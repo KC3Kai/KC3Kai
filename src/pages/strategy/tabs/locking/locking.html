@@ -5,10 +5,10 @@
 
 <div class="page_help">
 	<div class="help_q">How do I mark a ship for a color?</div>
-	<div class="help_a">Drag her from the "reserved" list at the bottom, onto designated dropping boxes for each color.</div>
+	<div class="help_a">Drag her icon from the "reserved" list at the bottom, onto designated dropping boxes for each color.</div>
 	
 	<div class="help_q">How do I remove a ship from a colored box?</div>
-	<div class="help_a">Click on her face.</div>
+	<div class="help_a">Double click on her face.</div>
 	
 	<div class="help_q">I cannot remove a ship from a colored box?</div>
 	<div class="help_a">You cannot removed ships already locked-in game, and are signified by the icon's transparency.</div>
@@ -18,16 +18,12 @@
 	
 	<div class="help_q">The ships get re-arranged after refreshing</div>
 	<div class="help_a">Do not mind the arrangements. This page's goal is to let you plan for the whole fleet's separation into different operations, not to arrange your compositions.</div>
-	
-	<div class="help_q">Can you add ship-type filters on the reserved ships list?</div>
-	<div class="help_a">No. Find desired ship types from the list yourself.</div>
-	
-	<div class="help_q">What's the 5th purple-ish box? There's no tag like that on the event.</div>
-	<div class="help_a">So that I won't need to edit it again in case the future events do get five ship locking categories.</div>
-	
-	<div class="help_q">Will you make a button that will divide my ship list for me?</div>
-	<div class="help_a">wtf are you talking about? :v</div>
-	
+
+	<div class="help_q">What does <b>Tag</b> column mean?</div>
+	<div class="help_a">If you see number in tag column it means that ship is already locked inside game. You can't do anything about game locked ships.
+		Otherwise try clicking inside cell. It should cycle through tags of that ship.
+	</div>
+
 	<div class="help_more">
 		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Locking">Learn more</a>
 	</div>
@@ -41,76 +37,63 @@
 	</div>
 	
 	<!-- LOCK MODES -->
-	<div class="lock_modes">
-		<!-- TAG 1 -->
-		<div class="lock_mode lock_mode_1">
-			<div class="map_area">
-				<!-- <div class="map">E1</div>
-				<div class="map">E2</div>
-				<div class="map">E7</div> -->
+	<div class="lock_modes"></div>
+	<div class="clear"></div>
+
+	<div class="shiplist_box">
+		<div class="ship_header">
+			<div class="ship_item">
+				<div class="ship_field hover ship_sally i18n_title" title="ShipTag" data-type="sally">Tag</div>
+
+				<div class="ship_field ship_img"></div>
+				<div class="ship_field hover ship_name" data-type="name">Name</div>
+				<div class="ship_field hover ship_type" data-type="type">Type</div>
+				<div class="ship_field hover ship_lv sorted" data-type="lv">Lv.</div>
+
+				<div class="ship_field hover ship_stat ship_hp i18n_title" title="ShipHp" data-type="hp"><img src="../../assets/img/stats/hp.png" /></div>
+				<div class="ship_field hover ship_stat ship_stat_mod ship_fp i18n_title" title="ShipFire" data-type="fp"><img src="../../assets/img/stats/fp.png" /></div>
+				<div class="ship_field hover ship_stat ship_stat_mod ship_tp i18n_title" title="ShipTorpedo" data-type="tp"><img src="../../assets/img/stats/tp.png" /></div>
+				<div class="ship_field hover ship_stat ship_stat_mod ship_aa i18n_title" title="ShipAntiAir" data-type="aa"><img src="../../assets/img/stats/aa.png" /></div>
+				<div class="ship_field hover ship_stat ship_stat_mod ship_ar i18n_title" title="ShipArmor" data-type="ar"><img src="../../assets/img/stats/ar.png" /></div>
+				<div class="ship_field hover ship_stat ship_as i18n_title" title="ShipAsw" data-type="as"><img src="../../assets/img/stats/as.png" /></div>
+				<div class="ship_field hover ship_stat ship_ev i18n_title" title="ShipEvasion" data-type="ev"><img src="../../assets/img/stats/ev.png" /></div>
+				<div class="ship_field hover ship_stat ship_ls i18n_title" title="ShipLos" data-type="ls"><img src="../../assets/img/stats/ls.png" /></div>
+				<div class="ship_field hover ship_stat ship_lk i18n_title" title="ShipLuck" data-type="lk"><img src="../../assets/img/stats/lk.png" /></div>
+				<div class="ship_field hover ship_stat ship_stat_mod ship_yasen i18n_title" title="ShipYasenFp" data-type="yasen"><img src="../../assets/img/stats/yasen.png" /></div>
+
+				<div class="ship_field ship_equip">Slots</div>
+				<div class="ship_field ship_lock"></div>
 				<div class="clear"></div>
 			</div>
-			<div class="ships_area"></div>
-			<div class="clear"></div>
-			<div class="drop_area" data-boxId="0">Drag & Drop Here</div>
 		</div>
-		<!-- TAG 2 -->
-		<div class="lock_mode lock_mode_2">
-			<div class="map_area">
-				<!-- <div class="map">E3</div>
-				<div class="map">E6</div>
-				<div class="map">E7</div> -->
-				<div class="clear"></div>
-			</div>
-			<div class="ships_area"></div>
-			<div class="clear"></div>
-			<div class="drop_area" data-boxId="1">Drag & Drop Here</div>
-		</div>
-		<!-- TAG 3 -->
-		<div class="lock_mode lock_mode_3">
-			<div class="map_area">
-				<!-- <div class="map">E4</div>
-				<div class="map">E7</div> -->
-				<div class="clear"></div>
-			</div>
-			<div class="ships_area"></div>
-			<div class="clear"></div>
-			<div class="drop_area" data-boxId="2">Drag & Drop Here</div>
-		</div>
-		<!-- TAG 4 -->
-		<div class="lock_mode lock_mode_4">
-			<div class="map_area">
-				<!-- <div class="map">E5</div> -->
-				<div class="clear"></div>
-			</div>
-			<div class="ships_area"></div>
-			<div class="clear"></div>
-			<div class="drop_area" data-boxId="3">Drag & Drop Here</div>
-		</div>
-		<!-- TAG 5 -->
-		<div class="lock_mode lock_mode_5">
-			<div class="ships_area"></div>
-			<div class="clear"></div>
-			<div class="drop_area" data-boxId="4">Drag & Drop Here</div>
-		</div>
+		<div class="ship_list scroll_fix"></div>
 		<div class="clear"></div>
 	</div>
-	
-	<div class="clear"></div>
-	
-	<!-- RESERVED LIST -->
-	<div class="reserved_list">
-		
+	<div class="filters scroll_fix">
+
+		<div class="filter_group">
+			<div class="filter_header">Speed</div>
+			<div class="ship_filter_speed"></div>
+		</div>
+
+		<div class="filter_group">
+			<div class="filter_header">Daihatsu</div>
+			<div class="ship_filter_daihatsu"></div>
+		</div>
+
+		<div class="filter_group">
+			<div class="filter_header">Type</div>
+			<div class="ship_types"></div>
+			<div class="clear"></div>
+		</div>
 	</div>
-	
+	<div class="clear"></div>
 </div>
 
 <div class="factory">
-	
 	<!-- LOCKED SHIP RECORD -->
 	<div class="lship hover"><img/></div>
-	
-	
+
 	<!-- RESERVED SHIP RECORD -->
 	<div class="rship hover bscolor4 fcolor2">
 		<div class="ship_img"><img/></div>
@@ -118,5 +101,57 @@
 		<div class="ship_lv"></div>
 		<div class="clear"></div>
 	</div>
-	
+
+	<div class="ship_item">
+		<div class="ship_field ship_sally"></div>
+
+		<div class="ship_field ship_img hover"><img class="ship_icon"/></div>
+		<div class="ship_field ship_name"></div>
+		<div class="ship_field ship_type"></div>
+		<div class="ship_field ship_lv"><span class="value"></span></div>
+
+		<div class="ship_field ship_stat ship_hp"></div>
+
+		<div class="ship_field ship_stat ship_stat_mod ship_fp"></div>
+		<div class="ship_field ship_stat ship_stat_mod ship_tp"></div>
+		<div class="ship_field ship_stat ship_stat_mod ship_aa"></div>
+		<div class="ship_field ship_stat ship_stat_mod ship_ar"></div>
+
+		<div class="ship_field ship_stat ship_as"></div>
+		<div class="ship_field ship_stat ship_ev"></div>
+		<div class="ship_field ship_stat ship_ls"></div>
+		<div class="ship_field ship_stat ship_lk"></div>
+		<div class="ship_field ship_stat ship_stat_mod ship_yasen"></div>
+
+		<div class="ship_field ship_equip">
+			<div class="ship_equip_icon ship_equip_1"><img/><span></span></div>
+			<div class="ship_equip_icon ship_equip_2"><img/><span></span></div>
+			<div class="ship_equip_icon ship_equip_3"><img/><span></span></div>
+			<div class="ship_equip_icon ship_equip_4"><img/><span></span></div>
+			<div class="ship_equip_icon ship_equip_ex"><img/><span></span></div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="clear"></div>
+	</div>
+
+	<!-- SHIP TYPE CHECKBOX -->
+	<div class="ship_filter_type hover">
+		<div class="filter_box"><input type="checkbox"></div>
+		<div class="filter_name"><label></label></div>
+	</div>
+
+	<div class="ship_filter_radio">
+		<div class="filter_box"><input type="radio"></div>
+		<div class="filter_name"><label></label></div>
+	</div>
+
+	<div class="lock_mode">
+		<div class="map_area">
+			<div class="clear"></div>
+		</div>
+		<div class="ships_area"></div>
+		<div class="clear"></div>
+		<div class="drop_area">Drag &amp; Drop Here</div>
+	</div>
 </div>
