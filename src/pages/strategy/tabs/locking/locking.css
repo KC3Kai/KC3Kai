@@ -284,6 +284,11 @@
 	position:relative;
 }
 
+.tab_locking .ship_list .ship_item .ship_equip .slot_open{
+	border-radius: 50%;
+	background: #b7b7b7;
+}
+
 /* FILTERS
 ------------------------------*/
 

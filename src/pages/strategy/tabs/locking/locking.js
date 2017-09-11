@@ -112,6 +112,7 @@
                 ls: [shipObj.ls[1], shipObj.nakedStats("ls"), shipObj.ls[0] ],
                 // [maxed modded, current + modded, dupe, master init]
                 lk: [shipObj.lk[1], shipObj.lk[0], shipObj.lk[0], shipMaster.api_luck[0]],
+                slot_num : shipMaster.api_slot_num,
                 exSlot: shipObj.ex_item,
 
                 canEquipDaihatsu: shipObj.canEquipDaihatsu()
@@ -210,12 +211,13 @@
             });
 
             [0,1,2,3].forEach(i => {
-                this.equipSlot(shipRow, i + 1, ship.slots[i], ship.equip[i]);
+                this.equipSlot(shipRow, i + 1, ship.slots[i], ship.slot_num);
             });
         }
 
-        equipSlot(cElm, equipNum, equipSlot, gearId) {
+        equipSlot(cElm, equipNum, equipSlot, slot_num) {
             const element = $(".ship_equip_" + equipNum, cElm);
+            element.toggleClass("slot_open", equipNum <= slot_num);
             $("img", element).hide();
             $("span", element).each((_, e) => {
                 if(equipSlot > 0)
