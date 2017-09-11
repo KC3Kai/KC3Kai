@@ -132,13 +132,17 @@
                 }
             });
             this.lockPlans.forEach((shipIds, tag) => {
-                shipIds.forEach(shipId => {
-                    this.shipList.forEach(ship => {
+                shipIds.forEach((shipId, idx) => {
+                    const found = !! this.shipList.find(ship => {
                         if(ship.id === shipId && ship.sally === 0) {
                             this.addShipToBox(tag, ship);
+                            return true;
                         }
                     });
+                    // clean ship id already sally or non-existed
+                    if(!found) delete shipIds[idx];
                 });
+                this.lockPlans[tag] = shipIds.filter(id => id !== undefined);
             });
         }
 
@@ -350,17 +354,22 @@
             shipBox.attr("data-boxcolorid", boxIndex);
             shipBox.attr("title", "{0:name} Lv.{1:level} ({2:stype})"
                 .format(ship.name, ship.level, KC3Meta.stype(ship.stype))
-            );
+            ).lazyInitTooltip();
             if(ship.sally) {
                 shipBox.addClass("gamelocked");
                 shipBox.off("click");
             } else {
                 shipBox.addClass("plannedlock");
-                shipBox.on("click", () => {this.cleanupPlannedLock(ship);} );
+                shipBox.on("dblclick", () => {this.cleanupPlannedLock(ship);} );
                 shipBox.draggable({
-                    revert: "invalid",
+                    revert: (valid) => {
+                        if(!valid) this.cleanupPlannedLock(ship);
+                    },
                     containment: $(".planner_area"),
-                    cursor: "move"
+                    cursor: "move",
+                    start: (e, ui) => {
+                        $(e.target).tooltip("disable");
+                    }
                 });
             }
         }
@@ -399,10 +408,10 @@
         setDroppable() {
             const dropEventFunc = (event, ui) => {
                 const ship = this.getShipById(ui.draggable.data("ship_id"));
-                const boxIndex = $(event.target).data("boxid");
+                const boxIndex = $(".drop_area", $(event.target)).data("boxid");
                 this.switchPlannedLock(ship, boxIndex);
             };
-            $(".drop_area").droppable({
+            $(".lock_mode").droppable({
                 accept: ".ship_item,.lship",
                 addClasses: false,
                 drop: dropEventFunc
