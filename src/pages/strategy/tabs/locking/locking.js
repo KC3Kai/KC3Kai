@@ -4,7 +4,6 @@
     class KC3LockingDefinition extends KC3ShipListGrid {
         constructor() {
             super("locking");
-            this.lockLimit = 5;
         }
 
         /* INIT
@@ -13,6 +12,8 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
+            this.lockLimit = 5;
+            this.heartLockMode = 2;
         }
 
         /* RELOAD
@@ -111,6 +112,9 @@
                 ls: [shipObj.ls[1], shipObj.nakedStats("ls"), shipObj.ls[0] ],
                 // [maxed modded, current + modded, dupe, master init]
                 lk: [shipObj.lk[1], shipObj.lk[0], shipObj.lk[0], shipMaster.api_luck[0]],
+
+                slotCount: shipMaster.api_slot_num,
+                slotMaxSize: shipMaster.api_maxeq,
                 exSlot: shipObj.ex_item,
 
                 canEquipDaihatsu: shipObj.canEquipDaihatsu()
@@ -131,13 +135,17 @@
                 }
             });
             this.lockPlans.forEach((shipIds, tag) => {
-                shipIds.forEach(shipId => {
-                    this.shipList.forEach(ship => {
+                shipIds.forEach((shipId, idx) => {
+                    const found = !! this.shipList.find(ship => {
                         if(ship.id === shipId && ship.sally === 0) {
                             this.addShipToBox(tag, ship);
+                            return true;
                         }
                     });
+                    // clean ship id already sally or non-existed
+                    if(!found) delete shipIds[idx];
                 });
+                this.lockPlans[tag] = shipIds.filter(id => id !== undefined);
             });
         }
 
@@ -170,7 +178,7 @@
                     helper: () => icon.clone().addClass("ship_icon_dragged").appendTo(".planner_area"),
                     revert: "invalid",
                     containment: $(".planner_area"),
-                    cursor: "pointer",
+                    cursor: "move",
                     cursorAt: { left: 18, top: 18 }
                 });
 
@@ -205,32 +213,55 @@
             });
 
             [0,1,2,3].forEach(i => {
-                this.equipSlot(shipRow, i + 1, ship.slots[i], ship.equip[i]);
+                this.showEquipSlot(shipRow, i + 1, ship.slotCount,
+                    ship.slotMaxSize[i], ship.slots[i], ship.equip[i]);
             });
+            // for ex-slot, although it's hidden
+            this.showEquipSlot(shipRow, 5, ship.exSlot ? 5 : ship.slotCount,
+                0, 0, ship.exSlot);
         }
 
-        equipSlot(cElm, equipNum, equipSlot, gearId) {
-            const element = $(".ship_equip_" + equipNum, cElm);
-            $("img", element).hide();
-            $("span", element).each((_, e) => {
-                if(equipSlot > 0)
-                    $(e).text(equipSlot);
-                else
-                    $(e).hide();
-            });
+        showEquipSlot(rowElem, index, slotCount, slotMaxSize, slotCurrentSize, equipId) {
+            const element = $(".ship_equip_" + (index > 4 ? "ex" : index), rowElem);
+            const isShowCurrent = !!this.filterValues.equipIcons;
+            if(equipId > 0 && isShowCurrent) {
+                const gear = KC3GearManager.get(equipId);
+                if(gear.masterId > 0) {
+                    $("img", element)
+                        .attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+                        .attr("alt", gear.master().api_id)
+                        .click(this.gearClickFunc)
+                        .error(function() {
+                            $(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
+                        });
+                    $("span", element).hide();
+                    element.addClass("hover");
+                } else {
+                    equipId = 0;
+                }
+            }
+            if(equipId <= 0 || !isShowCurrent) {
+                $("img", element).hide();
+                const slotSize = isShowCurrent ? slotCurrentSize : slotMaxSize;
+                $("span", element).text(slotSize).toggle(slotMaxSize > 0);
+                element.toggleClass("slot_open", index <= slotCount);
+                // hide ex-slot elements
+                if(index > 4 && slotCount < 5)
+                    element.hide();
+            }
         }
 
         addFilterUI() {
-            // Ship type, `KC3Meta._stype` will be an object if language extending occurs
-            $.each(KC3Meta._stype, (i, stype) => {
-                if(stype && [12, 15].indexOf(i) === -1) {
+            // Ship type
+            $.each(KC3Meta.sortedStypes(), (i, stype) => {
+                if(stype.id && stype.order < 999) {
                     const elm = $(".factory .ship_filter_type", this.tab).clone()
                         .appendTo(".tab_locking .filters .ship_types");
-                    elm.data("id", i);
-                    $("input[type='checkbox']", elm).attr("id", "shipType_" + i)
-                        .data("typeId", i);
-                    $("label", elm).attr("for", "shipType_" + i);
-                    $(".filter_name label", elm).text(stype);
+                    elm.data("id", stype.id);
+                    $("input[type='checkbox']", elm).attr("id", "shipType_" + stype.id)
+                        .data("typeId", stype.id);
+                    $("label", elm).attr("for", "shipType_" + stype.id);
+                    $(".filter_name label", elm).text(stype.name);
                 }
             });
 
@@ -255,17 +286,22 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
-            // Hide tag locked (not heart locked)
+            // Hide tag locked (not heart-locke)
             let elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_taglocked");
             $("input[type='checkbox']", elm).attr("id", "taglocked");
-            $(".filter_name label", elm).attr("for", "taglocked").text("Locked");
+            $(".filter_name label", elm).attr("for", "taglocked").text("Hide");
 
             // Equip stats
             elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_equipstats");
             $("input[type='checkbox']", elm).attr("id", "equipstats");
             $(".filter_name label", elm).attr("for", "equipstats").text("Stats");
+            // Equip icons
+            elm = $(".factory .ship_filter_checkbox", this.tab).clone()
+                .appendTo(".tab_locking .filters .ship_filter_equipicons");
+            $("input[type='checkbox']", elm).attr("id", "equipicons");
+            $(".filter_name label", elm).attr("for", "equipicons").text("Icons");
 
             this.updateFilters();
 
@@ -282,6 +318,8 @@
                 tagLocked : $(".filters .ship_filter_taglocked input[type='checkbox']", this.tab)
                     .prop("checked"),
                 equipStats : $(".filters .ship_filter_equipstats input[type='checkbox']", this.tab)
+                    .prop("checked"),
+                equipIcons : $(".filters .ship_filter_equipicons input[type='checkbox']", this.tab)
                     .prop("checked"),
                 stypes : $(".filters .ship_types input[type='checkbox']:checked", this.tab)
                     .toArray().map( el => Number($(el).data("typeId")) )
@@ -344,17 +382,28 @@
                 .appendTo(".tab_locking .lock_mode_" + (boxIndex + 1) + " .ships_area");
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
+            shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
             shipBox.attr("title", "{0:name} Lv.{1:level} ({2:stype})"
                 .format(ship.name, ship.level, KC3Meta.stype(ship.stype))
-            );
+            ).lazyInitTooltip();
             if(ship.sally) {
-                shipBox.addClass("gamelocked").removeClass("hover");
+                shipBox.addClass("gamelocked");
                 shipBox.off("click");
             } else {
                 shipBox.addClass("plannedlock");
-                shipBox.on("click", () => {this.cleanupPlannedLock(ship);} );
+                shipBox.on("dblclick", () => {this.cleanupPlannedLock(ship);} );
+                shipBox.draggable({
+                    revert: (valid) => {
+                        if(!valid) this.cleanupPlannedLock(ship);
+                    },
+                    containment: $(".planner_area"),
+                    cursor: "move",
+                    start: (e, ui) => {
+                        $(e.target).tooltip("disable");
+                    }
+                });
             }
         }
 
@@ -390,14 +439,15 @@
         }
 
         setDroppable() {
-            $(".drop_area").droppable({
-                accept: ".ship_item",
+            const dropEventFunc = (event, ui) => {
+                const ship = this.getShipById(ui.draggable.data("ship_id"));
+                const boxIndex = $(".drop_area", $(event.target)).data("boxid");
+                this.switchPlannedLock(ship, boxIndex);
+            };
+            $(".lock_mode").droppable({
+                accept: ".ship_item,.lship",
                 addClasses: false,
-                drop: (event, ui) => {
-                    const ship = this.getShipById(ui.draggable.data("ship_id"));
-                    const boxIndex = $(event.target).data("boxid");
-                    this.switchPlannedLock(ship, boxIndex);
-                }
+                drop: dropEventFunc
             });
         }
 

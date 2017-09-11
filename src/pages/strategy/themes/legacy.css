@@ -1294,6 +1294,9 @@ body {
 .tab_locking .ship_list .ship_item .lock_mode_5 {
 	background:#B1A2C1;
 }
+.tab_locking .ship_list .ship_item .ship_equip .slot_open{
+	background: #b7b7b7;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/

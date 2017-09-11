@@ -12,6 +12,7 @@
         this.canvas = {};
         this.ctx = {};
         this.allShipGroups = {};
+        this.sortedShipGroups = [];
         this.loading = 0;
         this.isShipList = true;
         this.shipCount = 0;
@@ -94,12 +95,16 @@
         this.canvas = document.createElement("CANVAS");
         this.ctx = this.canvas.getContext("2d");
         this.allShipGroups = {};
+        this.sortedShipGroups = [];
         var columnCount = parseInt(this.columnCount,10);
         if (isNaN(columnCount) || columnCount < 3)
             this.columnCount = 3;
-        for (var i in KC3Meta._stype) {
-            if (KC3Meta._stype !== "")
-                this.allShipGroups[i] = [];
+        var stypes = KC3Meta.sortedStypes();
+        for (var i in stypes) {
+            if (stypes[i].id) {
+                this.allShipGroups[stypes[i].id] = [];
+                this.sortedShipGroups.push(stypes[i].id);
+            }
         }
     };
 
@@ -348,7 +353,7 @@
             var x = 0;
             var y = 0;
             var color = self.colors.odd;
-            for (var type in self.allShipGroups) {
+            for (var type of self.sortedShipGroups) {
                 if (self.allShipGroups[type].length > 0) {
                     if (y >= self.canvas.height - self.rowParams.height) {
                         x += self.rowParams.width;

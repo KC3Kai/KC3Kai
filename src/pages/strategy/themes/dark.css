@@ -1618,6 +1618,9 @@ button, input, select, textarea {
 .tab_locking .ship_list .ship_item .lock_mode_5 {
 	background:#544c5c;
 }
+.tab_locking .ship_list .ship_item .ship_equip .slot_open{
+	background: #5a5a5a;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/

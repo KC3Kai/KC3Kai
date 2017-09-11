@@ -68,6 +68,9 @@
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
 }
+.tab_locking .lock_mode .lship.plannedlock {
+	cursor:move;
+}
 .tab_locking .lock_mode .lship img {
 	width:28px;
 	height:28px;
@@ -86,7 +89,7 @@
 	font-size:12px;
 	text-align:center;
 	color:#fff;
-	cursor:pointer;
+	cursor:default;
 }
 
 .tab_locking .shiplist_box {
@@ -137,13 +140,14 @@
 
 /* Row */
 .tab_locking .ship_list .ship_item {
-	width: 602px;
+	width: 597px;
 	height: 20px;
 	line-height: 20px;
 	font-size: 12px;
 	margin: 0 0 2px 0;
 	overflow: hidden;
 	position: relative;
+	touch-action: initial !important;
 }
 
 /* Cell */
@@ -154,7 +158,7 @@
 }
 
 .tab_locking .ingame_page {
-	width: 680px;
+	width: 597px;
 	height: 14px;
 	line-height: 14px;
 	font-size: 12px;
@@ -234,19 +238,21 @@
 /* Fields: Equips */
 .tab_locking .ship_item .ship_equip {
 	width: 80px;
+	margin-right: 0;
 }
 
 .tab_locking .ship_item .ship_equip_icon {
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	float: left;
 	overflow: hidden;
 	position: relative;
+	margin: 1px 1px 1px 1px;
 }
 
 .tab_locking .ship_item .ship_equip img {
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	vertical-align: top;
 }
 
@@ -263,8 +269,12 @@
 	justify-content: center;
 }
 
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
+	border-radius: 50%;
+}
+
 .tab_locking .ship_list .ship_item .ship_sally.lock_plan,
-.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]){
+.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]) {
 	cursor: pointer;
 }
 
@@ -273,16 +283,24 @@
 	width: 25px;
 }
 
+.tab_locking .ship_item .ship_lock img {
+	width: 13px;
+	height: 13px;
+	margin: -35px 0px 0px 10px;
+	position: relative;
+}
+
 /* FILTERS
 ------------------------------*/
 
 .tab_locking .filters {
 	float: left;
 	width: 88px;
-	margin: 22px 0 0 0;
-	padding: 0;
+	margin: 27px 0 5px 0;
+	padding: 0 0 0 2px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	font-size: 12px;
 }
 
 .tab_locking .filters .filter_name {

@@ -326,6 +326,48 @@ Provides access to data on built-in JSON files
 			return this._stype[id] || "??";
 		},
 		
+		allStypes :function(){
+			return $.extend(true, {}, this._stype);
+		},
+		
+		sortedStypes :function(){
+			const presetOrder = {
+				0: -1, // n/a
+				1: 10, // DE
+				2: 20, // DD
+				3: 30, 4: 30, // CL, CLT
+				5: 40, 6: 40, // CA, CAV
+				13: 50, 14: 50, // SS, SSV
+				8: 61, 9: 60, 10: 61, // FBB, BB, BBV
+				7: 72, 11: 70, 18: 71, // CVL, CV, CVB
+				16: 80, 20: 81, 22: 82, 17: 83, 19: 84, 21: 85, // AV, AS, AO, LHA, AR, CT
+			};
+			const stypeList = [], stypes = this.allStypes();
+			for(let i in stypes){
+				stypeList.push({
+					id: parseInt(i, 10),
+					name: stypes[i],
+					// unused ship type (12:XBB, 15:AP) will be 999
+					order: presetOrder[i] || 999
+				});
+			}
+			return stypeList.sort((a, b) => a.order - b.order || a.id - b.id);
+		},
+		
+		predefinedStypeGroup :function(){
+			return {
+				"DD": [2],
+				"CL": [3, 4],
+				"CA": [5, 6],
+				"BB": [8, 9, 10],
+				"CV": [7, 11, 18],
+				"SS": [13, 14],
+				"TorpedoSquard": [2, 3, 4],
+				"AntiSub": [1, 2, 3, 4, 6, 7, 10, 16, 17, 21, 22],
+				"Auxiliary": [16, 17, 19, 20, 21, 22]
+			};
+		},
+		
 		ctype :function(id){
 			return this._ctype[id] || "??";
 		},

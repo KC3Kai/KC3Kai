@@ -5,10 +5,10 @@
 
 <div class="page_help">
 	<div class="help_q">How do I mark a ship for a color?</div>
-	<div class="help_a">Drag her icon from the "reserved" list at the bottom, onto designated dropping boxes for each color.</div>
+	<div class="help_a">Drag her icon from the ship list at the bottom, onto designated dropping boxes for each color.</div>
 	
 	<div class="help_q">How do I remove a ship from a colored box?</div>
-	<div class="help_a">Double click on her face.</div>
+	<div class="help_a">Double click on her face at box, drag her out of box, or click her tag cell at list repeatedly.</div>
 	
 	<div class="help_q">I cannot remove a ship from a colored box?</div>
 	<div class="help_a">You cannot removed ships already locked in game, and are signified by the icon's transparency.</div>
@@ -31,22 +31,22 @@
 
 <div class="page_padding planner_area">
 	
-	<!-- CONTROL BUTTONS -->
+	<!-- Control buttons -->
 	<div class="controls">
 		<div class="control clearAllPlans hover bscolor1">Clear all manual locks</div>
 	</div>
 	
-	<!-- LOCK MODES -->
+	<!-- Lock modes -->
 	<div class="lock_modes"></div>
 	<div class="clear"></div>
 
+	<!-- Ship List Grid -->
 	<div class="shiplist_box">
 		<div class="ship_header">
 			<div class="ship_item">
-				<div class="ship_field hover ship_sally" data-type="sally">Tag</div>
-
 				<div class="ship_field ship_img"></div>
 				<div class="ship_field hover ship_name" data-type="name">Name</div>
+				<div class="ship_field hover ship_sally" data-type="sally">Tag</div>
 				<div class="ship_field hover ship_type" data-type="type">Type</div>
 				<div class="ship_field hover ship_lv sorted" data-type="lv">Lv.</div>
 
@@ -69,6 +69,8 @@
 		<div class="ship_list scroll_fix"></div>
 		<div class="clear"></div>
 	</div>
+
+	<!-- Filter controls -->
 	<div class="filters scroll_fix">
 
 		<div class="filter_group">
@@ -82,13 +84,14 @@
 		</div>
 
 		<div class="filter_group">
-			<div class="filter_header">Hide</div>
+			<div class="filter_header">Locked</div>
 			<div class="ship_filter_taglocked"></div>
 		</div>
 
 		<div class="filter_group">
 			<div class="filter_header">Equipment</div>
 			<div class="ship_filter_equipstats"></div>
+			<div class="ship_filter_equipicons"></div>
 		</div>
 
 		<div class="filter_group">
@@ -101,22 +104,27 @@
 </div>
 
 <div class="factory">
-	<!-- LOCKED SHIP RECORD -->
-	<div class="lship hover"><img/></div>
-
-	<!-- RESERVED SHIP RECORD -->
-	<div class="rship hover bscolor4 fcolor2">
-		<div class="ship_img"><img/></div>
-		<div class="ship_type"></div>
-		<div class="ship_lv"></div>
+	<!-- Ship Lock Area -->
+	<div class="lock_mode">
+		<div class="map_area">
+			<div class="clear"></div>
+		</div>
+		<div class="ships_area"></div>
 		<div class="clear"></div>
+		<div class="drop_area">Drag &amp; Drop Here</div>
 	</div>
 
+	<!-- Locked ship item -->
+	<div class="lship"><img/></div>
+
+	<!-- Ship List Grid Item -->
 	<div class="ship_item">
-		<div class="ship_field ship_sally"></div>
 
 		<div class="ship_field ship_img hover"><img class="ship_icon"/></div>
 		<div class="ship_field ship_name"></div>
+
+		<div class="ship_field ship_sally"></div>
+
 		<div class="ship_field ship_type"></div>
 		<div class="ship_field ship_lv"><span class="value"></span></div>
 
@@ -142,15 +150,20 @@
 			<div class="clear"></div>
 		</div>
 
+		<div class="ship_field ship_stat_icon ship_lock">
+			<img src="../../assets/img/client/heartlock.png" />
+		</div>
+
 		<div class="clear"></div>
 	</div>
 
-	<!-- SHIP TYPE CHECKBOX -->
+	<!-- Ship Type Checkbox -->
 	<div class="ship_filter_type hover">
 		<div class="filter_box"><input type="checkbox"></div>
 		<div class="filter_name"><label></label></div>
 	</div>
 
+	<!-- Common controls for other types of filters -->
 	<div class="ship_filter_radio">
 		<div class="filter_box"><input type="radio"></div>
 		<div class="filter_name"><label></label></div>
@@ -161,12 +174,4 @@
 		<div class="filter_name"><label></label></div>
 	</div>
 
-	<div class="lock_mode">
-		<div class="map_area">
-			<div class="clear"></div>
-		</div>
-		<div class="ships_area"></div>
-		<div class="clear"></div>
-		<div class="drop_area">Drag &amp; Drop Here</div>
-	</div>
 </div>

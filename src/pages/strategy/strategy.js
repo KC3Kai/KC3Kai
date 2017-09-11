@@ -207,9 +207,10 @@
 	// A jquery-ui tooltip options like native one
 	KC3StrategyTabs.nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
+		items: "[title],[titlealt]",
 		content: function(){
 			// Default escaping not used, keep html, simulate native one
-			return $(this).attr("title")
+			return ($(this).attr("title") || $(this).attr("titlealt") || "")
 				.replace(/\n/g, "<br/>")
 				.replace(/\t/g, "&emsp;&emsp;");
 		}
@@ -218,13 +219,13 @@
 		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
-				this.tooltip(opts || KC3StrategyTabs.nativeTooltipOptions);
+				this.tooltip($.extend(true, {}, KC3StrategyTabs.nativeTooltipOptions, opts));
 			}
 			return this;
 		};
 		// Actively close tooltips of element and its children
 		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
+			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
 				if(typeof $(el).tooltip("instance") !== "undefined")
 					$(el).tooltip("close");
 			});
