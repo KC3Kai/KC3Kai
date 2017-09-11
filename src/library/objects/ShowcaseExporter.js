@@ -160,7 +160,7 @@
             this._addConsumableImage(ctx, canvas, x, "blueprints");
         } else {
             x = this._addConsumableImage(ctx, canvas, x, "devmats") + 50;
-            this._addConsumableImage(ctx, canvas, x, "screws");
+            this._addConsumableImage(ctx, canvas, x, "screws", !this.hasAkashi);
         }
 
         var topLine = this.isShipList ? "Ship List" : "Equipment List";
@@ -202,10 +202,19 @@
 
     };
 
-    ShowcaseExporter.prototype._addConsumableImage = function (ctx, canvas, x, type) {
+    ShowcaseExporter.prototype._addConsumableImage = function (ctx, canvas, x, type, crossed = false) {
         ctx.fillText(JSON.parse(localStorage.consumables)[type], x, canvas.height - 1);
         x += ctx.measureText(JSON.parse(localStorage.consumables)[type]).width + 5;
         ctx.drawImage(this._otherImages[type], x, canvas.height - 18, 18, 18);
+        if(crossed) {
+            ctx.beginPath();
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = "2";
+            ctx.rect(x, canvas.height - 18, 18, 18);
+            ctx.moveTo(x, canvas.height);
+            ctx.lineTo(x + 18, canvas.height - 18);
+            ctx.stroke();
+        }
         return x + 18;
     };
 
@@ -556,6 +565,10 @@
 
     ShowcaseExporter.prototype.exportEquip = function () {
         this.isShipList = false;
+        KC3ShipManager.load();
+        this.hasAkashi = KC3ShipManager.find(function (s) {
+                return s.masterId === 187 || s.masterId === 182;
+            }).length > 0;
         this.rowParams = {
             width: 350,
             height: 30
