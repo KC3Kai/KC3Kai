@@ -112,7 +112,9 @@
                 ls: [shipObj.ls[1], shipObj.nakedStats("ls"), shipObj.ls[0] ],
                 // [maxed modded, current + modded, dupe, master init]
                 lk: [shipObj.lk[1], shipObj.lk[0], shipObj.lk[0], shipMaster.api_luck[0]],
-                slot_num : shipMaster.api_slot_num,
+
+                slotCount: shipMaster.api_slot_num,
+                slotMaxSize: shipMaster.api_maxeq,
                 exSlot: shipObj.ex_item,
 
                 canEquipDaihatsu: shipObj.canEquipDaihatsu()
@@ -211,20 +213,42 @@
             });
 
             [0,1,2,3].forEach(i => {
-                this.equipSlot(shipRow, i + 1, ship.slots[i], ship.slot_num);
+                this.showEquipSlot(shipRow, i + 1, ship.slotCount,
+                    ship.slotMaxSize[i], ship.slots[i], ship.equip[i]);
             });
+            // for ex-slot, although it's hidden
+            this.showEquipSlot(shipRow, 5, ship.exSlot ? 5 : ship.slotCount,
+                0, 0, ship.exSlot);
         }
 
-        equipSlot(cElm, equipNum, equipSlot, slot_num) {
-            const element = $(".ship_equip_" + equipNum, cElm);
-            element.toggleClass("slot_open", equipNum <= slot_num);
-            $("img", element).hide();
-            $("span", element).each((_, e) => {
-                if(equipSlot > 0)
-                    $(e).text(equipSlot);
-                else
-                    $(e).hide();
-            });
+        showEquipSlot(rowElem, index, slotCount, slotMaxSize, slotCurrentSize, equipId) {
+            const element = $(".ship_equip_" + (index > 4 ? "ex" : index), rowElem);
+            const isShowCurrent = !!this.filterValues.equipIcons;
+            if(equipId > 0 && isShowCurrent) {
+                const gear = KC3GearManager.get(equipId);
+                if(gear.masterId > 0) {
+                    $("img", element)
+                        .attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+                        .attr("alt", gear.master().api_id)
+                        .click(this.gearClickFunc)
+                        .error(function() {
+                            $(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
+                        });
+                    $("span", element).hide();
+                    element.addClass("hover");
+                } else {
+                    equipId = 0;
+                }
+            }
+            if(equipId <= 0 || !isShowCurrent) {
+                $("img", element).hide();
+                const slotSize = isShowCurrent ? slotCurrentSize : slotMaxSize;
+                $("span", element).text(slotSize).toggle(slotMaxSize > 0);
+                element.toggleClass("slot_open", index <= slotCount);
+                // hide ex-slot elements
+                if(index > 4 && slotCount < 5)
+                    element.hide();
+            }
         }
 
         addFilterUI() {
@@ -262,17 +286,22 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
-            // Hide tag locked (not heart locked)
+            // Hide tag locked (not heart-locke)
             let elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_taglocked");
             $("input[type='checkbox']", elm).attr("id", "taglocked");
-            $(".filter_name label", elm).attr("for", "taglocked").text("Locked");
+            $(".filter_name label", elm).attr("for", "taglocked").text("Hide");
 
             // Equip stats
             elm = $(".factory .ship_filter_checkbox", this.tab).clone()
                 .appendTo(".tab_locking .filters .ship_filter_equipstats");
             $("input[type='checkbox']", elm).attr("id", "equipstats");
             $(".filter_name label", elm).attr("for", "equipstats").text("Stats");
+            // Equip icons
+            elm = $(".factory .ship_filter_checkbox", this.tab).clone()
+                .appendTo(".tab_locking .filters .ship_filter_equipicons");
+            $("input[type='checkbox']", elm).attr("id", "equipicons");
+            $(".filter_name label", elm).attr("for", "equipicons").text("Icons");
 
             this.updateFilters();
 
@@ -289,6 +318,8 @@
                 tagLocked : $(".filters .ship_filter_taglocked input[type='checkbox']", this.tab)
                     .prop("checked"),
                 equipStats : $(".filters .ship_filter_equipstats input[type='checkbox']", this.tab)
+                    .prop("checked"),
+                equipIcons : $(".filters .ship_filter_equipicons input[type='checkbox']", this.tab)
                     .prop("checked"),
                 stypes : $(".filters .ship_types input[type='checkbox']:checked", this.tab)
                     .toArray().map( el => Number($(el).data("typeId")) )

@@ -147,6 +147,7 @@
 	margin: 0 0 2px 0;
 	overflow: hidden;
 	position: relative;
+	touch-action: initial !important;
 }
 
 /* Cell */
@@ -241,16 +242,17 @@
 }
 
 .tab_locking .ship_item .ship_equip_icon {
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	float: left;
 	overflow: hidden;
 	position: relative;
+	margin: 1px 1px 1px 1px;
 }
 
 .tab_locking .ship_item .ship_equip img {
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	vertical-align: top;
 }
 
@@ -267,8 +269,12 @@
 	justify-content: center;
 }
 
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
+	border-radius: 50%;
+}
+
 .tab_locking .ship_list .ship_item .ship_sally.lock_plan,
-.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]){
+.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]) {
 	cursor: pointer;
 }
 
@@ -278,14 +284,10 @@
 }
 
 .tab_locking .ship_item .ship_lock img {
-	width:13px;
-	height:13px;
-	margin:-35px 0px 0px 10px;
-	position:relative;
-}
-
-.tab_locking .ship_list .ship_item .ship_equip .slot_open{
-	border-radius: 50%;
+	width: 13px;
+	height: 13px;
+	margin: -35px 0px 0px 10px;
+	position: relative;
 }
 
 /* FILTERS
@@ -294,10 +296,11 @@
 .tab_locking .filters {
 	float: left;
 	width: 88px;
-	margin: 22px 0 0 0;
-	padding: 0;
+	margin: 27px 0 5px 0;
+	padding: 0 0 0 2px;
 	overflow-x: hidden;
 	overflow-y: auto;
+	font-size: 12px;
 }
 
 .tab_locking .filters .filter_name {

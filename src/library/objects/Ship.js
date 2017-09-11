@@ -887,7 +887,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
 		if(!this.rosterId || !this.masterId) { return 0; }
-		return (isNightContacted & 5) + this.fp[0] + this.tp[0]
+		return (isNightContacted ? 5 : 0) + this.fp[0] + this.tp[0]
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
 
