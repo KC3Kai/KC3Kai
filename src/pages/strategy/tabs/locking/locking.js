@@ -4,7 +4,6 @@
     class KC3LockingDefinition extends KC3ShipListGrid {
         constructor() {
             super("locking");
-            this.lockLimit = 5;
         }
 
         /* INIT
@@ -13,6 +12,8 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
+            this.lockLimit = 5;
+            this.heartLockMode = 2;
         }
 
         /* RELOAD
@@ -170,7 +171,7 @@
                     helper: () => icon.clone().addClass("ship_icon_dragged").appendTo(".planner_area"),
                     revert: "invalid",
                     containment: $(".planner_area"),
-                    cursor: "pointer",
+                    cursor: "move",
                     cursorAt: { left: 18, top: 18 }
                 });
 
@@ -221,16 +222,16 @@
         }
 
         addFilterUI() {
-            // Ship type, `KC3Meta._stype` will be an object if language extending occurs
-            $.each(KC3Meta._stype, (i, stype) => {
-                if(stype && [12, 15].indexOf(i) === -1) {
+            // Ship type
+            $.each(KC3Meta.sortedStypes(), (i, stype) => {
+                if(stype.id && stype.order < 999) {
                     const elm = $(".factory .ship_filter_type", this.tab).clone()
                         .appendTo(".tab_locking .filters .ship_types");
-                    elm.data("id", i);
-                    $("input[type='checkbox']", elm).attr("id", "shipType_" + i)
-                        .data("typeId", i);
-                    $("label", elm).attr("for", "shipType_" + i);
-                    $(".filter_name label", elm).text(stype);
+                    elm.data("id", stype.id);
+                    $("input[type='checkbox']", elm).attr("id", "shipType_" + stype.id)
+                        .data("typeId", stype.id);
+                    $("label", elm).attr("for", "shipType_" + stype.id);
+                    $(".filter_name label", elm).text(stype.name);
                 }
             });
 
@@ -344,17 +345,23 @@
                 .appendTo(".tab_locking .lock_mode_" + (boxIndex + 1) + " .ships_area");
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
+            shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
             shipBox.attr("title", "{0:name} Lv.{1:level} ({2:stype})"
                 .format(ship.name, ship.level, KC3Meta.stype(ship.stype))
             );
             if(ship.sally) {
-                shipBox.addClass("gamelocked").removeClass("hover");
+                shipBox.addClass("gamelocked");
                 shipBox.off("click");
             } else {
                 shipBox.addClass("plannedlock");
                 shipBox.on("click", () => {this.cleanupPlannedLock(ship);} );
+                shipBox.draggable({
+                    revert: "invalid",
+                    containment: $(".planner_area"),
+                    cursor: "move"
+                });
             }
         }
 
@@ -390,14 +397,15 @@
         }
 
         setDroppable() {
+            const dropEventFunc = (event, ui) => {
+                const ship = this.getShipById(ui.draggable.data("ship_id"));
+                const boxIndex = $(event.target).data("boxid");
+                this.switchPlannedLock(ship, boxIndex);
+            };
             $(".drop_area").droppable({
-                accept: ".ship_item",
+                accept: ".ship_item,.lship",
                 addClasses: false,
-                drop: (event, ui) => {
-                    const ship = this.getShipById(ui.draggable.data("ship_id"));
-                    const boxIndex = $(event.target).data("boxid");
-                    this.switchPlannedLock(ship, boxIndex);
-                }
+                drop: dropEventFunc
             });
         }
 

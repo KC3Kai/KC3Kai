@@ -68,6 +68,9 @@
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
 }
+.tab_locking .lock_mode .lship.plannedlock {
+	cursor:move;
+}
 .tab_locking .lock_mode .lship img {
 	width:28px;
 	height:28px;
@@ -86,7 +89,7 @@
 	font-size:12px;
 	text-align:center;
 	color:#fff;
-	cursor:pointer;
+	cursor:default;
 }
 
 .tab_locking .shiplist_box {
@@ -137,7 +140,7 @@
 
 /* Row */
 .tab_locking .ship_list .ship_item {
-	width: 602px;
+	width: 597px;
 	height: 20px;
 	line-height: 20px;
 	font-size: 12px;
@@ -154,7 +157,7 @@
 }
 
 .tab_locking .ingame_page {
-	width: 680px;
+	width: 597px;
 	height: 14px;
 	line-height: 14px;
 	font-size: 12px;
@@ -234,6 +237,7 @@
 /* Fields: Equips */
 .tab_locking .ship_item .ship_equip {
 	width: 80px;
+	margin-right: 0;
 }
 
 .tab_locking .ship_item .ship_equip_icon {
@@ -271,6 +275,13 @@
 .tab_locking .ship_header .ship_lv,
 .tab_locking .ship_list .ship_item .ship_lv {
 	width: 25px;
+}
+
+.tab_locking .ship_item .ship_lock img {
+	width:13px;
+	height:13px;
+	margin:-35px 0px 0px 10px;
+	position:relative;
 }
 
 /* FILTERS

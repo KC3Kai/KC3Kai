@@ -233,15 +233,16 @@
 			// Binding click event ends
 
 			// Add filter elements of ship types before `prepareFilters` executed
-			for(let sCtr in KC3Meta._stype){
-				// stype 12, 15 not used by shipgirl
+			$.each(KC3Meta.sortedStypes(), (idx, stype) => {
+				// stype 12, 15 not used by shipgirl, marked as order 999
 				// stype 1 is used from 2017-05-02
-				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
-					let cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				if(stype.id && stype.order < 999){
+					let cElm = $(".tab_ships .factory .ship_filter_type").clone()
+						.appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", stype.id);
+					$(".filter_name", cElm).text(stype.name);
 				}
-			}
+			});
 
 			// Update multi sorter elements
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
@@ -534,10 +535,10 @@
 				var view = findView(filterName,optionName);
 				thisOption.name = optionName;
 				thisOption.view = view;
-				thisOption.view.on('click', function() {
+				thisOption.view.on('click', function(e) {
 					var curRep = self.newFilterRep[filterName];
 					var selectedInd = ind;
-					curRep.onToggle.call(self,selectedInd,curRep,false);
+					curRep.onToggle.call(self,selectedInd,curRep,false,e);
 				});
 				console.assert(
 					thisOption.view.length === 1,
@@ -677,11 +678,10 @@
 						|| (curVal === ship.range);
 				});
 
-			var stypes = Object
-				.keys(KC3Meta._stype)
-				.map(function(x) { return parseInt(x,10); })
-				.filter(function(x) { return [12,15].indexOf(x)<0; })
-				.sort(function(a,b) { return a-b; });
+			var stypes = Object.keys(KC3Meta.allStypes())
+				.map(id => parseInt(id, 10))
+				.filter(id => [12, 15].indexOf(id) < 0)
+				.sort((a, b) => a - b);
 			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
@@ -696,22 +696,22 @@
 				// valid ship types and additionally 3 controls
 				stypes.concat(["all","none","invert"]),
 				// testShip
-				function(curVal,ship) {
+				function(curVal, ship) {
 					return curVal[ship.stype];
 				},
 				// find view
-				function (filterName,option) {
+				function (filterName, option) {
 					if (typeof option === "number") {
 						// this is a ship type toggle
 						return $(".tab_ships .filters .ship_types .ship_filter_type")
-							.filter( function() {  return $(this).data("id") === "" + option;  }  );
+							.filter( function() { return $(this).data("id") == option; } );
 					} else {
 						// one of: all / none / invert
 						return $(".tab_ships .filters .massSelect ." + option);
 					}
 				},
 				// onToggle
-				function(selectedInd, optionRep, initializing) {
+				function(selectedInd, optionRep, initializing, event) {
 					if (initializing) {
 						// the variable name is a bit misleading..
 						// but at this point we should set the initial value
@@ -719,8 +719,16 @@
 					} else {
 						var selected = optionRep.options[selectedInd];
 						if (typeof selected.name === 'number') {
-							// this is a ship type toggle
-							optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+							if(event && event.altKey){
+								// only select this ship type if Alt key held
+								$.each(stypes, function(ignore, stype) {
+									optionRep.curValue[stype] = false;
+								});
+								optionRep.curValue[selected.name] = true;
+							} else {
+								// this is a ship type toggle
+								optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+							}
 						} else {
 							$.each(stypes, function(ignore, stype) {
 								optionRep.curValue[stype] =
@@ -735,7 +743,7 @@
 					// update UI
 					$.each(optionRep.options, function(ignored, x) {
 						if (typeof x.name === "number") {
-							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
+							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name] );
 						}
 					});
 					if (!initializing)
