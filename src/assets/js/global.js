@@ -182,6 +182,12 @@ Object.size = function(obj) {
 	}
 	return size;
 };
+Object.assignIfDefined = function(target, key, value) {
+	if(value !== undefined && typeof target === "object") {
+		target[key] = value;
+	}
+	return target;
+};
 
 /* PRIMITIVE */
 /*******************************\
@@ -259,7 +265,7 @@ String.prototype.toHHMMSS = function () {
 
 /* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
 -------------------------------*/
-String.prototype.plusCurrentTime = function() {
+String.prototype.plusCurrentTime = function(showDays) {
 	var currentTime = new Date();
 	var secondsAfterMidnight =
 		3600 * currentTime.getHours() +
@@ -268,7 +274,9 @@ String.prototype.plusCurrentTime = function() {
 
 	var secondsRemaining = parseInt(this, 10);
 	var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
-	return String(timeFinished).toHHMMSS();
+	var daysPassed = Math.floor((secondsAfterMidnight + secondsRemaining) / 86400);
+	return (showDays && daysPassed ? "+" + daysPassed + " " : "") +
+		String(timeFinished).toHHMMSS();
 };
 
 /* hashing for integrity checks
@@ -420,7 +428,7 @@ String.prototype.hashCode = function() {
 					for (var i = 0, l=this.length; i < l; i++) {
 						// Check if we have nested arrays
 						if (this[i] instanceof Array && array[i] instanceof Array) {
-							// recurse into the nested arrays
+							// recursively into the nested arrays
 							if (!this[i].equals(array[i]))
 								return false;
 						} else if (this[i] != array[i]) {
@@ -654,7 +662,7 @@ Object.sumValuesByKey = function(){
 			switch(typeof clearTable) {
 				case 'number':
 				case 'string':
-					// Pick nth+1 element from ResetableKeys
+					// Pick nth+1 element from Reset-able Keys
 					// Invalid >> pick all elements
 					clearTable = parseInt(clearTable,10);
 					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
@@ -666,7 +674,7 @@ Object.sumValuesByKey = function(){
 					};
 					break;
 				default:
-					// Pick any matching element from Resetable Array
+					// Pick any matching element from Reset-able Array
 					// Invalid >> pick all elements
 					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
 

@@ -56,28 +56,24 @@
 
   // -------------------[ CHROME STORAGE SYNC WRAPPER ]--------------------- //
 
-  QuestSync.getSyncStorage = () => {
-    return new Promise((resolve, reject) => {
-      chrome.storage.sync.get(({ KC3QuestsData } = {}) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve(KC3QuestsData);
-        }
-      });
-    });
+  QuestSync.getSyncStorage = () =>
+    KC3ChromeSync.get('KC3QuestsData').then(KC3QuestSync.deserialize);
+
+  QuestSync.setSyncStorage = data =>
+    KC3ChromeSync.set('KC3QuestsData', KC3QuestSync.serialize(data));
+
+  // ChromeSync requires a string as input, so we need to stringify the data
+  // Since the quests prop is already stringified, we parse it first to avoid double stringification
+  QuestSync.serialize = (questData) => {
+    const quests = questData.quests ? JSON.parse(questData.quests) : {};
+    return JSON.stringify(Object.assign({}, questData, { quests }));
   };
 
-  QuestSync.setSyncStorage = (data) => {
-    return new Promise((resolve, reject) => {
-      chrome.storage.sync.set({ KC3QuestsData: data }, () => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
-    });
+  QuestSync.deserialize = (json) => {
+    if (!json) { return undefined; }
+
+    const result = JSON.parse(json);
+    return Object.assign(result, { quests: JSON.stringify(result.quests) });
   };
 
   // ----------------------------------------------------------------------- //

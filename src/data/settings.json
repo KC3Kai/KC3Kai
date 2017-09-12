@@ -277,18 +277,6 @@
 				}
 			},
 			{
-				"id" : "air_average",
-				"name" : "SettingsAFPAverage",
-				"type" : "json",
-				"options" : {}
-			},
-			{
-				"id" : "air_bounds",
-				"name" : "SettingsAFPBounds",
-				"type" : "json",
-				"options" : {}
-			},
-			{
 				"id" : "aaFormation",
 				"name" : "SettingsAAFormation",
 				"type" : "radio",
@@ -951,6 +939,30 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
+				}
+			},
+			{
+				"id" : "idbSaveSortie",
+				"name" : "SettingsSaveSortieToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieToDbTip"
+				}
+			},
+			{
+				"id" : "idbSaveExcludeMaps",
+				"name" : "SettingsSaveSortieButMaps",
+				"type" : "json",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieButMapsTip"
+				}
+			},
+			{
+				"id" : "idbSavePvP",
+				"name" : "SettingsSavePvpToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSavePvpToDbTip"
 				}
 			}
 		]

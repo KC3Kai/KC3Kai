@@ -26,7 +26,7 @@
 			ConfigManager.load();
 			// Check for player HQ info
 			PlayerManager.hq.load();
-			// Check for player statstics
+			// Check for player statistics
 			if(typeof localStorage.statistics != "undefined"){
 				this.statistics = JSON.parse(localStorage.statistics);
 			}else{
@@ -471,6 +471,8 @@
 				delete localStorage.apiUsage;
 				ConfigManager.load();
 				ConfigManager.dismissed_hints = {};
+				delete ConfigManager.air_average;
+				delete ConfigManager.air_bounds;
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();
@@ -643,7 +645,7 @@
 			if(this.newsfeed && this.newsfeed.time){
 				this.newsfeed.log.forEach(function(log, i){
 					// we are using the same timestamp for making it look like a proper log,
-					// as for now there's no timestamp from KCAPI,
+					// as for now there's no timestamp from KCSAPI,
 					// perhaps this is the best we can do.
 					// see some discussions at https://github.com/KC3Kai/KC3Kai/issues/1782
 					self.showFeedItem(i, self.newsfeed.time, log, !!showRawNewsfeed);

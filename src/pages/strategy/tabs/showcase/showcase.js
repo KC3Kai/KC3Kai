@@ -99,6 +99,7 @@
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.hq.load();
 			// Clean cache data
 			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
 			this.gearCache = {};
@@ -161,7 +162,7 @@
 				if(typeof self.gearCache["t"+GearType] == "undefined"){
 					self.gearCache["t"+GearType] = [];
 				}
-				// Add this sloteitem_id to the gear type
+				// Add this slotitem_id to the gear type
 				self.gearCache["t"+GearType].push({
 					id: GearMaster.api_id,
 					name: KC3Meta.gearName( GearMaster.api_name ),
@@ -202,13 +203,12 @@
 			return newSettings;
 		},
 
-		updateUI: function (){
+		updateUI: function () {
 			var settings = this.getSettings();
 			$("#exportOutputMode").val(settings.output);
 			$("#exportAddName")[0].checked = settings.exportName;
 			$("#exportMode").val(settings.exportMode);
 			$("#exportEventLocking")[0].checked = settings.eventLocking;
-
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -262,7 +262,6 @@
 					$(button).removeClass("disabled");
 				};
 				return exporter;
-
 			}
 
 			$("#exportShips").on("click", function(){
@@ -271,7 +270,7 @@
 					exporter.exportShips();
 			});
 
-			$("#exportEquipment").on("click", function () {
+			$("#exportEquipment").on("click", function (){
 				var exporter = setupExporter(this);
 				if (exporter !== null)
 					exporter.exportEquip();
@@ -293,13 +292,13 @@
 				});
 			});
 
-            $("#exportEventLocking").change(function(){
-                var checked = this.checked;
-                self.modifySettings(function(settings){
-                    settings.eventLocking = checked;
-                    return settings;
-                });
-            });
+			$("#exportEventLocking").change(function(){
+				var checked = this.checked;
+				self.modifySettings(function(settings){
+					settings.eventLocking = checked;
+					return settings;
+				});
+			});
 
 			$("#exportMode").change(function(){
 				var val = this.value;

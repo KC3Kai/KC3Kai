@@ -255,7 +255,7 @@ KC3改 Ship Box for Natsuiro theme
 	};
 	
 	/* HIDE AKASHI TIMER
-	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	(If enabled?) Show the timer whenever hover Akashi shipbox.
 	This element will be removed if it does not meet the required condition.
 	[Being repaired/Repairing]
 	---------------------------------------------------*/
@@ -286,7 +286,7 @@ KC3改 Ship Box for Natsuiro theme
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
 			if(this.shipData.hp[0] <= 0) {
-				// Already sunk ship will get negtive hp and no prediction
+				// Already sunk ship will get negative hp and no prediction
 				$(".ship_hp_cur", this.element).text(this.shipData.hp[0]);
 			} else {
 				$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
@@ -363,7 +363,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("title", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
+					.attr("titlealt", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
@@ -379,7 +379,7 @@ KC3改 Ship Box for Natsuiro theme
 				}
 				
 				if (thisGear.ace > 0) {
-					// Is a plane with veterancy
+					// Is a plane with proficiency level
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
 						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");

@@ -7,8 +7,8 @@ AntiAir: anti-air related calculations
 	- shipObj: instance of KC3Ship
 		- mst: master data of either ship or gear
 		- pred: predicates, a function that accepts a single parameter and returns a boolean value
-		- predXXX: predicate combinators. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
-          in some specific way to produce a new prediate.
+		- predXXX: predicate combinations. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
+          in some specific way to produce a new predicate.
 
 - module contents:
 	- shipProportionalShotdownRate(shipObj)
@@ -41,7 +41,7 @@ AntiAir: anti-air related calculations
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
 		- icon: IDs of icons representing this kind of AACI
-		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipments
 		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
@@ -63,7 +63,7 @@ AntiAir: anti-air related calculations
 
 	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
-	// return the first non-falsy value or "false" if all predicates have falled.
+	// return the first non-falsy value or "false" if all predicates have failed.
 	function predAnyOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
@@ -151,6 +151,8 @@ AntiAir: anti-air related calculations
 			191 /* QF 2-pounder */
 		].indexOf( mst.api_id ) !== -1;
 	}
+
+	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -385,6 +387,8 @@ AntiAir: anti-air related calculations
 		kinuK2Icon = 487,
 		yuraK2Icon = 488,
 		fumizukiK2Icon = 548,
+		uit25Icon = 539,
+		i504Icon = 530,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -394,7 +398,8 @@ AntiAir: anti-air related calculations
 		// Special combined icons for Build-in HA / CDMG
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
-		haMountNbifdIcon = "16-30"; // HA without AAFD
+		haMountNbifdIcon = "16-30", // HA without AAFD
+		aaGunNotCdIcon = "15-15";   // Non-CD AA Machine Gun
 
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
@@ -403,6 +408,8 @@ AntiAir: anti-air related calculations
 	var isKinuK2 = masterIdEq( kinuK2Icon );
 	var isYuraK2 = masterIdEq( yuraK2Icon );
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
+	var isUit25 = masterIdEq( uit25Icon );
+	var isI504 = masterIdEq( i504Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -679,6 +686,17 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// UIT-25 / I-504
+	// https://docs.google.com/spreadsheets/d/1ljddcPvpEioGVU5yvd5GtPU7afRKPSnzFDEIBbFohh8
+	declareAACI(
+		23, 1, 1.05,
+		[uit25Icon, aaGunNotCdIcon],
+		predAnyOf(isUit25, isI504),
+		withEquipmentMsts(
+			hasSome( isAAGunNotCD )
+		)
+	);
+
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers
 	//   (since object keys has to be strings, and AACITable[key] accepts keys
@@ -706,7 +724,7 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return a list of unduplicated possible AACI APIs based on all ships in fleet
+	// return a list of deduplicate possible AACI APIs based on all ships in fleet
 	function fleetPossibleAACIs(fleetObj) {
 		var aaciSet = {};
 		fleetObj.ship(function(rId, ind, shipObj) {

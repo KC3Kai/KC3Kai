@@ -68,7 +68,9 @@
 <!-- SORTIE CONTROLS -->
 <div class="sortie_controls">
 	<div class="sortie_count"></div>
-	<div class="sortie_batch_toggles"></div>
+	<div class="sortie_batch_toggles">
+		<div class="non_battle_toggle sortie_toggle active hover" data-target="non_battle" title="Battle nodes only">B</div>
+	</div>
 </div>
 
 <!-- SORTIE RECORDS -->
@@ -96,20 +98,25 @@
 				<div class="sortie_ship sortie_ship_6"><img/><div class="sortie_combined_ship sortie_combined_ship_6"><img/></div></div>
 				<div class="clear"></div>
 			</div>
-			<div class="sortie_column sortie_edges">
+			<div class="sortie_column sortie_edges one_line">
 				<div class="sortie_edge sortie_edge_1"></div>
 				<div class="sortie_edge sortie_edge_2"></div>
 				<div class="sortie_edge sortie_edge_3"></div>
 				<div class="sortie_edge sortie_edge_4"></div>
 				<div class="sortie_edge sortie_edge_5"></div>
+				<div class="sortie_edge sortie_edge_6"></div>
+				<div class="sortie_edge sortie_edge_7"></div>
+				<div class="sortie_edge sortie_edge_8"></div>
+				<div class="sortie_edge sortie_edge_9"></div>
+				<div class="sortie_edge sortie_edge_10"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_toggles">
 				<div class="sortie_toggle hover" data-target="sortie_roster" title="Fleet">F</div>
 				<div class="sortie_toggle hover" data-target="sortie_nodes" title="Nodes">N</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy"  title="Enemy">E</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds"  title="Conditions">C</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes"  title="Air Battle">A</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy" title="Enemy">E</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds" title="Conditions">C</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes" title="Air Battle">A</div>
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
@@ -187,19 +194,19 @@
 			<div class="node_conds">
 				<div class="node_cond">
 					<div class="node_cond_label">Detect</div>
-					<div class="node_cond_value node_detect">OK</div>
+					<div class="node_cond_value node_detect">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Engage</div>
-					<div class="node_cond_value node_engage">Parallel</div>
+					<div class="node_cond_value node_engage">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Contact</div>
-					<div class="node_cond_value node_contact">YES vs YES</div>
+					<div class="node_cond_value node_contact">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Air Battle</div>
-					<div class="node_cond_value node_airbattle"></div>
+					<div class="node_cond_value node_airbattle">-</div>
 				</div>
 			</div>
 			<div class="node_planes">
