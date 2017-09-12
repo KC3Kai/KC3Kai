@@ -139,6 +139,7 @@
 				var voiceSize = 0;
 				var playAndShowSubtitle = function(){
 					// Playback voice audio file
+					if(self.audio) { self.audio.pause(); }
 					self.audio = new Audio(voiceSrc);
 					self.audio.play();
 					// Emulate subtitles
@@ -564,7 +565,7 @@
 				$(".tab_mstship .shipInfo .voices").show();
 				$(".tab_mstship .shipInfo .voices").empty();
 
-				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id,false,false);
+				var allVoiceNums = KC3Translation.getShipVoiceNums(shipData.api_id, false, true);
 				$.each(allVoiceNums, function(ignored, vnum){
 					$("<div/>")
 						.addClass("hover")

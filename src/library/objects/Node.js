@@ -7,14 +7,18 @@ Used by SortieManager
 (function(){
 	"use strict";
 	
-	window.KC3Node = function(sortie_id, id, UTCTime){
-		this.sortie = (sortie_id || 0);
-		this.id = (id || 0);
+	window.KC3Node = function(sortie_id, api_no, utcTime, world, map){
+		this.sortie = sortie_id || 0;
+		this.id = api_no || 0;
 		this.type = "";
-		this.stime = UTCTime;
+		this.stime = utcTime;
 		this.isPvP = false;
+		this.letter = KC3Meta.nodeLetter(world || KC3SortieManager.map_world,
+			map || KC3SortieManager.map_num, this.id);
 	};
 
+	// set true, to test rank predicting easier via SRoom Maps History
+	KC3Node.debugRankPrediction = function() { return false; };
 	/**
 	// Return predicted battle rank letter. Static function.
 	// @param beginHPs, endHPs in following structure:
@@ -24,8 +28,8 @@ Used by SortieManager
 	//   arrays are all begins at 0.
 	// @param battleName - optional, the API call name invoked currently
 	*/
-	KC3Node.predictRank = function(beginHPs, endHPs, battleName) {
-		console.assert( 
+	KC3Node.predictRank = function(beginHPs, endHPs, battleName = "") {
+		console.assert(
 			beginHPs.ally.length === endHPs.ally.length,
 			"Ally data length mismatched");
 		console.assert(
@@ -100,16 +104,19 @@ Used by SortieManager
 		var enemyGaugeRate = Math.floor(enemyGauge / enemyBeginHP * 100);
 		var equalOrMore = enemyGaugeRate > (0.9 * allyGaugeRate);
 		var superior = enemyGaugeRate > 0 && enemyGaugeRate > (2.5 * allyGaugeRate);
+		if(KC3Node.debugRankPrediction()){
+			console.debug("Predicted HP gauge rate",
+				"-{0}/{1} = {2}%".format(allyGauge, allyBeginHP, allyGaugeRate),
+				"vs",
+				"{2}% = -{0}/{1}".format(enemyGauge, enemyBeginHP, enemyGaugeRate),
+				"enemy -{1}, A needs {2}/{0} ({3})"
+					.format(enemyCount, enemySunkCount, requiredSunk, battleName)
+			);
+		}
 
-		console.log("Predicted HP gauge rate",
-			"-{0}/{1} = {2}%".format(allyGauge, allyBeginHP, allyGaugeRate),
-			"vs",
-			"{2}% = -{0}/{1}".format(enemyGauge, enemyBeginHP, enemyGaugeRate),
-			"enemy -{1}, A needs {2}/{0} ".format(enemyCount, enemySunkCount, requiredSunk)
-		);
-
-		// For long distance air raid
-		if ( (battleName||"").indexOf("ld_airbattle") >-1 ) {
+		// For long distance air raid (api_event_id: 4, api_event_kind: 6),
+		// why not use api_event_kind? because it's not saved as battle data, it's in /next API result.
+		if (battleName.indexOf("ld_airbattle") > -1) {
 			// Based on long distance air raid rules from:
 			// https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E9%95%B7%E8%B7%9D%E9%9B%A2%E7%A9%BA%E8%A5%B2%E6%88%A6%E3%81%A7%E3%81%AE%E5%8B%9D%E5%88%A9%E5%88%A4%E5%AE%9A
 			// Also referenced:
@@ -155,6 +162,40 @@ Used by SortieManager
 		return "D";
 	};
 	
+	/**
+	 * Set element in `beginHPs.ally` array to -1 to represent her escaping when FCF used.
+	 * Abyssal ships might also be able to escape in future?
+	 * @see http://kancolle.wikia.com/wiki/Fleet_Command_Facility
+	 * @param {Array} allyHps - The array of `beginHPs.ally`.
+	 * @param {Object} rawData - Raw battle kcsapi result.
+	 * @return {number} Count of affected elements.
+	 */
+	KC3Node.excludeEscapedShips = function(allyHps, rawData){
+		let affected = 0;
+		if(Array.isArray(allyHps)) {
+			// this is from kcsapi name `/api_req_combined_battle/goback_port`
+			const goBackPort = (indexes, isCombined) => {
+				if(Array.isArray(indexes)) {
+					indexes.forEach(idx => {
+						allyHps[idx - 1 + (isCombined ? 6 : 0)] = -1;
+						affected += 1;
+					});
+				}
+			};
+			goBackPort(rawData.api_escape_idx, false);
+			goBackPort(rawData.api_escape_idx_combined, true);
+		}
+		return affected;
+	};
+	
+	// Update this list if more extra classes added
+	KC3Node.knownNodeExtraClasses = function(){
+		return [
+			"nc_night_battle", "nc_air_battle",
+			"nc_enemy_combined", "nc_air_raid"
+		];
+	};
+	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
 		this.type = "battle";
 		this.startsFromNight = false;
@@ -162,13 +203,23 @@ Used by SortieManager
 		// If passed initial values
 		if(typeof nodeData != "undefined"){
 			
-			// If passed raw data from compass
-			//"api_event_id":4,"api_event_kind":1
+			// If passed raw data from compass,
+			// about api_event_id and api_event_kind, see SortieManager.js#L237
 			if(typeof nodeData.api_event_kind != "undefined"){
 				this.eships = [];
 				this.eventKind = nodeData.api_event_kind;
 				this.eventId = nodeData.api_event_id;
 				this.gaugeDamage = 0; // calculate this on result screen. make it fair :D
+				this.nodeDesc = ["", "",
+					KC3Meta.term("BattleKindNightStart"),
+					KC3Meta.term("BattleKindNightStart"),
+					KC3Meta.term("BattleKindAirBattleOnly"),
+					KC3Meta.term("BattleKindEnemyCombined"),
+					KC3Meta.term("BattleKindAirDefendOnly")][this.eventKind];
+				this.nodeExtraClass = ["", "",
+					"nc_night_battle", "nc_night_battle",
+					"nc_air_battle", "nc_enemy_combined", "nc_air_raid"
+					][this.eventKind];
 			}
 			
 			// If passed formatted enemy list from PVP
@@ -178,7 +229,7 @@ Used by SortieManager
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
-		this.enemyHP = [0,0,0,0,0,0];
+		this.enemyHP = [{},{},{},{},{},{}];
 		this.originalHPs = [0,0,0,0,0,0,0,0,0,0,0,0,0];
 		this.allyNoDamage = true;
 		this.nodalXP = 0;
@@ -239,10 +290,9 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
-		var
-			self = this,
-			maps = JSON.parse(localStorage.maps),
-			ckey = ["m",KC3SortieManager.map_world,KC3SortieManager.map_num].join("");
+		var self = this,
+			mapKey = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+			currentMap = KC3SortieManager.getCurrentMapData();
 		this.type = "bounty";
 		this.item = nodeData.api_itemget_eo_comment.api_id;
 		this.icon = function(folder){
@@ -259,8 +309,8 @@ Used by SortieManager
 		this.amount = nodeData.api_itemget_eo_comment.api_getcount;
 		KC3SortieManager.materialGain[this.item-1] += this.amount;
 		
-		maps[ckey].clear |= (++maps[ckey].kills) >= KC3Meta.gauge(ckey.replace("m",""));
-		localStorage.maps = JSON.stringify(maps);
+		currentMap.clear |= (++currentMap.kills) >= KC3Meta.gauge(mapKey);
+		KC3SortieManager.setCurrentMapData(currentMap);
 		
 		// Bq3: Sortie 2 BBV/AO to [W1-6], reach node N twice
 		if(KC3SortieManager.isSortieAt(1, 6)
@@ -323,7 +373,7 @@ Used by SortieManager
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
 		this.battleDay = battleData;
 		this.fleetSent = parseInt(fleetSent) || KC3SortieManager.fleetSent;
-		//console.log("Raw battle data", battleData);
+		//console.debug("Raw battle data", battleData);
 		
 		var enemyships = battleData.api_ship_ke;
 		if(enemyships[0]==-1){ enemyships.splice(0,1); }
@@ -481,7 +531,7 @@ Used by SortieManager
 			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
-			// Bombine phase 2
+			// Bombing phase 2
 			if(battleData.api_kouku2.api_stage2 !== null){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
@@ -526,7 +576,7 @@ Used by SortieManager
 		
 		var i = 0;
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
-		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP()){
+		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
 			var PS = window.PS;
 			var DA = PS["KanColle.DamageAnalysis.FFI"];
 			var result = null;
@@ -537,21 +587,22 @@ Used by SortieManager
 			var fleetId = this.fleetSent - 1;
 			var enemyMain, enemyEscort, mainFleet, escortFleet;
 			
+			var endHPs = {
+				ally: beginHPs.ally.slice(),
+				enemy: beginHPs.enemy.slice()
+			};
+			
 			// PLAYER SINGLE FLEET
-			if ((typeof PlayerManager.combinedFleet === "undefined") || (PlayerManager.combinedFleet === 0) || fleetId>1){
+			if (!PlayerManager.combinedFleet || fleetId >= 1) {
 				// single fleet: not combined, or sent fleet is not first fleet
 				
-				// Update our fleet
+				// Data of current sortied our fleet
 				fleet = PlayerManager.fleets[fleetId];
-				// damecon ignored for PvP
-				dameConCode = KC3SortieManager.isPvP()
-					? [0,0,0,0,0,0]
-					: fleet.getDameConCodes();
-				
-				var endHPs = {
-					ally: beginHPs.ally.slice(),
-					enemy: beginHPs.enemy.slice()
-				};
+				// Damecon ignored for PvP.
+				// Known issue: get damecon from current fleet will not work with sortie history,
+				// and even read equips from sortie history,
+				// used on which node during 1 sortie still have to be remembered.
+				dameConCode = KC3SortieManager.isPvP() ? [0,0,0,0,0,0] : fleet.getDameConCodes();
 				
 				// ONLY ENEMY IS COMBINED
 				if (isEnemyCombined) {
@@ -560,15 +611,17 @@ Used by SortieManager
 					console.log("Only enemy is combined", result);
 					
 					// Update enemy ships
-					for (i = 7; i < 13; i++) {
-						this.enemyHP[i-7] = result.enemyMain[i-7];
-						endHPs.enemy[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].hp : -1;
-						this.enemySunk[i-7] = result.enemyMain[i-7] ? result.enemyMain[i-7].sunk : true;
+					for (i = 0; i < 6; i++) {
+						enemyMain = result.enemyMain[i];
+						this.enemyHP[i] = enemyMain || {};
+						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
+						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
-					for (i = 13; i < 19; i++) {
-						this.enemyHP[i-7] = result.enemyEscort[i-13];
-						endHPs.enemy[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].hp : -1;
-						this.enemySunk[i-7] = result.enemyEscort[i-13] ? result.enemyEscort[i-13].sunk : true;
+					for (i = 6; i < 12; i++) {
+						enemyEscort = result.enemyEscort[i-6];
+						this.enemyHP[i] = enemyEscort || {};
+						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
+						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
 				
 				// BOTH SINGLE FLEET
@@ -578,21 +631,21 @@ Used by SortieManager
 					console.log("Both single fleet", result);
 					
 					// Update enemy ships
-					for (i = 7; i < 13; i++) {
-						this.enemyHP[i-7] = result.enemy[i-7];
-						endHPs.enemy[i-7] = result.enemy[i-7] ? result.enemy[i-7].hp : -1;
-						this.enemySunk[i-7] = result.enemy[i-7] ? result.enemy[i-7].sunk : true;
+					for (i = 0; i < 6; i++) {
+						this.enemyHP[i] = result.enemy[i] || {};
+						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
+						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
 				}
 				
-				// update player ships
+				// update player ships of current sortied fleet
+				// will not work with sortie history data
 				shipNum = fleet.countShips();
 				for(i = 0; i < shipNum; i++) {
 					ship = fleet.ship(i);
 					ship.afterHp[0] = result.main[i].hp;
 					this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 					ship.afterHp[1] = ship.hp[1];
-					endHPs.ally[i] = result.main[i].hp;
 					// Check if damecon consumed, if yes, get item consumed
 					if (result.main[i].dameConConsumed){
 						this.dameConConsumed[i] = ship.findDameCon();
@@ -600,10 +653,10 @@ Used by SortieManager
 						this.dameConConsumed[i] = false;
 					}
 				}
-				
-				if(ConfigManager.info_btrank){
-					this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
+				for(i = 0; i < 6; i++) {
+					endHPs.ally[i] = result.main[i] ? result.main[i].hp : -1;
 				}
+
 				
 			// PLAYER COMBINED FLEET
 			} else {
@@ -629,19 +682,17 @@ Used by SortieManager
 					}
 					
 					// Update enemy
-					for(i = 1; i <= 6; i++) {
-						enemyMain = result.enemyMain[i-1];
-						if (enemyMain !== null) {
-							this.enemyHP[i-1] = enemyMain;
-							this.enemySunk[i-1] = enemyMain.sunk;
-						}
+					for(i = 0; i < 6; i++) {
+						enemyMain = result.enemyMain[i];
+						this.enemyHP[i] = enemyMain || {};
+						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
+						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
-					for(i = 1; i <= 6; i++) {
-						enemyEscort = result.enemyEscort[i-1];
-						if (enemyEscort !== null) {
-							this.enemyHP[i+5] = enemyEscort;
-							this.enemySunk[i+5] = enemyEscort.sunk;
-						}
+					for(i = 6; i < 12; i++) {
+						enemyEscort = result.enemyEscort[i-6];
+						this.enemyHP[i] = enemyEscort || {};
+						this.enemySunk[i] = enemyEscort ? enemyEscort.sunk : true;
+						endHPs.enemy[i] = enemyEscort ? enemyEscort.hp : -1;
 					}
 					
 					// Update main fleet
@@ -660,6 +711,9 @@ Used by SortieManager
 							this.dameConConsumed[i] = false;
 						}
 					}
+					for(i = 0; i < 6; i++) {
+						endHPs.ally[i] = mainFleet[i] ? mainFleet[i].hp : -1;
+					}
 					
 					// Update escort fleet
 					fleet = PlayerManager.fleets[1];
@@ -676,6 +730,9 @@ Used by SortieManager
 						} else {
 							this.dameConConsumedEscort[i] = false;
 						}
+					}
+					for(i = 6; i < 12; i++) {
+						endHPs.ally[i] = escortFleet[i-6] ? escortFleet[i-6].hp : -1;
 					}
 					
 				// ONLY PLAYER IS COMBINED
@@ -700,12 +757,11 @@ Used by SortieManager
 					}
 					
 					// Update enemy
-					for(i = 1; i <= 6; i++) {
-						enemyMain = result.enemy[i-1];
-						if (enemyMain !== null) {
-							this.enemyHP[i-1] = enemyMain;
-							this.enemySunk[i-1] = enemyMain.sunk;
-						}
+					for(i = 0; i < 6; i++) {
+						enemyMain = result.enemy[i];
+						this.enemyHP[i] = enemyMain || {};
+						this.enemySunk[i] = enemyMain ? enemyMain.sunk : true;
+						endHPs.enemy[i] = enemyMain ? enemyMain.hp : -1;
 					}
 					
 					// Update main fleet
@@ -724,6 +780,9 @@ Used by SortieManager
 							this.dameConConsumed[i] = false;
 						}
 					}
+					for(i = 0; i < 6; i++) {
+						endHPs.ally[i] = mainFleet[i] ? mainFleet[i].hp : -1;
+					}
 					
 					// Update escort fleet
 					fleet = PlayerManager.fleets[1];
@@ -741,8 +800,20 @@ Used by SortieManager
 							this.dameConConsumedEscort[i] = false;
 						}
 					}
+					for(i = 6; i < 12; i++) {
+						endHPs.ally[i] = escortFleet[i-6] ? escortFleet[i-6].hp : -1;
+					}
 				}
 				
+			}
+			
+			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, battleData );
+				this.predictedRank = KC3Node.predictRank( beginHPs, endHPs, battleData.api_name );
+				if(KC3Node.debugRankPrediction()){
+					console.debug("Predicted before after HPs", beginHPs, endHPs);
+					console.debug("Node " + this.letter + " predicted rank", this.predictedRank, this.sortie);
+				}
 			}
 		}
 		
@@ -750,30 +821,29 @@ Used by SortieManager
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				var maps = localStorage.getObject("maps"),
-					desg = ['m', sortieData.map_world, sortieData.map_num].join('');
 				if(this.isBoss()) {
 					// Invoke on boss event callback
 					if(sortieData.onSortie > 0 && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie
-					if(maps[desg].kind === "gauge-hp") {
-						maps[desg].baseHp = maps[desg].baseHp || this.enemyFlagshipHp;
-						if(maps[desg].baseHp != this.enemyFlagshipHp) {
-							console.info("Different boss HP detected:", maps[desg].baseHp + " -> " + this.enemyFlagshipHp);/*RemoveLogging:skip*/
+					var thisMap = sortieData.getCurrentMapData();
+					if(thisMap.kind === "gauge-hp") {
+						thisMap.baseHp = thisMap.baseHp || this.enemyFlagshipHp;
+						if(thisMap.baseHp != this.enemyFlagshipHp) {
+							console.info("Different boss HP detected:", thisMap.baseHp + " -> " + this.enemyFlagshipHp);/*RemoveLogging:skip*/
 							// If new HP lesser than old, should update it for Last Kill
-							if(this.enemyFlagshipHp < maps[desg].baseHp) {
-								maps[desg].baseHp = this.enemyFlagshipHp;
+							if(this.enemyFlagshipHp < thisMap.baseHp) {
+								thisMap.baseHp = this.enemyFlagshipHp;
 							}
 						}
+						sortieData.setCurrentMapData(thisMap);
 					}
-					localStorage.setObject("maps", maps);
 				}
 			}).call(this, KC3SortieManager);
 		}
 		
-		// Record encoutners only if on sortie
+		// Record encounters only if on sortie
 		if(KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleDay);
 			
@@ -809,7 +879,6 @@ Used by SortieManager
 			ally: nightData.api_maxhps.slice(1,7),
 			enemy: nightData.api_maxhps.slice(7,13)
 		};
-		
 		if (typeof nightData.api_maxhps_combined != "undefined") {
 			this.maxHPs.ally = this.maxHPs.ally.concat(nightData.api_maxhps_combined.slice(1,7));
 			this.maxHPs.enemy = this.maxHPs.enemy.concat(nightData.api_maxhps_combined.slice(7,13));
@@ -820,12 +889,15 @@ Used by SortieManager
 			ally: [],
 			enemy: []
 		};
-		
 		if (this.dayBeginHPs) {
 			beginHPs = this.dayBeginHPs;
 		} else {
 			beginHPs.ally = nightData.api_nowhps.slice(1,7);
 			beginHPs.enemy = nightData.api_nowhps.slice(7,13);
+			if (typeof nightData.api_nowhps_combined != "undefined") {
+				beginHPs.ally = beginHPs.ally.concat(nightData.api_nowhps_combined.slice(1,7));
+				beginHPs.enemy = beginHPs.enemy.concat(nightData.api_nowhps_combined.slice(7,13));
+			}
 		}
 		
 		if(setAsOriginalHP){
@@ -842,7 +914,7 @@ Used by SortieManager
 		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
-		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP()){
+		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
 			var PS = window.PS;
 			var DA = PS["KanColle.DamageAnalysis.FFI"];
 			var result = null;
@@ -853,10 +925,15 @@ Used by SortieManager
 			var ship;
 			var fleetId = this.fleetSent - 1;
 			
+			// use nowhps as initial values which are endHPs of day battle
 			var endHPs = {
-				ally: beginHPs.ally.slice(),
-				enemy: beginHPs.enemy.slice()
+				ally: nightData.api_nowhps.slice(1,7),
+				enemy: nightData.api_nowhps.slice(7,13)
 			};
+			if (typeof nightData.api_nowhps_combined != "undefined") {
+				endHPs.ally = endHPs.ally.concat(nightData.api_nowhps_combined.slice(1,7));
+				endHPs.enemy = endHPs.enemy.concat(nightData.api_nowhps_combined.slice(7,13));
+			}
 			
 			// PLAYER COMBINED FLEET
 			if (PlayerManager.combinedFleet && fleetId < 1) {
@@ -868,9 +945,10 @@ Used by SortieManager
 				if (isEnemyCombined) {
 					// still needs 12-element array for dameConCode
 					if (dameConCode.length < 7) {
-						dameConCode = dameConCode.concat([0,0,0,0,0,0]);
+						dameConCode = PlayerManager.fleets[0].getDameConCodes().concat(dameConCode);
+						console.assert(dameConCode.length === 12, "dameConCode length should be 12 for combined fleets");
 					}
-					console.log("Fleet dameConCode", dameConCode);
+					//console.debug("Fleet dameConCode", dameConCode);
 					result = DA.analyzeBothCombinedNightBattleJS(dameConCode, nightData); 
 					console.log("Player combined", "enemy combined", result);
 					
@@ -878,9 +956,10 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
-							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
+							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
 						}
 						
 					// enemy info, enemy escort fleet in yasen
@@ -894,9 +973,10 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
-							endHPs.enemy[i] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
+							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
 						}
 					}
 					
@@ -909,9 +989,17 @@ Used by SortieManager
 						ship.afterHp[0] = result.allyEscort[i].hp;
 						this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 						ship.afterHp[1] = ship.hp[1];
-						endHPs.ally[i] = result.allyEscort[i].hp;
+						if (result.allyEscort[i].dameConConsumed){
+							this.dameConConsumedEscort[i] = ship.findDameCon();
+						} else {
+							this.dameConConsumedEscort[i] = false;
+						}
 					}
-					
+					for(i = 0; i < 12; i++) {
+						endHPs.ally[i] = i < 6 ?
+							(result.allyMain[i] ? result.allyMain[i].hp : -1) :
+							(result.allyEscort[i-6] ? result.allyEscort[i-6].hp : -1);
+					}
 					
 				// ONLY PLAYER IS COMBINED
 				} else {
@@ -921,12 +1009,12 @@ Used by SortieManager
 					
 					// update enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
-						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
+						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
 					
-					// player fleet
+					// player escort fleet
 					shipNum = fleet.countShips();
 					for(i = 0; i < shipNum; i++) {
 						ship = fleet.ship(i);
@@ -935,7 +1023,14 @@ Used by SortieManager
 						ship.afterHp[0] = result.main[i].hp;
 						this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 						ship.afterHp[1] = ship.hp[1];
-						endHPs.ally[i] = result.main[i].hp;
+						if (result.main[i].dameConConsumed){
+							this.dameConConsumedEscort[i] = ship.findDameCon();
+						} else {
+							this.dameConConsumedEscort[i] = false;
+						}
+					}
+					for(i = 6; i < 12; i++) {
+						endHPs.ally[i] = result.main[i-6] ? result.main[i-6].hp : -1;
 					}
 				}
 				
@@ -943,7 +1038,7 @@ Used by SortieManager
 			} else {
 				fleet = PlayerManager.fleets[fleetId];
 				// damecon ignored for PvP
-				dameConCode = KC3SortieManager.isPvP() ? [0,0,0, 0,0,0] : fleet.getDameConCodes();
+				dameConCode = KC3SortieManager.isPvP() ? [0,0,0,0,0,0] : fleet.getDameConCodes();
 				
 				// ONLY ENEMY IS COMBINED
 				if (isEnemyCombined) {
@@ -955,9 +1050,10 @@ Used by SortieManager
 					if (this.activatedEnemyFleet == 1) {
 						console.log("Enemy main fleet in yasen", result.enemyMain);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyMain[i];
-							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							this.enemyHP[i] = result.enemyMain[i] || {};
 							this.enemySunk[i] = result.enemyMain[i] ? result.enemyMain[i].sunk : true;
+							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
 						}
 						
 					// enemy info, enemy escort fleet in yasen
@@ -971,9 +1067,10 @@ Used by SortieManager
 						this.eSlot = nightData.api_eSlot_combined;
 						this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7,13);
 						for (i = 0; i < 6; i++) {
-							this.enemyHP[i] = result.enemyEscort[i];
-							endHPs.enemy[i] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
+							this.enemyHP[i] = result.enemyEscort[i] || {};
 							this.enemySunk[i] = result.enemyEscort[i] ? result.enemyEscort[i].sunk : true;
+							endHPs.enemy[i] = result.enemyMain[i] ? result.enemyMain[i].hp : -1;
+							endHPs.enemy[i + 6] = result.enemyEscort[i] ? result.enemyEscort[i].hp : -1;
 						}
 					}
 					
@@ -985,13 +1082,14 @@ Used by SortieManager
 					
 					// regular yasen enemy info
 					for (i = 0; i < 6; i++) {
-						this.enemyHP[i] = result.enemy[i];
-						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
+						this.enemyHP[i] = result.enemy[i] || {};
 						this.enemySunk[i] = result.enemy[i] ? result.enemy[i].sunk : true;
+						endHPs.enemy[i] = result.enemy[i] ? result.enemy[i].hp : -1;
 					}
 				}
 				
-				// regular yasen fleet info
+				// update player fleet for yasen
+				// not work for sortie history
 				shipNum = fleet.countShips();
 				for(i = 0; i < shipNum; i++) {
 					ship = fleet.ship(i);
@@ -1000,16 +1098,24 @@ Used by SortieManager
 					ship.afterHp[0] = result.main[i].hp;
 					this.allyNoDamage &= ship.hp[0]==ship.afterHp[0];
 					ship.afterHp[1] = ship.hp[1];
-					endHPs.ally[i] = result.main[i].hp;
+					if (result.main[i].dameConConsumed){
+						this.dameConConsumed[i] = ship.findDameCon();
+					} else {
+						this.dameConConsumed[i] = false;
+					}
+				}
+				for(i = 0; i < 6; i++) {
+					endHPs.ally[i] = result.main[i] ? result.main[i].hp : -1;
 				}
 			}
 			
-			console.log("Predicted enemyHP & Sunk", this.enemyHP, this.enemySunk);
-			
-			// both single fleet predictable only for now
-			if(ConfigManager.info_btrank &&
-				!isEnemyCombined && (!PlayerManager.combinedFleet || fleetId > 0)){
+			if(ConfigManager.info_btrank){
+				KC3Node.excludeEscapedShips( beginHPs.ally, nightData );
 				this.predictedRankNight = KC3Node.predictRank( beginHPs, endHPs, nightData.api_name );
+				if(KC3Node.debugRankPrediction()){
+					console.debug("Predicted before after yasen HPs", beginHPs, endHPs);
+					console.debug("Node " + this.letter + " predicted yasen rank", this.predictedRankNight);
+				}
 			}
 		}
 		
@@ -1019,7 +1125,7 @@ Used by SortieManager
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
 		
-		// Record encoutners only if on sortie and starts from night
+		// Record encounters only if on sortie and starts from night
 		if(this.startsFromNight && KC3SortieManager.onSortie > 0) {
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
@@ -1044,13 +1150,14 @@ Used by SortieManager
 				this.rating = "SS";
 			
 			if(this.isBoss()) {
-				var maps = localStorage.getObject("maps"),
+				// assumed maps[ckey] already initialized at /mapinfo or /start
+				var maps = KC3SortieManager.getAllMapData(),
 					ckey = ['m', KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
 					stat = maps[ckey].stat,
 					srid = KC3SortieManager.onSortie;
 				/* DESPAIR STATISTICS ==> */
 				if(stat) {
-					let fs = [this.gaugeDamage, this.enemyFlagshipHp],
+					var fs = [this.gaugeDamage, this.enemyFlagshipHp],
 						pt = 'dummy',
 						sb = stat.onBoss,
 						oc = 0;
@@ -1117,9 +1224,7 @@ Used by SortieManager
 						stat.onClear = srid; // retrieve sortie ID for first clear mark
 				}
 				
-				/* ==> FLAGSHIP ATTACKING */
-				
-				localStorage.setObject('maps',maps);
+				KC3SortieManager.setAllMapData(maps);
 			}
 			
 			var ship_get = [];
@@ -1414,8 +1519,8 @@ Used by SortieManager
 		var ap = apTuple[0];
 		if(!!ap){
 			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
-				.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3),
-					Math.floor(3 * ap / 2), 3 * ap);
+				.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
+					Math.round(3 * ap / 2), 3 * ap);
 		}
 		var enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){

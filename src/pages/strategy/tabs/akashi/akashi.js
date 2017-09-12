@@ -13,6 +13,7 @@
 		heldGearRosterIds: [],
 		instances: {},
 		hideNotImprovable: false,
+		showEquippedLocked: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -100,16 +101,28 @@
 				var equipList = $(".equipment_list");
 				if(self.hideNotImprovable){
 					$(".equipment.disabled," +
-					  ".equipment.equipped," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
 					  ".equipment.insufficient",
 						equipList).slideUp(300);
 				} else {
 					$(".equipment.disabled," +
-					  ".equipment.equipped," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
 					  ".equipment.insufficient",
 						equipList).slideDown();
 				}
 			});
+			
+			$("#equipped_checkbox").on("change", function(){
+				self.showEquippedLocked = this.checked;
+				$(".equipment.disabled," +
+					".equipment.equipped," +
+					".equipment.insufficient",
+					$(".equipment_list")).slideDown(400);
+				// To recheck consumable items if locked
+				setTimeout(function(){
+					KC3StrategyTabs.reloadTab(undefined, false);
+				}, 400);
+			}).prop("checked", this.showEquippedLocked);
 			
 			// Link to weekday specified by hash parameter
 			if(!!KC3StrategyTabs.pageParams[1]){
@@ -254,7 +267,7 @@
 						switch(id){
 						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
 						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
-						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
+						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
 						}
 						return false;
 					};
@@ -277,7 +290,7 @@
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
 					&& self.instances[consumedItem.api_id].freestar0 < amount){
-					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+					$(".eq_res_line.plus{0}".format(stars), container).addClass(self.showEquippedLocked ? "locked" : "insufficient");
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("locked");
 				}
 			};
@@ -375,15 +388,15 @@
 						}
 						
 						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
-						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
+						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][2]);
 						showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
 						
 						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
-						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
+						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][2]);
 						showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
 						if(imp.upgrade && imp.upgrade[0] > 0){
 							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
-							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
+							checkDevScrew("max", itemId, resArr[3][1], resArr[3][2]);
 							showConsumedItemList("max", resArr[3][4], resArr[3][5]);
 							upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");

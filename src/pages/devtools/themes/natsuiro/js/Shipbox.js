@@ -31,7 +31,7 @@ KC3改 Ship Box for Natsuiro theme
 		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
 		$(".ship_img", this.element).tooltip({
-			position: { my: !!isCombinedEscort ? "left-50 top" : "left+50 top",
+			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
 			items: "div",
 			content: tooltipBox.html()
@@ -228,8 +228,8 @@ KC3改 Ship Box for Natsuiro theme
 		// If not being repaired
 		}else{
 			if(this.shipData.didFlee){
-				console.log( this.shipData.name(), "fled, setting backgrounds to white");
-				// if FCF, mark hp bar as blue
+				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
+				// if FCF, mark background and hp bar as white
 				$(".ship_hp_bar", this.element).css("background", "#fff");
 				this.element.css("background", "rgba(255,255,255,0.4)");
 			}else{

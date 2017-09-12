@@ -131,7 +131,7 @@ Does not include Ships and Gears which are managed by other Managers
 				}
 				*/
 				// Let client know: these slotitems are moving, not equippable.
-				// For now, moving peroid of LBAS plane is 12 mins.
+				// For now, moving period of LBAS plane is 12 mins.
 				if(Array.isArray(data.api_base_convert_slot)) {
 					[].push.apply(this.baseConvertingSlots, data.api_base_convert_slot);
 				}
@@ -158,6 +158,54 @@ Does not include Ships and Gears which are managed by other Managers
 				}
 			});
 			return total;
+		},
+
+		/**
+		 * @return the worst cond value [1, 3] of all land bases which are set to sortie
+		 */
+		getBasesWorstCond :function(){
+			var worst = 1;
+			$.each(this.bases, function(i, b){
+				if(b.action === 1){
+					worst = Math.max(worst, b.worstCond());
+				}
+			});
+			return worst;
+		},
+
+		/**
+		 * @param viewFleet - Fleet object currently being viewed, default 1st fleet.
+		 * @param escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
+		 * @param isCombined - if current view is really Combined Fleet view, default false.
+		 * @return fighter power text based on config.
+		 * @see Fleet.fighterPowerText similar function only served for Fleet object.
+		 */
+		getFleetsFighterPowerText :function(viewFleet = this.fleets[0],
+			escortFleet = this.fleets[1],
+			isCombined = false){
+			var mainFleet = viewFleet;
+			if(isCombined){ // force to 1st fleet if combined
+				mainFleet = viewFleet = this.fleets[0];
+			}
+			switch(ConfigManager.air_formula){
+				case 2:
+					return "~" + (
+						isCombined && ConfigManager.air_combined ?
+						mainFleet.fighterVeteran() + escortFleet.fighterVeteran() :
+						viewFleet.fighterVeteran());
+				case 3:
+					const mainBounds = mainFleet.fighterBounds();
+					const escortBounds = escortFleet.fighterBounds();
+					return  (isCombined && ConfigManager.air_combined ?
+							mainBounds[0] + escortBounds[0] : mainBounds[0])
+							+ "~" +
+							(isCombined && ConfigManager.air_combined ?
+							mainBounds[1] + escortBounds[1] : mainBounds[1]);
+				default:
+					return isCombined && ConfigManager.air_combined ?
+						mainFleet.fighterPower() + escortFleet.fighterPower() :
+						viewFleet.fighterPower();
+			}
 		},
 
 		setRepairDocks :function( data ){

@@ -87,25 +87,29 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				delete mergedEventInfo.api_dmg;
 				
 				sortie.eventmap = mergedEventInfo;
+
+				// Update event map now/max hp at once for panel display,
+				// because first run after rank selected, they were set to 9999
+				if((thisMap.curhp || 9999) === 9999 && eventData.api_now_maphp){
+					thisMap.curhp = parseInt(eventData.api_now_maphp, 10);
+					thisMap.maxhp = parseInt(eventData.api_max_maphp, 10);
+					this.setCurrentMapData(thisMap);
+				}
 			}
 			// Save on database and remember current sortieId
 			KC3Database.Sortie(sortie, function(id){
 				self.onSortie = id;
 				self.sortieTime = stime;
 				self.save();
-				
-				// Save event maphp now/max to localStorage.maps
+				// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
 				if(eventData){
-					if(!thisMap.curhp){
-						thisMap.curhp = eventData.api_now_maphp;
-						thisMap.maxhp = eventData.api_max_maphp;
-					}
 					if(thisMap.stat && thisMap.stat.onBoss){
-						let hpData = thisMap.stat.onBoss.hpdat || [];
+						var hpData = thisMap.stat.onBoss.hpdat || [];
 						hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
 						thisMap.stat.onBoss.hpdat = hpData;
+						self.setCurrentMapData(thisMap);
+						console.log("Event map HP on sortie " + id + " recorded as", hpData[id]);
 					}
-					self.setCurrentMapData(thisMap);
 				}
 			});
 		},
@@ -345,7 +349,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		checkFCF :function( escapeData ){
 			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
-				console.log("FCF triggered");
+				console.debug("FCF triggered");
 				
 				var taihadIndex = escapeData.api_escape_idx[0];
 				var taihadShip;
@@ -373,7 +377,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sendFCFHome :function(){
-			console.log("Setting escape flag for fcfCheck", this.fcfCheck);
+			console.debug("Setting escape flag for fcfCheck", this.fcfCheck);
 			this.fcfCheck.forEach(function(fcfShip){
 				KC3ShipManager.get(fcfShip).didFlee = true;
 			});
@@ -566,9 +570,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		/**
 		 * Get battle opponent's fighter power only based on master data.
-		 * @param enemyFleetShips - master ID array of opponent fleet ships.
-		 * @param enemyShipSlots - master ID array of equip slots, optional.
-		 *                         length should be the same with enemyFleetShips.
+		 * @param {Array} enemyFleetShips - master ID array of opponent fleet ships.
+		 * @param {Array[]}enemyShipSlots - master ID array of equip slots, optional.
+		 *                                  length should be the same with enemyFleetShips.
+		 * @param {Array[]}enemySlotSizes - capacities of equip slots, optional, same length either.
 		 * @return a tuple contains [
 		 *           computed fighter power (without improvement and proficiency bonus),
 		 *           sum of known slot capacity,
@@ -578,11 +583,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		 *         ]
 		 * @see To compute fighter power of our fleet, see Fleet, Ship, Gear classes.
 		 */
-		enemyFighterPower :function(enemyFleetShips, enemyShipSlots){
+		enemyFighterPower :function(enemyFleetShips, enemyShipSlots, enemySlotSizes){
 			var totalPower = false;
 			var totalCapacity = 0;
 			var noAirPowerCapacity = 0;
-			var exceptions = {};
+			const exceptions = {};
 			// no ship IDs
 			if(!enemyFleetShips){
 				exceptions.ship = null;
@@ -593,7 +598,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				if(!shipId || shipId < 0){
 					return;
 				}
-				let shipMst = KC3Master.isAbyssalShip(shipId) ?
+				const shipMst = KC3Master.isAbyssalShip(shipId) ?
 					KC3Master.abyssalShip(shipId, true) : KC3Master.ship(shipId);
 				// no ship master data
 				if(!shipMst){
@@ -609,8 +614,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				// mainly remove -1 placeholders
 				shipSlots = shipSlots.filter(function(id) { return id > 0; });
 				for(let slotIdx = 0; slotIdx < shipSlots.length; slotIdx++){
-					let gearId = shipSlots[slotIdx];
-					let gearMst = KC3Master.slotitem(gearId);
+					const gearId = shipSlots[slotIdx];
+					const gearMst = KC3Master.slotitem(gearId);
 					// no gear master data
 					if(!gearMst){
 						exceptions[shipId] = exceptions[shipId] || {};
@@ -619,9 +624,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
 						String(gearMst.api_type[2]) ) > -1){
-						let aaStat = gearMst.api_tyku || 0;
-						let capacity = (shipMst.api_maxeq || [])[slotIdx];
-						if(typeof capacity !== "undefined"){
+						const aaStat = gearMst.api_tyku || 0;
+						const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
+						if(capacity !== undefined){
 							if(aaStat > 0){
 								totalCapacity += capacity;
 								totalPower += Math.floor(Math.sqrt(capacity) * aaStat);

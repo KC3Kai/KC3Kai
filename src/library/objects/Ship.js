@@ -220,7 +220,7 @@ KC3改 Ship Object
 		var
 			self= this,
 			ca  = this.getDefer(), // get defer array
-			cd  = ca[0]; // current collection of deferreds
+			cd  = ca[0]; // current collection of deferred
 		if(ca && cd && cd.state() == "pending")
 			return ca;
 
@@ -311,7 +311,7 @@ KC3改 Ship Object
 	/**
 	 * Return max HP of a ship. Static method for library.
 	 * Especially after marriage, api_taik[1] is hard to reach in game.
-	 * @return false if ship ID belongs to aybssal or nonexistence
+	 * @return false if ship ID belongs to abyssal or nonexistence
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%B1%E3%83%83%E3%82%B3%E3%83%B3%E3%82%AB%E3%83%83%E3%82%B3%E3%82%AB%E3%83%AA%E5%BE%8C%E3%81%AE%E8%80%90%E4%B9%85%E5%80%A4
 	 */
@@ -336,7 +336,7 @@ KC3改 Ship Object
 
 	/**
 	 * Return total count of aircraft slots of a ship. Static method for library.
-	 * @return -1 if ship ID belongs to aybssal or nonexistence
+	 * @return -1 if ship ID belongs to abyssal or nonexistence
 	 */
 	KC3Ship.getCarrySlots = function(masterId){
 		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
@@ -397,7 +397,7 @@ KC3改 Ship Object
 			lk: this.master().api_luck[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
-			// Accuracy not shown ingame, so naked value might be plus-minus 0
+			// Accuracy not shown in-game, so naked value might be plus-minus 0
 			ac: 0
 		};
 		const statApiNames = {
@@ -448,7 +448,7 @@ KC3改 Ship Object
 			ev: this.ev[1],
 			fp: this.fp[1],
 			hp: this.hp[1],
-			// Maxed Luck includes full modernizated + marriage bonus
+			// Maxed Luck includes full modernized + marriage bonus
 			lk: this.lk[1],
 			ls: this.ls[1],
 			tp: this.tp[1]
@@ -469,7 +469,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Left modernizable stats of this ship.
+	 * Left modernize-able stats of this ship.
 	 * @return stats to be maxed modernization
 	 */
 	KC3Ship.prototype.modernizeLeftStats = function(statAttr){
@@ -816,7 +816,7 @@ KC3改 Ship Object
 			: isTaiyouSeries ? 65
 			: 100;
 
-		// shortcutting on the stricter condition first
+		// shortcut on the stricter condition first
 		if (this.as[0] < aswThreshold)
 			return false;
 

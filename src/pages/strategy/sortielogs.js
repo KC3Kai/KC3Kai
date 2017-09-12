@@ -518,14 +518,22 @@
 						var selFleet = sortie["fleet"+n];
 						$.each(selFleet, function(index, ship){
 							// false recorded on older sorties. stop loop when encountered
-							if(i===0) {
-								if(ship===false){ return false; }
-								
+							if(ship === false) { return false; }
+							if(i === 0) {
 								$(".sortie_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
 									.click(shipClickFunc);
 								$(".sortie_ship_"+(index+1), sortieBox)
+									.addClass("hover")
+									.addClass("simg-"+ship.mst_id)
+									.show();
+							} else if(i === 1) {
+								$(".sortie_combined_ship_"+(index+1)+" img", sortieBox)
+									.attr("src", KC3Meta.shipIcon(ship.mst_id))
+									.attr("alt", ship.mst_id)
+									.click(shipClickFunc);
+								$(".sortie_combined_ship_"+(index+1), sortieBox)
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
 									.show();
@@ -699,15 +707,31 @@
 								}
 							});
 							
-							// Process Battle
+							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
-							thisNode = (new KC3Node()).defineAsBattle();
+							// Known issue: prediction will fail when Damecon used,
+							// as Node not read equipped damecon from sortie history,
+							// and damecon used on which node during 1 sortie have to be remembered.
+							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
+								sortie.world, sortie.mapnum)).defineAsBattle();
 							if(typeof battle.data.api_dock_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
+								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.night( battle.yasen );
+								}
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
+								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.night( battle.yasen );
+								}
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
+							}
+							if(KC3Node.debugRankPrediction()){
+								// Known issue: if `api_name` not saved into battle data for old history,
+								// prediction on long distance air raid node will fail
+								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
+								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch");
 							}
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
@@ -894,17 +918,11 @@
 			
 			var withDataCover64 = this.stegcover64;
 			
-			var rcanvas = document.createElement("canvas");
-			rcanvas.width = 400;
-			rcanvas.height = 400;
-			var rcontext = rcanvas.getContext("2d");
-			
 			var domImg = new Image();
 			domImg.onload = function(){
-				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
-				KC3Database.get_sortie_data(sortieId, function(sortieData){
-					if(sortieData.battles.length===0){
+				KC3Database.get_sortie_data(sortieId, function(sortieData) {
+					if(sortieData.battles.length === 0) {
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return false;
@@ -918,39 +936,60 @@
 						$("body").css("opacity", "1");
 						return true;
 					}
-
+					
 					console.debug("Downloading reply", sortieId, ", data:", sortieData);
-					rcontext.font = "26pt Calibri";
-					rcontext.fillStyle = '#ffffff';
-					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20, 215);
-					
-					rcontext.font = "20pt Calibri";
-					rcontext.fillStyle = '#ffffff';
-					rcontext.fillText(PlayerManager.hq.name, 100, 210);
-					
-					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
-					var shipIconImage;
-					$.each(fleetUsed, function(ShipIndex, ShipData){
-						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-						rcontext.drawImage(shipIconImage,0,0,70,70,25+(60*ShipIndex),233,50,50);
-					});
-					
-					withDataCover64 = rcanvas.toDataURL("image/png");
-					
 					// Clear properties duplicated or may not used by replayer for now
-					$.each(sortieData.battles, function(_, battle){
+					$.each(sortieData.battles, function(_, battle) {
 						delete battle.hq;
 						delete battle.enemyId;
 						delete battle.airRaid;
 						delete battle.shizunde;
 					});
 					var jsonData = JSON.stringify(sortieData);
-					if(jsonData.length > 30000){
-						console.warn("Replayer data is too large to be encoded, size:", jsonData.length);
+					var scale = Math.ceil(Math.sqrt(jsonData.length / 30000));
+					console.debug("Image scale", scale, "based on data size:", jsonData.length);
+					
+					var rcanvas = document.createElement("canvas");
+					rcanvas.width = 400 * scale;
+					rcanvas.height = 400 * scale;
+					var rcontext = rcanvas.getContext("2d");
+					rcontext.drawImage(domImg, 0, 0, 400, 400, 0, 0, 400 * scale, 400 * scale);
+
+					rcontext.font = (26 * scale) + "pt Calibri";
+					rcontext.fillStyle = '#ffffff';
+					rcontext.fillText(sortieData.world+"-"+sortieData.mapnum, 20 * scale, 215 * scale);
+					
+					rcontext.font = (20 * scale) + "pt Calibri";
+					rcontext.fillStyle = '#ffffff';
+					rcontext.fillText(PlayerManager.hq.name, 100 * scale, 210 * scale);
+					
+					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
+					if(sortieData.combined) {
+						$.each(fleetUsed, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(18 + (60 * shipIndex)) * scale, 227 * scale, 50 * scale, 50 * scale);
+						});
+						$.each(sortieData.fleet2, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(45 + (60 * shipIndex)) * scale, 253 * scale, 35 * scale, 35 * scale);
+						});
+					} else {
+						$.each(fleetUsed, function(shipIndex, ShipData) {
+							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+								(25 + (60 * shipIndex)) * scale, 233 * scale, 50 * scale, 50 * scale);
+						});
 					}
+					
+					withDataCover64 = rcanvas.toDataURL("image/png");
+					
 					steg.encode(jsonData, withDataCover64, {
-						success: function(newImg){
-							KC3ImageExport.writeToCanvas(newImg, { width: 400, height: 400 }, function (error, canvas) {
+						success: function(newImg) {
+							KC3ImageExport.writeToCanvas(newImg,
+								{ width: 400 * scale, height: 400 * scale },
+								function(error, canvas) {
 								if (error) {
 									self.endExport(error);
 									return;
@@ -962,13 +1001,13 @@
 								}).export(self.endExport.bind(self));
 							});
 						},
-						error: function(e){
+						error: function(e) {
 							self.endExport(e);
 							return false;
 						}
 					});
 					
-				}, function(e){
+				}, function(e) {
 					self.endExport(e);
 					return false;
 				});

@@ -331,6 +331,11 @@ html,body {
 	display:none;
 	padding:5px;
 }
+.module.activity .activity_box.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
+}
 .module.activity .activity_dismissable {
 	cursor:pointer;
 	user-select: none;
@@ -608,6 +613,11 @@ html,body {
 }
 .module.activity .sortie_node.nc_battle {
 	background:#7D0000;
+	text-shadow:
+		0px -1px 1px #7d0000,
+		1px 0px 1px #7d0000,
+		0px 1px 1px #7d0000,
+		-1px 0px 1px #7d0000;
 }
 .module.activity .sortie_node.nc_resource {
 	background:#007A00;
@@ -623,6 +633,49 @@ html,body {
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
 }
+.module.activity .sortie_node.nc_night_battle {
+	background:
+		-webkit-linear-gradient(-15deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background:
+		linear-gradient(105deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background-size: 400% 200%;
+	background-position: -8px 0px;
+}
+.module.activity .sortie_node.nc_air_battle {
+	background:
+		-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+		#7d0000;
+	background-size: 18px 18px;
+	background-position: -9px -10px, -27px -45px;
+}
+.module.activity .sortie_node.nc_air_raid {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+		#7d0000;
+	background-size: 28px 27px;
+	background-position: -53px -66px;
+}
+.module.activity .sortie_node.nc_enemy_combined {
+	background:
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		#7d0000;
+	background-size: 25px 25px;
+	background-position: -7px -7px, 0px 18px, -32px 24px, -50px 49px;
+}
+
 /* Abyss Ships */
 .module.activity .node_type_battle {
 	position: relative;
@@ -2188,9 +2241,13 @@ ABYSS FLEET
 	width:30px;
 	height:30px;
 }
+.module.controls .fleet_lbas.badMorale {
+	border:2px solid #faa;
+}
 .module.controls .fleet_lbas.needsSupply {
 	border:2px solid #f00;
 }
+.module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
 	margin-top:-2px;
 }
@@ -2270,6 +2327,21 @@ ABYSS FLEET
 }
 .module.summary .summary-speed .summary_text {
 	width:41px;
+}
+.module.summary .summary_sub {
+	width:12px;
+	height:12px;
+	line-height:13px;
+	border-radius:6px;
+	margin:9px 0px 0px 9px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#78736f;
+	background:#fff;
+	overflow:hidden;
+	pointer-events:none;
+	display:none;
 }
 
 /*------- FLEET -------*/
