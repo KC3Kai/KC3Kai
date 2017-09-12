@@ -31,6 +31,7 @@
         Places data onto the interface from scratch.
         ---------------------------------*/
         execute() {
+            this.loadLockModeColors();
             this.addLockBoxes();
             $(".map_area, .ships_area", $(".lock_modes")).empty();
             this.fillLockBoxes();
@@ -86,9 +87,23 @@
             this.adjustHeight();
         }
 
+        setStyleVar(name, value) {
+            // set vars to parent element `planner_area` for sharing with children
+            const plannerNativeStyle = $(".planner_area", this.tab).get(0).style;
+            plannerNativeStyle.removeProperty(name);
+            plannerNativeStyle.setProperty(name, value);
+        }
+
+        loadLockModeColors() {
+            const tagColors = KC3Meta.eventLockingTagColors(ConfigManager.sr_theme);
+            tagColors.forEach((color, i) => {
+                this.setStyleVar(`--lockColor${i + 1}`, color);
+            });
+        }
+
         adjustHeight() {
-            $(".planner_area", this.tab).get(0).style
-                .setProperty("--shipListOffsetTop", $(".ship_list", this.tab).offset().top + "px");
+            this.setStyleVar("--shipListOffsetTop",
+                $(".ship_list", this.tab).offset().top + "px");
         }
 
         mapShipLockingStatus(shipObj) {

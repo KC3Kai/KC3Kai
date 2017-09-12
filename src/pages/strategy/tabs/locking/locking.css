@@ -36,6 +36,22 @@
 	padding:5px 5px 5px 5px;
 }
 
+.tab_locking .lock_mode_1 {
+	background: var(--lockColor1) !important;
+}
+.tab_locking .lock_mode_2 {
+	background: var(--lockColor2) !important;
+}
+.tab_locking .lock_mode_3 {
+	background: var(--lockColor3) !important;
+}
+.tab_locking .lock_mode_4 {
+	background: var(--lockColor4) !important;
+}
+.tab_locking .lock_mode_5 {
+	background: var(--lockColor5) !important;
+}
+
 .tab_locking .map_area {
 	width:130px;
 	margin:0 0 5px 0;
