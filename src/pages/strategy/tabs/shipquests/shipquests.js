@@ -27,6 +27,7 @@
 		---------------------------------*/
 		reload() {
 			KC3ShipManager.load();
+			KC3QuestManager.load();
 			this.prepareShipList(true, this.mapShipQuests);
 		}
 
@@ -60,6 +61,12 @@
 				const questDiv = $("<div />")
 					.addClass("ship_field ship_stat questIcon")
 					.addClass("type" + String(questId).substr(0, 1));
+
+				// If we have player data about the quest
+				if(KC3QuestManager.exists(questId)) {
+					questDiv.addClass("exists");
+				}
+
 				questDiv.text(questMeta.code);
 				questDiv.attr("title", this.buildQuestTooltip(questId, questMeta));
 				$(".ship_quests", shipRow).append(questDiv);
