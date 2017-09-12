@@ -444,7 +444,7 @@
 				});
 				
 				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
-				var remodelInfo = RemodelDb.remodelInfo( ship_id );
+				var remodelInfo = RemodelDb.remodelInfo( ship_id ) || {};
 				
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){

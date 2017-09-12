@@ -48,7 +48,10 @@
         },
         // according to the following doc:
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
-        calcDevMat: function(steel) {
+        // special case for Saratoga Mk.II converting: 5500 steel but 20 devmats
+        calcDevMat: function(steel, ship_id_from) {
+            if ([545, 550].indexOf(ship_id_from) > -1)
+                return 20;
             return (steel < 4500) ? 0
                 : ( steel < 5500) ? 10
                 : ( steel < 6500) ? 15
@@ -59,10 +62,21 @@
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 && [503, 504].indexOf(ship_id_from) < 0;
         },
-        // converting Suzuya/Kumano (Kou) K2 also consumes torches, see also:
-        // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
+        // some convert remodeling also consumes torches,
+        // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
-            return [503, 504, 508, 509].indexOf(ship_id_from) > -1 ? 20 : 0;
+            switch(ship_id_from) {
+                case 503: // Suzuya K2
+                case 504: // Kumano K2
+                case 508: // Suzuya Kou K2
+                case 509: // Kumano Kou K2
+                    return 20;
+                case 545: // Saratoga Mk.2
+                case 550: // Saratoga Mk.2 Mod.2
+                    return 30;
+                default:
+                    return 0;
+            }
         },
         mkDb: function(masterData, isRaw) {
             var self = this;
@@ -81,7 +95,7 @@
                  }
              */
             var remodelInfo = {};
-            // all ship Ids (except abyssals)
+            // all ship Ids (except abyssal)
             var shipIds = [];
             // all ship Ids that appears in x.aftershipid
             // stored as a set.
@@ -110,7 +124,7 @@
                       torch: 0
                     };
 
-                remodel.devmat = self.calcDevMat(remodel.steel);
+                remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from);
                 remodel.torch = self.calcTorch(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;
 
@@ -152,7 +166,7 @@
                  }
              */
             var remodelGroups = {};
-            // reverse from shipId to orginal
+            // reverse from shipId to original
             var originOf = {};
 
             $.each( originalShipIds, function(i, x) {
@@ -192,7 +206,7 @@
                      upgradeCount: isRaw ? Object.keys(masterData.shipupgrade).length : masterData.api_mst_shipupgrade.length
                    };
         },
-        // return root ship in this ships's remodel chain
+        // return root ship in this ship's remodel chain
         originOf: function(shipId) {
             return this._db ? this._db.originOf[shipId] : undefined;
         },
@@ -255,7 +269,7 @@
             remodelGroup.pop();
 
             // for ships that has at least been remodelled once,
-            // there is no need keepin her prior form info here.
+            // there is no need keeping her prior form info here.
             while (remodelGroup.length > 0 && remodelGroup[0] !== shipId)
                 remodelGroup.shift();
             var levels = remodelGroup.map( function(sid) {

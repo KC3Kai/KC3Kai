@@ -90,7 +90,7 @@
 					shipSrc += "&abyss=0&forceFrame=8";
 					appendToBox = ".tab_mstupdate .mstseason";
 				} else if (KC3Master.isAbyssalShip(shipData.api_id)) {
-					// ABYSSALS
+					// ABYSSAL
 					shipSrc += "&abyss=1" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstabyss";
 				} else {
@@ -165,6 +165,7 @@
 				$(".ship_name", shipBox).text(seasonalData ? seasonalData.api_name : "Link not available");
 				$(".ship_name", shipBox).data("tab", "mstship");
 				$(".ship_name", shipBox).data("api_id", shipId);
+				$(".ship_name", shipBox).attr("data-mst-id", shipId);
 				$(".ship_name", shipBox).click(linkClickFunc);
 				
 				shipBox.appendTo(".tab_mstupdate .mstseason");
