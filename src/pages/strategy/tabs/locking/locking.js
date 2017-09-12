@@ -87,8 +87,8 @@
         }
 
         adjustHeight() {
-            $(".ship_list, .filters", this.tab)
-                .css("height", "calc( 100vh - " + $(".ship_list", this.tab).offset().top + "px - 5px )");
+            $(".planner_area", this.tab).get(0).style
+                .setProperty("--shipListOffsetTop", $(".ship_list", this.tab).offset().top + "px");
         }
 
         mapShipLockingStatus(shipObj) {
@@ -152,7 +152,8 @@
         defineSorters() {
             this.defaultSorterDefinitions();
             const define = this.defineSimpleSorter.bind(this);
-            define("sally", "Sally",        ship => -ship.sally);
+            define("sally", "LockingTag",   ship =>
+                -ship.sally || -((ship.lockPlan === undefined ? -1 : ship.lockPlan) + 1) || ship.id);
             define("hp",    "MaxHp",        ship => -ship.hp);
             define("fp",    "FirePower",    ship => -ship.fp[1 + (this.filterValues.equipStats & 1)]);
             define("tp",    "Torpedo",      ship => -ship.tp[1 + (this.filterValues.equipStats & 1)]);
@@ -228,7 +229,7 @@
                 const gear = KC3GearManager.get(equipId);
                 if(gear.masterId > 0) {
                     $("img", element)
-                        .attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+                        .attr("src", `/assets/img/items/${gear.master().api_type[3]}.png`)
                         .attr("alt", gear.master().api_id)
                         .click(this.gearClickFunc)
                         .error(function() {
@@ -271,7 +272,7 @@
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_speed");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_speed")
-                    .attr("id", "filter_speed_"+i);
+                    .attr("id", "filter_speed_" + i);
                 $("label", elm).text(speed).attr("for", "filter_speed_" + i);
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
@@ -377,20 +378,20 @@
          * Drag & drop area
          */
         addShipToBox(boxIndex, ship) {
-            $(".ships_area div[data-rosterid='" + ship.id + "']", this.tab).remove();
+            $(`.ships_area div[data-rosterid='${ship.id}']`, this.tab).remove();
             const shipBox = $(".tab_locking .factory .lship").clone()
-                .appendTo(".tab_locking .lock_mode_" + (boxIndex + 1) + " .ships_area");
+                .appendTo(`.tab_locking .lock_mode_${boxIndex + 1} .ships_area`);
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
             shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
-            shipBox.attr("title", "{0:name} Lv.{1:level} ({2:stype})"
-                .format(ship.name, ship.level, KC3Meta.stype(ship.stype))
+            shipBox.attr("title", "{1:name} {2:stype} Lv.{3:level} ({0:id})"
+                .format(ship.id, ship.name, KC3Meta.stype(ship.stype), ship.level)
             ).lazyInitTooltip();
             if(ship.sally) {
                 shipBox.addClass("gamelocked");
-                shipBox.off("click");
+                shipBox.off("dblclick");
             } else {
                 shipBox.addClass("plannedlock");
                 shipBox.on("dblclick", () => {this.cleanupPlannedLock(ship);} );
@@ -430,7 +431,7 @@
                 .filter(shipInPlanId => shipInPlanId !== ship.id);
             delete ship.lockPlan;
             this.saveShipLockPlan();
-            $(".ships_area div[data-rosterid='" + ship.id + "']", this.tab).remove();
+            $(`.ships_area div[data-rosterid='${ship.id}']`, this.tab).remove();
             this.adjustHeight();
         }
 
