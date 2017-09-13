@@ -72,11 +72,11 @@
 		execute :function(){
 			$(".tab_mstupdate .runtime_id").text(chrome.runtime.id);
 			
-			var shipBox, gearBox, shipFile, shipVersion, shipSrc, appendToBox;
-			var self = this;
-			var linkClickFunc = function(e){
+			const self = this;
+			const linkClickFunc = function(e){
 				KC3StrategyTabs.gotoTab($(this).data("tab"), $(this).data("api_id"));
 			};
+			var shipBox, gearBox, shipFile, shipVersion, shipSrc, appendToBox;
 
 			// New Ship list
 			$.each(this.newShips, function(index, shipData) {
@@ -87,14 +87,20 @@
 				
 				if (KC3Master.isSeasonalShip(shipData.api_id)) {
 					// SEASONAL CG, no longer work since 2017-04-05 no seasonal item leak
-					shipSrc += "&abyss=0&forceFrame=8";
-					appendToBox = ".tab_mstupdate .mstseason";
+					// don't handle it here even seasonal leak again since 2017-09-12
+					return;
 				} else if (KC3Master.isAbyssalShip(shipData.api_id)) {
-					// ABYSSALS
+					// ABYSSAL
 					shipSrc += "&abyss=1" + (!shipVersion ? "" : "&ver=" + shipVersion);
+					// try to fix CG coordinate offset, only battle exists for abyssal
+					let [coordX, coordY] = KC3Master.graph(shipData.api_id).api_battle_n;
+					coordX = Math.floor(coordX * 0.4) - 150;
+					coordX = Math.floor(coordX * 0.4) - 40;
+					shipSrc += "&forceX=" + coordX + "&forceY=" + coordY;
 					appendToBox = ".tab_mstupdate .mstabyss";
 				} else {
 					// NON-SEASONAL CG
+					// show default card frame, no coordinate adjustment needed
 					shipSrc += "&abyss=0" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstships";
 				}
@@ -102,10 +108,11 @@
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
-				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
-				$(".ship_name", shipBox).data("tab", "mstship");
-				$(".ship_name", shipBox).data("api_id", shipData.api_id);
-				$(".ship_name", shipBox).click(linkClickFunc);
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
+					.data("tab", "mstship")
+					.data("api_id", shipData.api_id)
+					.attr("data-mst-id", shipData.api_id)
+					.click(linkClickFunc);
 				
 				shipBox.appendTo(appendToBox);
 			});
@@ -116,17 +123,18 @@
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
 				if(!KC3Master.isAbyssalGear(gearData.api_id)) {
-					var paddedId = (gearData.api_id<10?"00":gearData.api_id<100?"0":"") + gearData.api_id;
+					const paddedId = (gearData.api_id<10?"00":gearData.api_id<100?"0":"") + gearData.api_id;
 					$(".gear_cg img", gearBox).attr("src",
 						"http://" + self.myServerIp + "/kcs/resources/image/slotitem/card/" + paddedId + ".png");
 				} else {
 					$(".gear_cg img", gearBox).hide();
 				}
 				
-				$(".gear_name", gearBox).text( KC3Meta.gearName( gearData.api_name ) );
-				$(".gear_name", gearBox).data("tab", "mstgear");
-				$(".gear_name", gearBox).data("api_id", gearData.api_id);
-				$(".gear_name", gearBox).click(linkClickFunc);
+				$(".gear_name", gearBox).text( KC3Meta.gearName( gearData.api_name ) )
+					.data("tab", "mstgear")
+					.data("api_id", gearData.api_id)
+					.attr("data-mst-id", gearData.api_id)
+					.click(linkClickFunc);
 				
 				gearBox.appendTo(".tab_mstupdate .mstgears");
 			});
@@ -139,13 +147,18 @@
 				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
 				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=10";
+				// try to fix seasonal CG coordinate offset based on battle values
+				const [coordX, coordY] = KC3Master.graph(shipData.api_id).api_battle_n;
+				shipSrc += "&forceX=" + (coordX - 160) + "&forceY=" + (coordY - 120);
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
-				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) );
-				$(".ship_name", shipBox).data("tab", "mstship");
-				$(".ship_name", shipBox).data("api_id", shipData.api_id);
-				$(".ship_name", shipBox).click(linkClickFunc);
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
+					.data("tab", "mstship")
+					.data("api_id", shipData.api_id)
+					.attr("data-mst-id", shipData.api_id)
+					.attr("data-coord", [coordX, coordY].join(','))
+					.click(linkClickFunc);
 				
 				shipBox.appendTo(".tab_mstupdate .mstgraph");
 			});
@@ -158,14 +171,21 @@
 				shipVersion = KC3Master.graph(shipId).api_version[0];
 				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=8";
+				shipSrc += "&forceX=-40&forceY=-30";
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
-				var seasonalData = KC3Master.seasonal_ship(shipId);
+				const seasonalData = KC3Master.seasonal_ship(shipId);
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
-				$(".ship_name", shipBox).text(seasonalData ? seasonalData.api_name : "Link not available");
-				$(".ship_name", shipBox).data("tab", "mstship");
-				$(".ship_name", shipBox).data("api_id", shipId);
-				$(".ship_name", shipBox).click(linkClickFunc);
+				$(".ship_name", shipBox).text(seasonalData && seasonalData.api_name ?
+					seasonalData.api_name : "Not available")
+					.data("tab", "mstship")
+					.data("api_id", shipId)
+					.attr("data-mst-id", shipId);
+				if(seasonalData) {
+					$(".ship_name", shipBox).click(linkClickFunc);
+				} else {
+					$(".ship_name", shipBox).removeClass("hover");
+				}
 				
 				shipBox.appendTo(".tab_mstupdate .mstseason");
 			});

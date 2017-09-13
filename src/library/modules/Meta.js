@@ -438,6 +438,10 @@ Provides access to data on built-in JSON files
 				: "";
 		},
 		
+		eventLockingTagColors :function(theme = "dark"){
+			return (this._eventColle.lockingTagColors || {})[theme] || [];
+		},
+		
 		support :function(index){
 			return (typeof index === "undefined") ? this._battle.support :
 				this._battle.support[index] || "";

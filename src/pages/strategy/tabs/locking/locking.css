@@ -36,6 +36,22 @@
 	padding:5px 5px 5px 5px;
 }
 
+.tab_locking .lock_mode_1 {
+	background: var(--lockColor1) !important;
+}
+.tab_locking .lock_mode_2 {
+	background: var(--lockColor2) !important;
+}
+.tab_locking .lock_mode_3 {
+	background: var(--lockColor3) !important;
+}
+.tab_locking .lock_mode_4 {
+	background: var(--lockColor4) !important;
+}
+.tab_locking .lock_mode_5 {
+	background: var(--lockColor5) !important;
+}
+
 .tab_locking .map_area {
 	width:130px;
 	margin:0 0 5px 0;
@@ -296,6 +312,7 @@
 .tab_locking .filters {
 	float: left;
 	width: 88px;
+	min-height: 50px;
 	margin: 27px 0 5px 0;
 	padding: 0 0 0 2px;
 	overflow-x: hidden;
@@ -321,13 +338,13 @@
 }
 
 .tab_locking .filters .filter_group {
-	margin-bottom: 5px;
+	margin-bottom: 2px;
 	float: left;
 }
 
 @media only screen and (min-height: 640px) {
 	.tab_locking .filters .filter_group {
-		margin-bottom: 10px;
+		margin-bottom: 5px;
 	}
 }
 
@@ -335,14 +352,16 @@
 	background: #000;
 }
 
+.tab_locking .scroll_fix {
+	height: calc(100vh - var(--shipListOffsetTop) - 5px);
+}
+
 .tab_locking .scroll_fix::-webkit-scrollbar {
 	width: 5px;
 }
-
 .tab_locking .scroll_fix::-webkit-scrollbar-track {
 	background: #ddd;
 }
-
 .tab_locking .scroll_fix::-webkit-scrollbar-thumb {
 	background: #666;
 }

@@ -1598,27 +1598,7 @@ button, input, select, textarea {
 	border: 3px dotted #303030 !important;
 }
 
-.tab_locking .lock_mode_1,
-.tab_locking .ship_list .ship_item .lock_mode_1 {
-	background:#044d67;
-}
-.tab_locking .lock_mode_2,
-.tab_locking .ship_list .ship_item .lock_mode_2 {
-	background:#2c4e2c;
-}
-.tab_locking .lock_mode_3,
-.tab_locking .ship_list .ship_item .lock_mode_3 {
-	background:#737006;
-}
-.tab_locking .lock_mode_4,
-.tab_locking .ship_list .ship_item .lock_mode_4 {
-	background:#6c4513;
-}
-.tab_locking .lock_mode_5,
-.tab_locking .ship_list .ship_item .lock_mode_5 {
-	background:#544c5c;
-}
-.tab_locking .ship_list .ship_item .ship_equip .slot_open{
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	background: #5a5a5a;
 }
 
@@ -1954,7 +1934,7 @@ button, input, select, textarea {
 	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_select_back {
-	border:1px solid #77;
+	border:1px solid #777;
 	background:#292929;
 	color:#aaa;
 }

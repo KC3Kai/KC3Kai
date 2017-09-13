@@ -160,7 +160,9 @@ Saves and loads significant data for future use
 				}
 				// Apply a patch for Mikuma typo of KC devs
 				//ships[882] = this._seasonalShips[882];
+				ships[793] = this._seasonalShips[793];
 				// Seasonal data no longer leaked since 2017-04-05
+				// Seasonal data leaks again since 2017-09-12 if ID < 800
 			}
 			return ships;
 		},
