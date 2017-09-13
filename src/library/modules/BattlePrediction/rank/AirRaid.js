@@ -1,10 +1,13 @@
 (function () {
   const predict = (initial, result) => {
-    const { getDamageGauge } = KC3BattlePrediction.rank;
+    const { getDamageGauge,
+      battle: { isPlayerNoDamage }
+    } = KC3BattlePrediction.rank;
+
+    if (isPlayerNoDamage(initial, result)) { return 'SS'; }
 
     const { player: damageGauge } = getDamageGauge(initial, result);
 
-    if (damageGauge <= 0) { return 'SS'; }
     if (damageGauge < 10) { return 'A'; }
     if (damageGauge < 20) { return 'B'; }
     if (damageGauge < 50) { return 'C'; }

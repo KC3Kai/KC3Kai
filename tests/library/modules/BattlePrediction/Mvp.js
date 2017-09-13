@@ -26,7 +26,7 @@ QUnit.module('modules > BattlePrediction > Mvp', function () {
 
       const result = this.subject(ships);
 
-      assert.equal(result, 1);
+      assert.equal(result, 2);
     });
 
     QUnit.test('if equal damage, prefer ship closer to start of fleet', function (assert) {
@@ -34,7 +34,7 @@ QUnit.module('modules > BattlePrediction > Mvp', function () {
 
       const result = this.subject(ships);
 
-      assert.equal(result, 0);
+      assert.equal(result, 1);
     });
   });
 });

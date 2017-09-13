@@ -28,7 +28,7 @@
   const getFleetShips = (nowhps, maxhps) => {
     const { normalizeHps, convertToShips, splitSides } = KC3BattlePrediction.fleets;
 
-    // shortcircuit if neither side has a fleet
+    // short-circuit if neither side has a fleet
     if (!nowhps && !maxhps) { return { player: [], enemy: [] }; }
 
     return splitSides(

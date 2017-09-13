@@ -19,7 +19,8 @@
         ? { damageDealt, index: i }
         : result;
     }, { damageDealt: -1 });
-    return index;
+    // MVP index 1-based
+    return index !== undefined ? index + 1 : undefined;
   };
 
   /*--------------------------------------------------------*/

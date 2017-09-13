@@ -20,7 +20,7 @@
       // Specify phase ordering for each battle type
       engagement: {},
     },
-    // Rank prediciton
+    // Rank prediction
     rank: {
       airRaid: {},
       battle: {},
@@ -208,7 +208,7 @@
   const getFleetShips = (nowhps, maxhps) => {
     const { normalizeHps, convertToShips, splitSides } = KC3BattlePrediction.fleets;
 
-    // shortcircuit if neither side has a fleet
+    // short-circuit if neither side has a fleet
     if (!nowhps && !maxhps) { return { player: [], enemy: [] }; }
 
     return splitSides(
@@ -318,7 +318,8 @@
         ? { damageDealt, index: i }
         : result;
     }, { damageDealt: -1 });
-    return index;
+    // MVP index 1-based
+    return index !== undefined ? index + 1 : undefined;
   };
 
   /*--------------------------------------------------------*/
@@ -1280,11 +1281,14 @@
 
 (function () {
   const predict = (initial, result) => {
-    const { getDamageGauge } = KC3BattlePrediction.rank;
+    const { getDamageGauge,
+      battle: { isPlayerNoDamage }
+    } = KC3BattlePrediction.rank;
+
+    if (isPlayerNoDamage(initial, result)) { return 'SS'; }
 
     const { player: damageGauge } = getDamageGauge(initial, result);
 
-    if (damageGauge <= 0) { return 'SS'; }
     if (damageGauge < 10) { return 'A'; }
     if (damageGauge < 20) { return 'B'; }
     if (damageGauge < 50) { return 'C'; }

@@ -18,9 +18,9 @@ Used by SortieManager
 			map || KC3SortieManager.map_num, this.id);
 		this.nodeData = raw || {};
 	};
-
-	// set true, to test rank predicting easier via SRoom Maps History
-	KC3Node.debugRankPrediction = function() { return false; };
+	
+	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
+	KC3Node.debugPrediction = function() { return false; };
 	
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(){
@@ -406,7 +406,7 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to battle simulation, like sortielogs.
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugRankPrediction()){
+		if(isRealBattle || KC3Node.debugPrediction()){
 			const fleetId = this.fleetSent - 1;
 			// To work better on battle simulation, prefer to use `isPlayerCombined`,
 			// which check via API data instead of determining 'current state' of PlayerManager
@@ -442,21 +442,44 @@ Used by SortieManager
 			})();
 
 			const result = KC3BattlePrediction.analyzeBattle(battleData, dameConCode, { player, enemy, time });
+			this.predictedFleetsDay = result.fleets;
+			if (KC3Node.debugPrediction()) {
+				console.debug(`Node ${this.letter} predicted for ${player} vs ${enemy}`, result);
+			}
+
+			if (ConfigManager.info_btrank) {
+				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay);
+				this.predictedMvps = [mvpResult.playerMain];
+				this.predictedMvpCapable = !this.isAirBattleDamageInvolved();
+				if(mvpResult.playerEscort !== undefined) {
+					this.predictedMvps.push(mvpResult.playerEscort);
+				}
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted mvp`, this.predictedMvps, this.sortie);
+				}
+			}
 
 			// Update fleets with battle result
-			this.allyNoDamage = result.isPlayerNoDamage;
+			this.allyNoDamage = this.allyNoDamage && result.isPlayerNoDamage;
 			if (isRealBattle) {
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+					if(this.predictedMvpCapable && this.predictedMvps[0]) {
+						// string indicates prediction value
+						ship.mvp = this.predictedMvps[0] === position + 1 ? "true" : false;
+					}
 				});
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[1].ship(position);
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+					if(this.predictedMvpCapable && this.predictedMvps[1]) {
+						ship.mvp = this.predictedMvps[1] === position + 1 ? "true" : false;
+					}
 				});
 			}
 			result.fleets.enemyMain.forEach((ship, position) => {
@@ -472,8 +495,8 @@ Used by SortieManager
 
 			if (ConfigManager.info_btrank) {
 				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, battleData, result.fleets);
-				if (KC3Node.debugRankPrediction()) {
-					console.debug("Node " + this.letter + " predicted rank", this.predictedRank, this.sortie);
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
 				}
 			}
 		}
@@ -566,7 +589,7 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugRankPrediction()){
+		if(isRealBattle || KC3Node.debugPrediction()){
 			const fleetId = this.fleetSent - 1;
 			const isAgainstEnemyEscort = isEnemyCombined && this.activatedEnemyFleet !== 1;
 
@@ -598,9 +621,26 @@ Used by SortieManager
 				return result;
 			})();
 			const result = KC3BattlePrediction.analyzeBattle(nightData, dameConCode, { player, enemy, time });
+			this.predictedFleetsNight = result;
+			if (KC3Node.debugPrediction()) {
+				console.debug(`Node ${this.letter} predicted yasen ${player} vs ${enemy}`, result);
+			}
+
+			if (ConfigManager.info_btrank) {
+				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, result.fleets);
+				this.predictedMvps = this.predictedMvps || [];
+				this.predictedMvpCapable = this.startsFromNight ? true : this.predictedMvpCapable;
+				this.predictedMvps[0] = mvpResult.playerMain;
+				if(mvpResult.playerEscort !== undefined) {
+					this.predictedMvps[1] = mvpResult.playerEscort;
+				}
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted yasen mvp`, this.predictedMvps, this.sortie);
+				}
+			}
 
 			// Update fleets
-			this.allyNoDamage = result.isPlayerNoDamage;
+			this.allyNoDamage = this.allyNoDamage && result.isPlayerNoDamage;
 			if (isRealBattle) {
 				const playerFleet = PlayerManager.fleets[isPlayerCombined ? 1 : fleetId];
 				const playerResult = isPlayerCombined ? result.fleets.playerEscort : result.fleets.playerMain;
@@ -614,6 +654,9 @@ Used by SortieManager
 						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
 					} else {
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+					}
+					if(this.predictedMvpCapable && this.predictedMvps[isPlayerCombined ? 1 : 0]) {
+						ship.mvp = this.predictedMvps[isPlayerCombined ? 1 : 0] === position + 1 ? "true" : false;
 					}
 				});
 			}
@@ -637,8 +680,8 @@ Used by SortieManager
 
 			if(ConfigManager.info_btrank){
 				this.predictedRankNight = KC3BattlePrediction.predictRank(nightData.api_name, this.dayData || nightData, result.fleets);
-				if (KC3Node.debugRankPrediction()) {
-					console.debug("Node " + this.letter + " predicted yasen rank", this.predictedRankNight);
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted yasen rank`, this.predictedRankNight);
 				}
 			}
 		}
@@ -1291,6 +1334,18 @@ Used by SortieManager
 		return (this.eventKind === 1 && this.eventId === 5)
 		// Combined BOSS node, see advanceNode()@SortieManager.js
 			|| (this.eventKind === 5 && this.eventId === 5);
+	};
+	
+	// Indicate if this day battle deals any damage to enemy in opening aerial combat phase.
+	KC3Node.prototype.isAirBattleDamageInvolved = function(){
+		// Damages and losses of all kinds of aerial combat are too black-boxed to be predicted
+		const b = this.battleDay;
+		return !! (
+			(b.api_kouku && b.api_kouku.api_stage3 && // regular air battle
+				Math.floor(b.api_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0)) > 0) ||
+			(b.api_injection_kouku && b.api_injection_kouku.api_stage3 && // jets assault
+				Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0)) > 0)
+		);
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){

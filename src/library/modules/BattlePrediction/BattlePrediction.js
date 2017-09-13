@@ -20,7 +20,7 @@
       // Specify phase ordering for each battle type
       engagement: {},
     },
-    // Rank prediciton
+    // Rank prediction
     rank: {
       airRaid: {},
       battle: {},
