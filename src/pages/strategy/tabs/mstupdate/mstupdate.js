@@ -176,12 +176,15 @@
 				const seasonalData = KC3Master.seasonal_ship(shipId);
 				
 				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
-				$(".ship_name", shipBox).text(seasonalData ? seasonalData.api_name : "Link not available")
+				$(".ship_name", shipBox).text(seasonalData && seasonalData.api_name ?
+					seasonalData.api_name : "Not available")
 					.data("tab", "mstship")
 					.data("api_id", shipId)
 					.attr("data-mst-id", shipId);
-				if(seasonalData){
+				if(seasonalData) {
 					$(".ship_name", shipBox).click(linkClickFunc);
+				} else {
+					$(".ship_name", shipBox).removeClass("hover");
 				}
 				
 				shipBox.appendTo(".tab_mstupdate .mstseason");
