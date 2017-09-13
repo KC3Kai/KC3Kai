@@ -1,13 +1,22 @@
 .hover {
-	cursor:hand;
-	cursor:pointer;
+	cursor: pointer;
 }
 .clear {
-	clear:both !important;
+	clear: both !important;
 }
 .i18n {
-	visibility:hidden;
+	visibility: hidden;
 }
 .xhidden {
 	display: none;
+}
+/*
+To resolve over blurred downsized image issue.
+`scroll-behavior` default from Chrome 61, but
+can be enabled via `chrome://flags/#enable-experimental-web-platform-features`.
+*/
+@supports (scroll-behavior: smooth) {
+	img[src$=".gif"], img[src$=".png"] {
+		image-rendering: -webkit-optimize-contrast;
+	}
 }
