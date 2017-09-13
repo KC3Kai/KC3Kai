@@ -99,6 +99,7 @@
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.hq.load();
 			// Clean cache data
 			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
 			this.gearCache = {};

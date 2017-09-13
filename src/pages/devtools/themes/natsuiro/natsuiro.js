@@ -43,9 +43,10 @@
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
+		items: "[title],[titlealt]",
 		content: function(){
 			// Default escaping not used, keep html, simulate native one
-			return $(this).attr("title")
+			return ($(this).attr("title") || $(this).attr("titlealt") || "")
 				.replace(/\n/g, "<br/>")
 				.replace(/\t/g, "&emsp;&emsp;");
 		}
@@ -60,7 +61,7 @@
 		};
 		// Actively close tooltips of element and its children
 		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
+			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
 				if(typeof $(el).tooltip("instance") !== "undefined")
 					$(el).tooltip("close");
 			});
@@ -801,7 +802,7 @@
 	function clearBattleData(){
 		$(".module.activity .activity_box").hideChildrenTooltips();
 		$(".module.activity .abyss_ship img").attr("src", KC3Meta.abyssIcon(-1));
-		$(".module.activity .abyss_ship img").attr("title", "").lazyInitTooltip();
+		$(".module.activity .abyss_ship img").attr("titlealt", "").lazyInitTooltip();
 		$(".module.activity .abyss_ship").removeClass(KC3Meta.abyssShipBorderClass().join(" "));
 		$(".module.activity .abyss_ship").removeData("masterId").off("dblclick");
 		$(".module.activity .abyss_ship").css("opacity", 1);
@@ -1236,7 +1237,7 @@
 						var
 							cf = PlayerManager.combinedFleet, // Marks combined flag
 							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
-							so = KC3SortieManager.onSortie;   // Is it on sortie or not? if not, focus all fleets.
+							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
 						return !so || ((cf && fs===1) ? i <= 1 : i == fs-1);
 					})
 					.map    (function(fleetObj) { return fleetObj.ships; }) // Convert to ship ID array
@@ -1249,7 +1250,7 @@
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 				// if not disabled at Home Port
-				&& (KC3SortieManager.onSortie || !ConfigManager.alert_taiha_homeport)
+				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport)
 			) {
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
@@ -1281,7 +1282,6 @@
 			}
 
 			// Close opened tooltips to avoid buggy double popup
-			$(".module.summary").hideChildrenTooltips();
 			$(".module.status").hideChildrenTooltips();
 
 			// FLEET BUTTONS RESUPPLY STATUSES
@@ -1326,7 +1326,7 @@
 			$(".airbase_list").empty();
 			$(".airbase_list").hide();
 
-			var thisNode = KC3SortieManager.onSortie || KC3SortieManager.isPvP() ?
+			var thisNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
 				KC3SortieManager.currentNode() || {} : {};
 			var dameConConsumed = false;
 			var flarePos = thisNode.flarePos || 0;
@@ -1339,7 +1339,7 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1){
+						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
 						var starShellUsed = (flarePos == index+1) &&
@@ -1354,7 +1354,7 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie){
+						if(KC3SortieManager.isOnSortie()){
 							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
@@ -1388,7 +1388,7 @@
 				FleetSummary = {
 					lv: MainFleet.totalLevel() + EscortFleet.totalLevel(),
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
+					air: KC3Calc.getFleetsFighterPowerText(MainFleet, EscortFleet, true),
 					antiAir: Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
@@ -1437,7 +1437,7 @@
 				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						if(KC3SortieManager.onSortie){
+						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
 							} else if(isSelected2ndFleetOnCombined){
@@ -1462,7 +1462,7 @@
 					lv: CurrentFleet.totalLevel(),
 					baseExp: CurrentFleet.estimatePvpBaseExp(),
 					elos: Math.qckInt("floor", CurrentFleet.eLoS(), 1),
-					air: PlayerManager.getFleetsFighterPowerText(CurrentFleet),
+					air: KC3Calc.getFleetsFighterPowerText(CurrentFleet),
 					antiAir: CurrentFleet.adjustedAntiAir(ConfigManager.aaFormation),
 					speed: CurrentFleet.speed(),
 					docking: MainRepairs.docking,
@@ -1475,7 +1475,7 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
-							!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet) &&
+							!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet) &&
 							!CurrentFleet.isSupplied() &&
 							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
@@ -1493,8 +1493,8 @@
 			}
 
 			console.debug("Current fleet summary", FleetSummary);
-
 			// Fleet Summary Stats
+			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
 				.attr("title", selectedFleet > 1 ? "" :
 					KC3Meta.term("FirstFleetLevelTip")
@@ -1503,8 +1503,13 @@
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
-			$(".summary-airfp .summary_sub").toggle( selectedFleet === 5 && ConfigManager.air_combined );
-			$(".summary-airfp .summary_text").text( FleetSummary.air );
+			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
+			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
+			$(".summary-airfp .summary_text").text( FleetSummary.air )
+				.attr("titlealt", KC3Calc.buildFleetsContactChanceText(
+					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
+					isCombinedAirView ? 8 : 5
+				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
@@ -1540,12 +1545,13 @@
 
 			// Clear status reminder coloring
 			$(".module.status .status_text").removeClass("good bad");
+			$(".module.status").hideChildrenTooltips();
 
 			// If fleet status summary is enabled on settings
 			if(ConfigManager.info_fleetstat){
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.onSortie &&
+					(KC3SortieManager.isOnSortie() &&
 						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
@@ -1787,7 +1793,7 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
-									.attr("title", itemObj.htmlTooltip(planeInfo.api_max_count) )
+									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_max_count) )
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
@@ -1845,8 +1851,8 @@
 		},
 
 		LbasStatus: function(){
-			const lbasIsSupplied = PlayerManager.isBasesSupplied(),
-				lbasWorstCond = PlayerManager.getBasesWorstCond(),
+			const lbasIsSupplied = KC3Calc.isLandBasesSupplied(),
+				lbasWorstCond = KC3Calc.getLandBasesWorstCond(),
 				lbasCondBad = lbasWorstCond > 1;
 			// Update LBAS button for resupply/morale indicator
 			const lbasViewButton = $(".module.controls .fleet_lbas");
@@ -1863,8 +1869,8 @@
 				)).toggleClass("good", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
 				$(".module.status .status_supply img").attr("src",
 					"/assets/img/ui/" + (lbasIsSupplied ? "check.png" : "sunk.png"));
-				const lbasSupplyCost = PlayerManager.getBasesResupplyCost();
-				const lbasSortieCost = PlayerManager.getBasesSortieCost();
+				const lbasSupplyCost = KC3Calc.getLandBasesResupplyCost();
+				const lbasSortieCost = KC3Calc.getLandBasesSortieCost();
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
 						lbasSupplyCost.fuel, lbasSupplyCost.ammo, lbasSupplyCost.bauxite, ""
@@ -1890,16 +1896,15 @@
 
 			// Show world map and difficulty
 			$(".module.activity .map_world").text(
-				(KC3SortieManager.map_world>10 ? 'E' : KC3SortieManager.map_world)
-				+"-"
-				+KC3SortieManager.map_num
-				+((KC3SortieManager.map_world>10)
+				(KC3SortieManager.map_world >= 10 ? 'E' : KC3SortieManager.map_world)
+				+ "-" + KC3SortieManager.map_num
+				+ ((KC3SortieManager.map_world >= 10)
 					?["",
 					  KC3Meta.term("EventRankEasyAbbr"),
 					  KC3Meta.term("EventRankNormalAbbr"),
 					  KC3Meta.term("EventRankHardAbbr")]
 					[ KC3SortieManager.map_difficulty ]
-					:"")
+					: "")
 			);
 
 			// Map Gauge and status
@@ -2073,7 +2078,7 @@
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img").attr("src", KC3Meta.abyssIcon(eshipId));
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
-							.attr("title", thisNode.buildEnemyStatsMessage(index, eshipId,
+							.attr("titlealt", thisNode.buildEnemyStatsMessage(index, eshipId,
 								thisNode.elevels[index],
 								thisNode.beginHPs.enemy[index], thisNode.maxHPs.enemy[index],
 								null, thisNode.eSlot[index], false))
@@ -2111,9 +2116,9 @@
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
-				$(".module.activity .battle_airbattle").attr("title",
-					thisNode.buildAirPowerMessage()
-				).lazyInitTooltip();
+				$(".module.activity .battle_airbattle")
+					.attr("title", thisNode.buildAirPowerMessage())
+					.lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
 				$(".bomber_ally .plane_before").text(thisNode.planeBombers.player[0]);
@@ -2176,7 +2181,7 @@
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)+" img")
 							.attr("src", KC3Meta.abyssIcon(eshipId))
-							.attr("title", thisNode.buildEnemyStatsMessage(index))
+							.attr("titlealt", thisNode.buildEnemyStatsMessage(index))
 							.lazyInitTooltip();
 						$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1))
 							.data("masterId", eshipId)
@@ -2382,7 +2387,7 @@
 						if ($(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0) {
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 								.attr("src", thisNode.isPvP ? KC3Meta.shipIcon(eshipId) : KC3Meta.abyssIcon(eshipId))
-								.attr("title", thisNode.buildEnemyStatsMessage(index))
+								.attr("titlealt", thisNode.buildEnemyStatsMessage(index))
 								.lazyInitTooltip();
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 								.data("masterId", eshipId)
@@ -2790,7 +2795,7 @@
 				if(eshipId > 0){
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
 						.attr("src", KC3Meta.shipIcon(eshipId))
-						.attr("title", thisPvP.buildEnemyStatsMessage(index))
+						.attr("titlealt", thisPvP.buildEnemyStatsMessage(index))
 						.lazyInitTooltip();
 					$(".module.activity .abyss_single .abyss_ship_"+(index+1))
 						.data("masterId", eshipId)
@@ -3572,7 +3577,7 @@
 
 	function updateMapGauge(gaugeDmg, fsKill, noBoss) {
 		// Map Gauge and status
-		var thisMapId = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+		var thisMapId = KC3SortieManager.getSortieMap().join(''),
 			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
 			onBoss    = KC3SortieManager.currentNode().isBoss(),
@@ -3681,10 +3686,7 @@
 					Math.hrdInt("floor", PlayerManager.akashiRepair.getElapsed() || 0, 3, 1)
 				).toHHMMSS();
 			}
-			elm.attr("titlealt", title).lazyInitTooltip({
-				items: "[titlealt]",
-				content: function() { return $(this).attr("titlealt"); }
-			});
+			elm.attr("titlealt", title).lazyInitTooltip();
 		});
 	}
 })();

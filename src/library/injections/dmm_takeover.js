@@ -384,13 +384,18 @@
 					cancelHourlyLine();
 					const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
 					const diffMillis = nextHour - Date.now();
-					// Do not book on unexpected diff time: passed or >10 minutes
-					if(diffMillis <= 0 || diffMillis > 10 * 60000) {
+					// Do not book on unexpected diff time: passed or > 59 minutes
+					if(diffMillis <= 0 || diffMillis > 59 * 60000) {
 						showSubtitle(text, shipId);
 					} else {
 						self.subtitleHourlyShip = shipId;
 						self.subtitleHourlyTimer = setTimeout(function(){
-							if(self.subtitleHourlyShip == shipId){
+							// Should cancel booked hourly line for some conditions
+							if(self.subtitleHourlyShip == shipId
+								// if Chrome delays timer execution > 3 seconds
+								&& Math.abs(Date.now() - nextHour) < 3000
+								// TODO && at home port && secretary unchanged
+							){
 								hideSubtitle();
 								showSubtitle(text, shipId);
 							}
@@ -401,13 +406,8 @@
 
 				// If subtitles available for the voice
 				if(subtitleText){
-					// Cancel booked hourly line if other voice triggered
-					if(self.subtitleHourlyTimer && (quoteIdentifier != self.subtitleHourlyShip
-						|| !KC3Meta.isHomePortVoiceNum(quoteVoiceNum))){
-						cancelHourlyLine();
-					}
 					// Book for a future display if it's a ship's hourly voice,
-					// because game preload voice file in advance (about 5 mins).
+					// because game preload voice file in advance (about > 5 mins).
 					if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
 						bookHourlyLine(subtitleText, quoteIdentifier);
 					} else {

@@ -353,8 +353,24 @@
 			var shipSrc = "../../../../assets/swf/card.swf?sip=" + this.server_ip
 					+ ("&shipFile=" + shipFile + (tryDamagedGraph ? this.damagedBossFileSuffix : ""))
 					+ ("&abyss=" + (KC3Master.isAbyssalShip(ship_id) ? 1 : 0))
-					+ (KC3Master.isSeasonalShip(ship_id) || viewCgMode ? "&forceFrame=6" : "")
 					+ (!this.currentCardVersion ? "" : "&ver=" + this.currentCardVersion);
+			if(KC3Master.isSeasonalShip(ship_id)){
+				shipSrc += "&forceFrame=8";
+				// try to make it center
+				shipSrc += "&forceX=-40&forceY=-80";
+			} else if(KC3Master.isAbyssalShip(ship_id)){
+				// get shipgraph battle offset
+				let [x, y] = KC3Master.graph(ship_id).api_battle_n;
+				// 0.4 is card default scale, try to center it by [-15, -15]
+				x = Math.floor(x * 0.4) - 15; y = Math.floor(y * 0.4) - 15;
+				shipSrc += "&forceX={0}&forceY={1}".format(x, y);
+			} else if(viewCgMode){
+				// view large CG
+				shipSrc += "&forceFrame=10";
+				let [x, y] = KC3Master.graph(ship_id).api_battle_n;
+				x -= 180; y -= 280;
+				shipSrc += "&forceX={0}&forceY={1}".format(x, y);
+			}
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
 			$("<embed/>")
@@ -444,7 +460,7 @@
 				});
 				
 				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
-				var remodelInfo = RemodelDb.remodelInfo( ship_id );
+				var remodelInfo = RemodelDb.remodelInfo( ship_id ) || {};
 				
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
@@ -734,7 +750,7 @@
 							} else if(stat[0]=="if"){
 								// Compute fighter air power based on known slots
 								$(".ship_stat_min", statBox).text(
-									KC3SortieManager.enemyFighterPower([abyssMaster.api_id])[0] || 0
+									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
 								);
 								$(".ship_stat_max", statBox).hide();
 							} else {

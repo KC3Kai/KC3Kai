@@ -510,6 +510,72 @@ body {
 	background-color:#ffc;
 }
 
+/* COMMONS: SHIP LIST
+-------------------------------*/
+
+.ship_header .ship_item .ship_field.sorted {
+	background:#c4c4c4;
+}
+.ship_list .ship_item.odd .ship_field {
+	background:#efefef;
+}
+.ship_list .ship_item.even .ship_field {
+	background:#e4e4e4;
+}
+.ship_list .ship_item:hover .ship_field {
+	background:#ffffcc;
+}
+.ship_list .ship_onfleet-color1 {background: #90D4ED !important;}
+.ship_list .ship_onfleet-color2 {background: #BBDDBA !important;}
+.ship_list .ship_onfleet-color3 {background: #E8E68F !important;}
+.ship_list .ship_onfleet-color4 {background: #F6D0A0 !important;}
+.ship_list .ship_item .ship_lv span.value.married {
+	color:#a97417;
+}
+.ship_list .ship_item .ship_lv span.value.high {
+	color:#107e57;
+}
+.ship_list .ship_item .ship_lv span.value.medium {
+	color:#2ea6bb;
+}
+.ship_list .ship_item .ship_morale.sparkled {
+	background:#ff0;
+}
+.ship_list .ship_item .ship_fp.max {
+	background:#ff8888;
+}
+.ship_list .ship_item .ship_tp.max {
+	background:#00CCFF;
+}
+.ship_list .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#FFFFFF;
+}
+.ship_list .ship_item .ship_aa.max {
+	background:#FF9900;
+}
+.ship_list .ship_item .ship_ar.max {
+	background:#ffcc00;
+}
+.ship_list .ship_item .ship_stat span {
+	color:#aaa;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk,
+.ship_list .ship_item.even .ship_field.ship_lk {
+	background:#66FF66;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk.max,
+.ship_list .ship_item.even .ship_field.ship_lk.max {
+	background:#52d052;
+}
+.ship_list .ship_item .ship_lk .sub {
+	color:#aaa;
+}
+.ship_list .ship_item .ship_stat span {
+	font-size:8px;
+	color:#aaa;
+}
+
 /* OVERRIDES
 -------------------------------*/
 /* Screenshots */
@@ -1208,11 +1274,9 @@ body {
 
 /* LOCKING
 --------------------------------*/
-.tab_locking .lock_mode_1 { background:#029DD5; }
-.tab_locking .lock_mode_2 { background:#64B162; }
-.tab_locking .lock_mode_3 { background:#CCC700; }
-.tab_locking .lock_mode_4 { background:#EB9528; }
-.tab_locking .lock_mode_5 { background:#B1A2C1; }
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
+	background:#b7b7b7;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/

@@ -145,13 +145,10 @@ Contains summary information about a fleet and its 6 ships
 		}
 	};
 	
-	KC3Fleet.prototype.getDameConCodes = function() {
-		var i;
-		var result = [];
-		for (i=0;i<6;++i) {
-			result.push( this.ship(i).findDameCon().code );
-		}
-		return result;
+	// @return filtered ship object list not contain escaped (didFlee) ships.
+	// use this to reduce a `ship.didFlee` condition if ship position not concerned.
+	KC3Fleet.prototype.shipsUnescaped = function(){
+		return this.ship().filter(ship => !ship.didFlee);
 	};
 	
 	/*--------------------------------------------------------*/
@@ -168,7 +165,15 @@ Contains summary information about a fleet and its 6 ships
 		this.ships.fill(-1,1,6);
 		this.updateAkashiRepairDisplay();
 	};
-
+	
+	KC3Fleet.prototype.discard = function(shipId) {
+		var pos = this.ships.indexOf(Number(shipId));
+		if(pos>=0){
+			this.ships.splice(pos,1);
+			this.ships.push(-1);
+		}
+	};
+	
 	/*--------------------------------------------------------*/
 	/*-------------------[ AKASHI REPAIR ]--------------------*/
 	/*--------------------------------------------------------*/
@@ -413,15 +418,13 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.fighterBounds = function(){
 		var totalPower = [0, 0];
-		for(let index in this.ships){
-			if(this.ships[index] > 0 && !this.ship(index).didFlee){
-				let fighterPower = this.ship(index).fighterBounds();
-				if(Array.isArray(fighterPower)){
-					totalPower[0] += Math.floor(fighterPower[0]);
-					totalPower[1] += Math.floor(fighterPower[1]);
-				}
+		this.shipsUnescaped().forEach(ship => {
+			let fighterPower = ship.fighterBounds();
+			if(Array.isArray(fighterPower)){
+				totalPower[0] += Math.floor(fighterPower[0]);
+				totalPower[1] += Math.floor(fighterPower[1]);
 			}
-		}
+		});
 		return totalPower;
 	};
 	
@@ -435,7 +438,113 @@ Contains summary information about a fleet and its 6 ships
 				return this.fighterPower();
 		}
 	};
-	
+
+	/**
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return air contact chance related info object.
+	 * @see contactTriggerRate
+	 * @see contactSelectionInfo
+	 */
+	KC3Fleet.prototype.contactChanceInfo = function(dispSeiku = 1){
+		const triggerRate = this.contactTriggerRate(dispSeiku);
+		const [selectionFailureRate, planeList] = this.contactSelectionInfo(dispSeiku);
+		const successRate = Math.min(triggerRate, 1.0) * (1.0 - selectionFailureRate);
+		return {
+			success: successRate,
+			trigger: triggerRate,
+			cancelled: selectionFailureRate,
+			planes: planeList
+		};
+	};
+
+	/**
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return contact start chance at trigger phase.
+	 */
+	KC3Fleet.prototype.contactTriggerRate = function(dispSeiku = 1){
+		const airControlModifiers = [0, 1, 0.6, 0.55 /* guessed, unknown value */, 0];
+		var rate = 0;
+		this.shipsUnescaped().forEach(ship => {
+			rate += [0, 1, 2, 3].map(idx => {
+				const gear = ship.equipment(idx);
+				return gear.isContactAircraft(false) ?
+					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0;
+			}).reduce((acc, v) => acc + v, 0);
+		});
+		return rate * (airControlModifiers[dispSeiku] || 0);
+	};
+
+	/**
+	 * @return contact selection info tuple: [failure chance, contact plane list]
+	 * @see contactSelectionChanceTable
+	 */
+	KC3Fleet.prototype.contactSelectionInfo = function(dispSeiku){
+		const contactPlanes = this.contactSelectionChanceTable(dispSeiku);
+		return [contactPlanes.map(p => p.rate).reduce((acc, v) => acc * (1 - v), 1), contactPlanes];
+	};
+
+	/**
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return contact selection table of every possible aircraft.
+	 * @see http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#s1d9a838
+	 */
+	KC3Fleet.prototype.contactSelectionChanceTable = function(dispSeiku = 1){
+		const airControlModifiers = [0, 0.07, 0.06, 0.055, 0];
+		const contactPlaneList = [];
+		this.shipsUnescaped().forEach((ship, shipIdx) => {
+			ship.equipment((itemId, gearIdx, gear) => {
+				if(gear.isContactAircraft(true)) {
+					const gearMaster = gear.master();
+					contactPlaneList.push({
+						itemId: itemId,
+						masterId: gear.masterId,
+						icon: gearMaster.api_type[3],
+						stars: gear.stars || 0,
+						accurcy: gearMaster.api_houm || 0,
+						shipOrder: shipIdx,
+						shipMasterId: ship.masterId,
+						// LoS improvement taken into account, but any other modifier unknown
+						rate: (gearMaster.api_saku + gear.losStatImprovementBonus())
+							* (airControlModifiers[dispSeiku] || 0)
+					});
+				}
+			});
+		});
+		if(contactPlaneList.length > 0) {
+			// Selection priority order by: accuracy desc, ship position asc
+			contactPlaneList.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
+		}
+		return contactPlaneList;
+	};
+
+	/**
+	 * Night recon contact chance, under verifying, not usable.
+	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
+	 */
+	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
+		const contactPlaneList = [];
+		this.shipsUnescaped().forEach((ship, shipIdx) => {
+			ship.equipment((itemId, gearIdx, gear) => {
+				if(gear.itemId && gear.masterId === 102) {
+					const gearMaster = gear.master();
+					contactPlaneList.push({
+						itemId: itemId,
+						masterId: gear.masterId,
+						icon: gearMaster.api_type[3],
+						stars: gear.stars || 0,
+						slotSize: ship.slots[gearIdx] || 0,
+						shipOrder: shipIdx,
+						shipMasterId: ship.masterId,
+						shipLevel: ship.level,
+						// no info about how slot size multiply, just know 0 will not trigger
+						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slots[gearIdx] || 0) / 100
+					});
+				}
+			});
+		});
+		return contactPlaneList;
+	};
+
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()
@@ -579,8 +688,11 @@ Contains summary information about a fleet and its 6 ships
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.hasShip = function(expected, pos){
+	KC3Fleet.prototype.hasShip = function(expected, pos, isExcludeEscaped = false){
 		return this.ship().some((ship, index) => {
+			if(isExcludeEscaped && ship.didFlee) {
+				return false;
+			}
 			if(pos === undefined || pos === index) {
 				if(typeof expected === "number"
 					|| typeof expected === "string") {
@@ -596,8 +708,9 @@ Contains summary information about a fleet and its 6 ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShip = function(expected, isExclude = false){
-		return this.ship().reduce((count, ship) => {
+	KC3Fleet.prototype.countShip = function(expected, isExclude = false, isExcludeEscaped = false){
+		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
+		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
 				return count + (1 & (isExclude !==
 					(expected.indexOf(ship.masterId) > -1)));
@@ -607,8 +720,11 @@ Contains summary information about a fleet and its 6 ships
 		}, 0);
 	};
 	
-	KC3Fleet.prototype.hasShipType = function(expected, pos){
+	KC3Fleet.prototype.hasShipType = function(expected, pos, isExcludeEscaped = false){
 		return this.ship().some((ship, index) => {
+			if(isExcludeEscaped && ship.didFlee) {
+				return false;
+			}
 			if(pos === undefined || pos === index) {
 				if(typeof expected === "number"
 					|| typeof expected === "string") {
@@ -621,8 +737,9 @@ Contains summary information about a fleet and its 6 ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShipType = function(expected, isExclude = false){
-		return this.ship().reduce((count, ship) => {
+	KC3Fleet.prototype.countShipType = function(expected, isExclude = false, isExcludeEscaped = false){
+		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
+		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
 				return count + (1 & (isExclude !==
 					(expected.indexOf(ship.master().api_stype) > -1)));
@@ -633,32 +750,34 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.hasTaiha = function(){
-		return this.ship().some(function(ship){
-			return ship.isTaiha() && !ship.didFlee;
-		});
+		return this.shipsUnescaped().some(ship => ship.isTaiha());
 	};
 	
 	KC3Fleet.prototype.getTaihas = function(){
 		var taihaIndexes = [];
-		for(var sctr in this.ships){
-			var ship = this.ship(sctr);
+		for(var index in this.ships){
+			var ship = this.ship(index);
 			if(ship.isTaiha() && !ship.didFlee){
-				taihaIndexes.push(sctr);
+				taihaIndexes.push(index);
 			}
 		}
 		return taihaIndexes;
 	};
 	
+	KC3Fleet.prototype.getDameConCodes = function(){
+		var result = [];
+		for(var i=0; i < 6; ++i) {
+			result.push( this.ship(i).findDameCon().code );
+		}
+		return result;
+	};
+	
 	KC3Fleet.prototype.isSupplied = function(){
-		return this.ship().every(function(ship){
-			return !ship.didFlee && ship.isSupplied();
-		});
+		return this.shipsUnescaped().every(ship => ship.isSupplied());
 	};
 	
 	KC3Fleet.prototype.needsSupply = function(isEmpty){
-		return this.ship().some(function(ship){
-			return !ship.didFlee && ship.isNeedSupply(isEmpty);
-		});
+		return this.shipsUnescaped().some(ship => ship.isNeedSupply(isEmpty));
 	};
 	
 	KC3Fleet.prototype.missionOK = function(){
@@ -666,9 +785,8 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.lowestMorale = function(){
-		return this.ship().reduce(function(moralePre,shipData,moraleInd){
-			return Math.min(moralePre,shipData.didFlee ? 100 : shipData.morale);
-		},100);
+		return this.shipsUnescaped().reduce(
+			(moralePre, ship) => Math.min(moralePre, ship.morale), 100);
 	};
 	
 	KC3Fleet.prototype.isOnExped = function(){
@@ -676,13 +794,10 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.highestRepairTimes = function(akashiReduce){
-		var
-			self  = this,
-			highestDocking = 0,
+		var highestDocking = 0,
 			highestAkashi = 0;
 		
-		this.ship(function(rosterId,index,shipData){
-			if(shipData.didFlee) { return false; }
+		this.shipsUnescaped().forEach(shipData => {
 			var myRepairTime = shipData.repairTime();
 			if(akashiReduce && shipData.akashiMark){
 				myRepairTime.akashi -=
@@ -699,7 +814,7 @@ Contains summary information about a fleet and its 6 ships
 			akashiCheck: [
 				PlayerManager.akashiRepair.isRunning(),
 				PlayerManager.akashiRepair.canDoRepair(),
-				KC3AkashiRepair.hasRepairFlagship(self)
+				KC3AkashiRepair.hasRepairFlagship(this)
 			],
 		};
 	};
@@ -825,7 +940,7 @@ Contains summary information about a fleet and its 6 ships
 		// The weighting of the equipment sum part
 		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
-		var multipliers = {
+		const multipliers = {
 			6: 0.6, // Carrier-Based Fighter
 			7: 0.6, // Carrier-Based Dive Bomber
 			8: 0.8, // Carrier-Based Torpedo Bomber
@@ -873,27 +988,9 @@ Contains summary information about a fleet and its 6 ships
 					var itemType = itemData.master().api_type[2];
 					var multiplier = multipliers[itemType];
 					if (multiplier) {
-						var equipment_bonus = Math.sqrt(itemData.stars);
-
-						if (12 === itemType) {
-							// Small Radar bonus
-							equipment_bonus *= 1.25;
-						} else if (13 === itemType) {
-							// Large Radar bonus
-							equipment_bonus *= 1.4;
-						} else if ([9, 10].indexOf(itemType) > -1) {
-							// Reconnaissance Plane/Seaplane bonus
-							equipment_bonus *= 1.2;
-						} else if (11 === itemType) {
-							// Seaplane bomber bonus
-							equipment_bonus *= 1.15;
-						} else {
-							// all other equipment with no bonus
-							equipment_bonus = 0;
-						}
-
 						// multiple * (raw equipment los + equipment bonus)
-						equipTotal += multiplier * (itemData.master().api_saku + equipment_bonus);
+						equipTotal += multiplier * 
+							(itemData.master().api_saku + itemData.losStatImprovementBonus());
 					}
 				}
 			}
@@ -910,15 +1007,9 @@ Contains summary information about a fleet and its 6 ships
 		return total;
 	};
 	
-	/* DISCARD SHIP
-	------------------------------------*/
-	KC3Fleet.prototype.discard = function(shipId) {
-		var pos = this.ships.indexOf(Number(shipId));
-		if(pos>=0){
-			this.ships.splice(pos,1);
-			this.ships.push(-1);
-		}
-	};
+	/*--------------------------------------------------------*/
+	/*--------------[ OTHER MECHANISM INFERENCE ]-------------*/
+	/*--------------------------------------------------------*/
 	
 	/**
 	 * Look up for Katori Class Exp Bonus from current Fleet.
@@ -1048,8 +1139,9 @@ Contains summary information about a fleet and its 6 ships
 		// 3 or more CV(L/B)/AV/LHA
 		if(this.countShipType([7, 11, 18, 16, 17]) >= 3) {
 			return 1;
+		}
 		// 4 or more DD/CL/CLT
-		} else if(this.countShipType([2, 3, 4]) >= 4) {
+		if(this.countShipType([2, 3, 4]) >= 4) {
 			return 3;
 		}
 		// other composition
@@ -1097,6 +1189,10 @@ Contains summary information about a fleet and its 6 ships
 		}
 		return result.every(v => v === -1) ? false : result;
 	};
+
+	/*--------------------------------------------------------*/
+	/*----------------------[ DATA EXPORT ]-------------------*/
+	/*--------------------------------------------------------*/
 
 	/* SORTIE JSON
 	Used for recording sorties on indexedDB

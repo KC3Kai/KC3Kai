@@ -92,10 +92,11 @@
 						}
 					}
 					let tooltip = "{0} x{1}".format(curBox.data("nodeName"), curBox.data("count"));
-					let ap = KC3SortieManager.enemyFighterPower(shipList)[0];
+					let ap = KC3Calc.enemyFighterPower(shipList)[0];
 					if(ap){
-						tooltip += "\nAir Power: {0}  (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
-							.format(ap, Math.floor(ap / 3), Math.floor(2 * ap / 3), Math.floor(3 * ap / 2), 3 * ap);
+						tooltip += "\n" + KC3Meta.term("InferredFighterPower")
+							.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
+								Math.round(3 * ap / 2), 3 * ap);
 					}
 					$(".encounter_formation", curBox).attr("title", tooltip);
 				});

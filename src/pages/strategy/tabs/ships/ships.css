@@ -198,6 +198,7 @@
 	width:16px;
 	height:16px;
 	margin:2px;
+	vertical-align:text-bottom;
 }
 /* Totals */
 .tab_ships .ship_header .ship_totals {

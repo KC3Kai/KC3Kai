@@ -86,6 +86,16 @@
 	background:#D75048;
 	color:#fff;
 }
+.tab_shipquests .ship_item.even .questIcon.exists {
+	border-radius:2px;
+	border-left:4px solid #FF9900;
+	border-right:4px solid transparent;
+}
+.tab_shipquests .ship_item.odd .questIcon.exists {
+	border-radius:2px;
+	border-left:4px solid #FF9900;
+	border-right:4px solid transparent;
+}
 
 /* HEADER
 ------------------------------*/

@@ -8,6 +8,7 @@ Used by SortieManager
 	"use strict";
 	
 	window.KC3Node = function(sortie_id, api_no, utcTime, world, map, raw){
+		// will be 0 if sortie has not been saved to DB (yet)
 		this.sortie = sortie_id || 0;
 		this.id = api_no || 0;
 		this.type = "";
@@ -291,7 +292,7 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
 		var self = this,
-			mapKey = [KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+			mapKey = KC3SortieManager.getSortieMap().join(''),
 			currentMap = KC3SortieManager.getCurrentMapData();
 		this.type = "bounty";
 		this.item = nodeData.api_itemget_eo_comment.api_id;
@@ -452,7 +453,7 @@ Used by SortieManager
 			// see Fleet.calcJetsSteelCost()
 			if(!!this.airBaseJetInjection && !!this.airBaseJetInjection.api_stage1
 				&& this.airBaseJetInjection.api_stage1.api_f_count > 0
-				&& KC3SortieManager.onSortie > 0){
+				&& KC3SortieManager.isOnSortie()){
 				let consumedSteel = 0;
 				$.each(this.airBaseJetInjection.api_air_base_data, function(_, jet){
 					consumedSteel += Math.round(
@@ -558,7 +559,7 @@ Used by SortieManager
 			// Jet planes consume steels each battle based on:
 			// pendingConsumingSteel = round(jetMaster.api_cost * ship.slots[jetIdx] * 0.2)
 			if(this.planeJetFighters.player[0] > 0
-				&& (KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP())){
+				&& (KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())){
 				let consumedSteel = PlayerManager.fleets[this.fleetSent - 1]
 					.calcJetsSteelCost(KC3SortieManager.sortieName(2));
 				console.log("Jets consumed steel", consumedSteel);
@@ -572,7 +573,7 @@ Used by SortieManager
 		
 		var i = 0;
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
-		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
+		if(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
 			var PS = window.PS;
 			var DA = PS["KanColle.DamageAnalysis.FFI"];
 			var result = null;
@@ -819,7 +820,7 @@ Used by SortieManager
 			(function(sortieData){
 				if(this.isBoss()) {
 					// Invoke on boss event callback
-					if(sortieData.onSortie > 0 && sortieData.onBossAvailable) {
+					if(sortieData.isOnSortie() && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie
@@ -840,7 +841,7 @@ Used by SortieManager
 		}
 		
 		// Record encounters only if on sortie
-		if(KC3SortieManager.onSortie > 0) {
+		if(KC3SortieManager.isOnSortie()) {
 			this.saveEnemyEncounterInfo(this.battleDay);
 			
 			// Don't log at Strategy Room Maps/Events History
@@ -913,7 +914,7 @@ Used by SortieManager
 		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
-		if(KC3SortieManager.onSortie > 0 || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
+		if(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() || KC3Node.debugRankPrediction()){
 			var PS = window.PS;
 			var DA = PS["KanColle.DamageAnalysis.FFI"];
 			var result = null;
@@ -1125,11 +1126,11 @@ Used by SortieManager
 		}
 		
 		// Record encounters only if on sortie and starts from night
-		if(this.startsFromNight && KC3SortieManager.onSortie > 0) {
+		if(this.startsFromNight && KC3SortieManager.isOnSortie()) {
 			this.saveEnemyEncounterInfo(this.battleNight);
 		}
 		// Don't log at Strategy Room Maps/Events History
-		if(KC3SortieManager.onSortie > 0) {
+		if(KC3SortieManager.isOnSortie()) {
 			console.log("Parsed night battle node", this);
 		}
 	};
@@ -1151,9 +1152,9 @@ Used by SortieManager
 			if(this.isBoss()) {
 				// assumed maps[ckey] already initialized at /mapinfo or /start
 				var maps = KC3SortieManager.getAllMapData(),
-					ckey = ['m', KC3SortieManager.map_world, KC3SortieManager.map_num].join(''),
+					ckey = 'm' + KC3SortieManager.getSortieMap().join(''),
 					stat = maps[ckey].stat,
-					srid = KC3SortieManager.onSortie;
+					srid = KC3SortieManager.getSortieId();
 				/* DESPAIR STATISTICS ==> */
 				if(stat) {
 					var fs = [this.gaugeDamage, this.enemyFlagshipHp],
@@ -1374,7 +1375,7 @@ Used by SortieManager
 			}
 			// Save enemy deck name for encounter
 			var name = resultData.api_enemy_info.api_deck_name;
-			if(KC3SortieManager.onSortie > 0 && !!name){
+			if(KC3SortieManager.isOnSortie() && !!name){
 				this.saveEnemyEncounterInfo(null, name);
 			}
 		} catch (e) {
@@ -1492,6 +1493,9 @@ Used by SortieManager
 						if(!!aaciType){
 							aaciTips += "\n[{0}] +{1} (x{2})"
 								.format(aaciType.id, aaciType.fixed, aaciType.modifier);
+						} else {
+							aaciTips += "\n[{0}] {1}"
+								.format(fire.api_kind, KC3Meta.term("Unknown"));
 						}
 					}
 					var itemList = fire.api_use_items;
@@ -1512,26 +1516,51 @@ Used by SortieManager
 	*/
 	KC3Node.prototype.buildAirPowerMessage = function(){
 		var tooltip = this.airbattle[2] || "";
-		var apTuple = KC3SortieManager.enemyFighterPower(this.eships, this.eSlot);
+		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
-		// No i18n yet as it's for researchers
-		var ap = apTuple[0];
+		const ap = apTuple[0];
 		if(!!ap){
-			tooltip += "\nPOW: {0} (AI< {1}< AD< {2}< AP< {3}< AS< {4}< AS+)"
+			tooltip += "\n" + KC3Meta.term("InferredFighterPower")
 				.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
 					Math.round(3 * ap / 2), 3 * ap);
 		}
-		var enemyTotalPlanes = this.planeFighters.abyssal[0];
+		const enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){
-			tooltip += "\nFTG: {0} /{1}".format(apTuple[1], enemyTotalPlanes);
-			// 'total - AA Fighter - No AA (Bomber)' may be unknown slot or shot down by support
-			tooltip += " (AA0: {0}, UFO: {1})"
-				.format(apTuple[2], enemyTotalPlanes - apTuple[1] - apTuple[2]);
+			// 'AA plane + Non AA plane - stage1 Total' may be unknown slot sum or shot down by support
+			tooltip += "\n" + KC3Meta.term("InferredEnemyAircraft")
+				.format(apTuple[1], apTuple[2], enemyTotalPlanes,
+					apTuple[1] + apTuple[2] - enemyTotalPlanes);
+			// so try to infer unknown count by looking through air base attack
+			let airBaseEnemyTotalPlanes = 0;
+			if(this.airBaseAttack && this.airBaseAttack[0] && this.airBaseAttack[0].api_stage1){
+				airBaseEnemyTotalPlanes = this.airBaseAttack[0].api_stage1.api_e_count;
+			}
+			if(airBaseEnemyTotalPlanes){
+				tooltip += "\n" + KC3Meta.term("InferredLbasPlanes")
+					.format(airBaseEnemyTotalPlanes, apTuple[3],
+						airBaseEnemyTotalPlanes - apTuple[1] - apTuple[2] - apTuple[3]);
+			}
+			// also try to infer something from exped fleet aerial support
+			let airSupportEnemyTotalPlanes = 0;
+			if(this.battleDay && this.battleDay.api_support_info
+				&& this.battleDay.api_support_info.api_support_airatack
+				&& this.battleDay.api_support_info.api_support_airatack.api_stage1){
+				airSupportEnemyTotalPlanes = this.battleDay.api_support_info.api_support_airatack.api_stage1.api_e_count;
+			}
+			if(airSupportEnemyTotalPlanes){
+				tooltip += "\n" + KC3Meta.term("InferredSupportPlanes")
+					.format(airSupportEnemyTotalPlanes,
+						airSupportEnemyTotalPlanes - apTuple[1] - apTuple[2]);
+			}
+			// also may try to infer something from jet assault phase, if abyssal has one
 		}
-		if(Object.keys(apTuple[3]).length > 0){
-			tooltip += "\nERR: " + JSON.stringify(apTuple[3]);
+		if(Object.keys(apTuple[4]).length > 0){
+			tooltip += "\n" + KC3Meta.term("InferredExceptions").format(JSON.stringify(apTuple[4]));
 		}
-		return tooltip;
+		return $("<p></p>")
+			.css("font-size", "11px")
+			.text(tooltip)
+			.prop("outerHTML");
 	};
 
 	/**
@@ -1812,10 +1841,14 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.saveBattleOnDB = function( resultData ){
+		// Ignore if not saving to DB is demanded
+		if(ConfigManager.isNotToSaveSortie(...KC3SortieManager.getSortieMap())){
+			return;
+		}
 		var b = {
 			// TODO ref to the uniq key of sortie table which is not the auto-increment ID
 			// foreign key to sortie
-			sortie_id: (this.sortie || KC3SortieManager.onSortie || 0),
+			sortie_id: (this.sortie || KC3SortieManager.getSortieId()),
 			node: this.id,
 			// foreign key to encounters
 			//enemyId: (this.enemyEncounter.uniqid || ""),
@@ -1843,6 +1876,8 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.savePvPOnDB = function( resultData ){
+		// Ignore if not saving to DB is demanded
+		if(!ConfigManager.idbSavePvP) { return; }
 		var p = {
 			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent-1].sortieJson(),
 			enemy: [], // Unused
