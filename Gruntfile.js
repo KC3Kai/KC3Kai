@@ -42,6 +42,7 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'!assets/img/planes/**',
 					'!assets/img/useitems/pay*',
+					'!assets/img/shipseasonal/**',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
@@ -57,6 +58,19 @@ module.exports = function(grunt) {
 					'assets/js/markdown.min.js'
 				],
 				dest: 'build/release/'
+			},
+			seasonal: {
+				expand: true,
+				cwd: 'build/tmp/assets/img/shipseasonal/',
+				src: [ '*.png' ],
+				dest: 'build/release/assets/img/ships',
+				filter: function(file) {
+					var id = file.match(/^.*\/(\d+).png$/);
+					if(!id || !id[1]) return false;
+					id = Number(id[1]);
+					var files = grunt.file.readJSON('../../../src/data/seasonal_icons.json') || [];
+					return files.indexOf(id) > -1;
+				}
 			},
 			processed: {
 				expand: true,
@@ -198,6 +212,18 @@ module.exports = function(grunt) {
 								// return "KC3改";
 								return "KanColle";
 							}
+						}
+					]
+				}
+			},
+			seasonal_icons: {
+				src: 'build/tmp/src/data/seasonal_icons.json',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /^\[.*\]$/g,
+							replacement: '[]'
 						}
 					]
 				}
