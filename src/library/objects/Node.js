@@ -1245,24 +1245,31 @@ Used by SortieManager
 		if(this.battleDay.api_kouku)
 			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);
 		if(this.battleDay.api_kouku2)
-			fillAirBattleData("Air Battle #2", this.battleDay.api_kouku2).appendTo(tooltip);
+			fillAirBattleData(" Wave #2 ", this.battleDay.api_kouku2).appendTo(tooltip);
 		// Exped Aerial Support
 		if(this.battleDay.api_support_info && this.battleDay.api_support_info.api_support_airatack)
-			fillAirBattleData("Exped Support", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
+			fillAirBattleData("Exped Air", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
 		return tooltip.html();
 	};
 
 	/**
-	 * @return Total damage dealt from carriers to enemy in day time opening aerial combat phase.
+	 * @return tuple of [
+	 *   total damage dealt from carriers to enemy in day time opening aerial combat phase,
+	 *   planes from ship index Array
+	 * ]
 	 */
 	KC3Node.prototype.getAirBattleDamageInvolved = function(b = this.battleDay){
 		var totalDamage = 0;
+		const planeFromSet = new Set();
 		// jets assault from carriers
 		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3 && b.api_injection_kouku.api_stage3.api_edam){
 			totalDamage += Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
 		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3_combined && b.api_injection_kouku.api_stage3_combined.api_edam){
 			totalDamage += Math.floor(b.api_injection_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		if(b && b.api_injection_kouku && b.api_injection_kouku.api_plane_from && b.api_injection_kouku.api_plane_from[0][0] !== -1){
+			b.api_injection_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
 		}
 		// regular air battle
 		if(b && b.api_kouku && b.api_kouku.api_stage3 && b.api_kouku.api_stage3.api_edam){
@@ -1271,11 +1278,17 @@ Used by SortieManager
 		if(b && b.api_kouku && b.api_kouku.api_stage3_combined && b.api_kouku.api_stage3_combined.api_edam){
 			totalDamage += Math.floor(b.api_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
+		if(b && b.api_kouku && b.api_kouku.api_plane_from && b.api_kouku.api_plane_from[0][0] !== -1){
+			b.api_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
+		}
 		// 2nd wave for air battle only node, supposed to no combined
 		if(b && b.api_kouku2 && b.api_kouku2.api_stage3_combined && b.api_kouku2.api_stage3_combined.api_edam){
 			totalDamage += Math.floor(b.api_kouku2.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		return totalDamage;
+		if(b && b.api_kouku2 && b.api_kouku2.api_plane_from && b.api_kouku2.api_plane_from[0][0] !== -1){
+			b.api_kouku2.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
+		}
+		return [totalDamage, [...planeFromSet]];
 	};
 	
 	/**
@@ -1361,7 +1374,8 @@ Used by SortieManager
 		if(this.startsFromNight){
 			return true;
 		}
-		this.totalAirBombingDamage = this.getAirBattleDamageInvolved();
+		const [bombingDamage, planeFrom] = this.getAirBattleDamageInvolved();
+		this.totalAirBombingDamage = bombingDamage;
 		// No air bombing damage, just go ahead
 		if(this.totalAirBombingDamage === 0){
 			return true;
@@ -1374,9 +1388,11 @@ Used by SortieManager
 			mvpShipDamageDealt += this.predictedFleetsNight.playerMain[this.predictedMvpsNight[0] - 1].damageDealt;
 		}
 		return undefined === this.predictedFleetsDay.playerMain
-			.map((ship, idx) => mvpPosition === idx ? 0 : ship.damageDealt)
-			.find(damage => {
-			if(damage + this.totalAirBombingDamage > mvpShipDamageDealt){
+			.map(ship => ship.damageDealt)
+			.find((damage, idx) => {
+			// Skip ship which predicted MVP and no bomber equipped
+			if(mvpPosition !== idx && planeFrom.indexOf(idx + 1) > -1
+				&& damage + this.totalAirBombingDamage > mvpShipDamageDealt){
 				return true;
 			}
 		});
