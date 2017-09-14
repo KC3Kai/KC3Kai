@@ -262,16 +262,6 @@ Used by SortieManager
 			this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7,13));
 		}
 
-		// Record data for rank prediction
-		this.dayData = {
-			api_nowhps: battleData.api_nowhps,
-			api_maxhps: battleData.api_maxhps,
-			api_nowhps_combined: battleData.api_nowhps_combined,
-			api_maxhps_combined: battleData.api_maxhps_combined,
-			api_escape_idx: battleData.api_escape_idx,
-			api_escape_idx_combined: battleData.api_escape_idx_combined,
-		};
-		
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
@@ -448,15 +438,20 @@ Used by SortieManager
 			}
 
 			if (ConfigManager.info_btrank) {
+				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, battleData, this.predictedFleetsDay);
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
+				}
+				
 				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay);
 				this.predictedMvps = [mvpResult.playerMain];
-				this.predictedMvpCapable = !this.isAirBattleDamageInvolved();
-				if(mvpResult.playerEscort !== undefined) {
+				if (mvpResult.playerEscort !== undefined) {
 					this.predictedMvps.push(mvpResult.playerEscort);
 				}
 				if (KC3Node.debugPrediction()) {
 					console.debug(`Node ${this.letter} predicted mvp`, this.predictedMvps, this.sortie);
 				}
+				this.predictedMvpCapable = this.isMvpPredictionCapable();
 			}
 
 			// Update fleets with battle result
@@ -493,12 +488,6 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
-			if (ConfigManager.info_btrank) {
-				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, battleData, result.fleets);
-				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
-				}
-			}
 		}
 		
 		if(this.gaugeDamage > -1) {
@@ -621,22 +610,26 @@ Used by SortieManager
 				return result;
 			})();
 			const result = KC3BattlePrediction.analyzeBattle(nightData, dameConCode, { player, enemy, time });
-			this.predictedFleetsNight = result;
+			this.predictedFleetsNight = result.fleets;
 			if (KC3Node.debugPrediction()) {
 				console.debug(`Node ${this.letter} predicted yasen ${player} vs ${enemy}`, result);
 			}
 
 			if (ConfigManager.info_btrank) {
-				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, result.fleets);
-				this.predictedMvps = this.predictedMvps || [];
-				this.predictedMvpCapable = this.startsFromNight ? true : this.predictedMvpCapable;
-				this.predictedMvps[0] = mvpResult.playerMain;
-				if(mvpResult.playerEscort !== undefined) {
-					this.predictedMvps[1] = mvpResult.playerEscort;
+				this.predictedRankNight = KC3BattlePrediction.predictRank(nightData.api_name, this.battleDay || nightData, this.predictedFleetsNight);
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted yasen rank`, this.predictedRankNight);
+				}
+				
+				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);
+				this.predictedMvpsNight = [mvpResult.playerMain];
+				if (mvpResult.playerEscort !== undefined) {
+					this.predictedMvpsNight.push(mvpResult.playerEscort);
 				}
 				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted yasen mvp`, this.predictedMvps, this.sortie);
+					console.debug(`Node ${this.letter} predicted yasen mvp`, this.predictedMvpsNight, this.sortie);
 				}
+				this.predictedMvpCapable = this.isMvpPredictionCapable();
 			}
 
 			// Update fleets
@@ -655,8 +648,8 @@ Used by SortieManager
 					} else {
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
 					}
-					if(this.predictedMvpCapable && this.predictedMvps[isPlayerCombined ? 1 : 0]) {
-						ship.mvp = this.predictedMvps[isPlayerCombined ? 1 : 0] === position + 1 ? "true" : false;
+					if(this.predictedMvpCapable && this.predictedMvpsNight[isPlayerCombined ? 1 : 0]) {
+						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? "true" : false;
 					}
 				});
 			}
@@ -678,12 +671,6 @@ Used by SortieManager
 				this.maxHPs.enemy = nightData.api_maxhps_combined.slice(7, 13);
 			}
 
-			if(ConfigManager.info_btrank){
-				this.predictedRankNight = KC3BattlePrediction.predictRank(nightData.api_name, this.dayData || nightData, result.fleets);
-				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted yasen rank`, this.predictedRankNight);
-				}
-			}
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1257,12 +1244,40 @@ Used by SortieManager
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
 		if(this.battleDay.api_kouku)
 			fillAirBattleData("Air Battle", this.battleDay.api_kouku).appendTo(tooltip);
+		if(this.battleDay.api_kouku2)
+			fillAirBattleData("Air Battle #2", this.battleDay.api_kouku2).appendTo(tooltip);
 		// Exped Aerial Support
 		if(this.battleDay.api_support_info && this.battleDay.api_support_info.api_support_airatack)
 			fillAirBattleData("Exped Support", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
 		return tooltip.html();
 	};
 
+	/**
+	 * @return Total damage dealt from carriers to enemy in day time opening aerial combat phase.
+	 */
+	KC3Node.prototype.getAirBattleDamageInvolved = function(b = this.battleDay){
+		var totalDamage = 0;
+		// jets assault from carriers
+		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3 && b.api_injection_kouku.api_stage3.api_edam){
+			totalDamage += Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3_combined && b.api_injection_kouku.api_stage3_combined.api_edam){
+			totalDamage += Math.floor(b.api_injection_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		// regular air battle
+		if(b && b.api_kouku && b.api_kouku.api_stage3 && b.api_kouku.api_stage3.api_edam){
+			totalDamage += Math.floor(b.api_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		if(b && b.api_kouku && b.api_kouku.api_stage3_combined && b.api_kouku.api_stage3_combined.api_edam){
+			totalDamage += Math.floor(b.api_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		// 2nd wave for air battle only node, supposed to no combined
+		if(b && b.api_kouku2 && b.api_kouku2.api_stage3_combined && b.api_kouku2.api_stage3_combined.api_edam){
+			totalDamage += Math.floor(b.api_kouku2.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+		}
+		return totalDamage;
+	};
+	
 	/**
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
@@ -1336,16 +1351,35 @@ Used by SortieManager
 			|| (this.eventKind === 5 && this.eventId === 5);
 	};
 	
-	// Indicate if this day battle deals any damage to enemy in opening aerial combat phase.
-	KC3Node.prototype.isAirBattleDamageInvolved = function(){
-		// Damages and losses of all kinds of aerial combat are too black-boxed to be predicted
-		const b = this.battleDay;
-		return !! (
-			(b.api_kouku && b.api_kouku.api_stage3 && // regular air battle
-				Math.floor(b.api_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0)) > 0) ||
-			(b.api_injection_kouku && b.api_injection_kouku.api_stage3 && // jets assault
-				Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0)) > 0)
-		);
+	KC3Node.prototype.isMvpPredictionCapable = function(){
+		// Rule unknown: ship nearest to flagship does not get MVP when same damage dealt
+		const battleRank = this.predictedRankNight || this.predictedRank;
+		if(battleRank === "D" || battleRank === "E"){
+			return false;
+		}
+		// Should no air battle and not combined fleet for now
+		if(this.startsFromNight){
+			return true;
+		}
+		this.totalAirBombingDamage = this.getAirBattleDamageInvolved();
+		// No air bombing damage, just go ahead
+		if(this.totalAirBombingDamage === 0){
+			return true;
+		}
+		// Damages and losses of all kinds of aerial combat are too black-boxed to be predicted,
+		// but if total damage dealt in air battle is smaller than MVP ship dealt, it's safe.
+		const mvpPosition = this.predictedMvps[0] - 1;
+		var mvpShipDamageDealt = this.predictedFleetsDay.playerMain[mvpPosition].damageDealt;
+		if(this.predictedFleetsNight && mvpPosition === this.predictedMvpsNight[0] - 1){
+			mvpShipDamageDealt += this.predictedFleetsNight.playerMain[this.predictedMvpsNight[0] - 1].damageDealt;
+		}
+		return undefined === this.predictedFleetsDay.playerMain
+			.map((ship, idx) => mvpPosition === idx ? 0 : ship.damageDealt)
+			.find(damage => {
+			if(damage + this.totalAirBombingDamage > mvpShipDamageDealt){
+				return true;
+			}
+		});
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){
