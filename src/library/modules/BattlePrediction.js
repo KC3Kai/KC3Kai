@@ -306,6 +306,7 @@
     const { combineFleetResults } = KC3BattlePrediction.mvp;
 
     if (!nightFleets) { return dayFleets; }
+    if (!dayFleets) { return nightFleets; }
     return {
       playerMain: combineFleetResults(dayFleets.playerMain, nightFleets.playerMain),
       playerEscort: combineFleetResults(dayFleets.playerEscort, nightFleets.playerEscort),

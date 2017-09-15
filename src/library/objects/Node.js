@@ -438,12 +438,12 @@ Used by SortieManager
 			}
 
 			if (ConfigManager.info_btrank) {
-				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, battleData, this.predictedFleetsDay);
+				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, this.battleNight || battleData, this.predictedFleetsDay);
 				if (KC3Node.debugPrediction()) {
 					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
 				}
 				
-				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay);
+				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);
 				this.predictedMvps = [mvpResult.playerMain];
 				if (mvpResult.playerEscort !== undefined) {
 					this.predictedMvps.push(mvpResult.playerEscort);
@@ -1255,7 +1255,7 @@ Used by SortieManager
 	/**
 	 * @return tuple of [
 	 *   total damage dealt from carriers to enemy in day time opening aerial combat phase,
-	 *   planes from ship index Array
+	 *   [planes from ship index (1-based)]
 	 * ]
 	 */
 	KC3Node.prototype.getAirBattleDamageInvolved = function(b = this.battleDay){
@@ -1371,6 +1371,7 @@ Used by SortieManager
 			return false;
 		}
 		// Should no air battle and not combined fleet for now
+		// But there was battle node starts from night to day in game history
 		if(this.startsFromNight){
 			return true;
 		}
