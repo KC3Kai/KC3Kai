@@ -700,7 +700,9 @@ var interactions = {
 			// Book for a future display if it's a ship's hourly voice,
 			// because game preload voice file in advance (about > 5 mins, even ~24 mins).
 			if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
-				bookHourlyLine(subtitleText, quoteIdentifier);
+				if(ConfigManager.subtitle_hourly){
+					bookHourlyLine(subtitleText, quoteIdentifier);
+				}
 			} else {
 				showSubtitle(subtitleText, quoteIdentifier);
 			}

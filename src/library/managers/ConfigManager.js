@@ -64,6 +64,7 @@ Retrieves when needed to apply on components
 				info_stats_diff      : 3,
 				info_eng_stype       : false,
 				info_force_ship_lang : "",
+				info_seasonal_icon   : true,
 				info_salt            : false,
 				info_troll           : false,
 
@@ -118,6 +119,7 @@ Retrieves when needed to apply on components
 				subtitle_bold     : false,
 				subtitle_display  : "ghost",
 				subtitle_speaker  : false,
+				subtitle_hourly   : true,
 				google_translate  : true,
 				map_markers       : true,
 				mute_game_tab     : false,

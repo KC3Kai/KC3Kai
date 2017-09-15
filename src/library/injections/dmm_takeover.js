@@ -9,7 +9,7 @@
 		apply: function(response){
 			console.log('Applying DMM customizations...');
 
-			config =  $.extend(true, ConfigManager, response.config);
+			config = $.extend(true, ConfigManager, response.config);
 			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
@@ -208,7 +208,7 @@
 			if(config.dmm_custom_css !== ""){
 				var customCSS = document.createElement("style");
 				customCSS.type = "text/css";
-				customCSS.innerHTML = ConfigManager.dmm_custom_css;
+				customCSS.innerHTML = config.dmm_custom_css;
 				$("head").append(customCSS);
 			}
 		},
@@ -313,7 +313,7 @@
 						break;
 					case "abyssal":
 						quoteIdentifier = "abyssal";
-						if(ConfigManager.subtitle_speaker){
+						if(config.subtitle_speaker){
 							const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
 							quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
 						}
@@ -409,7 +409,9 @@
 					// Book for a future display if it's a ship's hourly voice,
 					// because game preload voice file in advance (about > 5 mins).
 					if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
-						bookHourlyLine(subtitleText, quoteIdentifier);
+						if(config.subtitle_hourly){
+							bookHourlyLine(subtitleText, quoteIdentifier);
+						}
 					} else {
 						showSubtitle(subtitleText, quoteIdentifier);
 					}
@@ -511,7 +513,7 @@
 		Attach onUnload listener to stop accidental exit
 		--------------------------------------*/
 		exitConfirmation: function(){
-			if (!ConfigManager.api_askExit) return false;
+			if (!config.api_askExit) return false;
 			window.onbeforeunload = function(){
 				// Not support custom message any more, see:
 				// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
@@ -647,7 +649,7 @@
 			let maxIdleScreenOpacity = 0.8;
 
 			// idle time unit is second
-			let timeIdleStartSec = ConfigManager.alert_idle_start;
+			let timeIdleStartSec = config.alert_idle_start;
 			let timeIdleStart = Math.floor(timeIdleStartSec * 1000);
 			let timeIdleMax = timeIdleStart + 100000;
 
@@ -677,8 +679,8 @@
 
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
-				if (!ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
-					|| ConfigManager.alert_idle_start <= 0)
+				if (!config.alert_idle_start // to exclude falsy values like NaN and 0
+					|| config.alert_idle_start <= 0)
 					return true;
 				if(request.action != "goodResponses") return true;
 				lastNetworkTime = (new Date()).getTime();
