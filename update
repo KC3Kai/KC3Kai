@@ -1,7 +1,7 @@
 {
-	"version" : "31.9.8",
+	"version" : "31.9.9",
 	"pr" : "https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20",
-	"time" : "Thu, 14 September 2017 12:00:00 +0900",
+	"time" : "",
 	"maintenance_start": "Tue, 12 September 2017 11:00:00 +0900",
 	"maintenance_end": "Tue, 12 September 2017 20:30:00 +0900"
 }
