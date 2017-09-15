@@ -234,6 +234,12 @@
 				}
 			},
 			{
+				"id" : "info_seasonal_icon",
+				"name" : "SettingsSeasonalShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
@@ -572,6 +578,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "map_markers",
+				"name" : "SettingsMapNodeMarkers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_askExit",
 				"name" : "SettingsConfirmExit",
 				"type" : "check",
@@ -700,8 +712,8 @@
 				"options" : {}
 			},
 			{
-				"id" : "map_markers",
-				"name" : "SettingsMapNodeMarkers",
+				"id" : "subtitle_hourly",
+				"name" : "SettingsSubtitleHourly",
 				"type" : "check",
 				"options" : {}
 			},

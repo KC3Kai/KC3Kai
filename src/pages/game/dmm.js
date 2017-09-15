@@ -168,7 +168,7 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// Untranslated quest copiable text form
+	// Untranslated quest copy-able text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -289,7 +289,7 @@ $(document).on("keydown", function(event){
 	}
 });
 
-/* Invokable actions
+/* Invoke-able actions
 -----------------------------------*/
 var interactions = {
 	
@@ -682,7 +682,9 @@ var interactions = {
 			// Book for a future display if it's a ship's hourly voice,
 			// because game preload voice file in advance (about > 5 mins).
 			if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
-				bookHourlyLine(subtitleText, quoteIdentifier);
+				if(ConfigManager.subtitle_hourly){
+					bookHourlyLine(subtitleText, quoteIdentifier);
+				}
 			} else {
 				showSubtitle(subtitleText, quoteIdentifier);
 			}

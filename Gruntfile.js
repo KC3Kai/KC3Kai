@@ -42,6 +42,7 @@ module.exports = function(grunt) {
 					'assets/img/**',
 					'!assets/img/planes/**',
 					'!assets/img/useitems/pay*',
+					'!assets/img/shipseasonal/**',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
@@ -57,6 +58,19 @@ module.exports = function(grunt) {
 					'assets/js/markdown.min.js'
 				],
 				dest: 'build/release/'
+			},
+			seasonal: {
+				expand: true,
+				cwd: 'build/tmp/assets/img/shipseasonal/',
+				src: '*.png',
+				dest: 'build/release/assets/img/ships',
+				filter: function(file) {
+					var id = file.match(/^.*\/(\d+).png$/);
+					if(!id || !id[1]) return false;
+					id = Number(id[1]);
+					var idArr = grunt.file.readJSON('src/data/seasonal_icons.json') || [];
+					return idArr.indexOf(id) > -1;
+				}
 			},
 			processed: {
 				expand: true,
@@ -198,6 +212,18 @@ module.exports = function(grunt) {
 								// return "KC3改";
 								return "KanColle";
 							}
+						}
+					]
+				}
+			},
+			seasonalicons: {
+				src: 'build/tmp/data/seasonal_icons.json',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /^.*$/g,
+							replacement: '[]'
 						}
 					]
 				}
@@ -461,6 +487,7 @@ module.exports = function(grunt) {
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
+		'copy:seasonal',
 		'removelogging',
 		'string-replace:devtooltitle',
 		'jshint:build',
@@ -470,6 +497,7 @@ module.exports = function(grunt) {
 		'htmlmin',
 		'modify_json:manifest_scripts',
 		'modify_json:manifest_info',
+		'string-replace:seasonalicons',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
