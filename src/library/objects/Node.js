@@ -462,9 +462,10 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvpCapable && this.predictedMvps[0]) {
+					if(this.predictedMvps[0] > 0) {
 						// string indicates prediction value
-						ship.mvp = this.predictedMvps[0] === position + 1 ? "true" : false;
+						ship.mvp = this.predictedMvps[0] === position + 1 ?
+							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
 				});
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
@@ -472,8 +473,9 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvpCapable && this.predictedMvps[1]) {
-						ship.mvp = this.predictedMvps[1] === position + 1 ? "true" : false;
+					if(this.predictedMvps[1] > 0) {
+						ship.mvp = this.predictedMvps[1] === position + 1 ?
+							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
 				});
 			}
@@ -648,8 +650,9 @@ Used by SortieManager
 					} else {
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
 					}
-					if(this.predictedMvpCapable && this.predictedMvpsNight[isPlayerCombined ? 1 : 0]) {
-						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? "true" : false;
+					if(this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
+						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
+							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
 				});
 			}
@@ -1096,9 +1099,7 @@ Used by SortieManager
 			}
 			// also try to infer something from exped fleet aerial support
 			let airSupportEnemyTotalPlanes = 0;
-			if(this.battleDay && this.battleDay.api_support_info
-				&& this.battleDay.api_support_info.api_support_airatack
-				&& this.battleDay.api_support_info.api_support_airatack.api_stage1){
+			if(Object.hasSafePath(this.battleDay, "api_support_info.api_support_airatack.api_stage1")){
 				airSupportEnemyTotalPlanes = this.battleDay.api_support_info.api_support_airatack.api_stage1.api_e_count;
 			}
 			if(airSupportEnemyTotalPlanes){
@@ -1247,7 +1248,7 @@ Used by SortieManager
 		if(this.battleDay.api_kouku2)
 			fillAirBattleData(" Wave #2 ", this.battleDay.api_kouku2).appendTo(tooltip);
 		// Exped Aerial Support
-		if(this.battleDay.api_support_info && this.battleDay.api_support_info.api_support_airatack)
+		if(Object.hasSafePath(this.battleDay, "api_support_info.api_support_airatack"))
 			fillAirBattleData("Exped Air", this.battleDay.api_support_info.api_support_airatack).appendTo(tooltip);
 		return tooltip.html();
 	};
@@ -1262,30 +1263,30 @@ Used by SortieManager
 		var totalDamage = 0;
 		const planeFromSet = new Set();
 		// jets assault from carriers
-		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3 && b.api_injection_kouku.api_stage3.api_edam){
+		if(Object.hasSafePath(b, "api_injection_kouku.api_stage3.api_edam")){
 			totalDamage += Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(b && b.api_injection_kouku && b.api_injection_kouku.api_stage3_combined && b.api_injection_kouku.api_stage3_combined.api_edam){
+		if(Object.hasSafePath(b, "api_injection_kouku.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_injection_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(b && b.api_injection_kouku && b.api_injection_kouku.api_plane_from && b.api_injection_kouku.api_plane_from[0][0] !== -1){
+		if(Object.hasSafePath(b, "api_injection_kouku.api_plane_from") && b.api_injection_kouku.api_plane_from[0][0] !== -1){
 			b.api_injection_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
 		}
 		// regular air battle
-		if(b && b.api_kouku && b.api_kouku.api_stage3 && b.api_kouku.api_stage3.api_edam){
+		if(Object.hasSafePath(b, "api_kouku.api_stage3.api_edam")){
 			totalDamage += Math.floor(b.api_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(b && b.api_kouku && b.api_kouku.api_stage3_combined && b.api_kouku.api_stage3_combined.api_edam){
+		if(Object.hasSafePath(b, "api_kouku.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(b && b.api_kouku && b.api_kouku.api_plane_from && b.api_kouku.api_plane_from[0][0] !== -1){
+		if(Object.hasSafePath(b, "api_kouku.api_plane_from") && b.api_kouku.api_plane_from[0][0] !== -1){
 			b.api_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
 		}
 		// 2nd wave for air battle only node, supposed to no combined
-		if(b && b.api_kouku2 && b.api_kouku2.api_stage3_combined && b.api_kouku2.api_stage3_combined.api_edam){
+		if(Object.hasSafePath(b, "api_kouku2.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_kouku2.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(b && b.api_kouku2 && b.api_kouku2.api_plane_from && b.api_kouku2.api_plane_from[0][0] !== -1){
+		if(Object.hasSafePath(b, "api_kouku2.api_plane_from") && b.api_kouku2.api_plane_from[0][0] !== -1){
 			b.api_kouku2.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
 		}
 		return [totalDamage, [...planeFromSet]];
