@@ -428,8 +428,16 @@ Provides access to data on built-in JSON files
 				KC3GearManager.landBasedAircraftType3Ids = this._dataColle.landBasedAircraftType3Ids;
 			if(Array.isArray(this._dataColle.antiAirFighterType2Ids))
 				KC3GearManager.antiAirFighterType2Ids = this._dataColle.antiAirFighterType2Ids;
+			if(Array.isArray(this._dataColle.aswAircraftType2Ids))
+				KC3GearManager.aswAircraftType2Ids = this._dataColle.aswAircraftType2Ids;
 			if(Array.isArray(this._dataColle.interceptorsType3Ids))
 				KC3GearManager.interceptorsType3Ids = this._dataColle.interceptorsType3Ids;
+			if(Array.isArray(this._dataColle.nightAircraftType3Ids))
+				KC3GearManager.nightAircraftType3Ids = this._dataColle.nightAircraftType3Ids;
+			if(Array.isArray(this._dataColle.jetAircraftType2Ids))
+				KC3GearManager.jetAircraftType2Ids = this._dataColle.jetAircraftType2Ids;
+			if(Array.isArray(this._dataColle.landBaseReconnType2Ids))
+				KC3GearManager.landBaseReconnType2Ids = this._dataColle.landBaseReconnType2Ids;
 		},
 		
 		defaultEquip :function(id){
@@ -760,18 +768,17 @@ Provides access to data on built-in JSON files
 		},
 		
 		gunfit :function(shipMstId, itemMstId){
-			if (typeof this._gunfit[shipMstId+""] == "undefined") {
+			if (this._gunfit[shipMstId] === undefined) {
 				return false;
 			}
-			
-			if (typeof itemMstId != "undefined") {
-				if (typeof this._gunfit[shipMstId+""][itemMstId+""] != "undefined") {
-					return this._gunfit[shipMstId+""][itemMstId+""];
+			if (itemMstId !== undefined) {
+				if (this._gunfit[shipMstId][itemMstId] !== undefined) {
+					return this._gunfit[shipMstId][itemMstId];
 				} else {
 					return false;
 				}
 			} else {
-				return this._gunfit[shipMstId+""];
+				return this._gunfit[shipMstId];
 			}
 		}
 	};

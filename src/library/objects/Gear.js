@@ -56,21 +56,22 @@ KC3改 Equipment Object
 	 * Get the improvement bonus for kinds of attack type based on current gear stars.
 	 * Modifiers might be broken into a JSON for better maintenance.
 	 * 
-	 * @param {string} - attack type identifier, allow values for now:
-	 *                   `fire`, `torpedo`, `yasen`, `asw`, `support`
+	 * @param {string} type - attack type identifier, allow values for now:
+	 *                        `fire`, `torpedo`, `yasen`, `asw`, `support`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
+	 * @see accStatImprovementBonus for accuracy improvement bonus
 	 * @see losStatImprovementBonus for LoS improvement bonus
 	 * @see aaStatImprovementBonus for Anti-Air improvement bonus
 	 * @see http://kancolle.wikia.com/wiki/Improvements
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
-	KC3Gear.prototype.attackPowerImprovementBonus = function(attackType = "fire") {
+	KC3Gear.prototype.attackPowerImprovementBonus = function(type = "fire") {
 		if(!this.itemId || !this.masterId) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		// No improvement bonus is default
 		let modifier = 0;
-		switch(attackType.toLowerCase()) {
+		switch(type.toLowerCase()) {
 			case "fire":
 				switch(type2) {
 					case 1: // Small Cal. Main
@@ -110,7 +111,43 @@ KC3改 Equipment Object
 				// No any improvement bonus found for support fleet for now
 				break;
 			default:
-				console.warn("Unknown attack type:", attackType);
+				console.warn("Unknown attack type:", type);
+		}
+		return modifier * Math.sqrt(stars);
+	};
+
+	/**
+	 * Get improvement bonus of accuracy stat.
+	 * @see http://kancolle.wikia.com/wiki/Improvements
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#oe80ec59
+	 */
+	KC3Gear.prototype.accStatImprovementBonus = function(type = "fire") {
+		if(!this.itemId || !this.masterId) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		switch(type.toLowerCase()) {
+			case "fire":
+				// Main gun/Secondary gun/AP shell/Radar/AAFD
+				// but wikia says Sonar gives shelling acc bonus?
+				if([1, 2, 3, 4, 12, 13, 19, 36].indexOf(type2) > -1)
+					modifier = 1;
+				break;
+			case "torpedo":
+				// Torpedo/AA Gun
+				if([5, 21, 32].indexOf(type2) > -1)
+					modifier = 1; // unknown
+				break;
+			case "yasen":
+				// unknown
+				break;
+			case "asw":
+				// Sonar
+				if([14, 40].indexOf(type2) > -1)
+					modifier = 1; // unknown
+				break;
+			default:
+				console.warn("Unknown attack type:", type);
 		}
 		return modifier * Math.sqrt(stars);
 	};
@@ -283,9 +320,10 @@ KC3改 Equipment Object
 		 * - 41: Large Flying Boat
 		 * - 47: Land Base Bomber (not equipped by carrier anyway)
 		 * - 57: Jet Bomber
+		 * Game might just use the simple way: stat > 0 of any aircraft
 		 */
 		return this.masterId > 0 &&
-			[7, 8, 11, 25, 26, 41, 47, 57].indexOf(this.master().api_type[2]) > -1 &&
+			KC3GearManager.aswAircraftType2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 0;
 	};
 

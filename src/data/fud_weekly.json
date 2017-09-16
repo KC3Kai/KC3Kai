@@ -1,8 +1,12 @@
 {
 	"carrierBasedAircraftType3Ids": [6, 7, 8, 9, 10, 21, 22, 33, 39, 40, 43, 45, 46],
 	"landBasedAircraftType3Ids": [6, 7, 8, 9, 10, 33, 37, 38, 39, 40, 43, 44, 45, 46],
-	"interceptorsType3Ids": [38, 44],
 	"antiAirFighterType2Ids": [6, 7, 8, 11, 45, 47, 48, 57],
+	"aswAircraftType2Ids": [7, 8, 11, 25, 26, 41, 47, 57],
+	"jetAircraftType2Ids": [56, 57, 58, 59],
+	"nightAircraftType3Ids": [45, 46],
+	"interceptorsType3Ids": [38, 44],
+	"landBaseReconnType2Ids": [9, 10, 41],
 	"airPowerInternalProficiency": [0, 10, 25, 40, 55, 70, 85, 100, 121],
 	"airPowerAverageBonuses": [0, 1.30384, 1.78885, 2.16795, 2.48998, 2.77489, 3.03315, 3.31662],
 	"airPowerTypeBonuses": {

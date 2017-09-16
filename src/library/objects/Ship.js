@@ -435,28 +435,30 @@ KC3改 Ship Object
 	 * returns total steel cost for this ship at this time
 	 */
 	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
-		var i, item, pc, self = this;
 		var totalSteel = 0, consumedSteel = 0;
-		for(i = 0; i < self.items.length; i++) {
-			item = self.equipment(i);
+		this.equipment().forEach((item, i) => {
 			// Is Jet aircraft and left slot > 0
-			if(item.masterId > 0 && item.master().api_type[2] == 57 && self.slots[i] > 0) {
+			if(item.masterId > 0 && this.slots[i] > 0 &&
+				KC3GearManager.jetAircraftType2Ids.indexOf(item.master().api_type[2]) > -1) {
 				consumedSteel = Math.round(
-					self.slots[i]
+					this.slots[i]
 					* item.master().api_cost
 					* KC3GearManager.jetBomberSteelCostRatioPerSlot
 				) || 0;
 				totalSteel += consumedSteel;
 				if(!!currentSortieId) {
-					pc = self.pendingConsumption[currentSortieId];
-					if(!pc) {
+					let pc = this.pendingConsumption[currentSortieId];
+					if(!Array.isArray(pc)) {
 						pc = [[0,0,0],[0,0,0],[0]];
-						self.pendingConsumption[currentSortieId] = pc;
+						this.pendingConsumption[currentSortieId] = pc;
+					}
+					if(!Array.isArray(pc[2])) {
+						pc[2] = [0];
 					}
 					pc[2][0] -= consumedSteel;
 				}
 			}
-		}
+		});
 		if(!!currentSortieId && totalSteel > 0) {
 			KC3ShipManager.save();
 		}
@@ -1186,25 +1188,76 @@ KC3改 Ship Object
 		const onLevel = 2 * Math.sqrt(this.level - 1);
 		const onLuck = 1.5 * Math.sqrt(this.lk[0]);
 		const onEquip = -this.nakedStats("ac");
-		// http://kancolle.wikia.com/wiki/Improvements
-		const onImprove = this.equipment(true).map(
-			// Main/Secondary/AP shell/Sonar/Radar/AAFD
-			e => e.itemId > 0 && [1,2,8,10,24,25].indexOf(e.master().api_type[1]) > -1
-				&& e.stars
-		).reduce((acc, v) => acc + Math.sqrt(v), 0);
+		const onImprove = this.equipment(true)
+			.map(g => g.accStatImprovementBonus("fire"))
+			.reduce((acc, v) => acc + v, 0);
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2]);
-		// TODO To be implemented
-		const gunfit = 0;
+		const gunfit = this.shellingGunFitAccuracy();
 		const base = 3 + gunfit +
-			Math.qckInt("floor", Math.floor(90 + onLevel + onLuck + onEquip + onImprove) *
-				formationModifier * moraleModifier, 1);
+			(90 + onLevel + onLuck + onEquip + onImprove) * formationModifier * moraleModifier;
 		return {
 			accuracy: base,
 			equipmentStats: onEquip,
 			equipImprovement: onImprove,
+			equipGunFit: gunfit,
 			moraleModifier: moraleModifier,
 			formationModifier: formationModifier
 		};
+	};
+
+	/**
+	 * Get current shelling accuracy bonus (or penalty) from equipped guns.
+	 * @see http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus
+	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#fitarms
+	 */
+	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "day") {
+		if(!this.rosterId || !this.masterId) { return 0; }
+		var result = 0;
+		// Fit bonus or overweight penalty for ship types:
+		const stype = this.master().api_stype;
+		switch(stype) {
+			case 3:
+			case 4:
+			case 21: // for Light Cruisers
+				const singleMountIds = [4, 11];
+				const twinMountIds = [65, 119, 139];
+				result = -2; // only fit bonus, but -2 fixed
+				result += Math.sqrt(this.countEquipment(singleMountIds)) * 4;
+				result += Math.sqrt(this.countEquipment(twinMountIds)) * 3;
+				break;
+			case 5:
+			case 6: // for Heavy Cruisers, only fit bonus
+				const has203TwinGun = this.hasEquipment(6);
+				const has203No3TwinGun = this.hasEquipment(50);
+				result += has203No3TwinGun ? 15 : has203TwinGun ? 10 : 0;
+				break;
+			case 8:
+			case 9:
+			case 10: // for Battleships
+				// Large cal. main gun gives accuracy bonus if it's fit,
+				// and accuracy penalty if it's overweight.
+				const timeIndex = {"day": 0, "night": 1}[time];
+				const gunCountFitMap = {};
+				this.equipment(true).forEach(g => {
+					if(g.itemId && g.masterId && g.master().api_type[2] === 3) {
+						let fitValues = KC3Meta.gunfit(this.masterId, g.masterId) || [0, 0];
+						if(!Array.isArray(fitValues)) fitValues = [fitValues];
+						const gunCount = (gunCountFitMap[g.masterId] || [0])[0];
+						gunCountFitMap[g.masterId] = [gunCount + 1, fitValues];
+					}
+				});
+				$.each(gunCountFitMap, (_, fit) => {
+					const count = fit[0];
+					let value = fit[1][timeIndex] || 0;
+					if(value < 0 && this.isMarried())
+						value *= 0.6;
+					result += value * Math.sqrt(count);
+				});
+				break;
+			default:
+				// not found for other ships
+		}
+		return result;
 	};
 
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
@@ -1423,9 +1476,10 @@ KC3改 Ship Object
 		const shellingAccuracy = shipObj.shellingAccuracy();
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(
-				shellingAccuracy.accuracy,
+				Math.qckInt("floor", shellingAccuracy.accuracy, 1),
 				signedNumber(shellingAccuracy.equipmentStats),
-				signedNumber(Math.qckInt("floor", shellingAccuracy.equipImprovement, 1))
+				signedNumber(Math.qckInt("floor", shellingAccuracy.equipImprovement, 1)),
+				signedNumber(Math.qckInt("floor", shellingAccuracy.equipGunFit, 1))
 			)
 		);
 		$(".adjustedAntiAir", tooltipBox).text(

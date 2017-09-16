@@ -17,7 +17,9 @@ Saves and loads list to and from localStorage
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46],
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,57],
+		aswAircraftType2Ids: [7,8,11,25,26,41,47,57],
 		interceptorsType3Ids: [38,44],
+		nightAircraftType3Ids: [45,46],
 
 		carrierSupplyBauxiteCostPerSlot: 5,
 		// LBAS mechanism still in progress
@@ -33,6 +35,7 @@ Saves and loads list to and from localStorage
 		landBaseOtherMaxSlot: 18,
 		landBaseReconnType2Ids: [9,10,41],
 		// Jet aircraft mechanism still in progress
+		jetAircraftType2Ids: [56,57,58,59],
 		jetBomberSteelCostRatioPerSlot: 0.2,
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
