@@ -765,22 +765,35 @@
 								sortie.world, sortie.mapnum)).defineAsBattle();
 							if(typeof battle.data.api_dock_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.night( battle.yasen );
 								}
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.night( battle.yasen );
 								}
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							if(KC3Node.debugRankPrediction()){
-								// Known issue: if `api_name` not saved into battle data for old history,
-								// prediction on long distance air raid node will fail
+							if(KC3Node.debugPrediction()){
+								// Known issue 1: if `api_name` not saved into battle data for old history,
+								// prediction on long distance air raid node will fail.
+								// Known issue 2: saved rating in DB will be incorrect,
+								// if thisNode.allyNoDamage is not correctly calculated on that sortie.
 								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
-								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch");
+								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch", battle);
+								
+								console.debug("Node " + thisNode.letter + " result mvp", battle.mvp, battle.sortie_id);
+								if(thisNode.predictedMvpCapable){
+									const predictedMvps = thisNode.predictedMvpsNight || thisNode.predictedMvps || [];
+									console.assert(battle.mvp[0] == predictedMvps[0], "MVP prediction mismatch", battle);
+									if(battle.mvp[1]){
+										console.assert(battle.mvp[1] == predictedMvps[1], "Escort MVP prediction mismatch", battle);
+									}
+								} else {
+									console.info("MVP prediction incapable");
+								}
 							}
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);

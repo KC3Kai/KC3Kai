@@ -346,34 +346,34 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		updateMvps :function(mvps){
-			if(!!mvps && mvps.length > 0){
+			if(Array.isArray(mvps) && mvps.length){
 				if(PlayerManager.combinedFleet && this.fleetSent === 1){
-					var mvpIndex1 = mvps[0] || 1,
-						mvpIndex2 = mvps[1] || 1,
-						ships1 = PlayerManager.fleets[0].ships,
-						ships2 = PlayerManager.fleets[1].ships;
-					if(mvpIndex1 > 0){
-						this.cleanMvpShips(ships1);
-						KC3ShipManager.get(ships1[mvpIndex1-1]).mvp = true;
+					const mainMvp = mvps[0] || 1,
+						escortMvp = mvps[1] || 1,
+						mainFleet = PlayerManager.fleets[0],
+						escortFleet = PlayerManager.fleets[1];
+					if(mainMvp > 0){
+						this.cleanMvpShips(mainFleet);
+						mainFleet.ship(mainMvp - 1).mvp = true;
 					}
-					if(mvpIndex2 > 0){
-						this.cleanMvpShips(ships2);
-						KC3ShipManager.get(ships2[mvpIndex2-1]).mvp = true;
+					if(escortMvp > 0){
+						this.cleanMvpShips(escortFleet);
+						escortFleet.ship(escortMvp - 1).mvp = true;
 					}
 				} else {
-					var mvpIndex = mvps[0] || mvps[1] || -1,
-						ships = PlayerManager.fleets[this.fleetSent-1].ships;
-					if(mvpIndex > 0){
-						this.cleanMvpShips(ships);
-						KC3ShipManager.get(ships[mvpIndex-1]).mvp = true;
+					const mvp = mvps[0] || mvps[1] || -1,
+						fleet = PlayerManager.fleets[this.fleetSent - 1];
+					if(mvp > 0){
+						this.cleanMvpShips(fleet);
+						fleet.ship(mvp - 1).mvp = true;
 					}
 				}
 			}
 		},
 		
-		cleanMvpShips :function(ships){
-			ships.forEach(function(index){
-				KC3ShipManager.get(ships[index]).mvp = false;
+		cleanMvpShips :function(fleet){
+			fleet.ship((rid, idx, ship) => {
+				ship.mvp = false;
 			});
 		},
 		
@@ -606,10 +606,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.nodes = [];
 			this.boss = { info: false };
 			if(PlayerManager.combinedFleet && sentFleet === 1){
-				this.cleanMvpShips(PlayerManager.fleets[0].ships);
-				this.cleanMvpShips(PlayerManager.fleets[1].ships);
+				this.cleanMvpShips(PlayerManager.fleets[0]);
+				this.cleanMvpShips(PlayerManager.fleets[1]);
 			} else {
-				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1].ships);
+				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1]);
 			}
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
