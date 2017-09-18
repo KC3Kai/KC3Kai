@@ -1034,7 +1034,6 @@ KC3改 Ship Object
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
 	 * @return {Array} day time attack type constants tuple: [name, cutin id / landing id, cutin name].
 	 *         cutin id is partially from `api_hougeki?.api_at_type` which indicates the special attacks.
-	 *         CV cutin not supported yet.
 	 *         NOTE: Not take 'can not be targeted' into account yet,
 	 *         such as: CV/CVB against submarine; submarine against land installation;
 	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
@@ -1058,11 +1057,21 @@ KC3改 Ship Object
 			const apShellCnt = this.countEquipmentType(2, 19);
 			if(mainGunCnt === 2 && apShellCnt === 1) return ["Cutin", 6, "CutinMainMain"];
 			const secondaryCnt = this.countEquipmentType(2, 4);
-			if(mainGunCnt === 1 && secondaryCnt === 1 && apShellCnt === 1) return ["Cutin", 5, "CutinMainApshell"];
+			if(mainGunCnt === 1 && secondaryCnt === 1 && apShellCnt === 1)
+				return ["Cutin", 5, "CutinMainApshell"];
 			const radarCnt = this.countEquipmentType(2, [12, 13]);
-			if(mainGunCnt === 1 && secondaryCnt === 1 && radarCnt === 1) return ["Cutin", 4, "CutinMainRadar"];
+			if(mainGunCnt === 1 && secondaryCnt === 1 && radarCnt === 1)
+				return ["Cutin", 4, "CutinMainRadar"];
 			if(mainGunCnt >= 1 && secondaryCnt >= 1) return ["Cutin", 3, "CutinMainSecond"];
 			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack"];
+		} else if(trySpTypeFirst && isThisCarrier) {
+			// day time carrier shelling cut-in, let dive bombers more useful
+			const fighterCnt = this.countEquipmentType(2, 6);
+			const diveBomberCnt = this.countEquipmentType(2, 7);
+			const torpedoBomberCnt = this.countEquipmentType(2, 8);
+			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
+				return ["Cutin", 7, "CutinFDBTB", 1];
+			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1) return ["Cutin", 7, "CutinDBTB", 0];
 		}
 		
 		if(targetShip && targetShip.api_soku === 0) {
@@ -1168,6 +1177,31 @@ KC3改 Ship Object
 			if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
 				(mainGunCnt === 1 && secondaryCnt >= 1) ||
 				(secondaryCnt >= 2 && torpedoCnt <= 1)) return ["Cutin", 1, "DoubleAttack"];
+			// carrier night cut-in, NOAP or Saratoga Mk.II needed
+			if(isThisCarrier) {
+				const hasNightAvPersonnel = this.hasEquipment([258, 259]);
+				const isThisSaratogaMk2 = this.masterId === 545;
+				if(isThisSaratogaMk2 || hasNightAvPersonnel) {
+					// verification still WIP
+					const nightFighterCnt = this.countEquipmentType(3, 45);
+					const nightTBomberCnt = this.countEquipmentType(3, 46);
+					// Fight Bomber Iwai
+					const specialDBomberCnt = this.countEquipment([154]);
+					// Swordfish series
+					const specialTBomberCnt = this.countEquipment([242, 243, 244]);
+					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFNTB", 7];
+					if(nightFighterCnt >= 2 && specialDBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFFBI", 6];
+					if(nightFighterCnt >= 2 && specialTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFSF", 5];
+					if(nightFighterCnt >= 1 && specialTBomberCnt >= 2) return ["Cutin", 6, "CutinNFSFSF", 4];
+					if(nightFighterCnt >= 1 && specialDBomberCnt >= 1 && specialTBomberCnt >= 1)
+						return ["Cutin", 6, "CutinNFFBISF", 3];
+					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialDBomberCnt >= 1)
+						return ["Cutin", 6, "CutinNFNTBFBI", 2];
+					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialTBomberCnt >= 1)
+						return ["Cutin", 6, "CutinNFNTBSF", 1];
+					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 0];
+				}
+			}
 		}
 		
 		if(targetShip && targetShip.api_soku === 0) {
@@ -1561,7 +1595,6 @@ KC3改 Ship Object
 		if(attackTypeNight[0] === "AirAttack" && canNightAttack){
 			// TODO implement CV night power calculation
 			const cvNightPower = 0;
-			// TODO implement CV night cut-in estimation
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			$(".nightAttack", tooltipBox).text(
 				KC3Meta.term("ShipNightAttack").format(
