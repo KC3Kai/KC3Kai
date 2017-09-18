@@ -482,6 +482,16 @@ Provides access to data on built-in JSON files
 				this._battle.engagement[index] || ["","",""];
 		},
 		
+		cutinTypeDay :function(index){
+			return (typeof index === "undefined") ? this._battle.cutinDay :
+				this._battle.cutinDay[index] || "";
+		},
+		
+		cutinTypeNight :function(index){
+			return (typeof index === "undefined") ? this._battle.cutinNight :
+				this._battle.cutinNight[index] || "";
+		},
+		
 		aacitype :function(index){
 			return (typeof index === "undefined") ? this._battle.aacitype :
 				this._battle.aacitype[index] || [];
