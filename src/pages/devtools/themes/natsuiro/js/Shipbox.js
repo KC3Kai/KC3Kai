@@ -85,13 +85,23 @@ KC3改 Ship Box for Natsuiro theme
 		// MVP icon
 		if(this.shipData.mvp){
 			$(".mvp_icon", this.element).show();
-			// Reserved value for predicted MVP
-			if(typeof this.shipData.mvp === "string"){
-				$(".mvp_icon img", this.element).css("opacity", 0.5);
+			switch(this.shipData.mvp){
+				case "chosen": // a capable prediction
+					$(".mvp_icon img", this.element).css("opacity", 0.7)
+						.css("filter", "brightness(1.2)")
+						.css("-webkit-filter", "brightness(1.2)");
+					break;
+				case "candidate": // an incapable prediction
+					$(".mvp_icon img", this.element).css("opacity", 0.5)
+						.css("filter", "brightness(0.6)")
+						.css("-webkit-filter", "brightness(0.6)");
+					break;
+				default: // an indeed result
+					$(".mvp_icon img", this.element).css("opacity", 1)
+						.css("filter", "").css("-webkit-filter", "");
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();
-			$(".mvp_icon img", this.element).css("opacity", "");
 		}
 		
 		return this;
