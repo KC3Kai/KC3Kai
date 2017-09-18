@@ -984,6 +984,16 @@ KC3改 Ship Object
 		return hasSonar;
 	};
 
+	/**
+	 * @return true if this ship can do opening torpedo attack.
+	 */
+	KC3Ship.prototype.canDoOpeningTorpedo = function() {
+		if(!this.rosterId || !this.masterId) { return undefined; }
+		const hasKouhyouteki = this.hasEquipment(41);
+		const isThisSubmarine = [13, 14].includes(this.master().api_stype);
+		return hasKouhyouteki || (isThisSubmarine && this.level >= 10);
+	};
+
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
@@ -1094,15 +1104,17 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return undefined if this is not a carrier.
+	 * @return false if this is a regular carrier or fp + tp = 0.
 	 */
-	KC3Ship.prototype.canDoCarrierNightAttack = function() {
-		if(!this.rosterId || !this.masterId) { return undefined; }
+	KC3Ship.prototype.canDoNightAttack = function() {
+		if(!this.rosterId || !this.masterId) { return false; }
+		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const stype = this.master().api_stype;
 		const isThisCarrier = [7, 11, 18].includes(stype);
+		// some special carriers can do shelling or air attack
 		if(isThisCarrier) {
-			// special carriers can do shelling or air attack
-			const isSpecialCarrier = [432, 353, // Graf & Graf Kai
+			const isSpecialCarrier = [
+				432, 353, // Graf & Graf Kai
 				433, // Saratoga (base form)
 				529 // Taiyou Kai Ni
 				].includes(this.masterId);
@@ -1110,11 +1122,11 @@ KC3改 Ship Object
 			// Ark Royal (Kai) can air attack if and only if Swordfish series equipped
 			if([515, 393].includes(this.masterId) && this.hasEquipment([242, 243, 244]))
 				return true;
-			// if Night fighter equipped?
+			// TODO if Night fighter equipped?
 			
-			return false;
 		}
-		return undefined;
+		// can not night attack for any ship type if initial fp + tp is 0
+		return initYasen > 0;
 	};
 
 	/**
@@ -1126,7 +1138,7 @@ KC3改 Ship Object
 	 * @return {Array} night battle attack type constants tuple: [name, cutin id, cutin name, TCI type].
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
 	 * @see estimateDayAttackType
-	 * @see canDoCarrierNightAttack
+	 * @see canDoNightAttack
 	 */
 	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId, trySpTypeFirst = false) {
 		if(!this.rosterId || !this.masterId) { return []; }
@@ -1171,7 +1183,8 @@ KC3改 Ship Object
 		}
 		if(isThisCarrier) {
 			// these carriers can only do shelling attack
-			const isSpecialCarrier = [432, 353, // Graf & Graf Kai
+			const isSpecialCarrier = [
+				432, 353, // Graf & Graf Kai
 				433 // Saratoga (base form)
 				].includes(this.masterId);
 			if(isSpecialCarrier) return ["SingleAttack", 0];
@@ -1185,8 +1198,7 @@ KC3改 Ship Object
 			if(this.masterId === 529 &&
 				!this.hasEquipmentType(2, [7, 8])) return ["SingleAttack", 0];
 			// Ark Royal (Kai) can air attack if and only if Swordfish series equipped,
-			// but here just indicates 'attack type', not 'can attack or not',
-			// see canDoCarrierNightAttack
+			// but here just indicates 'attack type', not 'can attack or not', see canDoNightAttack
 			return ["AirAttack", 7];
 		}
 		if(isThisSubmarine) {
@@ -1514,6 +1526,7 @@ KC3改 Ship Object
 		} else {
 			const shellingPower = attackTypeDay[0] === "Torpedo" ?
 				shipObj.shellingTorpedoPower() : shipObj.shellingFirePower();
+			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
 			const spAttackType = shipObj.estimateDayAttackType(undefined, true);
 			$(".dayAttack", tooltipBox).text(
 				KC3Meta.term("ShipDayAttack").format(
@@ -1527,7 +1540,9 @@ KC3改 Ship Object
 					Math.qckInt("floor", shellingPower, 0),
 					spAttackType[0] === "Cutin" ?
 						KC3Meta.cutinTypeDay(spAttackType[1]) :
-						KC3Meta.term("ShipAttackType" + spAttackType[0])
+						KC3Meta.term("ShipAttackType" + spAttackType[0]) + (
+							canOpeningTorp ? ", {0}".format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo")) : ""
+						)
 				)
 			);
 		}
@@ -1541,10 +1556,9 @@ KC3改 Ship Object
 				signedNumber(Math.qckInt("floor", shellingAccuracy.equipGunFit, 1))
 			)
 		);
-		// TODO implement CV can do night attack
 		const attackTypeNight = shipObj.estimateNightAttackType();
-		const cvNightAttack = shipObj.canDoCarrierNightAttack();
-		if(attackTypeNight[0] === "AirAttack" && cvNightAttack){
+		const canNightAttack = shipObj.canDoNightAttack();
+		if(attackTypeNight[0] === "AirAttack" && canNightAttack){
 			// TODO implement CV night power calculation
 			const cvNightPower = 0;
 			// TODO implement CV night cut-in estimation
@@ -1571,7 +1585,7 @@ KC3改 Ship Object
 						}[attackTypeNight[0]] || "ShipWarfareShelling"
 					),
 					Math.qckInt("floor", nightPower, 0),
-					cvNightAttack === false ?
+					!canNightAttack ?
 						KC3Meta.term("ShipAttackTypeNone") :
 					spAttackType[0] === "Cutin" ?
 						KC3Meta.cutinTypeNight(spAttackType[1]) :
