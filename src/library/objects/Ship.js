@@ -894,6 +894,43 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Get pre-cap carrier night aerial shelling power of this ship.
+	 */
+	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		const equipTotals = {
+			fp: 0, tp: 0, slotPower: 0, improve: 0
+		};
+		const isThisArkRoyal = [515, 393].includes(this.masterId);
+		this.equipment(false).forEach((g, idx) => {
+			if(g.masterId > 0) {
+				const master = g.master();
+				const slot = this.slots[idx] || 0;
+				const isNightAircraftType = [45, 46].includes(master.api_type[3]);
+				const isSwordfish = [242, 243, 244].includes(g.masterId);
+				const isSpecialNightPlane = [154].includes(g.masterId);
+				const isNightPlane = isThisArkRoyal ? isSwordfish :
+					isNightAircraftType || isSwordfish || isSpecialNightPlane;
+				if(isNightPlane) {
+					// verification WIP
+					equipTotals.fp += master.api_houg;
+					equipTotals.tp += master.api_raig;
+					equipTotals.slotPower += slot * (isNightAircraftType ? 3 : 0);
+					const ftaPower = master.api_houg + master.api_raig + master.api_tais;
+					equipTotals.slotPower += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
+					equipTotals.improve += g.attackPowerImprovementBonus("yasen");
+				}
+			}
+		});
+		let shellingPower = this.nakedStats("fp");
+		shellingPower += equipTotals.fp + equipTotals.tp;
+		shellingPower += equipTotals.slotPower;
+		shellingPower += equipTotals.improve;
+		shellingPower += isNightContacted ? 5 : 0;
+		return shellingPower;
+	};
+
+	/**
 	 * Apply known pre-cap modifiers to attack power.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
 	 */
@@ -937,7 +974,7 @@ KC3改 Ship Object
 			warfareType === "Shelling" ? 180 :
 			warfareType === "Antisub" ? 100 :
 			150; // default cap for other phases
-		return precapPower > cap ? (cap + Math.sqrt(precapPower - cap)) : precapPower;
+		return Math.floor(precapPower > cap ? cap + Math.sqrt(precapPower - cap) : precapPower);
 	};
 
 	/**
@@ -973,13 +1010,14 @@ KC3改 Ship Object
 		}
 		// TODO
 		// Critical x1.5
+		const criticalMod = 1;
 		// Aircraft proficiency critical modifier (also applied to shelling)
 		// Rocket, Landing craft modifier
 		// Against PT Imp modifier
 		// Depth Charge bonus
 		
 		// NOTE: Ammo left percent modifier is applied to final damage, not only attack power
-		return cappedPower * dayCutinMod * concatMod * apshellMod;
+		return Math.floor(cappedPower * criticalMod) * dayCutinMod * concatMod * apshellMod;
 	};
 
 	/**
@@ -1285,11 +1323,15 @@ KC3改 Ship Object
 				529 // Taiyou Kai Ni
 				].includes(this.masterId);
 			if(isSpecialCarrier) return true;
-			// Ark Royal (Kai) can air attack if and only if Swordfish series equipped
+			// Ark Royal (Kai) can air attack if and only if variants series equipped
 			if([515, 393].includes(this.masterId) && this.hasEquipment([242, 243, 244]))
 				return true;
-			// TODO if Night fighter / NOAP equipped?
-			
+			// if night aircraft + NOAP equipped or Saratoga Mk.2
+			const hasNightAircraft = this.hasEquipmentType(3, [45, 46]);
+			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
+			const isThisSaratogaMk2 = this.masterId === 545;
+			if(hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2))
+				return true;
 		}
 		// can not night attack for any ship type if initial fp + tp is 0
 		return initYasen > 0;
@@ -1321,7 +1363,6 @@ KC3改 Ship Object
 			const lateTorpedoCnt = this.countEquipment([213, 214]);
 			const ssRadarCnt = this.countEquipmentType(2, 51);
 			// special torpedo cut-in for late model submarine torpedo
-			// not put double attacks (x2) into modifiers since night cut-in applied to pre-cap?
 			if(lateTorpedoCnt >= 1 && ssRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
 			if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
 			if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
@@ -1344,7 +1385,7 @@ KC3改 Ship Object
 					const nightTBomberCnt = this.countEquipmentType(3, 46);
 					// Fight Bomber Iwai
 					const specialDBomberCnt = this.countEquipment([154]);
-					// Swordfish series
+					// Swordfish variants
 					const specialTBomberCnt = this.countEquipment([242, 243, 244]);
 					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFNTB", 1.25];
 					if(nightFighterCnt >= 2 && specialDBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFFBI", 1.18];
@@ -1388,7 +1429,7 @@ KC3改 Ship Object
 			// Taiyou Kai Ni fall-back to shelling attack if no bomber equipped
 			if(this.masterId === 529 &&
 				!this.hasEquipmentType(2, [7, 8])) return ["SingleAttack", 0];
-			// Ark Royal (Kai) can air attack if and only if Swordfish series equipped,
+			// Ark Royal (Kai) can air attack if and only if Swordfish variants equipped,
 			// but here just indicates 'attack type', not 'can attack or not', see canDoNightAttack
 			return ["AirAttack", 7];
 		}
@@ -1779,8 +1820,7 @@ KC3改 Ship Object
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
 		if(attackTypeNight[0] === "AirAttack" && canNightAttack){
-			// TODO implement CV night power calculation
-			let cvNightPower = 0;
+			let cvNightPower = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				cvNightPower = shipObj.applyPrecapModifiers(cvNightPower, "Shelling",
@@ -1795,14 +1835,14 @@ KC3改 Ship Object
 			$(".nightAttack", tooltipBox).text(
 				KC3Meta.term("ShipNightAttack").format(
 					KC3Meta.term("ShipWarfareShelling"),
-					cvNightPower || "??",
+					Math.qckInt("floor", cvNightPower, 0),
 					spAttackType[0] === "Cutin" ?
 						KC3Meta.cutinTypeNight(spAttackType[1]) :
 						KC3Meta.term("ShipAttackType" + spAttackType[0])
 				)
 			);
 		} else {
-			let nightPower = shipObj.nightBattlePower(battleConds.contactPlaneId > 0);
+			let nightPower = shipObj.nightBattlePower(battleConds.contactPlaneId == 102);
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
