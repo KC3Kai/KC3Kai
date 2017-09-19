@@ -1010,7 +1010,15 @@
 					updateMapHpInfo(self, sortieData);
 					
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+							+ encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					} else if(e.altKey) {
+						self.copyToClipboard(JSON.stringify(sortieData), () => {
+							alert("Replay data copied to clipboard");
+						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
@@ -1018,12 +1026,14 @@
 					
 					console.debug("Downloading reply", sortieId, ", data:", sortieData);
 					// Clear properties duplicated or may not used by replayer for now
+					delete sortieData.nodes;
 					$.each(sortieData.battles, function(_, battle) {
 						delete battle.hq;
 						delete battle.enemyId;
 						delete battle.airRaid;
 						delete battle.shizunde;
 					});
+					
 					var jsonData = JSON.stringify(sortieData);
 					var scale = Math.ceil(Math.sqrt(jsonData.length / 30000));
 					console.debug("Image scale", scale, "based on data size:", jsonData.length);
@@ -1096,7 +1106,7 @@
 			
 		};
 		
-		this.endExport = function (error, result) {
+		this.endExport = function(error, result) {
 			if (error) {
 				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
@@ -1106,6 +1116,24 @@
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");
+		};
+		
+		this.copyToClipboard = function(stringData, successCallback) {
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", stringData);
+					if(typeof successCallback === "function") {
+						successCallback.call(this, e);
+					}
+				} else {
+					console.warn("Browser does not support Clipboard event");
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
 		};
 		
 	};
