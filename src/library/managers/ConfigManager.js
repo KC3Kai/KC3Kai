@@ -33,6 +33,7 @@ Retrieves when needed to apply on components
 				chromeSyncQuests     : false,
 				air_formula          : 3,
 				air_combined         : false,
+				powerCapApplyLevel   : 3,
 
 				showCatBombs         : true,
 				showApiError         : true,

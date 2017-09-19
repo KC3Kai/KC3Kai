@@ -306,6 +306,19 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "" }
+			},
+			{
+				"id" : "powerCapApplyLevel",
+				"name" : "SettingsPowerCapLevel",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsPowerCapNone" ],
+						[ 1, "SettingsPowerCapPrecap" ],
+						[ 2, "SettingsPowerCapCapped" ],
+						[ 3, "SettingsPowerCapPostcap" ]
+					]
+				}
 			}
 		]
 	},
