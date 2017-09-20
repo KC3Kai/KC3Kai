@@ -243,18 +243,18 @@ Retrieves when needed to apply on components
 			this.save();
 		},
 		
-		// Toggle AntiAir Formation Type
-		// Only loop between frequently used (different modifiers):
-		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
+		// Toggle Player Formation Type (former AntiAir Formation)
+		// Loop between all formations, according combined fleet state:
+		// Line Ahead / Double Line / Diamond / Echelon / Line Abreast, or
+		// 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 		scrollAntiAirFormation :function(isCombined){
 			this.loadIfNecessary();
 			this.aaFormation += 1;
 			if(!!isCombined){
-				if(this.aaFormation == 4) this.aaFormation = 11;
-				if(this.aaFormation == 12) this.aaFormation = 13;
-				if(this.aaFormation == 15) this.aaFormation = 1;
+				if(this.aaFormation < 11) this.aaFormation = 11;
+				if(this.aaFormation > 14) this.aaFormation = 11;
 			} else {
-				this.aaFormation = this.aaFormation > 3 ? 1 : this.aaFormation;
+				if(this.aaFormation > 5) this.aaFormation = 1;
 			}
 			this.save();
 		},

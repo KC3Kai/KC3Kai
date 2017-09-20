@@ -911,7 +911,8 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap carrier night aerial shelling power of this ship.
+	 * Get pre-cap carrier night aerial power of this ship.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 */
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
 		if(!this.rosterId || !this.masterId) { return 0; }
@@ -924,7 +925,7 @@ KC3改 Ship Object
 			if(g.masterId > 0) {
 				const master = g.master();
 				const slot = this.slots[idx];
-				const isNightAircraftType = [45, 46].includes(master.api_type[3]);
+				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
 				const isSwordfish = [242, 243, 244].includes(g.masterId);
 				// Type 62 Fighter Bomber Iwai for now
 				const isSpecialNightPlane = [154].includes(g.masterId);
@@ -951,6 +952,7 @@ KC3改 Ship Object
 
 	/**
 	 * Apply known pre-cap modifiers to attack power.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
@@ -960,31 +962,51 @@ KC3改 Ship Object
 		const engagementMod = [0, 1, 0.8, 1.2, 0.6][engagementId] || 1;
 		// Formation modifier
 		const formationMod = (warfareType === "Antisub" ?
-			// 0 are placeholders for non-exists id
+			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
+			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
+			// 0 are placeholders for non-exists ID
 			[0, 0.6, 0.8, 1.2, 1, 1.3, 0, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
 			[0, 1, 0.8, 0.7, 0.6, 0.6, 0, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1]
 		)[formationId] || 1;
-		// Damage percent modifier of attacker ship
+		// Damage percent modifier
 		const damageMod = {
 			"chuuha": 0.7,
 			"taiha": 0.4
 		}[this.damageStatus()] || 1;
 		// Night special attack modifier, should not x2 since pre-cap?
-		const nightCutinMod = nightSpecialAttackType[0] === "Cutin" && nightSpecialAttackType[3] > 0 ?
-			nightSpecialAttackType[3] : 1;
+		const nightCutinMod = nightSpecialAttackType[0] === "Cutin" &&
+			nightSpecialAttackType[3] > 0 ? nightSpecialAttackType[3] : 1;
+		
+		// Apply modifiers, flooring unknown
+		let result = basicPower * engagementMod * formationMod * damageMod * nightCutinMod;
+		
+		// Light Cruiser fit gun bonus, should not applied before modifiers
+		const stype = this.master().api_stype;
+		const isThisLightCruiser = [2, 3, 21].includes(stype);
+		if(isThisLightCruiser) {
+			// 14cm, 15.2cm
+			const singleMountCnt = this.countEquipment([4, 11]);
+			const twinMountCnt = this.countEquipment([65, 119, 139]);
+			result += Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
+		}
+		// Italian Heavy Cruiser fit gun bonus
+		const isThisItaHeavyCruiser = stype === 5 &&
+			[448, 449].includes(RemodelDb.originOf(this.masterId));
+		if(isThisItaHeavyCruiser) {
+			// 203mm/53
+			const itaTwinMountCnt = this.countEquipment(162);
+			result += Math.sqrt(itaTwinMountCnt);
+		}
+		
 		// Yasen anti-sub normal battle condition forced to no damage
 		const aswMod = warfareType === "Antisub" && nightSpecialAttackType.length > 0
 			&& !isNightStartOrCombined ? 0 : 1;
-		
-		// TODO
-		// CL fit gun bonus
-		// Italian CV fit gun bonus
-		
-		return basicPower * engagementMod * formationMod * damageMod * nightCutinMod * aswMod;
+		return result * aswMod;
 	};
 
 	/**
 	 * Apply cap to attack power according warfare phase.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#k5f74647
 	 */
 	KC3Ship.prototype.applyPowerCap = function(precapPower,
@@ -998,6 +1020,7 @@ KC3改 Ship Object
 
 	/**
 	 * Apply known post-cap modifiers to capped attack power.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
@@ -1028,20 +1051,21 @@ KC3改 Ship Object
 				apshellMod = 1.08;
 		}
 		// TODO
-		// Critical x1.5
+		// Critical x1.5, might add this to settings as an option
 		const criticalMod = 1;
 		// Aircraft proficiency critical modifier (also applied to shelling)
 		// Rocket, Landing craft modifier
 		// Against PT Imp modifier
 		// Depth Charge bonus
 		
-		// NOTE: Ammo left percent modifier is applied to final damage, not only attack power
+		// NOTE: Ammo left percent modifier is applied to final damage, not attack power
 		return Math.floor(cappedPower * criticalMod) * dayCutinMod * concatMod * apshellMod;
 	};
 
 	/**
 	 * Collect battle conditions from current battle node if available.
 	 * Do not fall-back to default value here if not available, leave it to appliers.
+	 * @return {Object} an object contains battle properties we concern at.
 	 */
 	KC3Ship.prototype.collectBattleConditions = function(){
 		const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
@@ -1066,6 +1090,7 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @return extra power bonus for combined fleet battle.
 	 * @see http://wikiwiki.jp/kancolle/?%CF%A2%B9%E7%B4%CF%C2%E2#offense
 	 */
 	KC3Ship.prototype.combinedFleetPowerBonus = function(playerCombined, enemyCombined, warfareType = "Shelling"){
@@ -1301,6 +1326,7 @@ KC3改 Ship Object
 			// btw, ["Cutin", 1, "Laser"] no longer exists now
 		} else if(trySpTypeFirst && isThisCarrier) {
 			// day time carrier shelling cut-in, modifiers verification WIP
+			// https://twitter.com/_Kotoha07/status/907598964098080768
 			// https://twitter.com/arielugame/status/908343848459317249
 			const fighterCnt = this.countEquipmentType(2, 6);
 			const diveBomberCnt = this.countEquipmentType(2, 7);
@@ -1377,7 +1403,7 @@ KC3改 Ship Object
 				return true;
 			// if night aircraft + NOAP equipped or Saratoga Mk.2
 			// https://twitter.com/fukamilky_san/status/910109103011139586
-			const hasNightAircraft = this.hasEquipmentType(3, [45, 46]);
+			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			const isThisSaratogaMk2 = this.masterId === 545;
 			if(hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2))

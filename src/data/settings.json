@@ -284,15 +284,19 @@
 			},
 			{
 				"id" : "aaFormation",
-				"name" : "SettingsAAFormation",
+				"name" : "SettingsPlayerFormation",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "SettingsAAFLineAheadEtc" ],
-						[ 2, "SettingsAAFDoubleLine" ],
-						[ 3, "SettingsAAFDiamond" ],
-						[ 11, "SettingsAAFCombAntiSub" ],
-						[ 13, "SettingsAAFCombDiamond" ]
+						[ 1, "SettingsForLineAhead" ],
+						[ 2, "SettingsForDoubleLine" ],
+						[ 3, "SettingsForDiamond" ],
+						[ 4, "SettingsForEchelon" ],
+						[ 5, "SettingsForLineAbreast" ],
+						[ 11, "SettingsForCombAntiSub" ],
+						[ 12, "SettingsForCombForward" ],
+						[ 13, "SettingsForCombDiamond" ],
+						[ 14, "SettingsForCombBattle" ]
 					]
 				}
 			},
