@@ -375,7 +375,6 @@
 .tab_mstship .shipInfo .more .other_forms_list a,
 .tab_mstship .shipInfo .more .seasonal_cg_list a {
 	margin:0px 10px 0px 0px;
-	max-length:50px;
 }
 .tab_mstship .shipInfo .more .seasonal_cg.moreinfo_box {
 	height:auto;
@@ -583,29 +582,29 @@
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitDay {
 	width:75px;
 	height:20px;
+	text-shadow:0px 0px 7px #777;
 	background:#ace;
 	border-radius:3px;
 	float:left;
 	text-align:center;
 	font-size:11px;
-	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
 	width:75px;
 	height:20px;
+	text-shadow:0px 0px 7px #eee;
 	background:#258;
 	border-radius:3px;
 	float:left;
 	text-align:center;
 	font-size:11px;
-	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .fit_bonus {
-	color:#2b0;
+	color:#8f1;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .fit_neutral {
 	color:#333;
