@@ -637,6 +637,22 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Indicate if some specific equipment (aircraft usually) equipped on non-0 slot.
+	 */
+	KC3Ship.prototype.hasNonZeroSlotEquipment = function(masterId, isExslotIncluded = false) {
+		return this.findEquipmentById(masterId, isExslotIncluded)
+			.some((v, i) => !!v && this.slots[i] > 0);
+	};
+
+	/**
+	 * Indicate if some specific types of equipment (aircraft usually) equipped on non-0 slot.
+	 */
+	KC3Ship.prototype.hasNonZeroSlotEquipmentType = function(typeIndex, typeValue, isExslotIncluded = false) {
+		return this.findEquipmentByType(typeIndex, typeValue, isExslotIncluded)
+			.some((v, i) => !!v && this.slots[i] > 0);
+	};
+
+	/**
 	 * Simple method to find equipment by Master ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
 	 *         max 5-elements including ex-slot.
@@ -880,6 +896,7 @@ KC3改 Ship Object
 		aswPower += 2 * Math.sqrt(nakedAsw);
 		aswPower += 1.5 * equipmentTotalAsw;
 		aswPower += this.equipmentTotalImprovementBonus("asw");
+		// should move synergy modifier to pre-cap?
 		aswPower *= synergyModifier;
 		return aswPower;
 	};
@@ -899,33 +916,35 @@ KC3改 Ship Object
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
 		if(!this.rosterId || !this.masterId) { return 0; }
 		const equipTotals = {
-			fp: 0, tp: 0, slotPower: 0, improve: 0
+			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
 		};
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
+		const noNightAvPersonnel = !this.hasEquipment([258, 259]);
 		this.equipment(false).forEach((g, idx) => {
 			if(g.masterId > 0) {
 				const master = g.master();
-				const slot = this.slots[idx] || 0;
+				const slot = this.slots[idx];
 				const isNightAircraftType = [45, 46].includes(master.api_type[3]);
 				const isSwordfish = [242, 243, 244].includes(g.masterId);
+				// Type 62 Fighter Bomber Iwai for now
 				const isSpecialNightPlane = [154].includes(g.masterId);
-				const isNightPlane = isThisArkRoyal ? isSwordfish :
+				const isNightPlane = isThisArkRoyal && noNightAvPersonnel ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane) {
 					// verification WIP
 					equipTotals.fp += master.api_houg;
 					equipTotals.tp += master.api_raig;
-					equipTotals.slotPower += slot * (isNightAircraftType ? 3 : 0);
+					equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
 					const ftaPower = master.api_houg + master.api_raig + master.api_tais;
-					equipTotals.slotPower += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
-					equipTotals.improve += g.attackPowerImprovementBonus("yasen");
+					equipTotals.slotBonus += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
+					equipTotals.improveBonus += g.attackPowerImprovementBonus("yasen");
 				}
 			}
 		});
 		let shellingPower = this.nakedStats("fp");
 		shellingPower += equipTotals.fp + equipTotals.tp;
-		shellingPower += equipTotals.slotPower;
-		shellingPower += equipTotals.improve;
+		shellingPower += equipTotals.slotBonus;
+		shellingPower += equipTotals.improveBonus;
 		shellingPower += isNightContacted ? 5 : 0;
 		return shellingPower;
 	};
@@ -1174,10 +1193,31 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @return true if this ship can do ASW attack.
+	 */
+	KC3Ship.prototype.canDoASW = function() {
+		if(!this.rosterId || !this.masterId) { return false; }
+		// taiha ship can not attack
+		if(this.damageStatus() === "taiha") return false;
+		const stype = this.master().api_stype;
+		// DE, DD, CL, CLT, CT, AO
+		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
+		// if naked ASW stat not 0
+		if(isAntiSubStype && this.nakedStats("as") > 0) return true;
+		// CAV, CVL, BBV, AV, LHA
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
+		if(isAirAntiSubStype) {
+			// if ASW plane equipped and slot > 0
+			return [0,1,2,3].some(i => this.slots[i] > 0 && this.equipment(i).isAswAircraft());
+		}
+		return false;
+	};
+
+	/**
 	 * @return true if this ship can do opening torpedo attack.
 	 */
 	KC3Ship.prototype.canDoOpeningTorpedo = function() {
-		if(!this.rosterId || !this.masterId) { return undefined; }
+		if(!this.rosterId || !this.masterId) { return false; }
 		const hasKouhyouteki = this.hasEquipment(41);
 		const isThisSubmarine = [13, 14].includes(this.master().api_stype);
 		return hasKouhyouteki || (isThisSubmarine && this.level >= 10);
@@ -1260,13 +1300,16 @@ KC3改 Ship Object
 			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack", 1.2];
 			// btw, ["Cutin", 1, "Laser"] no longer exists now
 		} else if(trySpTypeFirst && isThisCarrier) {
-			// day time carrier shelling cut-in, modifiers still unknown
+			// day time carrier shelling cut-in, modifiers verification WIP
+			// https://twitter.com/arielugame/status/908343848459317249
 			const fighterCnt = this.countEquipmentType(2, 6);
 			const diveBomberCnt = this.countEquipmentType(2, 7);
 			const torpedoBomberCnt = this.countEquipmentType(2, 8);
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
-				return ["Cutin", 7, "CutinFDBTB", 1];
-			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1) return ["Cutin", 7, "CutinDBTB", 1];
+				return ["Cutin", 7, "CutinFDBTB", 1.25];
+			if(diveBomberCnt >= 2 && torpedoBomberCnt >= 1)
+				return ["Cutin", 7, "CutinDBDBTB", 1.2];
+			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1) return ["Cutin", 7, "CutinDBTB", 1.15];
 		}
 		
 		// is target a land base
@@ -1308,10 +1351,12 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return false if this is a regular carrier or fp + tp = 0.
+	 * @return false if this is a regular carrier, chuuha or fp + tp = 0.
 	 */
 	KC3Ship.prototype.canDoNightAttack = function() {
 		if(!this.rosterId || !this.masterId) { return false; }
+		// no ship can night attack on taiha
+		if(this.damageStatus() === "taiha") return false;
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const stype = this.master().api_stype;
 		const isThisCarrier = [7, 11, 18].includes(stype);
@@ -1323,10 +1368,15 @@ KC3改 Ship Object
 				529 // Taiyou Kai Ni
 				].includes(this.masterId);
 			if(isSpecialCarrier) return true;
-			// Ark Royal (Kai) can air attack if and only if variants series equipped
-			if([515, 393].includes(this.masterId) && this.hasEquipment([242, 243, 244]))
+			// only CVB can attack on chuuha (taiha already excluded)
+			const isNotCvb = stype !== 18;
+			const isWrostThanChuuha = this.damageStatus() === "chuuha";
+			if(isNotCvb && isWrostThanChuuha) return false;
+			// Ark Royal (Kai) can air attack if and only if variants series equipped and slot > 0
+			if([515, 393].includes(this.masterId) && this.hasNonZeroSlotEquipment([242, 243, 244]))
 				return true;
 			// if night aircraft + NOAP equipped or Saratoga Mk.2
+			// https://twitter.com/fukamilky_san/status/910109103011139586
 			const hasNightAircraft = this.hasEquipmentType(3, [45, 46]);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			const isThisSaratogaMk2 = this.masterId === 545;
@@ -1381,6 +1431,7 @@ KC3改 Ship Object
 				const isThisSaratogaMk2 = this.masterId === 545;
 				if(isThisSaratogaMk2 || hasNightAvPersonnel) {
 					// verification still WIP
+					// https://twitter.com/Nishisonic/status/909462950649282560
 					const nightFighterCnt = this.countEquipmentType(3, 45);
 					const nightTBomberCnt = this.countEquipmentType(3, 46);
 					// Fight Bomber Iwai
