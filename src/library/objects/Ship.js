@@ -1503,7 +1503,7 @@ KC3改 Ship Object
 				const isThisSaratogaMk2 = this.masterId === 545;
 				if(isThisSaratogaMk2 || hasNightAvPersonnel) {
 					// verification still WIP
-					// https://twitter.com/Nishisonic/status/909462950649282560
+					// https://twitter.com/Nishisonic/status/910867429256978432
 					const nightFighterCnt = this.countEquipmentType(3, 45);
 					const nightTBomberCnt = this.countEquipmentType(3, 46);
 					// Fight Bomber Iwai
@@ -1517,9 +1517,9 @@ KC3改 Ship Object
 					if(nightFighterCnt >= 1 && specialDBomberCnt >= 1 && specialTBomberCnt >= 1)
 						return ["Cutin", 6, "CutinNFFBISF", 1.18];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialDBomberCnt >= 1)
-						return ["Cutin", 6, "CutinNFNTBFBI", 1.2];
+						return ["Cutin", 6, "CutinNFNTBFBI", 1.18];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialTBomberCnt >= 1)
-						return ["Cutin", 6, "CutinNFNTBSF", 1.2];
+						return ["Cutin", 6, "CutinNFNTBSF", 1.18];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 				}
 			}

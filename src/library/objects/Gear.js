@@ -421,11 +421,11 @@ KC3改 Equipment Object
 	/**
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
-	KC3Gear.prototype.htmlTooltip = function(slotSize, onLandBase) {
-		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize, onLandBase);
+	KC3Gear.prototype.htmlTooltip = function(slotSize, onShipOrLandbase) {
+		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize, onShipOrLandbase);
 	};
 	/** Also export a static method */
-	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize, onLandBase) {
+	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize, shipOrLb) {
 		const gearData = gearObj.master();
 		if(gearObj.itemId === 0 || gearData === false){ return ""; }
 		const title = $('<div><span class="name"></span><br/></div>');
@@ -434,7 +434,7 @@ KC3改 Equipment Object
 			nameText = gearObj.name();
 			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
 			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
-			if(slotSize > 0 &&
+			if(slotSize !== undefined &&
 				(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1
 				|| KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1)){
 				nameText += " x{0}".format(slotSize);
@@ -475,36 +475,56 @@ KC3改 Equipment Object
 				title.append(statBox.html());
 			}
 		});
-		if(slotSize > 0 && gearObj.isAirstrikeAircraft()) {
-			if(onLandBase) {
+		if(slotSize !== undefined && shipOrLb && gearObj.isAirstrikeAircraft()) {
+			if(shipOrLb instanceof KC3LandBase) {
 				// Land installation target not taken into account
-				const lbasPower = gearObj.landbaseAirstrikePower(slotSize);
+				const lbasPower = Math.floor(gearObj.landbaseAirstrikePower(slotSize));
 				const lbAttackerModifier = gearData.api_type[2] === 47 ? 1.8 : 1;
-				const onNormal = Math.qckInt("floor", Math.floor(lbasPower) * lbAttackerModifier, 1);
+				const onNormal = Math.floor(lbasPower * lbAttackerModifier);
 				// Proficiency critical modifier not applied
-				const onCritical = Math.qckInt("floor", Math.floor(Math.floor(lbasPower) * 1.5) * lbAttackerModifier, 1);
-				const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
-				statBox.css("font-size", "11px");
-				$(".icon", statBox).attr("src", "/assets/img/stats/ib.png");
-				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
-				$(".value", statBox).text("{0}({1})".format(onNormal, onCritical));
-				title.append("<br/>").append(statBox.html());
-			} else {
+				const onCritical = Math.floor(Math.floor(lbasPower * 1.5) * lbAttackerModifier);
+				const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+				powBox.css("font-size", "11px");
+				$(".icon", powBox).attr("src", "/assets/img/stats/ib.png");
+				$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
+				$(".value", powBox).text("{0}({1})".format(onNormal, onCritical));
+				title.append("<br/>").append(powBox.html());
+			} else if(shipOrLb instanceof KC3Ship) {
 				const powerRange = gearObj.airstrikePower(slotSize);
 				const isRange = !!powerRange[2];
-				// Contact plane modifier not applied here
-				const onNormal = [Math.floor(powerRange[0]), Math.floor(powerRange[1])];
-				// Proficiency critical modifier not applied
-				const onCritical = [Math.floor(onNormal[0] * 1.5), Math.floor(onNormal[1] * 1.5)];
-				const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
-				statBox.css("font-size", "11px");
-				$(".icon", statBox).attr("src", "/assets/img/stats/ib.png");
-				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
-				$(".value", statBox).text(isRange ? "{0}({1}) / {2}({3})"
-					.format(onNormal[0], onCritical[0], onNormal[1], onCritical[1]) :
-					"{0}({1})".format(onNormal[0], onCritical[0])
-				);
-				title.append("<br/>").append(statBox.html());
+				const isOverCap = [powerRange[0] > 150, powerRange[1] > 150];
+				const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
+				const afterCap = [
+					shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
+					shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial")
+				];
+				const onNormal = [
+					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false)),
+					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false))
+				];
+				const onCritical = [
+					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, true)),
+					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true))
+				];
+				const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+				powBox.css("font-size", "11px");
+				$(".icon", powBox).attr("src", "/assets/img/stats/ib.png");
+				$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
+				let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
+				$(".vl", valueBox).text(onNormal[0]);
+				if(isOverCap[0]) $(".vl", valueBox).css("color", "#a08");
+				$(".vlc", valueBox).text(onCritical[0]);
+				if(isOverCap[0]) $(".vlc", valueBox).css("color", "#a08");
+				$(".value", powBox).append(valueBox.html());
+				if(isRange) {
+					let valueBox = $('<div><span class="vh"></span>(<span class="vhc"></span>)</div>');
+					$(".vh", valueBox).text(onNormal[1]);
+					if(isOverCap[1]) $(".vh", valueBox).css("color", "#a08");
+					$(".vhc", valueBox).text(onCritical[1]);
+					if(isOverCap[1]) $(".vhc", valueBox).css("color", "#a08");
+					$(".value", powBox).append(" / ").append(valueBox.html());
+				}
+				title.append("<br/>").append(powBox.html());
 			}
 		}
 		return title.html();

@@ -435,13 +435,15 @@
 				self.showKCGear(
 					$(".ship_gear_"+(ind+1), shipBox),
 					kcShip.equipment(ind),
-					kcShip.slots[ind]);
+					kcShip.slots[ind],
+					kcShip
+				);
 			});
 		},
 
 		/* Show single equipment
 		   --------------------------------------------*/
-		showKCGear: function(gearBox, kcGear, capacity) {
+		showKCGear: function(gearBox, kcGear, capacity, kcShip) {
 			if (kcGear.masterId === 0) {
 				gearBox.hide();
 				return;
@@ -463,8 +465,8 @@
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
 			$(".gear_name", gearBox).attr("title",
-				KC3Gear.buildGearTooltip(kcGear, true, capacity)
-			).lazyInitTooltip();
+				kcGear.htmlTooltip(capacity, kcShip))
+				.lazyInitTooltip();
 		},
 
 		createKCFleetObject: function(fleetObj) {

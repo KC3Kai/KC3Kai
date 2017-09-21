@@ -60,7 +60,7 @@ KC3改 Ship Box for Natsuiro theme
 		if( myExItem && myExItem.masterId > 0 ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png")
-				.attr("title", myExItem.htmlTooltip(0))
+				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
@@ -373,7 +373,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("titlealt", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
+					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slots[slot], this.shipData))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){

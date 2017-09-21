@@ -193,7 +193,7 @@ Object.assignIfDefined = function(target, key, value) {
  */
 Object.hasSafePath = function(root, props) {
 	return Object.safePropertyPath(false, root, props);
-}
+};
 /**
  * Get object property value by paths of any depth is valid.
  */
