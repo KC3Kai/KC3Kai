@@ -465,14 +465,16 @@
 	overflow:hidden;
 }
 .tab_mstship .shipInfo .accordion .body {
-	width:470px;
+	width:468px;
 	margin-top:5px;
 	margin-bottom:5px;
+	padding-left:10px;
+	padding-right:5px;
 }
 /* AACI
 --------------------------------*/
 .tab_mstship .shipInfo .aaci {
-	width:468px;
+	width:458px;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern {
 	width:290px;
@@ -558,7 +560,7 @@
 /* GUNFIT
 --------------------------------*/
 .tab_mstship .shipInfo .gunfit {
-	width:470px;
+	width:458px;
 }
 .tab_mstship .shipInfo .gunfit .fitgear {
 	width:400px;

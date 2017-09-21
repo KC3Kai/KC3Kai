@@ -156,7 +156,11 @@ KC3改 Ship Box for Natsuiro theme
 				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
 					[KC3Meta.term("PanelPossibleRemodel")] :
 					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
-			})(this.shipData) ).lazyInitTooltip();
+			})(this.shipData) ).lazyInitTooltip()
+			.toggleClass("goaled", (function(shipData){
+				var shipGoal = (localStorage.getObject("goals") || {})["s" + shipData.rosterId];
+				return Array.isArray(shipGoal) && shipData.level >= shipGoal[0];
+			})(this.shipData));
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
