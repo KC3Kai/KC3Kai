@@ -1793,7 +1793,7 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
-									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_max_count) )
+									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_max_count, true))
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);

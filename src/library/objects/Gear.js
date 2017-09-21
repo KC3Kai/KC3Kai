@@ -72,6 +72,7 @@ KC3改 Equipment Object
 		// No improvement bonus is default
 		let modifier = 0;
 		switch(type.toLowerCase()) {
+			case "airattack":
 			case "fire":
 				switch(type2) {
 					case 1: // Small Cal. Main
@@ -106,6 +107,10 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].indexOf(type2) > -1)
 					modifier = 1;
+				break;
+			case "airstrike":
+				// for normal opening airstrike, only seaplane bomber bonus confirmed
+				if(type2 === 11) return 0.2 * stars;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
@@ -301,6 +306,63 @@ KC3改 Equipment Object
 		}
 	};
 
+	/**
+	 * Get pre-cap opening airstrike power of this carrier-based aircraft.
+	 * @return tuple of [low power, high power, isRange]
+	 */
+	KC3Gear.prototype.airstrikePower = function(capacity = 0, isJetAssault = false){
+		if(!this.itemId || !this.masterId) { return [0, 0, false]; }
+		if(this.isAirstrikeAircraft()) {
+			const type2 = this.master().api_type[2];
+			const isTorpedoBomber = [8, 58].includes(type2);
+			const isOtherBomber = [7, 11, 57].includes(type2);
+			const isJet = [57, 58].includes(type2);
+			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
+			power += this.attackPowerImprovementBonus("airstrike");
+			power *= Math.sqrt(capacity);
+			power += 25;
+			if(isTorpedoBomber) {
+				// 80% or 150% random modifier (both 50% chance) for torpedo bomber
+				// modifier for unimplemented jet torpedo bomber unknown
+				return [0.8 * power, 1.5 * power, true];
+			} else {
+				const typeModifier = isJet ? isJetAssault ? 1 : 1 / Math.sqrt(2) : 1;
+				return [typeModifier * power, typeModifier * power, false];
+			}
+		}
+		return [0, 0, false];
+	};
+
+	/**
+	 * Get pre-cap support airstrike power from this land-based aircraft.
+	 */
+	KC3Gear.prototype.landbaseAirstrikePower = function(capacity = 0, targetShipId = 0){
+		if(!this.itemId || !this.masterId) { return 0; }
+		let result = 0;
+		if(this.isAirstrikeAircraft()) {
+			const type2 = this.master().api_type[2];
+			const isTorpedoBomber = [8, 58].includes(type2);
+			const isDiveBomber = [7, 11, 57].includes(type2);
+			const isLandBaseAttacker = [47].includes(type2);
+			const isJet = [57, 58].includes(type2);
+			result += 25;
+			let stat = isTorpedoBomber || isLandBaseAttacker ?
+				this.master().api_raig : this.master().api_baku;
+			let typeModifier = 1;
+			if(isLandBaseAttacker) {
+				typeModifier = 0.8;
+				// use DV stat if LandBase Attack Aircraft against land installation
+				if(targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+					stat = this.master().api_baku;
+				}
+			}
+			if(isJet) typeModifier = 1 / Math.sqrt(2);
+			result += Math.sqrt(1.8 * capacity) * stat;
+			result *= typeModifier;
+		}
+		return result;
+	};
+
 	KC3Gear.prototype.bauxiteCost = function(slotCurrent, slotMaxeq){
 		// Only used for the slot already equipped aircraft, unused for now
 		if(this.itemId===0){ return 0; }
@@ -308,6 +370,12 @@ KC3改 Equipment Object
 			return KC3GearManager.carrierSupplyBauxiteCostPerSlot * (slotMaxeq - slotCurrent);
 		}
 		return 0;
+	};
+
+	KC3Gear.prototype.isAirstrikeAircraft = function(){
+		return this.masterId > 0 &&
+			[7, 8, 11, 41, 47, 57, 58].indexOf(this.master().api_type[2]) > -1 &&
+			(this.master().api_raig > 0 || this.master().api_baku > 0);
 	};
 
 	KC3Gear.prototype.isAswAircraft = function(){
@@ -353,14 +421,14 @@ KC3改 Equipment Object
 	/**
 	 * Build tooltip HTML of this Gear. Used by Panel/Strategy Room.
 	 */
-	KC3Gear.prototype.htmlTooltip = function(slotSize) {
-		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize);
+	KC3Gear.prototype.htmlTooltip = function(slotSize, onLandBase) {
+		return KC3Gear.buildGearTooltip(this, slotSize !== undefined, slotSize, onLandBase);
 	};
 	/** Also export a static method */
-	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize) {
-		var gearData = gearObj.master();
+	KC3Gear.buildGearTooltip = function(gearObj, altName, slotSize, onLandBase) {
+		const gearData = gearObj.master();
 		if(gearObj.itemId === 0 || gearData === false){ return ""; }
-		var title = $('<div><span class="name"></span><br/></div>');
+		const title = $('<div><span class="name"></span><br/></div>');
 		var nameText = altName || gearObj.name();
 		if(altName === true){
 			nameText = gearObj.name();
@@ -374,7 +442,7 @@ KC3改 Equipment Object
 		}
 		$(".name", title).text(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
-		var planeStats = ["or", "kk"];
+		const planeStats = ["or", "kk"];
 		$.each([
 			["hp", "taik"],
 			["fp", "houg"],
@@ -389,7 +457,7 @@ KC3改 Equipment Object
 			["rn", "leng"],
 			["or", "distance"]
 		], function(index, sdata) {
-			var statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
+			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
 			if((gearData["api_" + sdata[1]] || 0) !== 0
 				&& (planeStats.indexOf(sdata[0]) < 0
@@ -397,7 +465,7 @@ KC3改 Equipment Object
 					&& KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1)
 				)
 			) { // Path of image should be inputted, maybe
-				$(".icon", statBox).attr("src", "../../../../assets/img/stats/" + sdata[0] + ".png");
+				$(".icon", statBox).attr("src", "/assets/img/stats/" + sdata[0] + ".png");
 				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_" + sdata[1]]] || "?");
@@ -407,6 +475,38 @@ KC3改 Equipment Object
 				title.append(statBox.html());
 			}
 		});
+		if(slotSize > 0 && gearObj.isAirstrikeAircraft()) {
+			if(onLandBase) {
+				// Land installation target not taken into account
+				const lbasPower = gearObj.landbaseAirstrikePower(slotSize);
+				const lbAttackerModifier = gearData.api_type[2] === 47 ? 1.8 : 1;
+				const onNormal = Math.qckInt("floor", Math.floor(lbasPower) * lbAttackerModifier, 1);
+				// Proficiency critical modifier not applied
+				const onCritical = Math.qckInt("floor", Math.floor(Math.floor(lbasPower) * 1.5) * lbAttackerModifier, 1);
+				const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
+				statBox.css("font-size", "11px");
+				$(".icon", statBox).attr("src", "/assets/img/stats/ib.png");
+				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
+				$(".value", statBox).text("{0}({1})".format(onNormal, onCritical));
+				title.append("<br/>").append(statBox.html());
+			} else {
+				const powerRange = gearObj.airstrikePower(slotSize);
+				const isRange = !!powerRange[2];
+				// Contact plane modifier not applied here
+				const onNormal = [Math.floor(powerRange[0]), Math.floor(powerRange[1])];
+				// Proficiency critical modifier not applied
+				const onCritical = [Math.floor(onNormal[0] * 1.5), Math.floor(onNormal[1] * 1.5)];
+				const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
+				statBox.css("font-size", "11px");
+				$(".icon", statBox).attr("src", "/assets/img/stats/ib.png");
+				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
+				$(".value", statBox).text(isRange ? "{0}({1}) / {2}({3})"
+					.format(onNormal[0], onCritical[0], onNormal[1], onCritical[1]) :
+					"{0}({1})".format(onNormal[0], onCritical[0])
+				);
+				title.append("<br/>").append(statBox.html());
+			}
+		}
 		return title.html();
 	};
 

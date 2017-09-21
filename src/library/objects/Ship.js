@@ -853,15 +853,25 @@ KC3改 Ship Object
 			shellingPower += this.equipmentTotalStats("raig");
 			shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
 			shellingPower += combinedFleetFactor;
-			shellingPower += this.equipmentTotalImprovementBonus("fire");
+			shellingPower += this.equipmentTotalImprovementBonus("airattack");
 			shellingPower = Math.floor(1.5 * shellingPower);
-			shellingPower += 55;
+			shellingPower += 50;
 		} else {
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("fire");
-			shellingPower += 5;
 		}
+		// 5 is attack power constant also used everywhere
+		shellingPower += 5;
 		return shellingPower;
+	};
+
+	/**
+	 * Get pre-cap shelling torpedo power of this ship.
+	 */
+	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		return 5 + this.tp[0] + combinedFleetFactor +
+			this.equipmentTotalImprovementBonus("torpedo");
 	};
 
 	/**
@@ -902,6 +912,17 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Get pre-cap airstrike power range of this ship.
+	 */
+	KC3Ship.prototype.airstrikePower = function(isJetAssaultPhase = false){
+		if(!this.rosterId || !this.masterId) { return 0; }
+		// no plane can be equipped on ex-slot for now
+		return this.equipment(false)
+			.map((g, i) => g.airstrikePower(this.slots[i], isJetAssaultPhase))
+			.reduce((a, arr) => [a[0] + arr[0], a[1] + arr[1], a[2] || arr[2]], [0, 0, false]);
+	};
+
+	/**
 	 * Get pre-cap night battle power of this ship.
 	 */
 	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
@@ -911,7 +932,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap carrier night aerial power of this ship.
+	 * Get pre-cap carrier night aerial attack power of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 */
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
@@ -1024,20 +1045,21 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = [], contactPlaneId = 0, targetShipType = 0){
+			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, targetShipType = 0){
 		// Artillery spotting modifier, not sure x2 should be applied or not?
 		const dayCutinMod = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
 		let concatMod = 1;
-		// Contact modifier only applied to aerial warfare
+		// Contact modifier only applied to aerial warfare airstrike power
 		if(warfareType === "Aerial" && contactPlaneId > 0) {
 			const contactPlaneAcc = KC3Master.slotitem(contactPlaneId).api_houm;
 			concatMod = contactPlaneAcc >= 3 ? 1.2 :
 				contactPlaneAcc >= 2 ? 1.17 : 1.12;
 		}
 		let apshellMod = 1;
-		// AP Shell modifier applied to specific target ship types
-		const isTargetShipTypeMatched = [].includes(targetShipType);
+		// AP Shell modifier applied to specific target ship types:
+		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
+		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipType);
 		if(isTargetShipTypeMatched) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
@@ -1050,16 +1072,40 @@ KC3改 Ship Object
 			else if(mainGunCnt >= 1 && apShellCnt >= 1)
 				apshellMod = 1.08;
 		}
+		// Standard critical modifier
+		const criticalMod = isCritical ? 1.5 : 1;
+		// Additional aircraft proficiency critical modifier (also applied to shelling)
+		let proCriticalMod = 1;
+		if(isCritical) {
+			// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
+			const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
+			this.equipment(false).forEach((g, i) => {
+				if(g.isAirstrikeAircraft()) {
+					const aceLevel = g.ace || 0;
+					const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+					let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+					if(i > 0) mod /= 2;
+					proCriticalMod += mod;
+				}
+			});
+		}
+		
 		// TODO
-		// Critical x1.5, might add this to settings as an option
-		const criticalMod = 1;
-		// Aircraft proficiency critical modifier (also applied to shelling)
 		// Rocket, Landing craft modifier
 		// Against PT Imp modifier
-		// Depth Charge bonus
 		
 		// NOTE: Ammo left percent modifier is applied to final damage, not attack power
-		return Math.floor(cappedPower * criticalMod) * dayCutinMod * concatMod * apshellMod;
+		let result = Math.floor(cappedPower * criticalMod * proCriticalMod) * dayCutinMod * concatMod * apshellMod;
+		
+		// New Depth Charge bonus
+		if(warfareType === "Antisub") {
+			const type95ndcCnt = this.countEquipment(226);
+			const type2dncCnt = this.countEquipment(227);
+			const ndcBonus = type95ndcCnt + 2 * type2dncCnt;
+			result += ndcBonus;
+		}
+		
+		return result;
 	};
 
 	/**
@@ -1841,6 +1887,9 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				aswPower = shipObj.applyPowerCap(aswPower, "Day", "Antisub");
 			}
+			if(ConfigManager.powerCapApplyLevel >= 3) {
+				aswPower = shipObj.applyPostcapModifiers(aswPower, "Antisub");
+			}
 			$(".dayAttack", tooltipBox).text(
 				KC3Meta.term("ShipDayAttack").format(
 					KC3Meta.term("ShipWarfareAntisub"),
@@ -1907,7 +1956,7 @@ KC3改 Ship Object
 				cvNightPower = shipObj.applyPowerCap(cvNightPower, "Night", "Shelling");
 			}
 			if(ConfigManager.powerCapApplyLevel >= 3) {
-				cvNightPower = shipObj.applyPostcapModifiers(cvNightPower);
+				cvNightPower = shipObj.applyPostcapModifiers(cvNightPower, "Shelling");
 			}
 			$(".nightAttack", tooltipBox).text(
 				KC3Meta.term("ShipNightAttack").format(
@@ -1931,7 +1980,7 @@ KC3改 Ship Object
 				nightPower = shipObj.applyPowerCap(nightPower, "Night", warfareTypeNight);
 			}
 			if(ConfigManager.powerCapApplyLevel >= 3) {
-				nightPower = shipObj.applyPostcapModifiers(nightPower);
+				nightPower = shipObj.applyPostcapModifiers(nightPower, warfareTypeNight);
 			}
 			$(".nightAttack", tooltipBox).text(
 				KC3Meta.term("ShipNightAttack").format(
