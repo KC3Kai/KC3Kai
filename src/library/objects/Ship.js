@@ -1738,6 +1738,33 @@ KC3改 Ship Object
 		return AntiAir.shipMaxShotdownAllBonuses( this );
 	};
 
+	/**
+	 * Check known possible effects on equipment changed.
+	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
+	 */
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}) {
+		if(!this.masterId) return {isShow: false};
+		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
+		let isShow = gunFit !== false;
+		const shipAacis = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(this));
+		isShow = isShow || shipAacis.length > 0;
+		const oaswPower = this.canDoOASW() ? this.antiSubWarfarePower() : false;
+		isShow = isShow || (oaswPower !== false);
+		// Possible TODO:
+		// can opening torpedo
+		// can cut-in (fire / air)
+		// can night attack for CV
+		// can night cut-in
+		return {
+			isShow,
+			shipObj: this,
+			gearObj: newGearObj.masterId ? newGearObj : false,
+			gunFit,
+			shipAacis,
+			oaswPower,
+		};
+	};
+
 	/* Expedition Supply Change Check */
 	KC3Ship.prototype.perform = function(command,args) {
 		try {

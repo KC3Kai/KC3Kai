@@ -1637,8 +1637,8 @@ ABYSS FLEET
 }
 .module.activity .activity_gunfit .fit_profile {
 	height:50px;
-	padding:5px 0px;
-	margin:0px 0px 5px 0px;
+	padding:3px 0px;
+	margin:0px 0px 2px 0px;
 }
 .module.activity .activity_gunfit .fit_profile_pic {
 	width:40px;
@@ -1649,23 +1649,11 @@ ABYSS FLEET
 	overflow: hidden;
 	margin:0px 5px 0px 0px;
 }
-.module.activity .activity_gunfit .fit_gear_pic {
-	width:40px;
-	height:40px;
-	border:0px none;
-	background:#333;
-}
 .module.activity .activity_gunfit .fit_profile_pic img {
 	width:42px;
 	height:42px;
 	position:relative;
 	margin:-1px 0px 0px -1px;
-}
-.module.activity .activity_gunfit .fit_gear_pic img {
-	width:32px;
-	height:32px;
-	position:relative;
-	margin:4px 0px 0px 4px;
 }
 .module.activity .activity_gunfit .fit_profile_name {
 	width:125px;
@@ -1687,35 +1675,131 @@ ABYSS FLEET
 	font-size:12px;
 	color:#ccc;
 }
-.module.activity .activity_gunfit .fit_value {
-	height:26px;
-	line-height:26px;
-	text-align:center;
+.module.activity .activity_gunfit .fit_gear {
+	height:40px;
+}
+.module.activity .activity_gunfit .fit_gear_pic {
+	width:30px;
+	height:30px;
+	border:0px none;
+	background:#333;
+}
+.module.activity .activity_gunfit .fit_gear_pic img {
+	width:30px;
+	height:30px;
+	position:relative;
+	margin:0px 0px 0px 0px;
+}
+.module.activity .activity_gunfit .fit_gear_name {
+	width:135px;
+	height:14px;
+	font-size:12px;
+	line-height:14px;
+}
+.module.activity .activity_gunfit .fit_gear_level {
+	color:#45a9a5;
 	font-weight:bold;
-	font-size:14px;
+}
+.module.activity .activity_gunfit .fit_gear_level img {
+	width:12px;
+	height:12px;
+	margin-top:1px;
+	vertical-align:text-top;
+}
+.module.activity .activity_gunfit .fit_value {
+	height:50px;
+	line-height:15px;
+	font-size:11px;
 	border-radius:8px;
 	margin:0px 0px 4px 0px;
-}
-.module.activity .activity_gunfit .fit_value.fit_bonus {
-	color:#fff;
-	background:#5a5;
-}
-.module.activity .activity_gunfit .fit_value.fit_neutral {
+	padding:1px 0px 1px 0px;
 	color:#000;
-	background:#ccc;
+	background:#aaa;
 }
-.module.activity .activity_gunfit .fit_value.fit_penalty {
-	color:#fff;
-	background:#a55;
+.module.activity .activity_gunfit .fit_value .fit_current {
+	height:30px;
+	margin:0px 0px 1px 0px;
+	padding:0px 5px 0px 5px;
 }
-.module.activity .activity_gunfit .fit_value.fit_unknown {
-	color:#000;
-	background:#ccc;
+.module.activity .activity_gunfit .fit_value .fit_current .fit_label {
+	float:left;
+	width:115px;
+	height:30px;
+	margin-right:5px;
+	padding-right:2px;
+	text-align:center;
+	overflow:hidden;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_day {
+	float:left;
+	width:40px;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_day img {
+	width:14px;
+	height:14px;
+	vertical-align:text-bottom;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_night {
+	float:left;
+	width:40px;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_night img {
+	width:13px;
+	height:13px;
+	margin-right:1px;
+	vertical-align:text-bottom;
+}
+.module.activity .activity_gunfit .fit_value .fit_total {
+	height:16px;
+	padding:0px 5px 0px 5px;
+	color:#eee;
+	text-align:center;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_bonus {
+	font-weight:bold;
+	color:#3c3;
+	text-shadow:0px 0px 1px #fff;
+	filter:drop-shadow(0px 0px 1px #fff);
+	-webkit-filter:drop-shadow(0px 0px 1px #fff);
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_penalty {
+	font-weight:bold;
+	color:#a55;
+	text-shadow:0px 0px 1px #fff;
+	filter:drop-shadow(0px 0px 1px #fff);
+	-webkit-filter:drop-shadow(0px 0px 1px #fff);
+}
+
+.module.activity .activity_gunfit .oasw {
+	height:36px;
+	font-size:11px;
+	line-height:16px;
+	border-radius:8px;
+	padding:2px 5px 2px 5px;
+	margin:0px 0px 4px 0px;
+	color:#ddd;
+	background:#15c;
+}
+.module.activity .activity_gunfit .oasw .oasw_message {
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.module.activity .activity_gunfit .oasw .oasw_power {
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.module.activity .activity_gunfit .oasw .oasw_power .value {
+	font-weight:bold;
 }
 
 .module.activity .activity_gunfit .aaci {
 	width:176px;
-	height:88px;
+	height:82px;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	overflow-y:auto;
@@ -2497,6 +2581,10 @@ ABYSS FLEET
 	font-size:11px;
 	color:#ffffff;
 	white-space:nowrap;
+}
+.module.fleet .lship .ship_level .value.goaled {
+	filter:drop-shadow(0px 0px 2px #fe2);
+	-webkit-filter:drop-shadow(0px 0px 2px #fe2);
 }
 .module.fleet .lship .ship_hp_text {
 	width:55px;
