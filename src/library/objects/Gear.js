@@ -310,7 +310,7 @@ KC3改 Equipment Object
 	 * Get pre-cap opening airstrike power of this carrier-based aircraft.
 	 * @return tuple of [low power, high power, isRange]
 	 */
-	KC3Gear.prototype.airstrikePower = function(capacity = 0, isJetAssault = false){
+	KC3Gear.prototype.airstrikePower = function(capacity = 0, combinedFleetFactor = 0, isJetAssault = false){
 		if(!this.itemId || !this.masterId) { return [0, 0, false]; }
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
@@ -321,6 +321,7 @@ KC3改 Equipment Object
 			power += this.attackPowerImprovementBonus("airstrike");
 			power *= Math.sqrt(capacity);
 			power += 25;
+			power += combinedFleetFactor;
 			if(isTorpedoBomber) {
 				// 80% or 150% random modifier (both 50% chance) for torpedo bomber
 				// modifier for unimplemented jet torpedo bomber unknown
@@ -496,15 +497,15 @@ KC3改 Equipment Object
 				const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
 				const afterCap = [
 					shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
-					shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial")
+					isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial") : 0
 				];
 				const onNormal = [
 					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false)),
-					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false))
+					isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false)) : 0
 				];
 				const onCritical = [
 					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, true)),
-					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true))
+					isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true)) : 0
 				];
 				const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 				powBox.css("font-size", "11px");

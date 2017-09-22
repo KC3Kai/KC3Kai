@@ -914,12 +914,27 @@ KC3改 Ship Object
 	/**
 	 * Get pre-cap airstrike power range of this ship.
 	 */
-	KC3Ship.prototype.airstrikePower = function(isJetAssaultPhase = false){
-		if(!this.rosterId || !this.masterId) { return 0; }
+	KC3Ship.prototype.airstrikePower = function(combinedFleetFactor = 0,
+			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
+		let totalPower = [0, 0, false];
+		if(!this.rosterId || !this.masterId) { return totalPower; }
 		// no plane can be equipped on ex-slot for now
-		return this.equipment(false)
-			.map((g, i) => g.airstrikePower(this.slots[i], isJetAssaultPhase))
-			.reduce((a, arr) => [a[0] + arr[0], a[1] + arr[1], a[2] || arr[2]], [0, 0, false]);
+		this.equipment(false).forEach((gear, i) => {
+			const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
+			const isRange = !!power[2];
+			const capped = [
+				this.applyPowerCap(power[0], "Day", "Aerial"),
+				isRange ? this.applyPowerCap(power[1], "Day", "Aerial") : 0
+			];
+			const postCapped = [
+				Math.floor(this.applyPostcapModifiers(capped[0], "Aerial", undefined, contactPlaneId, isCritical)),
+				isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical)) : 0
+			];
+			totalPower[0] += postCapped[0];
+			totalPower[1] = isRange ? totalPower[1] + postCapped[1] : totalPower[0];
+			totalPower[2] = totalPower[2] || isRange;
+		});
+		return totalPower;
 	};
 
 	/**
@@ -994,7 +1009,7 @@ KC3改 Ship Object
 			"chuuha": 0.7,
 			"taiha": 0.4
 		}[this.damageStatus()] || 1;
-		// Night special attack modifier, should not x2 since pre-cap?
+		// Night special attack modifier, should not x2 although some types attack 2 times
 		const nightCutinMod = nightSpecialAttackType[0] === "Cutin" &&
 			nightSpecialAttackType[3] > 0 ? nightSpecialAttackType[3] : 1;
 		
@@ -1046,7 +1061,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
 			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, targetShipType = 0){
-		// Artillery spotting modifier, not sure x2 should be applied or not?
+		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinMod = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
 		let concatMod = 1;
@@ -1123,11 +1138,13 @@ KC3改 Ship Object
 		// extract raw value from KCSAPI result because values in Node are translated
 		const engagementId = apiFormation[2];
 		const formationId = apiFormation[0];
+		const enemyFormationId = apiFormation[1];
 		const contactPlaneId = currentNode.fcontactId;
 		const isStartFromNight = currentNode.startsFromNight;
 		return {
 			engagementId,
 			formationId,
+			enemyFormationId,
 			contactPlaneId,
 			playerCombinedFleetType,
 			isEnemyCombined,
@@ -1139,7 +1156,8 @@ KC3改 Ship Object
 	 * @return extra power bonus for combined fleet battle.
 	 * @see http://wikiwiki.jp/kancolle/?%CF%A2%B9%E7%B4%CF%C2%E2#offense
 	 */
-	KC3Ship.prototype.combinedFleetPowerBonus = function(playerCombined, enemyCombined, warfareType = "Shelling"){
+	KC3Ship.prototype.combinedFleetPowerBonus = function(playerCombined, enemyCombined,
+			warfareType = "Shelling"){
 		const powerBonus = {
 			main: 0, escort: 0
 		};
@@ -1160,13 +1178,21 @@ KC3改 Ship Object
 				}
 				break;
 			case "Torpedo":
-				if(!enemyCombined) {
-					powerBonus.main = -5; powerBonus.escort = -5;
-				} else {
-					powerBonus.main = 10; powerBonus.escort = 10;
+				if(playerCombined) {
+					if(!enemyCombined) {
+						powerBonus.main = -5; powerBonus.escort = -5;
+					} else {
+						powerBonus.main = 10; powerBonus.escort = 10;
+					}
 				}
 				break;
 			case "Aerial":
+				if(!playerCombined && enemyCombined) {
+					// different by target enemy fleet, targeting main:
+					powerBonus.main = -10; powerBonus.escort = -10;
+					// targeting escort:
+					//powerBonus.main = -20; powerBonus.escort = -20;
+				}
 				break;
 		}
 		return powerBonus;
@@ -1599,11 +1625,34 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#hitterm1
+	 */
+	KC3Ship.prototype.estimateShellingFormationModifier = function(playerFormationId = ConfigManager.aaFormation,
+			enemyFormationId = 0) {
+		// Default is no bonus for regular fleet
+		// Still unknown for combined fleet formation
+		// Line Ahead, Diamond:
+		let modifier = 1;
+		switch(playerFormationId) {
+			case 2: // Double Line, cancelled by Line Abreast
+				modifier = enemyFormationId === 5 ? 1.0 : 1.2;
+				break;
+			case 4: // Echelon, cancelled by Line Ahead
+				modifier = enemyFormationId === 1 ? 1.0 : 1.2;
+				break;
+			case 5: // Line Abreast, cancelled by Echelon
+				modifier = enemyFormationId === 4 ? 1.0 : 1.2;
+				break;
+		}
+		return modifier;
+	};
+
+	/**
 	 * Get current shelling accuracy bonus (or penalty) from equipped guns.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#fitarms
 	 */
-	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "day") {
+	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "Day") {
 		if(!this.rosterId || !this.masterId) { return 0; }
 		var result = 0;
 		// Fit bonus or overweight penalty for ship types:
@@ -1629,7 +1678,7 @@ KC3改 Ship Object
 			case 10: // for Battleships
 				// Large cal. main gun gives accuracy bonus if it's fit,
 				// and accuracy penalty if it's overweight.
-				const timeIndex = {"day": 0, "night": 1}[time];
+				const timeIndex = {"Day": 0, "Night": 1}[time];
 				const gunCountFitMap = {};
 				this.equipment(true).forEach(g => {
 					if(g.itemId && g.masterId && g.master().api_type[2] === 3) {
@@ -1995,7 +2044,9 @@ KC3改 Ship Object
 			);
 		}
 		// TODO implement other types of accuracy
-		const shellingAccuracy = shipObj.shellingAccuracy();
+		const shellingAccuracy = shipObj.shellingAccuracy(
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId)
+		);
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(
 				Math.qckInt("floor", shellingAccuracy.accuracy, 1),
