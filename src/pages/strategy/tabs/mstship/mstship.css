@@ -584,24 +584,26 @@
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitDay {
 	width:75px;
 	height:20px;
-	text-shadow:0px 0px 7px #777;
+	text-shadow:0px 0px 7px #777, 1px 1px 1px #555;
 	background:#ace;
 	border-radius:3px;
 	float:left;
 	text-align:center;
 	font-size:11px;
+	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
 	width:75px;
 	height:20px;
-	text-shadow:0px 0px 7px #eee;
+	text-shadow:0px 0px 7px #eee, 1px 1px 1px #ccc;
 	background:#258;
 	border-radius:3px;
 	float:left;
 	text-align:center;
 	font-size:11px;
+	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 }
@@ -618,6 +620,7 @@
 	width:150px;
 	font-weight:normal;
 	background:inherit;
+	text-shadow:inherit;
 }
 
 /* SPECIAL (Salt Check)

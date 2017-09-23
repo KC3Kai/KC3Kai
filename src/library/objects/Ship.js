@@ -843,7 +843,7 @@ KC3改 Ship Object
 		if(!this.rosterId || !this.masterId) { return 0; }
 		const stype = this.master().api_stype;
 		const carrierStypes = [7, 11, 18];
-		let isCarrierShelling = carrierStypes.indexOf(stype) > -1;
+		let isCarrierShelling = carrierStypes.includes(stype);
 		if(!isCarrierShelling) {
 			// Hayasui Kai gets special when any Torpedo Bomber equipped
 			isCarrierShelling = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -955,16 +955,17 @@ KC3改 Ship Object
 		const equipTotals = {
 			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
 		};
+		// still uncertain that Ark Royal with Swordfish uses this formula or not?
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const noNightAvPersonnel = !this.hasEquipment([258, 259]);
-		this.equipment(false).forEach((g, idx) => {
-			if(g.masterId > 0) {
-				const master = g.master();
+		this.equipment(false).forEach((gear, idx) => {
+			if(gear.masterId > 0) {
+				const master = gear.master();
 				const slot = this.slots[idx];
 				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
-				const isSwordfish = [242, 243, 244].includes(g.masterId);
+				const isSwordfish = [242, 243, 244].includes(gear.masterId);
 				// Type 62 Fighter Bomber Iwai for now
-				const isSpecialNightPlane = [154].includes(g.masterId);
+				const isSpecialNightPlane = [154].includes(gear.masterId);
 				const isNightPlane = isThisArkRoyal && noNightAvPersonnel ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane) {
@@ -974,7 +975,7 @@ KC3改 Ship Object
 					equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
 					const ftaPower = master.api_houg + master.api_raig + master.api_tais;
 					equipTotals.slotBonus += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
-					equipTotals.improveBonus += g.attackPowerImprovementBonus("yasen");
+					equipTotals.improveBonus += gear.attackPowerImprovementBonus("yasen");
 				}
 			}
 		});
@@ -1294,20 +1295,21 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoASW = function() {
 		if(!this.rosterId || !this.masterId) { return false; }
-		// taiha ship can not attack
-		if(this.damageStatus() === "taiha") return false;
+		if(this.didFlee) return false;
 		const stype = this.master().api_stype;
+		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+		// CAV, CVL, BBV, AV, LHA, Carrier-like Hayasui Kai
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+		if(isAirAntiSubStype) {
+			// if CVL chuuha
+			if(stype === 10 && this.isStriped()) return false;
+			// if ASW plane equipped and slot > 0
+			return !!this.equipment(false).find((g, i) => this.slots[i] > 0 && g.isAswAircraft());
+		}
 		// DE, DD, CL, CLT, CT, AO
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
 		// if naked ASW stat not 0
-		if(isAntiSubStype && this.nakedStats("as") > 0) return true;
-		// CAV, CVL, BBV, AV, LHA
-		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
-		if(isAirAntiSubStype) {
-			// if ASW plane equipped and slot > 0
-			return [0,1,2,3].some(i => this.slots[i] > 0 && this.equipment(i).isAswAircraft());
-		}
-		return false;
+		return isAntiSubStype && this.nakedStats("as") > 0;
 	};
 
 	/**
@@ -1315,12 +1317,75 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoOpeningTorpedo = function() {
 		if(!this.rosterId || !this.masterId) { return false; }
+		if(this.didFlee) return false;
 		const hasKouhyouteki = this.hasEquipment(41);
 		const isThisSubmarine = [13, 14].includes(this.master().api_stype);
 		return hasKouhyouteki || (isThisSubmarine && this.level >= 10);
 	};
 
-	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId) {
+	/**
+	 * @return {Object} target (enemy) ship category flags defined by us, possible values are:
+	 *         `isSurface`, `isSubmarine`, `isLand`.
+	 */
+	KC3Ship.prototype.estimateTargetShipType = function(targetShipMasterId = 0) {
+		const targetShip = KC3Master.ship(targetShipMasterId);
+		// land installation
+		const isLand = targetShip && targetShip.api_soku === 0;
+		const isSubmarine = targetShip && [13, 14].includes(targetShip.api_stype);
+		// regular surface vessel by default
+		const isSurface = !isLand && !isSubmarine;
+		return {
+			isSubmarine,
+			isLand,
+			isSurface
+		};
+	};
+
+	/**
+	 * @return false if this ship (and target ship) can attack at day shelling phase.
+	 */
+	KC3Ship.prototype.canDoDayShellingAttack = function(targetShipMasterId = 0) {
+		if(!this.rosterId || !this.masterId) { return false; }
+		if(this.didFlee) return false;
+		const stype = this.master().api_stype;
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		const isThisSubmarine = [13, 14].includes(stype);
+		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+		const isThisCarrier = [7, 11, 18].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+		if(isThisCarrier) {
+			if(this.isTaiha()) return false;
+			const isNotCvb = stype !== 18;
+			if(isNotCvb && this.isStriped()) return false;
+			if(targetShipType.isSubmarine) return this.canDoASW();
+			// can not attack land installation if dive bomber equipped
+			if(targetShipType.isLand && this.hasNonZeroSlotEquipmentType(2, 7)) return false;
+			// can not attack if no bomber with slot > 0 equipped
+			return !!this.equipment(false).find((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
+		}
+		// submarines can only landing attack against land installation
+		if(isThisSubmarine) return this.estimateLandingAttackType(targetShipMasterId) > 0;
+		// can attack any enemy ship type by default
+		return true;
+	};
+
+	/**
+	 * @return true if this ship (and target ship) can do closing torpedo attack.
+	 */
+	KC3Ship.prototype.canDoClosingTorpedo = function(targetShipMasterId = 0) {
+		if(!this.rosterId || !this.masterId) { return false; }
+		if(this.didFlee) return false;
+		if(this.isStriped()) return false;
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		if(targetShipType.isSubmarine || targetShipType.isLand) return false;
+		// DD, CL, CLT, CA, CAV, AV, SS, SSV, FBB, BB, BBV, CT
+		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 18, 21].includes(this.master().api_stype);
+		return isTorpedoStype && this.nakedStats("tp") > 0;
+	};
+
+	/**
+	 * @return the landing attack kind ID, return 0 if can not attack.
+	 */
+	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
 		if(targetShip.api_soku === 0) {
@@ -1365,12 +1430,16 @@ KC3改 Ship Object
 	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
 	 *         should not pass targetShipMasterId at all for these scenes.
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
+	 * @see estimateNightAttackType
+	 * @see canDoOpeningTorpedo
+	 * @see canDoDayShellingAttack
+	 * @see canDoASW
+	 * @see canDoClosingTorpedo
 	 */
 	KC3Ship.prototype.estimateDayAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false) {
 		if(!this.rosterId || !this.masterId) { return []; }
 		// if attack target known, will give different attack according target ship
-		const targetShip = KC3Master.ship(targetShipMasterId);
-		const isTargetSubmarine = targetShip && [13, 14].includes(targetShip.api_stype);
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		const stype = this.master().api_stype;
 		const isThisCarrier = [7, 11, 18].includes(stype);
 		const isThisSubmarine = [13, 14].includes(stype);
@@ -1410,8 +1479,8 @@ KC3改 Ship Object
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1) return ["Cutin", 7, "CutinDBTB", 1.15];
 		}
 		
-		// is target a land base
-		if(targetShip && targetShip.api_soku === 0) {
+		// is target a land installation
+		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
 				return ["LandingAttack", landingAttackType];
@@ -1421,9 +1490,9 @@ KC3改 Ship Object
 		}
 		// is this ship Hayasui Kai
 		if(this.masterId === 352) {
-			if(isTargetSubmarine) {
+			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
-				const aswEquip = this.equipment(true).find(equip => equip.isAswAircraft());
+				const aswEquip = this.equipment(false).find(g => g.isAswAircraft());
 				return aswEquip ? ["AirAttack", 7] : ["DepthCharge", 8];
 			}
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
@@ -1439,7 +1508,7 @@ KC3改 Ship Object
 		if(isThisSubmarine) {
 			return ["Torpedo", 9];
 		}
-		if(isTargetSubmarine) {
+		if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA can only air attack against submarine
 			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 7] : ["DepthCharge", 8];
 		}
@@ -1449,12 +1518,14 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return false if this is a regular carrier, chuuha or fp + tp = 0.
+	 * @return false if this ship (and target ship) can attack at night.
 	 */
-	KC3Ship.prototype.canDoNightAttack = function() {
+	KC3Ship.prototype.canDoNightAttack = function(targetShipMasterId = 0) {
 		if(!this.rosterId || !this.masterId) { return false; }
+		// no count for escaped ship
+		if(this.didFlee) return false;
 		// no ship can night attack on taiha
-		if(this.damageStatus() === "taiha") return false;
+		if(this.isTaiha()) return false;
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const stype = this.master().api_stype;
 		const isThisCarrier = [7, 11, 18].includes(stype);
@@ -1468,12 +1539,11 @@ KC3改 Ship Object
 			if(isSpecialCarrier) return true;
 			// only CVB can attack on chuuha (taiha already excluded)
 			const isNotCvb = stype !== 18;
-			const isWrostThanChuuha = this.damageStatus() === "chuuha";
-			if(isNotCvb && isWrostThanChuuha) return false;
+			if(isNotCvb && this.isStriped()) return false;
 			// Ark Royal (Kai) can air attack if and only if variants series equipped and slot > 0
 			if([515, 393].includes(this.masterId) && this.hasNonZeroSlotEquipment([242, 243, 244]))
 				return true;
-			// if night aircraft + NOAP equipped or Saratoga Mk.2
+			// if night aircraft + NOAP equipped (or Saratoga Mk.2)
 			// https://twitter.com/fukamilky_san/status/910109103011139586
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
@@ -1481,7 +1551,7 @@ KC3改 Ship Object
 			if(hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2))
 				return true;
 		}
-		// can not night attack for any ship type if initial fp + tp is 0
+		// can not night attack for any ship type if initial FP + TP is 0
 		return initYasen > 0;
 	};
 
@@ -1496,10 +1566,9 @@ KC3改 Ship Object
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
 	 */
-	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId, trySpTypeFirst = false) {
+	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false) {
 		if(!this.rosterId || !this.masterId) { return []; }
-		const targetShip = KC3Master.ship(targetShipMasterId);
-		const isTargetSubmarine = targetShip && [13, 14].includes(targetShip.api_stype);
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		const stype = this.master().api_stype;
 		const isThisLightCarrier = stype === 7;
 		const isThisCarrier = [7, 11, 18].includes(stype);
@@ -1551,7 +1620,7 @@ KC3改 Ship Object
 			}
 		}
 		
-		if(targetShip && targetShip.api_soku === 0) {
+		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
 				return ["LandingAttack", landingAttackType];
@@ -1559,7 +1628,7 @@ KC3改 Ship Object
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
 			if(hasRocketLauncher) return ["Rocket", -1];
 		}
-		if(isTargetSubmarine && isThisLightCarrier) {
+		if(targetShipType.isSubmarine && isThisLightCarrier) {
 			return ["DepthCharge", 8];
 		}
 		if(isThisCarrier) {
@@ -1585,7 +1654,7 @@ KC3改 Ship Object
 		if(isThisSubmarine) {
 			return ["Torpedo", 9];
 		}
-		if(isTargetSubmarine) {
+		if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA
 			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 7] : ["DepthCharge", 8];
 		}
@@ -1683,7 +1752,7 @@ KC3改 Ship Object
 				this.equipment(true).forEach(g => {
 					if(g.itemId && g.masterId && g.master().api_type[2] === 3) {
 						let fitValues = KC3Meta.gunfit(this.masterId, g.masterId) || [0, 0];
-						if(!Array.isArray(fitValues)) fitValues = [fitValues];
+						if(!Array.isArray(fitValues)) fitValues = [fitValues, 0];
 						const gunCount = (gunCountFitMap[g.masterId] || [0])[0];
 						gunCountFitMap[g.masterId] = [gunCount + 1, fitValues];
 					}
@@ -1985,7 +2054,10 @@ KC3改 Ship Object
 			let attackPower = warfareTypeDay === "Torpedo" ?
 				shipObj.shellingTorpedoPower(combinedFleetBonus) :
 				shipObj.shellingFirePower(combinedFleetBonus);
+			const canShellingAttack =  warfareTypeDay === "Torpedo" ||
+				shipObj.canDoDayShellingAttack();
 			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
+			const canClosingTorp = shipObj.canDoClosingTorpedo();
 			const spAttackType = shipObj.estimateDayAttackType(undefined, true);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
@@ -1999,17 +2071,17 @@ KC3改 Ship Object
 				attackPower = shipObj.applyPostcapModifiers(attackPower, warfareTypeDay,
 					spAttackType);
 			}
+			let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
+				spAttackType[0] === "Cutin" ?
+					KC3Meta.cutinTypeDay(spAttackType[1]) :
+					KC3Meta.term("ShipAttackType" + spAttackType[0]);
+			if(canOpeningTorp) attackTypeIndicators += ", {0}"
+				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
 			$(".dayAttack", tooltipBox).text(
 				KC3Meta.term("ShipDayAttack").format(
 					KC3Meta.term("ShipWarfare" + warfareTypeDay),
 					Math.qckInt("floor", attackPower, 0),
-					(spAttackType[0] === "Cutin" ?
-						KC3Meta.cutinTypeDay(spAttackType[1]) :
-						KC3Meta.term("ShipAttackType" + spAttackType[0])
-					) + (
-						canOpeningTorp ? ", {0}"
-							.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo")) : ""
-					)
+					attackTypeIndicators
 				)
 			);
 		}
@@ -2058,15 +2130,15 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				nightPower = shipObj.applyPostcapModifiers(nightPower, warfareTypeNight);
 			}
+			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
+				spAttackType[0] === "Cutin" ?
+					KC3Meta.cutinTypeNight(spAttackType[1]) :
+					KC3Meta.term("ShipAttackType" + spAttackType[0]);
 			$(".nightAttack", tooltipBox).text(
 				KC3Meta.term("ShipNightAttack").format(
 					KC3Meta.term("ShipWarfare" + warfareTypeNight),
 					Math.qckInt("floor", nightPower, 0),
-					!canNightAttack ?
-						KC3Meta.term("ShipAttackTypeNone") :
-					spAttackType[0] === "Cutin" ?
-						KC3Meta.cutinTypeNight(spAttackType[1]) :
-						KC3Meta.term("ShipAttackType" + spAttackType[0])
+					attackTypeIndicators
 				)
 			);
 		}

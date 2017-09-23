@@ -657,11 +657,14 @@
 				var gunfits = KC3Meta.sortedGunfits(shipData.api_id);
 				if (gunfits) {
 					$.each(gunfits, function(idx, gunfitObj){
-						let itemId = gunfitObj.id;
-						let fitValue = gunfitObj.bonus;
-						let gunfitBox = $(".tab_mstship .factory .fitgear").clone();
-						let gearObj = KC3Master.slotitem(itemId);
-						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name));
+						const itemId = gunfitObj.id;
+						const fitValue = gunfitObj.bonus;
+						const gunfitBox = $(".tab_mstship .factory .fitgear").clone();
+						const gearObj = KC3Master.slotitem(itemId);
+						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name))
+							.data("id", itemId).on("click", function(e) {
+								KC3StrategyTabs.gotoTab("mstgear", $(this).data("id"));
+							}).addClass("hover");
 						
 						if (fitValue === "") {
 							$(".gearFitDay", gunfitBox).text(KC3Meta.term("FitWeightUnknown"))

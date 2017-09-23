@@ -796,8 +796,11 @@ Provides access to data on built-in JSON files
 			var gunfits = this.gunfit(shipMstId);
 			if(gunfits !== false) {
 				var sortedGearIds = Object.keys(gunfits).sort((a, b) =>
-						// Unknown go last
-						(gunfits[a] === "" || gunfits[b] === "") ? 1 :
+						// Unknown by ID asc
+						gunfits[a] === "" && gunfits[b] === "" ? Number(a) - Number(b) :
+						// Unknown always go last
+						gunfits[a] === "" ? Infinity :
+						gunfits[b] === "" ? -Infinity :
 						// By day bonus desc
 						gunfits[b][0] - gunfits[a][0]
 						// Fallback to ID asc

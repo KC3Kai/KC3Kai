@@ -1723,31 +1723,59 @@ ABYSS FLEET
 }
 .module.activity .activity_gunfit .fit_value .fit_current .fit_label {
 	float:left;
-	width:115px;
+	width:108px;
 	height:30px;
-	margin-right:5px;
+	margin-right:2px;
 	padding-right:2px;
 	text-align:center;
 	overflow:hidden;
 }
+.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown {
+	float:left;
+	width:50px;
+	text-align:center;
+	overflow:hidden;
+	white-space:nowrap;
+	display:none;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown img {
+	width:14px;
+	height:14px;
+	vertical-align:text-top;
+}
 .module.activity .activity_gunfit .fit_value .fit_current .fit_day {
 	float:left;
-	width:40px;
+	width:50px;
 }
 .module.activity .activity_gunfit .fit_value .fit_current .fit_day img {
 	width:14px;
 	height:14px;
+	margin-right:1px;
 	vertical-align:text-bottom;
 }
 .module.activity .activity_gunfit .fit_value .fit_current .fit_night {
 	float:left;
-	width:40px;
+	width:50px;
 }
 .module.activity .activity_gunfit .fit_value .fit_current .fit_night img {
 	width:13px;
 	height:13px;
-	margin-right:1px;
+	margin-right:2px;
 	vertical-align:text-bottom;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_bonus {
+	font-weight:bold;
+	color:#3c3;
+	text-shadow:0px 0px 7px #fff, 1px 1px 1px #333;
+	-webkit-filter:drop-shadow(0px 0px 1px #eee);
+	filter:drop-shadow(0px 0px 1px #eee);
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_penalty {
+	font-weight:bold;
+	color:#a55;
+	text-shadow:0px 0px 7px #fff, 1px 1px 1px #333;
+	-webkit-filter:drop-shadow(0px 0px 1px #eee);
+	filter:drop-shadow(0px 0px 1px #eee);
 }
 .module.activity .activity_gunfit .fit_value .fit_total {
 	height:16px;
@@ -1757,20 +1785,6 @@ ABYSS FLEET
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
-}
-.module.activity .activity_gunfit .fit_value .fit_current .fit_bonus {
-	font-weight:bold;
-	color:#3c3;
-	text-shadow:0px 0px 1px #fff;
-	filter:drop-shadow(0px 0px 1px #fff);
-	-webkit-filter:drop-shadow(0px 0px 1px #fff);
-}
-.module.activity .activity_gunfit .fit_value .fit_current .fit_penalty {
-	font-weight:bold;
-	color:#a55;
-	text-shadow:0px 0px 1px #fff;
-	filter:drop-shadow(0px 0px 1px #fff);
-	-webkit-filter:drop-shadow(0px 0px 1px #fff);
 }
 
 .module.activity .activity_gunfit .oasw {

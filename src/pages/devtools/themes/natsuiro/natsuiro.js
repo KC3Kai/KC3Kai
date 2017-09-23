@@ -3433,29 +3433,38 @@
 				$(".activity_gunfit .fit_gear_name").text("");
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
+			
+			const gunfitBox = $(".activity_gunfit .fit_value");
 			if (data.gunFit !== false) {
 				const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
-				const fitDay = parseInt(data.gunFit[0], 10),
-					fitNight = parseInt(data.gunFit[1], 10);
-				$(".activity_gunfit .fit_value .fit_current span").removeClass("fit_bonus fit_penalty");
-				$(".activity_gunfit .fit_value .fit_current .fit_day span")
-					.text(signedNumber(fitDay))
-					.addClass(fitDay < 0 ? "fit_penalty" : fitDay > 0 ? "fit_bonus" : "");
-				$(".activity_gunfit .fit_value .fit_current .fit_night span")
-					.text(signedNumber(fitNight))
-					.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
+				$(".fit_current span", gunfitBox).removeClass("fit_bonus fit_penalty");
+				if(data.gunFit === "") {
+					$(".fit_current .fit_unknown", gunfitBox).show();
+					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).hide();
+				} else {
+					const fitDay = parseInt(data.gunFit[0], 10),
+						fitNight = parseInt(data.gunFit[1], 10);
+					$(".fit_current .fit_day span", gunfitBox)
+						.text(signedNumber(fitDay))
+						.addClass(fitDay < 0 ? "fit_penalty" : fitDay > 0 ? "fit_bonus" : "");
+					$(".fit_current .fit_night span", gunfitBox)
+						.text(signedNumber(fitNight))
+						.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
+					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).show();
+					$(".fit_current .fit_unknown", gunfitBox).hide();
+				}
 				const totalFit = data.shipObj.shellingGunFitAccuracy();
-				$(".activity_gunfit .fit_value .fit_total .value")
+				$(".fit_total .value", gunfitBox)
 					.text(signedNumber(Math.qckInt("floor", totalFit, 1)));
-				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
+				gunfitBox.off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
-				$(".activity_gunfit .fit_value").show();
+				gunfitBox.show();
 			} else {
-				$(".activity_gunfit .fit_value").hide();
+				gunfitBox.hide();
 			}
 			
 			// only show OASW if gun fit not available
