@@ -2040,7 +2040,8 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, "Antisub", undefined, undefined, true);
+						power, "Antisub", undefined, undefined,
+						true, attackTypeDay[0] === "AirAttack");
 				}
 				power = shipObj.applyPostcapModifiers(power, "Antisub");
 			}
@@ -2080,7 +2081,8 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, warfareTypeDay, spAttackType, undefined, true);
+						power, warfareTypeDay, spAttackType, undefined,
+						true, attackTypeDay[0] === "AirAttack");
 				}
 				power = shipObj.applyPostcapModifiers(power, warfareTypeDay,
 					spAttackType);
@@ -2088,7 +2090,7 @@ KC3改 Ship Object
 			let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
 					KC3Meta.cutinTypeDay(spAttackType[1]) :
-					KC3Meta.term("ShipAttackType" + spAttackType[0]);
+					KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
 			$(".dayAttack", tooltipBox).text(
