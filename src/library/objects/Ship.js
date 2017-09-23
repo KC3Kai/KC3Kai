@@ -866,16 +866,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap shelling torpedo power of this ship.
-	 */
-	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
-		if(!this.rosterId || !this.masterId) { return 0; }
-		return 5 + this.tp[0] + combinedFleetFactor +
-			this.equipmentTotalImprovementBonus("torpedo");
-	};
-
-	/**
-	 * Get pre-cap shelling torpedo power of this ship.
+	 * Get pre-cap torpedo power of this ship.
 	 */
 	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
 		if(!this.rosterId || !this.masterId) { return 0; }
@@ -899,7 +890,7 @@ KC3改 Ship Object
 		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
 		const attackMethodConst = isAirAttack ? 8 : 13;
 		const nakedAsw = this.nakedStats("as");
-		// FIXME asw stat from some types of equipment not applied to as[0]?
+		// FIXME asw stat from some types of equipment not applied to this.as[0]?
 		// assume these equipment can not be equipped by this ship in-game
 		const equipmentTotalAsw = this.as[0] - nakedAsw;
 		let aswPower = attackMethodConst;
@@ -912,7 +903,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap airstrike power range of this ship.
+	 * Get pre-cap airstrike power tuple of this ship.
 	 */
 	KC3Ship.prototype.airstrikePower = function(combinedFleetFactor = 0,
 			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
@@ -1091,7 +1082,8 @@ KC3改 Ship Object
 		}
 		// Standard critical modifier
 		const criticalMod = isCritical ? 1.5 : 1;
-		// Additional aircraft proficiency critical modifier (also applied to shelling)
+		// Additional aircraft proficiency critical modifier
+		// Applied to open airstrike and shelling air attack including anti-sub
 		let proCriticalMod = 1;
 		if(isCritical && (isAirAttack || warfareType === "Aerial")) {
 			// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
@@ -1263,7 +1255,7 @@ KC3改 Ship Object
 			return false;
 
 		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
-		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled)
+		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D
 		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		const isHighAswTorpedoBomber = (masterData) => {
 			return masterData &&
@@ -1299,11 +1291,11 @@ KC3改 Ship Object
 		if(this.didFlee) return false;
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-		// CAV, CVL, BBV, AV, LHA, Carrier-like Hayasui Kai
-		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
 		if(isAirAntiSubStype) {
-			// if CVL chuuha
-			if(stype === 10 && this.isStriped()) return false;
+			// false if CVL & CVL-like chuuha
+			if((stype === 7 || isHayasuiKaiWithTorpedoBomber) && this.isStriped()) return false;
 			// if ASW plane equipped and slot > 0
 			return !!this.equipment(false).find((g, i) => this.slots[i] > 0 && g.isAswAircraft());
 		}
@@ -1599,7 +1591,7 @@ KC3改 Ship Object
 				const isThisSaratogaMk2 = this.masterId === 545;
 				if(isThisSaratogaMk2 || hasNightAvPersonnel) {
 					// verification still WIP
-					// https://twitter.com/Nishisonic/status/910867429256978432
+					// https://twitter.com/Nishisonic/status/911143760544751616
 					const nightFighterCnt = this.countEquipmentType(3, 45);
 					const nightTBomberCnt = this.countEquipmentType(3, 46);
 					// Fight Bomber Iwai
@@ -1607,6 +1599,7 @@ KC3改 Ship Object
 					// Swordfish variants
 					const specialTBomberCnt = this.countEquipment([242, 243, 244]);
 					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFNTB", 1.25];
+					if(nightFighterCnt >= 3) return ["Cutin", 6, "CutinNFNFNF", 1.18];
 					if(nightFighterCnt >= 2 && specialDBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFFBI", 1.18];
 					if(nightFighterCnt >= 2 && specialTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFSF", 1.18];
 					if(nightFighterCnt >= 1 && specialTBomberCnt >= 2) return ["Cutin", 6, "CutinNFSFSF", 1.18];
