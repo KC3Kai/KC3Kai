@@ -950,13 +950,14 @@ Contains summary information about a fleet and its 6 ships
 			12: 0.6, // Small Radar
 			13: 0.6, // Large Radar
 			26: 0.6, // ASW Patrol Aircraft
-			29: 0.6, // Searchlight Small / Large
+			29: 0.6, // Small Searchlight
 			32: 0.6, // Submarine Torpedo (not verified yet, 0.6 by default)
 			34: 0.6, // Fleet Command Facility
 			35: 0.6, // SCAMP
 			39: 0.6, // Skilled Lookouts
 			40: 0.6, // Sonar
 			41: 0.6, // Large Flying Boat
+			42: 0.6, // Large Searchlight
 			45: 0.6, // Seaplane Fighter
 			51: 0.6, // Submarine Radar
 			57: 0.6, // Jet Bomber
