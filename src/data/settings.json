@@ -301,6 +301,31 @@
 				}
 			},
 			{
+				"id" : "imaginaryEnemyType",
+				"name" : "SettingsImaginaryEnemyType",
+				"type" : "radio",
+				"hide" : 1,
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsEnemySurface" ],
+						[ 1, "SettingsEnemyLand" ],
+						[ 2, "SettingsEnemySubmarine" ]
+					]
+				}
+			},
+			{
+				"id" : "imaginaryEnemyArmor",
+				"name" : "SettingsImaginaryEnemyArmor",
+				"type" : "small_text",
+				"hide" : 1,
+				"bound" : {
+					"min" :  0,
+					"max" : 999,
+					"type": "Integer"
+				},
+				"options" : { "label" : "" }
+			},
+			{
 				"id" : "imaginaryEnemySlot",
 				"name" : "SettingsImaginaryEnemySlot",
 				"type" : "small_text",
@@ -322,6 +347,14 @@
 						[ 2, "SettingsPowerCapCapped" ],
 						[ 3, "SettingsPowerCapPostcap" ]
 					]
+				}
+			},
+			{
+				"id" : "powerCritical",
+				"name" : "SettingsPowerCritical",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsPowerCriticalTip"
 				}
 			}
 		]

@@ -20,6 +20,8 @@ Retrieves when needed to apply on components
 				hqInfoPage           : 1,
 				elosFormula          : 4,
 				aaFormation          : 1,
+				imaginaryEnemyType   : 0,
+				imaginaryEnemyArmor  : 0,
 				imaginaryEnemySlot   : 96,
 				hqExpDetail          : 1,
 				rankPtsMode          : 1,
@@ -34,6 +36,7 @@ Retrieves when needed to apply on components
 				air_formula          : 3,
 				air_combined         : false,
 				powerCapApplyLevel   : 3,
+				powerCritical        : false,
 
 				showCatBombs         : true,
 				showApiError         : true,
