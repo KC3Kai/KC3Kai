@@ -1302,8 +1302,7 @@ KC3改 Ship Object
 				.find((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
 		// DE, DD, CL, CLT, CT, AO(*)
-		// AO Hayasui can only depth charge, Kamoi can not asw
-		// Kamoi Kai Bo can air attack sub or not?
+		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
 		// if naked ASW stat not 0
 		return isAntiSubStype && this.nakedStats("as") > 0;
@@ -2027,6 +2026,9 @@ KC3改 Ship Object
 		if(canOasw){
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
+			const canShellingAttack = shipObj.canDoDayShellingAttack();
+			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
+			const canClosingTorp = shipObj.canDoClosingTorpedo();
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				power = shipObj.applyPrecapModifiers(power, "Antisub",
 					battleConds.engagementId, battleConds.formationId || 5);
@@ -2042,11 +2044,18 @@ KC3改 Ship Object
 				}
 				power = shipObj.applyPostcapModifiers(power, "Antisub");
 			}
+			let attackTypeIndicators = !canShellingAttack ?
+				KC3Meta.term("ShipAttackTypeNone") :
+				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
+			if(canOpeningTorp) attackTypeIndicators += ", {0}"
+				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
+			if(canClosingTorp) attackTypeIndicators += ", {0}"
+				.format(KC3Meta.term("ShipExtraPhaseClosingTorpedo"));
 			$(".dayAttack", tooltipBox).text(
 				KC3Meta.term("ShipDayAttack").format(
 					KC3Meta.term("ShipWarfareAntisub"),
 					joinPowerAndCritical(power, criticalPower),
-					KC3Meta.term("ShipAttackType" + attackTypeDay[0])
+					attackTypeIndicators
 				)
 			);
 		} else {
@@ -2090,6 +2099,8 @@ KC3改 Ship Object
 					KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
+			if(canClosingTorp) attackTypeIndicators += ", {0}"
+				.format(KC3Meta.term("ShipExtraPhaseClosingTorpedo"));
 			$(".dayAttack", tooltipBox).text(
 				KC3Meta.term("ShipDayAttack").format(
 					KC3Meta.term("ShipWarfare" + warfareTypeDay),
