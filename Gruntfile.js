@@ -62,13 +62,11 @@ module.exports = function(grunt) {
 				],
 				dest: 'build/release/'
 			},
-			// will not need this method and
-			// just copy seasonal icons above if package size unlimited
 			seasonal: {
 				expand: true,
 				cwd: 'build/tmp/assets/img/shipseasonal/',
 				src: '*.png',
-				dest: 'build/release/assets/img/ships',
+				dest: 'build/release/assets/img/shipseasonal/',
 				filter: function(file) {
 					var id = file.match(/^.*\/(\d+).png$/);
 					if(!id || !id[1]) return false;
@@ -508,6 +506,7 @@ module.exports = function(grunt) {
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
+		'copy:seasonal',
 		'removelogging',
 		'string-replace:devtooltitle',
 		'jshint:build',
