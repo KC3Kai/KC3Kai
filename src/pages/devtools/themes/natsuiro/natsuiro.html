@@ -730,13 +730,28 @@
 						<div class="fit_gear fit_profile">
 							<div class="fit_gear_pic fit_profile_pic"><img/></div>
 							<div class="fit_gear_name fit_profile_name"></div>
-							<div class="fit_gear_level fit_profile_level"><img src="../../../../assets/img/client/eqstar.png">+<span></span></div>
+							<div class="fit_gear_level fit_profile_level"><img src="/assets/img/client/eqstar.png">+<span></span></div>
 							<div class="clear"></div>
 						</div>
-						<div class="fit_value"></div>
-						<div class="aaci">
-							<div class="aaciList">
+						<div class="fit_value">
+							<div class="fit_current">
+								<div class="fit_label i18n">FitWeightValue</div>
+								<div class="fit_unknown"><img src="/assets/img/stats/sb.png"><br/><span class="i18n">FitWeightUnknown</span></div>
+								<div class="fit_day"><img src="/assets/img/ui/dark_day.png"><span></span></div>
+								<div class="fit_night"><img src="/assets/img/ui/dark_yasen.png"><span></span></div>
 							</div>
+							<div class="fit_total">
+								<span class="i18n">FitWeightTotal</span> <span class="value"></span>
+							</div>
+							<div class="clear"></div>
+						</div>
+						<div class="oasw">
+							<div class="oasw_message i18n">EquipOaswMessage</div>
+							<div class="oasw_power"><span class="i18n">EquipOaswPower</span> <span class="value"></span></div>
+							<div class="clear"></div>
+						</div>
+						<div class="aaci">
+							<div class="aaciList"></div>
 							<div class="clear"></div>
 						</div>
 					</div>
@@ -948,7 +963,7 @@
 					<div class="gear_star"></div>
 					<div class="gear_icon"><img/></div>
 				</div>
-				<div class="mvp_icon"><img src="../../../../assets/img/ui/mvp.png" /></div>
+				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
 				<div class="ship_img"><img/></div>
 				<div class="ship_col1">
 					<div class="ship_name"></div>
@@ -1029,7 +1044,7 @@
 			<!-- Clonable: Short Ship -->
 			<div class="sship">
 				<div class="ship_img"><img/></div>
-				<div class="mvp_icon"><img src="../../../../assets/img/ui/mvp.png" /></div>
+				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
 				<div class="ex_item">
 					<div class="gear_star"></div>
 					<div class="gear_icon"><img/></div>
@@ -1181,12 +1196,18 @@
 						<div class="stat_icon"><img src="../../../../assets/img/stats/lk.png"/><span class="stat_name i18n">ShipLuck</span></div>
 						<div class="stat_value stat_lk"><span class="equip"></span><span class="current"></span><span class="luck"></span></div>
 					</div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left shellingAccuracy"></div></div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
-						<span class="adjustedAntiAir"></span>; <span class="propShotdownRate"></span>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left dayAttack">
 					</div></div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left fixedShotdown"></div></div>
-					<div class="ship_stats_row"><div class="stat_value stat_wide text_left aaciMaxBonus"></div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left nightAttack">
+					</div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left shellingAccuracy">
+					</div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+						<span class="adjustedAntiAir"></span>; <span class="aaciMaxBonus"></span>
+					</div></div>
+					<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+						<span class="propShotdownRate"></span>; <span class="fixedShotdown"></span>
+					</div></div>
 					<div class="ship_stats_row sd_title">
 						<div class="aa_col text_left">AA if</div>
 						<div class="aa_col">Both</div><div class="aa_col">Prop.</div>

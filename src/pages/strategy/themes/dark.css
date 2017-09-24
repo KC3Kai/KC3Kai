@@ -1896,6 +1896,13 @@ button, input, select, textarea {
 .tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
 	background:#ed3;
 }
+.tab_mstship .shipInfo .gunfit .fitgear {
+	background:#333 !important;
+}
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitDay,
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
+	border-radius:0px !important;
+}
 
 /* GEARS LIBRARY
 --------------------------------*/

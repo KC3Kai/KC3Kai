@@ -1793,7 +1793,7 @@
 								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
 									.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
 								$(".base_plane_icon", planeBox)
-									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_max_count) )
+									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_count, baseInfo))
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
@@ -3404,8 +3404,10 @@
 			if ($("#atab_expeditionPlanner").hasClass("active")) {
 				return;
 			}
-
-			console.debug("GunFit/AACI", data);
+			// GunFit event now will show all kinds of effects triggered by equipment changed,
+			// not only the fit weight bonus / over weight penalty, AACI things.
+			// FIXME refactoring to rename all `gunfit` identifiers and names.
+			console.debug("Equipment special effects", data);
 			if(!data.isShow){
 				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;
@@ -3416,51 +3418,68 @@
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
 			if(data.gearObj.masterId > 0){
-				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/items/"+data.gearObj.master().api_type[3]+".png");
-				$(".activity_gunfit .fit_gear_name").text( data.gearObj.name() );
+				$(".activity_gunfit .fit_gear_pic img").attr("src",
+					"/assets/img/items/" + data.gearObj.master().api_type[3] + ".png");
+				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name())
+					.attr("title", data.gearObj.name()).lazyInitTooltip();
 				if (data.gearObj.stars > 0) {
-					$(".activity_gunfit .fit_gear_level span").text( data.gearObj.stars );
+					$(".activity_gunfit .fit_gear_level span").text(data.gearObj.stars);
 					$(".activity_gunfit .fit_gear_level").show();
 				} else {
 					$(".activity_gunfit .fit_gear_level").hide();
 				}
 			} else {
-				$(".activity_gunfit .fit_gear_pic img").attr("src", "../../../../assets/img/ui/empty.png");
+				$(".activity_gunfit .fit_gear_pic img").attr("src", "/assets/img/ui/empty.png");
 				$(".activity_gunfit .fit_gear_name").text("");
 				$(".activity_gunfit .fit_gear_level").hide();
 			}
-			if (data.thisFit !== false) {
-				$(".activity_gunfit .fit_value").removeClass("fit_unknown fit_penalty fit_bonus fit_neutral");
-				if (data.thisFit === "") {
-					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeightUnknown"));
-					$(".activity_gunfit .fit_value").addClass("fit_unknown");
+			
+			const gunfitBox = $(".activity_gunfit .fit_value");
+			if (data.gunFit !== false) {
+				const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+				$(".fit_current span", gunfitBox).removeClass("fit_bonus fit_penalty");
+				if(data.gunFit === "") {
+					$(".fit_current .fit_unknown", gunfitBox).show();
+					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).hide();
 				} else {
-					var fitValue = parseInt(data.thisFit, 10);
-					$(".activity_gunfit .fit_value").text(KC3Meta.term("FitWeight_"+fitValue));
-					if (fitValue < 0) {
-						$(".activity_gunfit .fit_value").addClass("fit_penalty");
-					} else if (fitValue > 0) {
-						$(".activity_gunfit .fit_value").addClass("fit_bonus");
-					} else {
-						$(".activity_gunfit .fit_value").addClass("fit_neutral");
-					}
+					const fitDay = parseInt(data.gunFit[0], 10),
+						fitNight = parseInt(data.gunFit[1], 10);
+					$(".fit_current .fit_day span", gunfitBox)
+						.text(signedNumber(fitDay))
+						.addClass(fitDay < 0 ? "fit_penalty" : fitDay > 0 ? "fit_bonus" : "");
+					$(".fit_current .fit_night span", gunfitBox)
+						.text(signedNumber(fitNight))
+						.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
+					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).show();
+					$(".fit_current .fit_unknown", gunfitBox).hide();
 				}
-				$(".activity_gunfit .fit_value").off("click").on("click", function(e){
+				const totalFit = data.shipObj.shellingGunFitAccuracy();
+				$(".fit_total .value", gunfitBox)
+					.text(signedNumber(Math.qckInt("floor", totalFit, 1)));
+				gunfitBox.off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
 					})).execute();
 					e.stopPropagation();
 				});
-				$(".activity_gunfit .fit_value").show();
+				gunfitBox.show();
 			} else {
-				$(".activity_gunfit .fit_value").hide();
+				gunfitBox.hide();
+			}
+			
+			// only show OASW if gun fit not available
+			if (data.oaswPower !== false && data.gunFit === false) {
+				$(".activity_gunfit .oasw .oasw_power .value")
+					.text(Math.qckInt("floor", data.oaswPower, 1));
+				$(".activity_gunfit .oasw").show();
+			} else {
+				$(".activity_gunfit .oasw").hide();
 			}
 			
 			if (data.shipAacis.length > 0) {
-				var aaciBox, equipIcon, i;
 				$(".activity_gunfit .aaciList").empty();
-				$.each(data.shipAacis, function(idx, aaciObj){
-					aaciBox = $("#factory .aaciPattern").clone();
+				$.each(data.shipAacis, function(idx, aaciObj) {
+					const aaciBox = $("#factory .aaciPattern").clone();
 					$(".apiId", aaciBox).text(aaciObj.id);
 					if(aaciObj.icons[0] > 0) {
 						$(".shipIcon img", aaciBox)
@@ -3471,16 +3490,16 @@
 						$(".shipIcon img", aaciBox).hide();
 					}
 					if(aaciObj.icons.length > 1) {
-						for(i = 1; i < aaciObj.icons.length; i++) {
-							equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+						for(let i = 1; i < aaciObj.icons.length; i++) {
+							const equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
 							$("<img/>")
-								.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+								.attr("src", "/assets/img/items/" + equipIcon[0] + ".png")
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 								.lazyInitTooltip()
 								.appendTo($(".equipIcons", aaciBox));
 							if(equipIcon.length>1) {
 								$('<img/>')
-									.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
+									.attr("src", "/assets/img/items/" + equipIcon[1] + ".png")
 									.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
 									.appendTo($(".equipIcons", aaciBox));
 							}
@@ -3488,9 +3507,16 @@
 					}
 					$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
 					$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
-					$(".activity_gunfit .aaci").height(data.thisFit !== false ? 88 : 118);
+					// no longer auto fit height
+					//$(".activity_gunfit .aaci").height(data.gunFit !== false ? 82 : 134);
 					if(idx === 0) aaciBox.addClass("triggerable");
 					aaciBox.appendTo(".activity_gunfit .aaciList");
+				});
+				$(".activity_gunfit .aaciList").off("click").on("click", function(e){
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "mstship-{0}-aaci".format(data.shipObj.masterId)
+					})).execute();
+					e.stopPropagation();
 				});
 				$(".activity_gunfit .aaci").show();
 			} else {

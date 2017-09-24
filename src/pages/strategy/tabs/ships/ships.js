@@ -1008,7 +1008,7 @@
 						cElm.addClass('modernization-able');
 
 					[1,2,3,4].forEach(function(x){
-						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1], cShip.id);
 					});
 					if(cShip.exSlot !== 0){
 						self.equipImg(cElm, "ex", -2, cShip.exSlot);
@@ -1119,15 +1119,15 @@
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gearId){
+		equipImg :function(cElm, equipNum, equipSlot, gearId, shipId){
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gearId > 0){
 				var gear = KC3GearManager.get(gearId);
 				if(gear.itemId<=0){ element.hide(); return; }
-
+				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img",element)
 					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(equipSlot))
+					.attr("title", gear.htmlTooltip(equipSlot, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span",element).css('visibility','hidden');

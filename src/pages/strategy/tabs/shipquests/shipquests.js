@@ -13,7 +13,7 @@
 			this.shipQuests = {};
 			// Load relationship data of ships and quests
 			try {
-				const questsData = $.ajax('../../data/ship_quests.json', { async: false }).responseText;
+				const questsData = $.ajax('/data/ship_quests.json', { async: false }).responseText;
 				this.shipQuests = JSON.parse(questsData);
 			} catch(e) {
 				console.error("Loading ship quests data failed", e);
@@ -63,7 +63,10 @@
 					.addClass("type" + String(questId).substr(0, 1));
 
 				// If we have player data about the quest
-				if(KC3QuestManager.exists(questId)) {
+				if(KC3QuestManager.exists(questId)
+					// If wanna hide quest not opened
+					//&& KC3QuestManager.open.includes(questId)
+				) {
 					questDiv.addClass("exists");
 				}
 
@@ -89,13 +92,13 @@
 					.prop("outerHTML");
 			}
 			if(!!questMeta.unlock) {
-				for(let ctr in questMeta.unlock) {
-					let cq = KC3Meta.quest(questMeta.unlock[ctr]);
+				for(const i in questMeta.unlock) {
+					const cq = KC3Meta.quest(questMeta.unlock[i]);
 					if(!!cq) title += "&emsp;" +
 						$("<span></span>").css("font-size", "11px")
 							.css("color", "#a96")
 							.text("-> [{0:id}] {1:code} {2:name}"
-								.format(questMeta.unlock[ctr], cq.code||"N/A", cq.name)
+								.format(questMeta.unlock[i], cq.code || "N/A", cq.name)
 							).prop("outerHTML") + "<br/>";
 				}
 			}
