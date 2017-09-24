@@ -213,11 +213,20 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Left HP to be Taiha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
-		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
-			$(".ship_hp_cur", this.element)
-				.attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) )
-				.lazyInitTooltip();
-		}
+		var chuuhaHp = Math.floor(0.50 * this.shipData.hp[1]);
+
+		var hpTooltip = "";
+		if(this.shipData.hp[0] > taihaHp)
+			hpTooltip = KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp);
+		else
+			hpTooltip = KC3Meta.term("PanelTaihaHp").format(taihaHp);
+
+		if(this.shipData.hp[0] > chuuhaHp)
+			hpTooltip += "<br>" + KC3Meta.term("PanelChuuhaHpLeft").format(chuuhaHp, this.shipData.hp[0] - chuuhaHp);
+		else
+			hpTooltip += "<br>" + KC3Meta.term("PanelChuuhaHp").format(chuuhaHp);
+		$(".ship_hp_cur", this.element).attr("title", hpTooltip).lazyInitTooltip();
+		
 		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
