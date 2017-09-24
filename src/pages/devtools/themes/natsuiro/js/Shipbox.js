@@ -211,22 +211,15 @@ KC3改 Ship Box for Natsuiro theme
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
 		
-		// Left HP to be Taiha
+		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
 		var chuuhaHp = Math.floor(0.50 * this.shipData.hp[1]);
-
-		var hpTooltip = "";
-		if(this.shipData.hp[0] > taihaHp)
-			hpTooltip = KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp);
-		else
-			hpTooltip = KC3Meta.term("PanelTaihaHp").format(taihaHp);
-
-		if(this.shipData.hp[0] > chuuhaHp)
-			hpTooltip += "<br>" + KC3Meta.term("PanelChuuhaHpLeft").format(chuuhaHp, this.shipData.hp[0] - chuuhaHp);
-		else
-			hpTooltip += "<br>" + KC3Meta.term("PanelChuuhaHp").format(chuuhaHp);
-		$(".ship_hp_cur", this.element).attr("title", hpTooltip).lazyInitTooltip();
-		
+		$(".ship_hp_cur", this.element).attr("title", (curHp => {
+			return KC3Meta.term(curHp > taihaHp ? "PanelTaihaHpLeft" : "PanelTaihaHp")
+				.format(taihaHp, curHp - taihaHp)
+				+ "\n" + KC3Meta.term(curHp > chuuhaHp ? "PanelChuuhaHpLeft" : "PanelChuuhaHp")
+				.format(chuuhaHp, curHp - chuuhaHp);
+		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
