@@ -62,6 +62,8 @@ module.exports = function(grunt) {
 				],
 				dest: 'build/release/'
 			},
+			// will not need this method and
+			// just copy seasonal icons above if package size unlimited
 			seasonal: {
 				expand: true,
 				cwd: 'build/tmp/assets/img/shipseasonal/',
@@ -506,7 +508,6 @@ module.exports = function(grunt) {
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
-		'copy:seasonal',
 		'removelogging',
 		'string-replace:devtooltitle',
 		'jshint:build',
@@ -516,7 +517,6 @@ module.exports = function(grunt) {
 		'htmlmin',
 		'modify_json:manifest_scripts',
 		'modify_json:manifest_info',
-		'string-replace:seasonalicons',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
