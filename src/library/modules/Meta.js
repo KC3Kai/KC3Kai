@@ -422,22 +422,26 @@ Provides access to data on built-in JSON files
 		updateAircraftTypeIds :function(){
 			// Do nothing if KC3GearManager not global yet
 			if(typeof KC3GearManager === "undefined"){ return; }
-			if(Array.isArray(this._dataColle.carrierBasedAircraftType3Ids))
-				KC3GearManager.carrierBasedAircraftType3Ids = this._dataColle.carrierBasedAircraftType3Ids;
-			if(Array.isArray(this._dataColle.landBasedAircraftType3Ids))
-				KC3GearManager.landBasedAircraftType3Ids = this._dataColle.landBasedAircraftType3Ids;
-			if(Array.isArray(this._dataColle.antiAirFighterType2Ids))
-				KC3GearManager.antiAirFighterType2Ids = this._dataColle.antiAirFighterType2Ids;
-			if(Array.isArray(this._dataColle.aswAircraftType2Ids))
-				KC3GearManager.aswAircraftType2Ids = this._dataColle.aswAircraftType2Ids;
-			if(Array.isArray(this._dataColle.interceptorsType3Ids))
-				KC3GearManager.interceptorsType3Ids = this._dataColle.interceptorsType3Ids;
-			if(Array.isArray(this._dataColle.nightAircraftType3Ids))
-				KC3GearManager.nightAircraftType3Ids = this._dataColle.nightAircraftType3Ids;
-			if(Array.isArray(this._dataColle.jetAircraftType2Ids))
-				KC3GearManager.jetAircraftType2Ids = this._dataColle.jetAircraftType2Ids;
-			if(Array.isArray(this._dataColle.landBaseReconnType2Ids))
-				KC3GearManager.landBaseReconnType2Ids = this._dataColle.landBaseReconnType2Ids;
+			// alias for short
+			const d = this._dataColle;
+			// current map table
+			const vo = {
+				carrierBasedAircraftType3Ids: d.carrierBasedAircraftType3Ids,
+				landBasedAircraftType3Ids: d.landBasedAircraftType3Ids,
+				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
+				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
+				aswAircraftType2Ids: d.aswAircraftType2Ids,
+				nightAircraftType3Ids: d.nightAircraftType3Ids,
+				interceptorsType3Ids: d.interceptorsType3Ids,
+				jetAircraftType2Ids: d.jetAircraftType2Ids,
+				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
+			};
+			// clean keys with invalid value to avoid being overwritten
+			Object.keys(vo).filter(k => !Array.isArray(vo[k])).forEach(k => {
+				delete vo[k];
+			});
+			// assign effective values
+			Object.assign(KC3GearManager, vo);
 		},
 		
 		defaultEquip :function(id){

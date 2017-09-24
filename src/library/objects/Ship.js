@@ -1266,7 +1266,7 @@ KC3改 Ship Object
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
 		if (isTaiyouKaiAfter) {
-			return [0,1,2,3,4].some( slot => this.equipment(slot).isAswAircraft() );
+			return [0,1,2,3,4].some( slot => this.equipment(slot).isAswAircraft(false) );
 		} else if (isTaiyouBase) {
 			return [0,1,2,3,4].some( slot => isHighAswTorpedoBomber( this.equipment(slot).master() ));
 		}
@@ -1294,12 +1294,16 @@ KC3改 Ship Object
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
 		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
 		if(isAirAntiSubStype) {
-			// false if CVL & CVL-like chuuha
-			if((stype === 7 || isHayasuiKaiWithTorpedoBomber) && this.isStriped()) return false;
+			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber;
+			// false if CVL or CVL-like chuuha
+			if(isCvlLike && this.isStriped()) return false;
 			// if ASW plane equipped and slot > 0
-			return !!this.equipment(false).find((g, i) => this.slots[i] > 0 && g.isAswAircraft());
+			return !!this.equipment(false)
+				.find((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
-		// DE, DD, CL, CLT, CT, AO
+		// DE, DD, CL, CLT, CT, AO(*)
+		// AO Hayasui can only depth charge, Kamoi can not asw
+		// Kamoi Kai Bo can air attack sub or not?
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
 		// if naked ASW stat not 0
 		return isAntiSubStype && this.nakedStats("as") > 0;
@@ -1485,7 +1489,7 @@ KC3改 Ship Object
 		if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
-				const aswEquip = this.equipment(false).find(g => g.isAswAircraft());
+				const aswEquip = this.equipment(false).find(g => g.isAswAircraft(false));
 				return aswEquip ? ["AirAttack", 7] : ["DepthCharge", 8];
 			}
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
@@ -1533,7 +1537,7 @@ KC3改 Ship Object
 			// only CVB can attack on chuuha (taiha already excluded)
 			const isNotCvb = stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
-			// Ark Royal (Kai) can air attack if and only if variants series equipped and slot > 0
+			// Ark Royal (Kai) can air attack if and only if Swordfish variants equipped and slot > 0
 			if([515, 393].includes(this.masterId) && this.hasNonZeroSlotEquipment([242, 243, 244]))
 				return true;
 			// if night aircraft + NOAP equipped (or Saratoga Mk.2)

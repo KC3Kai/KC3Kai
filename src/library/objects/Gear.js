@@ -375,24 +375,26 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
 		return this.masterId > 0 &&
-			[7, 8, 11, 41, 47, 57, 58].indexOf(this.master().api_type[2]) > -1 &&
+			KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			(this.master().api_raig > 0 || this.master().api_baku > 0);
 	};
 
-	KC3Gear.prototype.isAswAircraft = function(){
-		/* These type of aircraft with asw stat > 0 can do asw:
+	KC3Gear.prototype.isAswAircraft = function(forCvl = false){
+		/* These type of aircraft with asw stat > 0 can do (o)asw:
 		 * - 7: Dive Bomber
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 11: Seaplane Bomber
-		 * - 25: Autogyro
-		 * - 26: Anti-Sub PBY
+		 * - 25: Autogyro (CVL incapable)
+		 * - 26: Anti-Sub PBY (CVL incapable)
 		 * - 41: Large Flying Boat
-		 * - 47: Land Base Bomber (not equipped by carrier anyway)
+		 * - 47: Land Base Bomber (not equippable by carrier anyway)
 		 * - 57: Jet Bomber
 		 * Game might just use the simple way: stat > 0 of any aircraft
 		 */
+		const type2Ids = !forCvl ? KC3GearManager.aswAircraftType2Ids :
+			KC3GearManager.aswAircraftType2Ids.filter(id => id !== 25 && id !== 26);
 		return this.masterId > 0 &&
-			KC3GearManager.aswAircraftType2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 0;
 	};
 

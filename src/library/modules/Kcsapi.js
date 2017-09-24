@@ -1113,6 +1113,35 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
+		/* Expand air base on construction corps used
+		-------------------------------------------------------*/
+		"api_req_air_corps/expand_base":function(params, response, headers){
+			// only 1 land base data in api data, can not call setBases directly,
+			// have to merge it into existed land bases:
+			var rawBase = response.api_data[0],
+				bases = PlayerManager.bases,
+				worldFirstBase = bases.map(b => b.map).indexOf(rawBase.api_area_id);
+			// assume 1st base of expanded world always existed
+			if(worldFirstBase > -1){
+				var pos = worldFirstBase + rawBase.api_rid - 1,
+					base = new KC3LandBase(rawBase);
+				// replace expanded base position if it is unused
+				if(bases[pos] && bases[pos].rid === -1){
+					bases[pos] = base;
+				} else {
+					// it is used, insert before the position
+					bases.splice(pos, 0, base);
+					var count = bases.length;
+					// delete last one if it is unused and more than 4 bases
+					if(count > 4 && bases[count - 1].rid === -1){
+						bases.splice(count - 1, 1);
+					}
+				}
+				PlayerManager.saveBases();
+				KC3Network.trigger("Lbas");
+			}
+		},
+		
 		/* Change base name
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_name":function(params, response, headers){
