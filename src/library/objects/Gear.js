@@ -373,6 +373,12 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+	KC3Gear.prototype.isAntiAirAircraft = function(){
+		return this.masterId > 0 &&
+			KC3GearManager.antiAirFighterType2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tyku > 0;
+	};
+
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
 		return this.masterId > 0 &&
 			KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1 &&
@@ -478,59 +484,98 @@ KC3改 Equipment Object
 				title.append(statBox.html());
 			}
 		});
+		if(slotSize !== undefined && shipOrLb && gearObj.isAntiAirAircraft()) {
+			KC3Gear.appendFighterPowerTooltip(title, gearObj, slotSize, shipOrLb);
+		}
 		if(slotSize !== undefined && shipOrLb && gearObj.isAirstrikeAircraft()) {
-			if(shipOrLb instanceof KC3LandBase) {
-				// Land installation target not taken into account
-				const lbasPower = Math.floor(gearObj.landbaseAirstrikePower(slotSize));
-				const lbAttackerModifier = gearData.api_type[2] === 47 ? 1.8 : 1;
-				const onNormal = Math.floor(lbasPower * lbAttackerModifier);
-				// Proficiency critical modifier not applied
-				const onCritical = Math.floor(Math.floor(lbasPower * 1.5) * lbAttackerModifier);
-				const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
-				powBox.css("font-size", "11px");
-				$(".icon", powBox).attr("src", "/assets/img/stats/ib.png");
-				$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
-				$(".value", powBox).text("{0}({1})".format(onNormal, onCritical));
-				title.append("<br/>").append(powBox.html());
-			} else if(shipOrLb instanceof KC3Ship) {
-				const powerRange = gearObj.airstrikePower(slotSize);
-				const isRange = !!powerRange[2];
-				const isOverCap = [powerRange[0] > 150, powerRange[1] > 150];
-				const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
-				const afterCap = [
-					shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
-					isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial") : 0
-				];
-				const onNormal = [
-					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false)),
-					isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false)) : 0
-				];
-				const onCritical = [
-					Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, true)),
-					isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true)) : 0
-				];
-				const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
-				powBox.css("font-size", "11px");
-				$(".icon", powBox).attr("src", "/assets/img/stats/ib.png");
-				$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
-				let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
-				$(".vl", valueBox).text(onNormal[0]);
-				if(isOverCap[0]) $(".vl", valueBox).css("color", "#a08");
-				$(".vlc", valueBox).text(onCritical[0]);
-				if(isOverCap[0]) $(".vlc", valueBox).css("color", "#a08");
-				$(".value", powBox).append(valueBox.html());
-				if(isRange) {
-					let valueBox = $('<div><span class="vh"></span>(<span class="vhc"></span>)</div>');
-					$(".vh", valueBox).text(onNormal[1]);
-					if(isOverCap[1]) $(".vh", valueBox).css("color", "#a08");
-					$(".vhc", valueBox).text(onCritical[1]);
-					if(isOverCap[1]) $(".vhc", valueBox).css("color", "#a08");
-					$(".value", powBox).append(" / ").append(valueBox.html());
-				}
-				title.append("<br/>").append(powBox.html());
-			}
+			KC3Gear.appendAirstrikePowerTooltip(title, gearObj, slotSize, shipOrLb);
 		}
 		return title.html();
+	};
+	KC3Gear.appendFighterPowerTooltip = function(tooltipTitle, gearObj, slotSize, shipOrLb) {
+		const airBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+		airBox.css("font-size", "11px");
+		$(".icon", airBox).attr("src", "/assets/img/stats/if.png");
+		$(".icon", airBox).width(13).height(13).css("margin-top", "-3px");
+		let pattern, value;
+		switch(ConfigManager.air_formula) {
+			case 2:
+				pattern = "\u2248{0}";
+				value = gearObj.fighterVeteran(slotSize);
+				break;
+			case 3:
+				pattern = "{0}~{1}";
+				value = gearObj.fighterBounds(slotSize);
+				break;
+			default:
+				pattern = "{0}";
+				value = gearObj.fighterPower(slotSize);
+		}
+		$(".value", airBox).text(pattern.format(value));
+		// interception power only applied to aircraft deployed to land base
+		if(shipOrLb instanceof KC3LandBase) {
+			const interceptSpan = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+			$(".icon", interceptSpan).attr("src", "/assets/img/stats/ib.png");
+			$(".icon", interceptSpan).width(13).height(13).css("margin-top", "-3px");
+			$(".value", interceptSpan).text(gearObj.interceptionPower(slotSize));
+			airBox.append("&emsp;").append(interceptSpan.html());
+		}
+		tooltipTitle.append("<br/>").append(airBox.html());
+	};
+	KC3Gear.appendAirstrikePowerTooltip = function(tooltipTitle, gearObj, slotSize, shipOrLb) {
+		const gearMaster = gearObj.master();
+		if(shipOrLb instanceof KC3LandBase) {
+			// Land installation target not taken into account
+			const lbasPower = Math.floor(gearObj.landbaseAirstrikePower(slotSize));
+			const isLbaa = gearMaster.api_type[2] === 47;
+			const lbAttackerModifier = isLbaa ? 1.8 : 1;
+			const onNormal = Math.floor(lbasPower * lbAttackerModifier);
+			// Proficiency critical modifier not applied yet
+			const onCritical = Math.floor(Math.floor(lbasPower * 1.5) * lbAttackerModifier);
+			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+			powBox.css("font-size", "11px");
+			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isLbaa ? "rk" : "kk") + ".png");
+			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
+			$(".value", powBox).text("{0}({1})".format(onNormal, onCritical));
+			tooltipTitle.append("<br/>").append(powBox.html());
+		} else if(shipOrLb instanceof KC3Ship) {
+			const powerRange = gearObj.airstrikePower(slotSize);
+			const isRange = !!powerRange[2];
+			const isOverCap = [powerRange[0] > 150, powerRange[1] > 150];
+			const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
+			const afterCap = [
+				shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
+				isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial") : 0
+			];
+			const onNormal = [
+				Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false)),
+				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false)) : 0
+			];
+			const onCritical = [
+				Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, true)),
+				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true)) : 0
+			];
+			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
+			powBox.css("font-size", "11px");
+			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isRange ? "rk" : "kk") + ".png");
+			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
+			let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
+			$(".vl", valueBox).text(onNormal[0]);
+			if(isOverCap[0]) $(".vl", valueBox).css("color", "#a08");
+			$(".vlc", valueBox).text(onCritical[0]);
+			if(isOverCap[0]) $(".vlc", valueBox).css("color", "#a08");
+			$(".value", powBox).append(valueBox.html());
+			if(isRange) {
+				let valueBox = $('<div><span class="vh"></span>(<span class="vhc"></span>)</div>');
+				$(".vh", valueBox).text(onNormal[1]);
+				if(isOverCap[1]) $(".vh", valueBox).css("color", "#a08");
+				$(".vhc", valueBox).text(onCritical[1]);
+				if(isOverCap[1]) $(".vhc", valueBox).css("color", "#a08");
+				$(".value", powBox).append(" / ").append(valueBox.html());
+			}
+			tooltipTitle.append("<br/>").append(powBox.html());
+		}
+		return tooltipTitle;
 	};
 
 	// prepare info necessary for deckbuilder
