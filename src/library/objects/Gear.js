@@ -544,8 +544,8 @@ KC3改 Equipment Object
 			const isOverCap = [powerRange[0] > 150, powerRange[1] > 150];
 			const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
 			const afterCap = [
-				shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
-				isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial") : 0
+				shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial").power,
+				isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial").power : 0
 			];
 			const onNormal = [
 				Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false)),

@@ -109,6 +109,7 @@
         mapShipLockingStatus(shipObj) {
             const mappedObj = this.defaultShipDataMapping(shipObj);
             const shipMaster = shipObj.master();
+            const shipNakedStats = shipObj.nakedStats();
             Object.assign(mappedObj, {
                 hp: shipObj.hp[1],
                 sally: shipObj.sally,
@@ -122,9 +123,9 @@
                 aa: [shipMaster.api_tyku[1], shipMaster.api_tyku[0] + shipObj.mod[2], shipObj.aa[0] ],
                 ar: [shipMaster.api_souk[1], shipMaster.api_souk[0] + shipObj.mod[3], shipObj.ar[0] ],
                 // [maxed with leveling, naked current, current with equipment stats]
-                as: [shipObj.as[1], shipObj.nakedStats("as"), shipObj.as[0] ],
-                ev: [shipObj.ev[1], shipObj.nakedStats("ev"), shipObj.ev[0] ],
-                ls: [shipObj.ls[1], shipObj.nakedStats("ls"), shipObj.ls[0] ],
+                as: [shipObj.as[1], shipNakedStats.as, shipObj.as[0] ],
+                ev: [shipObj.ev[1], shipNakedStats.ev, shipObj.ev[0] ],
+                ls: [shipObj.ls[1], shipNakedStats.ls, shipObj.ls[0] ],
                 // [maxed modded, current + modded, dupe, master init]
                 lk: [shipObj.lk[1], shipObj.lk[0], shipObj.lk[0], shipMaster.api_luck[0]],
 
@@ -212,19 +213,23 @@
 
                 if(Array.isArray(statVal)) {
                     // 0: maxed modded, 1: naked + modded, 2: with equipment
-                    el.text(statVal[1 + (this.filterValues.equipStats & 1)])
-                        .toggleClass("max", statVal[1] >= statVal[0]);
+                    $(".stat_value", el).text(statVal[1 + (this.filterValues.equipStats & 1)]);
+                    el.toggleClass("max", statVal[1] >= statVal[0]);
                 } else {
-                    el.text(statVal);
+                    $(".stat_value", el).text(statVal);
                 }
 
                 // for mod-able stats, modded value: [1] - [0]
-                if(["tp","fp","aa","ar","yasen"].indexOf(stat) !== -1 && statVal[0] !== statVal[1]) {
-                    el.append(`<span>+${statVal[0] - statVal[1]}</span>`);
+                if(["tp","fp","aa","ar","yasen"].includes(stat) && statVal[0] > statVal[1]) {
+                    $(".stat_left", el).text(`+${statVal[0] - statVal[1]}`);
+                } else {
+                    $(".stat_left", el).hide();
                 }
                 // for luck value, 0: maxed modded, 1: current, 2: current again, 3: master init
                 if(stat === "lk" && statVal[1] > statVal[3] && statVal[1] < statVal[0]) {
-                    el.append(`<sup class='sub'>${statVal[1] - statVal[3]}</sup>`);
+                    $("sup", el).text(statVal[1] - statVal[3]);
+                } else {
+                    $("sup", el).hide();
                 }
             });
 
