@@ -867,6 +867,7 @@ KC3改 Ship Object
 
 	/**
 	 * Get pre-cap torpedo power of this ship.
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#n377a90c
 	 */
 	KC3Ship.prototype.shellingTorpedoPower = function(combinedFleetFactor = 0){
 		if(!this.rosterId || !this.masterId) { return 0; }
@@ -876,6 +877,7 @@ KC3改 Ship Object
 
 	/**
 	 * Get pre-cap anti-sub power of this ship.
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#AntiSubmarine
 	 */
 	KC3Ship.prototype.antiSubWarfarePower = function(){
 		if(!this.rosterId || !this.masterId) { return 0; }
@@ -908,7 +910,19 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Get pre-cap anti land installation power of this ship.
+	 * @see http://kancolle.wikia.com/wiki/Installation_Type
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 * @see estimateLandingAttackType
+	 */
+	KC3Ship.prototype.antiLandWarfarePower = function(){
+		// TODO
+	};
+
+	/**
 	 * Get pre-cap airstrike power tuple of this ship.
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b8c008fa
+	 * @see KC3Gear.prototype.airstrikePower
 	 */
 	KC3Ship.prototype.airstrikePower = function(combinedFleetFactor = 0,
 			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
@@ -935,6 +949,7 @@ KC3改 Ship Object
 
 	/**
 	 * Get pre-cap night battle power of this ship.
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b717e35a
 	 */
 	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
 		if(!this.rosterId || !this.masterId) { return 0; }
@@ -951,7 +966,8 @@ KC3改 Ship Object
 		const equipTotals = {
 			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
 		};
-		// still uncertain that Ark Royal with Swordfish uses this formula or not?
+		// Ark Royal (Kai) + Swordfish - NOAP, might use normal formula, but
+		// in fact, this formula is the same thing besides slot bonus part.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const noNightAvPersonnel = !this.hasEquipment([258, 259]);
 		this.equipment(false).forEach((gear, idx) => {
@@ -962,15 +978,18 @@ KC3改 Ship Object
 				const isSwordfish = [242, 243, 244].includes(gear.masterId);
 				// Type 62 Fighter Bomber Iwai for now
 				const isSpecialNightPlane = [154].includes(gear.masterId);
-				const isNightPlane = isThisArkRoyal && noNightAvPersonnel ? isSwordfish :
+				const isLegacyArkRoyal = isThisArkRoyal && noNightAvPersonnel;
+				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane) {
-					// verification WIP
 					equipTotals.fp += master.api_houg;
 					equipTotals.tp += master.api_raig;
-					equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
-					const ftaPower = master.api_houg + master.api_raig + master.api_tais;
-					equipTotals.slotBonus += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
+					if(!isLegacyArkRoyal) {
+						// verification WIP
+						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
+						const ftaPower = master.api_houg + master.api_raig + master.api_tais;
+						equipTotals.slotBonus += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
+					}
 					equipTotals.improveBonus += gear.attackPowerImprovementBonus("yasen");
 				}
 			}
@@ -990,17 +1009,25 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation,
-			nightSpecialAttackType = [], isNightStartOrCombined = false){
+			nightSpecialAttackType = [], isNightStart = false, isCombined = false){
 		// Engagement modifier
-		const engagementMod = [0, 1, 0.8, 1.2, 0.6][engagementId] || 1;
+		let engagementMod = [0, 1, 0.8, 1.2, 0.6][engagementId] || 1;
 		// Formation modifier
-		const formationMod = (warfareType === "Antisub" ?
+		let formationMod = (warfareType === "Antisub" ?
 			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
 			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 			// 0 are placeholders for non-exists ID
 			[0, 0.6, 0.8, 1.2, 1, 1.3, 0, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
 			[0, 1, 0.8, 0.7, 0.6, 0.6, 0, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1]
 		)[formationId] || 1;
+		// Non-empty attack type tuple means this supposed to be night battle
+		const isNightBattle = nightSpecialAttackType.length > 0;
+		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
+		// No engagement and formation modifier except night starts / combined ASW attack
+		if(isNightBattle && !canNightAntisub) {
+			engagementId = 1;
+			formationMod = 1;
+		}
 		// Damage percent modifier
 		const damageMod = {
 			"chuuha": 0.7,
@@ -1031,9 +1058,8 @@ KC3改 Ship Object
 			result += Math.sqrt(itaTwinMountCnt);
 		}
 		
-		// Yasen anti-sub normal battle condition forced to no damage
-		const aswMod = warfareType === "Antisub" && nightSpecialAttackType.length > 0
-			&& !isNightStartOrCombined ? 0 : 1;
+		// Night battle anti-sub regular battle condition forced to no damage
+		const aswMod = isNightBattle && warfareType === "Antisub" && !canNightAntisub ? 0 : 1;
 		return result * aswMod;
 	};
 
@@ -1146,12 +1172,14 @@ KC3改 Ship Object
 		const engagementId = apiFormation[2];
 		const formationId = apiFormation[0];
 		const enemyFormationId = apiFormation[1];
+		const airBattleId = Object.getSafePath(currentNode.battleDay, "api_kouku.api_stage1.api_disp_seiku");
 		const contactPlaneId = currentNode.fcontactId;
 		const isStartFromNight = currentNode.startsFromNight;
 		return {
 			engagementId,
 			formationId,
 			enemyFormationId,
+			airBattleId,
 			contactPlaneId,
 			playerCombinedFleetType,
 			isEnemyCombined,
@@ -1432,6 +1460,8 @@ KC3改 Ship Object
 	 *        special attack types. eg: attacking a submarine, landing attack an installation.
 	 *        The ID can be just an example to represent this type of target.
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
+	 * @param {number} airBattleId - air battle result id, to indicate if special attacks can be triggered,
+	 *        special attacks require AS / AS +, default is AS+.
 	 * @return {Array} day time attack type constants tuple: [name, cutin id / landing id, cutin name, modifier].
 	 *         cutin id is partially from `api_hougeki?.api_at_type` which indicates the special attacks.
 	 *         NOTE: Not take 'can not be targeted' into account yet,
@@ -1445,7 +1475,8 @@ KC3改 Ship Object
 	 * @see canDoASW
 	 * @see canDoClosingTorpedo
 	 */
-	KC3Ship.prototype.estimateDayAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false) {
+	KC3Ship.prototype.estimateDayAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false,
+			airBattleId = 1) {
 		if(!this.rosterId || !this.masterId) { return []; }
 		// if attack target known, will give different attack according target ship
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
@@ -1453,8 +1484,9 @@ KC3改 Ship Object
 		const isThisCarrier = [7, 11, 18].includes(stype);
 		const isThisSubmarine = [13, 14].includes(stype);
 		
-		const hasRecon = this.hasEquipmentType(2, [10, 11]);
-		if(trySpTypeFirst && hasRecon) {
+		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
+		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
+		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
 			/*
 			 * To estimate if can do day time special attacks (aka Artillery Spotting).
 			 * In game, special attack types are judged and given by server API result.
@@ -1474,7 +1506,7 @@ KC3改 Ship Object
 			if(mainGunCnt >= 1 && secondaryCnt >= 1) return ["Cutin", 3, "CutinMainSecond", 1.1];
 			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack", 1.2];
 			// btw, ["Cutin", 1, "Laser"] no longer exists now
-		} else if(trySpTypeFirst && isThisCarrier) {
+		} else if(trySpTypeFirst && isThisCarrier && isAirSuperiorityBetter) {
 			// day time carrier shelling cut-in, modifiers verification WIP
 			// https://twitter.com/_Kotoha07/status/907598964098080768
 			// https://twitter.com/arielugame/status/908343848459317249
@@ -1584,8 +1616,9 @@ KC3改 Ship Object
 		const isThisSubmarine = [13, 14].includes(stype);
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
-		if(trySpTypeFirst) {
+		if(trySpTypeFirst && !targetShipType.isSubmarine) {
 			// to estimate night special attacks, which should be given by server API result.
+			// will not trigger if this ship is taiha or targeting submarine.
 			const lateTorpedoCnt = this.countEquipment([213, 214]);
 			const ssRadarCnt = this.countEquipmentType(2, 51);
 			// special torpedo cut-in for late model submarine torpedo
@@ -2093,7 +2126,7 @@ KC3改 Ship Object
 				shipObj.canDoDayShellingAttack();
 			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
 			const canClosingTorp = shipObj.canDoClosingTorpedo();
-			const spAttackType = shipObj.estimateDayAttackType(undefined, true);
+			const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				power = shipObj.applyPrecapModifiers(power, warfareTypeDay,
@@ -2142,7 +2175,8 @@ KC3改 Ship Object
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				power = shipObj.applyPrecapModifiers(power, "Shelling",
-					undefined, undefined, spAttackType);
+					battleConds.engagementId, battleConds.formationId, spAttackType,
+					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0);
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Night", "Shelling"));
@@ -2170,9 +2204,9 @@ KC3改 Ship Object
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
-				// no engagement and formation modifier except night starts ASW battle
 				power = shipObj.applyPrecapModifiers(power, warfareTypeNight,
-					undefined, undefined, spAttackType);
+					battleConds.engagementId, battleConds.formationId, spAttackType,
+					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0);
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Night", warfareTypeNight));
