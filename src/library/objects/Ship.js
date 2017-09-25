@@ -937,8 +937,8 @@ KC3改 Ship Object
 				isRange ? this.applyPowerCap(power[1], "Day", "Aerial").power : 0
 			];
 			const postCapped = [
-				Math.floor(this.applyPostcapModifiers(capped[0], "Aerial", undefined, contactPlaneId, isCritical)),
-				isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical)) : 0
+				Math.floor(this.applyPostcapModifiers(capped[0], "Aerial", undefined, contactPlaneId, isCritical).power),
+				isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical).power) : 0
 			];
 			totalPower[0] += postCapped[0];
 			totalPower[1] = isRange ? totalPower[1] + postCapped[1] : totalPower[0];
@@ -1004,6 +1004,7 @@ KC3改 Ship Object
 
 	/**
 	 * Apply known pre-cap modifiers to attack power.
+	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
 	 */
@@ -1011,9 +1012,9 @@ KC3改 Ship Object
 			engagementId = 1, formationId = ConfigManager.aaFormation,
 			nightSpecialAttackType = [], isNightStart = false, isCombined = false){
 		// Engagement modifier
-		let engagementMod = [0, 1, 0.8, 1.2, 0.6][engagementId] || 1;
+		let engagementModifier = [0, 1, 0.8, 1.2, 0.6][engagementId] || 1;
 		// Formation modifier
-		let formationMod = (warfareType === "Antisub" ?
+		let formationModifier = (warfareType === "Antisub" ?
 			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
 			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 			// 0 are placeholders for non-exists ID
@@ -1025,42 +1026,57 @@ KC3改 Ship Object
 		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
 		// No engagement and formation modifier except night starts / combined ASW attack
 		if(isNightBattle && !canNightAntisub) {
-			engagementId = 1;
-			formationMod = 1;
+			engagementModifier = 1;
+			formationModifier = 1;
 		}
 		// Damage percent modifier
-		const damageMod = {
+		const damageModifier = {
 			"chuuha": 0.7,
 			"taiha": 0.4
 		}[this.damageStatus()] || 1;
 		// Night special attack modifier, should not x2 although some types attack 2 times
-		const nightCutinMod = nightSpecialAttackType[0] === "Cutin" &&
+		const nightCutinModifier = nightSpecialAttackType[0] === "Cutin" &&
 			nightSpecialAttackType[3] > 0 ? nightSpecialAttackType[3] : 1;
 		
 		// Apply modifiers, flooring unknown
-		let result = basicPower * engagementMod * formationMod * damageMod * nightCutinMod;
+		let result = basicPower * engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
 		const stype = this.master().api_stype;
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
+		let lightCruiserBonus = 0;
 		if(isThisLightCruiser) {
 			// 14cm, 15.2cm
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139]);
-			result += Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
+			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
+			result += lightCruiserBonus;
 		}
 		// Italian Heavy Cruiser fit gun bonus
 		const isThisItaHeavyCruiser = stype === 5 &&
 			[448, 449].includes(RemodelDb.originOf(this.masterId));
+		let italianHeavyCruiserBonus = 0;
 		if(isThisItaHeavyCruiser) {
 			// 203mm/53
 			const itaTwinMountCnt = this.countEquipment(162);
-			result += Math.sqrt(itaTwinMountCnt);
+			italianHeavyCruiserBonus = Math.sqrt(itaTwinMountCnt);
+			result += italianHeavyCruiserBonus;
 		}
 		
 		// Night battle anti-sub regular battle condition forced to no damage
-		const aswMod = isNightBattle && warfareType === "Antisub" && !canNightAntisub ? 0 : 1;
-		return result * aswMod;
+		const aswLimitation = isNightBattle && warfareType === "Antisub" && !canNightAntisub ? 0 : 1;
+		result *= aswLimitation;
+		
+		return {
+			power: result,
+			engagementModifier,
+			formationModifier,
+			damageModifier,
+			nightCutinModifier,
+			lightCruiserBonus,
+			italianHeavyCruiserBonus,
+			aswLimitation
+		};
 	};
 
 	/**
@@ -1087,6 +1103,7 @@ KC3改 Ship Object
 
 	/**
 	 * Apply known post-cap modifiers to capped attack power.
+	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
 	 */
@@ -1094,16 +1111,16 @@ KC3改 Ship Object
 			daySpecialAttackType = [], contactPlaneId = 0,
 			isCritical = false, isAirAttack = false, targetShipType = 0){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
-		const dayCutinMod = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
+		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
-		let concatMod = 1;
+		let airstrikeConcatModifier = 1;
 		// Contact modifier only applied to aerial warfare airstrike power
 		if(warfareType === "Aerial" && contactPlaneId > 0) {
 			const contactPlaneAcc = KC3Master.slotitem(contactPlaneId).api_houm;
-			concatMod = contactPlaneAcc >= 3 ? 1.2 :
+			airstrikeConcatModifier = contactPlaneAcc >= 3 ? 1.2 :
 				contactPlaneAcc >= 2 ? 1.17 : 1.12;
 		}
-		let apshellMod = 1;
+		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipType);
@@ -1113,17 +1130,17 @@ KC3改 Ship Object
 			const secondaryCnt = this.countEquipmentType(2, 4);
 			const radarCnt = this.countEquipmentType(2, [12, 13]);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
-				apshellMod = 1.15;
+				apshellModifier = 1.15;
 			else if(mainGunCnt >= 1 && apShellCnt >= 1 && radarCnt >= 1)
-				apshellMod = 1.1;
+				apshellModifier = 1.1;
 			else if(mainGunCnt >= 1 && apShellCnt >= 1)
-				apshellMod = 1.08;
+				apshellModifier = 1.08;
 		}
 		// Standard critical modifier
-		const criticalMod = isCritical ? 1.5 : 1;
+		const criticalModifier = isCritical ? 1.5 : 1;
 		// Additional aircraft proficiency critical modifier
 		// Applied to open airstrike and shelling air attack including anti-sub
-		let proCriticalMod = 1;
+		let proficiencyCriticalModifier = 1;
 		if(isCritical && (isAirAttack || warfareType === "Aerial")) {
 			// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 			const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
@@ -1133,7 +1150,7 @@ KC3改 Ship Object
 					const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
 					let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
 					if(i > 0) mod /= 2;
-					proCriticalMod += mod;
+					proficiencyCriticalModifier += mod;
 				}
 			});
 		}
@@ -1143,17 +1160,27 @@ KC3改 Ship Object
 		// Against PT Imp modifier
 		
 		// NOTE: Ammo left percent modifier is applied to final damage, not attack power
-		let result = Math.floor(cappedPower * criticalMod * proCriticalMod) * dayCutinMod * concatMod * apshellMod;
+		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
+			* dayCutinModifier * airstrikeConcatModifier * apshellModifier;
 		
 		// New Depth Charge bonus
+		let newDepthChargeBonus = 0;
 		if(warfareType === "Antisub") {
 			const type95ndcCnt = this.countEquipment(226);
 			const type2dncCnt = this.countEquipment(227);
-			const ndcBonus = type95ndcCnt + 2 * type2dncCnt;
-			result += ndcBonus;
+			newDepthChargeBonus = type95ndcCnt + 2 * type2dncCnt;
+			result += newDepthChargeBonus;
 		}
 		
-		return result;
+		return {
+			power: result,
+			criticalModifier,
+			proficiencyCriticalModifier,
+			dayCutinModifier,
+			airstrikeConcatModifier,
+			apshellModifier,
+			newDepthChargeBonus,
+		};
 	};
 
 	/**
@@ -2080,8 +2107,8 @@ KC3改 Ship Object
 			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
 			const canClosingTorp = shipObj.canDoClosingTorpedo();
 			if(ConfigManager.powerCapApplyLevel >= 1) {
-				power = shipObj.applyPrecapModifiers(power, "Antisub",
-					battleConds.engagementId, battleConds.formationId || 5);
+				({power} = shipObj.applyPrecapModifiers(power, "Antisub",
+					battleConds.engagementId, battleConds.formationId || 5));
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Day", "Antisub"));
@@ -2090,9 +2117,9 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, "Antisub", undefined, undefined,
-						true, attackTypeDay[0] === "AirAttack");
+						true, attackTypeDay[0] === "AirAttack").power;
 				}
-				power = shipObj.applyPostcapModifiers(power, "Antisub");
+				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
 			let attackTypeIndicators = !canShellingAttack ?
 				KC3Meta.term("ShipAttackTypeNone") :
@@ -2129,8 +2156,8 @@ KC3改 Ship Object
 			const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
-				power = shipObj.applyPrecapModifiers(power, warfareTypeDay,
-					battleConds.engagementId, battleConds.formationId);
+				({power} = shipObj.applyPrecapModifiers(power, warfareTypeDay,
+					battleConds.engagementId, battleConds.formationId));
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Day", warfareTypeDay));
@@ -2139,10 +2166,10 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, warfareTypeDay, spAttackType, undefined,
-						true, attackTypeDay[0] === "AirAttack");
+						true, attackTypeDay[0] === "AirAttack").power;
 				}
-				power = shipObj.applyPostcapModifiers(power, warfareTypeDay,
-					spAttackType);
+				({power} = shipObj.applyPostcapModifiers(power, warfareTypeDay,
+					spAttackType));
 			}
 			let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
@@ -2174,9 +2201,9 @@ KC3改 Ship Object
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			if(ConfigManager.powerCapApplyLevel >= 1) {
-				power = shipObj.applyPrecapModifiers(power, "Shelling",
+				({power} = shipObj.applyPrecapModifiers(power, "Shelling",
 					battleConds.engagementId, battleConds.formationId, spAttackType,
-					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0);
+					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0));
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Night", "Shelling"));
@@ -2184,9 +2211,9 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, "Shelling", undefined, undefined, true, true);
+						power, "Shelling", undefined, undefined, true, true).power;
 				}
-				power = shipObj.applyPostcapModifiers(power, "Shelling");
+				({power} = shipObj.applyPostcapModifiers(power, "Shelling"));
 			}
 			$(".nightAttack", tooltipBox).html(
 				KC3Meta.term("ShipNightAttack").format(
@@ -2204,9 +2231,9 @@ KC3改 Ship Object
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
-				power = shipObj.applyPrecapModifiers(power, warfareTypeNight,
+				({power} = shipObj.applyPrecapModifiers(power, warfareTypeNight,
 					battleConds.engagementId, battleConds.formationId, spAttackType,
-					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0);
+					battleConds.isStartFromNight, battleConds.playerCombinedFleetType > 0));
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Night", warfareTypeNight));
@@ -2214,9 +2241,9 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, warfareTypeNight, undefined, undefined, true);
+						power, warfareTypeNight, undefined, undefined, true).power;
 				}
-				power = shipObj.applyPostcapModifiers(power, warfareTypeNight);
+				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight));
 			}
 			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
