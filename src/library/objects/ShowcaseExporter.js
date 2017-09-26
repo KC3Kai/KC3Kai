@@ -41,15 +41,18 @@
             equipStars: "#42837f",
             equipInfo: "#000",
             equipStat: "#000",
-            /* should match lock mods in light theme. see legacy.css */
             lock_modes: {
-                1: "#029DD5",
-                2: "#64B162",
-                3: "#CCC700",
-                4: "#EB9528",
-                5: "#B1A2C1"
+                1: "#029dd5",
+                2: "#64b162",
+                3: "#ccc700",
+                4: "#eb9528",
+                5: "#b1a2c1"
             }
         };
+        /* load lock colors in light theme. see fud_quarterly.json */
+        KC3Meta.eventLockingTagColors("legacy").forEach((color, idx) => {
+            this.colors.lock_modes[idx + 1] = color;
+        });
 
         this.buildSettings = {};
         this.columnCount = 5;
@@ -96,7 +99,7 @@
         this.ctx = this.canvas.getContext("2d");
         this.allShipGroups = {};
         this.sortedShipGroups = [];
-        var columnCount = parseInt(this.columnCount,10);
+        var columnCount = parseInt(this.columnCount, 10);
         if (isNaN(columnCount) || columnCount < 3)
             this.columnCount = 3;
         var stypes = KC3Meta.sortedStypes();
@@ -333,8 +336,8 @@
             height: 35
         };
         if(this.buildSettings.exportMode === "light"){
-            this.rowParams.width = this.rowParams.height*3;
-            this.columnCount=this.columnCount*2;
+            this.rowParams.width = this.rowParams.height * 3;
+            this.columnCount = this.columnCount * 2;
         }
         if(this.buildSettings.eventLocking === true && typeof localStorage.lock_plan !== "undefined"){
             this.lock_plan = {};
@@ -413,10 +416,8 @@
         }
         this.canvas.height = Math.ceil((this.shipCount + types) / this.columnCount) * this.rowParams.height;
         this.canvas.width = this.columnCount * this.rowParams.width;
-
         if (!this._checkFit()) {
-            this.canvas.height = Math.ceil((this.shipCount + types) / this.columnCount + 1) * this.rowParams.height;
-            this.canvas.width = this.columnCount * this.rowParams.width;
+            this.canvas.height += this.rowParams.height;
         }
 
         this._fill();
@@ -427,7 +428,7 @@
         // math....
         var x = 0;
         var y = 0;
-        for (var type in this.allShipGroups) {
+        for (var type of this.sortedShipGroups) {
             if (this.allShipGroups[type].length > 0) {
                 if (y >= this.canvas.height - this.rowParams.height) {
                     x += this.rowParams.width;
@@ -447,7 +448,7 @@
             }
         }
 
-        return !(x >= this.canvas.width && y !== 0);
+        return x < this.canvas.width || (x === this.canvas.width && y === 0);
     };
 
     ShowcaseExporter.prototype._getShips = function () {

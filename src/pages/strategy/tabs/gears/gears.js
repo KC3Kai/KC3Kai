@@ -98,6 +98,8 @@
 			"t44": "aa",
 			// night fighter
 			"t45": "aa",
+			// night torpedo bomber
+			"t46": "tp",
 			// all types
 			"tall": "type",
 		},

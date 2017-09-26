@@ -188,6 +188,46 @@ Object.assignIfDefined = function(target, key, value) {
 	}
 	return target;
 };
+/**
+ * Checks object paths of any depth is valid, like `lodash.hashPathIn`.
+ */
+Object.hasSafePath = function(root, props) {
+	return Object.safePropertyPath(false, root, props);
+};
+/**
+ * Get object property value by paths of any depth is valid.
+ */
+Object.getSafePath = function(root, props) {
+	return Object.safePropertyPath(true, root, props);
+};
+Object.safePropertyPath = function(isGetProp, root, props) {
+	if(!root) {
+		return isGetProp ? root : false;
+	}
+	var path = [];
+	if(arguments.length > 3) {
+		path = $.makeArray(arguments).slice(2);
+	} else if(typeof props === "string") {
+		path = props.split('.');
+	} else if(Array.isArray(props)) {
+		path = props;
+	}
+	var prop;
+	while( !!(prop = path.shift()) ) {
+		try {
+			// can use hasOwnProperty not to match props inherited
+			if(typeof prop === "string" && prop in root) {
+				root = root[prop];
+			} else {
+				return isGetProp ? undefined : false;
+			}
+		} catch(e) {
+			return isGetProp ? undefined : false;
+		}
+	}
+	return isGetProp ? root : true;
+};
+
 
 /* PRIMITIVE */
 /*******************************\

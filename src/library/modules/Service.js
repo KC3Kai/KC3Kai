@@ -62,7 +62,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		/* SET API LINK
 		From osapi content script, the API Link has been extracted
-		Save the link onto localStorage and disable extracing API further
+		Save the link onto localStorage and disable extracting API further
 		If came from menu "Extract API Link", so open "Play via API" and close DMM source
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
@@ -151,7 +151,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		},
 		
 		/* Game Screen Change
-		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
+		A specific game screen manipulation. Such as idle timer, catbomb, and others. That marks
 		the guy who make this function is lazier than making another key for such purpose XD
 		(PS: self-insulting)
 		------------------------------------------*/
@@ -201,7 +201,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		},
 		
 		/* GET CONFIG
-		For content scripts who doesnt have access to localStorage
+		For content scripts who doesn't have access to localStorage
 		Mainly used at the moment for DMM/OSAPI/cookie injection
 		------------------------------------------*/
 		"getConfig" :function(request, sender, response){
@@ -356,7 +356,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
-		/* DMM FRMAE INJECTION
+		/* DMM FRAME INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){

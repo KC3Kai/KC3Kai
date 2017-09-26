@@ -929,78 +929,60 @@ Contains summary information about a fleet and its 6 ships
 	};
 
 	/**
-	 *  LoS : "Formula 33"
-	 *  http://kancolle.wikia.com/wiki/Line_of_Sight
-	 *  http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
-	 *  ID refer to start2 API, api_mst_slotitem_equiptype
-	 * @param nodeDivaricatedFactor
-	 * @returns {number}
+	 * Implementation of effective LoS : "Formula 33".
+	 * @see http://kancolle.wikia.com/wiki/Line_of_Sight
+	 * @see http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
+	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default.
+	 *        For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+	 * @return {number} F33 eLoS value of this fleet.
 	 */
-	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor){
-		// The weighting of the equipment sum part
-		// For now: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-		nodeDivaricatedFactor = nodeDivaricatedFactor || 1;
+	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor = 1){
+		// Known verified special multipliers applied to these types of equipment,
+		// ID refer to KCSAPI: start2/api_mst_slotitem_equiptype, slotitem.api_type[2]
 		const multipliers = {
-			6: 0.6, // Carrier-Based Fighter
-			7: 0.6, // Carrier-Based Dive Bomber
-			8: 0.8, // Carrier-Based Torpedo Bomber
-			9: 1, // Carrier-Based Reconnaissance Aircraft
+			8 : 0.8, // Carrier-Based Torpedo Bomber
+			9 : 1.0, // Carrier-Based Reconnaissance Aircraft
 			10: 1.2, // Reconnaissance Seaplane
 			11: 1.1, // Seaplane Bomber
-			12: 0.6, // Small Radar
-			13: 0.6, // Large Radar
-			26: 0.6, // ASW Patrol Aircraft
-			29: 0.6, // Searchlight Small / Large
-			32: 0.6, // Submarine Torpedo (not verified yet, 0.6 by default)
-			34: 0.6, // Fleet Command Facility
-			35: 0.6, // SCAMP
-			39: 0.6, // Skilled Lookouts
-			40: 0.6, // Sonar
-			41: 0.6, // Large Flying Boat
-			45: 0.6, // Seaplane Fighter
-			51: 0.6, // Submarine Radar
-			57: 0.6, // Jet Bomber
-			94: 1 // Carrier-Based Reconnaissance Aircraft (II)
+			58: 0.8, // Jet Torpedo Bomber (reserved)
+			59: 1.0, // Jet Reconnaissance Aircraft (reserved)
+			94: 1.0  // Carrier-Based Reconnaissance Aircraft (II) (reserved)
 		};
+		// without verified data, assume other items with LoS stat are using this:
+		const defaultMultiplier = 0.6;
 
 		var total = 0;
 		var emptyShipSlot = 0;
 
-		// iterate ships
-		for (var i = 0; i < 6; i++) {
-			var shipData = this.ship(i);
+		// iterate all ship slots, even some are empty
+		Array.numbers(0, 5).map(i => this.ship(i)).forEach(shipObj => {
+			// count for empty slots or ships retreated
+			if(shipObj.rosterId <= 0 || shipObj.didFlee) {
+				emptyShipSlot += 1;
+			} else {
+				// sum ship's naked los
+				total += Math.sqrt(shipObj.nakedLoS());
 
-			// if empty slot or ship flee ?
-			if(shipData.rosterId === 0 || shipData.didFlee) {
-				emptyShipSlot++;
-				continue;
-			}
-
-			// ship's naked los
-			total += Math.sqrt(shipData.nakedLoS());
-
-			// iterate ship's equipment
-			var equipTotal = 0;
-			var allEquips = shipData.equipment(true);
-			for (var j in allEquips) {
-				var itemData = allEquips[j];
-				if (itemData.itemId > 0) {
-					var itemType = itemData.master().api_type[2];
-					var multiplier = multipliers[itemType];
-					if (multiplier) {
-						// multiple * (raw equipment los + equipment bonus)
-						equipTotal += multiplier * 
-							(itemData.master().api_saku + itemData.losStatImprovementBonus());
+				// iterate ship's equipment including ex-slot
+				let equipTotal = 0;
+				shipObj.equipment(true).forEach(gearObj => {
+					if (gearObj.itemId > 0 && gearObj.masterId > 0) {
+						const itemType = gearObj.master().api_type[2];
+						const itemLos = gearObj.master().api_saku;
+						const multiplier = multipliers[itemType] || defaultMultiplier;
+						// only item with los stat > 0 will be summed
+						// although some items are not equippable by ship, eg: LBAA
+						if (itemLos > 0) {
+							equipTotal += multiplier * (itemLos + gearObj.losStatImprovementBonus());
+						}
 					}
-				}
+				});
+				total += nodeDivaricatedFactor * equipTotal;
 			}
-			total += nodeDivaricatedFactor * equipTotal;
-
-		}
+		});
 
 		// player hq level adjustment
 		total -= Math.ceil(0.4 * PlayerManager.hq.level);
-
 		// empty ship slot adjustment
 		total += 2 * emptyShipSlot;
 

@@ -10,7 +10,8 @@ Provides access to data on built-in JSON files
 		repo: "",
 		
 		_cache:{},
-		_icons:{},
+		_icons:[],
+		_seasonal:[],
 		_exp:{},
 		_expShip:{},
 		_ship:{},
@@ -93,6 +94,7 @@ Provides access to data on built-in JSON files
 			
 			// Load Common Meta
 			this._icons      = JSON.parse( $.ajax(repo+'icons.json', { async: false }).responseText );
+			this._seasonal   = JSON.parse( $.ajax(repo+'seasonal_icons.json', { async: false }).responseText );
 			this._exp        = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
 			this._expShip    = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._edges      = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
@@ -147,6 +149,11 @@ Provides access to data on built-in JSON files
 				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
 				// To prevent mess file renaming for images, patch it here.
 				id = path === "abyss/" ? id - 1000 : id;
+				// Show seasonal icon if found in meta, config in webstore package should be empty
+				if(path === "ships/" && ConfigManager.info_seasonal_icon
+					&& this._seasonal.length && this._seasonal.indexOf(id) > -1){
+					path = "shipseasonal/";
+				}
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
 			if(typeof empty === "undefined"){
@@ -415,14 +422,26 @@ Provides access to data on built-in JSON files
 		updateAircraftTypeIds :function(){
 			// Do nothing if KC3GearManager not global yet
 			if(typeof KC3GearManager === "undefined"){ return; }
-			if(Array.isArray(this._dataColle.carrierBasedAircraftType3Ids))
-				KC3GearManager.carrierBasedAircraftType3Ids = this._dataColle.carrierBasedAircraftType3Ids;
-			if(Array.isArray(this._dataColle.landBasedAircraftType3Ids))
-				KC3GearManager.landBasedAircraftType3Ids = this._dataColle.landBasedAircraftType3Ids;
-			if(Array.isArray(this._dataColle.antiAirFighterType2Ids))
-				KC3GearManager.antiAirFighterType2Ids = this._dataColle.antiAirFighterType2Ids;
-			if(Array.isArray(this._dataColle.interceptorsType3Ids))
-				KC3GearManager.interceptorsType3Ids = this._dataColle.interceptorsType3Ids;
+			// alias for short
+			const d = this._dataColle;
+			// current map table
+			const vo = {
+				carrierBasedAircraftType3Ids: d.carrierBasedAircraftType3Ids,
+				landBasedAircraftType3Ids: d.landBasedAircraftType3Ids,
+				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
+				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
+				aswAircraftType2Ids: d.aswAircraftType2Ids,
+				nightAircraftType3Ids: d.nightAircraftType3Ids,
+				interceptorsType3Ids: d.interceptorsType3Ids,
+				jetAircraftType2Ids: d.jetAircraftType2Ids,
+				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
+			};
+			// clean keys with invalid value to avoid being overwritten
+			Object.keys(vo).filter(k => !Array.isArray(vo[k])).forEach(k => {
+				delete vo[k];
+			});
+			// assign effective values
+			Object.assign(KC3GearManager, vo);
 		},
 		
 		defaultEquip :function(id){
@@ -436,6 +455,10 @@ Provides access to data on built-in JSON files
 					.reduce(function(p, c){if(!!c && p.indexOf(c) < 0) p.push(c);
 						return p;}, []).join(" ")
 				: "";
+		},
+		
+		eventLockingTagColors :function(theme = "dark"){
+			return (this._eventColle.lockingTagColors || {})[theme] || [];
 		},
 		
 		support :function(index){
@@ -461,6 +484,16 @@ Provides access to data on built-in JSON files
 		engagement :function(index){
 			return (typeof index === "undefined") ? this._battle.engagement :
 				this._battle.engagement[index] || ["","",""];
+		},
+		
+		cutinTypeDay :function(index){
+			return (typeof index === "undefined") ? this._battle.cutinDay :
+				this._battle.cutinDay[index] || "";
+		},
+		
+		cutinTypeNight :function(index){
+			return (typeof index === "undefined") ? this._battle.cutinNight :
+				this._battle.cutinNight[index] || "";
 		},
 		
 		aacitype :function(index){
@@ -749,19 +782,37 @@ Provides access to data on built-in JSON files
 		},
 		
 		gunfit :function(shipMstId, itemMstId){
-			if (typeof this._gunfit[shipMstId+""] == "undefined") {
+			if (this._gunfit[shipMstId] === undefined) {
 				return false;
 			}
-			
-			if (typeof itemMstId != "undefined") {
-				if (typeof this._gunfit[shipMstId+""][itemMstId+""] != "undefined") {
-					return this._gunfit[shipMstId+""][itemMstId+""];
+			if (itemMstId !== undefined) {
+				if (this._gunfit[shipMstId][itemMstId] !== undefined) {
+					return this._gunfit[shipMstId][itemMstId];
 				} else {
 					return false;
 				}
 			} else {
-				return this._gunfit[shipMstId+""];
+				return this._gunfit[shipMstId];
 			}
+		},
+		
+		sortedGunfits :function(shipMstId){
+			var gunfits = this.gunfit(shipMstId);
+			if(gunfits !== false) {
+				var sortedGearIds = Object.keys(gunfits).sort((a, b) =>
+						// Unknown by ID asc
+						gunfits[a] === "" && gunfits[b] === "" ? Number(a) - Number(b) :
+						// Unknown always go last
+						gunfits[a] === "" ? Infinity :
+						gunfits[b] === "" ? -Infinity :
+						// By day bonus desc
+						gunfits[b][0] - gunfits[a][0]
+						// Fallback to ID asc
+						|| Number(a) - Number(b)
+				);
+				return sortedGearIds.map(id => ({id: id, bonus: gunfits[id]}));
+			}
+			return false;
 		}
 	};
 	

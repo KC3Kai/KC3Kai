@@ -765,22 +765,35 @@
 								sortie.world, sortie.mapnum)).defineAsBattle();
 							if(typeof battle.data.api_dock_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.night( battle.yasen );
 								}
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugRankPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.night( battle.yasen );
 								}
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							if(KC3Node.debugRankPrediction()){
-								// Known issue: if `api_name` not saved into battle data for old history,
-								// prediction on long distance air raid node will fail
+							if(KC3Node.debugPrediction()){
+								// Known issue 1: if `api_name` not saved into battle data for old history,
+								// prediction on long distance air raid node will fail.
+								// Known issue 2: saved rating in DB will be incorrect,
+								// if thisNode.allyNoDamage is not correctly calculated on that sortie.
 								console.debug("Node " + thisNode.letter + " result rank", battle.rating, battle.sortie_id);
-								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch");
+								console.assert(battle.rating == (thisNode.predictedRankNight || thisNode.predictedRank), "Rank prediction mismatch", battle);
+								
+								console.debug("Node " + thisNode.letter + " result mvp", battle.mvp, battle.sortie_id);
+								if(thisNode.predictedMvpCapable){
+									const predictedMvps = thisNode.predictedMvpsNight || thisNode.predictedMvps || [];
+									console.assert(battle.mvp[0] == predictedMvps[0], "MVP prediction mismatch", battle);
+									if(battle.mvp[1]){
+										console.assert(battle.mvp[1] == predictedMvps[1], "Escort MVP prediction mismatch", battle);
+									}
+								} else {
+									console.info("MVP prediction incapable");
+								}
 							}
 							sinkShips[0].concat(battle.shizunde[0]);
 							sinkShips[1].concat(battle.shizunde[1]);
@@ -997,7 +1010,15 @@
 					updateMapHpInfo(self, sortieData);
 					
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+							+ encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					} else if(e.altKey) {
+						self.copyToClipboard(JSON.stringify(sortieData), () => {
+							alert("Replay data copied to clipboard");
+						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
@@ -1005,12 +1026,14 @@
 					
 					console.debug("Downloading reply", sortieId, ", data:", sortieData);
 					// Clear properties duplicated or may not used by replayer for now
+					delete sortieData.nodes;
 					$.each(sortieData.battles, function(_, battle) {
 						delete battle.hq;
 						delete battle.enemyId;
 						delete battle.airRaid;
 						delete battle.shizunde;
 					});
+					
 					var jsonData = JSON.stringify(sortieData);
 					var scale = Math.ceil(Math.sqrt(jsonData.length / 30000));
 					console.debug("Image scale", scale, "based on data size:", jsonData.length);
@@ -1083,7 +1106,7 @@
 			
 		};
 		
-		this.endExport = function (error, result) {
+		this.endExport = function(error, result) {
 			if (error) {
 				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
@@ -1093,6 +1116,24 @@
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");
+		};
+		
+		this.copyToClipboard = function(stringData, successCallback) {
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", stringData);
+					if(typeof successCallback === "function") {
+						successCallback.call(this, e);
+					}
+				} else {
+					console.warn("Browser does not support Clipboard event");
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
 		};
 		
 	};
