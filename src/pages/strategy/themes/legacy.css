@@ -557,7 +557,7 @@ body {
 .ship_list .ship_item .ship_ar.max {
 	background:#ffcc00;
 }
-.ship_list .ship_item .ship_stat span {
+.ship_list .ship_item .ship_stat span.stat_left {
 	color:#aaa;
 }
 .ship_list .ship_item.odd .ship_field.ship_lk,
@@ -571,9 +571,11 @@ body {
 .ship_list .ship_item .ship_lk .sub {
 	color:#aaa;
 }
-.ship_list .ship_item .ship_stat span {
-	font-size:8px;
-	color:#aaa;
+.ship_list .ship_item .ship_equip span {
+	color:#777;
+}
+.ship_list .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#ccc;
 }
 
 /* OVERRIDES
@@ -735,7 +737,7 @@ body {
 .tab_ships .ship_item .ship_ar.max {
 	background:#ffcc00;
 }
-.tab_ships .ship_item .ship_stat span {
+.tab_ships .ship_item .ship_stat span.stat_left {
 	color:#aaa;
 }
 .tab_ships .ship_item.odd .ship_field.ship_lk,
@@ -748,6 +750,12 @@ body {
 }
 .tab_ships .ship_item .ship_lk .sub {
 	color:#aaa;
+}
+.tab_ships .ship_item .ship_equip span {
+	color:#777;
+}
+.tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#ccc;
 }
 
 /* Construction */
@@ -1274,6 +1282,9 @@ body {
 
 /* LOCKING
 --------------------------------*/
+.tab_locking .ship_list .ship_item .ship_equip span {
+	color:#333;
+}
 .tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	background:#b7b7b7;
 }
