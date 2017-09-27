@@ -1855,7 +1855,7 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.proportionalShotdown = function(n) {
-		return AntiAir.shipProportionalShotdown(this,n);
+		return AntiAir.shipProportionalShotdown(this, n);
 	};
 
 	// note:
