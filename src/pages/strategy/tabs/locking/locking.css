@@ -246,9 +246,8 @@
 	text-align: center;
 }
 
-.tab_locking .ship_item .ship_stat span {
+.tab_locking .ship_item .ship_stat span.stat_left {
 	font-size: 8px;
-	color: #aaa;
 }
 
 /* Fields: Equips */

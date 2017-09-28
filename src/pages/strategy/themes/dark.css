@@ -565,7 +565,8 @@ button, input, select, textarea {
 	background:#000000;
 }
 .ship_list .ship_onfleet-color1 {
-	background: #2e4a79 !important; color:#fff;
+	background: #2e4a79 !important;
+	color:#fff;
 }
 .ship_list .ship_onfleet-color2 {
 	background: #527e51 !important;
@@ -608,9 +609,8 @@ button, input, select, textarea {
 .ship_list .ship_item .ship_ar.max {
 	background:#947600;
 }
-.ship_list .ship_item .ship_stat span {
-	font-size:8px;
-	color:#999999 !important;
+.ship_list .ship_item .ship_stat span.stat_left {
+	color:#999999;
 }
 .ship_list .ship_item.odd .ship_field.ship_lk,
 .ship_list .ship_item.even .ship_field.ship_lk {
@@ -622,6 +622,12 @@ button, input, select, textarea {
 }
 .ship_list .ship_item .ship_lk .sub {
 	color:#999999;
+}
+.ship_list .ship_item .ship_equip span {
+	color:#999999;
+}
+.ship_list .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#555555;
 }
 
 /* OVERRIDES
@@ -932,8 +938,8 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
-.tab_ships .ship_item .ship_stat span {
-	color:#999999 !important;
+.tab_ships .ship_item .ship_stat span.stat_left {
+	color:#999999;
 }
 .tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
@@ -946,8 +952,11 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_lk .sub {
 	color:#999999;
 }
+.tab_ships .ship_item .ship_equip span {
+	color:#999999;
+}
 .tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
-	background:#555555 !important;
+	background:#555555;
 }
 
 /* Construction */
@@ -1598,6 +1607,9 @@ button, input, select, textarea {
 	border: 3px dotted #303030 !important;
 }
 
+.tab_locking .ship_list .ship_item .ship_equip span {
+	color:#cccccc;
+}
 .tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	background: #5a5a5a;
 }

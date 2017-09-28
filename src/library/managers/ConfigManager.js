@@ -59,7 +59,7 @@ Retrieves when needed to apply on components
 				info_btrank          : true,
 				info_btstamp         : false,
 				info_fleetstat       : true,
-				info_blink_gauge     : true,
+				info_blink_gauge     : false,
 				info_boss            : false,
 				info_delta           : false,
 				info_auto_exped_tab  : true,
@@ -68,7 +68,7 @@ Retrieves when needed to apply on components
 				info_stats_diff      : 3,
 				info_eng_stype       : false,
 				info_force_ship_lang : "",
-				info_seasonal_icon   : true,
+				info_seasonal_icon   : false,
 				info_salt            : false,
 				info_troll           : false,
 

@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: 'build/tmp/assets/img/shipseasonal/',
 				src: '*.png',
-				dest: 'build/release/assets/img/ships',
+				dest: 'build/release/assets/img/shipseasonal/',
 				filter: function(file) {
 					var id = file.match(/^.*\/(\d+).png$/);
 					if(!id || !id[1]) return false;
@@ -516,7 +516,6 @@ module.exports = function(grunt) {
 		'htmlmin',
 		'modify_json:manifest_scripts',
 		'modify_json:manifest_info',
-		'string-replace:seasonalicons',
 		'jsonlint:build',
 		'json-minify',
 		'copy:processed',
