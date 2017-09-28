@@ -617,6 +617,7 @@
 		
 		refreshHealthMetric: function(){
 			var bc = this.battleCounts;
+			if(Object.keys(bc).length < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
 				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
 					.format(bc.lastDayBattle, bc.lastDaySortie)
