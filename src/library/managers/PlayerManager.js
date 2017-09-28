@@ -291,36 +291,41 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		setStatistics :function( data ){
-			var oldStatistics = JSON.parse(localStorage.statistics || "{\"exped\":{},\"pvp\":{},\"sortie\":{}}");
-			var newStatistics = {
+			const oldStatistics = JSON.parse(localStorage.statistics || '{"exped":{},"pvp":{},"sortie":{}}');
+			const newStatistics = {
 				exped: {
-					rate: data.exped.rate || oldStatistics.exped.rate || 0,
-					total: data.exped.total || oldStatistics.exped.total,
-					success: data.exped.success || oldStatistics.exped.success
+					rate: Number(data.exped.rate || oldStatistics.exped.rate) || 0,
+					total: Number(data.exped.total || oldStatistics.exped.total) || 0,
+					success: Number(data.exped.success || oldStatistics.exped.success) || 0
 				},
 				pvp: {
-					rate: data.pvp.rate || oldStatistics.pvp.rate || 0,
-					win: data.pvp.win || oldStatistics.pvp.win,
-					lose: data.pvp.lose || oldStatistics.pvp.lose,
-					attacked: data.pvp.attacked || oldStatistics.pvp.attacked,
-					attacked_win: data.pvp.attacked_win || oldStatistics.pvp.attacked_win
+					rate: Number(data.pvp.rate || oldStatistics.pvp.rate) || 0,
+					win: Number(data.pvp.win || oldStatistics.pvp.win) || 0,
+					lose: Number(data.pvp.lose || oldStatistics.pvp.lose) || 0,
+					// these properties are always 0, deprecated by devs, ignored here
+					//attacked: data.pvp.attacked || oldStatistics.pvp.attacked,
+					//attacked_win: data.pvp.attacked_win || oldStatistics.pvp.attacked_win
 				},
 				sortie: {
-					rate: data.sortie.rate || oldStatistics.sortie.rate || 0,
-					win: data.sortie.win || oldStatistics.sortie.win,
-					lose: data.sortie.lose || oldStatistics.sortie.lose
+					rate: Number(data.sortie.rate || oldStatistics.sortie.rate) || 0,
+					win: Number(data.sortie.win || oldStatistics.sortie.win) || 0,
+					lose: Number(data.sortie.lose || oldStatistics.sortie.lose) || 0
 				}
 			};
-			if(newStatistics.sortie.rate===0){
-				newStatistics.sortie.rate = Math.round(newStatistics.sortie.win / (newStatistics.sortie.win + newStatistics.sortie.lose) * 10000)/100;
+			const getRate = (win = 0, lose = 0, total = undefined) => {
+				let rate = Math.qckInt("floor", win / (total === undefined ? win + lose : total) * 100, 2);
+				if(isNaN(rate) || rate === Infinity) rate = 0;
+				return rate;
+			};
+			if(!newStatistics.sortie.rate) {
+				newStatistics.sortie.rate = getRate(newStatistics.sortie.win, newStatistics.sortie.lose);
 			}
-			if(newStatistics.pvp.rate===0){
-				newStatistics.pvp.rate = Math.round(newStatistics.pvp.win / (newStatistics.pvp.win + newStatistics.pvp.lose) *10000)/100;
+			if(!newStatistics.pvp.rate) {
+				newStatistics.pvp.rate = getRate(newStatistics.pvp.win, newStatistics.pvp.lose);
 			}
-			if(newStatistics.exped.rate===0){
-				newStatistics.exped.rate =  Math.round(newStatistics.exped.success / newStatistics.exped.total * 10000)/100;
+			if(!newStatistics.exped.rate) {
+				newStatistics.exped.rate = getRate(newStatistics.exped.success, 0, newStatistics.exped.total);
 			}
-			// console.log("rates", newStatistics.sortie.rate, newStatistics.pvp.rate, newStatistics.exped.rate);
 			localStorage.statistics = JSON.stringify(newStatistics);
 			return this;
 		},

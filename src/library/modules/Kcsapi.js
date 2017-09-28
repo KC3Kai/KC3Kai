@@ -232,7 +232,7 @@ Previously known as "Reactor"
 					lose: response.api_data.api_practice.api_lose,
 				},
 				sortie: {
-					rate: response.api_data.api_war.api_rate*100,
+					rate: response.api_data.api_war.api_rate * 100,
 					win: response.api_data.api_war.api_win,
 					lose: response.api_data.api_war.api_lose
 				}
