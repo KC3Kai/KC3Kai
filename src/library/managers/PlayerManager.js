@@ -294,25 +294,31 @@ Does not include Ships and Gears which are managed by other Managers
 			const oldStatistics = JSON.parse(localStorage.statistics || '{"exped":{},"pvp":{},"sortie":{}}');
 			const newStatistics = {
 				exped: {
-					rate: Number(data.exped.rate || oldStatistics.exped.rate) || 0,
+					rate: Number(data.exped.rate) || 0,
 					total: Number(data.exped.total || oldStatistics.exped.total) || 0,
 					success: Number(data.exped.success || oldStatistics.exped.success) || 0
 				},
 				pvp: {
-					rate: Number(data.pvp.rate || oldStatistics.pvp.rate) || 0,
+					rate: Number(data.pvp.rate) || 0,
 					win: Number(data.pvp.win || oldStatistics.pvp.win) || 0,
 					lose: Number(data.pvp.lose || oldStatistics.pvp.lose) || 0,
-					// these properties are always 0, deprecated by devs, ignored here
+					// these properties are always 0, maybe deprecated by devs, here ignored
 					//attacked: data.pvp.attacked || oldStatistics.pvp.attacked,
 					//attacked_win: data.pvp.attacked_win || oldStatistics.pvp.attacked_win
 				},
 				sortie: {
-					rate: Number(data.sortie.rate || oldStatistics.sortie.rate) || 0,
+					rate: Number(data.sortie.rate) || 0,
 					win: Number(data.sortie.win || oldStatistics.sortie.win) || 0,
 					lose: Number(data.sortie.lose || oldStatistics.sortie.lose) || 0
 				}
 			};
+			// only `api_get_member/record` offer us `rate` (as string) values,
+			// to get the rates before entering record screen, have to compute them by ourselves.
+			// rate is displayed after a 'Math.round' in-game, although raw api data keeps 2 decimals,
+			// but an exception: `api_war.api_rate` is not multiplied by 100, so no decimal after % it.
+			// see `api_get_member/record` function at `Kcsapi.js`
 			const getRate = (win = 0, lose = 0, total = undefined) => {
+				// different with in-game displaying integer, we always keep 2 decimals
 				let rate = Math.qckInt("floor", win / (total === undefined ? win + lose : total) * 100, 2);
 				if(isNaN(rate) || rate === Infinity) rate = 0;
 				return rate;
