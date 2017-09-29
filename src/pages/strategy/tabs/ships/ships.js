@@ -401,7 +401,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: ThisShip.hp[1],
+				hp: [ThisShip.hp[1], ThisShip.isMarried() ? ThisShip.maxHp(true) : MasterShip.api_taik[0]+KC3Ship.getMaxHpModernize(), MasterShip.api_taik[0]+ThisShip.mod[5] ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
@@ -411,7 +411,7 @@
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
+				as: [ThisShip.nakedAsw(), ThisShip.maxAswMod(), ThisShip.nakedAsw()-ThisShip.mod[6], ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
@@ -883,7 +883,7 @@
 			define("morale", "Morale",
 				   function(x) { return -x.morale; });
 			define("hp", "HP",
-				   function(x) { return -x.hp; });
+				   function(x) { return -x.hp[2]; });
 			define("fp", "Firepower",
 				   function(x) { return -x.fp[this.equipMode+1]; });
 			define("tp", "Torpedo",
@@ -984,15 +984,6 @@
 					$(".ship_lv .value", cElm).text( shipLevel )
 						.addClass( cShip.levelClass );
 					$(".ship_morale", cElm).text( cShip.morale );
-					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk .stat_value", cElm).text( cShip.lk[0] );
-					if(cShip.lk[0] >= cShip.lk[1]){
-						$(".ship_lk", cElm).addClass("max");
-					} else if(cShip.lk[0] > cShip.lk[2]){
-						$(".ship_lk sup", cElm).text(cShip.lk[0] - cShip.lk[2]);
-					} else {
-						$(".ship_lk sup", cElm).hide();
-					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -1023,14 +1014,16 @@
 						$(".ship_name", this).text( showName )
 							.attr("title", showName);
 						// Recomputes stats
+						self.modernizableStat("hp", this, thisShip.hp, 0, true);
 						self.modernizableStat("fp", this, thisShip.fp);
 						self.modernizableStat("tp", this, thisShip.tp);
 						self.modernizableStat("yasen", this, thisShip.yasen);
 						self.modernizableStat("aa", this, thisShip.aa);
 						self.modernizableStat("ar", this, thisShip.ar);
-						$(".ship_as", this).text( thisShip.as[self.equipMode] );
+						self.modernizableStat("as", this, thisShip.as, 2, true);
 						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
 						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+						self.modernizableStat("lk", this, thisShip.lk, 0, true);
 						// Reset heart-lock icon
 						$(".ship_lock img", this).attr("src",
 							"/assets/img/client/heartlock{0}.png"
@@ -1105,15 +1098,25 @@
 
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
-		modernizableStat :function(statAbbr, rowElm, valuesTuple){
+		modernizableStat :function(statAbbr, rowElm, valuesTuple, equipStatIndex = 1, isSup = false){
 			const statElm = $(".ship_" + statAbbr, rowElm);
-			$(".stat_value", statElm).text(valuesTuple[this.equipMode + 1]);
-			if(valuesTuple[0] <= valuesTuple[1]){
-				$(".stat_left", statElm).hide();
-				statElm.addClass("max");
+			$(".stat_value", statElm).text(valuesTuple[equipStatIndex > 0 ? (this.equipMode ? equipStatIndex : 0) : 0]);
+			if(isSup){
+				if(valuesTuple[0] >= valuesTuple[1]){
+					statElm.addClass("max");
+				} else if(valuesTuple[0] > valuesTuple[2]){
+					$(".sup", statElm).text(valuesTuple[0] - valuesTuple[2]);
+				} else {
+					$(".sup", statElm).hide();
+				}
 			} else {
-				$(".stat_left", statElm).show()
-					.text("+" + (valuesTuple[0] - valuesTuple[1]));
+				if(valuesTuple[0] <= valuesTuple[1]){
+					$(".stat_left", statElm).hide();
+					statElm.addClass("max");
+				} else {
+					$(".stat_left", statElm).show()
+						.text("+" + (valuesTuple[0] - valuesTuple[1]));
+				}
 			}
 		},
 
