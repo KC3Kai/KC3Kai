@@ -44,8 +44,8 @@ module.exports = function(grunt) {
 				src: [
 					'assets/img/**',
 					'assets/img/planes/**',
-					'!assets/img/useitems/pay*',
-					'!assets/img/shipseasonal/**',
+					'assets/img/useitems/pay*',
+					'assets/img/shipseasonal/**',
 					'assets/snd/**',
 					'assets/swf/**',
 					'assets/js/Chart.min.js',
