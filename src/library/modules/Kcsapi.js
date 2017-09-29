@@ -232,7 +232,7 @@ Previously known as "Reactor"
 					lose: response.api_data.api_practice.api_lose,
 				},
 				sortie: {
-					rate: response.api_data.api_war.api_rate*100,
+					rate: response.api_data.api_war.api_rate * 100,
 					win: response.api_data.api_war.api_win,
 					lose: response.api_data.api_war.api_lose
 				}
@@ -495,16 +495,7 @@ Previously known as "Reactor"
 			
 			var shipObj = ShipTo;
 			var gearObj = KC3GearManager.get(setExSlot ? shipObj.ex_item : shipObj.items[params.api_set_idx]);
-			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
-			KC3Network.trigger("GunFit", {
-				isShow: (gunfit !== false || aaciTypes.length > 0),
-				shipObj: shipObj,
-				gearObj: gearObj,
-				thisFit: gunfit,
-				shipFits: KC3Meta.gunfit(shipObj.masterId),
-				shipAacis: aaciTypes
-			});
+			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj));
 		},
 		
 		/* Fleet list
@@ -754,18 +745,9 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet");
 			}
 			
-			// Gun fit bonus / penalty OR possible AACI patterns
+			// GunFit event now not only represent fit bonus and AACI, can be any effect
 			var gearObj = KC3GearManager.get(itemID);
-			var gunfit = KC3Meta.gunfit(shipObj.masterId, gearObj.masterId);
-			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
-			KC3Network.trigger("GunFit", {
-				isShow: (gunfit !== false || aaciTypes.length > 0),
-				shipObj: shipObj,
-				gearObj: gearObj,
-				thisFit: gunfit,
-				shipFits: KC3Meta.gunfit(shipObj.masterId), // different from above
-				shipAacis: aaciTypes
-			});
+			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj));
 		},
 		
 		"api_req_kaisou/slotset_ex":function(params, response, headers){
@@ -783,15 +765,7 @@ Previously known as "Reactor"
 			} else {
 				KC3Network.trigger("Fleet");
 			}
-			// Possible AACI patterns
-			var aaciTypes = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(shipObj));
-			KC3Network.trigger("GunFit", {
-				isShow: aaciTypes.length > 0,
-				shipObj: shipObj,
-				gearObj: gearObj,
-				thisFit: false,
-				shipAacis: aaciTypes
-			});
+			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj));
 		},
 		
 		/* Remove all equipment of a ship
@@ -1137,6 +1111,35 @@ Previously known as "Reactor"
 		"api_get_member/base_air_corps":function(params, response, headers){
 			PlayerManager.setBases(response.api_data);
 			KC3Network.trigger("Lbas");
+		},
+		
+		/* Expand air base on construction corps used
+		-------------------------------------------------------*/
+		"api_req_air_corps/expand_base":function(params, response, headers){
+			// only 1 land base data in api data, can not call setBases directly,
+			// have to merge it into existed land bases:
+			var rawBase = response.api_data[0],
+				bases = PlayerManager.bases,
+				worldFirstBase = bases.map(b => b.map).indexOf(rawBase.api_area_id);
+			// assume 1st base of expanded world always existed
+			if(worldFirstBase > -1){
+				var pos = worldFirstBase + rawBase.api_rid - 1,
+					base = new KC3LandBase(rawBase);
+				// replace expanded base position if it is unused
+				if(bases[pos] && bases[pos].rid === -1){
+					bases[pos] = base;
+				} else {
+					// it is used, insert before the position
+					bases.splice(pos, 0, base);
+					var count = bases.length;
+					// delete last one if it is unused and more than 4 bases
+					if(count > 4 && bases[count - 1].rid === -1){
+						bases.splice(count - 1, 1);
+					}
+				}
+				PlayerManager.saveBases();
+				KC3Network.trigger("Lbas");
+			}
 		},
 		
 		/* Change base name

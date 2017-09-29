@@ -263,13 +263,13 @@
 					.prop("outerHTML");
 			}
 			if(!isBranch && !!questMeta.unlock) {
-				for(let ctr in questMeta.unlock) {
-					let cq = KC3Meta.quest(questMeta.unlock[ctr]);
+				for(const i in questMeta.unlock) {
+					const cq = KC3Meta.quest(questMeta.unlock[i]);
 					if(!!cq) title += "&emsp;" +
 						$("<span></span>").css("font-size", "11px")
 							.css("color", "#a96")
 							.text("-> [{0:id}] {1:code} {2:name}"
-								.format(questMeta.unlock[ctr], cq.code||"N/A", cq.name)
+								.format(questMeta.unlock[i], cq.code || "N/A", cq.name)
 							).prop("outerHTML") + "<br/>";
 				}
 			}

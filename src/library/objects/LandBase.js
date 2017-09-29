@@ -83,8 +83,11 @@
 				totalCost.fuel += Math.round(p.api_count * fuelCostPerSlot);
 				totalCost.ammo += Math.round(p.api_count * ammoCostPerSlot);
 				// Jets consume steel per battle
-				totalCost.steel += ((planeType2 == 57 ? Math.round(p.api_count * planeCost *
-					KC3GearManager.jetBomberSteelCostRatioPerSlot) : 0) || 0);
+				totalCost.steel += ((
+					KC3GearManager.jetAircraftType2Ids.indexOf(planeType2) > -1 ?
+						Math.round(p.api_count * planeCost * KC3GearManager.jetBomberSteelCostRatioPerSlot) : 0
+					) || 0
+				);
 			}
 		});
 		return totalCost;

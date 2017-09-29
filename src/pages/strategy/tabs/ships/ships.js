@@ -985,12 +985,13 @@
 						.addClass( cShip.levelClass );
 					$(".ship_morale", cElm).text( cShip.morale );
 					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk", cElm).text( cShip.lk[0] );
+					$(".ship_lk .stat_value", cElm).text( cShip.lk[0] );
 					if(cShip.lk[0] >= cShip.lk[1]){
 						$(".ship_lk", cElm).addClass("max");
 					} else if(cShip.lk[0] > cShip.lk[2]){
-						$(".ship_lk", cElm)
-							.append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
+						$(".ship_lk sup", cElm).text(cShip.lk[0] - cShip.lk[2]);
+					} else {
+						$(".ship_lk sup", cElm).hide();
 					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
@@ -1008,7 +1009,7 @@
 						cElm.addClass('modernization-able');
 
 					[1,2,3,4].forEach(function(x){
-						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1], cShip.id);
 					});
 					if(cShip.exSlot !== 0){
 						self.equipImg(cElm, "ex", -2, cShip.exSlot);
@@ -1019,11 +1020,8 @@
 						const thisShip = ship || cShip;
 						// Reset shown ship name
 						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this)
-							.text( showName )
-							.attr("title",
-								KC3StrategyTabs.isTextEllipsis($(".ship_name", this)) ? showName : ""
-							);
+						$(".ship_name", this).text( showName )
+							.attr("title", showName);
 						// Recomputes stats
 						self.modernizableStat("fp", this, thisShip.fp);
 						self.modernizableStat("tp", this, thisShip.tp);
@@ -1035,7 +1033,7 @@
 						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
 						// Reset heart-lock icon
 						$(".ship_lock img", this).attr("src",
-							"../../assets/img/client/heartlock{0}.png"
+							"/assets/img/client/heartlock{0}.png"
 								.format(!thisShip.locked ? "-x" : "")
 						).show();
 						if((self.heartLockMode === 1 && thisShip.locked)
@@ -1096,44 +1094,46 @@
 
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
-		getDerivedStatNaked :function(StatName, EquippedValue, ShipObj){
-			var Items = ShipObj.equipment(true);
-			for(var ctr in Items){
-				if(Items[ctr].itemId > 0){
-					EquippedValue -= Items[ctr].master()["api_"+StatName];
+		getDerivedStatNaked :function(statName, equippedValue, shipObj){
+			shipObj.equipment(true).forEach(gear => {
+				if(gear.masterId > 0){
+					equippedValue -= gear.master()["api_" + statName];
 				}
-			}
-			return EquippedValue;
+			});
+			return equippedValue;
 		},
 
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
-		modernizableStat :function(stat, cElm, Values){
-			$(".ship_"+stat, cElm).text( Values[this.equipMode+1] );
-			if(Values[0] == Values[1]){
-				$(".ship_"+stat, cElm).addClass("max");
-			}else{
-				$(".ship_"+stat, cElm).append("<span>+"+(Values[0] - Values[1])+"</span>");
+		modernizableStat :function(statAbbr, rowElm, valuesTuple){
+			const statElm = $(".ship_" + statAbbr, rowElm);
+			$(".stat_value", statElm).text(valuesTuple[this.equipMode + 1]);
+			if(valuesTuple[0] <= valuesTuple[1]){
+				$(".stat_left", statElm).hide();
+				statElm.addClass("max");
+			} else {
+				$(".stat_left", statElm).show()
+					.text("+" + (valuesTuple[0] - valuesTuple[1]));
 			}
 		},
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gearId){
+		equipImg :function(cElm, equipNum, equipSlot, gearId, shipId){
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gearId > 0){
 				var gear = KC3GearManager.get(gearId);
-				if(gear.itemId<=0){ element.hide(); return; }
-
-				$("img",element)
-					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(equipSlot))
+				if(gear.itemId <= 0){ element.hide(); return; }
+				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
+				$("img", element)
+					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+					.attr("title", gear.htmlTooltip(equipSlot, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span",element).css('visibility','hidden');
 			} else {
-				$("img",element).hide();
-				$("span",element).each(function(i,x){
+				$("img", element).hide();
+				$("span", element).each(function(i,x){
 					if(equipSlot > 0)
 						$(x).text(equipSlot);
 					else if(equipSlot === -2)
