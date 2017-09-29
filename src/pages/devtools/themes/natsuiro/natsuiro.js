@@ -2602,7 +2602,7 @@
 			$(".activity_modernization .mod_result_ar .mod_result_old").text( data.oldStats[3] );
 			$(".activity_modernization .mod_result_lk .mod_result_old").text( data.oldStats[4] );
 
-			$.each(["fp","tp","aa","ar","lk"], function(i, statName){
+			$.each(["fp","tp","aa","ar","lk","hp","as"], function(i, statName){
 				$(".activity_modernization .mod_result_"+statName+" .mod_result_old").text( data.oldStats[i] );
 
 				if(data.increase[i] > 0){

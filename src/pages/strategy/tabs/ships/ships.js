@@ -1020,7 +1020,7 @@
 						self.modernizableStat("yasen", this, thisShip.yasen);
 						self.modernizableStat("aa", this, thisShip.aa);
 						self.modernizableStat("ar", this, thisShip.ar);
-						self.modernizableStat("as", this, thisShip.as, 2, true);
+						self.modernizableStat("as", this, thisShip.as, 3, true);
 						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
 						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
 						self.modernizableStat("lk", this, thisShip.lk, 0, true);

@@ -40,7 +40,7 @@ KC3改 Ship Object
 		// corresponds to "api_kyouka" in the API,
 		// represents [fp,tp,aa,ar,lk] in the past.
 		// expanded to 7-length array since 2017-09-29
-		// last new twos are [hp,as]?
+		// last new twos are [hp,as]
 		this.mod = [0,0,0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
@@ -193,7 +193,9 @@ KC3改 Ship Object
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
 	KC3Ship.getMaxLevel = function(){ return 165; };
+	// hard-coded at `Core.swf/vo.UserShipData.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
+	// hard-coded at `Core.swf/vo.UserShipData.VAS`
 	KC3Ship.getMaxAswModernize = function() { return 9; };
 	KC3Ship.prototype.isMarried = function(){ return this.level >= KC3Ship.getMarriedLevel(); };
 	KC3Ship.prototype.levelClass = function(){
@@ -347,6 +349,7 @@ KC3改 Ship Object
 	// since 2017-09-29, asw stat can be modernized, known max value is within 9.
 	// but there is no info about asw stat from master ship, except initial asw of Taiyou.
 	KC3Ship.prototype.maxAswMod = function(){
+		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
 		var maxAswBeforeMarriage = this.as[1];
 		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize();
 		return maxAswBeforeMarriage === 0 ? 0 : maxModAsw;
@@ -1328,7 +1331,7 @@ KC3改 Ship Object
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
 	// also ship type Escort and CVL Taiyou are special cases
-	KC3Ship.prototype.canDoOASW = function () {
+	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(!this.rosterId || !this.masterId) { return false; }
 		// master Id for Isuzu K2
 		if (this.masterId === 141)
@@ -1346,8 +1349,10 @@ KC3改 Ship Object
 			: isTaiyouSeries ? 65
 			: 100;
 
+		// ship stats not updated in time when equipment changed, so take the diff if necessary
+		const shipAsw = this.as[0] + aswDiff;
 		// shortcut on the stricter condition first
-		if (this.as[0] < aswThreshold)
+		if (shipAsw < aswThreshold)
 			return false;
 
 		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
@@ -1373,7 +1378,7 @@ KC3改 Ship Object
 		if(this.master().api_stype == 1) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
-			return this.as[0] >= 75 && equipAswSum >= 4;
+			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
 		return hasSonar;
@@ -1908,14 +1913,17 @@ KC3改 Ship Object
 	/**
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
+	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
 	 */
-	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}) {
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}) {
 		if(!this.masterId) return {isShow: false};
 		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
 		let isShow = gunFit !== false;
 		const shipAacis = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(this));
 		isShow = isShow || shipAacis.length > 0;
-		const oaswPower = this.canDoOASW() ? this.antiSubWarfarePower() : false;
+		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
+		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
+		const oaswPower = this.canDoOASW(newEquipAsw - oldEquipAsw) ? this.antiSubWarfarePower() : false;
 		isShow = isShow || (oaswPower !== false);
 		// Possible TODO:
 		// can opening torpedo
