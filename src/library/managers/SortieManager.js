@@ -502,11 +502,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sortieName :function(diff){
-			var pvpData = JSON.parse(localStorage.statistics || "{}").pvp;
+			var pvpData = JSON.parse(localStorage.statistics || '{"pvp":{"win":0,"lose":0}}').pvp;
 			return this.isPvP() ? (
-				/* There's a possibility to encounter String bug
-				   -- if either win/lose counter is zero
-				*/
 				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
 			) : ("sortie" + (this.isOnUnsavedSortie() ? 0 : this.onSortie));
 		},
