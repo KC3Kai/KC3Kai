@@ -620,7 +620,7 @@ button, input, select, textarea {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#09a709;
 }
-.ship_list .ship_item .ship_lk .sub {
+.ship_list .ship_item .sup {
 	color:#999999;
 }
 .ship_list .ship_item .ship_equip span {

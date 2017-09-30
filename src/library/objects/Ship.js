@@ -37,7 +37,11 @@ KC3改 Ship Object
 		this.slots = [0,0,0,0,0];
 		this.slotnum = 0;
 		this.speed = 0;
-		this.mod = [0,0,0,0,0];
+		// corresponds to "api_kyouka" in the API,
+		// represents [fp,tp,aa,ar,lk] in the past.
+		// expanded to 7-length array since 2017-09-29
+		// last new twos are [hp,as]
+		this.mod = [0,0,0,0,0,0,0];
 		this.fuel = 0;
 		this.ammo = 0;
 		this.repair = [0,0,0];
@@ -189,6 +193,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
 	KC3Ship.getMaxLevel = function(){ return 165; };
+	// hard-coded at `Core.swf/vo.UserShipData.VHP`
+	KC3Ship.getMaxHpModernize = function() { return 2; };
+	// hard-coded at `Core.swf/vo.UserShipData.VAS`
+	KC3Ship.getMaxAswModernize = function() { return 9; };
 	KC3Ship.prototype.isMarried = function(){ return this.level >= KC3Ship.getMarriedLevel(); };
 	KC3Ship.prototype.levelClass = function(){
 		return this.level === KC3Ship.getMaxLevel() ? "married max" :
@@ -313,11 +321,12 @@ KC3改 Ship Object
 	/**
 	 * Return max HP of a ship. Static method for library.
 	 * Especially after marriage, api_taik[1] is hard to reach in game.
+	 * Since 2017-09-29, HP can be modernized, and known max value is within 2.
 	 * @return false if ship ID belongs to abyssal or nonexistence
 	 * @see http://wikiwiki.jp/kancolle/?%A5%B1%A5%C3%A5%B3%A5%F3%A5%AB%A5%C3%A5%B3%A5%AB%A5%EA
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E3%82%B1%E3%83%83%E3%82%B3%E3%83%B3%E3%82%AB%E3%83%83%E3%82%B3%E3%82%AB%E3%83%AA%E5%BE%8C%E3%81%AE%E8%80%90%E4%B9%85%E5%80%A4
 	 */
-	KC3Ship.getMaxHp = function(masterId, currentLevel){
+	KC3Ship.getMaxHp = function(masterId, currentLevel, isModernized){
 		var masterHpArr = KC3Master.isNotRegularShip(masterId) ? [] :
 			(KC3Master.ship(masterId) || {"api_taik":[]}).api_taik;
 		var masterHp = masterHpArr[0], maxLimitHp = masterHpArr[1];
@@ -330,10 +339,20 @@ KC3改 Ship Object
 			masterHp >= 30 ? masterHp + 5 :
 			masterHp >= 8  ? masterHp + 4 :
 			masterHp + 3) || false;
+		if(isModernized) expected += KC3Ship.getMaxHpModernize();
 		return maxLimitHp && expected > maxLimitHp ? maxLimitHp : expected;
 	};
-	KC3Ship.prototype.maxHp = function(){
-		return KC3Ship.getMaxHp(this.masterId, this.level);
+	KC3Ship.prototype.maxHp = function(isModernized){
+		return KC3Ship.getMaxHp(this.masterId, this.level, isModernized);
+	};
+
+	// since 2017-09-29, asw stat can be modernized, known max value is within 9.
+	// but there is no info about asw stat from master ship, except initial asw of Taiyou.
+	KC3Ship.prototype.maxAswMod = function(){
+		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
+		var maxAswBeforeMarriage = this.as[1];
+		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize();
+		return maxAswBeforeMarriage === 0 ? 0 : maxModAsw;
 	};
 
 	/**
@@ -522,8 +541,17 @@ KC3改 Ship Object
 		return total;
 	};
 
+	// faster naked asw stat method since frequently used
+	KC3Ship.prototype.nakedAsw = function(){
+		var asw = this.as[0];
+		var equipAsw = this.equipmentTotalStats("tais");
+		return asw - equipAsw;
+	};
+
 	KC3Ship.prototype.nakedLoS = function(){
-		return this.nakedStats("ls");
+		var los = this.ls[0];
+		var equipLos = this.equipmentTotalLoS();
+		return los - equipLos;
 	};
 
 	KC3Ship.prototype.equipmentTotalLoS = function (){
@@ -589,7 +617,10 @@ KC3改 Ship Object
 			tp: shipMst.api_raig[1] - shipMst.api_raig[0] - this.mod[1],
 			aa: shipMst.api_tyku[1] - shipMst.api_tyku[0] - this.mod[2],
 			ar: shipMst.api_souk[1] - shipMst.api_souk[0] - this.mod[3],
-			lk: this.lk[1] - this.lk[0]
+			lk: this.lk[1] - this.lk[0],
+			// or: shipMst.api_luck[1] - shipMst.api_luck[0] - this.mod[4],
+			hp: this.maxHp(true) - this.hp[1] - this.mod[5],
+			as: this.maxAswMod() - this.nakedAsw() - this.mod[6]
 		};
 		return !statAttr ? stats : stats[statAttr];
 	};
@@ -891,7 +922,7 @@ KC3改 Ship Object
 		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
 		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
 		const attackMethodConst = isAirAttack ? 8 : 13;
-		const nakedAsw = this.nakedStats("as");
+		const nakedAsw = this.nakedAsw();
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
 		const noCountEquipType2Ids = [1, 2, 10, 12, 13, 41, 45, 47];
@@ -1300,7 +1331,7 @@ KC3改 Ship Object
 	// - ASW stat >= 100
 	// also Isuzu K2 can do OASW unconditionally
 	// also ship type Escort and CVL Taiyou are special cases
-	KC3Ship.prototype.canDoOASW = function () {
+	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(!this.rosterId || !this.masterId) { return false; }
 		// master Id for Isuzu K2
 		if (this.masterId === 141)
@@ -1318,8 +1349,10 @@ KC3改 Ship Object
 			: isTaiyouSeries ? 65
 			: 100;
 
+		// ship stats not updated in time when equipment changed, so take the diff if necessary
+		const shipAsw = this.as[0] + aswDiff;
 		// shortcut on the stricter condition first
-		if (this.as[0] < aswThreshold)
+		if (shipAsw < aswThreshold)
 			return false;
 
 		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
@@ -1345,7 +1378,7 @@ KC3改 Ship Object
 		if(this.master().api_stype == 1) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
-			return this.as[0] >= 75 && equipAswSum >= 4;
+			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
 		return hasSonar;
@@ -1373,7 +1406,7 @@ KC3改 Ship Object
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
 		// if naked ASW stat not 0
-		return isAntiSubStype && this.nakedStats("as") > 0;
+		return isAntiSubStype && this.nakedAsw() > 0;
 	};
 
 	/**
@@ -1880,14 +1913,17 @@ KC3改 Ship Object
 	/**
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
+	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
 	 */
-	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}) {
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}) {
 		if(!this.masterId) return {isShow: false};
 		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
 		let isShow = gunFit !== false;
 		const shipAacis = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(this));
 		isShow = isShow || shipAacis.length > 0;
-		const oaswPower = this.canDoOASW() ? this.antiSubWarfarePower() : false;
+		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
+		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
+		const oaswPower = this.canDoOASW(newEquipAsw - oldEquipAsw) ? this.antiSubWarfarePower() : false;
 		isShow = isShow || (oaswPower !== false);
 		// Possible TODO:
 		// can opening torpedo
@@ -2030,7 +2066,9 @@ KC3改 Ship Object
 		);
 		$(".ship_morale span.value", tooltipBox).text(shipObj.morale);
 		$(".ship_exp_next span.value", tooltipBox).text(shipObj.exp[1]);
-		$(".stat_hp", tooltipBox).text(shipObj.hp[1]);
+		$(".stat_hp .current", tooltipBox).text(shipObj.hp[1]);
+		$(".stat_hp .mod", tooltipBox).text(signedNumber(modLeftStats.hp))
+			.toggle(!!modLeftStats.hp);
 		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
 		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
 			.toggle(!!modLeftStats.fp);
@@ -2064,6 +2102,8 @@ KC3改 Ship Object
 			.toggle(!!maxDiffStats.as);
 		$(".stat_as .equip", tooltipBox).text("({0})".format(nakedStats.as))
 			.toggle(!!equipDiffStats.as);
+		$(".stat_as .mod", tooltipBox).text(signedNumber(modLeftStats.as))
+			.toggle(!!modLeftStats.as);
 		$(".stat_sp", tooltipBox).text(shipObj.speedName())
 			.addClass(KC3Meta.shipSpeed(shipObj.speed, true));
 		$(".stat_ls .current", tooltipBox).text(shipObj.ls[0]);

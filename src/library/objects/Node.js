@@ -462,7 +462,7 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvps[0] > 0) {
+					if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
 						// string indicates prediction value
 						ship.mvp = this.predictedMvps[0] === position + 1 ?
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
@@ -473,7 +473,7 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvps[1] > 0) {
+					if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
 						ship.mvp = this.predictedMvps[1] === position + 1 ?
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
@@ -650,7 +650,8 @@ Used by SortieManager
 					} else {
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
 					}
-					if(this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
+					if(Array.isArray(this.predictedMvpsNight) &&
+						this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
 						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
@@ -1369,7 +1370,7 @@ Used by SortieManager
 	KC3Node.prototype.isMvpPredictionCapable = function(){
 		// Rule unknown: ship nearest to flagship does not get MVP when same damage dealt
 		const battleRank = this.predictedRankNight || this.predictedRank;
-		if(battleRank === "D" || battleRank === "E"){
+		if(!ConfigManager.info_btrank || battleRank === "D" || battleRank === "E"){
 			return false;
 		}
 		// Should no air battle and not combined fleet for now

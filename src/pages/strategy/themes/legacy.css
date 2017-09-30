@@ -568,7 +568,7 @@ body {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#52d052;
 }
-.ship_list .ship_item .ship_lk .sub {
+.ship_list .ship_item .sup {
 	color:#aaa;
 }
 .ship_list .ship_item .ship_equip span {
