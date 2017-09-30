@@ -2446,7 +2446,7 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)

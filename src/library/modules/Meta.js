@@ -142,21 +142,21 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 			return this;
 		},
-		getIcon: function(id, empty) {
+		getIcon: function(id, empty, useSeasonal = true) {
 			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
 				var path = KC3Master.isAbyssalShip(id) ? "abyss/" : "ships/";
 				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
 				// To prevent mess file renaming for images, patch it here.
 				id = path === "abyss/" ? id - 1000 : id;
-				// Show seasonal icon if found in meta, config in webstore package should be empty
-				if(path === "ships/" && ConfigManager.info_seasonal_icon
+				// Show seasonal icon if demanded, config enabled and found in meta
+				if(path === "ships/" && useSeasonal && ConfigManager.info_seasonal_icon
 					&& this._seasonal.length && this._seasonal.indexOf(id) > -1){
 					path = "shipseasonal/";
 				}
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
-			if(typeof empty === "undefined"){
+			if(empty === undefined){
 				return this._defaultIcon;
 			}
 			return empty;

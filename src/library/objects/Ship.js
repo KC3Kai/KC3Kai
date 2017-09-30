@@ -352,7 +352,7 @@ KC3改 Ship Object
 		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
 		var maxAswBeforeMarriage = this.as[1];
 		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize();
-		return maxAswBeforeMarriage === 0 ? 0 : maxModAsw;
+		return maxAswBeforeMarriage > 0 ? maxModAsw : 0;
 	};
 
 	/**

@@ -291,7 +291,7 @@ Uses KC3Quest objects to play around with
 				.css("text-indent", "-1em")
 				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
 				.prop("outerHTML");
-			if(questObj && Array.isArray(questObj.materials) && !questObj.materials.every(v => !v)){
+			if(questObj && Array.isArray(questObj.materials) && questObj.materials.some(v => v > 0)){
 				const buildRscItem = (name, value) => {
 					const rsc = $("<div><img />&nbsp;<span></span></div>");
 					$("img", rsc)
@@ -300,12 +300,11 @@ Uses KC3Quest objects to play around with
 					$("span", rsc).text(value || 0);
 					return rsc.html();
 				};
-				title += $("<p></p>").css("font-size", "11px")
-					.html(
-						["fuel", "ammo", "steel", "bauxite"]
-							.map((n, i) => buildRscItem(n, questObj.materials[i]))
-							.join("&emsp;")
-					).prop("outerHTML");
+				title += $("<p></p>").css("font-size", "11px").html(
+					["fuel", "ammo", "steel", "bauxite"]
+						.map((n, i) => buildRscItem(n, questObj.materials[i]))
+						.join("&emsp;")
+				).prop("outerHTML");
 			}
 			if(!!questMeta.memo){
 				title += $("<p></p>")
