@@ -1405,8 +1405,10 @@ KC3改 Ship Object
 		// DE, DD, CL, CLT, CT, AO(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
-		// if naked ASW stat not 0
-		return isAntiSubStype && this.nakedAsw() > 0;
+		// if max ASW stat before marriage (Lv99) not 0, can do ASW,
+		// which also used at `Core.swf/vo.UserShipData.hasTaisenAbility()`
+		// if as[1] === 0, naked asw stat should be 0, but as[0] may not.
+		return isAntiSubStype && this.as[1] > 0;
 	};
 
 	/**

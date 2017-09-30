@@ -1161,23 +1161,6 @@
 					$(this).parent().removeClass("complete");
 				}
 			};
-			var buildQuestTooltip = function(quest){
-				var title = "{0:code} {1:name}".format(
-					quest.code || "N/A",
-					quest.name || KC3Meta.term("UntranslatedQuest")
-					) + $("<p></p>").css("font-size", "11px")
-					.css("margin-left", "1em")
-					.css("text-indent", "-1em")
-					.text(quest.desc || KC3Meta.term("UntranslatedQuestTip"))
-					.prop("outerHTML");
-				if(!!quest.memo){
-					title += $("<p></p>")
-						.css("font-size", "11px")
-						.css("color", "#69a").text(quest.memo)
-						.prop("outerHTML");
-				}
-				return title;
-			};
 			$(".module.quests").empty();
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
@@ -1192,11 +1175,12 @@
 				}
 				if(quest.meta){
 					$(".quest_text", questBox).text(quest.meta().name)
-						.attr("title", buildQuestTooltip(quest.meta()))
+						.attr("titlealt", KC3QuestManager
+							.buildHtmlTooltip(quest.id, quest.meta(), false, false))
 						.lazyInitTooltip();
 				} else {
 					$(".quest_text", questBox).text(KC3Meta.term("UntranslatedQuest"))
-						.attr("title", KC3Meta.term("UntranslatedQuest"))
+						.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
 						.lazyInitTooltip();
 				}
 				$(".quest_track", questBox).text(quest.outputShort())
