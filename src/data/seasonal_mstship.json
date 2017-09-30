@@ -1,4 +1,13 @@
 {
+	"787": {
+		"api_id": 787,
+		"api_name": "浴衣朝霜",
+		"api_yomi": "あさしも",
+		"api_stype": 13,
+		"api_ctype": 80,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"788": {
 		"api_id": 788,
 		"api_name": "炒飯長波",

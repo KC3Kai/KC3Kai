@@ -1390,13 +1390,13 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_stats {
 	width:170px;
-	height:125px;
+	height:142px;
 }
 .module.activity .activity_modernization .mod_result_stat {
 	width:170px;
-	height:20px;
+	height:18px;
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 2px 0px;
 }
 .module.activity .activity_modernization .mod_result_icon {
 	width:20px;
@@ -1433,10 +1433,12 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_note {
 	width:170px;
-	height:20px;
+	height:30px;
 	color:#aaa;
 	font-size:12px;
+	line-height:15px;
 	text-align:center;
+	overflow:hidden;
 }
 
 /* ACTIVITY: Expedition Planner
