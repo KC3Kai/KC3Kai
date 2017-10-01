@@ -84,24 +84,27 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// MVP icon
 		if(this.shipData.mvp){
-			$(".mvp_icon", this.element).show()
-				.attr("src", "/assets/img/ui/mvp.png");
 			switch(this.shipData.mvp){
 				case "chosen": // a capable prediction
 					$(".mvp_icon img", this.element).css("opacity", 0.7)
+						.attr("src", "/assets/img/ui/mvp.png")
 						.css("-webkit-filter", "brightness(1.2)")
-						.css("filter", "brightness(1.2)");
+						.css("filter", "brightness(1.2)")
+						.toggle(ConfigManager.info_btmvp);
 					break;
 				case "candidate": // an incapable prediction
 					$(".mvp_icon img", this.element)
 						.attr("src", "/assets/img/ui/mdp.png")
 						.css("opacity", 0.7)
 						.css("-webkit-filter", "brightness(0.8)")
-						.css("filter", "brightness(0.8)");
+						.css("filter", "brightness(0.8)")
+						.toggle(ConfigManager.info_btmvp);
 					break;
 				default: // an indeed result
-					$(".mvp_icon img", this.element).css("opacity", 1)
-						.css("filter", "").css("-webkit-filter", "");
+					$(".mvp_icon img", this.element)
+						.attr("src", "/assets/img/ui/mvp.png")
+						.css("opacity", 1).css("filter", "").css("-webkit-filter", "")
+						.show();
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();
