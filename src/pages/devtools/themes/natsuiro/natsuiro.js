@@ -1069,8 +1069,9 @@
 					.lazyInitTooltip();
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(61) );
+			$(".count_1classMedals_or_mackerel").text( PlayerManager.consumables.mackerel || PlayerManager.consumables.firstClassMedals || 0 )
+				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.mackerel ? 68 : 61) )
+				.children("img").attr("src", "/assets/img/useitems/" + (PlayerManager.consumables.mackerel ? 68 : 61) + ".png");
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
 				.prev().attr("title", KC3Meta.useItemName(57) );
 			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
@@ -1081,8 +1082,9 @@
 				.prev().attr("title", KC3Meta.useItemName(52) );
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
 				+ (PlayerManager.consumables.irako || 0) )
-				.prev().attr("title", "{0} + {1}"
-					.format(KC3Meta.useItemName(54), KC3Meta.useItemName(59)) );
+				.prev().attr("title", "{0}x {1} + {2}x {3}"
+					.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
+						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
 			$(".consumables .consumable").hide();
 			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
 		},
