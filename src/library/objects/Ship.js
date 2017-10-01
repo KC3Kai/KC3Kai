@@ -1828,7 +1828,7 @@ KC3改 Ship Object
 	 * @see http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#fitarms
 	 */
-	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "Day") {
+	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "day") {
 		if(!this.rosterId || !this.masterId) { return 0; }
 		var result = 0;
 		// Fit bonus or overweight penalty for ship types:
@@ -1854,21 +1854,20 @@ KC3改 Ship Object
 			case 10: // for Battleships
 				// Large cal. main gun gives accuracy bonus if it's fit,
 				// and accuracy penalty if it's overweight.
-				const timeIndex = {"Day": 0, "Night": 1}[time];
 				const gunCountFitMap = {};
 				this.equipment(true).forEach(g => {
 					if(g.itemId && g.masterId && g.master().api_type[2] === 3) {
-						let fitValues = KC3Meta.gunfit(this.masterId, g.masterId) || [0, 0];
-						if(!Array.isArray(fitValues)) fitValues = [fitValues, 0];
-						const gunCount = (gunCountFitMap[g.masterId] || [0])[0];
-						gunCountFitMap[g.masterId] = [gunCount + 1, fitValues];
+						const fitInfo = KC3Meta.gunfit(this.masterId, g.masterId);
+						if(fitInfo && !fitInfo.unknown) {
+							const gunCount = (gunCountFitMap[fitInfo.weight] || [0])[0];
+							gunCountFitMap[fitInfo.weight] = [gunCount + 1, fitInfo];
+						}
 					}
 				});
 				$.each(gunCountFitMap, (_, fit) => {
 					const count = fit[0];
-					let value = fit[1][timeIndex] || 0;
-					if(value < 0 && this.isMarried())
-						value *= 0.6;
+					let value = fit[1][time] || 0;
+					if(this.isMarried()) value *= fit[1].married || 1;
 					result += value * Math.sqrt(count);
 				});
 				break;

@@ -656,34 +656,40 @@
 				$(".gunfitList").empty();
 				var gunfits = KC3Meta.sortedGunfits(shipData.api_id);
 				if (gunfits) {
+					let lastWeightClass = "";
+					let isOdd = false;
+					const fillGearFitValue = function(gunfitBox, value, className) {
+						$(".gearFit{0}".format(className), gunfitBox).text(
+							(value > 0 ? "+" : "") + value
+						);
+						$(".gearFit{0}".format(className), gunfitBox).addClass(
+							["fit_penalty", "fit_neutral", "fit_bonus"][Math.sign(value) + 1]
+						);
+					};
 					$.each(gunfits, function(idx, gunfitObj){
+						if(lastWeightClass != gunfitObj.weight) {
+							isOdd = !isOdd;
+							lastWeightClass = gunfitObj.weight;
+						}
 						const itemId = gunfitObj.id;
-						const fitValue = gunfitObj.bonus;
 						const gunfitBox = $(".tab_mstship .factory .fitgear").clone();
 						const gearObj = KC3Master.slotitem(itemId);
-						$(".gearName", gunfitBox).text(KC3Meta.gearName(gearObj.api_name))
-							.data("id", itemId).on("click", function(e) {
-								KC3StrategyTabs.gotoTab("mstgear", $(this).data("id"));
-							}).addClass("hover");
+						$(".gearName", gunfitBox).text(
+							"[{0}] {1}".format(itemId, KC3Meta.gearName(gearObj.api_name))
+						).data("id", itemId).on("click", function(e) {
+							KC3StrategyTabs.gotoTab("mstgear", $(this).data("id"));
+						}).addClass("hover");
 						
-						if (fitValue === "") {
+						if (gunfitObj.unknown === true) {
 							$(".gearFitDay", gunfitBox).text(KC3Meta.term("FitWeightUnknown"))
 								.addClass("fit_unknown");
 							$(".gearFitNight", gunfitBox).width(0);
 						} else {
-							var fillGearFitValue = function(value, className) {
-								value = Number(value);
-								$(".gearFit{0}".format(className), gunfitBox).text(
-									(value > 0 ? "+" : "") + value
-								);
-								$(".gearFit{0}".format(className), gunfitBox).addClass(
-									["fit_penalty", "fit_neutral", "fit_bonus"][Math.sign(value) + 1]
-								);
-							};
-							fillGearFitValue(fitValue[0], "Day");
-							fillGearFitValue(fitValue[1], "Night");
+							fillGearFitValue(gunfitBox, gunfitObj.day, "Day");
+							fillGearFitValue(gunfitBox, gunfitObj.night, "Night");
 						}
-						
+						gunfitBox.addClass(gunfitObj.weight);
+						gunfitBox.addClass(isOdd ? "odd" : "even");
 						gunfitBox.appendTo(".gunfitList");
 					});
 					$(".gunfit").parent().prev().show();
