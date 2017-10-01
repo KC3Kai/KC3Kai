@@ -78,8 +78,7 @@
 			},
 			"weight3": {
 				"day": 1,
-				"night": 0,
-				"married": 0.6
+				"night": 0
 			},
 			"weight4": {
 				"day": -3,
@@ -133,19 +132,23 @@
 			},
 			"weight4": {
 				"day": -3,
-				"night": -3
+				"night": -3,
+				"married": 0.6
 			},
 			"weight5": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			},
 			"weight6": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			},
 			"weight7": {
 				"day": -18,
-				"night": -18
+				"night": -18,
+				"married": 0.6
 			}
 		}
 	},
@@ -154,12 +157,13 @@
 	
 	"441": {
 		"weightClass": {
-			"weight1": [7, 76, 103, 104, 114, 190, 192, 231, 232],
-			"weight2": [133, 137],
-			"weight3": [161, 183],
-			"weight4": [117],
-			"weight5": [8, 105, 236],
-			"weight6": [9],
+			"weight1": [231, 232],
+			"weight2": [7, 76, 103, 104, 114, 190, 192],
+			"weight3": [133, 137],
+			"weight4": [161, 183],
+			"weight5": [117],
+			"weight6": [8, 105, 236],
+			"weight7": [9],
 			"unknown": [245, 246]
 		},
 		"accuracy": {
@@ -168,24 +172,32 @@
 				"night": 4
 			},
 			"weight2": {
+				"day": 4,
+				"night": 4
+			},
+			"weight3": {
 				"day": 1,
 				"night": 0
 			},
-			"weight3": {
-				"day": -5,
-				"night": -5
-			},
 			"weight4": {
-				"day": -7,
-				"night": -7
+				"day": -5,
+				"night": -5,
+				"married": 0.6
 			},
 			"weight5": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			},
 			"weight6": {
+				"day": -7,
+				"night": -7,
+				"married": 0.6
+			},
+			"weight7": {
 				"day": -10,
-				"night": -10
+				"night": -10,
+				"married": 0.6
 			}
 		}
 	},
@@ -219,19 +231,23 @@
 			},
 			"weight4": {
 				"day": -2,
-				"night": 0
+				"night": 0,
+				"married": 0.6
 			},
 			"weight5": {
 				"day": -5,
-				"night": -5
+				"night": -5,
+				"married": 0.6
 			},
 			"weight6": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			},
 			"weight7": {
 				"day": -10,
-				"night": -10
+				"night": -10,
+				"married": 0.6
 			}
 		}
 	},
@@ -239,13 +255,13 @@
 	
 	"439": {
 		"weightClass": {
-			"weight1": [7, 76, 103, 104, 114, 190, 192, 231, 232],
+			"weight1": [7, 76, 103, 104, 114, 190, 192],
 			"weight2": [8, 105, 236],
 			"weight3": [133, 137],
 			"weight4": [161, 183],
 			"weight5": [117],
 			"weight6": [9],
-			"unknown": [245, 246]
+			"unknown": [231, 232, 245, 246]
 		},
 		"accuracy": {
 			"weight1": {
@@ -266,11 +282,13 @@
 			},
 			"weight5": {
 				"day": -3,
-				"night": -3
+				"night": -3,
+				"married": 0.6
 			},
 			"weight6": {
 				"day": -10,
-				"night": -10
+				"night": -10,
+				"married": 0.6
 			}
 		}
 	},
@@ -310,11 +328,13 @@
 			},
 			"weight6": {
 				"day": -3,
-				"night": -3
+				"night": -3,
+				"married": 0.6
 			},
 			"weight7": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			}
 		}
 	},
@@ -356,11 +376,13 @@
 			},
 			"weight6": {
 				"day": -3,
-				"night": -5
+				"night": -5,
+				"married": 0.6
 			},
 			"weight7": {
 				"day": -7,
-				"night": -8
+				"night": -8,
+				"married": 0.6
 			}
 		}
 	},
@@ -409,11 +431,13 @@
 			},
 			"weight7": {
 				"day": -3,
-				"night": -3
+				"night": -3,
+				"married": 0.6
 			},
 			"weight8": {
 				"day": -7,
-				"night": -7
+				"night": -7,
+				"married": 0.6
 			}
 		}
 	},
@@ -448,7 +472,8 @@
 			},
 			"weight4": {
 				"day": -2,
-				"night": 0
+				"night": 0,
+				"married": 0.6
 			},
 			"weight5": {
 				"day": 0,
@@ -456,15 +481,18 @@
 			},
 			"weight6": {
 				"day": -2,
-				"night": -2
+				"night": -2,
+				"married": 0.6
 			},
 			"weight7": {
 				"day": -3,
-				"night": -3
+				"night": -3,
+				"married": 0.6
 			},
 			"weight8": {
 				"day": -5,
-				"night": -5
+				"night": -5,
+				"married": 0.6
 			}
 		}
 	},
@@ -484,15 +512,18 @@
 			},
 			"weight2": {
 				"day": -5,
-				"night": -5
+				"night": -5,
+				"married": 0.6
 			},
 			"weight3": {
 				"day": -5,
-				"night": -5
+				"night": -5,
+				"married": 0.6
 			},
 			"weight4": {
 				"day": -12,
-				"night": -12
+				"night": -12,
+				"married": 0.6
 			}
 		}
 	},
