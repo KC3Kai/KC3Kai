@@ -1899,17 +1899,16 @@ button, input, select, textarea {
 	border:1px solid #3e3e3e !important;
 	background:#222 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+.tab_mstship .shipInfo .aaci .aaciPattern.odd,
+.tab_mstship .shipInfo .gunfit .fitgear.odd {
 	background:#444 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.even {
+.tab_mstship .shipInfo .aaci .aaciPattern.even,
+.tab_mstship .shipInfo .gunfit .fitgear.even {
 	background:#333 !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
 	background:#ed3;
-}
-.tab_mstship .shipInfo .gunfit .fitgear {
-	background:#333 !important;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitDay,
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {

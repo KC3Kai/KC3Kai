@@ -782,35 +782,67 @@ Provides access to data on built-in JSON files
 		},
 		
 		gunfit :function(shipMstId, itemMstId){
-			if (this._gunfit[shipMstId] === undefined) {
+			let fitInfo = this._gunfit[shipMstId];
+			// redirect to the same class ship, no loop redirection
+			if(typeof fitInfo === "number") {
+				fitInfo = this._gunfit[fitInfo];
+			}
+			if(fitInfo === undefined) {
 				return false;
 			}
-			if (itemMstId !== undefined) {
-				if (this._gunfit[shipMstId][itemMstId] !== undefined) {
-					return this._gunfit[shipMstId][itemMstId];
-				} else {
+			if(itemMstId !== undefined) {
+				const weightClassDef = fitInfo.weightClass;
+				if(weightClassDef === undefined) {
 					return false;
 				}
+				const gunId = parseInt(itemMstId, 10);
+				const weightClass = Object.keys(weightClassDef)
+					.find(weight => weightClassDef[weight].indexOf(gunId) > -1);
+				if(weightClass === undefined) {
+					return false;
+				}
+				const weightAccuracy = (fitInfo.accuracy || {})[weightClass];
+				if(weightAccuracy) {
+					// clone and bind weight class name and id to result
+					return Object.assign({}, weightAccuracy, {
+						weight: weightClass,
+						id: gunId
+					});
+				} else {
+					// no accuracy found means gun exists but bonus/penalty unverified
+					return {
+						weight: weightClass,
+						id: gunId,
+						unknown: true
+					};
+				}
 			} else {
-				return this._gunfit[shipMstId];
+				return fitInfo;
 			}
 		},
 		
 		sortedGunfits :function(shipMstId){
-			var gunfits = this.gunfit(shipMstId);
+			const gunfits = this.gunfit(shipMstId);
 			if(gunfits !== false) {
-				var sortedGearIds = Object.keys(gunfits).sort((a, b) =>
-						// Unknown by ID asc
-						gunfits[a] === "" && gunfits[b] === "" ? Number(a) - Number(b) :
-						// Unknown always go last
-						gunfits[a] === "" ? Infinity :
-						gunfits[b] === "" ? -Infinity :
-						// By day bonus desc
-						gunfits[b][0] - gunfits[a][0]
-						// Fallback to ID asc
-						|| Number(a) - Number(b)
+				const names = gunfits.weightClass;
+				const gearIds = [];
+				Object.keys(names).forEach(name => {
+					gearIds.push(...names[name]);
+				});
+				const gearInfo = gearIds.map(id => this.gunfit(shipMstId, id));
+				const sortedGearInfo = gearInfo.sort((a, b) =>
+					// Unknown by ID asc
+					a.unknown === true && b.unknown === true ? a.id - b.id :
+					// Unknown always go last
+					a.unknown === true ? Infinity :
+					b.unknown === true ? -Infinity :
+					// By day bonus desc
+					b.day - a.day
+					// Fallback to weight and ID asc
+					|| a.weight.localeCompare(b.weight)
+					|| a.id - b.id
 				);
-				return sortedGearIds.map(id => ({id: id, bonus: gunfits[id]}));
+				return sortedGearInfo;
 			}
 			return false;
 		}

@@ -569,6 +569,11 @@
 	padding:2px 5px;
 	border-radius:6px;
 	line-height:20px;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.odd {
+	background:#ddd;
+}
+.tab_mstship .shipInfo .gunfit .fitgear.even {
 	background:#ccc;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearName {

@@ -3422,12 +3422,12 @@
 			if (data.gunFit !== false) {
 				const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 				$(".fit_current span", gunfitBox).removeClass("fit_bonus fit_penalty");
-				if(data.gunFit === "") {
+				if(data.gunFit.unknown === true) {
 					$(".fit_current .fit_unknown", gunfitBox).show();
 					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).hide();
 				} else {
-					const fitDay = parseInt(data.gunFit[0], 10),
-						fitNight = parseInt(data.gunFit[1], 10);
+					const fitDay = data.gunFit.day,
+						fitNight = data.gunFit.night;
 					$(".fit_current .fit_day span", gunfitBox)
 						.text(signedNumber(fitDay))
 						.addClass(fitDay < 0 ? "fit_penalty" : fitDay > 0 ? "fit_bonus" : "");
@@ -3491,8 +3491,6 @@
 					}
 					$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
 					$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
-					// no longer auto fit height
-					//$(".activity_gunfit .aaci").height(data.gunFit !== false ? 82 : 134);
 					if(idx === 0) aaciBox.addClass("triggerable");
 					aaciBox.appendTo(".activity_gunfit .aaciList");
 				});

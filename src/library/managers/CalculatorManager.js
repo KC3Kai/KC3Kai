@@ -263,7 +263,7 @@
                         exceptions[shipId][gearId] = aaStat;
                     }
                 } else if(gearMst.api_type[1] === 7) {
-                    // sum recon planes not participate normal air battle but LBAA battle,
+                    // sum recon planes not participate normal air battle but LBAS battle,
                     // seaplane fighters/bombers will not be dropped here
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
