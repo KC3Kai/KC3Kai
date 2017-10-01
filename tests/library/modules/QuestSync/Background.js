@@ -36,7 +36,7 @@ QUnit.module('modules > QuestSync', function () {
     });
 
     QUnit.test('bad json', function (assert) {
-      assert.throws(() => { this.subject({ key: 'config', oldValue: 'blah' }); });
+      assert.throws(() => { this.subject({ key: 'config', oldValue: 'blah', newValue: 'null' }); });
     });
   });
 
