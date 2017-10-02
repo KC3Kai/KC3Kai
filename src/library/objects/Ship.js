@@ -787,13 +787,13 @@ KC3改 Ship Object
 	Get fighter power of this ship as an array
 	with consideration to min-max bonus
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.fighterBounds = function(){
+	KC3Ship.prototype.fighterBounds = function(forLbas = false){
 		if(!this.rosterId){ return 0; }
 		var GearPowers = [
-			this.equipment(0).fighterBounds( this.slots[0] ),
-			this.equipment(1).fighterBounds( this.slots[1] ),
-			this.equipment(2).fighterBounds( this.slots[2] ),
-			this.equipment(3).fighterBounds( this.slots[3] )
+			this.equipment(0).fighterBounds( this.slots[0], forLbas ),
+			this.equipment(1).fighterBounds( this.slots[1], forLbas ),
+			this.equipment(2).fighterBounds( this.slots[2], forLbas ),
+			this.equipment(3).fighterBounds( this.slots[3], forLbas )
 		];
 		return [
 			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],

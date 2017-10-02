@@ -1722,12 +1722,12 @@
 							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
 						});
 						
-						// Regular fighter power on sortie
-						const [afpLower, afpHigher] = shipObj.fighterBounds();
+						// Regular fighter power on sortie, LBAS counts recon planes too
+						const [afpLower, afpHigher] = shipObj.fighterBounds(true);
 						$(".base_afp .base_stat_value", baseBox).text(
 							!!afpLower ? afpLower + "~" + afpHigher : KC3Meta.term("None")
 						);
-						// Land-base interception power on air defense
+						// Land-base interception power on air defense, ofc recon planes in
 						const ifp = shipObj.interceptionPower();
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
