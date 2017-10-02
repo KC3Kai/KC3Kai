@@ -89,7 +89,8 @@ KC3改 Ship Box for Natsuiro theme
 					$(".mvp_icon img", this.element).css("opacity", 0.7)
 						.attr("src", "/assets/img/ui/mvp.png")
 						.css("-webkit-filter", "brightness(1.2)")
-						.css("filter", "brightness(1.2)")
+						.css("filter", "brightness(1.2)");
+					$(".mvp_icon", this.element)
 						.toggle(ConfigManager.info_btmvp);
 					break;
 				case "candidate": // an incapable prediction
@@ -97,14 +98,15 @@ KC3改 Ship Box for Natsuiro theme
 						.attr("src", "/assets/img/ui/mdp.png")
 						.css("opacity", 0.7)
 						.css("-webkit-filter", "brightness(0.8)")
-						.css("filter", "brightness(0.8)")
+						.css("filter", "brightness(0.8)");
+					$(".mvp_icon", this.element)
 						.toggle(ConfigManager.info_btmvp);
 					break;
 				default: // an indeed result
 					$(".mvp_icon img", this.element)
 						.attr("src", "/assets/img/ui/mvp.png")
-						.css("opacity", 1).css("filter", "").css("-webkit-filter", "")
-						.show();
+						.css("opacity", 1).css("filter", "").css("-webkit-filter", "");
+					$(".mvp_icon", this.element).show();
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();
