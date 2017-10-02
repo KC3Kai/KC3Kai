@@ -401,7 +401,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: [ThisShip.hp[1], ThisShip.isMarried() ? ThisShip.maxHp(true) : MasterShip.api_taik[0]+KC3Ship.getMaxHpModernize(), MasterShip.api_taik[0]+ThisShip.mod[5] ],
+				hp: [ThisShip.hp[1], ThisShip.isMarried() ? ThisShip.maxHp(true) : MasterShip.api_taik[0]+KC3Ship.getMaxHpModernize(), MasterShip.api_taik[0] ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
@@ -883,7 +883,7 @@
 			define("morale", "Morale",
 				   function(x) { return -x.morale; });
 			define("hp", "HP",
-				   function(x) { return -x.hp[2]; });
+				   function(x) { return -x.hp[0]; });
 			define("fp", "Firepower",
 				   function(x) { return -x.fp[this.equipMode+1]; });
 			define("tp", "Torpedo",
@@ -895,7 +895,7 @@
 			define("ar", "Armor",
 				   function(x) { return -x.ar[this.equipMode+1]; });
 			define("as", "ASW",
-				   function(x) { return -x.as[this.equipMode]; });
+				   function(x) { return -x.as[this.equipMode ? 3 : 0]; });
 			define("ev", "Evasion",
 				   function(x) { return -x.ev[this.equipMode]; });
 			define("ls", "LoS",
@@ -1014,16 +1014,16 @@
 						$(".ship_name", this).text( showName )
 							.attr("title", showName);
 						// Recomputes stats
-						self.modernizableStat("hp", this, thisShip.hp, 0, true);
-						self.modernizableStat("fp", this, thisShip.fp);
-						self.modernizableStat("tp", this, thisShip.tp);
+						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
+						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
+						self.modernizableStat("tp", this, thisShip.tp, 2, 1);
 						self.modernizableStat("yasen", this, thisShip.yasen);
-						self.modernizableStat("aa", this, thisShip.aa);
-						self.modernizableStat("ar", this, thisShip.ar);
-						self.modernizableStat("as", this, thisShip.as, 3, true);
+						self.modernizableStat("aa", this, thisShip.aa, 2, 1);
+						self.modernizableStat("ar", this, thisShip.ar, 2, 1);
+						self.modernizableStat("as", this, thisShip.as, 3, 0, true);
 						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
 						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
-						self.modernizableStat("lk", this, thisShip.lk, 0, true);
+						self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
 						// Reset heart-lock icon
 						$(".ship_lock img", this).attr("src",
 							"/assets/img/client/heartlock{0}.png"
@@ -1098,9 +1098,14 @@
 
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
-		modernizableStat :function(statAbbr, rowElm, valuesTuple, equipStatIndex = 1, isSup = false){
+		modernizableStat :function(statAbbr, rowElm, valuesTuple,
+				equipStatIndex = 2, noEquipStatIndex = 1, isSup = false){
 			const statElm = $(".ship_" + statAbbr, rowElm);
-			$(".stat_value", statElm).text(valuesTuple[equipStatIndex > 0 ? (this.equipMode ? equipStatIndex : 0) : 0]);
+			$(".stat_value", statElm).text(
+				valuesTuple[equipStatIndex > 0 ?
+					(this.equipMode ? equipStatIndex : noEquipStatIndex) :
+					noEquipStatIndex]
+			);
 			if(isSup){
 				if(valuesTuple[0] >= valuesTuple[1]){
 					statElm.addClass("max");
