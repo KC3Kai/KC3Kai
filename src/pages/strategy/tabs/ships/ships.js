@@ -1100,7 +1100,7 @@
 		--------------------------------------------*/
 		modernizableStat :function(statAbbr, rowElm, valuesTuple, equipStatIndex = 1, isSup = false){
 			const statElm = $(".ship_" + statAbbr, rowElm);
-			$(".stat_value", statElm).text(valuesTuple[equipStatIndex > 0 ? (this.equipMode ? equipStatIndex : 0) : 0]);
+			$(".stat_value", statElm).text(valuesTuple[equipStatIndex > 0 ? (this.equipMode ? equipStatIndex + 1 : 1) : 0]);
 			if(isSup){
 				if(valuesTuple[0] >= valuesTuple[1]){
 					statElm.addClass("max");
