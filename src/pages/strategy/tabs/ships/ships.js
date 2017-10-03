@@ -1046,7 +1046,8 @@
 							targetElm.tooltip({
 								position: { my: "left top", at: "left+25 bottom" },
 								items: "div",
-								content: tooltipBox.prop("outerHTML")
+								content: tooltipBox.prop("outerHTML"),
+								open: KC3Ship.onShipTooltipOpen
 							});
 						}
 						// Rebind click handlers

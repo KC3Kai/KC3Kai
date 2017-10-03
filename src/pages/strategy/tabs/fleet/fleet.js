@@ -344,11 +344,16 @@
 		showAllKCFleets: function(kcFleetArray) {
 			var self = this;
 			// Empty fleet list
-			$(".tab_fleet .fleet_list").empty();
+			$(".tab_fleet .fleet_list").hide().empty();
 			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet );
 			});
-			$(".tab_fleet .fleet_list").createChildrenTooltips();
+			$(".tab_fleet .fleet_list").createChildrenTooltips().show(100, function() {
+				$(".ship_name", $(this)).each(function() {
+					if(KC3StrategyTabs.isTextEllipsis(this))
+						$(this).attr("title", $(this).text());
+				});
+			});
 		},
 
 		/* Show single fleet
@@ -415,9 +420,7 @@
 			});
 			$(".ship_lv_val", shipBox).text( kcShip.level );
 			var nameBox = $(".ship_name", shipBox);
-			nameBox.text( kcShip.name() );
-			if (KC3StrategyTabs.isTextEllipsis(nameBox))
-				nameBox.attr("title", kcShip.name());
+			nameBox.text( kcShip.name() ).lazyInitTooltip();
 
 			// Only available for current fleet as no ship attribute omitted
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
@@ -427,7 +430,8 @@
 				$(".ship_hover", shipBox).tooltip({
 					position: { my: "left top", at: "right+10 top" },
 					items: "div",
-					content: tooltipBox.prop("outerHTML")
+					content: tooltipBox.prop("outerHTML"),
+					open: KC3Ship.onShipTooltipOpen
 				});
 			}
 

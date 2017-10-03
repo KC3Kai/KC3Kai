@@ -225,6 +225,15 @@ body {
 .ui-tooltip-content .ship_tooltip .stat_wide {
 	width:249px;
 }
+.ui-tooltip-content .ship_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+	-webkit-animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	0% { margin-left: 0px; }
+	20% { margin-left: 0px; }
+	100% { margin-left: var(--maxOverflow, -50px); }
+}
 .ui-tooltip-content .ship_tooltip .aa_col {
 	width:49px;
 	height:19px;
