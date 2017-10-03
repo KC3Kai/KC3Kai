@@ -398,7 +398,7 @@
 		/* Show single ship
 		   --------------------------------------------*/
 		showKCShip: function(fleetBox, kcShip) {
-			if (!kcShip || kcShip.masterId === 0) return;
+			if (!kcShip || !kcShip.masterId) return;
 
 			var self = this;
 			var shipDb = WhoCallsTheFleetDb.getShipStat(kcShip.masterId);
@@ -444,7 +444,7 @@
 		/* Show single equipment
 		   --------------------------------------------*/
 		showKCGear: function(gearBox, kcGear, capacity, kcShip) {
-			if (kcGear.masterId === 0) {
+			if (!kcGear.masterId) {
 				gearBox.hide();
 				return;
 			}
@@ -471,6 +471,7 @@
 
 		createKCFleetObject: function(fleetObj) {
 			var fleet = new KC3Fleet();
+			if(!fleetObj) return fleet;
 			fleet.name = fleetObj.name;
 			fleet.ships = [ -1, -1, -1, -1, -1, -1 ];
 			if (!fleetObj) return;

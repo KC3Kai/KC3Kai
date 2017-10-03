@@ -71,39 +71,11 @@
 				}
 
 				questDiv.text(questMeta.code);
-				questDiv.attr("title", this.buildQuestTooltip(questId, questMeta));
+				questDiv.attr("title", KC3QuestManager.buildHtmlTooltip(questId, questMeta));
 				$(".ship_quests", shipRow).append(questDiv);
 			}
 		}
 
-		buildQuestTooltip(questId, questMeta) {
-			let title = "[{0:id}] {1:code} {2:name}".format(
-				questId, questMeta.code || "N/A",
-				questMeta.name || KC3Meta.term("UntranslatedQuest"));
-			title += $("<p></p>").css("font-size", "11px")
-				.css("margin-left", "1em")
-				.css("text-indent", "-1em")
-				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
-				.prop("outerHTML");
-			if(!!questMeta.memo) {
-				title += $("<p></p>")
-					.css("font-size", "11px")
-					.css("color", "#69a").text(questMeta.memo)
-					.prop("outerHTML");
-			}
-			if(!!questMeta.unlock) {
-				for(const i in questMeta.unlock) {
-					const cq = KC3Meta.quest(questMeta.unlock[i]);
-					if(!!cq) title += "&emsp;" +
-						$("<span></span>").css("font-size", "11px")
-							.css("color", "#a96")
-							.text("-> [{0:id}] {1:code} {2:name}"
-								.format(questMeta.unlock[i], cq.code || "N/A", cq.name)
-							).prop("outerHTML") + "<br/>";
-				}
-			}
-			return title;
-		}
 	}
 
 	KC3StrategyTabs.shipquests = new KC3StrategyTab("shipquests");
