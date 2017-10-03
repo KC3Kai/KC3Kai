@@ -60,10 +60,14 @@
   QuestSync.checkWasSyncEnabled = ({ key, newValue, oldValue } = {}) => {
     if (key !== 'config') { return false; }
 
-    const { chromeSyncQuests: wasEnabled } = JSON.parse(oldValue);
+    const oldConfig = JSON.parse(oldValue);
+    if(!oldConfig) { return false; }
+    const { chromeSyncQuests: wasEnabled } = oldConfig;
     if (wasEnabled) { return false; }
 
-    const { chromeSyncQuests: isEnabled } = JSON.parse(newValue);
+    const newConfig = JSON.parse(newValue);
+    if(!newConfig) { return false; }
+    const { chromeSyncQuests: isEnabled } = newConfig;
     return isEnabled;
   };
 
@@ -108,7 +112,7 @@
       throw new Error(`Bad syncStructVersion: ${remoteData.syncStructVersion}`);
     }
 
-    // shortcircuit if no changes
+    // short-circuit if no changes
     if (remoteData.quests === localStorage.quests) {
       console.info('No changes to be made'); /* RemoveLogging:skip */
       return false;

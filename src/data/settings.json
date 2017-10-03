@@ -154,6 +154,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btmvp",
+				"name" : "SettingsBattleMvp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_btstamp",
 				"name" : "SettingsBattleStamp",
 				"type" : "check",

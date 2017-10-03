@@ -197,6 +197,7 @@
      * @param {Array[]} enemyShipSlots - master ID array of equip slots, optional.
      *                                   length should be the same with enemyFleetShips.
      * @param {Array[]} enemySlotSizes - capacities of equip slots, optional, same length either.
+     * @param {boolean} forLbas - specify true if power for LBAS battle requested.
      * @return {Array} a tuple contains [
      *           computed fighter power (without improvement and proficiency bonus),
      *           sum of known slot capacity,
@@ -207,7 +208,7 @@
      *         ]
      * @see Fleet, Ship, Gear classes to compute fighter power of player fleet.
      */
-    const enemyFighterPower = (enemyFleetShips, enemyShipSlots, enemySlotSizes) => {
+    const enemyFighterPower = (enemyFleetShips, enemyShipSlots, enemySlotSizes, forLbas) => {
         var totalPower = false;
         var totalCapacity = 0;
         var noAirPowerCapacity = 0;
@@ -247,7 +248,9 @@
                     exceptions[shipId][gearId] = null;
                     continue;
                 }
-                if(KC3GearManager.antiAirFighterType2Ids.includes(gearMst.api_type[2])) {
+                // for LBAS battle, recon planes participate, and their fighter power may be counted
+                if(KC3GearManager.antiAirFighterType2Ids.includes(gearMst.api_type[2])
+                    || (!!forLbas && KC3GearManager.landBaseReconnType2Ids.includes(gearMst.api_type[2]))) {
                     const aaStat = gearMst.api_tyku || 0;
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
@@ -263,7 +266,7 @@
                         exceptions[shipId][gearId] = aaStat;
                     }
                 } else if(gearMst.api_type[1] === 7) {
-                    // sum recon planes not participate normal air battle but LBAA battle,
+                    // sum recon planes not participate in normal air battle but LBAS battle,
                     // seaplane fighters/bombers will not be dropped here
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {

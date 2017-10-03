@@ -352,7 +352,7 @@ KC3改 Ship Object
 		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
 		var maxAswBeforeMarriage = this.as[1];
 		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize();
-		return maxAswBeforeMarriage === 0 ? 0 : maxModAsw;
+		return maxAswBeforeMarriage > 0 ? maxModAsw : 0;
 	};
 
 	/**
@@ -787,13 +787,13 @@ KC3改 Ship Object
 	Get fighter power of this ship as an array
 	with consideration to min-max bonus
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.fighterBounds = function(){
+	KC3Ship.prototype.fighterBounds = function(forLbas = false){
 		if(!this.rosterId){ return 0; }
 		var GearPowers = [
-			this.equipment(0).fighterBounds( this.slots[0] ),
-			this.equipment(1).fighterBounds( this.slots[1] ),
-			this.equipment(2).fighterBounds( this.slots[2] ),
-			this.equipment(3).fighterBounds( this.slots[3] )
+			this.equipment(0).fighterBounds( this.slots[0], forLbas ),
+			this.equipment(1).fighterBounds( this.slots[1], forLbas ),
+			this.equipment(2).fighterBounds( this.slots[2], forLbas ),
+			this.equipment(3).fighterBounds( this.slots[3], forLbas )
 		];
 		return [
 			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
@@ -1405,8 +1405,10 @@ KC3改 Ship Object
 		// DE, DD, CL, CLT, CT, AO(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
-		// if naked ASW stat not 0
-		return isAntiSubStype && this.nakedAsw() > 0;
+		// if max ASW stat before marriage (Lv99) not 0, can do ASW,
+		// which also used at `Core.swf/vo.UserShipData.hasTaisenAbility()`
+		// if as[1] === 0, naked asw stat should be 0, but as[0] may not.
+		return isAntiSubStype && this.as[1] > 0;
 	};
 
 	/**
@@ -1488,12 +1490,12 @@ KC3改 Ship Object
 		if(targetShip.api_soku === 0) {
 			// most priority: Toku Daihatsu + 11th Tank
 			if(this.hasEquipment(230)) return 5;
-			// Abyssal installation could be landing attacked
+			// Abyssal hard land installation could be landing attacked
 			const isTargetLandable =
 				[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
 					1665, 1666, 1667, // Artillery Imp
 					1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
-					1753, 1754, // Summer Supply Depot Princess
+					// Summer Supply Depot Princess not counted?
 				].includes(targetShipMasterId);
 			const isThisSubmarine = [13, 14].includes(this.master().api_stype);
 			// T2 Tank
@@ -1522,8 +1524,9 @@ KC3改 Ship Object
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
 	 * @param {number} airBattleId - air battle result id, to indicate if special attacks can be triggered,
 	 *        special attacks require AS / AS +, default is AS+.
-	 * @return {Array} day time attack type constants tuple: [name, cutin id / landing id, cutin name, modifier].
-	 *         cutin id is partially from `api_hougeki?.api_at_type` which indicates the special attacks.
+	 * @return {Array} day time attack type constants tuple:
+	 *         [name, regular attack id / cutin id / landing id, cutin name, modifier].
+	 *         cutin id is from `api_hougeki?.api_at_type` which indicates the special attacks.
 	 *         NOTE: Not take 'can not be targeted' into account yet,
 	 *         such as: CV/CVB against submarine; submarine against land installation;
 	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
@@ -1587,31 +1590,32 @@ KC3改 Ship Object
 				return ["LandingAttack", landingAttackType];
 			}
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
-			if(hasRocketLauncher) return ["Rocket", 0];
+			// no such ID -1, just mean higher priority
+			if(hasRocketLauncher) return ["Rocket", -1];
 		}
 		// is this ship Hayasui Kai
 		if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
 				const aswEquip = this.equipment(false).find(g => g.isAswAircraft(false));
-				return aswEquip ? ["AirAttack", 7] : ["DepthCharge", 8];
+				return aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2];
 			}
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
 			if(this.hasEquipmentType(2, 8))
-				return ["AirAttack", 7];
+				return ["AirAttack", 1];
 			else
 				return ["SingleAttack", 0];
 		}
 		if(isThisCarrier) {
-			return ["AirAttack", 7];
+			return ["AirAttack", 1];
 		}
 		// only torpedo attack possible if this ship is submarine (but not shelling phase)
 		if(isThisSubmarine) {
-			return ["Torpedo", 9];
+			return ["Torpedo", 3];
 		}
 		if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA can only air attack against submarine
-			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 7] : ["DepthCharge", 8];
+			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2];
 		}
 		
 		// default single shelling fire attack
@@ -1732,7 +1736,7 @@ KC3改 Ship Object
 			if(hasRocketLauncher) return ["Rocket", -1];
 		}
 		if(targetShipType.isSubmarine && isThisLightCarrier) {
-			return ["DepthCharge", 8];
+			return ["DepthCharge", 2];
 		}
 		if(isThisCarrier) {
 			// these carriers can only do shelling attack
@@ -1752,18 +1756,18 @@ KC3改 Ship Object
 				!this.hasEquipmentType(2, [7, 8])) return ["SingleAttack", 0];
 			// Ark Royal (Kai) can air attack if and only if Swordfish variants equipped,
 			// but here just indicates 'attack type', not 'can attack or not', see canDoNightAttack
-			return ["AirAttack", 7];
+			return ["AirAttack", 1];
 		}
 		if(isThisSubmarine) {
-			return ["Torpedo", 9];
+			return ["Torpedo", 3];
 		}
 		if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA
-			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 7] : ["DepthCharge", 8];
+			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2];
 		}
 		
 		// default torpedo attack if any torpedo equipped
-		return torpedoCnt > 0 ? ["Torpedo", 9] : ["SingleAttack", 0];
+		return torpedoCnt > 0 ? ["Torpedo", 3] : ["SingleAttack", 0];
 	};
 
 	/**
@@ -1824,7 +1828,7 @@ KC3改 Ship Object
 	 * @see http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#fitarms
 	 */
-	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "Day") {
+	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "day") {
 		if(!this.rosterId || !this.masterId) { return 0; }
 		var result = 0;
 		// Fit bonus or overweight penalty for ship types:
@@ -1850,21 +1854,20 @@ KC3改 Ship Object
 			case 10: // for Battleships
 				// Large cal. main gun gives accuracy bonus if it's fit,
 				// and accuracy penalty if it's overweight.
-				const timeIndex = {"Day": 0, "Night": 1}[time];
 				const gunCountFitMap = {};
 				this.equipment(true).forEach(g => {
 					if(g.itemId && g.masterId && g.master().api_type[2] === 3) {
-						let fitValues = KC3Meta.gunfit(this.masterId, g.masterId) || [0, 0];
-						if(!Array.isArray(fitValues)) fitValues = [fitValues, 0];
-						const gunCount = (gunCountFitMap[g.masterId] || [0])[0];
-						gunCountFitMap[g.masterId] = [gunCount + 1, fitValues];
+						const fitInfo = KC3Meta.gunfit(this.masterId, g.masterId);
+						if(fitInfo && !fitInfo.unknown) {
+							const gunCount = (gunCountFitMap[fitInfo.weight] || [0])[0];
+							gunCountFitMap[fitInfo.weight] = [gunCount + 1, fitInfo];
+						}
 					}
 				});
 				$.each(gunCountFitMap, (_, fit) => {
 					const count = fit[0];
-					let value = fit[1][timeIndex] || 0;
-					if(value < 0 && this.isMarried())
-						value *= 0.6;
+					let value = fit[1][time] || 0;
+					if(this.isMarried()) value *= fit[1].married || 1;
 					result += value * Math.sqrt(count);
 				});
 				break;

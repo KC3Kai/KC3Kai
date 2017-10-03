@@ -1069,8 +1069,9 @@
 					.lazyInitTooltip();
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			$(".count_1classMedals").text( PlayerManager.consumables.firstClassMedals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(61) );
+			$(".count_1classMedals_or_mackerel").text( PlayerManager.consumables.mackerel || PlayerManager.consumables.firstClassMedals || 0 )
+				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.mackerel ? 68 : 61) )
+				.children("img").attr("src", "/assets/img/useitems/" + (PlayerManager.consumables.mackerel ? 68 : 61) + ".png");
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
 				.prev().attr("title", KC3Meta.useItemName(57) );
 			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
@@ -1081,8 +1082,9 @@
 				.prev().attr("title", KC3Meta.useItemName(52) );
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
 				+ (PlayerManager.consumables.irako || 0) )
-				.prev().attr("title", "{0} + {1}"
-					.format(KC3Meta.useItemName(54), KC3Meta.useItemName(59)) );
+				.prev().attr("title", "{0}x {1} + {2}x {3}"
+					.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
+						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
 			$(".consumables .consumable").hide();
 			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
 		},
@@ -1161,23 +1163,6 @@
 					$(this).parent().removeClass("complete");
 				}
 			};
-			var buildQuestTooltip = function(quest){
-				var title = "{0:code} {1:name}".format(
-					quest.code || "N/A",
-					quest.name || KC3Meta.term("UntranslatedQuest")
-					) + $("<p></p>").css("font-size", "11px")
-					.css("margin-left", "1em")
-					.css("text-indent", "-1em")
-					.text(quest.desc || KC3Meta.term("UntranslatedQuestTip"))
-					.prop("outerHTML");
-				if(!!quest.memo){
-					title += $("<p></p>")
-						.css("font-size", "11px")
-						.css("color", "#69a").text(quest.memo)
-						.prop("outerHTML");
-				}
-				return title;
-			};
 			$(".module.quests").empty();
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
@@ -1192,11 +1177,12 @@
 				}
 				if(quest.meta){
 					$(".quest_text", questBox).text(quest.meta().name)
-						.attr("title", buildQuestTooltip(quest.meta()))
+						.attr("titlealt", KC3QuestManager
+							.buildHtmlTooltip(quest.id, quest.meta(), false, false))
 						.lazyInitTooltip();
 				} else {
 					$(".quest_text", questBox).text(KC3Meta.term("UntranslatedQuest"))
-						.attr("title", KC3Meta.term("UntranslatedQuest"))
+						.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
 						.lazyInitTooltip();
 				}
 				$(".quest_track", questBox).text(quest.outputShort())
@@ -1736,12 +1722,12 @@
 							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
 						});
 						
-						// Regular fighter power on sortie
-						const [afpLower, afpHigher] = shipObj.fighterBounds();
+						// Regular fighter power on sortie, LBAS counts recon planes too
+						const [afpLower, afpHigher] = shipObj.fighterBounds(true);
 						$(".base_afp .base_stat_value", baseBox).text(
 							!!afpLower ? afpLower + "~" + afpHigher : KC3Meta.term("None")
 						);
-						// Land-base interception power on air defense
+						// Land-base interception power on air defense, ofc recon planes in
 						const ifp = shipObj.interceptionPower();
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
@@ -2462,7 +2448,7 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -3438,12 +3424,12 @@
 			if (data.gunFit !== false) {
 				const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 				$(".fit_current span", gunfitBox).removeClass("fit_bonus fit_penalty");
-				if(data.gunFit === "") {
+				if(data.gunFit.unknown === true) {
 					$(".fit_current .fit_unknown", gunfitBox).show();
 					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).hide();
 				} else {
-					const fitDay = parseInt(data.gunFit[0], 10),
-						fitNight = parseInt(data.gunFit[1], 10);
+					const fitDay = data.gunFit.day,
+						fitNight = data.gunFit.night;
 					$(".fit_current .fit_day span", gunfitBox)
 						.text(signedNumber(fitDay))
 						.addClass(fitDay < 0 ? "fit_penalty" : fitDay > 0 ? "fit_bonus" : "");
@@ -3507,8 +3493,6 @@
 					}
 					$(".fixed", aaciBox).text("+{0}".format(aaciObj.fixed));
 					$(".modifier", aaciBox).text("x{0}".format(aaciObj.modifier));
-					// no longer auto fit height
-					//$(".activity_gunfit .aaci").height(data.gunFit !== false ? 82 : 134);
 					if(idx === 0) aaciBox.addClass("triggerable");
 					aaciBox.appendTo(".activity_gunfit .aaciList");
 				});

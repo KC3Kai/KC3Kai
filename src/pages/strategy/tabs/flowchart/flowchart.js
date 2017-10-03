@@ -141,7 +141,7 @@
 			});
 			$(".questDesc", thisBox).text(thisQuest.desc);
 			$(".questDesc", thisBox)
-				.attr("title", this.buildQuestTooltip(quest_id, thisQuest, true))
+				.attr("title", KC3QuestManager.buildHtmlTooltip(quest_id, thisQuest, true, false))
 				.lazyInitTooltip();
 			$(".questOverride", thisBox).data("id", quest_id);
 			$(".questToggle", thisBox).data("id", quest_id);
@@ -221,7 +221,7 @@
 			});
 			$(".questDesc", thisBox).text( questMeta.desc || KC3Meta.term("UntranslatedQuest") );
 			$(".questDesc", thisBox)
-				.attr("title", this.buildQuestTooltip(thisQuest.id, questMeta, false))
+				.attr("title", KC3QuestManager.buildHtmlTooltip(thisQuest.id, questMeta))
 				.lazyInitTooltip();
 			$(".questToggle", thisBox).data("id", thisQuest.id);
 			$(".questRemove", thisBox).data("id", thisQuest.id);
@@ -245,35 +245,6 @@
 					$(thisBox).addClass("disabled");
 					break;
 			}
-		},
-		
-		buildQuestTooltip :function(questId, questMeta, isBranch){
-			var title = "[{0:id}] {1:code} {2:name}".format(
-				questId, questMeta.code || "N/A",
-				questMeta.name || KC3Meta.term("UntranslatedQuest"));
-			title += $("<p></p>").css("font-size", "11px")
-				.css("margin-left", "1em")
-				.css("text-indent", "-1em")
-				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
-				.prop("outerHTML");
-			if(!!questMeta.memo) {
-				title += $("<p></p>")
-					.css("font-size", "11px")
-					.css("color", "#69a").text(questMeta.memo)
-					.prop("outerHTML");
-			}
-			if(!isBranch && !!questMeta.unlock) {
-				for(const i in questMeta.unlock) {
-					const cq = KC3Meta.quest(questMeta.unlock[i]);
-					if(!!cq) title += "&emsp;" +
-						$("<span></span>").css("font-size", "11px")
-							.css("color", "#a96")
-							.text("-> [{0:id}] {1:code} {2:name}"
-								.format(questMeta.unlock[i], cq.code || "N/A", cq.name)
-							).prop("outerHTML") + "<br/>";
-				}
-			}
-			return title;
 		}
 		
 	};
