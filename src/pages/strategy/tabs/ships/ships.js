@@ -1047,7 +1047,8 @@
 								position: { my: "left top", at: "left+25 bottom" },
 								items: "div",
 								content: tooltipBox.prop("outerHTML"),
-								open: KC3Ship.onShipTooltipOpen
+								// might be disabled for performance
+								open: KC3Ship.onShipTooltipOpen,
 							});
 						}
 						// Rebind click handlers

@@ -2392,6 +2392,7 @@ KC3改 Ship Object
 			shipTooltipStyle.setProperty(name, value);
 		};
 		// find which width of wide rows overflow, add slide animation to them
+		// but animation might cost 10% more or less CPU even accelerated with GPU
 		let maxOverflow = 0;
 		$(".stat_wide div", ui.tooltip).each(function() {
 			// scroll width only works if element is visible
@@ -2399,7 +2400,8 @@ KC3改 Ship Object
 				w = $(this).width(),
 				over = w - sw;
 			maxOverflow = Math.min(maxOverflow, over);
-			if(over < 0) { $(this).addClass("slide"); }
+			// allow overflow some pixels
+			if(over < -8) { $(this).addClass("use-gpu slide"); }
 		});
 		setStyleVar("--maxOverflow", maxOverflow + "px");
 		return true;

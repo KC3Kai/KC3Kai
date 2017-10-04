@@ -95,13 +95,15 @@
 						this.showListRowCallback.call(this, ship, shipRow);
 					}
 				}
-				this.shipListDiv.show(1, () => {
-					$(".ship_name", this.shipListDiv).each(function() {
-						if(KC3StrategyTabs.isTextEllipsis(this)) {
-							$(this).attr("title", $(this).text());
-						}
-					});
-					this.shipListDiv.createChildrenTooltips();
+				this.shipListDiv.show(0, () => {
+					if(this.isLoading) {
+						$(".ship_name", this.shipListDiv).each(function() {
+							if(KC3StrategyTabs.isTextEllipsis(this)) {
+								$(this).attr("title", $(this).text());
+							}
+						});
+						this.shipListDiv.createChildrenTooltips();
+					}
 				});
 				$(".ingame_page").toggle(this.pageNo);
 				// Trigger post-show event

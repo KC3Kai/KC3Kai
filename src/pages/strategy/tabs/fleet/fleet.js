@@ -348,8 +348,9 @@
 			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet );
 			});
-			$(".tab_fleet .fleet_list").createChildrenTooltips().show(100, function() {
-				$(".ship_name", $(this)).each(function() {
+			// Show with duration and check if ship name overflow
+			$(".tab_fleet .fleet_list").createChildrenTooltips().show(100, () => {
+				$(".tab_fleet .fleet_list .ship_name").each(function() {
 					if(KC3StrategyTabs.isTextEllipsis(this))
 						$(this).attr("title", $(this).text());
 				});
@@ -431,7 +432,7 @@
 					position: { my: "left top", at: "right+10 top" },
 					items: "div",
 					content: tooltipBox.prop("outerHTML"),
-					open: KC3Ship.onShipTooltipOpen
+					open: KC3Ship.onShipTooltipOpen,
 				});
 			}
 

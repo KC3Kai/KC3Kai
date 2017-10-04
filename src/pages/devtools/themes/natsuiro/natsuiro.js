@@ -3649,7 +3649,9 @@
 						var infoElm = $(".module.activity .map_info");
 						infoElm.addClass("map_finisher");
 						if(!ConfigManager.info_blink_gauge)
-							infoElm.addClass("noBlink");
+							infoElm.addClass("noBlink").removeClass("use-gpu");
+						else
+							infoElm.addClass("use-gpu").removeClass("noBlink");
 						$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
 					})();
 				}
