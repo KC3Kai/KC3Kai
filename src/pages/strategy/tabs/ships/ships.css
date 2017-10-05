@@ -79,6 +79,8 @@
 
 .tab_ships .advanced_sorter {
 	margin:0px 0px 2px 0px;
+	float: left;
+	width: 220px;
 }
 .tab_ships .advanced_sorter .adv_label {
 	float:left;
@@ -154,6 +156,7 @@
 	width:55px;
 	height:18px;
 	float:left;
+	line-height: 16px;
 }
 .tab_ships .advanced_sorter .sorter_desc {
 	font-size:12px;
@@ -176,6 +179,22 @@
 	width:55px;
 	height:18px;
 	float:left;
+}
+.tab_ships .name_dupe_filter {
+	padding: 0 4px;
+	display: inline-block;
+}
+.tab_ships .name_dupe_filter .name_dupe_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+	line-height: 18px;
+}
+.tab_ships .name_dupe_filter input[type="text"] {
+	float: left;
+	font-size: 12px;
+	padding: 1px 3px;
 }
 
 /* HEADER
@@ -428,6 +447,14 @@
 .tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
 	display:none;
+}
+
+/* Ship hiding from filters */
+.tab_ships .ship_item.name_hidden {
+    display: none;
+}
+.tab_ships .ship_item.dupe_hidden {
+    display: none;
 }
 
 .tab_ships .ship_item .ship_lock img {
