@@ -7,8 +7,8 @@ AntiAir: anti-air related calculations
 	- shipObj: instance of KC3Ship
 		- mst: master data of either ship or gear
 		- pred: predicates, a function that accepts a single parameter and returns a boolean value
-		- predXXX: predicate combinators. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
-          in some specific way to produce a new prediate.
+		- predXXX: predicate combinations. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
+          in some specific way to produce a new predicate.
 
 - module contents:
 	- shipProportionalShotdownRate(shipObj)
@@ -41,7 +41,7 @@ AntiAir: anti-air related calculations
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
 		- icon: IDs of icons representing this kind of AACI
-		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipments
 		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
@@ -63,7 +63,7 @@ AntiAir: anti-air related calculations
 
 	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
-	// return the first non-falsy value or "false" if all predicates have falled.
+	// return the first non-falsy value or "false" if all predicates have failed.
 	function predAnyOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
@@ -125,6 +125,10 @@ AntiAir: anti-air related calculations
 		iconEq(1),
 		iconEq(2),
 		iconEq(3));
+
+	function is46cmTripleMount(mst) {
+		return mst.api_id === 6;
+	}
 	
 	var isYellowGun = iconEq(4);
 	var isFighter = categoryEq(6);
@@ -152,6 +156,8 @@ AntiAir: anti-air related calculations
 		].indexOf( mst.api_id ) !== -1;
 	}
 
+	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -178,7 +184,7 @@ AntiAir: anti-air related calculations
 			return 4;
 		if (isAARadar(mst))
 			return 3;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
@@ -189,6 +195,8 @@ AntiAir: anti-air related calculations
 			return 0.4;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 0.35;
+		if (is46cmTripleMount(mst))
+			return 0.25;
 		if (predAnyOf(isRedGun,
 				  isYellowGun,
 				  isAAGun,
@@ -196,31 +204,40 @@ AntiAir: anti-air related calculations
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
 			return 0.2;
-
+		// no default value for unverified equipment, might use 0.2 as default?
 		return 0;
 	}
 
+	// updated data: http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#anti-aircraft
+	// another implementation might give the latest verified data:
+	// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
 	function getShipImprovementModifier(mst) {
 		if (isAAGun(mst))
 			return 4;
-		if (isHighAngleMount(mst))
+		if (isBuiltinHighAngleMount(mst))
 			return 3;
+		if (isHighAngleMount(mst))
+			return 2;
+		if (isAAFD(mst))
+			return 2;
 		if (isAARadar(mst))
 			return 0;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
 	function getFleetImprovementModifier(mst) {
-		if (isHighAngleMount(mst))
+		if (isBuiltinHighAngleMount(mst))
 			return 3;
+		if (isHighAngleMount(mst))
+			return 2;
 		if (isAAFD(mst))
 			return 2;
 		if (isAARadar(mst))
 			return 1.5;
 		if (isAAGun(mst))
 			return 0;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
@@ -238,7 +255,7 @@ AntiAir: anti-air related calculations
 			 ? getFleetImprovementModifier
 			 : getShipImprovementModifier)(mst);
 		var aaStat = mst.api_tyku;
-		return eTypMod*aaStat + eImproveMod*Math.sqrt( stars );
+		return eTypMod * aaStat + eImproveMod * Math.sqrt( stars );
 	}
 
 	// returns a special floor function f(x) = q * floor( x / q )
@@ -256,7 +273,7 @@ AntiAir: anti-air related calculations
 		}
 
 		return function(x) {
-			return q*Math.floor(x / q);
+			return q * Math.floor(x / q);
 		};
 	}
 
@@ -277,17 +294,28 @@ AntiAir: anti-air related calculations
 	}
 
 	function shipAdjustedAntiAir(shipObj) {
-		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj,false);
+		// here aa[1] is max naked stat, equaled to api_tyku[1],
+		// might use current naked stat: aa[0] - equipment stat
+		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj, false);
 	}
 
-	function shipProportionalShotdownRate(shipObj) {
+	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
 		var floor = specialFloor(shipObj);
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
-		return floor(adjustedAA) / 400;
+		var combinedModifier = getCombinedFleetModifier(onCombinedFleetNum);
+		return floor(adjustedAA) / 400 * combinedModifier;
 	}
 
-	function shipProportionalShotdown(shipObj, num) {
-		return Math.floor( shipProportionalShotdownRate(shipObj) * num );
+	function shipProportionalShotdown(shipObj, num, onCombinedFleetNum) {
+		return Math.floor( shipProportionalShotdownRate(shipObj, onCombinedFleetNum) * num );
+	}
+
+	function getCombinedFleetModifier(onCombinedFleetNum) {
+		// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
+		return onCombinedFleetNum > 0 ? // is on combined fleet?
+			onCombinedFleetNum > 1 ? // is escort fleet?
+				0.6 * 0.8 : 0.9 * 0.8
+			: 1.0;
 	}
 
 	function getFormationModifiers(id) {
@@ -317,12 +345,24 @@ AntiAir: anti-air related calculations
 		return (2/1.3) * Math.floor( formationModifier * (mainAllShipEquipmentAA + escortAllShipEquipmentAA) );
 	}
 
-	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
-		K = typeof K === "undefined" ? 1 : K;
+	/**
+	 * @return {number} an integer indicating how many planes will be shotdown.
+	 * @param {Object} shipObj - instance of KC3Ship
+	 * @param {Object} fleetObj - instance(s) of KC3Fleet,
+	 *        if combined fleet requested, should pass nested object: {main: mainFleetObj, escort: escortFleetObj}.
+	 * @param {number} formationModifier - formation modifier, see #getFormationModifiers
+	 * @param {number} K - AACI modifier, default to 1
+	 * @param {number} onCombinedFleetNum - if ship on combined fleet, pass her fleet number (1 or 2), otherwise 0.
+	 */
+	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K = 1, onCombinedFleetNum = 0) {
 		var floor = specialFloor(shipObj);
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
-		return Math.floor( (floor(adjustedAA) + Math.floor( fleetAdjustedAntiAir(fleetObj, formationModifier) ))
-						   * K / 10);
+		return Math.floor(
+			(floor(adjustedAA) + Math.floor(
+				Array.isArray(fleetObj) ? fleetCombinedAdjustedAntiAir(fleetObj.main, fleetObj.escort, formationModifier) :
+					fleetAdjustedAntiAir(fleetObj, formationModifier) )
+			) * K / 10 * getCombinedFleetModifier(onCombinedFleetNum)
+		);
 	}
 
 	// avoid modifying this structure directly, use "declareAACI" instead.
@@ -385,6 +425,8 @@ AntiAir: anti-air related calculations
 		kinuK2Icon = 487,
 		yuraK2Icon = 488,
 		fumizukiK2Icon = 548,
+		uit25Icon = 539,
+		i504Icon = 530,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -394,7 +436,8 @@ AntiAir: anti-air related calculations
 		// Special combined icons for Build-in HA / CDMG
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
-		haMountNbifdIcon = "16-30"; // HA without AAFD
+		haMountNbifdIcon = "16-30", // HA without AAFD
+		aaGunNotCdIcon = "15-15";   // Non-CD AA Machine Gun
 
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
@@ -403,6 +446,8 @@ AntiAir: anti-air related calculations
 	var isKinuK2 = masterIdEq( kinuK2Icon );
 	var isYuraK2 = masterIdEq( yuraK2Icon );
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
+	var isUit25 = masterIdEq( uit25Icon );
+	var isI504 = masterIdEq( i504Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -679,6 +724,17 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// UIT-25 / I-504
+	// https://docs.google.com/spreadsheets/d/1ljddcPvpEioGVU5yvd5GtPU7afRKPSnzFDEIBbFohh8
+	declareAACI(
+		23, 1, 1.05,
+		[uit25Icon, aaGunNotCdIcon],
+		predAnyOf(isUit25, isI504),
+		withEquipmentMsts(
+			hasSome( isAAGunNotCD )
+		)
+	);
+
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers
 	//   (since object keys has to be strings, and AACITable[key] accepts keys
@@ -706,7 +762,7 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return a list of unduplicated possible AACI APIs based on all ships in fleet
+	// return a list of deduplicate possible AACI APIs based on all ships in fleet
 	function fleetPossibleAACIs(fleetObj) {
 		var aaciSet = {};
 		fleetObj.ship(function(rId, ind, shipObj) {
@@ -745,19 +801,19 @@ AntiAir: anti-air related calculations
 		});
 	}
 
-	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
+	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier, onCombinedFleetNum) {
 		var possibleAACIModifiers = fleetPossibleAACIs(fleetObj).map( function( apiId ) {
 			return AACITable[apiId].modifier;
 		});
 		// default value 1 is always available, making call to Math.max always non-empty
 		possibleAACIModifiers.push( 1 );
 		var mod = Math.max.apply( null, possibleAACIModifiers );
-		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1, onCombinedFleetNum),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod, onCombinedFleetNum),
 				 mod ];
 	}
 
-	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier) {
+	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier, onCombinedFleetNum) {
 		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj),
 			function(a, b){
 				// Order by modifier desc, fixed desc, icons[0] desc
@@ -767,8 +823,8 @@ AntiAir: anti-air related calculations
 			});
 		var aaciId = possibleAaciList.length > 0 ? possibleAaciList[0].id : 0;
 		var mod = possibleAaciList.length > 0 ? possibleAaciList[0].modifier : 1;
-		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1, onCombinedFleetNum),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod, onCombinedFleetNum),
 				 aaciId ];
 	}
 

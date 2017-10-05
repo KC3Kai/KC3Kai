@@ -266,7 +266,7 @@
 							ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
 						}
 						if(ThisCapacity > 0){
-							// Compute for veteranized fighter power
+							// Compute for ace fighter air power
 							var MyFighterPowerText = "";
 							if(ConfigManager.air_formula == 1){
 								MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);

@@ -21,6 +21,7 @@
 			scrollList: false,
 			heartLockMode: 0,
 			className: false,
+			showTooltip: false,
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -135,6 +136,94 @@
 				}
 				KC3StrategyTabs.reloadTab(undefined, false);
 			});
+			$(".tooltip_yes").on("click", function(){
+				if(!self.showTooltip){
+					self.showTooltip = true;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".tooltip_no").on("click", function(){
+				if(self.showTooltip){
+					self.showTooltip = false;
+					self.saveSettings();
+				}
+				KC3StrategyTabs.reloadTab(undefined, false);
+			});
+			$(".ship_export .export_to_kanmusu_list").on("click", function() {
+				// Export currently visible ships
+				var selectedShips = self.shipCache.filter(function(x) {
+					return self.executeFilters(x);
+				});
+				selectedShips.sort( function(a, b) {
+					return RemodelDb.originOf(a.bid) - RemodelDb.originOf(b.bid) 
+						|| b.ship.level - a.ship.level; 
+				});
+
+				var previousId = 0;
+				var importString = ".2";
+				// Format .2|shipId:shipLevel|shipId2:shipLevel2.remodel,shipLevel3|...
+				for(var i = 0; i < selectedShips.length; i++) {
+					var ship = selectedShips[i];
+					var shipId = ship.bid;
+					if(RemodelDb.originOf(shipId) === previousId)
+						// Dupes are separated with ,
+						importString += ",";
+					else // While first ones are separated by |shipId
+						importString += "|" + RemodelDb.originOf(shipId) + ":";
+					importString += ship.ship.level;
+					if(RemodelDb.remodelInfo(shipId) && ship.ship.level >= RemodelDb.remodelInfo(shipId).level) {
+						var group = RemodelDb.remodelGroup(shipId);
+						var remodelNumber = group.indexOf(shipId) + 1;
+						if(remodelNumber < group.length) // Not necessary for last cyclic remodels
+							importString += "." + remodelNumber;
+					}
+					previousId = RemodelDb.originOf(shipId);
+				}
+
+				// Customized base64 encoding: http://kancolle-calc.net/data/share.js
+				var CODE = [ '0000', '0001', '0010', '0011', '0100', '0101', '0110', '0111',
+					'1000', '1001', '1010', '1011', '1100', '1101' ];
+				var BASE64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-';
+
+				var buff = '';
+				var outputString = '';
+				for (var j = 0; j < importString.length; j++) {
+					var c = importString.charAt(j);
+					var pos;
+					if (c == ',') {
+						pos = 10;
+					} else if (c == '|') {
+						pos = 11;
+					} else if (c == '.') {
+						pos = 12;
+					} else if (c == ':') {
+						pos = 13;
+					} else {
+						pos = parseInt(c);
+					}
+					buff += CODE[pos];
+					if (buff.length >= 6) {
+						var seg = buff.slice(0, 6);
+						outputString += BASE64.charAt(parseInt(seg, 2));
+						buff = buff.slice(6);
+					}
+				}
+				if (buff.length > 0) {
+					while (buff.length < 6) {
+						buff += '1';
+					}
+					outputString += BASE64.charAt(parseInt(buff, 2));
+				}
+				
+				window.open("http://kancolle-calc.net/kanmusu_list.html?data=" + outputString);
+			});
+			$(".ship_export .export_to_kancepts").on("click", function() {
+				window.open("https://javran.github.io/kancepts/?sl=" + 
+					self.shipCache.filter(x => x.locked).map(function(x) {
+						return (x.ship.level > 99 ? "r" : "") + x.bid;
+					}).join(","));
+			});
 			$(".control_buttons .reset_default").on("click", function(){
 				delete self.currentSorters;
 				$.extend(true, self, self.defaultSettings);
@@ -144,15 +233,16 @@
 			// Binding click event ends
 
 			// Add filter elements of ship types before `prepareFilters` executed
-			for(let sCtr in KC3Meta._stype){
-				// stype 12, 15 not used by shipgirl
+			$.each(KC3Meta.sortedStypes(), (idx, stype) => {
+				// stype 12, 15 not used by shipgirl, marked as order 999
 				// stype 1 is used from 2017-05-02
-				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
-					let cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
+				if(stype.id && stype.order < 999){
+					let cElm = $(".tab_ships .factory .ship_filter_type").clone()
+						.appendTo(".tab_ships .filters .ship_types");
+					cElm.data("id", stype.id);
+					$(".filter_name", cElm).text(stype.name);
 				}
-			}
+			});
 
 			// Update multi sorter elements
 			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
@@ -193,7 +283,7 @@
 
 		// try pushing a new sorter to existing list
 		// if the sorter already exists, the its "reverse"
-		// value will be filpped.
+		// value will be flipped.
 		pushToCurrentSorters: function(name) {
 			var i;
 			var found = false;
@@ -311,7 +401,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: ThisShip.hp[1],
+				hp: [ThisShip.hp[1], ThisShip.isMarried() ? ThisShip.maxHp(true) : MasterShip.api_taik[0]+KC3Ship.getMaxHpModernize(), MasterShip.api_taik[0] ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
@@ -321,7 +411,7 @@
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [this.getDerivedStatNaked("tais", ThisShip.as[0], ThisShip), ThisShip.as[0] ],
+				as: [ThisShip.nakedAsw(), ThisShip.maxAswMod(), ThisShip.nakedAsw()-ThisShip.mod[6], ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
@@ -477,7 +567,7 @@
 		// NOTE: this function is supposed to be a shared callback function
 		// and should not be called directly.
 		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
-			// mutural exclusive options use just value indices
+			// mutual exclusive options use just value indices
 			// as the option value
 			var oldVal = optionRep.curValue;
 			if (oldVal === selectedInd)
@@ -490,7 +580,7 @@
 			});
 			// only trigger update when it's not the first time
 			// first time we just need to give it a initial value (default value)
-			// and then upate UI.
+			// and then update UI.
 			if (!initializing)
 				this.refreshTable();
 		},
@@ -520,7 +610,7 @@
 			// correspond to a toggle / control on UI
 			options,
 			// a callback function testShip(curVal,ship)
-			// that does the actual fitlering:
+			// that does the actual filtering:
 			// returning a falsy value means
 			// the ship should be filtered out from the list.
 			// curVal is the current state of the filter.
@@ -569,10 +659,10 @@
 				var view = findView(filterName,optionName);
 				thisOption.name = optionName;
 				thisOption.view = view;
-				thisOption.view.on('click', function() {
+				thisOption.view.on('click', function(e) {
 					var curRep = self.newFilterRep[filterName];
 					var selectedInd = ind;
-					curRep.onToggle.call(self,selectedInd,curRep,false);
+					curRep.onToggle.call(self,selectedInd,curRep,false,e);
 				});
 				console.assert(
 					thisOption.view.length === 1,
@@ -712,11 +802,10 @@
 						|| (curVal === ship.range);
 				});
 
-			var stypes = Object
-				.keys(KC3Meta._stype)
-				.map(function(x) { return parseInt(x,10); })
-				.filter(function(x) { return [12,15].indexOf(x)<0; })
-				.sort(function(a,b) { return a-b; });
+			var stypes = Object.keys(KC3Meta.allStypes())
+				.map(id => parseInt(id, 10))
+				.filter(id => [12, 15].indexOf(id) < 0)
+				.sort((a, b) => a - b);
 			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
@@ -728,25 +817,25 @@
 			self.defineShipFilter(
 				"stype",
 				savedFilterValues.stype || stypeDefValue,
-				// valid ship types and addtionally 3 controls
+				// valid ship types and additionally 3 controls
 				stypes.concat(["all","none","invert"]),
 				// testShip
-				function(curVal,ship) {
+				function(curVal, ship) {
 					return curVal[ship.stype];
 				},
 				// find view
-				function (filterName,option) {
+				function (filterName, option) {
 					if (typeof option === "number") {
 						// this is a ship type toggle
 						return $(".tab_ships .filters .ship_types .ship_filter_type")
-							.filter( function() {  return $(this).data("id") === "" + option;  }  );
+							.filter( function() { return $(this).data("id") == option; } );
 					} else {
 						// one of: all / none / invert
 						return $(".tab_ships .filters .massSelect ." + option);
 					}
 				},
 				// onToggle
-				function(selectedInd, optionRep, initializing) {
+				function(selectedInd, optionRep, initializing, event) {
 					if (initializing) {
 						// the variable name is a bit misleading..
 						// but at this point we should set the initial value
@@ -754,8 +843,16 @@
 					} else {
 						var selected = optionRep.options[selectedInd];
 						if (typeof selected.name === 'number') {
-							// this is a ship type toggle
-							optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+							if(event && event.altKey){
+								// only select this ship type if Alt key held
+								$.each(stypes, function(ignore, stype) {
+									optionRep.curValue[stype] = false;
+								});
+								optionRep.curValue[selected.name] = true;
+							} else {
+								// this is a ship type toggle
+								optionRep.curValue[selected.name] = !optionRep.curValue[selected.name];
+							}
 						} else {
 							$.each(stypes, function(ignore, stype) {
 								optionRep.curValue[stype] =
@@ -770,7 +867,7 @@
 					// update UI
 					$.each(optionRep.options, function(ignored, x) {
 						if (typeof x.name === "number") {
-							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name]  );
+							$( ".filter_check", x.view ).toggle( optionRep.curValue[x.name] );
 						}
 					});
 					if (!initializing)
@@ -802,6 +899,7 @@
 			shrinkedSettings.views.scroll = this.scrollList;
 			shrinkedSettings.views.lock = this.heartLockMode;
 			shrinkedSettings.views.ctype = this.className;
+			shrinkedSettings.views.tooltip = this.showTooltip;
 			this.settings = shrinkedSettings;
 			localStorage.srShiplist = JSON.stringify(this.settings);
 		},
@@ -819,6 +917,7 @@
 				this.scrollList = this.settings.views.scroll || false;
 				this.heartLockMode = this.settings.views.lock || 0;
 				this.className = this.settings.views.ctype || false;
+				this.showTooltip = this.settings.views.tooltip || false;
 			}
 		},
 
@@ -908,7 +1007,7 @@
 			define("morale", "Morale",
 				   function(x) { return -x.morale; });
 			define("hp", "HP",
-				   function(x) { return -x.hp; });
+				   function(x) { return -x.hp[0]; });
 			define("fp", "Firepower",
 				   function(x) { return -x.fp[this.equipMode+1]; });
 			define("tp", "Torpedo",
@@ -920,7 +1019,7 @@
 			define("ar", "Armor",
 				   function(x) { return -x.ar[this.equipMode+1]; });
 			define("as", "ASW",
-				   function(x) { return -x.as[this.equipMode]; });
+				   function(x) { return -x.as[this.equipMode ? 3 : 0]; });
 			define("ev", "Evasion",
 				   function(x) { return -x.ev[this.equipMode]; });
 			define("ls", "LoS",
@@ -996,8 +1095,9 @@
 					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 
 					$(".ship_id", cElm).text( cShip.id );
-					$(".ship_img .ship_icon", cElm).attr("src", KC3Meta.shipIcon(cShip.bid));
-					$(".ship_img .ship_icon", cElm).attr("alt", cShip.bid);
+					$(".ship_img .ship_icon", cElm)
+						.attr("src", KC3Meta.shipIcon(cShip.bid))
+						.attr("alt", cShip.bid);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1008,14 +1108,6 @@
 					$(".ship_lv .value", cElm).text( shipLevel )
 						.addClass( cShip.levelClass );
 					$(".ship_morale", cElm).text( cShip.morale );
-					$(".ship_hp", cElm).text( cShip.hp );
-					$(".ship_lk", cElm).text( cShip.lk[0] );
-					if(cShip.lk[0] >= cShip.lk[1]){
-						$(".ship_lk", cElm).addClass("max");
-					} else if(cShip.lk[0] > cShip.lk[2]){
-						$(".ship_lk", cElm)
-							.append("<sup class='sub'>{0}</sup>".format(cShip.lk[0] - cShip.lk[2]));
-					}
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -1032,7 +1124,7 @@
 						cElm.addClass('modernization-able');
 
 					[1,2,3,4].forEach(function(x){
-						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1]);
+						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1], cShip.id);
 					});
 					if(cShip.exSlot !== 0){
 						self.equipImg(cElm, "ex", -2, cShip.exSlot);
@@ -1043,23 +1135,22 @@
 						const thisShip = ship || cShip;
 						// Reset shown ship name
 						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this)
-							.text( showName )
-							.attr("title",
-								KC3StrategyTabs.isTextEllipsis($(".ship_name", this)) ? showName : ""
-							);
+						$(".ship_name", this).text( showName )
+							.attr("title", showName);
 						// Recomputes stats
-						self.modernizableStat("fp", this, thisShip.fp);
-						self.modernizableStat("tp", this, thisShip.tp);
+						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
+						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
+						self.modernizableStat("tp", this, thisShip.tp, 2, 1);
 						self.modernizableStat("yasen", this, thisShip.yasen);
-						self.modernizableStat("aa", this, thisShip.aa);
-						self.modernizableStat("ar", this, thisShip.ar);
-						$(".ship_as", this).text( thisShip.as[self.equipMode] );
+						self.modernizableStat("aa", this, thisShip.aa, 2, 1);
+						self.modernizableStat("ar", this, thisShip.ar, 2, 1);
+						self.modernizableStat("as", this, thisShip.as, 3, 0, true);
 						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
 						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+						self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
 						// Reset heart-lock icon
 						$(".ship_lock img", this).attr("src",
-							"../../assets/img/client/heartlock{0}.png"
+							"/assets/img/client/heartlock{0}.png"
 								.format(!thisShip.locked ? "-x" : "")
 						).show();
 						if((self.heartLockMode === 1 && thisShip.locked)
@@ -1067,6 +1158,20 @@
 							$(".ship_lock", this).show();
 						} else {
 							$(".ship_lock", this).hide();
+						}
+						// Update tooltip
+						const targetElm = $(".ship_img .ship_icon", this);
+						if(targetElm.tooltip("instance") !== undefined){
+							targetElm.tooltip("destroy");
+						}
+						if(self.showTooltip){
+							const tooltipBox = KC3ShipManager.get(thisShip.id)
+								.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
+							targetElm.tooltip({
+								position: { my: "left top", at: "left+25 bottom" },
+								items: "div",
+								content: tooltipBox.prop("outerHTML")
+							});
 						}
 						// Rebind click handlers
 						$(".ship_img .ship_icon", this).click(self.shipClickFunc);
@@ -1106,44 +1211,61 @@
 
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
-		getDerivedStatNaked :function(StatName, EquippedValue, ShipObj){
-			var Items = ShipObj.equipment(true);
-			for(var ctr in Items){
-				if(Items[ctr].itemId > 0){
-					EquippedValue -= Items[ctr].master()["api_"+StatName];
+		getDerivedStatNaked :function(statName, equippedValue, shipObj){
+			shipObj.equipment(true).forEach(gear => {
+				if(gear.masterId > 0){
+					equippedValue -= gear.master()["api_" + statName];
 				}
-			}
-			return EquippedValue;
+			});
+			return equippedValue;
 		},
 
 		/* Show cell contents of a mod stat
 		--------------------------------------------*/
-		modernizableStat :function(stat, cElm, Values){
-			$(".ship_"+stat, cElm).text( Values[this.equipMode+1] );
-			if(Values[0] == Values[1]){
-				$(".ship_"+stat, cElm).addClass("max");
-			}else{
-				$(".ship_"+stat, cElm).append("<span>+"+(Values[0] - Values[1])+"</span>");
+		modernizableStat :function(statAbbr, rowElm, valuesTuple,
+				equipStatIndex = 2, noEquipStatIndex = 1, isSup = false){
+			const statElm = $(".ship_" + statAbbr, rowElm);
+			$(".stat_value", statElm).text(
+				valuesTuple[equipStatIndex > 0 ?
+					(this.equipMode ? equipStatIndex : noEquipStatIndex) :
+					noEquipStatIndex]
+			);
+			if(isSup){
+				if(valuesTuple[0] >= valuesTuple[1]){
+					statElm.addClass("max");
+				} else if(valuesTuple[0] > valuesTuple[2]){
+					$(".sup", statElm).text(valuesTuple[0] - valuesTuple[2]);
+				} else {
+					$(".sup", statElm).hide();
+				}
+			} else {
+				if(valuesTuple[0] <= valuesTuple[1]){
+					$(".stat_left", statElm).hide();
+					statElm.addClass("max");
+				} else {
+					$(".stat_left", statElm).show()
+						.text("+" + (valuesTuple[0] - valuesTuple[1]));
+				}
 			}
 		},
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gearId){
+		equipImg :function(cElm, equipNum, equipSlot, gearId, shipId){
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gearId > 0){
 				var gear = KC3GearManager.get(gearId);
-				if(gear.itemId<=0){ element.hide(); return; }
-
-				$("img",element)
-					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(equipSlot))
+				if(gear.itemId <= 0){ element.hide(); return; }
+				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
+				$("img", element)
+					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+					.attr("title", gear.htmlTooltip(equipSlot, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span",element).css('visibility','hidden');
 			} else {
-				$("img",element).hide();
-				$("span",element).each(function(i,x){
+				$("img", element).hide();
+				$("span", element).each(function(i,x){
 					if(equipSlot > 0)
 						$(x).text(equipSlot);
 					else if(equipSlot === -2)

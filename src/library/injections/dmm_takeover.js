@@ -9,7 +9,7 @@
 		apply: function(response){
 			console.log('Applying DMM customizations...');
 
-			config =  $.extend(true, ConfigManager, response.config);
+			config = $.extend(true, ConfigManager, response.config);
 			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
 			meta = $.extend(true, KC3Meta, response.meta);
@@ -208,7 +208,7 @@
 			if(config.dmm_custom_css !== ""){
 				var customCSS = document.createElement("style");
 				customCSS.type = "text/css";
-				customCSS.innerHTML = ConfigManager.dmm_custom_css;
+				customCSS.innerHTML = config.dmm_custom_css;
 				$("head").append(customCSS);
 			}
 		},
@@ -290,6 +290,8 @@
 		subtitleVanishTimer: null,
 		subtitleVanishBaseMillis: null,
 		subtitleVanishExtraMillisPerChar: null,
+		subtitleHourlyTimer: null,
+		subtitleHourlyShip: 0,
 		subtitlesOverlay: function(){
 			var self = this;
 			return function(request, sender, response){
@@ -309,6 +311,13 @@
 					case "npc":
 						quoteIdentifier = "npc";
 						break;
+					case "abyssal":
+						quoteIdentifier = "abyssal";
+						if(config.subtitle_speaker){
+							const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
+							quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+						}
+						break;
 					default:
 						quoteIdentifier = request.shipID;
 						if(config.subtitle_speaker){
@@ -318,14 +327,6 @@
 				}
 				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 
-				// hide first to fading will stop
-				$(".overlay_subtitles").stop(true, true);
-				$(".overlay_subtitles").hide();
-
-				// If subtitle removal timer is ongoing, reset
-				if(self.subtitleVanishTimer){
-					clearTimeout(self.subtitleVanishTimer);
-				}
 				// Lazy init timing parameters
 				if(!self.subtitleVanishBaseMillis){
 					self.subtitleVanishBaseMillis = Number(meta.quote("timing", "baseMillisVoiceLine")) || 2000;
@@ -334,11 +335,23 @@
 					self.subtitleVanishExtraMillisPerChar = Number(meta.quote("timing", "extraMillisPerChar")) || 50;
 				}
 
-				// If subtitles available for the voice
-				if(subtitleText){
+				const hideSubtitle = () => {
+					// hide first to fading will stop
+					$(".overlay_subtitles").stop(true, true);
+					$(".overlay_subtitles").hide();
+					// If subtitle removal timer is ongoing, reset
+					if(self.subtitleVanishTimer){
+						clearTimeout(self.subtitleVanishTimer);
+					}
+				};
+				hideSubtitle();
+
+				// Display subtitle and set its removal timer
+				const showSubtitle = (subtitleText, quoteIdentifier) => {
 					$(".overlay_subtitles span").html(subtitleText);
+					$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
 					$(".overlay_subtitles").show();
-					var millis = self.subtitleVanishBaseMillis +
+					const millis = self.subtitleVanishBaseMillis +
 						(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 					self.subtitleVanishTimer = setTimeout(function(){
 						self.subtitleVanishTimer = false;
@@ -359,7 +372,51 @@
 					if(!!quoteSpeaker){
 						$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 					}
+				};
+
+				const cancelHourlyLine = () => {
+					if(self.subtitleHourlyTimer) clearTimeout(self.subtitleHourlyTimer);
+					self.subtitleHourlyTimer = false;
+					self.subtitleHourlyShip = 0;
+				};
+
+				const bookHourlyLine = (text, shipId) => {
+					cancelHourlyLine();
+					const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
+					const diffMillis = nextHour - Date.now();
+					// Do not book on unexpected diff time: passed or > 59 minutes
+					if(diffMillis <= 0 || diffMillis > 59 * 60000) {
+						showSubtitle(text, shipId);
+					} else {
+						self.subtitleHourlyShip = shipId;
+						self.subtitleHourlyTimer = setTimeout(function(){
+							// Should cancel booked hourly line for some conditions
+							if(self.subtitleHourlyShip == shipId
+								// if Chrome delays timer execution > 3 seconds
+								&& Math.abs(Date.now() - nextHour) < 3000
+								// TODO && at home port && secretary unchanged
+							){
+								hideSubtitle();
+								showSubtitle(text, shipId);
+							}
+							cancelHourlyLine();
+						}, diffMillis);
+					}
+				};
+
+				// If subtitles available for the voice
+				if(subtitleText){
+					// Book for a future display if it's a ship's hourly voice,
+					// because game preload voice file in advance (about > 5 mins).
+					if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
+						if(config.subtitle_hourly){
+							bookHourlyLine(subtitleText, quoteIdentifier);
+						}
+					} else {
+						showSubtitle(subtitleText, quoteIdentifier);
+					}
 				}
+
 			};
 		},
 
@@ -456,7 +513,7 @@
 		Attach onUnload listener to stop accidental exit
 		--------------------------------------*/
 		exitConfirmation: function(){
-			if (!ConfigManager.api_askExit) return false;
+			if (!config.api_askExit) return false;
 			window.onbeforeunload = function(){
 				// Not support custom message any more, see:
 				// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
@@ -592,7 +649,7 @@
 			let maxIdleScreenOpacity = 0.8;
 
 			// idle time unit is second
-			let timeIdleStartSec = ConfigManager.alert_idle_start;
+			let timeIdleStartSec = config.alert_idle_start;
 			let timeIdleStart = Math.floor(timeIdleStartSec * 1000);
 			let timeIdleMax = timeIdleStart + 100000;
 
@@ -622,8 +679,8 @@
 
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
-				if (!ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
-					|| ConfigManager.alert_idle_start <= 0)
+				if (!config.alert_idle_start // to exclude falsy values like NaN and 0
+					|| config.alert_idle_start <= 0)
 					return true;
 				if(request.action != "goodResponses") return true;
 				lastNetworkTime = (new Date()).getTime();

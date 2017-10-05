@@ -344,10 +344,11 @@
 		showAllKCFleets: function(kcFleetArray) {
 			var self = this;
 			// Empty fleet list
-			$(".tab_fleet .fleet_list").html("");
+			$(".tab_fleet .fleet_list").empty();
 			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet );
 			});
+			$(".tab_fleet .fleet_list").createChildrenTooltips();
 		},
 
 		/* Show single fleet
@@ -371,10 +372,25 @@
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
-			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() );
+			if(ConfigManager.elosFormula === 4) {
+				let f33Cn = [
+					Math.qckInt("floor", kcFleet.eLos4(), 1),
+					Math.qckInt("floor", kcFleet.eLos4(2), 1),
+					Math.qckInt("floor", kcFleet.eLos4(3), 1),
+					Math.qckInt("floor", kcFleet.eLos4(4), 1),
+					Math.qckInt("floor", kcFleet.eLos4(5), 1)
+				];
+				$(".detail_los .detail_value", fleetBox).attr("title",
+					"Cn1: {0}\nCn3: {1}\nCn4: {2}".format(f33Cn[0], f33Cn[2], f33Cn[3]));
+			} else {
+				$(".detail_los .detail_value").attr("title", "");
+			}
+			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() )
+				.attr("title", KC3Calc.buildFleetsContactChanceText(kcFleet));
 			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
 				.attr("title", "Line-Ahead: {0}\nDouble-Line: {1}\nDiamond: {2}"
-					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)) );
+					.format(kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3))
+				);
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 		},
@@ -382,7 +398,7 @@
 		/* Show single ship
 		   --------------------------------------------*/
 		showKCShip: function(fleetBox, kcShip) {
-			if (!kcShip || kcShip.masterId === 0) return;
+			if (!kcShip || !kcShip.masterId) return;
 
 			var self = this;
 			var shipDb = WhoCallsTheFleetDb.getShipStat(kcShip.masterId);
@@ -419,14 +435,16 @@
 				self.showKCGear(
 					$(".ship_gear_"+(ind+1), shipBox),
 					kcShip.equipment(ind),
-					kcShip.slots[ind]);
+					kcShip.slots[ind],
+					kcShip
+				);
 			});
 		},
 
 		/* Show single equipment
 		   --------------------------------------------*/
-		showKCGear: function(gearBox, kcGear, capacity) {
-			if (kcGear.masterId === 0) {
+		showKCGear: function(gearBox, kcGear, capacity, kcShip) {
+			if (!kcGear.masterId) {
 				gearBox.hide();
 				return;
 			}
@@ -447,12 +465,13 @@
 				$(".gear_name .slot", gearBox).text( " x{0}".format(capacity) );
 			}
 			$(".gear_name", gearBox).attr("title",
-				KC3Gear.buildGearTooltip(kcGear, true, capacity)
-			).lazyInitTooltip();
+				kcGear.htmlTooltip(capacity, kcShip))
+				.lazyInitTooltip();
 		},
 
 		createKCFleetObject: function(fleetObj) {
 			var fleet = new KC3Fleet();
+			if(!fleetObj) return fleet;
 			fleet.name = fleetObj.name;
 			fleet.ships = [ -1, -1, -1, -1, -1, -1 ];
 			if (!fleetObj) return;

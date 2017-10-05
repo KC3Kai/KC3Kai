@@ -8,12 +8,18 @@
 	<!-- REPLAY NOTICE -->
 	<div class="help_q">About <strong>REPLAY FEATURE</strong></div>
 	<div class="help_a">
-		Left click on a REP button to download sortie card images. You may watch it at the <strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank"
-		>REPLAY WEBSITE</a></strong>. You can also share this to your friends so they can watch it too. Be careful though, do not upload directly to Facebook or other websites that resize or change the quality of the picture. Try using imgur, puush, Twitter, etc.
 		<p>
-		Right clicking on the REP button will automatically open the <strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE</a></strong> with your replay.
+			Left click on a <kbd>REP</kbd> button to download sortie card images. You may watch it at the
+<strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE https://bit.ly/kc3-replayer</a></strong>.
+You can also share this to your friends so they can watch it too. Be careful though, do not upload directly to Facebook or other websites that resize or change the quality of the picture. Try using imgur, puush, Twitter, etc.
+		</p>
 		<p>
-		There are incoming features such as the ability to use normal in-game screenshots for replay. This is in our <code>dev-ssdata</code> branch in our GitHub repository, but needs further testing.
+			Right clicking on the <kbd>REP</kbd> button will automatically open the
+<strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE</a></strong> with your replay.
+		</p>
+		<p>
+			Hold <kbd>Alt</kbd> key and left click on the <kbd>REP</kbd> button will just copy your replay data (JSON text) to clipboard.
+		</p>
 	</div>
 
 	<div class="help_more">
@@ -84,7 +90,9 @@
 <!-- SORTIE CONTROLS -->
 <div class="sortie_controls">
 	<div class="sortie_count"></div>
-	<div class="sortie_batch_toggles"></div>
+	<div class="sortie_batch_toggles">
+		<div class="non_battle_toggle sortie_toggle active hover" data-target="non_battle" title="Battle nodes only">B</div>
+	</div>
 </div>
 
 <!-- SORTIE RECORDS -->
@@ -104,12 +112,12 @@
 			</div>
 			<div class="sortie_column sortie_map"></div>
 			<div class="sortie_column sortie_fleet">
-				<div class="sortie_ship sortie_ship_1"><img/></div>
-				<div class="sortie_ship sortie_ship_2"><img/></div>
-				<div class="sortie_ship sortie_ship_3"><img/></div>
-				<div class="sortie_ship sortie_ship_4"><img/></div>
-				<div class="sortie_ship sortie_ship_5"><img/></div>
-				<div class="sortie_ship sortie_ship_6"><img/></div>
+				<div class="sortie_ship sortie_ship_1"><img/><div class="sortie_combined_ship sortie_combined_ship_1"><img/></div></div>
+				<div class="sortie_ship sortie_ship_2"><img/><div class="sortie_combined_ship sortie_combined_ship_2"><img/></div></div>
+				<div class="sortie_ship sortie_ship_3"><img/><div class="sortie_combined_ship sortie_combined_ship_3"><img/></div></div>
+				<div class="sortie_ship sortie_ship_4"><img/><div class="sortie_combined_ship sortie_combined_ship_4"><img/></div></div>
+				<div class="sortie_ship sortie_ship_5"><img/><div class="sortie_combined_ship sortie_combined_ship_5"><img/></div></div>
+				<div class="sortie_ship sortie_ship_6"><img/><div class="sortie_combined_ship sortie_combined_ship_6"><img/></div></div>
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_edges one_line">
@@ -129,9 +137,9 @@
 				<div class="sortie_toggle hover" data-target="sortie_roster" title="Fleet">F</div>
 				<div class="sortie_toggle hover" data-target="sortie_nodes" title="Nodes">N</div>
 				<div class="sortie_toggle hover" data-target="sortie_stat" title="Statistic">S</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy"  title="Enemy">E</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds"  title="Conditions">C</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes"  title="Air Battle">A</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy" title="Enemy">E</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds" title="Conditions">C</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes" title="Air Battle">A</div>
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
@@ -219,19 +227,19 @@
 			<div class="node_conds">
 				<div class="node_cond">
 					<div class="node_cond_label">Detect</div>
-					<div class="node_cond_value node_detect">OK</div>
+					<div class="node_cond_value node_detect">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Engage</div>
-					<div class="node_cond_value node_engage">Parallel</div>
+					<div class="node_cond_value node_engage">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Contact</div>
-					<div class="node_cond_value node_contact">YES vs YES</div>
+					<div class="node_cond_value node_contact">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Air Battle</div>
-					<div class="node_cond_value node_airbattle"></div>
+					<div class="node_cond_value node_airbattle">-</div>
 				</div>
 			</div>
 			<div class="node_planes">

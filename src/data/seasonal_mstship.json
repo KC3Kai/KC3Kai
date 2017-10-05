@@ -1,4 +1,161 @@
 {
+	"787": {
+		"api_id": 787,
+		"api_name": "浴衣朝霜",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_ctype": 38,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"788": {
+		"api_id": 788,
+		"api_name": "炒飯長波",
+		"api_yomi": "ながなみ",
+		"api_stype": 2,
+		"api_ctype": 38,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"789": {
+		"api_id": 789,
+		"api_name": "夏Z1",
+		"api_yomi": "レーベレヒト・マース",
+		"api_stype": 2,
+		"api_ctype": 48,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"790": {
+		"api_id": 790,
+		"api_name": "夏海風",
+		"api_yomi": "うみかぜ",
+		"api_stype": 2,
+		"api_ctype": 23,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"791": {
+		"api_id": 791,
+		"api_name": "夏Commandant Teste",
+		"api_yomi": "コマンダン・テスト",
+		"api_stype": 16,
+		"api_ctype": 70,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"792": {
+		"api_id": 792,
+		"api_name": "夏最上",
+		"api_yomi": "もがみ",
+		"api_stype": 5,
+		"api_ctype": 9,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"793": {
+		"api_id": 793,
+		"api_name": "夏2017三隈",
+		"api_yomi": "みくま",
+		"api_stype": 5,
+		"api_ctype": 9,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"794": {
+		"api_id": 794,
+		"api_name": "夏伊401",
+		"api_yomi": "い401",
+		"api_stype": 14,
+		"api_ctype": 44,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"795": {
+		"api_id": 795,
+		"api_name": "夏U-511",
+		"api_yomi": "ゆー511・ろ500",
+		"api_stype": 13,
+		"api_ctype": 57,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"796": {
+		"api_id": 796,
+		"api_name": "夏呂500",
+		"api_yomi": "ゆー511・ろ500",
+		"api_stype": 13,
+		"api_ctype": 57,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"797": {
+		"api_id": 797,
+		"api_name": "瑞雲伊勢改",
+		"api_yomi": "いせ",
+		"api_stype": 10,
+		"api_ctype": 2,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"798": {
+		"api_id": 798,
+		"api_name": "瑞雲日向改",
+		"api_yomi": "ひゅうが",
+		"api_stype": 10,
+		"api_ctype": 2,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"799": {
+		"api_id": 799,
+		"api_name": "瑞雲大淀改",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_ctype": 52,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"800": {
+		"api_id": 800,
+		"api_name": "瑞雲明石",
+		"api_yomi": "あかし",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"801": {
+		"api_id": 801,
+		"api_name": "瑞雲明石改",
+		"api_yomi": "あかし",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"802": {
+		"api_id": 802,
+		"api_name": "瑞雲速吸",
+		"api_yomi": "はやすい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"803": {
+		"api_id": 803,
+		"api_name": "瑞雲扶桑",
+		"api_yomi": "ふそう",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"804": {
+		"api_id": 804,
+		"api_name": "瑞雲山城",
+		"api_yomi": "やましろ",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
 	"805": {
 		"api_id": 805,
 		"api_name": "梅雨漣",

@@ -833,7 +833,7 @@
 					supplyCost: CurrentFleet.calcResupplyCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
-						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
+						(!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet)
 						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),//0
 						CurrentFleet.needsSupply(true),//1
 						CurrentFleet.ship(0).isTaiha(),//2
@@ -871,7 +871,7 @@
 			if(ConfigManager.info_fleetstat){
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.onSortie &&
+					(KC3SortieManager.isOnSortie() &&
 						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
@@ -1395,7 +1395,7 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop").attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ));
 				}
 				

@@ -43,6 +43,10 @@ Uses KC3Quest objects to play around with
 			return (this.list["q"+questId] || (this.list["q"+questId] = new KC3Quest()));
 		},
 
+		getIfExists :function( questId ){
+			return this.exists(questId) ? this.get(questId) : false;
+		},
+
 		exists :function( questId ){
 			return !!this.list["q"+questId];
 		},
@@ -243,7 +247,7 @@ Uses KC3Quest objects to play around with
 					}
 				}
 				
-				// Add to actives or opens depeding on status
+				// Add to actives or opens depending on status
 				switch( questList[ctr].api_state ){
 					case 1:	// Unselected
 						this.isOpen( questList[ctr].api_no, true );
@@ -273,6 +277,53 @@ Uses KC3Quest objects to play around with
 			}
 			
 			this.save();
+		},
+		
+		buildHtmlTooltip :function(questId, meta, isShowId = true, isShowUnlocks = true){
+			const questMeta = meta || KC3Meta.quest(questId);
+			if(!questId || !questMeta) return "";
+			const questObj = this.getIfExists(questId);
+			let title = ((isShowId ? "[{0:id}] " : "") + "{1:code} {2:name}")
+				.format(questId, questMeta.code || "N/A",
+					questMeta.name || KC3Meta.term("UntranslatedQuest"));
+			title += $("<p></p>").css("font-size", "11px")
+				.css("margin-left", "1em")
+				.css("text-indent", "-1em")
+				.text(questMeta.desc || KC3Meta.term("UntranslatedQuestTip"))
+				.prop("outerHTML");
+			if(questObj && Array.isArray(questObj.materials) && questObj.materials.some(v => v > 0)){
+				const buildRscItem = (name, value) => {
+					const rsc = $("<div><img />&nbsp;<span></span></div>");
+					$("img", rsc)
+						.width(11).height(11).css("margin-top", "-3px")
+						.attr("src", `/assets/img/client/${name}.png`);
+					$("span", rsc).text(value || 0);
+					return rsc.html();
+				};
+				title += $("<p></p>").css("font-size", "11px").html(
+					["fuel", "ammo", "steel", "bauxite"]
+						.map((n, i) => buildRscItem(n, questObj.materials[i]))
+						.join("&emsp;")
+				).prop("outerHTML");
+			}
+			if(!!questMeta.memo){
+				title += $("<p></p>")
+					.css("font-size", "11px")
+					.css("color", "#69a").text(questMeta.memo)
+					.prop("outerHTML");
+			}
+			if(isShowUnlocks && Array.isArray(questMeta.unlock)){
+				for(const i in questMeta.unlock) {
+					const cq = KC3Meta.quest(questMeta.unlock[i]);
+					if(!!cq) title += "&emsp;" +
+						$("<span></span>").css("font-size", "11px")
+							.css("color", "#a96")
+							.text("-> [{0:id}] {1:code} {2:name}"
+								.format(questMeta.unlock[i], cq.code || "N/A", cq.name)
+							).prop("outerHTML") + "<br/>";
+				}
+			}
+			return title;
 		},
 		
 		/* IS OPEN
@@ -445,7 +496,7 @@ Uses KC3Quest objects to play around with
 				"663": // F55 Have 18000 steel (scrapping not counted here)
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
-					() => KC3SortieManager.onSortie && KC3SortieManager.fleetSent == 1,
+					() => KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1,
 				"861": // Bq3 Sortie 2 of BBV or AO
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
@@ -507,7 +558,7 @@ Uses KC3Quest objects to play around with
 				for(var ctr in tempQuests){
 					tempQuest = tempQuests[ctr];
 					
-					// Add to actives or opens depeding on status
+					// Add to actives or opens depending on status
 					switch( tempQuest.status ){
 						case 1:	// Unselected
 							this.isOpen( tempQuest.id, true );

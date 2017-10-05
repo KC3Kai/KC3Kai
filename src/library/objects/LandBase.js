@@ -43,6 +43,13 @@
 		});
 	};
 	
+	KC3LandBase.prototype.worstCond = function(){
+		return this.planes.reduce(function(acc, p){
+			return !p.api_slotid || p.api_state !== 1 || !p.api_cond
+				|| p.api_cond < acc ? acc : p.api_cond;
+		}, 0);
+	};
+	
 	KC3LandBase.prototype.calcResupplyCost = function() {
 		var totalFuel = 0,
 			totalBauxite = 0;
@@ -76,8 +83,11 @@
 				totalCost.fuel += Math.round(p.api_count * fuelCostPerSlot);
 				totalCost.ammo += Math.round(p.api_count * ammoCostPerSlot);
 				// Jets consume steel per battle
-				totalCost.steel += ((planeType2 == 57 ? Math.round(p.api_count * planeCost *
-					KC3GearManager.jetBomberSteelCostRatioPerSlot) : 0) || 0);
+				totalCost.steel += ((
+					KC3GearManager.jetAircraftType2Ids.indexOf(planeType2) > -1 ?
+						Math.round(p.api_count * planeCost * KC3GearManager.jetBomberSteelCostRatioPerSlot) : 0
+					) || 0
+				);
 			}
 		});
 		return totalCost;

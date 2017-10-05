@@ -10,6 +10,8 @@ var trustedExit = false;
 var subtitleVanishTimer = false;
 var subtitleVanishBaseMillis;
 var subtitleVanishExtraMillisPerChar;
+var subtitleHourlyTimer = false;
+var subtitleHourlyShip = 0;
 
 // Holder object for audio files to test mp3 duration
 var subtitleMp3;
@@ -182,7 +184,7 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// Untranslated quest copiable text form
+	// Untranslated quest copy-able text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -302,7 +304,7 @@ $(document).on("keydown", function(event){
 });
 
 
-/* Invokable actions
+/* Invoke-able actions
 -----------------------------------*/
 var interactions = {
 	
@@ -596,6 +598,13 @@ var interactions = {
 			case "npc":
 				quoteIdentifier = "npc";
 				break;
+			case "abyssal":
+				quoteIdentifier = "abyssal";
+				if(ConfigManager.subtitle_speaker){
+					const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
+					quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+				}
+				break;
 			default:
 				quoteIdentifier = request.shipID;
 				if(ConfigManager.subtitle_speaker){
@@ -606,14 +615,6 @@ var interactions = {
 		//console.debug("looking up quote:", quoteIdentifier, quoteVoiceNum, quoteVoiceSize);
 		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 		
-		// hide first to fading will stop
-		$(".overlay_subtitles").stop(true, true);
-		$(".overlay_subtitles").hide();
-		
-		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer){
-			clearTimeout(subtitleVanishTimer);
-		}
 		// Lazy init timing parameters
 		if(!subtitleVanishBaseMillis){
 			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
@@ -622,11 +623,23 @@ var interactions = {
 			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
 		}
 		
-		// If subtitles available for the voice
-		if(subtitleText){
+		const hideSubtitle = () => {
+			// hide first to fading will stop
+			$(".overlay_subtitles").stop(true, true);
+			$(".overlay_subtitles").hide();
+			// If subtitle removal timer is ongoing, reset
+			if(subtitleVanishTimer){
+				clearTimeout(subtitleVanishTimer);
+			}
+		};
+		hideSubtitle();
+		
+		// Display subtitle and set its removal timer
+		const showSubtitle = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
+			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
 			$(".overlay_subtitles").show();
-			var millis = subtitleVanishBaseMillis +
+			const millis = subtitleVanishBaseMillis +
 				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 			//console.debug("vanish after", millis, "ms");
 			subtitleVanishTimer = setTimeout(function(){
@@ -647,6 +660,51 @@ var interactions = {
 			}, millis);
 			if(!!quoteSpeaker){
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
+			}
+		};
+		
+		const cancelHourlyLine = () => {
+			if(subtitleHourlyTimer) clearTimeout(subtitleHourlyTimer);
+			subtitleHourlyTimer = false;
+			subtitleHourlyShip = 0;
+		};
+		
+		const bookHourlyLine = (text, shipId) => {
+			cancelHourlyLine();
+			const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
+			//const nextHour = new Date().resetTime(["Milliseconds"]).getTime() + 5000;
+			const diffMillis = nextHour - Date.now();
+			// Do not book on unexpected diff time: passed or > 59 minutes
+			if(diffMillis <= 0 || diffMillis > 59 * 60000) {
+				showSubtitle(text, shipId);
+			} else {
+				subtitleHourlyShip = shipId;
+				subtitleHourlyTimer = setTimeout(function(){
+					// Should cancel booked hourly line for some conditions
+					if(subtitleHourlyShip == shipId
+						// if Chrome delays timer execution > 3 seconds
+						&& Math.abs(Date.now() - nextHour) < 3000
+						// TODO && at home port && secretary unchanged
+					){
+						hideSubtitle();
+						showSubtitle(text, shipId);
+					}
+					cancelHourlyLine();
+				}, diffMillis);
+				//console.debug("hourly booked after:", diffMillis, shipId, text);
+			}
+		};
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			// Book for a future display if it's a ship's hourly voice,
+			// because game preload voice file in advance (about > 5 mins, even ~24 mins).
+			if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
+				if(ConfigManager.subtitle_hourly){
+					bookHourlyLine(subtitleText, quoteIdentifier);
+				}
+			} else {
+				showSubtitle(subtitleText, quoteIdentifier);
 			}
 		}
 	}

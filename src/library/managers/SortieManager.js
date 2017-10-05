@@ -75,7 +75,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					sortie.mapinfo.api_defeat_count = thisMap.kills || 0;
 				}
 			}
-			// Reocrd boss HP gauge states of event maps
+			// Record boss HP gauge states of event maps
 			if(eventData){
 				var mergedEventInfo = {};
 				$.extend(mergedEventInfo, eventData, {
@@ -87,27 +87,38 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				delete mergedEventInfo.api_dmg;
 				
 				sortie.eventmap = mergedEventInfo;
-			}
-			// Save on database and remember current sortieId
-			KC3Database.Sortie(sortie, function(id){
-				self.onSortie = id;
-				self.sortieTime = stime;
-				self.save();
-				
-				// Save event maphp now/max to localStorage.maps
-				if(eventData){
-					if(!thisMap.curhp){
-						thisMap.curhp = eventData.api_now_maphp;
-						thisMap.maxhp = eventData.api_max_maphp;
-					}
-					if(thisMap.stat && thisMap.stat.onBoss){
-						let hpData = thisMap.stat.onBoss.hpdat || [];
-						hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
-						thisMap.stat.onBoss.hpdat = hpData;
-					}
-					self.setCurrentMapData(thisMap);
+
+				// Update event map now/max hp at once for panel display,
+				// because first run after rank selected, they were set to 9999
+				if((thisMap.curhp || 9999) === 9999 && eventData.api_now_maphp){
+					thisMap.curhp = parseInt(eventData.api_now_maphp, 10);
+					thisMap.maxhp = parseInt(eventData.api_max_maphp, 10);
+					this.setCurrentMapData(thisMap);
 				}
-			});
+			}
+			if(ConfigManager.isNotToSaveSortie(this.map_world, this.map_num)){
+				// Ignore database saving if user demands, set a pseudo sortie id (keep > 0)
+				this.onSortie = Number.MAX_SAFE_INTEGER;
+				this.sortieTime = stime;
+				this.save();
+			} else {
+				// Save on database and remember current sortie id
+				KC3Database.Sortie(sortie, function(id){
+					self.onSortie = id;
+					self.sortieTime = stime;
+					self.save();
+					// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
+					if(eventData){
+						if(thisMap.stat && thisMap.stat.onBoss){
+							var hpData = thisMap.stat.onBoss.hpdat || [];
+							hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
+							thisMap.stat.onBoss.hpdat = hpData;
+							self.setCurrentMapData(thisMap);
+							console.log("Event map HP on sortie " + id + " recorded as", hpData[id]);
+						}
+					}
+				});
+			}
 		},
 		
 		snapshotFleetState :function(){
@@ -175,10 +186,30 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
-		isSortieAt: function(world,map) {
+		getSortieId: function() {
+			return this.isOnUnsavedSortie() ? 0 : this.onSortie || 0;
+		},
+		
+		getSortieMap: function() {
+			return [this.map_world, this.map_num];
+		},
+		
+		isOnSortie: function() {
+			return this.onSortie > 0 || this.isOnUnsavedSortie();
+		},
+		
+		isOnUnsavedSortie: function() {
+			return this.onSortie === Number.MAX_SAFE_INTEGER;
+		},
+		
+		isOnSavedSortie: function() {
+			return !this.isOnUnsavedSortie() && this.isOnSortie();
+		},
+		
+		isSortieAt: function(world, map) {
 			// Always return false on event maps
 			// (speculated map_world for events > 10 as expedition format follows)
-			return (this.map_world == world && this.map_world <= 10) &&
+			return (this.map_world == world && this.map_world < 10) &&
 				(this.map_num == (map || this.map_num));
 		},
 		
@@ -269,8 +300,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
-			thisNode = (new KC3Node( this.onSortie, nodeData.api_no, UTCTime ))[definedKind](nodeData);
+			thisNode = (new KC3Node( this.getSortieId(), nodeData.api_no, UTCTime,
+				this.map_world, this.map_num, nodeData ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
+			this.updateNodeCompassResults();
+			
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
 		},
@@ -312,40 +346,40 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		updateMvps :function(mvps){
-			if(!!mvps && mvps.length > 0){
+			if(Array.isArray(mvps) && mvps.length){
 				if(PlayerManager.combinedFleet && this.fleetSent === 1){
-					var mvpIndex1 = mvps[0] || 1,
-						mvpIndex2 = mvps[1] || 1,
-						ships1 = PlayerManager.fleets[0].ships,
-						ships2 = PlayerManager.fleets[1].ships;
-					if(mvpIndex1 > 0){
-						this.cleanMvpShips(ships1);
-						KC3ShipManager.get(ships1[mvpIndex1-1]).mvp = true;
+					const mainMvp = mvps[0] || 1,
+						escortMvp = mvps[1] || 1,
+						mainFleet = PlayerManager.fleets[0],
+						escortFleet = PlayerManager.fleets[1];
+					if(mainMvp > 0){
+						this.cleanMvpShips(mainFleet);
+						mainFleet.ship(mainMvp - 1).mvp = true;
 					}
-					if(mvpIndex2 > 0){
-						this.cleanMvpShips(ships2);
-						KC3ShipManager.get(ships2[mvpIndex2-1]).mvp = true;
+					if(escortMvp > 0){
+						this.cleanMvpShips(escortFleet);
+						escortFleet.ship(escortMvp - 1).mvp = true;
 					}
 				} else {
-					var mvpIndex = mvps[0] || mvps[1] || -1,
-						ships = PlayerManager.fleets[this.fleetSent-1].ships;
-					if(mvpIndex > 0){
-						this.cleanMvpShips(ships);
-						KC3ShipManager.get(ships[mvpIndex-1]).mvp = true;
+					const mvp = mvps[0] || mvps[1] || -1,
+						fleet = PlayerManager.fleets[this.fleetSent - 1];
+					if(mvp > 0){
+						this.cleanMvpShips(fleet);
+						fleet.ship(mvp - 1).mvp = true;
 					}
 				}
 			}
 		},
 		
-		cleanMvpShips :function(ships){
-			ships.forEach(function(index){
-				KC3ShipManager.get(ships[index]).mvp = false;
+		cleanMvpShips :function(fleet){
+			fleet.ship((rid, idx, ship) => {
+				ship.mvp = false;
 			});
 		},
 		
 		checkFCF :function( escapeData ){
 			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
-				console.log("FCF triggered");
+				console.debug("FCF triggered");
 				
 				var taihadIndex = escapeData.api_escape_idx[0];
 				var taihadShip;
@@ -373,7 +407,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sendFCFHome :function(){
-			console.log("Setting escape flag for fcfCheck", this.fcfCheck);
+			console.debug("Setting escape flag for fcfCheck", this.fcfCheck);
 			this.fcfCheck.forEach(function(fcfShip){
 				KC3ShipManager.get(fcfShip).didFlee = true;
 			});
@@ -404,6 +438,35 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
+		updateNodeCompassResults: function(){
+			if(this.isOnSavedSortie()) {
+				KC3Database.updateNodes(this.onSortie, this.nodes.map(node => {
+					// Basic edge ID and parsed type (dud === "")
+					const toSave = { id: node.id, type: node.type };
+					// Raw API result data
+					const mapNext = node.nodeData;
+					if(mapNext) {
+						if(mapNext.api_event_id !== undefined)   // Node raw event ID, 0 should be saved
+							toSave.eventId = mapNext.api_event_id;
+						if(mapNext.api_event_kind !== undefined) // Node raw event kind, 0 should be saved
+							toSave.eventKind = mapNext.api_event_kind;
+						if(mapNext.api_destruction_battle)       // Land Base Enemy Raid
+							toSave.airRaid = mapNext.api_destruction_battle;
+						if(mapNext.api_offshore_supply)          // Resupplier used event
+							toSave.offshoreSupply = mapNext.api_offshore_supply;
+					}
+					// FIXME saving nodeDesc directly will save translated text,
+					// which causes i18n switching not affect old records.
+					// To resolve this, parsed 'type, item & count' info should be saved,
+					// which could be recognized via all these attributes:
+					// api_itemget, api_happening, api_itemget_eo_result, api_itemget_eo_comment
+					if(node.nodeDesc)
+						toSave.desc = node.nodeDesc;
+					return toSave;
+				}));
+			}
+		},
+
 		// return empty object if not found
 		getAllMapData: function(){
 			return localStorage.getObject("maps") || {};
@@ -439,13 +502,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sortieName :function(diff){
-			var pvpData = JSON.parse(localStorage.statistics || "{}").pvp;
+			var pvpData = JSON.parse(localStorage.statistics || '{"pvp":{"win":0,"lose":0}}').pvp;
 			return this.isPvP() ? (
-				/* There's a possibility to encounter String bug
-				   -- if either win/lose counter is zero
-				*/
 				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
-			) : ("sortie" + this.onSortie);
+			) : ("sortie" + (this.isOnUnsavedSortie() ? 0 : this.onSortie));
 		},
 		
 		endSortie :function(portApiData){
@@ -520,13 +580,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			cons.resc.forEach(function(matr,indx){
 				self.materialGain[indx] += matr;
 			});
-			// To detect whether invalid sortie ID or not
-			if(this.onSortie)
+			// Still save as a record with sortie id unknown 'sortie0',
+			// for saving resupply / repair costs later
+			if(this.isOnSortie()){
 				KC3Database.Naverall({
-					hour: Math.hrdInt('floor',this.sortieTime/3.6,3,1),
+					hour: Math.hrdInt('floor', this.sortieTime / 3.6, 3, 1),
 					type: cons.name,
 					data: this.materialGain.slice(0)
-				},null,true);
+				}, null, true);
+				// Save node data to sortie table even end at 1st node
+				this.updateNodeCompassResults();
+			}
 			// Remove sortie comparison buffer
 			PlayerManager.hq.lastSortie = null;
 			
@@ -539,10 +603,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.nodes = [];
 			this.boss = { info: false };
 			if(PlayerManager.combinedFleet && sentFleet === 1){
-				this.cleanMvpShips(PlayerManager.fleets[0].ships);
-				this.cleanMvpShips(PlayerManager.fleets[1].ships);
+				this.cleanMvpShips(PlayerManager.fleets[0]);
+				this.cleanMvpShips(PlayerManager.fleets[1]);
 			} else {
-				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1].ships);
+				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1]);
 			}
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
@@ -563,81 +627,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.onCat = false;
 			this.sortieTime = 0;
 			this.save();
-		},
-		/**
-		 * Get battle opponent's fighter power only based on master data.
-		 * @param enemyFleetShips - master ID array of opponent fleet ships.
-		 * @param enemyShipSlots - master ID array of equip slots, optional.
-		 *                         length should be the same with enemyFleetShips.
-		 * @return a tuple contains [
-		 *           computed fighter power (without improvement and proficiency bonus),
-		 *           sum of known slot capacity,
-		 *           sum of slot capacity without air power,
-		 *           exception map indicates which ship or gear missing required data:
-		 *             {shipId: null || {gearId: null || aaStat}}
-		 *         ]
-		 * @see To compute fighter power of our fleet, see Fleet, Ship, Gear classes.
-		 */
-		enemyFighterPower :function(enemyFleetShips, enemyShipSlots){
-			var totalPower = false;
-			var totalCapacity = 0;
-			var noAirPowerCapacity = 0;
-			var exceptions = {};
-			// no ship IDs
-			if(!enemyFleetShips){
-				exceptions.ship = null;
-				return [totalPower, totalCapacity, exceptions];
-			}
-			$.each(enemyFleetShips, function(shipIdx, shipId){
-				// ignore -1 placeholder
-				if(!shipId || shipId < 0){
-					return;
-				}
-				let shipMst = KC3Master.isAbyssalShip(shipId) ?
-					KC3Master.abyssalShip(shipId, true) : KC3Master.ship(shipId);
-				// no ship master data
-				if(!shipMst){
-					exceptions[shipId] = null;
-					return;
-				}
-				let shipSlots = (enemyShipSlots || [])[shipIdx] || shipMst.kc3_slots;
-				// no slot gear IDs
-				if(!Array.isArray(shipSlots)){
-					exceptions[shipId] = {};
-					return;
-				}
-				// mainly remove -1 placeholders
-				shipSlots = shipSlots.filter(function(id) { return id > 0; });
-				for(let slotIdx = 0; slotIdx < shipSlots.length; slotIdx++){
-					let gearId = shipSlots[slotIdx];
-					let gearMst = KC3Master.slotitem(gearId);
-					// no gear master data
-					if(!gearMst){
-						exceptions[shipId] = exceptions[shipId] || {};
-						exceptions[shipId][gearId] = null;
-						continue;
-					}
-					if(KC3GearManager.antiAirFighterType2Ids.indexOf(
-						String(gearMst.api_type[2]) ) > -1){
-						let aaStat = gearMst.api_tyku || 0;
-						let capacity = (shipMst.api_maxeq || [])[slotIdx];
-						if(typeof capacity !== "undefined"){
-							if(aaStat > 0){
-								totalCapacity += capacity;
-								totalPower += Math.floor(Math.sqrt(capacity) * aaStat);
-							} else {
-								noAirPowerCapacity += capacity;
-							}
-						} else {
-							// no slot maxeq (capacity)
-							exceptions[shipId] = exceptions[shipId] || {};
-							exceptions[shipId][gearId] = aaStat;
-						}
-					}
-				}
-			});
-			return [totalPower, totalCapacity, noAirPowerCapacity, exceptions];
 		}
+		
 	};
 	
 })();

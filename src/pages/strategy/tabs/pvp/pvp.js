@@ -208,7 +208,8 @@
 			// Process battle, create simulated node info
 			var thisPvP = (new KC3Node()).defineAsBattle();
 			thisPvP.isPvP = true;
-			// For now, not required to simulate states of PvP sortie
+			thisPvP.letter = "PvP";
+			// Do not require to simulate states of PvP sortie
 			//KC3SortieManager.onPvP = true;
 			//KC3SortieManager.nodes.push(thisPvP);
 			
@@ -218,9 +219,22 @@
 			$(".pvp_battle_day", targetBox).html(battle_info_html);
 			this.fillBattleBox(thisPvP, $(".pvp_battle_day", targetBox));
 			
-			// Clean states if SortieManager is changed
-			//KC3SortieManager.onPvP = false;
-			//KC3SortieManager.nodes.length = 0;
+			if(KC3Node.debugPrediction()){
+				if(data.yasen.api_deck_id !== undefined){
+					thisPvP.night(data.yasen);
+				}
+				console.debug("PvP result rank", data.rating, data.id);
+				console.assert(data.rating == (thisPvP.predictedRankNight || thisPvP.predictedRank), "Rank prediction mismatch", data);
+				
+				console.debug("PvP result mvp", data.mvp, data.id);
+				if(thisPvP.predictedMvpCapable){
+					const predictedMvps = thisPvP.predictedMvpsNight || thisPvP.predictedMvps || [];
+					console.assert(data.mvp[0] == predictedMvps[0], "MVP prediction mismatch", data);
+				} else {
+					console.info("MVP prediction incapable");
+				}
+			}
+			
 		},
 		
 		/* FILL ONE BATTLE BOX (DAY/NIGHT)
@@ -330,7 +344,7 @@
 						fleet4: [],
 						fleetnum: 1,
 						hq: pvpData.hq,
-						id: 0,
+						id: pvpData.id,
 						support1: 0,
 						support2: 0,
 						world: 0,
@@ -338,7 +352,15 @@
 					};
 					
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+							+ encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					} else if(e.altKey) {
+						self.copyToClipboard(JSON.stringify(encodeData), () => {
+							alert("Replay data copied to clipboard");
+						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
@@ -384,6 +406,24 @@
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");
+		},
+		
+		copyToClipboard : function(stringData, successCallback) {
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", stringData);
+					if(typeof successCallback === "function") {
+						successCallback.call(this, e);
+					}
+				} else {
+					console.warn("Browser does not support Clipboard event");
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
 		}
 		
 	};

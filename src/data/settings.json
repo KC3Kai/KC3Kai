@@ -154,6 +154,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_btmvp",
+				"name" : "SettingsBattleMvp",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_btstamp",
 				"name" : "SettingsBattleStamp",
 				"type" : "check",
@@ -234,6 +240,12 @@
 				}
 			},
 			{
+				"id" : "info_seasonal_icon",
+				"name" : "SettingsSeasonalShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
@@ -277,30 +289,47 @@
 				}
 			},
 			{
-				"id" : "air_average",
-				"name" : "SettingsAFPAverage",
-				"type" : "json",
-				"options" : {}
-			},
-			{
-				"id" : "air_bounds",
-				"name" : "SettingsAFPBounds",
-				"type" : "json",
-				"options" : {}
-			},
-			{
 				"id" : "aaFormation",
-				"name" : "SettingsAAFormation",
+				"name" : "SettingsPlayerFormation",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "SettingsAAFLineAheadEtc" ],
-						[ 2, "SettingsAAFDoubleLine" ],
-						[ 3, "SettingsAAFDiamond" ],
-						[ 11, "SettingsAAFCombAntiSub" ],
-						[ 13, "SettingsAAFCombDiamond" ]
+						[ 1, "SettingsForLineAhead" ],
+						[ 2, "SettingsForDoubleLine" ],
+						[ 3, "SettingsForDiamond" ],
+						[ 4, "SettingsForEchelon" ],
+						[ 5, "SettingsForLineAbreast" ],
+						[ 11, "SettingsForCombAntiSub" ],
+						[ 12, "SettingsForCombForward" ],
+						[ 13, "SettingsForCombDiamond" ],
+						[ 14, "SettingsForCombBattle" ]
 					]
 				}
+			},
+			{
+				"id" : "imaginaryEnemyType",
+				"name" : "SettingsImaginaryEnemyType",
+				"type" : "radio",
+				"hide" : 1,
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsEnemySurface" ],
+						[ 1, "SettingsEnemyLand" ],
+						[ 2, "SettingsEnemySubmarine" ]
+					]
+				}
+			},
+			{
+				"id" : "imaginaryEnemyArmor",
+				"name" : "SettingsImaginaryEnemyArmor",
+				"type" : "small_text",
+				"hide" : 1,
+				"bound" : {
+					"min" :  0,
+					"max" : 999,
+					"type": "Integer"
+				},
+				"options" : { "label" : "" }
 			},
 			{
 				"id" : "imaginaryEnemySlot",
@@ -312,6 +341,27 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "" }
+			},
+			{
+				"id" : "powerCapApplyLevel",
+				"name" : "SettingsPowerCapLevel",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsPowerCapNone" ],
+						[ 1, "SettingsPowerCapPrecap" ],
+						[ 2, "SettingsPowerCapCapped" ],
+						[ 3, "SettingsPowerCapPostcap" ]
+					]
+				}
+			},
+			{
+				"id" : "powerCritical",
+				"name" : "SettingsPowerCritical",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsPowerCriticalTip"
+				}
 			}
 		]
 	},
@@ -584,6 +634,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "map_markers",
+				"name" : "SettingsMapNodeMarkers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_askExit",
 				"name" : "SettingsConfirmExit",
 				"type" : "check",
@@ -712,8 +768,8 @@
 				"options" : {}
 			},
 			{
-				"id" : "map_markers",
-				"name" : "SettingsMapNodeMarkers",
+				"id" : "subtitle_hourly",
+				"name" : "SettingsSubtitleHourly",
 				"type" : "check",
 				"options" : {}
 			},
@@ -951,6 +1007,30 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
+				}
+			},
+			{
+				"id" : "idbSaveSortie",
+				"name" : "SettingsSaveSortieToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieToDbTip"
+				}
+			},
+			{
+				"id" : "idbSaveExcludeMaps",
+				"name" : "SettingsSaveSortieButMaps",
+				"type" : "json",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieButMapsTip"
+				}
+			},
+			{
+				"id" : "idbSavePvP",
+				"name" : "SettingsSavePvpToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSavePvpToDbTip"
 				}
 			}
 		]

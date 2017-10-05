@@ -267,7 +267,7 @@
 						switch(id){
 						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
 						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
-						case 75: return (PlayerManager.consumables.newGunMountMaterial || 0) < amount;
+						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
 						}
 						return false;
 					};
@@ -388,15 +388,15 @@
 						}
 						
 						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
-						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
+						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][2]);
 						showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
 						
 						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
-						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
+						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][2]);
 						showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
 						if(imp.upgrade && imp.upgrade[0] > 0){
 							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
-							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
+							checkDevScrew("max", itemId, resArr[3][1], resArr[3][2]);
 							showConsumedItemList("max", resArr[3][4], resArr[3][5]);
 							upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");

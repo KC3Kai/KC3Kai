@@ -31,7 +31,7 @@ KC3改 Ship Box for Natsuiro theme
 		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
 		$(".ship_img", this.element).tooltip({
-			position: { my: !!isCombinedEscort ? "left-50 top" : "left+50 top",
+			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
 			items: "div",
 			content: tooltipBox.html()
@@ -60,7 +60,7 @@ KC3改 Ship Box for Natsuiro theme
 		if( myExItem && myExItem.masterId > 0 ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png")
-				.attr("title", myExItem.htmlTooltip(0))
+				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {
@@ -84,14 +84,32 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// MVP icon
 		if(this.shipData.mvp){
-			$(".mvp_icon", this.element).show();
-			// Reserved value for predicted MVP
-			if(typeof this.shipData.mvp === "string"){
-				$(".mvp_icon img", this.element).css("opacity", 0.5);
+			switch(this.shipData.mvp){
+				case "chosen": // a capable prediction
+					$(".mvp_icon img", this.element).css("opacity", 0.7)
+						.attr("src", "/assets/img/ui/mvp.png")
+						.css("-webkit-filter", "brightness(1.2)")
+						.css("filter", "brightness(1.2)");
+					$(".mvp_icon", this.element)
+						.toggle(ConfigManager.info_btmvp);
+					break;
+				case "candidate": // an incapable prediction
+					$(".mvp_icon img", this.element)
+						.attr("src", "/assets/img/ui/mdp.png")
+						.css("opacity", 0.7)
+						.css("-webkit-filter", "brightness(0.8)")
+						.css("filter", "brightness(0.8)");
+					$(".mvp_icon", this.element)
+						.toggle(ConfigManager.info_btmvp);
+					break;
+				default: // an indeed result
+					$(".mvp_icon img", this.element)
+						.attr("src", "/assets/img/ui/mvp.png")
+						.css("opacity", 1).css("filter", "").css("-webkit-filter", "");
+					$(".mvp_icon", this.element).show();
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();
-			$(".mvp_icon img", this.element).css("opacity", "");
 		}
 		
 		return this;
@@ -146,7 +164,11 @@ KC3改 Ship Box for Natsuiro theme
 				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
 					[KC3Meta.term("PanelPossibleRemodel")] :
 					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
-			})(this.shipData) ).lazyInitTooltip();
+			})(this.shipData) ).lazyInitTooltip()
+			.toggleClass("goaled", (function(shipData){
+				var shipGoal = (localStorage.getObject("goals") || {})["s" + shipData.rosterId];
+				return Array.isArray(shipGoal) && shipData.level >= shipGoal[0];
+			})(this.shipData));
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
@@ -194,13 +216,15 @@ KC3改 Ship Box for Natsuiro theme
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
 		
-		// Left HP to be Taiha
+		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
-		if(this.shipData.hp[0] > taihaHp && this.shipData.hp[0] < this.shipData.hp[1]){
-			$(".ship_hp_cur", this.element)
-				.attr("title", KC3Meta.term("PanelTaihaHpLeft").format(taihaHp, this.shipData.hp[0] - taihaHp) )
-				.lazyInitTooltip();
-		}
+		var chuuhaHp = Math.floor(0.50 * this.shipData.hp[1]);
+		$(".ship_hp_cur", this.element).attr("title", (curHp => {
+			return KC3Meta.term(curHp > taihaHp ? "PanelTaihaHpLeft" : "PanelTaihaHp")
+				.format(taihaHp, curHp - taihaHp)
+				+ "\n" + KC3Meta.term(curHp > chuuhaHp ? "PanelChuuhaHpLeft" : "PanelChuuhaHp")
+				.format(chuuhaHp, curHp - chuuhaHp);
+		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box colors
 		this.element.css("background-color", "transparent");
@@ -228,8 +252,8 @@ KC3改 Ship Box for Natsuiro theme
 		// If not being repaired
 		}else{
 			if(this.shipData.didFlee){
-				console.log( this.shipData.name(), "fled, setting backgrounds to white");
-				// if FCF, mark hp bar as blue
+				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
+				// if FCF, mark background and hp bar as white
 				$(".ship_hp_bar", this.element).css("background", "#fff");
 				this.element.css("background", "rgba(255,255,255,0.4)");
 			}else{
@@ -255,7 +279,7 @@ KC3改 Ship Box for Natsuiro theme
 	};
 	
 	/* HIDE AKASHI TIMER
-	(If enabled?) Show the timer whenever hover akashi's shipbox.
+	(If enabled?) Show the timer whenever hover Akashi shipbox.
 	This element will be removed if it does not meet the required condition.
 	[Being repaired/Repairing]
 	---------------------------------------------------*/
@@ -286,7 +310,7 @@ KC3改 Ship Box for Natsuiro theme
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
 			if(this.shipData.hp[0] <= 0) {
-				// Already sunk ship will get negtive hp and no prediction
+				// Already sunk ship will get negative hp and no prediction
 				$(".ship_hp_cur", this.element).text(this.shipData.hp[0]);
 			} else {
 				$(".ship_hp_diff", this.element).text((hpDiff > 0 ? "+" : "") + hpDiff);
@@ -363,7 +387,7 @@ KC3改 Ship Box for Natsuiro theme
 					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
-					.attr("title", thisGear.htmlTooltip(this.shipData.master().api_maxeq[slot]))
+					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slots[slot], this.shipData))
 					.lazyInitTooltip()
 					.data("masterId", thisGear.masterId)
 					.on("dblclick", function(e){
@@ -379,7 +403,7 @@ KC3改 Ship Box for Natsuiro theme
 				}
 				
 				if (thisGear.ace > 0) {
-					// Is a plane with veterancy
+					// Is a plane with proficiency level
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
 						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");

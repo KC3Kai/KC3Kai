@@ -182,6 +182,52 @@ Object.size = function(obj) {
 	}
 	return size;
 };
+Object.assignIfDefined = function(target, key, value) {
+	if(value !== undefined && typeof target === "object") {
+		target[key] = value;
+	}
+	return target;
+};
+/**
+ * Checks object paths of any depth is valid, like `lodash.hashPathIn`.
+ */
+Object.hasSafePath = function(root, props) {
+	return Object.safePropertyPath(false, root, props);
+};
+/**
+ * Get object property value by paths of any depth is valid.
+ */
+Object.getSafePath = function(root, props) {
+	return Object.safePropertyPath(true, root, props);
+};
+Object.safePropertyPath = function(isGetProp, root, props) {
+	if(!root) {
+		return isGetProp ? root : false;
+	}
+	var path = [];
+	if(arguments.length > 3) {
+		path = $.makeArray(arguments).slice(2);
+	} else if(typeof props === "string") {
+		path = props.split('.');
+	} else if(Array.isArray(props)) {
+		path = props;
+	}
+	var prop;
+	while( !!(prop = path.shift()) ) {
+		try {
+			// can use hasOwnProperty not to match props inherited
+			if(typeof prop === "string" && prop in root) {
+				root = root[prop];
+			} else {
+				return isGetProp ? undefined : false;
+			}
+		} catch(e) {
+			return isGetProp ? undefined : false;
+		}
+	}
+	return isGetProp ? root : true;
+};
+
 
 /* PRIMITIVE */
 /*******************************\
@@ -259,7 +305,7 @@ String.prototype.toHHMMSS = function () {
 
 /* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
 -------------------------------*/
-String.prototype.plusCurrentTime = function() {
+String.prototype.plusCurrentTime = function(showDays) {
 	var currentTime = new Date();
 	var secondsAfterMidnight =
 		3600 * currentTime.getHours() +
@@ -268,7 +314,9 @@ String.prototype.plusCurrentTime = function() {
 
 	var secondsRemaining = parseInt(this, 10);
 	var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
-	return String(timeFinished).toHHMMSS();
+	var daysPassed = Math.floor((secondsAfterMidnight + secondsRemaining) / 86400);
+	return (showDays && daysPassed ? "+" + daysPassed + " " : "") +
+		String(timeFinished).toHHMMSS();
 };
 
 /* hashing for integrity checks
@@ -420,7 +468,7 @@ String.prototype.hashCode = function() {
 					for (var i = 0, l=this.length; i < l; i++) {
 						// Check if we have nested arrays
 						if (this[i] instanceof Array && array[i] instanceof Array) {
-							// recurse into the nested arrays
+							// recursively into the nested arrays
 							if (!this[i].equals(array[i]))
 								return false;
 						} else if (this[i] != array[i]) {
@@ -654,7 +702,7 @@ Object.sumValuesByKey = function(){
 			switch(typeof clearTable) {
 				case 'number':
 				case 'string':
-					// Pick nth+1 element from ResetableKeys
+					// Pick nth+1 element from Reset-able Keys
 					// Invalid >> pick all elements
 					clearTable = parseInt(clearTable,10);
 					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
@@ -666,7 +714,7 @@ Object.sumValuesByKey = function(){
 					};
 					break;
 				default:
-					// Pick any matching element from Resetable Array
+					// Pick any matching element from Reset-able Array
 					// Invalid >> pick all elements
 					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
 
@@ -776,8 +824,11 @@ Storage.prototype.getObject = function(key) {
 /**
  * https://stackoverflow.com/questions/3027142/calculating-usage-of-localstorage-space
  * DOMException (code 22, name: QuotaExceededError) will be thrown on
- * 5M characters (yes it's not byte) exceeded for Chromium.
- * They are different for other browser engines:
+ * 5M characters (yes it's not in bytes) exceeded for Chromium localStorage.
+ * It's equivalent to `chrome.storage.local.QUOTA_BYTES`, but differences are:
+ * chrome.storage.local is in bytes, measured by JSON string and can be unlimitedStorage.
+ * https://developer.chrome.com/extensions/storage
+ * They are also different for other browser engines:
  * https://en.wikipedia.org/wiki/Web_storage#Storage_size
  **/
 Storage.prototype.quotaLength = 1024 * 1024 * 5;

@@ -329,6 +329,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.sortie.add(data).then(callback);
 		},
 		
+		updateNodes :function(id, newNodes){
+			this.con.sortie.update(id, {nodes: newNodes});
+		},
+
 		Battle :function(data){
 			data.hq = this.index;
 			this.con.battle.add(data);
