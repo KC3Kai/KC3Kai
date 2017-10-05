@@ -291,8 +291,8 @@
 		KC3TimerManager.update();
 
 		// Docking ~ Akashi Timer Stat
-		var TotalFleet = selectedFleet == 5 ? [0,1] : (selectedFleet == 6 ? [0,1,2,3] : [selectedFleet-1]);
-		var data = TotalFleet
+		var scopedFleetIds = selectedFleet == 5 ? [0,1] : (selectedFleet == 6 ? [] : [selectedFleet-1]);
+		var data = scopedFleetIds
 			.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
 			.reduce(function(pre,cur){
 				var data = {};
@@ -305,7 +305,7 @@
 		UpdateRepairTimerDisplays(data);
 		
 		// Akashi current
-		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
+		var baseElement = scopedFleetIds.length ? scopedFleetIds.length > 1 ? ['main','escort'] : ['single'] : [];
 		baseElement.forEach(function(baseKey,index){
 			var baseContainer = $([".shiplist",baseKey].join('_'));
 
@@ -1871,8 +1871,27 @@
 				$(".module.status .status_morale .status_text")
 					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"))
 					.toggleClass("bad", lbasCondBad).toggleClass("good", !lbasCondBad);
+				// no morale timer
 				moraleClockValue = 100;
 				moraleClockEnd = 0;
+				// clean repair status and timer, might show plane moving timer
+				$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
+				$(".module.status .status_repair .status_text")
+					.text( KC3Meta.term("Placeholder") )
+					.attr("title", "")
+					.removeClass("bad").addClass("good");
+				UpdateRepairTimerDisplays(0, 0);
+				// show 'combined fleet' type as 'LBAS'
+				$(".module.status .status_butai .status_text")
+					.text( KC3Meta.term("CombinedLbas") )
+					.attr("title", "");
+				$(".module.status .status_butai").show();
+				$(".module.status .status_support").hide();
+				// hide unused summary line
+				$(".module.summary").hideChildrenTooltips();
+				$(".module.summary").addClass("disabled");
+			} else {
+				$(".module.summary").removeClass("disabled");
 			}
 		},
 

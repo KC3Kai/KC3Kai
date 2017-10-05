@@ -2378,6 +2378,11 @@ ABYSS FLEET
 .module.summary {
 
 }
+.module.summary.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
+}
 .module.summary .summary_box {
 	width:61px;
 	height:20px;
