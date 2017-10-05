@@ -40,7 +40,7 @@ known IDs see QuestManager
 		if (data.materials) {
 			this.materials = data.materials;
 		}
-		if (!this.tracking) {
+		if (data.tracking) {
 			this.tracking = data.tracking;
 		}
 		this.attachMeta();
@@ -177,7 +177,7 @@ known IDs see QuestManager
 					trackingDesc : questMeta.trackingDesc
 				}; };
 				// If tracking is empty and Meta is defined
-				if(this.tracking === false){
+				if(this.tracking === false && Array.isArray(questMeta.tracking)){
 					this.tracking = questMeta.tracking;
 				}
 			} else if(this.meta === undefined) {
@@ -244,7 +244,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.autoAdjustCounter = function() {
-		if (! this.tracking || !Array.isArray(this.tracking))
+		if (!Array.isArray(this.tracking))
 			return;
 
 		if (this.isCompleted()) {

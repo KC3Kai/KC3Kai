@@ -173,7 +173,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
 				KC3QuestManager: KC3QuestManager,
-				questlist: request.questlist
+				questlist: request.questlist,
+				ConfigManager: ConfigManager
 			})).execute();
 		},
 		
@@ -196,7 +197,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				mapId: request.nextNode.api_mapinfo_no,
 				compassShow: !!request.nextNode.api_rashin_flg,
 				needsDelay: !!request.startSortie,
-				apiData: request.nextNode
+				apiData: request.nextNode,
+				ConfigManager: ConfigManager
 			})).execute();
 		},
 		
@@ -425,7 +427,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				shipID: request.shipID || false,
 				voiceNum: request.voiceNum,
 				voiceSize: request.voiceSize,
-				url: request.url
+				url: request.url,
+				ConfigManager: ConfigManager
 			})).execute();
 		},
 		
