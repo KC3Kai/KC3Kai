@@ -842,6 +842,9 @@ button, input, select, textarea {
 .tab_ships .control_buttons .reset_default:hover {
 	background:#555555;
 }
+.tab_ships .show_name_filter .name_criteria {
+	border:1px solid #888888;
+}
 .tab_ships .ship_count {
 	width:215px !important;
 }

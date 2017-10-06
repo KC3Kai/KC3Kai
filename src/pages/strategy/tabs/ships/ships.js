@@ -22,6 +22,8 @@
 			heartLockMode: 0,
 			className: false,
 			showTooltip: false,
+			// a special filter for quick search by show name
+			showNameFilter: "",
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -64,6 +66,7 @@
 			// Binding click event starts
 			$(".filters_label").on("click", function(){
 				$(".filters .ship_types").slideToggle(300);
+				$(".filters .show_name_filter").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
 					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
 					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
@@ -269,6 +272,43 @@
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
+
+			// Ship show name quick filter
+			$(".show_name_filter .name_criteria").on("keyup", () => {
+				this.refreshShowNameFilter();
+			}).on("focus", () => {
+				$(".show_name_filter .name_criteria").select();
+			}).val(this.showNameFilter);
+		},
+
+		refreshShowNameFilter: function() {
+			const newNameCriteria = $(".show_name_filter .name_criteria").val();
+			const nameToSearch = newNameCriteria.toLowerCase();
+			let hiddenShipsByName = 0;
+			if (nameToSearch.length > 0) {
+				$(".ship_list .ship_item").each(function() {
+					// also search for JP name and kana yomi, not so useful for JP tho
+					const shipName = $(".ship_name", this).text().toLowerCase(),
+						shipNameJp = ($(".ship_name", this).data("jpName") || "").toLowerCase(),
+						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "").toLowerCase();
+					const isToHide = ! (shipName.includes(nameToSearch)
+						|| shipNameJp.includes(nameToSearch)
+						|| shipNameKana.includes(nameToSearch));
+					hiddenShipsByName += isToHide & 1;
+					$(this).toggleClass("hidden_by_name", isToHide);
+				});
+			} else {
+				$(".ship_list .ship_item").removeClass("hidden_by_name");
+			}
+			// update listed ship counter
+			// have to take filtered list by data into account since hidden by name are still in list
+			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
+			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShipsByName);
+			if (this.showNameFilter !== newNameCriteria) {
+				this.showNameFilter = newNameCriteria;
+				this.saveSettings();
+			}
+			return hiddenShipsByName;
 		},
 
 		getLastCurrentSorter: function() {
@@ -441,103 +481,6 @@
 			return cached;
 		},
 
-		/* EXECUTE
-		Places data onto the interface
-		---------------------------------*/
-		execute :function(){
-			var self = this;
-			// now we need to do this before preparing filters
-			// Ship types
-			var sCtr, cElm;
-
-			for(sCtr in KC3Meta._stype){
-				// stype 12, 15 not used by shipgirl
-				// stype 1 is used from 2017-05-02
-				if(KC3Meta._stype[sCtr] && ["12", "15"].indexOf(sCtr) < 0){
-					cElm = $(".tab_ships .factory .ship_filter_type").clone().appendTo(".tab_ships .filters .ship_types");
-					cElm.data("id", sCtr);
-					$(".filter_name", cElm).text(KC3Meta.stype(sCtr));
-				}
-			}
-
-			$(".pages_yes").on("click", function(){
-				$(".ingame_page").show();
-				if(!self.pageNo){
-					self.pageNo = true;
-					self.saveSettings();
-				}
-			});
-			$(".pages_no").on("click", function(){
-				$(".ingame_page").hide();
-				if(self.pageNo){
-					self.pageNo = false;
-					self.saveSettings();
-				}
-			});
-			$(".control_buttons .reset_default").on("click", function(){
-				self.equipMode = 0;
-				self.pageNo = false;
-				self.multiKey = false;
-				self.currentSorters = [{name:"lv", reverse:false}];
-				delete localStorage.srShiplist;
-				KC3StrategyTabs.reloadTab(undefined, true);
-			});
-
-			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
-			var updateSorterControl = function() {
-				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
-				self.sorterDescCtrl.toggle(self.multiKey);
-			};
-			multiKeyCtrl.on("click", function() {
-				self.multiKey = ! self.multiKey;
-
-				updateSorterControl();
-
-				if (! self.multiKey) {
-					var needUpdate = self.cutCurrentSorter();
-					if (needUpdate)
-						self.refreshTable();
-				}
-			});
-
-			$(".pages_yes").on("click", function(){
-				$(".ingame_page").show();
-			});
-			$(".pages_no").on("click", function(){
-				$(".ingame_page").hide();
-			});
-			
-			/* Name filter */
-			$(".name_filter").on("keyup", function() {
-				if ($(".name_filter").length > 0) {
-					$(".ship_list .ship_item").each(function() {
-						var currentShipName = $(this).find(".ship_name").text();
-						var currentShipNameJp = $(this).find(".ship_name").data("jpname");
-						var currentShipNameJpKana = $(this).find(".ship_name").data("jpnamekana");
-						var shipSearch = $(".name_filter").val();
-						if (currentShipName.toLowerCase().indexOf(shipSearch.toLowerCase()) < 0
-							&& currentShipNameJp.toLowerCase().indexOf(shipSearch.toLowerCase()) < 0
-							&& currentShipNameJpKana.toLowerCase().indexOf(shipSearch.toLowerCase()) < 0) {
-							$(this).addClass("name_hidden");
-						} else {
-							$(this).removeClass("name_hidden");
-						}
-					});
-				} else {
-					$(".ship_list .ship_item").removeClass("name_hidden");
-				}
-			});
-
-			this.loadSettings();
-			this.sorterDescCtrl = $(".advanced_sorter .sorter_desc");
-			this.updateSorterDescription();
-			updateSorterControl();
-
-			this.prepareFilters();
-			this.shipList = $(".tab_ships .ship_list");
-			this.showFilters();
-		},
-
 		// default UI actions for options that are mutually exclusive
 		// NOTE: this function is supposed to be a shared callback function
 		// and should not be called directly.
@@ -579,7 +522,7 @@
 			// ship filters can hold a piece of value
 			// which represents its state.
 			// (e.g. true / false for keeping track of whether
-			//	this filter is enabled or disable)
+			//  this filter is enabled or disable)
 			defValue,
 			// an array of arbitrary values, each of the option should
 			// correspond to a toggle / control on UI
@@ -600,25 +543,25 @@
 			// or when user has changed something on UI.
 			// optionRep is the runtime representation of this filter:
 			// * optionRep.curValue represents the current value
-			//	 held by this filter, when initializing, this value is set to "null".
+			//   held by this filter, when initializing, this value is set to "null".
 			// * optionRep.options is the runtime representation of
-			//	 all options you have passed to this function.
-			//	 for all valid options indices ind
-			//	 * optionRep.options[ind].name is set to options[ind]
-			//	 * optionRep.options[ind].view is set to the jQuery object returned
-			//	   by your "findView".
+			//   all options you have passed to this function.
+			//   for all valid options indices ind
+			//   * optionRep.options[ind].name is set to options[ind]
+			//   * optionRep.options[ind].view is set to the jQuery object returned
+			//     by your "findView".
 			// * initializing: newly added to help indicate whether we are initializing
 			// your onToggle is responsible for 2 things:
 			// * when initalizing a filter, "optionRep.curValue" is set to "null",
-			//	 in this case "newVal" is "defValue" you passed to this function,
-			//	 you should do something like "optionRep.curValue = newVal"
-			//	 to complete initializing filter state. and update UI accordingly
-			//	 (but avoid refreshing ship list, since we are just initalizing)
+			//   in this case "newVal" is "defValue" you passed to this function,
+			//   you should do something like "optionRep.curValue = newVal"
+			//   to complete initializing filter state. and update UI accordingly
+			//   (but avoid refreshing ship list, since we are just initalizing)
 			// * when user does something on UI, your onToggle function will be triggered.
-			//	 in this case "newVal" is set to an index of "options" to indicate
-			//	 which option triggers this function. in this case you are responsible
-			//	 for updating "optionRep.curValue" accordingly, updating UI to reflect the change
-			//	 and finally refresh ship list to execute all filters.
+			//   in this case "newVal" is set to an index of "options" to indicate
+			//   which option triggers this function. in this case you are responsible
+			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
+			//   and finally refresh ship list to execute all filters.
 			onToggle) {
 			var self = this;
 			// as most filters are groups of mutually exclusive controls
@@ -869,6 +812,7 @@
 			for(let key in this.newFilterRep) {
 				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
 			}
+			shrinkedSettings.filters.showname = this.showNameFilter;
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
@@ -885,6 +829,9 @@
 				this.currentSorters = this.settings.sorters;
 				if(this.currentSorters.length > 1)
 					this.multiKey = true;
+			}
+			if(this.settings.filters){
+				this.showNameFilter = this.settings.filters.showname || "";
 			}
 			if(this.settings.views){
 				this.equipMode = this.settings.views.equip || 0;
@@ -947,7 +894,6 @@
 
 			this.refreshTable();
 		},
-
 
 		defineSorter: function(name,desc,comparator) {
 			this.sorters[name] = {
@@ -1029,6 +975,7 @@
 
 			// Clear list
 			this.shipList.empty().hide();
+			$(".ship_count .count_value").hide();
 
 			// Wait until execute
 			setTimeout(function(){
@@ -1073,6 +1020,8 @@
 					$(".ship_img .ship_icon", cElm)
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
+					$(".ship_name", cElm).data("jpName", cShip.jpName)
+						.data("jpNameKana", cShip.jpNameKana);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1110,10 +1059,7 @@
 						const thisShip = ship || cShip;
 						// Reset shown ship name
 						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this).text( showName )
-							.attr("title", showName)
-							.attr("data-jpName", thisShip.jpName)
-							.attr("data-jpNameKana", thisShip.jpNameKana);
+						$(".ship_name", this).text(showName).attr("title", showName);
 						// Recomputes stats
 						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
 						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
@@ -1160,9 +1106,11 @@
 				});
 
 				self.shipList.show().createChildrenTooltips();
-				$(".ship_count .count_value").text(
-					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
-				);
+				$(".ship_count .count_value .listed").text(FilteredShips.length)
+					.data("filtered", FilteredShips.length);
+				$(".ship_count .count_value .total").text(self.shipCache.length);
+				$(".ship_count .count_value").show();
+				self.refreshShowNameFilter();
 				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
