@@ -689,6 +689,9 @@ body {
 .tab_ships .control_buttons .hover:hover {
 	background:#cfc;
 }
+.tab_ships .show_name_filter .name_criteria {
+	border:1px solid #000;
+}
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #000;
 }
