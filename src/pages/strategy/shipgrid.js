@@ -48,7 +48,7 @@
 			// Trigger pre-show event
 			this.shipListDiv.trigger("preShow");
 			// Clear old list
-			this.shipListDiv.empty().hide();
+			this.shipListDiv.hide().empty();
 			const delayMillis = 100;
 			setTimeout(() => {
 				// Do list filtering
@@ -76,9 +76,6 @@
 						.click(this.shipClickFunc);
 					$(".ship_name", shipRow).text(ship.name)
 						.toggleClass("ship_kekkon-color", ship.level >= 100);
-					if(KC3StrategyTabs.isTextEllipsis($(".ship_name", shipRow))) {
-						$(".ship_name", shipRow).attr("title", ship.name);
-					}
 					$(".ship_type", shipRow).text(KC3Meta.stype(ship.stype));
 					$(".ship_lv .value", shipRow).text(ship.level)
 						.addClass(ship.levelClass);
@@ -98,7 +95,16 @@
 						this.showListRowCallback.call(this, ship, shipRow);
 					}
 				}
-				this.shipListDiv.show().createChildrenTooltips();
+				this.shipListDiv.show(0, () => {
+					if(this.isLoading) {
+						$(".ship_name", this.shipListDiv).each(function() {
+							if(KC3StrategyTabs.isTextEllipsis(this)) {
+								$(this).attr("title", $(this).text());
+							}
+						});
+						this.shipListDiv.createChildrenTooltips();
+					}
+				});
 				$(".ingame_page").toggle(this.pageNo);
 				// Trigger post-show event
 				this.shipListDiv.trigger("postShow", {shipList: filteredShipList});

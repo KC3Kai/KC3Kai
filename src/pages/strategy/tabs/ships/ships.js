@@ -22,6 +22,8 @@
 			heartLockMode: 0,
 			className: false,
 			showTooltip: false,
+			// a special filter for quick search by show name
+			showNameFilter: "",
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -64,6 +66,7 @@
 			// Binding click event starts
 			$(".filters_label").on("click", function(){
 				$(".filters .ship_types").slideToggle(300);
+				$(".filters .show_name_filter").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
 					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
 					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
@@ -269,6 +272,43 @@
 			this.prepareFilters();
 			this.shipList = $(".tab_ships .ship_list");
 			this.showFilters();
+
+			// Ship show name quick filter
+			$(".show_name_filter .name_criteria").on("keyup", () => {
+				this.refreshShowNameFilter();
+			}).on("focus", () => {
+				$(".show_name_filter .name_criteria").select();
+			}).val(this.showNameFilter);
+		},
+
+		refreshShowNameFilter: function() {
+			const newNameCriteria = $(".show_name_filter .name_criteria").val();
+			const nameToSearch = newNameCriteria.toLowerCase();
+			let hiddenShipsByName = 0;
+			if (nameToSearch.length > 0) {
+				$(".ship_list .ship_item").each(function() {
+					// also search for JP name and kana yomi, not so useful for JP tho
+					const shipName = $(".ship_name", this).text().toLowerCase(),
+						shipNameJp = ($(".ship_name", this).data("jpName") || "").toLowerCase(),
+						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "").toLowerCase();
+					const isToHide = ! (shipName.includes(nameToSearch)
+						|| shipNameJp.includes(nameToSearch)
+						|| shipNameKana.includes(nameToSearch));
+					hiddenShipsByName += isToHide & 1;
+					$(this).toggleClass("hidden_by_name", isToHide);
+				});
+			} else {
+				$(".ship_list .ship_item").removeClass("hidden_by_name");
+			}
+			// update listed ship counter
+			// have to take filtered list by data into account since hidden by name are still in list
+			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
+			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShipsByName);
+			if (this.showNameFilter !== newNameCriteria) {
+				this.showNameFilter = newNameCriteria;
+				this.saveSettings();
+			}
+			return hiddenShipsByName;
 		},
 
 		getLastCurrentSorter: function() {
@@ -392,6 +432,8 @@
 				ctype: MasterShip.api_ctype,
 				sortno: MasterShip.api_sortno,
 				name: ThisShip.name(),
+				jpName: MasterShip.api_name,
+				jpNameKana: MasterShip.api_yomi,
 				className: KC3Meta.ctypeName(MasterShip.api_ctype),
 				fullName: KC3Meta.term("ShipListFullNamePattern")
 					.format(KC3Meta.ctypeName(MasterShip.api_ctype), ThisShip.name()),
@@ -770,6 +812,7 @@
 			for(let key in this.newFilterRep) {
 				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
 			}
+			shrinkedSettings.filters.showname = this.showNameFilter;
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
@@ -786,6 +829,9 @@
 				this.currentSorters = this.settings.sorters;
 				if(this.currentSorters.length > 1)
 					this.multiKey = true;
+			}
+			if(this.settings.filters){
+				this.showNameFilter = this.settings.filters.showname || "";
 			}
 			if(this.settings.views){
 				this.equipMode = this.settings.views.equip || 0;
@@ -848,7 +894,6 @@
 
 			this.refreshTable();
 		},
-
 
 		defineSorter: function(name,desc,comparator) {
 			this.sorters[name] = {
@@ -930,6 +975,7 @@
 
 			// Clear list
 			this.shipList.empty().hide();
+			$(".ship_count .count_value").hide();
 
 			// Wait until execute
 			setTimeout(function(){
@@ -974,6 +1020,8 @@
 					$(".ship_img .ship_icon", cElm)
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
+					$(".ship_name", cElm).data("jpName", cShip.jpName)
+						.data("jpNameKana", cShip.jpNameKana);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1011,8 +1059,7 @@
 						const thisShip = ship || cShip;
 						// Reset shown ship name
 						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this).text( showName )
-							.attr("title", showName);
+						$(".ship_name", this).text(showName).attr("title", showName);
 						// Recomputes stats
 						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
 						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
@@ -1046,7 +1093,9 @@
 							targetElm.tooltip({
 								position: { my: "left top", at: "left+25 bottom" },
 								items: "div",
-								content: tooltipBox.prop("outerHTML")
+								content: tooltipBox.prop("outerHTML"),
+								// might be disabled for performance
+								open: KC3Ship.onShipTooltipOpen,
 							});
 						}
 						// Rebind click handlers
@@ -1059,9 +1108,11 @@
 				});
 
 				self.shipList.show().createChildrenTooltips();
-				$(".ship_count .count_value").text(
-					"{0} /{1}".format(FilteredShips.length, self.shipCache.length)
-				);
+				$(".ship_count .count_value .listed").text(FilteredShips.length)
+					.data("filtered", FilteredShips.length);
+				$(".ship_count .count_value .total").text(self.shipCache.length);
+				$(".ship_count .count_value").show();
+				self.refreshShowNameFilter();
 				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;

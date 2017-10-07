@@ -2126,6 +2126,12 @@ KC3改 Ship Object
 		if(!(ConfigManager.info_stats_diff & 2)){
 			$(".mod,.level,.luck", tooltipBox).hide();
 		}
+		// Fill more stats need complex calculations
+		KC3Ship.fillShipTooltipWideStats(shipObj, tooltipBox, canOasw);
+		return tooltipBox;
+	};
+	KC3Ship.fillShipTooltipWideStats = function(shipObj, tooltipBox, canOasw = false) {
+		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		// show possible critical power and mark capped power with different color
 		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span style="color:#a08">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
@@ -2378,6 +2384,27 @@ KC3改 Ship Object
 			});
 		}
 		return tooltipBox;
+	};
+	KC3Ship.onShipTooltipOpen = function(event, ui) {
+		const setStyleVar = (name, value) => {
+			const shipTooltipStyle = $(ui.tooltip).children().children().get(0).style;
+			shipTooltipStyle.removeProperty(name);
+			shipTooltipStyle.setProperty(name, value);
+		};
+		// find which width of wide rows overflow, add slide animation to them
+		// but animation might cost 10% more or less CPU even accelerated with GPU
+		let maxOverflow = 0;
+		$(".stat_wide div", ui.tooltip).each(function() {
+			// scroll width only works if element is visible
+			const sw = $(this).prop('scrollWidth'),
+				w = $(this).width(),
+				over = w - sw;
+			maxOverflow = Math.min(maxOverflow, over);
+			// allow overflow some pixels
+			if(over < -8) { $(this).addClass("use-gpu slide"); }
+		});
+		setStyleVar("--maxOverflow", maxOverflow + "px");
+		return true;
 	};
 
 	KC3Ship.prototype.deckbuilder = function() {

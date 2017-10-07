@@ -34,7 +34,8 @@ KC3改 Ship Box for Natsuiro theme
 			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
 			items: "div",
-			content: tooltipBox.html()
+			content: tooltipBox.html(),
+			open: KC3Ship.onShipTooltipOpen
 		});
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img", this.element).data("masterId", this.shipData.masterId)

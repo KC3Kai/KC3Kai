@@ -10,6 +10,14 @@
 .xhidden {
 	display: none;
 }
+/* a trick to yeild animation to GPU acceleration */
+.use-gpu {
+	will-change: transform;
+	transform: rotateZ(360deg);
+	/*transform: translate3d(0, 0, 0);*/
+	backface-visibility: hidden;
+	perspective: 1000px;
+}
 /*
 To resolve over blurred downsized image issue.
 `scroll-behavior` default from Chrome 61, but

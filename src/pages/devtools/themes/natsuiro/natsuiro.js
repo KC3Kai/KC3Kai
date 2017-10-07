@@ -291,29 +291,39 @@
 		KC3TimerManager.update();
 
 		// Docking ~ Akashi Timer Stat
-		var TotalFleet = selectedFleet == 5 ? [0,1] : (selectedFleet == 6 ? [0,1,2,3] : [selectedFleet-1]);
-		var data = TotalFleet
-			.map(function(x){return PlayerManager.fleets[x].highestRepairTimes(true);})
-			.reduce(function(pre,cur){
-				var data = {};
-				$.extend(pre,data);
-				Object.keys(pre).forEach(function(k){
-					data[k] = Math.max(pre[k],cur[k]);
-				});
-				return data;
-			});
-		UpdateRepairTimerDisplays(data);
+		let scopedFleetIds = [];
+		if(selectedFleet == 6) {
+			// No docking or Akashi timer for LBAS,
+			// TODO show timer for all (max) moving LBAS planes ETA
+		} else {
+			scopedFleetIds = selectedFleet >= 5 ? [0, 1] : [selectedFleet - 1];
+			const data = scopedFleetIds
+				.map(id => PlayerManager.fleets[id].highestRepairTimes(true))
+				.reduce((acc, cur) => {
+					Object.keys(cur).forEach(k => {
+						if(typeof cur[k] === "number") {
+							acc[k] = Math.max(acc[k] || 0, cur[k]);
+						} else if(Array.isArray(cur[k])) {
+							if(acc[k] === undefined || cur[k].every(v => !!v)) acc[k] = cur[k];
+						} else {
+							acc[k] = cur[k];
+						}
+					});
+					return acc;
+				}, {});
+			UpdateRepairTimerDisplays(data);
+		}
 		
-		// Akashi current
-		var baseElement = (TotalFleet.length > 1) ? ['main','escort'] : ['single'];
-		baseElement.forEach(function(baseKey,index){
-			var baseContainer = $([".shiplist",baseKey].join('_'));
+		// Akashi current timer for Ship Box list
+		const baseElement = scopedFleetIds.length ?
+			scopedFleetIds.length > 1 ? ['main','escort'] : ['single']
+			: [];
+		baseElement.forEach(function(baseKey, index){
+			const baseContainer = $([".shiplist",baseKey].join('_'));
 
-			$(".sship,.lship",baseContainer).each(function(index,shipBox){
-				var repairBox = $('.ship_repair_data',shipBox);
-
-				var
-					shipData = KC3ShipManager.get(repairBox.data('sid')),
+			$(".sship,.lship", baseContainer).each(function(index, shipBox){
+				const repairBox = $('.ship_repair_data',shipBox);
+				const shipData = KC3ShipManager.get(repairBox.data('sid')),
 					hpLost = shipData.hp[1] - shipData.hp[0],
 					dockTime = shipData.repair[0],
 					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
@@ -1871,8 +1881,27 @@
 				$(".module.status .status_morale .status_text")
 					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"))
 					.toggleClass("bad", lbasCondBad).toggleClass("good", !lbasCondBad);
+				// no morale timer
 				moraleClockValue = 100;
 				moraleClockEnd = 0;
+				// clean repair status and timer, might show plane moving timer
+				$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
+				$(".module.status .status_repair .status_text")
+					.text( KC3Meta.term("Placeholder") )
+					.attr("title", "")
+					.removeClass("bad").addClass("good");
+				UpdateRepairTimerDisplays(0, 0);
+				// show 'combined fleet' type as 'LBAS'
+				$(".module.status .status_butai .status_text")
+					.text( KC3Meta.term("CombinedLbas") )
+					.attr("title", "");
+				$(".module.status .status_butai").show();
+				$(".module.status .status_support").hide();
+				// hide unused summary line
+				$(".module.summary").hideChildrenTooltips();
+				$(".module.summary").addClass("disabled");
+			} else {
+				$(".module.summary").removeClass("disabled");
 			}
 		},
 
@@ -3649,7 +3678,9 @@
 						var infoElm = $(".module.activity .map_info");
 						infoElm.addClass("map_finisher");
 						if(!ConfigManager.info_blink_gauge)
-							infoElm.addClass("noBlink");
+							infoElm.addClass("noBlink").removeClass("use-gpu");
+						else
+							infoElm.addClass("use-gpu").removeClass("noBlink");
 						$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
 					})();
 				}
@@ -3661,7 +3692,7 @@
 
 	function UpdateRepairTimerDisplays(docking, akashi){
 		var
-			akashiTick = [false, false],
+			akashiTick = [false, false, false],
 			dockElm = $(".module.status .status_docking .status_text"),
 			koskElm = $(".module.status .status_akashi .status_text");
 		if(typeof docking === "object") {
@@ -3687,7 +3718,7 @@
 				}
 				break;
 			}
-			if((elm.data("tick") || [false]).every(function(x){return x;})) {
+			if((elm.data("tick") || [false]).every(x => x)) {
 				elm.removeClass('bad').addClass("good");
 				title = KC3Meta.term("PanelRepairing");
 			}

@@ -94,6 +94,7 @@
 	width:92px;
 	overflow:hidden;
 	position:relative;
+	white-space:nowrap;
 }
 .tab_docking .ship_item .ship_name.ship_kekkon {
 	/*width:112px;*/
