@@ -205,6 +205,7 @@
 	width: 92px;
 	overflow: hidden;
 	position: relative;
+	white-space: nowrap;
 }
 
 .tab_locking .ship_item .ship_type {

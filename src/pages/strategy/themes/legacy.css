@@ -225,6 +225,14 @@ body {
 .ui-tooltip-content .ship_tooltip .stat_wide {
 	width:249px;
 }
+.ui-tooltip-content .ship_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
+}
 .ui-tooltip-content .ship_tooltip .aa_col {
 	width:49px;
 	height:19px;
@@ -680,6 +688,9 @@ body {
 .tab_ships .advanced_sorter .hover:hover,
 .tab_ships .control_buttons .hover:hover {
 	background:#cfc;
+}
+.tab_ships .show_name_filter .name_criteria {
+	border:1px solid #000;
 }
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #000;
