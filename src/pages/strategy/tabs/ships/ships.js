@@ -76,18 +76,18 @@
 				});
 			});
 			$(".pages_yes").on("click", function(){
-				$(".ingame_page").show();
 				if(!self.pageNo){
 					self.pageNo = true;
 					self.saveSettings();
 				}
+				self.refreshShowNameFilter();
 			});
 			$(".pages_no").on("click", function(){
-				$(".ingame_page").hide();
 				if(self.pageNo){
 					self.pageNo = false;
 					self.saveSettings();
 				}
+				self.refreshShowNameFilter();
 			});
 			$(".scroll_fix").on("click", function(){
 				self.toggleTableScrollbar(true);
@@ -296,9 +296,11 @@
 						|| shipNameKana.includes(nameToSearch));
 					hiddenShipsByName += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
+					$(".ingame_page").hide();
 				});
 			} else {
 				$(".ship_list .ship_item").removeClass("hidden_by_name");
+				$(".ingame_page").toggle(this.pageNo);
 			}
 			// update listed ship counter
 			// have to take filtered list by data into account since hidden by name are still in list
@@ -1113,7 +1115,6 @@
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
 				self.refreshShowNameFilter();
-				$(".ingame_page").toggle(self.pageNo);
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
