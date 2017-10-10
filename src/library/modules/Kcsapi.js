@@ -280,9 +280,13 @@ Previously known as "Reactor"
 				// Recognize some frequently used items, full IDs set in master useitem
 				// TODO refactoring structure to save api_id too
 				switch(thisItem.api_id){
+					// 1:buckets, 2:torch, 3:devmats, 4:screws not found in this API,
+					// but counts defined in API /material above
 					case 10: PlayerManager.consumables.furniture200 = thisItem.api_count; break;
 					case 11: PlayerManager.consumables.furniture400 = thisItem.api_count; break;
 					case 12: PlayerManager.consumables.furniture700 = thisItem.api_count; break;
+					// 44 not found in this API, as it's not useitem and even not material
+					//case 44: PlayerManager.consumables.fcoin = thisItem.api_count; break;
 					// 50 and 51 not found in this API, as they are slotitem
 					//case 50: PlayerManager.consumables.repairTeam = thisItem.api_count; break;
 					//case 51: PlayerManager.consumables.repairGoddess = thisItem.api_count; break;
@@ -1953,8 +1957,8 @@ Previously known as "Reactor"
 				case 1: // exchange 4 medals with 1 blueprint
 					if(itemId === 57) PlayerManager.consumables.medals -= 4;
 				break;
-				case 2: // exchange 1 medals with materials [300, 300, 300, 300, 0, 2, 0, 0] (guessed)
-				case 3: // exchange 1 medals with 4 screws (guessed)
+				case 2: // exchange 1 medal with materials [300, 300, 300, 300, 0, 2, 0, 0] (guessed)
+				case 3: // exchange 1 medal with 4 screws (guessed)
 					if(itemId === 57) PlayerManager.consumables.medals -= 1;
 				break;
 				case 11: // exchange 1 present box with resources [550, 550, 0, 0]
@@ -1966,6 +1970,15 @@ Previously known as "Reactor"
 				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
 				case 23: // exchange 1 hishimochi with 1 irako (guessed)
 					if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
+				break;
+				case 31: // exchange 3 saury (sashimi) with resources [0, 300, 150, 0]
+					if(itemId === 68) PlayerManager.consumables.mackerel -= 3;
+				break;
+				case 32: // exchange 5 saury (shioyaki) with materials [0, 0, 3, 1]
+					if(itemId === 68) PlayerManager.consumables.mackerel -= 5;
+				break;
+				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0] (guessed)
+					if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
 				case 41: // exchange all boxes with fcoins
 					if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
