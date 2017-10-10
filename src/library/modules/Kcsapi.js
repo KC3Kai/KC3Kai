@@ -269,9 +269,16 @@ Previously known as "Reactor"
 		},
 		
 		"api_get_member/useitem":function(params, response, headers){
-			for(let ctr in response.api_data){
-				let thisItem = response.api_data[ctr];
+			// Clean counters first because items become to 0 will not appear in API array at all
+			Object.keys(PlayerManager.consumables).forEach(key => {
+				// these things not real 'useitem' (no data in this API result)
+				if(["fcoin", "buckets", "devmats", "screws", "torch"].indexOf(key) === -1)
+					PlayerManager.consumables[key] = 0;
+			});
+			for(let idx in response.api_data){
+				const thisItem = response.api_data[idx];
 				// Recognize some frequently used items, full IDs set in master useitem
+				// TODO refactoring structure to save api_id too
 				switch(thisItem.api_id){
 					case 10: PlayerManager.consumables.furniture200 = thisItem.api_count; break;
 					case 11: PlayerManager.consumables.furniture400 = thisItem.api_count; break;
@@ -1946,7 +1953,7 @@ Previously known as "Reactor"
 				case 1: // exchange 4 medals with 1 blueprint
 					if(itemId === 57) PlayerManager.consumables.medals -= 4;
 				break;
-				case 2: // exchange 1 medals with materials [300,300,300,300, 0, 2, 0, 0] (guessed)
+				case 2: // exchange 1 medals with materials [300, 300, 300, 300, 0, 2, 0, 0] (guessed)
 				case 3: // exchange 1 medals with 4 screws (guessed)
 					if(itemId === 57) PlayerManager.consumables.medals -= 1;
 				break;
@@ -1977,7 +1984,7 @@ Previously known as "Reactor"
 				break;
 				default:
 					if(isNaN(fExchg)){
-						// exchange 1 chocolate with resources [700,700,700,1500]
+						// exchange 1 chocolate with resources [700, 700, 700, 1500]
 						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
 					} else {
 						console.log("Unknown exchange type:", fExchg, itemId, aData);

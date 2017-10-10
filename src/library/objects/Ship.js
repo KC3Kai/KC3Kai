@@ -1837,6 +1837,11 @@ KC3改 Ship Object
 			case 3:
 			case 4:
 			case 21: // for Light Cruisers
+				// overhaul implemented in-game since 2017-06-23, still under verification:
+				// single high-angle applied to DD/CLs
+				// 15.5 triple applied CLs/CAs
+				// 15.5 triple secondary kai applied to Yamato class
+				// here are based on old verified conclusions:
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];
 				result = -2; // only fit bonus, but -2 fixed
@@ -1844,10 +1849,13 @@ KC3改 Ship Object
 				result += Math.sqrt(this.countEquipment(twinMountIds)) * 3;
 				break;
 			case 5:
-			case 6: // for Heavy Cruisers, only fit bonus
-				const has203TwinGun = this.hasEquipment(6);
-				const has203No3TwinGun = this.hasEquipment(50);
-				result += has203No3TwinGun ? 15 : has203TwinGun ? 10 : 0;
+			case 6: // for Heavy Cruisers, only fit bonus at night battle
+				if(time === "night") {
+					const has203TwinGun = this.hasEquipment(6);
+					const has203No3TwinGun = this.hasEquipment(50);
+					// 20.3cm priority to 20.3cm No.3
+					result += has203TwinGun ? 10 : has203No3TwinGun ? 15 : 0;
+				}
 				break;
 			case 8:
 			case 9:
