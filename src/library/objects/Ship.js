@@ -1038,6 +1038,7 @@ KC3改 Ship Object
 	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
+	 * @see https://twitter.com/Nishisonic/status/893030749913227264
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation,
@@ -1772,15 +1773,18 @@ KC3改 Ship Object
 
 	/**
 	 * Get current shelling attack accuracy related info of this ship.
-	 * NOTE: Not take target evasion part into account at all.
-	 * @param {number} formationModifier
+	 * NOTE: Only attacker accuracy part, not take defender evasion part into account at all, not final hit/critical rate.
+	 * @param {number} formationModifier - see #estimateShellingFormationModifier.
+	 * @param {boolean} applySpAttackModifiers - if special equipment and attack modifiers should be applied.
 	 * @return {Object} accuracy factors of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
+	 * @see https://twitter.com/Nishisonic/status/890202416112480256
 	 */
-	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1) {
+	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(!this.rosterId || !this.masterId) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level - 1);
+		// formula from PSVita is sqrt(1.5 * lk) anyway
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
 		const byEquip = -this.nakedStats("ac");
 		const byImprove = this.equipment(true)
@@ -1788,37 +1792,94 @@ KC3改 Ship Object
 			.reduce((acc, v) => acc + v, 0);
 		const byGunfit = this.shellingGunFitAccuracy();
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2]);
-		const base = 3 + byGunfit +
-			(90 + byLevel + byLuck + byEquip + byImprove) * formationModifier * moraleModifier;
+		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
+		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
+		let artillerySpottingModifier = 1;
+		// there is trigger chance rate for Artillery Spotting itself
+		if(applySpAttackModifiers) {
+			artillerySpottingModifier = (type => {
+				if(type[0] === "Cutin") {
+					// ID from `api_hougeki.api_at_type`, see #estimateDayAttackType:
+					// [regular attack, Laser, DA, Main Second, Main Radar, Main Second AP, Main Main AP, CVCI]
+					// modifier for CVCI still unknown
+					return [0, 0, 1.1, 1.3, 1.5, 1.3, 1.2, 1][type[1]] || 1;
+				}
+				return 1;
+			})(this.estimateDayAttackType(undefined, true, this.collectBattleConditions().airBattleId));
+		}
+		const apShellModifier = (() => {
+			// AP Shell combined with Large cal. main gun only mainly for battleships
+			const hasApShellAndMainGun = this.hasEquipmentType(2, 19) && this.hasEquipmentType(2, 3);
+			if(hasApShellAndMainGun) {
+				const hasSecondaryGun = this.hasEquipmentType(2, 4);
+				const hasRadar = this.hasEquipmentType(2, [12, 13]);
+				if(hasRadar && hasSecondaryGun) return 1.3;
+				if(hasRadar) return 1.25;
+				if(hasSecondaryGun) return 1.2;
+				return 1.1;
+			}
+			return 1;
+		})();
+		// penalty for combined fleets under verification
+		const accuracy = Math.floor(beforeSpModifier * artillerySpottingModifier * apShellModifier);
 		return {
-			accuracy: base,
+			accuracy,
+			basicAccuracy: basic,
+			preSpAttackAccuracy: beforeSpModifier,
 			equipmentStats: byEquip,
 			equipImprovement: byImprove,
 			equipGunFit: byGunfit,
-			moraleModifier: moraleModifier,
-			formationModifier: formationModifier
+			moraleModifier,
+			formationModifier,
+			artillerySpottingModifier,
+			apShellModifier
 		};
 	};
 
 	/**
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#hitterm1
+	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#avoidterm1
 	 */
-	KC3Ship.prototype.estimateShellingFormationModifier = function(playerFormationId = ConfigManager.aaFormation,
-			enemyFormationId = 0) {
-		// Default is no bonus for regular fleet
-		// Still unknown for combined fleet formation
-		// Line Ahead, Diamond:
+	KC3Ship.prototype.estimateShellingFormationModifier = function(
+			playerFormationId = ConfigManager.aaFormation,
+			enemyFormationId = 0,
+			type = "accuracy") {
 		let modifier = 1;
-		switch(playerFormationId) {
-			case 2: // Double Line, cancelled by Line Abreast
-				modifier = enemyFormationId === 5 ? 1.0 : 1.2;
+		switch(type) {
+			case "accuracy":
+				// Default is no bonus for regular fleet
+				// Still unknown for combined fleet formation
+				// Line Ahead, Diamond:
+				modifier = 1;
+				switch(playerFormationId) {
+					case 2: // Double Line, cancelled by Line Abreast
+						modifier = enemyFormationId === 5 ? 1.0 : 1.2;
+						break;
+					case 4: // Echelon, cancelled by Line Ahead
+						modifier = enemyFormationId === 1 ? 1.0 : 1.2;
+						break;
+					case 5: // Line Abreast, cancelled by Echelon
+						modifier = enemyFormationId === 4 ? 1.0 : 1.2;
+						break;
+				}
 				break;
-			case 4: // Echelon, cancelled by Line Ahead
-				modifier = enemyFormationId === 1 ? 1.0 : 1.2;
+			case "evasion":
+				// Line Ahead, Double Line:
+				modifier = 1;
+				switch(playerFormationId) {
+					case 3: // Diamond
+						modifier = 1.1;
+						break;
+					case 4: // Echelon, enhanced by Double Line / Echelon unknown
+						modifier = 1.2;
+						break;
+					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
+						modifier = 1.3;
+						break;
+				}
 				break;
-			case 5: // Line Abreast, cancelled by Echelon
-				modifier = enemyFormationId === 4 ? 1.0 : 1.2;
-				break;
+			default:
+				console.warn("Unknown modifier type:", type);
 		}
 		return modifier;
 	};
@@ -1883,6 +1944,52 @@ KC3改 Ship Object
 				// not found for other ships
 		}
 		return result;
+	};
+
+	/**
+	 * Get current shelling attack evasion related info of this ship.
+	 * @param {number} formationModifier - see #estimateShellingFormationModifier
+	 * @return {Object} evasion factors of this ship.
+	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
+	 */
+	KC3Ship.prototype.shellingEvasion = function(formationModifier = 1) {
+		if(!this.rosterId || !this.masterId) { return {}; }
+		// already naked ev + equipment total ev stats
+		const byStats = this.ev[0];
+		const byEquip = this.equipmentTotalStats("houk");
+		const byLuck = Math.sqrt(2 * this.lk[0]);
+		const preCap = Math.floor((byStats + byLuck) * formationModifier);
+		const postCap = preCap >= 65 ? Math.floor(55 + 2 * Math.sqrt(preCap - 65)) :
+			preCap >= 40 ? Math.floor(40 + 3 * Math.sqrt(preCap - 40)) :
+			preCap;
+		const byImprove = this.equipment(true)
+			.map(g => g.evaStatImprovementBonus("fire"))
+			.reduce((acc, v) => acc + v, 0);
+		// under verification
+		const stypeBonus = 0;
+		const searchlightModifier = this.hasEquipmentType(1, 18) ? 0.2 : 1;
+		const postCapForYasen = Math.floor(postCap + stypeBonus) * searchlightModifier;
+		const fuelPercent = Math.floor(this.fuel / this.master().api_fuel_max * 100);
+		const fuelPenalty = fuelPercent < 75 ? 75 - fuelPercent : 0;
+		// final hit % = ucap(floor(lcap(attackerAccuracy - defenderEvasion) * defenderMoraleModifier)) + aircraftProficiencyBonus
+		// capping limits its lower / upper bounds to [10, 96] + 1%, +1 since random number is 0-based, ranged in [0, 99]
+		// ship morale modifier not applied here since 'evasion' may be looked reduced when sparkle
+		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7]);
+		const evasion = Math.floor(postCap + byImprove - fuelPenalty);
+		const evasionForYasen = Math.floor(postCapForYasen + byImprove - fuelPenalty);
+		return {
+			evasion,
+			evasionForYasen,
+			preCap,
+			postCap,
+			postCapForYasen,
+			equipmentStats: byEquip,
+			equipImprovement: byImprove,
+			fuelPenalty,
+			moraleModifier,
+			formationModifier
+		};
 	};
 
 	KC3Ship.prototype.equipmentAntiAir = function(forFleet) {
@@ -2140,6 +2247,7 @@ KC3改 Ship Object
 	};
 	KC3Ship.fillShipTooltipWideStats = function(shipObj, tooltipBox, canOasw = false) {
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : "");
 		// show possible critical power and mark capped power with different color
 		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span style="color:#a08">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
@@ -2316,14 +2424,30 @@ KC3改 Ship Object
 		}
 		// TODO implement other types of accuracy
 		const shellingAccuracy = shipObj.shellingAccuracy(
-			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId)
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId),
+			true
 		);
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(
 				Math.qckInt("floor", shellingAccuracy.accuracy, 1),
 				signedNumber(shellingAccuracy.equipmentStats),
 				signedNumber(Math.qckInt("floor", shellingAccuracy.equipImprovement, 1)),
-				signedNumber(Math.qckInt("floor", shellingAccuracy.equipGunFit, 1))
+				signedNumber(Math.qckInt("floor", shellingAccuracy.equipGunFit, 1)),
+				optionalModifier(shellingAccuracy.moraleModifier, true),
+				optionalModifier(shellingAccuracy.artillerySpottingModifier),
+				optionalModifier(shellingAccuracy.apShellModifier)
+			)
+		);
+		const shellingEvasion = shipObj.shellingEvasion(
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion")
+		);
+		$(".shellingEvasion", tooltipBox).text(
+			KC3Meta.term("ShipEvaShelling").format(
+				Math.qckInt("floor", shellingEvasion.evasion, 1),
+				signedNumber(shellingEvasion.equipmentStats),
+				signedNumber(Math.qckInt("floor", shellingEvasion.equipImprovement, 1)),
+				signedNumber(-shellingEvasion.fuelPenalty),
+				optionalModifier(shellingEvasion.moraleModifier, true)
 			)
 		);
 		$(".adjustedAntiAir", tooltipBox).text(

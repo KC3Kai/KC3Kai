@@ -158,6 +158,36 @@ KC3改 Equipment Object
 	};
 
 	/**
+	 * Get improvement bonus of evasion stat.
+	 * @see http://kancolle.wikia.com/wiki/Improvements
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#oe80ec59
+	 */
+	KC3Gear.prototype.evaStatImprovementBonus = function(type = "fire") {
+		if(!this.itemId || !this.masterId) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		switch(type.toLowerCase()) {
+			case "fire":
+				// Engine Boiler
+				if(type2 === 17) modifier = 1.5;
+				break;
+			case "torpedo":
+				// unknown
+				break;
+			case "yasen":
+				// unknown
+				break;
+			case "asw":
+				// unknown
+				break;
+			default:
+				console.warn("Unknown attack type:", type);
+		}
+		return modifier * Math.sqrt(stars);
+	};
+
+	/**
 	 * Get improvement bonus of LoS stat.
 	 * LoS improvement applied to eLoS (Formula 33), air contact, etc.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#k9b5bd32
