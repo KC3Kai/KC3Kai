@@ -247,25 +247,27 @@
 
 .tab_overlodger .lodger-data .materials .material,
 .tab_overlodger .lodger-data .materials .material.over:before {
-	position:relative;
+	position: relative;
 	border-radius: 4px;
 	padding: 0 2px;
-	float:left;
+	float: left;
 	vertical-align: middle;
 }
 .tab_overlodger .lodger-data .materials .material {
 	margin: 0 1.4px 0 0;
-	width:12.3%;
+	width: 12.3%;
+	overflow: hidden;
+	white-space: nowrap;
 }
 .tab_overlodger .lodger-data .materials .material.rsc {
 }
 .tab_overlodger .lodger-data .materials .material.csm {
 }
 .tab_overlodger .lodger-data .materials .material.over:before {
-	position:absolute;
-	right:0;
+	position: absolute;
+	right: 0;
 	
-	content:attr(data-actual-value);
+	content: attr(data-actual-value);
 	opacity: 0;
 	transition: all 0.1s;
 }
@@ -277,10 +279,12 @@
 	margin: 0;
 }
 .tab_overlodger .lodger-data .materials .material img {
-	margin:1px;
+	margin: 1px;
 }
 .tab_overlodger .lodger-data .materials .material span {
-	display:inline-block;
-	width:calc(100% - 24px);
-	text-align:right;
+	display: inline-block;
+	width: calc(100% - 24px);
+	height: 21px;
+	line-height: 20px;
+	text-align: right;
 }
