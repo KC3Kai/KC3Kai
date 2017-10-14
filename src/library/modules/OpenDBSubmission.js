@@ -72,7 +72,7 @@ http://swaytwig.com/opendb/
 			delete createShipData.kdockId;
 
 			// console.debug( "[createship] prepared: " + JSON.stringify( createShipData ) );
-			this.submitData("ship_dev.php", createShipData);
+			this.submitData("ship_build.php", createShipData);
 			this.state = null;
 		},
 		processCreateItem: function( requestObj ) {
@@ -90,7 +90,7 @@ http://swaytwig.com/opendb/
 			};
 
 			// console.debug( "[createitem] prepared: " + JSON.stringify( createItemData ));
-			this.submitData("equip_dev.php", createItemData);
+			this.submitData("equip_build.php", createItemData);
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
@@ -99,7 +99,7 @@ http://swaytwig.com/opendb/
 			var response = requestObj.response.api_data;
 
 			var dropShipData = {
-				apiver: 3,
+				apiver: 4,
 				world: response.api_maparea_id,
 				map: response.api_mapinfo_no,
 				node: response.api_no
@@ -128,6 +128,7 @@ http://swaytwig.com/opendb/
 			dropShipData.result = response.api_get_ship ? response.api_get_ship.api_ship_id : 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.maprank = this.mapInfo[dropShipData.world * 10 + dropShipData.map] || 0;
+			dropShipData.inventory = response.api_get_ship ? KC3ShipManager.count(ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(dropShipData.result)) : 0;
 
 			this.submitData( "ship_drop.php", dropShipData );
 			this.state = null;

@@ -3514,7 +3514,7 @@ ABYSS FLEET
 
 .ui-tooltip {
 	max-width:500px;
-	padding:2px 5px 3px 6px;
+	padding:1px 4px 1px 5px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -3531,8 +3531,8 @@ ABYSS FLEET
 
 .ui-tooltip-content .ship_face_tooltip {
 	width:252px;
-	height:280px;
-	padding:2px 0px 2px 0px;
+	height:314px;
+	padding:0px 0px 0px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
 	width:208px;
