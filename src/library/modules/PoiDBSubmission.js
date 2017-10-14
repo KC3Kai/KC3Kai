@@ -1,8 +1,9 @@
-/* Poidbsubmission.js
-
-   KC3Kai poi-statistics data submission library
-
-*/
+/**
+ * PoiDBSubmission.js
+ *
+ * KC3Kai poi-statistics data submission module.
+ *
+ */
 (function(){
 	"use strict";
 
@@ -22,6 +23,7 @@
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
+		reportOrigin: "KC3Kai",
 
 		// *INTERNAL USE ONLY*
 		// because when building this dictionary
@@ -68,6 +70,7 @@
 				'api_req_combined_battle/battleresult': this.processBattleResult,
 			};
 
+			this.reportOrigin = "KC3Kai " + chrome.runtime.getManifest().version;
 		},
 		processSelectEventMapRank: function (requestObj) {
 			var params = requestObj.params;
@@ -269,7 +272,7 @@
 				return false;
 			} catch (e) {
 				console.warn("Poi DB Submission Error", e);
-				// Pop up APIError on unexpected runtime expcetion
+				// Pop up APIError on unexpected runtime exception
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
@@ -299,10 +302,8 @@
 		sendData: function(target, payload) {
 			var server = "http://poi.0u0.moe";
 			var url = server + "/api/report/v2/" + target;
-			var myVersion = chrome.runtime.getManifest().version;
-			var client = "KC3Kai " + myVersion;
-			payload.origin = client;
-			// console.debug( JSON.stringify( payload ) );
+			payload.origin = this.reportOrigin;
+			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );
 			$.ajax({
 				url: url,
 				method: "POST",
