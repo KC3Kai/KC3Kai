@@ -1930,8 +1930,8 @@ Previously known as "Reactor"
 					MasterShip.api_tyku[1] - (MasterShip.api_tyku[0] + newShipMod[2]),
 					MasterShip.api_souk[1] - (MasterShip.api_souk[0] + newShipMod[3]),
 					MasterShip.api_luck[1] - (MasterShip.api_luck[0] + newShipMod[4]),
-					OldShipObj.maxHp(true) - (OldShipObj.hp[1] + newShipMod[5]),
-					OldShipObj.maxAswMod() - (OldShipObj.nakedAsw() + newShipMod[6])
+					OldShipObj.maxHp(true) - (OldShipObj.hp[1] - OldShipObj.mod[5] + newShipMod[5]),
+					OldShipObj.maxAswMod() - (OldShipObj.nakedAsw() - OldShipObj.mod[6] + newShipMod[6])
 				]
 			});
 			

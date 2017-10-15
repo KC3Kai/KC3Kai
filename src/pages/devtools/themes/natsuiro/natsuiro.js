@@ -384,6 +384,7 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
@@ -1323,7 +1324,7 @@
 			$(".airbase_list").hide();
 
 			var thisNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-				KC3SortieManager.currentNode() || {} : {};
+				KC3SortieManager.currentNode() : {};
 			var dameConConsumed = false;
 			var flarePos = thisNode.flarePos || 0;
 
@@ -1934,8 +1935,10 @@
 			// Clear battle details box
 			clearBattleData();
 
+			// Exception unhandled if nodes are empty and current node is undefined for some reasons,
+			// eg: panel reopened during sortie
+			var numNodes = KC3SortieManager.countNodes();
 			var thisNode = KC3SortieManager.currentNode();
-			var numNodes = KC3SortieManager.nodes.length;
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
@@ -2776,8 +2779,8 @@
 			$(".module.activity .abyss_combined").hide();
 			
 			// Create a battle node for PvP battle
-			var thisPvP = (new KC3Node()).defineAsBattle();
-			KC3SortieManager.nodes.push(thisPvP);
+			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
+			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle, data.fleetSent );
 

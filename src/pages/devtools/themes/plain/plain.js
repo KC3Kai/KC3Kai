@@ -166,6 +166,7 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
@@ -1114,8 +1115,8 @@
 			// Clear battle details box
 			clearBattleData();
 			
+			var numNodes = KC3SortieManager.countNodes();
 			var thisNode = KC3SortieManager.currentNode();
-			var numNodes = KC3SortieManager.nodes.length;
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
@@ -1546,8 +1547,8 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			var thisPvP;
-			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
+			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle,data.fleetSent );
 			

@@ -39,13 +39,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.map_difficulty = world < 10 ? 0 : thisMap.difficulty || 0;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
-			this.nodes = [];
 			this.boss = {
 				info: false,
 				bosscell: -1,
 				comp: -1,
 				letters: []
 			};
+			this.clearNodes();
 			
 			this.snapshotFleetState();
 			var fleet = PlayerManager.fleets[this.fleetSent-1];
@@ -239,7 +239,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		currentNode :function(){
-			return this.nodes[ this.nodes.length-1 ];
+			return this.nodes[ this.nodes.length - 1 ] || new KC3Node();
 		},
 		
 		advanceNode :function( nodeData, UTCTime ){
@@ -281,7 +281,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_id = 8
 			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
 				nodeKind = "Bounty";
-			// Transport Node 
+			// Transport Node
 			// api_event_id = 9
 			} else if (nodeData.api_event_id == 9){
 				nodeKind = "Transport";
@@ -289,15 +289,16 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_id = 3
 			} else if (typeof nodeData.api_happening != "undefined") {
 				nodeKind = "Maelstrom";
-			// Empty Node 
+			// Empty Node
 			// api_event_kind = 0
 			// api_event_id = 6
 			} else {
 				
 			}
-			let definedKind = "defineAs" + nodeKind;
-			let bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
-			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
+			const definedKind = "defineAs" + nodeKind;
+			const bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
+			if(this.boss.letters && this.boss.letters.indexOf(bossLetter) < 0)
+				this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
 			thisNode = (new KC3Node( this.getSortieId(), nodeData.api_no, UTCTime,
@@ -307,6 +308,22 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
+		},
+		
+		appendNode :function( nodeObj ){
+			if(nodeObj instanceof KC3Node){
+				this.nodes.push(nodeObj);
+				return true;
+			}
+			return false;
+		},
+		
+		countNodes :function(){
+			return this.nodes.length;
+		},
+		
+		clearNodes :function(){
+			this.nodes.length = 0;
 		},
 		
 		engageLandBaseAirRaid :function( battleData ){
@@ -600,8 +617,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.map_difficulty = 0;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
-			this.nodes = [];
 			this.boss = { info: false };
+			this.clearNodes();
 			if(PlayerManager.combinedFleet && sentFleet === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0]);
 				this.cleanMvpShips(PlayerManager.fleets[1]);
