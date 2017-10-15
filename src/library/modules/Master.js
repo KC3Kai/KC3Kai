@@ -326,7 +326,7 @@ Saves and loads significant data for future use
 			for(ship_id in this._raw.ship) {
 				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 				delete cShip.kc3_maxed;
 				delete cShip.kc3_model;
 				delete cShip.kc3_bship;
@@ -344,7 +344,9 @@ Saves and loads significant data for future use
 
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				// `api_buildtime` always non-zero for all shipgirls even not able to be built,
+				// can be used to differentiate seasonal graph / abyssal data
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 
 				/* proposed variable:
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on

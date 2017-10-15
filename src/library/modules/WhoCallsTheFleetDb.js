@@ -14,7 +14,7 @@
 				}).responseText;
 
 				/**
-				 * WhoCallsTheFleet-DB using nedb storage, which is a line seperated json-like format.
+				 * WhoCallsTheFleet-DB using nedb storage, which is a line separated json-like format.
 				 * @see https://github.com/louischatriot/nedb
 				 */
 				var content = rawDb

@@ -90,8 +90,8 @@
 	}
 
 	function ExpedTabAutoFleetSwitch(needTabSwith) {
-		// set "needTabSwith" to true
-		// for switching to expedition tab when a candicate fleet is found
+		// set "needTabSwitch" to true
+		// for switching to expedition tab when a candidate fleet is found
 		var fleets = PlayerManager.fleets;
 		var availableFleetInd = -1;
 
@@ -1827,7 +1827,7 @@
 				allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 			
-			//fleets' subsripts start from 0 !
+			//fleets' subscripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
 			}).filter(function (rosterData, index){
@@ -2122,7 +2122,7 @@
 			
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
-			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
+			koskElm = $(".status_akashi  .status_text",context);
 		if(typeof docking==="object") {
 			akashi     = docking.akashi;
 			akashiTick = docking.akashiCheck;

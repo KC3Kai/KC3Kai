@@ -148,7 +148,7 @@ Uses Dexie.js third-party plugin on the assets directory
 							expedition: "++id,hq,data,mission,fleet,shipXP,admiralXP,items,time",
 							/** Naval Overall Proposal
 							Keys        DataType        Description
-							ID          PRIMARY-AUTOINC 
+							ID          PRIMARY-AUTO-INCREMENT
 							HQ          char[8]         Describes the HQ ID of the admiral
 							Hour        integer         Describes the UTC time, as standard of resources and consumables
 							Type        char[*]         Representing the material/useitem change method
@@ -168,8 +168,7 @@ Uses Dexie.js third-party plugin on the assets directory
 									/** data migrating process
 									    ship master id, level, and equipment (if available)
 									  will be transferred to the standard sortie json format.
-									  any other data that remain unknown, are kept it's
-									  unknownness.
+									  any other data that remain unknown.
 									--------------------------------------------------------- */
 									mission.fleet.push({
 										mst_id: KC3ShipManager.get(x[0]).masterId,
@@ -435,7 +434,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.logs.add(data);
 		},
 		
-		/* [GET] Retrive logs from Local DB
+		/* [GET] Retrieve logs from Local DB
 		--------------------------------------------*/
 		get_build :function(pageNumber, callback){
 			var itemsPerPage = 30;
