@@ -301,12 +301,12 @@ Previously known as "Reactor"
 					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
 					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
 					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
-					// 66, 67 and 76 not found in this API, as they are slotitem
+					// 66, 67, 69 and 76 not found in this API, as they are slotitem
 					//case 66: PlayerManager.consumables.ration = thisItem.api_count; break;
 					//case 67: PlayerManager.consumables.resupplier = thisItem.api_count; break;
+					//case 69: PlayerManager.consumables.mackerelCan = thisItem.api_count; break;
 					//case 76: PlayerManager.consumables.rationSpecial = thisItem.api_count; break;
 					case 68: PlayerManager.consumables.mackerel = thisItem.api_count; break;
-					case 69: PlayerManager.consumables.mackerelCan = thisItem.api_count; break;
 					case 70: PlayerManager.consumables.skilledCrew = thisItem.api_count; break;
 					case 71: PlayerManager.consumables.nEngine = thisItem.api_count; break;
 					case 72: PlayerManager.consumables.decoMaterial = thisItem.api_count; break;
@@ -1977,7 +1977,7 @@ Previously known as "Reactor"
 				case 32: // exchange 5 saury (shioyaki) with materials [0, 0, 3, 1]
 					if(itemId === 68) PlayerManager.consumables.mackerel -= 5;
 				break;
-				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0] (guessed)
+				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0]
 					if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
 				case 41: // exchange all boxes with fcoins
