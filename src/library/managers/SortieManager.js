@@ -146,8 +146,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
-				var event = (expedNum > 100);
-				if(event) expedNum -= 100;
+				// expedition ID extended since 207-10-18, 101 no longer the start of event support
+				// FIXME World 1 A1 = 100, A2 = 101, A3 = 102. event ID still unknown
+				var event = (expedNum > 200);
+				if(event) expedNum -= 200;
 				var world = Math.floor((expedNum - 1) / 8) + 1;
 				var n = (expedNum - 1) % 8;
 				return (world === 5 || event) && (isBoss ? n === 1 : n === 0);

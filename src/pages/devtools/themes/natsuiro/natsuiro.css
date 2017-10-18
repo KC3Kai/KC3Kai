@@ -1601,6 +1601,10 @@ ABYSS FLEET
 }
 .module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
 	margin-bottom:1px;
+	white-space:initial;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
+	font-size:13px !important;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
