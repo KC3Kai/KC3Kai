@@ -110,8 +110,9 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..40
+		// * expedNum: 1..40, 100..102
 		// * expedNum is number or string, just like fleetNum
+		// * expedNum extended since 2017-10-18, eg: 100 display name A1 for World 1
 		// data.expedConf[expedNum].greatSuccess: boolean
 
 		var data;
@@ -126,17 +127,24 @@
 			for (i=1; i<=40; ++i) {
 				data.expedConf[i] = { greatSuccess: false };
 			}
-
+			for (i=100; i<=102; ++i) {
+				data.expedConf[i] = { greatSuccess: false };
+			}
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
+			if(data.expedConf[100] === undefined) {
+				for (let i = 100; i <= 102; i++) {
+					data.expedConf[i] = { greatSuccess: false };
+				}
+			}
 		}
 		return data;
 	}
 
 	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
 	function ExpedTabUpdateConfig() {
-		var conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig();
 		if(selectedFleet > 4) return;
 		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
 		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
@@ -148,9 +156,9 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
-		var conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig();
 		if(selectedFleet > 4) return;
-		selectedExpedition = conf.fleetConf[selectedFleet].expedition;
+		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 
@@ -3154,7 +3162,7 @@
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
-			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
+			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();

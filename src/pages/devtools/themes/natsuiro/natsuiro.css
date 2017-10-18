@@ -1460,7 +1460,7 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
-	width:100%;
+	width: 100%;
 	list-style: none;
 	position: relative;
 	float: left;
@@ -1469,38 +1469,40 @@ ABYSS FLEET
 	background: #dddddd;
 	text-align: center;
 	text-decoration: none;
-	border-style:solid;
-	border-width:3px;
+	border-style: solid;
+	border-width: 3px;
 }
 
 .module.activity .activity_expeditionPlanner li {
 	background: #dddddd;
-	border-style:solid;
-	border-width:1px;
+	border-style: solid;
+	border-width: 1px;
 }
 
 .module.activity .activity_expeditionPlanner li:hover {
 	background: #ffffff;
 }
 
-.module.activity .activity_expeditionPlanner  li ul {
+.module.activity .activity_expeditionPlanner li ul {
 	list-style: none;
 	display: none;
 	position: absolute;
 	top: 100%;
 	left: 0;
 	background: #fff;
-	padding:0;
-	width:30%;
+	padding: 0;
+	width: 50%;
+	font-size: 13px;
+	line-height: 16px;
 }
 
-.module.activity .activity_expeditionPlanner li ui li{
+.module.activity .activity_expeditionPlanner li ui li {
 	display: none;
 	position: absolute;
 	top: 100%;
 	left: 0;
 	background: #fff;
-	width:50px;
+	width: 50px;
 }
 
 
@@ -1508,7 +1510,7 @@ ABYSS FLEET
 	top:0%;
 	left:100%;
 	cursor:pointer;
-	width:150%;
+	width:100%;
 }
 
 
