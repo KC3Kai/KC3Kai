@@ -99,8 +99,16 @@ module.exports = function(grunt) {
 			}
 		},
 		removelogging: {
-			'build/tmp': {
-				src: "build/tmp/**/*.js",
+			console: {
+				expand: true,
+				cwd: 'build/tmp',
+				src: [
+					'**/*.js',
+					'!data/lang/**',
+					'!assets/js/*',
+					'!library/helpers/KanColleHelpers.js',
+					'assets/js/global.js'
+				],
 				options: {
 					// keep all 'warn' and 'error' by default
 					methods: [
