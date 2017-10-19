@@ -3137,12 +3137,14 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
+				var asw = shipInst.as[0];
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
 					level : level,
-					drumCount : drumCount
+					drumCount : drumCount,
+					asw : asw
 				};
 			});
 
@@ -3156,9 +3158,9 @@
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
 
 			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
-			// console.debug(JSON.stringify(ExpdReqPack));
+			//console.debug(`Exped #${selectedExpedition} needs`, JSON.stringify(ExpdReqPack));
 			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
-			// console.debug(JSON.stringify(ExpdCheckerResult));
+			//console.debug(`Exped #${selectedExpedition} checks`, JSON.stringify(ExpdCheckerResult));
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
@@ -3318,7 +3320,8 @@
 			setupJQObject(
 				ExpdReqPack.levelCount,
 				ExpdCheckerResult.levelCount,
-				$(".module.activity .activity_expeditionPlanner .fleetLv"));
+				$(".module.activity .activity_expeditionPlanner .fleetLv")
+			);
 			if (ExpdReqPack.levelCount === null) {
 				$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
 			} else {
@@ -3326,16 +3329,31 @@
 			}
 
 			setupJQObject(
+				ExpdReqPack.totalAsw,
+				ExpdCheckerResult.totalAsw,
+				$(".module.activity .activity_expeditionPlanner .totalAsw")
+			);
+			if (ExpdReqPack.totalAsw === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").show();
+			}
+
+			setupJQObject(
 				ExpdReqPack.fleetSType,
 				ExpdCheckerResult.fleetSType,
 				$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
 				function ( dataReq, dataResult, jq ) {
-					jq.html( "" );
+					jq.empty();
 					$.each( dataReq, function(index, value){
 						var shipReqBox = $("#factory .expPlanner_shipReqBox")
 							.clone()
 							.appendTo( jq );
-						shipReqBox.text(dataReq[index].stypeOneOf.join("/")+":"+dataReq[index].stypeReqCount);
+						shipReqBox.text("{0}:{1}"
+							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
+						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE"))
+							shipReqBox.attr("title", KC3Meta.term("ExpedEscortTip"))
+								.lazyInitTooltip();
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
 						} else if (dataResult[index] === true) {
@@ -3352,7 +3370,8 @@
 			setupJQObject(
 				ExpdReqPack.drumCarrierCount,
 				ExpdCheckerResult.drumCarrierCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
+				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" )
+			);
 			if (ExpdReqPack.drumCount === null &&
 				ExpdReqPack.drumCarrierCount === null) {
 				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
