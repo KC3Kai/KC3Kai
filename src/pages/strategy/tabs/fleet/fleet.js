@@ -5,6 +5,7 @@
 
 	KC3StrategyTabs.fleet.definition = {
 		tabSelf: KC3StrategyTabs.fleet,
+		horizontal: false,
 
 		currentFleetsObj: null,
 		suggestedName: "",
@@ -145,6 +146,15 @@
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
 							encodeURI( JSON.stringify( converted )));
 
+			});
+			$("button#control_switch_view").on("click", function() {
+				self.horizontal = !self.horizontal;
+				if(self.horizontal) {
+					$(".fleet_ships").addClass("horizontal");
+					$(".fleet_ship").addClass("horizontal");
+				} else {
+					$(".horizontal").removeClass("horizontal");
+				}
 			});
 
 			this.refreshSavedFleets();

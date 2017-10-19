@@ -1512,6 +1512,10 @@ button, input, select, textarea {
 	position:relative;
 	overflow:hidden;
 }
+.tab_fleet .fleet_ship.horizontal {
+	height:175px;
+	margin:5px 2px 0px 0px;
+}
 .tab_fleet .fleet_ship .ship_type {
 	width:110px;
 	margin:0px;
