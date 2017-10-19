@@ -472,6 +472,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
+				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(callback);
@@ -481,6 +482,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
+				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
 				.count(callback);
 		},
 		

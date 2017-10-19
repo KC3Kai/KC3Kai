@@ -8,6 +8,13 @@
 	display:none;
 }
 
+.tab_expedpast label {
+	display:inherit;
+	max-width:inherit;
+	margin-bottom:inherit;
+	font-weight:inherit;
+}
+
 /* NUMBERS
 -----------------------------*/
 .tab_expedpast .expedNumBoxes {
