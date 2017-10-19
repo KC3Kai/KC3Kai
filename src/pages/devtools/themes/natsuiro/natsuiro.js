@@ -110,8 +110,9 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..40
+		// * expedNum: 1..40, 100..102
 		// * expedNum is number or string, just like fleetNum
+		// * expedNum extended since 2017-10-18, eg: 100 display name A1 for World 1
 		// data.expedConf[expedNum].greatSuccess: boolean
 
 		var data;
@@ -126,17 +127,24 @@
 			for (i=1; i<=40; ++i) {
 				data.expedConf[i] = { greatSuccess: false };
 			}
-
+			for (i=100; i<=102; ++i) {
+				data.expedConf[i] = { greatSuccess: false };
+			}
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
+			if(data.expedConf[100] === undefined) {
+				for (let i = 100; i <= 102; i++) {
+					data.expedConf[i] = { greatSuccess: false };
+				}
+			}
 		}
 		return data;
 	}
 
 	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
 	function ExpedTabUpdateConfig() {
-		var conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig();
 		if(selectedFleet > 4) return;
 		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
 		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
@@ -148,9 +156,9 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
-		var conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig();
 		if(selectedFleet > 4) return;
-		selectedExpedition = conf.fleetConf[selectedFleet].expedition;
+		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 
@@ -384,6 +392,7 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
@@ -1323,7 +1332,7 @@
 			$(".airbase_list").hide();
 
 			var thisNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-				KC3SortieManager.currentNode() || {} : {};
+				KC3SortieManager.currentNode() : {};
 			var dameConConsumed = false;
 			var flarePos = thisNode.flarePos || 0;
 
@@ -1934,8 +1943,10 @@
 			// Clear battle details box
 			clearBattleData();
 
+			// Exception unhandled if nodes are empty and current node is undefined for some reasons,
+			// eg: panel reopened during sortie
+			var numNodes = KC3SortieManager.countNodes();
 			var thisNode = KC3SortieManager.currentNode();
-			var numNodes = KC3SortieManager.nodes.length;
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
@@ -2776,8 +2787,8 @@
 			$(".module.activity .abyss_combined").hide();
 			
 			// Create a battle node for PvP battle
-			var thisPvP = (new KC3Node()).defineAsBattle();
-			KC3SortieManager.nodes.push(thisPvP);
+			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
+			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle, data.fleetSent );
 
@@ -3126,12 +3137,14 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
+				var asw = shipInst.as[0];
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
 					level : level,
-					drumCount : drumCount
+					drumCount : drumCount,
+					asw : asw
 				};
 			});
 
@@ -3145,13 +3158,13 @@
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
 
 			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
-			// console.debug(JSON.stringify(ExpdReqPack));
+			//console.debug(`Exped #${selectedExpedition} needs`, JSON.stringify(ExpdReqPack));
 			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
-			// console.debug(JSON.stringify(ExpdCheckerResult));
+			//console.debug(`Exped #${selectedExpedition} checks`, JSON.stringify(ExpdCheckerResult));
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
-			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
+			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
 			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
@@ -3307,7 +3320,8 @@
 			setupJQObject(
 				ExpdReqPack.levelCount,
 				ExpdCheckerResult.levelCount,
-				$(".module.activity .activity_expeditionPlanner .fleetLv"));
+				$(".module.activity .activity_expeditionPlanner .fleetLv")
+			);
 			if (ExpdReqPack.levelCount === null) {
 				$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
 			} else {
@@ -3315,16 +3329,31 @@
 			}
 
 			setupJQObject(
+				ExpdReqPack.totalAsw,
+				ExpdCheckerResult.totalAsw,
+				$(".module.activity .activity_expeditionPlanner .totalAsw")
+			);
+			if (ExpdReqPack.totalAsw === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").show();
+			}
+
+			setupJQObject(
 				ExpdReqPack.fleetSType,
 				ExpdCheckerResult.fleetSType,
 				$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
 				function ( dataReq, dataResult, jq ) {
-					jq.html( "" );
+					jq.empty();
 					$.each( dataReq, function(index, value){
 						var shipReqBox = $("#factory .expPlanner_shipReqBox")
 							.clone()
 							.appendTo( jq );
-						shipReqBox.text(dataReq[index].stypeOneOf.join("/")+":"+dataReq[index].stypeReqCount);
+						shipReqBox.text("{0}:{1}"
+							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
+						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE"))
+							shipReqBox.attr("title", KC3Meta.term("ExpedEscortTip"))
+								.lazyInitTooltip();
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
 						} else if (dataResult[index] === true) {
@@ -3341,7 +3370,8 @@
 			setupJQObject(
 				ExpdReqPack.drumCarrierCount,
 				ExpdCheckerResult.drumCarrierCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
+				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" )
+			);
 			if (ExpdReqPack.drumCount === null &&
 				ExpdReqPack.drumCarrierCount === null) {
 				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();

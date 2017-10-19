@@ -1,7 +1,7 @@
 /* Server.js
 KC3改 Server Object
 
-Xxxxxxx
+Represent KanColle game server instance.
 */
 (function(){
 	"use strict";

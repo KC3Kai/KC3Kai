@@ -23,36 +23,38 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		supportFleet: [],
 		fcfCheck: [],
 		escapedList: [],
-		materialGain: Array.apply(null,{length:8}).map(function(){return 0;}),
-		sinkList:{main:[],escr:[]},
+		materialGain: Array.apply(null, {length:8}).map(v => 0),
+		sinkList: {main:[], escr:[]},
 		sortieTime: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime, eventData){
-			var self = this;
+			const self = this;
 			// If still on sortie, end previous one
-			if(this.onSortie > 0){ this.endSortie(); }
+			if(this.isOnSortie()){
+				this.endSortie();
+			}
 			
 			this.fleetSent = parseInt(fleetNum);
 			this.map_world = world;
 			this.map_num = mapnum;
-			var thisMap = this.getCurrentMapData();
+			const thisMap = this.getCurrentMapData();
 			this.map_difficulty = world < 10 ? 0 : thisMap.difficulty || 0;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
-			this.nodes = [];
 			this.boss = {
 				info: false,
 				bosscell: -1,
 				comp: -1,
 				letters: []
 			};
+			this.clearNodes();
 			
 			this.snapshotFleetState();
-			var fleet = PlayerManager.fleets[this.fleetSent-1];
+			const fleet = PlayerManager.fleets[this.fleetSent-1];
 			fleet.resetAfterHp();
 			
 			// Prepare sortie database record
-			var sortie = {
+			const sortie = {
 				diff: this.map_difficulty,
 				world: world,
 				mapnum: mapnum,
@@ -77,7 +79,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			// Record boss HP gauge states of event maps
 			if(eventData){
-				var mergedEventInfo = {};
+				const mergedEventInfo = {};
 				$.extend(mergedEventInfo, eventData, {
 					// api_state not stored, use this instead
 					"api_cleared": thisMap.clear,
@@ -110,7 +112,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
 					if(eventData){
 						if(thisMap.stat && thisMap.stat.onBoss){
-							var hpData = thisMap.stat.onBoss.hpdat || [];
+							const hpData = thisMap.stat.onBoss.hpdat || [];
 							hpData[id] = [eventData.api_now_maphp, eventData.api_max_maphp];
 							thisMap.stat.onBoss.hpdat = hpData;
 							self.setCurrentMapData(thisMap);
@@ -144,8 +146,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
-				var event = (expedNum > 100);
-				if(event) expedNum -= 100;
+				// expedition ID extended since 207-10-18, 101 no longer the start of event support
+				// FIXME World 1 A1 = 100, A2 = 101, A3 = 102. event ID still unknown
+				var event = (expedNum > 200);
+				if(event) expedNum -= 200;
 				var world = Math.floor((expedNum - 1) / 8) + 1;
 				var n = (expedNum - 1) % 8;
 				return (world === 5 || event) && (isBoss ? n === 1 : n === 0);
@@ -161,7 +165,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getWorldLandBases :function(world){
-			var lbas = [];
+			const lbas = [];
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.rid > -1 && base.map === world
 					// Only sortie and defend needed
@@ -224,7 +228,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.boss.letters = [KC3Meta.nodeLetter(this.map_world, this.map_num, cellno)];
 			console.debug("Boss node info on start", this.boss);
 			// Init on boss node callback
-			var self = this;
+			const self = this;
 			this.onBossAvailable = this.onBossAvailable || function(nodeObj){
 				self.boss.edge      = nodeObj.id;
 				self.boss.formation = nodeObj.eformation;
@@ -239,68 +243,85 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		currentNode :function(){
-			return this.nodes[ this.nodes.length-1 ];
+			return this.nodes[ this.nodes.length - 1 ] || new KC3Node();
 		},
 		
 		advanceNode :function( nodeData, UTCTime ){
-			var thisNode, nodeKind;
 			//console.debug("Raw next node data", nodeData);
-			
-			nodeKind = "Dud";
-			// Selection node
+			let nodeKind = "Dud";
+			// Map Start Point
+			// api_event_id = 0
+			if (nodeData.api_event_id == 0) {
+				nodeKind = "Dud";
+			}
+			// Route Selection Node
 			// api_event_id = 6
 			// api_event_kind = 2
-			if (typeof nodeData.api_select_route != "undefined") {
-				console.log("nodeData.api_select_route found, defining as selector");
+			else if (typeof nodeData.api_select_route != "undefined") {
 				nodeKind = "Selector";
-			// Battle avoided node (Enemy not found / Peace sea / ...)
+			}
+			// Battle avoided node (message might be: Enemy not found / Peace sea / etc)
 			// api_event_id = 6
-			// api_event_kind = 0/1/3/4
-			}else if(nodeData.api_event_id == 6) {
-				console.log("nodeData.api_event_id = 6 and api_event_kind != 2, defining as dud");
-				// Another name may needed to show other messages
-				//nodeKind = "Dud";
-			// Battle Node
-			// api_event_kind = 1 (day battle)
-			// api_event_kind = 2 (start at night battle)
-			// api_event_kind = 3 (night battle first, then day battle)
-			// api_event_kind = 4 (aerial exchange)
-			// api_event_kind = 5 (enemy combined)
-			// api_event_kind = 6 (defensive aerial)
-			// api_event_id = 4 (normal battle)
-			// api_event_id = 5 (boss)
-			// api_event_id = 7 (aerial battle or reconnaissance)
-			// api_event_id = 10 (long distance aerial battle)
-			}else if([1,2,4,5,6].indexOf(nodeData.api_event_kind)>=0) {
-				nodeKind = "Battle";
+			// api_event_kind = 0/1/3/4/5/6/7
+			else if (nodeData.api_event_id == 6) {
+				// Might use another name to show a different message?
+				nodeKind = "Dud";
+			}
 			// Resource Node
 			// api_event_id = 2
-			}else if (typeof nodeData.api_itemget != "undefined") {
+			else if (typeof nodeData.api_itemget != "undefined") {
 				nodeKind = "Resource";
-			// Bounty Node
-			// api_event_id = 8
-			} else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
-				nodeKind = "Bounty";
-			// Transport Node 
-			// api_event_id = 9
-			} else if (nodeData.api_event_id == 9){
-				nodeKind = "Transport";
+			}
 			// Maelstrom Node
 			// api_event_id = 3
-			} else if (typeof nodeData.api_happening != "undefined") {
+			else if (typeof nodeData.api_happening != "undefined") {
 				nodeKind = "Maelstrom";
-			// Empty Node 
-			// api_event_kind = 0
-			// api_event_id = 6
-			} else {
-				
 			}
-			let definedKind = "defineAs" + nodeKind;
-			let bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
-			if(this.boss.letters.indexOf(bossLetter) < 0) this.boss.letters.push(bossLetter);
+			// Aerial Reconnaissance Node
+			// api_event_id = 7
+			// api_event_kind = 0
+			else if (nodeData.api_event_id == 7 && nodeData.api_event_kind == 0) {
+				// similar with both Resource and Transport, found at 6-3 G & H
+				nodeKind = "Dud";
+			}
+			// Bounty Node, typical example: 1-6-N
+			// api_event_id = 8
+			else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
+				nodeKind = "Bounty";
+			}
+			// Transport Node, event only for now
+			// api_event_id = 9
+			else if (nodeData.api_event_id == 9) {
+				nodeKind = "Transport";
+			}
+			// Battle Node
+			// api_event_kind = 1 (start from day battle)
+			// api_event_kind = 2 (start at night battle), eg: 2-5 D; 5-3 BCDF; 6-5 J
+			// api_event_kind = 3 (night battle first, then day battle), event in the past only
+			// api_event_kind = 4 (aerial exchange battle), eg: 1-6 DFL
+			// api_event_kind = 5 (enemy combined), eg: 6-5 Boss M
+			// api_event_kind = 6 (defensive aerial battle), eg: 6-4 DFG; 6-5 GH
+			// api_event_id = 4 (normal battle)
+			// api_event_id = 5 (boss battle)
+			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0))
+			// api_event_id = 10 (long distance aerial raid)
+			else if ([1, 2, 3, 4, 5, 6].indexOf(nodeData.api_event_kind) >= 0) {
+				// api_event_id not used, might cause misjudging if new id added
+				nodeKind = "Battle";
+			} else {
+				// Otherwise, supposed to be non-battle node
+				console.log(`Unknown node kind, api_event_id = ${nodeData.api_event_id} and api_event_kind = ${nodeData.api_event_kind}, defining as dud`);
+				nodeKind = "Dud";
+			}
+			
+			// According testing, boss node not able to be indicated since api_bosscell_no return random values even edge is still hidden
+			const bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
+			if(this.boss.letters && this.boss.letters.indexOf(bossLetter) < 0)
+				this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
-			thisNode = (new KC3Node( this.getSortieId(), nodeData.api_no, UTCTime,
+			const definedKind = "defineAs" + nodeKind;
+			const thisNode = (new KC3Node( this.getSortieId(), nodeData.api_no, UTCTime,
 				this.map_world, this.map_num, nodeData ))[definedKind](nodeData);
 			this.nodes.push(thisNode);
 			this.updateNodeCompassResults();
@@ -309,7 +330,26 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.save();
 		},
 		
+		appendNode :function( nodeObj ){
+			if(nodeObj instanceof KC3Node){
+				this.nodes.push(nodeObj);
+				return this.countNodes();
+			}
+			return false;
+		},
+		
+		countNodes :function(){
+			return this.nodes.length;
+		},
+		
+		clearNodes :function(){
+			// remove all array elements but no new array instance created,
+			// alternative method (will pop up a new array): this.nodes.splice(0);
+			this.nodes.length = 0;
+		},
+		
 		engageLandBaseAirRaid :function( battleData ){
+			// can not check node type because air raid may occur at any node
 			this.currentNode().airBaseRaid( battleData );
 		},
 		
@@ -484,7 +524,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		setCurrentMapData: function(mapData, world, map){
-			var allMapData = this.getAllMapData();
+			const allMapData = this.getAllMapData();
 			allMapData[
 				['m', world || this.map_world, map || this.map_num].join('')
 			] = (mapData || {});
@@ -502,7 +542,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		sortieName :function(diff){
-			var pvpData = JSON.parse(localStorage.statistics || '{"pvp":{"win":0,"lose":0}}').pvp;
+			const pvpData = JSON.parse(localStorage.statistics || '{"pvp":{"win":0,"lose":0}}').pvp;
 			return this.isPvP() ? (
 				"pvp" + (this.onSortie = (Number(pvpData.win) + Number(pvpData.lose) + (diff||1)))
 			) : ("sortie" + (this.isOnUnsavedSortie() ? 0 : this.onSortie));
@@ -600,8 +640,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.map_difficulty = 0;
 			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
-			this.nodes = [];
 			this.boss = { info: false };
+			this.clearNodes();
 			if(PlayerManager.combinedFleet && sentFleet === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0]);
 				this.cleanMvpShips(PlayerManager.fleets[1]);
@@ -622,7 +662,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.sinkList.escr.splice(0);
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
-			this.onSortie = 0; // clear sortie ID last
+			this.onSortie = 0;
 			this.onPvP = false;
 			this.onCat = false;
 			this.sortieTime = 0;

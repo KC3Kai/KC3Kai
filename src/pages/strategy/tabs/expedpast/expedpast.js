@@ -32,17 +32,16 @@
 			
 			// Add all expedition numbers on the filter list
 			var KE = PS["KanColle.Expedition"];
-			$('.tab_expedpast .expedNumbers').html("");
+			$('.tab_expedpast .expedNumbers').empty();
 			KE.allExpeditions.forEach( function(curVal, ind) {
 				var row = $('.tab_expedpast .factory .expedNum').clone();
-				$(".expedCheck input", row).attr("value", curVal.id.toString());
-				$(".expedText", row).text( curVal.id.toString() );
+				$(".expedCheck input", row).attr("value", curVal.id);
+				$(".expedText", row).text( curVal.name );
 				$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
 				
 				self.exped_filters.push(curVal.id);
 				
-				var boxNum = Math.ceil((ind+1)/8);
-				$(".tab_expedpast .expedNumBox_"+boxNum).append( row );
+				$(".tab_expedpast .expedNumBox_"+curVal.world).append( row );
 			});
 			
 			// Add world toggle

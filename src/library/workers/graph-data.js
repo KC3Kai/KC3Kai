@@ -31,7 +31,7 @@ function formatData(startHour, endHour, options, result){
 	let datasets = {};
 	let maxPoints = Math.ceil((endHour - startHour) / options.interval);
 	
-	// Create datasets based on graphable items
+	// Create dataset based on graph-able items
 	options.graphableItems.name.forEach(function(name, gii){
 		datasets[options.graphableItems.dbkey[gii]] = {
 			label: options.graphableItems.full[gii],

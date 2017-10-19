@@ -619,8 +619,9 @@ KC3改 Ship Object
 			ar: shipMst.api_souk[1] - shipMst.api_souk[0] - this.mod[3],
 			lk: this.lk[1] - this.lk[0],
 			// or: shipMst.api_luck[1] - shipMst.api_luck[0] - this.mod[4],
-			hp: this.maxHp(true) - this.hp[1] - this.mod[5],
-			as: this.maxAswMod() - this.nakedAsw() - this.mod[6]
+			// current stat (hp[1], as[0]) already includes the modded stat
+			hp: this.maxHp(true) - this.hp[1],
+			as: this.maxAswMod() - this.nakedAsw()
 		};
 		return !statAttr ? stats : stats[statAttr];
 	};
@@ -1222,7 +1223,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.collectBattleConditions = function(){
 		const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-				KC3SortieManager.currentNode() || {} : {};
+				KC3SortieManager.currentNode() : {};
 		const playerCombinedFleetType = PlayerManager.combinedFleet;
 		const isEnemyCombined = currentNode.enemyCombined;
 		const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
