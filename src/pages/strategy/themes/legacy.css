@@ -1107,9 +1107,9 @@ body {
 	background: #ebebe4;
 }
 .tab_fleet .fleet_box {
-	height:215px;
 	background:#def;
 	margin:0px 0px 5px 0px;
+	padding:0px 0px 5px 0px;
 	border-radius:12px;
 }
 .tab_fleet .fleet_name {
@@ -1181,16 +1181,21 @@ body {
 }
 .tab_fleet .fleet_ships {
 	width:672px;
-	height:175px;
 	margin:0px 4px;
 }
 .tab_fleet .fleet_ship {
 	width:110px;
-	height:165px;
+	height:85px;
 	float:left;
-	background:#ffc;
+	background:#fff;
 	border-radius:8px;
 	margin:10px 2px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_id {
+	color:#555 !important;
+	position:absolute;
+    bottom:0;
+    right:2px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	width:50px;
@@ -1207,25 +1212,25 @@ body {
 	color:#fff;
 }
 .tab_fleet .fleet_ship .ship_pic {
-	width:40px;
-	height:40px;
+	width:50px;
+	height:50px;
 	float:left;
-	margin:3px 0px 0px 10px;
+	margin:3px 0px 0px 0px;
 	background:#ccc;
 	border-radius:20px;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:40px;
-	height:40px;
+	width:50px;
+	height:50px;
 }
 .tab_fleet .fleet_ship .ship_lv {
-	width:50px;
+	width:45px;
 	height:40px;
 	float:left;
-	margin:3px 0px 0px 5px;
+	margin:8px 0px 0px 5px;
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
-	width:20px;
+	width:15px;
 	height:40px;
 	line-height:40px;
 	font-size:12px;
@@ -1233,11 +1238,12 @@ body {
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
-	width:30px;
+	width:25px;
 	height:40px;
 	line-height:40px;
 	font-size:16px;
 	font-weight:bold;
+	text-align:center;
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_name {

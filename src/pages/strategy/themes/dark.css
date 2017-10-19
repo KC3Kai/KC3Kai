@@ -1476,9 +1476,6 @@ button, input, select, textarea {
 .detail_field.incomplete {
 	background:#623636;
 }
-.tab_fleet .fleet_ships {
-	height:160px;
-}
 .ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
 	color:#777 !important;
 }
@@ -1508,12 +1505,16 @@ button, input, select, textarea {
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:175px;
-	margin:5px 2px 0px 0px;
+	height:88px;
+	margin:2px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
 	position:relative;
 	overflow:hidden;
+}
+.tab_fleet .fleet_ship.horizontal {
+	height:175px;
+	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	width:110px;
@@ -1526,7 +1527,7 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_pic {
 	width:108px;
-	height:80px;
+	height:85px;
 	-webkit-mask-image: -webkit-linear-gradient(top, 
 		rgba(34,34,34,0) 0%,
 		rgba(34,34,34,1) 30%,

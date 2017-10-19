@@ -31,17 +31,17 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
+					$('.pagination').show();
 				}else{
 					$('.pagination').hide();
+					$(".tab_crafts .build_list").empty();
 				}
-
-				self.tabSelf.definition.showPage(1);
 			});
 		},
 
 		showPage :function(pageNumber){
 			KC3Database.get_devmt(pageNumber, function(response){
-				$(".tab_crafts .build_list").html("");
+				$(".tab_crafts .build_list").empty();
 
 				var ctr, thisBuild, buildbox, MasterItem;
 				var shipClickFunc = function(e){

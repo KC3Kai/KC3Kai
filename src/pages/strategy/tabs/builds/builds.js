@@ -31,17 +31,17 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
+					$('.pagination').show();
 				}else{
 					$('.pagination').hide();
+					$(".tab_builds .build_list").empty();
 				}
-				
-				self.tabSelf.definition.showPage(1);
 			});
 		},
 		
 		showPage :function(pageNumber){
 			KC3Database.get_build(pageNumber, function(response){
-				$(".tab_builds .build_list").html("");
+				$(".tab_builds .build_list").empty();
 				
 				var ctr, thisBuild, buildbox;
 				var shipClickFunc = function(e){

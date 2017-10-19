@@ -442,7 +442,7 @@ var PS = {};
 
   exports.log = function (s) {
     return function () {
-      console.log(s);
+      console.log(s);/*RemoveLogging:skip*/
       return {};
     };
   };
@@ -4184,11 +4184,12 @@ var PS = {};
   exports.traceAny = function (x) {
     return function (k) {
       // node only recurses two levels into an object before printing
-      // "[object]" for further objects when using console.log()
+      // "[object]" for further objects when using console logging
       if (util !== undefined) {
-        console.log(util.inspect(x, { depth: null, colors: true }));
+        var z = util.inspect(x, { depth: null, colors: true });
+        console.debug(z);/*RemoveLogging:skip*/
       } else {
-        console.log(x);
+        console.debug(x);/*RemoveLogging:skip*/
       }
       return k({});
     };
@@ -4239,12 +4240,12 @@ var PS = {};
       return function (x) {
           return function (k) {
               if (level === 0) {
-                  console.log(x);
+                  console.log(x);/*RemoveLogging:skip*/
               } else if (level === 1) {
-                  console.warn(x);
+                  console.warn(x);/*RemoveLogging:skip*/
               } else {
-                  console.warn("Unknown level: " +level);
-                  console.warn(x);
+                  console.warn("Unknown level: " + level);/*RemoveLogging:skip*/
+                  console.warn(x);/*RemoveLogging:skip*/
               }
               return k({});
           };

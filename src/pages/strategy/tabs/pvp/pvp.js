@@ -25,6 +25,7 @@
 					self.showPagination();
 				} else {
 					$(".tab_pvp .pagination").hide();
+					$("#pvp_list").empty();
 				}
 				$(".tab_pvp .toggles .pvp_count").text(
 					"Total pages: {1}, battles: {0}".format(self.items, self.pages, self.itemsPerPage)
