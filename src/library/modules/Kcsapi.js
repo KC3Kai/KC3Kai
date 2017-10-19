@@ -1532,6 +1532,7 @@ Previously known as "Reactor"
 						break;
 					case 4:
 						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
+						KC3QuestManager.get(428).increment(0); // D26: Quarterly, index 0
 						break;
 					case 5:
 						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
@@ -1544,6 +1545,12 @@ Previously known as "Reactor"
 					case 38:
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
+						break;
+					case 101: // A2
+						KC3QuestManager.get(428).increment(1); // D26: Quarterly, index 1
+						break;
+					case 102: // A3
+						KC3QuestManager.get(428).increment(2); // D26: Quarterly, index 2
 						break;
 					}
 					KC3Network.trigger("Quests");
