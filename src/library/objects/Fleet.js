@@ -1180,6 +1180,7 @@ Contains summary information about a fleet and its 6 ships
 	Used for recording sorties on indexedDB
 	Generate fleet summary object without referential data (all masterId)
 	Data must be recorded on the state of sortie execution, thus no reference
+	Stats not recorded here can be computed by master stats + kyouka (mod)
 	------------------------------------*/
 	KC3Fleet.prototype.sortieJson = function(){
 		if(this.active){
@@ -1188,11 +1189,17 @@ Contains summary information about a fleet and its 6 ships
 			$.each(this.ships, function(index, rosterId){
 				if(rosterId > -1){
 					var ship = self.ship(index);
+					var nakedStats = ship.nakedStats();
 					ReturnObj.push({
 						mst_id: ship.masterId,
 						level: ship.level,
-						kyouka: ship.mod,
 						morale: ship.morale,
+						stats: {
+							ev: nakedStats.ev,
+							ls: nakedStats.ls,
+							as: nakedStats.as
+						},
+						kyouka: ship.mod,
 						equip: [
 							ship.equipment(0).masterId,
 							ship.equipment(1).masterId,

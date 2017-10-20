@@ -24,7 +24,10 @@
 		  "ship" object format:
 		  { id: <ship master id>
 		  , level: <ship level>
+		  , morale: <ship morale> (optional)
 		  , luck: <ship luck> (optional)
+		  , ...<other useful stats> (optional)
+		  , mod: <ship modernization> (optional)
 		  , equipments: <array of equipments, length = 5 (4+1), falsy for non-existing>
 		  }
 
@@ -310,8 +313,9 @@
 					var masterData = KC3Master.ship(shipData.mst_id);
 					shipObj.id = shipData.mst_id;
 					shipObj.level = shipData.level;
-					// keep undefined to indicate no luck stat record in sortie history
-					//shipObj.luck = masterData.api_luck[0];
+					shipObj.morale = shipData.morale;
+					shipObj.mod = shipData.kyouka;
+					shipObj.stats = shipData.stats;
 					shipObj.equipments = [];
 
 					$.each( shipData.equip, function(i,gearId) {
@@ -521,7 +525,7 @@
 			};
 
 			// fill in instance of Ships
-			$.each( fleetObj.ships, function(ind,shipObj) {
+			$.each( fleetObj.ships, function(ind, shipObj) {
 				if (!shipObj) return;
 				var ship = new KC3Ship();
 				shipObjArr.push( ship );
@@ -532,12 +536,8 @@
 				ship.rosterId = shipObj.rid || fleet.ships[ind];
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
-				ship.morale = shipObj.cond;
-				// calculate naked LoS
-				ship.ls[0] = shipObj.ls || (ship.estimateNakedLoS() + ship.equipmentTotalLoS());
-				ship.lk[0] = shipObj.luck;
-				ship.fp[0] = shipObj.fp || 0;
-				ship.tp[0] = shipObj.tp || 0;
+				ship.morale = shipObj.morale;
+
 				ship.items = [-1,-1,-1,-1];
 				ship.slots = masterData.api_maxeq;
 				ship.ex_item = 0;
@@ -561,6 +561,22 @@
 					gear.ace = equipment.ace ? equipment.ace : 0;
 				});
 
+				// estimate ship's stats from known facts as possible as we can
+				var mod = shipObj.mod || [];
+				var noMasterStats = shipObj.stats || {};
+				ship.hp[0] = ship.hp[1] = ship.maxHp() + (mod[5] || 0);
+
+				// read saved values first, then fall back to calculate master + mod + equip total
+				ship.fp[0] = shipObj.fp || (masterData.api_houg[0] + (mod[0] || 0) + ship.equipmentTotalStats("houg"));
+				ship.tp[0] = shipObj.tp || (masterData.api_raig[0] + (mod[1] || 0) + ship.equipmentTotalStats("raig"));
+				ship.aa[0] = shipObj.aa || (masterData.api_tyku[0] + (mod[2] || 0) + ship.equipmentTotalStats("tyku"));
+				ship.ar[0] = shipObj.ar || (masterData.api_souk[0] + (mod[3] || 0) + ship.equipmentTotalStats("souk"));
+				ship.lk[0] = shipObj.luck || (masterData.api_luck[0] + (mod[4] || 0));
+
+				// no value in master data, fall back to calculated naked + equip total
+				ship.ls[0] = shipObj.ls || ((noMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
+				ship.ev[0] = shipObj.ev || (noMasterStats.ev === undefined ? 0 : noMasterStats.ev + ship.equipmentTotalStats("houk"));
+				ship.as[0] = shipObj.as || (noMasterStats.as === undefined ? 0 : noMasterStats.as + ship.equipmentTotalStats("tais"));
 			});
 
 			return fleet;
@@ -608,11 +624,13 @@
 						id: ship.masterId,
 						rid: ship.rosterId,
 						level: ship.level,
-						cond: ship.morale,
+						morale: ship.morale,
 						luck: ship.lk[0],
 						ls: ship.ls[0],
+						as: ship.as[0],
 						fp: ship.fp[0],
 						tp: ship.tp[0],
+						mod: ship.mod,
 						equipments: convertEquipmentsOf(ship)
 					};
 					fleetObjShips.push( shipObj );
