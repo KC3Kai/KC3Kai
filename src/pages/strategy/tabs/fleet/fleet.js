@@ -76,7 +76,7 @@
 		   Places data onto the interface
 		   ---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 
 			$("input#hist_query").on("keydown", function(e) {
 				if (e.which === 13) {
@@ -147,15 +147,19 @@
 							encodeURI( JSON.stringify( converted )));
 
 			});
-			$("button#control_switch_view").on("click", function() {
-				self.horizontal = !self.horizontal;
-				if(self.horizontal) {
+			const updateHorizontal = () => {
+				if(this.horizontal) {
 					$(".fleet_ships").addClass("horizontal");
 					$(".fleet_ship").addClass("horizontal");
 				} else {
 					$(".horizontal").removeClass("horizontal");
 				}
+			};
+			$("button#control_switch_view").on("click", function() {
+				self.horizontal = !self.horizontal;
+				updateHorizontal();
 			});
+			updateHorizontal();
 
 			this.refreshSavedFleets();
 			if(!!KC3StrategyTabs.pageParams[1]){
