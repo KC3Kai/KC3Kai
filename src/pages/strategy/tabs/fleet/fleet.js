@@ -212,8 +212,8 @@
 
 			$.each( keys, function(_,key) {
 				selectBox.append( $("<option></option>")
-								  .attr("value", key)
-								  .text(key) );
+					.attr("value", key)
+					.text(key) );
 			});
 		},
 
@@ -306,7 +306,8 @@
 					var masterData = KC3Master.ship(shipData.mst_id);
 					shipObj.id = shipData.mst_id;
 					shipObj.level = shipData.level;
-					shipObj.luck = masterData.api_luck[0];
+					// keep undefined to indicate no luck stat record in sortie history
+					//shipObj.luck = masterData.api_luck[0];
 					shipObj.equipments = [];
 
 					$.each( shipData.equip, function(i,gearId) {
@@ -430,7 +431,14 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			});
 			$(".ship_lv_val", shipBox).text( kcShip.level );
-			$(".ship_id", shipBox).text( index );
+			$(".ship_lk_val", shipBox).text( kcShip.lk[0] );
+			$(".ship_luck", shipBox).toggle(kcShip.lk[0] !== undefined);
+			$(".ship_cond_icon img", shipBox).attr("src",
+				"/assets/img/client/morale/" + kcShip.moraleIcon() + ".png"
+			);
+			$(".ship_cond_val", shipBox).text( kcShip.morale );
+			$(".ship_morale", shipBox).toggle(kcShip.morale !== undefined);
+			$(".ship_index", shipBox).text( index );
 			var nameBox = $(".ship_name", shipBox);
 			nameBox.text( kcShip.name() ).lazyInitTooltip();
 
@@ -447,38 +455,45 @@
 				});
 			}
 
-			$.each([0,1,2,3,4], function(_,ind) {
+			[0,1,2,3,4].forEach(index => {
 				self.showKCGear(
-					$(".ship_gear_"+(ind+1), shipBox),
-					kcShip.equipment(ind),
-					kcShip.slots[ind],
-					kcShip
+					$(".ship_gear_"+(index+1), shipBox),
+					kcShip.equipment(index),
+					kcShip.slots[index],
+					kcShip,
+					index
 				);
 			});
 		},
 
 		/* Show single equipment
 		   --------------------------------------------*/
-		showKCGear: function(gearBox, kcGear, capacity, kcShip) {
+		showKCGear: function(gearBox, kcGear, capacity, kcShip, index) {
 			if (!kcGear.masterId) {
 				gearBox.hide();
 				return;
 			}
 			var masterData = kcGear.master();
-			$("img", gearBox).attr("src", "../../assets/img/items/"+masterData.api_type[3]+".png");
-			$("img", gearBox).attr("alt", masterData.api_id);
-			$("img", gearBox).click(function(){
-				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-			});
-			$(".gear_name .name", gearBox).text(kcGear.name());
-			if(kcGear.stars>0){
-				$(".gear_name .stars", gearBox).text( "\u2605{0} ".format(kcGear.stars) );
+			// ex-slot capacity not implemented yet, no aircraft equippable
+			$(".max_slot", gearBox).text(index < 4 ? capacity : "-");
+			if(index >= 4 || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
+				$(".max_slot", gearBox).addClass("unused");
 			}
-			if(kcGear.ace>0){
-				$(".gear_name .ace", gearBox).text( " \u00bb{0} ".format(kcGear.ace) );
+			$(".gear_icon img", gearBox).attr("src", "/assets/img/items/" + masterData.api_type[3] + ".png")
+				.attr("alt", masterData.api_id)
+				.click(function(){
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				});
+			$(".gear_name", gearBox).text(kcGear.name());
+			if(kcGear.stars > 0){
+				$(".gear_stars", gearBox).text
+					("\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)
+				).show();
 			}
-			if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3])>-1){
-				$(".gear_name .slot", gearBox).text( "x{0}".format(capacity) );
+			if(kcGear.ace > 0){
+				$(".gear_ace img", gearBox).attr("src", "/assets/img/client/achev/" +
+					Math.min(kcGear.ace, 7) + ".png");
+				$(".gear_ace", gearBox).show();
 			}
 			$(".gear_name", gearBox).attr("title",
 				kcGear.htmlTooltip(capacity, kcShip))
@@ -513,6 +528,7 @@
 				ship.rosterId = shipObj.rid || fleet.ships[ind];
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
+				ship.morale = shipObj.cond;
 				// calculate naked LoS
 				ship.ls[0] = shipObj.ls || (ship.estimateNakedLoS() + ship.equipmentTotalLoS());
 				ship.lk[0] = shipObj.luck;
@@ -588,6 +604,7 @@
 						id: ship.masterId,
 						rid: ship.rosterId,
 						level: ship.level,
+						cond: ship.morale,
 						luck: ship.lk[0],
 						ls: ship.ls[0],
 						fp: ship.fp[0],

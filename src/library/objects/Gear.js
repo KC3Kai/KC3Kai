@@ -594,16 +594,16 @@ KC3改 Equipment Object
 			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
 			let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
 			$(".vl", valueBox).text(onNormal[0]);
-			if(isOverCap[0]) $(".vl", valueBox).css("color", "#a08");
+			if(isOverCap[0]) $(".vl", valueBox).addClass("power_capped");
 			$(".vlc", valueBox).text(onCritical[0]);
-			if(isOverCap[0]) $(".vlc", valueBox).css("color", "#a08");
+			if(isOverCap[0]) $(".vlc", valueBox).addClass("power_capped");
 			$(".value", powBox).append(valueBox.html());
 			if(isRange) {
 				let valueBox = $('<div><span class="vh"></span>(<span class="vhc"></span>)</div>');
 				$(".vh", valueBox).text(onNormal[1]);
-				if(isOverCap[1]) $(".vh", valueBox).css("color", "#a08");
+				if(isOverCap[1]) $(".vh", valueBox).addClass("power_capped");
 				$(".vhc", valueBox).text(onCritical[1]);
-				if(isOverCap[1]) $(".vhc", valueBox).css("color", "#a08");
+				if(isOverCap[1]) $(".vhc", valueBox).addClass("power_capped");
 				$(".value", powBox).append(" / ").append(valueBox.html());
 			}
 			tooltipTitle.append("<br/>").append(powBox.html());

@@ -2250,9 +2250,9 @@ KC3改 Ship Object
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : "");
 		// show possible critical power and mark capped power with different color
-		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span style="color:#a08">{0}</span>' : "{0}")
+		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span class="power_capped">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
-				(cap ? '(<span style="color:#a08">{0}</span>)' : "({0})")
+				(cap ? '(<span class="power_capped">{0}</span>)' : "({0})")
 					.format(Math.qckInt("floor", cp, 0))
 			);
 		const onFleetNum = shipObj.onFleet();

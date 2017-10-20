@@ -3534,6 +3534,9 @@ ABYSS FLEET
 .ui-tooltip-content p {
 	margin:0px;
 }
+.ui-tooltip-content .power_capped {
+	color:#a08;
+}
 
 .ui-tooltip-content .ship_face_tooltip {
 	width:252px;
