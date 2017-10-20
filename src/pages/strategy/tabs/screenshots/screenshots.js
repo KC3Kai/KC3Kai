@@ -30,12 +30,12 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
+					$('.pagination').show();
 				}else{
 					$('.pagination').hide();
+					$(".screenshot_list").empty();
 				}
 			});
-			
-			this.showPage(1);
 		},
 		
 		/* SHOW PAGE

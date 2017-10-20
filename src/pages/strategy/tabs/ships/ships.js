@@ -445,17 +445,17 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: [ThisShip.hp[1], ThisShip.isMarried() ? ThisShip.maxHp(true) : MasterShip.api_taik[0]+KC3Ship.getMaxHpModernize(), MasterShip.api_taik[0] ],
-				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0]+ThisShip.mod[0], ThisShip.fp[0] ],
-				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0]+ThisShip.mod[1], ThisShip.tp[0] ],
+				hp: [ThisShip.hp[1], ThisShip.maxHp(true), MasterShip.api_taik[0] ],
+				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0] + ThisShip.mod[0], ThisShip.fp[0] ],
+				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0] + ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
 					MasterShip.api_houg[1] + MasterShip.api_raig[1],
-					MasterShip.api_houg[0]+ThisShip.mod[0] + MasterShip.api_raig[0]+ThisShip.mod[1],
+					MasterShip.api_houg[0] + ThisShip.mod[0] + MasterShip.api_raig[0] + ThisShip.mod[1],
 					ThisShip.fp[0] + ThisShip.tp[0]
 				],
 				aa: [MasterShip.api_tyku[1], MasterShip.api_tyku[0]+ThisShip.mod[2], ThisShip.aa[0] ],
 				ar: [MasterShip.api_souk[1], MasterShip.api_souk[0]+ThisShip.mod[3], ThisShip.ar[0] ],
-				as: [ThisShip.nakedAsw(), ThisShip.maxAswMod(), ThisShip.nakedAsw()-ThisShip.mod[6], ThisShip.as[0] ],
+				as: [ThisShip.nakedAsw(), ThisShip.maxAswMod(), ThisShip.nakedAsw() - ThisShip.mod[6], ThisShip.as[0] ],
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],

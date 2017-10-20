@@ -25,6 +25,7 @@
 					self.showPagination();
 				} else {
 					$(".tab_pvp .pagination").hide();
+					$("#pvp_list").empty();
 				}
 				$(".tab_pvp .toggles .pvp_count").text(
 					"Total pages: {1}, battles: {0}".format(self.items, self.pages, self.itemsPerPage)
@@ -201,12 +202,12 @@
 		---------------------------------*/
 		fillBattleInfo :function(data, targetBox){
 			// Process battle, create simulated node info
-			const thisPvP = (new KC3Node()).defineAsBattle();
+			const thisPvP = (new KC3Node(0, 0, data.time)).defineAsBattle();
 			thisPvP.isPvP = true;
 			thisPvP.letter = "PvP";
 			// Do not require to simulate states of PvP sortie
 			//KC3SortieManager.onPvP = true;
-			//KC3SortieManager.nodes.push(thisPvP);
+			//KC3SortieManager.appendNode(thisPvP);
 			
 			const battle_info_html = $(".tab_pvp .factory .pvp_battle_info").html();
 			// Day Battle

@@ -11,8 +11,9 @@ Used by SortieManager
 		// will be 0 if sortie has not been saved to DB (yet)
 		this.sortie = sortie_id || 0;
 		this.id = api_no || 0;
-		this.type = "";
+		// node data supposed to be available only if created with time stamp
 		this.stime = utcTime;
+		this.type = "";
 		this.isPvP = false;
 		this.letter = KC3Meta.nodeLetter(world || KC3SortieManager.map_world,
 			map || KC3SortieManager.map_num, this.id);
@@ -28,6 +29,10 @@ Used by SortieManager
 			"nc_night_battle", "nc_air_battle",
 			"nc_enemy_combined", "nc_air_raid"
 		];
+	};
+	
+	KC3Node.prototype.isInitialized = function(){
+		return !!this.stime;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){

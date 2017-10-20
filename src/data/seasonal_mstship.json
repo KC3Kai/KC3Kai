@@ -1,4 +1,116 @@
 {
+	"773": {
+		"api_id": 773,
+		"api_name": "秋刀魚狭霧",
+		"api_yomi": "さぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"774": {
+		"api_id": 774,
+		"api_name": "浴衣綾波",
+		"api_yomi": "あやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"775": {
+		"api_id": 775,
+		"api_name": "浴衣敷波",
+		"api_yomi": "しきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"776": {
+		"api_id": 776,
+		"api_name": "浴衣藤波",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"777": {
+		"api_id": 777,
+		"api_name": "浴衣古鷹",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"778": {
+		"api_id": 778,
+		"api_name": "浴衣由良",
+		"api_yomi": "ゆら",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"779": {
+		"api_id": 779,
+		"api_name": "浴衣神威",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"780": {
+		"api_id": 780,
+		"api_name": "浴衣神威改",
+		"api_yomi": "かもい",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"781": {
+		"api_id": 781,
+		"api_name": "浴衣神威改母",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"782": {
+		"api_id": 782,
+		"api_name": "浴衣択捉",
+		"api_yomi": "えとろふ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"783": {
+		"api_id": 783,
+		"api_name": "浴衣松輪",
+		"api_yomi": "まつわ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"784": {
+		"api_id": 784,
+		"api_name": "浴衣Libeccio",
+		"api_yomi": "リベッチオ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"785": {
+		"api_id": 785,
+		"api_name": "秋の味覚Верный",
+		"api_yomi": "ひびき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"786": {
+		"api_id": 786,
+		"api_name": "秋刀魚卯月",
+		"api_yomi": "うづき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"787": {
 		"api_id": 787,
 		"api_name": "浴衣朝霜",
