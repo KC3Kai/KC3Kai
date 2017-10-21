@@ -51,7 +51,7 @@ Has functions for TimerManager to use
 	
 	KC3Timer.prototype.expnum = function(){
 		if(this.expedNum > 0){
-			$(".timer-expnum", this.element).text( this.expedNum );
+			$(".timer-expnum", this.element).text( KC3Master.missionDispNo(this.expedNum) );
 		}
 	};
 	
@@ -130,7 +130,8 @@ Has functions for TimerManager to use
 			case 0:
 				var thisFleet = PlayerManager.fleets[this.num+1];
 				notifData.title = KC3Meta.term("DesktopNotifyExpedCompleteTitle");
-				notifData.message = KC3Meta.term("DesktopNotifyExpedCompleteMessage").format(this.num+2, thisFleet.mission[1]);
+				notifData.message = KC3Meta.term("DesktopNotifyExpedCompleteMessage")
+					.format(this.num + 2, KC3Master.missionDispNo(thisFleet.mission[1]));
 				notifData.iconUrl = "../../assets/img/quests/expedition.jpg";
 				break;
 			case 1:

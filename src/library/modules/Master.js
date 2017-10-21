@@ -249,6 +249,11 @@ Saves and loads significant data for future use
 			return this._raw.mission || {};
 		},
 
+		missionDispNo :function(id){
+			var dispNo = (this.mission(id) || {}).api_disp_no;
+			return dispNo || String(id);
+		},
+
 		abyssalShip :function(id, isMasterMerged){
 			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend({}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&

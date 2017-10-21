@@ -3010,10 +3010,9 @@
 				+".png"
 			);
 
-			// Show Expedition API defined display name instead
-			var dispNo = (KC3Master.mission(data.expedNum) || {}).api_disp_no;
+			// Show Expedition API defined display number instead
 			$(".activity_expedition .expres_num").text(
-				"{0} {1}".format(KC3Meta.term("Expedition"), dispNo || data.expedNum)
+				"{0} {1}".format(KC3Meta.term("Expedition"), KC3Master.missionDispNo(data.expedNum))
 			);
 
 			// Status text
@@ -3101,7 +3100,7 @@
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title")
-				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
+				.text(KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition));
 
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
