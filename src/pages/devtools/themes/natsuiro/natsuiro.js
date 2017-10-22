@@ -2838,6 +2838,11 @@
 						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 
+						if(ConfigManager.info_chuuha_icon){
+							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
+								.attr("src", KC3Ship.shipIcon(eshipId, thisPvP.maxHPs.enemy[index], newEnemyHP));
+						}
+
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .abyss_single .sunk_"+(index+1)+" img")

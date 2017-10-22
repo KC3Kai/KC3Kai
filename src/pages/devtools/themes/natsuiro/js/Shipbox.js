@@ -293,7 +293,7 @@ KC3改 Ship Box for Natsuiro theme
 	
 	/* SHOW PREDICTION
 	If enabled, and after-battle HP changed,
-	Show new HP bars and its color (not HP text)
+	Show diff HP text, new HP bars and its color
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showPrediction = function(){
 		// If prediction is disabled, cancel this function
@@ -333,6 +333,13 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_hp_prediction", this.element).css("background", "#FFFF00");
 			} else{
 				$(".ship_hp_prediction", this.element).css("background", "#00FF00");
+			}
+			
+			// Change to damaged ship icon if worse than 'chuuha'
+			if(ConfigManager.info_chuuha_icon) {
+				$(".ship_img img", this.element).attr("src",
+					KC3Ship.shipIcon(this.shipData.masterId, this.shipData.hp[1], this.shipData.afterHp[0])
+				);
 			}
 		}
 	};

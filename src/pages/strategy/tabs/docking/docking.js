@@ -20,6 +20,7 @@
 		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload() {
+			ConfigManager.load();
 			// Load latest states of ships and repair docks
 			PlayerManager.loadFleets();
 			KC3ShipManager.load();
@@ -134,8 +135,9 @@
 		}
 
 		showShipDockingStatus(ship, shipRow) {
-			$(".ship_img .ship_icon", shipRow)
-				.attr("src", KC3Ship.shipIcon(ship.masterId, ship.maxhp, ship.hp));
+			if(ConfigManager.info_chuuha_icon)
+				$(".ship_img .ship_icon", shipRow)
+					.attr("src", KC3Ship.shipIcon(ship.masterId, ship.maxhp, ship.hp));
 			$(".ship_status", shipRow).text("{0} / {1}".format(ship.hp, ship.maxhp));
 			$(".ship_hp_val", shipRow).css("width", parseInt(ship.hp / ship.maxhp * 100, 10)+"px");
 			$(".ship_repair_docking", shipRow).text( String(ship.repairDocking).toHHMMSS() );
