@@ -3126,14 +3126,16 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
-				var asw = shipInst.as[0];
+				var asw = shipInst.as[0], los = shipInst.ls[0], aa = shipInst.aa[0];
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
 					level : level,
 					drumCount : drumCount,
-					asw : asw
+					asw : asw,
+					los : los,
+					aa : aa
 				};
 			});
 
@@ -3327,6 +3329,26 @@
 			} else {
 				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").show();
 			}
+			setupJQObject(
+				ExpdReqPack.totalAa,
+				ExpdCheckerResult.totalAa,
+				$(".module.activity .activity_expeditionPlanner .totalAa")
+			);
+			if (ExpdReqPack.totalAa === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAa").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAa").show();
+			}
+			setupJQObject(
+				ExpdReqPack.totalLos,
+				ExpdCheckerResult.totalLos,
+				$(".module.activity .activity_expeditionPlanner .totalLos")
+			);
+			if (ExpdReqPack.totalLos === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLos").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLos").show();
+			}
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,
@@ -3340,9 +3362,10 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE"))
-							shipReqBox.attr("title", KC3Meta.term("ExpedEscortTip"))
-								.lazyInitTooltip();
+						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE")) {
+							shipReqBox.attr("title", "CL:1 DD:2 = DD:1 DE:3\n" +
+								KC3Meta.term("ExpedEscortTip")).lazyInitTooltip();
+						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
 						} else if (dataResult[index] === true) {
