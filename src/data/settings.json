@@ -240,6 +240,12 @@
 				}
 			},
 			{
+				"id" : "info_chuuha_icon",
+				"name" : "SettingsDamagedShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_seasonal_icon",
 				"name" : "SettingsSeasonalShipIcon",
 				"type" : "check",

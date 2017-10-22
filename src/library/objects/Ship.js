@@ -205,6 +205,15 @@ KC3改 Ship Object
 			this.level >= 50  ? "medium" :
 			"";
 	};
+	/** @return full url of ship face icon according her hp percent. */
+	KC3Ship.prototype.shipIcon = function(){
+		return KC3Meta.shipIcon(this.masterId, undefined, true, this.isStriped());
+	};
+	KC3Ship.shipIcon = function(masterId, mhp = 0, chp = mhp){
+		const isStriped = mhp > 0 && (chp / mhp) <= 0.5;
+		return KC3Meta.shipIcon(masterId, undefined, true, isStriped);
+	};
+	/** @return icon file name only without path and extension suffix. */
 	KC3Ship.prototype.moraleIcon = function(){
 		return KC3Ship.moraleIcon(this.morale);
 	};

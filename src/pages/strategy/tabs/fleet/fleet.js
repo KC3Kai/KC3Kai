@@ -432,7 +432,7 @@
 			$(".fleet_ships", fleetBox).append( shipBox );
 
 			$(".ship_type", shipBox).text( kcShip.stype() );
-			$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( kcShip.masterId ) );
+			$(".ship_pic img", shipBox).attr("src", kcShip.shipIcon() );
 			// TODO Link to ship list instead of ship library
 			$(".ship_pic img", shipBox).attr("alt", kcShip.masterId );
 			$(".ship_pic img", shipBox).click(function(){

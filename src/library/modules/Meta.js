@@ -142,7 +142,7 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 			return this;
 		},
-		getIcon: function(id, empty, useSeasonal = true) {
+		getIcon: function(id, empty, useSeasonal = true, isDamaged = false) {
 			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
 				var path = KC3Master.isAbyssalShip(id) ? "abyss/" : "ships/";
@@ -154,6 +154,11 @@ Provides access to data on built-in JSON files
 					&& this._seasonal.length && this._seasonal.indexOf(id) > -1){
 					path = "shipseasonal/";
 				}
+				// Show damaged (chuuha) icon if demanded and config enabled
+				if(path === "ships/" && isDamaged && ConfigManager.info_chuuha_icon){
+					id = String(id) + "_d";
+				}
+				// Here assume image file must be existed already (even for '_d.png')
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
 			if(empty === undefined){
