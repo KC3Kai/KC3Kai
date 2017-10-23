@@ -53,7 +53,7 @@
 
     const battleStart = parseStartJson(battleStartData);
     return getRankPredictor(apiName)
-      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult));
+      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult, true));
   };
 
   BP.predictMvp = (dayResult, nightResult) => {
