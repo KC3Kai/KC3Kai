@@ -282,9 +282,11 @@
 		},
 
 		refreshShowNameFilter: function() {
+			var self = this;
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
 			const nameToSearch = newNameCriteria.toLowerCase();
 			let hiddenShipsByName = 0;
+			$(".ingame_page").remove();
 			if (nameToSearch.length > 0) {
 				$(".ship_list .ship_item").each(function() {
 					// also search for JP name and kana yomi, not so useful for JP tho
@@ -296,12 +298,23 @@
 						|| shipNameKana.includes(nameToSearch));
 					hiddenShipsByName += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
-					$(".ingame_page").hide();
 				});
 			} else {
 				$(".ship_list .ship_item").removeClass("hidden_by_name");
-				$(".ingame_page").toggle(this.pageNo);
 			}
+
+			let visibleShips = 0;
+			$(".ship_list .ship_item").each(function() {
+				if(!$(this).hasClass("hidden_by_name")) {
+					$(this).removeClass("odd").removeClass("even")
+						.addClass(visibleShips % 2 ? "even" : "odd");
+					if(visibleShips % 10 == 0)
+						$("<div>").addClass("ingame_page")
+							.html("Page " + Math.ceil((visibleShips + 1) / 10))
+							.insertBefore(this).toggle(self.pageNo);
+					visibleShips++;
+				}
+			});
 			// update listed ship counter
 			// have to take filtered list by data into account since hidden by name are still in list
 			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
@@ -993,12 +1006,6 @@
 
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
-					if(shipCtr%10 === 0){
-						$("<div>").addClass("ingame_page")
-							.html("Page "+Math.ceil((Number(shipCtr)+1)/10))
-							.appendTo(self.shipList);
-					}
-
 					cShip = FilteredShips[shipCtr];
 					shipLevel = cShip.level;
 
@@ -1016,7 +1023,6 @@
 					// elements constructing for the time-consuming 'first time rendering'
 					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
-					if(shipCtr%2 === 0){ cElm.addClass("even"); }else{ cElm.addClass("odd"); }
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm)
