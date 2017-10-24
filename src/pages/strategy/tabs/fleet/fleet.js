@@ -477,15 +477,27 @@
 		/* Show single equipment
 		   --------------------------------------------*/
 		showKCGear: function(gearBox, kcGear, capacity, kcShip, index) {
-			if (!kcGear.masterId) {
+			if (!kcGear.masterId || !kcShip.masterId) {
 				gearBox.hide();
 				return;
 			}
-			var masterData = kcGear.master();
+			const masterData = kcGear.master();
+			const slotMaxSize = kcShip.master().api_maxeq[index];
 			// ex-slot capacity not implemented yet, no aircraft equippable
-			$(".max_slot", gearBox).text(index < 4 ? capacity : "-");
+			$(".slot_capacity", gearBox).text(index < 4 ? capacity : "-")
+				.removeClass("empty taiha chuuha shouha unused")
+				.addClass((percent => {
+					switch(true){
+						case !slotMaxSize: return "";
+						case percent <= 0.00: return "empty";
+						case percent <= 0.25: return "taiha";
+						case percent <= 0.50: return "chuuha";
+						case percent <= 0.75: return "shouha";
+						default: return "";
+					}
+				})(capacity / (slotMaxSize || 1)));
 			if(index >= 4 || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
-				$(".max_slot", gearBox).addClass("unused");
+				$(".slot_capacity", gearBox).addClass("unused");
 			}
 			$(".gear_icon img", gearBox).attr("src", "/assets/img/items/" + masterData.api_type[3] + ".png")
 				.attr("alt", masterData.api_id)
