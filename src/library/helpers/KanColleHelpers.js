@@ -7484,7 +7484,7 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(5)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(10))(ddde(3)));
       };
       if (v === 101) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(20)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(aswTotal(180))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(aaTotal(70))(losTotal(18)))));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(20)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(aswTotal(180))(aaTotal(70))));
       };
       if (v === 102) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(35)(5))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(185))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(aswTotal(280)))));
