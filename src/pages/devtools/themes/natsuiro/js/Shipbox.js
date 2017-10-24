@@ -44,7 +44,7 @@ KC3改 Ship Box for Natsuiro theme
 					tabPath: "mstship-{0}".format($(this).data("masterId"))
 				})).execute();
 			});
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -60,7 +60,7 @@ KC3改 Ship Box for Natsuiro theme
 		var myExItem = this.shipData.exItem();
 		if( myExItem && myExItem.masterId > 0 ) {
 			$(".ex_item .gear_icon img", this.element)
-				.attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png")
+				.attr("src", "/assets/img/items/"+myExItem.master().api_type[3]+".png")
 				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
 				.data("masterId", myExItem.masterId)
 				.on("dblclick", function(e){
@@ -293,7 +293,7 @@ KC3改 Ship Box for Natsuiro theme
 	
 	/* SHOW PREDICTION
 	If enabled, and after-battle HP changed,
-	Show new HP bars and its color (not HP text)
+	Show diff HP text, new HP bars and its color
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showPrediction = function(){
 		// If prediction is disabled, cancel this function
@@ -333,6 +333,13 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_hp_prediction", this.element).css("background", "#FFFF00");
 			} else{
 				$(".ship_hp_prediction", this.element).css("background", "#00FF00");
+			}
+			
+			// Change to damaged ship icon if worse than 'chuuha'
+			if(ConfigManager.info_chuuha_icon) {
+				$(".ship_img img", this.element).attr("src",
+					KC3Ship.shipIcon(this.shipData.masterId, this.shipData.hp[1], this.shipData.afterHp[0])
+				);
 			}
 		}
 	};
@@ -380,12 +387,12 @@ KC3改 Ship Box for Natsuiro theme
 				// Unknown item
 				if(thisGear.masterId === 0){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
-						"../../../../assets/img/ui/empty.png");
+						"/assets/img/ui/empty.png");
 					return false;
 				}
 				
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
-					"../../../../assets/img/items/"+thisGear.master().api_type[3]+".png");
+					"/assets/img/items/"+thisGear.master().api_type[3]+".png");
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
 					.attr("titlealt", thisGear.htmlTooltip(this.shipData.slots[slot], this.shipData))
@@ -407,7 +414,7 @@ KC3改 Ship Box for Natsuiro theme
 					// Is a plane with proficiency level
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
-						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");
+						.attr("src", "/assets/img/client/achev/"+thisGear.ace+".png");
 				}
 				if (thisGear.stars > 0){
 				    // Is a normal equipment that can be upgraded
