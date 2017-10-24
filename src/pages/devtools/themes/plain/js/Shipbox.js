@@ -18,14 +18,14 @@ KC3改 Ship Box for Natsuiro theme
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
-		$(".ship_img img", this.element).attr("src", KC3Meta.shipIcon(this.shipData.masterId));
+		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
 		if( myExItem && (myExItem.masterId > 0)){
-			$(".ex_item img", this.element).attr("src", "../../../../assets/img/items/"+myExItem.master().api_type[3]+".png");
+			$(".ex_item img", this.element).attr("src", "/assets/img/items/"+myExItem.master().api_type[3]+".png");
 		}else{
 			$(".ex_item", this.element).hide();
 		}

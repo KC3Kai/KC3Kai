@@ -142,18 +142,24 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 			return this;
 		},
-		getIcon: function(id, empty, useSeasonal = true) {
+		getIcon: function(id, empty, useSeasonal = true, isDamaged = false) {
 			id = Number(id);
 			if(this._icons.indexOf(id) > -1){
-				var path = KC3Master.isAbyssalShip(id) ? "abyss/" : "ships/";
+				const isAbyssal = KC3Master.isAbyssalShip(id);
+				let path = isAbyssal ? "abyss/" : "ships/";
 				// Devs bump 1000 for master ID of abyssal ships from 2017-04-05
-				// To prevent mess file renaming for images, patch it here.
-				id = path === "abyss/" ? id - 1000 : id;
+				// To prevent mess image files renaming, patch it here
+				id = isAbyssal ? id - 1000 : id;
 				// Show seasonal icon if demanded, config enabled and found in meta
-				if(path === "ships/" && useSeasonal && ConfigManager.info_seasonal_icon
+				if(!isAbyssal && useSeasonal && ConfigManager.info_seasonal_icon
 					&& this._seasonal.length && this._seasonal.indexOf(id) > -1){
 					path = "shipseasonal/";
 				}
+				// Show damaged (chuuha) icon if demanded and config enabled
+				if(!isAbyssal && isDamaged && ConfigManager.info_chuuha_icon){
+					id = String(id) + "_d";
+				}
+				// Here assume image file must be existed already (even for '_d.png')
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
 			if(empty === undefined){

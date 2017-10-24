@@ -2838,6 +2838,11 @@
 						newEnemyHP = thisPvP.enemyHP[index].hp;
 						if(newEnemyHP < 0){ newEnemyHP = 0; }
 
+						if(ConfigManager.info_chuuha_icon){
+							$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
+								.attr("src", KC3Ship.shipIcon(eshipId, thisPvP.maxHPs.enemy[index], newEnemyHP));
+						}
+
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .abyss_single .sunk_"+(index+1)+" img")
@@ -2998,19 +3003,6 @@
 		},
 		ExpedResult: function(data){
 			overrideFocus = true;
-			/* Data
-			{"api_ship_id":[-1,56,22,2,116,1,4],"api_clear_result":1,"api_get_exp":50,"api_member_lv":88,"api_member_exp":510662,"api_get_ship_exp":[210,140,140,140,140,140],"api_get_exp_lvup":[[272732,275000],[114146,117600],[89228,90300],[59817,63000],[162124,168100],[29155,30000]],"api_maparea_name":"\u5357\u65b9\u6d77\u57df","api_detail":"\u6c34\u96f7\u6226\u968a\u306b\u30c9\u30e9\u30e0\u7f36(\u8f38\u9001\u7528)\u3092\u53ef\u80fd\u306a\u9650\u308a\u6e80\u8f09\u3057\u3001\u5357\u65b9\u9f20\u8f38\u9001\u4f5c\u6226\u3092\u7d9a\u884c\u305b\u3088\uff01","api_quest_name":"\u6771\u4eac\u6025\u884c(\u5f10)","api_quest_level":8,"api_get_material":[420,0,200,0],"api_useitem_flag":[4,0],"api_get_item1":{"api_useitem_id":10,"api_useitem_name":"\u5bb6\u5177\u7bb1\uff08\u5c0f\uff09","api_useitem_count":1}}
-
-			useitem --
-				00 - nothing
-				01 - instant repair
-				02 - instant construct
-				03 - development item
-
-				10 - furniture small
-				11 - furniture medium
-				12 - furniture large
-			*/
 
 			if(!data.response.api_clear_result && !data.response.api_get_exp) {
 				data.response.api_clear_result = -1;
@@ -3023,8 +3015,10 @@
 				+".png"
 			);
 
-			// Expedition number
-			$(".activity_expedition .expres_num").text( KC3Meta.term("Expedition") + " " + data.expedNum );
+			// Show Expedition API defined display number instead
+			$(".activity_expedition .expres_num").text(
+				"{0} {1}".format(KC3Meta.term("Expedition"), KC3Master.missionDispNo(data.expedNum))
+			);
 
 			// Status text
 			$(".activity_expedition .expres_status")
@@ -3111,7 +3105,7 @@
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title")
-				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
+				.text(KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition));
 
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
@@ -3137,14 +3131,16 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
-				var asw = shipInst.as[0];
+				var asw = shipInst.as[0], los = shipInst.ls[0], aa = shipInst.aa[0];
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
 					level : level,
 					drumCount : drumCount,
-					asw : asw
+					asw : asw,
+					los : los,
+					aa : aa
 				};
 			});
 
@@ -3338,6 +3334,26 @@
 			} else {
 				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").show();
 			}
+			setupJQObject(
+				ExpdReqPack.totalAa,
+				ExpdCheckerResult.totalAa,
+				$(".module.activity .activity_expeditionPlanner .totalAa")
+			);
+			if (ExpdReqPack.totalAa === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAa").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalAa").show();
+			}
+			setupJQObject(
+				ExpdReqPack.totalLos,
+				ExpdCheckerResult.totalLos,
+				$(".module.activity .activity_expeditionPlanner .totalLos")
+			);
+			if (ExpdReqPack.totalLos === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLos").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalLos").show();
+			}
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,
@@ -3351,9 +3367,13 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE"))
-							shipReqBox.attr("title", KC3Meta.term("ExpedEscortTip"))
-								.lazyInitTooltip();
+						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE")) {
+							shipReqBox.attr("title",
+								// alternative DE/CVE patterns for exped 4, 5 and 9:
+								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
+								KC3Meta.term("ExpedEscortTip")
+							).lazyInitTooltip();
+						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
 						} else if (dataResult[index] === true) {

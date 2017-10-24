@@ -244,18 +244,18 @@
 					});
 			});*/
 			
-			// Export CSV: Expedition
-			$(".tab_profile .export_csv_exped").on("click", function(event){
+			const exportExpedCsv = (forAsw) => {
 				// CSV Headers
 				var exportData = [
 					"Expedition", "HQ Exp",
 					"Fuel", "Ammo", "Steel", "Bauxite",
-					"Reward 1", "Reward 2", "Result", "Date",
-					"Ship #1 (Morale/Drums)", "Ship #2", "Ship #3",
-					"Ship #4", "Ship #5", "Ship #6"
-				].join(",") + CSV_LINE_BREAKS;
-				var buildRewardItemText = function(data, index) {
-					var flag = data.api_useitem_flag[index - 1],
+					"Reward 1", "Reward 2", "Result", "Date", "Fleet#",
+					"Ship #1", "Ship #2", "Ship #3",
+					"Ship #4", "Ship #5", "Ship #6",
+				].concat(forAsw ? ["Total AA", "Total LoS", "Total ASW"] : [])
+				.join(",") + CSV_LINE_BREAKS;
+				const buildRewardItemText = (data, index) => {
+					const flag = data.api_useitem_flag[index - 1],
 						getItem = data["api_get_item" + index];
 					return csvQuoteIfNecessary(
 						(flag === 4 ? KC3Meta.useItemName(getItem.api_useitem_id) :
@@ -264,42 +264,99 @@
 						(flag > 0 && getItem ? " x" + getItem.api_useitem_count : "")
 					);
 				};
+				const sumEquipStats = (equipArr, apiName) => {
+					return equipArr.reduce(
+						(total, id) => (id > 0 ? KC3Master.slotitem(id)["api_" + apiName] || 0 : 0), 0
+					);
+				};
+				const sumShipStats = (shipInfo) => {
+					const stats = {
+						aa: 0,
+						aaEquip: 0,
+						los: 0,
+						losEquip: 0,
+						asw: 0,
+						aswEquip: 0
+					};
+					const shipMst = KC3Master.ship(shipInfo.mst_id);
+					stats.aaEquip = sumEquipStats(shipInfo.equip, "tyku");
+					stats.losEquip = sumEquipStats(shipInfo.equip, "saku");
+					stats.aswEquip = sumEquipStats(shipInfo.equip, "tais");
+					stats.aa = shipMst.api_tyku[0] + shipInfo.kyouka[2];
+					if(shipInfo.stats){
+						stats.los = shipInfo.stats.ls || 0;
+						stats.asw = shipInfo.stats.as || 0;
+					} else {
+						stats.los = WhoCallsTheFleetDb.estimateStat(WhoCallsTheFleetDb.getStatBound(shipInfo.mst_id, "los"), shipInfo.level) || 0;
+						stats.asw = WhoCallsTheFleetDb.estimateStat(WhoCallsTheFleetDb.getStatBound(shipInfo.mst_id, "asw"), shipInfo.level) || 0;
+					}
+					return stats;
+				};
 				// Get data from local DB
-				KC3Database.con.expedition
-					.where("hq").equals(PlayerManager.hq.id)
-					.reverse()
-					.toArray(function(result){
-						result.forEach(function(expedInfo){
-							var shipsInfo = expedInfo.fleet.map(ship => ship.mst_id > 0 ?
-								csvQuoteIfNecessary(
+				let db = KC3Database.con.expedition.where("hq").equals(PlayerManager.hq.id);
+				// Only need mission ID >= 100
+				if(forAsw) db = db.and(r => r.mission >= 100);
+				db.reverse().toArray(function(result){
+					result.forEach(function(expedInfo){
+						const fleetStats = {
+							aa: 0,
+							los: 0,
+							asw: 0,
+						};
+						const shipsInfo = expedInfo.fleet.map(ship => {
+							if(ship.mst_id > 0){
+								const stats = sumShipStats(ship);
+								fleetStats.aa += stats.aa + stats.aaEquip;
+								fleetStats.los += stats.los + stats.losEquip;
+								fleetStats.asw += stats.asw + stats.aswEquip;
+								return csvQuoteIfNecessary([
 									// Give up using String.format for better performance
-									[KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name),
-									 "Lv" + ship.level,
-									 "(" + ship.morale + "/" +
-									   ship.equip.reduce((drums, id) => drums+=(id===75), 0) + ")"
-									].join(" ")
-								) : "-"
-							);
-							if(shipsInfo.length < 6){
-								shipsInfo.length = 6;
-								shipsInfo.fill("-", expedInfo.fleet.length);
+									KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name),
+									"Lv:" + ship.level,
+									"Morale:" + ship.morale,
+									"Drums:" + ship.equip.reduce((drums, id) => drums+=(id===75), 0)
+								].concat(forAsw ? ["AA+-LoS+-ASW+-",
+										stats.aa + stats.aaEquip, stats.aa,
+										stats.los + stats.losEquip, stats.los,
+										stats.asw + stats.aswEquip, stats.asw].join(":") : []
+								).join("/"));
+							} else {
+								return "-";
 							}
-							exportData += [
-								expedInfo.mission, expedInfo.admiralXP,
-								expedInfo.data.api_get_material[0],
-								expedInfo.data.api_get_material[1],
-								expedInfo.data.api_get_material[2],
-								expedInfo.data.api_get_material[3],
-								buildRewardItemText(expedInfo.data, 1),
-								buildRewardItemText(expedInfo.data, 2),
-								["F", "S", "GS"][expedInfo.data.api_clear_result] || expedInfo.data.api_clear_result,
-								csvQuoteIfNecessary(new Date(expedInfo.time*1000).format("mmm dd, yyyy hh:MM tt"))
-							].concat(shipsInfo).join(",") + CSV_LINE_BREAKS;
 						});
-						
-						var filename = self.makeFilename("Expeditions", "csv");
-						self.saveFile(filename, exportData, "text/csv");
+						if(shipsInfo.length < 6){
+							shipsInfo.length = 6;
+							shipsInfo.fill("-", expedInfo.fleet.length);
+						}
+						exportData += [
+							expedInfo.mission, expedInfo.admiralXP,
+							expedInfo.data.api_get_material[0],
+							expedInfo.data.api_get_material[1],
+							expedInfo.data.api_get_material[2],
+							expedInfo.data.api_get_material[3],
+							buildRewardItemText(expedInfo.data, 1),
+							buildRewardItemText(expedInfo.data, 2),
+							["F", "S", "GS"][expedInfo.data.api_clear_result] || expedInfo.data.api_clear_result,
+							csvQuoteIfNecessary(new Date(expedInfo.time * 1000).format("mmm dd, yyyy hh:MM tt")),
+							expedInfo.fleetN
+						].concat(shipsInfo)
+						.concat(forAsw ? [fleetStats.aa, fleetStats.los, fleetStats.asw] : [])
+						.join(",") + CSV_LINE_BREAKS;
 					});
+					
+					const filename = self.makeFilename("Expeditions", "csv");
+					self.saveFile(filename, exportData, "text/csv");
+				}).catch(function(e){
+					console.error("Export expedition error", e);
+					alert("Oops! There is something wrong. You might report the error logs.");
+				});
+			};
+			// Export CSV: Expedition
+			$(".tab_profile .export_csv_exped").on("click", function(event){
+				exportExpedCsv(false);
+			});
+			$(".tab_profile .export_csv_exped_asw").on("click", function(event){
+				exportExpedCsv(true);
 			});
 			
 			// Export CSV: Construction
