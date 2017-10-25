@@ -99,7 +99,7 @@
 	// and is in correct format.
 	// returns the configuration for expedTab
 	// (previously called localStorage.expedTabLastPick)
-	function ExpedTabValidateConfig() {
+	function ExpedTabValidateConfig(idToValid) {
 		// data format for expedTab:
 		// data.fleetConf: an object
 		// data.fleetConf[fleetNum]:
@@ -110,12 +110,16 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..40, 100..102
+		// * expedNum: 1..40, 100..102, 110
 		// * expedNum is number or string, just like fleetNum
-		// * expedNum extended since 2017-10-18, eg: 100 display name A1 for World 1
 		// data.expedConf[expedNum].greatSuccess: boolean
 
 		var data;
+		const fillExpedConfDefaultGreatSuccess = (...ids) => {
+			ids.forEach(i => {
+				data.expedConf[i] = { greatSuccess: false };
+			});
+		};
 		if (! localStorage.expedTab) {
 			data = {};
 			data.fleetConf = {};
@@ -124,19 +128,16 @@
 				data.fleetConf[i] = { expedition: 1 };
 			}
 			data.expedConf = {};
-			for (i=1; i<=40; ++i) {
-				data.expedConf[i] = { greatSuccess: false };
-			}
-			for (i=100; i<=102; ++i) {
-				data.expedConf[i] = { greatSuccess: false };
-			}
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 40));
+			fillExpedConfDefaultGreatSuccess(100, 101, 102, 110);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
-			if(data.expedConf[100] === undefined) {
-				for (let i = 100; i <= 102; i++) {
-					data.expedConf[i] = { greatSuccess: false };
-				}
+			// add default GS config for new added expeditions
+			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
+			// * extended since 2017-10-25: 110 B1 for World 2
+			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
+				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
 		}
 		return data;
@@ -144,7 +145,7 @@
 
 	// selectedExpedition, plannerIsGreatSuccess + selectedFleet => storage
 	function ExpedTabUpdateConfig() {
-		const conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
 		conf.fleetConf[ selectedFleet ].expedition = selectedExpedition;
 		conf.expedConf[ selectedExpedition ].greatSuccess = plannerIsGreatSuccess;
@@ -156,7 +157,7 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
-		const conf = ExpedTabValidateConfig();
+		const conf = ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
@@ -627,7 +628,7 @@
 		// Expedition Planner
 		$(".expedition_entry").on("click",function(){
 			selectedExpedition = parseInt( $(this).data("expId") );
-			var conf = ExpedTabValidateConfig();
+			var conf = ExpedTabValidateConfig(selectedExpedition);
 			plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 			ExpedTabUpdateConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
