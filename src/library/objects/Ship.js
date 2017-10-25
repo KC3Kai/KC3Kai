@@ -1689,16 +1689,31 @@ KC3改 Ship Object
 		const isThisLightCarrier = stype === 7;
 		const isThisCarrier = [7, 11, 18].includes(stype);
 		const isThisSubmarine = [13, 14].includes(stype);
+		const isThisDestroyer = stype === 2;
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		if(trySpTypeFirst && !targetShipType.isSubmarine) {
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
-			const lateTorpedoCnt = this.countEquipment([213, 214]);
-			const ssRadarCnt = this.countEquipmentType(2, 51);
+			
+			// special torpedo radar cut-in for destroyers since 2017-10-25
+			if(isThisDestroyer) {
+				// api_tyku > 0 (Air Radar) might be excluded?
+				const surfaceRadarCnt = this.countEquipmentType(2, 12);
+				const smallMainGunCnt = this.countEquipmentType(2, 1);
+				const skilledLookoutCnt = this.countEquipmentType(2, 39);
+				// modifiers verification still WIP
+				if(torpedoCnt >= 1 && surfaceRadarCnt >= 1 && skilledLookoutCnt >= 1)
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.0];
+				if(smallMainGunCnt >= 1 && torpedoCnt >= 1 && surfaceRadarCnt >= 1)
+					return ["Cutin", 7, "CutinMainTorpRadar", 1.0];
+			}
 			// special torpedo cut-in for late model submarine torpedo
-			if(lateTorpedoCnt >= 1 && ssRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
+			const lateTorpedoCnt = this.countEquipment([213, 214]);
+			const submarineRadarCnt = this.countEquipmentType(2, 51);
+			if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
 			if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
+			
 			if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];
