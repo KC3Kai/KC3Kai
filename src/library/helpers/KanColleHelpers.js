@@ -7324,6 +7324,8 @@ var PS = {};
       return AnyOf;
   })();
   var getExpeditionRequirement = function (v) {
+      // Shortcuts
+      var addGroup = Data_Semigroup.append(Data_Semigroup.semigroupArray);
       var submarine = function (n) {
           return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.SS.value, KanColle_Generated_SType.SSV.value ]) ];
       };
@@ -7481,13 +7483,13 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))([ new Flagship(new ShipTypeOneOf([ KanColle_Generated_SType.CL.value ])) ])))));
       };
       if (v === 100) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(5)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(10))(ddde(3)));
+          return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
       };
       if (v === 101) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(20)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(aswTotal(180))(aaTotal(70))));
+          return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(aswTotal(180))(addGroup(aaTotal(70))(losTotal(16)))));
       };
       if (v === 102) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(35)(5))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(185))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(aswTotal(280)))));
+          return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(aswTotal(280)))));
       };
       return [  ];
   };
