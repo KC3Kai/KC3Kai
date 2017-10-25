@@ -27,7 +27,7 @@
 			// Check for player HQ info
 			PlayerManager.hq.load();
 			// Check for player statistics
-			if(typeof localStorage.statistics != "undefined"){
+			if(localStorage.statistics !== undefined){
 				this.statistics = JSON.parse(localStorage.statistics);
 			}else{
 				this.statistics = false;
@@ -54,33 +54,33 @@
 			}
 			
 			// Show player information
-			$(".hq_id .hq_content").html(PlayerManager.hq.id);
-			$(".hq_name .hq_content").html(PlayerManager.hq.name);
-			$(".hq_desc .hq_content").html(PlayerManager.hq.desc);
+			$(".hq_id .hq_content").text(PlayerManager.hq.id);
+			$(".hq_name .hq_content").text(PlayerManager.hq.name);
+			$(".hq_desc .hq_content").text(PlayerManager.hq.desc);
 			
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			$(".hq_server .hq_content").html( MyServer.name );
+			$(".hq_server .hq_content").text( MyServer.name );
 			
-			$(".hq_rank .hq_content").html(PlayerManager.hq.rank);
-			$(".hq_level .hq_content").html(PlayerManager.hq.level);
-			$(".hq_exp .hq_content").html(
+			$(".hq_rank .hq_content").text(PlayerManager.hq.rank);
+			$(".hq_level .hq_content").text(PlayerManager.hq.level);
+			$(".hq_exp .hq_content").text(
 				"{0} / {1}".format(
 					PlayerManager.hq.exp[3].toLocaleString(),
 					(PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]).toLocaleString()
 				)
 			);
 			
-			$(".rank_previous .rank_content").html(
+			$(".rank_previous .rank_content").text(
 				PlayerManager.hq.rankPtLastCount.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 			);
-			$(".rank_cuttime .rank_content").html(
+			$(".rank_cuttime .rank_content").text(
 				!PlayerManager.hq.rankPtLastTimestamp ? "?"
 					: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss")
 			);
-			$(".rank_cutval .rank_content").html(
+			$(".rank_cutval .rank_content").text(
 				PlayerManager.hq.rankPtCutoff.toLocaleString()
 			);
-			$(".rank_current .rank_content").html(
+			$(".rank_current .rank_content").text(
 				PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 			);
 			
@@ -94,21 +94,17 @@
 			
 			// Show statistics
 			if(this.statistics){
-				if(typeof this.statistics.sortie.rate == "string"){
-					$(".stat_sortie .stat_rate .stat_value").html((Number(this.statistics.sortie.rate)*100)+"%");
-				}else {
-					$(".stat_sortie .stat_rate .stat_value").html(this.statistics.sortie.rate+"%");
-				}
-				$(".stat_sortie .stat_win .stat_value").html(this.statistics.sortie.win);
-				$(".stat_sortie .stat_lose .stat_value").html(this.statistics.sortie.lose);
+				$(".stat_sortie .stat_rate .stat_value").text(this.statistics.sortie.rate + "%");
+				$(".stat_sortie .stat_win .stat_value").text(this.statistics.sortie.win);
+				$(".stat_sortie .stat_lose .stat_value").text(this.statistics.sortie.lose);
 				
-				$(".stat_pvp .stat_rate .stat_value").html(this.statistics.pvp.rate+"%");
-				$(".stat_pvp .stat_win .stat_value").html(this.statistics.pvp.win);
-				$(".stat_pvp .stat_lose .stat_value").html(this.statistics.pvp.lose);
+				$(".stat_pvp .stat_rate .stat_value").text(this.statistics.pvp.rate + "%");
+				$(".stat_pvp .stat_win .stat_value").text(this.statistics.pvp.win);
+				$(".stat_pvp .stat_lose .stat_value").text(this.statistics.pvp.lose);
 				
-				$(".stat_exped .stat_rate .stat_value").html(this.statistics.exped.rate+"%");
-				$(".stat_exped .stat_success .stat_value").html(this.statistics.exped.success);
-				$(".stat_exped .stat_total .stat_value").html(this.statistics.exped.total);
+				$(".stat_exped .stat_rate .stat_value").text(this.statistics.exped.rate + "%");
+				$(".stat_exped .stat_success .stat_value").text(this.statistics.exped.success);
+				$(".stat_exped .stat_total .stat_value").text(this.statistics.exped.total);
 			}
 			
 			// Show news feed
@@ -621,6 +617,7 @@
 		
 		refreshHealthMetric: function(){
 			var bc = this.battleCounts;
+			if(Object.keys(bc).length < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
 				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
 					.format(bc.lastDayBattle, bc.lastDaySortie)

@@ -77,6 +77,26 @@
 	float:left;
 }
 
+.tab_ships .show_name_filter {
+	height: 18px;
+	margin: 0px 0px 2px 0px;
+}
+.tab_ships .show_name_filter .name_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+	line-height: 18px;
+}
+.tab_ships .show_name_filter .name_criteria {
+	float: left;
+	font-size: 12px;
+	width: 188px;
+	height: 18px;
+	padding: 1px 3px;
+	line-height: 18px;
+}
+
 .tab_ships .advanced_sorter {
 	margin:0px 0px 2px 0px;
 }
@@ -263,6 +283,10 @@
 	overflow:hidden;
 	position:relative;
 }
+.tab_ships .ship_list .ship_item.hidden_by_name {
+	display: none;
+}
+
 /* Cell */
 .tab_ships .ship_item .ship_field {
 	height:20px;

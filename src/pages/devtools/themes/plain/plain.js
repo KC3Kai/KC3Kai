@@ -90,8 +90,8 @@
 	}
 
 	function ExpedTabAutoFleetSwitch(needTabSwith) {
-		// set "needTabSwith" to true
-		// for switching to expedition tab when a candicate fleet is found
+		// set "needTabSwitch" to true
+		// for switching to expedition tab when a candidate fleet is found
 		var fleets = PlayerManager.fleets;
 		var availableFleetInd = -1;
 
@@ -166,6 +166,7 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
@@ -1114,8 +1115,8 @@
 			// Clear battle details box
 			clearBattleData();
 			
+			var numNodes = KC3SortieManager.countNodes();
 			var thisNode = KC3SortieManager.currentNode();
-			var numNodes = KC3SortieManager.nodes.length;
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
@@ -1395,7 +1396,7 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop").attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ));
 				}
 				
@@ -1546,8 +1547,8 @@
 			$(".module.activity .map_world").text("PvP");
 			
 			// Process PvP Battle
-			var thisPvP;
-			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
+			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
+			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle,data.fleetSent );
 			
@@ -1826,7 +1827,7 @@
 				allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 			
-			//fleets' subsripts start from 0 !
+			//fleets' subscripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
 			}).filter(function (rosterData, index){
@@ -2121,7 +2122,7 @@
 			
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
-			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
+			koskElm = $(".status_akashi  .status_text",context);
 		if(typeof docking==="object") {
 			akashi     = docking.akashi;
 			akashiTick = docking.akashiCheck;

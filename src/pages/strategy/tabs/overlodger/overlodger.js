@@ -431,10 +431,13 @@
 												
 												sc = sortieCache[wr][fi.m];
 												sr = sortieCache[wr].rangeE(Math.sign(ledger_type),fi.m);
-												var sf;
-												sf = activeSelf.sortieRange[wr+fi.m];
-												sf = sf.filter(sortieFil,sr[1]);
-												rgrt  = sf.indexOf(data.opt)>=0;
+												var sf = activeSelf.sortieRange[wr+fi.m];
+												if(sf) {
+													sf = sf.filter(sortieFil,sr[1]);
+													rgrt = sf.indexOf(data.opt)>=0;
+												} else {
+													rgrt = false;
+												}
 												cret |= cache.apply(null, cacheKeyMD.concat( rgrt ) );
 												break;
 										}
@@ -747,7 +750,7 @@
 						  YYYYMM : 4-digit year + 2-digit month
 					Mode 2 =>
 						W[1-9][0-9] M[1-9] P[0-5]
-						  Period : (up to 10 defineable condition)
+						  Period : (up to 10 define-able condition)
 							  - Start of the map
 							  - Start of event
 							  - Cleared the map         (GREAT DESTR)
@@ -1614,7 +1617,7 @@
 			rCoef      = durData[1];
 		timeRange = JSON.parse(JSON.stringify(timeRange));
 		
-		/* How backlookup works:
+		/* How back-lookup works:
 			Scope/Duration
 			LookBHD/Day    - starts from specified date for N day backwards
 			  bhd(2015-12-12 04:00,1) --> (2015-12-11 04:00)

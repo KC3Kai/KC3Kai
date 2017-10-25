@@ -1390,13 +1390,13 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_stats {
 	width:170px;
-	height:125px;
+	height:142px;
 }
 .module.activity .activity_modernization .mod_result_stat {
 	width:170px;
-	height:20px;
+	height:18px;
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 2px 0px;
 }
 .module.activity .activity_modernization .mod_result_icon {
 	width:20px;
@@ -1433,17 +1433,19 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_note {
 	width:170px;
-	height:20px;
+	height:30px;
 	color:#aaa;
 	font-size:12px;
+	line-height:15px;
 	text-align:center;
+	overflow:hidden;
 }
 
 /* ACTIVITY: Expedition Planner
 ------------------------*/
 .module.activity .activity_expeditionPlanner {
-    text-align:center;
-    white-space:nowrap;
+	text-align:center;
+	white-space:nowrap;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
 	color:#006600;
@@ -1453,52 +1455,54 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-    width: 100%;
-    height: 28px;
+	width: 100%;
+	height: 28px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
-  width:100%;
-  list-style: none;
-  position: relative;
-  float: left;
-  margin: 0;
-  padding: 0;
-  	background: #dddddd;
+	width: 100%;
+	list-style: none;
+	position: relative;
+	float: left;
+	margin: 0;
+	padding: 0;
+	background: #dddddd;
 	text-align: center;
 	text-decoration: none;
-	border-style:solid;
-	border-width:3px;
+	border-style: solid;
+	border-width: 3px;
 }
 
 .module.activity .activity_expeditionPlanner li {
-  background: #dddddd;
-  border-style:solid;
-  border-width:1px;
+	background: #dddddd;
+	border-style: solid;
+	border-width: 1px;
 }
 
 .module.activity .activity_expeditionPlanner li:hover {
-  background: #ffffff;
+	background: #ffffff;
 }
 
-.module.activity .activity_expeditionPlanner  li ul {
-  list-style: none;
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding:0;
-  width:30%;
+.module.activity .activity_expeditionPlanner li ul {
+	list-style: none;
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	padding: 0;
+	width: 50%;
+	font-size: 13px;
+	line-height: 16px;
 }
 
-.module.activity .activity_expeditionPlanner li ui li{
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  width:50px;
+.module.activity .activity_expeditionPlanner li ui li {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	width: 50px;
 }
 
 
@@ -1506,7 +1510,7 @@ ABYSS FLEET
 	top:0%;
 	left:100%;
 	cursor:pointer;
-	width:150%;
+	width:100%;
 }
 
 
@@ -1524,21 +1528,24 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer_description {
-    float: left;
-    margin-right: 3px;
+	float: left;
+	margin-right: 3px;
+}
+.module.activity .activity_expeditionPlanner .estimated_time {
+	text-align: right;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
-    text-align: center;
-    height: 20px;
-    margin-bottom: 2px;
-    display:none;
+	text-align: center;
+	height: 20px;
+	margin-bottom: 2px;
+	display:none;
 }
 .module.activity .activity_expeditionPlanner .expres_resos {
-	width:170px;
-    height: 40px;
-    margin-bottom:3px;
-    display:inline-block;
+	width: 170px;
+	height: 40px;
+	margin-bottom: 3px;
+	display: inline-block;
 }
 .module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
 	display:inline-block;
@@ -1590,16 +1597,21 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_requirements {
-    margin-bottom:4px;
+	margin-bottom:4px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
 	margin-bottom:1px;
+	white-space:initial;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
+	font-size:13px !important;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
 }
 .module.activity .activity_expeditionPlanner .requirements_textbox {
 	display:inline-block;
+	margin-left:2px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text {
 	font-size: 14px;
@@ -2371,6 +2383,11 @@ ABYSS FLEET
 /*------- SUMMARY -------*/
 .module.summary {
 
+}
+.module.summary.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
 }
 .module.summary .summary_box {
 	width:61px;
@@ -3182,7 +3199,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .airbase .base_name {
-	width:100px;
+	width:95px;
 	height:20px;
 	float:left;
 	color:#cccccc;
@@ -3247,9 +3264,10 @@ ABYSS FLEET
 	width:50px;
 }
 .airbase .base_action {
-	width:35px;
+	width:40px;
 	height:20px;
 	line-height:20px;
+	white-space:nowrap;
 	overflow:hidden;
 	float:left;
 	color:#ffffff;
@@ -3502,7 +3520,7 @@ ABYSS FLEET
 
 .ui-tooltip {
 	max-width:500px;
-	padding:2px 5px 3px 6px;
+	padding:1px 4px 1px 5px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -3519,8 +3537,8 @@ ABYSS FLEET
 
 .ui-tooltip-content .ship_face_tooltip {
 	width:252px;
-	height:280px;
-	padding:2px 0px 2px 0px;
+	height:314px;
+	padding:0px 0px 0px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
 	width:208px;
@@ -3703,6 +3721,14 @@ ABYSS FLEET
 }
 .ui-tooltip-content .ship_face_tooltip .stat_wide {
 	width:249px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
 }
 .ui-tooltip-content .ship_face_tooltip .aa_col {
 	width:49px;

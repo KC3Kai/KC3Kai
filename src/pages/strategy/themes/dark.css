@@ -51,7 +51,7 @@ button, input, select, textarea {
 
 .ui-tooltip-content .ship_tooltip {
 	width:252px;
-	height:280px;
+	height:314px;
 	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_tooltip .ship_full_name {
@@ -236,6 +236,14 @@ button, input, select, textarea {
 
 .ui-tooltip-content .ship_tooltip .stat_wide {
 	width:249px;
+}
+.ui-tooltip-content .ship_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
 }
 .ui-tooltip-content .ship_tooltip .aa_col {
 	width:49px;
@@ -620,7 +628,7 @@ button, input, select, textarea {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#09a709;
 }
-.ship_list .ship_item .ship_lk .sub {
+.ship_list .ship_item .sup {
 	color:#999999;
 }
 .ship_list .ship_item .ship_equip span {
@@ -841,6 +849,9 @@ button, input, select, textarea {
 .tab_ships .advanced_sorter .adv_sorter:hover,
 .tab_ships .control_buttons .reset_default:hover {
 	background:#555555;
+}
+.tab_ships .show_name_filter .name_criteria {
+	border:1px solid #888888;
 }
 .tab_ships .ship_count {
 	width:215px !important;
@@ -1465,9 +1476,6 @@ button, input, select, textarea {
 .detail_field.incomplete {
 	background:#623636;
 }
-.tab_fleet .fleet_ships {
-	height:160px;
-}
 .ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
 	color:#777 !important;
 }
@@ -1497,12 +1505,16 @@ button, input, select, textarea {
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:175px;
-	margin:5px 2px 0px 0px;
+	height:88px;
+	margin:2px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
 	position:relative;
 	overflow:hidden;
+}
+.tab_fleet .fleet_ship.horizontal {
+	height:175px;
+	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	width:110px;
@@ -1515,7 +1527,7 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_pic {
 	width:108px;
-	height:80px;
+	height:85px;
 	-webkit-mask-image: -webkit-linear-gradient(top, 
 		rgba(34,34,34,0) 0%,
 		rgba(34,34,34,1) 30%,
@@ -1899,17 +1911,16 @@ button, input, select, textarea {
 	border:1px solid #3e3e3e !important;
 	background:#222 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+.tab_mstship .shipInfo .aaci .aaciPattern.odd,
+.tab_mstship .shipInfo .gunfit .fitgear.odd {
 	background:#444 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.even {
+.tab_mstship .shipInfo .aaci .aaciPattern.even,
+.tab_mstship .shipInfo .gunfit .fitgear.even {
 	background:#333 !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
 	background:#ed3;
-}
-.tab_mstship .shipInfo .gunfit .fitgear {
-	background:#333 !important;
 }
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitDay,
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {

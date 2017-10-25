@@ -158,6 +158,36 @@ KC3改 Equipment Object
 	};
 
 	/**
+	 * Get improvement bonus of evasion stat.
+	 * @see http://kancolle.wikia.com/wiki/Improvements
+	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#oe80ec59
+	 */
+	KC3Gear.prototype.evaStatImprovementBonus = function(type = "fire") {
+		if(!this.itemId || !this.masterId) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		switch(type.toLowerCase()) {
+			case "fire":
+				// Engine Boiler
+				if(type2 === 17) modifier = 1.5;
+				break;
+			case "torpedo":
+				// unknown
+				break;
+			case "yasen":
+				// unknown
+				break;
+			case "asw":
+				// unknown
+				break;
+			default:
+				console.warn("Unknown attack type:", type);
+		}
+		return modifier * Math.sqrt(stars);
+	};
+
+	/**
 	 * Get improvement bonus of LoS stat.
 	 * LoS improvement applied to eLoS (Formula 33), air contact, etc.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#k9b5bd32
@@ -206,14 +236,15 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	with added whole number average proficiency bonus
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterVeteran = function(capacity = 0){
+	KC3Gear.prototype.fighterVeteran = function(capacity = 0, forLbas = false){
 		// Empty item or slot means no fighter power
 		if(this.itemId === 0 || capacity <= 0){ return 0; }
 
 		var type2 = this.master().api_type[2],
 			type3 = this.master().api_type[3];
 		// Check if this object is a fighter plane
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1){
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
+			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalBonus = KC3Meta.airPowerAverageBonus(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
@@ -235,14 +266,16 @@ KC3改 Equipment Object
 	Get fighter power of this equipment
 	as an array with lower and upper bound proficiency bonuses
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterBounds = function(capacity = 0){
+	KC3Gear.prototype.fighterBounds = function(capacity = 0, forLbas = false){
 		// Empty item or slot means no fighter power
 		if(this.itemId === 0 || capacity <= 0){ return [0, 0]; }
 
 		var type2 = this.master().api_type[2],
 			type3 = this.master().api_type[3];
-		// Check if this object is a fighter plane
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1){
+		// Check if this object is a fighter plane,
+		// Also take recon planes into account because they participate in LBAS battle.
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
+			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalExps = KC3Meta.airPowerInternalExpBounds(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
@@ -302,7 +335,7 @@ KC3改 Equipment Object
 			
 			return Math.floor(interceptPower);
 		} else {
-			return this.fighterVeteran(capacity);
+			return this.fighterVeteran(capacity, true);
 		}
 	};
 

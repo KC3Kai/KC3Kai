@@ -21,6 +21,7 @@ known IDs see QuestManager
 		this.type = 0;
 		this.status = 0;
 		this.progress = 0;
+		this.materials = [0,0,0,0];
 		this.tracking = false;
 	};
 
@@ -34,9 +35,12 @@ known IDs see QuestManager
 		if (data.progress) {
 			this.progress = data.progress;
 		} else {
-			this.progress =	 0;
+			this.progress = 0;
 		}
-		if (!this.tracking) {
+		if (data.materials) {
+			this.materials = data.materials;
+		}
+		if (data.tracking) {
 			this.tracking = data.tracking;
 		}
 		this.attachMeta();
@@ -50,6 +54,7 @@ known IDs see QuestManager
 		this.status = data.api_state;
 		this.type = data.api_type;
 		this.progress = data.api_progress_flag;
+		this.materials = data.api_get_material;
 		this.attachMeta();
 
 		// Attach temporary raw data for quick reference
@@ -136,7 +141,7 @@ known IDs see QuestManager
 		}
 	};
 
-	/* ISCOMPLETE
+	/* IS COMPLETE
 	Return true iff all of the counters are complete
 	------------------------------------------*/
 	KC3Quest.prototype.isComplete = function() {
@@ -172,7 +177,7 @@ known IDs see QuestManager
 					trackingDesc : questMeta.trackingDesc
 				}; };
 				// If tracking is empty and Meta is defined
-				if(this.tracking === false){
+				if(this.tracking === false && Array.isArray(questMeta.tracking)){
 					this.tracking = questMeta.tracking;
 				}
 			} else if(this.meta === undefined) {
@@ -239,7 +244,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.autoAdjustCounter = function() {
-		if (! this.tracking || !Array.isArray(this.tracking))
+		if (!Array.isArray(this.tracking))
 			return;
 
 		if (this.isCompleted()) {
@@ -281,7 +286,7 @@ known IDs see QuestManager
 			return;
 
 		// pFlag: short for Progress Flag,
-		// for incompleted quests:
+		// for uncompleted quests:
 		// pFlag = 2: 80% <= progress percentage < 100%
 		// pFlag = 1: 50% <= progress percentage < 80%
 		// pFlag = 0:        progress percentage < 50%
@@ -296,7 +301,7 @@ known IDs see QuestManager
 		// we compare actual pFlag and pFlag under our track
 		// to see if they are consistent,
 		// by doing so we not only correct counter falling-behind problems,
-		// but also overshotting ones.
+		// but also overshooting ones.
 		let trackedPFlag =
 			/* cur/max >= 4/5 (80%) */
 			5*currentCount >= 4*maxCount ? 2
@@ -313,7 +318,7 @@ known IDs see QuestManager
 		};
 
 		// it's good if pFlag is consistent
-		// but something is defintely wrong if cur >= max
+		// but something is definitely wrong if cur >= max
 		if (trackedPFlag === actualPFlag &&
 			currentCount < maxCount)
 			return;
@@ -360,6 +365,7 @@ known IDs see QuestManager
 	};
 
 	KC3Quest.prototype.getColor = function(){
+		// can also use api_category
 		return [
 			"#555555", //0
 			"#33A459", //1
@@ -370,6 +376,7 @@ known IDs see QuestManager
 			"#996600", //6
 			"#AE76FA", //7
 			"#D75048", //8
+			"#555555", //9
 		][(this.id+"").substring(0,1)];
 	};
 

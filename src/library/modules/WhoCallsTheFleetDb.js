@@ -4,7 +4,7 @@
 	window.WhoCallsTheFleetDb = {
 		db: {},
 		expectedShipCount: 489,
-		expectedItemCount: 254,
+		expectedItemCount: 257,
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
@@ -14,7 +14,7 @@
 				}).responseText;
 
 				/**
-				 * WhoCallsTheFleet-DB using nedb storage, which is a line seperated json-like format.
+				 * WhoCallsTheFleet-DB using nedb storage, which is a line separated json-like format.
 				 * @see https://github.com/louischatriot/nedb
 				 */
 				var content = rawDb

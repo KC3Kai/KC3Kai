@@ -160,9 +160,12 @@ Saves and loads significant data for future use
 				}
 				// Apply a patch for Mikuma typo of KC devs
 				//ships[882] = this._seasonalShips[882];
-				ships[793] = this._seasonalShips[793];
+				//ships[793] = this._seasonalShips[793];
+				// Apply a patch for Asashimo Torelli submarine :P
+				//ships[787] = this._seasonalShips[787];
 				// Seasonal data no longer leaked since 2017-04-05
 				// Seasonal data leaks again since 2017-09-12 if ID < 800
+				// Seasonal data leaking fixed again since 207-10-18
 			}
 			return ships;
 		},
@@ -236,6 +239,14 @@ Saves and loads significant data for future use
 
 		all_useitems :function(){
 			return this._raw.useitem || {};
+		},
+
+		mission :function(id){
+			return !this.available ? false : this._raw.mission[id] || false;
+		},
+
+		all_missions :function(){
+			return this._raw.mission || {};
 		},
 
 		abyssalShip :function(id, isMasterMerged){
@@ -324,7 +335,7 @@ Saves and loads significant data for future use
 			for(ship_id in this._raw.ship) {
 				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 				delete cShip.kc3_maxed;
 				delete cShip.kc3_model;
 				delete cShip.kc3_bship;
@@ -342,7 +353,9 @@ Saves and loads significant data for future use
 
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				// `api_buildtime` always non-zero for all shipgirls even not able to be built,
+				// can be used to differentiate seasonal graph / abyssal data
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 
 				/* proposed variable:
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on

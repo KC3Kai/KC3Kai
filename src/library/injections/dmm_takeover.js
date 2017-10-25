@@ -10,9 +10,8 @@
 			console.log('Applying DMM customizations...');
 
 			config = $.extend(true, ConfigManager, response.config);
-			window.ConfigManager = config;
 			master = $.extend(true, KC3Master, response.master);
-			meta = $.extend(true, KC3Meta, response.meta);
+			meta   = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
 			$.extend(true, RemodelDb, response.remodel);
 
@@ -296,6 +295,7 @@
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "subtitle") return true;
+				config = $.extend(true, ConfigManager, request.ConfigManager);
 				if(!config.api_subtitles) return true;
 
 				// Get subtitle text
@@ -437,20 +437,24 @@
 			// runtime listener
 			return function(request, sender, response){
 				if(request.action != "questOverlay") return true;
+				config = $.extend(true, ConfigManager, request.ConfigManager);
 				if(!config.api_translation && !config.api_tracking) return true;
 
-				quests = $.extend(true, quests, request.KC3QuestManager);
+				quests = $.extend(true, KC3QuestManager, request.KC3QuestManager);
+				$(".overlay_quests").empty();
 
 				$.each(request.questlist, function( index, QuestRaw ){
-					if( QuestRaw !=- 1 ){
-						var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
+					if( QuestRaw !=- 1 && index < 5 ){
+						const QuestBox = $("#factory .ol_quest_exist").clone();
+						QuestBox.appendTo(".overlay_quests");
 
-						// Get quest data
-						var QuestData = new KC3Quest();
+						// Get quest data from manager and
+						// rebuild KC3Quest instance because serialized data only keep owned properties
+						const QuestData = new KC3Quest();
 						QuestData.define(quests.get( QuestRaw.api_no ));
 
 						// Show meta, title and description
-						if( typeof QuestData.meta().available != "undefined" ){
+						if( QuestData.meta().available ){
 
 							if (config.api_translation){
 								$(".name", QuestBox).text( QuestData.meta().name );
@@ -574,8 +578,9 @@
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
-				if(!config.map_markers) { response({success:false}); return true; }
-				//console.debug('Node markers', request);
+				if(!(request.ConfigManager || config).map_markers) {
+					response({success:false}); return true;
+				}
 
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;

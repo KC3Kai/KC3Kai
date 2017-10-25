@@ -57,6 +57,7 @@ Retrieves when needed to apply on components
 				info_compass         : true,
 				info_battle          : true,
 				info_btrank          : true,
+				info_btmvp           : true,
 				info_btstamp         : false,
 				info_fleetstat       : true,
 				info_blink_gauge     : false,

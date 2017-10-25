@@ -34,7 +34,8 @@ KC3改 Ship Box for Natsuiro theme
 			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
 				at: "left top", of: $(".module.fleet") },
 			items: "div",
-			content: tooltipBox.html()
+			content: tooltipBox.html(),
+			open: KC3Ship.onShipTooltipOpen
 		});
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
@@ -84,13 +85,14 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// MVP icon
 		if(this.shipData.mvp){
-			$(".mvp_icon", this.element).show()
-				.attr("src", "/assets/img/ui/mvp.png");
 			switch(this.shipData.mvp){
 				case "chosen": // a capable prediction
 					$(".mvp_icon img", this.element).css("opacity", 0.7)
+						.attr("src", "/assets/img/ui/mvp.png")
 						.css("-webkit-filter", "brightness(1.2)")
 						.css("filter", "brightness(1.2)");
+					$(".mvp_icon", this.element)
+						.toggle(ConfigManager.info_btmvp);
 					break;
 				case "candidate": // an incapable prediction
 					$(".mvp_icon img", this.element)
@@ -98,10 +100,14 @@ KC3改 Ship Box for Natsuiro theme
 						.css("opacity", 0.7)
 						.css("-webkit-filter", "brightness(0.8)")
 						.css("filter", "brightness(0.8)");
+					$(".mvp_icon", this.element)
+						.toggle(ConfigManager.info_btmvp);
 					break;
 				default: // an indeed result
-					$(".mvp_icon img", this.element).css("opacity", 1)
-						.css("filter", "").css("-webkit-filter", "");
+					$(".mvp_icon img", this.element)
+						.attr("src", "/assets/img/ui/mvp.png")
+						.css("opacity", 1).css("filter", "").css("-webkit-filter", "");
+					$(".mvp_icon", this.element).show();
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();

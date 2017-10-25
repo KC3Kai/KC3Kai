@@ -56,6 +56,7 @@
   <div class="fleet_control">
 	<button type="button" id="control_save">Save ...</button>
 	<button type="button" id="control_export_dbuilder">Export to DeckBuilder</button>
+	<button type="button" id="control_switch_view">Switch view</button>
 	<!-- TODO
 		 <button type="button" id="control_export_wctf">Export to WhoCallsTheFleet</button>
 	-->
@@ -112,42 +113,48 @@
 	
 	<!-- SHIP BOX -->
 	<div class="fleet_ship">
-		<div class="ship_hover">
-		<div class="ship_type">XXX</div>
-		<div class="ship_pic hover"><img/></div>
-		<div class="ship_lv">
-			<div class="ship_lv_lbl">Lv.</div>
-			<div class="ship_lv_val"></div>
+		
+		<div class="ship_box">
+			<div class="ship_hover">
+				<div class="ship_type">XXX</div>
+				<div class="ship_lv">
+					<div class="ship_lv_lbl">Lv.</div>
+					<div class="ship_lv_val"></div>
+					<div class="clear"></div>
+				</div>
+				<div class="ship_pic hover"><img/></div>
+			</div>
 			<div class="clear"></div>
+			<div class="ship_name"></div>
 		</div>
+		<div class="ship_gear">
+			<div class="ship_gear_1">
+				<div class="gear_icon hover"><img/></div>
+				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="clear"></div>
+			</div>
+			<div class="ship_gear_2">
+				<div class="gear_icon hover"><img/></div>
+				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="clear"></div>
+			</div>
+			<div class="ship_gear_3">
+				<div class="gear_icon hover"><img/></div>
+				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="clear"></div>
+			</div>
+			<div class="ship_gear_4">
+				<div class="gear_icon hover"><img/></div>
+				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="clear"></div>
+			</div>
+			<div class="ship_gear_5">
+				<div class="gear_icon hover"><img/></div>
+				<div class="gear_name"><span class="name"></span></div>
+				<div class="clear"></div>
+			</div>
 		</div>
-		<div class="clear"></div>
-		<div class="ship_name"></div>
-		<div class="ship_gear ship_gear_1">
-			<div class="gear_icon hover"><img/></div>
-			<div class="gear_name"><span class="name"></span><span class="stars"></span><span class="ace"></span><span class="slot"></span></div>
-			<div class="clear"></div>
-		</div>
-		<div class="ship_gear ship_gear_2">
-			<div class="gear_icon hover"><img/></div>
-			<div class="gear_name"><span class="name"></span><span class="stars"></span><span class="ace"></span><span class="slot"></span></div>
-			<div class="clear"></div>
-		</div>
-		<div class="ship_gear ship_gear_3">
-			<div class="gear_icon hover"><img/></div>
-			<div class="gear_name"><span class="name"></span><span class="stars"></span><span class="ace"></span><span class="slot"></span></div>
-			<div class="clear"></div>
-		</div>
-		<div class="ship_gear ship_gear_4">
-			<div class="gear_icon hover"><img/></div>
-			<div class="gear_name"><span class="name"></span><span class="stars"></span><span class="ace"></span><span class="slot"></span></div>
-			<div class="clear"></div>
-		</div>
-		<div class="ship_gear ship_gear_5">
-			<div class="gear_icon hover"><img/></div>
-			<div class="gear_name"><span class="name"></span></div>
-			<div class="clear"></div>
-		</div>
+		<div class="ship_id"></div>
 		<div class="ship_tooltip">
 			<div class="ship_stats_row">
 				<div class="ship_full_name"><span class="ship_masterId"></span> <span class="value"></span> <span class="ship_yomi"></span></div>
@@ -162,7 +169,7 @@
 			</div>
 			<div class="ship_stats_col">
 				<div class="stat_icon"><img src="/assets/img/stats/hp.png"/><span class="stat_name i18n">ShipHp</span></div>
-				<div class="stat_value stat_hp"></div>
+				<div class="stat_value stat_hp"><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ar.png"/><span class="stat_name i18n">ShipArmor</span></div>
 				<div class="stat_value stat_ar"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ev.png"/><span class="stat_name i18n">ShipEvasion</span></div>
@@ -182,23 +189,29 @@
 				<div class="stat_icon"><img src="/assets/img/stats/aa.png"/><span class="stat_name i18n">ShipAntiAir</span></div>
 				<div class="stat_value stat_aa"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/as.png"/><span class="stat_name i18n">ShipAsw</span></div>
-				<div class="stat_value stat_as"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
+				<div class="stat_value stat_as"><span class="equip"></span><span class="current"></span><span class="level"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ls.png"/><span class="stat_name i18n">ShipLos</span></div>
 				<div class="stat_value stat_ls"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/lk.png"/><span class="stat_name i18n">ShipLuck</span></div>
 				<div class="stat_value stat_lk"><span class="equip"></span><span class="current"></span><span class="luck"></span></div>
 			</div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left dayAttack">
-			</div></div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left nightAttack">
-			</div></div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left shellingAccuracy">
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div class="dayAttack"></div>
 			</div></div>
 			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
-				<span class="adjustedAntiAir"></span>; <span class="aaciMaxBonus"></span>
+				<div class="nightAttack"></div>
 			</div></div>
 			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
-				<span class="propShotdownRate"></span>; <span class="fixedShotdown"></span>
+				<div class="shellingAccuracy"></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div class="shellingEvasion"></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div><span class="adjustedAntiAir"></span>; <span class="aaciMaxBonus"></span></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div><span class="propShotdownRate"></span>; <span class="fixedShotdown"></span></div>
 			</div></div>
 			<div class="ship_stats_row sd_title">
 				<div class="aa_col text_left">AA if</div>

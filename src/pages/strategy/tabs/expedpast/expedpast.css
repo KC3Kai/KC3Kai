@@ -8,6 +8,13 @@
 	display:none;
 }
 
+.tab_expedpast label {
+	display:inherit;
+	max-width:inherit;
+	margin-bottom:inherit;
+	font-weight:inherit;
+}
+
 /* NUMBERS
 -----------------------------*/
 .tab_expedpast .expedNumBoxes {
@@ -15,7 +22,7 @@
 }
 .tab_expedpast .expedNumBox {
 	width:110px;
-	height:152px;
+	height:197px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	border-radius:8px;

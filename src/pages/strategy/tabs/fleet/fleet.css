@@ -36,6 +36,9 @@
 
 .tab_fleet button:disabled {
 }
+.tab_fleet #control_switch_view {
+	float:right;
+}
 .tab_fleet select:disabled {
 }
 
@@ -123,15 +126,23 @@
 /* Ships */
 .tab_fleet .fleet_ships {
 	width:672px;
-	height:175px;
+	height:100px;
 	margin:0px 4px;
+}
+.tab_fleet .fleet_ships.horizontal {
+	height:175px;
 }
 
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	width:110px;
+	width:334px;
 	float:left;
+	position:relative;
+}
+.tab_fleet .fleet_ship.horizontal {
+	width:110px;
+	height:165px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	height:21px;
@@ -140,6 +151,10 @@
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+}
+.tab_fleet .fleet_ship .ship_box {
+	float:left;
+	width:110px;
 }
 .tab_fleet .fleet_ship .ship_pic {
 	float:left;
@@ -173,11 +188,17 @@
 	font-weight:bold;
 }
 .tab_fleet .fleet_ship .ship_gear {
-	width:110px;
-	height:17px;
+	width:220px;
+	height:88px;
+	float:left;
 	line-height:17px;
 	margin:0px 0px 1px 0px;
 	font-size:12px;
+	white-space: nowrap;
+	overflow:hidden;
+}
+.tab_fleet .fleet_ship.horizontal .ship_gear {
+	width:110px;
 }
 .tab_fleet .fleet_ship .ship_gear.ship_gear_5 .gear_name {
 	color:#79b;
@@ -192,13 +213,25 @@
 	width:17px;
 	height:17px;
 }
+.tab_fleet .fleet_ship .ship_id {
+	color:#aaa;
+	position:absolute;
+    bottom:0;
+    right:2px;
+}
+.tab_fleet .fleet_ship.horizontal .ship_id {
+	visibility: hidden;
+}
 .tab_fleet .fleet_ship .gear_name {
-	width:85px;
+	width:200px;
 	height:17px;
 	float:left;
 	font-size:10px;
 	white-space: nowrap;
 	overflow:hidden;
+}
+.tab_fleet .fleet_ship.horizontal .gear_name {
+	width:85px;
 }
 .tab_fleet .fleet_ship .gear_name .stars {
 	color:#2b2;

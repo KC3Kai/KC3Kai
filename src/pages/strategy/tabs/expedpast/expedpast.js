@@ -28,21 +28,21 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 			
 			// Add all expedition numbers on the filter list
-			var KE = PS["KanColle.Expedition"];
-			$('.tab_expedpast .expedNumbers').html("");
+			const KE = PS["KanColle.Expedition"];
+			$('.tab_expedpast .expedNumbers').empty();
 			KE.allExpeditions.forEach( function(curVal, ind) {
 				var row = $('.tab_expedpast .factory .expedNum').clone();
-				$(".expedCheck input", row).attr("value", curVal.id.toString());
-				$(".expedText", row).text( curVal.id.toString() );
+				$(".expedCheck input", row).attr("value", curVal.id);
+				$(".expedCheck input", row).attr("world", curVal.world);
+				$(".expedText", row).text( curVal.name );
 				$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
 				
 				self.exped_filters.push(curVal.id);
 				
-				var boxNum = Math.ceil((ind+1)/8);
-				$(".tab_expedpast .expedNumBox_"+boxNum).append( row );
+				$(".tab_expedpast .expedNumBox_"+curVal.world).append( row );
 			});
 			
 			// Add world toggle
@@ -74,7 +74,7 @@
 			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(){
 				var
 					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
-					worldNum     = Math.qckInt("ceil",($(this).attr("value")) / 8),
+					worldNum     = $(this).attr("world"),
 					context      = ".tab_expedpast .expedNumBox_"+worldNum,
 					parentCheck  = true;
 				self.exped_filters = [];
@@ -121,14 +121,15 @@
 		},
 		
 		refreshList :function(){
-			var self = this;
+			const self = this;
 			
-			// Get pagination
+			$(".tab_expedpast .exped_list").empty();
 			$(".tab_expedpast .exped_pages").html('<ul class="pagination pagination-sm"></ul>');
-			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, function(NumRecords){
-				// console.log("NumRecords", NumRecords);
-				var itemsPerPage = 20;
-				var numPages = Math.ceil(NumRecords/itemsPerPage);
+			// Get pagination
+			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, function(numRecords){
+				const itemsPerPage = 20;
+				const numPages = Math.ceil(numRecords / itemsPerPage);
+				//console.debug("count_expeds", numRecords);
 				
 				if(numPages > 0){
 					$('.tab_expedpast .pagination').twbsPagination({
@@ -138,48 +139,42 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
-					$('.tab_expedpast .pagination').show("");
+					$('.tab_expedpast .pagination').show();
 				}else{
 					$('.tab_expedpast .pagination').hide();
 				}
-				
-				self.tabSelf.definition.showPage(1);
 			});
 		},
 		
 		showPage :function(pageNumber){
-			var self = this;
-			// console.log("page", pageNumber);
+			const self = this;
 			
 			KC3Database.get_expeds(pageNumber, this.exped_filters, this.fleet_filters, function(response){
-				// console.log("get_expeds", response);
-				$(".tab_expedpast .exped_list").html("");
+				//console.debug("get_expeds", response, self.exped_filters, self.fleet_filters);
+				$(".tab_expedpast .exped_list").empty();
 				
-				var ctr, sctr, rctr, drumCount, rscAmt,
-					ThisExped, ExpedBox, ExpedDate,
-					ThisShip, ShipBox;
+				for(let ctr in response){
+					const ThisExped = response[ctr];
+					const expedMaster = KC3Master.mission(ThisExped.mission) || {};
+					//console.debug(ThisExped);
 					
-				for(ctr in response){
-					ThisExped = response[ctr];
-					//console.log(ThisExped);
-					
-					ExpedBox = $(".tab_expedpast .factory .exped_item").clone().appendTo(".tab_expedpast .exped_list");
+					const ExpedBox = $(".tab_expedpast .factory .exped_item").clone().appendTo(".tab_expedpast .exped_list");
 					
 					// Expedition date
-					ExpedDate = new Date(ThisExped.time*1000);
-					$(".exped_date", ExpedBox).text( ExpedDate.format("mmm dd") );
-					$(".exped_time", ExpedBox).text( ExpedDate.format("hh:MM tt") );
-					$(".exped_info", ExpedBox).attr("title", ExpedDate.format("yyyy-mm-dd HH:MM:ss"));
+					const expedDate = new Date(ThisExped.time * 1000);
+					$(".exped_date", ExpedBox).text( expedDate.format("mmm dd") );
+					$(".exped_time", ExpedBox).text( expedDate.format("hh:MM tt") );
+					$(".exped_info", ExpedBox).attr("title", expedDate.format("yyyy-mm-dd HH:MM:ss"));
 					
 					// Number and HQ exp
-					$(".exped_number", ExpedBox).text( ThisExped.mission );
+					$(".exped_number", ExpedBox).text( expedMaster.api_disp_no || ThisExped.mission );
 					$(".exped_exp", ExpedBox).text( ThisExped.admiralXP );
 
-					drumCount = 0;
+					let drumCount = 0;
 					// Ship List
-					for(sctr in ThisExped.fleet){
-						ThisShip = ThisExped.fleet[sctr];
-						ShipBox = $(".tab_expedpast .factory .exped_ship").clone();
+					for(let sctr in ThisExped.fleet){
+						const ThisShip = ThisExped.fleet[sctr];
+						const ShipBox = $(".tab_expedpast .factory .exped_ship").clone();
 						$(".exped_ship_img img", ShipBox).attr("src", KC3Meta.shipIcon(ThisShip.mst_id) );
 						$(".exped_ship_exp", ShipBox).text( ThisExped.shipXP[sctr] );
 						if(ThisShip.morale > 49){ $(".exped_ship_img", ShipBox).addClass("sparkled"); }
@@ -194,9 +189,9 @@
 					$(".exped_drums", ExpedBox).text( drumCount );
 
 					// Resource gains
-					for(rctr in ThisExped.data.api_get_material){
+					for(let rctr in ThisExped.data.api_get_material){
 						rctr = parseInt(rctr, 10);
-						rscAmt = ThisExped.data.api_get_material[rctr];
+						const rscAmt = ThisExped.data.api_get_material[rctr];
 						if(rscAmt > 0){
 							$(".exped_rsc"+(rctr+1), ExpedBox).text( rscAmt );
 						}else{

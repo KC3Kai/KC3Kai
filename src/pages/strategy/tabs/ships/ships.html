@@ -145,13 +145,18 @@
 	<div class="clear"></div>
 
 	<div class="ship_types">
+	</div>
+	<div class="clear"></div>
 
+	<div class="show_name_filter">
+		<div class="name_label">Show by Name:</div>
+		<input type="text" class="name_criteria" />
 	</div>
 	<div class="clear"></div>
 
 	<div class="ship_count">
 		<div class="count_label">Listed ships:</div>
-		<div class="count_value"></div>
+		<div class="count_value"><span class="listed">?</span> /<span class="total">?</span></div>
 	</div>
 	<div class="ship_export">
 		<div class="export_label">Export to:</div>
@@ -218,17 +223,17 @@
 			<div class="ship_field ship_lv"><span class="i18n">LevelShort</span> <span class="value"></span></div>
 			<div class="ship_field ship_morale"></div>
 
-			<div class="ship_field ship_stat ship_hp"></div>
+			<div class="ship_field ship_stat ship_hp"><span class="stat_value"></span><sup class="sup"></sup></div>
 
 			<div class="ship_field ship_stat ship_stat_mod ship_fp"><span class="stat_value"></span><span class="stat_left"></span></div>
 			<div class="ship_field ship_stat ship_stat_mod ship_tp"><span class="stat_value"></span><span class="stat_left"></span></div>
 			<div class="ship_field ship_stat ship_stat_mod ship_aa"><span class="stat_value"></span><span class="stat_left"></span></div>
 			<div class="ship_field ship_stat ship_stat_mod ship_ar"><span class="stat_value"></span><span class="stat_left"></span></div>
 
-			<div class="ship_field ship_stat ship_as"></div>
+			<div class="ship_field ship_stat ship_as"><span class="stat_value"></span><sup class="sup"></sup></div>
 			<div class="ship_field ship_stat ship_ev"></div>
 			<div class="ship_field ship_stat ship_ls"></div>
-			<div class="ship_field ship_stat ship_lk"><span class="stat_value"></span><sup class="sub"></sup></div>
+			<div class="ship_field ship_stat ship_lk"><span class="stat_value"></span><sup class="sup"></sup></div>
 			<div class="ship_field ship_stat ship_stat_mod ship_yasen"><span class="stat_value"></span><span class="stat_left"></span></div>
 
 			<div class="ship_field ship_equip">
@@ -267,7 +272,7 @@
 			</div>
 			<div class="ship_stats_col">
 				<div class="stat_icon"><img src="/assets/img/stats/hp.png"/><span class="stat_name i18n">ShipHp</span></div>
-				<div class="stat_value stat_hp"></div>
+				<div class="stat_value stat_hp"><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ar.png"/><span class="stat_name i18n">ShipArmor</span></div>
 				<div class="stat_value stat_ar"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ev.png"/><span class="stat_name i18n">ShipEvasion</span></div>
@@ -287,23 +292,29 @@
 				<div class="stat_icon"><img src="/assets/img/stats/aa.png"/><span class="stat_name i18n">ShipAntiAir</span></div>
 				<div class="stat_value stat_aa"><span class="equip"></span><span class="current"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/as.png"/><span class="stat_name i18n">ShipAsw</span></div>
-				<div class="stat_value stat_as"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
+				<div class="stat_value stat_as"><span class="equip"></span><span class="current"></span><span class="level"></span><span class="mod"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/ls.png"/><span class="stat_name i18n">ShipLos</span></div>
 				<div class="stat_value stat_ls"><span class="equip"></span><span class="current"></span><span class="level"></span></div>
 				<div class="stat_icon"><img src="/assets/img/stats/lk.png"/><span class="stat_name i18n">ShipLuck</span></div>
 				<div class="stat_value stat_lk"><span class="equip"></span><span class="current"></span><span class="luck"></span></div>
 			</div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left dayAttack">
-			</div></div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left nightAttack">
-			</div></div>
-			<div class="ship_stats_row"><div class="stat_value stat_wide text_left shellingAccuracy">
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div class="dayAttack"></div>
 			</div></div>
 			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
-				<span class="adjustedAntiAir"></span>; <span class="aaciMaxBonus"></span>
+				<div class="nightAttack"></div>
 			</div></div>
 			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
-				<span class="propShotdownRate"></span>; <span class="fixedShotdown"></span>
+				<div class="shellingAccuracy"></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div class="shellingEvasion"></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div><span class="adjustedAntiAir"></span>; <span class="aaciMaxBonus"></span></div>
+			</div></div>
+			<div class="ship_stats_row"><div class="stat_value stat_wide text_left">
+				<div><span class="propShotdownRate"></span>; <span class="fixedShotdown"></span></div>
 			</div></div>
 			<div class="ship_stats_row sd_title">
 				<div class="aa_col text_left">AA if</div>

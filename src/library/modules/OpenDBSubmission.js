@@ -1,16 +1,19 @@
-/* OpenDBSubmission.js
-Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB 
-Copied and edited from PoiDBSubmission.js
-http://swaytwig.com/opendb/
+/**
+ * OpenDBSubmission.js
+ *
+ * Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB:
+ * http://swaytwig.com/opendb/
+ *
+ * @see PoiDBSubmission.js - copied and edited from
  */
 (function(){
 	"use strict";
 
 	window.OpenDBSubmission = {
 		// `state` should take one of the following value:
-		// * `null` if the module awaits nothing
+		// * `null`: if the module awaits nothing
 		// * `create_ship`: having "createship" consumed
-		//	 waiting for "kdock" message
+		//    waiting for "kdock" message
 		// * `drop_ship_1`: waiting for the final piece of data (rank etc, shipId if any)
 		state: null,
 		createShipData: null,
@@ -29,6 +32,7 @@ http://swaytwig.com/opendb/
 				'api_req_kousyou/createitem': this.processCreateItem,
 				'api_req_kousyou/remodel_slot': this.processRemodelItem,
 				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
+
 				// start or next
 				'api_req_map/start': this.processStartNext,
 				'api_req_map/next': this.processStartNext,
@@ -72,8 +76,8 @@ http://swaytwig.com/opendb/
 			delete createShipData.kdockId;
 
 			// console.debug( "[createship] prepared: " + JSON.stringify( createShipData ) );
-			this.submitData("ship_dev.php", createShipData);
-			this.state = null;
+			this.submitData("ship_build.php", createShipData);
+			this.cleanup();
 		},
 		processCreateItem: function( requestObj ) {
 			this.cleanup();
@@ -90,7 +94,7 @@ http://swaytwig.com/opendb/
 			};
 
 			// console.debug( "[createitem] prepared: " + JSON.stringify( createItemData ));
-			this.submitData("equip_dev.php", createItemData);
+			this.submitData("equip_build.php", createItemData);
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
@@ -99,7 +103,7 @@ http://swaytwig.com/opendb/
 			var response = requestObj.response.api_data;
 
 			var dropShipData = {
-				apiver: 3,
+				apiver: 4,
 				world: response.api_maparea_id,
 				map: response.api_mapinfo_no,
 				node: response.api_no
@@ -128,9 +132,10 @@ http://swaytwig.com/opendb/
 			dropShipData.result = response.api_get_ship ? response.api_get_ship.api_ship_id : 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.maprank = this.mapInfo[dropShipData.world * 10 + dropShipData.map] || 0;
+			dropShipData.inventory = response.api_get_ship ? KC3ShipManager.count(ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(dropShipData.result)) : 0;
 
-			this.submitData( "ship_drop.php", dropShipData );
-			this.state = null;
+			this.submitData("ship_drop.php", dropShipData);
+			this.cleanup();
 		},
 		processRemodelItem: function ( requestObj ) {
 			this.cleanup();
@@ -168,8 +173,8 @@ http://swaytwig.com/opendb/
 				}
 				return false;
 			} catch (e) {
-				console.warn("Open DB Submission Error", e);/*RemoveLogging:skip*/
-				// Pop up APIError on unexpected runtime expcetion
+				console.warn("Open DB Submission Error", e);
+				// Pop up APIError on unexpected runtime exception
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
@@ -190,28 +195,27 @@ http://swaytwig.com/opendb/
 		cleanup: function() {
 			if (this.state !== null) {
 				console.log("Aborting previous data report, interal state was:", this.state);
-		}
-
+			}
 			this.state = null;
 			this.createShipData = null;
 			this.dropShipData = null;
 		},
-		submitData: function (APIurl, data){
-			/*console.debug("Sending to " + APIurl + " Data: " + JSON.stringify(data))
-			if(true)
-				return;
-			}*/
+		submitData: function (endpoint, payload){
+			/*
+			console.debug("Sending to /" + endpoint + ", data: " + JSON.stringify(payload));
+			if(true) return;
+			*/
 			var post = $.ajax({
-				url: "http://swaytwig.com/opendb/report/" + APIurl,
+				url: "http://swaytwig.com/opendb/report/" + endpoint,
 				method: "POST",
-				data: data,
+				data: payload,
 			}).done(function( msg ) {
 				console.log("OpenDB Submission done:", msg);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
 				console.warn( "OpenDB Submission failed:", textStatus, errorThrown);
 			});
 		}
-    };
+	};
 
 	window.OpenDBSubmission.init();
 })();

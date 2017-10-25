@@ -196,12 +196,17 @@
 	};
 
 	KC3StrategyTabs.isTextEllipsis = function(element){
+		// NOTE: this method more flexible but low performance caused by DOM appending & removing
+		/*
 		var $c = $(element).clone()
 			.css({display: 'inline', width: 'auto', visibility: 'hidden'})
 			.appendTo('body');
 		var cWidth = $c.width();
 		$c.remove();
 		return cWidth > $(element).width();
+		*/
+		// NOTE: this method requires element.is(":visible") already, otherwise `scrollWidth` will be 0
+		return $(element).prop('scrollWidth') > $(element).width();
 	};
 
 	// A jquery-ui tooltip options like native one

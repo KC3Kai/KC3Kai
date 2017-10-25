@@ -39,7 +39,7 @@ body {
 
 .ui-tooltip-content .ship_tooltip {
 	width:252px;
-	height:280px;
+	height:314px;
 	padding:2px 0px 2px 0px;
 }
 .ui-tooltip-content .ship_tooltip .ship_full_name {
@@ -224,6 +224,14 @@ body {
 
 .ui-tooltip-content .ship_tooltip .stat_wide {
 	width:249px;
+}
+.ui-tooltip-content .ship_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
 }
 .ui-tooltip-content .ship_tooltip .aa_col {
 	width:49px;
@@ -568,7 +576,7 @@ body {
 .ship_list .ship_item.even .ship_field.ship_lk.max {
 	background:#52d052;
 }
-.ship_list .ship_item .ship_lk .sub {
+.ship_list .ship_item .sup {
 	color:#aaa;
 }
 .ship_list .ship_item .ship_equip span {
@@ -680,6 +688,9 @@ body {
 .tab_ships .advanced_sorter .hover:hover,
 .tab_ships .control_buttons .hover:hover {
 	background:#cfc;
+}
+.tab_ships .show_name_filter .name_criteria {
+	border:1px solid #000;
 }
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #000;
@@ -1096,9 +1107,9 @@ body {
 	background: #ebebe4;
 }
 .tab_fleet .fleet_box {
-	height:215px;
 	background:#def;
 	margin:0px 0px 5px 0px;
+	padding:0px 0px 5px 0px;
 	border-radius:12px;
 }
 .tab_fleet .fleet_name {
@@ -1170,16 +1181,21 @@ body {
 }
 .tab_fleet .fleet_ships {
 	width:672px;
-	height:175px;
 	margin:0px 4px;
 }
 .tab_fleet .fleet_ship {
 	width:110px;
-	height:165px;
+	height:85px;
 	float:left;
-	background:#ffc;
+	background:#fff;
 	border-radius:8px;
 	margin:10px 2px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_id {
+	color:#555 !important;
+	position:absolute;
+    bottom:0;
+    right:2px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	width:50px;
@@ -1196,25 +1212,25 @@ body {
 	color:#fff;
 }
 .tab_fleet .fleet_ship .ship_pic {
-	width:40px;
-	height:40px;
+	width:50px;
+	height:50px;
 	float:left;
-	margin:3px 0px 0px 10px;
+	margin:3px 0px 0px 0px;
 	background:#ccc;
 	border-radius:20px;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:40px;
-	height:40px;
+	width:50px;
+	height:50px;
 }
 .tab_fleet .fleet_ship .ship_lv {
-	width:50px;
+	width:45px;
 	height:40px;
 	float:left;
-	margin:3px 0px 0px 5px;
+	margin:8px 0px 0px 5px;
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
-	width:20px;
+	width:15px;
 	height:40px;
 	line-height:40px;
 	font-size:12px;
@@ -1222,11 +1238,12 @@ body {
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
-	width:30px;
+	width:25px;
 	height:40px;
 	line-height:40px;
 	font-size:16px;
 	font-weight:bold;
+	text-align:center;
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_name {

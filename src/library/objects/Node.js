@@ -11,8 +11,9 @@ Used by SortieManager
 		// will be 0 if sortie has not been saved to DB (yet)
 		this.sortie = sortie_id || 0;
 		this.id = api_no || 0;
-		this.type = "";
+		// node data supposed to be available only if created with time stamp
 		this.stime = utcTime;
+		this.type = "";
 		this.isPvP = false;
 		this.letter = KC3Meta.nodeLetter(world || KC3SortieManager.map_world,
 			map || KC3SortieManager.map_num, this.id);
@@ -28,6 +29,10 @@ Used by SortieManager
 			"nc_night_battle", "nc_air_battle",
 			"nc_enemy_combined", "nc_air_raid"
 		];
+	};
+	
+	KC3Node.prototype.isInitialized = function(){
+		return !!this.stime;
 	};
 	
 	KC3Node.prototype.defineAsBattle = function( nodeData ){
@@ -462,7 +467,7 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvps[0] > 0) {
+					if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
 						// string indicates prediction value
 						ship.mvp = this.predictedMvps[0] === position + 1 ?
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
@@ -473,7 +478,7 @@ Used by SortieManager
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(this.predictedMvps[1] > 0) {
+					if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
 						ship.mvp = this.predictedMvps[1] === position + 1 ?
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
@@ -650,7 +655,8 @@ Used by SortieManager
 					} else {
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
 					}
-					if(this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
+					if(Array.isArray(this.predictedMvpsNight) &&
+						this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
 						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
 							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
 					}
@@ -1369,7 +1375,7 @@ Used by SortieManager
 	KC3Node.prototype.isMvpPredictionCapable = function(){
 		// Rule unknown: ship nearest to flagship does not get MVP when same damage dealt
 		const battleRank = this.predictedRankNight || this.predictedRank;
-		if(battleRank === "D" || battleRank === "E"){
+		if(!ConfigManager.info_btrank || battleRank === "D" || battleRank === "E"){
 			return false;
 		}
 		// Should no air battle and not combined fleet for now
