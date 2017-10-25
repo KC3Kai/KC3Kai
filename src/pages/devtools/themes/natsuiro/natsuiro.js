@@ -2419,13 +2419,18 @@
 								.data("masterId", eshipId)
 								.on("dblclick", self.shipDoubleClickFunction)
 								.show();
+							if(ConfigManager.info_chuuha_icon && thisNode.isPvP){
+								$(".module.activity .abyss_single .abyss_ship_"+(index+1)+" img")
+									.attr("src", KC3Ship.shipIcon(eshipId, thisNode.maxHPs.enemy[index], newEnemyHP));
+							}
 						}
 						
 						if(!index &&
 							['multiple','gauge-hp'].indexOf(KC3SortieManager.getCurrentMapData().kind)>=0 /* Flagship */
-						)
+						){
 							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage,!newEnemyHP);
-
+						}
+						
 						if(newEnemyHP === 0){
 							$(".module.activity .abyss_single .abyss_ship_"+(index+1)).css("opacity", "0.6");
 							$(".module.activity .abyss_single .sunk_"+(index+1)+" img")
@@ -2447,7 +2452,7 @@
 						} else{
 							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
 						}
-
+						
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).show();
 					}
 				});

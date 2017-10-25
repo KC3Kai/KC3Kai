@@ -1316,8 +1316,20 @@ body {
 .tab_fleet .fleet_ship .ship_gear .ship_gear_5 .gear_name {
 	color:#79b;
 }
-.tab_fleet .fleet_ship .max_slot.unused {
-	color:#aaa;
+.tab_fleet .fleet_ship .slot_capacity.shouha {
+	color:#aa0;
+}
+.tab_fleet .fleet_ship .slot_capacity.chuuha {
+	color:#f70;
+}
+.tab_fleet .fleet_ship .slot_capacity.taiha {
+	color:#e30;
+}
+.tab_fleet .fleet_ship .slot_capacity.empty {
+	color:#777;
+}
+.tab_fleet .fleet_ship .slot_capacity.unused {
+	color:#ccc;
 }
 .tab_fleet .fleet_ship .gear_stars {
 	border-radius:8px;

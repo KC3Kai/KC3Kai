@@ -201,12 +201,12 @@
 .tab_fleet .fleet_ship .ship_gear.ship_gear_5 .gear_name {
 	color:#79b;
 }
-.tab_fleet .fleet_ship .max_slot {
+.tab_fleet .fleet_ship .slot_capacity {
 	float:left;
 	width:12px;
 	text-align:right;
 }
-.tab_fleet .fleet_ship.horizontal .max_slot {
+.tab_fleet .fleet_ship.horizontal .slot_capacity {
 	padding-left:2px;
 }
 .tab_fleet .fleet_ship .gear_icon {
