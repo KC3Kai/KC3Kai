@@ -24,13 +24,13 @@
 <!-- FLEET BOXES -->
 <div class="page_padding">
 
-  <div class="fleet_control">
+<div class="fleet_control">
 	<form action="">
-	  <div class="fleet_type_field">
+	<div class="fleet_type_field">
 		<input type="radio" name="view_type" id="current" value="current" checked="checked">
 		<label for="current">Current Fleets</label>
-	  </div>
-	  <div class="fleet_type_field">
+	</div>
+	<div class="fleet_type_field">
 		<input type="radio" name="view_type" id="saved" value="saved"> 
 		<label for="saved">Saved Fleets</label>
 		<select class="control_input" id="saved_fleet_sel">
@@ -38,39 +38,40 @@
 		<button type="button" id="control_saved_rename">Rename ...</button>
 		<button type="button" id="control_saved_delete">Delete ...</button>
 		<div class="clear"></div>
-	  </div>
-	  <div class="fleet_type_field">
+	</div>
+	<div class="fleet_type_field">
 		<input type="radio" name="view_type" id="history" value="history">
 		<label for="history">From Sortie History</label>
 		<input type="text" name="hist_query" id="hist_query"
-			   class="control_input"
-			   placeholder="Input Sortie Id" 
-			   value="">
-		<!-- TODO: support getting fleet from last sortie to a specific map -->
-	  </div>
+			class="control_input"
+			placeholder="Input Sortie Id"
+			value="">
+	</div>
 	</form>
 	<div class="fleet_error_msg">Error Message</div>
 	<button type="button" id="control_view">View</button>
-  </div>
-  <div class="page_section" id="fleet_description"></div>
-  <div class="fleet_control">
+</div>
+<div class="page_section" id="fleet_description"></div>
+<div class="fleet_control">
 	<button type="button" id="control_save">Save ...</button>
 	<button type="button" id="control_export_dbuilder">Export to DeckBuilder</button>
-	<button type="button" id="control_switch_view">Switch view</button>
 	<!-- TODO
 		 <button type="button" id="control_export_wctf">Export to WhoCallsTheFleet</button>
 	-->
-  </div>
-  <div class="fleet_list">
-  </div>
+	<button type="button" id="control_switch_view">Switch view</button>
+</div>
+
+<div class="fleet_list">
+</div>
+
 </div>
 
 <!-- CLONE FACTORY -->
 <div class="factory">
-  <!-- FLEET BOX -->
-  <div class="fleet_box">
-	<div class="fleet_info">
-	  <div class="fleet_name"></div>
+	<!-- FLEET BOX -->
+	<div class="fleet_box">
+		<div class="fleet_info">
+			<div class="fleet_name"></div>
 			<div class="fleet_details">
 				<div class="detail_field detail_level">
 					<div class="detail_icon"><img src="/assets/img/stats/lv.png" /></div>
@@ -117,44 +118,68 @@
 		<div class="ship_box">
 			<div class="ship_hover">
 				<div class="ship_type">XXX</div>
-				<div class="ship_lv">
-					<div class="ship_lv_lbl">Lv.</div>
-					<div class="ship_lv_val"></div>
-					<div class="clear"></div>
-				</div>
 				<div class="ship_pic hover"><img/></div>
+				<div class="ship_tiny_stats">
+					<div class="ship_lv">
+						<div class="ship_lv_lbl">Lv.</div>
+						<div class="ship_lv_val"></div>
+					</div>
+					<div class="ship_luck">
+						<div class="ship_lk_icon"><img src="/assets/img/stats/lk.png"/></div>
+						<div class="ship_lk_val"></div>
+					</div>
+					<div class="ship_morale">
+						<div class="ship_cond_icon"><img src="/assets/img/client/morale/3.png"/></div>
+						<div class="ship_cond_val"></div>
+					</div>
+				</div>
 			</div>
 			<div class="clear"></div>
 			<div class="ship_name"></div>
 		</div>
 		<div class="ship_gear">
 			<div class="ship_gear_1">
+				<div class="slot_capacity"></div>
 				<div class="gear_icon hover"><img/></div>
-				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="gear_name"></div>
+				<div class="gear_ace"><img /></div>
+				<div class="gear_stars"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="ship_gear_2">
+				<div class="slot_capacity"></div>
 				<div class="gear_icon hover"><img/></div>
-				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="gear_name"></div>
+				<div class="gear_ace"><img /></div>
+				<div class="gear_stars"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="ship_gear_3">
+				<div class="slot_capacity"></div>
 				<div class="gear_icon hover"><img/></div>
-				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="gear_name"></div>
+				<div class="gear_ace"><img /></div>
+				<div class="gear_stars"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="ship_gear_4">
+				<div class="slot_capacity"></div>
 				<div class="gear_icon hover"><img/></div>
-				<div class="gear_name"><span class="stars"></span><span class="name"></span><span class="ace"></span><span class="slot"></span></div>
+				<div class="gear_name"></div>
+				<div class="gear_ace"><img /></div>
+				<div class="gear_stars"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="ship_gear_5">
+				<div class="slot_capacity"></div>
 				<div class="gear_icon hover"><img/></div>
-				<div class="gear_name"><span class="name"></span></div>
+				<div class="gear_name"></div>
+				<div class="gear_ace"><img /></div>
+				<div class="gear_stars"></div>
 				<div class="clear"></div>
 			</div>
 		</div>
-		<div class="ship_id"></div>
+		<div class="ship_index"></div>
 		<div class="ship_tooltip">
 			<div class="ship_stats_row">
 				<div class="ship_full_name"><span class="ship_masterId"></span> <span class="value"></span> <span class="ship_yomi"></span></div>

@@ -17,12 +17,13 @@
     };
   };
 
-  const normalizeFleets = (battleResult) => {
+  const normalizeFleets = (fleetHpInfo, isAnalyzedResult = false) => {
     const { omitEmptySlots, hideOverkill } = KC3BattlePrediction.rank;
 
-    return Object.keys(battleResult).reduce((result, key) => {
+    return Object.keys(fleetHpInfo).reduce((result, key) => {
       return Object.assign(result, {
-        [key]: hideOverkill(omitEmptySlots(battleResult[key])),
+        // empty slots already removed for analyzed fleets result, dupe it will cause issue like #2284
+        [key]: hideOverkill(isAnalyzedResult ? fleetHpInfo[key] : omitEmptySlots(fleetHpInfo[key])),
       });
     }, {});
   };

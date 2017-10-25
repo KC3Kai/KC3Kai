@@ -205,6 +205,15 @@ KC3改 Ship Object
 			this.level >= 50  ? "medium" :
 			"";
 	};
+	/** @return full url of ship face icon according her hp percent. */
+	KC3Ship.prototype.shipIcon = function(){
+		return KC3Meta.shipIcon(this.masterId, undefined, true, this.isStriped());
+	};
+	KC3Ship.shipIcon = function(masterId, mhp = 0, chp = mhp){
+		const isStriped = mhp > 0 && (chp / mhp) <= 0.5;
+		return KC3Meta.shipIcon(masterId, undefined, true, isStriped);
+	};
+	/** @return icon file name only without path and extension suffix. */
 	KC3Ship.prototype.moraleIcon = function(){
 		return KC3Ship.moraleIcon(this.morale);
 	};
@@ -2250,9 +2259,9 @@ KC3改 Ship Object
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : "");
 		// show possible critical power and mark capped power with different color
-		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span style="color:#a08">{0}</span>' : "{0}")
+		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span class="power_capped">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
-				(cap ? '(<span style="color:#a08">{0}</span>)' : "({0})")
+				(cap ? '(<span class="power_capped">{0}</span>)' : "({0})")
 					.format(Math.qckInt("floor", cp, 0))
 			);
 		const onFleetNum = shipObj.onFleet();
