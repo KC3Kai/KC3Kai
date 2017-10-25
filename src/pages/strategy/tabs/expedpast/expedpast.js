@@ -155,7 +155,6 @@
 				
 				for(let ctr in response){
 					const ThisExped = response[ctr];
-					const expedMaster = KC3Master.mission(ThisExped.mission) || {};
 					//console.debug(ThisExped);
 					
 					const ExpedBox = $(".tab_expedpast .factory .exped_item").clone().appendTo(".tab_expedpast .exped_list");
@@ -167,7 +166,7 @@
 					$(".exped_info", ExpedBox).attr("title", expedDate.format("yyyy-mm-dd HH:MM:ss"));
 					
 					// Number and HQ exp
-					$(".exped_number", ExpedBox).text( expedMaster.api_disp_no || ThisExped.mission );
+					$(".exped_number", ExpedBox).text( KC3Master.missionDispNo(ThisExped.mission) );
 					$(".exped_exp", ExpedBox).text( ThisExped.admiralXP );
 
 					let drumCount = 0;

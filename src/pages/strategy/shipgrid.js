@@ -71,7 +71,7 @@
 					shipRow.toggleClass(oddEvenClass.bind(this, shipIdx));
 					$(".ship_id", shipRow).text(ship.id);
 					$(".ship_img .ship_icon", shipRow)
-						.attr("src", KC3Meta.shipIcon(ship.masterId))
+						.attr("src", KC3Ship.shipIcon(ship.masterId))
 						.attr("alt", ship.masterId)
 						.click(this.shipClickFunc);
 					$(".ship_name", shipRow).text(ship.name)

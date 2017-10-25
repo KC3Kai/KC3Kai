@@ -67,7 +67,7 @@ module.exports = function(grunt) {
 				src: '*.png',
 				dest: 'build/release/assets/img/shipseasonal/',
 				filter: function(file) {
-					var id = file.match(/^.*\/(\d+).png$/);
+					var id = file.match(/^.*\/(\d+)(_.*)?.png$/);
 					if(!id || !id[1]) return false;
 					id = Number(id[1]);
 					var idArr = grunt.file.readJSON('src/data/seasonal_icons.json') || [];
