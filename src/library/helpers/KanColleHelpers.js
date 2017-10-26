@@ -7492,7 +7492,7 @@ var PS = {};
           return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(aswTotal(280)))));
       };
       if (v === 110) {
-          return fslAndSc(50)(6);
+          return addGroup(fslAndSc(50)(6))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2))));
       };
       return [  ];
   };
