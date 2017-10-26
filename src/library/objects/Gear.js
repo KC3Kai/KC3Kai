@@ -406,6 +406,10 @@ KC3改 Equipment Object
 		return 0;
 	};
 
+	// Following methods used to type equips not by category, but by functionality (stats).
+	// Some special cases used just in case are defined at Ship object.
+	// Handling data only from master defined at AntiAir module.
+
 	KC3Gear.prototype.isAntiAirAircraft = function(){
 		return this.masterId > 0 &&
 			KC3GearManager.antiAirFighterType2Ids.indexOf(this.master().api_type[2]) > -1 &&
@@ -443,6 +447,24 @@ KC3改 Equipment Object
 		const type2 = isSelection ? [8, 9, 10, 41, 58, 59] : [9, 10, 11, 59];
 		return this.masterId > 0 &&
 			type2.indexOf(this.master().api_type[2]) > -1;
+	};
+
+	KC3Gear.prototype.isAirRadar = function(){
+		return this.masterId > 0 &&
+			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tyku > 0;
+	};
+
+	KC3Gear.prototype.isAafdBuiltinHighAngleMount = function(){
+		return this.masterId > 0 &&
+			[1, 4].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tyku > 7;
+	};
+
+	KC3Gear.prototype.isCdMachineGun = function(){
+		return this.masterId > 0 &&
+			this.master().api_type[2] === 21 &&
+			this.master().api_tyku > 8;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {

@@ -1370,7 +1370,7 @@ KC3改 Ship Object
 		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D
 		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		const isHighAswTorpedoBomber = (masterData) => {
-			return masterData &&
+			return masterData && masterData.masterId > 0 &&
 				masterData.api_type[2] === 8 &&
 				masterData.api_tais >= 7;
 		};
@@ -1697,16 +1697,24 @@ KC3改 Ship Object
 			// will not trigger if this ship is taiha or targeting submarine.
 			
 			// special torpedo radar cut-in for destroyers since 2017-10-25
-			if(isThisDestroyer) {
-				// api_tyku > 0 (Air Radar) might be excluded?
-				const surfaceRadarCnt = this.countEquipmentType(2, 12);
+			if(isThisDestroyer && torpedoCnt >= 1) {
+				// according tests, any radar with accuracy stat >= 3 capable,
+				// even large radars (Kasumi K2 can equip), air radars okay too, see:
+				// https://twitter.com/nicolai_2501/status/923172168141123584
+				// https://twitter.com/nicolai_2501/status/923175256092581888
+				const isHighAccRadar = (masterData) => {
+					return masterData && masterData.masterId > 0 &&
+						[12, 13].includes(masterData.api_type[2]) &&
+						masterData.api_houm > 2;
+				};
+				const hasCapableRadar = [0,1,2,3,4].some(slot => isHighAccRadar(this.equipment(slot).master()));
+				const hasSkilledLookout = this.hasEquipmentType(2, 39);
 				const smallMainGunCnt = this.countEquipmentType(2, 1);
-				const skilledLookoutCnt = this.countEquipmentType(2, 39);
 				// modifiers verification still WIP
-				if(torpedoCnt >= 1 && surfaceRadarCnt >= 1 && skilledLookoutCnt >= 1)
-					return ["Cutin", 8, "CutinTorpRadarLookout", 1.0];
-				if(smallMainGunCnt >= 1 && torpedoCnt >= 1 && surfaceRadarCnt >= 1)
-					return ["Cutin", 7, "CutinMainTorpRadar", 1.0];
+				if(hasCapableRadar && hasSkilledLookout)
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
+				if(hasCapableRadar && smallMainGunCnt >= 1)
+					return ["Cutin", 7, "CutinMainTorpRadar", 1.25];
 			}
 			// special torpedo cut-in for late model submarine torpedo
 			const lateTorpedoCnt = this.countEquipment([213, 214]);

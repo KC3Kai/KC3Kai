@@ -1502,10 +1502,23 @@
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
-				.attr("title", selectedFleet > 1 ? "" :
-					KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s)
-				).lazyInitTooltip();
+				.attr("title", (fleetNum => {
+					switch(fleetNum) {
+						case 1: return KC3Meta.term("FirstFleetLevelTip")
+							.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+						case 2:
+						case 3:
+						case 4:
+							const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
+							return "{0}: {3}\n{1}: {4}\n{2}: {5}".format(
+								KC3Meta.term("ExpedTotalAa"),
+								KC3Meta.term("ExpedTotalAsw"),
+								KC3Meta.term("ExpedTotalLos"),
+								fstats.aa, fstats.as, fstats.ls
+							);
+						default: return "";
+					}
+				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
