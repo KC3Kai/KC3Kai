@@ -225,6 +225,49 @@ Contains summary information about a fleet and its 6 ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false){
+		const stats = {
+			level: 0, morale: 0, hp: 0,
+			fp: 0, tp: 0, aa: 0, ar: 0,
+			ev: 0, as: 0, ls: 0, lk: 0,
+			ac: 0
+		};
+		this.ship((rid, idx, ship) =>{
+			// always includes modded/marriage bonus values
+			const ss = includeEquip ? {
+				hp: ship.hp[1],
+				fp: ship.fp[0], tp: ship.tp[0], aa: ship.aa[0], ar: ship.ar[0],
+				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
+				ac: ship.equipmentTotalStats("houm")
+			} : ship.nakedStats();
+			if(!includeEquip) {
+				// no accuracy if excludes equipment
+				ss.ac = 0;
+				// still includes modded/married luck
+				ss.lk = ship.lk[0];
+			}
+			ss.level = ship.level;
+			ss.morale = ship.morale;
+			if(includeImproveType) {
+				// TODO use accurate types
+				ship.equipment(true).forEach(gear => {
+					ss.fp += gear.attackPowerImprovementBonus("fire");
+					ss.tp += gear.attackPowerImprovementBonus("torpedo");
+					ss.aa += gear.aaStatImprovementBonus();
+					//ss.ar += gear.armorStatImprovementBonus();
+					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
+					ss.as += gear.attackPowerImprovementBonus("asw");
+					ss.ls += gear.losStatImprovementBonus();
+					ss.ac += gear.accStatImprovementBonus(includeImproveType);
+				});
+			}
+			Object.keys(stats).forEach(stat => {
+				stats[stat] += ss[stat] || 0;
+			});
+		});
+		return stats;
+	};
+	
 	KC3Fleet.prototype.countDrums = function(){
 		return this.ship().map(function(x){return x.countDrums();})
 			.reduce(function(x,y){return x+y;},0);

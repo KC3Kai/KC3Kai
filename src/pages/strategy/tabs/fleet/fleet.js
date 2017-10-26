@@ -380,25 +380,32 @@
 		   --------------------------------------------*/
 		showKCFleet: function(kcFleet) {
 			if (!kcFleet.active) return;
-			var self = this;
+			const self = this;
 
 			// Create fleet box
-			var fleetBox = $(".tab_fleet .factory .fleet_box").clone()
+			const fleetBox = $(".tab_fleet .factory .fleet_box").clone()
 				.appendTo(".tab_fleet .fleet_list");
 			// fleetBox.attr("id", "fleet_box"+index);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
-			$.each( [0,1,2,3,4,5], function(_,ind) {
-				var kcShip = kcFleet.ship(ind);
+			$.each( [0,1,2,3,4,5], function(_, ind) {
+				const kcShip = kcFleet.ship(ind);
 				self.showKCShip(fleetBox, kcShip, (ind + 1));
 			});
 
 			// Show fleet info
-			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() );
+			const fstats = kcFleet.totalStats(true);
+			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
+				.attr("title", "{0}: {3}\n{1}: {4}\n{2}: {5}".format(
+					KC3Meta.term("ExpedTotalAa"),
+					KC3Meta.term("ExpedTotalAsw"),
+					KC3Meta.term("ExpedTotalLos"),
+					fstats.aa, fstats.as, fstats.ls)
+				);
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
 			if(ConfigManager.elosFormula === 4) {
-				let f33Cn = [
+				const f33Cn = [
 					Math.qckInt("floor", kcFleet.eLos4(), 1),
 					Math.qckInt("floor", kcFleet.eLos4(2), 1),
 					Math.qckInt("floor", kcFleet.eLos4(3), 1),
@@ -587,8 +594,8 @@
 
 				// no value in master data, fall back to calculated naked + equip total
 				ship.ls[0] = shipObj.ls || ((noMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
-				ship.ev[0] = shipObj.ev || (noMasterStats.ev === undefined ? 0 : noMasterStats.ev + ship.equipmentTotalStats("houk"));
-				ship.as[0] = shipObj.as || (noMasterStats.as === undefined ? 0 : noMasterStats.as + ship.equipmentTotalStats("tais"));
+				ship.ev[0] = shipObj.ev || ((noMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats("houk"));
+				ship.as[0] = shipObj.as || ((noMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats("tais"));
 			});
 
 			return fleet;
