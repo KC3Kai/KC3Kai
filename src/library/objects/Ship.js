@@ -574,6 +574,18 @@ KC3改 Ship Object
 		return retVal === false ? 0 : retVal;
 	};
 
+	KC3Ship.prototype.estimateNakedAsw = function() {
+		var aswInfo = WhoCallsTheFleetDb.getStatBound(this.masterId, "asw");
+		var retVal = WhoCallsTheFleetDb.estimateStat(aswInfo, this.level);
+		return retVal === false ? 0 : retVal;
+	};
+
+	KC3Ship.prototype.estimateNakedEvasion = function() {
+		var evaInfo = WhoCallsTheFleetDb.getStatBound(this.masterId, "evasion");
+		var retVal = WhoCallsTheFleetDb.estimateStat(evaInfo, this.level);
+		return retVal === false ? 0 : retVal;
+	};
+
 	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
 		return this.equipment(true)
 			.map(gear => gear.attackPowerImprovementBonus(attackType))
