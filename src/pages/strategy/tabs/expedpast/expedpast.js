@@ -32,9 +32,10 @@
 			
 			// Add all expedition numbers on the filter list
 			$('.tab_expedpast .expedNumbers').empty();
-			if(localStorage.raw && JSON.parse(localStorage.raw).mission) {
-				var missions = JSON.parse(localStorage.raw).mission;
-				$.each(missions, function(ind, curVal) {
+			if(KC3Master.available) {
+				$.each(KC3Master.all_missions(), function(ind, curVal) {
+					// Event expeditions have the event world (eg, 38, 39, ...)
+					if(curVal.api_maparea_id > 10) return;
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.api_id);
 					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
@@ -48,7 +49,6 @@
 			} else {
 				// In case missing raw data
 				const KE = PS["KanColle.Expedition"];
-				$('.tab_expedpast .expedNumbers').empty();
 				KE.allExpeditions.forEach( function(curVal, ind) {
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.id);
