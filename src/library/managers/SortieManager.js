@@ -148,10 +148,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			function supportFormula(expedNum, isBoss){
 				// expedition ID extended since 207-10-18, 101 no longer the start of event support
 				// FIXME World 1 A1 = 100, A2 = 101, A3 = 102. event ID still unknown
-				var event = (expedNum > 200);
-				if(event) expedNum -= 200;
-				var world = Math.floor((expedNum - 1) / 8) + 1;
-				var n = (expedNum - 1) % 8;
+				const eventStartId = 201 - 1;
+				const mission = KC3Master.mission(expedNum);
+				let world = mission ? mission.api_maparea_id : 0;
+				const event = world >= 10 || expedNum > eventStartId;
+				if(event) expedNum -= eventStartId;
+				world = world || Math.floor((expedNum - 1) / 8) + 1;
+				const n = (expedNum - 1) % 8;
 				return (world === 5 || event) && (isBoss ? n === 1 : n === 0);
 			}
 			for(var i = 2; i <= 4; i++)

@@ -1555,6 +1555,8 @@ KC3改 Ship Object
 	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
 	 *         should not pass targetShipMasterId at all for these scenes.
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
+	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtHougeki - client side codes of day attack type.
+	 * @see BattleMain.swf#battle.phase.hougeki.PhaseHougekiBase - client side hints of special cutin attack type.
 	 * @see estimateNightAttackType
 	 * @see canDoOpeningTorpedo
 	 * @see canDoDayShellingAttack
@@ -1691,6 +1693,8 @@ KC3改 Ship Object
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
 	 * @return {Array} night battle attack type constants tuple: [name, cutin id, cutin name, modifier].
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
+	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtNight - client side codes of night attack type.
+	 * @see BattleMain.swf#battle.phase.night.PhaseAttack - client side hints of special cutin attack type.
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
 	 */
@@ -1724,9 +1728,9 @@ KC3改 Ship Object
 				const smallMainGunCnt = this.countEquipmentType(2, 1);
 				// modifiers verification still WIP
 				if(hasCapableRadar && hasSkilledLookout)
-					return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.3];
 				if(hasCapableRadar && smallMainGunCnt >= 1)
-					return ["Cutin", 7, "CutinMainTorpRadar", 1.25];
+					return ["Cutin", 7, "CutinMainTorpRadar", 1.3];
 			}
 			// special torpedo cut-in for late model submarine torpedo
 			const lateTorpedoCnt = this.countEquipment([213, 214]);

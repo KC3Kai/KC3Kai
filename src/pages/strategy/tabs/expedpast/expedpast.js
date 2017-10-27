@@ -35,7 +35,7 @@
 			if(KC3Master.available) {
 				$.each(KC3Master.all_missions(), function(ind, curVal) {
 					// Event expeditions have the event world (eg, 38, 39, ...)
-					if(curVal.api_maparea_id > 10) return;
+					if(curVal.api_maparea_id >= 10) return;
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.api_id);
 					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
