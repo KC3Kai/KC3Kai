@@ -1728,7 +1728,7 @@ KC3改 Ship Object
 				const smallMainGunCnt = this.countEquipmentType(2, 1);
 				// modifiers verification still WIP
 				if(hasCapableRadar && hasSkilledLookout)
-					return ["Cutin", 8, "CutinTorpRadarLookout", 1.3];
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.2];
 				if(hasCapableRadar && smallMainGunCnt >= 1)
 					return ["Cutin", 7, "CutinMainTorpRadar", 1.3];
 			}

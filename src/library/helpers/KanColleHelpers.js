@@ -10522,6 +10522,8 @@ var PS = {};
                   flagShipTypeOf: toFalseF(Data_Maybe.functorMaybe)(req.flagShipTypeOf),
                   levelCount: toFalseF(Data_Maybe.functorMaybe)(req.levelCount),
                   totalAsw: toFalseF(Data_Maybe.functorMaybe)(req.totalAsw),
+                  totalLos: toFalseF(Data_Maybe.functorMaybe)(req.totalLos),
+                  totalAa: toFalseF(Data_Maybe.functorMaybe)(req.totalAa),
                   drumCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCount),
                   drumCarrierCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCarrierCount),
                   fleetSType: toFalseF(Data_Functor.functorArray)(req.fleetSType)
