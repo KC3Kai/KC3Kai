@@ -574,6 +574,18 @@ KC3改 Ship Object
 		return retVal === false ? 0 : retVal;
 	};
 
+	KC3Ship.prototype.estimateNakedAsw = function() {
+		var aswInfo = WhoCallsTheFleetDb.getStatBound(this.masterId, "asw");
+		var retVal = WhoCallsTheFleetDb.estimateStat(aswInfo, this.level);
+		return retVal === false ? 0 : retVal;
+	};
+
+	KC3Ship.prototype.estimateNakedEvasion = function() {
+		var evaInfo = WhoCallsTheFleetDb.getStatBound(this.masterId, "evasion");
+		var retVal = WhoCallsTheFleetDb.estimateStat(evaInfo, this.level);
+		return retVal === false ? 0 : retVal;
+	};
+
 	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
 		return this.equipment(true)
 			.map(gear => gear.attackPowerImprovementBonus(attackType))
@@ -1324,8 +1336,8 @@ KC3改 Ship Object
 				200, 487, 488,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435), Fumizuki(548)
 				418, 434, 435, 548,
-				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Arashio K2(490)
-				464, 470, 199, 468, 490,
+				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
+				464, 470, 199, 468, 489, 490,
 				// Verniy(147), Kawakaze K2(469)
 				147, 469,
 				// Nagato K2(541)
@@ -1370,7 +1382,7 @@ KC3改 Ship Object
 		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D
 		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		const isHighAswTorpedoBomber = (masterData) => {
-			return masterData &&
+			return masterData && masterData.masterId > 0 &&
 				masterData.api_type[2] === 8 &&
 				masterData.api_tais >= 7;
 		};
@@ -1543,6 +1555,8 @@ KC3改 Ship Object
 	 *         asw aircraft all lost against submarine; torpedo bomber only against land,
 	 *         should not pass targetShipMasterId at all for these scenes.
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
+	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtHougeki - client side codes of day attack type.
+	 * @see BattleMain.swf#battle.phase.hougeki.PhaseHougekiBase - client side hints of special cutin attack type.
 	 * @see estimateNightAttackType
 	 * @see canDoOpeningTorpedo
 	 * @see canDoDayShellingAttack
@@ -1679,6 +1693,8 @@ KC3改 Ship Object
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
 	 * @return {Array} night battle attack type constants tuple: [name, cutin id, cutin name, modifier].
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
+	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtNight - client side codes of night attack type.
+	 * @see BattleMain.swf#battle.phase.night.PhaseAttack - client side hints of special cutin attack type.
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
 	 */
@@ -1689,16 +1705,39 @@ KC3改 Ship Object
 		const isThisLightCarrier = stype === 7;
 		const isThisCarrier = [7, 11, 18].includes(stype);
 		const isThisSubmarine = [13, 14].includes(stype);
+		const isThisDestroyer = stype === 2;
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		if(trySpTypeFirst && !targetShipType.isSubmarine) {
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
-			const lateTorpedoCnt = this.countEquipment([213, 214]);
-			const ssRadarCnt = this.countEquipmentType(2, 51);
+			
+			// special torpedo radar cut-in for destroyers since 2017-10-25
+			if(isThisDestroyer && torpedoCnt >= 1) {
+				// according tests, any radar with accuracy stat >= 3 capable,
+				// even large radars (Kasumi K2 can equip), air radars okay too, see:
+				// https://twitter.com/nicolai_2501/status/923172168141123584
+				// https://twitter.com/nicolai_2501/status/923175256092581888
+				const isHighAccRadar = (masterData) => {
+					return masterData && masterData.masterId > 0 &&
+						[12, 13].includes(masterData.api_type[2]) &&
+						masterData.api_houm > 2;
+				};
+				const hasCapableRadar = [0,1,2,3,4].some(slot => isHighAccRadar(this.equipment(slot).master()));
+				const hasSkilledLookout = this.hasEquipmentType(2, 39);
+				const smallMainGunCnt = this.countEquipmentType(2, 1);
+				// modifiers verification still WIP
+				if(hasCapableRadar && hasSkilledLookout)
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.3];
+				if(hasCapableRadar && smallMainGunCnt >= 1)
+					return ["Cutin", 7, "CutinMainTorpRadar", 1.3];
+			}
 			// special torpedo cut-in for late model submarine torpedo
-			if(lateTorpedoCnt >= 1 && ssRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
+			const lateTorpedoCnt = this.countEquipment([213, 214]);
+			const submarineRadarCnt = this.countEquipmentType(2, 51);
+			if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
 			if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
+			
 			if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];

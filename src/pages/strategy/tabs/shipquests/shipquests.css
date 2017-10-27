@@ -124,7 +124,8 @@
 /* Row */
 .tab_shipquests .ship_list .ship_item {
 	width:680px;
-	height:20px;
+	height:auto;
+	min-height:20px;
 	line-height:20px;
 	font-size:12px;
 	margin:0px 0px 2px 0px;
@@ -215,6 +216,9 @@
 }
 .tab_shipquests .ship_item .ship_quests {
 	width:430px;
+	height:auto;
+	min-height:20px;
+	overflow:initial;
 	text-align:left;
 }
 .tab_shipquests .ship_item .ship_stat {

@@ -31,19 +31,36 @@
 			const self = this;
 			
 			// Add all expedition numbers on the filter list
-			const KE = PS["KanColle.Expedition"];
 			$('.tab_expedpast .expedNumbers').empty();
-			KE.allExpeditions.forEach( function(curVal, ind) {
-				var row = $('.tab_expedpast .factory .expedNum').clone();
-				$(".expedCheck input", row).attr("value", curVal.id);
-				$(".expedCheck input", row).attr("world", curVal.world);
-				$(".expedText", row).text( curVal.name );
-				$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
-				
-				self.exped_filters.push(curVal.id);
-				
-				$(".tab_expedpast .expedNumBox_"+curVal.world).append( row );
-			});
+			if(KC3Master.available) {
+				$.each(KC3Master.all_missions(), function(ind, curVal) {
+					// Event expeditions have the event world (eg, 38, 39, ...)
+					if(curVal.api_maparea_id >= 10) return;
+					var row = $('.tab_expedpast .factory .expedNum').clone();
+					$(".expedCheck input", row).attr("value", curVal.api_id);
+					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
+					$(".expedText", row).text( curVal.api_disp_no );
+					$(".expedTime", row).text( (curVal.api_time * 60).toString().toHHMMSS().substring(0,5) );
+					
+					self.exped_filters.push(curVal.api_id);
+					
+					$(".tab_expedpast .expedNumBox_"+curVal.api_maparea_id).append( row );
+				});
+			} else {
+				// In case missing raw data
+				const KE = PS["KanColle.Expedition"];
+				KE.allExpeditions.forEach( function(curVal, ind) {
+					var row = $('.tab_expedpast .factory .expedNum').clone();
+					$(".expedCheck input", row).attr("value", curVal.id);
+					$(".expedCheck input", row).attr("world", curVal.world);
+					$(".expedText", row).text( curVal.name );
+					$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
+					
+					self.exped_filters.push(curVal.id);
+					
+					$(".tab_expedpast .expedNumBox_"+curVal.world).append( row );
+				});
+			}
 			
 			// Add world toggle
 			$(".tab_expedpast .expedNumBox")
