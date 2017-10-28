@@ -7492,7 +7492,7 @@ var PS = {};
           return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(aswTotal(280)))));
       };
       if (v === 110) {
-          return addGroup(fslAndSc(40)(6))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140)))))));
+          return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(175))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
       };
       return [  ];
   };
