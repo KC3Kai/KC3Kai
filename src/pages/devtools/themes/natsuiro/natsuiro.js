@@ -1525,9 +1525,11 @@
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
-				.attr("titlealt", KC3Calc.buildFleetsContactChanceText(
+				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
+					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
+				) + KC3Calc.buildFleetsContactChanceText(
 					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
-					isCombinedAirView ? 8 : 5
+					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));

@@ -588,6 +588,24 @@ Contains summary information about a fleet and its 6 ships
 		return contactPlaneList;
 	};
 
+	/**
+	 * @return total open airstrike power from all ships in fleet.
+	 * @see KC3Ship.prototype.airstrikePower
+	 * @see KC3Gear.prototype.airstrikePower
+	 */
+	KC3Fleet.prototype.airstrikePower = function(combinedFleetFactor = 0,
+			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
+		const totalPower = [0, 0, false];
+		this.shipsUnescaped().forEach((ship, index) => {
+			const shipPower = ship.airstrikePower(combinedFleetFactor, isJetAssaultPhase,
+				contactPlaneId, isCritical);
+			totalPower[0] += shipPower[0];
+			totalPower[1] += shipPower[1];
+			totalPower[2] |= shipPower[2];
+		});
+		return totalPower;
+	};
+
 	KC3Fleet.prototype.supportPower = function(){
 		return this.ship(0).supportPower()
 			+this.ship(1).supportPower()

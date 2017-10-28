@@ -137,6 +137,94 @@
     };
 
     /**
+     * Build open airstrike power tooltip text from 1 or more fleet(s).
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, default 2nd fleet.
+     * @param {boolean} isCombined - if current view is really Combined Fleet view, default false.
+     * @return built html string.
+     * @see Fleet.airstrikePower
+     */
+    const buildFleetsAirstrikePowerText = (
+            viewFleet = PlayerManager.fleets[0],
+            escortFleet = PlayerManager.fleets[1],
+            isCombined = false) => {
+        var mainFleet = viewFleet;
+        if(isCombined) { // force to 1st fleet if combined
+            mainFleet = viewFleet = PlayerManager.fleets[0];
+        }
+        const battleConds = collectBattleConditions();
+        const contactPlaneId = battleConds.contactPlaneId;
+        const isContact = contactPlaneId > 0;
+        const forJetAssault = false;
+        // Known combined fleet airstrike modifier applied to normal player fleet vs enemy combined only,
+        // against enemy main fleet -10, against escort fleet -20.
+        // But impossible to assume our aircraft totally attack which enemy fleet...
+        const combinedFleetMod = 0;
+        const normalPower = mainFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId);
+        let criticalPower = null;
+        if(ConfigManager.powerCritical) {
+            criticalPower = mainFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId, true);
+        }
+        if(isCombined && ConfigManager.air_combined) {
+            const escortFleetPower = escortFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId);
+            normalPower[0] += escortFleetPower[0];
+            normalPower[1] += escortFleetPower[1];
+            normalPower[2] |= escortFleetPower[2];
+            if(ConfigManager.powerCritical) {
+                const escortFleetCritical = escortFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId, true);
+                criticalPower[0] += escortFleetCritical[0];
+                criticalPower[1] += escortFleetCritical[1];
+                criticalPower[2] |= escortFleetCritical[2];
+            }
+        }
+        // critical power array represents total values if critical triggered by all attackers,
+        // so max possible range should be {0}(weakest) ~ {3}(strongest)
+        const formatPowerRange = (pow, critical) => (critical ?
+            (pow[2] ? "{0}({2})~{1}({3})" : "{0}({2})") :
+            (pow[2] ? "{0}~{1}" : "{0}")).format(
+                pow[0], pow[1], ...(critical || [])
+            );
+        const text = KC3Meta.term("PanelAirStrikeTip")
+            .format(formatPowerRange(normalPower, criticalPower),
+                isContact ? KC3Meta.term("BattleContact") : "");
+        return $("<p></p>")
+            .css("font-size", "11px")
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
+     * Collect battle conditions from current battle node if available.
+     * Do not fall-back to default value here if not available, leave it to appliers.
+     * @return an object contains battle properties we concern at.
+     */
+    const collectBattleConditions = () => {
+        const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
+                KC3SortieManager.currentNode() : {};
+        const playerCombinedFleetType = PlayerManager.combinedFleet;
+        const isEnemyCombined = currentNode.enemyCombined;
+        const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
+        const apiFormation = rawApiData.api_formation || [];
+        // extract raw value from KCSAPI result because values in Node are translated
+        const engagementId = apiFormation[2];
+        const formationId = apiFormation[0];
+        const enemyFormationId = apiFormation[1];
+        const airBattleId = Object.getSafePath(currentNode.battleDay, "api_kouku.api_stage1.api_disp_seiku");
+        const contactPlaneId = currentNode.fcontactId;
+        const isStartFromNight = currentNode.startsFromNight;
+        return {
+            engagementId,
+            formationId,
+            enemyFormationId,
+            airBattleId,
+            contactPlaneId,
+            playerCombinedFleetType,
+            isEnemyCombined,
+            isStartFromNight
+        };
+    };
+
+    /**
      * @return total resupply cost of all land bases.
      * @see PlayerManager.bases
      * @see LandBase.calcResupplyCost
@@ -288,6 +376,8 @@
     window.KC3Calc = Object.assign(publicApi, {
         getFleetsFighterPowerText,
         buildFleetsContactChanceText,
+        buildFleetsAirstrikePowerText,
+        collectBattleConditions,
         
         getLandBasesResupplyCost,
         getLandBasesSortieCost,

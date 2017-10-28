@@ -979,7 +979,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.airstrikePower = function(combinedFleetFactor = 0,
 			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
-		let totalPower = [0, 0, false];
+		const totalPower = [0, 0, false];
 		if(!this.rosterId || !this.masterId) { return totalPower; }
 		// no plane can be equipped on ex-slot for now
 		this.equipment(false).forEach((gear, i) => {
@@ -994,7 +994,7 @@ KC3改 Ship Object
 				isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical).power) : 0
 			];
 			totalPower[0] += postCapped[0];
-			totalPower[1] = isRange ? totalPower[1] + postCapped[1] : totalPower[0];
+			totalPower[1] += isRange ? postCapped[1] : postCapped[0];
 			totalPower[2] = totalPower[2] || isRange;
 		});
 		return totalPower;
@@ -1241,31 +1241,10 @@ KC3改 Ship Object
 	 * Collect battle conditions from current battle node if available.
 	 * Do not fall-back to default value here if not available, leave it to appliers.
 	 * @return {Object} an object contains battle properties we concern at.
+	 * @see CalculatorManager.collectBattleConditions
 	 */
 	KC3Ship.prototype.collectBattleConditions = function(){
-		const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-				KC3SortieManager.currentNode() : {};
-		const playerCombinedFleetType = PlayerManager.combinedFleet;
-		const isEnemyCombined = currentNode.enemyCombined;
-		const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
-		const apiFormation = rawApiData.api_formation || [];
-		// extract raw value from KCSAPI result because values in Node are translated
-		const engagementId = apiFormation[2];
-		const formationId = apiFormation[0];
-		const enemyFormationId = apiFormation[1];
-		const airBattleId = Object.getSafePath(currentNode.battleDay, "api_kouku.api_stage1.api_disp_seiku");
-		const contactPlaneId = currentNode.fcontactId;
-		const isStartFromNight = currentNode.startsFromNight;
-		return {
-			engagementId,
-			formationId,
-			enemyFormationId,
-			airBattleId,
-			contactPlaneId,
-			playerCombinedFleetType,
-			isEnemyCombined,
-			isStartFromNight
-		};
+		return KC3Calc.collectBattleConditions();
 	};
 
 	/**
