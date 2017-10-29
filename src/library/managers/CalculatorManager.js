@@ -169,12 +169,12 @@
             const escortFleetPower = escortFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId);
             normalPower[0] += escortFleetPower[0];
             normalPower[1] += escortFleetPower[1];
-            normalPower[2] |= escortFleetPower[2];
+            normalPower[2] = normalPower[2] || escortFleetPower[2];
             if(ConfigManager.powerCritical) {
                 const escortFleetCritical = escortFleet.airstrikePower(combinedFleetMod, forJetAssault, contactPlaneId, true);
                 criticalPower[0] += escortFleetCritical[0];
                 criticalPower[1] += escortFleetCritical[1];
-                criticalPower[2] |= escortFleetCritical[2];
+                criticalPower[2] = criticalPower[2] || escortFleetCritical[2];
             }
         }
         // critical power array represents total values if critical triggered by all attackers,

@@ -58,7 +58,7 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
-		if( myExItem && myExItem.masterId > 0 ) {
+		if( myExItem.exists() ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", "/assets/img/items/"+myExItem.master().api_type[3]+".png")
 				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
@@ -385,7 +385,7 @@ KC3改 Ship Box for Natsuiro theme
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				
 				// Unknown item
-				if(thisGear.masterId === 0){
+				if(thisGear.isDummy()){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 						"/assets/img/ui/empty.png");
 					return false;

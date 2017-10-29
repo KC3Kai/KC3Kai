@@ -601,7 +601,7 @@ Contains summary information about a fleet and its 6 ships
 				contactPlaneId, isCritical);
 			totalPower[0] += shipPower[0];
 			totalPower[1] += shipPower[1];
-			totalPower[2] |= shipPower[2];
+			totalPower[2] = totalPower[2] || shipPower[2];
 		});
 		return totalPower;
 	};
@@ -694,7 +694,7 @@ Contains summary information about a fleet and its 6 ships
 				totalCost.ammo += cost.ammo;
 				totalCost.steel += cost.steel;
 				totalCost.bauxite += cost.bauxite;
-				totalCost.hasMarried |= shipObj.isMarried();
+				totalCost.hasMarried = totalCost.hasMarried || shipObj.isMarried();
 			}
 		});
 		return totalCost;
@@ -1018,7 +1018,7 @@ Contains summary information about a fleet and its 6 ships
 		// iterate all ship slots, even some are empty
 		Array.numbers(0, 5).map(i => this.ship(i)).forEach(shipObj => {
 			// count for empty slots or ships retreated
-			if(shipObj.rosterId <= 0 || shipObj.didFlee) {
+			if(shipObj.isDummy() || shipObj.didFlee) {
 				emptyShipSlot += 1;
 			} else {
 				// sum ship's naked los
@@ -1027,7 +1027,7 @@ Contains summary information about a fleet and its 6 ships
 				// iterate ship's equipment including ex-slot
 				let equipTotal = 0;
 				shipObj.equipment(true).forEach(gearObj => {
-					if (gearObj.itemId > 0 && gearObj.masterId > 0) {
+					if (gearObj.exists()) {
 						const itemType = gearObj.master().api_type[2];
 						const itemLos = gearObj.master().api_saku;
 						const multiplier = multipliers[itemType] || defaultMultiplier;
@@ -1248,7 +1248,7 @@ Contains summary information about a fleet and its 6 ships
 			var ReturnObj = [];
 			var self = this;
 			$.each(this.ships, function(index, rosterId){
-				if(rosterId > -1){
+				if(rosterId > 0){
 					var ship = self.ship(index);
 					var nakedStats = ship.nakedStats();
 					ReturnObj.push({

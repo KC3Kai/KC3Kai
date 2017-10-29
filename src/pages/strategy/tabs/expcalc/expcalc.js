@@ -39,7 +39,6 @@
 			});
 
 			this.goalTemplates = GoalTemplateManager.load();
-			//console.debug("maplist:", this.maplist);
 		},
 
 		/* RELOAD
@@ -47,6 +46,14 @@
 		---------------------------------*/
 		reload :function(){
 			KC3ShipManager.load();
+			// clean grind data of non-exists ship(s)
+			var isCleaned = false;
+			Object.keys(this.goals).forEach(key => {
+				if(KC3ShipManager.get(key.slice(1)).isDummy()) {
+					isCleaned |= delete this.goals[key];
+				}
+			});
+			if(isCleaned) this.save();
 		},
 
 		computeNextLevel: function(masterId, currentLevel) {
@@ -287,8 +294,7 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					
 					var goalLevel = 
 						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
@@ -307,8 +313,7 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
 					// If can be remodelled (without convert remodels)
 					if (nextLevels !== false &&
@@ -650,7 +655,6 @@
 
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
-				//window.location.reload();
 
 				$(".ship_value" , editingBox).show();
 				$(".ship_input" , editingBox).hide();
@@ -778,6 +782,7 @@
 				}
 
 				this.goals["s"+ThisShip.rosterId] = grindData;
+				this.save();
 			}else{
 
 			}

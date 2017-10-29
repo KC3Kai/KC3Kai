@@ -1344,7 +1344,7 @@
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
@@ -1359,7 +1359,7 @@
 
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
@@ -1442,7 +1442,7 @@
 				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
 				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
@@ -1777,7 +1777,7 @@
 								//console.debug("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
-								if(itemObj.itemId <= 0 || itemObj.master() === false) {
+								if(itemObj.isDummy()) {
 									$("div", planeBox).remove();
 									return;
 								}
@@ -3503,7 +3503,7 @@
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			if(data.gearObj.masterId > 0){
+			if(data.gearObj.exists()){
 				$(".activity_gunfit .fit_gear_pic img").attr("src",
 					"/assets/img/items/" + data.gearObj.master().api_type[3] + ".png");
 				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name())
