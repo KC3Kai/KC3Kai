@@ -983,19 +983,21 @@ KC3改 Ship Object
 		if(!this.rosterId || !this.masterId) { return totalPower; }
 		// no plane can be equipped on ex-slot for now
 		this.equipment(false).forEach((gear, i) => {
-			const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
-			const isRange = !!power[2];
-			const capped = [
-				this.applyPowerCap(power[0], "Day", "Aerial").power,
-				isRange ? this.applyPowerCap(power[1], "Day", "Aerial").power : 0
-			];
-			const postCapped = [
-				Math.floor(this.applyPostcapModifiers(capped[0], "Aerial", undefined, contactPlaneId, isCritical).power),
-				isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical).power) : 0
-			];
-			totalPower[0] += postCapped[0];
-			totalPower[1] += isRange ? postCapped[1] : postCapped[0];
-			totalPower[2] = totalPower[2] || isRange;
+			if(this.slots[i] > 0 && gear.isAirstrikeAircraft()) {
+				const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
+				const isRange = !!power[2];
+				const capped = [
+					this.applyPowerCap(power[0], "Day", "Aerial").power,
+					isRange ? this.applyPowerCap(power[1], "Day", "Aerial").power : 0
+				];
+				const postCapped = [
+					Math.floor(this.applyPostcapModifiers(capped[0], "Aerial", undefined, contactPlaneId, isCritical).power),
+					isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "Aerial", undefined, contactPlaneId, isCritical).power) : 0
+				];
+				totalPower[0] += postCapped[0];
+				totalPower[1] += isRange ? postCapped[1] : postCapped[0];
+				totalPower[2] = totalPower[2] || isRange;
+			}
 		});
 		return totalPower;
 	};
