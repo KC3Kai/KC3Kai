@@ -245,6 +245,9 @@ Contains summary information about a fleet and its 6 ships
 				ss.ac = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
+			} else {
+				// asw with equipment is a special case
+				ss.as = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw();
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;

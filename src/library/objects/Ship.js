@@ -573,10 +573,10 @@ KC3改 Ship Object
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 10, 12, 13, 41, 45, 47];
+		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
-				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
+				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
 			).reduce((acc, v) => acc + v, 0);
 		return equipmentTotalAsw;
 	};
@@ -1039,6 +1039,7 @@ KC3改 Ship Object
 	/**
 	 * Get pre-cap carrier night aerial attack power of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#nightAS
 	 */
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
 		if(this.isDummy()) { return 0; }
@@ -1060,14 +1061,14 @@ KC3改 Ship Object
 				const isLegacyArkRoyal = isThisArkRoyal && noNightAvPersonnel;
 				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
-				if(isNightPlane) {
+				if(isNightPlane && slot > 0) {
+					// assume all master stats hold value 0 by default
 					equipTotals.fp += master.api_houg;
 					equipTotals.tp += master.api_raig;
 					if(!isLegacyArkRoyal) {
-						// verification WIP
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
-						const ftaPower = master.api_houg + master.api_raig + master.api_tais;
-						equipTotals.slotBonus += Math.sqrt(slot) * ftaPower * (isNightAircraftType ? 0.45 : 0.3);
+						const ftbaPower = master.api_houg + master.api_raig + master.api_baku + master.api_tais;
+						equipTotals.slotBonus += Math.sqrt(slot) * ftbaPower * (isNightAircraftType ? 0.45 : 0.3);
 					}
 					equipTotals.improveBonus += gear.attackPowerImprovementBonus("yasen");
 				}
