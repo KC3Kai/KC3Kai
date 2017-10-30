@@ -683,6 +683,22 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Get number of some equipment (aircraft usually) equipped on non-0 slot.
+	 */
+	KC3Ship.prototype.countNonZeroSlotEquipment = function(masterId, isExslotIncluded = false) {
+		return this.findEquipmentById(masterId, isExslotIncluded)
+			.reduce((acc, v, i) => acc + ((!!v && this.slots[i] > 0) & 1), 0);
+	};
+
+	/**
+	 * Get number of some specific types of equipment (aircraft usually) equipped on non-0 slot.
+	 */
+	KC3Ship.prototype.countNonZeroSlotEquipmentType = function(typeIndex, typeValue, isExslotIncluded = false) {
+		return this.findEquipmentByType(typeIndex, typeValue, isExslotIncluded)
+			.reduce((acc, v, i) => acc + ((!!v && this.slots[i] > 0) & 1), 0);
+	};
+
+	/**
 	 * Get number of drums held by this ship.
 	 */
 	KC3Ship.prototype.countDrums = function(){
@@ -1206,17 +1222,39 @@ KC3改 Ship Object
 		// Applied to open airstrike and shelling air attack including anti-sub
 		let proficiencyCriticalModifier = 1;
 		if(isCritical && (isAirAttack || warfareType === "Aerial")) {
-			// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
-			const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
-			this.equipment(false).forEach((g, i) => {
-				if(g.isAirstrikeAircraft()) {
-					const aceLevel = g.ace || 0;
-					const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-					let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
-					if(i > 0) mod /= 2;
-					proficiencyCriticalModifier += mod;
-				}
-			});
+			if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 7) {
+				// special proficiency critical modifier for CVCI
+				// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
+				const firstSlotType = (cutinType => {
+					switch(cutinType) {
+						case "CutinFDBTB": return [6, 7, 8];
+						case "CutinDBDBTB":
+						case "CutinDBTB": return [7, 8];
+						default: return [];
+					}
+				})(daySpecialAttackType[2]);
+				const hasNonZeroSlotCaptainPlane = (type2Ids) => {
+					const firstGear = this.equipment(0);
+					return this.slots[0] > 0 && firstGear.exists() &&
+						type2Ids.includes(firstGear.master().api_type[2]);
+				};
+				// detail modifier affected by (internal) proficiency under verification
+				// simply use max modifier (+0.1 / +0.25) here
+				proficiencyCriticalModifier += 0.1;
+				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
+			} else {
+				// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
+				const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
+				this.equipment(false).forEach((g, i) => {
+					if(g.isAirstrikeAircraft()) {
+						const aceLevel = g.ace || 0;
+						const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+						let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+						if(i > 0) mod /= 2;
+						proficiencyCriticalModifier += mod;
+					}
+				});
+			}
 		}
 		
 		// TODO
@@ -1584,12 +1622,13 @@ KC3改 Ship Object
 			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack", 1.2];
 			// btw, ["Cutin", 1, "Laser"] no longer exists now
 		} else if(trySpTypeFirst && isThisCarrier && isAirSuperiorityBetter) {
-			// day time carrier shelling cut-in, modifiers verification WIP
+			// day time carrier shelling cut-in
+			// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
 			// https://twitter.com/_Kotoha07/status/907598964098080768
 			// https://twitter.com/arielugame/status/908343848459317249
-			const fighterCnt = this.countEquipmentType(2, 6);
-			const diveBomberCnt = this.countEquipmentType(2, 7);
-			const torpedoBomberCnt = this.countEquipmentType(2, 8);
+			const fighterCnt = this.countNonZeroSlotEquipmentType(2, 6);
+			const diveBomberCnt = this.countNonZeroSlotEquipmentType(2, 7);
+			const torpedoBomberCnt = this.countNonZeroSlotEquipmentType(2, 8);
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
 				return ["Cutin", 7, "CutinFDBTB", 1.25];
 			if(diveBomberCnt >= 2 && torpedoBomberCnt >= 1)
@@ -1715,9 +1754,9 @@ KC3改 Ship Object
 				const hasCapableRadar = [0,1,2,3,4].some(slot => isHighAccRadar(this.equipment(slot).master()));
 				const hasSkilledLookout = this.hasEquipmentType(2, 39);
 				const smallMainGunCnt = this.countEquipmentType(2, 1);
-				// modifiers verification still WIP
+				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(hasCapableRadar && hasSkilledLookout)
-					return ["Cutin", 8, "CutinTorpRadarLookout", 1.2];
+					return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
 				if(hasCapableRadar && smallMainGunCnt >= 1)
 					return ["Cutin", 7, "CutinMainTorpRadar", 1.3];
 			}
@@ -1742,14 +1781,14 @@ KC3改 Ship Object
 				const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 				const isThisSaratogaMk2 = this.masterId === 545;
 				if(isThisSaratogaMk2 || hasNightAvPersonnel) {
-					// verification still WIP
+					// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 					// https://twitter.com/Nishisonic/status/911143760544751616
-					const nightFighterCnt = this.countEquipmentType(3, 45);
-					const nightTBomberCnt = this.countEquipmentType(3, 46);
+					const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
+					const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
 					// Fight Bomber Iwai
-					const specialDBomberCnt = this.countEquipment([154]);
+					const specialDBomberCnt = this.countNonZeroSlotEquipment([154]);
 					// Swordfish variants
-					const specialTBomberCnt = this.countEquipment([242, 243, 244]);
+					const specialTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
 					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFNTB", 1.25];
 					if(nightFighterCnt >= 3) return ["Cutin", 6, "CutinNFNFNF", 1.18];
 					if(nightFighterCnt >= 2 && specialDBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFFBI", 1.18];
