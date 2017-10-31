@@ -76,9 +76,6 @@
 		};
 	}(jQuery));
 
-	// Experience Calculation
-	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
-
 	// Reusable contents of Error Report
 	var errorReport = {
 		title: "",
@@ -435,22 +432,6 @@
 				}
 			});
 		}
-
-		// Get map exp rewards
-		$.ajax({
-			dataType: "JSON",
-			url : '../../../../data/exp_map.json',
-			success: function(mapData){
-				$.merge(mapexp,mapData);
-				$.each(mapexp, function(worldNum, mapNums){
-					$.each(mapNums, function(mapNum, mapExp){
-						if(mapExp > 0){
-							maplist[worldNum+"-"+(mapNum+1)] = mapExp;
-						}
-					});
-				});
-			}
-		});
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
@@ -2539,32 +2520,19 @@
 			// Show experience calculation if leveling global found in sent fleet
 			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
 				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
-				let expJustGained = data.api_get_ship_exp;
-				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				let newGoals = JSON.parse(localStorage.goals || "{}");
-				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(typeof newGoals["s"+rosterId] != "undefined"){
-						let grindData = newGoals["s"+rosterId];
-						if(grindData.length===0){ return true; }
-						let ThisShip = KC3ShipManager.get( rosterId );
-						// we are at battle result page and old ship exp data has not yet been updated,
-						// so here we need to add  "expJustGained" to get the correct exp.
-						// also we don't update ship.exp here, as it will be automatically sync-ed
-						// once we back to port or continue sortie.
-						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
-						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
-						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
-						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
-						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
-						expPerSortie = expPerSortie * rankFactors[grindData[4]];
-						console.log("Ship exp goal", rosterId, ThisShip.name(), [expLeft, expPerSortie], Math.ceil(expLeft / expPerSortie));
-						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
-							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
-							.delay( 5000 )
-							.fadeOut(1000, function(){ $(this).remove(); } );
-					}
+				const expJustGained = data.api_get_ship_exp;
+				const currentFleet = PlayerManager.fleets[selectedFleet-1];
+				const levelingGoals = localStorage.getObject("goals") || {};
+				currentFleet.ship(function(rosterId, index, shipData){
+					const grindGoal = KC3Calc.getShipLevelingGoal(shipData, undefined, levelingGoals, expJustGained[index + 1]);
+					// if no goal defined or the ship has reached the goal, skip it
+					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
+					console.log("Ship exp goal", shipData.name(), grindGoal);
+					$("<div />").addClass("expNotice").text( grindGoal.battlesLeft )
+						.appendTo("#ShipBox" + rosterId + " .ship_exp_label")
+						.delay( 5000 )
+						.fadeOut(1000, function(){ $(this).remove(); } );
 				});
-
 			}
 		},
 
