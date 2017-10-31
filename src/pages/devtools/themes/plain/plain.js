@@ -122,7 +122,7 @@
 
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
-			console.log("Find available fleet: " + String(selectedFleet));
+			//console.debug("Find available fleet: " + String(selectedFleet));
 
 			if (needTabSwith)
 				$("#atab_expeditionPlanner").trigger("click");
@@ -185,9 +185,9 @@
 						}).responseText);
 							
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
-						console.log(KC3Meta._quests);
+						console.debug(KC3Meta._quests);
 					}else{
-						console.log("no new quests...");
+						console.debug("no new quests...");
 					}
 				}
 			});
@@ -306,7 +306,7 @@
 		- use end time difference not remaining decrements for accuracy against lag
 		--------------------------------------------*/
 		window.KC3DevtoolsMoraleTimer = setInterval(function(){
-			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
+			// console.debug(moraleClockValue, moraleClockEnd, moraleClockRemain);
 			if(moraleClockEnd > 0){
 				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
 				if(moraleClockRemain > 0){
@@ -597,7 +597,7 @@
 		},
 		
 		GameUpdate: function(data){
-			console.log("GameUpdate triggered");
+			//console.debug("GameUpdate triggered");
 			$("#gameUpdate").hide();
 			
 			if(data[0] > 0 && data[1]>0){
@@ -846,7 +846,7 @@
 				
 			}
 			
-			console.log(FleetSummary);
+			//console.debug(FleetSummary);
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );
@@ -911,7 +911,7 @@
 					$(".module.status .status_morale .status_text").addClass("bad");
 					
 					if(FleetSummary.lowestMorale != moraleClockValue){
-						// console.log("new morale time", FleetSummary.lowestMorale, MoraleTime);
+						//console.debug("new morale time", FleetSummary.lowestMorale, MoraleTime);
 						moraleClockValue = FleetSummary.lowestMorale;
 						moraleClockEnd = (new Date()).getTime() + (MoraleTime*1000);
 					}
@@ -1089,10 +1089,10 @@
 					// If kill-based gauge
 					}else{
 						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
-						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
-						console.log("thisMapId", thisMapId);
-						console.log("KC3Meta", KC3Meta._gauges);
-						console.log("totalKills", totalKills);
+						//console.debug("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
+						//console.debug("thisMapId", thisMapId);
+						//console.debug("KC3Meta", KC3Meta._gauges);
+						//console.debug("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){
 							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
@@ -1135,7 +1135,7 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 			
-			console.log("natsuiro process node", thisNode);
+			//console.debug("natsuiro process node", thisNode);
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
@@ -1175,7 +1175,6 @@
 					
 				// Selection node
 				case "select":
-					console.log("natsuiro should show selection node");
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
 					$(".module.activity .node_type_text").text(KC3Meta.term("BattleSelect")+
 						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
@@ -1489,7 +1488,7 @@
 			}
 			
 			// Show resource used
-			console.log(data);
+			//console.debug(data);
 			$(".activity_crafting .used1").text( data.resourceUsed[0] );
 			$(".activity_crafting .used2").text( data.resourceUsed[1] );
 			$(".activity_crafting .used3").text( data.resourceUsed[2] );
@@ -1505,7 +1504,7 @@
 		CraftShip: function(data){},
 		
 		Modernize: function(data){
-			console.log("MODERNIZE TRIGGER", data);
+			//console.debug("MODERNIZE TRIGGER", data);
 			
 			var ModShip = KC3ShipManager.get(data.rosterId);
 			
@@ -1573,7 +1572,7 @@
 			}
 			
 			// Show opponent ships faces
-			console.log(thisPvP.eships);
+			//console.debug(thisPvP.eships);
 			$.each(thisPvP.eships, function(index, eshipId){
 				var eParam = thisPvP.eParam[index];
 				
@@ -1850,12 +1849,17 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
+				var los = shipInst.ls[0], aa = shipInst.aa[0];
+				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
 					level : level,
-					drumCount : drumCount
+					drumCount : drumCount,
+					asw : asw,
+					los : los,
+					aa : aa
 				};
 			});
 
@@ -1868,9 +1872,9 @@
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
 			
 			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
-			// console.log(JSON.stringify(ExpdReqPack));
+			//console.debug(JSON.stringify(ExpdReqPack));
 			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
-			// console.log(JSON.stringify(ExpdCheckerResult));
+			//console.debug(JSON.stringify(ExpdCheckerResult));
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);

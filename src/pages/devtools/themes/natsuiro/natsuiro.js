@@ -1344,7 +1344,7 @@
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
@@ -1359,7 +1359,7 @@
 
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
@@ -1442,7 +1442,7 @@
 				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
 				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
@@ -1525,9 +1525,11 @@
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
-				.attr("titlealt", KC3Calc.buildFleetsContactChanceText(
+				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
+					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
+				) + KC3Calc.buildFleetsContactChanceText(
 					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
-					isCombinedAirView ? 8 : 5
+					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
@@ -1775,7 +1777,7 @@
 								//console.debug("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
-								if(itemObj.itemId <= 0 || itemObj.master() === false) {
+								if(itemObj.isDummy()) {
 									$("div", planeBox).remove();
 									return;
 								}
@@ -3150,7 +3152,8 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
-				var asw = shipInst.as[0], los = shipInst.ls[0], aa = shipInst.aa[0];
+				var los = shipInst.ls[0], aa = shipInst.aa[0];
+				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
 				return {
 					ammo : 0,
 					morale : 0,
@@ -3386,9 +3389,10 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE")) {
+						if((selectedExpedition <= 40 || selectedExpedition === 102) &&
+							dataReq[index].stypeOneOf.includes("DE")) {
 							shipReqBox.attr("title",
-								// alternative DE/CVE patterns for exped 4, 5 and 9:
+								// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
@@ -3501,7 +3505,7 @@
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			if(data.gearObj.masterId > 0){
+			if(data.gearObj.exists()){
 				$(".activity_gunfit .fit_gear_pic img").attr("src",
 					"/assets/img/items/" + data.gearObj.master().api_type[3] + ".png");
 				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name())

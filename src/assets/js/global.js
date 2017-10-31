@@ -830,6 +830,8 @@ Storage.prototype.getObject = function(key) {
  * https://developer.chrome.com/extensions/storage
  * They are also different for other browser engines:
  * https://en.wikipedia.org/wiki/Web_storage#Storage_size
+ * From Chromium 61, localStorage is switched to leveldb backing store, but 5M quota unchanged.
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=586194
  **/
 Storage.prototype.quotaLength = 1024 * 1024 * 5;
 // Both length of key and value should be taken into account,

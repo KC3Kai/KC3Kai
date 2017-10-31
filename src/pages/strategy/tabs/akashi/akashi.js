@@ -152,7 +152,7 @@
 			
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
-			var ShipBox, ShipId;
+			var ShipBox, shipId;
 			var ResBox, improveList;
 			var consumedItem, upgradedItem;
 			
@@ -319,20 +319,20 @@
 				hasGear = self.gears.indexOf(parseInt(itemId, 10)) > -1;
 				
 				for(ctr in shipList){
-					ShipId = shipList[ctr];
+					shipId = shipList[ctr];
 					
 					// If player has any of needed ships, check for marking
-					if(self.ships.indexOf( ShipId ) > -1){
+					if(self.ships.indexOf( shipId ) > -1){
 						hasShip = true;
 					}
 					
 					// Add to ship list
 					ShipBox = $(".tab_akashi .factory .eq_ship").clone();
-					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(ShipId) );
-					$(".eq_ship_icon img", ShipBox).attr("alt", ShipId );
+					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false) );
+					$(".eq_ship_icon img", ShipBox).attr("alt", shipId );
 					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
-					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
-					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(ShipId, KC3Meta.shipName( KC3Master.ship(ShipId).api_name )) );
+					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(shipId).api_name ) );
+					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName( KC3Master.ship(shipId).api_name )) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
@@ -367,7 +367,7 @@
 										if(!remodel || !remodel.prev
 											|| reqArr[1].indexOf(remodel.prev) < 0){
 											shipIcons.append(
-												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId))
+												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
 												.width("16px").height("16px")
 											);
 										}
