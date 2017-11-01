@@ -1,7 +1,7 @@
 /* ShipManager.js
 KC3改 Ship Manager
 
-Managesship roster and does indexing for data access.
+Manages ship roster and does indexing for data access.
 Saves and loads list to and from localStorage
 */
 (function(){
@@ -84,7 +84,7 @@ Saves and loads list to and from localStorage
 						cShip[key] = tempData[key];
 				});
 				
-				// enforce freshify sortie0 placeholder
+				// enforce fresh sortie0 placeholder
 				(function(){
 					var szs = 'sortie0';
 					var ls  = cShip.lastSortie;
@@ -193,7 +193,7 @@ Saves and loads list to and from localStorage
 			this.save();
 		},
 		
-		// Remove ship from the list, scrapped, mod-fodded, or sunk
+		// Remove ship from the list, scrapped, mod-fodder, or sunk
 		remove :function( rosterId ){
 			console.log("Removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
