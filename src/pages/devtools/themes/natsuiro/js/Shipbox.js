@@ -58,7 +58,7 @@ KC3改 Ship Box for Natsuiro theme
 		
 		// Item on 5th slot
 		var myExItem = this.shipData.exItem();
-		if( myExItem && myExItem.masterId > 0 ) {
+		if( myExItem.exists() ) {
 			$(".ex_item .gear_icon img", this.element)
 				.attr("src", "/assets/img/items/"+myExItem.master().api_type[3]+".png")
 				.attr("title", myExItem.htmlTooltip(undefined, this.shipData))
@@ -158,18 +158,26 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
+		const shipMaster = this.shipData.master();
+		const shipGoal = KC3Calc.getShipLevelingGoal(this.shipData);
 		$(".ship_level span.value", this.element)
 			.text( this.shipData.level )
+			.toggleClass("goaled", this.shipData.level >= shipGoal.targetLevel)
 			.attr( "title", (function(shipData){
-				var mst = shipData.master();
-				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
-					[KC3Meta.term("PanelPossibleRemodel")] :
-					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
-			})(this.shipData) ).lazyInitTooltip()
-			.toggleClass("goaled", (function(shipData){
-				var shipGoal = (localStorage.getObject("goals") || {})["s" + shipData.rosterId];
-				return Array.isArray(shipGoal) && shipData.level >= shipGoal[0];
-			})(this.shipData));
+				let title = "";
+				title += shipMaster.api_afterlv ?
+					(shipData.level >= shipMaster.api_afterlv ? KC3Meta.term("PanelPossibleRemodel")
+						: KC3Meta.term("PanelNextRemodelLv").format(shipMaster.api_afterlv))
+					: "";
+				const nextGoal = isFinite(shipGoal.battlesLeft) && shipGoal.battlesLeft > 0 ?
+					KC3Meta.term("PanelNextLvGoalLeft")
+						.format(shipGoal.targetLevel, shipGoal.battlesLeft) : "";
+				if(nextGoal){
+					if(title) title += "\n";
+					title += nextGoal;
+				}
+				return title;
+			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
@@ -385,7 +393,7 @@ KC3改 Ship Box for Natsuiro theme
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				
 				// Unknown item
-				if(thisGear.masterId === 0){
+				if(thisGear.isDummy()){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).attr("src",
 						"/assets/img/ui/empty.png");
 					return false;

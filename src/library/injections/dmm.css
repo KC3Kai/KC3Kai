@@ -44,7 +44,7 @@
 .kc3 .ol_quest {
 	width:629px;
 	height:64px;
-	margin:0px 0px 4px 0px;
+	margin:0px 0px 4px 0px !important;
 }
 .kc3 .ol_quest .icon {
 	width:72px;
@@ -56,14 +56,14 @@
 	height:40px;
 	background:#E4D5C2;
 	float:left;
-	margin:2px 0px 0px 0px;
+	margin:2px 0px 0px 0px !important;
 }
 .kc3 .ol_quest .content .name {
 	width:431px;
 	height:13px;
 	line-height:13px;
 	font-size:13px;
-	margin:2px 0px 2px 0px;
+	margin:2px 0px 2px 0px !important;
 }
 .kc3 .ol_quest .content .desc {
 	width:431px;
@@ -76,7 +76,7 @@
 	width:60px;
 	height:40px;
 	line-height:60px;
-	margin:2px 0px 0px 0px;
+	margin:2px 0px 0px 0px !important;
 	float:left;
 	font-size:18px;
 	font-weight:bold;
@@ -94,7 +94,7 @@
 	height: 24px;
 	background: rgba(150,190,230, 0.6);
 	float: right;
-	margin: 20px -26px 0px 0px;
+	margin: 20px -26px 0px 0px !important;
 	position:relative;
 	border-radius: 15px;
 	line-height: 24px;
@@ -161,8 +161,8 @@
 }
 .kc3 .overlay_markers .letter {
 	position:absolute;
-	margin:0;
-	padding:0;
+	margin:0 !important;
+	padding:0 !important;
 	float:left;
 	line-height:24px;
 	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
@@ -173,8 +173,8 @@
 }
 .kc3 .overlay_markers .icon {
 	position:absolute;
-	margin:0;
-	padding:0;
+	margin:0 !important;
+	padding:0 !important;
 	float:left;
 	pointer-events:none;
 }
@@ -184,7 +184,7 @@
 .kc3 .overlay_idle {
 	width:790px;
 	height:480px;
-	padding:445px 10px 0px 0px;
+	padding:445px 10px 0px 0px !important;
 	text-align:right;
 	font-size:22px;
 	color:#fff;

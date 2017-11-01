@@ -178,7 +178,7 @@
 			const equipDiv = $(".ship_equip_" + equipNum, shipRow);
 			if(gearId > -1){
 				const gear = KC3GearManager.get(gearId);
-				if(gear.itemId <= 0) {
+				if(gear.isDummy()) {
 					equipDiv.hide();
 					return;
 				}

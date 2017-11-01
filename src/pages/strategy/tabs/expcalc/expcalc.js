@@ -6,13 +6,8 @@
 	KC3StrategyTabs.expcalc.definition = {
 		tabSelf: KC3StrategyTabs.expcalc,
 		goals: {},
-		mapexp: [],
-		maplist: {},
-		shipexp: {},
 		goalTemplates: [], // to be initialized in "init"
-
 		rankNames: ["F", "E", "D", "C", "B", "A", "S", "SS" ],
-		rankFactors: [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
 
 		/* INIT
 		Prepares all data needed
@@ -23,23 +18,7 @@
 				this.goals = JSON.parse(localStorage.goals);
 			}
 
-			// Get map exp rewards
-			this.mapexp = JSON.parse($.ajax({
-				url : '../../../../data/exp_map.json',
-				async: false
-			}).responseText);
-
-			var self = this;
-			$.each(this.mapexp, function(worldNum, mapNums){
-				$.each(mapNums, function(mapNum, mapExp){
-					if(mapExp > 0){
-						self.maplist[worldNum+"-"+(mapNum+1)] = mapExp;
-					}
-				});
-			});
-
 			this.goalTemplates = GoalTemplateManager.load();
-			//console.debug("maplist:", this.maplist);
 		},
 
 		/* RELOAD
@@ -47,6 +26,14 @@
 		---------------------------------*/
 		reload :function(){
 			KC3ShipManager.load();
+			// clean grind data of non-exists ship(s)
+			var isCleaned = false;
+			Object.keys(this.goals).forEach(key => {
+				if(KC3ShipManager.get(key.slice(1)).isDummy()) {
+					isCleaned |= delete this.goals[key];
+				}
+			});
+			if(isCleaned) this.save();
 		},
 
 		computeNextLevel: function(masterId, currentLevel) {
@@ -287,8 +274,7 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					
 					var goalLevel = 
 						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
@@ -307,8 +293,7 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
 					// If can be remodelled (without convert remodels)
 					if (nextLevels !== false &&
@@ -328,9 +313,11 @@
 			var self = this;
 
 			// Add map list into the factory drop-downs
-			$.each(this.maplist, function(MapName, MapExp){
-				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
-				$(".tab_expcalc .factory .goal_map select").append("<option>"+MapName+"</option>");
+			$.each(KC3Meta.allMapsExp(), function(mapName, mapExp){
+				if(mapExp > 0){
+					$(".tab_expcalc .factory .ship_map select").append("<option>" + mapName + "</option>");
+					$(".tab_expcalc .factory .goal_map select").append("<option>" + mapName + "</option>");
+				}
 			});
 
 			var editingBox, mapSplit;
@@ -650,7 +637,6 @@
 
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
-				//window.location.reload();
 
 				$(".ship_value" , editingBox).show();
 				$(".ship_input" , editingBox).hide();
@@ -778,40 +764,33 @@
 				}
 
 				this.goals["s"+ThisShip.rosterId] = grindData;
-			}else{
-
+				this.save();
 			}
 
+			var shipGoal = KC3Calc.getShipLevelingGoal(ThisShip, grindData, this.goals);
 			// Target level
-			$(".ship_target .ship_value", goalBox).text( grindData[0] );
+			$(".ship_target .ship_value", goalBox).text( shipGoal.targetLevel );
 
 			// Experience Left
-			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
-			$(".ship_exp .ship_value", goalBox).text( expLeft );
-			goalBox.toggleClass("goaled", expLeft <= 0);
+			$(".ship_exp .ship_value", goalBox).text( shipGoal.expLeft );
+			goalBox.toggleClass("goaled", shipGoal.expLeft <= 0);
 
 			// Base Experience: MAP
-			$(".ship_map .ship_value", goalBox).text( grindData[1]+"-"+grindData[2] );
-			var expPerSortie = this.maplist[ grindData[1]+"-"+grindData[2] ];
+			$(".ship_map .ship_value", goalBox).text( shipGoal.grindMap );
 
 			// Exp Modifier: MVP
-			$(".ship_mvp .ship_value", goalBox).text( grindData[6]?"Yes":"No" );
-			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !grindData[6]);
-
-			if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
+			$(".ship_mvp .ship_value", goalBox).text( shipGoal.isMvp ? "Yes" : "No" );
+			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isMvp);
 
 			// Exp Modifier: FLAGSHIP
-			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
-			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !grindData[5]);
-
-			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
+			$(".ship_fs .ship_value", goalBox).text( shipGoal.isFlagship ? "Yes" : "No" );
+			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isFlagship);
 
 			// Exp Modifier: RANK
-			$(".ship_rank .ship_value", goalBox).text( this.rankNames[grindData[4]] );
-			expPerSortie = expPerSortie * this.rankFactors[grindData[4]];
+			$(".ship_rank .ship_value", goalBox).text( shipGoal.battleRank );
 
 			// RESULT: Battles Left
-			$(".ship_result .ship_value", goalBox).text( Math.ceil(expLeft / expPerSortie) );
+			$(".ship_result .ship_value", goalBox).text( shipGoal.battlesLeft );
 		}
 
 	};

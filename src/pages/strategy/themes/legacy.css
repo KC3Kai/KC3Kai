@@ -1332,11 +1332,11 @@ body {
 	color:#ccc;
 }
 .tab_fleet .fleet_ship .gear_stars {
-	border-radius:8px;
+	border-radius:0px 8px 8px 0px;
 	background:linear-gradient(to right, rgba(255,255,238,0) 0%, #ffe 30%);
 }
 .tab_fleet .fleet_ship .gear_ace {
-	border-radius:8px;
+	border-radius:0px 8px 8px 0px;
 	background:linear-gradient(to right, rgba(255,255,238,0) 0%, #ffe 20%);
 }
 .tab_fleet .fleet_ship .ship_index {

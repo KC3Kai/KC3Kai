@@ -1493,7 +1493,7 @@ Previously known as "Reactor"
 			
 			shipList.forEach(function(rosterId){
 				var shipData = KC3ShipManager.get(rosterId);
-				if(shipData.masterId > 0) {
+				if(shipData.exists()) {
 					shipData.getDefer()[1].reject();
 					shipData.getDefer()[2].reject();
 					shipData.pendingConsumption.costnull=[[
@@ -1607,7 +1607,7 @@ Previously known as "Reactor"
 							pendCond = shipData.pendingConsumption,
 							dataInd  = Object.keys(pendCond).indexOf('costnull'),
 							consDat  = [shipData.fuel,shipData.ammo,shipData.slots.reduce(function(x,y){return x+y;})];
-						if(shipData.masterId > 0) {
+						if(shipData.exists()) {
 							// if there's a change in ship supply
 							console.debug("Pending consumption for Exped ship", rosterId, dataInd, pendCond.costnull, consDat);
 							if(dataInd >= 0) {

@@ -76,9 +76,6 @@
 		};
 	}(jQuery));
 
-	// Experience Calculation
-	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
-
 	// Reusable contents of Error Report
 	var errorReport = {
 		title: "",
@@ -435,22 +432,6 @@
 				}
 			});
 		}
-
-		// Get map exp rewards
-		$.ajax({
-			dataType: "JSON",
-			url : '../../../../data/exp_map.json',
-			success: function(mapData){
-				$.merge(mapexp,mapData);
-				$.each(mapexp, function(worldNum, mapNums){
-					$.each(mapNums, function(mapNum, mapExp){
-						if(mapExp > 0){
-							maplist[worldNum+"-"+(mapNum+1)] = mapExp;
-						}
-					});
-				});
-			}
-		});
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
@@ -1344,7 +1325,7 @@
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
@@ -1359,7 +1340,7 @@
 
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
 								// Send combined fleet, get escort info
@@ -1442,7 +1423,7 @@
 				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
 				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
 				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(rosterId > -1){
+					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
@@ -1525,9 +1506,11 @@
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
-				.attr("titlealt", KC3Calc.buildFleetsContactChanceText(
+				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
+					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
+				) + KC3Calc.buildFleetsContactChanceText(
 					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
-					isCombinedAirView ? 8 : 5
+					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
@@ -1775,7 +1758,7 @@
 								//console.debug("PLANE", i, planeInfo);
 								
 								itemObj = KC3GearManager.get(planeInfo.api_slotid);
-								if(itemObj.itemId <= 0 || itemObj.master() === false) {
+								if(itemObj.isDummy()) {
 									$("div", planeBox).remove();
 									return;
 								}
@@ -2537,32 +2520,19 @@
 			// Show experience calculation if leveling global found in sent fleet
 			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
 				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
-				let expJustGained = data.api_get_ship_exp;
-				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				let newGoals = JSON.parse(localStorage.goals || "{}");
-				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(typeof newGoals["s"+rosterId] != "undefined"){
-						let grindData = newGoals["s"+rosterId];
-						if(grindData.length===0){ return true; }
-						let ThisShip = KC3ShipManager.get( rosterId );
-						// we are at battle result page and old ship exp data has not yet been updated,
-						// so here we need to add  "expJustGained" to get the correct exp.
-						// also we don't update ship.exp here, as it will be automatically sync-ed
-						// once we back to port or continue sortie.
-						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
-						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
-						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
-						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
-						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
-						expPerSortie = expPerSortie * rankFactors[grindData[4]];
-						console.log("Ship exp goal", rosterId, ThisShip.name(), [expLeft, expPerSortie], Math.ceil(expLeft / expPerSortie));
-						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
-							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
-							.delay( 5000 )
-							.fadeOut(1000, function(){ $(this).remove(); } );
-					}
+				const expJustGained = data.api_get_ship_exp;
+				const currentFleet = PlayerManager.fleets[selectedFleet-1];
+				const levelingGoals = localStorage.getObject("goals") || {};
+				currentFleet.ship(function(rosterId, index, shipData){
+					const grindGoal = KC3Calc.getShipLevelingGoal(shipData, undefined, levelingGoals, expJustGained[index + 1]);
+					// if no goal defined or the ship has reached the goal, skip it
+					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
+					console.log("Ship exp goal", shipData.name(), grindGoal);
+					$("<div />").addClass("expNotice").text( grindGoal.battlesLeft )
+						.appendTo("#ShipBox" + rosterId + " .ship_exp_label")
+						.delay( 5000 )
+						.fadeOut(1000, function(){ $(this).remove(); } );
 				});
-
 			}
 		},
 
@@ -3150,7 +3120,8 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
-				var asw = shipInst.as[0], los = shipInst.ls[0], aa = shipInst.aa[0];
+				var los = shipInst.ls[0], aa = shipInst.aa[0];
+				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
 				return {
 					ammo : 0,
 					morale : 0,
@@ -3386,9 +3357,10 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if(selectedExpedition <= 40 && dataReq[index].stypeOneOf.includes("DE")) {
+						if((selectedExpedition <= 40 || selectedExpedition === 102) &&
+							dataReq[index].stypeOneOf.includes("DE")) {
 							shipReqBox.attr("title",
-								// alternative DE/CVE patterns for exped 4, 5 and 9:
+								// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
@@ -3501,7 +3473,7 @@
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			if(data.gearObj.masterId > 0){
+			if(data.gearObj.exists()){
 				$(".activity_gunfit .fit_gear_pic img").attr("src",
 					"/assets/img/items/" + data.gearObj.master().api_type[3] + ".png");
 				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name())

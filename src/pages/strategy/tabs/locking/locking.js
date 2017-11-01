@@ -247,7 +247,7 @@
             const isShowCurrent = !!this.filterValues.equipIcons;
             if(equipId > 0 && isShowCurrent) {
                 const gear = KC3GearManager.get(equipId);
-                if(gear.masterId > 0) {
+                if(gear.exists()) {
                     $("img", element)
                         .attr("src", `/assets/img/items/${gear.master().api_type[3]}.png`)
                         .attr("alt", gear.master().api_id)

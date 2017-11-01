@@ -14,11 +14,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		map_world: 0,
 		map_num: 0,
 		map_difficulty: 0,
-		nextNodeCount: 0,
 		hqExpGained: 0,
 		nodes: [],
 		boss: {},
-		onBossAvailable: false,
 		focusedFleet: [],
 		supportFleet: [],
 		fcfCheck: [],
@@ -39,7 +37,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.map_num = mapnum;
 			const thisMap = this.getCurrentMapData();
 			this.map_difficulty = world < 10 ? 0 : thisMap.difficulty || 0;
-			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
 			this.boss = {
 				info: false,
@@ -230,19 +227,20 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.boss.comp = comp;
 			this.boss.letters = [KC3Meta.nodeLetter(this.map_world, this.map_num, cellno)];
 			console.debug("Boss node info on start", this.boss);
-			// Init on boss node callback
-			const self = this;
-			this.onBossAvailable = this.onBossAvailable || function(nodeObj){
-				self.boss.edge      = nodeObj.id;
-				self.boss.formation = nodeObj.eformation;
-				self.boss.ships     = nodeObj.eships;
-				self.boss.lvls      = nodeObj.elevels;
-				self.boss.maxhps    = nodeObj.maxHPs.enemy;
-				self.boss.stats     = nodeObj.eParam;
-				self.boss.equip     = nodeObj.eSlot;
-				self.boss.info      = true;
-				console.log("Boss node reached", self.boss);
-			};
+		},
+		
+		onBossAvailable :function(nodeObj){
+			if(this.boss && nodeObj){
+				this.boss.edge      = nodeObj.id;
+				this.boss.formation = nodeObj.eformation;
+				this.boss.ships     = nodeObj.eships;
+				this.boss.lvls      = nodeObj.elevels;
+				this.boss.maxhps    = nodeObj.maxHPs.enemy;
+				this.boss.stats     = nodeObj.eParam;
+				this.boss.equip     = nodeObj.eSlot;
+				this.boss.info      = true;
+				console.log("Boss node reached", this.boss);
+			}
 		},
 		
 		currentNode :function(){
@@ -319,7 +317,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			
 			// According testing, boss node not able to be indicated since api_bosscell_no return random values even edge is still hidden
 			const bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
-			if(this.boss.letters && this.boss.letters.indexOf(bossLetter) < 0)
+			if(Array.isArray(this.boss.letters) && this.boss.letters.indexOf(bossLetter) < 0)
 				this.boss.letters.push(bossLetter);
 			console.debug("Next edge points to boss node", nodeData.api_bosscell_no, bossLetter);
 			
@@ -641,7 +639,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.map_world = 0;
 			this.map_num = 0;
 			this.map_difficulty = 0;
-			this.nextNodeCount = 0;
 			this.hqExpGained = 0;
 			this.boss = { info: false };
 			this.clearNodes();

@@ -1146,12 +1146,7 @@
 		/* Compute Derived Stats without Equipment
 		--------------------------------------------*/
 		getDerivedStatNaked :function(statName, equippedValue, shipObj){
-			shipObj.equipment(true).forEach(gear => {
-				if(gear.masterId > 0){
-					equippedValue -= gear.master()["api_" + statName];
-				}
-			});
-			return equippedValue;
+			return equippedValue - shipObj.equipmentTotalStats(statName, true);
 		},
 
 		/* Show cell contents of a mod stat
@@ -1189,7 +1184,7 @@
 			var element = $(".ship_equip_" + equipNum, cElm);
 			if(gearId > 0){
 				var gear = KC3GearManager.get(gearId);
-				if(gear.itemId <= 0){ element.hide(); return; }
+				if(gear.isDummy()){ element.hide(); return; }
 				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
 					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
