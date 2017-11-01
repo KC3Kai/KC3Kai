@@ -369,6 +369,52 @@
         return [totalPower, totalCapacity, noAirPowerCapacity, reconCapacity, exceptions];
     };
 
+    /**
+     * Get leveling goal data for specific ship, which defined at Strategy Room Leveling page.
+     *
+     * @param {Object} shipObj - KC3Ship instance
+     * @param {Array} shipGoalConfig - leveling goal config for the ship, will fetch from all configs if omitted.
+     * @param {Object} allGoalsConfig - all configs of all goals, will fetch from localStorage if omitted.
+     * @param {number} expJustGained - ship exp just gained from a battle result screen.
+     *                  Because ship exp data has not yet been updated,
+     *                  so we need to add it to get the correct current exp.
+     * @return {Object} calculated and converted data object explains defined leveling goal.
+     *          will return a pseudo instance if no goal defined for the ship.
+     * @see expcalc.js where defines ship leveling goal config array and manage all ship configs.
+     */
+    const getShipLevelingGoal = (shipObj,
+            shipGoalConfig,
+            allGoalsConfig = localStorage.getObject("goals"),
+            expJustGained = 0) => {
+        const goalResult = {
+            targetLevel: undefined,
+            expLeft: undefined,
+            battlesLeft: Infinity
+        };
+        const shipGoal = Array.isArray(shipGoalConfig) ? shipGoalConfig :
+            (allGoalsConfig || {})["s" + (shipObj || {}).rosterId];
+        if(shipObj && shipObj.exists() && shipGoal) {
+            goalResult.shipRoster = shipObj.rosterId;
+            goalResult.shipMaster = shipObj.masterId;
+            goalResult.targetLevel = shipGoal[0];
+            goalResult.expLeft = KC3Meta.expShip(goalResult.targetLevel)[1] - (shipObj.exp[0] + expJustGained);
+            goalResult.grindMap = [shipGoal[1], shipGoal[2]].join('-');
+            goalResult.baseExpPerBattles = KC3Meta.mapExp(shipGoal[1], shipGoal[2]);
+            goalResult.battleRank = ["F", "E", "D", "C", "B", "A", "S", "SS" ][shipGoal[4]] || "F";
+            goalResult.rankModifier = [0, 0.5, 0.7, 0.8, 1, 1, 1.2][shipGoal[4]] || 0;
+            goalResult.isFlagship = shipGoal[5] === 1;
+            goalResult.flagshipModifier = goalResult.isFlagship ? 1.5 : 1;
+            goalResult.isMvp = shipGoal[6] === 1;
+            goalResult.mvpModifier = goalResult.isMvp ? 2 : 1;
+            goalResult.expPerBattles = goalResult.baseExpPerBattles
+                * goalResult.rankModifier
+                * goalResult.flagshipModifier
+                * goalResult.mvpModifier;
+            goalResult.battlesLeft = Math.ceil(goalResult.expLeft / goalResult.expPerBattles);
+        }
+        return goalResult;
+    };
+
     const publicApi = {
     };
 
@@ -383,6 +429,8 @@
         getLandBasesSortieCost,
         getLandBasesWorstCond,
         isLandBasesSupplied,
+        
+        getShipLevelingGoal,
         
         enemyFighterPower
     });

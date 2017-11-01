@@ -407,6 +407,24 @@ Provides access to data on built-in JSON files
 			return (this._dataColle.gauges || {})["m" + map_id] || false;
 		},
 		
+		allMapsExp :function(){
+			return this._mapExpMap || ((rawExpMap) => {
+				this._mapExpMap = {};
+				if(rawExpMap){
+					$.each(rawExpMap, (world, expArr) => {
+						$.each(expArr, (map, exp) => {
+							this._mapExpMap[[world, map + 1].join('-')] = exp;
+						});
+					});
+				}
+				return this._mapExpMap;
+			})(this._dataColle.mapExps);
+		},
+		
+		mapExp :function(world, map){
+			return this.allMapsExp()[[world, map].join('-')] || 0;
+		},
+		
 		airPowerAverageBonus :function(ace){
 			// Use default known simple bonus constants if json data lost
 			var bonuses = this._dataColle.airPowerAverageBonuses || [0, 1, 1, 2, 2, 2, 3, 3];

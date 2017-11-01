@@ -158,18 +158,26 @@ KC3改 Ship Box for Natsuiro theme
 		this.showPrediction();
 		this.showMorale();
 		
+		const shipMaster = this.shipData.master();
+		const shipGoal = KC3Calc.getShipLevelingGoal(this.shipData);
 		$(".ship_level span.value", this.element)
 			.text( this.shipData.level )
+			.toggleClass("goaled", this.shipData.level >= shipGoal.targetLevel)
 			.attr( "title", (function(shipData){
-				var mst = shipData.master();
-				return (shipData.level >= (mst.api_afterlv || Infinity)) ?
-					[KC3Meta.term("PanelPossibleRemodel")] :
-					(mst.api_afterlv && [KC3Meta.term("PanelNextRemodelLv"),mst.api_afterlv].join(' ') || '');
-			})(this.shipData) ).lazyInitTooltip()
-			.toggleClass("goaled", (function(shipData){
-				var shipGoal = (localStorage.getObject("goals") || {})["s" + shipData.rosterId];
-				return Array.isArray(shipGoal) && shipData.level >= shipGoal[0];
-			})(this.shipData));
+				let title = "";
+				title += shipMaster.api_afterlv ?
+					(shipData.level >= shipMaster.api_afterlv ? KC3Meta.term("PanelPossibleRemodel")
+						: KC3Meta.term("PanelNextRemodelLv").format(shipMaster.api_afterlv))
+					: "";
+				const nextGoal = isFinite(shipGoal.battlesLeft) && shipGoal.battlesLeft > 0 ?
+					KC3Meta.term("PanelNextLvGoalLeft")
+						.format(shipGoal.targetLevel, shipGoal.battlesLeft) : "";
+				if(nextGoal){
+					if(title) title += "\n";
+					title += nextGoal;
+				}
+				return title;
+			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
