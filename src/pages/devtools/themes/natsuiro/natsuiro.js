@@ -52,6 +52,16 @@
 		}
 	};
 	(function($) {
+		// AOP around the dispatcher for any exception thrown from event handlers
+		var originalEventDispatch = $.event.dispatch;
+		$.event.dispatch = function() {
+			try {
+				originalEventDispatch.apply(this, arguments);
+			} catch(error) {
+				console.error("Uncaught event", error, this);
+				throw error;
+			}
+		};
 		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
@@ -1730,7 +1740,7 @@
 						][baseInfo.action]);
 						
 						const shipObj = new KC3Ship();
-						// simulate LBAS as a carrier, ensure it's not a dummy instance
+						// simulate 1 land-base as a carrier, ensure it's not a dummy ship
 						shipObj.rosterId = 1;
 						shipObj.masterId = 83;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){

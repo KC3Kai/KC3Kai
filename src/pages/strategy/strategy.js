@@ -221,6 +221,24 @@
 		}
 	};
 	(function($) {
+		// AOP around the dispatcher for any exception thrown from event handlers
+		var originalEventDispatch = $.event.dispatch;
+		$.event.dispatch = function() {
+			try {
+				originalEventDispatch.apply(this, arguments);
+			} catch(error) {
+				// simply log it first, hooked by DB logger by default
+				console.error("Uncaught event", error, this);
+				// still throw it out, will be caught by window.onerror and logged to console by default
+				throw error;
+			}
+		};
+		/*
+		// For global error debugging
+		window.onerror = function(messageOrEvent, source, lineno, colno, error) {
+			console.debug(messageOrEvent, error);
+		};
+		*/
 		// A lazy initializing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts) {
 			if(typeof this.tooltip("instance") === "undefined") {
