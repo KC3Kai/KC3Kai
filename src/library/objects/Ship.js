@@ -840,7 +840,7 @@ KC3改 Ship Object
 	with consideration to min-max bonus
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterBounds = function(forLbas = false){
-		if(this.isDummy()){ return 0; }
+		if(this.isDummy()){ return [0, 0]; }
 		var GearPowers = [
 			this.equipment(0).fighterBounds( this.slots[0], forLbas ),
 			this.equipment(1).fighterBounds( this.slots[1], forLbas ),

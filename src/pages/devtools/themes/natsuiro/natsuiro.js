@@ -1730,7 +1730,9 @@
 						][baseInfo.action]);
 						
 						const shipObj = new KC3Ship();
-						shipObj.rosterId = -1;
+						// simulate LBAS as a carrier, ensure it's not a dummy instance
+						shipObj.rosterId = 1;
+						shipObj.masterId = 83;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){
 							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
 						});

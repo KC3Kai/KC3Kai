@@ -187,19 +187,19 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ship_fuel .ship_supply_bar", this.element).css("width", (38 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo .ship_supply_bar", this.element).css("width", (38 * Math.min(this.ammoPercent, 1))+"px");
 		
-		if(this.fuelPercent<1 || this.ammoPercent<1){
+		if(this.fuelPercent < 1 || this.ammoPercent < 1){
 			var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
 			$(".ship_supply", this.element).attr("title",
 				KC3Meta.term("PanelResupplyCosts").format(
-					"+{0} \u27A4{1}".format(resupplyCost.fuel, this.shipData.master().api_fuel_max),
-					"+{0} \u27A4{1}".format(resupplyCost.ammo, this.shipData.master().api_bull_max),
+					"+{0} \u27A4{1}".format(resupplyCost.fuel, shipMaster.api_fuel_max),
+					"+{0} \u27A4{1}".format(resupplyCost.ammo, shipMaster.api_bull_max),
 					resupplyCost.bauxite,
 					this.shipData.isMarried() ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 				)
 			).lazyInitTooltip();
 		} else {
 			$(".ship_supply", this.element).attr("title",
-				"\u27A4{0}\n\u27A4{1}".format(this.shipData.master().api_fuel_max, this.shipData.master().api_bull_max)
+				"\u27A4{0}\n\u27A4{1}".format(shipMaster.api_fuel_max, shipMaster.api_bull_max)
 			).lazyInitTooltip();
 		}
 
