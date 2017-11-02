@@ -1133,11 +1133,9 @@
 		},
 
 		Timers: function(data){
-			$(".activity_basic .expeditions").createChildrenTooltips();
-			$(".activity_basic .timers").createChildrenTooltips();
 			$(".activity_basic .expeditions").hideChildrenTooltips();
 			$(".activity_basic .timers").hideChildrenTooltips();
-			
+
 			// Expedition numbers
 			KC3TimerManager._exped[0].expnum();
 			KC3TimerManager._exped[1].expnum();
@@ -1156,6 +1154,9 @@
 				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3);
 				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4);
 			}
+
+			$(".activity_basic .expeditions").createChildrenTooltips();
+			$(".activity_basic .timers").createChildrenTooltips();
 		},
 
 		/* QUESTS
@@ -1221,9 +1222,10 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
-				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
-				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2);
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3);
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4);
+				$(".activity_basic .expeditions").createChildrenTooltips();
 			}
 
 			// TAIHA ALERT CHECK
