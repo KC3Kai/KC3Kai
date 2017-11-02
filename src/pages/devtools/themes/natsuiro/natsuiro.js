@@ -3485,7 +3485,7 @@
 			$(".activity_gunfit .fit_ship_name").text( data.shipObj.name() );
 			$(".activity_gunfit .fit_ship_level span.value").text( data.shipObj.level );
 			
-			if(data.gearObj.exists()){
+			if(data.gearObj && data.gearObj.exists()){
 				$(".activity_gunfit .fit_gear_pic img").attr("src",
 					"/assets/img/items/" + data.gearObj.master().api_type[3] + ".png");
 				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name())
