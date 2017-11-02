@@ -168,7 +168,9 @@ Does not include Ships and Gears which are managed by other Managers
 					dockingShips.push( repairInfo );
 					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
-						KC3ShipManager.get( ndock.api_ship_id ).masterId
+						KC3ShipManager.get( ndock.api_ship_id ).masterId,
+						undefined,
+						ndock.api_ship_id
 					);
 				}else{
 					KC3TimerManager.repair( ndock.api_id ).deactivate();
