@@ -650,16 +650,15 @@ var interactions = {
 			subtitleTimer = [];
 			var maxTime = 0;
 			$.each(subtitleText, function(delay, text) {
-				delay = Number(delay);
-				if(text === "") {
-					maxTime = delay;
-					return;
-				}
-
+				var delayms = Number(delay.split(",")[0]);
+				
 				subtitleTimer.push(setTimeout(() => {
 					showSubtitleLine(text, quoteIdentifier);
-				}, delay));
-				maxTime = delay + subtitleVanishBaseMillis + (subtitleVanishExtraMillisPerChar * text.length);
+				}, delayms));
+				maxTime = delayms + subtitleVanishBaseMillis + (subtitleVanishExtraMillisPerChar * text.length);
+
+				if(delay.split(",").length > 1)
+					maxTime = Number(delay.split(",")[1]);
 			});
 			subtitleTimer.push(setTimeout(phaseSubtitlesOut, maxTime));
 		};
@@ -667,7 +666,7 @@ var interactions = {
 		const phaseSubtitlesOut = () => {
 			subtitleTimer = false;
 			$(".overlay_subtitles").fadeOut(1000, function(){
-				switch (config.subtitle_display) {
+				switch (ConfigManager.subtitle_display) {
 					case "evade":
 						$(".overlay_subtitles").css("top", "");
 						$(".overlay_subtitles").css("bottom", "5px");

@@ -154,8 +154,7 @@
 						if (!(typeof quote === 'string' || quote instanceof String)) {
 							quoteText = "";
 							$.each(quote, function (delay, line) {
-								if(line !== "")
-									quoteText += line + "</br>";
+								quoteText += line + "</br>";
 							});
 						}
 						$(".tab_mstship .shipInfo .subtitles").html(quoteText);

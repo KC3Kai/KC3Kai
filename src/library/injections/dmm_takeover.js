@@ -362,16 +362,15 @@
 					self.subtitleTimer = [];
 					var maxTime = 0;
 					$.each(subtitleText, function(delay, text) {
-						delay = Number(delay);
-						if(text === "") {
-							maxTime = delay;
-							return;
-						}
+						var delayms = Number(delay.split(",")[0]);
 						
 						self.subtitleTimer.push(setTimeout(() => {
 							showSubtitleLine(text, quoteIdentifier);
-						}, delay));
-						maxTime = delay + self.subtitleVanishBaseMillis + (self.subtitleVanishExtraMillisPerChar * text.length);
+						}, delayms));
+						maxTime = delayms + self.subtitleVanishBaseMillis + (self.subtitleVanishExtraMillisPerChar * text.length);
+
+						if(delay.split(",").length > 1)
+							maxTime = Number(delay.split(",")[1]);
 					});
 					self.subtitleTimer.push(setTimeout(phaseSubtitlesOut, maxTime));
 				};
