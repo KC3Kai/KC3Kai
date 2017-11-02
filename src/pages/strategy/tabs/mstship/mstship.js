@@ -146,10 +146,19 @@
 					var shipGirl = KC3Master.graph_file(self.currentGraph);
 					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
 					var quote = KC3Meta.quote( shipGirl, voiceLine, voiceSize );
+
 					console.debug("Playing subtitle: shipId, vnum, voiceLine, voiceFile, voiceSize:",
 						shipGirl, vnum, voiceLine, voiceFile, voiceSize);
 					if(quote){
-						$(".tab_mstship .shipInfo .subtitles").html(quote);
+						var quoteText = quote;
+						if (!(typeof quote === 'string' || quote instanceof String)) {
+							quoteText = "";
+							$.each(quote, function (delay, line) {
+								if(line !== "")
+									quoteText += line + "</br>";
+							});
+						}
+						$(".tab_mstship .shipInfo .subtitles").html(quoteText);
 					} else {
 						$(".tab_mstship .shipInfo .subtitles").html(
 							"Quote not found yet for: ship={0}, vnum={1}, vline={2}"

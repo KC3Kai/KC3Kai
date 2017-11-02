@@ -301,7 +301,7 @@
 					if (subId) {
 						// force overwriting regardless of original content
 						// empty content not replaced
-						if (v[subKey] && v[subKey].length) {
+						if (v[subKey]) {
 							v[subId] = v[subKey];
 
 							// temporary hack for scn quotes

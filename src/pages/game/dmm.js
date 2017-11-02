@@ -7,7 +7,7 @@ var waiting = true;
 var trustedExit = false;
 
 // Used to fade out subtitles after calculated duration
-var subtitleVanishTimer = false;
+var subtitleTimer = false;
 var subtitleVanishBaseMillis;
 var subtitleVanishExtraMillisPerChar;
 var subtitleHourlyTimer = false;
@@ -614,38 +614,66 @@ var interactions = {
 			$(".overlay_subtitles").stop(true, true);
 			$(".overlay_subtitles").hide();
 			// If subtitle removal timer is ongoing, reset
-			if(subtitleVanishTimer){
-				clearTimeout(subtitleVanishTimer);
+			if(subtitleTimer){
+				if(subtitleTimer instanceof Array)
+					subtitleTimer.forEach(clearTimeout);
+				else
+					clearTimeout(subtitleTimer);
 			}
 		};
 		hideSubtitle();
-		
+
 		// Display subtitle and set its removal timer
 		const showSubtitle = (subtitleText, quoteIdentifier) => {
+			if (typeof subtitleText === 'string' || subtitleText instanceof String)  {
+				showSubtitleLine(subtitleText, quoteIdentifier);
+				const millis = subtitleVanishBaseMillis +
+					(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+				subtitleTimer = setTimeout(phaseSubtitlesOut, millis);
+				return;
+			}
+
+			subtitleTimer = [];
+			var maxTime = 0;
+			$.each(subtitleText, function(delay, text) {
+				delay = Number(delay);
+				if(text === "") {
+					maxTime = delay;
+					return;
+				}
+
+				subtitleTimer.push(setTimeout(() => {
+					showSubtitleLine(text, quoteIdentifier);
+				}, delay));
+				maxTime = delay + subtitleVanishBaseMillis + (subtitleVanishExtraMillisPerChar * text.length);
+			});
+			subtitleTimer.push(setTimeout(phaseSubtitlesOut, maxTime));
+		};
+
+		const phaseSubtitlesOut = () => {
+			subtitleTimer = false;
+			$(".overlay_subtitles").fadeOut(1000, function(){
+				switch (config.subtitle_display) {
+					case "evade":
+						$(".overlay_subtitles").css("top", "");
+						$(".overlay_subtitles").css("bottom", "5px");
+						subtitlePosition = "bottom";
+						break;
+					case "ghost":
+						$(".overlay_subtitles").removeClass("ghost");
+						break;
+					default: break;
+				}
+			});
+		};
+
+		const showSubtitleLine = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
-			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
-			$(".overlay_subtitles").show();
-			const millis = subtitleVanishBaseMillis +
-				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(1000, function(){
-					switch (ConfigManager.subtitle_display) {
-						case "evade":
-							$(".overlay_subtitles").css("top", "");
-							$(".overlay_subtitles").css("bottom", "5px");
-							subtitlePosition = "bottom";
-							break;
-						case "ghost":
-							$(".overlay_subtitles").removeClass("ghost");
-							break;
-						default: break;
-					}
-				});
-			}, millis);
 			if(!!quoteSpeaker){
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 			}
+			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
+			$(".overlay_subtitles").show();
 		};
 		
 		const cancelHourlyLine = () => {
