@@ -1953,6 +1953,7 @@
 		},
 
 		CompassResult: function(data){
+			var self = this;
 			// Clear battle details box
 			clearBattleData();
 
@@ -1962,6 +1963,7 @@
 			var thisNode = KC3SortieManager.currentNode();
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
+			var diff = KC3SortieManager.map_difficulty;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
 
 			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
@@ -1993,7 +1995,55 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
-					$(".module.activity .node_type_battle").show();
+					var curNodeBody = $(".module.activity .node_type_prev_encounters .encounters");
+					curNodeBody.empty();
+					$(".module.activity .node_type_prev_encounters").show();
+					KC3Database.con.encounters.filter(function(node) {
+						return node.world === world 
+						&& node.map === map 
+						&& node.node === thisNode.id 
+						&& node.diff === diff;}).toArray(function(response){
+						var sortedList = response.sort((a,b) => b.count - a.count);
+						$.each(sortedList, function(index, encounter){
+							var curBox = $("#factory .encounter_record").clone();
+							$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
+							var shipList = JSON.parse(encounter.ke);
+							var badEntry = false;
+							$.each(shipList, function(shipIndex, shipId){
+								if(shipId > 0){
+									if(!KC3Master.isAbyssalShip(shipId)){
+										badEntry = true;
+										return;
+									}
+									var shipBox = $("#factory .encounter_ship").clone();
+									$(shipBox).removeClass(KC3Meta.abyssShipBorderClass());
+									$(shipBox).addClass(KC3Meta.abyssShipBorderClass(shipId));
+									$("img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
+									$("img", shipBox).attr("alt", shipId);
+									$("img", shipBox).data("masterId", shipId)
+										.on("dblclick", self.shipDoubleClickFunction);
+									//$(".encounter_id", shipBox).text(shipId);
+									$(shipBox).attr("title", "{0}: {1}\n".format(shipId, KC3Meta.abyssShipName(shipId))).lazyInitTooltip();
+									shipBox.appendTo($(".encounter_ships", curBox));
+								}
+							});
+							// Don't show 'broken' encounters from pre-abyssal ID shift update
+							if(badEntry)
+								return;
+							if(shipList.length > 6){
+								$(".encounter_ships", curBox).addClass("combined");
+							}
+							let tooltip = "{0} x{1}".format(encounter.name, encounter.count);
+							let ap = KC3Calc.enemyFighterPower(shipList)[0];
+							if(ap){
+								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
+									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
+										Math.round(3 * ap / 2), 3 * ap);
+							}
+							$(".encounter_formation", curBox).attr("title", tooltip).lazyInitTooltip();
+							curBox.appendTo(curNodeBody);
+						});
+					});
 					break;
 
 				// Resource node
@@ -2214,6 +2264,8 @@
 			}
 			
 			// Load enemy icons
+			$(".module.activity .node_type_prev_encounters").hide();
+			$(".module.activity .node_type_battle").show();
 			$.each(thisNode.eships, function(index, eshipId){
 				if(eshipId > 0){
 					if ($(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).length > 0) {
