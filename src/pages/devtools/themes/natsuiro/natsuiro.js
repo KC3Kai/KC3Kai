@@ -164,9 +164,11 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
-		const conf = ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
+		let conf = ExpedTabValidateConfig(selectedExpedition);
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
+		// re-validate config in case that fleet has just returned from a new exped
+		conf = ExpedTabValidateConfig(selectedExpedition);
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 
