@@ -117,8 +117,19 @@
 					$(".source",elm).addClass("hover").data("sid", src.tag);
 					$(".source",elm).click(toFromFunc);
 				}
-				$(".subtitle",elm).text( (state === "missing") ? "missing"
-										 :src.val );
+				var subtitle = "";
+				if(state === "missing")
+					subtitle = "missing";
+				else if (!(typeof src.val === 'string' || src.val instanceof String)) {
+					var subtitles = [];
+					$.each(src.val, function (delay, line) {
+						subtitles.push(line);
+					});
+					subtitle = subtitles.join("</br>");
+				} else
+					subtitle = src.val;
+
+				$(".subtitle",elm).html(subtitle);
 				$(".division",elm).click(toggleSrcFunc);
 				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
 					$(".en_src",elm).text(self.enQuotes[masterId][voiceNum]);
