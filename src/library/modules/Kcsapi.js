@@ -1340,28 +1340,27 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_nyukyo/start":function(params, response, headers){
 			var utcSeconds = Date.toUTCseconds(headers.Date),
-				shipId     = parseInt( params.api_ship_id , 10),
-				bucket     = parseInt( params.api_highspeed , 10),
-				nDockNum   = parseInt( params.api_ndock_id , 10),
-				shipData   = KC3ShipManager.get( shipId );
+				shipId     = parseInt(params.api_ship_id, 10),
+				bucket     = parseInt(params.api_highspeed, 10),
+				dockNum    = parseInt(params.api_ndock_id, 10),
+				shipData   = KC3ShipManager.get(shipId);
 			
-			PlayerManager.setResources(utcSeconds, null, [-shipData.repair[1],0,-shipData.repair[2],0]);
+			PlayerManager.setResources(utcSeconds, null, [-shipData.repair[1], 0, -shipData.repair[2], 0]);
 			if(bucket == 1){
 				PlayerManager.consumables.buckets -= 1;
 				PlayerManager.setConsumables();
 				
-				// If ship is still is the list being repaired, remove Her
-				var herRepairIndex = PlayerManager.repairShips.indexOf( shipId );
-				if(herRepairIndex  > -1){
-					PlayerManager.repairShips.splice(herRepairIndex, 1);
-				}
+				// If ship is still is the list being repaired, mark her repaired
+				var herRepairIndex = PlayerManager.repairShips.indexOf(shipId);
+				if(herRepairIndex > -1) PlayerManager.repairShips[herRepairIndex] = -1;
+				PlayerManager.repairShips[dockNum] = -1;
 				
 				KC3Database.Naverall({
 					data:[0,0,0,0,0,-1,0,0]
 				},shipData.lastSortie[0]);
 				
 				shipData.applyRepair();
-				KC3TimerManager.repair( nDockNum ).deactivate();
+				KC3TimerManager.repair(dockNum).deactivate();
 			}
 			
 			shipData.perform('repair');
@@ -1379,20 +1378,21 @@ Previously known as "Reactor"
 			PlayerManager.consumables.buckets -= 1;
 			PlayerManager.setConsumables();
 			
-			// If ship is still is the list being repaired, remove Her
-			var
-				shipId   = PlayerManager.repairShips[ params.api_ndock_id ],
+			// If ship is still is the list being repaired, mark her repaired
+			var dockNum  = parseInt(params.api_ndock_id, 10),
+				shipId   = PlayerManager.repairShips[dockNum],
 				shipData = KC3ShipManager.get(shipId);
-			PlayerManager.repairShips.splice(params.api_ndock_id, 1);
+			PlayerManager.repairShips[dockNum] = -1;
+			if(shipData.exists()){
+				KC3Database.Naverall({
+					data:[0,0,0,0,0,-1,0,0]
+				},shipData.lastSortie[0]);
+				shipData.perform('repair');
+				shipData.applyRepair();
+				KC3ShipManager.save();
+			}
 			
-			KC3Database.Naverall({
-				data:[0,0,0,0,0,-1,0,0]
-			},shipData.lastSortie[0]);
-			shipData.perform('repair');
-			shipData.applyRepair();
-			KC3ShipManager.save();
-			
-			KC3TimerManager.repair( params.api_ndock_id ).deactivate();
+			KC3TimerManager.repair(dockNum).deactivate();
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
