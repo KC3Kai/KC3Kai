@@ -629,7 +629,7 @@ var interactions = {
 			$(".overlay_subtitles").hide();
 			// If subtitle removal timer is ongoing, reset
 			if(subtitleTimer){
-				if(subtitleTimer instanceof Array)
+				if(Array.isArray(subtitleTimer))
 					subtitleTimer.forEach(clearTimeout);
 				else
 					clearTimeout(subtitleTimer);
@@ -639,31 +639,28 @@ var interactions = {
 		
 		// Display subtitle and set its removal timer
 		const showSubtitle = (subtitleText, quoteIdentifier) => {
-			if (typeof subtitleText === 'string' || subtitleText instanceof String)  {
+			if($.type(subtitleText) === "string") {
 				showSubtitleLine(subtitleText, quoteIdentifier);
 				const millis = subtitleVanishBaseMillis +
 					(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-				subtitleTimer = setTimeout(phaseSubtitlesOut, millis);
+				subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
 				return;
 			}
-
 			subtitleTimer = [];
-			var maxTime = 0;
-			$.each(subtitleText, function(delay, text) {
-				var delayms = Number(delay.split(",")[0]);
-				
+			let lastLineOutMillis = 0;
+			$.each(subtitleText, (delay, text) => {
+				const delays = String(delay).split(',');
+				const millis = Number(delays[0]);
+				lastLineOutMillis = delays.length > 1 ? Number(delays[1]) :
+					(millis + subtitleVanishBaseMillis + subtitleVanishExtraMillisPerChar * text.length);
 				subtitleTimer.push(setTimeout(() => {
 					showSubtitleLine(text, quoteIdentifier);
-				}, delayms));
-				maxTime = delayms + subtitleVanishBaseMillis + (subtitleVanishExtraMillisPerChar * text.length);
-
-				if(delay.split(",").length > 1)
-					maxTime = Number(delay.split(",")[1]);
+				}, millis));
 			});
-			subtitleTimer.push(setTimeout(phaseSubtitlesOut, maxTime));
+			subtitleTimer.push(setTimeout(fadeSubtitlesOut, lastLineOutMillis));
 		};
-
-		const phaseSubtitlesOut = () => {
+		
+		const fadeSubtitlesOut = () => {
 			subtitleTimer = false;
 			$(".overlay_subtitles").fadeOut(1000, function(){
 				switch (ConfigManager.subtitle_display) {
@@ -679,7 +676,7 @@ var interactions = {
 				}
 			});
 		};
-
+		
 		const showSubtitleLine = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
 			if(!!quoteSpeaker){

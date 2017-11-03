@@ -146,17 +146,12 @@
 					var shipGirl = KC3Master.graph_file(self.currentGraph);
 					var voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, voiceFile);
 					var quote = KC3Meta.quote( shipGirl, voiceLine, voiceSize );
-
+					
 					console.debug("Playing subtitle: shipId, vnum, voiceLine, voiceFile, voiceSize:",
 						shipGirl, vnum, voiceLine, voiceFile, voiceSize);
 					if(quote){
-						var quoteText = quote;
-						if (!(typeof quote === 'string' || quote instanceof String)) {
-							quoteText = "";
-							$.each(quote, function (delay, line) {
-								quoteText += line + "</br>";
-							});
-						}
+						var quoteText = $.type(quote) === "string" ? quote
+							: Object.keys(quote).map(k => quote[k]).join("</br>");
 						$(".tab_mstship .shipInfo .subtitles").html(quoteText);
 					} else {
 						$(".tab_mstship .shipInfo .subtitles").html(
