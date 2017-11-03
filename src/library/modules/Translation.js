@@ -53,12 +53,12 @@
 		/*
 		  Recursively changing any non-object value "v" into "{val: v, tag: <tag>}".
 		 */
-		addTags: function(obj, tag) {
-			function track(obj) {
-				if (typeof obj === "object") {
+		addTags: function(obj, tag, maxdepth = 2) {
+			function track(obj, depth) {
+				if (typeof obj === "object" && depth) {
 					$.each( obj, function(k,v) {
 						// should work for both arrays and objects
-						obj[k] = track(v);
+						obj[k] = track(v, depth - 1);
 					});
 				} else {
 					return {val: obj, tag: tag};
@@ -69,7 +69,7 @@
 			console.assert(
 				typeof obj === "object",
 				"addTags should only be applied on objects");
-			return track(obj);
+			return track(obj, maxdepth);
 		},
 
 		/** Clear specified attribute key from specified JSON object. */
@@ -301,7 +301,7 @@
 					if (subId) {
 						// force overwriting regardless of original content
 						// empty content not replaced
-						if (v[subKey] && v[subKey].length) {
+						if (v[subKey]) {
 							v[subId] = v[subKey];
 
 							// temporary hack for scn quotes
