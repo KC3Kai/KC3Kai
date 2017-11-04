@@ -48,6 +48,7 @@ Retrieves when needed to apply on components
 				PoiDBSubmission_enabled : false,
 				KC3DBSubmission_enabled : true,
 				OpenDBSubmission_enabled : false,
+				TsunDBSubmission_enabled : false,
 				PushAlerts_enabled   : 0,
 				PushAlerts_key       : '',
 
