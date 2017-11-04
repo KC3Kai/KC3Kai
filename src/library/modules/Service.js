@@ -427,6 +427,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				shipID: request.shipID || false,
 				voiceNum: request.voiceNum,
 				voiceSize: request.voiceSize,
+				duration: request.duration,
 				url: request.url,
 				ConfigManager: ConfigManager
 			})).execute();

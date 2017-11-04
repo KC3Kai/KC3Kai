@@ -303,6 +303,7 @@
 				var quoteIdentifier = "";
 				var quoteVoiceNum = request.voiceNum;
 				var quoteVoiceSize = request.voiceSize;
+				var quoteVoiceDuration = request.duration;
 				var quoteSpeaker = "";
 				switch(request.voicetype){
 					case "titlecall":
@@ -354,8 +355,8 @@
 					// Simple one line quote
 					if($.type(subtitleText) === "string") {
 						showSubtitleLine(subtitleText, quoteIdentifier);
-						const millis = self.subtitleVanishBaseMillis +
-							(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+						const millis = quoteVoiceDuration || (self.subtitleVanishBaseMillis +
+							self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 						self.subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
 						return;
 					}

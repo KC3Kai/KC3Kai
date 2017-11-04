@@ -590,6 +590,7 @@ var interactions = {
 		var quoteIdentifier = "";
 		var quoteVoiceNum = request.voiceNum;
 		var quoteVoiceSize = request.voiceSize;
+		var quoteVoiceDuration = request.duration;
 		var quoteSpeaker = "";
 		switch(request.voicetype){
 			case "titlecall":
@@ -641,8 +642,8 @@ var interactions = {
 		const showSubtitle = (subtitleText, quoteIdentifier) => {
 			if($.type(subtitleText) === "string") {
 				showSubtitleLine(subtitleText, quoteIdentifier);
-				const millis = subtitleVanishBaseMillis +
-					(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+				const millis = quoteVoiceDuration || (subtitleVanishBaseMillis +
+					subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
 				subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
 				return;
 			}

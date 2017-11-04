@@ -126,6 +126,7 @@ Retrieves when needed to apply on components
 				subtitle_display  : "ghost",
 				subtitle_speaker  : false,
 				subtitle_hourly   : true,
+				subtitle_duration : false,
 				google_translate  : true,
 				map_markers       : true,
 				mute_game_tab     : false,
