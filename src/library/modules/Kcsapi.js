@@ -862,6 +862,8 @@ Previously known as "Reactor"
 			delete thisMap.kinds;
 			delete thisMap.maxhps;
 			delete thisMap.baseHp;
+			delete thisMap.debuffFlag;
+			delete thisMap.debuffSound;
 			KC3SortieManager.setCurrentMapData(thisMap, world, map);
 		},
 		
