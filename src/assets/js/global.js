@@ -12,6 +12,9 @@ if (typeof NO_GA == "undefined") {
 		var s = document.getElementsByTagName('script')[0];
 		if(s && s.parentNode) s.parentNode.insertBefore(ga, s);
 	})();
+} else {
+	var _gaq = [];
+	_gaq.push = function() {};
 }
 
 /*
