@@ -164,11 +164,9 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
+		const conf = ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
-		let conf = ExpedTabValidateConfig(selectedExpedition);
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
-		// re-validate config in case that fleet has just returned from a new exped
-		conf = ExpedTabValidateConfig(selectedExpedition);
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 
@@ -1135,9 +1133,11 @@
 		},
 
 		Timers: function(data){
+			$(".activity_basic .expeditions").createChildrenTooltips();
+			$(".activity_basic .timers").createChildrenTooltips();
 			$(".activity_basic .expeditions").hideChildrenTooltips();
 			$(".activity_basic .timers").hideChildrenTooltips();
-
+			
 			// Expedition numbers
 			KC3TimerManager._exped[0].expnum();
 			KC3TimerManager._exped[1].expnum();
@@ -1156,9 +1156,6 @@
 				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3);
 				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4);
 			}
-
-			$(".activity_basic .expeditions").createChildrenTooltips();
-			$(".activity_basic .timers").createChildrenTooltips();
 		},
 
 		/* QUESTS
@@ -1224,10 +1221,9 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2);
-				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3);
-				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4);
-				$(".activity_basic .expeditions").createChildrenTooltips();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
 			}
 
 			// TAIHA ALERT CHECK
@@ -1394,8 +1390,8 @@
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
 					speed:
-						(MainFleet.fastFleet && EscortFleet.fastFleet)
-						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
+						KC3Meta.term(["SpeedSlow","SpeedFast","SpeedFast+","SpeedFastest"]
+							[Math.min(MainFleet.fastFleet, EscortFleet.fastFleet)]),
 					docking:
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:

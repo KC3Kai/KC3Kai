@@ -150,33 +150,28 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		setRepairDocks :function( data ){
-			// clone last repairing ship list, empty current list
-			const lastRepair = this.repairShips.splice(0);
-			this.repairShips.push(-1);
-			const dockingShips = [];
-			const self = this;
+			var lastRepair = this.repairShips.map(function(x){return x;}); // clone
+			this.repairShips.splice(0);
+			var dockingShips = [];
+			var self = this;
 			$.each(data, function(ctr, ndock){
-				const dockNum = ndock.api_id;
-				const shipRosterId = ndock.api_ship_id;
-				// check if not in the repairing list, mark as repaired
-				if(lastRepair[dockNum] > 0 && lastRepair[dockNum] != shipRosterId) {
-					KC3ShipManager.get(lastRepair[dockNum]).applyRepair();
+				if(lastRepair[ndock.api_id] != ndock.api_ship_id) { // check if not in the list (repaired)
+					KC3ShipManager.get(lastRepair[ndock.api_id]).applyRepair();
 				}
+
 				if(ndock.api_state > 0){
-					self.repairShips[dockNum] = shipRosterId;
-					dockingShips.push( {
-						id: shipRosterId,
-						completeTime: ndock.api_complete_time
-					} );
-					KC3TimerManager.repair(dockNum).activate(
+					self.repairShips[ ndock.api_id ] = ndock.api_ship_id;
+					var repairInfo =
+						{ id: ndock.api_ship_id,
+						  completeTime: ndock.api_complete_time
+						};
+					dockingShips.push( repairInfo );
+					KC3TimerManager.repair( ndock.api_id ).activate(
 						ndock.api_complete_time,
-						KC3ShipManager.get(shipRosterId).masterId,
-						undefined,
-						shipRosterId
+						KC3ShipManager.get( ndock.api_ship_id ).masterId
 					);
 				}else{
-					self.repairShips[dockNum] = -1;
-					KC3TimerManager.repair(dockNum).deactivate();
+					KC3TimerManager.repair( ndock.api_id ).deactivate();
 				}
 			});
 			// "localStorage.dockingShips" is not supposed

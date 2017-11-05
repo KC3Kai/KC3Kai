@@ -2123,10 +2123,6 @@ button, input, select, textarea {
 	border: 1px solid gray;
 	background: #00264d;
 }
-.tab_quotes .part_right .voice_entity .player audio {
-	filter:invert(100%);
-	-webkit-filter:invert(100%);
-}
 
 .tab_quotes .part_right .voice_entity.inherit .source {
     color: #00ffff;

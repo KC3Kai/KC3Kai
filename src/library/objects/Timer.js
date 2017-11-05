@@ -18,12 +18,11 @@ Has functions for TimerManager to use
 	KC3Timer.prototype.show = function(element){ this.element.show(); };
 	KC3Timer.prototype.hide = function(element){ this.element.hide(); };
 	
-	KC3Timer.prototype.activate = function(completion, faceId, expedNum, rosterId){
+	KC3Timer.prototype.activate = function(completion, faceId, expedNum){
 		this.active = true;
 		this.completion = completion;
-		if(faceId > 0){ this.faceId = faceId; }
-		if(expedNum > 0){ this.expedNum = expedNum; }
-		if(rosterId > 0){ this.rosterId = rosterId; }
+		if(typeof faceId != "undefined"){ if(faceId>0){ this.faceId = faceId; } }
+		if(typeof expedNum != "undefined"){ this.expedNum = expedNum; }
 		
 		var remaining = this.completion - Date.now();
 		remaining = Math.ceil((remaining - (ConfigManager.alert_diff*1000))/1000);
@@ -41,7 +40,6 @@ Has functions for TimerManager to use
 		this.completion = 0;
 		this.faceId = 0;
 		this.expedNum = 0;
-		this.rosterId = 0;
 		$(".timer-img img", this.element).hide();
 		$(".timer-expnum", this.element).text("");
 		$(".timer-time", this.element).text("").attr("title", "");
@@ -57,14 +55,11 @@ Has functions for TimerManager to use
 		}
 	};
 	
-	KC3Timer.prototype.face = function(faceId = this.faceId, isLocked = false){
+	KC3Timer.prototype.face = function(faceId, isLocked = false){
+		if(typeof faceId != "undefined"){ this.faceId = faceId; }
 		if(this.faceId > 0){
-			$(".timer-img img", this.element).attr("src", this.rosterId > 0 ?
-				KC3ShipManager.get(this.rosterId).shipIcon() :
-				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png"));
-			$(".timer-img", this.element).attr("title",
-				KC3Meta.shipName( KC3Master.ship(this.faceId).api_name )
-			);
+			$(".timer-img img", this.element).attr("src", KC3Meta.shipIcon(this.faceId, "../../../../assets/img/ui/empty.png"));
+			$(".timer-img", this.element).attr("title", KC3Meta.shipName( KC3Master.ship(this.faceId).api_name ) );
 			$(".timer-img", this.element).data("masterId", this.faceId).off("dblclick")
 				.on("dblclick", function(e){
 					(new RMsg("service", "strategyRoomPage", {

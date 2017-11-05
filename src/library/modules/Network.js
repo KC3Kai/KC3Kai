@@ -139,6 +139,11 @@ Listens to network history and triggers callback if game events happen
 								OpenDBSubmission.processData( thisRequest );
 							}
 							
+							// -- TsunDB Submission
+							if (ConfigManager.TsunDBSubmission_enabled) {
+								TsunDBSubmission.processData( thisRequest );
+							}
+							
 							thisRequest.process();
 							
 							// -- Kancolle DB Submission
@@ -178,60 +183,46 @@ Listens to network history and triggers callback if game events happen
 			
 			// Overlay subtitles
 			// http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
-			KC3Network.showSubtitle(request);
-		},
-
-		/**
-		 * Send a message to content script (via background script service)
-		 * to show subtitles at overlay for supported sound audio files.
-		 */
-		showSubtitle :function(http){
-			if(http.request.url.indexOf("/kcs/sound/") === -1) {
-				return;
-			}
-			const soundPaths = http.request.url.split("/");
-			const voiceType = soundPaths[5];
-			if(voiceType === "titlecall") {
-				// console.debug("DETECTED titlecall sound");
-				(new RMsg("service", "subtitle", {
-					voicetype: "titlecall",
-					fullurl: http.request.url,
-					filename: soundPaths[6],
-					voiceNum: soundPaths[7].split(".")[0],
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
-			} else if(voiceType === "kc9998") {
-				// console.debug("DETECTED Abyssal sound", soundPaths);
-				(new RMsg("service", "subtitle", {
-					voicetype: "abyssal",
-					fullurl: http.request.url,
-					filename: "",
-					voiceNum: soundPaths[6].split(".")[0],
-					voiceSize: http.response.content.size || 0,
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
-			} else if(voiceType === "kc9999") {
-				// console.debug("DETECTED NPC sound", soundPaths);
-				(new RMsg("service", "subtitle", {
-					voicetype: "npc",
-					fullurl: http.request.url,
-					filename: "",
-					voiceNum: soundPaths[6].split(".")[0],
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
-			} else {
-				// console.debug("DETECTED shipgirl sound");
-				const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
-				const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
-				const audioFileSize = http.response.content.size || 0;
-				(new RMsg("service", "subtitle", {
-					voicetype: "shipgirl",
-					fullurl: http.request.url,
-					shipID: shipGirl,
-					voiceNum: voiceLine,
-					voiceSize: audioFileSize,
-					tabId: chrome.devtools.inspectedWindow.tabId
-				})).execute();
+			if(request.request.url.indexOf("/kcs/sound/") > -1){
+				var soundPaths = request.request.url.split("/");
+				if(soundPaths[5]=="titlecall"){
+					// console.debug("DETECTED titlecall sound");
+					(new RMsg("service", "subtitle", {
+						voicetype: "titlecall",
+						filename: soundPaths[6],
+						voiceNum: soundPaths[7].split(".")[0],
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}else if(soundPaths[5]=="kc9998"){
+					// console.debug("DETECTED Abyssal sound", soundPaths);
+					(new RMsg("service", "subtitle", {
+						voicetype: "abyssal",
+						filename: "",
+						voiceNum: soundPaths[6].split(".")[0],
+						voiceSize: request.response.content.size || 0,
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}else if(soundPaths[5]=="kc9999"){
+					// console.debug("DETECTED NPC sound", soundPaths);
+					(new RMsg("service", "subtitle", {
+						voicetype: "npc",
+						filename: "",
+						voiceNum: soundPaths[6].split(".")[0],
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}else{
+					// console.debug("DETECTED shipgirl sound");
+					const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
+					const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
+					const audioFileSize = request.response.content.size || 0;
+					(new RMsg("service", "subtitle", {
+						voicetype: "shipgirl",
+						shipID: shipGirl,
+						voiceNum: voiceLine,
+						voiceSize: audioFileSize,
+						tabId: chrome.devtools.inspectedWindow.tabId
+					})).execute();
+				}
 			}
 		},
 

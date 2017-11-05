@@ -780,13 +780,6 @@
 				"options" : {}
 			},
 			{
-				"id" : "subtitle_duration",
-				"name" : "SettingsSubtitleAccurateDuration",
-				"type" : "check",
-				"hide" : 1,
-				"options" : {}
-			},
-			{
 				"id" : "mute_game_tab",
 				"name" : "SettingsMuteGameTab",
 				"type" : "check",

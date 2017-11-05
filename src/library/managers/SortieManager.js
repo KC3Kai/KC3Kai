@@ -634,18 +634,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			// Remove sortie comparison buffer
 			PlayerManager.hq.lastSortie = null;
-			// Record event debuff flags
-			if(portApiData && portApiData.api_event_object){
-				const eventObject = portApiData.api_event_object;
-				const thisMap = this.getCurrentMapData(this.map_world, this.map_num);
-				if(eventObject.api_m_flag){
-					thisMap.debuffFlag = eventObject.api_m_flag;
-				}
-				if(eventObject.api_m_flag2){
-					thisMap.debuffSound = (thisMap.debuffSound || 0) + 1;
-				}
-				this.setCurrentMapData(thisMap, this.map_world, this.map_num);
-			}
 			
 			// Reset sortie statistics
 			this.map_world = 0;

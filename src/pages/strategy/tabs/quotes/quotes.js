@@ -4,6 +4,7 @@
 	KC3StrategyTabs.quotes = new KC3StrategyTab("quotes");
 	
 	KC3StrategyTabs.quotes.definition = {
+		audio: false,
 		server_ip: "",
 		repo_loc: "../../data/",
 		enQuotes: [],
@@ -64,12 +65,6 @@
 			var toggleSrcFunc = function(){
 				$(".ref_sub", $(this).parent()).slideToggle(200);
 			};
-			var toQuoteHtmlLines = (quote, showDelayTime = true) => {
-				if($.type(quote) === "string") return quote;
-				return Object.keys(quote)
-					.map(k => ((showDelayTime ? "({1}) " : "") + "{0}").format(quote[k], k))
-					.join("</br>");
-			};
 
 			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true);
 			$.each(allVoiceNums,function(i,voiceNum) {
@@ -97,48 +92,58 @@
 
 				$(".voice",elm).on("click", function() {
 					var currentGraph = KC3Master.graph(masterId).api_filename;
+					if(self.audio){ self.audio.pause(); }
 					var voiceFile = $(this).data("voiceFile");
 					var voiceLine = $(this).data("voiceLine");
 					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
 						voiceNum, voiceFile, voiceLine);
 					var voiceSrc = "http://"+self.server_ip
 						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
-					if($(".voice_list .player audio").length){
-						$(".voice_list .player audio").each((_, a) => {a.pause();});
-					}
-					$(".voice_list .player").empty();
-					var player = $('<audio controls autoplay><source/></audio>');
-					$("source", player).attr("src", voiceSrc);
-					$(".player", elm).html(player);
+					self.audio = new Audio(voiceSrc);
+					self.audio.play();
 				});
 
-				var sourceText = "missing";
-				if(src) {
+				var sourceText;
+				if (src) {
 					sourceText = typeof src.tag === "number"
-						? (state === "direct" ? "Available" : "From " + self.buildShipName(src.tag) )
-						: src.tag;
+						? (state === "direct"
+						   ? "Available" : "From " + self.buildShipName(src.tag) )
+					    : src.tag;
+				} else {
+					sourceText = "missing";
 				}
-				$(".source",elm).text(sourceText);
+				$(".source",elm).text( sourceText );
 				if(sourceText.startsWith("From ")){
 					$(".source",elm).addClass("hover").data("sid", src.tag);
 					$(".source",elm).click(toFromFunc);
 				}
-				var subtitleText = state === "missing" ? "missing" : toQuoteHtmlLines(src.val);
-				$(".subtitle",elm).html(subtitleText);
+				var subtitle = "";
+				if(state === "missing")
+					subtitle = "missing";
+				else if (!(typeof src.val === 'string' || src.val instanceof String)) {
+					var subtitles = [];
+					$.each(src.val, function (delay, line) {
+						subtitles.push(line);
+					});
+					subtitle = subtitles.join("</br>");
+				} else
+					subtitle = src.val;
+
+				$(".subtitle",elm).html(subtitle);
 				$(".division",elm).click(toggleSrcFunc);
 				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
-					$(".en_src",elm).html(toQuoteHtmlLines(self.enQuotes[masterId][voiceNum], false));
+					$(".en_src",elm).text(self.enQuotes[masterId][voiceNum]);
 				}
 				if(self.jpQuotes && self.jpQuotes[masterId] && self.jpQuotes[masterId][voiceNum]){
-					$(".jp_src",elm).html(toQuoteHtmlLines(self.jpQuotes[masterId][voiceNum], false));
+					$(".jp_src",elm).text(self.jpQuotes[masterId][voiceNum]);
 				}
 				const seasonalKeys = Object.keys(shipLines).filter(k => k.startsWith(voiceNum + '@'));
 				if(seasonalKeys.length){
 					let spQuotes = "";
 					seasonalKeys.forEach(key => {
 						spQuotes += "<b>[{0}]</b> {1}"
-							.format(key.slice(key.indexOf('@') + 1), toQuoteHtmlLines(shipLines[key].val))
-							+ "<br/>";
+							.format(key.slice(key.indexOf('@') + 1), shipLines[key].val) +
+							"<br/>";
 					});
 					$(".seasonal",elm).html(spQuotes).show();
 				}

@@ -188,9 +188,10 @@ KC3改 Ship Object
 		}
 	};
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
+	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
-	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
+	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepaired(); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
@@ -303,7 +304,7 @@ KC3改 Ship Object
 		return Math.qckInt("ceil", (shipList.indexOf(this.rosterId) + 1) / 6, 0);
 	};
 
-	KC3Ship.prototype.isRepairing = function(){
+	KC3Ship.prototype.isRepaired = function(){
 		return PlayerManager.repairShips.indexOf(this.rosterId) >= 0;
 	};
 
@@ -313,7 +314,7 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.isFree = function(){
-		return !(this.isRepairing() || this.isAway());
+		return !(this.isRepaired() || this.isAway());
 	};
 
 	KC3Ship.prototype.resetAfterHp = function(){
@@ -322,7 +323,7 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.applyRepair = function(){
-		this.hp[0] = this.hp[1];
+		this.hp[0]  = this.hp[1];
 		// also keep afterHp consistent
 		this.resetAfterHp();
 		this.morale = Math.max(40, this.morale);
@@ -404,7 +405,7 @@ KC3改 Ship Object
 		if (optAfterHp) {
 			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
 		} else {
-			result.docking = this.isRepairing() ?
+			result.docking = this.isRepaired() ?
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
 				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
 				RepairTSec;
