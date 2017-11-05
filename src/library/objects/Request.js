@@ -8,14 +8,13 @@ Executes processing and relies on KC3Network for the triggers
 	"use strict";
 	
 	window.KC3Request = function( data ){
-		this.url = data.request.url;
-		this.headers = data.response.headers;
-		this.statusCode = data.response.status;
-		this.params = data.request.postData.params;
-		
-		var KcsApiIndex = this.url.indexOf("/kcsapi/");
-		this.call = this.url.substring( KcsApiIndex+8 );
-		
+		if(data){
+			this.url = data.request.url;
+			this.headers = data.response.headers;
+			this.statusCode = data.response.status;
+			this.params = data.request.postData.params;
+			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
+		}
 		this.gameStatus = 0;
 		this.response = {};
 	};

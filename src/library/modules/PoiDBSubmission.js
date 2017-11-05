@@ -254,16 +254,11 @@
 				this.sendData("pass_event", passEventData);
 			}
 		},
-		getApiName: function(url) {
-			var KcsApiIndex = url.indexOf("/kcsapi/");
-			return url.substring( KcsApiIndex+8 );
-		},
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
 			try {
-				var apiName = this.getApiName( requestObj.url );
-				var handler = this.handlers[apiName];
+				var handler = this.handlers[requestObj.call];
 				if ( handler ) {
 					// bind module to "this"
 					handler.call(this, requestObj);
@@ -311,9 +306,9 @@
 					'data': JSON.stringify( payload )
 				},
 			}).done( function() {
-				console.log( "Poi DB Submission done." );
+				console.log(`Poi DB Submission to ${target} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn( "Poi DB Submission failed:", textStatus, errorThrown);
+				console.warn(`Poi DB Submission to ${target} ${textStatus}`, errorThrown);
 			});
 			return;
 		}

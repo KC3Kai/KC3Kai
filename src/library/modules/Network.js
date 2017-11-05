@@ -128,20 +128,17 @@ Listens to network history and triggers callback if game events happen
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							// -- Poi DB Submission
-							// turns out "Request.process()" modifies the request,
-							// so we handle the process before that is invoked,
-							// and suppose all exceptions thrown are caught already.
 							if (ConfigManager.PoiDBSubmission_enabled) {
-								PoiDBSubmission.processData( thisRequest );
+								KC3Network.asyncSubmit(PoiDBSubmission, thisRequest);
 							}
 							// -- OpenDB Submission
 							if (ConfigManager.OpenDBSubmission_enabled) {
-								OpenDBSubmission.processData( thisRequest );
+								KC3Network.asyncSubmit(OpenDBSubmission, thisRequest);
 							}
 							
 							thisRequest.process();
 							
-							// -- Kancolle DB Submission
+							// -- Kancolle DB Submission, post-process
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
 								request.getContent(function(content, encoding){
 									DBSubmission.submitData(request.request.url,request.request.postData, content);
@@ -177,8 +174,24 @@ Listens to network history and triggers callback if game events happen
 			}
 			
 			// Overlay subtitles
-			// http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
 			KC3Network.showSubtitle(request);
+		},
+
+		/**
+		 * Asynchronously invoke a remote DB submission module to submit KCSAPI request data.
+		 */
+		asyncSubmit :function(submission, request){
+			// turns out "Request.process()" modifies the request, so clone the unmodified instance first.
+			var clonedRequest = $.extend(true, new KC3Request(), request);
+			// although submission processes should not be slow, still make them parallel async.
+			setTimeout(function(){
+				try {
+					submission.processData.call(submission, clonedRequest);
+				} catch (error) {
+					// suppose all exceptions thrown are caught already, should not reach here.
+					console.warn("Uncaught data submission", error);
+				}
+			});
 		},
 
 		/**
@@ -186,6 +199,7 @@ Listens to network history and triggers callback if game events happen
 		 * to show subtitles at overlay for supported sound audio files.
 		 */
 		showSubtitle :function(http){
+			// url sample: http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
 			if(http.request.url.indexOf("/kcs/sound/") === -1) {
 				return;
 			}
