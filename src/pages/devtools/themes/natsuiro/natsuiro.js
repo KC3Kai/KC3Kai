@@ -1390,8 +1390,8 @@
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
 					speed:
-						(MainFleet.fastFleet && EscortFleet.fastFleet)
-						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
+						KC3Meta.term(["SpeedSlow","SpeedFast","SpeedFast+","SpeedFastest"]
+							[Math.min(MainFleet.fastFleet, EscortFleet.fastFleet)]),
 					docking:
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:

@@ -8,7 +8,7 @@ Contains summary information about a fleet and its 6 ships
 	
 	window.KC3Fleet = function( data ){
 		this.active = false;
-		this.fastFleet = true;
+		this.fastFleet = 5;
 		this.fleetId = 0;
 		this.name = "";
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
@@ -619,15 +619,10 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.speed = function(){
-		this.fastFleet = true;
-		var i = 0;
-		while(this.fastFleet && i < 6) {
-			if(this.ships[i] > -1) {
-				this.fastFleet = this.fastFleet && this.ship(i).isFast();
-			}
-			i++;
-		}
-		return (this.fastFleet) ? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow");
+		this.fastFleet = Math.min(...this.ship().map(function (ship) {
+			return ship.didFlee ? 20 : ship.getSpeed();
+		}));
+		return KC3Meta.term(["SpeedSlow","SpeedFast","SpeedFast+","SpeedFastest"][this.fastFleet / 5 - 1]);
 	};
 
 	KC3Fleet.prototype.adjustedAntiAir = function(formationId){

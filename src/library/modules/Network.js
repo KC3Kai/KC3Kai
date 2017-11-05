@@ -139,6 +139,11 @@ Listens to network history and triggers callback if game events happen
 								OpenDBSubmission.processData( thisRequest );
 							}
 							
+							// -- TsunDB Submission
+							if (ConfigManager.TsunDBSubmission_enabled) {
+								TsunDBSubmission.processData( thisRequest );
+							}
+							
 							thisRequest.process();
 							
 							// -- Kancolle DB Submission

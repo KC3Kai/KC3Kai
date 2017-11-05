@@ -757,8 +757,8 @@
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: MainFleet.fighterPowerText(),
 					speed:
-						(MainFleet.fastFleet && EscortFleet.fastFleet)
-						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
+						KC3Meta.term(["SpeedSlow","SpeedFast","SpeedFast+","SpeedFastest"]
+							[Math.min(MainFleet.fastFleet, EscortFleet.fastFleet)]),
 					docking:
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
