@@ -1995,14 +1995,20 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
+					if(!ConfigManager.info_prevencounters)
+						break;
 					var curNodeBody = $(".module.activity .node_type_prev_encounters .encounters");
 					curNodeBody.empty();
+					curNodeBody.text("...");
 					$(".module.activity .node_type_prev_encounters").show();
 					KC3Database.con.encounters.filter(function(node) {
 						return node.world === world 
 						&& node.map === map 
 						&& node.node === thisNode.id 
 						&& node.diff === diff;}).toArray(function(response){
+						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
+							return;
+						curNodeBody.empty();
 						var sortedList = response.sort((a,b) => b.count - a.count);
 						$.each(sortedList, function(index, encounter){
 							var curBox = $("#factory .encounter_record").clone();
@@ -2043,6 +2049,9 @@
 							$(".encounter_formation", curBox).attr("title", tooltip).lazyInitTooltip();
 							curBox.appendTo(curNodeBody);
 						});
+					}).catch(function (err) {
+    					console.error("Loading encounters failed: ", err);
+						curNodeBody.text("An error has occured while loading encounters.");
 					});
 					break;
 
@@ -2226,6 +2235,7 @@
 				}
 				$(".module.activity .battle_support").show();
 				$(".module.activity .battle_fish").hide();
+				$(".module.activity .node_type_prev_encounters").hide();
 				$(".module.activity .node_type_battle").show();
 			};
 			// `info_compass` including 'Battle Data', so no activity if it's off

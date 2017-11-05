@@ -1085,16 +1085,20 @@ ABYSS FLEET
 	height:25px;
 }
 .module.activity .encounter_ship .boss {
-	box-shadow:0px 0px 1px 1px #5ef, 0px 0px 3px 2px #fe5;
+	border-color:#5ef;
+	box-shadow:0px 0px 1px 1px #fe5;
 }
 .module.activity .encounter_ship .kai {
-	box-shadow:0px 0px 3px 1px #2af;
+	border-color:#2af;
+	box-shadow:0px 0px 1px 0px #2af;
 }
 .module.activity .encounter_ship .flagship {
-	box-shadow:0px 0px 3px 1px #fc3;
+	border-color:#fc3;
+	box-shadow:0px 0px 1px 0px #fc3;
 }
 .module.activity .encounter_ship .elite {
-	box-shadow:0px 0px 3px 1px #f33;
+	border-color:#f33;
+	box-shadow:0px 0px 1px 0px #f33;
 }
 .module.activity .node_type_prev_encounters {
 	color: #fff;

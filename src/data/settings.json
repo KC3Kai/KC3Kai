@@ -142,6 +142,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_prevencounters",
+				"name" : "SettingsPrevEncounters",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_battle",
 				"name" : "SettingsBattleData",
 				"type" : "check",
