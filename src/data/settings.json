@@ -841,12 +841,12 @@
 		]
 	},
 	{
-		"section": "SettingsKC3DBSubmission",
+		"section": "SettingsTsunDBSubmission",
 		"help" : "",
 		"contents" :[
 			{
-				"id" : "KC3DBSubmission_enabled",
-				"name" : "SettingsEnableKC3DBSubmission",
+				"id" : "TsunDBSubmission_enabled",
+				"name" : "SettingsEnableTsunDBSubmission",
 				"type" : "check",
 				"options" : {}
 			}
