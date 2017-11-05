@@ -783,6 +783,7 @@
 				"id" : "subtitle_duration",
 				"name" : "SettingsSubtitleAccurateDuration",
 				"type" : "check",
+				"hide" : 1,
 				"options" : {}
 			},
 			{

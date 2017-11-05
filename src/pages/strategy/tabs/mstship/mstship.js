@@ -132,10 +132,13 @@
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");
 					return true;
 				}
-				
+				var shipVersions = KC3Master.graph(self.currentShipId).api_version;
+				var isPortVoices = vnum >= 2 && vnum <= 4;
+				// 0: ship card version, 1: voice version, 2: poke voice version?
+				var soundVersion = shipVersions[isPortVoices ? 2 : 1] || 1;
 				var voiceSrc = "http://"+self.server_ip
 							+ "/kcs/sound/kc"+self.currentGraph+"/"+voiceFile+".mp3"
-							+ (!self.currentCardVersion?"":"?version="+self.currentCardVersion);
+							+ (soundVersion > 1 ? "?version=" + soundVersion : "");
 				var voiceSize = 0;
 				var playAndShowSubtitle = function(){
 					// Playback voice audio file
@@ -161,7 +164,7 @@
 					}
 				};
 				// Get audio file size first for seasonal Poke(1/2/3)
-				if(vnum >= 2 && vnum <= 4){
+				if(isPortVoices){
 					$.ajax({
 						type: "HEAD",
 						url: voiceSrc,

@@ -178,65 +178,45 @@ Listens to network history and triggers callback if game events happen
 			
 			// Overlay subtitles
 			// http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
-			if(request.request.url.indexOf("/kcs/sound/") > -1){
-				if(ConfigManager.subtitle_duration){
-					let duration = 0;
-					const audio = new Audio(request.request.url);
-					audio.onloadedmetadata = () => {
-						duration = audio.duration;
-						// console.debug("DETECTED sound duration", duration);
-						audio.pause(); // ensure Audio can be GCed
-						KC3Network.showSubtitle(request, duration);
-					};
-					// fall back to inaccurate duration subtitle
-					audio.onerror = () => {
-						audio.pause();
-						KC3Network.showSubtitle(request);
-					};
-				} else {
-					KC3Network.showSubtitle(request);
-				}
-			}
+			KC3Network.showSubtitle(request);
 		},
 
 		/**
 		 * Send a message to content script (via background script service)
 		 * to show subtitles at overlay for supported sound audio files.
 		 */
-		showSubtitle :function(http, soundDuration){
+		showSubtitle :function(http){
 			if(http.request.url.indexOf("/kcs/sound/") === -1) {
 				return;
 			}
 			const soundPaths = http.request.url.split("/");
 			const voiceType = soundPaths[5];
-			// Audio duration is float in seconds, to milliseconds
-			const durationMillis = (soundDuration || 0) * 1000;
 			if(voiceType === "titlecall") {
 				// console.debug("DETECTED titlecall sound");
 				(new RMsg("service", "subtitle", {
 					voicetype: "titlecall",
+					fullurl: http.request.url,
 					filename: soundPaths[6],
 					voiceNum: soundPaths[7].split(".")[0],
-					duration: durationMillis,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			} else if(voiceType === "kc9998") {
 				// console.debug("DETECTED Abyssal sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "abyssal",
+					fullurl: http.request.url,
 					filename: "",
 					voiceNum: soundPaths[6].split(".")[0],
 					voiceSize: http.response.content.size || 0,
-					duration: durationMillis,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			} else if(voiceType === "kc9999") {
 				// console.debug("DETECTED NPC sound", soundPaths);
 				(new RMsg("service", "subtitle", {
 					voicetype: "npc",
+					fullurl: http.request.url,
 					filename: "",
 					voiceNum: soundPaths[6].split(".")[0],
-					duration: durationMillis,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			} else {
@@ -246,10 +226,10 @@ Listens to network history and triggers callback if game events happen
 				const audioFileSize = http.response.content.size || 0;
 				(new RMsg("service", "subtitle", {
 					voicetype: "shipgirl",
+					fullurl: http.request.url,
 					shipID: shipGirl,
 					voiceNum: voiceLine,
 					voiceSize: audioFileSize,
-					duration: durationMillis,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
