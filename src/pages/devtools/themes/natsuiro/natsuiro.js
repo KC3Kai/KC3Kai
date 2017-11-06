@@ -1997,47 +1997,46 @@
 						.lazyInitTooltip();
 					if(!ConfigManager.info_prevencounters)
 						break;
-					var curNodeBody = $(".module.activity .node_type_prev_encounters .encounters");
-					curNodeBody.empty();
-					curNodeBody.text("...");
+					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
+					nodeEncBox.text("...");
 					$(".module.activity .node_type_prev_encounters").show();
-					KC3Database.con.encounters.filter(function(node) {
-						return node.world === world 
-						&& node.map === map 
-						&& node.node === thisNode.id 
-						&& node.diff === diff;}).toArray(function(response){
+					KC3Database.con.encounters.filter(node =>
+						node.world === world && node.map === map
+						&& node.node === thisNode.id && node.diff === diff
+					).toArray(function(thisNodeEncounterList){
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
 							return;
-						curNodeBody.empty();
-						var sortedList = response.sort((a,b) => b.count - a.count);
-						$.each(sortedList, function(index, encounter){
-							var curBox = $("#factory .encounter_record").clone();
-							$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
-							var shipList = JSON.parse(encounter.ke);
-							var badEntry = false;
-							$.each(shipList, function(shipIndex, shipId){
+						nodeEncBox.empty();
+						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
+						$.each(sortedList, function(_, encounter){
+							const encBox = $("#factory .encounter_record").clone();
+							$(".encounter_formation img", encBox).attr("src",
+								KC3Meta.formationIcon(encounter.form));
+							const shipList = JSON.parse(encounter.ke);
+							let badEntry = false;
+							$.each(shipList, function(_, shipId){
 								if(shipId > 0){
 									if(!KC3Master.isAbyssalShip(shipId)){
 										badEntry = true;
 										return;
 									}
-									var shipBox = $("#factory .encounter_ship").clone();
+									const shipBox = $("#factory .encounter_ship").clone();
 									$(shipBox).removeClass(KC3Meta.abyssShipBorderClass());
 									$(shipBox).addClass(KC3Meta.abyssShipBorderClass(shipId));
 									$("img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
 									$("img", shipBox).attr("alt", shipId);
 									$("img", shipBox).data("masterId", shipId)
 										.on("dblclick", self.shipDoubleClickFunction);
-									//$(".encounter_id", shipBox).text(shipId);
-									$(shipBox).attr("title", "{0}: {1}\n".format(shipId, KC3Meta.abyssShipName(shipId))).lazyInitTooltip();
-									shipBox.appendTo($(".encounter_ships", curBox));
+									$(shipBox).attr("title", "{0}: {1}\n"
+										.format(shipId, KC3Meta.abyssShipName(shipId)))
+									.lazyInitTooltip();
+									shipBox.appendTo($(".encounter_ships", encBox));
 								}
 							});
 							// Don't show 'broken' encounters from pre-abyssal ID shift update
-							if(badEntry)
-								return;
+							if(badEntry) return;
 							if(shipList.length > 6){
-								$(".encounter_ships", curBox).addClass("combined");
+								$(".encounter_ships", encBox).addClass("combined");
 							}
 							let tooltip = "{0} x{1}".format(encounter.name, encounter.count);
 							let ap = KC3Calc.enemyFighterPower(shipList)[0];
@@ -2046,12 +2045,13 @@
 									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
 										Math.round(3 * ap / 2), 3 * ap);
 							}
-							$(".encounter_formation", curBox).attr("title", tooltip).lazyInitTooltip();
-							curBox.appendTo(curNodeBody);
+							$(".encounter_formation", encBox).attr("title", tooltip).lazyInitTooltip();
+							encBox.appendTo(nodeEncBox);
 						});
-					}).catch(function (err) {
-    					console.error("Loading encounters failed: ", err);
-						curNodeBody.text("An error has occured while loading encounters.");
+					}).catch(err => {
+						console.error("Loading node encounters failed", err);
+						// Keep 3 dots as unknown
+						nodeEncBox.text("...");
 					});
 					break;
 
