@@ -1045,6 +1045,64 @@ ABYSS FLEET
 	background:#D2C6FF;
 	border:1px solid #AE87E9;
 }
+/* Previously encountered */
+.module.activity .encounter_record {
+	width:180px;
+	height:26px;
+	float:left;
+	margin:0px 0px 5px 0px;
+	background:rgba(240,240,240,0.7);
+	border-radius:2px;
+}
+.module.activity .encounter_formation {
+	width:25px;
+	height:25px;
+	line-height:25px;
+	float:left;
+}
+.module.activity .encounter_formation img {
+	width:25px;
+	height:25px;
+}
+.module.activity .encounter_ships {
+	width:155px;
+	height:26px;
+	float:left;
+}
+.module.activity .encounter_ships.combined {
+	width:155px;
+	height:52px;
+	float:left;
+}
+
+.module.activity .encounter_ship {
+	width:25px;
+	height:25px;
+	float:left;
+}
+.module.activity .encounter_ship img {
+	width:25px;
+	height:25px;
+}
+.module.activity .encounter_ship .boss {
+	border-color:#5ef;
+	box-shadow:0px 0px 1px 1px #fe5;
+}
+.module.activity .encounter_ship .kai {
+	border-color:#2af;
+	box-shadow:0px 0px 1px 0px #2af;
+}
+.module.activity .encounter_ship .flagship {
+	border-color:#fc3;
+	box-shadow:0px 0px 1px 0px #fc3;
+}
+.module.activity .encounter_ship .elite {
+	border-color:#f33;
+	box-shadow:0px 0px 1px 0px #f33;
+}
+.module.activity .node_type_prev_encounters {
+	color: #fff;
+}
 /* Text Nodes */
 .module.activity .node_type_text {
 	width:150px;
