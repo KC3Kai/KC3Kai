@@ -8,9 +8,25 @@
 	
 	window.TsunDBSubmission = {
 		data : {
+			map: null,
+			cleared: null,
+			hqLvl: null,
+			fleetType: 0,
 			edgeID: [],
 			bossEdge: [],
-			fleetSent: 1
+			nodeType: null,
+			eventId: null,
+			eventKind: null,
+			nextRoute: null,
+			fleetSent: 1,
+			fleetSpeed: null,
+			fleet1: [],
+			fleet2: [],
+			los: [],
+			currentMapHP: null,
+			maxMapHP: null,
+			difficulty: null,
+			gaugeType: null
 		},
 		handlers : {},
 		mapInfo : [],
@@ -98,8 +114,8 @@
 			// F33 Cn 1,2,3 & 4
 			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLoS4(i); });
 			return fleet.ship().map(ship => (ship.isDummy() || ship.didFlee || ship.hp[0] <= 0) ? -1 : {
-				id: ship.masterId,
-				type: ship.stype(),
+				name: ship.master().api_name,
+				type: ship.master().api_stype,
 				speed: ship.speed,
 				equip: ship.equipement(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
