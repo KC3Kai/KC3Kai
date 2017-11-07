@@ -9,6 +9,7 @@
 	window.TsunDBSubmission = {
 		data : {
 			map: null,
+			mapNodes: [],
 			cleared: null,
 			hqLvl: null,
 			fleetType: 0,
@@ -61,6 +62,7 @@
 		
 		processStart: function(http) {
 			const apiData = http.response.api_data;
+			this.data.mapNodes = apiData.api_cell_data;
 			this.data.edgeID = [];
 			this.data.bossEdge = [apiData.api_bosscell_no];
 			// NOTE: because this is pre-process, when `api_req_map/start` called,
