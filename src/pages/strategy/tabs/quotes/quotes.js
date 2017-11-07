@@ -101,15 +101,29 @@
 					var voiceLine = $(this).data("voiceLine");
 					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
 						voiceNum, voiceFile, voiceLine);
-					var voiceSrc = "http://"+self.server_ip
-						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
+					var voiceSrc = `http://${self.server_ip}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
 					if($(".voice_list .player audio").length){
 						$(".voice_list .player audio").each((_, a) => {a.pause();});
 					}
 					$(".voice_list .player").empty();
+					$(".voice_list .subtitle").removeClass("playing");
 					var player = $('<audio controls autoplay><source/></audio>');
 					$("source", player).attr("src", voiceSrc);
 					$(".player", elm).html(player);
+					var audio = player.get(0);
+					audio.onloadedmetadata = function() {
+						$(this).parent().append('<span>{0}</span>'.format(Math.round(this.duration * 1000)));
+					};
+					audio.ontimeupdate = function() {
+						$("span", $(this).parent()).text('{0}/{1}'
+							.format(Math.round(this.currentTime * 1000), Math.round(this.duration * 1000)));
+					};
+					audio.onplay = function() {
+						$(".subtitle", elm).addClass("playing");
+					};
+					audio.onended = function() {
+						$(".subtitle", elm).removeClass("playing");
+					};
 				});
 
 				var sourceText = "missing";
