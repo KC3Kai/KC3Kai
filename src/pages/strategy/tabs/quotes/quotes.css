@@ -122,9 +122,11 @@
 }
 .tab_quotes .part_right .voice_entity .player {
 	float: left;
-	width: 127px;
+	width: 195px;
 	height: 20px;
 	margin-left: 5px;
+	font-size: 11px;
+	line-height: 20px;
 }
 .tab_quotes .part_right .voice_entity .player audio {
 	position: relative;
@@ -132,6 +134,10 @@
 	height: 30px;
 	transform: scaleY(0.7);
 	margin-top: -5px;
+	float: left;
+}
+.tab_quotes .part_right .voice_entity .player span {
+	float: right;
 }
 
 .tab_quotes .part_right .voice_entity.missing .source {

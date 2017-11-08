@@ -2112,6 +2112,9 @@ button, input, select, textarea {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #00344d;
 }
+.tab_quotes .part_right .voice_entity .subtitle.playing {
+	color: #bd7a0b;
+}
 .tab_quotes .part_right .voice_entity .jp_src,
 .tab_quotes .part_right .voice_entity .en_src {
 	background: #333;

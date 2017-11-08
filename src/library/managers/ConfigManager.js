@@ -56,6 +56,7 @@ Retrieves when needed to apply on components
 				info_drop            : true,
 				info_craft           : true,
 				info_compass         : true,
+				info_prevencounters  : true,
 				info_battle          : true,
 				info_btrank          : true,
 				info_btmvp           : true,
