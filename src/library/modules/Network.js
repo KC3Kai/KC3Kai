@@ -135,6 +135,10 @@ Listens to network history and triggers callback if game events happen
 							if (ConfigManager.OpenDBSubmission_enabled) {
 								KC3Network.asyncSubmit(OpenDBSubmission, thisRequest);
 							}
+							// -- TsunDB Submission
+							if (ConfigManager.TsunDBSubmission_enabled) {
+								KC3Network.asyncSubmit(TsunDBSubmission, thisRequest);
+							}
 							
 							thisRequest.process();
 							
