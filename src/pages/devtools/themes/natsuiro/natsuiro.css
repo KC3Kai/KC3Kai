@@ -1062,7 +1062,7 @@ ABYSS FLEET
 .module.activity .encounters .encounter_record {
 	width:180px;
 	height:auto;
-	background:rgba(240,240,240,0.7);
+	background:rgba(186,187,189,0.4);
 	border-radius:5px;
 	margin:0px 0px 2px 0px;
 	float:left;

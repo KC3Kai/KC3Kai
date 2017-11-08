@@ -1995,7 +1995,7 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
-					if(!ConfigManager.info_prevencounters)
+					if(!ConfigManager.info_prevencounters || !ConfigManager.info_compass)
 						break;
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
 					nodeEncBox.text("...");
@@ -2009,11 +2009,14 @@
 						nodeEncBox.empty();
 						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
 						$.each(sortedList, function(_, encounter){
+							const shipList = JSON.parse(encounter.ke || null);
+							let badEntry = ! (Array.isArray(shipList) &&
+								encounter.form > 0 && encounter.count > 0);
+							// Don't show 'broken' encounters with incorrect data
+							if(badEntry) return;
 							const encBox = $("#factory .encounter_record").clone();
 							$(".encounter_formation img", encBox).attr("src",
 								KC3Meta.formationIcon(encounter.form));
-							const shipList = JSON.parse(encounter.ke);
-							let badEntry = false;
 							$.each(shipList, function(_, shipId){
 								if(shipId > 0){
 									if(!KC3Master.isAbyssalShip(shipId)){
@@ -2027,10 +2030,10 @@
 									$("img", shipBox).attr("alt", shipId);
 									$("img", shipBox).data("masterId", shipId)
 										.on("dblclick", self.shipDoubleClickFunction);
-									$(shipBox).attr("title", "{0}: {1}\n"
-										.format(shipId, KC3Meta.abyssShipName(shipId)))
-									.lazyInitTooltip();
-									shipBox.appendTo($(".encounter_ships", encBox));
+									$(shipBox).attr("title", "{0}: {1}"
+										.format(shipId, KC3Meta.abyssShipName(shipId))
+									).lazyInitTooltip();
+									$(".encounter_ships", encBox).append(shipBox);
 								}
 							});
 							// Don't show 'broken' encounters from pre-abyssal ID shift update
@@ -2038,8 +2041,9 @@
 							if(shipList.length > 6){
 								$(".encounter_ships", encBox).addClass("combined");
 							}
-							let tooltip = "{0} x{1}".format(encounter.name, encounter.count);
-							let ap = KC3Calc.enemyFighterPower(shipList)[0];
+							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count);
+							tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
+							const ap = KC3Calc.enemyFighterPower(shipList)[0];
 							if(ap){
 								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
 									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
