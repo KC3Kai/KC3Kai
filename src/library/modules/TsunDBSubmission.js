@@ -27,7 +27,8 @@
 			currentMapHP: null,
 			maxMapHP: null,
 			difficulty: null,
-			gaugeType: null
+			gaugeType: null,
+			debuffSound: null
 		},
 		handlers : {},
 		mapInfo : [],
@@ -114,12 +115,12 @@
 			// Slow fleet wins over fast
 			this.data.fleetSpeed = Math.min(this.data.fleetSpeed, fleet.minSpeed);
 			// F33 Cn 1,2,3 & 4
-			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLoS4(i); });
+			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLoS(i); });
 			return fleet.ship().map(ship => (ship.isDummy() || ship.didFlee || ship.hp[0] <= 0) ? -1 : {
 				name: ship.master().api_name,
 				type: ship.master().api_stype,
 				speed: ship.speed,
-				equip: ship.equipement(false).map(gear => gear.masterId || -1),
+				equip: ship.equipment(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
 			});
 		},
@@ -170,15 +171,12 @@
 		},
 		
 		sendData: function(payload) {
-			var server = "http://kckai.cybersnets.com";
-			var url = server;
-			// console.debug( JSON.stringify( payload ) );
+			//console.debug(JSON.stringify(payload));
 			$.ajax({
-				url: url,
+				url: "http://kckai.cybersnets.com/api/routing",
 				method: "POST",
-				data: {
-					'data': JSON.stringify( payload )
-				},
+				headers: {"content-type": "application/json"},
+				data: JSON.stringify(payload)
 			}).done( function() {
 				console.log("Tsun DB Submission done.");
 			}).fail( function(jqXHR, textStatus, errorThrown) {
