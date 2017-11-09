@@ -151,7 +151,11 @@
 }
 
 .tab_quotes .part_right .voice_entity .source {
-    float: right;
+	float: right;
+	max-width: 160px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .tab_quotes .ship_list .ship_entity:hover {
