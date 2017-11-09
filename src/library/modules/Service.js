@@ -421,15 +421,59 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"subtitle" :function(request, sender, response){
 			//console.debug("subtitle", request);
-			(new TMsg(request.tabId, "gamescreen", "subtitle", {
-				voicetype: request.voicetype,
-				filename: request.filename || false,
-				shipID: request.shipID || false,
-				voiceNum: request.voiceNum,
-				voiceSize: request.voiceSize,
-				url: request.url,
-				ConfigManager: ConfigManager
-			})).execute();
+			let duration = 0;
+			const sendSubtitleToGameScreen = () => {
+				(new TMsg(request.tabId, "gamescreen", "subtitle", {
+					voicetype: request.voicetype,
+					fullurl: request.fullurl,
+					filename: request.filename || false,
+					shipID: request.shipID || false,
+					voiceNum: request.voiceNum,
+					voiceSize: request.voiceSize,
+					duration: duration,
+					url: request.url,
+					ConfigManager: ConfigManager
+				})).execute();
+			};
+			if(ConfigManager.subtitle_duration){
+				const readBlobAudioDuration = (blob) => {
+					const objectUrl = URL.createObjectURL(blob);
+					const audio = new Audio(objectUrl);
+					audio.onloadedmetadata = () => {
+						// Audio duration is float in seconds, to milliseconds
+						duration = (audio.duration || 0) * 1000;
+						// ensure Audio and Blob can be GCed
+						audio.pause();
+						URL.revokeObjectURL(objectUrl);
+						sendSubtitleToGameScreen();
+					};
+				};
+				const fetchVoiceFile = (soundUrl) => {
+					// Send request with jQuery to customize headers,
+					// ensure no header `Range` so that cache will be used
+					$.ajax({
+						url: soundUrl,
+						method: "GET",
+						headers: {
+							// Referer not allowed to be set by browser
+							"X-Requested-With": "ShockwaveFlash/" + detectFlashVersionString()
+						},
+						async: true,
+						cache: true,
+						processData: false,
+						xhrFields: { responseType: "blob" },
+						success: readBlobAudioDuration,
+						error: (xhr, status, error) => {
+							console.warn("Determine sound file duration " + status, error, soundUrl);
+							sendSubtitleToGameScreen();
+						}
+					});
+				};
+				// might link this with promise
+				fetchVoiceFile(request.fullurl);
+			} else {
+				sendSubtitleToGameScreen();
+			}
 		},
 		
 		/* GET VERSIONS
@@ -628,6 +672,12 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	function parseChromeVersion() {
 		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
 		return raw ? parseInt(raw[2], 10) : 0;
+	}
+	
+	function detectFlashVersionString() {
+		var plugin = navigator.plugins["Shockwave Flash"];
+		var major = (plugin && plugin.description.split(" ")[2]) || "1";
+		return major + ".0";
 	}
 	
 })();

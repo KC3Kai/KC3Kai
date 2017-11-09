@@ -128,20 +128,21 @@ Listens to network history and triggers callback if game events happen
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
 							// -- Poi DB Submission
-							// turns out "Request.process()" modifies the request,
-							// so we handle the process before that is invoked,
-							// and suppose all exceptions thrown are caught already.
 							if (ConfigManager.PoiDBSubmission_enabled) {
-								PoiDBSubmission.processData( thisRequest );
+								KC3Network.asyncSubmit(PoiDBSubmission, thisRequest);
 							}
 							// -- OpenDB Submission
 							if (ConfigManager.OpenDBSubmission_enabled) {
-								OpenDBSubmission.processData( thisRequest );
+								KC3Network.asyncSubmit(OpenDBSubmission, thisRequest);
+							}
+							// -- TsunDB Submission
+							if (ConfigManager.TsunDBSubmission_enabled) {
+								KC3Network.asyncSubmit(TsunDBSubmission, thisRequest);
 							}
 							
 							thisRequest.process();
 							
-							// -- Kancolle DB Submission
+							// -- Kancolle DB Submission, post-process
 							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
 								request.getContent(function(content, encoding){
 									DBSubmission.submitData(request.request.url,request.request.postData, content);
@@ -177,47 +178,78 @@ Listens to network history and triggers callback if game events happen
 			}
 			
 			// Overlay subtitles
-			// http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
-			if(request.request.url.indexOf("/kcs/sound/") > -1){
-				var soundPaths = request.request.url.split("/");
-				if(soundPaths[5]=="titlecall"){
-					// console.debug("DETECTED titlecall sound");
-					(new RMsg("service", "subtitle", {
-						voicetype: "titlecall",
-						filename: soundPaths[6],
-						voiceNum: soundPaths[7].split(".")[0],
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}else if(soundPaths[5]=="kc9998"){
-					// console.debug("DETECTED Abyssal sound", soundPaths);
-					(new RMsg("service", "subtitle", {
-						voicetype: "abyssal",
-						filename: "",
-						voiceNum: soundPaths[6].split(".")[0],
-						voiceSize: request.response.content.size || 0,
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}else if(soundPaths[5]=="kc9999"){
-					// console.debug("DETECTED NPC sound", soundPaths);
-					(new RMsg("service", "subtitle", {
-						voicetype: "npc",
-						filename: "",
-						voiceNum: soundPaths[6].split(".")[0],
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
-				}else{
-					// console.debug("DETECTED shipgirl sound");
-					const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
-					const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
-					const audioFileSize = request.response.content.size || 0;
-					(new RMsg("service", "subtitle", {
-						voicetype: "shipgirl",
-						shipID: shipGirl,
-						voiceNum: voiceLine,
-						voiceSize: audioFileSize,
-						tabId: chrome.devtools.inspectedWindow.tabId
-					})).execute();
+			KC3Network.showSubtitle(request);
+		},
+
+		/**
+		 * Asynchronously invoke a remote DB submission module to submit KCSAPI request data.
+		 */
+		asyncSubmit :function(submission, request){
+			// turns out "Request.process()" modifies the request, so clone the unmodified instance first.
+			var clonedRequest = $.extend(true, new KC3Request(), request);
+			// although submission processes should not be slow, still make them parallel async.
+			setTimeout(function(){
+				try {
+					submission.processData.call(submission, clonedRequest);
+				} catch (error) {
+					// suppose all exceptions thrown are caught already, should not reach here.
+					console.warn("Uncaught data submission", error);
 				}
+			});
+		},
+
+		/**
+		 * Send a message to content script (via background script service)
+		 * to show subtitles at overlay for supported sound audio files.
+		 */
+		showSubtitle :function(http){
+			// url sample: http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
+			if(http.request.url.indexOf("/kcs/sound/") === -1) {
+				return;
+			}
+			const soundPaths = http.request.url.split("/");
+			const voiceType = soundPaths[5];
+			if(voiceType === "titlecall") {
+				// console.debug("DETECTED titlecall sound");
+				(new RMsg("service", "subtitle", {
+					voicetype: "titlecall",
+					fullurl: http.request.url,
+					filename: soundPaths[6],
+					voiceNum: soundPaths[7].split(".")[0],
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			} else if(voiceType === "kc9998") {
+				// console.debug("DETECTED Abyssal sound", soundPaths);
+				(new RMsg("service", "subtitle", {
+					voicetype: "abyssal",
+					fullurl: http.request.url,
+					filename: "",
+					voiceNum: soundPaths[6].split(".")[0],
+					voiceSize: http.response.content.size || 0,
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			} else if(voiceType === "kc9999") {
+				// console.debug("DETECTED NPC sound", soundPaths);
+				(new RMsg("service", "subtitle", {
+					voicetype: "npc",
+					fullurl: http.request.url,
+					filename: "",
+					voiceNum: soundPaths[6].split(".")[0],
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+			} else {
+				// console.debug("DETECTED shipgirl sound");
+				const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));
+				const voiceLine = KC3Meta.getVoiceLineByFilename(shipGirl, soundPaths[6].split(".")[0]);
+				const audioFileSize = http.response.content.size || 0;
+				(new RMsg("service", "subtitle", {
+					voicetype: "shipgirl",
+					fullurl: http.request.url,
+					shipID: shipGirl,
+					voiceNum: voiceLine,
+					voiceSize: audioFileSize,
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
 			}
 		},
 

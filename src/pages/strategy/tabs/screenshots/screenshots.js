@@ -39,7 +39,7 @@
 		},
 		
 		/* SHOW PAGE
-		Show single page of screenshors
+		Show single page of screenshots
 		---------------------------------*/
 		showPage :function( page ){
 			var self = this;
