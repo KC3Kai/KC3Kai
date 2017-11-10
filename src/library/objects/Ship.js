@@ -737,6 +737,22 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Indicate if only specific equipment equipped (empty slot not counted).
+	 */
+	KC3Ship.prototype.onlyHasEquipment = function(masterId, isExslotIncluded = false) {
+		return this.countEquipment(masterId, isExslotIncluded) ===
+			this.equipment(isExslotIncluded).reduce((acc, gear) => acc + (gear.exists() & 1), 0);
+	};
+
+	/**
+	 * Indicate if only specific types of equipment equipped (empty slot not counted).
+	 */
+	KC3Ship.prototype.onlyHasEquipmentType = function(typeIndex, typeValue, isExslotIncluded = false) {
+		return this.countEquipmentType(typeIndex, typeValue, isExslotIncluded) ===
+			this.equipment(isExslotIncluded).reduce((acc, gear) => acc + (gear.exists() & 1), 0);
+	};
+
+	/**
 	 * Simple method to find equipment by Master ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
 	 *         max 5-elements including ex-slot.
@@ -1171,8 +1187,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.applyPowerCap = function(precapPower,
 			time = "Day", warfareType = "Shelling"){
 		const cap = time === "Night" ? 300 :
+			// increased from 150 to 180 since 2017-03-18
 			warfareType === "Shelling" ? 180 :
-			warfareType === "Antisub" ? 100 :
+			// increased from 100 to 150 since 2017-11-10
+			warfareType === "Antisub" ? 150 :
 			150; // default cap for other phases
 		const isCapped = precapPower > cap;
 		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
@@ -2342,8 +2360,9 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeDay[0]] || "Shelling";
-		// Show ASW power if can do Opening ASW
-		if(canOasw){
+		const isAswPowerShown = canOasw || (shipObj.canDoASW() && shipObj.onlyHasEquipmentType(1, [10, 32]));
+		// Show ASW power if can do Opening ASW, or only ASW equipment equipped
+		if(isAswPowerShown){
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
 			let isCapped = false;
