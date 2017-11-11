@@ -1,5 +1,5 @@
 <div class="page_title">
-	Drop Record
+	Ship Drop Records
 	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
 </div>
 
@@ -10,75 +10,55 @@
 </div>
 
 <div class = "control_panel">
-	<!-- WORLD LIST -->
-	<select class="world_list">
-		<option value="title" data-world_num="0">Select a world...</option>
-		<option value="World 1" data-world_num="1">World 1</option>
-		<option value="World 2" data-world_num="2">World 2</option>
-		<option value="World 3" data-world_num="3">World 3</option>
-		<option value="World 4" data-world_num="4">World 4</option>
-		<option value="World 5" data-world_num="5">World 5</option>
-		<option value="World 6" data-world_num="6">World 6</option>
-		<option value="Spring 2015" data-world_num="30">Spring 2015</option>
-		<option value="Summer 2015" data-world_num="31">Summer 2015</option>
-		<option value="Fall 2015" data-world_num="32">Fall 2015</option>
-		<option value="Winter 2016" data-world_num="33">Winter 2016</option>
-		<option value="Spring 2016" data-world_num="34">Spring 2016</option>
-		<option value="Summer 2016" data-world_num="35">Summer 2016</option>
-		<option value="Fall 2016" data-world_num="36">Fall 2016</option>
-		<option value="Winter 2017" data-world_num="37">Winter 2017</option>
-		<option value="Spring 2017" data-world_num="38">Spring 2017</option>
-		<option value="Summer 2017" data-world_num="39">Summer 2017</option>
-	</select>
-
-	<!-- MAP LIST -->
-	<select class="map_list">
-		<option value="0">Select a map...</option>
-	</select>
+	<!-- WORLD SELECTOR -->
+	<div class="selectors">
+		<select class="world_list">
+			<option value="0">Select a world...</option>
+		</select>
+		<select class="map_list">
+			<option value="0">Select a map...</option>
+		</select>
+	</div>
+	<div class="clear"></div>
 
 	<!-- FILTERS -->
 	<div class="filters">
 		<!-- SHIP TYPE -->
 		<div class="ship_types">
-
 		</div>
-
 		<div class="massSelect">
 			<!-- BATTLE RANK -->
 			<dl>
-				<dt class="massLabel">Battle Rating:</dt>
-				<dd class="hover dif_sab">SAB</dd>
-				<dd class="hover dif_sa">SA</dd>
-				<dd class="hover dif_s">S</dd>
-				<dd class="hover dif_a">A</dd>
-				<dd class="hover dif_b">B</dd>
+				<dt class="massLabel">Battle Rank:</dt>
+				<dd class="hover rank sab">SAB</dd>
+				<dd class="hover rank sa">SA</dd>
+				<dd class="hover rank s">S</dd>
+				<dd class="hover rank a">A</dd>
+				<dd class="hover rank b">B</dd>
 			</dl>
 			<!-- DIffICULTY -->
 			<dl id="eventSelected">
 				<dt class="massLabel">Difficulty:</dt>
-				<dd class="hover dif_hard">Hard</dd>
-				<dd class="hover dif_normal">Normal</dd>
-				<dd class="hover dif_easy">Easy</dd>
+				<dd class="hover diff hard">Hard</dd>
+				<dd class="hover diff normal">Normal</dd>
+				<dd class="hover diff easy">Easy</dd>
 			</dl>
 		</div>
-
 	</div>
+	<div class="clear"></div>
 
 </div>
 
 <!-- CONTENT -->
 <div class="page_padding">
+	<div class="loading"><img /></div>
 	<div class="content_root">
 	</div>
 </div>
 
-
 <!-- CLONABLES -->
 <div class="factory">
 	
-	<!--map_option-->
-	<option>Select a map...</option>
-
 	<div class="node_drop">
 		<div class="node_name"></div>
 		<div class="ships"></div>

@@ -367,7 +367,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1400px;
+	min-height:1430px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -1810,10 +1810,11 @@ body {
 /* SHIP_DROP
 --------------------------------*/
 .tab_shipdrop .control_panel {
-	background: #F0F5FF;
-}
-.tab_shipdrop .content_root .node_drop .ship{
 	background:#F0F5FF;
+}
+.tab_shipdrop .content_root .node_drop .ship {
+	background:#F0F5FF;
+	border-radius:5px;
 }
 .tab_shipdrop .ship_filter_type .filter_box {
 	border:1px solid #000;
@@ -1821,6 +1822,7 @@ body {
 .tab_shipdrop .ship_filter_type .filter_check {
 	background:#000;
 }
+.tab_shipdrop .massSelect .hover:hover,
 .tab_shipdrop .filters .ship_filter_type:hover {
 	background:#cfc;
 }

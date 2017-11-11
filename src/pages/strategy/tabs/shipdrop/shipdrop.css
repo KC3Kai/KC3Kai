@@ -2,74 +2,87 @@
 	width:680px;
 }
 
-.tab_shipdrop .content_root .node_drop .ship > img {
-	width: 24px;
-	height: 24px;
+.tab_shipdrop .loading {
+	margin:8px 5px;
+	display:none;
+	
+}
+.tab_shipdrop .loading img {
+	content:url(/assets/img/ui/indicator.svg);
+	width:24px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
 }
 
+/* Drop contents
+---------------------------------*/
+.tab_shipdrop .content_root .node_drop .ships {
+}
 .tab_shipdrop .content_root .node_drop .ship * {
-	line-height:30px;
-	margin:0px 5px 0px 0px;
+	font-size:13px;
+	height:24px;
+	line-height:24px;
+	margin:3px 4px 3px 4px;
 	border-radius:15px;
 	float:left;
 	overflow:hidden;
 }
-
+.tab_shipdrop .content_root .node_drop .ship img {
+	width: 24px;
+	height: 24px;
+}
 .tab_shipdrop .content_root .node_drop .ship {
 	display:inline-block;
+	min-width:71px;
+	min-height:30px;
+	margin:0px 4px 0px 0px;
 }
 
 .tab_shipdrop .content_root .node_drop .node_name {
 	font-size:15px;
+	font-weight:bold;
 }
 
 .tab_shipdrop .factory {
 	display:none;
 }
-.tab_shipdrop .replay_notice {
-	width:660px;
-	border:1px solid #3c3;
-	background:#dfd;
-	margin:10px auto 0px;
-	padding:5px 10px;
-	text-align:center;
-	font-size:12px;
-}
 
-/* control_panel
+/* Control Panel
 ---------------------------------*/
 .tab_shipdrop .control_panel {
-	margin: 0 0 15px 0;
+	margin:0 0 10px 0;
 }
 
-/* WORLD LIST
----------------------------------*/
+.tab_shipdrop .selectors {
+	margin:0px 0px 0px 0px;
+	height:42px;
+}
+
 .tab_shipdrop .control_panel .world_list {
-	min-width: 120px;
-	margin: 10px 10px 10px 10px;
+	min-width:150px;
+	height:22px;
+	margin:10px 0px 0px 10px;
+	float:left;
 }
 
-/* MAP LIST
----------------------------------*/
 .tab_shipdrop .control_panel .map_list {
-	min-width: 120px;
-	margin: 10px 10px 15px 10px;
+	min-width:115px;
+	height:22px;
+	margin:10px 0px 0px 10px;
+	float:left;
 }
 
-/* FONT
----------------------------------*/
 .tab_shipdrop .control_panel .filters >p {
 	font-weight:bold;
 	margin:0px 0px 10px 10px;
 }
 
-/* FILTER
----------------------------------*/
 .tab_shipdrop .filters .ship_types {
 	width:680px;
 	height:60px;
-	margin:10px 10px 10px 10px;
-	display:none;
+	margin:5px 10px 10px 10px;
 }
 .tab_shipdrop .filters .ship_filter_type {
 	width:80px;
@@ -96,26 +109,20 @@
 	float:left;
 }
 
-.tab_shipdrop .filters .battle_rank {
-	width:680px;
-	height:30px;
-	margin:10px 10px 10px 10px;
-}
-
 .tab_shipdrop .massSelect {
-	margin:10px 10px 10px 10px;
+	margin:10px 10px 0px 10px;
 }
 
-.tab_shipdrop .massSelect dl{
-	width: 220px;
-	display: 	inline-block;
-	vertical-align: top;
-	margin: 0px 0px 5px 0px;
-	overflow: 	hidden;
+.tab_shipdrop .massSelect dl {
+	width:250px;
+	display:inline-block;
+	vertical-align:top;
+	margin:0px 0px 10px 0px;
+	overflow:hidden;
 }
 .tab_shipdrop .massSelect dl dt,
-.tab_shipdrop .massSelect dl dd{
-	float: 		left;
+.tab_shipdrop .massSelect dl dd {
+	float:left;
 	line-height:inherit;
 }
 .tab_shipdrop .massSelect .massLabel {
@@ -125,7 +132,4 @@
 	margin:0px 0px 0px 4px;
 	padding: 0 3px;
 	border-radius: 4px;
-}
-.tab_shipdrop .massSelect .hover.on {
-	
 }

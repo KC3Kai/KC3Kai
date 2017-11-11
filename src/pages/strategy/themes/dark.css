@@ -387,7 +387,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1340px;
+	min-height:1365px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -2343,9 +2343,9 @@ button, input, select, textarea {
 /* SHIP_DROP
 --------------------------------*/
 .tab_shipdrop .control_panel {
-	background: #131313;
+	background:#131313;
 }
-.tab_shipdrop .content_root .node_drop .ship{
+.tab_shipdrop .content_root .node_drop .ship {
 	background:#303030;
 }
 .tab_shipdrop .ship_filter_type .filter_box {
@@ -2354,6 +2354,7 @@ button, input, select, textarea {
 .tab_shipdrop .ship_filter_type .filter_check {
 	background:#ffffff;
 }
+.tab_shipdrop .massSelect .hover:hover,
 .tab_shipdrop .filters .ship_filter_type:hover {
 	background:#555555;
 }
@@ -2366,5 +2367,5 @@ button, input, select, textarea {
 	border-radius:0px !important;
 }
 .tab_shipdrop .massSelect dl{
-	width: 310px !important;
+	width:310px !important;
 }
