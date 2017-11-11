@@ -53,12 +53,12 @@
 		/*
 		  Recursively changing any non-object value "v" into "{val: v, tag: <tag>}".
 		 */
-		addTags: function(obj, tag) {
-			function track(obj) {
-				if (typeof obj === "object") {
+		addTags: function(obj, tag, maxdepth = 2) {
+			function track(obj, depth) {
+				if (typeof obj === "object" && depth) {
 					$.each( obj, function(k,v) {
 						// should work for both arrays and objects
-						obj[k] = track(v);
+						obj[k] = track(v, depth - 1);
 					});
 				} else {
 					return {val: obj, tag: tag};
@@ -69,7 +69,7 @@
 			console.assert(
 				typeof obj === "object",
 				"addTags should only be applied on objects");
-			return track(obj);
+			return track(obj, maxdepth);
 		},
 
 		/** Clear specified attribute key from specified JSON object. */
@@ -301,7 +301,7 @@
 					if (subId) {
 						// force overwriting regardless of original content
 						// empty content not replaced
-						if (v[subKey] && v[subKey].length) {
+						if (v[subKey]) {
 							v[subId] = v[subKey];
 
 							// temporary hack for scn quotes
@@ -337,12 +337,32 @@
 		getQuotes: function(repo, track = false, language = ConfigManager.language,
 			checkKey = false, extendEnglish = true) {
 
+			const deepMergePartially = function(...objs) {
+				const merged = {};
+				const merge = obj => {
+					for(const prop in obj) {
+						if(obj.hasOwnProperty(prop)) {
+							if($.type(obj[prop]) === "object"
+								// workaround for PR #2299:
+								// prevent recursively merging for objects start with key "0",
+								// which are used by timing-split quote lines.
+								&& Object.keys(obj[prop])[0] !== "0") {
+								merged[prop] = deepMergePartially(merged[prop], obj[prop]);
+							} else {
+								merged[prop] = obj[prop];
+							}
+						}
+					}
+				};
+				objs.forEach(obj => merge(obj));
+				return merged;
+			};
 			var remodelGroups = {};
 			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
 				remodelGroups = RemodelDb._db.remodelGroups;
 			} else {
 				console.warn("Translation: failed to load RemodelDb, " +
-							 "please make sure it's been initialized properly");/*RemoveLogging:skip*/
+					"please make sure it's been initialized properly");/*RemoveLogging:skip*/
 			}
 			const extendQuotesFromRemodelGroups = (langJson, track = false) => {
 				$.each(remodelGroups, function(orgShipIdStr, groupInfo) {
@@ -360,7 +380,8 @@
 							});
 						}
 						// accumulate to curQuotes
-						curQuotes = $.extend(true, {}, curQuotes, quotes);
+						curQuotes = deepMergePartially(curQuotes, quotes);
+						//curQuotes = $.extend(true, {}, curQuotes, quotes);
 						// note that curQuotes now refers to a different obj
 						// and we haven't done any modification on curQuotes
 						// so it's safe to be assigned to a table
@@ -437,7 +458,9 @@
 					// 2nd pass: extend langJSON by considering pre-models
 					extendQuotesFromRemodelGroups(langJSON, track);
 					// 3rd pass: extend langJSON using enJSON to fill in any missing parts
-					langJSON = $.extend(true, {}, enJSON, langJSON);
+					langJSON = deepMergePartially(enJSON, langJSON);
+					// jQuery.extend cannot control deep merging exclusions
+					//langJSON = $.extend(true, {}, enJSON, langJSON);
 				}
 			}
 

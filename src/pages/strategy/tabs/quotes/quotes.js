@@ -4,7 +4,6 @@
 	KC3StrategyTabs.quotes = new KC3StrategyTab("quotes");
 	
 	KC3StrategyTabs.quotes.definition = {
-		audio: false,
 		server_ip: "",
 		repo_loc: "../../data/",
 		enQuotes: [],
@@ -65,6 +64,12 @@
 			var toggleSrcFunc = function(){
 				$(".ref_sub", $(this).parent()).slideToggle(200);
 			};
+			var toQuoteHtmlLines = (quote, showDelayTime = true) => {
+				if($.type(quote) === "string") return quote;
+				return Object.keys(quote)
+					.map(k => ((showDelayTime ? "({1}) " : "") + "{0}").format(quote[k], k))
+					.join("</br>");
+			};
 
 			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true);
 			$.each(allVoiceNums,function(i,voiceNum) {
@@ -92,47 +97,62 @@
 
 				$(".voice",elm).on("click", function() {
 					var currentGraph = KC3Master.graph(masterId).api_filename;
-					if(self.audio){ self.audio.pause(); }
 					var voiceFile = $(this).data("voiceFile");
 					var voiceLine = $(this).data("voiceLine");
 					console.debug("VOICE: shipId, voiceNum, voiceFile, voiceLine", masterId,
 						voiceNum, voiceFile, voiceLine);
-					var voiceSrc = "http://"+self.server_ip
-						+ "/kcs/sound/kc"+currentGraph+"/"+voiceFile+".mp3";
-					self.audio = new Audio(voiceSrc);
-					self.audio.play();
+					var voiceSrc = `http://${self.server_ip}/kcs/sound/kc${currentGraph}/${voiceFile}.mp3`;
+					if($(".voice_list .player audio").length){
+						$(".voice_list .player audio").each((_, a) => {a.pause();});
+					}
+					$(".voice_list .player").empty();
+					$(".voice_list .subtitle").removeClass("playing");
+					var player = $('<audio controls autoplay><source/></audio>');
+					$("source", player).attr("src", voiceSrc);
+					$(".player", elm).html(player);
+					var audio = player.get(0);
+					audio.onloadedmetadata = function() {
+						$(this).parent().append('<span>{0}</span>'.format(Math.round(this.duration * 1000)));
+					};
+					audio.ontimeupdate = function() {
+						$("span", $(this).parent()).text('{0}/{1}'
+							.format(Math.round(this.currentTime * 1000), Math.round(this.duration * 1000)));
+					};
+					audio.onplay = function() {
+						$(".subtitle", elm).addClass("playing");
+					};
+					audio.onended = function() {
+						$(".subtitle", elm).removeClass("playing");
+					};
 				});
 
-				var sourceText;
-				if (src) {
+				var sourceText = "missing";
+				if(src) {
 					sourceText = typeof src.tag === "number"
-						? (state === "direct"
-						   ? "Available" : "From " + self.buildShipName(src.tag) )
-					    : src.tag;
-				} else {
-					sourceText = "missing";
+						? (state === "direct" ? "Available" : "From " + self.buildShipName(src.tag) )
+						: src.tag;
 				}
-				$(".source",elm).text( sourceText );
+				$(".source",elm).text(sourceText);
 				if(sourceText.startsWith("From ")){
 					$(".source",elm).addClass("hover").data("sid", src.tag);
 					$(".source",elm).click(toFromFunc);
 				}
-				$(".subtitle",elm).text( (state === "missing") ? "missing"
-										 :src.val );
+				var subtitleText = state === "missing" ? "missing" : toQuoteHtmlLines(src.val);
+				$(".subtitle",elm).html(subtitleText);
 				$(".division",elm).click(toggleSrcFunc);
 				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
-					$(".en_src",elm).text(self.enQuotes[masterId][voiceNum]);
+					$(".en_src",elm).html(toQuoteHtmlLines(self.enQuotes[masterId][voiceNum], false));
 				}
 				if(self.jpQuotes && self.jpQuotes[masterId] && self.jpQuotes[masterId][voiceNum]){
-					$(".jp_src",elm).text(self.jpQuotes[masterId][voiceNum]);
+					$(".jp_src",elm).html(toQuoteHtmlLines(self.jpQuotes[masterId][voiceNum], false));
 				}
 				const seasonalKeys = Object.keys(shipLines).filter(k => k.startsWith(voiceNum + '@'));
 				if(seasonalKeys.length){
 					let spQuotes = "";
 					seasonalKeys.forEach(key => {
 						spQuotes += "<b>[{0}]</b> {1}"
-							.format(key.slice(key.indexOf('@') + 1), shipLines[key].val) +
-							"<br/>";
+							.format(key.slice(key.indexOf('@') + 1), toQuoteHtmlLines(shipLines[key].val))
+							+ "<br/>";
 					});
 					$(".seasonal",elm).html(spQuotes).show();
 				}

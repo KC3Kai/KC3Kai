@@ -111,8 +111,8 @@
 }
 
 .tab_quotes .part_right .voice_entity .voice {
-    width: 110px;
-    float: left;
+	width: 110px;
+	float: left;
 	height: 20px;
 	line-height: 18px;
 	border-radius: 3px;
@@ -120,9 +120,28 @@
 	text-align: left;
 	padding-left: 8px;
 }
+.tab_quotes .part_right .voice_entity .player {
+	float: left;
+	width: 195px;
+	height: 20px;
+	margin-left: 5px;
+	font-size: 11px;
+	line-height: 20px;
+}
+.tab_quotes .part_right .voice_entity .player audio {
+	position: relative;
+	width: 127px;
+	height: 30px;
+	transform: scaleY(0.7);
+	margin-top: -5px;
+	float: left;
+}
+.tab_quotes .part_right .voice_entity .player span {
+	float: right;
+}
 
 .tab_quotes .part_right .voice_entity.missing .source {
-    color: red;
+	color: red;
 }
 
 .tab_quotes .part_right .voice_entity.direct .source {
@@ -132,7 +151,11 @@
 }
 
 .tab_quotes .part_right .voice_entity .source {
-    float: right;
+	float: right;
+	max-width: 160px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .tab_quotes .ship_list .ship_entity:hover {
@@ -157,7 +180,7 @@
 	white-space:nowrap;
 }
 
-.tab_quotes .ship_list  .ship_entity .ship_pg_box {
+.tab_quotes .ship_list .ship_entity .ship_pg_box {
 	width: 152px;
 	height:12px;
 	margin:4px 3px 0px;

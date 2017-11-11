@@ -164,9 +164,11 @@
 	// this to reflect the change
 	// storage + selectedFleet => selectedExpedition, plannerIsGreatSuccess
 	function ExpedTabApplyConfig() {
-		const conf = ExpedTabValidateConfig(selectedExpedition);
 		if(selectedFleet > 4) return;
+		let conf = ExpedTabValidateConfig(selectedExpedition);
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
+		// re-validate config in case that fleet has just returned from a new exped
+		conf = ExpedTabValidateConfig(selectedExpedition);
 		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
 	}
 
@@ -1133,11 +1135,9 @@
 		},
 
 		Timers: function(data){
-			$(".activity_basic .expeditions").createChildrenTooltips();
-			$(".activity_basic .timers").createChildrenTooltips();
 			$(".activity_basic .expeditions").hideChildrenTooltips();
 			$(".activity_basic .timers").hideChildrenTooltips();
-			
+
 			// Expedition numbers
 			KC3TimerManager._exped[0].expnum();
 			KC3TimerManager._exped[1].expnum();
@@ -1156,6 +1156,9 @@
 				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3);
 				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4);
 			}
+
+			$(".activity_basic .expeditions").createChildrenTooltips();
+			$(".activity_basic .timers").createChildrenTooltips();
 		},
 
 		/* QUESTS
@@ -1221,9 +1224,10 @@
 				KC3TimerManager._exped[0].faceId = PlayerManager.fleets[1].ship(0).masterId;
 				KC3TimerManager._exped[1].faceId = PlayerManager.fleets[2].ship(0).masterId;
 				KC3TimerManager._exped[2].faceId = PlayerManager.fleets[3].ship(0).masterId;
-				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2).lazyInitTooltip();
-				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3).lazyInitTooltip();
-				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4).lazyInitTooltip();
+				KC3TimerManager._exped[0].face(undefined, PlayerManager.fleetCount < 2);
+				KC3TimerManager._exped[1].face(undefined, PlayerManager.fleetCount < 3);
+				KC3TimerManager._exped[2].face(undefined, PlayerManager.fleetCount < 4);
+				$(".activity_basic .expeditions").createChildrenTooltips();
 			}
 
 			// TAIHA ALERT CHECK
@@ -1390,8 +1394,7 @@
 						MainFleet, EscortFleet,
 						AntiAir.getFormationModifiers(ConfigManager.aaFormation))),
 					speed:
-						(MainFleet.fastFleet && EscortFleet.fastFleet)
-						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
+						KC3Meta.shipSpeed(Math.min(MainFleet.minSpeed, EscortFleet.minSpeed)),
 					docking:
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
@@ -1949,6 +1952,7 @@
 		},
 
 		CompassResult: function(data){
+			var self = this;
 			// Clear battle details box
 			clearBattleData();
 
@@ -1958,6 +1962,7 @@
 			var thisNode = KC3SortieManager.currentNode();
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
+			var diff = KC3SortieManager.map_difficulty;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
 
 			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
@@ -1989,7 +1994,68 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
-					$(".module.activity .node_type_battle").show();
+					if(!ConfigManager.info_prevencounters || !ConfigManager.info_compass)
+						break;
+					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
+					nodeEncBox.text("...");
+					$(".module.activity .node_type_prev_encounters").show();
+					KC3Database.con.encounters.filter(node =>
+						node.world === world && node.map === map
+						&& node.node === thisNode.id && node.diff === diff
+					).toArray(function(thisNodeEncounterList){
+						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
+							return;
+						nodeEncBox.empty();
+						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
+						$.each(sortedList, function(_, encounter){
+							const shipList = JSON.parse(encounter.ke || null);
+							let badEntry = ! (Array.isArray(shipList) &&
+								encounter.form > 0 && encounter.count > 0);
+							// Don't show 'broken' encounters with incorrect data
+							if(badEntry) return;
+							const encBox = $("#factory .encounter_record").clone();
+							$(".encounter_formation img", encBox).attr("src",
+								KC3Meta.formationIcon(encounter.form));
+							$.each(shipList, function(_, shipId){
+								if(shipId > 0){
+									if(!KC3Master.isAbyssalShip(shipId)){
+										badEntry = true;
+										return;
+									}
+									const shipBox = $("#factory .encounter_ship").clone();
+									$(shipBox).removeClass(KC3Meta.abyssShipBorderClass());
+									$(shipBox).addClass(KC3Meta.abyssShipBorderClass(shipId));
+									$("img", shipBox).attr("src", KC3Meta.abyssIcon(shipId));
+									$("img", shipBox).attr("alt", shipId);
+									$("img", shipBox).data("masterId", shipId)
+										.on("dblclick", self.shipDoubleClickFunction);
+									$(shipBox).attr("title", "{0}: {1}"
+										.format(shipId, KC3Meta.abyssShipName(shipId))
+									).lazyInitTooltip();
+									$(".encounter_ships", encBox).append(shipBox);
+								}
+							});
+							// Don't show 'broken' encounters from pre-abyssal ID shift update
+							if(badEntry) return;
+							if(shipList.length > 6){
+								$(".encounter_ships", encBox).addClass("combined");
+							}
+							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count);
+							tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
+							const ap = KC3Calc.enemyFighterPower(shipList)[0];
+							if(ap){
+								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
+									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
+										Math.round(3 * ap / 2), 3 * ap);
+							}
+							$(".encounter_formation", encBox).attr("title", tooltip).lazyInitTooltip();
+							encBox.appendTo(nodeEncBox);
+						});
+					}).catch(err => {
+						console.error("Loading node encounters failed", err);
+						// Keep 3 dots as unknown
+						nodeEncBox.text("...");
+					});
 					break;
 
 				// Resource node
@@ -2172,6 +2238,7 @@
 				}
 				$(".module.activity .battle_support").show();
 				$(".module.activity .battle_fish").hide();
+				$(".module.activity .node_type_prev_encounters").hide();
 				$(".module.activity .node_type_battle").show();
 			};
 			// `info_compass` including 'Battle Data', so no activity if it's off
@@ -2210,6 +2277,8 @@
 			}
 			
 			// Load enemy icons
+			$(".module.activity .node_type_prev_encounters").hide();
+			$(".module.activity .node_type_battle").show();
 			$.each(thisNode.eships, function(index, eshipId){
 				if(eshipId > 0){
 					if ($(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).length > 0) {

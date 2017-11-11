@@ -7,7 +7,7 @@ var waiting = true;
 var trustedExit = false;
 
 // Used to fade out subtitles after calculated duration
-var subtitleVanishTimer = false;
+var subtitleTimer = false;
 var subtitleVanishBaseMillis;
 var subtitleVanishExtraMillisPerChar;
 var subtitleHourlyTimer = false;
@@ -577,6 +577,7 @@ var interactions = {
 		var quoteIdentifier = "";
 		var quoteVoiceNum = request.voiceNum;
 		var quoteVoiceSize = request.voiceSize;
+		var quoteVoiceDuration = request.duration;
 		var quoteSpeaker = "";
 		switch(request.voicetype){
 			case "titlecall":
@@ -614,38 +615,62 @@ var interactions = {
 			$(".overlay_subtitles").stop(true, true);
 			$(".overlay_subtitles").hide();
 			// If subtitle removal timer is ongoing, reset
-			if(subtitleVanishTimer){
-				clearTimeout(subtitleVanishTimer);
+			if(subtitleTimer){
+				if(Array.isArray(subtitleTimer))
+					subtitleTimer.forEach(clearTimeout);
+				else
+					clearTimeout(subtitleTimer);
 			}
 		};
 		hideSubtitle();
 		
 		// Display subtitle and set its removal timer
 		const showSubtitle = (subtitleText, quoteIdentifier) => {
+			if($.type(subtitleText) === "string") {
+				showSubtitleLine(subtitleText, quoteIdentifier);
+				const millis = quoteVoiceDuration || (subtitleVanishBaseMillis +
+					subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+				subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
+				return;
+			}
+			subtitleTimer = [];
+			let lastLineOutMillis = 0;
+			$.each(subtitleText, (delay, text) => {
+				const delays = String(delay).split(',');
+				const millis = Number(delays[0]);
+				lastLineOutMillis = delays.length > 1 ? Number(delays[1]) :
+					(millis + subtitleVanishBaseMillis + subtitleVanishExtraMillisPerChar * text.length);
+				subtitleTimer.push(setTimeout(() => {
+					showSubtitleLine(text, quoteIdentifier);
+				}, millis));
+			});
+			subtitleTimer.push(setTimeout(fadeSubtitlesOut, lastLineOutMillis));
+		};
+		
+		const fadeSubtitlesOut = () => {
+			subtitleTimer = false;
+			$(".overlay_subtitles").fadeOut(1000, function(){
+				switch (ConfigManager.subtitle_display) {
+					case "evade":
+						$(".overlay_subtitles").css("top", "");
+						$(".overlay_subtitles").css("bottom", "5px");
+						subtitlePosition = "bottom";
+						break;
+					case "ghost":
+						$(".overlay_subtitles").removeClass("ghost");
+						break;
+					default: break;
+				}
+			});
+		};
+		
+		const showSubtitleLine = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
-			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
-			$(".overlay_subtitles").show();
-			const millis = subtitleVanishBaseMillis +
-				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(1000, function(){
-					switch (ConfigManager.subtitle_display) {
-						case "evade":
-							$(".overlay_subtitles").css("top", "");
-							$(".overlay_subtitles").css("bottom", "5px");
-							subtitlePosition = "bottom";
-							break;
-						case "ghost":
-							$(".overlay_subtitles").removeClass("ghost");
-							break;
-						default: break;
-					}
-				});
-			}, millis);
 			if(!!quoteSpeaker){
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 			}
+			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
+			$(".overlay_subtitles").show();
 		};
 		
 		const cancelHourlyLine = () => {

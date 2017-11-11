@@ -1658,6 +1658,9 @@ body {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #e6f7ff;
 }
+.tab_quotes .part_right .voice_entity .subtitle.playing {
+	color: #4285f4;
+}
 .tab_quotes .part_right .voice_entity .jp_src,
 .tab_quotes .part_right .voice_entity .en_src {
 	background: #eeeeee;
