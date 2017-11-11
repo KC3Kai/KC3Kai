@@ -1134,7 +1134,7 @@ KC3改 Ship Object
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
 		const damageModifier = (warfareType === "Torpedo" ? {
 			// Day time only affect Opening Torpedo in fact, Chuuha cannot Closing at all
-			// Night time unmentioned, assume Chuuha 0.8 too
+			// Night time unmentioned, assume Chuuha 0.8 too?
 			"chuuha": 0.8,
 			"taiha": 0.0
 		} : warfareType === "Shelling" || warfareType === "Antisub" ? {
@@ -1269,7 +1269,7 @@ KC3改 Ship Object
 						type2Ids.includes(firstGear.master().api_type[2]);
 				};
 				// detail modifier affected by (internal) proficiency under verification
-				// simply use max modifier (+0.1 / +0.25) here
+				// might be an average value from participants, simply use max modifier (+0.1 / +0.25) here
 				proficiencyCriticalModifier += 0.1;
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
 			} else {
@@ -1815,7 +1815,7 @@ KC3改 Ship Object
 					// https://twitter.com/Nishisonic/status/911143760544751616
 					const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 					const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
-					// Fight Bomber Iwai
+					// Fighter Bomber Iwai
 					const specialDBomberCnt = this.countNonZeroSlotEquipment([154]);
 					// Swordfish variants
 					const specialTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
@@ -2025,7 +2025,7 @@ KC3改 Ship Object
 				result = -2; // only fit bonus, but -2 fixed
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
-				// twin mount on Agano class / Ooyodo class / general CLs
+				// for twin mount on Agano class / Ooyodo class / general CLs
 				result += (isAganoClass ? 8 : isOoyodoClass ? 5 : 3) *
 					Math.sqrt(this.countEquipment(twinMountIds));
 				// for 15.5cm triple main mount on Ooyodo class
