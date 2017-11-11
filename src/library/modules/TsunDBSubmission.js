@@ -115,7 +115,7 @@
 			// Slow fleet wins over fast
 			this.data.fleetSpeed = Math.min(this.data.fleetSpeed, fleet.minSpeed);
 			// F33 Cn 1,2,3 & 4
-			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLoS(i); });
+			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLos4(i); });
 			return fleet.ship().map(ship => (ship.isDummy() || ship.didFlee || ship.hp[0] <= 0) ? -1 : {
 				name: ship.master().api_name,
 				type: ship.master().api_stype,
