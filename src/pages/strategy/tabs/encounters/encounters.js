@@ -149,8 +149,8 @@
 				&& (world < 10 || !diff || node.diff === diff)
 			).toArray(function(encounters) {
 				$.each(encounters, function(index, encounter) {
-					// data before enemy ship ID 1000 shifting not counted as bad
-					// data without `count`, `name` are old records, not counted as bad
+					// Data before enemy ship ID 1000 shifting not counted as bad
+					// Data without `count`, `name` are old records, not counted as bad
 					if(!Array.isArray(JSON.parse(encounter.ke || null)) || !encounter.form) {
 						console.debug("Bad encounter entry detected:", encounter);
 						return;
@@ -175,6 +175,7 @@
 						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
 						curBox.appendTo("#encounter-" + mapName + " .encounter_world_body");
 					} else if(!!nodeName) {
+						// Update node name only if node duplicated by multi edges
 						$(".encounter_node_head", curBox).text("Node {0} {1}".format(nodeLetter, nodeName));
 					}
 					// Check formation and ships box
@@ -189,7 +190,7 @@
 						curBox.data("nodeName", nodeName);
 						curBox.appendTo(curNodeBody);
 						$(".encounter_formation img", curBox).attr("src", KC3Meta.formationIcon(encounter.form));
-						shipList = JSON.parse(encounter.ke || null) || {};
+						shipList = JSON.parse(encounter.ke || "[]");
 						$.each(shipList, function(shipIndex, shipId) {
 							if(shipId > 0) {
 								shipBox = $(".tab_encounters .factory .encounter_ship").clone();
@@ -209,7 +210,9 @@
 							$(".encounter_ships", curBox).addClass("combined");
 						}
 					} else {
-						// Update count
+						// Still parse ship IDs for air power calculation
+						shipList = JSON.parse(encounter.ke || "[]");
+						// Update count only if more edges lead to the same node
 						curBox.data("count", (encounter.count || 1) + curBox.data("count"));
 						if(!!nodeName && curBox.data("nodeName") !== nodeName) {
 							curBox.data("nodeName", "{0}/{1}".format(curBox.data("nodeName"), nodeName));

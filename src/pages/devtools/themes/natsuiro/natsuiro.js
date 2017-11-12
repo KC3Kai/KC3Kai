@@ -2002,6 +2002,9 @@
 					nodeEncBox.text("...");
 					KC3Database.con.encounters.filter(node =>
 						node.world === world && node.map === map
+						// Known issue: this edge ID filtering only gives encounters of edge's own,
+						// if more than one edge leads to a same node,
+						// encounters (both patterns & count) will be inaccurate for this node.
 						&& node.node === thisNode.id && node.diff === diff
 					).toArray(function(thisNodeEncounterList){
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
