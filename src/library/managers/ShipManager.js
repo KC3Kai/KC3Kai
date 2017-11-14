@@ -165,7 +165,11 @@ Saves and loads list to and from localStorage
 				cShip.getDefer()[1].resolve(null); // removes async wait
 			}
 			cShip.getDefer()[2].resolve(cShip.fuel,cShip.bull,cShip.slots.reduce(function(x,y){return x+y;})); // mark resolve wait for port
-
+			
+			// update picture book base form info
+			if(PictureBook) {
+				PictureBook.updateBaseShip(cShip.masterId);
+			}
 		},
 		
 		// Mass set multiple ships
@@ -238,6 +242,11 @@ Saves and loads list to and from localStorage
 				.reduce(function(x,y){ return x.concat(y); });
 			var shipIndex = flatShips.indexOf(Number(rosterId));
 			return shipIndex < 0 ? -1 : Math.floor(shipIndex / 6);
+		},
+		
+		masterExists: function( masterId, matchBaseForm = true ){
+			var idToFind = matchBaseForm ? RemodelDb.originOf(masterId) || masterId : masterId;
+			return this.find(ship => idToFind === (matchBaseForm ? RemodelDb.originOf(ship.masterId) : ship.masterId)).length > 0;
 		},
 		
 		// Save ship list onto local storage
