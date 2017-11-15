@@ -226,6 +226,11 @@ KC3改 Ship Object
 			morale > 19 ? "2" : // orange face
 			"1"; // red face
 	};
+	/**
+	 * The reason why 53 / 33 is the bound of morale effect being taken:
+	 * on entering battle, morale is subtracted -3 (day) or -2 (night) before its value gets in,
+	 * so +3 value is used as the indeed morale bound for sparkle or fatigue.
+	 */
 	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4]){
 		return this.morale > 52 ? valuesArray[4] :
 			this.morale > 32 ? valuesArray[3] :
