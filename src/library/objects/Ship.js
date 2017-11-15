@@ -575,11 +575,15 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
+		// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
+		if(!canAirAttack) {
+			noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
 				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
@@ -984,7 +988,7 @@ KC3改 Ship Object
 	 * Get pre-cap anti-sub power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#AntiSubmarine
 	 */
-	KC3Ship.prototype.antiSubWarfarePower = function(){
+	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
 		const isSonarEquipped = this.hasEquipmentType(1, 10);
 		const isDepthChargeProjectorEquipped = this.hasEquipment([44, 45]);
@@ -996,9 +1000,9 @@ KC3改 Ship Object
 		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
 		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
 		const attackMethodConst = isAirAttack ? 8 : 13;
-		const nakedAsw = this.nakedAsw();
+		const nakedAsw = this.nakedAsw() + aswDiff;
 		// only asw stat from partial types of equipment taken into account
-		const equipmentTotalAsw = this.effectiveEquipmentTotalAsw();
+		const equipmentTotalAsw = this.effectiveEquipmentTotalAsw(isAirAttack);
 		let aswPower = attackMethodConst;
 		aswPower += 2 * Math.sqrt(nakedAsw);
 		aswPower += 1.5 * equipmentTotalAsw;
@@ -2187,7 +2191,8 @@ KC3改 Ship Object
 		isShow = isShow || shipAacis.length > 0;
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
-		const oaswPower = this.canDoOASW(newEquipAsw - oldEquipAsw) ? this.antiSubWarfarePower() : false;
+		const aswDiff = newEquipAsw - oldEquipAsw;
+		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		// Possible TODO:
 		// can opening torpedo
