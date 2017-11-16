@@ -201,6 +201,7 @@
     const collectBattleConditions = () => {
         const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
                 KC3SortieManager.currentNode() : {};
+        const isOnBattle = !!currentNode.stime;
         const playerCombinedFleetType = PlayerManager.combinedFleet;
         const isEnemyCombined = currentNode.enemyCombined;
         const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
@@ -213,6 +214,7 @@
         const contactPlaneId = currentNode.fcontactId;
         const isStartFromNight = currentNode.startsFromNight;
         return {
+            isOnBattle,
             engagementId,
             formationId,
             enemyFormationId,
