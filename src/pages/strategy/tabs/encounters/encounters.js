@@ -150,7 +150,7 @@
 			).toArray(function(encounters) {
 				$.each(encounters, function(index, encounter) {
 					// Data before enemy ship ID 1000 shifting not counted as bad
-					// Data without `count`, `name` are old records, not counted as bad
+					// Data without `count`, `name` are first-time records, not counted as bad
 					if(!Array.isArray(JSON.parse(encounter.ke || null)) || !encounter.form) {
 						console.debug("Bad encounter entry detected:", encounter);
 						return;
