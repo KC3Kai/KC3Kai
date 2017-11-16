@@ -1571,6 +1571,12 @@ body {
 	color: black;
 }
 
+/* ENCOUNTERS
+--------------------------------*/
+.tab_encounters .map_switcher {
+	background: #f0f5ff;
+}
+
 /* EXPEDITION SCORER
 --------------------------------*/
 .tab_compare .compare_ship_stat {

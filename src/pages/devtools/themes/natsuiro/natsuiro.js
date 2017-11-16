@@ -1974,7 +1974,6 @@
 
 			$(".module.activity .node_type_text").removeClass("dud");
 			$(".module.activity .node_type_text").removeClass("select");
-			$(".module.activity .node_types").hide();
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -1994,13 +1993,18 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
+					// Skip not only encounters disabled, but also all battle activity hidden
 					if(!ConfigManager.info_prevencounters || !ConfigManager.info_compass)
 						break;
+					$(".module.activity .node_type_battle").hide();
+					$(".module.activity .node_type_prev_encounters").show();
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
 					nodeEncBox.text("...");
-					$(".module.activity .node_type_prev_encounters").show();
 					KC3Database.con.encounters.filter(node =>
 						node.world === world && node.map === map
+						// Known issue: this edge ID filtering only gives encounters of edge's own,
+						// if more than one edge leads to a same node,
+						// encounters (both patterns & count) will be inaccurate for this node.
 						&& node.node === thisNode.id && node.diff === diff
 					).toArray(function(thisNodeEncounterList){
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
@@ -2160,8 +2164,10 @@
 			// If compass setting disabled, hide node letters and all battle activities
 			if(!ConfigManager.info_compass){
 				$(".module.activity .node_types").hide();
-				$(".module.activity .sortie_node").hide();
 				$(".module.activity .sortie_nodes .boss_node").hide();
+				$(".module.activity .sortie_nodes .sortie_node").hide();
+			} else {
+				$(".module.activity .sortie_nodes .sortie_node").show();
 			}
 		},
 
@@ -2174,6 +2180,7 @@
 				clearBattleData();
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
+				$(".module.activity .node_type_prev_encounters").hide();
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > 0 && $(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0){
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
@@ -2238,7 +2245,6 @@
 				}
 				$(".module.activity .battle_support").show();
 				$(".module.activity .battle_fish").hide();
-				$(".module.activity .node_type_prev_encounters").hide();
 				$(".module.activity .node_type_battle").show();
 			};
 			// `info_compass` including 'Battle Data', so no activity if it's off
@@ -2264,6 +2270,7 @@
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
 			}
+			$(".module.activity .node_type_prev_encounters").hide();
 			
 			if (thisNode.debuffed) {
 				$(".module.activity .map_world")
@@ -2277,8 +2284,6 @@
 			}
 			
 			// Load enemy icons
-			$(".module.activity .node_type_prev_encounters").hide();
-			$(".module.activity .node_type_battle").show();
 			$.each(thisNode.eships, function(index, eshipId){
 				if(eshipId > 0){
 					if ($(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).length > 0) {
@@ -2474,14 +2479,18 @@
 				.css("opacity", 0.5);
 			}
 
+			// Show battle activity if `info_compass` enabled, `info_battle` only affects enemy HP prediction
+			if(ConfigManager.info_compass){
+				$(".module.activity .node_type_battle").show();
+			}
 			this.Fleet();
 		},
 
 		BattleNight: function(data){
 			var self = this;
-			// Enemy HP Predictions
 			var thisNode = KC3SortieManager.currentNode();
-			
+
+			// Enemy HP Predictions
 			if(ConfigManager.info_battle){
 				var newEnemyHP, enemyHPPercent, enemyBarHeight;
 				
@@ -2576,9 +2585,10 @@
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
 						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
-						.toggleClass("new_ship", KC3ShipManager.count(
-								ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(thisNode.drop)
-							) === 0 // Not own this shipgirl of any remodel form
+						.toggleClass("new_ship", ConfigManager.info_dex_owned_ship ?
+							// Not own this shipgirl of any remodel form, judged by picture book history or current ships
+							! PictureBook.isEverOwnedShip(thisNode.drop) :
+							! KC3ShipManager.masterExists(thisNode.drop)
 						).lazyInitTooltip();
 				}
 
@@ -2862,10 +2872,6 @@
 			thisPvP.isPvP = true;
 			thisPvP.engage( data.battle, data.fleetSent );
 
-			// PvP battle activities data should be hidden when `info_compass` turned off,
-			// Here left it unfixed to keep identical.
-			//if(!ConfigManager.info_compass){ $(".module.activity .node_types").hide(); }
-
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
 			$(".module.activity .battle_drop    img").attr("src", "../../../../assets/img/ui/dark_shipdrop-x.png").css("visibility","hidden");
@@ -3032,7 +3038,16 @@
 
 			// Switch to battle tab
 			$(".module.activity .activity_battle").css("opacity", 1);
-			$(".module.activity .node_type_battle").show();
+			$(".module.activity .node_types").hide();
+			if(ConfigManager.info_compass){
+				$(".module.activity .sortie_nodes .sortie_node").show();
+				$(".module.activity .node_type_battle").show();
+			} else {
+				// PvP battle activities info should be hidden when `info_compass` turned off,
+				// Here left it unfixed to keep option function identical with history.
+				$(".module.activity .sortie_nodes .sortie_node").show();
+				$(".module.activity .node_type_battle").show();
+			}
 			$("#atab_battle").trigger("click");
 
 			// Trigger other listeners

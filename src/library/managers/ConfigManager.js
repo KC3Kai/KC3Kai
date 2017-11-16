@@ -71,6 +71,7 @@ Retrieves when needed to apply on components
 				info_stats_diff      : 3,
 				info_eng_stype       : false,
 				info_force_ship_lang : "",
+				info_dex_owned_ship  : true,
 				info_chuuha_icon     : true,
 				info_seasonal_icon   : false,
 				info_salt            : false,

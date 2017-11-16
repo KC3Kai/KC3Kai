@@ -246,6 +246,14 @@
 				}
 			},
 			{
+				"id" : "info_dex_owned_ship",
+				"name" : "SettingsCheckNewShipFromDex",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsCheckNewShipFromDexTip"
+				}
+			},
+			{
 				"id" : "info_chuuha_icon",
 				"name" : "SettingsDamagedShipIcon",
 				"type" : "check",

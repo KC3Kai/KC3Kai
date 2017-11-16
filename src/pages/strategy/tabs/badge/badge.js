@@ -17,14 +17,21 @@
 		   ---------------------------------*/
 		execute :function(){
 			var self = this;
+			PlayerManager.loadFleets();
+			KC3ShipManager.load();
+
 			$(".tab_badge .factory").hide();
 
-			$(".export_value", $("#ep_name").parent().parent()).html(PlayerManager.hq.name);
-			$(".export_value", $("#ep_level").parent().parent()).html(PlayerManager.hq.level);
-			$(".export_value", $("#ep_server").parent().parent()).html(PlayerManager.hq.server);
-			$(".export_value", $("#ep_current_fleet").parent().parent()).html(localStorage.fleets);
-			$(".export_value", $("#ep_k2").parent().parent()).html("[dynamically generated]");
-			$(".export_value", $("#ep_colle").parent().parent()).html(localStorage.ships);
+			$(".export_value", $("#ep_name").parent().parent()).text(PlayerManager.hq.name);
+			$(".export_value", $("#ep_level").parent().parent()).text(PlayerManager.hq.level);
+			$(".export_value", $("#ep_server").parent().parent()).text(PlayerManager.hq.server);
+			$(".export_value", $("#ep_current_fleet").parent().parent()).text(
+				JSON.stringify( PlayerManager.fleets.map(f => ({id:f.fleetId, name:f.name, ships:f.ships})) )
+			);
+			$(".export_value", $("#ep_k2").parent().parent()).text("[dynamically generated]");
+			$(".export_value", $("#ep_colle").parent().parent()).text(
+				JSON.stringify( Object.keys(KC3ShipManager.list).map(x => KC3ShipManager.list[x].masterId) )
+			);
 
 			$(".tab_badge .export_parts input").on("click", function () {
 				// on every option change we clear exported results
@@ -54,14 +61,14 @@
 					pb = PictureBook.load();
 					for (i=1; i<=5; ++i) {
 						var t = "Vol." + i + ", ";
-						if (pb[i]) {
-							t = t + "Last Update: " + new Date(pb[i].timestamp);
+						if (pb.ship && pb.ship[i]) {
+							t = t + "Last Update: " + new Date(pb.ship[i].timestamp);
 						} else {
 							t = t + "missing";
 						}
 						mkText(t);
 					}
-					mkText("Refresh (F5) this strategy room to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
+					mkText("Refresh this page to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
 				}
 
 			});
@@ -159,25 +166,23 @@
 			};
 		},
 		exportFromShipList: function() {
+			KC3ShipManager.load();
 			var ids = [];
-			$.each( KC3ShipManager.list, function(k,ship) {
+			$.each( KC3ShipManager.list, function(k, ship) {
 				ids.push( ship.masterId );
 			});
 			return this.exportFromIdList(ids);
 		},
 		exportFromPictureBook: function() {
 			var pb = PictureBook.load();
-			var i;
 			var ids = [];
-			console.log(pb);
-			$.each(pb, function(vol,x) {
-				ids = ids.concat( x.ids );
+			$.each(pb.ship, function(v, x) {
+				ids.push( ...x.ids );
 			});
 			return this.exportFromIdList(ids);
 		},
 		exportFleetInfo: function() {
 			PlayerManager.loadFleets();
-
 			var allFleetInfo = [];
 			var i,j;
 			for (i=0; i<4;++i) {

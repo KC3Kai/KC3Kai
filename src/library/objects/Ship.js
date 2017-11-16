@@ -226,6 +226,11 @@ KC3改 Ship Object
 			morale > 19 ? "2" : // orange face
 			"1"; // red face
 	};
+	/**
+	 * The reason why 53 / 33 is the bound of morale effect being taken:
+	 * on entering battle, morale is subtracted -3 (day) or -2 (night) before its value gets in,
+	 * so +3 value is used as the indeed morale bound for sparkle or fatigue.
+	 */
 	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4]){
 		return this.morale > 52 ? valuesArray[4] :
 			this.morale > 32 ? valuesArray[3] :
@@ -570,11 +575,15 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
+		// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
+		if(!canAirAttack) {
+			noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
 				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
@@ -979,7 +988,7 @@ KC3改 Ship Object
 	 * Get pre-cap anti-sub power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#AntiSubmarine
 	 */
-	KC3Ship.prototype.antiSubWarfarePower = function(){
+	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
 		const isSonarEquipped = this.hasEquipmentType(1, 10);
 		const isDepthChargeProjectorEquipped = this.hasEquipment([44, 45]);
@@ -991,9 +1000,9 @@ KC3改 Ship Object
 		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
 		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
 		const attackMethodConst = isAirAttack ? 8 : 13;
-		const nakedAsw = this.nakedAsw();
+		const nakedAsw = this.nakedAsw() + aswDiff;
 		// only asw stat from partial types of equipment taken into account
-		const equipmentTotalAsw = this.effectiveEquipmentTotalAsw();
+		const equipmentTotalAsw = this.effectiveEquipmentTotalAsw(isAirAttack);
 		let aswPower = attackMethodConst;
 		aswPower += 2 * Math.sqrt(nakedAsw);
 		aswPower += 1.5 * equipmentTotalAsw;
@@ -1134,7 +1143,7 @@ KC3改 Ship Object
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
 		const damageModifier = (warfareType === "Torpedo" ? {
 			// Day time only affect Opening Torpedo in fact, Chuuha cannot Closing at all
-			// Night time unmentioned, assume Chuuha 0.8 too
+			// Night time unmentioned, assume Chuuha 0.8 too?
 			"chuuha": 0.8,
 			"taiha": 0.0
 		} : warfareType === "Shelling" || warfareType === "Antisub" ? {
@@ -1269,7 +1278,7 @@ KC3改 Ship Object
 						type2Ids.includes(firstGear.master().api_type[2]);
 				};
 				// detail modifier affected by (internal) proficiency under verification
-				// simply use max modifier (+0.1 / +0.25) here
+				// might be an average value from participants, simply use max modifier (+0.1 / +0.25) here
 				proficiencyCriticalModifier += 0.1;
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
 			} else {
@@ -1815,7 +1824,7 @@ KC3改 Ship Object
 					// https://twitter.com/Nishisonic/status/911143760544751616
 					const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 					const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
-					// Fight Bomber Iwai
+					// Fighter Bomber Iwai
 					const specialDBomberCnt = this.countNonZeroSlotEquipment([154]);
 					// Swordfish variants
 					const specialTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
@@ -2025,7 +2034,7 @@ KC3改 Ship Object
 				result = -2; // only fit bonus, but -2 fixed
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
-				// twin mount on Agano class / Ooyodo class / general CLs
+				// for twin mount on Agano class / Ooyodo class / general CLs
 				result += (isAganoClass ? 8 : isOoyodoClass ? 5 : 3) *
 					Math.sqrt(this.countEquipment(twinMountIds));
 				// for 15.5cm triple main mount on Ooyodo class
@@ -2182,7 +2191,8 @@ KC3改 Ship Object
 		isShow = isShow || shipAacis.length > 0;
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
-		const oaswPower = this.canDoOASW(newEquipAsw - oldEquipAsw) ? this.antiSubWarfarePower() : false;
+		const aswDiff = newEquipAsw - oldEquipAsw;
+		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		// Possible TODO:
 		// can opening torpedo

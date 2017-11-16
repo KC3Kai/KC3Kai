@@ -5,12 +5,38 @@
 	display:none;
 }
 
+.tab_encounters .map_switcher {
+	margin: 0px 0px 10px 0px;
+	height: 45px;
+}
+
+.tab_encounters .world_list {
+	min-width: 150px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+}
+.tab_encounters .map_list {
+	min-width: 115px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+}
+.tab_encounters .difficulty {
+	min-width: 105px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+	display: none;
+}
+
 .tab_encounters .loading {
 	margin:8px 5px;
-	display:block;
+	display:none;
+	
 }
 .tab_encounters .loading img {
-	content:url(../../../../assets/img/ui/indicator.svg);
+	content:url(/assets/img/ui/indicator.svg);
 	width:24px;
 	height:24px;
 	margin-left:auto;
