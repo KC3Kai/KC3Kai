@@ -1133,6 +1133,7 @@ KC3改 Ship Object
 		// Formation modifier
 		let formationModifier = (warfareType === "Antisub" ?
 			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
+			// ID 6: new formation since 2017-11-17
 			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 			// 0 are placeholders for non-exists ID
 			[0, 0.6, 0.8, 1.2, 1, 1.3, 0, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :

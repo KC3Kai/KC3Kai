@@ -250,8 +250,8 @@ Used by SortieManager
 			this.eSlot = Array.pad(this.eSlotMain, 6, -1).concat(Array.pad(this.eSlotEscort, 6, -1));
 		}
 		
-		// api_eKyouka seems being removed since 2017-11-17
-		//this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+		// api_eKyouka seems being removed since 2017-11-17, kept for compatibility
+		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 		
 		this.supportFlag = battleData.api_support_flag > 0;
 		if(this.supportFlag) {
@@ -261,24 +261,34 @@ Used by SortieManager
 		this.yasenFlag = battleData.api_midnight_flag > 0;
 		
 		// only used by old theme, replaced by beginHPs
-		this.originalHPs = Array.pad(battleData.api_f_nowhps, 6, -1);
+		this.originalHPs = Array.pad(battleData.api_f_nowhps, 6, -1) || this.originalHPs;
 		// max HP of enemy main fleet flagship (boss), keep this for later use
 		// especially when enemy combined and active deck is not main fleet on night battle
-		this.enemyFlagshipHp = this.enemyFlagshipHp || battleData.api_e_nowhps[0];
+		this.enemyFlagshipHp = this.enemyFlagshipHp || (battleData.api_nowhps ?
+			battleData.api_nowhps[7] : battleData.api_e_nowhps[0]);
 		
 		this.maxHPs = {
 			ally: battleData.api_f_maxhps,
 			enemy: battleData.api_e_maxhps
 		};
-		if(isPlayerCombined) {
-			this.maxHPs.allyMain = this.maxHPs.ally;
-			this.maxHPs.allyEscort = battleData.api_f_maxhps_combined;
-			this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
-		}
-		if(isEnemyCombined) {
-			this.maxHPs.enemyMain = this.maxHPs.enemy;
-			this.maxHPs.enemyEscort = battleData.api_e_maxhps_combined;
-			this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+		// For old battle history
+		if(battleData.api_maxhps) {
+			this.maxHPs.ally = battleData.api_maxhps.slice(1, 7);
+			this.maxHPs.enemy = battleData.api_maxhps.slice(7, 13);
+			if(isEnemyCombined) {
+				this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7, 13));
+			}
+		} else {
+			if(isPlayerCombined) {
+				this.maxHPs.allyMain = this.maxHPs.ally;
+				this.maxHPs.allyEscort = battleData.api_f_maxhps_combined;
+				this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
+			}
+			if(isEnemyCombined) {
+				this.maxHPs.enemyMain = this.maxHPs.enemy;
+				this.maxHPs.enemyEscort = battleData.api_e_maxhps_combined;
+				this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+			}
 		}
 
 		this.detection = KC3Meta.detection( battleData.api_search[0] );
@@ -573,29 +583,39 @@ Used by SortieManager
 		this.elevels = normalizeIndex(nightData.api_ship_lv);
 		this.eformation = this.eformation || (nightData.api_formation || [])[1];
 		this.eParam = nightData.api_eParam;
-		//this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
+		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 		this.eSlot = nightData.api_eSlot;
 		
 		this.maxHPs = {
 			ally: nightData.api_f_maxhps,
 			enemy: nightData.api_e_maxhps
 		};
-		if(isPlayerCombined) {
-			this.maxHPs.allyMain = this.maxHPs.ally;
-			this.maxHPs.allyEscort = nightData.api_f_maxhps_combined;
-			this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
-		}
-		if(isEnemyCombined) {
-			this.maxHPs.enemyMain = this.maxHPs.enemy;
-			this.maxHPs.enemyEscort = nightData.api_e_maxhps_combined;
-			this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+		// For old battle history
+		if(nightData.api_maxhps) {
+			this.maxHPs.ally = nightData.api_maxhps.slice(1, 7);
+			this.maxHPs.enemy = nightData.api_maxhps.slice(7, 13);
+			if(isEnemyCombined) {
+				this.maxHPs.enemy = this.maxHPs.enemy.concat(nightData.api_maxhps_combined.slice(7, 13));
+			}
+		} else {
+			if(isPlayerCombined) {
+				this.maxHPs.allyMain = this.maxHPs.ally;
+				this.maxHPs.allyEscort = nightData.api_f_maxhps_combined;
+				this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
+			}
+			if(isEnemyCombined) {
+				this.maxHPs.enemyMain = this.maxHPs.enemy;
+				this.maxHPs.enemyEscort = nightData.api_e_maxhps_combined;
+				this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+			}
 		}
 		
 		if(setAsOriginalHP){
 			// only reserved for old theme using
-			this.originalHPs = Array.pad(nightData.api_f_nowhps, 6, -1);
+			this.originalHPs = Array.pad(nightData.api_f_nowhps, 6, -1) || this.originalHPs;
 		}
-		this.enemyFlagshipHp = this.enemyFlagshipHp || nightData.api_e_nowhps[0];
+		this.enemyFlagshipHp = this.enemyFlagshipHp || (nightData.api_nowhps ?
+			nightData.api_nowhps[7] : nightData.api_e_nowhps[0]);
 		
 		this.engagement = this.engagement || KC3Meta.engagement( nightData.api_formation[2] );
 		this.fcontactId = nightData.api_touch_plane[0]; // masterId of slotitem, starts from 1
