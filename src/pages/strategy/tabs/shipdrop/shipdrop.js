@@ -65,6 +65,7 @@
 					const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
 						this.dropTable[sortie.diff][battle.rating][battle.node] || {};
 					drop[battle.drop] = (drop[battle.drop] || 0) + 1;
+					if(battle.boss) drop.boss = true;
 				}).catch(e => {throw e;}));
 			}).then(() => {
 				Promise.all(allPromises).then(this.filterShipDrop.bind(this)).catch(e => {
@@ -91,7 +92,9 @@
 			const recountNodes = (edgeId, dropInfo) => {
 				const node = KC3Meta.nodeLetter(this.selectedWorld, this.selectedMap, edgeId);
 				allNodes[node] = allNodes[node] || {};
-				const shipIds = Object.keys(dropInfo);
+				const shipIds = Object.keys(dropInfo).filter(id => id !== "boss");
+				if(dropInfo.boss) allNodes[node].boss = true;
+				if(edgeId === node) allNodes[node].unknown = true;
 				shipIds.forEach(mstId => {
 					const count = dropInfo[mstId];
 					if(Number(mstId) > 0 && KC3Master.ship(mstId)) {
@@ -115,8 +118,13 @@
 			nodeLetters.sort((a, b) => a.localeCompare(b));
 			$.each(nodeLetters, (_, node) => {
 				const nodeDrop = $(".node_drop", factory).clone();
-				$(".node_name", nodeDrop).text("Node " + node);
-				const shipIds = Object.keys(allNodes[node]).filter(id => id !== "total");
+				const isBossNode = !!allNodes[node].boss;
+				$(".node_name", nodeDrop)
+					.text("Node " + node + (isBossNode ? " (Boss)" : ""))
+					.toggleClass("boss", isBossNode)
+					.toggleClass("unknown", !!allNodes[node].unknown);
+				const shipIds = Object.keys(allNodes[node])
+					.filter(id => ! ["total", "boss", "unknown"].includes(id));
 				// order by drop counts desc, id asc (no drop always first)
 				shipIds.sort((a, b) => a == "0" || b == "0" ? -Infinity :
 					allNodes[node][b] - allNodes[node][a] || Number(a) - Number(b));
@@ -130,16 +138,16 @@
 					if(this.ship_filter_checkbox[stype]) {
 						isToBeShown = true;
 						const shipBox = $(".ship", factory).clone();
-						if (isNoDrop) {
+						if(isNoDrop) {
 							$("img", shipBox).attr("src", "/assets/img/ui/dark_shipdrop-x.png");
 						} else {
-							$("img", shipBox).attr("src", KC3Meta.getIcon(shipId))
+							$("img", shipBox).attr("src", KC3Meta.getIcon(shipId, undefined, false))
 								.attr("alt", shipId).addClass("hover").click(shipClickFunc)
 								.attr("title", KC3Meta.shipName(shipMst.api_name));
 						}
 						const dropCount = allNodes[node][shipId];
 						$(".drop_times", shipBox).text("x{0}".format(dropCount))
-							.attr("title", "{0} /{1}: {2}%".format(dropCount, totalBattle,
+							.attr("title", "{0} /{1} = {2}%".format(dropCount, totalBattle,
 								Math.qckInt("round", dropCount / totalBattle * 100, 3)));
 						shipBox.appendTo($(".ships", nodeDrop));
 					}

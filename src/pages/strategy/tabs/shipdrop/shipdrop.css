@@ -44,6 +44,12 @@
 	font-size:15px;
 	font-weight:bold;
 }
+.tab_shipdrop .content_root .node_drop .node_name.unknown {
+	color:#aaa;
+}
+.tab_shipdrop .content_root .node_drop .node_name.boss {
+	color:#f15;
+}
 
 .tab_shipdrop .factory {
 	display:none;
