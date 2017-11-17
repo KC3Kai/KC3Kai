@@ -144,8 +144,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		getSupportingFleet :function(bossSupport){
 			function supportFormula(expedNum, isBoss){
 				// expedition ID extended since 207-10-18, 101 no longer the start of event support
-				// FIXME World 1 A1 = 100, A2 = 101, A3 = 102. event ID still unknown
-				const eventStartId = 201 - 1;
+				// starts from 301 since 2017-11-17, might be retrieved from master missions with disp no S1, S2
+				const eventStartId = 301 - 1;
 				const mission = KC3Master.mission(expedNum);
 				let world = mission ? mission.api_maparea_id : 0;
 				const event = world >= 10 || expedNum > eventStartId;
@@ -263,7 +263,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			// Battle avoided node (message might be: Enemy not found / Peace sea / etc)
 			// api_event_id = 6
-			// api_event_kind = 0/1/3/4/5/6/7
+			// api_event_kind = 0/1/3/4/5/6/7/8/9
 			else if (nodeData.api_event_id == 6) {
 				// Might use another name to show a different message?
 				nodeKind = "Dud";
@@ -302,11 +302,12 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_kind = 4 (aerial exchange battle), eg: 1-6 DFL
 			// api_event_kind = 5 (enemy combined), eg: 6-5 Boss M
 			// api_event_kind = 6 (defensive aerial battle), eg: 6-4 DFG; 6-5 GH
+			// api_event_kind = 7 (night to day battle), new for event fall 2017, why not 3?
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss battle)
 			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0))
 			// api_event_id = 10 (long distance aerial raid)
-			else if ([1, 2, 3, 4, 5, 6].indexOf(nodeData.api_event_kind) >= 0) {
+			else if ([1, 2, 3, 4, 5, 6, 7].indexOf(nodeData.api_event_kind) >= 0) {
 				// api_event_id not used, might cause misjudging if new id added
 				nodeKind = "Battle";
 			} else {
