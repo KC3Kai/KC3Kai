@@ -2869,7 +2869,7 @@
 			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
 			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle, data.fleetSent );
+			thisPvP.engage( data.battle, parseInt(data.fleetSent) );
 
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");

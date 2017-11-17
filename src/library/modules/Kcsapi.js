@@ -997,6 +997,21 @@ Previously known as "Reactor"
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		
+		/* NIGHT BATTLES to DAY BATTLES
+		-------------------------------------------------------*/
+		"api_req_sortie/night_to_day":function(params, response, headers){
+			response.api_data.api_name = "night_to_day";
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/ec_night_to_day":function(params, response, headers){
+			response.api_data.api_name = "ec_night_to_day";
+			this["api_req_sortie/night_to_day"].apply(this,arguments);
+		},
+		
 		/* BATTLE STARTS as NIGHT
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
