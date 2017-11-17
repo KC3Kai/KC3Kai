@@ -7,7 +7,8 @@
 			"weight4": [8, 105, 236],
 			"weight5": [117],
 			"weight6": [9],
-			"unknown": [245, 246]
+			"weight7": [245, 246],
+			"unknown": []
 		},
 		"accuracy": {
 			"weight1": {
@@ -15,7 +16,7 @@
 				"night": 7
 			},
 			"weight2": {
-				"day": -3,
+				"day": -2,
 				"night": 0,
 				"married": 0.6
 			},
@@ -35,9 +36,13 @@
 				"married": 0.6
 			},
 			"weight6": {
-				"day": -7,
-				"night": -7,
+				"day": -8,
+				"night": -8,
 				"married": 0.6
+			},
+			"weight7": {
+				"day": 0,
+				"night": 0
 			}
 		}
 	},
@@ -69,15 +74,15 @@
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 7,
-				"night": 7
+				"day": 4,
+				"night": 4
 			},
 			"weight2": {
 				"day": 4,
 				"night": 4
 			},
 			"weight3": {
-				"day": 1,
+				"day": 3,
 				"night": 0
 			},
 			"weight4": {
@@ -115,29 +120,30 @@
 			"weight5": [117],
 			"weight6": [8, 105, 236],
 			"weight7": [9],
-			"unknown": [245, 246]
+			"weight8": [245, 246],
+			"unknown": []
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 10,
-				"night": 10
-			},
-			"weight2": {
 				"day": 7,
 				"night": 7
 			},
+			"weight2": {
+				"day": 4,
+				"night": 4
+			},
 			"weight3": {
-				"day": 1,
+				"day": 0,
 				"night": 0
 			},
 			"weight4": {
-				"day": -3,
-				"night": -3,
+				"day": -7,
+				"night": -7,
 				"married": 0.6
 			},
 			"weight5": {
-				"day": -7,
-				"night": -7,
+				"day": -10,
+				"night": -10,
 				"married": 0.6
 			},
 			"weight6": {
@@ -146,9 +152,13 @@
 				"married": 0.6
 			},
 			"weight7": {
-				"day": -18,
-				"night": -18,
+				"day": -16,
+				"night": -16,
 				"married": 0.6
+			},
+			"weight8": {
+				"day": 0,
+				"night": 0
 			}
 		}
 	},
@@ -218,8 +228,8 @@
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 7,
-				"night": 7
+				"day": 4,
+				"night": 4
 			},
 			"weight2": {
 				"day": 4,
@@ -255,13 +265,13 @@
 	
 	"439": {
 		"weightClass": {
-			"weight1": [7, 76, 103, 104, 114, 190, 192],
+			"weight1": [7, 76, 103, 104, 114, 190, 192, 231, 232],
 			"weight2": [8, 105, 236],
 			"weight3": [133, 137],
 			"weight4": [161, 183],
 			"weight5": [117],
 			"weight6": [9],
-			"unknown": [231, 232, 245, 246]
+			"unknown": [245, 246]
 		},
 		"accuracy": {
 			"weight1": {
@@ -307,8 +317,8 @@
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 4,
-				"night": 4
+				"day": 2,
+				"night": 2
 			},
 			"weight2": {
 				"day": 2,
@@ -344,19 +354,20 @@
 
 	"82": {
 		"weightClass": {
-			"weight1": [231, 232],
-			"weight2": [7, 76, 103, 104, 114, 190, 192],
+			"weight1": [245, 246],
+			"weight2": [7, 76, 103, 104, 114, 190, 192, 231, 232],
 			"weight3": [8, 105, 236],
 			"weight4": [133, 137],
 			"weight5": [161, 183],
 			"weight6": [117],
 			"weight7": [9],
-			"unknown": [245, 246]
+			"unknown": []
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 4,
-				"night": 4
+				"day": -2,
+				"night": -2,
+				"married": 0.6
 			},
 			"weight2": {
 				"day": 4,
@@ -406,8 +417,8 @@
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 4,
-				"night": 4
+				"day": 2,
+				"night": 2
 			},
 			"weight2": {
 				"day": 2,
@@ -463,8 +474,8 @@
 				"night": 4
 			},
 			"weight2": {
-				"day": 4,
-				"night": 4
+				"day": 5,
+				"night": 5
 			},
 			"weight3": {
 				"day": 0,
@@ -499,11 +510,14 @@
 
 	"492": {
 		"weightClass": {
-			"weight1": [7, 76, 103, 104, 114, 190, 192],
+			"weight1": [7, 76, 103, 104, 114, 190, 192, 231, 232],
 			"weight2": [8, 105, 236],
 			"weight3": [161, 183],
 			"weight4": [9],
-			"unknown": [117, 133, 137, 231, 232, 245, 246]
+			"weight5": [245, 246],
+			"weight6": [117],
+			"weight7": [133, 137],
+			"unknown": []
 		},
 		"accuracy": {
 			"weight1": {
@@ -516,13 +530,27 @@
 				"married": 0.6
 			},
 			"weight3": {
-				"day": -5,
-				"night": -5,
+				"day": -7,
+				"night": -7,
 				"married": 0.6
 			},
 			"weight4": {
-				"day": -12,
-				"night": -12,
+				"day": -10,
+				"night": -10,
+				"married": 0.6
+			},
+			"weight5": {
+				"day": 5,
+				"night": 5
+			},
+			"weight6": {
+				"day": -7,
+				"night": -7,
+				"married": 0.6
+			},
+			"weight7": {
+				"day": -2,
+				"night": 0,
 				"married": 0.6
 			}
 		}
@@ -531,8 +559,8 @@
 
 	"131": {
 		"weightClass": {
-			"weight0": [7, 8, 9, 76, 103, 104, 105, 114, 117, 128, 133, 137, 161, 183, 190, 192, 231, 232, 236],
-			"unknown": [245, 246]
+			"weight0": [7, 8, 9, 76, 103, 104, 105, 114, 117, 128, 133, 137, 161, 183, 190, 192, 231, 232, 236, 245, 246],
+			"unknown": []
 		},
 		"accuracy": {
 			"weight0": {
