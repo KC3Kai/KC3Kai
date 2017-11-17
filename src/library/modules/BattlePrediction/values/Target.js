@@ -9,9 +9,10 @@
     return Object.freeze({ side, role, position });
   };
 
-  // Sanity check position index - should be an integer in range [0,6)
+  // Sanity check position index - should be an integer in range [0,7)
+  // Since 2017-11-17 (Event Fall 2017) 7 player ships fleet available
   const validatePosition = (position) => {
-    return position >= 0 && position < 6 && position === Math.floor(position);
+    return position >= 0 && position < 7 && position === Math.floor(position);
   };
 
   Object.assign(window.KC3BattlePrediction.battle, { createTarget, validatePosition });

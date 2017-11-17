@@ -4,12 +4,14 @@
   /*--------------------------------------------------------*/
 
   // Create a Fleets object with the state of the player and enemy fleets at battle start
-  const getInitialState = ({ api_nowhps, api_maxhps, api_nowhps_combined, api_maxhps_combined }, playerDamecons) => {
+  const getInitialState = ({ api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps,
+      api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined },
+      playerDamecons) => {
     const { Role } = KC3BattlePrediction;
     const { getFleetShips, addDamecons, createFleets } = KC3BattlePrediction.fleets;
 
-    const mainFleets = getFleetShips(api_nowhps, api_maxhps);
-    const escortFleets = getFleetShips(api_nowhps_combined, api_maxhps_combined);
+    const mainFleets = getFleetShips(api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps);
+    const escortFleets = getFleetShips(api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined);
 
     return createFleets(
       addDamecons(Role.MAIN_FLEET, playerDamecons, mainFleets.player),
@@ -25,20 +27,29 @@
 
   /* ----------------------[ SHIPS ]----------------------- */
 
-  const getFleetShips = (nowhps, maxhps) => {
+  const getFleetShips = (nowhpsPlayer, maxhpsPlayer, nowhpsEnemy, maxhpsEnemy) => {
     const { normalizeHps, convertToShips, splitSides } = KC3BattlePrediction.fleets;
 
     // short-circuit if neither side has a fleet
-    if (!nowhps && !maxhps) { return { player: [], enemy: [] }; }
+    if (!nowhpsPlayer && !maxhpsPlayer && !nowhpsEnemy && !maxhpsEnemy) { return { player: [], enemy: [] }; }
 
-    return splitSides(
-      convertToShips(normalizeHps(nowhps), normalizeHps(maxhps))
-    );
+    return {
+      player: convertToShips(normalizeHps(nowhpsPlayer), normalizeHps(maxhpsPlayer)),
+      enemy: convertToShips(normalizeHps(nowhpsEnemy), normalizeHps(maxhpsEnemy))
+    };
   };
 
   const normalizeHps = (hps) => {
     const { normalizeArrayIndexing, EMPTY_SLOT } = KC3BattlePrediction;
 
+    // Has become 0-based indexing since 2017-11-17
+    if(hps.length < 6) {
+      const emptySlotCount = 6 - (hps.length % 6);
+      return hps.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
+    }
+    return hps;
+
+    /*
     // Transform to 0-based indexing
     const result = normalizeArrayIndexing(hps);
 
@@ -49,6 +60,7 @@
     // In that case, we should pad the array with empty slots
     const emptySlotCount = 6 - (result.length % 6);
     return result.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
+    */
   };
 
   const convertToShips = (nowHps, maxHps) => {

@@ -41,7 +41,8 @@
   Util.normalizeFieldArrays = (propName, array) => {
     const { normalizeArrayIndexing } = KC3BattlePrediction;
 
-    return normalizeArrayIndexing(array).map(value => ({ [propName]: value }));
+    // Has become 0-based indexing since 2017-11-17
+    return array.map(value => ({ [propName]: value }));
   };
 
   Util.zipJson = (...elements) => Object.assign({}, ...elements);

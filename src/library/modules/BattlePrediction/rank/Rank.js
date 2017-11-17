@@ -6,8 +6,10 @@
   const parseStartJson = (battleData) => {
     const { makeShips, removeRetreated } = KC3BattlePrediction.rank;
 
-    const main = makeShips(battleData.api_nowhps, battleData.api_maxhps);
-    const escort = makeShips(battleData.api_nowhps_combined, battleData.api_maxhps_combined);
+    const {api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps} = battleData;
+    const {api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined} = battleData;
+    const main = makeShips(api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps);
+    const escort = makeShips(api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined);
 
     return {
       playerMain: removeRetreated(main.player, battleData.api_escape_idx),
@@ -46,15 +48,16 @@
 
   /* --------------------[ PARSE JSON ]-------------------- */
 
-  const makeShips = (nowhps, maxhps) => {
+  const makeShips = (nowhpsPlayer = [], maxhpsPlayer = [], nowhpsEnemy = [], maxhpsEnemy = []) => {
     const { splitSides, zipHps } = KC3BattlePrediction.rank;
 
-    const nowHps = splitSides(nowhps);
-    const maxHps = splitSides(maxhps);
+    // HPs already split, and 0-based indexing since 2017-11-17
+    //const nowHps = splitSides(nowhps);
+    //const maxHps = splitSides(maxhps);
 
     return {
-      player: zipHps(nowHps.player, maxHps.player),
-      enemy: zipHps(nowHps.enemy, maxHps.enemy),
+      player: zipHps(nowhpsPlayer, maxhpsPlayer),
+      enemy: zipHps(nowhpsEnemy, maxhpsEnemy),
     };
   };
 
