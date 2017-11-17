@@ -230,13 +230,23 @@ KC3改 Ship Object
 	 * The reason why 53 / 33 is the bound of morale effect being taken:
 	 * on entering battle, morale is subtracted -3 (day) or -2 (night) before its value gets in,
 	 * so +3 value is used as the indeed morale bound for sparkle or fatigue.
+	 *
+	 * @param {Array} valuesArray - values to be returned based on morale section.
+	 * @param {boolean} onBattle - if already on battle, not need to use the bounds mentioned above.
 	 */
-	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4]){
-		return this.morale > 52 ? valuesArray[4] :
+	KC3Ship.prototype.moraleEffectLevel = function(valuesArray = [0, 1, 2, 3, 4], onBattle = false){
+		return onBattle ? (
+			this.morale > 49 ? valuesArray[4] :
+			this.morale > 29 ? valuesArray[3] :
+			this.morale > 19 ? valuesArray[2] :
+			this.morale >= 0 ? valuesArray[1] :
+			valuesArray[0]
+			) : (
+			this.morale > 52 ? valuesArray[4] :
 			this.morale > 32 ? valuesArray[3] :
 			this.morale > 19 ? valuesArray[2] :
 			this.morale >= 0 ? valuesArray[1] :
-			valuesArray[0];
+			valuesArray[0]);
 	};
 	KC3Ship.prototype.getDefer = function(){
 		// returns a new defer if possible
@@ -1909,7 +1919,8 @@ KC3改 Ship Object
 			.map(g => g.accStatImprovementBonus("fire"))
 			.reduce((acc, v) => acc + v, 0);
 		const byGunfit = this.shellingGunFitAccuracy();
-		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2]);
+		const battleConds = this.collectBattleConditions();
+		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
 		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
 		let artillerySpottingModifier = 1;
@@ -1923,7 +1934,7 @@ KC3改 Ship Object
 					return [0, 0, 1.1, 1.3, 1.5, 1.3, 1.2, 1][type[1]] || 1;
 				}
 				return 1;
-			})(this.estimateDayAttackType(undefined, true, this.collectBattleConditions().airBattleId));
+			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
 		}
 		const apShellModifier = (() => {
 			// AP Shell combined with Large cal. main gun only mainly for battleships
@@ -2125,7 +2136,8 @@ KC3改 Ship Object
 		// final hit % = ucap(floor(lcap(attackerAccuracy - defenderEvasion) * defenderMoraleModifier)) + aircraftProficiencyBonus
 		// capping limits its lower / upper bounds to [10, 96] + 1%, +1 since random number is 0-based, ranged in [0, 99]
 		// ship morale modifier not applied here since 'evasion' may be looked reduced when sparkle
-		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7]);
+		const battleConds = this.collectBattleConditions();
+		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7], battleConds.isOnBattle);
 		const evasion = Math.floor(postCap + byImprove - fuelPenalty);
 		const evasionForYasen = Math.floor(postCapForYasen + byImprove - fuelPenalty);
 		return {

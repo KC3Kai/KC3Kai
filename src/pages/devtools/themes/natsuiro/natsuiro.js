@@ -2013,8 +2013,7 @@
 						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
 						$.each(sortedList, function(_, encounter){
 							const shipList = JSON.parse(encounter.ke || null);
-							let badEntry = ! (Array.isArray(shipList) &&
-								encounter.form > 0 && encounter.count > 0);
+							let badEntry = ! (Array.isArray(shipList) && encounter.form > 0);
 							// Don't show 'broken' encounters with incorrect data
 							if(badEntry) return;
 							const encBox = $("#factory .encounter_record").clone();
@@ -2044,7 +2043,7 @@
 							if(shipList.length > 6){
 								$(".encounter_ships", encBox).addClass("combined");
 							}
-							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count);
+							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
 							tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
 							const ap = KC3Calc.enemyFighterPower(shipList)[0];
 							if(ap){
