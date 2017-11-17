@@ -367,7 +367,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1400px;
+	min-height:1430px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -1571,6 +1571,12 @@ body {
 	color: black;
 }
 
+/* ENCOUNTERS
+--------------------------------*/
+.tab_encounters .map_switcher {
+	background: #f0f5ff;
+}
+
 /* EXPEDITION SCORER
 --------------------------------*/
 .tab_compare .compare_ship_stat {
@@ -1799,4 +1805,32 @@ body {
 }
 .tab_blueprints .ship_item .need_materials .icon span.used {
 	color:#aaa;
+}
+
+/* SHIP_DROP
+--------------------------------*/
+.tab_shipdrop .control_panel {
+	background:#F0F5FF;
+}
+.tab_shipdrop .content_root .node_drop .ship {
+	background:#F0F5FF;
+	border-radius:5px;
+}
+.tab_shipdrop .ship_filter_type .filter_box {
+	border:1px solid #000;
+}
+.tab_shipdrop .ship_filter_type .filter_check {
+	background:#000;
+}
+.tab_shipdrop .massSelect .hover:hover,
+.tab_shipdrop .filters .ship_filter_type:hover {
+	background:#cfc;
+}
+.tab_shipdrop .massSelect .hover {
+	border-radius: 4px;
+	color:#00f;
+}
+.tab_shipdrop .massSelect .hover.on {
+	color:#fff;
+	background: hsl(220, 100%, 60%);
 }

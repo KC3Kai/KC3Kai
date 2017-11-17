@@ -405,18 +405,22 @@
 				};
 			}
 			// Append sortno as default sorter to keep order stable
-			var lastSorterReverse = this.getLastCurrentSorter().reverse;
-			var mergedSorters = this.currentSorters.concat([{
+			const lastSorterReverse = this.getLastCurrentSorter().reverse;
+			const sortnoSorter = {
 				name: "sortno",
 				reverse: lastSorterReverse
-			}]);
-			// To simulate in game behavior, if 1st sorter is stype, and no level found
-			if(this.currentSorters[0].name == "type"
-				&& this.currentSorters.every(si => si.name !== "lv")){
-				mergedSorters.push({
-					name: "lv",
-					reverse: false
-				});
+			};
+			const mergedSorters = this.currentSorters.concat([sortnoSorter]);
+			// To simulate in-game behavior: if 1st sorter is stype,
+			// reverse sortno and add descending level if necessary
+			if(this.currentSorters[0].name == "type"){
+				sortnoSorter.reverse = !sortnoSorter.reverse;
+				if(this.currentSorters.every(si => si.name !== "lv")){
+					mergedSorters.push({
+						name: "lv",
+						reverse: false
+					});
+				}
 			}
 			// For duplicated ships, final sorter if roster ID not used
 			if(this.currentSorters.every(si => si.name !== "id")){

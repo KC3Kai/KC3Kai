@@ -71,6 +71,8 @@ Has functions for TimerManager to use
 						tabPath: "mstship-{0}".format($(this).data("masterId"))
 					})).execute();
 				});
+			$(".timer-img", this.element).toggleClass("lsc", !!this.lsc)
+				.toggleClass("new_ship", !!this.newShip);
 			$(".timer-img", this.element).removeClass("locked");
 			$(".timer-img img", this.element).show();
 		}else{
@@ -78,6 +80,7 @@ Has functions for TimerManager to use
 				.removeData("masterId").off("dblclick");
 			$(".timer-img img", this.element).hide();
 			$(".timer-img", this.element).toggleClass("locked", isLocked);
+			$(".timer-img", this.element).removeClass("lsc new_ship");
 		}
 		return $(".timer-img", this.element);
 	};

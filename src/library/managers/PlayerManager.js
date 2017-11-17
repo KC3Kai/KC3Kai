@@ -209,15 +209,20 @@ Does not include Ships and Gears which are managed by other Managers
 		setBuildDocks :function( data ){
 			$.each(data, function(ctr, kdock){
 				if(kdock.api_state > 0){
-					KC3TimerManager.build( kdock.api_id ).activate(
+					const faceId = kdock.api_created_ship_id;
+					const timer = KC3TimerManager.build( kdock.api_id );
+					timer.activate(
 						kdock.api_complete_time,
-						kdock.api_created_ship_id
+						faceId
 					);
 					if(kdock.api_item1 > 999){
-						KC3TimerManager.build( kdock.api_id ).lsc = true;
+						timer.lsc = true;
 					}else{
-						KC3TimerManager.build( kdock.api_id ).lsc = false;
+						timer.lsc = false;
 					}
+					timer.newShip = ConfigManager.info_dex_owned_ship ?
+						! PictureBook.isEverOwnedShip(faceId) :
+						! KC3ShipManager.masterExists(faceId);
 				}else{
 					KC3TimerManager.build( kdock.api_id ).deactivate();
 				}

@@ -141,7 +141,7 @@
 				$(".subtitle",elm).html(subtitleText);
 				$(".division",elm).click(toggleSrcFunc);
 				if(self.enQuotes && self.enQuotes[masterId] && self.enQuotes[masterId][voiceNum]){
-					$(".en_src",elm).html(toQuoteHtmlLines(self.enQuotes[masterId][voiceNum], false));
+					$(".en_src",elm).html(toQuoteHtmlLines(self.enQuotes[masterId][voiceNum], true));
 				}
 				if(self.jpQuotes && self.jpQuotes[masterId] && self.jpQuotes[masterId][voiceNum]){
 					$(".jp_src",elm).html(toQuoteHtmlLines(self.jpQuotes[masterId][voiceNum], false));

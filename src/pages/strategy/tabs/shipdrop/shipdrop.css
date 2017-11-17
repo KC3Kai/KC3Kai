@@ -1,0 +1,141 @@
+.tab_shipdrop {
+	width:680px;
+}
+
+.tab_shipdrop .loading {
+	margin:8px 5px;
+	display:none;
+	
+}
+.tab_shipdrop .loading img {
+	content:url(/assets/img/ui/indicator.svg);
+	width:24px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
+/* Drop contents
+---------------------------------*/
+.tab_shipdrop .content_root .node_drop .ships {
+}
+.tab_shipdrop .content_root .node_drop .ship * {
+	font-size:13px;
+	height:24px;
+	line-height:24px;
+	margin:3px 4px 3px 4px;
+	border-radius:15px;
+	float:left;
+	overflow:hidden;
+}
+.tab_shipdrop .content_root .node_drop .ship img {
+	width: 24px;
+	height: 24px;
+}
+.tab_shipdrop .content_root .node_drop .ship {
+	display:inline-block;
+	min-width:71px;
+	min-height:30px;
+	margin:0px 4px 0px 0px;
+}
+
+.tab_shipdrop .content_root .node_drop .node_name {
+	font-size:15px;
+	font-weight:bold;
+}
+.tab_shipdrop .content_root .node_drop .node_name.unknown {
+	color:#aaa;
+}
+.tab_shipdrop .content_root .node_drop .node_name.boss {
+	color:#f15;
+}
+
+.tab_shipdrop .factory {
+	display:none;
+}
+
+/* Control Panel
+---------------------------------*/
+.tab_shipdrop .control_panel {
+	margin:0 0 10px 0;
+}
+
+.tab_shipdrop .selectors {
+	margin:0px 0px 0px 0px;
+	height:42px;
+}
+
+.tab_shipdrop .control_panel .world_list {
+	min-width:150px;
+	height:22px;
+	margin:10px 0px 0px 10px;
+	float:left;
+}
+
+.tab_shipdrop .control_panel .map_list {
+	min-width:115px;
+	height:22px;
+	margin:10px 0px 0px 10px;
+	float:left;
+}
+
+.tab_shipdrop .control_panel .filters >p {
+	font-weight:bold;
+	margin:0px 0px 10px 10px;
+}
+
+.tab_shipdrop .filters .ship_types {
+	width:680px;
+	height:60px;
+	margin:5px 10px 10px 10px;
+}
+.tab_shipdrop .filters .ship_filter_type {
+	width:80px;
+	height:18px;
+	line-height:18px;
+	margin:0px 5px 2px 0px;
+	float:left;
+}
+
+.tab_shipdrop .ship_filter_type .filter_box {
+	width:10px;
+	height:10px;
+	margin:3px 7px 0px 3px;
+	float:left;
+}
+.tab_shipdrop .ship_filter_type .filter_check {
+	width:6px;
+	height:6px;
+	margin:1px;
+}
+.tab_shipdrop .ship_filter_type .filter_name {
+	width:55px;
+	height:18px;
+	float:left;
+}
+
+.tab_shipdrop .massSelect {
+	margin:10px 10px 0px 10px;
+}
+
+.tab_shipdrop .massSelect dl {
+	width:250px;
+	display:inline-block;
+	vertical-align:top;
+	margin:0px 0px 10px 0px;
+	overflow:hidden;
+}
+.tab_shipdrop .massSelect dl dt,
+.tab_shipdrop .massSelect dl dd {
+	float:left;
+	line-height:inherit;
+}
+.tab_shipdrop .massSelect .massLabel {
+	font-weight:bold;
+}
+.tab_shipdrop .massSelect .hover {
+	margin:0px 0px 0px 4px;
+	padding: 0 3px;
+	border-radius: 4px;
+}

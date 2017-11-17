@@ -464,6 +464,7 @@ Used by SortieManager
 			if (isRealBattle) {
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
+					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
@@ -475,6 +476,7 @@ Used by SortieManager
 				});
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[1].ship(position);
+					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
@@ -647,7 +649,7 @@ Used by SortieManager
 				playerResult.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = playerFleet.ship(position);
 					ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? 1 : -3)));
+					ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
 					ship.afterHp[0] = hp;
 					ship.afterHp[1] = ship.hp[1];
 					if (isPlayerCombined) {

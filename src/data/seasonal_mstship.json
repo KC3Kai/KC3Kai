@@ -49,11 +49,11 @@
 	},
 	"778": {
 		"api_id": 778,
-		"api_name": "浴衣由良",
+		"api_name": "浴衣由良改二",
 		"api_yomi": "ゆら",
 		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"779": {
 		"api_id": 779,
