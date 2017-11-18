@@ -236,12 +236,16 @@ Saves and loads list to and from localStorage
 		},
 		
 		// Locate which fleet the ship is in, return -1 if not in any fleet
+		// similar with Ship.onFleet, but return 0-based index not 1-based sequence
 		locateOnFleet: function( rosterId ){
-			var flatShips  = PlayerManager.fleets
-				.map(function(x){ return x.ships; })
-				.reduce(function(x,y){ return x.concat(y); });
-			var shipIndex = flatShips.indexOf(Number(rosterId));
-			return shipIndex < 0 ? -1 : Math.floor(shipIndex / 6);
+			var fleetId = -1;
+			PlayerManager.fleets.find((fleet, index) => {
+				if(fleet.ships.find(rid => rid === rosterId)){
+					fleetId = index;
+					return true;
+				}
+			});
+			return fleetId;
 		},
 		
 		masterExists: function( masterId, matchBaseForm = true ){
