@@ -443,6 +443,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
 		var self = this;
 		var master = this.master();
+		if (!this.masterId) return 0;
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
 
