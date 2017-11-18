@@ -39,7 +39,7 @@
     };
   };
 
-  const normalizeHps = (hps) => {
+  const normalizeHps = (hps = []) => {
     const { EMPTY_SLOT } = KC3BattlePrediction;
 
     if (hps.length < 6) {
