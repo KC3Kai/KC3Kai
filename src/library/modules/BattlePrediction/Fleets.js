@@ -28,39 +28,25 @@
   /* ----------------------[ SHIPS ]----------------------- */
 
   const getFleetShips = (nowhpsPlayer, maxhpsPlayer, nowhpsEnemy, maxhpsEnemy) => {
-    const { normalizeHps, convertToShips, splitSides } = KC3BattlePrediction.fleets;
+    const { normalizeHps, convertToShips } = KC3BattlePrediction.fleets;
 
     // short-circuit if neither side has a fleet
     if (!nowhpsPlayer && !maxhpsPlayer && !nowhpsEnemy && !maxhpsEnemy) { return { player: [], enemy: [] }; }
 
     return {
       player: convertToShips(normalizeHps(nowhpsPlayer), normalizeHps(maxhpsPlayer)),
-      enemy: convertToShips(normalizeHps(nowhpsEnemy), normalizeHps(maxhpsEnemy))
+      enemy: convertToShips(normalizeHps(nowhpsEnemy), normalizeHps(maxhpsEnemy)),
     };
   };
 
   const normalizeHps = (hps) => {
-    const { normalizeArrayIndexing, EMPTY_SLOT } = KC3BattlePrediction;
+    const { EMPTY_SLOT } = KC3BattlePrediction;
 
-    // Has become 0-based indexing since 2017-11-17
-    if(hps.length < 6) {
+    if (hps.length < 6) {
       const emptySlotCount = 6 - (hps.length % 6);
       return hps.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
     }
     return hps;
-
-    /*
-    // Transform to 0-based indexing
-    const result = normalizeArrayIndexing(hps);
-
-    // Sometimes empty ship slots at the end of the array get omitted
-    if (result.length % 6 === 0) {
-      return result;
-    }
-    // In that case, we should pad the array with empty slots
-    const emptySlotCount = 6 - (result.length % 6);
-    return result.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
-    */
   };
 
   const convertToShips = (nowHps, maxHps) => {

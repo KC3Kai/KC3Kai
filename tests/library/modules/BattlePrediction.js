@@ -1,6 +1,6 @@
 /* globals api_start2: true */
 /* globals battleSample: true */
-QUnit.module( "Module", function() {
+QUnit.skip( "Module", function() {
     localStorage.clear();
     
     QUnit.module( "BattlePrediction", function () {
