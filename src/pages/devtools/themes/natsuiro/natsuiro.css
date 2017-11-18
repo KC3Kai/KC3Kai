@@ -2560,8 +2560,7 @@ ABYSS FLEET
 	position:relative;
 }
 .module.fleet .lship.seven {
-	height:44px;
-	transform:scale(0.94);
+	height:45px;
 	margin-bottom:0px;
 }
 .module.fleet .lship.ship-stamp:after {
@@ -2723,8 +2722,14 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
+.module.fleet .lship.seven .ship_hp_box {
+	height:9px;
+}
 .module.fleet .lship .ship_hp_bar {
 	height:9px;
+}
+.module.fleet .lship.seven .ship_hp_bar {
+	height:7px;
 }
 .module.fleet .lship .ship_hp_prediction {
 	height:9px;
@@ -2962,6 +2967,9 @@ ABYSS FLEET
 	height:2px;
 	background:#555;
 	margin:0px 0px 0px 46px;
+}
+.module.fleet .lship.seven .ship_exp_box {
+	display:none;
 }
 .module.fleet .lship .ship_exp_bar {
 	height:2px;
