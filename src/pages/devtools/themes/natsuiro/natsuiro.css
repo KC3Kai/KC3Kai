@@ -2559,6 +2559,11 @@ ABYSS FLEET
 	padding:3px 0px 0px 0px;
 	position:relative;
 }
+.module.fleet .lship.seven {
+	height:44px;
+	transform:scale(0.94);
+	margin-bottom:0px;
+}
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
 	display: inline;
