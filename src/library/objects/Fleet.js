@@ -452,14 +452,12 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		return Array.apply(null, {length: 6}).map(Number.call, Number)
-			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterPower()))
+		return this.shipsUnescaped().map(ship => ship.fighterPower())
 			.reduce((acc, v) => acc + v, 0);
 	};
 	
 	KC3Fleet.prototype.fighterVeteran = function(){
-		return [0,1,2,3,4,5]
-			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterVeteran()))
+		return this.shipsUnescaped().map(ship => ship.fighterVeteran())
 			.reduce((acc, v) => acc + v, 0);
 	};
 	
