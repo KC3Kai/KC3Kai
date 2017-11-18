@@ -7,6 +7,10 @@ QUnit.module('modules > BattlePrediction > phases', function () {
     QUnit.test('embed field name in array elements', function (assert) {
       assert.deepEqual(this.subject('a', [1, 2, 3]), [{ a: 1 }, { a: 2 }, { a: 3 }]);
     });
+
+    QUnit.test('handle null array', function (assert) {
+      assert.deepEqual(this.subject('blah', null), []);
+    });
   });
 
   QUnit.module('zipJson', {

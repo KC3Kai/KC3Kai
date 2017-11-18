@@ -39,7 +39,7 @@
 
   // Embed the prop name in the array - it will be needed by zipJson()
   Util.normalizeFieldArrays = (propName, array) => {
-    return array.map(value => ({ [propName]: value }));
+    return (array || []).map(value => ({ [propName]: value }));
   };
 
   Util.zipJson = (...elements) => Object.assign({}, ...elements);
