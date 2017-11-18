@@ -57,14 +57,14 @@
     if (attackJson.api_frai !== undefined && attackJson.api_fydam !== undefined) {
       return {
         attacker: { position: index },
-        defender: { position: attackJson.api_frai - 1 },
+        defender: { position: attackJson.api_frai },
         damage: attackJson.api_fydam,
       };
     }
     if (attackJson.api_erai !== undefined && attackJson.api_eydam !== undefined) {
       return {
         attacker: { position: index },
-        defender: { position: attackJson.api_erai - 1 },
+        defender: { position: attackJson.api_erai },
         damage: attackJson.api_eydam,
       };
     }

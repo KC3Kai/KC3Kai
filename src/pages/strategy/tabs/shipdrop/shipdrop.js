@@ -259,7 +259,7 @@
 				const elem = $(".factory .ship_filter_type").clone()
 					.appendTo(".filters .ship_types");
 				elem.data("id", stype);
-				$(".filter_name", elem).text(stype == 0 ? "No Drop" : KC3Meta.stype(stype));
+				$(".filter_name", elem).text(stype === 0 ? "No Drop" : KC3Meta.stype(stype));
 				this.ship_filter_checkbox[stype] = true;
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
 			}

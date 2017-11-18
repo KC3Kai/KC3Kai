@@ -39,9 +39,7 @@
 
   // Embed the prop name in the array - it will be needed by zipJson()
   Util.normalizeFieldArrays = (propName, array) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-
-    return normalizeArrayIndexing(array).map(value => ({ [propName]: value }));
+    return array.map(value => ({ [propName]: value }));
   };
 
   Util.zipJson = (...elements) => Object.assign({}, ...elements);

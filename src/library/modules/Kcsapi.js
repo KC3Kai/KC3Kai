@@ -648,58 +648,55 @@ Previously known as "Reactor"
 		/* Change fleet member
 		-------------------------------------------------------*/
 		"api_req_hensei/change":function(params, response, headers){
-			var fleetIndex = parseInt(params.api_id, 10);
+			var fleetNum = parseInt(params.api_id, 10),
+				fleetIndex = fleetNum - 1;
 			
 			// If removing all ships except flagship
 			if(typeof response.api_data != "undefined"){
 				if(typeof response.api_data.api_change_count != "undefined"){
-					PlayerManager.fleets[ fleetIndex-1 ].clearNonFlagShips();
+					PlayerManager.fleets[fleetIndex].clearNonFlagShips();
 					PlayerManager.saveFleets();
-					KC3Network.trigger("Fleet", { switchTo: fleetIndex });
+					KC3Network.trigger("Fleet", { switchTo: fleetNum });
 					return true;
 				}
 			}
 			
 			// Ship deploying / removing / swapping
-			// Concat all ship IDs in all fleets into an array
-			var flatShips  = PlayerManager.fleets
-				.map(function(x){ return x.ships; })
-				.reduce(function(x,y){ return x.concat(y); });
-			// Target ship index in a fleet
+			// Target ship index on a fleet to be changed
 			var changedIndex = parseInt(params.api_ship_idx, 10);
-			// Target ship ID, -1 if removed
-			var changingShip = parseInt(params.api_ship_id,10);
-			// Swap from source ship index in flat array
-			var oldSwaperSlot = flatShips.indexOf(changingShip);
-			// Swap from source ship ID, -1 if empty
-			var oldSwapeeSlot = flatShips[ (fleetIndex-1) * 6 + changedIndex ];
-			// Swap from source fleet index
-			var oldFleet = Math.floor(oldSwaperSlot / 6);
-			if(changingShip > -1){ // Deploy or swap ship
+			// Target ship slot old ship ID, -1 if empty
+			var changedShip = PlayerManager.fleets[fleetIndex].ships[changedIndex];
+			// Source ship ID to be set, -1 if to be removed, -2 if remove all but flagship
+			var changingShip = parseInt(params.api_ship_id, 10);
+			// Source fleet index where source ship swapped from, -1 if not on fleet
+			var oldFleetIndex = changingShip > 0 ? KC3ShipManager.locateOnFleet(changingShip) : -1;
+			// Source ship index on the source fleet, -1 if not on fleet
+			var oldShipIndex = oldFleetIndex > -1 ? PlayerManager.fleets[oldFleetIndex].ships.indexOf(changingShip) : -1;
+			if(changingShip > 0){ // Deploy or swap ship
 				// Deploy ship to target fleet first, to avoid issue when swapping in the same fleet
-				PlayerManager.fleets[fleetIndex-1].ships[changedIndex] = changingShip;
+				PlayerManager.fleets[fleetIndex].ships[changedIndex] = changingShip;
 				// Swap ship from source fleet
-				if(oldSwaperSlot > -1){
-					PlayerManager.fleets[oldFleet].ships[oldSwaperSlot % 6] = oldSwapeeSlot;
-					// If source ship slot is empty, apply ship removing on source fleet
-					if(oldSwapeeSlot <= 0){
-						PlayerManager.fleets[oldFleet].ships.splice(oldSwaperSlot % 6, 1);
-						PlayerManager.fleets[oldFleet].ships.push(-1);
+				if(oldFleetIndex > -1 && oldShipIndex > -1){
+					PlayerManager.fleets[oldFleetIndex].ships[oldShipIndex] = changedShip;
+					// If target ship slot is empty, apply ship removing on source fleet
+					if(changedShip <= 0){
+						PlayerManager.fleets[oldFleetIndex].ships.splice(oldShipIndex, 1);
+						PlayerManager.fleets[oldFleetIndex].ships.push(-1);
 					}
 					// If not the same fleet, also recheck akashi repair of source fleet
-					if(oldFleet !== fleetIndex-1){
-						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleet]);
-						PlayerManager.fleets[oldFleet].updateAkashiRepairDisplay();
+					if(oldFleetIndex !== fleetIndex){
+						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleetIndex]);
+						PlayerManager.fleets[oldFleetIndex].updateAkashiRepairDisplay();
 					}
 				}
 			} else { // Remove ship
-				PlayerManager.fleets[fleetIndex-1].ships.splice(changedIndex, 1);
-				PlayerManager.fleets[fleetIndex-1].ships.push(-1);
+				PlayerManager.fleets[fleetIndex].ships.splice(changedIndex, 1);
+				PlayerManager.fleets[fleetIndex].ships.push(-1);
 			}
-			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex-1]);
-			PlayerManager.fleets[fleetIndex-1].updateAkashiRepairDisplay();
+			PlayerManager.akashiRepair.onChange(PlayerManager.fleets[fleetIndex]);
+			PlayerManager.fleets[fleetIndex].updateAkashiRepairDisplay();
 			PlayerManager.saveFleets();
-			KC3Network.trigger("Fleet", { switchTo: fleetIndex });
+			KC3Network.trigger("Fleet", { switchTo: fleetNum });
 		},
 		
 		/* Lock a ship
@@ -995,6 +992,21 @@ Previously known as "Reactor"
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			response.api_data.api_name = "fc_ld_airbattle";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
+		},
+		
+		/* NIGHT BATTLES to DAY BATTLES
+		-------------------------------------------------------*/
+		"api_req_sortie/night_to_day":function(params, response, headers){
+			response.api_data.api_name = "night_to_day";
+			KC3SortieManager.engageBattle(
+				response.api_data,
+				Date.toUTCseconds(headers.Date)
+			);
+			KC3Network.trigger("BattleStart");
+		},
+		"api_req_combined_battle/ec_night_to_day":function(params, response, headers){
+			response.api_data.api_name = "ec_night_to_day";
+			this["api_req_sortie/night_to_day"].apply(this,arguments);
 		},
 		
 		/* BATTLE STARTS as NIGHT

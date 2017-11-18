@@ -3,7 +3,7 @@
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
-  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
+  const JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
 
   Yasen.parseYasen = (playerRole, enemyRole, battleData) => {
     const { makeAttacks, extractFromJson } = KC3BattlePrediction.battle.phases;
@@ -19,40 +19,48 @@
 
   /* --------------------[ JSON PARSE ]-------------------- */
 
-  Yasen.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+  Yasen.parseJson = ({ api_at_eflag, api_at_list, api_df_list, api_damage }) => {
     const { parseAttackerIndex, parseDefenderIndices, parseDamage }
       = KC3BattlePrediction.battle.phases.yasen;
 
     return {
-      attacker: parseAttackerIndex(api_at_list),
-      defender: parseDefenderIndices(api_df_list),
+      attacker: parseAttackerIndex(api_at_eflag, api_at_list),
+      defender: parseDefenderIndices(api_at_eflag, api_df_list),
       damage: parseDamage(api_damage),
     };
   };
 
-  Yasen.parseAttackerIndex = (index) => {
+  Yasen.parseAttackerIndex = (isEnemyAttackFlag, index) => {
     const { Side } = KC3BattlePrediction;
 
-    return index <= 6
-      ? { side: Side.PLAYER, position: index - 1 }
-      : { side: Side.ENEMY, position: index - 7 };
+    return isEnemyAttackFlag === 0
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
   };
 
-  Yasen.parseDefenderIndices = (indices) => {
+  Yasen.parseDefenderIndex = (isEnemyAttackFlag, index) => {
+    const { Side } = KC3BattlePrediction;
+
+    return isEnemyAttackFlag === 1
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
+  };
+
+  Yasen.parseDefenderIndices = (isEnemyAttackFlag, indices) => {
     const { extendError } = KC3BattlePrediction;
-    const { parseAttackerIndex } = KC3BattlePrediction.battle.phases.yasen;
+    const { parseDefenderIndex } = KC3BattlePrediction.battle.phases.yasen;
 
     // single attack
     if (indices.length === 1) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     // double attack
     if (indices.length === 2 && indices[0] === indices[1]) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     // cut-in
     if (indices.length === 3 && indices[1] === -1 && indices[2] === -1) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     throw extendError(new Error('Unknown target indices format'), { indices });
   };

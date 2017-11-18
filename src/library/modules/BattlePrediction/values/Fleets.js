@@ -1,4 +1,5 @@
 (function () {
+  // might be 7 since 2017-11-17
   const FLEET_SIZE = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
@@ -82,7 +83,8 @@
     const { EMPTY_SLOT } = KC3BattlePrediction;
     // fill() is called because array elements must have assigned values or map will not work
     // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Description
-    return new Array(FLEET_SIZE).fill(EMPTY_SLOT).map((empty, index) => fleet[index] || empty);
+    return new Array(Math.max(Object.keys(fleet).length, FLEET_SIZE)).fill(EMPTY_SLOT)
+      .map((empty, index) => fleet[index] || empty);
   };
 
   const findLastIndex = (pred, array) => {

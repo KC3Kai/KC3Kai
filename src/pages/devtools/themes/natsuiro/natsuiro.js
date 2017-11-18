@@ -1450,6 +1450,7 @@
 						(new KC3NatsuiroShipbox(".lship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements()
 							.defineLong( CurrentFleet )
+							.toggleClass("seven", CurrentFleet.countShips() >= 7)
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
@@ -2869,7 +2870,7 @@
 			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
 			KC3SortieManager.appendNode(thisPvP);
 			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle, data.fleetSent );
+			thisPvP.engage( data.battle, parseInt(data.fleetSent) );
 
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");

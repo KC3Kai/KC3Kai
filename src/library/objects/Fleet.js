@@ -12,6 +12,7 @@ Contains summary information about a fleet and its 6 ships
 		this.minSpeed = 5;
 		this.fleetId = 0;
 		this.name = "";
+		// might be 7-length for 3rd fleet since 2017-11-17
 		this.ships = [ -1, -1, -1, -1, -1, -1 ];
 		this.mission = [ 0, 0, 0, 0 ];
 
@@ -163,14 +164,14 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.clearNonFlagShips = function(){
-		this.ships.fill(-1,1,6);
+		this.ships.fill(-1, 1);
 		this.updateAkashiRepairDisplay();
 	};
 	
 	KC3Fleet.prototype.discard = function(shipId) {
 		var pos = this.ships.indexOf(Number(shipId));
-		if(pos>=0){
-			this.ships.splice(pos,1);
+		if(pos >= 0){
+			this.ships.splice(pos, 1);
 			this.ships.push(-1);
 		}
 	};
@@ -217,8 +218,7 @@ Contains summary information about a fleet and its 6 ships
 	/*--------------------------------------------------------*/
 	
 	KC3Fleet.prototype.countShips = function(){
-		return (this.ships.indexOf(-1)+1 || 7)-1;
-		//return $.grep(this.ships, function(shipId){ return shipId>-1; }).length;
+		return (this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -452,14 +452,12 @@ Contains summary information about a fleet and its 6 ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		return Array.apply(null, {length: 6}).map(Number.call, Number)
-			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterPower()))
+		return this.shipsUnescaped().map(ship => ship.fighterPower())
 			.reduce((acc, v) => acc + v, 0);
 	};
 	
 	KC3Fleet.prototype.fighterVeteran = function(){
-		return [0,1,2,3,4,5]
-			.map(i => (this.ship(i).didFlee ? 0 : this.ship(i).fighterVeteran()))
+		return this.shipsUnescaped().map(ship => ship.fighterVeteran())
 			.reduce((acc, v) => acc + v, 0);
 	};
 	

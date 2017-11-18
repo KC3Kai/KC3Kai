@@ -41,26 +41,24 @@
 				// battles for formation / etc
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				// the following two are commented out 
-				// as poi "plugin-report" doesn't seem to support them.
-				// (might have been deprecated)
-				// 'api_req_sortie/night_to_day': this.processBattle,
-
+				'api_req_sortie/night_to_day': this.processBattle,
 				'api_req_sortie/ld_airbattle': this.processBattle,
+
 				'api_req_battle_midnight/battle': this.processBattle,
 				'api_req_battle_midnight/sp_midnight': this.processBattle,
+
 				'api_req_combined_battle/airbattle': this.processBattle,
 				'api_req_combined_battle/battle': this.processBattle,
 				'api_req_combined_battle/sp_midnight': this.processBattle,
 				'api_req_combined_battle/battle_water': this.processBattle,
 				"api_req_combined_battle/ld_airbattle": this.processBattle,
-
 				"api_req_combined_battle/ec_battle": this.processBattle,
 				"api_req_combined_battle/each_battle": this.processBattle,
 				"api_req_combined_battle/each_airbattle": this.processBattle,
 				"api_req_combined_battle/each_sp_midnight": this.processBattle,
 				"api_req_combined_battle/each_battle_water": this.processBattle,
 				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
+				"api_req_combined_battle/ec_night_to_day": this.processBattle,
 				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
 
 
@@ -166,7 +164,8 @@
 			// build up enemy ship array
 			const handleEnemies = (enemies) => {
 				// For OpenDB, empty slots = 0, not -1
-				return enemies.slice(1,7).map((en) => (en < 0) ? 0 : en);
+				while(enemies.length < 6) enemies.push(0);
+				return enemies;
 			};
 			try {
 				enemies.ships = handleEnemies(response.api_ship_ke);
