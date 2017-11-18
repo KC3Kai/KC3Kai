@@ -2561,8 +2561,10 @@ ABYSS FLEET
 }
 .module.fleet .lship.seven {
 	height:44px;
-	transform:scale(0.94);
 	margin-bottom:0px;
+}
+.module.fleet .lship.seven .ship_exp_box {
+	display:none;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
