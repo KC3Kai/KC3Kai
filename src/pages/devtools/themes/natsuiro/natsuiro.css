@@ -2722,17 +2722,20 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
-.module.fleet .lship.seven .ship_hp_box {
+.module.fleet .lship .ship_hp_bar {
 	height:9px;
 }
-.module.fleet .lship .ship_hp_bar {
+.module.fleet .lship .ship_hp_prediction {
+	height:9px;
+}
+.module.fleet .lship.seven .ship_hp_box {
 	height:9px;
 }
 .module.fleet .lship.seven .ship_hp_bar {
 	height:7px;
 }
-.module.fleet .lship .ship_hp_prediction {
-	height:9px;
+.module.fleet .lship.seven .ship_hp_prediction {
+	height:7px;
 }
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
@@ -2751,6 +2754,9 @@ ABYSS FLEET
 		-1px 0px 1px #3d1414, 1px 0px 1px #3d1414,
 		-1px 1px 1px #3d1414, 0px 1px 1px #3d1414, 1px 1px 1px #3d1414;
 	opacity:0.84;
+}
+.module.fleet .lship.seven .ship_hp_pred_value {
+	top:-1px;
 }
 
 /* ==> Akashi Timer <== */

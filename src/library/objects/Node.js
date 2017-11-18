@@ -204,6 +204,12 @@ Used by SortieManager
 		return this;
 	};
 	
+	// For compatibility, if there is still any property of Array starts with -1 element
+	KC3Node.prototype.normalizeArrayIndex = function(array){
+		// reuse function from prediction module
+		return KC3BattlePrediction.normalizeArrayIndexing(array);
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -211,47 +217,48 @@ Used by SortieManager
 		this.fleetSent = fleetSent || this.fleetSent || battleData.api_deck_id || KC3SortieManager.fleetSent;
 		//console.debug("Raw battle data", battleData);
 		
-		// To increase compatibility, if there is still any property starts with -1 element
-		const normalizeIndex = array => array[0] === -1 ? array.slice(1) : array;
-		
-		this.eships = normalizeIndex(battleData.api_ship_ke);
+		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
 		var isEnemyCombined = battleData.api_ship_ke_combined !== undefined;
 		this.enemyCombined = isEnemyCombined;
 		if(isEnemyCombined) {
 			this.eshipsMain = this.eships;
-			this.eshipsEscort = normalizeIndex(battleData.api_ship_ke_combined);
+			this.eshipsEscort = this.normalizeArrayIndex(battleData.api_ship_ke_combined);
 			// still unknown: non-combined 7 enemy ships existed?
 			this.eships = Array.pad(this.eshipsMain, 6, -1).concat(Array.pad(this.eshipsEscort, 6, -1));
+		} else {
+			// still pad its length to 6 for compatibility
+			this.eships = Array.pad(this.eships, 6, -1);
 		}
-		
-		var isPlayerCombined = battleData.api_fParam_combined !== undefined;
-		this.playerCombined = isPlayerCombined;
-		
-		this.eformation = battleData.api_formation[1];
-		
-		this.elevels = normalizeIndex(battleData.api_ship_lv);
+		this.elevels = this.normalizeArrayIndex(battleData.api_ship_lv);
 		if(isEnemyCombined) {
 			this.elevelsMain = this.elevels;
-			this.elevelsEscort = normalizeIndex(battleData.api_ship_lv_combined);
+			this.elevelsEscort = this.normalizeArrayIndex(battleData.api_ship_lv_combined);
 			this.elevels = Array.pad(this.elevelsMain, 6, -1).concat(Array.pad(this.elevelsEscort, 6, -1));
+		} else {
+			this.elevels = Array.pad(this.elevels, 6, -1);
 		}
-		
 		this.eParam = battleData.api_eParam;
-		if (isEnemyCombined) {
+		if(isEnemyCombined) {
 			this.eParamMain = this.eParam;
 			this.eParamEscort = battleData.api_eParam_combined;
 			this.eParam = Array.pad(this.eParamMain, 6, -1).concat(Array.pad(this.eParamEscort, 6, -1));
+		} else {
+			this.eParam = Array.pad(this.eParam, 6, -1);
 		}
-		
 		this.eSlot = battleData.api_eSlot;
-		if (isEnemyCombined) {
+		if(isEnemyCombined) {
 			this.eSlotMain = this.eSlot;
 			this.eSlotEscort = battleData.api_eSlot_combined;
 			this.eSlot = Array.pad(this.eSlotMain, 6, -1).concat(Array.pad(this.eSlotEscort, 6, -1));
+		} else {
+			this.eSlot = Array.pad(this.eSlot, 6, -1);
 		}
-		
+		this.eformation = (battleData.api_formation || [])[1] || this.eformation;
 		// api_eKyouka seems being removed since 2017-11-17, kept for compatibility
 		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
+		// might use api_f_maxhps_combined instead
+		var isPlayerCombined = battleData.api_fParam_combined !== undefined;
+		this.playerCombined = isPlayerCombined;
 		
 		this.supportFlag = battleData.api_support_flag > 0;
 		if(this.supportFlag) {
@@ -275,6 +282,9 @@ Used by SortieManager
 		if(battleData.api_maxhps) {
 			this.maxHPs.ally = battleData.api_maxhps.slice(1, 7);
 			this.maxHPs.enemy = battleData.api_maxhps.slice(7, 13);
+			if(isPlayerCombined) {
+				this.maxHPs.ally = this.maxHPs.ally.concat(battleData.api_maxhps_combined.slice(1, 7));
+			}
 			if(isEnemyCombined) {
 				this.maxHPs.enemy = this.maxHPs.enemy.concat(battleData.api_maxhps_combined.slice(7, 13));
 			}
@@ -283,11 +293,15 @@ Used by SortieManager
 				this.maxHPs.allyMain = this.maxHPs.ally;
 				this.maxHPs.allyEscort = battleData.api_f_maxhps_combined;
 				this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
+			} else {
+				this.maxHPs.ally = Array.pad(this.maxHPs.ally, 6, -1);
 			}
 			if(isEnemyCombined) {
 				this.maxHPs.enemyMain = this.maxHPs.enemy;
 				this.maxHPs.enemyEscort = battleData.api_e_maxhps_combined;
 				this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+			} else {
+				this.maxHPs.enemy = Array.pad(this.maxHPs.enemy, 6, -1);
 			}
 		}
 
@@ -566,25 +580,49 @@ Used by SortieManager
 		this.startsFromNight = !!fleetSent;
 		//console.debug("Raw night battle data", nightData);
 		
-		const normalizeIndex = array => array[0] === -1 ? array.slice(1) : array;
-		
-		this.eships = normalizeIndex(nightData.api_ship_ke);
+		this.eships = this.normalizeArrayIndex(nightData.api_ship_ke);
 		var isEnemyCombined = nightData.api_ship_ke_combined !== undefined;
 		this.enemyCombined = isEnemyCombined;
-		// activated one fleet for combined night battle: 1 = main, 2 = escort
 		if(isEnemyCombined){
+			this.eshipsMain = this.eships;
+			this.eshipsEscort = this.normalizeArrayIndex(nightData.api_ship_ke_combined);
+			this.eships = Array.pad(this.eshipsMain, 6, -1).concat(Array.pad(this.eshipsEscort, 6, -1));
+			// activated one fleet for combined night battle: 1 = main, 2 = escort
 			this.activatedFriendFleet = nightData.api_active_deck[0];
 			this.activatedEnemyFleet = nightData.api_active_deck[1];
+		} else {
+			this.eships = Array.pad(this.eships, 6, -1);
+		}
+		this.elevels = this.normalizeArrayIndex(nightData.api_ship_lv);
+		if(isEnemyCombined) {
+			this.elevelsMain = this.elevels;
+			this.elevelsEscort = this.normalizeArrayIndex(nightData.api_ship_lv_combined);
+			this.elevels = Array.pad(this.elevelsMain, 6, -1).concat(Array.pad(this.elevelsEscort, 6, -1));
+		} else {
+			this.elevels = Array.pad(this.elevels, 6, -1);
+		}
+		this.eParam = nightData.api_eParam;
+		if(isEnemyCombined) {
+			this.eParamMain = this.eParam;
+			this.eParamEscort = nightData.api_eParam_combined;
+			this.eParam = Array.pad(this.eParamMain, 6, -1).concat(Array.pad(this.eParamEscort, 6, -1));
+		} else {
+			this.eParam = Array.pad(this.eParam, 6, -1);
+		}
+		this.eSlot = nightData.api_eSlot;
+		if(isEnemyCombined) {
+			this.eSlotMain = this.eSlot;
+			this.eSlotEscort = nightData.api_eSlot_combined;
+			this.eSlot = Array.pad(this.eSlotMain, 6, -1).concat(Array.pad(this.eSlotEscort, 6, -1));
+		} else {
+			this.eSlot = Array.pad(this.eSlot, 6, -1);
 		}
 		
 		var isPlayerCombined = nightData.api_fParam_combined !== undefined;
 		this.playerCombined = isPlayerCombined;
 		
-		this.elevels = normalizeIndex(nightData.api_ship_lv);
-		this.eformation = this.eformation || (nightData.api_formation || [])[1];
-		this.eParam = nightData.api_eParam;
+		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
-		this.eSlot = nightData.api_eSlot;
 		
 		this.maxHPs = {
 			ally: nightData.api_f_maxhps,
@@ -594,6 +632,9 @@ Used by SortieManager
 		if(nightData.api_maxhps) {
 			this.maxHPs.ally = nightData.api_maxhps.slice(1, 7);
 			this.maxHPs.enemy = nightData.api_maxhps.slice(7, 13);
+			if(isPlayerCombined) {
+				this.maxHPs.ally = this.maxHPs.ally.concat(nightData.api_maxhps_combined.slice(1, 7));
+			}
 			if(isEnemyCombined) {
 				this.maxHPs.enemy = this.maxHPs.enemy.concat(nightData.api_maxhps_combined.slice(7, 13));
 			}
@@ -602,12 +643,25 @@ Used by SortieManager
 				this.maxHPs.allyMain = this.maxHPs.ally;
 				this.maxHPs.allyEscort = nightData.api_f_maxhps_combined;
 				this.maxHPs.ally = Array.pad(this.maxHPs.allyMain, 6, -1).concat(Array.pad(this.maxHPs.allyEscort, 6, -1));
+			} else {
+				this.maxHPs.ally = Array.pad(this.maxHPs.ally, 6, -1);
 			}
 			if(isEnemyCombined) {
 				this.maxHPs.enemyMain = this.maxHPs.enemy;
 				this.maxHPs.enemyEscort = nightData.api_e_maxhps_combined;
 				this.maxHPs.enemy = Array.pad(this.maxHPs.enemyMain, 6, -1).concat(Array.pad(this.maxHPs.enemyEscort, 6, -1));
+			} else {
+				this.maxHPs.enemy = Array.pad(this.maxHPs.enemy, 6, -1);
 			}
+		}
+		
+		const isAgainstEnemyEscort = isEnemyCombined && this.activatedEnemyFleet !== 1;
+		if(isAgainstEnemyEscort) {
+			this.eships = Array.pad(this.eshipsEscort, 6, -1);
+			this.elevels = Array.pad(this.elevelsEscort, 6, -1);
+			this.eParam = Array.pad(this.eParamEscort, 6, -1);
+			this.eSlot = Array.pad(this.eSlotEscort, 6, -1);
+			this.maxHPs.enemy = Array.pad(this.maxHPs.enemyEscort, 6, -1);
 		}
 		
 		if(setAsOriginalHP){
@@ -629,7 +683,6 @@ Used by SortieManager
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 		if(isRealBattle || KC3Node.debugPrediction()){
 			const fleetId = this.fleetSent - 1;
-			const isAgainstEnemyEscort = isEnemyCombined && this.activatedEnemyFleet !== 1;
 
 			// Find battle type
 			const player = (() => {
@@ -710,15 +763,6 @@ Used by SortieManager
 				this.enemyHP[position] = ship;
 				this.enemySunk[position] = ship.sunk;
 			});
-
-			if (isAgainstEnemyEscort) {
-				console.log("Enemy escort fleet in yasen", result.fleets.enemyEscort);
-				this.eships = this.eshipsEscort;
-				this.elevels = this.elevelsEscort;
-				this.eParam = this.eParamEscort;
-				this.eSlot = this.eSlotEscort;
-				this.maxHPs.enemy = this.maxHPs.enemyEscort;
-			}
 
 		}
 		
@@ -933,9 +977,8 @@ Used by SortieManager
 				}).filter(function(shipId){return shipId;});
 			});
 			
-			var eshipCnt = this.eships.length;
 			var sunkApCnt = 0;
-			for(var i = 0; i < eshipCnt; i++) {
+			for(var i = 0; i < this.eships.length; i++) {
 				if (this.enemySunk[i]) {
 					let shipId = this.eships[i];
 					let enemyShip = KC3Master.ship(shipId);
@@ -1347,11 +1390,10 @@ Used by SortieManager
 	KC3Node.prototype.airBaseRaid = function( battleData ){
 		this.battleDestruction = battleData;
 		//console.debug("Raw Air Base Raid data", battleData);
-		const normalizeIndex = array => array[0] === -1 ? array.slice(1) : array;
 		this.lostKind = battleData.api_lost_kind;
-		this.eships = normalizeIndex(battleData.api_ship_ke);
+		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
 		this.eformation = battleData.api_formation[1];
-		this.elevels = normalizeIndex(battleData.api_ship_lv);
+		this.elevels = this.normalizeArrayIndex(battleData.api_ship_lv);
 		this.eSlot = battleData.api_eSlot;
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
@@ -1471,7 +1513,7 @@ Used by SortieManager
 			diff: KC3SortieManager.map_difficulty,
 			node: this.id,
 			form: this.eformation,
-			// eships is padded array, still unknown enemy ship will have 7 ships or not
+			// eships is padded array
 			ke: JSON.stringify(this.eships)
 		};
 		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke].filter(v => !!v).join("/");
