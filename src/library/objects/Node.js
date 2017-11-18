@@ -933,11 +933,11 @@ Used by SortieManager
 				}).filter(function(shipId){return shipId;});
 			});
 			
-			var eshipCnt = this.eships.length + (this.eshipsEscort || []).length;
+			var eshipCnt = this.eships.length;
 			var sunkApCnt = 0;
 			for(var i = 0; i < eshipCnt; i++) {
 				if (this.enemySunk[i]) {
-					let shipId = (this.ecships || this.eships)[i];
+					let shipId = this.eships[i];
 					let enemyShip = KC3Master.ship(shipId);
 					if (!enemyShip) {
 						// ID starts from 1, -1 represents empty slot
@@ -1347,10 +1347,11 @@ Used by SortieManager
 	KC3Node.prototype.airBaseRaid = function( battleData ){
 		this.battleDestruction = battleData;
 		//console.debug("Raw Air Base Raid data", battleData);
+		const normalizeIndex = array => array[0] === -1 ? array.slice(1) : array;
 		this.lostKind = battleData.api_lost_kind;
-		this.eships = battleData.api_ship_ke.slice(1);
+		this.eships = normalizeIndex(battleData.api_ship_ke);
 		this.eformation = battleData.api_formation[1];
-		this.elevels = battleData.api_ship_lv.slice(1);
+		this.elevels = normalizeIndex(battleData.api_ship_lv);
 		this.eSlot = battleData.api_eSlot;
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
@@ -1464,21 +1465,20 @@ Used by SortieManager
 		if(KC3SortieManager.map_num < 1){ return false; }
 		
 		// Save the enemy encounter
-		// still unknown enemy ship will have 7 ships or not
-		const ke = Array.pad(this.eships, 6, -1).concat(Array.pad(this.eshipsEscort, 6, -1) || []);
 		const ed = {
 			world: KC3SortieManager.map_world,
 			map: KC3SortieManager.map_num,
 			diff: KC3SortieManager.map_difficulty,
 			node: this.id,
 			form: this.eformation,
-			ke: JSON.stringify(ke)
+			// eships is padded array, still unknown enemy ship will have 7 ships or not
+			ke: JSON.stringify(this.eships)
 		};
 		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke].filter(v => !!v).join("/");
 		KC3Database.Encounter(ed, true);
 		this.enemyEncounter = ed;
-		// Save enemy info
-		this.eships.forEach((enemyId, i) => {
+		// Save enemy info, maybe main fleet
+		(this.eshipsMain || this.eships).forEach((enemyId, i) => {
 			if (KC3Master.isAbyssalShip(enemyId)) {
 				KC3Database.Enemy({
 					id: enemyId,
