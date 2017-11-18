@@ -258,41 +258,41 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// Route Selection Node
 			// api_event_id = 6
 			// api_event_kind = 2
-			else if (typeof nodeData.api_select_route != "undefined") {
+			else if (typeof nodeData.api_select_route !== "undefined") {
 				nodeKind = "Selector";
 			}
 			// Battle avoided node (message might be: Enemy not found / Peace sea / etc)
 			// api_event_id = 6
 			// api_event_kind = 0/1/3/4/5/6/7/8/9
-			else if (nodeData.api_event_id == 6) {
+			else if (nodeData.api_event_id === 6) {
 				// Might use another name to show a different message?
 				nodeKind = "Dud";
 			}
 			// Resource Node
 			// api_event_id = 2
-			else if (typeof nodeData.api_itemget != "undefined") {
+			else if (typeof nodeData.api_itemget !== "undefined") {
 				nodeKind = "Resource";
 			}
 			// Maelstrom Node
 			// api_event_id = 3
-			else if (typeof nodeData.api_happening != "undefined") {
+			else if (typeof nodeData.api_happening !== "undefined") {
 				nodeKind = "Maelstrom";
 			}
 			// Aerial Reconnaissance Node
 			// api_event_id = 7
 			// api_event_kind = 0
-			else if (nodeData.api_event_id == 7 && nodeData.api_event_kind === 0) {
+			else if (nodeData.api_event_id === 7 && nodeData.api_event_kind === 0) {
 				// similar with both Resource and Transport, found at 6-3 G & H
 				nodeKind = "Dud";
 			}
 			// Bounty Node, typical example: 1-6-N
 			// api_event_id = 8
-			else if (typeof nodeData.api_itemget_eo_comment != "undefined") {
+			else if (typeof nodeData.api_itemget_eo_comment !== "undefined") {
 				nodeKind = "Bounty";
 			}
 			// Transport Node, event only for now
 			// api_event_id = 9
-			else if (nodeData.api_event_id == 9) {
+			else if (nodeData.api_event_id === 9) {
 				nodeKind = "Transport";
 			}
 			// Battle Node

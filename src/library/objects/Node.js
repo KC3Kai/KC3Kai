@@ -1316,8 +1316,8 @@ Used by SortieManager
 		if(isSafeArray(b, "api_injection_kouku.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_injection_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(isSafeArray(b, "api_injection_kouku.api_plane_from") && b.api_injection_kouku.api_plane_from[0][0] !== -1){
-			b.api_injection_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
+		if(isSafeArray(b, "api_injection_kouku.api_plane_from") && Array.isArray(b.api_injection_kouku.api_plane_from[0])){
+			b.api_injection_kouku.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });
 		}
 		// regular air battle
 		if(isSafeArray(b, "api_kouku.api_stage3.api_edam")){
@@ -1326,15 +1326,15 @@ Used by SortieManager
 		if(isSafeArray(b, "api_kouku.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(isSafeArray(b, "api_kouku.api_plane_from") && b.api_kouku.api_plane_from[0][0] !== -1){
-			b.api_kouku.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
+		if(isSafeArray(b, "api_kouku.api_plane_from") && Array.isArray(b.api_kouku.api_plane_from[0])){
+			b.api_kouku.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });
 		}
 		// 2nd wave for air battle only node, supposed to no combined
 		if(isSafeArray(b, "api_kouku2.api_stage3_combined.api_edam")){
 			totalDamage += Math.floor(b.api_kouku2.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
 		}
-		if(isSafeArray(b, "api_kouku2.api_plane_from") && b.api_kouku2.api_plane_from[0][0] !== -1){
-			b.api_kouku2.api_plane_from[0].forEach(idx => { planeFromSet.add(idx); });
+		if(isSafeArray(b, "api_kouku2.api_plane_from") && Array.isArray(b.api_kouku2.api_plane_from[0])){
+			b.api_kouku2.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });
 		}
 		return [totalDamage, [...planeFromSet]];
 	};

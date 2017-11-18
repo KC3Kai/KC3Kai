@@ -313,10 +313,14 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.onFleet = function(){
-		var shipList = PlayerManager.fleets
-			.map(fleet => fleet.ships)
-			.reduce((acc, ships) => acc.concat(ships), []);
-		return Math.qckInt("ceil", (shipList.indexOf(this.rosterId) + 1) / 6, 0);
+		var fleetNum = 0;
+		PlayerManager.fleets.find((fleet, index) => {
+			if(fleet.ships.find(rid => rid === this.rosterId)){
+				fleetNum = index + 1;
+				return true;
+			}
+		});
+		return fleetNum;
 	};
 
 	KC3Ship.prototype.isRepairing = function(){
