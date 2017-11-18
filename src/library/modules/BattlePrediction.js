@@ -184,12 +184,14 @@
   /*--------------------------------------------------------*/
 
   // Create a Fleets object with the state of the player and enemy fleets at battle start
-  const getInitialState = ({ api_nowhps, api_maxhps, api_nowhps_combined, api_maxhps_combined }, playerDamecons) => {
+  const getInitialState = ({ api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps,
+      api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined },
+      playerDamecons) => {
     const { Role } = KC3BattlePrediction;
     const { getFleetShips, addDamecons, createFleets } = KC3BattlePrediction.fleets;
 
-    const mainFleets = getFleetShips(api_nowhps, api_maxhps);
-    const escortFleets = getFleetShips(api_nowhps_combined, api_maxhps_combined);
+    const mainFleets = getFleetShips(api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps);
+    const escortFleets = getFleetShips(api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined);
 
     return createFleets(
       addDamecons(Role.MAIN_FLEET, playerDamecons, mainFleets.player),
@@ -205,30 +207,26 @@
 
   /* ----------------------[ SHIPS ]----------------------- */
 
-  const getFleetShips = (nowhps, maxhps) => {
-    const { normalizeHps, convertToShips, splitSides } = KC3BattlePrediction.fleets;
+  const getFleetShips = (nowhpsPlayer, maxhpsPlayer, nowhpsEnemy, maxhpsEnemy) => {
+    const { normalizeHps, convertToShips } = KC3BattlePrediction.fleets;
 
     // short-circuit if neither side has a fleet
-    if (!nowhps && !maxhps) { return { player: [], enemy: [] }; }
+    if (!nowhpsPlayer && !maxhpsPlayer && !nowhpsEnemy && !maxhpsEnemy) { return { player: [], enemy: [] }; }
 
-    return splitSides(
-      convertToShips(normalizeHps(nowhps), normalizeHps(maxhps))
-    );
+    return {
+      player: convertToShips(normalizeHps(nowhpsPlayer), normalizeHps(maxhpsPlayer)),
+      enemy: convertToShips(normalizeHps(nowhpsEnemy), normalizeHps(maxhpsEnemy)),
+    };
   };
 
-  const normalizeHps = (hps) => {
-    const { normalizeArrayIndexing, EMPTY_SLOT } = KC3BattlePrediction;
+  const normalizeHps = (hps = []) => {
+    const { EMPTY_SLOT } = KC3BattlePrediction;
 
-    // Transform to 0-based indexing
-    const result = normalizeArrayIndexing(hps);
-
-    // Sometimes empty ship slots at the end of the array get omitted
-    if (result.length % 6 === 0) {
-      return result;
+    if (hps.length < 6) {
+      const emptySlotCount = 6 - (hps.length % 6);
+      return hps.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
     }
-    // In that case, we should pad the array with empty slots
-    const emptySlotCount = 6 - (result.length % 6);
-    return result.concat(new Array(emptySlotCount).fill(EMPTY_SLOT));
+    return hps;
   };
 
   const convertToShips = (nowHps, maxHps) => {
@@ -751,7 +749,7 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
+  const JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
   Hougeki.parseHougeki = (playerRole, battleData) => {
     const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
     const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
@@ -760,12 +758,11 @@
     return makeAttacks(attackData, getTargetFactory(playerRole));
   };
 
-  const COMBINED_JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
   Hougeki.parseCombinedHougeki = (battleData) => {
     const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
     const { parseCombinedJson, getCombinedTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
 
-    const attackData = extractFromJson(battleData, COMBINED_JSON_FIELDS).map(parseCombinedJson);
+    const attackData = extractFromJson(battleData, JSON_FIELDS).map(parseCombinedJson);
     return makeAttacks(attackData, getCombinedTargetFactory());
   };
 
@@ -775,26 +772,26 @@
 
   /* --------------------[ JSON PARSE ]-------------------- */
 
-  Hougeki.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+  Hougeki.parseJson = ({ api_at_eflag, api_at_list, api_df_list, api_damage }) => {
     const { parseAttackerIndex, parseDefenderIndex, parseDamage } =
       KC3BattlePrediction.battle.phases.hougeki;
 
     return {
       damage: parseDamage(api_damage),
-      attacker: parseAttackerIndex(api_at_list),
-      defender: parseDefenderIndex(api_df_list),
+      attacker: parseAttackerIndex(api_at_eflag, api_at_list),
+      defender: parseDefenderIndex(api_at_eflag, api_df_list),
     };
   };
 
-  Hougeki.parseAttackerIndex = (index) => {
+  Hougeki.parseAttackerIndex = (isEnemyAttackFlag, index) => {
     const { Side } = KC3BattlePrediction;
 
-    return index <= 6
-      ? { side: Side.PLAYER, position: index - 1 }
-      : { side: Side.ENEMY, position: index - 7 };
+    return isEnemyAttackFlag === 0
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
   };
 
-  Hougeki.parseDefenderIndex = (targetIndices) => {
+  Hougeki.parseDefenderIndex = (isEnemyAttackFlag, targetIndices) => {
     const { Side, extendError } = KC3BattlePrediction;
 
     const index = targetIndices[0];
@@ -803,9 +800,9 @@
       throw extendError(new Error('Bad target index array'), { targetIndices });
     }
 
-    return index <= 6
-      ? { side: Side.PLAYER, position: index - 1 }
-      : { side: Side.ENEMY, position: index - 7 };
+    return isEnemyAttackFlag === 1
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
   };
 
   Hougeki.parseDamage = damages => damages.reduce((result, damage) => result + damage, 0);
@@ -829,9 +826,9 @@
     }
 
     const side = isEnemyAttackFlag === 1 ? Side.ENEMY : Side.PLAYER;
-    return attackerIndex <= 6
-      ? { side, role: Role.MAIN_FLEET, position: attackerIndex - 1 }
-      : { side, role: Role.ESCORT_FLEET, position: attackerIndex - 7 };
+    return attackerIndex < 6
+      ? { side, role: Role.MAIN_FLEET, position: attackerIndex }
+      : { side, role: Role.ESCORT_FLEET, position: attackerIndex - 6 };
   };
 
   Hougeki.parseCombinedDefender = (isEnemyAttackFlag, defenderIndices) => {
@@ -847,9 +844,9 @@
     }
 
     const side = isEnemyAttackFlag === 0 ? Side.ENEMY : Side.PLAYER;
-    return index <= 6
-      ? { side, role: Role.MAIN_FLEET, position: index - 1 }
-      : { side, role: Role.ESCORT_FLEET, position: index - 7 };
+    return index < 6
+      ? { side, role: Role.MAIN_FLEET, position: index }
+      : { side, role: Role.ESCORT_FLEET, position: index - 6 };
   };
 
   /* -----------------[ TARGET FACTORIES ]----------------- */
@@ -992,14 +989,14 @@
     if (attackJson.api_frai !== undefined && attackJson.api_fydam !== undefined) {
       return {
         attacker: { position: index },
-        defender: { position: attackJson.api_frai - 1 },
+        defender: { position: attackJson.api_frai },
         damage: attackJson.api_fydam,
       };
     }
     if (attackJson.api_erai !== undefined && attackJson.api_eydam !== undefined) {
       return {
         attacker: { position: index },
-        defender: { position: attackJson.api_erai - 1 },
+        defender: { position: attackJson.api_erai },
         damage: attackJson.api_eydam,
       };
     }
@@ -1183,9 +1180,7 @@
 
   // Embed the prop name in the array - it will be needed by zipJson()
   Util.normalizeFieldArrays = (propName, array) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-
-    return normalizeArrayIndexing(array).map(value => ({ [propName]: value }));
+    return array.map(value => ({ [propName]: value }));
   };
 
   Util.zipJson = (...elements) => Object.assign({}, ...elements);
@@ -1202,7 +1197,7 @@
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
-  const JSON_FIELDS = ['api_at_list', 'api_df_list', 'api_damage'];
+  const JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
 
   Yasen.parseYasen = (playerRole, enemyRole, battleData) => {
     const { makeAttacks, extractFromJson } = KC3BattlePrediction.battle.phases;
@@ -1218,40 +1213,48 @@
 
   /* --------------------[ JSON PARSE ]-------------------- */
 
-  Yasen.parseJson = ({ api_at_list, api_df_list, api_damage }) => {
+  Yasen.parseJson = ({ api_at_eflag, api_at_list, api_df_list, api_damage }) => {
     const { parseAttackerIndex, parseDefenderIndices, parseDamage }
       = KC3BattlePrediction.battle.phases.yasen;
 
     return {
-      attacker: parseAttackerIndex(api_at_list),
-      defender: parseDefenderIndices(api_df_list),
+      attacker: parseAttackerIndex(api_at_eflag, api_at_list),
+      defender: parseDefenderIndices(api_at_eflag, api_df_list),
       damage: parseDamage(api_damage),
     };
   };
 
-  Yasen.parseAttackerIndex = (index) => {
+  Yasen.parseAttackerIndex = (isEnemyAttackFlag, index) => {
     const { Side } = KC3BattlePrediction;
 
-    return index <= 6
-      ? { side: Side.PLAYER, position: index - 1 }
-      : { side: Side.ENEMY, position: index - 7 };
+    return isEnemyAttackFlag === 0
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
   };
 
-  Yasen.parseDefenderIndices = (indices) => {
+  Yasen.parseDefenderIndex = (isEnemyAttackFlag, index) => {
+    const { Side } = KC3BattlePrediction;
+
+    return isEnemyAttackFlag === 1
+      ? { side: Side.PLAYER, position: index }
+      : { side: Side.ENEMY, position: index };
+  };
+
+  Yasen.parseDefenderIndices = (isEnemyAttackFlag, indices) => {
     const { extendError } = KC3BattlePrediction;
-    const { parseAttackerIndex } = KC3BattlePrediction.battle.phases.yasen;
+    const { parseDefenderIndex } = KC3BattlePrediction.battle.phases.yasen;
 
     // single attack
     if (indices.length === 1) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     // double attack
     if (indices.length === 2 && indices[0] === indices[1]) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     // cut-in
     if (indices.length === 3 && indices[1] === -1 && indices[2] === -1) {
-      return parseAttackerIndex(indices[0]);
+      return parseDefenderIndex(isEnemyAttackFlag, indices[0]);
     }
     throw extendError(new Error('Unknown target indices format'), { indices });
   };
@@ -1382,8 +1385,10 @@
   const parseStartJson = (battleData) => {
     const { makeShips, removeRetreated } = KC3BattlePrediction.rank;
 
-    const main = makeShips(battleData.api_nowhps, battleData.api_maxhps);
-    const escort = makeShips(battleData.api_nowhps_combined, battleData.api_maxhps_combined);
+    const {api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps} = battleData;
+    const {api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined} = battleData;
+    const main = makeShips(api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps);
+    const escort = makeShips(api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined);
 
     return {
       playerMain: removeRetreated(main.player, battleData.api_escape_idx),
@@ -1422,15 +1427,16 @@
 
   /* --------------------[ PARSE JSON ]-------------------- */
 
-  const makeShips = (nowhps, maxhps) => {
+  const makeShips = (nowhpsPlayer = [], maxhpsPlayer = [], nowhpsEnemy = [], maxhpsEnemy = []) => {
     const { splitSides, zipHps } = KC3BattlePrediction.rank;
 
-    const nowHps = splitSides(nowhps);
-    const maxHps = splitSides(maxhps);
+    // HPs already split, and 0-based indexing since 2017-11-17
+    //const nowHps = splitSides(nowhps);
+    //const maxHps = splitSides(maxhps);
 
     return {
-      player: zipHps(nowHps.player, maxHps.player),
-      enemy: zipHps(nowHps.enemy, maxHps.enemy),
+      player: zipHps(nowhpsPlayer, maxhpsPlayer),
+      enemy: zipHps(nowhpsEnemy, maxhpsEnemy),
     };
   };
 
@@ -1556,6 +1562,7 @@
 }());
 
 (function () {
+  // might be 7 since 2017-11-17
   const FLEET_SIZE = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
@@ -1639,7 +1646,8 @@
     const { EMPTY_SLOT } = KC3BattlePrediction;
     // fill() is called because array elements must have assigned values or map will not work
     // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map#Description
-    return new Array(FLEET_SIZE).fill(EMPTY_SLOT).map((empty, index) => fleet[index] || empty);
+    return new Array(Math.max(Object.keys(fleet).length, FLEET_SIZE)).fill(EMPTY_SLOT)
+      .map((empty, index) => fleet[index] || empty);
   };
 
   const findLastIndex = (pred, array) => {
@@ -1764,9 +1772,10 @@
     return Object.freeze({ side, role, position });
   };
 
-  // Sanity check position index - should be an integer in range [0,6)
+  // Sanity check position index - should be an integer in range [0,7)
+  // Since 2017-11-17 (Event Fall 2017) 7 player ships fleet available
   const validatePosition = (position) => {
-    return position >= 0 && position < 6 && position === Math.floor(position);
+    return position >= 0 && position < 7 && position === Math.floor(position);
   };
 
   Object.assign(window.KC3BattlePrediction.battle, { createTarget, validatePosition });

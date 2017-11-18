@@ -1,4 +1,36 @@
 {
+	"763": {
+		"api_id": 763,
+		"api_name": "ハロウィン瑞穂",
+		"api_yomi": "みずほ",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"767": {
+		"api_id": 767,
+		"api_name": "秋の私服藤波",
+		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"769": {
+		"api_id": 769,
+		"api_name": "買い物鹿島",
+		"api_yomi": "かしま",
+		"api_stype": 21,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"771": {
+		"api_id": 771,
+		"api_name": "秋の私服Richelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
 	"772": {
 		"api_id": 772,
 		"api_name": "秋の私服狭霧",
@@ -1818,6 +1850,22 @@
 		"api_yomi": "みずほ",
 		"api_stype": 16,
 		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"998": {
+		"api_id": 998,
+		"api_name": "観艦式磯波",
+		"api_yomi": "いそなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"999": {
+		"api_id": 999,
+		"api_name": "観艦式浦波",
+		"api_yomi": "うらなみ",
+		"api_stype": 2,
+		"api_soku": 10,
 		"api_slot_num": 2
 	}
 }

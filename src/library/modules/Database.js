@@ -709,7 +709,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		get_pvps :function(pageNumber, callback){
 			var itemsPerPage = 10;
-			this.con.pvp
+			return this.con.pvp
 				.where("hq").equals(this.index)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )

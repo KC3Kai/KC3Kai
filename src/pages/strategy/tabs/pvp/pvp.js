@@ -95,6 +95,8 @@
 					self.cloneBattleBox(pvpBattle);
 				});
 				$("#pvp_list").createChildrenTooltips();
+			}).catch(error => {
+				console.error("Loading PvP record failed", error);
 			});
 		},
 		
@@ -135,10 +137,10 @@
 				self.cloneShipBox({
 					opponent: true,
 					equip: pvpBattle.data.api_eSlot[index],
-					kyouka: pvpBattle.data.api_eKyouka[index],
-					hp: pvpBattle.data.api_maxhps[index+7],
+					kyouka: (pvpBattle.data.api_eKyouka || [])[index] || [0,0,0,0],
+					hp: pvpBattle.data.api_maxhps ? pvpBattle.data.api_maxhps[index+7] : pvpBattle.data.api_e_maxhps[index],
 					stats: pvpBattle.data.api_eParam[index],
-					level: pvpBattle.data.api_ship_lv[index+1],
+					level: pvpBattle.data.api_ship_lv[0] == -1 ? pvpBattle.data.api_ship_lv[index+1] : pvpBattle.data.api_ship_lv[index],
 					mst_id: mstId,
 				}, $(".pvp_opponent", recordBox));
 			});

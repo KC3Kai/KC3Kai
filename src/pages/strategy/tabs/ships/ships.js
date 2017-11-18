@@ -308,7 +308,7 @@
 				if(!$(this).hasClass("hidden_by_name")) {
 					$(this).removeClass("odd").removeClass("even")
 						.addClass(visibleShips % 2 ? "even" : "odd");
-					if(visibleShips % 10 == 0)
+					if(visibleShips % 10 === 0)
 						$("<div>").addClass("ingame_page")
 							.html("Page " + Math.ceil((visibleShips + 1) / 10))
 							.insertBefore(this).toggle(self.pageNo);

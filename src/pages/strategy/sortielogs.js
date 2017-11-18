@@ -686,6 +686,7 @@
 							var battleData, battleType;
 							
 							// Determine if day or night battle node
+							// misspelling `api_dock_id` fixed since 2017-11-17, but old data still
 							if(typeof battle.data.api_dock_id != "undefined"){
 								battleData = battle.data;
 								battleType = BATTLE_BASIC;

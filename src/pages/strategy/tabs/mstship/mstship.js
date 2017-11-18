@@ -172,6 +172,10 @@
 						success: (data, status, xhr) => {
 							voiceSize = parseInt(xhr.getResponseHeader("Content-Length"), 10) || 0;
 							playAndShowSubtitle();
+						},
+						error: (xhr, status, error) => {
+							// try to playback even head failed, since cache may be hit
+							playAndShowSubtitle();
 						}
 					});
 				} else {

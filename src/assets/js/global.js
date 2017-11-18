@@ -546,6 +546,21 @@ Array.numbers = function(start, end){
 	while(i-- > 0) a[i] = n + i;
 	return a;
 };
+/** Pad values into array to reach the length */
+Array.pad = function(array, length, value, original){
+	if (!Array.isArray(array)) {
+		// give back non-array
+		return array;
+	}
+	array = original ? array : array.slice(0);
+	length = length || 0;
+	var method = length < 0 ? 'unshift' : 'push';
+	var total = Math.abs(length);
+	while(array.length < total) {
+		array[method](value);
+	}
+	return array;
+};
 
 /*******************************\
 |*** Object                     |
