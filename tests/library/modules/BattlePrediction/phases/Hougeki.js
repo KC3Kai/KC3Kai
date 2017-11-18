@@ -2,15 +2,19 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
   const { Side, Role } = KC3BattlePrediction;
   const Hougeki = KC3BattlePrediction.battle.phases.hougeki;
 
+  // at_e_flag values
+  const PLAYER_ATTACK = 0;
+  const ENEMY_ATTACK = 1;
+
   QUnit.module('parseAttackerIndex', {
     beforeEach() { this.subject = Hougeki.parseAttackerIndex; },
   }, function () {
     QUnit.test('player index', function (assert) {
-      assert.deepEqual(this.subject(6), { position: 5, side: Side.PLAYER });
+      assert.deepEqual(this.subject(PLAYER_ATTACK, 5), { position: 5, side: Side.PLAYER });
     });
 
     QUnit.test('enemy index', function (assert) {
-      assert.deepEqual(this.subject(7), { position: 0, side: Side.ENEMY });
+      assert.deepEqual(this.subject(ENEMY_ATTACK, 0), { position: 0, side: Side.ENEMY });
     });
   });
 
@@ -21,7 +25,7 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
       const dfIndex = [10, 9];
 
       try {
-        this.subject(dfIndex);
+        this.subject(PLAYER_ATTACK, dfIndex);
         assert.notOk(true, 'no exception');
       } catch (result) {
         assert.equal(result.message, 'Bad target index array');
@@ -30,11 +34,11 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
     });
 
     QUnit.test('player index', function (assert) {
-      assert.deepEqual(this.subject([6]), { side: Side.PLAYER, position: 5 });
+      assert.deepEqual(this.subject(ENEMY_ATTACK, [5]), { side: Side.PLAYER, position: 5 });
     });
 
     QUnit.test('enemy index', function (assert) {
-      assert.deepEqual(this.subject([7, 7]), { side: Side.ENEMY, position: 0 });
+      assert.deepEqual(this.subject(PLAYER_ATTACK, [0, 0]), { side: Side.ENEMY, position: 0 });
     });
   });
 
@@ -54,22 +58,22 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
     beforeEach() { this.subject = Hougeki.parseCombinedAttacker; },
   }, function () {
     QUnit.test('player main fleet', function (assert) {
-      assert.deepEqual(this.subject(0, 6),
+      assert.deepEqual(this.subject(0, 5),
         { side: Side.PLAYER, role: Role.MAIN_FLEET, position: 5 });
     });
 
     QUnit.test('player escort fleet', function (assert) {
-      assert.deepEqual(this.subject(0, 7),
+      assert.deepEqual(this.subject(0, 6),
         { side: Side.PLAYER, role: Role.ESCORT_FLEET, position: 0 });
     });
 
     QUnit.test('enemy main fleet', function (assert) {
-      assert.deepEqual(this.subject(1, 6),
+      assert.deepEqual(this.subject(1, 5),
         { side: Side.ENEMY, role: Role.MAIN_FLEET, position: 5 });
     });
 
     QUnit.test('enemy escort fleet', function (assert) {
-      assert.deepEqual(this.subject(1, 7),
+      assert.deepEqual(this.subject(1, 6),
         { side: Side.ENEMY, role: Role.ESCORT_FLEET, position: 0 });
     });
 
@@ -108,22 +112,22 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
     });
 
     QUnit.test('player main fleet', function (assert) {
-      assert.deepEqual(this.subject(1, [6, 6]),
+      assert.deepEqual(this.subject(1, [5, 5]),
         { side: Side.PLAYER, role: Role.MAIN_FLEET, position: 5 });
     });
 
     QUnit.test('player escort fleet', function (assert) {
-      assert.deepEqual(this.subject(1, [7]),
+      assert.deepEqual(this.subject(1, [6]),
         { side: Side.PLAYER, role: Role.ESCORT_FLEET, position: 0 });
     });
 
     QUnit.test('enemy main fleet', function (assert) {
-      assert.deepEqual(this.subject(0, [6]),
+      assert.deepEqual(this.subject(0, [5]),
         { side: Side.ENEMY, role: Role.MAIN_FLEET, position: 5 });
     });
 
     QUnit.test('enemy escort fleet', function (assert) {
-      assert.deepEqual(this.subject(0, [7, 7]),
+      assert.deepEqual(this.subject(0, [6, 6]),
         { side: Side.ENEMY, role: Role.ESCORT_FLEET, position: 0 });
     });
   });

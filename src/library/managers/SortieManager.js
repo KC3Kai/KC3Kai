@@ -252,7 +252,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			let nodeKind = "Dud";
 			// Map Start Point
 			// api_event_id = 0
-			if (nodeData.api_event_id == 0) {
+			if (nodeData.api_event_id === 0) {
 				nodeKind = "Dud";
 			}
 			// Route Selection Node
@@ -281,7 +281,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// Aerial Reconnaissance Node
 			// api_event_id = 7
 			// api_event_kind = 0
-			else if (nodeData.api_event_id == 7 && nodeData.api_event_kind == 0) {
+			else if (nodeData.api_event_id == 7 && nodeData.api_event_kind === 0) {
 				// similar with both Resource and Transport, found at 6-3 G & H
 				nodeKind = "Dud";
 			}
