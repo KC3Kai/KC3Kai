@@ -7,7 +7,7 @@
   const { Player, Enemy, Time } = KC3BattlePrediction;
   const types = {
     [toKey(Player.SINGLE, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -23,16 +23,16 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.MAIN_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -48,16 +48,16 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.ESCORT_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -73,11 +73,11 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.ESCORT_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
