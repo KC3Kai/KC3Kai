@@ -6,11 +6,11 @@
   const PLAYER_JSON_FIELDS = ['api_frai', 'api_fydam'];
   const ENEMY_JSON_FIELDS = ['api_erai', 'api_eydam'];
 
-  Raigeki.parseRaigeki = (playerRole, battleData) => {
+  Raigeki.parseRaigeki = (battleType, battleData) => {
     const { extractFromJson, raigeki: { getTargetFactories, parseSide } }
       = KC3BattlePrediction.battle.phases;
 
-    const targetFactories = getTargetFactories(playerRole);
+    const targetFactories = getTargetFactories(battleType);
 
     const playerAttacks = parseSide(targetFactories.playerAttack,
       extractFromJson(battleData, PLAYER_JSON_FIELDS));
@@ -73,11 +73,13 @@
 
   /* -----------------[ TARGET FACTORIES ]----------------- */
 
-  Raigeki.getTargetFactories = (playerRole) => {
-    const { Side, Role, bind, battle: { createTarget } } = KC3BattlePrediction;
+  Raigeki.getTargetFactories = (battleType) => {
+    const { Side } = KC3BattlePrediction;
+    const { createTargetFactory, isPlayerSingleFleet, isEnemySingleFleet } = KC3BattlePrediction.battle.phases.raigeki;
 
-    const playerTarget = bind(createTarget, Side.PLAYER, playerRole);
-    const enemyTarget = bind(createTarget, Side.ENEMY, Role.MAIN_FLEET);
+    // TODO: unify v6 and v12 raigeki parsing
+    const playerTarget = createTargetFactory(Side.PLAYER, isPlayerSingleFleet(battleType.player));
+    const enemyTarget = createTargetFactory(Side.ENEMY, isEnemySingleFleet(battleType.enemy));
 
     return {
       playerAttack: ({ attacker, defender }) => ({
@@ -89,6 +91,25 @@
         defender: playerTarget(defender.position),
       }),
     };
+  };
+
+  Raigeki.isPlayerSingleFleet = (playerFleetType) => {
+    const { Player } = KC3BattlePrediction;
+
+    return playerFleetType === Player.SINGLE;
+  };
+  Raigeki.isEnemySingleFleet = (enemyFleetType) => {
+    const { Enemy } = KC3BattlePrediction;
+
+    return enemyFleetType === Enemy.SINGLE;
+  };
+
+  Raigeki.createTargetFactory = (side, isSingleFleet) => {
+    const { Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    return isSingleFleet
+      ? position => createTarget(side, Role.MAIN_FLEET, position)
+      : position => createTarget(side, position < 6 ? Role.MAIN_FLEET : Role.ESCORT_FLEET, position % 6);
   };
 
   Raigeki.getCombinedTargetFactories = () => {

@@ -46,25 +46,7 @@
         return ({ api_raigeki }) => parseAs(raigeki, api_raigeki);
       },
       midnight(yasen) {
-        const { Role, bind } = KC3BattlePrediction;
-
-        const getEnemyRole = (api_active_deck) => {
-          // active deck isn't specified for enemy single fleet
-          if (!api_active_deck) { return Role.MAIN_FLEET; }
-
-          switch (api_active_deck[1]) {
-            case 1:
-              return Role.MAIN_FLEET;
-            case 2:
-              return Role.ESCORT_FLEET;
-            default:
-              throw new Error(`Bad api_active_deck: ${api_active_deck}`);
-          }
-        };
-
-        return ({ api_hougeki, api_active_deck }) => {
-          return parseAs(bind(yasen, getEnemyRole(api_active_deck)), api_hougeki);
-        };
+        return ({ api_hougeki }) => parseAs(yasen, api_hougeki);
       },
     };
 
