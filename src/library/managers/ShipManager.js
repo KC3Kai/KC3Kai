@@ -203,7 +203,7 @@ Saves and loads list to and from localStorage
 			var thisShip = this.list["x"+rosterId];
 			if(typeof thisShip != "undefined"){
 				// initializing for fleet sanitizing of zombie ships
-				var shipTargetFleetID = this.locateOnFleet(rosterId);
+				var shipTargetFleetID = this.locateOnFleet(parseInt(rosterId, 10));
 				// check whether the designated ship is on fleet or not
 				if(shipTargetFleetID >= 0){
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
@@ -240,7 +240,7 @@ Saves and loads list to and from localStorage
 		locateOnFleet: function( rosterId ){
 			var fleetId = -1;
 			PlayerManager.fleets.find((fleet, index) => {
-				if(fleet.ships.find(rid => rid === rosterId)){
+				if(fleet.ships.find(rid => rid == rosterId)){
 					fleetId = index;
 					return true;
 				}

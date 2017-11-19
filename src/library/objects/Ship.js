@@ -442,24 +442,30 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
 		var self = this;
+		var result = {
+			fuel: 0, ammo: 0
+		};
+		if(this.isDummy()) {
+			if(bauxiteNeeded) result.bauxite = 0;
+			if(steelNeeded) result.steel = 0;
+			return result;
+		}
+		
 		var master = this.master();
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
-
 		var mulRounded = function (a, percent) {
 			return Math.floor( a * percent );
 		};
 		var marriageConserve = function (v) {
 			return self.isMarried() ? Math.floor(0.85 * v) : v;
 		};
-		var result = {
-			fuel: fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent),
-			ammo: ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent)
-		};
+		result.fuel = fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent);
+		result.ammo = ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent);
 		// After testing, 85% is applied to supply cost, not max value
 		result.fuel = marriageConserve(result.fuel);
 		result.ammo = marriageConserve(result.ammo);
-		if(!!bauxiteNeeded){
+		if(bauxiteNeeded){
 			var slotsBauxiteCost = function(current, max) {
 				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
 			};
@@ -474,7 +480,7 @@ KC3改 Ship Object
 			// via http://kancolle.wikia.com/wiki/Marriage
 			//result.bauxite = marriageConserve(result.bauxite);
 		}
-		if(!!steelNeeded){
+		if(steelNeeded){
 			result.steel = this.calcJetsSteelCost();
 		}
 		return result;
@@ -486,6 +492,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcJetsSteelCost = function(currentSortieId) {
 		var totalSteel = 0, consumedSteel = 0;
+		if(this.isDummy()) { return totalSteel; }
 		this.equipment().forEach((item, i) => {
 			// Is Jet aircraft and left slot > 0
 			if(item.exists() && this.slots[i] > 0 &&
@@ -520,7 +527,7 @@ KC3改 Ship Object
 	 * @return stats without the equipment but with modernization.
 	 */
 	KC3Ship.prototype.nakedStats = function(statAttr){
-		if(!this.masterId) { return false; }
+		if(this.isDummy()) { return false; }
 		const stats = {
 			aa: this.aa[0],
 			ar: this.ar[0],
@@ -636,7 +643,7 @@ KC3改 Ship Object
 	 *         stats at Lv.165 can be only estimated by data from known database.
 	 */
 	KC3Ship.prototype.maxedStats = function(statAttr, isMarried = this.isMarried()){
-		if(!this.masterId) { return false; }
+		if(this.isDummy()) { return false; }
 		const stats = {
 			aa: this.aa[1],
 			ar: this.ar[1],
@@ -669,7 +676,7 @@ KC3改 Ship Object
 	 * @return stats to be maxed modernization
 	 */
 	KC3Ship.prototype.modernizeLeftStats = function(statAttr){
-		if(!this.masterId) { return false; }
+		if(this.isDummy()) { return false; }
 		const shipMst = this.master();
 		const stats = {
 			fp: shipMst.api_houg[1] - shipMst.api_houg[0] - this.mod[0],
@@ -1137,12 +1144,12 @@ KC3改 Ship Object
 		// Formation modifier
 		let formationModifier = (warfareType === "Antisub" ?
 			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
-			// ID 6: new formation since 2017-11-17
+			// ID 6: new Vanguard formation since 2017-11-17
 			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 			// 0 are placeholders for non-exists ID
-			[0, 0.6, 0.8, 1.2, 1, 1.3, 0, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
+			[0, 0.6, 0.8, 1.2, 1, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
 			warfareType === "Shelling" || warfareType === "Torpedo" ?
-			[0, 1, 0.8, 0.7, 0.6, 0.6, 0, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
+			[0, 1, 0.8, 0.7, 0.6, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
 			// Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
@@ -2182,6 +2189,7 @@ KC3改 Ship Object
 	//   - 1/4/5 (for line ahead / echelon / line abreast)
 	//   - 2 (for double line)
 	//   - 3 (for diamond)
+	//   - formation 6 (for vanguard) still under verification
 	// - all possible AACIs are considered and the largest AACI modifier
 	//   is used for calculation the maximum number of fixed shotdown
 	KC3Ship.prototype.fixedShotdownRange = function(formationId) {

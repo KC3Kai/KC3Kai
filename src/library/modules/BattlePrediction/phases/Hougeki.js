@@ -6,12 +6,12 @@
   /*--------------------------------------------------------*/
 
   const JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
-  Hougeki.parseHougeki = (playerRole, battleData) => {
+  Hougeki.parseHougeki = (battleType, battleData) => {
     const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
     const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
 
     const attackData = extractFromJson(battleData, JSON_FIELDS).map(parseJson);
-    return makeAttacks(attackData, getTargetFactory(playerRole));
+    return makeAttacks(attackData, getTargetFactory(battleType));
   };
 
   Hougeki.parseCombinedHougeki = (battleData) => {
@@ -107,18 +107,38 @@
 
   /* -----------------[ TARGET FACTORIES ]----------------- */
 
-  Hougeki.getTargetFactory = (playerRole) => {
-    const { Side, Role, battle: { createTarget } } = KC3BattlePrediction;
-
-    const roles = {
-      [Side.PLAYER]: playerRole,
-      [Side.ENEMY]: Role.MAIN_FLEET,
-    };
+  Hougeki.getTargetFactory = (battleType) => {
+    const { Side } = KC3BattlePrediction;
+    const { createTargetFactory, isPlayerSingleFleet, isEnemySingleFleet } = KC3BattlePrediction.battle.phases.hougeki;
+    const createTarget = createTargetFactory({
+      [Side.PLAYER]: isPlayerSingleFleet(battleType.player),
+      [Side.ENEMY]: isEnemySingleFleet(battleType.enemy),
+    });
 
     return ({ attacker, defender }) => ({
-      attacker: createTarget(attacker.side, roles[attacker.side], attacker.position),
-      defender: createTarget(defender.side, roles[defender.side], defender.position),
+      attacker: createTarget(attacker),
+      defender: createTarget(defender),
     });
+  };
+
+  Hougeki.isPlayerSingleFleet = (playerFleetType) => {
+    const { Player } = KC3BattlePrediction;
+
+    return playerFleetType === Player.SINGLE;
+  };
+  Hougeki.isEnemySingleFleet = (enemyFleetType) => {
+    const { Enemy } = KC3BattlePrediction;
+
+    return enemyFleetType === Enemy.SINGLE;
+  };
+
+  Hougeki.createTargetFactory = (isSingleFleet) => {
+    const { Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    return ({ side, position }) =>
+      (isSingleFleet[side]
+        ? createTarget(side, Role.MAIN_FLEET, position)
+        : createTarget(side, position < 6 ? Role.MAIN_FLEET : Role.ESCORT_FLEET, position % 6));
   };
 
   Hougeki.getCombinedTargetFactory = () => {

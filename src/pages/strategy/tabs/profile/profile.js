@@ -559,17 +559,13 @@
 			
 			// Clear buggy encounter data
 			$(".tab_profile .clear_encounters").on("click", function(event){
-				KC3Database.con.encounters.where("world").equals(0).toArray(function(encounterList){
-					$.each(encounterList, function(index, encounterData){
-						KC3Database.con.encounters.delete(encounterData.uniqid);
-					});
-					alert("Done 1/2~");
-					KC3Database.con.encounters.where("world").equals(-1).toArray(function(encounterList){
-						$.each(encounterList, function(index, encounterData){
-							KC3Database.con.encounters.delete(encounterData.uniqid);
-						});
-						alert("Done 2/2!");
-					});
+				KC3Database.con.encounters.filter(d => {
+					const ke = JSON.parse(d.ke || null);
+					const letter = KC3Meta.nodeLetter(d.world, d.map, d.node);
+					return d.world <= 0 || !Array.isArray(ke) || ke.length < 6
+						|| (d.world < 10 && letter === d.node);
+				}).delete().then((count) => {
+					if(count) alert("Done!"); else alert("No bug found!");
 				});
 			});
 			
