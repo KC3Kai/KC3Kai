@@ -439,7 +439,7 @@
   /*--------------------------------------------------------*/
   const { Player, Enemy, Time } = KC3BattlePrediction;
   const types = {
-    [toKey(Player.SINGLE, Enemy.SINGLE, Time.DAY)]() {
+    [toKey(Player.SINGLE, Enemy.SINGLE, Time.DAY)](battleType) {
       const { Role, bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
@@ -457,14 +457,14 @@
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
         openingTaisen: create('openingTaisen', bind(parseHougeki, Role.MAIN_FLEET)),
-        openingAtack: create('openingAtack', bind(parseRaigeki, Role.MAIN_FLEET)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
         hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
         hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
         hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
-        raigeki: create('raigeki', bind(parseRaigeki, Role.MAIN_FLEET)),
+        raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
-    [toKey(Player.CTF, Enemy.SINGLE, Time.DAY)]() {
+    [toKey(Player.CTF, Enemy.SINGLE, Time.DAY)](battleType) {
       const { Role, bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
@@ -482,14 +482,14 @@
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
         openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
-        openingAtack: create('openingAtack', bind(parseRaigeki, Role.ESCORT_FLEET)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
         hougeki1: create('hougeki1', bind(parseHougeki, Role.ESCORT_FLEET)),
-        raigeki: create('raigeki', bind(parseRaigeki, Role.ESCORT_FLEET)),
+        raigeki: create('raigeki', bind(parseRaigeki, battleType)),
         hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
         hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
       };
     },
-    [toKey(Player.STF, Enemy.SINGLE, Time.DAY)]() {
+    [toKey(Player.STF, Enemy.SINGLE, Time.DAY)](battleType) {
       const { Role, bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
@@ -507,11 +507,11 @@
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
         openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
-        openingAtack: create('openingAtack', bind(parseRaigeki, Role.ESCORT_FLEET)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
         hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
         hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
         hougeki3: create('hougeki3', bind(parseHougeki, Role.ESCORT_FLEET)),
-        raigeki: create('raigeki', bind(parseRaigeki, Role.ESCORT_FLEET)),
+        raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
     [toKey(Player.SINGLE, Enemy.COMBINED, Time.DAY)]() {
@@ -656,7 +656,7 @@
     if (!types[key]) {
       throw new Error(`Bad battle type: ${JSON.stringify(battleType)}`);
     }
-    return types[key]();
+    return types[key](battleType);
   };
 
   Object.assign(KC3BattlePrediction.battle.engagement, { getEngagementType, types });
@@ -938,11 +938,11 @@
   const PLAYER_JSON_FIELDS = ['api_frai', 'api_fydam'];
   const ENEMY_JSON_FIELDS = ['api_erai', 'api_eydam'];
 
-  Raigeki.parseRaigeki = (playerRole, battleData) => {
+  Raigeki.parseRaigeki = (battleType, battleData) => {
     const { extractFromJson, raigeki: { getTargetFactories, parseSide } }
       = KC3BattlePrediction.battle.phases;
 
-    const targetFactories = getTargetFactories(playerRole);
+    const targetFactories = getTargetFactories(battleType);
 
     const playerAttacks = parseSide(targetFactories.playerAttack,
       extractFromJson(battleData, PLAYER_JSON_FIELDS));
@@ -1005,11 +1005,13 @@
 
   /* -----------------[ TARGET FACTORIES ]----------------- */
 
-  Raigeki.getTargetFactories = (playerRole) => {
-    const { Side, Role, bind, battle: { createTarget } } = KC3BattlePrediction;
+  Raigeki.getTargetFactories = (battleType) => {
+    const { Side } = KC3BattlePrediction;
+    const { createTargetFactory, isPlayerSingleFleet, isEnemySingleFleet } = KC3BattlePrediction.battle.phases.raigeki;
 
-    const playerTarget = bind(createTarget, Side.PLAYER, playerRole);
-    const enemyTarget = bind(createTarget, Side.ENEMY, Role.MAIN_FLEET);
+    // TODO: unify v6 and v12 raigeki parsing
+    const playerTarget = createTargetFactory(Side.PLAYER, isPlayerSingleFleet(battleType.player));
+    const enemyTarget = createTargetFactory(Side.ENEMY, isEnemySingleFleet(battleType.enemy));
 
     return {
       playerAttack: ({ attacker, defender }) => ({
@@ -1021,6 +1023,25 @@
         defender: playerTarget(defender.position),
       }),
     };
+  };
+
+  Raigeki.isPlayerSingleFleet = (playerFleetType) => {
+    const { Player } = KC3BattlePrediction;
+
+    return playerFleetType === Player.SINGLE;
+  };
+  Raigeki.isEnemySingleFleet = (enemyFleetType) => {
+    const { Enemy } = KC3BattlePrediction;
+
+    return enemyFleetType === Enemy.SINGLE;
+  };
+
+  Raigeki.createTargetFactory = (side, isSingleFleet) => {
+    const { Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    return isSingleFleet
+      ? position => createTarget(side, Role.MAIN_FLEET, position)
+      : position => createTarget(side, position < 6 ? Role.MAIN_FLEET : Role.ESCORT_FLEET, position % 6);
   };
 
   Raigeki.getCombinedTargetFactories = () => {
@@ -1180,7 +1201,7 @@
 
   // Embed the prop name in the array - it will be needed by zipJson()
   Util.normalizeFieldArrays = (propName, array) => {
-    return array.map(value => ({ [propName]: value }));
+    return (array || []).map(value => ({ [propName]: value }));
   };
 
   Util.zipJson = (...elements) => Object.assign({}, ...elements);
