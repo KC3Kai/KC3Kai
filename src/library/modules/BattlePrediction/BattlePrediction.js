@@ -77,7 +77,7 @@
 
   BP.Enemy = Object.freeze({ SINGLE: 'single', COMBINED: 'combined' });
 
-  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night' });
+  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night', NIGHT_TO_DAY: 'night-to-day' });
 
   // INTERNAL ENUMS
   // ---------------
