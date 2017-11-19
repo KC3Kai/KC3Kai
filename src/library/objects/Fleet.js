@@ -1,7 +1,7 @@
 /* Fleet.js
 KC3改 Fleet Object
 
-Contains summary information about a fleet and its 6 ships
+Contains summary information about a fleet and its ships
 */
 (function(){
 	"use strict";
@@ -823,8 +823,8 @@ Contains summary information about a fleet and its 6 ships
 	
 	KC3Fleet.prototype.getDameConCodes = function(){
 		var result = [];
-		for(var i=0; i < 6; ++i) {
-			result.push( this.ship(i).findDameCon().code );
+		for(var index in this.ships) {
+			result.push(this.ship(index).findDameCon().code);
 		}
 		return result;
 	};
@@ -1012,7 +1012,7 @@ Contains summary information about a fleet and its 6 ships
 		var emptyShipSlot = 0;
 
 		// iterate all ship slots, even some are empty
-		Array.numbers(0, 5).map(i => this.ship(i)).forEach(shipObj => {
+		this.ships.map((rid, i) => this.ship(i)).forEach(shipObj => {
 			// count for empty slots or ships retreated
 			if(shipObj.isDummy() || shipObj.didFlee) {
 				emptyShipSlot += 1;

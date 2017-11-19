@@ -240,7 +240,7 @@ Saves and loads list to and from localStorage
 		locateOnFleet: function( rosterId ){
 			var fleetId = -1;
 			PlayerManager.fleets.find((fleet, index) => {
-				if(fleet.ships.find(rid => rid === rosterId)){
+				if(fleet.ships.find(rid => rid == rosterId)){
 					fleetId = index;
 					return true;
 				}

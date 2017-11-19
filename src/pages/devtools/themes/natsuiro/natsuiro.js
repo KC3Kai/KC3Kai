@@ -1233,20 +1233,17 @@
 			// TAIHA ALERT CHECK
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
-				PlayerManager.fleets
-					.filter (function( obj,  i) {
-						var
-							cf = PlayerManager.combinedFleet, // Marks combined flag
-							fs = KC3SortieManager.fleetSent,  // Which fleet that requires to focus out
+				PlayerManager.fleets.filter((obj, i) => {
+						const cf = PlayerManager.combinedFleet,   // Marks combined flag
+							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
-						return !so || ((cf && fs===1) ? i <= 1 : i == fs-1);
+						return !so || ((cf && fs === 1) ? i <= 1 : i == fs - 1);
 					})
-					.map    (function(fleetObj) { return fleetObj.ships; }) // Convert to ship ID array
-					.reduce (function(   x,  y) { return x.concat(y); })    // Join IDs from fleets
-					.map    (function(   v,  i) { return {id: v, pos: i % 6}; }) // Convert to {rosterId, posIndex} object
-					.filter (function(shipData) { return shipData.id>0 && shipData.pos>0; }) // Remove ID -1 and flagship
-					.map    (function(shipData) { return KC3ShipManager.get(shipData.id); }) // Convert to Ship instance
-					.some   (function( shipObj) { // Check if any ship is Taiha, not flee, no damecon found
+					.map    ((fleetObj) => fleetObj.ships.slice(1))    // Convert to non-flagship ID arrays
+					.reduce ((acc, arr) => acc.concat(arr))            // Join IDs into an array
+					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
+					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
+					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
 						return !shipObj.didFlee && shipObj.isTaiha()
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
@@ -2261,7 +2258,7 @@
 
 			var thisNode = KC3SortieManager.currentNode();
 			var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
-			var enemyFleetBox = thisNode.eships.length > 6 ? "combined" : "single";
+			var enemyFleetBox = thisNode.enemyCombined ? "combined" : "single";
 			var enemyFleetBoxSelector = ".module.activity .abyss_" + enemyFleetBox;
 			if (enemyFleetBox == "combined") {
 				$(".module.activity .abyss_single").hide();
