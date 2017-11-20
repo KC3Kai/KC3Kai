@@ -169,8 +169,7 @@
 	font-size:10px;
 	white-space:nowrap;
 	overflow:hidden;
-	float:left;
-	cursor: pointer;
+	float:left;	
 }
 .tab_maps .sortie_list .sortie_id {
 	width:50px;
@@ -180,6 +179,7 @@
 	font-weight:bold;
 	text-align:center;
 	float:left;
+	cursor: pointer;
 }
 .tab_maps .sortie_list .sortie_date {
 	width:50px;
