@@ -115,6 +115,13 @@
                 self.exportBattleImg(parseInt($(this).data("id")), e);
             });
 
+            // On-click sortie ID fleet manager
+            $(".sortie_list").on("click contextmenu", ".sortie_id", function (e) {
+                e.preventDefault();
+                var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
+                chrome.tabs.create({ url, active: true });
+            });
+
             // On-click single sortie toggles
             $(".tab_" + tabCode + " .sortie_list").on("click", ".sortie_box .sortie_toggles .sortie_toggle", function () {
                 self.toggleSortie(this, false);
