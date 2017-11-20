@@ -1,48 +1,58 @@
 // Parser for 航空 (aerial combat) phase
 (function () {
+  const Kouku = {};
+  const { pipe, juxt, flatten, map, filter, Side } = KC3BattlePrediction;
   /*--------------------------------------------------------*/
   /* ----------------------[ PUBLIC ]---------------------- */
   /*--------------------------------------------------------*/
 
-  const parseKouku = ({ api_stage3, api_stage3_combined }) => {
-    const { getAttacksToMainOrEscort } = KC3BattlePrediction.battle.phases.kouku;
+  Kouku.parseKouku = (battleData) => {
+    const { createAttack } = KC3BattlePrediction.battle;
+    const {
+      mergeFleetDamageArrays,
+      parsePlayerJson,
+      parseEnemyJson,
+      isDamagingAttack,
+    } = KC3BattlePrediction.battle.phases.kouku;
 
-    const mainAttacks = api_stage3 ? getAttacksToMainOrEscort('main', api_stage3) : [];
-    const escortAttacks = api_stage3_combined ? getAttacksToMainOrEscort('escort', api_stage3_combined) : [];
-
-    return mainAttacks.concat(escortAttacks);
+    return pipe(
+      mergeFleetDamageArrays,
+      juxt([parsePlayerJson, parseEnemyJson]),
+      flatten,
+      filter(isDamagingAttack),
+      map(createAttack)
+    )(battleData);
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/
 
-  const getAttacksToMainOrEscort = (role, { api_fdam, api_edam }) => {
-    const { parseDamageArray } = KC3BattlePrediction.battle.phases.kouku;
+  // Combine the damage arrays for main and escort fleets
+  Kouku.mergeFleetDamageArrays = ({ api_stage3, api_stage3_combined }) => ({
+    api_fdam: [].concat(
+      (api_stage3 && api_stage3.api_fdam) || [],
+      (api_stage3_combined && api_stage3_combined.api_fdam) || []
+    ),
+    api_edam: [].concat(
+      (api_stage3 && api_stage3.api_edam) || [],
+      (api_stage3_combined && api_stage3_combined.api_edam) || []
+    ),
+  });
 
-    const playerAttacks = api_fdam ? parseDamageArray('player', role, api_fdam) : [];
-    const enemyAttacks = api_edam ? parseDamageArray('enemy', role, api_edam) : [];
 
-    return playerAttacks.concat(enemyAttacks);
-  };
+  Kouku.parsePlayerJson = ({ api_fdam }) => api_fdam.map(
+    (damage, position) => ({ damage, defender: { side: Side.PLAYER, position } })
+  );
+  Kouku.parseEnemyJson = ({ api_edam }) => api_edam.map(
+    (damage, position) => ({ damage, defender: { side: Side.ENEMY, position } })
+  );
 
-  const parseDamageArray = (side, role, damageArray) => {
-    const { normalizeArrayIndexing, battle: { createAttack, createTarget } } = KC3BattlePrediction;
-
-    const damages = normalizeArrayIndexing(damageArray);
-    return damages.reduce((result, damage, position) => {
-      const attack = createAttack(damage, createTarget(side, role, position));
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
-  };
+  Kouku.isDamagingAttack = ({ damage }) => damage > 0;
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(KC3BattlePrediction.battle.phases.kouku, {
-    parseKouku,
-    getAttacksToMainOrEscort,
-    parseDamageArray,
-  });
+  Object.assign(KC3BattlePrediction.battle.phases.kouku, Kouku);
 }());

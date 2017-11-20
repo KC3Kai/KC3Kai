@@ -1,30 +1,41 @@
 (function () {
-  const EMPTY_SLOT = KC3BattlePrediction.EMPTY_SLOT;
+  const Ship = {};
+  const { EMPTY_SLOT } = KC3BattlePrediction;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const createShip = (hp, maxHp) => (hp !== -1 ? { hp, maxHp, damageDealt: 0 } : EMPTY_SLOT);
+  Ship.createShip = (hp, maxHp) => ({ hp, maxHp, damageDealt: 0 });
 
-  const installDamecon = (damecon, ship) =>
-    (ship !== EMPTY_SLOT ? Object.assign({}, ship, { damecon }) : ship);
+  Ship.installDamecon = (ship, damecon = 0) => Object.assign({}, ship, { damecon });
 
-  const dealDamage = (damage, ship) =>
+  Ship.dealDamage = damage => ship =>
     Object.assign({}, ship, { damageDealt: ship.damageDealt + damage });
 
-  const takeDamage = (damage, ship) => {
-    const { tryDamecon } = KC3BattlePrediction.fleets;
+  Ship.takeDamage = damage => ship => {
+    const { tryDamecon } = KC3BattlePrediction.fleets.ship;
 
     const result = Object.assign({}, ship, { hp: ship.hp - damage });
 
     return result.hp <= 0 ? tryDamecon(result) : result;
   };
 
+  Ship.formatShip = ship => {
+    if (ship === EMPTY_SLOT) { return EMPTY_SLOT; }
+
+    return {
+      hp: ship.hp,
+      dameConConsumed: ship.dameConConsumed || false,
+      sunk: ship.hp <= 0,
+      damageDealt: ship.damageDealt,
+    };
+  };
+
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
 
-  const tryDamecon = (ship) => {
+  Ship.tryDamecon = (ship) => {
     const { Damecon } = KC3BattlePrediction;
 
     switch (ship.damecon) {
@@ -45,29 +56,9 @@
     }
   };
 
-  const formatShip = (ship) => {
-    if (ship === EMPTY_SLOT) { return EMPTY_SLOT; }
-
-    return {
-      hp: ship.hp,
-      dameConConsumed: ship.dameConConsumed || false,
-      sunk: ship.hp <= 0,
-      damageDealt: ship.damageDealt,
-    };
-  };
-
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
-  Object.assign(window.KC3BattlePrediction.fleets, {
-    // Public
-    createShip,
-    installDamecon,
-    dealDamage,
-    takeDamage,
-    // Internals
-    tryDamecon,
-    formatShip,
-  });
+  Object.assign(window.KC3BattlePrediction.fleets.ship, Ship);
 }());

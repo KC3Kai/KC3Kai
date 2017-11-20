@@ -475,14 +475,12 @@ Used by SortieManager
 				: KC3BattlePrediction.Time.DAY;
 
 			const dameConCode = (() => {
-				if (KC3SortieManager.isPvP()) { return []; }
+				if (KC3SortieManager.isPvP()) { return {}; }
 
-				let result = PlayerManager.fleets[fleetId].getDameConCodes();
-				if (isPlayerCombined) {
-					result = result.concat(PlayerManager.fleets[1].getDameConCodes());
-				}
-
-				return result;
+				return {
+					main: PlayerManager.fleets[fleetId].getDameConCodes(),
+					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
+				};
 			})();
 
 			const result = KC3BattlePrediction.analyzeBattle(battleData, dameConCode, { player, enemy, time });
@@ -725,12 +723,12 @@ Used by SortieManager
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
 			const time = KC3BattlePrediction.Time.NIGHT;
 			const dameConCode = (() => {
-				if (KC3SortieManager.isPvP()) { return []; }
-				let result = PlayerManager.fleets[fleetId].getDameConCodes();
-				if (isPlayerCombined) {
-					result = result.concat(PlayerManager.fleets[1].getDameConCodes());
-				}
-				return result;
+				if (KC3SortieManager.isPvP()) { return {}; }
+
+				return {
+					main: PlayerManager.fleets[fleetId].getDameConCodes(),
+					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
+				};
 			})();
 			const result = KC3BattlePrediction.analyzeBattle(nightData, dameConCode, { player, enemy, time });
 			this.predictedFleetsNight = result.fleets;

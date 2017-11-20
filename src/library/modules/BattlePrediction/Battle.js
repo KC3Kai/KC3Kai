@@ -1,35 +1,28 @@
 (function () {
   const battle = {};
+  const { pipe, juxt, flatten, reduce } = KC3BattlePrediction;
   /*--------------------------------------------------------*/
   /* ----------------------[ PUBLIC ]---------------------- */
   /*--------------------------------------------------------*/
 
   battle.simulateBattle = (battleData, initalFleets, battleType) => {
-    const { battle: { parseBattle }, fleets: { simulateAttack } } = KC3BattlePrediction;
+    const { battle: { getPhases }, fleets: { simulateAttack } } = KC3BattlePrediction;
 
-    return parseBattle(battleType, battleData).reduce(simulateAttack, initalFleets);
+    return pipe(
+      juxt(getPhases(battleType)),
+      flatten,
+      reduce(simulateAttack, initalFleets)
+    )(battleData);
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/
 
-  /* -----------------[ PARSE BATTLE DATA ]---------------- */
-
-  battle.parseBattle = (battleType, battleData) => {
-    const { accumulateAttacks, parsePhases } = KC3BattlePrediction.battle;
-
-    return accumulateAttacks(parsePhases(battleType, battleData));
+  battle.getPhases = (battleType) => {
+    const { getBattlePhases, getPhaseParser } = KC3BattlePrediction.battle;
+    return getBattlePhases(battleType).map(getPhaseParser);
   };
-
-  battle.parsePhases = (battleType, battleData) => {
-    const { getBattlePhases } = KC3BattlePrediction.battle.engagement;
-
-    return getBattlePhases(battleType).map(parsePhase => parsePhase(battleData));
-  };
-
-  battle.accumulateAttacks = phases =>
-    phases.reduce((attacks, phase) => attacks.concat(phase), []);
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */

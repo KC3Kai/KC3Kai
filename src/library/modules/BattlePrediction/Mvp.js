@@ -31,10 +31,15 @@
   const combineFleetResults = (day, night) => {
     const { zipWith } = KC3BattlePrediction;
 
-    return zipWith(day, night, (dayResult, nightResult) => ({
-      damageDealt: dayResult.damageDealt + nightResult.damageDealt,
-    }));
+    return zipWith(
+      (dayResult, nightResult) => ({
+        damageDealt: dayResult.damageDealt + nightResult.damageDealt,
+      }),
+      day,
+      night
+    );
   };
+
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
