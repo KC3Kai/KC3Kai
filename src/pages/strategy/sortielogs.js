@@ -511,7 +511,10 @@
 						$(sortieBox)
 							.addClass("sortie_rank_"+sortie.diff)
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
-					$(".sortie_id", sortieBox).text( sortie.id );
+					$(".sortie_id", sortieBox)
+						.text(sortie.id)
+						.data("id", sortie.id)
+						.on("click", viewFleetAtManagerFunc);		
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );

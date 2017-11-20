@@ -170,6 +170,7 @@
 	white-space:nowrap;
 	overflow:hidden;
 	float:left;
+	cursor: pointer;
 }
 .tab_maps .sortie_list .sortie_id {
 	width:50px;
