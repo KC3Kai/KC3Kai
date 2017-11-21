@@ -1131,6 +1131,9 @@ Previously known as "Reactor"
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
+		"api_req_sortie/goback_port":function(params, response, headers){
+			this["api_req_combined_battle/goback_port"].apply(this,arguments);
+		},
 		
 		/*-------------------------------------------------------*/
 		/*-----------------------[ LBAS ]------------------------*/

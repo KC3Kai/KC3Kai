@@ -422,30 +422,26 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		checkFCF :function( escapeData ){
 			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
 				console.debug("FCF triggered");
-				
-				var taihadIndex = escapeData.api_escape_idx[0];
-				var taihadShip;
-				var escortIndex = escapeData.api_tow_idx[0];
-				var escortShip;
-				
-				console.log("FCF fleet indexes", taihadIndex, escortIndex);
-				
-				if(taihadIndex < 7){
-					taihadShip = PlayerManager.fleets[0].ship(taihadIndex-1).rosterId;
-				}else{
-					taihadShip = PlayerManager.fleets[1].ship(taihadIndex-7).rosterId;
-				}
-				
-				if(escortIndex < 7){
-					escortShip = PlayerManager.fleets[0].ship(escortIndex-1).rosterId;
-				}else{
-					escortShip = PlayerManager.fleets[1].ship(escortIndex-7).rosterId;
-				}
-				
-				this.fcfCheck = [taihadShip, escortShip];
+
+				const taihadShip = this.getRetreatedShip(escapeData.api_escape_idx);
+				const escortShip = this.getRetreatedShip(escapeData.api_tow_idx);
+
+				this.fcfCheck = [taihadShip, escortShip].filter(function (ship) {
+					return typeof ship !== 'undefined';
+				});
 				
 				console.log("Has set fcfCheck to", this.fcfCheck);
 			}
+		},
+
+		getRetreatedShip: function (escapeIdx) {
+			if (!escapeIdx) { return undefined; }
+
+			const shipIndex = escapeIdx[0];
+			if (PlayerManager.combinedFleet && shipIndex > 6) {
+				return PlayerManager.fleets[this.fleetSent].ship(shipIndex - 7).rosterId;
+			}
+			return PlayerManager.fleets[this.fleetSent - 1].ship(shipIndex - 1).rosterId;
 		},
 		
 		sendFCFHome :function(){

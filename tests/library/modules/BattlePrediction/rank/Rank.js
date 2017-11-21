@@ -13,53 +13,13 @@ QUnit.module('modules > BattlePrediction > Rank', function () {
     });
   });
 
-  QUnit.module('splitSides', {
-    beforeEach() { this.subject = Rank.splitSides; },
-  }, function () {
-    QUnit.test('fleet for role does not exist', function (assert) {
-      assert.deepEqual(this.subject(undefined), {
-        player: [],
-        enemy: [],
-      });
-    });
-
-    QUnit.test('both fleets', function (assert) {
-      const hps = [-1, 67, 57, 83, 52, 57, 45, 370, 88, 88, 80, 35, 35];
-
-      const result = this.subject(hps);
-
-      assert.deepEqual(result, {
-        player: [67, 57, 83, 52, 57, 45],
-        enemy: [370, 88, 88, 80, 35, 35],
-      });
-    });
-
-    QUnit.test('enemy only', function (assert) {
-      const hps = [-1, -1, -1, -1, -1, -1, -1, 57, 76, 76, 38, 35, 35];
-
-      const result = this.subject(hps);
-
-      assert.deepEqual(result, {
-        player: [],
-        enemy: [57, 76, 76, 38, 35, 35],
-      });
-    });
-
-    QUnit.test('player only', function (assert) {
-      const hps = [-1, 24, 32, 32, 32, 32, 38];
-
-      const result = this.subject(hps);
-
-      assert.deepEqual(result, {
-        player: [24, 32, 32, 32, 32, 38],
-        enemy: [],
-      });
-    });
-  });
-
   QUnit.module('zipHps', {
     beforeEach() { this.subject = Rank.zipHps; },
   }, function () {
+    QUnit.test('fleet does not exist', function (assert) {
+      assert.deepEqual(this.subject(undefined, undefined), []);
+    });
+
     QUnit.test('mismatched length of input arrays', function (assert) {
       const nowhps = new Array(5);
       const maxhps = new Array(7);
@@ -93,33 +53,21 @@ QUnit.module('modules > BattlePrediction > Rank', function () {
   QUnit.module('removeRetreated', {
     beforeEach() { this.subject = Rank.removeRetreated; },
   }, function () {
-    QUnit.test('no retreated ids in json', function (assert) {
+    QUnit.test('remove ships that have been retreated', function (assert) {
+      const ships = [1, 2, 3, 4, 5, 6];
+      const escapeIdx = [2, 3];
+
+      const result = this.subject(ships, escapeIdx);
+
+      assert.deepEqual(result, [1, 4, 5, 6]);
+    });
+
+    QUnit.test('no retreated ships', function (assert) {
       const ships = [1, 2, 3, 4, 5, 6];
 
       const result = this.subject(ships, undefined);
 
-      assert.deepEqual(result, ships);
-    });
-
-    QUnit.test('set retreated ship slots to empty', function (assert) {
-      const ships = [1, 2, 3, 4, 5, 6];
-      const escapeIdx = [2, 4];
-
-      const result = this.subject(ships, escapeIdx);
-
-      assert.deepEqual(result, [1, -1, 3, -1, 5, 6]);
-    });
-  });
-
-  QUnit.module('omitEmptySlots', {
-    beforeEach() { this.subject = Rank.omitEmptySlots; },
-  }, function () {
-    QUnit.test('remove empty slots', function (assert) {
-      const fleet = [{ hp: 1 }, { hp: -1 }, { hp: 3 }, { hp: 4 }, { hp: -1 }, { hp: -1 }];
-
-      const result = this.subject(fleet);
-
-      assert.deepEqual(result, [{ hp: 1 }, { hp: 3 }, { hp: 4 }]);
+      assert.deepEqual(result, [1, 2, 3, 4, 5, 6]);
     });
   });
 
