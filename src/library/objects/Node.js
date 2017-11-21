@@ -305,7 +305,7 @@ Used by SortieManager
 			}
 		}
 
-		this.detection = KC3Meta.detection( battleData.api_search[0] );
+		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : [0, 0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
 		// LBAS attack phase, including jet plane assault
