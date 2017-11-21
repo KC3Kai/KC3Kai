@@ -153,6 +153,49 @@
         raigeki: create('raigeki', parseCombinedRaigeki),
       };
     },
+    /* -------------------[ NIGHT TO DAY ]------------------- */
+    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT_TO_DAY)](battleType) {
+      const { bind } = KC3BattlePrediction;
+      const {
+        kouku: { parseKouku },
+        support: { parseCombinedSupport },
+        hougeki: { parseHougeki },
+        raigeki: { parseRaigeki },
+      } = KC3BattlePrediction.battle.phases;
+      const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
+
+      return {
+        kouku: create('kouku', parseKouku),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
+        support: create('support', parseCombinedSupport),
+        nSupport: create('nSupport', parseCombinedSupport),
+        nHougeki1: create('nHougeki1', bind(parseHougeki, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseHougeki, battleType)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+      };
+    },
+    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT_TO_DAY)](battleType) {
+      const { bind } = KC3BattlePrediction;
+      const {
+        kouku: { parseKouku },
+        support: { parseSupport },
+        hougeki: { parseHougeki },
+        raigeki: { parseRaigeki },
+      } = KC3BattlePrediction.battle.phases;
+      const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
+
+      return {
+        kouku: create('kouku', parseKouku),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
+        support: create('support', parseSupport),
+        nSupport: create('nSupport', parseSupport),
+        nHougeki1: create('nHougeki1', bind(parseHougeki, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseHougeki, battleType)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+      };
+    },
 
     /* -------------------[ NIGHT BATTLE ]------------------- */
     [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)](battleType) {
