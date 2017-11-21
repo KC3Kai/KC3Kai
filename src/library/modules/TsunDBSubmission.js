@@ -102,7 +102,7 @@
 			this.data.nextRoute = apiData.api_next;
 			
 			this.data.fleet1 = this.handleFleet(PlayerManager.fleets[this.data.fleetSent - 1]);
-			if(this.data.fleetType > 0) {
+			if(this.data.fleetType > 0 && this.data.fleetSent == 1) {
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
 			
