@@ -461,7 +461,7 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = battleData.api_name.indexOf('night_to_day') !== -1
+			const time = battleData.api_name && battleData.api_name.indexOf('night_to_day') !== -1
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 
