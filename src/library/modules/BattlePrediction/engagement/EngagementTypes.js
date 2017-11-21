@@ -200,55 +200,79 @@
     /* -------------------[ NIGHT BATTLE ]------------------- */
     [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
