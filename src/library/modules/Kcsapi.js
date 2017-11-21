@@ -997,7 +997,7 @@ Previously known as "Reactor"
 		/* NIGHT BATTLES to DAY BATTLES
 		-------------------------------------------------------*/
 		"api_req_sortie/night_to_day":function(params, response, headers){
-			response.api_data.api_name = "night_to_day";
+			response.api_data.api_name = response.api_data.api_name || "night_to_day";
 			KC3SortieManager.engageBattle(
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
