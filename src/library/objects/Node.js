@@ -345,14 +345,14 @@ Used by SortieManager
 		
 		// Air phases
 		var
-			planePhase  = battleData.api_kouku.api_stage1 || {
+			planePhase  = battleData.api_kouku && battleData.api_kouku.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
 				api_f_lostcount:0,
 				api_e_count    :0,
 				api_e_lostcount:0,
 			},
-			attackPhase = battleData.api_kouku.api_stage2;
+			attackPhase = battleData.api_kouku ? battleData.api_kouku.api_stage2 : null;
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = planePhase.api_touch_plane[1];
