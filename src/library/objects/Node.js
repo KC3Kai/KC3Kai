@@ -1047,6 +1047,13 @@ Used by SortieManager
 		}
 	};
 	
+	function sumSupportDamageArray (damageArray) {
+		return damageArray.reduce(function (total, attack) {
+			// old data format used leading -1 to make 1-based arrays
+			// kcsapi adds 0.1 to damage value to indicate flagship protection
+			return total + Math.max(0, Math.floor(attack));
+		}, 0);
+	}
 	/**
 	 * Builds a complex long message for results of Exped/LBAS support attack,
 	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
@@ -1061,16 +1068,14 @@ Used by SortieManager
 			if(attackType === 1){
 				var airatack = thisNode.supportInfo.api_support_airatack;
 				fleetId = airatack.api_deck_id;
-				supportDamage = !airatack.api_stage3 ? 0 :
-					Math.floor(airatack.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				supportDamage = !airatack.api_stage3 ? 0 : sumSupportDamageArray(airatack.api_stage3.api_edam);
 				// Support air attack has the same structure with kouku/LBAS
 				// So disp_seiku, plane xxx_count are also possible to be displayed
 				// Should break BattleSupportTips into another type for air attack
 			} else if([2,3].indexOf(attackType) > -1){
 				var hourai = thisNode.supportInfo.api_support_hourai;
 				fleetId = hourai.api_deck_id;
-				supportDamage = !hourai.api_damage ? 0 :
-					Math.floor(hourai.api_damage.slice(1).reduce(function(a,b){return a+b;},0));
+				supportDamage = !hourai.api_damage ? 0 : sumSupportDamageArray(hourai.api_damage);
 			}
 			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
 		}
@@ -1081,10 +1086,8 @@ Used by SortieManager
 				var jetStage2 = jet.api_stage2 || {};
 				var jetPlanes = jet.api_stage1.api_f_count;
 				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
-				var jetDamage = !jet.api_stage3 ? 0 :
-					Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				jetDamage += !jet.api_stage3_combined ? 0 :
-					Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetDamage = !jet.api_stage3 ? 0 : sumSupportDamageArray(jet.api_stage3.api_edam);
+				jetDamage += !jet.api_stage3_combined ? 0 : sumSupportDamageArray(jet.api_stage3_combined.api_edam);
 				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
 				var jetEnemyPlanes = jet.api_stage1.api_e_count;
 				if(jetEnemyPlanes > 0) {
@@ -1099,10 +1102,8 @@ Used by SortieManager
 				airBattle += ab.api_stage1.api_touch_plane[0] > 0 ? "+" + KC3Meta.term("BattleContact") : "";
 				var planes = ab.api_stage1.api_f_count;
 				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
-				var damage = !ab.api_stage3 ? 0 :
-					Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				damage += !ab.api_stage3_combined ? 0 :
-					Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var damage = !ab.api_stage3 ? 0 : sumSupportDamageArray(ab.api_stage3.api_edam);
+				damage += !ab.api_stage3_combined ? 0 : sumSupportDamageArray(ab.api_stage3_combined.api_edam);
 				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
 				var enemyPlanes = ab.api_stage1.api_e_count;
 				if(enemyPlanes > 0) {
