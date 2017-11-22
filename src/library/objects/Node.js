@@ -19,6 +19,10 @@ Used by SortieManager
 			map || KC3SortieManager.map_num, this.id);
 		this.nodeData = raw || {};
 	};
+
+	function isNightToDayNode(battleData) {
+		return !!battleData.api_day_flag;
+	}
 	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
 	KC3Node.debugPrediction = function() { return false; };
@@ -461,7 +465,7 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = battleData.api_name && battleData.api_name.indexOf('night_to_day') !== -1
+			const time = isNightToDayNode(battleData)
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 
