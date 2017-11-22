@@ -1310,7 +1310,11 @@
 			// Day battle-only environment
 			if(!thisNode.startsFromNight){
 				// If support expedition is triggered on this battle
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
+				if (thisNode.supportFlag || thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
@@ -1343,7 +1347,11 @@
 				
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				if (thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			

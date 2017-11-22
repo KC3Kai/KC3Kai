@@ -2370,11 +2370,15 @@
 			// Day battle-only environment
 			if(!thisNode.startsFromNight){
 				// If support expedition or LBAS is triggered on this battle
-				$(".module.activity .battle_support img").attr("src",
-					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
-				if(thisNode.supportFlag && !!thisNode.supportInfo){
-					var fleetId = (thisNode.supportInfo.api_support_airatack||{}).api_deck_id
-						|| (thisNode.supportInfo.api_support_hourai||{}).api_deck_id || "?";
+				if (thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
+				if(thisNode.supportInfo || thisNode.nightSupportInfo){
+					const supportInfo = thisNode.supportInfo || thisNode.nightSupportInfo;
+					const fleetId = (supportInfo.api_support_airatack||{}).api_deck_id
+						|| (supportInfo.api_support_hourai||{}).api_deck_id || "?";
 					$(".module.activity .battle_support .support_exped").text(fleetId);
 					$(".module.activity .battle_support .support_exped").show();
 				}
@@ -2464,7 +2468,11 @@
 
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				if (thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
