@@ -48,12 +48,13 @@
     }
   };
 
-  BP.predictRank = (apiName, battleStartData, battleResult) => {
+  BP.predictRank = (apiName, battleData, battleResult) => {
     const { parseStartJson, normalizeFleets, getRankPredictor } = KC3BattlePrediction.rank;
 
-    const battleStart = parseStartJson(battleStartData);
-    return getRankPredictor(apiName)
-      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult, true));
+    return getRankPredictor(apiName).predict(
+      normalizeFleets(parseStartJson(battleData), battleData),
+      normalizeFleets(battleResult, battleData)
+    );
   };
 
   BP.predictMvp = (dayResult, nightResult) => {
@@ -77,7 +78,7 @@
 
   BP.Enemy = Object.freeze({ SINGLE: 'single', COMBINED: 'combined' });
 
-  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night' });
+  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night', NIGHT_TO_DAY: 'night-to-day' });
 
   // INTERNAL ENUMS
   // ---------------

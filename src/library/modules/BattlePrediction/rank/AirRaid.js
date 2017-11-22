@@ -1,7 +1,8 @@
 (function () {
   const predict = (initial, result) => {
-    const { getDamageGauge,
-      battle: { isPlayerNoDamage }
+    const {
+      getDamageGauge,
+      battle: { isPlayerNoDamage },
     } = KC3BattlePrediction.rank;
 
     if (isPlayerNoDamage(initial, result)) { return 'SS'; }

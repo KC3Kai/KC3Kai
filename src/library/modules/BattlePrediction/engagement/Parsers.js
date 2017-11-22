@@ -45,6 +45,15 @@
       raigeki(raigeki) {
         return ({ api_raigeki }) => parseAs(raigeki, api_raigeki);
       },
+      nSupport(support) {
+        return ({ api_n_support_info }) => parseAs(support, api_n_support_info);
+      },
+      nHougeki1(hougeki) {
+        return ({ api_n_hougeki1 }) => parseAs(hougeki, api_n_hougeki1);
+      },
+      nHougeki2(hougeki) {
+        return ({ api_n_hougeki2 }) => parseAs(hougeki, api_n_hougeki2);
+      },
       midnight(yasen) {
         return ({ api_hougeki }) => parseAs(yasen, api_hougeki);
       },

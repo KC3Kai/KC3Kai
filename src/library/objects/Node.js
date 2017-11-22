@@ -305,7 +305,7 @@ Used by SortieManager
 			}
 		}
 
-		this.detection = KC3Meta.detection( battleData.api_search[0] );
+		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : [0, 0] );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
 		// LBAS attack phase, including jet plane assault
@@ -461,7 +461,9 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = KC3BattlePrediction.Time.DAY;
+			const time = battleData.api_name && battleData.api_name.indexOf('night_to_day') !== -1
+				? KC3BattlePrediction.Time.NIGHT_TO_DAY
+				: KC3BattlePrediction.Time.DAY;
 
 			const dameConCode = (() => {
 				if (KC3SortieManager.isPvP()) { return []; }
