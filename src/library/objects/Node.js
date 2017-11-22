@@ -265,6 +265,11 @@ Used by SortieManager
 			this.supportInfo = battleData.api_support_info;
 			this.supportInfo.api_support_flag = battleData.api_support_flag;
 		}
+		this.nightSupportFlag = battleData.api_n_support_flag > 0;
+		if (this.nightSupportFlag) {
+			this.nightSupportInfo = battleData.api_n_support_info;
+			this.nightSupportInfo.api_n_support_flag = battleData.api_n_support_flag;
+		}
 		this.yasenFlag = battleData.api_midnight_flag > 0;
 		
 		// only used by old theme, replaced by beginHPs
@@ -1047,12 +1052,31 @@ Used by SortieManager
 		}
 	};
 	
-	function sumSupportDamageArray (damageArray) {
+	function sumSupportDamageArray(damageArray) {
 		return damageArray.reduce(function (total, attack) {
 			// old data format used leading -1 to make 1-based arrays
 			// kcsapi adds 0.1 to damage value to indicate flagship protection
 			return total + Math.max(0, Math.floor(attack));
 		}, 0);
+	}
+
+	function buildSupportExpeditionMessage(supportInfo) {
+		let fleetId = "";
+		let supportDamage = 0;
+		const attackType = supportInfo.api_support_flag;
+		if (attackType === 1) {
+			const airatack = supportInfo.api_support_airatack;
+			fleetId = airatack.api_deck_id;
+			supportDamage = !airatack.api_stage3 ? 0 : sumSupportDamageArray(airatack.api_stage3.api_edam);
+			// Support air attack has the same structure with kouku/LBAS
+			// So disp_seiku, plane xxx_count are also possible to be displayed
+			// Should break BattleSupportTips into another type for air attack
+		} else if ([2, 3].indexOf(attackType) > -1) {
+			const hourai = supportInfo.api_support_hourai;
+			fleetId = hourai.api_deck_id;
+			supportDamage = !hourai.api_damage ? 0 : sumSupportDamageArray(hourai.api_damage);
+		}
+		return KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
 	}
 	/**
 	 * Builds a complex long message for results of Exped/LBAS support attack,
@@ -1063,21 +1087,10 @@ Used by SortieManager
 		var thisNode = this;
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
-			var fleetId = "", supportDamage = 0;
-			var attackType = thisNode.supportInfo.api_support_flag;
-			if(attackType === 1){
-				var airatack = thisNode.supportInfo.api_support_airatack;
-				fleetId = airatack.api_deck_id;
-				supportDamage = !airatack.api_stage3 ? 0 : sumSupportDamageArray(airatack.api_stage3.api_edam);
-				// Support air attack has the same structure with kouku/LBAS
-				// So disp_seiku, plane xxx_count are also possible to be displayed
-				// Should break BattleSupportTips into another type for air attack
-			} else if([2,3].indexOf(attackType) > -1){
-				var hourai = thisNode.supportInfo.api_support_hourai;
-				fleetId = hourai.api_deck_id;
-				supportDamage = !hourai.api_damage ? 0 : sumSupportDamageArray(hourai.api_damage);
-			}
-			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
+			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
+		}
+		if (thisNode.nightSupportFlag && !!thisNode.nightSupportInfo) {
+			supportTips += buildSupportExpeditionMessage(thisNode.nightSupportInfo);
 		}
 		var lbasTips = "";
 		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
