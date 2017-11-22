@@ -1069,7 +1069,7 @@ Used by SortieManager
 	function buildSupportExpeditionMessage(supportInfo) {
 		let fleetId = "";
 		let supportDamage = 0;
-		const attackType = supportInfo.api_support_flag;
+		const attackType = supportInfo.api_support_flag || supportInfo.api_n_support_flag;
 		if (attackType === 1) {
 			const airatack = supportInfo.api_support_airatack;
 			fleetId = airatack.api_deck_id;
