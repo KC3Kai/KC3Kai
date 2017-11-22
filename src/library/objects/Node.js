@@ -630,6 +630,12 @@ Used by SortieManager
 		
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
+
+		if (nightData.api_n_support_flag > 0) {
+			this.nightSupportFlag = true;
+			this.nightSupportInfo = nightData.api_n_support_info;
+			this.nightSupportInfo.api_n_support_flag = nightData.api_n_support_flag;
+		}
 		
 		this.maxHPs = {
 			ally: nightData.api_f_maxhps,
