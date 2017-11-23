@@ -1456,10 +1456,13 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		// Normal BOSS node starts from day battle
-		return (this.eventKind === 1 && this.eventId === 5)
-		// Combined BOSS node, see advanceNode()@SortieManager.js
-			|| (this.eventKind === 5 && this.eventId === 5);
+		// see advanceNode() (SortieManager.js) for api details
+		return (
+			// boss battle
+			this.eventId === 5 &&
+			// enemy single || enemy combined || night-to-day
+			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
+		);
 	};
 	
 	KC3Node.prototype.isMvpPredictionCapable = function(){
