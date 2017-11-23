@@ -1070,14 +1070,14 @@ Used by SortieManager
 		let fleetId = "";
 		let supportDamage = 0;
 		const attackType = supportInfo.api_support_flag || supportInfo.api_n_support_flag;
-		if (attackType === 1) {
+		if (supportInfo.api_support_airatack) {
 			const airatack = supportInfo.api_support_airatack;
 			fleetId = airatack.api_deck_id;
 			supportDamage = !airatack.api_stage3 ? 0 : sumSupportDamageArray(airatack.api_stage3.api_edam);
 			// Support air attack has the same structure with kouku/LBAS
 			// So disp_seiku, plane xxx_count are also possible to be displayed
 			// Should break BattleSupportTips into another type for air attack
-		} else if ([2, 3].indexOf(attackType) > -1) {
+		} else if (supportInfo.api_support_hourai) {
 			const hourai = supportInfo.api_support_hourai;
 			fleetId = hourai.api_deck_id;
 			supportDamage = !hourai.api_damage ? 0 : sumSupportDamageArray(hourai.api_damage);
