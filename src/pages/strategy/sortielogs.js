@@ -817,11 +817,15 @@
 							});
 							
 							// Support Exped/LBAS Triggered
-							if(thisNode.supportFlag || thisNode.lbasFlag){
+							if(thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag){
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-								if(thisNode.supportFlag && !!battleData.api_support_info){
-									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
-										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+								if(
+									(thisNode.supportFlag && battleData.api_support_info) ||
+									(thisNode.nightSupportFlag && battleData.api_n_support_info)
+								) {
+									const supportInfo = battleData.api_support_info || battleData.api_n_support_info;
+									const fleetId = (supportInfo.api_support_airatack||{}).api_deck_id
+										|| (supportInfo.api_support_hourai||{}).api_deck_id || "?";
 									$(".node_support .exped", nodeBox).text(fleetId);
 									$(".node_support .exped", nodeBox).show();
 								}
