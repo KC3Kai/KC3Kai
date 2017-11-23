@@ -21,7 +21,7 @@ Used by SortieManager
 	};
 
 	function isNightToDayNode(battleData) {
-		return !!battleData.api_day_flag;
+		return typeof battleData.api_day_flag !== 'undefined';
 	}
 	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
