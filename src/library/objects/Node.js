@@ -19,6 +19,10 @@ Used by SortieManager
 			map || KC3SortieManager.map_num, this.id);
 		this.nodeData = raw || {};
 	};
+
+	function isNightToDayNode(battleData) {
+		return typeof battleData.api_day_flag !== 'undefined';
+	}
 	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
 	KC3Node.debugPrediction = function() { return false; };
@@ -346,14 +350,14 @@ Used by SortieManager
 		
 		// Air phases
 		var
-			planePhase  = battleData.api_kouku.api_stage1 || {
+			planePhase  = battleData.api_kouku && battleData.api_kouku.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
 				api_f_lostcount:0,
 				api_e_count    :0,
 				api_e_lostcount:0,
 			},
-			attackPhase = battleData.api_kouku.api_stage2;
+			attackPhase = battleData.api_kouku ? battleData.api_kouku.api_stage2 : null;
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = planePhase.api_touch_plane[1];
@@ -466,7 +470,7 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = battleData.api_name && battleData.api_name.indexOf('night_to_day') !== -1
+			const time = isNightToDayNode(battleData)
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 
@@ -1472,10 +1476,13 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		// Normal BOSS node starts from day battle
-		return (this.eventKind === 1 && this.eventId === 5)
-		// Combined BOSS node, see advanceNode()@SortieManager.js
-			|| (this.eventKind === 5 && this.eventId === 5);
+		// see advanceNode() (SortieManager.js) for api details
+		return (
+			// boss battle
+			this.eventId === 5 &&
+			// enemy single || enemy combined || night-to-day
+			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
+		);
 	};
 	
 	KC3Node.prototype.isMvpPredictionCapable = function(){

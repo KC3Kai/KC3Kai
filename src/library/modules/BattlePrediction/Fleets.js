@@ -89,7 +89,7 @@
 
     switch (role) {
       case Role.MAIN_FLEET:
-        return damecons.slice(0, 6);
+        return damecons;
       case Role.ESCORT_FLEET:
         return damecons.slice(6, 12);
       default:
