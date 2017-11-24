@@ -132,7 +132,7 @@ QUnit.module('modules > BattlePrediction > Fleets', function () {
 
       const result = this.subject(Role.MAIN_FLEET, damecons);
 
-      assert.deepEqual(result, [1, 2, 3, 4, 5, 6]);
+      assert.deepEqual(result, damecons);
     });
 
     QUnit.test('escort fleet', function (assert) {

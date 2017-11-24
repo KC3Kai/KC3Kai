@@ -19,6 +19,10 @@ Used by SortieManager
 			map || KC3SortieManager.map_num, this.id);
 		this.nodeData = raw || {};
 	};
+
+	function isNightToDayNode(battleData) {
+		return typeof battleData.api_day_flag !== 'undefined';
+	}
 	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
 	KC3Node.debugPrediction = function() { return false; };
@@ -265,6 +269,11 @@ Used by SortieManager
 			this.supportInfo = battleData.api_support_info;
 			this.supportInfo.api_support_flag = battleData.api_support_flag;
 		}
+		this.nightSupportFlag = battleData.api_n_support_flag > 0;
+		if (this.nightSupportFlag) {
+			this.nightSupportInfo = battleData.api_n_support_info;
+			this.nightSupportInfo.api_n_support_flag = battleData.api_n_support_flag;
+		}
 		this.yasenFlag = battleData.api_midnight_flag > 0;
 		
 		// only used by old theme, replaced by beginHPs
@@ -341,14 +350,14 @@ Used by SortieManager
 		
 		// Air phases
 		var
-			planePhase  = battleData.api_kouku.api_stage1 || {
+			planePhase  = battleData.api_kouku && battleData.api_kouku.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
 				api_f_lostcount:0,
 				api_e_count    :0,
 				api_e_lostcount:0,
 			},
-			attackPhase = battleData.api_kouku.api_stage2;
+			attackPhase = battleData.api_kouku ? battleData.api_kouku.api_stage2 : null;
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = planePhase.api_touch_plane[1];
@@ -461,7 +470,7 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = battleData.api_name && battleData.api_name.indexOf('night_to_day') !== -1
+			const time = isNightToDayNode(battleData)
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 
@@ -625,6 +634,12 @@ Used by SortieManager
 		
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
+
+		if (nightData.api_n_support_flag > 0) {
+			this.nightSupportFlag = true;
+			this.nightSupportInfo = nightData.api_n_support_info;
+			this.nightSupportInfo.api_n_support_flag = nightData.api_n_support_flag;
+		}
 		
 		this.maxHPs = {
 			ally: nightData.api_f_maxhps,
@@ -1047,6 +1062,32 @@ Used by SortieManager
 		}
 	};
 	
+	function sumSupportDamageArray(damageArray) {
+		return damageArray.reduce(function (total, attack) {
+			// old data format used leading -1 to make 1-based arrays
+			// kcsapi adds 0.1 to damage value to indicate flagship protection
+			return total + Math.max(0, Math.floor(attack));
+		}, 0);
+	}
+
+	function buildSupportExpeditionMessage(supportInfo) {
+		let fleetId = "";
+		let supportDamage = 0;
+		const attackType = supportInfo.api_support_flag || supportInfo.api_n_support_flag;
+		if (supportInfo.api_support_airatack) {
+			const airatack = supportInfo.api_support_airatack;
+			fleetId = airatack.api_deck_id;
+			supportDamage = !airatack.api_stage3 ? 0 : sumSupportDamageArray(airatack.api_stage3.api_edam);
+			// Support air attack has the same structure with kouku/LBAS
+			// So disp_seiku, plane xxx_count are also possible to be displayed
+			// Should break BattleSupportTips into another type for air attack
+		} else if (supportInfo.api_support_hourai) {
+			const hourai = supportInfo.api_support_hourai;
+			fleetId = hourai.api_deck_id;
+			supportDamage = !hourai.api_damage ? 0 : sumSupportDamageArray(hourai.api_damage);
+		}
+		return KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
+	}
 	/**
 	 * Builds a complex long message for results of Exped/LBAS support attack,
 	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
@@ -1056,23 +1097,10 @@ Used by SortieManager
 		var thisNode = this;
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
-			var fleetId = "", supportDamage = 0;
-			var attackType = thisNode.supportInfo.api_support_flag;
-			if(attackType === 1){
-				var airatack = thisNode.supportInfo.api_support_airatack;
-				fleetId = airatack.api_deck_id;
-				supportDamage = !airatack.api_stage3 ? 0 :
-					Math.floor(airatack.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				// Support air attack has the same structure with kouku/LBAS
-				// So disp_seiku, plane xxx_count are also possible to be displayed
-				// Should break BattleSupportTips into another type for air attack
-			} else if([2,3].indexOf(attackType) > -1){
-				var hourai = thisNode.supportInfo.api_support_hourai;
-				fleetId = hourai.api_deck_id;
-				supportDamage = !hourai.api_damage ? 0 :
-					Math.floor(hourai.api_damage.slice(1).reduce(function(a,b){return a+b;},0));
-			}
-			supportTips = KC3Meta.term("BattleSupportTips").format(fleetId, KC3Meta.support(attackType), supportDamage);
+			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
+		}
+		if (thisNode.nightSupportFlag && !!thisNode.nightSupportInfo) {
+			supportTips += buildSupportExpeditionMessage(thisNode.nightSupportInfo);
 		}
 		var lbasTips = "";
 		if(thisNode.lbasFlag && !!thisNode.airBaseAttack){
@@ -1081,10 +1109,8 @@ Used by SortieManager
 				var jetStage2 = jet.api_stage2 || {};
 				var jetPlanes = jet.api_stage1.api_f_count;
 				var jetShotdown = jet.api_stage1.api_e_lostcount + (jetStage2.api_e_lostcount || 0);
-				var jetDamage = !jet.api_stage3 ? 0 :
-					Math.floor(jet.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				jetDamage += !jet.api_stage3_combined ? 0 :
-					Math.floor(jet.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var jetDamage = !jet.api_stage3 ? 0 : sumSupportDamageArray(jet.api_stage3.api_edam);
+				jetDamage += !jet.api_stage3_combined ? 0 : sumSupportDamageArray(jet.api_stage3_combined.api_edam);
 				var jetLost = jet.api_stage1.api_f_lostcount + (jetStage2.api_f_lostcount || 0);
 				var jetEnemyPlanes = jet.api_stage1.api_e_count;
 				if(jetEnemyPlanes > 0) {
@@ -1099,10 +1125,8 @@ Used by SortieManager
 				airBattle += ab.api_stage1.api_touch_plane[0] > 0 ? "+" + KC3Meta.term("BattleContact") : "";
 				var planes = ab.api_stage1.api_f_count;
 				var shotdown = ab.api_stage1.api_e_lostcount + (stage2.api_e_lostcount || 0);
-				var damage = !ab.api_stage3 ? 0 :
-					Math.floor(ab.api_stage3.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
-				damage += !ab.api_stage3_combined ? 0 :
-					Math.floor(ab.api_stage3_combined.api_edam.slice(1).reduce(function(a,b){return a+b;},0));
+				var damage = !ab.api_stage3 ? 0 : sumSupportDamageArray(ab.api_stage3.api_edam);
+				damage += !ab.api_stage3_combined ? 0 : sumSupportDamageArray(ab.api_stage3_combined.api_edam);
 				var lost = ab.api_stage1.api_f_lostcount + (stage2.api_f_lostcount || 0);
 				var enemyPlanes = ab.api_stage1.api_e_count;
 				if(enemyPlanes > 0) {
@@ -1452,10 +1476,13 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		// Normal BOSS node starts from day battle
-		return (this.eventKind === 1 && this.eventId === 5)
-		// Combined BOSS node, see advanceNode()@SortieManager.js
-			|| (this.eventKind === 5 && this.eventId === 5);
+		// see advanceNode() (SortieManager.js) for api details
+		return (
+			// boss battle
+			this.eventId === 5 &&
+			// enemy single || enemy combined || night-to-day
+			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
+		);
 	};
 	
 	KC3Node.prototype.isMvpPredictionCapable = function(){
