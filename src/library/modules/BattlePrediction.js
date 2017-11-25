@@ -595,13 +595,14 @@
         support: { parseCombinedSupport },
         hougeki: { parseHougeki },
         raigeki: { parseRaigeki },
+        yasen: { parseYasen },
       } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
         nSupport: create('nSupport', parseCombinedSupport),
-        nHougeki1: create('nHougeki1', bind(parseHougeki, battleType)),
-        nHougeki2: create('nHougeki2', bind(parseHougeki, battleType)),
+        nHougeki1: create('nHougeki1', bind(parseYasen, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseYasen, battleType)),
         airBaseInjection: create('airBaseInjection', parseKouku),
         injectionKouku: create('injectionKouku', parseKouku),
         airBaseAttack: create('airBaseAttack', parseKouku),
@@ -621,13 +622,14 @@
         support: { parseSupport },
         hougeki: { parseHougeki },
         raigeki: { parseRaigeki },
+        yasen: { parseYasen },
       } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
         nSupport: create('nSupport', parseSupport),
-        nHougeki1: create('nHougeki1', bind(parseHougeki, battleType)),
-        nHougeki2: create('nHougeki2', bind(parseHougeki, battleType)),
+        nHougeki1: create('nHougeki1', bind(parseYasen, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseYasen, battleType)),
         airBaseInjection: create('airBaseInjection', parseKouku),
         injectionKouku: create('injectionKouku', parseKouku),
         airBaseAttack: create('airBaseAttack', parseKouku),
