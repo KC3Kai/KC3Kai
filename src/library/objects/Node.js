@@ -635,6 +635,10 @@ Used by SortieManager
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 
+		if (this.startsFromNight) {
+			this.lbasFlag = false;
+		}
+
 		if (nightData.api_n_support_flag > 0) {
 			this.nightSupportFlag = true;
 			this.nightSupportInfo = nightData.api_n_support_info;
