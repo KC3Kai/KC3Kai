@@ -489,13 +489,17 @@
 				KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
 			};
 			var parseAirRaidFunc = function(airRaid){
+				const damageArray =
+				  airRaid &&
+				  airRaid.api_air_base_attack &&
+				  airRaid.api_air_base_attack.api_stage3 &&
+				  airRaid.api_air_base_attack.api_stage3.api_fdam || [];
 				return {
 					airRaidLostKind: (airRaid || {}).api_lost_kind || 0,
-					baseTotalDamage: airRaid && airRaid.api_air_base_attack
-						&& airRaid.api_air_base_attack.api_stage3
-						&& airRaid.api_air_base_attack.api_stage3.api_fdam ?
-						Math.floor(airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1)
-							.reduce((a, b) => a + b, 0)) : 0
+					baseTotalDamage: damageArray.reduce(
+							(sum, n) => sum + Math.max(0, Math.floor(n)),
+							0
+						),
 				};
 			};
 			$.each(sortieList, function(id, sortie){

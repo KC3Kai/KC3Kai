@@ -1474,9 +1474,9 @@ Used by SortieManager
 			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
-		this.baseDamage = bomberPhase && bomberPhase.api_fdam ? Math.floor(
-			bomberPhase.api_fdam.slice(1).reduce(function(a,b){return a+b;},0)
-		) : 0;
+		this.baseDamage = bomberPhase && bomberPhase.api_fdam
+			? sumSupportDamageArray(bomberPhase.api_fdam)
+			: 0;
 	};
 	
 	KC3Node.prototype.isBoss = function(){
