@@ -404,7 +404,8 @@ AntiAir: anti-air related calculations
 		return [
 			421, 330 /* Akizuki & Kai */,
 			422, 346 /* Teruzuki & Kai */,
-			423, 357 /* Hatsuzuki & Kai */
+			423, 357 /* Hatsuzuki & Kai */,
+			532, 537 /* Suzutsuki & Kai */	
 		].indexOf( mst.api_id ) !== -1;
 	}
 
