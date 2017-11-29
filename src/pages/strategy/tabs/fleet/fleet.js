@@ -339,8 +339,8 @@
 					var fleetObj = {};
 					fleetObj.name = "Fleet #" + fleetNum;
 					fleetObj.ships = [];
-					$.each([0,1,2,3,4,5], function(_,ind) {
-						fleetObj.ships.push(convertShip( fleetData[ind] ));
+					$.each(fleetData, function(ind, ship) {
+						fleetObj.ships.push(convertShip( ship ));
 					});
 					return fleetObj;
 				}
@@ -388,8 +388,7 @@
 			// fleetBox.attr("id", "fleet_box"+index);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
-			$.each( [0,1,2,3,4,5], function(_, ind) {
-				const kcShip = kcFleet.ship(ind);
+			$.each( kcFleet.ship(), function(ind, kcShip) {
 				self.showKCShip(fleetBox, kcShip, (ind + 1));
 			});
 
@@ -634,8 +633,7 @@
 			function convertFleet(fleet) {
 				if (!fleet || !fleet.active) return null;
 				var fleetObjShips = [];
-				$.each([0,1,2,3,4,5], function(_,ind) {
-					var ship = fleet.ship(ind);
+				$.each( fleet.ship(), function(ind, ship) {
 					if (ship.masterId === 0) {
 						fleetObjShips.push( null );
 						return;
