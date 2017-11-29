@@ -43,11 +43,15 @@
 				// detect formation
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				// the following two are commented out 
+				// the following are commented out 
 				// as poi "plugin-report" doesn't seem to support them.
 				// (might have been deprecated)
 				// 'api_req_sortie/night_to_day': this.processBattle,
 				// 'api_req_battle_midnight/battle': this.processBattle,
+				// "api_req_combined_battle/each_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_sp_midnight": this.processBattle,
+				// "api_req_combined_battle/ec_midnight_battle": this.processBattle,
 
 				"api_req_sortie/ld_airbattle": this.processBattle,
 				'api_req_battle_midnight/sp_midnight': this.processBattle,
@@ -59,11 +63,7 @@
 
 				"api_req_combined_battle/ec_battle": this.processBattle,
 				"api_req_combined_battle/each_battle": this.processBattle,
-				"api_req_combined_battle/each_airbattle": this.processBattle,
-				"api_req_combined_battle/each_sp_midnight": this.processBattle,
 				"api_req_combined_battle/each_battle_water": this.processBattle,
-				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
-				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
 				"api_req_combined_battle/ec_night_to_day": this.processBattle,
 
 				// detect ship id
