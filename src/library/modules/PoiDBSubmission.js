@@ -171,40 +171,13 @@
 			var dropShipData = this.dropShipData;
 
 			// fill in formation and enemy ship info.
-			try {
-				dropShipData.enemyFormation = response.api_formation[1];
-			} catch (err) {
-				console.warn("Error while extracting enemy formation", err, err.stack);
-				// when there's something wrong extracting enemy formation
-				// 0 is returned respecting poi's behavior
-				// see: https://github.com/poooi/poi/blob/53e5ac3a992f72b3d2f4a7db9feb094879a12851/views/battle-env.coffee#L24
-				dropShipData.enemyFormation = 0;
-			}
+			// if any info is missing/error occured, default to undefined
+			dropShipData.enemyFormation = response.api_formation && response.api_formation[1];
 
 			// build up enemy ship array, updated as of https://github.com/poooi/plugin-report/commit/843702876444435134d5f8d93c2c0f59ff0b5bd6
-			var enemyShips1;
-			var enemyShips2;
-			try {
-				enemyShips1 = response.api_ship_ke;
-			} catch (err) {
-				console.warn("Error while extracting enemy ship array", err, err.stack);
-				console.info("Using an empty ship array as placeholder");
-				enemyShips1 = [-1,-1,-1,-1,-1,-1];
-			}
-			if (enemyShips1.length !== 6) {
-				console.warn("ProcessBattle: incorrect enemy ship1 arr length expect 6 but got " 
-							 + enemyShips1.length );
-			}
-			if (typeof response.api_ship_ke_combined !== "undefined") {
-				// console.log("processBattle: enemy fleet is combined");
-				enemyShips2 = response.api_ship_ke_combined;
-				if (enemyShips2.length !== 6) {
-					console.warn("ProcessBattle: incorrect enemy ship2 arr length expect 6 but got " 
-								 + enemyShips2.length );
-				}
-			}
-			dropShipData.enemyShips1 = enemyShips1;
-			dropShipData.enemyShips2 = enemyShips2;
+			// enemyShips1 contains enemy main fleet, enemyShips2 contains enemy escort fleet (if any)
+			dropShipData.enemyShips1 = response.api_ship_ke || [];
+			dropShipData.enemyShips2 = response.api_ship_ke_combined || [];
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
@@ -230,11 +203,6 @@
 			dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
-
-			if (typeof dropShipData.enemyShips1 === "undefined") {
-				console.info("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
-				dropShipData.enemyShips1 = response.api_ship_id; //only enemy main fleet appears in api_ship_id for combined_battle/battleresult
-			}
 
 			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
 				? -1
