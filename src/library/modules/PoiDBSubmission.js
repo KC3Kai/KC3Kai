@@ -171,14 +171,13 @@
 			var dropShipData = this.dropShipData;
 
 			// fill in formation and enemy ship info.
-			dropShipData.enemyFormation = response.api_formation[1];
+			// if any info is missing/error occured, default to undefined
+			dropShipData.enemyFormation = response.api_formation && response.api_formation[1];
 
 			// build up enemy ship array, updated as of https://github.com/poooi/plugin-report/commit/843702876444435134d5f8d93c2c0f59ff0b5bd6
-			dropShipData.enemyShips1 = response.api_ship_ke;
-			if (typeof response.api_ship_ke_combined !== "undefined") {
-				// console.log("processBattle: enemy fleet is combined");
-				dropShipData.enemyShips2 = response.api_ship_ke_combined;
-			}
+			// enemyShips1 contains enemy main fleet, enemyShips2 contains enemy escort fleet (if any)
+			dropShipData.enemyShips1 = response.api_ship_ke || [];
+			dropShipData.enemyShips2 = response.api_ship_ke_combined || [];
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
