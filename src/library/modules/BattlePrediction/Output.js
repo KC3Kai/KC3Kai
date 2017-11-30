@@ -3,11 +3,11 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const formatResult = (battleType, initialFleets, resultFleets) => {
+  const formatResult = (initialFleets, resultFleets) => {
     const { isPlayerNoDamage, fleets: { formatFleets } } = KC3BattlePrediction;
 
-    const initial = formatFleets(battleType, initialFleets);
-    const result = formatFleets(battleType, resultFleets);
+    const initial = formatFleets(initialFleets);
+    const result = formatFleets(resultFleets);
 
     return {
       fleets: result,

@@ -1,77 +1,46 @@
 QUnit.module('modules > BattlePrediction > Fleets', function () {
   const Fleets = KC3BattlePrediction.fleets;
 
-  QUnit.module('mergeFleets', {
-    beforeEach() { this.subject = Fleets.mergeFleets; },
+  QUnit.module('getPath', {
+    beforeEach() { this.subject = Fleets.getPath; },
   }, function () {
-    QUnit.test('single fleet', function (assert) {
-      const fleet = {
-        main: [1, 2, 3],
-        escort: [],
-      };
-
-      const result = this.subject(fleet);
-
-      assert.deepEqual(result, [1, 2, 3, -1, -1, -1]);
-    });
-
     QUnit.test('strike force', function (assert) {
-      const fleet = {
-        main: [1, 2, 3, 4, 5, 6, 7],
-        escort: [],
+      const fleets = {
+        side: {
+          main: ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+        },
       };
+      const target = { side: 'side', position: 6 };
 
-      const result = this.subject(fleet);
+      const result = this.subject(fleets, target);
 
-      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7]);
+      assert.equal(result, 'side.main.6');
     });
 
     QUnit.test('combined fleet', function (assert) {
-      const fleet = {
-        main: [1, 2, 3, 4],
-        escort: [5, 6, 7],
+      const fleets = {
+        side: {
+          main: ['a', 'b', 'c', 'd', 'e', 'f'],
+          escort: ['g', 'h', 'i', 'j', 'k', 'l'],
+        },
       };
+      const target = { side: 'side', position: 6 };
 
-      const result = this.subject(fleet);
+      const result = this.subject(fleets, target);
 
-      assert.deepEqual(result, [1, 2, 3, 4, -1, -1, 5, 6, 7]);
-    });
-  });
-
-  QUnit.module('splitFleet', {
-    beforeEach() { this.subject = Fleets.splitFleet; },
-  }, function () {
-    QUnit.test('single fleet', function (assert) {
-      const fleet = [1, 2, 3, -1, -1, -1];
-
-      const result = this.subject(false)(fleet);
-
-      assert.deepEqual(result, {
-        main: [1, 2, 3],
-        escort: [],
-      });
+      assert.equal(result, 'side.escort.0');
     });
 
-    QUnit.test('strike force', function (assert) {
-      const fleet = [1, 2, 3, 4, 5, 6, 7];
+    QUnit.test('bad target', function (assert) {
+      const fleets = {
+        side: {
+          main: ['a', 'b', 'c'],
+          escort: [],
+        },
+      };
+      const target = { side: 'side', position: 5 };
 
-      const result = this.subject(false)(fleet);
-
-      assert.deepEqual(result, {
-        main: [1, 2, 3, 4, 5, 6, 7],
-        escort: [],
-      });
-    });
-
-    QUnit.test('combined fleet', function (assert) {
-      const fleet = [1, 2, 3, 4, -1, -1, 5, 6, 7];
-
-      const result = this.subject(true)(fleet);
-
-      assert.deepEqual(result, {
-        main: [1, 2, 3, 4],
-        escort: [5, 6, 7],
-      });
+      assert.throws(() => this.subject(fleets, target), 'Bad target: {"side":"side","position":5}');
     });
   });
 });

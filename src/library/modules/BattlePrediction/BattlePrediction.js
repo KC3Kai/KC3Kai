@@ -39,7 +39,7 @@
       const initialFleets = fleets.getInitialState(battleData, playerDamecons);
       const resultFleets = battle.simulateBattle(battleData, initialFleets, battleType);
 
-      return formatResult(battleType, initialFleets, resultFleets);
+      return formatResult(initialFleets, resultFleets);
     } catch (error) {
       // Pass context explicitly, so it is recorded
       KC3Log.error(error, error.data, { battleType, battleData, playerDamecons });
