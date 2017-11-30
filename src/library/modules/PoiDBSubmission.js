@@ -43,11 +43,15 @@
 				// detect formation
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				// the following two are commented out 
+				// the following are commented out 
 				// as poi "plugin-report" doesn't seem to support them.
 				// (might have been deprecated)
 				// 'api_req_sortie/night_to_day': this.processBattle,
 				// 'api_req_battle_midnight/battle': this.processBattle,
+				// "api_req_combined_battle/each_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_sp_midnight": this.processBattle,
+				// "api_req_combined_battle/ec_midnight_battle": this.processBattle,
 
 				"api_req_sortie/ld_airbattle": this.processBattle,
 				'api_req_battle_midnight/sp_midnight': this.processBattle,
@@ -59,11 +63,8 @@
 
 				"api_req_combined_battle/ec_battle": this.processBattle,
 				"api_req_combined_battle/each_battle": this.processBattle,
-				"api_req_combined_battle/each_airbattle": this.processBattle,
-				"api_req_combined_battle/each_sp_midnight": this.processBattle,
 				"api_req_combined_battle/each_battle_water": this.processBattle,
-				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
-				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				"api_req_combined_battle/ec_night_to_day": this.processBattle,
 
 				// detect ship id
 				'api_req_sortie/battleresult': this.processBattleResult,
@@ -170,38 +171,13 @@
 			var dropShipData = this.dropShipData;
 
 			// fill in formation and enemy ship info.
-			try {
-				dropShipData.enemyFormation = response.api_formation[1];
-			} catch (err) {
-				console.warn("Error while extracting enemy formation", err, err.stack);
-				// when there's something wrong extracting enemy formation
-				// 0 is returned respecting poi's behavior
-				// see: https://github.com/poooi/poi/blob/53e5ac3a992f72b3d2f4a7db9feb094879a12851/views/battle-env.coffee#L24
-				dropShipData.enemyFormation = 0;
-			}
+			// if any info is missing/error occured, default to undefined
+			dropShipData.enemyFormation = response.api_formation && response.api_formation[1];
 
-			// build up enemy ship array
-			var enemyShips;
-			try {
-				enemyShips = response.api_ship_ke.slice(1,7);
-			} catch (err) {
-				console.warn("Error while extracting enemy ship array", err, err.stack);
-				console.info("Using an empty ship array as placeholder");
-				enemyShips = [-1,-1,-1,-1,-1,-1];
-			}
-			if (enemyShips.length !== 6) {
-				console.warn("ProcessBattle: incorrect enemy ship arr length expect 6 but got " 
-							 + enemyShips.length );
-			}
-			if (typeof response.api_ship_ke_combined !== "undefined") {
-				// console.log("processBattle: enemy fleet is combined");
-				enemyShips = enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
-				if (enemyShips.length !== 12) {
-					console.warn("ProcessBattle: incorrect enemy ship arr length expect 12 but got " 
-								 + enemyShips.length );
-				}
-			}
-			dropShipData.enemyShips = enemyShips;
+			// build up enemy ship array, updated as of https://github.com/poooi/plugin-report/commit/843702876444435134d5f8d93c2c0f59ff0b5bd6
+			// enemyShips1 contains enemy main fleet, enemyShips2 contains enemy escort fleet (if any)
+			dropShipData.enemyShips1 = response.api_ship_ke || [];
+			dropShipData.enemyShips2 = response.api_ship_ke_combined || [];
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
@@ -227,11 +203,6 @@
 			dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
-
-			if (typeof dropShipData.enemyShips === "undefined") {
-				console.info("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
-				dropShipData.enemyShips = response.api_ship_id.slice(1);
-			}
 
 			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
 				? -1
