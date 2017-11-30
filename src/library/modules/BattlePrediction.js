@@ -39,7 +39,7 @@
       const initialFleets = fleets.getInitialState(battleData, playerDamecons);
       const resultFleets = battle.simulateBattle(battleData, initialFleets, battleType);
 
-      return formatResult(battleType, initialFleets, resultFleets);
+      return formatResult(initialFleets, resultFleets);
     } catch (error) {
       // Pass context explicitly, so it is recorded
       KC3Log.error(error, error.data, { battleType, battleData, playerDamecons });
@@ -378,15 +378,16 @@
 
 (function () {
   const Fleets = {};
-  const { pipe, juxt, map, filter, zipWith, EMPTY_SLOT } = KC3BattlePrediction;
+  const { Side } = KC3BattlePrediction;
+  const { pipe, juxt, map, zipWith, over } = KC3BattlePrediction;
   const COMBINED_FLEET_MAIN_SIZE = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
   // Create a Fleets object with the state of the player and enemy Fleets at battle start
-  Fleets.getInitialState = (battleData, damecons) => {
-    const { extractHps, merge } = KC3BattlePrediction.fleets;
+  Fleets.getInitialState = (battleData, playerDamecons) => {
+    const { extractHps, installDamecons } = KC3BattlePrediction.fleets;
 
     return pipe(
       juxt([
@@ -396,34 +397,32 @@
         extractHps('api_e_nowhps_combined', 'api_e_maxhps_combined'),
       ]),
       ([playerMain, playerEscort, enemyMain, enemyEscort]) => ({
-        player: merge(playerMain, playerEscort, damecons),
-        enemy: merge(enemyMain, enemyEscort, []),
-      })
+        [Side.PLAYER]: { main: playerMain, escort: playerEscort },
+        [Side.ENEMY]: { main: enemyMain, escort: enemyEscort },
+      }),
+      over(Side.PLAYER, installDamecons(playerDamecons))
     )(battleData);
   };
 
-  Fleets.getPath = ({ side, position }) => `${side}.${position}`;
   Fleets.simulateAttack = (fleets, { damage, defender, attacker }) => {
-    const { over } = KC3BattlePrediction;
     const { getPath } = KC3BattlePrediction.fleets;
     const { dealDamage, takeDamage } = KC3BattlePrediction.fleets.ship;
 
     return pipe(
-      over(getPath(defender), takeDamage(damage)),
-      attacker ? over(getPath(attacker), dealDamage(damage)) : x => x
+      over(getPath(fleets, defender), takeDamage(damage)),
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage)) : x => x
     )(fleets);
   };
 
-  Fleets.formatFleets = (battleType, fleets) => {
-    const { Player, Enemy } = KC3BattlePrediction;
-    const { formatSide } = KC3BattlePrediction.fleets;
+  // map() for the whole fleets structure
+  // i.e. f => side.forEach(role.forEach(ship.forEach(s => f(s))))
+  const mapShips = pipe(map, map, map);
 
+  Fleets.formatFleets = (fleets) => {
+    const { formatShip } = KC3BattlePrediction.fleets.ship;
     return pipe(
-      juxt([
-        ({ player }) => formatSide(battleType.player !== Player.SINGLE, player),
-        ({ enemy }) => formatSide(battleType.enemy !== Enemy.SINGLE, enemy),
-      ]),
-      ([player, enemy]) => ({
+      mapShips(formatShip),
+      ({ player, enemy }) => ({
         playerMain: player.main,
         playerEscort: player.escort,
         enemyMain: enemy.main,
@@ -451,15 +450,6 @@
     return zipWith(createShip, nowHps, maxHps);
   };
 
-  Fleets.merge = (main, escort, damecons) => {
-    const { installDamecons, mergeFleets } = KC3BattlePrediction.fleets;
-
-    return pipe(
-      installDamecons(damecons),
-      mergeFleets
-    )({ main, escort });
-  };
-
   Fleets.installDamecons = damecons => fleet => {
     const { installDamecon } = KC3BattlePrediction.fleets.ship;
 
@@ -469,32 +459,17 @@
     };
   };
 
-  Fleets.mergeFleets = ({ main, escort }) =>
-    [].concat(
-      zipWith((ship, empty) => ship || empty, main, Array(COMBINED_FLEET_MAIN_SIZE).fill(EMPTY_SLOT)),
-      escort
-    );
+  /* -----------------[ SIMULATE ATTACK ]------------------ */
 
-  /* ------------------[ FORMAT FLEETS ]------------------- */
-
-  Fleets.formatSide = (isCombined, fleet) => {
-    const { splitFleet, ship: { formatShip } } = KC3BattlePrediction.fleets;
-
-    return pipe(
-      map(formatShip),
-      splitFleet(isCombined)
-    )(fleet);
-  };
-
-  Fleets.splitFleet = isCombined => fleet => {
-    return pipe(
-      juxt([
-        ships => (isCombined ? ships.slice(0, COMBINED_FLEET_MAIN_SIZE) : fleet),
-        ships => (isCombined ? ships.slice(COMBINED_FLEET_MAIN_SIZE) : []),
-      ]),
-      map(filter(ship => ship !== EMPTY_SLOT)),
-      ([main, escort]) => ({ main, escort })
-    )(fleet);
+  Fleets.getPath = (fleets, { side, position }) => {
+    if (fleets[side].main[position]) {
+      return `${side}.main.${position}`;
+    }
+    const escortIndex = position - COMBINED_FLEET_MAIN_SIZE;
+    if (fleets[side].escort[escortIndex]) {
+      return `${side}.escort.${escortIndex}`;
+    }
+    throw new Error(`Bad target: ${JSON.stringify({ side, position })}`);
   };
 
   /*--------------------------------------------------------*/
@@ -565,11 +540,11 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  const formatResult = (battleType, initialFleets, resultFleets) => {
+  const formatResult = (initialFleets, resultFleets) => {
     const { isPlayerNoDamage, fleets: { formatFleets } } = KC3BattlePrediction;
 
-    const initial = formatFleets(battleType, initialFleets);
-    const result = formatFleets(battleType, resultFleets);
+    const initial = formatFleets(initialFleets);
+    const result = formatFleets(resultFleets);
 
     return {
       fleets: result,
