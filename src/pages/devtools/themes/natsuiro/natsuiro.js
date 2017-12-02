@@ -2376,7 +2376,7 @@
 					"../../../../assets/img/ui/dark_support.png"
 				);
 
-				if (this.nightSupportInfo || (!thisNode.startsFromNight && thisNode.supportInfo)) {
+				if (thisNode.nightSupportInfo || (!thisNode.startsFromNight && thisNode.supportInfo)) {
 					const supportInfo = thisNode.supportInfo || thisNode.nightSupportInfo;
 					const fleetId =
 						(supportInfo.api_support_airatack || {}).api_deck_id ||
