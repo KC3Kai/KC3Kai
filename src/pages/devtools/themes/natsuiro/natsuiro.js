@@ -2178,6 +2178,8 @@
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
 				$(".module.activity .node_type_prev_encounters").hide();
+				$(".module.activity .node_type_text").hide();
+				$(".module.activity .node_type_resource").hide();
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > 0 && $(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0){
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
