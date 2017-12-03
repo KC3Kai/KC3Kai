@@ -622,6 +622,11 @@ html,body {
 	padding:3px 0px 0px 0px;
 	position:relative;
 }
+.module.fleet .lship.seven {
+ 	height:43px;
+ 	margin-bottom:0px;
+ 	padding-top:1px;
+ }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
 	display: inline;

@@ -1262,7 +1262,7 @@ Used by SortieManager
 		if(masterId > 0){
 			const shipMaster = KC3Master.ship(masterId);
 			const abyssMaster = KC3Master.abyssalShip(masterId, true);
-			const isCurrentHpShown = ConfigManager.info_battle && Object.keys(this.enemyHP[index]).length > 0;
+			const isCurrentHpShown = ConfigManager.info_battle && this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0;
 			tooltip += "{0}: {1}\n".format(masterId,
 				isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(masterId));
 			tooltip += "{0} Lv {1} HP {2}\n".format(
