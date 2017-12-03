@@ -523,7 +523,7 @@
 					$(".sortie_id", sortieBox)
 						.text(sortie.id)
 						.data("id", sortie.id)
-						.on("click", viewFleetAtManagerFunc)
+						.on("click", viewFleetAtManagerFunc);
 						// .on("click", function (e) {
 						// 	// Open fleet manager with sortie ID
 						// 	if (e.ctrlKey) {
