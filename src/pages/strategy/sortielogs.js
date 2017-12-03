@@ -519,8 +519,13 @@
 						.text(sortie.id)
 						.data("id", sortie.id)
 						.on("click", function (e) {
-							var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
-							chrome.tabs.create({ url, active: true });
+							// Open fleet manager with sortie ID
+							if (e.ctrlKey) {
+								var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
+								chrome.tabs.create({ url, active: true });
+							} else {
+								KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
+							}
 						});
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
