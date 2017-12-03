@@ -489,13 +489,17 @@
 				KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
 			};
 			var parseAirRaidFunc = function(airRaid){
+				const damageArray =
+				  airRaid &&
+				  airRaid.api_air_base_attack &&
+				  airRaid.api_air_base_attack.api_stage3 &&
+				  airRaid.api_air_base_attack.api_stage3.api_fdam || [];
 				return {
 					airRaidLostKind: (airRaid || {}).api_lost_kind || 0,
-					baseTotalDamage: airRaid && airRaid.api_air_base_attack
-						&& airRaid.api_air_base_attack.api_stage3
-						&& airRaid.api_air_base_attack.api_stage3.api_fdam ?
-						Math.floor(airRaid.api_air_base_attack.api_stage3.api_fdam.slice(1)
-							.reduce((a, b) => a + b, 0)) : 0
+					baseTotalDamage: damageArray.reduce(
+							(sum, n) => sum + Math.max(0, Math.floor(n)),
+							0
+						),
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -578,6 +582,8 @@
 							return false;
 						}
 						var selFleet = sortie["fleet"+n];
+						if(selFleet.length === 7)
+							sortieBox.toggleClass("seven_ships");
 						$.each(selFleet, function(index, ship){
 							// false recorded on older sorties. stop loop when encountered
 							if(ship === false) { return false; }
@@ -589,6 +595,7 @@
 								$(".sortie_ship_"+(index+1), sortieBox)
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
+									.toggleClass("seven_ships", selFleet.length === 7)
 									.show();
 							} else if(i === 1) {
 								$(".sortie_combined_ship_"+(index+1)+" img", sortieBox)
@@ -823,11 +830,15 @@
 							});
 							
 							// Support Exped/LBAS Triggered
-							if(thisNode.supportFlag || thisNode.lbasFlag){
+							if(thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag){
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
-								if(thisNode.supportFlag && !!battleData.api_support_info){
-									var fleetId = (battleData.api_support_info.api_support_airatack||{}).api_deck_id
-										|| (battleData.api_support_info.api_support_hourai||{}).api_deck_id || "?";
+								if(
+									(thisNode.supportFlag && battleData.api_support_info) ||
+									(thisNode.nightSupportFlag && battleData.api_n_support_info)
+								) {
+									const supportInfo = battleData.api_support_info || battleData.api_n_support_info;
+									const fleetId = (supportInfo.api_support_airatack||{}).api_deck_id
+										|| (supportInfo.api_support_hourai||{}).api_deck_id || "?";
 									$(".node_support .exped", nodeBox).text(fleetId);
 									$(".node_support .exped", nodeBox).show();
 								}
@@ -1072,10 +1083,11 @@
 								(45 + (60 * shipIndex)) * scale, 253 * scale, 35 * scale, 35 * scale);
 						});
 					} else {
+						var shipImageSize = Math.min(55, 300 / fleetUsed.length);
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
-								(25 + (60 * shipIndex)) * scale, 233 * scale, 50 * scale, 50 * scale);
+								((shipImageSize / 2) + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (65 - shipImageSize) / 2) * scale, shipImageSize * scale, shipImageSize * scale);
 						});
 					}
 					

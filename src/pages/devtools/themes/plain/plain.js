@@ -841,6 +841,7 @@
 						(new KC3NatsuiroShipbox(".lship", rosterId))
 							.commonElements()
 							.defineLong( CurrentFleet )
+							.toggleClass("seven", CurrentFleet.countShips() >= 7)
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
@@ -918,7 +919,8 @@
 				}
 				$(".module.status .status_supply").attr("title",
 					FleetSummary.supplied ? "": KC3Meta.term("PanelResupplyCosts").format(
-						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite,
+						FleetSummary.supplyCost.hasMarried ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 					)
 				);
 				
@@ -1017,19 +1019,19 @@
 			
 			// TAIHA ALERT CHECK
 			if (
-				PlayerManager.fleets
-					.filter (function(  x,  i) {
-						var
-							cf = PlayerManager.combinedFleet,
-							fs = KC3SortieManager.fleetSent;
-						return (cf&&fs===1) ? (i <= 1) : (i == fs-1);
+				PlayerManager.fleets.filter((obj, i) => {
+						const cf = PlayerManager.combinedFleet,   // Marks combined flag
+							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
+							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
+						return !so || ((cf && fs === 1) ? i <= 1 : i == fs - 1);
 					})
-					.map    (function(  fldat) { return fldat.ships; })
-					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return shpDat.isTaiha();
+					.map    ((fleetObj) => fleetObj.ships.slice(1))    // Convert to non-flagship ID arrays
+					.reduce ((acc, arr) => acc.concat(arr))            // Join IDs into an array
+					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
+					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
+					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
+						return !shipObj.didFlee && shipObj.isTaiha()
+							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 			) {
 				if(ConfigManager.alert_taiha){
@@ -1310,7 +1312,11 @@
 			// Day battle-only environment
 			if(!thisNode.startsFromNight){
 				// If support expedition is triggered on this battle
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
+				if (thisNode.supportFlag || thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
@@ -1343,7 +1349,11 @@
 				
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				if (thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			

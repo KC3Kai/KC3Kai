@@ -48,12 +48,13 @@
     }
   };
 
-  BP.predictRank = (apiName, battleStartData, battleResult) => {
+  BP.predictRank = (apiName, battleData, battleResult) => {
     const { parseStartJson, normalizeFleets, getRankPredictor } = KC3BattlePrediction.rank;
 
-    const battleStart = parseStartJson(battleStartData);
-    return getRankPredictor(apiName)
-      .predict(normalizeFleets(battleStart), normalizeFleets(battleResult, true));
+    return getRankPredictor(apiName).predict(
+      normalizeFleets(parseStartJson(battleData), battleData),
+      normalizeFleets(battleResult, battleData)
+    );
   };
 
   BP.predictMvp = (dayResult, nightResult) => {
@@ -77,7 +78,7 @@
 
   BP.Enemy = Object.freeze({ SINGLE: 'single', COMBINED: 'combined' });
 
-  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night' });
+  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night', NIGHT_TO_DAY: 'night-to-day' });
 
   // INTERNAL ENUMS
   // ---------------
@@ -269,7 +270,7 @@
 
     switch (role) {
       case Role.MAIN_FLEET:
-        return damecons.slice(0, 6);
+        return damecons;
       case Role.ESCORT_FLEET:
         return damecons.slice(6, 12);
       default:
@@ -440,7 +441,7 @@
   const { Player, Enemy, Time } = KC3BattlePrediction;
   const types = {
     [toKey(Player.SINGLE, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -456,16 +457,16 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.MAIN_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -481,16 +482,16 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.ESCORT_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.MAIN_FLEET)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.SINGLE, Time.DAY)](battleType) {
-      const { Role, bind } = KC3BattlePrediction;
+      const { bind } = KC3BattlePrediction;
       const {
         kouku: { parseKouku },
         support: { parseSupport },
@@ -506,11 +507,11 @@
         kouku: create('kouku', parseKouku),
         kouku2: create('kouku2', parseKouku),
         support: create('support', parseSupport),
-        openingTaisen: create('openingTaisen', bind(parseHougeki, Role.ESCORT_FLEET)),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
         openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
-        hougeki1: create('hougeki1', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki2: create('hougeki2', bind(parseHougeki, Role.MAIN_FLEET)),
-        hougeki3: create('hougeki3', bind(parseHougeki, Role.ESCORT_FLEET)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        hougeki3: create('hougeki3', bind(parseHougeki, battleType)),
         raigeki: create('raigeki', bind(parseRaigeki, battleType)),
       };
     },
@@ -586,59 +587,138 @@
         raigeki: create('raigeki', parseCombinedRaigeki),
       };
     },
+    /* -------------------[ NIGHT TO DAY ]------------------- */
+    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT_TO_DAY)](battleType) {
+      const { bind } = KC3BattlePrediction;
+      const {
+        kouku: { parseKouku },
+        support: { parseCombinedSupport },
+        hougeki: { parseHougeki },
+        raigeki: { parseRaigeki },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
+      const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
+
+      return {
+        nSupport: create('nSupport', parseCombinedSupport),
+        nHougeki1: create('nHougeki1', bind(parseYasen, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseYasen, battleType)),
+        airBaseInjection: create('airBaseInjection', parseKouku),
+        injectionKouku: create('injectionKouku', parseKouku),
+        airBaseAttack: create('airBaseAttack', parseKouku),
+        kouku: create('kouku', parseKouku),
+        support: create('support', parseCombinedSupport),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        raigeki: create('raigeki', bind(parseRaigeki, battleType)),
+      };
+    },
+    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT_TO_DAY)](battleType) {
+      const { bind } = KC3BattlePrediction;
+      const {
+        kouku: { parseKouku },
+        support: { parseSupport },
+        hougeki: { parseHougeki },
+        raigeki: { parseRaigeki },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
+      const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
+
+      return {
+        nSupport: create('nSupport', parseSupport),
+        nHougeki1: create('nHougeki1', bind(parseYasen, battleType)),
+        nHougeki2: create('nHougeki2', bind(parseYasen, battleType)),
+        airBaseInjection: create('airBaseInjection', parseKouku),
+        injectionKouku: create('injectionKouku', parseKouku),
+        airBaseAttack: create('airBaseAttack', parseKouku),
+        kouku: create('kouku', parseKouku),
+        support: create('support', parseSupport),
+        openingTaisen: create('openingTaisen', bind(parseHougeki, battleType)),
+        openingAtack: create('openingAtack', bind(parseRaigeki, battleType)),
+        hougeki1: create('hougeki1', bind(parseHougeki, battleType)),
+        hougeki2: create('hougeki2', bind(parseHougeki, battleType)),
+        raigeki: create('raigeki', bind(parseRaigeki, battleType)),
+      };
+    },
 
     /* -------------------[ NIGHT BATTLE ]------------------- */
     [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
     [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)](battleType) {
       const { bind } = KC3BattlePrediction;
-      const { parseYasen } = KC3BattlePrediction.battle.phases.yasen;
+      const {
+        support: { parseCombinedSupport },
+        yasen: { parseYasen },
+      } = KC3BattlePrediction.battle.phases;
       const { create } = KC3BattlePrediction.battle.engagement.parserFactory;
 
       return {
+        nSupport: create('nSupport', parseCombinedSupport),
         hougeki: create('midnight', bind(parseYasen, battleType)),
       };
     },
@@ -709,6 +789,15 @@
       raigeki(raigeki) {
         return ({ api_raigeki }) => parseAs(raigeki, api_raigeki);
       },
+      nSupport(support) {
+        return ({ api_n_support_info }) => parseAs(support, api_n_support_info);
+      },
+      nHougeki1(hougeki) {
+        return ({ api_n_hougeki1 }) => parseAs(hougeki, api_n_hougeki1);
+      },
+      nHougeki2(hougeki) {
+        return ({ api_n_hougeki2 }) => parseAs(hougeki, api_n_hougeki2);
+      },
       midnight(yasen) {
         return ({ api_hougeki }) => parseAs(yasen, api_hougeki);
       },
@@ -732,12 +821,12 @@
   /*--------------------------------------------------------*/
 
   const JSON_FIELDS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
-  Hougeki.parseHougeki = (playerRole, battleData) => {
+  Hougeki.parseHougeki = (battleType, battleData) => {
     const { extractFromJson, makeAttacks } = KC3BattlePrediction.battle.phases;
     const { parseJson, getTargetFactory } = KC3BattlePrediction.battle.phases.hougeki;
 
     const attackData = extractFromJson(battleData, JSON_FIELDS).map(parseJson);
-    return makeAttacks(attackData, getTargetFactory(playerRole));
+    return makeAttacks(attackData, getTargetFactory(battleType));
   };
 
   Hougeki.parseCombinedHougeki = (battleData) => {
@@ -833,18 +922,38 @@
 
   /* -----------------[ TARGET FACTORIES ]----------------- */
 
-  Hougeki.getTargetFactory = (playerRole) => {
-    const { Side, Role, battle: { createTarget } } = KC3BattlePrediction;
-
-    const roles = {
-      [Side.PLAYER]: playerRole,
-      [Side.ENEMY]: Role.MAIN_FLEET,
-    };
+  Hougeki.getTargetFactory = (battleType) => {
+    const { Side } = KC3BattlePrediction;
+    const { createTargetFactory, isPlayerSingleFleet, isEnemySingleFleet } = KC3BattlePrediction.battle.phases.hougeki;
+    const createTarget = createTargetFactory({
+      [Side.PLAYER]: isPlayerSingleFleet(battleType.player),
+      [Side.ENEMY]: isEnemySingleFleet(battleType.enemy),
+    });
 
     return ({ attacker, defender }) => ({
-      attacker: createTarget(attacker.side, roles[attacker.side], attacker.position),
-      defender: createTarget(defender.side, roles[defender.side], defender.position),
+      attacker: createTarget(attacker),
+      defender: createTarget(defender),
     });
+  };
+
+  Hougeki.isPlayerSingleFleet = (playerFleetType) => {
+    const { Player } = KC3BattlePrediction;
+
+    return playerFleetType === Player.SINGLE;
+  };
+  Hougeki.isEnemySingleFleet = (enemyFleetType) => {
+    const { Enemy } = KC3BattlePrediction;
+
+    return enemyFleetType === Enemy.SINGLE;
+  };
+
+  Hougeki.createTargetFactory = (isSingleFleet) => {
+    const { Role, battle: { createTarget } } = KC3BattlePrediction;
+
+    return ({ side, position }) =>
+      (isSingleFleet[side]
+        ? createTarget(side, Role.MAIN_FLEET, position)
+        : createTarget(side, position < 6 ? Role.MAIN_FLEET : Role.ESCORT_FLEET, position % 6));
   };
 
   Hougeki.getCombinedTargetFactory = () => {
@@ -1322,8 +1431,9 @@
 
 (function () {
   const predict = (initial, result) => {
-    const { getDamageGauge,
-      battle: { isPlayerNoDamage }
+    const {
+      getDamageGauge,
+      battle: { isPlayerNoDamage },
     } = KC3BattlePrediction.rank;
 
     if (isPlayerNoDamage(initial, result)) { return 'SS'; }
@@ -1420,30 +1530,25 @@
   /*--------------------------------------------------------*/
 
   const parseStartJson = (battleData) => {
-    const { makeShips, removeRetreated } = KC3BattlePrediction.rank;
-
-    const {api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps} = battleData;
-    const {api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined} = battleData;
-    const main = makeShips(api_f_nowhps, api_f_maxhps, api_e_nowhps, api_e_maxhps);
-    const escort = makeShips(api_f_nowhps_combined, api_f_maxhps_combined, api_e_nowhps_combined, api_e_maxhps_combined);
+    const { zipHps } = KC3BattlePrediction.rank;
 
     return {
-      playerMain: removeRetreated(main.player, battleData.api_escape_idx),
-      playerEscort: removeRetreated(escort.player, battleData.api_escape_idx_combined),
-      enemyMain: main.enemy,
-      enemyEscort: escort.enemy,
+      playerMain: zipHps(battleData.api_f_nowhps, battleData.api_f_maxhps),
+      playerEscort: zipHps(battleData.api_f_nowhps_combined, battleData.api_f_maxhps_combined),
+      enemyMain: zipHps(battleData.api_e_nowhps, battleData.api_e_maxhps),
+      enemyEscort: zipHps(battleData.api_e_nowhps_combined, battleData.api_e_maxhps_combined),
     };
   };
 
-  const normalizeFleets = (fleetHpInfo, isAnalyzedResult = false) => {
-    const { omitEmptySlots, hideOverkill } = KC3BattlePrediction.rank;
+  const normalizeFleets = (fleets, battleData) => {
+    const { removeRetreated, hideOverkill } = KC3BattlePrediction.rank;
 
-    return Object.keys(fleetHpInfo).reduce((result, key) => {
-      return Object.assign(result, {
-        // empty slots already removed for analyzed fleets result, dupe it will cause issue like #2284
-        [key]: hideOverkill(isAnalyzedResult ? fleetHpInfo[key] : omitEmptySlots(fleetHpInfo[key])),
-      });
-    }, {});
+    return {
+      playerMain: hideOverkill(removeRetreated(fleets.playerMain, battleData.api_escape_idx)),
+      playerEscort: hideOverkill(removeRetreated(fleets.playerEscort, battleData.api_escape_idx_combined)),
+      enemyMain: hideOverkill(fleets.enemyMain),
+      enemyEscort: hideOverkill(fleets.enemyEscort),
+    };
   };
 
   const predictors = {
@@ -1464,34 +1569,10 @@
 
   /* --------------------[ PARSE JSON ]-------------------- */
 
-  const makeShips = (nowhpsPlayer = [], maxhpsPlayer = [], nowhpsEnemy = [], maxhpsEnemy = []) => {
-    const { splitSides, zipHps } = KC3BattlePrediction.rank;
-
-    // HPs already split, and 0-based indexing since 2017-11-17
-    //const nowHps = splitSides(nowhps);
-    //const maxHps = splitSides(maxhps);
-
-    return {
-      player: zipHps(nowhpsPlayer, maxhpsPlayer),
-      enemy: zipHps(nowhpsEnemy, maxhpsEnemy),
-    };
-  };
-
-  const isNotEmpty = fleet => fleet.some(hp => hp !== -1);
-  const splitSides = (hps = []) => {
-    const { normalizeArrayIndexing } = KC3BattlePrediction;
-
-    const normalizedHps = normalizeArrayIndexing(hps);
-    const player = normalizedHps.slice(0, 6);
-    const enemy = normalizedHps.slice(6, 12);
-
-    return {
-      player: isNotEmpty(player) ? player : [],
-      enemy,
-    };
-  };
   const zipHps = (nowHps, maxHps) => {
     const { extendError } = KC3BattlePrediction;
+
+    if (!nowHps && !maxHps) { return []; }
 
     if (nowHps.length !== maxHps.length) {
       throw extendError(new Error('Mismatched nowhps + maxhps'), { nowHps, maxHps });
@@ -1500,21 +1581,11 @@
     return nowHps.map((hp, index) => ({ hp, maxHp: maxHps[index] }));
   };
 
-  const removeRetreated = (fleet, escapeIds = []) => {
-    const { EMPTY_SLOT } = KC3BattlePrediction;
+  const removeRetreated = (fleet, escapeIds = []) =>
+    fleet.filter((ship, index) => !escapeIds.includes(index + 1));
 
-    return escapeIds
-      .reduce((result, escapeId) => {
-        result[escapeId - 1] = EMPTY_SLOT;
-        return result;
-      }, fleet);
-  };
 
   /* --------------------[ NORMALIZE ]--------------------- */
-
-  // NB: Empty slots can be discarded safely, since the only ships whose position matters are the
-  // respective main fleet flagships, who will always exist
-  const omitEmptySlots = fleet => fleet.filter(({ hp }) => hp !== KC3BattlePrediction.EMPTY_SLOT);
 
   const hideOverkill = fleet => fleet.map((ship) => {
     return ship.hp < 0 ? Object.assign({}, ship, { hp: 0 }) : ship;
@@ -1561,12 +1632,9 @@
     normalizeFleets,
     getRankPredictor,
     // Internal
-    makeShips,
-    splitSides,
     zipHps,
     removeRetreated,
 
-    omitEmptySlots,
     hideOverkill,
     // Helpers
     getSunkCount,

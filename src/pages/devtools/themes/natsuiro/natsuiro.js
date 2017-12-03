@@ -2178,6 +2178,8 @@
 				$(".module.activity .abyss_single").show();
 				$(".module.activity .abyss_combined").hide();
 				$(".module.activity .node_type_prev_encounters").hide();
+				$(".module.activity .node_type_text").hide();
+				$(".module.activity .node_type_resource").hide();
 				$.each(thisNode.eships, function(index, eshipId){
 					if(eshipId > 0 && $(".module.activity .abyss_single .abyss_ship_"+(index+1)).length > 0){
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).addClass(KC3Meta.abyssShipBorderClass(eshipId));
@@ -2367,22 +2369,36 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 
-			// Day battle-only environment
-			if(!thisNode.startsFromNight){
-				// If support expedition or LBAS is triggered on this battle
-				$(".module.activity .battle_support img").attr("src",
-					"../../../../assets/img/ui/dark_support"+["-x",""][(thisNode.supportFlag||thisNode.lbasFlag)&1]+".png");
-				if(thisNode.supportFlag && !!thisNode.supportInfo){
-					var fleetId = (thisNode.supportInfo.api_support_airatack||{}).api_deck_id
-						|| (thisNode.supportInfo.api_support_hourai||{}).api_deck_id || "?";
+			// If support expedition or LBAS is triggered on this battle
+			if (thisNode.supportFlag || thisNode.nightSupportFlag || thisNode.lbasFlag) {
+				$(".module.activity .battle_support img").attr(
+					"src",
+					"../../../../assets/img/ui/dark_support.png"
+				);
+
+				if (thisNode.nightSupportInfo || (!thisNode.startsFromNight && thisNode.supportInfo)) {
+					const supportInfo = thisNode.supportInfo || thisNode.nightSupportInfo;
+					const fleetId =
+						(supportInfo.api_support_airatack || {}).api_deck_id ||
+						(supportInfo.api_support_hourai || {}).api_deck_id ||
+						"?";
 					$(".module.activity .battle_support .support_exped").text(fleetId);
 					$(".module.activity .battle_support .support_exped").show();
 				}
-				$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
-				$(".module.activity .battle_support").attr("title",
-					thisNode.buildSupportAttackMessage() || KC3Meta.term("BattleSupportExped") )
-					.lazyInitTooltip();
 
+				$(".module.activity .battle_support")
+					.attr("title", thisNode.buildSupportAttackMessage() || KC3Meta.term("BattleSupportExped"))
+					.lazyInitTooltip();
+			} else {
+				$(".module.activity .battle_support img").attr(
+					"src",
+					"../../../../assets/img/ui/dark_support-x.png"
+				);
+			}
+			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
+
+			// Day battle-only environment
+			if(!thisNode.startsFromNight){
 				// If anti-air CI fire is triggered
 				$(".module.activity .battle_aaci img").attr("src",
 					"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
@@ -2464,7 +2480,6 @@
 
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
 				$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci-x.png");
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
@@ -3508,39 +3523,39 @@
 				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
 				 *
 				 * {
-					  "flagShipLevel":15,
-					  "shipCount":5,
-					  "flagShipTypeOf":null,
-					  "levelCount":30,
-					  "drumCount":null,
-					  "drumCarrierCount":3,
-					  "fleetSType":[
-					    {
-					      "stypeReqCount":1,
-					      "stypeOneOf":[
-					        "CL"
-					      ]
-					    },
-					    {
-					      "stypeReqCount":4,
-					      "stypeOneOf":[
-					        "DD"
-					      ]
-					    }
-					  ]
+						"flagShipLevel":15,
+						"shipCount":5,
+						"flagShipTypeOf":null,
+						"levelCount":30,
+						"drumCount":null,
+						"drumCarrierCount":3,
+						"fleetSType":[
+							{
+								"stypeReqCount":1,
+								"stypeOneOf":[
+									"CL"
+								]
+							},
+							{
+								"stypeReqCount":4,
+								"stypeOneOf":[
+									"DD"
+								]
+							}
+						]
 					}
 					---------------------
 					{
-					  "flagShipLevel":true,
-					  "shipCount":false,
-					  "flagShipTypeOf":null,
-					  "levelCount":true,
-					  "drumCount":null,
-					  "drumCarrierCount":false,
-					  "fleetSType":[
-					    true,
-					    false
-					  ]
+						"flagShipLevel":true,
+						"shipCount":false,
+						"flagShipTypeOf":null,
+						"levelCount":true,
+						"drumCount":null,
+						"drumCarrierCount":false,
+						"fleetSType":[
+							true,
+							false
+						]
 					}
 				 */
 
