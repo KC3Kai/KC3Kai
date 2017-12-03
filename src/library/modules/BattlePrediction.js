@@ -400,7 +400,7 @@
         [Side.PLAYER]: { main: playerMain, escort: playerEscort },
         [Side.ENEMY]: { main: enemyMain, escort: enemyEscort },
       }),
-      over(Side.PLAYER, installDamecons(playerDamecons))
+      over(Side.PLAYER, map(installDamecons(playerDamecons)))
     )(battleData);
   };
 
@@ -450,13 +450,14 @@
     return zipWith(createShip, nowHps, maxHps);
   };
 
-  Fleets.installDamecons = damecons => fleet => {
+  Fleets.installDamecons = playerDamecons => (fleet, fleetRole) => {
     const { installDamecon } = KC3BattlePrediction.fleets.ship;
 
-    return {
-      main: zipWith(installDamecon, fleet.main, damecons.main || []),
-      escort: zipWith(installDamecon, fleet.escort, damecons.escort || []),
-    };
+    return pipe(
+      ds => ds[fleetRole] || [],
+      ds => ds.slice(0, fleet.length),
+      ds => zipWith(installDamecon, fleet, ds)
+    )(playerDamecons);
   };
 
   /* -----------------[ SIMULATE ATTACK ]------------------ */
