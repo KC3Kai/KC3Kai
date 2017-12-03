@@ -485,8 +485,13 @@
 			var gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function(e){
-				KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
+			var viewFleetAtManagerFunc = function (e) {
+				if (!e.ctrlKey) {
+					KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
+				} else {
+					var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
+					chrome.tabs.create({ url, active: true });
+				}
 			};
 			var parseAirRaidFunc = function(airRaid){
 				const damageArray =
@@ -518,21 +523,22 @@
 					$(".sortie_id", sortieBox)
 						.text(sortie.id)
 						.data("id", sortie.id)
-						.on("click", function (e) {
-							// Open fleet manager with sortie ID
-							if (e.ctrlKey) {
-								var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
-								chrome.tabs.create({ url, active: true });
-							} else {
-								KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
-							}
-						});
+						.on("click", viewFleetAtManagerFunc)
+						// .on("click", function (e) {
+						// 	// Open fleet manager with sortie ID
+						// 	if (e.ctrlKey) {
+						// 		var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
+						// 		chrome.tabs.create({ url, active: true });
+						// 	} else {
+						// 		viewFleetAtManagerFunc(e)
+						// 	}
+						// });						
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
-					$(".button_tomanager", sortieBox).data("id", sortie.id)
-						.on("click", viewFleetAtManagerFunc);
+					// $(".button_tomanager", sortieBox).data("id", sortie.id)
+					// 	.on("click", viewFleetAtManagerFunc);
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
