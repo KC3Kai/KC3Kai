@@ -1159,11 +1159,11 @@ Used by SortieManager
 			thisNode.antiAirFire.forEach(fire => {
 				if(!!fire){
 					var fireShipPos = fire.api_idx; // starts from 0
-					// fireShipPos in [0, 6]: in normal fleet or main fleet, 6 for 3rd 7 ships fleet
+					// fireShipPos in [0, 5]: in normal fleet or main fleet, 6 for 3rd 7 ships fleet
 					// fireShipPos in [6, 11]: in escort fleet
 					if(fireShipPos >= 0 && fireShipPos < 12){
-						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 && thisNode.isPlayerCombined ? 1 : thisNode.fleetSent-1];
-						fireShipPos = thisNode.isPlayerCombined ? fireShipPos % 6 : fireShipPos;
+						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 && thisNode.playerCombined ? 1 : thisNode.fleetSent-1];
+						fireShipPos = thisNode.playerCombined ? fireShipPos % 6 : fireShipPos;
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
 						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
 						var aaciType = AntiAir.AACITable[fire.api_kind];
