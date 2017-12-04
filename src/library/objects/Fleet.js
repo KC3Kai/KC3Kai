@@ -1195,7 +1195,6 @@ Contains summary information about a fleet and its ships
 		return 1;
 	};
 
-	};
 
 	/**
 	 * Estimate possibly activated searchlight from current fleet ships.
