@@ -7,7 +7,9 @@
  */
 (function () {
   const BP = {
-    fleets: {},
+    fleets: {
+      ship: {},
+    },
     battle: {
       // Phase parsers - convert phase JSON to Attacks
       phases: {
@@ -15,10 +17,7 @@
         hougeki: {}, // shelling (砲撃)
         raigeki: {}, // torpedoes (雷撃)
         support: {}, // support expedition
-        yasen: {}, // night battle (夜戦)
       },
-      // Specify phase ordering for each battle type
-      engagement: {},
     },
     // Rank prediction
     rank: {
@@ -78,7 +77,7 @@
 
   BP.Enemy = Object.freeze({ SINGLE: 'single', COMBINED: 'combined' });
 
-  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night', NIGHT_TO_DAY: 'night-to-day' });
+  BP.Time = Object.freeze({ DAY: 'day', NIGHT: 'night', NIGHT_TO_DAY: 'night_to_day' });
 
   // INTERNAL ENUMS
   // ---------------
@@ -110,19 +109,92 @@
     return Object.keys(enumObj).some(key => enumObj[key] === value);
   };
 
+  /* ---------------------[ FP UTILS ]--------------------- */
+
+  // Compose functions left-to-right
+  // See _.flow (https://lodash.com/docs/#flow) or Ramda.pipe (http://ramdajs.com/docs/#pipe)
+  BP.pipe = (...funcs) => x => funcs.reduce((v, f) => f(v), x);
+
+  // Apply arguments to an array of functions, then combine
+  // See Ramda.converge (http://ramdajs.com/docs/#converge)
+  BP.converge = (after, funcs) => (...args) => after(...funcs.map(f => f(...args)));
+
+  // Apply arguments to an array of functions
+  // See _.over (https://lodash.com/docs/#over) or Ramda.juxt (http://ramdajs.com/docs/#juxt)
+  BP.juxt = funcs => (...args) => funcs.map(f => f(...args));
+
+  // Recursively flatten nested arrays
+  // See _.flattenDeep (https://lodash.com/docs/#flattenDeep) or Ramda.flatten (http://ramdajs.com/docs/#flatten)
+  BP.flatten = xs => xs.reduce(
+    (acc, x) => acc.concat(Array.isArray(x) ? BP.flatten(x) : x),
+    []
+  );
+
+  // Immutably set property at path
+  // Similar to/based on Ramda.over (http://ramdajs.com/docs/#over)
+  const setAt = ([prop, ...rest], f, obj) => {
+    if (!prop) {
+      return f(obj);
+    }
+    if (Array.isArray(obj)) {
+      const index = parseInt(prop, 10);
+      return [
+        ...obj.slice(0, index),
+        setAt(rest, f, obj[index]),
+        ...obj.slice(index + 1),
+      ];
+    }
+    if (typeof obj === 'object') {
+      return Object.assign({}, obj, { [prop]: setAt(rest, f, obj[prop]) });
+    }
+    throw new Error('Bad path');
+  };
+  BP.over = (path, f) => obj => {
+    try {
+      return setAt(path.split('.'), f, obj);
+    } catch (e) {
+      if (e.message === 'Bad path') {
+        throw new Error(`Bad path: ${path}`);
+      }
+      throw e;
+    }
+  };
+
+  // Curried map(), extended to work on objects
+  BP.map = f => xs => {
+    if (typeof xs.map === 'function') {
+      return xs.map(f);
+    }
+    if (typeof xs === 'object') {
+      return Object.keys(xs).reduce(
+        (result, key, index) => Object.assign(result, { [key]: f(xs[key], key, index) }),
+        {}
+      );
+    }
+    throw new Error(`Not a functor: ${xs}`);
+  };
+
+  // Curried filter()
+  BP.filter = f => xs => xs.filter(f);
+  // Curried reduce()
+  BP.reduce = (f, initialValue) => xs =>
+    typeof initialValue !== 'undefined'
+      ? xs.reduce(f, initialValue)
+      : xs.reduce(f);
+  // Concat as function rather than method
+  BP.concat = (xs, ...rest) => xs.concat(...rest);
+
   /* ---------------------[ ZIP WITH ]--------------------- */
 
-  const parseArgs = (args) => {
-    const iteratee = args.slice(-1)[0];
-
+  const parseArgs = ([iteratee, ...rest]) => {
     return typeof iteratee === 'function'
-      ? { arrays: args.slice(0, -1), iteratee }
-      : { arrays: args, iteratee: (...elements) => elements };
+      ? { arrays: rest, iteratee }
+      : { arrays: [iteratee, ...rest], iteratee: (...elements) => elements };
   };
   const getElements = (arrays, index) => arrays.map(array => array[index]);
   const getLongestArray = arrays =>
     arrays.reduce((result, array) => (array.length > result ? array.length : result), 0);
-  // See: http://devdocs.io/lodash~4/index#zipWith
+  // See: http://ramdajs.com/docs/#zipWith
   BP.zipWith = (...args) => {
     const { arrays, iteratee } = parseArgs(args);
 

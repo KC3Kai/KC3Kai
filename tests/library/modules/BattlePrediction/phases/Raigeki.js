@@ -1,64 +1,42 @@
 QUnit.module('modules > BattlePrediction > phases > Raigeki', function () {
   const Raigeki = KC3BattlePrediction.battle.phases.raigeki;
+  const { Side } = KC3BattlePrediction;
 
-  QUnit.module('removeEmptyAttacks', {
-    beforeEach() {
-      this.subject = Raigeki.removeEmptyAttacks;
-    },
+  QUnit.module('parsePlayerJson', {
+    beforeEach() { this.subject = Raigeki.parsePlayerJson; },
   }, function () {
-    QUnit.test('remove empty attacks', function (assert) {
-      const attacksJson = [
-        { defender: { position: 0 } },
-        { defender: { position: -1 } },
-        { defender: { position: 5 } },
-      ];
+    QUnit.test('extract player attack data from kcsapi json', function (assert) {
+      const json = {
+        api_frai: 'defender index',
+        api_fydam: 'damage',
+      };
 
-      const result = this.subject(attacksJson);
+      const result = this.subject(json, 'attacker index');
 
-      assert.deepEqual(result, [attacksJson[0], attacksJson[2]]);
+      assert.deepEqual(result, {
+        damage: 'damage',
+        defender: { side: Side.ENEMY, position: 'defender index' },
+        attacker: { side: Side.PLAYER, position: 'attacker index' },
+      });
     });
   });
 
-  QUnit.module('parseJson', {
-    beforeEach() {
-      this.subject = Raigeki.parseJson;
-    },
+  QUnit.module('parseEnemyJson', {
+    beforeEach() { this.subject = Raigeki.parseEnemyJson; },
   }, function () {
-    QUnit.test('player attack', function (assert) {
-      const json = { api_frai: 3, api_fydam: 126 };
+    QUnit.test('extract enemy attack data from kcsapi json', function (assert) {
+      const json = {
+        api_erai: 'defender index',
+        api_eydam: 'damage',
+      };
 
-      const result = this.subject(json, 5);
-
-      assert.deepEqual(result, {
-        attacker: { position: 5 },
-        defender: { position: 3 },
-        damage: 126,
-      });
-    });
-
-    QUnit.test('enemy attack', function (assert) {
-      const json = { api_erai: 5, api_eydam: 113 };
-
-      const result = this.subject(json, 4);
+      const result = this.subject(json, 'attacker index');
 
       assert.deepEqual(result, {
-        attacker: { position: 4 },
-        defender: { position: 5 },
-        damage: 113,
+        damage: 'damage',
+        defender: { side: Side.PLAYER, position: 'defender index' },
+        attacker: { side: Side.ENEMY, position: 'attacker index' },
       });
-    });
-
-    QUnit.test('bad json', function (assert) {
-      const json = { test: 'blah' };
-
-      try {
-        this.subject(json, 'index');
-        assert.notOk(true, 'no exception');
-      } catch (result) {
-        assert.equal(result.message, 'Bad attack json');
-        assert.equal(result.data.attackJson, json);
-        assert.equal(result.data.index, 'index');
-      }
     });
   });
 });
