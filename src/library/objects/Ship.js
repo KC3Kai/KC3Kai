@@ -323,6 +323,24 @@ KC3改 Ship Object
 		return fleetNum;
 	};
 
+	/**
+	 * @return a tuple for [position in fleet (0-based), fleet total ship amount].
+	 *         return [-1, 0] if this ship is not on any fleet.
+	 */
+	KC3Ship.prototype.fleetPosition = function(){
+		var position = -1,
+			total = 0;
+		if(this.exists()) {
+			const fleetNum = this.onFleet();
+			if(fleetNum > 0) {
+				var fleet = PlayerManager.fleets[fleetNum - 1];
+				position = fleet.ships.indexOf(this.rosterId);
+				total = fleet.countShips();
+			}
+		}
+		return [position, total];
+	};
+
 	KC3Ship.prototype.isRepairing = function(){
 		return PlayerManager.repairShips.indexOf(this.rosterId) >= 0;
 	};
@@ -382,7 +400,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.maxAswMod = function(){
 		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
 		var maxAswBeforeMarriage = this.as[1];
-		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize();
+		var maxModAsw = this.nakedAsw() + KC3Ship.getMaxAswModernize() - (this.mod[6] || 0);
 		return maxAswBeforeMarriage > 0 ? maxModAsw : 0;
 	};
 
@@ -1153,6 +1171,20 @@ KC3改 Ship Object
 			// Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
+		// Modifier of vanguard formation depends on the position in the fleet
+		if(formationId === 6) {
+			const [shipPos, shipCnt] = this.fleetPosition();
+			// Vanguard formation needs 4 ships at least, fake ID make no sense
+			if(shipCnt >= 4) {
+				// Guardian ships counted from 3rd or 4th ship
+				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
+				if(warfareType === "Shelling") {
+					formationModifier = isGuardian ? 1 : 0.5;
+				} else if(warfareType === "Antisub") {
+					formationModifier = isGuardian ? 0.6 : 1;
+				}
+			}
+		}
 		// Non-empty attack type tuple means this supposed to be night battle
 		const isNightBattle = nightSpecialAttackType.length > 0;
 		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
@@ -2017,6 +2049,8 @@ KC3改 Ship Object
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
 						break;
+					case 6: // Vanguard high evasion, but modifier unknown
+						modifier = 1.3;
 				}
 				break;
 			default:
@@ -2189,7 +2223,7 @@ KC3改 Ship Object
 	//   - 1/4/5 (for line ahead / echelon / line abreast)
 	//   - 2 (for double line)
 	//   - 3 (for diamond)
-	//   - formation 6 (for vanguard) still under verification
+	//   - 6 (for vanguard)
 	// - all possible AACIs are considered and the largest AACI modifier
 	//   is used for calculation the maximum number of fixed shotdown
 	KC3Ship.prototype.fixedShotdownRange = function(formationId) {

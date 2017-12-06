@@ -322,6 +322,7 @@ AntiAir: anti-air related calculations
 		return (id === 1 || id === 4 || id === 5) ? 1.0  // line ahead / echelon / line abreast
 			:  (id === 2) ? 1.2 // double line
 			:  (id === 3) ? 1.6 // diamond
+			:  (id === 6) ? 1.1 // vanguard
 			:  (id === 11 || id === 21) ? 1.1 // Combined anti-sub
 			:  (id === 12 || id === 14 || id === 22 || id === 24) ? 1.0 // Combined forward / battle
 			:  (id === 13 || id === 23) ? 1.5 // Combined diamond
