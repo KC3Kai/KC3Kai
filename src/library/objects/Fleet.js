@@ -1177,14 +1177,14 @@ Contains summary information about a fleet and its ships
 		}
 		// Check for Torpedo Support
 		// No BB/CA/CV(L/B) and BBV/CAV/AV/LHA/AO count less than 2
-		if(this.countShipType([5, 8, 9, 7, 11, 18]) == 0 && this.countShipType([6, 10, 16, 17, 22]) < 2) {
+		if(this.countShipType([5, 8, 9, 7, 11, 18]) === 0 && this.countShipType([6, 10, 16, 17, 22]) < 2) {
 			return 3;
 		}
 		// Check for Support Shelling
 		// If BB/CA is present and less than 2 CV(L/B)/LHA/AV
 		// Decide if its shelling or torp support based on BB(V)/CA(V) count
-		if (this.countShipType([5, 8, 9]) > 0 && this.countShipType([7, 11, 18, 16, 17]) < 2) {
-			if (this.countShipType([8, 9, 10]) >= 2 || this.countShipType([5, 6, 8, 9, 10]) >= 4) {
+		if(this.countShipType([5, 8, 9]) > 0 && this.countShipType([7, 11, 18, 16, 17]) < 2) {
+			if(this.countShipType([8, 9, 10]) >= 2 || this.countShipType([5, 6, 8, 9, 10]) >= 4) {
 				return 2;
 			}
 			else {
@@ -1194,7 +1194,6 @@ Contains summary information about a fleet and its ships
 		// If no criteria is met, remaining should be Aerial Support
 		return 1;
 	};
-
 
 	/**
 	 * Estimate possibly activated searchlight from current fleet ships.
