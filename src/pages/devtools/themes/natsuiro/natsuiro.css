@@ -602,6 +602,10 @@ html,body {
 	text-align:center;
 	border:1px solid #aaa;
 }
+.module.activity .sortie_node.long_name {
+	font-size:9px;
+	letter-spacing:-1px;
+}
 .module.activity .sortie_nodes .boss_node {
 	float:left;
 	position:absolute;

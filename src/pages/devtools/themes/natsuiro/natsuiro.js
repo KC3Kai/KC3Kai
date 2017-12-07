@@ -1961,9 +1961,11 @@
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var diff = KC3SortieManager.map_difficulty;
-			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
+			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id);
+			var longNodeLetter = String(nodeId).length > 2;
 
-			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
+			$(".module.activity .sortie_node_"+numNodes).text(nodeId)
+				.toggleClass("long_name", longNodeLetter);
 
 			$(".module.activity .node_types").hide();
 
@@ -1979,7 +1981,8 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId);
+				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId)
+					.toggleClass("long_name", longNodeLetter);
 				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes-1));
 				$(".module.activity .sortie_nodes .boss_node").show();
 			}

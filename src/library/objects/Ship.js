@@ -2051,6 +2051,7 @@ KC3改 Ship Object
 						break;
 					case 6: // Vanguard high evasion, but modifier unknown
 						modifier = 1.3;
+						break;
 				}
 				break;
 			default:
