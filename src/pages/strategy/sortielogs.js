@@ -486,11 +486,12 @@
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
 			var viewFleetAtManagerFunc = function (e) {
-				if (!e.ctrlKey) {
-					KC3StrategyTabs.gotoTab("fleet", "history", $(this).data("id"));
-				} else {
-					var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + $(this).data("id");
+				var id = $(this).data("id");
+				if (navigator.platform.indexOf("Mac") != -1 && e.metaKey || e.ctrlKey) {
+					var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + id;
 					chrome.tabs.create({ url, active: true });
+				} else {
+					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
 			var parseAirRaidFunc = function(airRaid){
