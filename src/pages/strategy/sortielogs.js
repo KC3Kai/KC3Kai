@@ -533,7 +533,7 @@
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
-							const letter = KC3Meta.nodeLetter( sortie.world, sortie.mapnum, node.id );
+							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id);
 							const isBattle = node.type === "battle";
 							const battleKind = ["", "",
 								"night_battle", "night_battle",
@@ -545,7 +545,8 @@
 								.addClass((isBattle && battleKind) || "")
 								.toggleClass("non_battle", !isBattle)
 								.attr("title", node.desc || "")
-								.text(letter);
+								.text(letter)
+								.toggleClass("long_name", String(letter).length > 2);
 
 							if(node.airRaid) {
 								// Adding air raids to all nodes, including non battle ones
@@ -723,8 +724,9 @@
 							if(edgeIndex < 0) {
 								edgeIndex = edges.length;
 								edges.push(battle.node);
+								const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node);
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
-									.text(KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ));
+									.text(letter).toggleClass("long_name", String(letter).length > 2);
 								if(edgeIndex === 5){
 									$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
 								}

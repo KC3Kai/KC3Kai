@@ -269,6 +269,9 @@
 	line-height:14px;
 	font-weight:normal;
 }
+.tab_maps .sortie_list .sortie_edge.long_name {
+	font-size:smaller;
+}
 .tab_maps .sortie_list .sortie_edge.edge_battle {
 	background:#700000;
 }
