@@ -564,8 +564,13 @@
 									}
 								}
 							}
-							if(index === 5)
+							if(index === 5) {
 								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							}
+							if(index === 11) {
+								$(".sortie_edges", sortieBox).addClass("more_edges");
+								$(".sortie_edges .extra_node", sortieBox).show();
+							}
 						});
 					}
 					

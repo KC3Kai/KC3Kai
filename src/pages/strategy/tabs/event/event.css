@@ -367,7 +367,8 @@
 .tab_event .sortie_list .sortie_edges.one_line .sortie_edge_7,
 .tab_event .sortie_list .sortie_edges.one_line .sortie_edge_8,
 .tab_event .sortie_list .sortie_edges.one_line .sortie_edge_9,
-.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_10,
+.tab_event .sortie_list .sortie_edges .extra_node {
 	display:none;
 }
 .tab_event .sortie_list .sortie_edges.two_lines .sortie_edge {
@@ -376,8 +377,13 @@
 	line-height:14px;
 	font-weight:normal;
 }
+.tab_event .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge {
+	font-size:13px;
+	width:20px;
+}
 .tab_event .sortie_list .sortie_edge.long_name {
-	font-size:smaller;
+	font-size:11px;
+	letter-spacing:-1px;
 }
 .tab_event .sortie_list .sortie_edge.edge_battle {
 	background:#700000;
