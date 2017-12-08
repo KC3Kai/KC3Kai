@@ -584,10 +584,13 @@ html,body {
 }
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
-	width:180px;
+	width:auto;
+	min-width:180px;
 	height:19px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 4px 0px;
 	position:relative;
+	display:inline-flex;
+	overflow:hidden;
 }
 .module.activity .sortie_node {
 	width:19px;
