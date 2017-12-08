@@ -1029,9 +1029,15 @@
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
+			let fc200 = PlayerManager.consumables.furniture200 || 0,
+				fc400 = PlayerManager.consumables.furniture400 || 0,
+				fc700 = PlayerManager.consumables.furniture700 || 0,
+				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin));
+				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
+				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
+					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0))).lazyInitTooltip();
 			$(".count_buckets")
 				.text( PlayerManager.consumables.buckets || 0 )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
