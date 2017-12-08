@@ -406,6 +406,9 @@
 .tab_event .sortie_list .sortie_edge.night_battle {
 	background:#14325A;
 }
+.tab_event .sortie_list .sortie_edge.night_to_day {
+	background:#A23C7F;
+}
 .tab_event .sortie_list .sortie_edge.air_raid {
 	background:#FFA500;
 }

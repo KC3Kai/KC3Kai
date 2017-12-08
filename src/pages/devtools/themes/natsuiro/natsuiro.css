@@ -646,11 +646,14 @@ html,body {
 	background:#00B3B1;
 }
 .module.activity .sortie_node.nc_night_battle {
+	background:#4233C3;
+}
+.module.activity .sortie_node.nc_night_to_day {
 	background:
-		-webkit-linear-gradient(-15deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
 		#7d0000;
 	background:
-		linear-gradient(105deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
 		#7d0000;
 	background-size: 400% 200%;
 	background-position: -8px 0px;

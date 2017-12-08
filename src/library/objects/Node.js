@@ -20,10 +20,6 @@ Used by SortieManager
 		this.nodeData = raw || {};
 	};
 
-	function isNightToDayNode(battleData) {
-		return typeof battleData.api_day_flag !== 'undefined';
-	}
-	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
 	KC3Node.debugPrediction = function() { return false; };
 	
@@ -31,7 +27,8 @@ Used by SortieManager
 	KC3Node.knownNodeExtraClasses = function(){
 		return [
 			"nc_night_battle", "nc_air_battle",
-			"nc_enemy_combined", "nc_air_raid"
+			"nc_enemy_combined", "nc_air_raid",
+			"nc_night_to_day"
 		];
 	};
 	
@@ -58,10 +55,12 @@ Used by SortieManager
 					KC3Meta.term("BattleKindNightStart"),
 					KC3Meta.term("BattleKindAirBattleOnly"),
 					KC3Meta.term("BattleKindEnemyCombined"),
-					KC3Meta.term("BattleKindAirDefendOnly")][this.eventKind];
+					KC3Meta.term("BattleKindAirDefendOnly"),
+					KC3Meta.term("BattleKindNightToDay")][this.eventKind];
 				this.nodeExtraClass = ["", "",
 					"nc_night_battle", "nc_night_battle",
-					"nc_air_battle", "nc_enemy_combined", "nc_air_raid"
+					"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
+					"nc_night_to_day"
 					][this.eventKind];
 			}
 			
@@ -275,6 +274,10 @@ Used by SortieManager
 			this.nightSupportInfo.api_n_support_flag = battleData.api_n_support_flag;
 		}
 		this.yasenFlag = battleData.api_midnight_flag > 0;
+		this.isNightToDay = typeof battleData.api_day_flag !== 'undefined';
+		if(this.isNightToDay) {
+			this.toDawnFlag = battleData.api_day_flag > 0;
+		}
 		
 		// only used by old theme, replaced by beginHPs
 		this.originalHPs = Array.pad(battleData.api_f_nowhps, 6, -1) || this.originalHPs;
@@ -470,7 +473,7 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = isNightToDayNode(battleData)
+			const time = this.isNightToDay
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 

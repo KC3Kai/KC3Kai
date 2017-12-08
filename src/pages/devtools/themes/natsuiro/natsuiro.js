@@ -834,7 +834,7 @@
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-		$(".module.activity .battle_night").lazyInitTooltip();
+		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
@@ -2400,8 +2400,8 @@
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
 
-			// Day battle-only environment
-			if(!thisNode.startsFromNight){
+			// Day only / Night to day battle environment
+			if(!thisNode.startsFromNight || thisNode.isNightToDay){
 				// If anti-air CI fire is triggered
 				$(".module.activity .battle_aaci img").attr("src",
 					"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
@@ -2410,7 +2410,12 @@
 					.lazyInitTooltip();
 
 				// If night battle will be asked after this battle
-				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+				// Indicate night to day battle, and if battle is kept to dawn (day time)
+				if(thisNode.isNightToDay){
+					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
+					$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleDayNeeded"));
+				}
 
 				// Battle conditions
 				$(".module.activity .battle_detection").text( thisNode.detection[0] );

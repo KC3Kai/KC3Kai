@@ -538,7 +538,7 @@
 							const isBattle = node.type === "battle";
 							const battleKind = ["", "",
 								"night_battle", "night_battle",
-								"air_battle", "enemy_combined", "air_raid"
+								"air_battle", "enemy_combined", "air_raid", "night_to_day"
 								][node.eventKind];
 							edges.push(node.id);
 							$(".sortie_edge_"+(index+1), sortieBox)
