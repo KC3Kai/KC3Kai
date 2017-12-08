@@ -485,10 +485,11 @@
 			var gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function (e) {
-				var id = $(this).data("id");
-				if (navigator.platform.indexOf("Mac") != -1 && e.metaKey || e.ctrlKey) {
-					var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + id;
+			var viewFleetAtManagerFunc = function(e) {
+				const id = $(this).data("id");
+				if(!id) return;
+				if(e.metaKey || e.ctrlKey) {
+					const url = chrome.extension.getURL("/pages/strategy/strategy.html") + `#fleet-history-${id}`;
 					chrome.tabs.create({ url, active: true });
 				} else {
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
@@ -521,10 +522,8 @@
 						$(sortieBox)
 							.addClass("sortie_rank_"+sortie.diff)
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
-					$(".sortie_id", sortieBox)
-						.text(sortie.id)
-						.data("id", sortie.id)
-						.on("click", viewFleetAtManagerFunc);								
+					$(".sortie_id", sortieBox).text(sortie.id)
+						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
@@ -818,13 +817,15 @@
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
 							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(thisNode.eformation) );
-							$.each(thisNode.eships.slice(0, 6), function(index, eship){
+							$.each(thisNode.eships.slice(0, 12), function(index, eship){
 								if(eship > 0){
-									$(".node_eship_"+(index+1)+" img", nodeBox)
+									const mainEscort = index >= 6 ? "escort" : "main";
+									$(`.node_eship.${mainEscort}.node_eship_${index+1} img`, nodeBox)
 										.attr("src", KC3Meta.abyssIcon( eship ) )
 										.attr("alt", eship)
 										.click(shipClickFunc);
-									$(".node_eship_"+(index+1), nodeBox).addClass("hover")
+									$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
+										.addClass("hover")
 										.removeClass(KC3Meta.abyssShipBorderClass())
 										.addClass(KC3Meta.abyssShipBorderClass(eship))
 										.attr("title", thisNode.buildEnemyStatsMessage(index))
