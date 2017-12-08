@@ -6,6 +6,7 @@
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
 		BATTLE_AERIAL  = 4,
+		BATTLE_NIGHT2DAY = 8,
 		
 		// Sortie Boss Node Indicator
 		// FIXME: this is not for translation. to test sortie status
@@ -567,7 +568,7 @@
 							if(index === 5) {
 								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
 							}
-							if(index === 11) {
+							if(index === 10) {
 								$(".sortie_edges", sortieBox).addClass("more_edges");
 								$(".sortie_edges .extra_node", sortieBox).show();
 							}
@@ -711,9 +712,15 @@
 							if(typeof battle.data.api_dock_id != "undefined"){
 								battleData = battle.data;
 								battleType = BATTLE_BASIC;
+								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+									battleType += BATTLE_AERIAL;
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								battleData = battle.data;
 								battleType = BATTLE_BASIC;
+								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+									battleType += BATTLE_AERIAL;
+								if(battle.data.api_day_flag !== undefined)
+									battleType += BATTLE_NIGHT2DAY;
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								battleData = battle.yasen;
 								battleType = BATTLE_NIGHT;
@@ -864,10 +871,13 @@
 							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
 							$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
 							
-							// Day Battle-only data
+							// Day Battle only or Night to Day Battle data
 							if((battleType & BATTLE_NIGHT) === 0){
-								$(".node_detect", nodeBox).text( thisNode.detection[0] );
-								$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+								// No detection, aerial and LBAS combat if Night2Day battle not go into day
+								if(thisNode.detection[0]){
+									$(".node_detect", nodeBox).text( thisNode.detection[0] );
+									$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+								}
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
