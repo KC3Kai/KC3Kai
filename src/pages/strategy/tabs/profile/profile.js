@@ -606,6 +606,11 @@
 			
 			// Fix abyssal master IDs after 2017-04-05 (bump 1000)
 			$(".tab_profile .fix_abyssal").on("click", function(event){
+				const handleError = function(err, msg) {
+					console.error(msg || "Fixing abyssal IDs error", err);
+					alert(`Oops! ${msg || "There is something wrong"}. You might report the error logs.`);
+				};
+				
 				// Fix table `enemy`. To update primary key, have to delete all records first
 				KC3Database.con.enemy.toArray(function(enemyList){
 					KC3Database.con.enemy.clear();
@@ -615,54 +620,54 @@
 					}
 					console.info("Enemy stats have been fixed");/*RemoveLogging:skip*/
 					alert("Done 1/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing enemy stats error");
 				});
+				
+				const updateKe = function(keArr){
+					if(Array.isArray(keArr) && keArr.some(id => id > 500 && id < 1501)){
+						return keArr.map(id => id > 500 && id < 1501 ? id + 1000 : id);
+					}
+					return keArr;
+				};
 				
 				// Fix table `encounters`. To update primary key, have to delete all records first
 				KC3Database.con.encounters.toArray(function(encList){
 					KC3Database.con.encounters.clear();
 					for(let r of encList){
-						let ke = JSON.parse(r.ke);
-						if(ke.some(id => id > 500 && id < 1501)){
-							ke = ke.map(id => id > 500 ? id + 1000 : id);
-							r.ke = JSON.stringify(ke);
-							let id = r.uniqid.split("/");
-							id[4] = r.ke;
+						const ke = JSON.parse(r.ke || null);
+						const keu = updateKe(ke);
+						if(ke !== keu){
+							r.ke = JSON.stringify(keu);
+							const id = r.uniqid.split("/");
+							id[4] = r.keu;
 							r.uniqid = id.join("/");
 						}
-						KC3Database.Encounter(r, false);
+						KC3Database.Encounter(r, true);
 					}
 					console.info("Encounters have been fixed");/*RemoveLogging:skip*/
 					alert("Done 2/3~");
+				}).catch(function(e){
+					handleError(e, "Fixing encounters error");
 				});
 				
-				// Fix table `battle`
-				KC3Database.con.battle.toArray(function(battleList){
-					var updateKe = function(keArr){
-						if(Array.isArray(keArr) && keArr.some(id => id > 500 && id < 1501)){
-							return keArr.map(id => id > 500 ? id + 1000 : id);
-						}
-						return keArr;
-					};
-					var logError = function(e){ console.error("Database fixing error", e); };
-					try {
-						for(let r of battleList){
-							let day = r.data;
-							let night = r.yasen;
-							if(day.api_ship_ke)
-								day.api_ship_ke = updateKe(day.api_ship_ke);
-							if(day.api_ship_ke_combined)
-								day.api_ship_ke_combined = updateKe(day.api_ship_ke_combined);
-							if(night.api_ship_ke)
-								night.api_ship_ke = updateKe(night.api_ship_ke);
-							if(night.api_ship_ke_combined)
-								night.api_ship_ke_combined = updateKe(night.api_ship_ke_combined);
-							KC3Database.con.battle.put(r).catch(logError);
-						}
-						console.info("Battle enemies have been fixed");/*RemoveLogging:skip*/
-					} catch(e) {
-						console.error("Fixing battle enemies error", e);
-					}
+				// Fix table `battle`, don't iterate all records by `toArray` to save memory
+				KC3Database.con.battle.reverse().modify(function(battle){
+					const day = battle.data;
+					const night = battle.yasen;
+					if(day.api_ship_ke)
+						day.api_ship_ke = updateKe(day.api_ship_ke);
+					if(day.api_ship_ke_combined)
+						day.api_ship_ke_combined = updateKe(day.api_ship_ke_combined);
+					if(night.api_ship_ke)
+						night.api_ship_ke = updateKe(night.api_ship_ke);
+					if(night.api_ship_ke_combined)
+						night.api_ship_ke_combined = updateKe(night.api_ship_ke_combined);
+				}).then(function(c){
+					console.info("Battle enemies have been fixed");/*RemoveLogging:skip*/
 					alert("Done 3/3!");
+				}).catch(function(e){
+					handleError(e, "Fixing battle enemies error");
 				});
 			});
 			
