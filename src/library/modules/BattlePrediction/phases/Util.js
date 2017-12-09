@@ -5,7 +5,7 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  Util.extractFromJson = (battleData, fields) => {
+  Util.extractFromJson = fields => (battleData) => {
     const { extendError, zipWith } = KC3BattlePrediction;
     const { normalizeFieldArrays, zipJson } = KC3BattlePrediction.battle.phases;
 
@@ -17,18 +17,7 @@
       throw extendError(new Error('Mismatched length of json arrays'), { battleData, fields });
     }
 
-    return zipWith(...arrays, zipJson);
-  };
-
-  Util.makeAttacks = (attacksData, createTargets) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-
-    return attacksData.reduce((result, data) => {
-      const { attacker, defender } = createTargets(data);
-      const attack = createAttack(data.damage, defender, attacker);
-
-      return attack.damage ? result.concat(attack) : result;
-    }, []);
+    return zipWith(zipJson, ...arrays);
   };
 
   /*--------------------------------------------------------*/

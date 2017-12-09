@@ -20,10 +20,6 @@ Used by SortieManager
 		this.nodeData = raw || {};
 	};
 
-	function isNightToDayNode(battleData) {
-		return typeof battleData.api_day_flag !== 'undefined';
-	}
-	
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
 	KC3Node.debugPrediction = function() { return false; };
 	
@@ -31,7 +27,8 @@ Used by SortieManager
 	KC3Node.knownNodeExtraClasses = function(){
 		return [
 			"nc_night_battle", "nc_air_battle",
-			"nc_enemy_combined", "nc_air_raid"
+			"nc_enemy_combined", "nc_air_raid",
+			"nc_night_to_day"
 		];
 	};
 	
@@ -58,10 +55,12 @@ Used by SortieManager
 					KC3Meta.term("BattleKindNightStart"),
 					KC3Meta.term("BattleKindAirBattleOnly"),
 					KC3Meta.term("BattleKindEnemyCombined"),
-					KC3Meta.term("BattleKindAirDefendOnly")][this.eventKind];
+					KC3Meta.term("BattleKindAirDefendOnly"),
+					KC3Meta.term("BattleKindNightToDay")][this.eventKind];
 				this.nodeExtraClass = ["", "",
 					"nc_night_battle", "nc_night_battle",
-					"nc_air_battle", "nc_enemy_combined", "nc_air_raid"
+					"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
+					"nc_night_to_day"
 					][this.eventKind];
 			}
 			
@@ -275,6 +274,12 @@ Used by SortieManager
 			this.nightSupportInfo.api_n_support_flag = battleData.api_n_support_flag;
 		}
 		this.yasenFlag = battleData.api_midnight_flag > 0;
+		this.isNightToDay = typeof battleData.api_day_flag !== 'undefined';
+		if(this.isNightToDay) {
+			this.toDawnFlag = battleData.api_day_flag > 0;
+			this.flarePos = battleData.api_flare_pos[0];
+			this.eFlarePos = battleData.api_flare_pos[1];
+		}
 		
 		// only used by old theme, replaced by beginHPs
 		this.originalHPs = Array.pad(battleData.api_f_nowhps, 6, -1) || this.originalHPs;
@@ -314,7 +319,7 @@ Used by SortieManager
 			}
 		}
 
-		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : [0, 0] );
+		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
 		
 		// LBAS attack phase, including jet plane assault
@@ -470,19 +475,17 @@ Used by SortieManager
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-			const time = isNightToDayNode(battleData)
+			const time = this.isNightToDay
 				? KC3BattlePrediction.Time.NIGHT_TO_DAY
 				: KC3BattlePrediction.Time.DAY;
 
 			const dameConCode = (() => {
-				if (KC3SortieManager.isPvP()) { return []; }
+				if (KC3SortieManager.isPvP()) { return {}; }
 
-				let result = PlayerManager.fleets[fleetId].getDameConCodes();
-				if (isPlayerCombined) {
-					result = result.concat(PlayerManager.fleets[1].getDameConCodes());
-				}
-
-				return result;
+				return {
+					main: PlayerManager.fleets[fleetId].getDameConCodes(),
+					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
+				};
 			})();
 
 			const result = KC3BattlePrediction.analyzeBattle(battleData, dameConCode, { player, enemy, time });
@@ -725,12 +728,12 @@ Used by SortieManager
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
 			const time = KC3BattlePrediction.Time.NIGHT;
 			const dameConCode = (() => {
-				if (KC3SortieManager.isPvP()) { return []; }
-				let result = PlayerManager.fleets[fleetId].getDameConCodes();
-				if (isPlayerCombined) {
-					result = result.concat(PlayerManager.fleets[1].getDameConCodes());
-				}
-				return result;
+				if (KC3SortieManager.isPvP()) { return {}; }
+
+				return {
+					main: PlayerManager.fleets[fleetId].getDameConCodes(),
+					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
+				};
 			})();
 			const result = KC3BattlePrediction.analyzeBattle(nightData, dameConCode, { player, enemy, time });
 			this.predictedFleetsNight = result.fleets;
@@ -1159,11 +1162,11 @@ Used by SortieManager
 			thisNode.antiAirFire.forEach(fire => {
 				if(!!fire){
 					var fireShipPos = fire.api_idx; // starts from 0
-					// fireShipPos in [0, 6]: in normal fleet or main fleet, 6 for 3rd 7 ships fleet
+					// fireShipPos in [0, 5]: in normal fleet or main fleet, 6 for 3rd 7 ships fleet
 					// fireShipPos in [6, 11]: in escort fleet
 					if(fireShipPos >= 0 && fireShipPos < 12){
-						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 && thisNode.isPlayerCombined ? 1 : thisNode.fleetSent-1];
-						fireShipPos = thisNode.isPlayerCombined ? fireShipPos % 6 : fireShipPos;
+						var sentFleet = PlayerManager.fleets[fireShipPos >= 6 && thisNode.playerCombined ? 1 : thisNode.fleetSent-1];
+						fireShipPos = thisNode.playerCombined ? fireShipPos % 6 : fireShipPos;
 						var shipName = KC3ShipManager.get(sentFleet.ships[fireShipPos]).name();
 						aaciTips += (!!aaciTips ? "\n" : "") + shipName;
 						var aaciType = AntiAir.AACITable[fire.api_kind];

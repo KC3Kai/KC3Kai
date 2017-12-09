@@ -800,8 +800,10 @@
 		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
+		$(".module.activity .sortie_nodes .extra_node").remove();
+		$(".module.activity .sortie_nodes").removeAttr("style");
 		$(".module.activity .sortie_node").text("").removeAttr("title")
-			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid")
+			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
@@ -834,7 +836,7 @@
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
-		$(".module.activity .battle_night").lazyInitTooltip();
+		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
@@ -1029,9 +1031,15 @@
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
+			let fc200 = PlayerManager.consumables.furniture200 || 0,
+				fc400 = PlayerManager.consumables.furniture400 || 0,
+				fc700 = PlayerManager.consumables.furniture700 || 0,
+				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			$(".count_fcoin")
 				.text( PlayerManager.consumables.fcoin || 0 )
-				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin));
+				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
+				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
+					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0))).lazyInitTooltip();
 			$(".count_buckets")
 				.text( PlayerManager.consumables.buckets || 0 )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1961,9 +1969,16 @@
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var diff = KC3SortieManager.map_difficulty;
-			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
+			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id);
+			var longNodeLetter = String(nodeId).length > 2;
 
-			$(".module.activity .sortie_node_"+numNodes).text( nodeId );
+			if(numNodes > 9) {
+				const emptyNodeDiv = `<div class="sortie_node extra_node sortie_node_${numNodes}"></div>`;
+				$(".module.activity .sortie_nodes").css("left", -20 * (numNodes - 9))
+					.append($(emptyNodeDiv));
+			}
+			$(".module.activity .sortie_node_"+numNodes).text(nodeId)
+				.toggleClass("long_name", longNodeLetter);
 
 			$(".module.activity .node_types").hide();
 
@@ -1979,8 +1994,9 @@
 
 			//console.debug("Next node", thisNode);
 			if(thisNode.isBoss()){
-				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId);
-				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes-1));
+				$(".module.activity .sortie_nodes .boss_node .boss_circle").text(nodeId)
+					.toggleClass("long_name", longNodeLetter);
+				$(".module.activity .sortie_nodes .boss_node").css("left", 20 * (numNodes - 1));
 				$(".module.activity .sortie_nodes .boss_node").show();
 			}
 			switch(thisNode.type){
@@ -2008,7 +2024,9 @@
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
 							return;
 						nodeEncBox.empty();
-						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
+						const sortedList = thisNodeEncounterList.sort(
+							(a, b) => (b.count || 1) - (a.count || 1)
+						);
 						$.each(sortedList, function(_, encounter){
 							const shipList = JSON.parse(encounter.ke || null);
 							let badEntry = ! (Array.isArray(shipList) && encounter.form > 0);
@@ -2397,8 +2415,8 @@
 			}
 			$(".module.activity .battle_support .support_lbas").toggle(thisNode.lbasFlag);
 
-			// Day battle-only environment
-			if(!thisNode.startsFromNight){
+			// Day only / Night to day battle environment
+			if(!thisNode.startsFromNight || thisNode.isNightToDay){
 				// If anti-air CI fire is triggered
 				$(".module.activity .battle_aaci img").attr("src",
 					"../../../../assets/img/ui/dark_aaci"+["-x",""][(!!thisNode.antiAirFire)&1]+".png");
@@ -2407,7 +2425,12 @@
 					.lazyInitTooltip();
 
 				// If night battle will be asked after this battle
-				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+				// Indicate night to day battle, and if battle is kept to dawn (day time)
+				if(thisNode.isNightToDay){
+					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
+					$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleDayNeeded"));
+				}
 
 				// Battle conditions
 				$(".module.activity .battle_detection").text( thisNode.detection[0] );

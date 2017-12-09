@@ -1166,7 +1166,7 @@ Contains summary information about a fleet and its ships
 	/**
 	 * Estimate possible type of support expedition from current composition.
 	 * @return the same value defined by `api_support_flag`,
-	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack
+	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack, 4=Anti-Sub Support
 	 *         0=Unmet expedition prerequisite
 	 * @see http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
 	 */
@@ -1175,16 +1175,24 @@ Contains summary information about a fleet and its ships
 		if(this.countShipType(2) < 2) {
 			return 0;
 		}
-		// 3 or more CV(L/B)/AV/LHA
-		if(this.countShipType([7, 11, 18, 16, 17]) >= 3) {
-			return 1;
-		}
-		// 4 or more DD/CL/CLT
-		if(this.countShipType([2, 3, 4]) >= 4) {
+		// Check for Torpedo Support
+		// No BB/CA/CV(L/B) and BBV/CAV/AV/LHA/AO count less than 2
+		if(this.countShipType([5, 8, 9, 7, 11, 18]) === 0 && this.countShipType([6, 10, 16, 17, 22]) < 2) {
 			return 3;
 		}
-		// other composition
-		return 2;
+		// Check for Support Shelling
+		// If BB/CA is present and less than 2 CV(L/B)/LHA/AV
+		// Decide if its shelling or torp support based on BB(V)/CA(V) count
+		if(this.countShipType([5, 8, 9]) > 0 && this.countShipType([7, 11, 18, 16, 17]) < 2) {
+			if(this.countShipType([8, 9, 10]) >= 2 || this.countShipType([5, 6, 8, 9, 10]) >= 4) {
+				return 2;
+			}
+			else {
+				return 3;
+			}
+		}
+		// If no criteria is met, remaining should be Aerial Support
+		return 1;
 	};
 
 	/**

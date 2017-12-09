@@ -100,6 +100,8 @@
 			"t45": "aa",
 			// night torpedo bomber
 			"t46": "tp",
+			// ASW land base bomber
+			"t47": "as",
 			// all types
 			"tall": "type",
 		},

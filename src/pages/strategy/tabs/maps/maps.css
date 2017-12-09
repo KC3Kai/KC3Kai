@@ -260,7 +260,8 @@
 .tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_7,
 .tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_8,
 .tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_9,
-.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_10 {
+.tab_maps .sortie_list .sortie_edges.one_line .sortie_edge_10,
+.tab_maps .sortie_list .sortie_edges .extra_node {
 	display:none;
 }
 .tab_maps .sortie_list .sortie_edges.two_lines .sortie_edge {
@@ -268,6 +269,13 @@
 	height:14px;
 	line-height:14px;
 	font-weight:normal;
+}
+.tab_maps .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge {
+	font-size:13px;
+	width:20px;
+}
+.tab_maps .sortie_list .sortie_edge.long_name {
+	font-size:11px;
 }
 .tab_maps .sortie_list .sortie_edge.edge_battle {
 	background:#700000;
@@ -296,6 +304,9 @@
 .tab_maps .sortie_list .sortie_edge.night_battle {
 	background:#14325A;
 }
+.tab_event .sortie_list .sortie_edge.night_to_day {
+	background:#A23C7F;
+}
 .tab_maps .sortie_list .sortie_edge.air_raid {
 	background:#FFA500;
 }
@@ -305,6 +316,9 @@
 	background-position:4px 50%;
 	background-size:22px;
 	background-blend-mode:multiply;
+}
+.tab_maps .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge.active.boss {
+	background-size:12px;
 }
 
 /* Sortie Info: TOGGLES */
@@ -587,13 +601,31 @@
 	overflow:hidden;
 	display:none;
 }
-.tab_maps .sortie_list .node_eship_4 {
-	margin:0px 0px 0px 20px;
-}
 .tab_maps .sortie_list .node_eship img {
 	width:20px;
 	height:20px;
 	vertical-align:top;
+}
+.tab_maps .sortie_list .node_eship.escort {
+	display:none;
+	position:relative;
+	width:15px;
+	height:15px;
+	left:28px;
+	top:-30px;
+	margin:0px 0px 5px 11px;
+	box-shadow:0px 0px 1px 1px #fff;
+}
+.tab_maps .sortie_list .node_eship.escort img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
+}
+.tab_maps .sortie_list .main.node_eship_4 {
+	margin:0px 0px 0px 20px;
+}
+.tab_maps .sortie_list .escort.node_eship_10 {
+	margin:0px 0px 5px 28px;
 }
 .tab_maps .sortie_list .node_enemy .boss {
 	border-color:#5ef;

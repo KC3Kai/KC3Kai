@@ -1,13 +1,9 @@
 QUnit.module('modules > BattlePrediction > values > Ship', function () {
-  const Ship = KC3BattlePrediction.fleets;
+  const Ship = KC3BattlePrediction.fleets.ship;
 
   QUnit.module('createShip', {
     beforeEach() { this.subject = Ship.createShip; },
   }, function () {
-    QUnit.test('empty slot', function (assert) {
-      assert.equal(this.subject(-1, -1), -1);
-    });
-
     QUnit.test('success', function (assert) {
       const result = this.subject(15, 20);
 
@@ -18,16 +14,21 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
   QUnit.module('installDamecon', {
     beforeEach() { this.subject = Ship.installDamecon; },
   }, function () {
-    QUnit.test('empty slot', function (assert) {
-      assert.equal(this.subject('blah', -1), -1);
-    });
-
-    QUnit.test('success', function (assert) {
+    QUnit.test('specified damecon', function (assert) {
       const ship = { hp: 10, maxHp: 12 };
 
-      const result = this.subject(1, ship);
+      const result = this.subject(ship, 1);
 
       assert.deepEqual(result, { hp: 10, maxHp: 12, damecon: 1 });
+    });
+
+    QUnit.test('defaults to no damecon', function (assert) {
+      const { Damecon } = KC3BattlePrediction;
+      const ship = { hp: 10, maxHp: 12 };
+
+      const result = this.subject(ship, undefined);
+
+      assert.deepEqual(result, { hp: 10, maxHp: 12, damecon: Damecon.NONE });
     });
   });
 
@@ -37,7 +38,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     QUnit.test('add to damage dealt', function (assert) {
       const ship = { damageDealt: 5, hp: 10 };
 
-      const result = this.subject(10, ship);
+      const result = this.subject(10)(ship);
 
       assert.deepEqual(result, { damageDealt: 15, hp: 10 });
     });
@@ -88,6 +89,10 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
       this.subject = Ship.formatShip;
     },
   }, function () {
+    QUnit.test('empty slot', function (assert) {
+      assert.equal(this.subject(-1), -1);
+    });
+
     QUnit.test('convert to output format', function (assert) {
       const ship = { hp: 20, maxHp: 30, dameConConsumed: true, damageDealt: 5 };
 
@@ -105,10 +110,6 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
       assert.equal(this.subject({ hp: 1 }).sunk, false);
       assert.equal(this.subject({ hp: 0 }).sunk, true);
       assert.equal(this.subject({ hp: -1 }).sunk, true);
-    });
-
-    QUnit.test('empty slot', function (assert) {
-      assert.equal(this.subject(-1), -1);
     });
 
     QUnit.test('default dameConConsumed to false', function (assert) {
