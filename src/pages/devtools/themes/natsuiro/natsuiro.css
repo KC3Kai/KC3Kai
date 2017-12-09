@@ -584,10 +584,12 @@ html,body {
 }
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
-	width:180px;
+	width:auto;
+	min-width:180px;
 	height:19px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 4px 0px;
 	position:relative;
+	display:inline-flex;
 }
 .module.activity .sortie_node {
 	width:19px;
@@ -601,6 +603,10 @@ html,body {
 	font-size:10px;
 	text-align:center;
 	border:1px solid #aaa;
+}
+.module.activity .sortie_node.long_name {
+	font-size:9px;
+	letter-spacing:-1px;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -642,11 +648,14 @@ html,body {
 	background:#00B3B1;
 }
 .module.activity .sortie_node.nc_night_battle {
+	background:#4233C3;
+}
+.module.activity .sortie_node.nc_night_to_day {
 	background:
-		-webkit-linear-gradient(-15deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
 		#7d0000;
 	background:
-		linear-gradient(105deg, rgba(0, 26, 199, 0.6) 25%, rgba(0,0,0,0) 25%),
+		linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
 		#7d0000;
 	background-size: 400% 200%;
 	background-position: -8px 0px;

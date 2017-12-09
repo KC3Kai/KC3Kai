@@ -1877,20 +1877,21 @@ Previously known as "Reactor"
 					}
 					
 					if(typeof oldMap !== "undefined"){
+						if(!!oldMap.kinds) localMap.kinds = oldMap.kinds;
+						if(!!oldMap.maxhps) localMap.maxhps = oldMap.maxhps;
+						if(!!oldMap.baseHp) localMap.baseHp = oldMap.baseHp;
 						// Different gauge detected
 						if(!!oldMap.gaugeType && oldMap.gaugeType !== localMap.gaugeType){
-							localMap.kinds = oldMap.kinds || [oldMap.gaugeType];
+							localMap.kinds = localMap.kinds || [oldMap.gaugeType];
 							localMap.kinds.push(localMap.gaugeType);
 							console.info("New gauge phase detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
 						}
 						// Different max value detected
 						if((oldMap.maxhp || 9999) !== 9999
 							&& oldMap.maxhp !== localMap.maxhp){
-							localMap.maxhps = oldMap.maxhps || [oldMap.maxhp];
+							localMap.maxhps = localMap.maxhps || [oldMap.maxhp];
 							localMap.maxhps.push(localMap.maxhp);
 							console.info("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
-						} else if(!!oldMap.baseHp){
-							localMap.baseHp = oldMap.baseHp;
 						}
 					}
 					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);

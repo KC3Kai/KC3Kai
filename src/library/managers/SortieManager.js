@@ -302,7 +302,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_kind = 4 (aerial exchange battle), eg: 1-6 DFL
 			// api_event_kind = 5 (enemy combined), eg: 6-5 Boss M
 			// api_event_kind = 6 (defensive aerial battle), eg: 6-4 DFG; 6-5 GH
-			// api_event_kind = 7 (night to day battle), new for event fall 2017, why not 3?
+			// api_event_kind = 7 (night to day battle), new for event fall 2017, all stages in 1 call
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss battle)
 			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0))
@@ -632,7 +632,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// Remove sortie comparison buffer
 			PlayerManager.hq.lastSortie = null;
 			// Record event debuff flags
-			if(portApiData && portApiData.api_event_object){
+			if(portApiData && portApiData.api_event_object
+				&& this.map_world >= 10 && this.map_num > 0){
 				const eventObject = portApiData.api_event_object;
 				const thisMap = this.getCurrentMapData(this.map_world, this.map_num);
 				if(eventObject.api_m_flag){

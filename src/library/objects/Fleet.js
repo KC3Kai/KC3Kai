@@ -1166,7 +1166,7 @@ Contains summary information about a fleet and its ships
 	/**
 	 * Estimate possible type of support expedition from current composition.
 	 * @return the same value defined by `api_support_flag`,
-	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack
+	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack, 4=Anti-Sub Support
 	 *         0=Unmet expedition prerequisite
 	 * @see http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
 	 */

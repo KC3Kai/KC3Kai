@@ -6,6 +6,7 @@
 		BATTLE_BASIC   = 1,
 		BATTLE_NIGHT   = 2,
 		BATTLE_AERIAL  = 4,
+		BATTLE_NIGHT2DAY = 8,
 		
 		// Sortie Boss Node Indicator
 		// FIXME: this is not for translation. to test sortie status
@@ -485,10 +486,11 @@
 			var gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function (e) {
-				var id = $(this).data("id");
-				if (navigator.platform.indexOf("Mac") != -1 && e.metaKey || e.ctrlKey) {
-					var url = 'chrome-extension://' + chrome.runtime.id + '/pages/strategy/strategy.html#fleet-history-' + id;
+			var viewFleetAtManagerFunc = function(e) {
+				const id = $(this).data("id");
+				if(!id) return;
+				if(e.metaKey || e.ctrlKey) {
+					const url = chrome.extension.getURL("/pages/strategy/strategy.html") + `#fleet-history-${id}`;
 					chrome.tabs.create({ url, active: true });
 				} else {
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
@@ -521,10 +523,8 @@
 						$(sortieBox)
 							.addClass("sortie_rank_"+sortie.diff)
 							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
-					$(".sortie_id", sortieBox)
-						.text(sortie.id)
-						.data("id", sortie.id)
-						.on("click", viewFleetAtManagerFunc);								
+					$(".sortie_id", sortieBox).text(sortie.id)
+						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d") );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
@@ -534,11 +534,11 @@
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
-							const letter = KC3Meta.nodeLetter( sortie.world, sortie.mapnum, node.id );
+							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id);
 							const isBattle = node.type === "battle";
 							const battleKind = ["", "",
 								"night_battle", "night_battle",
-								"air_battle", "enemy_combined", "air_raid"
+								"air_battle", "enemy_combined", "air_raid", "night_to_day"
 								][node.eventKind];
 							edges.push(node.id);
 							$(".sortie_edge_"+(index+1), sortieBox)
@@ -546,7 +546,8 @@
 								.addClass((isBattle && battleKind) || "")
 								.toggleClass("non_battle", !isBattle)
 								.attr("title", node.desc || "")
-								.text(letter);
+								.text(letter)
+								.toggleClass("long_name", String(letter).length > 2);
 
 							if(node.airRaid) {
 								// Adding air raids to all nodes, including non battle ones
@@ -564,8 +565,13 @@
 									}
 								}
 							}
-							if(index === 5)
+							if(index === 5) {
 								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
+							}
+							if(index === 10) {
+								$(".sortie_edges", sortieBox).addClass("more_edges");
+								$(".sortie_edges .extra_node", sortieBox).show();
+							}
 						});
 					}
 					
@@ -706,9 +712,15 @@
 							if(typeof battle.data.api_dock_id != "undefined"){
 								battleData = battle.data;
 								battleType = BATTLE_BASIC;
+								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+									battleType += BATTLE_AERIAL;
 							}else if(typeof battle.data.api_deck_id != "undefined"){
 								battleData = battle.data;
 								battleType = BATTLE_BASIC;
+								if((battle.data.api_name || "").indexOf("ld_airbattle") >= 0)
+									battleType += BATTLE_AERIAL;
+								if(battle.data.api_day_flag !== undefined)
+									battleType += BATTLE_NIGHT2DAY;
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								battleData = battle.yasen;
 								battleType = BATTLE_NIGHT;
@@ -724,8 +736,9 @@
 							if(edgeIndex < 0) {
 								edgeIndex = edges.length;
 								edges.push(battle.node);
+								const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node);
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
-									.text(KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ));
+									.text(letter).toggleClass("long_name", String(letter).length > 2);
 								if(edgeIndex === 5){
 									$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
 								}
@@ -818,13 +831,15 @@
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
 							$(".node_eformation", nodeBox).attr("title", KC3Meta.formationText(thisNode.eformation) );
-							$.each(thisNode.eships.slice(0, 6), function(index, eship){
+							$.each(thisNode.eships.slice(0, 12), function(index, eship){
 								if(eship > 0){
-									$(".node_eship_"+(index+1)+" img", nodeBox)
+									const mainEscort = index >= 6 ? "escort" : "main";
+									$(`.node_eship.${mainEscort}.node_eship_${index+1} img`, nodeBox)
 										.attr("src", KC3Meta.abyssIcon( eship ) )
 										.attr("alt", eship)
 										.click(shipClickFunc);
-									$(".node_eship_"+(index+1), nodeBox).addClass("hover")
+									$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
+										.addClass("hover")
 										.removeClass(KC3Meta.abyssShipBorderClass())
 										.addClass(KC3Meta.abyssShipBorderClass(eship))
 										.attr("title", thisNode.buildEnemyStatsMessage(index))
@@ -856,10 +871,13 @@
 							$(".node_engage", nodeBox).addClass( thisNode.engagement[1] );
 							$(".node_contact", nodeBox).text(thisNode.fcontact +" vs "+thisNode.econtact);
 							
-							// Day Battle-only data
+							// Day Battle only or Night to Day Battle data
 							if((battleType & BATTLE_NIGHT) === 0){
-								$(".node_detect", nodeBox).text( thisNode.detection[0] );
-								$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+								// No detection, aerial and LBAS combat if Night2Day battle not go into day
+								if(thisNode.detection[0]){
+									$(".node_detect", nodeBox).text( thisNode.detection[0] );
+									$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+								}
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
 								$(".node_airbattle", nodeBox).addClass( thisNode.airbattle[1] );
