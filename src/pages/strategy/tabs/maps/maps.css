@@ -317,6 +317,9 @@
 	background-size:22px;
 	background-blend-mode:multiply;
 }
+.tab_maps .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge.active.boss {
+	background-size:12px;
+}
 
 /* Sortie Info: TOGGLES */
 .tab_maps .sortie_list .sortie_toggles {

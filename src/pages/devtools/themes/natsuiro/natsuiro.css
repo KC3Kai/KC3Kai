@@ -590,7 +590,6 @@ html,body {
 	margin:0px 0px 4px 0px;
 	position:relative;
 	display:inline-flex;
-	overflow:hidden;
 }
 .module.activity .sortie_node {
 	width:19px;

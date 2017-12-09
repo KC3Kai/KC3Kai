@@ -801,9 +801,9 @@
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
 		$(".module.activity .sortie_nodes .extra_node").remove();
-		$(".module.activity .sortie_nodes").css("left", "");
+		$(".module.activity .sortie_nodes").removeAttr("style");
 		$(".module.activity .sortie_node").text("").removeAttr("title")
-			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid")
+			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
@@ -2024,7 +2024,9 @@
 						if($(".module.activity .node_type_prev_encounters").is(":hidden"))
 							return;
 						nodeEncBox.empty();
-						const sortedList = thisNodeEncounterList.sort((a, b) => b.count - a.count);
+						const sortedList = thisNodeEncounterList.sort(
+							(a, b) => (b.count || 1) - (a.count || 1)
+						);
 						$.each(sortedList, function(_, encounter){
 							const shipList = JSON.parse(encounter.ke || null);
 							let badEntry = ! (Array.isArray(shipList) && encounter.form > 0);

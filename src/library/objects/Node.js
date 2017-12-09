@@ -277,6 +277,8 @@ Used by SortieManager
 		this.isNightToDay = typeof battleData.api_day_flag !== 'undefined';
 		if(this.isNightToDay) {
 			this.toDawnFlag = battleData.api_day_flag > 0;
+			this.flarePos = battleData.api_flare_pos[0];
+			this.eFlarePos = battleData.api_flare_pos[1];
 		}
 		
 		// only used by old theme, replaced by beginHPs
