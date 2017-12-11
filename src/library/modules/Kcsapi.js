@@ -1717,38 +1717,50 @@ Previously known as "Reactor"
 		/* Scrap a Ship
 		-------------------------------------------------------*/
 		"api_req_kousyou/destroyship":function(params, response, headers){
-			var rsc   = [0,0,0,0,0,0,0,0],
-				memId = params.api_ship_id,
-				ship  = KC3ShipManager.get(memId),
-				scrap = [],
+			var shipIds = params.api_ship_id,
+				scrapGearFlag = params.api_slot_dest_flag == 1,
 				utcHour = Date.toUTChours(headers.Date);
-			
-			// Base ship scrap value
-			scrap.push(ship.master());
-			// Collect equipment scrap value
-			scrap = scrap.concat(
-				((ship.items).concat(ship.ex_item)).map(function(gearId){
-					return KC3GearManager.get(gearId).master();
-				}).filter(function(gearMaster){
-					return gearMaster;
-				})
-			);
-			// Sum everything
-			scrap.forEach(function(scrapData){
-				console.log("Scrapping", scrapData.api_id, scrapData.api_name, scrapData.api_broken);
-				scrapData.api_broken.forEach(function(val,ind){
-					rsc[ind] += val;
+			var scrapOneShip = function(rosterId) {
+				var rsc   = [0,0,0,0,0,0,0,0],
+					ship  = KC3ShipManager.get(rosterId),
+					scrap = [];
+				if(ship.isDummy()){
+					console.warn("There is no data in ShipManager, your localStorage.ships may not get synced for ships", rosterId);
+					return;
+				}
+				// Base ship scrap value
+				scrap.push(ship.master());
+				if(scrapGearFlag){
+					// Collect equipment scrap value if needed
+					scrap = scrap.concat(
+						((ship.items).concat(ship.ex_item)).map(function(gearId){
+							return KC3GearManager.get(gearId).master();
+						}).filter(function(gearMaster){
+							return gearMaster;
+						})
+					);
+				}
+				// Sum everything
+				scrap.forEach(function(scrapData){
+					console.log("Scrapping", scrapData.api_id, scrapData.api_name, scrapData.api_broken);
+					scrapData.api_broken.forEach(function(val,ind){
+						rsc[ind] += val;
+					});
 				});
+				KC3Database.Naverall({
+					hour: utcHour,
+					type: "dsship" + ship.masterId,
+					data: rsc
+				});
+				KC3ShipManager.remove(rosterId, !scrapGearFlag);
+				// F5: Daily Dismantlement
+				KC3QuestManager.get(609).increment();
+				PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
+			};
+			// Now in-game allow to scrap more ships in a row since 2017-12-11
+			$.each(shipIds.split("%2C"), function(index, shipId){
+				scrapOneShip(parseInt(shipId, 10));
 			});
-			KC3Database.Naverall({
-				hour: utcHour,
-				type: "dsship" + ship.masterId,
-				data: rsc
-			});
-			KC3ShipManager.remove(memId);
-			// F5: Daily Dismantlement
-			KC3QuestManager.get(609).increment();
-			PlayerManager.setResources(utcHour * 3600, null, rsc.slice(0,4));
 			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Consumables");
@@ -1764,10 +1776,10 @@ Previously known as "Reactor"
 				utcHour = Date.toUTChours(headers.Date);
 			$.each(itemIds.split("%2C"), function(index, itemId){
 				var gearMaster = KC3GearManager.get(itemId).master();
-				console.log("Scrapping", itemId, gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
 				if(!gearMaster){
 					console.warn("There is no data in GearManager, your localStorage.gears may not get synced for item", itemId);
 				} else {
+					console.log("Scrapping", itemId, gearMaster.api_id, gearMaster.api_name, gearMaster.api_broken);
 					gearMaster.api_broken.forEach(function(x,i){
 						rsc[i] += x;
 					});

@@ -1,4 +1,52 @@
 {
+	"757": {
+		"api_id": 757,
+		"api_name": "海峡突入満潮改二",
+		"api_yomi": "みちしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"758": {
+		"api_id": 758,
+		"api_name": "海峡突入時雨",
+		"api_yomi": "しぐれ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"759": {
+		"api_id": 759,
+		"api_name": "海峡突入最上",
+		"api_yomi": "もがみ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"760": {
+		"api_id": 760,
+		"api_name": "海峡突入山雲",
+		"api_yomi": "やまぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"761": {
+		"api_id": 761,
+		"api_name": "海峡突入朝雲",
+		"api_yomi": "あさぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"762": {
+		"api_id": 762,
+		"api_name": "晩秋の私服狭霧",
+		"api_yomi": "さぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"763": {
 		"api_id": 763,
 		"api_name": "ハロウィン瑞穂",
@@ -7,10 +55,34 @@
 		"api_soku": 5,
 		"api_slot_num": 2
 	},
+	"765": {
+		"api_id": 765,
+		"api_name": "秋の私服川内",
+		"api_yomi": "せんだい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"766": {
+		"api_id": 766,
+		"api_name": "秋の私服秋雲",
+		"api_yomi": "あきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"767": {
 		"api_id": 767,
 		"api_name": "秋の私服藤波",
 		"api_yomi": "ふじなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"768": {
+		"api_id": 768,
+		"api_name": "秋の私服天霧",
+		"api_yomi": "あまぎり",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
@@ -22,6 +94,14 @@
 		"api_stype": 21,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"770": {
+		"api_id": 770,
+		"api_name": "秋の私服白露",
+		"api_yomi": "しらつゆ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	},
 	"771": {
 		"api_id": 771,

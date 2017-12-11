@@ -1498,21 +1498,13 @@ KC3改 Ship Object
 		if (shipAsw < aswThreshold)
 			return false;
 
-		// according test, Taiyou needs a Torpedo Bomber with asw stat >= 7,
-		// current implemented: T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D
-		// see http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
-		const isHighAswTorpedoBomber = (masterData) => {
-			return masterData && masterData.masterId > 0 &&
-				masterData.api_type[2] === 8 &&
-				masterData.api_tais >= 7;
-		};
 		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
 		if (isTaiyouKaiAfter) {
-			return [0,1,2,3,4].some( slot => this.equipment(slot).isAswAircraft(false) );
+			return this.equipment(true).some(gear => gear.isAswAircraft(false));
 		} else if (isTaiyouBase) {
-			return [0,1,2,3,4].some( slot => isHighAswTorpedoBomber( this.equipment(slot).master() ));
+			return this.equipment(true).some(gear => gear.isHighAswBomber());
 		}
 
 		const hasSonar = this.hasEquipmentType(1, 10);
@@ -1839,12 +1831,7 @@ KC3改 Ship Object
 				// even large radars (Kasumi K2 can equip), air radars okay too, see:
 				// https://twitter.com/nicolai_2501/status/923172168141123584
 				// https://twitter.com/nicolai_2501/status/923175256092581888
-				const isHighAccRadar = (masterData) => {
-					return masterData && masterData.masterId > 0 &&
-						[12, 13].includes(masterData.api_type[2]) &&
-						masterData.api_houm > 2;
-				};
-				const hasCapableRadar = [0,1,2,3,4].some(slot => isHighAccRadar(this.equipment(slot).master()));
+				const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
 				const hasSkilledLookout = this.hasEquipmentType(2, 39);
 				const smallMainGunCnt = this.countEquipmentType(2, 1);
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f

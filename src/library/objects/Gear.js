@@ -443,6 +443,18 @@ KC3改 Equipment Object
 			this.master().api_tais > 0;
 	};
 
+	KC3Gear.prototype.isHighAswBomber = function(){
+		// See http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
+		// and official has announced high ASW ability aircraft is ASW stat >= 7.
+		// Carrier-based or Land-base bombers for now; AS-PBY, Autogyro, Seaplane Recon may not capable.
+		// Current implemented:
+		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
+		const type2Ids = [8, 47];
+		return this.masterId > 0 &&
+			type2Ids.indexOf(this.api_type[2]) > -1 &&
+			this.master().api_tais > 6;
+	};
+
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
 		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
@@ -455,6 +467,12 @@ KC3改 Equipment Object
 		return this.masterId > 0 &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 0;
+	};
+
+	KC3Gear.prototype.isHighAccuracyRadar = function(){
+		return this.masterId > 0 &&
+			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_houm > 2;
 	};
 
 	KC3Gear.prototype.isAafdBuiltinHighAngleMount = function(){
