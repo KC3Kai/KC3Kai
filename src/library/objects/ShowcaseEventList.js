@@ -161,7 +161,7 @@
             }
 
             new KC3ImageExport(this.canvas, {
-                filename: "Winter 2017 ShipList " + dateFormat(" yyyy-mm-dd"),
+                filename: "Winter 2018 ShipList " + dateFormat(" yyyy-mm-dd"),
                 method: this.buildSettings.output,
             }).export((error, result) => {
                 this.complete(result || {});
