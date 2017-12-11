@@ -219,7 +219,7 @@ Listens to network history and triggers callback if game events happen
 					voiceNum: soundPaths[7].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
-			break;
+				break;
 			case "kc9997":
 				// console.debug("DETECTED Event special sound", soundPaths);
 				(new RMsg("service", "subtitle", {
@@ -230,7 +230,7 @@ Listens to network history and triggers callback if game events happen
 					voiceSize: http.response.content.size || 0,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
-			break;
+				break;
 			case "kc9998":
 				// console.debug("DETECTED Abyssal sound", soundPaths);
 				(new RMsg("service", "subtitle", {
@@ -241,7 +241,7 @@ Listens to network history and triggers callback if game events happen
 					voiceSize: http.response.content.size || 0,
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
-			break;
+				break;
 			case "kc9999":
 				// console.debug("DETECTED NPC sound", soundPaths);
 				(new RMsg("service", "subtitle", {
@@ -251,7 +251,7 @@ Listens to network history and triggers callback if game events happen
 					voiceNum: soundPaths[6].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
-			break;
+				break;
 			default:
 				// console.debug("DETECTED shipgirl sound");
 				const shipGirl = KC3Master.graph_file(soundPaths[5].substring(2));

@@ -599,6 +599,9 @@ var interactions = {
 			case "npc":
 				quoteIdentifier = "npc";
 				break;
+			case "event":
+				quoteIdentifier = "event";
+				break;
 			case "abyssal":
 				quoteIdentifier = "abyssal";
 				if(ConfigManager.subtitle_speaker){
