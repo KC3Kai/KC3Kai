@@ -596,9 +596,9 @@ KC3改 Ship Object
 				if(equip.masterId === 268) isArcticEquipped = true;
 			}
 		});
-		// Special boost for Arctic Camouflage equipped on Tama Kai / Kai Ni, Kiso Kai Ni
+		// Special boost for Arctic Camouflage equipped on Tama K / K2, Kiso K / K2
 		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
-		if(isArcticEquipped && [146,216,547].indexOf(this.masterId) > -1) {
+		if(isArcticEquipped && [146, 216, 217, 547].indexOf(this.masterId) > -1) {
 			total += ({
 				"souk": 2,
 				"houk": 7
