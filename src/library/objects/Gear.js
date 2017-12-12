@@ -451,7 +451,7 @@ KC3改 Equipment Object
 		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
 		const type2Ids = [8, 47];
 		return this.masterId > 0 &&
-			type2Ids.indexOf(this.api_type[2]) > -1 &&
+			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
 	};
 
