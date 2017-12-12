@@ -1783,13 +1783,19 @@ Previously known as "Reactor"
 					gearMaster.api_broken.forEach(function(x,i){
 						rsc[i] += x;
 					});
+					// F66: Daily Scrap Anti-Air Guns
 					// F34: Weekly Scrap Anti-Air Guns
 					if([21].indexOf(gearMaster.api_type[2]) > -1){
+						KC3QuestManager.get(674).increment();
 						KC3QuestManager.get(638).increment();
 					}
 					// F55: Quarterly Scrap 10 Large Caliber Main Guns
 					if([3].indexOf(gearMaster.api_type[2]) > -1){
 						KC3QuestManager.get(663).increment();
+					}
+					// F65: Daily Scrap Small Caliber Main Guns
+					if([1].indexOf(gearMaster.api_type[2]) > -1){
+						KC3QuestManager.get(673).increment();
 					}
 				}
 				KC3GearManager.remove(itemId);
@@ -2191,7 +2197,10 @@ Previously known as "Reactor"
 					[854,0,[2,4], true, true], // Bq2: 1st requirement: [W2-4] A-rank+ the boss node
 					[854,1,[6,1], true, true], // Bq2: 2nd requirement: [W6-1] A-rank+ the boss node
 					[854,2,[6,3], true, true], // Bq2: 3rd requirement: [W6-3] A-rank+ the boss node
-					[862,0,[6,3], true, true]  // Bq4: Sortie to [W6-3] A-rank+ the boss node 2 times
+					[862,0,[6,3], true, true], // Bq4: Sortie to [W6-3] A-rank+ the boss node 2 times
+					[873,0,[3,1], true, true], // Bq5: 1st requirement: [W3-1] A-rank+ the boss node
+					[873,1,[3,2], true, true], // Bq5: 2nd requirement: [W3-2] A-rank+ the boss node
+					[873,2,[3,3], true, true]  // Bq5: 3rd requirement: [W3-3] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
