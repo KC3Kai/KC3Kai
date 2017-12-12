@@ -314,6 +314,8 @@ Previously known as "Reactor"
 					case 74: PlayerManager.consumables.newAircraftBlueprint = thisItem.api_count; break;
 					case 75: PlayerManager.consumables.newArtilleryMaterial = thisItem.api_count; break;
 					case 77: PlayerManager.consumables.newAviationMaterial = thisItem.api_count; break;
+					case 78: PlayerManager.consumables.actionReport = thisItem.api_count; break;
+					case 79: PlayerManager.consumables.straitMedal = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -2073,6 +2075,30 @@ Previously known as "Reactor"
 			}
 		},
 		
+		/* Buy Furniture
+		-------------------------------------------------------*/
+		"api_req_furniture/buy":function(params, response, headers, decodedParams){
+			var furnitureNo = parseInt(decodedParams.api_no, 10),
+				furnitureType = parseInt(decodedParams.api_type, 10),
+				discountFlag = !!decodedParams.api_discount_flag,
+				furnitureObj = KC3Master.furniture(undefined, furnitureNo, furnitureType);
+			if(furnitureObj){
+				// Defined in Core.swf#dto.FurnitureDTO.isNeedSpecialCraftsman()
+				const isFurnitureFairyNeeded = (price) => price >= 2000 && price < 20000;
+				// Defined in Core.swf#dto.FurnitureDTO.getDiscountPrice()
+				const getDiscountedPrice = (price) => Math.max(0, Math.floor((price - 100000) * 0.1));
+				var price = furnitureObj.api_price || 0,
+					fairyUsed = isFurnitureFairyNeeded(price) || discountFlag;
+				if(discountFlag && price >= 100000) price = getDiscountedPrice(price);
+				PlayerManager.consumables.fcoin -= price;
+				if(fairyUsed) PlayerManager.consumables.furnitureFairy -= 1;
+				PlayerManager.setConsumables();
+				console.info("You have bought furniture", furnitureObj.api_id, furnitureObj.api_title,
+					"with fcoin", price, fairyUsed ? "and furniture fairy" : "");
+				KC3Network.trigger("Consumables");
+			}
+		},
+		
 		/* Arsenal Item List
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slotlist":function(params, response, headers){
@@ -2145,6 +2171,32 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");
+		},
+		
+		/* List current available musics in Jukebox
+		-------------------------------------------------------*/
+		"api_req_furniture/music_list":function(params, response, headers){
+			// Game client-side will cache this result, so only 1st time of session will make a call
+			console.debug("Jukebox available musics", response.api_data);
+		},
+		/* Play music from a Jukebox
+		-------------------------------------------------------*/
+		"api_req_furniture/music_play":function(params, response, headers, decodedParams){
+			const musicId = decodedParams.api_music_id,
+				afterFcoin = parseInt(response.api_data.api_coin, 10);
+			if(afterFcoin >= 0){
+				PlayerManager.consumables.fcoin = afterFcoin;
+				PlayerManager.setConsumables();
+				KC3Network.trigger("Consumables");
+				// To get music information, have to handle `api_req_furniture/music_list`,
+				// and remember its API data array, match `api_music_id` with elements' `api_id`,
+				// and found `api_bgm_id` also defined in master.
+			}
+		},
+		/* Set a music as Home Port BGM from a Jukebox
+		-------------------------------------------------------*/
+		"api_req_furniture/set_portbgm":function(params, response, headers, decodedParams){
+			const musicId = decodedParams.api_music_id;
 		},
 		
 		/* Dummy
