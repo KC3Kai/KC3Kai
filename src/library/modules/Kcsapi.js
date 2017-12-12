@@ -1783,11 +1783,11 @@ Previously known as "Reactor"
 					gearMaster.api_broken.forEach(function(x,i){
 						rsc[i] += x;
 					});
-					// F66: Daily Scrap Anti-Air Guns
 					// F34: Weekly Scrap Anti-Air Guns
+					// F66: Daily Scrap Anti-Air Guns
 					if([21].indexOf(gearMaster.api_type[2]) > -1){
-						KC3QuestManager.get(674).increment();
 						KC3QuestManager.get(638).increment();
+						KC3QuestManager.get(674).increment();
 					}
 					// F55: Quarterly Scrap 10 Large Caliber Main Guns
 					if([3].indexOf(gearMaster.api_type[2]) > -1){
