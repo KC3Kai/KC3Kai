@@ -64,25 +64,38 @@ known IDs see QuestManager
 	/* OUTPUT SHORT
 	Return tracking text to be shown on Panel and Strategy Room
 	------------------------------------------*/
-	KC3Quest.prototype.outputShort = function(showAll){
-		if (typeof showAll == "undefined") {
-			showAll = false;
-		}
+	KC3Quest.prototype.outputShort = function(showAll = false, oneTimeChecks = false){
 		if(this.tracking){
-			var trackingText = [];
-			var ctr;
-			var textToShow = "";
-			for(ctr in this.tracking){
-				textToShow = this.tracking[ctr][0]+"/"+this.tracking[ctr][1];
-				trackingText.push((this.meta().trackingDesc ? this.meta().trackingDesc[ctr] : "{0}").format(textToShow));
-				if (!showAll && (this.tracking[ctr][0] < this.tracking[ctr][1])) {
-					return textToShow;
+			const trackingText = [];
+			let textToShow = "";
+			// If all tracking items are 1-time checks: [0, 1]
+			const isAllTicks = Array.isArray(this.tracking) &&
+				this.tracking.every(el => Array.isArray(el) && el[1] === 1);
+			let ticked = 0;
+			for(const key in this.tracking){
+				if(!Array.isArray(this.tracking[key])) continue;
+				textToShow = this.tracking[key].join("/");
+				trackingText.push(
+					(this.meta().trackingDesc ? this.meta().trackingDesc[key] : "{0}")
+						.format(textToShow)
+				);
+				if(!showAll) {
+					if(this.tracking[key][0] < this.tracking[key][1]) {
+						// Show first uncompleted item only if not show all and items not 1-time checks
+						if(!oneTimeChecks || !isAllTicks) return textToShow;
+					} else {
+						// Count completed ticks
+						ticked += 1;
+					}
 				}
 			}
-			if (!showAll) {
+			if(!showAll) {
+				// Show completed ticks if all tracking items are 1-time checks
+				if(oneTimeChecks && isAllTicks)
+					return "{0}/{1}".format(ticked, this.tracking.length);
 				return textToShow;
 			} else {
-				return trackingText.join(String.fromCharCode(10));
+				return trackingText.join("\n");
 			}
 		}
 		return "";
@@ -93,10 +106,9 @@ known IDs see QuestManager
 	------------------------------------------*/
 	KC3Quest.prototype.outputHtml = function(){
 		if(this.tracking){
-			var trackingText = [];
-			var ctr;
-			for(ctr in this.tracking){
-				trackingText.push(this.tracking[ctr][0]+"/"+this.tracking[ctr][1]);
+			const trackingText = [];
+			for(const key in this.tracking){
+				trackingText.push(this.tracking[key].join("/"));
 			}
 			return trackingText.join("<br />");
 		}
