@@ -276,11 +276,11 @@
 					exporter.exportEquip();
 			});
 
-            $("#eventShipList").on("click", function (){
-                var exporter = setupExporter(this, window.ShowcaseEventList);
-                if (exporter !== null)
-                    exporter.exportList();
-            });
+			$("#eventShipList").on("click", function (){
+				var exporter = setupExporter(this, window.ShowcaseEventList);
+				if (exporter !== null)
+					exporter.exportList();
+			});
 
 
 			$("#exportOutputMode").change(function(){

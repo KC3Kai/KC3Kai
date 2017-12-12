@@ -312,6 +312,9 @@
 					case "npc":
 						quoteIdentifier = "npc";
 						break;
+					case "event":
+						quoteIdentifier = "event";
+						break;
 					case "abyssal":
 						quoteIdentifier = "abyssal";
 						if(config.subtitle_speaker){

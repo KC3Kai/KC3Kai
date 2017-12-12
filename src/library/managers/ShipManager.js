@@ -198,7 +198,7 @@ Saves and loads list to and from localStorage
 		},
 		
 		// Remove ship from the list, scrapped, mod-fodder, or sunk
-		remove :function( rosterId ){
+		remove :function( rosterId, keepEquip = false ){
 			console.log("Removing ship", rosterId);
 			var thisShip = this.list["x"+rosterId];
 			if(typeof thisShip != "undefined"){
@@ -208,11 +208,13 @@ Saves and loads list to and from localStorage
 				if(shipTargetFleetID >= 0){
 					PlayerManager.fleets[shipTargetFleetID].discard(rosterId);
 				}
-				// remove any equipments from her
-				var items = thisShip.equipment(true);
-				for(var gctr in items){
-					if(items[gctr].itemId > 0){
-						KC3GearManager.remove( items[gctr].itemId );
+				// remove any equipments from her by default
+				if(!keepEquip){
+					var items = thisShip.equipment(true);
+					for(var gctr in items){
+						if(items[gctr].itemId > 0){
+							KC3GearManager.remove( items[gctr].itemId );
+						}
 					}
 				}
 				
