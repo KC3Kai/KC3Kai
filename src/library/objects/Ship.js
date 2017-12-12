@@ -589,11 +589,21 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
+		var isArcticEquipped = false;
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
+				if(equip.masterId === 268) isArcticEquipped = true;
 			}
 		});
+		// Special boost for Arctic Camouflage equipped on Tama Kai / Kai Ni, Kiso Kai Ni
+		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
+		if(isArcticEquipped && [146,216,547].indexOf(this.masterId) > -1) {
+			total += ({
+				"souk": 2,
+				"houk": 7
+			})[apiName] || 0;
+		}
 		return total;
 	};
 
@@ -1452,8 +1462,8 @@ KC3改 Ship Object
 		// see comments below.
 		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
-				// Abukuma K2(200), Kinu K2(487), Yura K2(488)
-				200, 487, 488,
+				// Abukuma K2(200), Kinu K2(487), Yura K2(488), Tama K2(547)
+				200, 487, 488, 547,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435), Fumizuki(548)
 				418, 434, 435, 548,
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
