@@ -251,11 +251,11 @@
 			self.updateUI();
 
 			// BUTTONS
-			function setupExporter(button){
+			function setupExporter(button, exporterClass = window.ShowcaseExporter){
 				if ($(button).hasClass("disabled"))
 					return null;
 				$(button).addClass("disabled");
-				var exporter = new ShowcaseExporter();
+				var exporter = new exporterClass();
 				exporter.buildSettings = self.getSettings();
 				exporter.complete = function (data) {
 					self.displayExportResult(data);
@@ -275,6 +275,13 @@
 				if (exporter !== null)
 					exporter.exportEquip();
 			});
+
+			$("#eventShipList").on("click", function (){
+				var exporter = setupExporter(this, window.ShowcaseEventList);
+				if (exporter !== null)
+					exporter.exportList();
+			});
+
 
 			$("#exportOutputMode").change(function(){
 				var val = this.value;

@@ -115,7 +115,7 @@ Uses KC3Quest objects to play around with
 			daily: {
 				type: 'daily',
 				key: 'timeToResetDailyQuests',
-				questIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 702],
+				questIds: [201, 216, 210, 211, 218, 212, 226, 230, 303, 304, 402, 403, 503, 504, 605, 606, 607, 608, 609, 619, 673, 674, 702],
 				resetQuests: function () { KC3QuestManager.resetDailies(); },
 				calculateNextReset: function (serverTime) {
 					// JST is +9 GMT, so 05:00 JST === 20:00 UTC
@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 822, 854, 861, 862],
+				questIds: [426, 428, 637, 643, 663, 675, 822, 854, 861, 862, 873],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -508,6 +508,11 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(16) === 1
 							&& fleet.countShipType(3) === 2;
+					},
+				"873": // Bq5 Sortie 1 CL
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(3) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

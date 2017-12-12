@@ -1207,7 +1207,7 @@
 						.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
 						.lazyInitTooltip();
 				}
-				$(".quest_track", questBox).text(quest.outputShort())
+				$(".quest_track", questBox).text(quest.outputShort(false, true))
 					.attr("title", quest.outputShort(true))
 					.lazyInitTooltip();
 			});
