@@ -2093,7 +2093,7 @@ Previously known as "Reactor"
 				PlayerManager.consumables.fcoin -= price;
 				if(fairyUsed) PlayerManager.consumables.furnitureFairy -= 1;
 				PlayerManager.setConsumables();
-				console.info("You have bought furniture", furnitureObj.api_id, furnitureObj.api_title,
+				console.log("You have bought furniture", furnitureObj.api_id, furnitureObj.api_title,
 					"with fcoin", price, fairyUsed ? "and furniture fairy" : "");
 				KC3Network.trigger("Consumables");
 			}
