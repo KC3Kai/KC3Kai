@@ -563,7 +563,8 @@
 					const ke = JSON.parse(d.ke || null);
 					const letter = KC3Meta.nodeLetter(d.world, d.map, d.node);
 					return d.world <= 0 || !Array.isArray(ke) || ke.length < 6
-						|| (d.world < 10 && letter === d.node);
+						|| (d.world < 10 && letter === d.node)
+						|| d.uniqid.indexOf(d.ke) === -1;
 				}).delete().then((count) => {
 					if(count) alert("Done!"); else alert("No bug found!");
 				});
@@ -640,7 +641,7 @@
 						if(ke !== keu){
 							r.ke = JSON.stringify(keu);
 							const id = r.uniqid.split("/");
-							id[4] = r.keu;
+							id[4] = r.ke;
 							r.uniqid = id.join("/");
 						}
 						KC3Database.Encounter(r, true);
