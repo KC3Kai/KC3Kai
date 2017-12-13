@@ -290,10 +290,11 @@ known IDs see QuestManager
 		let currentCount = trackingData[0];
 		let maxCount = parseFloat(trackingData[1]);
 
-		// no adjustment for F7 and F8:
-		// these two quests have a weird behavior that 1/3 is marked as being 50% completed
+		// no adjustment for F66, F7 and F8:
+		// these quests have a weird behavior that 1/3 is marked as being 50% completed
 		// so our auto-adjustment won't work for them.
-		if([607, 608].indexOf(this.id) > -1
+		// EO74 marks them as '(internal counter) starts from 1/4', so +1 50%, +2 80%.
+		if([607, 608, 674].indexOf(this.id) > -1
 			&& currentCount > 0 && currentCount < maxCount)
 			return;
 
@@ -317,7 +318,7 @@ known IDs see QuestManager
 		let trackedPFlag =
 			/* cur/max >= 4/5 (80%) */
 			5*currentCount >= 4*maxCount ? 2
-		/* cur/max >= 1/2 (50%) */
+			/* cur/max >= 1/2 (50%) */
 			: 2*currentCount >= maxCount ? 1
 			: 0;
 
