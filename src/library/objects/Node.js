@@ -187,15 +187,23 @@ Used by SortieManager
 			const maxLost = nodeData.api_happening.api_count;
 			// Nothing to lose?
 			if(!maxLost || maxRsc === 0) return;
-			const lostRate = maxLost / maxRsc;
+			// Max rate supposed to be up to 40%, 30%, 24%, 20% (by radar ship amount),
+			// rate of some maps lower than 40%, so here computes it in time.
+			// Server side might use floor(maxRsc * 0.4 (or 0.3 / 0.24 / 0.2)),
+			// so here try to round it up. But may be still inaccurate.
+			const lossRate = Math.qckInt("ceil", maxLost / maxRsc, 2);
 			const isReducedByRadar = !!nodeData.api_happening.api_dentan;
-			console.log("All ships will lose {0} at maelstrom".format(rscType), lostRate,
-				"({0} / {1})".format(maxLost, maxRsc), isReducedByRadar ? "reduced by radar": "");
+			let totalLost = 0;
 			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 				fleet.shipsUnescaped().forEach(ship => {
-					ship[rscType] -= Math.floor(ship[rscType] * lostRate);
+					const loss = Math.floor(ship[rscType] * lossRate);
+					totalLost += loss;
+					ship[rscType] -= loss;
 				});
 			});
+			console.log("Fleet(s) will lose {0} {1} in total at maelstrom".format(rscType, totalLost),
+				lossRate, "({0} / {1})".format(maxLost, maxRsc),
+				isReducedByRadar ? "(reduced by radar)" : "");
 		};
 		reduceFleetRscIfNecessary(nodeData);
 		return this;
