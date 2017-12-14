@@ -173,6 +173,31 @@ Used by SortieManager
 		};
 		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
 		this.amount = nodeData.api_happening.api_count;
+		const reduceFleetRscIfNecessary = (nodeData) => {
+			const itemId = nodeData.api_happening.api_mst_id;
+			const rscType = ["", "fuel", "ammo"][itemId] || "";
+			// Do nothing if not fuel or ammo lost
+			if(!rscType) return;
+			let maxRsc = 0;
+			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
+				fleet.shipsUnescaped().forEach(ship => {
+					maxRsc = Math.max(maxRsc, ship[rscType] || 0);
+				});
+			});
+			const maxLost = nodeData.api_happening.api_count;
+			// Nothing to lose?
+			if(!maxLost || maxRsc === 0) return;
+			const lostRate = maxLost / maxRsc;
+			const isReducedByRadar = !!nodeData.api_happening.api_dentan;
+			console.log("All ships will lose {0} at maelstrom".format(rscType), lostRate,
+				"({0} / {1})".format(maxLost, maxRsc), isReducedByRadar ? "reduced by radar": "");
+			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
+				fleet.shipsUnescaped().forEach(ship => {
+					ship[rscType] -= Math.floor(ship[rscType] * lostRate);
+				});
+			});
+		};
+		reduceFleetRscIfNecessary(nodeData);
 		return this;
 	};
 	

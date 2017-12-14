@@ -939,13 +939,19 @@ Previously known as "Reactor"
 			// 1: repair team used, 2: repair goddess used
 			var dameconUsedType = parseInt(params.api_recovery_type, 10);
 			KC3SortieManager.discardSunk();
-			KC3SortieManager.advanceNode( response.api_data, Date.toUTCseconds(headers.Date) );
+			var nextNode = KC3SortieManager.advanceNode(
+				response.api_data, Date.toUTCseconds(headers.Date)
+			);
 			KC3Network.hasOverlay = true;
 			(new RMsg("service", "mapMarkers", {
 				tabId: chrome.devtools.inspectedWindow.tabId,
 				nextNode: response.api_data
 			})).execute();
 			KC3Network.trigger("CompassResult");
+			// Refresh fleet shipbox if fuel or ammo lost at maelstrom node
+			if(nextNode.type === "maelstrom" && [1, 2].indexOf(nextNode.item) > -1){
+				KC3Network.trigger("Fleet");
+			}
 			if(typeof response.api_data.api_destruction_battle !== "undefined"){
 				KC3SortieManager.engageLandBaseAirRaid(
 					response.api_data.api_destruction_battle
