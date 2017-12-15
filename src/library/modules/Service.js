@@ -634,11 +634,11 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		} else {
 			chrome.tabs.query({ url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/" },
 				(tabs) => {
-					var tab = tabs[0]
+					var tab = tabs[0];
 					if (tab != null) {
-						chrome.windows.update(tab.windowId, { focused: true })
-						chrome.tabs.update(tab.id, { active: true })
-						chrome.notifications.clear(notificationId)
+						chrome.windows.update(tab.windowId, { focused: true });
+						chrome.tabs.update(tab.id, { active: true });
+						chrome.notifications.clear(notificationId);
 					}
 				})
 		}
