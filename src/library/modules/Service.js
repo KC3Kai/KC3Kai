@@ -627,13 +627,23 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	// Chrome Desktop Notifications: Box Click
-	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+	chrome.notifications.onClicked.addListener(function (notificationId, byUser) {
 		if (notificationId == "kc3kai_update") {
 			window.open("../../pages/update/update.html", "kc3_update_page");
 			chrome.notifications.clear("kc3kai_update");
+		} else {
+			chrome.tabs.query({ url: "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/" },
+				(tabs) => {
+					var tab = tabs[0]
+					if (tab != null) {
+						chrome.windows.update(tab.windowId, { focused: true })
+						chrome.tabs.update(tab.id, { active: true })
+						chrome.notifications.clear(notificationId)
+					}
+				})
 		}
 	});
-	
+
 	// Chrome Desktop Notifications: Button Click
 	chrome.notifications.onButtonClicked.addListener(function(notificationId, buttonIndex){
 		if (notificationId == "kc3kai_update") {
