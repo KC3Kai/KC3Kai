@@ -67,7 +67,7 @@
 --------------------------------*/
 .tab_encounters .encounter_record {
 	width:260px;
-	height:50px;
+	height:auto;
 	float:left;
 	margin:0px 20px 10px 0px;
 	padding:3px 5px;
@@ -88,11 +88,11 @@
 }
 .tab_encounters .encounter_ships {
 	width:210px;
-	height:44px;
+	height:auto;
 	float:left;
 }
 .tab_encounters .encounter_ships.combined {
-	width:130px;
+	width:185px;
 }
 
 .tab_encounters .encounter_ship {
@@ -102,10 +102,13 @@
 	margin:0px 5px 0px 0px;
 }
 .tab_encounters .combined .encounter_ship {
-	transform:scale(0.5);
+	transform:scale(0.75);
 	transform-origin:24px 0px;
-	width:16px;
-	height:24px;
+	width:22px;
+	height:34px;
+}
+.tab_encounters .encounter_ship.escort_flagship {
+	margin-left:14px;
 }
 .tab_encounters .encounter_icon {
 	width:30px;

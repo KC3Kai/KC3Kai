@@ -203,6 +203,7 @@
 									.click(shipClickFunc);
 								$(".encounter_id", shipBox).text(shipId);
 								$(shipBox).attr("title", KC3Meta.abyssShipName(shipId));
+								shipBox.toggleClass("escort_flagship", shipIndex === 6);
 								shipBox.appendTo($(".encounter_ships", curBox));
 							}
 						});
