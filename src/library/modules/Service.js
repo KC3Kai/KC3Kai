@@ -640,7 +640,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						chrome.tabs.update(tab.id, { active: true });
 						chrome.notifications.clear(notificationId);
 					}
-				})
+				});
 		}
 	});
 
