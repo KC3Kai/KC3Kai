@@ -65,7 +65,6 @@ Retrieves when needed to apply on components
 				info_blink_gauge     : false,
 				info_boss            : false,
 				info_delta           : false,
-				info_format_numbers  : true,
 				info_auto_exped_tab  : true,
 				info_auto_fleet_view : true,
 				info_pvp_info        : true,
@@ -75,6 +74,7 @@ Retrieves when needed to apply on components
 				info_dex_owned_ship  : true,
 				info_chuuha_icon     : true,
 				info_seasonal_icon   : false,
+				info_format_numbers  : true,
 				info_salt            : false,
 				info_troll           : false,
 

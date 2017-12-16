@@ -197,12 +197,6 @@
 				"options" : {}
 			},
 			{
-				"id" : "info_format_numbers",
-				"name" : "SettingsNumberFormat",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "info_auto_exped_tab",
 				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
@@ -268,6 +262,12 @@
 			{
 				"id" : "info_seasonal_icon",
 				"name" : "SettingsSeasonalShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_format_numbers",
+				"name" : "SettingsFormatNumbers",
 				"type" : "check",
 				"options" : {}
 			},
