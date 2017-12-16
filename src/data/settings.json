@@ -197,6 +197,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_format_numbers",
+				"name" : "SettingsNumberFormat",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_auto_exped_tab",
 				"name" : "SettingsAutoExpedTab",
 				"type" : "check",
