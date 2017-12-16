@@ -869,6 +869,10 @@ Provides access to data on built-in JSON files
 				return sortedGearInfo;
 			}
 			return false;
+		},
+
+		formatNumber :function(number, locale, options){
+			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ? number : number.toLocaleString(locale, options);
 		}
 	};
 	
