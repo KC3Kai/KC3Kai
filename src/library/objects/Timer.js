@@ -166,8 +166,9 @@ Has functions for TimerManager to use
 		// Tell background page to show the notification, cant do it here
 		if(ConfigManager.alert_desktop){
 			(new RMsg("service", "notify_desktop", {
-				notifId: this.type+"_"+this.num,
-				data: notifData
+				notifId: [this.type, this.num].join('_'),
+				data: notifData,
+				tabId: chrome.devtools.inspectedWindow.tabId
 			})).execute();
 		}
 	

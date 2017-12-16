@@ -553,9 +553,9 @@ KC3改 Ship Object
 			ev: this.ev[0],
 			fp: this.fp[0],
 			// Naked HP maybe mean HP before marriage
-			hp: this.master().api_taik[0],
+			hp: (this.master().api_taik || [])[0] || this.hp[1],
 			// Luck can be only added by modernization
-			lk: this.master().api_luck[0],
+			lk: (this.master().api_luck || [])[0] || this.lk[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
 			// Accuracy not shown in-game, so naked value might be plus-minus 0

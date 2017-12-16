@@ -85,10 +85,25 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
 			// Clear old notification first
-			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+			chrome.notifications.clear("kc3kai_" + request.notifId, function(){
 				// Add notification
-				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-				
+				chrome.notifications.create("kc3kai_" + request.notifId, request.data, function(createdId){
+					// Handler on notification box clicked
+					var clickHandler = function(clickedId){
+						if(clickedId === createdId){
+							var gameTabId = request.tabId;
+							chrome.notifications.clear(clickedId);
+							chrome.notifications.onClicked.removeListener(clickHandler);
+							if(gameTabId){
+								chrome.tabs.get(gameTabId, function(tab){
+									chrome.windows.update(tab.windowId, { focused: true });
+									chrome.tabs.update(gameTabId, { active: true });
+								});
+							}
+						}
+					};
+					chrome.notifications.onClicked.addListener(clickHandler);
+				});
 			});
 			// Sending Mobile Push notification if enabled
 			if(ConfigManager.PushAlerts_enabled) {
