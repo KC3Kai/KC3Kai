@@ -85,6 +85,21 @@
 	height:15px;
 	float:left;
 }
+.tab_expedpast .fleetCounts .fleetSparkles {
+	width:100px;
+	height:40px;
+	line-height:20px;
+}
+.tab_expedpast .fleetCounts .fleetDropdown input {
+	width:30px;
+	height:20px;
+	float:left;
+}
+.tab_expedpast .fleetCounts .typeSelect select {
+	width:40px;
+	height:20px;
+	float:left;
+}
 
 /* PAGINATION
 --------------------------------*/
@@ -97,7 +112,11 @@
 .tab_expedpast .exped_pages .pagination {
 	margin:0px;
 }
-
+.tab_expedpast .exped_count {
+	font-size:12px;
+	line-height:12px;
+	margin:0px 5px 5px 5px;
+}
 /* RECORDS
 --------------------------------*/
 .tab_expedpast .exped_item {
