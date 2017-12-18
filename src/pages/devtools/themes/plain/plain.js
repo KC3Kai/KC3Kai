@@ -369,7 +369,8 @@
 								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
 								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 								iconUrl: "../../assets/img/ui/morale.png"
-							}
+							},
+							tabId: chrome.devtools.inspectedWindow.tabId
 						})).execute();
 					}
 				}

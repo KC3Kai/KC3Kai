@@ -40,11 +40,16 @@ Executes processing and relies on KC3Network for the triggers
 		});
 		this.headers = reformatted;
 		
+		// Reformat and decode parameters
 		reformatted = {};
+		var paramsDecoded = {};
 		$.each(this.params, function(index, element){
-			reformatted[ decodeURI(element.name) ] = element.value;
+			var paramName = decodeURI(element.name);
+			reformatted[ paramName ] = element.value;
+			paramsDecoded[ paramName ] = decodeURIComponent(element.value || "");
 		});
 		this.params = reformatted;
+		this.paramsDecoded = paramsDecoded;
 		
 		return true;
 	};
@@ -153,7 +158,7 @@ Executes processing and relies on KC3Network for the triggers
 			
 			// Execute by passing data
 			try {
-				Kcsapi[this.call]( this.params, this.response, this.headers );
+				Kcsapi[this.call]( this.params, this.response, this.headers, this.paramsDecoded );
 			} catch (e) {
 				var reportParams = $.extend({}, this.params);
 				// Protect player's privacy

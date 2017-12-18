@@ -9,11 +9,11 @@
 	},
 	"758": {
 		"api_id": 758,
-		"api_name": "海峡突入時雨",
+		"api_name": "海峡突入時雨改二",
 		"api_yomi": "しぐれ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"759": {
 		"api_id": 759,

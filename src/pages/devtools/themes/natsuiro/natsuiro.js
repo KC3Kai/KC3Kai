@@ -286,7 +286,8 @@
 							title: KC3Meta.term("DesktopNotifyMoraleTitle"),
 							message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 							iconUrl: "../../assets/img/ui/morale.png"
-						}
+						},
+						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
 				}
 			}
@@ -1036,21 +1037,21 @@
 				fc700 = PlayerManager.consumables.furniture700 || 0,
 				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			$(".count_fcoin")
-				.text( PlayerManager.consumables.fcoin || 0 )
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
-				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
-					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0))).lazyInitTooltip();
+				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(...[fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
+					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0)].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
 			$(".count_buckets")
-				.text( PlayerManager.consumables.buckets || 0 )
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_screws")
-				.text( PlayerManager.consumables.screws || 0 )
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.screws || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_torch")
-				.text( PlayerManager.consumables.torch || 0 )
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_devmats")
-				.text( PlayerManager.consumables.devmats || 0 )
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.devmats || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
 			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
@@ -1061,32 +1062,32 @@
 					steel = PlayerManager.hq.lastMaterial[2],
 					bauxite = PlayerManager.hq.lastMaterial[3];
 				$(".count_fuel")
-					.text( fuel )
+					.text( KC3Meta.formatNumber(fuel) )
 					.toggleClass("regenCap", fuel >= regenCap)
 					.toggleClass("hardCap", fuel >= getWarnRscCap(PlayerManager.maxResource))
-					.attr("title", fuel >= regenCap ? "\u27A4" + regenCap :
-						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - fuel).toHHMMSS(), regenCap))
+					.attr("title", fuel >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
+						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - fuel).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_steel")
-					.text( steel )
+					.text( KC3Meta.formatNumber(steel) )
 					.toggleClass("regenCap", steel >= regenCap)
 					.toggleClass("hardCap", steel >= getWarnRscCap(PlayerManager.maxResource))
-					.attr("title", steel >= regenCap ? "\u27A4" + regenCap :
-						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - steel).toHHMMSS(), regenCap))
+					.attr("title", steel >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
+						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - steel).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_ammo")
-					.text( ammo )
+					.text( KC3Meta.formatNumber(ammo) )
 					.toggleClass("regenCap", ammo >= regenCap)
 					.toggleClass("hardCap", ammo >= getWarnRscCap(PlayerManager.maxResource))
-					.attr("title", ammo >= regenCap ? "\u27A4" + regenCap :
-						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - ammo).toHHMMSS(), regenCap))
+					.attr("title", ammo >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
+						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - ammo).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_bauxite")
-					.text( bauxite )
+					.text( KC3Meta.formatNumber(bauxite) )
 					.toggleClass("regenCap", bauxite >= regenCap)
 					.toggleClass("hardCap", bauxite >= getWarnRscCap(PlayerManager.maxResource))
-					.attr("title", bauxite >= regenCap ? "\u27A4" + regenCap :
-						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), regenCap))
+					.attr("title", bauxite >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
+						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js

@@ -330,6 +330,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			
 			console.log("Next node", nodeData.api_no, definedKind, thisNode);
 			this.save();
+			return thisNode;
 		},
 		
 		appendNode :function( nodeObj ){

@@ -553,9 +553,9 @@ KC3改 Ship Object
 			ev: this.ev[0],
 			fp: this.fp[0],
 			// Naked HP maybe mean HP before marriage
-			hp: this.master().api_taik[0],
+			hp: (this.master().api_taik || [])[0] || this.hp[1],
 			// Luck can be only added by modernization
-			lk: this.master().api_luck[0],
+			lk: (this.master().api_luck || [])[0] || this.lk[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
 			// Accuracy not shown in-game, so naked value might be plus-minus 0
@@ -596,9 +596,9 @@ KC3改 Ship Object
 				if(equip.masterId === 268) isArcticEquipped = true;
 			}
 		});
-		// Special boost for Arctic Camouflage equipped on Tama Kai / Kai Ni, Kiso Kai Ni
+		// Special boost for Arctic Camouflage equipped on Tama K / K2, Kiso K / K2
 		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
-		if(isArcticEquipped && [146,216,547].indexOf(this.masterId) > -1) {
+		if(isArcticEquipped && [146, 216, 217, 547].indexOf(this.masterId) > -1) {
 			total += ({
 				"souk": 2,
 				"houk": 7
