@@ -38,6 +38,10 @@
 	float:left;
 	border-radius:7px;
 }
+.tab_flowchart .questControls .questControl.showAll {
+	width:200px;
+	margin-top:2px;
+}
 .tab_flowchart .flowchart {
 	width:680px;
 	overflow:hidden;
@@ -261,4 +265,12 @@
 	height:12px;
 	margin:2px;
 	vertical-align:top;
+}
+.tab_flowchart .questExtraItem .questIcon.ticked {
+	background-image:url(../../../../assets/img/ui/quest_check.png);
+	background-repeat:no-repeat;
+	background-size:16px 16px;
+	background-position-x:25px;
+	background-position-y:4px;
+	background-blend-mode:normal;
 }
