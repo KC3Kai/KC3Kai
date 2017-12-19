@@ -93,7 +93,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						if(clickedId === createdId){
 							var gameTabId = request.tabId;
 							chrome.notifications.clear(clickedId);
-							chrome.notifications.onClicked.removeListener(clickHandler);
 							if(gameTabId){
 								chrome.tabs.get(gameTabId, function(tab){
 									chrome.windows.update(tab.windowId, { focused: true });
@@ -102,7 +101,16 @@ See Manifest File [manifest.json] under "background" > "scripts"
 							}
 						}
 					};
+					// Handler to clean one-time listeners on notification closed,
+					// since life cycle of listeners not the same with notifications.
+					var cleanListenersHandler = function(notificationId, byUser){
+						if(notificationId === createdId){
+							chrome.notifications.onClicked.removeListener(clickHandler);
+							chrome.notifications.onClosed.removeListener(cleanListenersHandler);
+						}
+					};
 					chrome.notifications.onClicked.addListener(clickHandler);
+					chrome.notifications.onClosed.addListener(cleanListenersHandler);
 				});
 			});
 			// Sending Mobile Push notification if enabled
@@ -642,7 +650,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	// Chrome Desktop Notifications: Box Click
-	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+	chrome.notifications.onClicked.addListener(function(notificationId){
 		if (notificationId == "kc3kai_update") {
 			window.open("../../pages/update/update.html", "kc3_update_page");
 			chrome.notifications.clear("kc3kai_update");
