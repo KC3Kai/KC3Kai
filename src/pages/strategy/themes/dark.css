@@ -1684,7 +1684,8 @@ button, input, select, textarea {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete .questDesc {
+.tab_flowchart .questInfo.complete .questDesc ,
+.tab_flowchart .questExtraItem.complete .questDesc {
 	color:#4caf50;
 }
 .tab_flowchart .questExtraItem.active {
