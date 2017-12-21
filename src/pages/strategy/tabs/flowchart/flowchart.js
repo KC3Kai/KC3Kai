@@ -5,6 +5,7 @@
 	
 	KC3StrategyTabs.flowchart.definition = {
 		tabSelf: KC3StrategyTabs.flowchart,
+		showingAll: false,
 		
 		flowchartIds: [],
 		
@@ -28,6 +29,7 @@
 		---------------------------------*/
 		execute :function(){
 			// Flowchart root nodes
+			var self = this;
 			var rootQuestTree = $(".tab_flowchart .flowchart ul.questTree");
 			this.seedBranch( rootQuestTree, 201 ); // Bd1
 			this.seedBranch( rootQuestTree, 303 ); // Cd2
@@ -42,17 +44,32 @@
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
 			this.seedBranch( rootQuestTree, 861 ); // Bq3
 			this.seedBranch( rootQuestTree, 873 ); // Bq5
-			this.seedBranch( rootQuestTree, 675 ); // F67
 			
 			// Other non-flowchart quests
 			var rootQuestList = $(".tab_flowchart .extralist ul.questList");
-			for(var ctr in KC3QuestManager.open){
-				var anotherQuest = KC3QuestManager.get( KC3QuestManager.open[ctr] );
-				if(this.flowchartIds.indexOf( KC3QuestManager.open[ctr] ) === -1){
-					this.addOtherQuest( anotherQuest );
-				}
+			var otherQuests = [];
+			for(var ctr in KC3QuestManager.list){
+				var anotherQuest = KC3QuestManager.list[ctr];
+				if(anotherQuest.id > 0 && this.flowchartIds.indexOf( anotherQuest.id ) === -1)
+					otherQuests.push( anotherQuest );
 			}
+			otherQuests.sort((a, b) => a.id - b.id); // sort like ingame
+			for(var otherQuest of otherQuests)
+				self.addOtherQuest(otherQuest);
+			$(".tab_flowchart .extralist .complete").hide();
 			
+			$(".showAll").on("click", function() {
+				if(self.showingAll) {
+					$(".tab_flowchart .extralist .complete").hide();
+					$(this).text("Show completed one-time quests");
+				} else {
+					$(".tab_flowchart .extralist .complete").show();
+					$(this).text("Hide completed one-time quests");
+				}
+
+				self.showingAll = !self.showingAll;
+			});
+
 			$(".resetDailies").on("click", function(){
 				KC3QuestManager.resetDailies();
 				KC3StrategyTabs.reloadTab(undefined, true);
@@ -241,6 +258,7 @@
 				// Complete
 				case 3:
 					$(thisBox).addClass("complete");
+					$(".questIcon", thisBox).addClass("ticked");
 					break;
 				// Else
 				default:

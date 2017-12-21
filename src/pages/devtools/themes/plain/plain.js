@@ -369,7 +369,8 @@
 								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
 								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 								iconUrl: "../../assets/img/ui/morale.png"
-							}
+							},
+							tabId: chrome.devtools.inspectedWindow.tabId
 						})).execute();
 					}
 				}
@@ -1828,7 +1829,7 @@
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt].toLocaleString() );
+			.text( KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]) );
 	}
 	
 	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {

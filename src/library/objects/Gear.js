@@ -230,6 +230,8 @@ KC3改 Equipment Object
 			case 45: // seaplane fighter
 				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 				modifier = 0.2; break;
+			case 48: // LB fighter or LB interceptor
+				modifier = 0.2; break;
 		}
 		return modifier * stars;
 	};
@@ -443,13 +445,15 @@ KC3改 Equipment Object
 			this.master().api_tais > 0;
 	};
 
-	KC3Gear.prototype.isHighAswBomber = function(){
+	KC3Gear.prototype.isHighAswBomber = function(forLbas = false){
 		// See http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
-		// Carrier-based or Land-base bombers for now; AS-PBY, Autogyro, Seaplane Recon may not capable.
+		// Carrier-based or Land-base bombers for now; AS-PBY, Autogyro may not capable.
 		// Current implemented:
 		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
-		const type2Ids = [8, 47];
+		// Seaplane Recon may capable for LBAS attack:
+		//   Type 0 Model 11B variants
+		const type2Ids = forLbas ? [8, 10, 47] : [8, 47];
 		return this.masterId > 0 &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;

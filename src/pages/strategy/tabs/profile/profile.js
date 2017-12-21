@@ -65,8 +65,8 @@
 			$(".hq_level .hq_content").text(PlayerManager.hq.level);
 			$(".hq_exp .hq_content").text(
 				"{0} / {1}".format(
-					PlayerManager.hq.exp[3].toLocaleString(),
-					(PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]).toLocaleString()
+					KC3Meta.formatNumber(PlayerManager.hq.exp[3]),
+					KC3Meta.formatNumber(PlayerManager.hq.exp[1] + PlayerManager.hq.exp[3])
 				)
 			);
 			
@@ -78,7 +78,7 @@
 					: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss")
 			);
 			$(".rank_cutval .rank_content").text(
-				PlayerManager.hq.rankPtCutoff.toLocaleString()
+				KC3Meta.formatNumber(PlayerManager.hq.rankPtCutoff)
 			);
 			$(".rank_current .rank_content").text(
 				PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -563,7 +563,8 @@
 					const ke = JSON.parse(d.ke || null);
 					const letter = KC3Meta.nodeLetter(d.world, d.map, d.node);
 					return d.world <= 0 || !Array.isArray(ke) || ke.length < 6
-						|| (d.world < 10 && letter === d.node);
+						|| (d.world < 10 && letter === d.node)
+						|| d.uniqid.indexOf(d.ke) === -1;
 				}).delete().then((count) => {
 					if(count) alert("Done!"); else alert("No bug found!");
 				});
@@ -640,7 +641,7 @@
 						if(ke !== keu){
 							r.ke = JSON.stringify(keu);
 							const id = r.uniqid.split("/");
-							id[4] = r.keu;
+							id[4] = r.ke;
 							r.uniqid = id.join("/");
 						}
 						KC3Database.Encounter(r, true);

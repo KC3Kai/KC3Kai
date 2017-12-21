@@ -250,6 +250,23 @@ Saves and loads significant data for future use
 			return this._raw.mission || {};
 		},
 
+		furniture :function(id, no, type){
+			if(!this.available) return false;
+			if(!id && no >= 0 && type >= 0){
+				$.each(this._raw.furniture, (i, f) => {
+					if(f.api_no === no && f.api_type === type){
+						id = f.api_id;
+						return false;
+					}
+				});
+			}
+			return id > 0 ? this._raw.furniture[id] || false : false;
+		},
+
+		all_furniture :function(){
+			return this._raw.furniture || {};
+		},
+
 		missionDispNo :function(id){
 			var dispNo = (this.mission(id) || {}).api_disp_no;
 			return dispNo || String(id);

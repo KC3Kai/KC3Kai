@@ -178,7 +178,7 @@ KC3改 Ship Box for Natsuiro theme
 				}
 				return title;
 			})(this.shipData) ).lazyInitTooltip();
-		$(".ship_exp_next", this.element).text( this.shipData.exp[1] );
+		$(".ship_exp_next", this.element).text( KC3Meta.formatNumber(this.shipData.exp[1]) );
 		$(".ship_exp_bar", this.element).css("width", (290*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");

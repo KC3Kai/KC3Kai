@@ -85,10 +85,33 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
 			// Clear old notification first
-			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+			chrome.notifications.clear("kc3kai_" + request.notifId, function(){
 				// Add notification
-				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-				
+				chrome.notifications.create("kc3kai_" + request.notifId, request.data, function(createdId){
+					// Handler on notification box clicked
+					var clickHandler = function(clickedId){
+						if(clickedId === createdId){
+							var gameTabId = request.tabId;
+							chrome.notifications.clear(clickedId);
+							if(gameTabId){
+								chrome.tabs.get(gameTabId, function(tab){
+									chrome.windows.update(tab.windowId, { focused: true });
+									chrome.tabs.update(gameTabId, { active: true });
+								});
+							}
+						}
+					};
+					// Handler to clean one-time listeners on notification closed,
+					// since life cycle of listeners not the same with notifications.
+					var cleanListenersHandler = function(notificationId, byUser){
+						if(notificationId === createdId){
+							chrome.notifications.onClicked.removeListener(clickHandler);
+							chrome.notifications.onClosed.removeListener(cleanListenersHandler);
+						}
+					};
+					chrome.notifications.onClicked.addListener(clickHandler);
+					chrome.notifications.onClosed.addListener(cleanListenersHandler);
+				});
 			});
 			// Sending Mobile Push notification if enabled
 			if(ConfigManager.PushAlerts_enabled) {
@@ -627,7 +650,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	// Chrome Desktop Notifications: Box Click
-	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+	chrome.notifications.onClicked.addListener(function(notificationId){
 		if (notificationId == "kc3kai_update") {
 			window.open("../../pages/update/update.html", "kc3_update_page");
 			chrome.notifications.clear("kc3kai_update");

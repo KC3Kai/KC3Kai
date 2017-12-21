@@ -266,6 +266,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_format_numbers",
+				"name" : "SettingsFormatNumbers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",

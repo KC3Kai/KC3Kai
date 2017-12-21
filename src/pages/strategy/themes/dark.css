@@ -1684,7 +1684,8 @@ button, input, select, textarea {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete .questDesc {
+.tab_flowchart .questInfo.complete .questDesc ,
+.tab_flowchart .questExtraItem.complete .questDesc {
 	color:#4caf50;
 }
 .tab_flowchart .questExtraItem.active {
@@ -1888,6 +1889,7 @@ button, input, select, textarea {
 }
 .tab_encounters .encounter_record {
 	background:#414141 !important;
+	border-radius:0px !important;
 }
 
 /* PVP

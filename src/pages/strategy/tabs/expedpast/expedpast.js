@@ -132,6 +132,9 @@
 				});
 				self.tabSelf.definition.refreshList();
 			});
+			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function(){
+				self.tabSelf.definition.refreshList();
+			});
 			
 			// Show initial list
 			self.tabSelf.definition.refreshList();
@@ -140,10 +143,23 @@
 		refreshList :function(){
 			const self = this;
 			
+			$(".tab_expedpast .exped_count").hide();
 			$(".tab_expedpast .exped_list").empty();
 			$(".tab_expedpast .exped_pages").html('<ul class="pagination pagination-sm"></ul>');
+			let typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
+			let target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
+			let sparkled = function(sparkles) {
+				switch(typeSelect) {
+					case 0:
+						return sparkles > target;
+					case 1:
+						return sparkles >= target;
+					case 2:
+						return sparkles == target;
+				}
+			};
 			// Get pagination
-			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, function(numRecords){
+			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, sparkled, function(numRecords, gs, ns, itemCount){
 				const itemsPerPage = 20;
 				const numPages = Math.ceil(numRecords / itemsPerPage);
 				//console.debug("count_expeds", numRecords);
@@ -156,6 +172,11 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
+					$('.tab_expedpast .exped_count').text(
+						"Total pages: {0}, total expeditions: {1}, great success/total success: {2}/{3} ({4}%)"
+							.format(...[numPages, numRecords, gs, ns].map((n) => n.toLocaleString()), 
+								(gs/ns*100).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))
+					).show();
 					$('.tab_expedpast .pagination').show();
 				}else{
 					$('.tab_expedpast .pagination').hide();
@@ -166,7 +187,19 @@
 		showPage :function(pageNumber){
 			const self = this;
 			
-			KC3Database.get_expeds(pageNumber, this.exped_filters, this.fleet_filters, function(response){
+			let typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
+			let target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
+			let sparkled = function(sparkles) {
+				switch(typeSelect) {
+					case 0:
+						return sparkles > target;
+					case 1:
+						return sparkles >= target;
+					case 2:
+						return sparkles == target;
+				}
+			};
+			KC3Database.get_expeds(pageNumber, this.exped_filters, this.fleet_filters, sparkled, function(response){
 				//console.debug("get_expeds", response, self.exped_filters, self.fleet_filters);
 				$(".tab_expedpast .exped_list").empty();
 				
