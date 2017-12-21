@@ -65,8 +65,8 @@
 			$(".hq_level .hq_content").text(PlayerManager.hq.level);
 			$(".hq_exp .hq_content").text(
 				"{0} / {1}".format(
-					PlayerManager.hq.exp[3].toLocaleString(),
-					(PlayerManager.hq.exp[1]+PlayerManager.hq.exp[3]).toLocaleString()
+					KC3Meta.formatNumber(PlayerManager.hq.exp[3]),
+					KC3Meta.formatNumber(PlayerManager.hq.exp[1] + PlayerManager.hq.exp[3])
 				)
 			);
 			
@@ -78,7 +78,7 @@
 					: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss")
 			);
 			$(".rank_cutval .rank_content").text(
-				PlayerManager.hq.rankPtCutoff.toLocaleString()
+				KC3Meta.formatNumber(PlayerManager.hq.rankPtCutoff)
 			);
 			$(".rank_current .rank_content").text(
 				PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })

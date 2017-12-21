@@ -3752,7 +3752,7 @@
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt].toLocaleString() );
+			.text( KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]) );
 	}
 
 	function CraftGearStats(MasterItem, StatProperty, Code){
