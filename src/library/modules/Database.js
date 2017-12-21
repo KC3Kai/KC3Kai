@@ -466,24 +466,30 @@ Uses Dexie.js third-party plugin on the assets directory
 				.count(callback);
 		},
 		
-		get_expeds :function(pageNumber, expeds, fleets, callback){
+		get_expeds :function(pageNumber, expeds, fleets, sparkled, callback){
 			// console.debug("expeds", expeds);
 			var itemsPerPage = 20;
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
 				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
+				.and(function(exped){ return sparkled(exped.fleet.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0)); })
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(callback);
 		},
 		
-		count_expeds: function(expeds, fleets, callback){
+		count_expeds: function(expeds, fleets, sparkled, callback){
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
 				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.count(callback);
+				.and(function(exped){ return sparkled(exped.fleet.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0)); })
+				.toArray(function(arr) {
+					let gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
+					let ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
+					callback(arr.length, gs, ns);
+				});
 		},
 		
 		count_normal_sorties: function(callback){
