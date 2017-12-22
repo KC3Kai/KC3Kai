@@ -74,7 +74,7 @@ Retrieves when needed to apply on components
 				info_dex_owned_ship  : true,
 				info_chuuha_icon     : true,
 				info_seasonal_icon   : false,
-				info_format_numbers  : true,
+				info_format_numbers  : false,
 				info_salt            : false,
 				info_troll           : false,
 
