@@ -316,6 +316,7 @@ Previously known as "Reactor"
 					case 77: PlayerManager.consumables.newAviationMaterial = thisItem.api_count; break;
 					case 78: PlayerManager.consumables.actionReport = thisItem.api_count; break;
 					case 79: PlayerManager.consumables.straitMedal = thisItem.api_count; break;
+					case 80: PlayerManager.consumables.xmasGiftBox = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -2047,6 +2048,11 @@ Previously known as "Reactor"
 					if(itemId === 10) PlayerManager.consumables.furniture200 -= 10;
 					if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
 					if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
+				break;
+				case 51: // exchange 1 xmas select gift box with 1 Reppuu (guessed)
+				case 52: // exchange 1 xmas select gift box with 1 WG42 (guessed)
+				case 53: // exchange 1 xmas select gift box with 4 screws [0, 0, 0, 4]
+					if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
 				break;
 				default:
 					if(isNaN(fExchg)){
