@@ -53,21 +53,24 @@
 				if(anotherQuest.id > 0 && this.flowchartIds.indexOf( anotherQuest.id ) === -1)
 					otherQuests.push( anotherQuest );
 			}
-			otherQuests.sort((a, b) => a.id - b.id); // sort like ingame
-			for(var otherQuest of otherQuests)
+			// Sort by ID like in-game
+			otherQuests.sort((a, b) => a.id - b.id);
+			for(var otherQuest of otherQuests){
 				self.addOtherQuest(otherQuest);
+			}
 			$(".tab_flowchart .extralist .complete").hide();
 			
 			$(".showAll").on("click", function() {
-				if(self.showingAll) {
-					$(".tab_flowchart .extralist .complete").hide();
-					$(this).text("Show completed one-time quests");
-				} else {
-					$(".tab_flowchart .extralist .complete").show();
-					$(this).text("Hide completed one-time quests");
+				if(!self.showingAll) {
+					self.showingAll = true;
 				}
-
-				self.showingAll = !self.showingAll;
+				$(".tab_flowchart .extralist .complete").show();
+			});
+			$(".hideAll").on("click", function() {
+				if(!!self.showingAll) {
+					self.showingAll = false;
+				}
+				$(".tab_flowchart .extralist .complete").hide();
 			});
 
 			$(".resetDailies").on("click", function(){
