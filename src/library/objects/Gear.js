@@ -470,7 +470,7 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isAirRadar = function(){
 		return this.masterId > 0 &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
-			this.master().api_tyku > 0;
+			this.master().api_tyku > 1;
 	};
 
 	KC3Gear.prototype.isHighAccuracyRadar = function(){

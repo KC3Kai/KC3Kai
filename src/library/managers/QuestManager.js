@@ -135,7 +135,7 @@ Uses KC3Quest objects to play around with
 			weekly: {
 				type: 'weekly',
 				key: 'timeToResetWeeklyQuests',
-				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 703],
+				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 676, 703],
 				resetQuests: function () { KC3QuestManager.resetWeeklies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 675, 822, 854, 861, 862, 873],
+				questIds: [426, 428, 637, 643, 663, 675, 822, 854, 861, 862, 873, 875],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -501,18 +501,28 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return (fleet.countShipType(10) +
-							fleet.countShipType(22)) === 2;
+							fleet.countShipType(22)) >= 2;
 					},
 				"862": // Bq4 Sortie 1 AV, 2 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(16) === 1
-							&& fleet.countShipType(3) === 2;
+						return fleet.countShipType(16) >= 1
+							&& fleet.countShipType(3) >= 2;
 					},
 				"873": // Bq5 Sortie 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(3) >= 1;
+					},
+				"875": // Bq6 Sortie DesDiv 31
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShip([
+								543, // Naganami Kai2
+								345, // Takanami Kai
+								359, // Okinami Kai
+								344  // Asashimo Kai
+							]) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

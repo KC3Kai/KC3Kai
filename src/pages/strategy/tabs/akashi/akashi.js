@@ -228,8 +228,9 @@
 							showConsumedItem(stars, null, container);
 						}
 					} else if(itemName !== null){
-						let extraBox = $(".extra_consumed.plus{0}".format(stars), container)
-							.clone().appendTo($(".eq_res_line.plus{0}".format(stars), container));
+						let extraBox = $(".extra_consumed.template.plus{0}".format(stars), container)
+							.clone().removeClass("template")
+							.appendTo($(".eq_res_line.plus{0}".format(stars), container));
 						let consumedItem = toSlotOrUseItem(itemName);
 						showConsumedItem(stars, consumedItem, itemCount, extraBox);
 						checkConsumedItem(stars, consumedItem, itemCount, extraBox);
