@@ -1,4 +1,92 @@
 {
+	"743": {
+		"api_id": 743,
+		"api_name": "Xmas伊8",
+		"api_yomi": "い8",
+		"api_stype": 13,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"744": {
+		"api_id": 744,
+		"api_name": "Xmas霰",
+		"api_yomi": "あられ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"745": {
+		"api_id": 745,
+		"api_name": "Xmas衣笠",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"746": {
+		"api_id": 746,
+		"api_name": "Xmas衣笠改二",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"747": {
+		"api_id": 747,
+		"api_name": "Xmas佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"748": {
+		"api_id": 748,
+		"api_name": "Xmas神威",
+		"api_yomi": "かもい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"749": {
+		"api_id": 749,
+		"api_name": "Xmas長月",
+		"api_yomi": "ながつき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"750": {
+		"api_id": 750,
+		"api_name": "Xmas翔鶴",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"751": {
+		"api_id": 751,
+		"api_name": "XmasLibeccio",
+		"api_yomi": "リベッチオ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"752": {
+		"api_id": 752,
+		"api_name": "Xmas狭霧",
+		"api_yomi": "さぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"753": {
+		"api_id": 753,
+		"api_name": "修羅場秋雲",
+		"api_yomi": "あきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"757": {
 		"api_id": 757,
 		"api_name": "海峡突入満潮改二",
