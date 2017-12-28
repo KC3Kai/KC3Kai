@@ -7275,6 +7275,15 @@ var PS = {};
       };
       return FleetTotalAa;
   })();
+  var FleetTotalFp = (function () {
+      function FleetTotalFp(value0) {
+          this.value0 = value0;
+      };
+      FleetTotalFp.create = function (value0) {
+          return new FleetTotalFp(value0);
+      };
+      return FleetTotalFp;
+  })();
   var FleetDrum = (function () {
       function FleetDrum(value0) {
           this.value0 = value0;
@@ -7351,6 +7360,9 @@ var PS = {};
       };
       var aaTotal = function (n) {
           return [ new FleetTotalAa(n) ];
+      };
+      var fpTotal = function (n) {
+          return [ new FleetTotalFp(n) ];
       };
       var fslAndSc = function (fsl) {
           return function (sc) {
@@ -7495,7 +7507,7 @@ var PS = {};
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
       };
       if (v === 111) {
-          return addGroup(fslAndSc(50)(6))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(sty(1)(KanColle_Generated_SType.CL.value))));
+          return addGroup(fslAndSc(50)(6))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(fpTotal(360)))));
       };
       return [  ];
   };
@@ -7534,6 +7546,9 @@ var PS = {};
       };
       if (v instanceof FleetTotalAa) {
           return "fleet anti-air stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
+      };
+      if (v instanceof FleetTotalFp) {
+          return "fleet fire-power stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
       };
       if (v instanceof FleetDrum) {
           return "fleet should have at least " + (Data_Show.show(Data_Show.showInt)(v.value0) + " drum(s)");
@@ -7595,6 +7610,11 @@ var PS = {};
                       return x.aa;
                   })(fleet)) >= req.value0;
               };
+              if (req instanceof FleetTotalFp) {
+                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                      return x.fp;
+                  })(fleet)) >= req.value0;
+              };
               if (req instanceof FleetDrum) {
                   return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.drumCount;
@@ -7639,6 +7659,7 @@ var PS = {};
   exports["FleetTotalAsw"] = FleetTotalAsw;
   exports["FleetTotalLos"] = FleetTotalLos;
   exports["FleetTotalAa"] = FleetTotalAa;
+  exports["FleetTotalFp"] = FleetTotalFp;
   exports["FleetDrum"] = FleetDrum;
   exports["FleetShipWithDrum"] = FleetShipWithDrum;
   exports["FleetSTypeCount"] = FleetSTypeCount;
@@ -10314,6 +10335,7 @@ var PS = {};
       $2.totalAsw = Data_Nullable.toNullable(rp.totalAsw);
       $2.totalLos = Data_Nullable.toNullable(rp.totalLos);
       $2.totalAa = Data_Nullable.toNullable(rp.totalAa);
+      $2.totalFp = Data_Nullable.toNullable(rp.totalFp);
       $2.drumCount = Data_Nullable.toNullable(rp.drumCount);
       $2.drumCarrierCount = Data_Nullable.toNullable(rp.drumCarrierCount);
       return $2;
@@ -10333,6 +10355,7 @@ var PS = {};
           totalAsw: Data_Nullable.toNullable(rp.totalAsw),
           totalLos: Data_Nullable.toNullable(rp.totalLos),
           totalAa: Data_Nullable.toNullable(rp.totalAa),
+          totalFp: Data_Nullable.toNullable(rp.totalFp),
           drumCount: Data_Nullable.toNullable(rp.drumCount),
           drumCarrierCount: Data_Nullable.toNullable(rp.drumCarrierCount),
           fleetSType: Data_Functor.map(Data_Functor.functorArray)(cov)(rp.fleetSType)
@@ -10346,6 +10369,7 @@ var PS = {};
       totalAsw: Data_Maybe.Nothing.value,
       totalLos: Data_Maybe.Nothing.value,
       totalAa: Data_Maybe.Nothing.value,
+      totalFp: Data_Maybe.Nothing.value,
       drumCount: Data_Maybe.Nothing.value,
       drumCarrierCount: Data_Maybe.Nothing.value,
       fleetSType: [  ]
@@ -10415,6 +10439,16 @@ var PS = {};
                   };
                   $182.totalAa = new Data_Maybe.Just(fleetReq.value0);
                   return $182;
+              };
+              if (fleetReq instanceof KanColle_Expedition_Requirement.FleetTotalFp) {
+                  var $183 = {};
+                  for (var $193 in p) {
+                      if ({}.hasOwnProperty.call(p, $193)) {
+                          $183[$193] = p[$193];
+                      };
+                  };
+                  $183.totalFp = new Data_Maybe.Just(fleetReq.value0);
+                  return $183;
               };
               if (fleetReq instanceof KanColle_Expedition_Requirement.FleetDrum) {
                   var $20 = {};
@@ -10514,6 +10548,11 @@ var PS = {};
                           return s.aa;
                       })(fleet)) >= taa;
                   })(req.totalAa),
+                  totalFp: Data_Functor.map(Data_Maybe.functorMaybe)(function (tfp) {
+                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                          return s.fp;
+                      })(fleet)) >= tfp;
+                  })(req.totalFp),
                   drumCount: Data_Functor.map(Data_Maybe.functorMaybe)(function (dc) {
                       return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.drumCount;
@@ -10543,6 +10582,7 @@ var PS = {};
                   totalAsw: toFalseF(Data_Maybe.functorMaybe)(req.totalAsw),
                   totalLos: toFalseF(Data_Maybe.functorMaybe)(req.totalLos),
                   totalAa: toFalseF(Data_Maybe.functorMaybe)(req.totalAa),
+                  totalFp: toFalseF(Data_Maybe.functorMaybe)(req.totalFp),
                   drumCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCount),
                   drumCarrierCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCarrierCount),
                   fleetSType: toFalseF(Data_Functor.functorArray)(req.fleetSType)
