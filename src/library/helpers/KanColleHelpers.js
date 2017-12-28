@@ -7494,6 +7494,9 @@ var PS = {};
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
       };
+      if (v === 111) {
+          return addGroup(fslAndSc(50)(6))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(sty(1)(KanColle_Generated_SType.CL.value))));
+      };
       return [  ];
   };
   var fromRawShip = function (s) {
@@ -7689,7 +7692,7 @@ var PS = {};
   };
   var allExpeditionIds = Data_Array.range(1)(40);
   allExpeditionIds.push(...Data_Array.range(100)(102));
-  allExpeditionIds.push(110);
+  allExpeditionIds.push(...Data_Array.range(110)(111));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -7864,6 +7867,9 @@ var PS = {};
       };
       if (eId === 110) {
           return income(0)(0)(10)(30);
+      };
+      if (eId === 111) {
+          return income(300)(200)(100)(0);
       };
       return Data_Monoid.mempty(incomeMonoid);
   };
@@ -8040,6 +8046,9 @@ var PS = {};
       };
       if (eId === 110) {
           return c(1.5)(4.5)((35));
+      };
+      if (eId === 111) {
+          return c(6.5)(8)(hm(8)(40));
       };
       return noCost;
   };
@@ -9143,12 +9152,12 @@ var PS = {};
       return EA(Data_Unfoldable.replicate(Data_Unfoldable.unfoldableArray)(40)($42));
   };
   var mkEA = function (xs) {
-      if (Data_Array.length(xs) === 44) {
+      if (Data_Array.length(xs) === 45) {
           return xs;
       };
       if (Data_Boolean.otherwise) {
           return Partial_Unsafe.unsafePartial(function (dictPartial) {
-              return Partial.crash(dictPartial)("expecting exactly 44 elements");
+              return Partial.crash(dictPartial)("expecting exactly 45 elements");
           });
       };
       throw new Error("Failed pattern match at KanColle.Expedition.New.EArray line 26, column 1 - line 28, column 72: " + [ xs.constructor.name ]);
@@ -9160,7 +9169,7 @@ var PS = {};
                   return v[i - 1];
               });
           };
-          if (1 <= 100 && i <= 110) {
+          if (1 <= 100 && i <= 120) {
               return Partial_Unsafe.unsafePartial(function (dictPartial) {
                   return v[i - 60];
               });
@@ -9279,7 +9288,7 @@ var PS = {};
       };
       var full = atLeast(6);
       return KanColle_Expedition_New_EArray.mkEA([ atLeast(2)([  ]), atLeast(4)([  ]), atLeast(3)([  ]), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value)), atLeast(4)(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), atLeast(4)([  ]), full([  ]), full([  ]), atLeast(4)(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), atLeast(3)(sty(2)(KanColle_Expedition_New_SType.CL.value)), atLeast(4)(sty(2)(KanColle_Expedition_New_SType.DD.value)), atLeast(4)(sty(2)(KanColle_Expedition_New_SType.DD.value)), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(4)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(3)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.CVLike.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(3)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(3)(KanColle_Expedition_New_SType.CVLike.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.BBV.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.SSLike.value))(sty(1)(KanColle_Expedition_New_SType.CL.value)), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(4)(KanColle_Expedition_New_SType.DD.value)), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CA.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value)))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.BBV.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(4)(KanColle_Expedition_New_SType.DD.value))), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.CA.value))(sty(2)(KanColle_Expedition_New_SType.DD.value)), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CVLike.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(2)(KanColle_Expedition_New_SType.DD.value))), sty(2)(KanColle_Expedition_New_SType.SSLike.value), sty(3)(KanColle_Expedition_New_SType.SSLike.value), sty(3)(KanColle_Expedition_New_SType.SSLike.value), sty(4)(KanColle_Expedition_New_SType.SSLike.value), sty(4)(KanColle_Expedition_New_SType.SSLike.value), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CT.value))(sty(2)(KanColle_Expedition_New_SType.DD.value)), sty(2)(KanColle_Expedition_New_SType.DD.value), sty(2)(KanColle_Expedition_New_SType.DD.value), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.CVLike.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CA.value))(sty(1)(KanColle_Expedition_New_SType.DD.value)))), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(1)(KanColle_Expedition_New_SType.DD.value)))), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(sty(5)(KanColle_Expedition_New_SType.DD.value)), full(sty(5)(KanColle_Expedition_New_SType.DD.value)), Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.AS.value))(sty(4)(KanColle_Expedition_New_SType.SSLike.value)), full(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Expedition_New_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Expedition_New_SType.AV.value))(sty(2)(KanColle_Expedition_New_SType.DD.value)))),
-        atLeast(4)([  ]), atLeast(4)([  ]), atLeast(5)([  ]), atLeast(6)([  ]) ]);
+        atLeast(4)([  ]), atLeast(4)([  ]), atLeast(5)([  ]), atLeast(6)([  ]), atLeast(6)([  ]) ]);
   })();
   var getMinimumComposition = KanColle_Expedition_New_EArray.indEA(minimumCompositions);
   var concretizeComposition = function (expectCount) {
@@ -9574,7 +9583,7 @@ var PS = {};
           };
       };
       return KanColle_Expedition_New_EArray.mkEA([ i(0)(30)(0)(0), i(0)(100)(30)(0), i(30)(30)(40)(0), i(0)(60)(0)(0), i(200)(200)(20)(20), i(0)(0)(0)(80), i(0)(0)(50)(30), i(50)(100)(50)(50), i(350)(0)(0)(0), i(0)(50)(0)(30), i(0)(0)(0)(250), i(50)(250)(200)(50), i(240)(300)(0)(0), i(0)(240)(200)(0), i(0)(0)(300)(400), i(500)(500)(200)(200), i(70)(70)(50)(0), i(0)(0)(300)(100), i(400)(0)(50)(30), i(0)(0)(150)(0), i(320)(270)(0)(0), i(0)(10)(0)(0), i(0)(20)(0)(100), i(500)(0)(0)(150), i(900)(0)(500)(0), i(0)(0)(0)(900), i(0)(0)(800)(0), i(0)(0)(900)(350), i(0)(0)(0)(100), i(0)(0)(0)(100), i(0)(30)(0)(0), i(50)(50)(50)(50), i(0)(0)(0)(0), i(0)(0)(0)(0), i(0)(0)(240)(280), i(480)(0)(200)(200), i(0)(380)(270)(0), i(420)(0)(200)(0), i(0)(0)(300)(0), i(300)(300)(0)(100),
-        i(45)(45)(0)(0), i(70)(40)(0)(10), i(120)(0)(60)(60), i(0)(0)(10)(30) ]);
+        i(45)(45)(0)(0), i(70)(40)(0)(10), i(120)(0)(60)(60), i(0)(0)(10)(30), i(300)(200)(100)(0) ]);
   })();
   var getResource = KanColle_Expedition_New_EArray.indEA(resources);
   exports["getResource"] = getResource;
@@ -9946,6 +9955,16 @@ var PS = {};
               "api_use_bull":0.45,
               "api_win_item1":[10,1],
               "api_win_item2":[1,1]
+          },
+          {
+              "api_id":111,
+              "api_disp_no":"B2",
+              "api_deck_num":6,
+              "api_time":520,
+              "api_use_fuel":0.65,
+              "api_use_bull":0.8,
+              "api_win_item1":[3,2],
+              "api_win_item2":[1,2]
           }
       ];
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});
