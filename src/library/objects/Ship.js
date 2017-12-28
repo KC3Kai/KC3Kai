@@ -589,13 +589,18 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
-		var isArcticEquipped = false;
+		var isArcticEquipped = false,
+			hasSurfaceRadar = false,
+			count127TwinGunModelDK2 = 0;
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
+				if(equip.masterId === 267) count127TwinGunModelDK2 += 1;
 				if(equip.masterId === 268) isArcticEquipped = true;
+				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
 			}
 		});
+		// Might move these complex definitions to fud_weekly.json?
 		// Special boost for Arctic Camouflage equipped on Tama K / K2, Kiso K / K2
 		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 		if(isArcticEquipped && [146, 216, 217, 547].indexOf(this.masterId) > -1) {
@@ -603,6 +608,29 @@ KC3改 Ship Object
 				"souk": 2,
 				"houk": 7
 			})[apiName] || 0;
+		}
+		// More boosts for 12.7cm Twin Gun Model D K2
+		// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
+		if(count127TwinGunModelDK2 > 0) {
+			const thisShipClass = this.master().api_ctype;
+			const isNaganamiK2 = this.master === 543;
+			const isShimakazeClass = thisShipClass === 22,
+				isYuugumoClass = thisShipClass === 38,
+				isKagerouClass = thisShipClass === 30;
+			let bonus = ({
+				"houg": isNaganamiK2 ? 3 : isYuugumoClass || isShimakazeClass ? 2 : isKagerouClass ? 1 : 0,
+				"souk": isNaganamiK2 ? 1 : 0,
+				"houk": isShimakazeClass || isYuugumoClass || isKagerouClass ? 1 : 0
+			})[apiName] || 0;
+			total += bonus * count127TwinGunModelDK2;
+			// Synergy with Surface Radar for Naganami Kai Ni and Shimakaze
+			if(hasSurfaceRadar && (isNaganamiK2 || isShimakazeClass)) {
+				total += ({
+					"houg": 1,
+					"raig": 3,
+					"houk": 2
+				})[apiName] || 0;
+			}
 		}
 		return total;
 	};
@@ -1847,8 +1875,11 @@ KC3改 Ship Object
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(hasCapableRadar && hasSkilledLookout)
 					return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
-				if(hasCapableRadar && smallMainGunCnt >= 1)
-					return ["Cutin", 7, "CutinMainTorpRadar", 1.3];
+				if(hasCapableRadar && smallMainGunCnt >= 1) {
+					// https://twitter.com/ayanamist_m2/status/944176834551222272
+					const has127TwinGunModelD2 = this.hasEquipment(267);
+					return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * (has127TwinGunModelD2 ? 1.25 : 1)];
+				}
 			}
 			// special torpedo cut-in for late model submarine torpedo
 			const lateTorpedoCnt = this.countEquipment([213, 214]);

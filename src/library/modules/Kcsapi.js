@@ -1792,19 +1792,27 @@ Previously known as "Reactor"
 					gearMaster.api_broken.forEach(function(x,i){
 						rsc[i] += x;
 					});
-					// F34: Weekly Scrap Anti-Air Guns
-					// F66: Daily Scrap Anti-Air Guns
-					if([21].indexOf(gearMaster.api_type[2]) > -1){
-						KC3QuestManager.get(638).increment();
-						KC3QuestManager.get(674).increment();
-					}
-					// F55: Quarterly Scrap 10 Large Caliber Main Guns
-					if([3].indexOf(gearMaster.api_type[2]) > -1){
-						KC3QuestManager.get(663).increment();
-					}
-					// F65: Daily Scrap Small Caliber Main Guns
-					if([1].indexOf(gearMaster.api_type[2]) > -1){
-						KC3QuestManager.get(673).increment();
+					// To track scrapping quests
+					switch(gearMaster.api_type[2]){
+						case 1: // Small Caliber Main Gun
+							KC3QuestManager.get(673).increment(); // F65 daily
+							break;
+						case 2: // Medium Caliber Main Gun
+							KC3QuestManager.get(676).increment(0); // F68 weekly index 0
+							break;
+						case 3: // Large Caliber Main Gun
+							KC3QuestManager.get(663).increment(); // F55 quarterly
+							break;
+						case 4: // Secondary Gun
+							KC3QuestManager.get(676).increment(1); // F68 weekly index 1
+							break;
+						case 21: // Anti-Air Gun
+							KC3QuestManager.get(638).increment(); // F34 weekly
+							KC3QuestManager.get(674).increment(); // F66 daily
+							break;
+						case 30: // Supply Container
+							KC3QuestManager.get(676).increment(2); // F68 weekly index 2
+							break;
 					}
 				}
 				KC3GearManager.remove(itemId);
@@ -2271,7 +2279,8 @@ Previously known as "Reactor"
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
-					[854,3,[6,4], true, true]  // Bq2: 4th requirement: [W6-4] S-rank the boss node
+					[854,3,[6,4], true, true], // Bq2: 4th requirement: [W6-4] S-rank the boss node
+					[875,0,[5,4], true, true]  // Bq6: Sortie to [W5-4] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
