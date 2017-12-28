@@ -117,7 +117,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..40, 100..102, 110
+		// * expedNum: 1..40, 100..102, 110, 111
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -136,13 +136,13 @@
 			}
 			data.expedConf = {};
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 40));
-			fillExpedConfDefaultGreatSuccess(100, 101, 102, 110);
+			fillExpedConfDefaultGreatSuccess(100, 101, 102, 110, 111);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
 			// add default GS config for new added expeditions
 			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
-			// * extended since 2017-10-25: 110 B1 for World 2
+			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -1511,11 +1511,12 @@
 						case 3:
 						case 4:
 							const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-							return "{0}: {3}\n{1}: {4}\n{2}: {5}".format(
+							return "{0}: {4}\n{1}: {5}\n{2}: {6}\n{3}: {7}".format(
+								KC3Meta.term("ExpedTotalFp"),
 								KC3Meta.term("ExpedTotalAa"),
 								KC3Meta.term("ExpedTotalAsw"),
 								KC3Meta.term("ExpedTotalLos"),
-								fstats.aa, fstats.as, fstats.ls
+								fstats.fp, fstats.aa, fstats.as, fstats.ls
 							);
 						default: return "";
 					}
@@ -3252,7 +3253,7 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
-				var los = shipInst.ls[0], aa = shipInst.aa[0];
+				var los = shipInst.ls[0], aa = shipInst.aa[0], fp = shipInst.fp[0];
 				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
 				return {
 					ammo : 0,
@@ -3262,7 +3263,8 @@
 					drumCount : drumCount,
 					asw : asw,
 					los : los,
-					aa : aa
+					aa : aa,
+					fp : fp
 				};
 			});
 
@@ -3475,6 +3477,16 @@
 				$(".module.activity .activity_expeditionPlanner .hasTotalLos").hide();
 			} else {
 				$(".module.activity .activity_expeditionPlanner .hasTotalLos").show();
+			}
+			setupJQObject(
+				ExpdReqPack.totalFp,
+				ExpdCheckerResult.totalFp,
+				$(".module.activity .activity_expeditionPlanner .totalFp")
+			);
+			if (ExpdReqPack.totalFp === null) {
+				$(".module.activity .activity_expeditionPlanner .hasTotalFp").hide();
+			} else {
+				$(".module.activity .activity_expeditionPlanner .hasTotalFp").show();
 			}
 
 			setupJQObject(

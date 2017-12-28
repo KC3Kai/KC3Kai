@@ -90,6 +90,7 @@
                  , ammo: Int
                  , catapult: Int
                  , blueprint: Int
+                 , report: Int
                  , devmat: Int
                  , torch: Int
                  }
@@ -120,6 +121,7 @@
                       // these fields are unknown for now
                       catapult: 0,
                       blueprint: 0,
+                      report: 0,
                       devmat: 0,
                       torch: 0
                     };
@@ -143,6 +145,7 @@
                     "data inconsistent:", x.api_id);
                 remodel.catapult = x.api_catapult_count;
                 remodel.blueprint = x.api_drawing_count;
+                remodel.report = x.api_report_count;
                 if(self.isIgnoreDevMat(remodel.blueprint, remodel.ship_id_from))
                     remodel.devmat = 0;
             });

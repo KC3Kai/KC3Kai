@@ -77,7 +77,7 @@
 			this.shipList.length = 0;
 			Object.keys(allRemodelInfo).forEach(key => {
 				const remodelInfo = allRemodelInfo[key];
-				if(remodelInfo.blueprint || remodelInfo.catapult) {
+				if(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report) {
 					const shipMaster = KC3Master.ship(remodelInfo.ship_id_from);
 					const shipData = {
 						id: remodelInfo.ship_id_from,
@@ -131,6 +131,14 @@
 					if(remodelInfo.catapult) {
 						mappedObj.materials.push({
 							icon: 65,
+							info: remodelInfo,
+							used: isUsed
+						});
+						mappedObj.materialsUsed += isUsed;
+					}
+					if(remodelInfo.report) {
+						mappedObj.materials.push({
+							icon: 78,
 							info: remodelInfo,
 							used: isUsed
 						});
@@ -195,6 +203,7 @@
 					.filter(filter).map(
 					m => new Array(m.icon === 58 ? m.info.blueprint :
 									m.icon === 65 ? m.info.catapult :
+									m.icon === 78 ? m.info.report :
 									1).fill(m.icon)
 				))).map(icon => {
 					resultMap[icon] = resultMap[icon] || 0;
@@ -230,6 +239,9 @@
 						break;
 					case 65:
 						appendOwnedItem(iconImg, PlayerManager.consumables.protoCatapult);
+						break;
+					case 78:
+						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
 						break;
 				}
 			}
@@ -306,6 +318,16 @@
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 2)
 					.text(remodelInfo.catapult)
+					.appendTo(line);
+			}
+			if(remodelInfo.report) {
+				$("<img />")
+					.attr("src", "../../assets/img/useitems/78.png")
+					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 2)
+					.text(remodelInfo.report)
 					.appendTo(line);
 			}
 			if(remodelInfo.devmat) {

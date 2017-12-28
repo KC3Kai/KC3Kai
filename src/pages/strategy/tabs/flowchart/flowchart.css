@@ -20,9 +20,10 @@
 	padding:5px 10px;
 }
 .tab_flowchart .questControls .questLabel {
-	width:90px;
+	width:auto;
 	height:20px;
 	line-height:20px;
+	margin-right:5px;
 	font-size:12px;
 	float:left;
 	font-weight:bold;
@@ -31,16 +32,12 @@
 	width:90px;
 	height:20px;
 	line-height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 2px 0px;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
 	float:left;
 	border-radius:7px;
-}
-.tab_flowchart .questControls .questControl.showAll {
-	width:200px;
-	margin-top:2px;
 }
 .tab_flowchart .flowchart {
 	width:680px;

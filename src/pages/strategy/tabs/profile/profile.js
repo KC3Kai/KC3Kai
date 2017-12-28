@@ -252,7 +252,7 @@
 					"Reward 1", "Reward 2", "Result", "Date", "Fleet#",
 					"Ship #1", "Ship #2", "Ship #3",
 					"Ship #4", "Ship #5", "Ship #6",
-				].concat(forAsw ? ["Total AA", "Total LoS", "Total ASW"] : [])
+				].concat(forAsw ? ["Total FP", "Total AA", "Total LoS", "Total ASW"] : [])
 				.join(",") + CSV_LINE_BREAKS;
 				const buildRewardItemText = (data, index) => {
 					const flag = data.api_useitem_flag[index - 1],
@@ -271,6 +271,8 @@
 				};
 				const sumShipStats = (shipInfo) => {
 					const stats = {
+						fp: 0,
+						fpEquip: 0,
 						aa: 0,
 						aaEquip: 0,
 						los: 0,
@@ -279,10 +281,12 @@
 						aswEquip: 0
 					};
 					const shipMst = KC3Master.ship(shipInfo.mst_id);
+					stats.fpEquip = sumEquipStats(shipInfo.equip, "houg");
 					stats.aaEquip = sumEquipStats(shipInfo.equip, "tyku");
 					stats.losEquip = sumEquipStats(shipInfo.equip, "saku");
 					stats.aswEquip = sumEquipStats(shipInfo.equip, "tais");
-					stats.aa = shipMst.api_tyku[0] + shipInfo.kyouka[2];
+					stats.aa = shipMst.api_houg[0] + shipInfo.kyouka[0];
+					stats.fp = shipMst.api_tyku[0] + shipInfo.kyouka[2];
 					if(shipInfo.stats){
 						stats.los = shipInfo.stats.ls || 0;
 						stats.asw = shipInfo.stats.as || 0;
@@ -299,6 +303,7 @@
 				db.reverse().toArray(function(result){
 					result.forEach(function(expedInfo){
 						const fleetStats = {
+							fp: 0,
 							aa: 0,
 							los: 0,
 							asw: 0,
@@ -306,6 +311,7 @@
 						const shipsInfo = expedInfo.fleet.map(ship => {
 							if(ship.mst_id > 0){
 								const stats = sumShipStats(ship);
+								fleetStats.fp += stats.fp + stats.fpEquip;
 								fleetStats.aa += stats.aa + stats.aaEquip;
 								fleetStats.los += stats.los + stats.losEquip;
 								fleetStats.asw += stats.asw + stats.aswEquip;
@@ -315,7 +321,8 @@
 									"Lv:" + ship.level,
 									"Morale:" + ship.morale,
 									"Drums:" + ship.equip.reduce((drums, id) => drums+=(id===75), 0)
-								].concat(forAsw ? ["AA+-LoS+-ASW+-",
+								].concat(forAsw ? ["FP+-AA+-LoS+-ASW+-",
+										stats.fp + stats.fpEquip, stats.fp,
 										stats.aa + stats.aaEquip, stats.aa,
 										stats.los + stats.losEquip, stats.los,
 										stats.asw + stats.aswEquip, stats.asw].join(":") : []
@@ -340,7 +347,7 @@
 							csvQuoteIfNecessary(new Date(expedInfo.time * 1000).format("mmm dd, yyyy hh:MM tt")),
 							expedInfo.fleetN
 						].concat(shipsInfo)
-						.concat(forAsw ? [fleetStats.aa, fleetStats.los, fleetStats.asw] : [])
+						.concat(forAsw ? [fleetStats.fp, fleetStats.aa, fleetStats.los, fleetStats.asw] : [])
 						.join(",") + CSV_LINE_BREAKS;
 					});
 					
