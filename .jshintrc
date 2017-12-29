@@ -98,6 +98,7 @@
 		"JSZip": true,
 		"Dexie": true,
 		"markdown": true,
+		"wanakana": true,
 		"steg": true
 	},
 	"undef": true,

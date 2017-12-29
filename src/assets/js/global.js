@@ -256,6 +256,13 @@ String.prototype.toArray = function() {
 };
 
 /**
+ * Capitalize first letter and lower case left letters.
+ */
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+};
+
+/**
  * String.format("msg {0} is {1}", args) - convenient placeholders replacing,
  * from http://jqueryvalidation.org/jQuery.validator.format/
  *

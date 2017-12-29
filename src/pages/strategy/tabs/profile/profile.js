@@ -448,6 +448,37 @@
 					});
 			});
 			
+			// Export CSV: Shipgirl Master Data
+			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots"
+				].join(",") + CSV_LINE_BREAKS;
+				$.each(KC3Master.all_ships(), (i, s) => {
+					if(KC3Master.isRegularShip(s.api_id)) {
+						exportData += [
+							s.api_id,
+							csvQuoteIfNecessary(KC3Meta.shipName(s.api_name)),
+							csvQuoteIfNecessary(s.api_yomi),
+							csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
+							csvQuoteIfNecessary(KC3Meta.stype(s.api_stype)),
+							csvQuoteIfNecessary(KC3Meta.ctype(s.api_ctype)),
+							RemodelDb.remodelGroup(s.api_id).join('/'),
+							s.api_taik.join('/'),
+							s.api_houg.join('/'),
+							s.api_souk.join('/'),
+							s.api_raig.join('/'),
+							s.api_tyku.join('/'),
+							s.api_luck.join('/'),
+							s.api_soku,
+							s.api_maxeq.slice(0, s.api_slot_num).join('/')
+						].join(",") + CSV_LINE_BREAKS;
+					}
+				});
+				const filename = self.makeFilename("Shipgirls", "csv");
+				self.saveFile(filename, exportData, "text/csv");
+			});
+			
 			// Export CSV: Abyssal Enemies
 			$(".tab_profile .export_csv_abyssal").on("click", function(event){
 				// CSV Headers
