@@ -748,6 +748,7 @@
 			} else {
 				$(".newsfeed").hide();
 			}
+			$(".newsfeed .feed_text").toggleClass("jp_fonts", showRawNewsfeed);
 		},
 		
 		showFeedItem: function(index, time, log, showRawNewsfeed){
