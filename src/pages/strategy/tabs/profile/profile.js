@@ -539,17 +539,6 @@
 				});
 			});
 			
-			// Clear RemodelDb
-			$(".tab_profile .clear_remodeldb").on("click", function(event) {
-				let result = confirm(
-					"You are about to remove ship remodel information, " +
-						"it won't be available until next time you restart game with KC3.");
-				if(result === true) {
-					delete localStorage.remodelDb;
-					window.location.reload();
-				}
-			});
-
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
@@ -567,6 +556,18 @@
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();
+			});
+			
+			// Clear RemodelDb (will be rebuilt on page reloaded)
+			$(".tab_profile .clear_remodeldb").on("click", function(event) {
+				const result = confirm(
+					"You are about to rebuild ship remodel information,\n"
+					+ "it won't be correct until next time you restart game with KC3 to get latest ship data."
+				);
+				if(result === true) {
+					delete localStorage.remodelDb;
+					window.location.reload();
+				}
 			});
 			
 			// Clear inconsistent localStorage cached ships & gears
