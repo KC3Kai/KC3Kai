@@ -448,6 +448,37 @@
 					});
 			});
 			
+			// Export CSV: Shipgirl Master Data
+			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots"
+				].join(",") + CSV_LINE_BREAKS;
+				$.each(KC3Master.all_ships(), (i, s) => {
+					if(KC3Master.isRegularShip(s.api_id)) {
+						exportData += [
+							s.api_id,
+							csvQuoteIfNecessary(KC3Meta.shipName(s.api_name)),
+							csvQuoteIfNecessary(s.api_yomi),
+							csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
+							csvQuoteIfNecessary(KC3Meta.stype(s.api_stype)),
+							csvQuoteIfNecessary(KC3Meta.ctype(s.api_ctype)),
+							RemodelDb.remodelGroup(s.api_id).join('/'),
+							s.api_taik.join('/'),
+							s.api_houg.join('/'),
+							s.api_souk.join('/'),
+							s.api_raig.join('/'),
+							s.api_tyku.join('/'),
+							s.api_luck.join('/'),
+							s.api_soku,
+							s.api_maxeq.slice(0, s.api_slot_num).join('/')
+						].join(",") + CSV_LINE_BREAKS;
+					}
+				});
+				const filename = self.makeFilename("Shipgirls", "csv");
+				self.saveFile(filename, exportData, "text/csv");
+			});
+			
 			// Export CSV: Abyssal Enemies
 			$(".tab_profile .export_csv_abyssal").on("click", function(event){
 				// CSV Headers
@@ -508,17 +539,6 @@
 				});
 			});
 			
-			// Clear RemodelDb
-			$(".tab_profile .clear_remodeldb").on("click", function(event) {
-				let result = confirm(
-					"You are about to remove ship remodel information, " +
-						"it won't be available until next time you restart game with KC3.");
-				if(result === true) {
-					delete localStorage.remodelDb;
-					window.location.reload();
-				}
-			});
-
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
@@ -536,6 +556,18 @@
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();
+			});
+			
+			// Clear RemodelDb (will be rebuilt on page reloaded)
+			$(".tab_profile .clear_remodeldb").on("click", function(event) {
+				const result = confirm(
+					"You are about to rebuild ship remodel information,\n"
+					+ "it won't be correct until next time you restart game with KC3 to get latest ship data."
+				);
+				if(result === true) {
+					delete localStorage.remodelDb;
+					window.location.reload();
+				}
 			});
 			
 			// Clear inconsistent localStorage cached ships & gears
@@ -717,6 +749,7 @@
 			} else {
 				$(".newsfeed").hide();
 			}
+			$(".newsfeed .feed_text").toggleClass("jp_fonts", showRawNewsfeed);
 		},
 		
 		showFeedItem: function(index, time, log, showRawNewsfeed){

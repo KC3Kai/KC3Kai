@@ -617,9 +617,8 @@ KC3改 Ship Object
 			const isShimakazeClass = thisShipClass === 22,
 				isYuugumoClass = thisShipClass === 38,
 				isKagerouClass = thisShipClass === 30;
-			let bonus = ({
+			const bonus = ({
 				"houg": isNaganamiK2 ? 3 : isYuugumoClass || isShimakazeClass ? 2 : isKagerouClass ? 1 : 0,
-				"souk": isNaganamiK2 ? 1 : 0,
 				"houk": isShimakazeClass || isYuugumoClass || isKagerouClass ? 1 : 0
 			})[apiName] || 0;
 			total += bonus * count127TwinGunModelDK2;

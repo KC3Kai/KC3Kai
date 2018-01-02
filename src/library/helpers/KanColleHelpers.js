@@ -7507,7 +7507,7 @@ var PS = {};
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
       };
       if (v === 111) {
-          return addGroup(fslAndSc(50)(6))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(fpTotal(360)))));
+          return addGroup(fslAndSc(45)(6))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(fpTotal(360)))));
       };
       return [  ];
   };

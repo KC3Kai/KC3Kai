@@ -441,7 +441,7 @@ Does not include Ships and Gears which are managed by other Managers
 
 		loadConsumables :function(){
 			if(typeof localStorage.consumables != "undefined"){
-				this.consumables =  $.extend(this.consumables, JSON.parse(localStorage.consumables));
+				this.consumables = $.extend(this.consumables, JSON.parse(localStorage.consumables));
 			}
 			return this;
 		},
