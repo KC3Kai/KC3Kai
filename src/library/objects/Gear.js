@@ -474,6 +474,11 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isHighAccuracyRadar = function(){
+		/* Here not call it 'isSurfaceRadar', because it's indeed including some Air Radars.
+		 The guess why KC devs suppose to judge 'Surface Radar' by 'api_houm > 2':
+		 since the accuracy <= 2 for all Air Radars in Small Radar category,
+		 but they have forgotten there are Air Radars with accuracy > 2 in Large Radar category,
+		 and there is a Destroyer (Kasumi K2) who can equip Large Radar... */
 		return this.masterId > 0 &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_houm > 2;
