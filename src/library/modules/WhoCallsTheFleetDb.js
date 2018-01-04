@@ -8,7 +8,7 @@
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
-				var rawDb = $.ajax({
+				var rawDb = KC3FileCacheManager["_" + prefix] || $.ajax({
 					url : repo + 'data/' + filename,
 					async: false
 				}).responseText;

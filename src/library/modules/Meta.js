@@ -126,8 +126,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		loadQuotes :function(){
+			if($.isEmptyObject(this._quotesSize))
+				this._quotesSize = JSON.parse($.ajax(this.repo + "quotes_size.json", { async: false }).responseText);
 			this._quotes = KC3Translation.getQuotes(this.repo);
-			this._quotesSize = JSON.parse($.ajax(this.repo + "quotes_size.json", { async: false }).responseText);
 			return this;
 		},
 		

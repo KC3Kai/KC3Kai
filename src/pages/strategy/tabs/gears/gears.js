@@ -447,30 +447,27 @@
 
 				var els = $();
 				for( var j in arranged[i].holder ){
+					var div;
 					if(arranged[i].holder[j].holder instanceof KC3LandBase){
-						els = els.add(
-							$('<div/>',{
-								'class':	'holder',
-								'html':		'<img src="../../../../assets/img/items/33.png" />'
-											+ '<font>LBAS World '+arranged[i].holder[j].holder.map+'</font>'
-											+ '<span>#'+arranged[i].holder[j].holder.rid+'</span>'
-											+ '<span>x'+arranged[i].holder[j].count+'</span>'
-							})
-						);
+						div = $('<div/>',{
+							'class':	'holder',
+							'html':		'<img/>'
+										+ '<font>LBAS World '+arranged[i].holder[j].holder.map+'</font>'
+										+ '<span>#'+arranged[i].holder[j].holder.rid+'</span>'
+										+ '<span>x'+arranged[i].holder[j].count+'</span>'
+						});
+						$("img", div).attr("src", "/assets/img/items/33.png");
 					} else {
-						els = els.add(
-							$('<div/>',{
-								'class':	'holder',
-								'html':		'<img src="'+KC3Meta.shipIcon(
-													arranged[i].holder[j].holder.masterId,
-													"../../assets/img/ui/empty.png"
-												)+'"/>'
-											+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
-											+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
-											+ '<span>x'+arranged[i].holder[j].count+'</span>'
-							})
-						);
+						div = $('<div/>',{
+							'class':	'holder',
+							'html':		'<img/>'
+										+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
+										+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
+										+ '<span>x'+arranged[i].holder[j].count+'</span>'
+						});
+						$("img", div).attr("src", KC3Meta.shipIcon(arranged[i].holder[j].holder.masterId, "/assets/img/ui/empty.png"));
 					}
+					els = els.add(div);
 				}
 				return els;
 			}
@@ -499,8 +496,7 @@
 			var allProperties = this._allProperties;
 			$.each(SlotItems, function(index,ThisSlotitem) {
 				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
-				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png")
-					.error(function() { $(this).unbind("error").attr("src", "../../assets/img/ui/empty.png"); });
+				$(".icon img", ItemElem).attr("src", "/assets/img/items/"+ThisSlotitem.type_id+".png", "/assets/img/ui/empty.png");
 				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
 				$(".icon img", ItemElem).on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);

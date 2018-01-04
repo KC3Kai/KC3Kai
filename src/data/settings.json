@@ -57,6 +57,11 @@
 				"type": "check"
 			},
 			{
+				"id": "checkLiveDataUpdates",
+				"name": "SettingsCheckLiveDataUpdates",
+				"type": "check"
+			},
+			{
 				"id": "devOnlyPages",
 				"name": "SettingsDevOnlyPages",
 				"type": "check"

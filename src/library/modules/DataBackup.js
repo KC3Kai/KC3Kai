@@ -20,12 +20,13 @@
 					if(ekex)$(elementkey).append("<div>Loading Data to array...(1/4)<div/>");
 					KC3Database.con.tables.forEach( //access all tables
 						function(table){
-							table.toArray(function(tablearray) { //add table data tmptext
+							if(table.name !== "filecaches") // Exclude caches from backup
+								table.toArray(function(tablearray) { //add table data tmptext
 									while(locked){}
 									locked = true;
 									fullDBData[table.name] = tablearray;
 									locked = false;
-							});
+								});
 					});//foreach
 				}).then(function(){//for transaction
 					if(ekex)$(elementkey).append("<div>Loading Data to zip...(2/4)<div/>");

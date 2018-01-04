@@ -397,10 +397,13 @@
 			const isGetEnglish = language === "en";
 			if(isGetEnglish || extendEnglish) {
 				try {
-					enJSON = JSON.parse($.ajax({
-						url : repo+'lang/data/en/quotes.json',
-						async: false
-					}).responseText);
+					if(self._enQuotes !== undefined)
+						enJSON = self._enQuotes;
+					else
+						enJSON = JSON.parse($.ajax({
+							url : repo+'lang/data/en/quotes.json',
+							async: false
+						}).responseText);
 					this.transformQuotes(enJSON, "en", checkKey && isGetEnglish,
 						// remove seasonal extending for these languages
 						["jp", "scn", "kr"].indexOf(language) > -1);
@@ -425,10 +428,13 @@
 			} else {
 				// load language specific quotes.json
 				try {
-					langJSON = JSON.parse($.ajax({
-						url : repo+'lang/data/' +language+ '/quotes.json',
-						async: false
-					}).responseText);
+					if(self["_" + language + "Quotes"] !== undefined) 
+						langJSON = self["_" + language + "Quotes"];
+					else
+						langJSON = JSON.parse($.ajax({
+							url : repo+'lang/data/' +language+ '/quotes.json',
+							async: false
+						}).responseText);
 				} catch (e) {
 					if (e instanceof SyntaxError){
 						console.warn("Loading quotes failed", language, e);/*RemoveLogging:skip*/

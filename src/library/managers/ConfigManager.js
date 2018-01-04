@@ -37,6 +37,7 @@ Retrieves when needed to apply on components
 				air_combined         : false,
 				powerCapApplyLevel   : 3,
 				powerCritical        : false,
+				checkLiveDataUpdates : true,
 
 				showCatBombs         : true,
 				showApiError         : true,

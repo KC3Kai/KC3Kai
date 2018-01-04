@@ -19,6 +19,7 @@
 		"KC3Dashboard": true,
 		"KC3DataBackup": true,
 		"KC3Database": true,
+		"KC3FileCacheManager": true,
 		"DBSubmission": true,
 		"Expedition": true,
 		"KC3ImageExport": true,

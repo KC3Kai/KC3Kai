@@ -213,6 +213,7 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
+		KC3FileCacheManager.init(true, true, true);
 		
 		// Live translations
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){

@@ -13,8 +13,7 @@
 			this.shipQuests = {};
 			// Load relationship data of ships and quests
 			try {
-				const questsData = $.ajax('/data/ship_quests.json', { async: false }).responseText;
-				this.shipQuests = JSON.parse(questsData);
+				this.shipQuests = KC3FileCacheManager._shipquests || JSON.parse($.ajax('/data/ship_quests.json', { async: false }).responseText);
 			} catch(e) {
 				console.error("Loading ship quests data failed", e);
 			}

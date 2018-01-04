@@ -407,6 +407,7 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
+		KC3FileCacheManager.init(true, true, true);
 
 		// Live translations of Quests, only work for EN
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
@@ -432,7 +433,7 @@
 
 		// Live updating from github repo
 		// TODO the option may be changed to other term, or another new option
-		if(ConfigManager.checkLiveQuests){
+		/*if(ConfigManager.checkLiveQuests){
 			$.ajax({
 				async: true,
 				dataType: "JSON",
@@ -440,11 +441,11 @@
 				success: function(newTPData){
 					if(JSON.stringify(newTPData) !== JSON.stringify(KC3Meta._tpmult)) {
 						$.extend(true, KC3Meta._tpmult, newTPData);
-						console.info("TP value multiplier live updated");/*RemoveLogging:skip*/
+						console.info("TP value multiplier live updated");/*RemoveLogging:skip*//*
 					}
 				}
 			});
-		}
+		}*/
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
@@ -1794,22 +1795,7 @@
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
-								$(".base_plane_img img", planeBox).attr("alt", paddedId)
-									.attr("src", eqImgSrc).error(function() {
-										if(!myServerHost) { // reuse host after lazy initialized
-											myServerHost = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
-											myServerHost = myServerHost ? "http://" + myServerHost : "..";
-										}
-										// fall-back to fetch image from online kcs resources
-										eqImgSrc = myServerHost + "/kcs/resources/image/slotitem/item_up/"
-											+ $(this).attr("alt") + ".png";
-										$(this).off("error").attr("src", eqImgSrc)
-											// fail-safe to show a placeholder icon
-											.error(function() {
-												eqImgSrc = "/assets/img/ui/empty.png";
-												$(this).off("error").attr("src", eqImgSrc);
-											});
-									});
+								$(".base_plane_img img", planeBox).attr("src", eqImgSrc, "/assets/img/ui/empty.png");
 								$(".base_plane_img", planeBox)
 									.attr("title", itemObj.name())
 									.lazyInitTooltip()
@@ -1817,8 +1803,7 @@
 									.on("dblclick", self.gearDoubleClickFunction);
 								
 								const eqIconSrc = "/assets/img/items/"+itemObj.master().api_type[3]+".png";
-								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc)
-									.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); });
+								$(".base_plane_icon img", planeBox).attr("src", eqIconSrc, "/assets/img/ui/empty.png");
 								$(".base_plane_icon", planeBox)
 									.attr("titlealt", itemObj.htmlTooltip(planeInfo.api_count, baseInfo))
 									.lazyInitTooltip()

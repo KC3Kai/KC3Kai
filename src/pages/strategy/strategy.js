@@ -34,6 +34,7 @@
 		RemodelDb.init();
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
+		KC3FileCacheManager.init(false, true, true);
 		
 		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");

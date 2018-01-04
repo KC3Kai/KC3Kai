@@ -20,9 +20,8 @@
 		---------------------------------*/
 		init :function(){
 			// Get upgrade data
-			var akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
-			this.upgrades = JSON.parse(akashiData);
-			//console.log(this.upgrades);
+			this.upgrades = KC3FileCacheManager._akashi || JSON.parse($.ajax('../../data/akashi.json', { async: false }).responseText);
+			// console.log(this.upgrades);
 		},
 
 		/* RELOAD

@@ -71,6 +71,12 @@
 					$(".timeServerMaintenance").text(KC3Meta.term("MenuTimeUnknown"));
 				}
 				
+				if (data.assets_version) {
+					if(localStorage.assetsVersion !== data.assets_version) {
+						KC3Database.init();
+						KC3FileCacheManager.checkForUpdate(data.assets_version);
+					}
+				}
 			}
 		});
 		

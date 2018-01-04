@@ -145,6 +145,10 @@
 			let kiloChars = Math.floor(usedChars / 1024);
 			let usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
 			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
+
+			let installedVersion = JSON.parse($.ajax(chrome.extension.getURL('/data/version.json'), { async: false }).responseText).version;
+			let usingVersion = localStorage.assetsVersion;
+			$(".management .version").text("Installed v{0}, remote v{1}".format(installedVersion, usingVersion));
 			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
@@ -539,6 +543,12 @@
 				});
 			});
 			
+			// Clear Cache
+			$(".tab_profile .clear_cache").on("click", function(event) {
+				KC3Database.con.filecaches.clear();
+				window.location.reload();
+			});
+            
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
