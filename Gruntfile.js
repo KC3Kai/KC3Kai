@@ -47,17 +47,9 @@ module.exports = function(grunt) {
 					'!assets/img/shipseasonal/**',
 					'assets/snd/**',
 					'assets/swf/**',
-					'assets/js/Chart.min.js',
-					'assets/js/Dexie.min.js',
-					'assets/js/FileSaver.min.js',
-					'assets/js/steganography.js',
-					'assets/js/jquery-ui.min.js',
-					'assets/js/KanColleHelpers.js',
-					'assets/js/twbsPagination.min.js',
-					'assets/js/jszip.min.js',
-					'assets/js/bootstrap-slider.min.js',
-					'assets/js/no_ga.js',
-					'assets/js/markdown.min.js'
+					'assets/js/*.js',
+					'!assets/js/jquery.min.js',
+					'!assets/js/KanColleHelpers.js'
 				],
 				dest: 'build/release/'
 			},
@@ -78,9 +70,8 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: 'build/tmp/',
 				src: [
-					'assets/css/keys.css',
-					'assets/css/jquery-ui.min.css',
-					'assets/css/bootstrap-slider.min.css',
+					'assets/css/**/*',
+					'!assets/css/bootstrap.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
 					'library/injections/*.css',
@@ -117,7 +108,8 @@ module.exports = function(grunt) {
 						'debug', 'dir', 'dirxml', 'profile', 'profileEnd',
 						'time', 'timeEnd', 'timeStamp', 'table', 'exception'
 					]
-				}
+				},
+				dest: 'build/tmp/'
 			}
 		},
 		jshint: {
@@ -158,7 +150,6 @@ module.exports = function(grunt) {
 					src: [
 						'assets/css/global.css',
 						'assets/css/keys.css',
-						'assets/css/bootstrap-slider.min.css',
 						'pages/**/*.css'
 					],
 					dest: 'build/tmp/'
