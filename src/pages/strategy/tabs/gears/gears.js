@@ -83,7 +83,7 @@
 			// land base bomber
 			"t37": "dv",
 			// interceptor
-			"t38": "aa",
+			"t38": "ht",
 			// jet bomber (keiun)
 			"t39": "dv",
 			// jet bomber (kikka)
