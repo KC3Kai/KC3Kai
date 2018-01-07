@@ -3232,7 +3232,7 @@
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
 
-			//fleets' subscripts start from 0 !
+			// fleets' subscripts start from 0 !
 			allShips = fleetObj.ships.map(function(rosterId, index) {
 				return KC3ShipManager.get(rosterId);
 			}).filter(function (rosterData, index) {
@@ -3274,7 +3274,7 @@
 			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
 			var condCheckWithoutResupply = unsatRequirements.length === 0;
 
-			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
+			// Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
 			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
 
 			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
@@ -3319,7 +3319,6 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			// "???" instead of "?" to make it more noticeable.
 			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
@@ -3335,22 +3334,34 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
+			var condIsGsWithoutSparkle = [101, 102].indexOf(selectedExpedition) > -1;
 
-			var estSuccessRate = 0;
+			var estSuccessRate = -1;
 			// can GS if:
 			// - expedition requirements are satisfied
 			// - either drum expedition, or regular expedition with all ships sparkled
-			if (condCheckWithoutResupply && !(condIsUnsparkledShip && !condIsDrumExpedition)) {
-				// based on the datamined vita formula,
-				// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
-				estSuccessRate = 21 + 15 * sparkledCount;
-				if (condIsDrumExpedition) {
-					estSuccessRate += condIsOverdrum ? 20 : -15;
+			// - or new added expeditions such as: A2, A3 (but rate formula unknown)
+			if (condCheckWithoutResupply) {
+				if (!condIsUnsparkledShip || condIsDrumExpedition) {
+					// based on the decompiled vita formula,
+					// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+					estSuccessRate = 21 + 15 * sparkledCount;
+					if (condIsDrumExpedition) {
+						estSuccessRate += condIsOverdrum ? 20 : -15;
+					}
+				} else if (condIsGsWithoutSparkle) {
+					// keep -1 for unknown
+				} else {
+					estSuccessRate = 0;
 				}
+			} else {
+				estSuccessRate = 0;
 			}
 
+			// "???" instead of "?" to make it more noticeable.
 			jqGSRate.text(
 				(function (rate) {
+					if (rate < 0) { return "???%"; }
 					if (rate === 0) { return "0%"; }
 					if (rate >= 100) { return "100%"; }
 					return "~" + rate + "%";
@@ -3366,10 +3377,9 @@
 				if (rate >= 100) { return "guaranteed"; }
 			}(estSuccessRate));
 
-
 			var tooltipText = (function () {
 				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
-				if (condIsUnsparkledShip && !condIsDrumExpedition) {
+				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsGsWithoutSparkle) {
 					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
