@@ -20,11 +20,14 @@
 		dropShipData: null,
 		remodelRecipeList: null,
 		remodelRecipeData: null,
+		remodelKnownRecipes: [],
 
 		// api handler
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
+		reportServer: "http://poi.0u0.moe",
+		reportApiBaseUrl: "/api/report/v2/",
 		reportOrigin: "KC3Kai",
 
 		// *INTERNAL USE ONLY*
@@ -151,20 +154,22 @@
 			this.cleanup();
 			this.remodelRecipeList = requestObj.response.api_data;
 			this.state = "remodel_slotlist";
+			this.lazyInitKnownRecipes();
 		},
 		processRemodelRecipeDetail: function( requestObj ) {
-			if (this.state !== 'remodel_slotlist' || !this.remodelRecipeList) {
+			// Player may just click cancel after viewing details
+			if ( !(this.state === 'remodel_slotlist' || this.state === "remodel_slotdetail")
+				|| !Array.isArray(this.remodelRecipeList)) {
 				this.cleanup();
 				return;
 			}
 			var params = requestObj.params;
 			var response = requestObj.response.api_data;
 			var recipeId = parseInt(params.api_id);
-			var recipeReqs = this.remodelRecipeList.find(r => r.api_id === recipeId);
-			if (!recipeReqs) {
-				// not supposed to occur anyway
+			var recipe = this.remodelRecipeList.find(r => r.api_id === recipeId);
+			if (!recipe) {
+				// not supposed to occur if recipe list not empty
 				console.warn("Selected remodel recipe not found in previous list", recipeId, this.remodelRecipeList);
-				this.cleanup();
 				return;
 			}
 			var rosterId = parseInt(params.api_slot_id);
@@ -177,39 +182,40 @@
 				currentLevel >= 6 ? 1 : 0;
 			this.remodelRecipeData = {
 				recipeId: recipeId,
-				itemId: recipeReqs.api_slot_id,
+				itemId: recipe.api_slot_id,
 				stage: stage,
 				day: Date.getJstDate().getDay(),
-				fuel: recipeReqs.api_req_fuel || 0,
-				ammo: recipeReqs.api_req_bull || 0,
-				steel: recipeReqs.api_req_steel || 0,
-				bauxite: recipeReqs.api_req_bauxite || 0,
+				fuel: recipe.api_req_fuel || 0,
+				ammo: recipe.api_req_bull || 0,
+				steel: recipe.api_req_steel || 0,
+				bauxite: recipe.api_req_bauxite || 0,
 				reqItemId: response.api_req_slot_id || -1,
 				reqItemCount: response.api_req_slot_num || 0,
-				buildkit: recipeReqs.api_req_buildkit,
-				remodelkit: recipeReqs.api_req_remodelkit,
-				certainBuildkit: response.api_certain_buildkit,
-				certainRemodelkit: response.api_certain_remodelkit
+				buildkit: recipe.api_req_buildkit || 0,
+				remodelkit: recipe.api_req_remodelkit || 0,
+				certainBuildkit: response.api_certain_buildkit || 0,
+				certainRemodelkit: response.api_certain_remodelkit || 0
 			};
 			this.state = "remodel_slotdetail";
 		},
 		processRemodelSlot: function( requestObj ) {
-			if (this.state !== 'remodel_slotdetail' || !this.remodelRecipeData
-				// well-known recipes not need to report?
-				|| [101, 201, 301].indexOf(this.remodelRecipeData.recipeId) > -1) {
+			if (this.state !== 'remodel_slotdetail' || !this.remodelRecipeData) {
 				this.cleanup();
 				return;
 			}
 			var params = requestObj.params;
 			var response = requestObj.response.api_data;
-			// might re-verify: recipe ID matches with previous detail used?
+			var data = this.remodelRecipeData;
 			var recipeId = parseInt(params.api_id);
-			// success related things not used for now
+			// Verify if recipe ID matches with previous detail used
+			if (recipeId !== data.recipeId) {
+				console.warn("Used remodel recipe not match with previous detail", recipeId, this.remodelRecipeData);
+				return;
+			}
 			var isCertainSuccess = !!parseInt(params.api_certain_flag);
 			var isSuccess = !!response.api_remodel_flag;
-			var data = this.remodelRecipeData;
-			// it's 2nd ship anyway, secretary is always Akashi
-			data.secretary = response.api_voice_ship_id;
+			// It's 2nd ship anyway, secretary is always Akashi
+			data.secretary = response.api_voice_ship_id || -1;
 			var afterRemodelId = response.api_remodel_id;
 			var afterRemodelSlot = response.api_after_slot;
 			data.upgradeToItemId = -1;
@@ -227,7 +233,33 @@
 				}
 			}
 			data.key = `r${data.recipeId}-i${data.itemId}-s${data.stage}-d${data.day}-s${data.secretary}`;
-			this.sendData("remodel_recipe", data);
+
+			// Besides well-known recipes,
+			// failed or duplicated improvement seems be noisy for recipe recording
+			// see https://github.com/poooi/plugin-report/blob/master/index.es#L450
+			if (!isSuccess || !this.remodelKnownRecipes.length
+				|| this.remodelKnownRecipes.includes[data.key]
+				|| [101, 201, 301].includes(data.recipeId)) {
+				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
+			} else {
+				this.remodelKnownRecipes.push(data.key);
+				this.sendData("remodel_recipe", data);
+			}
+
+			// Go back to improvement list like it does in-game
+			this.state = "remodel_slotlist";
+			this.remodelRecipeData = null;
+		},
+		lazyInitKnownRecipes: function() {
+			if (this.remodelKnownRecipes.length) return;
+			$.ajax({
+				url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
+				method: "GET",
+				dataType: "json",
+				success: (json) => {
+					if (Array.isArray(json.recipes)) this.remodelKnownRecipes = json.recipes;
+				}
+			});
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
@@ -355,8 +387,7 @@
 			this.remodelRecipeData = null;
 		},
 		sendData: function(target, payload) {
-			var server = "http://poi.0u0.moe";
-			var url = server + "/api/report/v2/" + target;
+			var url = this.reportServer + this.reportApiBaseUrl + target;
 			payload.origin = this.reportOrigin;
 			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );
 			$.ajax({
