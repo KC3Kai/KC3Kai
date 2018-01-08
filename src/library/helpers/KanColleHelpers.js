@@ -7417,10 +7417,10 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(6)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(sty(3)(KanColle_Generated_SType.DD.value)));
       };
       if (v === 15) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(9)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(carrier(2))(sty(2)(KanColle_Generated_SType.DD.value)));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(8)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(carrier(2))(sty(2)(KanColle_Generated_SType.DD.value)));
       };
       if (v === 16) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(11)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(sty(2)(KanColle_Generated_SType.DD.value)));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(10)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(sty(2)(KanColle_Generated_SType.DD.value)));
       };
       if (v === 17) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(20)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(sty(3)(KanColle_Generated_SType.DD.value)));
