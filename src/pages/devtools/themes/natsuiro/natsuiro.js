@@ -463,18 +463,20 @@
 		}
 
 		// Panel customizations: custom css
-		if(ConfigManager.pan_custom_css !== ""){
-			var customCSS = document.createElement("style");
-			customCSS.type = "text/css";
-			customCSS.innerHTML = ConfigManager.pan_custom_css;
-			$("head").append(customCSS);
-		}
+		var customCSS = document.createElement("style");
+		customCSS.type = "text/css";
+		customCSS.id = "pan_custom_css";
+		customCSS.innerHTML = ConfigManager.pan_custom_css;
+		$("head").append(customCSS);
 
 		// Listen config key changed
 		window.addEventListener("storage", function({key, timeStamp, url}){
 			if(key === ConfigManager.keyName()) {
 				ConfigManager.load();
 				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+
+				if($("#pan_custom_css").html() != ConfigManager.pan_custom_css)
+					$("#pan_custom_css").html(ConfigManager.pan_custom_css);
 			}
 		});
 
