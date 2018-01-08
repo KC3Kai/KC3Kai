@@ -151,15 +151,15 @@
 			this.sendData("create_item", createItemData);
 		},
 		processRemodelRecipeList: function( requestObj ) {
+			// To avoid state warning log if previous details viewed and canceled
+			if (this.state === 'remodel_slotdetail') this.state = null;
 			this.cleanup();
 			this.remodelRecipeList = requestObj.response.api_data;
-			this.state = "remodel_slotlist";
 			this.lazyInitKnownRecipes();
 		},
 		processRemodelRecipeDetail: function( requestObj ) {
-			// Player may just click cancel after viewing details
-			if ( !(this.state === 'remodel_slotlist' || this.state === "remodel_slotdetail")
-				|| !Array.isArray(this.remodelRecipeList)) {
+			// Player may just click cancel after viewing details, no state to be checked
+			if (!Array.isArray(this.remodelRecipeList)) {
 				this.cleanup();
 				return;
 			}
@@ -191,6 +191,8 @@
 				bauxite: recipe.api_req_bauxite || 0,
 				reqItemId: response.api_req_slot_id || -1,
 				reqItemCount: response.api_req_slot_num || 0,
+				//reqUseitemId: response.api_req_useitem_id || -1,
+				//reqUseitemCount: response.api_req_useitem_num || 0,
 				buildkit: recipe.api_req_buildkit || 0,
 				remodelkit: recipe.api_req_remodelkit || 0,
 				certainBuildkit: response.api_certain_buildkit || 0,
@@ -216,16 +218,16 @@
 			var isSuccess = !!response.api_remodel_flag;
 			// It's 2nd ship anyway, secretary is always Akashi
 			data.secretary = response.api_voice_ship_id || -1;
-			var afterRemodelId = response.api_remodel_id;
+			var afterRemodelIds = response.api_remodel_id;
 			var afterRemodelSlot = response.api_after_slot;
 			data.upgradeToItemId = -1;
 			data.upgradeToItemLevel = -1;
 			if (isSuccess && afterRemodelSlot) {
-				if(afterRemodelId[0] !== afterRemodelId[1]) {
+				if (afterRemodelIds[0] !== afterRemodelIds[1]) {
 					data.upgradeToItemId = afterRemodelSlot.api_slotitem_id;
 					data.upgradeToItemLevel = afterRemodelSlot.api_level;
 					// fix stage if necessary
-					if (!data.stage || data.stage < 2) data.stage = 2;
+					if (data.stage !== 2) data.stage = 2;
 				} else {
 					// try to fix stage if getting level before improvement from KC3Gear fails
 					var previousLevel = afterRemodelSlot.api_level - 1;
@@ -246,8 +248,8 @@
 				this.sendData("remodel_recipe", data);
 			}
 
-			// Go back to improvement list like it does in-game
-			this.state = "remodel_slotlist";
+			// Go back to improvement list like it does in-game, not clean all up
+			this.state = null;
 			this.remodelRecipeData = null;
 		},
 		lazyInitKnownRecipes: function() {
