@@ -15,6 +15,8 @@
 		// * `drop_ship_1`: having "start" or "next" consumed
 		//	 waiting for formation info ("battle")
 		// * `drop_ship_2`: waiting for the final piece of data (rank etc, shipId if any)
+		// * `remodel_slotdetail`: viewing Akashi improvement recipe details
+		//	 waiting for confirming
 		state: null,
 		createShipData: null,
 		dropShipData: null,
@@ -38,20 +40,23 @@
 		_initialize: function () {
 			this.handlers = {
 				'api_get_member/mapinfo': this.processMapInfo,
+				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
 				'api_req_kousyou/createship': this.processCreateShip,
 				'api_get_member/kdock': this.processKDock,
 				'api_req_kousyou/createitem': this.processCreateItem,
+
+				// collect recipe details, comment them out if data enough for poi-db
 				'api_req_kousyou/remodel_slotlist': this.processRemodelRecipeList,
 				'api_req_kousyou/remodel_slotlist_detail': this.processRemodelRecipeDetail,
 				'api_req_kousyou/remodel_slot': this.processRemodelSlot,
-				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
+
 				// start or next
 				'api_req_map/start': this.processStartNext,
 				'api_req_map/next': this.processStartNext,
 				// detect formation
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				// the following are commented out 
+				// the following are commented out
 				// as poi "plugin-report" doesn't seem to support them.
 				// (might have been deprecated)
 				// 'api_req_sortie/night_to_day': this.processBattle,

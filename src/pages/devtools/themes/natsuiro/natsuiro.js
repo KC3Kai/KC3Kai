@@ -475,7 +475,7 @@
 				ConfigManager.load();
 				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
 
-				if($("#pan_custom_css").html() != ConfigManager.pan_custom_css)
+				if($("#pan_custom_css").html() !== ConfigManager.pan_custom_css)
 					$("#pan_custom_css").html(ConfigManager.pan_custom_css);
 			}
 		});
