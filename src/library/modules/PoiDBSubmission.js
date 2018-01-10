@@ -18,11 +18,16 @@
 		state: null,
 		createShipData: null,
 		dropShipData: null,
+		remodelRecipeList: null,
+		remodelRecipeData: null,
+		remodelKnownRecipes: [],
 
 		// api handler
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
+		reportServer: "http://poi.0u0.moe",
+		reportApiBaseUrl: "/api/report/v2/",
 		reportOrigin: "KC3Kai",
 
 		// *INTERNAL USE ONLY*
@@ -36,6 +41,9 @@
 				'api_req_kousyou/createship': this.processCreateShip,
 				'api_get_member/kdock': this.processKDock,
 				'api_req_kousyou/createitem': this.processCreateItem,
+				'api_req_kousyou/remodel_slotlist': this.processRemodelRecipeList,
+				'api_req_kousyou/remodel_slotlist_detail': this.processRemodelRecipeDetail,
+				'api_req_kousyou/remodel_slot': this.processRemodelSlot,
 				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
 				// start or next
 				'api_req_map/start': this.processStartNext,
@@ -142,6 +150,119 @@
 			// console.log( "[createitem] prepared: " + JSON.stringify( createItemData ));
 			this.sendData("create_item", createItemData);
 		},
+		processRemodelRecipeList: function( requestObj ) {
+			// To avoid state warning log if previous details viewed and canceled
+			if (this.state === 'remodel_slotdetail') this.state = null;
+			this.cleanup();
+			this.remodelRecipeList = requestObj.response.api_data;
+			this.lazyInitKnownRecipes();
+		},
+		processRemodelRecipeDetail: function( requestObj ) {
+			// Player may just click cancel after viewing details, no state to be checked
+			if (!Array.isArray(this.remodelRecipeList)) {
+				this.cleanup();
+				return;
+			}
+			var params = requestObj.params;
+			var response = requestObj.response.api_data;
+			var recipeId = parseInt(params.api_id);
+			var recipe = this.remodelRecipeList.find(r => r.api_id === recipeId);
+			if (!recipe) {
+				// not supposed to occur if recipe list not empty
+				console.warn("Selected remodel recipe not found in previous list", recipeId, this.remodelRecipeList);
+				return;
+			}
+			var rosterId = parseInt(params.api_slot_id);
+			// Have to get current stars of the item to be improved,
+			// otherwise should not reference state-ful KC3GearManager at all.
+			var gearObj = KC3GearManager.get(rosterId);
+			var currentLevel = gearObj.stars || 0;
+			var stage = response.api_change_flag ? 2 :
+				currentLevel >= 10 ? 2 :
+				currentLevel >= 6 ? 1 : 0;
+			this.remodelRecipeData = {
+				recipeId: recipeId,
+				itemId: recipe.api_slot_id,
+				stage: stage,
+				day: Date.getJstDate().getDay(),
+				fuel: recipe.api_req_fuel || 0,
+				ammo: recipe.api_req_bull || 0,
+				steel: recipe.api_req_steel || 0,
+				bauxite: recipe.api_req_bauxite || 0,
+				reqItemId: response.api_req_slot_id || -1,
+				reqItemCount: response.api_req_slot_num || 0,
+				//reqUseitemId: response.api_req_useitem_id || -1,
+				//reqUseitemCount: response.api_req_useitem_num || 0,
+				buildkit: recipe.api_req_buildkit || 0,
+				remodelkit: recipe.api_req_remodelkit || 0,
+				certainBuildkit: response.api_certain_buildkit || 0,
+				certainRemodelkit: response.api_certain_remodelkit || 0
+			};
+			this.state = "remodel_slotdetail";
+		},
+		processRemodelSlot: function( requestObj ) {
+			if (this.state !== 'remodel_slotdetail' || !this.remodelRecipeData) {
+				this.cleanup();
+				return;
+			}
+			var params = requestObj.params;
+			var response = requestObj.response.api_data;
+			var data = this.remodelRecipeData;
+			var recipeId = parseInt(params.api_id);
+			// Verify if recipe ID matches with previous detail used
+			if (recipeId !== data.recipeId) {
+				console.warn("Used remodel recipe not match with previous detail", recipeId, this.remodelRecipeData);
+				return;
+			}
+			var isCertainSuccess = !!parseInt(params.api_certain_flag);
+			var isSuccess = !!response.api_remodel_flag;
+			// It's 2nd ship anyway, secretary is always Akashi
+			data.secretary = response.api_voice_ship_id || -1;
+			var afterRemodelIds = response.api_remodel_id;
+			var afterRemodelSlot = response.api_after_slot;
+			data.upgradeToItemId = -1;
+			data.upgradeToItemLevel = -1;
+			if (isSuccess && afterRemodelSlot) {
+				if (afterRemodelIds[0] !== afterRemodelIds[1]) {
+					data.upgradeToItemId = afterRemodelSlot.api_slotitem_id;
+					data.upgradeToItemLevel = afterRemodelSlot.api_level;
+					// fix stage if necessary
+					if (data.stage !== 2) data.stage = 2;
+				} else {
+					// try to fix stage if getting level before improvement from KC3Gear fails
+					var previousLevel = afterRemodelSlot.api_level - 1;
+					if (!data.stage) data.stage = previousLevel >= 6 ? 1 : 0;
+				}
+			}
+			data.key = `r${data.recipeId}-i${data.itemId}-s${data.stage}-d${data.day}-s${data.secretary}`;
+
+			// Besides well-known recipes,
+			// failed or duplicated improvement seems be noisy for recipe recording
+			// see https://github.com/poooi/plugin-report/blob/master/index.es#L450
+			if (!isSuccess || !this.remodelKnownRecipes.length
+				|| this.remodelKnownRecipes.includes[data.key]
+				|| [101, 201, 301].includes(data.recipeId)) {
+				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
+			} else {
+				this.remodelKnownRecipes.push(data.key);
+				this.sendData("remodel_recipe", data);
+			}
+
+			// Go back to improvement list like it does in-game, not clean all up
+			this.state = null;
+			this.remodelRecipeData = null;
+		},
+		lazyInitKnownRecipes: function() {
+			if (this.remodelKnownRecipes.length) return;
+			$.ajax({
+				url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
+				method: "GET",
+				dataType: "json",
+				success: (json) => {
+					if (Array.isArray(json.recipes)) this.remodelKnownRecipes = json.recipes;
+				}
+			});
+		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
 			var response = requestObj.response.api_data;
@@ -171,7 +292,7 @@
 			var dropShipData = this.dropShipData;
 
 			// fill in formation and enemy ship info.
-			// if any info is missing/error occured, default to undefined
+			// if any info is missing/error occurred, default to undefined
 			dropShipData.enemyFormation = response.api_formation && response.api_formation[1];
 
 			// build up enemy ship array, updated as of https://github.com/poooi/plugin-report/commit/843702876444435134d5f8d93c2c0f59ff0b5bd6
@@ -264,10 +385,11 @@
 			this.state = null;
 			this.createShipData = null;
 			this.dropShipData = null;
+			this.remodelRecipeList = null;
+			this.remodelRecipeData = null;
 		},
 		sendData: function(target, payload) {
-			var server = "http://poi.0u0.moe";
-			var url = server + "/api/report/v2/" + target;
+			var url = this.reportServer + this.reportApiBaseUrl + target;
 			payload.origin = this.reportOrigin;
 			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );
 			$.ajax({
