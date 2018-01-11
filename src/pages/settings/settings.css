@@ -237,7 +237,6 @@ body {
 	max-width:400px;
 	height:100px;
 	min-height:100px;
-	max-height:100px;
 	font-size:12px;
 	font-family:monospace;
 	margin:9px 5px 0px 0px;
@@ -257,7 +256,6 @@ body {
 	max-width:440px;
 	height:100px;
 	min-height:100px;
-	max-height:100px;
 	font-size:12px;
 	font-family:monospace;
 	margin:9px 5px 0px 0px;
