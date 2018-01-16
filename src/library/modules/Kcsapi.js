@@ -9,15 +9,15 @@ Previously known as "Reactor"
 	"use strict";
 	
 	window.Kcsapi = {
-		shipConstruction:{ active: false },
-		remodelSlot:{
-			slotList:{},
-			slotCur :{},
-			slotId  :0
+		shipConstruction: { active: false },
+		remodelRecipes: {
+			cachedRecipes: {},
+			currentList: [],
+			currentDetail: {}
 		},
 		serverOffset: 0,
 		moraleRefresh: $.extend(new Date(),{
-			calibrate:function(t){
+			calibrate: function(t){
 				t = Date.parse(t);
 				this.setTime(t);
 				return Math.hrdInt('floor',Date.now() - t,3,0,1);
@@ -2173,75 +2173,94 @@ Previously known as "Reactor"
 			}
 		},
 		
-		/* Arsenal Item List
+		/* Arsenal Improvement Item List
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slotlist":function(params, response, headers){
-			var
-				self = this,
-				rm = self.remodelSlot,
-				li = rm.slotList,
-				cu = rm.slotCur;
-			// clear current buffer
-			[li,cu].forEach(function(d){Object.keys(d).forEach(function(x){delete d[x];});});
-			// add every possible equip modernization
-			response.api_data.forEach(function(rmd){
-				var k = rmd.api_id;
-				delete rmd.api_id;
-				li[k] = rmd;
+			const recipes = this.remodelRecipes;
+			recipes.currentList = response.api_data;
+			// cache current recipe list
+			recipes.currentList.forEach(recipe => {
+				const id = recipe.api_id;
+				recipes.cachedRecipes[id] = recipe;
 			});
+			// detect 2nd ship, 0 if no 2nd only Akashi
+			recipes.shipId = PlayerManager.fleets[0].ship(1).masterId;
+			// get JST date on list shown
+			recipes.today = Date.getJstDate();
+			KC3Network.trigger("GearRemodelList", recipes);
 		},
-		/* Arsenal Item Detail
+		/* Arsenal Improvement Item Detail
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slotlist_detail":function(params, response, headers){
-			var
-				self = this,
-				rm = self.remodelSlot,
-				li = rm.slotList,
-				cu = rm.slotCur;
-			rm.slotId = parseInt(params.api_id);
-			// clear current slot buffer
-			[cu].forEach(function(d){Object.keys(d).forEach(function(x){delete d[x];});});
-			// copy list buffer and merge for corresponding item
-			$.extend(cu,li[rm.slotId],response.api_data);
+			const recipes = this.remodelRecipes,
+				cache = recipes.cachedRecipes,
+				recipeId = parseInt(params.api_id);
+			// cache current recipe detail data
+			recipes.currentDetail = response.api_data;
+			//recipes.currentDetail.api_req_useitem_id = 75;
+			//recipes.currentDetail.api_req_useitem_num = 1;
+			//recipes.currentDetail.api_req_useitem_id2 = 78;
+			//recipes.currentDetail.api_req_useitem_num2 = 1;
+			// merge detail to cached recipe
+			const recipe = cache[recipeId];
+			cache[recipeId] = $.extend({}, recipe, recipes.currentDetail);
+			// cache ID info of current item to be improved
+			recipes.rosterId = parseInt(params.api_slot_id);
+			recipes.masterId = recipe.api_slot_id;
+			recipes.recipeId = recipeId;
+			KC3Network.trigger("GearRemodelDetail", recipes);
 		},
-		/* Equipment Modernize
+		/* Equipment Arsenal Improvement
 		-------------------------------------------------------*/
 		"api_req_kousyou/remodel_slot":function(params, response, headers){
-			var
-				self = this,
-				rm = self.remodelSlot,
-				ky = (parseInt(params.api_certain_flag) && "certain") || "req",
-				cu = rm.slotCur,
-				hr = Date.toUTChours(headers.Date),
-				mt = Array.apply(null,{length:8}).map(function(){return 0;}),
-				ms = KC3GearManager.get(parseInt(params.api_slot_id)).master();
-			['fuel','bull','steel','bauxite','','','buildkit','remodelkit'].forEach(function(dk,id){
-				// rejects empty key
-				if(!dk.length) return;
-				
-				var sk = ['api',(id >= 4) ? ky : 'req',dk].join('_');
-				mt[id] = -cu[sk];
+			const recipes = this.remodelRecipes,
+				cache = recipes.cachedRecipes,
+				recipeId = parseInt(params.api_id),
+				rosterId = parseInt(params.api_slot_id),
+				isCertainSuccess = !!parseInt(params.api_certain_flag),
+				result = response.api_data;
+			const
+				reqApiName = (isCertainSuccess && "certain") || "req",
+				recipe = cache[recipeId],
+				hour = Date.toUTChours(headers.Date),
+				materials = Array.apply(null, {length: 8}).map(x => 0),
+				gear = KC3GearManager.get(rosterId),
+				master = gear.master();
+			recipes.currentResult = result;
+			recipes.recipeId = recipeId;
+			recipes.rosterId = rosterId;
+			recipes.isCertain = isCertainSuccess;
+			recipes.lastStars = gear.stars;
+			// bull = ammo, buildkit = devmat, remodelkit = screw
+			['fuel', 'bull', 'steel', 'bauxite', '', '', 'buildkit', 'remodelkit'].forEach((key, idx) => {
+				// rejects empty key which reserved for torch and bucket
+				if(!key.length) return;
+				var apiName = ['api', (idx >= 4) ? reqApiName : 'req', key].join('_');
+				materials[idx] = -recipe[apiName];
 			});
-			console.log("Improvement cost materials", mt);
+			console.log("Improvement cost materials", materials);
 			// Store to Lodger
 			KC3Database.Naverall({
-				hour: hr,
-				type: "rmditem" + ms.api_id,
-				data: mt
+				hour: hour,
+				type: "rmditem" + master.api_id,
+				data: materials
 			});
 			// Update equipment or consumables on local data
 			console.log("Improvement consumed slot or use item",
-				response.api_data.api_use_slot_id || "none",
-				response.api_data.api_use_useitem_id || "none"
+				result.api_use_slot_id || "none",
+				result.api_use_useitem_id || "none",
+				result.api_use_useitem_id2 || "none"
 			);
-			(response.api_data.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
-			KC3GearManager.set([ response.api_data.api_after_slot ]);
+			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
+			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);
 			
-			PlayerManager.setResources(hr * 3600, response.api_data.api_after_material.slice(0, 4));
-			PlayerManager.consumables.devmats = response.api_data.api_after_material[6];
-			PlayerManager.consumables.screws = response.api_data.api_after_material[7];
+			PlayerManager.setResources(hour * 3600, result.api_after_material.slice(0, 4));
+			PlayerManager.consumables.devmats = result.api_after_material[6];
+			PlayerManager.consumables.screws = result.api_after_material[7];
 			PlayerManager.setConsumables();
 			KC3QuestManager.get(619).increment();
+			
+			KC3Network.trigger("GearRemodel", recipes);
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Quests");

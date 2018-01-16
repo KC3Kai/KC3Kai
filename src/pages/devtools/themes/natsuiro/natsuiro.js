@@ -3,7 +3,7 @@
 	_gaq.push(['_trackEvent', "Panel: Natsuiro Theme", 'clicked']);
 
 	// Mathematical Constants
-	var LOG3  = Math.log10(3);
+	var LOG3 = Math.log10(3);
 
 	// Flags
 	var currentLayout = "";
@@ -28,6 +28,9 @@
 	var critAnim = false;
 	var critSound = new Audio("../../../../assets/snd/heart.mp3");
 	critSound.loop = true;
+
+	// The URL prefix of current player's KC server
+	var myKcServerHost = "";
 
 	// Morale Timer
 	var moraleTimerHandler = 0;
@@ -407,6 +410,11 @@
 		KC3Database.init();
 		KC3Translation.execute();
 		KC3QuestSync.init();
+
+		myKcServerHost = myKcServerHost || (() => {
+			let host = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
+			return host ? `http://${host}` : "";
+		})();
 
 		// Live translations of Quests, only work for EN
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
@@ -1809,7 +1817,6 @@
 		Lbas: function(){
 			const self = this;
 			this.LbasStatus();
-			var myServerHost;
 			if (selectedFleet == 6) {
 				$(".shiplist_single").empty();
 				$(".shiplist_single").hide();
@@ -1885,12 +1892,8 @@
 								// show local plane image first
 								$(".base_plane_img img", planeBox).attr("alt", paddedId)
 									.attr("src", eqImgSrc).error(function() {
-										if(!myServerHost) { // reuse host after lazy initialized
-											myServerHost = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
-											myServerHost = myServerHost ? "http://" + myServerHost : "..";
-										}
 										// fall-back to fetch image from online kcs resources
-										eqImgSrc = myServerHost + "/kcs/resources/image/slotitem/item_up/"
+										eqImgSrc = myKcServerHost + "/kcs/resources/image/slotitem/item_up/"
 											+ $(this).attr("alt") + ".png";
 										$(this).off("error").attr("src", eqImgSrc)
 											// fail-safe to show a placeholder icon
@@ -3221,6 +3224,218 @@
 			this.Fleet();
 		},
 
+		GearRemodelList: function(data){
+			//console.debug("Remodel list", data);
+			const remodelListBox = $(".activity_remodel .remodelList");
+			const weekdayName = data.today.toLocaleDateString(KC3Translation.getLocale(), { weekday: "long" });
+			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
+			$(".remodel_header .recipe_title", remodelListBox).html(
+				KC3Meta.term("RemodelItemListTitle").format(weekdayName)
+			);
+			$(".remodel_header .assistant_ship img", remodelListBox)
+				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+			$(".remodel_header", remodelListBox).addClass("hover").off("click")
+				.on("click", function(e) {
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "akashi"
+					})).execute();
+				});
+			$(".remodel_footer .owned_devmats span", remodelListBox).text(PlayerManager.consumables.devmats);
+			$(".remodel_footer .owned_screws span", remodelListBox).text(PlayerManager.consumables.screws);
+			$(".remodel_slotlist", remodelListBox).empty();
+			$.each(data.currentList, (idx, recipe) => {
+				const itemBox = $("#factory .remodelSlotItem").clone();
+				fillRemodelSlotItemBox(this, itemBox, recipe)
+					.appendTo($(".remodel_slotlist", remodelListBox));
+			});
+			$(".module.activity .activity_remodel").createChildrenTooltips();
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hideChildrenTooltips();
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_remodel .remodelList").show();
+			$(".module.activity .activity_remodel .remodelDetail").hide();
+			$(".module.activity .activity_remodel .remodelResult").hide();
+			$(".module.activity .activity_remodel").fadeIn(500);
+		},
+
+		GearRemodelDetail: function(data){
+			//console.debug("Remodel detail", data);
+			const remodelDetailBox = $(".activity_remodel .remodelDetail");
+			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
+			$(".remodel_header .assistant_ship img", remodelDetailBox)
+				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+			$(".remodel_header", remodelDetailBox).addClass("hover").off("click")
+				.on("click", function(e) {
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "akashi"
+					})).execute();
+				});
+			$(".remodel_footer .owned_devmats span", remodelDetailBox).text(PlayerManager.consumables.devmats);
+			$(".remodel_footer .owned_screws span", remodelDetailBox).text(PlayerManager.consumables.screws);
+			const recipeDetail = data.cachedRecipes[data.recipeId];
+			const improveItemBox = $("#factory .remodelSlotItem").clone();
+			fillRemodelSlotItemBox(this, improveItemBox, recipeDetail, data.rosterId);
+			$(".remodel_to_improve", remodelDetailBox).empty().append(improveItemBox);
+			
+			if(recipeDetail.api_req_slot_id || recipeDetail.api_req_useitem_id) {
+				const consumeList = $(".remodel_consume_items", remodelDetailBox);
+				$(".remodel_consume_item.useitem", consumeList).remove();
+				$(".owned_use_items:not(.first)", remodelDetailBox).remove();
+				// If consumes another equipment
+				if(recipeDetail.api_req_slot_id && recipeDetail.api_req_slot_num) {
+					const masterId = recipeDetail.api_req_slot_id;
+					const consumeGear = KC3Master.slotitem(masterId);
+					const consumeGearBox = $(".remodel_consume_item", consumeList);
+					$(".remodel_slot_icon img", consumeGearBox)
+						.attr("src", `/assets/img/items/${consumeGear.api_type[3]}.png`)
+						.data("masterId", masterId)
+						.on("dblclick", this.gearDoubleClickFunction);
+					$(".remodel_slot_name", consumeGearBox)
+						.text(KC3Meta.gearName(consumeGear.api_name))
+						.attr("title", KC3Meta.gearName(consumeGear.api_name));
+					$(".remodel_consume_amount", consumeGearBox)
+						.text("x{0}".format(recipeDetail.api_req_slot_num));
+					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true);
+					$(".owned_star0_item .value", remodelDetailBox)
+						.text("x{0}".format(totalAmount))
+						.toggleClass("red", totalAmount < recipeDetail.api_req_slot_num);
+					$(".owned_star0_item", remodelDetailBox).show();
+					const freeAmount = KC3GearManager.countFree(masterId, true, true);
+					$(".owned_free_item .value", remodelDetailBox)
+						.text("x{0}".format(freeAmount))
+						.toggleClass("red", freeAmount < recipeDetail.api_req_slot_num);
+					$(".owned_free_item", remodelDetailBox).show();
+				}
+				const addConsumeUseItem = (useitemId, useitemNum) => {
+					const consumeUseItemBox = $(".remodel_consume_item:not(.useitem)", consumeList).clone();
+					consumeUseItemBox.addClass("useitem").appendTo(consumeList);
+					$(".remodel_slot_icon img", consumeUseItemBox)
+						.attr("src", `/assets/img/useitems/${useitemId}.png`);
+					$(".remodel_slot_name", consumeUseItemBox)
+						.text(KC3Meta.useItemName(useitemId))
+						.attr("title", KC3Meta.useItemName(useitemId));
+					$(".remodel_consume_amount", consumeUseItemBox)
+						.text("x{0}".format(useitemNum));
+					const useitemAmount = PlayerManager.getConsumableById(useitemId) || 0;
+					const ownedUseitemBox = $(".owned_use_items.first", remodelDetailBox).clone()
+						.removeClass("first")
+						.appendTo($(".remodel_consumptions", remodelDetailBox));
+					$("img", ownedUseitemBox).attr("src", `/assets/img/useitems/${useitemId}.png`);
+					$(".value", ownedUseitemBox)
+						.text("x{0}".format(useitemAmount))
+						.toggleClass("red", useitemAmount < useitemNum);
+					ownedUseitemBox.show();
+				};
+				// If consumes some useitems
+				if(recipeDetail.api_req_useitem_id && recipeDetail.api_req_useitem_num) {
+					addConsumeUseItem(recipeDetail.api_req_useitem_id, recipeDetail.api_req_useitem_num);
+				}
+				// For now, only appears for upgrading from C gun to D gun
+				if(recipeDetail.api_req_useitem_id2 && recipeDetail.api_req_useitem_num2) {
+					addConsumeUseItem(recipeDetail.api_req_useitem_id2, recipeDetail.api_req_useitem_num2);
+				}
+				$(".remodel_consumptions", remodelDetailBox).show();
+			} else {
+				$(".remodel_consumptions", remodelDetailBox).hide();
+			}
+			
+			if(recipeDetail.api_change_flag) {
+				// Can only get info from DB since no detail from API when equipment can be upgraded
+				const impDb = WhoCallsTheFleetDb.getItemImprovement(recipeDetail.api_slot_id);
+				const upgradeInfo = (impDb || []).find(i => i.req
+					.some(r => r[0][data.today.getDay()] && (!r[1] || r[1].includes(data.shipId)))
+				);
+				if(upgradeInfo && upgradeInfo.upgrade) {
+					const [upgradeMasterId, upgradeStars] = upgradeInfo.upgrade;
+					const upgradeItemBox = $("#factory .remodelSlotItem").clone();
+					fillRemodelSlotItemBox(this, upgradeItemBox, {
+						api_slot_id: upgradeMasterId, noReqs: true
+					}, undefined, upgradeStars > 0 ? upgradeStars : undefined);
+					$(".remodel_upgrade_title", remodelDetailBox).show();
+					$(".remodel_upgrade_to", remodelDetailBox).empty().append(upgradeItemBox).show();
+				} else {
+					// Upgraded item info not found
+					$(".remodel_upgrade_title", remodelDetailBox).show();
+					$(".remodel_upgrade_to", remodelDetailBox).empty().append("???").show();
+				}
+			} else {
+				$(".remodel_upgrade_title", remodelDetailBox).hide();
+				$(".remodel_upgrade_to", remodelDetailBox).hide();
+			}
+			
+			$(".module.activity .activity_remodel").createChildrenTooltips();
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hideChildrenTooltips();
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_remodel .remodelList").hide();
+			$(".module.activity .activity_remodel .remodelDetail").show();
+			$(".module.activity .activity_remodel .remodelResult").hide();
+			$(".module.activity .activity_remodel").fadeIn(500);
+		},
+
+		GearRemodel: function(data){
+			//console.debug("Remodel result", data);
+			const remodelResultBox = $(".activity_remodel .remodelResult");
+			const result = data.currentResult;
+			const shipId = result.api_voice_ship_id || data.shipId
+				|| PlayerManager.fleets[0].ship(0).masterId;
+			$(".remodel_header .result_title", remodelResultBox).html(KC3Meta.term(
+				!result.api_remodel_flag ? "RemodelItemResultFailure" : "RemodelItemResultSuccess"
+			)).toggleClass("failure", !result.api_remodel_flag);
+			$(".remodel_header .assistant_ship img", remodelResultBox)
+				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
+				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+			$(".remodel_header", remodelResultBox).addClass("hover").off("click")
+				.on("click", function(e) {
+					(new RMsg("service", "strategyRoomPage", {
+						tabPath: "akashi"
+					})).execute();
+				});
+			$(".remodel_footer .owned_devmats span", remodelResultBox).text(PlayerManager.consumables.devmats);
+			$(".remodel_footer .owned_screws span", remodelResultBox).text(PlayerManager.consumables.screws);
+			const recipeDetail = data.cachedRecipes[data.recipeId];
+			const improveItemBox = $("#factory .remodelSlotItem").clone();
+			fillRemodelSlotItemBox(this, improveItemBox, recipeDetail, undefined,
+				// Here shows old stars of equipment before improving
+				data.lastStars > 0 ? data.lastStars : undefined);
+			$(".remodel_improved", remodelResultBox).empty().append(improveItemBox);
+			if(result.api_remodel_flag) {
+				const afterRemodelIds = result.api_remodel_id;
+				const afterRemodelSlot = result.api_after_slot;
+				// Indicates equipment is upgraded if 2 master IDs are different
+				//const isUpgraded = afterRemodelIds[0] !== afterRemodelIds[1];
+				// But no matter upgraded or not, new stars of equipment will be shown anyway
+				if(afterRemodelSlot) {
+					const upgradeItemBox = $("#factory .remodelSlotItem").clone();
+					fillRemodelSlotItemBox(this, upgradeItemBox, {
+						// Will show new equipment after being upgraded
+						api_slot_id: afterRemodelIds[1], noReqs: true
+					}, undefined, afterRemodelSlot.api_level > 0 ? afterRemodelSlot.api_level : undefined);
+					$(".remodel_upgrade_title", remodelResultBox).show();
+					$(".remodel_upgrade_to", remodelResultBox).empty().append(upgradeItemBox).show();
+				} else {
+					$(".remodel_upgrade_title", remodelResultBox).hide();
+					$(".remodel_upgrade_to", remodelResultBox).hide();
+				}
+			} else {
+				$(".remodel_upgrade_title", remodelResultBox).hide();
+				$(".remodel_upgrade_to", remodelResultBox).hide();
+			}
+			$(".module.activity .activity_remodel").createChildrenTooltips();
+			$(".module.activity .activity_tab").removeClass("active");
+			$("#atab_activity").addClass("active");
+			$(".module.activity .activity_box").hideChildrenTooltips();
+			$(".module.activity .activity_box").hide();
+			$(".module.activity .activity_remodel .remodelList").hide();
+			$(".module.activity .activity_remodel .remodelDetail").hide();
+			$(".module.activity .activity_remodel .remodelResult").show();
+			$(".module.activity .activity_remodel").fadeIn(500);
+		},
+
 		ExpeditionSelection: function (data) {
 			if (! ConfigManager.info_auto_exped_tab)
 				return;
@@ -3871,6 +4086,61 @@
 			return false;
 		}
 	};
+
+	function fillRemodelSlotItemBox(self, itemBox, recipe, rosterId, stars) {
+		if(!recipe.api_slot_id) return itemBox;
+		const gearMst = KC3Master.slotitem(recipe.api_slot_id);
+		const paddedId = String(gearMst.api_id).padStart(3, '0');
+		if(!recipe.noReqs) {
+			$(".remodel_slot_itemon img", itemBox)
+				.attr("src", `${myKcServerHost}/kcs/resources/image/slotitem/item_on/${paddedId}.png`)
+				.attr("title", gearMst.api_info)
+				.data("masterId", gearMst.api_id)
+				.on("click", self.gearDoubleClickFunction);
+		} else {
+			itemBox.addClass("noReqs");
+		}
+		$(".remodel_slot_icon img", itemBox)
+			.attr("src", `/assets/img/items/${gearMst.api_type[3]}.png`)
+			.attr("title", (recipe.api_id ? "{0}" : "[{0}]")
+				.format(recipe.api_id || gearMst.api_id))
+			.data("masterId", gearMst.api_id)
+			.on("dblclick", self.gearDoubleClickFunction);
+		$(".remodel_slot_name", itemBox)
+			.text(KC3Meta.gearName(gearMst.api_name))
+			.attr("title", KC3Meta.gearName(gearMst.api_name));
+		if(rosterId > 0) {
+			stars = KC3GearManager.get(rosterId).stars;
+		}
+		if(stars !== undefined) {
+			$(".remodel_slot_star span", itemBox).text(stars);
+			$(".remodel_slot_star", itemBox).show();
+			itemBox.addClass("withStar");
+		}
+		if(!recipe.noReqs) {
+			["fuel", "ammo", "steel", "bauxite", "devmats", "screws"].forEach((key, i) => {
+				const isKit = ["devmats", "screws"].includes(key);
+				$(".remodel_slot_reqs .remodel_req_{0} span{1}"
+					.format(key, isKit ? ".req" : ""), itemBox).text(
+					(isKit ? "x" : "") +
+					(recipe["api_req_" + ({
+						"ammo": "bull",
+						"devmats": "buildkit",
+						"screws": "remodelkit"
+					}[key] || key)] || 0)
+				);
+				if(isKit) {
+					const certainValue = recipe["api_certain_" + ({
+							"devmats": "buildkit",
+							"screws": "remodelkit"
+						}[key] || key)] || 0;
+					$(`.remodel_slot_reqs .remodel_req_${key} span.certain`, itemBox)
+						.text(`(${certainValue})`).toggle(certainValue > 0);
+				}
+			});
+		}
+		return itemBox;
+	}
 
 	function updateHQEXPGained(ele,newDelta) {
 		var
