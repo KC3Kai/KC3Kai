@@ -1166,7 +1166,8 @@
 			if(isSup){
 				if(valuesTuple[0] >= valuesTuple[1]){
 					statElm.addClass("max");
-				} else if(valuesTuple[0] > valuesTuple[2]){
+				}
+				if(valuesTuple[0] > valuesTuple[2]){
 					$(".sup", statElm).text(valuesTuple[0] - valuesTuple[2]);
 				} else {
 					$(".sup", statElm).hide();
