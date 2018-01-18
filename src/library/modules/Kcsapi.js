@@ -1802,9 +1802,16 @@ Previously known as "Reactor"
 							break;
 						case 3: // Large Caliber Main Gun
 							KC3QuestManager.get(663).increment(); // F55 quarterly
+							KC3QuestManager.get(677).increment(0); // F69 weekly index 0
 							break;
 						case 4: // Secondary Gun
 							KC3QuestManager.get(676).increment(1); // F68 weekly index 1
+							break;
+						case 5: // Torpedo
+							KC3QuestManager.get(677).increment(2); // F69 weekly index 2
+							break;
+						case 10: // Recon Seaplane
+							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
 							break;
 						case 21: // Anti-Air Gun
 							KC3QuestManager.get(638).increment(); // F34 weekly
@@ -2301,7 +2308,9 @@ Previously known as "Reactor"
 			if(rankPt >= 3) {
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
-				KC3QuestManager.get(311).increment(); // C8: Elite Fleet Practice
+				KC3QuestManager.get(311).increment(); // C8: Monthly Exercises 1
+				if(KC3QuestManager.isPrerequisiteFulfilled(318))
+					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
 			}
 		}
 	}

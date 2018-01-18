@@ -552,6 +552,9 @@ body {
 .ship_list .ship_item .ship_morale.sparkled {
 	background:#ff0;
 }
+.ship_list .ship_item .ship_hp.max {
+	background:#52d052;
+}
 .ship_list .ship_item .ship_fp.max {
 	background:#ff8888;
 }
@@ -734,6 +737,9 @@ body {
 }
 .tab_ships .ship_item .ship_morale.sparkled {
 	background:#ff0;
+}
+.tab_ships .ship_item .ship_hp.max {
+	background:#52d052;
 }
 .tab_ships .ship_item .ship_fp.max {
 	background:#ff8888;

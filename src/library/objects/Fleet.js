@@ -1169,6 +1169,7 @@ Contains summary information about a fleet and its ships
 	 *         1=Aerial Support, 2=Support Shelling, 3=Long Range Torpedo Attack, 4=Anti-Sub Support
 	 *         0=Unmet expedition prerequisite
 	 * @see http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
+	 * @see http://wikiwiki.jp/kancolle/?%BB%D9%B1%E7%B4%CF%C2%E2
 	 */
 	KC3Fleet.prototype.estimateSupportType = function() {
 		// Support expedition needs 2 DD at least
@@ -1190,6 +1191,28 @@ Contains summary information about a fleet and its ships
 			else {
 				return 3;
 			}
+		}
+		// Check for Anti-sub Support
+		const countAirAswShipType = (...shipTypes) => {
+			return this.ship().reduce((count, ship) => {
+				return count + (1 & (
+					// Match with specific ship types
+					shipTypes.includes(ship.master().api_stype) &&
+					// Equip aircraft can ASW with air attack (TB/DB/Autogyro/PBY/SPB/SPR/LFB)
+					// on any non zero slot
+					!!ship.equipment(false).find(
+						(g, i) => ship.slots[i] > 0 && g.isAswAircraft(false, true)
+					)
+				));
+			}, 0);
+		};
+		// If 1 Anti-sub CVL + any 1 Anti-sub (with air attack) CVL/AV/AO/LHA/CL or 2 DE present
+		// Will fall back to Aerial Support if there is no submarine in enemy fleet
+		const antiSubCvl = countAirAswShipType(7);
+		if(antiSubCvl >= 1 && (antiSubCvl >= 2 ||
+			countAirAswShipType(3, 16, 17, 22) >= 1 ||
+			this.countShipType(1) >= 2)) {
+			return 4;
 		}
 		// If no criteria is met, remaining should be Aerial Support
 		return 1;

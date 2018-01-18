@@ -484,25 +484,29 @@
 					// in case when the data isn't available,
 					// slots should still be getting cleaned up
 					$(".slotitem", this).empty().removeAttr("title");
-					$(".sloticon img", this).attr("src", "");
-					$(".sloticon img", this).hide();
+					$(".sloticon img", this).attr("src", "").hide();
 
 					if (stockEquipments) {
-						var equipId = stockEquipments[index];
-						if (equipId > 0) {
-							var equipment = KC3Master.slotitem( equipId );
-							$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) );
+						let equipId = stockEquipments[index];
+						if (equipId && (equipId > 0 || equipId.id > 0)) {
+							let star = 0;
+							if (equipId.id) {
+								star = equipId.star;
+								equipId = equipId.id;
+							}
+							const equipment = KC3Master.slotitem(equipId);
+							let nameText = KC3Meta.gearName(equipment.api_name);
+							if (star > 0) nameText += ` <span class="star">\u2605+${star}</span>`;
+							$(".slotitem", this).html(nameText);
 							$(".sloticon img", this)
-								.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
-							$(".sloticon img", this).attr("alt", equipId);
-							$(".sloticon img", this).off("click").click(function(){
-								KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-							});
-							$(".sloticon img", this).show();
+								.attr("src", `/assets/img/items/${equipment.api_type[3]}.png`)
+								.attr("alt", equipId).off("click")
+								.click(function(){
+									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+								}).show();
 							$(".sloticon", this).addClass("hover");
 						} else {
-							$(".sloticon img", this).hide();
-							$(".sloticon img", this).off("click");
+							$(".sloticon img", this).hide().off("click");
 							$(".sloticon", this).removeClass("hover");
 						}
 					}

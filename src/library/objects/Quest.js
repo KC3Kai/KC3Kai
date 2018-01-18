@@ -297,6 +297,13 @@ known IDs see QuestManager
 		if([607, 608, 674].indexOf(this.id) > -1
 			&& currentCount > 0 && currentCount < maxCount)
 			return;
+		// client-side progress judgement for these:
+		// C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
+		if([318].indexOf(this.id) > -1) {
+			if (currentCount < maxCount && this.progress > 0)
+				trackingData[0] = maxCount;
+			return;
+		}
 
 		// pFlag: short for Progress Flag,
 		// for uncompleted quests:

@@ -1489,14 +1489,14 @@ KC3改 Ship Object
 		// see comments below.
 		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
 			[
-				// Abukuma K2(200), Kinu K2(487), Yura K2(488), Tama K2(547)
-				200, 487, 488, 547,
+				// Abukuma K2(200), Tatsuta K2(478), Kinu K2(487), Yura K2(488), Tama K2(547)
+				200, 478, 487, 488, 547,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435), Fumizuki(548)
 				418, 434, 435, 548,
 				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
 				464, 470, 199, 468, 489, 490,
-				// Verniy(147), Kawakaze K2(469)
-				147, 469,
+				// Verniy(147), Kawakaze K2(469), Murasame K2(498)
+				147, 469, 498,
 				// Nagato K2(541)
 				541
 			].indexOf( this.masterId ) === -1)
@@ -1513,8 +1513,8 @@ KC3改 Ship Object
 	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
-		// master Id for Isuzu K2
-		if (this.masterId === 141)
+		// master Id for Isuzu K2, Tatsuta K2
+		if (this.masterId === 141 || this.masterId === 478)
 			return true;
 
 		// is Taiyou series:

@@ -229,13 +229,17 @@
 	margin:2px 0px 0px -10px;
 	padding-left: 12px;
 	z-index:1;
-	color: white;
+	color:white;
 	background:#444;
 	border-radius:0px 3px 3px 0px;
 	font-size:12px;
 	text-overflow: ellipsis;
 	overflow:hidden;
 	white-space: nowrap; 
+}
+.tab_mstship .shipInfo .equipment .slotitem .star {
+	color:#45a9a5;
+	font-size:11px;
 }
 
 /* Abyssal JSON */

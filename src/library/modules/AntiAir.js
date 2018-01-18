@@ -103,10 +103,8 @@ AntiAir: anti-air related calculations
 	// AA Radar
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
-	// EO memo: api_tyku >= 2
 	function isAARadar(mst) {
-		return isRadar(mst) && 
-			mst.api_tyku > 0;
+		return isRadar(mst) && mst.api_tyku >= 2;
 	}
 
 	// AAFD: check by category (36)
@@ -118,8 +116,11 @@ AntiAir: anti-air related calculations
 	// Type 3 Shell
 	var isType3Shell = categoryEq(18);
 
-	// Anti-air gun includes machine guns and rocket launchers
-	var isAAGun = categoryEq(21);
+	// Anti-air gun includes machine guns and rocket launchers,
+	// but not sure why AA stat < 3 gun not counted (only 7.7mm MG for now)
+	var isAAGun = predAllOf(iconEq(15), function(mst) {
+		return mst.api_tyku >= 3;
+	});
 
 	var isRedGun = predAnyOf(
 		iconEq(1),
@@ -137,23 +138,28 @@ AntiAir: anti-air related calculations
 
 	var isLargeCaliberMainGun = categoryEq(3);
 
-	// EO memo: api_tyku >= 8
 	function isBuiltinHighAngleMount(mst) {
+		// use the condition also used in game for future unknown equipment
+		return isHighAngleMount(mst) && mst.api_tyku >= 8;
+		/*
 		return [
-			122 /* aki-gun */,
-			130 /* maya-gun */,
-			135 /* 90mm single HA */,
-			172 /* 5inch */
+			122, // aki-gun
+			130, // maya-gun
+			135, // 90mm single HA
+			172  // 5inch
 		].indexOf( mst.api_id ) !== -1;
+		*/
 	}
 
-	// EO memo: api_tyku >= 9
 	function isCDMG(mst) {
+		return isAAGun(mst) && mst.api_tyku >= 9;
+		/*
 		return [
-			131 /* 25mm triple (CD) */,
-			173 /* Bofors */,
-			191 /* QF 2-pounder */
+			131, // 25mm triple (CD)
+			173, // Bofors
+			191  // QF 2-pounder
 		].indexOf( mst.api_id ) !== -1;
+		*/
 	}
 
 	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
@@ -406,7 +412,7 @@ AntiAir: anti-air related calculations
 			421, 330 /* Akizuki & Kai */,
 			422, 346 /* Teruzuki & Kai */,
 			423, 357 /* Hatsuzuki & Kai */,
-			532, 537 /* Suzutsuki & Kai */	
+			532, 537 /* Suzutsuki & Kai */
 		].indexOf( mst.api_id ) !== -1;
 	}
 
@@ -429,6 +435,7 @@ AntiAir: anti-air related calculations
 		fumizukiK2Icon = 548,
 		uit25Icon = 539,
 		i504Icon = 530,
+		tatsutaK2Icon = 478,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -450,6 +457,7 @@ AntiAir: anti-air related calculations
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
 	var isUit25 = masterIdEq( uit25Icon );
 	var isI504 = masterIdEq( i504Icon );
+	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -539,7 +547,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isCDMG ),
-				/* CDMGs are AAGuns, so we need at least 2 AA guns 
+				/* CDMGs are AAGuns, so we need at least 2 AA guns
 				   including the CDMG one we have just counted */
 				hasAtLeast(isAAGun, 2),
 				hasSome( isAARadar ))
@@ -727,13 +735,24 @@ AntiAir: anti-air related calculations
 	);
 
 	// UIT-25 / I-504
-	// https://docs.google.com/spreadsheets/d/1ljddcPvpEioGVU5yvd5GtPU7afRKPSnzFDEIBbFohh8
 	declareAACI(
 		23, 1, 1.05,
 		[uit25Icon, aaGunNotCdIcon],
 		predAnyOf(isUit25, isI504),
 		withEquipmentMsts(
 			hasSome( isAAGunNotCD )
+		)
+	);
+
+	// Tatsuta K2
+	declareAACI(
+		24, 3, 1.25,
+		[tatsutaK2Icon, haMountIcon, aaGunNotCdIcon],
+		predAllOf(isTatsutaK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAAGunNotCD ))
 		)
 	);
 

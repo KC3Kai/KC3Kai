@@ -50,7 +50,9 @@
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
         // special case for Saratoga Mk.II converting: 5500 steel but 20 devmats
         calcDevMat: function(steel, ship_id_from) {
-            if ([545, 550].indexOf(ship_id_from) > -1)
+            if (214 === ship_id_from) // Tatsuta
+                return 15;
+            if ([545, 550].indexOf(ship_id_from) > -1) // Saratoga
                 return 20;
             return (steel < 4500) ? 0
                 : ( steel < 5500) ? 10
@@ -66,6 +68,8 @@
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
             switch(ship_id_from) {
+                case 214: // Tatsuta
+                    return 5;
                 case 503: // Suzuya K2
                 case 504: // Kumano K2
                 case 508: // Suzuya Kou K2
