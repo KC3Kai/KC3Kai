@@ -604,6 +604,9 @@ button, input, select, textarea {
 	background:#b1b101;
 	color:#000;
 }
+.ship_list .ship_item .ship_hp.max {
+	background:#09a709;
+}
 .ship_list .ship_item .ship_fp.max {
 	background:#833232;
 }
@@ -935,6 +938,9 @@ button, input, select, textarea {
 }
 .tab_ships .ship_item .ship_lv span.value.medium {
 	color:#36c2db;
+}
+.tab_ships .ship_item .ship_hp.max {
+	background:#09a709;
 }
 .tab_ships .ship_item .ship_fp.max {
 	background:#833232;

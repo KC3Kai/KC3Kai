@@ -1,4 +1,44 @@
 {
+	"735": {
+		"api_id": 735,
+		"api_name": "正月大和",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"736": {
+		"api_id": 736,
+		"api_name": "正月対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"737": {
+		"api_id": 737,
+		"api_name": "正月Richelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"738": {
+		"api_id": 738,
+		"api_name": "正月Warspite",
+		"api_yomi": "ウォースパイト",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"739": {
+		"api_id": 739,
+		"api_name": "打ち上げ秋雲",
+		"api_yomi": "あきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"740": {
 		"api_id": 740,
 		"api_name": "売り子風雲",
@@ -111,6 +151,14 @@
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
+	"756": {
+		"api_id": 756,
+		"api_name": "秋の私服不知火",
+		"api_yomi": "しらぬい",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"757": {
 		"api_id": 757,
 		"api_name": "海峡突入満潮改二",
@@ -166,6 +214,14 @@
 		"api_stype": 16,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"764": {
+		"api_id": 764,
+		"api_name": "秋の私服蒼龍",
+		"api_yomi": "そうりゅう",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
 	},
 	"765": {
 		"api_id": 765,

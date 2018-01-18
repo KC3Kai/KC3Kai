@@ -217,10 +217,9 @@
 			
 			// If has children, show them under me
 			if(typeof thisQuest.unlock != "undefined"){
-				var ctr;
 				var childContainer = $("ul.questChildren", thisBox);
 				childContainer.attr("id", "questBox_"+quest_id);
-				for(ctr in thisQuest.unlock){
+				for(let ctr in thisQuest.unlock){
 					if(KC3QuestManager.isPeriod(thisQuest.unlock[ctr])){
 						this.seedBranch( childContainer, thisQuest.unlock[ctr] );
 					}
