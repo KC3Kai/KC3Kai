@@ -135,7 +135,7 @@ Uses KC3Quest objects to play around with
 			weekly: {
 				type: 'weekly',
 				key: 'timeToResetWeeklyQuests',
-				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 676, 703],
+				questIds: [214, 220, 213, 221, 228, 229, 241, 242, 243, 261, 302, 404, 410, 411, 613, 638, 676, 677, 703],
 				resetQuests: function () { KC3QuestManager.resetWeeklies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -154,7 +154,7 @@ Uses KC3Quest objects to play around with
 			monthly: {
 				type: 'monthly',
 				key: 'timeToResetMonthlyQuests',
-				questIds: [249, 256, 257, 259, 265, 264, 266, 311, 424, 626, 628, 645],
+				questIds: [249, 256, 257, 259, 265, 264, 266, 311, 318, 424, 626, 628, 645],
 				resetQuests: function () { KC3QuestManager.resetMonthlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -473,6 +473,12 @@ Uses KC3Quest objects to play around with
 								77, 82, 87, 88,             // Ise-class
 								26, 286, 411, 27, 287, 412  // Fusou-class
 							]) === 3 && fleet.countShipType(3) === 1;
+					},
+				"318": // C16 PvP with 2 more CLs in 1st fleet
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						return KC3SortieManager.isPvP() && KC3SortieManager.fleetSent == 1 &&
+							firstFleet.countShipType(3) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
