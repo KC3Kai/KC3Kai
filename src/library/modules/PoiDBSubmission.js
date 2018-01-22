@@ -23,6 +23,7 @@
 		remodelRecipeList: null,
 		remodelRecipeData: null,
 		remodelKnownRecipes: [],
+		remodelKnownRecipesLastUpdated: 0,
 
 		// api handler
 		handlers: {},
@@ -198,8 +199,8 @@
 				reqItemCount: response.api_req_slot_num || 0,
 				//reqUseitemId: response.api_req_useitem_id || -1,
 				//reqUseitemCount: response.api_req_useitem_num || 0,
-				buildkit: recipe.api_req_buildkit || 0,
-				remodelkit: recipe.api_req_remodelkit || 0,
+				buildkit: response.api_req_buildkit || 0,
+				remodelkit: response.api_req_remodelkit || 0,
 				certainBuildkit: response.api_certain_buildkit || 0,
 				certainRemodelkit: response.api_certain_remodelkit || 0
 			};
@@ -243,9 +244,9 @@
 
 			// Besides well-known recipes,
 			// failed or duplicated improvement seems be noisy for recipe recording
-			// see https://github.com/poooi/plugin-report/blob/master/index.es#L450
+			// see https://github.com/poooi/plugin-report/blob/master/reporters/remodel-recipe.es#L113
 			if (!isSuccess || !this.remodelKnownRecipes.length
-				|| this.remodelKnownRecipes.includes[data.key]
+				|| this.remodelKnownRecipes.includes(data.key)
 				|| [101, 201, 301].includes(data.recipeId)) {
 				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
 			} else {
@@ -258,15 +259,21 @@
 			this.remodelRecipeData = null;
 		},
 		lazyInitKnownRecipes: function() {
-			if (this.remodelKnownRecipes.length) return;
-			$.ajax({
-				url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
-				method: "GET",
-				dataType: "json",
-				success: (json) => {
-					if (Array.isArray(json.recipes)) this.remodelKnownRecipes = json.recipes;
-				}
-			});
+			// Update known recipes if not initialized or data older than 30 mins
+			if (!this.remodelKnownRecipes.length
+				|| (Date.now() - this.remodelKnownRecipesLastUpdated) > 30 * 60 * 1000) {
+				$.ajax({
+					url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
+					method: "GET",
+					dataType: "json",
+					success: (json) => {
+						if (Array.isArray(json.recipes)) {
+							this.remodelKnownRecipes = json.recipes;
+							this.remodelKnownRecipesLastUpdated = Date.now();
+						}
+					}
+				});
+			}
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
