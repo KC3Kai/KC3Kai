@@ -1546,7 +1546,8 @@ KC3改 Ship Object
 
 		const hasSonar = this.hasEquipmentType(1, 10);
 		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
-		// see https://twitter.com/a_t_o_6/status/863445975007805440
+		// see https://twitter.com/a_t_o_6/status/863445975007805440 (account closed)
+		// see https://twitter.com/99_999999999/status/954384819567263745
 		if(this.master().api_stype == 1) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
