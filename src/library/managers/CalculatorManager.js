@@ -9,7 +9,7 @@
  * and done within one or few functions.
  *
  * Basic calculation logics related to specific class are located in their corresponding Object definition,
- * such as Fleet, Ships, Gear, LandBase.
+ * such as Fleet, Ship, Gear, LandBase.
  *
  * Complex logic functions will be broken into individual modules or objects:
  * @see BattlePrediction - analyses battle API data and and simulates the battle results in advance;

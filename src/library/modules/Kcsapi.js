@@ -491,27 +491,35 @@ Previously known as "Reactor"
 		
 		// Equipment swap
 		"api_req_kaisou/slot_deprive":function(params, response, headers){
-			var ShipFrom = KC3ShipManager.get(params.api_unset_ship);
-			var ShipTo = KC3ShipManager.get(params.api_set_ship);
-			var setExSlot = params.api_set_slot_kind == 1;
-			var unsetExSlot = params.api_unset_slot_kind == 1;
-			// git rid of unused 5th element, guarantee equipment(4) is ex_item
-			ShipFrom.items = response.api_data.api_ship_data.api_unset_ship.api_slot.slice(0, 4);
-			if(unsetExSlot) ShipFrom.ex_item = response.api_data.api_ship_data.api_unset_ship.api_slot_ex;
-			var oldGearObj = KC3GearManager.get(setExSlot ? ShipTo.ex_item : ShipTo.items[params.api_set_idx]);
-			ShipTo.items = response.api_data.api_ship_data.api_set_ship.api_slot.slice(0, 4);
-			if(setExSlot) ShipTo.ex_item = response.api_data.api_ship_data.api_set_ship.api_slot_ex;
-			KC3ShipManager.save();
+			// it's not swap in fact, only move item from unset ship to set ship:
+			// old slot from unset ship will be empty, and old item from set ship (if any) will be freed
+			const setExSlot = params.api_set_slot_kind == 1;
+			const setShipRosterId = parseInt(params.api_set_ship, 10);
+			const setItemIndex = setExSlot ? 4 : parseInt(params.api_set_idx, 10);
+			const newShipData = response.api_data.api_ship_data;
+			
+			// old status of set ship
+			const oldShipObj = KC3ShipManager.get(setShipRosterId);
+			const oldGearObj = oldShipObj.equipment(setItemIndex);
+			// update set item only for equipment change checks
+			oldShipObj.items = newShipData.api_set_ship.api_slot.slice(0, 4);
+			if(setExSlot) oldShipObj.ex_item = newShipData.api_set_ship.api_slot_ex;
+			
+			// renew ship data for both set ship and unset ship
+			KC3ShipManager.set([newShipData.api_set_ship, newShipData.api_unset_ship]);
+			
 			// If ship is in a fleet, switch view to the fleet containing the ship
-			var fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
+			const fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
 			if (fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
 			}
 			
-			var gearObj = KC3GearManager.get(setExSlot ? ShipTo.ex_item : ShipTo.items[params.api_set_idx]);
-			KC3Network.trigger("GunFit", ShipTo.equipmentChangedEffects(gearObj, oldGearObj));
+			// get new status of set ship
+			const newShipObj = KC3ShipManager.get(setShipRosterId);
+			const newGearObj = newShipObj.equipment(setItemIndex);
+			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
 		},
 		
 		/* Fleet list
