@@ -23,6 +23,7 @@
 			this.clearOverlayHotKey();
 			this.exitConfirmation();
 			this.screenshotHotkey();
+			this.injectDMM();
 
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
@@ -724,6 +725,14 @@
 				hideIdleScreen = false;
 				$(".overlay_idle").hide();
 			};
+		},
+
+		injectDMM: function() {
+			let body = document.getElementsByTagName('body')[0];
+			let script = document.createElement('script');
+			script.setAttribute('type', 'text/javascript');
+			script.setAttribute('src', chrome.extension.getURL('library/injections/dmm_injectable.js'));
+			body.appendChild(script);
 		}
 	};
 

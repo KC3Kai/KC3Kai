@@ -100,6 +100,7 @@
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'",
 	"web_accessible_resources": [
-		"assets/img/*"
+		"assets/img/*",
+		"library/injections/dmm_injectable.js"
 	]
 }
