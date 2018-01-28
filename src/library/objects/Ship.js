@@ -613,7 +613,7 @@ KC3改 Ship Object
 		// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
 		if(count127TwinGunModelDK2 > 0) {
 			const thisShipClass = this.master().api_ctype;
-			const isNaganamiK2 = this.master === 543;
+			const isNaganamiK2 = this.masterId === 543;
 			const isShimakazeClass = thisShipClass === 22,
 				isYuugumoClass = thisShipClass === 38,
 				isKagerouClass = thisShipClass === 30;
