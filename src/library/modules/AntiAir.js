@@ -8,7 +8,7 @@ AntiAir: anti-air related calculations
 		- mst: master data of either ship or gear
 		- pred: predicates, a function that accepts a single parameter and returns a boolean value
 		- predXXX: predicate combinations. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
-          in some specific way to produce a new predicate.
+		  in some specific way to produce a new predicate.
 
 - module contents:
 	- shipProportionalShotdownRate(shipObj)
@@ -128,7 +128,7 @@ AntiAir: anti-air related calculations
 		iconEq(3));
 
 	function is46cmTripleMount(mst) {
-		return mst.api_id === 6;
+		return mst.api_id === 6 || mst.api_id === 276;
 	}
 	
 	var isYellowGun = iconEq(4);
@@ -146,7 +146,7 @@ AntiAir: anti-air related calculations
 			122, // aki-gun
 			130, // maya-gun
 			135, // 90mm single HA
-			172  // 5inch
+			172, // 5inch
 		].indexOf( mst.api_id ) !== -1;
 		*/
 	}
@@ -157,12 +157,16 @@ AntiAir: anti-air related calculations
 		return [
 			131, // 25mm triple (CD)
 			173, // Bofors
-			191  // QF 2-pounder
+			191, // QF 2-pounder
 		].indexOf( mst.api_id ) !== -1;
 		*/
 	}
 
 	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
+
+	function is12cm30tubeRocketLauncherKai2(mst) {
+		return mst.api_id === 274;
+	}
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -408,11 +412,29 @@ AntiAir: anti-air related calculations
 	}
 
 	function isAkizukiClass( mst ) {
+		return mst.api_ctype === 54;
+		/*
 		return [
-			421, 330 /* Akizuki & Kai */,
-			422, 346 /* Teruzuki & Kai */,
-			423, 357 /* Hatsuzuki & Kai */,
-			532, 537 /* Suzutsuki & Kai */
+			421, 330, // Akizuki & Kai
+			422, 346, // Teruzuki & Kai
+			423, 357, // Hatsuzuki & Kai
+			532, 537, // Suzutsuki & Kai
+		].indexOf( mst.api_id ) !== -1;
+		*/
+	}
+
+	function isIseClassKai( mst ) {
+		return mst.api_ctype === 2
+			// if non-Kai excluded
+			&& mst.api_id !== 77 && mst.api_id !== 87;
+	}
+
+	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
+	function isBattleShipKai( mst ) {
+		return [
+			82, // Ise Kai
+			88, // Hyuuga Kai
+			148, // Musashi Kai
 		].indexOf( mst.api_id ) !== -1;
 	}
 
@@ -426,6 +448,8 @@ AntiAir: anti-air related calculations
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
 		battleShipIcon = 131, // Yamato, weigh anchor!
+		battleShipKaiIcon = 148, // Musashi Kai represents
+		iseIcon = 77,
 		mayaK2Icon = 428,
 		isuzuK2Icon = 141,
 		kasumiK2BIcon = 470,
@@ -577,6 +601,31 @@ AntiAir: anti-air related calculations
 				hasSome( isLargeCaliberMainGun ),
 				hasSome( isType3Shell ),
 				hasSome( isAAFD ))
+		)
+	);
+
+	// Ise-class Kai only AACIs
+	declareAACI(
+		25, 7, 1.55,
+		[iseIcon, aaGunIcon, radarIcon, type3ShellIcon],
+		predAllOf(isIseClassKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isType3Shell ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// Ise-class Kai + Musashi Kai
+	declareAACI(
+		28, 4, 1.4,
+		[battleShipKaiIcon, aaGunIcon, radarIcon],
+		predAllOf(isBattleShipKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isAARadar ))
 		)
 	);
 
