@@ -581,7 +581,7 @@ AntiAir: anti-air related calculations
 
 	// battleship special AACIs
 	declareAACI(
-		4, 6, 1.4,
+		4, 6, 1.5,
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
 		predAllOf(isBattleship, slotNumAtLeast(4)),
 		withEquipmentMsts(
@@ -617,6 +617,8 @@ AntiAir: anti-air related calculations
 				hasSome( isAARadar ))
 		)
 	);
+
+	// api_kind 26, 27 are still unknown
 
 	// Ise-class Kai + Musashi Kai
 	declareAACI(
@@ -683,6 +685,8 @@ AntiAir: anti-air related calculations
 				hasSome( isCDMG ))
 		)
 	);
+	// api_kind 13 deprecated by devs
+	// might be Maya non-K2 biHaMount+CDMG+AirRadar +4 x1.35
 
 	// Isuzu K2
 	declareAACI(
