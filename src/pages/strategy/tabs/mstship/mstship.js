@@ -629,26 +629,26 @@
 				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
 				if (aaciList.length > 0) {
 					$.each(aaciList, function(idx, aaciObj){
-						let aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
+						const aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
 						$(".apiId", aaciBox).text("[{0}]".format(aaciObj.id));
 						if(aaciObj.icons[0] > 0) {
 							$(".shipIcon img", aaciBox)
-								.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+								.attr("src", KC3Meta.shipIcon(aaciObj.icons[0], undefined, false) )
 								.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "");
 						} else {
 							$(".shipIcon img", aaciBox).hide();
 						}
 						if(aaciObj.icons.length > 1) {
 							for(let i = 1; i < aaciObj.icons.length; i++) {
-								let equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
+								const equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
 								$("<img/>")
-									.attr("src", "../../../../assets/img/items/"+equipIcon[0]+".png")
+									.attr("src", `/assets/img/items/${equipIcon[0]}.png`)
 									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 									.appendTo($(".equipIcons", aaciBox));
-								if(equipIcon.length>1) {
+								if(equipIcon.length > 1) {
 									$('<img/>')
-										.attr("src", "../../../../assets/img/items/"+equipIcon[1]+".png")
-										.addClass(aaciObj.icons[i].indexOf("-")>-1 ? "minusIcon" : "plusIcon")
+										.attr("src", `/assets/img/items/${equipIcon[1]}.png`)
+										.addClass(aaciObj.icons[i].indexOf("-") > -1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}
 							}
@@ -659,7 +659,7 @@
 						aaciBox.toggleClass("even", (idx+1) % 2 === 0);
 						aaciBox.appendTo(".aaciList");
 					});
-					$(".aaci").show();
+					$(".aaci").show().createChildrenTooltips();
 					$(".aaci").parent().prev().show();
 				} else {
 					$(".aaci").hide();

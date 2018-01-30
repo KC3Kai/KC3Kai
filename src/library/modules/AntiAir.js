@@ -470,7 +470,8 @@ AntiAir: anti-air related calculations
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
 		haMountNbifdIcon = "16-30", // HA without AAFD
-		aaGunNotCdIcon = "15-15";   // Non-CD AA Machine Gun
+		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
+		aaGunK2RockeLaunIcon = "15+31"; // 12cm 30tube Rocket Launcher Kai 2
 
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
@@ -607,7 +608,7 @@ AntiAir: anti-air related calculations
 	// Ise-class Kai only AACIs
 	declareAACI(
 		25, 7, 1.55,
-		[iseIcon, aaGunIcon, radarIcon, type3ShellIcon],
+		[iseIcon, aaGunK2RockeLaunIcon, radarIcon, type3ShellIcon],
 		predAllOf(isIseClassKai),
 		withEquipmentMsts(
 			predAllOf(
@@ -620,7 +621,7 @@ AntiAir: anti-air related calculations
 	// Ise-class Kai + Musashi Kai
 	declareAACI(
 		28, 4, 1.4,
-		[battleShipKaiIcon, aaGunIcon, radarIcon],
+		[battleShipKaiIcon, aaGunK2RockeLaunIcon, radarIcon],
 		predAllOf(isBattleShipKai),
 		withEquipmentMsts(
 			predAllOf(
