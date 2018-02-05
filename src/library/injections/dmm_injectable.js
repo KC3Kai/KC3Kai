@@ -1,18 +1,18 @@
 /* dmm_injectable.js
 KC3改 reloadDialog override
 
-Injected on URLs matching pattern: "*://osapi.dmm.com/gadgets/*aid=854854*"
-See osapi.js
+Injected on URLs matching the same pattern with dmm_takeover.js, like: *.dmm.com
+See dmm_takeover.js and manifest.json
 
-Overrides DMM reload dialog, making it only show once per session.
+Overrides DMM force reloading dialog, making it only show once per session.
 */
 (function(){
 	"use strict";
 	var sendDMMReloadAttempt = true;
 
-	// Override DMM's reload dialog
+	// Original DMM reloadDialog shows an alert box, then force page reloaded
 	window.DMM.netgame.reloadDialog = function() {
-		console.error("[DMM] Unable to update security token. Please refresh game when you can.");
+		console.warn("[DMM] Unable to update security token. Please refresh game when you can.");
 		if(sendDMMReloadAttempt) {
 			sendDMMReloadAttempt = false;
 			alert("Unable to update security token.\n" + 

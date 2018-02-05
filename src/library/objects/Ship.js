@@ -1099,7 +1099,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap airstrike power tuple of this ship.
+	 * Get post-cap airstrike power tuple of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b8c008fa
 	 * @see KC3Gear.prototype.airstrikePower
 	 */

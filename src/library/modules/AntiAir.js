@@ -751,7 +751,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
 			predAllOf(
-				/* any HA with builtin AAFD will not work  */
+				/* any HA with builtin AAFD will not work */
 				predNot( hasSome( isBuiltinHighAngleMount )),
 				hasSome( isHighAngleMount ),
 				hasSome( isCDMG ))
