@@ -17,8 +17,8 @@
 	},
 	"734": {
 		"api_id": 734,
-		"api_name": "節分初霜",
-		"api_yomi": "はつしも",
+		"api_name": "節分朝霜",
+		"api_yomi": "あさしも",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
