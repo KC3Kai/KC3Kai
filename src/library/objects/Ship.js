@@ -2273,17 +2273,17 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateAntiAirEffectType = function() {
 		const aaEquipType = (() => {
 			if(this.isDummy()) return -1;
-			// Escaped or Morale 0 ship cannot anti-air
+			// Escaped or morale 0 ship cannot anti-air
 			if(this.didFlee || !this.morale) return -1;
 			const stype = this.master().api_stype;
-			// CAV, BBV, CV/CVL/CVB, AV can use Type 3 Shell
-			const isType3ShellStype = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
-			if(isType3ShellStype && this.hasEquipmentType(2, 18)) {
-				if(this.hasEquipment(274)) return 5;
+			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
+			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
+			if(this.hasEquipmentType(2, 18)) {
+				if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 5;
 				return 4;
 			}
-			// 12cm 30tube Rocket Launcher Kai 2
-			if(this.hasEquipment(274)) return 3;
+			// 12cm 30tube Rocket Launcher Kai Ni
+			if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 3;
 			// 12cm 30tube Rocket Launcher
 			if(this.hasEquipment(51)) return 2;
 			// Any HA Mount
