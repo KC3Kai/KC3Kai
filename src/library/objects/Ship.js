@@ -2278,6 +2278,7 @@ KC3改 Ship Object
 			const stype = this.master().api_stype;
 			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
 			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
+			// Type 3 Shell
 			if(this.hasEquipmentType(2, 18)) {
 				if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 5;
 				return 4;
@@ -2738,9 +2739,9 @@ KC3改 Ship Object
 			KC3Meta.term("ShipAAAdjusted").format(
 				"{0}{1}".format(
 					shipObj.adjustedAntiAir(),
-					// Only show irregular AA effect type,
-					// normal AA effect by equipping Machine Gun / Air Radar
-					aaEffectType[0] > 0 ?
+					// Only irregular AA effect types will show a text in-game,
+					// normal AA effect triggered by equipping Machine Gun / Air Radar
+					aaEffectType[0] > -1 ?
 						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectType[1])) :
 						""
 				)
