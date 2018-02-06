@@ -1099,7 +1099,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap airstrike power tuple of this ship.
+	 * Get post-cap airstrike power tuple of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b8c008fa
 	 * @see KC3Gear.prototype.airstrikePower
 	 */
@@ -2267,6 +2267,50 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Anti-air Equipment Attack Effect implemented since 2018-02-05 in-game.
+	 * @return a tuple indicates the effect type ID and its term key.
+	 */
+	KC3Ship.prototype.estimateAntiAirEffectType = function() {
+		const aaEquipType = (() => {
+			if(this.isDummy()) return -1;
+			// Escaped or morale 0 ship cannot anti-air
+			if(this.didFlee || !this.morale) return -1;
+			const stype = this.master().api_stype;
+			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
+			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
+			// Type 3 Shell
+			if(this.hasEquipmentType(2, 18)) {
+				if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 5;
+				return 4;
+			}
+			// 12cm 30tube Rocket Launcher Kai Ni
+			if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 3;
+			// 12cm 30tube Rocket Launcher
+			if(this.hasEquipment(51)) return 2;
+			// Any HA Mount
+			if(this.hasEquipmentType(3, 16)) return 1;
+			// Any AA Machine Gun
+			if(this.hasEquipmentType(2, 21)) return 0;
+			// Any Radar with AA stat,
+			// the only difference with gear.isAirRadar() is 'Type 13 Air Radar' for now
+			if(this.equipment(true).find(
+				g => g.masterId > 0 && g.master().api_type[3] === 11 && g.master().api_tyku > 0
+			)) return 0;
+			return -1;
+		})();
+		switch(aaEquipType) {
+			case -1: return [-1, "None"];
+			case 0: return [0, "Normal"];
+			case 1: return [1, "HighAngleMount"];
+			case 2: return [2, "RocketLauncher"];
+			case 3: return [3, "RocketLauncherK2"];
+			case 4: return [4, "Type3Shell"];
+			case 5: return [5, "Type3ShellRockeLaunK2"];
+			default: return [NaN, "Unknown"];
+		}
+	};
+
+	/**
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
 	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
@@ -2690,8 +2734,18 @@ KC3改 Ship Object
 				optionalModifier(shellingEvasion.moraleModifier, true)
 			)
 		);
+		const aaEffectType = shipObj.estimateAntiAirEffectType();
 		$(".adjustedAntiAir", tooltipBox).text(
-			KC3Meta.term("ShipAAAdjusted").format(shipObj.adjustedAntiAir())
+			KC3Meta.term("ShipAAAdjusted").format(
+				"{0}{1}".format(
+					shipObj.adjustedAntiAir(),
+					// Only irregular AA effect types will show a text in-game,
+					// normal AA effect triggered by equipping Machine Gun / Air Radar
+					aaEffectType[0] > -1 ?
+						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectType[1])) :
+						""
+				)
+			)
 		);
 		$(".propShotdownRate", tooltipBox).text(
 				KC3Meta.term("ShipAAShotdownRate").format(

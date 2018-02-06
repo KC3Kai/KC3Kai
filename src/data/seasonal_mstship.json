@@ -1,4 +1,28 @@
 {
+	"732": {
+		"api_id": 732,
+		"api_name": "節分如月",
+		"api_yomi": "きさらぎ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"733": {
+		"api_id": 733,
+		"api_name": "節分佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"734": {
+		"api_id": 734,
+		"api_name": "節分朝霜",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"735": {
 		"api_id": 735,
 		"api_name": "正月大和",
