@@ -2291,10 +2291,9 @@ KC3改 Ship Object
 			if(this.hasEquipmentType(3, 16)) return 1;
 			// Any AA Machine Gun
 			if(this.hasEquipmentType(2, 21)) return 0;
-			// Any Radar with AA stat,
-			// the only difference with gear.isAirRadar() is 'Type 13 Air Radar' for now
-			if(this.equipment(true).find(
-				g => g.masterId > 0 && g.master().api_type[3] === 11 && g.master().api_tyku > 0
+			// Any Radar plus any Seaplane bomber with AA stat
+			if(this.hasEquipmentType(3, 11) && this.equipment(true).find(
+				g => g.masterId > 0 && g.master().api_type[2] === 11 && g.master().api_tyku > 0
 			)) return 0;
 			return -1;
 		})();
@@ -2734,15 +2733,19 @@ KC3改 Ship Object
 				optionalModifier(shellingEvasion.moraleModifier, true)
 			)
 		);
-		const aaEffectType = shipObj.estimateAntiAirEffectType();
+		const [aaEffectTypeId, aaEffectTypeTerm] = shipObj.estimateAntiAirEffectType();
 		$(".adjustedAntiAir", tooltipBox).text(
 			KC3Meta.term("ShipAAAdjusted").format(
 				"{0}{1}".format(
 					shipObj.adjustedAntiAir(),
-					// Only irregular AA effect types will show a text in-game,
-					// normal AA effect triggered by equipping Machine Gun / Air Radar
-					aaEffectType[0] > -1 ?
-						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectType[1])) :
+					/* Here indicates the type of AA ability, not the real attack animation in-game,
+					 * only special AA effect types will show a banner text in-game,
+					 * like the T3 Shell shoots or Rockets shoots,
+					 * regular AA gun animation triggered by equipping AA gun, Radar+SPB or HA mount.
+					 * btw, 12cm Rocket Launcher non-Kai belongs to AA guns, no irregular attack effect.
+					 */
+					aaEffectTypeId > -1 ?
+						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)) :
 						""
 				)
 			)
