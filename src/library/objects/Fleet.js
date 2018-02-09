@@ -452,13 +452,11 @@ Contains summary information about a fleet and its ships
 	};
 	
 	KC3Fleet.prototype.fighterPower = function(){
-		return this.shipsUnescaped().map(ship => ship.fighterPower())
-			.reduce((acc, v) => acc + v, 0);
+		return this.shipsUnescaped().map(ship => ship.fighterPower()).sumValues();
 	};
 	
 	KC3Fleet.prototype.fighterVeteran = function(){
-		return this.shipsUnescaped().map(ship => ship.fighterVeteran())
-			.reduce((acc, v) => acc + v, 0);
+		return this.shipsUnescaped().map(ship => ship.fighterVeteran()).sumValues();
 	};
 	
 	KC3Fleet.prototype.fighterBounds = function(){
@@ -510,11 +508,10 @@ Contains summary information about a fleet and its ships
 		const airControlModifiers = [0, 1, 0.6, 0.55 /* guessed, unknown value */, 0];
 		var rate = 0;
 		this.shipsUnescaped().forEach(ship => {
-			rate += [0, 1, 2, 3].map(idx => {
-				const gear = ship.equipment(idx);
-				return gear.isContactAircraft(false) ?
-					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0;
-			}).reduce((acc, v) => acc + v, 0);
+			rate += ship.equipment().map(
+				(gear, idx) => gear.isContactAircraft(false) ?
+					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0
+			).sumValues();
 		});
 		return rate * (airControlModifiers[dispSeiku] || 0);
 	};
@@ -1200,7 +1197,7 @@ Contains summary information about a fleet and its ships
 					shipTypes.includes(ship.master().api_stype) &&
 					// Equip aircraft can ASW with air attack (TB/DB/Autogyro/PBY/SPB/SPR/LFB)
 					// on any non zero slot
-					!!ship.equipment(false).find(
+					!!ship.equipment().find(
 						(g, i) => ship.slots[i] > 0 && g.isAswAircraft(false, true)
 					)
 				));
@@ -1288,27 +1285,9 @@ Contains summary information about a fleet and its ships
 							as: nakedStats.as
 						},
 						kyouka: ship.mod,
-						equip: [
-							ship.equipment(0).masterId,
-							ship.equipment(1).masterId,
-							ship.equipment(2).masterId,
-							ship.equipment(3).masterId,
-							ship.exItem().masterId
-						],
-						stars: [
-							ship.equipment(0).stars,
-							ship.equipment(1).stars,
-							ship.equipment(2).stars,
-							ship.equipment(3).stars,
-							ship.exItem().stars
-						],
-						ace: [
-							ship.equipment(0).ace,
-							ship.equipment(1).ace,
-							ship.equipment(2).ace,
-							ship.equipment(3).ace,
-							ship.exItem().ace
-						]
+						equip: ship.equipment(true).map(g => g.masterId),
+						stars: ship.equipment(true).map(g => g.stars),
+						ace: ship.equipment(true).map(g => g.ace)
 					});
 				}
 			});
