@@ -477,8 +477,7 @@ Previously known as "Reactor"
 		// Equipment dragging
 		"api_req_kaisou/slot_exchange_index":function(params, response, headers){
 			var updatingShip = KC3ShipManager.get(params.api_id);
-			// git rid of unused 5th element, guarantee equipment(4) is ex_item
-			updatingShip.items = response.api_data.api_slot.slice(0, 4);
+			updatingShip.items = response.api_data.api_slot;
 			KC3ShipManager.save();
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
@@ -502,7 +501,7 @@ Previously known as "Reactor"
 			const oldShipObj = KC3ShipManager.get(setShipRosterId);
 			const oldGearObj = oldShipObj.equipment(setItemIndex);
 			// update set item only for equipment change checks
-			oldShipObj.items = newShipData.api_set_ship.api_slot.slice(0, 4);
+			oldShipObj.items = newShipData.api_set_ship.api_slot;
 			if(setExSlot) oldShipObj.ex_item = newShipData.api_set_ship.api_slot_ex;
 			
 			// renew ship data for both set ship and unset ship
@@ -795,7 +794,8 @@ Previously known as "Reactor"
 		/* Remove all equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
-			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1];
+			// unnecessary operation here since a `/api_get_member/ship3` call is followed
+			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1,-1];
 			KC3ShipManager.save();
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship

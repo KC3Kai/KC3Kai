@@ -288,12 +288,7 @@ AntiAir: anti-air related calculations
 	}
 
 	function allShipEquipments(shipObj) {
-		return [
-			shipObj.equipment(0),
-			shipObj.equipment(1),
-			shipObj.equipment(2),
-			shipObj.equipment(3),
-			shipObj.exItem()];
+		return shipObj.equipment(true);
 	}
 
 	function shipEquipmentAntiAir(shipObj, forFleet) {

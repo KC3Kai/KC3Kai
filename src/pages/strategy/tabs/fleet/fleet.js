@@ -471,10 +471,10 @@
 				});
 			}
 
-			[0,1,2,3,4].forEach(index => {
+			kcShip.equipment(true).forEach((gear, index) => {
 				self.showKCGear(
 					$(".ship_gear_"+(index+1), shipBox),
-					kcShip.equipment(index),
+					gear,
 					kcShip.slots[index],
 					kcShip,
 					index
@@ -613,11 +613,7 @@
 			var fleetsObj = [];
 
 			function convertEquipmentsOf(ship) {
-				var equipments = [];
-				$.each([0,1,2,3], function(_,ind) {
-					equipments.push( ship.equipment(ind) );
-				});
-				equipments.push( ship.exItem() );
+				var equipments = ship.equipment(true);
 
 				function convertEquipment(e) {
 					if (e.masterId === 0)

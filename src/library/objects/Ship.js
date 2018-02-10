@@ -26,7 +26,8 @@ KC3改 Ship Object
 		// corresponds to "api_slot" in the API,
 		// but devs change it to length == 5 someday,
 		// and item of ex slot still not at 5th.
-		this.items = [-1,-1,-1,-1];
+		// devs plan to extend Musashi Kai2 to 5 slots on 2018-02-16
+		this.items = [-1,-1,-1,-1,-1];
 		// corresponds to "api_slot_ex" in the API,
 		// which has special meanings on few values:
 		// 0: ex slot is not available
@@ -119,8 +120,7 @@ KC3改 Ship Object
 				this.ls = data.api_sakuteki;
 				this.lk = data.api_lucky;
 				this.range = data.api_leng;
-				// git rid of unused 5th, guarantee equipment(4) is exItem
-				this.items = data.api_slot.slice(0, 4);
+				this.items = data.api_slot;
 				if(typeof data.api_slot_ex != "undefined"){
 					this.ex_item = data.api_slot_ex;
 				}
@@ -167,7 +167,7 @@ KC3改 Ship Object
 			case 'number':
 			case 'string':
 				/* Number/String => converted as equipment slot key */
-				return this.getGearManager().get( slot >= this.items.length ? this.ex_item : this.items[slot] );
+				return this.getGearManager().get( slot < 0 || slot >= this.items.length ? this.ex_item : this.items[slot] );
 			case 'boolean':
 				/* Boolean => return all equipments with ex item if true */
 				return slot ? this.equipment().concat(this.exItem())
@@ -175,6 +175,8 @@ KC3改 Ship Object
 			case 'undefined':
 				/* Undefined => returns whole equipment as equip object */
 				return Array.apply(null, this.items)
+					// fixed to max 4 slots if 5th or more slots not found
+					.slice(0, Math.max(this.slotnum, 4))
 					.map(Number.call, Number)
 					.map(i => this.equipment(i));
 			case 'function':
@@ -411,10 +413,29 @@ KC3改 Ship Object
 	KC3Ship.getCarrySlots = function(masterId){
 		var maxeq = KC3Master.isNotRegularShip(masterId) ? undefined :
 			(KC3Master.ship(masterId) || {}).api_maxeq;
-		return Array.isArray(maxeq) ? maxeq.reduce((acc, v) => acc + v, 0) : -1;
+		return Array.isArray(maxeq) ? maxeq.sumValues() : -1;
 	};
 	KC3Ship.prototype.carrySlots = function(){
 		return KC3Ship.getCarrySlots(this.masterId);
+	};
+
+	/**
+	 * @param isExslotIncluded - if equipment on ex-slot is counted, here true by default
+	 * @return current equipped pieces of equipment
+	 */
+	KC3Ship.prototype.equipmentCount = function(isExslotIncluded = true){
+		let amount = (this.items.indexOf(-1) + 1 || (this.items.length + 1)) - 1;
+		// 0 means ex-slot not opened, -1 means opened but none equipped
+		amount += (isExslotIncluded && this.ex_item > 0) & 1;
+		return amount;
+	};
+
+	/**
+	 * @param isExslotIncluded - if ex-slot is counted, here true by default
+	 * @return amount of all equippable slots
+	 */
+	KC3Ship.prototype.equipmentMaxCount = function(isExslotIncluded = true){
+		return this.slotnum + ((isExslotIncluded && (this.ex_item === -1 || this.ex_item > 0)) & 1);
 	};
 
 	/* REPAIR TIME
@@ -663,7 +684,7 @@ KC3改 Ship Object
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
 				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
-			).reduce((acc, v) => acc + v, 0);
+			).sumValues();
 		return equipmentTotalAsw;
 	};
 
@@ -689,7 +710,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
 		return this.equipment(true)
 			.map(gear => gear.attackPowerImprovementBonus(attackType))
-			.reduce((acc, v) => acc + (v || 0), 0);
+			.sumValues();
 	};
 
 	/**
@@ -919,10 +940,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterPower = function(){
 		if(this.isDummy()){ return 0; }
-		return this.equipment(0).fighterPower( this.slots[0] )
-			+ this.equipment(1).fighterPower( this.slots[1] )
-			+ this.equipment(2).fighterPower( this.slots[2] )
-			+ this.equipment(3).fighterPower( this.slots[3] );
+		return this.equipment().map((g, i) => g.fighterPower(this.slots[i])).sumValues();
 	};
 
 	/* FIGHTER POWER with WHOLE NUMBER BONUS
@@ -931,10 +949,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterVeteran = function(){
 		if(this.isDummy()){ return 0; }
-		return this.equipment(0).fighterVeteran( this.slots[0] )
-			+ this.equipment(1).fighterVeteran( this.slots[1] )
-			+ this.equipment(2).fighterVeteran( this.slots[2] )
-			+ this.equipment(3).fighterVeteran( this.slots[3] );
+		return this.equipment().map((g, i) => g.fighterVeteran(this.slots[i])).sumValues();
 	};
 
 	/* FIGHTER POWER with LOWER AND UPPER BOUNDS
@@ -943,15 +958,10 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.fighterBounds = function(forLbas = false){
 		if(this.isDummy()){ return [0, 0]; }
-		var GearPowers = [
-			this.equipment(0).fighterBounds( this.slots[0], forLbas ),
-			this.equipment(1).fighterBounds( this.slots[1], forLbas ),
-			this.equipment(2).fighterBounds( this.slots[2], forLbas ),
-			this.equipment(3).fighterBounds( this.slots[3], forLbas )
-		];
+		const powerBounds = this.equipment().map((g, i) => g.fighterBounds(this.slots[i], forLbas));
 		return [
-			GearPowers[0][0]+GearPowers[1][0]+GearPowers[2][0]+GearPowers[3][0],
-			GearPowers[0][1]+GearPowers[1][1]+GearPowers[2][1]+GearPowers[3][1],
+			powerBounds.map(b => b[0]).sumValues(),
+			powerBounds.map(b => b[1]).sumValues()
 		];
 	};
 
@@ -981,11 +991,9 @@ KC3改 Ship Object
 				}
 			}
 		});
-		var interceptionPower =
-			  this.equipment(0).interceptionPower(this.slots[0])
-			+ this.equipment(1).interceptionPower(this.slots[1])
-			+ this.equipment(2).interceptionPower(this.slots[2])
-			+ this.equipment(3).interceptionPower(this.slots[3]);
+		var interceptionPower = this.equipment()
+			.map((g, i) => g.interceptionPower(this.slots[i]))
+			.sumValues();
 		return Math.floor(interceptionPower * reconModifier);
 	};
 
@@ -1107,8 +1115,8 @@ KC3改 Ship Object
 			isJetAssaultPhase = false, contactPlaneId = 0, isCritical = false){
 		const totalPower = [0, 0, false];
 		if(this.isDummy()) { return totalPower; }
-		// no plane can be equipped on ex-slot for now
-		this.equipment(false).forEach((gear, i) => {
+		// no ex-slot by default since no plane can be equipped on ex-slot for now
+		this.equipment().forEach((gear, i) => {
 			if(this.slots[i] > 0 && gear.isAirstrikeAircraft()) {
 				const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
 				const isRange = !!power[2];
@@ -1152,7 +1160,7 @@ KC3改 Ship Object
 		// in fact, this formula is the same thing besides slot bonus part.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const noNightAvPersonnel = !this.hasEquipment([258, 259]);
-		this.equipment(false).forEach((gear, idx) => {
+		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
 				const slot = this.slots[idx];
@@ -1375,7 +1383,7 @@ KC3改 Ship Object
 			} else {
 				// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 				const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
-				this.equipment(false).forEach((g, i) => {
+				this.equipment().forEach((g, i) => {
 					if(g.isAirstrikeAircraft()) {
 						const aceLevel = g.ace || 0;
 						const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
@@ -1572,7 +1580,7 @@ KC3改 Ship Object
 			// false if CVL or CVL-like chuuha
 			if(isCvlLike && this.isStriped()) return false;
 			// if ASW plane equipped and slot > 0
-			return !!this.equipment(false)
+			return !!this.equipment()
 				.find((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
 		// DE, DD, CL, CLT, CT, AO(*)
@@ -1632,7 +1640,7 @@ KC3改 Ship Object
 			// can not attack land installation if dive bomber equipped
 			if(targetShipType.isLand && this.hasNonZeroSlotEquipmentType(2, 7)) return false;
 			// can not attack if no bomber with slot > 0 equipped
-			return !!this.equipment(false).find((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
+			return !!this.equipment().find((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
 		}
 		// submarines can only landing attack against land installation
 		if(isThisSubmarine) return this.estimateLandingAttackType(targetShipMasterId) > 0;
@@ -1773,7 +1781,7 @@ KC3改 Ship Object
 		if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
-				const aswEquip = this.equipment(false).find(g => g.isAswAircraft(false));
+				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
 				return aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2];
 			}
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
@@ -1966,7 +1974,7 @@ KC3改 Ship Object
 		}
 		
 		// torpedo attack if any torpedo equipped at top most, otherwise single shelling fire
-		const topGear = this.equipment(false).find(gear => gear.exists() &&
+		const topGear = this.equipment().find(gear => gear.exists() &&
 			[1, 2, 3].indexOf(gear.master().api_type[1]) > -1);
 		return topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0];
 	};
@@ -1989,7 +1997,7 @@ KC3改 Ship Object
 		const byEquip = -this.nakedStats("ac");
 		const byImprove = this.equipment(true)
 			.map(g => g.accStatImprovementBonus("fire"))
-			.reduce((acc, v) => acc + v, 0);
+			.sumValues();
 		const byGunfit = this.shellingGunFitAccuracy();
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
@@ -2201,7 +2209,7 @@ KC3改 Ship Object
 			preCap;
 		const byImprove = this.equipment(true)
 			.map(g => g.evaStatImprovementBonus("fire"))
-			.reduce((acc, v) => acc + v, 0);
+			.sumValues();
 		// under verification
 		const stypeBonus = 0;
 		const searchlightModifier = this.hasEquipmentType(1, 18) ? 0.2 : 1;
@@ -2291,10 +2299,9 @@ KC3改 Ship Object
 			if(this.hasEquipmentType(3, 16)) return 1;
 			// Any AA Machine Gun
 			if(this.hasEquipmentType(2, 21)) return 0;
-			// Any Radar with AA stat,
-			// the only difference with gear.isAirRadar() is 'Type 13 Air Radar' for now
-			if(this.equipment(true).find(
-				g => g.masterId > 0 && g.master().api_type[3] === 11 && g.master().api_tyku > 0
+			// Any Radar plus any Seaplane bomber with AA stat
+			if(this.hasEquipmentType(3, 11) && !!this.equipment().find(
+				g => g.masterId > 0 && g.master().api_type[2] === 11 && g.master().api_tyku > 0
 			)) return 0;
 			return -1;
 		})();
@@ -2734,15 +2741,19 @@ KC3改 Ship Object
 				optionalModifier(shellingEvasion.moraleModifier, true)
 			)
 		);
-		const aaEffectType = shipObj.estimateAntiAirEffectType();
+		const [aaEffectTypeId, aaEffectTypeTerm] = shipObj.estimateAntiAirEffectType();
 		$(".adjustedAntiAir", tooltipBox).text(
 			KC3Meta.term("ShipAAAdjusted").format(
 				"{0}{1}".format(
 					shipObj.adjustedAntiAir(),
-					// Only irregular AA effect types will show a text in-game,
-					// normal AA effect triggered by equipping Machine Gun / Air Radar
-					aaEffectType[0] > -1 ?
-						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectType[1])) :
+					/* Here indicates the type of AA ability, not the real attack animation in-game,
+					 * only special AA effect types will show a banner text in-game,
+					 * like the T3 Shell shoots or Rockets shoots,
+					 * regular AA gun animation triggered by equipping AA gun, Radar+SPB or HA mount.
+					 * btw, 12cm Rocket Launcher non-Kai belongs to AA guns, no irregular attack effect.
+					 */
+					aaEffectTypeId > -1 ?
+						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)) :
 						""
 				)
 			)
