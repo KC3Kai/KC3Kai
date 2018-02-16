@@ -2281,8 +2281,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateAntiAirEffectType = function() {
 		const aaEquipType = (() => {
 			if(this.isDummy()) return -1;
-			// Escaped or morale 0 ship cannot anti-air
-			if(this.didFlee || !this.morale) return -1;
+			// Escaped or sunk ship cannot anti-air
+			if(this.didFlee || this.damageStatus() === "dummy") return -1;
 			const stype = this.master().api_stype;
 			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
 			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
@@ -2750,7 +2750,8 @@ KC3改 Ship Object
 					 * only special AA effect types will show a banner text in-game,
 					 * like the T3 Shell shoots or Rockets shoots,
 					 * regular AA gun animation triggered by equipping AA gun, Radar+SPB or HA mount.
-					 * btw, 12cm Rocket Launcher non-Kai belongs to AA guns, no irregular attack effect.
+					 * btw1, 12cm Rocket Launcher non-Kai belongs to AA guns, no irregular attack effect.
+					 * btw2, flagship will fall-back to the effect user if none has any attack effect.
 					 */
 					aaEffectTypeId > -1 ?
 						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)) :
