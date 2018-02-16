@@ -2,6 +2,8 @@
 KC3Kai Kancolle-DB submission library
 
 Listens to network history and triggers callback if game events happen
+
+@deprecated since 2018-01-30, see https://twitter.com/about518/status/958339823852404740
  */
 (function(){
 	"use strict";

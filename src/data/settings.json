@@ -895,14 +895,15 @@
 		]
 	},
 	{
-		"section": "SettingsDBSubmission",
-		"help" : "",
+		"section": "SettingsDBSubmissionWarn",
+		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2459",
 		"contents" :[
 			{
 				"id" : "DBSubmission_enabled",
 				"name" : "SettingsEnableDBSubmission",
 				"type" : "check",
-				"options" : {}
+				"options" : {},
+				"hide" : 1
 			},
 			{
 				"id" : "DBSubmission_key",

@@ -141,13 +141,6 @@ Listens to network history and triggers callback if game events happen
 							}
 							
 							thisRequest.process();
-							
-							// -- Kancolle DB Submission, post-process
-							if (ConfigManager.DBSubmission_enabled && DBSubmission.checkIfDataNeeded(request.request.url)){
-								request.getContent(function(content, encoding){
-									DBSubmission.submitData(request.request.url,request.request.postData, content);
-								});
-							}
 						}
 					});
 					request.getContent(function(x){
