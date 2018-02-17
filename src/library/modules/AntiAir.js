@@ -845,6 +845,10 @@ AntiAir: anti-air related calculations
 
 	// return: a list of sorted AACI objects order by effect desc,
 	//   as most effective AACI gets priority to be triggered.
+	// in-game, priority is based on kinds of conditions (in `if...return` flavor),
+	//   research about AACI priority for a ship:
+	//   https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
+	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
 	function sortedPossibleAaciList(aaciIds, sortCallback) {

@@ -82,6 +82,14 @@
                     return 0;
             }
         },
+        // hard-coded new consumption 'New Artillery Material' since 2018-02-16
+        calcGunMat: function(ship_id_from) {
+            switch(ship_id_from) {
+                case 148: // Musashi K2
+                    return 3;
+                default: return 0;
+            }
+        },
         mkDb: function(masterData, isRaw) {
             var self = this;
             // step 1: collect remodel info
@@ -132,6 +140,7 @@
 
                 remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from);
                 remodel.torch = self.calcTorch(remodel.ship_id_from);
+                remodel.gunmat = self.calcGunMat(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;
 
             });

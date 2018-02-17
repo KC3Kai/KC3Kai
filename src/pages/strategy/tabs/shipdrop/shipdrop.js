@@ -16,15 +16,17 @@
 		rankOp : ["SAB", "SA", "S", "A", "B"],
 		diff_filter_checkbox : {
 			"0" : true, // for normal maps
-			"1" : true, // event easy
-			"2" : true, // event normal
-			"3" : true  // event hard
+			"1" : true, // event easy / casual
+			"2" : true, // event normal / easy
+			"3" : true, // event hard / normal
+			"4" : true  // event hard
 		},
-		diffOp : ["hard", "normal", "easy"],
+		diffOp : ["hard", "normal", "easy", "casual"],
 		diffValues : {
 			"0" : true,
 			"1" : true,
-			"2" : true
+			"2" : true,
+			"3" : true
 		},
 
 		/* INIT: mandatory
@@ -106,7 +108,7 @@
 				});
 			};
 			for(let rank = 0; rank <= 5; rank++)
-			for(let diff = 0; diff <= 3; diff++) {
+			for(let diff = 0; diff <= 4; diff++) {
 				if(this.rank_filter_checkbox[rating[rank]] === false) continue;
 				if(this.diff_filter_checkbox[diff] === false) continue;
 				if(this.dropTable[diff]) {
@@ -291,14 +293,15 @@
 			const diffFilterHandler = (index, element) => {
 				this.diffValues[index] = ! this.diffValues[index];
 				element.toggleClass("on", this.diffValues[index]);
-				// difficulties reversed order: easy -> normal -> hard
-				this.diff_filter_checkbox[3 - index] = this.diffValues[index];
+				// difficulties reversed order: casual -> easy -> normal -> hard
+				this.diff_filter_checkbox[(this.selectedWorld >= 41 ? 4 : 3) - index] = this.diffValues[index];
 				this.filterShipDrop();
 			};
 			this.diffOp.forEach((diff, index) => {
 				const elem = $(".filters .massSelect .diff." + diff);
 				elem.toggleClass("on", this.diffValues[index]);
 				elem.on("click", diffFilterHandler.bind(this, index, elem));
+				if(diff === "casual" && this.selectedWorld < 41) elem.hide();
 			});
 
 		}

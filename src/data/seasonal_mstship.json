@@ -1,4 +1,28 @@
 {
+	"729": {
+		"api_id": 729,
+		"api_name": "バレンタイン神風",
+		"api_yomi": "かみかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"730": {
+		"api_id": 730,
+		"api_name": "バレンタイン球磨",
+		"api_yomi": "くま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"731": {
+		"api_id": 731,
+		"api_name": "バレンタイン潮",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
 	"732": {
 		"api_id": 732,
 		"api_name": "節分如月",
