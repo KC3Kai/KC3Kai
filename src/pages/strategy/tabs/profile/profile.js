@@ -553,6 +553,8 @@
 				ConfigManager.dismissed_hints = {};
 				delete ConfigManager.air_average;
 				delete ConfigManager.air_bounds;
+				delete ConfigManager.DBSubmission_enabled;
+				delete ConfigManager.DBSubmission_key;
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();

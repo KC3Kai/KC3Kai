@@ -29,6 +29,10 @@
 	float: left;
 	display: none;
 }
+.tab_encounters .difficulty.active {
+	display: block;
+}
+
 
 .tab_encounters .loading {
 	margin:8px 5px;
