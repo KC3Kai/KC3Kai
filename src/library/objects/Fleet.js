@@ -510,7 +510,7 @@ Contains summary information about a fleet and its ships
 		this.shipsUnescaped().forEach(ship => {
 			rate += ship.equipment().map(
 				(gear, idx) => gear.isContactAircraft(false) ?
-					(0.04 * gear.master().api_saku * Math.sqrt(ship.slots[idx])) : 0
+					(0.04 * gear.master().api_saku * Math.sqrt(ship.slotSize(idx))) : 0
 			).sumValues();
 		});
 		return rate * (airControlModifiers[dispSeiku] || 0);
@@ -574,12 +574,12 @@ Contains summary information about a fleet and its ships
 						masterId: gear.masterId,
 						icon: gearMaster.api_type[3],
 						stars: gear.stars || 0,
-						slotSize: ship.slots[gearIdx] || 0,
+						slotSize: ship.slotSize(gearIdx),
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
 						// no info about how slot size multiply, just know 0 will not trigger
-						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slots[gearIdx] || 0) / 100
+						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slotSize(gearIdx)) / 100
 					});
 				}
 			});
@@ -1198,7 +1198,7 @@ Contains summary information about a fleet and its ships
 					// Equip aircraft can ASW with air attack (TB/DB/Autogyro/PBY/SPB/SPR/LFB)
 					// on any non zero slot
 					!!ship.equipment().find(
-						(g, i) => ship.slots[i] > 0 && g.isAswAircraft(false, true)
+						(g, i) => ship.slotSize(i) > 0 && g.isAswAircraft(false, true)
 					)
 				));
 			}, 0);

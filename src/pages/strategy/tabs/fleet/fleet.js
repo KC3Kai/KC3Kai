@@ -311,6 +311,7 @@
 					if (!shipData || shipData.mst_id <= 0) return null;
 					var shipObj = {};
 					var masterData = KC3Master.ship(shipData.mst_id);
+					var slotnum = masterData.api_slot_num;
 					shipObj.id = shipData.mst_id;
 					shipObj.level = shipData.level;
 					shipObj.morale = shipData.morale;
@@ -328,8 +329,7 @@
 							ace: shipData.ace ? shipData.ace[i] : 0
 						} );
 					});
-
-					while (shipObj.equipments.length !== 5)
+					while (shipObj.equipments.length < Math.max(slotnum + 1, 5))
 						shipObj.equipments.push(null);
 
 					return shipObj;
@@ -471,6 +471,7 @@
 				});
 			}
 
+			$(".ship_gear > div", shipBox).hide();
 			kcShip.equipment(true).forEach((gear, index) => {
 				self.showKCGear(
 					$(".ship_gear_"+(index+1), shipBox),
@@ -491,8 +492,9 @@
 			}
 			const masterData = kcGear.master();
 			const slotMaxSize = kcShip.master().api_maxeq[index];
+			const isExslot = index >= kcShip.slotnum;
 			// ex-slot capacity not implemented yet, no aircraft equippable
-			$(".slot_capacity", gearBox).text(index < 4 ? capacity : "-")
+			$(".slot_capacity", gearBox).text(isExslot ? "-" : capacity)
 				.removeClass("empty taiha chuuha shouha unused")
 				.addClass((percent => {
 					switch(true){
@@ -504,7 +506,7 @@
 						default: return "";
 					}
 				})(capacity / (slotMaxSize || 1)));
-			if(index >= 4 || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
+			if(isExslot || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
 				$(".slot_capacity", gearBox).addClass("unused");
 			}
 			$(".gear_icon img", gearBox).attr("src", "/assets/img/items/" + masterData.api_type[3] + ".png")
@@ -526,6 +528,7 @@
 			$(".gear_name", gearBox).attr("title",
 				kcGear.htmlTooltip(capacity, kcShip))
 				.lazyInitTooltip();
+			gearBox.toggleClass("ex_slot", isExslot).show();
 		},
 
 		createKCFleetObject: function(fleetObj) {
@@ -553,14 +556,16 @@
 
 				var equipmentObjectArr = [];
 				var masterData = KC3Master.ship( shipObj.id );
+				var slotnum = masterData.api_slot_num;
 				ship.rosterId = shipObj.rid || fleet.ships[ind];
 				ship.masterId = shipObj.id;
 				ship.level = shipObj.level;
 				ship.morale = shipObj.morale;
 
-				ship.items = [-1,-1,-1,-1];
+				ship.items = [-1,-1,-1,-1,-1];
 				ship.slots = masterData.api_maxeq;
 				ship.ex_item = 0;
+				ship.slotnum = slotnum;
 				ship.GearManager = {
 					get: function(ind) {
 						return equipmentObjectArr[ind-1] || new KC3Gear();
@@ -571,7 +576,7 @@
 					if (!equipment) return;
 					var gear = new KC3Gear();
 					equipmentObjectArr.push( gear );
-					if(ind >= 4)
+					if(ind >= 4 && ind >= ship.slotnum)
 						ship.ex_item = equipmentObjectArr.length;
 					else
 						ship.items[ind] = equipmentObjectArr.length;
