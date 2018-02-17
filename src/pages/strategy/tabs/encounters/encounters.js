@@ -63,7 +63,10 @@
 			listElem.html(
 				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
 			);
-			$(".map_switcher .difficulty").toggle(isMap && this.isEventWorld(worldId));
+			$(".map_switcher .difficulty").removeClass("active");
+			if(isMap && this.isEventWorld(worldId)) {
+				$(".map_switcher .difficulty." + (worldId >= 41 ? "newSet" : "newSet")).addClass("active");
+			}
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				if(isMap) {
@@ -156,7 +159,13 @@
 						return;
 					}
 					let curBox, shipBox, shipList;
-					const diffStr = diffStrs[encounter.diff || 0] || "";
+					const diffStr = ["",
+						KC3Meta.term("EventRankCasualAbbr"),
+						KC3Meta.term("EventRankEasyAbbr"),
+						KC3Meta.term("EventRankNormalAbbr"),
+						KC3Meta.term("EventRankHardAbbr")][
+							((d, w) => w >= 41 ? d : d + 1)(encounter.diff || 0, encounter.world)
+						] || "";
 					const mapName = `${encounter.world}-${encounter.map}${diffStr}`;
 					// Check map box
 					if(!$("#encounter-" + mapName).length) {

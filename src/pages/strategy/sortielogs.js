@@ -227,7 +227,12 @@
 
 				updateScrollItem("map", 97);
 
-				var diffStr = ["E","N","H"];
+				const diffStr = [
+					KC3Meta.term("EventRankCasualAbbr"),
+					KC3Meta.term("EventRankEasyAbbr"),
+					KC3Meta.term("EventRankNormalAbbr"),
+					KC3Meta.term("EventRankHardAbbr")
+				];
 				// Check player's map list
 				$.each(self.maps, function(index, element){
 					var cWorld = (""+element.id).substr(0, (""+element.id).length-1);
@@ -237,14 +242,10 @@
 					if(cWorld == self.selectedWorld){
 						mapBox = $(".tab_"+tabCode+" .factory .map_box").clone().appendTo(".tab_"+tabCode+" .map_list");
 						mapBox.attr("data-map_num", cMap);
-						$(".map_title", mapBox).text((cWorld>=10 ? "E" : cWorld)+" - "+cMap+(function(x){
-							switch(x){
-								case 1: case 2: case 3:
-									return " " + diffStr[x-1];
-								default:
-									return "";
-							}
-						})(element.difficulty));
+						$(".map_title", mapBox).text( (cWorld>=10 ? "E" : cWorld) + "-" + cMap + " " +
+						(function(x, w){
+							return diffStr[x - (w >= 41 ? 1 : 0)] || "";
+						})(element.difficulty, cWorld));
 
 						// Check unselected difficulty
 						if(cWorld >= 10 && !element.difficulty) {
@@ -260,18 +261,14 @@
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
 								if (cWorld>=10) {
-									mapBox.addClass((function(x){
-										switch(x){
-											case 1:
-												return "easy";
-											case 2:
-												return "normal";
-											case 3:
-												return "hard";
-											default:
-												return "";
+									mapBox.addClass((function(x, w){
+										// New difficulty 'Casual' added since Winter 2018, and ID shifted +1
+										if(w >= 41){
+											return ["", "casual", "easy", "normal", "hard"][x] || "";
+										} else {
+											return ["", "easy", "normal", "hard"][x] || "";
 										}
-									})(element.difficulty));
+									})(element.difficulty, cWorld));
 								}
 								if(typeof element.maxhp != "undefined")
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
@@ -519,10 +516,12 @@
 					if(sortie.world >= 10) {
 						sortie.diff = sortie.diff || (self.maps[skey] || {difficulty:0}).difficulty || 0;
 					}
-					if((sortie.diff || 0) > 0)
+					if((sortie.diff || 0) > 0) {
+						const rankMarker = ((d, w) => w >= 41 ? (d === 1 ? "1C" : d - 1) : d)(sortie.diff, sortie.world);
 						$(sortieBox)
-							.addClass("sortie_rank_"+sortie.diff)
-							.attr("data-diff",KC3Meta.term("EventHistoryRank"+sortie.diff));
+							.addClass("sortie_rank_" + rankMarker)
+							.attr("data-diff", KC3Meta.term("EventHistoryRank" + rankMarker));
+					}
 					$(".sortie_id", sortieBox).text(sortie.id)
 						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
