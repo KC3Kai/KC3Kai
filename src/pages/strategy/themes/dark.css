@@ -1525,14 +1525,15 @@ button, input, select, textarea {
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:88px;
+	height:auto;
+	min-height:88px;
 	margin:2px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship.horizontal {
-	height:170px !important;
+	min-height:170px !important;
 	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {

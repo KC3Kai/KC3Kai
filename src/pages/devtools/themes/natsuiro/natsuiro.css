@@ -2878,6 +2878,12 @@ ABYSS FLEET
 	height:20px;
 	float:left;
 }
+.module.fleet .lship .ship_gear.ship_gear_5 {
+	display:none;
+	position:relative;
+	left:83px;
+	top:-40px;
+}
 .module.fleet .lship .ship_gear_star {
 	width:12px;
 	position:absolute;
@@ -2989,6 +2995,22 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_ammo .ship_supply_bar {
 	background:#999900;
+}
+.module.fleet .lship .ship_supplies.slot5 {
+	height:20px;
+	margin-top:20px;
+}
+.module.fleet .lship .slot5 .ship_supply {
+	height:10px;
+	margin:0px 0px;
+}
+.module.fleet .lship .slot5 .ship_supply_text {
+	height:8px;
+	line-height:8px;
+	font-size:8px;
+}
+.module.fleet .lship .slot5 .ship_supply_bar {
+	height:8px;
 }
 
 .module.fleet .lship .ship_exp_box {

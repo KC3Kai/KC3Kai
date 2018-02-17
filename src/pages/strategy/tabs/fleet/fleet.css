@@ -142,7 +142,8 @@
 }
 .tab_fleet .fleet_ship.horizontal {
 	width:110px;
-	height:172px;
+	height:auto;
+	min-height:172px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	height:21px;
@@ -187,7 +188,7 @@
 }
 .tab_fleet .fleet_ship .ship_gear {
 	width:220px;
-	height:88px;
+	height:auto;
 	float:left;
 	line-height:17px;
 	margin:0px 0px 1px 0px;

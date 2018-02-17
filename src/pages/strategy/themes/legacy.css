@@ -1193,7 +1193,8 @@ body {
 	margin:0px 4px;
 }
 .tab_fleet .fleet_ship {
-	height:85px;
+	height:auto;
+	min-height:85px;
 	background:#ffe;
 	border-radius:8px;
 	margin:10px 2px 2px 0px;
@@ -1319,7 +1320,7 @@ body {
 	font-weight:bold;
 	color:#00f;
 }
-.tab_fleet .fleet_ship .ship_gear .ship_gear_5 .gear_name {
+.tab_fleet .fleet_ship .ship_gear .ex_slot .gear_name {
 	color:#79b;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
