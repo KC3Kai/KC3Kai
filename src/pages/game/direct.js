@@ -39,7 +39,7 @@
 			}
 		});
 		
-		// Toggleable settings
+		// Toggle-able settings
 		toggleSetting("dmm_customize", "#background");
 		toggleSetting("api_subtitles", "#subtitles");
 		toggleSetting("api_translation", "#questtl");
