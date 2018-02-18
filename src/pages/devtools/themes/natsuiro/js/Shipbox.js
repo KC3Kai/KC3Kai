@@ -202,11 +202,14 @@ KC3改 Ship Box for Natsuiro theme
 				"\u27A4{0}\n\u27A4{1}".format(shipMaster.api_fuel_max, shipMaster.api_bull_max)
 			).lazyInitTooltip();
 		}
-
-		this.showEquipment(0);
-		this.showEquipment(1);
-		this.showEquipment(2);
-		this.showEquipment(3);
+		
+		if(this.shipData.slotnum > 4){
+			$(".ship_supplies", this.element).addClass(`slot${this.shipData.slotnum}`);
+		}
+		
+		Array.numbers(0, Math.max(this.shipData.slotnum - 1, 3)).forEach(slot => {
+			this.showEquipment(slot);
+		});
 		
 		return this.element;
 	};
@@ -425,7 +428,7 @@ KC3改 Ship Box for Natsuiro theme
 						.attr("src", "/assets/img/client/achev/"+thisGear.ace+".png");
 				}
 				if (thisGear.stars > 0){
-				    // Is a normal equipment that can be upgraded
+					// Is a normal equipment that can be upgraded
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(
 						thisGear.stars >= 10 ? "\u2605" : thisGear.stars
@@ -474,6 +477,8 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
 			}
+			
+			$(".ship_gear_"+(slot+1), this.element).show();
 		}else{
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
 			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();

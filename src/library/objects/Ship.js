@@ -173,9 +173,9 @@ KC3改 Ship Object
 				return slot ? this.equipment().concat(this.exItem())
 					: this.equipment();
 			case 'undefined':
-				/* Undefined => returns whole equipment as equip object */
-				return Array.apply(null, this.items)
-					// fixed to max 4 slots if 5th or more slots not found
+				/* Undefined => returns whole equipment as equip object array */
+				return this.items
+					// cloned and fixed to max 4 slots if 5th or more slots not found
 					.slice(0, Math.max(this.slotnum, 4))
 					.map(Number.call, Number)
 					.map(i => this.equipment(i));
@@ -188,6 +188,16 @@ KC3改 Ship Object
 				// forEach always return undefined, return equipment for chain use
 				return equipObjs;
 		}
+	};
+	KC3Ship.prototype.slotSize = function(slotIndex){
+		// ex-slot is always assumed to be 0 for now
+		return (slotIndex < 0 || slotIndex >= this.slots.length ? 0 : this.slots[slotIndex]) || 0;
+	};
+	KC3Ship.prototype.slotCapacity = function(slotIndex){
+		// no API data defines the capacity for ex-slot
+		var maxeq = KC3Master.isNotRegularShip(this.masterId) ? undefined :
+			(KC3Master.ship(this.masterId) || {}).api_maxeq;
+		return (Array.isArray(maxeq) ? maxeq[slotIndex] : 0) || 0;
 	};
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };

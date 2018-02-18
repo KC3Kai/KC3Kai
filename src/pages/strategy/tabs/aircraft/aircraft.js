@@ -263,7 +263,7 @@
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
 							$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
 							$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
-							ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
+							ThisCapacity = ThisPlane.MyHolder().slotSize( this._slotNums["s"+ThisPlane.itemId] );
 						}
 						if(ThisCapacity > 0){
 							// Compute for ace fighter air power
