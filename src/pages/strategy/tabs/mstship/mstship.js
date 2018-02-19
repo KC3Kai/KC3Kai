@@ -495,9 +495,12 @@
 								equipId = equipId.id;
 							}
 							const equipment = KC3Master.slotitem(equipId);
+							const fakeGear = new KC3Gear({itemId: 1, masterId: equipId});
 							let nameText = KC3Meta.gearName(equipment.api_name);
 							if (star > 0) nameText += ` <span class="star">\u2605+${star}</span>`;
-							$(".slotitem", this).html(nameText);
+							$(".slotitem", this).html(nameText)
+								.attr("title", fakeGear.htmlTooltip(shipData.api_maxeq[index]))
+								.lazyInitTooltip();
 							$(".sloticon img", this)
 								.attr("src", `/assets/img/items/${equipment.api_type[3]}.png`)
 								.attr("alt", equipId).off("click")
@@ -802,24 +805,26 @@
 						$(".tab_mstship .shipInfo .stats").css("width", "220px");
 						$(".tab_mstship .equipments .equipment").each(function(index){
 							$(this).show();
+							let maxeq;
 							if(abyssDb && abyssDb.api_maxeq && typeof abyssMaster.api_maxeq[index] !== "undefined"){
-								$(".capacity", this).text(abyssMaster.api_maxeq[index]).show();
+								maxeq = abyssMaster.api_maxeq[index];
+								$(".capacity", this).text(maxeq).show();
 							} else {
 								$(".capacity", this).text(index >= abyssMaster.api_slot_num ? "-" : "?").show();
 							}
 							// Priority to show equipment recorded via encounter
-							var equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
+							const equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
 							if (equipId > 0) {
-								var equipment = KC3Master.slotitem( equipId );
+								const equipment = KC3Master.slotitem( equipId );
+								const fakeGear = new KC3Gear({ itemId: 2, masterId: equipId });
 								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) )
-									.attr("title", "");
+									.attr("title", fakeGear.htmlTooltip(maxeq))
+									.lazyInitTooltip();
 								$(".sloticon img", this)
-									.attr("src","../../../../assets/img/items/"+equipment.api_type[3]+".png");
-								$(".sloticon img", this).attr("alt", equipId);
-								$(".sloticon img", this).off("click").click(function(){
-									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-								});
-								$(".sloticon img", this).show();
+									.attr("src","/assets/img/items/"+equipment.api_type[3]+".png")
+									.attr("alt", equipId).off("click").click(function(){
+										KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+									}).show();
 								$(".sloticon", this).addClass("hover");
 								// Check diff for updating `abyssal_stats.json`
 								if(enemyDbStats && (!abyssDb || !abyssDb.kc3_slots ||
@@ -832,9 +837,8 @@
 									);
 								}
 							} else {
-								$(".slotitem", this).empty();
-								$(".sloticon img", this).hide();
-								$(".sloticon img", this).off("click");
+								$(".slotitem", this).empty().removeAttr("title");
+								$(".sloticon img", this).hide().off("click");
 								$(".sloticon", this).removeClass("hover");
 							}
 						});
