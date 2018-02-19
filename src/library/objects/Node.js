@@ -734,6 +734,11 @@ Used by SortieManager
 		this.econtactId = nightData.api_touch_plane[1];
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
+		/*
+		// Star shell user, pos from 0 ~ 11? (if combined fleet), shift it back to 1-based index
+		this.flarePos = 1 + (isPlayerCombined && this.activatedFriendFleet == 2 ?
+			nightData.api_flare_pos[0] - this.maxHPs.allyMain.length : nightData.api_flare_pos[0]);
+		*/
 		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs

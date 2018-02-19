@@ -151,6 +151,10 @@ AntiAir: anti-air related calculations
 		*/
 	}
 
+	function is10cmTwinHighAngleMountKaiAMG(mst) {
+		return mst.api_id === 275;
+	}
+
 	function isCDMG(mst) {
 		return isAAGun(mst) && mst.api_tyku >= 9;
 		/*
@@ -444,6 +448,7 @@ AntiAir: anti-air related calculations
 		akizukiIcon = 421,
 		battleShipIcon = 131, // Yamato, weigh anchor!
 		battleShipKaiIcon = 148, // Musashi Kai represents
+		musashiK2Icon = 546,
 		iseIcon = 77,
 		mayaK2Icon = 428,
 		isuzuK2Icon = 141,
@@ -466,8 +471,10 @@ AntiAir: anti-air related calculations
 		cdmgIcon = "15+15",         // AAGun double
 		haMountNbifdIcon = "16-30", // HA without AAFD
 		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
-		aaGunK2RockeLaunIcon = "15+31"; // 12cm 30tube Rocket Launcher Kai 2
+		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
+		haMountKaiAmg = "16+15";    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
 
+	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
 	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
@@ -613,7 +620,18 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// api_kind 26, 27 are still unknown
+	declareAACI(
+		26, 6, 1.4,
+		[musashiK2Icon, haMountKaiAmg, radarIcon],
+		predAllOf(isMusashiK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiAMG ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// api_kind 27 still unknown
 
 	// Ise-class Kai + Musashi Kai
 	declareAACI(

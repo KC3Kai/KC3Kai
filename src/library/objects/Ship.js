@@ -1527,12 +1527,13 @@ KC3改 Ship Object
 	// there are two requirements:
 	// - sonar should be equipped
 	// - ASW stat >= 100
-	// also Isuzu K2 can do OASW unconditionally
+	// also Isuzu K2, Tatsuta K2 can do OASW unconditionally
 	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
 		// master Id for Isuzu K2, Tatsuta K2
-		if (this.masterId === 141 || this.masterId === 478)
+		// also reported for Jervis Kai for now, https://twitter.com/llfun_kancolle/status/965018502372315136
+		if ([141, 478, 394].includes(this.masterId))
 			return true;
 
 		// is Taiyou series:

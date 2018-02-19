@@ -1723,6 +1723,7 @@
 		Lbas: function(){
 			const self = this;
 			this.LbasStatus();
+			var myServerHost;
 			if (selectedFleet == 6) {
 				$(".shiplist_single").empty();
 				$(".shiplist_single").hide();
@@ -1731,16 +1732,18 @@
 				$(".airbase_list").empty();
 				$(".airbase_list").show();
 				
-				var baseBox, planeBox, itemObj, myServerHost;
 				const togglePlaneName = function(e){
 					$(".module.fleet .airbase_list .base_plane_name").toggle();
 					$(".module.fleet .airbase_list .name_toggle_group").toggle();
 				};
-				
-				$.each(PlayerManager.bases, function(i, baseInfo){
+				// Land-bases ordered by world ID desc, base ID asc
+				const sortedBases = PlayerManager.bases.sort(
+					(lb1, lb2) => lb2.map - lb1.map || lb1.rid - lb2.rid
+				);
+				$.each(sortedBases, function(i, baseInfo){
 					if (baseInfo.rid != -1) {
 						console.debug("LandBase", i, baseInfo);
-						baseBox = $("#factory .airbase").clone();
+						const baseBox = $("#factory .airbase").clone();
 						$(".base_map", baseBox).text(baseInfo.map);
 						$(".base_name", baseBox).text(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
@@ -1777,12 +1780,12 @@
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
 						
 						$.each(baseInfo.planes, function(i, planeInfo){
-							planeBox = $("#factory .airbase_plane").clone();
+							const planeBox = $("#factory .airbase_plane").clone();
 							
 							if (planeInfo.api_state !== 0) {
 								//console.debug("PLANE", i, planeInfo);
 								
-								itemObj = KC3GearManager.get(planeInfo.api_slotid);
+								const itemObj = KC3GearManager.get(planeInfo.api_slotid);
 								if(itemObj.isDummy()) {
 									$("div", planeBox).remove();
 									return;
