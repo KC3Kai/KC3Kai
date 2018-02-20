@@ -388,9 +388,13 @@
 			// fleetBox.attr("id", "fleet_box"+index);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
+			let maxSlots = 0;
 			$.each( kcFleet.ship(), function(ind, kcShip) {
 				self.showKCShip(fleetBox, kcShip, (ind + 1));
+				maxSlots = Math.max(maxSlots, kcShip.equipmentMaxCount(true));
 			});
+			$(".fleet_ships", fleetBox).addClass(`max_slot${maxSlots}`);
+			if(maxSlots > 6) $(".fleet_ships", fleetBox).addClass("max_slot6");
 
 			// Show fleet info
 			const fstats = kcFleet.totalStats(true);

@@ -352,7 +352,6 @@
 							clearTimeout(self.subtitleTimer);
 					}
 				};
-				hideSubtitle();
 
 				// Display subtitle and set its removal timer
 				const showSubtitle = (subtitleText, quoteIdentifier) => {
@@ -439,6 +438,7 @@
 
 				// If subtitles available for the voice
 				if(subtitleText){
+					hideSubtitle();
 					// Book for a future display if it's a ship's hourly voice,
 					// because game preload voice file in advance (about > 5 mins).
 					if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){

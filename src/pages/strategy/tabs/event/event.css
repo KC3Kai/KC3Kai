@@ -527,11 +527,11 @@
 	height:20px;
 	float:left;
 }
-
-.tab_event .sortie_list .rfleet_equips img {
+.tab_event .sortie_list .rfleet_equip img {
 	float:left;
-	line-height: auto;
 	width:12px;
+	margin-top:-1px;
+	vertical-align:top;
 }
 
 .tab_event .sortie_list .rfleet_lbas_plane {

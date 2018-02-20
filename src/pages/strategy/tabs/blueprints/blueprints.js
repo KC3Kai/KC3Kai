@@ -251,6 +251,9 @@
 					case 65:
 						appendOwnedItem(iconImg, PlayerManager.consumables.protoCatapult);
 						break;
+					case 75:
+						appendOwnedItem(iconImg, PlayerManager.consumables.newArtilleryMaterial);
+						break;
 					case 78:
 						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
 						break;

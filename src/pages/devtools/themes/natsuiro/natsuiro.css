@@ -280,7 +280,10 @@ html,body {
 }
 .module.admiral .admiral_name.censor {
 	color: transparent;
-	text-shadow: 0 0 8px rgba(255,220,0,0.9);
+	text-shadow: 0 0 8px rgba(255,220,0,0.4);
+}
+.module.admiral .admiral_name.censor:before {
+	content: 'U CANT SEE ME';
 }
 .module.admiral .admiral_comm {
 	width:130px;

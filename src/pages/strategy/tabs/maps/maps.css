@@ -415,11 +415,11 @@
 	height:20px;
 	float:left;
 }
-
-.tab_maps .sortie_list .rfleet_equips img {
+.tab_maps .sortie_list .rfleet_equip img {
 	float:left;
-	line-height: auto;
 	width:12px;
+	margin-top:-1px;
+	vertical-align:top;
 }
 
 .tab_maps .sortie_list .rfleet_lbas_plane {

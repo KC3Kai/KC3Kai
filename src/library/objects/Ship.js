@@ -1527,24 +1527,35 @@ KC3改 Ship Object
 	// there are two requirements:
 	// - sonar should be equipped
 	// - ASW stat >= 100
-	// also Isuzu K2 can do OASW unconditionally
+	// also Isuzu K2, Tatsuta K2 can do OASW unconditionally
 	// also ship type Escort and CVL Taiyou are special cases
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
 		// master Id for Isuzu K2, Tatsuta K2
-		if (this.masterId === 141 || this.masterId === 478)
+		// also reported for Jervis Kai for now, https://twitter.com/llfun_kancolle/status/965018502372315136
+		if ([141, 478, 394].includes(this.masterId))
 			return true;
+		const stype = this.master().api_stype,
+			ctype = this.master().api_ctype;
 
-		// is Taiyou series:
+		const isEscort = stype === 1;
+		// is CVE Taiyou series:
 		// tho Kasugamaru not possible to reach high asw for now
 		// and base asw stat of Kai and Kai2 already exceed 70
-		const isTaiyouSeries = RemodelDb.originOf(this.masterId) === 521;
+		const isTaiyouClass = ctype === 76;
 		const isTaiyouBase = this.masterId === 526;
 		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
+		// is CVE Gambier Bay series (Casablanca Class?):
+		// https://twitter.com/yshr00638210/status/965551109619138560
+		// https://twitter.com/yshr00638210/status/965570610775470082
+		const isCasablancaClass = ctype === 83;
+		const isGambierBayBase = this.masterId === 544;
+		const isGambierBayKai = isCasablancaClass && !isGambierBayBase;
 
-		// lower condition for Escort and Taiyou
-		const aswThreshold = this.master().api_stype == 1 ? 60
-			: isTaiyouSeries ? 65
+		// lower condition for Gambier Bay, Escort and Taiyou
+		const aswThreshold = isGambierBayBase ? 50
+			: isEscort ? 60
+			: isTaiyouClass || isGambierBayKai ? 65
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary
@@ -1556,17 +1567,23 @@ KC3改 Ship Object
 		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
+		// under verification about what equipment Gambier Bay (and Kai) needs.
 		if (isTaiyouKaiAfter) {
 			return this.equipment(true).some(gear => gear.isAswAircraft(false));
-		} else if (isTaiyouBase) {
+		} else if (isTaiyouBase || isGambierBayKai) {
 			return this.equipment(true).some(gear => gear.isHighAswBomber());
+		}
+		if(isGambierBayBase) {
+			// equip some high ASW sonars? such as: Type 0, Type 4, Type124, Type144/147
+			return this.equipment(true).some(
+				gear => gear.master().api_type[2] === 14 && gear.master().api_tais >= 11);
 		}
 
 		const hasSonar = this.hasEquipmentType(1, 10);
 		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		// see https://twitter.com/a_t_o_6/status/863445975007805440 (account closed)
 		// see https://twitter.com/99_999999999/status/954384819567263745
-		if(this.master().api_stype == 1) {
+		if(isEscort) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
 			return shipAsw >= 75 && equipAswSum >= 4;

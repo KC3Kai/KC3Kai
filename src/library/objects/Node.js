@@ -310,8 +310,9 @@ Used by SortieManager
 		this.isNightToDay = typeof battleData.api_day_flag !== 'undefined';
 		if(this.isNightToDay) {
 			this.toDawnFlag = battleData.api_day_flag > 0;
-			this.flarePos = battleData.api_flare_pos[0];
-			this.eFlarePos = battleData.api_flare_pos[1];
+			[this.flarePos, this.eFlarePos] = battleData.api_flare_pos;
+			this.flarePos = this.flarePos >= 0 ? 1 + this.flarePos : -1;
+			this.eFlarePos = this.eFlarePos >= 0 ? -1 + this.eFlarePos : -1;
 		}
 		
 		// only used by old theme, replaced by beginHPs
@@ -733,8 +734,17 @@ Used by SortieManager
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		this.econtactId = nightData.api_touch_plane[1];
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
-		this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
-		this.eFlarePos = nightData.api_flare_pos[1]; // PvP opponent only, abyss star shell not existed yet
+		// FIXME to handle history data before event Winter 2018, have to determine its date time?
+		//this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
+		// Star shell user ship index, pos from 0 ~ 11 (if combined?)
+		[this.flarePos, this.eFlarePos] = nightData.api_flare_pos;
+		// Shift it back to 1-based index to be compatible with old codes
+		this.flarePos = this.flarePos >= 0 ?
+			1 + (isPlayerCombined && this.activatedFriendFleet == 2 ?
+				this.flarePos - this.maxHPs.allyMain.length : this.flarePos)
+			: -1;
+		// PvP opponent only, abyssal star shell not existed yet
+		this.eFlarePos = this.eFlarePos >= 0 ? 1 + this.eFlarePos : -1;
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
