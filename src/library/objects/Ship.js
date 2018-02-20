@@ -1567,16 +1567,14 @@ KC3改 Ship Object
 		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
-		// under verification about what equipment Gambier Bay (and Kai) needs.
 		if (isTaiyouKaiAfter) {
 			return this.equipment(true).some(gear => gear.isAswAircraft(false));
 		} else if (isTaiyouBase || isGambierBayKai) {
 			return this.equipment(true).some(gear => gear.isHighAswBomber());
-		}
-		if(isGambierBayBase) {
-			// equip some high ASW sonars? such as: Type 0, Type 4, Type124, Type144/147
-			return this.equipment(true).some(
-				gear => gear.master().api_type[2] === 14 && gear.master().api_tais >= 11);
+		} else if (isGambierBayBase) {
+			// under verification about what equipment Gambier Bay needs.
+			// might be some large sonars? only Type 0 for now
+			return this.hasEquipmentType(2, 40);
 		}
 
 		const hasSonar = this.hasEquipmentType(1, 10);
