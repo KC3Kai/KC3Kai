@@ -117,7 +117,10 @@
 			// F33 Cn 1,2,3 & 4
 			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLos4(i); });
 			return fleet.ship().map(ship => (ship.isDummy() || ship.didFlee || ship.hp[0] <= 0) ? -1 : {
+				id : ship.master().api_id,
 				name: ship.master().api_name,
+				shiplock: ship.sally,
+				level: ship.level,
 				type: ship.master().api_stype,
 				speed: ship.speed,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
