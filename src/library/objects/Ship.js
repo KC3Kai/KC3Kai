@@ -1547,13 +1547,15 @@ KC3改 Ship Object
 		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
 		// is CVE Gambier Bay series (Casablanca Class?):
 		// https://twitter.com/yshr00638210/status/965551109619138560
+		// https://twitter.com/yshr00638210/status/965570610775470082
 		const isCasablancaClass = ctype === 83;
 		const isGambierBayBase = this.masterId === 544;
+		const isGambierBayKai = isCasablancaClass && !isGambierBayBase;
 
 		// lower condition for Gambier Bay, Escort and Taiyou
-		const aswThreshold = isCasablancaClass ? 50
+		const aswThreshold = isGambierBayBase ? 50
 			: isEscort ? 60
-			: isTaiyouClass ? 65
+			: isTaiyouClass || isGambierBayKai ? 65
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary
@@ -1566,10 +1568,15 @@ KC3改 Ship Object
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
 		// under verification about what equipment Gambier Bay (and Kai) needs.
-		if (isTaiyouKaiAfter || (isCasablancaClass && !isGambierBayBase)) {
+		if (isTaiyouKaiAfter) {
 			return this.equipment(true).some(gear => gear.isAswAircraft(false));
-		} else if (isTaiyouBase || isGambierBayBase) {
+		} else if (isTaiyouBase || isGambierBayKai) {
 			return this.equipment(true).some(gear => gear.isHighAswBomber());
+		}
+		if(isGambierBayBase) {
+			// equip some high ASW sonars? such as: Type 0, Type 4, Type124, Type144/147
+			return this.equipment(true).some(
+				gear => gear.master().api_type[2] === 14 && gear.master().api_tais >= 11);
 		}
 
 		const hasSonar = this.hasEquipmentType(1, 10);
