@@ -432,8 +432,8 @@ KC3改 Equipment Object
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 10: Seaplane Recon (only capable for ASW support)
 		 * - 11: Seaplane Bomber
-		 * - 25: Autogyro (CVL incapable, but capable for CVL ASW support)
-		 * - 26: Anti-Sub PBY (CVL incapable, but capable for CVL ASW support)
+		 * - 25: Autogyro (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
+		 * - 26: Anti-Sub PBY (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
 		 * - 41: Large Flying Boat
 		 * - 45: Seaplane Fighter (only capable for ASW support)
 		 * - 47: Land Base Bomber (not equippable by ship anyway)
