@@ -5787,7 +5787,7 @@ var SHIPDATA = {
 		image: 'SNuF.jpg',
 		type: 'CVL',
 		HP: 118,
-		FP: 45,
+		FP: 48,
 		TP: 0,
 		AA: 68,
 		AR: 93,
@@ -5819,7 +5819,7 @@ var SHIPDATA = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 582, 558, 583],
+		EQUIPS: [581, 557, 558, 583],
 	},
 	1782: {
 		name: 'Aircraft Carrier Princess 4',
@@ -5839,7 +5839,7 @@ var SHIPDATA = {
 		RNG: 3,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 582, 558, 583],
+		EQUIPS: [581, 557, 558, 583],
 	},
 	1783: {
 		name: 'Escort Water Princess 1',

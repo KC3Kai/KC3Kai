@@ -165,10 +165,15 @@
         x = this._addSlotsInfo(ctx, canvas, x)+50;
         if (this.isShipList) {
             x = this._addConsumableImage(ctx, canvas, x, "medals") + 50;
-            this._addConsumableImage(ctx, canvas, x, "blueprints");
+            x = this._addConsumableImage(ctx, canvas, x, "blueprints") + 50;
+            x = this._addConsumableImage(ctx, canvas, x, "actionReport") + 50;
+            this._addConsumableImage(ctx, canvas, x, "protoCatapult");
         } else {
             x = this._addConsumableImage(ctx, canvas, x, "devmats") + 50;
-            this._addConsumableImage(ctx, canvas, x, "screws", !this.hasAkashi);
+            x = this._addConsumableImage(ctx, canvas, x, "screws", !this.hasAkashi) + 50;
+            x = this._addConsumableImage(ctx, canvas, x, "newArtilleryMaterial") + 50;
+            x = this._addConsumableImage(ctx, canvas, x, "newAviationMaterial") + 50;
+            this._addConsumableImage(ctx, canvas, x, "skilledCrew");
         }
 
         var topLine = this.isShipList ? "Ship List" : "Equipment List";
@@ -211,8 +216,9 @@
     };
 
     ShowcaseExporter.prototype._addConsumableImage = function (ctx, canvas, x, type, crossed = false) {
-        ctx.fillText(JSON.parse(localStorage.consumables)[type], x, canvas.height - 1);
-        x += ctx.measureText(JSON.parse(localStorage.consumables)[type]).width + 5;
+        var count = JSON.parse(localStorage.consumables)[type] || "0";
+        ctx.fillText(count, x, canvas.height - 1);
+        x += ctx.measureText(count).width + 5;
         ctx.drawImage(this._otherImages[type], x, canvas.height - 18, 18, 18);
         if(crossed) {
             ctx.beginPath();
@@ -294,6 +300,13 @@
             self._loadImage("devmats", "_otherImages", "/assets/img/useitems/3.png", callback);
             self._loadImage("shipSlots", "_otherImages", "/assets/img/client/ship.png", callback);
             self._loadImage("gearSlots", "_otherImages", "/assets/img/client/gear.png", callback);
+
+            self._loadImage("actionReport", "_otherImages", "/assets/img/useitems/78.png", callback);
+            self._loadImage("protoCatapult","_otherImages", "/assets/img/useitems/65.png", callback);
+            self._loadImage("newArtilleryMaterial", "_otherImages", "/assets/img/useitems/75.png", callback);
+            self._loadImage("newAviationMaterial",  "_otherImages", "/assets/img/useitems/77.png", callback);
+            self._loadImage("skilledCrew",  "_otherImages", "/assets/img/useitems/70.png", callback);
+
         });
     };
 

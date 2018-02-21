@@ -82,7 +82,7 @@
 			$.each(this.newShips, function(index, shipData) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
-				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
+				shipVersion = (KC3Master.graph(shipData.api_id).api_version || [])[0];
 				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				
 				if (KC3Master.isSeasonalShip(shipData.api_id)) {
@@ -144,7 +144,7 @@
 			$.each(this.newCgs, function(index, shipData) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipData.api_id).api_filename;
-				shipVersion = KC3Master.graph(shipData.api_id).api_version[0];
+				shipVersion = (KC3Master.graph(shipData.api_id).api_version || [])[0];
 				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=10";
 				// try to fix seasonal CG coordinate offset based on battle values
@@ -168,7 +168,7 @@
 			$.each(this.archivedCgs, function(index, shipId) {
 				shipBox = $(".tab_mstupdate .factory .mstship").clone();
 				shipFile = KC3Master.graph(shipId).api_filename;
-				shipVersion = KC3Master.graph(shipId).api_version[0];
+				shipVersion = (KC3Master.graph(shipId).api_version || [])[0];
 				shipSrc = "/assets/swf/card.swf?sip=" + self.myServerIp + "&shipFile=" + shipFile;
 				shipSrc += "&abyss=0&forceFrame=8";
 				shipSrc += "&forceX=-40&forceY=-30";

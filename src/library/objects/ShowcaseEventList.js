@@ -106,7 +106,8 @@
                 if (KC3Master.ship(ships[0].masterId).api_afterlv !== 0) {
                     let suffixesList = Object.keys(KC3Meta._shipAffix.suffixes);
                     const name = KC3Master.ship(ships[0].masterId).api_name;
-                    const wctf_name = WhoCallsTheFleetDb.db["s" + ships[0].masterId].name.ja_jp;
+                    const wctf_ship = WhoCallsTheFleetDb.db["s" + ships[0].masterId];
+                    const wctf_name = wctf_ship ? wctf_ship.name.ja_jp : "";
                     let suffix = name.substring(wctf_name.length);
                     this.ctx.fillStyle = "#8c0c0c";
                     if (suffix.length) {

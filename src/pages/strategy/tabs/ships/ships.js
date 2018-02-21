@@ -480,6 +480,7 @@
 				range: ThisShip.range,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
+				slotNum: ThisShip.slotnum,
 				fleet: ThisShip.onFleet(),
 				ship: ThisShip,
 				master: ThisShip.master(),
@@ -1059,12 +1060,14 @@
 					else
 						cElm.addClass('modernization-able');
 
-					[1,2,3,4].forEach(function(x){
-						self.equipImg(cElm, x, cShip.slots[x-1], cShip.equip[x-1], cShip.id);
+					cShip.equip.forEach(function(gid, idx){
+						self.equipImg(cElm, idx + 1, cShip.slotNum, cShip.slots[idx], gid, cShip.id);
 					});
 					if(cShip.exSlot !== 0){
-						self.equipImg(cElm, "ex", -2, cShip.exSlot);
+						self.equipImg(cElm, "ex", cShip.slotNum, -2, cShip.exSlot);
 					}
+					$(".ship_equip", cElm).toggleClass("slot5",
+						cShip.slotNum + ((cShip.exSlot !== 0) & 1) > 5);
 
 					// callback for things that has to be recomputed
 					cElm.onRecompute = function(ship) {
@@ -1185,29 +1188,31 @@
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, equipNum, equipSlot, gearId, shipId){
-			var element = $(".ship_equip_" + equipNum, cElm);
+		equipImg :function(cElm, slotIndex, slotCount, slotSize, gearId, shipId){
+			var element = $(".ship_equip_" + slotIndex, cElm);
 			if(gearId > 0){
 				var gear = KC3GearManager.get(gearId);
 				if(gear.isDummy()){ element.hide(); return; }
 				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
 					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(equipSlot, ship))
+					.attr("title", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
-				$("span",element).css('visibility','hidden');
-			} else {
+				$("span", element).css("visibility", "hidden");
+				element.show();
+			} else if(slotIndex === "ex" || slotIndex <= Math.max(4, slotCount)){
 				$("img", element).hide();
-				$("span", element).each(function(i,x){
-					if(equipSlot > 0)
-						$(x).text(equipSlot);
-					else if(equipSlot === -2)
-						// for ex slot opened, but not equipped
-						$(x).addClass("empty");
-					else
-						$(x).css('visibility','hidden');
-				});
+				const sizeSpan = $("span", element);
+				if(slotSize > 0)
+					sizeSpan.text(slotSize);
+				else if(slotSize === -2)
+					// for ex slot opened, but not equipped
+					sizeSpan.addClass("empty");
+				else
+					sizeSpan.css("visibility", "hidden");
+			} else {
+				element.hide();
 			}
 		}
 	};
