@@ -452,12 +452,14 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isHighAswBomber = function(forLbas = false){
 		// See http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
-		// Carrier-based or Land-base bombers for now; AS-PBY, Autogyro may not capable.
-		// Current implemented:
+		// Carrier-based or Land-base bombers for now;
+		// Torpedo bombers current implemented:
 		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
+		// AS-PBY, Autogyro capable for OASW:
+		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon may capable for LBAS attack:
 		//   Type 0 Model 11B variants
-		const type2Ids = forLbas ? [8, 10, 47] : [8, 47];
+		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26, 47];
 		return this.masterId > 0 &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
