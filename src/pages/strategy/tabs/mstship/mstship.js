@@ -443,7 +443,7 @@
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
 						$(".ship_stat_name", statBox).text(realName);
-						// New initial asw statistic added for Anti-sub Carrier (Taiyou for now)
+						// New initial asw statistic added for Escort Carrier (CVE)
 						if(stat[0]=="as" && shipData.api_tais){
 							$(".ship_stat_min", statBox).text(shipData.api_tais[0]);
 						} else {
@@ -455,6 +455,9 @@
 						}
 						if(realName==="carry"){
 							$(".ship_stat_max", statBox).hide();
+							if(statFromDb[realName] === undefined){
+								$(".ship_stat_min", statBox).text(KC3Ship.getCarrySlots(ship_id));
+							}
 						} else {
 							$(".ship_stat_max span", statBox).text(
 								statFromDb[realName+"_max"] < 0 || statFromDb[realName+"_max"] === ""
