@@ -50,14 +50,21 @@
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
         // special case for Saratoga Mk.II converting: 5500 steel but 20 devmats
         calcDevMat: function(steel, ship_id_from) {
-            if (214 === ship_id_from) // Tatsuta
-                return 15;
-            if ([545, 550].indexOf(ship_id_from) > -1) // Saratoga
-                return 20;
-            return (steel < 4500) ? 0
-                : ( steel < 5500) ? 10
-                : ( steel < 6500) ? 15
-                : 20;
+            switch(ship_id_from) {
+                case 214: // Tatsuta
+                    return 15;
+                case 545: // Saratoga Mk.2
+                case 550: // Saratoga Mk.2 Mod.2
+                    return 20;
+                case 555: // Zuihou K2
+                case 560: // Zuihou K2B
+                    return 5;
+                default:
+                    return (steel < 4500) ? 0
+                         : (steel < 5500) ? 10
+                         : (steel < 6500) ? 15
+                         : 20;
+            }
         },
         // does not consume devmat if using blueprint,
         // except converting Suzuya/Kumano K2 to Kou K2, still consumes devmats
@@ -78,6 +85,9 @@
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 30;
+                case 555: // Zuihou K2
+                case 560: // Zuihou K2B
+                    return 20;
                 default:
                     return 0;
             }

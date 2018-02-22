@@ -448,6 +448,17 @@ KC3改 Ship Object
 		return this.slotnum + ((isExslotIncluded && (this.ex_item === -1 || this.ex_item > 0)) & 1);
 	};
 
+	/**
+	 * @return true if this ship is a CVE, which is Light Carrier and her initial ASW stat > 0
+	 */
+	KC3Ship.prototype.isEscortLightCarrier = function(){
+		if(this.isDummy()) return false;
+		const stype = this.master().api_stype;
+		// Known implementations: Taiyou series, Gambier Bay series, Zuihou K2B
+		const minAsw = (this.master().api_tais || [])[0];
+		return stype === 7 && minAsw > 0;
+	};
+
 	/* REPAIR TIME
 	Get ship's docking and Akashi times
 	when optAfterHp is true, return repair time based on afterHp
@@ -1539,23 +1550,31 @@ KC3改 Ship Object
 			ctype = this.master().api_ctype;
 
 		const isEscort = stype === 1;
-		// is CVE Taiyou series:
+		// is CVE (Taiyou series, Gambier Bay series, Zuihou K2B)
+		const isEscortLightCarrier = this.isEscortLightCarrier();
+		const hasLargeSonar = this.hasEquipmentType(2, 40);
+		// Taiyou series:
 		// tho Kasugamaru not possible to reach high asw for now
 		// and base asw stat of Kai and Kai2 already exceed 70
-		const isTaiyouClass = ctype === 76;
-		const isTaiyouBase = this.masterId === 526;
+		//const isTaiyouClass = ctype === 76;
+		//const isTaiyouBase = this.masterId === 526;
 		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
-		// is CVE Gambier Bay series (Casablanca Class?):
+		// Gambier Bay series (Casablanca Class?):
 		// https://twitter.com/yshr00638210/status/965551109619138560
 		// https://twitter.com/yshr00638210/status/965570610775470082
-		const isCasablancaClass = ctype === 83;
-		const isGambierBayBase = this.masterId === 544;
-		const isGambierBayKai = isCasablancaClass && !isGambierBayBase;
+		// https://twitter.com/syoukuretin/status/966332102718337024
+		//const isCasablancaClass = ctype === 83;
+		//const isGambierBayBase = this.masterId === 544;
+		//const isGambierBayKai = isCasablancaClass && !isGambierBayBase;
+		// Zuihou K2B:
+		// https://twitter.com/tobikage5/status/966318488284413957
+		// https://twitter.com/ZBMBVCfcuCHSi55/status/966327487713038338
+		//const isZuihouK2B = this.masterId === 560;
 
-		// lower condition for Gambier Bay, Escort and Taiyou
-		const aswThreshold = isGambierBayBase ? 50
+		// lower condition for DE and CVE, even lower if equips Large Sonar?
+		const aswThreshold = isEscortLightCarrier && hasLargeSonar ? 50
 			: isEscort ? 60
-			: isTaiyouClass || isGambierBayKai ? 65
+			: isEscortLightCarrier ? 65
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary
@@ -1566,17 +1585,11 @@ KC3改 Ship Object
 
 		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
-		// but Taiyou Kai+ can still OASW. only Sonar equipped can do neither.
-		// under verification about what equipment Gambier Bay (and Kai) needs.
+		// but CVE can still OASW. only Sonar equipped can do neither.
 		if (isTaiyouKaiAfter) {
 			return this.equipment(true).some(gear => gear.isAswAircraft(false));
-		} else if (isTaiyouBase || isGambierBayKai) {
+		} else if (isEscortLightCarrier) {
 			return this.equipment(true).some(gear => gear.isHighAswBomber());
-		}
-		if(isGambierBayBase) {
-			// equip some high ASW sonars? such as: Type 0, Type 4, Type124, Type144/147
-			return this.equipment(true).some(
-				gear => gear.master().api_type[2] === 14 && gear.master().api_tais >= 11);
 		}
 
 		const hasSonar = this.hasEquipmentType(1, 10);

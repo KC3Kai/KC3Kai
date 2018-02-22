@@ -432,8 +432,8 @@ KC3改 Equipment Object
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 10: Seaplane Recon (only capable for ASW support)
 		 * - 11: Seaplane Bomber
-		 * - 25: Autogyro (CVL incapable, but capable for CVL ASW support)
-		 * - 26: Anti-Sub PBY (CVL incapable, but capable for CVL ASW support)
+		 * - 25: Autogyro (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
+		 * - 26: Anti-Sub PBY (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
 		 * - 41: Large Flying Boat
 		 * - 45: Seaplane Fighter (only capable for ASW support)
 		 * - 47: Land Base Bomber (not equippable by ship anyway)
@@ -452,12 +452,14 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isHighAswBomber = function(forLbas = false){
 		// See http://wikiwiki.jp/kancolle/?%C2%E7%C2%EB
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
-		// Carrier-based or Land-base bombers for now; AS-PBY, Autogyro may not capable.
-		// Current implemented:
+		// Carrier-based or Land-base bombers for now;
+		// Torpedo bombers current implemented:
 		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
+		// AS-PBY, Autogyro capable for OASW:
+		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon may capable for LBAS attack:
 		//   Type 0 Model 11B variants
-		const type2Ids = forLbas ? [8, 10, 47] : [8, 47];
+		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26, 47];
 		return this.masterId > 0 &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;

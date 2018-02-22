@@ -140,43 +140,38 @@
 	position: relative;
 }
 
-.tab_event .map_box.cleared.easy:after {
+.tab_event .map_box.cleared:after {
 	content: "";
 	display: block;
 	position: absolute;
 	top: -1px;
-	right: -8px;
-	width: 21px;
-	height: 36px;
-	background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
-	background-size: contain;
+	right: -7px;
 	pointer-events: none;
 }
-
+.tab_event .map_box.cleared.casual:after {
+	top: -2px;
+	width: 19px;
+	height: 32px;
+	background: transparent url('/assets/img/client/medals/casual_medal.png') no-repeat;
+	background-size: contain;
+}
+.tab_event .map_box.cleared.easy:after {
+	width: 21px;
+	height: 37px;
+	background: transparent url('/assets/img/client/medals/easy_medal.png') no-repeat;
+	background-size: contain;
+}
 .tab_event .map_box.cleared.normal:after {
-	content: "";
-	display: block;
-	position: absolute;
-	top: -1px;
-	right: -8px;
 	width: 29px;
 	height: 37px;
-	background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
+	background: transparent url('/assets/img/client/medals/normal_medal.png') no-repeat;
 	background-size: contain;
-	pointer-events: none;
 }
-
 .tab_event .map_box.cleared.hard:after {
-	content: "";
-	display: block;
-	position: absolute;
-	top: -1px;
-	right: -8px;
 	width: 34px;
 	height: 38px;
-	background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
+	background: transparent url('/assets/img/client/medals/hard_medal.png') no-repeat;
 	background-size: contain;
-	pointer-events: none;
 }
 
 .tab_event .map_box.cleared.active.easy:after,
