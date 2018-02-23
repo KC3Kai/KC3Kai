@@ -1363,14 +1363,14 @@ Used by SortieManager
 	 */
 	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
 		const friendlyTable = $('<table>' +
-			'<tr class="header"><th class="type" colspan="2">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
-			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
+			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
 			'</table>');
 		const enemyTable = $('<table>' +
 			'<tr class="main"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
@@ -1404,19 +1404,24 @@ Used by SortieManager
 			const tRow = $(`.ship_${idx+1}`, friendlyTable);
 			if(sid > 0) {
 				const shipMaster = KC3Master.ship(sid);
+				const chp = friendlyFleet.api_nowhps[idx], mhp = friendlyFleet.api_maxhps[idx];
+				const leftHp = chp - friendlyFleetDamages[idx];
+				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
 					.css("margin-top", "-3px")
-					.attr("src", KC3Meta.shipIcon(sid));
+					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
-				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 5);
+				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
+				$(".voice", tRow).append(friendlyFleet.api_voice_p_no[idx] > 0 ?
+					$("<img/>").width(11).height(8).css("margin-top", "-2px")
+						.attr("src", "/assets/img/ui/sound.png") :
+					"&nbsp;"
+				).css("padding-right", 3);
 				$(".level", tRow).append(friendlyFleet.api_ship_lv[idx]).css("padding-right", 5);
-				const chp = friendlyFleet.api_nowhps[idx], mhp = friendlyFleet.api_maxhps[idx];
 				$(".hp", tRow).append("{0}{2} /{1}".format(chp, mhp,
 						friendlyFleetDamages[idx] > 0 ? -friendlyFleetDamages[idx] : ""
 					)
 				).css("padding-right", 5);
-				const leftHp = chp - friendlyFleetDamages[idx];
-				const isTaiha = (leftHp / mhp) < 0.25;
 				if(isTaiha) $(".hp", tRow).css("color", "red");
 				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
 				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
@@ -1456,7 +1461,7 @@ Used by SortieManager
 				$(`.s_${shipIdx}`, tRow).append(shipIcon).css("padding-right", 3);
 				$(`.dmg_${shipIdx}`, tRow).append(-enemyFleetDamages[idx]).css("padding-right", 5);
 				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipAfterHps[idx] <= 0;
-				if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "red");
+				if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "goldenrod");
 			}
 		});
 		// Join up messages and tables
