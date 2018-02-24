@@ -846,7 +846,7 @@
 								}
 							});
 							
-							// Support Exped/LBAS Triggered
+							// Support Exped/LBAS triggered
 							if(thisNode.supportFlag || thisNode.lbasFlag || thisNode.nightSupportFlag){
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support.png");
 								if(
@@ -863,6 +863,16 @@
 								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode));
 							}else{
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
+							}
+							
+							// Night battle Friendly Fleet support triggered
+							if(battle.yasen.api_friendly_info){
+								$(".node_result", nodeBox).addClass("icon5");
+								$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
+								$(".node_friend", nodeBox).attr("title", thisNode.buildFriendlyBattleMessage(battle.yasen));
+							}else{
+								$(".node_result", nodeBox).removeClass("icon5");
+								$(".node_friend", nodeBox).hide();
 							}
 							
 							// Conditions

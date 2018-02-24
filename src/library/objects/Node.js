@@ -314,6 +314,9 @@ Used by SortieManager
 			this.flarePos = this.flarePos >= 0 ? 1 + this.flarePos : -1;
 			this.eFlarePos = this.eFlarePos >= 0 ? -1 + this.eFlarePos : -1;
 		}
+		if (battleData.api_friendly_info !== undefined) {
+			this.friendlySupportFlag = true;
+		}
 		
 		// only used by old theme, replaced by beginHPs
 		this.originalHPs = Array.pad(battleData.api_f_nowhps, 6, -1) || this.originalHPs;
@@ -681,7 +684,11 @@ Used by SortieManager
 			this.nightSupportInfo = nightData.api_n_support_info;
 			this.nightSupportInfo.api_n_support_flag = nightData.api_n_support_flag;
 		}
-		
+
+		if (nightData.api_friendly_info !== undefined) {
+			this.friendlySupportFlag = true;
+		}
+
 		this.maxHPs = {
 			ally: nightData.api_f_maxhps,
 			enemy: nightData.api_e_maxhps
@@ -836,6 +843,10 @@ Used by SortieManager
 		if(this.gaugeDamage > -1
 			&& (!isEnemyCombined || this.activatedEnemyFleet == 1) ) {
 			let bossCurrentHp = nightData.api_e_nowhps[0];
+			// boss now hp will be the one after friendly fleet battle,
+			// so have to find the damage made by friend fleet back.
+			if(bossCurrentHp + this.gaugeDamage < nightData.api_e_maxhps[0])
+				bossCurrentHp = nightData.api_e_maxhps[0] - this.gaugeDamage;
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
 		
@@ -1143,8 +1154,7 @@ Used by SortieManager
 	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
 	 * return a empty string if no any support triggered.
 	 */
-	KC3Node.prototype.buildSupportAttackMessage = function(){
-		var thisNode = this;
+	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this){
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
 			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
@@ -1353,18 +1363,133 @@ Used by SortieManager
 	};
 
 	/**
+	 * Build HTML tooltip for friendly fleet info and battle result.
+	 */
+	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
+		//console.debug("Friendly battle", battleData, this.battleDay);
+		const friendlyTable = $('<table>' +
+			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
+			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'</table>');
+		const enemyTable = $('<table>' +
+			'<tr class="main"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
+				'<td class="s_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="dmg_6"></td></tr>' +
+			'<tr class="escort"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
+				'<td class="s_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="dmg_6"></td></tr>' +
+			'</table>');
+		const tooltip = $("<div></div>");
+		// Summaries ship damage for one side made by another side (night shelling only for now)
+		const sumFriendlyBattleDamages = (friendlyBattle, defenderFleetCount, attackerSide = 0) => {
+			const damages = new Array(defenderFleetCount).fill(0);
+			const hougeki = friendlyBattle.api_hougeki;
+			hougeki.api_at_eflag.forEach((sideFlag, idx) => {
+				if(sideFlag === attackerSide) {
+					const defender = hougeki.api_df_list[idx][0];
+					damages[defender] += sumSupportDamageArray(hougeki.api_damage[idx]);
+				}
+			});
+			return damages;
+		};
+		const friendlyFleet = battleData.api_friendly_info,
+			friendlyBattle = battleData.api_friendly_battle;
+		if(!friendlyFleet || !friendlyBattle) return tooltip.html();
+		// Fill up table of friendly fleet info
+		friendlyTable.css("font-size", "11px");
+		$(".header .hp", friendlyTable).css("text-align", "center");
+		$(".type", friendlyTable).text("#{0}".format(friendlyFleet.api_production_type));
+		const friendlyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
+			friendlyFleet.api_ship_id.length, 1);
+		friendlyFleet.api_ship_id.forEach((sid, idx) => {
+			const tRow = $(`.ship_${idx+1}`, friendlyTable);
+			if(sid > 0) {
+				const shipMaster = KC3Master.ship(sid);
+				const chp = friendlyFleet.api_nowhps[idx], mhp = friendlyFleet.api_maxhps[idx];
+				const leftHp = chp - friendlyFleetDamages[idx];
+				const isTaiha = (leftHp / mhp) < 0.25;
+				const shipIcon = $("<img/>").width(14).height(14)
+					.css("margin-top", "-3px")
+					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
+				$(".face", tRow).append(shipIcon).css("padding-right", 3);
+				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
+				$(".voice", tRow).append(friendlyFleet.api_voice_p_no[idx] > 0 ?
+					$("<img/>").width(11).height(8).css("margin-top", "-2px")
+						.attr("src", "/assets/img/ui/sound.png") :
+					"&nbsp;"
+				).css("padding-right", 3);
+				$(".level", tRow).append(friendlyFleet.api_ship_lv[idx]).css("padding-right", 5);
+				$(".hp", tRow).append("{0}{2} /{1}".format(chp, mhp,
+						friendlyFleetDamages[idx] > 0 ? -friendlyFleetDamages[idx] : ""
+					)
+				).css("padding-right", 5);
+				if(isTaiha) $(".hp", tRow).css("color", "red");
+				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
+				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
+					if(gid > 0) {
+						const gearMaster = KC3Master.slotitem(gid);
+						const gearIcon = $("<img/>").width(13).height(13)
+							.css("vertical-align", "text-bottom")
+							.attr("src", `/assets/img/items/${gearMaster.api_type[3]}.png`);
+						if(isStarShellUser && gearMaster.api_type[2] === 33) {
+							gearIcon.css("filter", "drop-shadow(0px 0px 2px #ff3399)")
+								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");
+						}
+						$(".equip", tRow).append(gearIcon).css("margin-right", 2);
+					}
+				});
+			}
+		});
+		// Fill up table of damage made to abyssal ships
+		enemyTable.css("font-size", "11px");
+		const enemyShips = battleData.api_ship_ke,
+			mainFleetCount = battleData.api_ship_ke.length,
+			enemyShipAfterHps = battleData.api_e_nowhps;
+		if(battleData.api_ship_ke_combined) {
+			enemyShips.push(...battleData.api_ship_ke_combined);
+			enemyShipAfterHps.push(...battleData.api_e_nowhps_combined);
+		}
+		const enemyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
+			enemyShips.length, 0);
+		enemyShips.forEach((sid, idx) => {
+			const tRow = $(idx > mainFleetCount - 1 ? ".escort" : ".main", enemyTable);
+			const shipIdx = idx > mainFleetCount - 1 ? idx - mainFleetCount + 1 : idx + 1;
+			if(sid > 0) {
+				const shipMaster = KC3Master.ship(sid);
+				const shipIcon = $("<img/>").width(14).height(14)
+					.css("margin-top", "-3px")
+					.attr("src", KC3Meta.abyssIcon(sid));
+				$(`.s_${shipIdx}`, tRow).append(shipIcon).css("padding-right", 3);
+				$(`.dmg_${shipIdx}`, tRow).append(-enemyFleetDamages[idx]).css("padding-right", 5);
+				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipAfterHps[idx] <= 0;
+				if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "goldenrod");
+			}
+		});
+		// Join up messages and tables
+		tooltip.append(KC3Meta.term("BattleFriendlyArrived") + "<br/>");
+		tooltip.append(friendlyTable);
+		tooltip.append(KC3Meta.term("BattleFriendlyBattle") + "<br/>");
+		tooltip.append(enemyTable);
+		return tooltip.html();
+	};
+
+	/**
 		Build HTML tooltip for details of air battle losses
 	*/
 	KC3Node.prototype.buildAirBattleLossMessage = function(){
-		var template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
+		const template = $('<table><tr><th class="type">&nbsp;</th><th>Friendly&nbsp;</th><th>Abyssal</th></tr>' +
 			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
 			'<tr class="airbattle_row"><td>Result</td><td colspan="2" class="airbattle"></td></tr>' +
 			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' + 
 			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>');
-		var tooltip = $("<div></div>");
-		var fillAirBattleData = function(typeName, koukuApiData){
-			var table = template.clone();
-			var stage1 = koukuApiData.api_stage1 || {
+		const tooltip = $("<div></div>");
+		const fillAirBattleData = function(typeName, koukuApiData){
+			const table = template.clone();
+			const stage1 = koukuApiData.api_stage1 || {
 					api_f_count:0,api_f_lostcount:0,
 					api_e_count:0,api_e_lostcount:0
 				},

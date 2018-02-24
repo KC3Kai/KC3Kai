@@ -630,8 +630,12 @@
 	height:24px;
 	float:left;
 	line-height:24px;
-	/*background:#fcc;*/
 }
+.tab_event .sortie_list .node_result.icon5 > div {
+	width:16px;
+	transform:scaleX(0.8);
+}
+
 .tab_event .sortie_list .node_formation img {
 	-webkit-transform: rotate(-90deg);
 	transform: rotate(-90deg);
