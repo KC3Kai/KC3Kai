@@ -843,6 +843,10 @@ Used by SortieManager
 		if(this.gaugeDamage > -1
 			&& (!isEnemyCombined || this.activatedEnemyFleet == 1) ) {
 			let bossCurrentHp = nightData.api_e_nowhps[0];
+			// boss now hp will be the one after friendly fleet battle,
+			// so have to find the damage made by friend fleet back.
+			if(bossCurrentHp + this.gaugeDamage < nightData.api_e_maxhps[0])
+				bossCurrentHp = nightData.api_e_maxhps[0] - this.gaugeDamage;
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
 		}
 		
@@ -1362,6 +1366,7 @@ Used by SortieManager
 	 * Build HTML tooltip for friendly fleet info and battle result.
 	 */
 	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
+		//console.debug("Friendly battle", battleData, this.battleDay);
 		const friendlyTable = $('<table>' +
 			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
 			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
