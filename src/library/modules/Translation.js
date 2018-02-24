@@ -221,7 +221,7 @@
 			"Repair" : 6,
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
-			"LeyteSupport" : 141,
+			"FriendSupport" : 141,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -252,7 +252,7 @@
 		// voice flag of a ship.
 		// the result is sorted.
 		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true) {
-			var sortedVoiceNums =  [
+			var sortedVoiceNums = [
 				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
 				12,5,7,14,15,16,18,17,23,19,20,21,22,
 			];
