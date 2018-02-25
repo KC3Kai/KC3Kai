@@ -1912,17 +1912,19 @@ Previously known as "Reactor"
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
 					localMap.gaugeType  = eventData.api_gauge_type || 0;
+					// added since Winter 2018
+					localMap.gaugeNum   = eventData.api_gauge_num || 1;
 					
 					switch(localMap.gaugeType) {
 						case 0:
 						case 2:
-							localMap.kind   = "gauge-hp";
+							localMap.kind = "gauge-hp";
 							break;
 						case 3:
-							localMap.kind   = "gauge-tp";
+							localMap.kind = "gauge-tp";
 							break;
 						default:
-							localMap.kind   = "gauge-hp";
+							localMap.kind = "gauge-hp";
 							console.info("Reported new API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
 					}
 					
@@ -1930,11 +1932,19 @@ Previously known as "Reactor"
 						if(!!oldMap.kinds) localMap.kinds = oldMap.kinds;
 						if(!!oldMap.maxhps) localMap.maxhps = oldMap.maxhps;
 						if(!!oldMap.baseHp) localMap.baseHp = oldMap.baseHp;
-						// Different gauge detected
+						if(!!oldMap.debuffFlag) localMap.debuffFlag = oldMap.debuffFlag;
+						if(!!oldMap.debuffSound) localMap.debuffSound = oldMap.debuffSound;
+						// Real different gauge detected
+						if(!!oldMap.gaugeNum && oldMap.gaugeNum !== localMap.gaugeNum){
+							// Should be a different BOSS and her HP might be different
+							delete localMap.baseHp;
+							console.info("New gauge phase detected:", oldMap.gaugeNum + " -> " + localMap.gaugeNum);
+						}
+						// Different gauge type detected
 						if(!!oldMap.gaugeType && oldMap.gaugeType !== localMap.gaugeType){
 							localMap.kinds = localMap.kinds || [oldMap.gaugeType];
 							localMap.kinds.push(localMap.gaugeType);
-							console.info("New gauge phase detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
+							console.info("New gauge type detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
 						}
 						// Different max value detected
 						if((oldMap.maxhp || 9999) !== 9999
@@ -1944,7 +1954,7 @@ Previously known as "Reactor"
 							console.info("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
 						}
 					}
-					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
+					localMap.stat = $.extend(true,{},defStat,etcStat[ key ]);
 				}
 				
 				maps[ key ] = localMap;

@@ -644,9 +644,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					thisMap.debuffSound = (thisMap.debuffSound || 0) + 1;
 				}
 				// first found at event Winter 2018
+				/*
 				if(eventObject.api_m_flag3){
 					thisMap.selectedOperation = eventObject.api_m_flag3;
 				}
+				*/
 				this.setCurrentMapData(thisMap, this.map_world, this.map_num);
 			}
 			
