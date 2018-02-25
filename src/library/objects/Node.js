@@ -1368,14 +1368,14 @@ Used by SortieManager
 	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
 		//console.debug("Friendly battle", battleData, this.battleDay);
 		const friendlyTable = $('<table>' +
-			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
-			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="stats"></th><th class="equip">&nbsp;</th></tr>' +
+			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
 			'</table>');
 		const enemyTable = $('<table>' +
 			'<tr class="main"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
@@ -1402,6 +1402,10 @@ Used by SortieManager
 		// Fill up table of friendly fleet info
 		friendlyTable.css("font-size", "11px");
 		$(".header .hp", friendlyTable).css("text-align", "center");
+		const yasenIcon = $("<img/>").width(10).height(10)
+			.css("margin-top", "-2px")
+			.attr("src", "/assets/img/stats/yasen.png");
+		$(".header .stats", friendlyTable).append(yasenIcon);
 		$(".type", friendlyTable).text("#{0}".format(friendlyFleet.api_production_type));
 		const friendlyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
 			friendlyFleet.api_ship_id.length, 1);
@@ -1428,6 +1432,13 @@ Used by SortieManager
 					)
 				).css("padding-right", 5);
 				if(isTaiha) $(".hp", tRow).css("color", "red");
+				// Show yasen (fp + tp) power only, ship current power / possible max power
+				$(".stats", tRow).append(
+					"{0} /{1}".format(
+						friendlyFleet.api_Param[idx][0] + friendlyFleet.api_Param[idx][1],
+						shipMaster.api_houg[1] + shipMaster.api_raig[1]
+					)
+				).css("padding-right", 3);
 				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
 				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
 					if(gid > 0) {

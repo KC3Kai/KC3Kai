@@ -873,6 +873,7 @@ Previously known as "Reactor"
 				thisMap.maxhp = parseInt(mapInfo.api_max_maphp, 10);
 				thisMap.gaugeNum = mapInfo.api_gauge_num || 1;
 				thisMap.gaugeType = mapInfo.api_gauge_type || 0;
+				thisMap.kind = ["", "", "gauge-hp", "gauge-tp"][thisMap.gaugeType] || "gauge-hp";
 			} else {
 				// nothing given for some event maps, suppose all things reset
 				console.log("Event map new rank HP data is not given, leaving 9999 as placeholder");
