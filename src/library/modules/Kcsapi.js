@@ -855,18 +855,31 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			var world = parseInt(params.api_maparea_id, 10),
-				map = parseInt(params.api_map_no, 10);
-			var thisMap = KC3SortieManager.getCurrentMapData(world, map);
+			const world = parseInt(params.api_maparea_id, 10),
+				map = parseInt(params.api_map_no, 10),
+				apiData = response.api_data;
+			const thisMap = KC3SortieManager.getCurrentMapData(world, map);
 			thisMap.difficulty = parseInt(params.api_rank, 10);
-			// if api gives new hp data
-			if(response.api_data && response.api_data.api_max_maphp){
-				thisMap.curhp = thisMap.maxhp = parseInt(response.api_data.api_max_maphp, 10);
+			if(apiData && apiData.api_max_maphp){
+				// if API gives new HP data only for some old event maps
+				thisMap.curhp = thisMap.maxhp = parseInt(apiData.api_max_maphp, 10);
+				delete thisMap.gaugeNum;
+			} else if(apiData && apiData.api_maphp){
+				// if API gives all map info,
+				// official devs announced since Winter 2018:
+				// change to lower difficulty may keep some gauge states or gimmicks, not reset all things
+				const mapInfo = apiData.api_maphp;
+				thisMap.curhp = parseInt(mapInfo.api_now_maphp, 10);
+				thisMap.maxhp = parseInt(mapInfo.api_max_maphp, 10);
+				thisMap.gaugeNum = mapInfo.api_gauge_num || 1;
+				thisMap.gaugeType = mapInfo.api_gauge_type || 0;
 			} else {
+				// nothing given for some event maps, suppose all things reset
 				console.log("Event map new rank HP data is not given, leaving 9999 as placeholder");
 				thisMap.curhp = thisMap.maxhp = 9999;
+				delete thisMap.gaugeNum;
 			}
-			// clear old progress of this map
+			// clear old progress of this map (not verified since Winter 2018)
 			delete thisMap.kinds;
 			delete thisMap.maxhps;
 			delete thisMap.baseHp;
@@ -1903,6 +1916,10 @@ Previously known as "Reactor"
 				if(typeof thisMap.api_defeat_count !== "undefined"){
 					localMap.kills = thisMap.api_defeat_count;
 					localMap.kind  = "multiple";
+				}
+				// Max Land-bases allowed to be sortied
+				if(typeof thisMap.api_air_base_decks !== "undefined"){
+					localMap.airBase = thisMap.api_air_base_decks;
 				}
 				
 				// Check for event map info
