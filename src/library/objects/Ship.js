@@ -1533,6 +1533,24 @@ KC3改 Ship Object
 		return true;
 	};
 
+	/**
+	 * @return true if this ship is capable of equipping (Striking Force) Fleet Command Facility.
+	 */
+	KC3Ship.prototype.canEquipFCF = function() {
+		if(this.isDummy()) { return false; }
+		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
+		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
+		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
+		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2
+		const capableShips = [464, 498, 500, 543];
+		// CVL Kasugamaru
+		const incapableShips = [521];
+		const masterId = this.masterId,
+			stype = this.master().api_stype;
+		return incapableShips.indexOf(masterId) === -1 &&
+			(capableShips.indexOf(masterId) > -1 || capableStypes.indexOf(stype) > -1);
+	};
+
 	// test to see if this ship is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
 	// there are two requirements:
