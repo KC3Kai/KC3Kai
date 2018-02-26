@@ -908,7 +908,7 @@ Used by SortieManager
 				
 				/* FLAGSHIP ATTACKING ==> */
 				console.log("Damaged Flagship", this.gaugeDamage, "/", maps[ckey].curhp || 0, "pts");
-				// also check if destroyed flagship is from main fleet (boss)
+				// also check if destroyed flagship is from main fleet (the boss)
 				const mainFlagshipKilled = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
 					resultData.api_destsf : 0;
 				switch(maps[ckey].kind) {
@@ -921,8 +921,10 @@ Used by SortieManager
 					case 'gauge-hp': /* HP-Gauge */
 						if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) {
 							maps[ckey].curhp -= this.gaugeDamage;
-							if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-								maps[ckey].curhp = 1 - (maps[ckey].clear = mainFlagshipKilled);
+							// if last kill, check whether flagship is killed or not
+							// flagship killed = gauge clear, not map clear if there are multi-gauges
+							if(maps[ckey].curhp <= 0)
+								maps[ckey].curhp = 1 - (mainFlagshipKilled & 1);
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
@@ -935,13 +937,15 @@ Used by SortieManager
 						} else {
 							maps[ckey].curhp = 0;
 						}
+						// clean remembered boss hp if there is one
+						delete maps[ckey].baseHp;
 						console.log("Landing get",this.gaugeDamage,"->",maps[ckey].curhp,"/",maps[ckey].maxhp,"TP");
 						break;
 					default:         /* Undefined */
 						break;
 				}
-				
-				maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
+				// obtaining clear once
+				maps[ckey].clear |= resultData.api_first_clear;
 				
 				if(stat) {
 					stat.onBoss.hpdat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
