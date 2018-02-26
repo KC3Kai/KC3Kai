@@ -409,22 +409,24 @@
 				// STATS
 				var statFromDb = WhoCallsTheFleetDb.getShipStat(ship_id);
 				$.each([
-					["hp", "taik"],
-					["fp", "houg"],
-					["ar", "souk"],
-					["tp", "raig"],
-					["ev", "db_evasion"],
-					["aa", "tyku"],
-					["ac", "db_carry"],
-					["as", "db_asw"],
-					["sp", "soku"],
-					["ls", "db_los"],
-					["rn", "leng"],
-					["lk", "luck"],
+					["hp", "taik", "ShipHp"],
+					["fp", "houg", "ShipFire"],
+					["ar", "souk", "ShipArmor"],
+					["tp", "raig", "ShipTorpedo"],
+					["ev", "db_evasion", "ShipEvasion"],
+					["aa", "tyku", "ShipAntiAir"],
+					["ac", "db_carry", "ShipCarry"],
+					["as", "db_asw", "ShipAsw"],
+					["sp", "soku", "ShipSpeed"],
+					["ls", "db_los", "ShipLos"],
+					["rn", "leng", "ShipLength"],
+					["lk", "luck", "ShipLuck"],
 				], function(index, stat){
 					statBox = $(".tab_mstship .factory .ship_stat").clone();
 					$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
-					$(".ship_stat_name", statBox).text(stat[1]);
+					$(".ship_stat_name", statBox).text(stat[1])
+						.attr("title", KC3Meta.term(stat[2]) || "")
+						.lazyInitTooltip();
 					
 					if(stat[0]=="rn"){
 						$(".ship_stat_text", statBox).text(["","Short","Medium","Long","V.Long"][shipData.api_leng]);
@@ -761,17 +763,19 @@
 					if(enemyDbStats || abyssDb){
 						$(".tab_mstship .shipInfo .stats").empty();
 						$.each([
-							["hp", "taik"],
-							["fp", "houg"],
-							["ar", "souk"],
-							["tp", "raig"],
-							["aa", "tyku"],
-							["sp", "soku"],
+							["hp", "taik", "ShipHp"],
+							["fp", "houg", "ShipFire"],
+							["ar", "souk", "ShipArmor"],
+							["tp", "raig", "ShipTorpedo"],
+							["aa", "tyku", "ShipAntiAir"],
+							["sp", "soku", "ShipSpeed"],
 							["if", "airpow"],
 						], function(index, stat){
 							statBox = $(".tab_mstship .factory .ship_stat").clone();
 							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
-							$(".ship_stat_name", statBox).text(stat[1]);
+							$(".ship_stat_name", statBox).text(stat[1])
+								.attr("title", KC3Meta.term(stat[2]) || "")
+								.lazyInitTooltip();
 							if(stat[0]=="sp"){
 								var speedEnNameMap = {"0":"Land","5":"Slow","10":"Fast","15":"Fast+","20":"Fastest"};
 								$(".ship_stat_text", statBox).text(speedEnNameMap[shipData.api_soku]);
