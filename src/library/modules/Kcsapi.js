@@ -871,8 +871,8 @@ Previously known as "Reactor"
 				const mapInfo = apiData.api_maphp;
 				thisMap.curhp = parseInt(mapInfo.api_now_maphp, 10);
 				thisMap.maxhp = parseInt(mapInfo.api_max_maphp, 10);
-				thisMap.gaugeNum = mapInfo.api_gauge_num || 1;
-				thisMap.gaugeType = mapInfo.api_gauge_type || 0;
+				thisMap.gaugeNum = parseInt(mapInfo.api_gauge_num, 10) || 1;
+				thisMap.gaugeType = parseInt(mapInfo.api_gauge_type, 10) || 0;
 				thisMap.kind = ["", "", "gauge-hp", "gauge-tp"][thisMap.gaugeType] || "gauge-hp";
 			} else {
 				// nothing given for some event maps, suppose all things reset
@@ -974,6 +974,9 @@ Previously known as "Reactor"
 			// Refresh fleet shipbox if fuel or ammo lost at maelstrom node
 			if(nextNode.type === "maelstrom" && [1, 2].indexOf(nextNode.item) > -1){
 				KC3Network.trigger("Fleet");
+			}
+			if(response.api_data.api_m1){
+				console.info("Map gimmick flag detected", response.api_data.api_m1);
 			}
 			if(typeof response.api_data.api_destruction_battle !== "undefined"){
 				KC3SortieManager.engageLandBaseAirRaid(
@@ -1123,6 +1126,10 @@ Previously known as "Reactor"
 			
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
+			
+			if(response.api_data.api_m1){
+				console.info("Boss gimmick flag detected", response.api_data.api_m1);
+			}
 			
 			PlayerManager.fleets.forEach(function(fleet){
 				fleet.ship(function(rosterId,slotId,shipData){

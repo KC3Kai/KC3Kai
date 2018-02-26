@@ -14,6 +14,7 @@
             this.showListRowCallback = this.showShipLockingRow;
             this.lockLimit = 5;
             this.heartLockMode = 2;
+            this.showShipLevel = true;
         }
 
         /* RELOAD
@@ -39,6 +40,11 @@
             
             this.tab = $(".tab_locking");
             $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
+            $(".toggleShipLevel", this.tab).on("click", (e) => {
+                this.showShipLevel = !this.showShipLevel;
+                $(".ships_area .lship .level").toggle(this.showShipLevel);
+            });
+            $(".ships_area .lship .level").toggle(this.showShipLevel);
             
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {
@@ -403,6 +409,7 @@
                 .appendTo(`.tab_locking .lock_mode_${boxIndex + 1} .ships_area`);
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
+            $(".level", shipBox).text(ship.level);
             shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);

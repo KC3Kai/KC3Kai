@@ -1371,6 +1371,10 @@ body {
 .tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	background:#b7b7b7;
 }
+.tab_locking .lock_mode .lship .level {
+	color:#333;
+	background:#ace;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/
