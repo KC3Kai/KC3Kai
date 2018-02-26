@@ -523,11 +523,11 @@ Uses KC3Quest objects to play around with
 				"875": // Bq6 Sortie DesDiv 31
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShip([
-								543, // Naganami Kai2
+						return fleet.countShip(543) >= 1 && // Naganami K2
+							fleet.countShip([
 								345, // Takanami Kai
 								359, // Okinami Kai
-								344  // Asashimo Kai
+								344, // Asashimo Kai
 							]) >= 1;
 					},
 			};
