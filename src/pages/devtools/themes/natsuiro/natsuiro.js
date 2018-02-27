@@ -3840,7 +3840,7 @@
 		var thisMapId = KC3SortieManager.getSortieMap().join(''),
 			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
-			onBoss    = KC3SortieManager.currentNode().isBoss(),
+			onBoss    = KC3SortieManager.currentNode().isValidBoss(),
 			depleteOK = onBoss || !!noBoss;
 
 		// Normalize Parameters

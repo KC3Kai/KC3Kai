@@ -592,13 +592,13 @@ Used by SortieManager
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				if(this.isBoss()) {
+				if(this.isValidBoss()) {
 					// Invoke on boss event callback
 					if(sortieData.isOnSortie() && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie
-					var thisMap = sortieData.getCurrentMapData();
+					const thisMap = sortieData.getCurrentMapData();
 					if(thisMap.kind === "gauge-hp") {
 						thisMap.baseHp = thisMap.baseHp || this.enemyFlagshipHp;
 						if(thisMap.baseHp != this.enemyFlagshipHp) {
@@ -874,7 +874,8 @@ Used by SortieManager
 			if(this.allyNoDamage && this.rating === "S")
 				this.rating = "SS";
 			
-			if(this.isBoss()) {
+			// for multi-gauges event map, check if this node is the right boss for current stage
+			if(this.isValidBoss()) {
 				// assumed maps[ckey] already initialized at /mapinfo or /start
 				var maps = KC3SortieManager.getAllMapData(),
 					ckey = 'm' + KC3SortieManager.getSortieMap().join(''),
@@ -901,7 +902,7 @@ Used by SortieManager
 					sb[pt].push(srid);
 					oc = sb[pt].length;
 					console.info("Current sortie recorded as", pt);
-					console.info("You've done this", oc, "time"+(oc != 1 ? 's' : '')+'.',
+					console.info("You've done this", oc, "time"+(oc > 1 ? 's' : '')+'.',
 						"Good luck, see you next time!");
 				}
 				/* ==> DESPAIR STATISTICS */
@@ -919,7 +920,7 @@ Used by SortieManager
 							maps[ckey].kills += mainFlagshipKilled;
 						break;
 					case 'gauge-hp': /* HP-Gauge */
-						if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) {
+						if(this.gaugeDamage >= 0 && (maps[ckey].curhp || 0) > 0) {
 							maps[ckey].curhp -= this.gaugeDamage;
 							// if last kill, check whether flagship is killed or not
 							// flagship killed = gauge clear, not map clear if there are multi-gauges
@@ -928,7 +929,6 @@ Used by SortieManager
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
-						/* TP Gauge */
 						if (typeof resultData.api_landing_hp != "undefined") {
 							var TPdata = resultData.api_landing_hp;
 							this.gaugeDamage = Math.min(TPdata.api_now_hp, TPdata.api_sub_value);
@@ -1666,13 +1666,23 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		// see advanceNode() (SortieManager.js) for api details
+		// see advanceNode() (SortieManager.js) for api details,
+		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
 		return (
 			// boss battle
 			this.eventId === 5 &&
 			// enemy single || enemy combined || night-to-day
 			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
 		);
+	};
+	
+	KC3Node.prototype.isValidBoss = function(){
+		if(!this.isBoss()) return false;
+		const thisMap = KC3SortieManager.getCurrentMapData(),
+			eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1),
+			isInvalidBoss = eventMapGauge && Array.isArray(eventMapGauge.boss) &&
+				eventMapGauge.boss.indexOf(this.id) === -1;
+		return !isInvalidBoss;
 	};
 	
 	KC3Node.prototype.isMvpPredictionCapable = function(){

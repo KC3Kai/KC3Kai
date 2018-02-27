@@ -1987,6 +1987,8 @@ KC3改 Ship Object
 						return ["Cutin", 6, "CutinNFNTBFBI", 1.18];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialTBomberCnt >= 1)
 						return ["Cutin", 6, "CutinNFNTBSF", 1.18];
+					// https://twitter.com/imoDer_Tw/status/968294965745893377
+					if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 				}
 			}
