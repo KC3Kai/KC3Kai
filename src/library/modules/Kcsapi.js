@@ -1135,10 +1135,6 @@ Previously known as "Reactor"
 			if(!ConfigManager.info_delta)
 				KC3Network.trigger("HQ");
 			
-			if(response.api_data.api_m1){
-				console.info("Boss gimmick flag detected", response.api_data.api_m1);
-			}
-			
 			PlayerManager.fleets.forEach(function(fleet){
 				fleet.ship(function(rosterId,slotId,shipData){
 					shipData.hp[0] = shipData.afterHp[0];
