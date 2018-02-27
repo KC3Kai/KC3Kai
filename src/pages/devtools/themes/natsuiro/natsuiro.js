@@ -3874,7 +3874,7 @@
 						.find('.nowhp').css("width", (rate[0])+"%").end()
 						.find('.curhp').css("width", (rate[1])+"%").end();
 
-					requireFinisher = (thisMap.curhp <= thisMap.baseHp);
+					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
 					var totalKills = KC3Meta.gauge( thisMapId );
@@ -3888,7 +3888,7 @@
 							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
 							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
 
-						requireFinisher = (killsLeft <= 1);
+						requireFinisher = killsLeft > 0 && killsLeft <= 1;
 					}else{
 						$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
 					}
