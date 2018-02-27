@@ -859,6 +859,7 @@ Previously known as "Reactor"
 				map = parseInt(params.api_map_no, 10),
 				apiData = response.api_data;
 			const thisMap = KC3SortieManager.getCurrentMapData(world, map);
+			const oldRank = thisMap.difficulty;
 			thisMap.difficulty = parseInt(params.api_rank, 10);
 			if(apiData && apiData.api_max_maphp){
 				// if API gives new HP data only for some old event maps
@@ -880,12 +881,19 @@ Previously known as "Reactor"
 				thisMap.curhp = thisMap.maxhp = 9999;
 				delete thisMap.gaugeNum;
 			}
-			// clear old progress of this map (not verified since Winter 2018)
-			delete thisMap.kinds;
-			delete thisMap.maxhps;
-			delete thisMap.baseHp;
-			delete thisMap.debuffFlag;
-			delete thisMap.debuffSound;
+			// clear old progress of this map,
+			// to lower difficulty known facts: unlocked map gimmick not reset and
+			// current gauge num not reset, but add 25% of lower rank's max maphp to now maphp
+			if(apiData && apiData.api_maphp && oldRank && oldRank < thisMap.difficulty){
+				// only forget the boss HP of higher difficulty if there is one
+				delete thisMap.baseHp;
+			} else {
+				delete thisMap.kinds;
+				delete thisMap.maxhps;
+				delete thisMap.baseHp;
+				delete thisMap.debuffFlag;
+				delete thisMap.debuffSound;
+			}
 			KC3SortieManager.setCurrentMapData(thisMap, world, map);
 		},
 		
