@@ -855,23 +855,45 @@ Previously known as "Reactor"
 		/* Select difficulty
 		-------------------------------------------------------*/
 		"api_req_map/select_eventmap_rank":function(params, response, headers){
-			var world = parseInt(params.api_maparea_id, 10),
-				map = parseInt(params.api_map_no, 10);
-			var thisMap = KC3SortieManager.getCurrentMapData(world, map);
+			const world = parseInt(params.api_maparea_id, 10),
+				map = parseInt(params.api_map_no, 10),
+				apiData = response.api_data;
+			const thisMap = KC3SortieManager.getCurrentMapData(world, map);
+			const oldRank = thisMap.difficulty;
 			thisMap.difficulty = parseInt(params.api_rank, 10);
-			// if api gives new hp data
-			if(response.api_data && response.api_data.api_max_maphp){
-				thisMap.curhp = thisMap.maxhp = parseInt(response.api_data.api_max_maphp, 10);
+			if(apiData && apiData.api_max_maphp){
+				// if API gives new HP data only for some old event maps
+				thisMap.curhp = thisMap.maxhp = parseInt(apiData.api_max_maphp, 10);
+				delete thisMap.gaugeNum;
+			} else if(apiData && apiData.api_maphp){
+				// if API gives all map info,
+				// official devs announced since Winter 2018:
+				// change to lower difficulty may keep some gauge states or gimmicks, not reset all things
+				const mapInfo = apiData.api_maphp;
+				thisMap.curhp = parseInt(mapInfo.api_now_maphp, 10);
+				thisMap.maxhp = parseInt(mapInfo.api_max_maphp, 10);
+				thisMap.gaugeNum = parseInt(mapInfo.api_gauge_num, 10) || 1;
+				thisMap.gaugeType = parseInt(mapInfo.api_gauge_type, 10) || 0;
+				thisMap.kind = ["", "", "gauge-hp", "gauge-tp"][thisMap.gaugeType] || "gauge-hp";
 			} else {
+				// nothing given for some event maps, suppose all things reset
 				console.log("Event map new rank HP data is not given, leaving 9999 as placeholder");
 				thisMap.curhp = thisMap.maxhp = 9999;
+				delete thisMap.gaugeNum;
 			}
-			// clear old progress of this map
-			delete thisMap.kinds;
-			delete thisMap.maxhps;
-			delete thisMap.baseHp;
-			delete thisMap.debuffFlag;
-			delete thisMap.debuffSound;
+			// clear old progress of this map,
+			// to lower difficulty known facts: unlocked map gimmick not reset and
+			// current gauge num not reset, but add 25% of lower rank's max maphp to now maphp
+			if(apiData && apiData.api_maphp && oldRank && oldRank < thisMap.difficulty){
+				// only forget the boss HP of higher difficulty if there is one
+				delete thisMap.baseHp;
+			} else {
+				delete thisMap.kinds;
+				delete thisMap.maxhps;
+				delete thisMap.baseHp;
+				delete thisMap.debuffFlag;
+				delete thisMap.debuffSound;
+			}
 			KC3SortieManager.setCurrentMapData(thisMap, world, map);
 		},
 		
@@ -960,6 +982,9 @@ Previously known as "Reactor"
 			// Refresh fleet shipbox if fuel or ammo lost at maelstrom node
 			if(nextNode.type === "maelstrom" && [1, 2].indexOf(nextNode.item) > -1){
 				KC3Network.trigger("Fleet");
+			}
+			if(response.api_data.api_m1){
+				console.info("Map gimmick flag detected", response.api_data.api_m1);
 			}
 			if(typeof response.api_data.api_destruction_battle !== "undefined"){
 				KC3SortieManager.engageLandBaseAirRaid(
@@ -1904,6 +1929,10 @@ Previously known as "Reactor"
 					localMap.kills = thisMap.api_defeat_count;
 					localMap.kind  = "multiple";
 				}
+				// Max Land-bases allowed to be sortied
+				if(typeof thisMap.api_air_base_decks !== "undefined"){
+					localMap.airBase = thisMap.api_air_base_decks;
+				}
 				
 				// Check for event map info
 				if(typeof thisMap.api_eventmap !== "undefined"){
@@ -1912,17 +1941,19 @@ Previously known as "Reactor"
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
 					localMap.gaugeType  = eventData.api_gauge_type || 0;
+					// added since Winter 2018
+					localMap.gaugeNum   = eventData.api_gauge_num || 1;
 					
 					switch(localMap.gaugeType) {
 						case 0:
 						case 2:
-							localMap.kind   = "gauge-hp";
+							localMap.kind = "gauge-hp";
 							break;
 						case 3:
-							localMap.kind   = "gauge-tp";
+							localMap.kind = "gauge-tp";
 							break;
 						default:
-							localMap.kind   = "gauge-hp";
+							localMap.kind = "gauge-hp";
 							console.info("Reported new API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
 					}
 					
@@ -1930,11 +1961,19 @@ Previously known as "Reactor"
 						if(!!oldMap.kinds) localMap.kinds = oldMap.kinds;
 						if(!!oldMap.maxhps) localMap.maxhps = oldMap.maxhps;
 						if(!!oldMap.baseHp) localMap.baseHp = oldMap.baseHp;
-						// Different gauge detected
+						if(!!oldMap.debuffFlag) localMap.debuffFlag = oldMap.debuffFlag;
+						if(!!oldMap.debuffSound) localMap.debuffSound = oldMap.debuffSound;
+						// Real different gauge detected
+						if(!!oldMap.gaugeNum && oldMap.gaugeNum !== localMap.gaugeNum){
+							// Should be a different BOSS and her HP might be different
+							delete localMap.baseHp;
+							console.info("New gauge phase detected:", oldMap.gaugeNum + " -> " + localMap.gaugeNum);
+						}
+						// Different gauge type detected
 						if(!!oldMap.gaugeType && oldMap.gaugeType !== localMap.gaugeType){
 							localMap.kinds = localMap.kinds || [oldMap.gaugeType];
 							localMap.kinds.push(localMap.gaugeType);
-							console.info("New gauge phase detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
+							console.info("New gauge type detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
 						}
 						// Different max value detected
 						if((oldMap.maxhp || 9999) !== 9999
@@ -1944,7 +1983,7 @@ Previously known as "Reactor"
 							console.info("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
 						}
 					}
-					localMap.stat       = $.extend(true,{},defStat,etcStat[ key ]);
+					localMap.stat = $.extend(true,{},defStat,etcStat[ key ]);
 				}
 				
 				maps[ key ] = localMap;
@@ -2303,7 +2342,7 @@ Previously known as "Reactor"
 				.filter(function(x){
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
-						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
+						(!x[3] || KC3SortieManager.currentNode().isValidBoss())             && /* Is on boss node */
 						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
 						true
 					);

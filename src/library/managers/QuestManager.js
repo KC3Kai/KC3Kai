@@ -377,10 +377,15 @@ Uses KC3Quest objects to play around with
 				this.isActive(questId, false);
 			}
 		},
-
-		resetQuestCounter: function( questId ){
-			if (typeof this.list["q"+questId] != "undefined"){
-				this.list["q"+questId].tracking[0][0] = 0;
+		
+		resetQuestCounter: function( questId, forced ){
+			var quest = this.list["q"+questId];
+			if(quest !== undefined && Array.isArray(quest.tracking)){
+				for(var ctr in quest.tracking){
+					var progress = quest.tracking[ctr];
+					if(progress.length > 1 && (!!forced || progress[0] < progress[1]))
+						progress[0] = 0;
+				}
 			}
 		},
 		
@@ -389,10 +394,10 @@ Uses KC3Quest objects to play around with
 				this.resetQuest( questIds[ctr] );
 			}
 		},
-
-		resetCounterLoop: function( questIds ){
+		
+		resetCounterLoop: function( questIds, forced ){
 			for(var ctr in questIds){
-				this.resetQuestCounter( questIds[ctr] );
+				this.resetQuestCounter( questIds[ctr], forced );
 			}
 		},
 		
@@ -400,7 +405,12 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
-			this.resetCounterLoop([311]);
+			// Monthly PvP counter reset to 0 if not click complete in a day
+			// C8
+			this.resetCounterLoop([311], true);
+			// To verify counter reset to 0 if required times not reached in a day
+			// C16
+			//this.resetCounterLoop([318], false);
 			this.save();
 		},
 		
@@ -523,11 +533,11 @@ Uses KC3Quest objects to play around with
 				"875": // Bq6 Sortie DesDiv 31
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShip([
-								543, // Naganami Kai2
+						return fleet.countShip(543) >= 1 && // Naganami K2
+							fleet.countShip([
 								345, // Takanami Kai
 								359, // Okinami Kai
-								344  // Asashimo Kai
+								344, // Asashimo Kai
 							]) >= 1;
 					},
 			};

@@ -116,9 +116,12 @@ AntiAir: anti-air related calculations
 	// Type 3 Shell
 	var isType3Shell = categoryEq(18);
 
+	// Check by icon (15)
+	var isMachineGun = iconEq(15);
+
 	// Anti-air gun includes machine guns and rocket launchers,
 	// but not sure why AA stat < 3 gun not counted (only 7.7mm MG for now)
-	var isAAGun = predAllOf(iconEq(15), function(mst) {
+	var isAAGun = predAllOf(isMachineGun, function(mst) {
 		return mst.api_tyku >= 3;
 	});
 
@@ -192,7 +195,7 @@ AntiAir: anti-air related calculations
 	//   might be more appropriate.
 
 	function getShipEquipmentModifier(mst) {
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 6;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 4;
@@ -213,7 +216,7 @@ AntiAir: anti-air related calculations
 			return 0.25;
 		if (predAnyOf(isRedGun,
 				  isYellowGun,
-				  isAAGun,
+				  isMachineGun,
 				  isFighter,
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
@@ -226,7 +229,7 @@ AntiAir: anti-air related calculations
 	// another implementation might give the latest verified data:
 	// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
 	function getShipImprovementModifier(mst) {
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 4;
 		if (isBuiltinHighAngleMount(mst))
 			return 3;
@@ -249,7 +252,7 @@ AntiAir: anti-air related calculations
 			return 2;
 		if (isAARadar(mst))
 			return 1.5;
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 0;
 		// no default value for unverified equipment
 		return 0;

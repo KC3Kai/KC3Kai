@@ -1533,6 +1533,24 @@ KC3改 Ship Object
 		return true;
 	};
 
+	/**
+	 * @return true if this ship is capable of equipping (Striking Force) Fleet Command Facility.
+	 */
+	KC3Ship.prototype.canEquipFCF = function() {
+		if(this.isDummy()) { return false; }
+		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
+		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
+		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
+		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2
+		const capableShips = [464, 498, 500, 543];
+		// CVL Kasugamaru
+		const incapableShips = [521];
+		const masterId = this.masterId,
+			stype = this.master().api_stype;
+		return incapableShips.indexOf(masterId) === -1 &&
+			(capableShips.indexOf(masterId) > -1 || capableStypes.indexOf(stype) > -1);
+	};
+
 	// test to see if this ship is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
 	// there are two requirements:
@@ -1969,6 +1987,8 @@ KC3改 Ship Object
 						return ["Cutin", 6, "CutinNFNTBFBI", 1.18];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialTBomberCnt >= 1)
 						return ["Cutin", 6, "CutinNFNTBSF", 1.18];
+					// https://twitter.com/imoDer_Tw/status/968294965745893377
+					if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
 					if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 				}
 			}
@@ -2904,9 +2924,10 @@ KC3改 Ship Object
 		}
 		gearInfo = this.exItem().deckbuilder();
 		if (gearInfo) {
-			// #1726 Deckbuilder: if max slot not reach 4, `ix` will not be used
+			// #1726 Deckbuilder: if max slot not reach 5, `ix` will not be used,
+			// which means i? > ship.api_slot_num will be considered as the ex-slot.
 			var usedSlot = Object.keys(itemsInfo).length;
-			if(usedSlot < 4) {
+			if(usedSlot < 5) {
 				itemsInfo["i".concat(usedSlot+1)] = gearInfo;
 			} else {
 				itemsInfo.ix = gearInfo;
