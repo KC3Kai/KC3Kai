@@ -5758,7 +5758,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 0,
 		SPD: 5,
-		SLOTS: [26, 23, 23],
+		SLOTS: [26, 22, 24],
 		EQUIPS: [581, 582, 583],
 	},
 	1778: {
@@ -5787,7 +5787,7 @@ var SHIPDATA = {
 		image: 'SNuF.jpg',
 		type: 'CVL',
 		HP: 118,
-		FP: 45,
+		FP: 48,
 		TP: 0,
 		AA: 68,
 		AR: 93,
