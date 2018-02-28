@@ -316,7 +316,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Dud";
 			}
 			
-			// According testing, boss node not able to be indicated since api_bosscell_no return random values even edge is still hidden
+			// According testing, boss node not able to be indicated since api_bosscell_no return random values even edge is still hidden,
+			// now we use manually configures to indicate known boss nodes (and their corresponding map gauges), see `fud_quarterly.json`
 			const bossLetter = KC3Meta.nodeLetter(this.map_world, this.map_num, nodeData.api_bosscell_no);
 			if(Array.isArray(this.boss.letters) && this.boss.letters.indexOf(bossLetter) < 0)
 				this.boss.letters.push(bossLetter);
@@ -385,6 +386,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(!ConfigManager.info_delta){
 				PlayerManager.hq.checkRankPoints();
 				PlayerManager.hq.updateLevel( resultData.api_member_lv, resultData.api_member_exp);
+			}
+			if(resultData.api_m1){
+				console.info("Map gimmick flag detected", resultData.api_m1);
 			}
 		},
 		
@@ -644,9 +648,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					thisMap.debuffSound = (thisMap.debuffSound || 0) + 1;
 				}
 				// first found at event Winter 2018
+				/*
 				if(eventObject.api_m_flag3){
 					thisMap.selectedOperation = eventObject.api_m_flag3;
 				}
+				*/
 				this.setCurrentMapData(thisMap, this.map_world, this.map_num);
 			}
 			

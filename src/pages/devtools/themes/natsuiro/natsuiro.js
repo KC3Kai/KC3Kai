@@ -3840,7 +3840,7 @@
 		var thisMapId = KC3SortieManager.getSortieMap().join(''),
 			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
-			onBoss    = KC3SortieManager.currentNode().isBoss(),
+			onBoss    = KC3SortieManager.currentNode().isValidBoss(),
 			depleteOK = onBoss || !!noBoss;
 
 		// Normalize Parameters
@@ -3849,6 +3849,7 @@
 
 		if(Object.keys(thisMap).length > 0){
 			$(".module.activity .map_info").removeClass("map_finisher");
+			$(".module.activity .map_hp").removeAttr("title");
 			if( thisMap.clear ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
@@ -3869,12 +3870,13 @@
 					});
 
 					console.debug("Map HP:",thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
-					$(".module.activity .map_hp").text( thisMap.curhp + " / " + thisMap.maxhp );
+					$(".module.activity .map_hp")
+						.text( thisMap.curhp + " / " + thisMap.maxhp );
 					$(".module.activity .map_gauge")
 						.find('.nowhp').css("width", (rate[0])+"%").end()
 						.find('.curhp').css("width", (rate[1])+"%").end();
 
-					requireFinisher = (thisMap.curhp <= thisMap.baseHp);
+					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
 					var totalKills = KC3Meta.gauge( thisMapId );
@@ -3883,12 +3885,13 @@
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
 						postBounty = killsLeft - (depleteOK && fsKill);
 					if(totalKills){
-						$(".module.activity .map_hp").text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));
+						$(".module.activity .map_hp")
+							.text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));
 						$(".module.activity .map_gauge")
 							.find('.curhp').css("width", ((postBounty/totalKills)*100)+"%").end()
 							.find('.nowhp').css("width", ( (killsLeft/totalKills)*100)+"%").end();
 
-						requireFinisher = (killsLeft <= 1);
+						requireFinisher = killsLeft > 0 && killsLeft <= 1;
 					}else{
 						$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNotClear") );
 					}
@@ -3902,12 +3905,16 @@
 							infoElm.addClass("noBlink").removeClass("use-gpu");
 						else
 							infoElm.addClass("use-gpu").removeClass("noBlink");
-						$(".module.activity .map_hp").text(KC3Meta.term("StrategyEvents1HP"));
+						$(".module.activity .map_hp")
+							.attr("title", $(".module.activity .map_hp").text())
+							.text(KC3Meta.term("StrategyEvents1HP"))
+							.lazyInitTooltip();
 					})();
 				}
 			}
 		}else{
-			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
+			$(".module.activity .map_hp").removeAttr("title")
+				.text( KC3Meta.term("BattleMapNoHpGauge") );
 		}
 	}
 

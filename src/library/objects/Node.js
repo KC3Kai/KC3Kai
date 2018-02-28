@@ -592,13 +592,13 @@ Used by SortieManager
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
 			
 			(function(sortieData){
-				if(this.isBoss()) {
+				if(this.isValidBoss()) {
 					// Invoke on boss event callback
 					if(sortieData.isOnSortie() && sortieData.onBossAvailable) {
 						sortieData.onBossAvailable(this);
 					}
 					// Save boss HP for future sortie
-					var thisMap = sortieData.getCurrentMapData();
+					const thisMap = sortieData.getCurrentMapData();
 					if(thisMap.kind === "gauge-hp") {
 						thisMap.baseHp = thisMap.baseHp || this.enemyFlagshipHp;
 						if(thisMap.baseHp != this.enemyFlagshipHp) {
@@ -874,7 +874,8 @@ Used by SortieManager
 			if(this.allyNoDamage && this.rating === "S")
 				this.rating = "SS";
 			
-			if(this.isBoss()) {
+			// for multi-gauges event map, check if this node is the right boss for current stage
+			if(this.isValidBoss()) {
 				// assumed maps[ckey] already initialized at /mapinfo or /start
 				var maps = KC3SortieManager.getAllMapData(),
 					ckey = 'm' + KC3SortieManager.getSortieMap().join(''),
@@ -901,14 +902,14 @@ Used by SortieManager
 					sb[pt].push(srid);
 					oc = sb[pt].length;
 					console.info("Current sortie recorded as", pt);
-					console.info("You've done this", oc, "time"+(oc != 1 ? 's' : '')+'.',
+					console.info("You've done this", oc, "time"+(oc > 1 ? 's' : '')+'.',
 						"Good luck, see you next time!");
 				}
 				/* ==> DESPAIR STATISTICS */
 				
 				/* FLAGSHIP ATTACKING ==> */
 				console.log("Damaged Flagship", this.gaugeDamage, "/", maps[ckey].curhp || 0, "pts");
-				// also check if destroyed flagship is from main fleet (boss)
+				// also check if destroyed flagship is from main fleet (the boss)
 				const mainFlagshipKilled = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
 					resultData.api_destsf : 0;
 				switch(maps[ckey].kind) {
@@ -919,14 +920,15 @@ Used by SortieManager
 							maps[ckey].kills += mainFlagshipKilled;
 						break;
 					case 'gauge-hp': /* HP-Gauge */
-						if((this.gaugeDamage >= 0) && (maps[ckey].curhp || 0) > 0) {
+						if(this.gaugeDamage >= 0 && (maps[ckey].curhp || 0) > 0) {
 							maps[ckey].curhp -= this.gaugeDamage;
-							if(maps[ckey].curhp <= 0) // if last kill -- check whether flagship is killed or not -- flagship killed = map clear
-								maps[ckey].curhp = 1 - (maps[ckey].clear = mainFlagshipKilled);
+							// if last kill, check whether flagship is killed or not
+							// flagship killed = gauge clear, not map clear if there are multi-gauges
+							if(maps[ckey].curhp <= 0)
+								maps[ckey].curhp = 1 - (mainFlagshipKilled & 1);
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
-						/* TP Gauge */
 						if (typeof resultData.api_landing_hp != "undefined") {
 							var TPdata = resultData.api_landing_hp;
 							this.gaugeDamage = Math.min(TPdata.api_now_hp, TPdata.api_sub_value);
@@ -935,13 +937,15 @@ Used by SortieManager
 						} else {
 							maps[ckey].curhp = 0;
 						}
+						// clean remembered boss hp if there is one
+						delete maps[ckey].baseHp;
 						console.log("Landing get",this.gaugeDamage,"->",maps[ckey].curhp,"/",maps[ckey].maxhp,"TP");
 						break;
 					default:         /* Undefined */
 						break;
 				}
-				
-				maps[ckey].clear |= resultData.api_first_clear; // obtaining clear once
+				// obtaining clear once
+				maps[ckey].clear |= resultData.api_first_clear;
 				
 				if(stat) {
 					stat.onBoss.hpdat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
@@ -1368,14 +1372,14 @@ Used by SortieManager
 	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
 		//console.debug("Friendly battle", battleData, this.battleDay);
 		const friendlyTable = $('<table>' +
-			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="equip">&nbsp;</th></tr>' +
-			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
-			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="equip"></td></tr>' +
+			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="stats"></th><th class="equip">&nbsp;</th></tr>' +
+			'<tr class="ship_1"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_2"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_3"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_4"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_5"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_6"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
+			'<tr class="ship_7"><td class="face"></td><td class="name"></td><td class="voice"></td><td class="level"></td><td class="hp"></td><td class="stats"></td><td class="equip"></td></tr>' +
 			'</table>');
 		const enemyTable = $('<table>' +
 			'<tr class="main"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
@@ -1402,6 +1406,10 @@ Used by SortieManager
 		// Fill up table of friendly fleet info
 		friendlyTable.css("font-size", "11px");
 		$(".header .hp", friendlyTable).css("text-align", "center");
+		const yasenIcon = $("<img/>").width(10).height(10)
+			.css("margin-top", "-2px")
+			.attr("src", "/assets/img/stats/yasen.png");
+		$(".header .stats", friendlyTable).append(yasenIcon);
 		$(".type", friendlyTable).text("#{0}".format(friendlyFleet.api_production_type));
 		const friendlyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
 			friendlyFleet.api_ship_id.length, 1);
@@ -1428,6 +1436,13 @@ Used by SortieManager
 					)
 				).css("padding-right", 5);
 				if(isTaiha) $(".hp", tRow).css("color", "red");
+				// Show yasen (fp + tp) power only, ship current power / possible max power
+				$(".stats", tRow).append(
+					"{0} /{1}".format(
+						friendlyFleet.api_Param[idx][0] + friendlyFleet.api_Param[idx][1],
+						shipMaster.api_houg[1] + shipMaster.api_raig[1]
+					)
+				).css("padding-right", 3);
 				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
 				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
 					if(gid > 0) {
@@ -1651,13 +1666,23 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.isBoss = function(){
-		// see advanceNode() (SortieManager.js) for api details
+		// see advanceNode() (SortieManager.js) for api details,
+		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
 		return (
 			// boss battle
 			this.eventId === 5 &&
 			// enemy single || enemy combined || night-to-day
 			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
 		);
+	};
+	
+	KC3Node.prototype.isValidBoss = function(){
+		if(!this.isBoss()) return false;
+		const thisMap = KC3SortieManager.getCurrentMapData(),
+			eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1),
+			isInvalidBoss = eventMapGauge && Array.isArray(eventMapGauge.boss) &&
+				eventMapGauge.boss.indexOf(this.id) === -1;
+		return !isInvalidBoss;
 	};
 	
 	KC3Node.prototype.isMvpPredictionCapable = function(){

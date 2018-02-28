@@ -139,20 +139,20 @@
 			var statBox;
 			$(".tab_mstgear .gearInfo .stats").empty();
 			$.each([
-				["hp", "taik"],
-				["fp", "houg"],
-				["ar", "souk"],
-				["tp", "raig"],
-				["sp", "soku"],
-				["dv", "baku"],
-				["aa", "tyku"],
-				["as", "tais"],
-				["ht", "houm"],
-				["ev", "houk"],
-				["ls", "saku"],
-				["rn", "leng"],
-				["or", "distance"],
-				["kk", "cost"],
+				["hp", "taik", "ShipHp"],
+				["fp", "houg", "ShipFire"],
+				["ar", "souk", "ShipArmor"],
+				["tp", "raig", "ShipTorpedo"],
+				["sp", "soku", "ShipSpeed"],
+				["dv", "baku", "ShipBombing"],
+				["aa", "tyku", "ShipAntiAir"],
+				["as", "tais", "ShipAsw"],
+				["ht", "houm", "ShipAccuracy", "ShipAccAntiBomber"],
+				["ev", "houk", "ShipEvasion", "ShipEvaInterception"],
+				["ls", "saku", "ShipLos"],
+				["rn", "leng", "ShipLength"],
+				["or", "distance", "ShipRadius"],
+				["kk", "cost", "ShipDeployCost"],
 			], function(index, sdata){
 				if((gearData["api_"+sdata[1]]||0) !== 0
 					&& (["or","kk"].indexOf(sdata[0]) < 0
@@ -160,7 +160,11 @@
 						KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
 				){
 					statBox = $(".tab_mstgear .factory .stat").clone();
-					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
+					$("img", statBox)
+						.attr("src", "../../../../assets/img/stats/"+sdata[0]+".png")
+						.attr("title", KC3Meta.term(
+							sdata[sdata.length > 3 && gearData.api_type[2] === 48 ? 3 : 2]) || "")
+						.lazyInitTooltip();
 					if(sdata[0]==="rn"){ // For range length
 						$(".stat_value", statBox).text( [
 							"?", "S", "M", "L", "VL", "XL"

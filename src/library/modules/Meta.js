@@ -407,6 +407,11 @@ Provides access to data on built-in JSON files
 			return (this._dataColle.gauges || {})["m" + map_id] || false;
 		},
 		
+		eventGauge :function(mapId, gaugeNum){
+			var mapInfo = (this._eventColle.eventMapGauges || {})[mapId] || false;
+			return mapInfo ? (gaugeNum ? mapInfo[gaugeNum] || false : mapInfo) : false;
+		},
+		
 		allMapsExp :function(){
 			return this._mapExpMap || ((rawExpMap) => {
 				this._mapExpMap = {};

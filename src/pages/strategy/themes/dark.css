@@ -1675,6 +1675,10 @@ button, input, select, textarea {
 .tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	background: #5a5a5a;
 }
+.tab_locking .lock_mode .lship .level {
+	color:#fff;
+	background:#ff5722;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/
