@@ -380,7 +380,6 @@
   const Fleets = {};
   const { Side } = KC3BattlePrediction;
   const { pipe, juxt, map, zipWith, over } = KC3BattlePrediction;
-  const COMBINED_FLEET_MAIN_SIZE = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
@@ -466,7 +465,8 @@
     if (fleets[side].main[position]) {
       return `${side}.main.${position}`;
     }
-    const escortIndex = position - COMBINED_FLEET_MAIN_SIZE;
+    const mainFleetSize = fleets[side].main.length;
+    const escortIndex = position - mainFleetSize;
     if (fleets[side].escort[escortIndex]) {
       return `${side}.escort.${escortIndex}`;
     }

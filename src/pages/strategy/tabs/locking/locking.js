@@ -409,7 +409,7 @@
                 .appendTo(`.tab_locking .lock_mode_${boxIndex + 1} .ships_area`);
 
             $("img", shipBox).attr("src", KC3Meta.shipIcon(ship.masterId));
-            $(".level", shipBox).text(ship.level);
+            $(".level", shipBox).text(ship.level).toggle(this.showShipLevel);
             shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
@@ -430,6 +430,7 @@
                     cursor: "move",
                     start: (e, ui) => {
                         $(e.target).tooltip("disable");
+                        $(".level", e.target).hide();
                     }
                 });
             }
