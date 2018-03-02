@@ -380,6 +380,7 @@
   const Fleets = {};
   const { Side } = KC3BattlePrediction;
   const { pipe, juxt, map, zipWith, over } = KC3BattlePrediction;
+  const COMBINED_FLEET_MAIN_ALIGN = 6;
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
@@ -465,8 +466,7 @@
     if (fleets[side].main[position]) {
       return `${side}.main.${position}`;
     }
-    const mainFleetSize = fleets[side].main.length;
-    const escortIndex = position - mainFleetSize;
+    const escortIndex = position - COMBINED_FLEET_MAIN_ALIGN;
     if (fleets[side].escort[escortIndex]) {
       return `${side}.escort.${escortIndex}`;
     }
@@ -700,6 +700,7 @@
 
 // Parser for 航空 (aerial combat) phase
 (function () {
+  const COMBINED_FLEET_MAIN_ALIGN = 6;
   const Kouku = {};
   const { pipe, juxt, flatten, map, filter, Side } = KC3BattlePrediction;
   /*--------------------------------------------------------*/
@@ -729,17 +730,28 @@
   /*--------------------------------------------------------*/
 
   // Combine the damage arrays for main and escort fleets
-  Kouku.mergeFleetDamageArrays = ({ api_stage3, api_stage3_combined }) => ({
-    api_fdam: [].concat(
-      (api_stage3 && api_stage3.api_fdam) || [],
-      (api_stage3_combined && api_stage3_combined.api_fdam) || []
-    ),
-    api_edam: [].concat(
-      (api_stage3 && api_stage3.api_edam) || [],
-      (api_stage3_combined && api_stage3_combined.api_edam) || []
-    ),
-  });
+  Kouku.mergeFleetDamageArrays = ({ api_stage3, api_stage3_combined }) => {
+    const { padAndConcatFleetArrays } = KC3BattlePrediction.battle.phases.kouku;
+    return {
+      api_fdam: padAndConcatFleetArrays(
+        (api_stage3 && api_stage3.api_fdam) || [],
+        (api_stage3_combined && api_stage3_combined.api_fdam) || []
+      ),
+      api_edam: padAndConcatFleetArrays(
+        (api_stage3 && api_stage3.api_edam) || [],
+        (api_stage3_combined && api_stage3_combined.api_edam) || []
+      ),
+    };
+  };
 
+  // Pad main fleet array with 0 damage to guarantee escort fleet position starts from 6
+  Kouku.padAndConcatFleetArrays = (mainArr, escortArr) => (
+    escortArr.length > 0 ?
+      mainArr.concat(
+        Array(Math.max(0, COMBINED_FLEET_MAIN_ALIGN - mainArr.length)).fill(0),
+        escortArr) :
+      mainArr.slice(0)
+  );
 
   Kouku.parsePlayerJson = ({ api_fdam }) => api_fdam.map(
     (damage, position) => ({ damage, defender: { side: Side.PLAYER, position } })

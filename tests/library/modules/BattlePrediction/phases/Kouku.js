@@ -34,7 +34,7 @@ QUnit.module('modules > BattlePrediction > phases > Kouku', function () {
 
       const result = this.subject(json);
 
-      assert.deepEqual(result, { api_fdam: [1, 2, 3], api_edam: [4, 5, 6, 7, 8, 9] });
+      assert.deepEqual(result, { api_fdam: [1, 2, 3], api_edam: [4, 5, 6, 0, 0, 0, 7, 8, 9] });
     });
 
     QUnit.test('combined vs single', function (assert) {
@@ -45,7 +45,7 @@ QUnit.module('modules > BattlePrediction > phases > Kouku', function () {
 
       const result = this.subject(json);
 
-      assert.deepEqual(result, { api_fdam: [1, 2, 3, 7, 8, 9], api_edam: [4, 5, 6] });
+      assert.deepEqual(result, { api_fdam: [1, 2, 3, 0, 0, 0, 7, 8, 9], api_edam: [4, 5, 6] });
     });
   });
 
