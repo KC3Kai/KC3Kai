@@ -285,6 +285,7 @@
 			var self = this;
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
 			const nameToSearch = newNameCriteria.toLowerCase();
+			const searchRegEx = new RegExp(nameToSearch);
 			let hiddenShipsByName = 0;
 			$(".ingame_page").remove();
 			if (nameToSearch.length > 0) {
@@ -293,9 +294,13 @@
 					const shipName = $(".ship_name", this).text().toLowerCase(),
 						shipNameJp = ($(".ship_name", this).data("jpName") || "").toLowerCase(),
 						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "").toLowerCase();
-					const isToHide = ! (shipName.includes(nameToSearch)
-						|| shipNameJp.includes(nameToSearch)
-						|| shipNameKana.includes(nameToSearch));
+					// const isToHide = ! (shipName.includes(nameToSearch)
+					// 	|| shipNameJp.includes(nameToSearch)
+					// 	|| shipNameKana.includes(nameToSearch));
+					const isToHide = !(searchRegEx.test(shipName)
+						|| searchRegEx.test(shipNameJp)
+						|| searchRegEx.test(shipNameKana)
+					);
 					hiddenShipsByName += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
 				});
