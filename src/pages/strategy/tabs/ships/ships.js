@@ -297,10 +297,7 @@
 					// const isToHide = ! (shipName.includes(nameToSearch)
 					// 	|| shipNameJp.includes(nameToSearch)
 					// 	|| shipNameKana.includes(nameToSearch));
-					const isToHide = !(searchRegEx.test(shipName)
-						|| searchRegEx.test(shipNameJp)
-						|| searchRegEx.test(shipNameKana)
-					);
+					const isToHide = ![shipName, shipNameJp, shipNameKana].some(v => searchRegEx.test(v));
 					hiddenShipsByName += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
 				});
