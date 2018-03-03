@@ -284,17 +284,17 @@
 		refreshShowNameFilter: function() {
 			var self = this;
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
-			const nameToSearch = newNameCriteria.toLowerCase();
-			const searchRegEx = new RegExp(nameToSearch);
+			const nameToSearch = newNameCriteria;
+			const searchRegEx = new RegExp(nameToSearch, 'iu');
 			let hiddenShipsByName = 0;
 			$(".ingame_page").remove();
 			if (nameToSearch.length > 0) {
 				$(".ship_list .ship_item").each(function() {
 					// also search for JP name and kana yomi, not so useful for JP tho
-					const shipName = $(".ship_name", this).text().toLowerCase(),
-						shipNameJp = ($(".ship_name", this).data("jpName") || "").toLowerCase(),
-						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "").toLowerCase();
-					// const isToHide = ! (shipName.includes(nameToSearch)
+					const shipName = $(".ship_name", this).text(),
+						shipNameJp = ($(".ship_name", this).data("jpName") || ""),
+						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "");
+					// const isToHide = !(shipName.includes(nameToSearch)
 					// 	|| shipNameJp.includes(nameToSearch)
 					// 	|| shipNameKana.includes(nameToSearch));
 					const isToHide = ![shipName, shipNameJp, shipNameKana].some(v => searchRegEx.test(v));
