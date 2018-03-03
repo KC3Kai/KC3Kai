@@ -41,5 +41,25 @@ QUnit.module('modules > BattlePrediction > phases > Kouku', () => {
         createAttack({ damage: 12, defender: { side: Side.ENEMY, position: 6 } }),
       ]);
     });
+
+    QUnit.test('[12v6] partial CF vs air raid', function (assert) {
+      const json = {
+        api_stage3: {
+          api_fdam: [57, 7],
+          api_edam: [0, 0, 0, 0, 0, 0],
+        },
+        api_stage3_combined: {
+          api_fdam: [17, 0, 0],
+        },
+      };
+
+      const result = this.subject(json);
+
+      assert.deepEqual(result, [
+        createAttack({ damage: 57, defender: { side: Side.PLAYER, position: 0 } }),
+        createAttack({ damage: 7, defender: { side: Side.PLAYER, position: 1 } }),
+        createAttack({ damage: 17, defender: { side: Side.PLAYER, position: 6 } }),
+      ]);
+    });
   });
 });
