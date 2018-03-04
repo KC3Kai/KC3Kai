@@ -85,7 +85,7 @@ Provides access to data on built-in JSON files
 		],
 		specialAbyssalIdVoicePrefixes: {
 			// Why do devs make wrong voice filename matching even for last event?
-			// `Prefix of indeed voice filename`: `Correctly matched abyssal ID`
+			// `Prefix of actual voice filename`: `Correctly matched abyssal ID`
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
