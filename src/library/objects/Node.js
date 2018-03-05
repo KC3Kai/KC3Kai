@@ -748,7 +748,7 @@ Used by SortieManager
 		// Shift it back to 1-based index to be compatible with old codes
 		this.flarePos = this.flarePos >= 0 ?
 			1 + (isPlayerCombined && this.activatedFriendFleet == 2 ?
-				this.flarePos - this.maxHPs.allyMain.length : this.flarePos)
+				this.flarePos - 6 : this.flarePos)
 			: -1;
 		// PvP opponent only, abyssal star shell not existed yet
 		this.eFlarePos = this.eFlarePos >= 0 ? 1 + this.eFlarePos : -1;
@@ -1571,27 +1571,27 @@ Used by SortieManager
 		const isSafeArray = (obj, path) => Array.isArray(Object.getSafePath(obj, path));
 		// jets assault from carriers
 		if(isSafeArray(b, "api_injection_kouku.api_stage3.api_edam")){
-			totalDamage += Math.floor(b.api_injection_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
+			totalDamage += sumSupportDamageArray(b.api_injection_kouku.api_stage3.api_edam);
 		}
 		if(isSafeArray(b, "api_injection_kouku.api_stage3_combined.api_edam")){
-			totalDamage += Math.floor(b.api_injection_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+			totalDamage += sumSupportDamageArray(b.api_injection_kouku.api_stage3_combined.api_edam);
 		}
 		if(isSafeArray(b, "api_injection_kouku.api_plane_from") && Array.isArray(b.api_injection_kouku.api_plane_from[0])){
 			b.api_injection_kouku.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });
 		}
 		// regular air battle
 		if(isSafeArray(b, "api_kouku.api_stage3.api_edam")){
-			totalDamage += Math.floor(b.api_kouku.api_stage3.api_edam.slice(1).reduce((a, v) => a + v, 0));
+			totalDamage += sumSupportDamageArray(b.api_kouku.api_stage3.api_edam);
 		}
 		if(isSafeArray(b, "api_kouku.api_stage3_combined.api_edam")){
-			totalDamage += Math.floor(b.api_kouku.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+			totalDamage += sumSupportDamageArray(b.api_kouku.api_stage3_combined.api_edam);
 		}
 		if(isSafeArray(b, "api_kouku.api_plane_from") && Array.isArray(b.api_kouku.api_plane_from[0])){
 			b.api_kouku.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });
 		}
 		// 2nd wave for air battle only node, supposed to no combined
 		if(isSafeArray(b, "api_kouku2.api_stage3_combined.api_edam")){
-			totalDamage += Math.floor(b.api_kouku2.api_stage3_combined.api_edam.slice(1).reduce((a, v) => a + v, 0));
+			totalDamage += sumSupportDamageArray(b.api_kouku2.api_stage3_combined.api_edam);
 		}
 		if(isSafeArray(b, "api_kouku2.api_plane_from") && Array.isArray(b.api_kouku2.api_plane_from[0])){
 			b.api_kouku2.api_plane_from[0].filter(idx => idx > -1).forEach(idx => { planeFromSet.add(idx); });

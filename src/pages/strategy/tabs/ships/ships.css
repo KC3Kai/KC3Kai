@@ -91,10 +91,13 @@
 .tab_ships .show_name_filter .name_criteria {
 	float: left;
 	font-size: 12px;
-	width: 188px;
+	width: 322px;
 	height: 18px;
 	padding: 1px 3px;
 	line-height: 18px;
+}
+.tab_ships .show_name_filter .name_criteria.error{
+	color: #f00;
 }
 
 .tab_ships .advanced_sorter {

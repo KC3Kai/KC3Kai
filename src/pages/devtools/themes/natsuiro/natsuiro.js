@@ -169,7 +169,7 @@
 		selectedExpedition = conf.fleetConf[ selectedFleet ].expedition;
 		// re-validate config in case that fleet has just returned from a new exped
 		conf = ExpedTabValidateConfig(selectedExpedition);
-		plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
+		plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 	}
 
 	function ExpedTabAutoFleetSwitch(needTabSwith) {
@@ -625,7 +625,7 @@
 		$(".expedition_entry").on("click",function(){
 			selectedExpedition = parseInt( $(this).data("expId") );
 			var conf = ExpedTabValidateConfig(selectedExpedition);
-			plannerIsGreatSuccess = conf.expedConf[ selectedExpedition ].greatSuccess;
+			plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 			ExpedTabUpdateConfig();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});

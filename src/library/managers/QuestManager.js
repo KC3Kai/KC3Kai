@@ -405,11 +405,10 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
-			// Monthly PvP counter reset to 0 if not click complete in a day
+			// Monthly PvP counter reset to 0 if not click complete in a day:
 			// C8
 			this.resetCounterLoop([311], true);
-			// To verify counter reset to 0 if required times not reached in a day
-			// C16
+			// Daily counter not reset for monthly PvP: C16
 			//this.resetCounterLoop([318], false);
 			this.save();
 		},

@@ -9,6 +9,35 @@ QUnit.module('modules > BattlePrediction', function () {
   }, function () {
     const { Player, Enemy, Time } = KC3BattlePrediction;
 
+    QUnit.test('partial CF - air raid', function (assert) {
+      const battleType = { player: Player.CTF, enemy: Enemy.SINGLE, time: Time.DAY };
+      const damecons = {};
+
+      const result = this.subject(battleData.cfLdAirbattle, damecons, battleType);
+
+      assert.equal(result.isPlayerNoDamage, false);
+      assert.deepEqual(result.fleets, {
+        playerMain: [
+          { hp: 62 - 57, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 50 - 7, sunk: false, dameConConsumed: false, damageDealt: 0 },
+        ],
+        playerEscort: [
+          { hp: 26 - 17, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 13, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 16, sunk: false, dameConConsumed: false, damageDealt: 0 },
+        ],
+        enemyMain: [
+          { hp: 350, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 88, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 88, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 48, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 60, sunk: false, dameConConsumed: false, damageDealt: 0 },
+          { hp: 60, sunk: false, dameConConsumed: false, damageDealt: 0 },
+        ],
+        enemyEscort: [],
+      });
+    });
+
     QUnit.test('7v12 night to day + damecon used', function (assert) {
       const battleType = { player: Player.SINGLE, enemy: Enemy.COMBINED, time: Time.NIGHT_TO_DAY };
       const damecons = {
