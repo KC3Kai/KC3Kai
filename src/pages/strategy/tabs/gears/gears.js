@@ -189,11 +189,13 @@
 			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
-
+			// See `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 			const getSpecialEquipType = (mstId, type2) => {
 				const SLOTITEM_SPECIAL_FLAGS = {
 					128: 38,
-					142: 43,
+					142: 93,
+					151: 94,
+					281: 38,
 				};
 				return SLOTITEM_SPECIAL_FLAGS[mstId] || type2;
 			};

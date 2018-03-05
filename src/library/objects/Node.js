@@ -311,8 +311,8 @@ Used by SortieManager
 		if(this.isNightToDay) {
 			this.toDawnFlag = battleData.api_day_flag > 0;
 			[this.flarePos, this.eFlarePos] = battleData.api_flare_pos;
-			this.flarePos = this.flarePos >= 0 ? 1 + this.flarePos : -1;
-			this.eFlarePos = this.eFlarePos >= 0 ? -1 + this.eFlarePos : -1;
+			this.flarePos = this.flarePos >= 0 ? 1 + (this.flarePos % 6) : -1;
+			this.eFlarePos = this.eFlarePos >= 0 ? 1 + (this.eFlarePos % 6) : -1;
 		}
 		if (battleData.api_friendly_info !== undefined) {
 			this.friendlySupportFlag = true;
@@ -746,12 +746,9 @@ Used by SortieManager
 		// Star shell user ship index, pos from 0 ~ 11 (if combined?)
 		[this.flarePos, this.eFlarePos] = nightData.api_flare_pos;
 		// Shift it back to 1-based index to be compatible with old codes
-		this.flarePos = this.flarePos >= 0 ?
-			1 + (isPlayerCombined && this.activatedFriendFleet == 2 ?
-				this.flarePos - 6 : this.flarePos)
-			: -1;
+		this.flarePos = this.flarePos >= 0 ? 1 + (isPlayerCombined ? this.flarePos % 6 : this.flarePos) : -1;
 		// PvP opponent only, abyssal star shell not existed yet
-		this.eFlarePos = this.eFlarePos >= 0 ? 1 + this.eFlarePos : -1;
+		this.eFlarePos = this.eFlarePos >= 0 ? 1 + (this.eFlarePos % 6) : -1;
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
