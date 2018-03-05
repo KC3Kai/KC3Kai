@@ -2,50 +2,59 @@ QUnit.module('modules > BattlePrediction > phases > Kouku', function () {
   const Kouku = KC3BattlePrediction.battle.phases.kouku;
   const { Side } = KC3BattlePrediction;
 
-  QUnit.module('mergeFleetDamageArrays', {
-    beforeEach() { this.subject = Kouku.mergeFleetDamageArrays; },
+  QUnit.module('extractDamageArray', {
+    beforeEach() { this.subject = Kouku.extractDamageArray; },
   }, function () {
-    QUnit.test('no bombing', function (assert) {
-      const json = {
-        api_stage3: null,
-        api_stage3_combined: null,
-      };
+    QUnit.test('undefined fleet data', function (assert) {
+      const json = {};
 
-      const result = this.subject(json);
+      const result = this.subject('blah', 'blah')(json);
 
-      assert.deepEqual(result, { api_fdam: [], api_edam: [] });
+      assert.deepEqual(result, []);
     });
 
-    QUnit.test('single vs single', function (assert) {
-      const json = {
-        api_stage3: { api_fdam: [1, 2, 3], api_edam: [4, 5, 6] },
-      };
+    QUnit.test('undefined damage array', function (assert) {
+      const json = { api_stage3: {} };
 
-      const result = this.subject(json);
+      const result = this.subject('api_stage3', 'blah')(json);
 
-      assert.deepEqual(result, { api_fdam: [1, 2, 3], api_edam: [4, 5, 6] });
+      assert.deepEqual(result, []);
     });
 
-    QUnit.test('single vs combined', function (assert) {
-      const json = {
-        api_stage3: { api_fdam: [1, 2, 3], api_edam: [4, 5, 6] },
-        api_stage3_combined: { api_fdam: null, api_edam: [7, 8, 9] },
-      };
+    QUnit.test('success', function (assert) {
+      const json = { api_stage3: { api_fdam: [1, 2, 3] } };
+
+      const result = this.subject('api_stage3', 'api_fdam')(json);
+
+      assert.deepEqual(result, [1, 2, 3]);
+    });
+  });
+
+  QUnit.module('padDamageArray', {
+    beforeEach() { this.subject = Kouku.padDamageArray; },
+  }, function () {
+    QUnit.test('array below minimum size', function (assert) {
+      const json = [1, 2];
 
       const result = this.subject(json);
 
-      assert.deepEqual(result, { api_fdam: [1, 2, 3], api_edam: [4, 5, 6, 7, 8, 9] });
+      assert.deepEqual(result, [1, 2, 0, 0, 0, 0]);
     });
 
-    QUnit.test('combined vs single', function (assert) {
-      const json = {
-        api_stage3: { api_fdam: [1, 2, 3], api_edam: [4, 5, 6] },
-        api_stage3_combined: { api_fdam: [7, 8, 9], api_edam: null },
-      };
+    QUnit.test('array at maximum size', function (assert) {
+      const json = [1, 2, 3, 4, 5, 6];
 
       const result = this.subject(json);
 
-      assert.deepEqual(result, { api_fdam: [1, 2, 3, 7, 8, 9], api_edam: [4, 5, 6] });
+      assert.deepEqual(result, [1, 2, 3, 4, 5, 6]);
+    });
+
+    QUnit.test('array over max size', function (assert) {
+      const json = [1, 2, 3, 4, 5, 6, 7];
+
+      const result = this.subject(json);
+
+      assert.deepEqual(result, [1, 2, 3, 4, 5, 6, 7]);
     });
   });
 

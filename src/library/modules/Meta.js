@@ -60,14 +60,14 @@ Provides access to data on built-in JSON files
 			"1555": 2, // valentines 2016, hinamatsuri 2015
 			"3347": 3, // valentines 2016, hinamatsuri 2015
 			"6547": 2, // whiteday 2015
-			"1471": 3 // whiteday 2015
+			"1471": 3, // whiteday 2015
 		},
 		specialShipVoices: {
 			// Graf Zeppelin (Kai):
 			//   17:Yasen(2) is replaced with 917. might map to 17, but not for now;
 			//   18 still used at day as random Attack, 918 used at night opening
 			432: {917: 917, 918: 918},
-			353: {917: 917, 918: 918}
+			353: {917: 917, 918: 918},
 		},
 		specialReairVoiceShips: [
 			// These ships got special (unused?) voice line (6, aka. Repair) implemented,
@@ -81,8 +81,14 @@ Provides access to data on built-in JSON files
 			135, 304,      // Naganami
 			136,           // Yamato Kai
 			418,           // Satsuki Kai Ni
-			496            // Zara due
+			496,           // Zara due
 		],
+		specialAbyssalIdVoicePrefixes: {
+			// Why do devs make wrong voice filename matching even for last event?
+			// `Prefix of actual voice filename`: `Correctly matched abyssal ID`
+			"4171793": 1799, // Abyssal Crane Princess
+			"4171796": 1802, // Abyssal Crane Princess - Damaged
+		},
 		
 		/* Initialization
 		-------------------------------------------------------*/
@@ -679,6 +685,8 @@ Provides access to data on built-in JSON files
 		// https://github.com/KC3Kai/KC3Kai/pull/2181
 		getAbyssalIdByFilename :function(filename){
 			var id, map = parseInt(filename.substr(0, 2), 10);
+			const prefix = Object.keys(this.specialAbyssalIdVoicePrefixes).find(p => filename.indexOf(p) === 0);
+			if(prefix) return this.specialAbyssalIdVoicePrefixes[prefix];
 			switch(filename.length){
 				case 7:
 					id = map === 64 ? filename.substr(2, 3) : filename.substr(3, 3);
@@ -875,9 +883,10 @@ Provides access to data on built-in JSON files
 			}
 			return false;
 		},
-
+		
 		formatNumber :function(number, locale, options){
-			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ? number : number.toLocaleString(locale, options);
+			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
+				number : number.toLocaleString(locale, options);
 		}
 	};
 	

@@ -1096,8 +1096,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
 		const isSonarEquipped = this.hasEquipmentType(1, 10);
-		const isDepthChargeProjectorEquipped = this.hasEquipment([44, 45]);
-		const isNewDepthChargeEquipped = this.hasEquipment([226, 227]);
+		const isDepthChargeProjectorEquipped = !!this.equipment(true).find(g => g.isDepthChargeProjector());
+		const isNewDepthChargeEquipped = !!this.equipment(true).find(g => g.isDepthCharge());
 		let synergyModifier = 1;
 		synergyModifier += isSonarEquipped && isNewDepthChargeEquipped ? 0.15 : 0;
 		synergyModifier += isDepthChargeProjectorEquipped && isNewDepthChargeEquipped ? 0.1 : 0;
@@ -1428,8 +1428,8 @@ KC3改 Ship Object
 		let newDepthChargeBonus = 0;
 		if(warfareType === "Antisub") {
 			const type95ndcCnt = this.countEquipment(226);
-			const type2dncCnt = this.countEquipment(227);
-			newDepthChargeBonus = type95ndcCnt + 2 * type2dncCnt;
+			const type2ndcCnt = this.countEquipment(227);
+			newDepthChargeBonus = type95ndcCnt + 2 * type2ndcCnt;
 			result += newDepthChargeBonus;
 		}
 		

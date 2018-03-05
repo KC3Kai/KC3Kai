@@ -90,9 +90,14 @@ KC3改 Equipment Object
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
 					case 14: // Sonar
-					case 15: // Depth Charge
 					case 40: // Large Sonar
 						modifier = 0.75; break;
+					case 15: // Depth Charge (Projector)
+						if(this.isDepthCharge())
+							modifier = 0;
+						else
+							modifier = 0.75;
+						break;
 				}
 				break;
 			case "torpedo":
@@ -500,6 +505,23 @@ KC3改 Equipment Object
 		return this.masterId > 0 &&
 			this.master().api_type[2] === 21 &&
 			this.master().api_tyku > 8;
+	};
+
+	KC3Gear.prototype.isDepthCharge = function(){
+		/* In-game, newly implemented Depth Charge are counted as different items in kinds of scenes,
+		 but their type in category or icon is the same with Depth Charge Projector.
+		 To differentiate them, the only method for now is a white-list of IDs. */
+		return this.masterId > 0 && this.master().api_type[2] === 15 &&
+		// Current implemented: Type95 DC, Type2 DC
+			[226, 227].indexOf(this.masterId) > -1;
+	};
+
+	KC3Gear.prototype.isDepthChargeProjector = function(){
+		return this.masterId > 0 && this.master().api_type[2] === 15 &&
+			// Current implemented: Type94 DCP, Type3 DCP
+			//[44, 45].indexOf(this.masterId) > -1;
+			// To maintenance fewer lists
+			!this.isDepthCharge();
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {
