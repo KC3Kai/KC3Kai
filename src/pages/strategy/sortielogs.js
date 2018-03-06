@@ -494,8 +494,13 @@
 				}
 			};
 			var parseAirRaidFunc = function(airRaid){
-				const damageArray =
-				  airRaid &&
+				if(airRaid && airRaid.api_air_base_attack) {
+					//console.debug("LB Air Raid", airRaid);
+					// Whoever wanna do whatever? such as dump enemy info
+					if(typeof window.dumpLandbaseAirRaid === "function")
+						window.dumpLandbaseAirRaid.call(self, airRaid);
+				}
+				const damageArray = airRaid &&
 				  airRaid.api_air_base_attack &&
 				  airRaid.api_air_base_attack.api_stage3 &&
 				  airRaid.api_air_base_attack.api_stage3.api_fdam || [];
