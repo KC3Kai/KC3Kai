@@ -860,7 +860,7 @@
 									$(".node_support .exped", nodeBox).show();
 								}
 								$(".node_support .lbas", nodeBox).toggle(thisNode.lbasFlag);
-								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode));
+								$(".node_support", nodeBox).attr("title", thisNode.buildSupportAttackMessage(thisNode, true));
 							}else{
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}

@@ -47,6 +47,21 @@
     }
   };
 
+  BP.analyzeBattlePartially = (battleData, playerDamecons, selectedPhases) => {
+    const { fleets, battle, formatResult } = KC3BattlePrediction;
+
+    try {
+      const initialFleets = fleets.getInitialState(battleData, playerDamecons);
+      const resultFleets = battle.simulateBattlePartially(battleData, initialFleets, selectedPhases);
+
+      return formatResult(initialFleets, resultFleets);
+    } catch (error) {
+      // Pass context explicitly, so it is recorded
+      KC3Log.error(error, error.data, { selectedPhases, battleData, playerDamecons });
+      throw error;
+    }
+  };
+
   BP.predictRank = (apiName, battleData, battleResult) => {
     const { parseStartJson, normalizeFleets, getRankPredictor } = KC3BattlePrediction.rank;
 
@@ -223,6 +238,17 @@
 
     return pipe(
       juxt(getPhases(battleType)),
+      flatten,
+      reduce(simulateAttack, initalFleets)
+    )(battleData);
+  };
+
+  battle.simulateBattlePartially = (battleData, initalFleets, battlePhases = []) => {
+    const { fleets: { simulateAttack } } = KC3BattlePrediction;
+    const { getPhaseParser } = KC3BattlePrediction.battle;
+
+    return pipe(
+      juxt(battlePhases.map(getPhaseParser)),
       flatten,
       reduce(simulateAttack, initalFleets)
     )(battleData);
