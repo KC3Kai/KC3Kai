@@ -1197,7 +1197,7 @@ Contains summary information about a fleet and its ships
 					shipTypes.includes(ship.master().api_stype) &&
 					// Equip aircraft can ASW with air attack (TB/DB/Autogyro/PBY/SPB/SPR/LFB)
 					// on any non zero slot
-					!!ship.equipment().find(
+					ship.equipment().some(
 						(g, i) => ship.slotSize(i) > 0 && g.isAswAircraft(false, true)
 					)
 				));

@@ -26,15 +26,14 @@ KC3改 Ship Object
 		// corresponds to "api_slot" in the API,
 		// but devs change it to length == 5 someday,
 		// and item of ex slot still not at 5th.
-		// devs plan to extend Musashi Kai2 to 5 slots on 2018-02-16
+		// extended to 5 slots on 2018-02-16 for Musashi Kai Ni.
 		this.items = [-1,-1,-1,-1,-1];
 		// corresponds to "api_slot_ex" in the API,
 		// which has special meanings on few values:
 		// 0: ex slot is not available
 		// -1: ex slot is available but nothing is equipped
 		this.ex_item = 0;
-		// "api_onslot" in API, also changed to length 5,
-		// not sure it represent size of ex slot or not
+		// "api_onslot" in API, also changed to length 5 now.
 		this.slots = [0,0,0,0,0];
 		this.slotnum = 0;
 		this.speed = 0;
@@ -216,8 +215,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.levelClass = function(){
 		return this.level === KC3Ship.getMaxLevel() ? "married max" :
 			this.level >= KC3Ship.getMarriedLevel() ? "married" :
-			this.level >= 80  ? "high" :
-			this.level >= 50  ? "medium" :
+			this.level >= 80 ? "high" :
+			this.level >= 50 ? "medium" :
 			"";
 	};
 	/** @return full url of ship face icon according her hp percent. */
@@ -327,7 +326,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.onFleet = function(){
 		var fleetNum = 0;
 		PlayerManager.fleets.find((fleet, index) => {
-			if(fleet.ships.find(rid => rid === this.rosterId)){
+			if(fleet.ships.some(rid => rid === this.rosterId)){
 				fleetNum = index + 1;
 				return true;
 			}
@@ -866,17 +865,19 @@ KC3改 Ship Object
 	/**
 	 * Indicate if only specific equipment equipped (empty slot not counted).
 	 */
-	KC3Ship.prototype.onlyHasEquipment = function(masterId, isExslotIncluded = false) {
-		return this.countEquipment(masterId, isExslotIncluded) ===
-			this.equipment(isExslotIncluded).reduce((acc, gear) => acc + (gear.exists() & 1), 0);
+	KC3Ship.prototype.onlyHasEquipment = function(masterId, isExslotIncluded = true) {
+		const equipmentCount = this.equipmentCount(isExslotIncluded);
+		return equipmentCount > 0 &&
+			equipmentCount === this.countEquipment(masterId, isExslotIncluded);
 	};
 
 	/**
 	 * Indicate if only specific types of equipment equipped (empty slot not counted).
 	 */
-	KC3Ship.prototype.onlyHasEquipmentType = function(typeIndex, typeValue, isExslotIncluded = false) {
-		return this.countEquipmentType(typeIndex, typeValue, isExslotIncluded) ===
-			this.equipment(isExslotIncluded).reduce((acc, gear) => acc + (gear.exists() & 1), 0);
+	KC3Ship.prototype.onlyHasEquipmentType = function(typeIndex, typeValue, isExslotIncluded = true) {
+		const equipmentCount = this.equipmentCount(isExslotIncluded);
+		return equipmentCount > 0 &&
+			equipmentCount === this.countEquipmentType(typeIndex, typeValue, isExslotIncluded);
 	};
 
 	/**
@@ -1096,8 +1097,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
 		const isSonarEquipped = this.hasEquipmentType(1, 10);
-		const isDepthChargeProjectorEquipped = !!this.equipment(true).find(g => g.isDepthChargeProjector());
-		const isNewDepthChargeEquipped = !!this.equipment(true).find(g => g.isDepthCharge());
+		const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
+		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
 		let synergyModifier = 1;
 		synergyModifier += isSonarEquipped && isNewDepthChargeEquipped ? 0.15 : 0;
 		synergyModifier += isDepthChargeProjectorEquipped && isNewDepthChargeEquipped ? 0.1 : 0;
@@ -1551,19 +1552,17 @@ KC3改 Ship Object
 			(capableShips.indexOf(masterId) > -1 || capableStypes.indexOf(stype) > -1);
 	};
 
-	// test to see if this ship is capable of opening ASW
+	// is this ship able to do OASW unconditionally
+	KC3Ship.prototype.isOaswShip = function() {
+		// Isuzu K2, Tatsuta K2, Jervis Kai
+		return [141, 478, 394].includes(this.masterId);
+	};
+	// test to see if this ship (with equipment) is capable of opening ASW 
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
-	// there are two requirements:
-	// - sonar should be equipped
-	// - ASW stat >= 100
-	// also Isuzu K2, Tatsuta K2 can do OASW unconditionally
-	// also ship type Escort and CVL Taiyou are special cases
+	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
-		// master Id for Isuzu K2, Tatsuta K2
-		// also reported for Jervis Kai for now, https://twitter.com/llfun_kancolle/status/965018502372315136
-		if ([141, 478, 394].includes(this.masterId))
-			return true;
+		if (this.isOaswShip()) return true;
 		const stype = this.master().api_stype,
 			ctype = this.master().api_ctype;
 
@@ -1577,19 +1576,8 @@ KC3改 Ship Object
 		//const isTaiyouClass = ctype === 76;
 		//const isTaiyouBase = this.masterId === 526;
 		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
-		// Gambier Bay series (Casablanca Class?):
-		// https://twitter.com/yshr00638210/status/965551109619138560
-		// https://twitter.com/yshr00638210/status/965570610775470082
-		// https://twitter.com/syoukuretin/status/966332102718337024
-		//const isCasablancaClass = ctype === 83;
-		//const isGambierBayBase = this.masterId === 544;
-		//const isGambierBayKai = isCasablancaClass && !isGambierBayBase;
-		// Zuihou K2B:
-		// https://twitter.com/tobikage5/status/966318488284413957
-		// https://twitter.com/ZBMBVCfcuCHSi55/status/966327487713038338
-		//const isZuihouK2B = this.masterId === 560;
 
-		// lower condition for DE and CVE, even lower if equips Large Sonar?
+		// lower condition for DE and CVE, even lower if equips Large Sonar
 		const aswThreshold = isEscortLightCarrier && hasLargeSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
@@ -1612,8 +1600,6 @@ KC3改 Ship Object
 
 		const hasSonar = this.hasEquipmentType(1, 10);
 		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
-		// see https://twitter.com/a_t_o_6/status/863445975007805440 (account closed)
-		// see https://twitter.com/99_999999999/status/954384819567263745
 		if(isEscort) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
@@ -1638,8 +1624,7 @@ KC3改 Ship Object
 			// false if CVL or CVL-like chuuha
 			if(isCvlLike && this.isStriped()) return false;
 			// if ASW plane equipped and slot > 0
-			return !!this.equipment()
-				.find((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
+			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
 		// DE, DD, CL, CLT, CT, AO(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
@@ -1698,7 +1683,7 @@ KC3改 Ship Object
 			// can not attack land installation if dive bomber equipped
 			if(targetShipType.isLand && this.hasNonZeroSlotEquipmentType(2, 7)) return false;
 			// can not attack if no bomber with slot > 0 equipped
-			return !!this.equipment().find((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
+			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
 		}
 		// submarines can only landing attack against land installation
 		if(isThisSubmarine) return this.estimateLandingAttackType(targetShipMasterId) > 0;
@@ -2360,7 +2345,7 @@ KC3改 Ship Object
 			// Any AA Machine Gun
 			if(this.hasEquipmentType(2, 21)) return 0;
 			// Any Radar plus any Seaplane bomber with AA stat
-			if(this.hasEquipmentType(3, 11) && !!this.equipment().find(
+			if(this.hasEquipmentType(3, 11) && this.equipment().some(
 				g => g.masterId > 0 && g.master().api_type[2] === 11 && g.master().api_tyku > 0
 			)) return 0;
 			return -1;
@@ -2613,8 +2598,9 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeDay[0]] || "Shelling";
-		const isAswPowerShown = canOasw || (shipObj.canDoASW() && shipObj.onlyHasEquipmentType(1, [10, 32]));
-		// Show ASW power if can do Opening ASW, or only ASW equipment equipped
+		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
+			|| (shipObj.canDoASW() && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
+		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
 		if(isAswPowerShown){
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
