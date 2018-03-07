@@ -180,11 +180,11 @@
 			this._holders = {};
 			// Compile equipment holders
 			for(const ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
+				const ship = KC3ShipManager.list[ctr];
+				for(const idx in ship.items){
+					this.checkShipSlotForItemHolder(idx, ship);
+				}
+				this.checkShipSlotForItemHolder(-1, ship);
 			}
 			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
