@@ -2418,9 +2418,10 @@
 					$(".module.activity .battle_support .support_exped").show();
 				}
 
-				$(".module.activity .battle_support")
-					.attr("title", thisNode.buildSupportAttackMessage() || KC3Meta.term("BattleSupportExped"))
-					.lazyInitTooltip();
+				$(".module.activity .battle_support").attr("title",
+					thisNode.buildSupportAttackMessage(undefined, true, true)
+						|| KC3Meta.term("BattleSupportExped")
+				).lazyInitTooltip();
 			} else {
 				$(".module.activity .battle_support img").attr(
 					"src",

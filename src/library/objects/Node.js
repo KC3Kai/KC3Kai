@@ -1155,7 +1155,8 @@ Used by SortieManager
 	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
 	 * return a empty string if no any support triggered.
 	 */
-	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this, showEnemyDamage = false){
+	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this,
+		showEnemyDamage = false, vertical = false){
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
 			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
@@ -1200,26 +1201,45 @@ Used by SortieManager
 		}
 		if(supportTips + lbasTips === "") return "";
 		const tooltip = $("<div/>"), logs = $("<p></p>");
-		logs.css("font-size", "11px").appendTo(tooltip);
+		logs.css("font-size", "11px").css("max-width", "390px").appendTo(tooltip);
 		logs.append(supportTips).append(lbasTips);
 		
 		const battleData = thisNode.battleDay;
 		if(showEnemyDamage && battleData && battleData.api_e_nowhps){
-			// Battle data without `api_e_nowhps` is old, current prediction module not supported
+			// Battle data without `api_e_nowhps` is old, not supported by current prediction module
 			const { fleets } = KC3BattlePrediction.analyzeBattlePartially(
 				battleData, [], // Not concern at damecons and damages of player ships here
+				// Might pre-define this type of phases preset inside module?
 				["airBaseInjection", "injectionKouku", "airBaseAttack", "support", "nSupport"]
 			);
-			const enemyTable = $('<table>' +
-				'<tr class="main"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
-					'<td class="s_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="dmg_6"></td></tr>' +
-				'<tr class="escort"><td class="s_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="dmg_3"></td>' +
-					'<td class="s_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="dmg_6"></td></tr>' +
-				'</table>');
+			const enemyTable = vertical ?
+				$(`<table>
+					<tr class="r1"><td class="e1 s"></td><td class="e1 d"></td><td class="m1 s"></td><td class="m1 d"></td></tr>
+					<tr class="r2"><td class="e2 s"></td><td class="e2 d"></td><td class="m2 s"></td><td class="m2 d"></td></tr>
+					<tr class="r3"><td class="e3 s"></td><td class="e3 d"></td><td class="m3 s"></td><td class="m3 d"></td></tr>
+					<tr class="r4"><td class="e4 s"></td><td class="e4 d"></td><td class="m4 s"></td><td class="m4 d"></td></tr>
+					<tr class="r5"><td class="e5 s"></td><td class="e5 d"></td><td class="m5 s"></td><td class="m5 d"></td></tr>
+					<tr class="r6"><td class="e6 s"></td><td class="e6 d"></td><td class="m6 s"></td><td class="m6 d"></td></tr>
+				</table>`) :
+				$(`<table><tr class="main">
+					<td class="m1 s"></td><td class="m1 d"></td><td class="m2 s"></td><td class="m2 d"></td>
+					<td class="m3 s"></td><td class="m3 d"></td><td class="m4 s"></td><td class="m4 d"></td>
+					<td class="m5 s"></td><td class="m5 d"></td><td class="m6 s"></td><td class="m6 d"></td>
+				</tr><tr class="escort">
+					<td class="e1 s"></td><td class="e1 d"></td><td class="e2 s"></td><td class="e2 d"></td>
+					<td class="e3 s"></td><td class="e3 d"></td><td class="e4 s"></td><td class="e4 d"></td>
+					<td class="e5 s"></td><td class="e5 d"></td><td class="e6 s"></td><td class="e6 d"></td>
+				</tr></table>`);
+			// Remove line feeds and indents to avoid auto `<br/>` converting
+			enemyTable.html(enemyTable.prop("outerHTML").replace(/\t|\n|\r|\r\n/g, ""));
 			enemyTable.css("font-size", "11px");
-			const enemyShips = battleData.api_ship_ke,
+			if(vertical) {
+				logs.css("float", "left");
+				enemyTable.css("float", "left").css("margin-left", "5px");
+			}
+			const enemyShips = battleData.api_ship_ke.slice(0),
 				mainFleetCount = battleData.api_ship_ke.length,
-				enemyShipHps = battleData.api_e_nowhps;
+				enemyShipHps = battleData.api_e_nowhps.slice(0);
 			if(battleData.api_ship_ke_combined) {
 				enemyShips.push(...battleData.api_ship_ke_combined);
 				enemyShipHps.push(...battleData.api_e_nowhps_combined);
@@ -1233,22 +1253,22 @@ Used by SortieManager
 				});
 			}
 			enemyShips.forEach((sid, idx) => {
-				const tRow = $(idx > mainFleetCount - 1 ? ".escort" : ".main", enemyTable);
-				const shipIdx = idx > mainFleetCount - 1 ? idx - mainFleetCount + 1 : idx + 1;
 				if(sid > 0) {
+					const shipIdx = idx > mainFleetCount - 1 ? idx - mainFleetCount + 1 : idx + 1,
+						mainEscort = idx > mainFleetCount - 1 ? "e" : "m";
+					const shipCell = $(`.${mainEscort}${shipIdx}.s`, enemyTable),
+						damageCell = $(`.${mainEscort}${shipIdx}.d`, enemyTable);
 					const shipMaster = KC3Master.ship(sid);
 					const shipIcon = $("<img/>").width(14).height(14)
 						.css("margin-top", "-3px")
 						.attr("src", KC3Meta.abyssIcon(sid));
-					$(`.s_${shipIdx}`, tRow).append(shipIcon).css("padding-right", 3);
-					$(`.dmg_${shipIdx}`, tRow).append(-enemyShipDamages[idx]).css("padding-right", 5);
+					shipCell.append(shipIcon).css("padding-right", 3);
+					damageCell.append(-enemyShipDamages[idx]).css("padding-right", 5);
 					const isSunk = enemyShipDamages[idx] >= enemyShipHps[idx];
-					if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "goldenrod");
+					if(isSunk) damageCell.css("color", "goldenrod");
 				}
 			});
-			// reuse the message from friendly fleet battle
-			tooltip.append(KC3Meta.term("BattleFriendlyBattle"));
-			tooltip.append("<br/>").append(enemyTable);
+			tooltip.append(enemyTable);
 		}
 		return tooltip.html();
 	};
