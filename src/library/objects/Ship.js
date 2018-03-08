@@ -194,9 +194,14 @@ KC3改 Ship Object
 	};
 	KC3Ship.prototype.slotCapacity = function(slotIndex){
 		// no API data defines the capacity for ex-slot
-		var maxeq = KC3Master.isNotRegularShip(this.masterId) ? undefined :
-			(KC3Master.ship(this.masterId) || {}).api_maxeq;
+		var maxeq = (this.master() || {}).api_maxeq;
 		return (Array.isArray(maxeq) ? maxeq[slotIndex] : 0) || 0;
+	};
+	KC3Ship.prototype.areAllSlotsFull = function(){
+		// to left unfulfilled slots in-game, make bauxite insufficient or use supply button at expedition
+		var maxeq = (this.master() || {}).api_maxeq;
+		return Array.isArray(maxeq) ?
+			maxeq.every((expectedSize, index) => !expectedSize || expectedSize <= this.slotSize(index)) : true;
 	};
 	KC3Ship.prototype.isFast = function(){ return (this.speed || this.master().api_soku) >= 10; };
 	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };

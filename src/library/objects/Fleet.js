@@ -834,6 +834,10 @@ Contains summary information about a fleet and its ships
 		return this.shipsUnescaped().some(ship => ship.isNeedSupply(isEmpty));
 	};
 	
+	KC3Fleet.prototype.needsPlaneSupply = function(){
+		return this.shipsUnescaped().some(ship => !ship.areAllSlotsFull());
+	};
+	
 	KC3Fleet.prototype.missionOK = function(){
 		return this.countShips() >= 2 && this.mission[0] === 0;
 	};

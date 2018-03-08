@@ -1422,7 +1422,8 @@
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
 						MainFleet.ship(0).isTaiha() || EscortFleet.ship(0).isTaiha(),
-						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped()
+						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped(),
+						MainFleet.needsPlaneSupply() || EscortFleet.needsPlaneSupply(),
 					],
 					lowestMorale:
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
@@ -1488,10 +1489,11 @@
 							!CurrentFleet.isSupplied() &&
 							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
-						),//0
-						CurrentFleet.needsSupply(true),//1
-						CurrentFleet.ship(0).isTaiha(),//2
-						false//3
+						), // [0]: need fuel/ammo resupply on conditions?
+						CurrentFleet.needsSupply(true), // [1]: is fuel/ammo empty?
+						CurrentFleet.ship(0).isTaiha(), // [2]: is some ship Taiha?
+						false, // [3]: is combined fleet HP bad conditions?
+						CurrentFleet.needsPlaneSupply(), // [4]: is any aircraft slot not full?
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
@@ -1569,7 +1571,7 @@
 			}
 
 			// Clear status reminder coloring
-			$(".module.status .status_text").removeClass("good bad");
+			$(".module.status .status_text").removeClass("good bad slotsWarn");
 			$(".module.status").hideChildrenTooltips();
 
 			// If fleet status summary is enabled on settings
@@ -1584,6 +1586,11 @@
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_supply .status_text").addClass("good");
+					// If selected fleet view not on sortie, and some aircraft slots not full
+					if(FleetSummary.badState[4] && !(KC3SortieManager.isOnSortie() &&
+						(PlayerManager.combinedFleet ? [1,2,5] : [KC3SortieManager.fleetSent]).indexOf(selectedFleet) > -1)){
+						$(".module.status .status_supply .status_text").removeClass("good").addClass("slotsWarn");
+					}
 				}else{
 					$(".module.status .status_supply .status_text").text(KC3Meta.term(
 						FleetSummary.badState[1] ? "PanelEmptySupply" :
