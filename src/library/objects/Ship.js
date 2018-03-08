@@ -202,7 +202,10 @@ KC3改 Ship Object
 	KC3Ship.prototype.getSpeed = function(){ return this.speed || this.master().api_soku; };
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
+	// Current HP < 25% but already in the repair dock not counted
 	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
+	// To indicate the face grey out ship, retreated or sunk (before her data removed from API)
+	KC3Ship.prototype.isAbsent = function(){ return (this.didFlee || this.hp[0] <= 0 || this.hp[1] <= 0); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
@@ -943,8 +946,8 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.obtainTP = function() {
 		var tp = KC3Meta.tpObtained();
-		if(this.isDummy()) { return tp; }
-		if (!(this.didFlee || this.isTaiha())) {
+		if (this.isDummy()) { return tp; }
+		if (!(this.isAbsent() || this.isTaiha())) {
 			var tp1,tp2,tp3;
 			tp1 = String(tp.add(KC3Meta.tpObtained({stype:this.master().api_stype})));
 			tp2 = String(tp.add(KC3Meta.tpObtained({slots:this.equipment().map(function(slot){return slot.masterId;})})));
@@ -1613,8 +1616,7 @@ KC3改 Ship Object
 	 * @return true if this ship can do ASW attack.
 	 */
 	KC3Ship.prototype.canDoASW = function() {
-		if(this.isDummy()) { return false; }
-		if(this.didFlee) return false;
+		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
@@ -1639,8 +1641,7 @@ KC3改 Ship Object
 	 * @return true if this ship can do opening torpedo attack.
 	 */
 	KC3Ship.prototype.canDoOpeningTorpedo = function() {
-		if(this.isDummy()) { return false; }
-		if(this.didFlee) return false;
+		if(this.isDummy() || this.isAbsent()) { return false; }
 		const hasKouhyouteki = this.hasEquipment(41);
 		const isThisSubmarine = [13, 14].includes(this.master().api_stype);
 		return hasKouhyouteki || (isThisSubmarine && this.level >= 10);
@@ -1668,8 +1669,7 @@ KC3改 Ship Object
 	 * @return false if this ship (and target ship) can attack at day shelling phase.
 	 */
 	KC3Ship.prototype.canDoDayShellingAttack = function(targetShipMasterId = 0) {
-		if(this.isDummy()) { return false; }
-		if(this.didFlee) return false;
+		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		const isThisSubmarine = [13, 14].includes(stype);
@@ -1695,8 +1695,7 @@ KC3改 Ship Object
 	 * @return true if this ship (and target ship) can do closing torpedo attack.
 	 */
 	KC3Ship.prototype.canDoClosingTorpedo = function(targetShipMasterId = 0) {
-		if(this.isDummy()) { return false; }
-		if(this.didFlee) return false;
+		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(this.isStriped()) return false;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		if(targetShipType.isSubmarine || targetShipType.isLand) return false;
@@ -1853,9 +1852,8 @@ KC3改 Ship Object
 	 * @return false if this ship (and target ship) can attack at night.
 	 */
 	KC3Ship.prototype.canDoNightAttack = function(targetShipMasterId = 0) {
-		if(this.isDummy()) { return false; }
-		// no count for escaped ship
-		if(this.didFlee) return false;
+		// no count for escaped ship too
+		if(this.isDummy() || this.isAbsent()) { return false; }
 		// no ship can night attack on taiha
 		if(this.isTaiha()) return false;
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
@@ -2325,9 +2323,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.estimateAntiAirEffectType = function() {
 		const aaEquipType = (() => {
-			if(this.isDummy()) return -1;
 			// Escaped or sunk ship cannot anti-air
-			if(this.didFlee || this.damageStatus() === "dummy") return -1;
+			if(this.isDummy() || this.isAbsent()) return -1;
 			const stype = this.master().api_stype;
 			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
 			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;

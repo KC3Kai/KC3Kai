@@ -80,7 +80,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				$.extend(mergedEventInfo, eventData, {
 					// api_state not stored, use this instead
 					"api_cleared": thisMap.clear,
-					"api_gauge_type": thisMap.gaugeType
+					"api_gauge_type": thisMap.gaugeType,
+					"api_gauge_num": thisMap.gaugeNum || 1
 				});
 				// api_dmg seems always 0 on sortie start
 				delete mergedEventInfo.api_dmg;
@@ -424,38 +425,34 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
-		checkFCF :function( escapeData ){
-			if ((typeof escapeData !== "undefined") && (escapeData !== null)) {
-				console.debug("FCF triggered");
-
+		checkFCF :function(escapeData){
+			if (escapeData) {
 				const taihadShip = this.getRetreatedShip(escapeData.api_escape_idx);
 				const escortShip = this.getRetreatedShip(escapeData.api_tow_idx);
-
-				this.fcfCheck = [taihadShip, escortShip].filter(function (ship) {
-					return typeof ship !== 'undefined';
-				});
-				
-				console.log("Has set fcfCheck to", this.fcfCheck);
+				this.fcfCheck = [taihadShip, escortShip].filter(rosterId => rosterId > 0);
+				console.log("FCF escape-able ships have set to", this.fcfCheck);
 			}
 		},
-
-		getRetreatedShip: function (escapeIdx) {
-			if (!escapeIdx) { return undefined; }
-
+		
+		getRetreatedShip :function(escapeIdx){
+			if (!escapeIdx || !escapeIdx[0]) { return 0; }
+			// Although there may be more elements in escape array, but only 1st element used
+			// since only 1 ship (topmost one) can be retreated for 1 battle
 			const shipIndex = escapeIdx[0];
 			if (PlayerManager.combinedFleet && shipIndex > 6) {
-				return PlayerManager.fleets[this.fleetSent].ship(shipIndex - 7).rosterId;
+				// Belong to combined escort fleet
+				return PlayerManager.fleets[1].ship(shipIndex - 7).rosterId;
 			}
 			return PlayerManager.fleets[this.fleetSent - 1].ship(shipIndex - 1).rosterId;
 		},
 		
 		sendFCFHome :function(){
-			console.debug("Setting escape flag for fcfCheck", this.fcfCheck);
-			this.fcfCheck.forEach(function(fcfShip){
+			console.debug("FCF escape-able ships", this.fcfCheck);
+			this.fcfCheck.forEach(function(fcfShip) {
 				KC3ShipManager.get(fcfShip).didFlee = true;
 			});
-			[].push.apply(this.escapedList,this.fcfCheck.splice(0));
-			console.log("New escapedList", this.escapedList);
+			[].push.apply(this.escapedList, this.fcfCheck.splice(0));
+			console.log("Have escaped ships", this.escapedList);
 		},
 		
 		addSunk :function(shizuList){

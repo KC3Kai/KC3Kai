@@ -553,25 +553,29 @@ Used by SortieManager
 			if (isRealBattle) {
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
-						// string indicates prediction value
-						ship.mvp = this.predictedMvps[0] === position + 1 ?
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
+							// string indicates prediction value
+							ship.mvp = this.predictedMvps[0] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[1].ship(position);
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
-						ship.mvp = this.predictedMvps[1] === position + 1 ?
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
+							ship.mvp = this.predictedMvps[1] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 			}
@@ -812,19 +816,21 @@ Used by SortieManager
 				const playerResult = isPlayerCombined ? result.fleets.playerEscort : result.fleets.playerMain;
 				playerResult.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = playerFleet.ship(position);
-					ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					if (isPlayerCombined) {
-						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					} else {
-						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					}
-					if(Array.isArray(this.predictedMvpsNight) &&
-						this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
-						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.hp = [ship.afterHp[0], ship.afterHp[1]];
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						if(isPlayerCombined) {
+							this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+						} else {
+							this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+						}
+						if(Array.isArray(this.predictedMvpsNight) &&
+							this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
+							ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 			}

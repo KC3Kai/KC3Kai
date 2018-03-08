@@ -811,7 +811,7 @@ Contains summary information about a fleet and its ships
 		var taihaIndexes = [];
 		for(var index in this.ships){
 			var ship = this.ship(index);
-			if(ship.isTaiha() && !ship.didFlee){
+			if(ship.isTaiha() && !ship.isAbsent()){
 				taihaIndexes.push(index);
 			}
 		}
@@ -898,7 +898,7 @@ Contains summary information about a fleet and its ships
 		return Array.apply(null, {length: 6})
 			.map(Number.call, Number)
 			.map(function(x){
-				return (!self.ship(x).didFlee)? self.ship(x).ls[0] : 0;
+				return !self.ship(x).isAbsent() ? self.ship(x).ls[0] : 0;
 			})
 			.reduce(function(x,y){return x+y;});
 	};
@@ -911,8 +911,8 @@ Contains summary information about a fleet and its ships
 		var RadarLoS = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId === 0) return false;
-			if(shipData.didFlee) return false;
+			if(shipData.isDummy()) return false;
+			if(shipData.isAbsent()) return false;
 			Array.apply(null, {length: 4})
 				.map(Number.call, Number)
 				.forEach(function(x){ if(shipData.items[x]>-1) { ConsiderEquipment(shipData.equipment(x)); }});
@@ -940,8 +940,8 @@ Contains summary information about a fleet and its ships
 		var nakedLos = 0;
 		
 		function ConsiderShip(shipData){
-			if(shipData.rosterId === 0) return false;
-			if(shipData.didFlee) return false;
+			if(shipData.isDummy()) return false;
+			if(shipData.isAbsent()) return false;
 			nakedLos += Math.sqrt( shipData.nakedLoS() );
 			Array.apply(null, {length: 4})
 				.map(Number.call, Number)
@@ -1011,7 +1011,7 @@ Contains summary information about a fleet and its ships
 		// iterate all ship slots, even some are empty
 		this.ships.map((rid, i) => this.ship(i)).forEach(shipObj => {
 			// count for empty slots or ships retreated
-			if(shipObj.isDummy() || shipObj.didFlee) {
+			if(shipObj.isDummy() || shipObj.isAbsent()) {
 				emptyShipSlot += 1;
 			} else {
 				// sum ship's naked los
@@ -1234,7 +1234,7 @@ Contains summary information about a fleet and its ships
 		const result = [-1, -1];
 		const lookupSearchlight = type2Id => {
 			this.ship().find((ship, shipIndex) => {
-				if(ship.hp[0] > 1 && !ship.didFlee) {
+				if(!ship.isAbsent() && ship.hp[0] > 1) {
 					const equipMap = ship.findEquipmentByType(2, type2Id);
 					const equipIndex = equipMap.indexOf(true);
 					if(equipIndex >= 0) {

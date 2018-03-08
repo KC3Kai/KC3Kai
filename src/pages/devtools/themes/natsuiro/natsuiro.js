@@ -1255,7 +1255,7 @@
 					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
 					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
 					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
-						return !shipObj.didFlee && shipObj.isTaiha()
+						return !shipObj.isAbsent() && shipObj.isTaiha()
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 				// if not disabled at Home Port
