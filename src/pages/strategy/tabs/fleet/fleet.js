@@ -406,16 +406,10 @@
 					KC3Meta.term("ExpedTotalLos"),
 					fstats.fp, fstats.aa, fstats.as, fstats.ls)
 				);
-			$(".detail_los .detail_icon img", fleetBox).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png" );
+			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
-			if(ConfigManager.elosFormula === 4) {
-				const f33Cn = [
-					Math.qckInt("floor", kcFleet.eLos4(), 1),
-					Math.qckInt("floor", kcFleet.eLos4(2), 1),
-					Math.qckInt("floor", kcFleet.eLos4(3), 1),
-					Math.qckInt("floor", kcFleet.eLos4(4), 1),
-					Math.qckInt("floor", kcFleet.eLos4(5), 1)
-				];
+			if(ConfigManager.elosFormula > 1) {
+				const f33Cn = Array.numbers(1, 5).map(cn => Math.qckInt("floor", kcFleet.eLos4(cn), 1));
 				$(".detail_los .detail_value", fleetBox).attr("title",
 					"Cn1: {0}\nCn3: {1}\nCn4: {2}".format(f33Cn[0], f33Cn[2], f33Cn[3]));
 			} else {

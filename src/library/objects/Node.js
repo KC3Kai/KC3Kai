@@ -311,8 +311,8 @@ Used by SortieManager
 		if(this.isNightToDay) {
 			this.toDawnFlag = battleData.api_day_flag > 0;
 			[this.flarePos, this.eFlarePos] = battleData.api_flare_pos;
-			this.flarePos = this.flarePos >= 0 ? 1 + this.flarePos : -1;
-			this.eFlarePos = this.eFlarePos >= 0 ? -1 + this.eFlarePos : -1;
+			this.flarePos = this.flarePos >= 0 ? 1 + (isPlayerCombined ? this.flarePos % 6 : this.flarePos) : -1;
+			this.eFlarePos = this.eFlarePos >= 0 ? 1 + (isEnemyCombined ? this.eFlarePos % 6 : this.eFlarePos) : -1;
 		}
 		if (battleData.api_friendly_info !== undefined) {
 			this.friendlySupportFlag = true;
@@ -553,25 +553,29 @@ Used by SortieManager
 			if (isRealBattle) {
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
-						// string indicates prediction value
-						ship.mvp = this.predictedMvps[0] === position + 1 ?
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
+							// string indicates prediction value
+							ship.mvp = this.predictedMvps[0] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[1].ship(position);
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
-						ship.mvp = this.predictedMvps[1] === position + 1 ?
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
+							ship.mvp = this.predictedMvps[1] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 			}
@@ -743,15 +747,12 @@ Used by SortieManager
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		// FIXME to handle history data before event Winter 2018, have to determine its date time?
 		//this.flarePos = nightData.api_flare_pos[0]; // Star shell user pos 1-6
-		// Star shell user ship index, pos from 0 ~ 11 (if combined?)
+		// Star shell user ship index, pos from 0 ~ 6 or 0 ~ 11 (if combined?)
 		[this.flarePos, this.eFlarePos] = nightData.api_flare_pos;
 		// Shift it back to 1-based index to be compatible with old codes
-		this.flarePos = this.flarePos >= 0 ?
-			1 + (isPlayerCombined && this.activatedFriendFleet == 2 ?
-				this.flarePos - 6 : this.flarePos)
-			: -1;
+		this.flarePos = this.flarePos >= 0 ? 1 + (isPlayerCombined ? this.flarePos % 6 : this.flarePos) : -1;
 		// PvP opponent only, abyssal star shell not existed yet
-		this.eFlarePos = this.eFlarePos >= 0 ? 1 + this.eFlarePos : -1;
+		this.eFlarePos = this.eFlarePos >= 0 ? 1 + (isEnemyCombined ? this.eFlarePos % 6 : this.eFlarePos) : -1;
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
@@ -815,19 +816,21 @@ Used by SortieManager
 				const playerResult = isPlayerCombined ? result.fleets.playerEscort : result.fleets.playerMain;
 				playerResult.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = playerFleet.ship(position);
-					ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-					ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
-					ship.afterHp[0] = hp;
-					ship.afterHp[1] = ship.hp[1];
-					if (isPlayerCombined) {
-						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-					} else {
-						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-					}
-					if(Array.isArray(this.predictedMvpsNight) &&
-						this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
-						ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
-							(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+					if(!ship.isAbsent()) {
+						ship.hp = [ship.afterHp[0], ship.afterHp[1]];
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						if(isPlayerCombined) {
+							this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+						} else {
+							this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+						}
+						if(Array.isArray(this.predictedMvpsNight) &&
+							this.predictedMvpsNight[isPlayerCombined ? 1 : 0] > 0) {
+							ship.mvp = this.predictedMvpsNight[isPlayerCombined ? 1 : 0] === position + 1 ? 
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
 					}
 				});
 			}
@@ -1158,7 +1161,8 @@ Used by SortieManager
 	 * Used as a tooltip by devtools panel or SRoom Maps History for now.
 	 * return a empty string if no any support triggered.
 	 */
-	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this){
+	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this,
+		showEnemyDamage = false, vertical = false){
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
 			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
@@ -1201,10 +1205,78 @@ Used by SortieManager
 			});
 			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
 		}
-		return supportTips + lbasTips === "" ? "" : $("<p></p>")
-			.css("font-size", "11px")
-			.text(supportTips + lbasTips)
-			.prop("outerHTML");
+		if(supportTips + lbasTips === "") return "";
+		const tooltip = $("<div/>"), logs = $("<p></p>");
+		logs.css("font-size", "11px").css("max-width", "390px").appendTo(tooltip);
+		logs.append(supportTips).append(lbasTips);
+		
+		const battleData = thisNode.battleDay;
+		if(showEnemyDamage && battleData && battleData.api_e_nowhps){
+			// Battle data without `api_e_nowhps` is old, not supported by current prediction module
+			const { fleets } = KC3BattlePrediction.analyzeBattlePartially(
+				battleData, [], // Not concern at damecons and damages of player ships here
+				// Might pre-define this type of phases preset inside module?
+				["airBaseInjection", "injectionKouku", "airBaseAttack", "support", "nSupport"]
+			);
+			const enemyTable = vertical ?
+				$(`<table>
+					<tr class="r1"><td class="e1 s"></td><td class="e1 d"></td><td class="m1 s"></td><td class="m1 d"></td></tr>
+					<tr class="r2"><td class="e2 s"></td><td class="e2 d"></td><td class="m2 s"></td><td class="m2 d"></td></tr>
+					<tr class="r3"><td class="e3 s"></td><td class="e3 d"></td><td class="m3 s"></td><td class="m3 d"></td></tr>
+					<tr class="r4"><td class="e4 s"></td><td class="e4 d"></td><td class="m4 s"></td><td class="m4 d"></td></tr>
+					<tr class="r5"><td class="e5 s"></td><td class="e5 d"></td><td class="m5 s"></td><td class="m5 d"></td></tr>
+					<tr class="r6"><td class="e6 s"></td><td class="e6 d"></td><td class="m6 s"></td><td class="m6 d"></td></tr>
+				</table>`) :
+				$(`<table><tr class="main">
+					<td class="m1 s"></td><td class="m1 d"></td><td class="m2 s"></td><td class="m2 d"></td>
+					<td class="m3 s"></td><td class="m3 d"></td><td class="m4 s"></td><td class="m4 d"></td>
+					<td class="m5 s"></td><td class="m5 d"></td><td class="m6 s"></td><td class="m6 d"></td>
+				</tr><tr class="escort">
+					<td class="e1 s"></td><td class="e1 d"></td><td class="e2 s"></td><td class="e2 d"></td>
+					<td class="e3 s"></td><td class="e3 d"></td><td class="e4 s"></td><td class="e4 d"></td>
+					<td class="e5 s"></td><td class="e5 d"></td><td class="e6 s"></td><td class="e6 d"></td>
+				</tr></table>`);
+			// Remove line feeds and indents to avoid auto `<br/>` converting
+			enemyTable.html(enemyTable.prop("outerHTML").replace(/\t|\n|\r|\r\n/g, ""));
+			enemyTable.css("font-size", "11px");
+			if(vertical) {
+				logs.css("float", "left");
+				enemyTable.css("float", "left").css("margin-left", "5px");
+			}
+			const enemyShips = battleData.api_ship_ke.slice(0),
+				mainFleetCount = battleData.api_ship_ke.length,
+				enemyShipHps = battleData.api_e_nowhps.slice(0);
+			if(battleData.api_ship_ke_combined) {
+				enemyShips.push(...battleData.api_ship_ke_combined);
+				enemyShipHps.push(...battleData.api_e_nowhps_combined);
+			}
+			const enemyShipDamages = enemyShipHps.slice(0);
+			fleets.enemyMain.forEach((ship, idx) => { enemyShipDamages[idx] -= ship.hp; });
+			if(battleData.api_ship_ke_combined) {
+				fleets.enemyEscort.forEach((ship, idx) => {
+					const pos = mainFleetCount + idx;
+					enemyShipDamages[pos] -= ship.hp;
+				});
+			}
+			enemyShips.forEach((sid, idx) => {
+				if(sid > 0) {
+					const shipIdx = idx > mainFleetCount - 1 ? idx - mainFleetCount + 1 : idx + 1,
+						mainEscort = idx > mainFleetCount - 1 ? "e" : "m";
+					const shipCell = $(`.${mainEscort}${shipIdx}.s`, enemyTable),
+						damageCell = $(`.${mainEscort}${shipIdx}.d`, enemyTable);
+					const shipMaster = KC3Master.ship(sid);
+					const shipIcon = $("<img/>").width(14).height(14)
+						.css("margin-top", "-3px")
+						.attr("src", KC3Meta.abyssIcon(sid));
+					shipCell.append(shipIcon).css("padding-right", 3);
+					damageCell.append(-enemyShipDamages[idx]).css("padding-right", 5);
+					const isSunk = enemyShipDamages[idx] >= enemyShipHps[idx];
+					if(isSunk) damageCell.css("color", "goldenrod");
+				}
+			});
+			tooltip.append(enemyTable);
+		}
+		return tooltip.html();
 	};
 	
 	/**

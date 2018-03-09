@@ -66,10 +66,10 @@
 			
 			// Compile equipment holders
 			for(const ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+				const ship = KC3ShipManager.list[ctr];
+				for(const idx in ship.items){
+					this.checkShipSlotForItemHolder(idx, ship);
+				}
 				// No plane is able to be equipped in ex-slot for now
 			}
 			for(const ctr in PlayerManager.bases){

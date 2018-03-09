@@ -1255,7 +1255,7 @@
 					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
 					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
 					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
-						return !shipObj.didFlee && shipObj.isTaiha()
+						return !shipObj.isAbsent() && shipObj.isTaiha()
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 				// if not disabled at Home Port
@@ -1364,7 +1364,7 @@
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
-							if(!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1){
+							if(KC3SortieManager.isCombinedSortie()){
 								// Send combined fleet, get escort info
 								dameConConsumed = (thisNode.dameConConsumedEscort || [])[index];
 							} else if(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2){
@@ -1373,7 +1373,7 @@
 							}
 						}
 						var starShellUsed = (flarePos == index+1) &&
-							((!!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1) ||
+							(KC3SortieManager.isCombinedSortie() ||
 							(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2));
 						(new KC3NatsuiroShipbox(".sship", rosterId, showCombinedFleetBars, dameConConsumed, starShellUsed))
 							.commonElements(true)
@@ -1422,7 +1422,8 @@
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
 						MainFleet.ship(0).isTaiha() || EscortFleet.ship(0).isTaiha(),
-						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped()
+						MainFleet.ship(0).isStriped() || EscortFleet.ship(0).isStriped(),
+						MainFleet.needsPlaneSupply() || EscortFleet.needsPlaneSupply(),
 					],
 					lowestMorale:
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
@@ -1442,7 +1443,7 @@
 
 				// Show ships on selected fleet
 				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
-				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.fleetSent == 1 && !!PlayerManager.combinedFleet);
+				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.isCombinedSortie());
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > 0){
 						if(KC3SortieManager.isOnSortie()){
@@ -1488,10 +1489,11 @@
 							!CurrentFleet.isSupplied() &&
 							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
-						),//0
-						CurrentFleet.needsSupply(true),//1
-						CurrentFleet.ship(0).isTaiha(),//2
-						false//3
+						), // [0]: need fuel/ammo resupply on conditions?
+						CurrentFleet.needsSupply(true), // [1]: is fuel/ammo empty?
+						CurrentFleet.ship(0).isTaiha(), // [2]: is some ship Taiha?
+						false, // [3]: is combined fleet HP bad conditions?
+						CurrentFleet.needsPlaneSupply(), // [4]: is any aircraft slot not full?
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
@@ -1541,27 +1543,23 @@
 				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
 				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text( FleetSummary.speed );
-			if(ConfigManager.elosFormula === 4){
+			if(ConfigManager.elosFormula > 1){
 				// F33 different factors for now: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){
-					let f33x3 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(3), 1);
-					let f33x4 = Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(4), 1);
+					const f33Cn = Array.numbers(1, 4)
+						.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
 					$(".summary-eqlos").attr("title",
-						"x4={0} \t3-5(G>28), 6-1(E>16, F>36)\nx3={1} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
-						.format(f33x4, f33x3)
+						"x1={0}\nx4={3} \t3-5(G>28), 6-1(E>16, F>36)\nx3={2} \t6-2(F<43/F>50, H>40), 6-3(H>38)"
+						.format(f33Cn)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
 				} else if(selectedFleet === 5){
-					let mainFleet = PlayerManager.fleets[0];
-					let escortFleet = PlayerManager.fleets[1];
-					let f33Cn = [
-						Math.qckInt("floor", mainFleet.eLos4(2) + escortFleet.eLos4(2), 1),
-						Math.qckInt("floor", mainFleet.eLos4(3) + escortFleet.eLos4(3), 1),
-						Math.qckInt("floor", mainFleet.eLos4(4) + escortFleet.eLos4(4), 1),
-						Math.qckInt("floor", mainFleet.eLos4(5) + escortFleet.eLos4(5), 1)
-					];
+					const mainFleet = PlayerManager.fleets[0],
+						escortFleet = PlayerManager.fleets[1],
+						f33Cn = Array.numbers(1, 5)
+							.map(cn => Math.qckInt("floor", mainFleet.eLos4(cn) + escortFleet.eLos4(cn), 1));
 					$(".summary-eqlos").attr("title",
-						"x2={0}\nx3={1}\nx4={2}\nx5={3}".format(f33Cn)
+						"x1={0}\nx2={1}\nx3={2}\nx4={3}\nx5={4}".format(f33Cn)
 					).lazyInitTooltip();
 				}
 			} else {
@@ -1569,21 +1567,28 @@
 			}
 
 			// Clear status reminder coloring
-			$(".module.status .status_text").removeClass("good bad");
+			$(".module.status .status_text").removeClass("good bad slotsWarn");
 			$(".module.status").hideChildrenTooltips();
 
 			// If fleet status summary is enabled on settings
 			if(ConfigManager.info_fleetstat){
+				const isSortieFleetsSelected = (KC3SortieManager.isCombinedSortie() ? [1,2,5] :
+					[KC3SortieManager.fleetSent]).indexOf(selectedFleet) > -1;
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
 					(KC3SortieManager.isOnSortie() &&
 						KC3SortieManager.isFullySupplied() &&
-						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
+						isSortieFleetsSelected)) &&
 					(!FleetSummary.badState[0])
 				){
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
 					$(".module.status .status_supply .status_text").addClass("good");
+					// If selected fleet view not on sortie, and some aircraft slots not full
+					if(FleetSummary.badState[4] &&
+						!(KC3SortieManager.isOnSortie() && isSortieFleetsSelected)){
+						$(".module.status .status_supply .status_text").removeClass("good").addClass("slotsWarn");
+					}
 				}else{
 					$(".module.status .status_supply .status_text").text(KC3Meta.term(
 						FleetSummary.badState[1] ? "PanelEmptySupply" :
@@ -1644,25 +1649,81 @@
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/" +
+					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
 					);
-					$(".module.status .status_repair .status_text").attr("title", "");
-					$(".module.status .status_repair .status_text").addClass("bad");
+					$(".module.status .status_repair .status_text")
+						.attr("titlealt", "").addClass("bad");
+					const fcfInfo = KC3SortieManager.getCurrentFCF();
+					// Show some strategy hints if FCF retreating is possible
+					if(!FleetSummary.badState[2] && fcfInfo.isAvailable){
+						const fcfTips = $("<div/>"),
+							iconStyles = {
+							"width":"15px", "height":"15px",
+							"margin-top":"-3px", "margin-right":"3px"
+						};
+						$("<img/>").css(iconStyles)
+							.attr("src", fcfInfo.shipToRetreat.shipIcon())
+							.appendTo(fcfTips);
+						fcfTips.append("{0} Lv {1} {2}\n".format(
+							fcfInfo.shipToRetreat.name(),
+							fcfInfo.shipToRetreat.level,
+							KC3Meta.term("PanelFCFTipTaihaShip")
+						));
+						if(fcfInfo.isCombined) {
+							$("<img/>").css(iconStyles)
+								.attr("src", fcfInfo.shipToEscort.shipIcon())
+								.appendTo(fcfTips);
+							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipEscortShip")));
+							fcfInfo.sortiedFleets[0].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
+							fcfInfo.sortiedFleets[1].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
+							$("<img/>").css(iconStyles)
+								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
+								.appendTo(fcfTips);
+							fcfTips.append("{0}\t".format(
+								Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS() + fcfInfo.sortiedFleets[1].eLoS(), 1)
+							));
+							$("<img/>").css(iconStyles)
+								.attr("src", "/assets/img/stats/ac.png")
+								.appendTo(fcfTips);
+							fcfTips.append("{0} ({1})\t".format(
+								KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0], fcfInfo.sortiedFleets[1], false),
+								KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0], fcfInfo.sortiedFleets[1], true)
+							));
+						} else {
+							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipStrikingForce")));
+							fcfInfo.sortiedFleets[0].setEscapeShip(...fcfInfo.shipIdsToBeAbsent);
+							$("<img/>").css(iconStyles)
+								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
+								.appendTo(fcfTips);
+							fcfTips.append("{0}\t".format(Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS(), 1)));
+							$("<img/>").css(iconStyles)
+								.attr("src", "/assets/img/stats/ac.png")
+								.appendTo(fcfTips);
+							fcfTips.append("{0}\t".format(KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0])));
+						}
+						fcfInfo.sortiedFleets.forEach(f => f.setEscapeShip());
+						$(".module.status .status_repair .status_text")
+							.text(KC3Meta.term("PanelFCFPossible"))
+							.attr("titlealt", fcfTips.html()).lazyInitTooltip();
+					}
 				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
-					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelCombinedFSChuuha") );
-					$(".module.status .status_repair .status_text").attr("title", KC3Meta.term("PanelCombinedFSChuuhaTip"));
-					$(".module.status .status_repair .status_text").addClass("bad");
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/" +
+					$(".module.status .status_repair .status_text")
+						.text( KC3Meta.term("PanelCombinedFSChuuha") )
+						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
+						.lazyInitTooltip()
+						.addClass("bad");
+					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "estat_bossmodrt.png")
 					);
 				// Condition Green
 				}else{
-					$(".module.status .status_repair .status_text").text( KC3Meta.term("PanelNoTaiha") );
-					$(".module.status .status_repair img").attr("src", "../../../../assets/img/ui/check.png");
-					$(".module.status .status_repair .status_text").attr("title", "");
-					$(".module.status .status_repair .status_text").addClass("good");
+					$(".module.status .status_repair .status_text")
+						.text( KC3Meta.term("PanelNoTaiha") )
+						.attr("titlealt", "")
+						.addClass("good");
+					$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
 				}
 
 				// STATUS: COMBINED
@@ -2418,9 +2479,10 @@
 					$(".module.activity .battle_support .support_exped").show();
 				}
 
-				$(".module.activity .battle_support")
-					.attr("title", thisNode.buildSupportAttackMessage() || KC3Meta.term("BattleSupportExped"))
-					.lazyInitTooltip();
+				$(".module.activity .battle_support").attr("title",
+					thisNode.buildSupportAttackMessage(undefined, true, true)
+						|| KC3Meta.term("BattleSupportExped")
+				).lazyInitTooltip();
 			} else {
 				$(".module.activity .battle_support img").attr(
 					"src",

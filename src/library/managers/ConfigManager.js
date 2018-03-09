@@ -18,7 +18,7 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : "en",
 				hqInfoPage           : 1,
-				elosFormula          : 4,
+				elosFormula          : 2,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
 				imaginaryEnemyArmor  : 0,

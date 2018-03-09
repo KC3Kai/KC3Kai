@@ -180,20 +180,22 @@
 			this._holders = {};
 			// Compile equipment holders
 			for(const ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
+				const ship = KC3ShipManager.list[ctr];
+				for(const idx in ship.items){
+					this.checkShipSlotForItemHolder(idx, ship);
+				}
+				this.checkShipSlotForItemHolder(-1, ship);
 			}
 			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
-
+			// See `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 			const getSpecialEquipType = (mstId, type2) => {
 				const SLOTITEM_SPECIAL_FLAGS = {
 					128: 38,
-					142: 43,
+					142: 93,
+					151: 94,
+					281: 38,
 				};
 				return SLOTITEM_SPECIAL_FLAGS[mstId] || type2;
 			};
