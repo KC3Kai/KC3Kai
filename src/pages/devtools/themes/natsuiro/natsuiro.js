@@ -1680,15 +1680,20 @@
 							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
 								.appendTo(fcfTips);
-							fcfTips.append("{0}\t".format(
-								Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS() + fcfInfo.sortiedFleets[1].eLoS(), 1)
+							fcfTips.append("{0} \u2192 {1} \t".format(
+								FleetSummary.elos,
+								selectedFleet == 5 ?
+									Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS() + fcfInfo.sortiedFleets[1].eLoS(), 1) :
+									Math.qckInt("floor", fcfInfo.sortiedFleets[(selectedFleet-1) % 2].eLoS(), 1)
 							));
 							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/ac.png")
 								.appendTo(fcfTips);
-							fcfTips.append("{0} ({1})\t".format(
-								KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0], fcfInfo.sortiedFleets[1], false),
-								KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0], fcfInfo.sortiedFleets[1], true)
+							fcfTips.append("{0} \u2192 {1}\t".format(
+								FleetSummary.air,
+								selectedFleet == 5 ?
+									KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0], fcfInfo.sortiedFleets[1], true) :
+									KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[(selectedFleet-1) % 2])
 							));
 						} else {
 							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipStrikingForce")));
@@ -1696,11 +1701,17 @@
 							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png")
 								.appendTo(fcfTips);
-							fcfTips.append("{0}\t".format(Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS(), 1)));
+							fcfTips.append("{0} \u2192 {1}\t".format(
+								FleetSummary.elos,
+								Math.qckInt("floor", fcfInfo.sortiedFleets[0].eLoS(), 1)
+							));
 							$("<img/>").css(iconStyles)
 								.attr("src", "/assets/img/stats/ac.png")
 								.appendTo(fcfTips);
-							fcfTips.append("{0}\t".format(KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0])));
+							fcfTips.append("{0} \u2192 {1}\t".format(
+								FleetSummary.air,
+								KC3Calc.getFleetsFighterPowerText(fcfInfo.sortiedFleets[0])
+							));
 						}
 						fcfInfo.sortiedFleets.forEach(f => f.setEscapeShip());
 						$(".module.status .status_repair .status_text")
