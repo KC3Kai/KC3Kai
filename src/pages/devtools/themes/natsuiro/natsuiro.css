@@ -3259,14 +3259,12 @@ ABYSS FLEET
 	line-height:20px;
 	float:left;
 	margin:0px 3px 3px 0px;
-	/*background:#fcc;*/
 }
 .module.status .status_icon {
 	width:20px;
 	height:20px;
 	float:left;
 	margin:0px 4px 0px 1px;
-	/*background:#ccf;*/
 }
 .module.status .status_icon.enclose {
 	background:#fff;

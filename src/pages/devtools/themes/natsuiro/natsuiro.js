@@ -1649,6 +1649,7 @@
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
+					$(".module.status .status_repair .status_icon").removeClass("enclose");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
 					);
@@ -1714,6 +1715,8 @@
 							));
 						}
 						fcfInfo.sortiedFleets.forEach(f => f.setEscapeShip());
+						$(".module.status .status_repair .status_icon").addClass("enclose");
+						$(".module.status .status_repair img").attr("src", "/assets/img/items/28.png");
 						$(".module.status .status_repair .status_text")
 							.text(KC3Meta.term("PanelFCFPossible"))
 							.attr("titlealt", fcfTips.html()).lazyInitTooltip();
