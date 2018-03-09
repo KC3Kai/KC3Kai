@@ -43,8 +43,6 @@ Retrieves when needed to apply on components
 				repeatApiError       : true,
 				detailedApiError     : true,
 
-				DBSubmission_enabled : 0,
-				DBSubmission_key     : '',
 				PoiDBSubmission_enabled : false,
 				KC3DBSubmission_enabled : false,
 				OpenDBSubmission_enabled : false,

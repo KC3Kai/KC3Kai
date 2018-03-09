@@ -895,29 +895,6 @@
 		]
 	},
 	{
-		"section": "SettingsDBSubmissionWarn",
-		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2459",
-		"contents" :[
-			{
-				"id" : "DBSubmission_enabled",
-				"name" : "SettingsEnableDBSubmission",
-				"type" : "check",
-				"options" : {},
-				"hide" : 1
-			},
-			{
-				"id" : "DBSubmission_key",
-				"name" : "SettingsDBSubmissionKey",
-				"type" : "long_text",
-				"options" : {"placeholder" : "API Key" },
-				"bound" : {
-					"length_min" : 27,
-					"length_max" : 27
-				}
-			}
-		]
-	},
-	{
 		"section": "SettingsPoiDBSubmission",
 		"help" : "",
 		"contents" :[
