@@ -124,7 +124,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		snapshotFleetState :function(){
 			PlayerManager.hq.lastSortie = PlayerManager.cloneFleets();
 			// remember index(es) of sent fleet(s) to battle
-			this.focusedFleet = (PlayerManager.combinedFleet && this.fleetSent === 1) ? [0,1] : [this.fleetSent-1];
+			this.focusedFleet = this.isCombinedSortie() ? [0,1] : [this.fleetSent-1];
 			// remember index(es) of sent fleet(s) to exped support
 			this.supportFleet = [];
 			if(!this.isPvP()){
@@ -220,6 +220,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		isPvP: function(){
 			return this.isSortieAt(-1) || this.onPvP;
+		},
+		
+		isCombinedSortie: function() {
+			return PlayerManager.combinedFleet && this.fleetSent === 1;
 		},
 		
 		setBoss :function( cellno, comp ){
@@ -395,7 +399,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		updateMvps :function(mvps){
 			if(Array.isArray(mvps) && mvps.length){
-				if(PlayerManager.combinedFleet && this.fleetSent === 1){
+				if(this.isCombinedSortie()){
 					const mainMvp = mvps[0] || 1,
 						escortMvp = mvps[1] || 1,
 						mainFleet = PlayerManager.fleets[0],
@@ -427,23 +431,64 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		checkFCF :function(escapeData){
 			if (escapeData) {
-				const taihadShip = this.getRetreatedShip(escapeData.api_escape_idx);
-				const escortShip = this.getRetreatedShip(escapeData.api_tow_idx);
+				const getRetreatableShipId = (escapeIdx) => {
+					if (!escapeIdx || !escapeIdx[0]) { return 0; }
+					// Although there may be more elements in escape array, but only 1st element used
+					// since only 1 ship (topmost one) can be retreated per battle
+					const shipIndex = escapeIdx[0];
+					// If combined fleets sent, index > 6 belongs to escort fleet
+					if (this.isCombinedSortie() && shipIndex > 6) {
+						return PlayerManager.fleets[1].ship(shipIndex - 7).rosterId;
+					}
+					return PlayerManager.fleets[this.fleetSent - 1].ship(shipIndex - 1).rosterId;
+				};
+				const taihadShip = getRetreatableShipId(escapeData.api_escape_idx);
+				const escortShip = getRetreatableShipId(escapeData.api_tow_idx);
 				this.fcfCheck = [taihadShip, escortShip].filter(rosterId => rosterId > 0);
 				console.log("FCF escape-able ships have set to", this.fcfCheck);
 			}
 		},
 		
-		getRetreatedShip :function(escapeIdx){
-			if (!escapeIdx || !escapeIdx[0]) { return 0; }
-			// Although there may be more elements in escape array, but only 1st element used
-			// since only 1 ship (topmost one) can be retreated for 1 battle
-			const shipIndex = escapeIdx[0];
-			if (PlayerManager.combinedFleet && shipIndex > 6) {
-				// Belong to combined escort fleet
-				return PlayerManager.fleets[1].ship(shipIndex - 7).rosterId;
-			}
-			return PlayerManager.fleets[this.fleetSent - 1].ship(shipIndex - 1).rosterId;
+		getCurrentFCF :function(){
+			// For now only to event map, can sortie with CF and SF
+			const isSortieAtEvent = this.map_world >= 10;
+			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);
+			if(!isSortieAtEvent || !sortiedFleets.length || !this.fcfCheck.length)
+				return { isAvailable: false };
+			const isCombinedSortie = sortiedFleets.length >= 2;
+			const flagship = sortiedFleets[0].ship(0);
+			const taihaShip = KC3ShipManager.get(this.fcfCheck[0]);
+			const escortShip = isCombinedSortie && KC3ShipManager.get(this.fcfCheck[1]);
+			const isNextNodeFound = !!this.currentNode().nodeData.api_next;
+			const canUseFCF = !isCombinedSortie ?
+				// is Striking Force (fleet #3) sortied (both check)
+				this.fleetSent === 3 && sortiedFleets[0].ships[6] > 0
+				// And flagship has SF-FCF (FCF incapable) (client check)
+				&& flagship.hasEquipment(272)
+				// And not flagship Taiha (supposed server-side checked already)
+				//&& taihaShip.fleetPosition()[0] > 0
+				// And current battle is not the final node (client check)
+				&& isNextNodeFound
+				:
+				// Main fleet flagship has FCF (client check)
+				flagship.hasEquipment(107)
+				// And Taiha ship not flagship of main and escort (server check)
+				//&& taihaShip.fleetPosition()[0] > 0
+				// And escort-able DD available (flagship DD incapable) (server check)
+				//&& !!escortShip && !escortShip.isDummy() && !escortShip.isAbsent()
+				//&& escortShip.fleetPosition()[0] > 0
+				//&& !escortShip.isTaiha()
+				// And current battle is not the final node (client check)
+				&& isNextNodeFound
+				;
+			return {
+				isAvailable: canUseFCF,
+				isCombined: isCombinedSortie,
+				shipToRetreat: taihaShip,
+				shipToEscort: escortShip,
+				sortiedFleets: sortiedFleets,
+				shipIdsToBeAbsent: this.fcfCheck.slice(0)
+			};
 		},
 		
 		sendFCFHome :function(){
@@ -663,8 +708,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(PlayerManager.combinedFleet && sentFleet === 1){
 				this.cleanMvpShips(PlayerManager.fleets[0]);
 				this.cleanMvpShips(PlayerManager.fleets[1]);
+				PlayerManager.fleets[0].setEscapeShip();
+				PlayerManager.fleets[1].setEscapeShip();
 			} else {
 				this.cleanMvpShips(PlayerManager.fleets[sentFleet - 1]);
+				PlayerManager.fleets[sentFleet - 1].setEscapeShip();
 			}
 			for(var ectr in this.escapedList){
 				KC3ShipManager.get( this.escapedList[ectr] ).didFlee = false;
