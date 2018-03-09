@@ -296,9 +296,9 @@
 				"options" : {
 					"choices" : [
 						[ 1, "SettingsELosSum" ],
-						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ],
-						[ 4, "SettingsELosF33" ]
+						[ 2, "SettingsELosF33" ],
+						[ 3, "SettingsELosF33x3" ],
+						[ 4, "SettingsELosF33x4" ]
 					]
 				}
 			},
@@ -887,29 +887,6 @@
 				"name" : "SettingsPushAlertsKey",
 				"type" : "long_text",
 				"options" : {"placeholder" : "Access Token" },
-				"bound" : {
-					"length_min" : 27,
-					"length_max" : 27
-				}
-			}
-		]
-	},
-	{
-		"section": "SettingsDBSubmissionWarn",
-		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2459",
-		"contents" :[
-			{
-				"id" : "DBSubmission_enabled",
-				"name" : "SettingsEnableDBSubmission",
-				"type" : "check",
-				"options" : {},
-				"hide" : 1
-			},
-			{
-				"id" : "DBSubmission_key",
-				"name" : "SettingsDBSubmissionKey",
-				"type" : "long_text",
-				"options" : {"placeholder" : "API Key" },
 				"bound" : {
 					"length_min" : 27,
 					"length_max" : 27

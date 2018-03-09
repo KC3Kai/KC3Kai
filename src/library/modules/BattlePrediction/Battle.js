@@ -15,6 +15,17 @@
     )(battleData);
   };
 
+  battle.simulateBattlePartially = (battleData, initalFleets, battlePhases = []) => {
+    const { fleets: { simulateAttack } } = KC3BattlePrediction;
+    const { getPhaseParser } = KC3BattlePrediction.battle;
+
+    return pipe(
+      juxt(battlePhases.map(getPhaseParser)),
+      flatten,
+      reduce(simulateAttack, initalFleets)
+    )(battleData);
+  };
+
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/

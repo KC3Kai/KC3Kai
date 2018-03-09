@@ -494,7 +494,7 @@ Previously known as "Reactor"
 			// old slot from unset ship will be empty, and old item from set ship (if any) will be freed
 			const setExSlot = params.api_set_slot_kind == 1;
 			const setShipRosterId = parseInt(params.api_set_ship, 10);
-			const setItemIndex = setExSlot ? 4 : parseInt(params.api_set_idx, 10);
+			const setItemIndex = setExSlot ? -1 : parseInt(params.api_set_idx, 10);
 			const newShipData = response.api_data.api_ship_data;
 			
 			// old status of set ship
