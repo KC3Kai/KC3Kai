@@ -176,7 +176,7 @@
 		sendData: function(payload) {
 			//console.debug(JSON.stringify(payload));
 			$.ajax({
-				url: "http://kckai.cybersnets.com/api/routing",
+				url: "http://tsundb.kc3.moe/api/routing",
 				method: "POST",
 				headers: {"content-type": "application/json"},
 				data: JSON.stringify(payload)
