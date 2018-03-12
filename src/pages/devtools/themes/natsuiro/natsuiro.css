@@ -398,6 +398,7 @@ html,body {
 	line-height:20px;
 	float:left;
 	color:#ccc;
+	white-space:nowrap;
 }
 .module.activity .consumable_ltext.regenCap {
 	color:#EAF918;
@@ -423,6 +424,10 @@ html,body {
 }
 .module.activity .consumables .consumable.page3 {
 	display:none;
+	width:60px;
+}
+.module.activity .consumables .consumable.page3 .consumable_ltext {
+	width:40px;
 }
 
 /* Expedition */
