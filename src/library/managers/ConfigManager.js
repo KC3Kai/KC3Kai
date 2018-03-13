@@ -262,7 +262,7 @@ Retrieves when needed to apply on components
 				if(this.aaFormation < 11) this.aaFormation = 11;
 				if(this.aaFormation > 14) this.aaFormation = 11;
 			} else {
-				if(this.aaFormation > 5) this.aaFormation = 1;
+				if(this.aaFormation > 6) this.aaFormation = 1;
 			}
 			this.save();
 		},

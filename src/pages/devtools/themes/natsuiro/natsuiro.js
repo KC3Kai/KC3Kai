@@ -2504,7 +2504,7 @@
 					$(".module.activity .battle_support .support_exped").show();
 				}
 
-				$(".module.activity .battle_support").attr("title",
+				$(".module.activity .battle_support").attr("titlealt",
 					thisNode.buildSupportAttackMessage(undefined, true, true)
 						|| KC3Meta.term("BattleSupportExped")
 				).lazyInitTooltip();

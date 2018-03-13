@@ -2113,6 +2113,12 @@ KC3改 Ship Object
 					case 5: // Line Abreast, cancelled by Echelon
 						modifier = enemyFormationId === 4 ? 1.0 : 1.2;
 						break;
+					case 6:{// Vanguard, depends on fleet position
+						const [shipPos, shipCnt] = this.fleetPosition(),
+							isGuardian = shipCnt >= 4 && shipPos >= Math.floor(shipCnt / 2);
+						modifier = isGuardian ? 1.2 : 0.8;
+						break;
+					}
 				}
 				break;
 			case "evasion":
@@ -2128,9 +2134,15 @@ KC3改 Ship Object
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
 						break;
-					case 6: // Vanguard high evasion, but modifier unknown
-						modifier = 1.3;
+					case 6:{// Vanguard, depends on fleet position and ship type
+						const [shipPos, shipCnt] = this.fleetPosition(),
+							isGuardian = shipCnt >= 4 && shipPos >= (Math.floor(shipCnt / 2) + 1),
+							isThisDestroyer = this.master().api_stype === 2;
+						modifier = isThisDestroyer ?
+							(isGuardian ? 1.4 : 1.2) :
+							(isGuardian ? 1.2 : 1.05);
 						break;
+					}
 				}
 				break;
 			default:
