@@ -1247,9 +1247,9 @@ Used by SortieManager
 				logs.css("float", "left");
 				enemyTable.css("float", "left").css("margin-left", "5px");
 			}
-			const enemyShips = battleData.api_ship_ke.slice(0),
-				mainFleetCount = battleData.api_ship_ke.length,
-				enemyShipHps = battleData.api_e_nowhps.slice(0);
+			const enemyShips = battleData.api_ship_ke.slice(0, 6),
+				mainFleetCount = enemyShips.length,
+				enemyShipHps = battleData.api_e_nowhps.slice(0, 6);
 			if(battleData.api_ship_ke_combined) {
 				enemyShips.push(...battleData.api_ship_ke_combined);
 				enemyShipHps.push(...battleData.api_e_nowhps_combined);
@@ -1476,8 +1476,8 @@ Used by SortieManager
 			});
 			return damages;
 		};
-		const friendlyFleet = battleData.api_friendly_info,
-			friendlyBattle = battleData.api_friendly_battle;
+		const friendlyFleet = (battleData || {}).api_friendly_info,
+			friendlyBattle = (battleData || {}).api_friendly_battle;
 		if(!friendlyFleet || !friendlyBattle) return tooltip.html();
 		// Fill up table of friendly fleet info
 		friendlyTable.css("font-size", "11px");
@@ -1537,9 +1537,9 @@ Used by SortieManager
 		});
 		// Fill up table of damage made to abyssal ships
 		enemyTable.css("font-size", "11px");
-		const enemyShips = battleData.api_ship_ke,
-			mainFleetCount = battleData.api_ship_ke.length,
-			enemyShipAfterHps = battleData.api_e_nowhps;
+		const enemyShips = battleData.api_ship_ke.slice(0, 6),
+			mainFleetCount = enemyShips.length,
+			enemyShipAfterHps = battleData.api_e_nowhps.slice(0, 6);
 		if(battleData.api_ship_ke_combined) {
 			enemyShips.push(...battleData.api_ship_ke_combined);
 			enemyShipAfterHps.push(...battleData.api_e_nowhps_combined);
