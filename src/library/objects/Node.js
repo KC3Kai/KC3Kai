@@ -1162,7 +1162,7 @@ Used by SortieManager
 	 * return a empty string if no any support triggered.
 	 */
 	KC3Node.prototype.buildSupportAttackMessage = function(thisNode = this,
-		showEnemyDamage = false, vertical = false){
+		showEnemyDamage = false, autoVertical = false){
 		var supportTips = "";
 		if(thisNode.supportFlag && !!thisNode.supportInfo){
 			supportTips += buildSupportExpeditionMessage(thisNode.supportInfo);
@@ -1205,10 +1205,11 @@ Used by SortieManager
 			});
 			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
 		}
-		if(supportTips + lbasTips === "") return "";
+		const tipLogs = supportTips + lbasTips;
+		if(tipLogs === "") return "";
 		const tooltip = $("<div/>"), logs = $("<p></p>");
 		logs.css("font-size", "11px").css("max-width", "390px").appendTo(tooltip);
-		logs.append(supportTips).append(lbasTips);
+		logs.append(tipLogs);
 		
 		const battleData = thisNode.battleDay;
 		if(showEnemyDamage && battleData && battleData.api_e_nowhps){
@@ -1218,7 +1219,10 @@ Used by SortieManager
 				// Might pre-define this type of phases preset inside module?
 				["airBaseInjection", "injectionKouku", "airBaseAttack", "support", "nSupport"]
 			);
-			const enemyTable = vertical ?
+			// Auto put table vertically on right if lines of logs >= enemy ship amount
+			const tipLogsLines = (tipLogs.match(/\r\n|\n|\r/g) || []).length;
+			const isVertical = autoVertical && tipLogsLines >= battleData.api_ship_ke.length;
+			const enemyTable = isVertical ?
 				$(`<table>
 					<tr class="r1"><td class="e1 s"></td><td class="e1 d"></td><td class="m1 s"></td><td class="m1 d"></td></tr>
 					<tr class="r2"><td class="e2 s"></td><td class="e2 d"></td><td class="m2 s"></td><td class="m2 d"></td></tr>
@@ -1239,13 +1243,13 @@ Used by SortieManager
 			// Remove line feeds and indents to avoid auto `<br/>` converting
 			enemyTable.html(enemyTable.prop("outerHTML").replace(/\t|\n|\r|\r\n/g, ""));
 			enemyTable.css("font-size", "11px");
-			if(vertical) {
+			if(isVertical) {
 				logs.css("float", "left");
 				enemyTable.css("float", "left").css("margin-left", "5px");
 			}
-			const enemyShips = battleData.api_ship_ke.slice(0),
-				mainFleetCount = battleData.api_ship_ke.length,
-				enemyShipHps = battleData.api_e_nowhps.slice(0);
+			const enemyShips = battleData.api_ship_ke.slice(0, 6),
+				mainFleetCount = enemyShips.length,
+				enemyShipHps = battleData.api_e_nowhps.slice(0, 6);
 			if(battleData.api_ship_ke_combined) {
 				enemyShips.push(...battleData.api_ship_ke_combined);
 				enemyShipHps.push(...battleData.api_e_nowhps_combined);
@@ -1472,8 +1476,8 @@ Used by SortieManager
 			});
 			return damages;
 		};
-		const friendlyFleet = battleData.api_friendly_info,
-			friendlyBattle = battleData.api_friendly_battle;
+		const friendlyFleet = (battleData || {}).api_friendly_info,
+			friendlyBattle = (battleData || {}).api_friendly_battle;
 		if(!friendlyFleet || !friendlyBattle) return tooltip.html();
 		// Fill up table of friendly fleet info
 		friendlyTable.css("font-size", "11px");
@@ -1533,9 +1537,9 @@ Used by SortieManager
 		});
 		// Fill up table of damage made to abyssal ships
 		enemyTable.css("font-size", "11px");
-		const enemyShips = battleData.api_ship_ke,
-			mainFleetCount = battleData.api_ship_ke.length,
-			enemyShipAfterHps = battleData.api_e_nowhps;
+		const enemyShips = battleData.api_ship_ke.slice(0, 6),
+			mainFleetCount = enemyShips.length,
+			enemyShipAfterHps = battleData.api_e_nowhps.slice(0, 6);
 		if(battleData.api_ship_ke_combined) {
 			enemyShips.push(...battleData.api_ship_ke_combined);
 			enemyShipAfterHps.push(...battleData.api_e_nowhps_combined);
