@@ -680,13 +680,13 @@ Contains summary information about a fleet and its ships
 		totalCost.supportFlag = this.estimateSupportType();
 		if(totalCost.supportFlag > 0) {
 			const costPercent = {
-				fuel: [0, 0.5, 0.5, 0.5][totalCost.supportFlag] || 0,
-				ammo: [0, 0.4, 0.8, 0.8][totalCost.supportFlag] || 0
+				fuel: [0, 0.5, 0.5, 0.5, 0.5][totalCost.supportFlag] || 0,
+				ammo: [0, 0.4, 0.8, 0.8, 0.4][totalCost.supportFlag] || 0
 			};
 			$.each(this.ships, (i, shipId) => {
 				if (shipId > 0) {
 					const shipObj = this.ship(i);
-					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo);
+					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo, false, false, true);
 					totalCost.fuel += cost.fuel;
 					totalCost.ammo += cost.ammo;
 				}

@@ -832,7 +832,7 @@
 		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
 		$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
-		$(".module.activity .battle_support").attr("title", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
+		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
 		$(".module.activity .battle_fish").lazyInitTooltip();
@@ -3028,7 +3028,7 @@
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
-			$(".module.activity .battle_support").attr("title", "").show();
+			$(".module.activity .battle_support").attr("titlealt", "").show();
 
 			// Enemy Formation
 			if((typeof thisPvP.eformation != "undefined") && (thisPvP.eformation > -1)){
