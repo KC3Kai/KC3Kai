@@ -1868,6 +1868,12 @@ Used by SortieManager
 		if(ConfigManager.isNotToSaveSortie(...KC3SortieManager.getSortieMap())){
 			return;
 		}
+		var b = this.getBattleDBData(resultData);
+		console.log("Saving battle", b);
+		KC3Database.Battle(b);
+	};
+
+	KC3Node.prototype.getBattleDBData = function( resultData ) {
 		var b = {
 			// TODO ref to the uniq key of sortie table which is not the auto-increment ID
 			// foreign key to sortie
@@ -1883,19 +1889,18 @@ Used by SortieManager
 			time: this.stime,
 			baseEXP: this.nodalXP,
 			hqEXP: resultData.api_get_exp || 0,
-			shizunde: this.lostShips.map(function(fleetLost){
+			shizunde: this.lostShips ? this.lostShips.map(function(fleetLost){
 				return fleetLost.map(function(shipSunk){
 					return KC3ShipManager.get(shipSunk).masterId;
 				});
-			}),
+			}) : [],
 			mvp: this.mvps
 		};
 		// Optional properties
 		// Air raid moved to proper place `sortie.nodes`, no longer here
 		//if(this.battleDestruction){ b.airRaid = this.battleDestruction; }
 		if(this.isBoss()){ b.boss = true; }
-		console.log("Saving battle", b);
-		KC3Database.Battle(b);
+		return b;
 	};
 	
 	KC3Node.prototype.savePvPOnDB = function( resultData ){

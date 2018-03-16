@@ -94,6 +94,11 @@ Saves and loads significant data for future use
 				}
 			});
 
+			if(self._raw.newShips[546] == undefined && KC3Meta.isAF()) {
+				self._raw.newShips[546] = 1522638000000 - KC3Master.newUpdatesExpiredAfter;
+				if(beforeCounts)
+					beforeCounts[0] -= 1;
+			}
 			this.updateRemodelTable();
 			this.save();
 			this.available = true;

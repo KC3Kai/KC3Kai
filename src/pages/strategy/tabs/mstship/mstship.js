@@ -383,11 +383,17 @@
 			}
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
-			$("<embed/>")
-				.attr("src", shipSrc)
-				.attr("wmode", "transparent")
-				.attr("menu", "false")
-				.appendTo(".tab_mstship .shipInfo .cgswf");
+			if(ship_id == 546 && KC3Meta.isAF())
+				$("<img/>")
+					.attr("src", "https://raw.githubusercontent.com/KC3Kai/KC3Kai/update-cumulative/src/assets/img/shipseasonal/Lkb/bk.png")
+					.css({"width":218,"height":300})
+					.appendTo(".tab_mstship .shipInfo .cgswf");
+			else
+				$("<embed/>")
+					.attr("src", shipSrc)
+					.attr("wmode", "transparent")
+					.attr("menu", "false")
+					.appendTo(".tab_mstship .shipInfo .cgswf");
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
 			$(".tab_mstship .shipInfo .hourlies").empty();
 			

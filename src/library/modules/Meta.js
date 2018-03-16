@@ -165,6 +165,8 @@ Provides access to data on built-in JSON files
 				if(!isAbyssal && isDamaged && ConfigManager.info_chuuha_icon){
 					id = String(id) + "_d";
 				}
+				if(this.isAF() && (id == 546 || id == "546_d"))
+					return `https://raw.githubusercontent.com/KC3Kai/KC3Kai/update-cumulative/src/assets/img/shipseasonal/Lkb/${id}.png`;
 				// Here assume image file must be existed already (even for '_d.png')
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
@@ -196,6 +198,7 @@ Provides access to data on built-in JSON files
 			if(Object.keys(this._ship).length === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
 			if(typeof this._cache[jpName] !== "undefined"){ return this._cache[jpName]; }
+			if(this.isAF() && jpName == "武蔵改二") jpName = "清霜改二";
 			// If full string matched, no combination needed
 			if(typeof this._ship[jpName] !== "undefined"){
 				this._cache[jpName] = this._ship[jpName];
@@ -889,6 +892,11 @@ Provides access to data on built-in JSON files
 		formatNumber :function(number, locale, options){
 			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
 				number : number.toLocaleString(locale, options);
+		},
+
+		isAF :function() {
+			// return true; // for testing
+			return Date.now() < 1522638000000 && Date.now() > 1522508400000;
 		}
 	};
 	

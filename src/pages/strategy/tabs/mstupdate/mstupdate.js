@@ -107,7 +107,14 @@
 				
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
-				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				if(shipData.api_id == 546 && KC3Meta.isAF()) {
+					$("<img/>")
+						.attr("src", "https://raw.githubusercontent.com/KC3Kai/KC3Kai/update-cumulative/src/assets/img/shipseasonal/Lkb/bk.png")
+						.css({"width":218,"height":300})
+						.appendTo($(".ship_cg", shipBox));
+					$(".ship_cg embed", shipBox).remove();
+				} else 
+					$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
