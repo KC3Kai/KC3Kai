@@ -172,6 +172,9 @@
 		execute :function(){
 			const self = this;
 			
+			$(".tab_aircraft .item_type").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
+			});
 			$(".tab_aircraft .item_type").on("click", function(e){
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});

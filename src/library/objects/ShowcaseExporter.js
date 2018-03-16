@@ -628,12 +628,12 @@
 
             if (!sorted[groupId].types[typeId]) {
                 sorted[groupId].types[typeId] = {
-                    typeId: KC3Master.slotitem(equip.masterId).api_type[3],
-                    name: KC3Meta.gearTypeName(2, equipMaster.api_type[2]),
+                    typeId: equipMaster.api_type[3],
+                    name: KC3Meta.gearTypeName(3, equipMaster.api_type[3]),
                     gears: {}
                 };
-                this._equipTypeImages[KC3Master.slotitem(equip.masterId).api_type[3]] = null;
             }
+            this._equipTypeImages[equipMaster.api_type[3]] = null;
 
             if (!sorted[groupId].types[typeId].gears[masterId]) {
                 sorted[groupId].types[typeId].gears[masterId] = {

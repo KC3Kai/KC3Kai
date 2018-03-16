@@ -315,6 +315,9 @@
 		execute :function(){
 			const self = this;
 
+			$(".tab_gears .item_type").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
+			});
 			$(".tab_gears .item_type").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
