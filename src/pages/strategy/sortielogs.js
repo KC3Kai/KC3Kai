@@ -604,7 +604,8 @@
 								$(".sortie_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
-									.click(shipClickFunc);
+									.click(shipClickFunc)
+									.css("visibility", "visible");
 								$(".sortie_ship_"+(index+1), sortieBox)
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
@@ -614,11 +615,13 @@
 								$(".sortie_combined_ship_"+(index+1)+" img", sortieBox)
 									.attr("src", KC3Meta.shipIcon(ship.mst_id))
 									.attr("alt", ship.mst_id)
-									.click(shipClickFunc);
+									.click(shipClickFunc)
+									.css("visibility", "visible");
 								$(".sortie_combined_ship_"+(index+1), sortieBox)
 									.addClass("hover")
 									.addClass("simg-"+ship.mst_id)
 									.show();
+								$(".sortie_ship_"+(index+1), sortieBox).show();
 							}
 							
 							rshipBox = $(".tab_"+tabCode+" .factory .rfleet_ship").clone();

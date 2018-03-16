@@ -143,7 +143,6 @@
 			const shipClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			const diffStrs = ["", "E", "N", "H"];
 
 			$(".encounter_list").empty().hide();
 			$(".loading").show();
@@ -164,7 +163,7 @@
 						KC3Meta.term("EventRankEasyAbbr"),
 						KC3Meta.term("EventRankNormalAbbr"),
 						KC3Meta.term("EventRankHardAbbr")][
-							((d, w) => w >= 41 ? d : d + 1)(encounter.diff || 0, encounter.world)
+							((d, w) => w < 10 || w >= 41 ? d : d + 1)(encounter.diff || 0, encounter.world)
 						] || "";
 					const mapName = `${encounter.world}-${encounter.map}${diffStr}`;
 					// Check map box

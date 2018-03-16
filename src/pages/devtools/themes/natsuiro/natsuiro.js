@@ -1033,8 +1033,8 @@
 
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			let getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
-			let fc200 = PlayerManager.consumables.furniture200 || 0,
+			const getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
+			const fc200 = PlayerManager.consumables.furniture200 || 0,
 				fc400 = PlayerManager.consumables.furniture400 || 0,
 				fc700 = PlayerManager.consumables.furniture700 || 0,
 				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
@@ -1057,9 +1057,9 @@
 				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
 			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
-				let roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));
-				let regenCap = PlayerManager.hq.getRegenCap();
-				let fuel = PlayerManager.hq.lastMaterial[0],
+				const roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));
+				const regenCap = PlayerManager.hq.getRegenCap();
+				const fuel = PlayerManager.hq.lastMaterial[0],
 					ammo = PlayerManager.hq.lastMaterial[1],
 					steel = PlayerManager.hq.lastMaterial[2],
 					bauxite = PlayerManager.hq.lastMaterial[3];
@@ -1093,24 +1093,35 @@
 					.lazyInitTooltip();
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			$(".count_1classMedals_or_mackerel").text( PlayerManager.consumables.mackerel || PlayerManager.consumables.firstClassMedals || 0 )
+			$(".count_1classMedalsOrSaury").text(
+					PlayerManager.consumables.mackerel || PlayerManager.consumables.firstClassMedals || 0 )
 				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.mackerel ? 68 : 61) )
-				.children("img").attr("src", "/assets/img/useitems/" + (PlayerManager.consumables.mackerel ? 68 : 61) + ".png");
+				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.mackerel ? 68 : 61}.png`);
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
 				.prev().attr("title", KC3Meta.useItemName(57) );
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
-				.prev().attr("title", KC3Meta.useItemName(64) );
 			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
 				.prev().attr("title", KC3Meta.useItemName(58) );
+			$(".count_newGunMats").text( PlayerManager.consumables.newArtilleryMaterial || 0 )
+				.prev().attr("title", KC3Meta.useItemName(75) );
+			$(".count_newAvMats").text( PlayerManager.consumables.newAviationMaterial || 0 )
+				.prev().attr("title", KC3Meta.useItemName(77) );
+			$(".count_actionReportOrSkilledCrew").text(
+					PlayerManager.consumables.actionReport || PlayerManager.consumables.skilledCrew || 0 )
+				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.actionReport ? 78 : 70) )
+				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.actionReport ? 78 : 70}.png`);
+			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
+				.prev().attr("title", KC3Meta.useItemName(64) );
 			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
 				.prev().attr("title", KC3Meta.useItemName(52) );
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				+ (PlayerManager.consumables.irako || 0) )
-				.prev().attr("title", "{0}x {1} + {2}x {3}"
-					.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
-						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+				                   + (PlayerManager.consumables.irako || 0)
+			).prev().attr("title", "{1} x{0} + {3} x{2}"
+				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
+					    PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			$(".consumables").hideChildrenTooltips();
 			$(".consumables .consumable").hide();
-			$(".consumables .consumable.page{0}".format(ConfigManager.hqInfoPage||1)).show();
+			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).show();
+			$(".consumables").createChildrenTooltips();
 		},
 
 		ShipSlots: function(data){
@@ -2493,7 +2504,7 @@
 					$(".module.activity .battle_support .support_exped").show();
 				}
 
-				$(".module.activity .battle_support").attr("title",
+				$(".module.activity .battle_support").attr("titlealt",
 					thisNode.buildSupportAttackMessage(undefined, true, true)
 						|| KC3Meta.term("BattleSupportExped")
 				).lazyInitTooltip();

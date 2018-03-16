@@ -78,7 +78,7 @@ KC3改 Ship Box for Natsuiro theme
 			$(".ex_item", this.element).hide();
 		}
 		$(".ex_item", this.element).toggleClass("item_being_used",
-			ConfigManager.info_battle && (this.dameConConsumed.pos == 4 ||
+			ConfigManager.info_battle && (this.dameConConsumed.pos === 0 ||
 				// Although starshell not equippable at ex-slot for now
 				(this.starShellUsed && myExItem.masterId == 101))
 		);
@@ -439,7 +439,7 @@ KC3改 Ship Box for Natsuiro theme
 				if(ConfigManager.info_battle){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).toggleClass("item_being_used",
 						// Consumed damecon slot
-						this.dameConConsumed.pos == slot ||
+						this.dameConConsumed.pos === slot+1 ||
 						// Mark all equipped starshell
 						(this.starShellUsed && thisGear.masterId == 101)
 					);

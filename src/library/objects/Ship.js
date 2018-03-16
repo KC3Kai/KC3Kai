@@ -916,30 +916,25 @@ KC3改 Ship Object
 
 	/* FIND DAMECON
 	   Find first available damecon.
-	   search order: extra slot -> 1st slot -> 2ns slot -> 3rd slot -> 4th slot
+	   search order: extra slot -> 1st slot -> 2ns slot -> 3rd slot -> 4th slot -> 5th slot
 	   return: {pos: <pos>, code: <code>}
-	   pos: 0-3 for normal slots, 4 for extra slot, -1 if not found.
+	   pos: 1-5 for normal slots, 0 for extra slot, -1 if not found.
 	   code: 0 if not found, 1 for repair team, 2 for goddess
 	   ----------------------------------------- */
 	KC3Ship.prototype.findDameCon = function() {
-		var items =
-			[ {pos: 4, item: this.exItem() },
-			  {pos: 0, item: this.equipment(0) },
-			  {pos: 1, item: this.equipment(1) },
-			  {pos: 2, item: this.equipment(2) },
-			  {pos: 3, item: this.equipment(3) } ];
-		items = items
-			.filter( function(x) {
+		const allItems = [ {pos: 0, item: this.exItem() } ];
+		allItems.push(...this.equipment(false).map((g, i) => ({pos: i + 1, item: g}) ));
+		const damecon = allItems.filter(x => (
 				// 42: repair team
 				// 43: repair goddess
-				return x.item.masterId === 42 || x.item.masterId === 43;
-			}).map(function(x) {
-				return {pos: x.pos,
-						code: x.item.masterId === 42 ? 1
-							: x.item.masterId === 43 ? 2
-							: 0};
-			});
-		return items.length > 0 ? items[0] : {pos: -1, code: 0};
+				x.item.masterId === 42 || x.item.masterId === 43
+			)).map(x => (
+				{pos: x.pos,
+				code: x.item.masterId === 42 ? 1
+					: x.item.masterId === 43 ? 2
+					: 0}
+			));
+		return damecon.length > 0 ? damecon[0] : {pos: -1, code: 0};
 	};
 
 	/* CALCULATE TRANSPORT POINT
@@ -2118,6 +2113,12 @@ KC3改 Ship Object
 					case 5: // Line Abreast, cancelled by Echelon
 						modifier = enemyFormationId === 4 ? 1.0 : 1.2;
 						break;
+					case 6:{// Vanguard, depends on fleet position
+						const [shipPos, shipCnt] = this.fleetPosition(),
+							isGuardian = shipCnt >= 4 && shipPos >= Math.floor(shipCnt / 2);
+						modifier = isGuardian ? 1.2 : 0.8;
+						break;
+					}
 				}
 				break;
 			case "evasion":
@@ -2133,9 +2134,15 @@ KC3改 Ship Object
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
 						break;
-					case 6: // Vanguard high evasion, but modifier unknown
-						modifier = 1.3;
+					case 6:{// Vanguard, depends on fleet position and ship type
+						const [shipPos, shipCnt] = this.fleetPosition(),
+							isGuardian = shipCnt >= 4 && shipPos >= (Math.floor(shipCnt / 2) + 1),
+							isThisDestroyer = this.master().api_stype === 2;
+						modifier = isThisDestroyer ?
+							(isGuardian ? 1.4 : 1.2) :
+							(isGuardian ? 1.2 : 1.05);
 						break;
+					}
 				}
 				break;
 			default:
@@ -2903,7 +2910,7 @@ KC3改 Ship Object
 		};
 
 		var gearInfo;
-		for(var i=0; i<4; ++i) {
+		for(var i=0; i<5; ++i) {
 			gearInfo = this.equipment(i).deckbuilder();
 			if (gearInfo)
 				itemsInfo["i".concat(i+1)] = gearInfo;
