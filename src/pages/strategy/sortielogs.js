@@ -464,7 +464,7 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
-			var self = this;
+			const self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			var shipNameEquipSwitchFunc = function(e){
@@ -477,13 +477,13 @@
 					$(".rfleet_equips",ref).show();
 				}
 			};
-			var shipClickFunc = function(e){
+			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var gearClickFunc = function(e){
+			const gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function(e) {
+			const viewFleetAtManagerFunc = function(e) {
 				const id = $(this).data("id");
 				if(!id) return;
 				if(e.metaKey || e.ctrlKey) {
@@ -493,19 +493,16 @@
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
-			var parseAirRaidFunc = function(airRaid){
+			const parseAirRaidFunc = function(airRaid){
 				if(airRaid && airRaid.api_air_base_attack) {
 					//console.debug("LB Air Raid", airRaid);
 					// Whoever wanna do whatever? such as dump enemy info
 					if(typeof window.dumpLandbaseAirRaid === "function")
 						window.dumpLandbaseAirRaid.call(self, airRaid);
 				}
-				const damageArray = airRaid &&
-				  airRaid.api_air_base_attack &&
-				  airRaid.api_air_base_attack.api_stage3 &&
-				  airRaid.api_air_base_attack.api_stage3.api_fdam || [];
+				const damageArray = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3.api_fdam") || [];
 				return {
-					airRaidLostKind: (airRaid || {}).api_lost_kind || 0,
+					airRaidLostKind: Object.getSafePath(airRaid, "api_lost_kind") || 0,
 					baseTotalDamage: damageArray.reduce(
 							(sum, n) => sum + Math.max(0, Math.floor(n)),
 							0
