@@ -507,7 +507,7 @@ KC3改 Ship Object
 	   to calculate steel cost per battles: steelNeeded == true
 	   returns an object: {fuel: <fuelCost>, ammo: <ammoCost>, steel: <steelCost>, bauxite: <bauxiteCost>}
 	 */
-	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded) {
+	KC3Ship.prototype.calcResupplyCost = function(fuelPercent, ammoPercent, bauxiteNeeded, steelNeeded, roundUp) {
 		var self = this;
 		var result = {
 			fuel: 0, ammo: 0
@@ -522,7 +522,7 @@ KC3改 Ship Object
 		var fullFuel = master.api_fuel_max;
 		var fullAmmo = master.api_bull_max;
 		var mulRounded = function (a, percent) {
-			return Math.floor( a * percent );
+			return !!roundUp ? Math.round( a * percent ) : Math.floor( a * percent );
 		};
 		var marriageConserve = function (v) {
 			return self.isMarried() ? Math.floor(0.85 * v) : v;

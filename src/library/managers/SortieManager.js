@@ -143,22 +143,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getSupportingFleet :function(bossSupport){
-			function supportFormula(expedNum, isBoss){
-				// expedition ID extended since 207-10-18, 101 no longer the start of event support
-				// starts from 301 since 2017-11-17, might be retrieved from master missions with disp no S1, S2
-				const eventStartId = 301 - 1;
-				const mission = KC3Master.mission(expedNum);
-				let world = mission ? mission.api_maparea_id : 0;
-				const event = world >= 10 || expedNum > eventStartId;
-				if(event) expedNum -= eventStartId;
-				world = world || Math.floor((expedNum - 1) / 8) + 1;
-				const n = (expedNum - 1) % 8;
-				return (world === 5 || event) && (isBoss ? n === 1 : n === 0);
-			}
-			for(var i = 2; i <= 4; i++)
+			const isSupportExpedition = (expedId, isBoss) => {
+				const m = KC3Master.mission(expedId);
+				// check sortied world matches with exped world
+				return m && m.api_maparea_id === this.map_world &&
+					// check is the right support exped display number
+					(isBoss ? ["34", "S2"] : ["33", "S1"]).includes(m.api_disp_no);
+			};
+			for(let i = 2; i <= 4; i++)
 				if(PlayerManager.fleets[i-1].active){
-					var fleetExpedition = PlayerManager.fleets[i-1].mission[1];
-					if(supportFormula(fleetExpedition, bossSupport)){
+					const fleetExpedition = PlayerManager.fleets[i-1].mission[1];
+					if(isSupportExpedition(fleetExpedition, bossSupport)){
 						return i;
 					}
 				}

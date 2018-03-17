@@ -89,6 +89,10 @@ body {
 	width:16px;
 	height:16px;
 }
+#discord .icon img {
+	width:16px;
+	height:18px;
+}
 .kc3 .links .link .text {
 	height:20px;
 	float:left;
