@@ -510,6 +510,7 @@
 							(sum, n) => sum + Math.max(0, Math.floor(n)),
 							0
 						),
+					airState: KC3Meta.airbattle(airRaid.api_air_base_attack.api_stage1.api_disp_seiku),
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -564,7 +565,7 @@
 										let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
 										oldTitle += oldTitle ? "\n" : "";
 										oldTitle += KC3Meta.term("BattleAirBaseLossTip")
-											.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
+											.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1),airRaid.airState[2]);
 										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
 									}
 								}
@@ -769,7 +770,7 @@
 								// Show Enemy Air Raid damage
 								if(airRaid.airRaidLostKind != 4) {
 									const damageTooltip = KC3Meta.term("BattleAirBaseLossTip")
-										.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
+										.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1),airRaid.airState[2]);
 									$(".node_id", nodeBox).attr("title", damageTooltip);
 									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", damageTooltip);
 								}
