@@ -1220,8 +1220,8 @@ Used by SortieManager
 				["airBaseInjection", "injectionKouku", "airBaseAttack", "support", "nSupport"]
 			);
 			// Auto put table vertically on right if lines of logs >= enemy ship amount
-			const tipLogsLines = (tipLogs.match(/\r\n|\n|\r/g) || []).length;
-			const isVertical = autoVertical && tipLogsLines >= battleData.api_ship_ke.length;
+			const tipLogsLines = (tipLogs.match(/\r\n|\n|\r/g) || []).length + 1;
+			const isVertical = autoVertical && tipLogsLines >= Math.max(6, battleData.api_ship_ke.length);
 			const enemyTable = isVertical ?
 				$(`<table>
 					<tr class="r1"><td class="e1 s"></td><td class="e1 d"></td><td class="m1 s"></td><td class="m1 d"></td></tr>
