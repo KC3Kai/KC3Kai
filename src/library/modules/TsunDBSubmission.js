@@ -153,7 +153,7 @@
 			this.shipDrop.enemyDeck = api_enemy_info.api_deck_name;
 			this.shipDrop.hqLvl = this.data.hqLvl;
 			this.shipDrop.difficulty = this.data.difficulty;
-			this.shipDrop.ship = apiData.api_get_ship.api_ship_id;
+			this.shipDrop.ship = apiData.hasOwnProperty(api_get_ship) ? apiData.api_get_ship.api_ship_id : -1;
 			
 			this.shipDrop.count = {};
 			KC3ShipManager.find(function(ship) { return ship }).forEach(ship => {
@@ -171,7 +171,7 @@
 			this.data.fleetSpeed = Math.min(this.data.fleetSpeed, fleet.minSpeed);
 			// F33 Cn 1,2,3 & 4
 			[1,2,3,4].forEach(i => { this.data.los[i - 1] += fleet.eLos4(i); });
-			return fleet.ship().map(ship => {
+			return fleet.ship().map(ship => ({
 				id : ship.master().api_id,
 				name: ship.master().api_name,
 				shiplock: ship.sally,
@@ -182,7 +182,7 @@
 				slots: ship.api_slot_num,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
-			});
+			}));
 		},
 		
 		/**
