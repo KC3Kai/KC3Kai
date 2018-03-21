@@ -93,8 +93,8 @@
 				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
 				
 				
-				'api_req_sortie/battleresult': this.processDrop
-				'api_req_combined_battle/battleresult': this.processDrop,
+				'api_req_sortie/battleresult': this.processDrop,
+				'api_req_combined_battle/battleresult': this.processDrop
 			};
 		},
 		
@@ -186,14 +186,14 @@
 			// the next one will be skipped until the state returns to 1.
 
 			var response = http.response.api_data;
-			this.enemyComp: {
+			this.enemyComp = {
 				map: this.data.map,
 				node: KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]),
 				hqLvl: this.data.hqLvl,
 				difficulty: this.data.difficulty,
 				enemies: {},
 				formation: null
-			},
+			};
 			// fill in formation and enemy ship info.
 			try {
 				this.enemyComp.formation = response.api_formation[1];
