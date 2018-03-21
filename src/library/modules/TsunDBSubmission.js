@@ -232,13 +232,13 @@
 				enemyComp: this.enemyComp.enemies,
 				hqLvl: this.data.hqLvl,
 				difficulty: this.data.difficulty,
-				ship: apiData.hasOwnProperty(api_get_ship) ? apiData.api_get_ship.api_ship_id : -1,
+				ship: apiData.api_get_ship ? apiData.api_get_ship.api_ship_id : -1,
 				count: {}
 			};
 			
-			KC3ShipManager.find(function(ship) { return ship }).forEach(ship => {
+			KC3ShipManager.find(function(ship) { return ship; }).forEach(ship => {
 				let id = RemodelDb.originOf(ship.masterId);
-				count.hasOwnProperty(id) ? count[id] += 1 : count[id] = 1;
+				this.shipDrop.count.hasOwnProperty(id) ? this.shipDrop.count[id] += 1 : this.shipDrop.count[id] = 1;
 			});
 			
 			this.sendData(this.shipDrop, `drops`);
