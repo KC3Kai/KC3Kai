@@ -8069,7 +8069,7 @@ var PS = {};
           return c(4.5)(1.5)((35));
       };
       if (eId === 111) {
-          return c(8)(0.65)(hm(8)(40));
+          return c(8)(6.5)(hm(8)(40));
       };
       return noCost;
   };
