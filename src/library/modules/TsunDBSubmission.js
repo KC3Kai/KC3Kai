@@ -327,9 +327,9 @@
 				headers: {'content-type': 'application/json'},
 				data: JSON.stringify(payload)
 			}).done( function() {
-				console.log("Tsun DB Submission done.");
-			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn("Tsun DB Submission " + textStatus, errorThrown);
+				console.log(`Tsun DB Submission to /${type} done.`);
+			}).fail( function(jqXHR, textStatus, error) {
+				console.warn(`Tsun DB Submission to /${type} ${textStatus}`, jqXHR.status, error);
 			});
 			return;
 		}
