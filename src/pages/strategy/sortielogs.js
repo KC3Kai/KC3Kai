@@ -511,10 +511,10 @@
 							let baseslot = defenderBases[base][idx].api_mst_id; //Check if plane is non-zeroed and is LBF/interceptor
 							if (defenderBases[base][idx].api_count > 0 && KC3GearManager.interceptorsType3Ids.indexOf(KC3Master.slotitem(baseslot).api_type[3])>-1) {
 								if (slot === 0) {array[idx] = baseslot;} //Fill if empty
-								else {array[idx] = (KC3Master.slotitem(slot).api_houm > KC3Master.slotitem(baseslot).api_houm) ? slot : baseslot}; //Compare on AB stat(evasion)
+								else {array[idx] = (KC3Master.slotitem(slot).api_houm > KC3Master.slotitem(baseslot).api_houm) ? slot : baseslot;} //Compare on AB stat(evasion)
 							}
 						}
-					})
+					});
 				}
 				ABPlane.forEach(function(slot,idx,array){ //Change to name for later
 					array[idx]=KC3Meta.gearName(KC3Master.slotitem(slot).api_name) || KC3Meta.term("None");
@@ -587,8 +587,7 @@
 										.format(airRaid.airState[0], KC3Meta.airraiddamage(airRaid.airRaidLostKind), Math.round(airRaid.baseTotalDamage * 0.9 + 0.1),
 										airRaid.HighestABInSlot[0],airRaid.HighestABInSlot[1],airRaid.HighestABInSlot[2],airRaid.HighestABInSlot[3],
 										airRaid.TorpedoBomberAfterShotdown,airRaid.DiveBomberAfterShotdown,airRaid.percentShotdown);
-										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
-									
+										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);					
 								}
 							}
 							if(index === 5) {
