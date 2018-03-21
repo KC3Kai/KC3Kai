@@ -54,9 +54,7 @@
 		init: function () {
 			this.handlers = {
 				'api_get_member/mapinfo': this.processMapInfo,
-				
 				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
-				
 				
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
@@ -173,7 +171,7 @@
 		},
 		
 		processEnemy: function(http, airRaidData) {
-			if(!this.currentMap[0] || !this.currentMap[1]) return;
+			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = airRaidData || http.response.api_data;
 			this.enemyComp = {};
 			
@@ -206,7 +204,7 @@
 		},
 		
 		processDrop: function(http) {
-			if(!this.currentMap[0] || !this.currentMap[1]) return;
+			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = http.response.api_data;
 			const lastShipCounts = this.shipDrop.counts || {};
 			this.shipDrop = {};
@@ -223,17 +221,15 @@
 			}
 			this.shipDrop.hqLvl = this.data.hqLvl;
 			this.shipDrop.difficulty = this.data.difficulty;
+			this.shipDrop.counts = lastShipCounts;
 			this.shipDrop.ship = apiData.api_get_ship ? apiData.api_get_ship.api_ship_id : -1;
 			
-			this.shipDrop.counts = lastShipCounts;
-			
-			// Can stop to submit if owned ships or equipment maxed and DB wanna deny these 'No drop' data
-			//if(! (this.shipDrop.ship === -1 && (this.shipDrop.ownedShips >= this.shipDrop.maxShips
-			//	|| this.shipDrop.ownedEquip >= this.shipDrop.maxEquip -3)))
-			if(this.shipDrop.ship == -1){
-				//Effectively prevents a submission from happening if it turns out a no drop happened due to max slots or equipment
-				if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.count()) <= 3) return;
-			}
+			// Effectively prevents a submission from happening,
+			// if it turns out a no drop happened due to max slots or equipment
+			if(this.shipDrop.ship === -1
+				&& (KC3ShipManager.count() >= KC3ShipManager.max
+				 || KC3GearManager.count() >= KC3GearManager.max - 3)
+			) { return; }
 			this.sendData(this.shipDrop, 'drops');
 			
 			// To avoid iterating all ships every time,
