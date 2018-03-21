@@ -224,15 +224,16 @@
 			this.shipDrop.hqLvl = this.data.hqLvl;
 			this.shipDrop.difficulty = this.data.difficulty;
 			this.shipDrop.ship = apiData.api_get_ship ? apiData.api_get_ship.api_ship_id : -1;
-			this.shipDrop.ownedShips = KC3ShipManager.count();
-			this.shipDrop.maxShips = KC3ShipManager.max;
-			this.shipDrop.ownedEquip = KC3GearManager.count();
-			this.shipDrop.maxEquip = KC3GearManager.max;
+			
 			this.shipDrop.counts = lastShipCounts;
 			
 			// Can stop to submit if owned ships or equipment maxed and DB wanna deny these 'No drop' data
 			//if(! (this.shipDrop.ship === -1 && (this.shipDrop.ownedShips >= this.shipDrop.maxShips
 			//	|| this.shipDrop.ownedEquip >= this.shipDrop.maxEquip -3)))
+			if(this.shipDrop.ship == -1){
+				//Effectively prevents a submission from happening if it turns out a no drop happened due to max slots or equipment
+				if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.count()) <= 3) return;
+			}
 			this.sendData(this.shipDrop, 'drops');
 			
 			// To avoid iterating all ships every time,
