@@ -88,9 +88,9 @@
 			this.mapInfo = $.extend(true, [], http.response.api_data.api_map_info);
 		},
 		
-		processEventSelect: function(http) {
+		processSelectEventMapRank: function(http) {
 			const mapId = [http.params.api_maparea_id, http.params.api_map_no].join('');
-			const eventMapInfo = this.mapInfo[mapId].api_eventmap;
+			const eventMapInfo = (this.mapInfo[mapId] || {}).api_eventmap;
 			if(eventMapInfo) {
 				eventMapInfo.api_selected_rank = Number(http.params.api_rank);
 				const apiData = http.response.api_data;
@@ -113,6 +113,7 @@
 			KC3ShipManager.find(ship => {
 				const baseFormId = RemodelDb.originOf(ship.masterId);
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
+				return false; // no ship wanted to find
 			});
 		},
 		
@@ -120,7 +121,7 @@
 			this.cleanOnNext();
 			const apiData = http.response.api_data;
 			
-			// Sets the map id
+			// Sets the map ID
 			const world = Number(apiData.api_maparea_id);
 			const map = Number(apiData.api_mapinfo_no);
 			this.currentMap = [world, map];
@@ -158,7 +159,7 @@
 			this.data.nextRoute = apiData.api_next;
 			
 			this.data.fleet1 = this.handleFleet(PlayerManager.fleets[this.data.fleetSent - 1]);
-			if(this.data.fleetType > 0 && this.data.fleetSent == 1) {
+			if(this.data.fleetType > 0 && this.data.fleetSent === 1) {
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
 			
