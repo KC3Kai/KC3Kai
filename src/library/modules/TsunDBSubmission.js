@@ -42,7 +42,6 @@
 			node: null,
 			rank: null,
 			enemyComp: [],
-			enemyDeck: null,
 			hqLvl: null,
 			difficulty: null,
 			ship: null,
@@ -50,10 +49,12 @@
 		},
 		handlers : {},
 		mapInfo : [],
+		currentMap: [0,0],
 		
 		init: function () {
 			this.handlers = {
 				'api_get_member/mapinfo': this.processMapInfo,
+				'api_req_map/select_eventmap_rank': this.processEventSelect,
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				'api_req_sortie/battle': this.processEnemy,
@@ -63,6 +64,10 @@
 		
 		processMapInfo: function(http) {
 			this.mapInfo = http.response.api_data.api_map_info;
+		},
+		
+		processEventSelect: function(http) {
+			this.data.difficulty = http.response.api_data.api_rank;
 		},
 		
 		processStart: function(http) {
@@ -81,6 +86,7 @@
 			//Sets the map id
 			const world = Number(apiData.api_maparea_id);
 			const map = Number(apiData.api_mapinfo_no);
+			this.currentMap = [world, map];
 			const mapId = [world, map].join('');
 			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
 			this.data.map = [world, map].join('-');
@@ -91,7 +97,6 @@
 			if(apiData.api_eventmap){
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
-				this.data.difficulty = KC3SortieManager.map_difficulty;
 				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 			}
@@ -127,7 +132,7 @@
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
-			this.enemyComp.node = KC3SortieManager.currentNode().letter;
+			this.enemyComp.node = KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]);
 			this.enemyComp.hqLvl = this.data.hqLvl;
 			this.enemyComp.difficulty = this.data.difficulty;
 			this.enemyComp.enemyComp = {
@@ -147,10 +152,9 @@
 			this.shipDrop = {};
 			
 			this.shipDrop.map = this.data.map;
-			this.shipDrop.node = KC3SortieManager.currentNode().letter;
+			this.shipDrop.node = KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]);
 			this.shipDrop.rank = apiData.api_win_rank;
 			this.shipDrop.enemyComp = apiData.api_ship_id;
-			this.shipDrop.enemyDeck = api_enemy_info.api_deck_name;
 			this.shipDrop.hqLvl = this.data.hqLvl;
 			this.shipDrop.difficulty = this.data.difficulty;
 			this.shipDrop.ship = apiData.hasOwnProperty(api_get_ship) ? apiData.api_get_ship.api_ship_id : -1;
@@ -197,7 +201,9 @@
 			// optional properties for event only
 			this.data.currentMapHP = 0;
 			this.data.maxMapHP = 0;
-			this.data.difficulty = 0;
+			if(this.currentMap[0] < 10){
+				this.data.difficulty = 0;
+			}
 			this.data.gaugeType = 0;
 		},
 		
