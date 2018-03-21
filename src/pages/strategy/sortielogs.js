@@ -464,7 +464,7 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
-			var self = this;
+			const self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			var shipNameEquipSwitchFunc = function(e){
@@ -477,13 +477,13 @@
 					$(".rfleet_equips",ref).show();
 				}
 			};
-			var shipClickFunc = function(e){
+			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var gearClickFunc = function(e){
+			const gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function(e) {
+			const viewFleetAtManagerFunc = function(e) {
 				const id = $(this).data("id");
 				if(!id) return;
 				if(e.metaKey || e.ctrlKey) {

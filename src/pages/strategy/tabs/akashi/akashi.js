@@ -78,9 +78,9 @@
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
 				self.instances[ThisGear.masterId].unequipped += 1 & (self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
-				self.instances[ThisGear.masterId].free += 1 & (ThisGear.lock === 0 &&
+				self.instances[ThisGear.masterId].free += 1 & (!ThisGear.lock &&
 					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
-				self.instances[ThisGear.masterId].freestar0 += 1 & (!ThisGear.stars && ThisGear.lock === 0 &&
+				self.instances[ThisGear.masterId].freestar0 += 1 & (!ThisGear.stars && !ThisGear.lock &&
 					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
 			});
 		},
