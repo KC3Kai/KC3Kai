@@ -41,7 +41,7 @@
 			map: null,
 			node: null,
 			rank: null,
-			enemyComp: [],
+			enemyComp: {},
 			hqLvl: null,
 			difficulty: null,
 			ship: null,
@@ -51,23 +51,68 @@
 		mapInfo : [],
 		currentMap: [0,0],
 		
+		// `state` should take one of the following value:
+		// * `null`: if the module awaits nothing
+		// * `create_ship`: having "createship" consumed
+		//    waiting for "kdock" message
+		// * `drop_ship_1`: waiting for the formation & enemies
+		// * `drop_ship_2`: waiting for the final piece of data (rank etc, shipId if any)
+		state: null,
+		
 		init: function () {
 			this.handlers = {
 				'api_get_member/mapinfo': this.processMapInfo,
-				'api_req_map/select_eventmap_rank': this.processEventSelect,
+				
+				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
+				
+				
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
-				'api_req_sortie/battle': this.processEnemy,
+				
+				// battles for formation / etc
+				'api_req_sortie/battle': this.processBattle,
+				'api_req_sortie/airbattle': this.processBattle,
+				'api_req_sortie/night_to_day': this.processBattle,
+				'api_req_sortie/ld_airbattle': this.processBattle,
+
+				'api_req_battle_midnight/battle': this.processBattle,
+				'api_req_battle_midnight/sp_midnight': this.processBattle,
+
+				'api_req_combined_battle/airbattle': this.processBattle,
+				'api_req_combined_battle/battle': this.processBattle,
+				'api_req_combined_battle/sp_midnight': this.processBattle,
+				'api_req_combined_battle/battle_water': this.processBattle,
+				"api_req_combined_battle/ld_airbattle": this.processBattle,
+				"api_req_combined_battle/ec_battle": this.processBattle,
+				"api_req_combined_battle/each_battle": this.processBattle,
+				"api_req_combined_battle/each_airbattle": this.processBattle,
+				"api_req_combined_battle/each_sp_midnight": this.processBattle,
+				"api_req_combined_battle/each_battle_water": this.processBattle,
+				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
+				"api_req_combined_battle/ec_night_to_day": this.processBattle,
+				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				
+				
 				'api_req_sortie/battleresult': this.processDrop
+				'api_req_combined_battle/battleresult': this.processDrop,
 			};
 		},
 		
 		processMapInfo: function(http) {
-			this.mapInfo = http.response.api_data.api_map_info;
+			var self = this;
+			$.each( http.response.api_data.api_map_info, function(i, entry) {
+				if (entry.api_eventmap) {
+					self.mapInfo[entry.api_id] = entry.api_eventmap.api_selected_rank;
+				}
+			});
 		},
 		
-		processEventSelect: function(http) {
-			this.data.difficulty = http.response.api_data.api_rank;
+		processSelectEventMapRank: function (http) {
+			var params = http.params;
+			// I know they are strings, just being 100% sure.
+			var mapId = String(params.api_maparea_id) + String(params.api_map_no);
+			var rank = parseInt(params.api_rank, 10);
+			this.mapInfo[mapId] = rank;
 		},
 		
 		processStart: function(http) {
@@ -81,6 +126,13 @@
 		
 		processNext: function(http) {
 			this.clean();
+			
+			this.data.fleetType = null;
+			this.data.fleet1 = [];
+			this.data.fleet2 = [];
+			this.data.los = [];
+			this.data.fleetSpeed = 20;
+			
 			const apiData = http.response.api_data;
 			
 			//Sets the map id
@@ -124,48 +176,78 @@
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
 			
+			this.state = 'drop_ship_1';
 			this.sendData(this.data, `routing`);
 		},
 		
-		processEnemy: function(http) {
-			const apiData = http.response.api_data;
-			this.enemyComp = {};
+		processBattle: function(http) {
+			if (this.state !== 'drop_ship_1') return;
+			// if this function ("processBattle") is entered more than once for a single battle
+			// the next one will be skipped until the state returns to 1.
+
+			var response = http.response.api_data;
+			this.enemyComp: {
+				map: this.data.map,
+				node: KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]),
+				hqLvl: this.data.hqLvl,
+				difficulty: this.data.difficulty,
+				enemies: {},
+				formation: null
+			},
+			// fill in formation and enemy ship info.
+			try {
+				this.enemyComp.formation = response.api_formation[1];
+			} catch (err) {
+				console.warn("Error while extracting enemy formation", err, err.stack);
+			}
+			try {
+				this.enemyComp.enemies.fleet1 = response.api_ship_ke;
+			} catch (err) {
+				console.warn("Error while extracting enemy ship array", err, err.stack);
+			}
+			if (typeof response.api_ship_ke_combined !== "undefined") {
+				// console.log("processBattle: enemy fleet is combined");
+				this.enemyComp.enemies.ships2 = response.api_ship_ke_combined;
+			}
 			
-			this.enemyComp.map = this.data.map;
-			this.enemyComp.node = KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]);
-			this.enemyComp.hqLvl = this.data.hqLvl;
-			this.enemyComp.difficulty = this.data.difficulty;
-			this.enemyComp.enemyComp = {
-				ship: apiData.api_ship_ke,
-				lvl: apiData.api_ship_lv,
-				hp: apiData.api_e_maxhps,
-				stats: apiData.api_eParam,
-				equip: apiData.api_eSlot
-			};
-			this.enemyComp.formation = apiData.api_formation[1];
-			
-			this.sendData(this.enemyComp, `enemy-comp`);
+			this.state = 'drop_ship_2';
+			this.sendData(this.shipDrop, `enemy-comp`);
 		},
 		
 		processDrop: function(http) {
+			if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.count()) <= 3){
+				this.cleanup();
+				return;
+			}
+			if (this.state !== 'drop_ship_2') {
+				this.cleanup();
+				return;
+			}
+			
 			const apiData = http.response.api_data;
-			this.shipDrop = {};
+			this.shipDrop = {
+				map: this.data.map,
+				node: KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]),
+				rank: apiData.api_win_rank,
+				enemyComp: this.enemyComp.enemies,
+				hqLvl: this.data.hqLvl,
+				difficulty: this.data.difficulty,
+				ship: apiData.hasOwnProperty(api_get_ship) ? apiData.api_get_ship.api_ship_id : -1,
+				count: {}
+			};
 			
-			this.shipDrop.map = this.data.map;
-			this.shipDrop.node = KC3Meta.nodeLetter(KC3SortieManager.map_world, KC3SortieManager.map_num, this.data.edgeID[this.data.edgeID.length-1]);
-			this.shipDrop.rank = apiData.api_win_rank;
-			this.shipDrop.enemyComp = apiData.api_ship_id;
-			this.shipDrop.hqLvl = this.data.hqLvl;
-			this.shipDrop.difficulty = this.data.difficulty;
-			this.shipDrop.ship = apiData.hasOwnProperty(api_get_ship) ? apiData.api_get_ship.api_ship_id : -1;
-			
-			this.shipDrop.count = {};
 			KC3ShipManager.find(function(ship) { return ship }).forEach(ship => {
 				let id = RemodelDb.originOf(ship.masterId);
 				count.hasOwnProperty(id) ? count[id] += 1 : count[id] = 1;
 			});
 			
 			this.sendData(this.shipDrop, `drops`);
+			this.state = null;
+		},
+		
+		getApiName: function(url) {
+			var KcsApiIndex = url.indexOf("/kcsapi/");
+			return url.substring( KcsApiIndex+8 );
 		},
 		
 		handleFleet: function(fleet) {
@@ -192,19 +274,13 @@
 		/**
 		 * Cleans up the data after each submission for each node.
 		 */
-		clean: function() {
-			// states of fleets might be changed every nodes
-			this.data.los = [0, 0, 0, 0];
-			this.data.fleet1 = [];
-			this.data.fleet2 = [];
-			this.data.fleetSpeed = 20;
-			// optional properties for event only
-			this.data.currentMapHP = 0;
-			this.data.maxMapHP = 0;
-			if(this.currentMap[0] < 10){
-				this.data.difficulty = 0;
+		cleanup: function() {
+			if (this.state !== null) {
+				console.log("Aborting previous data report, internal state was:", this.state);
 			}
-			this.data.gaugeType = 0;
+			this.state = null;
+			this.enemyComp = null;
+			this.shipDrop = null;
 		},
 		
 		processData: function(requestObj) {
