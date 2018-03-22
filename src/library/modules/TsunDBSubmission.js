@@ -320,11 +320,13 @@
 		
 		sendData: function(payload, type) {
 			//console.debug(JSON.stringify(payload));
-			payload.validation = "Michishio is cute!";
 			$.ajax({
 				url: `https://tsundb.kc3.moe/api/${type}`,
 				method: 'POST',
-				headers: {'content-type': 'application/json'},
+				headers: {
+					'content-type': 'application/json',
+					'tsun-ver': 'Michishio'
+				},
 				data: JSON.stringify(payload)
 			}).done( function() {
 				console.log(`Tsun DB Submission to /${type} done.`);
