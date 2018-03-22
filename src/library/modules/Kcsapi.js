@@ -30,10 +30,6 @@ Previously known as "Reactor"
 			var newCounts = KC3Master.init( response.api_data );
 			RemodelDb.init( response.api_data );
 			
-			if(ConfigManager.KC3DBSubmission_enabled) {
-				KC3DBSubmission.sendMaster( JSON.stringify(response) );
-			}
-			
 			KC3SortieManager.load();
 			// Marks last sortie as catbombed
 			if(KC3SortieManager.isOnSortie()) {

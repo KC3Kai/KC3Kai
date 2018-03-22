@@ -986,12 +986,13 @@ Contains summary information about a fleet and its ships
 	 * @return {number} F33 eLoS value of this fleet.
 	 */
 	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor = 1, hqLevel = PlayerManager.hq.level){
-		// it's 6 usually, will be 7 for Striking Force fleet during event
-		const maxShipSlots = this.ships.length,
+		const fullShipSlots = 6,
 			// empty slots and retreated ships already filtered
 			availableShips = this.shipsUnescaped(),
-			// count for empty slots or ships retreated
-			emptyShipSlot = Math.max(0, maxShipSlots - availableShips.length);
+			// count for empty slots or ships retreated,
+			// according test https://twitter.com/CC_jabberwock/status/975369274804940801
+			// for 7 ships Striking Force fleet during event, it will be -1, which make finally elos -2.
+			emptyShipSlot = fullShipSlots - availableShips.length;
 		let total = 0;
 		availableShips.forEach(ship => {
 			// sum ship's naked LoS

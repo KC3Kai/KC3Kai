@@ -430,22 +430,6 @@
 			});
 		}
 
-		// Live updating from github repo
-		// TODO the option may be changed to other term, or another new option
-		if(ConfigManager.checkLiveQuests){
-			$.ajax({
-				async: true,
-				dataType: "JSON",
-				url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/data/tp_mult.json?v="+(Date.now()),
-				success: function(newTPData){
-					if(JSON.stringify(newTPData) !== JSON.stringify(KC3Meta._tpmult)) {
-						$.extend(true, KC3Meta._tpmult, newTPData);
-						console.info("TP value multiplier live updated");/*RemoveLogging:skip*/
-					}
-				}
-			});
-		}
-
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
 		$(".module.activity .activity_tab").css("background", ConfigManager.pan_box_bcolor);

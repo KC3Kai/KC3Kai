@@ -8066,10 +8066,10 @@ var PS = {};
           return c(6.5)(3.5)(hm(2)(15));
       };
       if (eId === 110) {
-          return c(1.5)(4.5)((35));
+          return c(4.5)(1.5)((35));
       };
       if (eId === 111) {
-          return c(6.5)(8)(hm(8)(40));
+          return c(8)(6.5)(hm(8)(40));
       };
       return noCost;
   };
