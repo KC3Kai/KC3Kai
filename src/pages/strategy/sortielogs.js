@@ -501,12 +501,36 @@
 						window.dumpLandbaseAirRaid.call(self, airRaid);
 				}
 				const damageArray = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3.api_fdam") || [];
+				const planePhase = Object.getSafePath(airRaid,"api_air_base_attack.api_stage1") || {};
+				const bomberPhase = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3") || {};
+				const defenderBases = Object.getSafePath(airRaid,"api_air_base_attack.api_map_squadron_plane");
+				let ABPlane=[0,0,0,0];
+				if (typeof defenderBases != "undefined"){ //Fill up ABPlane with AB stat and interceptor/LBF as priority
+					ABPlane.forEach(function(slot,idx,array){ //See https://www.reddit.com/r/kancolle/comments/7ziide/discussion_newly_discovered_mechanics_of_lbas_air/
+						for (const base in defenderBases){
+							let baseslot = defenderBases[base][idx].api_mst_id; //Check if plane is non-zeroed and is LBF/interceptor
+							if (defenderBases[base][idx].api_count > 0 && KC3GearManager.interceptorsType3Ids.indexOf(KC3Master.slotitem(baseslot).api_type[3])>-1) {
+								if (slot === 0) {array[idx] = baseslot;} //Fill if empty
+								else {array[idx] = (KC3Master.slotitem(slot).api_houm > KC3Master.slotitem(baseslot).api_houm) ? slot : baseslot;} //Compare on AB stat(evasion)
+							}
+						}
+					});
+				}
+				ABPlane.forEach(function(slot,idx,array){ //Change to name for later
+					array[idx]=KC3Meta.gearName(KC3Master.slotitem(slot).api_name) || KC3Meta.term("None");
+				});
 				return {
 					airRaidLostKind: Object.getSafePath(airRaid, "api_lost_kind") || 0,
 					baseTotalDamage: damageArray.reduce(
 							(sum, n) => sum + Math.max(0, Math.floor(n)),
 							0
 						),
+					eships: Object.getSafePath(airRaid, "api_ship_ke") || [],
+					airState: KC3Meta.airbattle(Object.getSafePath(airRaid, "api_air_base_attack.api_stage1.api_disp_seiku") || 5),
+					TorpedoBomberAfterShotdown: (bomberPhase.api_frai_flag || []).indexOf(1)>-1 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo"),
+					DiveBomberAfterShotdown: (bomberPhase.api_fbak_flag || []).indexOf(1)>-1 ?  KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo"), 
+					percentShotdown: parseInt(planePhase.api_e_lostcount/planePhase.api_e_count*100 || 0)+"%",
+					HighestABInSlot: ABPlane,
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -557,13 +581,13 @@
 									$(".sortie_edge_"+(index+1), sortieBox)
 										.addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 									// Show Enemy Air Raid damage
-									if(airRaid.airRaidLostKind != 4) {
 										let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
 										oldTitle += oldTitle ? "\n" : "";
-										oldTitle += KC3Meta.term("BattleAirBaseLossTip")
-											.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
-										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
-									}
+										oldTitle += KC3Meta.term("SRoomAirRaidTip")
+										.format(airRaid.airState[0], KC3Meta.airraiddamage(airRaid.airRaidLostKind), Math.round(airRaid.baseTotalDamage * 0.9 + 0.1),
+										airRaid.HighestABInSlot[0],airRaid.HighestABInSlot[1],airRaid.HighestABInSlot[2],airRaid.HighestABInSlot[3],
+										airRaid.TorpedoBomberAfterShotdown,airRaid.DiveBomberAfterShotdown,airRaid.percentShotdown);
+										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);					
 								}
 							}
 							if(index === 5) {
@@ -764,9 +788,11 @@
 								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								// Show Enemy Air Raid damage
-								if(airRaid.airRaidLostKind != 4) {
-									const damageTooltip = KC3Meta.term("BattleAirBaseLossTip")
-										.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
+								if(airRaid.airRaidLostKind > 0) {
+									const damageTooltip = KC3Meta.term("SRoomAirRaidTip")
+										.format(airRaid.airState[0], KC3Meta.airraiddamage(airRaid.airRaidLostKind), Math.round(airRaid.baseTotalDamage * 0.9 + 0.1),
+										airRaid.HighestABInSlot[0],airRaid.HighestABInSlot[1],airRaid.HighestABInSlot[2],airRaid.HighestABInSlot[3],
+										airRaid.TorpedoBomberAfterShotdown,airRaid.DiveBomberAfterShotdown,airRaid.percentShotdown);
 									$(".node_id", nodeBox).attr("title", damageTooltip);
 									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", damageTooltip);
 								}
