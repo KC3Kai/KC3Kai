@@ -464,7 +464,7 @@
 		Shows sorties on interface using list of collected sortie objects
 		---------------------------------*/
 		this.showList = function( sortieList ){
-			var self = this;
+			const self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
 			var shipNameEquipSwitchFunc = function(e){
@@ -477,13 +477,13 @@
 					$(".rfleet_equips",ref).show();
 				}
 			};
-			var shipClickFunc = function(e){
+			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var gearClickFunc = function(e){
+			const gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			var viewFleetAtManagerFunc = function(e) {
+			const viewFleetAtManagerFunc = function(e) {
 				const id = $(this).data("id");
 				if(!id) return;
 				if(e.metaKey || e.ctrlKey) {
@@ -493,23 +493,56 @@
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
-			var parseAirRaidFunc = function(airRaid){
+			const parseAirRaidFunc = function(airRaid){
 				if(airRaid && airRaid.api_air_base_attack) {
 					//console.debug("LB Air Raid", airRaid);
 					// Whoever wanna do whatever? such as dump enemy info
 					if(typeof window.dumpLandbaseAirRaid === "function")
 						window.dumpLandbaseAirRaid.call(self, airRaid);
 				}
-				const damageArray = airRaid &&
-				  airRaid.api_air_base_attack &&
-				  airRaid.api_air_base_attack.api_stage3 &&
-				  airRaid.api_air_base_attack.api_stage3.api_fdam || [];
+				const damageArray = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3.api_fdam") || [];
+				const baseTotalDamage = damageArray.reduce((sum, n) => sum + Math.max(0, Math.floor(n)), 0);
+				const planePhase = Object.getSafePath(airRaid, "api_air_base_attack.api_stage1") || {};
+				const airState = planePhase.api_disp_seiku === undefined ? 99 : planePhase.api_disp_seiku;
+				const enemyPlaneLost = planePhase.api_e_count > 0 ?
+					Math.qckInt("round", planePhase.api_e_lostcount / planePhase.api_e_count * 100, 1) : 0;
+				const bomberPhase = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3") || {};
+				const defenderSquads = Object.getSafePath(airRaid, "api_air_base_attack.api_map_squadron_plane");
+				const topAbSquadSlots = [0, 0, 0, 0];
+				// Fill up Anti-bombing squadron slots with LBF/LBI master ID, highest AB stat as priority
+				// See https://www.reddit.com/r/kancolle/comments/7ziide/discussion_newly_discovered_mechanics_of_lbas_air/
+				if(defenderSquads){
+					for(const idx in topAbSquadSlots){
+						for(const base in defenderSquads){
+							// Check if defender plane is non-zeroed LBF/LBI
+							const basePlaneId = defenderSquads[base][idx].api_mst_id;
+							if(basePlaneId > 0 && defenderSquads[base][idx].api_count > 0
+								&& KC3GearManager.interceptorsType3Ids.includes(KC3Master.slotitem(basePlaneId).api_type[3])){
+								const topPlaneId = topAbSquadSlots[idx];
+								// Use higher AB stat plane, `api_houm` is the Anti-bombing stat
+								if(topPlaneId === 0 ||
+									KC3Master.slotitem(basePlaneId).api_houm >
+									KC3Master.slotitem(topPlaneId).api_houm){
+									topAbSquadSlots[idx] = basePlaneId;
+								}
+							}
+						}
+					}
+				}
+				const topAbSquadsName = topAbSquadSlots.map(id =>
+					id > 0 ? KC3Meta.gearName(KC3Master.slotitem(id).api_name) : KC3Meta.term("None")
+				);
 				return {
-					airRaidLostKind: (airRaid || {}).api_lost_kind || 0,
-					baseTotalDamage: damageArray.reduce(
-							(sum, n) => sum + Math.max(0, Math.floor(n)),
-							0
-						),
+					airRaidLostKind: Object.getSafePath(airRaid, "api_lost_kind") || 0,
+					baseTotalDamage: baseTotalDamage,
+					resourceLossAmount: Math.round(baseTotalDamage * 0.9 + 0.1),
+					eships: Object.getSafePath(airRaid, "api_ship_ke") || [],
+					airState: KC3Meta.airbattle(airState)[2] || KC3Meta.airbattle(airState)[0],
+					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1),
+					isDiveBombingFound: (bomberPhase.api_fbak_flag || []).includes(1),
+					shotdownPercent: enemyPlaneLost,
+					topAntiBomberSquadSlots: topAbSquadSlots,
+					topAntiBomberSquadNames: topAbSquadsName,
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -560,13 +593,20 @@
 									$(".sortie_edge_"+(index+1), sortieBox)
 										.addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 									// Show Enemy Air Raid damage
-									if(airRaid.airRaidLostKind != 4) {
 										let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
 										oldTitle += oldTitle ? "\n" : "";
-										oldTitle += KC3Meta.term("BattleAirBaseLossTip")
-											.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
+										oldTitle += KC3Meta.term("BattleHistoryAirRaidTip").format(
+											airRaid.baseTotalDamage,
+											KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+											airRaid.resourceLossAmount,
+											airRaid.airState,
+											"{0}%".format(airRaid.shotdownPercent),
+											KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+											KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+											airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+											airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3]
+										);
 										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
-									}
 								}
 							}
 							if(index === 5) {
@@ -767,11 +807,20 @@
 								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								// Show Enemy Air Raid damage
-								if(airRaid.airRaidLostKind != 4) {
-									const damageTooltip = KC3Meta.term("BattleAirBaseLossTip")
-										.format(airRaid.baseTotalDamage, Math.round(airRaid.baseTotalDamage * 0.9 + 0.1));
-									$(".node_id", nodeBox).attr("title", damageTooltip);
-									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", damageTooltip);
+								if(airRaid.airRaidLostKind > 0) {
+									const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
+										airRaid.baseTotalDamage,
+										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+										airRaid.resourceLossAmount,
+										airRaid.airState,
+										"{0}%".format(airRaid.shotdownPercent),
+										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3]
+									);
+									$(".node_id", nodeBox).attr("title", airRaidTooltip);
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
 								}
 							} else {
 								$(".node_id", nodeBox).removeClass("nodamage damaged");
