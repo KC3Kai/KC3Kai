@@ -76,15 +76,17 @@ Saves and loads list to and from localStorage
 		},
 		
 		// Count number of equipment by master item
-		countByMasterId :function(slotitem_id){
-			return this.count( function() {
-				return this.masterId == slotitem_id;
-			});
+		countByMasterId :function(slotitem_id, isUnlock, isNoStar){
+			return this.count(gear => (
+				gear.masterId == slotitem_id
+					&& (!isUnlock || !gear.lock)
+					&& (!isNoStar || !gear.stars)
+			));
 		},
 		
 		// Count number of equipment is not equipped by any ship or land-base
 		// Assume KC3ShipManager and PlayerManager are up to date
-		countFree :function(slotitem_id, isUnlock){
+		countFree :function(slotitem_id, isUnlock, isNoStar){
 			const heldRosterIds = [];
 			const rosterIdFilter = id => id > 0;
 			const landBasePlaneIdMap = p => p.api_slotid;
@@ -98,11 +100,12 @@ Saves and loads list to and from localStorage
 			for(let id of PlayerManager.baseConvertingSlots){
 				heldRosterIds.push(id);
 			}
-			return this.count( gear => {
-				return gear.masterId == slotitem_id
+			return this.count(gear => (
+				gear.masterId == slotitem_id
 					&& heldRosterIds.indexOf(gear.itemId) === -1
-					&& (!isUnlock || gear.lock === 0);
-			});
+					&& (!isUnlock || !gear.lock)
+					&& (!isNoStar || !gear.stars)
+			));
 		},
 		
 		// Look for items by specified conditions

@@ -46,6 +46,9 @@ Listens to network history and triggers callback if game events happen
 			ExpeditionStart: [],
 			ExpedResult: [],
 			GunFit: [],
+			GearRemodelList: [],
+			GearRemodelDetail: [],
+			GearRemodel: [],
 		},
 		delayedUpdate: {},
 
