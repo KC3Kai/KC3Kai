@@ -313,6 +313,10 @@ Previously known as "Reactor"
 					case 78: PlayerManager.consumables.actionReport = thisItem.api_count; break;
 					case 79: PlayerManager.consumables.straitMedal = thisItem.api_count; break;
 					case 80: PlayerManager.consumables.xmasGiftBox = thisItem.api_count; break;
+					case 81: PlayerManager.consumables.shogoMedalHard = thisItem.api_count; break;
+					case 82: PlayerManager.consumables.shogoMedalNormal = thisItem.api_count; break;
+					case 83: PlayerManager.consumables.shogoMedalEasy = thisItem.api_count; break;
+					case 84: PlayerManager.consumables.shogoMedalCasual = thisItem.api_count; break;
 					default: break;
 				}
 			}

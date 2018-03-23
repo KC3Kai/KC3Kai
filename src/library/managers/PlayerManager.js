@@ -485,6 +485,10 @@ Does not include Ships and Gears which are managed by other Managers
 				"78": "actionReport",
 				"79": "straitMedal",
 				"80": "xmasGiftBox",
+				"81": "shogoMedalHard",
+				"82": "shogoMedalNormal",
+				"83": "shogoMedalEasy",
+				"84": "shogoMedalCasual",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return this.consumables[attrNameMap[useitemId]];
