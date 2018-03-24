@@ -1868,13 +1868,13 @@ Used by SortieManager
 		if(ConfigManager.isNotToSaveSortie(...KC3SortieManager.getSortieMap())){
 			return;
 		}
-		var b = this.getBattleDBData(resultData);
+		const b = this.buildBattleDBData(resultData);
 		console.log("Saving battle", b);
 		KC3Database.Battle(b);
 	};
-
-	KC3Node.prototype.getBattleDBData = function( resultData ) {
-		var b = {
+	
+	KC3Node.prototype.buildBattleDBData = function( resultData = {} ) {
+		const b = {
 			// TODO ref to the uniq key of sortie table which is not the auto-increment ID
 			// foreign key to sortie
 			sortie_id: (this.sortie || KC3SortieManager.getSortieId()),

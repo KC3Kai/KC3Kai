@@ -577,7 +577,7 @@
 				)));
 		});
 
-		// Text-based battle player
+		// Text-based battle replayer
 		$(".module.activity .map_world").on("dblclick", function(){
 			const sortie = {
 				diff: KC3SortieManager.map_difficulty,
@@ -593,12 +593,11 @@
 				support2: KC3SortieManager.getSupportingFleet(true),
 				lbas: KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world)
 			};
-			sortie.battles = [KC3SortieManager.currentNode().getBattleDBData({})];
-			
-			var popup = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(sortie), "battle", "width=640,height=480,resizeable,scrollbars");
+			sortie.battles = [KC3SortieManager.currentNode().buildBattleDBData()];
+			const popup = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#"
+				+ JSON.stringify(sortie), "battle", "width=640,height=480,resizeable,scrollbars");
 			popup.document.close();
-			if (window.focus)
-				popup.focus();
+			if(window.focus) popup.focus();
 		});
 
 		/* Expedition Planner

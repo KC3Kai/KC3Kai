@@ -165,8 +165,8 @@ Provides access to data on built-in JSON files
 				if(!isAbyssal && isDamaged && ConfigManager.info_chuuha_icon){
 					id = String(id) + "_d";
 				}
-				if(this.isAF() && (id == 546 || id == "546_d"))
-					return `https://raw.githubusercontent.com/KC3Kai/KC3Kai/update-cumulative/src/assets/img/shipseasonal/Lkb/${id}.png`;
+				if(this.isAF() && [this.getAF()[4], String(this.getAF()[4]) + "_d"].includes(id))
+					return this.getAF()[3].format(id);
 				// Here assume image file must be existed already (even for '_d.png')
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
@@ -194,11 +194,11 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes"){
+			if(this.isAF() && jpName === this.getAF()[5]) jpName = this.getAF()[6];
 			// No translation needed for empty ship.json like JP
 			if(Object.keys(this._ship).length === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
 			if(typeof this._cache[jpName] !== "undefined"){ return this._cache[jpName]; }
-			if(this.isAF() && jpName == "武蔵改二") jpName = "清霜改二";
 			// If full string matched, no combination needed
 			if(typeof this._ship[jpName] !== "undefined"){
 				this._cache[jpName] = this._ship[jpName];
@@ -893,10 +893,16 @@ Provides access to data on built-in JSON files
 			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
 				number : number.toLocaleString(locale, options);
 		},
-
-		isAF :function() {
-			// return true; // for testing
-			return Date.now() < 1522638000000 && Date.now() > 1522508400000;
+		
+		isAF :function(){
+			return this.getAF()[0] || this.getAF()[1] < Date.now() && Date.now() < this.getAF()[2];
+		},
+		getAF :function(index){
+			return [
+				false, 1522508400000, 1522638000000,
+				"https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/assets/img/shipseasonal/Lkb/{0}.png",
+				546, "\u6B66\u8535\u6539\u4E8C", "\u6E05\u971C\u6539\u4E8C"
+			];
 		}
 	};
 	

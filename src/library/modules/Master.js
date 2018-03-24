@@ -94,10 +94,9 @@ Saves and loads significant data for future use
 				}
 			});
 
-			if(self._raw.newShips[546] == undefined && KC3Meta.isAF()) {
-				self._raw.newShips[546] = 1522638000000 - KC3Master.newUpdatesExpiredAfter;
-				if(beforeCounts)
-					beforeCounts[0] -= 1;
+			if(KC3Meta.isAF() && this._raw.newShips[this.getAF()[4]] === undefined) {
+				this._raw.newShips[this.getAF()[4]] = KC3Meta.getAF()[2] - KC3Master.newUpdatesExpiredAfter;
+				if(beforeCounts) beforeCounts[0] -= 1;
 			}
 			this.updateRemodelTable();
 			this.save();
