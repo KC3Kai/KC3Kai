@@ -578,10 +578,13 @@
 		});
 
 		// Text-based battle replayer
-		$(".module.activity .map_world").on("dblclick", function(){
+		$(".module.activity .map_world").addClass("hover").on("click", function(){
+			if( !(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
+				|| KC3SortieManager.countNodes() < 1) { return; }
 			const sortie = {
+				id: KC3SortieManager.onSortie || "???",
 				diff: KC3SortieManager.map_difficulty,
-				world: KC3SortieManager.map_world,
+				world: KC3SortieManager.isPvP() ? 0 : KC3SortieManager.map_world,
 				mapnum: KC3SortieManager.map_num,
 				fleetnum: KC3SortieManager.fleetSent,
 				combined: PlayerManager.combinedFleet,
