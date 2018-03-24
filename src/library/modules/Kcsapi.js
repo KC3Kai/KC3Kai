@@ -1841,14 +1841,20 @@ Previously known as "Reactor"
 							KC3QuestManager.get(676).increment(1); // F68 weekly index 1
 							break;
 						case 5: // Torpedo
+						case 32: // Submarine Torpedo
 							KC3QuestManager.get(677).increment(2); // F69 weekly index 2
 							break;
 						case 10: // Recon Seaplane
 							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
 							break;
-						case 21: // Anti-Air Gun
+						case 12: // Small Radar
+						case 13: // Large Radar
+							KC3QuestManager.get(680).increment(1); // F72 quarterly index 1
+							break;
+						case 21: // Anti-Air Machine Gun
 							KC3QuestManager.get(638).increment(); // F34 weekly
 							KC3QuestManager.get(674).increment(); // F66 daily
+							KC3QuestManager.get(680).increment(0); // F72 quarterly index 0
 							break;
 						case 30: // Supply Container
 							KC3QuestManager.get(676).increment(2); // F68 weekly index 2

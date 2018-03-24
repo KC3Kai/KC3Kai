@@ -833,11 +833,12 @@ AntiAir: anti-air related calculations
 
 	// Isokaze KB / Hamakaze KB
 	declareAACI(
-		29, 1, 1.1,
-		[isokazeKBIcon, haMountIcon, radarIcon],
+		29, 5, 1.55,
+		[isokazeKBIcon, haMountNbifdIcon, radarIcon],
 		predAnyOf(isIsokazeKB, isHamakazeKB),
 		withEquipmentMsts(
 			predAllOf(
+				predNot( hasSome( isBuiltinHighAngleMount )),
 				hasSome( isHighAngleMount ),
 				hasSome( isAARadar ))
 		)
