@@ -577,6 +577,32 @@
 				)));
 		});
 
+		// Text-based battle replayer
+		$(".module.activity .map_world").addClass("hover").on("click", function(){
+			if( !(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
+				|| KC3SortieManager.countNodes() < 1) { return; }
+			const sortie = {
+				id: KC3SortieManager.onSortie || "???",
+				diff: KC3SortieManager.map_difficulty,
+				world: KC3SortieManager.isPvP() ? 0 : KC3SortieManager.map_world,
+				mapnum: KC3SortieManager.map_num,
+				fleetnum: KC3SortieManager.fleetSent,
+				combined: PlayerManager.combinedFleet,
+				fleet1: PlayerManager.fleets[0].sortieJson(),
+				fleet2: PlayerManager.fleets[1].sortieJson(),
+				fleet3: PlayerManager.fleets[2].sortieJson(),
+				fleet4: PlayerManager.fleets[3].sortieJson(),
+				support1: KC3SortieManager.getSupportingFleet(false),
+				support2: KC3SortieManager.getSupportingFleet(true),
+				lbas: KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world)
+			};
+			sortie.battles = [KC3SortieManager.currentNode().buildBattleDBData()];
+			const popup = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#"
+				+ JSON.stringify(sortie), "battle", "width=640,height=480,resizeable,scrollbars");
+			popup.document.close();
+			if(window.focus) popup.focus();
+		});
+
 		/* Expedition Planner
 		--------------------------------------------*/
 
