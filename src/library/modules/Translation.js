@@ -480,6 +480,24 @@
 				ConfigManager.language,
 				ConfigManager.info_force_ship_lang,
 				ConfigManager.info_eng_stype);
+		},
+		
+		/**
+		 * @return the IANA standard locale tag according our language code
+		 */
+		getLocale :function(languageCode = ConfigManager.language){
+			// Since some of our language codes are not standard such as JP, KR, SCN, TCN.
+			// All available locale tags see also:
+			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
+			// https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+			return {
+				"jp": "ja",
+				"kr": "ko",
+				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
+				"tcn": "zh-Hant", // might include TW, HK, MO
+				"ua": "UA", // must be upper case
+				"troll": "en"
+			}[languageCode.toLowerCase()] || languageCode;
 		}
 		
 	};

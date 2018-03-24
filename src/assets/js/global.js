@@ -263,6 +263,42 @@ String.prototype.capitalize = function() {
 };
 
 /**
+ * Pad the current string with a given string (repeated, if needed)
+ * so that the resulting string reaches a given length.
+ * @see https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+ */
+String.prototype.pad = function (targetLength, padString, isPadEnd) {
+	// truncate if number or convert non-number to 0
+	targetLength = targetLength >> 0;
+	padString = String((typeof padString !== 'undefined' ? padString : ' '));
+	if (this.length > targetLength) {
+		return String(this);
+	} else {
+		targetLength = targetLength - this.length;
+		if (targetLength > padString.length) {
+			// append to original to ensure we are longer than needed
+			padString += padString.repeat(targetLength / padString.length);
+		}
+		// pad from start by default
+		return !!isPadEnd ? String(this) + padString.slice(0, targetLength) :
+			padString.slice(0, targetLength) + String(this);
+	}
+};
+/**
+ * Polyfill of padStart() and padEnd()
+ */
+if (!String.prototype.padStart) {
+	String.prototype.padStart = function(targetLength, padString) {
+		return this.pad(targetLength, padString, false);
+	};
+}
+if (!String.prototype.padEnd) {
+	String.prototype.padEnd = function(targetLength, padString) {
+		return this.pad(targetLength, padString, true);
+	};
+}
+
+/**
  * String.format("msg {0} is {1}", args) - convenient placeholders replacing,
  * from http://jqueryvalidation.org/jQuery.validator.format/
  *

@@ -652,7 +652,7 @@ Contains summary information about a fleet and its ships
 
 	/* Calculate expedition cost of a fleet
 	   -------------------------------------
-	   1 <= expeditionId <= 40
+	   1 <= expeditionId <= 40, 100 ~ 111
 	 */ 
 	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
 		var KEC = PS["KanColle.Expedition.Cost"];
@@ -663,7 +663,7 @@ Contains summary information about a fleet and its ships
 		$.each( this.ships, function(i, shipId) {
 			if (shipId > 0) {
 				var shipObj = self.ship(i);
-				var cost = shipObj.calcResupplyCost( costPercent.fuel, costPercent.ammo );
+				var cost = shipObj.calcResupplyCost( costPercent.fuel, costPercent.ammo, false, false, 0.4 );
 				totalFuel += cost.fuel;
 				totalAmmo += cost.ammo;
 			}
@@ -686,7 +686,7 @@ Contains summary information about a fleet and its ships
 			$.each(this.ships, (i, shipId) => {
 				if (shipId > 0) {
 					const shipObj = this.ship(i);
-					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo, false, false, true);
+					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo, false, false, 0.5);
 					totalCost.fuel += cost.fuel;
 					totalCost.ammo += cost.ammo;
 				}
@@ -706,7 +706,7 @@ Contains summary information about a fleet and its ships
 		$.each(this.ships, (i, shipId) => {
 			if (shipId > 0) {
 				const shipObj = this.ship(i);
-				const cost = shipObj.calcResupplyCost(-1, -1, true, true);
+				const cost = shipObj.calcResupplyCost(-1, -1, true, true, 0);
 				totalCost.fuel += cost.fuel;
 				totalCost.ammo += cost.ammo;
 				totalCost.steel += cost.steel;

@@ -220,26 +220,28 @@ Provides access to data on built-in JSON files
 			// if there's no match, it'll instantly stop and return the actual value.
 			***********************************************/
 			if(prefixesList.length > 0){
-				while( !!(occurs = (new RegExp("^("+prefixesList.join("|")+").+$","i")).exec(root)) ){
-					root = root.replace(new RegExp("^"+occurs[1],"i"), "");
-					if(prefixesMap[occurs[1]].slice(-1) === "$"){
-						combinedSuffixes.unshift(prefixesMap[occurs[1]].slice(0, -1));
+				while( !!(occurs = (new RegExp(`^(?:${prefixesList.join("|")})`, "i")).exec(root)) ){
+					const firstOccur = occurs[0];
+					root = root.replace(new RegExp(`^${firstOccur}`, "i"), "");
+					if(prefixesMap[occurs[0]].slice(-1) === "$"){
+						combinedSuffixes.unshift(prefixesMap[firstOccur].slice(0, -1));
 					} else {
-						combinedPrefixes.unshift(prefixesMap[occurs[1]]);
+						combinedPrefixes.unshift(prefixesMap[firstOccur]);
 					}
-					prefixesList.splice(prefixesList.indexOf(occurs[1]), 1);
+					prefixesList.splice(prefixesList.indexOf(firstOccur), 1);
 					replaced = true;
 				}
 			}
 			if(suffixesList.length > 0){
-				while( !!(occurs = (new RegExp(".+("+suffixesList.join("|")+")$","i")).exec(root)) ){
-					root = root.replace(new RegExp(occurs[1]+"$","i"), "");
-					if(suffixesMap[occurs[1]].slice(0, 1) === "^"){
-						combinedPrefixes.unshift(suffixesMap[occurs[1]].slice(1));
+				while( !!(occurs = (new RegExp(`(?:${suffixesList.join("|")})$`,"i")).exec(root)) ){
+					const firstOccur = occurs[0];
+					root = root.replace(new RegExp(`${firstOccur}$`, "i"), "");
+					if(suffixesMap[firstOccur].slice(0, 1) === "^"){
+						combinedPrefixes.unshift(suffixesMap[firstOccur].slice(1));
 					} else {
-						combinedSuffixes.unshift(suffixesMap[occurs[1]]);
+						combinedSuffixes.unshift(suffixesMap[firstOccur]);
 					}
-					suffixesList.splice(suffixesList.indexOf(occurs[1]), 1);
+					suffixesList.splice(suffixesList.indexOf(firstOccur), 1);
 					replaced = true;
 				}
 			}

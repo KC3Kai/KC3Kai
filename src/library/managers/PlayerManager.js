@@ -446,6 +446,54 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
+		getConsumableById :function(useitemId){
+			// ID mapping see also `api_get_member/useitem` at Kcsapi.js#282
+			const attrNameMap = {
+				"1": "buckets",
+				"2": "torch",
+				"3": "devmats",
+				"4": "screws",
+				"10": "furniture200",
+				"11": "furniture400",
+				"12": "furniture700",
+				"44": "fcoin",
+				"50": "repairTeam",
+				"51": "repairGoddess",
+				"52": "furnitureFairy",
+				"54": "mamiya",
+				"56": "chocolate",
+				"57": "medals",
+				"58": "blueprints",
+				"59": "irako",
+				"60": "presents",
+				"61": "firstClassMedals",
+				"62": "hishimochi",
+				"64": "reinforceExpansion",
+				"65": "protoCatapult",
+				"66": "ration",
+				"67": "resupplier",
+				"68": "mackerel",
+				"69": "mackerelCan",
+				"70": "skilledCrew",
+				"71": "nEngine",
+				"72": "decoMaterial",
+				"73": "constCorps",
+				"74": "newAircraftBlueprint",
+				"75": "newArtilleryMaterial",
+				"76": "rationSpecial",
+				"77": "newAviationMaterial",
+				"78": "actionReport",
+				"79": "straitMedal",
+				"80": "xmasGiftBox",
+				"81": "shogoMedalHard",
+				"82": "shogoMedalNormal",
+				"83": "shogoMedalEasy",
+				"84": "shogoMedalCasual",
+			};
+			// You may need to `loadConsumables` first for Strategy Room
+			return this.consumables[attrNameMap[useitemId]];
+		},
+
 		saveBases :function(){
 			localStorage.bases = JSON.stringify(this.bases);
 			return this;

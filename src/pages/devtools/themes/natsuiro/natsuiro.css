@@ -2335,6 +2335,242 @@ ABYSS FLEET
 	border-radius: 10px;
 	vertical-align: inherit;
 }
+/*------- ACTIVITY: Remodel Info -------*/
+.module.activity .activity_remodel {
+	padding: 5px 10px;
+	color: #ddd;
+	font-size: 12px;
+}
+.module.activity .activity_remodel .remodel_header {
+	width: 170px;
+	height: 34px;
+	margin: 0px 0px 1px 0px;
+}
+.module.activity .activity_remodel .remodel_header .recipe_title,
+.module.activity .activity_remodel .remodel_header .result_title {
+	float: left;
+	width: 138px;
+	color: #ffcc00;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_remodel .remodel_header .recipe_title span {
+	color: #3ec0bf;
+}
+.module.activity .activity_remodel .remodel_header .result_title.failure {
+	color: #f00;
+}
+.module.activity .activity_remodel .remodel_header .assistant_ship {
+	float: right;
+	width: 30px;
+	height: 30px;
+	margin-top: 2px;
+	border: 1px solid #000;
+	border-radius: 15px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodel_header .assistant_ship img {
+	width: 30px;
+	height: 30px;
+	margin: -1px 0px 0px -1px;
+}
+.module.activity .activity_remodel .remodel_scrollable {
+	width: 176px;
+	max-height: 106px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.module.activity .activity_remodel .remodel_slotlist,
+.module.activity .activity_remodel .remodel_to_improve,
+.module.activity .activity_remodel .remodel_consumptions,
+.module.activity .activity_remodel .remodel_upgrade_to,
+.module.activity .activity_remodel .remodel_improved {
+	width: 170px;
+	height: auto;
+}
+.module.activity .activity_remodel .remodelSlotItem {
+	width: 170px;
+	height: 56px;
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 5px;
+	margin: 0px 0px 2px 0px;
+	padding: 1px 1px 1px 1px;
+}
+.module.activity .activity_remodel .remodelSlotItem.withStar {
+	height: 69px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs {
+	height: 22px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon {
+	float: left;
+	width: 40px;
+	height: 56px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_itemon {
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon img {
+	width: 40px;
+	height: 56px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon {
+	float: left;
+	width: 20px;
+	height: 20px;
+	margin-right: 2px;
+	background: rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon img {
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_name {
+	float: left;
+	width: 106px;
+	height: 20px;
+	color: #eee;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_name {
+	width: 144px;
+}
+.module.activity .activity_remodel .remodelSlotItem.withStar .remodel_slot_name {
+	width: 106px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star {
+	float: left;
+	font-size: 11px;
+	font-weight: bold;
+	min-width: 38px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 0px 2px;
+	color: #45a9a5;
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_star {
+	margin-top: 3px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star img {
+	width: 12px;
+	height: 12px;
+	margin-top: -2px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs {
+	float: left;
+	width: 125px;
+	color: #222;
+	font-size: 11px;
+	margin: 2px 0px 0px 2px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_reqs {
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs div {
+	float: left;
+	height: 15px;
+	line-height: 15px;
+	margin-right: 3px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs img {
+	width: 12px;
+	height: 12px;
+	vertical-align: text-bottom;
+	margin-right: 1px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.certain {
+	color: #8ae9e4;
+	display: none;
+}
+.module.activity .activity_remodel .remodel_consumptions {
+	font-size: 11px;
+}
+.module.activity .activity_remodel .remodel_consumptions .consume_title {
+}
+.module.activity .activity_remodel .remodel_consume_item {
+	width: 170px;
+	height: 14px;
+	margin-bottom: 1px;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon {
+	float: left;
+	width: 14px;
+	height: 14px;
+	margin-right: 4px;
+	background: rgba(0, 0, 0, 0.6);
+	border-radius: 7px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon img {
+	width: 14px;
+	height: 14px;
+	vertical-align: top;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_name {
+	float: left;
+	width: 130px;
+	height: 14px;
+	color: #45a9a5;
+	line-height: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_consume_amount {
+	float: left;
+	color: #45a9a5;
+	font-weight: bold;
+	line-height: 14px;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item {
+	float: left;
+	margin-right: 5px;
+	display: none;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item img {
+	width: 12px;
+	height: 12px;
+	vertical-align: text-top;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_star0_item .star0 {
+	color: #45a9a5;
+	font-weight: bold;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item .value {
+	color: #45a9a5;
+	margin-left: 2px;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item .value.red {
+	color: #f00;
+}
+.module.activity .activity_remodel .remodel_upgrade_title {
+	font-size: 11px;
+	margin-top: 1px;
+}
+.module.activity .activity_remodel .remodel_footer > div {
+	float: right;
+	height: 17px;
+	line-height: 17px;
+	margin-left: 10px;
+}
+.module.activity .activity_remodel .remodel_footer .owned_devmats {
+}
+.module.activity .activity_remodel .remodel_footer .owned_screws {
+}
+.module.activity .activity_remodel .remodel_footer img {
+	width: 14px;
+	height: 14px;
+	vertical-align: text-bottom;
+	margin-right: 2px;
+}
 
 /*------- QUESTS -------*/
 .module.quests {

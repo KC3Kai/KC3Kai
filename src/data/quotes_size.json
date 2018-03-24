@@ -6,6 +6,7 @@
 			"53592": "Xmas",
 			"54600": "Setsubun",
 			"65184": "Summer",
+			"67368": "WhiteDay",
 			"67704": "LateWinter",
 			"70056": "Rainy",
 			"74424": "Saury",
@@ -23,6 +24,7 @@
 			"59304": "Valentines",
 			"60312": "Xmas",
 			"63168": "NewYears",
+			"69384": "WhiteDay",
 			"73248": "Rainy",
 			"74760": "EarlySummer2015",
 			"80808": "Summer",
@@ -39,6 +41,7 @@
 			"13440": "",
 			"58632": "Summer",
 			"61488": "NewYears",
+			"64344": "WhiteDay",
 			"65688": "EarlySummer",
 			"67872": "Setsubun",
 			"70392": "Xmas",
@@ -52,6 +55,7 @@
 			"47208": "NewYears",
 			"55776": "EarlySummer",
 			"56280": "Saury",
+			"57120": "WhiteDay",
 			"62328": "YearsEnd",
 			"64512": "Summer",
 			"77280": "Valentines",
@@ -69,7 +73,8 @@
 			"80808": "Valentines",
 			"93072": "Setsubun",
 			"101640": "YearsEnd",
-			"106176": "Rainy"
+			"106176": "Rainy",
+			"109200": "WhiteDay"
 		},
 		"3": {
 			"19152": "",
@@ -84,7 +89,8 @@
 			"73920": "Xmas",
 			"86016": "EarlySummer",
 			"87696": "Valentines",
-			"100464": "YearsEnd"
+			"100464": "YearsEnd",
+			"121128": "WhiteDay"
 		}
 	},
 	"11": {
@@ -141,7 +147,8 @@
 			"72744": "Valentines",
 			"78960": "Rainy",
 			"82656": "LateFall2017",
-			"87696": "Saury2017"
+			"87696": "Saury2017",
+			"89712": "WhiteDay"
 		},
 		"3": {
 			"19152": "",
@@ -160,6 +167,7 @@
 		"2": {
 			"27048": "",
 			"48216": "Rainy",
+			"52248": "WhiteDay",
 			"58632": "Valentines",
 			"60984": "LateFall2017",
 			"63840": "Fall",
@@ -192,6 +200,7 @@
 			"58464": "Setsubun",
 			"61656": "Xmas",
 			"75264": "EarlySummer",
+			"79128": "WhiteDay",
 			"85848": "YearsEnd",
 			"91392": "Valentines"
 		}
@@ -201,6 +210,7 @@
 			"12768": "",
 			"50736": "Summer",
 			"53424": "Kessen",
+			"57120": "WhiteDay",
 			"64344": "NewYears",
 			"66192": "Valentines",
 			"69888": "Setsubun",
@@ -218,6 +228,7 @@
 			"47040": "EarlySummer",
 			"51576": "Rainy",
 			"54264": "Xmas",
+			"57120": "WhiteDay",
 			"65856": "Setsubun",
 			"69552": "Summer"
 		}
@@ -229,6 +240,7 @@
 			"53256": "NewYears",
 			"54936": "YearsEnd",
 			"56448": "Xmas",
+			"66024": "WhiteDay",
 			"71400": "Rainy"
 		}
 	},
@@ -247,6 +259,7 @@
 			"61656": "Saury",
 			"64680": "LateWinter",
 			"65688": "Xmas",
+			"71232": "WhiteDay",
 			"71736": "Valentines",
 			"72408": "EarlySummer2015",
 			"75600": "Setsubun",
@@ -326,6 +339,7 @@
 			"93912": "EarlySummer",
 			"94248": "Xmas",
 			"96264": "YearsEnd",
+			"99456": "WhiteDay",
 			"100464": "Setsubun",
 			"103992": "Fall"
 		},
@@ -352,6 +366,7 @@
 			"24192": "Saury",
 			"62496": "EarlySummer",
 			"72408": "NewYears",
+			"73920": "WhiteDay",
 			"74424": "Valentines",
 			"74928": "Fall",
 			"78120": "Kessen",
@@ -392,6 +407,7 @@
 			"37968": "EarlySummer",
 			"47040": "Rainy",
 			"55440": "NewYears",
+			"59808": "WhiteDay",
 			"66864": "Fall",
 			"67872": "Summer",
 			"68376": "Saury",
@@ -406,6 +422,7 @@
 			"63000": "Xmas",
 			"70392": "Valentines",
 			"71400": "NewYears",
+			"79128": "WhiteDay",
 			"80472": "Fall",
 			"85344": "Saury",
 			"101136": "Summer"
@@ -423,6 +440,7 @@
 			"69720": "NewYears",
 			"72072": "Summer",
 			"78960": "Fall",
+			"83328": "WhiteDay",
 			"84504": "Setsubun",
 			"87024": "Saury",
 			"89544": "Xmas"
@@ -436,6 +454,7 @@
 			"66024": "YearsEnd",
 			"69048": "Saury",
 			"70056": "Fall",
+			"71568": "WhiteDay",
 			"75264": "NewYears",
 			"76440": "Setsubun",
 			"80304": "EarlySummer",
@@ -448,6 +467,7 @@
 			"13272": "",
 			"44856": "Rainy",
 			"65520": "Xmas",
+			"98616": "WhiteDay",
 			"126000": "NewYears",
 			"143136": "Valentines",
 			"177912": "YearsEnd"
@@ -471,6 +491,7 @@
 			"49728": "Fall",
 			"53928": "Setsubun",
 			"59640": "Rainy",
+			"60816": "WhiteDay",
 			"64344": "Valentines"
 		}
 	},
@@ -479,6 +500,7 @@
 			"13104": "",
 			"47040": "Saury",
 			"50736": "Xmas",
+			"58464": "WhiteDay",
 			"65184": "Summer",
 			"66024": "Rainy",
 			"66360": "Valentines",
@@ -493,6 +515,7 @@
 			"46704": "Xmas",
 			"48720": "Fall",
 			"51240": "Summer",
+			"54768": "WhiteDay",
 			"54936": "Valentines",
 			"63840": "Rainy",
 			"64848": "Setsubun"
@@ -511,7 +534,8 @@
 			"62664": "Setsubun",
 			"63840": "Valentines",
 			"66024": "Summer",
-			"75936": "Fall"
+			"75936": "Fall",
+			"89544": "WhiteDay"
 		}
 	},
 	"38": {
@@ -572,6 +596,7 @@
 			"39816": "NewYears",
 			"40824": "Valentines",
 			"42840": "EarlySummer",
+			"43680": "WhiteDay",
 			"50400": "YearsEnd",
 			"55776": "Fall",
 			"55944": "Cold",
@@ -607,6 +632,7 @@
 			"38472": "Setsubun",
 			"38976": "Surigao",
 			"40411": "LateFall2017",
+			"52080": "WhiteDay",
 			"52584": "NewYears",
 			"54600": "Valentines",
 			"55440": "Xmas",
@@ -658,6 +684,7 @@
 			"48384": "NewYears",
 			"49728": "Xmas",
 			"50400": "EarlySummer",
+			"55608": "WhiteDay",
 			"57792": "Valentines",
 			"58128": "YearsEnd",
 			"58800": "Fall",
@@ -699,6 +726,7 @@
 			"60648": "Rainy",
 			"62664": "YearsEnd",
 			"67200": "Cold",
+			"67704": "WhiteDay",
 			"73584": "Xmas2017"
 		},
 		"3": {
@@ -736,6 +764,7 @@
 			"100464": "Valentines",
 			"112056": "EarlySummer",
 			"121128": "YearsEnd",
+			"143640": "WhiteDay",
 			"147672": "EarlySummer2016",
 			"164976": "Setsubun"
 		}
@@ -745,6 +774,7 @@
 			"18648": "",
 			"86520": "Saury",
 			"91224": "LateFall2017",
+			"99288": "WhiteDay",
 			"100968": "Setsubun",
 			"103320": "Valentines",
 			"116592": "EarlySummer",
@@ -774,6 +804,7 @@
 			"57792": "Rainy",
 			"71736": "Fall",
 			"77616": "Summer",
+			"83832": "WhiteDay",
 			"85848": "NewYears",
 			"91392": "Setsubun",
 			"97440": "Valentines"
@@ -785,6 +816,7 @@
 			"58800": "Valentines",
 			"74256": "Rainy",
 			"81480": "YearsEnd",
+			"90888": "WhiteDay",
 			"96096": "NewYears",
 			"97776": "EarlySummer",
 			"106344": "Fall",
@@ -797,6 +829,7 @@
 			"91728": "NewYears",
 			"101976": "Valentines",
 			"115752": "Xmas",
+			"126504": "WhiteDay",
 			"142800": "Setsubun"
 		}
 	},
@@ -921,6 +954,7 @@
 			"52920": "Fall",
 			"55776": "NewYears",
 			"71400": "Saury",
+			"75432": "WhiteDay",
 			"82320": "EarlySummer",
 			"83160": "Xmas",
 			"83328": "YearsEnd",
@@ -940,6 +974,7 @@
 			"77112": "Fall",
 			"82152": "Setsubun",
 			"92400": "Valentines",
+			"93576": "WhiteDay",
 			"101136": "Summer"
 		}
 	},
@@ -952,7 +987,8 @@
 			"71568": "Fall",
 			"75600": "NewYears",
 			"76104": "Setsubun",
-			"79128": "Xmas"
+			"79128": "Xmas",
+			"122304": "WhiteDay"
 		}
 	},
 	"64": {
@@ -964,7 +1000,8 @@
 			"58968": "Kessen",
 			"63000": "Xmas",
 			"67200": "Fall",
-			"67536": "EarlySummer"
+			"67536": "EarlySummer",
+			"71904": "WhiteDay"
 		}
 	},
 	"65": {
@@ -975,7 +1012,8 @@
 			"83160": "Fall",
 			"91224": "Setsubun",
 			"100128": "Xmas",
-			"112224": "Summer"
+			"112224": "Summer",
+			"114072": "WhiteDay"
 		}
 	},
 	"66": {
@@ -987,6 +1025,7 @@
 			"80976": "Saury",
 			"100464": "Fall",
 			"105168": "NewYears",
+			"105840": "WhiteDay",
 			"112728": "Xmas",
 			"116088": "Summer",
 			"118272": "EarlySummer",
@@ -1014,6 +1053,7 @@
 			"70224": "YearsEnd",
 			"75936": "Rainy",
 			"77280": "Valentines",
+			"79296": "WhiteDay",
 			"81984": "EarlySummer",
 			"82320": "LateFall2017",
 			"90888": "Summer",
@@ -1044,7 +1084,8 @@
 			"64008": "Fall",
 			"68712": "Summer",
 			"73248": "Xmas",
-			"80472": "Valentines"
+			"80472": "Valentines",
+			"119784": "WhiteDay"
 		},
 		"3": {
 			"12600": "",
@@ -1078,7 +1119,8 @@
 			"84168": "Valentines",
 			"85008": "Setsubun",
 			"87024": "Rainy",
-			"114912": "EarlySummer"
+			"114912": "EarlySummer",
+			"128184": "WhiteDay"
 		},
 		"3": {
 			"19320": "Valentines2018",
@@ -1106,12 +1148,14 @@
 			"59976": "Rainy",
 			"65016": "Saury",
 			"65184": "YearsEnd",
+			"78288": "WhiteDay",
 			"80472": "Valentines",
 			"85008": "Fall"
 		},
 		"3": {
 			"15624": "",
-			"48384": "Rainy"
+			"48384": "Rainy",
+			"60648": "WhiteDay"
 		}
 	},
 	"71": {
@@ -1122,6 +1166,7 @@
 			"63168": "Valentines",
 			"67704": "Setsubun",
 			"68208": "Rainy",
+			"75264": "WhiteDay",
 			"79128": "YearsEnd",
 			"95592": "Fall",
 			"103992": "Cold",
@@ -1138,6 +1183,7 @@
 			"68040": "Xmas",
 			"71568": "Rainy",
 			"83160": "YearsEnd",
+			"87528": "WhiteDay",
 			"88032": "EarlySummer",
 			"120960": "Cold"
 		}
@@ -1153,12 +1199,14 @@
 			"59976": "Rainy",
 			"65016": "Saury",
 			"65184": "YearsEnd",
+			"78288": "WhiteDay",
 			"80472": "Valentines",
 			"85008": "Fall"
 		},
 		"3": {
 			"15624": "",
-			"48384": "Rainy"
+			"48384": "Rainy",
+			"60648": "WhiteDay"
 		}
 	},
 	"74": {
@@ -1166,6 +1214,7 @@
 			"24360": "",
 			"60984": "NewYears",
 			"88872": "Xmas",
+			"93744": "WhiteDay",
 			"94920": "EarlySummer",
 			"97104": "Valentines",
 			"97944": "Rainy",
@@ -1183,6 +1232,7 @@
 			"7728": "",
 			"35784": "NewYears",
 			"51408": "YearsEnd",
+			"55104": "WhiteDay",
 			"71064": "Summer",
 			"75432": "Xmas",
 			"96768": "EarlySummer",
@@ -1216,6 +1266,7 @@
 	"78": {
 		"2": {
 			"20328": "",
+			"50568": "WhiteDay",
 			"59136": "Rainy",
 			"60648": "Valentines",
 			"70728": "Summer",
@@ -1245,6 +1296,7 @@
 			"19320": "",
 			"62664": "Valentines",
 			"80976": "Saury",
+			"97104": "WhiteDay",
 			"130704": "NewYears",
 			"162288": "YearsEnd",
 			"165984": "Xmas",
@@ -1274,6 +1326,7 @@
 			"87528": "EarlySummer",
 			"111216": "Rainy",
 			"118608": "Valentines",
+			"124152": "WhiteDay",
 			"125832": "Setsubun",
 			"138096": "YearsEnd"
 		},
@@ -1285,6 +1338,7 @@
 	"81": {
 		"2": {
 			"5880": "",
+			"31248": "WhiteDay",
 			"58968": "Rainy",
 			"71904": "Valentines",
 			"85512": "Saury2017",
@@ -1326,6 +1380,7 @@
 			"72240": "Rainy",
 			"74256": "EarlySummer",
 			"76440": "Xmas",
+			"93912": "WhiteDay",
 			"99792": "Setsubun"
 		}
 	},
@@ -1333,6 +1388,7 @@
 		"2": {
 			"19992": "",
 			"39480": "EarlySummer",
+			"52416": "WhiteDay",
 			"60480": "Valentines",
 			"69048": "Xmas",
 			"74256": "LateFall2017",
@@ -1349,6 +1405,7 @@
 	"85": {
 		"2": {
 			"12096": "",
+			"64344": "WhiteDay",
 			"74424": "Valentines",
 			"112056": "YearsEnd",
 			"121968": "Xmas",
@@ -1370,6 +1427,7 @@
 		"2": {
 			"19152": "",
 			"62496": "Valentines",
+			"72576": "WhiteDay",
 			"119112": "Saury",
 			"121968": "Xmas",
 			"141960": "Setsubun",
@@ -1439,6 +1497,7 @@
 			"10248": "",
 			"27048": "Fall",
 			"54432": "Setsubun",
+			"58464": "WhiteDay",
 			"58800": "Summer",
 			"63168": "YearsEnd",
 			"65184": "Rainy",
@@ -1483,6 +1542,7 @@
 			"56280": "YearsEnd",
 			"57456": "Saury2017",
 			"57792": "LateFall2017",
+			"65856": "WhiteDay",
 			"66528": "Valentines"
 		},
 		"3": {
@@ -1510,6 +1570,7 @@
 			"69720": "Saury2017",
 			"71064": "Setsubun",
 			"72240": "Fall",
+			"77784": "WhiteDay",
 			"89040": "LateFall2017"
 		},
 		"4": {
@@ -1531,6 +1592,7 @@
 			"98784": "Setsubun",
 			"101808": "Fall",
 			"106008": "NewYears",
+			"114912": "WhiteDay",
 			"119280": "YearsEnd"
 		}
 	},
@@ -1546,6 +1608,7 @@
 			"86856": "Fall",
 			"87528": "LateFall2017",
 			"93408": "YearsEnd",
+			"97608": "WhiteDay",
 			"105000": "Setsubun"
 		}
 	},
@@ -1554,6 +1617,7 @@
 			"11088": "",
 			"62496": "Xmas",
 			"77952": "Saury",
+			"83496": "WhiteDay",
 			"91896": "Setsubun",
 			"94248": "Rainy",
 			"100296": "Xmas2017",
@@ -1579,6 +1643,7 @@
 			"127176": "Setsubun",
 			"139944": "NewYears",
 			"140784": "EarlySummer",
+			"157080": "WhiteDay",
 			"158256": "Fall",
 			"172200": "YearsEnd",
 			"175728": "Valentines"
@@ -1638,7 +1703,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"16968": "",
@@ -1654,6 +1720,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -1681,7 +1748,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"16968": "",
@@ -1697,6 +1765,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -1724,7 +1793,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"16968": "",
@@ -1740,6 +1810,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -1767,7 +1838,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"22176": "Leyte",
@@ -1783,6 +1855,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -1811,6 +1884,7 @@
 			"88200": "Xmas",
 			"94920": "Valentines2018",
 			"95760": "YearsEnd",
+			"125664": "WhiteDay",
 			"127176": "EarlySummer"
 		},
 		"4": {
@@ -1834,6 +1908,7 @@
 	"111": {
 		"2": {
 			"25704": "",
+			"39648": "WhiteDay",
 			"69552": "Leyte",
 			"74088": "EarlySummer",
 			"77448": "Valentines2018",
@@ -1892,6 +1967,7 @@
 	"112": {
 		"2": {
 			"25704": "",
+			"39648": "WhiteDay",
 			"69552": "Leyte",
 			"74088": "EarlySummer",
 			"77448": "Valentines2018",
@@ -1957,6 +2033,7 @@
 			"82992": "Valentines",
 			"83160": "EarlySummer",
 			"85344": "Fall",
+			"89040": "WhiteDay",
 			"97272": "Rainy",
 			"105336": "Xmas"
 		},
@@ -1974,6 +2051,7 @@
 			"82488": "YearsEnd",
 			"87024": "Setsubun",
 			"92232": "Summer",
+			"92400": "WhiteDay",
 			"92736": "EarlySummer",
 			"102144": "Xmas",
 			"114744": "Rainy",
@@ -1990,6 +2068,7 @@
 			"50400": "Valentines",
 			"61656": "Rainy",
 			"65352": "EarlySummer",
+			"66024": "WhiteDay",
 			"67032": "LateFall",
 			"69384": "Xmas",
 			"70056": "NewYears",
@@ -2017,6 +2096,7 @@
 			"69216": "YearsEnd",
 			"74424": "NewYears",
 			"75600": "Summer",
+			"80808": "WhiteDay",
 			"83160": "EarlySummer",
 			"84336": "Fall",
 			"95928": "Rainy"
@@ -2052,6 +2132,7 @@
 			"69216": "YearsEnd",
 			"74424": "NewYears",
 			"75600": "Summer",
+			"80808": "WhiteDay",
 			"83160": "EarlySummer",
 			"84336": "Fall",
 			"95928": "Rainy"
@@ -2136,6 +2217,7 @@
 			"57120": "EarlySummer",
 			"61656": "NewYears",
 			"70728": "Valentines",
+			"77448": "WhiteDay",
 			"81984": "Xmas",
 			"84840": "YearsEnd",
 			"85344": "Hina",
@@ -2156,6 +2238,7 @@
 			"57120": "EarlySummer",
 			"61656": "NewYears",
 			"70728": "Valentines",
+			"77448": "WhiteDay",
 			"81984": "Xmas",
 			"84840": "YearsEnd",
 			"85344": "Hina",
@@ -2180,6 +2263,7 @@
 			"67536": "Summer",
 			"69216": "Xmas",
 			"71904": "EarlySummer",
+			"73080": "WhiteDay",
 			"80304": "Setsubun",
 			"82656": "Rainy"
 		}
@@ -2189,6 +2273,7 @@
 			"15792": "",
 			"52920": "Valentines",
 			"63168": "Setsubun",
+			"70056": "WhiteDay",
 			"76272": "Saury",
 			"78792": "YearsEnd",
 			"84840": "Fall",
@@ -2231,6 +2316,7 @@
 			"60984": "Rainy",
 			"65016": "Fall",
 			"68544": "NewYears",
+			"69216": "WhiteDay",
 			"72912": "Summer",
 			"99960": "Setsubun",
 			"107016": "Xmas",
@@ -2247,6 +2333,7 @@
 			"31268": "",
 			"58296": "NewYears",
 			"62160": "LateFall2017",
+			"69552": "WhiteDay",
 			"73416": "Valentines",
 			"76440": "Fall",
 			"82488": "Saury",
@@ -2265,6 +2352,7 @@
 			"24024": "",
 			"52080": "Valentines",
 			"57960": "LateFall2017",
+			"60816": "WhiteDay",
 			"61320": "Rainy",
 			"70392": "Saury",
 			"73920": "Summer",
@@ -2282,6 +2370,7 @@
 		"2": {
 			"27048": "",
 			"62496": "Rainy",
+			"69048": "WhiteDay",
 			"92232": "Valentines",
 			"93408": "NewYears",
 			"108696": "Fall",
@@ -2331,6 +2420,7 @@
 			"60984": "Rainy",
 			"65016": "Fall",
 			"68544": "NewYears",
+			"69216": "WhiteDay",
 			"72912": "Summer",
 			"99960": "Setsubun",
 			"107016": "Xmas",
@@ -2348,6 +2438,7 @@
 			"72408": "Fall",
 			"79632": "Valentines",
 			"82824": "NewYears",
+			"86688": "WhiteDay",
 			"88704": "Hina",
 			"93744": "Rainy",
 			"98448": "LateFall2017",
@@ -2374,13 +2465,15 @@
 			"98616": "Setsubun",
 			"98784": "Saury",
 			"99960": "Xmas",
-			"103824": "Hina"
+			"103824": "Hina",
+			"109368": "WhiteDay"
 		}
 	},
 	"133": {
 		"2": {
 			"21000": "",
 			"60480": "Summer",
+			"60984": "WhiteDay",
 			"89880": "EarlySummer",
 			"94752": "Fall",
 			"97944": "NewYears",
@@ -2401,6 +2494,7 @@
 			"88536": "YearsEnd",
 			"89712": "NewYears",
 			"89880": "Xmas",
+			"90720": "WhiteDay",
 			"96264": "Summer",
 			"97272": "Saury",
 			"104160": "Fall",
@@ -2414,6 +2508,7 @@
 			"53592": "Xmas",
 			"56280": "",
 			"87192": "NewYears",
+			"93744": "WhiteDay",
 			"97272": "EarlySummer",
 			"97944": "Valentines",
 			"98112": "Rainy",
@@ -2435,6 +2530,7 @@
 			"72408": "Fall",
 			"79632": "Valentines",
 			"82824": "NewYears",
+			"86688": "WhiteDay",
 			"88704": "Hina",
 			"93744": "Rainy",
 			"98448": "LateFall2017",
@@ -2462,6 +2558,7 @@
 			"120120": "Fall",
 			"129696": "Saury",
 			"130200": "LateFall2017",
+			"135576": "WhiteDay",
 			"154056": "Setsubun",
 			"162456": "YearsEnd"
 		},
@@ -2480,6 +2577,7 @@
 			"94920": "EarlySummer",
 			"101304": "Leyte",
 			"104160": "Rainy",
+			"105168": "WhiteDay",
 			"115248": "Valentines",
 			"120624": "YearsEnd",
 			"137760": "Xmas",
@@ -2501,6 +2599,7 @@
 			"22176": "",
 			"68880": "ChristmasOld",
 			"72408": "Summer2017",
+			"73920": "WhiteDay",
 			"74424": "NewYears",
 			"79968": "Fall",
 			"81648": "EarlySummer",
@@ -2535,6 +2634,7 @@
 			"85008": "YearsEnd",
 			"86520": "Leyte",
 			"103992": "Fall",
+			"105672": "WhiteDay",
 			"107520": "NewYears",
 			"114576": "Xmas",
 			"121296": "Setsubun"
@@ -2549,6 +2649,7 @@
 			"17976": "",
 			"52920": "Valentines",
 			"63168": "Setsubun",
+			"70056": "WhiteDay",
 			"76272": "Saury",
 			"78792": "YearsEnd",
 			"84840": "Fall",
@@ -2577,6 +2678,7 @@
 			"80808": "Rainy",
 			"82656": "Cold",
 			"93576": "Xmas",
+			"97440": "WhiteDay",
 			"101136": "EarlySummer",
 			"144984": "Leyte"
 		},
@@ -2621,6 +2723,7 @@
 			"60648": "Rainy",
 			"62664": "YearsEnd",
 			"67200": "Cold",
+			"67704": "WhiteDay",
 			"73584": "Xmas2017"
 		},
 		"3": {
@@ -2641,6 +2744,7 @@
 			"38472": "Setsubun",
 			"38976": "Surigao",
 			"40411": "LateFall2017",
+			"52080": "WhiteDay",
 			"52584": "NewYears",
 			"54600": "Valentines",
 			"55440": "Xmas",
@@ -2710,6 +2814,7 @@
 			"15960": "",
 			"47376": "Saury",
 			"50736": "Xmas",
+			"58464": "WhiteDay",
 			"65184": "Summer",
 			"66024": "Rainy",
 			"66360": "Valentines",
@@ -2733,6 +2838,7 @@
 			"80808": "Rainy",
 			"82656": "Cold",
 			"93576": "Xmas",
+			"97440": "WhiteDay",
 			"101136": "EarlySummer",
 			"144984": "Leyte"
 		},
@@ -2765,6 +2871,7 @@
 	"149": {
 		"2": {
 			"20328": "",
+			"50568": "WhiteDay",
 			"59136": "Rainy",
 			"60648": "Valentines",
 			"70728": "Summer",
@@ -2793,6 +2900,7 @@
 		"2": {
 			"19152": "",
 			"62496": "Valentines",
+			"72576": "WhiteDay",
 			"119112": "Saury",
 			"121968": "Xmas",
 			"141960": "Setsubun",
@@ -2814,6 +2922,7 @@
 			"19320": "",
 			"62664": "Valentines",
 			"80976": "Saury",
+			"97104": "WhiteDay",
 			"130704": "NewYears",
 			"162288": "YearsEnd",
 			"165984": "Xmas",
@@ -2837,6 +2946,7 @@
 	"152": {
 		"2": {
 			"12096": "",
+			"64344": "WhiteDay",
 			"74424": "Valentines",
 			"112056": "YearsEnd",
 			"121968": "Xmas",
@@ -2909,6 +3019,7 @@
 			"7728": "",
 			"35784": "NewYears",
 			"51408": "YearsEnd",
+			"55104": "WhiteDay",
 			"71064": "Summer",
 			"75432": "Xmas",
 			"96768": "EarlySummer",
@@ -2997,6 +3108,7 @@
 			"76440": "Saury",
 			"79800": "Rainy",
 			"84168": "NewYears",
+			"85344": "WhiteDay",
 			"87528": "Valentines",
 			"96432": "Fall",
 			"107520": "Wine",
@@ -3013,6 +3125,7 @@
 			"49392": "NewYears",
 			"59472": "Valentines",
 			"65856": "YearsEnd",
+			"67032": "WhiteDay",
 			"73584": "LateWinter",
 			"80808": "Xmas",
 			"85848": "EarlySummer",
@@ -3039,6 +3152,7 @@
 			"103488": "Saury",
 			"104664": "Fall",
 			"105000": "YearsEnd",
+			"107688": "WhiteDay",
 			"113232": "Xmas",
 			"117432": "EarlySummer",
 			"121968": "Setsubun"
@@ -3050,6 +3164,7 @@
 			"37632": "NewYears",
 			"53088": "Xmas",
 			"60144": "Valentines",
+			"75768": "WhiteDay",
 			"85176": "Rainy",
 			"88872": "Setsubun",
 			"100296": "YearsEnd",
@@ -3079,6 +3194,7 @@
 			"13608": "",
 			"50736": "Rainy",
 			"55776": "Valentines",
+			"56952": "WhiteDay",
 			"61992": "NewYears",
 			"62496": "Setsubun",
 			"86856": "YearsEnd",
@@ -3101,6 +3217,7 @@
 			"63840": "Setsubun",
 			"73584": "YearsEnd",
 			"79800": "Rainy",
+			"82320": "WhiteDay",
 			"88200": "Valentines",
 			"90552": "Xmas",
 			"101304": "Fall"
@@ -3181,7 +3298,8 @@
 			"96432": "Fall",
 			"97440": "Xmas",
 			"98112": "Valentines",
-			"104832": "Setsubun"
+			"104832": "Setsubun",
+			"108192": "WhiteDay"
 		}
 	},
 	"182": {
@@ -3191,6 +3309,7 @@
 			"55944": "Fall",
 			"63000": "Valentines",
 			"63840": "Rainy",
+			"65856": "WhiteDay",
 			"77616": "Setsubun",
 			"78456": "EarlySummer"
 		}
@@ -3213,6 +3332,7 @@
 		"2": {
 			"11928": "",
 			"59472": "LateFall2017",
+			"59976": "WhiteDay",
 			"72072": "Saury",
 			"79128": "Xmas",
 			"79296": "NewYears",
@@ -3229,6 +3349,7 @@
 		"2": {
 			"18312": "",
 			"59472": "LateFall2017",
+			"59976": "WhiteDay",
 			"75600": "Saury",
 			"78792": "Valentines",
 			"79128": "Xmas",
@@ -3249,6 +3370,7 @@
 			"72408": "Xmas",
 			"76440": "EarlySummer",
 			"76776": "YearsEnd",
+			"83664": "WhiteDay",
 			"87696": "Rainy"
 		}
 	},
@@ -3259,6 +3381,7 @@
 			"55944": "Fall",
 			"63000": "Valentines",
 			"63840": "Rainy",
+			"65856": "WhiteDay",
 			"77616": "Setsubun",
 			"78456": "EarlySummer"
 		}
@@ -3271,6 +3394,7 @@
 			"63168": "Valentines",
 			"67704": "Setsubun",
 			"68208": "Rainy",
+			"75264": "WhiteDay",
 			"79128": "YearsEnd",
 			"95592": "Fall",
 			"103992": "Cold",
@@ -3287,6 +3411,7 @@
 			"68040": "Xmas",
 			"71568": "Rainy",
 			"83160": "YearsEnd",
+			"87528": "WhiteDay",
 			"88032": "EarlySummer",
 			"120960": "Cold"
 		}
@@ -3299,6 +3424,7 @@
 			"64680": "Xmas",
 			"67368": "NewYears",
 			"69216": "Fall",
+			"77784": "WhiteDay",
 			"78120": "EarlySummer",
 			"78960": "Setsubun",
 			"96600": "Valentines",
@@ -3314,6 +3440,7 @@
 			"83328": "Xmas",
 			"103824": "Valentines",
 			"109200": "EarlySummer",
+			"110712": "WhiteDay",
 			"111048": "LateFall2017",
 			"125160": "Setsubun"
 		},
@@ -3335,7 +3462,8 @@
 			"71568": "Fall",
 			"75600": "NewYears",
 			"76104": "Setsubun",
-			"79128": "Xmas"
+			"79128": "Xmas",
+			"122304": "WhiteDay"
 		}
 	},
 	"193": {
@@ -3347,7 +3475,8 @@
 			"58968": "Kessen",
 			"63000": "Xmas",
 			"67200": "Fall",
-			"67536": "EarlySummer"
+			"67536": "EarlySummer",
+			"71904": "WhiteDay"
 		}
 	},
 	"194": {
@@ -3358,7 +3487,8 @@
 			"83160": "Fall",
 			"91224": "Setsubun",
 			"100128": "Xmas",
-			"112224": "Summer"
+			"112224": "Summer",
+			"114072": "WhiteDay"
 		}
 	},
 	"195": {
@@ -3405,6 +3535,7 @@
 			"86856": "Fall",
 			"87528": "LateFall2017",
 			"93408": "YearsEnd",
+			"97608": "WhiteDay",
 			"105000": "Setsubun"
 		}
 	},
@@ -3417,6 +3548,7 @@
 			"82488": "YearsEnd",
 			"87024": "Setsubun",
 			"92232": "Summer",
+			"92400": "WhiteDay",
 			"92736": "EarlySummer",
 			"102144": "Xmas",
 			"114744": "Rainy",
@@ -3437,7 +3569,8 @@
 			"80808": "Valentines",
 			"93072": "Setsubun",
 			"101640": "YearsEnd",
-			"106176": "Rainy"
+			"106176": "Rainy",
+			"109200": "WhiteDay"
 		},
 		"3": {
 			"21672": "",
@@ -3452,7 +3585,8 @@
 			"73920": "Xmas",
 			"86016": "EarlySummer",
 			"87696": "Valentines",
-			"100464": "YearsEnd"
+			"100464": "YearsEnd",
+			"121128": "WhiteDay"
 		}
 	},
 	"203": {
@@ -3460,6 +3594,7 @@
 			"7392": "",
 			"44856": "Rainy",
 			"65520": "Xmas",
+			"98616": "WhiteDay",
 			"126000": "NewYears",
 			"143136": "Valentines",
 			"177912": "YearsEnd"
@@ -3517,6 +3652,7 @@
 	"209": {
 		"2": {
 			"20328": "",
+			"50568": "WhiteDay",
 			"59136": "Rainy",
 			"60648": "Valentines",
 			"70728": "Summer",
@@ -3545,6 +3681,7 @@
 		"2": {
 			"19152": "",
 			"62496": "Valentines",
+			"72576": "WhiteDay",
 			"119112": "Saury",
 			"121968": "Xmas",
 			"141960": "Setsubun",
@@ -3566,6 +3703,7 @@
 			"19320": "",
 			"62664": "Valentines",
 			"80976": "Saury",
+			"97104": "WhiteDay",
 			"130704": "NewYears",
 			"162288": "YearsEnd",
 			"165984": "Xmas",
@@ -3589,6 +3727,7 @@
 	"212": {
 		"2": {
 			"12096": "",
+			"64344": "WhiteDay",
 			"74424": "Valentines",
 			"112056": "YearsEnd",
 			"121968": "Xmas",
@@ -3613,6 +3752,7 @@
 			"57792": "Rainy",
 			"71736": "Fall",
 			"77616": "Summer",
+			"83832": "WhiteDay",
 			"85848": "NewYears",
 			"91392": "Setsubun",
 			"97440": "Valentines"
@@ -3624,6 +3764,7 @@
 			"58800": "Valentines",
 			"74256": "Rainy",
 			"81480": "YearsEnd",
+			"90888": "WhiteDay",
 			"96096": "NewYears",
 			"97776": "EarlySummer",
 			"106344": "Fall",
@@ -3688,6 +3829,7 @@
 			"61656": "Saury",
 			"64680": "LateWinter",
 			"65688": "Xmas",
+			"71232": "WhiteDay",
 			"71736": "Valentines",
 			"72408": "EarlySummer2015",
 			"75600": "Setsubun",
@@ -3709,6 +3851,7 @@
 			"91728": "NewYears",
 			"101976": "Valentines",
 			"115752": "Xmas",
+			"126504": "WhiteDay",
 			"142800": "Setsubun"
 		}
 	},
@@ -3760,6 +3903,7 @@
 			"58464": "Setsubun",
 			"61656": "Xmas",
 			"75264": "EarlySummer",
+			"79128": "WhiteDay",
 			"85848": "YearsEnd",
 			"91392": "Valentines"
 		}
@@ -3769,6 +3913,7 @@
 			"12768": "",
 			"50736": "Summer",
 			"53424": "Kessen",
+			"57120": "WhiteDay",
 			"64344": "NewYears",
 			"66192": "Valentines",
 			"69888": "Setsubun",
@@ -3786,6 +3931,7 @@
 			"47040": "EarlySummer",
 			"51576": "Rainy",
 			"54264": "Xmas",
+			"57120": "WhiteDay",
 			"65856": "Setsubun",
 			"69552": "Summer"
 		}
@@ -3797,6 +3943,7 @@
 			"53256": "NewYears",
 			"54936": "YearsEnd",
 			"56448": "Xmas",
+			"66024": "WhiteDay",
 			"71400": "Rainy"
 		}
 	},
@@ -3824,6 +3971,7 @@
 			"56280": "YearsEnd",
 			"57456": "Saury2017",
 			"57792": "LateFall2017",
+			"65856": "WhiteDay",
 			"66528": "Valentines"
 		},
 		"3": {
@@ -3853,7 +4001,8 @@
 			"72744": "Valentines",
 			"78960": "Rainy",
 			"82656": "LateFall2017",
-			"87696": "Saury2017"
+			"87696": "Saury2017",
+			"89712": "WhiteDay"
 		},
 		"3": {
 			"19992": "",
@@ -3880,6 +4029,7 @@
 			"69720": "Saury2017",
 			"71064": "Setsubun",
 			"72240": "Fall",
+			"77784": "WhiteDay",
 			"89040": "LateFall2017"
 		},
 		"4": {
@@ -3895,6 +4045,7 @@
 		"2": {
 			"27048": "",
 			"48216": "Rainy",
+			"52248": "WhiteDay",
 			"58632": "Valentines",
 			"60984": "LateFall2017",
 			"63840": "Fall",
@@ -3928,6 +4079,7 @@
 			"49728": "Fall",
 			"53928": "Setsubun",
 			"59640": "Rainy",
+			"60816": "WhiteDay",
 			"64344": "Valentines"
 		}
 	},
@@ -3936,6 +4088,7 @@
 			"13104": "",
 			"47040": "Saury",
 			"50736": "Xmas",
+			"58464": "WhiteDay",
 			"65184": "Summer",
 			"66024": "Rainy",
 			"66360": "Valentines",
@@ -3950,6 +4103,7 @@
 			"46704": "Xmas",
 			"48720": "Fall",
 			"51240": "Summer",
+			"54768": "WhiteDay",
 			"54936": "Valentines",
 			"63840": "Rainy",
 			"64848": "Setsubun"
@@ -3968,7 +4122,8 @@
 			"62664": "Setsubun",
 			"63840": "Valentines",
 			"66024": "Summer",
-			"75936": "Fall"
+			"75936": "Fall",
+			"89544": "WhiteDay"
 		}
 	},
 	"238": {
@@ -4029,6 +4184,7 @@
 			"39816": "NewYears",
 			"40824": "Valentines",
 			"42840": "EarlySummer",
+			"43680": "WhiteDay",
 			"50400": "YearsEnd",
 			"55776": "Fall",
 			"55944": "Cold",
@@ -4066,6 +4222,7 @@
 			"38472": "Setsubun",
 			"38976": "Surigao",
 			"40411": "LateFall2017",
+			"52080": "WhiteDay",
 			"52584": "NewYears",
 			"54600": "Valentines",
 			"55440": "Xmas",
@@ -4117,6 +4274,7 @@
 			"48384": "NewYears",
 			"49728": "Xmas",
 			"50400": "EarlySummer",
+			"55608": "WhiteDay",
 			"57792": "Valentines",
 			"58128": "YearsEnd",
 			"58800": "Fall",
@@ -4158,6 +4316,7 @@
 			"60648": "Rainy",
 			"62664": "YearsEnd",
 			"67200": "Cold",
+			"67704": "WhiteDay",
 			"73584": "Xmas2017"
 		},
 		"3": {
@@ -4194,6 +4353,7 @@
 			"98784": "Setsubun",
 			"101808": "Fall",
 			"106008": "NewYears",
+			"114912": "WhiteDay",
 			"119280": "YearsEnd"
 		}
 	},
@@ -4209,6 +4369,7 @@
 			"86856": "Fall",
 			"87528": "LateFall2017",
 			"93408": "YearsEnd",
+			"97608": "WhiteDay",
 			"105000": "Setsubun"
 		}
 	},
@@ -4217,6 +4378,7 @@
 			"11088": "",
 			"62496": "Xmas",
 			"77952": "Saury",
+			"83496": "WhiteDay",
 			"91896": "Setsubun",
 			"94248": "Rainy",
 			"100296": "Xmas2017",
@@ -4242,6 +4404,7 @@
 			"127176": "Setsubun",
 			"139944": "NewYears",
 			"140784": "EarlySummer",
+			"157080": "WhiteDay",
 			"158256": "Fall",
 			"172200": "YearsEnd",
 			"175728": "Valentines"
@@ -4258,6 +4421,7 @@
 			"100464": "Valentines",
 			"112056": "EarlySummer",
 			"121128": "YearsEnd",
+			"143640": "WhiteDay",
 			"147672": "EarlySummer2016",
 			"164976": "Setsubun"
 		}
@@ -4267,6 +4431,7 @@
 			"18648": "",
 			"86520": "Saury",
 			"91224": "LateFall2017",
+			"99288": "WhiteDay",
 			"100968": "Setsubun",
 			"103320": "Valentines",
 			"116592": "EarlySummer",
@@ -4284,6 +4449,7 @@
 			"53592": "Xmas",
 			"54600": "Setsubun",
 			"65184": "Summer",
+			"67368": "WhiteDay",
 			"67704": "LateWinter",
 			"70056": "Rainy",
 			"74424": "Saury",
@@ -4301,6 +4467,7 @@
 			"59304": "Valentines",
 			"60312": "Xmas",
 			"63168": "NewYears",
+			"69384": "WhiteDay",
 			"73248": "Rainy",
 			"74760": "EarlySummer2015",
 			"80808": "Summer",
@@ -4318,6 +4485,7 @@
 			"37968": "EarlySummer",
 			"47040": "Rainy",
 			"55440": "NewYears",
+			"59808": "WhiteDay",
 			"66864": "Fall",
 			"67872": "Summer",
 			"68376": "Saury",
@@ -4333,6 +4501,7 @@
 			"70392": "Valentines",
 			"71400": "NewYears",
 			"71904": "EarlySummer",
+			"79128": "WhiteDay",
 			"80472": "Fall",
 			"85344": "Saury",
 			"101136": "Summer"
@@ -4347,6 +4516,7 @@
 			"13440": "",
 			"58632": "Summer",
 			"61488": "NewYears",
+			"64344": "WhiteDay",
 			"65688": "EarlySummer",
 			"67872": "Setsubun",
 			"70392": "Xmas",
@@ -4362,6 +4532,7 @@
 			"69720": "NewYears",
 			"72072": "Summer",
 			"78960": "Fall",
+			"83328": "WhiteDay",
 			"84504": "Setsubun",
 			"87024": "Saury",
 			"89544": "Xmas"
@@ -4373,6 +4544,7 @@
 			"47208": "NewYears",
 			"55776": "EarlySummer",
 			"56280": "Saury",
+			"57120": "WhiteDay",
 			"62328": "YearsEnd",
 			"64512": "Summer",
 			"77280": "Valentines",
@@ -4388,6 +4560,7 @@
 			"66024": "YearsEnd",
 			"69048": "Saury",
 			"70056": "Fall",
+			"71568": "WhiteDay",
 			"75264": "NewYears",
 			"76440": "Setsubun",
 			"80304": "EarlySummer",
@@ -4423,6 +4596,7 @@
 			"52920": "Fall",
 			"55776": "NewYears",
 			"71400": "Saury",
+			"75432": "WhiteDay",
 			"82320": "EarlySummer",
 			"83160": "Xmas",
 			"83328": "YearsEnd",
@@ -4442,6 +4616,7 @@
 			"77112": "Fall",
 			"82152": "Setsubun",
 			"92400": "Valentines",
+			"93576": "WhiteDay",
 			"101136": "Summer"
 		}
 	},
@@ -4454,7 +4629,8 @@
 			"71568": "Fall",
 			"75600": "NewYears",
 			"76104": "Setsubun",
-			"79128": "Xmas"
+			"79128": "Xmas",
+			"122304": "WhiteDay"
 		}
 	},
 	"267": {
@@ -4466,7 +4642,8 @@
 			"58968": "Kessen",
 			"63000": "Xmas",
 			"67200": "Fall",
-			"67536": "EarlySummer"
+			"67536": "EarlySummer",
+			"71904": "WhiteDay"
 		}
 	},
 	"268": {
@@ -4477,7 +4654,8 @@
 			"83160": "Fall",
 			"91224": "Setsubun",
 			"100128": "Xmas",
-			"112224": "Summer"
+			"112224": "Summer",
+			"114072": "WhiteDay"
 		}
 	},
 	"269": {
@@ -4489,6 +4667,7 @@
 			"80976": "Saury",
 			"100464": "Fall",
 			"105168": "NewYears",
+			"105840": "WhiteDay",
 			"112728": "Xmas",
 			"116088": "Summer",
 			"118272": "EarlySummer",
@@ -4516,6 +4695,7 @@
 			"70224": "YearsEnd",
 			"75936": "Rainy",
 			"77280": "Valentines",
+			"79296": "WhiteDay",
 			"81984": "EarlySummer",
 			"82320": "LateFall2017",
 			"90888": "Summer",
@@ -4546,7 +4726,8 @@
 			"64008": "Fall",
 			"68712": "Summer",
 			"73248": "Xmas",
-			"80472": "Valentines"
+			"80472": "Valentines",
+			"119784": "WhiteDay"
 		},
 		"3": {
 			"12600": "",
@@ -4580,7 +4761,8 @@
 			"84168": "Valentines",
 			"85008": "Setsubun",
 			"87024": "Rainy",
-			"114912": "EarlySummer"
+			"114912": "EarlySummer",
+			"128184": "WhiteDay"
 		},
 		"3": {
 			"19320": "Valentines2018",
@@ -4605,6 +4787,7 @@
 			"63168": "Valentines",
 			"67704": "Setsubun",
 			"68208": "Rainy",
+			"75264": "WhiteDay",
 			"79128": "YearsEnd",
 			"95592": "Fall",
 			"103992": "Cold",
@@ -4621,6 +4804,7 @@
 			"68040": "Xmas",
 			"71568": "Rainy",
 			"83160": "YearsEnd",
+			"87528": "WhiteDay",
 			"88032": "EarlySummer",
 			"120960": "Cold"
 		}
@@ -4634,6 +4818,7 @@
 			"87528": "EarlySummer",
 			"111216": "Rainy",
 			"118608": "Valentines",
+			"124152": "WhiteDay",
 			"125832": "Setsubun",
 			"138096": "YearsEnd"
 		},
@@ -4645,6 +4830,7 @@
 	"276": {
 		"2": {
 			"10248": "",
+			"31248": "WhiteDay",
 			"58968": "Rainy",
 			"71904": "Valentines",
 			"85512": "Saury2017",
@@ -4665,6 +4851,7 @@
 			"72240": "Rainy",
 			"74256": "EarlySummer",
 			"76440": "Xmas",
+			"93912": "WhiteDay",
 			"99792": "Setsubun"
 		}
 	},
@@ -4672,6 +4859,7 @@
 		"2": {
 			"19992": "",
 			"39480": "EarlySummer",
+			"52416": "WhiteDay",
 			"60480": "Valentines",
 			"69048": "Xmas",
 			"74256": "LateFall2017",
@@ -4709,6 +4897,7 @@
 			"7728": "",
 			"35784": "NewYears",
 			"51408": "YearsEnd",
+			"55104": "WhiteDay",
 			"71064": "Summer",
 			"75432": "Xmas",
 			"96768": "EarlySummer",
@@ -4723,6 +4912,7 @@
 			"24360": "",
 			"60984": "NewYears",
 			"88872": "Xmas",
+			"93744": "WhiteDay",
 			"94920": "EarlySummer",
 			"97104": "Valentines",
 			"97944": "Rainy",
@@ -4740,6 +4930,7 @@
 			"10752": "",
 			"27048": "Fall",
 			"54432": "Setsubun",
+			"58464": "WhiteDay",
 			"58800": "Summer",
 			"63168": "YearsEnd",
 			"65184": "Rainy",
@@ -4764,6 +4955,7 @@
 			"93912": "EarlySummer",
 			"94248": "Xmas",
 			"96264": "YearsEnd",
+			"99456": "WhiteDay",
 			"100464": "Setsubun",
 			"103992": "Fall"
 		},
@@ -4790,6 +4982,7 @@
 			"24192": "Saury",
 			"62496": "EarlySummer",
 			"72408": "NewYears",
+			"73920": "WhiteDay",
 			"74424": "Valentines",
 			"74928": "Fall",
 			"78120": "Kessen",
@@ -4836,6 +5029,7 @@
 			"88200": "Xmas",
 			"94920": "Valentines2018",
 			"95760": "YearsEnd",
+			"125664": "WhiteDay",
 			"127176": "EarlySummer"
 		},
 		"4": {
@@ -4866,6 +5060,7 @@
 			"82992": "Valentines",
 			"83160": "EarlySummer",
 			"85344": "Fall",
+			"89040": "WhiteDay",
 			"97272": "Rainy",
 			"105336": "Xmas"
 		},
@@ -4883,6 +5078,7 @@
 			"82488": "YearsEnd",
 			"87024": "Setsubun",
 			"92232": "Summer",
+			"92400": "WhiteDay",
 			"92736": "EarlySummer",
 			"102144": "Xmas",
 			"114744": "Rainy",
@@ -4904,7 +5100,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"22176": "Leyte",
@@ -4920,6 +5117,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -4942,6 +5140,7 @@
 			"50400": "Valentines",
 			"61656": "Rainy",
 			"65352": "EarlySummer",
+			"66024": "WhiteDay",
 			"67032": "LateFall",
 			"69384": "Xmas",
 			"70056": "NewYears",
@@ -4969,6 +5168,7 @@
 			"67536": "Summer",
 			"69216": "Xmas",
 			"71904": "EarlySummer",
+			"73080": "WhiteDay",
 			"80304": "Setsubun",
 			"82656": "Rainy"
 		}
@@ -4978,6 +5178,7 @@
 			"15792": "",
 			"52920": "Valentines",
 			"63168": "Setsubun",
+			"70056": "WhiteDay",
 			"76272": "Saury",
 			"78792": "YearsEnd",
 			"84840": "Fall",
@@ -5005,7 +5206,8 @@
 			"81984": "YearsEnd",
 			"85344": "NewYears",
 			"99456": "Valentines",
-			"101640": "Setsubun"
+			"101640": "Setsubun",
+			"107352": "WhiteDay"
 		},
 		"3": {
 			"22176": "Leyte",
@@ -5021,6 +5223,7 @@
 			"70560": "Xmas",
 			"75432": "EarlySummer",
 			"75936": "NewYears",
+			"76608": "WhiteDay",
 			"83160": "YearsEnd",
 			"87864": "Rainy",
 			"91056": "Saury2017",
@@ -5045,6 +5248,7 @@
 			"64680": "Xmas",
 			"67368": "NewYears",
 			"69216": "Fall",
+			"77784": "WhiteDay",
 			"78120": "EarlySummer",
 			"78960": "Setsubun",
 			"96600": "Valentines",
@@ -5063,13 +5267,15 @@
 			"98616": "Setsubun",
 			"98784": "Saury",
 			"99960": "Xmas",
-			"103824": "Hina"
+			"103824": "Hina",
+			"109368": "WhiteDay"
 		}
 	},
 	"302": {
 		"2": {
 			"21000": "",
 			"60480": "Summer",
+			"60984": "WhiteDay",
 			"89880": "EarlySummer",
 			"94752": "Fall",
 			"97944": "NewYears",
@@ -5090,6 +5296,7 @@
 			"88536": "YearsEnd",
 			"89712": "NewYears",
 			"89880": "Xmas",
+			"90720": "WhiteDay",
 			"96264": "Summer",
 			"97272": "Saury",
 			"104160": "Fall",
@@ -5103,6 +5310,7 @@
 			"53592": "Xmas",
 			"56280": "",
 			"87192": "NewYears",
+			"93744": "WhiteDay",
 			"97272": "EarlySummer",
 			"97944": "Valentines",
 			"98112": "Rainy",
@@ -5130,6 +5338,7 @@
 			"120120": "Fall",
 			"129696": "Saury",
 			"130200": "LateFall2017",
+			"135576": "WhiteDay",
 			"154056": "Setsubun",
 			"162456": "YearsEnd"
 		},
@@ -5148,6 +5357,7 @@
 			"94920": "EarlySummer",
 			"101304": "Leyte",
 			"104160": "Rainy",
+			"105168": "WhiteDay",
 			"115248": "Valentines",
 			"120624": "YearsEnd",
 			"137760": "Xmas",
@@ -5169,6 +5379,7 @@
 			"22176": "",
 			"68880": "ChristmasOld",
 			"72408": "Summer2017",
+			"73920": "WhiteDay",
 			"74424": "NewYears",
 			"79968": "Fall",
 			"81648": "EarlySummer",
@@ -5199,6 +5410,7 @@
 			"76440": "Saury",
 			"79800": "Rainy",
 			"84168": "NewYears",
+			"85344": "WhiteDay",
 			"87528": "Valentines",
 			"96432": "Fall",
 			"107520": "Wine",
@@ -5215,6 +5427,7 @@
 			"49392": "NewYears",
 			"59472": "Valentines",
 			"65856": "YearsEnd",
+			"67032": "WhiteDay",
 			"73584": "LateWinter",
 			"80808": "Xmas",
 			"85848": "EarlySummer",
@@ -5231,6 +5444,7 @@
 			"63840": "Setsubun",
 			"73584": "YearsEnd",
 			"79800": "Rainy",
+			"82320": "WhiteDay",
 			"88200": "Valentines",
 			"90552": "Xmas",
 			"101304": "Fall"
@@ -5259,6 +5473,7 @@
 			"13608": "",
 			"50736": "Rainy",
 			"55776": "Valentines",
+			"56952": "WhiteDay",
 			"61992": "NewYears",
 			"62496": "Setsubun",
 			"86856": "YearsEnd",
@@ -5285,6 +5500,7 @@
 			"85008": "YearsEnd",
 			"86520": "Leyte",
 			"103992": "Fall",
+			"105672": "WhiteDay",
 			"107520": "NewYears",
 			"114576": "Xmas",
 			"121296": "Setsubun"
@@ -5307,7 +5523,8 @@
 			"96432": "Fall",
 			"97440": "Xmas",
 			"98112": "Valentines",
-			"104832": "Setsubun"
+			"104832": "Setsubun",
+			"108192": "WhiteDay"
 		}
 	},
 	"317": {
@@ -5316,6 +5533,7 @@
 			"37632": "NewYears",
 			"53088": "Xmas",
 			"60144": "Valentines",
+			"75768": "WhiteDay",
 			"85176": "Rainy",
 			"88872": "Setsubun",
 			"100296": "YearsEnd",
@@ -5344,6 +5562,7 @@
 		"2": {
 			"18312": "",
 			"59472": "LateFall2017",
+			"59976": "WhiteDay",
 			"75600": "Saury",
 			"78792": "Valentines",
 			"79128": "Xmas",
@@ -5364,6 +5583,7 @@
 			"77112": "Fall",
 			"82152": "Setsubun",
 			"92400": "Valentines",
+			"93576": "WhiteDay",
 			"101136": "Summer"
 		}
 	},
@@ -5375,6 +5595,7 @@
 			"103488": "Saury",
 			"104664": "Fall",
 			"105000": "YearsEnd",
+			"107688": "WhiteDay",
 			"113232": "Xmas",
 			"117432": "EarlySummer",
 			"121968": "Setsubun"
@@ -5406,6 +5627,7 @@
 			"72408": "Xmas",
 			"76440": "EarlySummer",
 			"76776": "YearsEnd",
+			"83664": "WhiteDay",
 			"87696": "Rainy"
 		}
 	},
@@ -5484,6 +5706,7 @@
 		"2": {
 			"21000": "",
 			"47544": "NewYears",
+			"53256": "WhiteDay",
 			"59136": "YearsEnd",
 			"65520": "Setsubun",
 			"66192": "Xmas",
@@ -5512,6 +5735,7 @@
 	"344": {
 		"2": {
 			"17640": "",
+			"33432": "WhiteDay",
 			"45696": "Fall",
 			"57792": "NewYears",
 			"64344": "Saury",
@@ -5527,6 +5751,7 @@
 			"65856": "Xmas",
 			"67032": "Valentines",
 			"71904": "Summer",
+			"75936": "WhiteDay",
 			"78120": "EarlySummer",
 			"78792": "YearsEnd",
 			"83832": "Setsubun",
@@ -5539,6 +5764,7 @@
 			"44688": "Valentines",
 			"55776": "NewYears",
 			"71736": "Xmas",
+			"73584": "WhiteDay",
 			"82152": "Rainy",
 			"85344": "YearsEnd",
 			"94752": "EarlySummer",
@@ -5555,6 +5781,7 @@
 			"53088": "Halloween",
 			"59640": "Rainy",
 			"93072": "Valentines",
+			"94416": "WhiteDay",
 			"97272": "Summer",
 			"98616": "Setsubun",
 			"102984": "YearsEnd",
@@ -5574,6 +5801,7 @@
 			"91392": "NewYears",
 			"92736": "EarlySummer",
 			"107520": "Setsubun",
+			"113064": "WhiteDay",
 			"113568": "Rainy"
 		}
 	},
@@ -5587,6 +5815,7 @@
 			"67536": "YearsEnd",
 			"70056": "Valentines",
 			"71400": "Fall",
+			"75264": "WhiteDay",
 			"75432": "Setsubun",
 			"81480": "LateWinter"
 		},
@@ -5605,6 +5834,7 @@
 			"90552": "Valentines",
 			"90720": "Summer",
 			"92736": "YearsEnd",
+			"94248": "WhiteDay",
 			"98784": "EarlySummer",
 			"106008": "Setsubun"
 		},
@@ -5623,6 +5853,7 @@
 			"81984": "Summer",
 			"98952": "YearsEnd",
 			"111384": "EarlySummer",
+			"130536": "WhiteDay",
 			"137088": "Setsubun"
 		}
 	},
@@ -5636,7 +5867,8 @@
 			"65688": "Fall",
 			"80808": "YearsEnd",
 			"82488": "Rainy",
-			"85008": "Summer"
+			"85008": "Summer",
+			"85680": "WhiteDay"
 		},
 		"3": {
 			"39480": "",
@@ -5654,6 +5886,7 @@
 			"20160": "",
 			"64176": "Fall",
 			"68208": "Summer",
+			"82992": "WhiteDay",
 			"90720": "Xmas",
 			"95088": "Rainy",
 			"100632": "YearsEnd",
@@ -5669,6 +5902,7 @@
 			"65352": "Valentines",
 			"66864": "EarlySummer",
 			"71400": "Rainy",
+			"73080": "WhiteDay",
 			"73248": "YearsEnd",
 			"83328": "Fall",
 			"89544": "Summer",
@@ -5693,7 +5927,8 @@
 			"96432": "NewYears",
 			"104664": "Xmas",
 			"111552": "Rainy",
-			"114912": "Setsubun"
+			"114912": "Setsubun",
+			"144984": "WhiteDay"
 		},
 		"3": {
 			"43176": "",
@@ -5709,6 +5944,7 @@
 			"55272": "Fall",
 			"56112": "YearsEnd",
 			"66696": "Saury",
+			"68208": "WhiteDay",
 			"75936": "EarlySummer",
 			"77616": "NewYears",
 			"100464": "Setsubun",
@@ -5740,6 +5976,7 @@
 			"25872": "",
 			"53592": "NewYears",
 			"54432": "EarlySummer",
+			"54768": "WhiteDay",
 			"54936": "Saury",
 			"68208": "Summer2017",
 			"78288": "Xmas",
@@ -5756,6 +5993,7 @@
 			"80976": "YearsEnd",
 			"82992": "Valentines",
 			"85848": "LateWinter",
+			"101136": "WhiteDay",
 			"115416": "EarlySummer",
 			"119784": "Fall",
 			"124992": "Setsubun"
@@ -5771,6 +6009,7 @@
 			"41664": "NewYears",
 			"72912": "Valentines",
 			"73416": "Setsubun",
+			"102312": "WhiteDay",
 			"104328": "Saury",
 			"107688": "EarlySummer",
 			"139776": "Rainy",
@@ -5780,6 +6019,7 @@
 	"361": {
 		"2": {
 			"34608": "",
+			"47040": "WhiteDay",
 			"58632": "Saury",
 			"59808": "NewYears",
 			"59976": "Wine",
@@ -5803,7 +6043,8 @@
 			"125160": "YearsEnd",
 			"128520": "Setsubun",
 			"135744": "Valentines",
-			"142968": "EarlySummer"
+			"142968": "EarlySummer",
+			"154896": "WhiteDay"
 		}
 	},
 	"363": {
@@ -5817,6 +6058,7 @@
 			"115416": "Rainy",
 			"123144": "Setsubun",
 			"123984": "EarlySummer",
+			"133560": "WhiteDay",
 			"135072": "NewYears"
 		}
 	},
@@ -5824,6 +6066,7 @@
 		"2": {
 			"16632": "",
 			"18984": "NewYears",
+			"38304": "WhiteDay",
 			"47208": "Xmas",
 			"50568": "Fall",
 			"56448": "Valentines",
@@ -5850,6 +6093,7 @@
 	"366": {
 		"2": {
 			"25368": "",
+			"62832": "WhiteDay",
 			"75768": "EarlySummer",
 			"86856": "Xmas",
 			"100632": "NewYears",
@@ -5882,6 +6126,7 @@
 			"58632": "Saury",
 			"60312": "YearsEnd",
 			"68040": "Xmas",
+			"75096": "WhiteDay",
 			"76104": "Fall",
 			"78120": "Rainy",
 			"101808": "Setsubun"
@@ -5895,6 +6140,7 @@
 			"49056": "Hina",
 			"50904": "EarlySummer",
 			"63000": "Xmas",
+			"68712": "WhiteDay",
 			"81816": "YearsEnd",
 			"89880": "NewYears",
 			"92232": "Saury2017",
@@ -5914,6 +6160,7 @@
 			"81312": "LateFall2017",
 			"82320": "Saury2017",
 			"86520": "Fall2017",
+			"88200": "WhiteDay",
 			"91392": "Valentines",
 			"92904": "Rainy",
 			"95088": "YearsEnd",
@@ -5929,6 +6176,7 @@
 			"76776": "Saury2017",
 			"79464": "Valentines2018",
 			"83160": "Fall2017",
+			"90048": "WhiteDay",
 			"96432": "LateFall2017",
 			"97440": "Setsubun2018",
 			"107016": "Rainy",
@@ -6157,6 +6405,7 @@
 			"31268": "",
 			"58296": "NewYears",
 			"62160": "LateFall2017",
+			"69552": "WhiteDay",
 			"73416": "Valentines",
 			"76440": "Fall",
 			"82488": "Saury",
@@ -6175,6 +6424,7 @@
 			"24024": "",
 			"52080": "Valentines",
 			"57960": "LateFall2017",
+			"60816": "WhiteDay",
 			"61320": "Rainy",
 			"70392": "Saury",
 			"73920": "Summer",
@@ -6192,6 +6442,7 @@
 		"2": {
 			"27048": "",
 			"62496": "Rainy",
+			"69048": "WhiteDay",
 			"92232": "Valentines",
 			"93408": "NewYears",
 			"108696": "Fall",
@@ -6220,6 +6471,7 @@
 			"83328": "Xmas",
 			"103824": "Valentines",
 			"109200": "EarlySummer",
+			"110712": "WhiteDay",
 			"111048": "LateFall2017",
 			"125160": "Setsubun"
 		},
@@ -6276,6 +6528,7 @@
 		"2": {
 			"27048": "",
 			"48216": "Rainy",
+			"52248": "WhiteDay",
 			"58632": "Valentines",
 			"60984": "LateFall2017",
 			"63840": "Fall",
@@ -6323,6 +6576,7 @@
 			"93912": "EarlySummer",
 			"94248": "Xmas",
 			"96264": "YearsEnd",
+			"99456": "WhiteDay",
 			"100464": "Setsubun",
 			"103992": "Fall"
 		},
@@ -6349,6 +6603,7 @@
 			"31416": "",
 			"62496": "EarlySummer",
 			"72408": "NewYears",
+			"73920": "WhiteDay",
 			"74424": "Valentines",
 			"74928": "Fall",
 			"78120": "Kessen",
@@ -6438,6 +6693,7 @@
 			"37968": "EarlySummer",
 			"47040": "Rainy",
 			"55440": "NewYears",
+			"59808": "WhiteDay",
 			"66864": "Fall",
 			"67872": "Summer",
 			"68376": "Saury",
@@ -6486,6 +6742,7 @@
 			"44688": "Valentines",
 			"55776": "NewYears",
 			"71736": "Xmas",
+			"73584": "WhiteDay",
 			"82152": "Rainy",
 			"85344": "YearsEnd",
 			"94752": "EarlySummer",
@@ -6515,6 +6772,7 @@
 			"65856": "Xmas",
 			"67032": "Valentines",
 			"71904": "Summer",
+			"75936": "WhiteDay",
 			"78120": "EarlySummer",
 			"78792": "YearsEnd",
 			"83832": "Setsubun",
@@ -6524,6 +6782,7 @@
 	"425": {
 		"2": {
 			"17640": "",
+			"33432": "WhiteDay",
 			"45696": "Fall",
 			"57792": "NewYears",
 			"64344": "Saury",
@@ -6543,7 +6802,8 @@
 			"80808": "Valentines",
 			"93072": "Setsubun",
 			"101640": "YearsEnd",
-			"106176": "Rainy"
+			"106176": "Rainy",
+			"109200": "WhiteDay"
 		},
 		"3": {
 			"21672": "",
@@ -6560,7 +6820,8 @@
 			"84168": "Valentines",
 			"85008": "Setsubun",
 			"87024": "Rainy",
-			"114912": "EarlySummer"
+			"114912": "EarlySummer",
+			"128184": "WhiteDay"
 		},
 		"3": {
 			"19320": "Valentines2018",
@@ -6585,7 +6846,8 @@
 			"64008": "Fall",
 			"68712": "Summer",
 			"73248": "Xmas",
-			"80472": "Valentines"
+			"80472": "Valentines",
+			"119784": "WhiteDay"
 		},
 		"3": {
 			"40992": "Leyte",
@@ -6620,6 +6882,7 @@
 		"2": {
 			"30408": "",
 			"47544": "NewYears",
+			"53256": "WhiteDay",
 			"59136": "YearsEnd",
 			"65520": "Setsubun",
 			"66192": "Xmas",
@@ -6638,6 +6901,7 @@
 			"20160": "",
 			"64176": "Fall",
 			"68208": "Summer",
+			"82992": "WhiteDay",
 			"90720": "Xmas",
 			"95088": "Rainy",
 			"100632": "YearsEnd",
@@ -6663,6 +6927,7 @@
 			"53592": "Xmas",
 			"54600": "Setsubun",
 			"65184": "Summer",
+			"67368": "WhiteDay",
 			"67704": "LateWinter",
 			"70056": "Rainy",
 			"74424": "Saury",
@@ -6680,6 +6945,7 @@
 			"59304": "Valentines",
 			"60312": "Xmas",
 			"63168": "NewYears",
+			"69384": "WhiteDay",
 			"73248": "Rainy",
 			"74760": "EarlySummer2015",
 			"80808": "Summer",
@@ -6696,6 +6962,7 @@
 			"14616": "",
 			"43008": "Xmas",
 			"44016": "Setsubun",
+			"47208": "Spring",
 			"57960": "Summer",
 			"63000": "EarlySummer"
 		}
@@ -6709,6 +6976,7 @@
 			"49728": "Fall",
 			"53928": "Setsubun",
 			"59640": "Rainy",
+			"60816": "WhiteDay",
 			"64344": "Valentines"
 		}
 	},
@@ -6726,6 +6994,7 @@
 		"2": {
 			"16632": "",
 			"18984": "NewYears",
+			"38304": "WhiteDay",
 			"47208": "Xmas",
 			"50568": "Fall",
 			"56448": "Valentines",
@@ -6743,6 +7012,7 @@
 			"41664": "NewYears",
 			"72912": "Valentines",
 			"73416": "Setsubun",
+			"102312": "WhiteDay",
 			"104328": "Saury",
 			"107688": "EarlySummer",
 			"139776": "Rainy",
@@ -6755,6 +7025,7 @@
 			"32592": "Xmas",
 			"59640": "NewYears",
 			"75096": "EarlySummer",
+			"80472": "WhiteDay",
 			"83832": "Rainy",
 			"92232": "Setsubun",
 			"121464": "Summer",
@@ -6771,6 +7042,7 @@
 			"80472": "Rainy",
 			"84840": "EarlySummer",
 			"88368": "Xmas",
+			"90888": "WhiteDay",
 			"113400": "Setsubun"
 		}
 	},
@@ -6782,6 +7054,7 @@
 			"53088": "Halloween",
 			"59640": "Rainy",
 			"93072": "Valentines",
+			"94416": "WhiteDay",
 			"97272": "Summer",
 			"98616": "Setsubun",
 			"102984": "YearsEnd",
@@ -6812,6 +7085,7 @@
 			"74592": "Fall",
 			"75096": "Summer",
 			"85344": "YearsEnd",
+			"90720": "WhiteDay",
 			"108360": "Setsubun"
 		}
 	},
@@ -6821,6 +7095,7 @@
 			"59640": "NewYears",
 			"64008": "Xmas",
 			"75096": "EarlySummer",
+			"80472": "WhiteDay",
 			"83832": "Rainy",
 			"92232": "Setsubun",
 			"121464": "Summer",
@@ -6837,6 +7112,7 @@
 			"80472": "Rainy",
 			"84840": "EarlySummer",
 			"88368": "Xmas",
+			"90888": "WhiteDay",
 			"113400": "Setsubun"
 		}
 	},
@@ -6845,6 +7121,7 @@
 			"17976": "",
 			"53592": "NewYears",
 			"54432": "EarlySummer",
+			"54768": "WhiteDay",
 			"54936": "Saury",
 			"68208": "Summer2017",
 			"78288": "Xmas",
@@ -6856,6 +7133,7 @@
 	"449": {
 		"2": {
 			"34608": "",
+			"47040": "WhiteDay",
 			"58632": "Saury",
 			"59808": "NewYears",
 			"59976": "Wine",
@@ -6879,6 +7157,7 @@
 			"74592": "Fall",
 			"75096": "Summer",
 			"85344": "YearsEnd",
+			"90720": "WhiteDay",
 			"108360": "Setsubun"
 		}
 	},
@@ -6894,6 +7173,7 @@
 			"91392": "NewYears",
 			"92736": "EarlySummer",
 			"107520": "Setsubun",
+			"113064": "WhiteDay",
 			"113568": "Rainy"
 		}
 	},
@@ -6905,6 +7185,7 @@
 			"80976": "YearsEnd",
 			"82992": "Valentines",
 			"85848": "LateWinter",
+			"101136": "WhiteDay",
 			"115416": "EarlySummer",
 			"119784": "Fall",
 			"124992": "Setsubun"
@@ -6924,6 +7205,7 @@
 			"67536": "YearsEnd",
 			"70056": "Valentines",
 			"71400": "Fall",
+			"75264": "WhiteDay",
 			"75432": "Setsubun",
 			"81480": "LateWinter"
 		},
@@ -6939,6 +7221,7 @@
 			"65352": "Valentines",
 			"66864": "EarlySummer",
 			"71400": "Rainy",
+			"73080": "WhiteDay",
 			"73248": "YearsEnd",
 			"83328": "Fall",
 			"89544": "Summer",
@@ -6963,7 +7246,8 @@
 			"96432": "NewYears",
 			"104664": "Xmas",
 			"111552": "Rainy",
-			"114912": "Setsubun"
+			"114912": "Setsubun",
+			"144984": "WhiteDay"
 		},
 		"3": {
 			"43176": "",
@@ -6981,7 +7265,8 @@
 			"125160": "YearsEnd",
 			"128520": "Setsubun",
 			"135744": "Valentines",
-			"142968": "EarlySummer"
+			"142968": "EarlySummer",
+			"154896": "WhiteDay"
 		}
 	},
 	"457": {
@@ -6992,6 +7277,7 @@
 			"49056": "Hina",
 			"50904": "EarlySummer",
 			"63000": "Xmas",
+			"68712": "WhiteDay",
 			"81816": "YearsEnd",
 			"89880": "NewYears",
 			"92232": "Saury2017",
@@ -7011,6 +7297,7 @@
 			"90552": "Valentines",
 			"90720": "Summer",
 			"92736": "YearsEnd",
+			"94248": "WhiteDay",
 			"98784": "EarlySummer",
 			"106008": "Setsubun"
 		},
@@ -7029,6 +7316,7 @@
 			"81984": "Summer",
 			"98952": "YearsEnd",
 			"111384": "EarlySummer",
+			"130536": "WhiteDay",
 			"137088": "Setsubun"
 		}
 	},
@@ -7042,7 +7330,8 @@
 			"65688": "Fall",
 			"80808": "YearsEnd",
 			"82488": "Rainy",
-			"85008": "Summer"
+			"85008": "Summer",
+			"85680": "WhiteDay"
 		},
 		"3": {
 			"29736": "",
@@ -7067,6 +7356,7 @@
 			"88200": "Xmas",
 			"94920": "Valentines2018",
 			"95760": "YearsEnd",
+			"125664": "WhiteDay",
 			"127176": "EarlySummer"
 		},
 		"4": {
@@ -7090,6 +7380,7 @@
 	"462": {
 		"2": {
 			"25704": "",
+			"39648": "WhiteDay",
 			"69552": "Leyte",
 			"74088": "EarlySummer",
 			"77448": "Valentines2018",
@@ -7155,6 +7446,7 @@
 			"98784": "Setsubun",
 			"101808": "Fall",
 			"106008": "NewYears",
+			"114912": "WhiteDay",
 			"119280": "YearsEnd"
 		}
 	},
@@ -7163,6 +7455,7 @@
 			"18648": "",
 			"91224": "LateFall2017",
 			"93072": "Saury",
+			"99288": "WhiteDay",
 			"100968": "Setsubun",
 			"103320": "Valentines",
 			"116592": "EarlySummer",
@@ -7182,6 +7475,7 @@
 			"55272": "Fall",
 			"56112": "YearsEnd",
 			"66696": "Saury",
+			"68208": "WhiteDay",
 			"75936": "EarlySummer",
 			"77616": "NewYears",
 			"100464": "Setsubun",
@@ -7205,6 +7499,7 @@
 			"88200": "Xmas",
 			"94920": "Valentines2018",
 			"95760": "YearsEnd",
+			"125664": "WhiteDay",
 			"127176": "EarlySummer"
 		},
 		"4": {
@@ -7228,6 +7523,7 @@
 	"467": {
 		"2": {
 			"25704": "",
+			"39648": "WhiteDay",
 			"69552": "Leyte",
 			"74088": "EarlySummer",
 			"77448": "Valentines2018",
@@ -7293,6 +7589,7 @@
 			"98784": "Setsubun",
 			"101808": "Fall",
 			"106008": "NewYears",
+			"114912": "WhiteDay",
 			"119280": "YearsEnd"
 		}
 	},
@@ -7307,6 +7604,7 @@
 			"81984": "Summer",
 			"98952": "YearsEnd",
 			"111384": "EarlySummer",
+			"130536": "WhiteDay",
 			"137088": "Setsubun"
 		}
 	},
@@ -7315,6 +7613,7 @@
 			"18648": "",
 			"91224": "LateFall2017",
 			"93072": "Saury",
+			"99288": "WhiteDay",
 			"100968": "Setsubun",
 			"103320": "Valentines",
 			"116592": "EarlySummer",
@@ -7330,6 +7629,7 @@
 			"30408": "",
 			"59136": "Valentines",
 			"61488": "Rainy",
+			"62832": "WhiteDay",
 			"65352": "Setsubun",
 			"68544": "NewYears",
 			"70896": "Fall",
@@ -7349,6 +7649,7 @@
 			"81312": "LateFall2017",
 			"82320": "Saury2017",
 			"86520": "Fall2017",
+			"88200": "WhiteDay",
 			"91392": "Valentines",
 			"92904": "Rainy",
 			"95088": "YearsEnd",
@@ -7367,6 +7668,7 @@
 			"115416": "Rainy",
 			"123144": "Setsubun",
 			"123984": "EarlySummer",
+			"133560": "WhiteDay",
 			"135072": "NewYears"
 		}
 	},
@@ -7378,6 +7680,7 @@
 			"76776": "Saury2017",
 			"79464": "Valentines2018",
 			"83160": "Fall2017",
+			"90048": "WhiteDay",
 			"96432": "LateFall2017",
 			"97440": "Setsubun2018",
 			"107016": "Rainy",
@@ -7406,6 +7709,7 @@
 			"30408": "",
 			"59136": "Valentines",
 			"61488": "Rainy",
+			"62832": "WhiteDay",
 			"65352": "Setsubun",
 			"68544": "NewYears",
 			"70896": "Fall",
@@ -7425,6 +7729,7 @@
 			"63840": "",
 			"74256": "Rainy",
 			"81480": "YearsEnd",
+			"90888": "WhiteDay",
 			"96096": "NewYears",
 			"97776": "EarlySummer",
 			"106344": "Fall",
@@ -7455,6 +7760,7 @@
 	"481": {
 		"2": {
 			"25368": "",
+			"62832": "WhiteDay",
 			"75768": "EarlySummer",
 			"86856": "Xmas",
 			"100632": "NewYears",
@@ -7523,6 +7829,7 @@
 			"58632": "Saury",
 			"60312": "YearsEnd",
 			"68040": "Xmas",
+			"75096": "WhiteDay",
 			"76104": "Fall",
 			"78120": "Rainy",
 			"101808": "Setsubun"
@@ -7538,6 +7845,7 @@
 			"82992": "Valentines",
 			"83160": "EarlySummer",
 			"85344": "Fall",
+			"89040": "WhiteDay",
 			"97272": "Rainy",
 			"105336": "Xmas"
 		},
@@ -7553,6 +7861,7 @@
 			"61656": "Saury",
 			"64680": "LateWinter",
 			"65688": "Xmas",
+			"71232": "WhiteDay",
 			"71736": "Valentines",
 			"72408": "EarlySummer2015",
 			"75600": "Setsubun",
@@ -7573,6 +7882,7 @@
 			"11088": "",
 			"62496": "Xmas",
 			"77952": "Saury",
+			"83496": "WhiteDay",
 			"91896": "Setsubun",
 			"94248": "Rainy",
 			"100296": "Xmas2017",
@@ -7603,6 +7913,7 @@
 			"127176": "Setsubun",
 			"139944": "NewYears",
 			"140784": "EarlySummer",
+			"157080": "WhiteDay",
 			"158256": "Fall",
 			"172200": "YearsEnd",
 			"175728": "Valentines"
@@ -7670,6 +7981,7 @@
 			"25872": "",
 			"53592": "NewYears",
 			"54432": "EarlySummer",
+			"54768": "WhiteDay",
 			"54936": "Saury",
 			"68208": "Summer2017",
 			"78288": "Xmas",
@@ -7684,6 +7996,7 @@
 			"48384": "NewYears",
 			"49728": "Xmas",
 			"50400": "EarlySummer",
+			"55608": "WhiteDay",
 			"57792": "Valentines",
 			"58128": "YearsEnd",
 			"58800": "Fall",
@@ -7757,6 +8070,7 @@
 			"60984": "Rainy",
 			"65016": "Fall",
 			"68544": "NewYears",
+			"69216": "WhiteDay",
 			"72912": "Summer",
 			"99960": "Setsubun",
 			"107016": "Xmas",
@@ -7793,6 +8107,7 @@
 			"60984": "Rainy",
 			"65016": "Fall",
 			"68544": "NewYears",
+			"69216": "WhiteDay",
 			"72912": "Summer",
 			"99960": "Setsubun",
 			"107016": "Xmas",
@@ -8022,6 +8337,7 @@
 			"87528": "EarlySummer",
 			"111216": "Rainy",
 			"118608": "Valentines",
+			"124152": "WhiteDay",
 			"125832": "Setsubun",
 			"138096": "YearsEnd"
 		},
@@ -8035,6 +8351,7 @@
 			"53592": "Xmas",
 			"57288": "",
 			"87192": "NewYears",
+			"93744": "WhiteDay",
 			"97272": "EarlySummer",
 			"97944": "Valentines",
 			"98112": "Rainy",
@@ -8071,6 +8388,7 @@
 			"80808": "Rainy",
 			"82656": "Cold",
 			"93576": "Xmas",
+			"97440": "WhiteDay",
 			"101136": "EarlySummer",
 			"144984": "Leyte"
 		},
@@ -8120,6 +8438,7 @@
 			"63000": "Xmas",
 			"70392": "Valentines",
 			"71400": "NewYears",
+			"79128": "WhiteDay",
 			"80472": "Fall",
 			"85344": "Saury",
 			"101136": "Summer"
@@ -8149,6 +8468,7 @@
 			"69216": "YearsEnd",
 			"74424": "NewYears",
 			"75600": "Summer",
+			"80808": "WhiteDay",
 			"83160": "EarlySummer",
 			"84336": "Fall",
 			"95928": "Rainy"
@@ -8174,6 +8494,43 @@
 			"34944": ""
 		}
 	},
+	"557": {
+		"2": {
+			"6552": "",
+			"82824": "LateFall",
+			"95592": "Rainy",
+			"103488": "Saury",
+			"104664": "Fall",
+			"105000": "YearsEnd",
+			"107688": "WhiteDay",
+			"113232": "Xmas",
+			"117432": "EarlySummer",
+			"121968": "Setsubun"
+		}
+	},
+	"558": {
+		"2": {
+			"11256": "",
+			"60144": "NewYears",
+			"63840": "Setsubun",
+			"73584": "YearsEnd",
+			"79800": "Rainy",
+			"82320": "WhiteDay",
+			"88200": "Valentines",
+			"90552": "Xmas",
+			"101304": "Fall"
+		},
+		"3": {
+			"24528": "",
+			"38640": "Leyte",
+			"44184": "Valentines2018",
+			"96936": "Fall"
+		},
+		"4": {
+			"53760": "",
+			"108192": "Leyte"
+		}
+	},
 	"560": {
 		"2": {
 			"28392": "",
@@ -8184,6 +8541,7 @@
 			"69216": "YearsEnd",
 			"74424": "NewYears",
 			"75600": "Summer",
+			"80808": "WhiteDay",
 			"83160": "EarlySummer",
 			"84336": "Fall",
 			"95928": "Rainy"

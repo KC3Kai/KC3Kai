@@ -464,6 +464,8 @@ AntiAir: anti-air related calculations
 		uit25Icon = 539,
 		i504Icon = 530,
 		tatsutaK2Icon = 478,
+		isokazeKBIcon = 557,
+		hamakazeKBIcon = 558,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -489,6 +491,8 @@ AntiAir: anti-air related calculations
 	var isUit25 = masterIdEq( uit25Icon );
 	var isI504 = masterIdEq( i504Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
+	var isIsokazeKB = masterIdEq( isokazeKBIcon );
+	var isHamakazeKB = masterIdEq( hamakazeKBIcon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -824,6 +828,19 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( isHighAngleMount ),
 				hasSome( isAAGunNotCD ))
+		)
+	);
+
+	// Isokaze KB / Hamakaze KB
+	declareAACI(
+		29, 5, 1.55,
+		[isokazeKBIcon, haMountNbifdIcon, radarIcon],
+		predAnyOf(isIsokazeKB, isHamakazeKB),
+		withEquipmentMsts(
+			predAllOf(
+				predNot( hasSome( isBuiltinHighAngleMount )),
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
 		)
 	);
 
