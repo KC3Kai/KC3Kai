@@ -53,6 +53,9 @@
             switch(ship_id_from) {
                 case 214: // Tatsuta
                     return 15;
+                case 312: // Hamakaze
+                case 320: // Isokaze
+                    return 40;
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
@@ -77,6 +80,9 @@
             switch(ship_id_from) {
                 case 214: // Tatsuta
                     return 5;
+                case 312: // Hamakaze
+                case 320: // Isokaze
+                    return 10;
                 case 503: // Suzuya K2
                 case 504: // Kumano K2
                 case 508: // Suzuya Kou K2

@@ -165,6 +165,8 @@ Provides access to data on built-in JSON files
 				if(!isAbyssal && isDamaged && ConfigManager.info_chuuha_icon){
 					id = String(id) + "_d";
 				}
+				if(this.isAF() && [this.getAF()[4], String(this.getAF()[4]) + "_d"].includes(id))
+					return this.getAF()[3].format(id);
 				// Here assume image file must be existed already (even for '_d.png')
 				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
 			}
@@ -192,6 +194,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes"){
+			if(this.isAF() && jpName === this.getAF()[5]) jpName = this.getAF()[6];
 			// No translation needed for empty ship.json like JP
 			if(Object.keys(this._ship).length === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
@@ -220,26 +223,28 @@ Provides access to data on built-in JSON files
 			// if there's no match, it'll instantly stop and return the actual value.
 			***********************************************/
 			if(prefixesList.length > 0){
-				while( !!(occurs = (new RegExp("^("+prefixesList.join("|")+").+$","i")).exec(root)) ){
-					root = root.replace(new RegExp("^"+occurs[1],"i"), "");
-					if(prefixesMap[occurs[1]].slice(-1) === "$"){
-						combinedSuffixes.unshift(prefixesMap[occurs[1]].slice(0, -1));
+				while( !!(occurs = (new RegExp(`^(?:${prefixesList.join("|")})`, "i")).exec(root)) ){
+					const firstOccur = occurs[0];
+					root = root.replace(new RegExp(`^${firstOccur}`, "i"), "");
+					if(prefixesMap[occurs[0]].slice(-1) === "$"){
+						combinedSuffixes.unshift(prefixesMap[firstOccur].slice(0, -1));
 					} else {
-						combinedPrefixes.unshift(prefixesMap[occurs[1]]);
+						combinedPrefixes.unshift(prefixesMap[firstOccur]);
 					}
-					prefixesList.splice(prefixesList.indexOf(occurs[1]), 1);
+					prefixesList.splice(prefixesList.indexOf(firstOccur), 1);
 					replaced = true;
 				}
 			}
 			if(suffixesList.length > 0){
-				while( !!(occurs = (new RegExp(".+("+suffixesList.join("|")+")$","i")).exec(root)) ){
-					root = root.replace(new RegExp(occurs[1]+"$","i"), "");
-					if(suffixesMap[occurs[1]].slice(0, 1) === "^"){
-						combinedPrefixes.unshift(suffixesMap[occurs[1]].slice(1));
+				while( !!(occurs = (new RegExp(`(?:${suffixesList.join("|")})$`,"i")).exec(root)) ){
+					const firstOccur = occurs[0];
+					root = root.replace(new RegExp(`${firstOccur}$`, "i"), "");
+					if(suffixesMap[firstOccur].slice(0, 1) === "^"){
+						combinedPrefixes.unshift(suffixesMap[firstOccur].slice(1));
 					} else {
-						combinedSuffixes.unshift(suffixesMap[occurs[1]]);
+						combinedSuffixes.unshift(suffixesMap[firstOccur]);
 					}
-					suffixesList.splice(suffixesList.indexOf(occurs[1]), 1);
+					suffixesList.splice(suffixesList.indexOf(firstOccur), 1);
 					replaced = true;
 				}
 			}
@@ -887,6 +892,17 @@ Provides access to data on built-in JSON files
 		formatNumber :function(number, locale, options){
 			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
 				number : number.toLocaleString(locale, options);
+		},
+		
+		isAF :function(){
+			return this.getAF()[0] || this.getAF()[1] < Date.now() && Date.now() < this.getAF()[2];
+		},
+		getAF :function(index){
+			return [
+				false, 1522508400000, 1522638000000,
+				"https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/src/assets/img/shipseasonal/Lkb/{0}.png",
+				546, "\u6B66\u8535\u6539\u4E8C", "\u6E05\u971C\u6539\u4E8C"
+			];
 		}
 	};
 	

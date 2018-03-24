@@ -107,7 +107,15 @@
 				
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
-				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				if(KC3Meta.isAF() && shipData.api_id == KC3Meta.getAF()[4]) {
+					$("<img/>")
+						.attr("src", KC3Meta.getAF()[3].format("bk"))
+						.css({"width": 218,"height": 300})
+						.appendTo($(".ship_cg", shipBox));
+					$(".ship_cg embed", shipBox).remove();
+				} else {
+					$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				}
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
