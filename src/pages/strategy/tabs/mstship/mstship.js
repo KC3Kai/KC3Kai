@@ -383,9 +383,9 @@
 			}
 			
 			$(".tab_mstship .shipInfo .cgswf embed").remove();
-			if(KC3Meta.isAF() && ship_id == KC3Meta.getAF()[4])
+			if(KC3Meta.isAF() && ship_id == KC3Meta.getAF(4))
 				$("<img/>")
-					.attr("src", KC3Meta.getAF()[3].format("bk"))
+					.attr("src", KC3Meta.getAF(3).format("bk"))
 					.css({"width": 218,"height": 300})
 					.appendTo(".tab_mstship .shipInfo .cgswf");
 			else
