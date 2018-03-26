@@ -1,76 +1,24 @@
 (function () {
     "use strict";
 
-    const baseImgSrc = "/assets/img/ui/event_winter_2018.png",
+    const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
         shipPositions = [
-            {"x": 58, "y": 165, "id": 131},
-            {"x": 185, "y": 165, "id": 143},
-            {"x": 312, "y": 165, "id": 80},
-            {"x": 440, "y": 165, "id": 62},
-            {"x": 567, "y": 165, "id": 65},
-            {"x": 58, "y": 245, "id": 66},
-            {"x": 185, "y": 245, "id": 67},
-            {"x": 312, "y": 245, "id": 69},
-            {"x": 440, "y": 245, "id": 68},
-            {"x": 567, "y": 245, "id": 138},
-            {"x": 58, "y": 325, "id": 50},
-            {"x": 185, "y": 325, "id": 452},
-            {"x": 312, "y": 325, "id": 409},
-            {"x": 440, "y": 325, "id": 425},
-            {"x": 567, "y": 325, "id": 135},
-            {"x": 58, "y": 405, "id": 485},
-            {"x": 58, "y": 556, "id": 78},
-            {"x": 185, "y": 556, "id": 79},
-            {"x": 312, "y": 556, "id": 124},
-            {"x": 440, "y": 556, "id": 125},
-            {"x": 567, "y": 556, "id": 71},
-            {"x": 58, "y": 636, "id": 72},
-            {"x": 185, "y": 636, "id": 139},
-            {"x": 312, "y": 636, "id": 168},
-            {"x": 440, "y": 636, "id": 167},
-            {"x": 567, "y": 636, "id": 20},
-            {"x": 58, "y": 716, "id": 170},
-            {"x": 185, "y": 716, "id": 410},
-            {"x": 312, "y": 716, "id": 415},
-            {"x": 58, "y": 869, "id": 26},
-            {"x": 185, "y": 869, "id": 27},
-            {"x": 312, "y": 869, "id": 70},
-            {"x": 440, "y": 869, "id": 43},
-            {"x": 567, "y": 869, "id": 97},
-            {"x": 58, "y": 949, "id": 413},
-            {"x": 185, "y": 949, "id": 414},
-            {"x": 757, "y": 230, "id": 63},
-            {"x": 885, "y": 230, "id": 64},
-            {"x": 1012, "y": 230, "id": 61},
-            {"x": 1140, "y": 230, "id": 114},
-            {"x": 1267, "y": 230, "id": 113},
-            {"x": 757, "y": 310, "id": 15},
-            {"x": 885, "y": 310, "id": 16},
-            {"x": 1012, "y": 310, "id": 49},
-            {"x": 1140, "y": 310, "id": 18},
-            {"x": 1267, "y": 310, "id": 486},
-            {"x": 757, "y": 390, "id": 41},
-            {"x": 885, "y": 390, "id": 38},
-            {"x": 1012, "y": 390, "id": 40},
-            {"x": 757, "y": 709, "id": 111},
-            {"x": 885, "y": 709, "id": 102},
-            {"x": 1012, "y": 709, "id": 103},
-            {"x": 1140, "y": 709, "id": 116},
-            {"x": 1267, "y": 709, "id": 77},
-            {"x": 757, "y": 787, "id": 87},
-            {"x": 885, "y": 787, "id": 100},
-            {"x": 1012, "y": 787, "id": 22},
-            {"x": 1140, "y": 787, "id": 183},
-            {"x": 1267, "y": 787, "id": 421},
-            {"x": 757, "y": 868, "id": 423}
-        ],
-        fleetNames = {
-            "Kurita Fleet": {x: 673, y: 422, mark: true},
-            "Suzuki Fleet": {x: 673, y: 732, mark: true},
-            "Nishimura Fleet": {x: 673, y: 964},
-            "Shima Fleet": {x: 1374, y: 412},
-            "Ozawa Fleet": {x: 1374, y: 880, mark: true}
-        };
+            {"x": 234, "y": 136, "id": 87},
+            {"x": 234, "y": 198, "id": 77},
+            {"x": 234, "y": 260, "id": 183},
+            {"x": 234, "y": 322, "id": 49},
+            {"x": 234, "y": 384, "id": 41},
+            {"x": 234, "y": 446, "id": 425},
+            {"x": 587, "y": 136, "id": 131},
+            {"x": 587, "y": 198, "id": 139},
+            {"x": 587, "y": 260, "id": 532},
+            {"x": 587, "y": 322, "id": 167},
+            {"x": 587, "y": 384, "id": 170},
+            {"x": 587, "y": 446, "id": 20},
+            {"x": 587, "y": 508, "id": 425},
+            {"x": 587, "y": 570, "id": 41},
+            {"x": 587, "y": 632, "id": 49}
+        ];
 
     class ShowcaseEventList {
         constructor() {
@@ -116,10 +64,10 @@
                         });
                         suffix = suffix.trim();
                         this.ctx.font = "400 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText(suffix, shipPos.x + 92 - this.ctx.measureText(suffix).width, shipPos.y - 16);
+                        this.ctx.fillText(suffix, shipPos.x + 77 - this.ctx.measureText(suffix).width, shipPos.y - 23);
                     } else {
                         this.ctx.font = "800 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText("*", shipPos.x + 92 - this.ctx.measureText("*").width, shipPos.y - 12);
+                        this.ctx.fillText("*", shipPos.x + 77 - this.ctx.measureText("*").width, shipPos.y - 19);
                     }
 
                 }
@@ -136,7 +84,7 @@
                 }
                 txt = ships[0].level;
             }
-            this.ctx.font = "800 26px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            this.ctx.font = "800 32px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
             this.ctx.fillText(txt, shipPos.x, shipPos.y);
         }
 
@@ -152,17 +100,8 @@
                 this.addShipToImage(shipPositions[i]);
             }
 
-            this.ctx.font = "800 32px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-
-            for (let i in fleetNames) {
-                if (!fleetNames.hasOwnProperty(i))
-                    continue;
-                this.ctx.fillStyle = fleetNames[i].mark ? "#000" : "#575249";
-                this.ctx.fillText(i, fleetNames[i].x - this.ctx.measureText(i).width - 10, fleetNames[i].y - 10);
-            }
-
             new KC3ImageExport(this.canvas, {
-                filename: "Winter 2018 ShipList " + dateFormat(" yyyy-mm-dd"),
+                filename: "Operation Kita Ten-Go shiplist" + dateFormat(" yyyy-mm-dd"),
                 method: this.buildSettings.output,
             }).export((error, result) => {
                 this.complete(result || {});
