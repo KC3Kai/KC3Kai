@@ -1247,7 +1247,8 @@ Contains summary information about a fleet and its ships
 						stats: {
 							ev: nakedStats.ev,
 							ls: nakedStats.ls,
-							as: nakedStats.as
+							as: nakedStats.as,
+							sp: ship.speed
 						},
 						kyouka: ship.mod,
 						equip: ship.equipment(true).map(g => g.masterId),
