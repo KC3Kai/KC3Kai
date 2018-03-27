@@ -577,14 +577,18 @@
 				)));
 		});
 
-		// Text-based battle replayer
-		$(".module.activity .map_world").addClass("hover").on("click", function(){
+		const prepareBattleLogsData = function(){
+			// Don't pop up if a battle has not started yet
 			if( !(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
-				|| KC3SortieManager.countNodes() < 1) { return; }
+				|| KC3SortieManager.countNodes() < 1) { return false; }
+			const node = KC3SortieManager.currentNode();
+			if(node.type !== "battle"
+				|| !(node.battleDay || node.battleNight)) { return false; }
+			const isPvP = node.isPvP;
 			const sortie = {
-				id: KC3SortieManager.onSortie || "???",
+				id: KC3SortieManager.onSortie || (isPvP ? "TBD" : "???"),
 				diff: KC3SortieManager.map_difficulty,
-				world: KC3SortieManager.isPvP() ? 0 : KC3SortieManager.map_world,
+				world: isPvP ? 0 : KC3SortieManager.map_world,
 				mapnum: KC3SortieManager.map_num,
 				fleetnum: KC3SortieManager.fleetSent,
 				combined: PlayerManager.combinedFleet,
@@ -592,15 +596,27 @@
 				fleet2: PlayerManager.fleets[1].sortieJson(),
 				fleet3: PlayerManager.fleets[2].sortieJson(),
 				fleet4: PlayerManager.fleets[3].sortieJson(),
-				support1: KC3SortieManager.getSupportingFleet(false),
-				support2: KC3SortieManager.getSupportingFleet(true),
-				lbas: KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world)
+				support1: isPvP ? 0 : KC3SortieManager.getSupportingFleet(false),
+				support2: isPvP ? 0 : KC3SortieManager.getSupportingFleet(true),
+				lbas: isPvP ? [] : KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world),
+				battles: [node.buildBattleDBData()]
 			};
-			sortie.battles = [KC3SortieManager.currentNode().buildBattleDBData()];
-			const popup = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#"
-				+ JSON.stringify(sortie), "battle", "width=640,height=480,resizeable,scrollbars");
-			popup.document.close();
-			if(window.focus) popup.focus();
+			return sortie;
+		};
+		const openBattleLogsWindow = function(data, isPopup){
+			try {
+				// Might try to close old window? or update with new URL (have to resolve privilege issue)
+				const ref = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data),
+					"battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+				if(ref && !ref.closed && ref.focus) ref.focus();
+			} catch (e) {
+				console.warn("Failed to open battle logs", e);
+			}
+		};
+		// Open text-based battle replayer in new tab or popup window
+		$(".module.activity .map_world").addClass("hover").on("click", function(e){
+			const data = prepareBattleLogsData();
+			if(data) openBattleLogsWindow(data, e.altKey);
 		});
 
 		/* Expedition Planner
@@ -3020,20 +3036,16 @@
 
 		PvPStart: function(data){
 			var self = this;
+			var thisPvP = KC3SortieManager.currentNode();
+
 			// Clear battle details box just to make sure
 			clearBattleData();
 			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
-			
+
 			// PvP enemy never combined
 			$(".module.activity .abyss_single").show();
 			$(".module.activity .abyss_combined").hide();
-			
-			// Create a battle node for PvP battle
-			var thisPvP = (new KC3Node(0, 0, Date.now())).defineAsBattle();
-			KC3SortieManager.appendNode(thisPvP);
-			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle, parseInt(data.fleetSent) );
 
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
@@ -4104,6 +4116,8 @@
 		if(!recipe.noReqs) {
 			$(".remodel_slot_itemon img", itemBox)
 				.attr("src", `${myKcServerHost}/kcs/resources/image/slotitem/item_on/${paddedId}.png`)
+				.attr("alt", "[{0}]".format(gearMst.api_id))
+				.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); })
 				.attr("title", gearMst.api_info)
 				.data("masterId", gearMst.api_id)
 				.on("click", self.gearDoubleClickFunction);

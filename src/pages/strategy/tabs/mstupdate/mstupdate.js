@@ -107,9 +107,9 @@
 				
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				
-				if(KC3Meta.isAF() && shipData.api_id == KC3Meta.getAF()[4]) {
+				if(KC3Meta.isAF() && shipData.api_id == KC3Meta.getAF(4)) {
 					$("<img/>")
-						.attr("src", KC3Meta.getAF()[3].format("bk"))
+						.attr("src", KC3Meta.getAF(3).format("bk"))
 						.css({"width": 218,"height": 300})
 						.appendTo($(".ship_cg", shipBox));
 					$(".ship_cg embed", shipBox).remove();
