@@ -3,21 +3,22 @@
 
     const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
         shipPositions = [
-            {"x": 234, "y": 136, "id": 87},
-            {"x": 234, "y": 198, "id": 77},
-            {"x": 234, "y": 260, "id": 183},
-            {"x": 234, "y": 322, "id": 49},
-            {"x": 234, "y": 384, "id": 41},
-            {"x": 234, "y": 446, "id": 425},
-            {"x": 587, "y": 136, "id": 131},
-            {"x": 587, "y": 198, "id": 139},
-            {"x": 587, "y": 260, "id": 532},
-            {"x": 587, "y": 322, "id": 167},
-            {"x": 587, "y": 384, "id": 170},
-            {"x": 587, "y": 446, "id": 20},
-            {"x": 587, "y": 508, "id": 425},
-            {"x": 587, "y": 570, "id": 41},
-            {"x": 587, "y": 632, "id": 49}
+            {"x": 254, "y": 144, "id": 87},
+            {"x": 254, "y": 209, "id": 77},
+            {"x": 254, "y": 274, "id": 183},
+            {"x": 254, "y": 339, "id": 49},
+            {"x": 254, "y": 404, "id": 41},
+            {"x": 254, "y": 469, "id": 425},
+
+            {"x": 626, "y": 144, "id": 131},
+            {"x": 626, "y": 209, "id": 139},
+            {"x": 626, "y": 274, "id": 532},
+            {"x": 626, "y": 339, "id": 167},
+            {"x": 626, "y": 404, "id": 170},
+            {"x": 626, "y": 469, "id": 20},
+            {"x": 626, "y": 534, "id": 425},
+            {"x": 626, "y": 599, "id": 41},
+            {"x": 626, "y": 664, "id": 49}
         ];
 
     class ShowcaseEventList {
@@ -64,10 +65,10 @@
                         });
                         suffix = suffix.trim();
                         this.ctx.font = "400 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText(suffix, shipPos.x + 77 - this.ctx.measureText(suffix).width, shipPos.y - 23);
+                        this.ctx.fillText(suffix, shipPos.x + 70 - this.ctx.measureText(suffix).width, shipPos.y - 26);
                     } else {
                         this.ctx.font = "800 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText("*", shipPos.x + 77 - this.ctx.measureText("*").width, shipPos.y - 19);
+                        this.ctx.fillText("*", shipPos.x + 70 - this.ctx.measureText("*").width, shipPos.y - 22);
                     }
 
                 }
