@@ -299,8 +299,9 @@
 					// also search for JP name and kana yomi, not so useful for JP tho
 					const shipName = $(".ship_name", this).text(),
 						shipNameJp = ($(".ship_name", this).data("jpName") || ""),
-						shipNameKana = ($(".ship_name", this).data("jpNameKana") || "");
-					const isToHide = ! [shipName, shipNameJp, shipNameKana]
+						shipNameKana = ($(".ship_name", this).data("jpNameKana") || ""),
+						shipNameRomaji = ($(".ship_name", this).data("jpNameRomaji") || "");
+					const isToHide = ! [shipName, shipNameJp, shipNameKana, shipNameRomaji]
 						.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
 					hiddenShipsByName += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
@@ -461,6 +462,7 @@
 				name: ThisShip.name(),
 				jpName: MasterShip.api_name,
 				jpNameKana: MasterShip.api_yomi,
+				jpNameRomaji: wanakana.toRomaji(MasterShip.api_yomi),
 				className: KC3Meta.ctypeName(MasterShip.api_ctype),
 				fullName: KC3Meta.term("ShipListFullNamePattern")
 					.format(KC3Meta.ctypeName(MasterShip.api_ctype), ThisShip.name()),
@@ -1042,7 +1044,8 @@
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
 					$(".ship_name", cElm).data("jpName", cShip.jpName)
-						.data("jpNameKana", cShip.jpNameKana);
+						.data("jpNameKana", cShip.jpNameKana)
+						.data("jpNameRomaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
