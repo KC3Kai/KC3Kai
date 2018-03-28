@@ -18,8 +18,10 @@
 	float: left;
 	border-radius: 7px;
 }
-.tab_showcase  .control {
+.tab_showcase .controls #eventShipList{
+	width:250px;
 }
+
 
 .tab_showcase  .control:hover {
 	background-color: #0066CC;
