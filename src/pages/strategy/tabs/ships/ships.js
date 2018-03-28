@@ -1043,9 +1043,6 @@
 					$(".ship_img .ship_icon", cElm)
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
-					$(".ship_name", cElm).data("jpName", cShip.jpName)
-						.data("jpNameKana", cShip.jpNameKana)
-						.data("jpNameRomaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1085,7 +1082,10 @@
 						const thisShip = ship || cShip;
 						// Reset shown ship name
 						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this).text(showName).attr("title", showName);
+						$(".ship_name", this).text(showName).attr("title", showName)
+							.data("jpName", thisShip.jpName)
+							.data("jpNameKana", thisShip.jpNameKana)
+							.data("jpNameRomaji", thisShip.jpNameRomaji);
 						// Recomputes stats
 						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
 						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
