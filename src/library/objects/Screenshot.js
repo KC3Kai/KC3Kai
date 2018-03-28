@@ -3,7 +3,7 @@ var enableShelfTimer = false;
 
 function KCScreenshot(){
 	ConfigManager.load();
-	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || 1);
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
