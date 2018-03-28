@@ -2396,6 +2396,7 @@ ABYSS FLEET
 	border-radius: 5px;
 	margin: 0px 0px 2px 0px;
 	padding: 1px 1px 1px 1px;
+	overflow: hidden;
 }
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
@@ -2466,10 +2467,16 @@ ABYSS FLEET
 }
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs {
 	float: left;
-	width: 125px;
+	width: 127px;
+	height: 32px;
 	color: #222;
 	font-size: 11px;
-	margin: 2px 0px 0px 2px;
+	margin-top: 2px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs::-webkit-scrollbar {
+	width: 3px;
 }
 .module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_reqs {
 	display: none;
@@ -2478,7 +2485,7 @@ ABYSS FLEET
 	float: left;
 	height: 15px;
 	line-height: 15px;
-	margin-right: 3px;
+	margin-left: 2px;
 }
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs img {
 	width: 12px;
@@ -2486,8 +2493,12 @@ ABYSS FLEET
 	vertical-align: text-bottom;
 	margin-right: 1px;
 }
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.req {
+	color: #ddd;
+}
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.certain {
 	color: #8ae9e4;
+	margin-left: 1px;
 	display: none;
 }
 .module.activity .activity_remodel .remodel_consumptions {
