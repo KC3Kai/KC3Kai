@@ -1483,13 +1483,22 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_practice/battle":function(params, response, headers){
 			var fleetNum = parseInt(params.api_deck_id, 10);
+			var utcSeconds = Date.toUTCseconds(headers.Date);
 			// Simulate PvP battle as special sortie
-			KC3SortieManager.sortieTime = Date.toUTCseconds(headers.Date);
+			KC3SortieManager.sortieTime = utcSeconds;
 			KC3SortieManager.fleetSent  = fleetNum;
 			KC3SortieManager.onSortie   = 0;
 			KC3SortieManager.map_world  = -1;
+			KC3SortieManager.map_num    = 0;
 			KC3SortieManager.onPvP      = true;
+			KC3SortieManager.clearNodes();
 			KC3SortieManager.snapshotFleetState();
+			// Create a battle node for the PvP battle
+			var pvpNode = (new KC3Node(0, 0, utcSeconds * 1000)).defineAsBattle();
+			pvpNode.isPvP = true;
+			pvpNode.letter = "PvP";
+			KC3SortieManager.appendNode(pvpNode);
+			KC3SortieManager.engageBattle(response.api_data);
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,
 				fleetSent: params.api_deck_id
@@ -1504,7 +1513,7 @@ Previously known as "Reactor"
 		/* PVP Start
 		-------------------------------------------------------*/
 		"api_req_practice/midnight_battle":function(params, response, headers){
-			KC3SortieManager.engageNight( response.api_data );
+			KC3SortieManager.engageNight(response.api_data);
 			KC3Network.trigger("PvPNight", { battle: response.api_data });
 		},
 		

@@ -18,10 +18,12 @@
 	float: left;
 	border-radius: 7px;
 }
-.tab_showcase  .control {
+.tab_showcase .controls #eventShipList{
+	width: auto;
+	padding: 0px 10px 0px 10px;
 }
 
-.tab_showcase  .control:hover {
+.tab_showcase .control:hover {
 	background-color: #0066CC;
 }
 
@@ -30,10 +32,10 @@
 	margin: 0px 0px 0px 0px;
 	padding: 5px 10px;
 }
-.tab_showcase  .control.disabled {
+.tab_showcase .control.disabled {
 	background-color:#eee;
 }
-.tab_showcase  .control.disabled:hover {
+.tab_showcase .control.disabled:hover {
 	background-color: #eee;
 	cursor:default;
 }

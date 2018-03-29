@@ -600,6 +600,9 @@
 				ship.ls[0] = shipObj.ls || ((noMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
 				ship.ev[0] = shipObj.ev || ((noMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats("houk"));
 				ship.as[0] = shipObj.as || ((noMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats("tais"));
+
+				// just fall back to master data, to avoid recompute ship speed by updating a table about speed up ship classes
+				ship.speed = shipObj.sp || noMasterStats.sp || masterData.api_soku;
 			});
 
 			return fleet;
@@ -648,6 +651,7 @@
 						as: ship.as[0],
 						fp: ship.fp[0],
 						tp: ship.tp[0],
+						sp: ship.speed,
 						mod: ship.mod,
 						equipments: convertEquipmentsOf(ship)
 					};
