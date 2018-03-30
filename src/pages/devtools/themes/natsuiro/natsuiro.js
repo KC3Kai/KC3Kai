@@ -605,10 +605,14 @@
 		};
 		const openBattleLogsWindow = function(data, isPopup){
 			try {
-				// Might try to close old window? or update with new URL (have to resolve privilege issue)
-				const ref = window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data),
-					"battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
-				if(ref && !ref.closed && ref.focus) ref.focus();
+				const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
+				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+				if(ref && !ref.closed){
+					// Update hash with latest battle data even if window already opened
+					ref.location.replace(url);
+					// Switch focus to the window if possible
+					if(ref.focus) ref.focus();
+				}
 			} catch (e) {
 				console.warn("Failed to open battle logs", e);
 			}
