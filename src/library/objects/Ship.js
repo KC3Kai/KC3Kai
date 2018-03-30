@@ -1353,7 +1353,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
 			daySpecialAttackType = [], contactPlaneId = 0,
-			isCritical = false, isAirAttack = false, targetShipType = 0){
+			isCritical = false, isAirAttack = false, targetShipType = 0, isDefenderArmorCounted = false){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
@@ -1425,17 +1425,29 @@ KC3改 Ship Object
 		// Rocket, Landing craft modifier
 		// Against PT Imp modifier
 		
-		// NOTE: Ammo left percent modifier is applied to final damage, not attack power
 		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
 			* dayCutinModifier * airstrikeConcatModifier * apshellModifier;
 		
-		// New Depth Charge bonus
+		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
 		if(warfareType === "Antisub") {
 			const type95ndcCnt = this.countEquipment(226);
 			const type2ndcCnt = this.countEquipment(227);
-			newDepthChargeBonus = type95ndcCnt + 2 * type2ndcCnt;
-			result += newDepthChargeBonus;
+			if(type95ndcCnt > 0 || type2ndcCnt > 0) {
+				const deShipBonus = this.master().api_stype === 1 ? 1 : 0;
+				newDepthChargeBonus =
+					type95ndcCnt * (Math.sqrt(KC3Master.slotitem(226).api_tais - 2) + deShipBonus) +
+					type2ndcCnt * (Math.sqrt(KC3Master.slotitem(227).api_tais - 2) + deShipBonus);
+				// Applying this to enemy submarine's armor, result will be capped to at least 1
+				if(isDefenderArmorCounted) result += newDepthChargeBonus;
+			}
+		}
+		
+		// Remaining ammo percent modifier, applied to final damage, not only attack power
+		const ammoPercent = Math.floor(this.ammo / this.master().api_bull_max * 100);
+		const remainingAmmoModifier = ammoPercent >= 50 ? 1 : ammoPercent * 2 / 100;
+		if(isDefenderArmorCounted) {
+			result *= remainingAmmoModifier;
 		}
 		
 		return {
@@ -1446,6 +1458,7 @@ KC3改 Ship Object
 			airstrikeConcatModifier,
 			apshellModifier,
 			newDepthChargeBonus,
+			remainingAmmoModifier,
 		};
 	};
 
