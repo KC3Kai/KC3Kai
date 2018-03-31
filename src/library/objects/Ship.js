@@ -208,7 +208,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.exItem = function(){ return this.getGearManager().get(this.ex_item); };
 	KC3Ship.prototype.isStriped = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.5); };
 	// Current HP < 25% but already in the repair dock not counted
-	KC3Ship.prototype.isTaiha   = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
+	KC3Ship.prototype.isTaiha = function(){ return (this.hp[1]>0) && (this.hp[0]/this.hp[1] <= 0.25) && !this.isRepairing(); };
 	// To indicate the face grey out ship, retreated or sunk (before her data removed from API)
 	KC3Ship.prototype.isAbsent = function(){ return (this.didFlee || this.hp[0] <= 0 || this.hp[1] <= 0); };
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
@@ -414,8 +414,7 @@ KC3改 Ship Object
 		return KC3Ship.getMaxHp(this.masterId, this.level, isModernized);
 	};
 
-	// since 2017-09-29, asw stat can be modernized, known max value is within 9.
-	// but there is no info about asw stat from master ship, except initial asw of Taiyou.
+	// Since 2017-09-29, asw stat can be modernized, known max value is within 9.
 	KC3Ship.prototype.maxAswMod = function(){
 		// the condition `Core.swf/vo.UserShipData.hasTaisenAbility()` also used
 		var maxAswBeforeMarriage = this.as[1];
@@ -583,7 +582,7 @@ KC3改 Ship Object
 		this.equipment().forEach((item, i) => {
 			// Is Jet aircraft and left slot > 0
 			if(item.exists() && this.slots[i] > 0 &&
-				KC3GearManager.jetAircraftType2Ids.indexOf(item.master().api_type[2]) > -1) {
+				KC3GearManager.jetAircraftType2Ids.includes(item.master().api_type[2])) {
 				consumedSteel = Math.round(
 					this.slots[i]
 					* item.master().api_cost
@@ -623,7 +622,6 @@ KC3改 Ship Object
 			fp: this.fp[0],
 			// Naked HP maybe mean HP before marriage
 			hp: (this.master().api_taik || [])[0] || this.hp[1],
-			// Luck can be only added by modernization
 			lk: (this.master().api_luck || [])[0] || this.lk[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
@@ -672,7 +670,7 @@ KC3改 Ship Object
 		// Might move these complex definitions to fud_weekly.json?
 		// Special boost for Arctic Camouflage equipped on Tama K / K2, Kiso K / K2
 		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
-		if(isArcticEquipped && [146, 216, 217, 547].indexOf(this.masterId) > -1) {
+		if(isArcticEquipped && [146, 216, 217, 547].includes(this.masterId)) {
 			total += ({
 				"souk": 2,
 				"houk": 7
@@ -915,7 +913,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.findEquipmentById = function(masterId, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
-			Array.isArray(masterId) ? masterId.indexOf(gear.masterId) > -1 :
+			Array.isArray(masterId) ? masterId.includes(gear.masterId) :
 			masterId === gear.masterId
 		);
 	};
@@ -928,7 +926,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.findEquipmentByType = function(typeIndex, typeValue, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
 			gear.exists() && (
-				Array.isArray(typeValue) ? typeValue.indexOf(gear.master().api_type[typeIndex]) > -1 :
+				Array.isArray(typeValue) ? typeValue.includes(gear.master().api_type[typeIndex]) :
 				typeValue === gear.master().api_type[typeIndex]
 			)
 		);
@@ -1020,7 +1018,7 @@ KC3改 Ship Object
 			if(id === 0){ return; }
 			var type2 = gear.master().api_type[2];
 			var los = gear.master().api_saku;
-			if(KC3GearManager.landBaseReconnType2Ids.indexOf(type2)>-1){
+			if(KC3GearManager.landBaseReconnType2Ids.includes(type2)){
 				// Carrier Recon Aircraft
 				if(type2 == 9){
 					reconModifier =
@@ -1583,7 +1581,7 @@ KC3改 Ship Object
 		const masterId = this.masterId,
 			stype = this.master().api_stype;
 		return incapableShips.indexOf(masterId) === -1 &&
-			(capableShips.indexOf(masterId) > -1 || capableStypes.indexOf(stype) > -1);
+			(capableShips.includes(masterId) || capableStypes.includes(stype));
 	};
 
 	// is this ship able to do OASW unconditionally
@@ -2013,7 +2011,7 @@ KC3改 Ship Object
 				if(mainGunCnt === 2 && secondaryCnt >= 1) return ["Cutin", 4, "CutinMainMainSecond", 1.75];
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
 					(mainGunCnt === 1 && torpedoCnt === 1)) return ["Cutin", 2, "CutinTorpTorpMain", 1.3];
-				// double attack can be torpedo attack animation if first slot is torpedo
+				// double attack can be torpedo attack animation if topmost slot is torpedo
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
 					(mainGunCnt === 1 && secondaryCnt >= 1) ||
 					(secondaryCnt >= 2 && torpedoCnt <= 1)) return ["Cutin", 1, "DoubleAttack", 1.2];
@@ -2057,7 +2055,7 @@ KC3改 Ship Object
 		
 		// torpedo attack if any torpedo equipped at top most, otherwise single shelling fire
 		const topGear = this.equipment().find(gear => gear.exists() &&
-			[1, 2, 3].indexOf(gear.master().api_type[1]) > -1);
+			[1, 2, 3].includes(gear.master().api_type[1]));
 		return topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0];
 	};
 
@@ -2378,7 +2376,7 @@ KC3改 Ship Object
 			if(this.isDummy() || this.isAbsent()) return -1;
 			const stype = this.master().api_stype;
 			// CAV, BBV, CV/CVL/CVB, AV can use Rocket Launcher K2
-			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].indexOf(stype) > -1;
+			const isStypeForRockeLaunK2 = [6, 7, 10, 11, 16, 18].includes(stype);
 			// Type 3 Shell
 			if(this.hasEquipmentType(2, 18)) {
 				if(isStypeForRockeLaunK2 && this.hasEquipment(274)) return 5;
