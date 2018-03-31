@@ -382,18 +382,18 @@
 				shipSrc += "&forceX={0}&forceY={1}".format(x, y);
 			}
 			
-			$(".tab_mstship .shipInfo .cgswf embed").remove();
-			if(KC3Meta.isAF() && ship_id == KC3Meta.getAF(4))
+			$(".tab_mstship .shipInfo .cgswf").empty();
+			if(KC3Meta.isAF() && ship_id == KC3Meta.getAF(4)){
 				$("<img/>")
 					.attr("src", KC3Meta.getAF(3).format("bk"))
-					.css({"width": 218,"height": 300})
 					.appendTo(".tab_mstship .shipInfo .cgswf");
-			else
+			} else {
 				$("<embed/>")
 					.attr("src", shipSrc)
 					.attr("wmode", "transparent")
 					.attr("menu", "false")
 					.appendTo(".tab_mstship .shipInfo .cgswf");
+			}
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
 			$(".tab_mstship .shipInfo .hourlies").empty();
 			
@@ -408,7 +408,7 @@
 				$(".tab_mstship .shipInfo .cgswf")
 					.css("width", "218px")
 					.css("height", "300px");
-				$(".tab_mstship .shipInfo .cgswf embed")
+				$(".tab_mstship .shipInfo .cgswf > *")
 					.css("width", "218px")
 					.css("height", "300px");
 				
@@ -876,7 +876,7 @@
 				$(".tab_mstship .shipInfo .json").hide().css("width", "100%");
 				$(".tab_mstship .shipInfo .subtitles").hide();
 				$(".tab_mstship .shipInfo .cgswf").css("width", "100%").css("height", "600px");
-				$(".tab_mstship .shipInfo .cgswf embed").css("width", "100%").css("height", "600px");
+				$(".tab_mstship .shipInfo .cgswf > *").css("width", "100%").css("height", "600px");
 				
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();

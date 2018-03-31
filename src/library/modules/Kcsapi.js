@@ -1919,7 +1919,7 @@ Previously known as "Reactor"
 			
 			// Exclude gauge based maps from being kept every time
 			const mapKeys = Object.keys(maps);
-			for(const key in mapKeys) {
+			for(const key of mapKeys) {
 				if(KC3Meta.gauge(key.substr(1)))
 					maps[key].clear = maps[key].kills = false;
 			}
