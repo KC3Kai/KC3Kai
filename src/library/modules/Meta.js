@@ -405,8 +405,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		serverByNum :function(num){
-			var ctr;
-			for(ctr in this._servers){
+			for(var ctr in this._servers){
 				if(this._servers[ctr].num==num){
 					return this._servers[ctr];
 				}
