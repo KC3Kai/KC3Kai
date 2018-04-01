@@ -3407,8 +3407,7 @@
 			//console.debug("Remodel result", data);
 			const remodelResultBox = $(".activity_remodel .remodelResult");
 			const result = data.currentResult;
-			const shipId = result.api_voice_ship_id || data.shipId
-				|| PlayerManager.fleets[0].ship(0).masterId;
+			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
 			$(".remodel_header .result_title", remodelResultBox).html(KC3Meta.term(
 				!result.api_remodel_flag ? "RemodelItemResultFailure" : "RemodelItemResultSuccess"
 			)).toggleClass("failure", !result.api_remodel_flag);
