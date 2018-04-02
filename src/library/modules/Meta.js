@@ -894,7 +894,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		isAF :function(){
-			return this.getAF(0) || this.getAF(1) < Date.now() && Date.now() < this.getAF(2);
+			return this.getAF(0) === undefined ?
+				this.getAF(1) < Date.now() && Date.now() < this.getAF(2) : this.getAF(0);
 		},
 		
 		getAF :function(index){
