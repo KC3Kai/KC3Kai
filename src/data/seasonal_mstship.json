@@ -2016,7 +2016,7 @@
 		"api_id": 979,
 		"api_name": "正月瑞鳳",
 		"api_yomi": "ずいほう",
-		"api_stype": 9,
+		"api_stype": 7,
 		"api_soku": 10,
 		"api_slot_num": 3
 	},
@@ -2024,7 +2024,7 @@
 		"api_id": 980,
 		"api_name": "正月瑞鳳改",
 		"api_yomi": "ずいほう",
-		"api_stype": 9,
+		"api_stype": 7,
 		"api_soku": 10,
 		"api_slot_num": 4
 	},
