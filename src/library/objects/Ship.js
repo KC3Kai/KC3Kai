@@ -2414,11 +2414,11 @@ KC3改 Ship Object
 	 * @see https://twitter.com/kankenRJ/status/979524073934893056
 	 */
 	KC3Ship.prototype.calcAntiAirEffectChance = function() {
+		if(this.isDummy() || this.isAbsent()) return 0;
 		const classBonus = this.master().api_ctype === 2 ? 70 : 0; //70 for Ise-class, 0 otherwise
-		let rosaCount = this.countEquipment(274,true); //Number of 12cm 30tube Rocket Launcher Kai Ni
+		let rosaCount = this.countEquipment(274); //Number of 12cm 30tube Rocket Launcher Kai Ni
 		rosaCount = rosaCount > 3 ? 3 : rosaCount; //No test yet on more than 3 Rosa K2, default to 3 just in case of exceptions
-		const groupValue = [70,110,150];
-		return Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0])/(400 - (48 + groupValue[rosaCount-1] + classBonus))*100, 0);
+		return rosaCount === 0 ? 0 : Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0])/(400 - (48 + 30 + 40*rosaCount + classBonus))*100, 0);
 	};
 
 	/**
