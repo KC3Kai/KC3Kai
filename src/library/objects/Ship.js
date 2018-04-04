@@ -2419,7 +2419,7 @@ KC3改 Ship Object
 		rosaCount = rosaCount > 3 ? 3 : rosaCount; //No test yet on more than 3 Rosa K2, default to 3 just in case of exceptions
 		const groupValue = [70,110,150];
 		return Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0])/(400 - (48 + groupValue[rosaCount-1] + classBonus))*100, 0);
-	}
+	};
 
 	/**
 	 * Check known possible effects on equipment changed.
