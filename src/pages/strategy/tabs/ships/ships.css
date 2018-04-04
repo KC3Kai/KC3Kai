@@ -371,9 +371,15 @@
 	white-space:nowrap;
 	position:relative;
 }
-.tab_ships .ship_item .ship_name.ship_kekkon {
-	/*width:112px;*/
+/*
+.tab_ships .ship_item .ship_name:after {
+	content:attr(data-ship-name);
 }
+.tab_ships .ship_item .ship_name.class_name:after {
+	content:attr(data-full-name);
+}
+*/
+
 .tab_ships .ship_item .ship_type {
 	width:30px;
 	text-align:center;
@@ -466,7 +472,13 @@
 	height:13px;
 	margin:-35px 0px 0px 39px;
 	position:relative;
+	display:inline;
+	content:url("/assets/img/client/heartlock.png");
 }
+.tab_ships .ship_item .ship_lock.unlock img {
+	content:url("/assets/img/client/heartlock-x.png");
+}
+
 .tab_ships .ship_item .ship_marry {
 	display:none;
 }

@@ -26,6 +26,7 @@
 			showNameFilter: "",
 			// default values of filters are defined at `prepareFilters`
 		},
+		recomputeSettings: {},
 		// All pre-defined filters instances
 		newFilterRep: {},
 		// All pre-defined sorters instances
@@ -55,6 +56,7 @@
 				let preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
+			this.recomputeSettings = {};
 		},
 
 		/* EXECUTE
@@ -282,7 +284,7 @@
 		},
 
 		refreshShowNameFilter: function() {
-			var self = this;
+			const self = this;
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
 			let hiddenShipsByName = 0;
 			$(".ingame_page").remove();
@@ -296,11 +298,14 @@
 					isValidRegex = false;
 				}
 				$(".ship_list .ship_item").each(function() {
-					// also search for JP name and kana yomi, not so useful for JP tho
-					const shipName = $(".ship_name", this).text(),
-						shipNameJp = ($(".ship_name", this).data("jpName") || ""),
-						shipNameKana = ($(".ship_name", this).data("jpNameKana") || ""),
-						shipNameRomaji = ($(".ship_name", this).data("jpNameRomaji") || "");
+					const shipNameElm = $(".ship_name", this);
+					// also search for JP name and kana yomi and romaji (useful for JP users)
+					const shipName = (self.className ?
+							shipNameElm.data("full-name") :
+							shipNameElm.data("ship-name")),
+						shipNameJp = (shipNameElm.data("jpname") || ""),
+						shipNameKana = (shipNameElm.data("jpname-kana") || ""),
+						shipNameRomaji = (shipNameElm.data("jpname-romaji") || "");
 					const isToHide = ! [shipName, shipNameJp, shipNameKana, shipNameRomaji]
 						.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
 					hiddenShipsByName += isToHide & 1;
@@ -994,7 +999,7 @@
 			this.isLoading = true;
 			this.saveSettings();
 
-			var self = this;
+			const self = this;
 			this.startTime = Date.now();
 
 			// Update indicators of sorters
@@ -1009,7 +1014,6 @@
 
 			// Wait until execute
 			setTimeout(function(){
-				var shipCtr, cElm, cShip, shipLevel;
 
 				// Filtering
 				var FilteredShips = self.shipCache.filter(function(x) {
@@ -1021,8 +1025,9 @@
 
 				// Fill up list
 				Object.keys(FilteredShips).forEach(function(shipCtr){
-					cShip = FilteredShips[shipCtr];
-					shipLevel = cShip.level;
+					var cElm;
+					var cShip = FilteredShips[shipCtr];
+					var shipLevel = cShip.level;
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
@@ -1043,6 +1048,13 @@
 					$(".ship_img .ship_icon", cElm)
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
+					// put data to attributes to ensure not lose them
+					$(".ship_name", cElm)
+						.attr("data-ship-name", cShip.name)
+						.attr("data-full-name", cShip.fullName)
+						.attr("data-jpname", cShip.jpName)
+						.attr("data-jpname-kana", cShip.jpNameKana)
+						.attr("data-jpname-romaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1080,31 +1092,28 @@
 					// callback for things that has to be recomputed
 					cElm.onRecompute = function(ship) {
 						const thisShip = ship || cShip;
-						// Reset shown ship name
-						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this).text(showName).attr("title", showName)
-							.data("jpName", thisShip.jpName)
-							.data("jpNameKana", thisShip.jpNameKana)
-							.data("jpNameRomaji", thisShip.jpNameRomaji);
-						// Recomputes stats
-						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
-						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
-						self.modernizableStat("tp", this, thisShip.tp, 2, 1);
-						self.modernizableStat("yasen", this, thisShip.yasen);
-						self.modernizableStat("aa", this, thisShip.aa, 2, 1);
-						self.modernizableStat("ar", this, thisShip.ar, 2, 1);
-						self.modernizableStat("as", this, thisShip.as, 3, 0, true);
-						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
-						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
-						self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
+						// Reset shown ship name class
+						if(self.className !== self.recomputeSettings.className) {
+							const showName = self.className ? thisShip.fullName : thisShip.name;
+							$(".ship_name", this).text(showName).attr("title", showName);
+						}
+						// Recomputes stats if equipment get in
+						if(self.equipMode !== self.recomputeSettings.equipMode) {
+							self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
+							self.modernizableStat("fp", this, thisShip.fp, 2, 1);
+							self.modernizableStat("tp", this, thisShip.tp, 2, 1);
+							self.modernizableStat("yasen", this, thisShip.yasen);
+							self.modernizableStat("aa", this, thisShip.aa, 2, 1);
+							self.modernizableStat("ar", this, thisShip.ar, 2, 1);
+							self.modernizableStat("as", this, thisShip.as, 3, 0, true);
+							$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
+							$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+							self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
+						}
 						// Reset heart-lock icon
-						$(".ship_lock img", this).attr("src",
-							"/assets/img/client/heartlock{0}.png"
-								.format(!thisShip.locked ? "-x" : "")
-						).show();
 						if((self.heartLockMode === 1 && thisShip.locked)
 						|| (self.heartLockMode === 2 && !thisShip.locked)) {
-							$(".ship_lock", this).show();
+							$(".ship_lock", this).toggleClass("unlock", self.heartLockMode === 2).show();
 						} else {
 							$(".ship_lock", this).hide();
 						}
@@ -1114,6 +1123,7 @@
 							targetElm.tooltip("destroy");
 						}
 						if(self.showTooltip){
+							// but this is also time-consuming
 							const tooltipBox = KC3ShipManager.get(thisShip.id)
 								.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
 							targetElm.tooltip({
@@ -1130,9 +1140,10 @@
 					};
 					// also invoke recompute for the first time
 					cElm.onRecompute(cShip);
-
 				});
 
+				self.recomputeSettings.className = self.className;
+				self.recomputeSettings.equipMode = self.equipMode;
 				self.shipList.show().createChildrenTooltips();
 				$(".ship_count .count_value .listed").text(FilteredShips.length)
 					.data("filtered", FilteredShips.length);
