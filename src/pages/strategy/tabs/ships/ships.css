@@ -78,6 +78,7 @@
 }
 
 .tab_ships .show_name_filter {
+	float: left;
 	height: 18px;
 	margin: 0px 0px 2px 0px;
 }

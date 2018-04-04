@@ -275,21 +275,39 @@
 
 			// Ship show name quick filter
 			$(".show_name_filter .name_criteria").on("keyup", () => {
-				this.refreshShowNameFilter();
+				this.refreshInputFilter();
 			}).on("focus", () => {
 				$(".show_name_filter .name_criteria").select();
 			}).val(this.showNameFilter);
 
-            // Ship show start/end level quick filter
-            $(".ship_level_filter .level_start_input").on("keyup", () => {
-                this.refreshFilter();
+			// Ship show start/end level quick filter
+			const lvStartInput = $(".ship_level_filter .level_start_input");
+			const lvEndInput = $(".ship_level_filter .level_end_input");
+            lvStartInput.on("keyup", () => {
+				const lvStartVal = parseInt(lvStartInput.val() == "" ? 0 : lvStartInput.val());
+				const lvEndVal = parseInt(lvEndInput.val() == "" ? 0 : lvEndInput.val());
+				if (lvStartVal <= lvEndVal){
+					lvStartInput.removeClass("error");
+					lvEndInput.removeClass("error");
+					this.refreshInputFilter();
+				} else {
+					lvStartInput.addClass("error");
+				}
             }).on("focus", () => {
-                $(".ship_level_filter .level_start_input").select();
+                lvStartInput.select();
             }).val(this.shipLevelFilterStart);
-            $(".ship_level_filter .level_end_input").on("keyup", () => {
-                this.refreshFilter();
+            lvEndInput.on("keyup", () => {
+				const lvStartVal = parseInt(lvStartInput.val() == "" ? 0 : lvStartInput.val());
+				const lvEndVal = parseInt(lvEndInput.val() == "" ? 0 : lvEndInput.val());
+				if (lvStartVal <= lvEndVal){
+					lvStartInput.removeClass("error");
+					lvEndInput.removeClass("error");
+					this.refreshInputFilter();
+				} else {
+					lvEndInput.addClass("error");
+				}
             }).on("focus", () => {
-                $(".ship_level_filter .level_end_input").select();
+                lvEndInput.select();
             }).val(this.shipLevelFilterEnd);
 		},
 
