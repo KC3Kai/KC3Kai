@@ -2409,6 +2409,19 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * To calculate Rosa K2 trigger chance (for now)
+	 * We need adjusted AA of ship, number of Rosa K2, ctype and luck stat
+	 * @see https://twitter.com/kankenRJ/status/979524073934893056
+	 */
+	KC3Ship.prototype.calcAntiAirEffectChance = function() {
+		const classBonus = this.master().api_ctype === 2 ? 70 : 0; //70 for Ise-class, 0 otherwise
+		let rosaCount = this.countEquipment(274,true); //Number of 12cm 30tube Rocket Launcher Kai Ni
+		rosaCount = rosaCount > 3 ? 3 : rosaCount; //No test yet on more than 3 Rosa K2, default to 3 just in case of exceptions
+		const groupValue = [70,110,150];
+		return Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0] + this.aa[0])/(400 - (48 + groupValue[rosaCount-1] + classBonus))*100, 0);
+	}
+
+	/**
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
 	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
@@ -2846,7 +2859,9 @@ KC3改 Ship Object
 					 * btw2, flagship will fall-back to the effect user if none has any attack effect.
 					 */
 					aaEffectTypeId > -1 ?
-						" ({0})".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)) :
+						" ({0})".format( aaEffectTypeId === 3 ? //Check if Rosa K2 can trigger
+							KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm) + ":" + shipObj.calcAntiAirEffectChance() + "%":
+							KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)) :
 						""
 				)
 			)
