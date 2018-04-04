@@ -80,14 +80,14 @@
 					self.pageNo = true;
 					self.saveSettings();
 				}
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 			});
 			$(".pages_no").on("click", function(){
 				if(self.pageNo){
 					self.pageNo = false;
 					self.saveSettings();
 				}
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 			});
 			$(".scroll_fix").on("click", function(){
 				self.toggleTableScrollbar(true);
@@ -279,62 +279,100 @@
 			}).on("focus", () => {
 				$(".show_name_filter .name_criteria").select();
 			}).val(this.showNameFilter);
+
+            // Ship show start/end level quick filter
+            $(".ship_level_filter .level_start_input").on("keyup", () => {
+                this.refreshFilter();
+            }).on("focus", () => {
+                $(".ship_level_filter .level_start_input").select();
+            }).val(this.shipLevelFilterStart);
+            $(".ship_level_filter .level_end_input").on("keyup", () => {
+                this.refreshFilter();
+            }).on("focus", () => {
+                $(".ship_level_filter .level_end_input").select();
+            }).val(this.shipLevelFilterEnd);
 		},
 
-		refreshShowNameFilter: function() {
-			var self = this;
-			const newNameCriteria = $(".show_name_filter .name_criteria").val();
-			let hiddenShipsByName = 0;
-			$(".ingame_page").remove();
-			if (newNameCriteria.length > 0) {
-				let nameToSearch = newNameCriteria, isValidRegex = false;
-				try {
-					nameToSearch = new RegExp(newNameCriteria, 'iu');
-					isValidRegex = true;
-				} catch (e) {
-					// Ignore regexp syntax error, will fall-back to substring matching
-					isValidRegex = false;
-				}
-				$(".ship_list .ship_item").each(function() {
-					// also search for JP name and kana yomi, not so useful for JP tho
-					const shipName = $(".ship_name", this).text(),
-						shipNameJp = ($(".ship_name", this).data("jpName") || ""),
-						shipNameKana = ($(".ship_name", this).data("jpNameKana") || ""),
-						shipNameRomaji = ($(".ship_name", this).data("jpNameRomaji") || "");
-					const isToHide = ! [shipName, shipNameJp, shipNameKana, shipNameRomaji]
-						.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
-					hiddenShipsByName += isToHide & 1;
-					$(this).toggleClass("hidden_by_name", isToHide);
-				});
-				$(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
-			} else {
-				$(".ship_list .ship_item").removeClass("hidden_by_name");
-				$(".show_name_filter .name_criteria").removeClass("error");
-			}
+        isInRange: function(number, min, max) {
+            number = parseInt(number == "" ? 0 : number);
+            min = parseInt(min == "" ? 0 : min);
+            max = parseInt(max == "" ? 0 : max);
+            if (min == 0 && max == 0) {
+                return true;
+            } else if (min > 0 && max == "") {
+                return number >= min;
+            } else if (max > 0 && min == "") {
+                return number <= max;
+            }
+            return number >= min && number <= max;
+        },
 
-			let visibleShips = 0;
-			$(".ship_list .ship_item").each(function() {
-				if(!$(this).hasClass("hidden_by_name")) {
-					$(this).removeClass("odd").removeClass("even")
-						.addClass(visibleShips % 2 ? "even" : "odd");
-					if(visibleShips % 10 === 0)
-						$("<div>").addClass("ingame_page")
-							.html("Page " + Math.ceil((visibleShips + 1) / 10))
-							.insertBefore(this).toggle(self.pageNo);
-					visibleShips++;
-				}
-			});
-			// update listed ship counter
-			// have to take filtered list by data into account since hidden by name are still in list
-			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
-			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShipsByName);
-			if (this.showNameFilter !== newNameCriteria) {
-				this.showNameFilter = newNameCriteria;
-				this.saveSettings();
-			}
-			return hiddenShipsByName;
+        parseLevel: function(lvlString) {
+            return lvlString.replace("Lv. ", "");
+        },
+
+        refreshInputFilter: function() {
+            var self = this;
+            const newNameCriteria = $(".show_name_filter .name_criteria").val();
+            const startLvCriteria = $(".ship_level_filter .level_start_input").val();
+            const endLvCriteria = $(".ship_level_filter .level_end_input").val();
+            let hiddenShips = 0;
+            $(".ingame_page").remove();
+            if (newNameCriteria.length > 0 || startLvCriteria.length > 0 || endLvCriteria.length > 0) {
+                let nameToSearch = newNameCriteria,
+                    levelToSearchStart = startLvCriteria,
+                    levelToSearchEnd = endLvCriteria,
+                    isValidRegex = false;
+                try {
+                    nameToSearch = new RegExp(newNameCriteria, 'iu');
+                    isValidRegex = true;
+                } catch (e) {
+                    // Ignore regexp syntax error, will fall-back to substring matching
+                    isValidRegex = false;
+                }
+                $(".ship_list .ship_item").each(function() {
+                    // also search for JP name and kana yomi, not so useful for JP tho
+                    const shipName = $(".ship_name", this).text(),
+                        shipNameJp = ($(".ship_name", this).data("jpName") || ""),
+                        shipNameKana = ($(".ship_name", this).data("jpNameKana") || ""),
+                        shipNameRomaji = ($(".ship_name", this).data("jpNameRomaji") || ""),
+                        shipLevel = self.parseLevel($(".ship_lv", this).text() || "");
+                    const isToHide_fromName = ![shipName, shipNameJp, shipNameKana, shipNameRomaji]
+                        .some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
+                    const isToHide_fromLevel = !self.isInRange(shipLevel, levelToSearchStart, levelToSearchEnd);
+                    const isToHide = isToHide_fromName || isToHide_fromLevel;
+                    hiddenShips += isToHide & 1;
+                    $(this).toggleClass("hidden_by_name", isToHide);
+                });
+                $(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
+            } else {
+                $(".ship_list .ship_item").removeClass("hidden_by_name");
+                $(".show_name_filter .name_criteria").removeClass("error");
+            }
+
+            let visibleShips = 0;
+            $(".ship_list .ship_item").each(function() {
+                if (!$(this).hasClass("hidden_by_name")) {
+                    $(this).removeClass("odd").removeClass("even")
+                        .addClass(visibleShips % 2 ? "even" : "odd");
+                    if (visibleShips % 10 === 0)
+                        $("<div>").addClass("ingame_page")
+                        .html("Page " + Math.ceil((visibleShips + 1) / 10))
+                        .insertBefore(this).toggle(self.pageNo);
+                    visibleShips++;
+                }
+            });
+            // update listed ship counter
+            // have to take filtered list by data into account since hidden by name are still in list
+            const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
+            $(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShips);
+            if (this.showNameFilter !== newNameCriteria) {
+                this.showNameFilter = newNameCriteria;
+                this.saveSettings();
+            }
+            return hiddenShips;
 		},
-
+		
 		getLastCurrentSorter: function() {
 			return this.currentSorters[this.currentSorters.length-1];
 		},
@@ -1138,7 +1176,7 @@
 					.data("filtered", FilteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
