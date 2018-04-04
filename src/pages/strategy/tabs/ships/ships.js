@@ -26,7 +26,6 @@
 			showNameFilter: "",
 			// default values of filters are defined at `prepareFilters`
 		},
-		recomputeSettings: {},
 		// All pre-defined filters instances
 		newFilterRep: {},
 		// All pre-defined sorters instances
@@ -51,19 +50,18 @@
 			KC3GearManager.load();
 			// Cache pre-processed ship info
 			this.shipCache = [];
-			for(let key in KC3ShipManager.list){
-				let shipData = KC3ShipManager.list[key];
-				let preparedData = this.prepareShipData(shipData);
+			for(const key in KC3ShipManager.list){
+				const shipData = KC3ShipManager.list[key];
+				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
-			this.recomputeSettings = {};
 		},
 
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 
 			// Binding click event starts
 			$(".filters_label").on("click", function(){
@@ -242,7 +240,7 @@
 				// stype 12, 15 not used by shipgirl, marked as order 999
 				// stype 1 is used from 2017-05-02
 				if(stype.id && stype.order < 999){
-					let cElm = $(".tab_ships .factory .ship_filter_type").clone()
+					const cElm = $(".tab_ships .factory .ship_filter_type").clone()
 						.appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", stype.id);
 					$(".filter_name", cElm).text(stype.name);
@@ -250,8 +248,8 @@
 			});
 
 			// Update multi sorter elements
-			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
-			var updateSorterControl = function() {
+			const multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+			const updateSorterControl = function() {
 				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
 				self.sorterDescCtrl.toggle(self.multiKey);
 			};
@@ -261,7 +259,7 @@
 				updateSorterControl();
 
 				if (! self.multiKey) {
-					var needUpdate = self.cutCurrentSorter();
+					const needUpdate = self.cutCurrentSorter();
 					if (needUpdate)
 						self.refreshTable();
 				}
@@ -345,7 +343,7 @@
 		},
 
 		reverseLastCurrentSorter: function() {
-			var sorter = this.getLastCurrentSorter();
+			const sorter = this.getLastCurrentSorter();
 			sorter.reverse = ! sorter.reverse;
 			this.updateSorterDescription();
 		},
@@ -354,10 +352,9 @@
 		// if the sorter already exists, the its "reverse"
 		// value will be flipped.
 		pushToCurrentSorters: function(name) {
-			var i;
-			var found = false;
-			for (i=0; !found && i<this.currentSorters.length; ++i) {
-				var sorterInfo = this.currentSorters[i];
+			let found = false;
+			for (let i = 0; !found && i < this.currentSorters.length; ++i) {
+				const sorterInfo = this.currentSorters[i];
 				if (name === sorterInfo.name) {
 					found = true;
 					sorterInfo.reverse = ! sorterInfo.reverse;
@@ -386,17 +383,17 @@
 		},
 
 		setCurrentSorter: function(name) {
-			var sorter = this.sorters[name];
+			const sorter = this.sorters[name];
 			console.assert(sorter, "sorter should have been registered");
 			this.currentSorters = [ {name: sorter.name, reverse:false} ];
 			this.updateSorterDescription();
 		},
 
 		updateSorterDescription: function() {
-			var self = this;
-			var desc = this.currentSorters
+			const self = this;
+			const desc = this.currentSorters
 				.map(function(sorterInfo) {
-					var sorter = self.sorters[sorterInfo.name];
+					const sorter = self.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? sorter.desc + "(R)"
 						: sorter.desc;
@@ -445,7 +442,7 @@
 			}
 			return mergedSorters
 				.map( sorterInfo => {
-					var sorter = this.sorters[sorterInfo.name];
+					const sorter = this.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? reversed(sorter.comparator)
 						: sorter.comparator;
@@ -456,9 +453,9 @@
 		// prepares necessary info.
 		// also stores those that doesn't need to be recomputed overtime.
 		prepareShipData: function(ship) {
-			var ThisShip = ship;
-			var MasterShip = ThisShip.master();
-			var cached =  {
+			const ThisShip = ship;
+			const MasterShip = ThisShip.master();
+			const cached = {
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
@@ -503,7 +500,7 @@
 				remodel: RemodelDb.isFinalForm(ship.masterId),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu()
 			};
-			var ThisShipData = cached;
+			const ThisShipData = cached;
 			// Check whether modernization is max
 			if( ThisShipData.fp[0] == ThisShipData.fp[1]
 				&& ThisShipData.tp[0] == ThisShipData.tp[1]
@@ -522,7 +519,7 @@
 		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
 			// mutual exclusive options use just value indices
 			// as the option value
-			var oldVal = optionRep.curValue;
+			const oldVal = optionRep.curValue;
 			if (oldVal === selectedInd)
 				return;
 			// first update value
@@ -598,7 +595,7 @@
 			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
 			//   and finally refresh ship list to execute all filters.
 			onToggle) {
-			var self = this;
+			const self = this;
 			// as most filters are groups of mutually exclusive controls
 			// it makes sense setting them as defaults
 			if (! findView)
@@ -606,15 +603,15 @@
 			if (! onToggle)
 				onToggle = this._mutualExclusiveOnToggle;
 
-			var newOptions = [];
+			const newOptions = [];
 			$.each(options, function(ind, optionName) {
-				var thisOption = {};
-				var view = findView(filterName,optionName);
+				const thisOption = {};
+				const view = findView(filterName,optionName);
 				thisOption.name = optionName;
 				thisOption.view = view;
 				thisOption.view.on('click', function(e) {
-					var curRep = self.newFilterRep[filterName];
-					var selectedInd = ind;
+					const curRep = self.newFilterRep[filterName];
+					const selectedInd = ind;
 					curRep.onToggle.call(self,selectedInd,curRep,false,e);
 				});
 				console.assert(
@@ -624,7 +621,7 @@
 				newOptions.push( thisOption );
 			});
 
-			var optionRep = {
+			const optionRep = {
 				curValue: null,
 				options: newOptions,
 				onToggle: onToggle,
@@ -638,8 +635,8 @@
 		},
 
 		prepareFilters: function() {
-			var self = this;
-			var savedFilterValues = this.settings.filters || {};
+			const self = this;
+			const savedFilterValues = this.settings.filters || {};
 			self.defineShipFilter(
 				"marriage",
 				savedFilterValues.marriage || 0,
@@ -738,7 +735,7 @@
 				["all", "yes","no"],
 				function(curVal, ship) {
 					if(curVal === 0) return true;
-					var dupeShips = self.shipCache.filter(s =>
+					const dupeShips = self.shipCache.filter(s =>
 						(RemodelDb.originOf(ship.bid) === RemodelDb.originOf(s.bid)
 							&& s.id !== ship.id)
 					);
@@ -755,14 +752,14 @@
 						|| (curVal === ship.range);
 				});
 
-			var stypes = Object.keys(KC3Meta.allStypes())
+			const stypes = Object.keys(KC3Meta.allStypes())
 				.map(id => parseInt(id, 10))
 				.filter(id => [12, 15].indexOf(id) < 0)
 				.sort((a, b) => a - b);
 			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
-			var stypeDefValue = [];
+			const stypeDefValue = [];
 			$.each(stypes, function(ignore, stype) {
 				stypeDefValue[stype] = true;
 			});
@@ -794,7 +791,7 @@
 						// but at this point we should set the initial value
 						optionRep.curValue = selectedInd;
 					} else {
-						var selected = optionRep.options[selectedInd];
+						const selected = optionRep.options[selectedInd];
 						if (typeof selected.name === 'number') {
 							if(event && event.altKey){
 								// only select this ship type if Alt key held
@@ -831,20 +828,20 @@
 
 		// execute all registered filters on a ship
 		executeFilters: function(ship) {
-			for(let key in this.newFilterRep) {
-				var filter = this.newFilterRep[key].testShip;
+			for(const key in this.newFilterRep) {
+				const filter = this.newFilterRep[key].testShip;
 				if (!filter(ship)) return false;
 			}
 			return true;
 		},
 
 		saveSettings: function() {
-			var shrinkedSettings = {
+			const shrinkedSettings = {
 				sorters: this.currentSorters,
 				filters: {},
 				views: {}
 			};
-			for(let key in this.newFilterRep) {
+			for(const key in this.newFilterRep) {
 				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
 			}
 			shrinkedSettings.filters.showname = this.showNameFilter;
@@ -882,8 +879,7 @@
 		Ship types, and other toggles
 		---------------------------------*/
 		showFilters :function(){
-			var self = this;
-			var sCtr;
+			const self = this;
 
 			// Equip Stats: Yes
 			self.viewElements.equip_yes = $(".tab_ships .filters .massSelect .equip_yes")
@@ -911,8 +907,8 @@
 
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
-				var sorter = self.getLastCurrentSorter();
-				var sorterName = $(this).data("type");
+				const sorter = self.getLastCurrentSorter();
+				const sorterName = $(this).data("type");
 				if (sorterName === sorter.name) {
 					self.reverseLastCurrentSorter();
 				} else {
@@ -939,18 +935,18 @@
 		},
 
 		defineSimpleSorter: function(name,desc,getter) {
-			var self = this;
+			const self = this;
 			this.defineSorter(
 				name,desc,
 				function(a,b) {
-					var va = getter.call(self,a);
-					var vb = getter.call(self,b);
+					const va = getter.call(self,a);
+					const vb = getter.call(self,b);
 					return typeof va === "string" ? va.localeCompare(vb) : va - vb;
 				});
 		},
 
 		prepareSorters: function() {
-			var define = this.defineSimpleSorter.bind(this);
+			const define = this.defineSimpleSorter.bind(this);
 
 			define("id", "Id",
 				   function(x) { return x.id; });
@@ -1014,34 +1010,31 @@
 
 			// Wait until execute
 			setTimeout(function(){
-
 				// Filtering
-				var FilteredShips = self.shipCache.filter(function(x) {
+				const filteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
 				});
 
 				// Sorting
-				FilteredShips.sort( self.makeComparator() );
+				filteredShips.sort( self.makeComparator() );
 
 				// Fill up list
-				Object.keys(FilteredShips).forEach(function(shipCtr){
-					var cElm;
-					var cShip = FilteredShips[shipCtr];
-					var shipLevel = cShip.level;
+				Object.keys(filteredShips).forEach(function(shipCtr){
+					const cShip = filteredShips[shipCtr];
+					const shipLevel = cShip.level;
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
 					if (cShip.view) {
-						cElm = cShip.view;
+						const cElm = cShip.view;
 						cElm.appendTo(self.shipList);
-
 						if (cElm.onRecompute)
 							cElm.onRecompute(cShip);
 						return;
 					}
 
 					// elements constructing for the time-consuming 'first time rendering'
-					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
+					const cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
 
 					$(".ship_id", cElm).text( cShip.id );
@@ -1093,12 +1086,13 @@
 					cElm.onRecompute = function(ship) {
 						const thisShip = ship || cShip;
 						// Reset shown ship name class
-						if(self.className !== self.recomputeSettings.className) {
+						if(self.className !== $(".ship_name", this).data("class-name")) {
 							const showName = self.className ? thisShip.fullName : thisShip.name;
-							$(".ship_name", this).text(showName).attr("title", showName);
+							$(".ship_name", this).text(showName).attr("title", showName)
+								.attr("data-class-name", self.className);
 						}
 						// Recomputes stats if equipment get in
-						if(self.equipMode !== self.recomputeSettings.equipMode) {
+						if(self.equipMode !== $(".ship_hp", this).data("equip-mode")) {
 							self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
 							self.modernizableStat("fp", this, thisShip.fp, 2, 1);
 							self.modernizableStat("tp", this, thisShip.tp, 2, 1);
@@ -1109,6 +1103,7 @@
 							$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
 							$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
 							self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
+							$(".ship_hp", this).attr("data-equip-mode", self.equipMode);
 						}
 						// Reset heart-lock icon
 						if((self.heartLockMode === 1 && thisShip.locked)
@@ -1118,6 +1113,8 @@
 							$(".ship_lock", this).hide();
 						}
 						// Update tooltip
+						$(".ship_name", this).lazyInitTooltip();
+						$(".ship_equip", this).lazyInitTooltip();
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");
@@ -1142,18 +1139,16 @@
 					cElm.onRecompute(cShip);
 				});
 
-				self.recomputeSettings.className = self.className;
-				self.recomputeSettings.equipMode = self.equipMode;
-				self.shipList.show().createChildrenTooltips();
-				$(".ship_count .count_value .listed").text(FilteredShips.length)
-					.data("filtered", FilteredShips.length);
+				self.shipList.show();
+				$(".ship_count .count_value .listed").text(filteredShips.length)
+					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
 				self.refreshShowNameFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
-			}, 100);
+				console.debug("Showing ship list took", Date.now() - self.startTime, "milliseconds");
+			});
 		},
 
 		shipClickFunc: function(e){
@@ -1211,14 +1206,14 @@
 		/* Show single equipment icon
 		--------------------------------------------*/
 		equipImg :function(cElm, slotIndex, slotCount, slotSize, gearId, shipId){
-			var element = $(".ship_equip_" + slotIndex, cElm);
+			const element = $(".ship_equip_" + slotIndex, cElm);
 			if(gearId > 0){
-				var gear = KC3GearManager.get(gearId);
+				const gear = KC3GearManager.get(gearId);
 				if(gear.isDummy()){ element.hide(); return; }
-				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
+				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
 					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(slotSize, ship))
+					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span", element).css("visibility", "hidden");
