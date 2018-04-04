@@ -2418,7 +2418,7 @@ KC3改 Ship Object
 		let rosaCount = this.countEquipment(274,true); //Number of 12cm 30tube Rocket Launcher Kai Ni
 		rosaCount = rosaCount > 3 ? 3 : rosaCount; //No test yet on more than 3 Rosa K2, default to 3 just in case of exceptions
 		const groupValue = [70,110,150];
-		return Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0] + this.aa[0])/(400 - (48 + groupValue[rosaCount-1] + classBonus))*100, 0);
+		return Math.qckInt("floor",(this.adjustedAntiAir() + this.lk[0])/(400 - (48 + groupValue[rosaCount-1] + classBonus))*100, 0);
 	}
 
 	/**
