@@ -68,7 +68,7 @@
 			// Binding click event starts
 			$(".filters_label").on("click", function(){
 				$(".filters .ship_types").slideToggle(300);
-				$(".filters .show_name_filter").slideToggle(300);
+				$(".filters .input_filter").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
 					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
 					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
