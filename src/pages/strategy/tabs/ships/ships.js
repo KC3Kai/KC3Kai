@@ -24,6 +24,8 @@
 			showTooltip: false,
 			// a special filter for quick search by show name
 			showNameFilter: "",
+			// a special filter for quick limit ships by level range
+			shipLevelFilter: ["", ""],
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -50,9 +52,9 @@
 			KC3GearManager.load();
 			// Cache pre-processed ship info
 			this.shipCache = [];
-			for(let key in KC3ShipManager.list){
-				let shipData = KC3ShipManager.list[key];
-				let preparedData = this.prepareShipData(shipData);
+			for(const key in KC3ShipManager.list){
+				const shipData = KC3ShipManager.list[key];
+				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
 		},
@@ -61,12 +63,12 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 
 			// Binding click event starts
 			$(".filters_label").on("click", function(){
 				$(".filters .ship_types").slideToggle(300);
-				$(".filters .show_name_filter").slideToggle(300);
+				$(".filters .input_filter").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
 					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
 					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
@@ -240,7 +242,7 @@
 				// stype 12, 15 not used by shipgirl, marked as order 999
 				// stype 1 is used from 2017-05-02
 				if(stype.id && stype.order < 999){
-					let cElm = $(".tab_ships .factory .ship_filter_type").clone()
+					const cElm = $(".tab_ships .factory .ship_filter_type").clone()
 						.appendTo(".tab_ships .filters .ship_types");
 					cElm.data("id", stype.id);
 					$(".filter_name", cElm).text(stype.name);
@@ -248,8 +250,8 @@
 			});
 
 			// Update multi sorter elements
-			var multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
-			var updateSorterControl = function() {
+			const multiKeyCtrl = $( ".advanced_sorter .adv_sorter" );
+			const updateSorterControl = function() {
 				$(".filter_check", multiKeyCtrl).toggle( self.multiKey );
 				self.sorterDescCtrl.toggle(self.multiKey);
 			};
@@ -259,7 +261,7 @@
 				updateSorterControl();
 
 				if (! self.multiKey) {
-					var needUpdate = self.cutCurrentSorter();
+					const needUpdate = self.cutCurrentSorter();
 					if (needUpdate)
 						self.refreshTable();
 				}
@@ -280,115 +282,113 @@
 				$(".show_name_filter .name_criteria").select();
 			}).val(this.showNameFilter);
 
-			// Ship show start/end level quick filter
+			// Ship level range quick filter
 			const lvStartInput = $(".ship_level_filter .level_start_input");
 			const lvEndInput = $(".ship_level_filter .level_end_input");
-            lvStartInput.on("keyup", () => {
-				const lvStartVal = parseInt(lvStartInput.val() == "" ? 0 : lvStartInput.val());
-				const lvEndVal = parseInt(lvEndInput.val() == "" ? 0 : lvEndInput.val());
-				if (lvStartVal <= lvEndVal){
-					lvStartInput.removeClass("error");
-					lvEndInput.removeClass("error");
-					this.refreshInputFilter();
-				} else {
-					lvStartInput.addClass("error");
-				}
-            }).on("focus", () => {
-                lvStartInput.select();
-            }).val(this.shipLevelFilterStart);
-            lvEndInput.on("keyup", () => {
-				const lvStartVal = parseInt(lvStartInput.val() == "" ? 0 : lvStartInput.val());
-				const lvEndVal = parseInt(lvEndInput.val() == "" ? 0 : lvEndInput.val());
-				if (lvStartVal <= lvEndVal){
-					lvStartInput.removeClass("error");
-					lvEndInput.removeClass("error");
-					this.refreshInputFilter();
-				} else {
-					lvEndInput.addClass("error");
-				}
-            }).on("focus", () => {
-                lvEndInput.select();
-            }).val(this.shipLevelFilterEnd);
+			const validateLevelString = (str) => {
+				const v = Number(str);
+				return str === "" || (
+					!isNaN(v) && Number.isInteger(v) && v > 0 && v <= KC3Ship.getMaxLevel()
+				);
+			};
+			lvStartInput.on("keyup", () => {
+				const isValid = validateLevelString(lvStartInput.val());
+				lvStartInput.toggleClass("error", !isValid);
+				if(isValid) this.refreshInputFilter();
+			}).on("focus", () => {
+				lvStartInput.select();
+			}).val(this.shipLevelFilter[0]);
+			lvEndInput.on("keyup", () => {
+				const isValid = validateLevelString(lvEndInput.val());
+				lvEndInput.toggleClass("error", !isValid);
+				if(isValid) this.refreshInputFilter();
+			}).on("focus", () => {
+				lvEndInput.select();
+			}).val(this.shipLevelFilter[1]);
 		},
 
-        isInRange: function(number, min, max) {
-            number = parseInt(number == "" ? 0 : number);
-            min = parseInt(min == "" ? 0 : min);
-            max = parseInt(max == "" ? 0 : max);
-            if (min == 0 && max == 0) {
-                return true;
-            } else if (min > 0 && max == "") {
-                return number >= min;
-            } else if (max > 0 && min == "") {
-                return number <= max;
-            }
-            return number >= min && number <= max;
-        },
+		refreshInputFilter: function() {
+			const self = this;
+			let hiddenShips = 0;
 
-        parseLevel: function(lvlString) {
-            return lvlString.replace("Lv. ", "");
-        },
+			const newNameCriteria = $(".show_name_filter .name_criteria").val();
+			const levelStartCriteria = $(".ship_level_filter .level_start_input").val();
+			const levelEndCriteria = $(".ship_level_filter .level_end_input").val();
+			if (newNameCriteria.length || levelStartCriteria.length || levelEndCriteria.length) {
+				let nameToSearch = newNameCriteria,
+					isValidRegex = false;
+				if (newNameCriteria.length) {
+					try {
+						nameToSearch = new RegExp(newNameCriteria, 'iu');
+						isValidRegex = true;
+					} catch (e) {
+						// Ignore regexp syntax error, will fall-back to substring matching
+						isValidRegex = false;
+					}
+					$(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
+				}
+				$(".ship_list .ship_item").each(function() {
+					const shipNameElm = $(".ship_name", this);
+					// also search for JP name and kana yomi and romaji (useful for JP users)
+					const shipName = (self.className ?
+							shipNameElm.data("full-name") :
+							shipNameElm.data("ship-name")),
+						shipNameJp = (shipNameElm.data("jpname") || ""),
+						shipNameKana = (shipNameElm.data("jpname-kana") || ""),
+						shipNameRomaji = (shipNameElm.data("jpname-romaji") || "");
+					const shipLevel = Number($(".ship_lv", this).data("level"));
+					const isHiddenByName = newNameCriteria.length &&
+						![shipName, shipNameJp, shipNameKana, shipNameRomaji]
+							.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
+					// function `inside` will treat invalid number (like "") as -/+Infinity,
+					// and it will auto swap min and max values if min > max
+					const isHiddenByLevel = !shipLevel.inside(levelStartCriteria, levelEndCriteria);
+					const isToHide = isHiddenByName || isHiddenByLevel;
+					hiddenShips += isToHide & 1;
+					$(this).toggleClass("hidden_by_name", isToHide);
+				});
+			} else {
+				$(".ship_list .ship_item").removeClass("hidden_by_name");
+				$(".show_name_filter .name_criteria").removeClass("error");
+			}
 
-        refreshInputFilter: function() {
-            var self = this;
-            const newNameCriteria = $(".show_name_filter .name_criteria").val();
-            const startLvCriteria = $(".ship_level_filter .level_start_input").val();
-            const endLvCriteria = $(".ship_level_filter .level_end_input").val();
-            let hiddenShips = 0;
-            $(".ingame_page").remove();
-            if (newNameCriteria.length > 0 || startLvCriteria.length > 0 || endLvCriteria.length > 0) {
-                let nameToSearch = newNameCriteria,
-                    levelToSearchStart = startLvCriteria,
-                    levelToSearchEnd = endLvCriteria,
-                    isValidRegex = false;
-                try {
-                    nameToSearch = new RegExp(newNameCriteria, 'iu');
-                    isValidRegex = true;
-                } catch (e) {
-                    // Ignore regexp syntax error, will fall-back to substring matching
-                    isValidRegex = false;
-                }
-                $(".ship_list .ship_item").each(function() {
-                    // also search for JP name and kana yomi, not so useful for JP tho
-                    const shipName = $(".ship_name", this).text(),
-                        shipNameJp = ($(".ship_name", this).data("jpName") || ""),
-                        shipNameKana = ($(".ship_name", this).data("jpNameKana") || ""),
-                        shipNameRomaji = ($(".ship_name", this).data("jpNameRomaji") || ""),
-                        shipLevel = self.parseLevel($(".ship_lv", this).text() || "");
-                    const isToHide_fromName = ![shipName, shipNameJp, shipNameKana, shipNameRomaji]
-                        .some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
-                    const isToHide_fromLevel = !self.isInRange(shipLevel, levelToSearchStart, levelToSearchEnd);
-                    const isToHide = isToHide_fromName || isToHide_fromLevel;
-                    hiddenShips += isToHide & 1;
-                    $(this).toggleClass("hidden_by_name", isToHide);
-                });
-                $(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
-            } else {
-                $(".ship_list .ship_item").removeClass("hidden_by_name");
-                $(".show_name_filter .name_criteria").removeClass("error");
-            }
+			$(".ingame_page").remove();
+			let visibleShips = 0;
+			$(".ship_list .ship_item").each(function() {
+				if (!$(this).hasClass("hidden_by_name")) {
+					$(this).removeClass("odd").removeClass("even")
+						.addClass(visibleShips % 2 ? "even" : "odd");
+					if (visibleShips % 10 === 0)
+						$("<div>").addClass("ingame_page")
+						.html("Page " + Math.ceil((visibleShips + 1) / 10))
+						.insertBefore(this).toggle(self.pageNo);
+					visibleShips++;
+				}
+			});
 
-            let visibleShips = 0;
-            $(".ship_list .ship_item").each(function() {
-                if (!$(this).hasClass("hidden_by_name")) {
-                    $(this).removeClass("odd").removeClass("even")
-                        .addClass(visibleShips % 2 ? "even" : "odd");
-                    if (visibleShips % 10 === 0)
-                        $("<div>").addClass("ingame_page")
-                        .html("Page " + Math.ceil((visibleShips + 1) / 10))
-                        .insertBefore(this).toggle(self.pageNo);
-                    visibleShips++;
-                }
-            });
-            // update listed ship counter
-            // have to take filtered list by data into account since hidden by name are still in list
-            const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
-            $(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShips);
-            if (this.showNameFilter !== newNameCriteria) {
-                this.showNameFilter = newNameCriteria;
-                this.saveSettings();
-            }
-            return hiddenShips;
+			// update listed ship counter
+			// have to take filtered list by data into account since hidden rows are still in list
+			const filteredBefore = $(".ship_count .count_value .listed").data("filtered") || 0;
+			$(".ship_count .count_value .listed").text(filteredBefore - hiddenShips);
+
+			// save criteria values to settings
+			let toUpdateSettings = false;
+			if (this.showNameFilter !== newNameCriteria) {
+				this.showNameFilter = newNameCriteria;
+				toUpdateSettings = true;
+			}
+			if (this.shipLevelFilter[0] !== levelStartCriteria) {
+				this.shipLevelFilter[0] = levelStartCriteria;
+				toUpdateSettings = true;
+			}
+			if (this.shipLevelFilter[1] !== levelEndCriteria) {
+				this.shipLevelFilter[1] = levelEndCriteria;
+				toUpdateSettings = true;
+			}
+			if (toUpdateSettings) {
+				this.saveSettings();
+			}
+			return hiddenShips;
 		},
 		
 		getLastCurrentSorter: function() {
@@ -396,7 +396,7 @@
 		},
 
 		reverseLastCurrentSorter: function() {
-			var sorter = this.getLastCurrentSorter();
+			const sorter = this.getLastCurrentSorter();
 			sorter.reverse = ! sorter.reverse;
 			this.updateSorterDescription();
 		},
@@ -405,10 +405,9 @@
 		// if the sorter already exists, the its "reverse"
 		// value will be flipped.
 		pushToCurrentSorters: function(name) {
-			var i;
-			var found = false;
-			for (i=0; !found && i<this.currentSorters.length; ++i) {
-				var sorterInfo = this.currentSorters[i];
+			let found = false;
+			for (let i = 0; !found && i < this.currentSorters.length; ++i) {
+				const sorterInfo = this.currentSorters[i];
 				if (name === sorterInfo.name) {
 					found = true;
 					sorterInfo.reverse = ! sorterInfo.reverse;
@@ -437,17 +436,17 @@
 		},
 
 		setCurrentSorter: function(name) {
-			var sorter = this.sorters[name];
+			const sorter = this.sorters[name];
 			console.assert(sorter, "sorter should have been registered");
 			this.currentSorters = [ {name: sorter.name, reverse:false} ];
 			this.updateSorterDescription();
 		},
 
 		updateSorterDescription: function() {
-			var self = this;
-			var desc = this.currentSorters
+			const self = this;
+			const desc = this.currentSorters
 				.map(function(sorterInfo) {
-					var sorter = self.sorters[sorterInfo.name];
+					const sorter = self.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? sorter.desc + "(R)"
 						: sorter.desc;
@@ -496,7 +495,7 @@
 			}
 			return mergedSorters
 				.map( sorterInfo => {
-					var sorter = this.sorters[sorterInfo.name];
+					const sorter = this.sorters[sorterInfo.name];
 					return sorterInfo.reverse
 						? reversed(sorter.comparator)
 						: sorter.comparator;
@@ -507,9 +506,9 @@
 		// prepares necessary info.
 		// also stores those that doesn't need to be recomputed overtime.
 		prepareShipData: function(ship) {
-			var ThisShip = ship;
-			var MasterShip = ThisShip.master();
-			var cached =  {
+			const ThisShip = ship;
+			const MasterShip = ThisShip.master();
+			const cached = {
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
@@ -554,7 +553,7 @@
 				remodel: RemodelDb.isFinalForm(ship.masterId),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu()
 			};
-			var ThisShipData = cached;
+			const ThisShipData = cached;
 			// Check whether modernization is max
 			if( ThisShipData.fp[0] == ThisShipData.fp[1]
 				&& ThisShipData.tp[0] == ThisShipData.tp[1]
@@ -573,7 +572,7 @@
 		_mutualExclusiveOnToggle: function(selectedInd,optionRep,initializing) {
 			// mutual exclusive options use just value indices
 			// as the option value
-			var oldVal = optionRep.curValue;
+			const oldVal = optionRep.curValue;
 			if (oldVal === selectedInd)
 				return;
 			// first update value
@@ -649,7 +648,7 @@
 			//   for updating "optionRep.curValue" accordingly, updating UI to reflect the change
 			//   and finally refresh ship list to execute all filters.
 			onToggle) {
-			var self = this;
+			const self = this;
 			// as most filters are groups of mutually exclusive controls
 			// it makes sense setting them as defaults
 			if (! findView)
@@ -657,15 +656,15 @@
 			if (! onToggle)
 				onToggle = this._mutualExclusiveOnToggle;
 
-			var newOptions = [];
+			const newOptions = [];
 			$.each(options, function(ind, optionName) {
-				var thisOption = {};
-				var view = findView(filterName,optionName);
+				const thisOption = {};
+				const view = findView(filterName,optionName);
 				thisOption.name = optionName;
 				thisOption.view = view;
 				thisOption.view.on('click', function(e) {
-					var curRep = self.newFilterRep[filterName];
-					var selectedInd = ind;
+					const curRep = self.newFilterRep[filterName];
+					const selectedInd = ind;
 					curRep.onToggle.call(self,selectedInd,curRep,false,e);
 				});
 				console.assert(
@@ -675,7 +674,7 @@
 				newOptions.push( thisOption );
 			});
 
-			var optionRep = {
+			const optionRep = {
 				curValue: null,
 				options: newOptions,
 				onToggle: onToggle,
@@ -689,8 +688,8 @@
 		},
 
 		prepareFilters: function() {
-			var self = this;
-			var savedFilterValues = this.settings.filters || {};
+			const self = this;
+			const savedFilterValues = this.settings.filters || {};
 			self.defineShipFilter(
 				"marriage",
 				savedFilterValues.marriage || 0,
@@ -789,7 +788,7 @@
 				["all", "yes","no"],
 				function(curVal, ship) {
 					if(curVal === 0) return true;
-					var dupeShips = self.shipCache.filter(s =>
+					const dupeShips = self.shipCache.filter(s =>
 						(RemodelDb.originOf(ship.bid) === RemodelDb.originOf(s.bid)
 							&& s.id !== ship.id)
 					);
@@ -806,14 +805,14 @@
 						|| (curVal === ship.range);
 				});
 
-			var stypes = Object.keys(KC3Meta.allStypes())
+			const stypes = Object.keys(KC3Meta.allStypes())
 				.map(id => parseInt(id, 10))
 				.filter(id => [12, 15].indexOf(id) < 0)
 				.sort((a, b) => a - b);
 			console.assert(stypes[0] === 0, "stype array should start with element 0");
 			// remove initial "0", which is invalid
 			stypes.shift();
-			var stypeDefValue = [];
+			const stypeDefValue = [];
 			$.each(stypes, function(ignore, stype) {
 				stypeDefValue[stype] = true;
 			});
@@ -845,7 +844,7 @@
 						// but at this point we should set the initial value
 						optionRep.curValue = selectedInd;
 					} else {
-						var selected = optionRep.options[selectedInd];
+						const selected = optionRep.options[selectedInd];
 						if (typeof selected.name === 'number') {
 							if(event && event.altKey){
 								// only select this ship type if Alt key held
@@ -882,23 +881,24 @@
 
 		// execute all registered filters on a ship
 		executeFilters: function(ship) {
-			for(let key in this.newFilterRep) {
-				var filter = this.newFilterRep[key].testShip;
+			for(const key in this.newFilterRep) {
+				const filter = this.newFilterRep[key].testShip;
 				if (!filter(ship)) return false;
 			}
 			return true;
 		},
 
 		saveSettings: function() {
-			var shrinkedSettings = {
+			const shrinkedSettings = {
 				sorters: this.currentSorters,
 				filters: {},
 				views: {}
 			};
-			for(let key in this.newFilterRep) {
+			for(const key in this.newFilterRep) {
 				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
 			}
 			shrinkedSettings.filters.showname = this.showNameFilter;
+			shrinkedSettings.filters.levelrange = this.shipLevelFilter;
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
@@ -918,7 +918,8 @@
 			}
 			if(this.settings.filters){
 				this.showNameFilter = this.settings.filters.showname || "";
-			}
+				this.shipLevelFilter = this.settings.filters.levelrange || ["", ""];
+		}
 			if(this.settings.views){
 				this.equipMode = this.settings.views.equip || 0;
 				this.pageNo = this.settings.views.page || false;
@@ -933,8 +934,7 @@
 		Ship types, and other toggles
 		---------------------------------*/
 		showFilters :function(){
-			var self = this;
-			var sCtr;
+			const self = this;
 
 			// Equip Stats: Yes
 			self.viewElements.equip_yes = $(".tab_ships .filters .massSelect .equip_yes")
@@ -962,8 +962,8 @@
 
 			// Column header sorting
 			$(".tab_ships .ship_header .ship_field.hover").on("click", function(){
-				var sorter = self.getLastCurrentSorter();
-				var sorterName = $(this).data("type");
+				const sorter = self.getLastCurrentSorter();
+				const sorterName = $(this).data("type");
 				if (sorterName === sorter.name) {
 					self.reverseLastCurrentSorter();
 				} else {
@@ -990,18 +990,18 @@
 		},
 
 		defineSimpleSorter: function(name,desc,getter) {
-			var self = this;
+			const self = this;
 			this.defineSorter(
 				name,desc,
 				function(a,b) {
-					var va = getter.call(self,a);
-					var vb = getter.call(self,b);
+					const va = getter.call(self,a);
+					const vb = getter.call(self,b);
 					return typeof va === "string" ? va.localeCompare(vb) : va - vb;
 				});
 		},
 
 		prepareSorters: function() {
-			var define = this.defineSimpleSorter.bind(this);
+			const define = this.defineSimpleSorter.bind(this);
 
 			define("id", "Id",
 				   function(x) { return x.id; });
@@ -1050,7 +1050,7 @@
 			this.isLoading = true;
 			this.saveSettings();
 
-			var self = this;
+			const self = this;
 			this.startTime = Date.now();
 
 			// Update indicators of sorters
@@ -1065,40 +1065,44 @@
 
 			// Wait until execute
 			setTimeout(function(){
-				var shipCtr, cElm, cShip, shipLevel;
-
 				// Filtering
-				var FilteredShips = self.shipCache.filter(function(x) {
+				const filteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
 				});
 
 				// Sorting
-				FilteredShips.sort( self.makeComparator() );
+				filteredShips.sort( self.makeComparator() );
 
 				// Fill up list
-				Object.keys(FilteredShips).forEach(function(shipCtr){
-					cShip = FilteredShips[shipCtr];
-					shipLevel = cShip.level;
+				Object.keys(filteredShips).forEach(function(shipCtr){
+					const cShip = filteredShips[shipCtr];
+					const shipLevel = cShip.level;
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
 					if (cShip.view) {
-						cElm = cShip.view;
+						const cElm = cShip.view;
 						cElm.appendTo(self.shipList);
-
 						if (cElm.onRecompute)
 							cElm.onRecompute(cShip);
 						return;
 					}
 
 					// elements constructing for the time-consuming 'first time rendering'
-					cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
+					const cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
 
 					$(".ship_id", cElm).text( cShip.id );
 					$(".ship_img .ship_icon", cElm)
 						.attr("src", KC3Meta.shipIcon(cShip.bid))
 						.attr("alt", cShip.bid);
+					// put data to attributes to ensure not lose them
+					$(".ship_name", cElm)
+						.attr("data-ship-name", cShip.name)
+						.attr("data-full-name", cShip.fullName)
+						.attr("data-jpname", cShip.jpName)
+						.attr("data-jpname-kana", cShip.jpNameKana)
+						.attr("data-jpname-romaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
 					}
@@ -1106,9 +1110,10 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					$(".ship_lv .value", cElm).text( shipLevel )
-						.addClass( cShip.levelClass );
-					$(".ship_morale", cElm).text( cShip.morale );
+					$(".ship_lv .value", cElm).text(shipLevel)
+						.addClass(cShip.levelClass);
+					$(".ship_lv", cElm).attr("data-level", shipLevel);
+					$(".ship_morale", cElm).text(cShip.morale);
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -1136,40 +1141,42 @@
 					// callback for things that has to be recomputed
 					cElm.onRecompute = function(ship) {
 						const thisShip = ship || cShip;
-						// Reset shown ship name
-						const showName = self.className ? thisShip.fullName : thisShip.name;
-						$(".ship_name", this).text(showName).attr("title", showName)
-							.data("jpName", thisShip.jpName)
-							.data("jpNameKana", thisShip.jpNameKana)
-							.data("jpNameRomaji", thisShip.jpNameRomaji);
-						// Recomputes stats
-						self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
-						self.modernizableStat("fp", this, thisShip.fp, 2, 1);
-						self.modernizableStat("tp", this, thisShip.tp, 2, 1);
-						self.modernizableStat("yasen", this, thisShip.yasen);
-						self.modernizableStat("aa", this, thisShip.aa, 2, 1);
-						self.modernizableStat("ar", this, thisShip.ar, 2, 1);
-						self.modernizableStat("as", this, thisShip.as, 3, 0, true);
-						$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
-						$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
-						self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
+						// Reset shown ship name class
+						if(self.className !== $(".ship_name", this).data("class-name")) {
+							const showName = self.className ? thisShip.fullName : thisShip.name;
+							$(".ship_name", this).text(showName).attr("title", showName)
+								.attr("data-class-name", self.className);
+						}
+						// Recomputes stats if equipment get in
+						if(self.equipMode !== $(".ship_hp", this).data("equip-mode")) {
+							self.modernizableStat("hp", this, thisShip.hp, 0, 0, true);
+							self.modernizableStat("fp", this, thisShip.fp, 2, 1);
+							self.modernizableStat("tp", this, thisShip.tp, 2, 1);
+							self.modernizableStat("yasen", this, thisShip.yasen);
+							self.modernizableStat("aa", this, thisShip.aa, 2, 1);
+							self.modernizableStat("ar", this, thisShip.ar, 2, 1);
+							self.modernizableStat("as", this, thisShip.as, 3, 0, true);
+							$(".ship_ev", this).text( thisShip.ev[self.equipMode] );
+							$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
+							self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
+							$(".ship_hp", this).attr("data-equip-mode", self.equipMode);
+						}
 						// Reset heart-lock icon
-						$(".ship_lock img", this).attr("src",
-							"/assets/img/client/heartlock{0}.png"
-								.format(!thisShip.locked ? "-x" : "")
-						).show();
 						if((self.heartLockMode === 1 && thisShip.locked)
 						|| (self.heartLockMode === 2 && !thisShip.locked)) {
-							$(".ship_lock", this).show();
+							$(".ship_lock", this).toggleClass("unlock", self.heartLockMode === 2).show();
 						} else {
 							$(".ship_lock", this).hide();
 						}
 						// Update tooltip
+						$(".ship_name", this).lazyInitTooltip();
+						$(".ship_equip", this).lazyInitTooltip();
 						const targetElm = $(".ship_img .ship_icon", this);
 						if(targetElm.tooltip("instance") !== undefined){
 							targetElm.tooltip("destroy");
 						}
 						if(self.showTooltip){
+							// but this is also time-consuming
 							const tooltipBox = KC3ShipManager.get(thisShip.id)
 								.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
 							targetElm.tooltip({
@@ -1186,19 +1193,18 @@
 					};
 					// also invoke recompute for the first time
 					cElm.onRecompute(cShip);
-
 				});
 
-				self.shipList.show().createChildrenTooltips();
-				$(".ship_count .count_value .listed").text(FilteredShips.length)
-					.data("filtered", FilteredShips.length);
+				self.shipList.show();
+				$(".ship_count .count_value .listed").text(filteredShips.length)
+					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.debug("Showing ship list took", (Date.now() - self.startTime)-100 , "milliseconds");
-			}, 100);
+				console.debug("Showing ship list took", Date.now() - self.startTime, "milliseconds");
+			});
 		},
 
 		shipClickFunc: function(e){
@@ -1256,14 +1262,14 @@
 		/* Show single equipment icon
 		--------------------------------------------*/
 		equipImg :function(cElm, slotIndex, slotCount, slotSize, gearId, shipId){
-			var element = $(".ship_equip_" + slotIndex, cElm);
+			const element = $(".ship_equip_" + slotIndex, cElm);
 			if(gearId > 0){
-				var gear = KC3GearManager.get(gearId);
+				const gear = KC3GearManager.get(gearId);
 				if(gear.isDummy()){ element.hide(); return; }
-				var ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
+				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
 					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
-					.attr("title", gear.htmlTooltip(slotSize, ship))
+					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
 				$("span", element).css("visibility", "hidden");

@@ -3785,7 +3785,6 @@ ABYSS FLEET
 .wrapper.h {
 	width:550px;
 	height:450px;
-	/*background:url(outline.png);*/
 }
 .h .module.admiral {
 	left:5px; top:5px;
@@ -3856,7 +3855,6 @@ ABYSS FLEET
 .wrapper.v {
 	width:800px;
 	height:325px;
-	/*background:url(vertical.png);*/
 }
 .v .module.admiral {
 	left:5px; top:5px;

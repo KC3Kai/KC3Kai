@@ -1894,14 +1894,14 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/mapinfo":function(params, response, headers){
 			// fix bugged falsy 'null' value
-			if(localStorage.maps == "null"){ delete localStorage.maps; }
+			if(localStorage.maps === "null"){ delete localStorage.maps; }
 			
-			var maps = KC3SortieManager.getAllMapData();
-			var ctr, thisMap, oldMap, localMap, etcStat, defStat;
+			const raws = response.api_data.api_map_info;
+			const maps = KC3SortieManager.getAllMapData();
 			
 			// Prepare event despair stat ^w^)!
-			etcStat = {};
-			defStat = {
+			const etcStat = {};
+			const defStat = {
 				onClear: null,
 				onError: [],
 				onBoss : {
@@ -1917,41 +1917,42 @@ Previously known as "Reactor"
 				}
 			};
 			
-			// Exclude gauge based map from being kept every time
-			for(ctr in KC3Meta._gauges) {
-				if(Object.keys(maps).indexOf(ctr)>=0)
-					maps[ctr].clear = maps[ctr].kills = false;
+			// Exclude gauge based maps from being kept every time
+			const mapKeys = Object.keys(maps);
+			for(const key of mapKeys) {
+				if(KC3Meta.gauge(key.substr(1)))
+					maps[key].clear = maps[key].kills = false;
 			}
 			
 			// Combine current storage and current available maps data
-			for(ctr in response.api_data.api_map_info){
-				thisMap = response.api_data.api_map_info[ctr];
-				var key = "m"+thisMap.api_id;
-				oldMap = maps[key];
+			for(const idx in raws) {
+				const thisMap = raws[idx];
+				const key = "m" + thisMap.api_id;
+				const oldMap = maps[key];
 				
-				if(typeof (oldMap||{}).curhp !== "undefined")
-					etcStat[key] = $.extend(true,{},defStat,maps[key].stat);
+				if((oldMap || {}).curhp !== undefined)
+					etcStat[key] = $.extend(true, {}, defStat, maps[key].stat);
 				
 				// Create map object
-				localMap = {
+				const localMap = {
 					id: thisMap.api_id,
 					clear: thisMap.api_cleared,
 					kind: "single"
 				};
 				
 				// Check for boss gauge kills
-				if(typeof thisMap.api_defeat_count !== "undefined"){
+				if(thisMap.api_defeat_count !== undefined) {
 					localMap.kills = thisMap.api_defeat_count;
 					localMap.kind  = "multiple";
 				}
 				// Max Land-bases allowed to be sortied
-				if(typeof thisMap.api_air_base_decks !== "undefined"){
+				if(thisMap.api_air_base_decks !== undefined) {
 					localMap.airBase = thisMap.api_air_base_decks;
 				}
 				
 				// Check for event map info
-				if(typeof thisMap.api_eventmap !== "undefined"){
-					var eventData = thisMap.api_eventmap;
+				if(thisMap.api_eventmap !== undefined) {
+					const eventData = thisMap.api_eventmap;
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
@@ -1972,37 +1973,37 @@ Previously known as "Reactor"
 							console.info("Reported new API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
 					}
 					
-					if(typeof oldMap !== "undefined"){
-						if(!!oldMap.kinds) localMap.kinds = oldMap.kinds;
-						if(!!oldMap.maxhps) localMap.maxhps = oldMap.maxhps;
-						if(!!oldMap.baseHp) localMap.baseHp = oldMap.baseHp;
-						if(!!oldMap.debuffFlag) localMap.debuffFlag = oldMap.debuffFlag;
-						if(!!oldMap.debuffSound) localMap.debuffSound = oldMap.debuffSound;
+					if(oldMap !== undefined) {
+						if(oldMap.kinds  !== undefined) localMap.kinds = oldMap.kinds;
+						if(oldMap.maxhps !== undefined) localMap.maxhps = oldMap.maxhps;
+						if(oldMap.baseHp !== undefined) localMap.baseHp = oldMap.baseHp;
+						if(oldMap.debuffFlag  !== undefined) localMap.debuffFlag = oldMap.debuffFlag;
+						if(oldMap.debuffSound !== undefined) localMap.debuffSound = oldMap.debuffSound;
 						// Real different gauge detected
-						if(!!oldMap.gaugeNum && oldMap.gaugeNum !== localMap.gaugeNum){
+						if(oldMap.gaugeNum !== undefined && oldMap.gaugeNum !== localMap.gaugeNum) {
 							// Should be a different BOSS and her HP might be different
 							delete localMap.baseHp;
 							console.info("New gauge phase detected:", oldMap.gaugeNum + " -> " + localMap.gaugeNum);
 						}
 						// Different gauge type detected
-						if(!!oldMap.gaugeType && oldMap.gaugeType !== localMap.gaugeType){
+						if(oldMap.gaugeType !== undefined && oldMap.gaugeType !== localMap.gaugeType) {
 							localMap.kinds = localMap.kinds || [oldMap.gaugeType];
 							localMap.kinds.push(localMap.gaugeType);
 							console.info("New gauge type detected:", oldMap.gaugeType + " -> " + localMap.gaugeType);
 						}
 						// Different max value detected
-						if((oldMap.maxhp || 9999) !== 9999
-							&& oldMap.maxhp !== localMap.maxhp){
+						if((oldMap.maxhp || 9999) !== 9999 && oldMap.maxhp !== localMap.maxhp) {
 							localMap.maxhps = localMap.maxhps || [oldMap.maxhp];
 							localMap.maxhps.push(localMap.maxhp);
 							console.info("New max HP detected:", oldMap.maxhp + " -> " + localMap.maxhp);
 						}
 					}
-					localMap.stat = $.extend(true,{},defStat,etcStat[ key ]);
+					localMap.stat = $.extend(true, {}, defStat, etcStat[ key ]);
 				}
 				
 				maps[ key ] = localMap;
 			}
+			
 			KC3SortieManager.setAllMapData(maps);
 			
 			// If LBAS info updated, trigger updating view
