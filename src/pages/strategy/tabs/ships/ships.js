@@ -309,11 +309,11 @@
 
 		refreshInputFilter: function() {
 			const self = this;
+			let hiddenShips = 0;
+
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
 			const levelStartCriteria = $(".ship_level_filter .level_start_input").val();
 			const levelEndCriteria = $(".ship_level_filter .level_end_input").val();
-			let hiddenShips = 0;
-			$(".ingame_page").remove();
 			if (newNameCriteria.length || levelStartCriteria.length || levelEndCriteria.length) {
 				let nameToSearch = newNameCriteria,
 					isValidRegex = false;
@@ -352,6 +352,7 @@
 				$(".show_name_filter .name_criteria").removeClass("error");
 			}
 
+			$(".ingame_page").remove();
 			let visibleShips = 0;
 			$(".ship_list .ship_item").each(function() {
 				if (!$(this).hasClass("hidden_by_name")) {
@@ -364,10 +365,12 @@
 					visibleShips++;
 				}
 			});
+
 			// update listed ship counter
-			// have to take filtered list by data into account since hidden by name are still in list
-			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
-			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShips);
+			// have to take filtered list by data into account since hidden rows are still in list
+			const filteredBefore = $(".ship_count .count_value .listed").data("filtered") || 0;
+			$(".ship_count .count_value .listed").text(filteredBefore - hiddenShips);
+
 			// save criteria values to settings
 			let toUpdateSettings = false;
 			if (this.showNameFilter !== newNameCriteria) {
