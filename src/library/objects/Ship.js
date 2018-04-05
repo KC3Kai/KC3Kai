@@ -1950,13 +1950,14 @@ KC3改 Ship Object
 		const isThisDestroyer = stype === 2;
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
+		// simulate server-side night air attack flag: `api_n_mother_list`
+		const isCarrierNightAirAttack = isThisCarrier && this.canCarrierNightAirAttack();
 		if(trySpTypeFirst && !targetShipType.isSubmarine) {
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
 			
-			// simulate night air attack flag: `api_n_mother_list`
 			// carrier night cut-in, NOAP or Saratoga Mk.II needed
-			if(isThisCarrier && this.canCarrierNightAirAttack()) {
+			if(isCarrierNightAirAttack) {
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 				// https://twitter.com/Nishisonic/status/911143760544751616
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
@@ -2025,6 +2026,10 @@ KC3改 Ship Object
 			}
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
 			if(hasRocketLauncher) return ["Rocket", -1];
+		}
+		// priority to use server flag, but impossible to test on abyssal below for now
+		if(isCarrierNightAirAttack) {
+			return ["AirAttack", 1];
 		}
 		if(targetShipType.isSubmarine && isThisLightCarrier) {
 			return ["DepthCharge", 2];
