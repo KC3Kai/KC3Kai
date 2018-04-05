@@ -24,6 +24,8 @@
 			showTooltip: false,
 			// a special filter for quick search by show name
 			showNameFilter: "",
+			// a special filter for quick limit ships by level range
+			shipLevelFilter: ["", ""],
 			// default values of filters are defined at `prepareFilters`
 		},
 		// All pre-defined filters instances
@@ -80,14 +82,14 @@
 					self.pageNo = true;
 					self.saveSettings();
 				}
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 			});
 			$(".pages_no").on("click", function(){
 				if(self.pageNo){
 					self.pageNo = false;
 					self.saveSettings();
 				}
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 			});
 			$(".scroll_fix").on("click", function(){
 				self.toggleTableScrollbar(true);
@@ -275,25 +277,55 @@
 
 			// Ship show name quick filter
 			$(".show_name_filter .name_criteria").on("keyup", () => {
-				this.refreshShowNameFilter();
+				this.refreshInputFilter();
 			}).on("focus", () => {
 				$(".show_name_filter .name_criteria").select();
 			}).val(this.showNameFilter);
+
+			// Ship level range quick filter
+			const lvStartInput = $(".ship_level_filter .level_start_input");
+			const lvEndInput = $(".ship_level_filter .level_end_input");
+			const validateLevelString = (str) => {
+				const v = Number(str);
+				return str === "" || (
+					!isNaN(v) && Number.isInteger(v) && v > 0 && v <= KC3Ship.getMaxLevel()
+				);
+			};
+			lvStartInput.on("keyup", () => {
+				const isValid = validateLevelString(lvStartInput.val());
+				lvStartInput.toggleClass("error", !isValid);
+				if(isValid) this.refreshInputFilter();
+			}).on("focus", () => {
+				lvStartInput.select();
+			}).val(this.shipLevelFilter[0]);
+			lvEndInput.on("keyup", () => {
+				const isValid = validateLevelString(lvEndInput.val());
+				lvEndInput.toggleClass("error", !isValid);
+				if(isValid) this.refreshInputFilter();
+			}).on("focus", () => {
+				lvEndInput.select();
+			}).val(this.shipLevelFilter[1]);
 		},
 
-		refreshShowNameFilter: function() {
+		refreshInputFilter: function() {
 			const self = this;
 			const newNameCriteria = $(".show_name_filter .name_criteria").val();
-			let hiddenShipsByName = 0;
+			const levelStartCriteria = $(".ship_level_filter .level_start_input").val();
+			const levelEndCriteria = $(".ship_level_filter .level_end_input").val();
+			let hiddenShips = 0;
 			$(".ingame_page").remove();
-			if (newNameCriteria.length > 0) {
-				let nameToSearch = newNameCriteria, isValidRegex = false;
-				try {
-					nameToSearch = new RegExp(newNameCriteria, 'iu');
-					isValidRegex = true;
-				} catch (e) {
-					// Ignore regexp syntax error, will fall-back to substring matching
+			if (newNameCriteria.length || levelStartCriteria.length || levelEndCriteria.length) {
+				let nameToSearch = newNameCriteria,
 					isValidRegex = false;
+				if (newNameCriteria.length) {
+					try {
+						nameToSearch = new RegExp(newNameCriteria, 'iu');
+						isValidRegex = true;
+					} catch (e) {
+						// Ignore regexp syntax error, will fall-back to substring matching
+						isValidRegex = false;
+					}
+					$(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
 				}
 				$(".ship_list .ship_item").each(function() {
 					const shipNameElm = $(".ship_name", this);
@@ -304,12 +336,17 @@
 						shipNameJp = (shipNameElm.data("jpname") || ""),
 						shipNameKana = (shipNameElm.data("jpname-kana") || ""),
 						shipNameRomaji = (shipNameElm.data("jpname-romaji") || "");
-					const isToHide = ! [shipName, shipNameJp, shipNameKana, shipNameRomaji]
-						.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
-					hiddenShipsByName += isToHide & 1;
+					const shipLevel = Number($(".ship_lv", this).data("level"));
+					const isHiddenByName = newNameCriteria.length &&
+						![shipName, shipNameJp, shipNameKana, shipNameRomaji]
+							.some(v => isValidRegex ? nameToSearch.test(v) : v.includes(nameToSearch));
+					// function `inside` will treat invalid number (like "") as -/+Infinity,
+					// and it will auto swap min and max values if min > max
+					const isHiddenByLevel = !shipLevel.inside(levelStartCriteria, levelEndCriteria);
+					const isToHide = isHiddenByName || isHiddenByLevel;
+					hiddenShips += isToHide & 1;
 					$(this).toggleClass("hidden_by_name", isToHide);
 				});
-				$(".show_name_filter .name_criteria").toggleClass("error", !isValidRegex);
 			} else {
 				$(".ship_list .ship_item").removeClass("hidden_by_name");
 				$(".show_name_filter .name_criteria").removeClass("error");
@@ -317,27 +354,40 @@
 
 			let visibleShips = 0;
 			$(".ship_list .ship_item").each(function() {
-				if(!$(this).hasClass("hidden_by_name")) {
+				if (!$(this).hasClass("hidden_by_name")) {
 					$(this).removeClass("odd").removeClass("even")
 						.addClass(visibleShips % 2 ? "even" : "odd");
-					if(visibleShips % 10 === 0)
+					if (visibleShips % 10 === 0)
 						$("<div>").addClass("ingame_page")
-							.html("Page " + Math.ceil((visibleShips + 1) / 10))
-							.insertBefore(this).toggle(self.pageNo);
+						.html("Page " + Math.ceil((visibleShips + 1) / 10))
+						.insertBefore(this).toggle(self.pageNo);
 					visibleShips++;
 				}
 			});
 			// update listed ship counter
 			// have to take filtered list by data into account since hidden by name are still in list
 			const filteredBeforeName = $(".ship_count .count_value .listed").data("filtered") || 0;
-			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShipsByName);
+			$(".ship_count .count_value .listed").text(filteredBeforeName - hiddenShips);
+			// save criteria values to settings
+			let toUpdateSettings = false;
 			if (this.showNameFilter !== newNameCriteria) {
 				this.showNameFilter = newNameCriteria;
+				toUpdateSettings = true;
+			}
+			if (this.shipLevelFilter[0] !== levelStartCriteria) {
+				this.shipLevelFilter[0] = levelStartCriteria;
+				toUpdateSettings = true;
+			}
+			if (this.shipLevelFilter[1] !== levelEndCriteria) {
+				this.shipLevelFilter[1] = levelEndCriteria;
+				toUpdateSettings = true;
+			}
+			if (toUpdateSettings) {
 				this.saveSettings();
 			}
-			return hiddenShipsByName;
+			return hiddenShips;
 		},
-
+		
 		getLastCurrentSorter: function() {
 			return this.currentSorters[this.currentSorters.length-1];
 		},
@@ -845,6 +895,7 @@
 				shrinkedSettings.filters[key] = this.newFilterRep[key].curValue;
 			}
 			shrinkedSettings.filters.showname = this.showNameFilter;
+			shrinkedSettings.filters.levelrange = this.shipLevelFilter;
 			shrinkedSettings.views.equip = this.equipMode;
 			shrinkedSettings.views.page = this.pageNo;
 			shrinkedSettings.views.scroll = this.scrollList;
@@ -864,7 +915,8 @@
 			}
 			if(this.settings.filters){
 				this.showNameFilter = this.settings.filters.showname || "";
-			}
+				this.shipLevelFilter = this.settings.filters.levelrange || ["", ""];
+		}
 			if(this.settings.views){
 				this.equipMode = this.settings.views.equip || 0;
 				this.pageNo = this.settings.views.page || false;
@@ -1055,9 +1107,10 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
-					$(".ship_lv .value", cElm).text( shipLevel )
-						.addClass( cShip.levelClass );
-					$(".ship_morale", cElm).text( cShip.morale );
+					$(".ship_lv .value", cElm).text(shipLevel)
+						.addClass(cShip.levelClass);
+					$(".ship_lv", cElm).attr("data-level", shipLevel);
+					$(".ship_morale", cElm).text(cShip.morale);
 
 					if(cShip.morale >= 50){ $(".ship_morale", cElm).addClass("sparkled"); }
 
@@ -1144,7 +1197,7 @@
 					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
-				self.refreshShowNameFilter();
+				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				console.debug("Showing ship list took", Date.now() - self.startTime, "milliseconds");
