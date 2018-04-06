@@ -1445,7 +1445,9 @@ body {
 
 /* MAPS
 --------------------------------*/
+.tab_event .sortie_controls .sortie_per_page,
 .tab_event .sortie_controls .sortie_count,
+.tab_maps .sortie_controls .sortie_per_page,
 .tab_maps .sortie_controls .sortie_count {
 	color:#337ab7;
 }

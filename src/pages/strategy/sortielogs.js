@@ -53,6 +53,7 @@
 			this.maps = JSON.parse(localStorage.maps || "{}");
 			this.exportingReplay = false;
 			this.enterCount = 0;
+			this.itemsPerPage = ConfigManager.sr_items_per_page || 20;
 		};
 		
 		/* EXECUTE
@@ -128,8 +129,18 @@
 				self.toggleSortie(this, true);
 			});
 			
+			// Select sorties per page
+			$(".tab_"+tabCode+" .sortie_per_page select").on("change", function(){
+				ConfigManager.load();
+				ConfigManager.sr_items_per_page = Number($(this).val()) || 20;
+				ConfigManager.save();
+				self.itemsPerPage = ConfigManager.sr_items_per_page;
+				self.showMap();
+			}).val(self.itemsPerPage);
+			
 			// Toggle between battle nodes only and with non-battle nodes
 			$(".tab_"+tabCode+" .sortie_batch_toggles .non_battle_toggle").on("click", function(){
+				ConfigManager.load();
 				ConfigManager.sr_show_non_battle = !ConfigManager.sr_show_non_battle;
 				ConfigManager.save();
 				$(this).toggleClass("active", !ConfigManager.sr_show_non_battle);
@@ -357,7 +368,7 @@
 			var expectedEnterCount = this.enterCount;
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
-			$(".tab_"+tabCode+" .sortie_batch_toggles").hide();
+			$(".tab_"+tabCode+" .sortie_controls").hide();
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
@@ -409,9 +420,9 @@
 				});
 				self.showPage(1, twbsPageObj);
 				$(".tab_"+tabCode+" .sortie_controls .sortie_count").text(
-					"Total pages: {0}, sorties: {1}".format(countPages, countSorties)
+					"total pages: {0}, sorties: {1}".format(countPages, countSorties)
 				);
-				$(".tab_"+tabCode+" .sortie_batch_toggles").show();
+				$(".tab_"+tabCode+" .sortie_controls").show();
 			}else{
 				$(".tab_"+tabCode+" .pagination").hide();
 			}
