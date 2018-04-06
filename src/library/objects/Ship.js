@@ -1555,8 +1555,8 @@ KC3改 Ship Object
 				200, 478, 487, 488, 547,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435), Fumizuki(548)
 				418, 434, 435, 548,
-				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
-				464, 470, 199, 468, 489, 490,
+				// Kasumi K2(464), Kasumi K2B(470), Arare K2 (198), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
+				464, 470, 198, 199, 468, 489, 490,
 				// Verniy(147), Kawakaze K2(469), Murasame K2(498)
 				147, 469, 498,
 				// Nagato K2(541)
