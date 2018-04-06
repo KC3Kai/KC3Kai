@@ -79,7 +79,6 @@ KC3改 Equipment Object
 				switch(type2) {
 					case 1: // Small Cal. Main
 					case 2: // Medium Cal. Main
-					case 4: // Secondary
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
 					case 24: // Landing Craft
@@ -87,6 +86,12 @@ KC3改 Equipment Object
 					case 36: // AA Fire Director
 					case 46: // Amphibious Tank
 						modifier = 1; break;
+					case 4: // Secondary
+						modifier = [10, 66, 220, 275].includes(this.masterId) ?
+							// 0.2 for some green HA guns
+							0.2 :  [12, 234, 247].includes(this.masterId) ?
+							// 0.3 for some yellow guns
+							0.3 : 1; break;
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
 					case 14: // Sonar
