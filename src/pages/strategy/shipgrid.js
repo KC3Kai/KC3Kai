@@ -49,7 +49,7 @@
 			this.shipListDiv.trigger("preShow");
 			// Clear old list
 			this.shipListDiv.hide().empty();
-			const delayMillis = 100;
+			const delayMillis = 0;
 			setTimeout(() => {
 				// Do list filtering
 				const filteredShipList = this.shipList.filter(ship => this.executeFilters(ship));

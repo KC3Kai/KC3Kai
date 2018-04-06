@@ -78,8 +78,9 @@
 }
 
 .tab_ships .show_name_filter {
+	float: left;
 	height: 18px;
-	margin: 0px 0px 2px 0px;
+	margin: 0px 2px 2px 0px;
 }
 .tab_ships .show_name_filter .name_label {
 	float: left;
@@ -97,6 +98,49 @@
 	line-height: 18px;
 }
 .tab_ships .show_name_filter .name_criteria.error{
+	color: #f00;
+}
+
+.tab_ships .ship_level_filter {
+	float: left;
+	height: 18px;
+	margin: 0px 2px 2px 24px;
+}
+.tab_ships .ship_level_filter .level_start_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+	line-height: 18px;
+}
+.tab_ships .ship_level_filter .level_end_label {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	padding-right: 5px;
+	line-height: 18px;
+	margin: 0 0 0 6px;
+}
+.tab_ships .ship_level_filter .level_start_input {
+	float: left;
+	font-size: 12px;
+	width: 30px;
+	height: 18px;
+	padding: 1px 3px;
+	line-height: 18px;
+}
+.tab_ships .ship_level_filter .level_start_input.error {
+	color: #f00;
+}
+.tab_ships .ship_level_filter .level_end_input {
+	float: left;
+	font-size: 12px;
+	width: 30px;
+	height: 18px;
+	padding: 1px 3px;
+	line-height: 18px;
+}
+.tab_ships .ship_level_filter .level_end_input.error {
 	color: #f00;
 }
 
@@ -371,9 +415,15 @@
 	white-space:nowrap;
 	position:relative;
 }
-.tab_ships .ship_item .ship_name.ship_kekkon {
-	/*width:112px;*/
+/*
+.tab_ships .ship_item .ship_name:after {
+	content:attr(data-ship-name);
 }
+.tab_ships .ship_item .ship_name.class_name:after {
+	content:attr(data-full-name);
+}
+*/
+
 .tab_ships .ship_item .ship_type {
 	width:30px;
 	text-align:center;
@@ -466,7 +516,13 @@
 	height:13px;
 	margin:-35px 0px 0px 39px;
 	position:relative;
+	display:inline;
+	content:url("/assets/img/client/heartlock.png");
 }
+.tab_ships .ship_item .ship_lock.unlock img {
+	content:url("/assets/img/client/heartlock-x.png");
+}
+
 .tab_ships .ship_item .ship_marry {
 	display:none;
 }

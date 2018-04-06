@@ -1139,7 +1139,6 @@
 						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
 						//console.debug("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
 						//console.debug("thisMapId", thisMapId);
-						//console.debug("KC3Meta", KC3Meta._gauges);
 						//console.debug("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){

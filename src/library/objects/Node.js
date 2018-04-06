@@ -1217,7 +1217,7 @@ Used by SortieManager
 			const { fleets } = KC3BattlePrediction.analyzeBattlePartially(
 				battleData, [], // Not concern at damecons and damages of player ships here
 				// Might pre-define this type of phases preset inside module?
-				["airBaseInjection", "injectionKouku", "airBaseAttack", "support", "nSupport"]
+				["nSupport", "airBaseInjection", "airBaseAttack", "support"]
 			);
 			// Auto put table vertically on right if lines of logs >= enemy ship amount
 			const tipLogsLines = (tipLogs.match(/\r\n|\n|\r/g) || []).length + 1;

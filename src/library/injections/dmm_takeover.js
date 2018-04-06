@@ -70,7 +70,7 @@
 		--------------------------------------*/
 		attachHTML: function(){
 			// Overlay screens
-			var overlays = $("<div>").addClass("overlays").appendTo("#area-game");
+			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game");
 
 			var overlay_quests = $("<div>").addClass("overlay_box overlay_quests");
 			overlays.append(overlay_quests);
