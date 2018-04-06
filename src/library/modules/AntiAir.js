@@ -322,11 +322,13 @@ AntiAir: anti-air related calculations
 		return Math.floor( shipProportionalShotdownRate(shipObj, onCombinedFleetNum) * num );
 	}
 
-	function getCombinedFleetModifier(onCombinedFleetNum) {
+	function getCombinedFleetModifier(onCombinedFleetNum, isLongDistanceAirRaid = false) {
 		// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#18
 		return onCombinedFleetNum > 0 ? // is on combined fleet?
 			onCombinedFleetNum > 1 ? // is escort fleet?
-				0.6 * 0.8 : 0.9 * 0.8
+				0.6 * 0.8 : // otherwise combined main fleet
+				(isLongDistanceAirRaid ? 0.9 * 0.8 : 1 * 0.8)
 			: 1.0;
 	}
 

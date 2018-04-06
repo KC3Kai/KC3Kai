@@ -1555,8 +1555,8 @@ KC3改 Ship Object
 				200, 478, 487, 488, 547,
 				// Satsuki K2(418), Mutsuki K2(434), Kisaragi K2(435), Fumizuki(548)
 				418, 434, 435, 548,
-				// Kasumi K2(464), Kasumi K2B(470), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
-				464, 470, 199, 468, 489, 490,
+				// Kasumi K2(464), Kasumi K2B(470), Arare K2 (198), Ooshio K2(199), Asashio K2D(468), Michishio K2(489), Arashio K2(490)
+				464, 470, 198, 199, 468, 489, 490,
 				// Verniy(147), Kawakaze K2(469), Murasame K2(498)
 				147, 469, 498,
 				// Nagato K2(541)
@@ -2417,18 +2417,18 @@ KC3改 Ship Object
 	 * To calculate 12cm 30tube Rocket Launcher Kai Ni (Rosa K2) trigger chance (for now),
 	 * we need adjusted AA of ship, number of Rosa K2, ctype and luck stat.
 	 * @see https://twitter.com/kankenRJ/status/979524073934893056 - current formula
-	 * @see http://ja.kancolle.wikia.com/wiki/スレッド:2471 - old formula verifying thread
+	 * @see http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2471 - old formula verifying thread
 	 */
 	KC3Ship.prototype.calcAntiAirEffectChance = function() {
 		if(this.isDummy() || this.isAbsent()) return 0;
-		// 70 for Ise-class, 0 otherwise
-		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Number of 12cm 30tube Rocket Launcher Kai Ni
 		let rosaCount = this.countEquipment(274);
 		if(rosaCount === 0) return 0;
 		// Not tested yet on more than 3 Rosa K2, capped to 3 just in case of exceptions
 		rosaCount = rosaCount > 3 ? 3 : rosaCount;
 		const rosaAdjustedAntiAir = 48;
+		// 70 for Ise-class, 0 otherwise
+		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Rounding to x%
 		return Math.qckInt("floor",
 			(this.adjustedAntiAir() + this.lk[0]) /

@@ -860,6 +860,9 @@ button, input, select, textarea {
 .tab_ships .ship_level_filter input {
 	border:1px solid #888888;
 }
+.tab_ships .ship_level_filter {
+	margin-left: 14px !important;
+}
 .tab_ships .ship_count {
 	width:215px !important;
 }
@@ -1757,7 +1760,9 @@ button, input, select, textarea {
 
 /* MAPS
 --------------------------------*/
+.tab_event .sortie_controls .sortie_per_page,
 .tab_event .sortie_controls .sortie_count,
+.tab_maps .sortie_controls .sortie_per_page,
 .tab_maps .sortie_controls .sortie_count {
 	color:#fff;
 }
