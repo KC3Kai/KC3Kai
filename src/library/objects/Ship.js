@@ -2417,18 +2417,18 @@ KC3改 Ship Object
 	 * To calculate 12cm 30tube Rocket Launcher Kai Ni (Rosa K2) trigger chance (for now),
 	 * we need adjusted AA of ship, number of Rosa K2, ctype and luck stat.
 	 * @see https://twitter.com/kankenRJ/status/979524073934893056 - current formula
-	 * @see http://ja.kancolle.wikia.com/wiki/スレッド:2471 - old formula verifying thread
+	 * @see http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2471 - old formula verifying thread
 	 */
 	KC3Ship.prototype.calcAntiAirEffectChance = function() {
 		if(this.isDummy() || this.isAbsent()) return 0;
-		// 70 for Ise-class, 0 otherwise
-		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Number of 12cm 30tube Rocket Launcher Kai Ni
 		let rosaCount = this.countEquipment(274);
 		if(rosaCount === 0) return 0;
 		// Not tested yet on more than 3 Rosa K2, capped to 3 just in case of exceptions
 		rosaCount = rosaCount > 3 ? 3 : rosaCount;
 		const rosaAdjustedAntiAir = 48;
+		// 70 for Ise-class, 0 otherwise
+		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Rounding to x%
 		return Math.qckInt("floor",
 			(this.adjustedAntiAir() + this.lk[0]) /

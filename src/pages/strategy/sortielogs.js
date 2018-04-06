@@ -511,6 +511,7 @@
 				const topAbSquadSlots = [0, 0, 0, 0];
 				// Fill up Anti-bombing squadron slots with LBF/LBI master ID, highest AB stat as priority
 				// See https://www.reddit.com/r/kancolle/comments/7ziide/discussion_newly_discovered_mechanics_of_lbas_air/
+				// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:1140#60
 				if(defenderSquads){
 					for(const idx in topAbSquadSlots){
 						for(const base in defenderSquads){
