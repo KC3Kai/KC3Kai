@@ -283,11 +283,15 @@ Previously known as "Reactor"
 					case 12: PlayerManager.consumables.furniture700 = thisItem.api_count; break;
 					// 44 not found in this API, as it's not useitem and even not material
 					//case 44: PlayerManager.consumables.fcoin = thisItem.api_count; break;
+					case 49: PlayerManager.consumables.dockKey = thisItem.api_count; break;
 					// 50 and 51 not found in this API, as they are slotitem
 					//case 50: PlayerManager.consumables.repairTeam = thisItem.api_count; break;
 					//case 51: PlayerManager.consumables.repairGoddess = thisItem.api_count; break;
 					case 52: PlayerManager.consumables.furnitureFairy = thisItem.api_count; break;
+					// 53 might be Port Expansion? but not listed in inventory like dock key
+					//case 53: PlayerManager.consumables.portExpansion = thisItem.api_count; break;
 					case 54: PlayerManager.consumables.mamiya = thisItem.api_count; break;
+					case 55: PlayerManager.consumables.ring = thisItem.api_count; break;
 					case 56: PlayerManager.consumables.chocolate = thisItem.api_count; break;
 					case 57: PlayerManager.consumables.medals = thisItem.api_count; break;
 					case 58: PlayerManager.consumables.blueprints = thisItem.api_count; break;
@@ -295,6 +299,7 @@ Previously known as "Reactor"
 					case 60: PlayerManager.consumables.presents = thisItem.api_count; break;
 					case 61: PlayerManager.consumables.firstClassMedals = thisItem.api_count; break;
 					case 62: PlayerManager.consumables.hishimochi = thisItem.api_count; break;
+					case 63: PlayerManager.consumables.hqPersonnel = thisItem.api_count; break;
 					case 64: PlayerManager.consumables.reinforceExpansion = thisItem.api_count; break;
 					case 65: PlayerManager.consumables.protoCatapult = thisItem.api_count; break;
 					// 66, 67, 69 and 76 not found in this API, as they are slotitem
@@ -311,6 +316,7 @@ Previously known as "Reactor"
 					case 75: PlayerManager.consumables.newArtilleryMaterial = thisItem.api_count; break;
 					case 77: PlayerManager.consumables.newAviationMaterial = thisItem.api_count; break;
 					case 78: PlayerManager.consumables.actionReport = thisItem.api_count; break;
+					// 79, 81~84 no medal icon found in itemicons.swf, as they are never in inventory?
 					case 79: PlayerManager.consumables.straitMedal = thisItem.api_count; break;
 					case 80: PlayerManager.consumables.xmasGiftBox = thisItem.api_count; break;
 					case 81: PlayerManager.consumables.shogoMedalHard = thisItem.api_count; break;
@@ -2078,14 +2084,15 @@ Previously known as "Reactor"
 		"api_req_member/itemuse":function(params, response, headers){
 			var utcHour = Date.toUTChours(headers.Date);
 			var itemId = parseInt(params.api_useitem_id, 10),
-				fForce = parseInt(params.api_force_flag, 10), // 1 = no over cap confirm dialogue
-				fExchg = parseInt(params.api_exchange_type, 10),
-				aData  = response.api_data,
-				fChuui = aData.api_caution_flag, // 1 = over cap confirm dialogue to be shown
-				flags  = aData.api_flag;
+				forceToUse = parseInt(params.api_force_flag, 10), // 1 = no over cap confirm dialogue
+				exchangeType = parseInt(params.api_exchange_type, 10),
+				apiData = response.api_data || {}, // may no api data for some cases?
+				showConfirmBox = apiData.api_caution_flag, // 1 = over cap confirm dialogue to be shown
+				obtainFlag = apiData.api_flag,
+				itemAttrName = PlayerManager.getConsumableById(itemId, true);
 			// Handle items to be used:
 			// before api_exchange_type all cases full verified, better to refresh counts via /useitem
-			switch(fExchg){
+			switch(exchangeType){
 				case 1: // exchange 4 medals with 1 blueprint
 					if(itemId === 57) PlayerManager.consumables.medals -= 4;
 				break;
@@ -2133,34 +2140,36 @@ Previously known as "Reactor"
 					if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
 				break;
 				default:
-					if(isNaN(fExchg)){
+					if(isNaN(exchangeType)){
 						// exchange 1 chocolate with resources [700, 700, 700, 1500]
 						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
 					} else {
-						console.log("Unknown exchange type:", fExchg, itemId, aData);
+						console.log("Unknown exchange type:", exchangeType, itemId, apiData);
 					}
 			}
-			// Handle item/materials will obtain:
-			switch(flags){
-				case 1:
-					// Obtained Item
-					// Use Master, Master ID, Get Count "api_getitem":{"api_usemst":5,"api_mst_id":44,"api_getcount":5000} (from furni box)
-					var dItem  = aData.api_getitem;
+			// Handle item/materials will be obtained:
+			switch(obtainFlag){
+				case 1: // supposed to obtain use/slot item
+					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
+					console.log(`Using item obtained item:`, itemId, itemAttrName, exchangeType, apiData.api_getitem);
+					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2?
+					if(apiData.api_slotitem){
+						console.log(`Using item obtained slotitem:`, apiData.api_slotitem);
+						// Not sure /slot_item will be called or not, should update GearManager here if not
+					}
 					break;
-				case 2:
-					// Obtained Material
-					var dMatr  = aData.api_material;
-					KC3Database.Naverall({
-						hour: utcHour,
-						type: "useitem" + itemId,
-						data: dMatr
-					});
-					// Not needed because /useitem, /material, /basic APIs will be called following this
-					/*
-					PlayerManager.setResources(utcHour * 3600, null, dMatr.slice(0,4));
-					PlayerManager.setConsumables(utcHour * 3600, null, dMatr.slice(4,8));
-					KC3Network.trigger("Consumables");
-					*/
+				case 2: // supposed to obtain materials
+					const materials = apiData.api_material;
+					console.log(`Using item obtained materials:`, itemId, itemAttrName, exchangeType, materials);
+					if(Array.isArray(materials)){
+						KC3Database.Naverall({
+							hour: utcHour,
+							type: "useitem" + itemId,
+							data: materials
+						});
+					}
+					// Do not need to set PlayerManager resources and consumables here,
+					// because /useitem, /material, /basic APIs will be called at once
 					break;
 			}
 		},
