@@ -308,7 +308,7 @@
 							los: 0,
 							asw: 0,
 						};
-						const shipsInfo = expedInfo.fleet.map(ship => {
+						const shipsInfo = !Array.isArray(expedInfo.fleet) ? [] : expedInfo.fleet.map(ship => {
 							if(ship.mst_id > 0){
 								const stats = sumShipStats(ship);
 								fleetStats.fp += stats.fp + stats.fpEquip;
