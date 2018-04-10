@@ -1204,7 +1204,7 @@
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
 				console.debug("Showing ship list took", Date.now() - self.startTime, "milliseconds");
-			});
+			}, 0);
 		},
 
 		shipClickFunc: function(e){

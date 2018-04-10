@@ -21,7 +21,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			
+			this.itemsPerPage = 20;
 		},
 		
 		/* EXECUTE
@@ -66,11 +66,11 @@
 			$(".tab_expedpast .expedNumBox")
 				.filter(function(i,x){return $(x).hasClass("expedNumBox_"+(i+1));})
 				.each(function(i,x){
-					var
-						row = $('.tab_expedpast .factory .expedNum').clone().addClass("expedWhole").removeClass("expedNum"),
-						val = true;
+					const row = $('.tab_expedpast .factory .expedNum').clone()
+						.addClass("expedWhole").removeClass("expedNum");
+					let val = true;
 					$("input",".expedNumBox_"+(i+1)).each(function(id,elm){
-						val&= $(elm).prop("checked");
+						val &= $(elm).prop("checked");
 					});
 					$(row)
 						.find(".expedCheck input")
@@ -89,11 +89,11 @@
 			
 			// Expedition Number Filter
 			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(){
-				var
+				const
 					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
 					worldNum     = $(this).attr("world"),
-					context      = ".tab_expedpast .expedNumBox_"+worldNum,
-					parentCheck  = true;
+					context      = ".tab_expedpast .expedNumBox_"+worldNum;
+				let parentCheck  = true;
 				self.exped_filters = [];
 				$(".expedNum   input",context).each(function(i,x){ parentCheck &= $(x).prop("checked"); });
 				$(".expedWhole input",context).prop("checked",parentCheck);
@@ -102,12 +102,12 @@
 				});
 				self.tabSelf.definition.refreshList();
 			}).on("click", ".expedWhole input", function() {
-				var
+				const
 					worldNum = $(this).val(),
 					state    = $(this).prop("checked"),
 					expeds   = $(".tab_expedpast .expedNumBox_"+worldNum+" .expedNum input");
 				expeds.each(function(i,x){
-					var
+					const
 						elmState = $(x).prop("checked"),
 						expedNum = parseInt($(x).val());
 					if(elmState ^ state) { // check different state
@@ -125,7 +125,7 @@
 			
 			// Fleet Number Filter
 			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(){
-				var filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
+				const filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
 				self.fleet_filters = [];
 				filterFleets.each( function() {
 					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
@@ -146,9 +146,9 @@
 			$(".tab_expedpast .exped_count").hide();
 			$(".tab_expedpast .exped_list").empty();
 			$(".tab_expedpast .exped_pages").html('<ul class="pagination pagination-sm"></ul>');
-			let typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
-			let target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
-			let sparkled = function(sparkles) {
+			const typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
+			const target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
+			const sparkled = function(sparkles) {
 				switch(typeSelect) {
 					case 0:
 						return sparkles > target;
@@ -159,9 +159,9 @@
 				}
 			};
 			// Get pagination
-			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, sparkled, function(numRecords, gs, ns, itemCount){
-				const itemsPerPage = 20;
-				const numPages = Math.ceil(numRecords / itemsPerPage);
+			KC3Database.count_expeds(this.exped_filters, this.fleet_filters, sparkled,
+				function(numRecords, gs, ns, itemCount){
+				const numPages = Math.ceil(numRecords / self.itemsPerPage);
 				//console.debug("count_expeds", numRecords);
 				
 				if(numPages > 0){
@@ -188,9 +188,9 @@
 		showPage :function(pageNumber){
 			const self = this;
 			
-			let typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
-			let target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
-			let sparkled = function(sparkles) {
+			const typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
+			const target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
+			const sparkled = function(sparkles) {
 				switch(typeSelect) {
 					case 0:
 						return sparkles > target;
@@ -200,7 +200,8 @@
 						return sparkles == target;
 				}
 			};
-			KC3Database.get_expeds(pageNumber, this.exped_filters, this.fleet_filters, sparkled, function(response){
+			KC3Database.get_expeds(pageNumber, this.itemsPerPage, this.exped_filters, this.fleet_filters, sparkled,
+				function(response){
 				//console.debug("get_expeds", response, self.exped_filters, self.fleet_filters);
 				$(".tab_expedpast .exped_list").empty();
 				
@@ -221,8 +222,8 @@
 					$(".exped_exp", ExpedBox).text( ThisExped.admiralXP );
 
 					let drumCount = 0;
-					// Ship List
-					for(let sctr in ThisExped.fleet){
+					// Ship List. WARN: `.fleet` might be `{}` for old bad data
+					for(const sctr in ThisExped.fleet){
 						const ThisShip = ThisExped.fleet[sctr];
 						const ShipBox = $(".tab_expedpast .factory .exped_ship").clone();
 						$(".exped_ship_img img", ShipBox).attr("src", KC3Meta.shipIcon(ThisShip.mst_id) );

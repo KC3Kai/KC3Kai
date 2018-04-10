@@ -466,16 +466,16 @@ Uses Dexie.js third-party plugin on the assets directory
 				.count(callback);
 		},
 		
-		get_expeds :function(pageNumber, expeds, fleets, sparkled, callback){
-			// console.debug("expeds", expeds);
-			var itemsPerPage = 20;
+		get_expeds :function(pageNumber, itemsPerPage, expeds, fleets, sparkled, callback){
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
 				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){ return sparkled(exped.fleet.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0)); })
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.and(function(exped){
+					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
+					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
@@ -484,10 +484,12 @@ Uses Dexie.js third-party plugin on the assets directory
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
 				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
-				.and(function(exped){ return sparkled(exped.fleet.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0)); })
-				.toArray(function(arr) {
-					let gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
-					let ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
+				.and(function(exped){
+					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
+					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).toArray(function(arr) {
+					const gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
+					const ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
 					callback(arr.length, gs, ns);
 				});
 		},

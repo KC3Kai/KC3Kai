@@ -446,7 +446,7 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
-		getConsumableById :function(useitemId){
+		getConsumableById :function(useitemId, attrNameOnly = false){
 			// ID mapping see also `api_get_member/useitem` at Kcsapi.js#282
 			const attrNameMap = {
 				"1": "buckets",
@@ -456,11 +456,18 @@ Does not include Ships and Gears which are managed by other Managers
 				"10": "furniture200",
 				"11": "furniture400",
 				"12": "furniture700",
+				"31": "fuel",
+				"32": "ammo",
+				"33": "steel",
+				"34": "bauxite",
 				"44": "fcoin",
+				"49": "dockKey",
 				"50": "repairTeam",
 				"51": "repairGoddess",
 				"52": "furnitureFairy",
+				"53": "portExpansion",
 				"54": "mamiya",
+				"55": "ring",
 				"56": "chocolate",
 				"57": "medals",
 				"58": "blueprints",
@@ -468,6 +475,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"60": "presents",
 				"61": "firstClassMedals",
 				"62": "hishimochi",
+				"63": "hqPersonnel",
 				"64": "reinforceExpansion",
 				"65": "protoCatapult",
 				"66": "ration",
@@ -491,7 +499,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"84": "shogoMedalCasual",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
-			return this.consumables[attrNameMap[useitemId]];
+			return attrNameOnly ? attrNameMap[useitemId] : this.consumables[attrNameMap[useitemId]];
 		},
 
 		saveBases :function(){
