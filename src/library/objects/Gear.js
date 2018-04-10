@@ -86,14 +86,20 @@ KC3改 Equipment Object
 					case 36: // AA Fire Director
 					case 46: // Amphibious Tank
 						modifier = 1; break;
-					case 4: // Secondary
-						modifier = [10, 66, 220, 275].includes(this.masterId) ?
-							// 0.2 for some green HA guns
-							0.2 :  [12, 234, 247].includes(this.masterId) ?
-							// 0.3 for some yellow guns
-							0.3 : 1; break;
 					case 3: // Large Cal. Main
 						modifier = 1.5; break;
+					case 4: // Secondary
+						// 0.2 per star for some green HA guns,
+						// 0.3 per star for some yellow guns,
+						// might be all but with some exceptions?
+						// so here use white-list for sqrt(stars)
+						if([11, 134, 135].includes(this.masterId)) {
+							modifier = 1;
+						} else {
+							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
+							return modifier * stars;
+						}
+						break;
 					case 14: // Sonar
 					case 40: // Large Sonar
 						modifier = 0.75; break;

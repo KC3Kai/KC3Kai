@@ -3324,20 +3324,29 @@
 						.attr("title", KC3Meta.gearName(consumeGear.api_name));
 					$(".remodel_consume_amount", consumeGearBox)
 						.text("x{0}".format(recipeDetail.api_req_slot_num));
-					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true);
+					consumeGearBox.show();
+					const isToConsumeSameGear = masterId === recipeDetail.api_slot_id &&
+						!KC3GearManager.get(data.rosterId).stars;
+					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true)
+						- (isToConsumeSameGear & 1);
 					$(".owned_star0_item .value", remodelDetailBox)
 						.text("x{0}".format(totalAmount))
 						.toggleClass("red", totalAmount < recipeDetail.api_req_slot_num);
 					$(".owned_star0_item", remodelDetailBox).show();
-					const freeAmount = KC3GearManager.countFree(masterId, true, true);
+					const freeAmount = KC3GearManager.countFree(masterId, true, true)
+						- (isToConsumeSameGear & 1);
 					$(".owned_free_item .value", remodelDetailBox)
 						.text("x{0}".format(freeAmount))
 						.toggleClass("red", freeAmount < recipeDetail.api_req_slot_num);
 					$(".owned_free_item", remodelDetailBox).show();
+				} else {
+					$(".remodel_consume_item", consumeList).hide();
+					$(".owned_star0_item", remodelDetailBox).hide();
+					$(".owned_free_item", remodelDetailBox).hide();
 				}
 				const addConsumeUseItem = (useitemId, useitemNum) => {
 					const consumeUseItemBox = $(".remodel_consume_item:not(.useitem)", consumeList).clone();
-					consumeUseItemBox.addClass("useitem").appendTo(consumeList);
+					consumeUseItemBox.addClass("useitem").show().appendTo(consumeList);
 					$(".remodel_slot_icon img", consumeUseItemBox)
 						.attr("src", `/assets/img/useitems/${useitemId}.png`);
 					$(".remodel_slot_name", consumeUseItemBox)

@@ -1811,12 +1811,12 @@ KC3改 Ship Object
 			 */
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
-			if(mainGunCnt === 2 && apShellCnt === 1) return ["Cutin", 6, "CutinMainMain", 1.5];
+			if(mainGunCnt >= 2 && apShellCnt >= 1) return ["Cutin", 6, "CutinMainMain", 1.5];
 			const secondaryCnt = this.countEquipmentType(2, 4);
-			if(mainGunCnt === 1 && secondaryCnt === 1 && apShellCnt === 1)
+			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
 				return ["Cutin", 5, "CutinMainApshell", 1.3];
 			const radarCnt = this.countEquipmentType(2, [12, 13]);
-			if(mainGunCnt === 1 && secondaryCnt === 1 && radarCnt === 1)
+			if(mainGunCnt >= 1 && secondaryCnt >= 1 && radarCnt >= 1)
 				return ["Cutin", 4, "CutinMainRadar", 1.2];
 			if(mainGunCnt >= 1 && secondaryCnt >= 1) return ["Cutin", 3, "CutinMainSecond", 1.1];
 			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack", 1.2];

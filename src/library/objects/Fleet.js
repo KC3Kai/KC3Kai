@@ -1233,14 +1233,14 @@ Contains summary information about a fleet and its ships
 	Stats not recorded here can be computed by master stats + kyouka (mod)
 	------------------------------------*/
 	KC3Fleet.prototype.sortieJson = function(){
+		const self = this;
+		const shipsArray = [];
 		if(this.active){
-			var ReturnObj = [];
-			var self = this;
 			$.each(this.ships, function(index, rosterId){
 				if(rosterId > 0){
-					var ship = self.ship(index);
-					var nakedStats = ship.nakedStats();
-					ReturnObj.push({
+					const ship = self.ship(index);
+					const nakedStats = ship.nakedStats();
+					shipsArray.push({
 						mst_id: ship.masterId,
 						level: ship.level,
 						morale: ship.morale,
@@ -1257,16 +1257,14 @@ Contains summary information about a fleet and its ships
 					});
 				}
 			});
-			return ReturnObj;
-		}else{
-			return {};
 		}
+		return shipsArray;
 	};
 
 	KC3Fleet.prototype.deckbuilder = function() {
-		var result = {};
-		this.ship().map( function(x,i) {
-			result["s".concat(i+1)] = x.deckbuilder();
+		const result = {};
+		this.ship().forEach((ship, index) => {
+			result[`s${index + 1}`] = ship.deckbuilder();
 		});
 		return result;
 	};
