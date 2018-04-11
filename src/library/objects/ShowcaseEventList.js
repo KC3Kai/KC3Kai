@@ -53,6 +53,9 @@
 
             if (ships.length > 0) {
                 if (KC3Master.ship(ships[0].masterId).api_afterlv !== 0) {
+                    this.ctx.shadowBlur = 0;
+                    this.ctx.shadowOffsetX = 0;
+                    this.ctx.shadowOffsetY = 0;
                     let suffixesList = Object.keys(KC3Meta._shipAffix.suffixes);
                     const name = KC3Master.ship(ships[0].masterId).api_name;
                     const wctf_ship = WhoCallsTheFleetDb.db["s" + ships[0].masterId];
@@ -73,6 +76,9 @@
 
                 }
 
+                this.ctx.shadowOffsetX = 2;
+                this.ctx.shadowOffsetY = 2;
+                this.ctx.shadowBlur = 2;
 
                 if (ships[0].level > 99) {
                     this.ctx.fillStyle = "#a97417";
@@ -93,6 +99,15 @@
             this.canvas.width = this.baseImage.width;
             this.canvas.height = this.baseImage.height;
             this.ctx.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
+
+            this.ctx.fillStyle = "#DDD";
+            this.ctx.font = "800 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            this.ctx.shadowColor = "#222";
+            this.ctx.shadowOffsetX = 2;
+            this.ctx.shadowOffsetY = 2;
+            this.ctx.shadowBlur = 3;
+            this.ctx.fillText("DISCLAIMER: This is all speculation and we do not have solid evidence that these ships" +
+                " will have special routing next event.", 5, 15);
 
             KC3ShipManager.load();
             for (let i in shipPositions) {
