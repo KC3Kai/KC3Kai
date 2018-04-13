@@ -101,13 +101,18 @@
             this.ctx.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
 
             this.ctx.fillStyle = "#DDD";
-            this.ctx.font = "800 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            let size = 16;
+            this.ctx.font = "800 "+size+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
             this.ctx.shadowColor = "#222";
             this.ctx.shadowOffsetX = 2;
             this.ctx.shadowOffsetY = 2;
             this.ctx.shadowBlur = 3;
-            this.ctx.fillText("DISCLAIMER: This is all speculation and we do not have solid evidence that these ships" +
-                " will have special routing next event.", 5, 15);
+            const text = "DISCLAIMER: This is all speculation and we do not have solid evidence that these ships will have special routing next event.";
+            while(this.ctx.measureText(text).width > 720){
+                size--;
+                this.ctx.font = "800 "+size+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            }
+            this.ctx.fillText(text, (720-this.ctx.measureText(text).width)/2 , 15);
 
             KC3ShipManager.load();
             for (let i in shipPositions) {
