@@ -1359,15 +1359,19 @@ button, input, select, textarea {
 .tab_crafts .build_item .build_rsc {
 	font-size:14px;
 }
+.tab_crafts .filters .build_rsc1,
 .tab_crafts .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_crafts .filters .build_rsc2,
 .tab_crafts .build_item .build_rsc2 {
 	color:#dec558;
 }
+.tab_crafts .filters .build_rsc3,
 .tab_crafts .build_item .build_rsc3 {
 	color:#cccccc;
 }
+.tab_crafts .filters .build_rsc4,
 .tab_crafts .build_item .build_rsc4 {
 	color:#b68f55;
 }

@@ -1001,18 +1001,27 @@ body {
 .tab_crafts .build_item {
 	background:#eee;
 }
+.tab_crafts .filters .build_name,
+.tab_crafts .filters .build_rsc {
+	border-color:#a9a9a9;
+	border-radius:2px;
+}
 .tab_crafts .build_item .build_rsc {
 	font-size:12px;
 }
+.tab_crafts .filters .build_rsc1,
 .tab_crafts .build_item .build_rsc1 {
 	background:#C1FFC1;
 }
+.tab_crafts .filters .build_rsc2,
 .tab_crafts .build_item .build_rsc2 {
 	background:#DFD7B3;
 }
+.tab_crafts .filters .build_rsc3,
 .tab_crafts .build_item .build_rsc3 {
 	background:#ccc;
 }
+.tab_crafts .filters .build_rsc4,
 .tab_crafts .build_item .build_rsc4 {
 	background:#FFDCA8;
 }

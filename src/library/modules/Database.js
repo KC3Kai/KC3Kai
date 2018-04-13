@@ -804,19 +804,27 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_devmt :function(pageNumber, callback){
-			var itemsPerPage = 25;
-			this.con.develop
-				.where("hq").equals(this.index)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+		get_devmt :function(filter, pageNumber, itemsPerPage, callback){
+			return this.con.develop
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter.call(this, r);
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_devmt: function(callback){
-			this.con.develop
-				.where("hq").equals(this.index)
-				.count(callback);
+		count_devmt: function(filter, callback){
+			return this.con.develop
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter.call(this, r);
+				}).count(callback);
+		},
+		
+		devmt_uniquekeys: function(indexedKey, callback){
+			// troublesome to extract collection by hq first, might be slower
+			return this.con.develop.orderBy(indexedKey).uniqueKeys(callback);
 		},
 		
 		count_sortie_battle: function(callback, startSecs, endSecs, world, map){
