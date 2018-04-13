@@ -36,10 +36,8 @@
 }
 .tab_crafts .build_item .build_flag {
 	width:100px;
-	overflow:hidden;
 	margin:0px 5px 0px 0px;
 	font-size:12px;
-	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
@@ -60,10 +58,8 @@
 }
 .tab_crafts .build_item .build_result {
 	width:130px;
-	overflow:hidden;
 	margin:0px 5px 0px 0px;
 	font-size:12px;
-	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
@@ -71,9 +67,9 @@
 	width:150px;
 	font-size:11px;
 	color:#999;
-	white-space:nowrap;
 	overflow:hidden;
 }
+
 /* FILTERS
 --------------------------------*/
 .tab_crafts .filters {
@@ -87,7 +83,8 @@
 }
 .tab_crafts .filters .build_icon {
 	float:left;
-	margin:4px 2px 0px 0px;
+	margin:5px 2px 0px 0px;
+	height:16px;
 }
 .tab_crafts .filters .build_rsc {
 	float:left;

@@ -795,15 +795,24 @@ body {
 .tab_builds .color_baux {
 	background:#FF9933;
 }
+.tab_builds .filters .build_name,
+.tab_builds .filters .build_rsc {
+	border-color:#a9a9a9;
+	border-radius:2px;
+}
+.tab_builds .filters .build_rsc1,
 .tab_builds .build_item .build_rsc1 {
 	background:#C1FFC1;
 }
+.tab_builds .filters .build_rsc2,
 .tab_builds .build_item .build_rsc2 {
 	background:#DFD7B3;
 }
+.tab_builds .filters .build_rsc3,
 .tab_builds .build_item .build_rsc3 {
 	background:#ccc;
 }
+.tab_builds .filters .build_rsc4,
 .tab_builds .build_item .build_rsc4 {
 	background:#FFDCA8;
 }
@@ -823,18 +832,28 @@ body {
 .tab_lscs .color_baux {
 	background:#FF9933;
 }
+.tab_lscs .filters .build_name,
+.tab_lscs .filters .build_rsc {
+	border-color:#a9a9a9;
+	border-radius:2px;
+}
+.tab_lscs .filters .build_rsc1,
 .tab_lscs .build_item .build_rsc1 {
 	background:#C1FFC1;
 }
+.tab_lscs .filters .build_rsc2,
 .tab_lscs .build_item .build_rsc2 {
 	background:#DFD7B3;
 }
+.tab_lscs .filters .build_rsc3,
 .tab_lscs .build_item .build_rsc3 {
 	background:#ccc;
 }
+.tab_lscs .filters .build_rsc4,
 .tab_lscs .build_item .build_rsc4 {
 	background:#FFDCA8;
 }
+.tab_lscs .filters .build_devmat,
 .tab_lscs .build_item .build_devmat {
 	background:#009999;
 	color:#fff;
