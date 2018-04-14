@@ -1372,9 +1372,6 @@ button, input, select, textarea {
 .tab_crafts .build_pages {
 	margin-bottom:10px;
 }
-.tab_crafts .build_item .build_rsc {
-	font-size:14px;
-}
 .tab_crafts .filters .build_rsc1,
 .tab_crafts .build_item .build_rsc1 {
 	color:#92c992;

@@ -111,8 +111,7 @@
 				$(".page_items .total_items").text(this.totalItems);
 				if(this.totalItems > 0){
 					$(".build_pages").html('<ul class="pagination pagination-sm"></ul>');
-					// Get filtered records and pagination
-					KC3Database.count_devmt(this.filterFunc.bind(this, false), filtered => {
+					const updatePagination = (filtered) => {
 						const numPages = Math.ceil(filtered / this.itemsPerPage);
 						$(".page_items .filtered_items").text(filtered);
 						$(".page_items .total_page").text(numPages);
@@ -131,7 +130,13 @@
 						}else{
 							$(".pagination").hide();
 						}
-					});
+					};
+					if(this.filters.result) {
+						KC3Database.count_devmt(this.filterFunc.bind(this, false), updatePagination);
+					} else {
+						// Do not need to count again if only filtering by recipe
+						updatePagination(this.totalItems);
+					}
 				} else {
 					hideAndResetInfo();
 				}

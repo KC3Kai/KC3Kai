@@ -37,7 +37,7 @@
 .tab_builds .build_item .build_name {
 	width:115px;
 	margin:0px 5px 0px 0px;
-	font-size:13px;
+	font-size:14px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
@@ -78,9 +78,11 @@
 	padding:1px;
 	border-width:1px;
 }
-.tab_builds .filters .secretary_ship,
+.tab_builds .filters .secretary_ship {
+	width:120px;
+}
 .tab_builds .filters .build_result {
-	width:130px;
+	width:140px;
 }
 .tab_builds .filters .reset_all {
 	height:25px;
