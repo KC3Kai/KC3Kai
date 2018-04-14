@@ -102,17 +102,18 @@
 
             this.ctx.fillStyle = "#DDD";
             let size = 16;
-            this.ctx.font = "800 "+size+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+            this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
             this.ctx.shadowColor = "#222";
             this.ctx.shadowOffsetX = 2;
             this.ctx.shadowOffsetY = 2;
             this.ctx.shadowBlur = 3;
-            const text = "DISCLAIMER: This is all speculation and we do not have solid evidence that these ships will have special routing next event.";
-            while(this.ctx.measureText(text).width > 720){
+            const text = "DISCLAIMER: We do not have solid evidence that these speculated ships will have special routing next event.";
+            // size smaller than Chromium minimum font setting will be simply ignored
+            while(this.ctx.measureText(text).width > 720 && size > 6){
                 size--;
-                this.ctx.font = "800 "+size+"px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+                this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
             }
-            this.ctx.fillText(text, (720-this.ctx.measureText(text).width)/2 , 15);
+            this.ctx.fillText(text, (720 - this.ctx.measureText(text).width) / 2 , 15);
 
             KC3ShipManager.load();
             for (let i in shipPositions) {
