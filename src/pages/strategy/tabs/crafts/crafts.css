@@ -37,7 +37,7 @@
 .tab_crafts .build_item .build_flag {
 	width:100px;
 	margin:0px 5px 0px 0px;
-	font-size:12px;
+	font-size:13px;
 	overflow:hidden;
 	text-overflow:ellipsis;
 }
@@ -96,12 +96,15 @@
 	border-width:1px;
 }
 .tab_crafts .filters .secretary_ship {
-	width:130px;
+	width:120px;
 }
 .tab_crafts .filters .build_result {
-	width:170px;
+	width:140px;
 }
-
+.tab_crafts .filters .reset_all {
+	height:25px;
+	padding:2px 5px;
+}
 .tab_crafts .page_items {
 	font-size:12px;
 }

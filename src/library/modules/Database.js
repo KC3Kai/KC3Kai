@@ -438,7 +438,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.build
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).reverse()
 				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
@@ -448,7 +448,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.build
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).count(callback);
 		},
 		
@@ -460,7 +460,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.lsc
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).reverse()
 				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
@@ -470,7 +470,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.lsc
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).count(callback);
 		},
 		
@@ -820,21 +820,21 @@ Uses Dexie.js third-party plugin on the assets directory
 			return this.con.develop
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).reverse()
 				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_devmt: function(filter, callback){
+		count_devmt :function(filter, callback){
 			return this.con.develop
 				.filter(r => {
 					if(r.hq !== this.index) return false;
-					return filter.call(this, r);
+					return filter(r);
 				}).count(callback);
 		},
 		
-		devmt_uniquekeys: function(indexedKey, callback){
+		uniquekeys_devmt :function(indexedKey, callback){
 			// troublesome to extract collection by hq first, might be slower
 			return this.con.develop.orderBy(indexedKey).uniqueKeys(callback);
 		},

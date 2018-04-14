@@ -64,7 +64,7 @@
 .tab_lscs .filters .build_name {
 	float:left;
 	height:25px;
-	margin-right:7px;
+	margin-right:5px;
 	margin-bottom:5px;
 }
 .tab_lscs .filters .build_icon {
@@ -76,17 +76,21 @@
 	float:left;
 	width:52px;
 	height:25px;
-	margin-right:7px;
+	margin-right:5px;
 	margin-bottom:5px;
 	padding:1px;
 	border-width:1px;
 }
 .tab_lscs .filters .secretary_ship,
 .tab_lscs .filters .build_result {
-	width:110px;
+	width:100px;
 }
 .tab_lscs .filters .build_devmat {
 	width:48px;
+}
+.tab_lscs .filters .reset_all {
+	height:25px;
+	padding:2px 5px;
 }
 .tab_lscs .page_items {
 	font-size:12px;

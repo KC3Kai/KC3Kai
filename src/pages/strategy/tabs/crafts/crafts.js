@@ -13,15 +13,15 @@
 		init :function(){
 			this.itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
 			this.filters = {};
-			this.filterFunc = (r) => {
+			this.filterFunc = (recipeOnly, r) => {
 				// falsy value considered as unfiltered property
 				return (!this.filters.flagship || r.flag === this.filters.flagship)
-					&& (!this.filters.result || r.result === this.filters.result)
 					// note: data type of `rsc?` in DB is string
 					&& (!this.filters.fuel || r.rsc1 == this.filters.fuel)
 					&& (!this.filters.ammo || r.rsc2 == this.filters.ammo)
 					&& (!this.filters.steel || r.rsc3 == this.filters.steel)
-					&& (!this.filters.bauxite || r.rsc4 == this.filters.bauxite);
+					&& (!this.filters.bauxite || r.rsc4 == this.filters.bauxite)
+					&& (!!recipeOnly || !this.filters.result || r.result === this.filters.result);
 			};
 			this.dateTimeOptions = {
 				year: 'numeric', month: 'short', day: 'numeric',
@@ -38,28 +38,33 @@
 		execute :function(){
 			const self = this;
 			// Update options for select list and current values
-			KC3Database.devmt_uniquekeys("flag", keys => {
+			const updateFiltersValues = () => {
+				$(".filters .secretary_ship").val(this.filters.flagship || 0);
+				$(".filters .build_result").val(this.filters.result || 0);
+				$(".filters .build_rsc1").val(this.filters.fuel || "");
+				$(".filters .build_rsc2").val(this.filters.ammo || "");
+				$(".filters .build_rsc3").val(this.filters.steel || "");
+				$(".filters .build_rsc4").val(this.filters.bauxite || "");
+			};
+			updateFiltersValues();
+			KC3Database.uniquekeys_devmt("flag", keys => {
 				this.availSecretaryIds = keys;
 				this.availSecretaryIds.forEach(key => {
 					$('<option />').val(key).text(
 						KC3Meta.shipName(KC3Master.ship(key).api_name)
 					).appendTo($(".filters .secretary_ship"));
 				});
-				$(".filters .secretary_ship").val(this.filters.flagship || 0);
+				updateFiltersValues();
 			});
-			KC3Database.devmt_uniquekeys("result", keys => {
+			KC3Database.uniquekeys_devmt("result", keys => {
 				this.availEquipmentIds = keys.filter(key => key > 0);
 				this.availEquipmentIds.forEach(key => {
 					$('<option />').val(key).text(
 						KC3Meta.gearName(KC3Master.slotitem(key).api_name)
 					).appendTo($(".filters .build_result"));
 				});
-				$(".filters .build_result").val(this.filters.result || 0);
+				updateFiltersValues();
 			});
-			$(".filters .build_rsc1").val(this.filters.fuel || "");
-			$(".filters .build_rsc2").val(this.filters.ammo || "");
-			$(".filters .build_rsc3").val(this.filters.steel || "");
-			$(".filters .build_rsc4").val(this.filters.bauxite || "");
 			// Register event handlers
 			$(".filters .secretary_ship").on("change", function(e) {
 				self.filters.flagship = Number($(this).val());
@@ -78,6 +83,11 @@
 				self.filters[rscKey] = Number($(this).val()) || 0;
 				if(oldValue !== self.filters[rscKey]) self.showList();
 			});
+			$(".filters .reset_all").on("click", function(e) {
+				self.filters = {};
+				updateFiltersValues();
+				self.showList();
+			});
 			$(".page_items .item_per_page").on("change", function(e) {
 				self.itemsPerPage = Number($(this).val()) || DEFAULT_ITEMS_PER_PAGE;
 				self.showList();
@@ -87,15 +97,22 @@
 		},
 
 		showList :function(){
-			// Get total records first
-			KC3Database.count_devmt((r => true), total => {
+			const hideAndResetInfo = () => {
+				$(".page_items .total_items").text(this.totalItems);
+				$(".page_items .filtered_items").text(0);
+				$(".page_items .total_page").text(0);
+				$(".page_items .percent").text(0);
+				$(".pagination").hide();
+			};
+			// Get total records of this recipe first
+			KC3Database.count_devmt(this.filterFunc.bind(this, true), total => {
 				this.totalItems = total;
 				$(".build_list").empty();
 				$(".page_items .total_items").text(this.totalItems);
 				if(this.totalItems > 0){
 					$(".build_pages").html('<ul class="pagination pagination-sm"></ul>');
 					// Get filtered records and pagination
-					KC3Database.count_devmt(this.filterFunc, filtered => {
+					KC3Database.count_devmt(this.filterFunc.bind(this, false), filtered => {
 						const numPages = Math.ceil(filtered / this.itemsPerPage);
 						$(".page_items .filtered_items").text(filtered);
 						$(".page_items .total_page").text(numPages);
@@ -116,11 +133,12 @@
 						}
 					});
 				} else {
-					$(".page_items .filtered_items").text(0);
-					$(".page_items .total_page").text(0);
-					$(".page_items .percent").text(0);
-					$(".pagination").hide();
+					hideAndResetInfo();
 				}
+			}).catch(error => {
+				console.error("Retrieving equipment crafting history failed", error);
+				hideAndResetInfo();
+				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
 			});
 		},
 
@@ -132,7 +150,7 @@
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
 			$(".build_list").empty();
-			KC3Database.get_devmt(this.filterFunc, pageNumber, this.itemsPerPage, resultArray => {
+			KC3Database.get_devmt(this.filterFunc.bind(this, false), pageNumber, this.itemsPerPage, resultArray => {
 				for(const index in resultArray){
 					const thisBuild = resultArray[index];
 					const buildBox = $(".factory .build_item").clone()
@@ -175,6 +193,7 @@
 				}
 			}).catch(error => {
 				console.error("Retrieving equipment crafting history failed", error);
+				$(".build_list").text("Oops! Something was going wrong. See error logs for details.");
 			});
 		}
 
