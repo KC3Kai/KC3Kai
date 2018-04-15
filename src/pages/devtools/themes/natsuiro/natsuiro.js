@@ -598,7 +598,7 @@
 				fleet4: PlayerManager.fleets[3].sortieJson(),
 				support1: isPvP ? 0 : KC3SortieManager.getSupportingFleet(false),
 				support2: isPvP ? 0 : KC3SortieManager.getSupportingFleet(true),
-				lbas: isPvP ? [] : KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world),
+				lbas: isPvP ? [] : KC3SortieManager.getWorldLandBases(KC3SortieManager.map_world, KC3SortieManager.map_num),
 				battles: [node.buildBattleDBData()]
 			};
 			return sortie;

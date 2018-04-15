@@ -478,9 +478,9 @@
 			const self = this;
 			// Show sortie records on list
 			var sortieBox, fleets, fleetkey, mainFleet, isCombined, rshipBox, nodeBox, thisNode, sinkShips;
-			var shipNameEquipSwitchFunc = function(e){
+			const shipNameEquipSwitchFunc = function(e){
 				var ref = $(this).parent().parent();
-				if($(".rfleet_detail",ref).css("display")==="none") {
+				if($(".rfleet_detail",ref).css("display") === "none") {
 					$(".rfleet_detail",ref).show();
 					$(".rfleet_equips",ref).hide();
 				} else {
@@ -558,13 +558,14 @@
 				};
 			};
 			$.each(sortieList, function(id, sortie){
+				const mapkey = ["m", sortie.world, sortie.mapnum].join(''),
+					mapInfo = self.maps[mapkey] || {};
 				//console.debug("list.sortie", id, sortie);
 				try {
-					var skey = ["m",sortie.world,sortie.mapnum].join('');
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
 					if(sortie.world >= 10) {
-						sortie.diff = sortie.diff || (self.maps[skey] || {difficulty:0}).difficulty || 0;
+						sortie.diff = sortie.diff || mapInfo.difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0) {
 						const rankMarker = ((d, w) => w >= 41 ? (d === 1 ? "1C" : d - 1) : d)(sortie.diff, sortie.world);
@@ -710,11 +711,23 @@
 					});
 					
 					$(".rfleet_lbas", sortieBox).addClass("disabled");
-					$.each(sortie.lbas || [], function(lbi, landbase){
-						$(".rfleet_lbas"+(lbi+1), sortieBox).removeClass("disabled");
-						$(".rfleet_lbas"+(lbi+1)+" .rfleet_title .num", sortieBox)
+					// `api_air_base_decks` not defined (or saved) for old event maps,
+					// assume all available land bases can be used
+					const lbMaxSortie = mapInfo.airBase || (sortie.world < 10 || sortie.world >= 41 ? 0 : 99);
+					let lbi = 0, lbSortie = 0;
+					$.each(sortie.lbas || [], function(index, landbase){
+						// Skip those land bases not set to sortie or defend
+						if(![1, 2].includes(landbase.action)){ return true; }
+						lbi += 1;
+						if(landbase.action === 1){
+							// Skip those land bases over max sortie amount allowed
+							if(lbSortie >= lbMaxSortie) { return true; }
+							lbSortie += 1;
+						}
+						$(".rfleet_lbas"+lbi, sortieBox).removeClass("disabled");
+						$(".rfleet_lbas"+lbi+" .rfleet_title .num", sortieBox)
 							.text("#{0}".format(landbase.rid));
-						$(".rfleet_lbas"+(lbi+1)+" .rfleet_title .action", sortieBox)
+						$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
 							.text([KC3Meta.term("LandBaseActionWaiting"),
 								KC3Meta.term("LandBaseActionSortie"),
 								KC3Meta.term("LandBaseActionDefend"),
@@ -726,7 +739,7 @@
 							var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();
 							var planeMaster = KC3Master.slotitem(plane.mst_id);
 							$(".rfleet_pic img", planeBox)
-								.attr("src", "../../assets/img/items/" + planeMaster.api_type[3] + ".png")
+								.attr("src", "/assets/img/items/" + planeMaster.api_type[3] + ".png")
 								.attr("alt", plane.mst_id)
 								.click(gearClickFunc)
 								.addClass("hover");
@@ -735,24 +748,24 @@
 								.attr("title", KC3Meta.gearName(planeMaster.api_name));
 							if(plane.state === 1){
 								$(".rfleet_stars img", planeBox)
-									.attr("src", "../../assets/img/client/eqstar.png");
+									.attr("src", "/assets/img/client/eqstar.png");
 								$(".rfleet_stars span", planeBox).text(plane.stars || 0);
 								if(plane.ace > -1) {
 									$(".rfleet_ace img", planeBox)
-										.attr("src", "../../assets/img/client/achev/" + plane.ace + ".png");
+										.attr("src", "/assets/img/client/achev/" + plane.ace + ".png");
 								} else {
 									$(".rfleet_ace img", planeBox).hide();
 								}
 								$(".rfleet_count", planeBox).text(plane.count);
 								$(".rfleet_morale img", planeBox)
-									.attr("src", "../../assets/img/client/morale/" + ["","3","2","1"][plane.morale] + ".png");
+									.attr("src", "/assets/img/client/morale/" + ["","3","2","1"][plane.morale] + ".png");
 							} else {
 								$(".rfleet_stars", planeBox).hide();
 								$(".rfleet_ace", planeBox).hide();
 								$(".rfleet_count", planeBox).hide();
 								$(".rfleet_morale", planeBox).hide();
 							}
-							$(".rfleet_lbas"+(lbi+1)+" .rfleet_body", sortieBox).append(planeBox);
+							$(".rfleet_lbas"+lbi+" .rfleet_body", sortieBox).append(planeBox);
 						});
 					});
 					
@@ -993,7 +1006,7 @@
 					
 					$(".sortie_nodes", sortieBox).append( $("<div>").addClass("clear") );
 					
-					var mstat = (self.maps[skey] || {}).stat,
+					var mstat = mapInfo.stat,
 						sstat = $(".sortie_stat", sortieBox),
 						kstat = ["now","max"];
 					if(mstat && sstat.length) {
