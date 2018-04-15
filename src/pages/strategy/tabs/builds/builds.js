@@ -11,6 +11,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			this.locale = KC3Translation.getLocale();
 			this.itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
 			this.filters = {};
 			this.filterFunc = (recipeOnly, r) => {
@@ -27,8 +28,8 @@
 				year: 'numeric', month: 'short', day: 'numeric',
 				hour: 'numeric', minute: '2-digit', hour12: true
 			};
-			this.availSecretaryIds = [];
-			this.availResultShipIds = [];
+			this.sortedSecretaryIds = [];
+			this.sortedResultShipIds = [];
 			this.totalItems = 0;
 		},
 
@@ -48,8 +49,12 @@
 			};
 			updateFiltersValues();
 			KC3Database.uniquekeys_build("flag", keys => {
-				this.availSecretaryIds = keys;
-				this.availSecretaryIds.forEach(key => {
+				this.sortedSecretaryIds = keys.sort((id1, id2) => (
+					KC3Meta.shipName(KC3Master.ship(id1).api_name).localeCompare(
+						KC3Meta.shipName(KC3Master.ship(id2).api_name),
+					this.locale) || id1 - id2
+				));
+				this.sortedSecretaryIds.forEach(key => {
 					$('<option />').val(key).text(
 						KC3Meta.shipName(KC3Master.ship(key).api_name)
 					).appendTo($(".filters .secretary_ship"));
@@ -57,8 +62,12 @@
 				updateFiltersValues();
 			});
 			KC3Database.uniquekeys_build("result", keys => {
-				this.availResultShipIds = keys.filter(key => key > 0);
-				this.availResultShipIds.forEach(key => {
+				this.sortedResultShipIds = keys.filter(key => key > 0).sort((id1, id2) => (
+					KC3Meta.shipName(KC3Master.ship(id1).api_name).localeCompare(
+						KC3Meta.shipName(KC3Master.ship(id2).api_name),
+					this.locale) || id1 - id2
+				));
+				this.sortedResultShipIds.forEach(key => {
 					$('<option />').val(key).text(
 						KC3Meta.shipName(KC3Master.ship(key).api_name)
 					).appendTo($(".filters .build_result"));
@@ -183,7 +192,7 @@
 					$(".build_time", buildBox).text(
 						new Date(thisBuild.time * 1000)
 							// format date time following KC3 global language setting
-							.toLocaleString(KC3Translation.getLocale(), this.dateTimeOptions)
+							.toLocaleString(this.locale, this.dateTimeOptions)
 					);
 				}
 			}).catch(error => {
