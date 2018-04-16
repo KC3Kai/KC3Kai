@@ -109,6 +109,9 @@
 .tab_crafts .page_items {
 	font-size:12px;
 }
+.tab_crafts .item_per_page {
+	margin-right:4px;
+}
 
 /* PAGINATION
 --------------------------------*/
