@@ -98,7 +98,7 @@
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
 	 */
 	KC3LandBase.prototype.sortieJson = function(){
-		var returnObj = {};
+		const returnObj = {};
 		if(this.rid > -1){
 			returnObj.rid = this.rid;
 			returnObj.range = this.range;
@@ -106,12 +106,12 @@
 			returnObj.planes = [];
 			$.each(this.planes, function(index, squad){
 				if(squad.api_slotid > 0){
-					var gear = KC3GearManager.get(squad.api_slotid);
+					const gear = KC3GearManager.get(squad.api_slotid);
 					returnObj.planes.push({
-						//squadron: squad.api_squadron_id,
+						squad: squad.api_squadron_id,
 						mst_id: gear.masterId,
 						count: squad.api_count,
-						//max_count: squad.api_max_count,
+						max_count: squad.api_max_count,
 						stars: gear.stars,
 						ace: gear.ace,
 						state: squad.api_state,

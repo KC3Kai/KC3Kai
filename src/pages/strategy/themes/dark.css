@@ -1007,15 +1007,22 @@ button, input, select, textarea {
 .tab_builds .color_baux {
 	background:#b68f55;
 }
+.tab_builds .filters {
+	height:65px !important;
+}
+.tab_builds .filters .build_rsc1,
 .tab_builds .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_builds .filters .build_rsc2,
 .tab_builds .build_item .build_rsc2 {
 	color:#dec558;
 }
+.tab_builds .filters .build_rsc3,
 .tab_builds .build_item .build_rsc3 {
 	color:#cccccc;
 }
+.tab_builds .filters .build_rsc4,
 .tab_builds .build_item .build_rsc4 {
 	color:#b68f55;
 }
@@ -1043,32 +1050,41 @@ button, input, select, textarea {
 .tab_lscs .color_baux {
 	background:#b68f55;
 }
-.tab_lscs .build_item .build_id {
-	width:45px !important;
+.tab_lscs .filters {
+	height:65px !important;
 }
-.tab_lscs .build_item .build_rsc1 {
-	width:50px !important;
+.tab_lscs .filters .secretary_ship,
+.tab_lscs .filters .build_result {
+	width:90px !important;
+}
+.tab_lscs .build_item .build_name {
+	width:105px !important;
+}
+.tab_lscs .build_item .build_rsc {
 	margin:0px !important;
+}
+.tab_lscs .filters .build_rsc1,
+.tab_lscs .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_lscs .filters .build_rsc2,
 .tab_lscs .build_item .build_rsc2 {
-	width:50px !important;
-	margin:0px !important;
 	color:#dec558;
 }
+.tab_lscs .filters .build_rsc3,
 .tab_lscs .build_item .build_rsc3 {
-	width:50px !important;
-	margin:0px !important;
 	color:#cccccc;
 }
+.tab_lscs .filters .build_rsc4,
 .tab_lscs .build_item .build_rsc4 {
-	width:50px !important;
-	margin:0px !important;
 	color:#b68f55;
 }
+.tab_lscs .filters .build_devmat,
 .tab_lscs .build_item .build_devmat {
 	color:#009999;
-	margin:0px 10px 0px 0px !important;
+}
+.tab_lscs .build_item .build_devmat {
+	margin-right:10px !important;
 }
 /* Docking */
 .tab_docking .ship_item.odd .ship_field {
@@ -1350,24 +1366,25 @@ button, input, select, textarea {
 }
 
 /* Crafting */
+.tab_crafts .filters {
+	height:65px !important;
+}
 .tab_crafts .build_pages {
 	margin-bottom:10px;
 }
-.tab_crafts .build_item {
-	
-}
-.tab_crafts .build_item .build_rsc {
-	font-size:14px;
-}
+.tab_crafts .filters .build_rsc1,
 .tab_crafts .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_crafts .filters .build_rsc2,
 .tab_crafts .build_item .build_rsc2 {
 	color:#dec558;
 }
+.tab_crafts .filters .build_rsc3,
 .tab_crafts .build_item .build_rsc3 {
 	color:#cccccc;
 }
+.tab_crafts .filters .build_rsc4,
 .tab_crafts .build_item .build_rsc4 {
 	color:#b68f55;
 }

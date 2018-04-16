@@ -8,7 +8,7 @@ Starts a timer every half-second which checks if kancolle game client is present
 If detected, passes the API link to background service for saving.
 
 [clearInterval] moved out of the messaging callback to ensure one-time sending only.
-When it was inside the callback, it was executed multiple times if response takes awile.
+When it was inside the callback, it was executed multiple times if response takes awhile.
 Bad side, if it saving on background service failed, no fallback plans but to refresh API link again.
 */
 (function(){

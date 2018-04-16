@@ -63,7 +63,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				fleet4: PlayerManager.fleets[3].sortieJson(),
 				support1: this.getSupportingFleet(false),
 				support2: this.getSupportingFleet(true),
-				lbas: this.getWorldLandBases(world),
+				lbas: this.getWorldLandBases(world, mapnum),
 				time: stime
 			};
 			// Add optional properties
@@ -160,12 +160,19 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			return 0;
 		},
 		
-		getWorldLandBases :function(world){
+		getWorldLandBases :function(world, map){
+			// Now mapinfo declares max land base amount can be sortied via `api_air_base_decks`
+			const mapInfo = this.getCurrentMapData(world, map),
+				maxLbasAllowed = mapInfo.airBase,
+				// Ignore regular maps that not allow to use land base, such as 6-1, 6-2, 6-3
+				// For event maps, not sure if devs make 0 sortie but air raid defense needed map?
+				isIgnoreThisMap = world < 10 && map !== undefined && !!mapInfo.id && !maxLbasAllowed;
 			const lbas = [];
 			$.each(PlayerManager.bases, function(i, base){
-				if(base.rid > -1 && base.map === world
-					// Only sortie and defend needed
-					&& [1,2].indexOf(base.action) > -1){
+				if(base.rid > -1 && base.map === world && !isIgnoreThisMap
+					// Not only sortie and defend, all actions saved for future loading
+					//&& [1,2].indexOf(base.action) > -1
+				){
 					lbas.push(base.sortieJson());
 				}
 			});
