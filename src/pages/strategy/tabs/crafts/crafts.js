@@ -49,8 +49,8 @@
 			};
 			updateFiltersValues();
 			KC3Database.uniquekeys_devmt("flag", keys => {
-				this.sortedSecretaryIds = keys.sort((id1, id2) => (
-					KC3Meta.shipName(KC3Master.ship(id1).api_name).localeCompare(
+				this.sortedSecretaryIds = keys.filter(key => key > 0).sort((id1, id2) => (
+					(KC3Meta.shipName(KC3Master.ship(id1).api_name) || "").localeCompare(
 						KC3Meta.shipName(KC3Master.ship(id2).api_name),
 					this.locale) || id1 - id2
 				));
@@ -63,7 +63,7 @@
 			});
 			KC3Database.uniquekeys_devmt("result", keys => {
 				this.sortedEquipmentIds = keys.filter(key => key > 0).sort((id1, id2) => (
-					KC3Meta.gearName(KC3Master.slotitem(id1).api_name).localeCompare(
+					(KC3Meta.gearName(KC3Master.slotitem(id1).api_name) || "").localeCompare(
 						KC3Meta.gearName(KC3Master.slotitem(id2).api_name),
 					this.locale) || id1 - id2
 				));
