@@ -544,17 +544,19 @@
 				const topAbSquadsName = topAbSquadSlots.map(id =>
 					id > 0 ? KC3Meta.gearName(KC3Master.slotitem(id).api_name) : KC3Meta.term("None")
 				);
+				const eships = Object.getSafePath(airRaid, "api_ship_ke") || [];
 				return {
 					airRaidLostKind: Object.getSafePath(airRaid, "api_lost_kind") || 0,
 					baseTotalDamage: baseTotalDamage,
 					resourceLossAmount: Math.round(baseTotalDamage * 0.9 + 0.1),
-					eships: Object.getSafePath(airRaid, "api_ship_ke") || [],
+					eships: eships,
 					airState: KC3Meta.airbattle(airState)[2] || KC3Meta.airbattle(airState)[0],
 					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1),
 					isDiveBombingFound: (bomberPhase.api_fbak_flag || []).includes(1),
 					shotdownPercent: enemyPlaneLost,
 					topAntiBomberSquadSlots: topAbSquadSlots,
 					topAntiBomberSquadNames: topAbSquadsName,
+					ap : KC3Calc.enemyFighterPower(eships, undefined, undefined, true)[0],
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -613,6 +615,7 @@
 											KC3Meta.airraiddamage(airRaid.airRaidLostKind),
 											airRaid.resourceLossAmount,
 											airRaid.airState,
+											airRaid.ap,
 											"{0}%".format(airRaid.shotdownPercent),
 											KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
 											KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
@@ -838,6 +841,7 @@
 										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
 										airRaid.resourceLossAmount,
 										airRaid.airState,
+										airRaid.ap,
 										"{0}%".format(airRaid.shotdownPercent),
 										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
 										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
