@@ -1334,8 +1334,7 @@ Used by SortieManager
 		const ap = apTuple[0];
 		if(!!ap){
 			tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-				.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-					Math.round(3 * ap / 2), 3 * ap);
+				.format(KC3Calc.fighterPowerIntervals(ap));
 		}
 		const enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){

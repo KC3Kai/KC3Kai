@@ -240,14 +240,12 @@
 					const ap = fpArr[0], recons = fpArr[3];
 					if(ap) {
 						tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-							.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-								Math.round(3 * ap / 2), 3 * ap);
+							.format(KC3Calc.fighterPowerIntervals(ap));
 					}
 					if(isLbasMap && recons) {
 						const lbasAp = KC3Calc.enemyFighterPower(shipList, undefined, undefined, true)[0];
 						tooltip += !lbasAp ? "" : "\n[LBAS] " + KC3Meta.term("InferredFighterPower")
-							.format(lbasAp, Math.round(lbasAp / 3), Math.round(2 * lbasAp / 3),
-								Math.round(3 * lbasAp / 2), 3 * lbasAp);
+							.format(KC3Calc.fighterPowerIntervals(lbasAp));
 					}
 					$(".encounter_formation", curBox).attr("title", tooltip);
 				});

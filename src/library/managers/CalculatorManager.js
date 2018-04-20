@@ -372,6 +372,19 @@
     };
 
     /**
+     * @param {number} basicPower - basic fighter power calculated by #enemyFighterPower
+     * @return {Array} fighter power intervals array including [basic power, AD power, AP power, AS power, AS+ power].
+     */
+    const fighterPowerIntervals = (basicPower = false) => {
+        return [basicPower,
+            Math.round(basicPower / 3),
+            Math.round(2 * basicPower / 3),
+            Math.round(3 * basicPower / 2),
+            3 * basicPower
+        ];
+    };
+
+    /**
      * Get leveling goal data for specific ship, which defined at Strategy Room Leveling page.
      *
      * @param {Object} shipObj - KC3Ship instance
@@ -434,7 +447,8 @@
         
         getShipLevelingGoal,
         
-        enemyFighterPower
+        enemyFighterPower,
+        fighterPowerIntervals
     });
 
 })();
