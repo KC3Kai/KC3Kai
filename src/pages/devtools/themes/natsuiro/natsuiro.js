@@ -2374,7 +2374,7 @@
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle")
-					.attr("title", thisNode.buildAirPowerMessage())
+					.attr("title", thisNode.buildAirPowerMessage(true))
 					.lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
