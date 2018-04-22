@@ -46,7 +46,7 @@
 		KC3Network.addGlobalListener(function(event, data){
 			if(KC3Panel.state == "running"){
 				KC3Panel.layout().trigger(event, data);
-				localStorage.quests = '{"id":0,"type":0,"status":0,"progress":0,"materials":[0,0,0,0],"tracking":false}';
+				localStorage.quests = `{"id":0,"type":0,"status":0,"progress":0,"materials":[0,0,0,0],"tracking":false}`;
 			}
 		});
 		
