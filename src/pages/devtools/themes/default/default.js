@@ -53,8 +53,13 @@
 				
 				for(var ctr in tempQuests){
 					tempQuest = tempQuests[ctr];
+<<<<<<< HEAD
 					tempQuest.status=1
 					questArray.push(tempQuest)
+=======
+					tempQuest.status = 1;
+					questArray.push(tempQuest);
+>>>>>>> ec06764834d7a44a92070f4eabc046bb7e704d16
 				}
 				localStorage.quests = JSON.stringify(questArray);
 			}
