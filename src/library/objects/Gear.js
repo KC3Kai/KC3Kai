@@ -473,7 +473,7 @@ KC3改 Equipment Object
 		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
 		// AS-PBY, Autogyro capable for OASW:
 		//   https://twitter.com/FlatIsNice/status/966332515681296384
-		// Seaplane Recon may capable for LBAS attack:
+		// Seaplane Recon capable for LBAS ASW attack:
 		//   Type 0 Model 11B variants
 		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26, 47];
 		return this.masterId > 0 &&
@@ -647,13 +647,36 @@ KC3改 Equipment Object
 	KC3Gear.appendAirstrikePowerTooltip = function(tooltipTitle, gearObj, slotSize, shipOrLb) {
 		const gearMaster = gearObj.master();
 		if(shipOrLb instanceof KC3LandBase) {
-			// Land installation target not taken into account
+			// Land installation / submarine target not taken into account here
 			const lbasPower = Math.floor(gearObj.landbaseAirstrikePower(slotSize));
+			// Kinds of land-based modifiers:
 			const isLbaa = gearMaster.api_type[2] === 47;
 			const lbAttackerModifier = isLbaa ? 1.8 : 1;
-			const onNormal = Math.floor(lbasPower * lbAttackerModifier);
-			// Proficiency critical modifier not applied yet
-			const onCritical = Math.floor(Math.floor(lbasPower * 1.5) * lbAttackerModifier);
+			let concatModifier = 1;
+			// TODO contact plane should be gotten from LBAS support section, wave by wave
+			const contactPlaneId = 0;
+			if(contactPlaneId > 0) {
+				const contactPlaneAcc = KC3Master.slotitem(contactPlaneId).api_houm;
+				concatModifier = contactPlaneAcc >= 3 ? 1.2 : contactPlaneAcc >= 2 ? 1.17 : 1.12;
+			}
+			const isEnemyCombined = KC3Calc.collectBattleConditions().isEnemyCombined || false;
+			const enemyCombinedModifier = isEnemyCombined ? 1.1 : 1;
+			// TODO uncertain modifier for LBAA against some enemies,
+			// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
+			// https://twitter.com/muu_1106/status/850875064106889218
+			const lbaaAbyssalModifier = 1;
+			const onNormal = Math.floor(lbasPower
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
+			// Proficiency critical modifier has been applied sometime since 2017-12-11?
+			// Modifier calculation is the same, but different from carrier-based,
+			// modifiers for squadron slots are independent and no first slot bonus.
+			const aceLevel = gearObj.ace || 0;
+			const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
+			const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+			const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
+			const criticalModifier = 1.5;
+			const onCritical = Math.floor(Math.floor(lbasPower * criticalModifier * proficiencyCriticalModifier)
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
 			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isLbaa ? "rk" : "kk") + ".png");

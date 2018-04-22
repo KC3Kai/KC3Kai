@@ -505,7 +505,8 @@
 				}
 			};
 			const parseAirRaidFunc = function(airRaid){
-				if(airRaid && airRaid.api_air_base_attack) {
+				if(!airRaid) return {airRaidLostKind: 0};
+				if(airRaid.api_air_base_attack) {
 					//console.debug("LB Air Raid", airRaid);
 					// Whoever wanna do whatever? such as dump enemy info
 					if(typeof window.dumpLandbaseAirRaid === "function")
@@ -544,17 +545,25 @@
 				const topAbSquadsName = topAbSquadSlots.map(id =>
 					id > 0 ? KC3Meta.gearName(KC3Master.slotitem(id).api_name) : KC3Meta.term("None")
 				);
+				const eships = airRaid.api_ship_ke || [];
+				const airpow = KC3Calc.enemyFighterPower(eships, airRaid.api_eSlot, undefined, true);
+				const airpowIntervals = KC3Calc.fighterPowerIntervals(airpow[0]);
+				if(Object.keys(airpow[4]).length) {
+					// add a question mark if there is inferring exception
+					airpowIntervals[0] = "{0}?".format(airpowIntervals[0]);
+				}
 				return {
-					airRaidLostKind: Object.getSafePath(airRaid, "api_lost_kind") || 0,
+					airRaidLostKind: airRaid.api_lost_kind || 0,
 					baseTotalDamage: baseTotalDamage,
 					resourceLossAmount: Math.round(baseTotalDamage * 0.9 + 0.1),
-					eships: Object.getSafePath(airRaid, "api_ship_ke") || [],
+					eships: eships,
+					eFighterPowers: airpowIntervals,
 					airState: KC3Meta.airbattle(airState)[2] || KC3Meta.airbattle(airState)[0],
 					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1),
 					isDiveBombingFound: (bomberPhase.api_fbak_flag || []).includes(1),
 					shotdownPercent: enemyPlaneLost,
 					topAntiBomberSquadSlots: topAbSquadSlots,
-					topAntiBomberSquadNames: topAbSquadsName,
+					topAntiBomberSquadNames: topAbSquadsName
 				};
 			};
 			$.each(sortieList, function(id, sortie){
@@ -617,7 +626,8 @@
 											KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
 											KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
 											airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-											airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3]
+											airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+											KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
 										);
 										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
 								}
@@ -842,7 +852,8 @@
 										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
 										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
 										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3]
+										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+										KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
 									);
 									$(".node_id", nodeBox).attr("title", airRaidTooltip);
 									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);

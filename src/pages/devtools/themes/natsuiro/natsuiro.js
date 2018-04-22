@@ -2197,8 +2197,7 @@
 							const ap = KC3Calc.enemyFighterPower(shipList)[0];
 							if(ap){
 								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-										Math.round(3 * ap / 2), 3 * ap);
+									.format(KC3Calc.fighterPowerIntervals(ap));
 							}
 							$(".encounter_formation", encBox).attr("title", tooltip).lazyInitTooltip();
 							encBox.appendTo(nodeEncBox);
@@ -2375,7 +2374,7 @@
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle")
-					.attr("title", thisNode.buildAirPowerMessage())
+					.attr("title", thisNode.buildAirPowerMessage(true))
 					.lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);
