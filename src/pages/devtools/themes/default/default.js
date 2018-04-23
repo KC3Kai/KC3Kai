@@ -53,7 +53,7 @@
 				
 				for(var ctr in tempQuests){
 					tempQuest = tempQuests[ctr];
-					tempQuest.status = 1;
+					tempQuest.status == 2? tempQuest.status = 1 : tempQuest;			
 					questArray.push(tempQuest);
 				}
 				localStorage.quests = JSON.stringify(questArray);
