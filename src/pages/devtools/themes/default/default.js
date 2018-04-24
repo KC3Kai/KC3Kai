@@ -46,6 +46,19 @@
 		KC3Network.addGlobalListener(function(event, data){
 			if(KC3Panel.state == "running"){
 				KC3Panel.layout().trigger(event, data);
+				
+				var tempQuests = JSON.parse(localStorage.quests);			
+				var tempQuest;			
+				var questArray = [];
+				
+				for(var ctr in tempQuests){
+					tempQuest = tempQuests[ctr];
+					if(tempQuest.status == 2){
+						tempQuest.status = 1;
+					}
+					questArray.push(tempQuest);
+				}
+				localStorage.quests = JSON.stringify(questArray);
 			}
 		});
 		
