@@ -1327,15 +1327,14 @@ Used by SortieManager
 	/**
 		Build a tooltip about computed enemy air power for researching air battle
 	*/
-	KC3Node.prototype.buildAirPowerMessage = function(){
+	KC3Node.prototype.buildAirPowerMessage = function(forLbas = false){
 		var tooltip = this.airbattle[2] || "";
-		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot);
+		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot, undefined, forLbas);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
 		const ap = apTuple[0];
 		if(!!ap){
 			tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-				.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-					Math.round(3 * ap / 2), 3 * ap);
+				.format(KC3Calc.fighterPowerIntervals(ap));
 		}
 		const enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){

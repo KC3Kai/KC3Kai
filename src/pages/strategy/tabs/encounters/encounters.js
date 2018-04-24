@@ -116,6 +116,12 @@
 			return worldId >= 10;
 		},
 		
+		isLbasSortieMap: function(world, map) {
+			return world === 6 && [4, 5].includes(map) ||
+				(world >= 41 && (this.maps[['m', world, map].join('')] || {}).airBase) ||
+				this.isEventWorld(world);
+		},
+		
 		worldToDesc: function(world) {
 			world = Number(world);
 			if(this.isEventWorld(world)) {
@@ -143,6 +149,7 @@
 			const shipClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
+			const isLbasMap = this.isLbasSortieMap(world, map);
 
 			$(".encounter_list").empty().hide();
 			$(".loading").show();
@@ -229,11 +236,16 @@
 					}
 					let tooltip = "{0} x{1}".format(curBox.data("nodeName"), curBox.data("count"));
 					tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
-					const ap = KC3Calc.enemyFighterPower(shipList)[0];
+					const fpArr = KC3Calc.enemyFighterPower(shipList);
+					const ap = fpArr[0], recons = fpArr[3];
 					if(ap) {
 						tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-							.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-								Math.round(3 * ap / 2), 3 * ap);
+							.format(KC3Calc.fighterPowerIntervals(ap));
+					}
+					if(isLbasMap && recons) {
+						const lbasAp = KC3Calc.enemyFighterPower(shipList, undefined, undefined, true)[0];
+						tooltip += !lbasAp ? "" : "\n[LBAS] " + KC3Meta.term("InferredFighterPower")
+							.format(KC3Calc.fighterPowerIntervals(lbasAp));
 					}
 					$(".encounter_formation", curBox).attr("title", tooltip);
 				});

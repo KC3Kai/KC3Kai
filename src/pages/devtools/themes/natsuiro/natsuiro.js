@@ -1534,11 +1534,11 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
+							ConfigManager.alert_supply_exped &&
 							!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet) &&
 							!CurrentFleet.isSupplied() &&
-							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
-						), // [0]: need fuel/ammo resupply on conditions?
+						), // [0]: need fuel/ammo resupply for expedition?
 						CurrentFleet.needsSupply(true), // [1]: is fuel/ammo empty?
 						CurrentFleet.ship(0).isTaiha(), // [2]: is some ship Taiha?
 						false, // [3]: is combined fleet HP bad conditions?
@@ -1622,12 +1622,15 @@
 			// If fleet status summary is enabled on settings
 			if(ConfigManager.info_fleetstat){
 				const isSortieFleetsSelected = (KC3SortieManager.isCombinedSortie() ? [1,2,5] :
-					[KC3SortieManager.fleetSent]).indexOf(selectedFleet) > -1;
+					KC3SortieManager.fleetSent <= 2 ? [KC3SortieManager.fleetSent, 5] :
+					[KC3SortieManager.fleetSent]).includes(selectedFleet);
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.isOnSortie() &&
-						KC3SortieManager.isFullySupplied() &&
-						isSortieFleetsSelected)) &&
+						(KC3SortieManager.isOnSortie() &&
+						 isSortieFleetsSelected &&
+						 KC3SortieManager.isFullySupplied()
+						)
+					) &&
 					(!FleetSummary.badState[0])
 				){
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
@@ -2197,8 +2200,7 @@
 							const ap = KC3Calc.enemyFighterPower(shipList)[0];
 							if(ap){
 								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
-									.format(ap, Math.round(ap / 3), Math.round(2 * ap / 3),
-										Math.round(3 * ap / 2), 3 * ap);
+									.format(KC3Calc.fighterPowerIntervals(ap));
 							}
 							$(".encounter_formation", encBox).attr("title", tooltip).lazyInitTooltip();
 							encBox.appendTo(nodeEncBox);
@@ -2375,7 +2377,7 @@
 				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle")
-					.attr("title", thisNode.buildAirPowerMessage())
+					.attr("title", thisNode.buildAirPowerMessage(true))
 					.lazyInitTooltip();
 				$(".fighter_ally .plane_before").text(thisNode.planeFighters.player[0]);
 				$(".fighter_enemy .plane_before").text(thisNode.planeFighters.abyssal[0]);

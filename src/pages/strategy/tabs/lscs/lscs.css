@@ -95,6 +95,9 @@
 .tab_lscs .page_items {
 	font-size:12px;
 }
+.tab_lscs .item_per_page {
+	margin-right:4px;
+}
 
 /* PAGINATION
 --------------------------------*/

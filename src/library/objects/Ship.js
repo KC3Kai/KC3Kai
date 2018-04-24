@@ -658,11 +658,15 @@ KC3改 Ship Object
 		var total = 0;
 		var isArcticEquipped = false,
 			hasSurfaceRadar = false,
-			count127TwinGunModelDK2 = 0;
+			count127TwinGunModelCK2 = 0,
+			count127TwinGunModelDK2 = 0,
+			count61QuadOxygenTorpedo = 0;
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
+				if(equip.masterId === 266) count127TwinGunModelCK2 += 1;
 				if(equip.masterId === 267) count127TwinGunModelDK2 += 1;
+				if(equip.masterId === 15) count61QuadOxygenTorpedo += 1;
 				if(equip.masterId === 268) isArcticEquipped = true;
 				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
 			}
@@ -676,6 +680,7 @@ KC3改 Ship Object
 				"houk": 7
 			})[apiName] || 0;
 		}
+		const isKagerouK2 = this.masterId === 566;
 		// More boosts for 12.7cm Twin Gun Model D K2
 		// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
 		if(count127TwinGunModelDK2 > 0) {
@@ -689,6 +694,8 @@ KC3改 Ship Object
 				"houk": isShimakazeClass || isYuugumoClass || isKagerouClass ? 1 : 0
 			})[apiName] || 0;
 			total += bonus * count127TwinGunModelDK2;
+			// Extra one-time +1 FP for Kagerou Kai Ni
+			if(isKagerouK2 && apiName === "houg") total += 1;
 			// Synergy with Surface Radar for Naganami Kai Ni and Shimakaze
 			if(hasSurfaceRadar && (isNaganamiK2 || isShimakazeClass)) {
 				total += ({
@@ -697,6 +704,18 @@ KC3改 Ship Object
 					"houk": 2
 				})[apiName] || 0;
 			}
+		}
+		// 12.7cm Twin Gun Model C K2 for Kagerou Kai Ni
+		if(count127TwinGunModelCK2 > 0) {
+			total += ({
+				"houg": isKagerouK2 ? (count127TwinGunModelCK2 >= 2 ? 3 : count127TwinGunModelCK2 === 1 ? 1 : 0) : 0
+			})[apiName] || 0;
+		}
+		// 61cm Quadruple (Oxygen) Torpedo Mount, more and more hard-coded boosts nowadays
+		if(count61QuadOxygenTorpedo > 0) {
+			total += ({
+				"raig": isKagerouK2 ? (count61QuadOxygenTorpedo >= 2 ? 4 : count127TwinGunModelCK2 === 1 ? 2 : 0) : 0
+			})[apiName] || 0;
 		}
 		return total;
 	};
@@ -1586,8 +1605,8 @@ KC3改 Ship Object
 
 	// is this ship able to do OASW unconditionally
 	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai
-		return [141, 478, 394].includes(this.masterId);
+		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai
+		return [141, 478, 394, 681].includes(this.masterId);
 	};
 	// test to see if this ship (with equipment) is capable of opening ASW 
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017

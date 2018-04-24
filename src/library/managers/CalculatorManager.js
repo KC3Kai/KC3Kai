@@ -12,7 +12,7 @@
  * such as Fleet, Ship, Gear, LandBase.
  *
  * Complex logic functions will be broken into individual modules or objects:
- * @see BattlePrediction - analyses battle API data and and simulates the battle results in advance;
+ * @see BattlePrediction - analyses battle API data and simulates the battle results in advance;
  * @see AntiAir - estimates Anti-Air power and AACI types based on Ship's equipment, Fleet compos, etc;
  * @see WhoCallsTheFleetDB - estimates more stats of Ship or Gear based on a well updated static database;
  * @see AkashiRepair - simulates Akashi Anchorage Repair timer, estimates amount of HP recovering;
@@ -372,6 +372,19 @@
     };
 
     /**
+     * @param {number} basicPower - basic fighter power calculated by #enemyFighterPower
+     * @return {Array} fighter power intervals array including [basic power, AD power, AP power, AS power, AS+ power].
+     */
+    const fighterPowerIntervals = (basicPower = false) => {
+        return [basicPower,
+            Math.round(basicPower / 3),
+            Math.round(2 * basicPower / 3),
+            Math.round(3 * basicPower / 2),
+            3 * basicPower
+        ];
+    };
+
+    /**
      * Get leveling goal data for specific ship, which defined at Strategy Room Leveling page.
      *
      * @param {Object} shipObj - KC3Ship instance
@@ -434,7 +447,8 @@
         
         getShipLevelingGoal,
         
-        enemyFighterPower
+        enemyFighterPower,
+        fighterPowerIntervals
     });
 
 })();

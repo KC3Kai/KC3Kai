@@ -91,6 +91,9 @@
 .tab_builds .page_items {
 	font-size:12px;
 }
+.tab_builds .item_per_page {
+	margin-right:4px;
+}
 
 /* PAGINATION
 --------------------------------*/

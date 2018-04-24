@@ -1493,7 +1493,7 @@ Previously known as "Reactor"
 			// Simulate PvP battle as special sortie
 			KC3SortieManager.sortieTime = utcSeconds;
 			KC3SortieManager.fleetSent  = fleetNum;
-			KC3SortieManager.onSortie   = 0;
+			KC3SortieManager.onSortie   = false;
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.map_num    = 0;
 			KC3SortieManager.onPvP      = true;
