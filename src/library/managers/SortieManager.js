@@ -7,7 +7,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 	"use strict";
 	
 	window.KC3SortieManager = {
-		onSortie: 0,
+		onSortie: false,
 		onPvP: false,
 		onCat: false,
 		fleetSent: 1,
@@ -102,10 +102,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				this.sortieTime = stime;
 				this.save();
 			} else {
+				this.onSortie = 0;
+				this.sortieTime = stime;
 				// Save on database and remember current sortie id
 				KC3Database.Sortie(sortie, function(id){
 					self.onSortie = id;
-					self.sortieTime = stime;
 					self.save();
 					// Lazy save event map hp to stat.onBoss.hpdat after sortie id confirmed
 					if(eventData){
@@ -202,7 +203,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		isOnSortie: function() {
-			return this.onSortie > 0 || this.isOnUnsavedSortie();
+			return Number.isInteger(this.onSortie) || this.isOnUnsavedSortie();
 		},
 		
 		isOnUnsavedSortie: function() {
@@ -225,7 +226,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		isCombinedSortie: function() {
-			return PlayerManager.combinedFleet && this.fleetSent === 1;
+			return !!PlayerManager.combinedFleet && this.fleetSent === 1;
 		},
 		
 		setBoss :function( cellno, comp ){
@@ -730,7 +731,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.sinkList.escr.splice(0);
 			KC3ShipManager.pendingShipNum = 0;
 			KC3GearManager.pendingGearNum = 0;
-			this.onSortie = 0;
+			this.onSortie = false;
 			this.onPvP = false;
 			this.onCat = false;
 			this.sortieTime = 0;
