@@ -1534,11 +1534,11 @@
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
+							ConfigManager.alert_supply_exped &&
 							!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet) &&
 							!CurrentFleet.isSupplied() &&
-							ConfigManager.alert_supply_exped &&
 							selectedFleet > (1+(!!PlayerManager.combinedFleet)) && selectedFleet < 5
-						), // [0]: need fuel/ammo resupply on conditions?
+						), // [0]: need fuel/ammo resupply for expedition?
 						CurrentFleet.needsSupply(true), // [1]: is fuel/ammo empty?
 						CurrentFleet.ship(0).isTaiha(), // [2]: is some ship Taiha?
 						false, // [3]: is combined fleet HP bad conditions?
@@ -1622,12 +1622,15 @@
 			// If fleet status summary is enabled on settings
 			if(ConfigManager.info_fleetstat){
 				const isSortieFleetsSelected = (KC3SortieManager.isCombinedSortie() ? [1,2,5] :
-					[KC3SortieManager.fleetSent]).indexOf(selectedFleet) > -1;
+					KC3SortieManager.fleetSent <= 2 ? [KC3SortieManager.fleetSent, 5] :
+					[KC3SortieManager.fleetSent]).includes(selectedFleet);
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.isOnSortie() &&
-						KC3SortieManager.isFullySupplied() &&
-						isSortieFleetsSelected)) &&
+						(KC3SortieManager.isOnSortie() &&
+						 isSortieFleetsSelected &&
+						 KC3SortieManager.isFullySupplied()
+						)
+					) &&
 					(!FleetSummary.badState[0])
 				){
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
