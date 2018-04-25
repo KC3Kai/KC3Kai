@@ -233,6 +233,12 @@
 				}
 			},
 			{
+				"id" : "info_ship_class_name",
+				"name" : "SettingsShipClassName",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_stats_diff",
 				"name" : "SettingsShipStatsDiffType",
 				"type" : "radio",
