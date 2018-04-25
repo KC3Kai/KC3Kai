@@ -355,6 +355,7 @@ Previously known as "Reactor"
 		"api_get_member/ship2":function(params, response, headers){
 			KC3ShipManager.set( response.api_data );
 			PlayerManager.setFleets( response.api_data_deck );
+			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
@@ -362,6 +363,7 @@ Previously known as "Reactor"
 		"api_get_member/ship3":function(params, response, headers){
 			KC3ShipManager.set( response.api_data.api_ship_data );
 			PlayerManager.setFleets( response.api_data.api_deck_data );
+			KC3Network.trigger("ShipSlots");
 			KC3Network.trigger("Timers");
 			KC3Network.trigger("Fleet");
 		},
@@ -1371,6 +1373,29 @@ Previously known as "Reactor"
 				data: material
 			});
 			console.log("Quest gained", quest, material);
+			
+			// Known types: 1=Consumable, 2=Unlock a fleet, 3=Furniture box, 4=LSC unlock,
+			//   5=LBAS unlock, 6=Exped resupply unlock, 11=Ship, 12=Slotitem, 13=Useitem,
+			//   14=Furniture, 15=Aircraft conversion, 16=Equipment consumption
+			const bonusType = bonuses.api_type;
+			if(bonusType === 11){
+				const count = bonuses.api_count || 1;
+				const shipId = (bonuses.api_item || {}).api_ship_id;
+				console.log("Quest gained ship", quest, shipId, count);
+				// Ships changed, but effective data will not be received until
+				// following `api_get_member/ship2` call, so here no need to call:
+				/*
+				KC3ShipManager.pendingShipNum += count;
+				KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(shipId);
+				KC3Network.trigger("ShipSlots");
+				KC3Network.trigger("GearSlots");
+				*/
+			}
+			if([12, 15, 16].includes(bonusType)){
+				// Gears changed, but effective data will not be received until
+				// following `api_get_member/slot_item` call, so here no need to call:
+				//KC3Network.trigger("GearSlots");
+			}
 			
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0,4));
 			PlayerManager.setConsumables(utcHour * 3600, null, consume);

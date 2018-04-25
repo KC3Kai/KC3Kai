@@ -1164,10 +1164,8 @@
 
 		ShipSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			var shipCount = KC3ShipManager.count();
-			var lockedShipCount = KC3ShipManager.count( function() {
-				return this.lock;
-			});
+			const shipCount = KC3ShipManager.count(),
+				lockedShipCount = KC3ShipManager.count(s => !!s.lock);
 
 			$(".count_ships")
 				.text( shipCount )
@@ -1180,10 +1178,8 @@
 
 		GearSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			var gearCount = KC3GearManager.count();
-			var lockedGearCount = KC3GearManager.count( function() {
-				return this.lock;
-			});
+			const gearCount = KC3GearManager.count(),
+				lockedGearCount = KC3GearManager.count(g => !!this.lock);
 
 			$(".count_gear")
 				.text( gearCount )
