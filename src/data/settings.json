@@ -477,23 +477,6 @@
 				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
-				"id" : "alert_morale_notif",
-				"name" : "SettingsMoraleNotif",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "alert_morale_value",
-				"name" : "SettingsMoraleValue",
-				"type" : "small_text",
-				"bound" : {
-					"min" :  1,
-					"max" : 49,
-					"type": "Integer"
-				},
-				"options" : { "label" : "" }
-			},
-			{
 				"id" : "alert_supply",
 				"name" : "SettingsSupplyRate",
 				"type" : "small_text",
@@ -512,14 +495,33 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  1,
+					"max" : 49,
+					"type": "Integer"
+				},
+				"options" : { "label" : "" }
+			},
+			{
 				"id" : "alert_type",
-				"name" : "SettingsSoundType",
+				"name" : "SettingsSoundTypeMorale",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "POP!" ],
-						[ 3, "DING!" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
@@ -540,6 +542,69 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_type_exped",
+				"name" : "SettingsSoundTypeExped",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_exped",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_type_repair",
+				"name" : "SettingsSoundTypeRepair",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_repair",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_type_cship",
+				"name" : "SettingsSoundTypeConstruction",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_cship",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_desktop",
