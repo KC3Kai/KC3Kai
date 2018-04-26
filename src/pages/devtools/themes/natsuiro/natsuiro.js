@@ -275,6 +275,8 @@
 						case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
 						case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
 						case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
+						case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
+						case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
 						default: KC3TimerManager.notifSound = false; break;
 					}
 					if(KC3TimerManager.notifSound){
@@ -1164,10 +1166,8 @@
 
 		ShipSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			var shipCount = KC3ShipManager.count();
-			var lockedShipCount = KC3ShipManager.count( function() {
-				return this.lock;
-			});
+			const shipCount = KC3ShipManager.count(),
+				lockedShipCount = KC3ShipManager.count(s => !!s.lock);
 
 			$(".count_ships")
 				.text( shipCount )
@@ -1180,10 +1180,8 @@
 
 		GearSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			var gearCount = KC3GearManager.count();
-			var lockedGearCount = KC3GearManager.count( function() {
-				return this.lock;
-			});
+			const gearCount = KC3GearManager.count(),
+				lockedGearCount = KC3GearManager.count(g => !!this.lock);
 
 			$(".count_gear")
 				.text( gearCount )
