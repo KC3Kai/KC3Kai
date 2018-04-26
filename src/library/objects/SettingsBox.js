@@ -113,9 +113,11 @@ To be dynamically used on the settings page
 						self.soundPreview.pause();
 					}
 					switch(ConfigManager.alert_type){
-						case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
+						case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
 						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
-						case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+						case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
+						case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
+						case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
 						default: self.soundPreview = false; break;
 					}
 					if(self.soundPreview){
@@ -179,14 +181,18 @@ To be dynamically used on the settings page
 			elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 
 			// If changed sound type, test play the alert sound
-			if(self.config == "alert_type"){
+			const baseKey = "alert_type",
+				configKeys = self.config.split(baseKey);
+			if(configKeys[0] === ""){
 				if(self.soundPreview){
 					self.soundPreview.pause();
 				}
-				switch(ConfigManager.alert_type){
-					case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
-					case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
-					case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+				switch(ConfigManager[baseKey + configKeys[1]]){
+					case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
+					case 2: self.soundPreview = new Audio(ConfigManager["alert_custom" + configKeys[1]]); break;
+					case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
+					case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
+					case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
 					default: self.soundPreview = false; break;
 				}
 				if(self.soundPreview){

@@ -118,10 +118,17 @@ Has functions for TimerManager to use
 		if(KC3TimerManager.notifSound){
 			KC3TimerManager.notifSound.pause();
 		}
-		switch(ConfigManager.alert_type){
+		const baseKey = "alert_type", customUrlKey = "alert_custom",
+			soundType = [
+				"alert_type_exped", "alert_type_repair", "alert_type_cship"
+			][this.type] || baseKey;
+		const configKeys = soundType.split(baseKey);
+		switch(ConfigManager[baseKey + configKeys[1]]){
 			case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
-			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager.alert_custom); break;
+			case 2: KC3TimerManager.notifSound = new Audio(ConfigManager[customUrlKey + configKeys[1]]); break;
 			case 3: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/ding.mp3"); break;
+			case 4: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/dong.mp3"); break;
+			case 5: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/bell.mp3"); break;
 			default: KC3TimerManager.notifSound = false; break;
 		}
 		if(KC3TimerManager.notifSound){

@@ -809,6 +809,9 @@ KC3改 Ship Object
 			const evs = WhoCallsTheFleetDb.estimateStat(evBound, KC3Ship.getMaxLevel());
 			if(evs !== false) { stats.ev = evs; }
 		}
+		// Unlike stats fp, tp, ar and aa,
+		// increase final maxed asw since modernized asw is not included in both as[1] and db
+		if(this.mod[6] > 0) { stats.as += this.mod[6]; }
 		return !statAttr ? stats : stats[statAttr];
 	};
 
@@ -2600,7 +2603,10 @@ KC3改 Ship Object
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
-		$(".ship_full_name .ship_yomi", tooltipBox).text(KC3Meta.shipReadingName(shipObj.master().api_yomi));
+		$(".ship_full_name .ship_yomi", tooltipBox).text(ConfigManager.info_ship_class_name ?
+			KC3Meta.ctypeName(shipObj.master().api_ctype) :
+			KC3Meta.shipReadingName(shipObj.master().api_yomi)
+		);
 		$(".ship_rosterId span", tooltipBox).text(shipObj.rosterId);
 		$(".ship_stype", tooltipBox).text(shipObj.stype());
 		$(".ship_level span.value", tooltipBox).text(shipObj.level);

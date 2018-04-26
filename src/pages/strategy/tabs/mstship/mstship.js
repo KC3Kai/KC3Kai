@@ -343,12 +343,21 @@
 			if(!shipData) { return; }
 			
 			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
-				.format(ship_id, KC3Meta.shipName(shipData.api_name),
-					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "") ) )
-				.attr("title",
-					KC3Master.isAbyssalShip(ship_id) ? KC3Meta.shipName(shipData.api_name) : // Abyssal ships
-					KC3Meta.ctypeName(shipData.api_ctype).replace("??", "") // No tooltip for seasonal CGs
-				).lazyInitTooltip();
+				.format(ship_id,
+					KC3Master.isRegularShip(ship_id) ?
+						ConfigManager.info_ship_class_name ?
+							KC3Meta.term("ShipListFullNamePattern").format(
+								KC3Meta.ctypeName(shipData.api_ctype), KC3Meta.shipName(shipData.api_name)) :
+							KC3Meta.shipName(shipData.api_name) :
+						KC3Meta.shipName(shipData.api_name),
+					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "")
+			) ).attr("title",
+				KC3Master.isRegularShip(ship_id) ?
+					ConfigManager.info_ship_class_name ?
+						$(".tab_mstship .shipInfo .name").text() : // Show whole text field
+						KC3Meta.ctypeName(shipData.api_ctype) : // Show ship class name
+					KC3Meta.shipName(shipData.api_name) // For Abyssal ships or seasonal CGs
+			).lazyInitTooltip();
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
 			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );
 			
