@@ -47,6 +47,22 @@
 			ship: null,
 			counts: null
 		},
+		aaci : {
+			shipPossibleAACI: null,
+			triggeredAACI: null,
+			badAACI: null,
+			ship: {
+				id: null,
+				lvl: null,
+				damage: null,
+				aa: null,
+				luck: null
+			},
+			shipPosition: null,
+			equips: null,
+			improvements: null,
+			kc3version: null
+		},
 		handlers : {},
 		mapInfo : [],
 		currentMap : [0, 0],
@@ -59,7 +75,7 @@
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				
-				'api_req_sortie/battle': this.processEnemy,
+				'api_req_sortie/battle': [this.processEnemy, this.processAACI],
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': this.processEnemy,
 				'api_req_sortie/ld_airbattle': this.processEnemy,
@@ -241,6 +257,70 @@
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
 			}
 		},
+
+		processAACI: function(http) {
+			const apiData = http.response.api_data;
+			this.aaci = {};
+
+			const fleetSent = Number(apiData.api_deck_id);
+			const fleetType = PlayerManager.combinedFleet;
+
+			if(fleetType > 0 && fleetSent === 1) {
+				// Ignore combined fleets (for now)
+				return;
+			}
+
+			if(!apiData.api_kouku || !apiData.api_kouku.api_stage2 || !apiData.api_kouku.api_stage2.api_e_count) {
+				// No enemy planes in phase 2, no AACI possible
+				return;
+			}
+
+			const fleet = PlayerManager.fleets[fleetSent - 1];
+
+			const possibleAACIs = fleet.ship().map((ship) => !ship.didFlee && AntiAir.shipPossibleAACIs(ship).map((id) => Number(id)));
+			// const possibleAACIs = [[], [5, 8], [], [], [], []]
+			// console.log("possible AACI", possibleAACIs);
+			const aaciCount = possibleAACIs.filter((arr) => arr.length).length;
+			this.aaci.shipPosition = possibleAACIs.findIndex((arr) => arr.length);
+
+			const apiAir = apiData.api_kouku.api_stage2.api_air_fire;
+			if(apiAir) {
+				// Triggered
+				const idx = apiAir.api_idx;
+				this.aaci.triggeredAACI = apiAir.api_kind;
+
+				if(idx != this.aaci.shipPosition) {
+					console.warn(`[TsunDB AACI] Wrong ship position ${idx}, expected ${this.aaci.shipPosition}! Unkown AACI?`);
+					this.aaci.shipPosition = idx;
+				}
+			} else {
+				// Not triggered
+				this.aaci.triggeredAACI = -1; 
+			}
+
+			if(aaciCount > 1 || (aaciCount == 0 && this.aaci.triggeredAACI < 0)) {
+				// Keep logging when none expected but one triggered
+				return;
+			}
+
+			this.aaci.shipPossibleAACI = possibleAACIs[this.aaci.shipPosition];
+			this.aaci.badAACI = this.aaci.triggeredAACI != -1 && !this.aaci.shipPossibleAACI.includes(this.aaci.triggeredAACI);
+
+			const triggeredShip = fleet.ship()[this.aaci.shipPosition];
+			this.aaci.ship = {
+				id: triggeredShip.master().api_id,
+				lvl: triggeredShip.level,
+				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
+				aa: triggeredShip.nakedStats("aa"),
+				luck: triggeredShip.nakedStats("lk")
+			};
+
+			this.aaci.equips = [...triggeredShip.equipment(false).map((equip) => equip.masterId || -1), triggeredShip.exItem().masterId || -1];
+			this.aaci.improvements = [...triggeredShip.equipment(false).map((equip) => equip.stars || -1), triggeredShip.exItem().stars || -1];
+			this.aaci.kc3version = chrome.runtime.getManifest().version + ('update_url' in chrome.runtime.getManifest() ? "" : "d");
+			// console.log(this.aaci);
+			this.sendData(this.aaci, 'aaci');
+		},
 		
 		handleFleet: function(fleet) {
 			// Update fleet minimal speed
@@ -295,7 +375,10 @@
 				// `null` is returned if no handler is found
 				var handler = this.handlers[requestObj.call];
 				if (handler) {
-					handler.call(this, requestObj);
+					if(Array.isArray(handler))
+						handler.forEach((func) => func.call(this, requestObj));
+					else
+						handler.call(this, requestObj);
 				}
 			} catch (e) {
 				console.warn("TsunDB submission error", e);
