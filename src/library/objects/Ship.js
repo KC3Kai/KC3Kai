@@ -656,67 +656,174 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
-		var isArcticEquipped = false,
-			hasSurfaceRadar = false,
-			count127TwinGunModelCK2 = 0,
-			count127TwinGunModelDK2 = 0,
-			count61QuadOxygenTorpedo = 0;
+		var hasSurfaceRadar = false;
+		const thisShipClass = this.master().api_ctype;
+		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
+		// To correct the 'naked stats' for these cases, have to simulate them all.
+		// A summary table: https://twitter.com/Lambda39/status/990268289866579968
+		// In order to handle some complex cases,
+		// this definition table includes some functions which can not be moved to JSON file.
+		const explicitStatsBonusGears = {
+			// 61cm Quadruple (Oxygen) Torpedo Mount
+			"15": {
+				count: 0,
+				byShip: {
+					// Kagerou K2
+					ids: [566],
+					multiple: { "raig": 2 },
+					countCap: 2,
+				},
+			},
+			// 61cm Triple (Oxygen) Torpedo Mount Late Model
+			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
+			"285": {
+				count: 0,
+				byShip: {
+					// Here goes ship ID white-list:
+					//  Fubuki K2, Murakumo K2,
+					//  Ayanami K2, Ushio K2
+					//  Akatsuki K2, Bep (Hibiki K2)
+					//  Hatsuharu K2, Hatsushimo K2
+					ids: [426, 420, 195, 407, 437, 147, 326, 419],
+					multiple: { "raig": 2, "houk": 1 },
+				},
+			},
+			// 61cm Quadruple (Oxygen) Torpedo Mount Late Model
+			// https://wikiwiki.jp/kancolle/61cm%E5%9B%9B%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
+			"286": {
+				count: 0,
+				byClass: {
+					// Asashio Class, Kai Nis
+					"18": {
+						remodel: 2,
+						multiple: { "raig": 2, "houk": 1 },
+					},
+					// Shiratsuyu Class, Kai Nis
+					"23": {
+						remodel: 2,
+						multiple: { "raig": 2, "houk": 1 },
+					},
+					// Kagerou Class, Kai Nis
+					//  Kagerou K2 only if except Isokaze / Hamakaze B Kai, Urakaze D Kai
+					"30": {
+						remodel: 2,
+						excludes: [556, 557, 558],
+						multiple: { "raig": 2, "houk": 1 },
+					},
+					// Yuugumo Class, Kai Nis
+					//  Naganami K2 only
+					"38": {
+						remodel: 2,
+						multiple: { "raig": 2, "houk": 1 },
+					},
+				},
+			},
+			// 12.7cm Twin Gun Mount Model C Kai Ni
+			"266": {
+				count: 0,
+				byShip: {
+					// Kagerou K2
+					ids: [566],
+					multiple: { "houg": 1 },
+					countCap: 2,
+					callback: (api, info) => (
+						// total +3 instead of +2 if guns >= 2
+						// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
+						({"houg": info.count >= 2 ? 1 : 0})[api] || 0
+					),
+				},
+			},
+			// 12.7cm Twin Gun Mount Model D Kai Ni
+			// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
+			"267": {
+				count: 0,
+				byClass: {
+					// Shimakaze Class
+					"22": {
+						multiple: { "houg": 2, "houk": 1 },
+					},
+					// Kagerou Class
+					"30": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Yuugumo Class
+					"38": {
+						multiple: { "houg": 2, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Naganami K2, total +3 for each gun
+						ids: [543],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Kagerou K2, total +2 for 1st gun
+						ids: [566],
+						single: { "houg": 1 },
+					},
+				],
+				synergyCallback: (api, info) => (
+					// Synergy with Surface Radar for Naganami Kai Ni and Shimakaze Kai
+					hasSurfaceRadar && [543, 229].includes(this.masterId) ? ({
+						"houg": 1, "raig": 3, "houk": 2
+					})[api] || 0 : 0
+				),
+			},
+			// Arctic Camouflage
+			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
+			"268": {
+				count: 0,
+				byShip: {
+					// Tama K / K2, Kiso K / K2
+					ids: [146, 216, 217, 547],
+					single: { "souk": 2, "houk": 7 },
+				},
+			},
+		};
+		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
-				if(equip.masterId === 266) count127TwinGunModelCK2 += 1;
-				if(equip.masterId === 267) count127TwinGunModelDK2 += 1;
-				if(equip.masterId === 15) count61QuadOxygenTorpedo += 1;
-				if(equip.masterId === 268) isArcticEquipped = true;
+				const bonusDefs = explicitStatsBonusGears[equip.masterId];
+				if(bonusDefs && bonusDefs.count >= 0) bonusDefs.count += 1;
 				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
 			}
 		});
-		// Might move these complex definitions to fud_weekly.json?
-		// Special boost for Arctic Camouflage equipped on Tama K / K2, Kiso K / K2
-		// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
-		if(isArcticEquipped && [146, 216, 217, 547].includes(this.masterId)) {
-			total += ({
-				"souk": 2,
-				"houk": 7
-			})[apiName] || 0;
-		}
-		const isKagerouK2 = this.masterId === 566;
-		// More boosts for 12.7cm Twin Gun Model D K2
-		// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
-		if(count127TwinGunModelDK2 > 0) {
-			const thisShipClass = this.master().api_ctype;
-			const isNaganamiK2 = this.masterId === 543;
-			const isShimakazeClass = thisShipClass === 22,
-				isYuugumoClass = thisShipClass === 38,
-				isKagerouClass = thisShipClass === 30;
-			const bonus = ({
-				"houg": isNaganamiK2 ? 3 : isYuugumoClass || isShimakazeClass ? 2 : isKagerouClass ? 1 : 0,
-				"houk": isShimakazeClass || isYuugumoClass || isKagerouClass ? 1 : 0
-			})[apiName] || 0;
-			total += bonus * count127TwinGunModelDK2;
-			// Extra one-time +1 FP for Kagerou Kai Ni
-			if(isKagerouK2 && apiName === "houg") total += 1;
-			// Synergy with Surface Radar for Naganami Kai Ni and Shimakaze
-			if(hasSurfaceRadar && (isNaganamiK2 || isShimakazeClass)) {
-				total += ({
-					"houg": 1,
-					"raig": 3,
-					"houk": 2
-				})[apiName] || 0;
+		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
+		const addBonusToTotalIfNecessary = (bonusDef, apiName, gearInfo) => {
+			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(this.masterId)) { return; }
+			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(this.masterId)) { return; }
+			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(thisShipClass)) { return; }
+			if(bonusDef.remodel &&
+				RemodelDb.remodelGroup(this.masterId).indexOf(this.masterId) < bonusDef.remodel) { return; }
+			if(bonusDef.single) { total += bonusDef.single[apiName] || 0; }
+			if(bonusDef.multiple) {
+				total += (bonusDef.multiple[apiName] || 0) *
+					(bonusDef.countCap ? Math.min(bonusDef.countCap, gearInfo.count) : gearInfo.count);
 			}
-		}
-		// 12.7cm Twin Gun Model C K2 for Kagerou Kai Ni
-		if(count127TwinGunModelCK2 > 0) {
-			total += ({
-				"houg": isKagerouK2 ? (count127TwinGunModelCK2 >= 2 ? 3 : count127TwinGunModelCK2 === 1 ? 1 : 0) : 0
-			})[apiName] || 0;
-		}
-		// 61cm Quadruple (Oxygen) Torpedo Mount, more and more hard-coded boosts nowadays
-		if(count61QuadOxygenTorpedo > 0) {
-			total += ({
-				"raig": isKagerouK2 ? (count61QuadOxygenTorpedo >= 2 ? 4 : count127TwinGunModelCK2 === 1 ? 2 : 0) : 0
-			})[apiName] || 0;
-		}
+			if(bonusDef.callback) { total += bonusDef.callback(apiName, gearInfo); }
+		};
+		Object.keys(explicitStatsBonusGears).forEach(gearId => {
+			const gearInfo = explicitStatsBonusGears[gearId];
+			if(gearInfo.count > 0) {
+				if(gearInfo.byClass) {
+					const byClass = gearInfo.byClass[thisShipClass];
+					if(byClass) addBonusToTotalIfNecessary(byClass, apiName, gearInfo);
+				}
+				if(gearInfo.byShip) {
+					const byShip = gearInfo.byShip;
+					if(Array.isArray(byShip)) {
+						byShip.forEach(s => addBonusToTotalIfNecessary(s, apiName, gearInfo));
+					} else {
+						addBonusToTotalIfNecessary(byShip, apiName, gearInfo);
+					}
+				}
+				if(gearInfo.synergyCallback) {
+					total += gearInfo.synergyCallback(apiName, gearInfo);
+				}
+			}
+		});
 		return total;
 	};
 
