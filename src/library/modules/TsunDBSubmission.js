@@ -278,9 +278,14 @@
 			const fleet = PlayerManager.fleets[fleetSent - 1];
 
 			const possibleAACIs = fleet.ship().map((ship) => !ship.didFlee && AntiAir.shipPossibleAACIs(ship).map((id) => Number(id)));
-			// const possibleAACIs = [[], [5, 8], [], [], [], []]
 			// console.log("possible AACI", possibleAACIs);
 			const aaciCount = possibleAACIs.filter((arr) => arr.length).length;
+
+			if(aaciCount > 1) {
+				// Don't log multiple AACI ships
+				return;
+			}
+
 			this.aaci.shipPosition = possibleAACIs.findIndex((arr) => arr.length);
 
 			const apiAir = apiData.api_kouku.api_stage2.api_air_fire;
@@ -298,7 +303,7 @@
 				this.aaci.triggeredAACI = -1; 
 			}
 
-			if(aaciCount > 1 || (aaciCount == 0 && this.aaci.triggeredAACI < 0)) {
+			if(aaciCount == 0 && this.aaci.triggeredAACI < 0) {
 				// Keep logging when none expected but one triggered
 				return;
 			}
