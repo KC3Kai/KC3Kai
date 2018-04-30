@@ -1267,13 +1267,140 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Calculate landing craft precap/postcap bonus depending on installation type
+	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 */
+	KC3Ship.prototype.calcLandingBonus = function(installationType=0){
+		if(this.isDummy() || ![2,3,4].includes(installationType)) { return 0; }
+
+		const t2Count = this.countEquipment(167); // Special Type 2 Amphibious Tank
+		const t89Count = this.countEquipment(166); // Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
+		const normalCount = this.countEquipment(68); // Daihatsu Landing Craft
+		/* const shikonCount = this.countEquipment(); //Toku Daihatsu Landing Craft + 11th Tank Regiment
+		(removed for now until more info) 
+		Also, toku bonus missing */
+		const landingModifiers = KC3GearManager.landingModifiers[installationType-2] || {};
+		const gearArr = [167,166,68];
+		const shipObj = this;
+
+		// Arrange equipment in terms of priority
+		const landingArray = [t2Count,t89Count,normalCount].map(function(element,idx){
+			let improvement = 0;
+			shipObj.equipment().forEach((gear, idx) => {
+				if(gear.exists())  {
+					if (gearArr[idx] === gear.masterId){
+						improvement += gear.stars;
+					}
+				}
+			});
+			
+			// Bonus for two Type 89 Tank
+			if (element > 1 && idx === 1){
+				return 3 + 0.06*improvement/element;
+			}
+
+			// Match modifier and improvement
+			else if (element > 0){
+				return landingModifiers.modifier[idx]+landingModifiers.improvement[idx]*improvement/element;
+			}
+
+			// Default to 1x if no matching equip
+			else { return 1; }
+		});
+
+		// T89/normal bonus overlap, so take highest and multiply
+		return landingArray[0]*(landingArray[1] > landingArray[2] ? landingArray[1] : landingArray[2]);
+	};
+
+	/**
 	 * Get pre-cap anti land installation power of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @see estimateLandingAttackType
-	 */
-	KC3Ship.prototype.antiLandWarfarePower = function(){
-		// TODO
+	 * @see getInstallationEnemyType
+	 * Returns array of [additive damage boost, multiplicative damage boost]
+ 	 * Two types of bonuses exist, precap and postcap
+ 	 * Check for PT imps too, since conditions are similar
+ 	 */
+	KC3Ship.prototype.antiLandWarfarePower = function(targetShipMasterId = 0, precap = true){
+		if(this.isDummy()) { return [0,1]; }
+		if (this.estimateTargetShipType(targetShipMasterId).isLand === false 
+			&& ![1637, 1638, 1639, 1640].includes(targetShipMasterId)) {return [0,1];} 
+
+		const installationType = this.getInstallationEnemyType(targetShipMasterId,precap);
+		const wg42Count = this.countEquipment(126); 
+		const hasT3Shell = this.hasEquipment(35);
+		let wg42Bonus = 1;
+		let t3Bonus = 1;
+		const landingBonus = this.calcLandingBonus(installationType);
+
+		/* Installation types
+		Type 1 : Soft-skinned
+		Type 2: Artillery Imps/Pillbox
+		Type 3: Isolated Island Princess
+		Type 4: Supply Depot Princess (NEET Hime), postcap
+		Type 5: PT Imp Pack, postcap
+		*/
+		
+		if (precap){
+			// [0,70,110,140,160] additive for each WG42,
+			const wg42Additive = wg42Count === 0 ? 0 : 20 + 55*wg42Count - 5*Math.pow(wg42Count,2);
+			
+			switch(installationType){
+				case 1: 
+					// Soft-skinned
+					// 2.5x multiplicative for at least one T3
+					return [wg42Additive, hasT3Shell ? 2.5 : 1];
+			
+				case 2: 
+					// Pillbox
+					const seaplaneBonus = this.hasEquipmentType(2,[10,11,39]) ? 1.5 : 1; // Works even if slot is zeroed.
+					const lightShipBonus = [2,3].includes(this.master().api_stype) ? 1.4 : 1; // DD/CL bonus
+					wg42Bonus = [1,1.6,2.72].find(function(element,index){ // Multiplicative WG42 bonus
+						if (index === wg42Count) {return element;}
+						else if (wg42Count > 2) {return 2.72;}
+					});
+					const apShellBonus = this.hasEquipmentType(2,19) ? 1.85 : 1;
+					
+					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
+					return [wg42Additive,seaplaneBonus*lightShipBonus*wg42Bonus*apShellBonus*landingBonus];
+				
+				case 3: 
+					// Isolated Island Princess
+					t3Bonus = hasT3Shell ? 1.75 : 1;
+					wg42Bonus = [1,1.4,2.1].find(function(element,index){
+						if (index === wg42Count) {return element;}
+						else if (wg42Count > 2) {return 2.1;}
+					});
+					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
+					return [wg42Additive,wg42Bonus*t3Bonus*landingBonus];
+			
+				default: return [0,1];
+			}
+		}
+		else { 
+			// Post-cap
+			switch(installationType){
+				case 4: 
+					// Supply Depot Princess
+					wg42Bonus = [1,1.25,1.625].find(function(element,index){
+						if (index === wg42Count) return element;
+						else if (wg42Count > 2) return 1.625;
+						});
+					return [0,landingBonus*wg42Bonus];
+		
+				case 5: 
+					// PT Imp Pack	  
+					const lightGunBonus = this.countEquipmentType(2,1) >= 2 ? 1.2 : 1;
+					const aaGunBonus = this.countEquipmentType(2,21) >= 2 ? 1.1 : 1;
+					const secondaryGunBonus = this.countEquipmentType(2,4) >= 2 ? 1.2 : 1;
+					t3Bonus = hasT3Shell ? 1.3 : 1;
+					return [0,lightGunBonus*aaGunBonus*secondaryGunBonus*t3Bonus];
+			
+				default: return [0,1];
+			}
+		}
 	};
 
 	/**
@@ -1893,6 +2020,46 @@ KC3改 Ship Object
 			}
 		}
 		return 0;
+	};
+
+	/**
+	 * Divide installation into KC3-unique types
+	 */
+	KC3Ship.prototype.getInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
+		const targetShip = KC3Master.ship(targetShipMasterId); 
+		if(!this.masterId || !targetShip) { return 0; }
+		if (this.estimateTargetShipType(targetShipMasterId).isLand === false 
+		&& ![1637, 1638, 1639, 1640].includes(targetShipMasterId)) { return 0; } 
+
+		/* Installation types
+		Type 1 : Soft-skinned
+		Type 2: Artillery Imps/Pillbox
+		Type 3: Isolated Island Princess
+		Type 4: Supply Depot Princess (NEET Hime), postcap
+		Type 5: PT Imp Pack, postcap
+		*/
+		
+		// Supply Depot Princess
+		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)){ 
+			// Supply Princess unique case, takes soft-skinned pre-cap but unique post-cap
+				return precap ? 1 : 4;
+		}
+		// Pillbox	
+		else if([1665, 1666, 1667].includes(targetShipMasterId)){ 
+				return 2;
+		}
+			
+		// Isolated Island Princess
+		else if([1668, 1669, 1670, 1671, 1672].includes(targetShipMasterId)){ 
+				return 3;
+		}
+			
+		// PT Imp Pack
+		else if([1637, 1638, 1639, 1640].includes(targetShipMasterId)){ 
+				return 5;
+		}
+
+		else { return 1; }
 	};
 
 	/**
