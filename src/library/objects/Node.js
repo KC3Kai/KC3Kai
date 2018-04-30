@@ -178,32 +178,43 @@ Used by SortieManager
 			const rscType = ["", "fuel", "ammo"][itemId] || "";
 			// Do nothing if not fuel or ammo lost
 			if(!rscType) return;
-			let maxRsc = 0;
+			let maxRemainingRsc = 0, radarShips = 0;
 			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 				fleet.shipsUnescaped().forEach(ship => {
-					maxRsc = Math.max(maxRsc, ship[rscType] || 0);
+					maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
+					radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 3);
 				});
 			});
-			const maxLost = nodeData.api_happening.api_count;
+			const actualMaxLoss = nodeData.api_happening.api_count;
 			// Nothing to lose?
-			if(!maxLost || maxRsc === 0) return;
-			// Max rate supposed to be up to 40%, 30%, 24%, 20% (by radar ship amount),
-			// rate of some maps lower than 40%, so here computes it in time.
-			// Server side might use floor(maxRsc * 0.4 (or 0.3 / 0.24 / 0.2)),
-			// so here try to round it up. But may be still inaccurate.
-			const lossRate = Math.qckInt("ceil", maxLost / maxRsc, 2);
+			if(!actualMaxLoss || maxRemainingRsc === 0) return;
+			// Server-side might use `min(nodeMaxLoss, floor(nowRsc * 0.4 * [1, 0.75, 0.6, 0.5][radarShips]))`,
+			// reduce it from remaining rsc of all activated ships and return the max value as `api_count`.
+			// `radarShips` = amount of ships equipped any type of radar,
+			// `nodeMaxLoss` is the map cell property which unknown by client-side,
+			// can be get from `api_count` if computed one bigger than it.
 			const isReducedByRadar = !!nodeData.api_happening.api_dentan;
+			const lossRate = 0.4 * (isReducedByRadar ? [1.0, 0.75, 0.6, 0.5][radarShips] || 1 : 1);
+			const expectedMaxLoss = Math.floor(maxRemainingRsc * lossRate);
+			const isCappedByMap = actualMaxLoss < expectedMaxLoss;
 			let totalLost = 0;
 			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 				fleet.shipsUnescaped().forEach(ship => {
-					const loss = Math.floor(ship[rscType] * lossRate);
-					totalLost += loss;
+					// cap reduction to map node max loss value
+					let loss = Math.min(actualMaxLoss, Math.floor(ship[rscType] * lossRate));
+					// cap reduction to remaining rsc, guarantee it >= 0
+					loss = Math.min(ship[rscType], loss);
 					ship[rscType] -= loss;
+					totalLost += loss;
 				});
 			});
 			console.log("Fleet(s) will lose {0} {1} in total at maelstrom".format(rscType, totalLost),
-				lossRate, "({0} / {1})".format(maxLost, maxRsc),
-				isReducedByRadar ? "(reduced by radar)" : "");
+				Math.qckInt("floor", lossRate, 2), "({0} / {1}){2}{3}".format(
+					actualMaxLoss, maxRemainingRsc,
+					(isCappedByMap ? " (capped from {0})".format(expectedMaxLoss) : ""),
+					(isReducedByRadar ? " (reduced by radar)" : "")
+				)
+			);
 		};
 		reduceFleetRscIfNecessary(nodeData);
 		return this;
