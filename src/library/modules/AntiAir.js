@@ -531,7 +531,9 @@ AntiAir: anti-air related calculations
 		};
 	}
 
-	// all non-sub ships
+	// All non-sub surface ships
+	// according KC vita codes, no ship type is used in predictions, (only ctype for Akizuki kinds, id for Maya K2 kinds)
+	// might be able to trigger as long as ship can equip corresponding equipment.
 	declareAACI(
 		5, 4, 1.5,
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
@@ -630,6 +632,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// Musashi K2
 	declareAACI(
 		26, 6, 1.4,
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
@@ -709,7 +712,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	// api_kind 13 deprecated by devs
-	// might be Maya non-K2 biHaMount+CDMG+AirRadar +4 x1.35
+	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
 
 	// Isuzu K2
 	declareAACI(
@@ -888,7 +891,11 @@ AntiAir: anti-air related calculations
 	// in-game, priority is based on kinds of conditions (in `if...return` flavor),
 	//   research about AACI priority for a ship:
 	//   https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
+	//   https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
 	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
+	// note: priority is different from trigger chance rate, since random number roll just done once,
+	//       lower priority AACI is still possible to be triggered if chance value is bigger.
+	//       on the opposite, both lower priority and smaller chance means never can be triggered.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
 	function sortedPossibleAaciList(aaciIds, sortCallback) {
