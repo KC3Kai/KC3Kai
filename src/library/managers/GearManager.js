@@ -40,6 +40,26 @@ Saves and loads list to and from localStorage
 		jetBomberSteelCostRatioPerSlot: 0.2,
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
+		// Anti-installation land damage per type and improvement
+		// Array format is [t2Bonus,t89Bonus,normalBonus]
+		landingModifiers : {
+			// Pillbox
+			0: {
+				modifier: [2.4,2.15,1.8],
+				improvement: [0.08,0.043,0.0036],
+			},
+			// Isolated Island Princess
+			1: {
+				modifier: [2.4,2.15,1.8],
+				improvement: [0.08,0.043,0.0036],
+			},
+			// Supply Depot Princess (no info on Daihatsu improvement)
+			2: {
+				modifier: [1.7,1.3,1],
+				improvement: [0.051,0.026,0],
+			},
+		},
+
 		// Get a specific item by ID
 		// NOTE: if you want to write test-cases, avoid setting KC3GearManager.list["x0"]
 		// because it'll never be retrieved by "get(0)"
