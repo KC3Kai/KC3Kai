@@ -1297,7 +1297,8 @@ KC3改 Ship Object
 			
 			// Bonus for two Type 89 Tank
 			if (element > 1 && idx === 1){
-				return 3 + 0.06*improvement/element;
+				return installationType === 4 ? 2.08+0.0416*improvement/element
+				 : 3 + 0.06*improvement/element;
 			}
 
 			// Match modifier and improvement
