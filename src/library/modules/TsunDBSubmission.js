@@ -7,12 +7,16 @@
 	"use strict";
 	
 	window.TsunDBSubmission = {
+		celldata : {
+			map: null,
+			data: []
+		},
+		
 		data : {
 			map: null,
 			hqLvl: null,
 			cleared: null,
 			fleetType: 0,
-			mapNodes: [],
 			fleet1: [],
 			fleet2: [],
 			sortiedFleet: 1,
@@ -64,6 +68,13 @@
 			improvements: null,
 			kc3version: null
 		},
+		development : {
+			hqLvl: null,
+			flagship: {},
+			resources: {},
+			result: null,
+			success: null
+		},
 		handlers : {},
 		mapInfo : [],
 		currentMap : [0, 0],
@@ -98,6 +109,9 @@
 				'api_req_sortie/battleresult': this.processDrop,
 				'api_req_combined_battle/battleresult': this.processDrop,
 				// PvP battle_result excluded intentionally
+				
+				// Development related
+				'api_req_kousyou/createitem': this.processDevelopment
 			};
 		},
 		
@@ -118,12 +132,33 @@
 			}
 		},
 		
+		processCellData: function(http){
+			const apiData = http.response.api_data;
+			
+			this.celldata.map = this.data.map;
+			this.celldata.data = apiData.api_cell_data;4
+			
+			//this.sendData(this.celldata, '???');
+		},
+		
 		processStart: function(http) {
 			this.cleanOnStart();
 			const apiData = http.response.api_data;
-			this.data.mapNodes = apiData.api_cell_data;
 			this.data.sortiedFleet = Number(http.params.api_deck_id);
 			this.data.fleetType = PlayerManager.combinedFleet;
+
+			// Sets the map ID
+			const world = Number(apiData.api_maparea_id);
+			const map = Number(apiData.api_mapinfo_no);
+			this.currentMap = [world, map];
+			const mapId = this.currentMap.join('');
+			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
+			this.data.map = this.currentMap.join('-');
+			
+			// Sets whether the map is cleared or not
+			this.data.cleared = mapData.api_cleared;
+			
+			this.processCellData(http);
 			this.processNext(http);
 			
 			// Statistics of owned ships by base form ID
@@ -137,17 +172,6 @@
 		processNext: function(http) {
 			this.cleanOnNext();
 			const apiData = http.response.api_data;
-			
-			// Sets the map ID
-			const world = Number(apiData.api_maparea_id);
-			const map = Number(apiData.api_mapinfo_no);
-			this.currentMap = [world, map];
-			const mapId = this.currentMap.join('');
-			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
-			this.data.map = this.currentMap.join('-');
-			
-			// Sets whether the map is cleared or not
-			this.data.cleared = mapData.api_cleared;
 			
 			// Sets player's HQ level
 			this.data.hqLvl = PlayerManager.hq.level;
@@ -170,7 +194,7 @@
 			
 			// Sets all the event related values
 			if(apiData.api_eventmap) {
-				const mapStorage = KC3SortieManager.getCurrentMapData(world, map);
+				const mapStorage = KC3SortieManager.getCurrentMapData(this.currentMap[0], this.currentMap[1]);
 				
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
@@ -330,6 +354,29 @@
 			this.sendData(this.aaci, 'aaci');
 		},
 		
+		processDevelopment: function(http){
+			this.cleanUp();
+			const request = http.params;
+			const response = http.response.api_data;
+			
+			this.development.hqLvl = PlayerManager.hq.level;
+			this.development.flagship = {
+				id: PlayerManager.fleets[0].ship(0).masterId,
+				type: PlayerManager.fleets[0].ship(0).master().api_stype,
+				lvl: PlayerManager.fleets[0].ship(0).level
+			};
+			this.development.resources = {
+				fuel: request.api_item1,
+				ammo: request.api_item2,
+				steel: request.api_item3,
+				bauxite: request.api_item4
+			};
+			this.development.result = response.api_slot_item.api_slotitem_id || response.api_fdata[1];
+			this.development.success = response.api_create_flag;
+			//console.debug(this.development);
+			this.sendData(this.development, 'development');
+		},
+		
 		handleFleet: function(fleet) {
 			// Update fleet minimal speed
 			fleet.speed();
@@ -355,6 +402,7 @@
 		 * Cleans up the data for each time start to sortie.
 		 */
 		cleanOnStart: function() {
+			this.celldata = {};
 			this.currentMap = [0, 0];
 			this.data.edgeID = [];
 			this.shipDrop.counts = {};
@@ -375,6 +423,13 @@
 			this.data.maxMapHP = 0;
 			this.data.gaugeNum = 0;
 			this.data.gaugeType = 0;
+		},
+		
+		/**
+		 * Cleans up the data of non-combat related things.
+		 */
+		cleanUp: function(){
+			this.development = {};
 		},
 		
 		processData: function(requestObj) {
