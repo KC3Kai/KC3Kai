@@ -40,7 +40,7 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 			
 			// First time hints can be dismissed
 			if(!ConfigManager.dismissed_hints.homepage_hints){
@@ -58,8 +58,8 @@
 			$(".hq_name .hq_content").text(PlayerManager.hq.name);
 			$(".hq_desc .hq_content").text(PlayerManager.hq.desc);
 			
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			$(".hq_server .hq_content").text( MyServer.name );
+			const myServer = (new KC3Server()).setNum( PlayerManager.hq.server );
+			$(".hq_server .hq_content").text( myServer.name );
 			
 			$(".hq_rank .hq_content").text(PlayerManager.hq.rank);
 			$(".hq_level .hq_content").text(PlayerManager.hq.level);
@@ -118,9 +118,9 @@
 			
 			// Show health metric
 			if(PlayerManager.hq.lastPortTime > this.battleCounts.lastPortTime){
-				let lastMonthSec = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
-				let last2DaySec = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
-				let lastDaySec = Math.floor(new Date().shiftHour(-24).getTime() / 1000);
+				const lastMonthSec = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
+				const last2DaySec = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
+				const lastDaySec = Math.floor(new Date().shiftHour(-24).getTime() / 1000);
 				KC3Database.count_sortie_battle(function(sc, bc){
 					self.battleCounts.lastDaySortie = sc;
 					self.battleCounts.lastDayBattle = bc;
@@ -141,28 +141,31 @@
 			}
 			
 			// Show localStorage space usage (unit is Kilo chars, not bytes)
-			let usedChars = localStorage.usedSpace();
-			let kiloChars = Math.floor(usedChars / 1024);
-			let usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
+			const usedChars = localStorage.usedSpace();
+			const kiloChars = Math.floor(usedChars / 1024);
+			const usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
 			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
 			
 			// Export all data
 			$(".tab_profile .export_data").on("click", function(){
-				var exportObject = {
-					config: JSON.parse(localStorage.config || "{}"),
-					fleets: JSON.parse(localStorage.fleets || "{}"),
-					gears: JSON.parse(localStorage.gears || "{}"),
-					//maps: JSON.parse(localStorage.maps || "{}"),
-					player: JSON.parse(localStorage.player || "{}"),
-					//quests: JSON.parse(localStorage.quests || "{}"),
-					ships: JSON.parse(localStorage.ships || "{}"),
-					//statistics: JSON.parse(localStorage.statistics || "{}")
-				};
-				var exportString = JSON.stringify(exportObject);
+				const keysToExport = [
+					// KC3 configurations
+					"config", "expedConfig", "expedTab",
+					"goalTemplates", "goals", "planes", "player",
+					"savedFleets", "srExpcalc", "srExpedscorer", "srShiplist", "srShowcase",
+					// history/cached in-game data
+					"fleets", "gears", "ships", "bases", "maps", "pictureBook", "quests",
+					// other keys are cache data can be auto rebuilt on game start
+				];
+				const exportObject = {};
+				keysToExport.forEach(key => {
+					exportObject[key] = JSON.parse(localStorage[key] || "{}");
+				});
+				let exportString = JSON.stringify(exportObject);
 				exportObject.hash = exportString.hashCode();
 				exportString = JSON.stringify(exportObject);
 				
-				var filename = self.makeFilename("Profile", "kc3");
+				const filename = self.makeFilename("Profile", "kc3");
 				self.saveFile(filename, exportString, "application/json");
 			});
 			
@@ -174,25 +177,21 @@
 			// On-data has been read
 			var reader = new FileReader();
 			reader.onload = function(theFile){
-				var importedData = JSON.parse(this.result);
-				var hash = importedData.hash;
+				const importedData = JSON.parse(this.result);
+				const hash = importedData.hash;
 				delete importedData.hash;
-				if( JSON.stringify(importedData).hashCode() == hash ) {
-					alert("OK");
-				} else {
+				if( JSON.stringify(importedData).hashCode() !== hash ) {
 					alert("Invalid KC3 File. Might have been edited, or from an old KC3 version.");
+					return;
 				}
-				
-				/*localStorage.config = JSON.stringify(importedData.config);
-				localStorage.fleets = JSON.stringify(importedData.fleets);
-				localStorage.gears = JSON.stringify(importedData.gears);
-				localStorage.maps = JSON.stringify(importedData.maps);
-				localStorage.player = JSON.stringify(importedData.player);
-				localStorage.quests = JSON.stringify(importedData.quests);
-				localStorage.ships = JSON.stringify(importedData.ships);
-				localStorage.statistics = JSON.stringify(importedData.statistics);
-				alert("Imported data for "+importedData.player.name+" from "+ KC3Meta.serverByNum(importedData.player.server).name+"!");
-				window.location.reload();*/
+				if( ! confirm("Are you sure to overwrite current profile data?")) {
+					return;
+				}
+				for(const key in importedData) {
+					localStorage[key] = JSON.stringify(importedData[key]);
+				}
+				alert(`Imported profile data for ${importedData.player.name} from KC3 File, please restart game!`);
+				window.location.reload();
 			};
 			
 			// On-selected file to import
@@ -211,16 +210,16 @@
 			// Precompiled regexp for better performance
 			const CSV_QUOTE_TEST_REGEXP = /(\s|\r|\n|\")/;
 			const CSV_DQUOTE_REGEXP = /\"/g;
-			let csvDquoteEscaped = function(field) {
+			const csvDquoteEscaped = function(field) {
 				return '"' + field.replace(CSV_DQUOTE_REGEXP, '""') + '"';
 			};
-			let csvQuoteIfNecessary = function(field) {
+			const csvQuoteIfNecessary = function(field) {
 				return CSV_QUOTE_TEST_REGEXP.test(field) ? csvDquoteEscaped(field) : field;
 			};
 			// Export CSV: Sortie
 			/*$(".tab_profile .export_csv_sortie").on("click", function(event){
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+CSV_LINE_BREAKS;
 				
@@ -239,14 +238,14 @@
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
-						var filename = self.makeFilename("LSC", ".csv");
+						const filename = self.makeFilename("LSC", ".csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});*/
 			
 			const exportExpedCsv = (forAsw) => {
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"Expedition", "HQ Exp",
 					"Fuel", "Ammo", "Steel", "Bauxite",
 					"Reward 1", "Reward 2", "Result", "Date", "Fleet#",
@@ -369,7 +368,7 @@
 			// Export CSV: Construction
 			$(".tab_profile .export_csv_build").on("click", function(event){
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+CSV_LINE_BREAKS;
 				
@@ -388,7 +387,7 @@
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
-						var filename = self.makeFilename("Constructions", "csv");
+						const filename = self.makeFilename("Constructions", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -396,7 +395,7 @@
 			// Export CSV: Crafting
 			$(".tab_profile .export_csv_craft").on("click", function(event){
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Result", "Date"
 				].join(",")+CSV_LINE_BREAKS;
 				
@@ -415,7 +414,7 @@
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
-						var filename = self.makeFilename("Crafting", "csv");
+						const filename = self.makeFilename("Crafting", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -423,7 +422,7 @@
 			// Export CSV: LSC
 			$(".tab_profile .export_csv_lsc").on("click", function(event){
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"Secretary", "Fuel", "Ammo", "Steel", "Bauxite", "Dev Mat", "Result", "Date"
 				].join(",")+CSV_LINE_BREAKS;
 				
@@ -443,7 +442,7 @@
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
-						var filename = self.makeFilename("LSC", "csv");
+						const filename = self.makeFilename("LSC", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -482,7 +481,7 @@
 			// Export CSV: Abyssal Enemies
 			$(".tab_profile .export_csv_abyssal").on("click", function(event){
 				// CSV Headers
-				var exportData = [
+				let exportData = [
 					"ID", "Name", "SType", "HP", "FP", "AR", "TP", "AA", "Speed", "Equip1", "Equip2", "Equip3", "Equip4"
 				].join(",")+CSV_LINE_BREAKS;
 				KC3Database.con.enemy
@@ -505,7 +504,7 @@
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						
-						var filename = self.makeFilename("AbyssalShips", "csv");
+						const filename = self.makeFilename("AbyssalShips", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});
@@ -585,8 +584,8 @@
 			$(".tab_profile .clear_fcf").on("click", function(event){
 				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
 					return false;
-				var json = localStorage.ships;
-				var hash = json.hashCode();
+				let json = localStorage.ships;
+				const hash = json.hashCode();
 				json = json.replace(/,\"didFlee\":(true|false)/g, "")
 						   .replace(/,\"mvp\":(true|false)/g, "");
 				if(hash !== json.hashCode()){
@@ -656,7 +655,7 @@
 				// Fix table `enemy`. To update primary key, have to delete all records first
 				KC3Database.con.enemy.toArray(function(enemyList){
 					KC3Database.con.enemy.clear();
-					for(let r of enemyList){
+					for(const r of enemyList){
 						if(r.id < 1501) { r.id += 1000; }
 						KC3Database.Enemy(r);
 					}
@@ -676,7 +675,7 @@
 				// Fix table `encounters`. To update primary key, have to delete all records first
 				KC3Database.con.encounters.toArray(function(encList){
 					KC3Database.con.encounters.clear();
-					for(let r of encList){
+					for(const r of encList){
 						const ke = JSON.parse(r.ke || null);
 						const keu = updateKe(ke);
 						if(ke !== keu){
@@ -716,7 +715,7 @@
 		},
 		
 		refreshHealthMetric: function(){
-			var bc = this.battleCounts;
+			const bc = this.battleCounts;
 			if(Object.keys(bc).length < 2) return;
 			$(".day_battle_total_24 .rank_content").html(
 				'{0}<span style="font-weight:normal"> (during {1} sorties)</span>'
@@ -738,7 +737,7 @@
 		},
 		
 		refreshNewsfeed: function(showRawNewsfeed){
-			var self = this;
+			const self = this;
 			if(this.newsfeed && this.newsfeed.time){
 				this.newsfeed.log.forEach(function(log, i){
 					// we are using the same timestamp for making it look like a proper log,
@@ -755,8 +754,8 @@
 		},
 		
 		showFeedItem: function(index, time, log, showRawNewsfeed){
-			var isRaw = !!showRawNewsfeed || ConfigManager.language == "jp";
-			var selector = ".newsfeed .feed_item_{0}".format(index + 1);
+			const isRaw = !!showRawNewsfeed || ConfigManager.language == "jp";
+			const selector = ".newsfeed .feed_item_{0}".format(index + 1);
 			$(selector + " .time").text(new Date(time).format("mm/dd HH:MM"));
 			switch(log.api_type){
 			case "1":
@@ -773,7 +772,7 @@
 				break;
 			case "5":
 				$(selector + " .colorbox").css("background", "#98e75f");
-				var opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
+				const opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
 				if(log.api_message.indexOf("勝利") > -1){
 					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPWin").format(opponent));
 				} else if(log.api_message.indexOf("敗北") > -1){
@@ -802,7 +801,7 @@
 		},
 		
 		saveFile: function(filename, data, type){
-			var blob = new Blob([data], {type: type+";charset=utf-8"});
+			const blob = new Blob([data], {type: type+";charset=utf-8"});
 			saveAs(blob, filename);
 		}
 		

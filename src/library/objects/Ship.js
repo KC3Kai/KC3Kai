@@ -1718,7 +1718,7 @@ KC3改 Ship Object
 		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai
 		return [141, 478, 394, 681].includes(this.masterId);
 	};
-	// test to see if this ship (with equipment) is capable of opening ASW 
+	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
 	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {

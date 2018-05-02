@@ -68,7 +68,7 @@ Saves and loads list to and from localStorage
 			var x;
 			for (var ind in this.list) {
 				x = this.list[ind];
-				if (cond.call(x,x)) {
+				if (cond.call(x, x)) {
 					n += 1;
 				}
 			}

@@ -1181,7 +1181,7 @@
 		GearSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			const gearCount = KC3GearManager.count(),
-				lockedGearCount = KC3GearManager.count(g => !!this.lock);
+				lockedGearCount = KC3GearManager.count(g => !!g.lock);
 
 			$(".count_gear")
 				.text( gearCount )
