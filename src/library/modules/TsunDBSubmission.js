@@ -9,20 +9,20 @@
 	window.TsunDBSubmission = {
 		data : {
 			map: null,
-			mapNodes: [],
-			cleared: null,
 			hqLvl: null,
+			cleared: null,
 			fleetType: 0,
+			mapNodes: [],
+			fleet1: [],
+			fleet2: [],
+			sortiedFleet: 1,
+			fleetSpeed: null,
 			edgeID: [],
+			los: [],
 			nodeType: null,
 			eventId: null,
 			eventKind: null,
 			nextRoute: null,
-			fleetSent: 1,
-			fleetSpeed: null,
-			fleet1: [],
-			fleet2: [],
-			los: [],
 			currentMapHP: null,
 			maxMapHP: null,
 			difficulty: null,
@@ -35,17 +35,34 @@
 			node: null,
 			hqLvl: null,
 			difficulty: null,
-			enemies: null
+			enemyComp: null
 		},
 		shipDrop : {
 			map: null,
 			node: null,
 			rank: null,
+			cleared: null,
 			enemyComp: null,
 			hqLvl: null,
 			difficulty: null,
 			ship: null,
 			counts: null
+		},
+		aaci : {
+			shipPossibleAACI: null,
+			triggeredAACI: null,
+			badAACI: null,
+			ship: {
+				id: null,
+				lvl: null,
+				damage: null,
+				aa: null,
+				luck: null
+			},
+			shipPosition: null,
+			equips: null,
+			improvements: null,
+			kc3version: null
 		},
 		handlers : {},
 		mapInfo : [],
@@ -59,7 +76,7 @@
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				
-				'api_req_sortie/battle': this.processEnemy,
+				'api_req_sortie/battle': [this.processEnemy, this.processAACI],
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': this.processEnemy,
 				'api_req_sortie/ld_airbattle': this.processEnemy,
@@ -105,7 +122,7 @@
 			this.cleanOnStart();
 			const apiData = http.response.api_data;
 			this.data.mapNodes = apiData.api_cell_data;
-			this.data.fleetSent = Number(http.params.api_deck_id);
+			this.data.sortiedFleet = Number(http.params.api_deck_id);
 			this.data.fleetType = PlayerManager.combinedFleet;
 			this.processNext(http);
 			
@@ -129,18 +146,6 @@
 			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
 			this.data.map = this.currentMap.join('-');
 			
-			// Sets all the event related values
-			if(apiData.api_eventmap) {
-				const mapStorage = KC3SortieManager.getCurrentMapData(world, map);
-				
-				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
-				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
-				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
-				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num;
-				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
-				this.data.debuffSound = mapStorage.debuffSound;
-			}
-			
 			// Sets whether the map is cleared or not
 			this.data.cleared = mapData.api_cleared;
 			
@@ -158,12 +163,27 @@
 			// Checks whether the fleet has hit a dead end or not
 			this.data.nextRoute = apiData.api_next;
 			
-			this.data.fleet1 = this.handleFleet(PlayerManager.fleets[this.data.fleetSent - 1]);
-			if(this.data.fleetType > 0 && this.data.fleetSent === 1) {
+			this.data.fleet1 = this.handleFleet(PlayerManager.fleets[this.data.sortiedFleet - 1]);
+			if(this.data.fleetType > 0 && this.data.sortiedFleet === 1) {
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
 			
-			this.sendData(this.data, 'routing');
+			// Sets all the event related values
+			if(apiData.api_eventmap) {
+				const mapStorage = KC3SortieManager.getCurrentMapData(world, map);
+				
+				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
+				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
+				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
+				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num;
+				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
+				this.data.debuffSound = mapStorage.debuffSound;
+				
+				this.sendData(this.data, 'event/routing');
+			}
+			else{
+				this.sendData(this.data, 'routing');
+			}
 			
 			// Send Land-base Air Raid enemy compos
 			if(apiData.api_destruction_battle) {
@@ -177,28 +197,27 @@
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
-			this.enemyComp.node = KC3Meta.nodeLetter(this.currentMap[0], this.currentMap[1],
-				this.data.edgeID.slice(-1).pop());
+			this.enemyComp.node = this.data.edgeID.slice(-1);
 			this.enemyComp.hqLvl = this.data.hqLvl;
 			this.enemyComp.difficulty = this.data.difficulty;
-			this.enemyComp.enemies = {
-				formation: apiData.api_formation[1],
+			this.enemyComp.enemyComp = {
 				ship: apiData.api_ship_ke,
 				lvl: apiData.api_ship_lv,
 				hp: apiData.api_e_maxhps,
 				// No api_eParam for LB air raid
 				stats: apiData.api_eParam || [],
-				equip: apiData.api_eSlot
+				equip: apiData.api_eSlot,
+				formation: apiData.api_formation[1]
 			};
 			if(apiData.api_ship_ke_combined) {
-				this.enemyComp.enemies.shipEscort = apiData.api_ship_ke_combined;
-				this.enemyComp.enemies.lvlEscort = apiData.api_ship_lv_combined;
-				this.enemyComp.enemies.hpEscort = apiData.api_e_maxhps_combined;
-				this.enemyComp.enemies.statsEscort = apiData.api_eParam_combined;
-				this.enemyComp.enemies.equipEscort = apiData.api_eSlot_combined;
+				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
+				this.enemyComp.enemyComp.lvlEscort = apiData.api_ship_lv_combined;
+				this.enemyComp.enemyComp.hpEscort = apiData.api_e_maxhps_combined;
+				this.enemyComp.enemyComp.statsEscort = apiData.api_eParam_combined;
+				this.enemyComp.enemyComp.equipEscort = apiData.api_eSlot_combined;
 			}
 			if(airRaidData) {
-				this.enemyComp.enemies.isAirRaid = true;
+				this.enemyComp.enemyComp.isAirRaid = true;
 			}
 			
 			this.sendData(this.enemyComp, 'enemy-comp');
@@ -211,14 +230,14 @@
 			this.shipDrop = {};
 			
 			this.shipDrop.map = this.data.map;
-			this.shipDrop.node = KC3Meta.nodeLetter(this.currentMap[0], this.currentMap[1],
-				this.data.edgeID.slice(-1).pop());
+			this.shipDrop.node = this.data.edgeID.slice(-1);
 			this.shipDrop.rank = apiData.api_win_rank;
+			this.shipDrop.cleared = this.data.cleared;
 			// Enemy comp name only existed in result API data
-			if(this.enemyComp.enemies && !this.enemyComp.enemies.isAirRaid) {
-				this.enemyComp.enemies.mapName = apiData.api_quest_name;
-				this.enemyComp.enemies.compName = apiData.api_enemy_info.api_deck_name;
-				this.shipDrop.enemyComp = this.enemyComp.enemies;
+			if(this.enemyComp.enemyComp && !this.enemyComp.enemyComp.isAirRaid) {
+				this.enemyComp.enemyComp.mapName = apiData.api_quest_name;
+				this.enemyComp.enemyComp.compName = apiData.api_enemy_info.api_deck_name;
+				this.shipDrop.enemyComp = this.enemyComp.enemyComp;
 			}
 			this.shipDrop.hqLvl = this.data.hqLvl;
 			this.shipDrop.difficulty = this.data.difficulty;
@@ -240,6 +259,75 @@
 				const baseFormId = RemodelDb.originOf(this.shipDrop.ship);
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
 			}
+		},
+
+		processAACI: function(http) {
+			const apiData = http.response.api_data;
+			this.aaci = {};
+
+			const sortiedFleet = Number(apiData.api_deck_id);
+			const fleetType = PlayerManager.combinedFleet;
+
+			if(fleetType > 0 && sortiedFleet === 1) {
+				// Ignore combined fleets (for now)
+				return;
+			}
+
+			if(!apiData.api_kouku || !apiData.api_kouku.api_stage2 || !apiData.api_kouku.api_stage2.api_e_count) {
+				// No enemy planes in phase 2, no AACI possible
+				return;
+			}
+
+			const fleet = PlayerManager.fleets[sortiedFleet - 1];
+
+			const possibleAACIs = fleet.ship().map((ship) => !ship.didFlee && AntiAir.shipPossibleAACIs(ship).map((id) => Number(id)));
+			// console.log("possible AACI", possibleAACIs);
+			const aaciCount = possibleAACIs.filter((arr) => arr.length).length;
+
+			if(aaciCount > 1) {
+				// Don't log multiple AACI ships
+				return;
+			}
+
+			this.aaci.shipPosition = possibleAACIs.findIndex((arr) => arr.length);
+
+			const apiAir = apiData.api_kouku.api_stage2.api_air_fire;
+			if(apiAir) {
+				// Triggered
+				const idx = apiAir.api_idx;
+				this.aaci.triggeredAACI = apiAir.api_kind;
+
+				if(idx != this.aaci.shipPosition) {
+					console.warn(`[TsunDB AACI] Wrong ship position ${idx}, expected ${this.aaci.shipPosition}! Unknown AACI?`);
+					this.aaci.shipPosition = idx;
+				}
+			} else {
+				// Not triggered
+				this.aaci.triggeredAACI = -1; 
+			}
+
+			if(aaciCount == 0 && this.aaci.triggeredAACI < 0) {
+				// Keep logging when none expected but one triggered
+				return;
+			}
+
+			this.aaci.shipPossibleAACI = possibleAACIs[this.aaci.shipPosition];
+			this.aaci.badAACI = this.aaci.triggeredAACI != -1 && !this.aaci.shipPossibleAACI.includes(this.aaci.triggeredAACI);
+
+			const triggeredShip = fleet.ship()[this.aaci.shipPosition];
+			this.aaci.ship = {
+				id: triggeredShip.master().api_id,
+				lvl: triggeredShip.level,
+				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
+				aa: triggeredShip.nakedStats("aa"),
+				luck: triggeredShip.nakedStats("lk")
+			};
+
+			this.aaci.equips = [...triggeredShip.equipment(false).map((equip) => equip.masterId || -1), triggeredShip.exItem().masterId || -1];
+			this.aaci.improvements = [...triggeredShip.equipment(false).map((equip) => equip.stars || -1), triggeredShip.exItem().stars || -1];
+			this.aaci.kc3version = chrome.runtime.getManifest().version + ('update_url' in chrome.runtime.getManifest() ? "" : "d");
+			// console.log(this.aaci);
+			this.sendData(this.aaci, 'aaci');
 		},
 		
 		handleFleet: function(fleet) {
@@ -295,7 +383,10 @@
 				// `null` is returned if no handler is found
 				var handler = this.handlers[requestObj.call];
 				if (handler) {
-					handler.call(this, requestObj);
+					if(Array.isArray(handler))
+						handler.forEach((func) => func.call(this, requestObj));
+					else
+						handler.call(this, requestObj);
 				}
 			} catch (e) {
 				console.warn("TsunDB submission error", e);
@@ -325,7 +416,7 @@
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json',
-					'tsun-ver': 'Michishio'
+					'tsun-ver': 'Michishio Kai'
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {
