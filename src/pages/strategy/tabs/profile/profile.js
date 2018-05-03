@@ -184,7 +184,11 @@
 					alert("Invalid KC3 File. Might have been edited, or from an old KC3 version.");
 					return;
 				}
-				if( ! confirm("Are you sure to overwrite current profile data?")) {
+				if(PlayerManager.hq.id && importedData.player.id !== PlayerManager.hq.id &&
+					! confirm("You are going to import a profile from different player, are you sure?")) {
+					return;
+				}
+				if( ! confirm("Are you sure to overwrite all your current profile data?")) {
 					return;
 				}
 				for(const key in importedData) {
