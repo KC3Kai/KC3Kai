@@ -136,7 +136,7 @@
 			const apiData = http.response.api_data;
 			
 			this.celldata.map = this.data.map;
-			this.celldata.data = apiData.api_cell_data;4
+			this.celldata.data = apiData.api_cell_data;
 			
 			//this.sendData(this.celldata, '???');
 		},
@@ -147,16 +147,11 @@
 			this.data.sortiedFleet = Number(http.params.api_deck_id);
 			this.data.fleetType = PlayerManager.combinedFleet;
 
-			// Sets the map ID
+			// Sets the map value
 			const world = Number(apiData.api_maparea_id);
 			const map = Number(apiData.api_mapinfo_no);
 			this.currentMap = [world, map];
-			const mapId = this.currentMap.join('');
-			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
 			this.data.map = this.currentMap.join('-');
-			
-			// Sets whether the map is cleared or not
-			this.data.cleared = mapData.api_cleared;
 			
 			this.processCellData(http);
 			this.processNext(http);
@@ -175,6 +170,13 @@
 			
 			// Sets player's HQ level
 			this.data.hqLvl = PlayerManager.hq.level;
+			
+			// Sets the map id
+			const mapId = this.currentMap.join('');
+			const mapData = this.mapInfo.find(i => i.api_id == mapId) || {};
+			
+			// Sets whether the map is cleared or not
+			this.data.cleared = mapData.api_cleared;
 			
 			// Charts the route array using edge ids as values
 			this.data.edgeID.push(apiData.api_no);
