@@ -1992,8 +1992,7 @@ KC3改 Ship Object
 		const isSubmarine = targetShip && this.isSubmarine(targetShip.api_stype);
 		// regular surface vessel by default
 		const isSurface = !isLand && !isSubmarine;
-		const name = targetShip.api_name;
-		const isPTImp = (typeof name != 'undefined' ? name : [] ).includes("PT");
+		const isPTImp = [1637,1638,1639,1640].includes(targetShipMasterId);
 		return {
 			isSubmarine,
 			isLand,
