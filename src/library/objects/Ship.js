@@ -2206,7 +2206,9 @@ KC3改 Ship Object
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(this.isDummy()) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level - 1);
-		// formula from PSVita is sqrt(1.5 * lk) anyway
+		// formula from PSVita is sqrt(1.5 * lk) anyway,
+		// but verifications have proved this one gets more accurate
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
 		const byEquip = -this.nakedStats("ac");
 		const byImprove = this.equipment(true)
