@@ -1270,6 +1270,7 @@ KC3改 Ship Object
 	 * Calculate landing craft precap/postcap bonus depending on installation type
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 * @return {number} multiplier of landing craft, unfloored for calculations
 	 */
 	KC3Ship.prototype.calcLandingBonus = function(installationType=0){
 		if(this.isDummy() || ![2,3,4].includes(installationType)) { return 0; }
@@ -1277,15 +1278,28 @@ KC3改 Ship Object
 		const t2Count = this.countEquipment(167); // Special Type 2 Amphibious Tank
 		const t89Count = this.countEquipment(166); // Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		const normalCount = this.countEquipment(68); // Daihatsu Landing Craft
-		/* const shikonCount = this.countEquipment(); //Toku Daihatsu Landing Craft + 11th Tank Regiment
-		(removed for now until more info) 
-		Also, toku bonus missing */
+		const shikonCount = this.countEquipment(230); // Toku Daihatsu Landing Craft + 11th Tank Regiment
+		// Currently Toku Daihatsu bonus unknown
+
 		const landingModifiers = KC3GearManager.landingModifiers[installationType-2] || {};
-		const gearArr = [167,166,68];
+		const gearArr = [167,166,68,230];
 		const shipObj = this;
 
+		let tankBonus = 1;
+		let landingBonus = [1];
+		let landingImprovementBonus = [0];
+		
+		/**
+		 * Highest landing craft modifier is selected
+		 * (Speculative) Then, highest landing craft improvement modifier is selected
+		 * If two or more of the same equipment present, take average improvement level
+		 * 
+		 * Then, multiply total landing modifier with tank modifier
+		 * There are some enemies with recorded modifiers for two or more of same equipment, those will take priority
+		 */
+
 		// Arrange equipment in terms of priority
-		const landingArray = [t2Count,t89Count,normalCount].map(function(element,idx){
+		const landingArray = [t2Count,t89Count,normalCount,shikonCount].forEach(function(element,idx){
 			let improvement = 0;
 			shipObj.equipment().forEach((gear, idx) => {
 				if(gear.exists())  {
@@ -1294,33 +1308,41 @@ KC3改 Ship Object
 					}
 				}
 			});
+			// Two (or more) Type 2 Tank bonus (Currently only for Supply Depot and Pillbox)
+			if (element > 1 && idx === 0 && [2,5].includes(installationType)){
+				tankBonus = installationType === 2 ? 3.2 : 2.5;
+				tankBonus *= (1 + improvement / element / 30);
+			}
+
+			// Type 2 Tank bonus
+			else if (element > 0 && idx === 0){
+				tankBonus = landingModifiers.modifier[idx] + landingModifiers.improvement[idx] * improvement / element;
+			}
 			
-			// Bonus for two Type 89 Tank
-			if (element > 1 && idx === 1){
-				return installationType === 4 ? 2.08+0.0416*improvement/element
-				 : 3 + 0.06*improvement/element;
+			// Bonus for two Type 89 Tank (Pillbox, Supply Depot and Isolated Island)
+			else if (element > 1 && idx === 1 && [2,3,5].includes(installationType)){
+				landingBonus.push(installationType === 5 ? 2.08 : 3 );
+				landingImprovementBonus.push((installationType === 5 ? 0.0416 : 0.06) * improvement / element);
 			}
 
-			// Match modifier and improvement
+			// Otherwise, match modifier and improvement
 			else if (element > 0){
-				return landingModifiers.modifier[idx]+landingModifiers.improvement[idx]*improvement/element;
+				landingBonus.push(landingModifiers.modifier[idx]);
+				landingImprovementBonus.push(landingModifiers.improvement[idx] * improvement / element);
 			}
-
-			// Default to 1x if no matching equip
-			else { return 1; }
 		});
 
-		// T89/normal bonus overlap, so take highest and multiply
-		return landingArray[0]*(landingArray[1] > landingArray[2] ? landingArray[1] : landingArray[2]);
+		// Multiply modifiers
+		return tankBonus * (Math.max(...landingBonus) + Math.max(...landingImprovementBonus));
 	};
 
 	/**
-	 * Get anti land installation modifiers of this ship.
+	 * Get anti land installation multiplier of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
-	 * @see calcLandingBonus
+	 * @see estimateLandingAttackType
 	 * @see getInstallationEnemyType
-	 * @return array of [additive damage boost, multiplicative damage boost]
+	 * @return {Array} of [additive damage boost, multiplicative damage boost]
  	 * Two types of bonuses exist, precap and postcap
  	 */
 	KC3Ship.prototype.antiLandWarfarePower = function(targetShipMasterId = 0, precap = true){
@@ -1338,7 +1360,8 @@ KC3改 Ship Object
 		Type 1 : Soft-skinned
 		Type 2: Artillery Imps/Pillbox
 		Type 3: Isolated Island Princess
-		Type 4: Supply Depot Princess (NEET Hime), postcap
+		Type 4: Harbour Summer Princess Damaged Form
+		Type 5: Supply Depot Princess (NEET Hime), postcap
 		*/
 		
 		if (precap){
@@ -1356,37 +1379,47 @@ KC3改 Ship Object
 					const seaplaneBonus = this.hasEquipmentType(2,[10,11,39]) ? 1.5 : 1; // Works even if slot is zeroed.
 					const lightShipBonus = [2,3].includes(this.master().api_stype) ? 1.4 : 1; // DD/CL bonus
 					wg42Bonus = [1,1.6,2.72].find(function(element,index){ // Multiplicative WG42 bonus
-						if (index === wg42Count) {return element;}
-						else if (wg42Count > 2) {return 2.72;}
+						if (index === wg42Count) { return element; }
+						else if (wg42Count > 2) { return 2.72; }
 					});
 					const apShellBonus = this.hasEquipmentType(2,19) ? 1.85 : 1;
 					
 					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
-					return [wg42Additive,seaplaneBonus*lightShipBonus*wg42Bonus*apShellBonus*landingBonus];
+					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
+						* apShellBonus * landingBonus];
 				
 				case 3: 
 					// Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1,1.4,2.1].find(function(element,index){
-						if (index === wg42Count) {return element;}
-						else if (wg42Count > 2) {return 2.1;}
+						if (index === wg42Count) { return element; }
+						else if (wg42Count > 2) { return 2.1; }
 					});
 					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
-					return [wg42Additive,wg42Bonus*t3Bonus*landingBonus];
-			
+					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+
+				case 4:
+					// Harbour Summer Princess Damaged Form
+					wg42Bonus = [1,1.4,2.1].find(function(element,index){ // Multiplicative WG42 bonus
+						if (index === wg42Count) { return element; }
+						else if (wg42Count > 2) { return 2.1; }
+					});
+					t3Bonus = hasT3Shell ? 1.8 : 1;
+					// Missing: AP Shell modifier, SPB/SPF modifier
+					return [0, wg42Bonus * t3Bonus * landingBonus];					
 				default: return [0,1];
 			}
 		}
 		else { 
 			// Post-cap
 			switch(installationType){
-				case 4: 
+				case 5: 
 					// Supply Depot Princess
 					wg42Bonus = [1,1.25,1.625].find(function(element,index){
 						if (index === wg42Count) return element;
 						else if (wg42Count > 2) return 1.625;
 						});
-					return [0,landingBonus*wg42Bonus];
+					return [0,landingBonus * wg42Bonus];
 		
 				default: return [0,1];
 			}
@@ -1552,7 +1585,7 @@ KC3改 Ship Object
 			landingModifier = landingBonus[1];
 		}
 		
-		// Apply modifiers, flooring unknown, anti-installation first
+		// Apply modifiers, flooring unknown
 		let result = (basicPower * landingModifier + landingAdditive) * engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
@@ -1950,7 +1983,7 @@ KC3改 Ship Object
 
 	/**
 	 * @return {Object} target (enemy) ship category flags defined by us, possible values are:
-	 *         `isSurface`, `isSubmarine`, `isLand`, `isPTImp.
+	 *         `isSurface`, `isSubmarine`, `isLand`.
 	 */
 	KC3Ship.prototype.estimateTargetShipType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
@@ -1959,7 +1992,8 @@ KC3改 Ship Object
 		const isSubmarine = targetShip && this.isSubmarine(targetShip.api_stype);
 		// regular surface vessel by default
 		const isSurface = !isLand && !isSubmarine;
-		const isPTImp = targetShip.api_name.includes("PT");
+		const name = targetShip.api_name;
+		const isPTImp = (typeof name != 'undefined' ? name : [] ).includes("PT");
 		return {
 			isSubmarine,
 			isLand,
@@ -2052,13 +2086,14 @@ KC3改 Ship Object
 		Type 1 : Soft-skinned
 		Type 2: Artillery Imps/Pillbox
 		Type 3: Isolated Island Princess
-		Type 4: Supply Depot Princess (NEET Hime), postcap
+		Type 4: Harbour Summer Princess Damaged Form
+		Type 5: Supply Depot Princess (NEET Hime), postcap
 		*/
 		
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)){ 
 			// Supply Princess unique case, takes soft-skinned pre-cap but unique post-cap
-				return precap ? 1 : 4;
+				return precap ? 1 : 5;
 		}
 		// Pillbox	
 		else if([1665, 1666, 1667].includes(targetShipMasterId)){ 
@@ -2068,6 +2103,11 @@ KC3改 Ship Object
 		// Isolated Island Princess
 		else if([1668, 1669, 1670, 1671, 1672].includes(targetShipMasterId)){ 
 				return 3;
+		}
+
+		// Harbour Summer Princess Damaged Form
+		else if ([1702, 1703, 1704].includes(targetShipMasterId)){
+			return 4;
 		}
 
 		else { return 1; }
