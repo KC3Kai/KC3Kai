@@ -1272,8 +1272,8 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @return {number} multiplier of landing craft, unfloored for calculations
 	 */
-	KC3Ship.prototype.calcLandingBonus = function(installationType=0){
-		if(this.isDummy() || ![2,3,4].includes(installationType)) { return 0; }
+	KC3Ship.prototype.calcLandingBonus = function(installationType = 0){
+		if(this.isDummy() || ![2,3,4,5].includes(installationType)) { return 0; }
 
 		const t2Count = this.countEquipment(167); // Special Type 2 Amphibious Tank
 		const t89Count = this.countEquipment(166); // Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
@@ -1299,34 +1299,34 @@ KC3改 Ship Object
 		 */
 
 		// Arrange equipment in terms of priority
-		const landingArray = [t2Count,t89Count,normalCount,shikonCount].forEach(function(element,idx){
+		[t2Count,t89Count,normalCount,shikonCount].forEach(function(element,idx){
 			let improvement = 0;
 			shipObj.equipment().forEach((gear, idx) => {
 				if(gear.exists())  {
-					if (gearArr[idx] === gear.masterId){
+					if(gearArr[idx] === gear.masterId){
 						improvement += gear.stars;
 					}
 				}
 			});
 			// Two (or more) Type 2 Tank bonus (Currently only for Supply Depot and Pillbox)
-			if (element > 1 && idx === 0 && [2,5].includes(installationType)){
+			if(element > 1 && idx === 0 && [2,5].includes(installationType)){
 				tankBonus = installationType === 2 ? 3.2 : 2.5;
 				tankBonus *= (1 + improvement / element / 30);
 			}
 
 			// Type 2 Tank bonus
-			else if (element > 0 && idx === 0){
+			else if(element > 0 && idx === 0){
 				tankBonus = landingModifiers.modifier[idx] + landingModifiers.improvement[idx] * improvement / element;
 			}
 			
 			// Bonus for two Type 89 Tank (Pillbox, Supply Depot and Isolated Island)
-			else if (element > 1 && idx === 1 && [2,3,5].includes(installationType)){
+			else if(element > 1 && idx === 1 && [2,3,5].includes(installationType)){
 				landingBonus.push(installationType === 5 ? 2.08 : 3 );
 				landingImprovementBonus.push((installationType === 5 ? 0.0416 : 0.06) * improvement / element);
 			}
 
 			// Otherwise, match modifier and improvement
-			else if (element > 0){
+			else if(element > 0){
 				landingBonus.push(landingModifiers.modifier[idx]);
 				landingImprovementBonus.push(landingModifiers.improvement[idx] * improvement / element);
 			}
@@ -1347,7 +1347,7 @@ KC3改 Ship Object
  	 */
 	KC3Ship.prototype.antiLandWarfarePower = function(targetShipMasterId = 0, precap = true){
 		if(this.isDummy()) { return [0,1]; }
-		if (this.estimateTargetShipType(targetShipMasterId).isLand === false) {return [0,1];} 
+		if(this.estimateTargetShipType(targetShipMasterId).isLand === false) { return [0,1]; } 
 
 		const installationType = this.getInstallationEnemyType(targetShipMasterId,precap);
 		const wg42Count = this.countEquipment(126); 
@@ -1364,9 +1364,9 @@ KC3改 Ship Object
 		Type 5: Supply Depot Princess (NEET Hime), postcap
 		*/
 		
-		if (precap){
+		if(precap){
 			// [0,70,110,140,160] additive for each WG42,
-			const wg42Additive = wg42Count === 0 ? 0 : 20 + 55*wg42Count - 5*Math.pow(wg42Count,2);
+			const wg42Additive = wg42Count === 0 ? 0 : 20 + 55 * wg42Count - 5 * Math.pow(wg42Count,2);
 			
 			switch(installationType){
 				case 1: 
@@ -1384,7 +1384,7 @@ KC3改 Ship Object
 					});
 					const apShellBonus = this.hasEquipmentType(2,19) ? 1.85 : 1;
 					
-					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
+					// Set WG42 additive modifier, multiply multiplicative modifiers
 					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
 						* apShellBonus * landingBonus];
 				
@@ -1395,7 +1395,7 @@ KC3改 Ship Object
 						if (index === wg42Count) { return element; }
 						else if (wg42Count > 2) { return 2.1; }
 					});
-					// [0,70,110,140,160] addition for each WG42, multiply multiplicative modifiers
+					// Set WG42 additive modifier, multiply multiplicative modifiers
 					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
 
 				case 4:
@@ -1405,7 +1405,9 @@ KC3改 Ship Object
 						else if (wg42Count > 2) { return 2.1; }
 					});
 					t3Bonus = hasT3Shell ? 1.8 : 1;
+
 					// Missing: AP Shell modifier, SPB/SPF modifier
+					// No additive WG42 bonus
 					return [0, wg42Bonus * t3Bonus * landingBonus];					
 				default: return [0,1];
 			}
@@ -1585,7 +1587,7 @@ KC3改 Ship Object
 			landingModifier = landingBonus[1];
 		}
 		
-		// Apply modifiers, flooring unknown
+		// Apply modifiers, flooring unknown, multiply and add land modifiers first
 		let result = (basicPower * landingModifier + landingAdditive) * engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
