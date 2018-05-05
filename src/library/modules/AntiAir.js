@@ -534,10 +534,12 @@ AntiAir: anti-air related calculations
 	// All non-sub surface ships
 	// according KC vita codes, no ship type is used in predictions, (only ctype for Akizuki kinds, id for Maya K2 kinds)
 	// might be able to trigger as long as ship can equip corresponding equipment.
+	// but kind 5,7,8,9 (contains HA mount) seems never trigger on Akizuki-class,
+	// reason might be: https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
 	declareAACI(
 		5, 4, 1.5,
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast(isBuiltinHighAngleMount, 2),
@@ -548,7 +550,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		8, 4, 1.4,
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBuiltinHighAngleMount ),
@@ -559,7 +561,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		7, 3, 1.35,
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -571,7 +573,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		9, 2, 1.3,
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(1)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),

@@ -1038,7 +1038,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Master ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentById = function(masterId, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1050,7 +1050,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Type ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentByType = function(typeIndex, typeValue, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1723,7 +1723,7 @@ KC3改 Ship Object
 	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
-		if (this.isOaswShip()) return true;
+		if(this.isOaswShip()) { return true; }
 		const stype = this.master().api_stype,
 			ctype = this.master().api_ctype;
 
