@@ -373,7 +373,7 @@
 				steel: request.api_item3,
 				bauxite: request.api_item4
 			};
-			this.development.result = response.api_slot_item.api_slotitem_id || parseInt(response.api_fdata.split(',')[1]);
+			this.development.result = response.api_create_flag ? response.api_slot_item.api_slotitem_id : parseInt(response.api_fdata.split(',')[1]);
 			this.development.success = response.api_create_flag;
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
