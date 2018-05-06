@@ -2124,7 +2124,7 @@ KC3改 Ship Object
 	 * Special attacks are not taken into consideration
 	 */
 	KC3Ship.prototype.shipPossibleLandingDamage = function(){
-		if(this.isDummy()) { return {}; }
+		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
 		const hasWG42 = this.hasEquipment(126);
 		const hasT3Shell = this.hasEquipment(35);
@@ -2143,7 +2143,7 @@ KC3改 Ship Object
 			possibleTypes = [2,3,4,5];
 		}
 		// Return empty if no anti-installation found
-		else { return {}; }
+		else { return []; }
 
 		const dummyEnemyList = [1573,1665,1668,1702,1653];
 		const basicPower = this.shellingFirePower();
@@ -2161,7 +2161,6 @@ KC3改 Ship Object
 			({power} = shipObj.applyPostcapModifiers(power, "Shelling",
 			[], 0, false, false, 0, false, dummyEnemy));
 			
-
 			landingObj.enemy = dummyEnemy;
 			landingObj.dayPower = Math.floor(power);
 
