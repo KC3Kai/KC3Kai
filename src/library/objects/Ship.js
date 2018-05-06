@@ -2113,6 +2113,69 @@ KC3改 Ship Object
 
 		else { return 1; }
 	};
+		/**
+	 * Get anti-installation power against all possible types of installations
+	 * Choose types based on current equip
+	 * @see getInstallationEnemyType for kc3-unique types
+	 * @return {array} with element {Object} that has three attributes
+	 * enemy: Enemy ID to get icon
+	 * dayPower: Day attack power of ship
+	 * nightPower: Night attack power of ship
+	 * Special attacks are not taken into consideration
+	 */
+	KC3Ship.prototype.shipPossibleLandingDamage = function(){
+		if(this.isDummy()) { return {}; }
+		let possibleTypes = [];
+		const hasWG42 = this.hasEquipment(126);
+		const hasT3Shell = this.hasEquipment(35);
+		const hasLandingCraft = this.hasEquipmentType(2,24) || this.hasEquipment(167);
+
+		// WG42 eligible for all or ship has both Daihatsu and T3 Shell
+		if (hasWG42 || (hasT3Shell && hasLandingCraft)){
+			possibleTypes = [1,2,3,4,5];
+		}
+		// T3 Shell eligible for all except Pillbox
+		else if(hasT3Shell){
+			possibleTypes = [1,3,4,5];
+		}
+		// Daihatsu/Tank bonus does not work on soft-skinned
+		else if (hasLandingCraft){
+			possibleTypes = [2,3,4,5];
+		}
+		// Return empty if no anti-installation found
+		else { return {}; }
+
+		const dummyEnemyList = [1573,1665,1668,1702,1653];
+		const basicPower = this.shellingFirePower();
+		const shipObj = this;
+		let landingList = [];
+
+		// Fill damage lists for each enemy type
+		possibleTypes.forEach(function(installationType){
+			const landingObj = {}
+			const dummyEnemy = dummyEnemyList[installationType-1];
+			let { power } = shipObj.applyPrecapModifiers(basicPower, "Shelling",
+			1, ConfigManager.aaFormation, [], false, false, dummyEnemy);
+			({power} = shipObj.applyPowerCap(power, "Day", "Shelling"));
+			({power} = shipObj.applyPostcapModifiers(power, "Shelling",
+			[], 0, false, false, 0, false, dummyEnemy));
+			
+
+			landingObj.enemy = dummyEnemy;
+			landingObj.dayPower = Math.floor(power);
+
+			({ power } = shipObj.applyPrecapModifiers(basicPower, "Shelling",
+			1, ConfigManager.aaFormation, [], false, false, dummyEnemy));
+			({power} = shipObj.applyPowerCap(power, "Night", "Shelling"));
+			({power} = shipObj.applyPostcapModifiers(power, "Shelling",
+			[], 0, false, false, 0, false, dummyEnemy));
+			landingObj.nightPower = Math.floor(power);
+
+			landingList.push(landingObj);
+		});
+		return landingList;
+	};
+
 
 	/**
 	 * Estimate day time attack type of this ship.
@@ -2800,6 +2863,8 @@ KC3改 Ship Object
 		const aswDiff = newEquipAsw - oldEquipAsw;
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
+		const antiLandDamage = this.shipPossibleLandingDamage();
+		isShow = isShow || antiLandDamage.length > 0 ;
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -2812,6 +2877,7 @@ KC3改 Ship Object
 			gunFit,
 			shipAacis,
 			oaswPower,
+			antiLandDamage,
 		};
 	};
 
