@@ -1038,7 +1038,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Master ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentById = function(masterId, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1050,7 +1050,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Type ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentByType = function(typeIndex, typeValue, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1718,12 +1718,12 @@ KC3改 Ship Object
 		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai
 		return [141, 478, 394, 681].includes(this.masterId);
 	};
-	// test to see if this ship (with equipment) is capable of opening ASW 
+	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
 	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
-		if (this.isOaswShip()) return true;
+		if(this.isOaswShip()) { return true; }
 		const stype = this.master().api_stype,
 			ctype = this.master().api_ctype;
 
@@ -2206,7 +2206,9 @@ KC3改 Ship Object
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(this.isDummy()) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level - 1);
-		// formula from PSVita is sqrt(1.5 * lk) anyway
+		// formula from PSVita is sqrt(1.5 * lk) anyway,
+		// but verifications have proved this one gets more accurate
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
 		const byEquip = -this.nakedStats("ac");
 		const byImprove = this.equipment(true)

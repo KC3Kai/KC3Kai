@@ -48,8 +48,8 @@
 			
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
 			
-			// Apply HTML language code
-			$("html").attr("lang", ConfigManager.language);
+			// Apply HTML language code, here needs ISO 639-1 abbr code
+			$("html").attr("lang", this.getLocale(ConfigManager.language));
 		},
 
 		/*
@@ -485,7 +485,7 @@
 		},
 		
 		/**
-		 * @return the IANA standard locale tag according our language code
+		 * @return the IANA standard (ISO-639) locale tag according our language code
 		 */
 		getLocale :function(languageCode = ConfigManager.language){
 			// Since some of our language codes are not standard such as JP, KR, SCN, TCN.

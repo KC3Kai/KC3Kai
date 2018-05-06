@@ -51,22 +51,25 @@
 						.appendTo(".export_method .desc");
 				}
 
-				var pb,i;
 				if (v === 'shiplist') {
 					mkText("Use data from the current ship list. Please note that ships that you had before but somehow scrapped, modfodded, or sunk in favor of more ship slots will not show up. If you want to show everything that you had so far, even in the past, use the Picture Book option.");
 				} else {
 					mkText("Use data from the in-game picture book / album / kandex / library. This will export ships you had even in the past which had been lost, probably in favor of more ship slots. This however, will require you to visit the MAIN pages on the IN-GAME picture book for us to collect data. You just need to visit the FIVE MAIN pages (not the sub-pages). Also, you DO NOT need to wait for all images to load.");
 
 					mkText("Status:");
-					pb = PictureBook.load();
-					for (i=1; i<=5; ++i) {
-						var t = "Vol." + i + ", ";
-						if (pb.ship && pb.ship[i]) {
-							t = t + "Last Update: " + new Date(pb.ship[i].timestamp);
-						} else {
-							t = t + "missing";
+					const pb = PictureBook.load();
+					if (pb.ship) {
+						for (const i in pb.ship) {
+							var t = "Vol." + i + ", ";
+							if (pb.ship[i] && Array.isArray(pb.ship[i].ids)) {
+								t = t + "Last Update: " + new Date(pb.ship[i].timestamp);
+							} else {
+								t = t + "missing";
+							}
+							mkText(t);
 						}
-						mkText(t);
+					} else {
+						mkText("Data missing");
 					}
 					mkText("Refresh this page to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
 				}
