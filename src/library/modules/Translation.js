@@ -37,7 +37,9 @@
 				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
 				
-				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
+				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft YaHei", "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
+
+				case "tcn-yue": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft YaHei", "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
 				
 				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
 				
@@ -98,7 +100,7 @@
 
 			// Japanese special case where ships and items sources are already in JP
 			if(
-				(["jp", "tcn"].indexOf(language) > -1)
+				(["jp", "tcn", "tcn-yue"].indexOf(language) > -1)
 				&& (["ships", "items", "useitems", "ship_affix"].indexOf(filename) > -1)
 			){
 				extendEnglish = false;
@@ -495,6 +497,7 @@
 				"kr": "ko",
 				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
 				"tcn": "zh-Hant", // might include TW, HK, MO
+				"tcn-yue": "zh-Hant", // might include TW, HK, MO
 				"ua": "UA", // must be upper case
 				"troll": "en"
 			}[languageCode.toLowerCase()] || languageCode;
