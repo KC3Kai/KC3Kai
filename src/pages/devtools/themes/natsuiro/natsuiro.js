@@ -4094,9 +4094,9 @@
 			}
 
 			// Show anti-installation modifier
-			if (data.antiLandDamage.length > 0 ) {
+			if (data.antiLandPower.length > 0 ) {
 				$(".activity_gunfit .landingList").empty();
-				$.each(data.antiLandDamage, function(idx, landingObj) {
+				$.each(data.antiLandPower, function(idx, landingObj) {
 					const landingBox = $("#factory .landingInfo").clone();
 					if(landingObj.enemy > 0) {
 						$(".shipIcon img", landingBox)

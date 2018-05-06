@@ -2113,7 +2113,7 @@ KC3改 Ship Object
 
 		else { return 1; }
 	};
-		/**
+	/**
 	 * Get anti-installation power against all possible types of installations
 	 * Choose types based on current equip
 	 * @see getInstallationEnemyType for kc3-unique types
@@ -2152,10 +2152,11 @@ KC3改 Ship Object
 
 		// Fill damage lists for each enemy type
 		possibleTypes.forEach(function(installationType){
-			const landingObj = {}
+			const landingObj = {};
 			const dummyEnemy = dummyEnemyList[installationType-1];
 			let { power } = shipObj.applyPrecapModifiers(basicPower, "Shelling",
 			1, ConfigManager.aaFormation, [], false, false, dummyEnemy);
+			const precap = power;
 			({power} = shipObj.applyPowerCap(power, "Day", "Shelling"));
 			({power} = shipObj.applyPostcapModifiers(power, "Shelling",
 			[], 0, false, false, 0, false, dummyEnemy));
@@ -2164,8 +2165,7 @@ KC3改 Ship Object
 			landingObj.enemy = dummyEnemy;
 			landingObj.dayPower = Math.floor(power);
 
-			({ power } = shipObj.applyPrecapModifiers(basicPower, "Shelling",
-			1, ConfigManager.aaFormation, [], false, false, dummyEnemy));
+			power = precap;
 			({power} = shipObj.applyPowerCap(power, "Night", "Shelling"));
 			({power} = shipObj.applyPostcapModifiers(power, "Shelling",
 			[], 0, false, false, 0, false, dummyEnemy));
@@ -2863,8 +2863,8 @@ KC3改 Ship Object
 		const aswDiff = newEquipAsw - oldEquipAsw;
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
-		const antiLandDamage = this.shipPossibleLandingDamage();
-		isShow = isShow || antiLandDamage.length > 0 ;
+		const antiLandPower = this.shipPossibleLandingDamage();
+		isShow = isShow || antiLandPower.length > 0 ;
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -2877,7 +2877,7 @@ KC3改 Ship Object
 			gunFit,
 			shipAacis,
 			oaswPower,
-			antiLandDamage,
+			antiLandPower,
 		};
 	};
 
