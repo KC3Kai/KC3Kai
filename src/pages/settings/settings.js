@@ -8,19 +8,14 @@
 		KC3Meta.init("../../data/");
 		KC3Translation.execute();
 		
-		// Set HTML language
-		$("html").attr("lang", ConfigManager.language);
-		
-		var sectionBox;
-		
 		// Add configurable settings
 		$.ajax({
 			dataType: 'json',
 			url: "../../data/settings.json",
 			success: function(response){
-				for(var sctr in response){
+				for(const sctr in response){
 					// Add section header
-					sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
+					const sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
 					$(".title", sectionBox).text( KC3Meta.term( response[sctr].section ) );
 					
 					// Learn more button
@@ -31,9 +26,10 @@
 					}
 					
 					// Add settings boxes under this section
-					for(var cctr in response[sctr].contents){
-						if ((parseInt(response[sctr].contents[cctr].hide) || 0) === 0) // hide "private/deprecated" settings
-						  new SettingsBox( response[sctr].contents[cctr] );
+					for(const cctr in response[sctr].contents){
+						// hide "private/deprecated" settings
+						if ((parseInt(response[sctr].contents[cctr].hide) || 0) === 0)
+							new SettingsBox( response[sctr].contents[cctr] );
 					}
 				}
 				$(".settings").tooltip();

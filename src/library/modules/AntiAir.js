@@ -896,8 +896,8 @@ AntiAir: anti-air related calculations
 	//   https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
 	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
 	// note: priority is different from trigger chance rate, since random number roll just done once,
-	//       lower priority AACI is still possible to be triggered if chance value is bigger.
-	//       on the opposite, both lower priority and smaller chance means never can be triggered.
+	//       lower priority AACI is still possible to be triggered if chance value is greater.
+	//       on the opposite, both lower priority and lesser chance means never be triggered.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
 	function sortedPossibleAaciList(aaciIds, sortCallback) {
