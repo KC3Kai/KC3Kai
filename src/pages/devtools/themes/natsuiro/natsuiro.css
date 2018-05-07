@@ -2014,6 +2014,48 @@ ABYSS FLEET
 .module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
 	background:#777;
 }
+.module.activity .activity_gunfit .landing {
+	width:176px;
+	height:82px;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .landing .landingInfo {
+	width:170px;
+	height:20px;
+	margin:0px 0px 1px 0px;
+	border-radius:6px;
+	font-size:12px;
+	color:#ccc;
+}
+.module.activity .activity_gunfit .landing .shipIcon {
+	width:18px;
+	height:20px;
+	margin:0px 1px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .landing .shipIcon img {
+	width:18px;
+	height:18px;
+	margin-top:-2px;
+	margin-left:-2px;
+}
+.module.activity .activity_gunfit .landing .dayPower {
+	width:60px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 2px;
+	float:left;
+}
+.module.activity .activity_gunfit .landing .nightPower {
+	width:60px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	padding:1px 1px;
+	float:left;
+}
 /*------- ACTIVITY: PvP Info -------*/
 .module.activity .activity_pvp {
 	padding: 5px 10px;
