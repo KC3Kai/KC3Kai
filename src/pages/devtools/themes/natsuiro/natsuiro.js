@@ -4092,29 +4092,33 @@
 			} else {
 				$(".activity_gunfit .aaci").hide();
 			}
-
-			// Show anti-installation modifier
-			if (data.antiLandPower.length > 0 ) {
+			
+			// Show anti-installation powers
+			if (data.antiLandPowers.length > 0 ) {
 				$(".activity_gunfit .landingList").empty();
-				$.each(data.antiLandPower, function(idx, landingObj) {
-					const landingBox = $("#factory .landingInfo").clone();
-					if(landingObj.enemy > 0) {
+				$.each(data.antiLandPowers, function(idx, info) {
+					if(info.enemy > 0) {
+						const landingBox = $("#factory .landingInfo").clone();
 						$(".shipIcon img", landingBox)
-							.attr("src", KC3Meta.shipIcon(landingObj.enemy) )
+							.attr("src", KC3Meta.abyssIcon(info.enemy))
+							.attr("alt", info.enemy)
+							.attr("title", KC3Meta.abyssShipName(info.enemy))
 							.lazyInitTooltip();
-					} else {
-						$(".shipIcon img", landingBox).hide();
+						$(".dayPower .value", landingBox).text(info.dayPower);
+						$(".nightPower .value", landingBox).text(info.nightPower);
+						const tooltip = "(... x{0} +{1}) x{2}".format(
+							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
+							info.modifiers.antiLandAdditive,
+							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3)
+						);
+						$(".modifiers", landingBox).attr("title", tooltip).lazyInitTooltip();
+						landingBox.appendTo(".activity_gunfit .landingList");
 					}
-					$(".dayPower", landingBox).text("Day:{0}".format(landingObj.dayPower));
-					$(".nightPower", landingBox).text("Night:{0}".format(landingObj.nightPower));
-					
-					landingBox.appendTo(".activity_gunfit .landingList");
 				});
 				$(".activity_gunfit .landing").show();
 			} else {
 				$(".activity_gunfit .landing").hide();
 			}
-			
 			
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
