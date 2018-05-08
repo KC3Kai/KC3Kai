@@ -5,24 +5,27 @@
 	$(document).on("ready", function(){
 		// Load previously stored configs
 		ConfigManager.load();
-		KC3Meta.init("../../data/");
+		KC3Meta.init("/data/");
 		KC3Translation.execute();
 		
 		// Add configurable settings
 		$.ajax({
 			dataType: 'json',
-			url: "../../data/settings.json",
+			url: "/data/settings.json",
 			success: function(response){
 				for(const sctr in response){
-					// Add section header
+					// Add linkable section header
 					const sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
-					$(".title", sectionBox).text( KC3Meta.term( response[sctr].section ) );
+					const anchorId = response[sctr].section.replace(/^Settings/, '').toLowerCase();
+					sectionBox.attr("id", anchorId);
+					$(".title a", sectionBox).text( KC3Meta.term( response[sctr].section ) )
+						.attr("href", "#" + anchorId );
 					
 					// Learn more button
-					if(response[sctr].help!==""){
-						$("a", sectionBox).attr("href", response[sctr].help );
+					if(response[sctr].help){
+						$("a.more", sectionBox).attr("href", response[sctr].help );
 					}else{
-						$("a", sectionBox).hide();
+						$("a.more", sectionBox).hide();
 					}
 					
 					// Add settings boxes under this section
@@ -32,7 +35,11 @@
 							new SettingsBox( response[sctr].contents[cctr] );
 					}
 				}
+				// Init jquery-ui tooltips
 				$(".settings").tooltip();
+				// Jump to specified section if necessary
+				if(document.location.hash)
+					document.location.replace(document.location.href);
 			}
 		});
 		

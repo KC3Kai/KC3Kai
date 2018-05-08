@@ -1423,8 +1423,8 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		if(precap) {
-			// [0, 70, 110, 140, 160] additive for each WG42,
-			const wg42Additive = wg42Count === 0 ? 0 : 20 + 55 * wg42Count - 5 * Math.pow(wg42Count, 2);
+			// [0, 70, 110, 140, 160] additive for each WG42
+			const wg42Additive = wg42Count > 0 ? 20 + 55 * wg42Count - 5 * Math.pow(wg42Count, 2) : 0;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
