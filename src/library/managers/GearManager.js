@@ -40,7 +40,7 @@ Saves and loads list to and from localStorage
 		jetBomberSteelCostRatioPerSlot: 0.2,
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
-		// Daihatsu landing craft anti-installation damage modifiers per types and improvements
+		// Daihatsu landing craft anti-installation power modifiers per types and improvements
 		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus]
 		landingCraftModifiers: {
 			// Artillery Imp
@@ -58,7 +58,7 @@ Saves and loads list to and from localStorage
 				modifier: [1.7,1.3,1,3.52],
 				improvement: [0.051,0.026,0,0],
 			},
-			// Summer Harbor Princess Damaged Form (no info on shikon 11th tank)
+			// Summer Harbor Princess Damaged Form (no info on Shikon 11th tank)
 			3: {
 				modifier: [2.8,3.7,1.8,1],
 				improvement: [0,0,0,0],

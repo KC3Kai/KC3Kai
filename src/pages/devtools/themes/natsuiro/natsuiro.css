@@ -1912,6 +1912,9 @@ ABYSS FLEET
 	overflow-x:hidden;
 	overflow-y:auto;
 }
+.module.activity .activity_gunfit .scrollable::-webkit-scrollbar {
+	width: 3px;
+}
 
 .module.activity .activity_gunfit .oasw {
 	height:36px;
@@ -1939,7 +1942,7 @@ ABYSS FLEET
 
 .module.activity .activity_gunfit .aaci {
 	width:176px;
-	height:82px;
+	height:auto;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	overflow-y:auto;
@@ -2024,7 +2027,7 @@ ABYSS FLEET
 
 .module.activity .activity_gunfit .landing {
 	width:176px;
-	height:105px;
+	height:auto;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	overflow-y:auto;
@@ -2037,6 +2040,7 @@ ABYSS FLEET
 	border-radius:6px;
 	font-size:12px;
 	color:#ccc;
+	background:rgba(255,54,54,0.2);
 }
 .module.activity .activity_gunfit .landing .shipIcon {
 	width:18px;
@@ -2055,6 +2059,8 @@ ABYSS FLEET
 	height:20px;
 	margin:0px 2px 0px 0px;
 	float:left;
+	white-space:nowrap;
+	overflow:visible;
 }
 .module.activity .activity_gunfit .landing .power img {
 	width:15px;
