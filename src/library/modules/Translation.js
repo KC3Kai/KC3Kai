@@ -497,7 +497,7 @@
 				"kr": "ko",
 				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
 				"tcn": "zh-Hant", // might include TW, HK, MO
-				"tcn-yue": "zh-Hant", // might include TW, HK, MO
+				"tcn-yue": "zh-yue-Hant", // might include HK, MO
 				"ua": "UA", // must be upper case
 				"troll": "en"
 			}[languageCode.toLowerCase()] || languageCode;
