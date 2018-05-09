@@ -4055,7 +4055,7 @@
 					$(".apiId", aaciBox).text(aaciObj.id);
 					if(aaciObj.icons[0] > 0) {
 						$(".shipIcon img", aaciBox)
-							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0]) )
+							.attr("src", KC3Meta.shipIcon(aaciObj.icons[0], undefined, false) )
 							.attr("title", KC3Meta.aacitype(aaciObj.id)[0] || "")
 							.lazyInitTooltip();
 					} else {
@@ -4091,6 +4091,34 @@
 				$(".activity_gunfit .aaci").show();
 			} else {
 				$(".activity_gunfit .aaci").hide();
+			}
+			
+			// Show anti-installation powers
+			if (data.antiLandPowers.length > 0 ) {
+				$(".activity_gunfit .landingList").empty();
+				$.each(data.antiLandPowers, function(idx, info) {
+					if(info.enemy > 0) {
+						const enemyBox = $("#factory .landingInfo").clone()
+							.appendTo(".activity_gunfit .landingList");
+						$(".shipIcon img", enemyBox)
+							.attr("src", KC3Meta.abyssIcon(info.enemy))
+							.attr("alt", info.enemy)
+							.attr("title", KC3Meta.abyssShipName(info.enemy))
+							.lazyInitTooltip();
+						$(".dayPower .value", enemyBox).text(info.dayPower);
+						$(".nightPower .value", enemyBox).text(info.nightPower);
+						// might add more texts to explain capping and battle conditions
+						const tooltip = "(... x{0} +{1}) x{2}".format(
+							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
+							info.modifiers.antiLandAdditive,
+							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3)
+						);
+						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
+					}
+				});
+				$(".activity_gunfit .landing").show();
+			} else {
+				$(".activity_gunfit .landing").hide();
 			}
 			
 			$(".module.activity .activity_tab").removeClass("active");
