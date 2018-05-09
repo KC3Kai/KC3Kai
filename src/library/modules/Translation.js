@@ -495,7 +495,7 @@
 				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
 				"tcn": "zh-Hant", // might include TW, HK, MO
 				"tcn-yue": "zh-Hant-HK", // Cantonese dialect for HK, MO
-				"ua": "UA", // must be upper case
+				"ua": "uk",
 				"troll": "en"
 			}[languageCode.toLowerCase()] || languageCode;
 		}
