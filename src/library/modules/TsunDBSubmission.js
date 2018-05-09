@@ -346,7 +346,7 @@
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
 				aa: triggeredShip.nakedStats("aa"),
-				luck: triggeredShip.nakedStats("lk")
+				luck: triggeredShip.lk[0]
 			};
 
 			this.aaci.equips = [...triggeredShip.equipment(false).map((equip) => equip.masterId || -1), triggeredShip.exItem().masterId || -1];
