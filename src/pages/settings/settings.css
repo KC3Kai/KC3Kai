@@ -74,17 +74,18 @@ body {
 	height:24px;
 	float:left;
 	font-size:20px;
-	/*font-weight:bold;*/
 	line-height:24px;
 	margin:0px 10px 0px 0px;
 	color:#0099FF;
 }
 .section a {
+	text-decoration:none;
+}
+.section a.more {
 	width:170px;
 	height:24px;
 	float:right;
 	margin:0px 10px 0px 0px;
-	text-decoration:none;
 	text-align:right;
 }
 .section .icon {

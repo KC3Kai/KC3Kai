@@ -1038,7 +1038,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Master ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentById = function(masterId, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1050,7 +1050,7 @@ KC3改 Ship Object
 	/**
 	 * Simple method to find equipment by Type ID from current ship's equipment.
 	 * @return the mapped Array to indicate equipment found or not at corresponding position,
-	 *         max 5-elements including ex-slot.
+	 *         max 6-elements including ex-slot.
 	 */
 	KC3Ship.prototype.findEquipmentByType = function(typeIndex, typeValue, isExslotIncluded = true) {
 		return this.equipment(isExslotIncluded).map(gear =>
@@ -1267,13 +1267,204 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get pre-cap anti land installation power of this ship.
+	 * Get anti-installation power against all possible types of installations.
+	 * Will choose meaningful installation types based on current equipment.
+	 * Special attacks and battle conditions are not taken into consideration.
+	 * @return {array} with element {Object} that has attributes:
+	 *  * enemy: Enemy ID to get icon
+	 *  * dayPower: Day attack power of ship
+	 *  * nightPower: Night attack power of ship
+	 *  * modifiers: Known anti-installation modifiers
+	 * @see estimateInstallationEnemyType for kc3-unique installation types
+	 */
+	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
+		if(this.isDummy()) { return []; }
+		let possibleTypes = [];
+		const hasWG42 = this.hasEquipment(126);
+		const hasT3Shell = this.hasEquipment(35);
+		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
+		// WG42 eligible for all or ship has both Daihatsu and T3 Shell
+		if (hasWG42 || (hasT3Shell && hasLandingCraft)){
+			possibleTypes = [1, 2, 3, 4, 5];
+		}
+		// T3 Shell eligible for all except Pillbox
+		else if(hasT3Shell){
+			possibleTypes = [1, 3, 4, 5];
+		}
+		// Daihatsu/Tank bonus does not work on soft-skinned
+		else if (hasLandingCraft){
+			possibleTypes = [2, 3, 4, 5];
+		}
+		// Return empty if no anti-installation weapon found
+		else {
+			return [];
+		}
+		// Dummy target enemy IDs, also used for abyssal icons
+		// 1753: Harbor Princess, 1665: Artillery Imp, 1668: Isolated Island Princess
+		// 1653: Supply Depot Princess, 1702: Summer Harbor Princess - Damaged
+		const dummyEnemyList = [1573, 1665, 1668, 1653, 1702];
+		const basicPower = this.shellingFirePower();
+		const resultList = [];
+		// Fill damage lists for each enemy type
+		possibleTypes.forEach(installationType => {
+			const obj = {};
+			const dummyEnemy = dummyEnemyList[installationType - 1];
+			// Modifiers from special attacks, battle conditions are not counted for now
+			const fixedPreConds = ["Shelling", 1, undefined, [], false, false, dummyEnemy],
+				fixedPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
+			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedPreConds);
+			let {power} = this.applyPowerCap(precap, "Day", "Shelling");
+			const postcapInfo = this.applyPostcapModifiers(power, ...fixedPostConds);
+			power = postcapInfo.power;
+			
+			obj.enemy = dummyEnemy;
+			obj.modifiers = {
+				antiLandModifier,
+				antiLandAdditive,
+				postCapAntiLandModifier: postcapInfo.antiLandModifier
+			};
+			obj.dayPower = Math.floor(power);
+			
+			// Still use day time pre-cap shelling power, without TP value.
+			// Power constant +5 included, if assumes night contact is triggered.
+			power = precap;
+			({power} = this.applyPowerCap(power, "Night", "Shelling"));
+			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			obj.nightPower = Math.floor(power);
+			
+			resultList.push(obj);
+		});
+		return resultList;
+	};
+
+	/**
+	 * Calculate landing craft pre-cap/post-cap bonus depending on installation type.
+	 * @param installationType - kc3-unique installation types
+	 * @return {number} multiplier of landing craft
+	 * @see estimateInstallationEnemyType
+	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 */
+	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
+		if(this.isDummy() || ![2, 3, 4, 5].includes(installationType)) { return 0; }
+		// 4 types of Daihatsu Landing Craft with known bonus:
+		//  * 167: Special Type 2 Amphibious Tank
+		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
+		//  * 68 : Daihatsu Landing Craft
+		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
+		// Currently Toku Daihatsu bonus unknown
+		const landingCraftIds = [167, 166, 68, 230];
+		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
+		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 2] || {};
+		const getModifier = (type, forImp = false) => (
+			(landingModifiers[forImp ? "improvement" : "modifier"] || [])[type] || (forImp ? 0 : 1)
+		);
+		let tankBonus = 1;
+		const landingBonus = [1], landingImprovementBonus = [0];
+		
+		/**
+		 * Highest landing craft modifier is selected
+		 * (Speculative) Then, highest landing craft improvement modifier is selected
+		 * If two or more of the same equipment present, take average improvement level
+		 *
+		 * Then, multiply total landing modifier with tank modifier
+		 * There are some enemies with recorded modifiers for two or more of same equipment,
+		 * those will take priority
+		 */
+		
+		// Arrange equipment in terms of priority
+		landingCraftCounts.forEach((count, type) => {
+			let improvement = 0;
+			this.equipment().forEach((g, i) => {
+				if(g.exists() && g.masterId === landingCraftIds[type]) {
+					improvement += g.stars;
+				}
+			});
+			// Two (or more) Type 2 Tank bonus (Currently only for Supply Depot and Pillbox)
+			if(count > 1 && type === 0 && [2, 4].includes(installationType)) {
+				tankBonus = installationType === 2 ? 3.2 : 2.5;
+				tankBonus *= 1 + improvement / count / 30;
+			}
+			// Type 2 Tank bonus
+			else if(count > 0 && type === 0) {
+				tankBonus = getModifier(type) + getModifier(type, true) * improvement / count;
+			}
+			// Bonus for two Type 89 Tank (Pillbox, Supply Depot and Isolated Island)
+			else if(count > 1 && type === 1 && [2, 3, 4].includes(installationType)) {
+				landingBonus.push(installationType === 4 ? 2.08 : 3 );
+				landingImprovementBonus.push((installationType === 4 ? 0.0416 : 0.06) * improvement / count);
+			}
+			// Otherwise, match modifier and improvement
+			else if(count > 0) {
+				landingBonus.push(getModifier(type));
+				landingImprovementBonus.push(getModifier(type, true) * improvement / count);
+			}
+		});
+		// Multiply modifiers
+		return tankBonus * (Math.max(...landingBonus) + Math.max(...landingImprovementBonus));
+	};
+
+	/**
+	 * Get anti land installation power bonus & multiplier of this ship.
+	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
-	 * @see estimateLandingAttackType
+	 * @see estimateInstallationEnemyType
+	 * @see calcLandingCraftBonus
+	 * @return {Array} of [additive damage boost, multiplicative damage boost]
 	 */
-	KC3Ship.prototype.antiLandWarfarePower = function(){
-		// TODO
+	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true){
+		if(this.isDummy()) { return [0, 1]; }
+		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
+		if(!installationType) { return [0, 1]; }
+		const wg42Count = this.countEquipment(126);
+		const hasT3Shell = this.hasEquipment(35);
+		let wg42Bonus = 1;
+		let t3Bonus = 1;
+		const landingBonus = this.calcLandingCraftBonus(installationType);
+		if(precap) {
+			// [0, 70, 110, 140, 160] additive for each WG42
+			const wg42Additive = wg42Count > 0 ? 20 + 55 * wg42Count - 5 * Math.pow(wg42Count, 2) : 0;
+			switch(installationType) {
+				case 1: // Soft-skinned, general type of land installation
+					// 2.5x multiplicative for at least one T3
+					return [wg42Additive, hasT3Shell ? 2.5 : 1];
+				
+				case 2: // Pillbox, Artillery Imp
+					// Works even if slot is zeroed
+					const seaplaneBonus = this.hasEquipmentType(2, [10, 11, 39]) ? 1.5 : 1;
+					// DD/CL bonus
+					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
+					// Multiplicative WG42 bonus
+					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
+					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
+					
+					// Set WG42 additive modifier, multiply multiplicative modifiers
+					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
+						* apShellBonus * landingBonus];
+				
+				case 3: // Isolated Island Princess
+					t3Bonus = hasT3Shell ? 1.75 : 1;
+					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					// Set WG42 additive modifier, multiply multiplicative modifiers
+					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+				
+				case 5: // Summer Harbor Princess Damaged Form
+					// Multiplicative WG42 bonus
+					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					t3Bonus = hasT3Shell ? 1.8 : 1;
+					// Missing: AP Shell modifier, SPB/SPF modifier
+					// No additive WG42 bonus
+					return [0, wg42Bonus * t3Bonus * landingBonus];
+			}
+		} else { // Post-cap types
+			switch(installationType){
+				case 4: // Supply Depot Princess
+					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
+					return [0, landingBonus * wg42Bonus];
+			}
+		}
+		return [0, 1];
 	};
 
 	/**
@@ -1370,8 +1561,8 @@ KC3改 Ship Object
 	 * @see https://twitter.com/Nishisonic/status/893030749913227264
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
-			engagementId = 1, formationId = ConfigManager.aaFormation,
-			nightSpecialAttackType = [], isNightStart = false, isCombined = false){
+			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
+			isNightStart = false, isCombined = false, targetShipMasterId = 0){
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
 		// Formation modifier
@@ -1424,8 +1615,16 @@ KC3改 Ship Object
 		const nightCutinModifier = nightSpecialAttackType[0] === "Cutin" &&
 			nightSpecialAttackType[3] > 0 ? nightSpecialAttackType[3] : 1;
 		
-		// Apply modifiers, flooring unknown
-		let result = basicPower * engagementModifier * formationModifier * damageModifier * nightCutinModifier;
+		// Anti-installation modifiers
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		let antiLandAdditive = 0, antiLandModifier = 1;
+		if(targetShipType.isLand) {
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true);
+		}
+		
+		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
+		let result = (basicPower * antiLandModifier + antiLandAdditive)
+			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
 		const stype = this.master().api_stype;
@@ -1459,9 +1658,11 @@ KC3改 Ship Object
 			formationModifier,
 			damageModifier,
 			nightCutinModifier,
+			antiLandModifier,
+			antiLandAdditive,
 			lightCruiserBonus,
 			italianHeavyCruiserBonus,
-			aswLimitation
+			aswLimitation,
 		};
 	};
 
@@ -1496,8 +1697,8 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = [], contactPlaneId = 0,
-			isCritical = false, isAirAttack = false, targetShipType = 0, isDefenderArmorCounted = false){
+			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, isAirAttack = false,
+			targetShipStype = 0, isDefenderArmorCounted = false, targetShipMasterId = 0){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
@@ -1511,7 +1712,7 @@ KC3改 Ship Object
 		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
-		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipType);
+		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
 		if(isTargetShipTypeMatched) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
@@ -1565,12 +1766,25 @@ KC3改 Ship Object
 			}
 		}
 		
-		// TODO
-		// Rocket, Landing craft modifier
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		// Against PT Imp modifier
+		let antiPtImpModifier = 1;
+		if(targetShipType.isPtImp) {
+			const lightGunBonus = this.countEquipmentType(2, 1) >= 2 ? 1.2 : 1;
+			const aaGunBonus = this.countEquipmentType(2, 21) >= 2 ? 1.1 : 1;
+			const secondaryGunBonus = this.countEquipmentType(2, 4) >= 2 ? 1.2 : 1;
+			const t3Bonus = this.hasEquipment(35) ? 1.3 : 1;
+			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
+		}
+		// Anti-installation modifier
+		let antiLandModifier = 1;
+		if(targetShipType.isLand) {
+			antiLandModifier = this.antiLandWarfarePowerMods(targetShipMasterId, false)[1];
+		}
 		
 		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* dayCutinModifier * airstrikeConcatModifier * apshellModifier;
+			* dayCutinModifier * airstrikeConcatModifier * apshellModifier
+			* antiPtImpModifier * antiLandModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -1601,6 +1815,8 @@ KC3改 Ship Object
 			dayCutinModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
+			antiPtImpModifier,
+			antiLandModifier,
 			newDepthChargeBonus,
 			remainingAmmoModifier,
 		};
@@ -1718,12 +1934,12 @@ KC3改 Ship Object
 		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai
 		return [141, 478, 394, 681].includes(this.masterId);
 	};
-	// test to see if this ship (with equipment) is capable of opening ASW 
+	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
 	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
-		if (this.isOaswShip()) return true;
+		if(this.isOaswShip()) { return true; }
 		const stype = this.master().api_stype,
 			ctype = this.master().api_ctype;
 
@@ -1807,7 +2023,7 @@ KC3改 Ship Object
 
 	/**
 	 * @return {Object} target (enemy) ship category flags defined by us, possible values are:
-	 *         `isSurface`, `isSubmarine`, `isLand`.
+	 *         `isSurface`, `isSubmarine`, `isLand`, `isPtImp`.
 	 */
 	KC3Ship.prototype.estimateTargetShipType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
@@ -1816,11 +2032,46 @@ KC3改 Ship Object
 		const isSubmarine = targetShip && this.isSubmarine(targetShip.api_stype);
 		// regular surface vessel by default
 		const isSurface = !isLand && !isSubmarine;
+		// known PT Imp Packs (also belong to surface)
+		const isPtImp = [1637, 1638, 1639, 1640].includes(targetShipMasterId);
 		return {
 			isSubmarine,
 			isLand,
-			isSurface
+			isSurface,
+			isPtImp,
 		};
+	};
+
+	/**
+	 * Divide Abyssal land installation into KC3-unique types:
+	 *   Type 1: Soft-skinned, eg: Harbor Princess
+	 *   Type 2: Artillery Imp, aka. Pillbox
+	 *   Type 3: Isolated Island Princess
+	 *   Type 4: Supply Depot Princess
+	 *   Type 5: Summer Harbor Princess Damaged Form
+	 *   Type 0: Not land installation
+	 * @param precap - specify true if going to calculate pre-cap modifiers
+	 * @return the numeric type identifier
+	 * @see http://kancolle.wikia.com/wiki/Installation_Type
+	 */
+	KC3Ship.prototype.estimateInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
+		const targetShip = KC3Master.ship(targetShipMasterId);
+		if(!this.masterId || !targetShip) { return 0; }
+		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
+		// Supply Depot Princess
+		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)){
+			// Unique case: takes soft-skinned pre-cap but unique post-cap
+			return precap ? 1 : 4;
+		}
+		const abyssalIdTypeMap = {
+			// Summer Harbor Princess Damaged Form
+			"1702": 5, "1703": 5, "1704": 5,
+			// Isolated Island Princess
+			"1668": 3, "1669": 3, "1670": 3, "1671": 3, "1672": 3,
+			// Artillery Imp
+			"1665": 2, "1666": 2, "1667": 2,
+		};
+		return abyssalIdTypeMap[targetShipMasterId] || 1;
 	};
 
 	/**
@@ -2206,7 +2457,9 @@ KC3改 Ship Object
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(this.isDummy()) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level - 1);
-		// formula from PSVita is sqrt(1.5 * lk) anyway
+		// formula from PSVita is sqrt(1.5 * lk) anyway,
+		// but verifications have proved this one gets more accurate
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
 		const byEquip = -this.nakedStats("ac");
 		const byImprove = this.equipment(true)
@@ -2581,6 +2834,8 @@ KC3改 Ship Object
 		const aswDiff = newEquipAsw - oldEquipAsw;
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
+		const antiLandPowers = this.shipPossibleAntiLandPowers();
+		isShow = isShow || antiLandPowers.length > 0 ;
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -2593,6 +2848,7 @@ KC3改 Ship Object
 			gunFit,
 			shipAacis,
 			oaswPower,
+			antiLandPowers,
 		};
 	};
 
@@ -3115,7 +3371,7 @@ KC3改 Ship Object
 			gearInfo = this.equipment(i).deckbuilder();
 			if (gearInfo)
 				itemsInfo["i".concat(i+1)] = gearInfo;
-			else 
+			else
 				break;
 		}
 		gearInfo = this.exItem().deckbuilder();

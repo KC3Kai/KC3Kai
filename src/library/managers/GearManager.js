@@ -40,6 +40,31 @@ Saves and loads list to and from localStorage
 		jetBomberSteelCostRatioPerSlot: 0.2,
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
+		// Daihatsu landing craft anti-installation power modifiers per types and improvements
+		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus]
+		landingCraftModifiers: {
+			// Artillery Imp
+			0: {
+				modifier: [2.4,2.15,1.8,2.2],
+				improvement: [0.08,0.043,0.0036,0],
+			},
+			// Isolated Island Princess
+			1: {
+				modifier: [2.4,2.15,1.8,2.2],
+				improvement: [0.08,0.043,0.0036,0],
+			},
+			// Supply Depot Princess (no info on Daihatsu improvement)
+			2: {
+				modifier: [1.7,1.3,1,3.52],
+				improvement: [0.051,0.026,0,0],
+			},
+			// Summer Harbor Princess Damaged Form (no info on Shikon 11th tank)
+			3: {
+				modifier: [2.8,3.7,1.8,1],
+				improvement: [0,0,0,0],
+			},
+		},
+
 		// Get a specific item by ID
 		// NOTE: if you want to write test-cases, avoid setting KC3GearManager.list["x0"]
 		// because it'll never be retrieved by "get(0)"
@@ -68,7 +93,7 @@ Saves and loads list to and from localStorage
 			var x;
 			for (var ind in this.list) {
 				x = this.list[ind];
-				if (cond.call(x,x)) {
+				if (cond.call(x, x)) {
 					n += 1;
 				}
 			}

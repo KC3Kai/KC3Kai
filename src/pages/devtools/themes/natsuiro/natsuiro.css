@@ -1906,6 +1906,16 @@ ABYSS FLEET
 	text-overflow:ellipsis;
 }
 
+.module.activity .activity_gunfit .scrollable {
+	width:176px;
+	max-height:134px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .scrollable::-webkit-scrollbar {
+	width: 3px;
+}
+
 .module.activity .activity_gunfit .oasw {
 	height:36px;
 	font-size:11px;
@@ -1932,7 +1942,7 @@ ABYSS FLEET
 
 .module.activity .activity_gunfit .aaci {
 	width:176px;
-	height:82px;
+	height:auto;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	overflow-y:auto;
@@ -2014,6 +2024,56 @@ ABYSS FLEET
 .module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
 	background:#777;
 }
+
+.module.activity .activity_gunfit .landing {
+	width:176px;
+	height:auto;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .landing .landingInfo {
+	width:155px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 1px 6px;
+	border-radius:6px;
+	font-size:12px;
+	color:#ccc;
+	background:rgba(255,54,54,0.2);
+}
+.module.activity .activity_gunfit .landing .shipIcon {
+	width:18px;
+	height:20px;
+	margin:0px 5px 0px 5px;
+	float:left;
+}
+.module.activity .activity_gunfit .landing .shipIcon img {
+	width:18px;
+	height:18px;
+	margin-top:1px;
+	vertical-align:top;
+}
+.module.activity .activity_gunfit .landing .power {
+	width:50px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	white-space:nowrap;
+	overflow:visible;
+}
+.module.activity .activity_gunfit .landing .power img {
+	width:15px;
+	height:15px;
+	vertical-align:text-top;
+}
+.module.activity .activity_gunfit .landing .power .value {
+	margin-left:2px;
+}
+.module.activity .activity_gunfit .landing .modifiers {
+	width:15px;
+}
+
 /*------- ACTIVITY: PvP Info -------*/
 .module.activity .activity_pvp {
 	padding: 5px 10px;

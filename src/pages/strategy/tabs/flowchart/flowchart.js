@@ -84,28 +84,39 @@
 			$(".tab_flowchart .extralist .complete").toggle(this.showingAll);
 			
 			$(".resetDailies").on("click", function(){
-				KC3QuestManager.resetDailies();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm("Are you sure?")){
+					KC3QuestManager.resetDailies();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 			$(".resetWeeklies").on("click", function(){
-				KC3QuestManager.resetWeeklies();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm("Are you sure?")){
+					KC3QuestManager.resetWeeklies();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 			$(".resetMonthlies").on("click", function(){
-				KC3QuestManager.resetMonthlies();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm("Are you sure?")){
+					KC3QuestManager.resetMonthlies();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 			$(".resetQuarterlies").on("click", function(){
-				KC3QuestManager.resetQuarterlies();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm("Are you sure?")){
+					KC3QuestManager.resetQuarterlies();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 			$(".resetAllQuests").on("click", function(){
-				KC3QuestManager.clear();
-				KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm(`Are you sure?
+All your quest data will be cleared, including 1-time quests you have done. Lost data would not be recovered. `)){
+					KC3QuestManager.clear();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
 			});
 			
 			// Manual quest count overrides

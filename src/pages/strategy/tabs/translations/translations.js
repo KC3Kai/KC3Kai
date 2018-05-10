@@ -70,6 +70,7 @@
 
 			$.each( keys, function(i,k) {
 				var v = jsonData[k];
+				if($.isEmptyObject(v)) return true;
 				var row = $(".factory .tq-item").clone();
 
 				var questWikiCode = (v.code && v.code.val) ? v.code.val : "???";
@@ -83,7 +84,7 @@
 				var questNameL = v.name.tag;
 				var questDescL = v.desc.tag;
 
-				row.addClass( 
+				row.addClass(
 					language === v.name.tag && language === v.desc.tag ?
 						"translation_done" : "translation_missing" );
 

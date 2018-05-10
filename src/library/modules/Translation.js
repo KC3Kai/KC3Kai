@@ -31,23 +31,22 @@
 		Specialized Language HTML adjustments
 		-----------------------------------------*/
 		applyHTML :function(){
-			// Specialized fonts
+			// Apply specialized global fonts
 			var fontFamily = false;
 			switch(ConfigManager.language){
-				
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
-				
-				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
-				
+				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
+				case "tcn-yue": fontFamily = '"Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
 				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
-				
+				case "kr": fontFamily = '"Helvetica Neue", Helvetica, Arial, "AppleGothic", "Malgun Gothic", "GulimChe", "Dotum", "UnDotum", sans-serif'; break;
 				default: break;
 			}
+			if(fontFamily){
+				$("body").css("font-family", fontFamily);
+			}
 			
-			if(fontFamily){ $("body").css("font-family", fontFamily); }
-			
-			// Apply HTML language code
-			$("html").attr("lang", ConfigManager.language);
+			// Apply HTML language code, here needs ISO 639-1 abbr code
+			$("html").attr("lang", this.getLocale(ConfigManager.language));
 		},
 
 		/*
@@ -98,7 +97,7 @@
 
 			// Japanese special case where ships and items sources are already in JP
 			if(
-				(["jp", "tcn"].indexOf(language) > -1)
+				(["jp", "tcn", "tcn-yue"].indexOf(language) > -1)
 				&& (["ships", "items", "useitems", "ship_affix"].indexOf(filename) > -1)
 			){
 				extendEnglish = false;
@@ -483,7 +482,7 @@
 		},
 		
 		/**
-		 * @return the IANA standard locale tag according our language code
+		 * @return the IANA standard (ISO-639) locale tag according our language code
 		 */
 		getLocale :function(languageCode = ConfigManager.language){
 			// Since some of our language codes are not standard such as JP, KR, SCN, TCN.
@@ -495,7 +494,8 @@
 				"kr": "ko",
 				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
 				"tcn": "zh-Hant", // might include TW, HK, MO
-				"ua": "UA", // must be upper case
+				"tcn-yue": "zh-Hant-HK", // Cantonese dialect for HK, MO
+				"ua": "uk",
 				"troll": "en"
 			}[languageCode.toLowerCase()] || languageCode;
 		}
