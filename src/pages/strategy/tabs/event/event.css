@@ -285,6 +285,7 @@
 	font-weight:bold;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 .tab_event .sortie_list .sortie_date {
 	width:50px;
@@ -293,6 +294,7 @@
 	font-size:12px;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 
 /* Sortie Info: MAP */

@@ -4094,7 +4094,7 @@
 			}
 			
 			// Show anti-installation powers
-			if (data.antiLandPowers.length > 0 ) {
+			if (data.antiLandPowers.length > 0) {
 				$(".activity_gunfit .landingList").empty();
 				$.each(data.antiLandPowers, function(idx, info) {
 					if(info.enemy > 0) {

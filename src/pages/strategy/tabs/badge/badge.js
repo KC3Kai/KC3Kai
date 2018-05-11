@@ -59,10 +59,12 @@
 					mkText("Status:");
 					const pb = PictureBook.load();
 					if (pb.ship) {
+						const locale = KC3Translation.getLocale();
 						for (const i in pb.ship) {
 							var t = "Vol." + i + ", ";
 							if (pb.ship[i] && Array.isArray(pb.ship[i].ids)) {
-								t = t + "Last Update: " + new Date(pb.ship[i].timestamp);
+								t = t + "Last Update: " + new Date(pb.ship[i].timestamp)
+									.format("fullDateTime", false, locale);
 							} else {
 								t = t + "missing";
 							}

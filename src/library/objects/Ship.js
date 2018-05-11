@@ -1458,7 +1458,7 @@ KC3改 Ship Object
 					return [0, wg42Bonus * t3Bonus * landingBonus];
 			}
 		} else { // Post-cap types
-			switch(installationType){
+			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
 					return [0, landingBonus * wg42Bonus];
