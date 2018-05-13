@@ -4094,7 +4094,7 @@
 			}
 			
 			// Show anti-installation powers
-			if (data.antiLandPowers.length > 0) {
+			if (data.antiLandPowers.length > 0 ) {
 				$(".activity_gunfit .landingList").empty();
 				$.each(data.antiLandPowers, function(idx, info) {
 					if(info.enemy > 0) {
@@ -4111,8 +4111,8 @@
 						const tooltip = "(... x{0} +{1}) x{2}".format(
 							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
 							info.modifiers.antiLandAdditive,
-							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3)
-						);
+							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3))
+						 	+ "\n" + KC3Meta.term("Chuuha") + ": {0} / {1}".format(info.damagedPowers[0], info.damagedPowers[1]);
 						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
 					}
 				});
