@@ -117,7 +117,7 @@
 			});
 			
 			// Show health metric
-			if(PlayerManager.hq.lastPortTime > this.battleCounts.lastPortTime){
+			if(PlayerManager.hq.lastPortTime > this.battleCounts.lastPortTime + 600){
 				const lastMonthSec = Math.floor(new Date().shiftDate(-30).getTime() / 1000);
 				const last2DaySec = Math.floor(new Date().shiftHour(-48).getTime() / 1000);
 				const lastDaySec = Math.floor(new Date().shiftHour(-24).getTime() / 1000);

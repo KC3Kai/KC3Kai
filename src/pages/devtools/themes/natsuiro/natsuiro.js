@@ -4094,9 +4094,11 @@
 			}
 			
 			// Show anti-installation powers
-			if (data.antiLandPowers.length > 0) {
+			if (data.antiLandPowers) {
 				$(".activity_gunfit .landingList").empty();
-				$.each(data.antiLandPowers, function(idx, info) {
+				// recompute powers after ship stats updated
+				const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+				$.each(newShipObj.shipPossibleAntiLandPowers(), function(idx, info) {
 					if(info.enemy > 0) {
 						const enemyBox = $("#factory .landingInfo").clone()
 							.appendTo(".activity_gunfit .landingList");

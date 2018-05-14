@@ -2829,13 +2829,18 @@ KC3改 Ship Object
 		let isShow = gunFit !== false;
 		const shipAacis = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(this));
 		isShow = isShow || shipAacis.length > 0;
+		// NOTE: shipObj here to be returned will be the 'old' ship instance,
+		// whose stats, like fp, tp, asw, are the values before equipment change.
+		// To get the 'latest' ship stats, should defer `GunFit` event after `api_get_member/ship3` call,
+		// and retrieve latest ship instance via KC3ShipManager.get method.
+		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
 		const aswDiff = newEquipAsw - oldEquipAsw;
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		const antiLandPowers = this.shipPossibleAntiLandPowers();
-		isShow = isShow || antiLandPowers.length > 0 ;
+		isShow = isShow || antiLandPowers.length > 0;
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -2848,7 +2853,7 @@ KC3改 Ship Object
 			gunFit,
 			shipAacis,
 			oaswPower,
-			antiLandPowers,
+			antiLandPowers: antiLandPowers.length > 0,
 		};
 	};
 

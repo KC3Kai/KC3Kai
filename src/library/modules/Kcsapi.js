@@ -526,6 +526,7 @@ Previously known as "Reactor"
 			// get new status of set ship
 			const newShipObj = KC3ShipManager.get(setShipRosterId);
 			const newGearObj = newShipObj.equipment(setItemIndex);
+			// not followed by `api_get_member/ship3`, do not defer event
 			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
 		},
 		
@@ -777,7 +778,8 @@ Previously known as "Reactor"
 			// GunFit event now not only represent fit bonus and AACI, can be any effect
 			var oldGearObj = KC3GearManager.get(oldItemId);
 			var gearObj = KC3GearManager.get(itemID);
-			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			// Will be followed by `api_get_member/ship3`, defer event 1 call
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
 		},
 		
 		"api_req_kaisou/slotset_ex":function(params, response, headers){
@@ -796,7 +798,8 @@ Previously known as "Reactor"
 			} else {
 				KC3Network.trigger("Fleet");
 			}
-			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			// Will be followed by `api_get_member/ship3`, defer event 1 call
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
 		},
 		
 		/* Remove all equipment of a ship

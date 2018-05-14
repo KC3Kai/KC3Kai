@@ -106,7 +106,7 @@
 				);
 				const shipName = KC3Master.isAbyssalShip(id) ?
 					KC3Meta.abyssShipName(id) : KC3Meta.shipName(shipData.api_name);
-				$(".shipName", shipBox).text("[{0}] {1}".format(id, shipName))
+				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
 					.attr("title", shipName);
 				
 				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship) >= 0) {
