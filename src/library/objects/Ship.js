@@ -669,7 +669,7 @@ KC3改 Ship Object
 				count: 0,
 				byShip: {
 					// Kagerou K2
-					ids: [566],
+					ids: [566, 567],
 					multiple: { "raig": 2 },
 					countCap: 2,
 				},
@@ -704,7 +704,7 @@ KC3改 Ship Object
 						multiple: { "raig": 2, "houk": 1 },
 					},
 					// Kagerou Class, Kai Nis
-					//  Kagerou K2 only if except Isokaze / Hamakaze B Kai, Urakaze D Kai
+					//  except Isokaze / Hamakaze B Kai, Urakaze D Kai
 					"30": {
 						remodel: 2,
 						excludes: [556, 557, 558],
@@ -723,7 +723,7 @@ KC3改 Ship Object
 				count: 0,
 				byShip: {
 					// Kagerou K2
-					ids: [566],
+					ids: [566, 567],
 					multiple: { "houg": 1 },
 					countCap: 2,
 					callback: (api, info) => (
@@ -759,7 +759,7 @@ KC3改 Ship Object
 					},
 					{
 						// Kagerou K2, total +2 for 1st gun
-						ids: [566],
+						ids: [566, 567],
 						single: { "houg": 1 },
 					},
 				],

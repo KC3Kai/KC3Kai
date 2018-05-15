@@ -323,6 +323,11 @@ Previously known as "Reactor"
 					case 82: PlayerManager.consumables.shogoMedalNormal = thisItem.api_count; break;
 					case 83: PlayerManager.consumables.shogoMedalEasy = thisItem.api_count; break;
 					case 84: PlayerManager.consumables.shogoMedalCasual = thisItem.api_count; break;
+					case 85: PlayerManager.consumables.rice = thisItem.api_count; break;
+					case 86: PlayerManager.consumables.umeboshi = thisItem.api_count; break;
+					case 87: PlayerManager.consumables.nori = thisItem.api_count; break;
+					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
+					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					default: break;
 				}
 			}

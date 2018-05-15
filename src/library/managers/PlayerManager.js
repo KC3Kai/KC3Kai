@@ -497,6 +497,11 @@ Does not include Ships and Gears which are managed by other Managers
 				"82": "shogoMedalNormal",
 				"83": "shogoMedalEasy",
 				"84": "shogoMedalCasual",
+				"85": "rice",
+				"86": "umeboshi",
+				"87": "nori",
+				"88": "tea",
+				"89": "dinnerTicket",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return attrNameOnly ? attrNameMap[useitemId] : this.consumables[attrNameMap[useitemId]];
