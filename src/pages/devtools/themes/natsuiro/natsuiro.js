@@ -875,7 +875,8 @@
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
-		$(".module.activity .battle_fish").lazyInitTooltip();
+		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png");
+		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
@@ -2753,8 +2754,29 @@
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
 				.css("opacity", 1);
 
-			// If there is any special item drop
-			if(typeof data.api_get_useitem != "undefined"){
+			// If there is any useitem drop
+			if(data.api_get_useitem){
+				const useitemId = data.api_get_useitem.api_useitem_id;
+				if(useitemId > 0){
+					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
+					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
+					if(useitemAttr){
+						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
+						PlayerManager.setConsumables();
+					}
+					$(".module.activity .battle_fish img")
+						.attr("src", `/assets/img/useitems/${useitemId}.png`)
+						.error(function(){ $(this).off("error").attr("src", "/assets/img/ui/map_drop.png"); });
+					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
+						+ "\n{0}: {1} +1".format(
+							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
+							currentAmount
+						)
+					);
+				} else {
+					$(".module.activity .battle_fish img").attr("src", "/assets/img/ui/map_drop.png");
+					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop"));
+				}
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
 			}
