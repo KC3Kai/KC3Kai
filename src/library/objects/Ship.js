@@ -1294,6 +1294,7 @@ KC3改 Ship Object
 	 *  * dayPower: Day attack power of ship
 	 *  * nightPower: Night attack power of ship
 	 *  * modifiers: Known anti-installation modifiers
+	 *  * damagedPowers: Day & night attack power tuple on Chuuha ship
 	 * @see estimateInstallationEnemyType for kc3-unique installation types
 	 */
 	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
@@ -1317,7 +1318,7 @@ KC3改 Ship Object
 		// Dummy target enemy IDs, also used for abyssal icons
 		// 1573: Harbor Princess, 1665: Artillery Imp, 1668: Isolated Island Princess
 		// 1656: Supply Depot Princess - Damaged, 1702: Summer Harbor Princess - Damaged
-		// 1753: Supply Depot Summer Princess
+		// 1753: Summer Supply Depot Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1702, 1753];
 		const basicPower = this.shellingFirePower();
 		const resultList = [];
@@ -1354,12 +1355,12 @@ KC3改 Ship Object
 			({power} = this.applyPowerCap(damagedPrecap, "Day", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
 			obj.damagedPowers = [Math.floor(power)];
-
+			
 			// Get Chuuha night power
 			({power} = this.applyPowerCap(damagedPrecap, "Night", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
 			obj.damagedPowers.push(Math.floor(power));
-
+			
 			resultList.push(obj);
 		});
 		return resultList;
@@ -1375,7 +1376,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
 		if(this.isDummy() || ![1, 2, 3, 4, 5, 6].includes(installationType)) { return 0; }
-		// 4 types of Daihatsu Landing Craft with known bonus:
+		// 5 types of Daihatsu Landing Craft with known bonus:
 		//  * 167: Special Type 2 Amphibious Tank
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
@@ -1452,8 +1453,8 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		if(precap) {
-			// [0, 70, 110, 140, 160] additive for each WG42 (from psvita)
-			const wg42Additive = wg42Count > 0 ? [75, 110, 140, 160][wg42Count - 1] : 0;
+			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
+			const wg42Additive = [0, 75, 110, 140, 160][wg42Count] || 160;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
@@ -1466,14 +1467,14 @@ KC3改 Ship Object
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// SS(V) bonus
-					const subBonus = [13, 14].includes(this.master().api_stype) ? 2.3 : 1;
+					const ssBonus = this.isSubmarine() ? 2.3 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set WG42 additive modifier, multiply multiplicative modifiers
 					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus * subBonus];
+						* apShellBonus * landingBonus * ssBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
@@ -1490,12 +1491,12 @@ KC3改 Ship Object
 					return [0, wg42Bonus * t3Bonus * landingBonus];
 			}
 		} else { // Post-cap types
-			switch(installationType){
+			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
 					return [0, landingBonus * wg42Bonus];
 
-				case 6: // Supply Depot Summer Princess (shikon bonus only)
+				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
 			}
 		}
@@ -1634,7 +1635,6 @@ KC3改 Ship Object
 			engagementModifier = 1;
 			formationModifier = 1;
 		}
-		damageStatus = typeof damageStatus === "string" ? damageStatus : "";
 		// Damage percent modifier
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
 		const damageModifier = (warfareType === "Torpedo" ? {
@@ -2080,13 +2080,13 @@ KC3改 Ship Object
 
 	/**
 	 * Divide Abyssal land installation into KC3-unique types:
+	 *   Type 0: Not land installation
 	 *   Type 1: Soft-skinned, eg: Harbor Princess
 	 *   Type 2: Artillery Imp, aka. Pillbox
 	 *   Type 3: Isolated Island Princess
 	 *   Type 4: Supply Depot Princess
 	 *   Type 5: Summer Harbor Princess Damaged Form
-	 * 	 Type 6: Supply Depot Summer Princess
-	 *   Type 0: Not land installation
+	 *   Type 6: Summer Supply Depot Princess
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
@@ -2096,11 +2096,11 @@ KC3改 Ship Object
 		if(!this.masterId || !targetShip) { return 0; }
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
-		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)){
+		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
 		}
-		// Supply Depot Summer Princess
+		// Summer Supply Depot Princess
 		if([1753, 1754].includes(targetShipMasterId)) {
 			// Same unique case as above
 			return precap ? 1 : 6;

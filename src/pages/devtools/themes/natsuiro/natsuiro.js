@@ -2758,24 +2758,24 @@
 			if(data.api_get_useitem){
 				const useitemId = data.api_get_useitem.api_useitem_id;
 				if(useitemId > 0){
-					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
-					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
-					if(useitemAttr){
-						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
-						PlayerManager.setConsumables();
-					}
 					$(".module.activity .battle_fish img")
 						.attr("src", `/assets/img/useitems/${useitemId}.png`).addClass("rounded")
 						.error(function(){
 							$(this).off("error").removeClass("rounded")
 								.attr("src", "/assets/img/ui/map_drop.png");
 						});
+					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
+					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
 					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
-						+ "\n{0}: {1} +1".format(
+						+ (useitemAttr ? "\n{0}: {1} +1".format(
 							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
 							currentAmount
-						)
+						) : "")
 					);
+					if(useitemAttr){
+						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
+						PlayerManager.setConsumables();
+					}
 				} else {
 					$(".module.activity .battle_fish img")
 						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
@@ -4135,12 +4135,12 @@
 							.lazyInitTooltip();
 						$(".dayPower .value", enemyBox).text(info.dayPower);
 						$(".nightPower .value", enemyBox).text(info.nightPower);
-						// might add more texts to explain capping and battle conditions
-						const tooltip = "(... x{0} +{1}) x{2}".format(
+						const tooltip = KC3Meta.term("PanelAntiLandPowerTip").format(
 							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
 							info.modifiers.antiLandAdditive,
-							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3))
-						 	+ "\n" + KC3Meta.term("Chuuha") + ": {0} / {1}".format(info.damagedPowers[0], info.damagedPowers[1]);
+							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3),
+							info.damagedPowers[0],
+							info.damagedPowers[1]);
 						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
 					}
 				});
