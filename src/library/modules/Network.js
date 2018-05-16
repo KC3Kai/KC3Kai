@@ -51,6 +51,7 @@ Listens to network history and triggers callback if game events happen
 			GearRemodel: [],
 		},
 		delayedUpdate: {},
+		deferredEvents: [],
 
 		/* ADD LISTENER
 		All callback to an event
@@ -74,14 +75,31 @@ Listens to network history and triggers callback if game events happen
 		trigger : function( eventName, data ){
 			if((this.delayedUpdate[eventName] || 0) <= 0) {
 				$.each(this.eventTypes[eventName], function( index, callback ){
-					callback( eventName, data||{});
+					callback( eventName, data || {});
 				});
 				this.delayedUpdate[eventName] = 0;
 			} else {
 				this.delayedUpdate[eventName] -= 1;
-				console.log("Prevented call to [" + eventName + "],",
-					"delay", this.delayedUpdate[eventName], "left");
+				console.log(`Prevented to call [${eventName}], delay ${this.delayedUpdate[eventName]} left`);
 			}
+		},
+
+		/* DEFER TRIGGER
+		Defers event performing after specified amount of API calls
+		------------------------------------------*/
+		deferTrigger : function(count, eventName, data){
+			// Only allow `after` API call advice for now,
+			// `before` and `around` seem not useful yet.
+			const advice = "after";
+			// +1 if not before since it will be handled at once after current API call
+			const amount = count + (advice !== "before" ? 1 : 0);
+			this.deferredEvents.push({
+				advice: advice,
+				amount: amount,
+				name: eventName,
+				data: data
+			});
+			//console.log(`Deferred to call [${eventName}] after ${count} time(s)`);
 		},
 
 		/* DELAY
@@ -112,10 +130,10 @@ Listens to network history and triggers callback if game events happen
 			// If request is an API Call
 			if(request.request.url.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = request.request.url;
-
+				
 				// Clear overlays before processing this new API call
 				KC3Network.clearOverlays();
-
+				
 				// Create new request and process it
 				// console.debug(request, request.request);
 				var
@@ -143,7 +161,13 @@ Listens to network history and triggers callback if game events happen
 								KC3Network.asyncSubmit(TsunDBSubmission, thisRequest);
 							}
 							
+							// Trigger deferred events before this API call if there are some
+							//KC3Network.handleDeferredEvents(thisRequest, "before");
+							
 							thisRequest.process();
+							
+							// Trigger deferred events after this API call if there are some
+							KC3Network.handleDeferredEvents(thisRequest, "after");
 						}
 					});
 					request.getContent(function(x){
@@ -160,13 +184,13 @@ Listens to network history and triggers callback if game events happen
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}
 					});
-				}else{
+				} else {
 					message.api_status = false;
 					message.api_result = request.response.statusText;
 					(new RMsg("service", "gameScreenChg", message)).execute();
 				}
 			}
-
+			
 			// If request is a furniture asset
 			if(request.request.url.indexOf("resources/image/furniture") > -1){
 				// Clear overlays upon entering furniture menu
@@ -175,6 +199,38 @@ Listens to network history and triggers callback if game events happen
 			
 			// Overlay subtitles
 			KC3Network.showSubtitle(request);
+		},
+
+		/**
+		 * Call those events deferred by specified API call amount on specified advice.
+		 */
+		handleDeferredEvents :function(request, advice){
+			if(!this.deferredEvents.length) { return false; }
+			// Check the event queue if advice is matched
+			const eventsToHandle = this.deferredEvents
+				.filter(e => (e.advice === advice || e.advice === "around") && e.amount > 0);
+			let eventTriggered = 0;
+			eventsToHandle.forEach(e => {
+				// Avoid to reduce API call count duplicatedly if advice is around
+				if(e.advice !== "around" || (e.advice === "around" && advice === "before")) {
+					e.amount -= 1;
+				}
+				if(e.amount <= 0) {
+					// Remove the event already triggered from queue
+					const index = this.deferredEvents.indexOf(e);
+					if(index >= 0) { this.deferredEvents.splice(index, 1); }
+					// Only trigger the event on first time countdown reaches
+					if(e.amount === 0) {
+						this.trigger(e.name, e.data);
+						console.log(`Deferred event [${e.name}] called on [${request.call}]`, e);
+						eventTriggered += 1;
+					}
+				} else {
+					console.log(`Deferred event [${e.name}], ${e.amount} left on [${request.call}]`);
+				}
+			});
+			// Indicate if there is an event triggered at least
+			return eventTriggered > 0;
 		},
 
 		/**

@@ -875,7 +875,8 @@
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
-		$(".module.activity .battle_fish").lazyInitTooltip();
+		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png");
+		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
@@ -2753,8 +2754,33 @@
 				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
 				.css("opacity", 1);
 
-			// If there is any special item drop
-			if(typeof data.api_get_useitem != "undefined"){
+			// If there is any useitem drop
+			if(data.api_get_useitem){
+				const useitemId = data.api_get_useitem.api_useitem_id;
+				if(useitemId > 0){
+					$(".module.activity .battle_fish img")
+						.attr("src", `/assets/img/useitems/${useitemId}.png`).addClass("rounded")
+						.error(function(){
+							$(this).off("error").removeClass("rounded")
+								.attr("src", "/assets/img/ui/map_drop.png");
+						});
+					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
+					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
+					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
+						+ (useitemAttr ? "\n{0}: {1} +1".format(
+							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
+							currentAmount
+						) : "")
+					);
+					if(useitemAttr){
+						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
+						PlayerManager.setConsumables();
+					}
+				} else {
+					$(".module.activity .battle_fish img")
+						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
+					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop"));
+				}
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
 			}
@@ -4094,9 +4120,11 @@
 			}
 			
 			// Show anti-installation powers
-			if (data.antiLandPowers.length > 0 ) {
+			if (data.antiLandPowers) {
 				$(".activity_gunfit .landingList").empty();
-				$.each(data.antiLandPowers, function(idx, info) {
+				// recompute powers after ship stats updated
+				const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+				$.each(newShipObj.shipPossibleAntiLandPowers(), function(idx, info) {
 					if(info.enemy > 0) {
 						const enemyBox = $("#factory .landingInfo").clone()
 							.appendTo(".activity_gunfit .landingList");
@@ -4107,12 +4135,12 @@
 							.lazyInitTooltip();
 						$(".dayPower .value", enemyBox).text(info.dayPower);
 						$(".nightPower .value", enemyBox).text(info.nightPower);
-						// might add more texts to explain capping and battle conditions
-						const tooltip = "(... x{0} +{1}) x{2}".format(
+						const tooltip = KC3Meta.term("PanelAntiLandPowerTip").format(
 							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
 							info.modifiers.antiLandAdditive,
-							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3)
-						);
+							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3),
+							info.damagedPowers[0],
+							info.damagedPowers[1]);
 						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
 					}
 				});

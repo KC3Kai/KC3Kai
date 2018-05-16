@@ -265,6 +265,29 @@ Provides access to data on built-in JSON files
 			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
 		},
 		
+		distinctNameDelimiter :function(combinedName = ""){
+			const result = [];
+			// To avoid frequently used bracket `()`, current tag: `{...}?`
+			const re = /\{(.*?)\}\?/g;
+			let match, occur = 0, lastIndex = 0;
+			while((match = re.exec(combinedName)) !== null){
+				occur += 1;
+				if(occur === 1){
+					result.push(combinedName.slice(0, match.index));
+					result.push(match[1]);
+				} else {
+					result.push(combinedName.slice(lastIndex, match.index));
+				}
+				lastIndex = re.lastIndex;
+			}
+			if(occur === 0){
+				return combinedName;
+			} else {
+				result.push(combinedName.slice(lastIndex));
+			}
+			return result.join("");
+		},
+		
 		gearName :function(jpName){
 			if(typeof this._slotitem[jpName] !== "undefined"){
 				return this._slotitem[jpName];
@@ -291,9 +314,11 @@ Provides access to data on built-in JSON files
 			if(!shipMaster.api_name){
 				shipMaster = KC3Master.ship(Number(ship));
 			}
-			return [this.shipName(shipMaster.api_name), this.shipReadingName(shipMaster.api_yomi)]
-				.filter(function(x){return !!x&&x!=="-";})
-				.join("");
+			return this.distinctNameDelimiter(
+				[this.shipName(shipMaster.api_name), this.shipReadingName(shipMaster.api_yomi)]
+					.filter(x => !!x && x !== "-")
+					.join("")
+			);
 		},
 		
 		abyssShipBorderClass :function(ship){

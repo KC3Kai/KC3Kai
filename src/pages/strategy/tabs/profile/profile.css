@@ -27,6 +27,7 @@
 	margin:0px 5px 0px 0px;
 	padding:0px 0px 0px 5px;
 	font-weight:bold;
+	white-space:nowrap;
 }
 .tab_profile .hq_content {
 	width:580px;
@@ -76,9 +77,9 @@
 	width:100px;
 	height:15px;
 	float:left;
-	/*text-align:right;*/
 	margin:0px 10px 0px 0px;
 	padding:0px 0px 0px 5px;
+	white-space:nowrap;
 }
 .tab_profile .stat_value {
 	width:100px;
@@ -100,6 +101,7 @@
 	height:20px;
 	float:left;
 	margin:0px 5px 0px 0px;
+	white-space:nowrap;
 }
 .tab_profile .rank_content {
 	width:420px;

@@ -43,7 +43,7 @@ var dateFormat = function () {
 		};
 
 	// Regexes and supporting functions are cached through closure
-	return function (date, mask, utc) {
+	return function (date, mask, utc, locale) {
 		var dF = dateFormat;
 
 		// You can't provide utc if you skip other args (use the "UTC:" mask prefix)
@@ -77,12 +77,12 @@ var dateFormat = function () {
 			flags = {
 				d:    d,
 				dd:   pad(d),
-				ddd:  dF.i18n.dayNames[D],
-				dddd: dF.i18n.dayNames[D + 7],
+				ddd:  locale ? date.toLocaleString(locale, {weekday: "short"}) : dF.i18n.dayNames[D],
+				dddd: locale ? date.toLocaleString(locale, {weekday: "long"}) : dF.i18n.dayNames[D + 7],
 				m:    m + 1,
 				mm:   pad(m + 1),
-				mmm:  dF.i18n.monthNames[m],
-				mmmm: dF.i18n.monthNames[m + 12],
+				mmm:  locale ? date.toLocaleString(locale, {month: "short"}) : dF.i18n.monthNames[m],
+				mmmm: locale ? date.toLocaleString(locale, {month: "long"}) : dF.i18n.monthNames[m + 12],
 				yy:   String(y).slice(2),
 				yyyy: y,
 				h:    H % 12 || 12,
@@ -120,6 +120,7 @@ dateFormat.masks = {
 	shortTime:      "h:MM TT",
 	mediumTime:     "h:MM:ss TT",
 	longTime:       "h:MM:ss TT Z",
+	fullDateTime:   "yyyy-mm-dd dddd HH:MM:ss Z",
 	isoDate:        "yyyy-mm-dd",
 	isoTime:        "HH:MM:ss",
 	isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
@@ -686,8 +687,8 @@ Object.sumValuesByKey = function(){
 	}
 
 	Object.defineProperties(Date.prototype,{
-		format: { value: function format(mask, utc) {
-			return dateFormat(this, mask, utc);
+		format: { value: function format(mask, utc, locale) {
+			return dateFormat(this, mask, utc, locale);
 		}},
 		shiftHour : { get: function () { return shiftTime.bind(this,'Hours'); } },
 		shiftDate : { get: function () { return shiftTime.bind(this,'Date' ); } },

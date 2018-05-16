@@ -323,6 +323,11 @@ Previously known as "Reactor"
 					case 82: PlayerManager.consumables.shogoMedalNormal = thisItem.api_count; break;
 					case 83: PlayerManager.consumables.shogoMedalEasy = thisItem.api_count; break;
 					case 84: PlayerManager.consumables.shogoMedalCasual = thisItem.api_count; break;
+					case 85: PlayerManager.consumables.rice = thisItem.api_count; break;
+					case 86: PlayerManager.consumables.umeboshi = thisItem.api_count; break;
+					case 87: PlayerManager.consumables.nori = thisItem.api_count; break;
+					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
+					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -526,6 +531,7 @@ Previously known as "Reactor"
 			// get new status of set ship
 			const newShipObj = KC3ShipManager.get(setShipRosterId);
 			const newGearObj = newShipObj.equipment(setItemIndex);
+			// not followed by `api_get_member/ship3`, do not defer event
 			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
 		},
 		
@@ -777,7 +783,8 @@ Previously known as "Reactor"
 			// GunFit event now not only represent fit bonus and AACI, can be any effect
 			var oldGearObj = KC3GearManager.get(oldItemId);
 			var gearObj = KC3GearManager.get(itemID);
-			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			// Will be followed by `api_get_member/ship3`, defer event 1 call
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
 		},
 		
 		"api_req_kaisou/slotset_ex":function(params, response, headers){
@@ -796,7 +803,8 @@ Previously known as "Reactor"
 			} else {
 				KC3Network.trigger("Fleet");
 			}
-			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			// Will be followed by `api_get_member/ship3`, defer event 1 call
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
 		},
 		
 		/* Remove all equipment of a ship
@@ -2181,10 +2189,12 @@ Previously known as "Reactor"
 				case 1: // supposed to obtain use/slot item
 					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
 					console.log(`Using item obtained item:`, itemId, itemAttrName, exchangeType, apiData.api_getitem);
-					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2?
-					if(apiData.api_slotitem){
-						console.log(`Using item obtained slotitem:`, apiData.api_slotitem);
-						// Not sure /slot_item will be called or not, should update GearManager here if not
+					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
+					// not sure how `api_slotitem` will go if `api_getcount` > 1
+					if(apiData.api_getitem && apiData.api_getitem.api_slotitem){
+						console.log(`Using item obtained slotitem:`, apiData.api_getitem.api_slotitem);
+						// `api_get_member/slot_item` will not be called, have to update GearManager here
+						KC3GearManager.set([ apiData.api_getitem.api_slotitem ]);
 					}
 					break;
 				case 2: // supposed to obtain materials

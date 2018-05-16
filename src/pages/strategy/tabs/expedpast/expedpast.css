@@ -139,6 +139,7 @@
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	color:#888;
+	white-space:nowrap;
 }
 .tab_expedpast .exped_date {
 	font-size:12px;

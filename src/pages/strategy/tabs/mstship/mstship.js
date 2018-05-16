@@ -94,25 +94,26 @@
 			};
 
 			// List all ships
-			$.each(this.mergedMasterShips, function(index, ShipData){
-				if(!ShipData) { return true; }
-				
-				var shipBox = $(".tab_mstship .factory .shipRecord").clone();
-				shipBox.attr("data-id", ShipData.api_id);
-				shipBox.data("bs", ShipData.kc3_bship);
-				
-				$("img", shipBox).attr("src", KC3Master.isAbyssalShip(ShipData.api_id) ?
-					KC3Meta.abyssIcon(ShipData.api_id) : KC3Meta.shipIcon(ShipData.api_id)
+			$.each(this.mergedMasterShips, function(index, shipData){
+				if(!shipData) { return true; }
+				const shipBox = $(".tab_mstship .factory .shipRecord").clone()
+					.appendTo(".tab_mstship .shipRecords");
+				const id = shipData.api_id;
+				shipBox.attr("data-id", id);
+				shipBox.data("bs", shipData.kc3_bship);
+				$("img", shipBox).attr("src", KC3Master.isAbyssalShip(id) ?
+					KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id)
 				);
+				const shipName = KC3Master.isAbyssalShip(id) ?
+					KC3Meta.abyssShipName(id) : KC3Meta.shipName(shipData.api_name);
+				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
+					.attr("title", shipName);
 				
-				if(ConfigManager.salt_list.indexOf(ShipData.kc3_bship)>=0) {
+				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship) >= 0) {
 					shipBox.addClass('salted');
 				}
-				
-				$(".shipName", shipBox).text( "["+ShipData.api_id+"] "+KC3Meta.shipName(ShipData.api_name) );
-
-				shipBox.appendTo(".tab_mstship .shipRecords");
 			});
+			$(".tab_mstship .shipRecords").createChildrenTooltips();
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
@@ -349,14 +350,18 @@
 							KC3Meta.term("ShipListFullNamePattern").format(
 								KC3Meta.ctypeName(shipData.api_ctype), KC3Meta.shipName(shipData.api_name)) :
 							KC3Meta.shipName(shipData.api_name) :
-						KC3Meta.shipName(shipData.api_name),
-					KC3Meta.shipReadingName(shipData.api_yomi).replace("-", "")
+						KC3Master.isAbyssalShip(ship_id) ?
+							KC3Meta.abyssShipName(ship_id) :
+							KC3Meta.shipName(shipData.api_name),
+					KC3Master.isAbyssalShip(ship_id) ? "" : KC3Meta.shipReadingName(shipData.api_yomi)
 			) ).attr("title",
 				KC3Master.isRegularShip(ship_id) ?
 					ConfigManager.info_ship_class_name ?
 						$(".tab_mstship .shipInfo .name").text() : // Show whole text field
 						KC3Meta.ctypeName(shipData.api_ctype) : // Show ship class name
-					KC3Meta.shipName(shipData.api_name) // For Abyssal ships or seasonal CGs
+					KC3Master.isAbyssalShip(ship_id) ?
+						KC3Meta.abyssShipName(ship_id) : // For Abyssal ships
+						KC3Meta.shipName(shipData.api_name) // For Seasonal CGs
 			).lazyInitTooltip();
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
 			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );

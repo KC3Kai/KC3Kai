@@ -12,7 +12,9 @@
 		toggleMode: 1,
 		itemsPerPage: 10,
 		
-		init :function(){},
+		init :function(){
+			this.locale = KC3Translation.getLocale();
+		},
 		reload :function(){
 		},
 		execute :function(){
@@ -112,7 +114,7 @@
 			$(".pvp_id", recordBox).text(pvpBattle.id);
 			if (pvpBattle.time) {
 				const pvpTime = new Date(pvpBattle.time * 1000);
-				$(".pvp_date", recordBox).text(pvpTime.format("mmm d"))
+				$(".pvp_date", recordBox).text(pvpTime.format("mmm d", false, this.locale))
 					.attr("title", pvpTime.format("yyyy-mm-dd HH:MM:ss"));
 			} else {
 				$(".pvp_date", recordBox).text("Unknown");

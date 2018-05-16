@@ -21,6 +21,7 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
+			this.locale = KC3Translation.getLocale();
 			this.itemsPerPage = 20;
 		},
 		
@@ -213,7 +214,7 @@
 					
 					// Expedition date
 					const expedDate = new Date(ThisExped.time * 1000);
-					$(".exped_date", ExpedBox).text( expedDate.format("mmm dd") );
+					$(".exped_date", ExpedBox).text( expedDate.format("mmm dd", false, self.locale) );
 					$(".exped_time", ExpedBox).text( expedDate.format("hh:MM tt") );
 					$(".exped_info", ExpedBox).attr("title", expedDate.format("yyyy-mm-dd HH:MM:ss"));
 					
