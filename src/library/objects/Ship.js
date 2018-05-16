@@ -1457,7 +1457,7 @@ KC3改 Ship Object
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
-			const wg42Additive = [0, 75, 110, 140, 160][wg42Count] || 160;
+			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
