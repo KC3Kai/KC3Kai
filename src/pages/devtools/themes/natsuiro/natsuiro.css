@@ -904,6 +904,12 @@ ABYSS FLEET
 	height:24px;
 	margin:3px;
 }
+.module.activity .battle_flag.battle_fish img.rounded {
+	width:25px;
+	height:25px;
+	margin:3px 5px;
+	border-radius:50%;
+}
 .module.activity .battle_flag .support_exped {
 	width:12px;
 	height:12px;

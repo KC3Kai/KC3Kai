@@ -2765,8 +2765,11 @@
 						PlayerManager.setConsumables();
 					}
 					$(".module.activity .battle_fish img")
-						.attr("src", `/assets/img/useitems/${useitemId}.png`)
-						.error(function(){ $(this).off("error").attr("src", "/assets/img/ui/map_drop.png"); });
+						.attr("src", `/assets/img/useitems/${useitemId}.png`).addClass("rounded")
+						.error(function(){
+							$(this).off("error").removeClass("rounded")
+								.attr("src", "/assets/img/ui/map_drop.png");
+						});
 					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
 						+ "\n{0}: {1} +1".format(
 							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
@@ -2774,7 +2777,8 @@
 						)
 					);
 				} else {
-					$(".module.activity .battle_fish img").attr("src", "/assets/img/ui/map_drop.png");
+					$(".module.activity .battle_fish img")
+						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
 					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop"));
 				}
 				$(".module.activity .battle_support").hide();
