@@ -323,6 +323,11 @@ Previously known as "Reactor"
 					case 82: PlayerManager.consumables.shogoMedalNormal = thisItem.api_count; break;
 					case 83: PlayerManager.consumables.shogoMedalEasy = thisItem.api_count; break;
 					case 84: PlayerManager.consumables.shogoMedalCasual = thisItem.api_count; break;
+					case 85: PlayerManager.consumables.rice = thisItem.api_count; break;
+					case 86: PlayerManager.consumables.umeboshi = thisItem.api_count; break;
+					case 87: PlayerManager.consumables.nori = thisItem.api_count; break;
+					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
+					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -2184,10 +2189,12 @@ Previously known as "Reactor"
 				case 1: // supposed to obtain use/slot item
 					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
 					console.log(`Using item obtained item:`, itemId, itemAttrName, exchangeType, apiData.api_getitem);
-					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2?
-					if(apiData.api_slotitem){
-						console.log(`Using item obtained slotitem:`, apiData.api_slotitem);
-						// Not sure /slot_item will be called or not, should update GearManager here if not
+					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
+					// not sure how `api_slotitem` will go if `api_getcount` > 1
+					if(apiData.api_getitem && apiData.api_getitem.api_slotitem){
+						console.log(`Using item obtained slotitem:`, apiData.api_getitem.api_slotitem);
+						// `api_get_member/slot_item` will not be called, have to update GearManager here
+						KC3GearManager.set([ apiData.api_getitem.api_slotitem ]);
 					}
 					break;
 				case 2: // supposed to obtain materials
