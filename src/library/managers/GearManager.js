@@ -41,27 +41,37 @@ Saves and loads list to and from localStorage
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Daihatsu landing craft anti-installation power modifiers per types and improvements
-		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus]
+		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus]
 		landingCraftModifiers: {
-			// Artillery Imp
+			// Soft-skinned (currently only Shikon 11th tank)
 			0: {
-				modifier: [2.4,2.15,1.8,2.2],
-				improvement: [0.08,0.043,0.0036,0],
+				modifier: [1,1,1,1.39,1],
+				improvement: [0,0,0,0,0]
+			},
+			// Artillery Imp
+			1: {
+				modifier: [2.4,2.15,1.8,2.97,2.05],
+				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Isolated Island Princess
-			1: {
-				modifier: [2.4,2.15,1.8,2.2],
-				improvement: [0.08,0.043,0.0036,0],
+			2: {
+				modifier: [2.4,2.15,1.8,2.97,1],
+				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Supply Depot Princess (no info on Daihatsu improvement)
-			2: {
-				modifier: [1.7,1.3,1,3.52],
-				improvement: [0.051,0.026,0,0],
+			3: {
+				modifier: [1.7,1.3,1,3.52,1],
+				improvement: [0.051,0.026,0,0,0],
 			},
 			// Summer Harbor Princess Damaged Form (no info on Shikon 11th tank)
-			3: {
-				modifier: [2.8,3.7,1.8,1],
-				improvement: [0,0,0,0],
+			4: {
+				modifier: [2.8,3.7,1.8,1,1],
+				improvement: [0.093,0.074,0.036,0,0],
+			},
+			// Summer Supply Deport Princess (currently only Shikon 11th tank)
+			5: {
+				modifier: [1,1,1,2.2,1],
+				improvement: [0,0,0,0,0],
 			},
 		},
 
