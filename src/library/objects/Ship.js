@@ -668,8 +668,8 @@ KC3改 Ship Object
 			"15": {
 				count: 0,
 				byShip: {
-					// Kagerou K2
-					ids: [566],
+					// Kagerou Class K2
+					ids: [566, 567],
 					multiple: { "raig": 2 },
 					countCap: 2,
 				},
@@ -692,29 +692,47 @@ KC3改 Ship Object
 			// https://wikiwiki.jp/kancolle/61cm%E5%9B%9B%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"286": {
 				count: 0,
+				starmax: 0,
 				byClass: {
 					// Asashio Class, Kai Nis
 					"18": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						callback: (api, info) => (({
+							"houg": info.starmax > 0 ? 1 : 0,
+							"raig": info.starmax > 0 ? 1 : 0,
+						})[api] || 0),
 					},
 					// Shiratsuyu Class, Kai Nis
 					"23": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						callback: (api, info) => (({
+							"houg": info.starmax > 0 ? 1 : 0,
+							"raig": info.starmax > 0 ? 1 : 0,
+						})[api] || 0),
 					},
 					// Kagerou Class, Kai Nis
-					//  Kagerou K2 only if except Isokaze / Hamakaze B Kai, Urakaze D Kai
+					//  except Isokaze / Hamakaze B Kai, Urakaze D Kai
 					"30": {
 						remodel: 2,
 						excludes: [556, 557, 558],
 						multiple: { "raig": 2, "houk": 1 },
+						// +1 more fp & tp if stars +max, multiple unknown
+						callback: (api, info) => (({
+							"houg": info.starmax > 0 ? 1 : 0,
+							"raig": info.starmax > 0 ? 1 : 0,
+						})[api] || 0),
 					},
 					// Yuugumo Class, Kai Nis
 					//  Naganami K2 only
 					"38": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						callback: (api, info) => (({
+							"houg": info.starmax > 0 ? 1 : 0,
+							"raig": info.starmax > 0 ? 1 : 0,
+						})[api] || 0),
 					},
 				},
 			},
@@ -722,8 +740,8 @@ KC3改 Ship Object
 			"266": {
 				count: 0,
 				byShip: {
-					// Kagerou K2
-					ids: [566],
+					// Kagerou Class K2
+					ids: [566, 567],
 					multiple: { "houg": 1 },
 					countCap: 2,
 					callback: (api, info) => (
@@ -758,8 +776,8 @@ KC3改 Ship Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// Kagerou K2, total +2 for 1st gun
-						ids: [566],
+						// Kagerou Class K2, total +2 for 1st gun
+						ids: [566, 567],
 						single: { "houg": 1 },
 					},
 				],
@@ -787,6 +805,7 @@ KC3改 Ship Object
 				total += (equip.master()["api_" + apiName] || 0);
 				const bonusDefs = explicitStatsBonusGears[equip.masterId];
 				if(bonusDefs && bonusDefs.count >= 0) bonusDefs.count += 1;
+				if(bonusDefs && bonusDefs.starmax >= 0) bonusDefs.starmax += (equip.stars >= 10) & 1;
 				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
 			}
 		});
@@ -2852,13 +2871,18 @@ KC3改 Ship Object
 		let isShow = gunFit !== false;
 		const shipAacis = AntiAir.sortedPossibleAaciList(AntiAir.shipPossibleAACIs(this));
 		isShow = isShow || shipAacis.length > 0;
+		// NOTE: shipObj here to be returned will be the 'old' ship instance,
+		// whose stats, like fp, tp, asw, are the values before equipment change.
+		// To get the 'latest' ship stats, should defer `GunFit` event after `api_get_member/ship3` call,
+		// and retrieve latest ship instance via KC3ShipManager.get method.
+		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
 		const aswDiff = newEquipAsw - oldEquipAsw;
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		const antiLandPowers = this.shipPossibleAntiLandPowers();
-		isShow = isShow || antiLandPowers.length > 0 ;
+		isShow = isShow || antiLandPowers.length > 0;
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -2871,7 +2895,7 @@ KC3改 Ship Object
 			gunFit,
 			shipAacis,
 			oaswPower,
-			antiLandPowers,
+			antiLandPowers: antiLandPowers.length > 0,
 		};
 	};
 

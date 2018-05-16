@@ -192,7 +192,7 @@
 				"night": 4
 			},
 			"weight3": {
-				"day": 1,
+				"day": 2,
 				"night": 0
 			},
 			"weight4": {
@@ -201,8 +201,8 @@
 				"married": 0.6
 			},
 			"weight5": {
-				"day": -7,
-				"night": -7,
+				"day": -10,
+				"night": -10,
 				"married": 0.6
 			},
 			"weight6": {
@@ -422,7 +422,7 @@
 			"weight3": [8, 105, 236],
 			"weight4": [161, 183],
 			"weight5": [133, 137],
-			"weight6": [128],
+			"weight6": [128, 281],
 			"weight7": [117],
 			"weight8": [9],
 			"unknown": [245, 246, 276]
@@ -470,49 +470,38 @@
 
 	"541": {
 		"weightClass": {
-			"weight1": [231, 232],
-			"weight2": [8, 105, 236],
-			"weight3": [161, 183],
-			"weight4": [133, 137],
-			"weight5": [128],
-			"weight6": [7, 76, 103, 104, 114, 190, 192],
-			"weight7": [117],
-			"weight8": [9, 276],
-			"unknown": [245, 246]
+			"weight1": [8, 105, 236],
+			"weight2": [161, 183],
+			"weight3": [128, 281],
+			"weight4": [117],
+			"weight5": [9],
+			"weight6": [276],
+			"unknown": [7, 76, 103, 104, 114, 133, 137, 190, 192, 231, 232, 245, 246]
 		},
 		"accuracy": {
 			"weight1": {
-				"day": 4,
-				"night": 4
-			},
-			"weight2": {
 				"day": 5,
 				"night": 5
+			},
+			"weight2": {
+				"day": 0,
+				"night": 0
 			},
 			"weight3": {
 				"day": 0,
 				"night": 0
 			},
 			"weight4": {
-				"day": -2,
-				"night": 0,
-				"married": 0.6
-			},
-			"weight5": {
-				"day": 0,
-				"night": 0
-			},
-			"weight6": {
-				"day": -2,
-				"night": -2,
-				"married": 0.6
-			},
-			"weight7": {
 				"day": -3,
 				"night": -3,
 				"married": 0.6
 			},
-			"weight8": {
+			"weight5": {
+				"day": -5,
+				"night": -5,
+				"married": 0.6
+			},
+			"weight6": {
 				"day": -5,
 				"night": -5,
 				"married": 0.6
@@ -571,7 +560,7 @@
 
 	"131": {
 		"weightClass": {
-			"weight0": [7, 8, 9, 76, 103, 104, 105, 114, 117, 128, 133, 137, 161, 183, 190, 192, 231, 232, 236, 245, 246, 276],
+			"weight0": [7, 8, 9, 76, 103, 104, 105, 114, 117, 128, 133, 137, 161, 183, 190, 192, 231, 232, 236, 245, 246, 276, 281],
 			"unknown": []
 		},
 		"accuracy": {
