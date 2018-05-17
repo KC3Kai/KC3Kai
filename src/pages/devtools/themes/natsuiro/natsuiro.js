@@ -1157,8 +1157,21 @@
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
 				                   + (PlayerManager.consumables.irako || 0)
 			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
-					    PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			if(KC3Meta.isDuringFoodEvent()){
+				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
+				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
+					const attrName = PlayerManager.getConsumableById(id, true);
+					let amount = PlayerManager.getConsumableById(id) || 0;
+					// slotitem like rations should be counted via GearManager
+					const slotitemMstId = slotitemIdMap[id];
+					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
+					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
+				});
+			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
+				ConfigManager.scrollHqInfoPage();
+			}
 			$(".consumables").hideChildrenTooltips();
 			$(".consumables .consumable").hide();
 			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).show();

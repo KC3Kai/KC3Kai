@@ -422,11 +422,13 @@ html,body {
 .module.activity .consumables .consumable.page2 {
 	display:none;
 }
-.module.activity .consumables .consumable.page3 {
+.module.activity .consumables .consumable.page3,
+.module.activity .consumables .consumable.page4 {
 	display:none;
 	width:60px;
 }
-.module.activity .consumables .consumable.page3 .consumable_ltext {
+.module.activity .consumables .consumable.page3 .consumable_ltext,
+.module.activity .consumables .consumable.page4 .consumable_ltext {
 	width:40px;
 }
 
@@ -907,7 +909,7 @@ ABYSS FLEET
 .module.activity .battle_flag.battle_fish img.rounded {
 	width:25px;
 	height:25px;
-	margin:3px 5px;
+	margin-top:2px;
 	border-radius:50%;
 }
 .module.activity .battle_flag .support_exped {
