@@ -678,6 +678,7 @@ KC3改 Ship Object
 			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"285": {
 				count: 0,
+				starsDist: [],
 				byShip: {
 					// Here goes ship ID white-list:
 					//  Fubuki K2, Murakumo K2,
@@ -686,6 +687,10 @@ KC3改 Ship Object
 					//  Hatsuharu K2, Hatsushimo K2
 					ids: [426, 420, 195, 407, 437, 147, 326, 419],
 					multiple: { "raig": 2, "houk": 1 },
+					// +1 fp if stars +max
+					callback: (api, info) => (({
+						"houg": info.starsDist[10] || 0,
+					})[api] || 0),
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount Late Model
@@ -700,7 +705,7 @@ KC3改 Ship Object
 						multiple: { "raig": 2, "houk": 1 },
 						// +1 fp if stars +max
 						callback: (api, info) => (({
-							"houg": info.starsDist[10] > 0 ? 1 : 0,
+							"houg": info.starsDist[10] || 0,
 						})[api] || 0),
 					},
 					// Shiratsuyu Class, Kai Nis
@@ -708,7 +713,7 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
 						callback: (api, info) => (({
-							"houg": info.starsDist[10] > 0 ? 1 : 0,
+							"houg": info.starsDist[10] || 0,
 						})[api] || 0),
 					},
 					// Kagerou Class, Kai Nis
@@ -717,10 +722,10 @@ KC3改 Ship Object
 						remodel: 2,
 						excludes: [556, 557, 558],
 						multiple: { "raig": 2, "houk": 1 },
-						// +1 tp if stars >= 5, +1 fp if stars +max, multiple unknown
+						// +1 tp if stars >= 5, +1 fp if stars +max, multiple
 						callback: (api, info) => (({
-							"houg": info.starsDist[10] > 0 ? 1 : 0,
-							"raig": info.starsDist.slice(5).some(v => v > 0) ? 1 : 0,
+							"houg": info.starsDist[10] || 0,
+							"raig": info.starsDist.slice(5).sumValues(),
 						})[api] || 0),
 					},
 					// Yuugumo Class, Kai Nis
@@ -729,7 +734,7 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
 						callback: (api, info) => (({
-							"houg": info.starsDist[10] > 0 ? 1 : 0,
+							"houg": info.starsDist[10] || 0,
 						})[api] || 0),
 					},
 				},

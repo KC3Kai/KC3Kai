@@ -875,7 +875,7 @@
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
-		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png");
+		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
@@ -2768,31 +2768,29 @@
 				.css("opacity", 1);
 
 			// If there is any useitem drop
-			if(data.api_get_useitem){
-				const useitemId = data.api_get_useitem.api_useitem_id;
-				if(useitemId > 0){
-					$(".module.activity .battle_fish img")
-						.attr("src", `/assets/img/useitems/${useitemId}.png`).addClass("rounded")
-						.error(function(){
-							$(this).off("error").removeClass("rounded")
-								.attr("src", "/assets/img/ui/map_drop.png");
-						});
-					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
-					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
-					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
-						+ (useitemAttr ? "\n{0}: {1} +1".format(
-							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
-							currentAmount
-						) : "")
-					);
-					if(useitemAttr){
-						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
-						PlayerManager.setConsumables();
-					}
-				} else {
-					$(".module.activity .battle_fish img")
-						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
-					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop"));
+			if(thisNode.dropUseitem > 0){
+				$(".module.activity .battle_fish img")
+					.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
+					.error(function(){
+						$(this).off("error").removeClass("rounded")
+							.attr("src", "/assets/img/ui/map_drop.png");
+					});
+				const currentAmount = PlayerManager.getConsumableById(thisNode.dropUseitem) || 0;
+				const useitemAttr = PlayerManager.getConsumableById(thisNode.dropUseitem, true);
+				// Not sure if all drop items are capped at 99, but foods seem be so.
+				// Might be unnecessary processing here, because:
+				// if amount reaches its cap, should be no drop flag in API result at all, like ship.
+				const dropItemCap = 99;
+				$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
+					+ (useitemAttr ? "\n{0}: {1} +{2}".format(
+						KC3Meta.useItemName(thisNode.dropUseitem) || KC3Meta.term("Unknown"),
+						currentAmount,
+						currentAmount >= dropItemCap ? 0 : 1
+					) : "")
+				);
+				if(useitemAttr){
+					PlayerManager.consumables[useitemAttr] = Math.min(currentAmount + 1, dropItemCap);
+					PlayerManager.setConsumables();
 				}
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
