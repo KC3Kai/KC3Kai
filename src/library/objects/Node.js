@@ -110,11 +110,10 @@ Used by SortieManager
 		this.item = [];
 		this.icon = [];
 		this.amount = [];
-		if (typeof nodeData.api_itemget !== "undefined" && nodeData.api_itemget.api_id) {
-			nodeData.api_itemget = [nodeData.api_itemget];
-		}
-		this.nodeDesc = this.buildItemNodeDesc( nodeData.api_itemget );
-		nodeData.api_itemget.forEach(function(itemget){
+		const itemgetArr = Array.isArray(nodeData.api_itemget) ? nodeData.api_itemget :
+			nodeData.api_itemget && nodeData.api_itemget.api_id ? [nodeData.api_itemget] : [];
+		this.nodeDesc = this.buildItemNodeDesc( itemgetArr );
+		itemgetArr.forEach(function(itemget){
 			var icon_id = itemget.api_icon_id;
 			var getcount = itemget.api_getcount;
 			self.item.push(icon_id);
