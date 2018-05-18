@@ -2758,7 +2758,7 @@
 		},
 
 		BattleResult: function(data){
-			var thisNode = KC3SortieManager.currentNode();
+			const thisNode = KC3SortieManager.currentNode();
 
 			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
 
@@ -2768,13 +2768,19 @@
 				.css("opacity", 1);
 
 			// If there is any useitem drop
-			if(thisNode.dropUseitem > 0){
-				$(".module.activity .battle_fish img")
-					.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
-					.error(function(){
-						$(this).off("error").removeClass("rounded")
-							.attr("src", "/assets/img/ui/map_drop.png");
-					});
+			if(thisNode.dropUseitem > 0) {
+				// Keep old style icon shown if drop spoiler is disabled
+				if(ConfigManager.info_drop) {
+					$(".module.activity .battle_fish img")
+						.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
+						.error(function() {
+							$(this).off("error").removeClass("rounded")
+								.attr("src", "/assets/img/ui/map_drop.png");
+						});
+				} else {
+					$(".module.activity .battle_fish img")
+						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
+				}
 				const currentAmount = PlayerManager.getConsumableById(thisNode.dropUseitem) || 0;
 				const useitemAttr = PlayerManager.getConsumableById(thisNode.dropUseitem, true);
 				// Not sure if all drop items are capped at 99, but foods seem be so.
@@ -2782,25 +2788,27 @@
 				// if amount reaches its cap, should be no drop flag in API result at all, like ship.
 				const dropItemCap = 99;
 				$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
-					+ (useitemAttr ? "\n{0}: {1} +{2}".format(
+					+ (useitemAttr && ConfigManager.info_drop ? "\n{0}: {1} +{2}".format(
 						KC3Meta.useItemName(thisNode.dropUseitem) || KC3Meta.term("Unknown"),
 						currentAmount,
 						currentAmount >= dropItemCap ? 0 : 1
 					) : "")
 				);
-				if(useitemAttr){
-					PlayerManager.consumables[useitemAttr] = Math.min(currentAmount + 1, dropItemCap);
-					PlayerManager.setConsumables();
-				}
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
+				if(useitemAttr) {
+					PlayerManager.consumables[useitemAttr] = Math.min(currentAmount + 1, dropItemCap);
+					PlayerManager.setConsumables();
+					this.Consumables({});
+				}
 			}
 
 			// If there is a ship drop
-			if(thisNode.drop > 0){
+			if(thisNode.drop > 0) {
 				// If drop spoiler is enabled on settings
-				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
+				if(ConfigManager.info_drop) {
+					$(".module.activity .battle_drop img")
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -2811,17 +2819,16 @@
 							! KC3ShipManager.masterExists(thisNode.drop)
 						).lazyInitTooltip();
 				}
-
-				// Update Counts
+				// Update counts
 				this.ShipSlots({});
 				this.GearSlots({});
-			}else{
+			} else {
 				$(".module.activity .battle_drop img").attr("src",
 					"../../../../assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
-			if(KC3SortieManager.getCurrentMapData().kind=='gauge-tp') {
+			if(KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
 				updateMapGauge(
 					-thisNode.gaugeDamage,
 					true /* does not matter flagship status */
@@ -2830,11 +2837,11 @@
 
 			// Show experience calculation if leveling global found in sent fleet
 			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
-				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
+				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)) {
 				const expJustGained = data.api_get_ship_exp;
 				const currentFleet = PlayerManager.fleets[selectedFleet-1];
 				const levelingGoals = localStorage.getObject("goals") || {};
-				currentFleet.ship(function(rosterId, index, shipData){
+				currentFleet.ship(function(rosterId, index, shipData) {
 					const grindGoal = KC3Calc.getShipLevelingGoal(shipData, undefined, levelingGoals, expJustGained[index + 1]);
 					// if no goal defined or the ship has reached the goal, skip it
 					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;

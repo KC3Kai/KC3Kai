@@ -105,7 +105,6 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
-		var self = this;
 		this.type = "resource";
 		this.item = [];
 		this.icon = [];
@@ -113,25 +112,25 @@ Used by SortieManager
 		const itemgetArr = Array.isArray(nodeData.api_itemget) ? nodeData.api_itemget :
 			nodeData.api_itemget && nodeData.api_itemget.api_id ? [nodeData.api_itemget] : [];
 		this.nodeDesc = this.buildItemNodeDesc( itemgetArr );
-		itemgetArr.forEach(function(itemget){
-			var icon_id = itemget.api_icon_id;
-			var getcount = itemget.api_getcount;
-			self.item.push(icon_id);
-			self.icon.push(function(folder){
+		itemgetArr.forEach(itemget => {
+			const icon_id = itemget.api_icon_id;
+			const getcount = itemget.api_getcount;
+			this.item.push(icon_id);
+			this.icon.push(function(folder){
 				return folder+(
 					["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
 					[icon_id - 1]
 				)+".png";
 			});
-			self.amount.push(getcount);
+			this.amount.push(getcount);
 			if(icon_id < 8)
-				KC3SortieManager.materialGain[icon_id-1] += getcount;
+				KC3SortieManager.materialGain[icon_id - 1] += getcount;
 		});
 		return this;
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
-		var self = this,
+		const self = this,
 			mapKey = KC3SortieManager.getSortieMap().join(''),
 			currentMap = KC3SortieManager.getCurrentMapData();
 		this.type = "bounty";
@@ -139,7 +138,7 @@ Used by SortieManager
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[self.item-1]
+				[self.item - 1]
 			)+".png";
 		};
 		this.nodeDesc = this.buildItemNodeDesc([
@@ -167,7 +166,7 @@ Used by SortieManager
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[nodeData.api_happening.api_icon_id-1]
+				[nodeData.api_happening.api_icon_id - 1]
 			)+".png";
 		};
 		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
@@ -246,7 +245,6 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
-		
 		return this;
 	};
 	
