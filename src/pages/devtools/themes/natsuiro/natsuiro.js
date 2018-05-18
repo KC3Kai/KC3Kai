@@ -2760,11 +2760,11 @@
 		BattleResult: function(data){
 			const thisNode = KC3SortieManager.currentNode();
 
-			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
+			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 
 			// Show real battle rank
-			$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
+			$(".module.activity .battle_rating img")
+				.attr("src", `/assets/img/client/ratings/${thisNode.rating}.png`)
 				.css("opacity", 1);
 
 			// If there is any useitem drop
@@ -2783,21 +2783,21 @@
 				}
 				const currentAmount = PlayerManager.getConsumableById(thisNode.dropUseitem) || 0;
 				const useitemAttr = PlayerManager.getConsumableById(thisNode.dropUseitem, true);
-				// Not sure if all drop items are capped at 99, but foods seem be so.
-				// Might be unnecessary processing here, because:
-				// if amount reaches its cap, should be no drop flag in API result at all, like ship.
-				const dropItemCap = 99;
+				// Confirmed that food items are capped at 99, and if amount reaches its cap,
+				// will be no drop flag in API result at all, just like ship.
 				$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
-					+ (useitemAttr && ConfigManager.info_drop ? "\n{0}: {1} +{2}".format(
-						KC3Meta.useItemName(thisNode.dropUseitem) || KC3Meta.term("Unknown"),
-						currentAmount,
-						currentAmount >= dropItemCap ? 0 : 1
+					+ (useitemAttr && ConfigManager.info_drop ? "\n{0}: {1} +1".format(
+						KC3Meta.useItemName(thisNode.dropUseitem) ||
+							(KC3Master.useitem(thisNode.dropUseitem) || {}).api_name ||
+							KC3Meta.term("Unknown"),
+						currentAmount
 					) : "")
 				);
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
+				// Update counts
 				if(useitemAttr) {
-					PlayerManager.consumables[useitemAttr] = Math.min(currentAmount + 1, dropItemCap);
+					PlayerManager.consumables[useitemAttr] = currentAmount + 1;
 					PlayerManager.setConsumables();
 					this.Consumables({});
 				}
@@ -2823,8 +2823,8 @@
 				this.ShipSlots({});
 				this.GearSlots({});
 			} else {
-				$(".module.activity .battle_drop img").attr("src",
-					"../../../../assets/img/ui/dark_shipdrop-x.png");
+				$(".module.activity .battle_drop img")
+					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
