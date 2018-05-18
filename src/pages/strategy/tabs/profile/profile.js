@@ -451,34 +451,70 @@
 					});
 			});
 			
-			// Export CSV: Shipgirl Master Data
+			// Export CSV: Shipgirl Master Data (Abyssal including internal DB)
 			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
 				// CSV Headers
 				let exportData = [
 					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots"
 				].join(",") + CSV_LINE_BREAKS;
-				$.each(KC3Master.all_ships(), (i, s) => {
-					if(KC3Master.isRegularShip(s.api_id)) {
+				$.each(KC3Master.all_ships(true), (i, s) => {
+					const isAb = KC3Master.isAbyssalShip(s.api_id);
+					if((!event.altKey && KC3Master.isRegularShip(s.api_id)) || (event.altKey && isAb)) {
 						exportData += [
 							s.api_id,
-							csvQuoteIfNecessary(KC3Meta.shipName(s.api_name)),
+							csvQuoteIfNecessary(isAb ? KC3Meta.abyssShipName(s.api_id) : KC3Meta.shipName(s.api_name)),
 							csvQuoteIfNecessary(s.api_yomi),
-							csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
+							isAb ? "-" : csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
 							csvQuoteIfNecessary(KC3Meta.stype(s.api_stype)),
-							csvQuoteIfNecessary(KC3Meta.ctype(s.api_ctype)),
-							RemodelDb.remodelGroup(s.api_id).join('/'),
-							s.api_taik.join('/'),
-							s.api_houg.join('/'),
-							s.api_souk.join('/'),
-							s.api_raig.join('/'),
-							s.api_tyku.join('/'),
-							s.api_luck.join('/'),
+							isAb ? "-" : csvQuoteIfNecessary(KC3Meta.ctype(s.api_ctype)),
+							isAb ? "-" : RemodelDb.remodelGroup(s.api_id).join('/'),
+							isAb ? s.api_taik : s.api_taik.join('/'),
+							isAb ? s.api_houg : s.api_houg.join('/'),
+							isAb ? s.api_souk : s.api_souk.join('/'),
+							isAb ? s.api_raig : s.api_raig.join('/'),
+							isAb ? s.api_tyku : s.api_tyku.join('/'),
+							isAb ? s.api_luck : s.api_luck.join('/'),
 							s.api_soku,
-							s.api_maxeq.slice(0, s.api_slot_num).join('/')
+							(s.api_maxeq || []).slice(0, s.api_slot_num).join('/')
 						].join(",") + CSV_LINE_BREAKS;
 					}
 				});
 				const filename = self.makeFilename("Shipgirls", "csv");
+				self.saveFile(filename, exportData, "text/csv");
+			});
+			
+			// Export CSV: Equipment Master Data
+			$(".tab_profile .export_csv_equipment").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "Japanese Name", "Rare", "Types", "Scrap Rsc", "Stats", "Unknown Stats"
+				].join(",") + CSV_LINE_BREAKS;
+				const statsApiMap = {
+					"api_houg": "FP", "api_raig": "TP", "api_souk": "AR", "api_tyku": "AA",
+					"api_houk": "EV", "api_houm": "AC", "api_tais": "AS", "api_saku": "LS",
+					"api_leng": "RN", "api_distance": "RD", "api_cost": "BC"
+				};
+				const unkStatsApiArr = [
+					"api_atap", "api_bakk", "api_baku", "api_luck",
+					"api_raik", "api_raim", "api_sakb", "api_soku", "api_taik"
+				];
+				$.each(KC3Master.all_slotitems(), (i, s) => {
+					if((!event.altKey && !KC3Master.isAbyssalGear(s.api_id))
+					 || (event.altKey && KC3Master.isAbyssalGear(s.api_id))) {
+						exportData += [
+							s.api_id,
+							csvQuoteIfNecessary(KC3Meta.gearName(s.api_name)),
+							csvQuoteIfNecessary(s.api_name),
+							s.api_rare,
+							s.api_type.join('/'),
+							s.api_broken.join('/'),
+							Object.keys(statsApiMap).filter(k => !!s[k])
+								.map(k => statsApiMap[k] + ":" + s[k]).join('/'),
+							unkStatsApiArr.filter(k => !!s[k]).map(k => k.substr(4) + ":" + s[k]).join('/')
+						].join(",") + CSV_LINE_BREAKS;
+					}
+				});
+				const filename = self.makeFilename("Equipment", "csv");
 				self.saveFile(filename, exportData, "text/csv");
 			});
 			
