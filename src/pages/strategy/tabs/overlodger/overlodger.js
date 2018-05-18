@@ -1292,7 +1292,7 @@
 			
 			$(".lodger-header",baseContext).text(
 				[1,2].reduce(function(str,key,ind){
-					return str.replace('%DATE' + key,dateFormat(lookupBound[ind] * 3600000,'ddd yyyy-mm-dd HH:' + ['00','59'][ind]));
+					return str.replace('%DATE' + key,dateFormat(lookupBound[ind] * 3600000,'yyyy-mm-dd (ddd) HH:' + ['00','59'][ind], false, KC3Translation.getLocale()));
 				},KC3Meta.term('LodgerLabel'))
 			);
 			
