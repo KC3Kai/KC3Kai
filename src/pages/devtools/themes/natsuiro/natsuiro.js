@@ -2160,6 +2160,13 @@
 						break;
 					$(".module.activity .node_type_battle").hide();
 					$(".module.activity .node_type_prev_encounters").show();
+					$(".module.activity .node_type_prev_encounters .prev_encounter_label")
+						.addClass("hover")
+						.off("click").on("click", function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "encounters-{0}-{1}-{2}".format(world, map, diff)
+							})).execute();
+						});
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
 					nodeEncBox.text("...");
 					KC3Database.con.encounters.filter(node =>
