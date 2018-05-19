@@ -918,6 +918,15 @@ Provides access to data on built-in JSON files
 				number : number.toLocaleString(locale, options);
 		},
 		
+		/**
+		 * @return indicate if game is during Spring 2018 mini event.
+		 * Should disable this after event manually. Seems no reliable flag found,
+		 * perhaps `api_c_flag` will not disappear if Dinner Ticket not.
+		 */
+		isDuringFoodEvent :function(){
+			return true;
+		},
+		
 		isAF :function(){
 			return this.getAF(0) === undefined ?
 				this.getAF(1) < Date.now() && Date.now() < this.getAF(2) : this.getAF(0);

@@ -143,7 +143,7 @@ Saves and loads significant data for future use
 
 		all_ships :function(withAbyssals, withSeasonals){
 			var id, ss, as;
-			var ships = $.extend({}, this._raw.ship);
+			var ships = $.extend(true, {}, this._raw.ship);
 			if(!!withAbyssals && Object.keys(ships).length > 0
 				&& Object.keys(this._abyssalShips).length > 0){
 				for(id in this._abyssalShips){
@@ -277,7 +277,7 @@ Saves and loads significant data for future use
 		},
 
 		abyssalShip :function(id, isMasterMerged){
-			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend({}, this.ship(id)) || {};
+			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend(true, {}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&
 				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
 				false : $.extend(master, this._abyssalShips[id]);

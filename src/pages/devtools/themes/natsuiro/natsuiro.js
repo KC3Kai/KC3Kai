@@ -875,7 +875,7 @@
 		$(".module.activity .battle_support").attr("titlealt", KC3Meta.term("BattleSupportExped")).lazyInitTooltip();
 		$(".module.activity .battle_support .support_lbas").hide();
 		$(".module.activity .battle_support .support_exped").hide();
-		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png");
+		$(".module.activity .battle_fish img").attr("src", "../../../../assets/img/ui/map_drop.png").removeClass("rounded");
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
@@ -1157,8 +1157,21 @@
 			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
 				                   + (PlayerManager.consumables.irako || 0)
 			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54), 
-					    PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			if(KC3Meta.isDuringFoodEvent()){
+				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
+				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
+					const attrName = PlayerManager.getConsumableById(id, true);
+					let amount = PlayerManager.getConsumableById(id) || 0;
+					// slotitem like rations should be counted via GearManager
+					const slotitemMstId = slotitemIdMap[id];
+					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
+					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
+				});
+			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
+				ConfigManager.scrollHqInfoPage();
+			}
 			$(".consumables").hideChildrenTooltips();
 			$(".consumables .consumable").hide();
 			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).show();
@@ -2147,6 +2160,13 @@
 						break;
 					$(".module.activity .node_type_battle").hide();
 					$(".module.activity .node_type_prev_encounters").show();
+					$(".module.activity .node_type_prev_encounters .prev_encounter_label")
+						.addClass("hover")
+						.off("click").on("click", function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "encounters-{0}-{1}-{2}".format(world, map, diff)
+							})).execute();
+						});
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
 					nodeEncBox.text("...");
 					KC3Database.con.encounters.filter(node =>
@@ -2745,51 +2765,57 @@
 		},
 
 		BattleResult: function(data){
-			var thisNode = KC3SortieManager.currentNode();
+			const thisNode = KC3SortieManager.currentNode();
 
-			updateHQEXPGained($(".admiral_lvnext"),KC3SortieManager.hqExpGained);
+			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 
 			// Show real battle rank
-			$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.rating+".png")
+			$(".module.activity .battle_rating img")
+				.attr("src", `/assets/img/client/ratings/${thisNode.rating}.png`)
 				.css("opacity", 1);
 
 			// If there is any useitem drop
-			if(data.api_get_useitem){
-				const useitemId = data.api_get_useitem.api_useitem_id;
-				if(useitemId > 0){
+			if(thisNode.dropUseitem > 0) {
+				// Keep old style icon shown if drop spoiler is disabled
+				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_fish img")
-						.attr("src", `/assets/img/useitems/${useitemId}.png`).addClass("rounded")
-						.error(function(){
+						.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
+						.error(function() {
 							$(this).off("error").removeClass("rounded")
 								.attr("src", "/assets/img/ui/map_drop.png");
 						});
-					const currentAmount = PlayerManager.getConsumableById(useitemId) || 0;
-					const useitemAttr = PlayerManager.getConsumableById(useitemId, true);
-					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
-						+ (useitemAttr ? "\n{0}: {1} +1".format(
-							KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"),
-							currentAmount
-						) : "")
-					);
-					if(useitemAttr){
-						PlayerManager.consumables[useitemAttr] = currentAmount + 1;
-						PlayerManager.setConsumables();
-					}
 				} else {
 					$(".module.activity .battle_fish img")
 						.attr("src", "/assets/img/ui/map_drop.png").removeClass("rounded");
-					$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop"));
 				}
+				const currentAmount = PlayerManager.getConsumableById(thisNode.dropUseitem) || 0;
+				const useitemAttr = PlayerManager.getConsumableById(thisNode.dropUseitem, true);
+				// Confirmed that food items are capped at 99, and if amount reaches its cap,
+				// will be no drop flag in API result at all, just like ship.
+				$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")
+					+ (useitemAttr && ConfigManager.info_drop ? "\n{0}: {1} +1".format(
+						KC3Meta.useItemName(thisNode.dropUseitem) ||
+							(KC3Master.useitem(thisNode.dropUseitem) || {}).api_name ||
+							KC3Meta.term("Unknown"),
+						currentAmount
+					) : "")
+				);
 				$(".module.activity .battle_support").hide();
 				$(".module.activity .battle_fish").show();
+				// Update counts
+				if(useitemAttr) {
+					PlayerManager.consumables[useitemAttr] = currentAmount + 1;
+					PlayerManager.setConsumables();
+					this.Consumables({});
+				}
 			}
 
 			// If there is a ship drop
-			if(thisNode.drop > 0){
+			if(thisNode.drop > 0) {
 				// If drop spoiler is enabled on settings
-				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
+				if(ConfigManager.info_drop) {
+					$(".module.activity .battle_drop img")
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -2800,17 +2826,16 @@
 							! KC3ShipManager.masterExists(thisNode.drop)
 						).lazyInitTooltip();
 				}
-
-				// Update Counts
+				// Update counts
 				this.ShipSlots({});
 				this.GearSlots({});
-			}else{
-				$(".module.activity .battle_drop img").attr("src",
-					"../../../../assets/img/ui/dark_shipdrop-x.png");
+			} else {
+				$(".module.activity .battle_drop img")
+					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
-			if(KC3SortieManager.getCurrentMapData().kind=='gauge-tp') {
+			if(KC3SortieManager.getCurrentMapData().kind === 'gauge-tp') {
 				updateMapGauge(
 					-thisNode.gaugeDamage,
 					true /* does not matter flagship status */
@@ -2819,11 +2844,11 @@
 
 			// Show experience calculation if leveling global found in sent fleet
 			if(selectedFleet <= (PlayerManager.combinedFleet ? 2 : 4) &&
-				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)){
+				KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)) {
 				const expJustGained = data.api_get_ship_exp;
 				const currentFleet = PlayerManager.fleets[selectedFleet-1];
 				const levelingGoals = localStorage.getObject("goals") || {};
-				currentFleet.ship(function(rosterId, index, shipData){
+				currentFleet.ship(function(rosterId, index, shipData) {
 					const grindGoal = KC3Calc.getShipLevelingGoal(shipData, undefined, levelingGoals, expJustGained[index + 1]);
 					// if no goal defined or the ship has reached the goal, skip it
 					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
