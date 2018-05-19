@@ -463,6 +463,11 @@
 		customCSS.innerHTML = ConfigManager.pan_custom_css;
 		$("head").append(customCSS);
 
+		var previousStates = {
+			poi : ConfigManager.PoiDBSubmission_enabled,
+			opendb : ConfigManager.OpenDBSubmission_enabled,
+			tsundb : ConfigManager.TsunDBSubmission_enabled 
+		};
 		// Listen config key changed
 		window.addEventListener("storage", function({key, timeStamp, url}){
 			if(key === ConfigManager.keyName()) {
@@ -471,6 +476,19 @@
 
 				if($("#pan_custom_css").html() !== ConfigManager.pan_custom_css)
 					$("#pan_custom_css").html(ConfigManager.pan_custom_css);
+
+				if(!previousStates.poi && ConfigManager.PoiDBSubmission_enabled)
+					PoiDBSubmission.cleanup();
+				if(!previousStates.opendb && ConfigManager.OpenDBSubmission_enabled)
+					OpenDBSubmission.cleanup();
+				if(!previousStates.tsundb && ConfigManager.TsunDBSubmission_enabled)
+					TsunDBSubmission.cleanOnStart();
+
+				previousStates = {
+					poi : ConfigManager.PoiDBSubmission_enabled,
+					opendb : ConfigManager.OpenDBSubmission_enabled,
+					tsundb : ConfigManager.TsunDBSubmission_enabled 
+				};
 			}
 		});
 

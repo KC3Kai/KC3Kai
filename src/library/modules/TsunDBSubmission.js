@@ -165,6 +165,7 @@
 		},
 		
 		processNext: function(http) {
+			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			this.cleanOnNext();
 			const apiData = http.response.api_data;
 			
