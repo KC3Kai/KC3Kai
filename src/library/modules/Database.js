@@ -770,7 +770,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				this.con.enemy
 					.where("id").equals(shipId)
 					.toArray(function(matchList){
-						console.debug("matchList", matchList);
+						//console.debug("matchList", matchList);
 						if(matchList.length > 0){
 							callback(matchList[0]);
 						}else{

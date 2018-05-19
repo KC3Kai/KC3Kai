@@ -41,11 +41,11 @@ Used by SortieManager
 		this.startsFromNight = false;
 		
 		// If passed initial values
-		if(typeof nodeData != "undefined"){
+		if(typeof nodeData !== "undefined"){
 			
 			// If passed raw data from compass,
 			// about api_event_id and api_event_kind, see SortieManager.js#L237
-			if(typeof nodeData.api_event_kind != "undefined"){
+			if(typeof nodeData.api_event_kind !== "undefined"){
 				this.eships = [];
 				this.eventKind = nodeData.api_event_kind;
 				this.eventId = nodeData.api_event_id;
@@ -65,7 +65,7 @@ Used by SortieManager
 			}
 			
 			// If passed formatted enemy list from PVP
-			if(typeof nodeData.pvp_opponents != "undefined"){
+			if(typeof nodeData.pvp_opponents !== "undefined"){
 				this.eships = nodeData.pvp_opponents;
 				this.gaugeDamage = -1;
 			}
@@ -105,34 +105,32 @@ Used by SortieManager
 	};
 	
 	KC3Node.prototype.defineAsResource = function( nodeData ){
-		var self = this;
 		this.type = "resource";
 		this.item = [];
 		this.icon = [];
 		this.amount = [];
-		if (typeof nodeData.api_itemget == "object" && typeof nodeData.api_itemget.api_id != "undefined") {
-			nodeData.api_itemget = [nodeData.api_itemget];
-		}
-		this.nodeDesc = this.buildItemNodeDesc( nodeData.api_itemget );
-		nodeData.api_itemget.forEach(function(itemget){
-			var icon_id = itemget.api_icon_id;
-			var getcount = itemget.api_getcount;
-			self.item.push(icon_id);
-			self.icon.push(function(folder){
+		const itemgetArr = Array.isArray(nodeData.api_itemget) ? nodeData.api_itemget :
+			nodeData.api_itemget && nodeData.api_itemget.api_id ? [nodeData.api_itemget] : [];
+		this.nodeDesc = this.buildItemNodeDesc( itemgetArr );
+		itemgetArr.forEach(itemget => {
+			const icon_id = itemget.api_icon_id;
+			const getcount = itemget.api_getcount;
+			this.item.push(icon_id);
+			this.icon.push(function(folder){
 				return folder+(
 					["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass","","box1","box2","box3"]
 					[icon_id - 1]
 				)+".png";
 			});
-			self.amount.push(getcount);
+			this.amount.push(getcount);
 			if(icon_id < 8)
-				KC3SortieManager.materialGain[icon_id-1] += getcount;
+				KC3SortieManager.materialGain[icon_id - 1] += getcount;
 		});
 		return this;
 	};
 	
 	KC3Node.prototype.defineAsBounty = function( nodeData ){
-		var self = this,
+		const self = this,
 			mapKey = KC3SortieManager.getSortieMap().join(''),
 			currentMap = KC3SortieManager.getCurrentMapData();
 		this.type = "bounty";
@@ -140,7 +138,7 @@ Used by SortieManager
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[self.item-1]
+				[self.item - 1]
 			)+".png";
 		};
 		this.nodeDesc = this.buildItemNodeDesc([
@@ -168,7 +166,7 @@ Used by SortieManager
 		this.icon = function(folder){
 			return folder+(
 				["fuel","ammo","steel","bauxite","ibuild","bucket","devmat","compass"]
-				[nodeData.api_happening.api_icon_id-1]
+				[nodeData.api_happening.api_icon_id - 1]
 			)+".png";
 		};
 		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
@@ -247,7 +245,6 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
-		
 		return this;
 	};
 	
@@ -452,7 +449,7 @@ Used by SortieManager
 		}
 		
 		// Fighter phase 2
-		if(typeof battleData.api_kouku2 != "undefined"){
+		if(typeof battleData.api_kouku2 !== "undefined"){
 			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
@@ -470,7 +467,7 @@ Used by SortieManager
 		}
 		
 		// Jet plane phase, happen before fighter attack phase
-		if(typeof battleData.api_injection_kouku != "undefined"){
+		if(typeof battleData.api_injection_kouku !== "undefined"){
 			var jetPlanePhase = battleData.api_injection_kouku;
 			this.planeJetFighters = { player:[0,0], abyssal:[0,0] };
 			this.planeJetBombers = { player:[0,0], abyssal:[0,0] };
@@ -495,7 +492,7 @@ Used by SortieManager
 		}
 		
 		// Boss Debuffed
-		this.debuffed = typeof battleData.api_boss_damaged != "undefined" ?
+		this.debuffed = typeof battleData.api_boss_damaged !== "undefined" ?
 			(battleData.api_boss_damaged == 1) ? true : false
 			: false;
 		
@@ -943,7 +940,7 @@ Used by SortieManager
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
-						if (typeof resultData.api_landing_hp != "undefined") {
+						if (typeof resultData.api_landing_hp !== "undefined") {
 							var TPdata = resultData.api_landing_hp;
 							this.gaugeDamage = Math.min(TPdata.api_now_hp, TPdata.api_sub_value);
 							maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
@@ -972,7 +969,7 @@ Used by SortieManager
 			
 			var ship_get = [];
 			
-			if(typeof resultData.api_get_ship != "undefined"){
+			if(typeof resultData.api_get_ship !== "undefined"){
 				this.drop = resultData.api_get_ship.api_ship_id;
 				KC3ShipManager.pendingShipNum += 1;
 				KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(this.drop);
@@ -984,7 +981,19 @@ Used by SortieManager
 				this.drop = 0;
 			}
 			
-			if(typeof resultData.api_get_eventitem != "undefined"){
+			if(typeof resultData.api_get_useitem !== "undefined"){
+				this.dropUseitem = resultData.api_get_useitem.api_useitem_id || 0;
+			}else{
+				this.dropUseitem = 0;
+			}
+			
+			if(typeof resultData.api_get_slotitem !== "undefined"){
+				this.dropSlotitem = resultData.api_get_slotitem.api_slotitem_id || 0;
+			}else{
+				this.dropSlotitem = 0;
+			}
+			
+			if(typeof resultData.api_get_eventitem !== "undefined"){
 				(function(resultEventItems){
 					console.log("Event items get", resultEventItems);
 					(resultEventItems || []).forEach(function(eventItem){
@@ -1910,6 +1919,10 @@ Used by SortieManager
 		// Air raid moved to proper place `sortie.nodes`, no longer here
 		//if(this.battleDestruction){ b.airRaid = this.battleDestruction; }
 		if(this.isBoss()){ b.boss = true; }
+		// optional drop item (useitem & slotitem), not added into DB index yet
+		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
+		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
+		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
 		return b;
 	};
 	

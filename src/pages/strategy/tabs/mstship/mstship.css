@@ -47,17 +47,17 @@
 	float:left;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	padding:5px;
+	padding:5px 0px;
 	border:1px solid #ccc;
 	background:#ffc;
 	border-radius: 8px 0px 0px 8px;
 }
 .tab_mstship .shipRecord {
-	width:170px;
+	width:auto;
 	height:20px;
 	line-height:20px;
 	margin:0px 0px 2px 0px;
-	border-radius: 5px;
+	padding-left:5px;
 }
 .tab_mstship .shipRecord:hover {
 	background:#cfc;
@@ -70,6 +70,7 @@
 .tab_mstship .shipRecord .shipIcon img {
 	width:20px;
 	height:20px;
+	vertical-align:text-bottom;
 }
 .tab_mstship .shipRecord .shipName {
 	width:150px;
@@ -77,6 +78,7 @@
 	float:left;
 	padding:0px 0px 0px 5px;
 	white-space:nowrap;
+	overflow:visible;
 }
 
 /* SHIP INFO

@@ -8,11 +8,14 @@
 			this.loadingGraph = false;
 			this.ctx   = null;
 			this.chart = null;
+			this.dateOptions = {
+				year: "numeric", month: "long", day: "numeric"
+			};
 		}
 		
 		// Executes only on first tab visit unless refreshed
 		init(){
-			
+			this.locale = KC3Translation.getLocale();
 		}
 		
 		// Executes every tab visit
@@ -114,9 +117,9 @@
 			$(".loading").hide();
 			// Show graph title dates
 			$(".graph_title").text(
-				new Date($("#startDate").val()).format("mmm d, yyyy")
-				+" to "
-				+new Date($("#endDate").val()+" 00:00:00").format("mmm d, yyyy")
+				new Date($("#startDate").val()).toLocaleString(this.locale, this.dateOptions)
+				+" ~ "
+				+new Date($("#endDate").val() + " 00:00:00").toLocaleString(this.locale, this.dateOptions)
 			);
 			
 			// Ability to hide types

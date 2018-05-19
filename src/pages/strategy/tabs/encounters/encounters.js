@@ -149,6 +149,24 @@
 			const shipClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
+			const updateShipTooltip = function(shipBox, shipId, db){
+				const dummyNode = new KC3Node();
+				const abd = db || {};
+				const abm = KC3Master.abyssalShip(shipId, true);
+				// Data from encountered DB get priority than internal data set
+				const eParam = db ? [abd.fp, abd.tp, abd.aa, abd.ar] :
+					[abm.api_houg, abm.api_raig, abm.api_tyku, abm.api_souk];
+				const eSlot = db ? [abd.eq1, abd.eq2, abd.eq3, abd.eq4] :
+					abm.kc3_slots || [];
+				$(shipBox).attr("title", dummyNode.buildEnemyStatsMessage(
+					0, shipId,
+					// Ship level not recorded, always unknown
+					null, null,
+					abd.hp || abm.api_taik || null,
+					eParam.some(v => v === undefined) ? null : eParam,
+					eSlot, false
+				)).lazyInitTooltip();
+			};
 			const isLbasMap = this.isLbasSortieMap(world, map);
 
 			$(".encounter_list").empty().hide();
@@ -217,7 +235,8 @@
 									.attr("alt", shipId)
 									.click(shipClickFunc);
 								$(".encounter_id", shipBox).text(shipId);
-								$(shipBox).attr("title", KC3Meta.abyssShipName(shipId));
+								// Show abyssal stats & equipment on tooltip
+								KC3Database.get_enemyInfo(shipId, updateShipTooltip.bind(self, shipBox, shipId));
 								shipBox.toggleClass("escort_flagship", shipIndex === 6);
 								shipBox.appendTo($(".encounter_ships", curBox));
 							}

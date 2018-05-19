@@ -236,10 +236,16 @@ Retrieves when needed to apply on components
 				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
 		},
 		
+		// Current maximum pages of HQ info
+		getMaxHqInfoPage :function(){
+			return 3;
+		},
+		
 		// Toggle HQ Info Page
 		scrollHqInfoPage :function(){
 			this.loadIfNecessary();
-			this.hqInfoPage = (this.hqInfoPage % 3) + 1;
+			const maxPage = this.getMaxHqInfoPage() + (KC3Meta.isDuringFoodEvent() & 1);
+			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
 			this.save();
 		},
 		
