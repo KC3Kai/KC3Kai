@@ -463,11 +463,6 @@
 		customCSS.innerHTML = ConfigManager.pan_custom_css;
 		$("head").append(customCSS);
 
-		var previousStates = {
-			poi : ConfigManager.PoiDBSubmission_enabled,
-			opendb : ConfigManager.OpenDBSubmission_enabled,
-			tsundb : ConfigManager.TsunDBSubmission_enabled 
-		};
 		// Listen config key changed
 		window.addEventListener("storage", function({key, timeStamp, url}){
 			if(key === ConfigManager.keyName()) {
@@ -476,19 +471,6 @@
 
 				if($("#pan_custom_css").html() !== ConfigManager.pan_custom_css)
 					$("#pan_custom_css").html(ConfigManager.pan_custom_css);
-
-				if(!previousStates.poi && ConfigManager.PoiDBSubmission_enabled)
-					PoiDBSubmission.cleanup();
-				if(!previousStates.opendb && ConfigManager.OpenDBSubmission_enabled)
-					OpenDBSubmission.cleanup();
-				if(!previousStates.tsundb && ConfigManager.TsunDBSubmission_enabled)
-					TsunDBSubmission.cleanOnStart();
-
-				previousStates = {
-					poi : ConfigManager.PoiDBSubmission_enabled,
-					opendb : ConfigManager.OpenDBSubmission_enabled,
-					tsundb : ConfigManager.TsunDBSubmission_enabled 
-				};
 			}
 		});
 
@@ -653,7 +635,6 @@
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
 
-
 		/* Morale timers, and clickable to restart timer manually.
 		--------------------------------------------*/
 		checkAndRestartMoraleTimer();
@@ -777,6 +758,7 @@
 		// Activate();
 
 		// Start Network listener
+		KC3Network.initConfigs();
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || (["GameStart","HomeScreen","CatBomb"].indexOf(event)+1)){
 				if(typeof NatsuiroListeners[event] != "undefined"){

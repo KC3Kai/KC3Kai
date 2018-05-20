@@ -231,6 +231,7 @@
 			var KcsApiIndex = url.indexOf("/kcsapi/");
 			return url.substring( KcsApiIndex+8 );
 		},
+		// SPI: process entry
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
@@ -263,6 +264,7 @@
 				});
 			}
 		},
+		// SPI: clean all previous states up
 		cleanup: function() {
 			if (this.state !== null) {
 				console.log("Aborting previous data report, interal state was:", this.state);
