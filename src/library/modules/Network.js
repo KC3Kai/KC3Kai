@@ -138,12 +138,15 @@ Listens to network history and triggers callback if game events happen
 					const newConfigs = localStorage.getObject(ConfigManager.keyName());
 					this.submissionModuleNames.forEach(name => {
 						if(this.submissionConfigs[name] !== newConfigs[name + configSuffix]) {
+							const isToCleanup = !this.submissionConfigs[name] && !!newConfigs[name + configSuffix];
 							this.submissionConfigs[name] = newConfigs[name + configSuffix];
 							// Clean previous states if config is changed from disabled to enabled,
 							// because it is buggy especially on config changed during sortie.
-							const submission = window[name], cleanMethod = submission && submission.cleanup;
-							console.log(`${name} enabled changed to ${this.submissionConfigs[name]}${cleanMethod ? ", cleaning previous states..." : ""}`);
-							if(cleanMethod) {
+							const submission = window[name],
+								cleanMethod = submission && submission.cleanup,
+								isAbleToCleanup = isToCleanup && typeof cleanMethod === "function";
+							console.log(`${name} enabled changed to ${this.submissionConfigs[name]}${isAbleToCleanup ? ", cleaning previous states..." : ""}`);
+							if(isAbleToCleanup) {
 								try {
 									cleanMethod.call(submission);
 								} catch (error) {
