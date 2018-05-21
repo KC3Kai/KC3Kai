@@ -529,7 +529,7 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
 		return this.masterId > 0 && this.master().api_type[2] === 15 &&
-			// Current implemented: Type94 DCP, Type3 DCP
+			// Current implemented: Type94 DCP, Type3 DCP, Type3 DCP CD, 15cm9t ASW Rocket
 			//[44, 45].indexOf(this.masterId) > -1;
 			// To maintenance fewer lists
 			!this.isDepthCharge();

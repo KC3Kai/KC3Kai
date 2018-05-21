@@ -266,9 +266,17 @@
 		updateFilters : function() {
 			const self = this;
 
-			const stypeHandler = (stype, element, stypeValues) => {
-				stypeValues[stype] = ! stypeValues[stype];
-				$(".filter_box .filter_check" , element).toggle(stypeValues[stype]);
+			const stypeHandler = (stype, element, stypeValues, event) => {
+				if(event.altKey) {
+					Object.keys(stypeValues).forEach(t => { stypeValues[t] = false; });
+					stypeValues[stype] = true;
+					$(".filters .ship_types .ship_filter_type").each((_, elm) => {
+						$(".filter_box .filter_check", elm).toggle(stypeValues[$(elm).data("id")]);
+					});
+				} else {
+					stypeValues[stype] = ! stypeValues[stype];
+					$(".filter_box .filter_check" , element).toggle(stypeValues[stype]);
+				}
 				this.filterShipDrop();
 			};
 			const stypes = KC3Meta.sortedStypes();
