@@ -66,7 +66,9 @@
 					this.dropTable[sortie.diff][battle.rating] = this.dropTable[sortie.diff][battle.rating] || {};
 					const drop = this.dropTable[sortie.diff][battle.rating][battle.node] =
 						this.dropTable[sortie.diff][battle.rating][battle.node] || {};
-					drop[battle.drop] = (drop[battle.drop] || 0) + 1;
+					drop["s-" + battle.drop] = (drop["s-" + battle.drop] || 0) + 1;
+					if(battle.slotitem) drop["e-" + battle.slotitem] = (drop["e-" + battle.slotitem] || 0) + 1;
+					if(battle.useitem) drop["i-" + battle.useitem] = (drop["i-" + battle.useitem] || 0) + 1;
 					if(battle.boss) drop.boss = true;
 				}).catch(e => {throw e;}));
 			}).then(() => {
@@ -94,17 +96,22 @@
 			const recountNodes = (edgeId, dropInfo) => {
 				const node = KC3Meta.nodeLetter(this.selectedWorld, this.selectedMap, edgeId);
 				allNodes[node] = allNodes[node] || {};
-				const shipIds = Object.keys(dropInfo).filter(id => id !== "boss");
+				const shipIds = Object.keys(dropInfo).filter(id => id.startsWith("s-"));
 				if(dropInfo.boss) allNodes[node].boss = true;
 				if(edgeId === node) allNodes[node].unknown = true;
-				shipIds.forEach(mstId => {
-					const count = dropInfo[mstId];
-					if(Number(mstId) > 0 && KC3Master.ship(mstId)) {
-						allNodes[node][mstId] = (allNodes[node][mstId] || 0) + count;
+				shipIds.forEach(id => {
+					const count = dropInfo[id], mstId = Number(id.slice(2));
+					if(mstId > 0 && KC3Master.ship(mstId)) {
+						allNodes[node][id] = (allNodes[node][id] || 0) + count;
 					} else {
-						allNodes[node][0] = (allNodes[node][0] || 0) + count;
+						allNodes[node]["s-0"] = (allNodes[node]["s-0"] || 0) + count;
 					}
 					allNodes[node].total = (allNodes[node].total || 0) + count;
+				});
+				const useitemIds = Object.keys(dropInfo).filter(id => id.startsWith("i-"));
+				useitemIds.forEach(id => {
+					const count = dropInfo[id];
+					allNodes[node][id] = (allNodes[node][id] || 0) + count;
 				});
 			};
 			for(let rank = 0; rank <= 5; rank++)
@@ -125,15 +132,14 @@
 					.text("Node " + node + (isBossNode ? " (Boss)" : ""))
 					.toggleClass("boss", isBossNode)
 					.toggleClass("unknown", !!allNodes[node].unknown);
-				const shipIds = Object.keys(allNodes[node])
-					.filter(id => ! ["total", "boss", "unknown"].includes(id));
+				const shipIds = Object.keys(allNodes[node]).filter(id => id.startsWith("s-"));
 				// order by drop counts desc, id asc (no drop always first)
-				shipIds.sort((a, b) => a == "0" || b == "0" ? -Infinity :
-					allNodes[node][b] - allNodes[node][a] || Number(a) - Number(b));
+				shipIds.sort((a, b) => a === "s-0" ? -1 : b === "s-0" ? 1 :
+					allNodes[node][b] - allNodes[node][a] || Number(a.slice(2)) - Number(b.slice(2)));
 				let isToBeShown = false;
 				const totalBattle = allNodes[node].total;
-				$.each(shipIds, (_, shipId) => {
-					shipId = Number(shipId);
+				$.each(shipIds, (_, ship) => {
+					const shipId = Number(ship.slice(2));
 					const shipMst = KC3Master.ship(shipId);
 					const isNoDrop = !shipId || !shipMst;
 					const stype = isNoDrop ? 0 : shipMst.api_stype;
@@ -147,13 +153,28 @@
 								.attr("alt", shipId).addClass("hover").click(shipClickFunc)
 								.attr("title", KC3Meta.shipName(shipMst.api_name));
 						}
-						const dropCount = allNodes[node][shipId];
+						const dropCount = allNodes[node][ship];
 						$(".drop_times", shipBox).text("x{0}".format(dropCount))
 							.attr("title", "{0} /{1} = {2}%".format(dropCount, totalBattle,
 								Math.qckInt("round", dropCount / totalBattle * 100, 3)));
 						shipBox.appendTo($(".ships", nodeDrop));
 					}
 				});
+				// stype 100 represents useitem
+				if(this.ship_filter_checkbox[100]) {
+					const useitemIds = Object.keys(allNodes[node]).filter(id => id.startsWith("i-"));
+					useitemIds.sort((a, b) => allNodes[node][b] - allNodes[node][a] || Number(a.slice(2)) - Number(b.slice(2)));
+					$.each(useitemIds, (_, useitem) => {
+						const useitemId = Number(useitem.slice(2));
+						const shipBox = $(".ship", factory).clone().appendTo($(".useitems", nodeDrop));
+						$("img", shipBox).attr("src", `/assets/img/useitems/${useitemId}.png`)
+							.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
+							.attr("title", KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"));
+						$(".drop_times", shipBox).text("x{0}".format(allNodes[node][useitem]));
+						shipBox.addClass("useitem");
+						isToBeShown = true;
+					});
+				}
 				if(isToBeShown) {
 					nodeDrop.append($('<div class="clear"></div>'));
 					nodeDrop.appendTo(contentRoot);
@@ -253,17 +274,21 @@
 			const stypes = KC3Meta.sortedStypes();
 			// make stype ID 0 as "No Drop", put it at last
 			const type0 = stypes.shift();
-			type0.order = 998;
+			type0.order = 997;
 			stypes.push(type0);
+			// add a fake stype ID 100 as "Item" (mainly food), put it at last
+			const useitemType = {id: 100, order: 998};
+			stypes.push(useitemType);
 			for(const stypeObj of stypes) {
 				if(stypeObj.order === 999) continue;
 				const stype = stypeObj.id;
 				const elem = $(".factory .ship_filter_type").clone()
 					.appendTo(".filters .ship_types");
 				elem.data("id", stype);
-				$(".filter_name", elem).text(stype === 0 ? "No Drop" : KC3Meta.stype(stype));
+				$(".filter_name", elem).text(stype === 0 ? "No Drop" : stype === 100 ? "Item" : KC3Meta.stype(stype));
 				this.ship_filter_checkbox[stype] = true;
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
+				if(stype === 100 && this.isEventWorld(this.selectedWorld)) elem.hide();
 			}
 
 			const updateRankFilterValue = () => {

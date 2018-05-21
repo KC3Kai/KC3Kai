@@ -878,6 +878,15 @@
 							}else{
 								$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
 							}
+							// Useitem Drop
+							if(battle.useitem > 0){
+								$(".node_drop img", nodeBox)
+									.attr("src", `/assets/img/useitems/${battle.useitem}.png`)
+									.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
+									.css("border-radius", "50%")
+									.attr("title", [$(".node_drop img", nodeBox).attr("title"),
+										KC3Meta.useItemName(battle.useitem)].filter(v => !!v).join(" + "));
+							}
 							
 							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;

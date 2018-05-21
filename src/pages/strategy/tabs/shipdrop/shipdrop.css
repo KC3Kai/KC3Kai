@@ -20,6 +20,8 @@
 ---------------------------------*/
 .tab_shipdrop .content_root .node_drop .ships {
 }
+.tab_shipdrop .content_root .node_drop .useitems {
+}
 .tab_shipdrop .content_root .node_drop .ship * {
 	font-size:13px;
 	height:24px;
