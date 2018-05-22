@@ -1403,6 +1403,7 @@ Previously known as "Reactor"
 				// Gears changed, but effective data will not be received until
 				// following `api_get_member/slot_item` call, so here no need to call:
 				//KC3Network.trigger("GearSlots");
+				KC3Network.deferTrigger(2, "Consumables");
 			}
 			
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0,4));
@@ -2013,7 +2014,7 @@ Previously known as "Reactor"
 							break;
 						default:
 							localMap.kind = "gauge-hp";
-							console.info("Reported new API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
+							console.info("Reported unknown API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
 					}
 					
 					if(oldMap !== undefined) {
@@ -2181,35 +2182,50 @@ Previously known as "Reactor"
 						// exchange 1 chocolate with resources [700, 700, 700, 1500]
 						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
 					} else {
-						console.log("Unknown exchange type:", exchangeType, itemId, apiData);
+						console.info("Unknown exchange type:", exchangeType, itemId, apiData);
 					}
 			}
-			// Handle item/materials will be obtained:
+			// Do not need to set PlayerManager resources and consumables here,
+			// because /useitem, /material, /basic APIs will be called at once
+			// Other handling on item/materials obtained:
 			switch(obtainFlag){
 				case 1: // supposed to obtain use/slot item
-					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
-					console.log(`Using item obtained item:`, itemId, itemAttrName, exchangeType, apiData.api_getitem);
-					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
-					// not sure how `api_slotitem` will go if `api_getcount` > 1
-					if(apiData.api_getitem && apiData.api_getitem.api_slotitem){
-						console.log(`Using item obtained slotitem:`, apiData.api_getitem.api_slotitem);
-						// `api_get_member/slot_item` will not be called, have to update GearManager here
-						KC3GearManager.set([ apiData.api_getitem.api_slotitem ]);
-					}
 					break;
 				case 2: // supposed to obtain materials
-					const materials = apiData.api_material;
-					console.log(`Using item obtained materials:`, itemId, itemAttrName, exchangeType, materials);
-					if(Array.isArray(materials)){
-						KC3Database.Naverall({
-							hour: utcHour,
-							type: "useitem" + itemId,
-							data: materials
-						});
-					}
-					// Do not need to set PlayerManager resources and consumables here,
-					// because /useitem, /material, /basic APIs will be called at once
 					break;
+				default:
+					console.info("Unknown flag:", obtainFlag, apiData);
+			}
+			if(apiData.api_material){
+				const materials = apiData.api_material;
+				console.log("Using item obtained materials:", itemId, itemAttrName, exchangeType, materials);
+				if(Array.isArray(materials)){
+					KC3Database.Naverall({
+						hour: utcHour,
+						type: "useitem" + itemId,
+						data: materials
+					});
+				}
+			}
+			// flag should be 1, but exchange type 64, obtains Dinner Ticket and Mamiya, flag is 2,
+			// it consumes 1 Saury Can, but seems no info in API result... have to remove slotitem from GearManager?
+			// In case of `api_getitem` existing no matter what flag value is:
+			if(apiData.api_getitem){
+				console.log("Using item obtained item(s):", itemId, itemAttrName, exchangeType, apiData.api_getitem);
+				const itemArr = $.makeArray(apiData.api_getitem);
+				itemArr.forEach(getitem => {
+					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
+					if([5, 6].includes(getitem.api_usemst)){
+						const useitemId = getitem.api_mst_id;
+						console.log("Obtained useitem:", useitemId, PlayerManager.getConsumableById(useitemId, true));
+					}
+					// `api_mst_id` will be the slotitem ID if `api_usemst` is 2, and `api_slotitem` will appear
+					if(getitem.api_slotitem){
+						// since `api_get_member/slot_item` will not be called, have to update GearManager here
+						KC3GearManager.set([ getitem.api_slotitem ]);
+						console.log(`Obtained slotitem:`, getitem.api_slotitem);
+					}
+				});
 			}
 		},
 		
