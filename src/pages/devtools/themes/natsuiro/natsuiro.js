@@ -635,7 +635,6 @@
 				NatsuiroListeners.UpdateExpeditionPlanner();
 			} );
 
-
 		/* Morale timers, and clickable to restart timer manually.
 		--------------------------------------------*/
 		checkAndRestartMoraleTimer();
@@ -759,6 +758,7 @@
 		// Activate();
 
 		// Start Network listener
+		KC3Network.initConfigs();
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || (["GameStart","HomeScreen","CatBomb"].indexOf(event)+1)){
 				if(typeof NatsuiroListeners[event] != "undefined"){

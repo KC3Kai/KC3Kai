@@ -511,6 +511,7 @@
 		//Activate();
 		
 		// Start Network listener
+		KC3Network.initConfigs();
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || event == "HomeScreen" || event == "GameStart"){
 				if(typeof NatsuiroListeners[event] != "undefined"){

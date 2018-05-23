@@ -52,6 +52,8 @@ Listens to network history and triggers callback if game events happen
 		},
 		delayedUpdate: {},
 		deferredEvents: [],
+		submissionModuleNames: ["PoiDBSubmission", "OpenDBSubmission", "TsunDBSubmission"],
+		submissionConfigs: {},
 
 		/* ADD LISTENER
 		All callback to an event
@@ -121,6 +123,46 @@ Listens to network history and triggers callback if game events happen
 			chrome.devtools.network.onRequestFinished.addListener(this.received);
 		},
 
+		/* INIT CONFIGS
+		Store and listen to the changes of used config values
+		------------------------------------------*/
+		initConfigs :function(){
+			ConfigManager.loadIfNecessary();
+			// Initial config values
+			const configSuffix = "_enabled";
+			this.submissionModuleNames.forEach(name => {
+				this.submissionConfigs[name] = ConfigManager[name + configSuffix];
+			});
+			const configChangedListener = ({key, timeStamp, url}) => {
+				if(key === ConfigManager.keyName()) {
+					const newConfigs = localStorage.getObject(ConfigManager.keyName());
+					this.submissionModuleNames.forEach(name => {
+						if(this.submissionConfigs[name] !== newConfigs[name + configSuffix]) {
+							const isToCleanup = !this.submissionConfigs[name] && !!newConfigs[name + configSuffix];
+							this.submissionConfigs[name] = newConfigs[name + configSuffix];
+							// Clean previous states if config is changed from disabled to enabled,
+							// because it is buggy especially on config changed during sortie.
+							const submission = window[name],
+								cleanMethod = submission && submission.cleanup,
+								isAbleToCleanup = isToCleanup && typeof cleanMethod === "function";
+							console.log(`${name} enabled changed to ${this.submissionConfigs[name]}${isAbleToCleanup ? ", cleaning previous states..." : ""}`);
+							if(isAbleToCleanup) {
+								try {
+									cleanMethod.call(submission);
+								} catch (error) {
+									console.warn("Uncaught states cleanup", error);
+								}
+							}
+						}
+					});
+				}
+			};
+			// Do not try to call this multiple times, otherwise this is needed:
+			//window.removeEventListener("storage", configChangeListener);
+			// Listen to the changes of local storage configs
+			window.addEventListener("storage", configChangedListener);
+		},
+
 		/* RECEIVED
 		Fired when we receive network entry
 		Inside, use "KC3Network" instead of "this"
@@ -148,18 +190,13 @@ Listens to network history and triggers callback if game events happen
 				if(thisRequest.validateHeaders()){
 					thisRequest.readResponse(request, function(){
 						if(thisRequest.validateData()){
-							// -- Poi DB Submission
-							if (ConfigManager.PoiDBSubmission_enabled) {
-								KC3Network.asyncSubmit(PoiDBSubmission, thisRequest);
-							}
-							// -- OpenDB Submission
-							if (ConfigManager.OpenDBSubmission_enabled) {
-								KC3Network.asyncSubmit(OpenDBSubmission, thisRequest);
-							}
-							// -- TsunDB Submission
-							if (ConfigManager.TsunDBSubmission_enabled) {
-								KC3Network.asyncSubmit(TsunDBSubmission, thisRequest);
-							}
+							// Invoke remote DB submission modules
+							KC3Network.submissionModuleNames.forEach(name => {
+								if(KC3Network.submissionConfigs[name]) {
+									// Assume module already loaded globally
+									KC3Network.asyncSubmit(window[name], thisRequest);
+								}
+							});
 							
 							// Trigger deferred events before this API call if there are some
 							//KC3Network.handleDeferredEvents(thisRequest, "before");

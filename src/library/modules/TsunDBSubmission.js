@@ -165,6 +165,7 @@
 		},
 		
 		processNext: function(http) {
+			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			this.cleanOnNext();
 			const apiData = http.response.api_data;
 			
@@ -357,7 +358,7 @@
 		},
 		
 		processDevelopment: function(http){
-			this.cleanUp();
+			this.cleanNonCombat();
 			const request = http.params;
 			const response = http.response.api_data;
 			
@@ -430,10 +431,22 @@
 		/**
 		 * Cleans up the data of non-combat related things.
 		 */
-		cleanUp: function(){
+		cleanNonCombat: function(){
 			this.development = {};
 		},
 		
+		/**
+		 * SPI: clean all previous states up.
+		 */
+		cleanup: function(){
+			this.cleanOnStart();
+			this.cleanOnNext();
+			this.cleanNonCombat();
+		},
+		
+		/**
+		 * SPI: process entry.
+		 */
 		processData: function(requestObj) {
 			try {
 				// get data handler based on URL given

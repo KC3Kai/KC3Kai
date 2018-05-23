@@ -2389,6 +2389,9 @@ button, input, select, textarea {
 .tab_shipdrop .content_root .node_drop .ship {
 	background:#303030;
 }
+.tab_shipdrop .content_root .node_drop .useitem {
+	background:#303030;
+}
 .tab_shipdrop .ship_filter_type .filter_box {
 	border:1px solid #888888;
 }
