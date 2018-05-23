@@ -746,6 +746,7 @@ Previously known as "Reactor"
 			shipData.lock = lockState;
 			KC3ShipManager.save();
 			KC3Network.trigger("Fleet");
+			KC3Network.trigger("ShipSlots");
 		},
 		
 		/* Lock a equipment
@@ -759,6 +760,7 @@ Previously known as "Reactor"
 				KC3GearManager.save();
 				console.log("Item", itemId, gearObj.name(), "lock state", lockState);
 			}
+			KC3Network.trigger("GearSlots");
 		},
 		
 		/* Change equipment of a ship
