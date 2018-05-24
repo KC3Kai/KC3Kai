@@ -2222,6 +2222,7 @@ Previously known as "Reactor"
 			}
 			// Do not need to set PlayerManager resources and consumables here,
 			// because /useitem, /material, /basic APIs will be called at once
+			
 			// Other handling on item/materials obtained:
 			switch(obtainFlag){
 				case 1: // supposed to obtain use/slot item
@@ -2245,10 +2246,13 @@ Previously known as "Reactor"
 			// flag should be 1, but exchange type 64, obtains Dinner Ticket and Mamiya, flag is 2,
 			// it consumes 1 Saury Can, but seems no info in API result... have to remove slotitem from GearManager?
 			// In case of `api_getitem` existing no matter what flag value is:
-			if(apiData.api_getitem){
-				console.log("Using item obtained item(s):", itemId, itemAttrName, exchangeType, apiData.api_getitem);
-				const itemArr = $.makeArray(apiData.api_getitem);
-				itemArr.forEach(getitem => {
+			const getitems = apiData.api_getitem;
+			if(getitems && (!Array.isArray(getitems) || !getitems.every(v => !v))){
+				console.log("Using item obtained item(s):", itemId, itemAttrName, exchangeType, getitems);
+				const getitemArr = $.makeArray(getitems);
+				getitemArr.forEach(getitem => {
+					// result might be `"api_getitem":[null]` if flag is 2
+					if(!getitem) return;
 					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
 					if([5, 6].includes(getitem.api_usemst)){
 						const useitemId = getitem.api_mst_id;
