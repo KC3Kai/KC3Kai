@@ -63,14 +63,25 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_get_member/require_info":function(params, response, headers){
 			this["api_get_member/slot_item"](params, { api_data: response.api_data.api_slot_item }, headers);
+			this["api_get_member/unsetslot"](params, { api_data: response.api_data.api_unsetslot }, headers);
 			this["api_get_member/kdock"](params, { api_data: response.api_data.api_kdock }, headers);
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
+			//this["api_get_member/furniture"](params, { api_data: response.api_data.api_furniture }, headers);
+			PlayerManager.extraSupply = response.api_data.api_extra_supply;
 		},
 		
 		"api_req_member/require_info":function(params, response, headers){
 			this["api_get_member/slot_item"](params, { api_data: response.api_data.api_slot_item }, headers);
 			this["api_get_member/kdock"](params, { api_data: response.api_data.api_kdock }, headers);
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
+		},
+		
+		/* LogIn Bonus
+		-------------------------------------------------------*/
+		"api_req_member/get_incentive":function(params, response, headers){
+			if(response.api_data && response.api_data.api_item){
+				console.info("Login Bonus:", response.api_data);/*RemoveLogging:skip*/
+			}
 		},
 		
 		/* Home Port Screen
@@ -95,6 +106,7 @@ Previously known as "Reactor"
 				maxShipSlots: response.api_data.api_basic.api_max_chara,
 				maxGearSlots: response.api_data.api_basic.api_max_slotitem,
 				fleetCount: response.api_data.api_basic.api_count_deck,
+				questCount: response.api_data.api_parallel_quest_count,
 				repairSlots: response.api_data.api_basic.api_count_ndock,
 				buildSlots: response.api_data.api_basic.api_count_kdock,
 			});
@@ -485,6 +497,16 @@ Previously known as "Reactor"
 			KC3GearManager.set( response.api_data );
 			KC3Network.trigger("GearSlots");
 			KC3Network.trigger("Fleet");
+		},
+		
+		/* Unequipped equipment list by categories
+		-------------------------------------------------------*/
+		"api_get_member/unsetslot":function(params, response, headers){
+			// Data format: `api_slottype${api_type[2]}: [rosterId array]`
+			// Equipment unequipped must be updated by updating `items` of ships,
+			// so nothing to be handled for this call now.
+			//KC3Network.trigger("GearSlots");
+			//KC3Network.trigger("Fleet");
 		},
 		
 		// Equipment dragging
@@ -1372,7 +1394,7 @@ Previously known as "Reactor"
 			
 			// Compute bonuses for ledger
 			bonuses.forEach(function(x){
-				if(x.api_type == 1 && x.api_item.api_id >= 5) {
+				if(x.api_type == 1 && x.api_item.api_id >= 5 && x.api_item.api_id <= 8) {
 					consume[x.api_item.api_id - 5] += x.api_count;
 				}
 			});
@@ -1384,28 +1406,39 @@ Previously known as "Reactor"
 			});
 			console.log("Quest gained", quest, material);
 			
-			// Known types: 1=Consumable, 2=Unlock a fleet, 3=Furniture box, 4=LSC unlock,
-			//   5=LBAS unlock, 6=Exped resupply unlock, 11=Ship, 12=Slotitem, 13=Useitem,
-			//   14=Furniture, 15=Aircraft conversion, 16=Equipment consumption
-			const bonusType = bonuses.api_type;
-			if(bonusType === 11){
-				const count = bonuses.api_count || 1;
-				const shipId = (bonuses.api_item || {}).api_ship_id;
-				console.log("Quest gained ship", quest, shipId, count);
-				// Ships changed, but effective data will not be received until
-				// following `api_get_member/ship2` call, so here no need to call:
-				/*
-				KC3ShipManager.pendingShipNum += count;
-				KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(shipId);
-				KC3Network.trigger("ShipSlots");
-				KC3Network.trigger("GearSlots");
-				*/
-			}
-			if([12, 15, 16].includes(bonusType)){
-				// Gears changed, but effective data will not be received until
-				// following `api_get_member/slot_item` call, so here no need to call:
-				//KC3Network.trigger("GearSlots");
-				KC3Network.deferTrigger(2, "Consumables");
+			var deferEventApiCount = 0;
+			bonuses.forEach(bonus => {
+				const bonusType = bonus.api_type;
+				// Known types: 1=Consumable, 2=Unlock a fleet, 3=Furniture box, 4=LSC unlock,
+				//   5=LBAS unlock, 6=Exped resupply unlock, 11=Ship, 12=Slotitem, 13=Useitem,
+				//   14=Furniture, 15=Aircraft conversion, 16=Equipment consumption
+				if(bonusType === 11){
+					const shipId = (bonus.api_item || {}).api_ship_id;
+					console.log("Quest gained ship", quest, shipId, bonus);
+					// Ships changed, but effective data will not be received until
+					// following `api_get_member/ship2` call, so here no need to call:
+					/*
+					KC3ShipManager.pendingShipNum += count;
+					KC3GearManager.pendingGearNum += KC3Meta.defaultEquip(shipId);
+					KC3Network.trigger("ShipSlots");
+					KC3Network.trigger("GearSlots");
+					*/
+					deferEventApiCount = 4;
+				}
+				if([12, 15, 16].includes(bonusType)){
+					console.log("Quest gained equipment", quest, bonus);
+					// Gears changed, but effective data will not be received until
+					// following `api_get_member/slot_item` call.
+					deferEventApiCount = 2;
+					// For type 16, like quest F36 (61cm Quintuple -> P61cm Sextuple),
+					// seems it will replace equipped slot with Sextuple master ID, reusing Quintuple item ID,
+					// but no `api_get_member/ship2` call followed,
+					// to correct secretary's current equipment, other handling might be needed here.
+				}
+			});
+			if(deferEventApiCount > 0){
+				KC3Network.deferTrigger(deferEventApiCount, "GearSlots");
+				KC3Network.deferTrigger(deferEventApiCount, "Consumables");
 			}
 			
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0,4));

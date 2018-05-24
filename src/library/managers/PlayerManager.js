@@ -15,10 +15,12 @@ Does not include Ships and Gears which are managed by other Managers
 		bases: [],
 		baseConvertingSlots: [],
 		fleetCount: 1,
+		questCount: 5,
 		repairSlots: 2,
 		repairShips: [-1,-1,-1,-1,-1],
 		buildSlots: 2,
 		combinedFleet: 0,
+		extraSupply: [0, 0],
 		statistics: {},
 		maxResource: 300000,
 		maxConsumable: 3000,
@@ -64,6 +66,7 @@ Does not include Ships and Gears which are managed by other Managers
 			// Update related managers with new data if exists
 			Object.assignIfDefined(PlayerManager.consumables, "fcoin", data.fcoin);
 			PlayerManager.fleetCount = data.fleetCount;
+			PlayerManager.questCount = data.questCount;
 			PlayerManager.repairSlots = data.repairSlots;
 			PlayerManager.buildSlots = data.buildSlots;
 			KC3ShipManager.max = data.maxShipSlots;

@@ -28,6 +28,7 @@ Instantiate-able class to represent one player
 			this.buildSlots = 2;
 			this.shipSlots = 100;
 			this.gearSlots = 500;
+			this.parallelQuestCount = 5;
 		}
 	};
 	
@@ -48,6 +49,7 @@ Instantiate-able class to represent one player
 		this.buildSlots = data.buildSlots;
 		this.shipSlots = data.maxShipSlots;
 		this.gearSlots = 3 + data.maxGearSlots;
+		this.parallelQuestCount = data.questCount;
 		
 		this.updateLevel(data.level, data.exp);
 		this.checkRankPoints();
@@ -190,6 +192,7 @@ Instantiate-able class to represent one player
 			this.buildSlots = playerInfo.buildSlots || 2;
 			this.shipSlots = playerInfo.shipSlots || 100;
 			this.gearSlots = playerInfo.gearSlots || 500;
+			this.parallelQuestCount = playerInfo.parallelQuestCount || 5;
 			return true;
 		}
 		return false;
