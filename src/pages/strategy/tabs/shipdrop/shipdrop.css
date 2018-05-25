@@ -115,6 +115,7 @@
 	width:55px;
 	height:18px;
 	float:left;
+	white-space:nowrap;
 }
 
 .tab_shipdrop .massSelect {
@@ -140,4 +141,18 @@
 	margin:0px 0px 0px 4px;
 	padding: 0 3px;
 	border-radius: 4px;
+}
+.tab_shipdrop .filters #timeRange {
+	width:auto;
+	margin-bottom:5px;
+}
+.tab_shipdrop .filters .time_label,
+.tab_shipdrop .filters .time_input {
+	float:left;
+	height:25px;
+	margin-right:5px;
+}
+.tab_shipdrop .filters .time_input input {
+	width:140px;
+	height:24px;
 }
