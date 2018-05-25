@@ -1271,13 +1271,6 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
-		const isSonarEquipped = this.hasEquipmentType(1, 10);
-		const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
-		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
-		let synergyModifier = 1;
-		synergyModifier += isSonarEquipped && isNewDepthChargeEquipped ? 0.15 : 0;
-		synergyModifier += isDepthChargeProjectorEquipped && isNewDepthChargeEquipped ? 0.1 : 0;
-		synergyModifier *= isSonarEquipped && isDepthChargeProjectorEquipped ? 1.15 : 1;
 		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
 		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
 		const attackMethodConst = isAirAttack ? 8 : 13;
@@ -1289,6 +1282,18 @@ KC3改 Ship Object
 		aswPower += 1.5 * equipmentTotalAsw;
 		aswPower += this.equipmentTotalImprovementBonus("asw");
 		// should move synergy modifier to pre-cap?
+		let synergyModifier = 1;
+		// new DC + DCP synergy (x1.1 / x1.25)
+		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
+		// T3DCP CD and 15cm9t ASW Rocket are not counted yet, so `isDepthChargeProjectorEquipped` not used
+		//const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
+		if(isNewDepthChargeEquipped && this.hasEquipment([44, 45])) {
+			// Large Sonar, like T0 Sonar, not counted here
+			const isSonarEquipped = this.hasEquipmentType(2, 14);
+			synergyModifier = isSonarEquipped ? 1.25 : 1.1;
+		}
+		// legacy all types of sonar + all DC(P) synergy (x1.15)
+		synergyModifier *= this.hasEquipmentType(3, 18) && this.hasEquipmentType(3, 17) ? 1.15 : 1;
 		aswPower *= synergyModifier;
 		return aswPower;
 	};
