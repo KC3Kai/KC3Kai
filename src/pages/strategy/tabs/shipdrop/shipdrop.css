@@ -144,15 +144,15 @@
 }
 .tab_shipdrop .filters #timeRange {
 	width:auto;
-	margin-bottom:5px;
 }
 .tab_shipdrop .filters .time_label,
 .tab_shipdrop .filters .time_input {
 	float:left;
-	height:25px;
+	height:20px;
 	margin-right:5px;
 }
 .tab_shipdrop .filters .time_input input {
 	width:140px;
-	height:24px;
+	height:20px;
+	font-size:12px;
 }
