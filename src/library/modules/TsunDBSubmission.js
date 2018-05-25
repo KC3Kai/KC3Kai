@@ -224,7 +224,7 @@
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
-			this.enemyComp.node = this.data.edgeID.slice(-1);
+			this.enemyComp.node = this.data.edgeID[this.data.edgeID.length-1];
 			this.enemyComp.hqLvl = this.data.hqLvl;
 			this.enemyComp.difficulty = this.data.difficulty;
 			this.enemyComp.enemyComp = {
@@ -257,7 +257,7 @@
 			this.shipDrop = {};
 			
 			this.shipDrop.map = this.data.map;
-			this.shipDrop.node = this.data.edgeID.slice(-1);
+			this.shipDrop.node = this.data.edgeID[this.data.edgeID.length-1];
 			this.shipDrop.rank = apiData.api_win_rank;
 			this.shipDrop.cleared = this.data.cleared;
 			// Enemy comp name only existed in result API data
