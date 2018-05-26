@@ -47,6 +47,9 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
+			if(!KC3StrategyTabs.pageParams[1]) {
+				this.timeRange = [-Infinity, Infinity];
+			}
 			this.updateMapSelectors();
 			this.updateFilters();
 		},
