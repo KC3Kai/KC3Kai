@@ -28,6 +28,7 @@
 			"2" : true,
 			"3" : true
 		},
+		timeRange : [-Infinity, Infinity],
 
 		/* INIT: mandatory
 		Prepares initial static data needed.
@@ -46,6 +47,9 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
+			if(!KC3StrategyTabs.pageParams[1]) {
+				this.timeRange = [-Infinity, Infinity];
+			}
 			this.updateMapSelectors();
 			this.updateFilters();
 		},
@@ -57,9 +61,12 @@
 			const hqId = PlayerManager.hq.id;
 			this.dropTable = {};
 			const allPromises = [];
+			$(".tab_shipdrop .content_root").empty();
 			$(".loading").show();
 			KC3Database.con.sortie.where("world").equals(world).and(
 				data => data.mapnum === map && data.hq === hqId
+				&& (this.isEventWorld(world) ||
+					(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
 			).each(sortie => {
 				this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
 				allPromises.push(KC3Database.con.battle.where("sortie_id").equals(sortie.id).each(battle => {
@@ -209,6 +216,7 @@
 				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
 			);
 			$(".filters .massSelect #eventSelected").toggle(this.isEventWorld(worldId));
+			$(".filters .massSelect #timeRange").toggle(!this.isEventWorld(worldId));
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				if(isMap) {
@@ -336,6 +344,32 @@
 				elem.on("click", diffFilterHandler.bind(this, index, elem));
 				if(diff === "casual" && this.selectedWorld < 41) elem.hide();
 			});
+
+			// datetime-local input control seems be troublesome to input, only date here
+			const today = new Date().format("yyyy-mm-dd");
+			$(".filters #timeRange .time_input input").on("blur", (event) => {
+				const input = $(event.target);
+				const id = input.attr("id"), val = input.val();
+				let changed = false;
+				if(id === "startTime"){
+					const lastVal = this.timeRange[0];
+					this.timeRange[0] = val ? new Date(val + " 00:00:00").getTime() : -Infinity;
+					changed = this.timeRange[0] !== lastVal;
+					$("#endTime", input.parent().parent()).attr("min", val);
+				} else if(id === "endTime"){
+					const lastVal = this.timeRange[1];
+					this.timeRange[1] = val ? new Date(val + " 23:59:59").getTime() : Infinity;
+					changed = this.timeRange[1] !== lastVal;
+					$("#startTime", input.parent().parent()).attr("max", val || today);
+				}
+				if(changed) this.reloadMapShipDrop(this.selectedWorld, this.selectedMap);
+			});
+			$(".filters #timeRange #startTime").val(
+				this.timeRange[0] > 0 ? new Date(this.timeRange[0]).format("yyyy-mm-dd") : ""
+			).attr("max", today);
+			$(".filters #timeRange #endTime").val(
+				this.timeRange[1] < Infinity ? new Date(this.timeRange[1]).format("yyyy-mm-dd") : ""
+			).attr("max", today);
 
 		}
 

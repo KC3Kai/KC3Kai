@@ -5,20 +5,22 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
+	<div class="help_q">Are these records from a data collecting cloud service?</div>
+	<div class="help_a">Nope. These drops are from recorded sortie history data of your own, if you have enabled the history recording.<br/>
+		It's just an alternative view of Maps / Events History pages, no remote data from any report server have been fetched.<br/>
+		It's expected that unable to determine boss node from 'ancient' history or events data.<br/>
+		Will be a little weird if node letters are not ready or your history data have been partially corrupted.
+	</div>
+
 	<div class="help_q">Will some ship types listed here drop?</div>
 	<div class="help_a">Nope. All available ship types are just copied from Ship List page.<br/>
 		To activate only 1 filter quickly instead of switching, like doing it on the Ship List page,
 		you can hold <kbd>Alt</kbd> key and left click one of them.
 	</div>
 
-	<div class="help_q">Why are items no drop rate hint?</div>
-	<div class="help_a">Filtering by sortie time range is not implemented for now,
-		but items dropped like foods are time-limited event thingies.<br/>
-		Drop rates calculated from recorded total battle amount make no sense.
-	</div>
-
-	<div class="help_more">
-		<a href="https://db.kcwiki.org/drop/" target="_blank">poi-statistics</a>
+	<div class="help_more">Online statistics services:
+		<a href="https://db.kcwiki.org/drop/" target="_blank">poi-statistics</a><br/>
+		<a href="https://tsundb.kc3.moe/" target="_blank">TsunDB</a>
 	</div>
 </div>
 
@@ -41,7 +43,7 @@
 		</div>
 		<div class="massSelect">
 			<!-- BATTLE RANK -->
-			<dl>
+			<dl class="rank_selector">
 				<dt class="massLabel">Battle Rank:</dt>
 				<dd class="hover rank sab">SAB</dd>
 				<dd class="hover rank sa">SA</dd>
@@ -50,12 +52,19 @@
 				<dd class="hover rank b">B</dd>
 			</dl>
 			<!-- DIffICULTY -->
-			<dl id="eventSelected">
+			<dl class="diff_selector" id="eventSelected">
 				<dt class="massLabel">Difficulty:</dt>
 				<dd class="hover diff hard">Hard</dd>
 				<dd class="hover diff normal">Normal</dd>
 				<dd class="hover diff easy">Easy</dd>
 				<dd class="hover diff casual">Casual</dd>
+			</dl>
+			<!-- DATE TIME RANGE -->
+			<dl class="time_range" id="timeRange">
+				<div class="time_label"><label for="startTime">Sortie On:</label></div>
+				<div class="time_input"><input type="date" id="startTime" /></div>
+				<div class="time_label">~</div>
+				<div class="time_input"><input type="date" id="endTime" /></div>
 			</dl>
 		</div>
 	</div>

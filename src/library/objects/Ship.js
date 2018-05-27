@@ -198,7 +198,7 @@ KC3改 Ship Object
 		return (Array.isArray(maxeq) ? maxeq[slotIndex] : 0) || 0;
 	};
 	KC3Ship.prototype.areAllSlotsFull = function(){
-		// to left unfulfilled slots in-game, make bauxite insufficient or use supply button at expedition
+		// to leave unfulfilled slots in-game, make bauxite insufficient or use supply button at expedition
 		var maxeq = (this.master() || {}).api_maxeq;
 		return Array.isArray(maxeq) ?
 			maxeq.every((expectedSize, index) => !expectedSize || expectedSize <= this.slotSize(index)) : true;
@@ -1917,7 +1917,7 @@ KC3改 Ship Object
 				break;
 			case "Aerial":
 				if(!playerCombined && enemyCombined) {
-					// different by target enemy fleet, targeting main:
+					// differentiated by target enemy fleet, targeting main:
 					powerBonus.main = -10; powerBonus.escort = -10;
 					// targeting escort:
 					//powerBonus.main = -20; powerBonus.escort = -20;
@@ -1968,8 +1968,8 @@ KC3改 Ship Object
 		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
 		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
 		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
-		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2
-		const capableShips = [464, 498, 500, 543];
+		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2, DD Shiranui K2
+		const capableShips = [464, 498, 500, 543, 567];
 		// CVL Kasugamaru
 		const incapableShips = [521];
 		const masterId = this.masterId,
