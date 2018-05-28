@@ -876,9 +876,16 @@ KC3改 Ship Object
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
 		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
-		// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
 		if(!canAirAttack) {
-			noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+			const stype = this.master().api_stype;
+			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+			// autogyro on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
+			if(isAirAntiSubStype) {
+				// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+			}
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
