@@ -1,7 +1,7 @@
 /**
  * TsunDBSubmission.js
  *
- * KC3Kai routing, enemies and drops data submission module.
+ * KC3Kai routing, enemies, drops, AACI kinds and developments data submission module.
  */
 (function(){
 	"use strict";
@@ -11,7 +11,6 @@
 			map: null,
 			data: []
 		},
-		
 		data : {
 			map: null,
 			hqLvl: null,
@@ -113,6 +112,7 @@
 				// Development related
 				'api_req_kousyou/createitem': this.processDevelopment
 			};
+			this.manifest = chrome.runtime.getManifest() || {};
 		},
 		
 		processMapInfo: function(http) {
@@ -224,7 +224,7 @@
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
-			this.enemyComp.node = this.data.edgeID[this.data.edgeID.length-1];
+			this.enemyComp.node = this.data.edgeID[this.data.edgeID.length - 1];
 			this.enemyComp.hqLvl = this.data.hqLvl;
 			this.enemyComp.difficulty = this.data.difficulty;
 			this.enemyComp.enemyComp = {
@@ -257,7 +257,7 @@
 			this.shipDrop = {};
 			
 			this.shipDrop.map = this.data.map;
-			this.shipDrop.node = this.data.edgeID[this.data.edgeID.length-1];
+			this.shipDrop.node = this.data.edgeID[this.data.edgeID.length - 1];
 			this.shipDrop.rank = apiData.api_win_rank;
 			this.shipDrop.cleared = this.data.cleared;
 			// Enemy comp name only existed in result API data
@@ -307,17 +307,17 @@
 
 			const fleet = PlayerManager.fleets[sortiedFleet - 1];
 
-			const possibleAACIs = fleet.ship().map((ship) => !ship.didFlee && AntiAir.shipPossibleAACIs(ship).map((id) => Number(id)));
-			// console.log("possible AACI", possibleAACIs);
-			const aaciCount = possibleAACIs.filter((arr) => arr.length).length;
-
+			const possibleAACIs = fleet.ship().map(ship => !ship.isAbsent() && AntiAir.shipPossibleAACIs(ship).map(id => Number(id)));
+			//console.log("[TsunDB AACI] Possible AACI", possibleAACIs);
+			const aaciCount = possibleAACIs.filter(arr => arr.length).length;
 			if(aaciCount > 1) {
 				// Don't log multiple AACI ships
 				return;
 			}
 
-			this.aaci.shipPosition = possibleAACIs.findIndex((arr) => arr.length);
+			this.aaci.shipPosition = possibleAACIs.findIndex(arr => arr.length);
 
+			// api_kouku2 is ignored
 			const apiAir = apiData.api_kouku.api_stage2.api_air_fire;
 			if(apiAir) {
 				// Triggered
@@ -330,30 +330,30 @@
 				}
 			} else {
 				// Not triggered
-				this.aaci.triggeredAACI = -1; 
+				this.aaci.triggeredAACI = -1;
 			}
 
-			if(aaciCount == 0 && this.aaci.triggeredAACI < 0) {
+			if(aaciCount == 0 && this.aaci.triggeredAACI <= 0) {
 				// Keep logging when none expected but one triggered
 				return;
 			}
 
 			this.aaci.shipPossibleAACI = possibleAACIs[this.aaci.shipPosition];
-			this.aaci.badAACI = this.aaci.triggeredAACI != -1 && !this.aaci.shipPossibleAACI.includes(this.aaci.triggeredAACI);
+			this.aaci.badAACI = this.aaci.triggeredAACI > 0 && !this.aaci.shipPossibleAACI.includes(this.aaci.triggeredAACI);
 
 			const triggeredShip = fleet.ship()[this.aaci.shipPosition];
 			this.aaci.ship = {
-				id: triggeredShip.master().api_id,
+				id: triggeredShip.masterId,
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
 				aa: triggeredShip.nakedStats("aa"),
 				luck: triggeredShip.lk[0]
 			};
 
-			this.aaci.equips = [...triggeredShip.equipment(false).map((equip) => equip.masterId || -1), triggeredShip.exItem().masterId || -1];
-			this.aaci.improvements = [...triggeredShip.equipment(false).map((equip) => equip.stars || -1), triggeredShip.exItem().stars || -1];
-			this.aaci.kc3version = chrome.runtime.getManifest().version + ('update_url' in chrome.runtime.getManifest() ? "" : "d");
-			// console.log(this.aaci);
+			this.aaci.equips = triggeredShip.equipment(true).map(g => g.masterId || -1);
+			this.aaci.improvements = triggeredShip.equipment(true).map(g => g.stars || -1);
+			this.aaci.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+
 			this.sendData(this.aaci, 'aaci');
 		},
 		
@@ -374,7 +374,9 @@
 				steel: request.api_item3,
 				bauxite: request.api_item4
 			};
-			this.development.result = response.api_create_flag ? response.api_slot_item.api_slotitem_id : parseInt(response.api_fdata.split(',')[1]);
+			this.development.result = response.api_create_flag ?
+				response.api_slot_item.api_slotitem_id :
+				Number(response.api_fdata.split(',')[1]);
 			this.development.success = response.api_create_flag;
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
@@ -453,8 +455,8 @@
 				// `null` is returned if no handler is found
 				var handler = this.handlers[requestObj.call];
 				if (handler) {
-					if(Array.isArray(handler))
-						handler.forEach((func) => func.call(this, requestObj));
+					if (Array.isArray(handler))
+						handler.forEach(h => h.call(this, requestObj));
 					else
 						handler.call(this, requestObj);
 				}

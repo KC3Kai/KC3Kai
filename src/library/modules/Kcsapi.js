@@ -2245,6 +2245,8 @@ Previously known as "Reactor"
 			}
 			// flag should be 1, but exchange type 64, obtains Dinner Ticket and Mamiya, flag is 2,
 			// it consumes 1 Saury Can, but seems no info in API result... have to remove slotitem from GearManager?
+			// btw, exchange type 73, consumes extra 300 torches, obtains Prototype Catapult is also flag 2,
+			// and its exchange counted in `port.api_c_flag`, so that client can deny more than 3 exchanges.
 			// In case of `api_getitem` existing no matter what flag value is:
 			const getitems = apiData.api_getitem;
 			if(getitems && (!Array.isArray(getitems) || !getitems.every(v => !v))){
