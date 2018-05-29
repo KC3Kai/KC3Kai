@@ -722,6 +722,10 @@ KC3改 Ship Object
 							"tyku": 2, "houk": 3
 						})[api] || 0 : 0),
 					},
+					// Fusou Class
+					"26": {
+						multiple: { "houg": 1 },
+					},
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
