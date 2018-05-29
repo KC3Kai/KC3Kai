@@ -661,6 +661,7 @@ KC3改 Ship Object
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
 		// A summary table: https://twitter.com/Lambda39/status/990268289866579968
+		// https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
@@ -674,7 +675,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// extra fp +1 for Kongou K2 and Haruna K2
+						// for Kongou K2 and Haruna K2
 						ids: [149, 151],
 						multiple: { "houg": 1 },
 					},
@@ -682,10 +683,14 @@ KC3改 Ship Object
 						// extra aa +1, ev +2 for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 1, "houk": 2 },
+						// synergy with Surface Radar
+						callback: (api, info) => (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 2
+						})[api] || 0 : 0),
 					},
 				],
 			},
-			// 35.6cm Twin Gun Mount Kai (Dazzle Camouflage)
+			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
 			"289": {
 				count: 0,
 				byShip: [
@@ -704,6 +709,11 @@ KC3改 Ship Object
 						})[api] || 0 : 0),
 					},
 					{
+						// extra aa +1 for Kongou K2
+						ids: [149],
+						multiple: { "tyku": 1 },
+					},
+					{
 						// extra aa +2, ev +2 for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 2, "houk": 2 },
@@ -714,16 +724,18 @@ KC3改 Ship Object
 			"290": {
 				count: 0,
 				byClass: {
-					// Ise Class (and future K2?)
+					// Ise Class Kai+
 					"2": {
+						remodel: 1,
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 						// synergy with Air Radar
 						callback: (api, info) => (hasAirRadar ? ({
 							"tyku": 2, "houk": 3
 						})[api] || 0 : 0),
 					},
-					// Fusou Class
+					// Fusou Class Kai Ni?
 					"26": {
+						remodel: 2,
 						multiple: { "houg": 1 },
 					},
 				},
