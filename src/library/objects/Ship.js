@@ -656,7 +656,7 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
-		var hasSurfaceRadar = false;
+		var hasSurfaceRadar = false, hasAirRadar = false;
 		const thisShipClass = this.master().api_ctype;
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
@@ -664,6 +664,66 @@ KC3改 Ship Object
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
+			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
+			"104": {
+				count: 0,
+				byShip: [
+					{
+						// all Kongou Class K2
+						ids: [149, 150, 151, 152],
+						multiple: { "houg": 1 },
+					},
+					{
+						// extra fp +1 for Kongou K2 and Haruna K2
+						ids: [149, 151],
+						multiple: { "houg": 1 },
+					},
+					{
+						// extra aa +1, ev +2 for Haruna K2
+						ids: [151],
+						multiple: { "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// 35.6cm Twin Gun Mount Kai (Dazzle Camouflage)
+			"289": {
+				count: 0,
+				byShip: [
+					{
+						// all Kongou Class K2
+						ids: [149, 150, 151, 152],
+						multiple: { "houg": 1 },
+					},
+					{
+						// for Kongou K2 and Haruna K2
+						ids: [149, 151],
+						multiple: { "houg": 1 },
+						// synergy with Surface Radar
+						callback: (api, info) => (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 2
+						})[api] || 0 : 0),
+					},
+					{
+						// extra aa +2, ev +2 for Haruna K2
+						ids: [151],
+						multiple: { "tyku": 2, "houk": 2 },
+					},
+				],
+			},
+			// 41cm Triple Gun Mount Kai Ni
+			"290": {
+				count: 0,
+				byClass: {
+					// Ise Class (and future K2?)
+					"2": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+						// synergy with Air Radar
+						callback: (api, info) => (hasAirRadar ? ({
+							"tyku": 2, "houk": 3
+						})[api] || 0 : 0),
+					},
+				},
+			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
@@ -815,6 +875,7 @@ KC3改 Ship Object
 					}
 				}
 				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
+				if(!hasAirRadar && equip.isAirRadar()) hasAirRadar = true;
 			}
 		});
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
