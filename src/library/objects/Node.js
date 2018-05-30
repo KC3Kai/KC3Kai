@@ -458,7 +458,7 @@ Used by SortieManager
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
 				if(!!battleData.api_kouku2.api_stage2.api_air_fire){
-					if(!this.antiAirFire || this.antiAirFire.length<1){
+					if(!this.antiAirFire || this.antiAirFire.length < 1){
 						this.antiAirFire = [null];
 					}
 					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;

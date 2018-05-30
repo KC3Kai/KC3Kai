@@ -1885,3 +1885,6 @@ body {
 	color:#fff;
 	background: hsl(220, 100%, 60%);
 }
+.tab_shipdrop .filters .time_input input {
+	border:1px solid #aaa;
+}

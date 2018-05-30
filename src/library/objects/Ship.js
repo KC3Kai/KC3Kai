@@ -198,7 +198,7 @@ KC3改 Ship Object
 		return (Array.isArray(maxeq) ? maxeq[slotIndex] : 0) || 0;
 	};
 	KC3Ship.prototype.areAllSlotsFull = function(){
-		// to left unfulfilled slots in-game, make bauxite insufficient or use supply button at expedition
+		// to leave unfulfilled slots in-game, make bauxite insufficient or use supply button at expedition
 		var maxeq = (this.master() || {}).api_maxeq;
 		return Array.isArray(maxeq) ?
 			maxeq.every((expectedSize, index) => !expectedSize || expectedSize <= this.slotSize(index)) : true;
@@ -656,14 +656,90 @@ KC3改 Ship Object
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
 		var total = 0;
-		var hasSurfaceRadar = false;
+		var hasSurfaceRadar = false, hasAirRadar = false;
 		const thisShipClass = this.master().api_ctype;
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
 		// A summary table: https://twitter.com/Lambda39/status/990268289866579968
+		// https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
+			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
+			"104": {
+				count: 0,
+				byShip: [
+					{
+						// all Kongou Class K2
+						ids: [149, 150, 151, 152],
+						multiple: { "houg": 1 },
+					},
+					{
+						// for Kongou K2 and Haruna K2
+						ids: [149, 151],
+						multiple: { "houg": 1 },
+					},
+					{
+						// extra aa +1, ev +2 for Haruna K2
+						ids: [151],
+						multiple: { "tyku": 1, "houk": 2 },
+						// synergy with Surface Radar
+						callback: (api, info) => (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 2
+						})[api] || 0 : 0),
+					},
+				],
+			},
+			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
+			"289": {
+				count: 0,
+				byShip: [
+					{
+						// all Kongou Class K2
+						ids: [149, 150, 151, 152],
+						multiple: { "houg": 1 },
+					},
+					{
+						// for Kongou K2 and Haruna K2
+						ids: [149, 151],
+						multiple: { "houg": 1 },
+						// synergy with Surface Radar
+						callback: (api, info) => (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 2
+						})[api] || 0 : 0),
+					},
+					{
+						// extra aa +1 for Kongou K2
+						ids: [149],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// extra aa +2, ev +2 for Haruna K2
+						ids: [151],
+						multiple: { "tyku": 2, "houk": 2 },
+					},
+				],
+			},
+			// 41cm Triple Gun Mount Kai Ni
+			"290": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai+
+					"2": {
+						remodel: 1,
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+						// synergy with Air Radar
+						callback: (api, info) => (hasAirRadar ? ({
+							"tyku": 2, "houk": 3
+						})[api] || 0 : 0),
+					},
+					// Fusou Class Kai Ni?
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 1 },
+					},
+				},
+			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
@@ -815,6 +891,7 @@ KC3改 Ship Object
 					}
 				}
 				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
+				if(!hasAirRadar && equip.isAirRadar()) hasAirRadar = true;
 			}
 		});
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
@@ -876,9 +953,16 @@ KC3改 Ship Object
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
 		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
-		// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
 		if(!canAirAttack) {
-			noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+			const stype = this.master().api_stype;
+			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+			// autogyro on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
+			if(isAirAntiSubStype) {
+				// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+			}
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
@@ -1917,7 +2001,7 @@ KC3改 Ship Object
 				break;
 			case "Aerial":
 				if(!playerCombined && enemyCombined) {
-					// different by target enemy fleet, targeting main:
+					// differentiated by target enemy fleet, targeting main:
 					powerBonus.main = -10; powerBonus.escort = -10;
 					// targeting escort:
 					//powerBonus.main = -20; powerBonus.escort = -20;
@@ -1968,8 +2052,8 @@ KC3改 Ship Object
 		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
 		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
 		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
-		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2
-		const capableShips = [464, 498, 500, 543];
+		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2, DD Shiranui K2
+		const capableShips = [464, 498, 500, 543, 567];
 		// CVL Kasugamaru
 		const incapableShips = [521];
 		const masterId = this.masterId,
