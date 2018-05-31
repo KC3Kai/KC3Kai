@@ -505,7 +505,7 @@
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
-			const parseAirRaidFunc = function(airRaid){
+			const parseAirRaidFunc = function(airRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
 				if(airRaid.api_air_base_attack) {
 					//console.debug("LB Air Raid", airRaid);
@@ -567,6 +567,26 @@
 					topAntiBomberSquadNames: topAbSquadsName
 				};
 			};
+			const showSortieLedger = function(sortieId, sortieBox) {
+				// LBAS consumptions not included, because they are bound with world id, not sortie
+				// Akashi repair not included either
+				// Support expedition may not included either
+				KC3Database.con.navaloverall.where("type").equals("sortie" + sortieId).toArray(arr => {
+					if(arr.length) {
+						const consumptions = arr.reduce((acc, o) =>
+							acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0,0,0,0,0,0,0,0]);
+						const tooltip = consumptions.map((v, i) => {
+							const icon = $("<img />").attr("src", "/assets/img/client/" +
+									["fuel.png", "ammo.png", "steel.png", "bauxite.png",
+									"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
+								).width(13).height(13).css("margin", "-3px 2px 0 0");
+							return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
+						}).join(" ");
+						$(".sortie_map", sortieBox).attr("titlealt",
+							"{0}".format(tooltip)).lazyInitTooltip();
+					}
+				});
+			};
 			$.each(sortieList, function(id, sortie){
 				const mapkey = ["m", sortie.world, sortie.mapnum].join(''),
 					mapInfo = self.maps[mapkey] || {};
@@ -589,6 +609,7 @@
 					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
+					showSortieLedger(sortie.id, sortieBox);
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
 					var edges = [];
