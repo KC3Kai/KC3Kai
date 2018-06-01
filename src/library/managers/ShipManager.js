@@ -8,8 +8,7 @@ Saves and loads list to and from localStorage
 	"use strict";
 	
 	/* this variable will keep the kc3-specific variables */
-	var
-		defaults = (new KC3Ship()),
+	const defaults = (new KC3Ship()),
 		devVariables = {
 			capture: ['didFlee','pendingConsumption','lastSortie','repair','akashiMark'],
 			norepl : ['repair']
@@ -19,7 +18,7 @@ Saves and loads list to and from localStorage
 		list: {},
 		max: 100,
 		pendingShipNum: 0,
-
+		
 		// Get a specific ship by ID
 		get :function( rosterId ){
 			// console.log("getting ship", rosterId, this.list["x"+rosterId]);
@@ -46,27 +45,24 @@ Saves and loads list to and from localStorage
 		
 		// Add or replace a ship on the list
 		add :function(data){
-			var
-				self     = this,
-				tempData = {},
-				cky      = "",
-				newData  = false,
-				cShip;
-			if(typeof data.api_id != "undefined"){
+			const self   = this,
+				tempData = {};
+			var cky, cShip, oShip, isNewShip;
+			if(typeof data.api_id !== "undefined") {
 				cky = "x"+data.api_id;
-			}else if(typeof data.rosterId != "undefined"){
+			} else if(typeof data.rosterId !== "undefined") {
 				cky = "x"+data.rosterId;
-			}else{
+			} else {
 				return false;
 			}
 			
-			newData = !self.list[cky];
+			oShip = self.list[cky];
+			isNewShip = !oShip;
 			
 			devVariables.capture.forEach(function(key){
-				var
-					val = (self.list[cky] || defaults)[key];
+				var val = (oShip || defaults)[key];
 				tempData[key] = (typeof val === 'object' &&
-					(val instanceof Array ? [].slice.apply(val) : $.extend({},val))
+					(val instanceof Array ? [].slice.apply(val) : $.extend({}, val))
 				) || val;
 			});
 			
@@ -78,22 +74,22 @@ Saves and loads list to and from localStorage
 			//this.list[cky].didFlee = didFlee;
 			
 			// prevent the fresh data always overwrites the current loaded state
-			if(!newData) {
+			if(!isNewShip) {
 				devVariables.capture.forEach(function(key){
-					if(devVariables.norepl.indexOf(key)<0)
+					if(devVariables.norepl.indexOf(key) < 0)
 						cShip[key] = tempData[key];
 				});
 				
 				// enforce fresh sortie0 placeholder
-				(function(){
-					var szs = 'sortie0';
-					var ls  = cShip.lastSortie;
-					var cnt = 0;
-					var szi;
-					for(szi=0;szi<ls.length;szi++)
-						cnt += ls[szi]==szs;
+				(function() {
+					var szs = 'sortie0',
+						ls  = cShip.lastSortie,
+						cnt = 0,
+						szi;
+					for(szi = 0; szi < ls.length; szi++)
+						cnt += ls[szi] == szs;
 					while(cnt) {
-						for(szi=0;ls[szi]!=szs;szi++){}
+						for(szi = 0; ls[szi] != szs; szi++) {}
 						ls.splice(szi,1);
 						cnt--;
 					}
@@ -120,12 +116,11 @@ Saves and loads list to and from localStorage
 				/* Disabling this --
 					the problem is, pending consumption variable stacks up for expedition, */
 				// Calculate Difference
-				var
-					sp  = cShip,
+				var sp  = cShip,
 					pc  = sp.pendingConsumption,
 					rs  = Array.apply(null,{length:8}).map(function(){return 0;}),
 					df  = tempData.repair.map(function(x,i){return x - sp.repair[i];}),
-					plt = ((cShip.hp[1] - cShip.hp[0]) > 0 ? 0.075 : 0.000 );
+					hpd = sp.hp[0] - (oShip || defaults).hp[0];
 				
 				rs[0] = -df[1];
 				rs[2] = -df[2];
@@ -135,18 +130,15 @@ Saves and loads list to and from localStorage
 					type: 'akashi' + sp.masterId,
 					data: rs
 				});
+				console.log("Akashi repaired", sp.rosterId, sp.name(), hpd, df);
 				// Reduce Consumption Counter
 				// df (delta)      = [0,5,20]
 				df.shift(); df.push(0);
-				console.log("Akashi repaired", cShip.rosterId, cShip.name(),
-					cShip.hp.reduceRight((hi, lo) => hi - lo),
-					df, df.map(rsc => Math.floor(rsc * plt)) );
 				Object.keys(pc).reverse().forEach(function(d){
 					// if the difference is not all-zero, keep going
 					if(df.every(function(x){return !x;}))
 						return;
-					var
-						rp = pc[d][1],
+					var rp = pc[d][1],
 						dt = rp.map(function(x,i){return Math.max(x,-df[i]);});
 					// if the delta is not all-zero, keep going
 					if(dt.every(function(x){return !x;}))
@@ -162,9 +154,11 @@ Saves and loads list to and from localStorage
 			// if there's still pending exped condition on queue
 			// don't remove async wait false, after that, remove port load wait
 			if(!cShip.pendingConsumption.costnull) {
-				cShip.getDefer()[1].resolve(null); // removes async wait
+				// removes async wait
+				cShip.getDefer()[1].resolve(null);
 			}
-			cShip.getDefer()[2].resolve(cShip.fuel,cShip.bull,cShip.slots.reduce(function(x,y){return x+y;})); // mark resolve wait for port
+			// mark resolve wait for port
+			cShip.getDefer()[2].resolve(cShip.fuel, cShip.bull, cShip.slots.reduce(function(x,y){return x+y;}));
 			
 			// update picture book base form info
 			if(PictureBook) {
@@ -174,25 +168,23 @@ Saves and loads list to and from localStorage
 		
 		// Mass set multiple ships
 		// [repl] -> replace flag (replace whole list, replacing clear functionality)
-		set :function(data,repl){
-			var ctr,cky,rem,kid,slf;
-			slf = this;
-			rem = Object.keys(this.list);
+		set :function(data, repl){
+			const self = this;
+			var rem = Object.keys(this.list);
 			// console.log.apply(console,["Current list"].concat(rem.map(function(x){return x.slice(1);})));
-			for(ctr in data){
+			for(const ctr in data){
 				if(!!data[ctr]){
-					cky = 'x' + data[ctr].api_id;
-					kid = rem.indexOf(cky);
+					var cky = 'x' + data[ctr].api_id;
+					var kid = rem.indexOf(cky);
 					this.add(data[ctr]);
-					if(kid>=0)
-						rem.splice(kid,1);
+					if(kid >= 0)
+						rem.splice(kid, 1);
 				}
 			}
-			if(!repl)
-				rem.splice(0);
+			if(!repl) rem.splice(0);
 			// console.log.apply(console,["Removed ship"].concat(rem.map(function(x){return x.slice(1);})));
 			rem.forEach(function(rosterId){
-				slf.remove(parseInt(rosterId.slice(1)));
+				self.remove(parseInt(rosterId.slice(1)));
 			});
 			this.save();
 		},
@@ -259,7 +251,7 @@ Saves and loads list to and from localStorage
 		clear: function(){
 			this.list = {};
 		},
-
+		
 		encoded: function() {
 			return JSON.stringify(this.list);
 		},
