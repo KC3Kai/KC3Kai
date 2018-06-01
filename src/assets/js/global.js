@@ -264,6 +264,18 @@ String.prototype.capitalize = function() {
 };
 
 /**
+ * String identifier to camel case.
+ * Will remove spaces, but ignore [-_$]. Upper first letter, but not lower left letters of word.
+ * @param isToUpper - to upper camel case instead of lower camel case.
+ */
+String.prototype.toCamelCase = function(isToUpper) {
+	return this.trim().replace(/^([A-Za-z])|[\s]+(\w)/g, function(match, p1, p2) {
+		if(p2) return p2.toUpperCase();
+		return isToUpper ? p1.toUpperCase() : p1.toLowerCase();
+	});
+};
+
+/**
  * Pad the current string with a given string (repeated, if needed)
  * so that the resulting string reaches a given length.
  * @see https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
