@@ -569,12 +569,11 @@
 			};
 			const showSortieLedger = function(sortieId, sortieBox) {
 				// LBAS consumptions not included, because they are bound with world id, not sortie
-				// Akashi repair not included either
-				// Support expedition may not included either
+				// Akashi repair not included either, belonged to its own type
 				KC3Database.con.navaloverall.where("type").equals("sortie" + sortieId).toArray(arr => {
-					if(arr.length) {
-						const consumptions = arr.reduce((acc, o) =>
-							acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0,0,0,0,0,0,0,0]);
+					const consumptions = arr.reduce((acc, o) =>
+						acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0,0,0,0,0,0,0,0]);
+					if(arr.length && !consumptions.every(v => !v)) {
 						const tooltip = consumptions.map((v, i) => {
 							const icon = $("<img />").attr("src", "/assets/img/client/" +
 									["fuel.png", "ammo.png", "steel.png", "bauxite.png",
