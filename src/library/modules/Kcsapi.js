@@ -2226,6 +2226,7 @@ Previously known as "Reactor"
 			// Other handling on item/materials obtained:
 			switch(obtainFlag){
 				case 1: // supposed to obtain use/slot item
+				case 3: // exchange type 63, obtains materials and 2 irako
 					break;
 				case 2: // supposed to obtain materials
 					break;

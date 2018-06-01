@@ -107,8 +107,25 @@
 		cloneBattleBox :function(pvpBattle){
 			//console.debug("PvP battle record:", pvpBattle);
 			const self = this;
-			
 			const recordBox = $(".tab_pvp .factory .pvp_record").clone();
+			const showPvpLedger = function(sortieName) {
+				KC3Database.con.navaloverall.where("type").equals(sortieName).toArray(arr => {
+					const consumptions = arr.reduce((acc, o) =>
+						acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0,0,0,0,0,0,0,0]);
+					if(arr.length && !consumptions.every(v => !v)) {
+						const tooltip = consumptions.map((v, i) => {
+							const icon = $("<img />").attr("src", "/assets/img/client/" +
+									["fuel.png", "ammo.png", "steel.png", "bauxite.png",
+									"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
+								).width(13).height(13).css("margin", "-3px 2px 0 0");
+							return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
+						}).join(" ");
+						const oldTooltip = $(".pvp_result img", recordBox).attr("title");
+						$(".pvp_result img", recordBox).removeAttr("title").attr("titlealt",
+							"{0}<br/>{1}".format(oldTooltip, tooltip)).lazyInitTooltip();
+					}
+				});
+			};
 			
 			// Basic battle info
 			$(".pvp_id", recordBox).text(pvpBattle.id);
@@ -120,9 +137,10 @@
 				$(".pvp_date", recordBox).text("Unknown");
 			}
 			$(".pvp_result img", recordBox)
-				.attr("src", "../../assets/img/client/ratings/"+pvpBattle.rating+".png")
+				.attr("src", `/assets/img/client/ratings/${pvpBattle.rating}.png`)
 				.attr("title", "Base EXP " + pvpBattle.baseEXP );
 			$(".pvp_dl", recordBox).data("id", pvpBattle.id);
+			if (pvpBattle.sortie_name) showPvpLedger(pvpBattle.sortie_name);
 			
 			// Player fleet
 			$.each(pvpBattle.fleet, function(index, curShip){

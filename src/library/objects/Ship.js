@@ -660,8 +660,9 @@ KC3改 Ship Object
 		const thisShipClass = this.master().api_ctype;
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
-		// A summary table: https://twitter.com/Lambda39/status/990268289866579968
-		// https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
+		// Some summary tables:
+		//  * https://twitter.com/Lambda39/status/990268289866579968
+		//  * https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
@@ -680,7 +681,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// extra aa +1, ev +2 for Haruna K2
+						// extra +1 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 1, "houk": 2 },
 						// synergy with Surface Radar
@@ -691,6 +692,7 @@ KC3改 Ship Object
 				],
 			},
 			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
+			// https://wikiwiki.jp/kancolle/35.6cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%28%E3%83%80%E3%82%BA%E3%83%AB%E8%BF%B7%E5%BD%A9%E4%BB%95%E6%A7%98%29
 			"289": {
 				count: 0,
 				byShip: [
@@ -709,18 +711,19 @@ KC3改 Ship Object
 						})[api] || 0 : 0),
 					},
 					{
-						// extra aa +1 for Kongou K2
+						// extra +1 aa for Kongou K2
 						ids: [149],
 						multiple: { "tyku": 1 },
 					},
 					{
-						// extra aa +2, ev +2 for Haruna K2
+						// extra +2 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 2, "houk": 2 },
 					},
 				],
 			},
 			// 41cm Triple Gun Mount Kai Ni
+			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
 			"290": {
 				count: 0,
 				byClass: {
@@ -756,7 +759,7 @@ KC3改 Ship Object
 				count: 0,
 				starsDist: [],
 				byShip: {
-					// Here goes ship ID white-list:
+					// Here goes ship ID white-list instead of byClass:
 					//  Fubuki K2, Murakumo K2,
 					//  Ayanami K2, Ushio K2
 					//  Akatsuki K2, Bep (Hibiki K2)
@@ -859,13 +862,14 @@ KC3改 Ship Object
 						ids: [566, 567],
 						single: { "houg": 1 },
 					},
+					{
+						// synergy with Surface Radar for Naganami Kai Ni and Shimakaze Kai
+						ids: [543, 229],
+						callback: (api, info) => (hasSurfaceRadar ? ({
+							"houg": 1, "raig": 3, "houk": 2
+						})[api] || 0 : 0),
+					},
 				],
-				synergyCallback: (api, info) => (
-					// Synergy with Surface Radar for Naganami Kai Ni and Shimakaze Kai
-					hasSurfaceRadar && [543, 229].includes(this.masterId) ? ({
-						"houg": 1, "raig": 3, "houk": 2
-					})[api] || 0 : 0
-				),
 			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
@@ -913,7 +917,13 @@ KC3改 Ship Object
 			if(gearInfo.count > 0) {
 				if(gearInfo.byClass) {
 					const byClass = gearInfo.byClass[thisShipClass];
-					if(byClass) addBonusToTotalIfNecessary(byClass, apiName, gearInfo);
+					if(byClass) {
+						if(Array.isArray(byClass)) {
+							byClass.forEach(c => addBonusToTotalIfNecessary(c, apiName, gearInfo));
+						} else {
+							addBonusToTotalIfNecessary(byClass, apiName, gearInfo);
+						}
+					}
 				}
 				if(gearInfo.byShip) {
 					const byShip = gearInfo.byShip;
@@ -922,9 +932,6 @@ KC3改 Ship Object
 					} else {
 						addBonusToTotalIfNecessary(byShip, apiName, gearInfo);
 					}
-				}
-				if(gearInfo.synergyCallback) {
-					total += gearInfo.synergyCallback(apiName, gearInfo);
 				}
 			}
 		});

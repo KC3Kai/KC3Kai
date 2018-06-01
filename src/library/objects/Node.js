@@ -1930,12 +1930,15 @@ Used by SortieManager
 		// Ignore if not saving to DB is demanded
 		if(!ConfigManager.idbSavePvP) { return; }
 		var p = {
-			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent-1].sortieJson(),
-			enemy: [], // Unused
+			fleet: PlayerManager.fleets[KC3SortieManager.fleetSent - 1].sortieJson(),
+			// Unused, included in following data
+			enemy: [],
 			data: (this.battleDay || {}),
 			yasen: (this.battleNight || {}),
 			rating: this.rating,
 			baseEXP: this.nodalXP,
+			// ID bound to PvP win count + 1, related to ledger type
+			sortie_name: KC3SortieManager.sortieName(2),
 			mvp: this.mvps,
 			time: KC3SortieManager.sortieTime
 		};
