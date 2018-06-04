@@ -684,10 +684,6 @@ KC3改 Ship Object
 						// extra +1 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 1, "houk": 2 },
-						// synergy with Surface Radar
-						callback: (api, info) => (hasSurfaceRadar ? ({
-							"houg": 2, "houk": 2
-						})[api] || 0 : 0),
 					},
 				],
 			},

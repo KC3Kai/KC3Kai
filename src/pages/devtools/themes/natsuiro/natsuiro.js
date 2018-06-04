@@ -3699,8 +3699,11 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
-			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
+			$(".module.activity .activity_expeditionPlanner .estimated_time")
+				.text(String(60 * ExpdCost.time).toHHMMSS())
+				.attr("title", String(60 * ExpdCost.time).plusCurrentTime(true))
+				.lazyInitTooltip();
 
 			// setup expedition item colors
 			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {

@@ -1639,15 +1639,20 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer {
-	margin-bottom:4px;
+	height: 20px;
+	margin-bottom: 4px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer_description {
 	float: left;
+	text-align: left;
+	width: 110px;
 	margin-right: 3px;
 }
 .module.activity .activity_expeditionPlanner .estimated_time {
+	float: right;
 	text-align: right;
+	width: 67px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
