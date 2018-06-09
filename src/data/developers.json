@@ -115,7 +115,10 @@
 				"desc": "AboutDeveloper",
 				"active": 1,
 				"links": {
-					"gh" : "https://github.com/Tibo442"
+					"gh" : "https://github.com/Tibo442",
+					"wk" : "http://kancolle.wikia.com/wiki/User:Tibo442",
+					"tw" : "http://twitter.com/FlatIsNice",
+					"wb" : "http://flatisjustice.moe"
 				}
 			},
 			{

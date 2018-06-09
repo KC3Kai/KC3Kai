@@ -329,6 +329,12 @@
 
 			var response = requestObj.response.api_data;
 			var dropShipData = this.dropShipData;
+			if( dropShipData.cellId !== KC3SortieManager.currentNode().id ||
+			    dropShipData.mapId !== KC3SortieManager.map_world*10 + KC3SortieManager.map_num) {
+				console.warn("Incorrect cell/map for ", KC3SortieManager.map_world*10 + KC3SortieManager.map_num, " edge ", KC3SortieManager.currentNode().id, dropShipData);
+				this.cleanup();
+				return;
+			}
 
 			dropShipData.shipId = response.api_get_ship ? response.api_get_ship.api_ship_id : -1;
 			dropShipData.quest = response.api_quest_name;
