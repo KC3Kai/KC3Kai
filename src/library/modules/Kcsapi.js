@@ -504,9 +504,17 @@ Previously known as "Reactor"
 		"api_get_member/unsetslot":function(params, response, headers){
 			// Data format: `api_slottype${api_type[2]}: [rosterId array]`
 			// Equipment unequipped must be updated by updating `items` of ships,
-			// so nothing to be handled for this call now.
-			//KC3Network.trigger("GearSlots");
-			//KC3Network.trigger("Fleet");
+			// so nothing to be handled for this call now, besides caching them.
+			KC3GearManager.unsetSlotitemByType2 = {};
+			const data = response.api_data;
+			const prefix = "api_slottype";
+			Object.keys(data).forEach(key => {
+				if(key.slice(0, prefix.length) === prefix && Array.isArray(data[key])) {
+					const type2Id = key.slice(prefix.length);
+					KC3GearManager.unsetSlotitemByType2[type2Id] = data[key];
+				}
+			});
+			console.log("Refresh unsetslot", KC3GearManager.unsetSlotitemByType2);
 		},
 		
 		// Equipment dragging
@@ -1433,7 +1441,8 @@ Previously known as "Reactor"
 					// For type 16, like quest F36 (61cm Quintuple -> P61cm Sextuple),
 					// seems it will replace equipped slot with Sextuple master ID, reusing Quintuple item ID,
 					// but no `api_get_member/ship2` call followed,
-					// to correct secretary's current equipment, other handling might be needed here.
+					// to correct secretary's current equipment, should remove consumed item here.
+					// But issue duration will not be long since will be auto fixed on home port.
 				}
 			});
 			if(deferEventApiCount > 0){
@@ -2161,78 +2170,119 @@ Previously known as "Reactor"
 				exchangeType = parseInt(params.api_exchange_type, 10),
 				apiData = response.api_data || {}, // may no api data for some cases?
 				showConfirmBox = apiData.api_caution_flag, // 1 = over cap confirm dialogue to be shown
-				obtainFlag = apiData.api_flag,
+				obtainFlag = apiData.api_flag, // meaning uncertain?
 				itemAttrName = PlayerManager.getConsumableById(itemId, true);
-			// Handle items to be used:
-			// before api_exchange_type all cases full verified, better to refresh counts via /useitem
+			// Handle special items to be consumed by client:
+			// Known useitem consumptions listed here are only for your reference,
+			// since all cases of `api_exchange_type` are not fully verified,
+			// exact amounts of useitem depend on following /useitem call.
 			switch(exchangeType){
 				case 1: // exchange 4 medals with 1 blueprint
-					if(itemId === 57) PlayerManager.consumables.medals -= 4;
+					//if(itemId === 57) PlayerManager.consumables.medals -= 4;
 				break;
 				case 2: // exchange 1 medal with materials [300, 300, 300, 300, 0, 2, 0, 0] (guessed)
 				case 3: // exchange 1 medal with 4 screws (guessed)
-					if(itemId === 57) PlayerManager.consumables.medals -= 1;
+					//if(itemId === 57) PlayerManager.consumables.medals -= 1;
 				break;
 				case 11: // exchange 1 present box with resources [550, 550, 0, 0]
 				case 12: // exchange 1 present box with materials [0, 0, 3, 1]
 				case 13: // exchange 1 present box with 1 irako
-					if(itemId === 60) PlayerManager.consumables.presents -= 1;
+					//if(itemId === 60) PlayerManager.consumables.presents -= 1;
 				break;
 				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200] (guessed)
 				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
 				case 23: // exchange 1 hishimochi with 1 irako (guessed)
-					if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
+					//if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
 				break;
 				case 31: // exchange 3 saury (sashimi) with resources [0, 300, 150, 0]
-					if(itemId === 68) PlayerManager.consumables.mackerel -= 3;
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 3;
 				break;
 				case 32: // exchange 5 saury (shioyaki) with materials [0, 0, 3, 1]
-					if(itemId === 68) PlayerManager.consumables.mackerel -= 5;
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 5;
 				break;
 				case 33: // exchange 7 saury (kabayaki) with 1 saury can & 3 buckets [0, 3, 0, 0]
-					if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
+					//if(itemId === 68) PlayerManager.consumables.mackerel -= 7;
 				break;
 				case 41: // exchange all boxes with fcoins
-					if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
-					if(itemId === 11) PlayerManager.consumables.furniture400 = 0;
-					if(itemId === 12) PlayerManager.consumables.furniture700 = 0;
+					//if(itemId === 10) PlayerManager.consumables.furniture200 = 0;
+					//if(itemId === 11) PlayerManager.consumables.furniture400 = 0;
+					//if(itemId === 12) PlayerManager.consumables.furniture700 = 0;
 				break;
 				case 42: // exchange half boxes with fcoins
-					if(itemId === 10) PlayerManager.consumables.furniture200 = Math.floor(PlayerManager.consumables.furniture200 / 2);
-					if(itemId === 11) PlayerManager.consumables.furniture400 = Math.floor(PlayerManager.consumables.furniture400 / 2);
-					if(itemId === 12) PlayerManager.consumables.furniture700 = Math.floor(PlayerManager.consumables.furniture700 / 2);
+					//if(itemId === 10) PlayerManager.consumables.furniture200 = Math.floor(PlayerManager.consumables.furniture200 / 2);
+					//if(itemId === 11) PlayerManager.consumables.furniture400 = Math.floor(PlayerManager.consumables.furniture400 / 2);
+					//if(itemId === 12) PlayerManager.consumables.furniture700 = Math.floor(PlayerManager.consumables.furniture700 / 2);
 				break;
 				case 43: // exchange 10 boxes with fcoins
-					if(itemId === 10) PlayerManager.consumables.furniture200 -= 10;
-					if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
-					if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
+					//if(itemId === 10) PlayerManager.consumables.furniture200 -= 10;
+					//if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
+					//if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
 				break;
 				case 51: // exchange 1 xmas select gift box with 1 Reppuu (guessed)
 				case 52: // exchange 1 xmas select gift box with 1 WG42 (guessed)
 				case 53: // exchange 1 xmas select gift box with 4 screws [0, 0, 0, 4]
-					if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
+					//if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
+				break;
+				case 61: // exchange 5 rice with 1 origini
+					//if(itemId === 85) PlayerManager.consumables.rice -= 5;
+				break;
+				case 62: // exchange 6 rice & 2 umeboshi & 3 nori with devmats and screws [0, 0, 3, 3]
+					/*
+					if([85, 86, 87].includes(itemId)) {
+						PlayerManager.consumables.rice -= 6;
+						PlayerManager.consumables.umeboshi -= 2;
+						PlayerManager.consumables.nori -= 3;
+					}
+					*/
+				break;
+				case 63: // exchange 8 rice & 3 umeboshi & 3 nori & 4 tea with 2 irako, devmats, buckets and screws [0, 2, 2, 1]
+					/*
+					if([85, 86, 87, 88].includes(itemId)) {
+						PlayerManager.consumables.rice -= 8;
+						PlayerManager.consumables.umeboshi -= 3;
+						PlayerManager.consumables.nori -= 3;
+						PlayerManager.consumables.tea -= 4;
+					}
+					*/
+				break;
+				case 64: // exchange 9 rice & 5 umeboshi & 6 nori & 7 tea & 1 saury can with 1 dinner ticket and 1 mamiya
+					/*
+					if([85, 86, 87, 88].includes(itemId)) {
+						PlayerManager.consumables.rice -= 9;
+						PlayerManager.consumables.umeboshi -= 5;
+						PlayerManager.consumables.nori -= 6;
+						PlayerManager.consumables.tea -= 7;
+					}
+					*/
+					// it consumes 1 canned saury, but no `api_get_member/slot_item` api call followed,
+					// have to remove the slotitem (unequipped & unlocked) from GearManager here.
+					// see `ItemlistMain.swf#scene.itemlist.views.itemselect.jfood.ItemSelectDialogForJapaneseFood._getMemIDForSanmaNoKandume()`
+					// correct method is looking up via `api_unset_slot` by type2 category first, then 1st occurrence of master Id
+					const freeSauryCans = KC3GearManager.findFree(g => g.masterId === 150 && !g.lock);
+					if(freeSauryCans.length){
+						KC3GearManager.remove(freeSauryCans[0].itemId);
+						KC3GearManager.save();
+					}
+				break;
+				case 71: // exchange 1 dinner ticket with 2 medals
+				case 72: // exchange 1 dinner ticket with 9 screws [0, 0, 0, 9]
+				case 73: // exchange 1 dinner ticket & 300 torches with 1 prototype catapult
+					// this exchange counted in `port.api_c_flag`, so that client can deny more than 3 exchanges
+				case 74: // exchange 1 dinner ticket with 3 mamiya
+					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
 				default:
 					if(isNaN(exchangeType)){
 						// exchange 1 chocolate with resources [700, 700, 700, 1500]
-						if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
+						//if(itemId === 56) PlayerManager.consumables.chocolate -= 1;
 					} else {
 						console.info("Unknown exchange type:", exchangeType, itemId, apiData);
 					}
 			}
 			// Do not need to set PlayerManager resources and consumables here,
-			// because /useitem, /material, /basic APIs will be called at once
+			// because /useitem, /material, /basic APIs will be called at once.
 			
-			// Other handling on item/materials obtained:
-			switch(obtainFlag){
-				case 1: // supposed to obtain use/slot item
-				case 3: // exchange type 63, obtains materials and 2 irako
-					break;
-				case 2: // supposed to obtain materials
-					break;
-				default:
-					console.info("Unknown flag:", obtainFlag, apiData);
-			}
+			// On materials obtained:
 			if(apiData.api_material){
 				const materials = apiData.api_material;
 				console.log("Using item obtained materials:", itemId, itemAttrName, exchangeType, materials);
@@ -2244,17 +2294,14 @@ Previously known as "Reactor"
 					});
 				}
 			}
-			// flag should be 1, but exchange type 64, obtains Dinner Ticket and Mamiya, flag is 2,
-			// it consumes 1 Saury Can, but seems no info in API result... have to remove slotitem from GearManager?
-			// btw, exchange type 73, consumes extra 300 torches, obtains Prototype Catapult is also flag 2,
-			// and its exchange counted in `port.api_c_flag`, so that client can deny more than 3 exchanges.
-			// In case of `api_getitem` existing no matter what flag value is:
+			// On new item(s) obtained:
 			const getitems = apiData.api_getitem;
+			// in case of `api_getitem` existing no matter what obtainFlag value is
 			if(getitems && (!Array.isArray(getitems) || !getitems.every(v => !v))){
 				console.log("Using item obtained item(s):", itemId, itemAttrName, exchangeType, getitems);
 				const getitemArr = $.makeArray(getitems);
 				getitemArr.forEach(getitem => {
-					// result might be `"api_getitem":[null]` if flag is 2
+					// result might be `"api_getitem":[null]` if obtainFlag is not 1
 					if(!getitem) return;
 					// `api_mst_id` will be the useitem ID if `api_usemst` is 5 or 6
 					if([5, 6].includes(getitem.api_usemst)){

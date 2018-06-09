@@ -11,6 +11,7 @@ Saves and loads list to and from localStorage
 		list: {},
 		max: 500,
 		pendingGearNum: 0,
+		unsetSlotitemByType2: {},
 
 		// These IDs can be updated at `fud_weekly.json`
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46],
@@ -119,22 +120,31 @@ Saves and loads list to and from localStorage
 			));
 		},
 		
-		// Count number of equipment is not equipped by any ship or land-base
-		// Assume KC3ShipManager and PlayerManager are up to date
-		countFree :function(slotitem_id, isUnlock, isNoStar){
+		// To collect unequipped slotitem ID list,
+		// but correctly should search in `unsetSlotitemByType2` from `api_get_member/unsetslot`.
+		collectEquippedIds :function(lbasIncluded = true){
 			const heldRosterIds = [];
 			const rosterIdFilter = id => id > 0;
 			const landBasePlaneIdMap = p => p.api_slotid;
-			// Collect roster IDs of equipped (held) items by ships, land bases
+			// Collect roster IDs of equipped (held) items by ships, land bases (optional)
+			// Assume KC3ShipManager and PlayerManager are up to date
 			for(let key in KC3ShipManager.list){
 				heldRosterIds.push(...KC3ShipManager.list[key].items.filter(rosterIdFilter));
 			}
-			for(let base of PlayerManager.bases){
-				heldRosterIds.push(...base.planes.map(landBasePlaneIdMap).filter(rosterIdFilter));
+			if(lbasIncluded){
+				for(let base of PlayerManager.bases){
+					heldRosterIds.push(...base.planes.map(landBasePlaneIdMap).filter(rosterIdFilter));
+				}
+				for(let id of PlayerManager.baseConvertingSlots){
+					heldRosterIds.push(id);
+				}
 			}
-			for(let id of PlayerManager.baseConvertingSlots){
-				heldRosterIds.push(id);
-			}
+			return heldRosterIds;
+		},
+		
+		// Count number of equipment is not equipped by any ship or land-base
+		countFree :function(slotitem_id, isUnlock, isNoStar){
+			const heldRosterIds = this.collectEquippedIds(true);
 			return this.count(gear => (
 				gear.masterId == slotitem_id
 					&& heldRosterIds.indexOf(gear.itemId) === -1
@@ -154,6 +164,14 @@ Saves and loads list to and from localStorage
 				}
 			}
 			return result;
+		},
+		
+		// Look for equipment is not equipped by any ship or land-base
+		findFree :function( cond ){
+			const heldRosterIds = this.collectEquippedIds(true);
+			return this.find(g => (
+				heldRosterIds.indexOf(g.itemId) === -1 && cond.call(g, g)
+			));
 		},
 		
 		// Add or replace an item on the list
