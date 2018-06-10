@@ -329,9 +329,11 @@
 
 			var response = requestObj.response.api_data;
 			var dropShipData = this.dropShipData;
-			if( dropShipData.cellId !== KC3SortieManager.currentNode().id ||
-			    dropShipData.mapId !== KC3SortieManager.map_world*10 + KC3SortieManager.map_num) {
-				console.warn("Incorrect cell/map for ", KC3SortieManager.map_world*10 + KC3SortieManager.map_num, " edge ", KC3SortieManager.currentNode().id, dropShipData);
+			// Remind: KC3SortieManager and current node are not updated about battle result yet
+			var currentNode = KC3SortieManager.currentNode();
+			var currentMapId = KC3SortieManager.map_world*10 + KC3SortieManager.map_num;
+			if (dropShipData.cellId !== currentNode.id || dropShipData.mapId !== currentMapId) {
+				console.warn(`Incorrect cell/map for ${currentMapId} edge ${currentNode.id}`, dropShipData);
 				this.cleanup();
 				return;
 			}

@@ -2245,7 +2245,7 @@ Previously known as "Reactor"
 					}
 					*/
 				break;
-				case 64: // exchange 9 rice & 5 umeboshi & 6 nori & 7 tea & 1 saury can with 1 dinner ticket and 1 mamiya
+				case 64: // exchange 9 rice & 5 umeboshi & 6 nori & 7 tea & 1 canned saury with 1 dinner ticket and 1 mamiya
 					/*
 					if([85, 86, 87, 88].includes(itemId)) {
 						PlayerManager.consumables.rice -= 9;
@@ -2260,7 +2260,9 @@ Previously known as "Reactor"
 					// correct method is looking up via `api_unset_slot` by type2 category first, then 1st occurrence of master Id
 					const freeSauryCans = KC3GearManager.findFree(g => g.masterId === 150 && !g.lock);
 					if(freeSauryCans.length){
-						KC3GearManager.remove(freeSauryCans[0].itemId);
+						const sauryCanId = freeSauryCans[0].itemId;
+						console.log("Consuming 1 Canned Saury", sauryCanId);
+						KC3GearManager.remove(sauryCanId);
 						KC3GearManager.save();
 					}
 				break;
@@ -2312,7 +2314,7 @@ Previously known as "Reactor"
 					if(getitem.api_slotitem){
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
 						KC3GearManager.set([ getitem.api_slotitem ]);
-						console.log(`Obtained slotitem:`, getitem.api_slotitem);
+						console.log("Obtained slotitem:", getitem.api_slotitem);
 					}
 				});
 			}

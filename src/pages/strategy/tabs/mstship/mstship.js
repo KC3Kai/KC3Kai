@@ -460,11 +460,10 @@
 						
 					}else if(stat[0]=="hp"){
 						$(".ship_stat_min", statBox).text(shipData["api_"+stat[1]][0]);
-						// Show our max value for married ship, as api_taik[1] is unreasonable
+						// Show our max value for married ship, as api_taik[1] is usually unreachable
 						$(".ship_stat_max span", statBox).text(KC3Ship.getMaxHp(ship_id));
-						// api_taik[1] is being used as upper max for HP modding
-						$(".ship_stat_max", statBox)
-							.attr("title", shipData["api_"+stat[1]][1])
+						// api_taik[1] is used as upper limit for marriage increasing & HP modding
+						$(".ship_stat_max", statBox).attr("title", shipData["api_"+stat[1]][1])
 							.lazyInitTooltip();
 					}else if(stat[1].startsWith("db_")){
 						var realName = stat[1].slice(3);
