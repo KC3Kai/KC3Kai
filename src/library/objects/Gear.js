@@ -110,17 +110,17 @@ KC3改 Equipment Object
 				break;
 			case "torpedo":
 				// Torpedo or AA Machine Gun
-				if(type2 === 5 || type2 === 21)
+				if([5, 21, 32].includes(type2))
 					modifier = 1.2;
 				break;
 			case "yasen":
 				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 46].indexOf(type2) > -1)
+				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 46].includes(type2))
 					modifier = 1;
 				break;
 			case "asw":
 				// Depth Charge or Sonar
-				if([14, 15, 40].indexOf(type2) > -1)
+				if([14, 15, 40].includes(type2))
 					modifier = 1;
 				break;
 			case "airstrike":
@@ -149,28 +149,29 @@ KC3改 Equipment Object
 		switch(type.toLowerCase()) {
 			case "fire":
 				// Main gun/Secondary gun/AP shell/AAFD
-				// but wikia says Sonar gives shelling acc bonus?
-				if([1, 2, 3, 4, 19, 36].indexOf(type2) > -1)
+				// wikia says Sonar gives shelling acc bonus?
+				if([1, 2, 3, 4, 19, 36].includes(type2))
 					modifier = 1;
-				// Radar, http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:951#54
-				if([12, 13].indexOf(type2) > -1)
+				// Radar
+				if([12, 13].includes(type2))
 					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
-				// Depth Charge
-				if([15].indexOf(type2) > -1)
-					modifier = 0.4; // unknown
+				// Depth Charge Projector
+				if([15].includes(type2))
+					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown
 				break;
 			case "torpedo":
-				// Torpedo/AA Gun
-				if([5, 21, 32].indexOf(type2) > -1)
-					modifier = 1; // unknown
+				// AA Gun
+				if([21].includes(type2)) modifier = 1; // unknown
+				// Torpedo
+				if([5, 32].includes(type2)) modifier = 2;
 				break;
 			case "yasen":
 				// unknown
 				break;
 			case "asw":
 				// Sonar
-				if([14, 40].indexOf(type2) > -1)
-					modifier = 1; // unknown
+				if([14, 40].includes(type2))
+					modifier = 1.3;
 				break;
 			default:
 				console.warn("Unknown attack type:", type);
@@ -194,7 +195,8 @@ KC3改 Equipment Object
 				if(type2 === 17) modifier = 1.5;
 				break;
 			case "torpedo":
-				// unknown
+				// Sonar
+				if([14, 40].includes(type2)) modifier = 1.5;
 				break;
 			case "yasen":
 				// unknown
