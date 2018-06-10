@@ -1918,9 +1918,13 @@ KC3改 Ship Object
 			antiLandModifier = this.antiLandWarfarePowerMods(targetShipMasterId, false)[1];
 		}
 		
-		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* dayCutinModifier * airstrikeConcatModifier * apshellModifier
-			* antiPtImpModifier * antiLandModifier;
+		// About rounding and position of anti-land modifier:
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
+		let result = Math.floor(Math.floor(
+					Math.floor(cappedPower * antiLandModifier) * apshellModifier
+				) * criticalModifier * proficiencyCriticalModifier
+			) * dayCutinModifier * airstrikeConcatModifier
+			* antiPtImpModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
