@@ -142,6 +142,30 @@ Saves and loads list to and from localStorage
 			return heldRosterIds;
 		},
 		
+		// Find specific piece of equipment equipped on which ship or land-base,
+		// Will return an Array if aircraft is moving from a land-base.
+		equippedBy :function(itemId){
+			if(itemId > 0 && this.get(itemId).exists()){
+				const rosterIdFilter = id => id === itemId;
+				const landBasePlaneIdMap = p => p.api_slotid;
+				for(let key in KC3ShipManager.list){
+					const ship = KC3ShipManager.list[key];
+					if(ship.items.some(rosterIdFilter) || ship.ex_item === itemId)
+						return ship;
+				}
+				for(let base of PlayerManager.bases){
+					if(base.planes.map(landBasePlaneIdMap).some(rosterIdFilter))
+						return base;
+				}
+				if(PlayerManager.baseConvertingSlots.includes(itemId)){
+					return PlayerManager.baseConvertingSlots;
+				}
+				return false;
+			}
+			// returning undefined indicates invalid item
+			return;
+		},
+		
 		// Count number of equipment is not equipped by any ship or land-base
 		countFree :function(slotitem_id, isUnlock, isNoStar){
 			const heldRosterIds = this.collectEquippedIds(true);
