@@ -2736,22 +2736,23 @@ KC3改 Ship Object
 		switch(stype) {
 			case 2: // for Destroyers
 				// fit bonus under verification since 2017-06-23
+				// 12.7cm Single High-angle Gun Mount (Late Model)
 				const singleHighAngleMountCnt = this.countEquipment(229);
-				// for Satsuki K2
-				result += (this.masterId === 418 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
-				// for Mutsuki class, Kamikaze class still unknown
+				// for Mutsuki class including Satsuki K2
+				result += (ctype === 28 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
+				// for Kamikaze class still unknown
 				break;
 			case 3:
 			case 4:
 			case 21: // for Light Cruisers
-				// overhaul implemented in-game since 2017-06-23, still under verification
+				// overhaul implemented in-game since 2017-06-23, not fully verified
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
 				const isOoyodoClass = ctype === 52;
-				result = -2; // only fit bonus, but -2 fixed
+				result = -2; // only fit bonus, but -2 fixed (might disappeared?)
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
 				// for twin mount on Agano class / Ooyodo class / general CLs

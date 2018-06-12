@@ -3928,10 +3928,9 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if((selectedExpedition <= 40 || selectedExpedition === 102) &&
-							dataReq[index].stypeOneOf.includes("DE")) {
+						// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
+						if([4, 5, 9, 102].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
-								// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
