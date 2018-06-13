@@ -329,6 +329,14 @@
 
 			var response = requestObj.response.api_data;
 			var dropShipData = this.dropShipData;
+			// Remind: KC3SortieManager and current node are not updated about battle result yet
+			var currentNode = KC3SortieManager.currentNode();
+			var currentMapId = KC3SortieManager.map_world*10 + KC3SortieManager.map_num;
+			if (dropShipData.cellId !== currentNode.id || dropShipData.mapId !== currentMapId) {
+				console.warn(`Incorrect cell/map for ${currentMapId} edge ${currentNode.id}`, dropShipData);
+				this.cleanup();
+				return;
+			}
 
 			dropShipData.shipId = response.api_get_ship ? response.api_get_ship.api_ship_id : -1;
 			dropShipData.quest = response.api_quest_name;

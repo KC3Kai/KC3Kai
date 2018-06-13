@@ -1831,6 +1831,7 @@ KC3改 Ship Object
 	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
+	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
 			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, isAirAttack = false,
@@ -1918,9 +1919,13 @@ KC3改 Ship Object
 			antiLandModifier = this.antiLandWarfarePowerMods(targetShipMasterId, false)[1];
 		}
 		
-		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* dayCutinModifier * airstrikeConcatModifier * apshellModifier
-			* antiPtImpModifier * antiLandModifier;
+		// About rounding and position of anti-land modifier:
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
+		let result = Math.floor(Math.floor(
+					Math.floor(cappedPower * antiLandModifier) * apshellModifier
+				) * criticalModifier * proficiencyCriticalModifier
+			) * dayCutinModifier * airstrikeConcatModifier
+			* antiPtImpModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -2731,22 +2736,23 @@ KC3改 Ship Object
 		switch(stype) {
 			case 2: // for Destroyers
 				// fit bonus under verification since 2017-06-23
+				// 12.7cm Single High-angle Gun Mount (Late Model)
 				const singleHighAngleMountCnt = this.countEquipment(229);
-				// for Satsuki K2
-				result += (this.masterId === 418 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
-				// for Mutsuki class, Kamikaze class still unknown
+				// for Mutsuki class including Satsuki K2
+				result += (ctype === 28 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
+				// for Kamikaze class still unknown
 				break;
 			case 3:
 			case 4:
 			case 21: // for Light Cruisers
-				// overhaul implemented in-game since 2017-06-23, still under verification
+				// overhaul implemented in-game since 2017-06-23, not fully verified
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
 				const isOoyodoClass = ctype === 52;
-				result = -2; // only fit bonus, but -2 fixed
+				result = -2; // only fit bonus, but -2 fixed (might disappeared?)
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
 				// for twin mount on Agano class / Ooyodo class / general CLs
