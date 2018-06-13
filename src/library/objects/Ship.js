@@ -666,6 +666,106 @@ KC3改 Ship Object
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
+			// Suisei
+			// https://twitter.com/KennethWWKK/status/1006880793262604288
+			"24": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					}
+				},
+			},
+			// Suisei Model 12A
+			"57": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					}
+				},
+			},
+			// Suisei (601 Air Group)
+			"111": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					}
+				},
+			},
+			// Suisei (Egusa Squadron)
+			"100": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 4 },
+					}
+				},
+			},
+			// Suisei Model 22 (634 Air Group)
+			"291": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 4, "houk": 1 },
+					}
+				},
+			},
+			// Zuiun (634 Air Group)
+			"79": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 3 },
+					}
+				},
+			},
+			// Zuiun Model 12 (634 Air Group)
+			"81": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 3 },
+					}
+				},
+			},
+			// Zuiun Model 12 (634 Air Group / Skilled)
+			"237": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 4, "houk": 2 },
+					}
+				},
+			},
+			// Type 2 Reconnaissance Aircraft
+			"61": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						single: { "houg": 3, "souk": 1, "houk": 2 },
+					}
+				},
+			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
 				count: 0,

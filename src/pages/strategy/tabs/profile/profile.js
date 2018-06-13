@@ -465,8 +465,8 @@
 							csvQuoteIfNecessary(isAb ? KC3Meta.abyssShipName(s.api_id) : KC3Meta.shipName(s.api_name)),
 							csvQuoteIfNecessary(s.api_yomi),
 							isAb ? "-" : csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
-							csvQuoteIfNecessary(KC3Meta.stype(s.api_stype)),
-							isAb ? "-" : csvQuoteIfNecessary(KC3Meta.ctype(s.api_ctype)),
+							csvQuoteIfNecessary([s.api_stype, KC3Meta.stype(s.api_stype)].join('/')),
+							isAb ? "-" : csvQuoteIfNecessary([s.api_ctype, KC3Meta.ctype(s.api_ctype)].join('/')),
 							isAb ? "-" : RemodelDb.remodelGroup(s.api_id).join('/'),
 							isAb ? s.api_taik : s.api_taik.join('/'),
 							isAb ? s.api_houg : s.api_houg.join('/'),
@@ -490,13 +490,13 @@
 					"ID", "Name", "Japanese Name", "Rare", "Types", "Scrap Rsc", "Stats", "Unknown Stats"
 				].join(",") + CSV_LINE_BREAKS;
 				const statsApiMap = {
-					"api_houg": "FP", "api_raig": "TP", "api_souk": "AR", "api_tyku": "AA",
-					"api_houk": "EV", "api_houm": "AC", "api_tais": "AS", "api_saku": "LS",
-					"api_leng": "RN", "api_distance": "RD", "api_cost": "BC"
+					"api_houg": "FP", "api_raig": "TP", "api_baku": "BP", "api_souk": "AR",
+					"api_tyku": "AA", "api_houk": "EV", "api_houm": "AC", "api_tais": "AS",
+					"api_saku": "LS", "api_leng": "RN", "api_distance": "RD", "api_cost": "BC"
 				};
 				const unkStatsApiArr = [
-					"api_atap", "api_bakk", "api_baku", "api_luck",
-					"api_raik", "api_raim", "api_sakb", "api_soku", "api_taik"
+					"api_atap", "api_bakk", "api_luck", "api_raik",
+					"api_raim", "api_sakb", "api_soku", "api_taik"
 				];
 				$.each(KC3Master.all_slotitems(), (i, s) => {
 					if((!event.altKey && !KC3Master.isAbyssalGear(s.api_id))
