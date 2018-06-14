@@ -712,6 +712,7 @@ KC3改 Ship Object
 				},
 			},
 			// Suisei Model 22 (634 Air Group)
+			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%29
 			"291": {
 				count: 0,
 				byClass: {
@@ -723,6 +724,7 @@ KC3改 Ship Object
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
+			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%EF%BC%8F%E7%86%9F%E7%B7%B4%29
 			"292": {
 				count: 0,
 				byClass: {
@@ -926,6 +928,7 @@ KC3改 Ship Object
 				},
 			},
 			// 12.7cm Single High-angle Gun Mount (Late Model)
+			// https://wikiwiki.jp/kancolle/12.7cm%E5%8D%98%E8%A3%85%E9%AB%98%E8%A7%92%E7%A0%B2%28%E5%BE%8C%E6%9C%9F%E5%9E%8B%29
 			// https://twitter.com/panmodoki10/status/1006898009202831362
 			"229": {
 				count: 0,

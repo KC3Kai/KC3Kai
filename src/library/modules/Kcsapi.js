@@ -459,6 +459,9 @@ Previously known as "Reactor"
 			if(remodel.catapult > 0){
 				PlayerManager.consumables.protoCatapult -= remodel.catapult;
 			}
+			if(remodel.report > 0){
+				PlayerManager.consumables.actionReport -= remodel.report;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
