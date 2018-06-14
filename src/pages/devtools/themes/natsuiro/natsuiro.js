@@ -406,6 +406,7 @@
 		KC3Meta.defaultIcon("../../../../assets/img/ui/empty.png");
 		KC3Meta.loadQuotes();
 		PlayerManager.init();
+		PlayerManager.loadConsumables();
 		KC3ShipManager.load();
 		KC3GearManager.load();
 		KC3SortieManager.load();
@@ -3699,8 +3700,11 @@
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
-			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
+			$(".module.activity .activity_expeditionPlanner .estimated_time")
+				.text(String(60 * ExpdCost.time).toHHMMSS())
+				.attr("title", String(60 * ExpdCost.time).plusCurrentTime(true))
+				.lazyInitTooltip();
 
 			// setup expedition item colors
 			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
@@ -3924,10 +3928,9 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						if((selectedExpedition <= 40 || selectedExpedition === 102) &&
-							dataReq[index].stypeOneOf.includes("DE")) {
+						// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
+						if([4, 5, 9, 102].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
-								// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();

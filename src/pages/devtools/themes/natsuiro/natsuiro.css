@@ -1639,15 +1639,20 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer {
-	margin-bottom:4px;
+	height: 20px;
+	margin-bottom: 4px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer_description {
 	float: left;
+	text-align: left;
+	width: 110px;
 	margin-right: 3px;
 }
 .module.activity .activity_expeditionPlanner .estimated_time {
+	float: right;
 	text-align: right;
+	width: 67px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
@@ -2312,7 +2317,7 @@ ABYSS FLEET
 	font-size: 11px;
 	border: 1px solid #faa;
 	border-radius: 17px 5px 5px 17px;
-	background-color: #555;
+	background-color: rgba(85,85,85,0.7);
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon {
 	width: 28px;

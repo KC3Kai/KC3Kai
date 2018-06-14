@@ -14,14 +14,22 @@
 			this.locale = KC3Translation.getLocale();
 			this.itemsPerPage = DEFAULT_ITEMS_PER_PAGE;
 			this.filters = {};
+			this.compareNum = (lhs, rhs, op = "=") => {
+				switch(op) {
+					case ">": case ">=": return Number(lhs) >= Number(rhs);
+					case "<": case "<=": return Number(lhs) <= Number(rhs);
+					case "#": case "!=": return Number(lhs) !== Number(rhs);
+					default: return Number(lhs) === Number(rhs);
+				}
+			};
 			this.filterFunc = (recipeOnly, r) => {
 				// falsy value considered as unfiltered property
 				return (!this.filters.flagship || r.flag === this.filters.flagship)
 					// note: data type of `rsc?` and `devmat` in DB is string
-					&& (!this.filters.fuel || r.rsc1 == this.filters.fuel)
-					&& (!this.filters.ammo || r.rsc2 == this.filters.ammo)
-					&& (!this.filters.steel || r.rsc3 == this.filters.steel)
-					&& (!this.filters.bauxite || r.rsc4 == this.filters.bauxite)
+					&& (!this.filters.fuel || this.compareNum(r.rsc1, this.filters.fuel, this.filters.fuelOp))
+					&& (!this.filters.ammo || this.compareNum(r.rsc2,this.filters.ammo, this.filters.ammoOp))
+					&& (!this.filters.steel || this.compareNum(r.rsc3,this.filters.steel, this.filters.steelOp))
+					&& (!this.filters.bauxite || this.compareNum(r.rsc4,this.filters.bauxite, this.filters.bauxiteOp))
 					&& (!this.filters.devmat || r.devmat == this.filters.devmat)
 					&& (!!recipeOnly || !this.filters.result || r.result === this.filters.result);
 			};
@@ -92,11 +100,20 @@
 			$(".filters .build_rsc").on("focus", function(e) {
 				$(this).select();
 			});
+			$(".filters .build_rsc").on("input", function(e) {
+				this.reportValidity();
+			});
 			$(".filters .build_rsc").on("blur", function(e) {
+				if(!this.checkValidity()) return;
 				const rscKey = $(this).data("rsc");
 				const oldValue = self.filters[rscKey] || 0;
-				self.filters[rscKey] = Number($(this).val()) || 0;
-				if(oldValue !== self.filters[rscKey]) self.showList();
+				const oldOp = self.filters[`${rscKey}Op`];
+				const val = ($(this).val().match(/\d+$/) || [""])[0];
+				const op = ($(this).val().match(/^[<=#>]/) || [])[0];
+				self.filters[rscKey] = Number(val) || 0;
+				self.filters[`${rscKey}Op`] = op;
+				if(oldValue !== self.filters[rscKey] || oldOp !== self.filters[`${rscKey}Op`])
+					self.showList();
 			});
 			$(".filters .reset_all").on("click", function(e) {
 				self.filters = {};

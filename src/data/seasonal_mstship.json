@@ -2459,5 +2459,93 @@
 		"api_stype": 10,
 		"api_soku": 5,
 		"api_slot_num": 4
+	},
+	"1035": {
+		"api_id": 1035,
+		"api_name": "お出掛け朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1036": {
+		"api_id": 1036,
+		"api_name": "お出掛け弥生",
+		"api_yomi": "やよい",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1037": {
+		"api_id": 1037,
+		"api_name": "お出掛け村雨",
+		"api_yomi": "むらさめ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1038": {
+		"api_id": 1038,
+		"api_name": "お出掛け村雨改二",
+		"api_yomi": "むらさめ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1039": {
+		"api_id": 1039,
+		"api_name": "春の私服大和",
+		"api_yomi": "やまと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"1040": {
+		"api_id": 1040,
+		"api_name": "記念日Gambier Bay",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1041": {
+		"api_id": 1041,
+		"api_name": "記念日天霧",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1042": {
+		"api_id": 1042,
+		"api_name": "記念日長波改二",
+		"api_yomi": "ながなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1043": {
+		"api_id": 1043,
+		"api_name": "瑞雲佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1044": {
+		"api_id": 1044,
+		"api_name": "瑞雲対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1045": {
+		"api_id": 1045,
+		"api_name": "瑞雲Commandant Teste",
+		"api_yomi": "コマンダン・テスト",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
 	}
 }

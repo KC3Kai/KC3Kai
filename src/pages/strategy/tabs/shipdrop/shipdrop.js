@@ -177,7 +177,12 @@
 						$("img", shipBox).attr("src", `/assets/img/useitems/${useitemId}.png`)
 							.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
 							.attr("title", KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"));
-						$(".drop_times", shipBox).text("x{0}".format(allNodes[node][useitem]));
+						const dropCount = allNodes[node][useitem];
+						$(".drop_times", shipBox).text("x{0}".format(dropCount));
+						if(-Infinity < this.timeRange[0] || this.timeRange[1] < Infinity)
+							$(".drop_times", shipBox).attr("title", "{0} /{1} = {2}%"
+								.format(dropCount, totalBattle, Math.qckInt("round", dropCount / totalBattle * 100, 3))
+							);
 						shipBox.addClass("useitem");
 						isToBeShown = true;
 					});

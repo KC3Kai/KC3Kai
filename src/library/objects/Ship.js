@@ -666,6 +666,117 @@ KC3改 Ship Object
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
+			// Suisei
+			// https://twitter.com/KennethWWKK/status/1006880793262604288
+			"24": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+			},
+			// Suisei Model 12A
+			"57": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+			},
+			// Suisei (601 Air Group)
+			"111": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+			},
+			// Suisei (Egusa Squadron)
+			"100": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 4 },
+					},
+				},
+			},
+			// Suisei Model 22 (634 Air Group)
+			"291": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 6, "houk": 1 },
+					},
+				},
+			},
+			// Suisei Model 22 (634 Air Group / Skilled)
+			"292": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
+					},
+				},
+			},
+			// Zuiun (634 Air Group)
+			"79": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 3 },
+					},
+				},
+			},
+			// Zuiun Model 12 (634 Air Group)
+			"81": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 3 },
+					},
+				},
+			},
+			// Zuiun Model 12 (634 Air Group / Skilled)
+			"237": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 4, "houk": 2 },
+					},
+				},
+			},
+			// Type 2 Reconnaissance Aircraft
+			"61": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						single: { "houg": 3, "souk": 1, "houk": 2 },
+					},
+				},
+			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
 				count: 0,
@@ -684,10 +795,6 @@ KC3改 Ship Object
 						// extra +1 aa, +2 ev for Haruna K2
 						ids: [151],
 						multiple: { "tyku": 1, "houk": 2 },
-						// synergy with Surface Radar
-						callback: (api, info) => (hasSurfaceRadar ? ({
-							"houg": 2, "houk": 2
-						})[api] || 0 : 0),
 					},
 				],
 			},
@@ -748,7 +855,7 @@ KC3改 Ship Object
 				count: 0,
 				byShip: {
 					// Kagerou Class K2
-					ids: [566, 567],
+					ids: [566, 567, 568],
 					multiple: { "raig": 2 },
 					countCap: 2,
 				},
@@ -818,12 +925,66 @@ KC3改 Ship Object
 					},
 				},
 			},
+			// 12.7cm Single High-angle Gun Mount (Late Model)
+			// https://twitter.com/panmodoki10/status/1006898009202831362
+			"229": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 3,
+						})[api] || 0 : 0),
+					},
+					// Kamikaze Class
+					"66": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 3,
+						})[api] || 0 : 0),
+					},
+					// Shimushu Class
+					"74": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "houk": 4,
+						})[api] || 0 : 0),
+					},
+					// Etorofu Class
+					"77": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "houk": 4,
+						})[api] || 0 : 0),
+					},
+				},
+				byShip: {
+					// Yura K2
+					ids: [488],
+					callback: (api, info) => (({
+						"houg": 2 * (info.starsDist[10] || 0),
+						"tyku": 3 * (info.starsDist[10] || 0),
+					})[api] || 0) + (hasSurfaceRadar ? ({
+						"houg": 3, "houk": 2,
+					})[api] || 0 : 0),
+				},
+			},
 			// 12.7cm Twin Gun Mount Model C Kai Ni
 			"266": {
 				count: 0,
 				byShip: {
 					// Kagerou Class K2
-					ids: [566, 567],
+					ids: [566, 567, 568],
 					multiple: { "houg": 1 },
 					countCap: 2,
 					callback: (api, info) => (
@@ -859,7 +1020,7 @@ KC3改 Ship Object
 					},
 					{
 						// Kagerou Class K2, total +2 for 1st gun
-						ids: [566, 567],
+						ids: [566, 567, 568],
 						single: { "houg": 1 },
 					},
 					{
@@ -1835,6 +1996,7 @@ KC3改 Ship Object
 	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#aftercap
+	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
 			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, isAirAttack = false,
@@ -1922,9 +2084,13 @@ KC3改 Ship Object
 			antiLandModifier = this.antiLandWarfarePowerMods(targetShipMasterId, false)[1];
 		}
 		
-		let result = Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
-			* dayCutinModifier * airstrikeConcatModifier * apshellModifier
-			* antiPtImpModifier * antiLandModifier;
+		// About rounding and position of anti-land modifier:
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
+		let result = Math.floor(Math.floor(
+					Math.floor(cappedPower * antiLandModifier) * apshellModifier
+				) * criticalModifier * proficiencyCriticalModifier
+			) * dayCutinModifier * airstrikeConcatModifier
+			* antiPtImpModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -2735,22 +2901,23 @@ KC3改 Ship Object
 		switch(stype) {
 			case 2: // for Destroyers
 				// fit bonus under verification since 2017-06-23
+				// 12.7cm Single High-angle Gun Mount (Late Model)
 				const singleHighAngleMountCnt = this.countEquipment(229);
-				// for Satsuki K2
-				result += (this.masterId === 418 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
-				// for Mutsuki class, Kamikaze class still unknown
+				// for Mutsuki class including Satsuki K2
+				result += (ctype === 28 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
+				// for Kamikaze class still unknown
 				break;
 			case 3:
 			case 4:
 			case 21: // for Light Cruisers
-				// overhaul implemented in-game since 2017-06-23, still under verification
+				// overhaul implemented in-game since 2017-06-23, not fully verified
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
 				const isOoyodoClass = ctype === 52;
-				result = -2; // only fit bonus, but -2 fixed
+				result = -2; // only fit bonus, but -2 fixed (might disappeared?)
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
 				// for twin mount on Agano class / Ooyodo class / general CLs

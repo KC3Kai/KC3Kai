@@ -110,6 +110,28 @@
 				}
 			},
 			{
+				"name": "Tibo442",
+				"avatar": "https://avatars2.githubusercontent.com/u/5676386?v=4&s=88",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh" : "https://github.com/Tibo442",
+					"wk" : "http://kancolle.wikia.com/wiki/User:Tibo442",
+					"tw" : "http://twitter.com/FlatIsNice",
+					"wb" : "http://flatisjustice.moe"
+				}
+			},
+			{
+				"name": "Tsubakura",
+				"avatar" : "https://avatars0.githubusercontent.com/u/20300876?v=4&s=460",
+				"desc" : ["AboutDeveloper", "AboutDevTester"],
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Tsubakura",
+					"wk" :"http://kancolle.wikia.com/wiki/User:Tsubakura"
+				}
+			},
+			{
 				"name": "bamboo3250",
 				"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
 				"desc": ["AboutDeveloper", "Tiếng Việt"],
@@ -533,18 +555,18 @@
 				"links" : {
 					"gh": "https://github.com/Rys3t"
 				}
+			},
+			{
+				"name": "TrickLin",
+				"avatar" : "https://avatars2.githubusercontent.com/u/8099890?s=88&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/TrickLin"
+				}
 			}
 		],
 		"AboutForkContributors": [
-			{
-				"name": "Tibo442",
-				"avatar": "https://avatars2.githubusercontent.com/u/5676386?v=4&s=88",
-				"desc": "AboutDeveloper",
-				"active": 1,
-				"links": {
-					"gh" : "https://github.com/Tibo442"
-				}
-			},
 			{
 				"name": "HitomaruKonpaku",
 				"avatar" : "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
@@ -564,10 +586,19 @@
 				}
 			},
 			{
+				"name": "Dewy",
+				"avatar" : "https://avatars1.githubusercontent.com/u/26541502?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/sorewachigauyo"
+				}
+			},
+			{
 				"name": "kyoushuu",
 				"avatar": "https://avatars2.githubusercontent.com/u/2142097?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/kyoushuu"
 				}
@@ -576,7 +607,7 @@
 				"name": "tmerta",
 				"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
 				"desc" : "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/tmerta"
 				}
@@ -585,7 +616,7 @@
 				"name": "nevrending",
 				"avatar": "https://avatars3.githubusercontent.com/u/4745298?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/nevrending",
 					"wk" :"http://kancolle.wikia.com/wiki/User:NevREnding",
@@ -598,9 +629,72 @@
 				"name": "reynn",
 				"avatar": "https://avatars2.githubusercontent.com/u/224374?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/reynn"
+				}
+			},
+			{
+				"name": "hd7771",
+				"avatar" : "https://avatars3.githubusercontent.com/u/7695245?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 0,
+				"links" : {
+					"gh" :"https://github.com/107nationalstation"
+				}
+			},
+			{
+				"name": "Prince Yang",
+				"avatar" : "https://avatars3.githubusercontent.com/u/7968263?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 0,
+				"links" : {
+					"gh" :"https://github.com/ptyang"
+				}
+			},
+			{
+				"name": "abs15986",
+				"avatar" : "https://avatars2.githubusercontent.com/u/13902881?s=60&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/abs15986"
+				}
+			},
+			{
+				"name": "MZI",
+				"avatar" : "https://avatars1.githubusercontent.com/u/14719366?s=460&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/MZIchenjl"
+				}
+			},
+			{
+				"name": "redpizza",
+				"avatar" : "https://avatars2.githubusercontent.com/u/31765780?s=460&v=4",
+				"desc" : "日本語",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/redpizza"
+				}
+			},
+			{
+				"name": "Ning Humbert",
+				"avatar" : "https://avatars1.githubusercontent.com/u/8641779?s=460&v=4",
+				"desc" : ["简体中文", "日本語"],
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/lackofdream"
+				}
+			},
+			{
+				"name": "Felix Suwito",
+				"avatar" : "https://avatars3.githubusercontent.com/u/19694373?s=460&v=4",
+				"desc" : "Indonesian",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/flixwito"
 				}
 			}
 		],
@@ -613,16 +707,6 @@
 				"links" : {
 					"gh" :"https://github.com/Tedster59",
 					"wb": "http://forum.worldofwarships.com/index.php?/user/tedster-1001311062/"
-				}
-			},
-			{
-				"name": "Tsubakura",
-				"avatar" : "https://avatars0.githubusercontent.com/u/20300876?v=4&s=460",
-				"desc" : "AboutDevTester",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/Tsubakura",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Tsubakura"
 				}
 			},
 			{

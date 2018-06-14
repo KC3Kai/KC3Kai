@@ -924,7 +924,7 @@ Provides access to data on built-in JSON files
 		 * perhaps `api_c_flag` will not disappear if Dinner Ticket not.
 		 */
 		isDuringFoodEvent :function(){
-			return true;
+			return false;
 		},
 		
 		isAF :function(){
