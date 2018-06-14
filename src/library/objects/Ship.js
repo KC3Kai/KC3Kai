@@ -675,7 +675,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 2 },
-					}
+					},
 				},
 			},
 			// Suisei Model 12A
@@ -686,7 +686,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 2 },
-					}
+					},
 				},
 			},
 			// Suisei (601 Air Group)
@@ -697,7 +697,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 2 },
-					}
+					},
 				},
 			},
 			// Suisei (Egusa Squadron)
@@ -708,7 +708,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 4 },
-					}
+					},
 				},
 			},
 			// Suisei Model 22 (634 Air Group)
@@ -718,8 +718,19 @@ KC3改 Ship Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "houg": 4, "houk": 1 },
-					}
+						multiple: { "houg": 6, "houk": 1 },
+					},
+				},
+			},
+			// Suisei Model 22 (634 Air Group / Skilled)
+			"292": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
+					},
 				},
 			},
 			// Zuiun (634 Air Group)
@@ -730,7 +741,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 3 },
-					}
+					},
 				},
 			},
 			// Zuiun Model 12 (634 Air Group)
@@ -741,7 +752,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 3 },
-					}
+					},
 				},
 			},
 			// Zuiun Model 12 (634 Air Group / Skilled)
@@ -752,7 +763,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 4, "houk": 2 },
-					}
+					},
 				},
 			},
 			// Type 2 Reconnaissance Aircraft
@@ -763,7 +774,7 @@ KC3改 Ship Object
 					"2": {
 						remodel: 2,
 						single: { "houg": 3, "souk": 1, "houk": 2 },
-					}
+					},
 				},
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
@@ -844,7 +855,7 @@ KC3改 Ship Object
 				count: 0,
 				byShip: {
 					// Kagerou Class K2
-					ids: [566, 567],
+					ids: [566, 567, 568],
 					multiple: { "raig": 2 },
 					countCap: 2,
 				},
@@ -914,12 +925,66 @@ KC3改 Ship Object
 					},
 				},
 			},
+			// 12.7cm Single High-angle Gun Mount (Late Model)
+			// https://twitter.com/panmodoki10/status/1006898009202831362
+			"229": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 3,
+						})[api] || 0 : 0),
+					},
+					// Kamikaze Class
+					"66": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 2, "houk": 3,
+						})[api] || 0 : 0),
+					},
+					// Shimushu Class
+					"74": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "houk": 4,
+						})[api] || 0 : 0),
+					},
+					// Etorofu Class
+					"77": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "houk": 4,
+						})[api] || 0 : 0),
+					},
+				},
+				byShip: {
+					// Yura K2
+					ids: [488],
+					callback: (api, info) => (({
+						"houg": 2 * (info.starsDist[10] || 0),
+						"tyku": 3 * (info.starsDist[10] || 0),
+					})[api] || 0) + (hasSurfaceRadar ? ({
+						"houg": 3, "houk": 2,
+					})[api] || 0 : 0),
+				},
+			},
 			// 12.7cm Twin Gun Mount Model C Kai Ni
 			"266": {
 				count: 0,
 				byShip: {
 					// Kagerou Class K2
-					ids: [566, 567],
+					ids: [566, 567, 568],
 					multiple: { "houg": 1 },
 					countCap: 2,
 					callback: (api, info) => (
@@ -955,7 +1020,7 @@ KC3改 Ship Object
 					},
 					{
 						// Kagerou Class K2, total +2 for 1st gun
-						ids: [566, 567],
+						ids: [566, 567, 568],
 						single: { "houg": 1 },
 					},
 					{
