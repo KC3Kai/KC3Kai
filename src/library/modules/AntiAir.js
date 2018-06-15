@@ -437,6 +437,7 @@ AntiAir: anti-air related calculations
 	function isBattleShipKai( mst ) {
 		return [
 			82, // Ise Kai
+			553, // Ise K2
 			88, // Hyuuga Kai
 			148, // Musashi Kai
 			546, // Musashi K2
