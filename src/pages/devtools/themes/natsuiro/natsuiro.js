@@ -589,7 +589,7 @@
 				|| !(node.battleDay || node.battleNight)) { return false; }
 			const isPvP = node.isPvP;
 			const sortie = {
-				id: KC3SortieManager.onSortie || (isPvP ? "TBD" : "???"),
+				id: KC3SortieManager.isOnSavedSortie() && KC3SortieManager.onSortie || (isPvP ? "TBD" : "???"),
 				diff: KC3SortieManager.map_difficulty,
 				world: isPvP ? 0 : KC3SortieManager.map_world,
 				mapnum: KC3SortieManager.map_num,
