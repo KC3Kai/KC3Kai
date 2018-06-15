@@ -875,6 +875,7 @@ KC3改 Ship Object
 					//  Hatsuharu K2, Hatsushimo K2
 					ids: [426, 420, 195, 407, 437, 147, 326, 419],
 					multiple: { "raig": 2, "houk": 1 },
+					countCap: 2,
 					// +1 fp if stars +max
 					callback: (api, info) => (({
 						"houg": info.starsDist[10] || 0,
@@ -891,6 +892,7 @@ KC3改 Ship Object
 					"18": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						countCap: 2,
 						// +1 fp if stars +max
 						callback: (api, info) => (({
 							"houg": info.starsDist[10] || 0,
@@ -900,6 +902,7 @@ KC3改 Ship Object
 					"23": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						countCap: 2,
 						callback: (api, info) => (({
 							"houg": info.starsDist[10] || 0,
 						})[api] || 0),
@@ -910,6 +913,7 @@ KC3改 Ship Object
 						remodel: 2,
 						excludes: [556, 557, 558],
 						multiple: { "raig": 2, "houk": 1 },
+						countCap: 2,
 						// +1 tp if stars >= 5, +1 fp if stars +max, multiple
 						callback: (api, info) => (({
 							"houg": info.starsDist[10] || 0,
@@ -921,6 +925,7 @@ KC3改 Ship Object
 					"38": {
 						remodel: 2,
 						multiple: { "raig": 2, "houk": 1 },
+						countCap: 2,
 						callback: (api, info) => (({
 							"houg": info.starsDist[10] || 0,
 						})[api] || 0),
@@ -963,6 +968,15 @@ KC3改 Ship Object
 					},
 					// Etorofu Class
 					"77": {
+						callback: (api, info) => (({
+							"houg": info.starsDist[10] || 0,
+							"tyku": info.starsDist[10] || 0,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "houk": 4,
+						})[api] || 0 : 0),
+					},
+					// Hiburi Class
+					"85": {
 						callback: (api, info) => (({
 							"houg": info.starsDist[10] || 0,
 							"tyku": info.starsDist[10] || 0,
