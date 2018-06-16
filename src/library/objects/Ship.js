@@ -662,7 +662,7 @@ KC3改 Ship Object
 		// To correct the 'naked stats' for these cases, have to simulate them all.
 		// Some summary tables:
 		//  * https://twitter.com/Lambda39/status/990268289866579968
-		//  * https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
+		//  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
@@ -744,6 +744,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 2 },
 				},
 			},
 			// Zuiun Model 12 (634 Air Group)
@@ -755,6 +765,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 2 },
 				},
 			},
 			// Zuiun Model 12 (634 Air Group / Skilled)
@@ -766,6 +786,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 4, "houk": 2 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 3, "houk": 1 },
 				},
 			},
 			// Type 2 Reconnaissance Aircraft
