@@ -128,9 +128,9 @@
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:185px;
+	width:215px;
 	height:20px;
-	margin:5px 5px -5px 505px;
+	margin:5px 5px -5px 475px;
 	background:none;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {
@@ -255,6 +255,29 @@
 	width:175px;
 	margin:0px 5px 0px 0px;
 }
+.tab_maps .sortie_list .sortie_edges .shipstate {
+	position:absolute;
+	margin:-14px 0px 0px 14px;
+	width:15px;
+	height:15px;
+	float:left;
+	overflow:hidden;
+}
+.tab_maps .sortie_list .sortie_edges.one_line .shipstate {
+	margin:-16px 0px 0px 16px;
+	width:20px;
+	height:20px;
+}
+.tab_maps .sortie_list .sortie_edges .shipstate img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
+	overflow:hidden;
+}
+.tab_maps .sortie_list .sortie_edges.one_line .shipstate img{
+	width:20px;
+	height:20px;
+}
 .tab_maps .sortie_list .nonodes {
 	height:30px;
 	line-height:30px;
@@ -320,7 +343,7 @@
 .tab_maps .sortie_list .sortie_edge.night_battle {
 	background:#14325A;
 }
-.tab_event .sortie_list .sortie_edge.night_to_day {
+.tab_maps .sortie_list .sortie_edge.night_to_day {
 	background:#A23C7F;
 }
 .tab_maps .sortie_list .sortie_edge.air_raid {

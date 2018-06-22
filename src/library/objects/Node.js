@@ -498,7 +498,7 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to battle simulation, like sortielogs.
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugPrediction()){
+		if(isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate){
 			const fleetId = this.fleetSent - 1;
 			// To work better on battle simulation, prefer to use `isPlayerCombined`,
 			// which check via API data instead of determining 'current state' of PlayerManager

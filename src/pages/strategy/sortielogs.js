@@ -148,6 +148,15 @@
 				self.showMap();
 			}).toggleClass("active", !ConfigManager.sr_show_non_battle);
 			
+			// Toggle between using predictions to get taiha/chuuha/sunk state
+			$(".tab_"+tabCode+" .sortie_batch_toggles .show_new_shipstate_toggle").on("click", function(){
+				ConfigManager.load();
+				ConfigManager.sr_show_new_shipstate = !ConfigManager.sr_show_new_shipstate;
+				ConfigManager.save();
+				$(this).toggleClass("active", ConfigManager.sr_show_new_shipstate);
+				self.showMap();
+			}).toggleClass("active", ConfigManager.sr_show_new_shipstate);
+			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.switchWorld(KC3StrategyTabs.pageParams[1],
 					KC3StrategyTabs.pageParams[2]);
@@ -927,6 +936,17 @@
 								}
 							}else if(typeof battle.yasen.api_deck_id != "undefined"){
 								thisNode.engageNight( battleData, sortie.fleetnum );
+							}
+							if(ConfigManager.sr_show_new_shipstate) {
+								let predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
+								let lowestHP = 1;
+								$.each(predicted.playerMain, function(index, ship) {
+									if(ship.hp < thisNode.originalHPs[index])
+										lowestHP = Math.min(ship.hp / thisNode.maxHPs.ally[index], lowestHP);
+								});
+								if(lowestHP < 0) lowestHP = 0;
+								if(lowestHP <= .5)
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][Math.ceil(lowestHP*4)]}.png"></img></div>`);
 							}
 							if(KC3Node.debugPrediction()){
 								// Known issue 1: if `api_name` not saved into battle data for old history,
