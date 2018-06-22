@@ -2721,6 +2721,7 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 			} else {
 				// special torpedo radar cut-in for destroyers since 2017-10-25
+				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
 					// according tests, any radar with accuracy stat >= 3 capable,
 					// even large radars (Kasumi K2 can equip), air radars okay too, see:
@@ -2729,14 +2730,13 @@ KC3改 Ship Object
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
-					// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
-					if(hasCapableRadar && hasSkilledLookout)
-						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
 					if(hasCapableRadar && smallMainGunCnt >= 1) {
 						// https://twitter.com/ayanamist_m2/status/944176834551222272
 						const has127TwinGunModelD2 = this.hasEquipment(267);
 						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * (has127TwinGunModelD2 ? 1.25 : 1)];
 					}
+					if(hasCapableRadar && hasSkilledLookout)
+						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214]);
