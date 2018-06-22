@@ -939,14 +939,16 @@
 							}
 							if(ConfigManager.sr_show_new_shipstate) {
 								let predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
-								let lowestHP = 1;
-								$.each(predicted.playerMain, function(index, ship) {
-									if(ship.hp < thisNode.originalHPs[index])
-										lowestHP = Math.min(ship.hp / thisNode.maxHPs.ally[index], lowestHP);
-								});
-								if(lowestHP < 0) lowestHP = 0;
-								if(lowestHP <= .5)
-									$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][Math.ceil(lowestHP*4)]}.png"></img></div>`);
+								if(predicted) {
+									let lowestHP = 1;
+									$.each(predicted.playerMain, function(index, ship) {
+										if(ship.hp < thisNode.originalHPs[index])
+											lowestHP = Math.min(ship.hp / thisNode.maxHPs.ally[index], lowestHP);
+									});
+									if(lowestHP < 0) lowestHP = 0;
+									if(lowestHP <= .5)
+										$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][Math.ceil(lowestHP*4)]}.png"></img></div>`);
+								}
 							}
 							if(KC3Node.debugPrediction()){
 								// Known issue 1: if `api_name` not saved into battle data for old history,
