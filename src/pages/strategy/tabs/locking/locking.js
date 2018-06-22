@@ -355,28 +355,28 @@
 
         prepareFilters() {
             this.defineSimpleFilter("speed", [], 0,
-                (index, ship) => {
+                (filterDef, ship) => {
                     return (this.filterValues.speed === 0)
                         || (this.filterValues.speed === 1 && ship.speed < 10)
                         || (this.filterValues.speed === 2 && ship.speed >= 10);
                 }
             );
             this.defineSimpleFilter("daihatsu", [], 0,
-                (index, ship) => {
+                (filterDef, ship) => {
                     return (this.filterValues.daihatsu === 0)
                         || (this.filterValues.daihatsu === 1 && ship.canEquipDaihatsu)
                         || (this.filterValues.daihatsu === 2 && !ship.canEquipDaihatsu);
                 }
             );
             this.defineSimpleFilter("tagLocked", [], 0,
-                (index, ship) => {
+                (filterDef, ship) => {
                     return (!this.filterValues.tagLocked)
                         || (this.filterValues.tagLocked && !ship.sally);
                 }
             );
 
             this.defineSimpleFilter("shipType", [], 0,
-                (index, ship) => {
+                (filterDef, ship) => {
                     return (this.filterValues.stypes.length === 0)
                         || (this.filterValues.stypes.indexOf(ship.stype) !== -1);
                 }
