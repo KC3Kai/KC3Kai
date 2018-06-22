@@ -942,11 +942,19 @@
 								if(predicted) {
 									let lowestHP = 1;
 									$.each(predicted.playerMain, function(index, ship) {
-										if(ship.hp < thisNode.originalHPs[index])
-											lowestHP = Math.min(ship.hp / thisNode.maxHPs.ally[index], lowestHP);
+										let maxHP = thisNode.maxHPs.ally[index];
+										let currentHP = ship.hp / maxHP;
+										if(Math.ceil(currentHP * 4) < Math.ceil(thisNode.originalHPs[index] / maxHP * 4))
+											lowestHP = Math.min(currentHP, lowestHP);
+									});
+									$.each(predicted.playerEscort, function(index, ship) {
+										let maxHP = thisNode.maxHPs.allyEscort[index];
+										let currentHP = ship.hp / maxHP;
+										if(Math.ceil(currentHP * 4) < Math.ceil((thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay).api_f_nowhps_combined[index] / maxHP * 4))
+											lowestHP = Math.min(currentHP, lowestHP);
 									});
 									if(lowestHP < 0) lowestHP = 0;
-									if(lowestHP <= .5)
+									if(lowestHP <= 0.5)
 										$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][Math.ceil(lowestHP*4)]}.png"></img></div>`);
 								}
 							}
