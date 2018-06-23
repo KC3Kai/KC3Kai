@@ -254,6 +254,12 @@ Used by SortieManager
 		return KC3BattlePrediction.normalizeArrayIndexing(array);
 	};
 	
+	// detect KCSAPI old battle data via existing `api_f_maxhps` instead of `api_maxhps`
+	KC3Node.prototype.isOldBattleData = function(battleData){
+		const data = battleData || this.battleNight || this.battleDay;
+		return data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -498,112 +504,106 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to battle simulation, like sortielogs.
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate){
-			try{
-				const fleetId = this.fleetSent - 1;
-				// To work better on battle simulation, prefer to use `isPlayerCombined`,
-				// which check via API data instead of determining 'current state' of PlayerManager
-				//const isPlayerCombinedSent = fleetId === 0 && PlayerManager.combinedFleet > 0;
+		if((isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate)
+			&& !this.isOldBattleData(battleData)){
+			const fleetId = this.fleetSent - 1;
+			// To work better on battle simulation, prefer to use `isPlayerCombined`,
+			// which check via API data instead of determining 'current state' of PlayerManager
+			//const isPlayerCombinedSent = fleetId === 0 && PlayerManager.combinedFleet > 0;
 
-				// Find battle type
-				const player = (() => {
-					if (!isPlayerCombined) { return KC3BattlePrediction.Player.SINGLE; }
+			// Find battle type
+			const player = (() => {
+				if (!isPlayerCombined) { return KC3BattlePrediction.Player.SINGLE; }
 
-					switch (PlayerManager.combinedFleet) {
-						case 1:
-							return KC3BattlePrediction.Player.CTF;
-						case 2:
-							return KC3BattlePrediction.Player.STF;
-						case 3:
-							return KC3BattlePrediction.Player.TCF;
-						default:
-							throw new Error(`Unknown combined fleet code: ${PlayerManager.combinedFleet}`);
-					}
-				})();
-				const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
-				const time = this.isNightToDay
-					? KC3BattlePrediction.Time.NIGHT_TO_DAY
-					: KC3BattlePrediction.Time.DAY;
-
-				const dameConCode = (() => {
-					if (KC3SortieManager.isPvP()) { return {}; }
-
-					return {
-						main: PlayerManager.fleets[fleetId].getDameConCodes(),
-						escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
-					};
-				})();
-
-				const result = KC3BattlePrediction.analyzeBattle(battleData, dameConCode, { player, enemy, time });
-				this.predictedFleetsDay = result.fleets;
-				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted for ${player} vs ${enemy}`, result);
+				switch (PlayerManager.combinedFleet) {
+					case 1:
+						return KC3BattlePrediction.Player.CTF;
+					case 2:
+						return KC3BattlePrediction.Player.STF;
+					case 3:
+						return KC3BattlePrediction.Player.TCF;
+					default:
+						throw new Error(`Unknown combined fleet code: ${PlayerManager.combinedFleet}`);
 				}
+			})();
+			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
+			const time = this.isNightToDay
+				? KC3BattlePrediction.Time.NIGHT_TO_DAY
+				: KC3BattlePrediction.Time.DAY;
 
-				if (ConfigManager.info_btrank) {
-					this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, this.battleNight || battleData, this.predictedFleetsDay);
-					if (KC3Node.debugPrediction()) {
-						console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
-					}
-					
-					const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);
-					this.predictedMvps = [mvpResult.playerMain];
-					if (mvpResult.playerEscort !== undefined) {
-						this.predictedMvps.push(mvpResult.playerEscort);
-					}
-					if (KC3Node.debugPrediction()) {
-						console.debug(`Node ${this.letter} predicted mvp`, this.predictedMvps, this.sortie);
-					}
-					this.predictedMvpCapable = this.isMvpPredictionCapable();
-				}
+			const dameConCode = (() => {
+				if (KC3SortieManager.isPvP()) { return {}; }
 
-				// Update fleets with battle result
-				this.allyNoDamage = this.allyNoDamage && result.isPlayerNoDamage;
-				if (isRealBattle) {
-					result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
-						const ship = PlayerManager.fleets[fleetId].ship(position);
-						if(!ship.isAbsent()) {
-							ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-							ship.afterHp[0] = hp;
-							ship.afterHp[1] = ship.hp[1];
-							this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
-							if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
-								// string indicates prediction value
-								ship.mvp = this.predictedMvps[0] === position + 1 ?
-									(this.predictedMvpCapable ? "chosen" : "candidate") : false;
-							}
-						}
-					});
-					result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
-						const ship = PlayerManager.fleets[1].ship(position);
-						if(!ship.isAbsent()) {
-							ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
-							ship.afterHp[0] = hp;
-							ship.afterHp[1] = ship.hp[1];
-							this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
-							if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
-								ship.mvp = this.predictedMvps[1] === position + 1 ?
-									(this.predictedMvpCapable ? "chosen" : "candidate") : false;
-							}
-						}
-					});
-				}
-				result.fleets.enemyMain.forEach((ship, position) => {
-					this.enemyHP[position] = ship;
-					this.enemySunk[position] = ship.sunk;
-				});
-				result.fleets.enemyEscort.forEach((ship, index) => {
-					const position = index + 6;
+				return {
+					main: PlayerManager.fleets[fleetId].getDameConCodes(),
+					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
+				};
+			})();
 
-					this.enemyHP[position] = ship;
-					this.enemySunk[position] = ship.sunk;
-				});
-			} catch (e) {
-				if(isRealBattle || KC3Node.debugPrediction())
-					throw e;
-				else 
-					console.error("Sortie battle prediction exception", e);
+			const result = KC3BattlePrediction.analyzeBattle(battleData, dameConCode, { player, enemy, time });
+			this.predictedFleetsDay = result.fleets;
+			if (KC3Node.debugPrediction()) {
+				console.debug(`Node ${this.letter} predicted for ${player} vs ${enemy}`, result);
 			}
+
+			if (ConfigManager.info_btrank) {
+				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, this.battleNight || battleData, this.predictedFleetsDay);
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
+				}
+				
+				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);
+				this.predictedMvps = [mvpResult.playerMain];
+				if (mvpResult.playerEscort !== undefined) {
+					this.predictedMvps.push(mvpResult.playerEscort);
+				}
+				if (KC3Node.debugPrediction()) {
+					console.debug(`Node ${this.letter} predicted mvp`, this.predictedMvps, this.sortie);
+				}
+				this.predictedMvpCapable = this.isMvpPredictionCapable();
+			}
+
+			// Update fleets with battle result
+			this.allyNoDamage = this.allyNoDamage && result.isPlayerNoDamage;
+			if (isRealBattle) {
+				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
+					const ship = PlayerManager.fleets[fleetId].ship(position);
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[0] > 0) {
+							// string indicates prediction value
+							ship.mvp = this.predictedMvps[0] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
+					}
+				});
+				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
+					const ship = PlayerManager.fleets[1].ship(position);
+					if(!ship.isAbsent()) {
+						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						ship.afterHp[0] = hp;
+						ship.afterHp[1] = ship.hp[1];
+						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
+						if(Array.isArray(this.predictedMvps) && this.predictedMvps[1] > 0) {
+							ship.mvp = this.predictedMvps[1] === position + 1 ?
+								(this.predictedMvpCapable ? "chosen" : "candidate") : false;
+						}
+					}
+				});
+			}
+			result.fleets.enemyMain.forEach((ship, position) => {
+				this.enemyHP[position] = ship;
+				this.enemySunk[position] = ship.sunk;
+			});
+			result.fleets.enemyEscort.forEach((ship, index) => {
+				const position = index + 6;
+
+				this.enemyHP[position] = ship;
+				this.enemySunk[position] = ship.sunk;
+			});
 
 		}
 		
@@ -771,7 +771,8 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugPrediction()){
+		if((isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate)
+			&& !this.isOldBattleData(nightData)){
 			const fleetId = this.fleetSent - 1;
 
 			// Find battle type

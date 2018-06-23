@@ -924,38 +924,53 @@
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum)).defineAsBattle();
-							if(typeof battle.data.api_dock_id != "undefined"){
-								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
-									thisNode.night( battle.yasen );
+							try {
+								if(typeof battle.data.api_dock_id != "undefined"){
+									thisNode.engage( battleData, sortie.fleetnum );
+									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+										thisNode.night( battle.yasen );
+									}
+								}else if(typeof battle.data.api_deck_id != "undefined"){
+									thisNode.engage( battleData, sortie.fleetnum );
+									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+										thisNode.night( battle.yasen );
+									}
+								}else if(typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.engageNight( battleData, sortie.fleetnum );
 								}
-							}else if(typeof battle.data.api_deck_id != "undefined"){
-								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
-									thisNode.night( battle.yasen );
+							} catch(e) {
+								if(ConfigManager.sr_show_new_shipstate) {
+									console.error("Predicting battle ship state", e);
+								} else {
+									throw e;
 								}
-							}else if(typeof battle.yasen.api_deck_id != "undefined"){
-								thisNode.engageNight( battleData, sortie.fleetnum );
 							}
-							if(ConfigManager.sr_show_new_shipstate) {
-								let predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
-								if(predicted) {
+							if(ConfigManager.sr_show_new_shipstate){
+								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
+								if(predicted){
+									const toDamageLevel = (hpRatio) => Math.ceil(hpRatio * 4);
+									const rawData = thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay;
 									let lowestHP = 1;
-									$.each(predicted.playerMain, function(index, ship) {
-										let maxHP = thisNode.maxHPs.ally[index];
-										let currentHP = ship.hp / maxHP;
-										if(Math.ceil(currentHP * 4) < Math.ceil(thisNode.originalHPs[index] / maxHP * 4))
+									$.each(predicted.playerMain, function(index, ship){
+										const maxHP = thisNode.maxHPs.ally[index];
+										const nowHP = rawData.api_f_nowhps[index];
+										const currentHP = ship.hp / maxHP;
+										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
 											lowestHP = Math.min(currentHP, lowestHP);
 									});
-									$.each(predicted.playerEscort, function(index, ship) {
-										let maxHP = thisNode.maxHPs.allyEscort[index];
-										let currentHP = ship.hp / maxHP;
-										if(Math.ceil(currentHP * 4) < Math.ceil((thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay).api_f_nowhps_combined[index] / maxHP * 4))
+									$.each(predicted.playerEscort, function(index, ship){
+										const maxHP = thisNode.maxHPs.allyEscort[index];
+										const nowHP = rawData.api_f_nowhps_combined[index];
+										const currentHP = ship.hp / maxHP;
+										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
 											lowestHP = Math.min(currentHP, lowestHP);
 									});
 									if(lowestHP < 0) lowestHP = 0;
-									if(lowestHP <= 0.5)
-										$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][Math.ceil(lowestHP*4)]}.png"></img></div>`);
+									if(lowestHP <= 0.5){
+										const level = toDamageLevel(lowestHP);
+										$(".sortie_edge_"+(edgeIndex+1), sortieBox)
+											.append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][level]}.png"></img></div>`);
+									}
 								}
 							}
 							if(KC3Node.debugPrediction()){

@@ -256,27 +256,29 @@
 	margin:0px 5px 0px 0px;
 }
 .tab_maps .sortie_list .sortie_edges .shipstate {
-	position:absolute;
-	margin:-14px 0px 0px 14px;
-	width:15px;
-	height:15px;
+	position:relative;
+	margin:-15px 0px 0px 15px;
+	width:18px;
+	height:18px;
 	float:left;
 	overflow:hidden;
 }
-.tab_maps .sortie_list .sortie_edges.one_line .shipstate {
-	margin:-16px 0px 0px 16px;
-	width:20px;
-	height:20px;
+.tab_maps .sortie_list .sortie_edges.two_lines .shipstate {
+	margin:-13px 0px 0px 19px;
+	width:14px;
+	height:14px;
+}
+.tab_maps .sortie_list .sortie_edges.two_lines.more_edges .shipstate {
+	margin:-13px 0px 0px 9px;
 }
 .tab_maps .sortie_list .sortie_edges .shipstate img {
-	width:15px;
-	height:15px;
+	width:18px;
+	height:18px;
 	vertical-align:top;
-	overflow:hidden;
 }
-.tab_maps .sortie_list .sortie_edges.one_line .shipstate img{
-	width:20px;
-	height:20px;
+.tab_maps .sortie_list .sortie_edges.two_lines .shipstate img {
+	width:14px;
+	height:14px;
 }
 .tab_maps .sortie_list .nonodes {
 	height:30px;
