@@ -254,10 +254,14 @@ Used by SortieManager
 		return KC3BattlePrediction.normalizeArrayIndexing(array);
 	};
 	
-	// detect KCSAPI old battle data via existing `api_f_maxhps` instead of `api_maxhps`
+	/**
+	 * Detect KCSAPI old battle data via existing `api_f_maxhps` instead of `api_maxhps`
+	 * @param battleData - raw battle API data.
+	 * @return undefined if raw battle data not ready, like non-battle nodes.
+	 */
 	KC3Node.prototype.isOldBattleData = function(battleData){
 		const data = battleData || this.battleNight || this.battleDay;
-		return data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
+		return !data ? undefined : data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
 	};
 	
 	/* BATTLE FUNCTIONS
