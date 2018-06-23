@@ -661,8 +661,9 @@ KC3改 Ship Object
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
 		// Some summary tables:
-		//  * https://twitter.com/Lambda39/status/990268289866579968
 		//  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
+		//  * http://furukore.com/archives/13793
+		//  * https://twitter.com/Lambda39/status/990268289866579968
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
@@ -875,7 +876,7 @@ KC3改 Ship Object
 							"tyku": 2, "houk": 3
 						})[api] || 0 : 0),
 					},
-					// Fusou Class Kai Ni?
+					// Fusou Class Kai Ni
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 1 },
@@ -2743,7 +2744,8 @@ KC3改 Ship Object
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
 				if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
-				
+				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
+				// will not mutex if 5 slots ships can equip torpedo
 				if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];
