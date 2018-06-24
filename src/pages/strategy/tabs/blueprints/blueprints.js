@@ -16,10 +16,23 @@
 					- (ls.materials.length - ls.materialsUsed)
 					|| rs.materials.length - ls.materials.length
 					|| ls.id - rs.id);
-			this.defineSimpleFilter("materials", [], 0, (index, ship) => ship.materials.length);
+			this.defineSimpleFilter("materials", [], 0, (fd, ship) => ship.materials.length);
+			this.defineSimpleFilter("hideUnlock", [], 0, (fd, ship) => !fd.currentIndex || !!ship.locked);
+			this.defineSimpleFilter("hideDupe", [], 0, (fd, ship) => {
+				if(!fd.currentIndex) return true;
+				const dupeShips = this.shipList.filter(s => (
+					ship.id !== s.id && RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(s.masterId)
+				));
+				if(!dupeShips.length) return true;
+				const dupeRemodelLevels = dupeShips.map(s => RemodelDb.remodelGroup(s.masterId).indexOf(s.masterId));
+				const thisRemodelLevel = RemodelDb.remodelGroup(ship.masterId).indexOf(ship.masterId);
+				return thisRemodelLevel >= Math.max(dupeRemodelLevels);
+			});
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
 			this.viewType = "owned";
+			this.hideUnlock = false;
+			this.hideDupe = false;
 		}
 
 		/* RELOAD
@@ -34,10 +47,22 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute() {
-			$(".tab_blueprints .view_type input[type=radio][name=view_type]")
-				.on("change", function() {
-				const viewType = $("input[type=radio][name=view_type]:checked").val();
-				KC3StrategyTabs.gotoTab(undefined, viewType);
+			const joinPageParams = () => (
+				[this.viewType,
+					this.hideUnlock ? "locked" : this.hideDupe && "all",
+					this.hideDupe && "nodupe"].filter(v => !!v)
+			);
+			$(".tab_blueprints .view_type input[type=radio][name=view_type]").on("change", (e) => {
+				this.viewType = $(".view_type input[type=radio][name=view_type]:checked").val();
+				KC3StrategyTabs.gotoTab(undefined, ...joinPageParams());
+			});
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_unlock]").on("change", (e) => {
+				this.hideUnlock = $(".view_type input[type=checkbox][name=hide_unlock]").prop("checked");
+				KC3StrategyTabs.gotoTab(undefined, ...joinPageParams());
+			});
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_dupe]").on("change", (e) => {
+				this.hideDupe = $(".view_type input[type=checkbox][name=hide_dupe]").prop("checked");
+				KC3StrategyTabs.gotoTab(undefined, ...joinPageParams());
 			});
 			this.shipListDiv = $(".tab_blueprints .ship_list");
 			this.shipRowTemplateDiv = $(".tab_blueprints .factory .ship_item");
@@ -49,21 +74,33 @@
 				$(".tab_blueprints .owned").hide();
 			});
 			this.shipListDiv.on("postShow", this.showTotalMaterials);
-			this.loadView(KC3StrategyTabs.pageParams[1]);
+			this.loadView(KC3StrategyTabs.pageParams[1],
+				KC3StrategyTabs.pageParams[2] === "locked",
+				KC3StrategyTabs.pageParams[3] === "nodupe");
 		}
 
-		loadView(viewType = "owned") {
+		loadView(viewType = "owned", hideUnlock = false, hideDupe = false) {
 			this.viewType = viewType;
+			this.hideUnlock = hideUnlock;
+			this.hideDupe = hideDupe;
 			$(".tab_blueprints .view_type input[type=radio][name=view_type][value={0}]"
 				.format(this.viewType)).prop("checked", true);
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_unlock]")
+				.prop("checked", this.hideUnlock);
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_dupe]")
+				.prop("checked", this.hideDupe);
 			switch(this.viewType) {
 				case "owned":
 					this.setSorter("lv");
 					this.prepareShipList(true, this.mapRemodelMaterials);
+					this.filterDefinitions.hideUnlock.currentIndex = this.hideUnlock & 1;
+					this.filterDefinitions.hideDupe.currentIndex = this.hideDupe & 1;
 					break;
 				case "all":
 					this.setSorter("type");
 					this.prepareShipListFromRemodelDb();
+					this.filterDefinitions.hideUnlock.currentIndex = 0;
+					this.filterDefinitions.hideDupe.currentIndex = 0;
 					break;
 				default:
 					console.warn("Unsupported view type:", this.viewType);
@@ -204,6 +241,10 @@
 			$("<span></span>")
 				.text("x{0}".format(shipList.length))
 				.appendTo(totalItemDiv);
+			if(!shipList.length) {
+				totalDiv.parent().show();
+				return;
+			}
 			
 			// Count total and used remodel materials
 			const countMaterials = (resultMap = ({}), filter = (m => true)) => {

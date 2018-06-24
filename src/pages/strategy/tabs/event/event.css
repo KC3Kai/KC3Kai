@@ -219,9 +219,9 @@
 /* SORTIE SWITCHER
 ---------------------------------*/
 .tab_event .sortie_batch_toggles {
-	width:179px;
+	width:209px;
 	height:20px;
-	margin:5px 5px -5px 511px;
+	margin:5px 5px -5px 481px;
 	background:none;
 }
 .tab_event .sortie_batch_toggles .sortie_toggles {
@@ -357,6 +357,31 @@
 .tab_event .sortie_list .sortie_edges {
 	width:175px;
 	margin:0px 5px 0px 0px;
+}
+.tab_event .sortie_list .sortie_edges .shipstate {
+	position:relative;
+	margin:-15px 0px 0px 15px;
+	width:18px;
+	height:18px;
+	float:left;
+	overflow:hidden;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .shipstate {
+	margin:-13px 0px 0px 19px;
+	width:14px;
+	height:14px;
+}
+.tab_event .sortie_list .sortie_edges.two_lines.more_edges .shipstate {
+	margin:-13px 0px 0px 9px;
+}
+.tab_event .sortie_list .sortie_edges .shipstate img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .shipstate img {
+	width:14px;
+	height:14px;
 }
 .tab_event .sortie_list .nonodes {
 	height:30px;

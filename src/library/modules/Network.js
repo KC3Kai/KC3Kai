@@ -194,7 +194,7 @@ Listens to network history and triggers callback if game events happen
 							KC3Network.submissionModuleNames.forEach(name => {
 								if(KC3Network.submissionConfigs[name]) {
 									// Assume module already loaded globally
-									KC3Network.asyncSubmit(window[name], thisRequest);
+									KC3Network.asyncSubmit(window[name], thisRequest, name);
 								}
 							});
 							
@@ -273,16 +273,17 @@ Listens to network history and triggers callback if game events happen
 		/**
 		 * Asynchronously invoke a remote DB submission module to submit KCSAPI request data.
 		 */
-		asyncSubmit :function(submission, request){
+		asyncSubmit :function(submission, request, moduleName){
 			// turns out "Request.process()" modifies the request, so clone the unmodified instance first.
 			var clonedRequest = $.extend(true, new KC3Request(), request);
 			// although submission processes should not be slow, still make them parallel async.
 			setTimeout(function(){
 				try {
+					//console.log(`Processing data via ${moduleName}...`);
 					submission.processData.call(submission, clonedRequest);
 				} catch (error) {
 					// suppose all exceptions thrown are caught already, should not reach here.
-					console.warn("Uncaught data submission", error);
+					console.warn(`Uncaught data submission to ${moduleName}`, error);
 				}
 			});
 		},

@@ -1839,6 +1839,7 @@ ABYSS FLEET
 	vertical-align:text-top;
 }
 .module.activity .activity_gunfit .fit_value {
+	width:176px;
 	height:50px;
 	line-height:15px;
 	font-size:11px;
@@ -1849,6 +1850,8 @@ ABYSS FLEET
 	background:#aaa;
 }
 .module.activity .activity_gunfit .fit_value .fit_current {
+	float:left;
+	width:100%;
 	height:30px;
 	margin:0px 0px 1px 0px;
 	padding:0px 5px 0px 5px;
@@ -1910,6 +1913,8 @@ ABYSS FLEET
 	filter:drop-shadow(0px 0px 1px #eee);
 }
 .module.activity .activity_gunfit .fit_value .fit_total {
+	float:left;
+	width:100%;
 	height:16px;
 	padding:0px 5px 0px 5px;
 	color:#eee;
@@ -1930,6 +1935,7 @@ ABYSS FLEET
 }
 
 .module.activity .activity_gunfit .oasw {
+	width:176px;
 	height:36px;
 	font-size:11px;
 	line-height:16px;

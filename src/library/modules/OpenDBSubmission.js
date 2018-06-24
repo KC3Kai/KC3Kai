@@ -282,10 +282,10 @@
 				url: "http://swaytwig.com/opendb/report/" + endpoint,
 				method: "POST",
 				data: payload,
-			}).done(function( msg ) {
-				console.log("OpenDB Submission done:", msg);
+			}).done( function() {
+				console.log(`OpenDB Submission to /${endpoint} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn( "OpenDB Submission failed:", textStatus, errorThrown);
+				console.warn(`OpenDB Submission to /${endpoint} ${textStatus}`, errorThrown);
 			});
 		}
 	};
