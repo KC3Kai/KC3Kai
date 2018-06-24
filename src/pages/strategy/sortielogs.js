@@ -148,6 +148,15 @@
 				self.showMap();
 			}).toggleClass("active", !ConfigManager.sr_show_non_battle);
 			
+			// Toggle between using predictions to get taiha/chuuha/sunk state
+			$(".tab_"+tabCode+" .sortie_batch_toggles .show_new_shipstate_toggle").on("click", function(){
+				ConfigManager.load();
+				ConfigManager.sr_show_new_shipstate = !ConfigManager.sr_show_new_shipstate;
+				ConfigManager.save();
+				$(this).toggleClass("active", ConfigManager.sr_show_new_shipstate);
+				self.showMap();
+			}).toggleClass("active", ConfigManager.sr_show_new_shipstate);
+			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.switchWorld(KC3StrategyTabs.pageParams[1],
 					KC3StrategyTabs.pageParams[2]);
@@ -915,18 +924,54 @@
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum)).defineAsBattle();
-							if(typeof battle.data.api_dock_id != "undefined"){
-								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
-									thisNode.night( battle.yasen );
+							try {
+								if(typeof battle.data.api_dock_id != "undefined"){
+									thisNode.engage( battleData, sortie.fleetnum );
+									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+										thisNode.night( battle.yasen );
+									}
+								}else if(typeof battle.data.api_deck_id != "undefined"){
+									thisNode.engage( battleData, sortie.fleetnum );
+									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+										thisNode.night( battle.yasen );
+									}
+								}else if(typeof battle.yasen.api_deck_id != "undefined"){
+									thisNode.engageNight( battleData, sortie.fleetnum );
 								}
-							}else if(typeof battle.data.api_deck_id != "undefined"){
-								thisNode.engage( battleData, sortie.fleetnum );
-								if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
-									thisNode.night( battle.yasen );
+							} catch(e) {
+								if(ConfigManager.sr_show_new_shipstate) {
+									console.error("Predicting battle ship state", e);
+								} else {
+									throw e;
 								}
-							}else if(typeof battle.yasen.api_deck_id != "undefined"){
-								thisNode.engageNight( battleData, sortie.fleetnum );
+							}
+							if(ConfigManager.sr_show_new_shipstate){
+								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
+								if(predicted){
+									const toDamageLevel = (hpRatio) => Math.ceil(hpRatio * 4);
+									const rawData = thisNode.startsFromNight ? thisNode.battleNight : thisNode.battleDay;
+									let lowestHP = 1;
+									$.each(predicted.playerMain, function(index, ship){
+										const maxHP = thisNode.maxHPs.ally[index];
+										const nowHP = rawData.api_f_nowhps[index];
+										const currentHP = ship.hp / maxHP;
+										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
+											lowestHP = Math.min(currentHP, lowestHP);
+									});
+									$.each(predicted.playerEscort, function(index, ship){
+										const maxHP = thisNode.maxHPs.allyEscort[index];
+										const nowHP = rawData.api_f_nowhps_combined[index];
+										const currentHP = ship.hp / maxHP;
+										if(toDamageLevel(currentHP) < toDamageLevel(nowHP / maxHP))
+											lowestHP = Math.min(currentHP, lowestHP);
+									});
+									if(lowestHP < 0) lowestHP = 0;
+									if(lowestHP <= 0.5){
+										const level = toDamageLevel(lowestHP);
+										$(".sortie_edge_"+(edgeIndex+1), sortieBox)
+											.append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][level]}.png"></img></div>`);
+									}
+								}
 							}
 							if(KC3Node.debugPrediction()){
 								// Known issue 1: if `api_name` not saved into battle data for old history,

@@ -177,8 +177,8 @@
 		defineSimpleFilter(filterName, optionValues, defaultIndex, testShipFunc) {
 			const filterDef = {
 				optionValues: optionValues,
-				currentIndex: defaultIndex || null,
-				testShip: (ship) => testShipFunc(filterDef.currentIndex, ship)
+				currentIndex: defaultIndex === undefined ? null : defaultIndex,
+				testShip: (ship) => testShipFunc(filterDef, ship)
 			};
 			this.filterDefinitions[filterName] = filterDef;
 		}

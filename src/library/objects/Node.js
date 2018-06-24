@@ -254,6 +254,12 @@ Used by SortieManager
 		return KC3BattlePrediction.normalizeArrayIndexing(array);
 	};
 	
+	// detect KCSAPI old battle data via existing `api_f_maxhps` instead of `api_maxhps`
+	KC3Node.prototype.isOldBattleData = function(battleData){
+		const data = battleData || this.battleNight || this.battleDay;
+		return data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -498,7 +504,8 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to battle simulation, like sortielogs.
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugPrediction()){
+		if((isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate)
+			&& !this.isOldBattleData(battleData)){
 			const fleetId = this.fleetSent - 1;
 			// To work better on battle simulation, prefer to use `isPlayerCombined`,
 			// which check via API data instead of determining 'current state' of PlayerManager
@@ -764,7 +771,8 @@ Used by SortieManager
 		
 		// Battle analysis only if on sortie or PvP, not applied to sortielogs
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-		if(isRealBattle || KC3Node.debugPrediction()){
+		if((isRealBattle || KC3Node.debugPrediction() || ConfigManager.sr_show_new_shipstate)
+			&& !this.isOldBattleData(nightData)){
 			const fleetId = this.fleetSent - 1;
 
 			// Find battle type

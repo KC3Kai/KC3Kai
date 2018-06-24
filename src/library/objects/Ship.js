@@ -661,8 +661,9 @@ KC3改 Ship Object
 		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 		// To correct the 'naked stats' for these cases, have to simulate them all.
 		// Some summary tables:
+		//  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
+		//  * http://furukore.com/archives/13793
 		//  * https://twitter.com/Lambda39/status/990268289866579968
-		//  * https://gist.github.com/andanteyk/ecd9b81d12403d841aa71e3fd76d3652
 		// In order to handle some complex cases,
 		// this definition table includes some functions which can not be moved to JSON file.
 		const explicitStatsBonusGears = {
@@ -744,6 +745,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 2 },
 				},
 			},
 			// Zuiun Model 12 (634 Air Group)
@@ -755,6 +766,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 3 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 2 },
 				},
 			},
 			// Zuiun Model 12 (634 Air Group / Skilled)
@@ -766,6 +787,16 @@ KC3改 Ship Object
 						remodel: 2,
 						multiple: { "houg": 4, "houk": 2 },
 					},
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 2 },
+					},
+				},
+				byShip: {
+					// Ise Class Kai
+					ids: [82, 88],
+					multiple: { "houg": 3, "houk": 1 },
 				},
 			},
 			// Type 2 Reconnaissance Aircraft
@@ -845,7 +876,7 @@ KC3改 Ship Object
 							"tyku": 2, "houk": 3
 						})[api] || 0 : 0),
 					},
-					// Fusou Class Kai Ni?
+					// Fusou Class Kai Ni
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 1 },
@@ -2691,6 +2722,7 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 			} else {
 				// special torpedo radar cut-in for destroyers since 2017-10-25
+				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
 					// according tests, any radar with accuracy stat >= 3 capable,
 					// even large radars (Kasumi K2 can equip), air radars okay too, see:
@@ -2699,21 +2731,21 @@ KC3改 Ship Object
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
-					// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
-					if(hasCapableRadar && hasSkilledLookout)
-						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
 					if(hasCapableRadar && smallMainGunCnt >= 1) {
 						// https://twitter.com/ayanamist_m2/status/944176834551222272
 						const has127TwinGunModelD2 = this.hasEquipment(267);
 						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * (has127TwinGunModelD2 ? 1.25 : 1)];
 					}
+					if(hasCapableRadar && hasSkilledLookout)
+						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
 				if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
-				
+				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
+				// will not mutex if 5 slots ships can equip torpedo
 				if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];

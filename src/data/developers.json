@@ -319,10 +319,11 @@
 			},
 			{
 				"name": "Admiral Mikado",
-				"avatar" : "../../assets/img/ui/empty.png",
+				"avatar" : "https://avatars2.githubusercontent.com/u/40426881?s=460&v=4",
 				"desc" : "Deutsch",
-				"active": 0,
+				"active": 1,
 				"links" : {
+					"gh" :"https://github.com/Admiral-Mikado",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
 				}
 			},
@@ -695,6 +696,15 @@
 				"active": 1,
 				"links" : {
 					"gh": "https://github.com/flixwito"
+				}
+			},
+			{
+				"name": "RandomGuyB5",
+				"avatar" : "https://avatars1.githubusercontent.com/u/40309140?s=460&v=4",
+				"desc" : "Deutsch",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/RandomGuyB5"
 				}
 			}
 		],

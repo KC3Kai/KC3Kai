@@ -157,6 +157,7 @@ Retrieves when needed to apply on components
 				dismissed_hints        : {},
 				sr_theme               : "legacy",
 				sr_show_non_battle     : true,
+				sr_show_new_shipstate  : true,
 				sr_custom_css          : "",
 
 				idbSaveSortie          : true,
