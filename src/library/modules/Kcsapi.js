@@ -511,12 +511,14 @@ Previously known as "Reactor"
 			KC3GearManager.unsetSlotitemByType2 = {};
 			const data = response.api_data;
 			const prefix = "api_slottype";
-			Object.keys(data).forEach(key => {
-				if(key.slice(0, prefix.length) === prefix && Array.isArray(data[key])) {
-					const type2Id = key.slice(prefix.length);
-					KC3GearManager.unsetSlotitemByType2[type2Id] = data[key];
-				}
-			});
+			if(data) {
+				Object.keys(data).forEach(key => {
+					if(key.slice(0, prefix.length) === prefix && Array.isArray(data[key])) {
+						const type2Id = key.slice(prefix.length);
+						KC3GearManager.unsetSlotitemByType2[type2Id] = data[key];
+					}
+				});
+			}
 			console.log("Refresh unsetslot", KC3GearManager.unsetSlotitemByType2);
 		},
 		
