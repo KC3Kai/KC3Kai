@@ -2732,9 +2732,13 @@ KC3改 Ship Object
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
 					if(hasCapableRadar && smallMainGunCnt >= 1) {
+						// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni
 						// https://twitter.com/ayanamist_m2/status/944176834551222272
-						const has127TwinGunModelD2 = this.hasEquipment(267);
-						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * (has127TwinGunModelD2 ? 1.25 : 1)];
+						const modelDSmallGunCnt = this.countEquipment(267);
+						// Possible to equip 2 D guns for 4 slots Tashkent
+						// https://twitter.com/Xe_UCH/status/1011398540654809088
+						const modelDSmallGunModifier = [1, 1.25, 1.4][modelDSmallGunCnt] || 1;
+						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * modelDSmallGunModifier];
 					}
 					if(hasCapableRadar && hasSkilledLookout)
 						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
