@@ -50,8 +50,18 @@
 
 		mapShipQuests(shipObj) {
 			const mappedObj = this.defaultShipDataMapping(shipObj);
+			mappedObj.quests = [];
+			// remove duplicated quests and join left ones together
+			const pushDistinctQuests = (ids = []) => {
+				mappedObj.quests.push(...ids.filter(id => !mappedObj.quests.includes(id)));
+			};
+			// exactly matching current ship ID if there is the suffix `=`
+			const questsForThisShipOnly = this.getShipQuests(shipObj.masterId + "=");
+			pushDistinctQuests(questsForThisShipOnly);
+			// matching by base remodel ID by default, that is like a suffix `>`
 			const baseRemodelForm = RemodelDb.originOf(shipObj.masterId);
-			mappedObj.quests = this.getShipQuests(baseRemodelForm);
+			const questsForBaseRemodel = this.getShipQuests(baseRemodelForm);
+			pushDistinctQuests(questsForBaseRemodel);
 			return mappedObj;
 		}
 

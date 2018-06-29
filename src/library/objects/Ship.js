@@ -1080,6 +1080,40 @@ KC3改 Ship Object
 					},
 				],
 			},
+			// 12cm Single Gun Mount Kai Ni
+			"293": {
+				count: 0,
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						callback: (api, info) => (({
+							"houg": 2, "houk": 3,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "raig": 1, "houk": 3,
+						})[api] || 0 : 0),
+					},
+					// Kamikaze Class
+					"66": {
+						callback: (api, info) => (({
+							"houg": 2, "houk": 3,
+						})[api] || 0) + (hasSurfaceRadar ? ({
+							"houg": 1, "raig": 1, "houk": 3,
+						})[api] || 0 : 0),
+					},
+				},
+			},
+			// 12.7cm Twin Gun Mount Model A Kai Ni
+			"294": {
+				
+			},
+			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
+			"295": {
+				
+			},
+			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
+			"296": {
+				
+			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 			"268": {
