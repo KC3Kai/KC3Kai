@@ -448,6 +448,7 @@ KC3改 Equipment Object
 							},
 							{
 								flags: [ "tripleTorpedo" ],
+								// Not sure how more torpedoes will go? but no 4-slots for Fubuki Class
 								byCount: {
 									gear: "tripleTorpedo",
 									"1": { "houg": 1, "raig": 3 },
@@ -535,7 +536,7 @@ KC3改 Equipment Object
 					],
 				},
 				byShip: {
-					// Yukikaze Kai?, Shigure K2, Isokaze B Kai, extra +1 ev
+					// Yukikaze Kai, Shigure K2, Isokaze B Kai, extra +1 ev
 					ids: [145, 228, 557],
 					multiple: { "houk": 1 },
 				},
@@ -624,6 +625,7 @@ KC3改 Equipment Object
 					// Ayanami Class
 					"1": {
 						multiple: { "houg": 1 },
+						// Not sure how multiple synergies will go?
 						synergy: [
 							{
 								flags: [ "airRadar" ],
@@ -708,6 +710,7 @@ KC3改 Equipment Object
 		const synergyGears = bonusGears.synergyGears;
 		const bonusDefs = bonusGears[gear.masterId];
 		if(synergyGears) {
+			// Triple Torpedo Late Model not counted
 			if([13, 125].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
@@ -723,13 +726,13 @@ KC3改 Equipment Object
 	KC3Gear.equipmentTotalStatsOnShipBonus = function(bonusGears, ship, apiName){
 		var total = 0;
 		const shipMasterId = ship.masterId;
-		const thisShipClass = ship.master().api_ctype;
+		const shipClassId = ship.master().api_ctype;
 		const synergyGears = bonusGears.synergyGears || {};
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
-			// Conditional filters, they are logic AND, all existed have to be passed
+			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
-			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(thisShipClass)) { return; }
+			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
 			if(bonusDef.remodel &&
 				RemodelDb.remodelGroup(shipMasterId).indexOf(shipMasterId) < bonusDef.remodel) { return; }
 			let gearCount = gearInfo.count;
@@ -769,7 +772,7 @@ KC3改 Equipment Object
 			const gearInfo = bonusGears[gearId];
 			if(gearInfo.count > 0) {
 				if(gearInfo.byClass) {
-					let byClass = gearInfo.byClass[thisShipClass];
+					let byClass = gearInfo.byClass[shipClassId];
 					if(byClass) {
 						// Refer to another ship class if bonuses supposed to be the same
 						if(typeof byClass === "string") {
