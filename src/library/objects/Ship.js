@@ -654,20 +654,22 @@ KC3改 Ship Object
 		});
 	};
 
-	// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
-	// To correct the 'naked stats' for these cases, have to simulate them all.
-	// Some summary tables:
-	//  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-	//  * http://furukore.com/archives/13793
-	//  * https://twitter.com/Lambda39/status/990268289866579968
-	// In order to handle some complex cases,
-	// this definition table includes some functions which can not be moved to JSON file.
+	/**
+	 * Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
+	 * to correct the 'naked stats' for these cases, have to simulate them all.
+	 * @return the bonus definition table with new counters of related equipment.
+	 * @see URLs some summary tables:
+	 *  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
+	 *  * http://furukore.com/archives/13793
+	 *  * https://cdn.discordapp.com/attachments/178613137430282240/462356700104622100/bonus_small_guns.png
+	 *  * https://twitter.com/Lambda39/status/990268289866579968
+	 */
 	KC3Ship.explicitStatsBonusGears = function(){
 		return {
 			"synergyGears": {
-				surfaceRadar: false,
-				airRadar: false,
-				tripleTorpedo: false,
+				surfaceRadar: 0,
+				airRadar: 0,
+				tripleTorpedo: 0,
 			},
 			// Suisei
 			"24": {
@@ -848,7 +850,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							stats: { "houg": 2, "houk": 2 },
+							single: { "houg": 2, "houk": 2 },
 						},
 					},
 					{
@@ -874,7 +876,7 @@ KC3改 Ship Object
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
-							stats: { "tyku": 2, "houk": 3 },
+							single: { "tyku": 2, "houk": 3 },
 						},
 					},
 					// Fusou Class Kai Ni
@@ -887,11 +889,14 @@ KC3改 Ship Object
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
-				byShip: {
+				byClass: {
 					// Kagerou Class K2
-					ids: [566, 567, 568],
-					multiple: { "raig": 2 },
-					countCap: 2,
+					"30": {
+						remodel: 2,
+						excludes: [556, 557, 558],
+						multiple: { "raig": 2 },
+						countCap: 2,
+					},
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
@@ -985,7 +990,7 @@ KC3改 Ship Object
 						multiple: { "houg": 2, "tyku": 1, "houk": 3 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							stats: { "houg": 2, "raig": 1, "houk": 3 },
+							single: { "houg": 2, "raig": 1, "houk": 3 },
 						},
 					},
 					// Kamikaze Class
@@ -995,7 +1000,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							stats: { "houg": 2, "tais": 1, "houk": 3 },
+							single: { "houg": 2, "tais": 1, "houk": 3 },
 						},
 					},
 					// Etorofu Class
@@ -1014,7 +1019,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1, "tyku": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							stats: { "houg": 2, "houk": 3 },
+							single: { "houg": 2, "houk": 3 },
 						},
 					},
 					// Kamikaze Class
@@ -1025,7 +1030,7 @@ KC3改 Ship Object
 						multiple: { "houg": 1, "tyku": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							stats: { "houg": 1, "houk": 4 },
+							single: { "houg": 1, "houk": 4 },
 						},
 					},
 					// Etorofu Class
@@ -1040,7 +1045,7 @@ KC3改 Ship Object
 					multiple: { "houg": 2, "tyku": 3 },
 					synergy: {
 						flags: [ "surfaceRadar" ],
-						stats: { "houg": 3, "houk": 2 },
+						single: { "houg": 3, "houk": 2 },
 					},
 				},
 			},
@@ -1053,11 +1058,15 @@ KC3改 Ship Object
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
-								stats: { "houg": 2, "raig": 1, "houk": 2 },
+								single: { "houg": 2, "raig": 1, "houk": 2 },
 							},
 							{
 								flags: [ "tripleTorpedo" ],
-								stats: { "houg": 2, "houk": 3 },
+								byCount: {
+									gear: "tripleTorpedo",
+									"1": { "houg": 1, "raig": 3 },
+									"2": { "houg": 2, "raig": 5 },
+								},
 							},
 						],
 					},
@@ -1078,9 +1087,9 @@ KC3改 Ship Object
 				},
 				byShip: [
 					{
-						// Shiratsuyu Kai, Murasame K2
-						ids: [242, 498],
-						multiple: { "houk": 1 },
+						// Yuudachi K2
+						ids: [144],
+						multiple: { "houg": 1, "raig": 1, "tyku": 1, "houk": 2 },
 					},
 					{
 						// Shigure K2
@@ -1088,9 +1097,9 @@ KC3改 Ship Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// Yuudachi K2
-						ids: [144],
-						multiple: { "houg": 1, "raig": 1, "tkyu": 1, "houk": 2 },
+						// Shiratsuyu Kai, Murasame K2
+						ids: [242, 498],
+						multiple: { "houk": 1 },
 					},
 					{
 						// Kawakaze K2
@@ -1106,37 +1115,44 @@ KC3改 Ship Object
 					// Asashio Class
 					"18": {
 						multiple: { "houg": 1 },
-						callback: (api, info, synergy) => (synergy.surfaceRadar ? ({
-							"houg": 1, "raig": 3, "houk": 1
-						})[api] || 0 : 0),
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "raig": 3, "houk": 1 },
+						},
 					},
 					// Shiratsuyu Class
 					"23": "18",
 					// Kagerou Class
-					"30": {
-						multiple: { "houg": 1 },
-						callback: (api, info, synergy) => (synergy.surfaceRadar ? ({
-							"houg": 2, "raig": 3, "houk": 1
-						})[api] || 0 : 0),
-					},
-				},
-				byShip: [
-					{
-						// Shigure K2
-						ids: [145],
-						multiple: { "houk": 1 },
-					}, {
-						// Kagerou Class K2
-						ids: [566, 567, 568],
-						multiple: { "houg": 1 },
-						countCap: 2,
-						callback: (api, info) => (
-							// total +3 instead of +2 if guns >= 2
+					"30": [
+						{
+							multiple: { "houg": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 3, "houk": 1 },
+							},
+						},
+						{
+							remodel: 2,
+							excludes: [556, 557, 558],
+							// Kagerou Class K2 total +2 fp til 2 guns
+							multiple: { "houg": 1 },
+							countCap: 2,
+						},
+						{
+							remodel: 2,
+							excludes: [556, 557, 558],
+							// Kagerou Class K2 total +5 instead of +4 if guns = 2
 							// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
-							({"houg": info.count >= 2 ? 1 : 0})[api] || 0
-						),
-					}
-				],
+							single: { "houg": 1 },
+							minCount: 2,
+						},
+					],
+				},
+				byShip: {
+					// Yukikaze Kai?, Shigure K2, Isokaze B Kai, total +2 ev
+					ids: [145, 228, 557],
+					multiple: { "houk": 1 },
+				},
 			},
 			// 12.7cm Twin Gun Mount Model D Kai Ni
 			// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
@@ -1150,46 +1166,144 @@ KC3改 Ship Object
 					// Yuugumo Class
 					"38": {
 						multiple: { "houg": 2, "houk": 1 },
-						callback: (api, info, synergy) => (synergy.surfaceRadar ? ({
-							"houg": 2, "raig": 3, "houk": 1
-						})[api] || 0 : 0),
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "raig": 3, "houk": 1 },
+						},
 					},
 					// Kagerou Class
-					"30": {
-						multiple: { "houg": 1, "houk": 1 },
-					},
+					"30": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							remodel: 2,
+							excludes: [556, 557, 558],
+							// Kagerou Class K2, total +2 for 1st gun
+							single: { "houg": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
 						// Naganami K2, total +3 for each gun
 						ids: [543],
 						multiple: { "houg": 1 },
-						// total +3 fp, +4 tp, +3 ev
-						callback: (api, info, synergy) => (synergy.surfaceRadar ? ({
-							"houg": 1, "raig": 1, "houk": 2
-						})[api] || 0 : 0),
+						// total +6 fp, +4 tp, +3 ev
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "raig": 1, "houk": 2 },
+						},
 					},
 					{
-						// Kagerou Class K2, total +2 for 1st gun
-						ids: [566, 567, 568],
-						single: { "houg": 1 },
-					},
-					{
-						// synergy with Surface Radar for Shimakaze Kai
+						// Shimakaze Kai, total +3 fp, +3 tp, +3 ev
 						ids: [229],
-						callback: (api, info, synergy) => (synergy.surfaceRadar ? ({
-							"houg": 1, "raig": 3, "houk": 2
-						})[api] || 0 : 0),
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "raig": 3, "houk": 2 },
+						},
 					},
 				],
 			},
 			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
+			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2A%E5%9E%8B%E6%94%B9%E4%B8%89%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE
 			"295": {
-				
+				count: 0,
+				byClass: {
+					// Ayanami Class
+					"1": {
+						multiple: { "houg": 2, "tyku": 2 },
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 6 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 1, "houk": 2 },
+							},
+						],
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Fubuki Class
+					"12": "1",
+				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
+			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2B%E5%9E%8B%E6%94%B9%E5%9B%9B%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE
 			"296": {
-				
+				count: 0,
+				byClass: {
+					// Ayanami Class
+					"1": {
+						multiple: { "houg": 1 },
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 5 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "raig": 2, "houk": 2 },
+							},
+						],
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Hatsuharu Class
+					"10": {
+						multiple: { "houg": 1, "houk": 1 },
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 5 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "raig": 2, "houk": 2 },
+							},
+						],
+					},
+				},
+				byShip: [
+					{
+						// extra synergies for Yuudachi/Shigure/Kawakaze/Murasame K2
+						ids: [144, 145, 469, 498],
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 1 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "raig": 1 },
+							},
+						],
+					},
+					{
+						// Yuudachi K2
+						ids: [144],
+						multiple: { "houg": 1, "raig": 1, "houk": 1 },
+					},
+					{
+						// Shigure K2
+						ids: [145],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Murasame K2
+						ids: [498],
+						multiple: { "tyku": 1, "houk": 2 },
+					},
+					{
+						// Kawakaze K2
+						ids: [469],
+						multiple: { "houk": 2 },
+					},
+				],
 			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
@@ -1209,7 +1323,7 @@ KC3改 Ship Object
 		const thisShipClass = this.master().api_ctype;
 		const explicitStatsBonusGears = KC3Ship.explicitStatsBonusGears();
 		// Accumulates displayed stats from equipment, and count for special equipment
-		const synergyFlags = explicitStatsBonusGears.synergyGears;
+		const synergyGears = explicitStatsBonusGears.synergyGears;
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
@@ -1221,16 +1335,13 @@ KC3改 Ship Object
 							(bonusDefs.starsDist[equip.stars || 0] || 0);
 					}
 				}
-				if(!synergyFlags.surfaceRadar && equip.isHighAccuracyRadar())
-					synergyFlags.surfaceRadar = true;
-				if(!synergyFlags.airRadar && equip.isAirRadar())
-					synergyFlags.airRadar = true;
-				if(!synergyFlags.tripleTorpedo && [13, 125, 285].includes(equip.masterId))
-					synergyFlags.tripleTorpedo = true;
+				if([13, 125].includes(equip.masterId)) synergyGears.tripleTorpedo += 1;
+				if(equip.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
+				if(equip.isAirRadar()) synergyGears.airRadar += 1;
 			}
 		});
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
-		const addBonusToTotalIfNecessary = (bonusDef, apiName, gearInfo, synergyFlags) => {
+		const addBonusToTotalIfNecessary = (bonusDef, apiName, gearInfo, synergyGears) => {
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(this.masterId)) { return; }
 			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(this.masterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(thisShipClass)) { return; }
@@ -1241,6 +1352,7 @@ KC3改 Ship Object
 				gearCount = gearInfo.starsDist.slice(bonusDef.minStars).sumValues();
 				if(!gearCount) return;
 			}
+			if(bonusDef.minCount && gearCount < bonusDef.minCount) { return; }
 			if(bonusDef.single) { total += bonusDef.single[apiName] || 0; }
 			if(bonusDef.multiple) {
 				total += (bonusDef.multiple[apiName] || 0) *
@@ -1248,8 +1360,13 @@ KC3改 Ship Object
 			}
 			if(bonusDef.synergy) {
 				const addBonusFromSynergyGears = (synergy) => {
-					if(synergy.flags.every(flag => !!synergyFlags[flag])) {
-						total += synergy.stats[apiName] || 0;
+					if(synergy.flags.every(flag => synergyGears[flag] > 0)) {
+						if(synergy.single) { total += synergy.single[apiName] || 0; }
+						if(synergy.byCount) {
+							const gearName = synergy.byCount.gear;
+							const countAmount = gearName === "this" ? gearCount : synergyGears[gearName] || 0;
+							total += (synergy.byCount[countAmount] || {})[apiName] || 0;
+						}
 					}
 				};
 				if(Array.isArray(bonusDef.synergy)) {
@@ -1258,7 +1375,8 @@ KC3改 Ship Object
 					addBonusFromSynergyGears(bonusDef.synergy);
 				}
 			}
-			if(bonusDef.callback) { total += bonusDef.callback(apiName, gearInfo, synergyFlags); }
+			// Try not to use any callback in order to let bonus table suit for a JSON
+			//if(bonusDef.callback) { total += bonusDef.callback(apiName, gearInfo, synergyGears); }
 		};
 		Object.keys(explicitStatsBonusGears).forEach(gearId => {
 			const gearInfo = explicitStatsBonusGears[gearId];
@@ -1270,18 +1388,18 @@ KC3改 Ship Object
 							byClass = gearInfo.byClass[byClass] || {};
 						}
 						if(Array.isArray(byClass)) {
-							byClass.forEach(c => addBonusToTotalIfNecessary(c, apiName, gearInfo, synergyFlags));
+							byClass.forEach(c => addBonusToTotalIfNecessary(c, apiName, gearInfo, synergyGears));
 						} else {
-							addBonusToTotalIfNecessary(byClass, apiName, gearInfo, synergyFlags);
+							addBonusToTotalIfNecessary(byClass, apiName, gearInfo, synergyGears);
 						}
 					}
 				}
 				if(gearInfo.byShip) {
 					const byShip = gearInfo.byShip;
 					if(Array.isArray(byShip)) {
-						byShip.forEach(s => addBonusToTotalIfNecessary(s, apiName, gearInfo, synergyFlags));
+						byShip.forEach(s => addBonusToTotalIfNecessary(s, apiName, gearInfo, synergyGears));
 					} else {
-						addBonusToTotalIfNecessary(byShip, apiName, gearInfo, synergyFlags);
+						addBonusToTotalIfNecessary(byShip, apiName, gearInfo, synergyGears);
 					}
 				}
 			}
