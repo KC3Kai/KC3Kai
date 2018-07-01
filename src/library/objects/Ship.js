@@ -645,6 +645,25 @@ KC3改 Ship Object
 		return !statAttr ? stats : stats[statAttr];
 	};
 
+	KC3Ship.prototype.statsBonusOnShip = function(statAttr){
+		if(this.isDummy()) { return false; }
+		const stats = {};
+		const statApiNames = {
+			"houg": "fp",
+			"souk": "ar",
+			"raig": "tp",
+			"houk": "ev",
+			"tyku": "aa",
+			"tais": "as",
+			"saku": "ls",
+			//"houm": "ac",
+		};
+		for(const apiName in statApiNames) {
+			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
+		}
+		return !statAttr ? stats : stats[statAttr];
+	};
+
 	KC3Ship.prototype.equipmentStatsMap = function(apiName, isExslotIncluded = true){
 		return this.equipment(isExslotIncluded).map(equip => {
 			if(equip.exists()) {
@@ -654,18 +673,22 @@ KC3改 Ship Object
 		});
 	};
 
-	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
+	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false){
 		var total = 0;
-		const bonusDefs = KC3Gear.explicitStatsBonusGears();
+		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
-				KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
+				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
 			}
 		});
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
-		total += KC3Gear.equipmentTotalStatsOnShipBonus(bonusDefs, this, apiName);
+		if(bonusDefs) {
+			const onShipBonus = KC3Gear.equipmentTotalStatsOnShipBonus(bonusDefs, this, apiName);
+			total = isOnShipBonusOnly ? onShipBonus : total + onShipBonus;
+		}
 		return total;
 	};
 
@@ -2849,12 +2872,14 @@ KC3改 Ship Object
 		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
 		const nakedStats = shipObj.nakedStats(),
 			  maxedStats = shipObj.maxedStats(),
+			  bonusStats = shipObj.statsBonusOnShip(),
 			  maxDiffStats = {},
 			  equipDiffStats = {},
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
 		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
@@ -2879,27 +2904,32 @@ KC3改 Ship Object
 		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
 		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
 			.toggle(!!modLeftStats.fp);
-		$(".stat_fp .equip", tooltipBox).text("({0})".format(nakedStats.fp))
+		$(".stat_fp .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.fp, optionalNumber(bonusStats.fp)))
 			.toggle(!!equipDiffStats.fp);
 		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
 		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
 			.toggle(!!modLeftStats.ar);
-		$(".stat_ar .equip", tooltipBox).text("({0})".format(nakedStats.ar))
+		$(".stat_ar .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ar, optionalNumber(bonusStats.ar)))
 			.toggle(!!equipDiffStats.ar);
 		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
 		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
 			.toggle(!!modLeftStats.tp);
-		$(".stat_tp .equip", tooltipBox).text("({0})".format(nakedStats.tp))
+		$(".stat_tp .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.tp, optionalNumber(bonusStats.tp)))
 			.toggle(!!equipDiffStats.tp);
 		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
 		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
 			.toggle(!!maxDiffStats.ev);
-		$(".stat_ev .equip", tooltipBox).text("({0})".format(nakedStats.ev))
+		$(".stat_ev .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ev, optionalNumber(bonusStats.ev)))
 			.toggle(!!equipDiffStats.ev);
 		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
 		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
 			.toggle(!!modLeftStats.aa);
-		$(".stat_aa .equip", tooltipBox).text("({0})".format(nakedStats.aa))
+		$(".stat_aa .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.aa, optionalNumber(bonusStats.aa)))
 			.toggle(!!equipDiffStats.aa);
 		$(".stat_ac .current", tooltipBox).text(shipObj.carrySlots());
 		const canOasw = shipObj.canDoOASW();
@@ -2907,7 +2937,8 @@ KC3改 Ship Object
 			.toggleClass("oasw", canOasw);
 		$(".stat_as .level", tooltipBox).text(signedNumber(maxDiffStats.as))
 			.toggle(!!maxDiffStats.as);
-		$(".stat_as .equip", tooltipBox).text("({0})".format(nakedStats.as))
+		$(".stat_as .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.as, optionalNumber(bonusStats.as)))
 			.toggle(!!equipDiffStats.as);
 		$(".stat_as .mod", tooltipBox).text(signedNumber(modLeftStats.as))
 			.toggle(!!modLeftStats.as);
@@ -2916,7 +2947,8 @@ KC3改 Ship Object
 		$(".stat_ls .current", tooltipBox).text(shipObj.ls[0]);
 		$(".stat_ls .level", tooltipBox).text(signedNumber(maxDiffStats.ls))
 			.toggle(!!maxDiffStats.ls);
-		$(".stat_ls .equip", tooltipBox).text("({0})".format(nakedStats.ls))
+		$(".stat_ls .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ls, optionalNumber(bonusStats.ls)))
 			.toggle(!!equipDiffStats.ls);
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
@@ -2936,7 +2968,7 @@ KC3改 Ship Object
 	};
 	KC3Ship.fillShipTooltipWideStats = function(shipObj, tooltipBox, canOasw = false) {
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
-		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : "");
+		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : '');
 		// show possible critical power and mark capped power with different color
 		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span class="power_capped">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
