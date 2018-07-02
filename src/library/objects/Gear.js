@@ -55,6 +55,7 @@ KC3改 Equipment Object
 				surfaceRadar: 0,
 				airRadar: 0,
 				tripleTorpedo: 0,
+				kamikazeTwinTorpedo: 0,
 			},
 			// Suisei
 			"24": {
@@ -373,10 +374,20 @@ KC3改 Equipment Object
 					// Mutsuki Class
 					"28": {
 						multiple: { "houg": 2, "tyku": 1, "houk": 3 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 2, "raig": 1, "houk": 3 },
-						},
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 1, "houk": 3 },
+							},
+							{
+								flags: [ "kamikazeTwinTorpedo" ],
+								byCount: {
+									gear: "kamikazeTwinTorpedo",
+									"1": { "houg": 2, "raig": 4 },
+									"2": { "houg": 3, "raig": 7 },
+								},
+							},
+						],
 					},
 					// Kamikaze Class
 					"66": "28",
@@ -712,6 +723,7 @@ KC3改 Equipment Object
 		if(synergyGears) {
 			// Triple Torpedo Late Model not counted
 			if([13, 125].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
+			if([174].includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
