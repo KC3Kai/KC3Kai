@@ -325,7 +325,7 @@
 							return;
 						}
 						shipObj.equipments.push( {id: gearId,
-							improve: shipData.stars ? shipData.stars[i] : 0,
+							improve: shipData.stars > 0 ? shipData.stars[i] : 0,
 							ace: shipData.ace ? shipData.ace[i] : 0
 						} );
 					});
@@ -574,12 +574,14 @@
 					if (!equipment) return;
 					var gear = new KC3Gear();
 					equipmentObjectArr.push( gear );
-					if(ind >= 4 && ind >= ship.slotnum)
+					if(ind >= 4 && ind >= ship.slotnum) {
 						ship.ex_item = equipmentObjectArr.length;
-					else
+						gear.itemId = ship.ex_item;
+					} else {
 						ship.items[ind] = equipmentObjectArr.length;
+						gear.itemId = ship.items[ind];
+					}
 					gear.masterId = equipment.id;
-					gear.itemId = ship.items[ind];
 					gear.stars = equipment.improve ? equipment.improve : 0;
 					gear.ace = equipment.ace ? equipment.ace : 0;
 				});
