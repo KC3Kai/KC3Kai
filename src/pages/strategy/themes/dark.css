@@ -1680,6 +1680,12 @@ button, input, select, textarea {
 		1px 1px 1px #131313;
 }
 
+.tab_fleet .ss_button {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+	margin-top: -10px !important;
+}
+
 /* LOCKING
 --------------------------------*/
 .tab_locking .controls {
