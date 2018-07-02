@@ -131,7 +131,9 @@ AntiAir: anti-air related calculations
 		iconEq(3));
 
 	function is46cmTripleMount(mst) {
-		return mst.api_id === 6 || mst.api_id === 276;
+		// 46cm Kai not counted
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
+		return mst.api_id === 6; //|| mst.api_id === 276;
 	}
 	
 	var isYellowGun = iconEq(4);
@@ -271,6 +273,7 @@ AntiAir: anti-air related calculations
 			(forFleet
 			 ? getFleetImprovementModifier
 			 : getShipImprovementModifier)(mst);
+		// according verification, AA bonus of specific equip on specific ship not counted
 		var aaStat = mst.api_tyku;
 		return eTypMod * aaStat + eImproveMod * Math.sqrt( stars );
 	}
@@ -307,7 +310,9 @@ AntiAir: anti-air related calculations
 
 	function shipAdjustedAntiAir(shipObj) {
 		// here aa[1] is max naked stat, equaled to api_tyku[1],
-		// might use current naked stat: aa[0] - equipment stat
+		// might use current naked stat: aa[0] - equipment stat.
+		// according verification, AA bonus of specific equip on specific ship not counted,
+		// it seems be better not to use aa[0] property.
 		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj, false);
 	}
 

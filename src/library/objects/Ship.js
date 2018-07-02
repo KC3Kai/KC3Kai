@@ -645,6 +645,25 @@ KC3改 Ship Object
 		return !statAttr ? stats : stats[statAttr];
 	};
 
+	KC3Ship.prototype.statsBonusOnShip = function(statAttr){
+		if(this.isDummy()) { return false; }
+		const stats = {};
+		const statApiNames = {
+			"houg": "fp",
+			"souk": "ar",
+			"raig": "tp",
+			"houk": "ev",
+			"tyku": "aa",
+			"tais": "as",
+			"saku": "ls",
+			//"houm": "ac",
+		};
+		for(const apiName in statApiNames) {
+			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
+		}
+		return !statAttr ? stats : stats[statAttr];
+	};
+
 	KC3Ship.prototype.equipmentStatsMap = function(apiName, isExslotIncluded = true){
 		return this.equipment(isExslotIncluded).map(equip => {
 			if(equip.exists()) {
@@ -654,496 +673,22 @@ KC3改 Ship Object
 		});
 	};
 
-	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true){
+	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false){
 		var total = 0;
-		var hasSurfaceRadar = false, hasAirRadar = false;
-		const thisShipClass = this.master().api_ctype;
-		// Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
-		// To correct the 'naked stats' for these cases, have to simulate them all.
-		// Some summary tables:
-		//  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-		//  * http://furukore.com/archives/13793
-		//  * https://twitter.com/Lambda39/status/990268289866579968
-		// In order to handle some complex cases,
-		// this definition table includes some functions which can not be moved to JSON file.
-		const explicitStatsBonusGears = {
-			// Suisei
-			// https://twitter.com/KennethWWKK/status/1006880793262604288
-			"24": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-			},
-			// Suisei Model 12A
-			"57": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-			},
-			// Suisei (601 Air Group)
-			"111": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-			},
-			// Suisei (Egusa Squadron)
-			"100": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 4 },
-					},
-				},
-			},
-			// Suisei Model 22 (634 Air Group)
-			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%29
-			"291": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 6, "houk": 1 },
-					},
-				},
-			},
-			// Suisei Model 22 (634 Air Group / Skilled)
-			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%EF%BC%8F%E7%86%9F%E7%B7%B4%29
-			"292": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
-					},
-				},
-			},
-			// Zuiun (634 Air Group)
-			"79": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 3 },
-					},
-					// Fusou Class Kai Ni
-					"26": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-				byShip: {
-					// Ise Class Kai
-					ids: [82, 88],
-					multiple: { "houg": 2 },
-				},
-			},
-			// Zuiun Model 12 (634 Air Group)
-			"81": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 3 },
-					},
-					// Fusou Class Kai Ni
-					"26": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-				byShip: {
-					// Ise Class Kai
-					ids: [82, 88],
-					multiple: { "houg": 2 },
-				},
-			},
-			// Zuiun Model 12 (634 Air Group / Skilled)
-			"237": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						multiple: { "houg": 4, "houk": 2 },
-					},
-					// Fusou Class Kai Ni
-					"26": {
-						remodel: 2,
-						multiple: { "houg": 2 },
-					},
-				},
-				byShip: {
-					// Ise Class Kai
-					ids: [82, 88],
-					multiple: { "houg": 3, "houk": 1 },
-				},
-			},
-			// Type 2 Reconnaissance Aircraft
-			"61": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2 },
-					},
-				},
-			},
-			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
-			"104": {
-				count: 0,
-				byShip: [
-					{
-						// all Kongou Class K2
-						ids: [149, 150, 151, 152],
-						multiple: { "houg": 1 },
-					},
-					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
-						multiple: { "houg": 1 },
-					},
-					{
-						// extra +1 aa, +2 ev for Haruna K2
-						ids: [151],
-						multiple: { "tyku": 1, "houk": 2 },
-					},
-				],
-			},
-			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
-			// https://wikiwiki.jp/kancolle/35.6cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%28%E3%83%80%E3%82%BA%E3%83%AB%E8%BF%B7%E5%BD%A9%E4%BB%95%E6%A7%98%29
-			"289": {
-				count: 0,
-				byShip: [
-					{
-						// all Kongou Class K2
-						ids: [149, 150, 151, 152],
-						multiple: { "houg": 1 },
-					},
-					{
-						// for Kongou K2 and Haruna K2
-						ids: [149, 151],
-						multiple: { "houg": 1 },
-						// synergy with Surface Radar
-						callback: (api, info) => (hasSurfaceRadar ? ({
-							"houg": 2, "houk": 2
-						})[api] || 0 : 0),
-					},
-					{
-						// extra +1 aa for Kongou K2
-						ids: [149],
-						multiple: { "tyku": 1 },
-					},
-					{
-						// extra +2 aa, +2 ev for Haruna K2
-						ids: [151],
-						multiple: { "tyku": 2, "houk": 2 },
-					},
-				],
-			},
-			// 41cm Triple Gun Mount Kai Ni
-			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
-			"290": {
-				count: 0,
-				byClass: {
-					// Ise Class Kai+
-					"2": {
-						remodel: 1,
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
-						// synergy with Air Radar
-						callback: (api, info) => (hasAirRadar ? ({
-							"tyku": 2, "houk": 3
-						})[api] || 0 : 0),
-					},
-					// Fusou Class Kai Ni
-					"26": {
-						remodel: 2,
-						multiple: { "houg": 1 },
-					},
-				},
-			},
-			// 61cm Quadruple (Oxygen) Torpedo Mount
-			"15": {
-				count: 0,
-				byShip: {
-					// Kagerou Class K2
-					ids: [566, 567, 568],
-					multiple: { "raig": 2 },
-					countCap: 2,
-				},
-			},
-			// 61cm Triple (Oxygen) Torpedo Mount Late Model
-			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
-			"285": {
-				count: 0,
-				starsDist: [],
-				byShip: {
-					// Here goes ship ID white-list instead of byClass:
-					//  Fubuki K2, Murakumo K2,
-					//  Ayanami K2, Ushio K2
-					//  Akatsuki K2, Bep (Hibiki K2)
-					//  Hatsuharu K2, Hatsushimo K2
-					ids: [426, 420, 195, 407, 437, 147, 326, 419],
-					multiple: { "raig": 2, "houk": 1 },
-					countCap: 2,
-					// +1 fp if stars +max
-					callback: (api, info) => (({
-						"houg": info.starsDist[10] || 0,
-					})[api] || 0),
-				},
-			},
-			// 61cm Quadruple (Oxygen) Torpedo Mount Late Model
-			// https://wikiwiki.jp/kancolle/61cm%E5%9B%9B%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
-			"286": {
-				count: 0,
-				starsDist: [],
-				byClass: {
-					// Asashio Class, Kai Nis
-					"18": {
-						remodel: 2,
-						multiple: { "raig": 2, "houk": 1 },
-						countCap: 2,
-						// +1 fp if stars +max
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-						})[api] || 0),
-					},
-					// Shiratsuyu Class, Kai Nis
-					"23": {
-						remodel: 2,
-						multiple: { "raig": 2, "houk": 1 },
-						countCap: 2,
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-						})[api] || 0),
-					},
-					// Kagerou Class, Kai Nis
-					//  except Isokaze / Hamakaze B Kai, Urakaze D Kai
-					"30": {
-						remodel: 2,
-						excludes: [556, 557, 558],
-						multiple: { "raig": 2, "houk": 1 },
-						countCap: 2,
-						// +1 tp if stars >= 5, +1 fp if stars +max, multiple
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"raig": info.starsDist.slice(5).sumValues(),
-						})[api] || 0),
-					},
-					// Yuugumo Class, Kai Nis
-					//  Naganami K2 only
-					"38": {
-						remodel: 2,
-						multiple: { "raig": 2, "houk": 1 },
-						countCap: 2,
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-						})[api] || 0),
-					},
-				},
-			},
-			// 12.7cm Single High-angle Gun Mount (Late Model)
-			// https://wikiwiki.jp/kancolle/12.7cm%E5%8D%98%E8%A3%85%E9%AB%98%E8%A7%92%E7%A0%B2%28%E5%BE%8C%E6%9C%9F%E5%9E%8B%29
-			// https://twitter.com/panmodoki10/status/1006898009202831362
-			"229": {
-				count: 0,
-				starsDist: [],
-				byClass: {
-					// Mutsuki Class
-					"28": {
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"tyku": info.starsDist[10] || 0,
-						})[api] || 0) + (hasSurfaceRadar ? ({
-							"houg": 2, "houk": 3,
-						})[api] || 0 : 0),
-					},
-					// Kamikaze Class
-					"66": {
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"tyku": info.starsDist[10] || 0,
-						})[api] || 0) + (hasSurfaceRadar ? ({
-							"houg": 2, "houk": 3,
-						})[api] || 0 : 0),
-					},
-					// Shimushu Class
-					"74": {
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"tyku": info.starsDist[10] || 0,
-						})[api] || 0) + (hasSurfaceRadar ? ({
-							"houg": 1, "houk": 4,
-						})[api] || 0 : 0),
-					},
-					// Etorofu Class
-					"77": {
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"tyku": info.starsDist[10] || 0,
-						})[api] || 0) + (hasSurfaceRadar ? ({
-							"houg": 1, "houk": 4,
-						})[api] || 0 : 0),
-					},
-					// Hiburi Class
-					"85": {
-						callback: (api, info) => (({
-							"houg": info.starsDist[10] || 0,
-							"tyku": info.starsDist[10] || 0,
-						})[api] || 0) + (hasSurfaceRadar ? ({
-							"houg": 1, "houk": 4,
-						})[api] || 0 : 0),
-					},
-				},
-				byShip: {
-					// Yura K2
-					ids: [488],
-					callback: (api, info) => (({
-						"houg": 2 * (info.starsDist[10] || 0),
-						"tyku": 3 * (info.starsDist[10] || 0),
-					})[api] || 0) + (hasSurfaceRadar ? ({
-						"houg": 3, "houk": 2,
-					})[api] || 0 : 0),
-				},
-			},
-			// 12.7cm Twin Gun Mount Model C Kai Ni
-			"266": {
-				count: 0,
-				byShip: {
-					// Kagerou Class K2
-					ids: [566, 567, 568],
-					multiple: { "houg": 1 },
-					countCap: 2,
-					callback: (api, info) => (
-						// total +3 instead of +2 if guns >= 2
-						// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
-						({"houg": info.count >= 2 ? 1 : 0})[api] || 0
-					),
-				},
-			},
-			// 12.7cm Twin Gun Mount Model D Kai Ni
-			// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
-			"267": {
-				count: 0,
-				byClass: {
-					// Shimakaze Class
-					"22": {
-						multiple: { "houg": 2, "houk": 1 },
-					},
-					// Kagerou Class
-					"30": {
-						multiple: { "houg": 1, "houk": 1 },
-					},
-					// Yuugumo Class
-					"38": {
-						multiple: { "houg": 2, "houk": 1 },
-					},
-				},
-				byShip: [
-					{
-						// Naganami K2, total +3 for each gun
-						ids: [543],
-						multiple: { "houg": 1 },
-					},
-					{
-						// Kagerou Class K2, total +2 for 1st gun
-						ids: [566, 567, 568],
-						single: { "houg": 1 },
-					},
-					{
-						// synergy with Surface Radar for Naganami Kai Ni and Shimakaze Kai
-						ids: [543, 229],
-						callback: (api, info) => (hasSurfaceRadar ? ({
-							"houg": 1, "raig": 3, "houk": 2
-						})[api] || 0 : 0),
-					},
-				],
-			},
-			// Arctic Camouflage
-			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
-			"268": {
-				count: 0,
-				byShip: {
-					// Tama K / K2, Kiso K / K2
-					ids: [146, 216, 217, 547],
-					single: { "souk": 2, "houk": 7 },
-				},
-			},
-		};
+		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
 				total += (equip.master()["api_" + apiName] || 0);
-				const bonusDefs = explicitStatsBonusGears[equip.masterId];
-				if(bonusDefs) {
-					if(bonusDefs.count >= 0) bonusDefs.count += 1;
-					if(Array.isArray(bonusDefs.starsDist)) {
-						bonusDefs.starsDist[equip.stars || 0] = 1 +
-							(bonusDefs.starsDist[equip.stars || 0] || 0);
-					}
-				}
-				if(!hasSurfaceRadar && equip.isHighAccuracyRadar()) hasSurfaceRadar = true;
-				if(!hasAirRadar && equip.isAirRadar()) hasAirRadar = true;
+				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
 			}
 		});
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
-		const addBonusToTotalIfNecessary = (bonusDef, apiName, gearInfo) => {
-			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(this.masterId)) { return; }
-			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(this.masterId)) { return; }
-			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(thisShipClass)) { return; }
-			if(bonusDef.remodel &&
-				RemodelDb.remodelGroup(this.masterId).indexOf(this.masterId) < bonusDef.remodel) { return; }
-			if(bonusDef.single) { total += bonusDef.single[apiName] || 0; }
-			if(bonusDef.multiple) {
-				total += (bonusDef.multiple[apiName] || 0) *
-					(bonusDef.countCap ? Math.min(bonusDef.countCap, gearInfo.count) : gearInfo.count);
-			}
-			if(bonusDef.callback) { total += bonusDef.callback(apiName, gearInfo); }
-		};
-		Object.keys(explicitStatsBonusGears).forEach(gearId => {
-			const gearInfo = explicitStatsBonusGears[gearId];
-			if(gearInfo.count > 0) {
-				if(gearInfo.byClass) {
-					const byClass = gearInfo.byClass[thisShipClass];
-					if(byClass) {
-						if(Array.isArray(byClass)) {
-							byClass.forEach(c => addBonusToTotalIfNecessary(c, apiName, gearInfo));
-						} else {
-							addBonusToTotalIfNecessary(byClass, apiName, gearInfo);
-						}
-					}
-				}
-				if(gearInfo.byShip) {
-					const byShip = gearInfo.byShip;
-					if(Array.isArray(byShip)) {
-						byShip.forEach(s => addBonusToTotalIfNecessary(s, apiName, gearInfo));
-					} else {
-						addBonusToTotalIfNecessary(byShip, apiName, gearInfo);
-					}
-				}
-			}
-		});
+		if(bonusDefs) {
+			const onShipBonus = KC3Gear.equipmentTotalStatsOnShipBonus(bonusDefs, this, apiName);
+			total = isOnShipBonusOnly ? onShipBonus : total + onShipBonus;
+		}
 		return total;
 	};
 
@@ -2731,13 +2276,16 @@ KC3改 Ship Object
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
-					if(hasCapableRadar && smallMainGunCnt >= 1) {
-						// https://twitter.com/ayanamist_m2/status/944176834551222272
-						const has127TwinGunModelD2 = this.hasEquipment(267);
-						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * (has127TwinGunModelD2 ? 1.25 : 1)];
-					}
+					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni
+					// https://twitter.com/ayanamist_m2/status/944176834551222272
+					const modelDSmallGunCnt = this.countEquipment(267);
+					// Possible to equip 2 D guns for 4 slots Tashkent
+					// https://twitter.com/Xe_UCH/status/1011398540654809088
+					const modelDSmallGunModifier = [1, 1.25, 1.4][modelDSmallGunCnt] || 1;
+					if(hasCapableRadar && smallMainGunCnt >= 1)
+						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * modelDSmallGunModifier];
 					if(hasCapableRadar && hasSkilledLookout)
-						return ["Cutin", 8, "CutinTorpRadarLookout", 1.25];
+						return ["Cutin", 8, "CutinTorpRadarLookout", 1.2 * modelDSmallGunModifier];
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214]);
@@ -3324,12 +2872,14 @@ KC3改 Ship Object
 		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
 		const nakedStats = shipObj.nakedStats(),
 			  maxedStats = shipObj.maxedStats(),
+			  bonusStats = shipObj.statsBonusOnShip(),
 			  maxDiffStats = {},
 			  equipDiffStats = {},
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
 		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
+		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
@@ -3354,27 +2904,32 @@ KC3改 Ship Object
 		$(".stat_fp .current", tooltipBox).text(shipObj.fp[0]);
 		$(".stat_fp .mod", tooltipBox).text(signedNumber(modLeftStats.fp))
 			.toggle(!!modLeftStats.fp);
-		$(".stat_fp .equip", tooltipBox).text("({0})".format(nakedStats.fp))
+		$(".stat_fp .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.fp, optionalNumber(bonusStats.fp)))
 			.toggle(!!equipDiffStats.fp);
 		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
 		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
 			.toggle(!!modLeftStats.ar);
-		$(".stat_ar .equip", tooltipBox).text("({0})".format(nakedStats.ar))
+		$(".stat_ar .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ar, optionalNumber(bonusStats.ar)))
 			.toggle(!!equipDiffStats.ar);
 		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
 		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
 			.toggle(!!modLeftStats.tp);
-		$(".stat_tp .equip", tooltipBox).text("({0})".format(nakedStats.tp))
+		$(".stat_tp .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.tp, optionalNumber(bonusStats.tp)))
 			.toggle(!!equipDiffStats.tp);
 		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
 		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
 			.toggle(!!maxDiffStats.ev);
-		$(".stat_ev .equip", tooltipBox).text("({0})".format(nakedStats.ev))
+		$(".stat_ev .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ev, optionalNumber(bonusStats.ev)))
 			.toggle(!!equipDiffStats.ev);
 		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
 		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
 			.toggle(!!modLeftStats.aa);
-		$(".stat_aa .equip", tooltipBox).text("({0})".format(nakedStats.aa))
+		$(".stat_aa .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.aa, optionalNumber(bonusStats.aa)))
 			.toggle(!!equipDiffStats.aa);
 		$(".stat_ac .current", tooltipBox).text(shipObj.carrySlots());
 		const canOasw = shipObj.canDoOASW();
@@ -3382,7 +2937,8 @@ KC3改 Ship Object
 			.toggleClass("oasw", canOasw);
 		$(".stat_as .level", tooltipBox).text(signedNumber(maxDiffStats.as))
 			.toggle(!!maxDiffStats.as);
-		$(".stat_as .equip", tooltipBox).text("({0})".format(nakedStats.as))
+		$(".stat_as .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.as, optionalNumber(bonusStats.as)))
 			.toggle(!!equipDiffStats.as);
 		$(".stat_as .mod", tooltipBox).text(signedNumber(modLeftStats.as))
 			.toggle(!!modLeftStats.as);
@@ -3391,7 +2947,8 @@ KC3改 Ship Object
 		$(".stat_ls .current", tooltipBox).text(shipObj.ls[0]);
 		$(".stat_ls .level", tooltipBox).text(signedNumber(maxDiffStats.ls))
 			.toggle(!!maxDiffStats.ls);
-		$(".stat_ls .equip", tooltipBox).text("({0})".format(nakedStats.ls))
+		$(".stat_ls .equip", tooltipBox)
+			.text("({0}{1})".format(nakedStats.ls, optionalNumber(bonusStats.ls)))
 			.toggle(!!equipDiffStats.ls);
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
@@ -3411,7 +2968,7 @@ KC3改 Ship Object
 	};
 	KC3Ship.fillShipTooltipWideStats = function(shipObj, tooltipBox, canOasw = false) {
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
-		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : "");
+		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : '');
 		// show possible critical power and mark capped power with different color
 		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span class="power_capped">{0}</span>' : "{0}")
 			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
