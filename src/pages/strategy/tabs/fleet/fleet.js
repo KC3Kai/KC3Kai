@@ -427,6 +427,7 @@
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
 				const fleetBox = thisButton.parent();
+				fleetBox.get(0).scrollIntoView();
 				thisButton.hide("fast", "linear", self.captureFleetBox.bind(self, fleetBox));
 			});
 		},
@@ -435,7 +436,7 @@
 		 * Save fleet box screenshot
 		 */
 		captureFleetBox: function(fleetBox) {
-			const fleetNum = $(fleetBox).data("fleet");
+			const fleetNum = $(fleetBox).data("fleet") || 1;
 			const coords = {
 				x: $(fleetBox).offset().left,
 				y: $(fleetBox).offset().top,

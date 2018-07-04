@@ -1495,12 +1495,12 @@ KC3改 Ship Object
 		}
 		// Damage percent modifier
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
-		const damageModifier = (warfareType === "Torpedo" ? {
+		const damageModifier = (!isNightBattle && warfareType === "Torpedo" ? {
 			// Day time only affect Opening Torpedo in fact, Chuuha cannot Closing at all
-			// Night time unmentioned, assume Chuuha 0.8 too?
+			// Night time unmentioned, assume to be the same with shelling
 			"chuuha": 0.8,
 			"taiha": 0.0
-		} : warfareType === "Shelling" || warfareType === "Antisub" ? {
+		} : (isNightBattle && warfareType === "Torpedo") || warfareType === "Shelling" || warfareType === "Antisub" ? {
 			"chuuha": 0.7,
 			"taiha": 0.4
 		} : // Aerial Opening Airstrike not affected
