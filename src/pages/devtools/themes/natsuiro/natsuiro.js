@@ -711,6 +711,22 @@
 			}
 		});
 
+		// Scrollable control buttons
+		$(".module.controls .scroll_btn").on("click", function(){
+			var buttonCount = $(".module.controls .control_btn").length;
+			var buttonSize = $(".module.controls .control_btn").outerWidth(true);
+			var containerSize = $(".module.controls .scrollable").outerWidth(true);
+			var maxLeft = buttonSize * (buttonCount - Math.floor(containerSize / buttonSize));
+			var currentLeft = $(".module.controls .scrollable").scrollLeft();
+			var goLeft = $(this).hasClass("scroll_left");
+			var newLeft = goLeft ?
+				Math.max(currentLeft - buttonSize, 0) :
+				Math.min(currentLeft + buttonSize, maxLeft);
+			$(".module.controls .scrollable").scrollLeft(newLeft);
+			$(".module.controls .scroll_left").toggleClass("disabled", newLeft <= 0);
+			$(".module.controls .scroll_right").toggleClass("disabled", newLeft >= maxLeft);
+		});
+
 		// Resize window to 800x480
 		$(".module.controls .btn_resize").on("click", function(){
 			// Send fit-screen request to service to be forwarded to gameplay page
@@ -726,8 +742,31 @@
 				tabId: chrome.devtools.inspectedWindow.tabId
 			},function(isMuted){
 				$(".module.controls .btn_mute img")
-					.attr("src", "img/mute{0}.png".format(isMuted ? "-x" : ""));
+					.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
 			})).execute();
+		});
+
+		// Reload subtitle quotes
+		$(".module.controls .btn_reload_quotes").on("click", function(){
+			// TODO request latest quotes.json for current lang from remote repo
+			// Tell game screen tab use latest meta
+			(new RMsg("service", "reloadMeta", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				type: "Quotes"
+			})).execute();
+			// TODO add UI response to show reloading status
+		});
+
+		// Reload meta of quests
+		$(".module.controls .btn_reload_quests").on("click", function(){
+			// TODO request latest quests.json for both EN and current lang from remote repo
+			KC3Meta.reloadQuests();
+			// Tell game screen tab use latest meta
+			(new RMsg("service", "reloadMeta", {
+				tabId: chrome.devtools.inspectedWindow.tabId,
+				type: "Quests"
+			})).execute();
+			// TODO add UI response to show reloading status
 		});
 
 		// Trigger initial selected fleet num
@@ -779,13 +818,13 @@
 			// if inspected tab is muted, update the mute icon
 			try {
 				if(tabInfo.mutedInfo.muted){
-					$(".module.controls .btn_mute img").attr("src", "img/mute-x.png");
+					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
 				} else if(ConfigManager.mute_game_tab) {
 					(new RMsg("service", "toggleSounds", {
 						tabId: chrome.devtools.inspectedWindow.tabId
 					}, function(isMuted){
 						$(".module.controls .btn_mute img")
-							.attr("src", "img/mute{0}.png".format(isMuted ? "-x" : ""));
+							.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
 					})).execute();
 				}
 			} catch(e) {}
@@ -835,6 +874,9 @@
 			$(".wrapper").removeClass("v").addClass("h");
 			currentLayout = "horizontal";
 		}
+		$(".module.controls .scrollable").scrollLeft(0);
+		$(".module.controls .scroll_left").addClass("disabled");
+		$(".module.controls .scroll_right").removeClass("disabled");
 	}
 
 	function clearSortieData(){

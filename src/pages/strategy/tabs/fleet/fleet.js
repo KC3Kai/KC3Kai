@@ -148,8 +148,8 @@
 				console.log( "JSON to be exported", JSON.stringify( converted ) );
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
 							encodeURI( JSON.stringify( converted )));
-
 			});
+
 			const updateHorizontal = () => {
 				if(this.horizontal) {
 					$(".fleet_ships").addClass("horizontal");
@@ -325,8 +325,8 @@
 							return;
 						}
 						shipObj.equipments.push( {id: gearId,
-							improve: shipData.stars > 0 ? shipData.stars[i] : 0,
-							ace: shipData.ace ? shipData.ace[i] : 0
+							improve: shipData.stars && shipData.stars[i] > 0 ? shipData.stars[i] : 0,
+							ace: shipData.ace ? shipData.ace[i] || 0 : 0
 						} );
 					});
 					while (shipObj.equipments.length < Math.max(slotnum + 1, 5))
@@ -365,7 +365,7 @@
 			// Empty fleet list
 			$(".tab_fleet .fleet_list").hide().empty();
 			$.each(kcFleetArray, function(ind, kcFleet) {
-				self.showKCFleet( kcFleet );
+				self.showKCFleet( kcFleet, ind + 1 );
 			});
 			// Show with duration and check if ship name overflow
 			$(".tab_fleet .fleet_list").createChildrenTooltips().show(100, () => {
@@ -378,14 +378,14 @@
 
 		/* Show single fleet
 		   --------------------------------------------*/
-		showKCFleet: function(kcFleet) {
+		showKCFleet: function(kcFleet, fleetNum) {
 			if (!kcFleet.active) return;
 			const self = this;
 
 			// Create fleet box
 			const fleetBox = $(".tab_fleet .factory .fleet_box").clone()
 				.appendTo(".tab_fleet .fleet_list");
-			// fleetBox.attr("id", "fleet_box"+index);
+			fleetBox.attr("data-fleet", fleetNum);
 			$(".fleet_name", fleetBox).text( kcFleet.name );
 
 			let maxSlots = 0;
@@ -424,6 +424,51 @@
 				);
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
+			$(".ss_button", fleetBox).on("click", function(e) {
+				const thisButton = $(this);
+				const fleetBox = thisButton.parent();
+				fleetBox.get(0).scrollIntoView();
+				thisButton.hide("fast", "linear", self.captureFleetBox.bind(self, fleetBox));
+			});
+		},
+
+		/**
+		 * Save fleet box screenshot
+		 */
+		captureFleetBox: function(fleetBox) {
+			const fleetNum = $(fleetBox).data("fleet") || 1;
+			const coords = {
+				x: $(fleetBox).offset().left,
+				y: $(fleetBox).offset().top,
+				w: $(fleetBox).width(),
+				h: $(fleetBox).height(),
+				t: $(document).scrollTop(),
+			};
+			chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
+				const canvas = document.createElement("canvas"), img = new Image();
+				img.onload = () => {
+					canvas.width = coords.w;
+					canvas.height = coords.h;
+					canvas.getContext("2d").drawImage(img,
+						coords.x, coords.y - coords.t, coords.w, coords.h,
+						0, 0, coords.w, coords.h);
+					new KC3ImageExport(canvas, {
+						filename: "{0} #{1} ({2})".format(
+							$("#fleet_description").text(),
+							fleetNum, dateFormat("yyyy-mm-dd HHMM")
+						),
+					}).export((error, result) => {
+						if(error) {
+							console.error("Failed to screenshot fleet", error);
+							alert("Failed to generate fleet screenshot");
+						} else if(result && result.filename) {
+							alert("Saved to {0}".format(result.filename));
+						}
+						$(".ss_button", fleetBox).show();
+					});
+				};
+				img.src = dataUrl;
+			});
 		},
 
 		/* Show single ship

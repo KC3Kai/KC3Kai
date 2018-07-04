@@ -122,6 +122,22 @@
 .tab_fleet .detail_value:hover {
 	overflow:visible;
 }
+.tab_fleet .ss_button {
+	float:right;
+	position:relative;
+	width:30px;
+	height:30px;
+	margin-top:-19px;
+	margin-right:2px;
+	opacity:0.05;
+}
+.tab_fleet .ss_button:hover {
+	opacity:1.0;
+}
+.tab_fleet .ss_button img {
+	width:30px;
+	height:30px;
+}
 
 /* Ships */
 .tab_fleet .fleet_ships {

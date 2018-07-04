@@ -83,8 +83,8 @@ Retrieves when needed to apply on components
 				lock_prep : [],
 
 				ss_mode      : 0,
-				ss_type      : 'JPG',
-				ss_quality   : 70,
+				ss_type      : 'PNG',
+				ss_quality   : 90,
 				ss_directory : 'KanColle',
 				ss_dppx      : 1,
 
