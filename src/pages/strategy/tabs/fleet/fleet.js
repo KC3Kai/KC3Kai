@@ -452,7 +452,10 @@
 						coords.x, coords.y - coords.t, coords.w, coords.h,
 						0, 0, coords.w, coords.h);
 					new KC3ImageExport(canvas, {
-						filename: "{0} #{1}".format($("#fleet_description").text(), fleetNum),
+						filename: "{0} #{1} ({2})".format(
+							$("#fleet_description").text(),
+							fleetNum, dateFormat("yyyy-mm-dd HHMM")
+						),
 					}).export((error, result) => {
 						if(error) {
 							console.error("Failed to screenshot fleet", error);
