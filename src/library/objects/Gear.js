@@ -411,7 +411,7 @@ KC3改 Equipment Object
 				byClass: {
 					// Mutsuki Class
 					"28": {
-						minStars: 10,
+						minStars: 8,
 						multiple: { "houg": 1, "tyku": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -422,7 +422,7 @@ KC3改 Equipment Object
 					"66": "28",
 					// Shimushu Class
 					"74": {
-						minStars: 10,
+						minStars: 8,
 						multiple: { "houg": 1, "tyku": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -437,7 +437,7 @@ KC3改 Equipment Object
 				byShip: {
 					// Yura K2
 					ids: [488],
-					minStars: 10,
+					minStars: 8,
 					multiple: { "houg": 2, "tyku": 3 },
 					synergy: {
 						flags: [ "surfaceRadar" ],
@@ -587,7 +587,7 @@ KC3改 Equipment Object
 						// Naganami K2, total +3 for each gun
 						ids: [543],
 						multiple: { "houg": 1 },
-						// total +6 fp, +4 tp, +3 ev
+						// total +6 fp, +4 tp, +4 ev
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 1, "raig": 1, "houk": 2 },
