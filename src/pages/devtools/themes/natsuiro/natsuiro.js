@@ -1099,6 +1099,11 @@
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").lazyInitTooltip();
+			const remainingTime = KC3Calc.remainingTimeUntilNextResets();
+			const resetTimeTips = "{0}: {2}\n{1}: {3}".format(
+				KC3Meta.term("MenuPvPReset"), KC3Meta.term("MenuQuestReset"),
+				remainingTime.pvp, remainingTime.quest
+			);
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
 					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -1106,9 +1111,11 @@
 				).attr("title", KC3Meta.term("HQRankPointsTip")
 					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
 						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
+					+ "\n{0}: {1}\n".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank)
+					+ resetTimeTips
 				);
 			} else {
-				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", "");
+				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", resetTimeTips);
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});

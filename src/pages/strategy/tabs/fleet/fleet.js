@@ -426,8 +426,11 @@
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
-				const fleetBox = thisButton.parent();
-				fleetBox.get(0).scrollIntoView();
+				const fleetBox = thisButton.parent(), fleetBoxNative = fleetBox.get(0);
+				if(fleetBoxNative.scrollIntoViewIfNeeded)
+					fleetBoxNative.scrollIntoViewIfNeeded();
+				else if(fleetBoxNative.scrollIntoView)
+					fleetBoxNative.scrollIntoView();
 				thisButton.hide("fast", "linear", self.captureFleetBox.bind(self, fleetBox));
 			});
 		},
