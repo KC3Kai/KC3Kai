@@ -204,7 +204,7 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class K2
+						// all Kongou Class Kai Ni
 						ids: [149, 150, 151, 152],
 						multiple: { "houg": 1 },
 					},
@@ -226,7 +226,7 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class K2
+						// all Kongou Class Kai Ni
 						ids: [149, 150, 151, 152],
 						multiple: { "houg": 1 },
 					},
@@ -256,22 +256,29 @@ KC3改 Equipment Object
 			"290": {
 				count: 0,
 				byClass: {
-					// Ise Class Kai+
-					"2": {
-						remodel: 1,
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
-						synergy: {
-							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 3 },
+					"2": [
+						// Ise Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+							synergy: {
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
 						},
-					},
+						// extra +1 fp for Ise Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Fusou Class Kai Ni
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 1 },
 					},
 				},
-			},
+		},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
