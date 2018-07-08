@@ -1099,6 +1099,11 @@
 			$(".admiral_name").text( PlayerManager.hq.name );
 			$(".admiral_comm").text( PlayerManager.hq.desc );
 			$(".admiral_rank").lazyInitTooltip();
+			const homePortTimeTips = "{0}: {1}".format(
+				KC3Meta.term("PanelLastHomePort"),
+				!PlayerManager.hq.lastPortTime ? "?" :
+					new Date(PlayerManager.hq.lastPortTime * 1000).format("mm-dd HH:MM:ss")
+			);
 			const remainingTime = KC3Calc.remainingTimeUntilNextResets();
 			const resetTimeTips = "{0}: {2}\n{1}: {3}".format(
 				KC3Meta.term("MenuPvPReset"), KC3Meta.term("MenuQuestReset"),
@@ -1108,14 +1113,16 @@
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
 					.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 					+ KC3Meta.term("HQRankPoints")
-				).attr("title", KC3Meta.term("HQRankPointsTip")
+				).attr("title", [KC3Meta.term("HQRankPointsTip")
 					.format(!PlayerManager.hq.rankPtLastTimestamp ? "?"
-						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("yyyy-mm-dd HH:MM:ss"))
-					+ "\n{0}: {1}\n".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank)
-					+ resetTimeTips
+						: new Date(PlayerManager.hq.rankPtLastTimestamp).format("mm-dd HH:MM:ss")) + "\n",
+					homePortTimeTips,
+					"{0}: {1}".format(KC3Meta.term("MenuRankPtsCutoff"), remainingTime.rank),
+					resetTimeTips].join("\n")
 				);
 			} else {
-				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title", resetTimeTips);
+				$(".admiral_rank").text(PlayerManager.hq.rank).attr("title",
+					[homePortTimeTips, resetTimeTips].join("\n"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
