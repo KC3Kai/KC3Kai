@@ -360,9 +360,10 @@
 						
 						// Add some precondition ship icons as not check them yet
 						if(improveList.length > 1){
-							var shipIcons = $(".eq_res_label.material", ResBox).empty();
+							var shipIcons = $(".eq_res_label.material", ResBox);
 							imp.req.forEach(function(reqArr){
-								if(reqArr[0][dayIdx] && reqArr[1]){
+								if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
+									shipIcons.empty();
 									reqArr[1].forEach(function(reqShipId){
 										var remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
 										if(!remodel || !remodel.prev
