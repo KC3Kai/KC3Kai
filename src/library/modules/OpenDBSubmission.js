@@ -2,7 +2,7 @@
  * OpenDBSubmission.js
  *
  * Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB:
- * http://swaytwig.com/opendb/
+ * http://opendb.swaytwig.com/
  *
  * @see PoiDBSubmission.js - copied and edited from
  */
@@ -279,7 +279,7 @@
 			if(true) return;
 			*/
 			var post = $.ajax({
-				url: "http://swaytwig.com/opendb/report/" + endpoint,
+				url: "http://opendb.swaytwig.com/report/" + endpoint,
 				method: "POST",
 				data: payload,
 			}).done( function() {
