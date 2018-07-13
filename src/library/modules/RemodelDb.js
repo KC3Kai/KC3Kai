@@ -56,6 +56,7 @@
                 case 213: // Tenryuu
                     return 24;
                 case 214: // Tatsuta
+                case 242: // Shiratsuyu
                     return 15;
                 case 312: // Hamakaze
                 case 317: // Urakaze

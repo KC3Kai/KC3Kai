@@ -503,8 +503,8 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shiratsuyu Kai, Murasame K2
-						ids: [242, 498],
+						// Shiratsuyu Kai+?, Murasame K2
+						ids: [242, 497, 498],
 						multiple: { "houk": 1 },
 					},
 					{
@@ -729,8 +729,7 @@ KC3改 Equipment Object
 		const synergyGears = bonusGears.synergyGears;
 		const bonusDefs = bonusGears[gear.masterId];
 		if(synergyGears) {
-			// Triple Torpedo Late Model not counted
-			if([13, 125].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
+			if([13, 125, 285].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if([174].includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
