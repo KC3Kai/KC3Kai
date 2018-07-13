@@ -471,6 +471,7 @@ AntiAir: anti-air related calculations
 		fumizukiK2Icon = 548,
 		uit25Icon = 539,
 		i504Icon = 530,
+		tenryuuK2Icon = 477,
 		tatsutaK2Icon = 478,
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
@@ -498,6 +499,7 @@ AntiAir: anti-air related calculations
 	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
 	var isUit25 = masterIdEq( uit25Icon );
 	var isI504 = masterIdEq( i504Icon );
+	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
@@ -841,6 +843,26 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( isHighAngleMount ),
 				hasSome( isAAGunNotCD ))
+		)
+	);
+
+	// Tenryuu K2
+	declareAACI(
+		30, 3, 1.3,
+		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
+		predAllOf(isTenryuuK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( isHighAngleMount, 3 ))
+		)
+	);
+	declareAACI(
+		31, 2, 1.25,
+		[tenryuuK2Icon, haMountIcon, haMountIcon],
+		predAllOf(isTenryuuK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( isHighAngleMount, 2 ))
 		)
 	);
 

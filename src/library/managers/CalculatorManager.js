@@ -430,6 +430,58 @@
         return goalResult;
     };
 
+    /**
+     * Calculates the timestamp of next in-game Quest/PvP/RankPtCutOff reset.
+     * @param {number} now - timestamp of 'now', current timestamp by default.
+     * @return {Object} an Object contains timestamp of {quest, pvp, rank}.
+     */
+    const nextResetsTimestamp = (now = Date.now()) => {
+        // Next Quest reset time (UTC 2000 / JST 0500)
+        const utc8pm = new Date(now),
+            utc6am = new Date(now), utc6pm = new Date(now);
+        utc8pm.setUTCHours(20, 0, 0, 0);
+        if(utc8pm.getTime() < now) utc8pm.shiftDate(1);
+        // Next PvP reset time (UTC 1800,0600 / JST 0300,1500)
+        utc6am.setUTCHours(6, 0, 0, 0);
+        utc6pm.setUTCHours(18, 0, 0, 0);
+        if(utc6am.getTime() < now) utc6am.shiftDate(1);
+        if(utc6pm.getTime() < now) utc6pm.shiftDate(1);
+        const nextPvPstamp = Math.min(utc6am.getTime(), utc6pm.getTime());
+        // Next Rank points cut-off time (-1 hour from PvP reset time)
+        //   extra cut-off monthly on JST 2200, the last day of every month,
+        //   but points from quest Z cannon not counted after JST 1400.
+        let nextPtCutoff = new Date(nextPvPstamp);
+        nextPtCutoff.shiftHour(-1);
+        if(nextPtCutoff.getTime() < now) nextPtCutoff.shiftHour(13);
+        if(nextPtCutoff.getMonth() > new Date(now).getMonth()
+            || nextPtCutoff.getFullYear() > new Date(now).getFullYear()) {
+            nextPtCutoff.setUTCHours(13, 0, 0, 0);
+            if(nextPtCutoff.getTime() < now) {
+                nextPtCutoff = new Date(utc6pm.getTime());
+                nextPtCutoff.shiftHour(-1);
+            }
+        }
+        return {
+            quest: utc8pm.getTime(),
+            pvp: nextPvPstamp,
+            rank: nextPtCutoff.getTime(),
+        };
+    };
+
+    /**
+     * Calculates remaining time until next in-game Quest/PvP/RankPtCutOff reset.
+     * @param {number} now - timestamp of 'now', current timestamp by default.
+     * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank}.
+     */
+    const remainingTimeUntilNextResets = (now = Date.now()) => {
+        const nextResets = nextResetsTimestamp(now);
+        return {
+            quest: String(Math.floor((nextResets.quest - now) / 1000)).toHHMMSS(),
+            pvp: String(Math.floor((nextResets.pvp - now) / 1000)).toHHMMSS(),
+            rank: String(Math.floor((nextResets.rank - now) / 1000)).toHHMMSS(),
+        };
+    };
+
     const publicApi = {
     };
 
@@ -445,10 +497,12 @@
         getLandBasesWorstCond,
         isLandBasesSupplied,
         
-        getShipLevelingGoal,
-        
         enemyFighterPower,
-        fighterPowerIntervals
+        fighterPowerIntervals,
+        
+        getShipLevelingGoal,
+        nextResetsTimestamp,
+        remainingTimeUntilNextResets,
     });
 
 })();

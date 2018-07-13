@@ -53,7 +53,10 @@
             switch(ship_id_from) {
                 case 82: // Ise
                     return 80;
+                case 213: // Tenryuu
+                    return 24;
                 case 214: // Tatsuta
+                case 242: // Shiratsuyu
                     return 15;
                 case 312: // Hamakaze
                 case 317: // Urakaze
@@ -75,15 +78,18 @@
                          : 20;
             }
         },
-        // does not consume devmat if using blueprint,
-        // except converting Suzuya/Kumano K2 to Kou K2, Kagerou K to K2, still consumes devmats
+        // does not consume devmat if using blueprint, except:
+        // still consumes devmat if converting Suzuya/Kumano K2 to Kou K2,
+        // Kagerou-class K to K2, Ise K to K2
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
-            return blueprint_count > 0 && [82, 225, 226, 227, 503, 504].indexOf(ship_id_from) < 0;
+            return blueprint_count > 0 && ![82, 225, 226, 227, 503, 504].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
             switch(ship_id_from) {
+                case 213: // Tenryuu
+                    return 8;
                 case 214: // Tatsuta
                     return 5;
                 case 312: // Hamakaze
