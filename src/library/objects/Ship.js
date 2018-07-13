@@ -1777,7 +1777,7 @@ KC3改 Ship Object
 		return powerBonus;
 	};
 
-	// check if this ship is capable of equipping Daihatsu (landing craft)
+	// check if this ship is capable of equipping Daihatsu (landing craft, amphibious tank not counted)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		if(this.isDummy()) { return false; }
 		var master = this.master();
@@ -1818,8 +1818,8 @@ KC3改 Ship Object
 		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
 		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
 		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
-		// DD Kasumi K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Naganami K2, DD Shiranui K2
-		const capableShips = [464, 498, 500, 543, 567];
+		// DD Kasumi K2, DD Shiratsuyu K2, DD Murasame K2, AO Kamoi Kai-Bo, DD Yuugumo K2, DD Naganami K2, DD Shiranui K2
+		const capableShips = [464, 497, 498, 500, 542, 543, 567];
 		// CVL Kasugamaru
 		const incapableShips = [521];
 		const masterId = this.masterId,

@@ -46,6 +46,7 @@ KC3改 Equipment Object
 	 * @see URLs some summary tables:
 	 *  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * http://furukore.com/archives/13793
+	 *  * https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
 	 *  * https://cdn.discordapp.com/attachments/178613137430282240/462356700104622100/bonus_small_guns.png
 	 *  * https://twitter.com/Lambda39/status/990268289866579968
 	 */
@@ -204,7 +205,7 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class K2
+						// all Kongou Class Kai Ni
 						ids: [149, 150, 151, 152],
 						multiple: { "houg": 1 },
 					},
@@ -226,7 +227,7 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// all Kongou Class K2
+						// all Kongou Class Kai Ni
 						ids: [149, 150, 151, 152],
 						multiple: { "houg": 1 },
 					},
@@ -256,22 +257,29 @@ KC3改 Equipment Object
 			"290": {
 				count: 0,
 				byClass: {
-					// Ise Class Kai+
-					"2": {
-						remodel: 1,
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
-						synergy: {
-							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 3 },
+					"2": [
+						// Ise Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+							synergy: {
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
 						},
-					},
+						// extra +1 fp for Ise Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Fusou Class Kai Ni
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 1 },
 					},
 				},
-			},
+		},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
@@ -455,7 +463,7 @@ KC3改 Equipment Object
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 2, "raig": 1, "houk": 2 },
+								single: { "houg": 3, "raig": 1, "houk": 2 },
 							},
 							{
 								flags: [ "tripleTorpedo" ],
