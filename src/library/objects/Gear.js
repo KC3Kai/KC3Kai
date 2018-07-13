@@ -56,6 +56,8 @@ KC3改 Equipment Object
 				surfaceRadar: 0,
 				airRadar: 0,
 				tripleTorpedo: 0,
+				tripleTorpedoLateModel: 0,
+				quadrupleTorpedoLateModel: 0,
 				kamikazeTwinTorpedo: 0,
 			},
 			// Suisei
@@ -503,7 +505,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shiratsuyu Kai+?, Murasame K2
+						// Shiratsuyu Kai+, Murasame K2
 						ids: [242, 497, 498],
 						multiple: { "houk": 1 },
 					},
@@ -628,12 +630,32 @@ KC3改 Equipment Object
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 3, "raig": 1, "houk": 2 },
 							},
+							{
+								flags: [ "tripleTorpedo" ],
+								byCount: {
+									gear: "tripleTorpedo",
+									"1": { "houg": 1, "raig": 3 },
+									"2": { "houg": 2, "raig": 5 },
+								},
+							},
+							{
+								flags: [ "tripleTorpedoLateModel" ],
+								byCount: {
+									gear: "tripleTorpedoLateModel",
+									"1": { "houg": 1, "raig": 4 },
+									"2": { "houg": 2, "raig": 6 },
+								},
+							},
 						],
 					},
 					// Akatsuki Class
 					"5": "1",
 					// Fubuki Class
 					"12": "1",
+					// Hatsuharu Class
+					"10": {
+						multiple: { "houg": 2 },
+					},
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
@@ -653,6 +675,14 @@ KC3改 Equipment Object
 							{
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 1, "raig": 2, "houk": 2 },
+							},
+							{
+								flags: [ "tripleTorpedo" ],
+								single: { "houg": 1, "raig": 3 },
+							},
+							{
+								flags: [ "quadrupleTorpedoLateModel" ],
+								single: { "houg": 1, "raig": 3 },
 							},
 						],
 					},
@@ -729,7 +759,9 @@ KC3改 Equipment Object
 		const synergyGears = bonusGears.synergyGears;
 		const bonusDefs = bonusGears[gear.masterId];
 		if(synergyGears) {
-			if([13, 125, 285].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
+			if([13, 125].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
+			if([285].includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
+			if([286].includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
 			if([174].includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
