@@ -426,12 +426,12 @@
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
-				const fleetBox = thisButton.parent(), fleetBoxNative = fleetBox.get(0);
+				const thisFleetBox = thisButton.parent(), fleetBoxNative = thisFleetBox.get(0);
 				if(fleetBoxNative.scrollIntoViewIfNeeded)
 					fleetBoxNative.scrollIntoViewIfNeeded();
 				else if(fleetBoxNative.scrollIntoView)
 					fleetBoxNative.scrollIntoView();
-				thisButton.hide("fast", "linear", self.captureFleetBox.bind(self, fleetBox));
+				thisButton.hide("fast", "linear", self.captureFleetBox.bind(self, thisFleetBox));
 			});
 		},
 
@@ -449,10 +449,12 @@
 			};
 			chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
 				const canvas = document.createElement("canvas"), img = new Image();
-				img.onload = () => {
+				img.onload = (e) => {
 					canvas.width = coords.w;
 					canvas.height = coords.h;
-					canvas.getContext("2d").drawImage(img,
+					const ctx = canvas.getContext("2d");
+					ctx.imageSmoothingEnabled = false;
+					ctx.drawImage(img,
 						coords.x, coords.y - coords.t, coords.w, coords.h,
 						0, 0, coords.w, coords.h);
 					new KC3ImageExport(canvas, {

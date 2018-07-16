@@ -1962,6 +1962,14 @@ Previously known as "Reactor"
 							KC3QuestManager.get(676).increment(2); // F68 weekly index 2
 							break;
 					}
+					switch(gearMaster.api_id){
+						case 3: // 10cm Twin High-angle Gun Mount
+							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
+							break;
+						case 121: // Type 94 Anti-Aircraft Fire Director
+							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+							break;
+					}
 				}
 				KC3GearManager.remove(itemId);
 			});
@@ -2498,7 +2506,7 @@ Previously known as "Reactor"
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
-					[214,1,false, true]  // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
+					[214,1,false, true], // Bw1: 2nd requirement: Encounter 24 bosses (index:1)
 				],
 				[ /* D RANK */ ],
 				[ /* C RANK */ ],
@@ -2510,7 +2518,7 @@ Previously known as "Reactor"
 					[241,0,[3,5], true],
 					[229,0,[ 4 ], true], // Bw6: Defeat 12 bosses in horned nodes in World 4
 					[242,0,[4,4], true], // Bw8: Defeat a boss in World [W4-4]
-					[214,2,false, true]  // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
+					[214,2,false, true], // Bw1: 3rd requirement: Win vs 12 bosses (index:2)
 				],
 				[ /* A RANK */
 					[261,0,[1,5], true], // Bw10: Sortie to [W1-5] and A-rank+ the boss node 3 times
@@ -2521,7 +2529,7 @@ Previously known as "Reactor"
 					[862,0,[6,3], true, true], // Bq4: Sortie to [W6-3] A-rank+ the boss node 2 times
 					[873,0,[3,1], true, true], // Bq5: 1st requirement: [W3-1] A-rank+ the boss node
 					[873,1,[3,2], true, true], // Bq5: 2nd requirement: [W3-2] A-rank+ the boss node
-					[873,2,[3,3], true, true]  // Bq5: 3rd requirement: [W3-3] A-rank+ the boss node
+					[873,2,[3,3], true, true], // Bq5: 3rd requirement: [W3-3] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -2529,7 +2537,10 @@ Previously known as "Reactor"
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 					[854,3,[6,4], true, true], // Bq2: 4th requirement: [W6-4] S-rank the boss node
-					[875,0,[5,4], true, true]  // Bq6: Sortie to [W5-4] S-rank the boss node
+					[875,0,[5,4], true, true], // Bq6: Sortie to [W5-4] S-rank the boss node
+					[888,0,[5,1], true, true], // Bq7: 1st requirement: [W5-1] S-rank the boss node
+					[888,1,[5,3], true, true], // Bq7: 2nd requirement: [W5-3] S-rank the boss node
+					[888,2,[5,4], true, true], // Bq7: 3rd requirement: [W5-4] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

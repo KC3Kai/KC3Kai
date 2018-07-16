@@ -680,16 +680,28 @@ KC3改 Equipment Object
 								flags: [ "tripleTorpedo" ],
 								single: { "houg": 1, "raig": 3 },
 							},
+						],
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Shiratsuyu Class
+					"23": {
+						multiple: { "houg": 1 },
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 5 },
+							},
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "raig": 2, "houk": 2 },
+							},
 							{
 								flags: [ "quadrupleTorpedoLateModel" ],
 								single: { "houg": 1, "raig": 3 },
 							},
 						],
 					},
-					// Akatsuki Class
-					"5": "1",
-					// Shiratsuyu Class
-					"23": "1",
 					// Hatsuharu Class
 					"10": {
 						multiple: { "houg": 1, "houk": 1 },
@@ -707,8 +719,8 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra synergies for Yuudachi/Shigure/Kawakaze/Murasame K2
-						ids: [144, 145, 469, 498],
+						// extra synergies for Yuudachi/Shigure/Kawakaze/Shiratsuyu/Murasame K2
+						ids: [144, 145, 469, 497, 498],
 						synergy: [
 							{
 								flags: [ "airRadar" ],
@@ -719,6 +731,11 @@ KC3改 Equipment Object
 								single: { "raig": 1 },
 							},
 						],
+					},
+					{
+						// Shiratsuyu K2
+						ids: [497],
+						multiple: { "houg": 1, "houk": 2 },
 					},
 					{
 						// Yuudachi K2
