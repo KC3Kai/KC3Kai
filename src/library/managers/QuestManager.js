@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 822, 854, 861, 862, 873, 875],
+				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 686, 822, 854, 861, 862, 873, 875, 888],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -530,6 +530,18 @@ Uses KC3Quest objects to play around with
 								359, // Okinami Kai
 								344, // Asashimo Kai
 							]) >= 1;
+					},
+				"888": // Bq7 Sortie New Mikawa Fleet
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShip(69)  + // Choukai any remodel
+							   fleet.countShip(61)  + // Aoba any remodel
+							   fleet.countShip(123) + // Kinugasa any remodel
+							   fleet.countShip(60)  + // Kako any remodel
+							   fleet.countShip(59)  + // Furutaka any remodel
+							   fleet.countShip(52)  + // Tenryuu any remodel
+							   fleet.countShip(115)   // Yuubari any remodel
+							>= 4;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
