@@ -468,11 +468,11 @@ Uses KC3Quest objects to play around with
 				"259": // Bm4 Sortie 3 BB (4 classes below only) and 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShip([
-								131, 136, 143, 148,         // Yamato-class
-								80, 275, 541, 81, 276,      // Nagato-class
-								77, 82, 87, 88,             // Ise-class
-								26, 286, 411, 27, 287, 412  // Fusou-class
+						return fleet.countShipClass([
+								37, // Yamato-class
+								19, // Nagato-class
+								2,  // Ise-class
+								26, // Fusou-class
 							]) === 3 && fleet.countShipType(3) === 1;
 					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
