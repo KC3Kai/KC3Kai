@@ -706,6 +706,15 @@
 				"links" : {
 					"gh" :"https://github.com/RandomGuyB5"
 				}
+			},
+			{
+				"name": "Oradimi",
+				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
+				"desc" : "Français",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Oradimi"
+				}
 			}
 		],
 		"AboutTesters": [
