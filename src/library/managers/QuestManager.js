@@ -539,7 +539,7 @@ Uses KC3Quest objects to play around with
 							   fleet.countShip(123) + // Kinugasa any remodel
 							   fleet.countShip(60)  + // Kako any remodel
 							   fleet.countShip(59)  + // Furutaka any remodel
-							   fleet.countShip(52)  + // Tenryuu any remodel
+							   fleet.countShip(51)  + // Tenryuu any remodel
 							   fleet.countShip(115)   // Yuubari any remodel
 							>= 4;
 					},

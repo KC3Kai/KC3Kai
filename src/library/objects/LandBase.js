@@ -94,6 +94,47 @@
 	};
 	
 	/**
+	 * Calculate percentages of preliminary shotdown ratio for Air Defense on Enemy Raid.
+	 * @param dispSeiku - air battle state id, AS by default, see `api_disp_seiku`.
+	 * @return {Object} contains 4-elements Array properties of
+	 *         { `minShotdownSlots`, `maxShotdownSlots`, `formattedSlots` }.
+	 * @see https://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Enemy_Raid_2
+	 */
+	KC3LandBase.prototype.shotdownRatio = function(dispSeiku = 2){
+		const airStateMod = [6, 10, 8, 4, 1][dispSeiku] || 8;
+		const minShotdownSlots = [],
+			maxShotdownSlots = [],
+			formattedSlots = [];
+		// Slot-based matching
+		$.each(this.planes, function(i, p) {
+			let minShotdown = 0,
+				maxShotdown = 0;
+			if(p.api_slotid > 0 && p.api_state === 1){
+				const planeMaster = KC3GearManager.get(p.api_slotid).master();
+				const interceptStat = planeMaster.api_houk || 0,
+					antiBombingStat = planeMaster.api_houm || 0;
+				minShotdown = 6.5 * airStateMod +
+					3.5 * (antiBombingStat + airStateMod * Math.min(interceptStat, 1));
+				// Exclusive to the upper bound
+				maxShotdown = minShotdown + 3.5 * (airStateMod + antiBombingStat - 1);
+			} else {
+				// If there is no plane, then shotdown depends on air state only,
+				// same formula is still applied, without bonus from stats.
+				minShotdown = 6.5 * airStateMod;
+				maxShotdown = minShotdown + 3.5 * (airStateMod - 1);
+			}
+			formattedSlots.push(`${minShotdown}% ~ ${maxShotdown}%`);
+			minShotdownSlots.push(minShotdown / 100);
+			maxShotdownSlots.push(maxShotdown / 100);
+		});
+		return {
+			minShotdownSlots,
+			maxShotdownSlots,
+			formattedSlots,
+		};
+	};
+	
+	/**
 	 * Convert to new Object used to record sorties on indexedDB
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
 	 */
@@ -121,44 +162,6 @@
 			});
 		}
 		return returnObj;
-	};
-
-	// Prelim air defense formula from https://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Enemy_Raid_2
-	KC3LandBase.prototype.shotdownRatio = function(dispSeiku = 2){
-		const airStateMod = [6, 10, 8, 4, 1][dispSeiku];
-		let minSlotShotdown = [],
-			maxSlotShotdown = [],
-			formattedShotdown = [];
-
-		// Slot-based matching
-		$.each(this.planes, function(i, p) {
-			let minShotdown = 0,
-				maxShotdown = 0;
-			
-			if(p.api_slotid > 0 && p.api_state === 1){
-				const interceptStat = KC3GearManager.get(p.api_slotid).master().api_houk || 0;
-				const abStat = KC3GearManager.get(p.api_slotid).master().api_houm || 0;
-				minShotdown = 6.5 * airStateMod + 3.5 * (abStat + airStateMod * Math.min(interceptStat, 1));
-				// Exclusive to the upper bound
-				maxShotdown = minShotdown + 3.5 * (airStateMod + abStat - 1);
-			}
-
-			// If there is no plane, then shotdown depends on air state
-			// Same formula still applies
-			else {
-				minShotdown = 6.5 * airStateMod;
-				maxShotdown = minShotdown + 3.5 * (airStateMod - 1);
-			}
-			minSlotShotdown.push(minShotdown/100);
-			maxSlotShotdown.push(maxShotdown/100);
-			formattedShotdown.push(minShotdown + "% ~ " + maxShotdown + "%");
-		});
-
-		return {
-			minSlotShotdown: minSlotShotdown,
-			maxSlotShotdown: maxSlotShotdown,
-			formattedShotdown: formattedShotdown,
-		};
 	};
 	
 })();
