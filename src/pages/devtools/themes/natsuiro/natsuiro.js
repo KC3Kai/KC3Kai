@@ -1936,6 +1936,11 @@
 					(lb1, lb2) => lb2.map - lb1.map || lb1.rid - lb2.rid
 				);
 				$.each(sortedBases, function(i, baseInfo){
+					let slotShotdown = [];
+					if (baseInfo.action === 2){
+						const slotDefense = baseInfo.shotdownRatio();
+						slotShotdown = slotDefense.formattedShotdown;
+					}	
 					if (baseInfo.rid != -1) {
 						console.debug("LandBase", i, baseInfo);
 						const baseBox = $("#factory .airbase").clone();
@@ -1948,7 +1953,8 @@
 							KC3Meta.term("LandBaseActionDefend"),
 							KC3Meta.term("LandBaseActionRetreat"),
 							KC3Meta.term("LandBaseActionRest")
-						][baseInfo.action]);
+						][baseInfo.action]).attr("title", KC3Meta.term(baseInfo.action === 2 ? "LandBaseDefenseShotdown" : "").format(slotShotdown))
+						.lazyInitTooltip();
 						
 						const shipObj = new KC3Ship();
 						// simulate 1 land-base as a carrier, ensure it's not a dummy ship
