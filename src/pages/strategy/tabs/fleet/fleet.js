@@ -447,32 +447,35 @@
 				h: $(fleetBox).height(),
 				t: $(document).scrollTop(),
 			};
-			chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
-				const canvas = document.createElement("canvas"), img = new Image();
-				img.onload = (e) => {
-					canvas.width = coords.w;
-					canvas.height = coords.h;
-					const ctx = canvas.getContext("2d");
-					ctx.imageSmoothingEnabled = false;
-					ctx.drawImage(img,
-						coords.x, coords.y - coords.t, coords.w, coords.h,
-						0, 0, coords.w, coords.h);
-					new KC3ImageExport(canvas, {
-						filename: "{0} #{1} ({2})".format(
-							$("#fleet_description").text(),
-							fleetNum, dateFormat("yyyy-mm-dd HHMM")
-						),
-					}).export((error, result) => {
-						if(error) {
-							console.error("Failed to screenshot fleet", error);
-							alert("Failed to generate fleet screenshot");
-						} else if(result && result.filename) {
-							alert("Saved to {0}".format(result.filename));
-						}
-						$(".ss_button", fleetBox).show();
-					});
-				};
-				img.src = dataUrl;
+			chrome.tabs.getZoom(undefined, scale => {
+				if(scale !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale; });
+				chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
+					const canvas = document.createElement("canvas"), img = new Image();
+					img.onload = (e) => {
+						canvas.width = coords.w;
+						canvas.height = coords.h;
+						const ctx = canvas.getContext("2d");
+						ctx.imageSmoothingEnabled = false;
+						ctx.drawImage(img,
+							coords.x, coords.y - coords.t, coords.w, coords.h,
+							0, 0, coords.w, coords.h);
+						new KC3ImageExport(canvas, {
+							filename: "{0} #{1} ({2})".format(
+								$("#fleet_description").text(),
+								fleetNum, dateFormat("yyyy-mm-dd HHMM")
+							),
+						}).export((error, result) => {
+							if(error) {
+								console.error("Failed to screenshot fleet", error);
+								alert("Failed to generate fleet screenshot");
+							} else if(result && result.filename) {
+								alert("Saved to {0}".format(result.filename));
+							}
+							$(".ss_button", fleetBox).show();
+						});
+					};
+					img.src = dataUrl;
+				});
 			});
 		},
 
