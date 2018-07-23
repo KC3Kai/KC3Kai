@@ -54,11 +54,17 @@ KC3改 Equipment Object
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 279],
 				airRadar: 0,
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279],
 				tripleTorpedo: 0,
+				tripleTorpedoIds: [13, 125],
 				tripleTorpedoLateModel: 0,
+				tripleTorpedoLateModelIds: [285],
 				quadrupleTorpedoLateModel: 0,
+				quadrupleTorpedoLateModelIds: [286],
 				kamikazeTwinTorpedo: 0,
+				kamikazeTwinTorpedoIds: [174],
 			},
 			// Suisei
 			"24": {
@@ -677,7 +683,7 @@ KC3改 Equipment Object
 								single: { "houg": 1, "raig": 2, "houk": 2 },
 							},
 							{
-								flags: [ "tripleTorpedo" ],
+								flags: [ "tripleTorpedoLateModel" ],
 								single: { "houg": 1, "raig": 3 },
 							},
 						],
@@ -776,10 +782,10 @@ KC3改 Equipment Object
 		const synergyGears = bonusGears.synergyGears;
 		const bonusDefs = bonusGears[gear.masterId];
 		if(synergyGears) {
-			if([13, 125].includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
-			if([285].includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
-			if([286].includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
-			if([174].includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
+			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
+			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
+			if(synergyGears.quadrupleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
+			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
