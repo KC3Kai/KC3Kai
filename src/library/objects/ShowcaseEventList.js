@@ -1,26 +1,57 @@
 (function () {
     "use strict";
 
-    const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
+    // European ships
+    const baseImgSrc = "/assets/img/ui/european_ships.png",
+        disclaimerHeightOffset = 50,
         shipPositions = [
-            {"x": 254, "y": 144, "id": 87},
-            {"x": 254, "y": 209, "id": 77},
-            {"x": 254, "y": 274, "id": 183},
-            {"x": 254, "y": 339, "id": 49},
-            {"x": 254, "y": 404, "id": 41},
-            {"x": 254, "y": 469, "id": 425},
+            {"x": 242, "y": 122+42* 0, "id": 491}, // Commandant Teste
+            {"x": 242, "y": 122+42* 1, "id": 535}, // Luigi Torelli
+            {"x": 242, "y": 122+42* 2, "id": 431}, // U-511
+            {"x": 242, "y": 122+42* 3, "id": 432}, // Graf Zeppelin
+            {"x": 242, "y": 122+42* 4, "id": 444}, // Aquila
+            {"x": 242, "y": 122+42* 5, "id": 515}, // Ark Royal
+            {"x": 242, "y": 122+42* 6, "id": 439}, // Warspite
+            {"x": 242, "y": 122+42* 7, "id":  78}, // Kongou
+            {"x": 242, "y": 122+42* 8, "id": 171}, // Bismarck
+            {"x": 242, "y": 122+42* 9, "id": 441}, // Littorio
+            {"x": 242, "y": 122+42*10, "id": 442}, // Roma
 
-            {"x": 626, "y": 144, "id": 131},
-            {"x": 626, "y": 209, "id": 139},
-            {"x": 626, "y": 274, "id": 532},
-            {"x": 626, "y": 339, "id": 167},
-            {"x": 626, "y": 404, "id": 170},
-            {"x": 626, "y": 469, "id": 20},
-            {"x": 626, "y": 534, "id": 425},
-            {"x": 626, "y": 599, "id": 41},
-            {"x": 626, "y": 664, "id": 49}
+            {"x": 564, "y": 122+42* 0, "id": 511}, // Gangut
+            {"x": 564, "y": 122+42* 1, "id": 492}, // Richelieu
+            {"x": 564, "y": 122+42* 2, "id": 176}, // Prinz Eugen
+            {"x": 564, "y": 122+42* 3, "id": 448}, // Zara
+            {"x": 564, "y": 122+42* 4, "id": 449}, // Pola
+            {"x": 564, "y": 122+42* 5, "id": 174}, // Z1
+            {"x": 564, "y": 122+42* 6, "id": 175}, // Z3
+            {"x": 564, "y": 122+42* 7, "id": 443}, // Libeccio
+            {"x": 564, "y": 122+42* 8, "id": 519}, // Jervis
+            {"x": 564, "y": 122+42* 9, "id": 516}, // Tashkent
+            {"x": 564, "y": 122+42*10, "id": 35}   // Hibiki
         ];
 
+    // Operation ten go/kita
+    /*const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
+        disclaimerHeightOffset = 0,
+        shipPositions = [
+            {"x": 254, "y": 144, "id": 87},  // Hyuuga
+            {"x": 254, "y": 209, "id": 77},  // Ise
+            {"x": 254, "y": 274, "id": 183}, // Ooyodo
+            {"x": 254, "y": 339, "id": 49},  // Kasumi
+            {"x": 254, "y": 404, "id": 41},  // Hatsushimo
+            {"x": 254, "y": 469, "id": 425}, // Asashimo
+
+            {"x": 626, "y": 144, "id": 131}, // Yamato
+            {"x": 626, "y": 209, "id": 139}, // Yahagi
+            {"x": 626, "y": 274, "id": 532}, // Suzutsuki
+            {"x": 626, "y": 339, "id": 167}, // Isokaze
+            {"x": 626, "y": 404, "id": 170}, // Hamakaze
+            {"x": 626, "y": 469, "id": 20},  // Yukikaze
+            {"x": 626, "y": 534, "id": 425}, // Asashimo
+            {"x": 626, "y": 599, "id": 41},  // Hatsushimo
+            {"x": 626, "y": 664, "id": 49}   // Kasumi
+        ];*/
+    
     class ShowcaseEventList {
         constructor() {
             this.buildSettings = {};
@@ -52,6 +83,10 @@
             let txt = "-";
 
             if (ships.length > 0) {
+                txt = ships[0].level;
+                this.ctx.font = "800 32px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+                let lvlWidth = this.ctx.measureText(txt).width;
+
                 if (KC3Master.ship(ships[0].masterId).api_afterlv !== 0) {
                     this.ctx.shadowBlur = 0;
                     this.ctx.shadowOffsetX = 0;
@@ -68,12 +103,11 @@
                         });
                         suffix = suffix.trim();
                         this.ctx.font = "400 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText(suffix, shipPos.x + 70 - this.ctx.measureText(suffix).width, shipPos.y - 26);
+                        this.ctx.fillText(suffix, shipPos.x + lvlWidth / 2, shipPos.y - 18);
                     } else {
                         this.ctx.font = "800 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-                        this.ctx.fillText("*", shipPos.x + 70 - this.ctx.measureText("*").width, shipPos.y - 22);
+                        this.ctx.fillText("*", shipPos.x + lvlWidth / 2, shipPos.y - 18);
                     }
-
                 }
 
                 this.ctx.shadowOffsetX = 2;
@@ -89,10 +123,9 @@
                 } else {
                     this.ctx.fillStyle = "#000";
                 }
-                txt = ships[0].level;
             }
             this.ctx.font = "800 32px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
-            this.ctx.fillText(txt, shipPos.x, shipPos.y);
+            this.ctx.fillText(txt, shipPos.x - this.ctx.measureText(txt).width / 2, shipPos.y);
         }
 
         fillShipLvls() {
@@ -100,20 +133,24 @@
             this.canvas.height = this.baseImage.height;
             this.ctx.drawImage(this.baseImage, 0, 0, this.canvas.width, this.canvas.height);
 
-            this.ctx.fillStyle = "#DDD";
+            this.ctx.fillStyle = "#D33";
             let size = 16;
             this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
             this.ctx.shadowColor = "#222";
-            this.ctx.shadowOffsetX = 2;
-            this.ctx.shadowOffsetY = 2;
-            this.ctx.shadowBlur = 3;
-            const text = "DISCLAIMER: We do not have solid evidence that these speculated ships will have special routing next event.";
+            this.ctx.shadowOffsetX = 1;
+            this.ctx.shadowOffsetY = 1;
+            this.ctx.shadowBlur = 1;
+            const text = ["DISCLAIMER: We do not have solid evidence that these", "speculated ships will have special routing next event."];
             // size smaller than Chromium minimum font setting will be simply ignored
-            while(this.ctx.measureText(text).width > 720 && size > 6){
-                size--;
-                this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
-            }
-            this.ctx.fillText(text, (720 - this.ctx.measureText(text).width) / 2 , 15);
+
+            for(let line of text)
+                while(this.ctx.measureText(line).width > this.canvas.width && size > 6){
+                    size--;
+                    this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+                }
+            let yOffset = 0.25;
+            for(let line of text)
+                this.ctx.fillText(line, (this.canvas.width - this.ctx.measureText(line).width) / 2 , disclaimerHeightOffset + ++yOffset * size);
 
             KC3ShipManager.load();
             for (let i in shipPositions) {
