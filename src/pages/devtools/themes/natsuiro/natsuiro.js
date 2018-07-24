@@ -1949,9 +1949,16 @@
 							KC3Meta.term("LandBaseActionRetreat"),
 							KC3Meta.term("LandBaseActionRest")
 						][baseInfo.action]);
+						if (baseInfo.action === 2) {
+							// Show a tooltip for shotdown ratios given to enemy slots
+							const shotdownRatios = baseInfo.shotdownRatio().formattedSlots;
+							$(".base_action", baseBox).attr("title",
+								KC3Meta.term("LandBaseDefenseShotdown").format(shotdownRatios)
+							).lazyInitTooltip();
+						}
 						
 						const shipObj = new KC3Ship();
-						// simulate 1 land-base as a carrier, ensure it's not a dummy ship
+						// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
 						shipObj.rosterId = 1;
 						shipObj.masterId = 83;
 						shipObj.items = baseInfo.planes.map(function(planeInfo){

@@ -1063,7 +1063,13 @@ KC3改 Ship Object
 				supportPower += 55;
 			}
 		} else {
-			supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
+			// Explicit fire power bonus from equipment on specific ship taken into account:
+			// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2354#13
+			// so better to use current fp value from `api_karyoku` (including naked fp + all equipment fp),
+			// to avoid the case that fp bonus not accurately updated in time.
+			supportPower = 5 + this.fp[0] - 1;
+			// should be the same value with above if `equipmentTotalStats` works properly
+			//supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
 	};

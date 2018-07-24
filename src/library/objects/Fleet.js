@@ -827,6 +827,35 @@ Contains summary information about a fleet and its ships
 		}, 0);
 	};
 	
+	KC3Fleet.prototype.hasShipClass = function(expected, pos, isExcludeEscaped = false){
+		return this.ship().some((ship, index) => {
+			if(isExcludeEscaped && ship.didFlee) {
+				return false;
+			}
+			if(pos === undefined || pos === index) {
+				if(typeof expected === "number"
+					|| typeof expected === "string") {
+					return expected == ship.master().api_ctype;
+				} else if(Array.isArray(expected)) {
+					return expected.indexOf(ship.master().api_ctype) > -1;
+				}
+			}
+			return false;
+		});
+	};
+	
+	KC3Fleet.prototype.countShipClass = function(expected, isExclude = false, isExcludeEscaped = false){
+		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
+		return ships.reduce((count, ship) => {
+			if(Array.isArray(expected)) {
+				return count + (1 & (isExclude !==
+					(expected.indexOf(ship.master().api_ctype) > -1)));
+			}
+			return count + (1 & (isExclude !==
+				(expected == ship.master().api_ctype)));
+		}, 0);
+	};
+	
 	KC3Fleet.prototype.hasTaiha = function(){
 		return this.shipsUnescaped().some(ship => ship.isTaiha());
 	};
