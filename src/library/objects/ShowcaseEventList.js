@@ -151,9 +151,9 @@
                         size--;
                         this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
                     }
-                let yOffset = 0.25;
+                let yOffset = 1.25;
                 for(let line of text)
-                    this.ctx.fillText(line, (this.canvas.width - this.ctx.measureText(line).width) / 2 , disclaimerHeightOffset + ++yOffset * size);
+                    this.ctx.fillText(line, (this.canvas.width - this.ctx.measureText(line).width) / 2 , disclaimerHeightOffset + yOffset++ * size);
             }
 
             KC3ShipManager.load();
