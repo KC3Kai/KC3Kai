@@ -7,6 +7,7 @@
         disclaimerHeightOffset = -1,
         fontFamily = '"Helvetica Neue\", Helvetica, Arial, sans-serif',
         lvlFontSize = 36,
+        maxBoxWidth = 145,
         shipPositions = [
             {"x": 366, "y": 139+60.7* 0, "id": 491}, // Commandant Teste
             {"x": 366, "y": 139+60.7* 1, "id": 535}, // Luigi Torelli
@@ -89,13 +90,27 @@
             const ships = KC3ShipManager.find((s) => ids.indexOf(Number(s.masterId)) !== -1 && s.lock !== 0)
                 .sort((a, b) => b.level - a.level);
             this.ctx.fillStyle = "#000";
-            let txt = "-";
 
             if (ships.length > 0) {
-                txt = ships[0].level;
-                this.ctx.font = `800 ${lvlFontSize}px ${fontFamily}`;
-                const lvlWidth = this.ctx.measureText(txt).width;
+                let lvlWidth = 0, maxIndex = 0, firstWidth = 0;
+                for(let index = 0; index < ships.length; index++) {
+                    this.ctx.font = `800 ${index ? lvlFontSize / 2 : lvlFontSize}px ${fontFamily}`;
+                    let currentWidth = this.ctx.measureText(ships[index].level).width;
 
+                    if (index != 0) {
+                        this.ctx.font = `800 ${lvlFontSize / 2}px ${fontFamily}`;
+                        currentWidth += this.ctx.measureText(", ").width;
+                    } else {
+                        firstWidth = currentWidth;
+                    }
+
+                    if(lvlWidth + currentWidth > maxBoxWidth)
+                        break;
+                    lvlWidth += currentWidth;
+                    maxIndex = index + 1;
+                }
+
+                // Show kai/kai ni status for highest level ship, this is prob most important one, in other cases it could be messy
                 if (KC3Master.ship(ships[0].masterId).api_afterlv !== 0) {
                     this.ctx.shadowBlur = 0;
                     this.ctx.shadowOffsetX = 0;
@@ -112,29 +127,57 @@
                         });
                         suffix = suffix.trim();
                         this.ctx.font = `400 12px ${fontFamily}`;
-                        this.ctx.fillText(suffix, shipPos.x + lvlWidth / 2, shipPos.y - 18);
+                        this.ctx.fillText(suffix, shipPos.x - lvlWidth / 2 + firstWidth, shipPos.y - 18);
                     } else {
                         this.ctx.font = `800 18px ${fontFamily}`;
-                        this.ctx.fillText("*", shipPos.x + lvlWidth / 2, shipPos.y - 18);
+                        this.ctx.fillText("*", shipPos.x - lvlWidth / 2 + firstWidth, shipPos.y - 18);
                     }
                 }
 
-                this.ctx.shadowOffsetX = 2;
-                this.ctx.shadowOffsetY = 2;
-                this.ctx.shadowBlur = 2;
+                let posOffset = 0, index = 0;
+                while(index < ships.length && index < maxIndex) {
+                    let ship = ships[index];
+                    let txt = ship.level;
 
-                if (ships[0].level > 99) {
-                    this.ctx.fillStyle = "#a97417";
-                } else if (ships[0].level >= 80) {
-                    this.ctx.fillStyle = "#107e57";
-                } else if (ships[0].level >= 50) {
-                    this.ctx.fillStyle = "#2ea6bb";
-                } else {
-                    this.ctx.fillStyle = "#000";
+                    if (ship.level > 99) {
+                        this.ctx.fillStyle = "#a97417";
+                    } else if (ship.level >= 80) {
+                        this.ctx.fillStyle = "#107e57";
+                    } else if (ship.level >= 50) {
+                        this.ctx.fillStyle = "#2ea6bb";
+                    } else {
+                        this.ctx.fillStyle = "#000";
+                    }
+
+                    if(index == 0) {
+                        this.ctx.shadowOffsetX = 2;
+                        this.ctx.shadowOffsetY = 2;
+                        this.ctx.shadowBlur = 2;
+                    } else {
+                        this.ctx.shadowOffsetX = 1;
+                        this.ctx.shadowOffsetY = 1;
+                        this.ctx.shadowBlur = 1;
+                    }
+                    this.ctx.font = `800 ${index ? lvlFontSize / 2 : lvlFontSize}px ${fontFamily}`;
+
+                    this.ctx.fillText(ship.level, shipPos.x + posOffset - lvlWidth / 2, shipPos.y);
+                    posOffset += this.ctx.measureText(ship.level).width;
+
+                    index++;
+
+                    this.ctx.fillStyle = "#333";
+                    this.ctx.font = `800 ${lvlFontSize / 3}px ${fontFamily}`;
+                    if (index < ships.length && index < maxIndex) {
+                        this.ctx.fillText(", ", shipPos.x + posOffset - lvlWidth / 2, shipPos.y);
+                        posOffset += this.ctx.measureText(", ").width;
+                    } else if (maxIndex != ships.length) {
+                        this.ctx.fillText("...", shipPos.x + posOffset - lvlWidth / 2, shipPos.y);
+                    }
                 }
+            } else {
+                this.ctx.font = `800 ${lvlFontSize}px ${fontFamily}`;
+                this.ctx.fillText("-", shipPos.x - this.ctx.measureText("-").width / 2, shipPos.y);
             }
-            this.ctx.font = `800 ${lvlFontSize}px ${fontFamily}`;
-            this.ctx.fillText(txt, shipPos.x - this.ctx.measureText(txt).width / 2, shipPos.y);
         }
 
         fillShipLvls() {
