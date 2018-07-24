@@ -3,7 +3,9 @@
 
     // European ships
     const baseImgSrc = "/assets/img/ui/european_ships.png",
+        exportFileName = "European Ship List",
         disclaimerHeightOffset = -1,
+        fontFamily = '"Helvetica Neue\", Helvetica, Arial, sans-serif',
         lvlFontSize = 36,
         shipPositions = [
             {"x": 366, "y": 139+60.7* 0, "id": 491}, // Commandant Teste
@@ -32,8 +34,11 @@
         ];
 
     // Operation ten go/kita
-    /*const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
+    /*
+    const baseImgSrc = "/assets/img/ui/operation_kita_ten-go.png",
+        exportFileName = "Operation Kita Ten-Go Ship List",
         disclaimerHeightOffset = 0,
+        fontFamily = '"Helvetica Neue\", Helvetica, Arial, sans-serif',
         lvlFontSize = 32,
         shipPositions = [
             {"x": 254, "y": 144, "id": 87},  // Hyuuga
@@ -52,8 +57,9 @@
             {"x": 626, "y": 534, "id": 425}, // Asashimo
             {"x": 626, "y": 599, "id": 41},  // Hatsushimo
             {"x": 626, "y": 664, "id": 49}   // Kasumi
-        ];*/
-    
+        ];
+    */
+
     class ShowcaseEventList {
         constructor() {
             this.buildSettings = {};
@@ -69,25 +75,26 @@
         }
 
         addShipToImage(shipPos) {
-            let ids = [];
-            let allShips = KC3Master.all_ships();
-            for (let i in allShips) {
+            const ids = [];
+            const allShips = KC3Master.all_ships();
+            for (const i in allShips) {
                 if (!allShips.hasOwnProperty(i))
                     continue;
-                let tempShip = KC3Master.ship(i);
+                const tempShip = KC3Master.ship(i);
                 if (tempShip.kc3_bship === shipPos.id) {
                     ids.push(Number(i));
                 }
             }
 
-            let ships = KC3ShipManager.find((s) => ids.indexOf(Number(s.masterId)) !== -1 && s.lock !== 0).sort((a, b) => b.level - a.level);
+            const ships = KC3ShipManager.find((s) => ids.indexOf(Number(s.masterId)) !== -1 && s.lock !== 0)
+                .sort((a, b) => b.level - a.level);
             this.ctx.fillStyle = "#000";
             let txt = "-";
 
             if (ships.length > 0) {
                 txt = ships[0].level;
-                this.ctx.font = `800 ${lvlFontSize}px \"Helvetica Neue\", Helvetica, Arial, sans-serif`;
-                let lvlWidth = this.ctx.measureText(txt).width;
+                this.ctx.font = `800 ${lvlFontSize}px ${fontFamily}`;
+                const lvlWidth = this.ctx.measureText(txt).width;
 
                 if (KC3Master.ship(ships[0].masterId).api_afterlv !== 0) {
                     this.ctx.shadowBlur = 0;
@@ -104,10 +111,10 @@
                             suffix = suffix.replace(s.trim(), KC3Meta._shipAffix.suffixes[s.trim()]);
                         });
                         suffix = suffix.trim();
-                        this.ctx.font = "400 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+                        this.ctx.font = `400 12px ${fontFamily}`;
                         this.ctx.fillText(suffix, shipPos.x + lvlWidth / 2, shipPos.y - 18);
                     } else {
-                        this.ctx.font = "800 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
+                        this.ctx.font = `800 18px ${fontFamily}`;
                         this.ctx.fillText("*", shipPos.x + lvlWidth / 2, shipPos.y - 18);
                     }
                 }
@@ -126,7 +133,7 @@
                     this.ctx.fillStyle = "#000";
                 }
             }
-            this.ctx.font = `800 ${lvlFontSize}px \"Helvetica Neue\", Helvetica, Arial, sans-serif`;
+            this.ctx.font = `800 ${lvlFontSize}px ${fontFamily}`;
             this.ctx.fillText(txt, shipPos.x - this.ctx.measureText(txt).width / 2, shipPos.y);
         }
 
@@ -137,34 +144,40 @@
 
             this.ctx.fillStyle = "#D33";
             let size = 16;
-            this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+            this.ctx.font = `800 ${size}px ${fontFamily}`;
             this.ctx.shadowColor = "#222";
             this.ctx.shadowOffsetX = 1;
             this.ctx.shadowOffsetY = 1;
             this.ctx.shadowBlur = 1;
-            if(disclaimerHeightOffset >= 0) {
-                const text = ["DISCLAIMER: We do not have solid evidence that these", "speculated ships will have special routing next event."];
-                // size smaller than Chromium minimum font setting will be simply ignored
-
-                for(let line of text)
-                    while(this.ctx.measureText(line).width > this.canvas.width && size > 6){
+            // Add disclaimer text line if necessary
+            if (disclaimerHeightOffset >= 0) {
+                const text = ["DISCLAIMER: We do not have solid evidence that these",
+                    "speculated ships will have special routing next event."];
+                for (const line of text) {
+                    // size smaller than Chromium minimum font setting will be simply ignored
+                    while (this.ctx.measureText(line).width > this.canvas.width && size > 6) {
                         size--;
-                        this.ctx.font = `800 ${size}px "Helvetica Neue", Helvetica, Arial, sans-serif`;
+                        this.ctx.font = `800 ${size}px ${fontFamily}`;
                     }
+                }
                 let yOffset = 1.25;
-                for(let line of text)
-                    this.ctx.fillText(line, (this.canvas.width - this.ctx.measureText(line).width) / 2 , disclaimerHeightOffset + yOffset++ * size);
+                for (const line of text) {
+                    this.ctx.fillText(line,
+                        (this.canvas.width - this.ctx.measureText(line).width) / 2,
+                        disclaimerHeightOffset + yOffset * size);
+                    yOffset++;
+                }
             }
 
             KC3ShipManager.load();
-            for (let i in shipPositions) {
+            for (const i in shipPositions) {
                 if (!shipPositions.hasOwnProperty(i))
                     continue;
                 this.addShipToImage(shipPositions[i]);
             }
 
             new KC3ImageExport(this.canvas, {
-                filename: "Operation Kita Ten-Go shiplist" + dateFormat(" yyyy-mm-dd"),
+                filename: exportFileName + dateFormat(" yyyy-mm-dd"),
                 method: this.buildSettings.output,
             }).export((error, result) => {
                 this.complete(result || {});
