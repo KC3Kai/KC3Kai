@@ -45,22 +45,22 @@
             lvlFontSize: 32,
             maxBoxWidth: 105,
             shipPositions: [
-                {"x": 254, "y": 144, "id": 87},  // Hyuuga
-                {"x": 254, "y": 209, "id": 77},  // Ise
-                {"x": 254, "y": 274, "id": 183}, // Ooyodo
-                {"x": 254, "y": 339, "id": 49},  // Kasumi
-                {"x": 254, "y": 404, "id": 41},  // Hatsushimo
-                {"x": 254, "y": 469, "id": 425}, // Asashimo
+                {"x": 275, "y": 144, "id": 87},  // Hyuuga
+                {"x": 275, "y": 209, "id": 77},  // Ise
+                {"x": 275, "y": 274, "id": 183}, // Ooyodo
+                {"x": 275, "y": 339, "id": 49},  // Kasumi
+                {"x": 275, "y": 404, "id": 41},  // Hatsushimo
+                {"x": 275, "y": 469, "id": 425}, // Asashimo
 
-                {"x": 626, "y": 144, "id": 131}, // Yamato
-                {"x": 626, "y": 209, "id": 139}, // Yahagi
-                {"x": 626, "y": 274, "id": 532}, // Suzutsuki
-                {"x": 626, "y": 339, "id": 167}, // Isokaze
-                {"x": 626, "y": 404, "id": 170}, // Hamakaze
-                {"x": 626, "y": 469, "id": 20},  // Yukikaze
-                {"x": 626, "y": 534, "id": 425}, // Asashimo
-                {"x": 626, "y": 599, "id": 41},  // Hatsushimo
-                {"x": 626, "y": 664, "id": 49}   // Kasumi
+                {"x": 646, "y": 144, "id": 131}, // Yamato
+                {"x": 646, "y": 209, "id": 139}, // Yahagi
+                {"x": 646, "y": 274, "id": 532}, // Suzutsuki
+                {"x": 646, "y": 339, "id": 167}, // Isokaze
+                {"x": 646, "y": 404, "id": 170}, // Hamakaze
+                {"x": 646, "y": 469, "id": 20},  // Yukikaze
+                {"x": 646, "y": 534, "id": 425}, // Asashimo
+                {"x": 646, "y": 599, "id": 41},  // Hatsushimo
+                {"x": 646, "y": 664, "id": 49}   // Kasumi
             ],
         },
     };
@@ -154,6 +154,7 @@
                         this.ctx.fillStyle = "#000";
                     }
 
+                    this.ctx.shadowColor = "#222";
                     if (index === 0) {
                         this.ctx.shadowOffsetX = 2;
                         this.ctx.shadowOffsetY = 2;
