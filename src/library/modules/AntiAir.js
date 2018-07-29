@@ -834,11 +834,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tatsuta K2
+	// Tenryuu K2 / Tatsuta K2
 	declareAACI(
 		24, 3, 1.25,
 		[tatsutaK2Icon, haMountIcon, aaGunNotCdIcon],
-		predAllOf(isTatsutaK2),
+		predAnyOf(isTenryuuK2, isTatsutaK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
