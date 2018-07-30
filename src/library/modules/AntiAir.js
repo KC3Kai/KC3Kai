@@ -846,6 +846,18 @@ AntiAir: anti-air related calculations
 		)
 	);
 
+	// Isokaze B Kai / Hamakaze B Kai
+	declareAACI(
+		29, 5, 1.55,
+		[isokazeBkIcon, haMountIcon, radarIcon],
+		predAnyOf(isIsokazeBk, isHamakazeBk),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
+		)
+	);
+
 	// Tenryuu K2
 	declareAACI(
 		30, 3, 1.3,
@@ -866,17 +878,19 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Isokaze B Kai / Hamakaze B Kai
+	// Jervis Kai? any British ship?
+	/*
 	declareAACI(
-		29, 5, 1.55,
-		[isokazeBkIcon, haMountIcon, radarIcon],
-		predAnyOf(isIsokazeBk, isHamakazeBk),
+		32, 1, 1.1,
+		[jervisKaiIcon, cdmgIcon, cdmgIcon],
+		predAllOf(isJervisKai),
 		withEquipmentMsts(
 			predAllOf(
-				hasSome( isHighAngleMount ),
-				hasSome( isAARadar ))
+				hasSome( isUpRocketLauncher ),
+				hasSome( isCDMG ))
 		)
 	);
+	*/
 
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers

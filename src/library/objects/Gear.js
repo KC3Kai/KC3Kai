@@ -287,7 +287,49 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 				},
-		},
+			},
+			// 16inch Mk.I Triple Gun Mount
+			"298": {
+				count: 0,
+				byClass: {
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					// Kongou Class
+					"6": {
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
+				},
+			},
+			// 16inch Mk.I Triple Gun Mount + AFCT Kai
+			"299": {
+				byClass: {
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					// Kongou Class
+					"6": {
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
+				},
+			},
+			// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284
+			"300": {
+				count: 0,
+				byClass: {
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 2, "souk": 1, "houk": -2 },
+					},
+					// Kongou Class
+					// https://twitter.com/shiro_sh39/status/1023840030886748160
+					"6": {
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
+				},
+			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
@@ -764,6 +806,20 @@ KC3改 Equipment Object
 						multiple: { "houk": 2 },
 					},
 				],
+			},
+			// 20-tube 7inch UP Rocket Launchers
+			"301": {
+				count: 0,
+				byClass: {
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "souk": 1, "tyku": 2, "houk": 1 },
+					},
+					// Ark Royal Class
+					"78": "67",
+					// J(ervis) Class
+					"82": "67",
+				},
 			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
