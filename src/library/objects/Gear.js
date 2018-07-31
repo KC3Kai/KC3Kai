@@ -304,6 +304,7 @@ KC3改 Equipment Object
 			},
 			// 16inch Mk.I Triple Gun Mount + AFCT Kai
 			"299": {
+				count: 0,
 				byClass: {
 					// Queen Elizabeth Class
 					"67": {
@@ -817,7 +818,7 @@ KC3改 Equipment Object
 					},
 					// Ark Royal Class
 					"78": "67",
-					// J(ervis) Class
+					// Jervis Class
 					"82": "67",
 				},
 			},
