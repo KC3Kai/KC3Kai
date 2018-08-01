@@ -102,7 +102,7 @@
                     this.ctx.font = `800 ${index ? lvlFontSize / 2 : lvlFontSize}px ${fontFamily}`;
                     let currentWidth = this.ctx.measureText(ships[index].level).width;
 
-                    if (index != 0) {
+                    if (index !== 0) {
                         this.ctx.font = `800 ${lvlFontSize / 2}px ${fontFamily}`;
                         currentWidth += this.ctx.measureText(", ").width;
                     } else {

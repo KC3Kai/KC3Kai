@@ -176,7 +176,7 @@ KC3改 Equipment Object
 					multiple: { "houg": 2 },
 				},
 			},
-			// Zuiun Model 12 (634 Air Group / Skilled)
+			// Zuiun (634 Air Group / Skilled)
 			"237": {
 				count: 0,
 				byClass: {
