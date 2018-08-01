@@ -799,7 +799,18 @@
     ShowcaseExporter.prototype._addEquipGroupsToCanvas = function (group, canvas, ctx) {
         function compareEquip(a, b) {
             var equipA = KC3Master.slotitem(a.slice(1)), equipB = KC3Master.slotitem(b.slice(1));
-            return equipB[sortingParam] - equipA[sortingParam];
+            if (SPSortPart === "overall") {
+                var equipASum = 0, equipBSum = 0;
+                for (var i in equipParams) {
+                    if (typeof equipA[equipParams[i]] !== "undefined")
+                        equipASum += equipA[equipParams[i]];
+                    if (typeof equipB[equipParams[i]] !== "undefined")
+                        equipBSum += equipB[equipParams[i]];
+                }
+                return equipBSum - equipASum;
+            } else {
+                return equipB[sortingParam] - equipA[sortingParam];
+            }
         }
 
         var typeCount = Object.keys(group.types).length;
@@ -830,8 +841,10 @@
                     }
                 }
 
-                var sortingParam = this._paramToApi[KC3StrategyTabs.gears.definition._defaultCompareMethod[typeId]];
-                if (!!sortingParam) {
+                var SPSortPart = KC3StrategyTabs.gears.definition._defaultCompareMethod[typeId];
+                var equipParams = this._paramToApi;
+                var sortingParam = equipParams[SPSortPart];
+                if (!!sortingParam || SPSortPart === "overall") {
                     masterIds.sort(compareEquip);
                 }
 
