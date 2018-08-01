@@ -8,7 +8,7 @@ Instantiate-able class to represent one player
 	
 	window.KC3Player = function(){
 		if(!this.load()){
-			this.id =  0;
+			this.id = 0;
 			this.name = "Unknown";
 			this.nameId = "-1";
 			this.desc = "";
@@ -33,7 +33,7 @@ Instantiate-able class to represent one player
 	};
 	
 	KC3Player.prototype.update = function( data ){
-		this.id =  data.mid;
+		this.id = data.mid;
 		this.name = data.name;
 		this.nameId = data.nameId;
 		KC3Database.index = this.id;

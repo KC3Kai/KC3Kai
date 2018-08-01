@@ -752,6 +752,42 @@
 				});
 			});
 			
+			// Fix player member ID in all tables after 2018-08-01 if player transferred to another server
+			$(".tab_profile .fix_playerid").on("click", function(event){
+				const newId = PlayerManager.hq.id;
+				if(!confirm("CAUTION: All your records of history database will be updated.\n" +
+					"Do you confirm you have been transferred to a new server,\n" +
+					"and is this your new player ID: {0}?\n".format(newId) +
+					"If not, choose Cancel, restart your game then reload this page first."))
+					return false;
+				alert("Will begin to update your database,\n" +
+					"might take a long time if your data is huge.\n" +
+					"Do not leave this page until new dialog box shown.");
+				let errorOccurred = false;
+				const updateTable = (table) => {
+					return KC3Database.con[table].toCollection()
+						.modify(r => { r.hq = newId; })
+						.then(c => {
+							console.info(`Player ID for [${table}] updated, affected: ${c}`);/*RemoveLogging:skip*/
+						}).catch(e => {
+							errorOccurred = true;
+							console.error(`Player ID updating for [${table}]`, e);
+						});
+				};
+				const promiseArray = [];
+				KC3Database.con.tables.forEach(table => {
+					if(Object.keys(table.schema.instanceTemplate).includes("hq")) {
+						promiseArray.push(updateTable(table.name));
+					}
+				});
+				Promise.all(promiseArray).then(results => {
+					if(errorOccurred)
+						alert("Oops! There is something wrong. You might report the error logs.");
+					else
+						alert("All done!");
+				});
+			});
+			
 		},
 		
 		refreshHealthMetric: function(){
