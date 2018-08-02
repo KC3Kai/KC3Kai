@@ -157,6 +157,7 @@ AntiAir: anti-air related calculations
 	}
 
 	function is10cmTwinHighAngleMountKaiAMG(mst) {
+		// 10cm Twin High-angle Gun Mount Kai + Additional Machine
 		return mst.api_id === 275;
 	}
 
@@ -174,7 +175,19 @@ AntiAir: anti-air related calculations
 	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
 
 	function is12cm30tubeRocketLauncherKai2(mst) {
+		// 12cm 30-tube Rocket Launcher Kai Ni
 		return mst.api_id === 274;
+	}
+
+	function isBritishRocketLauncher(mst) {
+		// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284 (UP Rocket Launchers embedded)
+		// 20-tube 7inch UP Rocket Launchers
+		return [300, 301].indexOf(mst.api_id) !== -1;
+	}
+
+	function isBritishPomPomGun(mst) {
+		// QF 2-pounder Octuple Pom-pom Gun Mount
+		return mst.api_id === 191;
 	}
 
 	// for equipments the coefficient is different for
@@ -449,6 +462,15 @@ AntiAir: anti-air related calculations
 		].indexOf( mst.api_id ) !== -1;
 	}
 
+	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
+	function isBritishShips( mst ) {
+		return [67, // Queen Elizabeth Class
+				78, // Ark Royal Class
+				82, // Jervis Class
+				6, // Kongou Class
+			].indexOf( mst.api_ctype ) !== -1;
+	}
+
 	function masterIdEq( n ) {
 		return function(mst) {
 			return mst.api_id === n;
@@ -475,6 +497,7 @@ AntiAir: anti-air related calculations
 		tatsutaK2Icon = 478,
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
+		warspiteIcon = 439,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -834,15 +857,27 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tatsuta K2
+	// Tenryuu K2 / Tatsuta K2
 	declareAACI(
 		24, 3, 1.25,
 		[tatsutaK2Icon, haMountIcon, aaGunNotCdIcon],
-		predAllOf(isTatsutaK2),
+		predAnyOf(isTenryuuK2, isTatsutaK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
 				hasSome( isAAGunNotCD ))
+		)
+	);
+
+	// Isokaze B Kai / Hamakaze B Kai
+	declareAACI(
+		29, 5, 1.55,
+		[isokazeBkIcon, haMountIcon, radarIcon],
+		predAnyOf(isIsokazeBk, isHamakazeBk),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
 		)
 	);
 
@@ -866,15 +901,16 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Isokaze B Kai / Hamakaze B Kai
+	// British-relevant ships
+	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class
 	declareAACI(
-		29, 5, 1.55,
-		[isokazeBkIcon, haMountIcon, radarIcon],
-		predAnyOf(isIsokazeBk, isHamakazeBk),
+		32, 3, 1.2,
+		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
+		predAnyOf(isBritishShips),
 		withEquipmentMsts(
 			predAllOf(
-				hasSome( isHighAngleMount ),
-				hasSome( isAARadar ))
+				hasSome( isBritishRocketLauncher ),
+				hasSome( isBritishPomPomGun ))
 		)
 	);
 

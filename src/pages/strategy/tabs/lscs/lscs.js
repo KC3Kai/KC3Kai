@@ -51,10 +51,10 @@
 			const updateFiltersValues = () => {
 				$(".filters .secretary_ship").val(this.filters.flagship || 0);
 				$(".filters .build_result").val(this.filters.result || 0);
-				$(".filters .build_rsc1").val(this.filters.fuel || "");
-				$(".filters .build_rsc2").val(this.filters.ammo || "");
-				$(".filters .build_rsc3").val(this.filters.steel || "");
-				$(".filters .build_rsc4").val(this.filters.bauxite || "");
+				$(".filters .build_rsc1").val(`${this.filters.fuelOp || ""}${this.filters.fuel || ""}`);
+				$(".filters .build_rsc2").val(`${this.filters.ammoOp || ""}${this.filters.ammo || ""}`);
+				$(".filters .build_rsc3").val(`${this.filters.steelOp || ""}${this.filters.steel || ""}`);
+				$(".filters .build_rsc4").val(`${this.filters.bauxiteOp || ""}${this.filters.bauxite || ""}`);
 				$(".filters .build_devmat").val(this.filters.devmat || 0);
 			};
 			updateFiltersValues();

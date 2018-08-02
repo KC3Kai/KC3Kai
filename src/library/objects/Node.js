@@ -1243,7 +1243,8 @@ Used by SortieManager
 		logs.css("font-size", "11px").css("max-width", "390px").appendTo(tooltip);
 		logs.append(tipLogs);
 		
-		const battleData = thisNode.battleDay;
+		// night battle only nodes (at 5-3) have allowed support fleet since 2017-11-17
+		const battleData = thisNode.battleDay || thisNode.battleNight;
 		if(showEnemyDamage && battleData && battleData.api_e_nowhps){
 			// Battle data without `api_e_nowhps` is old, not supported by current prediction module
 			const { fleets } = KC3BattlePrediction.analyzeBattlePartially(
