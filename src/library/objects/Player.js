@@ -144,7 +144,7 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("ships");
 		localStorage.removeItem("gears");
 		// History of map clear and event boss hp info will be lost, unrecoverable
-		localStorage.removeItem("maps");
+		//localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
 		localStorage.removeItem("quests");
 		localStorage.removeItem("lock_plan");

@@ -952,7 +952,7 @@ Used by SortieManager
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */
-						if (typeof resultData.api_landing_hp !== "undefined") {
+						if(typeof resultData.api_landing_hp !== "undefined") {
 							var TPdata = resultData.api_landing_hp;
 							this.gaugeDamage = Math.min(TPdata.api_now_hp, TPdata.api_sub_value);
 							maps[ckey].curhp = TPdata.api_now_hp - this.gaugeDamage;
@@ -969,6 +969,19 @@ Used by SortieManager
 				}
 				// obtaining clear once
 				maps[ckey].clear |= resultData.api_first_clear;
+				
+				// add a flag to this sortie record
+				if(resultData.api_first_clear && KC3SortieManager.isOnSavedSortie()) {
+					KC3Database.con.sortie.get(KC3SortieManager.getSortieId(), (sortie) => {
+						const eventmap = (sortie || {}).eventmap;
+						if(eventmap) {
+							eventmap.api_first_clear = resultData.api_first_clear;
+							KC3Database.con.sortie.put(sortie).then(() => {
+								console.info("Congratulations! This is your first time clear this map", eventmap);
+							});
+						}
+					});
+				}
 				
 				if(stat) {
 					stat.onBoss.hpdat[srid] = [maps[ckey].curhp,maps[ckey].maxhp];
