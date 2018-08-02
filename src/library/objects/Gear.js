@@ -296,8 +296,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
@@ -310,8 +311,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
@@ -324,9 +326,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
-					// https://twitter.com/shiro_sh39/status/1023840030886748160
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},

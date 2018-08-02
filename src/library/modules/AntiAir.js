@@ -464,11 +464,13 @@ AntiAir: anti-air related calculations
 
 	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
 	function isBritishShips( mst ) {
-		return [67, // Queen Elizabeth Class
+		return [
+				67, // Queen Elizabeth Class
 				78, // Ark Royal Class
 				82, // Jervis Class
-				6, // Kongou Class
-			].indexOf( mst.api_ctype ) !== -1;
+			].indexOf( mst.api_ctype ) !== -1 ||
+			// Kongou Class Kai Ni
+			[149, 150, 151, 152].indexOf( mst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {
@@ -902,7 +904,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// British-relevant ships
-	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class
+	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class K2
 	declareAACI(
 		32, 3, 1.2,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
