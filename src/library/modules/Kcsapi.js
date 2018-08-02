@@ -1966,6 +1966,12 @@ Previously known as "Reactor"
 						case 3: // 10cm Twin High-angle Gun Mount
 							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
 							break;
+						case 19: // Type 96 Fighter
+							KC3QuestManager.get(678).increment(0); // F70 quarterly index 0
+							break;
+						case 20: // Type 0 Fighter Model 21
+							KC3QuestManager.get(678).increment(1); // F70 quarterly index 1
+							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
 							break;

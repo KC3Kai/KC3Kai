@@ -333,7 +333,7 @@
 				this.aaci.triggeredAACI = -1;
 			}
 
-			if(aaciCount == 0 && this.aaci.triggeredAACI <= 0) {
+			if(aaciCount === 0 && this.aaci.triggeredAACI <= 0) {
 				// Keep logging when none expected but one triggered
 				return;
 			}

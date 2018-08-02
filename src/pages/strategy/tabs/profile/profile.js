@@ -752,6 +752,92 @@
 				});
 			});
 			
+			const isEventMapInfoMissing = () => {
+				if(!localStorage.maps) return true;
+				return ! Object.keys(localStorage.getObject("maps"))
+					.map(v => Number(v.substr(1, v.length > 3 ? 2 : 1))).some(v => v >= 10);
+			};
+			
+			// Craft localStorage.maps for event maps if player loses his data for some reasons
+			$(".tab_profile .fix_mapinfo").on("click", function(event){
+				if(!isEventMapInfoMissing() && !confirm(
+					"The data of your event maps seem be existing already,\n" +
+					"Continue to complete your missing data?"))
+					return;
+				const maps = JSON.parse(localStorage.maps || "{}");
+				const fixed = [], cleared = {};
+				KC3Database.con.sortie.where("world").above(9).each(r => {
+					const mapId = [r.world, r.mapnum].join(''), key = 'm' + mapId;
+					const event = r.eventmap || {};
+					if(maps[key] === undefined) {
+						maps[key] = {
+							id: Number(mapId),
+							difficulty: r.diff,
+							// assume map cleared, and have these pseudo data:
+							clear: 1,
+							kind: "gauge-hp",
+							curhp: 0,
+							maxhp: event.api_max_maphp || 9999,
+							// `stat` might be able to rebuild from all battle records of that map?
+						};
+						fixed.push(key);
+					}
+					if(r.eventmap) {
+						// can confirm clear flag from latest history records, but can not sure 'not cleared' easily,
+						// maybe walk through all battle data to determine if map is finally cleared and the boss remained hp?
+						cleared[key] |= !!(event.api_cleared || event.api_first_clear);
+						if(event.api_max_maphp) maps[key].maxhp = event.api_max_maphp;
+					}
+				}).then(() => {
+					localStorage.setObject("maps", maps);
+					console.info("Rebuilt event map info", fixed, cleared, maps);/*RemoveLogging:skip*/
+					alert(`Done! Maps added: ${fixed.join(', ') || 'none'}.` + 
+						"\nNOTE: they are assumed as cleared since lack of information.");
+				}).catch(err => {
+					console.error("Rebuilding event map info", err);
+					alert("Oops! There is something wrong. You might report the error logs.");
+				});
+			});
+			
+			// Fix player member ID in all tables after 2018-08-01 if player transferred to another server
+			$(".tab_profile .fix_playerid").on("click", function(event){
+				const newId = PlayerManager.hq.id;
+				if(!confirm("CAUTION: All your records of history database will be updated.\n" +
+					"Do you confirm you have been transferred to a new server,\n" +
+					"and is this your new player ID: {0}?\n".format(newId) +
+					"If not, choose Cancel, restart your game then reload this page first."))
+					return false;
+				alert("Will begin to update your database,\n" +
+					"might take a long time if your data amount is mass.\n" +
+					"Do not leave this page until new dialog box shown.");
+				let errorOccurred = false;
+				const updateTable = (table) => {
+					return KC3Database.con[table].toCollection()
+						.modify(r => { r.hq = newId; })
+						.then(c => {
+							console.info(`Player ID for [${table}] updated, affected: ${c}`);/*RemoveLogging:skip*/
+						}).catch(e => {
+							errorOccurred = true;
+							console.error(`Player ID updating for [${table}]`, e);
+						});
+				};
+				const promiseArray = [];
+				KC3Database.con.tables.forEach(table => {
+					if(Object.keys(table.schema.instanceTemplate).includes("hq")) {
+						promiseArray.push(updateTable(table.name));
+					}
+				});
+				Promise.all(promiseArray).then(results => {
+					if(errorOccurred) {
+						alert("Oops! There is something wrong. You might report the error logs.");
+					} else {
+						alert("All done!" + (!isEventMapInfoMissing() ? "" :
+							"\nIt seems that your event map information in Profile have lost too." +
+							"\nTo fix events history map buttons, try the rebuild link above."));
+					}
+				});
+			});
+			
 		},
 		
 		refreshHealthMetric: function(){
