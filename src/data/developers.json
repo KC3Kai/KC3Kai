@@ -132,6 +132,24 @@
 				}
 			},
 			{
+				"name": "reinforce",
+				"avatar": "https://avatars2.githubusercontent.com/u/1038834?v=3&s=40",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh" : "https://github.com/reinforce"
+				}
+			},
+			{
+				"name": "Dewy",
+				"avatar" : "https://avatars1.githubusercontent.com/u/26541502?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/sorewachigauyo"
+				}
+			},
+			{
 				"name": "bamboo3250",
 				"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
 				"desc": ["AboutDeveloper", "Tiếng Việt"],
@@ -578,24 +596,6 @@
 				}
 			},
 			{
-				"name": "reinforce",
-				"avatar": "https://avatars2.githubusercontent.com/u/1038834?v=3&s=40",
-				"desc": "AboutDeveloper",
-				"active": 1,
-				"links": {
-					"gh" : "https://github.com/reinforce"
-				}
-			},
-			{
-				"name": "Dewy",
-				"avatar" : "https://avatars1.githubusercontent.com/u/26541502?s=460&v=4",
-				"desc" : "AboutDeveloper",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/sorewachigauyo"
-				}
-			},
-			{
 				"name": "kyoushuu",
 				"avatar": "https://avatars2.githubusercontent.com/u/2142097?v=3&s=40",
 				"desc": "AboutDeveloper",
@@ -714,6 +714,15 @@
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/Oradimi"
+				}
+			},
+			{
+				"name": "Trần Quốc Hưng",
+				"avatar" : "https://avatars3.githubusercontent.com/u/23023212?s=460&v=4",
+				"desc" : "Tiếng Việt",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/mw3tv123"
 				}
 			}
 		],
