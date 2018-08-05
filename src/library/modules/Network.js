@@ -18,6 +18,7 @@ Listens to network history and triggers callback if game events happen
 			ModalBox: [],
 			GameUpdate: [],
 			DebuffNotify: [],
+			PlayerChanged: [],
 			HomeScreen: [],
 			HQ: [],
 			Consumables: [],
@@ -121,6 +122,13 @@ Listens to network history and triggers callback if game events happen
 		listen :function(){
 			// Call Chrome API to start listening
 			chrome.devtools.network.onRequestFinished.addListener(this.received);
+		},
+
+		/* STOP
+		Stop listening and remove callback
+		------------------------------------------*/
+		stop :function(){
+			chrome.devtools.network.onRequestFinished.removeListener(this.received);
 		},
 
 		/* INIT CONFIGS

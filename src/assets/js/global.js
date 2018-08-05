@@ -232,6 +232,40 @@ Object.safePropertyPath = function(isGetProp, root, props) {
 	return isGetProp ? root : true;
 };
 
+/*******************************\
+|*** Function                   |
+\*******************************/
+/**
+ * A simple Generator function executor, which makes chaining Promises synchronously easier.
+ * Notes:
+ *   * Must try...catch unhandled exception within your Generator function, otherwise will be quiet.
+ *   * Invoking this function is non-blocking, will return at once.
+ * To fully control Generator flow, use library like `co()`(https://github.com/tj/co) instead.
+ * To learn about Generator function:
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
+ */
+Function.execPromiseInGenerator = function (gfn) {
+	if(!gfn || !gfn.constructor || gfn.constructor.name !== "GeneratorFunction")
+		throw new TypeError("Argument must be a Generator function");
+	var iterator = gfn();
+	var resolve = function(r) { return loop(iterator.next(r)); };
+	var reject = function(e) { return loop(iterator.throw(e)); };
+	var loop = function(result) {
+		if(!result.done) {
+			var p = result.value;
+			// assume yielded value is always Promise, might add thunk function either?
+			if(p && typeof p.then === "function") {
+				p.then(resolve, reject);
+			} else if(Array.isArray(p)) {
+				Promise.all(p).then(resolve, reject);
+			} else {
+				iterator.throw(new TypeError("Only allow to yield a Promise or Promise array"));
+			}
+		}
+		return result.done;
+	};
+	loop(iterator.next());
+};
 
 /* PRIMITIVE */
 /*******************************\

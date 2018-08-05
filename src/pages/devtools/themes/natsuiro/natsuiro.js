@@ -1026,6 +1026,20 @@
 			$("#catBomb").fadeIn(300);
 		},
 
+		PlayerChanged: function(data){
+			$("#catBomb").hide();
+			
+			const player = PlayerManager.hq;
+			const newMemberId = data.api_member_id;
+			// to confirm new player account logged in, set this and restart game and panel:
+			player.confirmedNewId = newMemberId;
+			// to transfer player with new member id, set this and updating database needed:
+			player.id = newMemberId;
+			player.save();
+			
+			$("#catBomb").fadeIn(300);
+		},
+
 		// General green modal message box, reusing #gameUpdate div elements
 		ModalBox: function(data){
 			$("#gameUpdate").hide();

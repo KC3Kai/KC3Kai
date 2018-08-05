@@ -141,13 +141,7 @@ Instantiate-able class to represent one player
 		// KC3 user settings, Strategy Room options untouched, may cause minor conflict.
 		localStorage.removeItem("player");
 		localStorage.removeItem("fleets");
-		localStorage.removeItem("ships");
-		localStorage.removeItem("gears");
-		// History of map clear and event boss hp info will be lost, unrecoverable
-		//localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
-		localStorage.removeItem("quests");
-		localStorage.removeItem("lock_plan");
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
 		localStorage.removeItem("lastExperience");
@@ -159,10 +153,17 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("longestIdleTime");
 		localStorage.removeItem("pictureBook");
 		localStorage.removeItem("playerNewsFeed");
-		
-		KC3ShipManager.clear();
-		KC3GearManager.clear();
-		KC3QuestManager.clear();
+		// History of map clear and event boss hp info will be lost,
+		// still keep them since they are unrecoverable.
+		//localStorage.removeItem("maps");
+		//localStorage.removeItem("quests");
+		// KCSAPI of totally refreshing ships and gears already done,
+		// clearing them here will cause temporarily missing of cached data.
+		//localStorage.removeItem("ships");
+		//localStorage.removeItem("gears");
+		//KC3ShipManager.clear();
+		//KC3GearManager.clear();
+		//KC3QuestManager.clear();
 		KC3SortieManager.endSortie();
 	};
 	
@@ -173,26 +174,27 @@ Instantiate-able class to represent one player
 	KC3Player.prototype.load = function(){
 		if( typeof localStorage.player != "undefined" ){
 			var playerInfo = JSON.parse(localStorage.player);
-			this.id =  playerInfo.id;
-			this.name = playerInfo.name;
-			this.desc = playerInfo.desc;
-			this.rank = playerInfo.rank;
-			this.level = playerInfo.level;
-			this.exp = playerInfo.exp;
+			this.id     = playerInfo.id;
+			this.name   = playerInfo.name;
+			this.desc   = playerInfo.desc;
+			this.rank   = playerInfo.rank;
+			this.level  = playerInfo.level;
+			this.exp    = playerInfo.exp;
 			this.server = playerInfo.server;
-			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
-			this.rankPtLastTimestamp = (playerInfo.rankPtLastTimestamp || 0);
-			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);
-			this.rankPtLastCheck = (playerInfo.rankPtLastCheck || 0);
+			this.rankPtLastCount = playerInfo.rankPtLastCount || 0;
+			this.rankPtLastTimestamp = playerInfo.rankPtLastTimestamp || 0;
+			this.rankPtCutoff = playerInfo.rankPtCutoff || 0;
+			this.rankPtLastCheck = playerInfo.rankPtLastCheck || 0;
 			this.lastMaterial = playerInfo.lastMaterial || null;
 			this.lastPortTime = playerInfo.lastPortTime || null;
 			this.lastSortie   = playerInfo.lastSortie || null;
-			this.fleetSlots = playerInfo.fleetSlots || 1;
-			this.repairSlots = playerInfo.repairSlots || 2;
-			this.buildSlots = playerInfo.buildSlots || 2;
-			this.shipSlots = playerInfo.shipSlots || 100;
-			this.gearSlots = playerInfo.gearSlots || 500;
+			this.fleetSlots   = playerInfo.fleetSlots || 1;
+			this.repairSlots  = playerInfo.repairSlots || 2;
+			this.buildSlots   = playerInfo.buildSlots || 2;
+			this.shipSlots    = playerInfo.shipSlots || 100;
+			this.gearSlots    = playerInfo.gearSlots || 500;
 			this.parallelQuestCount = playerInfo.parallelQuestCount || 5;
+			if(playerInfo.confirmedNewId) this.confirmedNewId = playerInfo.confirmedNewId;
 			return true;
 		}
 		return false;

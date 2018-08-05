@@ -68,6 +68,21 @@ Previously known as "Reactor"
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
 			//this["api_get_member/furniture"](params, { api_data: response.api_data.api_furniture }, headers);
 			PlayerManager.extraSupply = response.api_data.api_extra_supply;
+			if(response.api_data.api_basic){
+				const player = PlayerManager.hq;
+				const mid = response.api_data.api_basic.api_member_id;
+				if(player.id > 0 && mid > 0){
+					// check if player changed on game started initially
+					if(mid == player.id || mid == player.confirmedNewId){
+						delete player.confirmedNewId;
+					} else {
+						// stop network listening to prevent losing data by player logout on home port
+						KC3Network.stop();
+						// show alert messages, let player decide to continue logging out or transfer player
+						KC3Network.trigger("PlayerChanged", response.api_data.api_basic);
+					}
+				}
+			}
 		},
 		
 		"api_req_member/require_info":function(params, response, headers){
