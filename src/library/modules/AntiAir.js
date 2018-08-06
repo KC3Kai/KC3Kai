@@ -958,8 +958,9 @@ AntiAir: anti-air related calculations
 	//   as most effective AACI gets priority to be triggered.
 	// in-game, priority is based on kinds of conditions (in `if...return` flavor),
 	//   research about AACI priority for a ship:
-	//   https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
-	//   https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	//    * https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
+	//    * https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	//    * http://nishisonic.xsrv.jp/archives/809
 	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
 	// note: priority is different from trigger chance rate, since random number roll just done once,
 	//       lower priority AACI is still possible to be triggered if chance value is greater.
