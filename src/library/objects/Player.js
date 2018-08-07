@@ -141,13 +141,7 @@ Instantiate-able class to represent one player
 		// KC3 user settings, Strategy Room options untouched, may cause minor conflict.
 		localStorage.removeItem("player");
 		localStorage.removeItem("fleets");
-		localStorage.removeItem("ships");
-		localStorage.removeItem("gears");
-		// History of map clear and event boss hp info will be lost, unrecoverable
-		//localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
-		localStorage.removeItem("quests");
-		localStorage.removeItem("lock_plan");
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
 		localStorage.removeItem("lastExperience");
@@ -159,10 +153,17 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("longestIdleTime");
 		localStorage.removeItem("pictureBook");
 		localStorage.removeItem("playerNewsFeed");
-		
-		KC3ShipManager.clear();
-		KC3GearManager.clear();
-		KC3QuestManager.clear();
+		// History of map clear and event boss hp info will be lost,
+		// still keep them since they are unrecoverable.
+		//localStorage.removeItem("maps");
+		//localStorage.removeItem("quests");
+		// KCSAPI of totally refreshing ships and gears already done,
+		// clearing them here will cause temporarily missing of cached data.
+		//localStorage.removeItem("ships");
+		//localStorage.removeItem("gears");
+		//KC3ShipManager.clear();
+		//KC3GearManager.clear();
+		//KC3QuestManager.clear();
 		KC3SortieManager.endSortie();
 	};
 	

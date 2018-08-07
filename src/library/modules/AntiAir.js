@@ -464,11 +464,13 @@ AntiAir: anti-air related calculations
 
 	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
 	function isBritishShips( mst ) {
-		return [67, // Queen Elizabeth Class
+		return [
+				67, // Queen Elizabeth Class
 				78, // Ark Royal Class
 				82, // Jervis Class
-				6, // Kongou Class
-			].indexOf( mst.api_ctype ) !== -1;
+			].indexOf( mst.api_ctype ) !== -1 ||
+			// Kongou Class Kai Ni
+			[149, 150, 151, 152].indexOf( mst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {
@@ -902,7 +904,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// British-relevant ships
-	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class
+	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class K2
 	declareAACI(
 		32, 3, 1.2,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
@@ -956,8 +958,9 @@ AntiAir: anti-air related calculations
 	//   as most effective AACI gets priority to be triggered.
 	// in-game, priority is based on kinds of conditions (in `if...return` flavor),
 	//   research about AACI priority for a ship:
-	//   https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
-	//   https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	//    * https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
+	//    * https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	//    * http://nishisonic.xsrv.jp/archives/809
 	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
 	// note: priority is different from trigger chance rate, since random number roll just done once,
 	//       lower priority AACI is still possible to be triggered if chance value is greater.

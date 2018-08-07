@@ -296,8 +296,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
@@ -310,8 +311,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
@@ -324,9 +326,9 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class
-					// https://twitter.com/shiro_sh39/status/1023840030886748160
+					// Kongou Class Kai Ni
 					"6": {
+						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
 				},
@@ -958,6 +960,7 @@ KC3改 Equipment Object
 					case 21: // AA Machine Gun
 					case 24: // Landing Craft
 					case 29: // Searchlight
+					case 42: // Large Searchlight
 					case 36: // AA Fire Director
 					case 46: // Amphibious Tank
 						modifier = 1; break;
@@ -990,7 +993,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 46].includes(type2))
+				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 42, 46].includes(type2))
 					modifier = 1;
 				break;
 			case "asw":
@@ -1023,9 +1026,9 @@ KC3改 Equipment Object
 		let modifier = 0;
 		switch(type.toLowerCase()) {
 			case "fire":
-				// Main gun/Secondary gun/AP shell/AAFD
+				// Main gun/Secondary gun/AP shell/AAFD/Searchlight
 				// wikia says Sonar gives shelling acc bonus?
-				if([1, 2, 3, 4, 19, 36].includes(type2))
+				if([1, 2, 3, 4, 19, 29, 36, 42].includes(type2))
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))

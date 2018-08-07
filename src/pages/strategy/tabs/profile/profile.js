@@ -766,32 +766,40 @@
 					return;
 				const maps = JSON.parse(localStorage.maps || "{}");
 				const fixed = [], cleared = {};
-				KC3Database.con.sortie.where("world").above(9).each(r => {
-					const mapId = [r.world, r.mapnum].join(''), key = 'm' + mapId;
-					const event = r.eventmap || {};
-					if(maps[key] === undefined) {
+				KC3Database.con.sortie.where("world").above(9).reverse().each(r => {
+					const mapId = [r.world, r.mapnum].join(""), key = "m" + mapId;
+					const event = r.eventmap || {}, map = maps[key] || {};
+					if(!fixed.includes(key) &&
+						(maps[key] === undefined || map.pseudo || map.maxhp === 9999 ||
+							(map.kind === "gauge-hp" && !map.baseHp))) {
+						fixed.push(key);
+						const isFirstPseudo = maps[key] === undefined || map.clear === undefined;
 						maps[key] = {
 							id: Number(mapId),
 							difficulty: r.diff,
 							// assume map cleared, and have these pseudo data:
-							clear: 1,
-							kind: "gauge-hp",
-							curhp: 0,
-							maxhp: event.api_max_maphp || 9999,
+							clear: isFirstPseudo ? 1 : map.clear,
+							kind: map.kind || "gauge-hp",
+							curhp: map.curhp || 0,
+							maxhp: (map.maxhp === 9999 ? 0 : map.maxhp) || event.api_max_maphp || 9999,
+							pseudo: true,
 							// `stat` might be able to rebuild from all battle records of that map?
 						};
-						fixed.push(key);
+						if(map.baseHp || map.kind === "gauge-hp")
+							maps[key].baseHp = map.baseHp || false;
+						if(map.stat) maps[key].stat = map.stat;
 					}
 					if(r.eventmap) {
 						// can confirm clear flag from latest history records, but can not sure 'not cleared' easily,
 						// maybe walk through all battle data to determine if map is finally cleared and the boss remained hp?
+						//if(event.api_max_maphp) maps[key].maxhp = event.api_max_maphp;
 						cleared[key] |= !!(event.api_cleared || event.api_first_clear);
-						if(event.api_max_maphp) maps[key].maxhp = event.api_max_maphp;
+						// perhaps it's easier that list up all unknown maps, let user tick which ones are cleared manually
 					}
 				}).then(() => {
 					localStorage.setObject("maps", maps);
 					console.info("Rebuilt event map info", fixed, cleared, maps);/*RemoveLogging:skip*/
-					alert(`Done! Maps added: ${fixed.join(', ') || 'none'}.` + 
+					alert(`Done! Maps added: ${fixed.join(', ') || 'none'}.` +
 						"\nNOTE: they are assumed as cleared since lack of information.");
 				}).catch(err => {
 					console.error("Rebuilding event map info", err);
