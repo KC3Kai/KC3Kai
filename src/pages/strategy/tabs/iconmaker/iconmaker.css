@@ -1,0 +1,55 @@
+.tab_iconmaker {
+	width:680px;
+}
+
+.tab_iconmaker .factory {
+	display:none;
+}
+
+.tab_iconmaker label {
+	font-weight:normal;
+}
+
+.tab_iconmaker .ship_params,
+.tab_iconmaker .crop_info,
+.tab_iconmaker .crop_controls,
+.tab_iconmaker .cropped {
+	width:100%;
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:5px;
+	margin-bottom:5px;
+	text-align:center;
+}
+
+.tab_iconmaker .cropped {
+	padding-top:10px;
+	padding-bottom:10px;
+	background:#f0f;
+}
+
+.tab_iconmaker .ship_id {
+	width:80px;
+}
+.tab_iconmaker .seasonal {
+	width:40px;
+}
+.tab_iconmaker .img_url {
+	width:550px;
+}
+.tab_iconmaker .loading {
+	width:24px;
+	height:24px;
+}
+.tab_iconmaker .img_url.error {
+	color:#f00;
+}
+
+.tab_iconmaker .crop_info {
+	margin-top:-10px;
+}
+
+.tab_iconmaker .crop_controls .point,
+.tab_iconmaker .crop_controls .zoom {
+	width:60px;
+}
