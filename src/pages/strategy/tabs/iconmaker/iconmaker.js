@@ -37,7 +37,7 @@
 				isLoading = false;
 			const bindNewImage = (imgUrl, addExistedRef = true) => {
 				isLoading = true;
-				$(".loading").show();
+				$(".loading").css("visibility", "visible");
 				$(".img_url").removeClass("error");
 				croppie.croppie("destroy");
 				croppie = $(".crop_container").croppie(croppieOptions);
@@ -47,16 +47,17 @@
 					points: [pointX, pointY, pointX + iconSize / scale, pointY + iconSize / scale],
 				}).then(img => {
 					$(".cr-image").css("background", bgColors[1 & isAbyssal]);
-					$(".loading").hide();
+					$(".loading").css("visibility", "hidden");
 					isLoading = false;
 					if(addExistedRef) {
 						$(".cropped").append("&nbsp;").append(
 							$("<img/>").addClass("existed_icon")
 								.attr("src", `/assets/img/${isAbyssal ? "abyss" : "ships"}/${shipId}${isDamaged ? "_d" : ""}.png`)
 						);
+						$(".cropped").show();
 					}
 				}).catch(e => {
-					$(".loading").hide();
+					$(".loading").css("visibility", "hidden");
 					isLoading = false;
 					$(".img_url").addClass("error");
 					console.debug("Image loading failed", e);
@@ -65,10 +66,10 @@
 							$("<img/>").addClass("existed_icon")
 								.attr("src", `/assets/img/abyss/${shipId}$.png`)
 						);
+						$(".cropped").show();
 					}
 				});
 			};
-			$(".loading").hide();
 			$(".ship_id").on("blur", e => {
 				if(isLoading) {
 					$(".ship_id").val(shipId);
@@ -160,9 +161,12 @@
 						.attr("src", resp)
 						.attr("alt", `${shipId}${isDamaged ? "_d" : ""}.png`);
 					$(".cropped").append(imgElm);
+					$(".cropped").show();
+					$(".preview img").attr("src", resp);
+					$(".preview").show();
 				});
 			});
-			$(".cropped").on("click", ".cropped_icon", e => {
+			$(".cropped").on("click", ".cropped_icon,.existed_icon", e => {
 				$(e.target).remove();
 			});
 		},
