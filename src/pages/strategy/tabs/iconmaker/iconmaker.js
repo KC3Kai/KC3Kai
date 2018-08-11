@@ -10,6 +10,22 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
+			this.iconSize = 70;
+			this.croppieOptions = {
+				boundary: { width: this.iconSize * 4, height: this.iconSize * 4 },
+				viewport: { width: this.iconSize, height: this.iconSize, type: "circle" },
+				showZoomer: false,
+			};
+			this.bgColors = ["#0070cc", "#8e0000"];
+			this.shipId = 0;
+			this.isDamaged = false;
+			this.seasonalIdx = 0;
+			this.imgUrl = "";
+			this.isAbyssal = false;
+			this.pointX = 0;
+			this.pointY = 0;
+			this.scale = 0.75;
+			this.isLoading = false;
 		},
 
 		/* RELOAD: optional
@@ -22,82 +38,44 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			const iconSize = 70;
-			const croppieOptions = {
-				boundary: { width: iconSize * 4, height: iconSize * 4 },
-				viewport: { width: iconSize, height: iconSize, type: "circle" },
-				showZoomer: false,
+			// parameters intentionally not to be remembered
+			this.imgUrl = "";
+			this.isLoading = false;
+			
+			const updateParams = () => {
+				$(".ship_id").val(this.shipId || "");
+				$(".damaged").prop("checked", this.isDamaged);
+				$(".abyssal").prop("checked", this.isAbyssal);
+				$(".seasonal").val(this.seasonalIdx || "");
+				$(".img_url").val(this.imgUrl);
 			};
-			const bgColors = ["#0070cc", "#8e0000"];
-			let shipId = 0, isDamaged = false, seasonalIdx = 0;
-			let imgUrl = "", isAbyssal = false;
-			let croppie = $(".crop_container").croppie(croppieOptions),
-				pointX = 0, pointY = 0,
-				scale = 0.75,
-				isLoading = false;
-			const bindNewImage = (imgUrl, addExistedRef = true) => {
-				isLoading = true;
-				$(".loading").css("visibility", "visible");
-				$(".img_url").removeClass("error");
-				croppie.croppie("destroy");
-				croppie = $(".crop_container").croppie(croppieOptions);
-				croppie.croppie("bind", {
-					url: imgUrl,
-					zoom: scale,
-					points: [pointX, pointY, pointX + iconSize / scale, pointY + iconSize / scale],
-				}).then(img => {
-					$(".cr-image").css("background", bgColors[1 & isAbyssal]);
-					$(".loading").css("visibility", "hidden");
-					isLoading = false;
-					if(addExistedRef) {
-						$(".cropped").append("&nbsp;").append(
-							$("<img/>").addClass("existed_icon")
-								.attr("src", `/assets/img/${isAbyssal ? "abyss" : "ships"}/${shipId}${isDamaged ? "_d" : ""}.png`)
-						);
-						$(".cropped").show();
-					}
-				}).catch(e => {
-					$(".loading").css("visibility", "hidden");
-					isLoading = false;
-					$(".img_url").addClass("error");
-					console.debug("Image loading failed", e);
-					if(addExistedRef && isAbyssal) {
-						$(".cropped").append("&nbsp;").append(
-							$("<img/>").addClass("existed_icon")
-								.attr("src", `/assets/img/abyss/${shipId}$.png`)
-						);
-						$(".cropped").show();
-					}
-				});
-			};
+			updateParams();
+			// event handlers binding
+			this.croppie = $(".crop_container").croppie(this.croppieOptions);
 			$(".ship_id").on("blur", e => {
-				if(isLoading) {
-					$(".ship_id").val(shipId);
-					$(".damaged").prop("checked", isDamaged);
-					$(".seasonal").val(seasonalIdx || "");
+				if(this.isLoading) {
+					updateParams();
 					return;
 				}
 				const newShipId = Number($(".ship_id").val());
 				const damaged = !!$(".damaged").prop("checked");
 				const newSeasonal = Number($(".seasonal").val()) || 0;
-				const isNewImage = shipId !== newShipId || damaged !== isDamaged || newSeasonal !== seasonalIdx;
+				const isNewImage = newShipId !== this.shipId
+					|| damaged !== this.isDamaged
+					|| newSeasonal !== this.seasonalIdx;
 				if(!newShipId || !isNewImage) return;
-				shipId = newShipId;
-				isDamaged = damaged;
-				seasonalIdx = newSeasonal;
-				const dbShip = WhoCallsTheFleetDb.db[`s${shipId}`];
-				const illustId = seasonalIdx > 0 ? ((dbShip || {}).illust_extra || [])[seasonalIdx - 1] : shipId;
-				const imgNo = 8 + (1 & isDamaged);
+				this.shipId = newShipId;
+				this.isDamaged = damaged;
+				this.seasonalIdx = newSeasonal;
+				const dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`];
+				const illustId = this.seasonalIdx > 0 ? ((dbShip || {}).illust_extra || [])[this.seasonalIdx - 1] : this.shipId;
+				const imgNo = 8 + (1 & this.isDamaged);
 				const baseUrl = [
 					"http://fleet.diablohu.com/!/pics-ships/",
 					"http://fleet.diablohu.com/!/pics-ships-extra/"
-				][1 & (seasonalIdx > 0)];
-				imgUrl = `${baseUrl}${illustId}/${imgNo}.png`;
-				$(".img_url").val(imgUrl);
-				pointX = 0;
-				pointY = 0;
-				scale = 0.75;
-				bindNewImage(imgUrl, isNewImage);
+				][1 & (this.seasonalIdx > 0)];
+				this.imgUrl = `${baseUrl}${illustId}/${imgNo}.png`;
+				this.bindNewImage(isNewImage);
 			});
 			$(".damaged").on("change", e => {
 				$(".ship_id").blur();
@@ -106,60 +84,61 @@
 				$(".ship_id").blur();
 			});
 			$(".abyssal").on("change", e => {
-				isAbyssal = !!$(".abyssal").prop("checked");
+				this.isAbyssal = !!$(".abyssal").prop("checked");
 			});
 			$(".img_url").on("blur", e => {
-				if(isLoading) {
-					$(".img_url").val(imgUrl);
+				if(this.isLoading) {
+					$(".img_url").val(this.imgUrl);
 					return;
 				}
 				const newUrl = $(".img_url").val();
-				if(newUrl && newUrl !== imgUrl) {
-					imgUrl = newUrl;
-					bindNewImage(imgUrl, false);
+				if(newUrl && newUrl !== this.imgUrl) {
+					this.imgUrl = newUrl;
+					this.bindNewImage(false);
 				}
 			});
 			$(".crop_container").on("update.croppie", (e, data) => {
 				$(".crop_info").text(JSON.stringify(data));
-				[pointX, pointY] = data.points.map(v => Number(v));
-				scale = data.zoom;
-				$(".left").val(pointX);
-				$(".top").val(pointY);
-				$(".zoom").val(scale * 100);
+				[this.pointX, this.pointY] = data.points.map(v => Number(v));
+				this.scale = data.zoom;
+				$(".left").val(this.pointX);
+				$(".top").val(this.pointY);
+				// keep 3 decimals for zoom percent value
+				$(".zoom").val(Math.floor(this.scale * 100000) / 1000);
 			});
 			$(".crop_info").text("{}");
 			$(".point.left").on("blur", e => {
 				const newLeft = Number($(".point.left").val()) || 0;
-				if(newLeft !== pointX) {
-					pointX = newLeft;
-					bindNewImage(imgUrl, false);
+				if(newLeft !== this.pointX) {
+					this.pointX = newLeft;
+					this.bindNewImage(false);
 				}
-			}).val(pointX);
+			}).val(this.pointX);
 			$(".point.top").on("blur", e => {
 				const newTop = Number($(".point.top").val()) || 0;
-				if(newTop !== pointY) {
-					pointY = newTop;
-					bindNewImage(imgUrl, false);
+				if(newTop !== this.pointY) {
+					this.pointY = newTop;
+					this.bindNewImage(false);
 				}
-			}).val(pointY);
+			}).val(this.pointY);
 			$(".zoom").on("blur", e => {
 				const newScale = (Number($(".zoom").val()) || 100) / 100;
-				if(newScale !== scale) {
-					scale = newScale;
-					croppie.croppie("setZoom", scale);
+				if(newScale !== this.scale) {
+					this.scale = newScale;
+					this.croppie.croppie("setZoom", this.scale);
 				}
-			}).val(scale * 100);
+			}).val(this.scale * 100);
 			$(".get_result").on("click", e => {
-				croppie.croppie("result", {
+				this.croppie.croppie("result", {
 					type: "canvas",
 					format: "png",
 					size: "viewport",
 					circle: true,
-					backgroundColor: bgColors[1 & isAbyssal],
+					backgroundColor: this.bgColors[1 & this.isAbyssal],
 				}).then(resp => {
 					const imgElm = $('<img/>').addClass("cropped_icon")
 						.attr("src", resp)
-						.attr("alt", `${shipId}${isDamaged ? "_d" : ""}.png`);
+						.attr("alt", `${this.shipId}${this.isDamaged ? "_d" : ""}.png`);
 					$(".cropped").append(imgElm);
 					$(".cropped").show();
 					$(".preview img").attr("src", resp);
@@ -182,9 +161,48 @@
 		update: function(pageParams) {
 			// Use `pageParams` for latest page hash values,
 			// KC3StrategyTabs.pageParams keeps the old values for states tracking
-
+			
 			// Returning `true` means updating has been handled.
 			return false;
-		}
+		},
+
+		bindNewImage: function(addExistedRef = true) {
+			this.isLoading = true;
+			$(".loading").css("visibility", "visible");
+			$(".img_url").removeClass("error").val(this.imgUrl);
+			this.croppie.croppie("destroy");
+			this.croppie = $(".crop_container").croppie(this.croppieOptions);
+			this.croppie.croppie("bind", {
+				url: this.imgUrl,
+				zoom: this.scale,
+				points: [this.pointX, this.pointY,
+					this.pointX + this.iconSize / this.scale, this.pointY + this.iconSize / this.scale],
+			}).then(img => {
+				$(".cr-image").css("background", this.bgColors[1 & this.isAbyssal]);
+				$(".loading").css("visibility", "hidden");
+				this.isLoading = false;
+				if(addExistedRef) {
+					$(".cropped").append("&nbsp;").append(
+					$("<img/>").addClass("existed_icon").attr("src",
+						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${this.shipId}${this.isDamaged ? "_d" : ""}.png`)
+					);
+					$(".cropped").show();
+				}
+			}).catch(e => {
+				$(".loading").css("visibility", "hidden");
+				this.isLoading = false;
+				$(".img_url").addClass("error");
+				// for http get exception, `e` will be a event instance instead of Error instance
+				console.debug("Image loading failed", e);
+				if(addExistedRef && this.isAbyssal) {
+					$(".cropped").append("&nbsp;").append(
+						$("<img/>").addClass("existed_icon")
+							.attr("src", `/assets/img/abyss/${this.shipId}$.png`)
+					);
+					$(".cropped").show();
+				}
+			});
+		},
+
 	};
 })();

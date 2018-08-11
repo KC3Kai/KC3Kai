@@ -44,12 +44,12 @@ KC3改 Equipment Object
 	 * It might be moved to an independent JSON, but stays here so that we can add comments.
 	 * @return the bonus definition table with new counters of related equipment.
 	 * @see URLs some summary tables:
-	 *  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-	 *  * http://furukore.com/archives/13793
-	 *  * https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
-	 *  * https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E9%A7%86%E9%80%90%E8%89%A6%E3%81%AE%E4%B8%BB%E7%A0%B2%E3%83%95%E3%82%A3%E3%83%83%E3%83%88%E8%A3%9C%E6%AD%A3%E3%81%A8%E8%89%A6%E7%A8%AE%E5%88%A5%E3%81%8A/#i
-	 *  * https://cdn.discordapp.com/attachments/178613137430282240/462356700104622100/bonus_small_guns.png
-	 *  * https://twitter.com/Lambda39/status/990268289866579968
+	 *  * [20180616 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
+	 *  * [20180810 ALL] https://imgur.com/a/kd3fSSo
+	 *  * [20180721 ALL] http://furukore.com/archives/13793
+	 *  * [20180726  DD] https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
+	 *  * [20180808  DD] https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E9%A7%86%E9%80%90%E8%89%A6%E3%81%AE%E4%B8%BB%E7%A0%B2%E3%83%95%E3%82%A3%E3%83%83%E3%83%88%E8%A3%9C%E6%AD%A3%E3%81%A8%E8%89%A6%E7%A8%AE%E5%88%A5%E3%81%8A/#i
+	 *  * [20180429  DD] https://twitter.com/Lambda39/status/990268289866579968
 	 */
 	KC3Gear.explicitStatsBonusGears = function(){
 		return {
