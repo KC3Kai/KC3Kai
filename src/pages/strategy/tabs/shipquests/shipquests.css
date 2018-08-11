@@ -12,12 +12,15 @@
 }
 .tab_shipquests .ship_item .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type6 {
 	background:#996600;
@@ -25,6 +28,7 @@
 }
 .tab_shipquests .ship_item .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item .questIcon.type8 {
 	background:#D75048;
@@ -40,12 +44,15 @@
 }
 .tab_shipquests .ship_item.even .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type6 {
 	background:#996600;
@@ -53,6 +60,7 @@
 }
 .tab_shipquests .ship_item.even .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item.even .questIcon.type8 {
 	background:#D75048;
@@ -68,12 +76,15 @@
 }
 .tab_shipquests .ship_item.odd .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type6 {
 	background:#996600;
@@ -81,20 +92,30 @@
 }
 .tab_shipquests .ship_item.odd .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item.odd .questIcon.type8 {
 	background:#D75048;
 	color:#fff;
 }
-.tab_shipquests .ship_item.even .questIcon.exists {
+.tab_shipquests .ship_item .questIcon.completed,
+.tab_shipquests .ship_item .questIcon.actived,
+.tab_shipquests .ship_item .questIcon.opened,
+.tab_shipquests .ship_item .questIcon.exists {
 	border-radius:2px;
-	border-left:4px solid #FF9900;
 	border-right:4px solid transparent;
 }
-.tab_shipquests .ship_item.odd .questIcon.exists {
-	border-radius:2px;
+.tab_shipquests .ship_item .questIcon.exists {
 	border-left:4px solid #FF9900;
-	border-right:4px solid transparent;
+}
+.tab_shipquests .ship_item .questIcon.opened {
+	border-left:4px solid #FF9900;
+}
+.tab_shipquests .ship_item .questIcon.actived {
+	border-left:4px solid #0099FF;
+}
+.tab_shipquests .ship_item .questIcon.completed {
+	border-left:4px solid #9955FF;
 }
 
 /* HEADER
