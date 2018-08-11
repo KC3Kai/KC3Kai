@@ -73,11 +73,16 @@
 					.addClass("type" + String(questId).substr(0, 1));
 
 				// If we have player data about the quest
-				if(KC3QuestManager.exists(questId)
-					// If wanna hide quest not opened
-					//&& KC3QuestManager.open.includes(questId)
-				) {
-					questDiv.addClass("exists");
+				if(KC3QuestManager.exists(questId)) {
+					if(KC3QuestManager.get(questId).status === 3) {
+						questDiv.addClass("completed");
+					} else if(KC3QuestManager.active.includes(questId)) {
+						questDiv.addClass("actived");
+					} else if(KC3QuestManager.open.includes(questId)) {
+						questDiv.addClass("opened");
+					} else {
+						questDiv.addClass("exists");
+					}
 				}
 
 				questDiv.text(questMeta.code);

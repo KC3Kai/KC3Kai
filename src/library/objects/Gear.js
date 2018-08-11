@@ -44,11 +44,12 @@ KC3改 Equipment Object
 	 * It might be moved to an independent JSON, but stays here so that we can add comments.
 	 * @return the bonus definition table with new counters of related equipment.
 	 * @see URLs some summary tables:
-	 *  * https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-	 *  * http://furukore.com/archives/13793
-	 *  * https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
-	 *  * https://cdn.discordapp.com/attachments/178613137430282240/462356700104622100/bonus_small_guns.png
-	 *  * https://twitter.com/Lambda39/status/990268289866579968
+	 *  * [20180616 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
+	 *  * [20180810 ALL] https://imgur.com/a/kd3fSSo
+	 *  * [20180721 ALL] http://furukore.com/archives/13793
+	 *  * [20180726  DD] https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
+	 *  * [20180808  DD] https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E9%A7%86%E9%80%90%E8%89%A6%E3%81%AE%E4%B8%BB%E7%A0%B2%E3%83%95%E3%82%A3%E3%83%83%E3%83%88%E8%A3%9C%E6%AD%A3%E3%81%A8%E8%89%A6%E7%A8%AE%E5%88%A5%E3%81%8A/#i
+	 *  * [20180429  DD] https://twitter.com/Lambda39/status/990268289866579968
 	 */
 	KC3Gear.explicitStatsBonusGears = function(){
 		return {
@@ -527,6 +528,14 @@ KC3改 Equipment Object
 									"2": { "houg": 2, "raig": 5 },
 								},
 							},
+							{
+								flags: [ "tripleTorpedoLateModel" ],
+								byCount: {
+									gear: "tripleTorpedoLateModel",
+									"1": { "houg": 1, "raig": 4 },
+									"2": { "houg": 2, "raig": 6 },
+								},
+							},
 						],
 					},
 				},
@@ -619,50 +628,52 @@ KC3改 Equipment Object
 				count: 0,
 				byClass: {
 					// Shimakaze Class
-					"22": {
-						multiple: { "houg": 2, "houk": 1 },
-					},
-					// Yuugumo Class
-					"38": {
-						multiple: { "houg": 2, "houk": 1 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 2, "raig": 3, "houk": 1 },
+					"22": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
 						},
-					},
+						{
+							// Shimakaze Kai, total +3 fp, +3 tp, +3 ev
+							remodel: 1,
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "raig": 3, "houk": 2 },
+							},
+						},
+					],
+					// Yuugumo Class
+					"38": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 3, "houk": 1 },
+							},
+						},
+						{
+							// Yuugumo Class K2, total +3 for each gun
+							remodel: 2,
+							multiple: { "houg": 1 },
+							// total +6 fp, +4 tp, +4 ev
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "raig": 1, "houk": 2 },
+							},
+						},
+					],
 					// Kagerou Class
 					"30": [
 						{
 							multiple: { "houg": 1, "houk": 1 },
 						},
 						{
+							// Kagerou Class K2, total +2 for 1st gun
 							remodel: 2,
 							excludes: [556, 557, 558],
-							// Kagerou Class K2, total +2 for 1st gun
 							single: { "houg": 1 },
 						},
 					],
 				},
-				byShip: [
-					{
-						// Naganami K2, total +3 for each gun
-						ids: [543],
-						multiple: { "houg": 1 },
-						// total +6 fp, +4 tp, +4 ev
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 1, "raig": 1, "houk": 2 },
-						},
-					},
-					{
-						// Shimakaze Kai, total +3 fp, +3 tp, +3 ev
-						ids: [229],
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 1, "raig": 3, "houk": 2 },
-						},
-					},
-				],
 			},
 			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
 			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2A%E5%9E%8B%E6%94%B9%E4%B8%89%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE

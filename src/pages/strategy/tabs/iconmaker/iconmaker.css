@@ -1,0 +1,124 @@
+.tab_iconmaker {
+	width:680px;
+}
+
+.tab_iconmaker .factory {
+	display:none;
+}
+
+.tab_iconmaker label {
+	font-weight:normal;
+	margin-right:10px;
+}
+
+.tab_iconmaker .ship_params,
+.tab_iconmaker .crop_info,
+.tab_iconmaker .crop_controls,
+.tab_iconmaker .preview,
+.tab_iconmaker .cropped {
+	width:100%;
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:5px;
+	margin-bottom:5px;
+	text-align:center;
+}
+
+.tab_iconmaker .cropped {
+	padding-top:10px;
+	padding-bottom:10px;
+	background:#f0f;
+	display:none;
+}
+
+.tab_iconmaker .ship_id {
+	width:80px;
+}
+.tab_iconmaker .seasonal {
+	width:40px;
+}
+.tab_iconmaker .img_url {
+	width:550px;
+}
+.tab_iconmaker .loading {
+	width:24px;
+	height:24px;
+	margin:-2px 0px 0px -10px;
+	visibility:hidden;
+}
+.tab_iconmaker .img_url.error {
+	color:#f00;
+}
+
+.tab_iconmaker .crop_info {
+	margin-top:-10px;
+}
+
+.tab_iconmaker .crop_controls .point,
+.tab_iconmaker .crop_controls .zoom {
+	width:60px;
+}
+.tab_iconmaker .crop_controls .get_result {
+	margin-left:10px;
+}
+
+.tab_iconmaker .preview {
+	line-height:85px;
+	color:#fff;
+	background:#333;
+	display:none;
+}
+.tab_iconmaker .preview span {
+	float:left;
+	margin-left:60px;
+}
+.tab_iconmaker .preview img {
+	vertical-align:top;
+}
+.tab_iconmaker .preview .devpanel {
+	width:40px;
+	height:40px;
+	float:left;
+	margin:20px 0px 0px 5px;
+	border-radius:20px;
+	overflow:hidden;
+	border:1px solid #000;
+}
+.tab_iconmaker .preview .devpanel img {
+	width:40px;
+	height:40px;
+	position:relative;
+	margin:-1px 0px 0px -1px;
+}
+.tab_iconmaker .preview .fleet_legacy {
+	width:50px;
+	height:50px;
+	float:left;
+	margin:15px 0px 0px 5px;
+	background:#ccc;
+	border:1px solid #ccc;
+	border-radius: 25px;
+}
+.tab_iconmaker .preview .fleet_legacy img {
+	width:48px;
+	height:48px;
+}
+.tab_iconmaker .preview .fleet_dark {
+	width:108px;
+	height:85px;
+	-webkit-mask-image: -webkit-linear-gradient(top,
+		rgba(34,34,34,0) 0%,
+		rgba(34,34,34,1) 30%,
+		rgba(34,34,34,0) 100%
+	);
+	top:0px;
+	left:5px;
+	position:relative;
+	margin:0px 0px 0px 5px;
+	overflow:hidden;
+}
+.tab_iconmaker .preview .fleet_dark img {
+	width:140px;
+	height:140px;
+	margin:-32px 0px 0px -16px
+}
