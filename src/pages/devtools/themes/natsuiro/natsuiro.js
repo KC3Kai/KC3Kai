@@ -2741,11 +2741,12 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${rankLetter}.png`);
 				const dmgGauge = thisNode.predictedDamageGauge || thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}%{3}{2}%".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
 					KC3Meta.term("BattleRating"),
-					dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
-					dmgGauge.player === undefined ? "?" : dmgGauge.player,
-					KC3Meta.term("BattleContactVs")
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
 				)).lazyInitTooltip();
 			}
 
@@ -2830,11 +2831,12 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${thisNode.predictedRankNight}.png`);
 				const dmgGauge = thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}%{3}{2}%".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
 					KC3Meta.term("BattleRating"),
-					dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
-					dmgGauge.player === undefined ? "?" : dmgGauge.player,
-					KC3Meta.term("BattleContactVs")
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
 				)).lazyInitTooltip();
 			}
 
@@ -3267,11 +3269,12 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${thisPvP.predictedRank}.png`);
 				const dmgGauge = thisPvP.predictedDamageGauge || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}%{3:vs}{2}%".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
 					KC3Meta.term("BattleRating"),
-					dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
-					dmgGauge.player === undefined ? "?" : dmgGauge.player,
-					KC3Meta.term("BattleContactVs")
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
 				)).lazyInitTooltip();
 			}
 
