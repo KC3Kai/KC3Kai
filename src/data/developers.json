@@ -583,6 +583,15 @@
 				"links" : {
 					"gh": "https://github.com/TrickLin"
 				}
+			},
+			{
+				"name": "RandomGuyB5",
+				"avatar" : "https://avatars1.githubusercontent.com/u/40309140?s=460&v=4",
+				"desc" : "Deutsch",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/RandomGuyB5"
+				}
 			}
 		],
 		"AboutForkContributors": [
@@ -696,15 +705,6 @@
 				"active": 1,
 				"links" : {
 					"gh": "https://github.com/flixwito"
-				}
-			},
-			{
-				"name": "RandomGuyB5",
-				"avatar" : "https://avatars1.githubusercontent.com/u/40309140?s=460&v=4",
-				"desc" : "Deutsch",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/RandomGuyB5"
 				}
 			},
 			{

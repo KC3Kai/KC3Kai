@@ -551,9 +551,11 @@ Used by SortieManager
 			}
 
 			if (ConfigManager.info_btrank) {
-				this.predictedRank = KC3BattlePrediction.predictRank(battleData.api_name, this.battleNight || battleData, this.predictedFleetsDay);
+				[this.predictedRank, this.predictedDamageGauge] = KC3BattlePrediction.predictRankAndDamageGauge(
+					battleData.api_name, this.battleNight || battleData, this.predictedFleetsDay
+				);
 				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.sortie);
+					console.debug(`Node ${this.letter} predicted rank`, this.predictedRank, this.predictedDamageGauge, this.sortie);
 				}
 				
 				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);
@@ -813,9 +815,11 @@ Used by SortieManager
 			}
 
 			if (ConfigManager.info_btrank) {
-				this.predictedRankNight = KC3BattlePrediction.predictRank(nightData.api_name, this.battleDay || nightData, this.predictedFleetsNight);
+				[this.predictedRankNight, this.predictedDamageGaugeNight] = KC3BattlePrediction.predictRankAndDamageGauge(
+					nightData.api_name, this.battleDay || nightData, this.predictedFleetsNight
+				);
 				if (KC3Node.debugPrediction()) {
-					console.debug(`Node ${this.letter} predicted yasen rank`, this.predictedRankNight);
+					console.debug(`Node ${this.letter} predicted yasen rank`, this.predictedRankNight, this.predictedDamageGaugeNight);
 				}
 				
 				const mvpResult = KC3BattlePrediction.predictMvp(this.predictedFleetsDay, this.predictedFleetsNight);

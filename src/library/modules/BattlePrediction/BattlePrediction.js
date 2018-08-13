@@ -71,6 +71,18 @@
     );
   };
 
+  BP.predictRankAndDamageGauge = (apiName, battleData, battleResult) => {
+    const { parseStartJson, normalizeFleets, getRankPredictor, getDamageGauge } = KC3BattlePrediction.rank;
+
+    const initialFleets = normalizeFleets(parseStartJson(battleData), battleData),
+      resultFleets = normalizeFleets(battleResult, battleData);
+
+    return [
+      getRankPredictor(apiName).predict(initialFleets, resultFleets),
+      getDamageGauge(initialFleets, resultFleets)
+    ];
+  };
+
   BP.predictMvp = (dayResult, nightResult) => {
     const { combineResults, getHighestDamage } = KC3BattlePrediction.mvp;
 
