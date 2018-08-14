@@ -925,7 +925,7 @@
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
-		$(".module.activity .battle_rating").lazyInitTooltip();
+		$(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
 		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
 		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
@@ -2737,9 +2737,17 @@
 
 			// Show predicted battle rank
 			if(thisNode.predictedRank || thisNode.predictedRankNight){
-				$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+(thisNode.predictedRank||thisNode.predictedRankNight)+".png")
-				.css("opacity", 0.5);
+				const rankLetter = thisNode.predictedRank || thisNode.predictedRankNight;
+				$(".module.activity .battle_rating img").css("opacity", 0.5)
+					.attr("src", `/assets/img/client/ratings/${rankLetter}.png`);
+				const dmgGauge = thisNode.predictedDamageGauge || thisNode.predictedDamageGaugeNight || {};
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
+					KC3Meta.term("BattleRating"),
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
+				)).lazyInitTooltip();
 			}
 
 			// Show battle activity if `info_compass` enabled, `info_battle` only affects enemy HP prediction
@@ -2820,9 +2828,16 @@
 			}
 
 			if(thisNode.predictedRankNight){
-				$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisNode.predictedRankNight+".png")
-				.css("opacity", 0.5);
+				$(".module.activity .battle_rating img").css("opacity", 0.5)
+					.attr("src", `/assets/img/client/ratings/${thisNode.predictedRankNight}.png`);
+				const dmgGauge = thisNode.predictedDamageGaugeNight || {};
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
+					KC3Meta.term("BattleRating"),
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
+				)).lazyInitTooltip();
 			}
 
 			this.Fleet();
@@ -3251,9 +3266,16 @@
 
 			// Show predicted battle rank
 			if(thisPvP.predictedRank){
-				$(".module.activity .battle_rating img").attr("src",
-				"../../../../assets/img/client/ratings/"+thisPvP.predictedRank+".png")
-				.css("opacity", 0.5);
+				$(".module.activity .battle_rating img").css("opacity", 0.5)
+					.attr("src", `/assets/img/client/ratings/${thisPvP.predictedRank}.png`);
+				const dmgGauge = thisPvP.predictedDamageGauge || {};
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
+					KC3Meta.term("BattleRating"),
+					KC3Meta.term("BattleDamageGauges").format(
+						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
+						dmgGauge.player === undefined ? "?" : dmgGauge.player
+					)
+				)).lazyInitTooltip();
 			}
 
 			// Battle conditions
@@ -3359,7 +3381,7 @@
 		PvPEnd: function(data){
 			var thisPvP = KC3SortieManager.currentNode();
 			$(".module.activity .battle_rating img")
-				.attr("src", "../../../../assets/img/client/ratings/"+thisPvP.rating+".png")
+				.attr("src", `/assets/img/client/ratings/${thisPvP.rating}.png`)
 				.css("opacity", 1);
 			updateHQEXPGained($(".admiral_lvnext"), KC3SortieManager.hqExpGained);
 			this.Fleet();
