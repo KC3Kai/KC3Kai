@@ -42,8 +42,8 @@ KCScreenshot.prototype.remoteStart = function(tabId, offset){
 KCScreenshot.prototype.prepare = function(){
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 800 * this.scale;
-	this.canvas.height = 480 * this.scale;
+	this.canvas.width = 1200 * this.scale;
+	this.canvas.height = 720 * this.scale;
 	this.context = this.canvas.getContext("2d");
 	
 	// Initialize Image Tag
@@ -125,8 +125,8 @@ KCScreenshot.prototype.crop = function(offset){
 	chrome.tabs.getZoom(null, function(zoomFactor){
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 800 * zoomFactor * self.scale,
-			realHeight: 480 * zoomFactor * self.scale,
+			realWidth: 1200 * zoomFactor * self.scale,
+			realHeight: 720 * zoomFactor * self.scale,
 			offTop: offset.top * zoomFactor * self.scale,
 			offLeft: offset.left * zoomFactor * self.scale,
 		};
@@ -140,8 +140,8 @@ KCScreenshot.prototype.crop = function(offset){
 			params.realHeight,
 			0,
 			0,
-			800 * self.scale,
-			480 * self.scale
+			1200 * self.scale,
+			720 * self.scale
 		);
 		
 		self.output();

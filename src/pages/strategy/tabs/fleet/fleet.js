@@ -447,8 +447,9 @@
 				h: $(fleetBox).height(),
 				t: $(document).scrollTop(),
 			};
+			const dpr = window.devicePixelRatio || 1;
 			chrome.tabs.getZoom(undefined, scale => {
-				if(scale !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale; });
+				if(scale !== 1 || dpr !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale * dpr; });
 				chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
 					const canvas = document.createElement("canvas"), img = new Image();
 					img.onload = (e) => {
