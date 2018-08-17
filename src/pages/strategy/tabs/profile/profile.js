@@ -919,6 +919,10 @@
 				$(selector + " .colorbox").css("background", "#d75048");
 				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUnlockMap"));
 				break;
+			case "8":
+				$(selector + " .colorbox").css("background", "#d75048");
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUnlockArea"));
+				break;
 			case "11":
 				$(selector + " .colorbox").css("background", "#9999ff");
 				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedUpdateLib"));

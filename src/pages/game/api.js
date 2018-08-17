@@ -51,7 +51,7 @@ var
 // Show game screens
 function ActivateGame(){
 	waiting = false;
-	$(".box-wrap").css("background", "#fff");
+	var scale = (ConfigManager.api_gameScale || 100) / 100;
 	$(".box-wait").hide();
 	$(".game-swf").remove();
 	$(".box-game")
@@ -59,8 +59,19 @@ function ActivateGame(){
 		.find(".game-swf")
 		.attr("src", localStorage.absoluteswf)
 		.end()
-		.show();
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
+		.show()
+		.css("transform", `scale(${scale})`);
+	$(".box-wrap").css({
+		"background": "#fff",
+		"width": 1200 * scale,
+		"height": 720 * scale,
+		"margin-top": ConfigManager.api_margin
+	});
+	var gamebox = $(".box-game").offset(), wrapper = $(".box-wrap").offset();
+	$(".box-game").css({
+		"margin-left": -gamebox.left + wrapper.left,
+		"margin-top": -gamebox.top + wrapper.top,
+	});
 	idleTimer = setInterval(idleFunction, 1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -80,7 +91,7 @@ $(document).on("ready", function(){
 	KC3Translation.execute();
 	
 	// Apply interface configs
-	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
+	//$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
 	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{

@@ -33,7 +33,7 @@ KC3改 Equipment Object
 		}
 	};
 
-	KC3Gear.prototype.exists = function(){ return this.itemId > 0 && this.masterId > 0; };
+	KC3Gear.prototype.exists = function(){ return this.itemId > 0 && this.masterId > 0 && this.master() !== false; };
 	KC3Gear.prototype.isDummy = function(){ return ! this.exists(); };
 	KC3Gear.prototype.master = function(){ return KC3Master.slotitem( this.masterId ); };
 	KC3Gear.prototype.name = function(){ return KC3Meta.gearName( this.master().api_name ); };
@@ -1341,13 +1341,13 @@ KC3改 Equipment Object
 	// Handling data only from master defined at AntiAir module.
 
 	KC3Gear.prototype.isAntiAirAircraft = function(){
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			KC3GearManager.antiAirFighterType2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 0;
 	};
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			(this.master().api_raig > 0 || this.master().api_baku > 0);
 	};
@@ -1370,7 +1370,7 @@ KC3改 Equipment Object
 			KC3GearManager.aswAircraftType2Ids.slice(0) :
 			KC3GearManager.aswAircraftType2Ids.filter(id => id !== 25 && id !== 26);
 		if(forSupport) type2Ids.push(10, 45);
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 0;
 	};
@@ -1386,7 +1386,7 @@ KC3改 Equipment Object
 		// Seaplane Recon capable for LBAS ASW attack:
 		//   Type 0 Model 11B variants
 		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26, 47];
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
 	};
@@ -1395,12 +1395,12 @@ KC3改 Equipment Object
 		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
 		const type2 = isSelection ? [8, 9, 10, 41, 58, 59] : [9, 10, 41, 59];
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			type2.indexOf(this.master().api_type[2]) > -1;
 	};
 
 	KC3Gear.prototype.isAirRadar = function(){
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 1;
 	};
@@ -1411,19 +1411,19 @@ KC3改 Equipment Object
 		 since the accuracy <= 2 for all Air Radars in Small Radar category,
 		 but they have forgotten there are Air Radars with accuracy > 2 in Large Radar category,
 		 and there is a Destroyer (Kasumi K2) who can equip Large Radar... */
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_houm > 2;
 	};
 
 	KC3Gear.prototype.isAafdBuiltinHighAngleMount = function(){
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			[1, 4].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 7;
 	};
 
 	KC3Gear.prototype.isCdMachineGun = function(){
-		return this.masterId > 0 && this.master() &&
+		return this.exists() &&
 			this.master().api_type[2] === 21 &&
 			this.master().api_tyku > 8;
 	};
@@ -1432,13 +1432,13 @@ KC3改 Equipment Object
 		/* In-game, newly implemented Depth Charge are counted as different items in kinds of scenes,
 		 but their type in category or icon is the same with Depth Charge Projector.
 		 To differentiate them, the only method for now is a white-list of IDs. */
-		return this.masterId > 0 && this.master() && this.master().api_type[2] === 15 &&
+		return this.exists() && this.master().api_type[2] === 15 &&
 		// Current implemented: Type95 DC, Type2 DC
 			[226, 227].indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
-		return this.masterId > 0 && this.master() && this.master().api_type[2] === 15 &&
+		return this.exists() && this.master().api_type[2] === 15 &&
 			// Current implemented: Type94 DCP, Type3 DCP, Type3 DCP CD, 15cm9t ASW Rocket
 			//[44, 45].indexOf(this.masterId) > -1;
 			// To maintenance fewer lists
@@ -1475,7 +1475,7 @@ KC3改 Equipment Object
 			nameText = gearObj.name();
 			if(gearObj.stars > 0){ nameText += " \u2605{0}".format(gearObj.stars); }
 			if(gearObj.ace > 0){ nameText += " \u00bb{0}".format(gearObj.ace); }
-			if(slotSize !== undefined && gearObj.master() &&
+			if(slotSize !== undefined && gearData &&
 				(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1
 				|| KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3]) >- 1)){
 				nameText += " x{0}".format(slotSize);

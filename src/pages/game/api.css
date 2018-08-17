@@ -220,18 +220,19 @@ body {
 /* PLAY GAME
 --------------------------*/
 .box-game {
-	width:800px;
-	height:480px;
+	width:1200px;
+	height:720px;
 	display:none;
 	position:relative;
 }
 .box-game .game-swf {
-	width:800px;
-	height:480px;
+	width:100%;
+	height:102%;
 }
 .box-game .overlays {
 	width:800px;
 	height:480px;
+	zoom:1.5;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -344,7 +345,7 @@ body {
 	width:629px;
 	height:336px;
 	top:110px;
-	left:144px;
+	left:142px;
 }
 .ol_quest {
 	width:629px;
@@ -516,8 +517,8 @@ body {
 /* OVERLAY: TAIHA ALERT
 --------------------------*/
 .taiha_blood {
-	width:800px;
-	height:480px;
+	width:120px;
+	height:720px;
 	top:0px;
 	left:0px;
 	background:url("../../assets/img/ui/blood.png");
@@ -525,8 +526,8 @@ body {
 	opacity:0.5;
 }
 .taiha_red {
-	width:800px;
-	height:480px;
+	width:1200px;
+	height:720px;
 	top:0px;
 	left:0px;
 	display:none;

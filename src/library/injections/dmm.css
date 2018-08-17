@@ -161,6 +161,7 @@
 	height:372px;
 	left:26px;
 	top:18px;
+	zoom:1.5;
 }
 .kc3 .overlay_markers .letter {
 	position:absolute;
@@ -187,7 +188,7 @@
 .kc3 .overlay_idle {
 	width:1190px;
 	height:720px;
-	padding:675px 10px 0 0 !important;
+	padding:675px 10px 0px 0px !important;
 	text-align:right;
 	font-size:33px;
 	color:#fff;
