@@ -24,8 +24,8 @@
 	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
 	font-size:12px;
 	color:#333;
-	width:800px;
-	height:480px;
+	width:1200px;
+	height:720px;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -39,49 +39,49 @@
 /* OVERLAY: QUEST
 --------------------------*/
 .kc3 .overlay_quests {
-	width:629px;
-	height:336px;
-	top:110px;
-	left:144px;
+	width:944px;
+	height:504px;
+	top:165px;
+	left:216px;
 }
 .kc3 .ol_quest {
-	width:629px;
-	height:64px;
-	margin:0px 0px 4px 0px !important;
+	width:944px;
+	height:95px;
+	margin: 0 0 7px 0 !important;
 }
 .kc3 .ol_quest .icon {
-	width:72px;
-	height:64px;
+	width:106px;
+	height:96px;
 	float:left;
 }
 .kc3 .ol_quest .content {
-	width:431px;
-	height:40px;
+	width:640px;
+	height:65px;
 	background:#E4D5C2;
 	float:left;
 	margin:2px 0px 0px 0px !important;
 }
 .kc3 .ol_quest .content .name {
-	width:431px;
-	height:13px;
-	line-height:13px;
-	font-size:13px;
+	width:640px;
+	height:22px;
+	line-height:22px;
+	font-size:22px;
 	margin:2px 0px 2px 0px !important;
 }
 .kc3 .ol_quest .content .desc {
-	width:431px;
-	height:24px;
-	line-height:12px;
-	font-size:11px;
+	width:640px;
+	height:44px;
+	line-height:16px;
+	font-size:15px;
 	overflow:hidden;
 }
 .kc3 .ol_quest .tracking {
-	width:60px;
-	height:40px;
-	line-height:60px;
+	width:100px;
+	height:60px;
+	line-height:95px;
 	margin:2px 0px 0px 0px !important;
 	float:left;
-	font-size:18px;
+	font-size:24px;
 	font-weight:bold;
 	text-align:center;
 	color:#555;
@@ -93,16 +93,16 @@
 	font-size:11px;
 }
 .kc3 .ol_quest .no_tl {
-	width:24px;
-	height:24px;
+	width: 36px;
+	height: 36px;
 	background:rgba(150,190,230, 0.6);
 	float:right;
-	margin:20px -26px 0px 0px !important;
+	margin: 30px -39px 0px 0px !important;
 	position:relative;
-	border-radius:15px;
-	line-height:24px;
+	border-radius: 21px;
+	line-height: 36px;
 	text-align:center;
-	font-size:16px;
+	font-size: 24px;
 	font-weight:bold;
 	color:#fff;
 	pointer-events:visible;
