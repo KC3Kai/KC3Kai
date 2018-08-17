@@ -156,6 +156,7 @@
 			var GearMaster, GearType;
 			$.each(GearRecords, function(index, element){
 				GearMaster = KC3Master.slotitem( index.substr(1) );
+				if(!GearMaster) return;
 
 				GearType = GearMaster.api_type[3];
 				// If gear type does not exist yet
