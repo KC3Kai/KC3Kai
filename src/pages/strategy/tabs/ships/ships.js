@@ -1265,7 +1265,7 @@
 			const element = $(".ship_equip_" + slotIndex, cElm);
 			if(gearId > 0){
 				const gear = KC3GearManager.get(gearId);
-				if(gear.isDummy()){ element.hide(); return; }
+				if(gear.isDummy() || gear.master() === false){ element.hide(); return; }
 				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
 					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
