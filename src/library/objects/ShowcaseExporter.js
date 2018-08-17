@@ -615,6 +615,7 @@
 
             var equip = allGears[i];
             var equipMaster = KC3Master.slotitem(equip.masterId);
+            if (!equipMaster) continue;
 
             var masterId = "m" + equip.masterId;
             var typeId = "t" + equipMaster.api_type[3];

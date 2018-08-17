@@ -118,14 +118,14 @@
 				'margin-left': 'auto',
 				'margin-right': 'auto',
 				padding: 0,
-				width: 800,
-				height: 480,
+				width: 1200,
+				height: 720,
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
 			$("#game_frame").css({
-				width: 800,
-				height: 480
+				width: 1200,
+				height: 720
 			});
 			$(".dmm-ntgnavi").hide();
 			$(".area-naviapp").hide();
@@ -143,17 +143,17 @@
 
 			var self = this;
 			this.resizeTimer = setInterval(function(){
-				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
+				if ($("#game_frame").width() !== 1200 || $("#game_frame").height() !== 720) {
 					self.resizeGameFrame();
 				}
 			}, 10000);
 		},
-		// Resize game frame to 800x480
+		// Resize game frame to 1200x720
 		resizeGameFrame: function(){
-			console.log("Resizing game frame to 800x480");
+			console.log("Resizing game frame to 1200x720");
 			$("#game_frame").css({
-				width: 800,
-				height: 480
+				width: 1200,
+				height: 720
 			});
 		},
 		// Final process on document ready
@@ -188,7 +188,7 @@
 				$("body").css("min-height", visibleHeight);
 				// Prevent scrollbar shown if computed height not accurate but larger than game player
 				$("body").css("overflow-y", !$("#alert").is(":visible")
-					&& visibleHeight > self.gameZoomScale * 480 ? "hidden" : "auto");
+					&& visibleHeight > self.gameZoomScale * 720 ? "hidden" : "auto");
 			};
 			// Background
 			if(!config.api_bg_image){

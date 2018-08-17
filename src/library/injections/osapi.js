@@ -21,16 +21,24 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	function checkAgain(){
 		console.log("Checking API link...");
 		// If API link is found
-		if(document.getElementById("externalswf")){
-			console.log( document.getElementById("externalswf").getAttribute("src") );
+		if(document.getElementById("htmlWrap")){
+			console.log( document.getElementById("htmlWrap").getAttribute("src") );
 			// Send it to background script
+			(new RMsg(
+				"service",
+				"set_api_link",
+				{ swfsrc: document.getElementById("htmlWrap").getAttribute("src") }
+			)).execute();
+			
+			// Stop interval
+			clearInterval(intervalChecker);
+		} else if(document.getElementById("externalswf")){
+			console.log( document.getElementById("externalswf").getAttribute("src") );
 			(new RMsg(
 				"service",
 				"set_api_link",
 				{ swfsrc: document.getElementById("externalswf").getAttribute("src") }
 			)).execute();
-			
-			// Stop interval
 			clearInterval(intervalChecker);
 		}
 	}
@@ -50,7 +58,13 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				|| response.storage[0] == "false" || response.storage[1] == "true"
 			){
 				console.log("Setting zoom to scale", response.value[0] + "%");
-				document.body.style.zoom = (response.value[0] || 100) / 100;
+				var scale = (response.value[0] || 100) / 100;
+				document.body.style.transform = "scale(" + scale + ")";
+				setTimeout(function(){
+					var playerOffset = $("#flashWrap").offset();
+					$("#flashWrap").css("margin-left", -playerOffset.left / scale);
+					$("#flashWrap").css("margin-top", -playerOffset.top);
+				}, 3000);
 			}
 			// For dmm site play mode
 			if(response.value[1] && response.storage[0] == "true"){

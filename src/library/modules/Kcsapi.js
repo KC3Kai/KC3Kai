@@ -58,6 +58,9 @@ Previously known as "Reactor"
 				KC3Network.trigger("GameUpdate", newCounts);
 			}
 		},
+		"api_start2/getData":function(params, response, headers){
+			this.api_start2(params, response, headers);
+		},
 		
 		/* Consolidated Game Loading Call
 		-------------------------------------------------------*/
