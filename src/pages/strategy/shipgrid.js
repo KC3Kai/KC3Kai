@@ -148,6 +148,7 @@
 				stype: shipMaster.api_stype,
 				ctype: shipMaster.api_ctype,
 				sortno: shipMaster.api_sortno,
+				sortId: shipMaster.api_sort_id,
 				name: shipObj.name(),
 				level: shipObj.level,
 				levelClass: shipObj.levelClass(),
@@ -170,7 +171,7 @@
 			define("type", "Type", ship => ship.stype);
 			define("ctype", "Class", ship => ship.ctype);
 			define("lv", "Level", ship => -ship.level);
-			define("sortno", "SortOrder", ship => ship.sortno);
+			define("sortno", "SortOrder", ship => ship.sortId);
 			define("morale", "Morale", ship => -ship.morale);
 		}
 

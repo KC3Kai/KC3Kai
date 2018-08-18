@@ -28,10 +28,13 @@
 .tab_mstupdate .mstship .ship_cg {
 	width:218px;
 	height:300px;
+	background:#006c91;
+	text-align:center;
+	overflow:hidden;
 }
-.tab_mstupdate .mstship .ship_cg embed {
-	width:218px;
+.tab_mstupdate .mstship .ship_cg img {
 	height:300px;
+	vertical-align:top;
 }
 .tab_mstupdate .mstship .ship_name {
 	width:218px;

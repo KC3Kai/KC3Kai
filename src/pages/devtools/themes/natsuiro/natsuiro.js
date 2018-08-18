@@ -1999,11 +1999,11 @@
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
-								$(".base_plane_img img", planeBox).attr("alt", paddedId)
+								$(".base_plane_img img", planeBox).attr("alt", itemObj.masterId)
 									.attr("src", eqImgSrc).error(function() {
 										// fall-back to fetch image from online kcs resources
-										eqImgSrc = myKcServerHost + "/kcs/resources/image/slotitem/item_up/"
-											+ $(this).attr("alt") + ".png";
+										eqImgSrc = myKcServerHost + "/kcs2/resources"
+											+ KC3Master.png_file($(this).attr("alt"), "item_up", "slot");
 										$(this).off("error").attr("src", eqImgSrc)
 											// fail-safe to show a placeholder icon
 											.error(function() {
@@ -4293,10 +4293,10 @@
 	function fillRemodelSlotItemBox(self, itemBox, recipe, rosterId, stars) {
 		if(!recipe.api_slot_id) return itemBox;
 		const gearMst = KC3Master.slotitem(recipe.api_slot_id);
-		const paddedId = String(gearMst.api_id).padStart(3, '0');
+		const gearPng = KC3Master.png_file(gearMst.api_id, "item_on", "slot");
 		if(!recipe.noReqs) {
 			$(".remodel_slot_itemon img", itemBox)
-				.attr("src", `${myKcServerHost}/kcs/resources/image/slotitem/item_on/${paddedId}.png`)
+				.attr("src", `${myKcServerHost}/kcs2/resources${gearPng}`)
 				.attr("alt", "[{0}]".format(gearMst.api_id))
 				.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); })
 				.attr("title", gearMst.api_info)

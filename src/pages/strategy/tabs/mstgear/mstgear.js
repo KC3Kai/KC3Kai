@@ -80,19 +80,18 @@
 		
 		showGear :function(gear_id){
 			gear_id = Number(gear_id||"124");
-			var self = this;
-			var gearData = KC3Master.slotitem( gear_id );
+			const self = this;
+			const gearData = KC3Master.slotitem( gear_id );
 			console.debug("Viewing gearData", gearData);
 			self.currentGearId = gear_id;
 			
 			if(!KC3Master.isAbyssalGear(gear_id)){
-				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";
-				var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
+				const gearHost = `http://${this.server_ip}/kcs2/resources`;
 				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
-				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost+"card/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost+"item_character/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost+"item_up/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost+"item_on/"+paddedId+".png");
+				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost + KC3Master.png_file(gear_id, "card", "slot"));
+				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_character", "slot"));
+				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_up", "slot"));
+				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_on", "slot"));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			}else{
 				$(".tab_mstgear .gearInfo .gearAssets").hide();
