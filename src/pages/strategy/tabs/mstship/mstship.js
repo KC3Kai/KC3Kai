@@ -429,8 +429,6 @@
 				this.croppie.croppie("bind", {
 					url: KC3Meta.isAF() && ship_id == KC3Meta.getAF(4) ? KC3Meta.getAF(3).format("bk") : kcs2Src,
 					zoom: cgswf.attr("scale"),
-				}).then(img => {
-					console.debug(img);
 				}).catch(err => {
 					$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
 				});
