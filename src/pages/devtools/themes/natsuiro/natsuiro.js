@@ -727,7 +727,7 @@
 			$(".module.controls .scroll_right").toggleClass("disabled", newLeft >= maxLeft);
 		});
 
-		// Resize window to 800x480
+		// Resize window to 1200x720
 		$(".module.controls .btn_resize").on("click", function(){
 			// Send fit-screen request to service to be forwarded to gameplay page
 			(new RMsg("service", "fitScreen", {
@@ -1724,7 +1724,9 @@
 						FleetSummary.supplyCost.hasMarried ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 					) + ("\n" + KC3Meta.term("PanelBattleConsumes").format(
 						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
-						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo
+						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo,
+						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
+						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel))
 				).lazyInitTooltip();

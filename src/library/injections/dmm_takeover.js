@@ -622,7 +622,8 @@
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
-				if(!(request.ConfigManager || config).map_markers) {
+				var thisConfig = request.ConfigManager || config;
+				if(!thisConfig.map_markers && !thisConfig.map_letters) {
 					response({success:false}); return true;
 				}
 
@@ -637,9 +638,9 @@
 					var letters = meta.nodeLetters(request.worldId, request.mapId);
 					var lettersFound = (!!letters && Object.keys(letters).length > 0);
 					var icons = meta.nodeMarkers(request.worldId, request.mapId);
-					var iconsFound =  (!!icons.length && icons.length > 0);
+					var iconsFound = (!!icons.length && icons.length > 0);
 					$(".overlay_markers").hide().empty();
-					if(lettersFound){
+					if(lettersFound && thisConfig.map_letters){
 						// Show node letters
 						var l;
 						for(l in letters){
@@ -649,7 +650,7 @@
 							$(".overlay_markers").append(letterDiv);
 						}
 					}
-					if(iconsFound){
+					if(iconsFound && thisConfig.map_markers){
 						// Show some icon style markers
 						var i;
 						for(i in icons){
