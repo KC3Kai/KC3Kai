@@ -38,6 +38,7 @@
 		this.currentSorties = [];
 		this.stegcover64 = "";
 		this.exportingReplay = false;
+		this.scrollVars     = {};
 		
 		/* INIT
 		Prepares static data needed
@@ -61,7 +62,8 @@
 		Places data onto the interface
 		---------------------------------*/
 		this.execute = function(){
-			var self = this;
+			const self = this;
+			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
 			
 			// On-click world menus
 			$(".tab_"+tabCode+" .world_box").on("click", function(){
@@ -71,21 +73,20 @@
 			
 			// Toggle-able world scroll
 			$(".tab_"+tabCode+" .world_shift").on("click", function(){
-				var le,cr,re;
-				le = 0;
-				cr = $(window).data("world_off");
-				re = $(window).data("world_max");
-				$(window).data("world_off",cr = Math.max(le,Math.min(re,(function(e){
+				var le = 0;
+				var cr = self.scrollVars[tabCode].world_off;
+				var re = self.scrollVars[tabCode].world_max;
+				self.scrollVars[tabCode].world_off = (cr = Math.max(le, Math.min(re, (function(e){
 					if(e.hasClass("disabled"))
 						return cr;
 					else if(e.hasClass("left"))
-						return cr-1;
+						return cr - 1;
 					else if(e.hasClass("right"))
-						return cr+1;
+						return cr + 1;
 					else
 						return cr;
 				})($(this)))));
-				updateScrollItem("world", 116);
+				updateScrollItem(self.scrollVars[tabCode], "world", tabCode === "maps" ? 87 : 116);
 			});
 			
 			// On-click map menus
@@ -95,21 +96,20 @@
 			
 			// Toggle-able map scroll
 			$(".tab_"+tabCode+" .map_shift").on("click", function(){
-				var le,cr,re;
-				le = 0;
-				cr = $(window).data("map_off");
-				re = $(window).data("map_max");
-				$(window).data("map_off",cr = Math.max(le,Math.min(re,(function(e){
+				var le = 0;
+				var cr = self.scrollVars[tabCode].map_off;
+				var re = self.scrollVars[tabCode].map_max;
+				self.scrollVars[tabCode].map_off = (cr = Math.max(le, Math.min(re, (function(e){
 					if(e.hasClass("disabled"))
 						return cr;
 					else if(e.hasClass("left"))
-						return cr-1;
+						return cr - 1;
 					else if(e.hasClass("right"))
-						return cr+1;
+						return cr + 1;
 					else
 						return cr;
 				})($(this)))));
-				updateScrollItem("map", 97);
+				updateScrollItem(self.scrollVars[tabCode], "map", 97);
 			});
 			
 			// On-click sortie ID export battle
@@ -205,7 +205,7 @@
 		Handle event on a world has been selected by clicking menu or by url
 		---------------------------------*/
 		this.switchWorld = function(worldNum, mapNum){
-			var self = this;
+			const self = this;
 			self.selectedWorld = Number(worldNum);
 			$(".tab_"+tabCode+" .world_box").removeClass("active");
 			$(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
@@ -214,17 +214,18 @@
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
 			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
-			var worldOffset = $(window).data("world_off");
+			var maxDispWorlds = 6 + (tabCode === "maps" ? 2 : 0);
+			var worldOffset = self.scrollVars[tabCode].world_off;
 			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
-			if(typeof worldOffset === "undefined"){
-				$(window).data("world_off", Math.min(selectOffset, countWorlds-6-((tabCode=="maps")&1)));
+			if(worldOffset === undefined){
+				self.scrollVars[tabCode].world_off = Math.min(selectOffset, countWorlds - maxDispWorlds);
 			} else if(selectOffset < worldOffset){
-				$(window).data("world_off", selectOffset);
-			} else if(selectOffset >= 6+((tabCode=="maps")&1) && worldOffset < selectOffset-5){
-				$(window).data("world_off", selectOffset-5);
+				self.scrollVars[tabCode].world_off = selectOffset;
+			} else if(selectOffset >= maxDispWorlds && worldOffset < selectOffset - maxDispWorlds - 1){
+				self.scrollVars[tabCode].world_off = selectOffset - maxDispWorlds - 1;
 			}
-			$(window).data("world_max", Math.max(0, countWorlds-6));
-			updateScrollItem("world", 116);
+			self.scrollVars[tabCode].world_max = Math.max(0, countWorlds - maxDispWorlds);
+			updateScrollItem(self.scrollVars[tabCode], "world", tabCode === "maps" ? 87 : 116);
 
 			if(self.selectedWorld !== 0){
 				// As IndexedDB real-time updated, also load Storage maps
@@ -241,12 +242,12 @@
 				$(".tab_"+tabCode+" .map_list").css("width",Math.max(7,countMaps)*100);
 
 				mapBox.attr("data-map_num", 0);
-				$(window).data("map_off", (self.selectedWorld > 10 && countMaps >= 8) ? 1 : 0);
-				$(window).data("map_max", Math.max(0,countMaps-7));
+				self.scrollVars[tabCode].map_off = countMaps >= 8 ? 1 : 0;
+				self.scrollVars[tabCode].map_max = Math.max(0, countMaps - 7);
 				mapBox.addClass("empty");
 				mapBox.addClass("active");
 
-				updateScrollItem("map", 97);
+				updateScrollItem(self.scrollVars[tabCode], "map", 97);
 
 				const diffStr = [
 					KC3Meta.term("EventRankCasualAbbr"),
@@ -350,6 +351,7 @@
 					self.switchMap(mapNum);
 				}
 			}else{
+				updateScrollItem(self.scrollVars[tabCode], "map", 97);
 				self.showMap();
 			}
 		};
@@ -1129,17 +1131,16 @@
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 		};
 		
-		function updateScrollItem(worldMap, itemWidth) {
-			var
-				le = 0,
-				cr = $(window).data(worldMap + "_off"),
-				re = $(window).data(worldMap + "_max");
-			if(cr<=le)
+		function updateScrollItem(scrollVars, worldMap, itemWidth) {
+			var le = 0,
+				cr = scrollVars[worldMap + "_off"],
+				re = scrollVars[worldMap + "_max"];
+			if(cr === undefined || cr <= le)
 				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").addClass("disabled");
 			else
 				$(".tab_"+tabCode+" ."+worldMap+"_shift.left").removeClass("disabled");
 			
-			if(cr>=re)
+			if(cr === undefined || cr >= re)
 				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").addClass("disabled");
 			else
 				$(".tab_"+tabCode+" ."+worldMap+"_shift.right").removeClass("disabled");
