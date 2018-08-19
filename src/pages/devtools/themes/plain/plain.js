@@ -415,7 +415,7 @@
 			}
 		});
 		
-		// Resize window to 800x480
+		// Resize window to 1200x720
 		$(".module.controls .btn_resize").on("click", function(){
 			// Send fit-screen request to service to be forwarded to gameplay page
 			(new RMsg("service", "fitScreen", {

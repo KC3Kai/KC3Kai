@@ -740,6 +740,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "map_letters",
+				"name" : "SettingsMapClearerLetters",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "api_askExit",
 				"name" : "SettingsConfirmExit",
 				"type" : "check",

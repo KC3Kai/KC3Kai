@@ -275,9 +275,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						chrome.windows.getCurrent(function(wind){
 							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
 								chrome.windows.update(wind.id, {
-									width: Math.ceil(800*ZoomFactor*size.game_zoom)
+									width: Math.ceil(1200*ZoomFactor*size.game_zoom)
 										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
-									height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+									height: Math.ceil((720+size.margin_top)*size.game_zoom*ZoomFactor)
 										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
 								});
 							})).execute();

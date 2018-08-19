@@ -76,7 +76,7 @@
 			const linkClickFunc = function(e){
 				KC3StrategyTabs.gotoTab($(this).data("tab"), $(this).data("api_id"));
 			};
-			var shipBox, gearBox, shipFile, shipVersion, shipSrc, appendToBox;
+			var shipBox, gearBox, shipFile, shipVersion, shipSrc, shipPng, appendToBox;
 
 			// New Ship list
 			$.each(this.newShips, function(index, shipData) {
@@ -98,28 +98,28 @@
 					coordX = Math.floor(coordX * 0.4) - 40;
 					shipSrc += "&forceX=" + coordX + "&forceY=" + coordY;
 					appendToBox = ".tab_mstupdate .mstabyss";
+					shipPng = KC3Master.png_file(shipData.api_id, "full", "ship");
 				} else {
 					// NON-SEASONAL CG
 					// show default card frame, no coordinate adjustment needed
 					shipSrc += "&abyss=0" + (!shipVersion ? "" : "&ver=" + shipVersion);
 					appendToBox = ".tab_mstupdate .mstships";
+					shipPng = KC3Master.png_file(shipData.api_id, "card", "ship");
 				}
 				
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
+				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
 				if(KC3Meta.isAF() && shipData.api_id == KC3Meta.getAF(4)) {
-					$("<img/>")
-						.attr("src", KC3Meta.getAF(3).format("bk"))
-						.css({"width": 218,"height": 300})
-						.appendTo($(".ship_cg", shipBox));
-					$(".ship_cg embed", shipBox).remove();
+					$(".ship_cg img", shipBox).attr("src", KC3Meta.getAF(3).format("bk"));
 				} else {
-					$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+					$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
 				}
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)
+					.attr("data-swf", shipSrc)
 					.click(linkClickFunc);
 				
 				shipBox.appendTo(appendToBox);
@@ -131,9 +131,9 @@
 				gearBox = $(".tab_mstupdate .factory .mstgear").clone();
 				
 				if(!KC3Master.isAbyssalGear(gearData.api_id)) {
-					const paddedId = (gearData.api_id<10?"00":gearData.api_id<100?"0":"") + gearData.api_id;
+					const cardPng = KC3Master.png_file(gearData.api_id, "card", "slot");
 					$(".gear_cg img", gearBox).attr("src",
-						"http://" + self.myServerIp + "/kcs/resources/image/slotitem/card/" + paddedId + ".png");
+						`http://${self.myServerIp}/kcs2/resources${cardPng}`);
 				} else {
 					$(".gear_cg img", gearBox).hide();
 				}
@@ -159,13 +159,16 @@
 				const [coordX, coordY] = KC3Master.graph(shipData.api_id).api_battle_n;
 				shipSrc += "&forceX=" + (coordX - 160) + "&forceY=" + (coordY - 120);
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
+				shipPng = KC3Master.png_file(shipData.api_id, "full", "ship");
+				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
-				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
 				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)
 					.attr("data-coord", [coordX, coordY].join(','))
+					.attr("data-swf", shipSrc)
 					.click(linkClickFunc);
 				
 				shipBox.appendTo(".tab_mstupdate .mstgraph");
@@ -182,13 +185,16 @@
 				shipSrc += "&forceX=-40&forceY=-30";
 				shipSrc += !shipVersion ? "" : "&ver=" + shipVersion;
 				const seasonalData = KC3Master.seasonal_ship(shipId);
+				shipPng = KC3Master.png_file(shipId, "character_full", "ship");
+				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
-				$(".ship_cg embed", shipBox).attr("src", shipSrc).attr("menu", "false");
+				$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
 				$(".ship_name", shipBox).text(seasonalData && seasonalData.api_name ?
 					seasonalData.api_name : "Not available")
 					.data("tab", "mstship")
 					.data("api_id", shipId)
-					.attr("data-mst-id", shipId);
+					.attr("data-mst-id", shipId)
+					.attr("data-swf", shipSrc);
 				if(seasonalData) {
 					$(".ship_name", shipBox).click(linkClickFunc);
 				} else {

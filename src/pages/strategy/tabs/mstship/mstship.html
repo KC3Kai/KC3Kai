@@ -5,25 +5,11 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">The CG viewer just says "Loading..." and Voice buttons don't work!</div>
-	<div class="help_a">Have you played the game since you updated to v23 later? If not, go play first and refresh the whole thing it if it has been open.</div>
+	<div class="help_q">HTML5 CG viewer supports:</div>
+	<div class="help_a">Use mouse to drag image moving around; Use mousewheel to zoom in or out; Clicking on left-side to switch between card and full CG; Clicking on right-side to switch between regular CG and damaged CG.</div>
 	
-	<div class="help_q">The CG viewer supports:</div>
-	<div class="help_a">Use mouse to drag image moving around; Use mousewheel to zoom in or out; Use LEFT and RIGHT keys to switch image frames; Use SPACE key to go back to card image, and default size.</div>
-	
-	<div class="help_q">Why do I need to do the flash security settings?</div>
-	<div class="help_a">You'll need to add this extension to the "trusted" locations that can load external files - so that we can show you the CG. If not, you probably have seen the looping disaster.
-		<div>
-			<strong>Setting directives:</strong>
-			<ul>
-				<li><a target="_blank" href="http://www.macromedia.com/support/documentation/en/flashplayer/help/settings_manager04.html">Click here</a> to go to flash player security settings</li>
-				<li>Click on "<em>Edit Locations...</em>"</li>
-				<li>Choose "<em>Add location</em>"</li>
-				<li>Paste the extension code <code>chrome-extension://<span class="runtime_id"></span>/</code>, and confirm</li>
-				<li>Refresh this page via browser reload button</li>
-			</ul>
-		</div>
-	</div>
+	<div class="help_q">How about other image types?</div>
+	<div class="help_a">Not for now nyan!</div>
 	
 	<div class="help_q">The hourlies are in the wrong order</div>
 	<div class="help_a">I can see that. Kuma with it</div>
@@ -75,7 +61,11 @@
 			<div class="basic">
 				<div class="name"></div>
 				<div class="type"></div>
-				<div class="cgswf"><embed /></div>
+				<div class="cgswf">
+					<div class="image"></div>
+					<div class="big_mode"></div>
+					<div class="dmg_mode"></div>
+				</div>
 				<div class="stats"></div>
 				<div class="equipments">
 					<div class="equipment">

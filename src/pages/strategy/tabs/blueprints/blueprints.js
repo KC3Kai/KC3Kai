@@ -122,6 +122,7 @@
 						stype: shipMaster.api_stype,
 						ctype: shipMaster.api_ctype,
 						sortno: shipMaster.api_sortno,
+						sortId: shipMaster.api_sort_id,
 						name: KC3Meta.shipName(shipMaster.api_name),
 						level: remodelInfo.level,
 						levelClass: "",

@@ -428,7 +428,9 @@ var interactions = {
 	
 	// Show map markers for old worlds (node letters & icons)
 	markersOverlay :function(request, sender, response){
-		if(!ConfigManager.map_markers) { response({success:false}); return true; }
+		if(!ConfigManager.map_markers && !ConfigManager.map_letters){
+			response({success:false}); return true;
+		}
 		var sortieStartDelayMillis = 2800;
 		var markersShowMillis = 5000;
 		var compassLeastShowMillis = 3500;
@@ -440,9 +442,9 @@ var interactions = {
 			var letters = KC3Meta.nodeLetters(request.worldId, request.mapId);
 			var lettersFound = (!!letters && Object.keys(letters).length > 0);
 			var icons = KC3Meta.nodeMarkers(request.worldId, request.mapId);
-			var iconsFound =  (!!icons.length && icons.length > 0);
+			var iconsFound = (!!icons.length && icons.length > 0);
 			$(".overlay_markers").hide().empty();
-			if(lettersFound){
+			if(lettersFound && ConfigManager.map_letters){
 				// Show node letters
 				var l;
 				for(l in letters){
@@ -452,7 +454,7 @@ var interactions = {
 					$(".overlay_markers").append(letterDiv);
 				}
 			}
-			if(iconsFound){
+			if(iconsFound && ConfigManager.map_markers){
 				// Show some icon style markers
 				var i;
 				for(i in icons){
@@ -524,8 +526,8 @@ var interactions = {
 			// Resize the window
 			chrome.windows.getCurrent(function(wind){
 				chrome.windows.update(wind.id, {
-					width: Math.ceil(800*GameScale*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
-					height: Math.ceil(480*GameScale*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+					width: Math.ceil(1200*GameScale*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
+					height: Math.ceil(720*GameScale*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
 				});
 			});
 		});

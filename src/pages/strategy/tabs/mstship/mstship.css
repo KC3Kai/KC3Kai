@@ -103,10 +103,36 @@
 	float:left;
 	margin:0px 5px 5px 0px;
 	background:#006c91;
+	overflow:hidden;
+	text-align:center;
 }
-.tab_mstship .shipInfo .cgswf embed {
-	width:218px;
-	height:300px;
+.tab_mstship .shipInfo .cgswf .image {
+	width:100%;
+	height:100%;
+}
+.tab_mstship .shipInfo .cgswf .big_mode {
+	float:left;
+	position:relative;
+	width:32px;
+	height:100%;
+	top:-100%;
+	z-index:999;
+	cursor:pointer;
+}
+.tab_mstship .shipInfo .cgswf .big_mode:hover {
+	background:rgba(0,0,255,0.5);
+}
+.tab_mstship .shipInfo .cgswf .dmg_mode {
+	float:right;
+	position:relative;
+	width:32px;
+	height:100%;
+	top:-100%;
+	z-index:999;
+	cursor:pointer;
+}
+.tab_mstship .shipInfo .cgswf .dmg_mode:hover {
+	background:rgba(255,0,0,0.5);
 }
 
 /* Ship Name*/

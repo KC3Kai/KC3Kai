@@ -138,6 +138,7 @@ Retrieves when needed to apply on components
 				subtitle_duration : false,
 				google_translate  : true,
 				map_markers       : true,
+				map_letters       : false,
 				mute_game_tab     : false,
 				dmm_forcecookies  : false,
 				dmm_customize     : false,
