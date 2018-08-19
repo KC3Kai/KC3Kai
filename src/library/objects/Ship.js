@@ -214,7 +214,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.speedName = function(){ return KC3Meta.shipSpeed(this.speed); };
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
-	KC3Ship.getMaxLevel = function(){ return 165; };
+	KC3Ship.getMaxLevel = function(){ return 175; };
 	// hard-coded at `Core.swf/vo.UserShipData.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
 	// hard-coded at `Core.swf/vo.UserShipData.VAS`
