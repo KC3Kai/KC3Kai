@@ -347,6 +347,22 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 61cm Quintuple (Oxygen) Torpedo Mount
+			"58": {
+				count: 0,
+				byClass: {
+					// CLT types in Kuma Class
+					"4": {
+						stypes: [4],
+						multiple: { "raig": 1 },
+					},
+					// Shimakaze (Kai only?)
+					"22": {
+						remodel: 1,
+						multiple: { "raig": 1 },
+					},
+				},
+			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
 			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"285": {
@@ -871,12 +887,14 @@ KC3改 Equipment Object
 		var total = 0;
 		const shipMasterId = ship.masterId;
 		const shipClassId = ship.master().api_ctype;
+		const shipTypeId = ship.master().api_stype;
 		const synergyGears = bonusGears.synergyGears || {};
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
+			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
 			if(bonusDef.remodel &&
 				RemodelDb.remodelGroup(shipMasterId).indexOf(shipMasterId) < bonusDef.remodel) { return; }
 			let gearCount = gearInfo.count;

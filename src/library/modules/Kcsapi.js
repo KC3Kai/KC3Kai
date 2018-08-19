@@ -71,6 +71,9 @@ Previously known as "Reactor"
 			this["api_get_member/useitem"](params, { api_data: response.api_data.api_useitem }, headers);
 			//this["api_get_member/furniture"](params, { api_data: response.api_data.api_furniture }, headers);
 			PlayerManager.extraSupply = response.api_data.api_extra_supply;
+			// ship type filters settings:
+			//api_oss_setting: {api_language_type: 0, api_oss_items: [1, 1, 1, 1, 1, 1, 1, 1]}
+			// using skin: api_skin_id
 		},
 		
 		"api_req_member/require_info":function(params, response, headers){

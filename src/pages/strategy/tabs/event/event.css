@@ -15,8 +15,8 @@
 ---------------------------------*/
 .tab_event .world_list {
 	height:31px;
-	position:relative;
 	min-width:700px;
+	position:relative;
 	overflow:hidden;
 }
 .tab_event .world_box {
@@ -60,29 +60,29 @@
 }
 .tab_event .map_shift {
 	position:absolute;
-	top: 0;
-	width: 10px;
-	height: 95%;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
+	top:0;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
 }
 .tab_event .map_shift.left {
-	left: 0;
+	left:0;
 }
 .tab_event .map_shift.right {
-	right: 2px;
+	right:2px;
 }
 .tab_event .map_shift.disabled {
 	cursor:default;
-	color: #f0f8ff;
+	visibility:hidden;
 }
 .tab_event .map_list {
-	position: relative;
-	min-width: 800px;
-	margin: 0px 0px 0px 0px;
-	padding: 5px 10px;
-	margin-left: -97px;
+	position:relative;
+	min-width:800px;
+	margin:0px 0px 0px 0px;
+	padding:5px 10px;
+	margin-left:-97px;
 }
 .tab_event .map_box {
 	width:90px;

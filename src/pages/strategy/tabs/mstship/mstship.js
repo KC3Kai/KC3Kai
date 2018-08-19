@@ -210,6 +210,7 @@
 			});
 			
 			// CG Notice can be dismissed
+			/*
 			if(!ConfigManager.dismissed_hints.cg_notice){
 				$(".cg_notes").show();
 				$(".cg_notes").on("click", function(e){
@@ -223,6 +224,7 @@
 					$(".cg_notes").attr("title", "Dismissed, will not be shown next time. But can always be found at Help Topics.");
 				});
 			}
+			*/
 			
 			// Fold/unfold sections like a accordion widget
 			$(".tab_mstship .shipInfo .accordion .head").on("click", function(e){

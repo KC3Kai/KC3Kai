@@ -14,8 +14,10 @@
 /* WORLD LIST
 ---------------------------------*/
 .tab_maps .world_list {
-	width:700px;
+	min-width:700px;
 	height:31px;
+	position:relative;
+	overflow:hidden;
 }
 .tab_maps .world_box {
 	width:87px;
@@ -31,9 +33,50 @@
 	line-height:29px;
 	border-bottom:0px none;
 }
+.tab_maps .world_shift {
+	position:absolute;
+	top:0px;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
+}
+.tab_maps .world_shift.left {
+	left:-3px;
+}
+.tab_maps .world_shift.right {
+	right:3px;
+}
+.tab_maps .world_shift.disabled {
+	cursor:default;
+	display:none;
+}
 
 /* MAP LIST
 ---------------------------------*/
+.tab_maps .map_scrollable {
+	position:relative;
+}
+.tab_maps .map_shift {
+	position:absolute;
+	top:0;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
+}
+.tab_maps .map_shift.left {
+	left:0;
+}
+.tab_maps .map_shift.right {
+	right:2px;
+}
+.tab_maps .map_shift.disabled {
+	cursor:default;
+	visibility:hidden;
+}
 .tab_maps .map_list {
 	width:700px;
 	margin:0px 0px 0px 0px;
