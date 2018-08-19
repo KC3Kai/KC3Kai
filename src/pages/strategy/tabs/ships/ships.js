@@ -513,7 +513,7 @@
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
 				ctype: MasterShip.api_ctype,
-				sortno: MasterShip.api_sortno,
+				sortno: MasterShip.api_sort_id,
 				name: ThisShip.name(),
 				jpName: MasterShip.api_name,
 				jpNameKana: MasterShip.api_yomi,

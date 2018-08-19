@@ -39,10 +39,10 @@
 /* OVERLAY: QUEST
 --------------------------*/
 .kc3 .overlay_quests {
-	width:944px;
+	width:945px;
 	height:504px;
-	top:165px;
-	left:216px;
+	top:164px;
+	left:215px;
 }
 .kc3 .ol_quest {
 	width:944px;
@@ -55,18 +55,19 @@
 	float:left;
 }
 .kc3 .ol_quest .content {
-	width:640px;
-	height:65px;
+	width:651px;
+	height:62px;
 	background:#E4D5C2;
 	float:left;
 	margin:2px 0px 0px 0px !important;
 }
 .kc3 .ol_quest .content .name {
-	width:640px;
-	height:22px;
-	line-height:22px;
-	font-size:22px;
+	width:651px;
+	height:19px;
+	line-height:19px;
+	font-size:19px;
 	margin:2px 0px 2px 0px !important;
+	white-space: nowrap;
 }
 .kc3 .ol_quest .content .desc {
 	width:640px;
@@ -76,12 +77,12 @@
 	overflow:hidden;
 }
 .kc3 .ol_quest .tracking {
-	width:100px;
-	height:60px;
-	line-height:95px;
+	width:90px;
+	height:62px;
+	line-height:90px;
 	margin:2px 0px 0px 0px !important;
 	float:left;
-	font-size:24px;
+	font-size:27px;
 	font-weight:bold;
 	text-align:center;
 	color:#555;
@@ -89,8 +90,8 @@
 	opacity:0.80;
 }
 .kc3 .ol_quest .tracking.small {
-	line-height:10px;
-	font-size:11px;
+	line-height:15px;
+	font-size:15px;
 }
 .kc3 .ol_quest .no_tl {
 	width: 36px;
@@ -119,28 +120,28 @@
 	text-align: center;
 	color:#fff;
 	text-shadow:
-		0px 0px 2px #000,
-		1px 1px 2px #000,
-		1px -1px 2px #000,
-		-1px -1px 2px #000,
-		-1px 1px 2px #000,
-		0px 0px 2px #000;
+			0px 0px 2px #000,
+			1px 1px 2px #000,
+			1px -1px 2px #000,
+			-1px -1px 2px #000,
+			-1px 1px 2px #000,
+			0px 0px 2px #000;
 	pointer-events: none;
 }
 .kc3 .overlay_subtitles.abyssal {
 	color:#7d7d7d;
 	text-shadow:
-		0px 0px 10px #000,
-		0px 0px 10px #000,
-		0px 0px 2px #000,
-		1px 1px 2px #000,
-		1px -1px 2px #000,
-		-1px -1px 2px #000,
-		-1px 1px 2px #000,
-		0px 0px 2px #000,
-		-1px -1px 3px #fff,
-		1px 1px 3px #911,
-		0px 0px 15px #fff;
+			0px 0px 10px #000,
+			0px 0px 10px #000,
+			0px 0px 2px #000,
+			1px 1px 2px #000,
+			1px -1px 2px #000,
+			-1px -1px 2px #000,
+			-1px 1px 2px #000,
+			0px 0px 2px #000,
+			-1px -1px 3px #fff,
+			1px 1px 3px #911,
+			0px 0px 15px #fff;
 }
 .kc3 .overlay_subtitles.ghost {
 	opacity:0.2;
@@ -194,9 +195,9 @@
 	color:#fff;
 	font-weight:normal;
 	text-shadow:1px 1px 2px #151515,
-		-1px -1px 2px #151515,
-		-1px 1px 2px #151515,
-		1px -1px 2px #151515;
+	-1px -1px 2px #151515,
+	-1px 1px 2px #151515,
+	1px -1px 2px #151515;
 	pointer-events: all;
 	display:none;
 }

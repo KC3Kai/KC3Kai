@@ -214,6 +214,29 @@ Saves and loads significant data for future use
 			delete this._raw.changedGraphs[id];
 		},
 
+		/**
+		 * Build image URI of asset resources (like ship, equipment) since KC2ndSeq (HTML5 mode) on 2018-08-17.
+		 * @see graph - replace old swf filename method (tho it's still available for now)
+		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
+		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
+		 *               [`card`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`] for slotitem
+		 * @param shipOrSlot - `ship` or `slot`
+		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
+		 */
+		png_file :function(id, type = "card", shipOrSlot = "ship", isDamaged = false){
+			if(!id || id < 0 || !type || !shipOrSlot) return "";
+			const typeWithSuffix = type + (isDamaged && shipOrSlot === "ship" ? "_dmg" : "");
+			const typeWithPrefix = shipOrSlot + "_" + typeWithSuffix;
+			const key = str => str.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+			const getFilenameSuffix = (id, typeStr) => String(
+				1000 + 17 * (Number(id) + 7) *
+				KC3Meta.resourceKeys[(key(typeStr) + Number(id) * typeStr.length) % 100] % 8973
+			);
+			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
+				suffix = getFilenameSuffix(id, typeWithPrefix);
+			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}_${suffix}.png`;
+		},
+
 		slotitem :function(id){
 			return !this.available ? false : this._raw.slotitem[id] || false;
 		},

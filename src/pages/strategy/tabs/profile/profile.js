@@ -650,6 +650,18 @@
 				});
 			});
 			
+			// Clear old encounter data from phase 1 normal maps
+			$(".tab_profile .clear_old_encounters").on("click", function(event){
+				if(!confirm("Are you sure? Lost data would not be recovered."))
+					return false;
+				KC3Database.con.encounters.where("world").below(10).delete().then(() => {
+					alert("Done!");
+				}).catch(err => {
+					console.error("Removing encounters entries", err);
+					alert("Oops! There is something wrong. You might report the error logs.");
+				});
+			});
+			
 			// Fix buggy ledger data, current possible types:
 			// 1: LBAS type, 2: Consumables empty useitem
 			$(".tab_profile .fix_ledger").on("click", function(event){

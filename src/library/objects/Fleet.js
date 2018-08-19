@@ -732,6 +732,10 @@ Contains summary information about a fleet and its ships
 			fuel: 0,
 			dayOnlyAmmo: 0,
 			nightBattleAmmo: 0,
+			nightStartFuel: 0,
+			nightStartAmmo: 0,
+			aswFuel: 0,
+			aswAmmo: 0,
 			airRaidFuel: 0,
 			airRaidAmmo: 0
 		};
@@ -742,7 +746,14 @@ Contains summary information about a fleet and its ships
 			totalCost.fuel += Math.ceil(maxFuel * 0.2);
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
-			totalCost.airRaidFuel += Math.floor(maxFuel * 0.08) || 1;
+			// 10% since Fall 2017 event
+			totalCost.nightStartFuel += Math.ceil(maxFuel * 0.1);
+			totalCost.nightStartAmmo += Math.ceil(maxAmmo * 0.1);
+			// 8% fuel, no ammo since Fall 2017 event
+			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
+			totalCost.aswAmmo += 0;
+			// 8% -> 6% since Fall 2017 event
+			totalCost.airRaidFuel += Math.floor(maxFuel * 0.06) || 1;
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 		}
 		return totalCost;
