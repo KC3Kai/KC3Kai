@@ -96,11 +96,22 @@
 			],
 			"run_at": "document_end",
 			"all_frames": true
+		},
+		{
+			"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+			"js": [
+				"assets/js/jquery.min.js",
+				"library/objects/Messengers.js",
+				"library/injections/kcs2.js"
+			],
+			"run_at": "document_end",
+			"all_frames": true
 		}
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'",
 	"web_accessible_resources": [
 		"assets/img/*",
-		"library/injections/dmm_injectable.js"
+		"library/injections/dmm_injectable.js",
+		"library/injections/kcs2_injectable.js"
 	]
 }

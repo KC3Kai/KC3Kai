@@ -63,17 +63,10 @@ function ActivateGame(){
 		.show();
 	$(".box-wrap").css({
 		"background": "#fff",
-		"width": 1200 * scale,
-		"height": 720 * scale,
+		"width": 1200,
+		"zoom": scale,
 		"margin-top": ConfigManager.api_margin
 	});
-	/*
-	var gamebox = $(".box-game").offset(), wrapper = $(".box-wrap").offset();
-	$(".box-game").css({
-		"margin-left": -gamebox.left + wrapper.left,
-		"margin-top": -gamebox.top + wrapper.top,
-	});
-	*/
 	idleTimer = setInterval(idleFunction,1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -92,7 +85,6 @@ $(document).on("ready", function(){
 	KC3Translation.execute();
 	
 	// Apply interface configs
-	//$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
 	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
@@ -110,12 +102,13 @@ $(document).on("ready", function(){
 			$(".overlay_subtitles").css("font-weight", "bold");
 		}
 		
+		const scale = (ConfigManager.api_gameScale || 100) / 100;
 		switch (ConfigManager.subtitle_display) {
 			case "bottom":
 				$(".overlay_subtitles span").css("pointer-events", "none");
 				break;
 			case "below":
-				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").prependTo(".out-of-box");
 				$(".overlay_subtitles").css({
 					position: "relative",
 					margin: "5px auto 0px",
@@ -124,19 +117,20 @@ $(document).on("ready", function(){
 					bottom: "auto",
 					right: "auto",
 					width: $(".box-game").width(),
-					zoom: ((ConfigManager.api_gameScale || 100) / 100)
+					zoom: scale
 				});
 				break;
 			case "stick":
-				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").prependTo(".out-of-box");
 				$(".overlay_subtitles").css({
 					position: "fixed",
 					left: "50%",
 					top: "auto",
-					bottom: "3px",
+					bottom: ConfigManager.alert_idle_counter > 1 ? "40px" : "3px",
 					right: "auto",
 					margin: "0px 0px 0px "+(-($(".box-game").width()/2))+"px",
-					width: $(".box-game").width()
+					width: $(".box-game").width(),
+					zoom: scale
 				});
 				break;
 			default: break;
