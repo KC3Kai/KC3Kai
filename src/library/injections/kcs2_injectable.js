@@ -56,6 +56,13 @@
 					//console.debug("Unloaded OnStop", id);
 				}
 			});
+			// To unload battle BGM faded out only without stop looping
+			thisHowl.on("fade", (id) => {
+				if (thisHowl.state() === "loaded" && thisHowl._volume <= 0) {
+					thisHowl.unload();
+					//console.debug("Unloaded OnFade", id);
+				}
+			});
 			howler._howls._push.apply(this, arguments);
 		};
 
