@@ -403,12 +403,15 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){
-			var
-				sid      = parseInt(params.api_id,10),
-				ship     = KC3ShipManager.get(sid),
-				mast     = ship.master(),
-				ship_obj = response.api_data;
-			console.log("Perform Marriage with", sid, ship.name());
+			var rosterId    = parseInt(params.api_id, 10),
+				shipObj     = KC3ShipManager.get(rosterId),
+				marriedShip = response.api_data;
+			console.log("Perform Marriage with", rosterId, shipObj.name());
+			// no longer followed by /ship2 and /useitem since HTML5 mode
+			KC3ShipManager.set([marriedShip]);
+			PlayerManager.consumables.ring -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
@@ -718,7 +721,7 @@ Previously known as "Reactor"
 			
 			// If removing all ships except flagship
 			if(typeof response.api_data != "undefined"){
-				if(typeof response.api_data.api_change_count != "undefined"){
+				if(response.api_data.api_change_count > 0){
 					PlayerManager.fleets[fleetIndex].clearNonFlagShips();
 					PlayerManager.saveFleets();
 					KC3Network.trigger("Fleet", { switchTo: fleetNum });
