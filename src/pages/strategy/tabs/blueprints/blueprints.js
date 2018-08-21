@@ -26,7 +26,7 @@
 				if(!dupeShips.length) return true;
 				const dupeRemodelLevels = dupeShips.map(s => RemodelDb.remodelGroup(s.masterId).indexOf(s.masterId));
 				const thisRemodelLevel = RemodelDb.remodelGroup(ship.masterId).indexOf(ship.masterId);
-				return thisRemodelLevel >= Math.max(dupeRemodelLevels);
+				return thisRemodelLevel >= Math.max(...dupeRemodelLevels);
 			});
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
