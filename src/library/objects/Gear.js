@@ -348,6 +348,7 @@ KC3改 Equipment Object
 				},
 			},
 			// 61cm Quintuple (Oxygen) Torpedo Mount
+			// https://wikiwiki.jp/kancolle/61cm%E4%BA%94%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7
 			"58": {
 				count: 0,
 				byClass: {
@@ -355,11 +356,39 @@ KC3改 Equipment Object
 					"4": {
 						stypes: [4],
 						multiple: { "raig": 1 },
+						countCap: 2,
 					},
 					// Shimakaze (Kai only?)
 					"22": {
 						remodel: 1,
 						multiple: { "raig": 1 },
+						countCap: 2,
+					},
+					// Akizuki Class (not only Kai?)
+					"54": {
+						multiple: { "raig": 1 },
+						countCap: 2,
+					},
+				},
+			},
+			// 53cm Bow (Oxygen) Torpedo Mount
+			// https://wikiwiki.jp/kancolle/53cm%E8%89%A6%E9%A6%96%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7
+			"67": {
+				count: 0,
+				byShip: {
+					// -5 tp on other ship types except SS, SSV
+					excludeStypes: [13, 14],
+					multiple: { "raig": -5 },
+				},
+			},
+			// Prototype 61cm Sextuple (Oxygen) Torpedo Mount
+			"179": {
+				count: 0,
+				byClass: {
+					// Akizuki Class
+					"54": {
+						multiple: { "raig": 1 },
+						countCap: 2,
 					},
 				},
 			},
@@ -894,7 +923,9 @@ KC3改 Equipment Object
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
+			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
+			if(Array.isArray(bonusDef.excludeStypes) && bonusDef.excludeStypes.includes(shipTypeId)) { return; }
 			if(bonusDef.remodel &&
 				RemodelDb.remodelGroup(shipMasterId).indexOf(shipMasterId) < bonusDef.remodel) { return; }
 			let gearCount = gearInfo.count;
