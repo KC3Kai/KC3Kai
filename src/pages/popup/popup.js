@@ -16,6 +16,7 @@
 		KC3Translation.execute();
 		
 		$(".myVersion").text(myVersion);
+		$(".gameVersion").text(localStorage.gameVersion || KC3Meta.term("Unknown"));
 		
 		// Show estimated time until next update
 		$.ajax({

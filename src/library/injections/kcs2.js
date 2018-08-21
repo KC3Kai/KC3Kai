@@ -24,8 +24,6 @@
 				const scale = (response.value[0] || 100) / 100;
 				// There should be one jQuery $ injected into this context
 				const gameCanvas = $("canvas"), editArea = $("#r_editarea");
-				// what's this?
-				//$("button[title='HOOK DIV']").remove();
 				// Set width for canvas so that zoom will affect both its size and pointer zone
 				gameCanvas.css("width", "100%");
 				// Scale edit box to right position too
