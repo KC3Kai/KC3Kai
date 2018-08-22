@@ -417,6 +417,7 @@
 			
 			if(this.croppie) this.croppie.croppie("destroy");
 			setTimeout(() => {
+				if(this.currentShipId !== ship_id) return;
 				const cgswf = $(".tab_mstship .shipInfo .cgswf");
 				this.croppie = $(".tab_mstship .shipInfo .cgswf .image").croppie({
 					boundary: { width: cgswf.width(), height: cgswf.height() },

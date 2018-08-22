@@ -294,11 +294,13 @@ Listens to network history and triggers callback if game events happen
 		 */
 		showSubtitle :function(http){
 			// url sample: http://203.104.209.39/kcs/sound/kcdbtrdgatxdpl/178798.mp3?version=5
-			if(http.request.url.indexOf("/kcs/sound/") === -1) {
+			//             http://203.104.209.39/kcs2/resources/voice/titlecall_1/050.mp3
+			const isV2Voice = http.request.url.includes("/kcs2/resources/voice/");
+			if(!(isV2Voice || http.request.url.includes("/kcs/sound/"))) {
 				return;
 			}
 			const soundPaths = http.request.url.split("/");
-			const voiceType = soundPaths[5];
+			const voiceType = soundPaths[isV2Voice ? 6 : 5];
 			switch(voiceType) {
 			case "titlecall":
 				// console.debug("DETECTED titlecall sound");
@@ -309,6 +311,20 @@ Listens to network history and triggers callback if game events happen
 					voiceNum: soundPaths[7].split(".")[0],
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
+				break;
+			case "titlecall_1":
+			case "titlecall_2":
+				// console.debug("DETECTED kcs2 titlecall sound");
+				(new RMsg("service", "subtitle", {
+					voicetype: "titlecall",
+					fullurl: http.request.url,
+					filename: voiceType.split("_")[1],
+					voiceNum: soundPaths[7].split(".")[0],
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+				break;
+			case "tutorial":
+				// Ignore this for now
 				break;
 			case "kc9997":
 				// console.debug("DETECTED Event special sound", soundPaths);

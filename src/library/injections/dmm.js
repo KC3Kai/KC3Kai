@@ -8,10 +8,11 @@
 			$("body").css("overflow", "hidden");
 			$("#game_frame").css("position", "fixed");
 			$("#game_frame").css("left", "0px");
-			$("#game_frame").css("top", -112 * (1 - scale));
+			$("#game_frame").css("top", "-16px");
 			$("#game_frame").css("z-index", "999");
+			$("#game_frame").css("zoom", scale);
+			$(".dmm-ntgnavi").css("display", "none");
 			$("#dmm-ntgnavi-renew").css("display", "none");
-			//$("#game_frame").css("zoom", scale);
 			break;
 		case 'inject':
 			DMMCustomizations.apply(response);

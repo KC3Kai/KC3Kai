@@ -56,6 +56,7 @@
                 rank: 6,
                 flagship: true,
                 mvp: true,
+                baseExp: 0,
                 enable: true
             };
         },
@@ -81,7 +82,7 @@
             // TODO: make sure "*" is handled properly
             return shipTypes;
         },
-        // return a string represetation of stype query
+        // return a string representation of stype query
         showSType: function(stypes) {
             function translate(x) {
                 return x === "*"? "Any":x;
@@ -98,6 +99,7 @@
             result[4] = template.rank;
             result[5] = template.flagship?1:0;
             result[6] = template.mvp?1:0;
+            result[7] = template.baseExp||0;
             return result;
         },
         mapShipTypeAbbrs2Ids: function(stypeAbbrs) {
