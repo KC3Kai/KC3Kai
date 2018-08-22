@@ -171,7 +171,8 @@ KC3改 Ship Box for Natsuiro theme
 					: "";
 				const nextGoal = isFinite(shipGoal.battlesLeft) && shipGoal.battlesLeft > 0 ?
 					KC3Meta.term("PanelNextLvGoalLeft")
-						.format(shipGoal.targetLevel, shipGoal.battlesLeft) : "";
+						.format(shipGoal.targetLevel, shipGoal.battlesLeft,
+							shipGoal.baseExp || shipGoal.baseExpPerBattles) : "";
 				if(nextGoal){
 					if(title) title += "\n";
 					title += nextGoal;
