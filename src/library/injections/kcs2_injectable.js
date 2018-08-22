@@ -34,14 +34,15 @@
 
 		// Hook and improve howler.js instance management: unload it on sound playback ended,
 		// same sound will reload resource file again, but should hit browser's disk cache.
+		// The game has added unload() invoking, but under some environment (some versions of Chromium),
+		// although JS heap can be GC, but process memory used by buffer of downloaded files not released by browser.
+		/*
 		howler._howls._push = howler._howls.push;
 		howler._howls.push = function () {
 			const thisHowl = arguments[0];
-			/*
-			thisHowl.on("play", (id) => {
-				console.debug("Playing", id, thisHowl._src, thisHowl._duration);
-			});
-			*/
+			//thisHowl.on("play", (id) => {
+			//	console.debug("Playing", id, thisHowl._src, thisHowl._duration);
+			//});
 			// To unload voices and SEs except looping BGM
 			thisHowl.on("end", (id) => {
 				if (thisHowl.state() === "loaded" && !thisHowl._loop) {
@@ -65,6 +66,7 @@
 			});
 			howler._howls._push.apply(this, arguments);
 		};
+		*/
 
 		console.log("Components hooked!");
 		if (checkerTimer) clearInterval(checkerTimer);
