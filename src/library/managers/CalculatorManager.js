@@ -420,8 +420,9 @@
             goalResult.isFlagship = shipGoal[5] === 1;
             goalResult.flagshipModifier = goalResult.isFlagship ? 1.5 : 1;
             goalResult.isMvp = shipGoal[6] === 1;
+            goalResult.baseExp = shipGoal[7] || 0;
             goalResult.mvpModifier = goalResult.isMvp ? 2 : 1;
-            goalResult.expPerBattles = goalResult.baseExpPerBattles
+            goalResult.expPerBattles = (shipGoal[7] || goalResult.baseExpPerBattles)
                 * goalResult.rankModifier
                 * goalResult.flagshipModifier
                 * goalResult.mvpModifier;

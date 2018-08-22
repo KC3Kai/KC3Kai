@@ -95,7 +95,18 @@
 		 * Load map info from localStorage as usual.
 		 */
 		loadMapsFromStorage: function() {
-			this.maps = localStorage.getObject("maps") || {};
+			const maps = localStorage.getObject("maps") || {};
+			this.maps = {};
+			Object.keys(maps)
+				.sort((id1, id2) => {
+					const m1 = id1.slice(-1), m2 = id2.slice(-1);
+					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+					if(w1 === "7") w1 = "3.5";
+					if(w2 === "7") w2 = "3.5";
+					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
+				}).forEach(id => {
+					this.maps[id] = maps[id];
+				});
 		},
 		
 		/**
