@@ -870,7 +870,7 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet");
 			}
 			
-			// Although followed by `/ship3`, but nothing will be effected, so no defer
+			// Although followed by `/ship3`, but nothing will be effect, so no defer
 			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects());
 		},
 		
