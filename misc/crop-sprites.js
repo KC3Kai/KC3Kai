@@ -29,12 +29,12 @@ if (subFolder) {
 	const fullPath = path.resolve('.', subFolder);
 	try {
 		fs.mkdirSync(fullPath);
-	}
-	catch (err) {
+	} catch (err) {
 		if (err.code !== 'EEXIST') throw err;
 	}
 }
 
+const ssImgBuffer = fs.readFileSync(smithImage);
 Object.keys(smith.frames).forEach(sprite => {
 	const file = path.resolve('.', subFolder, sprite + '.png');
 	const basename = path.basename(file);
@@ -45,7 +45,7 @@ Object.keys(smith.frames).forEach(sprite => {
 		width: frame.w,
 		height: frame.h,
 	};
-	pngCrop.crop(smithImage, file, config, err => {
+	pngCrop.crop(ssImgBuffer, file, config, err => {
 		if (err) {
 			console.error(`Cropping [${basename}] with`, config, err);
 		} else {
