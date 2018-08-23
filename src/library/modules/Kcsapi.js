@@ -856,17 +856,22 @@ Previously known as "Reactor"
 		/* Remove all equipment of a ship
 		-------------------------------------------------------*/
 		"api_req_kaisou/unsetslot_all":function(params, response, headers){
+			var shipID = parseInt(params.api_id, 10);
+			var shipObj = KC3ShipManager.get(shipID);
 			// unnecessary operation here since a `/api_get_member/ship3` call is followed
-			KC3ShipManager.get( params.api_id ).items = [-1,-1,-1,-1,-1];
+			shipObj.items = [-1,-1,-1,-1,-1];
 			KC3ShipManager.save();
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
-			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
+			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
 			if (fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			} else {
 				KC3Network.trigger("Fleet");
 			}
+			
+			// Although followed by `/ship3`, but nothing will be effected, so no defer
+			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects());
 		},
 		
 		/* Re-supply a ship
