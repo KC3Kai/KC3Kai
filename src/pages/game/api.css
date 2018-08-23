@@ -230,9 +230,8 @@ body {
 	height:102%;
 }
 .box-game .overlays {
-	width:800px;
-	height:480px;
-	zoom:1.5;
+	width:1200px;
+	height:720px;
 	position:absolute;
 	top:0px;
 	left:0px;
@@ -243,44 +242,44 @@ body {
 	position:absolute;
 }
 /* Refresh Toggle : default view */
-.box-game .game-refresh {
+.game-refresh {
 	display:none;
 	align-items: center;
 	justify-content: flex-end;
 	position:fixed;
 	top:0;
 	right:-32px;
-	padding: 4px;
+	padding:4px;
 	font-weight: bold;
-	width: 32px;
+	width:32px;
 	height:24px;
 	background-color:rgba(128,255,128,0.5);
-	border-radius: 16px 0px 0px 16px;
-	transition: all 0.2s;
+	border-radius:16px 0px 0px 16px;
+	transition:all 0.2s;
 }
 /* Refresh Toggle : default view / hover state */
-.box-game .game-refresh:hover {
+.game-refresh:hover {
 	right:0;
 }
 /* Refresh Toggle : default view / hoverable item */
-.box-game .game-refresh:before {
-	display: block;
-	width: 25%;
-	height: 100%;
-	content: " ";
-	position: absolute;
+.game-refresh:before {
+	display:block;
+	width:25%;
+	height:100%;
+	content:" ";
+	position:absolute;
 	top:0;
-	right: 32px;
-	transition: width 0.2s;
+	right:32px;
+	transition:width 0.2s;
 }
 /* Refresh Toggle : default view / hoverable item / hover state */
-.box-game .game-refresh:hover:before {
-	width: 0px;
+.game-refresh:hover:before {
+	width:0px;
 }
 /* Refresh Toggle : widescreen (>=832px) */
 @media only screen and (min-width: 832px) {
 	/* Refresh Toggle : widescreen / default state */
-	.box-game .game-refresh {
+	.game-refresh {
 		padding: 0;
 		right: 0px;
 		width:32px;
@@ -289,12 +288,12 @@ body {
 		border-radius:16px;
 	}
 	/* Refresh Toggle : widescreen / disabled hoverable item */
-	.box-game .game-refresh:before {
+	.game-refresh:before {
 		display:none;
 	}
 }
 /* Idle Timer */
-.box-wrap .game-idle-timer {
+.game-idle-timer {
 	display:none;
 	position: fixed;
 	left: 0;
@@ -310,13 +309,13 @@ body {
 	color: maroon;
 	transition: all 0.2s;
 }
-.box-wrap .game-idle-timer.safe-timer {
+.game-idle-timer.safe-timer {
 	color: olive;
 }
-.box-wrap .game-idle-timer:hover {
+.game-idle-timer:hover {
 	bottom: 0;
 }
-.box-wrap .game-idle-timer:before {
+.game-idle-timer:before {
 	content: " ";
 	position: absolute;
 	width: 100%;
@@ -326,15 +325,15 @@ body {
 	bottom: 24px;
 	transition: height 0.2s;
 }
-.box-wrap .game-idle-timer:hover:before {
+.game-idle-timer:hover:before {
 	height: 0px;
 }
 /* Refresh Toggle : Horizontal Panels (height >= 504px) */
 @media only screen and (min-height: 504px) {
-	.box-wrap .game-idle-timer {
+	.game-idle-timer {
 		bottom: 0;
 	}
-	.box-wrap .game-idle-timer:before {
+	.game-idle-timer:before {
 		display:none;
 	}
 }
@@ -342,49 +341,49 @@ body {
 /* OVERLAY: QUEST
 --------------------------*/
 .overlay_quests {
-	width:629px;
-	height:336px;
-	top:110px;
-	left:142px;
+	width:945px;
+	height:504px;
+	top:164px;
+	left:215px;
 }
 .ol_quest {
-	width:629px;
-	height:64px;
-	margin:0px 0px 4px 0px;
+	width:945px;
+	height:95px;
+	margin:0px 0px 7px 0px;
 }
 .ol_quest .icon {
-	width:72px;
-	height:64px;
+	width:106px;
+	height:95px;
 	float:left;
 }
 .ol_quest .content {
-	width:431px;
-	height:40px;
+	width:651px;
+	height:62px;
 	background:#E4D5C2;
 	float:left;
 	margin:2px 0px 0px 0px;
 }
 .ol_quest .content .name {
-	width:431px;
-	height:13px;
-	line-height:13px;
-	font-size:13px;
+	width:651px;
+	height:19px;
+	line-height:19px;
+	font-size:18px;
 	margin:2px 0px 2px 0px;
 }
 .ol_quest .content .desc {
-	width:431px;
-	height:22px;
-	line-height:11px;
-	font-size:11px;
+	width:640px;
+	height:44px;
+	line-height:16px;
+	font-size:15px;
 	overflow:hidden;
 }
 .ol_quest .tracking {
-	width:60px;
-	height:40px;
-	line-height:60px;
+	width:90px;
+	height:62px;
+	line-height:92px;
 	margin:2px 0px 0px 0px;
 	float:left;
-	font-size:18px;
+	font-size:27px;
 	font-weight:bold;
 	text-align:center;
 	color:#555;
@@ -392,23 +391,23 @@ body {
 	opacity:0.80;
 }
 .ol_quest .tracking.small {
-	line-height:10px;
-	font-size:11px;
+	line-height:16px;
+	font-size:15px;
 }
 .ol_quest .no_tl {
-	width: 24px;
-	height: 24px;
-	background: rgba(150,190,230, 0.6);
-	float: right;
-	margin: 20px -26px 0px 0px;
+	width:36px;
+	height:36px;
+	background:rgba(150,190,230, 0.6);
+	float:right;
+	margin:30px -39px 0px 0px;
 	position:relative;
-	border-radius: 15px;
-	line-height: 24px;
-	text-align: center;
-	font-size: 16px;
-	font-weight: bold;
-	color: #fff;
-	pointer-events: visible;
+	border-radius:21px;
+	line-height:36px;
+	text-align:center;
+	font-size:16px;
+	font-weight:bold;
+	color:#fff;
+	pointer-events:visible;
 	display:none;
 }
 
@@ -499,9 +498,9 @@ body {
 /* OVERLAY: FOCUS REGAIN
 --------------------------*/
 .focus_regain {
-	width:800px;
+	width:1200px;
 	height:2px;
-	top:478px;
+	top:718px;
 	left:0px;
 	background:#ccc;
 	display:none;
@@ -517,7 +516,7 @@ body {
 /* OVERLAY: TAIHA ALERT
 --------------------------*/
 .taiha_blood {
-	width:120px;
+	width:1200px;
 	height:720px;
 	top:0px;
 	left:0px;
@@ -589,10 +588,10 @@ body {
 /* OVERLAY: MAP MARKERS
 --------------------------*/
 .overlay_markers {
-	width:750px;
-	height:372px;
-	left:26px;
-	top:18px;
+	width:1200px;
+	height:720px;
+	left:0px;
+	top:0px;
 }
 .overlay_markers .letter {
 	position:absolute;

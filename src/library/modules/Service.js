@@ -63,11 +63,14 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		/* SET API LINK
 		From osapi content script, the API Link has been extracted
 		Save the link onto localStorage and disable extracting API further
-		If came from menu "Extract API Link", so open "Play via API" and close DMM source
+		~~If came from menu "Extract API Link", so open "Play via API" and close DMM source~~
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
 			// Set api link on internal storage
-			localStorage.absoluteswf = request.swfsrc;
+			localStorage.absoluteswf = request.swfsrc || "";
+			// Remember version string of current game main.js
+			const gameVerStr = (localStorage.absoluteswf.match(/&version=[\d\.]+\b/) || [])[0];
+			localStorage.gameVersion = (gameVerStr || "").split("=")[1] || "";
 			
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean

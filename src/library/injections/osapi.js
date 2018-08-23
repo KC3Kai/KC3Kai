@@ -59,12 +59,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			){
 				console.log("Setting zoom to scale", response.value[0] + "%");
 				var scale = (response.value[0] || 100) / 100;
-				document.body.style.transform = "scale(" + scale + ")";
-				setTimeout(function(){
-					var playerOffset = $("#flashWrap").offset();
-					$("#flashWrap").css("margin-left", -playerOffset.left / scale);
-					$("#flashWrap").css("margin-top", -playerOffset.top);
-				}, 3000);
+				document.body.style.zoom = scale;
 			}
 			// For dmm site play mode
 			if(response.value[1] && response.storage[0] == "true"){

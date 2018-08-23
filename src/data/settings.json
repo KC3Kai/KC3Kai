@@ -891,8 +891,14 @@
 				"name" : "SettingsMuteGameTab",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "fix_game_code",
+				"name" : "SettingsGameLibFixes",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
 			}
-			
 		]
 	},
 	{
