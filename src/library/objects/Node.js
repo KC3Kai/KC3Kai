@@ -214,7 +214,9 @@ Used by SortieManager
 				)
 			);
 		};
-		reduceFleetRscIfNecessary(nodeData);
+		// It seems server-side has changed losses of the same node to random values,
+		// stop inaccurate simulation for now
+		//reduceFleetRscIfNecessary(nodeData);
 		return this;
 	};
 	

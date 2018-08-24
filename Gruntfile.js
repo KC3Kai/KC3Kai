@@ -309,6 +309,16 @@ module.exports = function(grunt) {
 								],
 								"run_at": "document_end",
 								"all_frames": true
+							},
+							{
+								"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/injections/kcs2.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
 							}
 						],
 					}
