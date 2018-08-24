@@ -343,6 +343,7 @@
 			dropShipData.enemy = response.api_enemy_info.api_deck_name;
 			dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
 			dropShipData.rank = response.api_win_rank;
+			dropShipData.baseExp = response.api_get_base_exp;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
 
 			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
