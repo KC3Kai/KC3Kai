@@ -294,17 +294,17 @@ body {
 }
 /* Idle Timer */
 .game-idle-timer {
-	display:none;
+	display: none;
 	position: fixed;
 	left: 0;
 	right: 0;
-	bottom: -24px;
+	bottom: -18px;
 	width: 128px;
-	height: 24px;
+	height: 20px;
 	margin: 0 auto;
 	text-align: center;
 	background-color: rgba(189, 183, 107, 0.75);
-	border-radius: 20px 20px 0px 0px;
+	border-radius: 16px 16px 0px 0px;
 	font-weight: bold;
 	color: maroon;
 	transition: all 0.2s;
@@ -322,14 +322,14 @@ body {
 	height: 25%;
 	left: 0;
 	right: 0;
-	bottom: 24px;
+	bottom: 20px;
 	transition: height 0.2s;
 }
 .game-idle-timer:hover:before {
 	height: 0px;
 }
-/* Refresh Toggle : Horizontal Panels (height >= 504px) */
-@media only screen and (min-height: 504px) {
+/* Always shown if screen height >= 720 + 20px */
+@media only screen and (min-height: 740px) {
 	.game-idle-timer {
 		bottom: 0;
 	}

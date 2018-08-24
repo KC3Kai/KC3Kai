@@ -1158,7 +1158,7 @@ Used by SortieManager
 			// Save enemy deck name for encounter
 			var name = resultData.api_enemy_info.api_deck_name;
 			if(KC3SortieManager.isOnSortie() && !!name){
-				this.saveEnemyEncounterInfo(null, name);
+				this.saveEnemyEncounterInfo(null, name, this.nodalXP);
 			}
 		} catch (e) {
 			console.warn("Caught an exception:", e, "\nProceeds safely");/*RemoveLogging:skip*/
@@ -1847,11 +1847,12 @@ Used by SortieManager
 		});
 	};
 	
-	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName){
-		// Update name only if new name offered
+	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){
+		// Update name and base exp only if new name offered
 		if(!battleData && !!updatedName){
 			if(!!this.enemyEncounter.uniqid){
 				this.enemyEncounter.name = updatedName;
+				if(baseExp > 0){ this.enemyEncounter.exp = baseExp; }
 				KC3Database.Encounter(this.enemyEncounter, false);
 				return true;
 			}

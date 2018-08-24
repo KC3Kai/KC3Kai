@@ -2282,6 +2282,9 @@
 							}
 							let tooltip = "{0} x{1}".format(encounter.name || "???", encounter.count || 1);
 							tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
+							if(encounter.exp){
+								tooltip += "\n{0}: {1}".format(KC3Meta.term("PvpBaseExp"), encounter.exp);
+							}
 							const ap = KC3Calc.enemyFighterPower(shipList)[0];
 							if(ap){
 								tooltip += "\n" + KC3Meta.term("InferredFighterPower")
