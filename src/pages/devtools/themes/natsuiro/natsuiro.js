@@ -2973,6 +2973,14 @@
 					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteExists").format(countExisting) );
 				}
 
+				const CraftGearStats = (itemMst, statProperty, code) => {
+					if(parseInt(itemMst["api_"+statProperty], 10) !== 0){
+						const thisStatBox = $("#factory .equipStat").clone()
+							.appendTo(".module.activity .activity_crafting .equipStats");
+						$("img", thisStatBox).attr("src", `/assets/img/stats/${code}_p2.png`);
+						$(".equipStatText", thisStatBox).text( itemMst["api_"+statProperty] );
+					}
+				};
 				$(".activity_crafting .equipStats").empty();
 				CraftGearStats(MasterItem, "souk", "ar");
 				CraftGearStats(MasterItem, "houg", "fp");
@@ -4368,15 +4376,6 @@
 					return "";
 			}()))
 			.text( KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]) );
-	}
-
-	function CraftGearStats(MasterItem, StatProperty, Code){
-		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
-			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");
-
-			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
-			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
-		}
 	}
 
 	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {

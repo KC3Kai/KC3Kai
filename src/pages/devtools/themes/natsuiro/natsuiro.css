@@ -1234,18 +1234,18 @@ ABYSS FLEET
 	float:left;
 }
 .module.activity .activity_crafting .equipStatIcon {
-	width:20px;
+	width:22px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0px 3px 0px 0px;
 	background:#fff;
 	border-radius:10px;
-
+	text-align:center;
 }
 .module.activity .activity_crafting .equipStatIcon img {
-	width:16px;
+	width:18px;
 	height:16px;
-	margin:2px;
+	margin:2px 2px;
 	vertical-align:top;
 }
 .module.activity .activity_crafting .equipStatText {
@@ -4186,8 +4186,8 @@ ABYSS FLEET
 	border-bottom-color:#fcfcfc;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_icon img {
-	width:15px;
-	height:15px;
+	width:19px;
+	height:16px;
 	margin-top:-2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_name {
