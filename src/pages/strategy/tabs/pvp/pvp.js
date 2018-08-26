@@ -207,7 +207,7 @@
 					const divTag = $("<div/>").addClass("pvp_ship_item");
 					
 					const thisItem = KC3Master.slotitem(itemMstId);
-					const imgTag = $("<img/>").attr("src", "../../assets/img/items/"+thisItem.api_type[3]+".png")
+					const imgTag = $("<img/>").attr("src", KC3Meta.itemIcon(thisItem.api_type[3]))
 						.attr("alt", itemMstId)
 						.attr("title", KC3Meta.gearName(thisItem.api_name))
 						.click(gearClickFunc);

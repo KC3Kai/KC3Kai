@@ -1534,30 +1534,28 @@ KC3改 Equipment Object
 		// Some stats only shown at Equipment Library, omitted here.
 		const planeStats = ["or", "kk"];
 		$.each([
-			["hp_p2", "taik"],
-			["fp_p2", "houg"],
-			["ar_p2", "souk"],
-			["tp_p2", "raig"],
-			["dv_p2", "baku"],
-			["aa_p2", "tyku"],
-			["as_p2", "tais"],
-			["ht_p2", "houm"],
-			["ev_p2", "houk"],
-			["ls_p2", "saku"],
-			["rn_p2", "leng"],
+			["hp", "taik"],
+			["fp", "houg"],
+			["ar", "souk"],
+			["tp", "raig"],
+			["dv", "baku"],
+			["aa", "tyku"],
+			["as", "tais"],
+			["ht", "houm"],
+			["ev", "houk"],
+			["ls", "saku"],
+			["rn", "leng"],
 			["or", "distance"]
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
-			if((gearData["api_" + sdata[1]] || 0) !== 0
-				&& (planeStats.indexOf(sdata[0]) < 0
-				|| (planeStats.indexOf(sdata[0]) >=0
-					&& KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1)
-				)
-			) { // Path of image should be inputted, maybe
-				$(".icon", statBox).attr("src", "/assets/img/stats/" + sdata[0] + ".png");
-				$(".icon", statBox).width(15).height(13).css("margin-top", "-3px");
-				if(sdata[0] === "rn_p2") {
+			if((gearData["api_" + sdata[1]] || 0) !== 0 && (
+				!planeStats.includes(sdata[0]) || (planeStats.includes(sdata[0]) &&
+					KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3]))
+			)) {
+				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
+				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
+				if(sdata[0] === "rn") {
 					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_" + sdata[1]]] || "?");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);
@@ -1576,8 +1574,8 @@ KC3改 Equipment Object
 	KC3Gear.appendFighterPowerTooltip = function(tooltipTitle, gearObj, slotSize, shipOrLb) {
 		const airBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 		airBox.css("font-size", "11px");
-		$(".icon", airBox).attr("src", "/assets/img/stats/if.png");
-		$(".icon", airBox).width(15).height(13).css("margin-top", "-3px");
+		$(".icon", airBox).attr("src", KC3Meta.statIcon("if"));
+		$(".icon", airBox).width(13).height(13).css("margin-top", "-3px");
 		let pattern, value;
 		switch(ConfigManager.air_formula) {
 			case 2:
@@ -1596,8 +1594,8 @@ KC3改 Equipment Object
 		// interception power only applied to aircraft deployed to land base
 		if(shipOrLb instanceof KC3LandBase) {
 			const interceptSpan = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
-			$(".icon", interceptSpan).attr("src", "/assets/img/stats/ib.png");
-			$(".icon", interceptSpan).width(15).height(13).css("margin-top", "-3px");
+			$(".icon", interceptSpan).attr("src", KC3Meta.statIcon("ib"));
+			$(".icon", interceptSpan).width(13).height(13).css("margin-top", "-3px");
 			$(".value", interceptSpan).text(gearObj.interceptionPower(slotSize));
 			airBox.append("&emsp;").append(interceptSpan.html());
 		}
@@ -1638,8 +1636,8 @@ KC3改 Equipment Object
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
-			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isLbaa ? "rk" : "kk") + ".png");
-			$(".icon", powBox).width(15).height(13).css("margin-top", "-3px");
+			$(".icon", powBox).attr("src", KC3Meta.statIcon(isLbaa ? "rk" : "kk"));
+			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
 			$(".value", powBox).text("{0}({1})".format(onNormal, onCritical));
 			tooltipTitle.append("<br/>").append(powBox.html());
 		} else if(shipOrLb instanceof KC3Ship) {
@@ -1661,8 +1659,8 @@ KC3改 Equipment Object
 			];
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
-			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isRange ? "rk" : "kk") + ".png");
-			$(".icon", powBox).width(15).height(13).css("margin-top", "-3px");
+			$(".icon", powBox).attr("src", KC3Meta.statIcon(isRange ? "rk" : "kk"));
+			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
 			let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
 			$(".vl", valueBox).text(onNormal[0]);
 			if(isOverCap[0]) $(".vl", valueBox).addClass("power_capped");

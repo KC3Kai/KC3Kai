@@ -1459,16 +1459,16 @@ Used by SortieManager
 					"{0} /{1}".format(currentHp === 0 || currentHp ? currentHp : "?", maxHp || "?")
 			);
 			if(Array.isArray(eParam)){
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_fp_p2.png")
+				tooltip += $("<img />").attr("src", KC3Meta.statIcon("mod_fp"))
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_tp_p2.png")
+				tooltip += $("<img />").attr("src", KC3Meta.statIcon("mod_tp"))
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_aa_p2.png")
+				tooltip += $("<img />").attr("src", KC3Meta.statIcon("mod_aa"))
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_ar_p2.png")
+				tooltip += $("<img />").attr("src", KC3Meta.statIcon("mod_ar"))
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 			}
@@ -1477,7 +1477,7 @@ Used by SortieManager
 					if(eSlot[slotIdx] > 0) {
 						const gearMaster = KC3Master.slotitem(eSlot[slotIdx]);
 						tooltip += "\n" + $("<img />")
-							.attr("src","/assets/img/items/"+gearMaster.api_type[3]+".png")
+							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]))
 							.css(iconStyles).prop("outerHTML");
 						tooltip += KC3Meta.gearName(gearMaster.api_name);
 						if(KC3GearManager.carrierBasedAircraftType3Ids
@@ -1535,7 +1535,7 @@ Used by SortieManager
 		$(".header .hp", friendlyTable).css("text-align", "center");
 		const yasenIcon = $("<img/>").width(10).height(10)
 			.css("margin-top", "-2px")
-			.attr("src", "/assets/img/stats/yasen.png");
+			.attr("src", KC3Meta.statIcon("yasen"));
 		$(".header .stats", friendlyTable).append(yasenIcon);
 		$(".type", friendlyTable).text("#{0}".format(friendlyFleet.api_production_type));
 		const friendlyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
@@ -1576,7 +1576,7 @@ Used by SortieManager
 						const gearMaster = KC3Master.slotitem(gid);
 						const gearIcon = $("<img/>").width(13).height(13)
 							.css("vertical-align", "text-bottom")
-							.attr("src", `/assets/img/items/${gearMaster.api_type[3]}.png`);
+							.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
 						if(isStarShellUser && gearMaster.api_type[2] === 33) {
 							gearIcon.css("filter", "drop-shadow(0px 0px 2px #ff3399)")
 								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");

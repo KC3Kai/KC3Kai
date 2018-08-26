@@ -42,7 +42,11 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
+			
+			$(".tab_compare .compare_selector .config_stat img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon(self.statList[$(img).parent().data("stat")][0]));
+			});
 			
 			// Clone all ships
 			var box;
@@ -121,7 +125,7 @@
 		/* REFRESH COMPARISON DATA
 		---------------------------------*/
 		refresh :function(){
-			var self = this;
+			const self = this;
 			var shipBox, MasterShip;
 			$(".tab_compare .compare_list").html("");
 			
@@ -132,8 +136,11 @@
 				shipBox = $(".tab_compare .factory .compare_ship").clone();
 				shipBox.attr("id", "mst-"+mstId);
 				$(".compare_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(mstId));
-				$(".compare_ship_name", shipBox).html( KC3Meta.shipName(MasterShip.api_name) );
+				$(".compare_ship_name", shipBox).text( KC3Meta.shipName(MasterShip.api_name) );
 				$(".compare_remove", shipBox).data("id", mstId);
+				$(".config_stat img", shipBox).each((_, img) => {
+					$(img).attr("src", KC3Meta.statIcon(self.statList[$(img).parent().data("stat")][0]));
+				});
 				shipBox.appendTo(".tab_compare .compare_list");
 			});
 			

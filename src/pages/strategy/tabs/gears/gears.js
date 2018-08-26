@@ -171,6 +171,7 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
+			ConfigManager.load();
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
@@ -315,7 +316,13 @@
 		execute :function(){
 			const self = this;
 
-			$(".tab_gears .item_type").each((_, elm) => {
+			$(".tab_gears .item_stat img, .tab_gears .sortControl img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+			$(".tab_gears .item_types .item_type img").each((_, img) => {
+				$(img).attr("src", KC3Meta.itemIcon($(img).parent().data("type")));
+			});
+			$(".tab_gears .item_types .item_type").each((_, elm) => {
 				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
 			});
 			$(".tab_gears .item_type").on("click", function(){
@@ -438,7 +445,7 @@
 			const self = this;
 			$(".tab_gears .item_type").removeClass("active");
 			$(".tab_gears .item_type[data-type={0}]".format(type_id)).addClass("active");
-			$(".tab_gears .item_list").empty();
+			$(".tab_gears .item_list").html("");
 
 			const comparator = this._comparator[compareMethod];
 			if (typeof comparator == "undefined") {
@@ -456,7 +463,7 @@
 					if(item.holder instanceof KC3LandBase){
 						holderDiv = $('<div/>', {
 							'class' : 'holder',
-							'html'  : `<img src="/assets/img/items/33.png" />
+							'html'  : `<img src="${KC3Meta.itemIcon(33)}" />
 								<font>LBAS World ${item.holder.map}</font>
 								<span>#${item.holder.rid}</span>
 								<span>x${item.count}</span>`
@@ -501,7 +508,7 @@
 			$.each(SlotItems, function(index, ThisSlotitem) {
 				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
 				$(".icon img", ItemElem)
-					.attr("src", "/assets/img/items/"+ThisSlotitem.type_id+".png")
+					.attr("src", KC3Meta.itemIcon(ThisSlotitem.type_id))
 					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
 				$(".icon img", ItemElem)
 					.attr("title", `[${ThisSlotitem.id}]`)

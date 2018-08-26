@@ -56,6 +56,7 @@
 			this._holders = {};
 			this._slotNums = {};
 
+			ConfigManager.load();
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			PlayerManager.loadBases();
@@ -172,6 +173,12 @@
 		execute :function(){
 			const self = this;
 			
+			$(".tab_aircraft .item_stat img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+			$(".tab_aircraft .item_types .item_type img").each((_, img) => {
+				$(img).attr("src", KC3Meta.itemIcon($(img).parent().data("type")));
+			});
 			$(".tab_aircraft .item_type").each((_, elm) => {
 				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
 			});
@@ -196,14 +203,14 @@
 		showType :function(type_id){
 			$(".tab_aircraft .item_type").removeClass("active");
 			$(".tab_aircraft .item_type[data-type={0}]".format(type_id)).addClass("active");
-			$(".tab_aircraft .item_list").empty();
+			$(".tab_aircraft .item_list").html("");
 			
 			(this._items["t"+type_id] || []).forEach(ThisSlotitem => {
 				const ItemElem = $(".tab_aircraft .factory .slotitem").clone()
 					.appendTo(".tab_aircraft .item_list");
 				const masterId = ThisSlotitem.id;
 				$(".icon img", ItemElem)
-					.attr("src", `/assets/img/items/${type_id}.png`)
+					.attr("src", KC3Meta.itemIcon(type_id))
 					.attr("title", `[${masterId}]`)
 					.attr("alt", masterId)
 					.click(function(e){
@@ -211,6 +218,17 @@
 					});
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
+				if(KC3GearManager.interceptorsType3Ids.includes(Number(type_id))){
+					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccAntiBomber"));
+					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ib"));
+					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvaInterception"));
+					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("if"));
+				} else {
+					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccuracy"));
+					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ht"));
+					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvasion"));
+					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("ev"));
+				}
 				
 				this.slotitem_stat(ItemElem, ThisSlotitem, "fp");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "tp");
@@ -231,7 +249,7 @@
 					const PlaneBox = $(".tab_aircraft .factory .instance").clone();
 					$(".instances", ItemElem).append(PlaneBox);
 					
-					$(".instance_icon img", PlaneBox).attr("src", "/assets/img/items/"+type_id+".png");
+					$(".instance_icon img", PlaneBox).attr("src", KC3Meta.itemIcon(type_id));
 					$(".instance_lock", PlaneBox).toggle(!ThisPlane.lock);
 					
 					if(ThisPlane.stars > 0){
@@ -254,13 +272,13 @@
 					
 					if(ThisPlane.MyHolder()){
 						if(ThisPlane.MyHolder() instanceof KC3LandBase){
-							$(".holder_pic img", PlaneBox).attr("src", "/assets/img/items/33.png" );
+							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
 							$(".holder_name", PlaneBox).text( "LBAS World "+ThisPlane.MyHolder().map );
 							$(".holder_level", PlaneBox).text( "#"+ThisPlane.MyHolder().rid );
 							ThisCapacity = (ThisPlane.MyHolder().planes
 								.find(s => s.api_slotid === rosterId) || {}).api_max_count || "?";
 						} else if(ThisPlane.MyHolder() === "LbasMoving"){
-							$(".holder_pic img", PlaneBox).attr("src", "/assets/img/items/33.png" );
+							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
 							$(".holder_name", PlaneBox).text( "LBAS Moving" );
 							$(".holder_level", PlaneBox).text( "" );
 							ThisCapacity = "";

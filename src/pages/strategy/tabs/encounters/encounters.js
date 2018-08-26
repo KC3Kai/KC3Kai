@@ -180,7 +180,7 @@
 			};
 			const isLbasMap = this.isLbasSortieMap(world, map);
 
-			$(".encounter_list").empty().hide();
+			$(".encounter_list").html("").hide();
 			$(".loading").show();
 			KC3Database.con.encounters.filter(node =>
 				node.world === world && node.map === map

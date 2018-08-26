@@ -262,7 +262,7 @@
 	margin:0px 0px 3px 0px;
 }
 .tab_ships .ship_header .ship_stat img {
-	width:16px;
+	max-width:19px;
 	height:16px;
 	margin:2px;
 	vertical-align:text-bottom;

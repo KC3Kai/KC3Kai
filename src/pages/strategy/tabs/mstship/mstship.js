@@ -70,6 +70,9 @@
 			$(".tab_mstship .runtime_id").text(chrome.runtime.id);
 			var self = this;
 
+			$(".stat_icon img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
 			// slider setup for level-dependent stats
 			self.atLvlSlider = $("input#at-level-slider");
 			// create a dummy slider, this will be destroyed once there's something
@@ -469,7 +472,7 @@
 					["lk", "luck", "ShipLuck"],
 				], function(index, stat){
 					statBox = $(".tab_mstship .factory .ship_stat").clone();
-					$("img", statBox).attr("src", `/assets/img/stats/${stat[0]}_p2.png`);
+					$("img", statBox).attr("src", KC3Meta.statIcon(stat[0]));
 					$(".ship_stat_name", statBox).text(stat[1])
 						.attr("title", KC3Meta.term(stat[2]) || "")
 						.lazyInitTooltip();
@@ -556,7 +559,7 @@
 								.attr("title", fakeGear.htmlTooltip(shipData.api_maxeq[index]))
 								.lazyInitTooltip();
 							$(".sloticon img", this)
-								.attr("src", `/assets/img/items/${equipment.api_type[3]}.png`)
+								.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
 								.attr("alt", equipId).off("click")
 								.click(function(){
 									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
@@ -699,12 +702,12 @@
 							for(let i = 1; i < aaciObj.icons.length; i++) {
 								const equipIcon = String(aaciObj.icons[i]).split(/[+-]/);
 								$("<img/>")
-									.attr("src", `/assets/img/items/${equipIcon[0]}.png`)
+									.attr("src", KC3Meta.itemIcon(equipIcon[0], 1))
 									.attr("title", KC3Meta.aacitype(aaciObj.id)[i] || "")
 									.appendTo($(".equipIcons", aaciBox));
 								if(equipIcon.length > 1) {
 									$('<img/>')
-										.attr("src", `/assets/img/items/${equipIcon[1]}.png`)
+										.attr("src", KC3Meta.itemIcon(equipIcon[1], 1))
 										.addClass(aaciObj.icons[i].indexOf("-") > -1 ? "minusIcon" : "plusIcon")
 										.appendTo($(".equipIcons", aaciBox));
 								}
@@ -818,7 +821,7 @@
 							["if", "airpow"],
 						], function(index, stat){
 							statBox = $(".tab_mstship .factory .ship_stat").clone();
-							$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
+							$("img", statBox).attr("src", KC3Meta.statIcon(stat[0]));
 							$(".ship_stat_name", statBox).text(stat[1])
 								.attr("title", KC3Meta.term(stat[2]) || "")
 								.lazyInitTooltip();
@@ -874,7 +877,7 @@
 									.attr("title", fakeGear.htmlTooltip(maxeq))
 									.lazyInitTooltip();
 								$(".sloticon img", this)
-									.attr("src","/assets/img/items/"+equipment.api_type[3]+".png")
+									.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
 									.attr("alt", equipId).off("click").click(function(){
 										KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 									}).show();

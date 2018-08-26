@@ -736,8 +736,8 @@
 							ship.equip.filter(id => id > 0).forEach((gearId, i) => {
 								let masterGear = KC3Master.slotitem(gearId);
 								$(".rfleet_equips .rfleet_equip.rfleet_equip_"+(i+1),rshipBox)
-									.find('img')
-									.attr("src","../../assets/img/items/" + masterGear.api_type[3] + ".png")
+									.find("img")
+									.attr("src", KC3Meta.itemIcon(masterGear.api_type[3]))
 									.attr("title", KC3Meta.gearName(masterGear.api_name))
 									.addClass("hover").attr("alt", gearId)
 									.click(gearClickFunc);
@@ -781,7 +781,7 @@
 							var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();
 							var planeMaster = KC3Master.slotitem(plane.mst_id);
 							$(".rfleet_pic img", planeBox)
-								.attr("src", "/assets/img/items/" + planeMaster.api_type[3] + ".png")
+								.attr("src", KC3Meta.itemIcon(planeMaster.api_type[3]))
 								.attr("alt", plane.mst_id)
 								.click(gearClickFunc)
 								.addClass("hover");

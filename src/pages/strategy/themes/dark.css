@@ -183,9 +183,9 @@ button, input, select, textarea {
 	border-bottom-color:#fcfcfc;
 }
 .ui-tooltip-content .ship_tooltip .stat_icon img {
-	width:19px;
-	height:16px;
-	margin-top:-2px;
+	max-width:19px;
+	height:15px;
+	vertical-align:bottom;
 }
 .ui-tooltip-content .ship_tooltip .stat_name {
 	color:#a9a150;
