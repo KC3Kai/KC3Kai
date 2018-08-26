@@ -193,9 +193,10 @@
 				$(".loading").css("visibility", "hidden");
 				this.isLoading = false;
 				if(addExistedRef) {
+					const refId = this.isAbyssal ? this.shipId - 1000 : this.shipId;
 					$(".cropped").append("&nbsp;").append(
 					$("<img/>").addClass("existed_icon").attr("src",
-						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${this.shipId}${this.isDamaged ? "_d" : ""}.png`)
+						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${refId}${this.isDamaged ? "_d" : ""}.png`)
 					);
 					$(".cropped").show();
 				}
@@ -206,9 +207,10 @@
 				// for http get exception, `e` will be a event instance instead of Error instance
 				console.debug("Image loading failed", e);
 				if(addExistedRef && this.isAbyssal) {
+					const refId = this.isAbyssal ? this.shipId - 1000 : this.shipId;
 					$(".cropped").append("&nbsp;").append(
 						$("<img/>").addClass("existed_icon")
-							.attr("src", `/assets/img/abyss/${this.shipId}$.png`)
+							.attr("src", `/assets/img/abyss/${this.refId}$.png`)
 					);
 					$(".cropped").show();
 				}
