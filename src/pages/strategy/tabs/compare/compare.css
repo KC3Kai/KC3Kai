@@ -9,7 +9,7 @@
 	margin:10px 0px 20px 0px;
 	display: none;
 }
-.tab_compare .compare_add_col  {
+.tab_compare .compare_add_col {
 	height:24px;
 	line-height:24px;
 	float:left;
@@ -89,11 +89,12 @@
 	line-height:24px;
 	margin:0px 5px 0px 0px;
 	border-radius:12px;
+	text-align:center;
 }
 .tab_compare .compare_ship_stat img {
-	width:16px;
+	max-width:19px;
 	height:16px;
-	margin:4px;
+	margin:4px 2px;
 	vertical-align:top;
 }
 .tab_compare .compare_remove {
@@ -149,9 +150,10 @@
 	height:30px;
 	float:left;
 	margin:0px 5px 0px 0px;
+	text-align:center;
 }
 .tab_compare .compare_select_stat img {
-	width:16px;
+	max-width:19px;
 	height:16px;
-	margin:7px 6px;
+	margin:7px 4px;
 }

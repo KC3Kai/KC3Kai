@@ -77,7 +77,7 @@
 	font-size:12px;
 }
 .tab_gears .slotitem .info .item_stat img {
-	width:16px;
+	max-width:19px;
 	height:16px;
 	margin:0px 2px 0px 0px;
 }
@@ -261,4 +261,6 @@
 }
 .tab_gears .itemSorters .sortControl img {
 	margin-top:-3px;
+	max-width: 22px;
+	height: 18px
 }

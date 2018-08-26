@@ -469,7 +469,7 @@
 					["lk", "luck", "ShipLuck"],
 				], function(index, stat){
 					statBox = $(".tab_mstship .factory .ship_stat").clone();
-					$("img", statBox).attr("src", "../../../../assets/img/stats/"+stat[0]+".png");
+					$("img", statBox).attr("src", `/assets/img/stats/${stat[0]}_p2.png`);
 					$(".ship_stat_name", statBox).text(stat[1])
 						.attr("title", KC3Meta.term(stat[2]) || "")
 						.lazyInitTooltip();

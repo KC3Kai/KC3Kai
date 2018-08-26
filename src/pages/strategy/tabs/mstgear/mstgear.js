@@ -138,18 +138,18 @@
 			var statBox;
 			$(".tab_mstgear .gearInfo .stats").empty();
 			$.each([
-				["hp", "taik", "ShipHp"],
-				["fp", "houg", "ShipFire"],
-				["ar", "souk", "ShipArmor"],
-				["tp", "raig", "ShipTorpedo"],
-				["sp", "soku", "ShipSpeed"],
-				["dv", "baku", "ShipBombing"],
-				["aa", "tyku", "ShipAntiAir"],
-				["as", "tais", "ShipAsw"],
-				["ht", "houm", "ShipAccuracy", "ShipAccAntiBomber"],
-				["ev", "houk", "ShipEvasion", "ShipEvaInterception"],
-				["ls", "saku", "ShipLos"],
-				["rn", "leng", "ShipLength"],
+				["hp_p2", "taik", "ShipHp"],
+				["fp_p2", "houg", "ShipFire"],
+				["ar_p2", "souk", "ShipArmor"],
+				["tp_p2", "raig", "ShipTorpedo"],
+				["sp_p2", "soku", "ShipSpeed"],
+				["dv_p2", "baku", "ShipBombing"],
+				["aa_p2", "tyku", "ShipAntiAir"],
+				["as_p2", "tais", "ShipAsw"],
+				["ht_p2", "houm", "ShipAccuracy", "ShipAccAntiBomber"],
+				["ev_p2", "houk", "ShipEvasion", "ShipEvaInterception"],
+				["ls_p2", "saku", "ShipLos"],
+				["rn_p2", "leng", "ShipLength"],
 				["or", "distance", "ShipRadius"],
 				["kk", "cost", "ShipDeployCost"],
 			], function(index, sdata){
@@ -160,15 +160,18 @@
 				){
 					statBox = $(".tab_mstgear .factory .stat").clone();
 					$("img", statBox)
-						.attr("src", "../../../../assets/img/stats/"+sdata[0]+".png")
+						.attr("src", `/assets/img/stats/${sdata[0]}.png`)
 						.attr("title", KC3Meta.term(
 							sdata[sdata.length > 3 && gearData.api_type[2] === 48 ? 3 : 2]) || "")
 						.lazyInitTooltip();
-					if(sdata[0]==="rn"){ // For range length
+					if(sdata[0]==="ev_p2" && gearData.api_type[2] === 48){ // For interception
+						$("img", statBox).attr("src", "/assets/img/stats/ev2_p2.png");
+						$(".stat_value", statBox).text( gearData["api_"+sdata[1]] );
+					}else if(sdata[0]==="rn_p2"){ // For range length
 						$(".stat_value", statBox).text( [
 							"?", "S", "M", "L", "VL", "XL"
 						][gearData["api_"+sdata[1]]] || "?" );
-					}else if(sdata[0]==="sp"){ // For speed, but not found in gears
+					}else if(sdata[0]==="sp_p2"){ // For speed, but not found in gears
 						$(".stat_value", statBox).text( ({
 							"0":"L", "5":"S", "10":"F", "15":"F+", "20":"F++"
 						})[gearData["api_"+sdata[1]]] || "?");

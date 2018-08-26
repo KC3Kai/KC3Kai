@@ -1459,16 +1459,16 @@ Used by SortieManager
 					"{0} /{1}".format(currentHp === 0 || currentHp ? currentHp : "?", maxHp || "?")
 			);
 			if(Array.isArray(eParam)){
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_fp.png")
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_fp_p2.png")
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipFire"), eParam[0]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_tp.png")
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_tp_p2.png")
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipTorpedo"), eParam[1]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_aa.png")
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_aa_p2.png")
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}\n".format(KC3Meta.term("ShipAntiAir"), eParam[2]);
-				tooltip += $("<img />").attr("src", "/assets/img/client/mod_ar.png")
+				tooltip += $("<img />").attr("src", "/assets/img/client/mod_ar_p2.png")
 					.css(iconStyles).prop("outerHTML");
 				tooltip += "{0}: {1}".format(KC3Meta.term("ShipArmor"), eParam[3]);
 			}
