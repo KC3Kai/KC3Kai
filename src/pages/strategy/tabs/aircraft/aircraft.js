@@ -56,7 +56,6 @@
 			this._holders = {};
 			this._slotNums = {};
 
-			ConfigManager.load();
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			PlayerManager.loadBases();

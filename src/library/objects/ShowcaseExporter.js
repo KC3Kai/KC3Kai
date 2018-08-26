@@ -279,19 +279,19 @@
             for (var i in self._statsImages) {
                 if (!self._statsImages.hasOwnProperty(i))
                     continue;
-                self._loadImage(i, "_statsImages", "/assets/img/stats/" + i + ".png", callback);
+                self._loadImage(i, "_statsImages", KC3Meta.statIcon(i, 1), callback);
             }
 
             for (i in self._equipTypeImages) {
                 if (!self._equipTypeImages.hasOwnProperty(i))
                     continue;
-                self._loadImage(i, "_equipTypeImages", "/assets/img/items/" + i + ".png", callback);
+                self._loadImage(i, "_equipTypeImages", KC3Meta.itemIcon(i), callback);
             }
 
             for (i in self._shipImages) {
                 if (!self._shipImages.hasOwnProperty(i))
                     continue;
-                self._loadImage(i, "_shipImages", "/assets/img/ships/" + i + ".png", callback);
+                self._loadImage(i, "_shipImages", KC3Meta.shipIcon(i, undefined, false), callback);
             }
 
             self._loadImage("medals", "_otherImages", "/assets/img/useitems/57.png", callback);

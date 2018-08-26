@@ -184,7 +184,7 @@ button, input, select, textarea {
 }
 .ui-tooltip-content .ship_tooltip .stat_icon img {
 	max-width:19px;
-	height:15px;
+	height:16px;
 	vertical-align:bottom;
 }
 .ui-tooltip-content .ship_tooltip .stat_name {

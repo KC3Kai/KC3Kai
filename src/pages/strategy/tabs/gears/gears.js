@@ -171,7 +171,6 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			ConfigManager.load();
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
