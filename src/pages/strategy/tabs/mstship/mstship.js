@@ -414,7 +414,7 @@
 			var cgType = KC3Master.isSeasonalShip(ship_id) ? "character_full" :
 				KC3Master.isAbyssalShip(ship_id) || viewCgMode ? "full" :
 				"card";
-			var kcs2Src = `http://${this.server_ip}//kcs2/resources` +
+			var kcs2Src = `http://${this.server_ip}/kcs2/resources` +
 				KC3Master.png_file(ship_id, cgType, "ship", tryDamagedGraph && !KC3Master.isSeasonalShip(ship_id));
 			if(this.currentCardVersion) kcs2Src += `?version=${this.currentCardVersion}`;
 			
