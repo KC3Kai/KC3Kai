@@ -205,7 +205,7 @@
 						const itemMaster = KC3Master.slotitem(thisBuild.result);
 						const itemName = KC3Meta.gearName(itemMaster.api_name);
 						$(".build_ricon img", buildBox)
-							.attr("src", `/assets/img/items/${itemMaster.api_type[3]}.png`)
+							.attr("src", KC3Meta.itemIcon(itemMaster.api_type[3]))
 							.attr("alt", thisBuild.result)
 							.click(gearClickFunc);
 						$(".build_ricon", buildBox).addClass("hover");

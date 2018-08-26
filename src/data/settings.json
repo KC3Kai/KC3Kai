@@ -273,6 +273,30 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_items_iconset",
+				"name" : "SettingsItemsIconSet",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsAuto" ],
+						[ 1, "SettingsIconSetPhase1" ],
+						[ 2, "SettingsIconSetPhase2" ]
+					]
+				}
+			},
+			{
+				"id" : "info_stats_iconset",
+				"name" : "SettingsStatsIconSet",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsAuto" ],
+						[ 1, "SettingsIconSetPhase1" ],
+						[ 2, "SettingsIconSetPhase2" ]
+					]
+				}
+			},
+			{
 				"id" : "info_format_numbers",
 				"name" : "SettingsFormatNumbers",
 				"type" : "check",

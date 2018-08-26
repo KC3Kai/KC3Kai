@@ -183,12 +183,12 @@
 					return;
 				}
 				$("img", equipDiv)
-					.attr("src", "../../assets/img/items/" + gear.master().api_type[3] + ".png")
+					.attr("src", KC3Meta.itemIcon(gear.master().api_type[3]))
 					.attr("title", gear.htmlTooltip(slotSize))
 					.attr("alt", gear.master().api_id)
 					.click(this.gearClickFunc)
 					.error(function() {
-						$(this).unbind("error").attr("src", "../../assets/img/ui/empty.png");
+						$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
 					});
 				$("span", equipDiv).css("visibility", "hidden");
 			} else {

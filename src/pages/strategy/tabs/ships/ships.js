@@ -237,6 +237,14 @@
 			});
 			// Binding click event ends
 
+			// Update ship stats header icon set
+			$(".tab_ships .ship_header .ship_stat img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("type")));
+			});
+			$(".ship_tooltip .stat_icon img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+
 			// Add filter elements of ship types before `prepareFilters` executed
 			$.each(KC3Meta.sortedStypes(), (idx, stype) => {
 				// stype 12, 15 not used by shipgirl, marked as order 999
@@ -1060,7 +1068,7 @@
 			});
 
 			// Clear list
-			this.shipList.empty().hide();
+			this.shipList.html("").hide();
 			$(".ship_count .count_value").hide();
 
 			// Wait until execute
@@ -1268,7 +1276,7 @@
 				if(gear.isDummy()){ element.hide(); return; }
 				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
-					.attr("src", "/assets/img/items/" + gear.master().api_type[3] + ".png")
+					.attr("src", KC3Meta.itemIcon(gear.master().api_type[3]))
 					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.show();

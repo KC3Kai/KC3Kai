@@ -914,11 +914,12 @@
 				break;
 			case "3":
 				$(selector + " .colorbox").css("background", "#ace");
-				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedExped"));
+				const fleetName = log.api_message.substring(0, log.api_message.indexOf("が")) || "艦隊";
+				$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedExped").format(fleetName));
 				break;
 			case "5":
 				$(selector + " .colorbox").css("background", "#98e75f");
-				const opponent = log.api_message.substring(1, log.api_message.indexOf("」"));
+				const opponent = log.api_message.substring(0, log.api_message.indexOf("さんとの"));
 				if(log.api_message.indexOf("勝利") > -1){
 					$(selector + " .feed_text").html(isRaw ? log.api_message : KC3Meta.term("NewsfeedPvPWin").format(opponent));
 				} else if(log.api_message.indexOf("敗北") > -1){

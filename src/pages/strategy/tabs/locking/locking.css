@@ -148,7 +148,7 @@
 }
 
 .tab_locking .ship_header .ship_stat img {
-	width: 16px;
+	max-width: 19px;
 	height: 16px;
 	margin-top: 2px;
 	vertical-align: text-bottom;

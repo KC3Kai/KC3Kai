@@ -403,6 +403,9 @@ Uses Dexie.js third-party plugin on the assets directory
 					if(!data.name && !!oldData.name){
 						data.name = oldData.name;
 					}
+					if(!data.exp && !!oldData.exp){
+						data.exp = oldData.exp;
+					}
 				}
 				self.con.encounters.put(data).then(callback);
 			});
