@@ -22,10 +22,12 @@
 			this.seasonalIdx = 0;
 			this.imgUrl = "";
 			this.isAbyssal = false;
+			this.useOfficial = false;
 			this.pointX = 0;
 			this.pointY = 0;
 			this.scale = 0.75;
 			this.isLoading = false;
+			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
 		},
 
 		/* RELOAD: optional
@@ -60,21 +62,27 @@
 				const newShipId = Number($(".ship_id").val());
 				const damaged = !!$(".damaged").prop("checked");
 				const newSeasonal = Number($(".seasonal").val()) || 0;
+				const officialLink = !!$(".official").prop("checked");
 				const isNewImage = newShipId !== this.shipId
 					|| damaged !== this.isDamaged
-					|| newSeasonal !== this.seasonalIdx;
+					|| newSeasonal !== this.seasonalIdx
+					|| officialLink !== this.useOfficial;
 				if(!newShipId || !isNewImage) return;
 				this.shipId = newShipId;
 				this.isDamaged = damaged;
 				this.seasonalIdx = newSeasonal;
+				this.useOfficial = officialLink;
 				const dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`];
 				const illustId = this.seasonalIdx > 0 ? ((dbShip || {}).illust_extra || [])[this.seasonalIdx - 1] : this.shipId;
 				const imgNo = 8 + (1 & this.isDamaged);
 				const baseUrl = [
 					"http://fleet.diablohu.com/!/pics-ships/",
-					"http://fleet.diablohu.com/!/pics-ships-extra/"
-				][1 & (this.seasonalIdx > 0)];
-				this.imgUrl = `${baseUrl}${illustId}/${imgNo}.png`;
+					"http://fleet.diablohu.com/!/pics-ships-extra/",
+					`http://${this.serverIp}/kcs2/resources`
+				][this.useOfficial ? 2 : 1 & (this.seasonalIdx > 0)];
+				this.imgUrl = this.useOfficial ?
+					baseUrl + KC3Master.png_file(this.shipId, "full", "ship", this.isDamaged) :
+					`${baseUrl}${illustId}/${imgNo}.png`;
 				this.bindNewImage(isNewImage);
 			});
 			$(".damaged").on("change", e => {
@@ -85,6 +93,9 @@
 			});
 			$(".abyssal").on("change", e => {
 				this.isAbyssal = !!$(".abyssal").prop("checked");
+			});
+			$(".official").on("change", e => {
+				$(".ship_id").blur();
 			});
 			$(".img_url").on("blur", e => {
 				if(this.isLoading) {
@@ -182,9 +193,10 @@
 				$(".loading").css("visibility", "hidden");
 				this.isLoading = false;
 				if(addExistedRef) {
+					const refId = this.isAbyssal ? this.shipId - 1000 : this.shipId;
 					$(".cropped").append("&nbsp;").append(
 					$("<img/>").addClass("existed_icon").attr("src",
-						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${this.shipId}${this.isDamaged ? "_d" : ""}.png`)
+						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${refId}${this.isDamaged ? "_d" : ""}.png`)
 					);
 					$(".cropped").show();
 				}
@@ -195,9 +207,10 @@
 				// for http get exception, `e` will be a event instance instead of Error instance
 				console.debug("Image loading failed", e);
 				if(addExistedRef && this.isAbyssal) {
+					const refId = this.isAbyssal ? this.shipId - 1000 : this.shipId;
 					$(".cropped").append("&nbsp;").append(
 						$("<img/>").addClass("existed_icon")
-							.attr("src", `/assets/img/abyss/${this.shipId}$.png`)
+							.attr("src", `/assets/img/abyss/${this.refId}$.png`)
 					);
 					$(".cropped").show();
 				}

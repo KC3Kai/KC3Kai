@@ -198,6 +198,16 @@ Provides access to data on built-in JSON files
 		formationText :function(formationId){
 			return this._battle.formation[formationId] || "";
 		},
+		itemIcon :function(type3Id, iconSetId = ConfigManager.info_items_iconset){
+			// current auto using phase 2
+			const path = "items" + (["_p2", "", "_p2"][iconSetId || 0] || "");
+			return chrome.extension.getURL(`/assets/img/${path}/${type3Id}.png`);
+		},
+		statIcon :function(statName, iconSetId = ConfigManager.info_stats_iconset){
+			// current auto using phase 1
+			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
+			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
+		},
 		
 		shipNameAffix :function(affix){
 			// Just translate the prefixes and suffixes in `ship_affix.json`

@@ -81,6 +81,10 @@
 		execute :function(){
 			const self = this;
 
+			$(".ship_tooltip .stat_icon img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+
 			$("input#hist_query").on("keydown", function(e) {
 				if (e.which === 13) {
 					$("button#control_view").click();
@@ -363,7 +367,7 @@
 		showAllKCFleets: function(kcFleetArray) {
 			var self = this;
 			// Empty fleet list
-			$(".tab_fleet .fleet_list").hide().empty();
+			$(".tab_fleet .fleet_list").hide().html("");
 			$.each(kcFleetArray, function(ind, kcFleet) {
 				self.showKCFleet( kcFleet, ind + 1 );
 			});
@@ -561,7 +565,8 @@
 			if(isExslot || KC3GearManager.carrierBasedAircraftType3Ids.indexOf(masterData.api_type[3]) < 0){
 				$(".slot_capacity", gearBox).addClass("unused");
 			}
-			$(".gear_icon img", gearBox).attr("src", "/assets/img/items/" + masterData.api_type[3] + ".png")
+			$(".gear_icon img", gearBox).attr("src", KC3Meta.itemIcon(masterData.api_type[3]))
+				.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); })
 				.attr("alt", masterData.api_id)
 				.click(function(){
 					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));

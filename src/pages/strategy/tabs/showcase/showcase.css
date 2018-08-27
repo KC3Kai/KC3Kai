@@ -190,9 +190,10 @@
 	width:20px;
 	height:18px;
 	float:left;
+	text-align:center;
 }
 .tab_showcase .show_gear .gear_stat_icon img {
-	width:16px;
+	max-width:18px;
 	height:16px;
 	margin:1px;
 }

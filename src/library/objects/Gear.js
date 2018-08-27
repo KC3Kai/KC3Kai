@@ -1549,14 +1549,12 @@ KC3改 Equipment Object
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
-			if((gearData["api_" + sdata[1]] || 0) !== 0
-				&& (planeStats.indexOf(sdata[0]) < 0
-				|| (planeStats.indexOf(sdata[0]) >=0
-					&& KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1)
-				)
-			) { // Path of image should be inputted, maybe
-				$(".icon", statBox).attr("src", "/assets/img/stats/" + sdata[0] + ".png");
-				$(".icon", statBox).width(13).height(13).css("margin-top", "-3px");
+			if((gearData["api_" + sdata[1]] || 0) !== 0 && (
+				!planeStats.includes(sdata[0]) || (planeStats.includes(sdata[0]) &&
+					KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3]))
+			)) {
+				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
+				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_" + sdata[1]]] || "?");
 				} else {
@@ -1576,7 +1574,7 @@ KC3改 Equipment Object
 	KC3Gear.appendFighterPowerTooltip = function(tooltipTitle, gearObj, slotSize, shipOrLb) {
 		const airBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 		airBox.css("font-size", "11px");
-		$(".icon", airBox).attr("src", "/assets/img/stats/if.png");
+		$(".icon", airBox).attr("src", KC3Meta.statIcon("if"));
 		$(".icon", airBox).width(13).height(13).css("margin-top", "-3px");
 		let pattern, value;
 		switch(ConfigManager.air_formula) {
@@ -1596,7 +1594,7 @@ KC3改 Equipment Object
 		// interception power only applied to aircraft deployed to land base
 		if(shipOrLb instanceof KC3LandBase) {
 			const interceptSpan = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
-			$(".icon", interceptSpan).attr("src", "/assets/img/stats/ib.png");
+			$(".icon", interceptSpan).attr("src", KC3Meta.statIcon("ib"));
 			$(".icon", interceptSpan).width(13).height(13).css("margin-top", "-3px");
 			$(".value", interceptSpan).text(gearObj.interceptionPower(slotSize));
 			airBox.append("&emsp;").append(interceptSpan.html());
@@ -1638,7 +1636,7 @@ KC3改 Equipment Object
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
-			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isLbaa ? "rk" : "kk") + ".png");
+			$(".icon", powBox).attr("src", KC3Meta.statIcon(isLbaa ? "rk" : "kk"));
 			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
 			$(".value", powBox).text("{0}({1})".format(onNormal, onCritical));
 			tooltipTitle.append("<br/>").append(powBox.html());
@@ -1661,7 +1659,7 @@ KC3改 Equipment Object
 			];
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
-			$(".icon", powBox).attr("src", "/assets/img/stats/" + (isRange ? "rk" : "kk") + ".png");
+			$(".icon", powBox).attr("src", KC3Meta.statIcon(isRange ? "rk" : "kk"));
 			$(".icon", powBox).width(13).height(13).css("margin-top", "-3px");
 			let valueBox = $('<div><span class="vl"></span>(<span class="vlc"></span>)</div>');
 			$(".vl", valueBox).text(onNormal[0]);

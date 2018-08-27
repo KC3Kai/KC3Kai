@@ -180,7 +180,7 @@
 			};
 			const isLbasMap = this.isLbasSortieMap(world, map);
 
-			$(".encounter_list").empty().hide();
+			$(".encounter_list").html("").hide();
 			$(".loading").show();
 			KC3Database.con.encounters.filter(node =>
 				node.world === world && node.map === map
@@ -266,6 +266,9 @@
 					}
 					let tooltip = "{0} x{1}".format(curBox.data("nodeName"), curBox.data("count"));
 					tooltip += "\n{0}".format(KC3Meta.formationText(encounter.form));
+					if(encounter.exp) {
+						tooltip += "\n{0}: {1}".format(KC3Meta.term("PvpBaseExp"), encounter.exp);
+					}
 					const fpArr = KC3Calc.enemyFighterPower(shipList);
 					const ap = fpArr[0], recons = fpArr[3];
 					if(ap) {

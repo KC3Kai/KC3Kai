@@ -57,6 +57,9 @@
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();
             this.showListGrid();
+            $(".ship_header .ship_stat img").each((_, img) => {
+                $(img).attr("src", KC3Meta.statIcon($(img).parent().data("type")));
+            });
             this.shipListHeaderDiv = $(".ship_header .ship_field.hover", this.tab);
             this.registerShipListHeaderEvent(this.shipListHeaderDiv);
             this.shipListHeaderDiv.on("click", (e) => {
@@ -255,7 +258,7 @@
                 const gear = KC3GearManager.get(equipId);
                 if(gear.exists()) {
                     $("img", element)
-                        .attr("src", `/assets/img/items/${gear.master().api_type[3]}.png`)
+                        .attr("src", KC3Meta.itemIcon(gear.master().api_type[3]))
                         .attr("alt", gear.master().api_id)
                         .click(this.gearClickFunc)
                         .error(function() {

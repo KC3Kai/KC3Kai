@@ -229,8 +229,9 @@ Listens to network history and triggers callback if game events happen
 			}
 			
 			// If request is a furniture asset
-			if(request.request.url.indexOf("resources/image/furniture") > -1){
+			if(request.request.url.indexOf("/img/interior/interior_parts") > -1){
 				// Clear overlays upon entering furniture menu
+				// No longer work again since Phase 2 caches assets
 				KC3Network.clearOverlays();
 			}
 			
