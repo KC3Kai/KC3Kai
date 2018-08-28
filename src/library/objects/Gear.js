@@ -552,6 +552,22 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 12.7cm Twin Gun Mount Model A
+			"297": {
+				count: 0,
+				byClass: {
+					// Fubuki Class
+					"12": {
+						multiple: { "houk": 2 },
+					},
+					// Ayanami Class
+					"1": {
+						multiple: { "houk": 1 },
+					},
+					// Akatsuki Class
+					"5": "1",
+				},
+			},
 			// 12.7cm Twin Gun Mount Model A Kai Ni
 			"294": {
 				count: 0,
