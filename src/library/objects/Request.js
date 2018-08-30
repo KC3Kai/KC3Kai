@@ -8,14 +8,13 @@ Executes processing and relies on KC3Network for the triggers
 	"use strict";
 	
 	window.KC3Request = function( data ){
-		this.url = data.request.url;
-		this.headers = data.response.headers;
-		this.statusCode = data.response.status;
-		this.params = data.request.postData.params;
-		
-		var KcsApiIndex = this.url.indexOf("/kcsapi/");
-		this.call = this.url.substring( KcsApiIndex+8 );
-		
+		if(data){
+			this.url = data.request.url;
+			this.headers = data.response.headers;
+			this.statusCode = data.response.status;
+			this.params = data.request.postData.params;
+			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
+		}
 		this.gameStatus = 0;
 		this.response = {};
 	};
@@ -26,7 +25,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode != 200){
-			console.error(this.statusCode, this.response);
+			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
 				message: KC3Meta.term("CatBombServerCommErrorMsg").format([this.call])
@@ -41,11 +40,16 @@ Executes processing and relies on KC3Network for the triggers
 		});
 		this.headers = reformatted;
 		
+		// Reformat and decode parameters
 		reformatted = {};
+		var paramsDecoded = {};
 		$.each(this.params, function(index, element){
-			reformatted[ decodeURI(element.name) ] = element.value;
+			var paramName = decodeURI(element.name);
+			reformatted[ paramName ] = element.value;
+			paramsDecoded[ paramName ] = decodeURIComponent(element.value || "");
 		});
 		this.params = reformatted;
+		this.paramsDecoded = paramsDecoded;
 		
 		return true;
 	};
@@ -74,7 +78,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.error("Error Game Status", this.gameStatus, this.response);
+			console.warn("Game Status Error:", this.gameStatus, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
@@ -150,15 +154,11 @@ Executes processing and relies on KC3Network for the triggers
 		if(typeof Kcsapi[this.call] != "undefined"){
 			// check clock and clear quests at 5AM JST
 			var serverTime = Date.safeToUtcTime( this.headers.Date );
-			try {
-				KC3QuestManager.checkAndResetQuests(serverTime);
-			} catch (e) {
-				console.error(e.stack);/*RemoveLogging:skip*/
-			}
+			KC3QuestManager.checkAndResetQuests(serverTime);
 			
 			// Execute by passing data
 			try {
-				Kcsapi[this.call]( this.params, this.response, this.headers );
+				Kcsapi[this.call]( this.params, this.response, this.headers, this.paramsDecoded );
 			} catch (e) {
 				var reportParams = $.extend({}, this.params);
 				// Protect player's privacy
@@ -166,7 +166,7 @@ Executes processing and relies on KC3Network for the triggers
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format([this.call]),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: this.url,
 						headers: this.headers,
@@ -178,7 +178,7 @@ Executes processing and relies on KC3Network for the triggers
 					kc3Manifest: chrome.runtime.getManifest()
 				});
 				// Keep stack logging in extension's console
-				console.log(e.stack);/*RemoveLogging:skip*/
+				console.error("Game API Call Error:", e);/*RemoveLogging:skip*/
 			}
 		}
 	};

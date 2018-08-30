@@ -13,6 +13,7 @@
 		heldGearRosterIds: [],
 		instances: {},
 		hideNotImprovable: false,
+		showEquippedLocked: false,
 		
 		/* INIT
 		Prepares static data needed
@@ -66,16 +67,21 @@
 				
 				if(typeof self.instances[ThisGear.masterId] == "undefined"){
 					self.instances[ThisGear.masterId] = {
-						total:0,star0_5:0,star6_9:0,starmax:0,free:0
+						total:0, star0:0, star0_5:0, star6_9:0, starmax:0,
+						unequipped:0, free:0, freestar0:0
 					};
 				}
 				self.instances[ThisGear.masterId].id = ThisGear.masterId;
 				self.instances[ThisGear.masterId].total += 1;
+				self.instances[ThisGear.masterId].star0 += (!ThisGear.stars) & 1;
 				self.instances[ThisGear.masterId].star0_5 += (!ThisGear.stars || ThisGear.stars < 6) & 1;
 				self.instances[ThisGear.masterId].star6_9 += (ThisGear.stars >= 6 && ThisGear.stars < 10) & 1;
 				self.instances[ThisGear.masterId].starmax += (ThisGear.stars == 10) & 1;
-				self.instances[ThisGear.masterId].free += 1 & ( ThisGear.lock === 0 
-					&& self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1 );
+				self.instances[ThisGear.masterId].unequipped += 1 & (self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
+				self.instances[ThisGear.masterId].free += 1 & (!ThisGear.lock &&
+					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
+				self.instances[ThisGear.masterId].freestar0 += 1 & (!ThisGear.stars && !ThisGear.lock &&
+					self.heldGearRosterIds.indexOf(ThisGear.itemId) === -1);
 			});
 		},
 		
@@ -83,8 +89,9 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 			self.hideNotImprovable = false;
+			this.reload();
 			
 			$(".tab_akashi .weekday").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
@@ -92,8 +99,31 @@
 			
 			$("#disabled_toggle").on("click", function(){
 				self.hideNotImprovable = !self.hideNotImprovable;
-				$(".equipment.disabled").toggle(!self.hideNotImprovable);
+				var equipList = $(".equipment_list");
+				if(self.hideNotImprovable){
+					$(".equipment.disabled," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
+					  ".equipment.insufficient",
+						equipList).slideUp(300);
+				} else {
+					$(".equipment.disabled," +
+					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
+					  ".equipment.insufficient",
+						equipList).slideDown();
+				}
 			});
+			
+			$("#equipped_checkbox").on("change", function(){
+				self.showEquippedLocked = this.checked;
+				$(".equipment.disabled," +
+					".equipment.equipped," +
+					".equipment.insufficient",
+					$(".equipment_list")).slideDown(400);
+				// To recheck consumable items if locked
+				setTimeout(function(){
+					KC3StrategyTabs.reloadTab(undefined, false);
+				}, 400);
+			}).prop("checked", this.showEquippedLocked);
 			
 			// Link to weekday specified by hash parameter
 			if(!!KC3StrategyTabs.pageParams[1]){
@@ -119,11 +149,11 @@
 					|| Number(a) - Number(b);
 			});
 			
-			$(".equipment_list").empty();
+			$(".equipment_list").html("");
 			
 			var ThisBox, MasterItem, ItemName;
 			var hasShip, hasGear, ctr;
-			var ShipBox, ShipId;
+			var ShipBox, shipId;
 			var ResBox, improveList;
 			var consumedItem, upgradedItem;
 			
@@ -136,6 +166,16 @@
 			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
 			};
+			var destructConsumeResource = function(res4, res5){
+				var [itemName, itemCount] = Array.isArray(res4) ? res4[0] : [res4, res5];
+				itemName = typeof itemName === "string" || itemName > 0 ? itemName : null;
+				return [itemName, itemCount];
+			};
+			var toSlotOrUseItem = function(v){
+				return typeof v === "string" && v.startsWith("consumable")
+					? [Number(v.match(/_(\d+)$/)[1]), KC3Meta.useItemName(v.match(/_(\d+)$/)[1])]
+					: KC3Master.slotitem(v);
+			};
 			var showDevScrew = function(stars, devmats, devmatsGS, screws, screwsGS){
 				$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox)
 					.text( toAmountStr(devmats) );
@@ -146,37 +186,72 @@
 				$(".eq_res_value.screws.plus{0} .cnt".format(stars), ResBox)
 					.text( "({0})".format(toAmountStr(screwsGS)) );
 			};
-			var showConsumedItem = function(stars, consumedItem, amount){
+			var showConsumedItem = function(stars, consumedItem, amount, container = ResBox){
 				if(!consumedItem){
-					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox).hide();
-					$(".eq_res_value.consumed_name.plus{0}".format(stars), ResBox).hide();
+					$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container).hide();
+					$(".eq_res_value.consumed_name.plus{0}".format(stars), container).hide();
 					return;
 				}
-				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), ResBox)
-					.attr("src", "../../assets/img/items/"+consumedItem.api_type[3]+".png");
-				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+				// Array represents the id and name of useitem (not slotitem)
+				if(Array.isArray(consumedItem)){
+					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container).hide();
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.text( consumedItem[1] );
+					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]) );
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
+						.text( "x{0}".format(toAmountStr(amount)) );
+					return;
+				}
+				$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container)
+					.attr("src", KC3Meta.itemIcon(consumedItem.api_type[3]));
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.attr("alt", consumedItem.api_id);
-				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), ResBox)
+				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.click(gearClickFunc);
-				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 					.text( KC3Meta.gearName(consumedItem.api_name) );
-				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)) );
-				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox)
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
 					.text( "x{0}".format(toAmountStr(amount)) );
 			};
+			var showConsumedItemList = function(stars, resArrElm4, resArrElm5, container = ResBox){
+				var consumedResArr = Array.isArray(resArrElm4) ? resArrElm4 : [[resArrElm4, resArrElm5]];
+				consumedResArr.forEach((res, i) => {
+					let [itemName, itemCount] = destructConsumeResource(res[0], res[1]);
+					if(i === 0){
+						if(itemName !== null){
+							let consumedItem = toSlotOrUseItem(itemName);
+							showConsumedItem(stars, consumedItem, itemCount, container);
+							checkConsumedItem(stars, consumedItem, itemCount, container);
+						} else {
+							showConsumedItem(stars, null, container);
+						}
+					} else if(itemName !== null){
+						let extraBox = $(".extra_consumed.template.plus{0}".format(stars), container)
+							.clone().removeClass("template")
+							.appendTo($(".eq_res_line.plus{0}".format(stars), container));
+						let consumedItem = toSlotOrUseItem(itemName);
+						showConsumedItem(stars, consumedItem, itemCount, extraBox);
+						checkConsumedItem(stars, consumedItem, itemCount, extraBox);
+						extraBox.show();
+					}
+				});
+			};
 			var checkDevScrew = function(stars, itemId, devmats, screws){
-				if(!hasGear || !hasShip) return;
 				var redLine = false;
-				if(PlayerManager.consumables.devmats < devmats){
+				if((PlayerManager.consumables.devmats || 0) < devmats){
 					redLine = true;
 					$(".eq_res_value.devmats.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(PlayerManager.consumables.screws < screws){
+				if((PlayerManager.consumables.screws || 0) < screws){
 					redLine = true;
 					$(".eq_res_value.screws.plus{0} .val".format(stars), ResBox).addClass("insufficient");
 				}
-				if(!!self.instances[itemId] && self.instances[itemId]["star"+stars] === 0){
+				$(".eq_res_label.plus{0}".format(stars), ResBox).attr("title",
+					(self.instances[itemId]||{})["star"+stars] || 0);
+				if(!self.instances[itemId] || !self.instances[itemId]["star"+stars]){
 					redLine = true;
 					$(".eq_res_label.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
@@ -184,15 +259,41 @@
 					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
 				}
 			};
-			var checkConsumedItem = function(stars, consumedItem, amount){
-				if(!hasGear || !hasShip) return;
+			var checkConsumedItem = function(stars, consumedItem, amount, container = ResBox){
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
+					.removeClass("insufficient locked")
+					.removeAttr("title");
+				// Check useitem instead of slotitem
+				if(Array.isArray(consumedItem)){
+					let isNotEnoughUseItem = function(id, amount){
+						switch(id){
+						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
+						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
+						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
+						}
+						return false;
+					};
+					if(isNotEnoughUseItem(consumedItem[0], amount)){
+						$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+						$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
+					}
+					return;
+				}
+				$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).attr("title",
+					"{0} (\u2605+0 /total: {1} /{2})".format(
+						(self.instances[consumedItem.api_id]||{}).freestar0 || 0,
+						(self.instances[consumedItem.api_id]||{}).star0 || 0,
+						(self.instances[consumedItem.api_id]||{}).total || 0
+					)
+				);
 				if(!self.instances[consumedItem.api_id]
-					|| self.instances[consumedItem.api_id].total < amount){
-					$(".eq_res_line.plus{0}".format(stars), ResBox).addClass("insufficient");
-					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("insufficient");
+					|| self.instances[consumedItem.api_id].star0 < amount){
+					$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 				} else if(!!self.instances[consumedItem.api_id]
-					&& self.instances[consumedItem.api_id].free < amount){
-					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), ResBox).addClass("locked");
+					&& self.instances[consumedItem.api_id].freestar0 < amount){
+					$(".eq_res_line.plus{0}".format(stars), container).addClass(self.showEquippedLocked ? "locked" : "insufficient");
+					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("locked");
 				}
 			};
 			
@@ -203,7 +304,7 @@
 				
 				ThisBox = $(".tab_akashi .factory .equipment").clone().appendTo(".equipment_list");
 				
-				$(".eq_icon img", ThisBox).attr("src", "../../assets/img/items/"+MasterItem.api_type[3]+".png");
+				$(".eq_icon img", ThisBox).attr("src", KC3Meta.itemIcon(MasterItem.api_type[3]));
 				$(".eq_icon img", ThisBox).attr("alt", MasterItem.api_id);
 				$(".eq_icon img", ThisBox).click(gearClickFunc);
 				
@@ -217,33 +318,30 @@
 				}
 				
 				// If player has this item, check for marking
-				hasGear = false;
-				if(self.gears.indexOf(parseInt(itemId,10)) > -1){
-					hasGear = true;
-				}
+				hasGear = self.gears.indexOf(parseInt(itemId, 10)) > -1;
 				
 				for(ctr in shipList){
-					ShipId = shipList[ctr];
+					shipId = shipList[ctr];
 					
 					// If player has any of needed ships, check for marking
-					if(self.ships.indexOf( ShipId ) > -1){
+					if(self.ships.indexOf( shipId ) > -1){
 						hasShip = true;
 					}
 					
 					// Add to ship list
 					ShipBox = $(".tab_akashi .factory .eq_ship").clone();
-					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(ShipId) );
-					$(".eq_ship_icon img", ShipBox).attr("alt", ShipId );
+					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false) );
+					$(".eq_ship_icon img", ShipBox).attr("alt", shipId );
 					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
-					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(ShipId).api_name ) );
-					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(ShipId, KC3Meta.shipName( KC3Master.ship(ShipId).api_name )) );
+					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(shipId).api_name ) );
+					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName( KC3Master.ship(shipId).api_name )) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
-				// If doesn't have either ship or gear
-				if(!hasGear || !hasShip){
-					ThisBox.addClass("disabled");
-				}
+				// If doesn't have either ship or gear, show disabled red box
+				ThisBox.toggleClass("disabled", !hasGear || !hasShip)
+				// If all gear equipped, show yellow box
+					.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
 				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
 				if(Array.isArray(imps) && imps.length > 0){
@@ -263,15 +361,16 @@
 						
 						// Add some precondition ship icons as not check them yet
 						if(improveList.length > 1){
-							var shipIcons = $(".eq_res_label.material", ResBox).empty();
+							var shipIcons = $(".eq_res_label.material", ResBox);
 							imp.req.forEach(function(reqArr){
-								if(reqArr[0][dayIdx] && reqArr[1]){
+								if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
+									shipIcons.empty();
 									reqArr[1].forEach(function(reqShipId){
 										var remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
 										if(!remodel || !remodel.prev
 											|| reqArr[1].indexOf(remodel.prev) < 0){
 											shipIcons.append(
-												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId))
+												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
 												.width("16px").height("16px")
 											);
 										}
@@ -292,50 +391,48 @@
 						}
 						
 						showDevScrew("0_5", resArr[1][0], resArr[1][1], resArr[1][2], resArr[1][3]);
-						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][3]);
-						if(resArr[1][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[1][4]);
-							showConsumedItem("0_5", consumedItem, resArr[1][5]);
-							checkConsumedItem("0_5", consumedItem, resArr[1][5]);
-						} else {
-							showConsumedItem("0_5", null);
-						}
+						checkDevScrew("0_5", itemId, resArr[1][1], resArr[1][2]);
+						showConsumedItemList("0_5", resArr[1][4], resArr[1][5]);
 						
 						showDevScrew("6_9", resArr[2][0], resArr[2][1], resArr[2][2], resArr[2][3]);
-						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][3]);
-						if(resArr[2][4] > 0){
-							consumedItem = KC3Master.slotitem(resArr[2][4]);
-							showConsumedItem("6_9", consumedItem, resArr[2][5]);
-							checkConsumedItem("6_9", consumedItem, resArr[2][5]);
-						} else {
-							showConsumedItem("6_9", null);
-						}
+						checkDevScrew("6_9", itemId, resArr[2][1], resArr[2][2]);
+						showConsumedItemList("6_9", resArr[2][4], resArr[2][5]);
 						if(imp.upgrade && imp.upgrade[0] > 0){
 							showDevScrew("max", resArr[3][0], resArr[3][1], resArr[3][2], resArr[3][3]);
-							checkDevScrew("max", itemId, resArr[3][1], resArr[3][3]);
-							if(resArr[3][4] > 0){
-								consumedItem = KC3Master.slotitem(resArr[3][4]);
-								showConsumedItem("max", consumedItem, resArr[3][5]);
-								checkConsumedItem("max", consumedItem, resArr[3][5]);
-							} else {
-								showConsumedItem("max", null);
-							}
+							checkDevScrew("max", itemId, resArr[3][1], resArr[3][2]);
+							showConsumedItemList("max", resArr[3][4], resArr[3][5]);
 							upgradedItem = KC3Master.slotitem(imp.upgrade[0]);
-							$(".eq_next .eq_res_icon img", ResBox).attr("src", "../../assets/img/items/"+upgradedItem.api_type[3]+".png");
+							$(".eq_next .eq_res_icon img", ResBox).attr("src", KC3Meta.itemIcon(upgradedItem.api_type[3]));
 							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
 							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
-							$(".eq_next .eq_res_name", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
-							$(".eq_next .eq_res_name", ResBox).attr("title", "[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name)) );
+							$(".eq_next .eq_res_name .name_val", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
+							if(imp.upgrade[1]){
+								$(".eq_next .eq_res_name .stars_val", ResBox).text(
+									imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]
+								);
+							} else {
+								$(".eq_next .eq_res_name .stars", ResBox).hide();
+							}
+							$(".eq_next .eq_res_name", ResBox).attr("title",
+								"[{0}] {1}".format(upgradedItem.api_id, KC3Meta.gearName(upgradedItem.api_name))
+							);
 						} else {
-							$(".eq_res_line.plusmax", ResBox).hide();
+							$(".eq_res_line.plusmax", ResBox).addClass("insufficient").hide();
 							$(".eq_next", ResBox).hide();
 						}
 						$(".eq_resources", ThisBox).append(ResBox);
+						// If materials or all consumables insufficient, add a class to hide this item
+						ThisBox.toggleClass("insufficient",
+							hasGear && hasShip && (
+							$(".eq_res_line.material", ResBox).hasClass("insufficient") ||
+							$(".eq_res_line.insufficient", ResBox).length >=
+								$(".eq_res_line", ResBox).length - 1
+							)
+						);
 					});
 				} else {
 					$(".eq_resources", ThisBox).hide();
 				}
-				
 			});
 			
 		}

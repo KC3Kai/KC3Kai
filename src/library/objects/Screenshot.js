@@ -3,7 +3,7 @@ var enableShelfTimer = false;
 
 function KCScreenshot(){
 	ConfigManager.load();
-	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || 1);
+	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
@@ -42,8 +42,8 @@ KCScreenshot.prototype.remoteStart = function(tabId, offset){
 KCScreenshot.prototype.prepare = function(){
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 800 * this.scale;
-	this.canvas.height = 480 * this.scale;
+	this.canvas.width = 1200 * this.scale;
+	this.canvas.height = 720 * this.scale;
 	this.context = this.canvas.getContext("2d");
 	
 	// Initialize Image Tag
@@ -62,15 +62,15 @@ KCScreenshot.prototype.generateScreenshotFilename = function(withPlayerName) {
 	withPlayerName = typeof withPlayerName == 'undefined' ? true : withPlayerName;
 	
 	var d = new Date();
-	curr_month = (d.getMonth()+1) + "";
+	var curr_month = (d.getMonth()+1) + "";
 	if (curr_month.length == 1) { curr_month = "0" + curr_month; }
-	curr_date = d.getDate() + "";
+	var curr_date = d.getDate() + "";
 	if (curr_date.length == 1) { curr_date = "0" + curr_date; }
-	curr_hour = d.getHours() + "";
+	var curr_hour = d.getHours() + "";
 	if (curr_hour.length == 1) { curr_hour = "0" + curr_hour; }
-	curr_min = d.getMinutes() + "";
+	var curr_min = d.getMinutes() + "";
 	if (curr_min.length == 1) { curr_min = "0" + curr_min; }
-	curr_second = d.getSeconds() + "";
+	var curr_second = d.getSeconds() + "";
 	if (curr_second.length == 1) { curr_second = "0" + curr_second; }
 	
 	if (withPlayerName) {
@@ -88,7 +88,7 @@ KCScreenshot.prototype.capture = function(){
 	var self = this;
 	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss) {
+	if(!ConfigManager.alert_taiha_ss && interactions) {
 		interactions.suspendTaiha(function(){
 			self.startCapture();
 		});
@@ -125,8 +125,8 @@ KCScreenshot.prototype.crop = function(offset){
 	chrome.tabs.getZoom(null, function(zoomFactor){
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 800 * zoomFactor * self.scale,
-			realHeight: 480 * zoomFactor * self.scale,
+			realWidth: 1200 * zoomFactor * self.scale,
+			realHeight: 720 * zoomFactor * self.scale,
 			offTop: offset.top * zoomFactor * self.scale,
 			offLeft: offset.left * zoomFactor * self.scale,
 		};
@@ -140,8 +140,8 @@ KCScreenshot.prototype.crop = function(offset){
 			params.realHeight,
 			0,
 			0,
-			800 * self.scale,
-			480 * self.scale
+			1200 * self.scale,
+			720 * self.scale
 		);
 		
 		self.output();

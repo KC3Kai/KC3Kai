@@ -31,7 +31,8 @@
 							for (devCtr in response.AboutInvdividuals[devTypeCode]) {
 								addDeveloper(
 									response.AboutInvdividuals[devTypeCode][devCtr],
-									devCatBox
+									devCatBox,
+									devTypeCode
 								);
 							}
 						}
@@ -70,17 +71,18 @@
 	function addDeveloperCategory(title, targetBox){
 		var devcatBox = $("#factory .devCategory").clone();
 		$(".devcatTitle", devcatBox).text( KC3Meta.term(title) );
+		devcatBox.addClass(title.toCamelCase());
 		targetBox.append(devcatBox);
 		return $(".devcatList", devcatBox);
 	}
 	
 	// Show one of the developers
-	function addDeveloper( info, targetBox ){
+	function addDeveloper( info, targetBox, type ){
 		var devBox = $("#factory .devBox").clone();
 		
 		$(".devAvatar img", devBox).attr("src", info.avatar);
 		$(".devName", devBox).text( info.name );
-		if(typeof info.desc == "object"){
+		if(Array.isArray(info.desc)){
 			var myRoles = [];
 			$.each(info.desc, function(i,desc){
 				myRoles.push( KC3Meta.term( desc ) );
@@ -98,7 +100,7 @@
 			$(".devLinks", devBox).append(linkBox);
 		}
 		
-		if (info.active) {
+		if(info.active) {
 			targetBox.append(devBox);
 		} else {
 			devBox.addClass("inactive");

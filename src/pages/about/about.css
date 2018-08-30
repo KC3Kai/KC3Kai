@@ -89,6 +89,10 @@ body {
 	width:16px;
 	height:16px;
 }
+#discord .icon img {
+	width:16px;
+	height:18px;
+}
 .kc3 .links .link .text {
 	height:20px;
 	float:left;
@@ -140,7 +144,9 @@ body {
 	font-weight:bold;
 	line-height:16px;
 	margin:3px 0px 4px 0px;
+	white-space:nowrap;
 	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .devBox .devDesc {
 	/*width:120px;
@@ -161,6 +167,9 @@ body {
 	display:none;
 	margin:0px;
 	padding:0px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .devBox .devLinks {
 	width:120px;
@@ -194,6 +203,22 @@ body {
 }
 .devBox.inactive .devLinks {
 	display:none;
+}
+.aboutTranslators .devBox,
+.aboutForkContributors .devBox {
+	height:55px
+}
+.aboutTranslators .devAvatar,
+.aboutForkContributors .devAvatar {
+	margin-top:3px;
+}
+.aboutTranslators .devName,
+.aboutForkContributors .devName {
+	margin-bottom:1px;
+}
+.aboutTranslators .devDesc,
+.aboutForkContributors .devDesc {
+	display:block;
 }
 
 /* PARTNERS

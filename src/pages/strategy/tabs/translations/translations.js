@@ -70,6 +70,7 @@
 
 			$.each( keys, function(i,k) {
 				var v = jsonData[k];
+				if($.isEmptyObject(v)) return true;
 				var row = $(".factory .tq-item").clone();
 
 				var questWikiCode = (v.code && v.code.val) ? v.code.val : "???";
@@ -78,11 +79,12 @@
 				var questName = v.name.val;
 				var questDesc = v.desc.val;
 				var questMemo = v.memo ? v.memo.val : false;
+				var questTrackingDesc = v.trackingDesc ? v.trackingDesc : false;
 
 				var questNameL = v.name.tag;
 				var questDescL = v.desc.tag;
 
-				row.addClass( 
+				row.addClass(
 					language === v.name.tag && language === v.desc.tag ?
 						"translation_done" : "translation_missing" );
 
@@ -98,14 +100,24 @@
 				if(questMemo){
 					if($("#html-rendering").is(":checked")){
 						$(".tq-memo",row).html(questMemo.replace(/\n/g,"<br/>")).addClass(
-							language === v.desc.tag ?
+							language === v.memo.tag ?
 							"translation_done" : "translation_missing");
 					} else {
 						$(".tq-memo",row).text(questMemo.replace(/\n/g,"\\n")).addClass(
-							language === v.desc.tag ?
+							language === v.memo.tag ?
 							"translation_done" : "translation_missing");
 					}
 				}
+				if(questTrackingDesc){
+					for(var index = 0; index < questTrackingDesc.length; index++){
+						var questTrack = $("<div/>").addClass("tq-trackingDesc");
+						questTrack.text("[" + index + "] " + questTrackingDesc[index].val).addClass(
+							language === questTrackingDesc[index].tag ?
+								"translation_done" : "translation_missing");
+						questTrack.appendTo(row);
+					}
+				}
+
 				$(".tq-json",row).text('{0}:{1},'.format(JSON.stringify(k), JSON.stringify(originalJson[k])));
 
 				row.appendTo( "#tr-container" );
@@ -125,7 +137,6 @@
 			var language = ConfigManager.language;
 
 			$.each(servers, function(i, d) {
-				console.log(d);
 				var row = $(".factory .tr-item").clone();
 				row.addClass( 
 					language === d.dat.name.tag ?

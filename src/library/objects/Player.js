@@ -1,14 +1,14 @@
 /* Player.js
 KC3改 Player Class
 
-Instantiatable class to represent one player
+Instantiate-able class to represent one player
 */
 (function(){
 	"use strict";
 	
 	window.KC3Player = function(){
 		if(!this.load()){
-			this.id =  0;
+			this.id = 0;
 			this.name = "Unknown";
 			this.nameId = "-1";
 			this.desc = "";
@@ -19,14 +19,21 @@ Instantiatable class to represent one player
 			this.rankPtLastCount = 0;
 			this.rankPtCutoff = 0;
 			this.rankPtLastCheck = 0;
+			this.rankPtLastTimestamp = 0;
 			this.lastMaterial = null;
 			this.lastPortTime = null;
 			this.lastSortie   = null;
+			this.fleetSlots = 1;
+			this.repairSlots = 2;
+			this.buildSlots = 2;
+			this.shipSlots = 100;
+			this.gearSlots = 500;
+			this.parallelQuestCount = 5;
 		}
 	};
 	
 	KC3Player.prototype.update = function( data ){
-		this.id =  data.mid;
+		this.id = data.mid;
 		this.name = data.name;
 		this.nameId = data.nameId;
 		KC3Database.index = this.id;
@@ -37,7 +44,15 @@ Instantiatable class to represent one player
 		this.desc = data.desc;
 		this.rank = KC3Meta.rank( data.rank );
 		
-		this.updateLevel(data.level,data.exp);
+		this.fleetSlots = data.fleetCount;
+		this.repairSlots = data.repairSlots;
+		this.buildSlots = data.buildSlots;
+		this.shipSlots = data.maxShipSlots;
+		this.gearSlots = 3 + data.maxGearSlots;
+		this.parallelQuestCount = data.questCount;
+		
+		this.updateLevel(data.level, data.exp);
+		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.updateLevel = function( level, exp ){
@@ -54,8 +69,6 @@ Instantiatable class to represent one player
 			exp_percent = 1.0;
 		}
 		this.exp = [ exp_percent, exp_next, exp_current, ExpCurrLevel + exp_current ];
-		
-		this.checkRankPoints();
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
@@ -94,6 +107,7 @@ Instantiatable class to represent one player
 	
 	KC3Player.prototype.rankCutOff = function(){
 		this.rankPtLastCount = this.getRankPoints();
+		this.rankPtLastTimestamp = Date.now();
 		this.rankPtCutoff = this.exp[3];
 	};
 	
@@ -115,7 +129,7 @@ Instantiatable class to represent one player
 			}
 		}*/
 		
-		return Math.floor((this.exp[3] - this.rankPtCutoff)/1428) + ExOpBonus;
+		return (this.exp[3] - this.rankPtCutoff) * 7 / 10000 + ExOpBonus;
 	};
 	
 	KC3Player.prototype.getRegenCap = function(){
@@ -123,21 +137,33 @@ Instantiatable class to represent one player
 	};
 
 	KC3Player.prototype.logout = function(){
+		// Clear all cached / tracked game data related to specified player member,
+		// KC3 user settings, Strategy Room options untouched, may cause minor conflict.
 		localStorage.removeItem("player");
 		localStorage.removeItem("fleets");
-		localStorage.removeItem("ships");
-		localStorage.removeItem("gears");
-		localStorage.removeItem("maps");
 		localStorage.removeItem("statistics");
-		localStorage.removeItem("quests");
-		localStorage.removeItem("lock_plan");
 		localStorage.removeItem("lastResource");
 		localStorage.removeItem("lastUseitem");
 		localStorage.removeItem("lastExperience");
-		
-		KC3ShipManager.clear();
-		KC3GearManager.clear();
-		KC3QuestManager.clear();
+		localStorage.removeItem("akashiRepairStartTime");
+		localStorage.removeItem("baseConvertingSlots");
+		localStorage.removeItem("bases");
+		localStorage.removeItem("consumables");
+		localStorage.removeItem("dockingShips");
+		localStorage.removeItem("longestIdleTime");
+		localStorage.removeItem("pictureBook");
+		localStorage.removeItem("playerNewsFeed");
+		// History of map clear and event boss hp info will be lost,
+		// still keep them since they are unrecoverable.
+		//localStorage.removeItem("maps");
+		//localStorage.removeItem("quests");
+		// KCSAPI of totally refreshing ships and gears already done,
+		// clearing them here will cause temporarily missing of cached data.
+		//localStorage.removeItem("ships");
+		//localStorage.removeItem("gears");
+		//KC3ShipManager.clear();
+		//KC3GearManager.clear();
+		//KC3QuestManager.clear();
 		KC3SortieManager.endSortie();
 	};
 	
@@ -156,11 +182,18 @@ Instantiatable class to represent one player
 			this.exp = playerInfo.exp;
 			this.server = playerInfo.server;
 			this.rankPtLastCount = (playerInfo.rankPtLastCount || 0);
+			this.rankPtLastTimestamp = (playerInfo.rankPtLastTimestamp || 0);
 			this.rankPtCutoff = (playerInfo.rankPtCutoff || 0);
 			this.rankPtLastCheck = (playerInfo.rankPtLastCheck || 0);
 			this.lastMaterial = playerInfo.lastMaterial || null;
 			this.lastPortTime = playerInfo.lastPortTime || null;
 			this.lastSortie   = playerInfo.lastSortie || null;
+			this.fleetSlots = playerInfo.fleetSlots || 1;
+			this.repairSlots = playerInfo.repairSlots || 2;
+			this.buildSlots = playerInfo.buildSlots || 2;
+			this.shipSlots = playerInfo.shipSlots || 100;
+			this.gearSlots = playerInfo.gearSlots || 500;
+			this.parallelQuestCount = playerInfo.parallelQuestCount || 5;
 			return true;
 		}
 		return false;

@@ -8,6 +8,7 @@
 		<link href="../../assets/css/global.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
 		<link href="../../assets/css/bootstrap-slider.min.css" rel="stylesheet" type="text/css">
+		<link href="../../assets/css/croppie.min.css" rel="stylesheet" type="text/css" />
 		<link href="strategy.css" rel="stylesheet" type="text/css">
 		<title class="i18n">StrategyRoomTitle</title>
 		<link rel="shortcut icon" href="../../assets/img/logo/48.png" type="image/x-icon" />
@@ -43,6 +44,7 @@
 							<li data-id="docking" class="i18n">TabSubMenuDocking</li>
 							<li data-id="expcalc" class="i18n">TabSubMenuLeveling</li>
 							<li data-id="badge" class="i18n">TabSubMenuBadge</li>
+							<li data-id="blueprints">Blueprints</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -75,6 +77,7 @@
 							<li data-id="event" class="i18n">TabSubMenuEvents</li>
 							<li data-id="encounters" class="i18n">TabSubMenuEncounters</li>
 							<li data-id="pvp" class="i18n">TabSubMenuPvP</li>
+							<li data-id="shipdrop">Drop Record</li>
 						</ul>
 					</div>
 					<div class="submenu">
@@ -97,9 +100,11 @@
 					<div class="submenu dev-only">
 						<div class="title">Dev-Only</div>
 						<ul class="menulist">
-							<li data-id="playground">Playground</li>
+							<li data-id="logger">Logs</li>
 							<li data-id="translations">Translations</li>
 							<li data-id="quotes">Quotes</li>
+							<li data-id="iconmaker">Icons</li>
+							<li data-id="playground">Playground</li>
 						</ul>
 					</div>
 				</div>
@@ -127,8 +132,9 @@
 		<script type="text/javascript" src="../../assets/js/Chart.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/FileSaver.min.js"></script>
 		<script type="text/javascript" src="../../assets/js/bootstrap-slider.min.js"></script>
-		<script type="text/javascript" src="../../assets/js/KanColleHelpers.js"></script>
 		<script type="text/javascript" src="../../assets/js/jszip.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/wanakana.min.js"></script>
+		<script type="text/javascript" src="../../assets/js/croppie.min.js"></script>
 		<script type="text/javascript" src="../../library/modules/StrategyTabs.js"></script>
 
 		<!-- @buildimportjs ../../library/objects.js -->
@@ -147,6 +153,7 @@
 		<script type="text/javascript" src="../../library/objects/Sortie.js"></script>
 		<script type="text/javascript" src="../../library/objects/LandBase.js"></script>
 		<script type="text/javascript" src="../../library/objects/ShowcaseExporter.js"></script>
+		<script type="text/javascript" src="../../library/objects/ShowcaseEventList.js"></script>
 		<script type="text/javascript" src="../../library/managers/ConfigManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GearManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/PlayerManager.js"></script>
@@ -154,10 +161,20 @@
 		<script type="text/javascript" src="../../library/managers/SortieManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/QuestManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/ShipManager.js"></script>
+		<script type="text/javascript" src="../../library/managers/CalculatorManager.js"></script>
 		<script type="text/javascript" src="../../library/managers/GoalTemplateManager.js"></script>
 		<!-- @nonbuildend -->
+
+		<script type="text/javascript" src="../../library/helpers/KanColleHelpers.js"></script>
+		<script type="text/javascript" src="../../library/modules/BattlePrediction.js"></script>
+		<script type="text/javascript" src="../../library/modules/ChromeSync.js"></script>
+		<script type="text/javascript" src="../../library/modules/QuestSync/Sync.js"></script>
+		<script type="text/javascript" src="../../library/modules/QuestSync/ContentScript.js"></script>
 		<script type="text/javascript" src="../../library/modules/RemodelDb.js"></script>
 		<script type="text/javascript" src="../../library/modules/Database.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Log.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Messaging.js"></script>
+		<script type="text/javascript" src="../../library/modules/Log/Strategy.js"></script>
 		<script type="text/javascript" src="../../library/modules/ImageExport.js"></script>
 		<script type="text/javascript" src="../../library/modules/Master.js"></script>
 		<script type="text/javascript" src="../../library/modules/Translation.js"></script>
@@ -172,6 +189,7 @@
 
 		<script type="text/javascript" src="graphable.js"></script>
 		<script type="text/javascript" src="sortielogs.js"></script>
+		<script type="text/javascript" src="shipgrid.js"></script>
 		<!-- @buildimportjs allstrategytabs.js -->
 
 		<!-- @nonbuildstart -->
@@ -180,6 +198,7 @@
 		<script type="text/javascript" src="tabs/docking/docking.js"></script>
 		<script type="text/javascript" src="tabs/gears/gears.js"></script>
 		<script type="text/javascript" src="tabs/newsfeed/newsfeed.js"></script>
+		<script type="text/javascript" src="tabs/logger/logger.js"></script>
 
 		<!-- experience, resources and consumables, implements graphable -->
 		<script type="text/javascript" src="tabs/resources/resources.js"></script>
@@ -214,6 +233,9 @@
 		<script type="text/javascript" src="tabs/quotes/quotes.js"></script>
 		<script type="text/javascript" src="tabs/pvp/pvp.js"></script>
 		<script type="text/javascript" src="tabs/compare/compare.js"></script>
+		<script type="text/javascript" src="tabs/blueprints/blueprints.js"></script>
+		<script type="text/javascript" src="tabs/shipdrop/shipdrop.js"></script>
+		<script type="text/javascript" src="tabs/iconmaker/iconmaker.js"></script>
 		<!-- @nonbuildend -->
 
 	</body>

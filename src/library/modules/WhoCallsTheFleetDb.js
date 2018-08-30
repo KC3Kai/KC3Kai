@@ -3,16 +3,20 @@
 
 	window.WhoCallsTheFleetDb = {
 		db: {},
-		expectedShipCount: 466,
-		expectedItemCount: 228,
+		expectedShipCount: 534,
+		expectedItemCount: 299,
 		init: function(repo) {
 			var self = this;
 			var loadAndParseDb = function(prefix, filename, expectedCount) {
 				var rawDb = $.ajax({
-					url : repo + 'assets/js/' + filename,
+					url : repo + 'data/' + filename,
 					async: false
 				}).responseText;
 
+				/**
+				 * WhoCallsTheFleet-DB using nedb storage, which is a line separated json-like format.
+				 * @see https://github.com/louischatriot/nedb
+				 */
 				var content = rawDb
 					.split("\n")
 					.map( function(x) {
@@ -25,11 +29,11 @@
 					.filter( function(x) {return x;});
 				
 				if (content.length < expectedCount) {
-					console.warn("Unexpected entity number,",
+					console.warn("WhoCallsTheFleetDB: unexpected entity number,",
 								 filename, "might has been changed.");
 				} else if(content.length > expectedCount) {
-					console.info(filename, "has been updated,",
-								 "commit `expected(Ship|Item)Count:", content.length +
+					console.info("WhoCallsTheFleetDB:", filename, "has been updated,",
+								 "commit `expected(Ship|Item)Count: " + content.length +
 								 ",` instead of `" + expectedCount + "` plz.");
 				}
 
@@ -41,8 +45,8 @@
 			};
 
 			this.db = {};
-			this.expectedShipCount = loadAndParseDb("s", "WhoCallsTheFleetShipDb.json", this.expectedShipCount);
-			this.expectedItemCount = loadAndParseDb("i", "WhoCallsTheFleetItemDb.json", this.expectedItemCount);
+			this.expectedShipCount = loadAndParseDb("s", "WhoCallsTheFleet_ships.nedb", this.expectedShipCount);
+			this.expectedItemCount = loadAndParseDb("i", "WhoCallsTheFleet_items.nedb", this.expectedItemCount);
 		},
 
 		getShipStat: function(shipId) {
@@ -85,6 +89,12 @@
 			var retVal = statBound.base +
 				Math.floor((statBound.max - statBound.base)*level / 99.0);
 			return retVal;
+		},
+
+		estimateStatBase: function(stat, statMax, level) {
+			var retVal = stat / (( 99 - level) / 99.0)
+				- statMax * level / ( 99 - level);
+			return Math.ceil(retVal);
 		},
 
 		getShipRemodel: function(shipId) {

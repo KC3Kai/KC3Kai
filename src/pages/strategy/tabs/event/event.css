@@ -15,8 +15,8 @@
 ---------------------------------*/
 .tab_event .world_list {
 	height:31px;
-	position:relative;
 	min-width:700px;
+	position:relative;
 	overflow:hidden;
 }
 .tab_event .world_box {
@@ -60,29 +60,29 @@
 }
 .tab_event .map_shift {
 	position:absolute;
-	top: 0;
-	width: 10px;
-	height: 95%;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
+	top:0;
+	width:10px;
+	height:95%;
+	display:flex;
+	align-items:center;
+	cursor:pointer;
 }
 .tab_event .map_shift.left {
-	left: 0;
+	left:0;
 }
 .tab_event .map_shift.right {
-	right: 2px;
+	right:2px;
 }
 .tab_event .map_shift.disabled {
 	cursor:default;
-	color: #f0f8ff;
+	visibility:hidden;
 }
 .tab_event .map_list {
-	position: relative;
-	min-width: 800px;
-	margin: 0px 0px 0px 0px;
-	padding: 5px 10px;
-	margin-left: -97px;
+	position:relative;
+	min-width:800px;
+	margin:0px 0px 0px 0px;
+	padding:5px 10px;
+	margin-left:-97px;
 }
 .tab_event .map_box {
 	width:90px;
@@ -140,43 +140,38 @@
 	position: relative;
 }
 
-.tab_event .map_box.cleared.easy:after {
+.tab_event .map_box.cleared:after {
 	content: "";
 	display: block;
 	position: absolute;
 	top: -1px;
-	right: -8px;
-	width: 21px;
-	height: 36px;
-	background: transparent url('../../../../assets/img/client/medals/easy_medal.png');
-	background-size: contain;
+	right: -7px;
 	pointer-events: none;
 }
-
+.tab_event .map_box.cleared.casual:after {
+	top: -2px;
+	width: 19px;
+	height: 32px;
+	background: transparent url('/assets/img/client/medals/casual_medal.png') no-repeat;
+	background-size: contain;
+}
+.tab_event .map_box.cleared.easy:after {
+	width: 21px;
+	height: 37px;
+	background: transparent url('/assets/img/client/medals/easy_medal.png') no-repeat;
+	background-size: contain;
+}
 .tab_event .map_box.cleared.normal:after {
-	content: "";
-	display: block;
-	position: absolute;
-	top: -1px;
-	right: -8px;
 	width: 29px;
 	height: 37px;
-	background: transparent url('../../../../assets/img/client/medals/normal_medal.png');
+	background: transparent url('/assets/img/client/medals/normal_medal.png') no-repeat;
 	background-size: contain;
-	pointer-events: none;
 }
-
 .tab_event .map_box.cleared.hard:after {
-	content: "";
-	display: block;
-	position: absolute;
-	top: -1px;
-	right: -8px;
 	width: 34px;
 	height: 38px;
-	background: transparent url('../../../../assets/img/client/medals/hard_medal.png');
+	background: transparent url('/assets/img/client/medals/hard_medal.png') no-repeat;
 	background-size: contain;
-	pointer-events: none;
 }
 
 .tab_event .map_box.cleared.active.easy:after,
@@ -200,19 +195,33 @@
 	margin:5px 0px 0px 0px;
 }
 
-.tab_event .sortie_controls .sortie_count {
+.tab_event .sortie_controls .sortie_per_page {
+	float:left;
+	height:15px;
 	font-size:12px;
 	line-height:12px;
+	margin:4px 0px 4px 20px;
+}
+.tab_event .sortie_controls .sortie_per_page select {
 	float:left;
-	margin:4px 5px 5px 20px;
+	width:40px;
+	height:18px;
+	margin:-3px 4px 0px 0px;
+}
+.tab_event .sortie_controls .sortie_count {
+	float:left;
+	height:15px;
+	font-size:12px;
+	line-height:12px;
+	margin:4px 5px 4px 5px;
 }
 
 /* SORTIE SWITCHER
 ---------------------------------*/
 .tab_event .sortie_batch_toggles {
-	width:165px;
+	width:209px;
 	height:20px;
-	margin:5px 5px -5px 525px;
+	margin:5px 5px -5px 481px;
 	background:none;
 }
 .tab_event .sortie_batch_toggles .sortie_toggles {
@@ -276,6 +285,7 @@
 	font-weight:bold;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 .tab_event .sortie_list .sortie_date {
 	width:50px;
@@ -284,6 +294,7 @@
 	font-size:12px;
 	text-align:center;
 	float:left;
+	white-space:nowrap;
 }
 
 /* Sortie Info: MAP */
@@ -314,12 +325,63 @@
 	width:30px;
 	height:30px;
 	vertical-align:top;
+	visibility:hidden;
+}
+.tab_event .sortie_list .seven_ships .sortie_ship {
+	margin:3px 5px 0px 0px;
+	width:25px;
+	height:25px;
+	line-height:25px;
+}
+.tab_event .sortie_list .seven_ships .sortie_ship img {
+	width:25px;
+	height:25px;
+}
+.tab_event .sortie_list .sortie_combined_ship {
+	position:absolute;
+	margin:-16px 0px 0px 16px;
+	width:20px;
+	height:20px;
+	float:left;
+	overflow:hidden;
+	display:none;
+}
+.tab_event .sortie_list .sortie_combined_ship img {
+	width:20px;
+	height:20px;
+	vertical-align:top;
+	overflow:hidden;
 }
 
 /* Sortie Info: EDGES */
 .tab_event .sortie_list .sortie_edges {
 	width:175px;
 	margin:0px 5px 0px 0px;
+}
+.tab_event .sortie_list .sortie_edges .shipstate {
+	position:relative;
+	margin:-15px 0px 0px 15px;
+	width:18px;
+	height:18px;
+	float:left;
+	overflow:hidden;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .shipstate {
+	margin:-13px 0px 0px 19px;
+	width:14px;
+	height:14px;
+}
+.tab_event .sortie_list .sortie_edges.two_lines.more_edges .shipstate {
+	margin:-13px 0px 0px 9px;
+}
+.tab_event .sortie_list .sortie_edges .shipstate img {
+	width:18px;
+	height:18px;
+	vertical-align:top;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .shipstate img {
+	width:14px;
+	height:14px;
 }
 .tab_event .sortie_list .nonodes {
 	height:30px;
@@ -332,14 +394,76 @@
 	line-height:30px;
 	float:left;
 	text-align:center;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 1px 0px;
 	color:#fff;
 	border-radius:15px;
 	font-size:14px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_6,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_7,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_8,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_9,
+.tab_event .sortie_list .sortie_edges.one_line .sortie_edge_10,
+.tab_event .sortie_list .sortie_edges .extra_node {
+	display:none;
+}
+.tab_event .sortie_list .sortie_edges.two_lines .sortie_edge {
+	width:30px;
+	height:14px;
+	line-height:14px;
+	font-weight:normal;
+}
+.tab_event .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge {
+	font-size:13px;
+	width:20px;
+}
+.tab_event .sortie_list .sortie_edge.long_name {
+	font-size:11px;
+	letter-spacing:-1px;
+}
+.tab_event .sortie_list .sortie_edge.edge_battle {
+	background:#700000;
+}
 .tab_event .sortie_list .sortie_edge.active {
 	background:#B50000;
+}
+.tab_event .sortie_list .sortie_edge.edge_ {
+	background:#00B3B1;
+}
+.tab_event .sortie_list .sortie_edge.edge_select {
+	background:#AAAAAA;
+}
+.tab_event .sortie_list .sortie_edge.edge_resource {
+	background:#70D800;
+}
+.tab_event .sortie_list .sortie_edge.edge_transport {
+	background:#40C4FF;
+}
+.tab_event .sortie_list .sortie_edge.edge_maelstrom {
+	background:#AE87E9;
+}
+.tab_event .sortie_list .sortie_edge.edge_bounty {
+	background:#40C4FF;
+}
+.tab_event .sortie_list .sortie_edge.night_battle {
+	background:#14325A;
+}
+.tab_event .sortie_list .sortie_edge.night_to_day {
+	background:#A23C7F;
+}
+.tab_event .sortie_list .sortie_edge.air_raid {
+	background:#FFA500;
+}
+.tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
+	background-image:url(../../../../assets/img/client/boss.png);
+	background-repeat:no-repeat;
+	background-position:4px 50%;
+	background-size:22px;
+	background-blend-mode:multiply;
+}
+.tab_event .sortie_list .sortie_edges.two_lines.more_edges .sortie_edge.active.boss {
+	background-size:12px;
 }
 
 /* Sortie Info: TOGGLES */
@@ -366,9 +490,12 @@
 .tab_event .sortie_list .sortie_rfleet {
 	width:163px;
 	height:92px;
-	margin:0px 2px 0px 2px;
+	margin:0px 2px 2px 2px;
 	float:left;
 	overflow:hidden;
+}
+.tab_event .sortie_list .seven_ships .sortie_rfleet {
+	height:114px;
 }
 .tab_event .sortie_list .sortie_rfleet.disabled {
 	opacity:.3;
@@ -381,6 +508,7 @@
 	text-align:center;
 	font-size:11px;
 	font-weight:bold;
+	overflow:hidden;
 }
 .tab_event .sortie_list .rfleet_body {
 	width:163px;
@@ -393,7 +521,6 @@
 	margin:3px 1px 0px 0px;
 	float:left;
 	overflow:hidden;
-	/*background:#ccf;*/
 }
 .tab_event .sortie_list .rfleet_pic {
 	width:20px;
@@ -401,7 +528,6 @@
 	line-height:20px;
 	border-radius:10px;
 	overflow:hidden;
-	/*background:#ccc;*/
 	float:left;
 	margin:0px 3px 0px 0px;
 }
@@ -418,8 +544,9 @@
 	font-size:10px;
 	transform:scale(0.85);
 	transform-origin:left;
+	white-space:nowrap;
 	overflow:hidden;
-	/*background:#fcc;*/
+	text-overflow:ellipsis;
 }
 .tab_event .sortie_list .rfleet_level {
 	width:55px;
@@ -429,19 +556,80 @@
 	font-size:10px;
 	transform:scale(0.75);
 	transform-origin:left;
+	white-space:nowrap;
 	overflow:hidden;
-	/*background:#cfc;*/
 }
 .tab_event .sortie_list .rfleet_equips {
 	width:55px;
 	height:20px;
 	float:left;
 }
-
-.tab_event .sortie_list .rfleet_equips img {
+.tab_event .sortie_list .rfleet_equip img {
 	float:left;
-	line-height: auto;
 	width:12px;
+	margin-top:-1px;
+	vertical-align:top;
+}
+
+.tab_event .sortie_list .rfleet_lbas_plane {
+	width:80px;
+	height:32px;
+	margin:3px 1px 0px 0px;
+	float:left;
+	overflow:hidden;
+}
+.tab_event .sortie_list .rfleet_lbas_plane .rfleet_detail div {
+	height:15px;
+	line-height:15px;
+	font-size:10px;
+	float:left;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_event .sortie_list .rfleet_lbas_plane .rfleet_name {
+	width:55px;
+	font-size:11px !important;
+	text-overflow:ellipsis;
+	transform:initial;
+}
+.tab_event .sortie_list .rfleet_stars {
+	width:22px;
+	margin-left:-2px;
+}
+.tab_event .sortie_list .rfleet_stars img {
+	width:10px;
+	height:10px;
+	margin-top:-2px;
+}
+.tab_event .sortie_list .rfleet_stars span {
+	color:#45a9a5;
+}
+.tab_event .sortie_list .rfleet_ace {
+	width:10px;
+}
+.tab_event .sortie_list .rfleet_ace img {
+	width:20px;
+	height:12px;
+	margin-top:-2px;
+	margin-left:-5px;
+}
+.tab_event .sortie_list .rfleet_count {
+	width:15px;
+}
+.tab_event .sortie_list .rfleet_morale {
+	width:10px;
+}
+.tab_event .sortie_list .rfleet_morale img {
+	width:10px;
+	height:10px;
+	margin-top:-2px;
+}
+
+.tab_event .sortie_list .button_tomanager {
+	width:auto;
+	float:none;
+	padding:0px 5px 0px 5px;
+	margin:5px 5px 5px 5px;
 }
 
 /* Sortie Nodes */
@@ -472,10 +660,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
-.tab_event .sortie_list .node_id.nodamage {
+.tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
-.tab_event .sortie_list .node_id.damaged {
+.tab_event .sortie_list .damaged {
 	box-shadow: 0px 0px 2px 2px #f90;
 }
 
@@ -484,10 +672,15 @@
 	height:24px;
 	float:left;
 	line-height:24px;
-	/*background:#fcc;*/
 }
+.tab_event .sortie_list .node_result.icon5 > div {
+	width:16px;
+	transform:scaleX(0.8);
+}
+
 .tab_event .sortie_list .node_formation img {
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_event .sortie_list .node_result_box {
 	width:20px;
@@ -550,6 +743,7 @@
 	height:20px;
 	margin:10px 0px 0px 0px;
 	-webkit-transform: rotate(-90deg);
+	transform: rotate(-90deg);
 }
 .tab_event .sortie_list .node_eship {
 	width:20px;
@@ -561,13 +755,31 @@
 	overflow:hidden;
 	display:none;
 }
-.tab_event .sortie_list .node_eship_4 {
-	margin:0px 0px 0px 20px;
-}
 .tab_event .sortie_list .node_eship img {
 	width:20px;
 	height:20px;
 	vertical-align:top;
+}
+.tab_event .sortie_list .node_eship.escort {
+	display:none;
+	position:relative;
+	width:15px;
+	height:15px;
+	left:28px;
+	top:-30px;
+	margin:0px 0px 5px 11px;
+	box-shadow:0px 0px 1px 1px #fff;
+}
+.tab_event .sortie_list .node_eship.escort img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
+}
+.tab_event .sortie_list .main.node_eship_4 {
+	margin:0px 0px 0px 20px;
+}
+.tab_event .sortie_list .escort.node_eship_10 {
+	margin:0px 0px 5px 28px;
 }
 .tab_event .sortie_list .node_enemy .boss {
 	box-shadow:0px 0px 1px 1px #5ef;
@@ -691,6 +903,25 @@
 	color:#f00;
 }
 /* Difficulty marker */
+/* new Winter 2018 casual difficulty uses the ID 1 */
+.tab_event .sortie_list .sortie_box.sortie_rank_1C {
+	border: rgb(64,255,64) solid 1px;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1C:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:0; bottom:0;
+	opacity:0;
+	color:rgb(0,128,0);
+	font-weight:bolder;
+	font-size:200%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1C.expanded:after {
+	opacity:0.25;
+}
+/* difficulty ID should shift +1, but unchanged here */
 .tab_event .sortie_list .sortie_box.sortie_rank_1 {
 	border: rgb(64,64,255) solid 1px;
 	/*background-image: url('../../../../assets/img/client/difficulty/bg-1.png');*/
@@ -721,7 +952,7 @@
 	opacity:0.25;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2 {
-	border: rgb(64,255,64) solid 1px;
+	border: rgb(255,255,64) solid 1px;
 	/*background-image: url('../../../../assets/img/client/difficulty/bg-2.png');*/
 	/*background-repeat: no-repeat;*/
 	/*background-position: 100% 100%;*/
@@ -740,7 +971,7 @@
 	position:absolute;
 	right:0; bottom:0;
 	opacity:0;
-	color:rgb(0,128,0);
+	color:rgb(128,128,0);
 	font-weight:bolder;
 	font-size:200%;
 	pointer-events:none;

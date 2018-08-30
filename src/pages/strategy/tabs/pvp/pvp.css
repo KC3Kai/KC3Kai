@@ -69,27 +69,26 @@
 	width:70px;
 	height:24px;
 	line-height:24px;
-	/*background:#fff;*/
 	margin:0px 0px 3px 0px;
 	font-size:18px;
 	font-weight:bold;
 	text-align:center;
+	white-space:nowrap;
 }
 .tab_pvp .pvp_info .pvp_date {
 	width:70px;
 	height:16px;
 	line-height:16px;
-	/*background:#fff;*/
 	margin:0px 0px 3px 0px;
 	font-size:12px;
 	color:#579;
 	text-align:center;
+	white-space:nowrap;
 }
 .tab_pvp .pvp_info .pvp_result {
 	width:70px;
 	height:26px;
 	line-height:26px;
-	/*background:#fff;*/
 	margin:0px 0px 10px 0px;
 	text-align:center;
 }

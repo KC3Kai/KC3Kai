@@ -28,9 +28,52 @@
 	var moraleClockValue = 100;
 	var moraleClockEnd = 0;
 	var moraleClockRemain = 0;
-	
-	// Experience Calculation
-	var mapexp = [], maplist = {}, rankFactors = [0, 0.5, 0.7, 0.8, 1, 1, 1.2];
+
+	// A jquery-ui tooltip options like native one
+	var nativeTooltipOptions = {
+		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
+		items: "[title],[titlealt]",
+		content: function(){
+			// Default escaping not used, keep html, simulate native one
+			return ($(this).attr("title") || $(this).attr("titlealt") || "")
+				.replace(/\n/g, "<br/>")
+				.replace(/\t/g, "&emsp;&emsp;");
+		}
+	};
+	(function($) {
+		// AOP around the dispatcher for any exception thrown from event handlers
+		var originalEventDispatch = $.event.dispatch;
+		$.event.dispatch = function() {
+			try {
+				originalEventDispatch.apply(this, arguments);
+			} catch(error) {
+				console.error("Uncaught event", error, this);
+				throw error;
+			}
+		};
+		// A lazy initializing method, prevent duplicate tooltip instance
+		$.fn.lazyInitTooltip = function(opts) {
+			if(typeof this.tooltip("instance") === "undefined") {
+				this.tooltip($.extend(true, {}, nativeTooltipOptions, opts));
+			}
+			return this;
+		};
+		// Actively close tooltips of element and its children
+		$.fn.hideChildrenTooltips = function() {
+			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
+				if(typeof $(el).tooltip("instance") !== "undefined")
+					$(el).tooltip("close");
+			});
+			return this;
+		};
+		// Create native-like tooltips of element and its children
+		$.fn.createChildrenTooltips = function() {
+			$.each($("[title]:not([disabled])", this), function(_, el){
+				$(el).lazyInitTooltip();
+			});
+			return this;
+		};
+	}(jQuery));
 
 	// make sure localStorage.expedTab is available
 	// and is in correct format.
@@ -90,8 +133,8 @@
 	}
 
 	function ExpedTabAutoFleetSwitch(needTabSwith) {
-		// set "needTabSwith" to true
-		// for switching to expedition tab when a candicate fleet is found
+		// set "needTabSwitch" to true
+		// for switching to expedition tab when a candidate fleet is found
 		var fleets = PlayerManager.fleets;
 		var availableFleetInd = -1;
 
@@ -122,7 +165,7 @@
 
 		if (availableFleetInd !== -1) {
 			selectedFleet = availableFleetInd + 1;
-			console.log("Find available fleet: " + String(selectedFleet));
+			//console.debug("Find available fleet: " + String(selectedFleet));
 
 			if (needTabSwith)
 				$("#atab_expeditionPlanner").trigger("click");
@@ -166,8 +209,10 @@
 		PlayerManager.init();
 		KC3ShipManager.load();
 		KC3GearManager.load();
+		KC3SortieManager.load();
 		KC3Database.init();
 		KC3Translation.execute();
+		KC3QuestSync.init();
 		
 		// Live translations
 		if(ConfigManager.checkLiveQuests && ConfigManager.language=="en"){
@@ -183,27 +228,13 @@
 						}).responseText);
 							
 						KC3Meta._quests = $.extend(true, enQuests, newQuestTLs);
-						console.log(KC3Meta._quests);
+						console.debug(KC3Meta._quests);
 					}else{
-						console.log("no new quests...");
+						console.debug("no new quests...");
 					}
 				}
 			});
 		}
-		
-		// Get map exp rewards
-		mapexp = JSON.parse($.ajax({
-			url : '../../../../data/exp_map.json',
-			async: false
-		}).responseText);
-		
-		$.each(mapexp, function(worldNum, mapNums){
-			$.each(mapNums, function(mapNum, mapExp){
-				if(mapExp > 0){
-					maplist[worldNum+"-"+(mapNum+1)] = mapExp;
-				}
-			});
-		});
 		
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity/100);
@@ -220,13 +251,23 @@
 		}
 		
 		// Panel customizations: custom css
-		if(ConfigManager.pan_custom_css !== ""){
-			var customCSS = document.createElement("style");
-			customCSS.type = "text/css";
-			customCSS.innerHTML = ConfigManager.pan_custom_css;
-			$("head").append(customCSS);
-		}
+		var customCSS = document.createElement("style");
+		customCSS.type = "text/css";
+		customCSS.id = "pan_custom_css";
+		customCSS.innerHTML = ConfigManager.pan_custom_css;
+		$("head").append(customCSS);
 
+		// Listen config key changed
+		window.addEventListener("storage", function({key, timeStamp, url}){
+			if(key === ConfigManager.keyName()) {
+				ConfigManager.load();
+				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+
+				if($("#pan_custom_css").html() != ConfigManager.pan_custom_css)
+					$("#pan_custom_css").html(ConfigManager.pan_custom_css);
+			}
+		});
+		
 		// Close CatBomb modal
 		$(".modalBox").on("click", ".closebtn", function(){
 			$(this).parent().parent().fadeOut(300);
@@ -251,7 +292,7 @@
 		$(".admiral_rank").on("click",function(){
 			// If title, switch to points
 			if($(this).data("mode")==1){
-				$(this).text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
+				$(this).text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) +KC3Meta.term("HQRankPoints"));
 				$(this).data("mode", 0);
 				
 			// If points, switch to title
@@ -264,7 +305,7 @@
 		// eLoS Toggle
 		$(".summary-eqlos").on("click",function(){
 			ConfigManager.scrollElosMode();
-			$(".summary-eqlos img", self.domElement).attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png"); 
+			$(".summary-eqlos img").attr("src", "../../../../assets/img/stats/los"+ConfigManager.elosFormula+".png"); 
 			$(".summary-eqlos .summary_text").text( Math.qckInt("floor", ((selectedFleet < 5) ? PlayerManager.fleets[selectedFleet-1].eLoS() : PlayerManager.fleets[0].eLoS()+PlayerManager.fleets[1].eLoS()), 1) );
 		}).addClass("hover");
 		
@@ -304,7 +345,7 @@
 		- use end time difference not remaining decrements for accuracy against lag
 		--------------------------------------------*/
 		window.KC3DevtoolsMoraleTimer = setInterval(function(){
-			// console.log(moraleClockValue, moraleClockEnd, moraleClockRemain);
+			// console.debug(moraleClockValue, moraleClockEnd, moraleClockRemain);
 			if(moraleClockEnd > 0){
 				moraleClockRemain = Math.ceil( (moraleClockEnd - (new Date()).getTime())/1000);
 				if(moraleClockRemain > 0){
@@ -338,7 +379,8 @@
 								title: KC3Meta.term("DesktopNotifyMoraleTitle"),
 								message: KC3Meta.term("DesktopNotifyMoraleMessage"),
 								iconUrl: "../../assets/img/ui/morale.png"
-							}
+							},
+							tabId: chrome.devtools.inspectedWindow.tabId
 						})).execute();
 					}
 				}
@@ -352,8 +394,8 @@
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
 			NatsuiroListeners.Fleet();
-			ExpedTabApplyConfig();
-			NatsuiroListeners.UpdateExpeditionPlanner();
+			//ExpedTabApplyConfig();
+			//NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 		
 		// Combined Fleet button
@@ -373,7 +415,7 @@
 			}
 		});
 		
-		// Resize window to 800x480
+		// Resize window to 1200x720
 		$(".module.controls .btn_resize").on("click", function(){
 			// Send fit-screen request to service to be forwarded to gameplay page
 			(new RMsg("service", "fitScreen", {
@@ -469,6 +511,7 @@
 		//Activate();
 		
 		// Start Network listener
+		KC3Network.initConfigs();
 		KC3Network.addGlobalListener(function(event, data){
 			if(isRunning || event == "HomeScreen" || event == "GameStart"){
 				if(typeof NatsuiroListeners[event] != "undefined"){
@@ -585,7 +628,6 @@
 			}else{
 				overrideFocus = false;
 			}
-			KC3SortieManager.onPvP = false;
 		},
 		
 		CatBomb: function(data){
@@ -596,7 +638,7 @@
 		},
 		
 		GameUpdate: function(data){
-			console.log("GameUpdate triggered");
+			//console.debug("GameUpdate triggered");
 			$("#gameUpdate").hide();
 			
 			if(data[0] > 0 && data[1]>0){
@@ -617,7 +659,7 @@
 			if($(".admiral_rank").data("mode")==1){
 				$(".admiral_rank").text(PlayerManager.hq.rank);
 			}else{
-				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()+KC3Meta.term("HQRankPoints"));
+				$(".admiral_rank").text(PlayerManager.hq.getRankPoints().toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })+KC3Meta.term("HQRankPoints"));
 			}
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
@@ -773,8 +815,7 @@
 					elos: Math.qckInt("floor", MainFleet.eLoS()+EscortFleet.eLoS(), 1),
 					air: MainFleet.fighterPowerText(),
 					speed:
-						(MainFleet.fastFleet && EscortFleet.fastFleet)
-						? KC3Meta.term("SpeedFast") : KC3Meta.term("SpeedSlow"),
+						KC3Meta.shipSpeed(Math.min(MainFleet.minSpeed, EscortFleet.minSpeed)),
 					docking:
 						Math.max(MainRepairs.docking,EscortRepairs.docking),
 					akashi:
@@ -812,6 +853,7 @@
 						(new KC3NatsuiroShipbox(".lship", rosterId))
 							.commonElements()
 							.defineLong( CurrentFleet )
+							.toggleClass("seven", CurrentFleet.countShips() >= 7)
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
@@ -833,7 +875,7 @@
 					supplyCost: CurrentFleet.calcResupplyCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
-						(!(KC3SortieManager.onSortie && KC3SortieManager.fleetSent == selectedFleet)
+						(!(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == selectedFleet)
 						&& !CurrentFleet.isSupplied() && ConfigManager.alert_supply_exped && selectedFleet > 1 && selectedFleet < 5),//0
 						CurrentFleet.needsSupply(true),//1
 						CurrentFleet.ship(0).isTaiha(),//2
@@ -845,7 +887,7 @@
 				
 			}
 			
-			console.log(FleetSummary);
+			//console.debug(FleetSummary);
 			
 			// Fleet Summary Stats
 			$(".summary-level .summary_text").text( FleetSummary.lv );
@@ -871,7 +913,7 @@
 			if(ConfigManager.info_fleetstat){
 				// STATUS: RESUPPLY
 				if( (FleetSummary.supplied ||
-					(KC3SortieManager.onSortie &&
+					(KC3SortieManager.isOnSortie() &&
 						KC3SortieManager.isFullySupplied() &&
 						(KC3SortieManager.fleetSent == (PlayerManager.combinedFleet ? 1 : selectedFleet)))) &&
 					(!FleetSummary.badState[0])
@@ -889,7 +931,8 @@
 				}
 				$(".module.status .status_supply").attr("title",
 					FleetSummary.supplied ? "": KC3Meta.term("PanelResupplyCosts").format(
-						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite
+						FleetSummary.supplyCost.fuel, FleetSummary.supplyCost.ammo, FleetSummary.supplyCost.bauxite,
+						FleetSummary.supplyCost.hasMarried ? KC3Meta.term("PanelResupplyMarriedHint") : ""
 					)
 				);
 				
@@ -910,7 +953,7 @@
 					$(".module.status .status_morale .status_text").addClass("bad");
 					
 					if(FleetSummary.lowestMorale != moraleClockValue){
-						// console.log("new morale time", FleetSummary.lowestMorale, MoraleTime);
+						//console.debug("new morale time", FleetSummary.lowestMorale, MoraleTime);
 						moraleClockValue = FleetSummary.lowestMorale;
 						moraleClockEnd = (new Date()).getTime() + (MoraleTime*1000);
 					}
@@ -988,19 +1031,19 @@
 			
 			// TAIHA ALERT CHECK
 			if (
-				PlayerManager.fleets
-					.filter (function(  x,  i) {
-						var
-							cf = PlayerManager.combinedFleet,
-							fs = KC3SortieManager.fleetSent;
-						return (cf&&fs===1) ? (i <= 1) : (i == fs-1);
+				PlayerManager.fleets.filter((obj, i) => {
+						const cf = PlayerManager.combinedFleet,   // Marks combined flag
+							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
+							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
+						return !so || ((cf && fs === 1) ? i <= 1 : i == fs - 1);
 					})
-					.map    (function(  fldat) { return fldat.ships; })
-					.reduce (function(  x,  y) { return x.concat(y); })
-					.filter (function( shipId) { return shipId >= 0; })
-					.map    (function( shipId) { return KC3ShipManager.get(shipId); })
-					.some   (function( shpDat) {
-						return shpDat.isTaiha();
+					.map    ((fleetObj) => fleetObj.ships.slice(1))    // Convert to non-flagship ID arrays
+					.reduce ((acc, arr) => acc.concat(arr))            // Join IDs into an array
+					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
+					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
+					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
+						return !shipObj.isAbsent() && shipObj.isTaiha()
+							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
 					})
 			) {
 				if(ConfigManager.alert_taiha){
@@ -1050,7 +1093,7 @@
 				// we'll try switching to the next available fleet if any
 				ExpedTabAutoFleetSwitch(false);
 			}
-			NatsuiroListeners.UpdateExpeditionPlanner();
+			//NatsuiroListeners.UpdateExpeditionPlanner();
 		},
 		
 		SortieStart: function(data){
@@ -1062,13 +1105,20 @@
 				(KC3SortieManager.map_world>10 ? 'E' : KC3SortieManager.map_world)
 				+"-"
 				+KC3SortieManager.map_num
-				+((KC3SortieManager.map_world>10)
-					?["",
+				+ ((KC3SortieManager.map_world >= 41)
+					? [ "",
+					  KC3Meta.term("EventRankCasualAbbr"),
 					  KC3Meta.term("EventRankEasyAbbr"),
 					  KC3Meta.term("EventRankNormalAbbr"),
-					  KC3Meta.term("EventRankHardAbbr")]
+					  KC3Meta.term("EventRankHardAbbr") ]
 					[ KC3SortieManager.map_difficulty ]
-					:"")
+					: (KC3SortieManager.map_world >= 10)
+					? [ "",
+					  KC3Meta.term("EventRankEasyAbbr"),
+					  KC3Meta.term("EventRankNormalAbbr"),
+					  KC3Meta.term("EventRankHardAbbr") ]
+					[ KC3SortieManager.map_difficulty ]
+					: "")
 			);
 			
 			// Map Gauge and status
@@ -1088,10 +1138,9 @@
 					// If kill-based gauge
 					}else{
 						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
-						console.log("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
-						console.log("thisMapId", thisMapId);
-						console.log("KC3Meta", KC3Meta._gauges);
-						console.log("totalKills", totalKills);
+						//console.debug("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
+						//console.debug("thisMapId", thisMapId);
+						//console.debug("totalKills", totalKills);
 						var killsLeft = totalKills - thisMap.kills;
 						if(totalKills){
 							$(".module.activity .map_hp").text( killsLeft+" / "+totalKills+" kills");
@@ -1114,8 +1163,8 @@
 			// Clear battle details box
 			clearBattleData();
 			
+			var numNodes = KC3SortieManager.countNodes();
 			var thisNode = KC3SortieManager.currentNode();
-			var numNodes = KC3SortieManager.nodes.length;
 			var world = KC3SortieManager.map_world;
 			var map = KC3SortieManager.map_num;
 			var nodeId = KC3Meta.nodeLetter(world, map, thisNode.id );
@@ -1134,7 +1183,7 @@
 			$(".module.activity .battle_fish").hide();
 			$(".module.activity .battle_support").show();
 			
-			console.log("natsuiro process node", thisNode);
+			//console.debug("natsuiro process node", thisNode);
 			switch(thisNode.type){
 				// Battle node
 				case "battle":
@@ -1174,7 +1223,6 @@
 					
 				// Selection node
 				case "select":
-					console.log("natsuiro should show selection node");
 					$(".module.activity .sortie_node_"+numNodes).addClass("nc_select");
 					$(".module.activity .node_type_text").text(KC3Meta.term("BattleSelect")+
 						KC3Meta.term("BattleSelectNodes").format(thisNode.choices[0], thisNode.choices[1]));
@@ -1203,7 +1251,7 @@
 			clearBattleData();
 			
 			var thisNode = KC3SortieManager.currentNode();
-			var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+			var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 			
 			// Load enemy icons
 			$.each(thisNode.eships, function(index, eshipId){
@@ -1280,9 +1328,13 @@
 			$(".module.activity .battle_support").show();
 			
 			// Day battle-only environment
-			if(!thisNode.startNight){
+			if(!thisNode.startsFromNight){
 				// If support expedition is triggered on this battle
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support"+["-x",""][thisNode.supportFlag&1]+".png");
+				if (thisNode.supportFlag || thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
@@ -1315,7 +1367,11 @@
 				
 			// Started on night battle
 			}else{
-				$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				if (thisNode.nightSupportFlag) {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support.png");
+				} else {
+					$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png");
+				}
 				$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 			}
 			
@@ -1395,7 +1451,7 @@
 			if(thisNode.drop > 0){
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop){
-					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop));
+					$(".module.activity .battle_drop img").attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop").attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ));
 				}
 				
@@ -1407,35 +1463,6 @@
 					"../../../../assets/img/ui/dark_shipdrop-x.png");
 			}
 			
-			// Show experience calculation
-			if(selectedFleet<5){
-				let expJustGained = data.api_get_ship_exp;
-				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
-				let newGoals = JSON.parse(localStorage.goals || "{}");
-				$.each(CurrentFleet.ships, function(index, rosterId){
-					if(typeof newGoals["s"+rosterId] != "undefined"){
-						let grindData = newGoals["s"+rosterId];
-						if(grindData.length===0){ return true; }
-						let ThisShip = KC3ShipManager.get( rosterId );
-						// we are at battle result page and old ship exp data has not yet been updated,
-						// so here we need to add  "expJustGained" to get the correct exp.
-						// also we don't update ship.exp here, as it will be automatically sync-ed
-						// once we back to port or continue sortie.
-						let expLeft = KC3Meta.expShip(grindData[0])[1] - (ThisShip.exp[0] + expJustGained[index+1]);
-						console.debug("Ship", rosterId, "target exp", expLeft);
-						if(expLeft < 0){ return true; } // if the ship has reached the goal, skip it
-						let expPerSortie = maplist[ grindData[1]+"-"+grindData[2] ];
-						if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
-						if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
-						expPerSortie = expPerSortie * rankFactors[grindData[4]];
-						$("<div />").addClass("expNotice").text( Math.ceil(expLeft / expPerSortie) )
-							.appendTo("#ShipBox"+rosterId+" .ship_exp_label")
-							.delay( 5000 )
-							.fadeOut(1000, function(){ $(this).remove(); } );
-					}
-				});
-
-			}
 		},
 		
 		CraftGear: function(data){
@@ -1454,7 +1481,7 @@
 				var MasterItem = KC3Master.slotitem( data.itemMasterId );
 				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
 				
-				icon = "../../../../assets/img/items/"+MasterItem.api_type[3]+".png";
+				icon = KC3Meta.itemIcon(MasterItem.api_type[3]);
 				$(".activity_crafting .equipIcon img").attr("src", icon);
 				$(".activity_crafting .equipName").text( PlayerItem.name() );
 				
@@ -1488,7 +1515,7 @@
 			}
 			
 			// Show resource used
-			console.log(data);
+			//console.debug(data);
 			$(".activity_crafting .used1").text( data.resourceUsed[0] );
 			$(".activity_crafting .used2").text( data.resourceUsed[1] );
 			$(".activity_crafting .used3").text( data.resourceUsed[2] );
@@ -1504,7 +1531,7 @@
 		CraftShip: function(data){},
 		
 		Modernize: function(data){
-			console.log("MODERNIZE TRIGGER", data);
+			//console.debug("MODERNIZE TRIGGER", data);
 			
 			var ModShip = KC3ShipManager.get(data.rosterId);
 			
@@ -1545,14 +1572,8 @@
 			clearBattleData();
 			$(".module.activity .map_world").text("PvP");
 			
-			// Process PvP Battle
-			KC3SortieManager.fleetSent = data.fleetSent;
-			KC3SortieManager.onPvP = true;
-			
-			var thisPvP;
-			KC3SortieManager.nodes.push(thisPvP = (new KC3Node()).defineAsBattle());
-			thisPvP.isPvP = true;
-			thisPvP.engage( data.battle,data.fleetSent );
+			// Processed PvP Battle
+			var thisPvP = KC3SortieManager.currentNode();
 			
 			// Hide useless information
 			$(".module.activity .battle_support img").attr("src", "../../../../assets/img/ui/dark_support-x.png").css("visibility","hidden");
@@ -1575,7 +1596,7 @@
 			}
 			
 			// Show opponent ships faces
-			console.log(thisPvP.eships);
+			//console.debug(thisPvP.eships);
 			$.each(thisPvP.eships, function(index, eshipId){
 				var eParam = thisPvP.eParam[index];
 				
@@ -1694,7 +1715,6 @@
 		},
 		
 		PvPEnd: function(data){
-			KC3SortieManager.onPvP = false;
 			var thisPvP = KC3SortieManager.currentNode();
 			
 			$(".module.activity .battle_rating img")
@@ -1719,19 +1739,6 @@
 		},
 		ExpedResult: function(data){
 			overrideFocus = true;
-			/* Data
-			{"api_ship_id":[-1,56,22,2,116,1,4],"api_clear_result":1,"api_get_exp":50,"api_member_lv":88,"api_member_exp":510662,"api_get_ship_exp":[210,140,140,140,140,140],"api_get_exp_lvup":[[272732,275000],[114146,117600],[89228,90300],[59817,63000],[162124,168100],[29155,30000]],"api_maparea_name":"\u5357\u65b9\u6d77\u57df","api_detail":"\u6c34\u96f7\u6226\u968a\u306b\u30c9\u30e9\u30e0\u7f36(\u8f38\u9001\u7528)\u3092\u53ef\u80fd\u306a\u9650\u308a\u6e80\u8f09\u3057\u3001\u5357\u65b9\u9f20\u8f38\u9001\u4f5c\u6226\u3092\u7d9a\u884c\u305b\u3088\uff01","api_quest_name":"\u6771\u4eac\u6025\u884c(\u5f10)","api_quest_level":8,"api_get_material":[420,0,200,0],"api_useitem_flag":[4,0],"api_get_item1":{"api_useitem_id":10,"api_useitem_name":"\u5bb6\u5177\u7bb1\uff08\u5c0f\uff09","api_useitem_count":1}}
-			
-			useitem --
-				00 - nothing
-				01 - instant repair
-				02 - instant construct
-				03 - development item
-				
-				10 - furniture small
-				11 - furniture medium
-				12 - furniture large
-			*/
 			
 			if(!data.response.api_clear_result && !data.response.api_get_exp) {
 				data.response.api_clear_result = -1;
@@ -1745,7 +1752,9 @@
 			);
 			
 			// Expedition number
-			$(".activity_expedition .expres_num").text( KC3Meta.term("Expedition") + " " + data.expedNum );
+			$(".activity_expedition .expres_num").text(
+				"{0} {1}".format(KC3Meta.term("Expedition"), KC3Master.missionDispNo(data.expedNum))
+			);
 			
 			// Status text
 			$(".activity_expedition .expres_status")
@@ -1811,262 +1820,12 @@
 
 			// after getting the result, we assume user will just resupply & resend to the same expedition
 			// it makes sense to update expedition planner with current fleet-expedition relation.
-			var expedTabConf = ExpedTabValidateConfig();
-			var resultFleetNum = data.params.api_deck_id; // string
-			expedTabConf.fleetConf[ resultFleetNum ].expedition = data.expedNum;
-			localStorage.expedTab = JSON.stringify( expedTabConf );
-		},
+			//var expedTabConf = ExpedTabValidateConfig();
+			//var resultFleetNum = data.params.api_deck_id; // string
+			//expedTabConf.fleetConf[ resultFleetNum ].expedition = data.expedNum;
+			//localStorage.expedTab = JSON.stringify( expedTabConf );
+		}
 
-		UpdateExpeditionPlanner: function (data) {
-			// if combined fleet or LBAS, cancel action
-			if(selectedFleet===5 || selectedFleet===6){ return false; }
-			
-			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
-				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".module.activity .activity_expeditionPlanner .dropdown_title")
-				.text(KC3Meta.term("ExpedNumLabel")+String(selectedExpedition));
-
-			var
-				allShips,
-				fleetObj = PlayerManager.fleets[selectedFleet-1];
-			
-			//fleets' subsripts start from 0 !
-			allShips = fleetObj.ships.map(function(rosterId, index) {
-				return KC3ShipManager.get(rosterId);
-			}).filter(function (rosterData, index){
-				return (rosterData.masterId > 0);
-			});
-			
-			var PS = window.PS;
-			var KE = PS["KanColle.Expedition"];
-			var KER = PS["KanColle.Expedition.Requirement"];
-			var KEC = PS["KanColle.Expedition.Cost"];
-			var KERO = PS["KanColle.Expedition.RequirementObject"];
-			var ST = PS["KanColle.Generated.SType"];
-
-			var allShipsForLib = allShips.map(function(CurrentShip, ind) {
-				var shipInst = CurrentShip;
-				var shipModel = CurrentShip.master();
-				var stypeId = shipModel.api_stype;
-				var stype = ST.showSType(ST.fromInt(stypeId));
-				var level = shipInst.level;
-				var drumCount = CurrentShip.countDrums();
-				return {
-					ammo : 0,
-					morale : 0,
-					stype : stype,
-					level : level,
-					drumCount : drumCount
-				};
-			});
-
-			var fleet = KER.fromRawFleet(allShipsForLib);
-			var availableExpeditions = KE.getAvailableExpeditions( fleet );
-
-			var unsatRequirements = KER.unsatisfiedRequirements(selectedExpedition)(fleet);
-
-			//Don't forget to use KERO.*ToObject to convert raw data to JS friendly objs
-			var rawExpdReqPack = KERO.getExpeditionRequirementPack(selectedExpedition);
-			
-			var ExpdReqPack = KERO.requirementPackToObj(rawExpdReqPack);
-			// console.log(JSON.stringify(ExpdReqPack));
-			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
-			// console.log(JSON.stringify(ExpdCheckerResult));
-			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
-			var KEIB = PS["KanColle.Expedition.IncomeBase"];
-			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
-			var ExpdFleetCost = fleetObj.calcExpeditionCost( selectedExpedition );
-
-			$(".module.activity .activity_expeditionPlanner .estimated_time").text( String( 60*ExpdCost.time ).toHHMMSS() );
-
-			// setup expedition item colors
-			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
-				var expeditionId = parseInt( $(this).data("expId") );
-				if (availableExpeditions.indexOf(expeditionId) !== -1) {
-					$(this).addClass("cond_passed").removeClass("cond_failed");
-					// this expedition is available
-				} else {
-					// mark not available
-					$(this).addClass("cond_failed").removeClass("cond_passed");
-				}
-			});
-
-			var resourceRoot = $(".module.activity .activity_expeditionPlanner .expres_resos");
-			$.each(["fuel","ammo","steel","bauxite"], function(i,v) {
-				var basicIncome = ExpdIncome[v];
-				var jqObj = $( "."+v, resourceRoot );
-				var resupply;
-				if (v === "fuel" || v === "ammo") {
-					resupply = ExpdFleetCost[v];
-				} else {
-					resupply = 0;
-				}
-
-				var tooltipText = fleetObj.landingCraftBonusTextAndVal(basicIncome,resupply,plannerIsGreatSuccess);
-				jqObj.text( tooltipText.val );
-				jqObj.attr( 'title', tooltipText.text );
-			});
-
-			var markFailed = function (jq) {
-				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
-				return jq;
-			};
-			var markPassed = function (jq) {
-				jq.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
-				return jq;
-			};
-
-			// dataReq: like dataResult
-			// dataResult: dataResult of ExpdCheckerResult fields, where
-			//		 null: should hide jq obj
-			//		 false: check failed
-			//		 true: check passed
-			//		 <other values>: no effect
-			// jq: the jq object
-			// postActions: (optional) call postActions(dataReq,dataResult,jq) perform actions after jq object is properly set.
-			//				note that postActions is only called if the requirement is not null
-			//				the default action is setting the requirement to jq text
-			var setupJQObject = function( dataReq, dataResult, jq, postActions ) {
-				if (dataReq === null) {
-					jq.hide();
-				} else {
-					jq.show();
-					if (dataResult === false) {
-						// when this condition is not met
-						markFailed( jq );
-					} else if (dataResult === true) {
-						// when this condition is met
-						markPassed( jq );
-					}
-					var setJQText = function( dataReq, dataResult, jq ) { jq.text( dataReq ); };										
-					postActions = postActions || setJQText;
-					postActions( dataReq, dataResult, jq );
-				}
-			};
-			
-			setupJQObject(
-				ExpdReqPack.flagShipLevel,
-				ExpdCheckerResult.flagShipLevel,
-				$(".module.activity .activity_expeditionPlanner .flagshipLv"));
-
-			
-			setupJQObject(
-				ExpdReqPack.flagShipTypeOf,
-				ExpdCheckerResult.flagShipTypeOf,
-				$(".module.activity .activity_expeditionPlanner .flagshipType"));
-
-			setupJQObject(
-				ExpdReqPack.shipCount,
-				ExpdCheckerResult.shipCount,
-				$(".module.activity .activity_expeditionPlanner .shipNum"));
-
-			setupJQObject(
-				ExpdReqPack.levelCount,
-				ExpdCheckerResult.levelCount,
-				$(".module.activity .activity_expeditionPlanner .fleetLv"));
-			if (ExpdReqPack.levelCount === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
-			}
-
-			setupJQObject(
-				ExpdReqPack.fleetSType,
-				ExpdCheckerResult.fleetSType,
-				$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
-				function ( dataReq, dataResult, jq ) {
-					jq.html( "" );
-					$.each( dataReq, function(index, value){
-						var shipReqBox = $("#factory .expPlanner_shipReqBox")
-							.clone()
-							.appendTo( jq );
-						shipReqBox.text(dataReq[index].stypeOneOf.join("/")+":"+dataReq[index].stypeReqCount);
-						if (dataResult[index] === false) {
-							markFailed( shipReqBox );
-						} else if (dataResult[index] === true) {
-							markPassed( shipReqBox );
-						}
-					});
-				});
-
-			setupJQObject(
-				ExpdReqPack.drumCount,
-				ExpdCheckerResult.drumCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
-
-			setupJQObject(
-				ExpdReqPack.drumCarrierCount,
-				ExpdCheckerResult.drumCarrierCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" ));
-			if (ExpdReqPack.drumCount === null &&
-				ExpdReqPack.drumCarrierCount === null) {
-				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
-			} else {
-				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
-			}
-			
-			if (fleetObj.isSupplied()) {
-				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelSupplied"));
-
-				markPassed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck") );
-			} else {
-				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).hide();
-				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelUnderSupplied"));
-				
-				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
-			}
-
-			if (unsatRequirements.length === 0 && fleetObj.isSupplied()) {
-				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
-			} else {
-				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
-			}
-
-			return;
-
-				/*
-				 *
-				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
-				 *
-				 * {  
-					  "flagShipLevel":15,
-					  "shipCount":5,
-					  "flagShipTypeOf":null,
-					  "levelCount":30,
-					  "drumCount":null,
-					  "drumCarrierCount":3,
-					  "fleetSType":[  
-					    {  
-					      "stypeReqCount":1,
-					      "stypeOneOf":[  
-					        "CL"
-					      ]
-					    },
-					    {  
-					      "stypeReqCount":4,
-					      "stypeOneOf":[  
-					        "DD"
-					      ]
-					    }
-					  ]
-					}
-					---------------------
-					{  
-					  "flagShipLevel":true,
-					  "shipCount":false,
-					  "flagShipTypeOf":null,
-					  "levelCount":true,
-					  "drumCount":null,
-					  "drumCarrierCount":false,
-					  "fleetSType":[  
-					    true,
-					    false
-					  ]
-					}					
-				 */
-				
-		},
 	};
 	
 	function updateHQEXPGained(ele,newDelta) {
@@ -2084,7 +1843,7 @@
 				else
 					return "";
 			}()))
-			.text( PlayerManager.hq.exp[hqDt] );
+			.text( KC3Meta.formatNumber(PlayerManager.hq.exp[hqDt]) );
 	}
 	
 	function buildContactPlaneSpan(fcontactId, fcontact, econtactId, econtact) {
@@ -2094,13 +1853,13 @@
 		if(fcontactId > 0){
 			var fcpMaster = KC3Master.slotitem(fcontactId);
 			fContactIcon = $("<img />")
-				.attr("src", "../../../../assets/img/items/"+fcpMaster.api_type[3]+".png")
+				.attr("src", KC3Meta.itemIcon(fcpMaster.api_type[3]))
 				.attr("title", KC3Meta.gearName(fcpMaster.api_name));
 		}
 		if(econtactId > 0){
 			var ecpMaster = KC3Master.slotitem(econtactId);
 			eContactIcon = $("<img />")
-				.attr("src", "../../../../assets/img/items/"+ecpMaster.api_type[3]+".png")
+				.attr("src", KC3Meta.itemIcon(ecpMaster.api_type[3]))
 				.attr("title", KC3Meta.gearName(ecpMaster.api_name));
 		}
 		$(contactSpan)
@@ -2114,7 +1873,7 @@
 		if(parseInt(MasterItem["api_"+StatProperty], 10) !== 0){
 			var thisStatBox = $("#factory .equipStat").clone().appendTo(".module.activity .activity_crafting .equipStats");
 			
-			$("img", thisStatBox).attr("src", "../../../../assets/img/stats/"+Code+".png");
+			$("img", thisStatBox).attr("src", KC3Meta.statIcon(Code));
 			$(".equipStatText", thisStatBox).text( MasterItem["api_"+StatProperty] );
 		}
 	}
@@ -2125,7 +1884,7 @@
 			
 			context = $(".module.status"),
 			dockElm = $(".status_docking .status_text",context),
-			koskElm = $(".status_akashi  .status_text",context); // kousaka-kan
+			koskElm = $(".status_akashi  .status_text",context);
 		if(typeof docking==="object") {
 			akashi     = docking.akashi;
 			akashiTick = docking.akashiCheck;

@@ -1,8 +1,9 @@
-/* Poidbsubmission.js
-
-   KC3Kai poi-statistics data submission library
-
-*/
+/**
+ * PoiDBSubmission.js
+ *
+ * KC3Kai poi-statistics data submission module.
+ *
+ */
 (function(){
 	"use strict";
 
@@ -14,14 +15,23 @@
 		// * `drop_ship_1`: having "start" or "next" consumed
 		//	 waiting for formation info ("battle")
 		// * `drop_ship_2`: waiting for the final piece of data (rank etc, shipId if any)
+		// * `remodel_slotdetail`: viewing Akashi improvement recipe details
+		//	 waiting for confirming
 		state: null,
 		createShipData: null,
 		dropShipData: null,
+		remodelRecipeList: null,
+		remodelRecipeData: null,
+		remodelKnownRecipes: [],
+		remodelKnownRecipesLastUpdated: 0,
 
 		// api handler
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
+		reportServer: "http://poi.0u0.moe",
+		reportApiBaseUrl: "/api/report/v2/",
+		reportOrigin: "KC3Kai",
 
 		// *INTERNAL USE ONLY*
 		// because when building this dictionary
@@ -31,21 +41,31 @@
 		_initialize: function () {
 			this.handlers = {
 				'api_get_member/mapinfo': this.processMapInfo,
+				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
 				'api_req_kousyou/createship': this.processCreateShip,
 				'api_get_member/kdock': this.processKDock,
 				'api_req_kousyou/createitem': this.processCreateItem,
-				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
+
+				// collect recipe details, comment them out if data enough for poi-db
+				'api_req_kousyou/remodel_slotlist': this.processRemodelRecipeList,
+				'api_req_kousyou/remodel_slotlist_detail': this.processRemodelRecipeDetail,
+				'api_req_kousyou/remodel_slot': this.processRemodelSlot,
+
 				// start or next
 				'api_req_map/start': this.processStartNext,
 				'api_req_map/next': this.processStartNext,
 				// detect formation
 				'api_req_sortie/battle': this.processBattle,
 				'api_req_sortie/airbattle': this.processBattle,
-				// the following two are commented out 
+				// the following are commented out
 				// as poi "plugin-report" doesn't seem to support them.
 				// (might have been deprecated)
 				// 'api_req_sortie/night_to_day': this.processBattle,
 				// 'api_req_battle_midnight/battle': this.processBattle,
+				// "api_req_combined_battle/each_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				// "api_req_combined_battle/each_sp_midnight": this.processBattle,
+				// "api_req_combined_battle/ec_midnight_battle": this.processBattle,
 
 				"api_req_sortie/ld_airbattle": this.processBattle,
 				'api_req_battle_midnight/sp_midnight': this.processBattle,
@@ -57,17 +77,15 @@
 
 				"api_req_combined_battle/ec_battle": this.processBattle,
 				"api_req_combined_battle/each_battle": this.processBattle,
-				"api_req_combined_battle/each_airbattle": this.processBattle,
-				"api_req_combined_battle/each_sp_midnight": this.processBattle,
 				"api_req_combined_battle/each_battle_water": this.processBattle,
-				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
-				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
+				"api_req_combined_battle/ec_night_to_day": this.processBattle,
 
 				// detect ship id
 				'api_req_sortie/battleresult': this.processBattleResult,
 				'api_req_combined_battle/battleresult': this.processBattleResult,
 			};
 
+			this.reportOrigin = "KC3Kai " + chrome.runtime.getManifest().version;
 		},
 		processSelectEventMapRank: function (requestObj) {
 			var params = requestObj.params;
@@ -138,6 +156,125 @@
 			// console.log( "[createitem] prepared: " + JSON.stringify( createItemData ));
 			this.sendData("create_item", createItemData);
 		},
+		processRemodelRecipeList: function( requestObj ) {
+			// To avoid state warning log if previous details viewed and canceled
+			if (this.state === 'remodel_slotdetail') this.state = null;
+			this.cleanup();
+			this.remodelRecipeList = requestObj.response.api_data;
+			this.lazyInitKnownRecipes();
+		},
+		processRemodelRecipeDetail: function( requestObj ) {
+			// Player may just click cancel after viewing details, no state to be checked
+			if (!Array.isArray(this.remodelRecipeList)) {
+				this.cleanup();
+				return;
+			}
+			var params = requestObj.params;
+			var response = requestObj.response.api_data;
+			var recipeId = parseInt(params.api_id);
+			var recipe = this.remodelRecipeList.find(r => r.api_id === recipeId);
+			if (!recipe) {
+				// not supposed to occur if recipe list not empty
+				console.warn("Selected remodel recipe not found in previous list", recipeId, this.remodelRecipeList);
+				return;
+			}
+			var rosterId = parseInt(params.api_slot_id);
+			// Have to get current stars of the item to be improved,
+			// otherwise should not reference state-ful KC3GearManager at all.
+			var gearObj = KC3GearManager.get(rosterId);
+			var currentLevel = gearObj.stars || 0;
+			var stage = response.api_change_flag ? 2 :
+				currentLevel >= 10 ? 2 :
+				currentLevel >= 6 ? 1 : 0;
+			this.remodelRecipeData = {
+				recipeId: recipeId,
+				itemId: recipe.api_slot_id,
+				stage: stage,
+				day: Date.getJstDate().getDay(),
+				fuel: recipe.api_req_fuel || 0,
+				ammo: recipe.api_req_bull || 0,
+				steel: recipe.api_req_steel || 0,
+				bauxite: recipe.api_req_bauxite || 0,
+				reqItemId: response.api_req_slot_id || -1,
+				reqItemCount: response.api_req_slot_num || 0,
+				//reqUseitemId: response.api_req_useitem_id || -1,
+				//reqUseitemCount: response.api_req_useitem_num || 0,
+				buildkit: response.api_req_buildkit || 0,
+				remodelkit: response.api_req_remodelkit || 0,
+				certainBuildkit: response.api_certain_buildkit || 0,
+				certainRemodelkit: response.api_certain_remodelkit || 0
+			};
+			this.state = "remodel_slotdetail";
+		},
+		processRemodelSlot: function( requestObj ) {
+			if (this.state !== 'remodel_slotdetail' || !this.remodelRecipeData) {
+				this.cleanup();
+				return;
+			}
+			var params = requestObj.params;
+			var response = requestObj.response.api_data;
+			var data = this.remodelRecipeData;
+			var recipeId = parseInt(params.api_id);
+			// Verify if recipe ID matches with previous detail used
+			if (recipeId !== data.recipeId) {
+				console.warn("Used remodel recipe not match with previous detail", recipeId, this.remodelRecipeData);
+				return;
+			}
+			var isCertainSuccess = !!parseInt(params.api_certain_flag);
+			var isSuccess = !!response.api_remodel_flag;
+			// It's 2nd ship anyway, secretary is always Akashi
+			data.secretary = response.api_voice_ship_id || -1;
+			var afterRemodelIds = response.api_remodel_id;
+			var afterRemodelSlot = response.api_after_slot;
+			data.upgradeToItemId = -1;
+			data.upgradeToItemLevel = -1;
+			if (isSuccess && afterRemodelSlot) {
+				if (afterRemodelIds[0] !== afterRemodelIds[1]) {
+					data.upgradeToItemId = afterRemodelSlot.api_slotitem_id;
+					data.upgradeToItemLevel = afterRemodelSlot.api_level;
+					// fix stage if necessary
+					if (data.stage !== 2) data.stage = 2;
+				} else {
+					// try to fix stage if getting level before improvement from KC3Gear fails
+					var previousLevel = afterRemodelSlot.api_level - 1;
+					if (!data.stage) data.stage = previousLevel >= 6 ? 1 : 0;
+				}
+			}
+			data.key = `r${data.recipeId}-i${data.itemId}-s${data.stage}-d${data.day}-s${data.secretary}`;
+
+			// Besides well-known recipes,
+			// failed or duplicated improvement seems be noisy for recipe recording
+			// see https://github.com/poooi/plugin-report/blob/master/reporters/remodel-recipe.es#L113
+			if (!isSuccess || !this.remodelKnownRecipes.length
+				|| this.remodelKnownRecipes.includes(data.key)
+				|| [101, 201, 301].includes(data.recipeId)) {
+				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
+			} else {
+				this.remodelKnownRecipes.push(data.key);
+				this.sendData("remodel_recipe", data);
+			}
+
+			// Go back to improvement list like it does in-game, not clean all up
+			this.state = null;
+			this.remodelRecipeData = null;
+		},
+		lazyInitKnownRecipes: function() {
+			// Update known recipes if not initialized or data older than 30 mins
+			if (!this.remodelKnownRecipes.length
+				|| (Date.now() - this.remodelKnownRecipesLastUpdated) > 30 * 60 * 1000) {
+				$.ajax({
+					url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
+					method: "GET",
+					dataType: "json",
+					success: (json) => {
+						if (Array.isArray(json.recipes)) {
+							this.remodelKnownRecipes = json.recipes;
+							this.remodelKnownRecipesLastUpdated = Date.now();
+						}
+					}
+				});
+			}
+		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
 			var response = requestObj.response.api_data;
@@ -167,40 +304,13 @@
 			var dropShipData = this.dropShipData;
 
 			// fill in formation and enemy ship info.
-			try {
-				dropShipData.enemyFormation = response.api_formation[1];
-			} catch (err) {
-				console.warn("error while extracting enemy formation");
-				console.warn(err);
-				// when there's something wrong extracting enemy formation
-				// 0 is returned respecting poi's behavior
-				// see: https://github.com/poooi/poi/blob/53e5ac3a992f72b3d2f4a7db9feb094879a12851/views/battle-env.coffee#L24
-				dropShipData.enemyFormation = 0;
-			}
+			// if any info is missing/error occurred, default to undefined
+			dropShipData.enemyFormation = response.api_formation && response.api_formation[1];
 
-			// build up enemy ship array
-			var enemyShips;
-			try {
-				enemyShips = response.api_ship_ke.slice(1,7);
-			} catch (err) {
-				console.warn("error while extracting enemy ship array");
-				console.warn(err);
-				console.warn("using an empty ship array as placeholder");
-				enemyShips = [-1,-1,-1,-1,-1,-1];
-			}
-			if (enemyShips.length !== 6) {
-				console.warn("processBattle: incorrect enemy ship arr length expect 6 but got " 
-							 + enemyShips.length );
-			}
-			if (typeof response.api_ship_ke_combined !== "undefined") {
-				// console.log("processBattle: enemy fleet is combined");
-				enemyShips = enemyShips.concat( response.api_ship_ke_combined.slice(1,7) );
-				if (enemyShips.length !== 12) {
-					console.warn("processBattle: incorrect enemy ship arr length expect 12 but got " 
-								 + enemyShips.length );
-				}
-			}
-			dropShipData.enemyShips = enemyShips;
+			// build up enemy ship array, updated as of https://github.com/poooi/plugin-report/commit/843702876444435134d5f8d93c2c0f59ff0b5bd6
+			// enemyShips1 contains enemy main fleet, enemyShips2 contains enemy escort fleet (if any)
+			dropShipData.enemyShips1 = response.api_ship_ke || [];
+			dropShipData.enemyShips2 = response.api_ship_ke_combined || [];
 			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
@@ -219,24 +329,28 @@
 
 			var response = requestObj.response.api_data;
 			var dropShipData = this.dropShipData;
+			// Remind: KC3SortieManager and current node are not updated about battle result yet
+			var currentNode = KC3SortieManager.currentNode();
+			var currentMapId = KC3SortieManager.map_world*10 + KC3SortieManager.map_num;
+			if (dropShipData.cellId !== currentNode.id || dropShipData.mapId !== currentMapId) {
+				console.warn(`Incorrect cell/map for ${currentMapId} edge ${currentNode.id}`, dropShipData);
+				this.cleanup();
+				return;
+			}
 
 			dropShipData.shipId = response.api_get_ship ? response.api_get_ship.api_ship_id : -1;
 			dropShipData.quest = response.api_quest_name;
 			dropShipData.enemy = response.api_enemy_info.api_deck_name;
 			dropShipData.mapLv = this.mapInfo[dropShipData.mapId] || 0;
 			dropShipData.rank = response.api_win_rank;
+			dropShipData.baseExp = response.api_get_base_exp;
 			dropShipData.teitokuLv = PlayerManager.hq.level;
-
-			if (typeof dropShipData.enemyShips === "undefined") {
-				console.warn("[dropship] missing enemy ship info during battle, info from battleresult is used instead.");
-				dropShipData.enemyShips = response.api_ship_id.slice(1);
-			}
 
 			dropShipData.itemId = (typeof response.api_get_useitem === "undefined")
 				? -1
 				: response.api_get_useitem.api_useitem_id;
 
-			console.log( "[dropship] prepared: " + JSON.stringify( dropShipData ) );
+			console.debug("[dropship] prepared dropShipData", JSON.stringify( dropShipData ));
 			this.sendData( "drop_ship", dropShipData );
 			this.state = null;
 
@@ -249,21 +363,16 @@
 					mapId: dropShipData.mapId,
 					mapLv: dropShipData.mapLv
 				};
-				console.log( "Passing an event map!" );
-				console.log( JSON.stringify( passEventData ) );
+				console.debug("Passing an event map, raw data", JSON.stringify( passEventData ));
 				this.sendData("pass_event", passEventData);
 			}
 		},
-		getApiName: function(url) {
-			var KcsApiIndex = url.indexOf("/kcsapi/");
-			return url.substring( KcsApiIndex+8 );
-		},
+		// SPI: process entry
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
 			try {
-				var apiName = this.getApiName( requestObj.url );
-				var handler = this.handlers[apiName];
+				var handler = this.handlers[requestObj.call];
 				if ( handler ) {
 					// bind module to "this"
 					handler.call(this, requestObj);
@@ -271,14 +380,14 @@
 				}
 				return false;
 			} catch (e) {
-				console.warn("Poi DB Submission exception:", e.stack);/*RemoveLogging:skip*/
-				// Pop up APIError on unexpected runtime expcetion
+				console.warn("Poi DB Submission Error", e);
+				// Pop up APIError on unexpected runtime exception
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("PoiDBSubmission"),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,
@@ -290,23 +399,22 @@
 				});
 			}
 		},
+		// SPI: clean all previous states up
 		cleanup: function() {
 			if (this.state !== null) {
-				console.log( "aborting previous data report" );
-				console.log( "interal state was: " + this.state );
+				console.log( "Aborting previous data report, interal state was:", this.state );
 			}
 
 			this.state = null;
 			this.createShipData = null;
 			this.dropShipData = null;
+			this.remodelRecipeList = null;
+			this.remodelRecipeData = null;
 		},
 		sendData: function(target, payload) {
-			var server = "http://poi.0u0.moe";
-			var url = server + "/api/report/v2/" + target;
-			var myVersion = chrome.runtime.getManifest().version;
-			var client = "KC3Kai " + myVersion;
-			payload.origin = client;
-			// console.log( JSON.stringify( payload ) );
+			var url = this.reportServer + this.reportApiBaseUrl + target;
+			payload.origin = this.reportOrigin;
+			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );
 			$.ajax({
 				url: url,
 				method: "POST",
@@ -314,9 +422,9 @@
 					'data': JSON.stringify( payload )
 				},
 			}).done( function() {
-				console.log( "Poi DB Submission done." );
+				console.log(`Poi DB Submission to ${target} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn( "Poi DB Submission failed:", textStatus, errorThrown);
+				console.warn(`Poi DB Submission to ${target} ${textStatus}`, errorThrown);
 			});
 			return;
 		}

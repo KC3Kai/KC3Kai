@@ -12,13 +12,19 @@ Redirects to KanColle game page after writing
 	
 	// New Cookie Hack
 	function writeCookies(){
-		document.cookie = "cklg=welcome;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/";
-		document.cookie = "cklg=welcome;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame/";
-		document.cookie = "cklg=welcome;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame_s/";
-		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/";
-		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame/";
-		document.cookie = "ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=.dmm.com;path=/netgame_s/";
-		console.log("cookies written!");
+		var expireTime = "Sun, 09 Feb 2019 09:00:09 GMT";
+		var buildCookie = function(key, value, domain, path){
+			return key + "=" + value + ";expires=" + expireTime + ";domain=" + domain + ";path=" + path;
+		};
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame_s/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/play/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame_s/");
+		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/play/");
+		console.log("Hacked cookies written!");
 	}
 	
 	// Check if "Force Cookies" enabled
@@ -30,7 +36,7 @@ Redirects to KanColle game page after writing
 		if(response.value){
 			writeCookies();
 		}else{
-			console.log("KC3改 forcing cookies disabled, enjoy error areas..");
+			console.log("KC3改 forcing cookies disabled, enjoy error areas.");
 		}
 	});
 	

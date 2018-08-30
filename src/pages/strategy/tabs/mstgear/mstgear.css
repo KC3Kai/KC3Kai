@@ -135,11 +135,12 @@
 	height:20px;
 	float:left;
 	line-height:18px;
+	text-align:right;
 }
 .tab_mstgear .gearInfo .stat_icon img {
-	width:18px;
+	max-width:20px;
 	height:18px;
-	margin:1px;
+	margin:1px 0px;
 }
 .tab_mstgear .gearInfo .stat_value {
 	width:36px;

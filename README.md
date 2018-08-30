@@ -19,7 +19,7 @@ KC3改 is a feature-rich Chrome extension that helps you play [Kantai Collection
 
 * **ALWAYS UPDATED**. With an active team of developers, testers and translators, usual release with new features and enhancements is every week, with minor update/patches in between those days. 
 
-* **SUPPORT CHANNELS**. In any problem, question, comment or suggestion you have, we are easily reachable in the right medium. We recommend getting in touch through either our [discord chat](http://discord.me/kancolle), or [Facebook page](https://www.facebook.com/kc3kai/).
+* **SUPPORT CHANNELS**. In any problem, question, comment or suggestion you have, we are easily reachable in the right medium. We recommend getting in touch through either our [Discord server](https://discord.kc3.moe/) or [Facebook page](https://www.facebook.com/kc3kai/).
 
 * **GOOD FUTURE ROADMAP**. We regularly think of, and receive ideas, suggestions. We are excited about many of these and are determined to implement more amazing things than what we have now.
 
@@ -78,8 +78,8 @@ Please visit the [GitHub wiki for Development Documentation](https://github.com/
 ## Community
 #### Chat
 We'd love to hear your thoughts about the app, comments and suggestions, join us in a discord channel
-* [Join KanColle Channel](http://discord.me/kancolle)
-* [KC3改Sub Channel `#kc3-kai`](https://discordapp.com/channels/118339803660943369/205766705463427072)
+* [Join KanColle Channel](http://discord.kc3.moe/)
+* [KC3改Sub Channel `#general-talk`](https://discordapp.com/channels/334799201428832257/334800276848640013)
 * If you have a GitHub account, [join us on Gitter](https://gitter.im/KC3Kai/Public)
 
 #### Social Media

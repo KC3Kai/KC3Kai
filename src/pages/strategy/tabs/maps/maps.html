@@ -10,13 +10,32 @@
 	<!-- REPLAY NOTICE -->
 	<div class="help_q">About <strong>REPLAY FEATURE</strong></div>
 	<div class="help_a">
-		Left click on a REP button to download sortie card images. You may watch it at the <strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank"
-		>REPLAY WEBSITE</a></strong>. You can also share this to your friends so they can watch it too. Be careful though, do not upload directly to Facebook or other websites that resize or change the quality of the picture. Try using imgur, puush, Twitter, etc.
 		<p>
-		Right clicking on the REP button will automatically open the <strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE</a></strong> with your replay.
+			Left click on a <kbd>REP</kbd> button to download sortie card images. You may watch it at the
+<strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE https://bit.ly/kc3-replayer</a></strong>.
+You can also share this to your friends so they can watch it too. Be careful though, do not upload directly to Facebook or other websites that resize or change the quality of the picture. Try using imgur, puush, Twitter, etc.
+		</p>
 		<p>
-		There are incoming features such as the ability to use normal in-game screenshots for replay. This is in our <code>dev-ssdata</code> branch in our GitHub repository, but needs further testing.
+			Right clicking on the <kbd>REP</kbd> button will automatically open the
+<strong><a href="https://kc3kai.github.io/kancolle-replay/battleplayer.html" target="_blank">REPLAY WEBSITE</a></strong> with your replay.
+		</p>
+		<p>
+			Hold <kbd>Alt</kbd> key and left click on the <kbd>REP</kbd> button will just copy your replay data (JSON text) to clipboard.
+		</p>
 	</div>
+
+	<!-- FLEET MANAGER -->
+	<div class="help_q">
+		<strong>Show Fleet Manager</strong>
+	</div>
+	<div class="help_a">
+		<p>Expand Fleet section by clicking on <kbd>F</kbd> button,<br/>
+			a <kbd>To Fleet Manager</kbd> button will be found to show the fleets in Fleet Manager page.<br/>
+			Left click on <code>Sortie ID</code> next to <kbd>REP</kbd> button, will also do the same thing.
+		</p>
+		<p>Hold <kbd>Ctrl</kbd> or <kbd>Meta</kbd> key and click will open Fleet Manager in new tab.</p>
+	</div>
+
 	<div class="help_q"></div>
 	<div class="help_a"></div>
 	<div class="help_more">
@@ -25,40 +44,52 @@
 </div>
 
 <!-- WORLD LIST -->
-<div class="world_list">
-	<div class="world_box hover active" data-world_num="0">
-		<div class="world_icon"></div>
-		<div class="world_text">All Runs</div>
+<div class="map_scrollable">
+	<div class="world_list">
+		<div class="world_box hover active" data-world_num="0">
+			<div class="world_icon"></div>
+			<div class="world_text">All Runs</div>
+		</div>
+		<div class="world_box hover" data-world_num="1">
+			<div class="world_icon"></div>
+			<div class="world_text">World 1</div>
+		</div>
+		<div class="world_box hover" data-world_num="2">
+			<div class="world_icon"></div>
+			<div class="world_text">World 2</div>
+		</div>
+		<div class="world_box hover" data-world_num="3">
+			<div class="world_icon"></div>
+			<div class="world_text">World 3</div>
+		</div>
+		<div class="world_box hover" data-world_num="7">
+			<div class="world_icon"></div>
+			<div class="world_text">World 7</div>
+		</div>
+		<div class="world_box hover" data-world_num="4">
+			<div class="world_icon"></div>
+			<div class="world_text">World 4</div>
+		</div>
+		<div class="world_box hover" data-world_num="5">
+			<div class="world_icon"></div>
+			<div class="world_text">World 5</div>
+		</div>
+		<div class="world_box hover" data-world_num="6">
+			<div class="world_icon"></div>
+			<div class="world_text">World 6</div>
+		</div>
+		<div class="clear"></div>
 	</div>
-	<div class="world_box hover" data-world_num="1">
-		<div class="world_icon"></div>
-		<div class="world_text">World 1</div>
-	</div>
-	<div class="world_box hover" data-world_num="2">
-		<div class="world_icon"></div>
-		<div class="world_text">World 2</div>
-	</div>
-	<div class="world_box hover" data-world_num="3">
-		<div class="world_icon"></div>
-		<div class="world_text">World 3</div>
-	</div>
-	<div class="world_box hover" data-world_num="4">
-		<div class="world_icon"></div>
-		<div class="world_text">World 4</div>
-	</div>
-	<div class="world_box hover" data-world_num="5">
-		<div class="world_icon"></div>
-		<div class="world_text">World 5</div>
-	</div>
-	<div class="world_box hover" data-world_num="6">
-		<div class="world_icon"></div>
-		<div class="world_text">World 6</div>
-	</div>
-	<div class="clear"></div>
+	<div class="world_shift left">&#9664;</div>
+	<div class="world_shift right">&#9654;</div>
 </div>
 
 <!-- MAP LIST -->
-<div class="map_list">
+<div class="map_scrollable">
+	<div class="map_list">
+	</div>
+	<div class="map_shift left">&#9664;</div>
+	<div class="map_shift right">&#9654;</div>
 </div>
 
 <!-- PAGINATION -->
@@ -67,8 +98,17 @@
 
 <!-- SORTIE CONTROLS -->
 <div class="sortie_controls">
+	<div class="sortie_per_page">
+		<select class="item_count_select">
+			<option value="20">20</option><option value="10">10</option><option value="5">5</option>
+		</select>
+		<span>sorties per page,</span>
+	</div>
 	<div class="sortie_count"></div>
-	<div class="sortie_batch_toggles"></div>
+	<div class="sortie_batch_toggles">
+		<div class="show_new_shipstate_toggle sortie_toggle active hover" data-target="show_new_shipstate" title="Taiha/Chuuha stamps">T</div>
+		<div class="non_battle_toggle sortie_toggle active hover" data-target="non_battle" title="Battle nodes only">B</div>
+	</div>
 </div>
 
 <!-- SORTIE RECORDS -->
@@ -83,33 +123,42 @@
 		<div class="sortie_info">
 			<div class="sortie_column sortie_record">
 				<div class="sortie_dl hover">REP</div>
-				<div class="sortie_id"></div>
+				<div class="sortie_id hover"></div>
 				<div class="sortie_date"></div>
 			</div>
 			<div class="sortie_column sortie_map"></div>
 			<div class="sortie_column sortie_fleet">
-				<div class="sortie_ship sortie_ship_1"><img/></div>
-				<div class="sortie_ship sortie_ship_2"><img/></div>
-				<div class="sortie_ship sortie_ship_3"><img/></div>
-				<div class="sortie_ship sortie_ship_4"><img/></div>
-				<div class="sortie_ship sortie_ship_5"><img/></div>
-				<div class="sortie_ship sortie_ship_6"><img/></div>
+				<div class="sortie_ship sortie_ship_1"><img/><div class="sortie_combined_ship sortie_combined_ship_1"><img/></div></div>
+				<div class="sortie_ship sortie_ship_2"><img/><div class="sortie_combined_ship sortie_combined_ship_2"><img/></div></div>
+				<div class="sortie_ship sortie_ship_3"><img/><div class="sortie_combined_ship sortie_combined_ship_3"><img/></div></div>
+				<div class="sortie_ship sortie_ship_4"><img/><div class="sortie_combined_ship sortie_combined_ship_4"><img/></div></div>
+				<div class="sortie_ship sortie_ship_5"><img/><div class="sortie_combined_ship sortie_combined_ship_5"><img/></div></div>
+				<div class="sortie_ship sortie_ship_6"><img/><div class="sortie_combined_ship sortie_combined_ship_6"><img/></div></div>
 				<div class="clear"></div>
 			</div>
-			<div class="sortie_column sortie_edges">
+			<div class="sortie_column sortie_edges one_line">
 				<div class="sortie_edge sortie_edge_1"></div>
 				<div class="sortie_edge sortie_edge_2"></div>
 				<div class="sortie_edge sortie_edge_3"></div>
 				<div class="sortie_edge sortie_edge_4"></div>
 				<div class="sortie_edge sortie_edge_5"></div>
+				<div class="sortie_edge sortie_edge_6"></div>
+				<div class="sortie_edge sortie_edge_7"></div>
+				<div class="sortie_edge sortie_edge_8"></div>
+				<div class="sortie_edge sortie_edge_9"></div>
+				<div class="sortie_edge sortie_edge_10"></div>
+				<div class="sortie_edge extra_node sortie_edge_11"></div>
+				<div class="sortie_edge extra_node sortie_edge_12"></div>
+				<div class="sortie_edge extra_node sortie_edge_13"></div>
+				<div class="sortie_edge extra_node sortie_edge_14"></div>
 				<div class="clear"></div>
 			</div>
 			<div class="sortie_column sortie_toggles">
 				<div class="sortie_toggle hover" data-target="sortie_roster" title="Fleet">F</div>
 				<div class="sortie_toggle hover" data-target="sortie_nodes" title="Nodes">N</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy"  title="Enemy">E</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds"  title="Conditions">C</div>
-				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes"  title="Air Battle">A</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_enemy" title="Enemy">E</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_conds" title="Conditions">C</div>
+				<div class="sortie_toggle sortie_toggle_in active hover" data-target="node_planes" title="Air Battle">A</div>
 				<div class="clear"></div>
 			</div>
 			<div class="clear"></div>
@@ -118,25 +167,41 @@
 			<div class="sortie_rfleet rfleet_main">
 				<div class="rfleet_title">Main Fleet</div>
 				<div class="rfleet_body">
-					
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_escort">
 				<div class="rfleet_title">Escort Fleet</div>
 				<div class="rfleet_body">
-					
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_preboss">
 				<div class="rfleet_title">Pre-boss Support</div>
 				<div class="rfleet_body">
-					
 				</div>
 			</div>
 			<div class="sortie_rfleet rfleet_boss">
 				<div class="rfleet_title">Boss Support</div>
 				<div class="rfleet_body">
-					
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_lbas rfleet_lbas1">
+				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_body">
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_lbas rfleet_lbas2">
+				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_body">
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_lbas rfleet_lbas3">
+				<div class="rfleet_title">LBAS <span class="num"></span> <span class="action"></span></div>
+				<div class="rfleet_body">
+				</div>
+			</div>
+			<div class="sortie_rfleet rfleet_control">
+				<div class="rfleet_body">
+					<div class="sortie_toggle button_tomanager hover" title="View fleets at Fleet Manager">To Fleet Manager</div>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -160,30 +225,36 @@
 		</div>
 		<div class="node_enemy">
 			<div class="node_eformation"><img/></div>
-			<div class="node_eship node_eship_1"><img/></div>
-			<div class="node_eship node_eship_2"><img/></div>
-			<div class="node_eship node_eship_3"><img/></div>
-			<div class="node_eship node_eship_4"><img/></div>
-			<div class="node_eship node_eship_5"><img/></div>
-			<div class="node_eship node_eship_6"><img/></div>
+			<div class="node_eship main node_eship_1"><img/></div>
+			<div class="node_eship main node_eship_2"><img/></div>
+			<div class="node_eship main node_eship_3"><img/></div>
+			<div class="node_eship main node_eship_4"><img/></div>
+			<div class="node_eship main node_eship_5"><img/></div>
+			<div class="node_eship main node_eship_6"><img/></div>
+			<div class="node_eship escort node_eship_7"><img/></div>
+			<div class="node_eship escort node_eship_8"><img/></div>
+			<div class="node_eship escort node_eship_9"><img/></div>
+			<div class="node_eship escort node_eship_10"><img/></div>
+			<div class="node_eship escort node_eship_11"><img/></div>
+			<div class="node_eship escort node_eship_12"><img/></div>
 		</div>
 		<div class="node_details">
 			<div class="node_conds">
 				<div class="node_cond">
 					<div class="node_cond_label">Detect</div>
-					<div class="node_cond_value node_detect">OK</div>
+					<div class="node_cond_value node_detect">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Engage</div>
-					<div class="node_cond_value node_engage">Parallel</div>
+					<div class="node_cond_value node_engage">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Contact</div>
-					<div class="node_cond_value node_contact">YES vs YES</div>
+					<div class="node_cond_value node_contact">-</div>
 				</div>
 				<div class="node_cond">
 					<div class="node_cond_label">Air Battle</div>
-					<div class="node_cond_value node_airbattle"></div>
+					<div class="node_cond_value node_airbattle">-</div>
 				</div>
 			</div>
 			<div class="node_planes">
@@ -248,6 +319,21 @@
 			<div class="rfleet_equip rfleet_equip_2"><img/></div>
 			<div class="rfleet_equip rfleet_equip_3"><img/></div>
 			<div class="rfleet_equip rfleet_equip_4"><img/></div>
+			<div class="rfleet_equip rfleet_equip_5"><img/></div>
+			<div class="rfleet_equip rfleet_equip_6"><img/></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+	<!-- LBAS PLANE BOX -->
+	<div class="rfleet_lbas_plane">
+		<div class="rfleet_pic"><img/></div>
+		<div class="rfleet_detail">
+			<div class="rfleet_name"></div>
+			<div class="rfleet_stars"><img/><span></span></div>
+			<div class="rfleet_ace"><img/></div>
+			<div class="rfleet_count"></div>
+			<div class="rfleet_morale"><img/></div>
 		</div>
 		<div class="clear"></div>
 	</div>

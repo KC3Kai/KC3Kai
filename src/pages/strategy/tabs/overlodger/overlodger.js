@@ -182,9 +182,9 @@
 			var
 				emptyLedger = ['first','clear','last'].reduce(function(objk,itky){
 					objk[itky] = NaN; return objk;
-				},{}),
-				rangeNullFil = function(dt,id){
-					return dt || cr[id]; };
+				},{});
+				//rangeNullFil = function(dt,id){
+				//	return dt || cr[id]; };
 			function cache(x,f,w,m,p,r) {
 				// x - ledger id
 				// f - filter
@@ -431,10 +431,13 @@
 												
 												sc = sortieCache[wr][fi.m];
 												sr = sortieCache[wr].rangeE(Math.sign(ledger_type),fi.m);
-												var sf;
-												sf = activeSelf.sortieRange[wr+fi.m];
-												sf = sf.filter(sortieFil,sr[1]);
-												rgrt  = sf.indexOf(data.opt)>=0;
+												var sf = activeSelf.sortieRange[wr+fi.m];
+												if(sf) {
+													sf = sf.filter(sortieFil,sr[1]);
+													rgrt = sf.indexOf(data.opt)>=0;
+												} else {
+													rgrt = false;
+												}
 												cret |= cache.apply(null, cacheKeyMD.concat( rgrt ) );
 												break;
 										}
@@ -443,7 +446,7 @@
 									}
 									return ret;
 								} catch (e) {
-									console.error(e); // Accessing non exists ledger data
+									console.error("Accessing non exists ledger data", e);
 									return false;
 								}
 							})(this.sortie.Period)
@@ -627,7 +630,7 @@
 						});
 					}
 				});
-			console.log(sortieCache,ledgerCache);
+			//console.debug("Cached data", sortieCache,ledgerCache);
 			
 			$.each(mapBuffer,function(k,v){
 				mapBuffer[k] = v = Object.freeze(
@@ -747,7 +750,7 @@
 						  YYYYMM : 4-digit year + 2-digit month
 					Mode 2 =>
 						W[1-9][0-9] M[1-9] P[0-5]
-						  Period : (up to 10 defineable condition)
+						  Period : (up to 10 define-able condition)
 							  - Start of the map
 							  - Start of event
 							  - Cleared the map         (GREAT DESTR)
@@ -831,11 +834,11 @@
 							ctr.always(function(){
 								time = Date.now() - time;
 							}).done(function(){
-								console.log('Execution',name,'Completed in ',time,'ms');
+								console.debug('Execution', name, 'completed in', time, 'ms');
 							}).fail(function(){
-								console.error('Execution',name,'Failed after',time,'ms');
+								console.error('Execution', name, 'failed after', time, 'ms');
 							}).progress(function(x){
-								console.info('Execution',name,'still ongoing after',Date.now() - time,'ms on milestone:',x);
+								console.info('Execution', name, 'still ongoing after', Date.now() - time, 'ms on milestone:', x);
 							});
 							this.push(ctr);
 							return ctr;
@@ -861,7 +864,7 @@
 							(function(newBuffer){
 								try {
 									var oldBufferLen = this.sortieBuffer.length || 0;
-									console.log("Extending map buffer from",oldBufferLen,"by",newBuffer.length);
+									console.debug("Extending map buffer from",oldBufferLen,"by",newBuffer.length);
 									$.extend(this.sortieBuffer,newBuffer);
 									$.each(this.sortieRange,function(k,v){
 										(self.sortieRange[k] = self.sortieRange[k] || []).splice(0);
@@ -1025,7 +1028,7 @@
 									}
 									[].unshift.apply(self.totalBuffer,newTotalBuffer);
 								} catch (e) {
-									console.error(e.stack);
+									console.error("Fetching incremental data", e);
 								} finally {
 									bufferCancel = false;
 									thr.resolve(newBuffer.length);
@@ -1035,12 +1038,12 @@
 					}).call(this,threads.watchThread('CollectBuffer'));
 					
 					$.when.apply(null,threads).then(function(){
-						console.info.apply(console,["Async Completed"].concat([].slice.apply(arguments)));
+						console.debug.apply(console,["Async completed"].concat([].slice.apply(arguments)));
 						// Finalize
 						refreshCurrentBuffer.call(self);
 						$(".filterRefresh",baseContext).trigger('click');
 					},function(e){
-						console.error("Thread Execution Failed",e);
+						console.error("Thread execution failed", e);
 					});
 				} catch (e) {
 					throw e;
@@ -1278,7 +1281,7 @@
 						$(this).trigger('refresh');
 						time = Date.now() - time;
 						$(".loading").hide();
-						//console.info("Refresh done in",time,"msec");
+						//console.debug("Refresh done in", time, "ms");
 					});
 		},
 		
@@ -1289,7 +1292,7 @@
 			
 			$(".lodger-header",baseContext).text(
 				[1,2].reduce(function(str,key,ind){
-					return str.replace('%DATE' + key,dateFormat(lookupBound[ind] * 3600000,'ddd yyyy-mm-dd HH:' + ['00','59'][ind]));
+					return str.replace('%DATE' + key,dateFormat(lookupBound[ind] * 3600000,'yyyy-mm-dd (ddd) HH:' + ['00','59'][ind], false, KC3Translation.getLocale()));
 				},KC3Meta.term('LodgerLabel'))
 			);
 			
@@ -1386,7 +1389,7 @@
 		resetBuffer :function(){
 			var self = this;
 			if(bufferCancel){
-				console.error("Rejected attempt to modify the locked buffer, please wait gently.");
+				console.info("Rejected attempt to modify the locked buffer, please wait gently");
 				return false;
 			}
 			
@@ -1596,7 +1599,7 @@
 				)
 				allBuffer.push(d);
 			if(i%500==499 && (Date.now - t > 300)) {
-				console.info("Milestone",i+1,"check after",Date.now() - t,"msec");
+				console.debug("Milestone", i+1, "check after", Date.now() - t, "ms");
 			}
 		}
 		this.flatBuffer = Object.freeze(allBuffer.sort(function(x,y){return x.hour - y.hour;}).slice(0));
@@ -1614,7 +1617,7 @@
 			rCoef      = durData[1];
 		timeRange = JSON.parse(JSON.stringify(timeRange));
 		
-		/* How backlookup works:
+		/* How back-lookup works:
 			Scope/Duration
 			LookBHD/Day    - starts from specified date for N day backwards
 			  bhd(2015-12-12 04:00,1) --> (2015-12-11 04:00)

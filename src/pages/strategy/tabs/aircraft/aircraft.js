@@ -15,14 +15,43 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
-
+			this.sortMasterItem = (a, b) => {
+				const type = a.type_id;
+				let s1 = "aa", s2 = "aa";
+				switch(type){
+					case 6: case 43: case 45: // (Night/Seaplane) Fighter
+						s1 = 'aa'; s2 = 'fp'; break;
+					case 7: case 39: case 40: // Dive/Jet bomber
+						s1 = 'dv'; s2 = 'aa'; break;
+					case 8: case 46: // (Night) Torpedo bomber
+						s1 = 'tp'; s2 = 'as'; break;
+					case 9: case 33: // Recon / Large flying boat
+						s1 = 'ls'; s2 = 'or'; break;
+					case 10: // Seaplane Bomber/Recon
+						s1 = 'dv'; s2 = 'ls'; break;
+					case 37: // LB Attacker
+						s1 = 'dv'; s2 = 'tp'; break;
+					case 38: // Interceptor (ht = Anti-bomber)
+						s1 = 'ht'; s2 = 'aa'; break;
+					case 44: // LB Fighter (ev = Interception)
+						s1 = 'aa'; s2 = 'ev'; break;
+					case 21: case 22: case 47: // Autogyro, ASW-PBY, LB ASW bomber
+						s1 = 'as'; s2 = 'dv'; break;
+				}
+				return b.stats[s1] - a.stats[s1]
+					|| b.stats[s2] - a.stats[s2]
+					|| b.stats.ht - a.stats.ht
+					|| b.stats.ev - a.stats.ev
+					|| b.stats.ls - a.stats.ls
+					|| a.id - b.id;
+			};
 		},
 
 		/* RELOAD
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			var self = this;
+			const self = this;
 			this._items = {};
 			this._holders = {};
 			this._slotNums = {};
@@ -36,49 +65,46 @@
 			this.squadNames = JSON.parse(localStorage.planes);
 			
 			// Compile equipment holders
-			var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
-			for(ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
+			for(const ctr in KC3ShipManager.list){
+				const ship = KC3ShipManager.list[ctr];
+				for(const idx in ship.items){
+					this.checkShipSlotForItemHolder(idx, ship);
+				}
 				// No plane is able to be equipped in ex-slot for now
 			}
-			for(ctr in PlayerManager.bases){
+			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
-			for(ctr in PlayerManager.baseConvertingSlots){
+			for(const ctr in PlayerManager.baseConvertingSlots){
 				this._holders["s"+PlayerManager.baseConvertingSlots[ctr]] = "LbasMoving";
 			}
-			
-			// Compile ships on Index
-			var thisType, thisSlotitem, thisGearInstance;
 			
 			function GetMyHolder(){ return self._holders["s"+this.itemId]; }
 			function NoHolder(){ return false; }
 			
-			for(ctr in KC3GearManager.list){
-				ThisItem = KC3GearManager.list[ctr];
-				MasterItem = ThisItem.master();
+			// Compile ships on Index
+			for(const ctr in KC3GearManager.list){
+				const ThisItem = KC3GearManager.list[ctr];
+				const MasterItem = ThisItem.master();
 				if(!MasterItem) continue;
 				//if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(MasterItem.api_type[3]) == -1) continue;
 				
 				// Add holder to the item object temporarily via function return
-				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
+				if(this._holders["s"+ThisItem.itemId] !== undefined){
 					ThisItem.MyHolder = GetMyHolder;
 				}else{
 					ThisItem.MyHolder = NoHolder;
 				}
 				
 				// Check if slotitem_type is filled
-				if(typeof this._items["t"+MasterItem.api_type[3]] == "undefined"){
+				if(this._items["t"+MasterItem.api_type[3]] === undefined){
 					this._items["t"+MasterItem.api_type[3]] = [];
 				}
-				thisType = this._items["t"+MasterItem.api_type[3]];
+				const thisType = this._items["t"+MasterItem.api_type[3]];
 				
 				// Check if slotitem_id is filled
-				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
+				if(thisType["s"+MasterItem.api_id] === undefined){
+					thisType["s"+MasterItem.api_id] = {
 						id: ThisItem.masterId,
 						type_id: MasterItem.api_type[3],
 						english: ThisItem.name(),
@@ -99,47 +125,25 @@
 						instances: []
 					};
 				}
-				thisSlotitem = this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id];
-				
-				thisSlotitem.instances.push(ThisItem);
+				const thisMasterItem = thisType["s"+MasterItem.api_id];
+				thisMasterItem.instances.push(ThisItem);
 			}
 			
-			// sort this_items
-			var sortMasterItem = function(a, b){
-				var attr;
-				switch( i ){
-					case 't6': case 6:
-						attr = 'aa'; break;
-					case 't7': case 7:
-						attr = 'dv'; break;
-					case 't8': case 8:
-						attr = 'tp'; break;
-					case 't9': case 9:
-						attr = 'ls'; break;
-					case 't10': case 10:
-						attr = 'dv'; break;
-					default:
-						attr = 'aa'; break;
-				}
-				if( b.stats[attr] == a.stats[attr] )
-					return b.stats.ht - a.stats.ht;
-				return b.stats[attr] - a.stats[attr];
-			};
-			var sortSlotItem = function(a,b){
-				return b.ace - a.ace;
-			};
-			for( var i in this._items ){
-
+			const sortSlotItem = (a, b) => (
+				// order by proficiency desc first
+				b.ace - a.ace || a.itemId - b.itemId
+			);
+			for( const i in this._items ){
 				// make elements in this._items true Array
-				for( var j in this._items[i] ){
-					// sort item by ace
+				for( const j in this._items[i] ){
+					// sort item instances
 					this._items[i][j].instances.sort(sortSlotItem);
 					this._items[i].push( this._items[i][j] );
 					delete this._items[i][j];
 				}
 				
-				// sort MasterItem by stat
-				this._items[i].sort(sortMasterItem);
+				// sort MasterItem by stats
+				this._items[i].sort(this.sortMasterItem);
 			}
 		},
 		
@@ -155,7 +159,7 @@
 		/* Check LBAS slot of an aircraft is equipped
 		--------------------------------------------*/
 		checkLbasSlotForItemHolder :function(LandBase){
-			for(var squad in LandBase.planes){
+			for(const squad in LandBase.planes){
 				if(LandBase.planes[squad].api_slotid > 0){
 					this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
 				}
@@ -166,13 +170,22 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 			
-			$(".tab_aircraft .item_type").on("click", function(){
+			$(".tab_aircraft .item_stat img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+			$(".tab_aircraft .item_types .item_type img").each((_, img) => {
+				$(img).attr("src", KC3Meta.itemIcon($(img).parent().data("type")));
+			});
+			$(".tab_aircraft .item_type").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
+			});
+			$(".tab_aircraft .item_type").on("click", function(e){
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 			
-			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(){
+			$(".tab_aircraft .item_list").on("change", ".instance_name input", function(e){
 				self.squadNames["p"+$(this).attr("data-gearId")] = $(this).val();
 				localStorage.planes = JSON.stringify(self.squadNames);
 			});
@@ -191,22 +204,30 @@
 			$(".tab_aircraft .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_aircraft .item_list").html("");
 			
-			var ctr, ThisType, ItemElem, ThisSlotitem;
-			var gearClickFunc = function(e){
-				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-			};
-			var lbasPlanesFilter = function(s){
-				return s.api_slotid === ThisPlane.itemId;
-			};
-			for(ctr in this._items["t"+type_id]){
-				ThisSlotitem = this._items["t"+type_id][ctr];
-				
-				ItemElem = $(".tab_aircraft .factory .slotitem").clone().appendTo(".tab_aircraft .item_list");
-				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+type_id+".png");
-				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
-				$(".icon img", ItemElem).click(gearClickFunc);
+			(this._items["t"+type_id] || []).forEach(ThisSlotitem => {
+				const ItemElem = $(".tab_aircraft .factory .slotitem").clone()
+					.appendTo(".tab_aircraft .item_list");
+				const masterId = ThisSlotitem.id;
+				$(".icon img", ItemElem)
+					.attr("src", KC3Meta.itemIcon(type_id))
+					.attr("title", `[${masterId}]`)
+					.attr("alt", masterId)
+					.click(function(e){
+						KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+					});
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
+				if(KC3GearManager.interceptorsType3Ids.includes(Number(type_id))){
+					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccAntiBomber"));
+					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ib"));
+					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvaInterception"));
+					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("if"));
+				} else {
+					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccuracy"));
+					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ht"));
+					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvasion"));
+					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("ev"));
+				}
 				
 				this.slotitem_stat(ItemElem, ThisSlotitem, "fp");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "tp");
@@ -220,54 +241,61 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem, "rn");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				
-				var PlaneCtr, ThisPlane, PlaneBox, rankLines, ThisCapacity;
-				for(PlaneCtr in ThisSlotitem.instances){
-					ThisPlane = ThisSlotitem.instances[PlaneCtr];
+				ThisSlotitem.instances.forEach(ThisPlane => {
+					const rosterId = ThisPlane.itemId;
+					let ThisCapacity = 0;
 					
-					PlaneBox = $(".tab_aircraft .factory .instance").clone();
+					const PlaneBox = $(".tab_aircraft .factory .instance").clone();
 					$(".instances", ItemElem).append(PlaneBox);
 					
-					$(".instance_icon img", PlaneBox).attr("src", "../../assets/img/items/"+type_id+".png");
+					$(".instance_icon img", PlaneBox).attr("src", KC3Meta.itemIcon(type_id));
+					$(".instance_lock", PlaneBox).toggle(!ThisPlane.lock);
 					
 					if(ThisPlane.stars > 0){
 						$(".instance_star span", PlaneBox).text( ThisPlane.stars > 9 ? "m" : ThisPlane.stars);
 					} else {
 						$(".instance_star img", PlaneBox).hide();
 					}
-					
 					if(ThisPlane.ace > 0){
-						$(".instance_chev img", PlaneBox).attr("src", "../../assets/img/client/achev/"+ThisPlane.ace+".png");
+						$(".instance_chev img", PlaneBox).attr("src", "/assets/img/client/achev/"+ThisPlane.ace+".png");
 					}else{
 						$(".instance_chev img", PlaneBox).hide();
 					}
 					
-					$(".instance_name input", PlaneBox).attr("data-gearId", ThisPlane.itemId);
-					
-					if(typeof this.squadNames["p"+ThisPlane.itemId] != "undefined"){
-						$(".instance_name input", PlaneBox).val( this.squadNames["p"+ThisPlane.itemId] );
+					$(".instance_name input", PlaneBox)
+						.attr("data-gearId", rosterId)
+						.attr("title", "#" + rosterId);
+					if(typeof this.squadNames["p"+rosterId] != "undefined"){
+						$(".instance_name input", PlaneBox).val( this.squadNames["p"+rosterId] );
 					}
 					
 					if(ThisPlane.MyHolder()){
 						if(ThisPlane.MyHolder() instanceof KC3LandBase){
-							$(".holder_pic img", PlaneBox).attr("src", "../../../../assets/img/items/33.png" );
+							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
 							$(".holder_name", PlaneBox).text( "LBAS World "+ThisPlane.MyHolder().map );
 							$(".holder_level", PlaneBox).text( "#"+ThisPlane.MyHolder().rid );
-							ThisCapacity = ThisPlane.MyHolder().planes
-								.filter(lbasPlanesFilter)[0].api_max_count;
+							ThisCapacity = (ThisPlane.MyHolder().planes
+								.find(s => s.api_slotid === rosterId) || {}).api_max_count || "?";
 						} else if(ThisPlane.MyHolder() === "LbasMoving"){
-							$(".holder_pic img", PlaneBox).attr("src", "../../../../assets/img/items/33.png" );
+							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
 							$(".holder_name", PlaneBox).text( "LBAS Moving" );
 							$(".holder_level", PlaneBox).text( "" );
 							ThisCapacity = "";
 						} else {
-							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) );
+							$(".holder_pic img", PlaneBox)
+								.attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId) )
+								.addClass("hover")
+								.attr("alt", ThisPlane.MyHolder().masterId)
+								.click(function(e){
+									KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+								});
 							$(".holder_name", PlaneBox).text( ThisPlane.MyHolder().name() );
-							$(".holder_level", PlaneBox).text("Lv."+ThisPlane.MyHolder().level);
-							ThisCapacity = ThisPlane.MyHolder().slots[ this._slotNums["s"+ThisPlane.itemId] ];
+							$(".holder_level", PlaneBox).text("Lv"+ThisPlane.MyHolder().level);
+							ThisCapacity = ThisPlane.MyHolder().slotSize( this._slotNums["s"+rosterId] );
 						}
 						if(ThisCapacity > 0){
-							// Compute for veteranized fighter power
-							var MyFighterPowerText = "";
+							// Compute for ace fighter air power
+							let MyFighterPowerText = "";
 							if(ConfigManager.air_formula == 1){
 								MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);
 							}else{
@@ -284,9 +312,9 @@
 						$(".instance_aaval", PlaneBox).addClass("reserveSquad");
 						$(".instance_aaval", PlaneBox).text( ThisSlotitem.stats.aa );
 					}
-				}
+				});
 				
-			}
+			});
 			
 		},
 		

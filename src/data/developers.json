@@ -28,7 +28,6 @@
 				"name": "Javran",
 				"avatar": "http://i.imgur.com/uujxOHX.png",
 				"desc": "AboutDeveloper",
-				"active": 1,
 				"links": {
 					"gh" : "https://github.com/Javran",
 					"tw" :"https://twitter.com/JavranC",
@@ -62,6 +61,92 @@
 				"active": 1,
 				"links": {
 					"gh" :"https://github.com/fourinone41"
+				}
+			},
+			{
+				"name": "DynamicSTOP",
+				"avatar" : "https://avatars1.githubusercontent.com/u/9434504?v=3&s=40",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/DynamicSTOP",
+					"fb" :"https://www.facebook.com/DynamicSTOP"
+				}
+			},
+			{
+				"name": "Adrymne",
+				"avatar": "https://avatars0.githubusercontent.com/u/15857144?v=4&s=88",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh" : "https://github.com/Adrymne"
+				}
+			},
+			{
+				"name": "Vultren",
+				"avatar" : "https://avatars0.githubusercontent.com/u/10458410?v=3&s=40",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Vultren"
+				}
+			},
+			{
+				"name": "Sanya V. Litvyak",
+				"avatar" : "https://avatars3.githubusercontent.com/u/1585104?v=4&s=460",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Nya-chan"
+				}
+			},
+			{
+				"name": "FOG_Yamato",
+				"avatar" : "https://avatars2.githubusercontent.com/u/22725593?v=4&s=460",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/FOG-Yamato"
+				}
+			},
+			{
+				"name": "Tibo442",
+				"avatar": "https://avatars2.githubusercontent.com/u/5676386?v=4&s=88",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh" : "https://github.com/Tibo442",
+					"wk" : "http://kancolle.wikia.com/wiki/User:Tibo442",
+					"tw" : "http://twitter.com/FlatIsNice",
+					"wb" : "http://flatisjustice.moe"
+				}
+			},
+			{
+				"name": "Tsubakura",
+				"avatar" : "https://avatars0.githubusercontent.com/u/20300876?v=4&s=460",
+				"desc" : ["AboutDeveloper", "AboutDevTester"],
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Tsubakura",
+					"wk" :"http://kancolle.wikia.com/wiki/User:Tsubakura"
+				}
+			},
+			{
+				"name": "reinforce",
+				"avatar": "https://avatars2.githubusercontent.com/u/1038834?v=3&s=40",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh" : "https://github.com/reinforce"
+				}
+			},
+			{
+				"name": "Dewy",
+				"avatar" : "https://avatars1.githubusercontent.com/u/26541502?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/sorewachigauyo"
 				}
 			},
 			{
@@ -135,19 +220,19 @@
 					"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
 					"fb" : "https://www.facebook.com/iTwilly.HJW"
 				}
-			},
-			{
-				"name": "DynamicSTOP",
-				"avatar" : "https://avatars1.githubusercontent.com/u/9434504?v=3&s=40",
-				"desc" : "AboutDeveloper",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/DynamicSTOP",
-					"fb" :"https://www.facebook.com/DynamicSTOP"
-				}
 			}
 		],
 		"AboutModerators": [
+			{
+				"name": "mikenzb",
+				"avatar" : "https://avatars3.githubusercontent.com/u/5982780?v=3&s=40",
+				"desc" : ["AboutModerator"],
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Mikenzb",
+					"st" :"http://steamcommunity.com/id/mikenzb"
+				}
+			},
 			{
 				"name": "CrazyTeitoku",
 				"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
@@ -178,8 +263,7 @@
 					"gh" :"https://github.com/ethrundr",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
 					"fb" :"https://www.facebook.com/ethrundr",
-					"hm" :"http://www.himeuta.net/members/1056-ethrundr/",
-					"kn" :"http://www.kaorinusantara.or.id/forum/index.php?members/ethrundr.18705/"
+					"hm" :"http://www.himeuta.net/members/1056-ethrundr/"
 				}
 			}
 		],
@@ -253,10 +337,11 @@
 			},
 			{
 				"name": "Admiral Mikado",
-				"avatar" : "../../assets/img/ui/empty.png",
+				"avatar" : "https://avatars2.githubusercontent.com/u/40426881?s=460&v=4",
 				"desc" : "Deutsch",
-				"active": 0,
+				"active": 1,
 				"links" : {
+					"gh" :"https://github.com/Admiral-Mikado",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
 				}
 			},
@@ -292,7 +377,7 @@
 				"name": "Syntax7error",
 				"avatar" : "https://avatars2.githubusercontent.com/u/21103170?v=3&s=40",
 				"desc" : "Français",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/Syntax7error",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Syntax_Terror"
@@ -322,7 +407,7 @@
 				"name": "RanFoxRun",
 				"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
 				"desc" : "Italiano",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/RanFoxRun",
 					"wk" :"http://kancolle.wikia.com/wiki/User:RanFoxRun"
@@ -336,6 +421,15 @@
 				"links" : {
 					"gh" :"https://github.com/rephira",
 					"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
+				}
+			},
+			{
+				"name": "IE10",
+				"avatar" : "https://avatars0.githubusercontent.com/u/24682743?v=4&s=460",
+				"desc" : "한국어",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/antest1"
 				}
 			},
 			{
@@ -409,7 +503,6 @@
 					"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
 				}
 			},
-			
 			{
 				"name": "omekeki",
 				"avatar" : "https://avatars1.githubusercontent.com/u/15091910?v=3&s=40",
@@ -449,17 +542,26 @@
 				"name": "JoyceTheBleak",
 				"avatar" : "https://avatars2.githubusercontent.com/u/19313885?v=3&s=40",
 				"desc" : "Українська",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"fb": "https://www.facebook.com/rostyslav.fed",
 					"wb": "https://vk.com/joyce_the_bleak"
 				}
 			},
 			{
+				"name": "RinaSatsu",
+				"avatar" : "https://avatars1.githubusercontent.com/u/29840359?v=4&s=460",
+				"desc" : "Українська",
+				"active": 0,
+				"links" : {
+					"gh": "https://github.com/RinaSatsu"
+				}
+			},
+			{
 				"name": "PajiPegasus",
 				"avatar" : "https://avatars2.githubusercontent.com/u/24373879?v=3&s=40",
 				"desc" : "繁體中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/PajiPegasus"
 				}
@@ -472,32 +574,41 @@
 				"links" : {
 					"gh": "https://github.com/Rys3t"
 				}
+			},
+			{
+				"name": "TrickLin",
+				"avatar" : "https://avatars2.githubusercontent.com/u/8099890?s=88&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/TrickLin"
+				}
+			},
+			{
+				"name": "RandomGuyB5",
+				"avatar" : "https://avatars1.githubusercontent.com/u/40309140?s=460&v=4",
+				"desc" : "Deutsch",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/RandomGuyB5"
+				}
 			}
 		],
 		"AboutForkContributors": [
 			{
-				"name": "reinforce",
-				"avatar": "https://avatars2.githubusercontent.com/u/1038834?v=3&s=40",
-				"desc": "AboutDeveloper",
-				"active": 1,
-				"links": {
-					"gh" : "https://github.com/reinforce"
-				}
-			},
-			{
-				"name": "Vultren",
-				"avatar" : "https://avatars0.githubusercontent.com/u/10458410?v=3&s=40",
+				"name": "HitomaruKonpaku",
+				"avatar" : "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
 				"desc" : "AboutDeveloper",
 				"active": 1,
 				"links" : {
-					"gh" :"https://github.com/Vultren"
+					"gh" :"https://github.com/HitomaruKonpaku"
 				}
 			},
 			{
 				"name": "kyoushuu",
 				"avatar": "https://avatars2.githubusercontent.com/u/2142097?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/kyoushuu"
 				}
@@ -506,7 +617,7 @@
 				"name": "tmerta",
 				"avatar" : "https://avatars0.githubusercontent.com/u/2845736?v=3&s=40",
 				"desc" : "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/tmerta"
 				}
@@ -515,7 +626,7 @@
 				"name": "nevrending",
 				"avatar": "https://avatars3.githubusercontent.com/u/4745298?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/nevrending",
 					"wk" :"http://kancolle.wikia.com/wiki/User:NevREnding",
@@ -528,25 +639,94 @@
 				"name": "reynn",
 				"avatar": "https://avatars2.githubusercontent.com/u/224374?v=3&s=40",
 				"desc": "AboutDeveloper",
-				"active": 1,
+				"active": 0,
 				"links": {
 					"gh" : "https://github.com/reynn"
+				}
+			},
+			{
+				"name": "hd7771",
+				"avatar" : "https://avatars3.githubusercontent.com/u/7695245?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 0,
+				"links" : {
+					"gh" :"https://github.com/107nationalstation"
+				}
+			},
+			{
+				"name": "Prince Yang",
+				"avatar" : "https://avatars3.githubusercontent.com/u/7968263?s=460&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 0,
+				"links" : {
+					"gh" :"https://github.com/ptyang"
+				}
+			},
+			{
+				"name": "abs15986",
+				"avatar" : "https://avatars2.githubusercontent.com/u/13902881?s=60&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/abs15986"
+				}
+			},
+			{
+				"name": "MZI",
+				"avatar" : "https://avatars1.githubusercontent.com/u/14719366?s=460&v=4",
+				"desc" : "简体中文",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/MZIchenjl"
+				}
+			},
+			{
+				"name": "redpizza",
+				"avatar" : "https://avatars2.githubusercontent.com/u/31765780?s=460&v=4",
+				"desc" : "日本語",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/redpizza"
+				}
+			},
+			{
+				"name": "Ning Humbert",
+				"avatar" : "https://avatars1.githubusercontent.com/u/8641779?s=460&v=4",
+				"desc" : ["简体中文", "日本語"],
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/lackofdream"
+				}
+			},
+			{
+				"name": "Felix Suwito",
+				"avatar" : "https://avatars3.githubusercontent.com/u/19694373?s=460&v=4",
+				"desc" : "Indonesian",
+				"active": 1,
+				"links" : {
+					"gh": "https://github.com/flixwito"
+				}
+			},
+			{
+				"name": "Oradimi",
+				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
+				"desc" : "Français",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Oradimi"
+				}
+			},
+			{
+				"name": "Trần Quốc Hưng",
+				"avatar" : "https://avatars3.githubusercontent.com/u/23023212?s=460&v=4",
+				"desc" : "Tiếng Việt",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/mw3tv123"
 				}
 			}
 		],
 		"AboutTesters": [
-			{
-				"name": "mikenzb",
-				"avatar" : "https://avatars3.githubusercontent.com/u/5982780?v=3&s=40",
-				"desc" : "AboutModerator",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/Mikenzb",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Mikenzb",
-					"st" :"http://steamcommunity.com/id/mikenzb",
-					"wb" :"http://forum.worldofwarships.asia/index.php?/user/mikenzb-2007237814/"
-				}
-			},
 			{
 				"name": "Tedster",
 				"avatar" : "https://avatars1.githubusercontent.com/u/21696818?v=3&s=40",
@@ -673,6 +853,15 @@
 	 				"gh" :"https://github.com/dustfan",
 	 				"wk" :"http://kancolle.wikia.com/wiki/User:DustFan"
 	 			}
+	 		},
+	 		{
+	 			"name": "Matty Chan",
+	 			"avatar" : "https://avatars0.githubusercontent.com/u/21363469?v=4&s=460",
+	 			"desc" : "AboutReporter",
+				"active": 1,
+	 			"links" : {
+	 				"gh" :"https://github.com/Accelyte"
+	 			}
 	 		}
 		],
 		"AboutOtherContributors": [
@@ -743,7 +932,7 @@
 		{
 			"name": "AboutPartnerPoiStatsName",
 			"desc": "AboutPartnerPoiStatsDesc",
-			"image": "https://cdn.rawgit.com/poooi/poi/master/assets/icons/icon.png",
+			"image": "https://raw.githubusercontent.com/poooi/poi/master/assets/icons/icon.png",
 			"links": [
 				"http://db.kcwiki.moe"
 			]
@@ -751,7 +940,7 @@
 		{
 			"name": "AboutPartnerWhoCallsName",
 			"desc": "AboutPartnerWhoCallsDesc",
-			"image": "https://cdn.rawgit.com/Diablohu/WhoCallsTheFleet/master/app/assets/images/appicon.png",
+			"image": "https://raw.githubusercontent.com/Diablohu/WhoCallsTheFleet/master/app/assets/images/appicon.png",
 			"links": [
 				"http://fleet.diablohu.com",
 				"https://github.com/Diablohu/WhoCallsTheFleet"
@@ -762,15 +951,8 @@
 			"desc": "AboutPartnerThreeBardsDesc",
 			"image": "badge.png",
 			"links": [
+				"http://www.sanya.moe/kcbadge/",
 				"http://threebards.com"
-			]
-		},
-		{
-			"name": "AboutPartnerKCDBNetName",
-			"desc": "AboutPartnerKCDBNetDesc",
-			"image": "http://kancolle-db.net/apple-touch-icon-72x72.png",
-			"links": [
-				"http://kancolle-db.net"
 			]
 		},
 		{

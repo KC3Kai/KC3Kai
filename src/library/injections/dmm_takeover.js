@@ -9,11 +9,11 @@
 		apply: function(response){
 			console.log('Applying DMM customizations...');
 
-			config =  $.extend(true, ConfigManager, response.config);
-			window.ConfigManager = config;
+			config = $.extend(true, ConfigManager, response.config);
 			master = $.extend(true, KC3Master, response.master);
-			meta = $.extend(true, KC3Meta, response.meta);
+			meta   = $.extend(true, KC3Meta, response.meta);
 			quests = $.extend(true, KC3QuestManager, response.quests);
+			$.extend(true, RemodelDb, response.remodel);
 
 			this.windowFocus();
 			this.attachHTML();
@@ -23,8 +23,10 @@
 			this.clearOverlayHotKey();
 			this.exitConfirmation();
 			this.screenshotHotkey();
+			this.injectDMM();
 
 			chrome.runtime.onMessage.addListener(this.subtitlesOverlay());
+			chrome.runtime.onMessage.addListener(this.reloadMeta());
 			chrome.runtime.onMessage.addListener(this.clearOverlays());
 			chrome.runtime.onMessage.addListener(this.questOverlay());
 			chrome.runtime.onMessage.addListener(this.mapMarkersOverlay());
@@ -69,7 +71,7 @@
 		--------------------------------------*/
 		attachHTML: function(){
 			// Overlay screens
-			var overlays = $("<div>").addClass("overlays").appendTo("#area-game");
+			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game");
 
 			var overlay_quests = $("<div>").addClass("overlay_box overlay_quests");
 			overlays.append(overlay_quests);
@@ -116,14 +118,14 @@
 				'margin-left': 'auto',
 				'margin-right': 'auto',
 				padding: 0,
-				width: 800,
-				height: 480,
+				width: 1200,
+				height: 720,
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
 			$("#game_frame").css({
-				width: 800,
-				height: 480
+				width: 1200,
+				height: 720
 			});
 			$(".dmm-ntgnavi").hide();
 			$(".area-naviapp").hide();
@@ -141,17 +143,17 @@
 
 			var self = this;
 			this.resizeTimer = setInterval(function(){
-				if ($("#game_frame").width() != 800 || $("#game_frame").height() != 480) {
+				if ($("#game_frame").width() !== 1200 || $("#game_frame").height() !== 720) {
 					self.resizeGameFrame();
 				}
 			}, 10000);
 		},
-		// Resize game frame to 800x480
+		// Resize game frame to 1200x720
 		resizeGameFrame: function(){
-			console.log("Resizing game frame to 800x480");
+			console.log("Resizing game frame to 1200x720");
 			$("#game_frame").css({
-				width: 800,
-				height: 480
+				width: 1200,
+				height: 720
 			});
 		},
 		// Final process on document ready
@@ -175,8 +177,21 @@
 			// Top Margin from game frame to window
 			$("#area-game").css("margin-top", config.api_margin+"px");
 
+			// Keep background image size fitting to window, see issue #1824
+			var autoFitWindowHeight = function(){
+				// Only suppose for narrow window (such as horizontal panel),
+				// as viewport height will be larger than game player, but computed body height is 0
+				// For wide window, the height may not fit viewport height,
+				// especially when it's smaller than game player, and scrollbar appears
+				var visibleHeight = $(window).height() - self.gameZoomScale
+					* (($("#area-game").offset() || {}).top || 0);
+				$("body").css("min-height", visibleHeight);
+				// Prevent scrollbar shown if computed height not accurate but larger than game player
+				$("body").css("overflow-y", !$("#alert").is(":visible")
+					&& visibleHeight > self.gameZoomScale * 720 ? "hidden" : "auto");
+			};
 			// Background
-			if(config.api_bg_image === ""){
+			if(!config.api_bg_image){
 				// Solid color
 				$("body").css("background", config.api_bg_color);
 			}else{
@@ -186,26 +201,15 @@
 				$("body").css("background-size", config.api_bg_size);
 				$("body").css("background-position", config.api_bg_position);
 				$("body").css("background-repeat", "no-repeat");
+				autoFitWindowHeight();
+				$(window).resize(autoFitWindowHeight);
 			}
-
-			// Keep background image size fitting to window, see issue #1824
-			var autoFitWindowHeight = function(){
-				$("body").css("min-height",
-					// Only suppose for narrow window (such as horizontal panel),
-					// as viewport height will be larger than game player, but computed body height is 0
-					// For wide window, the height may not fit viewport height,
-					// especially when it's smaller than game player, and scrollbar appears
-					$("body").height() - self.gameZoomScale * $("#area-game").offset().top
-				);
-			};
-			autoFitWindowHeight();
-			$(window).resize(autoFitWindowHeight);
 
 			// User css customizations
 			if(config.dmm_custom_css !== ""){
 				var customCSS = document.createElement("style");
 				customCSS.type = "text/css";
-				customCSS.innerHTML = ConfigManager.dmm_custom_css;
+				customCSS.innerHTML = config.dmm_custom_css;
 				$("head").append(customCSS);
 			}
 		},
@@ -284,19 +288,24 @@
 		/* SUBTITLES OVERLAY
 		Displays subtitles on voice audio file requested
 		--------------------------------------*/
-		subtitleVanishTimer: null,
+		subtitleTimer: null,
 		subtitleVanishBaseMillis: null,
 		subtitleVanishExtraMillisPerChar: null,
+		subtitleHourlyTimer: null,
+		subtitleHourlyShip: 0,
 		subtitlesOverlay: function(){
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "subtitle") return true;
+				config = $.extend(true, ConfigManager, request.ConfigManager);
 				if(!config.api_subtitles) return true;
 
 				// Get subtitle text
 				var subtitleText = false;
 				var quoteIdentifier = "";
 				var quoteVoiceNum = request.voiceNum;
+				var quoteVoiceSize = request.voiceSize;
+				var quoteVoiceDuration = request.duration;
 				var quoteSpeaker = "";
 				switch(request.voicetype){
 					case "titlecall":
@@ -305,6 +314,16 @@
 					case "npc":
 						quoteIdentifier = "npc";
 						break;
+					case "event":
+						quoteIdentifier = "event";
+						break;
+					case "abyssal":
+						quoteIdentifier = "abyssal";
+						if(config.subtitle_speaker){
+							const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
+							quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+						}
+						break;
 					default:
 						quoteIdentifier = request.shipID;
 						if(config.subtitle_speaker){
@@ -312,16 +331,8 @@
 						}
 						break;
 				}
-				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum );
+				subtitleText = meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 
-				// hide first to fading will stop
-				$(".overlay_subtitles").stop(true, true);
-				$(".overlay_subtitles").hide();
-
-				// If subtitle removal timer is ongoing, reset
-				if(self.subtitleVanishTimer){
-					clearTimeout(self.subtitleVanishTimer);
-				}
 				// Lazy init timing parameters
 				if(!self.subtitleVanishBaseMillis){
 					self.subtitleVanishBaseMillis = Number(meta.quote("timing", "baseMillisVoiceLine")) || 2000;
@@ -330,32 +341,126 @@
 					self.subtitleVanishExtraMillisPerChar = Number(meta.quote("timing", "extraMillisPerChar")) || 50;
 				}
 
-				// If subtitles available for the voice
-				if(subtitleText){
+				const hideSubtitle = () => {
+					// hide first to fading will stop
+					$(".overlay_subtitles").stop(true, true);
+					$(".overlay_subtitles").hide();
+					// If subtitle removal timer is ongoing, reset
+					if(self.subtitleTimer){
+						if(Array.isArray(self.subtitleTimer))
+							self.subtitleTimer.forEach(clearTimeout);
+						else
+							clearTimeout(self.subtitleTimer);
+					}
+				};
+
+				// Display subtitle and set its removal timer
+				const showSubtitle = (subtitleText, quoteIdentifier) => {
+					// Simple one line quote
+					if($.type(subtitleText) === "string") {
+						showSubtitleLine(subtitleText, quoteIdentifier);
+						const millis = quoteVoiceDuration || (self.subtitleVanishBaseMillis +
+							self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+						self.subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
+						return;
+					}
+					// Quotes of multi-lines with customized delay times
+					self.subtitleTimer = [];
+					let lastLineOutMillis = 0;
+					$.each(subtitleText, (delay, text) => {
+						const delays = String(delay).split(',');
+						const millis = Number(delays[0]);
+						lastLineOutMillis = delays.length > 1 ? Number(delays[1]) :
+							(millis + self.subtitleVanishBaseMillis +
+							// Length will be inaccurate if text includes html chars
+							(self.subtitleVanishExtraMillisPerChar * text.length));
+						self.subtitleTimer.push(setTimeout(() => {
+							showSubtitleLine(text, quoteIdentifier);
+						}, millis));
+					});
+					self.subtitleTimer.push(setTimeout(fadeSubtitlesOut, lastLineOutMillis));
+				};
+
+				const fadeSubtitlesOut = () => {
+					self.subtitleTimer = false;
+					$(".overlay_subtitles").fadeOut(1000, function(){
+						switch (config.subtitle_display) {
+							case "evade":
+								$(".overlay_subtitles").css("top", "");
+								$(".overlay_subtitles").css("bottom", "5px");
+								self.subtitlePosition = "bottom";
+								break;
+							case "ghost":
+								$(".overlay_subtitles").removeClass("ghost");
+								break;
+							default: break;
+						}
+					});
+				};
+
+				const showSubtitleLine = (subtitleText, quoteIdentifier) => {
 					$(".overlay_subtitles span").html(subtitleText);
-					$(".overlay_subtitles").show();
-					var millis = self.subtitleVanishBaseMillis +
-						(self.subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-					self.subtitleVanishTimer = setTimeout(function(){
-						self.subtitleVanishTimer = false;
-						$(".overlay_subtitles").fadeOut(1000, function(){
-							switch (config.subtitle_display) {
-								case "evade":
-									$(".overlay_subtitles").css("top", "");
-									$(".overlay_subtitles").css("bottom", "5px");
-									self.subtitlePosition = "bottom";
-									break;
-								case "ghost":
-									$(".overlay_subtitles").removeClass("ghost");
-									break;
-								default: break;
-							}
-						});
-					}, millis);
 					if(!!quoteSpeaker){
 						$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 					}
+					$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
+					$(".overlay_subtitles").show();
+				};
+
+				const cancelHourlyLine = () => {
+					if(self.subtitleHourlyTimer) clearTimeout(self.subtitleHourlyTimer);
+					self.subtitleHourlyTimer = false;
+					self.subtitleHourlyShip = 0;
+				};
+
+				const bookHourlyLine = (text, shipId) => {
+					cancelHourlyLine();
+					const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
+					const diffMillis = nextHour - Date.now();
+					// Do not book on unexpected diff time: passed or > 59 minutes
+					if(diffMillis <= 0 || diffMillis > 59 * 60000) {
+						showSubtitle(text, shipId);
+					} else {
+						self.subtitleHourlyShip = shipId;
+						self.subtitleHourlyTimer = setTimeout(function(){
+							// Should cancel booked hourly line for some conditions
+							if(self.subtitleHourlyShip == shipId
+								// if Chrome delays timer execution > 3 seconds
+								&& Math.abs(Date.now() - nextHour) < 3000
+								// TODO && at home port && secretary unchanged
+							){
+								hideSubtitle();
+								showSubtitle(text, shipId);
+							}
+							cancelHourlyLine();
+						}, diffMillis);
+					}
+				};
+
+				// If subtitles available for the voice
+				if(subtitleText){
+					hideSubtitle();
+					// Book for a future display if it's a ship's hourly voice,
+					// because game preload voice file in advance (about > 5 mins).
+					if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
+						if(config.subtitle_hourly){
+							bookHourlyLine(subtitleText, quoteIdentifier);
+						}
+					} else {
+						showSubtitle(subtitleText, quoteIdentifier);
+					}
 				}
+
+			};
+		},
+
+		// Live reloading meta data
+		reloadMeta: function(){
+			var self = this;
+			return function(request, sender, response){
+				if(request.action != "reloadMeta") return true;
+				meta = $.extend(true, KC3Meta, request.meta);
+				console.log(request.metaType, "reloaded");
 			};
 		},
 
@@ -376,20 +481,24 @@
 			// runtime listener
 			return function(request, sender, response){
 				if(request.action != "questOverlay") return true;
+				config = $.extend(true, ConfigManager, request.ConfigManager);
 				if(!config.api_translation && !config.api_tracking) return true;
 
-				quests = $.extend(true, quests, request.KC3QuestManager);
+				quests = $.extend(true, KC3QuestManager, request.KC3QuestManager);
+				$(".overlay_quests").empty();
 
 				$.each(request.questlist, function( index, QuestRaw ){
-					if( QuestRaw !=- 1 ){
-						var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
+					if( QuestRaw !=- 1 && index < 5 ){
+						const QuestBox = $("#factory .ol_quest_exist").clone();
+						QuestBox.appendTo(".overlay_quests");
 
-						// Get quest data
-						var QuestData = new KC3Quest();
+						// Get quest data from manager and
+						// rebuild KC3Quest instance because serialized data only keep owned properties
+						const QuestData = new KC3Quest();
 						QuestData.define(quests.get( QuestRaw.api_no ));
 
 						// Show meta, title and description
-						if( typeof QuestData.meta().available != "undefined" ){
+						if( QuestData.meta().available ){
 
 							if (config.api_translation){
 								$(".name", QuestBox).text( QuestData.meta().name );
@@ -400,14 +509,14 @@
 
 							if(config.api_tracking){
 								$(".tracking", QuestBox).html( QuestData.outputHtml() );
+								// Special cases multiple requirements, such as Bw1, Bq2
+								if(QuestData.tracking && QuestData.tracking.length > 1){
+									$(".tracking", QuestBox).addClass("small");
+								}
 							}else{
 								$(".tracking", QuestBox).hide();
 							}
 
-							// Special Bw1 case multiple requirements
-							if( QuestRaw.api_no == 214 ){
-								$(".tracking", QuestBox).addClass("small");
-							}
 						}else{
 							if(config.google_translate) {
 								$(".with_tl", QuestBox).css({ visibility: "hidden" });
@@ -452,7 +561,7 @@
 		Attach onUnload listener to stop accidental exit
 		--------------------------------------*/
 		exitConfirmation: function(){
-			if (!ConfigManager.api_askExit) return false;
+			if (!config.api_askExit) return false;
 			window.onbeforeunload = function(){
 				// Not support custom message any more, see:
 				// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
@@ -513,8 +622,10 @@
 			var self = this;
 			return function(request, sender, response){
 				if(request.action != "markersOverlay") return true;
-				if(!config.map_markers) { response({success:false}); return true; }
-				console.log('markers', request);
+				var thisConfig = request.ConfigManager || config;
+				if(!thisConfig.map_markers && !thisConfig.map_letters) {
+					response({success:false}); return true;
+				}
 
 				var sortieStartDelayMillis = 2800;
 				var markersShowMillis = 5000;
@@ -527,9 +638,9 @@
 					var letters = meta.nodeLetters(request.worldId, request.mapId);
 					var lettersFound = (!!letters && Object.keys(letters).length > 0);
 					var icons = meta.nodeMarkers(request.worldId, request.mapId);
-					var iconsFound =  (!!icons.length && icons.length > 0);
+					var iconsFound = (!!icons.length && icons.length > 0);
 					$(".overlay_markers").hide().empty();
-					if(lettersFound){
+					if(lettersFound && thisConfig.map_letters){
 						// Show node letters
 						var l;
 						for(l in letters){
@@ -539,7 +650,7 @@
 							$(".overlay_markers").append(letterDiv);
 						}
 					}
-					if(iconsFound){
+					if(iconsFound && thisConfig.map_markers){
 						// Show some icon style markers
 						var i;
 						for(i in icons){
@@ -588,7 +699,7 @@
 			let maxIdleScreenOpacity = 0.8;
 
 			// idle time unit is second
-			let timeIdleStartSec = ConfigManager.alert_idle_start;
+			let timeIdleStartSec = config.alert_idle_start;
 			let timeIdleStart = Math.floor(timeIdleStartSec * 1000);
 			let timeIdleMax = timeIdleStart + 100000;
 
@@ -618,14 +729,22 @@
 
 			// Receives and remembers the time when a network request was last made
 			return function(request, sender, response){
-				if (!ConfigManager.alert_idle_start // to exclude falsy values like NaN and 0
-					|| ConfigManager.alert_idle_start <= 0)
+				if (!config.alert_idle_start // to exclude falsy values like NaN and 0
+					|| config.alert_idle_start <= 0)
 					return true;
 				if(request.action != "goodResponses") return true;
 				lastNetworkTime = (new Date()).getTime();
 				hideIdleScreen = false;
 				$(".overlay_idle").hide();
 			};
+		},
+
+		injectDMM: function() {
+			let body = document.getElementsByTagName('body')[0];
+			let script = document.createElement('script');
+			script.setAttribute('type', 'text/javascript');
+			script.setAttribute('src', chrome.extension.getURL('library/injections/dmm_injectable.js'));
+			body.appendChild(script);
 		}
 	};
 

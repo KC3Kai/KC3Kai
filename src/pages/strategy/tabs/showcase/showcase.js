@@ -99,6 +99,7 @@
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.hq.load();
 			// Clean cache data
 			this.shipCache = { bb:[], fbb:[], bbv:[], cv:[], cvl:[], ca:[], cav:[], cl:[], dd:[], ss:[], clt:[], ax:[], ao:[] };
 			this.gearCache = {};
@@ -155,13 +156,14 @@
 			var GearMaster, GearType;
 			$.each(GearRecords, function(index, element){
 				GearMaster = KC3Master.slotitem( index.substr(1) );
+				if(!GearMaster) return;
 
 				GearType = GearMaster.api_type[3];
 				// If gear type does not exist yet
 				if(typeof self.gearCache["t"+GearType] == "undefined"){
 					self.gearCache["t"+GearType] = [];
 				}
-				// Add this sloteitem_id to the gear type
+				// Add this slotitem_id to the gear type
 				self.gearCache["t"+GearType].push({
 					id: GearMaster.api_id,
 					name: KC3Meta.gearName( GearMaster.api_name ),
@@ -183,7 +185,8 @@
 			var defSettings = {
 				exportMode: "standard",
 				output: 2, // new tab
-				exportName: false
+				exportName: false,
+				eventLocking: false
 			};
 			var settings;
 			if (typeof localStorage.srShowcase === "undefined") {
@@ -201,12 +204,12 @@
 			return newSettings;
 		},
 
-		updateUI: function (){
+		updateUI: function () {
 			var settings = this.getSettings();
 			$("#exportOutputMode").val(settings.output);
 			$("#exportAddName")[0].checked = settings.exportName;
 			$("#exportMode").val(settings.exportMode);
-
+			$("#exportEventLocking")[0].checked = settings.eventLocking;
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -249,18 +252,17 @@
 			self.updateUI();
 
 			// BUTTONS
-			function setupExporter(button){
+			function setupExporter(button, exporterClass = window.ShowcaseExporter){
 				if ($(button).hasClass("disabled"))
 					return null;
 				$(button).addClass("disabled");
-				var exporter = new ShowcaseExporter();
+				var exporter = new exporterClass();
 				exporter.buildSettings = self.getSettings();
 				exporter.complete = function (data) {
 					self.displayExportResult(data);
 					$(button).removeClass("disabled");
 				};
 				return exporter;
-
 			}
 
 			$("#exportShips").on("click", function(){
@@ -269,11 +271,18 @@
 					exporter.exportShips();
 			});
 
-			$("#exportEquipment").on("click", function () {
+			$("#exportEquipment").on("click", function (){
 				var exporter = setupExporter(this);
 				if (exporter !== null)
 					exporter.exportEquip();
 			});
+
+			$("#eventShipList").on("click", function (){
+				var exporter = setupExporter(this, window.ShowcaseEventList);
+				if (exporter !== null)
+					exporter.exportList();
+			});
+
 
 			$("#exportOutputMode").change(function(){
 				var val = this.value;
@@ -287,6 +296,14 @@
 				var checked = this.checked;
 				self.modifySettings(function(settings){
 					settings.exportName = checked;
+					return settings;
+				});
+			});
+
+			$("#exportEventLocking").change(function(){
+				var checked = this.checked;
+				self.modifySettings(function(settings){
+					settings.eventLocking = checked;
 					return settings;
 				});
 			});
@@ -365,13 +382,13 @@
 					if(typeof ThisTopGear !== "undefined"){
 						GearBox = $(".tab_showcase .factory .show_gear").clone();
 						if(GearTypeIcon===0){ GearTypeIcon=ThisTopGear.type; }
-						$(".gear_icon img", GearBox).attr("src", "../../assets/img/items/"+GearTypeIcon+".png");
+						$(".gear_icon img", GearBox).attr("src", KC3Meta.itemIcon(GearTypeIcon));
 						GearTypeIcon = 0;
 						$(".gear_name", GearBox).html( ThisTopGear.name );
 						$(".gear_name", GearBox).attr("title", ThisTopGear.name );
 
 						if(typeof element.order !== "undefined"){
-							$(".gear_stat_icon img", GearBox).attr("src", "../../assets/img/stats/"+element.order+".png");
+							$(".gear_stat_icon img", GearBox).attr("src", KC3Meta.statIcon(element.order));
 							$(".gear_stat_val", GearBox).html( ThisTopGear[element.order] );
 						}else{
 							$(".gear_name", GearBox).css("width", "170px");

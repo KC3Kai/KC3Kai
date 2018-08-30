@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 /* strategy.css
 Only CSS definitions that are common to all themes should be added here
 
@@ -10,4 +12,17 @@ Things like colors, border radiuses, text-shadows should be defined in theme CSS
 
 #menu .submenu.dev-only {
 	display:none;
+}
+
+.jp_fonts {
+	font-family: "Tahoma", "Helvetica", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+.kr_fonts {
+	font-family: "AppleGothic", "Malgun Gothic", "GulimChe", "Dotum", "UnDotum", sans-serif;
+}
+.scn_fonts {
+	font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei Sharp", "WenQuanYi Zen Hei", "Heiti SC", "ST Heiti", "SimHei", sans-serif;
+}
+.tcn_fonts {
+	font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", "Heiti TC", "LiHei Pro Medium", sans-serif;
 }

@@ -29,19 +29,25 @@
 
     window.GoalTemplateManager = {
         validSTypes: [],
+        enSTypeMeta: {},
 
+        initValidSTypes: function() {
+            this.enSTypeMeta = KC3Translation.getJSONWithOptions(KC3Meta.repo, "stype", false, "en", false, true);
+            console.assert(this.enSTypeMeta['0'] === "", "stype should start with element 0: ''");
+            delete this.enSTypeMeta['0'];
+            this.validSTypes = Object.keys(this.enSTypeMeta).map(id => this.enSTypeMeta[id]);
+        },
         load: function() {
+            if(this.validSTypes.length === 0) {
+                this.initValidSTypes();
+            }
             return JSON.parse(localStorage.goalTemplates || "[]");
         },
         save: function(t) {
-            try {
-                if (!Array.isArray(t))
-                    throw "not an array";
-                localStorage.goalTemplates =
-                    JSON.stringify(t);
-            } catch (err) {
-                console.log("error when saving:", err);
-            }
+            if (Array.isArray(t))
+                localStorage.goalTemplates = JSON.stringify(t);
+            else
+                console.error("Data to be saved is not an array", t);
         },
         newTemplate: function() {
             return {
@@ -50,6 +56,7 @@
                 rank: 6,
                 flagship: true,
                 mvp: true,
+                baseExp: 0,
                 enable: true
             };
         },
@@ -75,7 +82,7 @@
             // TODO: make sure "*" is handled properly
             return shipTypes;
         },
-        // return a string represetation of stype query
+        // return a string representation of stype query
         showSType: function(stypes) {
             function translate(x) {
                 return x === "*"? "Any":x;
@@ -92,29 +99,18 @@
             result[4] = template.rank;
             result[5] = template.flagship?1:0;
             result[6] = template.mvp?1:0;
+            result[7] = template.baseExp||0;
             return result;
+        },
+        mapShipTypeAbbrs2Ids: function(stypeAbbrs) {
+            return (stypeAbbrs || []).map(stype => this.validSTypes.indexOf(stype) + 1);
         },
         checkShipType: function(stypeId, template) {
             if (template.stype.indexOf("*") != -1)
                 return true;
-            var KGS = PS["KanColle.Generated.SType"];
-            var stypeIds = template.stype.map( function(x) {
-                return KGS.toInt(KGS.readSType(x));
-            });
+            var stypeIds = this.mapShipTypeAbbrs2Ids(template.stype);
             return stypeIds.indexOf(stypeId) != -1;
         }
     };
 
-    // initialize valid stypes
-    var stypeRaw =
-        "DDE DD  CL  CLT " +
-        "CA  CAV CVL FBB " +
-        "BB  BBV CV  XBB " +
-        "SS  SSV AP  AV  " +
-        "LHA CVB AR  AS  " +
-        "CT  AO";
-    window.GoalTemplateManager.validSTypes =
-        stypeRaw
-          .split(" ")
-          .filter( function(x) { return x.length > 0; });
 })();

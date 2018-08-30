@@ -17,14 +17,21 @@
 		   ---------------------------------*/
 		execute :function(){
 			var self = this;
+			PlayerManager.loadFleets();
+			KC3ShipManager.load();
+
 			$(".tab_badge .factory").hide();
 
-			$(".export_value", $("#ep_name").parent().parent()).html(PlayerManager.hq.name);
-			$(".export_value", $("#ep_level").parent().parent()).html(PlayerManager.hq.level);
-			$(".export_value", $("#ep_server").parent().parent()).html(PlayerManager.hq.server);
-			$(".export_value", $("#ep_current_fleet").parent().parent()).html(localStorage.fleets);
-			$(".export_value", $("#ep_k2").parent().parent()).html("[dynamically generated]");
-			$(".export_value", $("#ep_colle").parent().parent()).html(localStorage.ships);
+			$(".export_value", $("#ep_name").parent().parent()).text(PlayerManager.hq.name);
+			$(".export_value", $("#ep_level").parent().parent()).text(PlayerManager.hq.level);
+			$(".export_value", $("#ep_server").parent().parent()).text(PlayerManager.hq.server);
+			$(".export_value", $("#ep_current_fleet").parent().parent()).text(
+				JSON.stringify( PlayerManager.fleets.map(f => ({id:f.fleetId, name:f.name, ships:f.ships})) )
+			);
+			$(".export_value", $("#ep_k2").parent().parent()).text("[dynamically generated]");
+			$(".export_value", $("#ep_colle").parent().parent()).text(
+				JSON.stringify( Object.keys(KC3ShipManager.list).map(x => KC3ShipManager.list[x].masterId) )
+			);
 
 			$(".tab_badge .export_parts input").on("click", function () {
 				// on every option change we clear exported results
@@ -44,24 +51,29 @@
 						.appendTo(".export_method .desc");
 				}
 
-				var pb,i;
 				if (v === 'shiplist') {
 					mkText("Use data from the current ship list. Please note that ships that you had before but somehow scrapped, modfodded, or sunk in favor of more ship slots will not show up. If you want to show everything that you had so far, even in the past, use the Picture Book option.");
 				} else {
-					mkText("Use data from the in-game picture book / album / kandex / library. This will export ships you had even in the past which had been lost, probably in favor of more ship slots. This however, will require you to visit the MAIN pages on the IN-GAME picture book for us to collect data. You just need to visit the FIVE MAIN pages (not the sub-pages). Also, you DO NOT need to wait for all images to load.");
+					mkText("Use data from the in-game picture book / album / kandex / library. This will export ships you had even in the past which had been lost, probably in favor of more ship slots. This however, will require you to visit the MAIN pages on the IN-GAME picture book for us to collect data. You just need to visit the 6 MAIN pages (not the sub-pages). Also, you DO NOT need to wait for all images to load.");
 
 					mkText("Status:");
-					pb = PictureBook.load();
-					for (i=1; i<=5; ++i) {
-						var t = "Vol." + i + ", ";
-						if (pb[i]) {
-							t = t + "Last Update: " + new Date(pb[i].timestamp);
-						} else {
-							t = t + "missing";
+					const pb = PictureBook.load();
+					if (pb.ship) {
+						const locale = KC3Translation.getLocale();
+						for (const i in pb.ship) {
+							var t = "Vol." + i + ", ";
+							if (pb.ship[i] && Array.isArray(pb.ship[i].ids)) {
+								t = t + "Last Update: " + new Date(pb.ship[i].timestamp)
+									.format("fullDateTime", false, locale);
+							} else {
+								t = t + "missing";
+							}
+							mkText(t);
 						}
-						mkText(t);
+					} else {
+						mkText("Data missing");
 					}
-					mkText("Refresh (F5) this strategy room to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
+					mkText("Refresh this page to update the states. And No, we will not add the feature to re-select the previous choice when you refresh.");
 				}
 
 			});
@@ -159,25 +171,23 @@
 			};
 		},
 		exportFromShipList: function() {
+			KC3ShipManager.load();
 			var ids = [];
-			$.each( KC3ShipManager.list, function(k,ship) {
+			$.each( KC3ShipManager.list, function(k, ship) {
 				ids.push( ship.masterId );
 			});
 			return this.exportFromIdList(ids);
 		},
 		exportFromPictureBook: function() {
 			var pb = PictureBook.load();
-			var i;
 			var ids = [];
-			console.log(pb);
-			$.each(pb, function(vol,x) {
-				ids = ids.concat( x.ids );
+			$.each(pb.ship, function(v, x) {
+				ids.push( ...x.ids );
 			});
 			return this.exportFromIdList(ids);
 		},
 		exportFleetInfo: function() {
 			PlayerManager.loadFleets();
-
 			var allFleetInfo = [];
 			var i,j;
 			for (i=0; i<4;++i) {

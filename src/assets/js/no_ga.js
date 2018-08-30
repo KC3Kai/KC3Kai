@@ -1,1 +1,1 @@
-var NO_GA = true;
+window.NO_GA = true;

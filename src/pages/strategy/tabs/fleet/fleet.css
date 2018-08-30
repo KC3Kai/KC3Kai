@@ -36,6 +36,9 @@
 
 .tab_fleet button:disabled {
 }
+.tab_fleet #control_switch_view {
+	float:right;
+}
 .tab_fleet select:disabled {
 }
 
@@ -43,7 +46,7 @@
 --------------------------------*/
 .tab_fleet .fleet_box {
 	width:680px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 10px 0px;
 }
 /* Info */
 .tab_fleet .fleet_info {
@@ -119,19 +122,44 @@
 .tab_fleet .detail_value:hover {
 	overflow:visible;
 }
+.tab_fleet .ss_button {
+	float:right;
+	position:relative;
+	width:30px;
+	height:30px;
+	margin-top:-19px;
+	margin-right:2px;
+	opacity:0.05;
+}
+.tab_fleet .ss_button:hover {
+	opacity:1.0;
+}
+.tab_fleet .ss_button img {
+	width:30px;
+	height:30px;
+}
 
 /* Ships */
 .tab_fleet .fleet_ships {
 	width:672px;
-	height:175px;
+	height:98px;
 	margin:0px 4px;
+}
+.tab_fleet .fleet_ships.horizontal {
+	height:182px;
 }
 
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	width:110px;
+	width:334px;
 	float:left;
+	position:relative;
+}
+.tab_fleet .fleet_ship.horizontal {
+	width:110px;
+	height:auto;
+	min-height:172px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	height:21px;
@@ -141,15 +169,17 @@
 	font-size:14px;
 	text-align:center;
 }
+.tab_fleet .fleet_ship .ship_box {
+	float:left;
+	width:110px;
+}
 .tab_fleet .fleet_ship .ship_pic {
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	
 }
 
 .tab_fleet .fleet_ship .ship_lv {
-	
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
 	float:left;
@@ -173,207 +203,83 @@
 	font-weight:bold;
 }
 .tab_fleet .fleet_ship .ship_gear {
-	width:110px;
-	height:17px;
+	width:220px;
+	height:auto;
+	float:left;
 	line-height:17px;
 	margin:0px 0px 1px 0px;
-	font-size:12px;
+	font-size:10px;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_fleet .fleet_ship.horizontal .ship_gear {
+	width:110px;
 }
 .tab_fleet .fleet_ship .ship_gear.ship_gear_5 .gear_name {
 	color:#79b;
 }
+.tab_fleet .fleet_ship .slot_capacity {
+	float:left;
+	width:12px;
+	text-align:right;
+}
+.tab_fleet .fleet_ship.horizontal .slot_capacity {
+	padding-left:2px;
+}
 .tab_fleet .fleet_ship .gear_icon {
 	width:17px;
 	height:17px;
-	margin:0px 3px 0px 0px;
+	margin:0px 1px 0px 0px;
 	float:left;
 }
 .tab_fleet .fleet_ship .gear_icon img {
 	width:17px;
 	height:17px;
+	vertical-align:top;
 }
 .tab_fleet .fleet_ship .gear_name {
-	width:85px;
+	width:190px;
 	height:17px;
 	float:left;
-	font-size:10px;
-	white-space: nowrap;
+	white-space:nowrap;
 	overflow:hidden;
+	text-overflow:ellipsis;
 }
-.tab_fleet .fleet_ship .gear_name .stars {
-	color:#2b2;
+.tab_fleet .fleet_ship.horizontal .gear_name {
+	width:79px;
+	text-overflow:initial;
 }
-.tab_fleet .fleet_ship .gear_name .ace {
-	color:#fa1;
+.tab_fleet .fleet_ship .gear_stars {
+	float:right;
+	width:20px;
+	position:absolute;
+	right:0px;
+	padding-right:2px;
+	text-align:right;
+	color:#45a9a5;
+	display:none;
 }
-.tab_fleet .fleet_ship .gear_name .slot {
-	color:#999;
+.tab_fleet .fleet_ship .gear_ace {
+	float:right;
+	width:30px;
+	position:absolute;
+	right:0px;
+	display:none;
+}
+.tab_fleet .fleet_ship .gear_ace img {
+	width:20px;
+	height:17px;
+	margin-left:-2px;
+	vertical-align:top;
+}
+
+.tab_fleet .fleet_ship .ship_index {
+	position:absolute;
+}
+.tab_fleet .fleet_ship.horizontal .ship_index {
+	display:none;
 }
 
 .tab_fleet .fleet_ship .ship_tooltip {
 	display:none;
-}
-
-.ui-tooltip-content .ship_tooltip {
-	width:202px;
-	height:280px;
-	padding:2px 0px 2px 0px;
-}
-.ui-tooltip-content .ship_tooltip .ship_full_name {
-	width:158px;
-	height:17px;
-	line-height:17px;
-	padding:0px 2px 0px 2px;
-	margin:0px 0px 0px 0px;
-	float:left;
-	overflow:hidden;
-	white-space:nowrap;
-	text-overflow:ellipsis;
-}
-.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_masterId {
-	color:#c4a957;
-}
-.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
-	color:#ccc;
-}
-.ui-tooltip-content .ship_tooltip .ship_rosterId {
-	width:40px;
-	height:17px;
-	line-height:17px;
-	margin:0px 2px 0px 0px;
-	font-size:11px;
-	float:left;
-	color:#a9a150;
-	text-align:right;
-}
-.ui-tooltip-content .ship_tooltip .ship_stype {
-	width:32px;
-	height:17px;
-	line-height:17px;
-	padding:0px 0px 0px 2px;
-	margin:0px 2px 0px 0px;
-	float:left;
-	overflow:hidden;
-	white-space:nowrap;
-}
-.ui-tooltip-content .ship_tooltip .ship_level {
-	width:48px;
-	height:17px;
-	line-height:17px;
-	padding:0px 0px 0px 0px;
-	margin:0px 2px 0px 0px;
-	float:left;
-	overflow:hidden;
-	white-space:nowrap;
-}
-.ui-tooltip-content .ship_tooltip .ship_level span.i18n {
-	color:#3ec0bf;
-}
-.ui-tooltip-content .ship_tooltip .ship_hp {
-	width:64px;
-	height:17px;
-	line-height:17px;
-	padding:0px 0px 0px 0px;
-	margin:0px 2px 0px 0px;
-	text-align:right;
-	float:right;
-	overflow:hidden;
-	white-space:nowrap;
-}
-.ui-tooltip-content .ship_tooltip .ship_stats_col {
-	width:101px;
-	margin:0px 0px 0px 0px;
-	float:left;
-}
-.ui-tooltip-content .ship_tooltip .ship_stats_row {
-	width:200px;
-	margin:0px 0px 0px 0px;
-	float:left;
-}
-.ui-tooltip-content .ship_tooltip .stat_icon {
-	width:52px;
-	height:19px;
-	line-height:17px;
-	padding:0px 0px 0px 1px;
-	margin:0px 0px 1px 0px;
-	float:left;
-	overflow:hidden;
-	white-space:nowrap;
-	background-color:#ffe;
-	border:1px solid #ddd;
-	border-right-color:#ffe;
-	border-bottom-color:#fcfcfc;
-}
-.ui-tooltip-content .ship_tooltip .stat_icon img {
-	width:15px;
-	height:15px;
-	margin-top:-2px;
-}
-.ui-tooltip-content .ship_tooltip .stat_name {
-	color:#a9a150;
-	font-size:11px;
-	margin:0px 0px 0px 2px;
-}
-.ui-tooltip-content .ship_tooltip .stat_value {
-	width:46px;
-	height:19px;
-	line-height:17px;
-	padding:0px 2px 1px 2px;
-	margin:0px 2px 1px 0px;
-	float:left;
-	font-size:12px;
-	text-align:right;
-	overflow:hidden;
-	white-space:nowrap;
-	background-color:#ffffe3;
-	border:1px solid #aaa;
-	border-right-color:#f0f0f0;
-	border-bottom-color:#f0f0f0;
-}
-.ui-tooltip-content .ship_tooltip .stat_value.oasw {
-	color:#0cd;
-}
-.ui-tooltip-content .ship_tooltip .stat_value.SpeedFaster,
-.ui-tooltip-content .ship_tooltip .stat_value.SpeedFastest {
-	color:#7aabb8;
-}
-.ui-tooltip-content .ship_tooltip .stat_wide {
-	width:199px;
-}
-.ui-tooltip-content .ship_tooltip .aa_col {
-	width: 39px;
-	height:19px;
-	line-height:17px;
-	padding:0px 2px 0px 2px;
-	margin:0px 1px 1px 0px;
-	float:left;
-	font-size:11px;
-	text-align:right;
-	overflow:hidden;
-	white-space:nowrap;
-	background-color:#ffffe3;
-	border:1px solid #aaa;
-	border-right-color:#f0f0f0;
-	border-bottom-color:#f0f0f0;
-}
-.ui-tooltip-content .ship_tooltip .aa_col.bomberSlot img {
-	width:15px;
-	height:15px;
-	margin-top:-5px;
-	margin-left:-2px;
-}
-.ui-tooltip-content .ship_tooltip .aa_col.sd_both,
-.ui-tooltip-content .ship_tooltip .aa_col.sd_prop,
-.ui-tooltip-content .ship_tooltip .aa_col.sd_fixed,
-.ui-tooltip-content .ship_tooltip .aa_col.sd_fail {
-	color:#f00;
-}
-.ui-tooltip-content .ship_tooltip .text_center {
-	text-align:center;
-}
-.ui-tooltip-content .ship_tooltip .text_left {
-	text-align:left;
-}
-.ui-tooltip-content .ship_tooltip .text_right {
-	text-align:right;
 }

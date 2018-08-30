@@ -7,6 +7,9 @@ module.exports = function(grunt) {
 			tmp: {
 				src: [ 'build/tmp/**/*', 'build/tmp/' ]
 			},
+			battlePrediction: {
+				src: ['build/release/library/modules/BattlePrediction/']
+			},
 			release: {
 				src: [ 'build/release/**/*', 'build/release/' ]
 			},
@@ -25,6 +28,7 @@ module.exports = function(grunt) {
 				expand: true,
 				src: [
 					// some tests would load from the following 2 paths:
+					'node_modules/babel-polyfill/dist/polyfill.min.js',
 					'node_modules/qunitjs/**/*',
 					'node_modules/jquery/**/*',
 
@@ -39,48 +43,74 @@ module.exports = function(grunt) {
 				cwd: 'build/tmp/',
 				src: [
 					'assets/img/**',
+					'!assets/img/payitems/**',
+					'!assets/img/shipseasonal/**',
+					'!assets/img/useitems_p2/**',
 					'assets/snd/**',
 					'assets/swf/**',
-					'assets/js/Chart.min.js',
-					'assets/js/Dexie.min.js',
-					'assets/js/FileSaver.min.js',
-					'assets/js/steganography.js',
-					'assets/js/jquery-ui.min.js',
-					'assets/js/KanColleHelpers.js',
-					'assets/js/twbsPagination.min.js',
-					'assets/js/WhoCallsTheFleetShipDb.json',
-					'assets/js/WhoCallsTheFleetItemDb.json',
-					'assets/js/jszip.min.js',
-					'assets/js/bootstrap-slider.min.js',
-					'assets/js/no_ga.js',
-					'assets/js/markdown.min.js'
+					'assets/js/*.js',
+					'!assets/js/jquery.min.js',
+					'!assets/js/KanColleHelpers.js'
 				],
 				dest: 'build/release/'
+			},
+			seasonal: {
+				expand: true,
+				cwd: 'build/tmp/assets/img/shipseasonal/',
+				src: '*.png',
+				dest: 'build/release/assets/img/shipseasonal/',
+				filter: function(file) {
+					var id = file.match(/^.*\/(\d+)(_.*)?.png$/);
+					if(!id || !id[1]) return false;
+					id = Number(id[1]);
+					var idArr = grunt.file.readJSON('src/data/seasonal_icons.json') || [];
+					return idArr.indexOf(id) > -1;
+				}
 			},
 			processed: {
 				expand: true,
 				cwd: 'build/tmp/',
 				src: [
-					'assets/css/keys.css',
-					'assets/css/jquery-ui.min.css',
-					'assets/css/bootstrap-slider.min.css',
+					'assets/css/**/*',
+					'!assets/css/bootstrap.css',
 					'library/helpers/*.js',
 					'library/injections/*.js',
 					'library/injections/*.css',
-					'library/modules/*.js',
+					'library/modules/**/*.js',
 					'library/workers/*.js',
 					'pages/**/*',
+					'!pages/devtools/themes/default/**',
 					'!pages/strategy/tabs/**/*.js',
+					'!pages/strategy/tabs/_tpl/**',
 					'manifest.json',
 					'data/*.json',
+					'data/*.nedb',
 					'data/lang/data/**/*.json'
 				],
 				dest: 'build/release/'
 			}
 		},
 		removelogging: {
-			'build/tmp': {
-				src: "build/tmp/**/*.js"
+			console: {
+				expand: true,
+				cwd: 'build/tmp',
+				src: [
+					'**/*.js',
+					'!data/lang/**',
+					'!assets/js/*',
+					'!library/helpers/KanColleHelpers.js',
+					'assets/js/global.js'
+				],
+				options: {
+					// keep all 'warn' and 'error' by default
+					methods: [
+						'log', 'info', 'assert', 'count', 'clear',
+						'group', 'groupEnd', 'groupCollapsed', 'trace',
+						'debug', 'dir', 'dirxml', 'profile', 'profileEnd',
+						'time', 'timeEnd', 'timeStamp', 'table', 'exception'
+					]
+				},
+				dest: 'build/tmp/'
 			}
 		},
 		jshint: {
@@ -121,7 +151,6 @@ module.exports = function(grunt) {
 					src: [
 						'assets/css/global.css',
 						'assets/css/keys.css',
-						'assets/css/bootstrap-slider.min.css',
 						'pages/**/*.css'
 					],
 					dest: 'build/tmp/'
@@ -188,6 +217,18 @@ module.exports = function(grunt) {
 						}
 					]
 				}
+			},
+			seasonalicons: {
+				src: 'build/tmp/data/seasonal_icons.json',
+				dest: 'build/tmp/',
+				options: {
+					replacements: [
+						{
+							pattern: /^.*$/g,
+							replacement: '[]'
+						}
+					]
+				}
 			}
 		},
 		modify_json: {
@@ -214,7 +255,12 @@ module.exports = function(grunt) {
 								"assets/js/Dexie.min.js",
 								"library/objects.js",
 								"library/managers.js",
+								"library/modules/ChromeSync.js",
+								"library/modules/QuestSync/Sync.js",
+								"library/modules/QuestSync/Background.js",
 								"library/modules/Database.js",
+								"library/modules/Log/Log.js",
+								"library/modules/Log/Background.js",
 								"library/modules/ImageExport.js",
 								"library/modules/Master.js",
 								"library/modules/RemodelDb.js",
@@ -225,13 +271,13 @@ module.exports = function(grunt) {
 						},
 						"content_scripts": [
 							{
-								"matches":["*://www.dmm.com/*"],
+								"matches": ["*://*.dmm.com/*"],
 								"js": ["library/injections/cookie.js"],
 								"run_at": "document_end",
 								"all_frames": true
 							},
 							{
-								"matches":["*://www.dmm.com/netgame/*/app_id=854854*"],
+								"matches": ["*://www.dmm.com/netgame/*/app_id=854854*"],
 								"css": [
 									"library/injections/dmm.css"
 								],
@@ -239,8 +285,15 @@ module.exports = function(grunt) {
 									"assets/js/global.js",
 									"library/objects.js",
 									"library/managers.js",
+									"library/modules/Log/Log.js",
+									"library/modules/Log/Messaging.js",
+									"library/modules/Log/ContentScript.js",
+									"library/modules/ChromeSync.js",
+									"library/modules/QuestSync/Sync.js",
+									"library/modules/QuestSync/ContentScript.js",
 									"library/modules/Master.js",
 									"library/modules/Meta.js",
+									"library/modules/RemodelDb.js",
 									"library/modules/Translation.js",
 									"library/injections/dmm_takeover.js",
 									"library/injections/dmm.js"
@@ -249,11 +302,21 @@ module.exports = function(grunt) {
 								"all_frames": true
 							},
 							{
-								"matches":["*://osapi.dmm.com/gadgets/*aid=854854*"],
+								"matches": ["*://osapi.dmm.com/gadgets/*aid=854854*"],
 								"js": [
 									"assets/js/global.js",
 									"library/objects.js",
 									"library/injections/osapi.js"
+								],
+								"run_at": "document_end",
+								"all_frames": true
+							},
+							{
+								"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+								"js": [
+									"assets/js/global.js",
+									"library/objects.js",
+									"library/injections/kcs2.js"
 								],
 								"run_at": "document_end",
 								"all_frames": true
@@ -322,6 +385,20 @@ module.exports = function(grunt) {
 				],
 				dest: 'build/release/assets/js/global.js'
 			},
+			battlePrediction: {
+				src: [
+					'build/tmp/library/modules/BattlePrediction/BattlePrediction.js',
+					'build/tmp/library/modules/BattlePrediction/**/*.js'
+				],
+				dest: 'build/release/library/modules/BattlePrediction.js',
+			},
+			battlePredictionDev: {
+				src: [
+					'src/library/modules/BattlePrediction/BattlePrediction.js',
+					'src/library/modules/BattlePrediction/**/*.js',
+				],
+				dest: 'src/library/modules/BattlePrediction.js',
+			},
 			library: {
 				files: {
 					'build/release/library/managers.js' : ['build/tmp/library/managers/*.js'],
@@ -332,7 +409,7 @@ module.exports = function(grunt) {
 				files: {
 					'build/release/pages/strategy/allstrategytabs.js' : ['build/tmp/pages/strategy/tabs/*/*.js'],
 				}
-			}
+			},
 		},
 		qunit: {
 			all: [
@@ -363,9 +440,9 @@ module.exports = function(grunt) {
 			"extensions": {
 				"kc3kai": {
 					account: "dragonjet",
-					publish: true, 
+					publish: true,
 					appID: "hkgmldnainaglpjngpajnnjfhpdjkohh",
-					zip: "build/release.zip"      
+					zip: "build/release.zip"
 				}
 			}
 		},
@@ -385,7 +462,8 @@ module.exports = function(grunt) {
 						// same reason for "tests/library".
 						src: [ "src/library/**/*.js",
 							   "src/pages/**/*.js",
-							   "tests/library/**/*.js"
+							   "tests/library/**/*.js",
+							   "tests/pages/**/*.js"
 							 ],
 						dest: 'build/testenv/'
 					}
@@ -425,9 +503,11 @@ module.exports = function(grunt) {
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
+		'concat:battlePrediction',
 		'concat:library',
 		'concat:strategy',
-		'clean:tmp'
+		'clean:tmp',
+		'clean:battlePrediction',
 	]);
 	
 	grunt.registerTask('build', [
@@ -435,6 +515,7 @@ module.exports = function(grunt) {
 		'clean:release',
 		'copy:tmpsrc',
 		'copy:statics',
+		'copy:seasonal',
 		'removelogging',
 		'string-replace:devtooltitle',
 		'jshint:build',
@@ -449,8 +530,10 @@ module.exports = function(grunt) {
 		'copy:processed',
 		'concat:global_css',
 		'concat:global_js',
+		'concat:battlePrediction',
 		'concat:library',
-		'concat:strategy'
+		'concat:strategy',
+		'clean:battlePrediction'
 	]);
 	
 	grunt.registerTask('test-src', [

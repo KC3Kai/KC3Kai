@@ -83,7 +83,7 @@
 			// land base bomber
 			"t37": "dv",
 			// interceptor
-			"t38": "aa",
+			"t38": "ht",
 			// jet bomber (keiun)
 			"t39": "dv",
 			// jet bomber (kikka)
@@ -96,6 +96,12 @@
 			"t43": "aa",
 			// land base fighter (new interceptor)
 			"t44": "aa",
+			// night fighter
+			"t45": "aa",
+			// night torpedo bomber
+			"t46": "tp",
+			// ASW land base bomber
+			"t47": "as",
 			// all types
 			"tall": "type",
 		},
@@ -104,11 +110,11 @@
 		/* Initialize comparators
 		---------------------------------*/
 		initComparator: function() {
-			var mkComparator = function(propertyGetter) {
+			const mkComparator = function(propertyGetter) {
 				return function(a,b) {
 					// for equipments, greater usually means better xD
 					// so the comparison is flipped
-					var result = propertyGetter(b) - propertyGetter(a);
+					const result = propertyGetter(b) - propertyGetter(a);
 					// additionally, if they look the same on the given stat
 					// we compare all properties by taking their sum.
 					if (result === 0) {
@@ -118,31 +124,39 @@
 					}
 				};
 			};
-			var self = this;
-			var allProperties = this._allProperties;
-			var sumAllGetter = function(obj) {
+			const self = this;
+			const allProperties = this._allProperties;
+			const sumAllGetter = function(obj) {
 				return allProperties
 					.map( function(p) { return obj.stats[p] || 0; } )
 					.reduce( function(a,b) { return a+b; }, 0);
 			};
 
 			allProperties.forEach( function(property,i) {
-				var getter = function(obj) {
+				const getter = function(obj) {
 					return obj.stats[property];
 				};
 				self._comparator[property] = mkComparator(getter);
 			});
 			self._comparator.overall = function(a,b) {
-				return sumAllGetter(b) - sumAllGetter(a);
+				return sumAllGetter(b) - sumAllGetter(a)
+					|| a.id - b.id;
 			};
 			self._comparator.type = function(a,b) {
 				return a.type_id - b.type_id
-					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b);
+					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b)
+					|| a.id - b.id;
 			};
 			self._comparator.total = function(a,b) {
 				return (b.held.length+b.extras.length) - (a.held.length+a.extras.length)
 					|| b.extras.length - a.extras.length
-					|| a.type_id - b.type_id;
+					|| a.type_id - b.type_id
+					|| a.id - b.id;
+			};
+			self._comparator.ingame = function(a,b) {
+				// in-game it sorted by sp(api_type[2]) asc, masterId asc, rosterId asc
+				return a.category - b.category
+					|| a.id - b.id;
 			};
 		},
 
@@ -154,7 +168,7 @@
 		},
 
 		/* RELOAD
-		Prepares reloadable data
+		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
 			// Reload data from local storage
@@ -165,34 +179,45 @@
 			this._items = {};
 			this._holders = {};
 			// Compile equipment holders
-			var ctr, ThisItem, MasterItem, ThisShip, MasterShip;
-			for(ctr in KC3ShipManager.list){
-				this.checkShipSlotForItemHolder(0, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(1, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(2, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(3, KC3ShipManager.list[ctr]);
-				this.checkShipSlotForItemHolder(-1, KC3ShipManager.list[ctr]);
+			for(const ctr in KC3ShipManager.list){
+				const ship = KC3ShipManager.list[ctr];
+				for(const idx in ship.items){
+					this.checkShipSlotForItemHolder(idx, ship);
+				}
+				this.checkShipSlotForItemHolder(-1, ship);
 			}
-			for(ctr in PlayerManager.bases){
+			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
-
+			// See `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
+			const getSpecialEquipType = (mstId, type2) => {
+				const SLOTITEM_SPECIAL_FLAGS = {
+					128: 38,
+					142: 93,
+					151: 94,
+					281: 38,
+				};
+				return SLOTITEM_SPECIAL_FLAGS[mstId] || type2;
+			};
 			// Compile ships on Index
-			for(ctr in KC3GearManager.list){
-				ThisItem = KC3GearManager.list[ctr];
-				MasterItem = ThisItem.master();
+			for(const ctr in KC3GearManager.list){
+				const ThisItem = KC3GearManager.list[ctr];
+				const MasterItem = ThisItem.master();
 				if(!MasterItem) continue;
 
 				// Check if slotitem_type is filled
 				if(typeof this._items["t"+MasterItem.api_type[3]] == "undefined"){
 					this._items["t"+MasterItem.api_type[3]] = [];
 				}
+				const ThisType = this._items["t"+MasterItem.api_type[3]];
 
 				// Check if slotitem_id is filled
-				if(typeof this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] == "undefined"){
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id] = {
+				if(typeof ThisType["s"+MasterItem.api_id] == "undefined"){
+					ThisType["s"+MasterItem.api_id] = {
+						rid: ThisItem.id,
 						id: ThisItem.masterId,
 						type_id: MasterItem.api_type[3],
+						category: getSpecialEquipType(ThisItem.masterId, MasterItem.api_type[2]),
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
 						stats: {
@@ -214,49 +239,50 @@
 					};
 				}
 
-				var holder = this._holders["s"+ThisItem.itemId];
+				const holder = this._holders["s"+ThisItem.itemId];
+				const item = ThisType["s"+MasterItem.api_id];
 
 				// Add this item to the instances
-				if(typeof this._holders["s"+ThisItem.itemId] != "undefined"){
+				if(typeof holder != "undefined"){
 					// Someone is holding it
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].held.push({
+					item.held.push({
 						id: ThisItem.itemId,
 						level: ThisItem.stars,
 						locked: ThisItem.lock,
 						holder: holder,
 					});
 
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] = {
+					if( !item.arranged[ThisItem.stars] )
+						item.arranged[ThisItem.stars] = {
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
 						};
 
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId] = {
+					if( !item.arranged[ThisItem.stars].holder[holder.rosterId] )
+						item.arranged[ThisItem.stars].holder[holder.rosterId] = {
 							holder: holder,
 							count: 0
 						};
 
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].holder[holder.rosterId].count++;
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].heldCount++;
+					item.arranged[ThisItem.stars].holder[holder.rosterId].count++;
+					item.arranged[ThisItem.stars].heldCount++;
 				}else{
 					// It's an extra equip on inventory
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].extras.push({
+					item.extras.push({
 						id: ThisItem.itemId,
 						level: ThisItem.stars,
 						locked: ThisItem.lock
 					});
 
-					if( !this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] )
-						this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars] = {
+					if( !item.arranged[ThisItem.stars] )
+						item.arranged[ThisItem.stars] = {
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
 						};
 
-					this._items["t"+MasterItem.api_type[3]]["s"+MasterItem.api_id].arranged[ThisItem.stars].extraCount++;
+					item.arranged[ThisItem.stars].extraCount++;
 				}
 			}
 		},
@@ -264,7 +290,7 @@
 		/* Check a ship's equipment slot of an item is equipped
 		--------------------------------------------*/
 		checkShipSlotForItemHolder :function(slot, ThisShip){
-			if(slot<0){
+			if(slot < 0){
 				if(ThisShip.ex_item > 0){
 					this._holders["s"+ThisShip.ex_item] = ThisShip;
 				}
@@ -276,7 +302,7 @@
 		/* Check LBAS slot of an aircraft is equipped
 		--------------------------------------------*/
 		checkLbasSlotForItemHolder :function(LandBase){
-			for(var squad in LandBase.planes){
+			for(const squad in LandBase.planes){
 				if(LandBase.planes[squad].api_slotid > 0){
 					this._holders["s"+LandBase.planes[squad].api_slotid] = LandBase;
 				}
@@ -287,17 +313,27 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 
+			$(".tab_gears .item_stat img, .tab_gears .sortControl img").each((_, img) => {
+				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
+			});
+			$(".tab_gears .item_types .item_type img").each((_, img) => {
+				$(img).attr("src", KC3Meta.itemIcon($(img).parent().data("type")));
+			});
+			$(".tab_gears .item_types .item_type").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).data("type")));
+			});
 			$(".tab_gears .item_type").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
 			});
 
 			// setup sort methods
-			var sortControls = this._allProperties.slice(0);
+			const sortControls = this._allProperties.slice(0);
 			sortControls.push( "overall" );
 			sortControls.push( "type" );
 			sortControls.push( "total" );
+			sortControls.push( "ingame" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
 					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);
@@ -317,7 +353,7 @@
 		},
 
 		switchTypeAndSort: function(typeId, sortMethod) {
-			var compareMethod = sortMethod || this._defaultCompareMethod["t"+typeId] || "overall";
+			const compareMethod = sortMethod || this._defaultCompareMethod["t"+typeId] || "overall";
 			this.updateSorters(typeId);
 			this._currentTypeId = typeId;
 			this.showType(typeId, compareMethod);
@@ -327,8 +363,8 @@
 		 * get all available type ids from _items
 		 */
 		getAllAvailableTypes: function() {
-			var allTypeIds = [];
-			for (var ty in this._items) {
+			const allTypeIds = [];
+			for (const ty in this._items) {
 				if (this._items.hasOwnProperty(ty) && ty.startsWith('t')) {
 					allTypeIds.push( parseInt(ty.slice(1)) );
 				}
@@ -339,9 +375,9 @@
 		/* check available items and show or hide sorters accordingly
 		  ------------------------------------------*/
 		updateSorters: function(type_id) {
-			var self = this;
-			var statSets = {};
-			var allProperties = self._allProperties;
+			const self = this;
+			const statSets = {};
+			const allProperties = self._allProperties;
 			allProperties.forEach(function(p,i) {
 				statSets[p] = [];
 			});
@@ -352,33 +388,24 @@
 					statSets[p].push( ThisSlotitem.stats[p] );
 				};
 			}
-			
+
 			if (type_id === "all") {
 				$.each(this.getAllAvailableTypes(), function (i,typeId) {
-					var tyInd = "t" + typeId;
-					for (var item in self._items[tyInd]) {
-					var ThisSlotitem = self._items[tyInd][item];
+					const tyInd = "t" + typeId;
+					for (const item in self._items[tyInd]) {
+						const ThisSlotitem = self._items[tyInd][item];
 						allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
 					}
 				});
 			} else {
-				for (var item in self._items["t"+type_id]) {
-					var ThisSlotitem = self._items["t"+type_id][item];
+				for (const item in self._items["t"+type_id]) {
+					const ThisSlotitem = self._items["t"+type_id][item];
 					allProperties.forEach(accumulateStats(statSets, ThisSlotitem));
-
-					// well, if jshlint is trying to be smart and makes code harder
-					// to read, then that's not my fault.
-					// the equivalent code:
-					/*
-					  allProperties.forEach(function(p,i) {
-					  statSets[p].push( ThisSlotitem.stats[p] );
-					  });
-					*/
 				}
 			}
 
-			var removeDuplicates = function(xs) {
-				var result = [];
+			const removeDuplicates = function(xs) {
+				const result = [];
 				xs.forEach(function(v,i) {
 					if (result.indexOf(v) === -1)
 						result.push(v);
@@ -392,18 +419,18 @@
 			});
 
 			allProperties.forEach(function(p,i) {
-				var q = ".tab_gears .itemSorters .sortControl." + p;
+				const q = ".tab_gears .itemSorters .sortControl." + p;
 				if ((statSets[p].length <= 1 &&
 					self._defaultCompareMethod["t"+type_id] !== p)
 					|| (p==="or" && self._landPlaneTypes.indexOf(Number(type_id))<0)
 				) {
-					  $(q).addClass("hide");
+					$(q).addClass("hide");
 				} else {
-					  $(q).removeClass("hide");
+					$(q).removeClass("hide");
 				}
 			});
 
-			var q = ".tab_gears .itemSorters .sortControl.type";
+			const q = ".tab_gears .itemSorters .sortControl.type";
 			if (type_id === "all") {
 				$(q).removeClass("hide");
 			} else {
@@ -414,150 +441,118 @@
 		/* Show slotitem type, with a compare method
 		--------------------------------------------*/
 		showType :function(type_id, compareMethod){
+			const self = this;
 			$(".tab_gears .item_type").removeClass("active");
 			$(".tab_gears .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_gears .item_list").html("");
 
-			var comparator = this._comparator[compareMethod];
+			const comparator = this._comparator[compareMethod];
 			if (typeof comparator == "undefined") {
-				console.warn("comparator missing for: " + compareMethod);
+				console.warn("Missing comparator for:", compareMethod);
 			} else {
 				$(".tab_gears .sortControl").removeClass("active");
 				$(".tab_gears .sortControl.{0}".format(compareMethod)).addClass("active");
 			}
 
 			function showEqList(i,arranged){
-				if( !arranged[i].heldCount )
-					return null;
-
-				var els = $();
-				for( var j in arranged[i].holder ){
-					if(arranged[i].holder[j].holder instanceof KC3LandBase){
-						els = els.add(
-							$('<div/>',{
-								'class':	'holder',
-								'html':		'<img src="../../../../assets/img/items/33.png" />'
-											+ '<font>LBAS World '+arranged[i].holder[j].holder.map+'</font>'
-											+ '<span>#'+arranged[i].holder[j].holder.rid+'</span>'
-											+ '<span>x'+arranged[i].holder[j].count+'</span>'
-							})
-						);
+				if( !arranged[i].heldCount ) return null;
+				let div = $(), holderDiv;
+				$.each(arranged[i].holder, (rosterId, item) => {
+					// Here multi-line strings template apparently better
+					if(item.holder instanceof KC3LandBase){
+						holderDiv = $('<div/>', {
+							'class' : 'holder',
+							'html'  : `<img src="${KC3Meta.itemIcon(33)}" />
+								<font>LBAS World ${item.holder.map}</font>
+								<span>#${item.holder.rid}</span>
+								<span>x${item.count}</span>`
+						});
 					} else {
-						els = els.add(
-							$('<div/>',{
-								'class':	'holder',
-								'html':		'<img src="'+KC3Meta.shipIcon(
-													arranged[i].holder[j].holder.masterId,
-													"../../assets/img/ui/empty.png"
-												)+'"/>'
-											+ '<font>'+arranged[i].holder[j].holder.name()+'</font>'
-											+ '<span>Lv'+arranged[i].holder[j].holder.level+'</span>'
-											+ '<span>x'+arranged[i].holder[j].count+'</span>'
-							})
-						);
+						const masterId = item.holder.masterId;
+						holderDiv = $('<div/>', {
+							'class' : 'holder',
+							'html'  :
+								`<img src="${KC3Meta.shipIcon(masterId,"/assets/img/ui/empty.png")}"/>
+								<font>${item.holder.name()}</font>
+								<span>Lv${item.holder.level}</span>
+								<span>x${item.count}</span>`
+						});
+						$("img", holderDiv).addClass("hover")
+							.attr("title", `[${masterId}]`)
+							.attr("alt", masterId)
+							.on("click", self.shipClickFunc);
 					}
-				}
-				return els;
+					div = div.add(holderDiv);
+				});
+				return div;
 			}
 
-			var ctr, ThisType, ItemElem, ThisSlotitem;
-			var gearClickFunc = function(e){
-				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-			};
-			var SlotItems = [];
-			var self = this;
+			const SlotItems = [];
 			if (type_id === "all") {
 				$.each(this.getAllAvailableTypes(), function(i,typeId) {
-					var tyInd = "t"+typeId;
-					for (var slotItem in self._items[tyInd]) {
+					const tyInd = "t"+typeId;
+					for (const slotItem in self._items[tyInd]) {
 						SlotItems.push( self._items[tyInd][slotItem] );
 					}
 				});
 			} else {
-				for (var slotItem in this._items["t"+type_id]) {
+				for (const slotItem in this._items["t"+type_id]) {
 					SlotItems.push( this._items["t"+type_id][slotItem] );
 				}
 			}
 
 			SlotItems.sort( comparator );
 
-			var allProperties = this._allProperties;
-			$.each(SlotItems, function(index,ThisSlotitem) {
-				ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
-				$(".icon img", ItemElem).attr("src", "../../assets/img/items/"+ThisSlotitem.type_id+".png")
-					.error(function() { $(this).unbind("error").attr("src", "../../assets/img/ui/empty.png"); });
-				$(".icon img", ItemElem).attr("alt", ThisSlotitem.id);
-				$(".icon img", ItemElem).on("click", gearClickFunc);
+			const allProperties = this._allProperties;
+			$.each(SlotItems, function(index, ThisSlotitem) {
+				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
+				$(".icon img", ItemElem)
+					.attr("src", KC3Meta.itemIcon(ThisSlotitem.type_id))
+					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
+				$(".icon img", ItemElem)
+					.attr("title", `[${ThisSlotitem.id}]`)
+					.attr("alt", ThisSlotitem.id)
+					.on("click", self.gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
-				//$(".counts", ItemElem).html("You have <strong>"+(ThisSlotitem.held.length+ThisSlotitem.extras.length)+"</strong> (<strong>"+ThisSlotitem.held.length+"</strong> worn, <strong>"+ThisSlotitem.extras.length+"</strong> extras)");
-
 
 				allProperties.forEach( function(v,i) {
 					self.slotitem_stat(ItemElem, ThisSlotitem, v);
 				});
 
-				var holderCtr, ThisHolder, HolderElem;
-				//console.log(ThisSlotitem);
-
-				for( var i in ThisSlotitem.arranged ){
-					$('<dl/>')
-						.append( $('<dt/>',{
-								'class':	i === 0 ? 'base' : '',
-								'html':		'<img src="../../assets/img/client/eqstar.png"><span>+' + i + '</span>'
-							}).append( $('<small/>').html(
-								'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
-								+ ( ThisSlotitem.arranged[i].heldCount
-									? ' (' +ThisSlotitem.arranged[i].heldCount+ ' Equipped, ' +ThisSlotitem.arranged[i].extraCount + ' Equippable)'
-									: ''
-								)
-							) )
-						)
-						.append( $('<dd/>').append(showEqList(i,ThisSlotitem.arranged)) )
-						.appendTo( ItemElem.children('.holders') );
-				}
-
-				$('<dl/>')
-					.append( $('<dd/>').html(
-						'Total ' + (ThisSlotitem.held.length+ThisSlotitem.extras.length)
-						+ ( ThisSlotitem.held.length
-							? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
-							: ''
-						)
-					) )
+				for( const i in ThisSlotitem.arranged ){
+					$('<dl/>').append(
+						$('<dt/>', {
+							'class': i === 0 ? 'base' : '',
+							'html' : `<img src="/assets/img/client/eqstar.png"><span>+${i}</span>`
+						}).append( $('<small/>').html(
+							'x' + (ThisSlotitem.arranged[i].heldCount + ThisSlotitem.arranged[i].extraCount)
+							+ ( ThisSlotitem.arranged[i].heldCount
+								? ' (' +ThisSlotitem.arranged[i].heldCount+ ' Equipped, ' +ThisSlotitem.arranged[i].extraCount + ' Equippable)'
+								: ''
+							)
+						) )
+					).append( $('<dd/>').append(showEqList(i,ThisSlotitem.arranged)) )
 					.appendTo( ItemElem.children('.holders') );
-				/*
-				for(holderCtr in ThisSlotitem.held){
-					ThisHolder = ThisSlotitem.held[holderCtr];
-					HolderElem = $(".tab_gears .factory .holder").clone();
-					$(".holder_list", ItemElem).append(HolderElem);
-
-					$(".holder_pic img", HolderElem).attr("src",
-						KC3Meta.shipIcon(
-							ThisHolder.holder.masterId,
-							"../../assets/img/ui/empty.png"
-						)
-					);
-					$(".holder_name", HolderElem).text(ThisHolder.holder.name());
-					$(".holder_level", HolderElem).text("Lv"+ThisHolder.holder.level);
-
-					if(ThisHolder.level==0){ $(".holder_star", HolderElem).hide(); }
-					else{ $(".holder_star span", HolderElem).text(ThisHolder.level); }
 				}
 
-				for(holderCtr in ThisSlotitem.extras){
-					ThisHolder = ThisSlotitem.extras[holderCtr];
-					HolderElem = $(".tab_gears .factory .xholder").clone();
-					$(".holder_list", ItemElem).append(HolderElem);
-
-					$(".holder_icon img", HolderElem).attr("src", "../../assets/img/items/"+type_id+".png");
-
-					if(ThisHolder.level==0){ $(".holder_star", HolderElem).hide(); }
-					else{ $(".holder_star span", HolderElem).text(ThisHolder.level); }
-				}
-				*/
+				$('<dl/>').append( $('<dd/>').html(
+					'Total ' + (ThisSlotitem.held.length+ThisSlotitem.extras.length)
+					+ ( ThisSlotitem.held.length
+						? ' (' +ThisSlotitem.held.length+ ' Equipped, ' +ThisSlotitem.extras.length + ' Equippable)'
+						: ''
+					)
+				) ).appendTo( ItemElem.children('.holders') );
 			});
 
+		},
+
+		shipClickFunc: function(e){
+			KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+		},
+
+		gearClickFunc: function(e){
+			KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 		},
 
 		/* Determine if an item has a specific stat

@@ -22,6 +22,7 @@
 						[ "ru", "Русский" ],
 						[ "scn", "简体中文" ],
 						[ "tcn", "繁體中文" ],
+						[ "tcn-yue", "粵語(粵字)" ],
 						[ "th", "ภาษาไทย" ],
 						[ "vi", "Tiếng Việt" ],
 						[ "ua", "Українська" ]
@@ -142,6 +143,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_prevencounters",
+				"name" : "SettingsPrevEncounters",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_battle",
 				"name" : "SettingsBattleData",
 				"type" : "check",
@@ -150,6 +157,12 @@
 			{
 				"id" : "info_btrank",
 				"name" : "SettingsBattleRank",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_btmvp",
+				"name" : "SettingsBattleMvp",
 				"type" : "check",
 				"options" : {}
 			},
@@ -221,6 +234,75 @@
 				}
 			},
 			{
+				"id" : "info_ship_class_name",
+				"name" : "SettingsShipClassName",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_stats_diff",
+				"name" : "SettingsShipStatsDiffType",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsShipStatsCurrent" ],
+						[ 1, "SettingsShipStatsUnequipped" ],
+						[ 2, "SettingsShipStatsLeftToMax" ],
+						[ 3, "SettingsShipStatsAll" ]
+					]
+				}
+			},
+			{
+				"id" : "info_dex_owned_ship",
+				"name" : "SettingsCheckNewShipFromDex",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsCheckNewShipFromDexTip"
+				}
+			},
+			{
+				"id" : "info_chuuha_icon",
+				"name" : "SettingsDamagedShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_seasonal_icon",
+				"name" : "SettingsSeasonalShipIcon",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "info_items_iconset",
+				"name" : "SettingsItemsIconSet",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsAuto" ],
+						[ 1, "SettingsIconSetPhase1" ],
+						[ 2, "SettingsIconSetPhase2" ]
+					]
+				}
+			},
+			{
+				"id" : "info_stats_iconset",
+				"name" : "SettingsStatsIconSet",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsAuto" ],
+						[ 1, "SettingsIconSetPhase1" ],
+						[ 2, "SettingsIconSetPhase2" ]
+					]
+				}
+			},
+			{
+				"id" : "info_format_numbers",
+				"name" : "SettingsFormatNumbers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_salt",
 				"name" : "SettingsSaltyShip",
 				"type" : "check",
@@ -245,9 +327,9 @@
 				"options" : {
 					"choices" : [
 						[ 1, "SettingsELosSum" ],
-						[ 2, "SettingsELosOld" ],
-						[ 3, "SettingsELosNew" ],
-						[ 4, "SettingsELosF33" ]
+						[ 2, "SettingsELosF33" ],
+						[ 3, "SettingsELosF33x3" ],
+						[ 4, "SettingsELosF33x4" ]
 					]
 				}
 			},
@@ -264,30 +346,48 @@
 				}
 			},
 			{
-				"id" : "air_average",
-				"name" : "SettingsAFPAverage",
-				"type" : "json",
-				"options" : {}
-			},
-			{
-				"id" : "air_bounds",
-				"name" : "SettingsAFPBounds",
-				"type" : "json",
-				"options" : {}
-			},
-			{
 				"id" : "aaFormation",
-				"name" : "SettingsAAFormation",
+				"name" : "SettingsPlayerFormation",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ 1, "SettingsAAFLineAheadEtc" ],
-						[ 2, "SettingsAAFDoubleLine" ],
-						[ 3, "SettingsAAFDiamond" ],
-						[ 11, "SettingsAAFCombAntiSub" ],
-						[ 13, "SettingsAAFCombDiamond" ]
+						[ 1, "SettingsForLineAhead" ],
+						[ 2, "SettingsForDoubleLine" ],
+						[ 3, "SettingsForDiamond" ],
+						[ 4, "SettingsForEchelon" ],
+						[ 5, "SettingsForLineAbreast" ],
+						[ 6, "SettingsForVanguard" ],
+						[ 11, "SettingsForCombAntiSub" ],
+						[ 12, "SettingsForCombForward" ],
+						[ 13, "SettingsForCombDiamond" ],
+						[ 14, "SettingsForCombBattle" ]
 					]
 				}
+			},
+			{
+				"id" : "imaginaryEnemyType",
+				"name" : "SettingsImaginaryEnemyType",
+				"type" : "radio",
+				"hide" : 1,
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsEnemySurface" ],
+						[ 1, "SettingsEnemyLand" ],
+						[ 2, "SettingsEnemySubmarine" ]
+					]
+				}
+			},
+			{
+				"id" : "imaginaryEnemyArmor",
+				"name" : "SettingsImaginaryEnemyArmor",
+				"type" : "small_text",
+				"hide" : 1,
+				"bound" : {
+					"min" :  0,
+					"max" : 999,
+					"type": "Integer"
+				},
+				"options" : { "label" : "" }
 			},
 			{
 				"id" : "imaginaryEnemySlot",
@@ -299,6 +399,27 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "" }
+			},
+			{
+				"id" : "powerCapApplyLevel",
+				"name" : "SettingsPowerCapLevel",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsPowerCapNone" ],
+						[ 1, "SettingsPowerCapPrecap" ],
+						[ 2, "SettingsPowerCapCapped" ],
+						[ 3, "SettingsPowerCapPostcap" ]
+					]
+				}
+			},
+			{
+				"id" : "powerCritical",
+				"name" : "SettingsPowerCritical",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsPowerCriticalTip"
+				}
 			}
 		]
 	},
@@ -356,6 +477,7 @@
 				"options" : {
 					"choices" : [
 						[ 1, "SettingsNormal" ],
+						[ 0, "SettingsAuto" ],
 						[ 1.3, "1.3x" ],
 						[ 1.6, "1.6x" ],
 						[ 2, "Retina (2x)" ]
@@ -380,23 +502,6 @@
 				"options" : { "label" : "SettingsSeconds" }
 			},
 			{
-				"id" : "alert_morale_notif",
-				"name" : "SettingsMoraleNotif",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "alert_morale_value",
-				"name" : "SettingsMoraleValue",
-				"type" : "small_text",
-				"bound" : {
-					"min" :  1,
-					"max" : 49,
-					"type": "Integer"
-				},
-				"options" : { "label" : "" }
-			},
-			{
 				"id" : "alert_supply",
 				"name" : "SettingsSupplyRate",
 				"type" : "small_text",
@@ -415,14 +520,33 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_morale_notif",
+				"name" : "SettingsMoraleNotif",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_morale_value",
+				"name" : "SettingsMoraleValue",
+				"type" : "small_text",
+				"bound" : {
+					"min" :  1,
+					"max" : 49,
+					"type": "Integer"
+				},
+				"options" : { "label" : "" }
+			},
+			{
 				"id" : "alert_type",
-				"name" : "SettingsSoundType",
+				"name" : "SettingsSoundTypeMorale",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ 0, "None" ],
-						[ 1, "POP!" ],
-						[ 3, "DING!" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
 						[ 2, "SettingsCustom" ]
 					]
 				}
@@ -443,6 +567,69 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_type_exped",
+				"name" : "SettingsSoundTypeExped",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_exped",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_type_repair",
+				"name" : "SettingsSoundTypeRepair",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_repair",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
+				"id" : "alert_type_cship",
+				"name" : "SettingsSoundTypeConstruction",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None" ],
+						[ 1, "SettingsSFXpop" ],
+						[ 3, "SettingsSFXding" ],
+						[ 4, "SettingsSFXdong" ],
+						[ 5, "SettingsSFXbell" ],
+						[ 2, "SettingsCustom" ]
+					]
+				}
+			},
+			{
+				"id" : "alert_custom_cship",
+				"name" : "SettingsCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_desktop",
@@ -471,6 +658,7 @@
 					"type": "Number"
 				},
 				"options" : {
+					"label": "SettingsSeconds",
 					"tooltip" : "SettingsIdleWarnDesc"
 				}
 			},
@@ -538,6 +726,12 @@
 				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_noanim",
+				"name" : "SettingsNoAnimation",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},
@@ -560,6 +754,18 @@
 			{
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "map_markers",
+				"name" : "SettingsMapNodeMarkers",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "map_letters",
+				"name" : "SettingsMapClearerLetters",
 				"type" : "check",
 				"options" : {}
 			},
@@ -692,12 +898,31 @@
 				"options" : {}
 			},
 			{
-				"id" : "map_markers",
-				"name" : "SettingsMapNodeMarkers",
+				"id" : "subtitle_hourly",
+				"name" : "SettingsSubtitleHourly",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "subtitle_duration",
+				"name" : "SettingsSubtitleAccurateDuration",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
+			},
+			{
+				"id" : "mute_game_tab",
+				"name" : "SettingsMuteGameTab",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "fix_game_code",
+				"name" : "SettingsGameLibFixes",
+				"type" : "check",
+				"hide" : 1,
+				"options" : {}
 			}
-			
 		]
 	},
 	{
@@ -746,12 +971,12 @@
 		]
 	},
 	{
-		"section": "SettingsKC3DBSubmission",
+		"section": "SettingsTsunDBSubmission",
 		"help" : "",
 		"contents" :[
 			{
-				"id" : "KC3DBSubmission_enabled",
-				"name" : "SettingsEnableKC3DBSubmission",
+				"id" : "TsunDBSubmission_enabled",
+				"name" : "SettingsEnableTsunDBSubmission",
 				"type" : "check",
 				"options" : {}
 			}
@@ -772,28 +997,6 @@
 				"name" : "SettingsPushAlertsKey",
 				"type" : "long_text",
 				"options" : {"placeholder" : "Access Token" },
-				"bound" : {
-					"length_min" : 27,
-					"length_max" : 27
-				}
-			}
-		]
-	},
-	{
-		"section": "SettingsDBSubmission",
-		"help" : "",
-		"contents" :[
-			{
-				"id" : "DBSubmission_enabled",
-				"name" : "SettingsEnableDBSubmission",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "DBSubmission_key",
-				"name" : "SettingsDBSubmissionKey",
-				"type" : "long_text",
-				"options" : {"placeholder" : "API Key" },
 				"bound" : {
 					"length_min" : 27,
 					"length_max" : 27
@@ -925,6 +1128,70 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsStrategyCustomCSSTip"
+				}
+			},
+			{
+				"id" : "idbSaveSortie",
+				"name" : "SettingsSaveSortieToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieToDbTip"
+				}
+			},
+			{
+				"id" : "idbSaveExcludeMaps",
+				"name" : "SettingsSaveSortieButMaps",
+				"type" : "json",
+				"options" : {
+					"tooltip" : "SettingsSaveSortieButMapsTip"
+				}
+			},
+			{
+				"id" : "idbSavePvP",
+				"name" : "SettingsSavePvpToDb",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsSavePvpToDbTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsLogging",
+		"help": "",
+		"contents": [
+			{
+				"id": "disableConsoleLogHooks",
+				"name": "SettingsConsoleLogHooks",
+				"type": "check",
+				"options": {
+					"tooltip": "SettingsConsoleLogHooksTip"
+				}
+			},
+			{
+				"id": "hoursToKeepErrors",
+				"name": "SettingsErrorKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsErrorKeepDurationTip"
+				}
+			},
+			{
+				"id": "hoursToKeepLogs",
+				"name": "SettingsLogKeepDuration",
+				"type" : "small_text",
+				"bound" : {
+					"min" : 0,
+					"type": "Integer"
+				},
+				"options": {
+					"label": "SettingsHours",
+					"tooltip": "SettingsLogKeepDurationTip"
 				}
 			}
 		]

@@ -7,9 +7,11 @@ var waiting = true;
 var trustedExit = false;
 
 // Used to fade out subtitles after calculated duration
-var subtitleVanishTimer = false;
+var subtitleTimer = false;
 var subtitleVanishBaseMillis;
 var subtitleVanishExtraMillisPerChar;
+var subtitleHourlyTimer = false;
+var subtitleHourlyShip = 0;
 
 // Holder object for audio files to test mp3 duration
 var subtitleMp3;
@@ -27,7 +29,6 @@ var suspendedTaiha = false;
 
 // Overlay avoids cursor
 var subtitlePosition = "bottom";
-var subtitleGhostout = false;
 
 // Overlay for map markers
 var markersOverlayTimer = false;
@@ -50,6 +51,7 @@ var
 // Show game screens
 function ActivateGame(){
 	waiting = false;
+	var scale = (ConfigManager.api_gameScale || 100) / 100;
 	$(".box-wrap").css("background", "#fff");
 	$(".box-wait").hide();
 	$(".game-swf").remove();
@@ -59,7 +61,12 @@ function ActivateGame(){
 		.attr("src", "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/")
 		.end()
 		.show();
-	$(".box-wrap").css("zoom", ((ConfigManager.api_gameScale || 100) / 100));
+	$(".box-wrap").css({
+		"background": "#fff",
+		"width": 1200,
+		"zoom": scale,
+		"margin-top": ConfigManager.api_margin
+	});
 	idleTimer = setInterval(idleFunction,1000);
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
@@ -78,7 +85,6 @@ $(document).on("ready", function(){
 	KC3Translation.execute();
 	
 	// Apply interface configs
-	$(".box-wrap").css("margin-top", ConfigManager.api_margin+"px");
 	if(ConfigManager.api_bg_image === ""){
 		$("body").css("background", ConfigManager.api_bg_color);
 	}else{
@@ -96,12 +102,13 @@ $(document).on("ready", function(){
 			$(".overlay_subtitles").css("font-weight", "bold");
 		}
 		
+		const scale = (ConfigManager.api_gameScale || 100) / 100;
 		switch (ConfigManager.subtitle_display) {
 			case "bottom":
 				$(".overlay_subtitles span").css("pointer-events", "none");
 				break;
 			case "below":
-				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").prependTo(".out-of-box");
 				$(".overlay_subtitles").css({
 					position: "relative",
 					margin: "5px auto 0px",
@@ -110,19 +117,20 @@ $(document).on("ready", function(){
 					bottom: "auto",
 					right: "auto",
 					width: $(".box-game").width(),
-					zoom: ((ConfigManager.api_gameScale || 100) / 100)
+					zoom: scale
 				});
 				break;
 			case "stick":
-				$(".overlay_subtitles").appendTo("body");
+				$(".overlay_subtitles").prependTo(".out-of-box");
 				$(".overlay_subtitles").css({
 					position: "fixed",
 					left: "50%",
 					top: "auto",
-					bottom: "3px",
+					bottom: ConfigManager.alert_idle_counter > 1 ? "40px" : "3px",
 					right: "auto",
 					margin: "0px 0px 0px "+(-($(".box-game").width()/2))+"px",
-					width: $(".box-game").width()
+					width: $(".box-game").width(),
+					zoom: scale
 				});
 				break;
 			default: break;
@@ -160,7 +168,14 @@ $(document).on("ready", function(){
 		}
 	});
 	
-	// untranslated quest copiable text form
+	// Listen ConfigManager changed
+	window.addEventListener("storage", function({key, timeStamp, url}){
+		if(key === ConfigManager.keyName()) {
+			ConfigManager.load();
+		}
+	});
+	
+	// Untranslated quest copy-able text form
 	$(".overlay_quests").on("click", ".no_tl", function(){
 		chrome.tabs.create({
 			url: "https://translate.google.com/#ja/"+ConfigManager.language+"/"
@@ -228,7 +243,6 @@ $(document).on("ready", function(){
 	
 	// Exit confirmation
 	window.onbeforeunload = function(){
-		ConfigManager.load();
 		// added waiting condition should be ignored
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
@@ -282,7 +296,7 @@ $(document).on("keydown", function(event){
 	}
 });
 
-/* Invokable actions
+/* Invoke-able actions
 -----------------------------------*/
 var interactions = {
 	
@@ -312,7 +326,7 @@ var interactions = {
 			}
 			response({success:true});
 		}catch(e){
-			console.error(e);
+			console.error("CatBomb exception", e);
 		}finally{
 			response({success:false});
 		}
@@ -361,13 +375,11 @@ var interactions = {
 					
 					if(ConfigManager.api_tracking){
 						$(".tracking", QuestBox).html( QuestData.outputHtml() );
+						if(QuestData.tracking && QuestData.tracking.length > 1){
+							$(".tracking", QuestBox).addClass("small");
+						}
 					}else{
 						$(".tracking", QuestBox).hide();
-					}
-					
-					// Special Bw1 case multiple requirements
-					if( QuestRaw.api_no == 214 ){
-						$(".tracking", QuestBox).addClass("small");
 					}
 				}else{
 					if(ConfigManager.google_translate) {
@@ -399,7 +411,9 @@ var interactions = {
 	
 	// Show map markers for old worlds (node letters & icons)
 	markersOverlay :function(request, sender, response){
-		if(!ConfigManager.map_markers) { response({success:false}); return true; }
+		if(!ConfigManager.map_markers && !ConfigManager.map_letters){
+			response({success:false}); return true;
+		}
 		var sortieStartDelayMillis = 2800;
 		var markersShowMillis = 5000;
 		var compassLeastShowMillis = 3500;
@@ -411,9 +425,9 @@ var interactions = {
 			var letters = KC3Meta.nodeLetters(request.worldId, request.mapId);
 			var lettersFound = (!!letters && Object.keys(letters).length > 0);
 			var icons = KC3Meta.nodeMarkers(request.worldId, request.mapId);
-			var iconsFound =  (!!icons.length && icons.length > 0);
+			var iconsFound = (!!icons.length && icons.length > 0);
 			$(".overlay_markers").hide().empty();
-			if(lettersFound){
+			if(lettersFound && ConfigManager.map_letters){
 				// Show node letters
 				var l;
 				for(l in letters){
@@ -423,7 +437,7 @@ var interactions = {
 					$(".overlay_markers").append(letterDiv);
 				}
 			}
-			if(iconsFound){
+			if(iconsFound && ConfigManager.map_markers){
 				// Show some icon style markers
 				var i;
 				for(i in icons){
@@ -493,8 +507,8 @@ var interactions = {
 			// Resize the window
 			chrome.windows.getCurrent(function(wind){
 				chrome.windows.update(wind.id, {
-					width: Math.ceil(800*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
-					height: Math.ceil(480*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+					width: Math.ceil(1200*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
+					height: Math.ceil(720*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
 				});
 			});
 		});
@@ -510,10 +524,11 @@ var interactions = {
 		
 		if(ConfigManager.alert_taiha_blood) {
 			if(critAnim){ clearInterval(critAnim); }
-			critAnim = setInterval(function() {
-				$(".taiha_red").toggleClass("anim2");
-			}, 500);
-			
+			if(!ConfigManager.alert_taiha_noanim){
+				critAnim = setInterval(function() {
+					$(".taiha_red").toggleClass("anim2");
+				}, 500);
+			}
 			$(".taiha_blood").show(0, function(){
 				$(".taiha_red").show(0, function(){
 					(callback || function(){})();
@@ -570,6 +585,8 @@ var interactions = {
 		var subtitleText = false;
 		var quoteIdentifier = "";
 		var quoteVoiceNum = request.voiceNum;
+		var quoteVoiceSize = request.voiceSize;
+		var quoteVoiceDuration = request.duration;
 		var quoteSpeaker = "";
 		switch(request.voicetype){
 			case "titlecall":
@@ -578,6 +595,16 @@ var interactions = {
 			case "npc":
 				quoteIdentifier = "npc";
 				break;
+			case "event":
+				quoteIdentifier = "event";
+				break;
+			case "abyssal":
+				quoteIdentifier = "abyssal";
+				if(ConfigManager.subtitle_speaker){
+					const abyssalId = KC3Meta.getAbyssalIdByFilename(quoteVoiceNum);
+					quoteSpeaker = KC3Meta.abyssShipName(abyssalId);
+				}
+				break;
 			default:
 				quoteIdentifier = request.shipID;
 				if(ConfigManager.subtitle_speaker){
@@ -585,16 +612,8 @@ var interactions = {
 				}
 				break;
 		}
-		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum );
+		subtitleText = KC3Meta.quote( quoteIdentifier, quoteVoiceNum, quoteVoiceSize );
 		
-		// hide first to fading will stop
-		$(".overlay_subtitles").stop(true, true);
-		$(".overlay_subtitles").hide();
-		
-		// If subtitle removal timer is ongoing, reset
-		if(subtitleVanishTimer){
-			clearTimeout(subtitleVanishTimer);
-		}
 		// Lazy init timing parameters
 		if(!subtitleVanishBaseMillis){
 			subtitleVanishBaseMillis = Number(KC3Meta.quote("timing", "baseMillisVoiceLine")) || 2000;
@@ -603,33 +622,120 @@ var interactions = {
 			subtitleVanishExtraMillisPerChar = Number(KC3Meta.quote("timing", "extraMillisPerChar")) || 50;
 		}
 		
-		// If subtitles available for the voice
-		if(subtitleText){
+		const hideSubtitle = () => {
+			// hide first to fading will stop
+			$(".overlay_subtitles").stop(true, true);
+			$(".overlay_subtitles").hide();
+			// If subtitle removal timer is ongoing, reset
+			if(subtitleTimer){
+				if(Array.isArray(subtitleTimer))
+					subtitleTimer.forEach(clearTimeout);
+				else
+					clearTimeout(subtitleTimer);
+			}
+		};
+		
+		// Display subtitle and set its removal timer
+		const showSubtitle = (subtitleText, quoteIdentifier) => {
+			if($.type(subtitleText) === "string") {
+				showSubtitleLine(subtitleText, quoteIdentifier);
+				const millis = quoteVoiceDuration || (subtitleVanishBaseMillis +
+					subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
+				subtitleTimer = setTimeout(fadeSubtitlesOut, millis);
+				return;
+			}
+			subtitleTimer = [];
+			let lastLineOutMillis = 0;
+			$.each(subtitleText, (delay, text) => {
+				const delays = String(delay).split(',');
+				const millis = Number(delays[0]);
+				lastLineOutMillis = delays.length > 1 ? Number(delays[1]) :
+					(millis + subtitleVanishBaseMillis + subtitleVanishExtraMillisPerChar * text.length);
+				subtitleTimer.push(setTimeout(() => {
+					showSubtitleLine(text, quoteIdentifier);
+				}, millis));
+			});
+			subtitleTimer.push(setTimeout(fadeSubtitlesOut, lastLineOutMillis));
+		};
+		
+		const fadeSubtitlesOut = () => {
+			subtitleTimer = false;
+			$(".overlay_subtitles").fadeOut(1000, function(){
+				switch (ConfigManager.subtitle_display) {
+					case "evade":
+						$(".overlay_subtitles").css("top", "");
+						$(".overlay_subtitles").css("bottom", "5px");
+						subtitlePosition = "bottom";
+						break;
+					case "ghost":
+						$(".overlay_subtitles").removeClass("ghost");
+						break;
+					default: break;
+				}
+			});
+		};
+		
+		const showSubtitleLine = (subtitleText, quoteIdentifier) => {
 			$(".overlay_subtitles span").html(subtitleText);
-			$(".overlay_subtitles").show();
-			var millis = subtitleVanishBaseMillis +
-				(subtitleVanishExtraMillisPerChar * $(".overlay_subtitles").text().length);
-			//console.debug("vanish after", millis, "ms");
-			subtitleVanishTimer = setTimeout(function(){
-				subtitleVanishTimer = false;
-				$(".overlay_subtitles").fadeOut(1000, function(){
-					switch (ConfigManager.subtitle_display) {
-						case "evade":
-							$(".overlay_subtitles").css("top", "");
-							$(".overlay_subtitles").css("bottom", "5px");
-							subtitlePosition = "bottom";
-							break;
-						case "ghost":
-							$(".overlay_subtitles").removeClass("ghost");
-							break;
-						default: break;
-					}
-				});
-			}, millis);
 			if(!!quoteSpeaker){
 				$(".overlay_subtitles span").html("{0}: {1}".format(quoteSpeaker, subtitleText));
 			}
+			$(".overlay_subtitles").toggleClass("abyssal", quoteIdentifier === "abyssal");
+			$(".overlay_subtitles").show();
+		};
+		
+		const cancelHourlyLine = () => {
+			if(subtitleHourlyTimer) clearTimeout(subtitleHourlyTimer);
+			subtitleHourlyTimer = false;
+			subtitleHourlyShip = 0;
+		};
+		
+		const bookHourlyLine = (text, shipId) => {
+			cancelHourlyLine();
+			const nextHour = new Date().shiftHour(1).resetTime(["Minutes", "Seconds", "Milliseconds"]).getTime();
+			const diffMillis = nextHour - Date.now();
+			// Do not book on unexpected diff time: passed or > 59 minutes
+			if(diffMillis <= 0 || diffMillis > 59 * 60000) {
+				showSubtitle(text, shipId);
+			} else {
+				subtitleHourlyShip = shipId;
+				subtitleHourlyTimer = setTimeout(function(){
+					// Should cancel booked hourly line for some conditions
+					if(subtitleHourlyShip == shipId
+						// if Chrome delays timer execution > 3 seconds
+						&& Math.abs(Date.now() - nextHour) < 3000
+					){
+						hideSubtitle();
+						showSubtitle(text, shipId);
+					}
+					cancelHourlyLine();
+				}, diffMillis);
+			}
+		};
+		
+		// If subtitles available for the voice
+		if(subtitleText){
+			hideSubtitle();
+			// Book for a future display if it's a ship's hourly voice,
+			// because game preload voice file in advance (about > 5 mins).
+			if(!isNaN(Number(quoteIdentifier)) && KC3Meta.isHourlyVoiceNum(quoteVoiceNum)){
+				if(ConfigManager.subtitle_hourly){
+					bookHourlyLine(subtitleText, quoteIdentifier);
+				}
+			} else {
+				showSubtitle(subtitleText, quoteIdentifier);
+			}
 		}
+	},
+	
+	// Live reloading meta data
+	reloadMeta :function(request, sender, response){
+		if(request.metaType === "Quotes") {
+			KC3Meta.loadQuotes();
+		} else if(request.metaType === "Quests") {
+			KC3Meta.reloadQuests();
+		}
+		console.info(request.metaType, "reloaded");
 	},
 	
 	// Dummy action

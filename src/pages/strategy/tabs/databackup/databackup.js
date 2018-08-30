@@ -24,7 +24,7 @@
 
 			$(".tab_databackup .export_data").on("click", function(){ //export data
 				sav = true;
-				if(confirm("Are you sure you want to export data?")){
+				if(confirm("Are you sure you want to export your data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
 					window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
@@ -49,12 +49,12 @@
 			});
 
 			$(".tab_databackup .overwrite_data").on("click", function(){//overwrite_data
-				if(confirm("Please close all your currently opened KC3 panels and pages (including devtools) first."))
-				if(confirm("Will overwrite all your KC3 data! Are you sure?")){
+				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
+				if(confirm("This will overwrite all of your KC3 data! Are you sure?")){
 					if(filename==="")
 						alert("No file selected");
 					else
-						if(sav||confirm("If you haven't backup your old data, will be lost! Are you sure?")){
+						if(sav||confirm("If you haven't backed up your old data, it will be lost! Are you sure?")){
 							$(".tab_databackup .dataselect").hide();
 							$(".tab_databackup .processDisplay").show();
 							window.KC3DataBackup.loadData(filename,true,".tab_databackup .processDisplay .processText",function(){

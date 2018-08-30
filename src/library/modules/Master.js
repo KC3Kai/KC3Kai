@@ -13,8 +13,11 @@ Saves and loads significant data for future use
 		// Not start from, excluding
 		abyssalShipIdFrom: 1500,
 		abyssalGearIdFrom: 500,
-		// Might be updated soon, depending on next seasonal ID going ~811 or 997~
-		seasonalCgIdFrom: 800,
+		// Devs still archive seasonal ID backward from old max 997
+		// Since 2017-11-27, 998~ going to be used
+		seasonalCgIdFrom: 700,
+		// Clear new updates data after 1 week
+		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
 		_raw: {},
 		_abyssalShips: {},
@@ -40,10 +43,11 @@ Saves and loads significant data for future use
 			}
 			this._raw.newShips = this._raw.newShips || {};
 			this._raw.newItems = this._raw.newItems || {};
+			this._raw.newGraphs = this._raw.newGraphs || {};
+			this._raw.changedGraphs = this._raw.changedGraphs || {};
 
-			var
-				self = this,
-				diff = {"ship":"newShips", "slotitem":"newItems"},
+			var self = this,
+				diff = {"ship":"newShips", "slotitem":"newItems", "shipgraph":"newGraphs"},
 				oraw = $.extend({}, this._raw),
 				newCounts = [0, 0],
 				ctime = Date.now();
@@ -54,7 +58,7 @@ Saves and loads significant data for future use
 				var short_mst_name = mst_name.replace("api_mst_", "");
 
 				// If the current master item is an array
-				if (Object.prototype.toString.call(mst_data) === '[object Array]') {
+				if (Array.isArray(mst_data)) {
 					// Add the master item to local raw, as empty object
 					self._raw[short_mst_name] = {};
 
@@ -71,13 +75,29 @@ Saves and loads significant data for future use
 							if(!oraw[short_mst_name][elem_key]) {
 								self._raw[diff[short_mst_name]][elem_key] = ctime;
 							} else {
-								delete self._raw[diff[short_mst_name]][elem_key];
+								if(short_mst_name === "shipgraph") {
+									if(self._raw[short_mst_name][elem_key].api_version[0]
+										!= oraw[short_mst_name][elem_key].api_version[0]) {
+										self._raw.changedGraphs[elem_key] = ctime;
+									} else if(self._raw.changedGraphs[elem_key] &&
+										(ctime - self._raw.changedGraphs[elem_key]) > self.newUpdatesExpiredAfter) {
+										delete self._raw.changedGraphs[elem_key];
+									}
+								}
+								if(self._raw[diff[short_mst_name]][elem_key] &&
+									(ctime - self._raw[diff[short_mst_name]][elem_key]) > self.newUpdatesExpiredAfter) {
+									delete self._raw[diff[short_mst_name]][elem_key];
+								}
 							}
 						}
 					});
 				}
 			});
 
+			if(KC3Meta.isAF() && this._raw.newShips[KC3Meta.getAF(4)] === undefined) {
+				this._raw.newShips[KC3Meta.getAF(4)] = KC3Meta.getAF(2) - KC3Master.newUpdatesExpiredAfter;
+				if(beforeCounts) beforeCounts[0] -= 1;
+			}
 			this.updateRemodelTable();
 			this.save();
 			this.available = true;
@@ -123,7 +143,7 @@ Saves and loads significant data for future use
 
 		all_ships :function(withAbyssals, withSeasonals){
 			var id, ss, as;
-			var ships = $.extend({}, this._raw.ship);
+			var ships = $.extend(true, {}, this._raw.ship);
 			if(!!withAbyssals && Object.keys(ships).length > 0
 				&& Object.keys(this._abyssalShips).length > 0){
 				for(id in this._abyssalShips){
@@ -145,9 +165,18 @@ Saves and loads significant data for future use
 				}
 				// Apply a patch for Mikuma typo of KC devs
 				//ships[882] = this._seasonalShips[882];
+				//ships[793] = this._seasonalShips[793];
+				// Apply a patch for Asashimo Torelli submarine :P
+				//ships[787] = this._seasonalShips[787];
 				// Seasonal data no longer leaked since 2017-04-05
+				// Seasonal data leaks again since 2017-09-12 if ID < 800
+				// Seasonal data leaking fixed again since 207-10-18
 			}
 			return ships;
+		},
+
+		seasonal_ship :function(id){
+			return this._seasonalShips[id] || false;
 		},
 
 		new_ships :function(){
@@ -167,6 +196,45 @@ Saves and loads significant data for future use
 			return !this.available ? false : Object.keys(this._raw.shipgraph).filter(function(key){
 				return self._raw.shipgraph[key].api_filename === filename;
 			})[0];
+		},
+
+		new_graphs :function(){
+			return this._raw.newGraphs || {};
+		},
+
+		remove_new_graphs :function(id){
+			delete this._raw.newGraphs[id];
+		},
+
+		changed_graphs :function(){
+			return this._raw.changedGraphs || {};
+		},
+
+		remove_changed_graphs :function(id){
+			delete this._raw.changedGraphs[id];
+		},
+
+		/**
+		 * Build image URI of asset resources (like ship, equipment) since KC2ndSeq (HTML5 mode) on 2018-08-17.
+		 * @see graph - replace old swf filename method (tho it's still available for now)
+		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
+		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
+		 *               [`card`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`] for slotitem
+		 * @param shipOrSlot - `ship` or `slot`
+		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
+		 */
+		png_file :function(id, type = "card", shipOrSlot = "ship", isDamaged = false){
+			if(!id || id < 0 || !type || !shipOrSlot) return "";
+			const typeWithSuffix = type + (isDamaged && shipOrSlot === "ship" ? "_dmg" : "");
+			const typeWithPrefix = shipOrSlot + "_" + typeWithSuffix;
+			const key = str => str.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+			const getFilenameSuffix = (id, typeStr) => String(
+				1000 + 17 * (Number(id) + 7) *
+				KC3Meta.resourceKeys[(key(typeStr) + Number(id) * typeStr.length) % 100] % 8973
+			);
+			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
+				suffix = getFilenameSuffix(id, typeWithPrefix);
+			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}_${suffix}.png`;
 		},
 
 		slotitem :function(id){
@@ -201,8 +269,38 @@ Saves and loads significant data for future use
 			return this._raw.useitem || {};
 		},
 
+		mission :function(id){
+			return !this.available ? false : this._raw.mission[id] || false;
+		},
+
+		all_missions :function(){
+			return this._raw.mission || {};
+		},
+
+		furniture :function(id, no, type){
+			if(!this.available) return false;
+			if(!id && no >= 0 && type >= 0){
+				$.each(this._raw.furniture, (i, f) => {
+					if(f.api_no === no && f.api_type === type){
+						id = f.api_id;
+						return false;
+					}
+				});
+			}
+			return id > 0 ? this._raw.furniture[id] || false : false;
+		},
+
+		all_furniture :function(){
+			return this._raw.furniture || {};
+		},
+
+		missionDispNo :function(id){
+			var dispNo = (this.mission(id) || {}).api_disp_no;
+			return dispNo || String(id);
+		},
+
 		abyssalShip :function(id, isMasterMerged){
-			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend({}, this.ship(id)) || {};
+			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend(true, {}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&
 				(Object.keys(this._abyssalShips).length === 0 || !this._abyssalShips[id]) ?
 				false : $.extend(master, this._abyssalShips[id]);
@@ -251,6 +349,8 @@ Saves and loads significant data for future use
 					this._raw.stype = data.stype;
 					this._raw.newShips = data.newShips || {};
 					this._raw.newItems = data.newItems || {};
+					this._raw.newGraphs = data.newGraphs || {};
+					this._raw.changedGraphs = data.changedGraphs || {};
 					return true;
 				},
 			};
@@ -266,10 +366,10 @@ Saves and loads significant data for future use
 						var tempRaw = JSON.parse(localStorage[storType]);
 						if(!tempRaw.ship) throw Error("Non-existing ship");
 
-						this.available |= keyStor[storType].call(this,tempRaw);
-						console.info("Loaded master: %c%s%c data","color:darkblue",storType,"color:initial");
+						this.available = this.available || keyStor[storType].call(this,tempRaw);
+						console.info("Loaded master: %c%s%c data", "color:darkblue", storType, "color:initial");
 					} catch (e) {
-						console.error("Failed to process master: %s data",storType,e);/*RemoveLogging:skip*/
+						console.error("Failed to process master: %s data", storType, e);
 					}
 				}
 				return this.available;
@@ -285,7 +385,7 @@ Saves and loads significant data for future use
 			for(ship_id in this._raw.ship) {
 				cShip = this._raw.ship[ship_id];
 				if(!cShip) { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 				delete cShip.kc3_maxed;
 				delete cShip.kc3_model;
 				delete cShip.kc3_bship;
@@ -303,7 +403,9 @@ Saves and loads significant data for future use
 
 				// Pre-checks of the remodel table
 				if(!cShip)               { /* invalid API */ continue; }
-				if(!cShip.api_buildtime) { /* unbuildable by API */ continue; }
+				// `api_buildtime` always non-zero for all shipgirls even not able to be built,
+				// can be used to differentiate seasonal graph / abyssal data
+				if(!cShip.api_buildtime) { /* non-kanmusu by API */ continue; }
 
 				/* proposed variable:
 				  kc3 prefix variable -> to prevent overwriting what devs gonna say later on

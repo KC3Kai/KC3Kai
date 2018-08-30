@@ -32,6 +32,9 @@
 	<div class="help_q">Exporter is downloading image instead of opening it in new tab or Imgur!</div>
 	<div class="help_a">In case of Imgur error or image data string is being too big for new tab to handle it will be downloaded.</div>
 
+	<div class="help_q">How does export event locking tags work?</div>
+	<div class="help_a">If ship is locked in some operation you will see colored background behind it's name. If you only plan to lock it there you will see colored circle right after ship level. Please note colors on image doesn't necessarily match lock colors in game. You could compare them <a href="#locking">here</a>.</div>
+
 	<div class="help_more">
 		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Showcase">Learn more</a>
 	</div>
@@ -59,10 +62,16 @@
 			<input type="checkbox" id="exportAddName">
 			<label for="exportAddName">Show my name and level on image</label>
 		</div>
+
+		<div class="option admiral_info">
+			<input type="checkbox" id="exportEventLocking">
+			<label for="exportEventLocking">Add event locking tags (see <a href="#locking">locking</a>)</label>
+		</div>
 	</div>
 	<div class="clear"></div>
 	<div class="control hover" id="exportShips">Export Ships</div>
-    <div class="control hover" id="exportEquipment">Export Equipment</div>
+	<div class="control hover" id="exportEquipment">Export Equipment</div>
+	<div class="control hover" id="eventShipList">European ships</div>
 	<div class="clear"></div>
 	<div class="exportResults"></div>
 </div>

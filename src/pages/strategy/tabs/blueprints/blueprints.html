@@ -1,0 +1,108 @@
+<div class="page_title">
+	Blueprints Required for Ship Remodels
+	<div class="page_help_btn hover"><span>?</span> Help Topics</div>
+</div>
+
+<!-- HELP TOPICS -->
+<div class="page_help">
+	<div class="help_q">What is this page for?</div>
+	<div class="help_a">This page displays ships that require materials such as blueprints in order to be remodeled.</div>
+
+	<div class="help_q">Why are some materials grayed-out?</div>
+	<div class="help_a">Grayed-out materials have already been used to remodel the ship in question and are therefore no longer required.</div>
+
+	<div class="help_q">Which ships should be given a higher remodel priority?</div>
+	<div class="help_a">This depends on your personal situation. To learn more, refer to these articles:
+		<a href="http://kancolle.wikia.com/wiki/Partials/Blueprint_Priority" target="_blank">Blueprint Priority</a>,
+		<a href="https://zekamashi.net/kancolle-kouryaku/kunsyou/" target="_blank">改装優先順位</a>.
+	</div>
+
+	<div class="help_q">What is the purpose of the All Ships view?</div>
+	<div class="help_a">The All Ships view displays all ships currently implemented in-game who require materials in order to be remodeled.<br />
+		It also attempts to display grayed-out materials and total needs by considering ships that are already in your possession.
+		In contrast to the Ships in Service view, several columns serve different purposes:
+		<ul>
+			<li><b>ID</b> under the Ships in Service view corresponds to the ID assigned to your individual ships, but in All Ships view it is used to refer to the Master ID assigned to the ship's type. You can see these in the <a href="#mstship">Ship Library</a>. For example, your fleet may have two Abukuma Kai Nis - one may have her own ID of 573 while the other has an ID of 5957. However, the Master ID of the ship type known as "Abukuma Kai Ni" is always 200.
+			<li><b>Level</b> instead refers to the level required in order to remodel the ship in question.
+			<li>The <b>Requirements</b> column additionally shows you the name of the ship's next form.
+		</ul>
+	</div>
+
+	<div class="help_q">Why does the data seem weird or incorrect following a game maintenance?</div>
+	<div class="help_a">
+		Sometimes the KanColle devs may either neglect to update the remodel data in a timely manner or they may put dummy data into the API result if multiple successive maintenances are scheduled.
+		In order to fix such issues after the in-game data has stabilized, you can try refreshing our remodel info cache by clicking the <b>'Rebuild ship remodel information caches'</b> link on the <a href="#profile">Profile</a> page.
+	</div>
+
+	<div class="help_more">
+		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Blueprints">Learn more</a>
+	</div>
+</div>
+
+<div class="view_types">
+	<label class="view_type">
+		<input type="radio" name="view_type" value="owned" checked /><span>Ships in Service</span>
+	</label>
+	<label class="view_type">
+		<input type="radio" name="view_type" value="all" /><span>All Ships</span>
+	</label>
+	<label class="view_type">
+		<input type="checkbox" name="hide_unlock" /><span>Hide Unlock Ships</span>
+	</label>
+	<label class="view_type">
+		<input type="checkbox" name="hide_dupe" /><span>Hide Dupe Remodels</span>
+	</label>
+</div>
+<div class="clear"></div>
+
+<!-- SHIP LIST -->
+<div class="page_padding">
+
+	<!-- HEADER LABELS AND ICONS -->
+	<div class="ship_header">
+		<div class="ship_item">
+			<div class="ship_field hover ship_id" data-type="id">ID</div>
+			<div class="ship_field ship_img"></div>
+			<div class="ship_field hover ship_name" data-type="name">Name</div>
+			<div class="ship_field hover ship_type" data-type="type">Type</div>
+			<div class="ship_field hover ship_lv" data-type="lv">Level</div>
+			<div class="ship_field hover need_materials" data-type="materials">Requirements (Blueprints, etc)</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<!-- SHIP LIST HTML CONTAINER -->
+	<div class="ship_list">
+	</div>
+	<div class="clear"></div>
+
+	<div class="total summary">
+		<div class="summary_item i18n">In demand:</div>
+		<div class="total_items">
+		</div>
+	</div>
+	<div class="clear"></div>
+
+	<div class="owned summary">
+		<div class="summary_item i18n">In possession:</div>
+		<div class="owned_items">
+		</div>
+	</div>
+	<div class="clear"></div>
+
+	<div class="factory">
+		<!-- SHIP RECORD -->
+		<div class="ship_item">
+			<div class="ship_field ship_id"></div>
+			<div class="ship_field ship_img hover"><img class="ship_icon"/></div>
+			<div class="ship_field ship_name"></div>
+			<div class="ship_field ship_type"></div>
+			<div class="ship_field ship_lv"><span class="i18n">LevelShort</span> <span class="value"></span></div>
+			<div class="ship_field need_materials"></div>
+			<div class="ship_field ship_stat_icon ship_lock"><img src="../../assets/img/client/heartlock.png" /></div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+
+</div>

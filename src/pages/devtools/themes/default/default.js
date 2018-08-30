@@ -1,3 +1,4 @@
+/* jshint undef: false, unused: false */
 (function(){
 	"use strict";
 	_gaq.push(['_trackEvent', "Panel: Default Theme", 'clicked']);

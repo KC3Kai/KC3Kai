@@ -285,7 +285,7 @@ ul.altGameModes li .modePlay {
 /* F12 INSTRUCTIONS
 --------------------------*/
 .instructStep  {
-	margin:0px 0px 10px 0px;
+	margin:0px 0px 5px 0px;
 }
 .instructStep .stepNum {
 	width:30px;
@@ -312,6 +312,15 @@ ul.altGameModes li .modePlay {
 .instructKancolleTab {
 	font-size:14px;
 }
+.instructHint {
+	font-size:12px;
+}
+.instructHint .stepNum {
+	width:30px;
+	height:25px;
+	line-height:25px;
+	font-size:12px;
+}
 
 /* IMPORTED
 --------------------------*/
@@ -320,8 +329,8 @@ ul.altGameModes li .modePlay {
 	display: inline-block;
 	width: 30px;
 	height: 16px;
-	float:left;
-	margin:1px 5px 0px 0px;
+	margin: 1px 5px 0px 0px;
+	float: left;
 }
 .switch input { display:none; }
 .slider {

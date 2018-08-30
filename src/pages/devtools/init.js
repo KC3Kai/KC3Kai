@@ -12,38 +12,46 @@
 			// Check if theme exists
 			$.ajax({
 				type: "HEAD",
-				url: "themes/"+ConfigManager.pan_theme+"/"+ConfigManager.pan_theme+".html",
+				url: "themes/" + ConfigManager.pan_theme + "/" + ConfigManager.pan_theme + ".html",
 				success: function(){
 					createPanel( ConfigManager.pan_theme );
 				},
 				error: function(){
-					createPanel( "default" );
+					createFailPanel();
 				}
 			});
 			
 			if (ConfigManager.apiRecorder) {
-				chrome.devtools.panels.create("KCSAPI",
-					"../../assets/img/logo/16.png",
-					"pages/devtools/recorder/recorder.html",
-					function(panel){}
-				);
+				createApiRecorderPanel();
 			}
 			
 		} catch (e) {
 			// Catch any exceptions in the attempt
-			chrome.devtools.panels.create("DevKC3Kai",
-				"../../assets/img/logo/16.png",
-				"pages/devtools/fail.html",
-				function(panel){}
-			);
+			createFailPanel();
 		}
 	});
 	
 	// Execute Chrome API to add panels to devtools
-	function createPanel( theme ){
+	function createPanel( theme ) {
 		chrome.devtools.panels.create("DevKC3Kai",
 			"../../assets/img/logo/16.png",
-			"pages/devtools/themes/"+theme+"/"+theme+".html",
+			"pages/devtools/themes/" + theme + "/" + theme + ".html",
+			function(panel){}
+		);
+	}
+	
+	function createFailPanel() {
+		chrome.devtools.panels.create("DevKC3Kai",
+			"../../assets/img/logo/16.png",
+			"pages/devtools/fail.html",
+			function(panel){}
+		);
+	}
+	
+	function createApiRecorderPanel() {
+		chrome.devtools.panels.create("KCSAPI",
+			"../../assets/img/logo/16.png",
+			"pages/devtools/recorder/recorder.html",
 			function(panel){}
 		);
 	}

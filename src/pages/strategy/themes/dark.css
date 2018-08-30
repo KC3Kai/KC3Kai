@@ -43,6 +43,248 @@ button, input, select, textarea {
 .ui-tooltip-content p {
 	margin:0px;
 }
+.ui-tooltip-content .power_capped {
+	color:#e4c;
+}
+
+.ui-tooltip-content .stats_icon_img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+
+.ui-tooltip-content .ship_tooltip {
+	width:252px;
+	height:314px;
+	padding:2px 0px 2px 0px;
+}
+.ui-tooltip-content .ship_tooltip .ship_full_name {
+	width:208px;
+	height:17px;
+	line-height:17px;
+	padding:0px 2px 0px 2px;
+	margin:0px 0px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_masterId {
+	color:#c4a957;
+}
+.ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
+	color:#ccc;
+}
+.ui-tooltip-content .ship_tooltip .ship_rosterId {
+	width:40px;
+	height:17px;
+	line-height:17px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	color:#a9a150;
+	text-align:right;
+}
+.ui-tooltip-content .ship_tooltip .ship_stype {
+	width:32px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 2px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_tooltip .ship_level {
+	width:45px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_tooltip .ship_level span.i18n {
+	color:#3ec0bf;
+}
+.ui-tooltip-content .ship_tooltip .ship_level span.value.married {
+	color:#a97417;
+}
+.ui-tooltip-content .ship_tooltip .ship_level span.value.high {
+	color:#107e57;
+}
+.ui-tooltip-content .ship_tooltip .ship_level span.value.medium {
+	color:#36c2db;
+}
+.ui-tooltip-content .ship_tooltip .ship_exp_next {
+	width:75px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_tooltip .ship_exp_next span.i18n {
+	color:#7ca99f;
+}
+.ui-tooltip-content .ship_tooltip .ship_morale {
+	width:32px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_tooltip .ship_morale img {
+	width:13px;
+	height:13px;
+	vertical-align:text-bottom;
+	margin-right:1px;
+}
+.ui-tooltip-content .ship_tooltip .ship_hp {
+	width:48px;
+	height:17px;
+	line-height:17px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	text-align:right;
+	float:right;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_tooltip .ship_stats_col {
+	width:126px;
+	margin:0px 0px 0px 0px;
+	float:left;
+}
+.ui-tooltip-content .ship_tooltip .ship_stats_row {
+	width:250px;
+	margin:0px 0px 0px 0px;
+	float:left;
+}
+.ui-tooltip-content .ship_tooltip .stat_icon {
+	width:52px;
+	height:19px;
+	line-height:17px;
+	padding:0px 0px 0px 1px;
+	margin:0px 0px 1px 0px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffe;
+	border:1px solid #ddd;
+	border-right-color:#ffe;
+	border-bottom-color:#fcfcfc;
+}
+.ui-tooltip-content .ship_tooltip .stat_icon img {
+	max-width:19px;
+	height:16px;
+	vertical-align:bottom;
+}
+.ui-tooltip-content .ship_tooltip .stat_name {
+	color:#a9a150;
+	font-size:11px;
+	margin:0px 0px 0px 2px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value {
+	width:71px;
+	height:19px;
+	line-height:17px;
+	padding:0px 2px 1px 2px;
+	margin:0px 2px 1px 0px;
+	float:left;
+	font-size:11px;
+	text-align:right;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffffe3;
+	border:1px solid #aaa;
+	border-right-color:#f0f0f0;
+	border-bottom-color:#f0f0f0;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .equip {
+	font-size:10px;
+	color:#888;
+	margin-right:1px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .mod {
+	font-size:10px;
+	color:#aaa;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .level {
+	font-size:10px;
+	color:#3ec0bf;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .luck {
+	font-size:10px;
+	color:#2b2;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_tooltip .stat_value .oasw {
+	color:#0cd;
+}
+.ui-tooltip-content .ship_tooltip .stat_value.SpeedFaster,
+.ui-tooltip-content .ship_tooltip .stat_value.SpeedFastest,
+.ui-tooltip-content .ship_tooltip .stat_value.RangeChanged {
+	color:#7aabb8;
+}
+
+.ui-tooltip-content .ship_tooltip .stat_wide {
+	width:249px;
+}
+.ui-tooltip-content .ship_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
+}
+.ui-tooltip-content .ship_tooltip .aa_col {
+	width:49px;
+	height:19px;
+	line-height:17px;
+	padding:0px 2px 0px 2px;
+	margin:0px 1px 1px 0px;
+	float:left;
+	font-size:11px;
+	text-align:right;
+	overflow:hidden;
+	white-space:nowrap;
+	background-color:#ffffe3;
+	border:1px solid #aaa;
+	border-right-color:#f0f0f0;
+	border-bottom-color:#f0f0f0;
+}
+.ui-tooltip-content .ship_tooltip .aa_col.bomberSlot img {
+	width:15px;
+	height:15px;
+	margin-top:-5px;
+	margin-left:-2px;
+}
+.ui-tooltip-content .ship_tooltip .aa_col.sd_both,
+.ui-tooltip-content .ship_tooltip .aa_col.sd_prop,
+.ui-tooltip-content .ship_tooltip .aa_col.sd_fixed,
+.ui-tooltip-content .ship_tooltip .aa_col.sd_fail {
+	color:#f00;
+}
+.ui-tooltip-content .ship_tooltip .text_center {
+	text-align:center;
+}
+.ui-tooltip-content .ship_tooltip .text_left {
+	text-align:left;
+}
+.ui-tooltip-content .ship_tooltip .text_right {
+	text-align:right;
+}
 
 /* COLORS
 -------------------------------*/
@@ -145,7 +387,7 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1300px;
+	min-height:1390px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -312,6 +554,94 @@ button, input, select, textarea {
 }
 .float_toolbar .reload:hover {
 	background-color:#000000;
+}
+
+/* COMMONS: SHIP LIST
+-------------------------------*/
+
+.ship_header .ship_item .ship_field.sorted {
+	background:#303030;
+}
+.ship_header .ship_stat img {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+}
+.ship_list .ship_item.odd .ship_field {
+	background:#303030;
+}
+.ship_list .ship_item.even .ship_field {
+	background:#303030;
+}
+.ship_list .ship_item:hover .ship_field {
+	background:#000000;
+}
+.ship_list .ship_onfleet-color1 {
+	background: #2e4a79 !important;
+	color:#fff;
+}
+.ship_list .ship_onfleet-color2 {
+	background: #527e51 !important;
+	color:#fff;
+}
+.ship_list .ship_onfleet-color3 {
+	background: #878533 !important;
+	 color:#fff;
+ }
+.ship_list .ship_onfleet-color4 {
+	background: #946e3d !important;
+	color:#fff;
+}
+.ship_list .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.ship_list .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.ship_list .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.ship_list .ship_item .ship_morale.sparkled {
+	background:#b1b101;
+	color:#000;
+}
+.ship_list .ship_item .ship_hp.max {
+	background:#09a709;
+}
+.ship_list .ship_item .ship_fp.max {
+	background:#833232;
+}
+.ship_list .ship_item .ship_tp.max {
+	background:#073e78;
+}
+.ship_list .ship_item .ship_yasen.max {
+	background:#555555;
+	color:#ffffff;
+}
+.ship_list .ship_item .ship_aa.max {
+	background:#935b07;
+}
+.ship_list .ship_item .ship_ar.max {
+	background:#947600;
+}
+.ship_list .ship_item .ship_stat span.stat_left {
+	color:#999999;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk,
+.ship_list .ship_item.even .ship_field.ship_lk {
+	background:#116311;
+}
+.ship_list .ship_item.odd .ship_field.ship_lk.max,
+.ship_list .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.ship_list .ship_item .sup {
+	color:#999999;
+}
+.ship_list .ship_item .ship_equip span {
+	color:#999999;
+}
+.ship_list .ship_item .ship_equip .ship_equip_ex .empty {
+	background:#555555;
 }
 
 /* OVERRIDES
@@ -497,26 +827,44 @@ button, input, select, textarea {
 	
 }
 /* Ship List */
-.tab_ships .massSelect .hover {
+.tab_ships .filters .fold_button {
+	background:#cccccc;
+}
+.tab_ships .massSelect .hover,
+.tab_ships .ship_export .hover {
 	color:#ffffff
+}
+.tab_ships .massSelect .hover {
+	border-radius:0px !important;
 }
 .tab_ships .massSelect .hover.on {
 	color:#ffcc00;
 	background: #5f5f5f;
 	border-radius:0px !important;
 }
-.tab_ships .massSelect dl{
+.tab_ships .massSelect dl {
 	width: 215px !important;
 }
 .tab_ships .ship_header .ship_stat img {
 	filter: invert(100%);
 	-webkit-filter: invert(100%);
 }
-.tab_ships .filters .ship_filter_type:hover {
+.tab_ships .filters .massSelect .hover:hover,
+.tab_ships .filters .ship_filter_type:hover,
+.tab_ships .ship_export .hover:hover,
+.tab_ships .advanced_sorter .adv_sorter:hover,
+.tab_ships .control_buttons .reset_default:hover {
 	background:#555555;
 }
-.tab_ships .advanced_sorter .adv_sorter:hover {
-	background:#555555;
+.tab_ships .show_name_filter .name_criteria,
+.tab_ships .ship_level_filter input {
+	border:1px solid #888888;
+}
+.tab_ships .ship_level_filter {
+	margin-left: 14px !important;
+}
+.tab_ships .ship_count {
+	width:215px !important;
 }
 .tab_ships .advanced_sorter .filter_box {
 	border:1px solid #888888;
@@ -583,6 +931,21 @@ button, input, select, textarea {
 	background:#b1b101;
 	color:#000;
 }
+.tab_ships .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_ships .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_ships .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_ships .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.tab_ships .ship_item .ship_hp.max {
+	background:#09a709;
+}
 .tab_ships .ship_item .ship_fp.max {
 	background:#833232;
 }
@@ -599,14 +962,25 @@ button, input, select, textarea {
 .tab_ships .ship_item .ship_ar.max {
 	background:#947600;
 }
-.tab_ships .ship_item.odd .ship_field.ship_lk{
-	background:#116311;
+.tab_ships .ship_item .ship_stat span.stat_left {
+	color:#999999;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk,
 .tab_ships .ship_item.even .ship_field.ship_lk {
 	background:#116311;
 }
+.tab_ships .ship_item.odd .ship_field.ship_lk.max,
+.tab_ships .ship_item.even .ship_field.ship_lk.max {
+	background:#09a709;
+}
+.tab_ships .ship_item .ship_lk .sub {
+	color:#999999;
+}
+.tab_ships .ship_item .ship_equip span {
+	color:#999999;
+}
 .tab_ships .ship_item .ship_equip .ship_equip_ex .empty {
-	background:#555555 !important;
+	background:#555555;
 }
 
 /* Construction */
@@ -633,15 +1007,22 @@ button, input, select, textarea {
 .tab_builds .color_baux {
 	background:#b68f55;
 }
+.tab_builds .filters {
+	height:65px !important;
+}
+.tab_builds .filters .build_rsc1,
 .tab_builds .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_builds .filters .build_rsc2,
 .tab_builds .build_item .build_rsc2 {
 	color:#dec558;
 }
+.tab_builds .filters .build_rsc3,
 .tab_builds .build_item .build_rsc3 {
 	color:#cccccc;
 }
+.tab_builds .filters .build_rsc4,
 .tab_builds .build_item .build_rsc4 {
 	color:#b68f55;
 }
@@ -669,32 +1050,41 @@ button, input, select, textarea {
 .tab_lscs .color_baux {
 	background:#b68f55;
 }
-.tab_lscs .build_item .build_id {
-	width:45px !important;
+.tab_lscs .filters {
+	height:65px !important;
 }
-.tab_lscs .build_item .build_rsc1 {
-	width:50px !important;
+.tab_lscs .filters .secretary_ship,
+.tab_lscs .filters .build_result {
+	width:90px !important;
+}
+.tab_lscs .build_item .build_name {
+	width:105px !important;
+}
+.tab_lscs .build_item .build_rsc {
 	margin:0px !important;
+}
+.tab_lscs .filters .build_rsc1,
+.tab_lscs .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_lscs .filters .build_rsc2,
 .tab_lscs .build_item .build_rsc2 {
-	width:50px !important;
-	margin:0px !important;
 	color:#dec558;
 }
+.tab_lscs .filters .build_rsc3,
 .tab_lscs .build_item .build_rsc3 {
-	width:50px !important;
-	margin:0px !important;
 	color:#cccccc;
 }
+.tab_lscs .filters .build_rsc4,
 .tab_lscs .build_item .build_rsc4 {
-	width:50px !important;
-	margin:0px !important;
 	color:#b68f55;
 }
+.tab_lscs .filters .build_devmat,
 .tab_lscs .build_item .build_devmat {
 	color:#009999;
-	margin:0px 10px 0px 0px !important;
+}
+.tab_lscs .build_item .build_devmat {
+	margin-right:10px !important;
 }
 /* Docking */
 .tab_docking .ship_item.odd .ship_field {
@@ -705,6 +1095,18 @@ button, input, select, textarea {
 }
 .tab_docking .ship_item:hover .ship_field {
 	background:#000000;
+}
+.tab_docking .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_docking .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_docking .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_docking .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
 }
 .tab_docking .ship_item .ship_status {
 	color:#ffffff;
@@ -772,6 +1174,9 @@ button, input, select, textarea {
 .tab_expcalc .ship_goal {
 	background-color:#333333;
 	border-radius: 0px !important;
+}
+.tab_expcalc .ship_goal.goaled {
+	background-color:#968300;
 }
 .tab_expcalc .ship_goal.highlight_stype {
 	background-color:#330000;
@@ -961,24 +1366,25 @@ button, input, select, textarea {
 }
 
 /* Crafting */
+.tab_crafts .filters {
+	height:65px !important;
+}
 .tab_crafts .build_pages {
 	margin-bottom:10px;
 }
-.tab_crafts .build_item {
-	
-}
-.tab_crafts .build_item .build_rsc {
-	font-size:14px;
-}
+.tab_crafts .filters .build_rsc1,
 .tab_crafts .build_item .build_rsc1 {
 	color:#92c992;
 }
+.tab_crafts .filters .build_rsc2,
 .tab_crafts .build_item .build_rsc2 {
 	color:#dec558;
 }
+.tab_crafts .filters .build_rsc3,
 .tab_crafts .build_item .build_rsc3 {
 	color:#cccccc;
 }
+.tab_crafts .filters .build_rsc4,
 .tab_crafts .build_item .build_rsc4 {
 	color:#b68f55;
 }
@@ -1037,12 +1443,25 @@ button, input, select, textarea {
 	border-bottom:1px solid #777;
 	margin:0px !important;
 }
+.tab_akashi .equipment.equipped {
+	background:#4c4100;
+}
 .tab_akashi .equipment.disabled {
 	opacity:0.4;
 	background:#621f1f;
 }
+.tab_akashi .eq_res .eq_res_line {
+	border-radius:0px !important;
+	width:346px !important;
+	padding-left:1px !important;
+}
+.tab_akashi .eq_res .eq_res_line.locked {
+	background:#4c4100;
+	border-radius:0px;
+}
 .tab_akashi .eq_res .eq_res_line.insufficient {
-	background:#710 !important;
+	background:#621f1f;
+	border-radius:0px;
 }
 .tab_akashi .eq_res .insufficient {
 	color:#f10 !important;
@@ -1087,9 +1506,6 @@ button, input, select, textarea {
 .detail_field.incomplete {
 	background:#623636;
 }
-.tab_fleet .fleet_ships {
-	height:160px;
-}
 .ui-tooltip-content .ship_tooltip .ship_full_name span.ship_yomi {
 	color:#777 !important;
 }
@@ -1116,15 +1532,35 @@ button, input, select, textarea {
 	border-bottom-color:#777 !important;
 }
 
+.tab_fleet .fleet_list {
+	padding:0px 0px 0px !important;
+}
+
+.tab_fleet .fleet_ships {
+	height:90px !important;
+}
+.tab_fleet .fleet_ships.horizontal {
+	height:175px !important;
+}
+.tab_fleet .fleet_ships.max_slot6 {
+	height:107px !important;
+}
+
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:175px;
-	margin:5px 2px 0px 0px;
+	height:88px;
+	margin:2px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
-	position:relative;
 	overflow:hidden;
+}
+.tab_fleet .max_slot6 .fleet_ship {
+	height:105px;
+}
+.tab_fleet .fleet_ship.horizontal {
+	min-height:171px !important;
+	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
 	width:110px;
@@ -1137,7 +1573,7 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_pic {
 	width:108px;
-	height:80px;
+	height:85px;
 	-webkit-mask-image: -webkit-linear-gradient(top, 
 		rgba(34,34,34,0) 0%,
 		rgba(34,34,34,1) 30%,
@@ -1149,9 +1585,9 @@ button, input, select, textarea {
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:150px;
-	height:150px;
-	margin:-40px 0px 0px -21px
+	width:140px;
+	height:140px;
+	margin:-32px 0px 0px -16px
 }
 
 .tab_fleet .fleet_ship .ship_lv {
@@ -1169,16 +1605,22 @@ button, input, select, textarea {
 	font-size:12px;
 	color:#cccccc;
 	text-shadow:1px 1px 3px #000,
-	-1px -1px 3px #000,
-	1px 1px 3px #000;
+		-1px -1px 3px #000,
+		1px 1px 3px #000;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
 	height:20px;
 	line-height:20px;
 	color:#fff;
 	text-shadow:2px 2px 5px #000,
-	-2px -2px 5px #000,
-	2px 2px 5px #000;
+		-2px -2px 5px #000,
+		2px 2px 5px #000;
+}
+.tab_fleet .fleet_ship .ship_luck {
+	display:none !important;
+}
+.tab_fleet .fleet_ship .ship_morale {
+	display:none !important;
 }
 .tab_fleet .fleet_ship .ship_name {
 	width:110px;
@@ -1189,43 +1631,81 @@ button, input, select, textarea {
 	font-size:12px;
 	font-weight:bold;
 	color:#fff;
+	text-shadow:2px 2px 5px #000,
+		-2px -2px 5px #000,
+		2px 2px 5px #000;
 }
 .tab_fleet .fleet_ship .ship_gear {
 	width:110px;
 	height:17px;
 	line-height:17px;
 	margin:0px 0px 1px 0px;
-	/*background:#ccf;*/
-	font-size:12px;
-}
-.tab_fleet .fleet_ship .gear_icon {
-	width:17px;
-	height:17px;
-	margin:0px 3px 0px 0px;
-	/*background:#fcc;*/
-	float:left;
-}
-.tab_fleet .fleet_ship .gear_icon img {
-	width:17px;
-	height:17px;
-}
-.tab_fleet .fleet_ship .gear_name {
-	width:85px;
-	height:17px;
-	/*background:#cfc;*/
-	float:left;
 	font-size:10px;
-	white-space: nowrap;
-	overflow:hidden;
+}
+.tab_fleet .fleet_ship .slot_capacity.shouha {
+	color:#fe0;
+}
+.tab_fleet .fleet_ship .slot_capacity.chuuha {
+	color:#f90;
+}
+.tab_fleet .fleet_ship .slot_capacity.taiha {
+	color:#f10;
+}
+.tab_fleet .fleet_ship .slot_capacity.empty {
+	color:#777;
+}
+.tab_fleet .fleet_ship .slot_capacity.unused {
+	color:#555;
+}
+.tab_fleet .fleet_ship.horizontal .gear_name {
+	width:77px !important;
+}
+.tab_fleet .fleet_ship .gear_ace {
+	z-index:1;
+	background:linear-gradient(to right, rgba(255,255,255,0) 0%, #131313 20%);
+}
+.tab_fleet .fleet_ship .gear_stars {
+	color:#45a9a5;
+	z-index:2;
+	background:linear-gradient(to right, rgba(255,255,255,0) 0%, #131313 30%);
+}
+.tab_fleet .fleet_ship .ship_index {
+	bottom: 0px;
+	right: 2px;
+	color: #777;
+	text-shadow: 0px 0px 3px #131313,
+		-1px -1px 1px #131313,
+		1px -1px 1px #131313,
+		-1px 1px 1px #131313,
+		1px 1px 1px #131313;
+}
+
+.tab_fleet .ss_button {
+	filter: invert(100%);
+	-webkit-filter: invert(100%);
+	margin-top: -10px !important;
 }
 
 /* LOCKING
 --------------------------------*/
-.tab_locking .lock_mode_1 { background:#044d67; }
-.tab_locking .lock_mode_2 { background:#2c4e2c; }
-.tab_locking .lock_mode_3 { background:#737006; }
-.tab_locking .lock_mode_4 { background:#6c4513; }
-.tab_locking .lock_mode_5 { background:#544c5c; }
+.tab_locking .controls {
+	margin: 0px 0 5px 0 !important;
+}
+
+.tab_locking .ship_list .ship_item .lock_plan {
+	border: 3px dotted #303030 !important;
+}
+
+.tab_locking .ship_list .ship_item .ship_equip span {
+	color:#cccccc;
+}
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
+	background: #5a5a5a;
+}
+.tab_locking .lock_mode .lship .level {
+	color:#fff;
+	background:#ff5722;
+}
 
 /* QUEST FLOWCHART
 --------------------------------*/
@@ -1247,7 +1727,8 @@ button, input, select, textarea {
 	font-weight:bold;
 }
 
-.tab_flowchart .questInfo.complete .questDesc {
+.tab_flowchart .questInfo.complete .questDesc ,
+.tab_flowchart .questExtraItem.complete .questDesc {
 	color:#4caf50;
 }
 .tab_flowchart .questExtraItem.active {
@@ -1287,10 +1768,24 @@ button, input, select, textarea {
 .tab_shipquests .ship_item:hover .ship_field {
 	background:#000000;
 }
+.tab_shipquests .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_shipquests .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_shipquests .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_shipquests .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
 
 /* MAPS
 --------------------------------*/
+.tab_event .sortie_controls .sortie_per_page,
 .tab_event .sortie_controls .sortie_count,
+.tab_maps .sortie_controls .sortie_per_page,
 .tab_maps .sortie_controls .sortie_count {
 	color:#fff;
 }
@@ -1345,7 +1840,7 @@ button, input, select, textarea {
 	background:#369;
 	border:1px solid #3f8cd9;
 }
-.tab_event .sortie_list .sortie_date ,
+.tab_event .sortie_list .sortie_date,
 .tab_maps .sortie_list .sortie_date {
 	color:#aaa;
 }
@@ -1425,9 +1920,23 @@ button, input, select, textarea {
 }
 /* ENCOUNTERS
 --------------------------------*/
+.tab_encounters .map_switcher {
+	height: 30px !important;
+}
+.tab_encounters .world_list {
+	margin: 5px 10px 5px 20px !important;
+}
+.tab_encounters .map_list {
+	margin: 5px 10px 5px 10px !important;
+}
+.tab_encounters .difficulty {
+	margin: 5px 10px 5px 10px !important;
+}
 .tab_encounters .encounter_record {
 	background:#414141 !important;
+	border-radius:0px !important;
 }
+
 /* PVP
 --------------------------------*/
 .tab_pvp .page_list {
@@ -1500,14 +2009,20 @@ button, input, select, textarea {
 	border:1px solid #3e3e3e !important;
 	background:#222 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.odd {
+.tab_mstship .shipInfo .aaci .aaciPattern.odd,
+.tab_mstship .shipInfo .gunfit .fitgear.odd {
 	background:#444 !important;
 }
-.tab_mstship .shipInfo .aaci .aaciPattern.even {
+.tab_mstship .shipInfo .aaci .aaciPattern.even,
+.tab_mstship .shipInfo .gunfit .fitgear.even {
 	background:#333 !important;
 }
 .tab_mstship .shipInfo .aaci .aaciPattern.triggerable {
 	background:#ed3;
+}
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitDay,
+.tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
+	border-radius:0px !important;
 }
 
 /* GEARS LIBRARY
@@ -1547,7 +2062,7 @@ button, input, select, textarea {
 	-webkit-filter:invert(100%);
 }
 .tab_compare .compare_select_back {
-	border:1px solid #77;
+	border:1px solid #777;
 	background:#292929;
 	color:#aaa;
 }
@@ -1657,15 +2172,23 @@ button, input, select, textarea {
 .tab_quotes .part_right .voice_entity.inherit {
 	background: #00344d;
 }
-.tab_quotes .part_right .voice_entity .jp_src,.en_src {
+.tab_quotes .part_right .voice_entity .subtitle.playing {
+	color: #bd7a0b;
+}
+.tab_quotes .part_right .voice_entity .jp_src,
+.tab_quotes .part_right .voice_entity .en_src {
 	background: #333;
 }
-.tab_quotes .part_right .voice_entity .sp_quote {
+.tab_quotes .part_right .voice_entity .seasonal {
 	background: #625;
 }
 .tab_quotes .part_right .voice_entity .voice {
 	border: 1px solid gray;
 	background: #00264d;
+}
+.tab_quotes .part_right .voice_entity .player audio {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 
 .tab_quotes .part_right .voice_entity.inherit .source {
@@ -1688,7 +2211,8 @@ button, input, select, textarea {
 .tab_translations .tq-item.translation_missing .tq-key,
 .tab_translations .tq-item.translation_missing .tq-from,
 .tab_translations .tq-item .tq-name.translation_missing,
-.tab_translations .tq-item .tq-desc.translation_missing {
+.tab_translations .tq-item .tq-desc.translation_missing,
+.tab_translations .tq-item .tq-trackingDesc.translation_missing {
 	color: firebrick;
 }
 .tab_translations .page_content select {
@@ -1790,4 +2314,112 @@ button, input, select, textarea {
 	line-height:20px;
 	color:#aaa;
 	font-size:12px;
+}
+
+/* LOGS
+--------------------------------*/
+.tab_logger .log_entry {
+	border-radius:0px !important;
+}
+.tab_logger .labelled_rule .date {
+	background:#222222 !important;
+}
+.tab_logger .log_entry .summary .time {
+	color:#bbb;
+}
+.tab_logger .log_entry .summary .msg .dataline {
+	color:#999 !important;
+}
+.tab_logger .log_entry .summary .msg {
+	color:#cccccc;
+}
+.tab_logger .log_entry .summary .source {
+	color:#0b1452 !important;
+}
+.tab_logger .log_entry .summary .context {
+	color:#222222 !important;
+}
+.tab_logger .log_entry .stack {
+	color:#ff1414 !important;
+}
+.bg-success {
+	background-color:#356b37;
+}
+.bg-info {
+	background-color:#00584b;
+}
+.bg-warning {
+	background-color:#5f5b10;
+}
+.bg-danger {
+	background-color:#960f30;
+}
+
+/* BLUEPRINTS
+--------------------------------*/
+.tab_blueprints .view_types {
+	background:#131313;
+	border-bottom:1px solid #444444;
+}
+
+.tab_blueprints .ship_item.odd .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item.even .ship_field {
+	background:#303030;
+}
+.tab_blueprints .ship_item:hover .ship_field {
+	background:#000000;
+}
+.tab_blueprints .ship_item .ship_lv span.i18n {
+	color:#888;
+}
+.tab_blueprints .ship_item .ship_lv span.value.married {
+	color:#d3911d;
+}
+.tab_blueprints .ship_item .ship_lv span.value.high {
+	color:#1cdb98;
+}
+.tab_blueprints .ship_item .ship_lv span.value.medium {
+	color:#36c2db;
+}
+.tab_blueprints .ship_item .need_materials .icon span.used {
+	color:#555;
+}
+
+/* SHIP_DROP
+--------------------------------*/
+.tab_shipdrop .control_panel {
+	background:#131313;
+}
+.tab_shipdrop .content_root .node_drop .ship {
+	background:#303030;
+}
+.tab_shipdrop .content_root .node_drop .useitem {
+	background:#303030;
+}
+.tab_shipdrop .ship_filter_type .filter_box {
+	border:1px solid #888888;
+}
+.tab_shipdrop .ship_filter_type .filter_check {
+	background:#ffffff;
+}
+.tab_shipdrop .massSelect .hover:hover,
+.tab_shipdrop .filters .ship_filter_type:hover {
+	background:#555555;
+}
+.tab_shipdrop .massSelect .hover {
+	color:#ffffff
+}
+.tab_shipdrop .massSelect .hover.on {
+	color:#ffcc00;
+	background: #5f5f5f;
+	border-radius:0px !important;
+}
+.tab_shipdrop .massSelect dl.rank_selector {
+	width:300px !important;
+}
+.tab_shipdrop .filters .time_input input {
+	border:1px solid #555;
+	background:#333;
 }

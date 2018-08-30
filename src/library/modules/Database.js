@@ -148,7 +148,7 @@ Uses Dexie.js third-party plugin on the assets directory
 							expedition: "++id,hq,data,mission,fleet,shipXP,admiralXP,items,time",
 							/** Naval Overall Proposal
 							Keys        DataType        Description
-							ID          PRIMARY-AUTOINC 
+							ID          PRIMARY-AUTO-INCREMENT
 							HQ          char[8]         Describes the HQ ID of the admiral
 							Hour        integer         Describes the UTC time, as standard of resources and consumables
 							Type        char[*]         Representing the material/useitem change method
@@ -168,8 +168,7 @@ Uses Dexie.js third-party plugin on the assets directory
 									/** data migrating process
 									    ship master id, level, and equipment (if available)
 									  will be transferred to the standard sortie json format.
-									  any other data that remain unknown, are kept it's
-									  unknownness.
+									  any other data that remain unknown.
 									--------------------------------------------------------- */
 									mission.fleet.push({
 										mst_id: KC3ShipManager.get(x[0]).masterId,
@@ -230,7 +229,16 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.log("Database v75", t);
 						},
 						vr: 75,
-					}
+					},
+					{
+						ch: {
+							logs: "++id,type,timestamp,context",
+						},
+						up: function (t){
+							console.log("Databse v76", t);
+						},
+						vr: 76,
+					},
 					/*
 					Database versions are only integers, no decimals.
 					7.2 was detected as 72 by chrome, and thus specifying 8 is actually lower version
@@ -263,7 +271,14 @@ Uses Dexie.js third-party plugin on the assets directory
 					dbVer.upgrade(dbCurr.up);
 				}
 			});
-			this.con.open();
+			return this.con.open();
+		},
+
+		loadIfNecessary :function() {
+			if (!(this.con.isOpen && this.con.isOpen())) {
+				return this.init();
+			}
+			return Promise.resolve();
 		},
 		
 		clear :function(callback){
@@ -313,6 +328,10 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.sortie.add(data).then(callback);
 		},
 		
+		updateNodes :function(id, newNodes){
+			this.con.sortie.update(id, {nodes: newNodes});
+		},
+
 		Battle :function(data){
 			data.hq = this.index;
 			this.con.battle.add(data);
@@ -384,6 +403,9 @@ Uses Dexie.js third-party plugin on the assets directory
 					if(!data.name && !!oldData.name){
 						data.name = oldData.name;
 					}
+					if(!data.exp && !!oldData.exp){
+						data.exp = oldData.exp;
+					}
 				}
 				self.con.encounters.put(data).then(callback);
 			});
@@ -393,55 +415,98 @@ Uses Dexie.js third-party plugin on the assets directory
 			data.hq = this.index;
 			this.con.pvp.add(data).then(callback);
 		},
+
+		Log :function (data, { expireAt }){
+			return KC3Database.deleteExpiredLogs(expireAt)
+				.then(() => KC3Database.addLog(data));
+		},
+
+		deleteExpiredLogs :function(expireAt){
+			const promises = Object.keys(expireAt).map((logType) => {
+				const expireTime = expireAt[logType];
+				return this.con.logs
+					.where('timestamp')
+					.belowOrEqual(expireTime)
+					.and(({ type }) => type === logType)
+					.delete();
+			});
+			return Dexie.Promise.all(promises);
+		},
+
+		addLog :function(data){
+			return this.con.logs.add(data);
+		},
 		
-		/* [GET] Retrive logs from Local DB
-		--------------------------------------------*/
-		get_build :function(pageNumber, callback){
-			var itemsPerPage = 30;
-			this.con.build
-				.where("hq").equals(this.index)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+		get_build :function(filter, pageNumber, itemsPerPage, callback){
+			return this.con.build
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_build: function(callback){
-			this.con.build
-				.where("hq").equals(this.index)
-				.count(callback);
+		count_build :function(filter, callback){
+			return this.con.build
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).count(callback);
 		},
 		
-		get_lscs :function(pageNumber, callback){
-			var itemsPerPage = 30;
-			this.con.lsc
-				.where("hq").equals(this.index)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+		uniquekeys_build :function(indexedKey, callback){
+			return this.con.build.orderBy(indexedKey).uniqueKeys(callback);
+		},
+		
+		get_lscs :function(filter, pageNumber, itemsPerPage, callback){
+			return this.con.lsc
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_lscs: function(callback){
-			this.con.lsc
-				.where("hq").equals(this.index)
-				.count(callback);
+		count_lscs :function(filter, callback){
+			return this.con.lsc
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).count(callback);
 		},
 		
-		get_expeds :function(pageNumber, expeds, fleets, callback){
-			// console.debug("expeds", expeds);
-			var itemsPerPage = 20;
+		uniquekeys_lscs :function(indexedKey, callback){
+			return this.con.lsc.orderBy(indexedKey).uniqueKeys(callback);
+		},
+		
+		get_expeds :function(pageNumber, itemsPerPage, expeds, fleets, sparkled, callback){
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
+				.and(function(exped){
+					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
+					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_expeds: function(expeds, fleets, callback){
+		count_expeds: function(expeds, fleets, sparkled, callback){
 			this.con.expedition
 				.where("hq").equals(this.index)
 				.and(function(exped){ return expeds.indexOf(exped.mission) > -1; })
-				.count(callback);
+				.and(function(exped){ return fleets.indexOf(exped.fleetN) > -1; })
+				.and(function(exped){
+					const fleetArr = Array.isArray(exped.fleet) ? exped.fleet : [];
+					return sparkled(fleetArr.reduce((sp, sh) => sh.morale > 49 ? sp + 1 : sp, 0));
+				}).toArray(function(arr) {
+					const gs = arr.reduce((sum, curr) => curr.data.api_clear_result == 2 ? sum + 1 : sum, 0);
+					const ns = arr.reduce((sum, curr) => curr.data.api_clear_result  > 0 ? sum + 1 : sum, 0);
+					callback(arr.length, gs, ns);
+				});
 		},
 		
 		count_normal_sorties: function(callback){
@@ -599,7 +664,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_sortie_data :function(sortie_id, callback){
+		get_sortie_data :function(sortie_id, callback, errorCallback){
 			var self = this;
 			var sortie_data = {};
 			this.con.sortie
@@ -614,8 +679,9 @@ Uses Dexie.js third-party plugin on the assets directory
 							console.debug("battleList", battleList);
 							sortie_data.battles = battleList;
 							callback(sortie_data);
-						});
-				});
+						}).catch(errorCallback
+							|| function(e){console.error(e);});
+				}).catch(errorCallback || function(e){console.error(e);});
 		},
 		
 		get_battle : function(mapArea, mapNo, battleNode, enemyId, callback) {
@@ -666,7 +732,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		
 		get_pvps :function(pageNumber, callback){
 			var itemsPerPage = 10;
-			this.con.pvp
+			return this.con.pvp
 				.where("hq").equals(this.index)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
@@ -674,7 +740,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_pvp_data :function(pvp_id, callback){
-			this.con.pvp
+			return this.con.pvp
 				.where("id").equals(pvp_id)
 				.toArray(callback);
 		},
@@ -707,7 +773,7 @@ Uses Dexie.js third-party plugin on the assets directory
 				this.con.enemy
 					.where("id").equals(shipId)
 					.toArray(function(matchList){
-						console.debug("matchList", matchList);
+						//console.debug("matchList", matchList);
 						if(matchList.length > 0){
 							callback(matchList[0]);
 						}else{
@@ -716,7 +782,7 @@ Uses Dexie.js third-party plugin on the assets directory
 					});
 				return true;
 			} catch (e) {
-				console.error(e.stack);
+				console.warn(e);
 			}
 		},
 		
@@ -753,19 +819,27 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		get_devmt :function(pageNumber, callback){
-			var itemsPerPage = 25;
-			this.con.develop
-				.where("hq").equals(this.index)
-				.reverse()
-				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
+		get_devmt :function(filter, pageNumber, itemsPerPage, callback){
+			return this.con.develop
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).reverse()
+				.offset((pageNumber - 1) * itemsPerPage).limit(itemsPerPage)
 				.toArray(callback);
 		},
 		
-		count_devmt: function(callback){
-			this.con.develop
-				.where("hq").equals(this.index)
-				.count(callback);
+		count_devmt :function(filter, callback){
+			return this.con.develop
+				.filter(r => {
+					if(r.hq !== this.index) return false;
+					return filter(r);
+				}).count(callback);
+		},
+		
+		uniquekeys_devmt :function(indexedKey, callback){
+			// troublesome to extract collection by hq first, might be slower
+			return this.con.develop.orderBy(indexedKey).uniqueKeys(callback);
 		},
 		
 		count_sortie_battle: function(callback, startSecs, endSecs, world, map){
@@ -854,7 +928,33 @@ Uses Dexie.js third-party plugin on the assets directory
 				.reverse()
 				.toArray()
 				.then (callbackSucc || function(){})
-				.catch(callbackFail || function(e){console.error(e.stack);});
+				.catch(callbackFail || function(e){console.error(e);});
+		},
+
+		count_log_entries :function (filters) {
+			return filters.reduce((tableOrCollection, filter, index) => {
+				if (index === 0) {
+					// we have a Table
+					return tableOrCollection.filter(filter);
+				}
+				// otherwise we have a Collection
+				return tableOrCollection.and(filter);
+			}, this.con.logs).count();
+		},
+
+		get_log_entries :function ({ pageNumber, itemsPerPage, filters }) {
+			const collection = this.con.logs.orderBy('timestamp').reverse();
+
+			const filteredCollection = filters.reduce((result, filter) => result.and(filter), collection);
+
+			return filteredCollection
+				.offset((pageNumber - 1) * itemsPerPage)
+				.limit(itemsPerPage)
+				.toArray();
+		},
+
+		delete_log_entries :function () {
+			return this.con.logs.clear();
 		},
 		
 	};
