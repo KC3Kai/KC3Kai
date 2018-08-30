@@ -2912,31 +2912,31 @@ KC3改 Ship Object
 			.toggle(!!modLeftStats.fp);
 		$(".stat_fp .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.fp, optionalNumber(bonusStats.fp)))
-			.toggle(!!equipDiffStats.fp);
+			.toggle(!!equipDiffStats.fp || !!bonusStats.fp);
 		$(".stat_ar .current", tooltipBox).text(shipObj.ar[0]);
 		$(".stat_ar .mod", tooltipBox).text(signedNumber(modLeftStats.ar))
 			.toggle(!!modLeftStats.ar);
 		$(".stat_ar .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.ar, optionalNumber(bonusStats.ar)))
-			.toggle(!!equipDiffStats.ar);
+			.toggle(!!equipDiffStats.ar || !!bonusStats.ar);
 		$(".stat_tp .current", tooltipBox).text(shipObj.tp[0]);
 		$(".stat_tp .mod", tooltipBox).text(signedNumber(modLeftStats.tp))
 			.toggle(!!modLeftStats.tp);
 		$(".stat_tp .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.tp, optionalNumber(bonusStats.tp)))
-			.toggle(!!equipDiffStats.tp);
+			.toggle(!!equipDiffStats.tp || !!bonusStats.tp);
 		$(".stat_ev .current", tooltipBox).text(shipObj.ev[0]);
 		$(".stat_ev .level", tooltipBox).text(signedNumber(maxDiffStats.ev))
 			.toggle(!!maxDiffStats.ev);
 		$(".stat_ev .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.ev, optionalNumber(bonusStats.ev)))
-			.toggle(!!equipDiffStats.ev);
+			.toggle(!!equipDiffStats.ev || !!bonusStats.ev);
 		$(".stat_aa .current", tooltipBox).text(shipObj.aa[0]);
 		$(".stat_aa .mod", tooltipBox).text(signedNumber(modLeftStats.aa))
 			.toggle(!!modLeftStats.aa);
 		$(".stat_aa .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.aa, optionalNumber(bonusStats.aa)))
-			.toggle(!!equipDiffStats.aa);
+			.toggle(!!equipDiffStats.aa || !!bonusStats.aa);
 		$(".stat_ac .current", tooltipBox).text(shipObj.carrySlots());
 		const canOasw = shipObj.canDoOASW();
 		$(".stat_as .current", tooltipBox).text(shipObj.as[0])
@@ -2945,7 +2945,7 @@ KC3改 Ship Object
 			.toggle(!!maxDiffStats.as);
 		$(".stat_as .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.as, optionalNumber(bonusStats.as)))
-			.toggle(!!equipDiffStats.as);
+			.toggle(!!equipDiffStats.as || !!bonusStats.as);
 		$(".stat_as .mod", tooltipBox).text(signedNumber(modLeftStats.as))
 			.toggle(!!modLeftStats.as);
 		$(".stat_sp", tooltipBox).text(shipObj.speedName())
@@ -2955,7 +2955,7 @@ KC3改 Ship Object
 			.toggle(!!maxDiffStats.ls);
 		$(".stat_ls .equip", tooltipBox)
 			.text("({0}{1})".format(nakedStats.ls, optionalNumber(bonusStats.ls)))
-			.toggle(!!equipDiffStats.ls);
+			.toggle(!!equipDiffStats.ls || !!bonusStats.ls);
 		$(".stat_rn", tooltipBox).text(shipObj.rangeName())
 			.toggleClass("RangeChanged", shipObj.range != shipObj.master().api_leng);
 		$(".stat_lk .current", tooltipBox).text(shipObj.lk[0]);
