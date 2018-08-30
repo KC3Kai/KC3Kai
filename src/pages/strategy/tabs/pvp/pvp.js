@@ -6,16 +6,15 @@
 	KC3StrategyTabs.pvp.definition = {
 		tabSelf: KC3StrategyTabs.pvp,
 		
-		box_record: false,
-		box_ship: false,
-		
 		exportingReplay: false,
 		stegcover64: "",
 		
 		toggleMode: 1,
 		itemsPerPage: 10,
 		
-		init :function(){},
+		init :function(){
+			this.locale = KC3Translation.getLocale();
+		},
 		reload :function(){
 		},
 		execute :function(){
@@ -26,9 +25,9 @@
 				self.pages = Math.ceil( result / self.itemsPerPage );
 				if(self.pages > 0){
 					self.showPagination();
-					self.showPage(1);
 				} else {
 					$(".tab_pvp .pagination").hide();
+					$("#pvp_list").empty();
 				}
 				$(".tab_pvp .toggles .pvp_count").text(
 					"Total pages: {1}, battles: {0}".format(self.items, self.pages, self.itemsPerPage)
@@ -85,7 +84,7 @@
 		/* SHOW SPECIFIC PAGE
 		---------------------------------*/
 		showPage :function(pageNum){
-			var self = this;
+			const self = this;
 			this.toggleMode = 1;
 			$("#pvp_list").empty();
 			$(".tab_pvp .pvp_toggle").removeClass("active");
@@ -98,6 +97,8 @@
 					self.cloneBattleBox(pvpBattle);
 				});
 				$("#pvp_list").createChildrenTooltips();
+			}).catch(error => {
+				console.error("Loading PvP record failed", error);
 			});
 		},
 		
@@ -105,23 +106,41 @@
 		---------------------------------*/
 		cloneBattleBox :function(pvpBattle){
 			//console.debug("PvP battle record:", pvpBattle);
-			var self = this;
-			
-			self.box_record = $(".tab_pvp .factory .pvp_record").clone();
+			const self = this;
+			const recordBox = $(".tab_pvp .factory .pvp_record").clone();
+			const showPvpLedger = function(sortieName) {
+				KC3Database.con.navaloverall.where("type").equals(sortieName).toArray(arr => {
+					const consumptions = arr.reduce((acc, o) =>
+						acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0,0,0,0,0,0,0,0]);
+					if(arr.length && !consumptions.every(v => !v)) {
+						const tooltip = consumptions.map((v, i) => {
+							const icon = $("<img />").attr("src", "/assets/img/client/" +
+									["fuel.png", "ammo.png", "steel.png", "bauxite.png",
+									"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
+								).width(13).height(13).css("margin", "-3px 2px 0 0");
+							return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
+						}).join(" ");
+						const oldTooltip = $(".pvp_result img", recordBox).attr("title");
+						$(".pvp_result img", recordBox).removeAttr("title").attr("titlealt",
+							"{0}<br/>{1}".format(oldTooltip, tooltip)).lazyInitTooltip();
+					}
+				});
+			};
 			
 			// Basic battle info
-			$(".pvp_id", self.box_record).text(pvpBattle.id);
+			$(".pvp_id", recordBox).text(pvpBattle.id);
 			if (pvpBattle.time) {
-				let pvpTime = new Date(pvpBattle.time * 1000);
-				$(".pvp_date", self.box_record).text(pvpTime.format("mmm d"))
+				const pvpTime = new Date(pvpBattle.time * 1000);
+				$(".pvp_date", recordBox).text(pvpTime.format("mmm d", false, this.locale))
 					.attr("title", pvpTime.format("yyyy-mm-dd HH:MM:ss"));
 			} else {
-				$(".pvp_date", self.box_record).text("Unknown");
+				$(".pvp_date", recordBox).text("Unknown");
 			}
-			$(".pvp_result img", self.box_record)
-				.attr("src", "../../assets/img/client/ratings/"+pvpBattle.rating+".png")
+			$(".pvp_result img", recordBox)
+				.attr("src", `/assets/img/client/ratings/${pvpBattle.rating}.png`)
 				.attr("title", "Base EXP " + pvpBattle.baseEXP );
-			$(".pvp_dl", self.box_record).data("id", pvpBattle.id);
+			$(".pvp_dl", recordBox).data("id", pvpBattle.id);
+			if (pvpBattle.sortie_name) showPvpLedger(pvpBattle.sortie_name);
 			
 			// Player fleet
 			$.each(pvpBattle.fleet, function(index, curShip){
@@ -129,7 +148,7 @@
 				if (pvpBattle.mvp[0] == index+1) {
 					curShip.mvp = true;
 				}
-				self.cloneShipBox(curShip, $(".pvp_player", self.box_record));
+				self.cloneShipBox(curShip, $(".pvp_player", recordBox));
 			});
 			
 			// Opponent Fleet
@@ -138,89 +157,102 @@
 				self.cloneShipBox({
 					opponent: true,
 					equip: pvpBattle.data.api_eSlot[index],
-					kyouka: pvpBattle.data.api_eKyouka[index],
-					hp: pvpBattle.data.api_maxhps[index+7],
+					kyouka: (pvpBattle.data.api_eKyouka || [])[index] || [0,0,0,0],
+					hp: pvpBattle.data.api_maxhps ? pvpBattle.data.api_maxhps[index+7] : pvpBattle.data.api_e_maxhps[index],
 					stats: pvpBattle.data.api_eParam[index],
-					level: pvpBattle.data.api_ship_lv[index+1],
+					level: pvpBattle.data.api_ship_lv[0] == -1 ? pvpBattle.data.api_ship_lv[index+1] : pvpBattle.data.api_ship_lv[index],
 					mst_id: mstId,
-				}, $(".pvp_opponent", self.box_record));
+				}, $(".pvp_opponent", recordBox));
 			});
 			
-			self.fillBattleInfo(pvpBattle, $(".pvp_battle", self.box_record));
+			self.fillBattleInfo(pvpBattle, $(".pvp_battle", recordBox));
 			
-			self.box_record.appendTo("#pvp_list");
+			recordBox.appendTo("#pvp_list");
 		},
 		
 		/* CLONE ONE SHIP BOX INTO BATTLE LIST
 		---------------------------------*/
 		cloneShipBox :function(data, targetBox){
-			var self = this;
-			var shipClickFunc = function(e){
+			const self = this;
+			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var gearClickFunc = function(e){
+			const gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
-			this.box_ship = $(".tab_pvp .factory .pvp_details_ship").clone();
+			const shipBox = $(".tab_pvp .factory .pvp_details_ship").clone();
 			
-			let shipName = KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name);
-			$(".pvp_ship_icon img", this.box_ship).attr("src", KC3Meta.shipIcon(data.mst_id))
+			const shipName = KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name);
+			$(".pvp_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(data.mst_id))
 				.attr("alt", data.mst_id).click(shipClickFunc);
-			$(".pvp_ship_icon", this.box_ship).addClass("simg-"+data.mst_id);
-			$(".pvp_ship_icon", this.box_ship).addClass("hover");
-			$(".pvp_ship_name", this.box_ship).text(shipName)
+			$(".pvp_ship_icon", shipBox).addClass("simg-"+data.mst_id);
+			$(".pvp_ship_icon", shipBox).addClass("hover");
+			$(".pvp_ship_name", shipBox).text(shipName)
 				.attr("title", shipName);
 			
-			$(".pvp_ship_level span", this.box_ship).text(data.level);
+			$(".pvp_ship_level span", shipBox).text(data.level);
 			if (!data.opponent) {
-				if (data.mvp) $(".pvp_ship_mvp_icon", this.box_ship).show();
+				if (data.mvp) $(".pvp_ship_mvp_icon", shipBox).show();
 			} else {
-				$(".pvp_ship_hp span", this.box_ship).text(data.hp);
-				$(".pvp_ship_level", this.box_ship).attr("title", "HP " + data.hp);
-				$(".pvp_ship_fp", this.box_ship).text(data.stats[0]);
-				$(".pvp_ship_tp", this.box_ship).text(data.stats[1]);
-				$(".pvp_ship_aa", this.box_ship).text(data.stats[2]);
-				$(".pvp_ship_ar", this.box_ship).text(data.stats[3]);
+				$(".pvp_ship_hp span", shipBox).text(data.hp);
+				$(".pvp_ship_level", shipBox).attr("title", "HP " + data.hp);
+				$(".pvp_ship_fp", shipBox).text(data.stats[0]);
+				$(".pvp_ship_tp", shipBox).text(data.stats[1]);
+				$(".pvp_ship_aa", shipBox).text(data.stats[2]);
+				$(".pvp_ship_ar", shipBox).text(data.stats[3]);
 			}
 			
-			var thisItem, divTag, imgTag;
 			$.each(data.equip, function(index, itemMstId){
 				if (itemMstId > 0) {
-					var divTag = $("<div/>").addClass("pvp_ship_item");
+					const divTag = $("<div/>").addClass("pvp_ship_item");
 					
-					thisItem = KC3Master.slotitem(itemMstId);
-					var imgTag = $("<img/>").attr("src", "../../assets/img/items/"+thisItem.api_type[3]+".png")
+					const thisItem = KC3Master.slotitem(itemMstId);
+					const imgTag = $("<img/>").attr("src", KC3Meta.itemIcon(thisItem.api_type[3]))
 						.attr("alt", itemMstId)
 						.attr("title", KC3Meta.gearName(thisItem.api_name))
 						.click(gearClickFunc);
 					divTag.append(imgTag).addClass("hover");
 					
-					$(".pvp_ship_items", self.box_ship).append(divTag);
+					$(".pvp_ship_items", shipBox).append(divTag);
 				}
 			});
 			
-			targetBox.append(this.box_ship);
+			targetBox.append(shipBox);
 		},
 		
 		/* FILL BATTLE INFO WITH DATA
 		---------------------------------*/
 		fillBattleInfo :function(data, targetBox){
 			// Process battle, create simulated node info
-			var thisPvP = (new KC3Node()).defineAsBattle();
+			const thisPvP = (new KC3Node(0, 0, data.time)).defineAsBattle();
 			thisPvP.isPvP = true;
-			// For now, not required to simulate states of PvP sortie
+			thisPvP.letter = "PvP";
+			// Do not require to simulate states of PvP sortie
 			//KC3SortieManager.onPvP = true;
-			//KC3SortieManager.nodes.push(thisPvP);
+			//KC3SortieManager.appendNode(thisPvP);
 			
-			var battle_info_html = $(".tab_pvp .factory .pvp_battle_info").html();
+			const battle_info_html = $(".tab_pvp .factory .pvp_battle_info").html();
 			// Day Battle
 			thisPvP.engage( data.data, 1);
 			$(".pvp_battle_day", targetBox).html(battle_info_html);
 			this.fillBattleBox(thisPvP, $(".pvp_battle_day", targetBox));
 			
-			// Clean states if SortieManager is changed
-			//KC3SortieManager.onPvP = false;
-			//KC3SortieManager.nodes.length = 0;
+			if(KC3Node.debugPrediction()){
+				if(data.yasen.api_deck_id !== undefined){
+					thisPvP.night(data.yasen);
+				}
+				console.debug("PvP result rank", data.rating, data.id);
+				console.assert(data.rating == (thisPvP.predictedRankNight || thisPvP.predictedRank), "Rank prediction mismatch", data);
+				
+				console.debug("PvP result mvp", data.mvp, data.id);
+				if(thisPvP.predictedMvpCapable){
+					const predictedMvps = thisPvP.predictedMvpsNight || thisPvP.predictedMvps || [];
+					console.assert(data.mvp[0] == predictedMvps[0], "MVP prediction mismatch", data);
+				} else {
+					console.info("MVP prediction incapable");
+				}
+			}
+			
 		},
 		
 		/* FILL ONE BATTLE BOX (DAY/NIGHT)
@@ -236,7 +268,7 @@
 			$(".node_airbattle", targetBox).addClass( nodeInfo.airbattle[1] );
 			["Fighters","Bombers"].forEach(function(planeType){
 				["player","abyssal"].forEach(function(side,jndex){
-					var nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
+					const nodeName = ".node_"+(planeType[0])+(side[0]=='p' ? 'F' : 'A');
 					// Plane total counts
 					$(nodeName+"T", targetBox).text(nodeInfo["plane"+planeType][side][0]);
 					// Plane losses
@@ -250,7 +282,7 @@
 		/* PAGINATION
 		---------------------------------*/
 		showPagination :function(){
-			var self = this;
+			const self = this;
 			$(".tab_pvp .page_list").html('<ul class="pagination pagination-sm"></ul>');
 			$(".tab_pvp .pagination").twbsPagination({
 				totalPages: self.pages,
@@ -267,7 +299,7 @@
 			if(this.exportingReplay) return false;
 			this.exportingReplay = true;
 			
-			var self = this;
+			const self = this;
 			
 			$("body").css("opacity", "0.5");
 			
@@ -289,7 +321,7 @@
 			domImg.onload = function(){
 				rcontext.drawImage( domImg, 0, 0, 400, 400, 0, 0, 400, 400 );
 				
-				KC3Database.get_pvp_data( pvp_id, function(pvpData){
+				KC3Database.get_pvp_data(pvp_id, function(pvpData){
 					console.debug("Downloading reply", pvp_id, ", data:", pvpData);
 					if (pvpData.length === 0) {
 						self.exportingReplay = false;
@@ -330,7 +362,7 @@
 						fleet4: [],
 						fleetnum: 1,
 						hq: pvpData.hq,
-						id: 0,
+						id: pvpData.id,
 						support1: 0,
 						support2: 0,
 						world: 0,
@@ -338,7 +370,15 @@
 					};
 					
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#" + encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+							+ encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						self.exportingReplay = false;
+						$("body").css("opacity", "1");
+						return true;
+					} else if(e.altKey) {
+						self.copyToClipboard(JSON.stringify(encodeData), () => {
+							alert("Replay data copied to clipboard");
+						});
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
@@ -365,6 +405,9 @@
 						}
 					});
 					
+				}).catch(function(e) {
+					self.endExport(e);
+					return false;
 				});
 				
 			};
@@ -373,7 +416,7 @@
 		
 		endExport : function(error, result) {
 			if (error) {
-				console.error(error, error.stack);
+				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
 			} else if (result && result.filename) {
 				// Show a response 'cause download bar is hidden
@@ -381,6 +424,24 @@
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");
+		},
+		
+		copyToClipboard : function(stringData, successCallback) {
+			const copyHandler = function(e) {
+				e.preventDefault();
+				if(e.clipboardData) {
+					e.clipboardData.setData("text/plain", stringData);
+					if(typeof successCallback === "function") {
+						successCallback.call(this, e);
+					}
+				} else {
+					console.warn("Browser does not support Clipboard event");
+				}
+				return true;
+			};
+			document.addEventListener("copy", copyHandler);
+			document.execCommand("copy");
+			document.removeEventListener("copy", copyHandler);
 		}
 		
 	};

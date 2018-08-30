@@ -1,3 +1,5 @@
+@charset "utf-8";
+
 /* GLOBAL
 ------------------------------*/
 #factory {
@@ -22,6 +24,18 @@ html,body {
 }
 #critical.anim2 {
 	box-shadow:inset 0px 0px 60px rgba(255,0,0,0.8);
+}
+.jp_fonts {
+	font-family: "Tahoma", "Helvetica", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "Osaka", "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+.kr_fonts {
+	font-family: "AppleGothic", "Malgun Gothic", "GulimChe", "Dotum", "UnDotum", sans-serif;
+}
+.scn_fonts {
+	font-family: "Microsoft YaHei UI", "Microsoft YaHei", "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei Sharp", "WenQuanYi Zen Hei", "Heiti SC", "ST Heiti", "SimHei", sans-serif;
+}
+.tcn_fonts {
+	font-family: "Microsoft JhengHei UI", "Microsoft JhengHei", "Heiti TC", "LiHei Pro Medium", sans-serif;
 }
 
 /* MODALS
@@ -260,12 +274,16 @@ html,body {
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow: ellipsis;
+	user-select: none;
 	-webkit-user-select: none;
 	color:#ffcc00;
 }
 .module.admiral .admiral_name.censor {
 	color: transparent;
-	text-shadow: 0 0 8px rgba(255,220,0,0.9);
+	text-shadow: 0 0 8px rgba(255,220,0,0.4);
+}
+.module.admiral .admiral_name.censor:before {
+	content: 'U CANT SEE ME';
 }
 .module.admiral .admiral_comm {
 	width:130px;
@@ -330,8 +348,14 @@ html,body {
 	display:none;
 	padding:5px;
 }
+.module.activity .activity_box.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
+}
 .module.activity .activity_dismissable {
 	cursor:pointer;
+	user-select: none;
 	-webkit-user-select:none;
 }
 
@@ -374,6 +398,7 @@ html,body {
 	line-height:20px;
 	float:left;
 	color:#ccc;
+	white-space:nowrap;
 }
 .module.activity .consumable_ltext.regenCap {
 	color:#EAF918;
@@ -397,8 +422,14 @@ html,body {
 .module.activity .consumables .consumable.page2 {
 	display:none;
 }
-.module.activity .consumables .consumable.page3 {
+.module.activity .consumables .consumable.page3,
+.module.activity .consumables .consumable.page4 {
 	display:none;
+	width:60px;
+}
+.module.activity .consumables .consumable.page3 .consumable_ltext,
+.module.activity .consumables .consumable.page4 .consumable_ltext {
+	width:40px;
 }
 
 /* Expedition */
@@ -505,6 +536,14 @@ html,body {
 	background-repeat:no-repeat;
 }
 
+.module.activity .builds .timer-img.lsc {
+	background:#b70100;
+}
+.module.activity .builds .timer-img.new_ship {
+	filter:drop-shadow(0px 0px 2px #1f1);
+	-webkit-filter:drop-shadow(0px 0px 2px #1f1);
+}
+
 /*------- ACTIVITY: BATTLE -------*/
 .module.activity .activity_battle {
 	white-space:nowrap;
@@ -569,10 +608,12 @@ html,body {
 }
 /* Sortie Nodes */
 .module.activity .sortie_nodes {
-	width:180px;
+	width:auto;
+	min-width:180px;
 	height:19px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 4px 0px;
 	position:relative;
+	display:inline-flex;
 }
 .module.activity .sortie_node {
 	width:19px;
@@ -586,6 +627,10 @@ html,body {
 	font-size:10px;
 	text-align:center;
 	border:1px solid #aaa;
+}
+.module.activity .sortie_node.long_name {
+	font-size:9px;
+	letter-spacing:-1px;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -606,6 +651,11 @@ html,body {
 }
 .module.activity .sortie_node.nc_battle {
 	background:#7D0000;
+	text-shadow:
+		0px -1px 1px #7d0000,
+		1px 0px 1px #7d0000,
+		0px 1px 1px #7d0000,
+		-1px 0px 1px #7d0000;
 }
 .module.activity .sortie_node.nc_resource {
 	background:#007A00;
@@ -621,6 +671,52 @@ html,body {
 .module.activity .sortie_node.nc_avoid {
 	background:#00B3B1;
 }
+.module.activity .sortie_node.nc_night_battle {
+	background:#4233C3;
+}
+.module.activity .sortie_node.nc_night_to_day {
+	background:
+		-webkit-linear-gradient(-15deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background:
+		linear-gradient(105deg, rgba(106, 98, 241, 0.6) 25%, rgba(0,0,0,0) 25%),
+		#7d0000;
+	background-size: 400% 200%;
+	background-position: -8px 0px;
+}
+.module.activity .sortie_node.nc_air_battle {
+	background:
+		-webkit-linear-gradient(bottom left, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to top right, rgba(0,0,0,0) 75%, rgba(17, 17, 170, 0.9) 75%),
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.7) 75%),
+		#7d0000;
+	background-size: 18px 18px;
+	background-position: -9px -10px, -27px -45px;
+}
+.module.activity .sortie_node.nc_air_raid {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+		#7d0000;
+	background-size: 28px 27px;
+	background-position: -53px -66px;
+}
+.module.activity .sortie_node.nc_enemy_combined {
+	background:
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),
+		#7d0000;
+	background-size: 25px 25px;
+	background-position: -7px -7px, 0px 18px, -32px 24px, -50px 49px;
+}
+
 /* Abyss Ships */
 .module.activity .node_type_battle {
 	position: relative;
@@ -810,6 +906,12 @@ ABYSS FLEET
 	height:24px;
 	margin:3px;
 }
+.module.activity .battle_flag.battle_fish img.rounded {
+	width:25px;
+	height:25px;
+	margin-top:2px;
+	border-radius:50%;
+}
 .module.activity .battle_flag .support_exped {
 	width:12px;
 	height:12px;
@@ -990,6 +1092,74 @@ ABYSS FLEET
 	background:#D2C6FF;
 	border:1px solid #AE87E9;
 }
+/* Previously encountered */
+.module.activity .node_type_prev_encounters {
+	color:#eee;
+	font-size:12px;
+}
+.module.activity .node_type_prev_encounters .prev_encounter_label {
+	color:#ffcc00;
+	height:17px;
+}
+.module.activity .node_type_prev_encounters .encounters {
+	height:165px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.module.activity .encounters .encounter_record {
+	width:180px;
+	height:auto;
+	background:rgba(186,187,189,0.4);
+	border-radius:5px;
+	margin:0px 0px 2px 0px;
+	float:left;
+}
+.module.activity .encounters .encounter_formation {
+	width:24px;
+	height:24px;
+	background:#fff;
+	border-radius:50%;
+	margin:1px 0px 0px 2px;
+	float:left;
+}
+.module.activity .encounters .encounter_formation img {
+	width:25px;
+	height:25px;
+	vertical-align:top;
+}
+.module.activity .encounters .encounter_ships {
+	width:154px;
+	height:27px;
+	padding:1px 0px 0px 2px;
+	float:left;
+}
+.module.activity .encounters .encounter_ships.combined {
+	height:53px;
+}
+.module.activity .encounters .encounter_ship {
+	width:25px;
+	height:25px;
+	border-radius:50%;
+	margin:0px 0px 1px 0px;
+	float:left;
+}
+.module.activity .encounters .encounter_ship img {
+	width:25px;
+	height:25px;
+	vertical-align:top;
+}
+.module.activity .encounters .encounter_ship.boss {
+	box-shadow:0px 0px 1px 1px #5ef, 0px 0px 3px 2px #fe5;
+}
+.module.activity .encounters .encounter_ship.kai {
+	box-shadow:0px 0px 1px 1px #2af;
+}
+.module.activity .encounters .encounter_ship.flagship {
+	box-shadow:0px 0px 1px 1px #fc3;
+}
+.module.activity .encounters .encounter_ship.elite {
+	box-shadow:0px 0px 1px 1px #f33;
+}
 /* Text Nodes */
 .module.activity .node_type_text {
 	width:150px;
@@ -1067,15 +1237,15 @@ ABYSS FLEET
 	width:20px;
 	height:20px;
 	float:left;
-	margin:0px 5px 0px 0px;
+	margin:0px 3px 0px 0px;
 	background:#fff;
 	border-radius:10px;
-
+	text-align:center;
 }
 .module.activity .activity_crafting .equipStatIcon img {
-	width:16px;
+	max-width:18px;
 	height:16px;
-	margin:2px;
+	margin:2px 1px;
 	vertical-align:top;
 }
 .module.activity .activity_crafting .equipStatText {
@@ -1335,13 +1505,13 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_stats {
 	width:170px;
-	height:125px;
+	height:142px;
 }
 .module.activity .activity_modernization .mod_result_stat {
 	width:170px;
-	height:20px;
+	height:18px;
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 2px 0px;
 }
 .module.activity .activity_modernization .mod_result_icon {
 	width:20px;
@@ -1378,17 +1548,19 @@ ABYSS FLEET
 }
 .module.activity .activity_modernization .mod_result_note {
 	width:170px;
-	height:20px;
+	height:30px;
 	color:#aaa;
 	font-size:12px;
+	line-height:15px;
 	text-align:center;
+	overflow:hidden;
 }
 
 /* ACTIVITY: Expedition Planner
 ------------------------*/
 .module.activity .activity_expeditionPlanner {
-    text-align:center;
-    white-space:nowrap;
+	text-align:center;
+	white-space:nowrap;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
 	color:#006600;
@@ -1398,52 +1570,54 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_menu {
-    width: 100%;
-    height: 28px;
+	width: 100%;
+	height: 28px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
-  width:100%;
-  list-style: none;
-  position: relative;
-  float: left;
-  margin: 0;
-  padding: 0;
-  	background: #dddddd;
+	width: 100%;
+	list-style: none;
+	position: relative;
+	float: left;
+	margin: 0;
+	padding: 0;
+	background: #dddddd;
 	text-align: center;
 	text-decoration: none;
-	border-style:solid;
-	border-width:3px;
+	border-style: solid;
+	border-width: 3px;
 }
 
 .module.activity .activity_expeditionPlanner li {
-  background: #dddddd;
-  border-style:solid;
-  border-width:1px;
+	background: #dddddd;
+	border-style: solid;
+	border-width: 1px;
 }
 
 .module.activity .activity_expeditionPlanner li:hover {
-  background: #ffffff;
+	background: #ffffff;
 }
 
-.module.activity .activity_expeditionPlanner  li ul {
-  list-style: none;
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  padding:0;
-  width:30%;
+.module.activity .activity_expeditionPlanner li ul {
+	list-style: none;
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	padding: 0;
+	width: 50%;
+	font-size: 13px;
+	line-height: 16px;
 }
 
-.module.activity .activity_expeditionPlanner li ui li{
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: #fff;
-  width:50px;
+.module.activity .activity_expeditionPlanner li ui li {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background: #fff;
+	width: 50px;
 }
 
 
@@ -1451,7 +1625,7 @@ ABYSS FLEET
 	top:0%;
 	left:100%;
 	cursor:pointer;
-	width:150%;
+	width:100%;
 }
 
 
@@ -1465,25 +1639,33 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer {
-	margin-bottom:4px;
+	height: 20px;
+	margin-bottom: 4px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_timer_description {
-    float: left;
-    margin-right: 3px;
+	float: left;
+	text-align: left;
+	width: 110px;
+	margin-right: 3px;
+}
+.module.activity .activity_expeditionPlanner .estimated_time {
+	float: right;
+	text-align: right;
+	width: 67px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
-    text-align: center;
-    height: 20px;
-    margin-bottom: 2px;
-    display:none;
+	text-align: center;
+	height: 20px;
+	margin-bottom: 2px;
+	display:none;
 }
 .module.activity .activity_expeditionPlanner .expres_resos {
-	width:170px;
-    height: 40px;
-    margin-bottom:3px;
-    display:inline-block;
+	width: 170px;
+	height: 40px;
+	margin-bottom: 3px;
+	display: inline-block;
 }
 .module.activity .activity_expeditionPlanner .expres_divHF {/* divide half */
 	display:inline-block;
@@ -1535,16 +1717,21 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_requirements {
-    margin-bottom:4px;
+	margin-bottom:4px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
 	margin-bottom:1px;
+	white-space:initial;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
+	font-size:13px !important;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
 }
 .module.activity .activity_expeditionPlanner .requirements_textbox {
 	display:inline-block;
+	margin-left:2px;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text {
 	font-size: 14px;
@@ -1582,8 +1769,8 @@ ABYSS FLEET
 }
 .module.activity .activity_gunfit .fit_profile {
 	height:50px;
-	padding:5px 0px;
-	margin:0px 0px 5px 0px;
+	padding:3px 0px;
+	margin:0px 0px 2px 0px;
 }
 .module.activity .activity_gunfit .fit_profile_pic {
 	width:40px;
@@ -1594,23 +1781,11 @@ ABYSS FLEET
 	overflow: hidden;
 	margin:0px 5px 0px 0px;
 }
-.module.activity .activity_gunfit .fit_gear_pic {
-	width:40px;
-	height:40px;
-	border:0px none;
-	background:#333;
-}
 .module.activity .activity_gunfit .fit_profile_pic img {
 	width:42px;
 	height:42px;
 	position:relative;
 	margin:-1px 0px 0px -1px;
-}
-.module.activity .activity_gunfit .fit_gear_pic img {
-	width:32px;
-	height:32px;
-	position:relative;
-	margin:4px 0px 0px 4px;
 }
 .module.activity .activity_gunfit .fit_profile_name {
 	width:125px;
@@ -1632,35 +1807,161 @@ ABYSS FLEET
 	font-size:12px;
 	color:#ccc;
 }
-.module.activity .activity_gunfit .fit_value {
-	height:26px;
-	line-height:26px;
-	text-align:center;
+.module.activity .activity_gunfit .fit_gear {
+	height:40px;
+}
+.module.activity .activity_gunfit .fit_gear_pic {
+	width:30px;
+	height:30px;
+	border:0px none;
+	background:#333;
+}
+.module.activity .activity_gunfit .fit_gear_pic img {
+	width:30px;
+	height:30px;
+	position:relative;
+	margin:0px 0px 0px 0px;
+}
+.module.activity .activity_gunfit .fit_gear_name {
+	width:135px;
+	height:14px;
+	font-size:12px;
+	line-height:14px;
+}
+.module.activity .activity_gunfit .fit_gear_level {
+	color:#45a9a5;
 	font-weight:bold;
-	font-size:14px;
+}
+.module.activity .activity_gunfit .fit_gear_level img {
+	width:12px;
+	height:12px;
+	margin-top:1px;
+	vertical-align:text-top;
+}
+.module.activity .activity_gunfit .fit_value {
+	width:176px;
+	height:50px;
+	line-height:15px;
+	font-size:11px;
 	border-radius:8px;
 	margin:0px 0px 4px 0px;
-}
-.module.activity .activity_gunfit .fit_value.fit_bonus {
-	color:#fff;
-	background:#5a5;
-}
-.module.activity .activity_gunfit .fit_value.fit_neutral {
+	padding:1px 0px 1px 0px;
 	color:#000;
-	background:#ccc;
+	background:#aaa;
 }
-.module.activity .activity_gunfit .fit_value.fit_penalty {
-	color:#fff;
-	background:#a55;
+.module.activity .activity_gunfit .fit_value .fit_current {
+	float:left;
+	width:100%;
+	height:30px;
+	margin:0px 0px 1px 0px;
+	padding:0px 5px 0px 5px;
 }
-.module.activity .activity_gunfit .fit_value.fit_unknown {
-	color:#000;
-	background:#ccc;
+.module.activity .activity_gunfit .fit_value .fit_current .fit_label {
+	float:left;
+	width:108px;
+	height:30px;
+	margin-right:2px;
+	padding-right:2px;
+	text-align:center;
+	overflow:hidden;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown {
+	float:left;
+	width:50px;
+	text-align:center;
+	overflow:hidden;
+	white-space:nowrap;
+	display:none;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_unknown img {
+	width:14px;
+	height:14px;
+	vertical-align:text-top;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_day {
+	float:left;
+	width:50px;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_day img {
+	width:14px;
+	height:14px;
+	margin-right:1px;
+	vertical-align:text-bottom;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_night {
+	float:left;
+	width:50px;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_night img {
+	width:13px;
+	height:13px;
+	margin-right:2px;
+	vertical-align:text-bottom;
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_bonus {
+	font-weight:bold;
+	color:#3c3;
+	text-shadow:0px 0px 7px #fff, 1px 1px 1px #333;
+	-webkit-filter:drop-shadow(0px 0px 1px #eee);
+	filter:drop-shadow(0px 0px 1px #eee);
+}
+.module.activity .activity_gunfit .fit_value .fit_current .fit_penalty {
+	font-weight:bold;
+	color:#a55;
+	text-shadow:0px 0px 7px #fff, 1px 1px 1px #333;
+	-webkit-filter:drop-shadow(0px 0px 1px #eee);
+	filter:drop-shadow(0px 0px 1px #eee);
+}
+.module.activity .activity_gunfit .fit_value .fit_total {
+	float:left;
+	width:100%;
+	height:16px;
+	padding:0px 5px 0px 5px;
+	color:#eee;
+	text-align:center;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+.module.activity .activity_gunfit .scrollable {
+	width:176px;
+	max-height:134px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .scrollable::-webkit-scrollbar {
+	width: 3px;
+}
+
+.module.activity .activity_gunfit .oasw {
+	width:176px;
+	height:36px;
+	font-size:11px;
+	line-height:16px;
+	border-radius:8px;
+	padding:2px 5px 2px 5px;
+	margin:0px 0px 4px 0px;
+	color:#ddd;
+	background:#15c;
+}
+.module.activity .activity_gunfit .oasw .oasw_message {
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.module.activity .activity_gunfit .oasw .oasw_power {
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.module.activity .activity_gunfit .oasw .oasw_power .value {
+	font-weight:bold;
 }
 
 .module.activity .activity_gunfit .aaci {
 	width:176px;
-	height:88px;
+	height:auto;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	overflow-y:auto;
@@ -1742,6 +2043,56 @@ ABYSS FLEET
 .module.activity .activity_gunfit .aaci .aaciPattern.triggerable {
 	background:#777;
 }
+
+.module.activity .activity_gunfit .landing {
+	width:176px;
+	height:auto;
+	margin:0px 0px 2px 0px;
+	overflow:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_gunfit .landing .landingInfo {
+	width:155px;
+	height:20px;
+	line-height:20px;
+	margin:0px 0px 1px 6px;
+	border-radius:6px;
+	font-size:12px;
+	color:#ccc;
+	background:rgba(255,54,54,0.2);
+}
+.module.activity .activity_gunfit .landing .shipIcon {
+	width:18px;
+	height:20px;
+	margin:0px 5px 0px 5px;
+	float:left;
+}
+.module.activity .activity_gunfit .landing .shipIcon img {
+	width:18px;
+	height:18px;
+	margin-top:1px;
+	vertical-align:top;
+}
+.module.activity .activity_gunfit .landing .power {
+	width:50px;
+	height:20px;
+	margin:0px 2px 0px 0px;
+	float:left;
+	white-space:nowrap;
+	overflow:visible;
+}
+.module.activity .activity_gunfit .landing .power img {
+	width:15px;
+	height:15px;
+	vertical-align:text-top;
+}
+.module.activity .activity_gunfit .landing .power .value {
+	margin-left:2px;
+}
+.module.activity .activity_gunfit .landing .modifiers {
+	width:15px;
+}
+
 /*------- ACTIVITY: PvP Info -------*/
 .module.activity .activity_pvp {
 	padding: 5px 10px;
@@ -1972,7 +2323,7 @@ ABYSS FLEET
 	font-size: 11px;
 	border: 1px solid #faa;
 	border-radius: 17px 5px 5px 17px;
-	background-color: #555;
+	background-color: rgba(85,85,85,0.7);
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon {
 	width: 28px;
@@ -2062,6 +2413,254 @@ ABYSS FLEET
 	background-color: #fff;
 	border-radius: 10px;
 	vertical-align: inherit;
+}
+/*------- ACTIVITY: Remodel Info -------*/
+.module.activity .activity_remodel {
+	padding: 5px 10px;
+	color: #ddd;
+	font-size: 12px;
+}
+.module.activity .activity_remodel .remodel_header {
+	width: 170px;
+	height: 34px;
+	margin: 0px 0px 1px 0px;
+}
+.module.activity .activity_remodel .remodel_header .recipe_title,
+.module.activity .activity_remodel .remodel_header .result_title {
+	float: left;
+	width: 138px;
+	color: #ffcc00;
+	font-weight: bold;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.module.activity .activity_remodel .remodel_header .recipe_title span {
+	color: #3ec0bf;
+}
+.module.activity .activity_remodel .remodel_header .result_title.failure {
+	color: #f00;
+}
+.module.activity .activity_remodel .remodel_header .assistant_ship {
+	float: right;
+	width: 30px;
+	height: 30px;
+	margin-top: 2px;
+	border: 1px solid #000;
+	border-radius: 15px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodel_header .assistant_ship img {
+	width: 30px;
+	height: 30px;
+	margin: -1px 0px 0px -1px;
+}
+.module.activity .activity_remodel .remodel_scrollable {
+	width: 176px;
+	max-height: 106px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.module.activity .activity_remodel .remodel_slotlist,
+.module.activity .activity_remodel .remodel_to_improve,
+.module.activity .activity_remodel .remodel_consumptions,
+.module.activity .activity_remodel .remodel_upgrade_to,
+.module.activity .activity_remodel .remodel_improved {
+	width: 170px;
+	height: auto;
+}
+.module.activity .activity_remodel .remodelSlotItem {
+	width: 170px;
+	height: 56px;
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 5px;
+	margin: 0px 0px 2px 0px;
+	padding: 1px 1px 1px 1px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodelSlotItem.withStar {
+	height: 69px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs {
+	height: 22px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon {
+	float: left;
+	width: 40px;
+	height: 56px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_itemon {
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_itemon img {
+	width: 40px;
+	height: 56px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon {
+	float: left;
+	width: 20px;
+	height: 20px;
+	margin-right: 2px;
+	background: rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_icon img {
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_name {
+	float: left;
+	width: 106px;
+	height: 20px;
+	color: #eee;
+	line-height: 20px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_name {
+	width: 144px;
+}
+.module.activity .activity_remodel .remodelSlotItem.withStar .remodel_slot_name {
+	width: 106px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star {
+	float: left;
+	font-size: 11px;
+	font-weight: bold;
+	min-width: 38px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 0px 2px;
+	color: #45a9a5;
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_star {
+	margin-top: 3px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_star img {
+	width: 12px;
+	height: 12px;
+	margin-top: -2px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs {
+	float: left;
+	width: 127px;
+	height: 32px;
+	color: #222;
+	font-size: 11px;
+	margin-top: 2px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs::-webkit-scrollbar {
+	width: 3px;
+}
+.module.activity .activity_remodel .remodelSlotItem.noReqs .remodel_slot_reqs {
+	display: none;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs div {
+	float: left;
+	height: 15px;
+	line-height: 15px;
+	margin-left: 2px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs img {
+	width: 12px;
+	height: 12px;
+	vertical-align: text-bottom;
+	margin-right: 1px;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.req {
+	color: #ddd;
+}
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.certain {
+	color: #8ae9e4;
+	margin-left: 1px;
+	display: none;
+}
+.module.activity .activity_remodel .remodel_consumptions {
+	font-size: 11px;
+}
+.module.activity .activity_remodel .remodel_consumptions .consume_title {
+}
+.module.activity .activity_remodel .remodel_consume_item {
+	width: 170px;
+	height: 14px;
+	margin-bottom: 1px;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon {
+	float: left;
+	width: 14px;
+	height: 14px;
+	margin-right: 4px;
+	background: rgba(0, 0, 0, 0.6);
+	border-radius: 7px;
+	overflow: hidden;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_icon img {
+	width: 14px;
+	height: 14px;
+	vertical-align: top;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_slot_name {
+	float: left;
+	width: 130px;
+	height: 14px;
+	color: #45a9a5;
+	line-height: 14px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.module.activity .activity_remodel .remodel_consume_item .remodel_consume_amount {
+	float: left;
+	color: #45a9a5;
+	font-weight: bold;
+	line-height: 14px;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item {
+	float: left;
+	margin-right: 5px;
+	display: none;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item img {
+	width: 12px;
+	height: 12px;
+	vertical-align: text-top;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_star0_item .star0 {
+	color: #45a9a5;
+	font-weight: bold;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item .value {
+	color: #45a9a5;
+	margin-left: 2px;
+}
+.module.activity .activity_remodel .remodel_consumptions .owned_item .value.red {
+	color: #f00;
+}
+.module.activity .activity_remodel .remodel_upgrade_title {
+	color: #ffcc00;
+	font-size: 11px;
+	margin-top: 1px;
+}
+.module.activity .activity_remodel .remodel_footer > div {
+	float: right;
+	height: 17px;
+	line-height: 17px;
+	margin-left: 10px;
+}
+.module.activity .activity_remodel .remodel_footer .owned_devmats {
+}
+.module.activity .activity_remodel .remodel_footer .owned_screws {
+}
+.module.activity .activity_remodel .remodel_footer img {
+	width: 14px;
+	height: 14px;
+	vertical-align: text-bottom;
+	margin-right: 2px;
 }
 
 /*------- QUESTS -------*/
@@ -2177,7 +2776,7 @@ ABYSS FLEET
 	border-radius:8px;
 	background:#333333;
 	text-align:center;
-	margin:0px 0px 3px 0px;
+	margin:0px 5px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
@@ -2186,21 +2785,57 @@ ABYSS FLEET
 	width:30px;
 	height:30px;
 }
+.module.controls .fleet_lbas.badMorale {
+	border:2px solid #faa;
+}
 .module.controls .fleet_lbas.needsSupply {
 	border:2px solid #f00;
 }
+.module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
 	margin-top:-2px;
+}
+.module.controls .scrollable {
+	height:38px;
+	margin:0px 5px 3px 0px;
+	font-size:0px;
+	word-spacing:0px;
+	letter-spacing:0px;
+	white-space:nowrap;
+	overflow-x:hidden;
+	overflow-y:hidden;
+}
+.module.controls .scroll_btn {
+	width:0px;
+	height:0px;
+	margin:2px 5px 3px 0px;
+}
+.module.controls .scroll_left {
+	border-top:13px solid transparent;
+	border-bottom:13px solid transparent;
+	border-right:15px solid #999999;
+}
+.module.controls .scroll_right {
+	border-top:13px solid transparent;
+	border-bottom:13px solid transparent;
+	border-left:15px solid #999999;
+}
+.module.controls .scroll_left.disabled {
+	border-right:15px solid #333333;
+}
+.module.controls .scroll_right.disabled {
+	border-left:15px solid #333333;
 }
 .module.controls .control_btn {
 	width:40px;
 	border-radius:15px;
 	background:#999999;
-	text-align:center;
 	margin:0px 5px 0px 0px;
 	text-align:center;
 	overflow:hidden;
 	padding:3px;
+	display:inline-block;
+	float:initial;
 }
 .module.controls .control_btn img {
 	width:34px;
@@ -2214,6 +2849,11 @@ ABYSS FLEET
 /*------- SUMMARY -------*/
 .module.summary {
 
+}
+.module.summary.disabled {
+	filter:brightness(0.5);
+	-webkit-filter:brightness(0.5);
+	pointer-events:none;
 }
 .module.summary .summary_box {
 	width:61px;
@@ -2269,6 +2909,21 @@ ABYSS FLEET
 .module.summary .summary-speed .summary_text {
 	width:41px;
 }
+.module.summary .summary_sub {
+	width:12px;
+	height:12px;
+	line-height:13px;
+	border-radius:6px;
+	margin:9px 0px 0px 9px;
+	position:absolute;
+	font-size:8px;
+	text-align:center;
+	color:#78736f;
+	background:#fff;
+	overflow:hidden;
+	pointer-events:none;
+	display:none;
+}
 
 /*------- FLEET -------*/
 .module.fleet {
@@ -2293,6 +2948,10 @@ ABYSS FLEET
 	border-radius:5px;
 	padding:3px 0px 0px 0px;
 	position:relative;
+}
+.module.fleet .lship.seven {
+	height:45px;
+	margin-bottom:0px;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
@@ -2321,7 +2980,21 @@ ABYSS FLEET
 	background:#fff;
 	border-radius:9px;
 	z-index:1;
+}
+.module.fleet .lship .ex_item .gear_star {
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
 	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ex_item.item_being_used {
 	background:#fe3;
@@ -2331,7 +3004,10 @@ ABYSS FLEET
 		0px 0px 4px #ff0,
 		0px 0px 4px #ff0;
 }
-.module.fleet .lship .ex_item img {
+.module.fleet .lship .ex_item .gear_icon {
+	overflow:hidden;
+}
+.module.fleet .lship .ex_item .gear_icon img {
 	width:18px;
 	height:18px;
 	line-height:18px;
@@ -2407,6 +3083,10 @@ ABYSS FLEET
 	color:#ffffff;
 	white-space:nowrap;
 }
+.module.fleet .lship .ship_level .value.goaled {
+	filter:drop-shadow(0px 0px 2px #fe2);
+	-webkit-filter:drop-shadow(0px 0px 2px #fe2);
+}
 .module.fleet .lship .ship_hp_text {
 	width:55px;
 	height:15px;
@@ -2438,6 +3118,15 @@ ABYSS FLEET
 .module.fleet .lship .ship_hp_prediction {
 	height:9px;
 }
+.module.fleet .lship.seven .ship_hp_box {
+	height:9px;
+}
+.module.fleet .lship.seven .ship_hp_bar {
+	height:7px;
+}
+.module.fleet .lship.seven .ship_hp_prediction {
+	height:7px;
+}
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
 	top:0px;
@@ -2455,6 +3144,9 @@ ABYSS FLEET
 		-1px 0px 1px #3d1414, 1px 0px 1px #3d1414,
 		-1px 1px 1px #3d1414, 0px 1px 1px #3d1414, 1px 1px 1px #3d1414;
 	opacity:0.84;
+}
+.module.fleet .lship.seven .ship_hp_pred_value {
+	top:-1px;
 }
 
 /* ==> Akashi Timer <== */
@@ -2553,34 +3245,40 @@ ABYSS FLEET
 	height:20px;
 	float:left;
 }
+.module.fleet .lship .ship_gear.ship_gear_5 {
+	display:none;
+	position:relative;
+	left:83px;
+	top:-40px;
+}
 .module.fleet .lship .ship_gear_star {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 8px 0px 0px -5px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 13px;
-	color: #ff0;
-	background: #45a9a5;
-	pointer-events: none;
-	display: none;
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
+	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ship_gear_ace {
-	width: 12px;
-	position: absolute;
-	font-size: 8px;
-	margin: 4px 0px 0px 15px;
-	height: 12px;
-	overflow: hidden;
-	border-radius: 6px;
-	text-align: center;
-	line-height: 13px;
-	color: #ff0;
-	pointer-events: none;
-	display: none;
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:4px 0px 0px 15px;
+	height:12px;
+	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .lship .ship_gear_ace img {
 	vertical-align:middle;
@@ -2665,12 +3363,31 @@ ABYSS FLEET
 .module.fleet .lship .ship_ammo .ship_supply_bar {
 	background:#999900;
 }
+.module.fleet .lship .ship_supplies.slot5 {
+	height:20px;
+	margin-top:20px;
+}
+.module.fleet .lship .slot5 .ship_supply {
+	height:10px;
+	margin:0px 0px;
+}
+.module.fleet .lship .slot5 .ship_supply_text {
+	height:8px;
+	line-height:8px;
+	font-size:8px;
+}
+.module.fleet .lship .slot5 .ship_supply_bar {
+	height:8px;
+}
 
 .module.fleet .lship .ship_exp_box {
 	width:290px;
 	height:2px;
 	background:#555;
 	margin:0px 0px 0px 46px;
+}
+.module.fleet .lship.seven .ship_exp_box {
+	display:none;
 }
 .module.fleet .lship .ship_exp_bar {
 	height:2px;
@@ -2712,7 +3429,21 @@ ABYSS FLEET
 	background:#fff;
 	border-radius:9px;
 	z-index:1;
+}
+.module.fleet .sship .ex_item .gear_star {
+	width:12px;
+	position:absolute;
+	font-size:8px;
+	margin:8px 0px 0px -5px;
+	height:12px;
 	overflow:hidden;
+	border-radius:6px;
+	text-align:center;
+	line-height:12px;
+	color:#ff0;
+	background:#45a9a5;
+	pointer-events:none;
+	display:none;
 }
 .module.fleet .sship .ex_item.item_being_used {
 	background:#fe3;
@@ -2722,7 +3453,10 @@ ABYSS FLEET
 		0px 0px 4px #ff0,
 		0px 0px 4px #ff0;
 }
-.module.fleet .sship .ex_item img {
+.module.fleet .sship .ex_item .gear_icon {
+	overflow:hidden;
+}
+.module.fleet .sship .ex_item .gear_icon img {
 	width:18px;
 	height:18px;
 	line-height:18px;
@@ -2844,6 +3578,7 @@ ABYSS FLEET
 .module.fleet .sship .ship_bar {
 	width:120px;
 	height:2px;
+	user-select: none;
 	-webkit-user-select: none;
 }
 .module.fleet .sship .ship_bar.ship_exp {
@@ -2888,14 +3623,12 @@ ABYSS FLEET
 	line-height:20px;
 	float:left;
 	margin:0px 3px 3px 0px;
-	/*background:#fcc;*/
 }
 .module.status .status_icon {
 	width:20px;
 	height:20px;
 	float:left;
 	margin:0px 4px 0px 1px;
-	/*background:#ccf;*/
 }
 .module.status .status_icon.enclose {
 	background:#fff;
@@ -2917,6 +3650,7 @@ ABYSS FLEET
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow: ellipsis;
+	user-select: none;
 	-webkit-user-select: none;
 }
 .module.status .status_text.bad {
@@ -2924,6 +3658,9 @@ ABYSS FLEET
 }
 .module.status .status_text.good {
 	color:#afa;
+}
+.module.status .status_text.slotsWarn {
+	color:#ffa;
 }
 
 .module.status .status_support {
@@ -2957,28 +3694,40 @@ ABYSS FLEET
 .airbase .airbase_info {
 	float:left;
 }
-.airbase .base_name {
-	width:100px;
-	height:20px;
+.airbase .base_map {
+	width:18px;
+	font-size:11px;
+	font-weight:bold;
+	color:#ffcc00;
+	text-shadow:1px 1px 3px #333;
+	text-align:right;
+	line-height:20px;
+	margin:0px 4px 0px 0px;
+	white-space:nowrap;
 	overflow:hidden;
+}
+.airbase .base_name {
+	width:95px;
+	height:20px;
 	float:left;
 	color:#cccccc;
 	text-shadow:1px 1px 3px #333;
 	white-space:nowrap;
 	text-overflow:ellipsis;
+	overflow:hidden;
 	font-size:11px;
 	line-height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0px 3px 0px 0px;
 }
 
 .airbase .base_stats {
-	width:190px;
+	width:170px;
 	height:20px;
 	float:left;
 	overflow:hidden;
 }
 .airbase .base_stats .base_stat {
-	width:60px;
+	width:55px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -2996,29 +3745,42 @@ ABYSS FLEET
 .airbase .base_stats .base_stat_icon img {
 	width:16px;
 	height:16px;
-	filter: invert(100%);
-	-webkit-filter: invert(100%);
-	vertical-align: top;
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+	vertical-align:top;
 }
 .airbase .base_stats .base_stat_value {
-	width:40px;
+	width:35px;
 	height:20px;
 	line-height:20px;
 	float:left;
 	text-align:left;
-	overflow:hidden;
+	white-space:nowrap;
 	color:#cccccc;
 	font-size:11px;
+}
+.airbase .base_stats .base_stat.base_range {
+	width:40px;
+}
+.airbase .base_stats .base_stat.base_range .base_stat_value {
+	width:20px;
+}
+.airbase .base_stats .base_stat.base_afp {
+	width:75px;
+}
+.airbase .base_stats .base_stat.base_afp .base_stat_value {
+	width:50px;
 }
 .airbase .base_action {
 	width:40px;
 	height:20px;
 	line-height:20px;
+	white-space:nowrap;
 	overflow:hidden;
 	float:left;
 	color:#ffffff;
 	text-align:right;
-	font-size: 11px;
+	font-size:11px;
 }
 .airbase .base_planes {
 	width:340px;
@@ -3050,9 +3812,9 @@ ABYSS FLEET
 	width:80px;
 	text-align:center;
 	position:relative;
-	margin:0px 0px 0px -10px;
+	margin:0px -5px 0px -10px;
 }
-.base_plane_img  img {
+.base_plane_img img {
 	width:100%;
 	vertical-align:middle;
 	margin:-60% -50%;
@@ -3077,7 +3839,7 @@ ABYSS FLEET
 .base_plane_icon {
 	width:20px;
 	line-height:20px;
-	padding:2px 0px;
+	margin:2px 0px 0px 5px;
 }
 .base_plane_icon img {
 	width:20px;
@@ -3095,6 +3857,16 @@ ABYSS FLEET
 }
 .base_plane_name {
 	display:none;
+	line-height:24px;
+	font-size:11px;
+	text-shadow:2px 2px 4px #333,
+		2px 2px 4px #333;
+	color:#ccc;
+	margin:0px 0px 0px 2px;
+	width:120px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 .base_plane_count {
 	line-height:24px;
@@ -3125,7 +3897,6 @@ ABYSS FLEET
 .wrapper.h {
 	width:550px;
 	height:450px;
-	/*background:url(outline.png);*/
 }
 .h .module.admiral {
 	left:5px; top:5px;
@@ -3153,14 +3924,19 @@ ABYSS FLEET
 	left:205px; top:5px;
 }
 .h .module.controls .control_btn {
-	float:right;
+/*	float:right;*/
 	width:30px;
 	line-height:29px;
-	padding:0px;
+	padding:1px;
 }
 .h .module.controls .control_btn img {
 	width:26px;
 	height:20px;
+}
+.h .module.controls .control_btn.btn_reload_quotes img,
+.h .module.controls .control_btn.btn_reload_quests img {
+	width:22px;
+	height:22px;
 }
 .h .module.summary {
 	width:343px;
@@ -3185,6 +3961,9 @@ ABYSS FLEET
 .h .module.controls .fleet_rengo {
 	margin:0px 2px 3px 0px;
 }
+.h .module.controls .scrollable {
+	width:100px;
+}
 .h .module.status {
 	width:340px;
 	height:45px;
@@ -3196,7 +3975,6 @@ ABYSS FLEET
 .wrapper.v {
 	width:800px;
 	height:325px;
-	/*background:url(vertical.png);*/
 }
 .v .module.admiral {
 	left:5px; top:5px;
@@ -3211,6 +3989,9 @@ ABYSS FLEET
 	width:240px;
 	height:66px;
 	left:555px; top:5px;
+}
+.v .module.controls .scrollable {
+	width:175px;
 }
 .v .module.summary {
 	width:240px;
@@ -3256,7 +4037,7 @@ ABYSS FLEET
 
 .ui-tooltip {
 	max-width:500px;
-	padding:2px 5px 3px 6px;
+	padding:1px 4px 1px 5px;
 	border-width:1px !important;
 	border:1px solid #222;
 	box-shadow:0 0 5px 1px #888;
@@ -3270,14 +4051,17 @@ ABYSS FLEET
 .ui-tooltip-content p {
 	margin:0px;
 }
+.ui-tooltip-content .power_capped {
+	color:#a08;
+}
 
 .ui-tooltip-content .ship_face_tooltip {
-	width:202px;
-	height:280px;
-	padding:2px 0px 2px 0px;
+	width:252px;
+	height:314px;
+	padding:0px 0px 0px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name {
-	width:158px;
+	width:208px;
 	height:17px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;
@@ -3314,7 +4098,7 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level {
-	width:48px;
+	width:45px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3326,8 +4110,48 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .ship_level span.i18n {
 	color:#3ec0bf;
 }
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.married {
+	color:#a97417;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.high {
+	color:#107e57;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_level span.value.medium {
+	color:#36c2db;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next {
+	width:75px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_exp_next span.i18n {
+	color:#7ca99f;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale {
+	width:32px;
+	height:17px;
+	line-height:16px;
+	padding:0px 0px 0px 0px;
+	margin:0px 2px 0px 0px;
+	font-size:11px;
+	float:left;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.ui-tooltip-content .ship_face_tooltip .ship_morale img {
+	width:13px;
+	height:13px;
+	vertical-align:text-bottom;
+	margin-right:1px;
+}
 .ui-tooltip-content .ship_face_tooltip .ship_hp {
-	width:64px;
+	width:48px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;
@@ -3338,12 +4162,12 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_col {
-	width:101px;
+	width:126px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_row {
-	width:200px;
+	width:250px;
 	margin:0px 0px 0px 0px;
 	float:left;
 }
@@ -3362,9 +4186,9 @@ ABYSS FLEET
 	border-bottom-color:#fcfcfc;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_icon img {
-	width:15px;
-	height:15px;
-	margin-top:-2px;
+	max-width:19px;
+	height:16px;
+	vertical-align:bottom;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_name {
 	color:#b49a47;
@@ -3372,13 +4196,13 @@ ABYSS FLEET
 	margin:0px 0px 0px 2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value {
-	width:46px;
+	width:71px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 1px 2px;
 	margin:0px 2px 1px 0px;
 	float:left;
-	font-size:12px;
+	font-size:11px;
 	text-align:right;
 	overflow:hidden;
 	white-space:nowrap;
@@ -3387,18 +4211,47 @@ ABYSS FLEET
 	border-right-color:#f0f0f0;
 	border-bottom-color:#f0f0f0;
 }
-.ui-tooltip-content .ship_face_tooltip .stat_value.oasw {
+.ui-tooltip-content .ship_face_tooltip .stat_value .equip {
+	font-size:10px;
+	color:#888;
+	margin-right:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .mod {
+	font-size:10px;
+	color:#aaa;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .level {
+	font-size:10px;
+	color:#3ec0bf;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .luck {
+	font-size:10px;
+	color:#2b2;
+	margin-left:1px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value .oasw {
 	color:#0cd;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFaster,
-.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest {
+.ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest,
+.ui-tooltip-content .ship_face_tooltip .stat_value.RangeChanged {
 	color:#7aabb8;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_wide {
-	width:199px;
+	width:249px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_wide .slide {
+	animation:slide infinite 3s alternate 1s;
+}
+@keyframes slide {
+	from { margin-left: 0px; }
+	30% { margin-left: 0px; }
+	to { margin-left: var(--maxOverflow, -50px); }
 }
 .ui-tooltip-content .ship_face_tooltip .aa_col {
-	width: 39px;
+	width:49px;
 	height:19px;
 	line-height:17px;
 	padding:0px 2px 0px 2px;

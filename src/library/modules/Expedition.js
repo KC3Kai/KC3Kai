@@ -272,19 +272,20 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 
 						let countDaihatsu = expedRecord => {
 							let onlyDaihatsu = x => [68,193].indexOf(x) !== -1;
-							let ys = expedRecord.fleet.map( function(shipRecord) {
+							let ys = Array.isArray(expedRecord.fleet) ?
+								expedRecord.fleet.map( function(shipRecord) {
 								let dhtCount = 0;
 								// Kinu K2
 								if (shipRecord.mst_id === 487)
 									dhtCount += 1;
 								dhtCount += (shipRecord.equip || []).filter( onlyDaihatsu ).length;
 								return dhtCount;
-							});
+							}) : [];
 							return ys.reduce( (a,b) => a+b, 0 );
 						};
 
 						let countShips = expedRecord => {
-							return expedRecord.fleet.length;
+							return expedRecord.fleet.length || 0;
 						};
 
 						let daihatsuCountsFromHist = xs.map( countDaihatsu );
@@ -403,7 +404,7 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 				};
 			});
 			return mergeExpedCost( fleetActualCost );
-		} else if (cost.type === "costmodel") {
+		} else if (cost.type === "custom") {
 			return {
 				fuel: cost.fuel,
 				ammo: cost.ammo };

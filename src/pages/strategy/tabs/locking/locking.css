@@ -2,8 +2,9 @@
 	display:none;
 }
 .tab_locking .planner_area {
-	padding-top:10px;
 	-webkit-user-select: none;
+	user-select: none;
+	padding: 0 5px 0;
 }
 
 /* CONTROLS
@@ -11,34 +12,50 @@
 .tab_locking .controls {
 	width:680px;
 	height:20px;
-	margin:0px 0px 10px 0px;
+	margin:5px 0 5px 0;
 }
 .tab_locking .control {
 	height:20px;
 	line-height:20px;
-	padding:0px 10px;
+	padding:0 10px;
 	float:right;
 	border-radius:5px;
 	font-size:12px;
 	font-weight:bold;
+	margin-left:10px;
 }
 
 /* LOCKING MODES
 ------------------------------*/
 .tab_locking .lock_modes {
 	width:680px;
-	padding:5px 0px;
 }
 .tab_locking .lock_mode {
 	width:130px;
 	float:left;
-	margin:0px 6px 0px 0px;
+	margin:0 6px 0 0;
 	padding:5px 5px 5px 5px;
+}
+
+.tab_locking .lock_mode_1 {
+	background: var(--lockColor1) !important;
+}
+.tab_locking .lock_mode_2 {
+	background: var(--lockColor2) !important;
+}
+.tab_locking .lock_mode_3 {
+	background: var(--lockColor3) !important;
+}
+.tab_locking .lock_mode_4 {
+	background: var(--lockColor4) !important;
+}
+.tab_locking .lock_mode_5 {
+	background: var(--lockColor5) !important;
 }
 
 .tab_locking .map_area {
 	width:130px;
-	margin:0px 0px 5px 0px;
+	margin:0 0 5px 0;
 }
 .tab_locking .map_area .map {
 	width:30px;
@@ -46,7 +63,7 @@
 	line-height:30px;
 	float:left;
 	border-radius:20px;
-	margin:0px 5px 0px 0px;
+	margin:0 5px 0 0;
 	text-align:center;
 	background:#fff;
 	color:#000;
@@ -58,23 +75,36 @@
 	width:28px;
 	height:28px;
 	line-height:28px;
-	background:#fff;
-	border-radius:15px;
+	border-radius:14px;
 	float:left;
-	margin:0px 2px 2px 0px;
-	overflow:hidden;
+	margin:0 2px 2px 0;
 	border:1px solid #000;
+	box-shadow:0px 0px 1px #000;
 }
 .tab_locking .lock_mode .lship.gamelocked {
 	opacity:0.5;
 }
+.tab_locking .lock_mode .lship.plannedlock {
+	cursor:move;
+}
 .tab_locking .lock_mode .lship img {
 	width:28px;
 	height:28px;
+	margin:-1px 0px 0px -1px;
 	vertical-align:top;
+}
+.tab_locking .lock_mode .lship .level {
+	width:18px;
+	height:12px;
+	line-height:12px;
+	border-radius:6px;
+	margin:-12px 0px 0px -4px;
 	position:relative;
-	top:-1px;
-	left:-1px;
+	font-size:9px;
+	text-align:center;
+	text-shadow:0px 0px 0px rgba(0,0,0,0.7);
+	opacity:0.85;
+	pointer-events:none;
 }
 
 .tab_locking .lock_mode .drop_area {
@@ -82,59 +112,287 @@
 	width:120px;
 	height:50px;
 	line-height:50px;
-	margin:5px 0px 0px 0px;
+	margin:5px 0 0 0;
 	font-size:12px;
 	text-align:center;
 	color:#fff;
-	cursor:pointer;
+	cursor:default;
 }
 
-/* RESEVED LIST
+.tab_locking .shiplist_box {
+	width: 602px;
+	float: left;
+	margin: 5px 0 0 0;
+	padding: 0;
+}
+
+/* SHIP LIST - HEADER
 ------------------------------*/
-.tab_locking .reserved_list {
-	width:674px;
-	margin:20px 0px 0px 0px;
-	padding:0px 0px 10px 0px;
+.tab_locking .ship_header {
+	width: 602px;
+	height: 22px;
+	margin: 0;
 }
-.tab_locking .reserved_list .rship {
-	width:108px;
-	height:30px;
-	line-height:24px;
-	float:left;
-	/*background:#eee;*/
-	border-radius:7px;
-	margin:2px;
-	padding:3px 4px;
+
+.tab_locking .ship_header .ship_item {
+	width: 614px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0 0 3px 0;
 }
-.tab_locking .reserved_list .rship .ship_img {
-	width:24px;
-	height:24px;
-	float:left;
-	border-radius:12px;
-	border:1px solid #000;
-	/* background:#fcc; */
-	margin:0px 2px 0px 0px;
+
+.tab_locking .ship_header .ship_item .ship_sally {
+	font-weight: normal;
 }
-.tab_locking .reserved_list .rship .ship_img img {
-	width:24px;
-	height:24px;
-	position:relative;
-	top:-1px;
-	left:-1px;
+
+.tab_locking .ship_header .ship_stat img {
+	max-width: 19px;
+	height: 16px;
+	margin-top: 2px;
+	vertical-align: text-bottom;
 }
-.tab_locking .reserved_list .rship .ship_type {
-	width:32px;
-	height:24px;
-	float:left;
-	/* background:#cfc; */
-	margin:0px 2px 0px 0px;
-	font-size:12px;
-	font-weight:bold;
+
+/* SHIP LIST - BODY
+------------------------------*/
+.tab_locking .ship_list {
+	width: 602px;
+	min-height: 50px;
+	margin: 0 0 5px 0;
+	/* scroll fix */
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
-.tab_locking .reserved_list .rship .ship_lv {
-	width:40px;
-	height:24px;
-	float:left;
-	font-size:12px;
-	/* background:#ccf; */
+
+/* Row */
+.tab_locking .ship_list .ship_item {
+	width: 597px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	margin: 0 0 2px 0;
+	overflow: hidden;
+	position: relative;
+	touch-action: initial !important;
+}
+
+/* Cell */
+.tab_locking .ship_item .ship_field {
+	height: 20px;
+	float: left;
+	margin: 0 2px 0 0;
+}
+
+.tab_locking .ingame_page {
+	width: 597px;
+	height: 14px;
+	line-height: 14px;
+	font-size: 12px;
+	margin: 4px 0 2px 0;
+	text-align: left;
+	padding: 0 0 0 10px;
+	color: #aaa;
+}
+
+/* Fields: Basic */
+.tab_locking .ship_item .ship_id {
+	width: 44px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_img {
+	position: relative;
+	width: 20px;
+}
+
+.tab_locking .ship_item .ship_img img.ship_icon {
+	width: 20px;
+	height: 20px;
+	vertical-align: top;
+}
+
+.tab_locking .ship_item .ship_name {
+	width: 92px;
+	overflow: hidden;
+	position: relative;
+	white-space: nowrap;
+}
+
+.tab_locking .ship_item .ship_type {
+	width: 30px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_lv {
+	width: 50px;
+	text-align: center;
+	position: relative;
+}
+
+.tab_locking .ship_item .ship_status {
+	width: 70px;
+	text-align: center;
+	position: relative;
+}
+
+.tab_locking .ship_item .ship_bar {
+	width: 106px;
+	position: relative;
+}
+
+.tab_locking .ship_item .ship_sally {
+	width: 20px;
+	text-align: center;
+	position: relative;
+	font-weight: bold;
+}
+
+.tab_locking .ship_item .ship_stat {
+	width: 25px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_stat_mod {
+	width: 35px;
+	text-align: center;
+}
+
+.tab_locking .ship_item .ship_stat span.stat_left {
+	font-size: 8px;
+}
+
+/* Fields: Equips */
+.tab_locking .ship_item .ship_equip {
+	width: 80px;
+	margin-right: 0;
+}
+
+.tab_locking .ship_item .ship_equip_icon {
+	width: 18px;
+	height: 18px;
+	float: left;
+	overflow: hidden;
+	position: relative;
+	margin: 1px 1px 1px 1px;
+}
+
+.tab_locking .ship_item .ship_equip img {
+	width: 18px;
+	height: 18px;
+	vertical-align: top;
+}
+
+.tab_locking .ship_item .ship_equip span {
+	position: absolute;
+	display: flex;
+	right: 0;
+	bottom: 0;
+	font-size: 11px;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+
+.tab_locking .ship_list .ship_item .ship_equip .slot_open {
+	border-radius: 50%;
+}
+
+.tab_locking .ship_list .ship_item .ship_sally.lock_plan,
+.tab_locking .ship_list .ship_item .ship_sally:not([class*="lock_mode"]) {
+	cursor: pointer;
+}
+
+.tab_locking .ship_header .ship_lv,
+.tab_locking .ship_list .ship_item .ship_lv {
+	width: 25px;
+}
+
+.tab_locking .ship_item .ship_lock img {
+	width: 13px;
+	height: 13px;
+	margin: -35px 0px 0px 10px;
+	position: relative;
+}
+
+/* FILTERS
+------------------------------*/
+
+.tab_locking .filters {
+	float: left;
+	width: 88px;
+	min-height: 50px;
+	margin: 27px 0 5px 0;
+	padding: 0 0 0 2px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	font-size: 12px;
+}
+
+.tab_locking .filters .filter_name {
+	width: 55px;
+	height: 18px;
+	float: left;
+}
+
+.tab_locking .filters .filter_box {
+	width: 10px;
+	height: 10px;
+	margin: 3px 7px 0 3px;
+	float: left;
+}
+
+.tab_locking .filters .filter_box input {
+	margin: 0;
+}
+
+.tab_locking .filters .filter_group {
+	margin-bottom: 2px;
+	float: left;
+}
+
+@media only screen and (min-height: 640px) {
+	.tab_locking .filters .filter_group {
+		margin-bottom: 5px;
+	}
+}
+
+.tab_locking .ship_filter_type .filter_check {
+	background: #000;
+}
+
+.tab_locking .scroll_fix {
+	height: calc(100vh - var(--shipListOffsetTop) - 5px);
+}
+
+.tab_locking .scroll_fix::-webkit-scrollbar {
+	width: 5px;
+}
+.tab_locking .scroll_fix::-webkit-scrollbar-track {
+	background: #ddd;
+}
+.tab_locking .scroll_fix::-webkit-scrollbar-thumb {
+	background: #666;
+}
+
+.tab_locking .filters label {
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.tab_locking .filters .filter_header {
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.tab_locking .planner_area .ship_icon_dragged {
+	width: 28px;
+	height: 28px;
+}
+
+.tab_locking .ship_list .ship_item .lock_plan {
+	border: 3px dotted #FFF;
+	line-height: 16px;
 }

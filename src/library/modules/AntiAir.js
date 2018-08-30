@@ -7,8 +7,8 @@ AntiAir: anti-air related calculations
 	- shipObj: instance of KC3Ship
 		- mst: master data of either ship or gear
 		- pred: predicates, a function that accepts a single parameter and returns a boolean value
-		- predXXX: predicate combinators. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
-          in some specific way to produce a new prediate.
+		- predXXX: predicate combinations. "predXXX(pred1, pred2, ...)" combines pred1, pred2, ...
+		  in some specific way to produce a new predicate.
 
 - module contents:
 	- shipProportionalShotdownRate(shipObj)
@@ -41,7 +41,7 @@ AntiAir: anti-air related calculations
 		- fixed: fixed shotdown bonus
 		- modifier: the "K" value to "shipFixedShotdown" when this AACI is triggered
 		- icon: IDs of icons representing this kind of AACI
-		- predicateShipMst: test whether "mst" can perform this kind of AACI ingoring equipments
+		- predicateShipMst: test whether "mst" can perform this kind of AACI ignoring equipments
 		- predicateShipObj: test whether "shipObj" can perform this particular kind of AACI
 	- other not explicitly listed contents are for debugging or internal use only.
 
@@ -63,7 +63,7 @@ AntiAir: anti-air related calculations
 
 	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
-	// return the first non-falsy value or "false" if all predicates have falled.
+	// return the first non-falsy value or "false" if all predicates have failed.
 	function predAnyOf(/* list of predicates */) {
 		var args = arguments;
 		return function(x) {
@@ -104,8 +104,7 @@ AntiAir: anti-air related calculations
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
 	function isAARadar(mst) {
-		return isRadar(mst) && 
-			mst.api_tyku > 0;
+		return isRadar(mst) && mst.api_tyku >= 2;
 	}
 
 	// AAFD: check by category (36)
@@ -117,13 +116,25 @@ AntiAir: anti-air related calculations
 	// Type 3 Shell
 	var isType3Shell = categoryEq(18);
 
-	// Anti-air gun includes machine guns and rocket launchers
-	var isAAGun = categoryEq(21);
+	// Check by icon (15)
+	var isMachineGun = iconEq(15);
+
+	// Anti-air gun includes machine guns and rocket launchers,
+	// but not sure why AA stat < 3 gun not counted (only 7.7mm MG for now)
+	var isAAGun = predAllOf(isMachineGun, function(mst) {
+		return mst.api_tyku >= 3;
+	});
 
 	var isRedGun = predAnyOf(
 		iconEq(1),
 		iconEq(2),
 		iconEq(3));
+
+	function is46cmTripleMount(mst) {
+		// 46cm Kai not counted
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
+		return mst.api_id === 6; //|| mst.api_id === 276;
+	}
 	
 	var isYellowGun = iconEq(4);
 	var isFighter = categoryEq(6);
@@ -133,20 +144,50 @@ AntiAir: anti-air related calculations
 	var isLargeCaliberMainGun = categoryEq(3);
 
 	function isBuiltinHighAngleMount(mst) {
+		// use the condition also used in game for future unknown equipment
+		return isHighAngleMount(mst) && mst.api_tyku >= 8;
+		/*
 		return [
-			122 /* aki-gun */,
-			130 /* maya-gun */,
-			135 /* 90mm single HA */,
-			172 /* 5inch */
+			122, // aki-gun
+			130, // maya-gun
+			135, // 90mm single HA
+			172, // 5inch
 		].indexOf( mst.api_id ) !== -1;
+		*/
+	}
+
+	function is10cmTwinHighAngleMountKaiAMG(mst) {
+		// 10cm Twin High-angle Gun Mount Kai + Additional Machine
+		return mst.api_id === 275;
 	}
 
 	function isCDMG(mst) {
+		return isAAGun(mst) && mst.api_tyku >= 9;
+		/*
 		return [
-			131 /* 25mm triple (CD) */,
-			173 /* Bofors */,
-			191 /* QF 2-pounder */
+			131, // 25mm triple (CD)
+			173, // Bofors
+			191, // QF 2-pounder
 		].indexOf( mst.api_id ) !== -1;
+		*/
+	}
+
+	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
+
+	function is12cm30tubeRocketLauncherKai2(mst) {
+		// 12cm 30-tube Rocket Launcher Kai Ni
+		return mst.api_id === 274;
+	}
+
+	function isBritishRocketLauncher(mst) {
+		// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284 (UP Rocket Launchers embedded)
+		// 20-tube 7inch UP Rocket Launchers
+		return [300, 301].indexOf(mst.api_id) !== -1;
+	}
+
+	function isBritishPomPomGun(mst) {
+		// QF 2-pounder Octuple Pom-pom Gun Mount
+		return mst.api_id === 191;
 	}
 
 	// for equipments the coefficient is different for
@@ -169,13 +210,13 @@ AntiAir: anti-air related calculations
 	//   might be more appropriate.
 
 	function getShipEquipmentModifier(mst) {
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 6;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 4;
 		if (isAARadar(mst))
 			return 3;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
@@ -186,38 +227,49 @@ AntiAir: anti-air related calculations
 			return 0.4;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 0.35;
+		if (is46cmTripleMount(mst))
+			return 0.25;
 		if (predAnyOf(isRedGun,
 				  isYellowGun,
-				  isAAGun,
+				  isMachineGun,
 				  isFighter,
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
 			return 0.2;
-
+		// no default value for unverified equipment, might use 0.2 as default?
 		return 0;
 	}
 
+	// updated data: http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#anti-aircraft
+	// another implementation might give the latest verified data:
+	// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
 	function getShipImprovementModifier(mst) {
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 4;
-		if (isHighAngleMount(mst))
+		if (isBuiltinHighAngleMount(mst))
 			return 3;
+		if (isHighAngleMount(mst))
+			return 2;
+		if (isAAFD(mst))
+			return 2;
 		if (isAARadar(mst))
 			return 0;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
 	function getFleetImprovementModifier(mst) {
-		if (isHighAngleMount(mst))
+		if (isBuiltinHighAngleMount(mst))
 			return 3;
+		if (isHighAngleMount(mst))
+			return 2;
 		if (isAAFD(mst))
 			return 2;
 		if (isAARadar(mst))
 			return 1.5;
-		if (isAAGun(mst))
+		if (isMachineGun(mst))
 			return 0;
-
+		// no default value for unverified equipment
 		return 0;
 	}
 
@@ -234,8 +286,9 @@ AntiAir: anti-air related calculations
 			(forFleet
 			 ? getFleetImprovementModifier
 			 : getShipImprovementModifier)(mst);
+		// according verification, AA bonus of specific equip on specific ship not counted
 		var aaStat = mst.api_tyku;
-		return eTypMod*aaStat + eImproveMod*Math.sqrt( stars );
+		return eTypMod * aaStat + eImproveMod * Math.sqrt( stars );
 	}
 
 	// returns a special floor function f(x) = q * floor( x / q )
@@ -253,17 +306,12 @@ AntiAir: anti-air related calculations
 		}
 
 		return function(x) {
-			return q*Math.floor(x / q);
+			return q * Math.floor(x / q);
 		};
 	}
 
 	function allShipEquipments(shipObj) {
-		return [
-			shipObj.equipment(0),
-			shipObj.equipment(1),
-			shipObj.equipment(2),
-			shipObj.equipment(3),
-			shipObj.exItem()];
+		return shipObj.equipment(true);
 	}
 
 	function shipEquipmentAntiAir(shipObj, forFleet) {
@@ -274,23 +322,39 @@ AntiAir: anti-air related calculations
 	}
 
 	function shipAdjustedAntiAir(shipObj) {
-		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj,false);
+		// here aa[1] is max naked stat, equaled to api_tyku[1],
+		// might use current naked stat: aa[0] - equipment stat.
+		// according verification, AA bonus of specific equip on specific ship not counted,
+		// it seems be better not to use aa[0] property.
+		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj, false);
 	}
 
-	function shipProportionalShotdownRate(shipObj) {
+	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
 		var floor = specialFloor(shipObj);
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
-		return floor(adjustedAA) / 400;
+		var combinedModifier = getCombinedFleetModifier(onCombinedFleetNum);
+		return floor(adjustedAA) / 400 * combinedModifier;
 	}
 
-	function shipProportionalShotdown(shipObj, num) {
-		return Math.floor( shipProportionalShotdownRate(shipObj) * num );
+	function shipProportionalShotdown(shipObj, num, onCombinedFleetNum) {
+		return Math.floor( shipProportionalShotdownRate(shipObj, onCombinedFleetNum) * num );
+	}
+
+	function getCombinedFleetModifier(onCombinedFleetNum, isLongDistanceAirRaid = false) {
+		// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
+		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#18
+		return onCombinedFleetNum > 0 ? // is on combined fleet?
+			onCombinedFleetNum > 1 ? // is escort fleet?
+				0.6 * 0.8 : // otherwise combined main fleet
+				(isLongDistanceAirRaid ? 0.9 * 0.8 : 1 * 0.8)
+			: 1.0;
 	}
 
 	function getFormationModifiers(id) {
 		return (id === 1 || id === 4 || id === 5) ? 1.0  // line ahead / echelon / line abreast
 			:  (id === 2) ? 1.2 // double line
 			:  (id === 3) ? 1.6 // diamond
+			:  (id === 6) ? 1.1 // vanguard
 			:  (id === 11 || id === 21) ? 1.1 // Combined anti-sub
 			:  (id === 12 || id === 14 || id === 22 || id === 24) ? 1.0 // Combined forward / battle
 			:  (id === 13 || id === 23) ? 1.5 // Combined diamond
@@ -314,12 +378,24 @@ AntiAir: anti-air related calculations
 		return (2/1.3) * Math.floor( formationModifier * (mainAllShipEquipmentAA + escortAllShipEquipmentAA) );
 	}
 
-	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K /* AACI modifier, default to 1 */) {
-		K = typeof K === "undefined" ? 1 : K;
+	/**
+	 * @return {number} an integer indicating how many planes will be shotdown.
+	 * @param {Object} shipObj - instance of KC3Ship
+	 * @param {Object} fleetObj - instance(s) of KC3Fleet,
+	 *        if combined fleet requested, should pass nested object: {main: mainFleetObj, escort: escortFleetObj}.
+	 * @param {number} formationModifier - formation modifier, see #getFormationModifiers
+	 * @param {number} K - AACI modifier, default to 1
+	 * @param {number} onCombinedFleetNum - if ship on combined fleet, pass her fleet number (1 or 2), otherwise 0.
+	 */
+	function shipFixedShotdown(shipObj, fleetObj, formationModifier, K = 1, onCombinedFleetNum = 0) {
 		var floor = specialFloor(shipObj);
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
-		return Math.floor( (floor(adjustedAA) + Math.floor( fleetAdjustedAntiAir(fleetObj, formationModifier) ))
-						   * K / 10);
+		return Math.floor(
+			(floor(adjustedAA) + Math.floor(
+				Array.isArray(fleetObj) ? fleetCombinedAdjustedAntiAir(fleetObj.main, fleetObj.escort, formationModifier) :
+					fleetAdjustedAntiAir(fleetObj, formationModifier) )
+			) * K / 10 * getCombinedFleetModifier(onCombinedFleetNum)
+		);
 	}
 
 	// avoid modifying this structure directly, use "declareAACI" instead.
@@ -358,11 +434,43 @@ AntiAir: anti-air related calculations
 	}
 
 	function isAkizukiClass( mst ) {
+		return mst.api_ctype === 54;
+		/*
 		return [
-			421, 330 /* Akizuki & Kai */,
-			422, 346 /* Teruzuki & Kai */,
-			423, 357 /* Hatsuzuki & Kai */
+			421, 330, // Akizuki & Kai
+			422, 346, // Teruzuki & Kai
+			423, 357, // Hatsuzuki & Kai
+			532, 537, // Suzutsuki & Kai
 		].indexOf( mst.api_id ) !== -1;
+		*/
+	}
+
+	function isIseClassKai( mst ) {
+		return mst.api_ctype === 2
+			// if non-Kai excluded
+			&& mst.api_id !== 77 && mst.api_id !== 87;
+	}
+
+	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
+	function isBattleShipKai( mst ) {
+		return [
+			82, // Ise Kai
+			553, // Ise K2
+			88, // Hyuuga Kai
+			148, // Musashi Kai
+			546, // Musashi K2
+		].indexOf( mst.api_id ) !== -1;
+	}
+
+	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
+	function isBritishShips( mst ) {
+		return [
+				67, // Queen Elizabeth Class
+				78, // Ark Royal Class
+				82, // Jervis Class
+			].indexOf( mst.api_ctype ) !== -1 ||
+			// Kongou Class Kai Ni
+			[149, 150, 151, 152].indexOf( mst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {
@@ -375,11 +483,23 @@ AntiAir: anti-air related calculations
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
 		battleShipIcon = 131, // Yamato, weigh anchor!
+		battleShipKaiIcon = 148, // Musashi Kai represents
+		musashiK2Icon = 546,
+		iseIcon = 77,
 		mayaK2Icon = 428,
 		isuzuK2Icon = 141,
 		kasumiK2BIcon = 470,
 		satsukiK2Icon = 418,
 		kinuK2Icon = 487,
+		yuraK2Icon = 488,
+		fumizukiK2Icon = 548,
+		uit25Icon = 539,
+		i504Icon = 530,
+		tenryuuK2Icon = 477,
+		tatsutaK2Icon = 478,
+		isokazeBkIcon = 557,
+		hamakazeBkIcon = 558,
+		warspiteIcon = 439,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -389,13 +509,25 @@ AntiAir: anti-air related calculations
 		// Special combined icons for Build-in HA / CDMG
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
-		haMountNbifdIcon = "16-30"; // HA without AAFD
+		haMountNbifdIcon = "16-30", // HA without AAFD
+		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
+		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
+		haMountKaiAmg = "16+15";    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
 
+	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
 	var isKasumiK2B = masterIdEq( kasumiK2BIcon );
 	var isSatsukiK2 = masterIdEq( satsukiK2Icon );
 	var isKinuK2 = masterIdEq( kinuK2Icon );
+	var isYuraK2 = masterIdEq( yuraK2Icon );
+	var isFumizukiK2 = masterIdEq( fumizukiK2Icon );
+	var isUit25 = masterIdEq( uit25Icon );
+	var isI504 = masterIdEq( i504Icon );
+	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
+	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
+	var isIsokazeBk = masterIdEq( isokazeBkIcon );
+	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -432,11 +564,15 @@ AntiAir: anti-air related calculations
 		};
 	}
 
-	// all non-sub ships
+	// All non-sub surface ships
+	// according KC vita codes, no ship type is used in predictions, (only ctype for Akizuki kinds, id for Maya K2 kinds)
+	// might be able to trigger as long as ship can equip corresponding equipment.
+	// but kind 5,7,8,9 (contains HA mount) seems never trigger on Akizuki-class,
+	// reason might be: https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
 	declareAACI(
 		5, 4, 1.5,
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(3)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast(isBuiltinHighAngleMount, 2),
@@ -447,7 +583,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		8, 4, 1.4,
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBuiltinHighAngleMount ),
@@ -458,7 +594,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		7, 3, 1.35,
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -470,7 +606,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		9, 2, 1.3,
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
-		predAllOf(isNotSubmarine, slotNumAtLeast(1)),
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(1)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -485,7 +621,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isCDMG ),
-				/* CDMGs are AAGuns, so we need at least 2 AA guns 
+				/* CDMGs are AAGuns, so we need at least 2 AA guns
 				   including the CDMG one we have just counted */
 				hasAtLeast(isAAGun, 2),
 				hasSome( isAARadar ))
@@ -494,7 +630,7 @@ AntiAir: anti-air related calculations
 
 	// battleship special AACIs
 	declareAACI(
-		4, 6, 1.4,
+		4, 6, 1.5,
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
 		predAllOf(isBattleship, slotNumAtLeast(4)),
 		withEquipmentMsts(
@@ -515,6 +651,45 @@ AntiAir: anti-air related calculations
 				hasSome( isLargeCaliberMainGun ),
 				hasSome( isType3Shell ),
 				hasSome( isAAFD ))
+		)
+	);
+
+	// Ise-class Kai only AACIs
+	declareAACI(
+		25, 7, 1.55,
+		[iseIcon, aaGunK2RockeLaunIcon, radarIcon, type3ShellIcon],
+		predAllOf(isIseClassKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isType3Shell ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// Musashi K2
+	declareAACI(
+		26, 6, 1.4,
+		[musashiK2Icon, haMountKaiAmg, radarIcon],
+		predAllOf(isMusashiK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiAMG ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// api_kind 27 still unknown
+
+	// Ise-class Kai + Musashi Kai
+	declareAACI(
+		28, 4, 1.4,
+		[battleShipKaiIcon, aaGunK2RockeLaunIcon, radarIcon],
+		predAllOf(isBattleShipKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isAARadar ))
 		)
 	);
 
@@ -571,6 +746,8 @@ AntiAir: anti-air related calculations
 				hasSome( isCDMG ))
 		)
 	);
+	// api_kind 13 deprecated by devs
+	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
 
 	// Isuzu K2
 	declareAACI(
@@ -635,7 +812,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
 			predAllOf(
-				/* any HA with builtin AAFD will not work  */
+				/* any HA with builtin AAFD will not work */
 				predNot( hasSome( isBuiltinHighAngleMount )),
 				hasSome( isHighAngleMount ),
 				hasSome( isCDMG ))
@@ -647,6 +824,95 @@ AntiAir: anti-air related calculations
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
 			hasSome( isCDMG )
+		)
+	);
+
+	// Yura K2
+	declareAACI(
+		21, 5, 1.45,
+		[yuraK2Icon, haMountIcon, radarIcon],
+		predAllOf(isYuraK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// Fumizuki K2
+	declareAACI(
+		22, 2, 1.2,
+		[fumizukiK2Icon, cdmgIcon],
+		predAllOf(isFumizukiK2),
+		withEquipmentMsts(
+			hasSome( isCDMG )
+		)
+	);
+
+	// UIT-25 / I-504
+	declareAACI(
+		23, 1, 1.05,
+		[uit25Icon, aaGunNotCdIcon],
+		predAnyOf(isUit25, isI504),
+		withEquipmentMsts(
+			hasSome( isAAGunNotCD )
+		)
+	);
+
+	// Tenryuu K2 / Tatsuta K2
+	declareAACI(
+		24, 3, 1.25,
+		[tatsutaK2Icon, haMountIcon, aaGunNotCdIcon],
+		predAnyOf(isTenryuuK2, isTatsutaK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAAGunNotCD ))
+		)
+	);
+
+	// Isokaze B Kai / Hamakaze B Kai
+	declareAACI(
+		29, 5, 1.55,
+		[isokazeBkIcon, haMountIcon, radarIcon],
+		predAnyOf(isIsokazeBk, isHamakazeBk),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAARadar ))
+		)
+	);
+
+	// Tenryuu K2
+	declareAACI(
+		30, 3, 1.3,
+		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
+		predAllOf(isTenryuuK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( isHighAngleMount, 3 ))
+		)
+	);
+	declareAACI(
+		31, 2, 1.25,
+		[tenryuuK2Icon, haMountIcon, haMountIcon],
+		predAllOf(isTenryuuK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( isHighAngleMount, 2 ))
+		)
+	);
+
+	// British-relevant ships
+	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class K2
+	declareAACI(
+		32, 3, 1.2,
+		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
+		predAnyOf(isBritishShips),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isBritishRocketLauncher ),
+				hasSome( isBritishPomPomGun ))
 		)
 	);
 
@@ -677,7 +943,7 @@ AntiAir: anti-air related calculations
 		return result;
 	}
 
-	// return a list of unduplicated possible AACI APIs based on all ships in fleet
+	// return a list of deduplicate possible AACI APIs based on all ships in fleet
 	function fleetPossibleAACIs(fleetObj) {
 		var aaciSet = {};
 		fleetObj.ship(function(rId, ind, shipObj) {
@@ -690,6 +956,15 @@ AntiAir: anti-air related calculations
 
 	// return: a list of sorted AACI objects order by effect desc,
 	//   as most effective AACI gets priority to be triggered.
+	// in-game, priority is based on kinds of conditions (in `if...return` flavor),
+	//   research about AACI priority for a ship:
+	//    * https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
+	//    * https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	//    * http://nishisonic.xsrv.jp/archives/809
+	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
+	// note: priority is different from trigger chance rate, since random number roll just done once,
+	//       lower priority AACI is still possible to be triggered if chance value is greater.
+	//       on the opposite, both lower priority and lesser chance means never be triggered.
 	// param: AACI IDs from possibleAACIs functions
 	// param: a optional callback function to customize ordering
 	function sortedPossibleAaciList(aaciIds, sortCallback) {
@@ -716,19 +991,19 @@ AntiAir: anti-air related calculations
 		});
 	}
 
-	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier) {
+	function shipFixedShotdownRange(shipObj, fleetObj, formationModifier, onCombinedFleetNum) {
 		var possibleAACIModifiers = fleetPossibleAACIs(fleetObj).map( function( apiId ) {
 			return AACITable[apiId].modifier;
 		});
 		// default value 1 is always available, making call to Math.max always non-empty
 		possibleAACIModifiers.push( 1 );
 		var mod = Math.max.apply( null, possibleAACIModifiers );
-		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1, onCombinedFleetNum),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod, onCombinedFleetNum),
 				 mod ];
 	}
 
-	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier) {
+	function shipFixedShotdownRangeWithAACI(shipObj, fleetObj, formationModifier, onCombinedFleetNum) {
 		var possibleAaciList = sortedPossibleAaciList(fleetPossibleAACIs(fleetObj),
 			function(a, b){
 				// Order by modifier desc, fixed desc, icons[0] desc
@@ -738,8 +1013,8 @@ AntiAir: anti-air related calculations
 			});
 		var aaciId = possibleAaciList.length > 0 ? possibleAaciList[0].id : 0;
 		var mod = possibleAaciList.length > 0 ? possibleAaciList[0].modifier : 1;
-		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1),
-				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod),
+		return [ shipFixedShotdown(shipObj, fleetObj, formationModifier, 1, onCombinedFleetNum),
+				 shipFixedShotdown(shipObj, fleetObj, formationModifier, mod, onCombinedFleetNum),
 				 aaciId ];
 	}
 

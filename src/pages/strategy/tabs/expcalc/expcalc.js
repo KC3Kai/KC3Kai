@@ -6,13 +6,8 @@
 	KC3StrategyTabs.expcalc.definition = {
 		tabSelf: KC3StrategyTabs.expcalc,
 		goals: {},
-		mapexp: [],
-		maplist: {},
-		shipexp: {},
 		goalTemplates: [], // to be initialized in "init"
-
 		rankNames: ["F", "E", "D", "C", "B", "A", "S", "SS" ],
-		rankFactors: [0, 0.5, 0.7, 0.8, 1, 1, 1.2],
 
 		/* INIT
 		Prepares all data needed
@@ -23,23 +18,7 @@
 				this.goals = JSON.parse(localStorage.goals);
 			}
 
-			// Get map exp rewards
-			this.mapexp = JSON.parse($.ajax({
-				url : '../../../../data/exp_map.json',
-				async: false
-			}).responseText);
-
-			var self = this;
-			$.each(this.mapexp, function(worldNum, mapNums){
-				$.each(mapNums, function(mapNum, mapExp){
-					if(mapExp > 0){
-						self.maplist[worldNum+"-"+(mapNum+1)] = mapExp;
-					}
-				});
-			});
-
 			this.goalTemplates = GoalTemplateManager.load();
-			//console.debug("maplist:", this.maplist);
 		},
 
 		/* RELOAD
@@ -47,6 +26,14 @@
 		---------------------------------*/
 		reload :function(){
 			KC3ShipManager.load();
+			// clean grind data of non-exists ship(s)
+			var isCleaned = false;
+			Object.keys(this.goals).forEach(key => {
+				if(KC3ShipManager.get(key.slice(1)).isDummy()) {
+					isCleaned |= delete this.goals[key];
+				}
+			});
+			if(isCleaned) this.save();
 		},
 
 		computeNextLevel: function(masterId, currentLevel) {
@@ -55,10 +42,10 @@
 					arr.push(x);
 			}
 			// figure out a list of possible goal levels in ascending order.
-			// a goal level might be remodel level or 99 (can be married) / 155 (full exp)
+			// a goal level might be remodel level or 99 (can be married) / 165 (full exp)
 			var possibleNextLevels = RemodelDb.nextLevels( masterId );
-			setAdd(possibleNextLevels, 99);
-			setAdd(possibleNextLevels, 155);
+			setAdd(possibleNextLevels, KC3Ship.getMarriedLevel() - 1);
+			setAdd(possibleNextLevels, KC3Ship.getMaxLevel());
 
 			while (possibleNextLevels.length > 0 && possibleNextLevels[0] <= currentLevel)
 				possibleNextLevels.shift();
@@ -287,13 +274,12 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					
 					var goalLevel = 
 						self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 
-					if (goalLevel === false || goalLevel >= 99)
+					if (goalLevel === false || goalLevel >= KC3Ship.getMarriedLevel() - 1)
 						return;
 					if (goalLevel - ThisShip.level <= settings.closeToRemodelLevelDiff ) {
 						jqObj.addClass("highlight_closeToRemodel");
@@ -307,8 +293,7 @@
 					clearHighlight(jqObj);
 					var rosterId = jqObj.data("id");
 					var ThisShip = KC3ShipManager.get( rosterId );
-					if (ThisShip.masterId === 0)
-						return;
+					if (ThisShip.isDummy()) return;
 					var nextLevels = RemodelDb.nextLevels( ThisShip.masterId );
 					// If can be remodelled (without convert remodels)
 					if (nextLevels !== false &&
@@ -328,9 +313,11 @@
 			var self = this;
 
 			// Add map list into the factory drop-downs
-			$.each(this.maplist, function(MapName, MapExp){
-				$(".tab_expcalc .factory .ship_map select").append("<option>"+MapName+"</option>");
-				$(".tab_expcalc .factory .goal_map select").append("<option>"+MapName+"</option>");
+			$.each(KC3Meta.allMapsExp(), function(mapName, mapExp){
+				if(mapExp > 0){
+					$(".tab_expcalc .factory .ship_map select").append("<option>" + mapName + "</option>");
+					$(".tab_expcalc .factory .goal_map select").append("<option>" + mapName + "</option>");
+				}
 			});
 
 			var editingBox, mapSplit;
@@ -345,6 +332,7 @@
 				$(".ship_rank select", editingBox).val( grindData[4] );
 				$(".ship_fs input", editingBox).prop("checked", grindData[5]);
 				$(".ship_mvp input", editingBox).prop("checked", grindData[6]);
+				$(".ship_baseexp input", editingBox).val( grindData[7] );
 
 				$(".ship_value" , editingBox).hide();
 				$(".ship_input" , editingBox).show();
@@ -358,7 +346,7 @@
 				editingBox = $(this).parent();
 
 				mapSplit = $(".ship_map select", editingBox).val().split("-");
-				console.log("mapSplit", mapSplit);
+				//console.debug("mapSplit", mapSplit);
 				self.goals["s"+ editingBox.data("id") ] = [
 					/*0*/ parseInt($(".ship_target input", editingBox).val(), 10), // target level
 					/*1*/ parseInt(mapSplit[0], 10), // world
@@ -366,7 +354,8 @@
 					/*3*/ 0, // node
 					/*4*/ parseInt($(".ship_rank select", editingBox).val(), 10), // battle rank
 					/*5*/ $(".ship_fs input", editingBox).prop("checked")?1:0, // flagship
-					/*6*/ $(".ship_mvp input", editingBox).prop("checked")?1:0 // mvp
+					/*6*/ $(".ship_mvp input", editingBox).prop("checked")?1:0, // mvp
+					/*7*/ parseInt($(".ship_baseexp input", editingBox).val(), 10), // base exp
 				];
 
 				self.save();
@@ -403,6 +392,7 @@
 				$(".goal_rank .goal_value",goalBox).text( self.rankNames[tdata.rank] );
 				$(".goal_fs .goal_value",goalBox).text( tdata.flagship? "Yes":"No" );
 				$(".goal_mvp .goal_value",goalBox).text( tdata.mvp? "Yes":"No" );
+				$(".goal_baseexp .goal_value", goalBox).text( tdata.baseExp );
 
 				// "edit" mode
 				$(".goal_type input",goalBox)
@@ -411,6 +401,7 @@
 				$(".goal_rank select",goalBox).val( tdata.rank );
 				$(".goal_fs input", goalBox).prop("checked", tdata.flagship);
 				$(".goal_mvp input", goalBox).prop("checked", tdata.mvp);
+				$(".goal_baseexp input", goalBox).val(tdata.baseExp);
 
 				// enable / disable
 				if (! tdata.enable) {
@@ -480,6 +471,7 @@
 				var rankNum = parseInt($(".goal_rank select", t).val(), 10);
 				var flagship = $(".goal_fs input", t).prop("checked");
 				var mvp = $(".goal_mvp input", t).prop("checked");
+				var baseExp = parseInt($(".goal_baseexp input", t).val(), 10);
 
 				var obj = self.goalTemplates[t.index()];
 				var result = {
@@ -487,7 +479,9 @@
 					map: map,
 					rank: rankNum,
 					flagship: flagship,
-					mvp: mvp };
+					mvp: mvp,
+					baseExp: baseExp,
+				};
 				// use extend to make sure "enable" field is properly kept
 				self.goalTemplates[t.index()] = $.extend(obj, result);
 				GoalTemplateManager.save( self.goalTemplates );
@@ -545,12 +539,7 @@
 				// we will end up highlighting everything
 				if (stypes.indexOf("*") != -1)
 					return true;
-
-				var KGS = PS["KanColle.Generated.SType"];
-				var stypeIds = stypes.map( function(x) {
-					return KGS.toInt(KGS.readSType(x));
-				});
-
+				var stypeIds = GoalTemplateManager.mapShipTypeAbbrs2Ids(stypes);
 				// traverse all ships, toggle "highlight" flag
 				$(".section_body .ship_goal").each( function(i,x) {
 					var jqObj = $(x);
@@ -562,11 +551,7 @@
 					var ThisShip = KC3ShipManager.get( rosterId );
 					var MasterShip = ThisShip.master();
 					var stypeId = MasterShip.api_stype;
-					if (stypeIds.indexOf(stypeId) != -1) {
-						jqObj.addClass("highlight_stype");
-					} else {
-						jqObj.removeClass("highlight_stype");
-					}
+					jqObj.toggleClass("highlight_stype", stypeIds.indexOf(stypeId) != -1);
 				});
 			});
 
@@ -597,7 +582,7 @@
 					return true;
 
 				$.each( targetShips, function(i,x) {
-					console.log( JSON.stringify(x) );
+					console.debug("Target ship", JSON.stringify(x) );
 					var grindData = self.goals["s" + x.rosterId];
 					self.goals["s" + x.rosterId] =
 						GoalTemplateManager.applyTemplate(grindData, template);
@@ -641,7 +626,7 @@
 				// and the current goal set is fewer than that,
 				// we can ask user whether he wants to update the goal level
 				// instead of removing this goal.
-				if (nextLevel < 99
+				if (nextLevel < KC3Ship.getMarriedLevel() - 1
 					&& typeof curGoal !== "undefined"
 					&& curGoal[0] < nextLevel) {
 
@@ -659,7 +644,6 @@
 
 				delete self.goals["s"+ editingBox.data("id") ];
 				self.save();
-				//window.location.reload();
 
 				$(".ship_value" , editingBox).show();
 				$(".ship_input" , editingBox).hide();
@@ -669,11 +653,13 @@
 				$(".ship_rem", editingBox).hide();
 				editingBox.addClass("inactive");
 
-				// the only can when nextLevel === false is when your ship have reached Lv.155
-				if (nextLevel === false)
+				// the only can when nextLevel === false is when your ship have reached Lv.max
+				if (nextLevel === false) {
+					editingBox.remove();
 					return;
+				}
 
-				if (nextLevel < 99) {
+				if (nextLevel < KC3Ship.getMarriedLevel() - 1) {
 					$(".section_expcalc .box_recommend .clear").remove();
 					editingBox.appendTo(".section_expcalc .box_recommend");
 					$("<div />").addClass("clear").appendTo(".section_expcalc .box_recommend");
@@ -726,7 +712,7 @@
 				$(".ship_target .ship_value", goalBox).text( goalLevel );
 				var expLeft = KC3Meta.expShip(goalLevel)[1] - ThisShip.exp[0];
 				$(".ship_exp .ship_value", goalBox).text( expLeft );
-				if (goalLevel < 99) {
+				if (goalLevel < KC3Ship.getMarriedLevel() - 1) {
 					goalBox.appendTo(".section_expcalc .box_recommend");
 					return true;
 				} else {
@@ -760,7 +746,7 @@
 				var goalLevel = self.computeNextLevel( ThisShip.masterId, ThisShip.level );
 				// if we ever want to run "recompute" on any ship, that particular ship
 				// should have already been added in this tab
-				// (those locked but have not yet reached Lv 155) in the first place.
+				// (those locked but have not yet reached Lv max) in the first place.
 				console.assert( goalLevel !== false, "targeting ship that has no goal?" );
 				// As much as possible use arrays nowadays to shrink JSON size,
 				// we might run out of the 5MB localStorage allocated for our app
@@ -771,53 +757,50 @@
 					/*3*/ 1, // node
 					/*4*/ 6, // E=1 D=2 C=3 B=4 A=5 S=6 SS=7
 					/*5*/ 0, // flagship
-					/*6*/ 0 // mvp
+					/*6*/ 0, // mvp
+					/*7*/ 0, // base exp
 				];
 
 				var i;
 				for (i=0; i<self.goalTemplates.length; ++i) {
 					var template = self.goalTemplates[i];
 					if (template.enable &&
-						GoalTemplateManager.checkShipType(MasterShip.api_stype,template)) {
+						GoalTemplateManager.checkShipType(MasterShip.api_stype, template)) {
 						grindData = GoalTemplateManager.applyTemplate(grindData, template);
 						break;
 					}
 				}
 
 				this.goals["s"+ThisShip.rosterId] = grindData;
-			}else{
-
+				this.save();
 			}
 
+			var shipGoal = KC3Calc.getShipLevelingGoal(ThisShip, grindData, this.goals);
 			// Target level
-			$(".ship_target .ship_value", goalBox).text( grindData[0] );
+			$(".ship_target .ship_value", goalBox).text( shipGoal.targetLevel );
 
 			// Experience Left
-			var expLeft = KC3Meta.expShip(grindData[0])[1] - ThisShip.exp[0];
-			$(".ship_exp .ship_value", goalBox).text( expLeft );
+			$(".ship_exp .ship_value", goalBox).text( shipGoal.expLeft );
+			goalBox.toggleClass("goaled", shipGoal.expLeft <= 0);
 
 			// Base Experience: MAP
-			$(".ship_map .ship_value", goalBox).text( grindData[1]+"-"+grindData[2] );
-			var expPerSortie = this.maplist[ grindData[1]+"-"+grindData[2] ];
+			$(".ship_map .ship_value", goalBox).text( shipGoal.grindMap );
+			// Inputed Base Experience
+			$(".ship_baseexp .ship_value", goalBox).text( shipGoal.baseExp );
 
 			// Exp Modifier: MVP
-			$(".ship_mvp .ship_value", goalBox).text( grindData[6]?"Yes":"No" );
-			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !grindData[6]);
-
-			if(grindData[6]===1){ expPerSortie = expPerSortie * 2; }
+			$(".ship_mvp .ship_value", goalBox).text( shipGoal.isMvp ? "Yes" : "No" );
+			$(".ship_mvp .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isMvp);
 
 			// Exp Modifier: FLAGSHIP
-			$(".ship_fs .ship_value", goalBox).text( grindData[5]?"Yes":"No" );
-			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !grindData[5]);
-
-			if(grindData[5]===1){ expPerSortie = expPerSortie * 1.5; }
+			$(".ship_fs .ship_value", goalBox).text( shipGoal.isFlagship ? "Yes" : "No" );
+			$(".ship_fs .ship_value", goalBox).toggleClass( "bool_no", !shipGoal.isFlagship);
 
 			// Exp Modifier: RANK
-			$(".ship_rank .ship_value", goalBox).text( this.rankNames[grindData[4]] );
-			expPerSortie = expPerSortie * this.rankFactors[grindData[4]];
+			$(".ship_rank .ship_value", goalBox).text( shipGoal.battleRank );
 
 			// RESULT: Battles Left
-			$(".ship_result .ship_value", goalBox).text( Math.ceil(expLeft / expPerSortie) );
+			$(".ship_result .ship_value", goalBox).text( shipGoal.battlesLeft );
 		}
 
 	};

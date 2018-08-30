@@ -1,11 +1,11 @@
 (function(){
 	"use strict";
 	_gaq.push(['_trackPageview']);
-	
+
 	const HASH_PARAM_DELIM = "-";
 	var activeTab;
 	var themeName;
-	
+
 	Object.defineProperties(window,{
 		activeTab:{
 			get:function(){return activeTab;},
@@ -17,7 +17,7 @@
 			get:function(){return activeTab.definition;}
 		}
 	});
-	
+
 	$(document).on("ready", function(){
 		// Initialize data managers
 		ConfigManager.load();
@@ -33,7 +33,7 @@
 		RemodelDb.init();
 		KC3Translation.execute();
 		WhoCallsTheFleetDb.init("../../");
-		
+
 		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
 		themeCSS.rel = "stylesheet";
@@ -47,32 +47,32 @@
 			customCSS.innerHTML = ConfigManager.sr_custom_css;
 			$("head").append(customCSS);
 		}
-		
+
 		if(!KC3Master.available){
 			$("#error").text( KC3Meta.term("FirstRunMessage") );
 			$("#error").show();
 		}
-		
+
 		// show dev-only pages conditionally
 		if(ConfigManager.devOnlyPages){
 			$("#menu .submenu.dev-only").show();
 		}
-		
+
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){
 			// Google Analytics just for click event
 			var gaEvent = "Strategy Room: " + $(this).data("id");
 			_gaq.push(['_trackEvent', gaEvent, 'clicked']);
-			
+
 			KC3StrategyTabs.reloadTab(this);
 		});
-		
+
 		// Refresh current tab and force data reloading
 		$(".logo").on("click", function(){
 			console.debug("Reloading current tab [", KC3StrategyTabs.pageParams[0], "] on demand");
 			KC3StrategyTabs.reloadTab(undefined, true);
 		});
-		
+
 		$("#contentHtml").on("click", ".page_help_btn", function(){
 			if( $(".page_help").is(":visible") ){
 				$(".page_help").fadeOut();
@@ -80,7 +80,7 @@
 				$(".page_help").fadeIn();
 			}
 		});
-		
+
 		// Add back to top and reload float button
 		$(window).scroll(function(){
 			if($(this).scrollTop() > 90){
@@ -95,24 +95,34 @@
 		$(".float_toolbar .reload").on("click", function(){
 			$(".logo").trigger("click");
 		});
-		
+
 		$("#error").on("click", function(){
 			$(this).empty().hide();
 		});
-		
+
+		// Add listener to react on config key changed
+		/* Strategy Room not needs it yet, as it can be reloaded at any time
+		window.addEventListener("storage", function({key, timeStamp, url}){
+			if(key === ConfigManager.keyName()) {
+				ConfigManager.load();
+				console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
+			}
+		});
+		*/
+
 		// Add listener to react on URL hash changed
 		window.addEventListener('popstate', KC3StrategyTabs.onpopstate);
-		
+
 		// If there is a hash tag on URL, set it as initial selected
 		KC3StrategyTabs.pageParams = window.location.hash.substring(1).split(HASH_PARAM_DELIM);
 		if(KC3StrategyTabs.pageParams[0] !== ""){
 			$("#menu .submenu ul.menulist li").removeClass("active");
 			$("#menu .submenu ul.menulist li[data-id="+KC3StrategyTabs.pageParams[0]+"]").addClass("active");
 		}
-		
+
 		// Load initially selected
 		$("#menu .submenu ul.menulist li.active").click();
-		
+
 	});
 
 	KC3StrategyTabs.gotoTab = function(tab, hashParams) {
@@ -162,7 +172,7 @@
 			thisTab.apply(reloadData);
 			window.scrollTo(0,0);
 		}else{
-			console.info("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
+			console.warn("Clicked ", KC3StrategyTabs.loading, "menu with no bound actions");
 			KC3StrategyTabs.loading = false;
 		}
 	};
@@ -186,25 +196,49 @@
 	};
 
 	KC3StrategyTabs.isTextEllipsis = function(element){
+		// NOTE: this method more flexible but low performance caused by DOM appending & removing
+		/*
 		var $c = $(element).clone()
 			.css({display: 'inline', width: 'auto', visibility: 'hidden'})
 			.appendTo('body');
 		var cWidth = $c.width();
 		$c.remove();
 		return cWidth > $(element).width();
+		*/
+		// NOTE: this method requires element.is(":visible") already, otherwise `scrollWidth` will be 0
+		return $(element).prop('scrollWidth') > $(element).width();
 	};
 
 	// A jquery-ui tooltip options like native one
 	KC3StrategyTabs.nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
+		items: "[title],[titlealt]",
 		content: function(){
 			// Default escaping not used, keep html, simulate native one
-			return $(this).attr("title")
+			return ($(this).attr("title") || $(this).attr("titlealt") || "")
 				.replace(/\n/g, "<br/>")
 				.replace(/\t/g, "&emsp;&emsp;");
 		}
 	};
 	(function($) {
+		// AOP around the dispatcher for any exception thrown from event handlers
+		var originalEventDispatch = $.event.dispatch;
+		$.event.dispatch = function() {
+			try {
+				originalEventDispatch.apply(this, arguments);
+			} catch(error) {
+				// simply log it first, hooked by DB logger by default
+				console.error("Uncaught event", error, this);
+				// still throw it out, will be caught by window.onerror and logged to console by default
+				throw error;
+			}
+		};
+		/*
+		// For global error debugging
+		window.onerror = function(messageOrEvent, source, lineno, colno, error) {
+			console.debug(messageOrEvent, error);
+		};
+		*/
 		// A lazy initialzing method, prevent duplicate tooltip instance
 		$.fn.lazyInitTooltip = function(opts, isExtendDefault = true) {
 			if(typeof this.tooltip("instance") === "undefined") {
@@ -218,7 +252,7 @@
 		};
 		// Actively close tooltips of element and its children
 		$.fn.hideChildrenTooltips = function() {
-			$.each($("[title]:not([disabled])", this), function(_, el){
+			$.each($("[title]:not([disabled]),[titlealt]:not([disabled])", this), function(_, el){
 				if(typeof $(el).tooltip("instance") !== "undefined")
 					$(el).tooltip("close");
 			});
@@ -232,7 +266,7 @@
 			return this;
 		};
 	}(jQuery));
-	
+
 	/**
 	 * Simulate throttle/debounce func like the ones in lodash
 	 * docs see: https://github.com/cowboy/jquery-throttle-debounce

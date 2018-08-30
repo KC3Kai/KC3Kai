@@ -8,6 +8,13 @@
 	display:none;
 }
 
+.tab_expedpast label {
+	display:inherit;
+	max-width:inherit;
+	margin-bottom:inherit;
+	font-weight:inherit;
+}
+
 /* NUMBERS
 -----------------------------*/
 .tab_expedpast .expedNumBoxes {
@@ -15,7 +22,7 @@
 }
 .tab_expedpast .expedNumBox {
 	width:110px;
-	height:152px;
+	height:197px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	border-radius:8px;
@@ -78,6 +85,21 @@
 	height:15px;
 	float:left;
 }
+.tab_expedpast .fleetCounts .fleetSparkles {
+	width:100px;
+	height:40px;
+	line-height:20px;
+}
+.tab_expedpast .fleetCounts .fleetDropdown input {
+	width:30px;
+	height:20px;
+	float:left;
+}
+.tab_expedpast .fleetCounts .typeSelect select {
+	width:40px;
+	height:20px;
+	float:left;
+}
 
 /* PAGINATION
 --------------------------------*/
@@ -90,7 +112,11 @@
 .tab_expedpast .exped_pages .pagination {
 	margin:0px;
 }
-
+.tab_expedpast .exped_count {
+	font-size:12px;
+	line-height:12px;
+	margin:0px 5px 5px 5px;
+}
 /* RECORDS
 --------------------------------*/
 .tab_expedpast .exped_item {
@@ -113,6 +139,7 @@
 	text-align:center;
 	margin:0px 5px 0px 0px;
 	color:#888;
+	white-space:nowrap;
 }
 .tab_expedpast .exped_date {
 	font-size:12px;

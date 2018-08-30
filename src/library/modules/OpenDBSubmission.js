@@ -1,17 +1,21 @@
-/* OpenDBSubmission.js
-Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB 
-Copied and edited from PoiDBSubmission.js
-http://swaytwig.com/opendb/
+/**
+ * OpenDBSubmission.js
+ *
+ * Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB:
+ * http://opendb.swaytwig.com/
+ *
+ * @see PoiDBSubmission.js - copied and edited from
  */
 (function(){
 	"use strict";
 
 	window.OpenDBSubmission = {
 		// `state` should take one of the following value:
-		// * `null` if the module awaits nothing
+		// * `null`: if the module awaits nothing
 		// * `create_ship`: having "createship" consumed
-		//	 waiting for "kdock" message
-		// * `drop_ship_1`: waiting for the final piece of data (rank etc, shipId if any)
+		//    waiting for "kdock" message
+		// * `drop_ship_1`: waiting for the formation & enemies
+		// * `drop_ship_2`: waiting for the final piece of data (rank etc, shipId if any)
 		state: null,
 		createShipData: null,
 		dropShipData: null,
@@ -29,9 +33,34 @@ http://swaytwig.com/opendb/
 				'api_req_kousyou/createitem': this.processCreateItem,
 				'api_req_kousyou/remodel_slot': this.processRemodelItem,
 				'api_req_map/select_eventmap_rank': this.processSelectEventMapRank,
+
 				// start or next
 				'api_req_map/start': this.processStartNext,
 				'api_req_map/next': this.processStartNext,
+
+				// battles for formation / etc
+				'api_req_sortie/battle': this.processBattle,
+				'api_req_sortie/airbattle': this.processBattle,
+				'api_req_sortie/night_to_day': this.processBattle,
+				'api_req_sortie/ld_airbattle': this.processBattle,
+
+				'api_req_battle_midnight/battle': this.processBattle,
+				'api_req_battle_midnight/sp_midnight': this.processBattle,
+
+				'api_req_combined_battle/airbattle': this.processBattle,
+				'api_req_combined_battle/battle': this.processBattle,
+				'api_req_combined_battle/sp_midnight': this.processBattle,
+				'api_req_combined_battle/battle_water': this.processBattle,
+				"api_req_combined_battle/ld_airbattle": this.processBattle,
+				"api_req_combined_battle/ec_battle": this.processBattle,
+				"api_req_combined_battle/each_battle": this.processBattle,
+				"api_req_combined_battle/each_airbattle": this.processBattle,
+				"api_req_combined_battle/each_sp_midnight": this.processBattle,
+				"api_req_combined_battle/each_battle_water": this.processBattle,
+				"api_req_combined_battle/ec_midnight_battle": this.processBattle,
+				"api_req_combined_battle/ec_night_to_day": this.processBattle,
+				"api_req_combined_battle/each_ld_airbattle": this.processBattle,
+
 
 				// detect ship id
 				'api_req_sortie/battleresult': this.processBattleResult,
@@ -71,8 +100,8 @@ http://swaytwig.com/opendb/
 				requestObj.response.api_data[createShipData.kdockId].api_created_ship_id;
 			delete createShipData.kdockId;
 
-			// console.log( "[createship] prepared: " + JSON.stringify( createShipData ) );
-			this.submitData("ship_dev.php", createShipData);
+			// console.debug( "[createship] prepared: " + JSON.stringify( createShipData ) );
+			this.submitData("ship_build.php", createShipData);
 			this.state = null;
 		},
 		processCreateItem: function( requestObj ) {
@@ -89,8 +118,8 @@ http://swaytwig.com/opendb/
 				result: (response.api_slot_item === undefined) ? 0 : response.api_slot_item.api_slotitem_id
 			};
 
-			// console.log( "[createitem] prepared: " + JSON.stringify( createItemData ));
-			this.submitData("equip_dev.php", createItemData);
+			// console.debug( "[createitem] prepared: " + JSON.stringify( createItemData ));
+			this.submitData("equip_build.php", createItemData);
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
@@ -99,7 +128,7 @@ http://swaytwig.com/opendb/
 			var response = requestObj.response.api_data;
 
 			var dropShipData = {
-				apiver: 3,
+				apiver: 5,
 				world: response.api_maparea_id,
 				map: response.api_mapinfo_no,
 				node: response.api_no
@@ -107,6 +136,51 @@ http://swaytwig.com/opendb/
 
 			this.dropShipData = dropShipData;
 			this.state = 'drop_ship_1';
+		},
+		processBattle: function( requestObj ) {
+			if (this.state !== 'drop_ship_1' &&
+				// could have night battles, in which case "processBattle"
+				// is entered more than once
+				this.state !== 'drop_ship_2') {
+				this.cleanup();
+				return;
+			}
+			// if this function ("processBattle") is entered more than once for a single battle
+			// (which usually happens when the user starts with day battle and decide to go for night one)
+			// the latest formation takes priority.
+
+			var response = requestObj.response.api_data;
+			var dropShipData = this.dropShipData;
+
+			let enemies = {};
+			// fill in formation and enemy ship info.
+			try {
+				enemies.formation = response.api_formation[1];
+			} catch (err) {
+				console.warn("Error while extracting enemy formation", err, err.stack);
+				enemies.formation = 0;
+			}
+
+			// build up enemy ship array
+			const handleEnemies = (enemies) => {
+				// For OpenDB, empty slots = 0, not -1
+				while(enemies.length < 6) enemies.push(0);
+				return enemies;
+			};
+			try {
+				enemies.ships = handleEnemies(response.api_ship_ke);
+			} catch (err) {
+				console.warn("Error while extracting enemy ship array", err, err.stack);
+				console.info("Using an empty ship array as placeholder");
+				enemies.ships = [0, 0, 0, 0, 0, 0];
+			}
+			if (typeof response.api_ship_ke_combined !== "undefined") {
+				// console.log("processBattle: enemy fleet is combined");
+				enemies.ships2 = handleEnemies(response.api_ship_ke_combined);
+			}
+			dropShipData.enemy = JSON.stringify(enemies);
+			
+			this.state = 'drop_ship_2';
 		},
 		processMapInfo: function( requestObj ) {
 			var self = this;
@@ -117,7 +191,7 @@ http://swaytwig.com/opendb/
 			});
 		},
 		processBattleResult: function( requestObj ) {
-			if (this.state !== 'drop_ship_1') {
+			if (this.state !== 'drop_ship_2') {
 				this.cleanup();
 				return;
 			}
@@ -128,15 +202,16 @@ http://swaytwig.com/opendb/
 			dropShipData.result = response.api_get_ship ? response.api_get_ship.api_ship_id : 0;
 			dropShipData.rank = response.api_win_rank;
 			dropShipData.maprank = this.mapInfo[dropShipData.world * 10 + dropShipData.map] || 0;
+			dropShipData.inventory = response.api_get_ship ? KC3ShipManager.count(ship => RemodelDb.originOf(ship.masterId) === RemodelDb.originOf(dropShipData.result)) : 0;
 
-			this.submitData( "ship_drop.php", dropShipData );
+			this.submitData("ship_drop.php", dropShipData);
 			this.state = null;
 		},
 		processRemodelItem: function ( requestObj ) {
 			this.cleanup();
 			var params = requestObj.params;
 			var response = requestObj.response.api_data;
-			//console.log( "[createitem] received: " + JSON.stringify( response ));
+			//console.debug( "[createitem] received: " + JSON.stringify( response ));
 			if(params.api_certain_flag === 1)
 				return;
 			var currentItem = KC3GearManager.get(parseInt(params.api_slot_id));
@@ -150,11 +225,13 @@ http://swaytwig.com/opendb/
 			};
 
 			this.submitData("equip_remodel.php", remodelData);
+			this.state = null;
 		},
 		getApiName: function(url) {
 			var KcsApiIndex = url.indexOf("/kcsapi/");
 			return url.substring( KcsApiIndex+8 );
 		},
+		// SPI: process entry
 		// get data handler based on URL given
 		// `null` is returned if no handler is found
 		processData: function( requestObj ) {
@@ -168,14 +245,14 @@ http://swaytwig.com/opendb/
 				}
 				return false;
 			} catch (e) {
-				console.warn("Open DB Submission exception:", e.stack);/*RemoveLogging:skip*/
-				// Pop up APIError on unexpected runtime expcetion
+				console.warn("Open DB Submission Error", e);
+				// Pop up APIError on unexpected runtime exception
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
 					title: KC3Meta.term("APIErrorNoticeTitle"),
 					message: KC3Meta.term("APIErrorNoticeMessage").format("OpenDBSubmission"),
-					stack: e.stack,
+					stack: e.stack || String(e),
 					request: {
 						url: requestObj.url,
 						headers: requestObj.headers,
@@ -187,32 +264,31 @@ http://swaytwig.com/opendb/
 				});
 			}
 		},
+		// SPI: clean all previous states up
 		cleanup: function() {
 			if (this.state !== null) {
-				console.log( "aborting previous data report" );
-				console.log( "interal state was: " + this.state );
+				console.log("Aborting previous data report, interal state was:", this.state);
 			}
-
 			this.state = null;
 			this.createShipData = null;
 			this.dropShipData = null;
 		},
-		submitData: function (APIurl, data){
-			/*console.log("Sending to " + APIurl + " Data: " + JSON.stringify(data))
-			if(true)
-				return;
-			}*/
+		submitData: function (endpoint, payload){
+			/*
+			console.debug("Sending to /" + endpoint + ", data: " + JSON.stringify(payload));
+			if(true) return;
+			*/
 			var post = $.ajax({
-				url: "http://swaytwig.com/opendb/report/" + APIurl,
+				url: "http://opendb.swaytwig.com/report/" + endpoint,
 				method: "POST",
-				data: data,
-			}).done(function( msg ) {
-				console.log("OpenDB Submission done: ", msg);
+				data: payload,
+			}).done( function() {
+				console.log(`OpenDB Submission to /${endpoint} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
-				console.warn( "OpenDB Submission failed:", textStatus, errorThrown);
+				console.warn(`OpenDB Submission to /${endpoint} ${textStatus}`, errorThrown);
 			});
 		}
-    };
+	};
 
 	window.OpenDBSubmission.init();
 })();

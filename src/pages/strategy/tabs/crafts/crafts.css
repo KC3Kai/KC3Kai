@@ -35,17 +35,17 @@
 	margin:2px;
 }
 .tab_crafts .build_item .build_flag {
-	width:110px;
-	overflow:hidden;
+	width:100px;
 	margin:0px 5px 0px 0px;
-	font-size:12px;
-	white-space: nowrap;
+	font-size:14px;
 	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_crafts .build_item .build_rsc {
 	width:40px;
 	margin:0px 5px 0px 0px;
 	text-align:center;
+	font-size:14px;
 	font-weight:bold;
 }
 .tab_crafts .build_item .build_ricon {
@@ -59,21 +59,64 @@
 }
 .tab_crafts .build_item .build_result {
 	width:130px;
-	overflow:hidden;
 	margin:0px 5px 0px 0px;
 	font-size:12px;
-	white-space: nowrap;
 	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_crafts .build_item .build_time {
-	width:140px;
+	width:150px;
 	font-size:11px;
 	color:#999;
+	overflow:hidden;
+}
+
+/* FILTERS
+--------------------------------*/
+.tab_crafts .filters {
+	height:60px;
+}
+.tab_crafts .filters .build_name {
+	float:left;
+	height:25px;
+	margin-right:10px;
+	margin-bottom:5px;
+}
+.tab_crafts .filters .build_icon {
+	float:left;
+	margin:5px 2px 0px 0px;
+	height:16px;
+}
+.tab_crafts .filters .build_rsc {
+	float:left;
+	width:45px;
+	height:25px;
+	margin-right:10px;
+	margin-bottom:5px;
+	padding:1px;
+	border-width:1px;
+}
+.tab_crafts .filters .secretary_ship {
+	width:120px;
+}
+.tab_crafts .filters .build_result {
+	width:140px;
+}
+.tab_crafts .filters .reset_all {
+	height:25px;
+	padding:2px 5px;
+}
+.tab_crafts .page_items {
+	font-size:12px;
+}
+.tab_crafts .item_per_page {
+	margin-right:4px;
 }
 
 /* PAGINATION
 --------------------------------*/
 .tab_crafts .build_pages {
+	height:50px;
 }
 .tab_crafts .build_pages .pagination {
 	margin:5px 0px 0px 0px;

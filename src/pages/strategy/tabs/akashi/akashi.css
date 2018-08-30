@@ -29,6 +29,10 @@
 	float:left;
 	border-radius:7px;
 }
+.tab_akashi .controls .option {
+	margin:0px 5px 0px 5px;
+	float:left;
+}
 
 /* WEEKDAYS
 --------------------------------*/
@@ -58,10 +62,6 @@
 	line-height:24px;
 	margin:0px 0px 5px 0px;
 	padding:5px;
-}
-.tab_akashi .equipment.disabled {
-	opacity:0.4;
-	background:#fcc;
 }
 
 .tab_akashi .equipment .eq_icon {
@@ -174,7 +174,9 @@
 .tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt {
 	width:20px;
 }
-.tab_akashi .eq_res .eq_res_value.consumed_name > div.cnt.locked {
+.tab_akashi .eq_res .extra_consumed {
+	float:right;
+	display:none;
 }
 
 .tab_akashi .eq_res .eq_next {
@@ -199,4 +201,7 @@
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
+}
+.tab_akashi .eq_res .eq_next .eq_res_name .stars {
+	color:#45a9a5;
 }

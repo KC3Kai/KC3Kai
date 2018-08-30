@@ -1,6 +1,6 @@
 (function(){
 	"use strict";
-	
+
 	window.KC3Translation = {
 		/* EXECUTE
 		Triggers translations into current page
@@ -9,8 +9,8 @@
 			this.applyWords();
 			this.applyHTML();
 		},
-		
-		
+
+
 		/* APPLY WORDS
 		Change words inside visible DOM elements
 		-----------------------------------------*/
@@ -25,22 +25,21 @@
 				$(this).attr("title", KC3Meta.term( $(this).attr("title") ) );
 			});
 		},
-		
-		
+
+
 		/* APPLY HTML
 		Specialized Language HTML adjustments
 		-----------------------------------------*/
 		applyHTML :function(){
-			// Specialized fonts
+			// Apply specialized global fonts
 			var fontFamily = false;
 			switch(ConfigManager.language){
 				// Default font family for CJK languages
 				case "scn": fontFamily = '"HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,"Nimbus Sans L",Arial,"Lucida Grande","Liberation Sans","Microsoft YaHei UI","Microsoft YaHei","Hiragino Sans GB","Wenquanyi Micro Hei","WenQuanYi Zen Hei","ST Heiti",SimHei,"WenQuanYi Zen Hei Sharp",sans-serif'; break;
-				
-				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, "Microsoft JhengHei", "Microsoft JhengHei UI", Arial,"Heiti TC", sans-serif'; break;
-				
+				case "tcn": fontFamily = '"Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei", "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
+				case "tcn-yue": fontFamily = '"Microsoft JhengHei", "Helvetica Neue", Helvetica, Arial, "Microsoft JhengHei UI", "Heiti TC", sans-serif'; break;
 				case "jp": fontFamily = '"Helvetica Neue", "Tahoma", Helvetica, Arial, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", "Meiryo", "Yu Gothic UI Semibold", "ＭＳ Ｐゴシック", "MS PGothic", sans-serif'; break;
-				
+				case "kr": fontFamily = '"Helvetica Neue", Helvetica, Arial, "AppleGothic", "Malgun Gothic", "GulimChe", "Dotum", "UnDotum", sans-serif'; break;
 				default: break;
 			}
 			// Can be also defined in terms
@@ -49,10 +48,10 @@
 				fontFamily = fontFamilyInTerm;
 			}
 			if(fontFamily){ $("body").css("font-family", fontFamily); }
-			
+
 			// Apply HTML language code
-			$("html").attr("lang", ConfigManager.language);
-			
+			$("html").attr("lang", this.getLocale(ConfigManager.language));
+
 			// Apply custom CSS for language specified in terms
 			var cssInTerm = KC3Meta.term("LangCustomCSS");
 			if(!!cssInTerm && cssInTerm !== "LangCustomCSS"){
@@ -66,12 +65,12 @@
 		/*
 		  Recursively changing any non-object value "v" into "{val: v, tag: <tag>}".
 		 */
-		addTags: function(obj, tag) {
-			function track(obj) {
-				if (typeof obj === "object") {
+		addTags: function(obj, tag, maxdepth = 2) {
+			function track(obj, depth) {
+				if (typeof obj === "object" && depth) {
 					$.each( obj, function(k,v) {
 						// should work for both arrays and objects
-						obj[k] = track(v);
+						obj[k] = track(v, depth - 1);
 					});
 				} else {
 					return {val: obj, tag: tag};
@@ -82,7 +81,7 @@
 			console.assert(
 				typeof obj === "object",
 				"addTags should only be applied on objects");
-			return track(obj);
+			return track(obj, maxdepth);
 		},
 
 		/** Clear specified attribute key from specified JSON object. */
@@ -100,21 +99,18 @@
 
 		getJSONWithOptions: function(repo, filename, extendEnglish,
 									 language, info_force_ship_lang, info_eng_stype,
-									 track_source) {
-			var self = this;
-
+									 track_source = false) {
 			if (filename === "quotes") {
-				console.log("warning: using KC3Translation.getQuotes to get quotes");
+				console.info("Warning: using KC3Translation.getQuotes to get quotes");
 				return this.getQuotes(repo);
 			}
 
-			// Check if desired to extend english files
-			if (typeof extendEnglish=="undefined") { extendEnglish=false; }
-			if (typeof track_source==="undefined") { track_source = false; }
+			// Check if desired to extend English files
+			extendEnglish = extendEnglish || false;
 
 			// Japanese special case where ships and items sources are already in JP
 			if(
-				(["jp", "tcn"].indexOf(language) > -1)
+				(["jp", "tcn", "tcn-yue"].indexOf(language) > -1)
 				&& (["ships", "items", "useitems", "ship_affix"].indexOf(filename) > -1)
 			){
 				extendEnglish = false;
@@ -140,15 +136,15 @@
 					}).responseText);
 
 					if (track_source) {
-						self.addTags(enJSON, "en");
+						this.addTags(enJSON, "en");
 					}
 					if (filename === "quests") {
-						self.unoverrideAttr(enJSON, "memo");
+						this.unoverrideAttr(enJSON, "memo");
 					}
 				} catch (e) {
-					console.error(e.stack);
-					let errMsg = $("<p>Fatal error when loading {0} en TL data: {1}</p>" +
-						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, e));
+					console.error("Loading translation failed", filename, e);
+					let errMsg = $(("<p>Fatal error when loading {0} en TL data: {1}</p>" +
+						"<p>Contact developers plz! &gt;_&lt;</p>").format(filename, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
 						$("#error").show();
@@ -172,12 +168,12 @@
 				}).responseText);
 
 				if (track_source) {
-					self.addTags(translation, language);
+					this.addTags(translation, language);
 				}
 			} catch (e) {
 				// As EN can be used, fail-safe for other JSON syntax error
 				if (e instanceof SyntaxError && extendEnglish && language!=="en"){
-					console.warn(e.stack);/*RemoveLogging:skip*/
+					console.warn("Loading translation failed", filename, language, e);/*RemoveLogging:skip*/
 					translation = null;
 					// Show error message for Strategy Room
 					if($("#error").length>0){
@@ -188,9 +184,9 @@
 					}
 				} else {
 					// Unknown error still needs to be handled asap
-					console.error(e.stack);/*RemoveLogging:skip*/
-					let errMsg = $("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
-						"<p>Contact developers plz! &gt;_&lt;</p>".format(filename, language, e));
+					console.error("Loading translation failed", filename, language, e);
+					let errMsg = $(("<p>Fatal error when loading {0} TL data of {1}: {2}</p>" +
+						"<p>Contact developers plz! &gt;_&lt;</p>").format(filename, language, e));
 					if($("#error").length>0){
 						$("#error").append(errMsg);
 						$("#error").show();
@@ -201,21 +197,6 @@
 				}
 			}
 			return $.extend(true, translationBase, translation);
-		},
-
-		getShipVoiceFlag: function (shipMasterId) {
-			var shipData = KC3Master.ship(shipMasterId);
-			return shipData ? shipData.api_voicef : 0;
-		},
-
-		// check if a ship has idle voice
-		shipHasIdleVoice: function (shipMasterId) {
-			return (1 & this.getShipVoiceFlag(shipMasterId)) !== 0;
-		},
-
-		// check if a ship has hourly voices
-		shipHasHourlyVoices: function (shipMasterId) {
-			return (2 & this.getShipVoiceFlag(shipMasterId)) !== 0;
 		},
 
 		// descriptive keys to numeric keys
@@ -248,7 +229,12 @@
 			"Damaged(3)" : 21,
 			"Sunk" : 22,
 			"Idle" : 29,
+			"Idle(2)" : 129,
 			"Repair" : 6,
+			"Yasen(3)" : 917,
+			"Yasen(4)" : 918,
+			"FriendSupport" : 141,
+			"FriendSupport(2)" : 241,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -258,7 +244,7 @@
 			"H2000":50, "H2100":51, "H2200":52, "H2300":53
 		},
 		// see initialization code below.
-		_idToDesc: null,
+		_idToDesc: undefined,
 
 		// descriptive voice key to numeric one
 		voiceDescToNum: function(k) {
@@ -267,18 +253,19 @@
 
 		// numeric voice key to descriptive one
 		voiceNumToDesc: function(k) {
-			return this._idToDesc[k];
+			if(!this._idToDesc) {
+				this._idToDesc = Object.keys(this._descToId).reduce(
+					(o, k) => Object.assign({}, o, { [this._descToId[k]]:k }), {}
+				);
+			}
+			return this._idToDesc[k] || "";
 		},
 
-		// get available ship voice numbers by checking 
+		// get available ship voice numbers by checking
 		// voice flag of a ship.
 		// the result is sorted.
-		getShipVoiceNums: function(masterId,includeHourlies,includeRepair) {
-			if (typeof includeHourlies === "undefined")
-				includeHourlies = true;
-			if (typeof includeRepair === "undefined")
-				includeRepair = false;
-			var sortedVoiceNums =  [
+		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true) {
+			var sortedVoiceNums = [
 				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
 				12,5,7,14,15,16,18,17,23,19,20,21,22,
 			];
@@ -288,44 +275,53 @@
 			];
 
 			// add idle voice key
-			if (this.shipHasIdleVoice(masterId))
+			if (KC3Meta.shipHasIdleVoice(masterId))
 				sortedVoiceNums.push(29);
+			// add another special idle voice key, when morale >= 50 (sparkle cond)
+			if (KC3Meta.shipHasSpIdleVoice(masterId))
+				sortedVoiceNums.push(129);
 
 			// add repair key
-			if (includeRepair)
+			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			if (includeHourlies && this.shipHasHourlyVoices(masterId))
+			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
+
+			if (KC3Meta.specialShipVoices[masterId]){
+				sortedVoiceNums = sortedVoiceNums.concat(Object.keys(KC3Meta.specialShipVoices[masterId]));
+			}
 
 			return sortedVoiceNums;
 		},
 
 		// insert quote id as key if descriptive key is used.
-		transformQuotes: function(quotes, language, checkKey) {
+		transformQuotes: function(quotes, language, checkKey = false, removeSeasonals = false) {
 			var self = this;
 			function isIntStr(s) {
 				return parseInt(s,10).toString() === s;
 			}
 
-			$.each( quotes, function(k,v) {
+			$.each( quotes, function(k, v) {
 				if (! isIntStr(k) )
 					return;
 				// transforming "v" object
 
 				// get an immutable list of keys for further operation
 				var subKeys = Object.keys(v);
-				$.each(subKeys, function(i,subKey) {
+				$.each(subKeys, function(i, subKey) {
 					var subId = self.voiceDescToNum(subKey);
+					var isSeasonalKey = subKey.indexOf("@") > -1;
 					if (subId) {
 						// force overwriting regardless of original content
 						// empty content not replaced
-						if (v[subKey] && v[subKey].length) {
+						if (v[subKey]) {
 							v[subId] = v[subKey];
 
 							// temporary hack for scn quotes
 							// as we don't use special key for seasonal lines
 							// and en will always has priority on that.
+							/*
 							if (["scn", "kr"].indexOf(language) > -1) {
 								if (subId === 2) {
 									v[6547] = v[subKey];
@@ -334,50 +330,110 @@
 									v[1471] = v[subKey];
 								}
 							}
+							*/
 						}
 					} else {
-						if (!!checkKey && ! isIntStr(subKey) ) {
+						if (isSeasonalKey) {
+							if (!!removeSeasonals) {
+								delete v[subKey];
+							}
+						} else if (!!checkKey && !isIntStr(subKey) ) {
 							// neither a descriptive key nor a normal number
-							console.debug( "Not transformed subtitle key:", subKey,
-								"(masterId=", k, ")");
+							console.debug(`Not transformed subtitle key "${subKey}" for ship ${k}`);
 						}
 					}
 				});
-				
+
 			});
 			return quotes;
 		},
 
-		getQuotes: function(repo, track, language, checkKey) {
-			var self = this;
-			if (typeof track === "undefined")
-				track = false;
+		getQuotes: function(repo, track = false, language = ConfigManager.language,
+			checkKey = false, extendEnglish = true) {
 
-			// we always use English version quotes as the base,
+			const deepMergePartially = function(...objs) {
+				const merged = {};
+				const merge = obj => {
+					for(const prop in obj) {
+						if(obj.hasOwnProperty(prop)) {
+							if($.type(obj[prop]) === "object"
+								// workaround for PR #2299:
+								// prevent recursively merging for objects start with key "0",
+								// which are used by timing-split quote lines.
+								&& Object.keys(obj[prop])[0] !== "0") {
+								merged[prop] = deepMergePartially(merged[prop], obj[prop]);
+							} else {
+								merged[prop] = obj[prop];
+							}
+						}
+					}
+				};
+				objs.forEach(obj => merge(obj));
+				return merged;
+			};
+			var remodelGroups = {};
+			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
+				remodelGroups = RemodelDb._db.remodelGroups;
+			} else {
+				console.warn("Translation: failed to load RemodelDb, " +
+					"please make sure it's been initialized properly");/*RemoveLogging:skip*/
+			}
+			const extendQuotesFromRemodelGroups = (langJson, track = false) => {
+				$.each(remodelGroups, function(orgShipIdStr, groupInfo) {
+					// a group of ship ids that consider as "same ship"
+					// sorted by remodels
+					var group = groupInfo.group;
+					// accumulate quotes
+					var curQuotes = {};
+					$.each(group, function(i, curShipId) {
+						// implicit casting index from num to str
+						var quotes = langJson[curShipId] || {};
+						if (track) {
+							$.each(quotes, function(k, v) {
+								quotes[k].tag = curShipId;
+							});
+						}
+						// accumulate to curQuotes
+						curQuotes = deepMergePartially(curQuotes, quotes);
+						//curQuotes = $.extend(true, {}, curQuotes, quotes);
+						// note that curQuotes now refers to a different obj
+						// and we haven't done any modification on curQuotes
+						// so it's safe to be assigned to a table
+						langJson[curShipId] = curQuotes;
+					});
+				});
+			};
+
+			// Use English version quotes as the base by default,
 			// assuming all quotes are complete so there
 			// is no need to extend the table by considering pre-remodel ship quotes.
 			var enJSON = {};
-			language = language || ConfigManager.language;
-			try {
-				enJSON = JSON.parse($.ajax({
-					url : repo+'lang/data/en/quotes.json',
-					async: false
-				}).responseText);
-				this.transformQuotes(enJSON, "en", false);
-				if (track) {
-					self.addTags(enJSON, "en");
-				}
-			} catch(e) {
-				if (e instanceof SyntaxError){
-					console.warn(e.stack);/*RemoveLogging:skip*/
-					translation = null;
-				} else {
-					throw e;
+			const isGetEnglish = language === "en";
+			if(isGetEnglish || extendEnglish) {
+				try {
+					enJSON = JSON.parse($.ajax({
+						url : repo+'lang/data/en/quotes.json',
+						async: false
+					}).responseText);
+					this.transformQuotes(enJSON, "en", checkKey && isGetEnglish,
+						// remove seasonal extending for these languages
+						["jp", "scn", "kr"].indexOf(language) > -1);
+					if (track) {
+						this.addTags(enJSON, "en");
+					}
+					extendQuotesFromRemodelGroups(enJSON, track && isGetEnglish);
+				} catch(e) {
+					if (e instanceof SyntaxError){
+						console.warn("Loading quotes failed", e);/*RemoveLogging:skip*/
+						enJSON = {};
+					} else {
+						throw e;
+					}
 				}
 			}
 
 			var langJSON;
-			if (language === "en") {
+			if (isGetEnglish) {
 				// if it's already English the we are done.
 				langJSON = enJSON;
 			} else {
@@ -389,9 +445,9 @@
 					}).responseText);
 				} catch (e) {
 					if (e instanceof SyntaxError){
-						console.warn(e.stack);/*RemoveLogging:skip*/
-						console.warn("Failed to load",language,"quotes, falling back to en version");
-						// Show unduplicated error message for Strategy Room
+						console.warn("Loading quotes failed", language, e);/*RemoveLogging:skip*/
+						console.info("Failed to load " + language + " quotes, falling back to en version");
+						// Show repeatedly error message for Strategy Room
 						if($("#error").length>0 && $("#error").text().indexOf("quotes.json")<0){
 							$("#error").append(
 								$("<p>Syntax error on {0} quotes.json: {1}</p>".format(language, e.message))
@@ -401,55 +457,27 @@
 						langJSON = enJSON;
 						language = "en";
 					} else {
-						console.error(e.stack);/*RemoveLogging:skip*/
+						console.error("Loading quotes failed", language, e);
 						throw e;
 					}
 				}
+				// if still non-English JSON pending to be processed
+				if(language !== "en") {
+					// 1st pass: interpret descriptive keys as keys
+					this.transformQuotes(langJSON, language, checkKey);
+					if (track) {
+						this.addTags(langJSON, language);
+					}
+					// extend quotes by reusing ship's pre-remodels
+					// 2nd pass: extend langJSON by considering pre-models
+					extendQuotesFromRemodelGroups(langJSON, track);
+					// 3rd pass: extend langJSON using enJSON to fill in any missing parts
+					langJSON = deepMergePartially(enJSON, langJSON);
+					// jQuery.extend cannot control deep merging exclusions
+					//langJSON = $.extend(true, {}, enJSON, langJSON);
+				}
 			}
 
-			// 1st pass: interpret descriptive keys as keys
-			this.transformQuotes(langJSON, language, checkKey);
-			if (track && language !== "en") {
-				self.addTags(langJSON, language);
-			}
-
-			// extend quotes by reusing ship's pre-remodels
-			// 2nd pass: extend langJSON by considering pre-models
-			if (typeof RemodelDb !== "undefined" && !!RemodelDb._db && !!RemodelDb._db.remodelGroups) {
-				$.each(RemodelDb._db.remodelGroups, function(orgShipIdStr,groupInfo) {
-					// a group of ship ids that consider as "same ship"
-					// sorted by remodels
-					var group = groupInfo.group;
-					var i,curShipId;
-					// accumulate quotes
-					var curQuotes = {};
-					var q;
-
-					$.each(group, function(i,curShipId) {
-						// implicit casting index from num to str
-						q = langJSON[curShipId] || {};
-						if (track) {
-							$.each(q,function(k,v) {
-								q[k].tag = curShipId;
-							});
-						}
-						// accumulate to curQuotes
-						curQuotes = $.extend(true, {}, curQuotes, q);
-						// note that curQuotes now refers to a different obj
-						// and we haven't done any modification on curQuotes
-						// so it's safe to be assigned to a table
-						langJSON[curShipId] = curQuotes;
-					});
-				});
-			} else {
-				console.warn("Translation: failed to load RemodelDb, " +
-							 "please make sure it's been initialized properly");/*RemoveLogging:skip*/
-			}
-
-			// 3rd pass: extend langJSON using enJSON to fill in any missing parts
-			if (language !== "en") {
-				langJSON = $.extend(true, {}, enJSON, langJSON);
-			}
 			return langJSON;
 		},
 
@@ -464,12 +492,27 @@
 				ConfigManager.language,
 				ConfigManager.info_force_ship_lang,
 				ConfigManager.info_eng_stype);
+		},
+
+		/**
+		 * @return the IANA standard (ISO-639) locale tag according our language code
+		 */
+		getLocale :function(languageCode = ConfigManager.language){
+			// Since some of our language codes are not standard such as JP, KR, SCN, TCN.
+			// All available locale tags see also:
+			// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
+			// https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+			return {
+				"jp": "ja",
+				"kr": "ko",
+				"scn": "zh-Hans-CN", // Mainland Simplified Chinese
+				"tcn": "zh-Hant", // might include TW, HK, MO
+				"tcn-yue": "zh-Hant-HK", // Cantonese dialect for HK, MO
+				"ua": "uk",
+				"troll": "en"
+			}[languageCode.toLowerCase()] || languageCode;
 		}
-		
+
 	};
 
-	KC3Translation._idToDesc = {};
-	$.each(KC3Translation._descToId, function(k,v) {
-		KC3Translation._idToDesc[v] = k;
-	});
 })();

@@ -26,14 +26,14 @@
                     this._db = db;
                     console.info("RemodelDb: database updated based on", isRaw ? "Master raw" : "api_start2");
                 } catch (e) {
-                    console.error("RemodelDb:", e.stack);/*RemoveLogging:skip*/
+                    console.error("RemodelDb: updating error", e);
                 }
             } else {
-                console.info("RemodelDb: no update required");
+                console.log("RemodelDb: no update required");
             }
 
             if (! this._db) {
-                console.warn("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
+                console.info("RemodelDb: database unavailable, need to re-initialize with master data");/*RemoveLogging:skip*/
             }
         },
         // compare master data against _db (could be null)
@@ -48,21 +48,76 @@
         },
         // according to the following doc:
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
-        calcDevMat: function(steel) {
-            return (steel < 4500) ? 0
-                : ( steel < 5500) ? 10
-                : ( steel < 6500) ? 15
-                : 20;
+        // special case for Saratoga Mk.II converting: 5500 steel but 20 devmats
+        calcDevMat: function(steel, ship_id_from) {
+            switch(ship_id_from) {
+                case 82: // Ise
+                    return 80;
+                case 213: // Tenryuu
+                    return 24;
+                case 214: // Tatsuta
+                case 242: // Shiratsuyu
+                    return 15;
+                case 312: // Hamakaze
+                case 317: // Urakaze
+                case 320: // Isokaze
+                    return 40;
+                case 225: // Kagerou
+                case 226: // Shiranui
+                case 227: // Kuroshio
+                case 545: // Saratoga Mk.2
+                case 550: // Saratoga Mk.2 Mod.2
+                    return 20;
+                case 555: // Zuihou K2
+                case 560: // Zuihou K2B
+                    return 5;
+                default:
+                    return (steel < 4500) ? 0
+                         : (steel < 5500) ? 10
+                         : (steel < 6500) ? 15
+                         : 20;
+            }
         },
-        // does not consume devmat if using blueprint,
-        // except converting Suzuya K2 to Kou K2, still consumes devmats
+        // does not consume devmat if using blueprint, except:
+        // still consumes devmat if converting Suzuya/Kumano K2 to Kou K2,
+        // Kagerou-class K to K2, Ise K to K2
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
-            return blueprint_count > 0 && ship_id_from !== 503;
+            return blueprint_count > 0 && ![82, 225, 226, 227, 503, 504].includes(ship_id_from);
         },
-        // converting Suzuya (Kou) K2 also consumes torches, see also:
-        // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
+        // some convert remodeling also consumes torches,
+        // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
         calcTorch: function(ship_id_from) {
-            return (ship_id_from === 503 || ship_id_from === 508) ? 20 : 0;
+            switch(ship_id_from) {
+                case 213: // Tenryuu
+                    return 8;
+                case 214: // Tatsuta
+                    return 5;
+                case 312: // Hamakaze
+                case 317: // Urakaze
+                case 320: // Isokaze
+                    return 10;
+                case 503: // Suzuya K2
+                case 504: // Kumano K2
+                case 508: // Suzuya Kou K2
+                case 509: // Kumano Kou K2
+                    return 20;
+                case 545: // Saratoga Mk.2
+                case 550: // Saratoga Mk.2 Mod.2
+                    return 30;
+                case 555: // Zuihou K2
+                case 560: // Zuihou K2B
+                    return 20;
+                default:
+                    return 0;
+            }
+        },
+        // hard-coded new consumption 'New Artillery Material' since 2018-02-16
+        calcGunMat: function(ship_id_from) {
+            switch(ship_id_from) {
+                case 148: // Musashi K2
+                    return 3;
+                default: return 0;
+            }
         },
         mkDb: function(masterData, isRaw) {
             var self = this;
@@ -76,12 +131,13 @@
                  , ammo: Int
                  , catapult: Int
                  , blueprint: Int
+                 , report: Int
                  , devmat: Int
                  , torch: Int
                  }
              */
             var remodelInfo = {};
-            // all ship Ids (except abyssals)
+            // all ship Ids (except abyssal)
             var shipIds = [];
             // all ship Ids that appears in x.aftershipid
             // stored as a set.
@@ -106,12 +162,14 @@
                       // these fields are unknown for now
                       catapult: 0,
                       blueprint: 0,
+                      report: 0,
                       devmat: 0,
                       torch: 0
                     };
 
-                remodel.devmat = self.calcDevMat(remodel.steel);
+                remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from);
                 remodel.torch = self.calcTorch(remodel.ship_id_from);
+                remodel.gunmat = self.calcGunMat(remodel.ship_id_from);
                 remodelInfo[x.api_id] = remodel;
 
             });
@@ -129,6 +187,7 @@
                     "data inconsistent:", x.api_id);
                 remodel.catapult = x.api_catapult_count;
                 remodel.blueprint = x.api_drawing_count;
+                remodel.report = x.api_report_count;
                 if(self.isIgnoreDevMat(remodel.blueprint, remodel.ship_id_from))
                     remodel.devmat = 0;
             });
@@ -152,7 +211,7 @@
                  }
              */
             var remodelGroups = {};
-            // reverse from shipId to orginal
+            // reverse from shipId to original
             var originOf = {};
 
             $.each( originalShipIds, function(i, x) {
@@ -192,7 +251,7 @@
                      upgradeCount: isRaw ? Object.keys(masterData.shipupgrade).length : masterData.api_mst_shipupgrade.length
                    };
         },
-        // return root ship in this ships's remodel chain
+        // return root ship in this ship's remodel chain
         originOf: function(shipId) {
             return this._db ? this._db.originOf[shipId] : undefined;
         },
@@ -255,7 +314,7 @@
             remodelGroup.pop();
 
             // for ships that has at least been remodelled once,
-            // there is no need keepin her prior form info here.
+            // there is no need keeping her prior form info here.
             while (remodelGroup.length > 0 && remodelGroup[0] !== shipId)
                 remodelGroup.shift();
             var levels = remodelGroup.map( function(sid) {

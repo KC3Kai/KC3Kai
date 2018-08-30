@@ -62,20 +62,23 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		
 		/* SET API LINK
 		From osapi content script, the API Link has been extracted
-		Save the link onto localStorage and disable extracing API further
-		If came from menu "Extract API Link", so open "Play via API" and close DMM source
+		Save the link onto localStorage and disable extracting API further
+		~~If came from menu "Extract API Link", so open "Play via API" and close DMM source~~
 		------------------------------------------*/
 		"set_api_link" :function(request, sender, callback){
 			// Set api link on internal storage
-			localStorage.absoluteswf = request.swfsrc;
+			localStorage.absoluteswf = request.swfsrc || "";
+			// Remember version string of current game main.js
+			const gameVerStr = (localStorage.absoluteswf.match(/&version=[\d\.]+\b/) || [])[0];
+			localStorage.gameVersion = (gameVerStr || "").split("=")[1] || "";
 			
 			// If refreshing API link, close source tabs and re-open game frame
 			if(JSON.parse(localStorage.extract_api)){ // localStorage has problems with native boolean
 				localStorage.extract_api = false;
+				chrome.tabs.remove([sender.tab.id], function(){});
 				// To avoid cross-domain warning of chrome
 				//window.open("../pages/game/api.html", "kc3kai_game");
 				chrome.tabs.create({ url: chrome.extension.getURL("../pages/game/api.html") });
-				chrome.tabs.remove([sender.tab.id], function(){});
 			}
 		},
 		
@@ -85,13 +88,35 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"notify_desktop" :function(request, sender, callback){
 			// Clear old notification first
-			chrome.notifications.clear("kc3kai_"+request.notifId, function(){
+			chrome.notifications.clear("kc3kai_" + request.notifId, function(){
 				// Add notification
-				chrome.notifications.create("kc3kai_"+request.notifId, request.data);
-				
+				chrome.notifications.create("kc3kai_" + request.notifId, request.data, function(createdId){
+					// Handler on notification box clicked
+					var clickHandler = function(clickedId){
+						if(clickedId === createdId){
+							var gameTabId = request.tabId;
+							chrome.notifications.clear(clickedId);
+							if(gameTabId){
+								chrome.tabs.get(gameTabId, function(tab){
+									chrome.windows.update(tab.windowId, { focused: true });
+									chrome.tabs.update(gameTabId, { active: true });
+								});
+							}
+						}
+					};
+					// Handler to clean one-time listeners on notification closed,
+					// since life cycle of listeners not the same with notifications.
+					var cleanListenersHandler = function(notificationId, byUser){
+						if(notificationId === createdId){
+							chrome.notifications.onClicked.removeListener(clickHandler);
+							chrome.notifications.onClosed.removeListener(cleanListenersHandler);
+						}
+					};
+					chrome.notifications.onClicked.addListener(clickHandler);
+					chrome.notifications.onClosed.addListener(cleanListenersHandler);
+				});
 			});
 			// Sending Mobile Push notification if enabled
-			ConfigManager.load();
 			if(ConfigManager.PushAlerts_enabled) {
 				$.ajax({
 					async: true,
@@ -152,7 +177,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		},
 		
 		/* Game Screen Change
-		A specific game screen manipulation. Such as idle timer, catbombing, and others. That marks
+		A specific game screen manipulation. Such as idle timer, catbomb, and others. That marks
 		the guy who make this function is lazier than making another key for such purpose XD
 		(PS: self-insulting)
 		------------------------------------------*/
@@ -174,7 +199,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			KC3QuestManager.load();
 			(new TMsg(request.tabId, "gamescreen", "questOverlay", {
 				KC3QuestManager: KC3QuestManager,
-				questlist: request.questlist
+				questlist: request.questlist,
+				ConfigManager: ConfigManager
 			})).execute();
 		},
 		
@@ -197,12 +223,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				mapId: request.nextNode.api_mapinfo_no,
 				compassShow: !!request.nextNode.api_rashin_flg,
 				needsDelay: !!request.startSortie,
-				apiData: request.nextNode
+				apiData: request.nextNode,
+				ConfigManager: ConfigManager
 			})).execute();
 		},
 		
 		/* GET CONFIG
-		For content scripts who doesnt have access to localStorage
+		For content scripts who doesn't have access to localStorage
 		Mainly used at the moment for DMM/OSAPI/cookie injection
 		------------------------------------------*/
 		"getConfig" :function(request, sender, response){
@@ -251,9 +278,9 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						chrome.windows.getCurrent(function(wind){
 							(new TMsg(request.tabId, "gamescreen", "getWindowSize", {}, function(size){
 								chrome.windows.update(wind.id, {
-									width: Math.ceil(800*ZoomFactor*size.game_zoom)
+									width: Math.ceil(1200*ZoomFactor*size.game_zoom)
 										+ (wind.width- Math.ceil(size.width*ZoomFactor) ),
-									height: Math.ceil((480+size.margin_top)*size.game_zoom*ZoomFactor)
+									height: Math.ceil((720+size.margin_top)*size.game_zoom*ZoomFactor)
 										+ (wind.height- Math.ceil(size.height*ZoomFactor) )
 								});
 							})).execute();
@@ -357,19 +384,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 		},
 		
-		/* DMM FRMAE INJECTION
+		/* DMM FRAME INJECTION
 		Responds if content script should inject DMM Frame customizations
 		------------------------------------------*/
 		"dmmFrameInject" :function(request, sender, response){
 			var senderUrl = (sender.tab)?sender.tab.url:false || sender.url  || "";
 			
-			ConfigManager.load();
 			if( isDMMFrame(senderUrl) && localStorage.dmmplay == "false"){
 				// DMM FRAME
 				response({ mode: 'frame', scale: ConfigManager.api_gameScale});
 			} else if(ConfigManager.dmm_customize && localStorage.extract_api != "true") {
 				var props = {
-					highlighted: true
+					highlighted: true,
+					muted: !!ConfigManager.mute_game_tab
 				};
 				// Prevent Chrome auto discard the game tab
 				// autoDiscardable since Chrome 54
@@ -389,6 +416,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 						config: ConfigManager,
 						master: KC3Master,
 						meta: KC3Meta,
+						remodel: RemodelDb,
 						quest: KC3QuestManager,
 					});
 				});
@@ -418,13 +446,78 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		When a ship speaks, show subtitles
 		------------------------------------------*/
 		"subtitle" :function(request, sender, response){
-			console.debug("subtitle", request);
-			(new TMsg(request.tabId, "gamescreen", "subtitle", {
-				voicetype: request.voicetype,
-				filename: request.filename || false,
-				shipID: request.shipID || false,
-				voiceNum: request.voiceNum,
-				url: request.url
+			//console.debug("subtitle", request);
+			let duration = 0;
+			const sendSubtitleToGameScreen = () => {
+				(new TMsg(request.tabId, "gamescreen", "subtitle", {
+					voicetype: request.voicetype,
+					fullurl: request.fullurl,
+					filename: request.filename || false,
+					shipID: request.shipID || false,
+					voiceNum: request.voiceNum,
+					voiceSize: request.voiceSize,
+					duration: duration,
+					url: request.url,
+					ConfigManager: ConfigManager
+				})).execute();
+			};
+			if(ConfigManager.subtitle_duration){
+				const readBlobAudioDuration = (blob) => {
+					const objectUrl = URL.createObjectURL(blob);
+					const audio = new Audio(objectUrl);
+					audio.onloadedmetadata = () => {
+						// Audio duration is float in seconds, to milliseconds
+						duration = (audio.duration || 0) * 1000;
+						// ensure Audio and Blob can be GCed
+						audio.pause();
+						URL.revokeObjectURL(objectUrl);
+						sendSubtitleToGameScreen();
+					};
+				};
+				const fetchVoiceFile = (soundUrl) => {
+					// Send request with jQuery to customize headers,
+					// ensure no header `Range` so that cache will be used
+					$.ajax({
+						url: soundUrl,
+						method: "GET",
+						headers: {
+							// Referer not allowed to be set by browser
+							"X-Requested-With": "ShockwaveFlash/" + detectFlashVersionString()
+						},
+						async: true,
+						cache: true,
+						processData: false,
+						xhrFields: { responseType: "blob" },
+						success: readBlobAudioDuration,
+						error: (xhr, status, error) => {
+							console.warn("Determine sound file duration " + status, error, soundUrl);
+							sendSubtitleToGameScreen();
+						}
+					});
+				};
+				// might link this with promise
+				fetchVoiceFile(request.fullurl);
+			} else {
+				sendSubtitleToGameScreen();
+			}
+		},
+		
+		/* LIVE RELOAD META DATA
+		Such as Quotes, Quotes of subtitles
+		------------------------------------------*/
+		"reloadMeta" :function(request, sender, response){
+			var metaType = request.type;
+			if(localStorage.dmmplay == "true" && ConfigManager.dmm_customize) {
+				// Reload meta at background for DMM takeover
+				if(metaType === "Quotes") {
+					KC3Meta.loadQuotes();
+				} else if(metaType === "Quests") {
+					KC3Meta.reloadQuests();
+				}
+			}
+			(new TMsg(request.tabId, "gamescreen", "reloadMeta", {
+				metaType: metaType,
+				meta: KC3Meta
 			})).execute();
 		},
 		
@@ -438,8 +531,24 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				manifest: chrome.runtime.getManifest(),
 				kc3version: chrome.runtime.getManifest().version
 			});
-		}
+		},
 		
+		/* QUEST SYNC
+		Facilitate remote invocation of background methods
+		------------------------------------------*/
+		"questSync" :function({ method, args, isAsync }, sender, response){
+			if (isAsync) {
+				KC3QuestSync[method](...args)
+					.then((result) => { response({ success: result }); })
+					.catch((error) => { response({ error }); });
+			} else {
+				try {
+					response({ success: KC3QuestSync[method](...args) });
+				} catch (error) {
+					response({ error });
+				}
+			}
+		},
 	};
 	
 	/* Runtime Message Listener
@@ -451,7 +560,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		// Check if message is intended for this script
 		if( (request.identifier || false) == "kc3_service"){
 			// Log message contents and sender for debugging
-			console.log(request.action, { "Request": request, "Sender": sender });
+			//console.debug(request.action, { "Request": request, "Sender": sender });
 			
 			// Check requested action is supported
 			if(typeof window.KC3Service[ request.action ] != "undefined"){
@@ -514,51 +623,15 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
-	/* On Chrome Storage Changed
-	Sync localStorage parts with Chrome Storage
-	Used for sync quests data on different machines
+	/* On Web Storage (localStorage here) Changed
+	Reload our ConfigManager as soon as possible on the key `config` changed,
+	Instead of explicitly invoking `load` method everywhere.
 	------------------------------------------*/
-	chrome.storage.onChanged.addListener(function(changes, namespace) {
-		// Check if expected changes present and namespace is "sync"
-		if (changes.KC3QuestsData && namespace == "sync") {
-			// Check if synchronization is enabled
+	window.addEventListener("storage", function({type, key, timeStamp, url}) {
+		//console.debug("storageEvent", {type, key, timeStamp, url});
+		if(key === ConfigManager.keyName()) {
 			ConfigManager.load();
-			if (ConfigManager.chromeSyncQuests) {
-				var newValue = changes.KC3QuestsData.newValue;
-				// Check if remote data structure version is matching with current expected structure
-				if (newValue.syncStructVersion == KC3QuestManager.syncStructVersion) {
-					// Check if local quests version not set or remote version is more then local
-					var dataVer = localStorage.questsVersion;
-					if (typeof dataVer === "undefined"
-						|| Number(newValue.questsVersion) > Number(dataVer)) {
-						localStorage.questsVersion = newValue.questsVersion;
-						// Check if JSON strings are the same, then there's nothing to do
-						if (newValue.quests === localStorage.quests) { return true; }
-						// Set new quests and reset times
-						localStorage.quests = newValue.quests;
-						localStorage.timeToResetDailyQuests = newValue.timeToResetDailyQuests;
-						localStorage.timeToResetWeeklyQuests = newValue.timeToResetWeeklyQuests;
-						localStorage.timeToResetMonthlyQuests = newValue.timeToResetMonthlyQuests;
-						localStorage.timeToResetQuarterlyQuests = newValue.timeToResetQuarterlyQuests;
-						// Check if desktop notifications enabled
-						if (ConfigManager.dataSyncNotification) {
-							var dt = new Date(+newValue.syncTimeStamp).toLocaleString();
-							chrome.notifications.create("kc3kai_quests", {
-								type: "basic",
-								title: KC3Meta.term("DesktopNotifyQuestsSyncTitle"),
-								message: KC3Meta.term("DesktopNotifyQuestsSyncMessage").format(dt),
-								iconUrl: "../../assets/img/quests/sortie.jpg"
-							});
-						}
-					} else {
-						console.info("Quest old version data received, ignored");
-					}
-				} else {
-					console.info("Quest unexpected data structure received, version:", newValue.syncStructVersion);
-				}
-			} else {
-				console.info("Quest data received, ignored as sync disabled by setting");
-			}
+			console.debug("Reload ConfigManager caused by", (url || "").match(/\/\/[^\/]+\/([^\?]+)/)[1]);
 		}
 	});
 	
@@ -599,7 +672,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	});
 	
 	// Chrome Desktop Notifications: Box Click
-	chrome.notifications.onClicked.addListener(function(notificationId, byUser){
+	chrome.notifications.onClicked.addListener(function(notificationId){
 		if (notificationId == "kc3kai_update") {
 			window.open("../../pages/update/update.html", "kc3_update_page");
 			chrome.notifications.clear("kc3kai_update");
@@ -632,7 +705,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	}
 	
 	function screenshotSpecialMode(tabId, response){
-		ConfigManager.load();
 		if(ConfigManager.dmm_customize) {
 			(new TMsg(tabId, "gamescreen", "getGamescreenOffset", {}, function(offset){
 				(new KCScreenshot())
@@ -645,6 +717,12 @@ See Manifest File [manifest.json] under "background" > "scripts"
 	function parseChromeVersion() {
 		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
 		return raw ? parseInt(raw[2], 10) : 0;
+	}
+	
+	function detectFlashVersionString() {
+		var plugin = navigator.plugins["Shockwave Flash"];
+		var major = (plugin && plugin.description.split(" ")[2]) || "1";
+		return major + ".0";
 	}
 	
 })();

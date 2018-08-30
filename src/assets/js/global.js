@@ -3,14 +3,18 @@
 \*******************************/
 /* GOOGLE ANALYTICS
 -------------------------------*/
-if (typeof NO_GA == "undefined") {
+if (!window.NO_GA) {
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-9789944-12']);
 	(function() {
 		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 		ga.src = 'https://ssl.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		var s = document.getElementsByTagName('script')[0];
+		if(s && s.parentNode) s.parentNode.insertBefore(ga, s);
 	})();
+} else {
+	var _gaq = [];
+	_gaq.push = function() {};
 }
 
 /*
@@ -39,7 +43,7 @@ var dateFormat = function () {
 		};
 
 	// Regexes and supporting functions are cached through closure
-	return function (date, mask, utc) {
+	return function (date, mask, utc, locale) {
 		var dF = dateFormat;
 
 		// You can't provide utc if you skip other args (use the "UTC:" mask prefix)
@@ -73,12 +77,12 @@ var dateFormat = function () {
 			flags = {
 				d:    d,
 				dd:   pad(d),
-				ddd:  dF.i18n.dayNames[D],
-				dddd: dF.i18n.dayNames[D + 7],
+				ddd:  locale ? date.toLocaleString(locale, {weekday: "short"}) : dF.i18n.dayNames[D],
+				dddd: locale ? date.toLocaleString(locale, {weekday: "long"}) : dF.i18n.dayNames[D + 7],
 				m:    m + 1,
 				mm:   pad(m + 1),
-				mmm:  dF.i18n.monthNames[m],
-				mmmm: dF.i18n.monthNames[m + 12],
+				mmm:  locale ? date.toLocaleString(locale, {month: "short"}) : dF.i18n.monthNames[m],
+				mmmm: locale ? date.toLocaleString(locale, {month: "long"}) : dF.i18n.monthNames[m + 12],
 				yy:   String(y).slice(2),
 				yyyy: y,
 				h:    H % 12 || 12,
@@ -116,6 +120,7 @@ dateFormat.masks = {
 	shortTime:      "h:MM TT",
 	mediumTime:     "h:MM:ss TT",
 	longTime:       "h:MM:ss TT Z",
+	fullDateTime:   "yyyy-mm-dd dddd HH:MM:ss Z",
 	isoDate:        "yyyy-mm-dd",
 	isoTime:        "HH:MM:ss",
 	isoDateTime:    "yyyy-mm-dd'T'HH:MM:ss",
@@ -139,11 +144,11 @@ http://stackoverflow.com/a/10088053/483704
 -------------------------------*/
 Date.getJstDate = function() {
 	// create Date object for current location
-	d = new Date();
+	var d = new Date();
 	// convert to msec
 	// add local time zone offset
 	// get UTC time in msec
-	utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+	var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
 	// create new Date object for different city
 	// using supplied offset
 	return new Date(utc + (3600000*9));
@@ -181,6 +186,52 @@ Object.size = function(obj) {
 	}
 	return size;
 };
+Object.assignIfDefined = function(target, key, value) {
+	if(value !== undefined && typeof target === "object") {
+		target[key] = value;
+	}
+	return target;
+};
+/**
+ * Checks object paths of any depth is valid, like `lodash.hashPathIn`.
+ */
+Object.hasSafePath = function(root, props) {
+	return Object.safePropertyPath(false, root, props);
+};
+/**
+ * Get object property value by paths of any depth is valid.
+ */
+Object.getSafePath = function(root, props) {
+	return Object.safePropertyPath(true, root, props);
+};
+Object.safePropertyPath = function(isGetProp, root, props) {
+	if(!root) {
+		return isGetProp ? root : false;
+	}
+	var path = [];
+	if(arguments.length > 3) {
+		path = $.makeArray(arguments).slice(2);
+	} else if(typeof props === "string") {
+		path = props.split('.');
+	} else if(Array.isArray(props)) {
+		path = props;
+	}
+	var prop;
+	while( !!(prop = path.shift()) ) {
+		try {
+			// can use hasOwnProperty not to match props inherited
+			if(typeof prop === "string" && prop in root) {
+				root = root[prop];
+			} else {
+				return isGetProp ? undefined : false;
+			}
+		} catch(e) {
+			return isGetProp ? undefined : false;
+		}
+	}
+	return isGetProp ? root : true;
+};
+
 
 /* PRIMITIVE */
 /*******************************\
@@ -204,6 +255,62 @@ String.prototype.insert = function (index, string) {
 String.prototype.toArray = function() {
 	return this.split("");
 };
+
+/**
+ * Capitalize first letter and lower case left letters.
+ */
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+};
+
+/**
+ * String identifier to camel case.
+ * Will remove spaces, [_$] and also [@+-/*\,.%&#!?:;]. Upper first letter, but not lower left letters of word.
+ * @param isToUpper - to upper camel case instead of lower camel case.
+ */
+String.prototype.toCamelCase = function(isToUpper) {
+	return this.replace(/[_$@\+\-\*\/\\\.,%&#!?:;]/g, ' ').trim().replace(/^([A-Za-z])|[\s]+(\w)/g,
+	function(match, p1, p2) {
+		if(p2) return p2.toUpperCase();
+		return isToUpper ? p1.toUpperCase() : p1.toLowerCase();
+	});
+};
+
+/**
+ * Pad the current string with a given string (repeated, if needed)
+ * so that the resulting string reaches a given length.
+ * @see https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+ */
+String.prototype.pad = function (targetLength, padString, isPadEnd) {
+	// truncate if number or convert non-number to 0
+	targetLength = targetLength >> 0;
+	padString = String((typeof padString !== 'undefined' ? padString : ' '));
+	if (this.length > targetLength) {
+		return String(this);
+	} else {
+		targetLength = targetLength - this.length;
+		if (targetLength > padString.length) {
+			// append to original to ensure we are longer than needed
+			padString += padString.repeat(targetLength / padString.length);
+		}
+		// pad from start by default
+		return !!isPadEnd ? String(this) + padString.slice(0, targetLength) :
+			padString.slice(0, targetLength) + String(this);
+	}
+};
+/**
+ * Polyfill of padStart() and padEnd()
+ */
+if (!String.prototype.padStart) {
+	String.prototype.padStart = function(targetLength, padString) {
+		return this.pad(targetLength, padString, false);
+	};
+}
+if (!String.prototype.padEnd) {
+	String.prototype.padEnd = function(targetLength, padString) {
+		return this.pad(targetLength, padString, true);
+	};
+}
 
 /**
  * String.format("msg {0} is {1}", args) - convenient placeholders replacing,
@@ -258,7 +365,7 @@ String.prototype.toHHMMSS = function () {
 
 /* SECONDS TO HH:MM:SS, ADDING CURRENT TIME
 -------------------------------*/
-String.prototype.plusCurrentTime = function() {
+String.prototype.plusCurrentTime = function(showDays) {
 	var currentTime = new Date();
 	var secondsAfterMidnight =
 		3600 * currentTime.getHours() +
@@ -267,7 +374,9 @@ String.prototype.plusCurrentTime = function() {
 
 	var secondsRemaining = parseInt(this, 10);
 	var timeFinished = (secondsAfterMidnight + secondsRemaining) % 86400;
-	return String(timeFinished).toHHMMSS();
+	var daysPassed = Math.floor((secondsAfterMidnight + secondsRemaining) / 86400);
+	return (showDays && daysPassed ? "+" + daysPassed + " " : "") +
+		String(timeFinished).toHHMMSS();
 };
 
 /* hashing for integrity checks
@@ -419,7 +528,7 @@ String.prototype.hashCode = function() {
 					for (var i = 0, l=this.length; i < l; i++) {
 						// Check if we have nested arrays
 						if (this[i] instanceof Array && array[i] instanceof Array) {
-							// recurse into the nested arrays
+							// recursively into the nested arrays
 							if (!this[i].equals(array[i]))
 								return false;
 						} else if (this[i] != array[i]) {
@@ -494,6 +603,50 @@ Array.numbers = function(start, end){
 	while(i-- > 0) a[i] = n + i;
 	return a;
 };
+/** Pad values into array to reach the length */
+Array.pad = function(array, length, value, original){
+	if (!Array.isArray(array)) {
+		// give back non-array
+		return array;
+	}
+	array = original ? array : array.slice(0);
+	length = length || 0;
+	var method = length < 0 ? 'unshift' : 'push';
+	var total = Math.abs(length);
+	while(array.length < total) {
+		array[method](value);
+	}
+	return array;
+};
+// To avoid for...in iteration hitting this function, uses Object.defineProperty like other polyfill
+Object.defineProperty(Array.prototype, "sumValues", {
+	enumerable: false, // although it is false by default
+	/**
+	 * A convenient method to sum all the numbers in Array.
+	 * Equivalent to a code like `[].reduce((acc, v) => acc + v, 0)`.
+	 * @param getter - an optional function to convert each element to numeric value
+	 */
+	value: function sumValues(getter) {
+		var thisArray = this;
+		return thisArray.reduce(function(acc, v, i) {
+			return acc + (Number(typeof getter === "function" ? getter(v, i, acc, thisArray) : v) || 0);
+		}, 0);
+	}
+});
+
+/*******************************\
+|*** Object                     |
+\*******************************/
+/** Sum values in Objects with same properties */
+Object.sumValuesByKey = function(){
+	return Array.from(arguments).reduce(function(acc, o){
+		for(var k in o){
+			if(o.hasOwnProperty(k))
+				acc[k] = Number(acc[k] || 0) + Number(o[k]);
+		}
+		return acc;
+	}, {});
+};
 
 /*******************************\
 |*** Date                       |
@@ -547,8 +700,8 @@ Array.numbers = function(start, end){
 	}
 
 	Object.defineProperties(Date.prototype,{
-		format: { value: function format(mask, utc) {
-			return dateFormat(this, mask, utc);
+		format: { value: function format(mask, utc, locale) {
+			return dateFormat(this, mask, utc, locale);
 		}},
 		shiftHour : { get: function () { return shiftTime.bind(this,'Hours'); } },
 		shiftDate : { get: function () { return shiftTime.bind(this,'Date' ); } },
@@ -639,7 +792,7 @@ Array.numbers = function(start, end){
 			switch(typeof clearTable) {
 				case 'number':
 				case 'string':
-					// Pick nth+1 element from ResetableKeys
+					// Pick nth+1 element from Reset-able Keys
 					// Invalid >> pick all elements
 					clearTable = parseInt(clearTable,10);
 					clearTable = ((clearTable >= 0) && !isNaN(clearTable) && isFinite(clearTable) || ResetableKeys.length) && clearTable;
@@ -651,7 +804,7 @@ Array.numbers = function(start, end){
 					};
 					break;
 				default:
-					// Pick any matching element from Resetable Array
+					// Pick any matching element from Reset-able Array
 					// Invalid >> pick all elements
 					clearTable = ((typeof clearTable === 'object' && clearTable instanceof Array && clearTable) || ResetableKeys);
 
@@ -761,9 +914,14 @@ Storage.prototype.getObject = function(key) {
 /**
  * https://stackoverflow.com/questions/3027142/calculating-usage-of-localstorage-space
  * DOMException (code 22, name: QuotaExceededError) will be thrown on
- * 5M characters (yes it's not byte) exceeded for Chromium.
- * They are different for other browser engines:
+ * 5M characters (yes it's not in bytes) exceeded for Chromium localStorage.
+ * It's equivalent to `chrome.storage.local.QUOTA_BYTES`, but differences are:
+ * chrome.storage.local is in bytes, measured by JSON string and can be unlimitedStorage.
+ * https://developer.chrome.com/extensions/storage
+ * They are also different for other browser engines:
  * https://en.wikipedia.org/wiki/Web_storage#Storage_size
+ * From Chromium 61, localStorage is switched to leveldb backing store, but 5M quota unchanged.
+ * https://bugs.chromium.org/p/chromium/issues/detail?id=586194
  **/
 Storage.prototype.quotaLength = 1024 * 1024 * 5;
 // Both length of key and value should be taken into account,

@@ -548,7 +548,7 @@
 				if(KC3SortieManager.currentNode().type != "battle"){ console.error("Wrong node handling"); return false; }
 				
 				var thisNode = KC3SortieManager.currentNode();
-				var battleData = (thisNode.startNight)? thisNode.battleNight : thisNode.battleDay;
+				var battleData = (thisNode.startsFromNight)? thisNode.battleNight : thisNode.battleDay;
 				
 				if((typeof thisNode.eformation != "undefined") && (thisNode.eformation > -1)){
 					$(".battle .battle_formation img", container).attr("src", KC3Meta.formationIcon(thisNode.eformation));
@@ -595,11 +595,11 @@
 				
 				$(".battle .battle_support",container).show();
 				// Day battle-only environment
-				if(!thisNode.startNight){
+				if(!thisNode.startsFromNight){
 					$(".battle .battle_current", container).text("DAY BATTLE");
 					
 					// If support expedition is triggered on this battle
-					if(thisNode.supportFlag){
+					if(thisNode.supportFlag || thisNode.nightSupportFlag){
 						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
 					}else{
 						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
@@ -645,7 +645,11 @@
 					// Started on night battle
 					$(".battle .battle_current", container).text("NIGHT BATTLE");
 					
-					$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					if (thisNode.nightSupportFlag) {
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support.png");
+					} else {
+						$(".battle .battle_support img", container).attr("src", "../../../../assets/img/ui/support-x.png");
+					}
 					$(".battle .battle_yasen img", container).attr("src", "../../../../assets/img/ui/yasen.png");
 				}
 				
@@ -1091,8 +1095,8 @@
 						gearHolderColor = "rgba(0, 0, 0, 1)";
 						equipCapacityColor = "#fff";
 				}
-				$(".ship-gear img", self.domElement).css("background", gearHolderColor);
-				$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+				$(".ship-gear img").css("background", gearHolderColor);
+				$(".fleet-ships .ship-equip-capacity").css("color", equipCapacityColor);
 				ConfigManager.save();
 			});
 
@@ -1102,7 +1106,7 @@
 			}else{
 				$(".ship-equip-capacity", element).text("");
 			}
-			$(".fleet-ships .ship-equip-capacity", self.domElement).css("color", equipCapacityColor);
+			$(".fleet-ships .ship-equip-capacity").css("color", equipCapacityColor);
 		}
 	}
 	

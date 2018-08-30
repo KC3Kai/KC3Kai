@@ -20,9 +20,10 @@
 	padding:5px 10px;
 }
 .tab_flowchart .questControls .questLabel {
-	width:90px;
+	width:auto;
 	height:20px;
 	line-height:20px;
+	margin-right:5px;
 	font-size:12px;
 	float:left;
 	font-weight:bold;
@@ -31,7 +32,7 @@
 	width:90px;
 	height:20px;
 	line-height:20px;
-	margin:0px 5px 0px 0px;
+	margin:0px 5px 2px 0px;
 	font-weight:bold;
 	font-size:12px;
 	text-align:center;
@@ -98,7 +99,7 @@
 	background-blend-mode:normal;
 }
 .tab_flowchart .questFlowItem .questDesc {
-	max-width:66%;
+	max-width:64%;
 	margin:0px 5px 0px 0px;
 	height:20px;
 	float:left;
@@ -261,4 +262,12 @@
 	height:12px;
 	margin:2px;
 	vertical-align:top;
+}
+.tab_flowchart .questExtraItem .questIcon.ticked {
+	background-image:url(../../../../assets/img/ui/quest_check.png);
+	background-repeat:no-repeat;
+	background-size:16px 16px;
+	background-position-x:25px;
+	background-position-y:4px;
+	background-blend-mode:normal;
 }

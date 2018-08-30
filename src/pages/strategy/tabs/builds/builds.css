@@ -1,39 +1,10 @@
 .tab_builds {
 }
 .tab_builds .build_list {
+	width:680px;
 }
 .tab_builds .factory {
 	display:none;
-}
-
-.tab_builds .legend {
-}
-.tab_builds .legend_item {
-	width:120px;
-	height:20px;
-	float:left;
-}
-.tab_builds .legend_color {
-	width:14px;
-	height:14px;
-	margin:3px 5px 0px 3px;
-	float:left;
-	border:1px solid #555;
-}
-.tab_builds .legend_icon {
-	width:20px;
-	height:20px;
-	margin:0px 5px 0px 0px;
-	float:left;
-}
-.tab_builds .legend_icon img {
-	width:16px;
-	height:16px;
-	margin:2px;
-}
-.tab_builds .legend_label {
-	width:70px;
-	float:left;
 }
 
 /* LIST
@@ -64,23 +35,70 @@
 	margin:2px;
 }
 .tab_builds .build_item .build_name {
-	width:100px;
-	overflow:hidden;
+	width:115px;
 	margin:0px 5px 0px 0px;
+	font-size:14px;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_builds .build_item .build_rsc {
-	width:50px;
+	width:40px;
 	margin:0px 5px 0px 0px;
+	font-size:14px;
 	text-align:center;
 }
 .tab_builds .build_item .build_time {
-	width:140px;
+	width:150px;
 	font-size:11px;
+	overflow:hidden;
+}
+
+/* FILTERS
+--------------------------------*/
+.tab_builds .filters {
+	height:60px;
+}
+.tab_builds .filters .build_name {
+	float:left;
+	height:25px;
+	margin-right:10px;
+	margin-bottom:5px;
+}
+.tab_builds .filters .build_icon {
+	float:left;
+	margin:5px 2px 0px 0px;
+	height:16px;
+}
+.tab_builds .filters .build_rsc {
+	float:left;
+	width:45px;
+	height:25px;
+	margin-right:10px;
+	margin-bottom:5px;
+	padding:1px;
+	border-width:1px;
+}
+.tab_builds .filters .secretary_ship {
+	width:120px;
+}
+.tab_builds .filters .build_result {
+	width:140px;
+}
+.tab_builds .filters .reset_all {
+	height:25px;
+	padding:2px 5px;
+}
+.tab_builds .page_items {
+	font-size:12px;
+}
+.tab_builds .item_per_page {
+	margin-right:4px;
 }
 
 /* PAGINATION
 --------------------------------*/
 .tab_builds .build_pages {
+	height:50px;
 	margin-bottom:10px;
 }
 .tab_builds .build_pages .pagination {

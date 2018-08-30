@@ -1,40 +1,10 @@
 .tab_lscs {
 }
 .tab_lscs .build_list {
-	white-space:nowrap;
+	width:680px;
 }
 .tab_lscs .factory {
 	display:none;
-}
-
-.tab_lscs .legend {
-}
-.tab_lscs .legend_item {
-	width:120px;
-	height:20px;
-	float:left;
-}
-.tab_lscs .legend_color {
-	width:14px;
-	height:14px;
-	margin:3px 5px 0px 3px;
-	float:left;
-	border:1px solid #555;
-}
-.tab_lscs .legend_icon {
-	width:20px;
-	height:20px;
-	margin:0px 5px 0px 0px;
-	float:left;
-}
-.tab_lscs .legend_icon img {
-	width:16px;
-	height:16px;
-	margin:2px;
-}
-.tab_lscs .legend_label {
-	width:70px;
-	float:left;
 }
 
 /* LIST
@@ -66,25 +36,73 @@
 }
 .tab_lscs .build_item .build_name {
 	width:100px;
-	overflow:hidden;
 	margin:0px 5px 0px 0px;
+	font-size:14px;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 .tab_lscs .build_item .build_rsc {
-	width:45px;
+	width:40px;
 	margin:0px 5px 0px 0px;
+	font-size:13px;
 	text-align:center;
 }
 .tab_lscs .build_item .build_devmat {
-	width:35px;
+	width:30px;
 }
 .tab_lscs .build_item .build_time {
-	width:120px;
+	width:148px;
 	font-size:11px;
+	overflow:hidden;
+}
+
+/* FILTERS
+--------------------------------*/
+.tab_lscs .filters {
+	height:60px;
+}
+.tab_lscs .filters .build_name {
+	float:left;
+	height:25px;
+	margin-right:5px;
+	margin-bottom:5px;
+}
+.tab_lscs .filters .build_icon {
+	float:left;
+	margin:5px 2px 0px 0px;
+	height:16px;
+}
+.tab_lscs .filters .build_rsc {
+	float:left;
+	width:52px;
+	height:25px;
+	margin-right:5px;
+	margin-bottom:5px;
+	padding:1px;
+	border-width:1px;
+}
+.tab_lscs .filters .secretary_ship,
+.tab_lscs .filters .build_result {
+	width:100px;
+}
+.tab_lscs .filters .build_devmat {
+	width:48px;
+}
+.tab_lscs .filters .reset_all {
+	height:25px;
+	padding:2px 5px;
+}
+.tab_lscs .page_items {
+	font-size:12px;
+}
+.tab_lscs .item_per_page {
+	margin-right:4px;
 }
 
 /* PAGINATION
 --------------------------------*/
 .tab_lscs .build_pages {
+	height:50px;
 	margin-bottom:10px;
 }
 .tab_lscs .build_pages .pagination {

@@ -35,8 +35,8 @@
 			$.each(KC3Master.all_slotitems(), function(index, GearData){
 				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
 				gearBox.attr("data-id", GearData.api_id);
-				$(".gearIcon img", gearBox).attr("src", "../../../../assets/img/items/"+GearData.api_type[3]+".png")
-					.error(function() { $(this).unbind("error").attr("src", "../../assets/img/ui/empty.png"); });
+				$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(GearData.api_type[3]))
+					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
 				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
 				gearBox.appendTo(".tab_mstgear .gearRecords");
 			});
@@ -80,19 +80,18 @@
 		
 		showGear :function(gear_id){
 			gear_id = Number(gear_id||"124");
-			var self = this;
-			var gearData = KC3Master.slotitem( gear_id );
-			console.debug("gearData", gearData);
+			const self = this;
+			const gearData = KC3Master.slotitem( gear_id );
+			console.debug("Viewing gearData", gearData);
 			self.currentGearId = gear_id;
 			
 			if(!KC3Master.isAbyssalGear(gear_id)){
-				var gearHost = "http://"+this.server_ip+"/kcs/resources/image/slotitem/";
-				var paddedId = (gear_id<10?"00":gear_id<100?"0":"")+gear_id;
+				const gearHost = `http://${this.server_ip}/kcs2/resources`;
 				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
-				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost+"card/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost+"item_character/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost+"item_up/"+paddedId+".png");
-				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost+"item_on/"+paddedId+".png");
+				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost + KC3Master.png_file(gear_id, "card", "slot"));
+				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_character", "slot"));
+				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_up", "slot"));
+				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_on", "slot"));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			}else{
 				$(".tab_mstgear .gearInfo .gearAssets").hide();
@@ -105,12 +104,14 @@
 				KC3Meta.gearTypeName(1, gearData.api_type[1]),
 				KC3Meta.gearTypeName(2, gearData.api_type[2]).replace("?", "") ||
 					KC3Master.slotitem_equiptype(gearData.api_type[2]).api_name
-			));
-			if(KC3StrategyTabs.isTextEllipsis(gearTypesBox)){
-				gearTypesBox.attr("title", gearTypesBox.text());
-			} else {
-				gearTypesBox.attr("title", "");
-			}
+			)).lazyInitTooltip();
+			setTimeout(() => {
+				if(KC3StrategyTabs.isTextEllipsis(gearTypesBox)){
+					gearTypesBox.attr("title", gearTypesBox.text());
+				} else {
+					gearTypesBox.attr("title", "");
+				}
+			}, 0);
 
 			$(".tab_mstgear .gearInfo .rarity").empty();
 			for(var bctr=0; bctr<gearData.api_rare; bctr++){
@@ -135,30 +136,38 @@
 			
 			// Stats
 			var statBox;
+			var planeOnlyStats = ["or", "kk"];
 			$(".tab_mstgear .gearInfo .stats").empty();
 			$.each([
-				["hp", "taik"],
-				["fp", "houg"],
-				["ar", "souk"],
-				["tp", "raig"],
-				["sp", "soku"],
-				["dv", "baku"],
-				["aa", "tyku"],
-				["as", "tais"],
-				["ht", "houm"],
-				["ev", "houk"],
-				["ls", "saku"],
-				["rn", "leng"],
-				["or", "distance"],
-				["kk", "cost"],
+				["hp", "taik", "ShipHp"],
+				["fp", "houg", "ShipFire"],
+				["ar", "souk", "ShipArmor"],
+				["tp", "raig", "ShipTorpedo"],
+				["sp", "soku", "ShipSpeed"],
+				["dv", "baku", "ShipBombing"],
+				["aa", "tyku", "ShipAntiAir"],
+				["as", "tais", "ShipAsw"],
+				["ht", "houm", "ShipAccuracy", "ib", "ShipAccAntiBomber"],
+				["ev", "houk", "ShipEvasion", "if", "ShipEvaInterception"],
+				["ls", "saku", "ShipLos"],
+				["rn", "leng", "ShipLength"],
+				["or", "distance", "ShipRadius"],
+				["kk", "cost", "ShipDeployCost"],
 			], function(index, sdata){
-				if((gearData["api_"+sdata[1]]||0) !== 0
-					&& (["or","kk"].indexOf(sdata[0]) < 0
-					|| (["or","kk"].indexOf(sdata[0]) >=0 &&
-						KC3GearManager.landBasedAircraftType3Ids.indexOf(gearData.api_type[3])>-1) )
-				){
+				if((gearData["api_"+sdata[1]]||0) !== 0 && (
+					!planeOnlyStats.includes(sdata[0]) || (
+						planeOnlyStats.includes(sdata[0]) &&
+						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
+					)
+				)) {
+					var isLandFighter = gearData.api_type[2] === 48;
 					statBox = $(".tab_mstgear .factory .stat").clone();
-					$("img", statBox).attr("src", "../../../../assets/img/stats/"+sdata[0]+".png");
+					$("img", statBox)
+						.attr("src", KC3Meta.statIcon(sdata[
+							sdata.length > 3 && isLandFighter ? 3 : 0
+						])).attr("title", KC3Meta.term(
+							sdata[sdata.length > 4 && isLandFighter ? 4 : 2]) || "")
+						.lazyInitTooltip();
 					if(sdata[0]==="rn"){ // For range length
 						$(".stat_value", statBox).text( [
 							"?", "S", "M", "L", "VL", "XL"
@@ -168,7 +177,7 @@
 							"0":"L", "5":"S", "10":"F", "15":"F+", "20":"F++"
 						})[gearData["api_"+sdata[1]]] || "?");
 					}else if(sdata[0]==="kk"){ // For bauxite cost when deploy to LBAS
-						var landSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(gearData.api_type[2])>-1 ?
+						var landSlot = KC3GearManager.landBaseReconnType2Ids.includes(gearData.api_type[2]) ?
 							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
 						var deployCost = gearData["api_"+sdata[1]] * landSlot;
 						$(".stat_value", statBox).text( "{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot) );

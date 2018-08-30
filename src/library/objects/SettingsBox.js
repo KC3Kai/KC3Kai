@@ -86,7 +86,7 @@ To be dynamically used on the settings page
 				}
 
 				// Invalid Value Attempt
-				var ERRCODE = isInvalid(self.bound,$(this).val());
+				var ERRCODE = isInvalid(self.bound, $(this).val());
 				if(!!ERRCODE) {
 					var errstr = KC3Meta.term("SettingsErrorOrder");
 					if(ERRCODE === -1) {
@@ -97,8 +97,8 @@ To be dynamically used on the settings page
 							.replace("%CMP",KC3Meta.term("SettingsError" + ((ERRCODE & 2) == 2 ? "Above" :  "Below")))
 							.replace("%VAL",self.bound[((ERRCODE & 4) == 4 ? "" : "length_") + ((ERRCODE & 2) == 2 ? "max" : "min")]);
 					}
-					console.info(errstr);
-					elementControl($(this).parent().siblings(".note"),'red',errstr);
+					console.log("Validation failed:", $(this).val(), errstr, self.bound);
+					elementControl($(this).parent().siblings(".note"), 'red', errstr);
 					$(this).val(ConfigManager[self.config]);
 					return false;
 				}
@@ -113,9 +113,11 @@ To be dynamically used on the settings page
 						self.soundPreview.pause();
 					}
 					switch(ConfigManager.alert_type){
-						case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
+						case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
 						case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
-						case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+						case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
+						case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
+						case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
 						default: self.soundPreview = false; break;
 					}
 					if(self.soundPreview){
@@ -170,7 +172,7 @@ To be dynamically used on the settings page
 		}
 
 		$("."+choiceClass, this.element).on("click", function(){
-			console.log(this,arguments);
+			//console.debug(this, arguments);
 			$("."+$(this).data("class")).removeClass("active");
 			$(this).addClass("active");
 			ConfigManager.loadIfNecessary();
@@ -179,14 +181,18 @@ To be dynamically used on the settings page
 			elementControl($(this).parent().siblings(".note"),'',KC3Meta.term("SettingsErrorNG"));
 
 			// If changed sound type, test play the alert sound
-			if(self.config == "alert_type"){
+			const baseKey = "alert_type",
+				configKeys = self.config.split(baseKey);
+			if(configKeys[0] === ""){
 				if(self.soundPreview){
 					self.soundPreview.pause();
 				}
-				switch(ConfigManager.alert_type){
-					case 1: self.soundPreview = new Audio("../../../../assets/snd/pop.mp3"); break;
-					case 2: self.soundPreview = new Audio(ConfigManager.alert_custom); break;
-					case 3: self.soundPreview = new Audio("../../../../assets/snd/ding.mp3"); break;
+				switch(ConfigManager[baseKey + configKeys[1]]){
+					case 1: self.soundPreview = new Audio("/assets/snd/pop.mp3"); break;
+					case 2: self.soundPreview = new Audio(ConfigManager["alert_custom" + configKeys[1]]); break;
+					case 3: self.soundPreview = new Audio("/assets/snd/ding.mp3"); break;
+					case 4: self.soundPreview = new Audio("/assets/snd/dong.mp3"); break;
+					case 5: self.soundPreview = new Audio("/assets/snd/bell.mp3"); break;
 					default: self.soundPreview = false; break;
 				}
 				if(self.soundPreview){
@@ -292,7 +298,7 @@ To be dynamically used on the settings page
 		// lsb-2 : value check if set, length check if not
 		// having all bit is set means invalid value
 		// otherwise, having all bit is unset means valid value
-		console.log(bound);
+		//console.debug(bound);
 		var isNumber = function(str){
 			return !(isNaN(str) || str === "" || str === null || str === false);
 		};

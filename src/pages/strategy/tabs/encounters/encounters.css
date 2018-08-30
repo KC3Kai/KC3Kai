@@ -5,12 +5,42 @@
 	display:none;
 }
 
+.tab_encounters .map_switcher {
+	margin: 0px 0px 10px 0px;
+	height: 45px;
+}
+
+.tab_encounters .world_list {
+	min-width: 150px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+}
+.tab_encounters .map_list {
+	min-width: 115px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+}
+.tab_encounters .difficulty {
+	min-width: 105px;
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+	display: none;
+}
+.tab_encounters .difficulty.active {
+	display: block;
+}
+
+
 .tab_encounters .loading {
 	margin:8px 5px;
-	display:block;
+	display:none;
+	
 }
 .tab_encounters .loading img {
-	content:url(../../../../assets/img/ui/indicator.svg);
+	content:url(/assets/img/ui/indicator.svg);
 	width:24px;
 	height:24px;
 	margin-left:auto;
@@ -41,7 +71,7 @@
 --------------------------------*/
 .tab_encounters .encounter_record {
 	width:260px;
-	height:50px;
+	height:auto;
 	float:left;
 	margin:0px 20px 10px 0px;
 	padding:3px 5px;
@@ -62,11 +92,11 @@
 }
 .tab_encounters .encounter_ships {
 	width:210px;
-	height:44px;
+	height:auto;
 	float:left;
 }
 .tab_encounters .encounter_ships.combined {
-	width:130px;
+	width:185px;
 }
 
 .tab_encounters .encounter_ship {
@@ -76,10 +106,13 @@
 	margin:0px 5px 0px 0px;
 }
 .tab_encounters .combined .encounter_ship {
-	transform:scale(0.5);
+	transform:scale(0.75);
 	transform-origin:24px 0px;
-	width:16px;
-	height:24px;
+	width:22px;
+	height:34px;
+}
+.tab_encounters .encounter_ship.escort_flagship {
+	margin-left:14px;
 }
 .tab_encounters .encounter_icon {
 	width:30px;

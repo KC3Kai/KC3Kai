@@ -28,18 +28,37 @@
 	 </div>
 	 <div class="expedNumBox fleetCounts">
 		<div class="fleetCount">
-			<div class="fleetRadio"><input type="checkbox" value="2" CHECKED DISABLED /></div>
-			<div class="fleetText">Fleet 2</div>
+			<label>
+				<div class="fleetRadio"><input type="checkbox" value="2" checked /></div>
+				<div class="fleetText">Fleet 2</div>
+			</label>
 			<div class="clear"></div>
 		</div>
 		<div class="fleetCount">
-			<div class="fleetRadio"><input type="checkbox" value="3" CHECKED DISABLED /></div>
-			<div class="fleetText">Fleet 3</div>
+			<label>
+				<div class="fleetRadio"><input type="checkbox" value="3" checked /></div>
+				<div class="fleetText">Fleet 3</div>
+			</label>
 			<div class="clear"></div>
 		</div>
 		<div class="fleetCount">
-			<div class="fleetRadio"><input type="checkbox" value="4" CHECKED DISABLED /></div>
-			<div class="fleetText">Fleet 4</div>
+			<label>
+				<div class="fleetRadio"><input type="checkbox" value="4" checked /></div>
+				<div class="fleetText">Fleet 4</div>
+			</label>
+			<div class="clear"></div>
+		</div>
+		<br><br>
+		<div class="fleetSparkles">
+			<label>
+			<div class=sparkleText>Sparkles:</div>
+				<div class="typeSelect"><select>
+					<option value="0">></option>
+					<option value="1" selected="selected">≥</option>
+					<option value="2">=</option>
+				</select></div>
+				<div class="fleetDropdown"><input id="sparkleAmount" type="number" min="0" max="6" value="0"/></div>
+			</label>
 			<div class="clear"></div>
 		</div>
 	 </div>
@@ -48,10 +67,11 @@
 
 <!-- PAGINATION -->
 <div class="exped_pages page_panel">
-	 <ul class="pagination pagination-sm"></ul>
+	<ul class="pagination pagination-sm"></ul>
 </div>
 
 <div class="page_padding">
+	<div class="exped_count"></div>
 	<div class="exped_list"></div>
 </div>
 
@@ -60,8 +80,10 @@
 	
 	<!-- Expedition checkboxes for candidates -->
 	<div class="expedNum">
-		<div class="expedCheck"><input type="checkbox" CHECKED /></div>
-		<div class="expedText"></div>
+		<label>
+			<div class="expedCheck"><input type="checkbox" checked /></div>
+			<div class="expedText"></div>
+		</label>
 		<div class="expedTime"></div>
 		<div class="clear"></div>
 	</div>

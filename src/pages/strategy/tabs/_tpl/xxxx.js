@@ -1,18 +1,18 @@
 (function(){
 	"use strict";
-	
+
 	KC3StrategyTabs.sample = new KC3StrategyTab("sample");
-	
+
 	KC3StrategyTabs.sample.definition = {
 		tabSelf: KC3StrategyTabs.sample,
-		
+
 		/* INIT: mandatory
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
 			// TODO codes stub, remove this if nothing to do
 		},
-		
+
 		/* RELOAD: optional
 		Loads latest player or game data if needed.
 		---------------------------------*/
@@ -45,5 +45,5 @@
 			return false;
 		}
 	};
-	
+
 })();

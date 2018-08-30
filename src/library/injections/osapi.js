@@ -8,7 +8,7 @@ Starts a timer every half-second which checks if kancolle game client is present
 If detected, passes the API link to background service for saving.
 
 [clearInterval] moved out of the messaging callback to ensure one-time sending only.
-When it was inside the callback, it was executed multiple times if response takes awile.
+When it was inside the callback, it was executed multiple times if response takes awhile.
 Bad side, if it saving on background service failed, no fallback plans but to refresh API link again.
 */
 (function(){
@@ -21,16 +21,24 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	function checkAgain(){
 		console.log("Checking API link...");
 		// If API link is found
-		if(document.getElementById("externalswf")){
-			console.log( document.getElementById("externalswf").getAttribute("src") );
+		if(document.getElementById("htmlWrap")){
+			console.log( document.getElementById("htmlWrap").getAttribute("src") );
 			// Send it to background script
+			(new RMsg(
+				"service",
+				"set_api_link",
+				{ swfsrc: document.getElementById("htmlWrap").getAttribute("src") }
+			)).execute();
+			
+			// Stop interval
+			clearInterval(intervalChecker);
+		} else if(document.getElementById("externalswf")){
+			console.log( document.getElementById("externalswf").getAttribute("src") );
 			(new RMsg(
 				"service",
 				"set_api_link",
 				{ swfsrc: document.getElementById("externalswf").getAttribute("src") }
 			)).execute();
-			
-			// Stop interval
 			clearInterval(intervalChecker);
 		}
 	}
@@ -50,7 +58,8 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				|| response.storage[0] == "false" || response.storage[1] == "true"
 			){
 				console.log("Setting zoom to scale", response.value[0] + "%");
-				document.body.style.zoom = (response.value[0] || 100) / 100;
+				var scale = (response.value[0] || 100) / 100;
+				document.body.style.zoom = scale;
 			}
 			// For dmm site play mode
 			if(response.value[1] && response.storage[0] == "true"){
@@ -58,7 +67,11 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				document.getElementById("spacing_top").style = "height:0px;display:none;";
 				// Prevent Tab key scrolling
 				$(document).on("keydown", function(e){
-					if(event.which === 9) { e.stopPropagation(); e.preventDefault(); }
+					if(e.which === 9) {
+						$(document).scrollTop(0);
+						e.stopPropagation();
+						e.preventDefault();
+					}
 				});
 			}
 		}

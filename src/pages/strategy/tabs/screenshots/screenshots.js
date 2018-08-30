@@ -30,16 +30,16 @@
 							self.tabSelf.definition.showPage( page );
 						}
 					});
+					$('.pagination').show();
 				}else{
 					$('.pagination').hide();
+					$(".screenshot_list").empty();
 				}
 			});
-			
-			this.showPage(1);
 		},
 		
 		/* SHOW PAGE
-		Show single page of screenshors
+		Show single page of screenshots
 		---------------------------------*/
 		showPage :function( page ){
 			var self = this;
@@ -66,13 +66,13 @@
 			var ssId = $(this).data("ssid");
 			var deleteHash = $(this).data("deletehash");
 			var deleteDbRecord = function() {
-				console.info("Deleting image record from local database, id =", ssId);
+				console.log("Deleting image record from local database, id =", ssId);
 				KC3Database.con.screenshots.where("id").equals(ssId)
 					.delete().then(cnt => {
-						console.info("Found", cnt, "record, deleted!");
+						console.info("Found", cnt, "image(s), deleted!");
 						KC3StrategyTabs.reloadTab(undefined, true);
 					}).catch(e => {
-						console.error(e, e.stack);
+						console.error("Deleting image exception", e);
 					});
 			};
 			if(deleteHash){
@@ -83,7 +83,7 @@
 					.then(KC3ImageExport.deleteUpload.bind(null, deleteHash))
 					.then(deleteDbRecord)
 					.catch(e => {
-						console.error(e, e.stack);
+						console.warn("Deleting remote image failed", e);
 						if(confirm("Failed to delete image from imgur.com, still remove this record?"))
 							deleteDbRecord();
 					});

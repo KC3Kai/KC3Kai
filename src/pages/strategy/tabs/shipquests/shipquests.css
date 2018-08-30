@@ -12,12 +12,15 @@
 }
 .tab_shipquests .ship_item .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item .questIcon.type6 {
 	background:#996600;
@@ -25,6 +28,7 @@
 }
 .tab_shipquests .ship_item .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item .questIcon.type8 {
 	background:#D75048;
@@ -40,12 +44,15 @@
 }
 .tab_shipquests .ship_item.even .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item.even .questIcon.type6 {
 	background:#996600;
@@ -53,6 +60,7 @@
 }
 .tab_shipquests .ship_item.even .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item.even .questIcon.type8 {
 	background:#D75048;
@@ -68,12 +76,15 @@
 }
 .tab_shipquests .ship_item.odd .questIcon.type3 {
 	background:#98E75F;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type4 {
 	background:#ace;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type5 {
 	background:#EDD286;
+	color:#000;
 }
 .tab_shipquests .ship_item.odd .questIcon.type6 {
 	background:#996600;
@@ -81,10 +92,30 @@
 }
 .tab_shipquests .ship_item.odd .questIcon.type7 {
 	background:#AE76FA;
+	color:#fff;
 }
 .tab_shipquests .ship_item.odd .questIcon.type8 {
 	background:#D75048;
 	color:#fff;
+}
+.tab_shipquests .ship_item .questIcon.completed,
+.tab_shipquests .ship_item .questIcon.actived,
+.tab_shipquests .ship_item .questIcon.opened,
+.tab_shipquests .ship_item .questIcon.exists {
+	border-radius:2px;
+	border-right:4px solid transparent;
+}
+.tab_shipquests .ship_item .questIcon.exists {
+	border-left:4px solid #FF9900;
+}
+.tab_shipquests .ship_item .questIcon.opened {
+	border-left:4px solid #FF9900;
+}
+.tab_shipquests .ship_item .questIcon.actived {
+	border-left:4px solid #0099FF;
+}
+.tab_shipquests .ship_item .questIcon.completed {
+	border-left:4px solid #9955FF;
 }
 
 /* HEADER
@@ -114,7 +145,8 @@
 /* Row */
 .tab_shipquests .ship_list .ship_item {
 	width:680px;
-	height:20px;
+	height:auto;
+	min-height:20px;
 	line-height:20px;
 	font-size:12px;
 	margin:0px 0px 2px 0px;
@@ -155,6 +187,7 @@
 .tab_shipquests .ship_item .ship_img img.ship_icon {
 	width:20px;
 	height:20px;
+	vertical-align:top;
 }
 .tab_shipquests .ship_item .ship_img img.ship_kekkon {
 	position:absolute;
@@ -199,17 +232,16 @@
 	width:50px;
 	text-align:center;
 	position:relative;
-}
-.tab_shipquests .ship_item .ship_lv.ship_kekkon {
+	overflow:hidden;
+	white-space:nowrap;
 }
 .tab_shipquests .ship_item .ship_quests {
 	width:430px;
+	height:auto;
+	min-height:20px;
+	overflow:initial;
 	text-align:left;
 }
-.tab_shipquests .ship_item .ship_lv span {
-	color:#888;
-}
-/* Fields: Stats */
 .tab_shipquests .ship_item .ship_stat {
 	width:35px;
 	text-align:center;

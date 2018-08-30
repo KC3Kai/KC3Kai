@@ -73,7 +73,7 @@
 	font-size:12px;
 }
 .tab_aircraft .slotitem .info .item_stat img {
-	width:16px;
+	max-width:19px;
 	height:16px;
 	margin:0px 2px 0px 0px;
 }
@@ -103,6 +103,13 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+}
+.tab_aircraft .slotitem .instance_lock {
+	margin:5px 0px 0px -22px;
+}
+.tab_aircraft .slotitem .instance_lock img {
+	width:10px;
+	height:10px;
 }
 .tab_aircraft .slotitem .instance_star {
 	width:20px;

@@ -3,210 +3,195 @@
 KC3改 Configuration Manager
 
 Stores KC3改 Settings on localStorage for persistence
-Retreives when needed to apply on components
+Retrieves when needed to apply on components
 */
 (function(){
 	"use strict";
+	
+	const CONFIG_KEY_NAME = "config";
 	
 	window.ConfigManager = {
 		
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
-				version     		: 8,
-				language    		: "en",
-				hqInfoPage  		: 1,
-				elosFormula 		: 4,
-				aaFormation 		: 1,
-				imaginaryEnemySlot	: 96,
-				hqExpDetail 		: 1,
-				rankPtsMode 		: 1,
-				timerDisplayType	: 1,
-				marryLevelFormat	: 0,
-				checkLiveQuests		: true,
-				devOnlyPages		: false,
-				forceDMMLogin		: false,
-				apiRecorder			: false,
-				updateNotification	: 2,
-				dataSyncNotification	: false,
-				chromeSyncQuests	: false,
+				version              : 8,
+				language             : "en",
+				hqInfoPage           : 1,
+				elosFormula          : 2,
+				aaFormation          : 1,
+				imaginaryEnemyType   : 0,
+				imaginaryEnemyArmor  : 0,
+				imaginaryEnemySlot   : 96,
+				hqExpDetail          : 1,
+				rankPtsMode          : 1,
+				timerDisplayType     : 1,
+				checkLiveQuests      : true,
+				devOnlyPages         : false,
+				forceDMMLogin        : false,
+				apiRecorder          : false,
+				updateNotification   : 2,
+				dataSyncNotification : false,
+				chromeSyncQuests     : false,
+				air_formula          : 3,
+				air_combined         : false,
+				powerCapApplyLevel   : 3,
+				powerCritical        : false,
 
-				showCatBombs		: true,
-				showApiError		: true,
-				repeatApiError		: true,
-				detailedApiError	: true,
+				showCatBombs         : true,
+				showApiError         : true,
+				repeatApiError       : true,
+				detailedApiError     : true,
 
-				DBSubmission_enabled: 0,
-				DBSubmission_key : '',
+				PoiDBSubmission_enabled : false,
+				KC3DBSubmission_enabled : false,
+				OpenDBSubmission_enabled : false,
+				TsunDBSubmission_enabled : false,
+				PushAlerts_enabled   : 0,
+				PushAlerts_key       : '',
 
-				PoiDBSubmission_enabled: false,
-				
-				KC3DBSubmission_enabled: true,
-                
-				OpenDBSubmission_enabled: false,
-				
-				PushAlerts_enabled: 0,
-				PushAlerts_key : '',
-				
-				info_face 			: true,
-				info_drop 			: true,
-				info_craft 			: true,
-				info_compass 		: true,
-				info_battle 		: true,
-				info_btrank			: true,
-				info_btstamp 		: false,
-				info_fleetstat 		: true,
-				info_blink_gauge	: true,
-				info_boss 			: false,
-				info_delta 			: false,
-				info_auto_exped_tab : true,
-				info_auto_fleet_view: true,
-				info_pvp_info		: true,
-				info_eng_stype		: false,
-				info_force_ship_lang: "",
-				info_salt 			: false,
-				info_troll 			: false,
+				info_face            : true,
+				info_drop            : true,
+				info_craft           : true,
+				info_compass         : true,
+				info_prevencounters  : true,
+				info_battle          : true,
+				info_btrank          : true,
+				info_btmvp           : true,
+				info_btstamp         : false,
+				info_fleetstat       : true,
+				info_blink_gauge     : false,
+				info_boss            : false,
+				info_delta           : false,
+				info_auto_exped_tab  : true,
+				info_auto_fleet_view : true,
+				info_pvp_info        : true,
+				info_stats_diff      : 3,
+				info_eng_stype       : false,
+				info_force_ship_lang : "",
+				info_ship_class_name : false,
+				info_dex_owned_ship  : true,
+				info_chuuha_icon     : true,
+				info_seasonal_icon   : false,
+				info_items_iconset   : 0,
+				info_stats_iconset   : 0,
+				info_format_numbers  : false,
+				info_salt            : false,
+				info_troll           : false,
 
-				// AIR PROFICIENCY BONUSES (Configurable by user)
-				// 1=no veteran 2=veteran average 3=veteran bounds 4=configurable, but unused yet
-				air_formula			: 3,
-				air_average			: {
-					"6":  [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"7":  [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"8":  [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"11": [0,    1,	  1,   3,    3,	   7,  7,  9],
-					"45": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"47": [0,    1,	  1,   1,    2,	   2,  2,  3],
-					"48": [0, 1.35, 3.5, 7.1, 11.4, 16.8, 17, 25],
-					"57": [0,    1,	  1,   3,    3,	   7,  7,  9]
-				},
-				air_bounds			: {
-					"6": [  // fighter
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"7": [  // dive bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"8": [  // torpedo bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"11": [  // seaplane bomber
-						[0,0], // 0
-						[0,1], [0,1], [1,3], // 3
-						[1,3], [3,7], [3,7], [7,9] // 7
-					],
-					"45": [  // seaplane fighter
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"47": [  // land bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					],
-					"48": [  // interceptor
-						[0.026, 0.845], // 0
-						[1, 1.715], [3.212, 3.984], [6.845, 7.504], // 3
-						[11.205, 11.786], [16.639, 17], [16.999, 17.205], [24.679, 25.411] // 7
-					],
-					"57": [  // jet fighter-bomber
-						[0,0], // 0
-						[0,1], [0,1], [0,1], // 3
-						[1,2], [1,2], [1,2], [1,3] // 7
-					]  // assumed to be equivalent to regular bombers unless proved otherwise
-				},
-				
-				salt_list 		: new KC3ShipMasterList(),
-				wish_list 		: new KC3ShipMasterList(),
-				lock_list 		: new KC3ShipRosterList(),
-				lock_prep 		: [],
-				dismissed_hints	: {},
-				
-				ss_mode				: 0,
-				ss_type				: 'JPG',
-				ss_quality 			: 70,
-				ss_directory 		: 'KanColle',
-				ss_dppx 			: 1,
-				
-				alert_diff 			: 59,
-				alert_morale_notif	: true,
-				alert_morale_value	: 40,
-				alert_type 			: 1,
-				alert_custom 		: "",
-				alert_volume 		: 60,
-				alert_desktop 		: true,
-				alert_supply 		: 3,
-				alert_supply_exped 	:true,
-				alert_idle_counter	: 1,
-				alert_idle_start	: 0,
-				alert_rsc_cap		: 95,
-				
-				alert_taiha			: false,
-				alert_taiha_blur	: false,
-				alert_taiha_blood	: false,
-				alert_taiha_ss		: false,
-				alert_taiha_sound	: false,
-				alert_taiha_panel	: true,
-				alert_taiha_homeport: false,
-				alert_taiha_damecon	: false,
-				
-				api_translation		: true,
-				api_tracking 		: true,
-				api_mustPanel 		: true,
-				api_askExit			: true,
-				api_directRefresh	: false,
-				api_margin			: 0,
-				api_bg_color		: "#def",
-				api_bg_image		: "",
-				api_bg_size			: "cover",
-				api_bg_position		: "top center",
-				api_gameScale		: 100,
-				api_subtitles		: true,
-				subtitle_font		: "\"Trebuchet MS\",\"Lucida Grande\",\"Lucida Sans Unicode\",\"Lucida Sans\",Tahoma,sans-serif",
-				subtitle_size		: 22,
-				subtitle_bold		: false,
-				subtitle_display	: "ghost",
-				subtitle_speaker	: false,
-				google_translate	: true,
-				map_markers			: true,
-				dmm_forcecookies	: false,
-				dmm_customize		: false,
-				dmm_custom_css		: "",
-				
-				pan_theme			: "natsuiro",
-				pan_size			: "big",
-				pan_gear_holder		: "black",
-				pan_bg_color		: "#def",
-				pan_bg_image		: "",
-				pan_bg_size			: "cover",
-				pan_bg_position		: "top center",
-				pan_opacity 		: 100,
-				pan_box_bcolor 		: "rgba(100, 100, 100, 0.618)",
-				pan_custom_css		: "",
+				salt_list : new KC3ShipMasterList(),
+				wish_list : new KC3ShipMasterList(),
+				lock_list : new KC3ShipRosterList(),
+				lock_prep : [],
 
-				sr_theme			: "legacy",
-				sr_custom_css		: ""
+				ss_mode      : 0,
+				ss_type      : 'PNG',
+				ss_quality   : 90,
+				ss_directory : 'KanColle',
+				ss_dppx      : 1,
+
+				alert_diff         : 59,
+				alert_morale_notif : true,
+				alert_morale_value : 40,
+				alert_type         : 1,
+				alert_custom       : "",
+				alert_type_exped   : 1,
+				alert_custom_exped : "",
+				alert_type_repair  : 1,
+				alert_custom_repair: "",
+				alert_type_cship   : 1,
+				alert_custom_cship : "",
+				alert_volume       : 60,
+				alert_desktop      : true,
+				alert_supply       : 3,
+				alert_supply_exped : true,
+				alert_idle_counter : 1,
+				alert_idle_start   : 0,
+				alert_rsc_cap      : 95,
+
+				alert_taiha          : false,
+				alert_taiha_blur     : false,
+				alert_taiha_blood    : false,
+				alert_taiha_ss       : false,
+				alert_taiha_sound    : false,
+				alert_taiha_panel    : true,
+				alert_taiha_homeport : false,
+				alert_taiha_damecon  : false,
+				alert_taiha_noanim   : false,
+
+				api_translation   : true,
+				api_tracking      : true,
+				api_mustPanel     : true,
+				api_askExit       : true,
+				api_directRefresh : false,
+				api_margin        : 0,
+				api_bg_color      : "#def",
+				api_bg_image      : "",
+				api_bg_size       : "cover",
+				api_bg_position   : "top center",
+				api_gameScale     : 100,
+				api_subtitles     : true,
+				subtitle_font     : '"Trebuchet MS","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Tahoma,sans-serif',
+				subtitle_size     : 32,
+				subtitle_bold     : false,
+				subtitle_display  : "ghost",
+				subtitle_speaker  : false,
+				subtitle_hourly   : true,
+				subtitle_duration : false,
+				google_translate  : true,
+				map_markers       : true,
+				map_letters       : false,
+				mute_game_tab     : false,
+				fix_game_code     : false,
+				dmm_forcecookies  : false,
+				dmm_customize     : false,
+				dmm_custom_css    : "",
+
+				pan_theme       : "natsuiro",
+				pan_size        : "big",
+				pan_gear_holder : "black",
+				pan_bg_color    : "#def",
+				pan_bg_image    : "",
+				pan_bg_size     : "cover",
+				pan_bg_position : "top center",
+				pan_opacity     : 100,
+				pan_box_bcolor  : "rgba(100, 100, 100, 0.618)",
+				pan_custom_css  : "",
+
+				dismissed_hints        : {},
+				sr_theme               : "legacy",
+				sr_show_non_battle     : true,
+				sr_show_new_shipstate  : true,
+				sr_custom_css          : "",
+
+				idbSaveSortie          : true,
+				idbSaveExcludeMaps     : [],
+				idbSavePvP             : true,
+				idbSaveLedgers         : true,
+
+				disableConsoleLogHooks : false,
+				forwardConsoleOutput   : false,
+				hoursToKeepLogs        : 12,
+				hoursToKeepErrors      : 168,
 			};
 		},
-        
+		
+		keyName : function(){
+			return CONFIG_KEY_NAME;
+		},
+		
 		// Reset value of a specific key to the current default value
-		resetValueOf: function(key) {
+		resetValueOf : function(key){
 			ConfigManager.loadIfNecessary();
 			this[key] = this.defaults()[key];
-			console.log( "reset key", key, " to default:", JSON.stringify(this[key]) );
+			console.log("Reset config key", key, "to default:", JSON.stringify(this[key]) );
 			this.save();
 		},
 		
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
+			console.log("Reset all configs to default");
 			this.save();
 		},
 
@@ -214,7 +199,7 @@ Retreives when needed to apply on components
 		load : function(){
 			var self = this;
 			// Get old config or create dummy if none
-			var oldConfig = JSON.parse(localStorage.config || "{}");
+			var oldConfig = JSON.parse(localStorage[CONFIG_KEY_NAME] || "{}");
 			
 			['salt','wish','lock'].forEach(function(shipListType){
 				var k = [shipListType,'list'].join('_');
@@ -224,7 +209,7 @@ Retreives when needed to apply on components
 			// Check if old config has versioning and if its lower version
 			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
 				// Old config is an old version, clear it, set defaults, and save on storage
-				localStorage.removeItem("config");
+				localStorage.removeItem(CONFIG_KEY_NAME);
 				$.extend(this, this.defaults());
 				this.save();
 			}else{
@@ -239,20 +224,33 @@ Retreives when needed to apply on components
 		
 		loadIfNecessary : function(){
 			var currentConfig = JSON.stringify(this);
-			if(currentConfig !== localStorage.config){
+			if(currentConfig !== localStorage[CONFIG_KEY_NAME]){
 				this.load();
 			}
 		},
 		
 		// Save current config onto localStorage
 		save : function(){
-			localStorage.config = JSON.stringify(this);
+			localStorage[CONFIG_KEY_NAME] = JSON.stringify(this);
+		},
+		
+		isNotToSaveSortie : function(world, map){
+			const mapId = Number([world, map].join('')) || "ShouldNotMatch";
+			return !this.idbSaveSortie ||
+				(Array.isArray(this.idbSaveExcludeMaps) &&
+				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
+		},
+		
+		// Current maximum pages of HQ info
+		getMaxHqInfoPage :function(){
+			return 3;
 		},
 		
 		// Toggle HQ Info Page
 		scrollHqInfoPage :function(){
 			this.loadIfNecessary();
-			this.hqInfoPage = (this.hqInfoPage % 3) + 1;
+			const maxPage = this.getMaxHqInfoPage() + (KC3Meta.isDuringFoodEvent() & 1);
+			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
 			this.save();
 		},
 		
@@ -264,24 +262,25 @@ Retreives when needed to apply on components
 		},
 		
 		// Toggle Fighter Power
+		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
 			this.loadIfNecessary();
 			this.air_formula = (this.air_formula % 3) + 1;
 			this.save();
 		},
 		
-		// Toggle AntiAir Formation Type
-		// Only loop between frequently used (different modifiers):
-		// Line Ahead / Double Line / Diamond / C anti-sub / C diamond / C battle
+		// Toggle Player Formation Type (former AntiAir Formation)
+		// Loop between all formations, according combined fleet state:
+		// Line Ahead / Double Line / Diamond / Echelon / Line Abreast, or
+		// 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 		scrollAntiAirFormation :function(isCombined){
 			this.loadIfNecessary();
 			this.aaFormation += 1;
 			if(!!isCombined){
-				if(this.aaFormation == 4) this.aaFormation = 11;
-				if(this.aaFormation == 12) this.aaFormation = 13;
-				if(this.aaFormation == 15) this.aaFormation = 1;
+				if(this.aaFormation < 11) this.aaFormation = 11;
+				if(this.aaFormation > 14) this.aaFormation = 11;
 			} else {
-				this.aaFormation = this.aaFormation > 3 ? 1 : this.aaFormation;
+				if(this.aaFormation > 6) this.aaFormation = 1;
 			}
 			this.save();
 		},
@@ -344,7 +343,7 @@ Retreives when needed to apply on components
 					return nLen;
 				}},
 				unshift:{value:function unshift(){
-					var _ushf,_args,nLen;
+					var _ushf, _args, nAry, nLen;
 					_args = Array.prototype.slice.apply(arguments);
 					_ushf = Function.prototype.apply.bind(Array.prototype.unshift,this);
 					nAry  = _args.filter(arrayUniquefy).filter(filterFun.bind(this));

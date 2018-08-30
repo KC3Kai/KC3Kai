@@ -165,6 +165,11 @@
 .tab_expcalc .ship_goal .ship_map {
 	width:70px;
 	margin:0px 2px 0px 0px;
+	display:none;
+}
+.tab_expcalc .ship_goal .ship_baseexp {
+	width:70px;
+	margin:0px 2px 0px 0px;
 }
 .tab_expcalc .ship_goal .ship_rank {
 	width:50px;
@@ -370,6 +375,10 @@
 }
 
 .tab_expcalc .goal_template .goal_map {
+	width:70px;
+	display:none;
+}
+.tab_expcalc .goal_template .goal_baseexp {
 	width:70px;
 }
 
