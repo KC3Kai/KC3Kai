@@ -290,11 +290,11 @@ Saves and loads significant data for future use
 				equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
 		},
 
-		equip_exslot_type :function(stype, shipId){
+		equip_exslot_type :function(equipTypes, stype, shipId){
 			if(!this.available) return false;
 			// remap general exslot types object to array
 			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
-			const regularSlotTypes = this.equip_type(stype, shipId);
+			const regularSlotTypes = equipTypes || this.equip_type(stype, shipId) || [];
 			return !regularSlotTypes.length ? generalExslotTypes :
 				generalExslotTypes.filter(type => regularSlotTypes.includes(type));
 		},

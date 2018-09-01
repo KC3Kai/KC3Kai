@@ -2025,10 +2025,10 @@ button, input, select, textarea {
 	border-radius:0px !important;
 }
 .tab_mstship .shipInfo .equipSlots .equippableType {
-	background:#444;
+	background:#333;
 }
 .tab_mstship .shipInfo .equipExSlot .equippableType {
-	background:#333;
+	background:#444;
 }
 
 /* GEARS LIBRARY

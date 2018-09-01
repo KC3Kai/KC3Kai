@@ -708,12 +708,12 @@
 				} else {
 					$(".equipSlots").hide();
 				}
-				const exslotTypes = KC3Master.equip_exslot_type(shipData.api_stype, shipData.api_id);
+				const exslotTypes = KC3Master.equip_exslot_type(equipTypes);
 				if (exslotTypes.length > 0) {
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
 					// specified items on exslot of specified ships
 					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id);
-					// seems that RemodelUtil defines if 33 Turbine can be equipped
+					// `RemodelUtil.createSetListEx` hard-coded whether Improved Turbine can be equipped
 					if (equipTypes.includes(17) && !exslotItems.includes(33)) {
 						exslotItems.push(33);
 					}
