@@ -1786,12 +1786,16 @@ KC3改 Ship Object
 	// check if this ship is capable of equipping Daihatsu (landing craft, amphibious tank not counted)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		if(this.isDummy()) { return false; }
-		var master = this.master();
+		const master = this.master();
+		// Phase2 method: lookup Daihatsu type2 ID 24 in her master equip types
+		return KC3Master.equip_type(master.api_stype, this.masterId).includes(24);
+		// Phase1 method:
+		/*
 		// ship types: DD=2, CL=3, BB=9, AV=16, LHA=17, AO=22
 		// so far only ships with types above can equip daihatsu.
 		if ([2,3,9,16,17,22].indexOf( master.api_stype ) === -1)
 			return false;
-
+		
 		// excluding Akitsushima(445), Hayasui(460), Commandant Teste(491), Kamoi(162)
 		// (however their remodels are capable of equipping daihatsu
 		if ([445, 460, 491, 162].indexOf( this.masterId ) !== -1)
@@ -1799,7 +1803,7 @@ KC3改 Ship Object
 		
 		// only few DDs, CLs and 1 BB are capable of equipping daihatsu
 		// see comments below.
-		if ([2 /* DD */,3 /* CL */,9 /* BB */].indexOf( master.api_stype ) !== -1 &&
+		if ([2, 3, 9].indexOf( master.api_stype ) !== -1 &&
 			[
 				// Abukuma K2(200), Tatsuta K2(478), Kinu K2(487), Yura K2(488), Tama K2(547)
 				200, 478, 487, 488, 547,
@@ -1814,6 +1818,7 @@ KC3改 Ship Object
 			].indexOf( this.masterId ) === -1)
 			return false;
 		return true;
+		*/
 	};
 
 	/**
@@ -1821,6 +1826,12 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canEquipFCF = function() {
 		if(this.isDummy()) { return false; }
+		const masterId = this.masterId,
+			stype = this.master().api_stype;
+		// Phase2 method: lookup FCF type2 ID 34 in her master equip types
+		return KC3Master.equip_type(stype, masterId).includes(34);
+		// Phase1 method:
+		/*
 		// Excluding DE, DD, XBB, SS, SSV, AO, AR, which can be found at master.stype.api_equip_type[34]
 		const capableStypes = [3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 20, 21];
 		// These can be found at `RemodelMain.swf/scene.remodel.view.changeEquip._createType3List()`
@@ -1828,10 +1839,9 @@ KC3改 Ship Object
 		const capableShips = [464, 497, 498, 500, 542, 543, 567];
 		// CVL Kasugamaru
 		const incapableShips = [521];
-		const masterId = this.masterId,
-			stype = this.master().api_stype;
 		return incapableShips.indexOf(masterId) === -1 &&
 			(capableShips.includes(masterId) || capableStypes.includes(stype));
+		*/
 	};
 
 	// is this ship able to do OASW unconditionally
