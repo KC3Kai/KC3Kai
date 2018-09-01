@@ -579,7 +579,10 @@
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
 					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterbull );
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
-					$(".tab_mstship .shipInfo .remodel_blueprint").toggle( remodelInfo.blueprint > 0 );
+					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
+						// show blueprint icon for all these special materials
+						remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat
+					);
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
 					$(".tab_mstship .shipInfo .remodel").hide();
