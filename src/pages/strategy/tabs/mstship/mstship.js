@@ -693,7 +693,7 @@
 					// use 2nd yellow icon instead of 1st green one if type is secondary gun
 					const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
 					// skip 'VT Fuze' and event item 'Transport Device', since they are not used for now
-					if(!firstIconId || typeId === 50) return;
+					if (!firstIconId || typeId === 50) return;
 					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 						.appendTo(listClass);
 					$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(firstIconId))
@@ -708,11 +708,15 @@
 				} else {
 					$(".equipSlots").hide();
 				}
-				const exslotTypes = KC3Master.equip_exslot_type();
+				const exslotTypes = KC3Master.equip_exslot_type(shipData.api_stype, shipData.api_id);
 				if (exslotTypes.length > 0) {
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
 					// specified items on exslot of specified ships
 					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id);
+					// seems that RemodelUtil defines if 33 Turbine can be equipped
+					if (equipTypes.includes(17) && !exslotItems.includes(33)) {
+						exslotItems.push(33);
+					}
 					if (exslotItems.length > 0) {
 						exslotItems.forEach(item => {
 							const gearMst = KC3Master.slotitem(item);
