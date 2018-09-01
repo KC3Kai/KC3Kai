@@ -684,9 +684,52 @@
 					$("<div/>").addClass("clear").appendTo(".tab_mstship .shipInfo .hourlies");
 				}
 				
+				// Equippable Items
+				$(".equipSlots .equipList,.equipExSlot .equipList").empty();
+				const addEquipType = (listClass, typeId) => {
+					// use 2nd yellow icon instead of 1st green one if type is secondary gun
+					const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
+					// skip 'VT Fuze' and event item 'Transport Device', since they are not used for now
+					if(!firstIconId || typeId === 50) return;
+					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
+						.appendTo(listClass);
+					$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(firstIconId))
+						.attr("title", typeId);
+					$(".typeName", equipTypeBox).text(KC3Meta.gearTypeName(2, typeId))
+						.attr("title", KC3Meta.gearTypeName(2, typeId));
+				};
+				const equipTypes = KC3Master.equip_type(shipData.api_stype, shipData.api_id);
+				if (equipTypes.length > 0) {
+					equipTypes.forEach(addEquipType.bind(this, ".equipSlots .equipList"));
+					$(".equipSlots").show().createChildrenTooltips();
+				} else {
+					$(".equipSlots").hide();
+				}
+				const exslotTypes = KC3Master.equip_exslot_type();
+				if (exslotTypes.length > 0) {
+					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
+					// specified items on exslot of specified ships
+					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id);
+					if (exslotItems.length > 0) {
+						exslotItems.forEach(item => {
+							const gearMst = KC3Master.slotitem(item);
+							const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
+								.appendTo(".equipExSlot .equipList");
+							$(".typeIcon", equipTypeBox);
+							$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
+								.attr("title", item);
+							$(".typeName", equipTypeBox).text(KC3Meta.gearName(gearMst.api_name))
+								.attr("title", KC3Meta.gearName(gearMst.api_name));
+						});
+					}
+					$(".equipExSlot").show().createChildrenTooltips();
+				} else {
+					$(".equipExSlot").hide();
+				}
+				
 				// AACI Types
 				$(".aaciList").empty();
-				var aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
+				const aaciList = AntiAir.sortedPossibleAaciList( AntiAir.shipAllPossibleAACIs(shipData) );
 				if (aaciList.length > 0) {
 					$.each(aaciList, function(idx, aaciObj){
 						const aaciBox = $(".tab_mstship .factory .aaciPattern").clone();
@@ -728,7 +771,7 @@
 				
 				// GUN FITS
 				$(".gunfitList").empty();
-				var gunfits = KC3Meta.sortedGunfits(shipData.api_id);
+				const gunfits = KC3Meta.sortedGunfits(shipData.api_id);
 				if (gunfits) {
 					let lastWeightClass = "";
 					let isOdd = false;

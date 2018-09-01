@@ -261,6 +261,50 @@ Saves and loads significant data for future use
 			return !this.available ? false : this._raw.slotitem_equiptype[id] || false;
 		},
 
+		equip_type :function(stype, shipId){
+			if(!this.available) return false;
+			// use ship specified equip types first if found
+			const equipTypeArr = shipId && this.equip_ship(shipId).api_equip_type;
+			if(equipTypeArr) return equipTypeArr;
+			const equipTypeObj = this.stype(stype).api_equip_type || {};
+			// remap equip types object of ship type to array
+			return Object.keys(equipTypeObj).filter(type => !!equipTypeObj[type]).map(id => Number(id));
+		},
+
+		equip_type_sp :function(slotitemId, defaultType){
+			// Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
+			// Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
+			const equipTypeSp = {
+				128: 38,
+				142: 93,
+				151: 94,
+				281: 38,
+			};
+			return equipTypeSp[slotitemId] || defaultType;
+		},
+
+		equip_ship :function(shipId){
+			const equipShips = this._raw.equip_ship || {};
+			// look up ship specified equip types
+			return !this.available ? false :
+				equipShips[Object.keys(equipShips).find(i => equipShips[i].api_ship_id == shipId)] || false;
+		},
+
+		equip_exslot_type :function(){
+			// remap general exslot types object to array
+			return !this.available ? false :
+				Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
+		},
+
+		// @return different from functions above, returns a slotitem ID list, not type2 ID list
+		equip_exslot_ship :function(shipId){
+			const exslotShips = this._raw.equip_exslot_ship || {};
+			// find and remap ship specified exslot items
+			return !this.available ? [] : Object.keys(exslotShips)
+				.filter(i => exslotShips[i].api_ship_ids.includes(Number(shipId)))
+				.map(i => exslotShips[i].api_slotitem_id) || [];
+		},
+
 		useitem :function(id){
 			return !this.available ? false : this._raw.useitem[id] || false;
 		},

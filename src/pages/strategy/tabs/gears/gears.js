@@ -189,16 +189,6 @@
 			for(const ctr in PlayerManager.bases){
 				this.checkLbasSlotForItemHolder(PlayerManager.bases[ctr]);
 			}
-			// See `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
-			const getSpecialEquipType = (mstId, type2) => {
-				const SLOTITEM_SPECIAL_FLAGS = {
-					128: 38,
-					142: 93,
-					151: 94,
-					281: 38,
-				};
-				return SLOTITEM_SPECIAL_FLAGS[mstId] || type2;
-			};
 			// Compile ships on Index
 			for(const ctr in KC3GearManager.list){
 				const ThisItem = KC3GearManager.list[ctr];
@@ -217,7 +207,7 @@
 						rid: ThisItem.id,
 						id: ThisItem.masterId,
 						type_id: MasterItem.api_type[3],
-						category: getSpecialEquipType(ThisItem.masterId, MasterItem.api_type[2]),
+						category: KC3Master.equip_type_sp(ThisItem.masterId, MasterItem.api_type[2]),
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
 						stats: {

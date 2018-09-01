@@ -209,6 +209,23 @@ Provides access to data on built-in JSON files
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
 		},
 		
+		itemIconsByType2 :function(type2Id){
+			if(!this._type2IconMap){
+				// Build type2 id to icon type3 id map from master data
+				const iconMap = {};
+				$.each(KC3Master.all_slotitems(), (_, g) => {
+					if(KC3Master.isAbyssalGear(g.api_id)) return false;
+					// some items are belonged to XXX (II) type (93, 94)
+					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
+					const iconId = g.api_type[3];
+					iconMap[t2Id] = iconMap[t2Id] || [];
+					if(!iconMap[t2Id].includes(iconId)) iconMap[t2Id].push(iconId);
+				});
+				this._type2IconMap = iconMap;
+			}
+			return this._type2IconMap[type2Id] || [];
+		},
+		
 		shipNameAffix :function(affix){
 			// Just translate the prefixes and suffixes in `ship_affix.json`
 			// And keep the necessary space after or before the affixes
