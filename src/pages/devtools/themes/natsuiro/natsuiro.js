@@ -2765,7 +2765,7 @@
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
-					) + "\n" + thisNode.buildAbnormalDamageMessage(thisNode.AD)
+					) + "\n" + thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)
 				)).lazyInitTooltip();
 			}
 
@@ -2855,7 +2855,7 @@
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
-					) + "\n" + thisNode.buildAbnormalDamageMessage(thisNode.AD)
+					) + thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)
 				)).lazyInitTooltip();
 			}
 

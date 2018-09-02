@@ -613,8 +613,8 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
-			this.AD = this.abnormalDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
-			this.AD.push(...this.abnormalDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
+			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -861,8 +861,6 @@ Used by SortieManager
 						}
 					}
 				});
-				this.AD = this.abnormalDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
-				this.AD.push(...this.abnormalDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
 			}
 
 			const enemyResult = isAgainstEnemyEscort ? result.fleets.enemyEscort : result.fleets.enemyMain;
@@ -871,6 +869,8 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
+			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1851,8 +1851,8 @@ Used by SortieManager
 		});
 	};
 
-		/** 
-	 * Abnormal damage checker that checks damage instances from BP module
+	/** 
+	 * Unexpected damage checker that checks damage instances from BP module
 	 * @see http://kancolle.wikia.com/wiki/Combat/Damage_Calculation
 	 * @param BPfleet - playerMain/playerEscort array from BP fleets export
 	 * @param fleetnum - player fleet index
@@ -1862,10 +1862,10 @@ Used by SortieManager
 	 * 	*enemy: Enemy formation, id, equips, stats and health before attack
 	 * 	*ship: Player formation, position, id, equips, stats, improvements, proficiency, combined fleet type, current health and ammo
 	 *  *damageInstance: Actual damage, expected damage range and critical
-	 * 	*isAbnormal: Boolean to check if damage is in expected or unexpected range
+	 * 	*isunexpected: Boolean to check if damage is in expected or unexpected range
 	 */
-	KC3Node.prototype.abnormalDamagePrediction = function(BPFleet, fleetnum, formation, engagement) {
-		let AD = [];
+	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement) {
+		let unexpectedList = [];
 		BPFleet.forEach(({ attacks }, position) => {
 			if (attacks.length === 0) { return; }
 			const ship = PlayerManager.fleets[fleetnum].ship(position);
@@ -1934,14 +1934,14 @@ Used by SortieManager
 
 				let result = {},
 					eHp = this.maxHPs.enemy[target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
-					abnormalFlag = isLand || KC3SortieManager.map_world > 10;
+					unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++){
 					// Scratch damage/miss check
-					if ((abnormalFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
+					if ((unexpectedFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
 
-						let abnormalDamage = false,
+						let unexpectedDamage = false,
 							damageInstance = {},
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
@@ -1964,8 +1964,8 @@ Used by SortieManager
 						armor -= newDepthChargeBonus;
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
-						if (damage[i] > maxDam) { abnormalDamage = true; }
-						if (abnormalDamage || abnormalFlag) {
+						if (damage[i] > maxDam) { unexpectedDamage = true; }
+						if (unexpectedDamage || unexpectedFlag) {
 							
 							// Formatting for tsunDB
 							damageInstance.actualDamage = damage[i];
@@ -1979,7 +1979,7 @@ Used by SortieManager
 
 							result.ship = {
 								id: ship.masterId, 
-								damageStatus: Math.ceil(hpPercent / 20),
+								damageStatus: Math.ceil(hpPercent / 25),
 								equips: ship.equipment(true).map(g => g.masterId || -1),
 								improvements: ship.equipment(true).map(g => g.stars || -1),
 								proficiency: ship.equipment(true).map(g => g.ace || -1),
@@ -2005,10 +2005,10 @@ Used by SortieManager
 								isMainFleet: !this.EnemyCombined ? true : attack.target < this.eshipsMain.length,
 							};
 
-							result.isAbnormal = abnormalDamage;
+							result.isUnexpected = true;
 							result.engagement = engagement;
 							result.debuffed = !!this.debuff;
-							AD.push(result);
+							unexpectedList.push(result);
 						}
 					}
 					// Updating eHp (if needed for multi-hit)
@@ -2016,21 +2016,22 @@ Used by SortieManager
 				}
 			});
 		});
-	return AD;
+	return unexpectedList;
 	};
 
-	KC3Node.prototype.buildAbnormalDamageMessage = function(AD){
-		if (!AD) { return; }
-		let ADTips = "";
-		AD.forEach(a => {
+	KC3Node.prototype.buildUnexpectedDamageMessage = function(unexpectedList){
+		if (!unexpectedList) { return; }
+		let UDTips = "";
+		unexpectedList.forEach(a => {
 			const shipMaster = KC3Master.ship(a.ship.id);
 			const shipName = KC3Meta.shipName(shipMaster.api_name);
 			const enemyName = KC3Meta.abyssShipName(a.enemy.id);
-			if (a.isAbnormal) {
-				ADTips += shipName + " attacks " + enemyName + " for " + a.damageInstance.actualDamage + " damage. Expected damage: " + a.damageInstance.expectedDamage + "\n";
+			if (a.isUnexpected) { 
+				UDTips += "{0} attacks {1} ({2}) for {3} damage. Expected range: {4} ~ {5}\n".format(shipName, enemyName, a.enemy.id, a.damageInstance.actualDamage,
+					a.damageInstance.expectedDamage[0], a.damageInstance.expectedDamage[1]);
 			}
 		});
-		return ADTips;
+		return UDTips;
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){
