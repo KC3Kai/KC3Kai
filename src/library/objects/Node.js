@@ -613,8 +613,10 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
+			this.AD = this.abnormalDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
+			this.AD.push(...this.abnormalDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
 		}
-		
+
 		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
 			
@@ -859,6 +861,8 @@ Used by SortieManager
 						}
 					}
 				});
+				this.AD = this.abnormalDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
+				this.AD.push(...this.abnormalDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
 			}
 
 			const enemyResult = isAgainstEnemyEscort ? result.fleets.enemyEscort : result.fleets.enemyMain;
@@ -1845,6 +1849,188 @@ Used by SortieManager
 				return true;
 			}
 		});
+	};
+
+		/** 
+	 * Abnormal damage checker that checks damage instances from BP module
+	 * @see http://kancolle.wikia.com/wiki/Combat/Damage_Calculation
+	 * @param BPfleet - playerMain/playerEscort array from BP fleets export
+	 * @param fleetnum - player fleet index
+	 * @param formation - player formation id
+	 * @param engagement - engagement id
+	 * @return {array} with element {Object} that has attributes: 
+	 * 	*enemy: Enemy formation, id, equips, stats and health before attack
+	 * 	*ship: Player formation, position, id, equips, stats, improvements, proficiency, combined fleet type, current health and ammo
+	 *  *damageInstance: Actual damage, expected damage range and critical
+	 * 	*isAbnormal: Boolean to check if damage is in expected or unexpected range
+	 */
+	KC3Node.prototype.abnormalDamagePrediction = function(BPFleet, fleetnum, formation, engagement) {
+		let AD = [];
+		BPFleet.forEach(({ attacks }, position) => {
+			if (attacks.length === 0) { return; }
+			const ship = PlayerManager.fleets[fleetnum].ship(position);
+			if (ship.isDummy()) { return; }
+			attacks.forEach( attack => {
+				let damage = attack.damage,
+					cutin = attack.cutin >= 0 ? attack.cutin : attack.ncutin,
+					acc =  attack.acc,
+					hp = attack.hp,
+					ciequip = attack.equip,
+					time = (attack.cutin >= 0) ? 'Day' : 'Night',
+					nightSpecialAttackType = [],
+					daySpecialAttackType = [];
+
+				const target = this.eships[attack.target],
+					enemyShip = KC3Master.ship(target),
+					damageStatus = ['taiha','chuuha'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]),
+					eShip = new KC3Ship();
+				
+				// Simulate an enemy ship to obtain armor from equipment
+				eShip.rosterId = 1;
+				eShip.masterId = 83;
+				eShip.items = this.eSlot[attack.target];
+
+				const { isSub, isLand } = ship.estimateTargetShipType(target);
+
+				/** 
+				 * CVCI/NBCVCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
+				 * Technically possible to guess exact cut-in from api_si_list (included per attack)
+				 * Since multiple cutins are possible per ship, reassignment to match cutin number from estimation is required
+				 */
+
+				if (time == "Night") {
+					nightSpecialAttackType = ship.estimateNightAttackType(target, true);
+					// In case of re-roll attacks like 7/8
+					if (nightSpecialAttackType[1] !== cutin){
+						nightSpecialAttackType = {
+							1: ["Cutin", 1, "DoubleAttack", 1.2],
+							2: ["Cutin", 2, "CutinTorpTorpMain", 1.3],
+							3: ["Cutin", 3, "CutinTorpTorpTorp", 1.5],
+							4: ["Cutin", 4, "CutinMainMainSecond", 1.75],
+							5: ["Cutin", 5, "CutinMainMainMain", 2.0],
+							6: ["Cutin", 6, "CutinNFNTB", 1.2],
+							7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
+							8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
+						}[cutin] || ['Single', 0];
+					}
+				}
+				else {
+					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
+					if (daySpecialAttackType[1] !== cutin) {
+						// Arty spotting will keep re-rolling sp attacks
+						daySpecialAttackType = {
+							0: ["SingleAttack", 0],
+							2: ["Cutin", 2, "DoubleAttack", 1.2],
+							3: ["Cutin", 3, "CutinMainSecond", 1.1],
+							4: ["Cutin", 4, "CutinMainRadar", 1.2],
+							5: ["Cutin", 5, "CutinMainApshell", 1.3],
+							6: ["Cutin", 6, "CutinMainMain", 1.5],
+							7: ["Cutin", 7, "CutinDBTB", 1.15],
+						}[cutin] || ['Single', 0];
+					}
+				}
+				
+				const warfareType = !isSub ? 'Shelling' : 'Antisub';
+
+				let result = {},
+					eHp = this.maxHPs.enemy[target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
+					abnormalFlag = isLand || KC3SortieManager.map_world > 10;
+
+				// Simulating each attack
+				for (let i = 0; i < damage.length; i++){
+					// Scratch damage/miss check
+					if ((abnormalFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
+
+						let abnormalDamage = false,
+							damageInstance = {},
+							newDepthChargeBonus = 0,
+							remainingAmmoModifier = 1,
+							armor = this.eParam[attack.target][3] + eShip.equipmentTotalStats("souk");
+
+						// Ignore CF modifiers for now
+						let power = time === 'Day' ?  ship.shellingFirePower() 
+							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
+							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
+						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
+						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
+							nightSpecialAttackType, this.isNightStart, this.isPlayerCombined, target, damageStatus));
+						const precapPower = power;
+						({power} = ship.applyPowerCap(power, time, warfareType));
+
+						// Simplify aerial attack check to just carrier check, unlikely that need to check for edge cases like Hayasui/old CV night attacks
+						({power, newDepthChargeBonus, remainingAmmoModifier} = ship.applyPostcapModifiers(power, warfareType,
+							daySpecialAttackType, 0, acc[i] === 2, ship.isCarrier(), enemyShip.api_stype, false, target));
+						const postcapPower = power;
+						armor -= newDepthChargeBonus;
+
+						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
+						if (damage[i] > maxDam) { abnormalDamage = true; }
+						if (abnormalDamage || abnormalFlag) {
+							
+							// Formatting for tsunDB
+							damageInstance.actualDamage = damage[i];
+							damageInstance.isCritical = acc[i] === 2;
+							const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
+							damageInstance.expectedDamage = [minDam, maxDam];
+							result.damageInstance = damageInstance;
+
+							let hpPercent = Math.qckInt('floor', hp/ship.hp[1], 3) * 100;
+							hpPercent = hpPercent > 0 ? hpPercent : 0;
+
+							result.ship = {
+								id: ship.masterId, 
+								damageStatus: Math.ceil(hpPercent / 20),
+								equips: ship.equipment(true).map(g => g.masterId || -1),
+								improvements: ship.equipment(true).map(g => g.stars || -1),
+								proficiency: ship.equipment(true).map(g => g.ace || -1),
+								slots: ship.slots,
+								position: position,
+								formation: formation,
+								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
+								combinedFleet: PlayerManager.combinedFleet,
+								rAmmoMod: remainingAmmoModifier,
+								spAttackType: cutin,
+								cutinEquips: ciequip,
+								precapPower: precapPower,
+								postcapPower: postcapPower,
+							};
+
+							result.enemy = {
+								id: target,
+								equips: this.eSlot[attack.target],
+								stats: this.eParam[attack.target],
+								formation: this.eformation,
+								position: attack.target,
+								armor: armor,
+								isMainFleet: !this.EnemyCombined ? true : attack.target < this.eshipsMain.length,
+							};
+
+							result.isAbnormal = abnormalDamage;
+							result.engagement = engagement;
+							result.debuffed = !!this.debuff;
+							AD.push(result);
+						}
+					}
+					// Updating eHp (if needed for multi-hit)
+					eHp -= damage[i];
+				}
+			});
+		});
+	return AD;
+	};
+
+	KC3Node.prototype.buildAbnormalDamageMessage = function(AD){
+		if (!AD) { return; }
+		let ADTips = "";
+		AD.forEach(a => {
+			const shipMaster = KC3Master.ship(a.ship.id);
+			const shipName = KC3Meta.shipName(shipMaster.api_name);
+			const enemyName = KC3Meta.abyssShipName(a.enemy.id);
+			if (a.isAbnormal) {
+				ADTips += shipName + " attacks " + enemyName + " for " + a.damageInstance.actualDamage + " damage. Expected damage: " + a.damageInstance.expectedDamage + "\n";
+			}
+		});
+		return ADTips;
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){

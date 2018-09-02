@@ -1,6 +1,5 @@
 (function () {
   const Hougeki = {};
-  const HOUGEKI_PROPS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
   const { pipe, map, Side } = KC3BattlePrediction;
 
   /*--------------------------------------------------------*/
@@ -11,6 +10,8 @@
     const { createAttack } = KC3BattlePrediction.battle;
     const { extractFromJson } = KC3BattlePrediction.battle.phases;
     const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
+    const HOUGEKI_PROPS = battleData.api_at_type ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type']
+      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list'];
 
     return pipe(
       extractFromJson(HOUGEKI_PROPS),
@@ -24,12 +25,13 @@
   /*--------------------------------------------------------*/
 
   Hougeki.parseJson = (attackJson) => {
-    const { parseDamage, parseAttacker, parseDefender } = KC3BattlePrediction.battle.phases.hougeki;
+    const { parseDamage, parseAttacker, parseDefender, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
 
     return {
       damage: parseDamage(attackJson),
       attacker: parseAttacker(attackJson),
       defender: parseDefender(attackJson),
+      info: parseInfo(attackJson),
     };
   };
 
@@ -44,6 +46,14 @@
   Hougeki.parseDefender = ({ api_at_eflag, api_df_list }) => ({
     side: api_at_eflag === 1 ? Side.PLAYER : Side.ENEMY,
     position: api_df_list[0],
+  });
+
+  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list }) => ({
+    damage: api_damage,
+    acc: api_cl_list,
+    equip: api_si_list,
+    cutin: api_at_type,
+    ncutin: api_sp_list,
   });
 
   /*--------------------------------------------------------*/
