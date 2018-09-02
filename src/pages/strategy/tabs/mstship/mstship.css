@@ -505,6 +505,48 @@
 	padding-left:10px;
 	padding-right:5px;
 }
+
+/* EQUIPPABLE
+--------------------------------*/
+.tab_mstship .shipInfo .equipSlots,
+.tab_mstship .shipInfo .equipExSlot {
+	width:453px;
+}
+.tab_mstship .shipInfo .equipSlots .equippableType,
+.tab_mstship .shipInfo .equipExSlot .equippableType {
+	float:left;
+	width:224px;
+	height:20px;
+	margin:0px 2px 1px 0px;
+	font-size:12px;
+	line-height:20px;
+	border-radius:6px;
+}
+.tab_mstship .shipInfo .equipSlots .typeIcon,
+.tab_mstship .shipInfo .equipExSlot .typeIcon,
+.tab_mstship .shipInfo .equipSlots .typeIcon img,
+.tab_mstship .shipInfo .equipExSlot .typeIcon img {
+	width:20px;
+	height:20px;
+	vertical-align:text-bottom;
+}
+.tab_mstship .shipInfo .equipSlots .typeIcon,
+.tab_mstship .shipInfo .equipExSlot .typeIcon {
+	float:left;
+}
+.tab_mstship .shipInfo .equipSlots .typeName,
+.tab_mstship .shipInfo .equipExSlot .typeName {
+	float:left;
+	width:200px;
+	margin:0px 2px 0px 2px;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
+}
+.tab_mstship .shipInfo .equipExSlot .label {
+	color:inherit;
+}
+
 /* AACI
 --------------------------------*/
 .tab_mstship .shipInfo .aaci {

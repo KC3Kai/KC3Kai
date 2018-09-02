@@ -1699,6 +1699,15 @@ body {
 	background:#ffc;
 	border:1px solid #ace;
 }
+/* SHIPS LIBRARY
+--------------------------------*/
+.tab_mstship .shipInfo .equipSlots .equippableType {
+	background:#ddd;
+}
+.tab_mstship .shipInfo .equipExSlot .equippableType {
+	background:#ccc;
+}
+
 /* QUOTES
 --------------------------------*/
 .tab_quotes .ship_list {

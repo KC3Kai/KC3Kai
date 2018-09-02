@@ -11,6 +11,12 @@
 	margin-right:10px;
 }
 
+.tab_iconmaker ol,
+.tab_iconmaker ul {
+	padding-left:1em;
+}
+
+.tab_iconmaker .notes,
 .tab_iconmaker .ship_params,
 .tab_iconmaker .crop_info,
 .tab_iconmaker .crop_controls,
@@ -22,6 +28,11 @@
 	margin-top:5px;
 	margin-bottom:5px;
 	text-align:center;
+}
+
+.tab_iconmaker .notes {
+	color:blue;
+	text-align:right;
 }
 
 .tab_iconmaker .cropped {
