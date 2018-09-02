@@ -83,9 +83,11 @@ Instantiate-able class to represent one player
 		// If this is the last day of the month
 		if(PvPReset.getUTCDate() == lastDay.getUTCDate()) {
 			// At morning, check 0500 UTC = 1400 JST
-			// At night, check 1300 UTC = 2200 JST
+			// At night, check 1300 UTC = 2200 JST: Montly points reset
+			// At night, check 1700 UTC = 0200 JST: First cycle end, start second cycle
 			this.checkRankCutOff(PvPReset, 5);
 			this.checkRankCutOff(PvPReset, 13);
+			this.checkRankCutOff(PvPReset, 17);
 		}else {
 			// Not last day of the month..
 			// At morning, check 0500 UTC = 1400 JST

@@ -67,6 +67,34 @@ KC3改 Equipment Object
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 			},
+			// Type 97 Torpedo Bomber (931 Air Group)
+			"82": {
+				count: 0,
+				byClass: {
+					// Taiyou Kai+
+					"76": {
+						remodel: 1,
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+			},
+			// Ju 87C Kai Ni (KMX)
+			"305": {
+				count: 0,
+				byClass: {
+					// Taiyou Kai Ni?
+					"76": {
+						remodel: 2,
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Graf Zeppelin Class
+					"63": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Aquila Class
+					"68": "63",
+				},
+			},
 			// Suisei
 			"24": {
 				count: 0,
@@ -135,6 +163,17 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Type 2 Reconnaissance Aircraft
+			"61": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						single: { "houg": 3, "souk": 1, "houk": 2 },
+					},
+				},
+			},
 			// Zuiun (634 Air Group)
 			"79": {
 				count: 0,
@@ -198,15 +237,20 @@ KC3改 Equipment Object
 					multiple: { "houg": 3, "houk": 1 },
 				},
 			},
-			// Type 2 Reconnaissance Aircraft
-			"61": {
+			// S9 Osprey
+			"304": {
 				count: 0,
 				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2 },
+					// Kuma Class
+					"4": {
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
 					},
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Agano Class
+					"41": "4",
 				},
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
@@ -332,6 +376,22 @@ KC3改 Equipment Object
 						remodel: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
+				},
+			},
+			// Bofors 15.2cm Twin Gun Mount Model 1930
+			"303": {
+				count: 0,
+				byClass: {
+					// Kuma Class
+					"4": {
+						multiple: { "houg": 1, "tyku": 1 },
+					},
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Agano Class
+					"41": "4",
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
@@ -550,6 +610,22 @@ KC3改 Equipment Object
 						flags: [ "surfaceRadar" ],
 						single: { "houg": 3, "houk": 2 },
 					},
+				},
+			},
+			// 12.7cm Twin Gun Mount Model A
+			"297": {
+				count: 0,
+				byClass: {
+					// Fubuki Class
+					"12": {
+						multiple: { "houk": 2 },
+					},
+					// Ayanami Class
+					"1": {
+						multiple: { "houk": 1 },
+					},
+					// Akatsuki Class
+					"5": "1",
 				},
 			},
 			// 12.7cm Twin Gun Mount Model A Kai Ni

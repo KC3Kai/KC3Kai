@@ -2024,6 +2024,12 @@ button, input, select, textarea {
 .tab_mstship .shipInfo .gunfit .fitgear .gearFitNight {
 	border-radius:0px !important;
 }
+.tab_mstship .shipInfo .equipSlots .equippableType {
+	background:#333;
+}
+.tab_mstship .shipInfo .equipExSlot .equippableType {
+	background:#444;
+}
 
 /* GEARS LIBRARY
 --------------------------------*/
