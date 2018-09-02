@@ -412,6 +412,7 @@ Previously known as "Reactor"
 			PlayerManager.consumables.ring -= 1;
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Fleet");
 		},
 		
 		"api_req_kaisou/remodeling":function(params, response, headers){
