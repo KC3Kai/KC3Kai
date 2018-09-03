@@ -448,10 +448,10 @@
 
     return pipe(
       over(getPath(fleets, defender), takeDamage(damage)),
-      attacker ? over(getPath(fleets, attacker), dealDamage(damage, defender, info)) : x => x
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
     )(fleets);
   };
-  
+
   // map() for the whole fleets structure
   // i.e. f => side.forEach(role.forEach(ship.forEach(s => f(s))))
   const mapShips = pipe(map, map, map);
@@ -694,8 +694,8 @@
     const { extractFromJson } = KC3BattlePrediction.battle.phases;
     const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
     const HOUGEKI_PROPS = battleData.api_at_type ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type']
-      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list'];
-
+      : battleData.api_sp_list ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list']
+      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
     return pipe(
       extractFromJson(HOUGEKI_PROPS),
       map(parseJson),
@@ -1226,7 +1226,7 @@
 
   Ship.installDamecon = (ship, damecon = 0) => Object.assign({}, ship, { damecon });
 
-  Ship.dealDamage = (damage, { position }, info) => ship => {
+  Ship.dealDamage = (damage, info, { position } = {}) => ship => {
     if (info) { ship.attacks.push(Object.assign({}, info, { target: position, hp: ship.hp })); }
 
     return Object.assign({}, ship, { damageDealt: ship.damageDealt + damage});

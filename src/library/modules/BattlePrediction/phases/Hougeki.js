@@ -11,8 +11,8 @@
     const { extractFromJson } = KC3BattlePrediction.battle.phases;
     const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
     const HOUGEKI_PROPS = battleData.api_at_type ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type']
-      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list'];
-
+      : battleData.api_sp_list ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list']
+      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
     return pipe(
       extractFromJson(HOUGEKI_PROPS),
       map(parseJson),
