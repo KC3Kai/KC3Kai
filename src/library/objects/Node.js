@@ -1871,6 +1871,8 @@ Used by SortieManager
 			const ship = PlayerManager.fleets[fleetnum].ship(position);
 			if (ship.isDummy()) { return; }
 			attacks.forEach( attack => {
+
+				// BATTLE CONDS
 				let damage = attack.damage,
 					cutin = attack.cutin >= 0 ? attack.cutin : attack.ncutin,
 					acc =  attack.acc,
@@ -1880,6 +1882,7 @@ Used by SortieManager
 					nightSpecialAttackType = [],
 					daySpecialAttackType = [];
 
+				// ENEMY STATS
 				const target = this.eships[attack.target],
 					enemyShip = KC3Master.ship(target),
 					damageStatus = ['taiha','chuuha'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]),
@@ -1890,6 +1893,7 @@ Used by SortieManager
 				eShip.masterId = 83;
 				eShip.items = this.eSlot[attack.target];
 
+				// PLAYER SPECIALS
 				const { isSub, isLand } = ship.estimateTargetShipType(target);
 
 				/** 
@@ -1967,7 +1971,7 @@ Used by SortieManager
 						if (damage[i] > maxDam) { unexpectedDamage = true; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
-							// Formatting for tsunDB
+							// TsunDB formatting
 							damageInstance.actualDamage = damage[i];
 							damageInstance.isCritical = acc[i] === 2;
 							const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
@@ -1998,14 +2002,13 @@ Used by SortieManager
 							result.enemy = {
 								id: target,
 								equips: this.eSlot[attack.target],
-								stats: this.eParam[attack.target],
 								formation: this.eformation,
 								position: attack.target,
 								armor: armor,
 								isMainFleet: !this.EnemyCombined ? true : attack.target < this.eshipsMain.length,
 							};
 
-							result.isUnexpected = true;
+							result.isUnexpected = unexpectedDamage;
 							result.engagement = engagement;
 							result.debuffed = !!this.debuff;
 							unexpectedList.push(result);
