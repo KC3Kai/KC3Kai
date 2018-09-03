@@ -267,9 +267,11 @@
 				moraleClockRemain = 0;
 				$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelRecoveredMorale") );
 
-				// Morale Notification
-				if(ConfigManager.alert_morale_notif){
-					// Play sound
+				// Morale desktop notification if not on sortie/PvP,
+				if(ConfigManager.alert_morale_notif &&
+					!(KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP())
+				){
+					// Play sound if alert sound setting is not none
 					if(KC3TimerManager.notifSound){ KC3TimerManager.notifSound.pause(); }
 					switch(ConfigManager.alert_type){
 						case 1: KC3TimerManager.notifSound = new Audio("../../../../assets/snd/pop.mp3"); break;
@@ -283,7 +285,7 @@
 						KC3TimerManager.notifSound.volume = ConfigManager.alert_volume / 100;
 						KC3TimerManager.notifSound.play();
 					}
-					// Desktop notif regardless of settings, we consider Morale Notif as "yes"
+					// Send desktop notification
 					(new RMsg("service", "notify_desktop", {
 						notifId: "morale",
 						data: {

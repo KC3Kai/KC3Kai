@@ -170,7 +170,7 @@ Saves and loads significant data for future use
 				//ships[787] = this._seasonalShips[787];
 				// Seasonal data no longer leaked since 2017-04-05
 				// Seasonal data leaks again since 2017-09-12 if ID < 800
-				// Seasonal data leaking fixed again since 207-10-18
+				// Seasonal data leaking fixed again since 2017-10-18
 			}
 			return ships;
 		},
