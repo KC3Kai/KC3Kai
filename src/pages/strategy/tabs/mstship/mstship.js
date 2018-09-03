@@ -573,7 +573,7 @@
 				});
 				
 				// MORE INFO
-				if(shipData.api_aftershipid>0){
+				if(shipData.api_aftershipid > 0){
 					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
 					$(".tab_mstship .shipInfo .remodel_name a").data("sid", shipData.api_aftershipid);
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
@@ -581,7 +581,7 @@
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
 					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
 						// show blueprint icon for all these special materials
-						remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat
+						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat)
 					);
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
