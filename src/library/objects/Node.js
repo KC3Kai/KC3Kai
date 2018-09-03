@@ -1968,13 +1968,13 @@ Used by SortieManager
 						armor -= newDepthChargeBonus;
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
-						if (damage[i] > maxDam) { unexpectedDamage = true; }
+						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
+						if (damage[i] > maxDam && maxDam > 0 ) { unexpectedDamage = true; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
 							// TsunDB formatting
 							damageInstance.actualDamage = damage[i];
 							damageInstance.isCritical = acc[i] === 2;
-							const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
 							damageInstance.expectedDamage = [minDam, maxDam];
 							result.damageInstance = damageInstance;
 
@@ -1984,7 +1984,7 @@ Used by SortieManager
 							result.ship = {
 								id: ship.masterId, 
 								damageStatus: Math.ceil(hpPercent / 25),
-								equips: ship.equipment(true).map(g => g.masterId || -1),
+								equip: ship.equipment(true).map(g => g.masterId || -1),
 								improvements: ship.equipment(true).map(g => g.stars || -1),
 								proficiency: ship.equipment(true).map(g => g.ace || -1),
 								slots: ship.slots,
@@ -1997,11 +1997,12 @@ Used by SortieManager
 								cutinEquips: ciequip,
 								precapPower: precapPower,
 								postcapPower: postcapPower,
+								time: time,
 							};
 
 							result.enemy = {
 								id: target,
-								equips: this.eSlot[attack.target],
+								equip: this.eSlot[attack.target],
 								formation: this.eformation,
 								position: attack.target,
 								armor: armor,
