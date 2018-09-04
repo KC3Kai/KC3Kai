@@ -1934,7 +1934,9 @@ Used by SortieManager
 					}
 				}
 				
-				const warfareType = !isSub ? 'Shelling' : 'Antisub';
+				const warfareType = !isSub ? 'Shelling' : 'Antisub',
+					powerBonus = ship.combinedFleetPowerBonus(PlayerManager.combinedFleet, this.isEnemyCombined, warfareType),
+					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort;
 
 				let result = {},
 					eHp = this.maxHPs.enemy[target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
@@ -1942,6 +1944,7 @@ Used by SortieManager
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++){
+					if (damage[i] === -1) { break; } // NBCVCI triple array of [x, -1, -1]
 					// Scratch damage/miss check
 					if ((unexpectedFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
 
@@ -1951,13 +1954,12 @@ Used by SortieManager
 							remainingAmmoModifier = 1,
 							armor = this.eParam[attack.target][3] + eShip.equipmentTotalStats("souk");
 
-						// Ignore CF modifiers for now
-						let power = time === 'Day' ?  ship.shellingFirePower() 
+						let power = time === 'Day' ?  ship.shellingFirePower(combinedFleetFactor) 
 							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
 							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
-							nightSpecialAttackType, this.isNightStart, this.isPlayerCombined, target, damageStatus));
+							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
 						const precapPower = power;
 						({power} = ship.applyPowerCap(power, time, warfareType));
 
