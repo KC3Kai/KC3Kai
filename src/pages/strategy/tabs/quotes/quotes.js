@@ -107,7 +107,7 @@
 					}
 					$(".voice_list .player").empty();
 					$(".voice_list .subtitle").removeClass("playing");
-					var player = $('<audio controls autoplay><source/></audio>');
+					var player = $('<audio controls autoplay controlslist="nodownload"><source/></audio>');
 					$("source", player).attr("src", voiceSrc);
 					$(".player", elm).html(player);
 					var audio = player.get(0);
