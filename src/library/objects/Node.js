@@ -1894,7 +1894,7 @@ Used by SortieManager
 				eShip.items = this.eSlot[attack.target];
 
 				// PLAYER SPECIALS
-				const { isSub, isLand } = ship.estimateTargetShipType(target);
+				const { isSubmarine, isLand } = ship.estimateTargetShipType(target);
 
 				/** 
 				 * CVCI/NBCVCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
@@ -1934,7 +1934,7 @@ Used by SortieManager
 					}
 				}
 				
-				const warfareType = !isSub ? 'Shelling' : 'Antisub',
+				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
 					powerBonus = ship.combinedFleetPowerBonus(PlayerManager.combinedFleet, this.isEnemyCombined, warfareType),
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort;
 
