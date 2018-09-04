@@ -122,7 +122,7 @@
 }
 .tab_quotes .part_right .voice_entity .player {
 	float: left;
-	width: 195px;
+	width: 200px;
 	height: 20px;
 	margin-left: 5px;
 	font-size: 11px;
@@ -130,14 +130,39 @@
 }
 .tab_quotes .part_right .voice_entity .player audio {
 	position: relative;
-	width: 127px;
-	height: 30px;
-	transform: scaleY(0.7);
-	margin-top: -5px;
+	width: 132px;
+	height: 20px;
+	margin-left: -3px;
 	float: left;
+}
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls {
+	overflow: hidden;
+	background: inherit;
+}
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-enclosure {
+	background: inherit;
+	border-radius: 0;
+	min-height: 20px;
+	height: 20px;
+}
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-panel {
+	background: inherit;
+	height: 20px;
+	padding: 0;
+}
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-mute-button,
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-volume-slider,
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-time-remaining-display,
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-current-time-display {
+	display: none;
+}
+.tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-timeline {
+	padding: 0;
+	margin: 0 15px 0 10px;
 }
 .tab_quotes .part_right .voice_entity .player span {
 	float: right;
+	margin-right: 5px;
 }
 
 .tab_quotes .part_right .voice_entity.missing .source {
