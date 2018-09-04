@@ -158,7 +158,7 @@
 }
 .tab_quotes .part_right .voice_entity .player audio::-webkit-media-controls-timeline {
 	padding: 0;
-	margin: 0 15px 0 2px;
+	margin: 0 15px 0 10px;
 }
 .tab_quotes .part_right .voice_entity .player span {
 	float: right;

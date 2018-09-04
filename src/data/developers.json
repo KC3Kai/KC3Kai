@@ -724,6 +724,15 @@
 				"links" : {
 					"gh" :"https://github.com/mw3tv123"
 				}
+			},
+			{
+				"name": "whitekiw",
+				"avatar" : "https://avatars2.githubusercontent.com/u/42760071?s=460&v=4",
+				"desc" : "한국어",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/whitekiw"
+				}
 			}
 		],
 		"AboutTesters": [
