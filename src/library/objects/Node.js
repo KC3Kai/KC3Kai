@@ -1939,7 +1939,7 @@ Used by SortieManager
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort;
 
 				let result = {},
-					eHp = this.maxHPs.enemy[target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
+					eHp = this.maxHPs.enemy[attack.target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
 					unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
 
 				// Simulating each attack
@@ -2149,6 +2149,35 @@ Used by SortieManager
 		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
+
+		// Save fleet as well
+		b.fleetIds = PlayerManager.fleets.map((fleet) => fleet.ships);
+		b.fleetStatus = PlayerManager.fleets[KC3SortieManager.fleetSent - 1].ships.filter((id) => id>0).map((ship) => KC3ShipManager.get(ship));
+		if(this.playerCombined) b.fleetStatus.concat(PlayerManager.fleets[1].ships.filter((id) => id>0).map((ship) => KC3ShipManager.get(ship)));
+
+		// Delete useless/default data
+		let dummyShip = KC3ShipManager.get(-1);
+		b.fleetStatus = b.fleetStatus.map((ship) => {
+			let newShip = {};
+			for(let key in ship) {
+				if(!ship.hasOwnProperty(key) || ['lastSortie', 'pendingConsumption', 'akashiMark', 'preExpedCond', 'repair', 'sally', 'slotnum', 'speed', 'stars', 'lock'].includes(key)) continue;
+				if(ship[key] == dummyShip[key]) continue;
+				newShip[key] = ship[key];
+			}
+			return newShip;
+		});
+
+		// Save equips as well
+		let dummyEquip = KC3GearManager.get(-1);
+		b.equipStatus = [].concat(...b.fleetStatus.map((a) => a.items)).filter((a) => a>0).map((equipId) => {
+			let equip = KC3GearManager.get(equipId), newEquip = {};
+			for(let key in equip) {
+				if(!equip.hasOwnProperty(key) || ['lock'].includes(key)) continue;
+				if(equip[key] == dummyEquip[key]) continue;
+				newEquip[key] = equip[key];
+			}
+			return newEquip;
+		});
 		return b;
 	};
 	
