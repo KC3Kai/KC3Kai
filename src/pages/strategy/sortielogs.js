@@ -923,7 +923,7 @@
 							PlayerManager.combinedFleet = sortie.combined;
 
 							// Simulate PlayerManager fleet
-							if(battle.fleetIds && battle.fleetStatus && battle.equipStatus) {
+							if(KC3Node.debugPrediction() && battle.fleetIds && battle.fleetStatus && battle.equipStatus) {
 								KC3GearManager.clear();
 								battle.equipStatus.forEach((gear) => KC3GearManager.add(gear));
 								KC3ShipManager.clear();
@@ -962,7 +962,7 @@
 								}
 							}
 
-							if(battle.fleetIds && battle.fleetStatus && battle.equipStatus && thisNode.unexpectedList && thisNode.unexpectedList.length) {
+							if(KC3Node.debugPrediction() && battle.fleetIds && battle.fleetStatus && battle.equipStatus && thisNode.unexpectedList && thisNode.unexpectedList.length) {
 								console.warn(`Unexpected damage in ${sortie.world}-${sortie.mapnum} sortie #${thisNode.sortie}: ${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node)}: `, thisNode.unexpectedList);
 								let prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",  (prevTitle?prevTitle+"\n":"")+ thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)).lazyInitTooltip();
