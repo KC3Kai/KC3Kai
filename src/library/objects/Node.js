@@ -1944,6 +1944,7 @@ Used by SortieManager
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++){
+					damage[i] = Math.floor(damage[i]); // FS protection
 					if (damage[i] === -1) { break; } // NBCVCI triple array of [x, -1, -1]
 					// Scratch damage/miss check
 					if ((unexpectedFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
@@ -2022,6 +2023,8 @@ Used by SortieManager
 				}
 			});
 		});
+
+	if (unexpectedList.length && KC3Node.debugPrediction()) { console.debug('Damage predicted', unexpectedList); }
 	return unexpectedList;
 	};
 
@@ -2169,7 +2172,7 @@ Used by SortieManager
 
 		// Save equips as well
 		let dummyEquip = KC3GearManager.get(-1);
-		b.equipStatus = [].concat(...b.fleetStatus.map((a) => a.items)).filter((a) => a>0).map((equipId) => {
+		b.equipStatus = b.fleetStatus.map((ship) => ship.ex_item).concat(...b.fleetStatus.map((a) => a.items)).filter((a) => a>0).map((equipId) => {
 			let equip = KC3GearManager.get(equipId), newEquip = {};
 			for(let key in equip) {
 				if(!equip.hasOwnProperty(key) || ['lock'].includes(key)) continue;
