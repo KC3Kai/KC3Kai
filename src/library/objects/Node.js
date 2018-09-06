@@ -1916,7 +1916,7 @@ Used by SortieManager
 				};
 				ship.nakedAsw = function() {
 					return this.as[0];
-				}
+				};
 
 				ship.fp[0] = shipMaster.api_houg[0] + (shipData.kyouka[0] || 0) + ship.equipmentTotalStats("houg");
 				ship.tp[0] = shipMaster.api_raig[0] + (shipData.kyouka[1] || 0) + ship.equipmentTotalStats("raig");
@@ -1924,12 +1924,18 @@ Used by SortieManager
 				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
 				ship.mod = shipData.kyouka;
 
+				if (ship.as[0] === undefined){	
+					const aswBound = WhoCallsTheFleetDb.getStatBound( shipData.mst_id, 'asw' );
+					ship.as[0] = WhoCallsTheFleetDb.estimateStat(aswBound, shipData.level);
+				}
+
 				if(this.ammo !== undefined) {
 					ship.ammo = this.ammo[fleetnum][position];
 				} else {
 					// Make a rough guess of current ammo percentage remaining with event node consumption
 					let ammoPercent = 100,
 						reachedNode = false;
+					// Ignore maelstrom/whirlpool for now
 					this.nodeData.nodes.forEach( node => {
 						if (this.id === node.id) { reachedNode = true; }
 						if (reachedNode) { return; }
@@ -1959,7 +1965,6 @@ Used by SortieManager
 				// ENEMY STATS
 				const target = this.eships[attack.target],
 					enemyShip = KC3Master.ship(target),
-					damageStatus = ['taiha','chuuha','shouha','normal'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]),
 					eShip = new KC3Ship();
 				
 				// Simulate an enemy ship to obtain armor from equipment
@@ -2010,7 +2015,8 @@ Used by SortieManager
 				
 				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
 					powerBonus = ship.combinedFleetPowerBonus(PlayerManager.combinedFleet, this.isEnemyCombined, warfareType),
-					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort;
+					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
+					damageStatus = ['taiha','chuuha','shouha','normal'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]);
 
 				let result = {},
 					eHp = this.maxHPs.enemy[attack.target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
@@ -2091,7 +2097,7 @@ Used by SortieManager
 
 							result.isUnexpected = unexpectedDamage;
 							result.engagement = engagement;
-							result.debuffed = !!this.debuff;
+							result.debuffed = !!this.debuffed;
 							unexpectedList.push(result);
 						}
 					}

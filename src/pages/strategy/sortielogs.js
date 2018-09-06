@@ -1003,8 +1003,8 @@
 									console.info("MVP prediction incapable");
 								}
 							}
-							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0])
-							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1])
+							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0]);
+							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1]);
 							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
