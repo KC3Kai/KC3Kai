@@ -619,6 +619,10 @@ Provides access to data on built-in JSON files
 			return edgeId;
 		},
 		
+		nodes :function(worldId, mapId) {
+			return this._nodes["World " + worldId + "-" + mapId] || {};
+		},
+		
 		nodeLetters : function(worldId, mapId) {
 			var map = this._nodes["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined" && !!map.letters) {

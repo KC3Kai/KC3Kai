@@ -263,6 +263,17 @@
 		};
 	}(jQuery));
 	
+	// Allow user to set any option except for dataType, cache, and url
+	jQuery.cachedScript = function(url, options, success) {
+		options = $.extend(options || {}, {
+			dataType: "script",
+			cache: true,
+			url: url,
+			success: success,
+		});
+		return jQuery.ajax(options);
+	};
+	
 	/**
 	 * Simulate throttle/debounce func like the ones in lodash
 	 * docs see: https://github.com/cowboy/jquery-throttle-debounce
