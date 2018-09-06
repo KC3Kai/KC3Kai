@@ -1892,7 +1892,7 @@ Used by SortieManager
 						case 'number':
 						case 'string':
 							/* Number/String => converted as equipment slot key */
-							return this.getGearManager().get( slot < 0 || slot >= this.items.length ? this.ex_item : this.items[slot] );
+							return slot < 0 || slot >= this.shipData.equip.length ? this.equipment(true)[this.shipData.equip.length-1] : this.equipment(true)[slot];
 						case 'boolean':
 							/* Boolean => return all equipments with ex item if true */
 							return slot ? this.shipData.equip.map( (gId,idx) => {
