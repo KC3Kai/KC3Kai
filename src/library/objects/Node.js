@@ -612,8 +612,10 @@ Used by SortieManager
 				this.enemyHP[position] = ship;
 				this.enemySunk[position] = ship.sunk;
 			});
-			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle);
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle));
+			const unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
+			if (this.unexpectedList) { this.unexpectedList.push(...unexpectedList); }
+			else { this.unexpectedList = unexpectedList; }
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -868,8 +870,10 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
-			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle);
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle));
+			const unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
+			if (this.unexpectedList) { this.unexpectedList.push(...unexpectedList); }
+			else { this.unexpectedList = unexpectedList; }
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1940,8 +1944,14 @@ Used by SortieManager
 						if (this.id === node.id) { reachedNode = true; }
 						if (reachedNode) { return; }
 						// Cannot tell subnode from node list?
-						// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
-						ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
+						// Normal battle, yasen/day
+						if (node.eventId === 4) { ammoPercent -= (node.eventKind === 2 || node.eventKind === 3) ? 10 : 20; }
+						// Boss node
+						if (node.eventId === 5) { ammoPercent -= 20; }
+						// Aerial battle
+						if (node.eventId === 7 && node.eventKind === 4 ) { ammoPercent -= 20; }
+						// Aerial raid
+						if (node.eventId === 10 ) { ammoPercent -= 4;}
 					});
 					ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
 					ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
