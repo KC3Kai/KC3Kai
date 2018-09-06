@@ -874,22 +874,20 @@
 								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								// Show Enemy Air Raid damage
-								if(airRaid.airRaidLostKind > 0) {
-									const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
-										airRaid.baseTotalDamage,
-										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
-										airRaid.resourceLossAmount,
-										airRaid.airState,
-										"{0}%".format(airRaid.shotdownPercent),
-										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
-										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
-										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
-										KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
-									);
-									$(".node_id", nodeBox).attr("title", airRaidTooltip);
-									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
-								}
+								const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
+									airRaid.baseTotalDamage,
+									KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+									airRaid.resourceLossAmount,
+									airRaid.airState,
+									"{0}%".format(airRaid.shotdownPercent),
+									KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+									KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+									airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+									airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+									KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
+								);
+								$(".node_id", nodeBox).attr("title", airRaidTooltip);
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
 							} else {
 								$(".node_id", nodeBox).removeClass("nodamage damaged");
 							}
