@@ -1904,9 +1904,10 @@ Used by SortieManager
 					if (reachedNode) { return; }
 					// Cannot tell subnode from node list?
 					// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
-					ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind];
+					ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
 				});
-				ship.ammo = ship.master().api_bull_max * ammoPercent / 100;
+				ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
+				ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
 			}
 
 			if (ship.isDummy()) { return; }

@@ -1138,10 +1138,6 @@
 			
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
 
-			// Reload PlayerManager, KC3GearManager and KC3ShipManager
-			PlayerManager.loadFleets();
-			KC3ShipManager.load();
-			KC3GearManager.load();
 		};
 		
 		function updateScrollItem(scrollVars, worldMap, itemWidth) {
