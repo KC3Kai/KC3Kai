@@ -922,24 +922,11 @@
 							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
 
-							// Simulate PlayerManager fleet
-							if(KC3Node.debugPrediction() && battle.fleetIds && battle.fleetStatus && battle.equipStatus) {
-								KC3GearManager.clear();
-								battle.equipStatus.forEach((gear) => KC3GearManager.add(gear));
-								KC3ShipManager.clear();
-								battle.fleetStatus.forEach((ship) => KC3ShipManager.add(ship));
-								for(let fleetId = 0; fleetId < 4; fleetId++) 
-									PlayerManager.fleets[fleetId] = (new KC3Fleet()).defineFormatted({
-										fleetId: fleetId,
-										ships: battle.fleetIds[fleetId]
-									});
-							}
-
 							// Known issue: prediction will fail when Damecon used,
 							// as Node not read equipped damecon from sortie history,
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
-								sortie.world, sortie.mapnum)).defineAsBattle();
+								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
@@ -962,7 +949,7 @@
 								}
 							}
 
-							if(KC3Node.debugPrediction() && battle.fleetIds && battle.fleetStatus && battle.equipStatus && thisNode.unexpectedList && thisNode.unexpectedList.length) {
+							if(thisNode.unexpectedList && thisNode.unexpectedList.length) {
 								console.warn(`Unexpected damage in ${sortie.world}-${sortie.mapnum} sortie #${thisNode.sortie}: ${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node)}: `, thisNode.unexpectedList);
 								let prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",  (prevTitle?prevTitle+"\n":"")+ thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)).lazyInitTooltip();

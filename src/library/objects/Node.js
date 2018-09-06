@@ -612,9 +612,8 @@ Used by SortieManager
 				this.enemyHP[position] = ship;
 				this.enemySunk[position] = ship.sunk;
 			});
-
-			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
+			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle);
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle));
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -869,8 +868,8 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
-			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
+			this.unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle);
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle));
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1864,11 +1863,52 @@ Used by SortieManager
 	 *  *damageInstance: Actual damage, expected damage range and critical
 	 * 	*isunexpected: Boolean to check if damage is in expected or unexpected range
 	 */
-	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement) {
+	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement, isRealBattle = false) {
 		let unexpectedList = [];
 		BPFleet.forEach(({ attacks }, position) => {
 			if (attacks.length === 0) { return; }
-			const ship = PlayerManager.fleets[fleetnum].ship(position);
+			let ship = PlayerManager.fleets[fleetnum].ship(position);
+
+			// SHIP SIMULATION FOR SORTIE HISTORY
+			if (!isRealBattle && this.nodeData.id) {
+				const shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				const shipMaster = KC3Master.ship(shipData.mst_id);
+				ship = new KC3Ship();
+				ship.shipData = shipData;
+				ship.rosterId = 1;
+				ship.masterId = shipData.mst_id;
+				ship.slots = shipMaster.api_maxeq;
+				ship.equipment = function(){
+					return this.shipData.equip.map( (gId,idx) => {
+						let gData = KC3Master.slotitem(gId);
+						delete gData.api_id;
+						let g = new KC3Gear(gData);
+						g.masterId = gId;
+						g.itemId = 1;
+						g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
+						g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
+						return g;
+					});
+				};
+				ship.fp[0] = shipMaster.api_houg[0] + (shipData.kyouka[0] || 0) + ship.equipmentTotalStats("houg");
+				ship.tp[0] = shipMaster.api_raig[0] + (shipData.kyouka[1] || 0) + ship.equipmentTotalStats("raig");
+				ship.as[0] = shipData.stats.as;
+				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
+				ship.mod = shipData.kyouka;
+
+				// Make a rough guess of current ammo percentage remaining with event node consumption
+				let ammoPercent = 100,
+					reachedNode = false;
+				this.nodeData.nodes.forEach( node => {
+					if (this.id === node.id) { reachedNode = true; }
+					if (reachedNode) { return; }
+					// Cannot tell subnode from node list?
+					// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
+					ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind];
+				});
+				ship.ammo = ship.master().api_bull_max * ammoPercent / 100;
+			}
+
 			if (ship.isDummy()) { return; }
 			attacks.forEach( attack => {
 
@@ -1885,7 +1925,7 @@ Used by SortieManager
 				// ENEMY STATS
 				const target = this.eships[attack.target],
 					enemyShip = KC3Master.ship(target),
-					damageStatus = ['taiha','chuuha'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]),
+					damageStatus = ['taiha','chuuha','shouha','normal'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]),
 					eShip = new KC3Ship();
 				
 				// Simulate an enemy ship to obtain armor from equipment
@@ -1972,7 +2012,7 @@ Used by SortieManager
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
-						if (damage[i] > maxDam && maxDam > 0 ) { unexpectedDamage = true; }
+						if (damage[i] > maxDam && minDam > 0 ) { unexpectedDamage = true; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
 							// TsunDB formatting
@@ -2153,34 +2193,6 @@ Used by SortieManager
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
 
-		// Save fleet as well
-		b.fleetIds = PlayerManager.fleets.map((fleet) => fleet.ships);
-		b.fleetStatus = PlayerManager.fleets[KC3SortieManager.fleetSent - 1].ships.filter((id) => id>0).map((ship) => KC3ShipManager.get(ship));
-		if(this.playerCombined) b.fleetStatus.concat(PlayerManager.fleets[1].ships.filter((id) => id>0).map((ship) => KC3ShipManager.get(ship)));
-
-		// Delete useless/default data
-		let dummyShip = KC3ShipManager.get(-1);
-		b.fleetStatus = b.fleetStatus.map((ship) => {
-			let newShip = {};
-			for(let key in ship) {
-				if(!ship.hasOwnProperty(key) || ['lastSortie', 'pendingConsumption', 'akashiMark', 'preExpedCond', 'repair', 'sally', 'slotnum', 'speed', 'stars', 'lock'].includes(key)) continue;
-				if(ship[key] == dummyShip[key]) continue;
-				newShip[key] = ship[key];
-			}
-			return newShip;
-		});
-
-		// Save equips as well
-		let dummyEquip = KC3GearManager.get(-1);
-		b.equipStatus = b.fleetStatus.map((ship) => ship.ex_item).concat(...b.fleetStatus.map((a) => a.items)).filter((a) => a>0).map((equipId) => {
-			let equip = KC3GearManager.get(equipId), newEquip = {};
-			for(let key in equip) {
-				if(!equip.hasOwnProperty(key) || ['lock'].includes(key)) continue;
-				if(equip[key] == dummyEquip[key]) continue;
-				newEquip[key] = equip[key];
-			}
-			return newEquip;
-		});
 		return b;
 	};
 	
