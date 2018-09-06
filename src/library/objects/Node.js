@@ -1864,51 +1864,84 @@ Used by SortieManager
 	 * 	*isunexpected: Boolean to check if damage is in expected or unexpected range
 	 */
 	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement, isRealBattle = false) {
-		let unexpectedList = [];
+		let unexpectedList = [], sunkenShips = 0;
 		BPFleet.forEach(({ attacks }, position) => {
-			if (attacks.length === 0) { return; }
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
 			// SHIP SIMULATION FOR SORTIE HISTORY
 			if (!isRealBattle && this.nodeData.id) {
-				const shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				position = position + sunkenShips;
+				let shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				while(this.sunken && this.sunken[this.playerCombined?fleetnum:0].includes(shipData.mst_id)) {
+					sunkenShips++;
+					position = position + sunkenShips;
+					shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				}
 				const shipMaster = KC3Master.ship(shipData.mst_id);
 				ship = new KC3Ship();
 				ship.shipData = shipData;
 				ship.rosterId = 1;
 				ship.masterId = shipData.mst_id;
 				ship.slots = shipMaster.api_maxeq;
-				ship.equipment = function(){
-					return this.shipData.equip.map( (gId,idx) => {
-						let gData = KC3Master.slotitem(gId);
-						delete gData.api_id;
-						let g = new KC3Gear(gData);
-						g.masterId = gId;
-						g.itemId = 1;
-						g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
-						g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
-						return g;
-					});
+				ship.equipment = function(slot){
+					switch(typeof slot) {
+						case 'number':
+						case 'string':
+							/* Number/String => converted as equipment slot key */
+							return this.getGearManager().get( slot < 0 || slot >= this.items.length ? this.ex_item : this.items[slot] );
+						case 'boolean':
+							/* Boolean => return all equipments with ex item if true */
+							return slot ? this.shipData.equip.map( (gId,idx) => {
+								let gData = KC3Master.slotitem(gId);
+								delete gData.api_id;
+								let g = new KC3Gear(gData);
+								g.masterId = gId;
+								g.itemId = 1;
+								g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
+								g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
+								return g;
+							}) : this.equipment();
+						case 'undefined':
+							/* Undefined => returns whole equipment as equip object array */
+							return this.equipment(true).slice(0, this.shipData.equip.length-1);
+						case 'function':
+							/* Function => iterates over given callback for every equipment */
+							var equipObjs = this.equipment();
+							equipObjs.forEach((item, index) => {
+								slot.call(this, item.itemId, index, item);
+							});
+							// forEach always return undefined, return equipment for chain use
+							return equipObjs;
+					}
 				};
+				ship.nakedAsw = function() {
+					return this.as[0];
+				}
+
 				ship.fp[0] = shipMaster.api_houg[0] + (shipData.kyouka[0] || 0) + ship.equipmentTotalStats("houg");
 				ship.tp[0] = shipMaster.api_raig[0] + (shipData.kyouka[1] || 0) + ship.equipmentTotalStats("raig");
 				ship.as[0] = shipData.stats.as;
 				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
 				ship.mod = shipData.kyouka;
 
-				// Make a rough guess of current ammo percentage remaining with event node consumption
-				let ammoPercent = 100,
-					reachedNode = false;
-				this.nodeData.nodes.forEach( node => {
-					if (this.id === node.id) { reachedNode = true; }
-					if (reachedNode) { return; }
-					// Cannot tell subnode from node list?
-					// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
-					ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
-				});
-				ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
-				ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
+				if(this.ammo !== undefined) {
+					ship.ammo = this.ammo[fleetnum][position];
+				} else {
+					// Make a rough guess of current ammo percentage remaining with event node consumption
+					let ammoPercent = 100,
+						reachedNode = false;
+					this.nodeData.nodes.forEach( node => {
+						if (this.id === node.id) { reachedNode = true; }
+						if (reachedNode) { return; }
+						// Cannot tell subnode from node list?
+						// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
+						ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
+					});
+					ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
+					ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
+				}
 			}
+			if (attacks.length === 0) { return; }
 
 			if (ship.isDummy()) { return; }
 			attacks.forEach( attack => {
@@ -2000,6 +2033,7 @@ Used by SortieManager
 							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
 							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
+						const shellingPower = power;
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
 							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
 						const precapPower = power;
@@ -2039,6 +2073,8 @@ Used by SortieManager
 								rAmmoMod: remainingAmmoModifier,
 								spAttackType: cutin,
 								cutinEquips: ciequip,
+								shellingPower: shellingPower,
+								armorReduction: newDepthChargeBonus,
 								precapPower: precapPower,
 								postcapPower: postcapPower,
 								time: time,
@@ -2193,7 +2229,8 @@ Used by SortieManager
 		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
-
+		// Save ammo
+		b.ammo = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).ammo));
 		return b;
 	};
 	
