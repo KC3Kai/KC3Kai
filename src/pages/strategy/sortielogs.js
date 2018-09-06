@@ -842,9 +842,7 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
-							
-							battle.shizunde |= [[],[]];
-							
+														
 							// Show on node list
 							var edgeIndex = edges.indexOf(battle.node);
 							if(edgeIndex < 0) {
@@ -927,6 +925,9 @@
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+							if(battle.ammo !== undefined)
+								thisNode.ammo = battle.ammo;
+							thisNode.sunken = sinkShips;
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
@@ -1002,8 +1003,8 @@
 									console.info("MVP prediction incapable");
 								}
 							}
-							sinkShips[0].concat(battle.shizunde[0]);
-							sinkShips[1].concat(battle.shizunde[1]);
+							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0])
+							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1])
 							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );

@@ -1864,14 +1864,19 @@ Used by SortieManager
 	 * 	*isunexpected: Boolean to check if damage is in expected or unexpected range
 	 */
 	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement, isRealBattle = false) {
-		let unexpectedList = [];
+		let unexpectedList = [], sunkenShips = 0;
 		BPFleet.forEach(({ attacks }, position) => {
-			if (attacks.length === 0) { return; }
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
 			// SHIP SIMULATION FOR SORTIE HISTORY
 			if (!isRealBattle && this.nodeData.id) {
-				const shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				position = position + sunkenShips;
+				let shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				while(this.sunken && this.sunken[this.playerCombined?fleetnum:0].includes(shipData.mst_id)) {
+					sunkenShips++;
+					position = position + sunkenShips;
+					shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
+				}
 				const shipMaster = KC3Master.ship(shipData.mst_id);
 				ship = new KC3Ship();
 				ship.shipData = shipData;
@@ -1896,19 +1901,24 @@ Used by SortieManager
 				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
 				ship.mod = shipData.kyouka;
 
-				// Make a rough guess of current ammo percentage remaining with event node consumption
-				let ammoPercent = 100,
-					reachedNode = false;
-				this.nodeData.nodes.forEach( node => {
-					if (this.id === node.id) { reachedNode = true; }
-					if (reachedNode) { return; }
-					// Cannot tell subnode from node list?
-					// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
-					ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
-				});
-				ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
-				ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
+				if(this.ammo !== undefined) {
+					ship.ammo = this.ammo[fleetnum][position];
+				} else {
+					// Make a rough guess of current ammo percentage remaining with event node consumption
+					let ammoPercent = 100,
+						reachedNode = false;
+					this.nodeData.nodes.forEach( node => {
+						if (this.id === node.id) { reachedNode = true; }
+						if (reachedNode) { return; }
+						// Cannot tell subnode from node list?
+						// 0: No battle, 1: Normal battle, 2: Night battle, 3: Night battle, 4: Air battle, 5: Combined fleet battle, 6: Air raid, 7: Night-to-day (VS CF)
+						ammoPercent -= { 0: 0, 1: 20, 2: 10, 3: 10, 4: 4, 5: 20, 6: 4, 7: 20 }[node.eventKind] || 0;
+					});
+					ship.ammo = shipMaster.api_bull_max * ammoPercent / 100;
+					ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
+				}
 			}
+			if (attacks.length === 0) { return; }
 
 			if (ship.isDummy()) { return; }
 			attacks.forEach( attack => {
@@ -2193,7 +2203,8 @@ Used by SortieManager
 		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
-
+		// Save ammo
+		b.ammo = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).ammo));
 		return b;
 	};
 	
