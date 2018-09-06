@@ -1883,18 +1883,41 @@ Used by SortieManager
 				ship.rosterId = 1;
 				ship.masterId = shipData.mst_id;
 				ship.slots = shipMaster.api_maxeq;
-				ship.equipment = function(){
-					return this.shipData.equip.map( (gId,idx) => {
-						let gData = KC3Master.slotitem(gId);
-						delete gData.api_id;
-						let g = new KC3Gear(gData);
-						g.masterId = gId;
-						g.itemId = 1;
-						g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
-						g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
-						return g;
-					});
+				ship.equipment = function(slot){
+					switch(typeof slot) {
+						case 'number':
+						case 'string':
+							/* Number/String => converted as equipment slot key */
+							return this.getGearManager().get( slot < 0 || slot >= this.items.length ? this.ex_item : this.items[slot] );
+						case 'boolean':
+							/* Boolean => return all equipments with ex item if true */
+							return slot ? this.shipData.equip.map( (gId,idx) => {
+								let gData = KC3Master.slotitem(gId);
+								delete gData.api_id;
+								let g = new KC3Gear(gData);
+								g.masterId = gId;
+								g.itemId = 1;
+								g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
+								g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
+								return g;
+							}) : this.equipment();
+						case 'undefined':
+							/* Undefined => returns whole equipment as equip object array */
+							return this.equipment(true).slice(0, this.shipData.equip.length-1);
+						case 'function':
+							/* Function => iterates over given callback for every equipment */
+							var equipObjs = this.equipment();
+							equipObjs.forEach((item, index) => {
+								slot.call(this, item.itemId, index, item);
+							});
+							// forEach always return undefined, return equipment for chain use
+							return equipObjs;
+					}
 				};
+				ship.nakedAsw = function() {
+					return this.as[0];
+				}
+
 				ship.fp[0] = shipMaster.api_houg[0] + (shipData.kyouka[0] || 0) + ship.equipmentTotalStats("houg");
 				ship.tp[0] = shipMaster.api_raig[0] + (shipData.kyouka[1] || 0) + ship.equipmentTotalStats("raig");
 				ship.as[0] = shipData.stats.as;
@@ -2010,6 +2033,7 @@ Used by SortieManager
 							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
 							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
+						const shellingPower = power;
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
 							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
 						const precapPower = power;
@@ -2049,6 +2073,8 @@ Used by SortieManager
 								rAmmoMod: remainingAmmoModifier,
 								spAttackType: cutin,
 								cutinEquips: ciequip,
+								shellingPower: shellingPower,
+								armorReduction: newDepthChargeBonus,
 								precapPower: precapPower,
 								postcapPower: postcapPower,
 								time: time,
