@@ -14,6 +14,11 @@
 			cleared: null,
 			celldata: []
 		},
+		eventreward : {
+			map: null,
+			difficulty: null,
+			rewards: []
+		},
 		data : {
 			map: null,
 			hqLvl: null,
@@ -273,9 +278,22 @@
 			this.sendData(this.enemyComp, 'enemy-comp');
 		},
 		
+		processEventReward: function(http){
+			const apiData = http.response.api_data;
+			
+			this.eventreward.map = this.data.map;
+			this.eventreward.difficulty = this.data.difficulty;
+			this.eventreward.rewards = apiData.api_get_eventitem;
+			
+			this.sendData(this.eventreward, 'eventreward');
+		},
+		
 		processDrop: function(http) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = http.response.api_data;
+			if(apiData.hasOwnProperty('api_get_eventitem')){
+				this.processEventReward(http);
+			}
 			const lastShipCounts = this.shipDrop.counts || {};
 			this.shipDrop = {};
 			
@@ -431,6 +449,7 @@
 		 */
 		cleanOnStart: function() {
 			this.celldata = {};
+			this.eventreward = {};
 			this.currentMap = [0, 0];
 			this.data.edgeID = [];
 			this.shipDrop.counts = {};
