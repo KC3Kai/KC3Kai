@@ -347,12 +347,13 @@ Saves and loads significant data for future use
 		},
 
 		setCellData :function(startData){
-			// `api_mst_mapcell` removed since KC Phase 2
-			// have to collect them from api_req_map/start.api_cell_data
+			// `api_mst_mapcell` removed since KC Phase 2,
+			// have to collect them from `api_req_map/start.api_cell_data`
 			const mapcell = this._raw.mapcell || {};
 			const world = startData.api_maparea_id, map = startData.api_mapinfo_no;
 			const newCellsArr = startData.api_cell_data;
-			if(Array.isArray(newCellsArr) && newCellsArr.length){
+			// Only save normal maps for players, since event maps data will be accumulated to big
+			if(world > 0 && world < 10 && Array.isArray(newCellsArr) && newCellsArr.length){
 				const apiIds = newCellsArr.map(c => c.api_id);
 				// Clean existed cells of this map for old master data
 				$.each(mapcell, (id, cell) => {
