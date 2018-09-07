@@ -927,6 +927,8 @@
 								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
 							if(battle.ammo !== undefined)
 								thisNode.ammo = battle.ammo;
+							if (battle.slots !== undefined)
+								thisNode.slots = battle.slots;
 							thisNode.sunken = sinkShips;
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){

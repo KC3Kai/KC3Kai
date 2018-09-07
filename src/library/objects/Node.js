@@ -1886,7 +1886,7 @@ Used by SortieManager
 				ship.shipData = shipData;
 				ship.rosterId = 1;
 				ship.masterId = shipData.mst_id;
-				ship.slots = shipMaster.api_maxeq;
+				ship.slots = this.slots[fleetnum][position] || shipMaster.api_maxeq;
 				ship.equipment = function(slot){
 					switch(typeof slot) {
 						case 'number':
@@ -2247,8 +2247,9 @@ Used by SortieManager
 		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
-		// Save ammo
+		// Save ammo and slots (at the start of the battle?)
 		b.ammo = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).ammo));
+		b.slots = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).slots));
 		return b;
 	};
 	
