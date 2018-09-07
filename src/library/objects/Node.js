@@ -2082,6 +2082,7 @@ Used by SortieManager
 								improvements: ship.equipment(true).map(g => g.stars || -1),
 								proficiency: ship.equipment(true).map(g => g.ace || -1),
 								slots: ship.slots,
+								stats: ship.nakedStats(),
 								position: position,
 								formation: formation,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
@@ -2106,6 +2107,7 @@ Used by SortieManager
 							};
 
 							result.isUnexpected = unexpectedDamage;
+							result.landFlag = isLand;
 							result.engagement = engagement;
 							result.debuffed = !!this.debuffed;
 							unexpectedList.push(result);

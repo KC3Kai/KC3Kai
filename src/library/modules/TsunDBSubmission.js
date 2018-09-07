@@ -67,6 +67,48 @@
 			improvements: null,
 			kc3version: null
 		},
+		unexpectedDamage : {
+			map: null,
+			edgeID: null,
+			debuffed: null,
+			cleared: null,
+			engagement: null,
+			damageInstance: {
+				actualDamage: null,
+				expectedDamage: null,
+				isCritical: null,
+			},
+			ship: {
+				id: null, 
+				damageStatus: null,
+				equip: null,
+				improvements: null,
+				proficiency: null,
+				slots: null,
+				stats: null,
+				position: null,
+				formation: null,
+				isMainFleet: null,
+				combinedFleet: null,
+				rAmmoMod: null,
+				spAttackType: null,
+				cutinEquips: null,
+				shellingPower: null,
+				armorReduction: null,
+				precapPower: null,
+				postcapPower: null,
+				time: null,
+			},
+			enemy: {
+				id: null,
+				equip: null,
+				formation: null,
+				position: null,
+				armor: null,
+				isMainFleet: null,
+			},
+			kc3version: null,
+		},
 		development : {
 			hqLvl: null,
 			flagship: {},
@@ -105,8 +147,8 @@
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
 				// PvP battles and regular night battles are excluded intentionally
 				
-				'api_req_sortie/battleresult': this.processDrop,
-				'api_req_combined_battle/battleresult': this.processDrop,
+				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
+				'api_req_combined_battle/battleresult': [this.processDrop, this.processUnexpected],
 				// PvP battle_result excluded intentionally
 				
 				// Development related
@@ -357,6 +399,24 @@
 			this.sendData(this.aaci, 'aaci');
 		},
 		
+		processUnexpected: function(){
+			this.unexpectedDamage = {};
+			const thisNode = KC3SortieManager.currentNode();
+			const unexpectedList = thisNode.unexpectedList;
+			if (!unexpectedList || !unexpectedList.length) { return; }
+			const obj = { cleared: !!this.data.cleared, edgeID: thisNode.id, map: this.data.map, 
+				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d") };
+			unexpectedList.forEach( a => {
+				if (a.isUnexpected || a.landFlag || (thisNode.isBoss() && this.currentMap[0] > 10)) {
+					this.unexpectedDamage = Object.assign({}, a, obj);
+					delete this.unexpectedDamage.landFlag;
+					delete this.unexpectedDamage.isUnexpected;
+					
+					this.sendData(this.unexpectedDamage, 'abnormal');
+				}
+			});
+		},
+
 		processDevelopment: function(http){
 			this.cleanNonCombat();
 			const request = http.params;
