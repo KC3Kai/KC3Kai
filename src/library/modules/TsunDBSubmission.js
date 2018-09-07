@@ -9,7 +9,10 @@
 	window.TsunDBSubmission = {
 		celldata : {
 			map: null,
-			data: []
+			difficulty: null,
+			amountOfNodes: null,
+			cleared: null,
+			celldata: []
 		},
 		data : {
 			map: null,
@@ -22,9 +25,14 @@
 			fleetSpeed: null,
 			edgeID: [],
 			los: [],
-			nodeType: null,
-			eventId: null,
-			eventKind: null,
+			nodeInfo: {
+				nodeType: null,
+				eventId: null,
+				eventKind: null,
+				nodeColor: null,
+				amountOfNodes: null,
+				itemGet: []
+			},
 			nextRoute: null,
 			currentMapHP: null,
 			maxMapHP: null,
@@ -132,13 +140,12 @@
 			}
 		},
 		
-		processCellData: function(http){
-			const apiData = http.response.api_data;
-			
+		processCellData: function(){
 			this.celldata.map = this.data.map;
-			this.celldata.data = apiData.api_cell_data;
+			this.celldata.difficulty = this.data.difficulty;
+			this.celldata.cleared = this.data.cleared;
 			
-			//this.sendData(this.celldata, '???');
+			this.sendData(this.celldata, 'celldata');
 		},
 		
 		processStart: function(http) {
@@ -146,6 +153,13 @@
 			const apiData = http.response.api_data;
 			this.data.sortiedFleet = Number(http.params.api_deck_id);
 			this.data.fleetType = PlayerManager.combinedFleet;
+			
+			// Sets amount of nodes value in NodeInfo
+			this.data.nodeInfo.amountOfNodes = apiData.api_cell_data.length;
+			
+			// Sets value for celldata submission
+			this.celldata.amountOfNodes = apiData.api_cell_data.length;
+			this.celldata.celldata = apiData.api_cell_data;
 
 			// Sets the map value
 			const world = Number(apiData.api_maparea_id);
@@ -153,7 +167,6 @@
 			this.currentMap = [world, map];
 			this.data.map = this.currentMap.join('-');
 			
-			this.processCellData(http);
 			this.processNext(http);
 			
 			// Statistics of owned ships by base form ID
@@ -183,9 +196,11 @@
 			this.data.edgeID.push(apiData.api_no);
 			
 			// All values related to node types
-			this.data.nodeType = apiData.api_color_no;
-			this.data.eventId = apiData.api_event_id;
-			this.data.eventKind = apiData.api_event_kind;
+			this.data.nodeInfo.nodeType = apiData.api_color_no;
+			this.data.nodeInfo.eventId = apiData.api_event_id;
+			this.data.nodeInfo.eventKind = apiData.api_event_kind;
+			this.data.nodeInfo.nodeColor = apiData.api_color_no;
+			this.data.nodeInfo.itemGet = apiData.api_itemget || [];
 			
 			// Checks whether the fleet has hit a dead end or not
 			this.data.nextRoute = apiData.api_next;
@@ -206,10 +221,18 @@
 				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
-				this.sendData(this.data, 'event/routing');
+				this.processCellData();
+				this.sendData(this.data, 'eventrouting');
 			}
 			else{
-				this.sendData(this.data, 'routing');
+				//This is made to support the old schema for the routing. This will be deprecated in the future.
+				let oldData = this.data;
+				oldData.nodeType = this.data.nodeInfo.nodeType;
+				oldData.eventId = this.data.nodeInfo.eventId;
+				oldData.eventKind = this.data.nodeInfo.eventKind;
+				delete oldData.nodeInfo;
+				
+				this.sendData(oldData, 'routing');
 			}
 			
 			// Send Land-base Air Raid enemy compos
@@ -411,6 +434,14 @@
 			this.currentMap = [0, 0];
 			this.data.edgeID = [];
 			this.shipDrop.counts = {};
+			this.data.nodeInfo = {
+				nodeType: null,
+				eventId: null,
+				eventKind: null,
+				nodeColor: null,
+				amountOfNodes: null,
+				itemGet: []
+			};
 		},
 		
 		/**
@@ -462,7 +493,7 @@
 				}
 			} catch (e) {
 				console.warn("TsunDB submission error", e);
-				// Its not Mongo, but Mango =D
+				// I like mangos
 				var reportParams = $.extend({}, requestObj.params);
 				delete reportParams.api_token;
 				KC3Network.trigger("APIError", {
@@ -488,7 +519,7 @@
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json',
-					'tsun-ver': 'Michishio Kai'
+					'tsun-ver': 'Kasumi'
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {
