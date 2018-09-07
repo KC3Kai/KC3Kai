@@ -1886,7 +1886,7 @@ Used by SortieManager
 				ship.shipData = shipData;
 				ship.rosterId = 1;
 				ship.masterId = shipData.mst_id;
-				ship.slots = this.slots[fleetnum][position] || shipMaster.api_maxeq;
+				ship.slots = !this.slots ? shipMaster.api_maxeq : this.slots[fleetnum][position];
 				ship.equipment = function(slot){
 					switch(typeof slot) {
 						case 'number':
