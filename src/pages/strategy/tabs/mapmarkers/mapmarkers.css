@@ -42,7 +42,6 @@
 .tab_mapmarkers .overlays .overlay_markers {
 	width:100%;
 	height:100%;
-	background:rgba(0,0,0,0);
 }
 .tab_mapmarkers .overlay_markers .letter {
 	position:absolute;
@@ -89,7 +88,7 @@
 .tab_mapmarkers .map,
 .tab_mapmarkers .zoom,
 .tab_mapmarkers .zoomSlider {
-	width:70px;
+	width:50px;
 }
 .tab_mapmarkers .zoomSlider {
 	display:initial;

@@ -13,11 +13,12 @@
 			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.1/pixi.min.js";
 			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
 			this.jsonMaxLength = 60;
-			this.world = 1;
+			this.world = 0;
 			this.map = 1;
 			this.zoom = 55;
 			this.isShowEdges = true;
 			this.isShowEnemies = false;
+			this.isShowMarkers = true;
 			this.isLoading = false;
 		},
 
@@ -31,89 +32,13 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			const updateParams = () => {
-				$(".world").val(this.world);
-				$(".map").val(this.map);
-				$(".zoom").val(this.zoom);
-				$(".zoomSlider").val(this.zoom);
-				$(".show_edges").prop("checked", this.isShowEdges);
-				$(".show_enemies").prop("checked", this.isShowEnemies);
-				$(".map_url").val(this.mapInfoMeta || "");
-			};
-			updateParams();
 			const updateMapZoom = (scale) => {
 				$(".map_container").css("zoom", scale);
 				$(".overlays").css("zoom", scale);
 				$(".scrollable").height(720 * scale);
 			};
-			const buildMapRscUrl = (world, map, file) => {
-				const worldStr = String(world).pad(3, '0');
-				const mapStr = String(map).pad(2, '0');
-				return `http://${this.serverIp}/kcs2/resources/map/${worldStr}/${mapStr}_${file}`;
-			};
-			const loadMapAssets = () => {
-				if(this.isLoading) {
-					updateParams();
-					return;
-				}
-				this.isLoading = true;
-				$(".loading").css("visibility", "visible");
-				this.isShowEdges = $(".show_edges").prop("checked");
-				this.isShowEnemies = $(".show_enemies").prop("checked");
-				this.mapImgMeta = buildMapRscUrl(this.world, this.map, "image.json");
-				this.mapInfoMeta = buildMapRscUrl(this.world, this.map, "info.json");
-				this.mapKey = `${String(this.world).pad(3, '0')}${String(this.map).pad(2, '0')}`;
-				updateParams();
-				this.pixiTextStyle = this.pixiTextStyle || new this.pixi.TextStyle({
-					fontFamily: "Arial",
-					fontSize: 18,
-					fill: "white",
-					stroke: '#ff3300',
-					strokeThickness: 4,
-				});
-				const container = new this.pixi.Container();
-				const loader = new this.pixi.loaders.Loader();
-				loader.add(this.mapImgMeta)
-				//.add(`http://${this.serverIp}/kcs2/img/map/map_common.json`)
-				.load(() => {
-					$.getJSON(this.mapInfoMeta, info => {
-						this.mapInfoMeta = info;
-						for(const bg of this.mapInfoMeta.bg) {
-							const frame = this.pixi.Texture.fromFrame(`map${this.mapKey}_${bg}`);
-							container.addChild(new this.pixi.Sprite(frame));
-						}
-						this.pixiApp.stage.addChild(container);
-						if(this.isShowEnemies && this.mapInfoMeta.enemies) {
-							for(const enemy of this.mapInfoMeta.enemies) {
-								const frame = this.pixi.Texture.fromFrame(`map${this.mapKey}_${enemy.img}`);
-								const sprite = new this.pixi.Sprite(frame);
-								sprite.position.set(enemy.x, enemy.y);
-								this.pixiApp.stage.addChild(sprite);
-							}
-						}
-						if(this.isShowEdges && this.mapInfoMeta.spots) {
-							for(const spot of this.mapInfoMeta.spots) {
-								const id = spot.no;
-								if(!spot.line) continue;
-								const frame = this.pixi.Texture.fromFrame(`map${this.mapKey}_${spot.line.img || ("route_" + id)}`);
-								const sprite = new this.pixi.Sprite(frame);
-								sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
-								const bounds = sprite.getBounds();
-								const edgeText = new this.pixi.Text(id, this.pixiTextStyle);
-								edgeText.anchor.set(0.5, 0.5);
-								this.pixiApp.stage.addChild(edgeText);
-								edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-							}
-						}
-						this.addMarkers();
-						this.isLoading = false;
-						$(".loading").css("visibility", "hidden");
-					});
-				});
-			};
-			$.cachedScript(this.pixiJsUrl, {}, () => {
-				this.pixi = window.PIXI;
-				this.pixiApp = this.pixiApp || new this.pixi.Application({
+			const initPixiApp = () => {
+				this.pixiApp = new this.pixi.Application({
 					width: 1200, height: 720,
 					transparent: true,
 					forceCanvas: true
@@ -122,15 +47,29 @@
 				$(".map_container").append(this.canvas);
 				$(".map_container canvas").css("width", "100%");
 				updateMapZoom(this.zoom / 100);
-				loadMapAssets();
-			});
+			};
+			
+			this.updateParams();
+			if(this.pixiApp) {
+				// Do not reload pixi.js again, and destroy old stage
+				this.pixiApp.destroy(true, {children: true});
+				initPixiApp();
+				// Render map at once if already specified
+				if(this.mapInfoMetaUrl) this.loadMapAssets();
+			} else {
+				$.cachedScript(this.pixiJsUrl, {}, () => {
+					window.PIXI.utils.skipHello();
+					this.pixi = window.PIXI;
+					initPixiApp();
+				});
+			}
 			$(".world").on("change", e => {
 				this.world = Math.max(1, Number($(e.target).val()));
-				loadMapAssets();
+				this.loadMapAssets();
 			});
 			$(".map").on("change", e => {
 				this.map = Math.max(1, Number($(e.target).val()));
-				loadMapAssets();
+				this.loadMapAssets();
 			});
 			$(".zoom").on("change", e => {
 				this.zoom = Number($(e.target).val());
@@ -142,10 +81,14 @@
 				$(".zoom").val(this.zoom).trigger("change");
 			});
 			$(".show_edges").on("change", e => {
-				loadMapAssets();
+				this.loadMapAssets();
 			});
 			$(".show_enemies").on("change", e => {
-				loadMapAssets();
+				this.loadMapAssets();
+			});
+			$(".show_markers").on("change", e => {
+				this.isShowMarkers = $(e.target).prop("checked");
+				$(".overlay_markers").toggle(this.isShowMarkers);
 			});
 			$(".markers textarea").on("change", e => {
 				$(".markers").removeClass("error");
@@ -175,6 +118,154 @@
 			
 			// Returning `true` means updating has been handled.
 			return false;
+		},
+
+		updateParams: function() {
+			$(".world").val(this.world);
+			$(".map").val(this.map);
+			$(".zoom").val(this.zoom);
+			$(".zoomSlider").val(this.zoom);
+			$(".show_edges").prop("checked", this.isShowEdges);
+			$(".show_enemies").prop("checked", this.isShowEnemies);
+			$(".show_markers").prop("checked", this.isShowMarkers);
+			$(".map_url").val(this.mapInfoMetaUrl || "");
+		},
+
+		loadMapAssets: function() {
+			if(this.isLoading) {
+				this.updateParams();
+				return;
+			}
+			// see `TaskCreateMap.prototype._getPath`
+			const getMapRscUrl = (world, map, file) => {
+				const worldStr = String(world).pad(3, '0');
+				const mapStr = String(map).pad(2, '0');
+				return `http://${this.serverIp}/kcs2/resources/map/${worldStr}/${mapStr}_${file}`;
+			};
+			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
+			const getTextureByColorNo = colorNo => {
+				switch(colorNo) {
+					case -1: return 'map_common_132';
+					case 1: return 'map_common_125';
+					case 2:
+					case 6: return 'map_common_128';
+					case 3: return 'map_common_130';
+					case 4: return 'map_common_131';
+					case 5: return 'map_common_120';
+					case 7: return 'map_common_100';
+					case 8: return 'map_common_119';
+					case 9: return 'map_common_129';
+					case 10: return 'map_common_95';
+					case 11: return 'map_common_133';
+					case 12: return 'map_common_134';
+					case -2: return 'map_common_127';
+				}
+			};
+			this.isLoading = true;
+			$(".loading").css("visibility", "visible");
+			this.isShowEdges = $(".show_edges").prop("checked");
+			this.isShowEnemies = $(".show_enemies").prop("checked");
+			this.mapImgMetaUrl = getMapRscUrl(this.world, this.map, "image.json");
+			this.mapInfoMetaUrl = getMapRscUrl(this.world, this.map, "info.json");
+			this.updateParams();
+			this.pixiTextStyle = this.pixiTextStyle || new this.pixi.TextStyle({
+				fontFamily: "Arial",
+				fontSize: 18,
+				fill: "white",
+				stroke: '#ff3300',
+				strokeThickness: 4,
+			});
+			const mapKey = `${String(this.world).pad(3, '0')}${String(this.map).pad(2, '0')}`;
+			const texturePrefix = `map${mapKey}_`;
+			const stage = this.pixiApp.stage;
+			// Clean up rendered old containers
+			const clearStage = (destroyChildren = true) => {
+				const count = stage.children.length;
+				for(let i = 0; i < count; i++) {
+					const child = stage.children[0];
+					if(destroyChildren && typeof child.destroy === "function") child.destroy();
+					stage.removeChild(child);
+				}
+			};
+			const container = new this.pixi.Container();
+			const loader = new this.pixi.loaders.Loader();
+			// Register error handler
+			loader.onError.add(err => {
+				$(".map_url").addClass("error");
+				console.debug(err);
+				this.isLoading = false;
+				$(".loading").css("visibility", "hidden");
+			});
+			loader.add(this.mapImgMetaUrl)
+			.add(`http://${this.serverIp}/kcs2/img/map/map_common.json`)
+			.load((thisLoader, res) => {
+				if(!this.isLoading) {
+					clearStage();
+					$(".overlays").hide();
+					return;
+				}
+				$(".map_url").removeClass("error");
+				// More info (hidden nodes) might be added, see `TaskCreateMap.prototype._loadAddingInfo`
+				$.getJSON(this.mapInfoMetaUrl, info => {
+					this.mapInfoMeta = info;
+					clearStage();
+					for(const bg of this.mapInfoMeta.bg) {
+						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${bg}`);
+						container.addChild(new this.pixi.Sprite(frame));
+					}
+					stage.addChild(container);
+					if(this.isShowEdges && this.mapInfoMeta.spots) {
+						const edges = {};
+						// Fill edge line numbers
+						for(const spot of this.mapInfoMeta.spots) {
+							const spotCoord = [spot.x, spot.y].join(',');
+							edges[spotCoord] = edges[spotCoord] || [];
+							edges[spotCoord].push(spot);
+							const edge = spot.no;
+							if(!spot.line) continue;
+							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${spot.line.img || ("route_" + edge)}`);
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
+							const bounds = sprite.getBounds();
+							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
+							edgeText.anchor.set(0.5, 0.5);
+							stage.addChild(edgeText);
+							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+						}
+						// Fill node spot colors/icons only if master mapcell data ready
+						for(const edgeKey of Object.keys(edges)) {
+							const edge = edges[edgeKey];
+							const node = edge[0];
+							node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
+							if(node.color) {
+								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color));
+								const sprite = new this.pixi.Sprite(frame);
+								let offsetX = 0, offsetY = 0;
+								if(node.color == 5) offsetY = -5;
+								if(node.offsets && node.offsets[node.color]) {
+									offsetX = node.offsets[node.color].x;
+									offsetY = node.offsets[node.color].y;
+								}
+								sprite.anchor.set(0.5, 0.5);
+								sprite.position.set(node.x + offsetX, node.y + offsetY);
+								stage.addChild(sprite);
+							}
+						}
+					}
+					if(this.isShowEnemies && this.mapInfoMeta.enemies) {
+						for(const enemy of this.mapInfoMeta.enemies) {
+							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${enemy.img}`);
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(enemy.x, enemy.y);
+							stage.addChild(sprite);
+						}
+					}
+					this.addMarkers();
+					$(".overlays").show();
+					this.isLoading = false;
+					$(".loading").css("visibility", "hidden");
+				});
+			});
 		},
 
 		collectMarkers: function() {
@@ -293,9 +384,11 @@
 				dragging = null;
 				e.preventDefault();
 			});
+			$(".overlay_markers").toggle(this.isShowMarkers);
 		},
 
 		cssValue: function(elm, attr) {
+			// seems some values will be changed under some zoom scale?
 			return parseInt(elm.css(attr).slice(0, -2), 10);
 		},
 

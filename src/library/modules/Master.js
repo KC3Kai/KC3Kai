@@ -346,6 +346,45 @@ Saves and loads significant data for future use
 			return dispNo || String(id);
 		},
 
+		setCellData :function(startData){
+			// `api_mst_mapcell` removed since KC Phase 2
+			// have to collect them from api_req_map/start.api_cell_data
+			const mapcell = this._raw.mapcell || {};
+			const world = startData.api_maparea_id, map = startData.api_mapinfo_no;
+			const newCellsArr = startData.api_cell_data;
+			if(Array.isArray(newCellsArr) && newCellsArr.length){
+				const apiIds = newCellsArr.map(c => c.api_id);
+				// Clean existed cells of this map for old master data
+				$.each(mapcell, (id, cell) => {
+					if(!apiIds.includes(id) &&
+						cell.api_maparea_id === world && cell.api_mapinfo_no === map)
+						delete mapcell[id];
+				});
+				newCellsArr.forEach(cell => {
+					mapcell[cell.api_id] = {
+						api_map_no: Number([world, map].join('')),
+						api_maparea_id: world,
+						api_mapinfo_no: map,
+						api_id: cell.api_id,
+						api_no: cell.api_no,
+						api_color_no: cell.api_color_no,
+						api_passed: cell.api_passed,
+					};
+				});
+				this._raw.mapcell = mapcell;
+				this.save();
+			}
+		},
+
+		mapCell :function(world, map, edge){
+			const mapCells = {};
+			$.each(this._raw.mapcell || {}, (id, cell) => {
+				if(cell.api_maparea_id === world && cell.api_mapinfo_no === map)
+					mapCells[cell.api_no] = cell;
+			});
+			return edge === undefined ? mapCells : mapCells[edge] || {};
+		},
+
 		abyssalShip :function(id, isMasterMerged){
 			var master = !!isMasterMerged && this.isAbyssalShip(id) && $.extend(true, {}, this.ship(id)) || {};
 			return Object.keys(master).length === 0 &&
