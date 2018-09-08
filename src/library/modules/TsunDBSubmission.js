@@ -145,7 +145,12 @@
 			}
 		},
 		
-		processCellData: function(){
+		processCellData: function(http){
+			const apiData = http.response.api_data;
+			this.celldata.amountOfNodes = apiData.api_cell_data.length;
+			this.celldata.celldata = apiData.api_cell_data;
+			
+			// Processed values from processStart
 			this.celldata.map = this.data.map;
 			this.celldata.difficulty = this.data.difficulty;
 			this.celldata.cleared = this.data.cleared;
@@ -162,16 +167,13 @@
 			// Sets amount of nodes value in NodeInfo
 			this.data.nodeInfo.amountOfNodes = apiData.api_cell_data.length;
 			
-			// Sets value for celldata submission
-			this.celldata.amountOfNodes = apiData.api_cell_data.length;
-			this.celldata.celldata = apiData.api_cell_data;
-
 			// Sets the map value
 			const world = Number(apiData.api_maparea_id);
 			const map = Number(apiData.api_mapinfo_no);
 			this.currentMap = [world, map];
 			this.data.map = this.currentMap.join('-');
 			
+			this.processCellData(http);
 			this.processNext(http);
 			
 			// Statistics of owned ships by base form ID
@@ -226,18 +228,16 @@
 				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
-				this.processCellData();
 				this.sendData(this.data, 'eventrouting');
-			}
-			else{
-				//This is made to support the old schema for the routing. This will be deprecated in the future.
-				let oldData = JSON.parse(JSON.stringify(this.data));
-				oldData.nodeType = this.data.nodeInfo.nodeType;
-				oldData.eventId = this.data.nodeInfo.eventId;
-				oldData.eventKind = this.data.nodeInfo.eventKind;
-				delete oldData.nodeInfo;
+			} else {
+				// This is made to support the old schema for the routing. This will be deprecated in the future.
+				const oldFormatData = $.extend(true, {}, this.data);
+				delete oldFormatData.nodeInfo;
+				oldFormatData.nodeType = this.data.nodeInfo.nodeType;
+				oldFormatData.eventId = this.data.nodeInfo.eventId;
+				oldFormatData.eventKind = this.data.nodeInfo.eventKind;
 				
-				this.sendData(oldData, 'routing');
+				this.sendData(oldFormatData, 'routing');
 			}
 			
 			// Send Land-base Air Raid enemy compos
@@ -291,7 +291,7 @@
 		processDrop: function(http) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = http.response.api_data;
-			if(apiData.hasOwnProperty('api_get_eventitem')){
+			if(apiData.api_get_eventitem !== undefined) {
 				this.processEventReward(http);
 			}
 			const lastShipCounts = this.shipDrop.counts || {};
@@ -452,7 +452,6 @@
 			this.eventreward = {};
 			this.currentMap = [0, 0];
 			this.data.edgeID = [];
-			this.shipDrop.counts = {};
 			this.data.nodeInfo = {
 				nodeType: null,
 				eventId: null,
@@ -461,6 +460,7 @@
 				amountOfNodes: null,
 				itemGet: []
 			};
+			this.shipDrop.counts = {};
 		},
 		
 		/**
