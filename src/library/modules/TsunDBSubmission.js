@@ -231,7 +231,7 @@
 			}
 			else{
 				//This is made to support the old schema for the routing. This will be deprecated in the future.
-				let oldData = this.data;
+				let oldData = JSON.parse(JSON.stringify(this.data));
 				oldData.nodeType = this.data.nodeInfo.nodeType;
 				oldData.eventId = this.data.nodeInfo.eventId;
 				oldData.eventKind = this.data.nodeInfo.eventKind;
