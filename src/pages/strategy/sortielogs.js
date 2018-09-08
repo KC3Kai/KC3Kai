@@ -842,9 +842,7 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
-							
-							battle.shizunde |= [[],[]];
-							
+														
 							// Show on node list
 							var edgeIndex = edges.indexOf(battle.node);
 							if(edgeIndex < 0) {
@@ -919,11 +917,17 @@
 							
 							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
+
 							// Known issue: prediction will fail when Damecon used,
 							// as Node not read equipped damecon from sortie history,
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
-								sortie.world, sortie.mapnum)).defineAsBattle();
+								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+							if(battle.ammo !== undefined)
+								thisNode.ammo = battle.ammo;
+							if (battle.slots !== undefined)
+								thisNode.slots = battle.slots;
+							thisNode.sunken = sinkShips;
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
@@ -944,6 +948,13 @@
 								} else {
 									throw e;
 								}
+							}
+
+							if(thisNode.unexpectedList && thisNode.unexpectedList.length) {
+								console.warn(`Unexpected damage in ${sortie.world}-${sortie.mapnum} sortie #${thisNode.sortie}: ${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node)}: `, thisNode.unexpectedList);
+								let prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",  (prevTitle?prevTitle+"\n":"")+ thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)).lazyInitTooltip();
+								//$(".sortie_edge_"+(edgeIndex+1), sortieBox).append(`<div class="shipstate"><img src="/assets/img/ui/quest_active.png"></img></div>`);
 							}
 							if(ConfigManager.sr_show_new_shipstate){
 								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
@@ -992,8 +1003,8 @@
 									console.info("MVP prediction incapable");
 								}
 							}
-							sinkShips[0].concat(battle.shizunde[0]);
-							sinkShips[1].concat(battle.shizunde[1]);
+							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0]);
+							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1]);
 							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
@@ -1127,6 +1138,7 @@
 			});
 			
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
+
 		};
 		
 		function updateScrollItem(scrollVars, worldMap, itemWidth) {
