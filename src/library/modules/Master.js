@@ -352,15 +352,23 @@ Saves and loads significant data for future use
 			const mapcell = this._raw.mapcell || {};
 			const world = startData.api_maparea_id, map = startData.api_mapinfo_no;
 			const newCellsArr = startData.api_cell_data;
-			// Only save normal maps for players, since event maps data will be accumulated to big
-			if(world > 0 && world < 10 && Array.isArray(newCellsArr) && newCellsArr.length){
-				const apiIds = newCellsArr.map(c => c.api_id);
-				// Clean existed cells of this map for old master data
-				$.each(mapcell, (id, cell) => {
-					if(!apiIds.includes(id) &&
-						cell.api_maparea_id === world && cell.api_mapinfo_no === map)
-						delete mapcell[id];
-				});
+			if(world > 0 && map > 0 && Array.isArray(newCellsArr) && newCellsArr.length > 0) {
+				if(world >= 10) {
+					// Clean existed cells of old events for small footprint,
+					// since old event maps data will be accumulated to big
+					$.each(mapcell, (id, cell) => {
+						if(cell.api_maparea_id >= 10 && cell.api_maparea_id < world)
+							delete mapcell[id];
+					});
+				} else {
+					// Clean existed cells of this map for old master data
+					const apiIds = newCellsArr.map(c => c.api_id);
+					$.each(mapcell, (id, cell) => {
+						if(!apiIds.includes(id) &&
+							cell.api_maparea_id === world && cell.api_mapinfo_no === map)
+							delete mapcell[id];
+					});
+				}
 				newCellsArr.forEach(cell => {
 					mapcell[cell.api_id] = {
 						api_map_no: Number([world, map].join('')),
