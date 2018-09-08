@@ -172,17 +172,19 @@
 				fontFamily: "Arial",
 				fontSize: 18,
 				fill: "white",
-				stroke: '#ff3300',
+				stroke: "#ff3300",
 				strokeThickness: 4,
+				dropShadow: true,
+				dropShadowColor: "#000000",
+				dropShadowDistance: 2,
 			});
 			const mapKey = `${String(this.world).pad(3, '0')}${String(this.map).pad(2, '0')}`;
 			const texturePrefix = `map${mapKey}_`;
 			const stage = this.pixiApp.stage;
 			// Clean up rendered old containers
 			const clearStage = (destroyChildren = true) => {
-				const count = stage.children.length;
-				for(let i = 0; i < count; i++) {
-					const child = stage.children[0];
+				for(let i = stage.children.length - 1; i >= 0; i--) {
+					const child = stage.children[i];
 					if(destroyChildren && typeof child.destroy === "function") child.destroy();
 					stage.removeChild(child);
 				}
@@ -227,10 +229,33 @@
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
 							const bounds = sprite.getBounds();
+							// Draw an arrow to indicate the edge direction
+							const fromSpot = {x: bounds.x + bounds.width, y: bounds.y + bounds.height};
+							if(spot.line.x < 0) fromSpot.x += spot.line.x;
+							if(spot.line.y < 0) fromSpot.y += spot.line.y;
+							const grp = new this.pixi.Graphics();
+							const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
+							grp.setTransform(
+								spot.x + (fromSpot.x - spot.x) / 2,
+								spot.y + (fromSpot.y - spot.y) / 2,
+								1, 1, angle);
+							const arrowHeight = 18, arrowColor = 0xcdcde9;
+							grp.lineStyle(2, arrowColor, 1);
+							grp.moveTo(0, 0);
+							grp.beginFill(arrowColor);
+							grp.lineTo(-arrowHeight, -arrowHeight / 1.5);
+							grp.lineTo(-arrowHeight / 1.4, 0);
+							grp.lineTo(-arrowHeight, +arrowHeight / 1.5);
+							grp.lineTo(0, 0);
+							grp.endFill();
+							stage.addChild(grp);
 							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
-							edgeText.anchor.set(0.5, 0.5);
-							stage.addChild(edgeText);
+							edgeText.anchor.set(
+								1.5 * (Math.abs(angle) / Math.PI),
+								Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
+							);
 							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+							stage.addChild(edgeText);
 						}
 						// Fill node spot colors/icons only if master mapcell data ready
 						for(const edgeKey of Object.keys(edges)) {
