@@ -83,6 +83,7 @@
 		unexpectedDamage : {
 			map: null,
 			edgeID: null,
+			difficulty: null,
 			debuffed: null,
 			cleared: null,
 			engagement: null,
@@ -452,6 +453,7 @@
 				cleared: !!this.data.cleared,
 				edgeID: thisNode.id,
 				map: this.data.map,
+				difficulty: this.data.difficulty,
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
 			};
 			unexpectedList.forEach(a => {
