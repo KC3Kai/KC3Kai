@@ -442,13 +442,13 @@
     )(battleData);
   };
 
-  Fleets.simulateAttack = (fleets, { damage, defender, attacker }) => {
+  Fleets.simulateAttack = (fleets, { damage, defender, attacker, info }) => {
     const { getPath } = KC3BattlePrediction.fleets;
     const { dealDamage, takeDamage } = KC3BattlePrediction.fleets.ship;
 
     return pipe(
       over(getPath(fleets, defender), takeDamage(damage)),
-      attacker ? over(getPath(fleets, attacker), dealDamage(damage)) : x => x
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
     )(fleets);
   };
 
@@ -683,7 +683,6 @@
 
 (function () {
   const Hougeki = {};
-  const HOUGEKI_PROPS = ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
   const { pipe, map, Side } = KC3BattlePrediction;
 
   /*--------------------------------------------------------*/
@@ -694,7 +693,9 @@
     const { createAttack } = KC3BattlePrediction.battle;
     const { extractFromJson } = KC3BattlePrediction.battle.phases;
     const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
-
+    const HOUGEKI_PROPS = battleData.api_at_type ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type']
+      : battleData.api_sp_list ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list']
+      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
     return pipe(
       extractFromJson(HOUGEKI_PROPS),
       map(parseJson),
@@ -707,12 +708,13 @@
   /*--------------------------------------------------------*/
 
   Hougeki.parseJson = (attackJson) => {
-    const { parseDamage, parseAttacker, parseDefender } = KC3BattlePrediction.battle.phases.hougeki;
+    const { parseDamage, parseAttacker, parseDefender, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
 
     return {
       damage: parseDamage(attackJson),
       attacker: parseAttacker(attackJson),
       defender: parseDefender(attackJson),
+      info: parseInfo(attackJson),
     };
   };
 
@@ -729,13 +731,20 @@
     position: api_df_list[0],
   });
 
+  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list }) => ({
+    damage: api_damage,
+    acc: api_cl_list,
+    equip: api_si_list,
+    cutin: api_at_type,
+    ncutin: api_sp_list,
+  });
+
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/
 
   Object.assign(KC3BattlePrediction.battle.phases.hougeki, Hougeki);
 }());
-
 // Parser for 航空 (aerial combat) phase
 (function () {
   const COMBINED_FLEET_MAIN_ALIGN = 6;
@@ -1185,13 +1194,14 @@
 }());
 
 (function () {
-  const createAttack = ({ damage, defender, attacker }) => {
+  const createAttack = ({ damage, defender, attacker, info }) => {
     const { normalizeDamage, createTarget } = KC3BattlePrediction.battle;
 
     return Object.freeze({
       damage: normalizeDamage(damage),
       defender: createTarget(defender),
       attacker: attacker && createTarget(attacker),
+      info: info,
     });
   };
 
@@ -1205,7 +1215,6 @@
     normalizeDamage,
   });
 }());
-
 (function () {
   const Ship = {};
   const { EMPTY_SLOT } = KC3BattlePrediction;
@@ -1213,12 +1222,15 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  Ship.createShip = (hp, maxHp) => ({ hp, maxHp, damageDealt: 0 });
+  Ship.createShip = (hp, maxHp) => ({ hp, maxHp, damageDealt: 0, attacks: [] });
 
   Ship.installDamecon = (ship, damecon = 0) => Object.assign({}, ship, { damecon });
 
-  Ship.dealDamage = damage => ship =>
-    Object.assign({}, ship, { damageDealt: ship.damageDealt + damage });
+  Ship.dealDamage = (damage, info, { position } = {}) => ship => {
+    if (info) { ship.attacks.push(Object.assign({}, info, { target: position, hp: ship.hp })); }
+
+    return Object.assign({}, ship, { damageDealt: ship.damageDealt + damage});
+  };
 
   Ship.takeDamage = damage => ship => {
     const { tryDamecon } = KC3BattlePrediction.fleets.ship;
@@ -1236,6 +1248,7 @@
       dameConConsumed: ship.dameConConsumed || false,
       sunk: ship.hp <= 0,
       damageDealt: ship.damageDealt,
+      attacks: ship.attacks
     };
   };
 
@@ -1270,7 +1283,6 @@
 
   Object.assign(window.KC3BattlePrediction.fleets.ship, Ship);
 }());
-
 (function () {
   const createTarget = ({ side, position }) => {
     const { validateEnum, battle: { validatePosition }, Side } = KC3BattlePrediction;

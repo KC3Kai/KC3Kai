@@ -1,11 +1,12 @@
 (function () {
-  const createAttack = ({ damage, defender, attacker }) => {
+  const createAttack = ({ damage, defender, attacker, info }) => {
     const { normalizeDamage, createTarget } = KC3BattlePrediction.battle;
 
     return Object.freeze({
       damage: normalizeDamage(damage),
       defender: createTarget(defender),
       attacker: attacker && createTarget(attacker),
+      info: info,
     });
   };
 
