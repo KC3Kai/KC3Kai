@@ -26,13 +26,13 @@
     )(battleData);
   };
 
-  Fleets.simulateAttack = (fleets, { damage, defender, attacker }) => {
+  Fleets.simulateAttack = (fleets, { damage, defender, attacker, info }) => {
     const { getPath } = KC3BattlePrediction.fleets;
     const { dealDamage, takeDamage } = KC3BattlePrediction.fleets.ship;
 
     return pipe(
       over(getPath(fleets, defender), takeDamage(damage)),
-      attacker ? over(getPath(fleets, attacker), dealDamage(damage)) : x => x
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
     )(fleets);
   };
 

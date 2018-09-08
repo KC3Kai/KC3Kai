@@ -842,9 +842,7 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
-							
-							battle.shizunde |= [[],[]];
-							
+														
 							// Show on node list
 							var edgeIndex = edges.indexOf(battle.node);
 							if(edgeIndex < 0) {
@@ -874,22 +872,20 @@
 								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 								// Show Enemy Air Raid damage
-								if(airRaid.airRaidLostKind > 0) {
-									const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
-										airRaid.baseTotalDamage,
-										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
-										airRaid.resourceLossAmount,
-										airRaid.airState,
-										"{0}%".format(airRaid.shotdownPercent),
-										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
-										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
-										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
-										KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
-									);
-									$(".node_id", nodeBox).attr("title", airRaidTooltip);
-									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
-								}
+								const airRaidTooltip = KC3Meta.term("BattleHistoryAirRaidTip").format(
+									airRaid.baseTotalDamage,
+									KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+									airRaid.resourceLossAmount,
+									airRaid.airState,
+									"{0}%".format(airRaid.shotdownPercent),
+									KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+									KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+									airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+									airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+									KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
+								);
+								$(".node_id", nodeBox).attr("title", airRaidTooltip);
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title", airRaidTooltip);
 							} else {
 								$(".node_id", nodeBox).removeClass("nodamage damaged");
 							}
@@ -921,11 +917,14 @@
 							
 							// Process Battle, simulate combinedFleet flag
 							PlayerManager.combinedFleet = sortie.combined;
+
 							// Known issue: prediction will fail when Damecon used,
 							// as Node not read equipped damecon from sortie history,
 							// and damecon used on which node during 1 sortie have to be remembered.
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
-								sortie.world, sortie.mapnum)).defineAsBattle();
+								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+							thisNode.fleetStates = battle.fleetStates;
+							thisNode.sunken = sinkShips;
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
@@ -945,6 +944,17 @@
 									console.error("Predicting battle ship state", e);
 								} else {
 									throw e;
+								}
+							}
+
+							if(thisNode.unexpectedList && thisNode.unexpectedList.length) {
+								const messages = thisNode.buildUnexpectedDamageMessage();
+								if(messages) {
+									console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node)}`, thisNode.unexpectedList);
+									const prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
+									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",
+										(prevTitle ? prevTitle + "\n" : "") + messages
+									).lazyInitTooltip();
 								}
 							}
 							if(ConfigManager.sr_show_new_shipstate){
@@ -994,8 +1004,8 @@
 									console.info("MVP prediction incapable");
 								}
 							}
-							sinkShips[0].concat(battle.shizunde[0]);
-							sinkShips[1].concat(battle.shizunde[1]);
+							sinkShips[0] = sinkShips[0].concat(battle.shizunde[0]);
+							sinkShips[1] = sinkShips[1].concat(battle.shizunde[1]);
 							
 							// Enemies
 							$(".node_eformation img", nodeBox).attr("src", KC3Meta.formationIcon(thisNode.eformation) );
@@ -1129,6 +1139,7 @@
 			});
 			
 			$(".tab_"+tabCode+" .sortie_list").createChildrenTooltips();
+
 		};
 		
 		function updateScrollItem(scrollVars, worldMap, itemWidth) {

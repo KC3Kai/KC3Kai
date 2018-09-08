@@ -1,0 +1,119 @@
+.tab_mapmarkers {
+	width:680px;
+}
+
+.tab_mapmarkers .factory {
+	display:none;
+}
+
+.tab_mapmarkers label {
+	font-weight:normal;
+	margin-right:10px;
+}
+
+.tab_mapmarkers ol,
+.tab_mapmarkers ul {
+	padding-left:1em;
+}
+
+.tab_mapmarkers .scrollable {
+	max-width: 680px;
+	max-height: 720px;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.tab_mapmarkers .map_container {
+	width: 1200px;
+	height: 720px;
+	background: #283a85;
+}
+
+.tab_mapmarkers .overlays {
+	width:1200px;
+	height:720px;
+	position:relative;
+	left:0px;
+	top:-720px;
+	overflow:hidden;
+	z-index:1;
+}
+
+.tab_mapmarkers .overlays .overlay_markers {
+	width:100%;
+	height:100%;
+}
+.tab_mapmarkers .overlay_markers .letter {
+	position:absolute;
+	margin:0;
+	padding:0;
+	float:left;
+	max-height:28px;
+	line-height:28px;
+	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+	font-size:28px;
+	font-weight:bold;
+	text-shadow:1px 1px 2px #f5f5f5, 0px 0px 2px #f5f5f5;
+	cursor:move;
+}
+.tab_mapmarkers .overlay_markers .letter.moving {
+	cursor:default;
+	z-index:99;
+}
+.tab_mapmarkers .overlay_markers .icon {
+	position:absolute;
+	margin:0;
+	padding:0;
+	float:left;
+	cursor:move;
+}
+
+.tab_mapmarkers .notes,
+.tab_mapmarkers .map_params,
+.tab_mapmarkers .controls {
+	width:100%;
+	padding-left:10px;
+	padding-right:10px;
+	margin-top:5px;
+	margin-bottom:5px;
+	text-align:center;
+}
+
+.tab_mapmarkers .notes {
+	color:blue;
+	text-align:right;
+}
+
+.tab_mapmarkers .world,
+.tab_mapmarkers .map,
+.tab_mapmarkers .zoom,
+.tab_mapmarkers .zoomSlider {
+	width:50px;
+}
+.tab_mapmarkers .zoomSlider {
+	display:initial;
+	vertical-align:text-top;
+}
+.tab_mapmarkers .map_url {
+	width:550px;
+}
+.tab_mapmarkers .loading {
+	width:24px;
+	height:24px;
+	margin:-2px 0px 0px -10px;
+	visibility:hidden;
+}
+.tab_mapmarkers .map_url.error {
+	color:#f00;
+}
+
+.tab_mapmarkers .controls .markers {
+	margin:10px 0px 0px 0px;
+}
+.tab_mapmarkers .controls .markers textarea {
+	width:90%;
+	height:250px;
+}
+.tab_mapmarkers .controls .markers.error {
+	color:#f00;
+}

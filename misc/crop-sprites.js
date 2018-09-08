@@ -34,8 +34,12 @@ if (subFolder) {
 	}
 }
 
-const ssImgBuffer = fs.readFileSync(smithImage);
-Object.keys(smith.frames).forEach(sprite => {
+const nextFrame = (currentFrame) => {
+	if (currentFrame >= ssFrames.length) return;
+	cropFrame(currentFrame, true);
+};
+const cropFrame = (currentFrame, byFrame = false) => {
+	const sprite = ssFrames[currentFrame];
 	const file = path.resolve('.', subFolder, sprite + '.png');
 	const basename = path.basename(file);
 	const frame = smith.frames[sprite].frame;
@@ -51,5 +55,18 @@ Object.keys(smith.frames).forEach(sprite => {
 		} else {
 			console.info(`Cropped into [${basename}] with`, config);
 		}
+		if (byFrame) nextFrame(currentFrame + 1);
 	});
-});
+};
+
+const ssImgBuffer = fs.readFileSync(smithImage);
+const ssFrames = Object.keys(smith.frames);
+// frame by frame for big image to avoid out of memory
+if (ssFrames.length > 50) {
+	// but call stack memory might overflow :)
+	nextFrame(0);
+} else {
+	ssFrames.forEach((sprite, index) => {
+		cropFrame(index, false);
+	});
+}

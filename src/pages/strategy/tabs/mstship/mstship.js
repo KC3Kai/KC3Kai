@@ -357,6 +357,9 @@
 			console.debug("Viewing shipData", shipData);
 			if(!shipData) { return; }
 			
+			const gearClickFunc = function(e) {
+				KC3StrategyTabs.gotoTab("mstgear", $(this).data("id") || $(this).attr("alt"));
+			};
 			$(".tab_mstship .shipInfo .name").text( "[{0}] {1} {2}"
 				.format(ship_id,
 					KC3Master.isRegularShip(ship_id) ?
@@ -561,9 +564,7 @@
 							$(".sloticon img", this)
 								.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
 								.attr("alt", equipId).off("click")
-								.click(function(){
-									KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-								}).show();
+								.click(gearClickFunc).show();
 							$(".sloticon", this).addClass("hover");
 						} else {
 							$(".sloticon img", this).hide().off("click");
@@ -697,7 +698,7 @@
 					const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 						.appendTo(listClass);
 					$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(firstIconId))
-						.attr("title", typeId);
+						.attr("title", "[?,?,{0},{1},?]".format(typeId, firstIconId));
 					$(".typeName", equipTypeBox).text(KC3Meta.gearTypeName(2, typeId))
 						.attr("title", KC3Meta.gearTypeName(2, typeId));
 				};
@@ -722,9 +723,11 @@
 							const gearMst = KC3Master.slotitem(item);
 							const equipTypeBox = $(".tab_mstship .factory .equippableType").clone()
 								.appendTo(".equipExSlot .equipList");
-							$(".typeIcon", equipTypeBox);
-							$(".typeIcon img", equipTypeBox).attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
-								.attr("title", item);
+							$(".typeIcon img", equipTypeBox)
+								.attr("src", KC3Meta.itemIcon(gearMst.api_type[3]))
+								.attr("title", "[{0}]".format(item))
+								.attr("alt", item).click(gearClickFunc);
+							$(".typeIcon", equipTypeBox).addClass("hover");
 							$(".typeName", equipTypeBox).text(KC3Meta.gearName(gearMst.api_name))
 								.attr("title", KC3Meta.gearName(gearMst.api_name));
 						});
@@ -800,9 +803,7 @@
 						const gearObj = KC3Master.slotitem(itemId);
 						$(".gearName", gunfitBox).text(
 							"[{0}] {1}".format(itemId, KC3Meta.gearName(gearObj.api_name))
-						).data("id", itemId).on("click", function(e) {
-							KC3StrategyTabs.gotoTab("mstgear", $(this).data("id"));
-						}).addClass("hover");
+						).data("id", itemId).on("click", gearClickFunc).addClass("hover");
 						
 						if (gunfitObj.unknown === true) {
 							$(".gearFitDay", gunfitBox).text(KC3Meta.term("FitWeightUnknown"))
@@ -928,9 +929,7 @@
 									.lazyInitTooltip();
 								$(".sloticon img", this)
 									.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
-									.attr("alt", equipId).off("click").click(function(){
-										KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
-									}).show();
+									.attr("alt", equipId).off("click").click(gearClickFunc).show();
 								$(".sloticon", this).addClass("hover");
 								// Check diff for updating `abyssal_stats.json`
 								if(enemyDbStats && (!abyssDb || !abyssDb.kc3_slots ||

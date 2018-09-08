@@ -7,7 +7,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     QUnit.test('success', function (assert) {
       const result = this.subject(15, 20);
 
-      assert.deepEqual(result, { hp: 15, maxHp: 20, damageDealt: 0 });
+      assert.deepEqual(result, { hp: 15, maxHp: 20, damageDealt: 0, attacks: [] });
     });
   });
 
@@ -94,7 +94,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
     });
 
     QUnit.test('convert to output format', function (assert) {
-      const ship = { hp: 20, maxHp: 30, dameConConsumed: true, damageDealt: 5 };
+      const ship = { hp: 20, maxHp: 30, dameConConsumed: true, damageDealt: 5, attacks: undefined };
 
       const result = this.subject(ship);
 
@@ -103,6 +103,7 @@ QUnit.module('modules > BattlePrediction > values > Ship', function () {
         dameConConsumed: true,
         sunk: false,
         damageDealt: 5,
+        attacks: undefined,
       });
     });
 

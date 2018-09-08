@@ -642,18 +642,17 @@
 					$(".overlay_markers").hide().empty();
 					if(lettersFound && thisConfig.map_letters){
 						// Show node letters
-						var l;
-						for(l in letters){
+						for(let l in letters){
 							var letterDiv = $('<div class="letter"></div>').text(l)
 								.css("left", letters[l][0] + "px")
 								.css("top", letters[l][1] + "px");
+							if(l.length > 1) letterDiv.css("font-size", 34 - 6 * l.length);
 							$(".overlay_markers").append(letterDiv);
 						}
 					}
 					if(iconsFound && thisConfig.map_markers){
 						// Show some icon style markers
-						var i;
-						for(i in icons){
+						for(let i in icons){
 							var obj = icons[i];
 							var iconImg = $('<img />')
 								.attr("src", chrome.extension.getURL("assets/img/"+ obj.img))

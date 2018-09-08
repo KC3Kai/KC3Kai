@@ -579,7 +579,7 @@ body {
 }
 .overlay_subtitles span {
 	width:100%;
-	pointer-events: visible;
+	pointer-events:visible;
 }
 .overlay_subtitles.ghost span {
 	pointer-events:none !important;
@@ -598,9 +598,10 @@ body {
 	margin:0;
 	padding:0;
 	float:left;
-	line-height:24px;
+	max-height:28px;
+	line-height:28px;
 	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
-	font-size:22px;
+	font-size:28px;
 	font-weight:bold;
 	text-shadow:1px 1px 2px #f5f5f5, 0px 0px 2px #f5f5f5;
 	pointer-events:none;
