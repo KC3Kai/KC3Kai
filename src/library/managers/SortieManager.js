@@ -143,6 +143,19 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			PlayerManager.hq.save();
 		},
 		
+		getBattleFleetStates :function(){
+			const fleetStates = this.focusedFleet.map(id => PlayerManager.fleets[id]).map(fleet => ({
+				fuel: fleet.ships.map(ship => KC3ShipManager.get(ship).fuel),
+				ammo: fleet.ships.map(ship => KC3ShipManager.get(ship).ammo),
+				slots: fleet.ships.map(ship => KC3ShipManager.get(ship).slots),
+				// Could add more if necessary to track these properties of ships
+				//items: fleet.ships.map(ship => KC3ShipManager.get(ship).items),
+				//exitem: fleet.ships.map(ship => KC3ShipManager.get(ship).ex_item),
+				//morale: fleet.ships.map(ship => KC3ShipManager.get(ship).morale),
+			}));
+			return fleetStates;
+		},
+		
 		getSupportingFleet :function(bossSupport){
 			const isSupportExpedition = (expedId, isBoss) => {
 				const m = KC3Master.mission(expedId);
