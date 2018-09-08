@@ -31,10 +31,18 @@
 	width:680px;
 }
 .tab_locking .lock_mode {
-	width:130px;
+	width: 100px;
 	float:left;
-	margin:0 6px 0 0;
+	margin: 0 15px 0 0;
 	padding:5px 5px 5px 5px;
+}
+
+.tab_locking .lock_mode:first-child {
+	margin-left: 8px;
+}
+
+.tab_locking .lock_mode:last-child {
+	margin-right: -3px;
 }
 
 .tab_locking .lock_mode_1 {
@@ -51,6 +59,9 @@
 }
 .tab_locking .lock_mode_5 {
 	background: var(--lockColor5) !important;
+}
+.tab_locking .lock_mode_6 {
+	background: var(--lockColor6) !important;
 }
 
 .tab_locking .map_area {
@@ -109,10 +120,11 @@
 
 .tab_locking .lock_mode .drop_area {
 	background:rgba(255,255,255,0.2);
-	width:120px;
+	width:90px;
 	height:50px;
-	line-height:50px;
+	line-height:20px;
 	margin:5px 0 0 0;
+	padding-top:6px;
 	font-size:12px;
 	text-align:center;
 	color:#fff;
