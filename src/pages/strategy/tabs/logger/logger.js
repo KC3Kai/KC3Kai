@@ -368,7 +368,7 @@
         // named func
         top.split(' (')[1].trimRight().slice(0, -1) :
         // anonymous func
-        top.split('at ')[1];
+        top.split('at ')[1] || '';
       return {
         full,
         short: full.substring(full.lastIndexOf('/') + 1, ((full.lastIndexOf(':') + 1) || (full.length + 1)) - 1),

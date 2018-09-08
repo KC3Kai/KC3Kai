@@ -45,6 +45,10 @@
 		toggleSetting("api_translation", "#questtl");
 		toggleSetting("map_markers", "#mapmarkers");
 		toggleSetting("api_askExit", "#exitconfirm");
+		toggleSetting("mute_game_tab", "#mutegametab");
+		toggleSetting("TsunDBSubmission_enabled", "#tsundbsubmission");
+		toggleSetting("PoiDBSubmission_enabled", "#poidbsubmission");
+		toggleSetting("OpenDBSubmission_enabled", "#opendbsubmission");
 		toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
 		
 		$("#background").on("change", customizationConsequence);
@@ -77,7 +81,7 @@
 		}
 	});
 	
-	// Toggleable setting
+	// Toggle-able setting
 	function toggleSetting(configName, elementName){
 		if (ConfigManager[configName]) {
 			$(elementName).prop("checked", true);

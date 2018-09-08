@@ -21,7 +21,7 @@
 					.split("\n")
 					.map( function(x) {
 						try {
-							return JSON.parse(x); 
+							return x ? JSON.parse(x) : false;
 						} catch (e) {
 							return false;
 						}
