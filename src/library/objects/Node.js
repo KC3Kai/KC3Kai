@@ -1854,29 +1854,30 @@ Used by SortieManager
 		});
 	};
 
-	/** 
-	 * Unexpected damage checker that checks damage instances from BP module
+	/**
+	 * Unexpected damage checker that checks damage instances from BP module.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Damage_Calculation
-	 * @param BPfleet - playerMain/playerEscort array from BP fleets export
+	 * @param predictedFleet - playerMain/playerEscort array from BP fleets export
 	 * @param fleetnum - player fleet index
 	 * @param formation - player formation id
 	 * @param engagement - engagement id
-	 * @return {array} with element {Object} that has attributes: 
-	 * 	*enemy: Enemy formation, id, equips, stats and health before attack
-	 * 	*ship: Player formation, position, id, equips, stats, improvements, proficiency, combined fleet type, current health and ammo
-	 *  *damageInstance: Actual damage, expected damage range and critical
-	 * 	*isunexpected: Boolean to check if damage is in expected or unexpected range
+	 * @return {array} with element {Object} that has attributes:
+	 *   * enemy: Enemy formation, id, equips, stats and health before attack
+	 *   * ship: Player formation, position, id, equips, stats, improvements, proficiency, combined fleet type, current health and ammo
+	 *   * damageInstance: Actual damage, expected damage range and critical
+	 *   * isUnexpected: Boolean to check if damage is in expected or unexpected range
 	 */
-	KC3Node.prototype.unexpectedDamagePrediction = function(BPFleet, fleetnum, formation, engagement, isRealBattle = false) {
-		let unexpectedList = [], sunkenShips = 0;
-		BPFleet.forEach(({ attacks }, position) => {
+	KC3Node.prototype.unexpectedDamagePrediction = function(predictedFleet, fleetnum, formation, engagement, isRealBattle = false) {
+		const unexpectedList = [];
+		let sunkenShips = 0;
+		predictedFleet.forEach(({ attacks }, position) => {
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
 			// SHIP SIMULATION FOR SORTIE HISTORY
 			if (!isRealBattle && this.nodeData.id) {
 				position = position + sunkenShips;
 				let shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
-				while(this.sunken && this.sunken[this.playerCombined?fleetnum:0].includes(shipData.mst_id)) {
+				while(this.sunken && this.sunken[this.playerCombined ? fleetnum : 0].includes(shipData.mst_id)) {
 					sunkenShips++;
 					position = position + sunkenShips;
 					shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
@@ -1886,7 +1887,9 @@ Used by SortieManager
 				ship.shipData = shipData;
 				ship.rosterId = 1;
 				ship.masterId = shipData.mst_id;
-				ship.slots = !this.slots ? shipMaster.api_maxeq : this.slots[fleetnum][position];
+				ship.slots = this.fleetStates && this.fleetStates.length ?
+					this.fleetStates[this.playerCombined ? fleetnum : 0].slots[position] :
+					shipMaster.api_maxeq;
 				ship.equipment = function(slot){
 					switch(typeof slot) {
 						case 'number':
@@ -1928,13 +1931,13 @@ Used by SortieManager
 				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
 				ship.mod = shipData.kyouka;
 
-				if (ship.as[0] === undefined){	
+				if (ship.as[0] === undefined){
 					const aswBound = WhoCallsTheFleetDb.getStatBound( shipData.mst_id, 'asw' );
 					ship.as[0] = WhoCallsTheFleetDb.estimateStat(aswBound, shipData.level);
 				}
 
-				if(this.ammo !== undefined) {
-					ship.ammo = this.ammo[fleetnum][position];
+				if(this.fleetStates && this.fleetStates.length) {
+					ship.ammo = this.fleetStates[this.playerCombined ? fleetnum : 0].ammo[position];
 				} else {
 					// Make a rough guess of current ammo percentage remaining with event node consumption
 					let ammoPercent = 100,
@@ -1943,7 +1946,7 @@ Used by SortieManager
 					this.nodeData.nodes.forEach( node => {
 						if (this.id === node.id) { reachedNode = true; }
 						if (reachedNode) { return; }
-						// Cannot tell subnode from node list?
+						// Cannot tell submarine node from node list?
 						// Normal battle, yasen/day
 						if (node.eventId === 4) { ammoPercent -= (node.eventKind === 2 || node.eventKind === 3) ? 10 : 20; }
 						// Boss node
@@ -1962,10 +1965,10 @@ Used by SortieManager
 			if (ship.isDummy()) { return; }
 			attacks.forEach( attack => {
 
-				// BATTLE CONDS
+				// BATTLE CONDITIONS
 				let damage = attack.damage,
 					cutin = attack.cutin >= 0 ? attack.cutin : attack.ncutin,
-					acc =  attack.acc,
+					acc = attack.acc,
 					hp = attack.hp,
 					ciequip = attack.equip,
 					time = (attack.cutin >= 0) ? 'Day' : 'Night',
@@ -1986,7 +1989,7 @@ Used by SortieManager
 				const { isSubmarine, isLand } = ship.estimateTargetShipType(target);
 
 				/** 
-				 * CVCI/NBCVCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
+				 * CVCI/NB CVCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
 				 * Technically possible to guess exact cut-in from api_si_list (included per attack)
 				 * Since multiple cutins are possible per ship, reassignment to match cutin number from estimation is required
 				 */
@@ -2028,14 +2031,15 @@ Used by SortieManager
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
 					damageStatus = ['taiha','chuuha','shouha','normal'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]);
 
-				let result = {},
-					eHp = this.maxHPs.enemy[attack.target], // Simpler way of obtaining enemy health, its just for scratch damage check anyway
-					unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
+				const result = {};
+				// Simpler way of obtaining enemy health, its just for scratch damage check anyway
+				let eHp = this.maxHPs.enemy[attack.target];
+				const unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++){
 					damage[i] = Math.floor(damage[i]); // FS protection
-					if (damage[i] === -1) { break; } // NBCVCI triple array of [x, -1, -1]
+					if (damage[i] === -1) { break; } // NB CVCI triple array of [x, -1, -1]
 					// Scratch damage/miss check
 					if ((unexpectedFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
 
@@ -2119,23 +2123,31 @@ Used by SortieManager
 			});
 		});
 
-	if (unexpectedList.length && KC3Node.debugPrediction()) { console.debug('Damage predicted', unexpectedList); }
-	return unexpectedList;
+		if (unexpectedList.length && KC3Node.debugPrediction()) {
+			console.debug("Unexpected damage predicted", unexpectedList);
+		}
+		return unexpectedList;
 	};
 
-	KC3Node.prototype.buildUnexpectedDamageMessage = function(unexpectedList){
-		if (!unexpectedList) { return; }
-		let UDTips = "";
-		unexpectedList.forEach(a => {
-			const shipMaster = KC3Master.ship(a.ship.id);
-			const shipName = KC3Meta.shipName(shipMaster.api_name);
-			const enemyName = KC3Meta.abyssShipName(a.enemy.id);
-			if (a.isUnexpected) { 
-				UDTips += "{0} attacks {1} ({2}) for {3} damage. Expected range: {4} ~ {5}\n".format(shipName, enemyName, a.enemy.id, a.damageInstance.actualDamage,
-					a.damageInstance.expectedDamage[0], a.damageInstance.expectedDamage[1]);
-			}
-		});
-		return UDTips;
+	KC3Node.prototype.buildUnexpectedDamageMessage = function(unexpectedList = this.unexpectedList){
+		let tooltips = "";
+		if(Array.isArray(unexpectedList)) {
+			unexpectedList.forEach(a => {
+				if(a.isUnexpected) {
+					const shipMaster = KC3Master.ship(a.ship.id),
+						attackerName = KC3Meta.shipName(shipMaster.api_name);
+					const defenderMstId = a.enemy.id,
+						defenderName = KC3Meta.abyssShipName(defenderMstId);
+					const dmg = a.damageInstance;
+					if(tooltips) tooltips += "\n";
+					tooltips += KC3Meta.term("BattleUnexpectedDamageTip").format(
+						attackerName, defenderName, defenderMstId,
+						dmg.actualDamage, dmg.expectedDamage[0], dmg.expectedDamage[1]
+					);
+				}
+			});
+		}
+		return tooltips;
 	};
 	
 	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){
@@ -2237,7 +2249,9 @@ Used by SortieManager
 					return KC3ShipManager.get(shipSunk).masterId;
 				});
 			}) : [],
-			mvp: this.mvps
+			mvp: this.mvps,
+			// Save fleet current states (fuel, ammo, slots, etc) at the start of the battle
+			fleetStates: KC3SortieManager.getBattleFleetStates()
 		};
 		// Optional properties
 		// Air raid moved to proper place `sortie.nodes`, no longer here
@@ -2247,9 +2261,6 @@ Used by SortieManager
 		if(this.dropUseitem > 0){ b.useitem = this.dropUseitem; }
 		if(this.dropSlotitem > 0){ b.slotitem = this.dropSlotitem; }
 		// btw, event map clearing award items not saved yet, see `api_get_eventitem`
-		// Save ammo and slots (at the start of the battle?)
-		b.ammo = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).ammo));
-		b.slots = PlayerManager.fleets.map((fleet) => fleet.ships.map((ship) => KC3ShipManager.get(ship).slots));
 		return b;
 	};
 	

@@ -192,10 +192,13 @@
 			this.celldata.amountOfNodes = apiData.api_cell_data.length;
 			this.celldata.celldata = apiData.api_cell_data;
 			
-			// Processed values from processStart
+			// Processed values from processStart and processMapInfo
 			this.celldata.map = this.data.map;
-			this.celldata.difficulty = this.data.difficulty;
-			this.celldata.cleared = this.data.cleared;
+			const mapData = this.mapInfo.find(i => i.api_id == this.data.map) || {};
+			this.celldata.cleared = mapData.api_cleared;
+			if(mapData.api_eventmap) {
+				this.celldata.difficulty = mapData.api_eventmap.api_selected_rank;
+			}
 			
 			this.sendData(this.celldata, 'celldata');
 		},
@@ -343,10 +346,11 @@
 			this.shipDrop.node = this.data.edgeID[this.data.edgeID.length - 1];
 			this.shipDrop.rank = apiData.api_win_rank;
 			this.shipDrop.cleared = this.data.cleared;
-			// Enemy comp name only existed in result API data
+			// Enemy comp name and exp only existed in result API data
 			if(this.enemyComp.enemyComp && !this.enemyComp.enemyComp.isAirRaid) {
 				this.enemyComp.enemyComp.mapName = apiData.api_quest_name;
 				this.enemyComp.enemyComp.compName = apiData.api_enemy_info.api_deck_name;
+				this.enemyComp.enemyComp.baseExp = apiData.api_get_base_exp;
 				this.shipDrop.enemyComp = this.enemyComp.enemyComp;
 			}
 			this.shipDrop.hqLvl = this.data.hqLvl;
@@ -440,19 +444,21 @@
 			this.sendData(this.aaci, 'aaci');
 		},
 		
-		processUnexpected: function(){
-			this.unexpectedDamage = {};
+		processUnexpected: function(http){
 			const thisNode = KC3SortieManager.currentNode();
 			const unexpectedList = thisNode.unexpectedList;
-			if (!unexpectedList || !unexpectedList.length) { return; }
-			const obj = { cleared: !!this.data.cleared, edgeID: thisNode.id, map: this.data.map, 
-				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d") };
-			unexpectedList.forEach( a => {
-				if (a.isUnexpected || a.landFlag || (thisNode.isBoss() && this.currentMap[0] > 10)) {
-					this.unexpectedDamage = Object.assign({}, a, obj);
+			if(!unexpectedList || !unexpectedList.length) { return; }
+			const template = {
+				cleared: !!this.data.cleared,
+				edgeID: thisNode.id,
+				map: this.data.map,
+				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
+			};
+			unexpectedList.forEach(a => {
+				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && this.currentMap[0] > 10)) {
+					this.unexpectedDamage = Object.assign({}, a, template);
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;
-					
 					this.sendData(this.unexpectedDamage, 'abnormal');
 				}
 			});

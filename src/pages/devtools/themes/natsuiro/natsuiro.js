@@ -2762,12 +2762,13 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${rankLetter}.png`);
 				const dmgGauge = thisNode.predictedDamageGauge || thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}\n{2}".format(
 					KC3Meta.term("BattleRating"),
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
-					) + "\n" + thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)
+					),
+					thisNode.buildUnexpectedDamageMessage()
 				)).lazyInitTooltip();
 			}
 
@@ -2852,12 +2853,13 @@
 				$(".module.activity .battle_rating img").css("opacity", 0.5)
 					.attr("src", `/assets/img/client/ratings/${thisNode.predictedRankNight}.png`);
 				const dmgGauge = thisNode.predictedDamageGaugeNight || {};
-				$(".module.activity .battle_rating").attr("title", "{0}\n{1}".format(
+				$(".module.activity .battle_rating").attr("title", "{0}\n{1}\n{2}".format(
 					KC3Meta.term("BattleRating"),
 					KC3Meta.term("BattleDamageGauges").format(
 						dmgGauge.enemy  === undefined ? "?" : dmgGauge.enemy,
 						dmgGauge.player === undefined ? "?" : dmgGauge.player
-					) + thisNode.buildUnexpectedDamageMessage(thisNode.unexpectedList)
+					),
+					thisNode.buildUnexpectedDamageMessage()
 				)).lazyInitTooltip();
 			}
 
