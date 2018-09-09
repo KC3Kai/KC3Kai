@@ -187,7 +187,7 @@
 					eventMapInfo.api_gauge_num = Number(apiData.api_maphp.api_gauge_num);
 					eventMapInfo.api_gauge_type = Number(apiData.api_maphp.api_gauge_type);
 				}
-				this.mapInfo.find(i => i.api_id == mapId) = eventMapInfo;
+				this.mapInfo.find(i => i.api_id == mapId).api_eventmap = eventMapInfo;
 			}
 		},
 		
