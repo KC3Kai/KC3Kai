@@ -356,7 +356,7 @@ Provides access to data on built-in JSON files
 			return this.distinctNameDelimiter(
 				[this.shipName(shipMaster.api_name), this.shipReadingName(shipMaster.api_yomi)]
 					.filter(x => !!x && x !== "-")
-					.join("")
+					.joinIfNeeded()
 			);
 		},
 		

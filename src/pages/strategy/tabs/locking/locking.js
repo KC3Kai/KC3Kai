@@ -387,10 +387,17 @@
         }
 
         loadShipLockPlan() {
-            if (localStorage.lock_plan !== undefined)
+            if (localStorage.lock_plan !== undefined) {
                 this.lockPlans = JSON.parse(localStorage.lock_plan);
-            else
+                // Add insufficient & remove overflow, guarantee = `this.lockLimit`
+                while (this.lockPlans.length < this.lockLimit) {
+                    this.lockPlans.push([]);
+                }
+                if (this.lockPlans.length > this.lockLimit)
+                    this.lockPlans.length = this.lockLimit;
+            } else {
                 this.resetShipLockPlan();
+            }
         }
 
         resetShipLockPlan() {

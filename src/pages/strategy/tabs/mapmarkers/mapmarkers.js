@@ -271,7 +271,7 @@
 							stage.addChild(sprite);
 						}
 					}
-					// Fill node spot colors/icons only if master mapcell data ready
+					// Fill node spot colors/icons if master mapcell data ready or additional route
 					for(const edgeKey of Object.keys(edges)) {
 						const edge = edges[edgeKey];
 						const node = edge[0];
@@ -280,7 +280,7 @@
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
 							const sprite = new this.pixi.Sprite(frame);
 							let offsetX = 0, offsetY = 0;
-							if(node.color == 5) offsetY = -5;
+							if(node.color === 5) offsetY = -5;
 							if(node.offsets && node.offsets[node.color]) {
 								offsetX = node.offsets[node.color].x;
 								offsetY = node.offsets[node.color].y;
@@ -301,6 +301,8 @@
 				}
 				this.addMarkers();
 				$(".overlays").show();
+				this.isLoading = false;
+				$(".loading").css("visibility", "hidden");
 			};
 			const loader = new this.pixi.loaders.Loader();
 			// Register error handler
@@ -321,16 +323,23 @@
 				$(".map_url").removeClass("error");
 				$.getJSON(this.mapInfoMetaUrl, info => {
 					this.mapInfoMeta = info;
-					// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
-					if(this.digEventSpots && this.isShowEdges && this.world >= 10) {
-						const currentSpotCnt = this.mapInfoMeta.spots.length;
+					const currentSpotCnt = this.mapInfoMeta.spots.length;
+					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
+					// Confirmed condition if nodes amount at first not reach expected one
+					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) &&
+						this.isShowEdges && this.world >= 10) {
+						// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
 						const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);
 						$.getJSON(additionalUrl, addingInfo => {
 							if(addingInfo.bg) info.bg.push(...addingInfo.bg);
 							if(addingInfo.spots) info.spots.push(...addingInfo.spots);
+							const addedSpotCnt = (addingInfo.spots || []).length;
 							if(addingInfo.enemies) info.enemies.push(...addingInfo.enemies);
 							if(addingInfo.labels) info.labels = addingInfo.labels;
-							console.debug("Found additional spots", addingInfo.spots.length, "merged info", this.mapInfoMeta);
+							console.debug("Found additional spots", addedSpotCnt, "merged info", this.mapInfoMeta);
+							if(knownTotalSpotCnt > currentSpotCnt + addedSpotCnt) {
+								console.debug(`Expected spots amount ${knownTotalSpotCnt} not met by ${currentSpotCnt} + additional ${addedSpotCnt}, more hidden nodes existed?`);
+							}
 							loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`))
 								.load(() => { renderMapStage(); });
 						}).fail(xhr => {
@@ -340,8 +349,6 @@
 					} else {
 						renderMapStage();
 					}
-					this.isLoading = false;
-					$(".loading").css("visibility", "hidden");
 				});
 			});
 		},

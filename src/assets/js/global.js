@@ -634,6 +634,34 @@ Object.defineProperty(Array.prototype, "sumValues", {
 	}
 });
 
+Object.defineProperty(Array.prototype, "joinIfNeeded", {
+	enumerable: false,
+	/**
+	 * A convenient method to join Array elements with space if char between 2 elements are ascii.
+	 * @param separator - an optional string to use other separator instead of space.
+	 * @param testCallback - an optional function to test interfacing chars are ascii or not.
+	 */
+	value: function joinIfNeeded(separator, testCallback) {
+		separator = separator || " ";
+		testCallback = testCallback || function(prevStr, nextStr) {
+			var tailChar = String(prevStr).slice(-1).charCodeAt(0),
+				headChar = String(nextStr).charCodeAt(0);
+			return tailChar > 32 && tailChar < 256 && headChar > 32 && headChar < 256;
+		};
+		var thisArray = this, resultArray = [];
+		if(thisArray.length) {
+			if(thisArray.length === 1) resultArray.push(thisArray[0]);
+			thisArray.reduce(function(lastElm, thisElm, i) {
+				if(i === 1) resultArray.push(lastElm);
+				if(testCallback(lastElm, thisElm)) resultArray.push(separator);
+				resultArray.push(thisElm);
+				return thisElm;
+			});
+		}
+		return resultArray.join("");
+	}
+});
+
 /*******************************\
 |*** Object                     |
 \*******************************/
