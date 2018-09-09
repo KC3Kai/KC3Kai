@@ -33,6 +33,7 @@
 	overflow:hidden;
 }
 .tab_mstupdate .mstship .ship_cg img {
+	max-width:300px;
 	height:300px;
 	vertical-align:top;
 }

@@ -120,6 +120,7 @@
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)
 					.attr("data-swf", shipSrc)
+					.attr("title", "[{0}]".format(shipData.api_id))
 					.click(linkClickFunc);
 				
 				shipBox.appendTo(appendToBox);
@@ -142,6 +143,7 @@
 					.data("tab", "mstgear")
 					.data("api_id", gearData.api_id)
 					.attr("data-mst-id", gearData.api_id)
+					.attr("title", "[{0}]".format(gearData.api_id))
 					.click(linkClickFunc);
 				
 				gearBox.appendTo(".tab_mstupdate .mstgears");
@@ -167,6 +169,7 @@
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)
+					.attr("title", "[{0}]".format(shipData.api_id))
 					.attr("data-coord", [coordX, coordY].join(','))
 					.attr("data-swf", shipSrc)
 					.click(linkClickFunc);
@@ -194,6 +197,7 @@
 					.data("tab", "mstship")
 					.data("api_id", shipId)
 					.attr("data-mst-id", shipId)
+					.attr("title", "[{0}]".format(shipId))
 					.attr("data-swf", shipSrc);
 				if(seasonalData) {
 					$(".ship_name", shipBox).click(linkClickFunc);
@@ -204,7 +208,7 @@
 				shipBox.appendTo(".tab_mstupdate .mstseason");
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstseason");
-			
+			$(".page_padding").createChildrenTooltips();
 		}
 		
 	};

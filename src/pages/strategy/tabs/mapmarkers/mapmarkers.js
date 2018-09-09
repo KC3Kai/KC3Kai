@@ -20,6 +20,7 @@
 			this.isShowEnemies = false;
 			this.isShowMarkers = true;
 			this.isLoading = false;
+			this.digEventSpots = false;
 		},
 
 		/* RELOAD: optional
@@ -145,20 +146,23 @@
 			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
-					case -1: return 'map_common_132';
-					case 1: return 'map_common_125';
+					case -1:
+					// undefined in `_getTexture`, just used for default white dot
+					case 0: return 'map_common_133';
+					case 1: return 'map_common_126';
 					case 2:
-					case 6: return 'map_common_128';
-					case 3: return 'map_common_130';
-					case 4: return 'map_common_131';
+					case 6: return 'map_common_129';
+					case 3: return 'map_common_131';
+					case 4: return 'map_common_132';
 					case 5: return 'map_common_120';
 					case 7: return 'map_common_100';
 					case 8: return 'map_common_119';
-					case 9: return 'map_common_129';
+					case 9: return 'map_common_130';
 					case 10: return 'map_common_95';
-					case 11: return 'map_common_133';
-					case 12: return 'map_common_134';
-					case -2: return 'map_common_127';
+					case 11: return 'map_common_134';
+					case 12: return 'map_common_135';
+					case -2: return 'map_common_128';
+					case -3: return 'map_common_125';
 				}
 			};
 			this.isLoading = true;
@@ -172,22 +176,132 @@
 				fontFamily: "Arial",
 				fontSize: 18,
 				fill: "white",
-				stroke: '#ff3300',
+				stroke: "#ff3300",
 				strokeThickness: 4,
+				dropShadow: true,
+				dropShadowColor: "#000000",
+				dropShadowDistance: 2,
 			});
 			const mapKey = `${String(this.world).pad(3, '0')}${String(this.map).pad(2, '0')}`;
 			const texturePrefix = `map${mapKey}_`;
 			const stage = this.pixiApp.stage;
 			// Clean up rendered old containers
 			const clearStage = (destroyChildren = true) => {
-				const count = stage.children.length;
-				for(let i = 0; i < count; i++) {
-					const child = stage.children[0];
+				for(let i = stage.children.length - 1; i >= 0; i--) {
+					const child = stage.children[i];
 					if(destroyChildren && typeof child.destroy === "function") child.destroy();
 					stage.removeChild(child);
 				}
 			};
-			const container = new this.pixi.Container();
+			// Render map based on `this.mapInfoMeta`
+			const renderMapStage = () => {
+				clearStage();
+				const bgContainer = new this.pixi.Container();
+				for(const bg of this.mapInfoMeta.bg) {
+					const textureName = typeof bg === "string" ? bg : bg.img ? bg.img : false;
+					if(textureName === false) {
+						console.debug("Unknown BG texture:", bg);
+						continue;
+					}
+					const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
+					bgContainer.addChild(new this.pixi.Sprite(frame));
+				}
+				stage.addChild(bgContainer);
+				if(this.isShowEdges && this.mapInfoMeta.spots) {
+					const edges = {};
+					let isAddingRouteStart = false;
+					// Fill edge numbers of lines, colored nodes, etc
+					for(const spot of this.mapInfoMeta.spots) {
+						const spotCoord = [spot.x, spot.y].join(',');
+						edges[spotCoord] = edges[spotCoord] || [];
+						edges[spotCoord].push(spot);
+						const edge = spot.no;
+						// Draw additional start point
+						if(spot.direction && isAddingRouteStart) {
+							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
+							stage.addChild(sprite);
+						}
+						if(!spot.line) continue;
+						const isAddingRoute = !!spot.route;
+						isAddingRouteStart |= isAddingRoute;
+						const textureName = spot.line.img || (isAddingRoute && spot.route.img) || "route_" + edge;
+						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
+						const sprite = new this.pixi.Sprite(frame);
+						sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
+						// Fill lines of additional routes
+						if(isAddingRoute) stage.addChild(sprite);
+						const bounds = sprite.getBounds();
+						// Draw an arrow to indicate the edge direction
+						const fromSpot = {x: bounds.x + bounds.width, y: bounds.y + bounds.height};
+						if(spot.line.x < 0) fromSpot.x += spot.line.x;
+						if(spot.line.y < 0) fromSpot.y += spot.line.y;
+						const grp = new this.pixi.Graphics();
+						const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
+						grp.setTransform(
+							spot.x + (fromSpot.x - spot.x) / 2,
+							spot.y + (fromSpot.y - spot.y) / 2,
+							1, 1, angle);
+						const arrowHeight = 18, arrowColor = 0xcdcde9;
+						grp.lineStyle(2, arrowColor, 1);
+						grp.moveTo(0, 0);
+						grp.beginFill(arrowColor);
+						grp.lineTo(-arrowHeight, -arrowHeight / 1.5);
+						grp.lineTo(-arrowHeight / 1.4, 0);
+						grp.lineTo(-arrowHeight, +arrowHeight / 1.5);
+						grp.lineTo(0, 0);
+						grp.endFill();
+						stage.addChild(grp);
+						// Show edge numbers
+						const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
+						edgeText.anchor.set(
+							1.5 * (Math.abs(angle) / Math.PI),
+							Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
+						);
+						edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+						stage.addChild(edgeText);
+					}
+					// Fill labels of additional nodes
+					if(Array.isArray(this.mapInfoMeta.labels)) {
+						for(const label of this.mapInfoMeta.labels) {
+							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${label.img}`);
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(label.x, label.y);
+							stage.addChild(sprite);
+						}
+					}
+					// Fill node spot colors/icons only if master mapcell data ready
+					for(const edgeKey of Object.keys(edges)) {
+						const edge = edges[edgeKey];
+						const node = edge[0];
+						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
+						if(node.color || node.route) {
+							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
+							const sprite = new this.pixi.Sprite(frame);
+							let offsetX = 0, offsetY = 0;
+							if(node.color == 5) offsetY = -5;
+							if(node.offsets && node.offsets[node.color]) {
+								offsetX = node.offsets[node.color].x;
+								offsetY = node.offsets[node.color].y;
+							}
+							sprite.anchor.set(0.5, 0.5);
+							sprite.position.set(node.x + offsetX, node.y + offsetY);
+							stage.addChild(sprite);
+						}
+					}
+				}
+				if(this.isShowEnemies && this.mapInfoMeta.enemies) {
+					for(const enemy of this.mapInfoMeta.enemies) {
+						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${enemy.img}`);
+						const sprite = new this.pixi.Sprite(frame);
+						sprite.position.set(enemy.x, enemy.y);
+						stage.addChild(sprite);
+					}
+				}
+				this.addMarkers();
+				$(".overlays").show();
+			};
 			const loader = new this.pixi.loaders.Loader();
 			// Register error handler
 			loader.onError.add(err => {
@@ -205,63 +319,27 @@
 					return;
 				}
 				$(".map_url").removeClass("error");
-				// More info (hidden nodes) might be added, see `TaskCreateMap.prototype._loadAddingInfo`
 				$.getJSON(this.mapInfoMetaUrl, info => {
 					this.mapInfoMeta = info;
-					clearStage();
-					for(const bg of this.mapInfoMeta.bg) {
-						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${bg}`);
-						container.addChild(new this.pixi.Sprite(frame));
+					// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
+					if(this.digEventSpots && this.isShowEdges && this.world >= 10) {
+						const currentSpotCnt = this.mapInfoMeta.spots.length;
+						const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);
+						$.getJSON(additionalUrl, addingInfo => {
+							if(addingInfo.bg) info.bg.push(...addingInfo.bg);
+							if(addingInfo.spots) info.spots.push(...addingInfo.spots);
+							if(addingInfo.enemies) info.enemies.push(...addingInfo.enemies);
+							if(addingInfo.labels) info.labels = addingInfo.labels;
+							console.debug("Found additional spots", addingInfo.spots.length, "merged info", this.mapInfoMeta);
+							loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`))
+								.load(() => { renderMapStage(); });
+						}).fail(xhr => {
+							console.debug("No additional spot found");
+							renderMapStage();
+						});
+					} else {
+						renderMapStage();
 					}
-					stage.addChild(container);
-					if(this.isShowEdges && this.mapInfoMeta.spots) {
-						const edges = {};
-						// Fill edge line numbers
-						for(const spot of this.mapInfoMeta.spots) {
-							const spotCoord = [spot.x, spot.y].join(',');
-							edges[spotCoord] = edges[spotCoord] || [];
-							edges[spotCoord].push(spot);
-							const edge = spot.no;
-							if(!spot.line) continue;
-							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${spot.line.img || ("route_" + edge)}`);
-							const sprite = new this.pixi.Sprite(frame);
-							sprite.position.set(spot.x + spot.line.x, spot.y + spot.line.y);
-							const bounds = sprite.getBounds();
-							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
-							edgeText.anchor.set(0.5, 0.5);
-							stage.addChild(edgeText);
-							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-						}
-						// Fill node spot colors/icons only if master mapcell data ready
-						for(const edgeKey of Object.keys(edges)) {
-							const edge = edges[edgeKey];
-							const node = edge[0];
-							node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
-							if(node.color) {
-								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color));
-								const sprite = new this.pixi.Sprite(frame);
-								let offsetX = 0, offsetY = 0;
-								if(node.color == 5) offsetY = -5;
-								if(node.offsets && node.offsets[node.color]) {
-									offsetX = node.offsets[node.color].x;
-									offsetY = node.offsets[node.color].y;
-								}
-								sprite.anchor.set(0.5, 0.5);
-								sprite.position.set(node.x + offsetX, node.y + offsetY);
-								stage.addChild(sprite);
-							}
-						}
-					}
-					if(this.isShowEnemies && this.mapInfoMeta.enemies) {
-						for(const enemy of this.mapInfoMeta.enemies) {
-							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${enemy.img}`);
-							const sprite = new this.pixi.Sprite(frame);
-							sprite.position.set(enemy.x, enemy.y);
-							stage.addChild(sprite);
-						}
-					}
-					this.addMarkers();
-					$(".overlays").show();
 					this.isLoading = false;
 					$(".loading").css("visibility", "hidden");
 				});
