@@ -176,18 +176,17 @@
 		},
 		
 		processSelectEventMapRank: function(http) {
+			const apiData = http.response.api_data;
 			const mapId = [http.params.api_maparea_id, http.params.api_map_no].join('');
 			const eventMapInfo = (this.mapInfo.find(i => i.api_id == mapId) || {}).api_eventmap;
-			if(eventMapInfo !== undefined) {
-				const apiData = http.response.api_data;
+			if(eventMapInfo) {
 				eventMapInfo.api_selected_rank = Number(http.params.api_rank);
-				eventMapInfo.api_max_maphp = Number(apiData.api_maphp.api_max_maphp);
-				eventMapInfo.api_now_maphp = Number(apiData.api_maphp.api_now_maphp);
-				if(apiData !== undefined && apiData.api_maphp !== undefined) {
+				if(apiData && apiData.api_maphp) {
+					eventMapInfo.api_max_maphp = Number(apiData.api_maphp.api_max_maphp);
+					eventMapInfo.api_now_maphp = Number(apiData.api_maphp.api_now_maphp);
 					eventMapInfo.api_gauge_num = Number(apiData.api_maphp.api_gauge_num);
 					eventMapInfo.api_gauge_type = Number(apiData.api_maphp.api_gauge_type);
 				}
-				this.mapInfo.find(i => i.api_id == mapId).api_eventmap = eventMapInfo;
 			}
 		},
 		
