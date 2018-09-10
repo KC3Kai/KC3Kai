@@ -209,6 +209,7 @@
 				stage.addChild(bgContainer);
 				if(this.isShowEdges && this.mapInfoMeta.spots) {
 					const edges = {};
+					const edgesContainer = new this.pixi.Container();
 					let isAddingRouteStart = false;
 					// Fill edge numbers of lines, colored nodes, etc
 					for(const spot of this.mapInfoMeta.spots) {
@@ -260,7 +261,7 @@
 							Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
 						);
 						edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-						stage.addChild(edgeText);
+						edgesContainer.addChild(edgeText);
 					}
 					// Fill labels of additional nodes
 					if(Array.isArray(this.mapInfoMeta.labels)) {
@@ -290,6 +291,7 @@
 							stage.addChild(sprite);
 						}
 					}
+					stage.addChild(edgesContainer);
 				}
 				if(this.isShowEnemies && this.mapInfoMeta.enemies) {
 					for(const enemy of this.mapInfoMeta.enemies) {
