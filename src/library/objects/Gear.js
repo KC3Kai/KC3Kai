@@ -71,22 +71,19 @@ KC3改 Equipment Object
 			"82": {
 				count: 0,
 				byClass: {
-					// Taiyou Kai+
+					// Taiyou Kai+ (CAUTION: remodel group starts from Kasugamaru)
+					// Unknown for Shinyou
 					"76": {
 						remodel: 1,
+						excludes: [526],
 						multiple: { "tais": 1, "houk": 1 },
 					},
 				},
 			},
-			// Ju 87C Kai Ni (KMX)
+			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
 				count: 0,
 				byClass: {
-					// Taiyou Kai Ni?
-					"76": {
-						remodel: 2,
-						multiple: { "tais": 1, "houk": 1 },
-					},
 					// Graf Zeppelin Class
 					"63": {
 						multiple: { "houg": 1, "houk": 1 },
@@ -94,6 +91,18 @@ KC3改 Equipment Object
 					// Aquila Class
 					"68": "63",
 				},
+				byShip: [
+					// Taiyou Kai Ni
+					{
+						ids: [529],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Shinyou Kai Ni
+					{
+						ids: [536],
+						multiple: { "tais": 3, "houk": 2 },
+					},
+				],
 			},
 			// Suisei
 			"24": {
