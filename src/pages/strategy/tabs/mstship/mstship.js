@@ -331,7 +331,7 @@
 			shipList.scrollTop(scrollTop);
 		},
 
-		showShip :function(ship_id, switchDamagedGraph = false, switchCgView = false, showAllGraphs = false){
+		showShip :function(ship_id, switchDamagedGraph, switchCgView, switchAllGraphs){
 			ship_id = Number(ship_id || "405");
 			const self = this,
 				shipData = this.mergedMasterShips[ship_id],
@@ -357,6 +357,7 @@
 			if(switchCgView) this.tryBigMode = !this.tryBigMode;
 			const viewCgMode = !!this.tryBigMode;
 			const tryDamagedGraph = !!this.tryDamaged;
+			const showAllGraphs = switchAllGraphs && !$(".tab_mstship .shipInfo .basic .cglist").length;
 			this.currentShipId = ship_id;
 
 			console.debug("Viewing shipData", shipData);
