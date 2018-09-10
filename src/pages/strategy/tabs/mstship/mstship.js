@@ -249,6 +249,11 @@
 				}
 			});
 			
+			// View all CG types
+			$(".tab_mstship .shipInfo .type").on("click", function(e){
+				self.showShip(self.currentShipId, false, false, true);
+			});
+			
 			// Link to quotes developer page
 			if(ConfigManager.devOnlyPages){
 				$(".tab_mstship .shipInfo").on("click", ".to-quotes", function(e){
@@ -326,7 +331,7 @@
 			shipList.scrollTop(scrollTop);
 		},
 
-		showShip :function(ship_id, switchDamagedGraph = false, switchCgView = false){
+		showShip :function(ship_id, switchDamagedGraph = false, switchCgView = false, showAllGraphs = false){
 			ship_id = Number(ship_id || "405");
 			const self = this,
 				shipData = this.mergedMasterShips[ship_id],
@@ -422,26 +427,55 @@
 			if(this.currentCardVersion) kcs2Src += `?version=${this.currentCardVersion}`;
 			
 			if(this.croppie) this.croppie.croppie("destroy");
-			setTimeout(() => {
-				if(this.currentShipId !== ship_id) return;
-				const cgswf = $(".tab_mstship .shipInfo .cgswf");
-				this.croppie = $(".tab_mstship .shipInfo .cgswf .image").croppie({
-					boundary: { width: cgswf.width(), height: cgswf.height() },
-					viewport: KC3Master.isAbyssalShip(ship_id) ?
-						{ width: 234, height: 200, type: "square" } :
-						{ width: 218, height: 300, type: "square" },
-					showZoomer: false,
+			if(showAllGraphs){
+				$(".tab_mstship .shipInfo .cgswf").hide();
+				const cgList = $('<div class="cglist"></div>').appendTo(".tab_mstship .shipInfo .basic");
+				const availableTypes = KC3Master.isSeasonalShip(ship_id) ? [
+						'card', 'character_full', 'character_full_dmg',
+						'character_up', 'character_up_dmg'
+					] : KC3Master.isAbyssalShip(ship_id) ? [
+						'banner', 'banner_dmg', 'banner_g_dmg',
+						'full', 'full_dmg'
+					] : ['card', 'card_dmg',
+						'banner', 'banner_dmg', 'banner_g_dmg',
+						'full', 'full_dmg',
+						'character_full', 'character_full_dmg',
+						'character_up', 'character_up_dmg',
+						'remodel', 'remodel_dmg',
+						'supply_character', 'supply_character_dmg',
+						'album_status'
+					];
+				availableTypes.forEach(type => {
+					const img = $("<img />"), imgUri = KC3Master.png_file(ship_id, type, "ship");
+					const url = `http://${this.server_ip}/kcs2/resources${imgUri}`
+						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
+					img.attr("src", url).attr("alt", imgUri).attr("title", type)
+						.css("max-width", "100%")
+						.appendTo(cgList);
 				});
-				$(".tab_mstship .shipInfo .cgswf .cr-viewport").css("border", "none")
-					.css("box-shadow", "none");
-				$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "Loading");
-				this.croppie.croppie("bind", {
-					url: KC3Meta.isAF() && ship_id == KC3Meta.getAF(4) ? KC3Meta.getAF(3).format("bk") : kcs2Src,
-					zoom: cgswf.attr("scale"),
-				}).catch(err => {
-					$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
-				});
-			}, 0);
+			} else {
+				$(".tab_mstship .shipInfo .basic .cglist").remove();
+				setTimeout(() => {
+					if(this.currentShipId !== ship_id) return;
+					const cgswf = $(".tab_mstship .shipInfo .cgswf").show();
+					this.croppie = $(".tab_mstship .shipInfo .cgswf .image").croppie({
+						boundary: { width: cgswf.width(), height: cgswf.height() },
+						viewport: KC3Master.isAbyssalShip(ship_id) ?
+							{ width: 234, height: 200, type: "square" } :
+							{ width: 218, height: 300, type: "square" },
+						showZoomer: false,
+					});
+					$(".tab_mstship .shipInfo .cgswf .cr-viewport").css("border", "none")
+						.css("box-shadow", "none");
+					$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "Loading");
+					this.croppie.croppie("bind", {
+						url: KC3Meta.isAF() && ship_id == KC3Meta.getAF(4) ? KC3Meta.getAF(3).format("bk") : kcs2Src,
+						zoom: cgswf.attr("scale"),
+					}).catch(err => {
+						$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
+					});
+				}, 0);
+			}
 			
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
 			$(".tab_mstship .shipInfo .hourlies").empty();
@@ -449,7 +483,7 @@
 			saltClassUpdate();
 			
 			var statBox;
-			if(KC3Master.isRegularShip(ship_id) && !viewCgMode){
+			if(KC3Master.isRegularShip(ship_id) && !viewCgMode && !showAllGraphs){
 				// Ship-only, non abyssal
 				$(".tab_mstship .shipInfo .stats").empty();
 				$(".tab_mstship .shipInfo .stats").css("width", "");
@@ -840,7 +874,7 @@
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").show();
 				else
 					$(".tab_mstship .shipInfo .tokubest .to-quotes").hide();
-			} else if (KC3Master.isAbyssalShip(ship_id)) {
+			} else if (KC3Master.isAbyssalShip(ship_id) && !showAllGraphs) {
 				// Abyssal, show larger CG viewer
 				$(".tab_mstship .shipInfo .stats").hide();
 				$(".tab_mstship .shipInfo .equipments").hide();
