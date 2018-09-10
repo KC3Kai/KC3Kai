@@ -1867,7 +1867,9 @@ KC3改 Ship Object
 		// and base asw stat of Kai and Kai2 already exceed 70
 		//const isTaiyouClass = ctype === 76;
 		//const isTaiyouBase = this.masterId === 526;
-		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1;
+		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
+			// Shinyou Kai+ included?
+			|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 
 		// lower condition for DE and CVE, even lower if equips Large Sonar
 		const aswThreshold = isEscortLightCarrier && hasLargeSonar ? 50

@@ -83,6 +83,7 @@
 		unexpectedDamage : {
 			map: null,
 			edgeID: null,
+			difficulty: null,
 			debuffed: null,
 			cleared: null,
 			engagement: null,
@@ -175,12 +176,14 @@
 		},
 		
 		processSelectEventMapRank: function(http) {
+			const apiData = http.response.api_data;
 			const mapId = [http.params.api_maparea_id, http.params.api_map_no].join('');
-			const eventMapInfo = (this.mapInfo[mapId] || {}).api_eventmap;
+			const eventMapInfo = (this.mapInfo.find(i => i.api_id == mapId) || {}).api_eventmap;
 			if(eventMapInfo) {
 				eventMapInfo.api_selected_rank = Number(http.params.api_rank);
-				const apiData = http.response.api_data;
 				if(apiData && apiData.api_maphp) {
+					eventMapInfo.api_max_maphp = Number(apiData.api_maphp.api_max_maphp);
+					eventMapInfo.api_now_maphp = Number(apiData.api_maphp.api_now_maphp);
 					eventMapInfo.api_gauge_num = Number(apiData.api_maphp.api_gauge_num);
 					eventMapInfo.api_gauge_type = Number(apiData.api_maphp.api_gauge_type);
 				}
@@ -194,7 +197,7 @@
 			
 			// Processed values from processStart and processMapInfo
 			this.celldata.map = this.data.map;
-			const mapData = this.mapInfo.find(i => i.api_id == this.data.map) || {};
+			const mapData = this.mapInfo.find(i => i.api_id == this.currentMap.join('')) || {};
 			this.celldata.cleared = mapData.api_cleared;
 			if(mapData.api_eventmap) {
 				this.celldata.difficulty = mapData.api_eventmap.api_selected_rank;
@@ -269,7 +272,7 @@
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
 				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
-				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num;
+				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num || 1;
 				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
@@ -452,6 +455,7 @@
 				cleared: !!this.data.cleared,
 				edgeID: thisNode.id,
 				map: this.data.map,
+				difficulty: this.data.difficulty,
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
 			};
 			unexpectedList.forEach(a => {
