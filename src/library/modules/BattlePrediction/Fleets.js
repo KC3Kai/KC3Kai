@@ -31,7 +31,7 @@
     const { dealDamage, takeDamage } = KC3BattlePrediction.fleets.ship;
 
     return pipe(
-      over(getPath(fleets, defender), takeDamage(damage)),
+      over(getPath(fleets, defender), takeDamage(damage, info)),
       attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
     )(fleets);
   };
