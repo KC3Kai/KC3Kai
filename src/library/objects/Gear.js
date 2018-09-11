@@ -97,9 +97,9 @@ KC3改 Equipment Object
 						ids: [529],
 						multiple: { "tais": 1, "houk": 1 },
 					},
-					// Shinyou Kai Ni
+					// Shinyou
 					{
-						ids: [536],
+						ids: [534, 381, 536],
 						multiple: { "tais": 3, "houk": 2 },
 					},
 				],
@@ -1641,7 +1641,7 @@ KC3改 Equipment Object
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
-					$(".value", statBox).text(["?","S","M","L","VL","XL"][gearData["api_" + sdata[1]]] || "?");
+					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);
 				}

@@ -394,6 +394,13 @@ Provides access to data on built-in JSON files
 			return !returnTerm ? this.term(term) : term;
 		},
 		
+		gearRange :function(apiLeng, returnTerm){
+			var rangeTermsMap = {"1":"RangeShortAbbr", "2":"RangeMediumAbbr", "3":"RangeLongAbbr", "4":"RangeVeryLongAbbr", "5":"RangeExtremeLongAbbr"};
+			var term = rangeTermsMap[apiLeng];
+			// return the api value itself if new name term not decided yet
+			return !returnTerm ? this.term(term || apiLeng) : term || "Unknown";
+		},
+		
 		exp :function(level){
 			return this._exp[level] || [0,0];
 		},

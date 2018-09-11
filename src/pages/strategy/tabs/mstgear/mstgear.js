@@ -169,13 +169,9 @@
 							sdata[sdata.length > 4 && isLandFighter ? 4 : 2]) || "")
 						.lazyInitTooltip();
 					if(sdata[0]==="rn"){ // For range length
-						$(".stat_value", statBox).text( [
-							"?", "S", "M", "L", "VL", "XL"
-						][gearData["api_"+sdata[1]]] || "?" );
-					}else if(sdata[0]==="sp"){ // For speed, but not found in gears
-						$(".stat_value", statBox).text( ({
-							"0":"L", "5":"S", "10":"F", "15":"F+", "20":"F++"
-						})[gearData["api_"+sdata[1]]] || "?");
+						$(".stat_value", statBox).text(
+							KC3Meta.gearRange(gearData["api_"+sdata[1]])
+						);
 					}else if(sdata[0]==="kk"){ // For bauxite cost when deploy to LBAS
 						var landSlot = KC3GearManager.landBaseReconnType2Ids.includes(gearData.api_type[2]) ?
 							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
