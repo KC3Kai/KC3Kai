@@ -28,25 +28,30 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			const self = this;
 			
 			// List all equipment
-			var gearBox;
-			$.each(KC3Master.all_slotitems(), function(index, GearData){
-				gearBox = $(".tab_mstgear .factory .gearRecord").clone();
-				gearBox.attr("data-id", GearData.api_id);
-				$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(GearData.api_type[3]))
-					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
-				$(".gearName", gearBox).text( "[" + GearData.api_id + "] " + KC3Meta.gearName(GearData.api_name) );
-				gearBox.appendTo(".tab_mstgear .gearRecords");
+			const iconFailsafeHandler = function(e) {
+				$(this).unbind("error").attr("src", "/assets/img/ui/empty.png");
+			};
+			$.each(KC3Master.all_slotitems(), function(index, gearData){
+				if(!gearData) { return true; }
+				const id = gearData.api_id,
+					iconType = gearData.api_type[3],
+					gearName = KC3Meta.gearName(gearData.api_name);
+				const gearBox = $(".tab_mstgear .factory .gearRecord")
+					.clone().appendTo(".tab_mstgear .gearRecords");
+				gearBox.attr("data-id", id);
+				$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconType)).error(iconFailsafeHandler);
+				$(".gearName", gearBox).text(`[${id}] ${gearName}`).attr("title", gearName);
 			});
+			$(".tab_mstgear .gearRecords").createChildrenTooltips();
 			
 			// Select equipment
 			$(".tab_mstgear .gearRecords .gearRecord").on("click", function(){
 				var gid = $(this).data("id");
 				if( gid != self.currentGearId ){
 					KC3StrategyTabs.gotoTab(null, gid);
-					//self.showGear( $(this).data("id") );
 				}
 			});
 			
