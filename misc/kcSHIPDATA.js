@@ -6514,7 +6514,7 @@ var SHIPDATA = {
 		LUK: 1,
 		RNG: 3,
 		SPD: 5,
-		SLOTS: [0, 0, 0],
+		SLOTS: [0, 0, 0, 124],
 		EQUIPS: [551, 551, 551, 583],
 	},
 	1816: {
@@ -6533,7 +6533,7 @@ var SHIPDATA = {
 		LUK: 1,
 		RNG: 3,
 		SPD: 5,
-		SLOTS: [0, 0, 0],
+		SLOTS: [0, 0, 0, 144],
 		EQUIPS: [551, 551, 551, 583],
 	},
 	1817: {
