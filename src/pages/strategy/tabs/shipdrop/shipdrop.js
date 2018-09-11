@@ -65,7 +65,7 @@
 			$(".loading").show();
 			KC3Database.con.sortie.where("world").equals(world).and(
 				data => data.mapnum === map && data.hq === hqId
-				&& (this.isEventWorld(world) ||
+				&& (KC3Meta.isEventWorld(world) ||
 					(data.time * 1000 > this.timeRange[0] && data.time * 1000 < this.timeRange[1]))
 			).each(sortie => {
 				this.dropTable[sortie.diff] = this.dropTable[sortie.diff] || {};
@@ -220,8 +220,8 @@
 			listElem.html(
 				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
 			);
-			$(".filters .massSelect #eventSelected").toggle(this.isEventWorld(worldId));
-			$(".filters .massSelect #timeRange").toggle(!this.isEventWorld(worldId));
+			$(".filters .massSelect #eventSelected").toggle(KC3Meta.isEventWorld(worldId));
+			$(".filters .massSelect #timeRange").toggle(!KC3Meta.isEventWorld(worldId));
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				if(isMap) {
@@ -238,10 +238,10 @@
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? this.mapToDesc : this.worldToDesc;
+			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
 			if($(`option[value=${value}]`, list).length === 0) {
 				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(this, world, map))
+					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
 				);
 			}
 		},
@@ -259,32 +259,6 @@
 				}).forEach(id => {
 					this.maps[id] = maps[id];
 				});
-		},
-
-		isEventWorld: function(worldId) {
-			return worldId >= 10;
-		},
-
-		worldToDesc: function(world) {
-			world = Number(world);
-			if(this.isEventWorld(world)) {
-				const eventMapDefs = {
-					seasons : ["Winter", "Spring", "Summer", "Fall"],
-					fromId : 21,
-					fromYear : 2013
-				}, period = eventMapDefs.seasons.length,
-				worldIndex = world - eventMapDefs.fromId,
-				season = eventMapDefs.seasons[worldIndex % period],
-				year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
-				return KC3Meta.term("MapNameEventWorld").format(
-					KC3Meta.term("MapNameEventSeason" + season), year);
-			} else {
-				return KC3Meta.term("MapNameWorld" + world);
-			}
-		},
-
-		mapToDesc: function(world, map) {
-			return this.isEventWorld(world) ? "E-" + map : [world, map].join("-");
 		},
 
 		updateFilters : function() {
@@ -320,7 +294,7 @@
 				$(".filter_name", elem).text(stype === 0 ? "No Drop" : stype === 100 ? "Item" : KC3Meta.stype(stype));
 				this.ship_filter_checkbox[stype] = true;
 				elem.on("click", stypeHandler.bind(this, stype, elem, this.ship_filter_checkbox));
-				if(stype === 100 && this.isEventWorld(this.selectedWorld)) elem.hide();
+				if(stype === 100 && KC3Meta.isEventWorld(this.selectedWorld)) elem.hide();
 			}
 
 			const updateRankFilterValue = () => {
