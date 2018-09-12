@@ -548,14 +548,16 @@
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
 		slotitem_stat :function(ItemElem, SlotItem, statName){
-			if(SlotItem.stats[statName] !== 0 &&
-				(statName !== "or" || 
-					(statName === "or" &&
-					this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
-				)
-			){
-				$(".stats .item_{0} span".format(statName), ItemElem)
-					.text(SlotItem.stats[statName]);
+			if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
+				(statName === "or" && this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
+			)){
+				if(statName === "rn"){
+					$(".stats .item_{0} span".format(statName), ItemElem)
+						.text(KC3Meta.gearRange(SlotItem.stats[statName]));
+				} else {
+					$(".stats .item_{0} span".format(statName), ItemElem)
+						.text(SlotItem.stats[statName]);
+				}
 			} else {
 				$(".stats .item_{0}".format(statName), ItemElem).hide();
 			}

@@ -13,6 +13,11 @@
 	font-size:12px;
 }
 
+.tab_mstship ol,
+.tab_mstship ul {
+	padding-left:1em;
+}
+
 /* FILTERS
 --------------------------------*/
 .tab_mstship .filters {

@@ -15,9 +15,9 @@
     return Object.assign({}, ship, { damageDealt: ship.damageDealt + damage});
   };
 
-  Ship.takeDamage = damage => ship => {
+  Ship.takeDamage = (damage, info) => ship => {
     const { tryDamecon } = KC3BattlePrediction.fleets.ship;
-
+    if (info) { info.ehp = ship.hp; }
     const result = Object.assign({}, ship, { hp: ship.hp - damage });
 
     return result.hp <= 0 ? tryDamecon(result) : result;
