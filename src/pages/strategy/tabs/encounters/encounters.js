@@ -64,7 +64,7 @@
 				$("<option />").attr("value", 0).text("Select a {0}...".format(isMap ? "map" : "world"))
 			);
 			$(".map_switcher .difficulty").removeClass("active");
-			if(isMap && this.isEventWorld(worldId)) {
+			if(isMap && KC3Meta.isEventWorld(worldId)) {
 				$(".map_switcher .difficulty." + (worldId >= 41 ? "newSet" : "newSet")).addClass("active");
 			}
 			$.each(this.maps, (_, map) => {
@@ -83,10 +83,10 @@
 			const world = String(mapId).slice(0, -1);
 			const map = String(mapId).slice(-1);
 			const value = isMap ? map : world;
-			const descFunc = isMap ? this.mapToDesc : this.worldToDesc;
+			const descFunc = isMap ? KC3Meta.mapToDesc : KC3Meta.worldToDesc;
 			if($(`option[value=${value}]`, list).length === 0) {
 				list.append(
-					$("<option />").attr("value", value).text(descFunc.call(this, world, map))
+					$("<option />").attr("value", value).text(descFunc.call(KC3Meta, world, map))
 				);
 			}
 		},
@@ -123,36 +123,10 @@
 			});
 		},
 		
-		isEventWorld: function(worldId) {
-			return worldId >= 10;
-		},
-		
 		isLbasSortieMap: function(world, map) {
 			return world === 6 && [4, 5].includes(map) ||
 				(world >= 41 && (this.maps[['m', world, map].join('')] || {}).airBase) ||
-				this.isEventWorld(world);
-		},
-		
-		worldToDesc: function(world) {
-			world = Number(world);
-			if(this.isEventWorld(world)) {
-				const eventMapDefs = {
-					seasons : ["Winter", "Spring", "Summer", "Fall"],
-					fromId : 21,
-					fromYear : 2013
-				}, period = eventMapDefs.seasons.length,
-				worldIndex = world - eventMapDefs.fromId,
-				season = eventMapDefs.seasons[worldIndex % period],
-				year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
-				return KC3Meta.term("MapNameEventWorld").format(
-					KC3Meta.term("MapNameEventSeason" + season), year);
-			} else {
-				return KC3Meta.term("MapNameWorld" + world);
-			}
-		},
-		
-		mapToDesc: function(world, map) {
-			return this.isEventWorld(world) ? "E-" + map : [world, map].join("-");
+				KC3Meta.isEventWorld(world);
 		},
 		
 		showMapEncounters: function(world, map, diff) {

@@ -321,13 +321,12 @@
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
 		slotitem_stat :function(ItemElem, SlotItem, statName){
-			if(SlotItem.stats[statName] !== 0 &&
-				(statName !== "or" ||
-					(statName === "or" &&
-					KC3GearManager.landBasedAircraftType3Ids.indexOf(SlotItem.type_id)>-1)
-				)
-			){
-				$(".stats .item_"+statName+" span", ItemElem).text(SlotItem.stats[statName]);
+			if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
+				(statName === "or" && KC3GearManager.landBasedAircraftType3Ids.indexOf(SlotItem.type_id)>-1)
+			)){
+				$(".stats .item_"+statName+" span", ItemElem).text(
+					statName === "rn" ? KC3Meta.gearRange(SlotItem.stats[statName]) : SlotItem.stats[statName]
+				);
 			}else{
 				$(".stats .item_"+statName, ItemElem).hide();
 			}

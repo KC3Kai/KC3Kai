@@ -394,6 +394,13 @@ Provides access to data on built-in JSON files
 			return !returnTerm ? this.term(term) : term;
 		},
 		
+		gearRange :function(apiLeng, returnTerm){
+			var rangeTermsMap = {"1":"RangeShortAbbr", "2":"RangeMediumAbbr", "3":"RangeLongAbbr", "4":"RangeVeryLongAbbr", "5":"RangeExtremeLongAbbr"};
+			var term = rangeTermsMap[apiLeng];
+			// return the api value itself if new name term not decided yet
+			return !returnTerm ? this.term(term || apiLeng) : term || "Unknown";
+		},
+		
 		exp :function(level){
 			return this._exp[level] || [0,0];
 		},
@@ -959,6 +966,38 @@ Provides access to data on built-in JSON files
 		formatNumber :function(number, locale, options){
 			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
 				number : number.toLocaleString(locale, options);
+		},
+		
+		isEventWorld :function(worldId) {
+			return Number(worldId) >= 10;
+		},
+		
+		worldToDesc :function(worldId, mapId, returnTerm) {
+			worldId = Number(worldId);
+			var worldTerm = "Unknown";
+			if(this.isEventWorld(worldId)) {
+				const eventMapDefs = {
+					seasons : ["Winter", "Spring", "Summer", "Fall"],
+					fromId : 21,
+					fromYear : 2013,
+					skippedFrom : [42, 2],
+				}, period = eventMapDefs.seasons.length,
+				worldIndex = worldId >= eventMapDefs.skippedFrom[0] ?
+					worldId - eventMapDefs.fromId + eventMapDefs.skippedFrom[1] :
+					worldId - eventMapDefs.fromId,
+				season = eventMapDefs.seasons[worldIndex % period],
+				year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
+				worldTerm = ["MapNameEventWorld", "MapNameEventSeason" + season, year];
+				return !returnTerm ? KC3Meta.term(worldTerm[0])
+					.format(KC3Meta.term(worldTerm[1]), worldTerm[2]) : worldTerm;
+			} else {
+				worldTerm = "MapNameWorld" + worldId;
+				return !returnTerm ? KC3Meta.term(worldTerm) : worldTerm;
+			}
+		},
+		
+		mapToDesc :function(worldId, mapId) {
+			return this.isEventWorld(worldId) ? "E-" + mapId : [worldId, mapId].join("-");
 		},
 		
 		/**

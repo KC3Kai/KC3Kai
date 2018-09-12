@@ -2041,30 +2041,33 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
-		if(targetShip.api_soku === 0) {
-			// most priority: Toku Daihatsu + 11th Tank
-			if(this.hasEquipment(230)) return 5;
-			// Abyssal hard land installation could be landing attacked
-			const isTargetLandable =
-				[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
-					1665, 1666, 1667, // Artillery Imp
-					1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
-					// Summer Supply Depot Princess not counted?
-				].includes(targetShipMasterId);
+		// Phase2 defined in `PhaseHougeki._getDaihatsuEffectType`
+		const isLand = targetShip.api_soku <= 0;
+		// most priority: Toku Daihatsu + 11th Tank
+		if(this.hasEquipment(230)) return isLand ? 5 : 0;
+		// Abyssal hard land installation could be landing attacked
+		const isTargetLandable =
+			[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
+				1665, 1666, 1667, // Artillery Imp
+				1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
+				// but why Summer Supply Depot Princess not counted?
+				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
+				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
+			].includes(targetShipMasterId);
+		// T2 Tank
+		if(this.hasEquipment(167)) {
 			const isThisSubmarine = this.isSubmarine();
-			// T2 Tank
-			if(this.hasEquipment(167)) {
-				if(isThisSubmarine) return 4;
-				if(isTargetLandable) return 4;
-			}
-			if(isTargetLandable) {
-				// T89 Tank
-				if(this.hasEquipment(166)) return 3;
-				// Toku Daihatsu
-				if(this.hasEquipment(193)) return 2;
-				// Daihatsu
-				if(this.hasEquipment(68)) return 1;
-			}
+			if(isThisSubmarine && isLand) return 4;
+			if(isTargetLandable) return 4;
+			return 0;
+		}
+		if(isTargetLandable) {
+			// T89 Tank
+			if(this.hasEquipment(166)) return 3;
+			// Toku Daihatsu
+			if(this.hasEquipment(193)) return 2;
+			// Daihatsu
+			if(this.hasEquipment(68)) return 1;
 		}
 		return 0;
 	};

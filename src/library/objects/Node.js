@@ -2033,7 +2033,7 @@ Used by SortieManager
 
 				const result = {};
 				// Simpler way of obtaining enemy health, its just for scratch damage check anyway
-				let eHp = this.maxHPs.enemy[attack.target];
+				let eHp = attack.ehp || this.maxHPs.enemy[attack.target];
 				const unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
 
 				// Simulating each attack
@@ -2067,7 +2067,7 @@ Used by SortieManager
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
-						if (damage[i] > maxDam && minDam > 0 ) { unexpectedDamage = true; }
+						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > 0.13*eHp; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
 							// TsunDB formatting
@@ -2108,6 +2108,7 @@ Used by SortieManager
 								position: attack.target,
 								armor: armor,
 								isMainFleet: !this.EnemyCombined ? true : attack.target < this.eshipsMain.length,
+								hp: eHp,
 							};
 
 							result.isUnexpected = unexpectedDamage;

@@ -787,6 +787,11 @@
 		},
 		"markers": [
 			{
+				"img": "client/maelstrom.png",
+				"pos": [968, 271],
+				"size": [27, 27]
+			},
+			{
 				"img": "client/ammo.png",
 				"pos": [429, 197],
 				"size": [27, 27]
@@ -799,11 +804,6 @@
 			{
 				"img": "client/maelstrom.png",
 				"pos": [151, 367],
-				"size": [27, 27]
-			},
-			{
-				"img": "client/maelstrom.png",
-				"pos": [106, 245],
 				"size": [27, 27]
 			},
 			{
