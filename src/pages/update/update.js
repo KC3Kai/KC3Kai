@@ -44,11 +44,12 @@
 		$.ajax({
 			url: "https://api.github.com/repos/KC3Kai/KC3Kai/pulls?state=all&base=webstore",
 			dataType: "JSON",
+			timeout: 15000,
 			complete: function(xhr, status){
 				$(".loading").hide();
 			},
 			error: function(xhr, status, err){
-				$("#versionList").text(err);
+				$("#versionList").text(err || status);
 			},
 			success: function(response){
 				var releaseBox;
