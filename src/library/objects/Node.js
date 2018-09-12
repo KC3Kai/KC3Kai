@@ -2041,7 +2041,7 @@ Used by SortieManager
 					damage[i] = Math.floor(damage[i]); // FS protection
 					if (damage[i] === -1) { break; } // NB CVCI triple array of [x, -1, -1]
 					// Scratch damage/miss check
-					if ((unexpectedFlag || damage[i] > eHp * 0.13) && acc[i] !== 0) {
+					if ((unexpectedFlag || damage[i] > eHp * 0.14) && acc[i] !== 0) {
 
 						let unexpectedDamage = false,
 							damageInstance = {},
@@ -2053,6 +2053,7 @@ Used by SortieManager
 							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
 							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
+						if (time === 'Night' && ship.canCarrierNightAirAttack()) { power = ship.nightAirAttackPower(this.fcontactId === 252); }
 						const shellingPower = power;
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
 							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
@@ -2067,7 +2068,7 @@ Used by SortieManager
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
-						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > 0.13*eHp; }
+						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > eHp * 0.14; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
 							// TsunDB formatting
