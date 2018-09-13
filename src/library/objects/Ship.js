@@ -2053,6 +2053,7 @@ KC3改 Ship Object
 				// but why Summer Supply Depot Princess not counted?
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
+				1556, 1631, 1632, 1633, 1650, 1651, 1652, // Airfield Princess
 			].includes(targetShipMasterId);
 		// T2 Tank
 		if(this.hasEquipment(167)) {

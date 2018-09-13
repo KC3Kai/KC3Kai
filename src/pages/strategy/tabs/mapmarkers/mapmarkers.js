@@ -210,6 +210,7 @@
 				if(this.isShowEdges && this.mapInfoMeta.spots) {
 					const edges = {};
 					const edgesContainer = new this.pixi.Container();
+					const labelsContainer = new this.pixi.Container();
 					let isAddingRouteStart = false;
 					// Fill edge numbers of lines, colored nodes, etc
 					for(const spot of this.mapInfoMeta.spots) {
@@ -269,7 +270,7 @@
 							const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${label.img}`);
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(label.x, label.y);
-							stage.addChild(sprite);
+							labelsContainer.addChild(sprite);
 						}
 					}
 					// Fill node spot colors/icons if master mapcell data ready or additional route
@@ -292,6 +293,7 @@
 						}
 					}
 					stage.addChild(edgesContainer);
+					stage.addChild(labelsContainer);
 				}
 				if(this.isShowEnemies && this.mapInfoMeta.enemies) {
 					for(const enemy of this.mapInfoMeta.enemies) {
@@ -325,29 +327,46 @@
 				$(".map_url").removeClass("error");
 				$.getJSON(this.mapInfoMetaUrl, info => {
 					this.mapInfoMeta = info;
-					const currentSpotCnt = this.mapInfoMeta.spots.length;
+					const initSpotCnt = this.mapInfoMeta.spots.length;
+					let currentSpotCnt = initSpotCnt, addedSpotCnt = 0;
 					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
 					// Confirmed condition if nodes amount at first not reach expected one
 					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) &&
-						this.isShowEdges && this.world >= 10) {
+						this.isShowEdges && KC3Meta.isEventWorld(this.world)) {
 						// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
-						const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);
-						$.getJSON(additionalUrl, addingInfo => {
-							if(addingInfo.bg) info.bg.push(...addingInfo.bg);
-							if(addingInfo.spots) info.spots.push(...addingInfo.spots);
-							const addedSpotCnt = (addingInfo.spots || []).length;
-							if(addingInfo.enemies) info.enemies.push(...addingInfo.enemies);
-							if(addingInfo.labels) info.labels = addingInfo.labels;
-							console.debug("Found additional spots", addedSpotCnt, "merged info", this.mapInfoMeta);
-							if(knownTotalSpotCnt > currentSpotCnt + addedSpotCnt) {
-								console.debug(`Expected spots amount ${knownTotalSpotCnt} not met by ${currentSpotCnt} + additional ${addedSpotCnt}, more hidden nodes existed?`);
-							}
-							loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`))
-								.load(() => { renderMapStage(); });
-						}).fail(xhr => {
-							console.debug("No additional spot found");
-							renderMapStage();
-						});
+						const loadAdditonalInfo = () => {
+							const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);
+							$.getJSON(additionalUrl, addingInfo => {
+								if(addingInfo.bg) info.bg.push(...addingInfo.bg);
+								if(addingInfo.spots) info.spots.push(...addingInfo.spots);
+								if(addingInfo.enemies) info.enemies.push(...addingInfo.enemies);
+								if(addingInfo.labels) {
+									info.labels = info.labels || [];
+									info.labels.push(...addingInfo.labels);
+								}
+								const foundSpotCnt = (addingInfo.spots || []).length;
+								addedSpotCnt += foundSpotCnt;
+								console.debug("Found additional spots", foundSpotCnt,
+									"merged to previous", currentSpotCnt,
+									this.mapInfoMeta);
+								loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`));
+								currentSpotCnt += foundSpotCnt;
+								if(!knownTotalSpotCnt || currentSpotCnt < knownTotalSpotCnt) {
+									loadAdditonalInfo();
+								}
+							}).fail(xhr => {
+								console.debug("No more additional spot found");
+								if(knownTotalSpotCnt > currentSpotCnt + addedSpotCnt) {
+									console.debug(`Expected spots amount ${knownTotalSpotCnt} not met by ${initSpotCnt} + additional ${addedSpotCnt}, more hidden nodes existed?`);
+								}
+								if(currentSpotCnt > initSpotCnt) {
+									loader.load(() => { renderMapStage(); });
+								} else {
+									renderMapStage();
+								}
+							});
+						};
+						loadAdditonalInfo();
 					} else {
 						renderMapStage();
 					}
