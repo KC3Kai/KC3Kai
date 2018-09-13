@@ -25,7 +25,7 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
   });
 
   QUnit.module('parseAttacker', {
-    beforeEach() { this.subject = Hougeki.parseAttacker; },
+    beforeEach() { this.subject = Hougeki.parseAttacker.bind(null, false); },
   }, function () {
     QUnit.test('player attack', function (assert) {
       const json = { api_at_eflag: 0, api_at_list: 5 };
@@ -41,7 +41,7 @@ QUnit.module('modules > BattlePrediction > phases > Hougeki', function () {
   });
 
   QUnit.module('parseDefender', {
-    beforeEach() { this.subject = Hougeki.parseDefender; },
+    beforeEach() { this.subject = Hougeki.parseDefender.bind(null, false); },
   }, function () {
     QUnit.test('player single attack', function (assert) {
       const json = { api_at_eflag: 0, api_df_list: [5] };

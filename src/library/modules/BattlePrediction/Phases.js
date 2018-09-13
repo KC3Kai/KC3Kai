@@ -22,6 +22,7 @@
     nHougeki2: ({ parseHougeki }) => ({ api_n_hougeki2 }) => parseHougeki(api_n_hougeki2),
     // nb shelling
     hougeki: ({ parseHougeki }) => ({ api_hougeki }) => parseHougeki(api_hougeki),
+    friendly: ({ parseFriendly }) => ({ api_friendly_battle }) => parseFriendly(api_friendly_battle),
   };
 
   const wrapParser = parser => battleData => (battleData ? parser(battleData) : []);
@@ -31,6 +32,7 @@
       support: { parseSupport },
       hougeki: { parseHougeki },
       raigeki: { parseRaigeki },
+      friendly: { parseFriendly },
     } = KC3BattlePrediction.battle.phases;
 
     return {
@@ -38,6 +40,7 @@
       parseSupport: wrapParser(parseSupport),
       parseHougeki: wrapParser(parseHougeki),
       parseRaigeki: wrapParser(parseRaigeki),
+      parseFriendly: wrapParser(parseFriendly),
     };
   };
 
