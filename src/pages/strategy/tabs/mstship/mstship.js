@@ -442,7 +442,13 @@
 					isSpecificAlbumTypes ? ['character_full', 'character_up'] : [
 						'card', 'character_full', 'character_full_dmg',
 						'character_up', 'character_up_dmg'
-					] : KC3Master.isAbyssalShip(ship_id) ? [
+					] : KC3Master.isAbyssalShip(ship_id) ?
+					KC3Meta.abyssShipBorderClass(shipData) === "boss" ? [
+						'banner', 'banner_dmg', 'banner_g_dmg',
+						'full', 'full_dmg',
+						'banner_d', 'full_d'
+						// also exists: 'banner_g_d', 'full_dmg_d'...
+					] : [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg'
 					] : ['card', 'card_dmg',
@@ -454,13 +460,25 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
+				const imageErrorHandler = function(e) {
+					$(this).unbind("error");
+					// Hide optional debuffed abyssal boss alt lines,
+					// since damaged boss state can be only determined via battle API `api_xal01` property.
+					if($(this).attr("title").endsWith("_d")) $(this).hide();
+				};
 				availableTypes.forEach(type => {
-					const img = $("<img />"), imgUri = KC3Master.png_file(ship_id, type, "ship");
+					// Old suffix for debuffed boss CG used still, see `ShipLoader.hasai` & `hSuffix()`
+					const isDebuffedBoss = type.endsWith("_d");
+					const img = $("<img />"), imgUri = KC3Master.png_file(ship_id,
+						isDebuffedBoss ? type.slice(0, -2) : type, "ship", false,
+						isDebuffedBoss ? this.damagedBossFileSuffix : "");
 					const url = `http://${this.server_ip}/kcs2/resources${imgUri}`
 						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
 					img.attr("src", url).attr("alt", imgUri).attr("title", type)
 						.css("max-width", "100%")
+						.error(imageErrorHandler)
 						.appendTo(cgList);
+					cgList.append('<div class="clear"></div>');
 				});
 			} else {
 				$(".tab_mstship .shipInfo .basic .cglist").remove();
