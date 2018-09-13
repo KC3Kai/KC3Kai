@@ -2041,7 +2041,7 @@ Used by SortieManager
 					damage[i] = Math.floor(damage[i]); // FS protection
 					if (damage[i] === -1) { break; } // NB CVCI triple array of [x, -1, -1]
 					// Scratch damage/miss check
-					if ((unexpectedFlag || damage[i] > eHp * 0.14) && acc[i] !== 0) {
+					if ((unexpectedFlag || damage[i] > eHp * 0.06 + (eHp - 1) * 0.8) && acc[i] !== 0) {
 
 						let unexpectedDamage = false,
 							damageInstance = {},
@@ -2068,7 +2068,7 @@ Used by SortieManager
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
-						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > eHp * 0.14; }
+						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > eHp * 0.06 + (eHp - 1) * 0.8; }
 						if (unexpectedDamage || unexpectedFlag) {
 							
 							// TsunDB formatting
