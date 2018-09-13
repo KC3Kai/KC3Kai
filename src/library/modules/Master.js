@@ -222,8 +222,9 @@ Saves and loads significant data for future use
 		 *               [`card`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`] for slotitem
 		 * @param shipOrSlot - `ship` or `slot`
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
+		 * @param debuffedAbyssalSuffix - specify old suffix for debuffed abyssal boss full CG. btw suffix is `_d`
 		 */
-		png_file :function(id, type = "card", shipOrSlot = "ship", isDamaged = false){
+		png_file :function(id, type = "card", shipOrSlot = "ship", isDamaged = false, debuffedAbyssalSuffix = ""){
 			if(!id || id < 0 || !type || !shipOrSlot) return "";
 			const typeWithSuffix = type + (isDamaged && shipOrSlot === "ship" ? "_dmg" : "");
 			const typeWithPrefix = shipOrSlot + "_" + typeWithSuffix;
@@ -234,7 +235,7 @@ Saves and loads significant data for future use
 			);
 			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
 				suffix = getFilenameSuffix(id, typeWithPrefix);
-			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}_${suffix}.png`;
+			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}_${suffix}.png`;
 		},
 
 		slotitem :function(id){

@@ -59,30 +59,7 @@
 			1.0, 2.0, 4.0, 4.0, 4.0, 2.0, 1.0,
 		],
 		mapWorldDesc   = function(map_id){
-			var 
-				mapLocal = {
-					string: ["Naval Base","Southwestern","Northern","Western","Southern","Central"]
-						.map(function(str){return [str,'Area'].join(' ');}),
-					value : [ 1,undefined]
-				},
-				mapEvent = {
-					string: ["Winter","Spring","Summer","Fall"],
-					value : [21,2013]
-				},
-				mapDesc;
-			
-			mapDesc = (function(array_data,array_index){
-				var
-					entryLimit = array_data.string.length,
-					selectedIndex = (array_index - array_data.value[0]);
-				
-				return [
-					array_data.string.slice( selectedIndex % entryLimit ).shift(),
-					array_data.value[1] + parseInt(selectedIndex / entryLimit,10)
-				].filter(function(str){return str;}).join(' ');
-			})((map_id < 10) ? mapLocal : mapEvent,map_id);
-			
-			return [Number(map_id).toDigits(2), mapDesc ].join(': ');
+			return [Number(map_id).toDigits(2), KC3Meta.worldToDesc(map_id)].join(': ');
 		},
 		
 		mapBuffer = {},
