@@ -503,10 +503,8 @@ Used by SortieManager
 			}
 		}
 		
-		// Boss Debuffed
-		this.debuffed = typeof (battleData.api_boss_damaged || battleData.api_xal01) !== "undefined" ?
-			(battleData.api_boss_damaged || battleData.api_xal01 == 1) ? true : false
-			: false;
+		// Boss Debuffed, see `BattleCommonModel.prototype.isBossDamaged`
+		this.debuffed = 1 == (battleData.api_boss_damaged || battleData.api_xal01);
 		
 		// Battle analysis only if on sortie or PvP, not applied to battle simulation, like sortielogs.
 		const isRealBattle = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
