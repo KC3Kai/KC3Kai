@@ -34,6 +34,7 @@ Provides access to data on built-in JSON files
 		_dataColle:{},
 		_eventColle:{},
 		_edges:{},
+		_edgesOld:{},
 		_nodes:{},
 		_gunfit:{},
 		_defaultIcon:"",
@@ -116,6 +117,7 @@ Provides access to data on built-in JSON files
 			this._exp        = JSON.parse( $.ajax(repo+'exp_hq.json', { async: false }).responseText );
 			this._expShip    = JSON.parse( $.ajax(repo+'exp_ship.json', { async: false }).responseText );
 			this._edges      = JSON.parse( $.ajax(repo+'edges.json', { async: false }).responseText );
+			this._edgesOld   = JSON.parse( $.ajax(repo+'edges_p1.json', { async: false }).responseText );
 			this._nodes      = JSON.parse( $.ajax(repo+'nodes.json', { async: false }).responseText );
 			this._gunfit     = JSON.parse( $.ajax(repo+'gunfit.json', { async: false }).responseText );
 			// fud: Frequently updated data. rarely & randomly updated on maintenance weekly in fact
@@ -615,12 +617,15 @@ Provides access to data on built-in JSON files
 			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
 		
-		nodeLetter : function(worldId, mapId, edgeId) {
-			var map = this._edges["World " + worldId + "-" + mapId];
+		nodeLetter : function(worldId, mapId, edgeId, timestamp) {
+			const dataSource = this.isEventWorld(worldId) || this.isPhase2Started(timestamp) ?
+				this._edges : this._edgesOld;
+			const map = dataSource["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined") {
 				var edge = map[edgeId];
 				if (typeof edge !== "undefined") {
-					return edge[1];	// return destination
+					// return destination
+					return edge[1];
 				}
 			}
 			return edgeId;
@@ -998,6 +1003,12 @@ Provides access to data on built-in JSON files
 		
 		mapToDesc :function(worldId, mapId) {
 			return this.isEventWorld(worldId) ? "E-" + mapId : [worldId, mapId].join("-");
+		},
+		
+		isPhase2Started :function(datetime) {
+			const timestamp = datetime instanceof Date ? datetime.getTime() : Number(datetime);
+			// using 2018-08-17 00:00:00 as threshold, since maintenance started from 8-15, ended on 8-17
+			return !timestamp || timestamp >= 1534435200000;
 		},
 		
 		/**
