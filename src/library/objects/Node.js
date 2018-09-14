@@ -1595,10 +1595,10 @@ Used by SortieManager
 		enemyTable.css("font-size", "11px");
 		const enemyShips = battleData.api_ship_ke.slice(0, 6),
 			mainFleetCount = enemyShips.length,
-			enemyShipAfterHps = battleData.api_e_nowhps.slice(0, 6);
+			enemyShipBeforeHps = battleData.api_e_nowhps.slice(0, 6);
 		if(battleData.api_ship_ke_combined) {
 			enemyShips.push(...battleData.api_ship_ke_combined);
-			enemyShipAfterHps.push(...battleData.api_e_nowhps_combined);
+			enemyShipBeforeHps.push(...battleData.api_e_nowhps_combined);
 		}
 		const enemyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
 			enemyShips.length, 0);
@@ -1612,7 +1612,7 @@ Used by SortieManager
 					.attr("src", KC3Meta.abyssIcon(sid));
 				$(`.s_${shipIdx}`, tRow).append(shipIcon).css("padding-right", 3);
 				$(`.dmg_${shipIdx}`, tRow).append(-enemyFleetDamages[idx]).css("padding-right", 5);
-				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipAfterHps[idx] <= 0;
+				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipBeforeHps[idx] - enemyFleetDamages[idx] <= 0;
 				if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "goldenrod");
 			}
 		});

@@ -35,6 +35,8 @@ QUnit.module('modules > BattlePrediction', function () {
           { hp: 60, sunk: false, dameConConsumed: false, damageDealt: 0, attacks: [] },
         ],
         enemyEscort: [],
+        friendMain: [],
+        friendEscort: [],
       });
     });
 
@@ -74,6 +76,8 @@ QUnit.module('modules > BattlePrediction', function () {
           { hp: -62, sunk: true, dameConConsumed: false, damageDealt: 0, attacks: [{damage:[0],acc:[1],equip:[-1],cutin: undefined, ncutin:0,target:6,hp:9,ehp: 4}] },
           { hp: -21, sunk: true, dameConConsumed: false, damageDealt: 0, attacks: [] },
         ],
+        friendMain: [],
+        friendEscort: [],
       });
     });
   });
