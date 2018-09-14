@@ -47,7 +47,7 @@
     const { formatShip } = KC3BattlePrediction.fleets.ship;
     return pipe(
       mapShips(formatShip),
-      ({ player, enemy, friend }) => ({
+      ({ [Side.PLAYER]: player, [Side.ENEMY]: enemy, [Side.FRIEND]: friend }) => ({
         playerMain: player.main,
         playerEscort: player.escort,
         enemyMain: enemy.main,

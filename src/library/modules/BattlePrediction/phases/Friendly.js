@@ -8,10 +8,10 @@
 
   Friendly.parseFriendly = ({ api_hougeki }) => {
     const {
-      hougeki: { parseHougeki },
+      hougeki: { parseHougekiFriend },
     } = KC3BattlePrediction.battle.phases;
 
-    return parseHougeki(api_hougeki, true);
+    return parseHougekiFriend(api_hougeki);
   };
 
   /*--------------------------------------------------------*/
