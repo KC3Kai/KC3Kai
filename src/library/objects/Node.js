@@ -610,10 +610,13 @@ Used by SortieManager
 				this.enemyHP[position] = ship;
 				this.enemySunk[position] = ship.sunk;
 			});
-			const unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2]);
-			if (this.unexpectedList) { this.unexpectedList.push(...unexpectedList); }
-			else { this.unexpectedList = unexpectedList; }
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, battleData.api_formation[0], battleData.api_formation[2]));
+
+			this.unexpectedList = this.unexpectedList || [];
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerMain,
+				this.fleetSent -1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle));
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
+				1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle)
+			);
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -868,10 +871,12 @@ Used by SortieManager
 				this.enemySunk[position] = ship.sunk;
 			});
 
-			const unexpectedList = this.unexpectedDamagePrediction(result.fleets.playerMain, this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2]);
-			if (this.unexpectedList) { this.unexpectedList.push(...unexpectedList); }
-			else { this.unexpectedList = unexpectedList; }
-			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort, 1, nightData.api_formation[0], nightData.api_formation[2]));
+			this.unexpectedList = this.unexpectedList || [];
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerMain,
+				this.fleetSent -1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle));
+			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
+				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
+			);
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1859,20 +1864,22 @@ Used by SortieManager
 	 * @param fleetnum - player fleet index
 	 * @param formation - player formation id
 	 * @param engagement - engagement id
+	 * @param isRealBattle - indicate node data is from real sortie battle or DB history
 	 * @return {array} with element {Object} that has attributes:
 	 *   * enemy: Enemy formation, id, equips, stats and health before attack
 	 *   * ship: Player formation, position, id, equips, stats, improvements, proficiency, combined fleet type, current health and ammo
 	 *   * damageInstance: Actual damage, expected damage range and critical
 	 *   * isUnexpected: Boolean to check if damage is in expected or unexpected range
 	 */
-	KC3Node.prototype.unexpectedDamagePrediction = function(predictedFleet, fleetnum, formation, engagement, isRealBattle = false) {
+	KC3Node.prototype.unexpectedDamagePrediction = function(predictedFleet, fleetnum, formation, engagement,
+		isRealBattle = true) {
 		const unexpectedList = [];
 		let sunkenShips = 0;
 		predictedFleet.forEach(({ attacks }, position) => {
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
 			// SHIP SIMULATION FOR SORTIE HISTORY
-			if (!isRealBattle && this.nodeData.id) {
+			if (!isRealBattle && KC3Node.debugPrediction() && this.nodeData.id) {
 				position = position + sunkenShips;
 				let shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
 				while(this.sunken && this.sunken[this.playerCombined ? fleetnum : 0].includes(shipData.mst_id)) {
@@ -1897,9 +1904,8 @@ Used by SortieManager
 						case 'boolean':
 							/* Boolean => return all equipments with ex item if true */
 							return slot ? this.shipData.equip.map( (gId,idx) => {
-								let gData = KC3Master.slotitem(gId);
-								delete gData.api_id;
-								let g = new KC3Gear(gData);
+								const gearMst = KC3Master.slotitem(gId);
+								const g = new KC3Gear(gearMst);
 								g.masterId = gId;
 								g.itemId = 1;
 								g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
