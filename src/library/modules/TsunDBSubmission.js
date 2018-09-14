@@ -614,7 +614,13 @@
 			}).done( function() {
 				console.log(`Tsun DB Submission to /${type} done.`);
 			}).fail( function(jqXHR, textStatus, error) {
-				console.warn(`Tsun DB Submission to /${type} ${textStatus}`, jqXHR.status, error);
+				const statusCode = jqXHR.status;
+				if(statusCode === 400) {
+					// Server-side defines: '400 Bad Request' = status can be ignored
+					console.log(`Tsun DB Submission to /${type} ${textStatus}`, statusCode, error);
+				} else {
+					console.warn(`Tsun DB Submission to /${type} ${textStatus}`, statusCode, error);
+				}
 			});
 			return;
 		}

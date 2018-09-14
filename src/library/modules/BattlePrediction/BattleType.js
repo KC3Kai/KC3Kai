@@ -95,6 +95,7 @@
 
     // night-to-day
     [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT_TO_DAY)]: [
+      'friendly',
       'nSupport',
       'nHougeki1',
       'nHougeki2',
@@ -111,12 +112,12 @@
     ],
 
     // night battle
-    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
+    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
   };
 
   battle.getBattlePhases = (battleType) => {

@@ -616,8 +616,9 @@
 					$(".sortie_id", sortieBox).text(sortie.id)
 						.data("id", sortie.id).on("click", viewFleetAtManagerFunc);
 					$(".sortie_dl", sortieBox).data("id", sortie.id);
-					$(".sortie_date", sortieBox).text( new Date(sortie.time*1000).format("mmm d", false, self.locale) );
-					$(".sortie_date", sortieBox).attr("title", new Date(sortie.time*1000).format("yyyy-mm-dd HH:MM:ss") );
+					const sortieTime = sortie.time * 1000;
+					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
+					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
 					showSortieLedger(sortie.id, sortieBox);
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
@@ -625,7 +626,7 @@
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
-							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id);
+							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
 							const battleKind = ["", "",
 								"night_battle", "night_battle",
@@ -842,13 +843,13 @@
 								battleType = BATTLE_INVALID;
 								return true;
 							}
-														
+							
 							// Show on node list
 							var edgeIndex = edges.indexOf(battle.node);
 							if(edgeIndex < 0) {
 								edgeIndex = edges.length;
 								edges.push(battle.node);
-								const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node);
+								const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime);
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("edge_battle")
 									.text(letter).toggleClass("long_name", String(letter).length > 2);
 								if(edgeIndex === 5){
@@ -866,7 +867,7 @@
 
 							// HTML elements
 							nodeBox = $(".tab_"+tabCode+" .factory .sortie_nodeinfo").clone();
-							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node ) );
+							$(".node_id", nodeBox).text( KC3Meta.nodeLetter( sortie.world, sortie.mapnum, battle.node, sortieTime ) );
 							if(airRaid.airRaidLostKind > 0) {
 								// Adding to sortie_edge for consistency with old sorties
 								$(".node_id", nodeBox).addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
@@ -947,10 +948,10 @@
 								}
 							}
 
-							if(thisNode.unexpectedList && thisNode.unexpectedList.length) {
+							if(KC3Node.debugPrediction() && thisNode.unexpectedList && thisNode.unexpectedList.length) {
 								const messages = thisNode.buildUnexpectedDamageMessage();
 								if(messages) {
-									console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node)}`, thisNode.unexpectedList);
+									console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime)}`, thisNode.unexpectedList);
 									const prevTitle = $(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title");
 									$(".sortie_edge_"+(edgeIndex+1), sortieBox).attr("title",
 										(prevTitle ? prevTitle + "\n" : "") + messages

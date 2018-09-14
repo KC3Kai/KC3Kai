@@ -17,6 +17,7 @@
         hougeki: {}, // shelling (砲撃)
         raigeki: {}, // torpedoes (雷撃)
         support: {}, // support expedition
+        friendly: {}, // night battle friend fleet support
       },
     },
     // Rank prediction
@@ -110,7 +111,7 @@
   // ---------------
 
   // Player or enemy ship
-  BP.Side = Object.freeze({ PLAYER: 'player', ENEMY: 'enemy' });
+  BP.Side = Object.freeze({ PLAYER: 'player', ENEMY: 'enemy', FRIEND: 'friend' });
 
   // Ship in main or escort fleet
   BP.Role = Object.freeze({ MAIN_FLEET: 'main', ESCORT_FLEET: 'escort' });
@@ -379,6 +380,7 @@
 
     // night-to-day
     [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT_TO_DAY)]: [
+      'friendly',
       'nSupport',
       'nHougeki1',
       'nHougeki2',
@@ -395,12 +397,12 @@
     ],
 
     // night battle
-    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
-    [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)]: ['nSupport', 'hougeki'],
+    [toKey(Player.SINGLE, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.CTF, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.STF, Enemy.SINGLE, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.SINGLE, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.CTF, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
+    [toKey(Player.STF, Enemy.COMBINED, Time.NIGHT)]: ['friendly', 'nSupport', 'hougeki'],
   };
 
   battle.getBattlePhases = (battleType) => {
@@ -425,7 +427,7 @@
 
   // Create a Fleets object with the state of the player and enemy Fleets at battle start
   Fleets.getInitialState = (battleData, playerDamecons) => {
-    const { extractHps, installDamecons } = KC3BattlePrediction.fleets;
+    const { extractHps, extractSubInfo, installDamecons } = KC3BattlePrediction.fleets;
 
     return pipe(
       juxt([
@@ -433,10 +435,13 @@
         extractHps('api_f_nowhps_combined', 'api_f_maxhps_combined'),
         extractHps('api_e_nowhps', 'api_e_maxhps'),
         extractHps('api_e_nowhps_combined', 'api_e_maxhps_combined'),
+        pipe(extractSubInfo('api_friendly_info'), extractHps('api_nowhps', 'api_maxhps')),
       ]),
-      ([playerMain, playerEscort, enemyMain, enemyEscort]) => ({
+      ([playerMain, playerEscort, enemyMain, enemyEscort, friendMain]) => ({
         [Side.PLAYER]: { main: playerMain, escort: playerEscort },
         [Side.ENEMY]: { main: enemyMain, escort: enemyEscort },
+        // No escort fleet found yet for NPC friend fleet support
+        [Side.FRIEND]: { main: friendMain, escort: [] }
       }),
       over(Side.PLAYER, map(installDamecons(playerDamecons)))
     )(battleData);
@@ -460,11 +465,13 @@
     const { formatShip } = KC3BattlePrediction.fleets.ship;
     return pipe(
       mapShips(formatShip),
-      ({ player, enemy }) => ({
+      ({ [Side.PLAYER]: player, [Side.ENEMY]: enemy, [Side.FRIEND]: friend }) => ({
         playerMain: player.main,
         playerEscort: player.escort,
         enemyMain: enemy.main,
         enemyEscort: enemy.escort,
+        friendMain: friend.main,
+        friendEscort: friend.escort,
       })
     )(fleets);
   };
@@ -486,6 +493,10 @@
     }
 
     return zipWith(createShip, nowHps, maxHps);
+  };
+
+  Fleets.extractSubInfo = (subProp) => battleData => {
+    return battleData[subProp] || {};
   };
 
   Fleets.installDamecons = playerDamecons => (fleet, fleetRole) => {
@@ -651,6 +662,7 @@
     nHougeki2: ({ parseHougeki }) => ({ api_n_hougeki2 }) => parseHougeki(api_n_hougeki2),
     // nb shelling
     hougeki: ({ parseHougeki }) => ({ api_hougeki }) => parseHougeki(api_hougeki),
+    friendly: ({ parseFriendly }) => ({ api_friendly_battle }) => parseFriendly(api_friendly_battle),
   };
 
   const wrapParser = parser => battleData => (battleData ? parser(battleData) : []);
@@ -660,6 +672,7 @@
       support: { parseSupport },
       hougeki: { parseHougeki },
       raigeki: { parseRaigeki },
+      friendly: { parseFriendly },
     } = KC3BattlePrediction.battle.phases;
 
     return {
@@ -667,6 +680,7 @@
       parseSupport: wrapParser(parseSupport),
       parseHougeki: wrapParser(parseHougeki),
       parseRaigeki: wrapParser(parseRaigeki),
+      parseFriendly: wrapParser(parseFriendly),
     };
   };
 
@@ -682,6 +696,29 @@
 }());
 
 (function () {
+  const Friendly = {};
+  const { pipe, map, filter, Side } = KC3BattlePrediction;
+
+  /*--------------------------------------------------------*/
+  /* --------------------[ PUBLIC API ]-------------------- */
+  /*--------------------------------------------------------*/
+
+  Friendly.parseFriendly = ({ api_hougeki }) => {
+    const {
+      hougeki: { parseHougekiFriend },
+    } = KC3BattlePrediction.battle.phases;
+
+    return parseHougekiFriend(api_hougeki);
+  };
+
+  /*--------------------------------------------------------*/
+  /* ---------------------[ EXPORTS ]---------------------- */
+  /*--------------------------------------------------------*/
+
+  Object.assign(KC3BattlePrediction.battle.phases.friendly, Friendly);
+}());
+
+(function () {
   const Hougeki = {};
   const { pipe, map, Side } = KC3BattlePrediction;
 
@@ -690,22 +727,34 @@
   /*--------------------------------------------------------*/
 
   Hougeki.parseHougeki = (battleData) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-    const { extractFromJson } = KC3BattlePrediction.battle.phases;
-    const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
-    const HOUGEKI_PROPS = battleData.api_at_type ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type']
-      : battleData.api_sp_list ? ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list']
-      : ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
-    return pipe(
-      extractFromJson(HOUGEKI_PROPS),
-      map(parseJson),
-      map(createAttack)
-    )(battleData);
+    const { parseHougekiInternal } = KC3BattlePrediction.battle.phases.hougeki;
+    return parseHougekiInternal(battleData, false);
+  };
+
+  Hougeki.parseHougekiFriend = (battleData) => {
+    const { parseHougekiInternal } = KC3BattlePrediction.battle.phases.hougeki;
+    return parseHougekiInternal(battleData, true);
   };
 
   /*--------------------------------------------------------*/
   /* --------------------[ INTERNALS ]--------------------- */
   /*--------------------------------------------------------*/
+
+  Hougeki.parseHougekiInternal = (battleData, isAllySideFriend = false) => {
+    const { createAttack } = KC3BattlePrediction.battle;
+    const { extractFromJson } = KC3BattlePrediction.battle.phases;
+    const { parseJson, parseJsonFriend } = KC3BattlePrediction.battle.phases.hougeki;
+    const HOUGEKI_PROPS = battleData.api_at_type ?
+      ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type'] :
+      battleData.api_sp_list ?
+      ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list'] :
+      ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
+    return pipe(
+      extractFromJson(HOUGEKI_PROPS),
+      map(isAllySideFriend ? parseJsonFriend : parseJson),
+      map(createAttack)
+    )(battleData);
+  };
 
   Hougeki.parseJson = (attackJson) => {
     const { parseDamage, parseAttacker, parseDefender, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
@@ -714,6 +763,17 @@
       damage: parseDamage(attackJson),
       attacker: parseAttacker(attackJson),
       defender: parseDefender(attackJson),
+      info: parseInfo(attackJson),
+    };
+  };
+
+  Hougeki.parseJsonFriend = (attackJson) => {
+    const { parseDamage, parseAttackerFriend, parseDefenderFriend, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
+
+    return {
+      damage: parseDamage(attackJson),
+      attacker: parseAttackerFriend(attackJson),
+      defender: parseDefenderFriend(attackJson),
       info: parseInfo(attackJson),
     };
   };
@@ -728,6 +788,16 @@
 
   Hougeki.parseDefender = ({ api_at_eflag, api_df_list }) => ({
     side: api_at_eflag === 1 ? Side.PLAYER : Side.ENEMY,
+    position: api_df_list[0],
+  });
+
+  Hougeki.parseAttackerFriend = ({ api_at_eflag, api_at_list }) => ({
+    side: api_at_eflag === 1 ? Side.ENEMY : Side.FRIEND,
+    position: api_at_list,
+  });
+
+  Hougeki.parseDefenderFriend = ({ api_at_eflag, api_df_list }) => ({
+    side: api_at_eflag === 1 ? Side.FRIEND : Side.ENEMY,
     position: api_df_list[0],
   });
 
