@@ -948,7 +948,7 @@
 								}
 							}
 
-							if(thisNode.unexpectedList && thisNode.unexpectedList.length) {
+							if(KC3Node.debugPrediction() && thisNode.unexpectedList && thisNode.unexpectedList.length) {
 								const messages = thisNode.buildUnexpectedDamageMessage();
 								if(messages) {
 									console.warn(`Unexpected damage in sortie #${thisNode.sortie} ${sortie.world}-${sortie.mapnum}-${KC3Meta.nodeLetter(sortie.world, sortie.mapnum, battle.node, sortieTime)}`, thisNode.unexpectedList);
