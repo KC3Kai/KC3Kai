@@ -17,6 +17,7 @@
         hougeki: {}, // shelling (砲撃)
         raigeki: {}, // torpedoes (雷撃)
         support: {}, // support expedition
+        friendly: {}, // night battle friend fleet support
       },
     },
     // Rank prediction
@@ -110,7 +111,7 @@
   // ---------------
 
   // Player or enemy ship
-  BP.Side = Object.freeze({ PLAYER: 'player', ENEMY: 'enemy' });
+  BP.Side = Object.freeze({ PLAYER: 'player', ENEMY: 'enemy', FRIEND: 'friend' });
 
   // Ship in main or escort fleet
   BP.Role = Object.freeze({ MAIN_FLEET: 'main', ESCORT_FLEET: 'escort' });
