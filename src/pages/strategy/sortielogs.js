@@ -270,7 +270,7 @@
 						})(element.difficulty, cWorld));
 
 						// Check unselected difficulty
-						if(cWorld >= 10 && !element.difficulty) {
+						if(KC3Meta.isEventWorld(cWorld) && !element.difficulty) {
 							mapBox.addClass("noclearnogauge");
 							$(".map_hp_txt", mapBox).text("No difficulty");
 						} else {
@@ -604,7 +604,7 @@
 				try {
 					// Create sortie box
 					sortieBox = $(".tab_"+tabCode+" .factory .sortie_box").clone().appendTo(".tab_"+tabCode+" .sortie_list");
-					if(sortie.world >= 10) {
+					if(KC3Meta.isEventWorld(sortie.world)) {
 						sortie.diff = sortie.diff || mapInfo.difficulty || 0;
 					}
 					if((sortie.diff || 0) > 0) {
@@ -619,7 +619,7 @@
 					const sortieTime = sortie.time * 1000;
 					$(".sortie_date", sortieBox).text( new Date(sortieTime).format("mmm d", false, self.locale) );
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
-					$(".sortie_map", sortieBox).text( (sortie.world >= 10 ? "E" : sortie.world) + "-" + sortie.mapnum );
+					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
 					showSortieLedger(sortie.id, sortieBox);
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);

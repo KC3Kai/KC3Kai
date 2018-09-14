@@ -2161,7 +2161,7 @@
 
 			// Show world map and difficulty
 			$(".module.activity .map_world").text(
-				(KC3SortieManager.map_world >= 10 ? 'E' : KC3SortieManager.map_world)
+				(KC3Meta.isEventWorld(KC3SortieManager.map_world) ? 'E' : KC3SortieManager.map_world)
 				+ "-" + KC3SortieManager.map_num
 				+ ((KC3SortieManager.map_world >= 41)
 					? [ "",
@@ -2170,7 +2170,7 @@
 					  KC3Meta.term("EventRankNormalAbbr"),
 					  KC3Meta.term("EventRankHardAbbr") ]
 					[ KC3SortieManager.map_difficulty ]
-					: (KC3SortieManager.map_world >= 10)
+					: KC3Meta.isEventWorld(KC3SortieManager.map_world)
 					? [ "",
 					  KC3Meta.term("EventRankEasyAbbr"),
 					  KC3Meta.term("EventRankNormalAbbr"),

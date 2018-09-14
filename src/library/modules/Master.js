@@ -354,11 +354,11 @@ Saves and loads significant data for future use
 			const world = startData.api_maparea_id, map = startData.api_mapinfo_no;
 			const newCellsArr = startData.api_cell_data;
 			if(world > 0 && map > 0 && Array.isArray(newCellsArr) && newCellsArr.length > 0) {
-				if(world >= 10) {
+				if(KC3Meta.isEventWorld(world)) {
 					// Clean existed cells of old events for small footprint,
 					// since old event maps data will be accumulated to big
 					$.each(mapcell, (id, cell) => {
-						if(cell.api_maparea_id >= 10 && cell.api_maparea_id < world)
+						if(KC3Meta.isEventWorld(cell.api_maparea_id) && cell.api_maparea_id < world)
 							delete mapcell[id];
 					});
 				} else {

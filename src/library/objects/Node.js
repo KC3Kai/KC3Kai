@@ -1958,19 +1958,19 @@ Used by SortieManager
 					ship.ammo = ship.ammo > 0 ? ship.ammo : 0;
 				}
 			}
-			if (attacks.length === 0) { return; }
 
+			if (!attacks || !attacks.length) { return; }
 			if (ship.isDummy()) { return; }
-			attacks.forEach( attack => {
+			attacks.forEach(attack => {
 
 				// BATTLE CONDITIONS
-				let damage = attack.damage,
+				const damage = attack.damage,
 					cutin = attack.cutin >= 0 ? attack.cutin : attack.ncutin,
 					acc = attack.acc,
 					hp = attack.hp,
 					ciequip = attack.equip,
-					time = (attack.cutin >= 0) ? 'Day' : 'Night',
-					nightSpecialAttackType = [],
+					time = (attack.cutin >= 0) ? 'Day' : 'Night';
+				let nightSpecialAttackType = [],
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
@@ -1986,16 +1986,15 @@ Used by SortieManager
 				// PLAYER SPECIALS
 				const { isSubmarine, isLand } = ship.estimateTargetShipType(target);
 
-				/** 
-				 * CVCI/NB CVCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
+				/*
+				 * CVCI/CVNCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
 				 * Technically possible to guess exact cut-in from api_si_list (included per attack)
 				 * Since multiple cutins are possible per ship, reassignment to match cutin number from estimation is required
 				 */
-
-				if (time == "Night") {
+				if (time === "Night") {
 					nightSpecialAttackType = ship.estimateNightAttackType(target, true);
 					// In case of re-roll attacks like 7/8
-					if (nightSpecialAttackType[1] !== cutin){
+					if (nightSpecialAttackType[1] !== cutin) {
 						nightSpecialAttackType = {
 							1: ["Cutin", 1, "DoubleAttack", 1.2],
 							2: ["Cutin", 2, "CutinTorpTorpMain", 1.3],
@@ -2007,11 +2006,10 @@ Used by SortieManager
 							8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 						}[cutin] || ['Single', 0];
 					}
-				}
-				else {
+				} else {
 					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
 					if (daySpecialAttackType[1] !== cutin) {
-						// Arty spotting will keep re-rolling sp attacks
+						// Artillery spotting will keep re-rolling sp attacks
 						daySpecialAttackType = {
 							0: ["SingleAttack", 0],
 							2: ["Cutin", 2, "DoubleAttack", 1.2],
@@ -2027,33 +2025,36 @@ Used by SortieManager
 				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
 					powerBonus = ship.combinedFleetPowerBonus(PlayerManager.combinedFleet, this.isEnemyCombined, warfareType),
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
-					damageStatus = ['taiha','chuuha','shouha','normal'].find((a,idx) => (idx+1)/4 >= hp/ship.hp[1]);
+					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
 				const result = {};
 				// Simpler way of obtaining enemy health, its just for scratch damage check anyway
 				let eHp = attack.ehp || this.maxHPs.enemy[attack.target];
-				const unexpectedFlag = isLand || KC3SortieManager.map_world > 10 || KC3Node.debugPrediction();
+				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++){
-					damage[i] = Math.floor(damage[i]); // FS protection
-					if (damage[i] === -1) { break; } // NB CVCI triple array of [x, -1, -1]
-					// Scratch damage/miss check
+					// Remove Flagship protection flag
+					damage[i] = Math.floor(damage[i]);
+					// Skip unused values in CVNCI array of [x, -1, -1]
+					if (damage[i] === -1) { break; }
+					// Also ignore scratch damage or miss
 					if ((unexpectedFlag || damage[i] > eHp * 0.06 + (eHp - 1) * 0.08) && acc[i] !== 0) {
-
+						const damageInstance = {};
 						let unexpectedDamage = false,
-							damageInstance = {},
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
 							armor = this.eParam[attack.target][3] + eShip.equipmentTotalStats("souk");
 
-						let power = time === 'Day' ?  ship.shellingFirePower(combinedFleetFactor) 
-							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) : 
+						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor)
+							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) :
 							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
-						if (time === 'Night' && ship.canCarrierNightAirAttack()) { power = ship.nightAirAttackPower(this.fcontactId === 252); }
+						if (time === 'Night' && ship.canCarrierNightAirAttack()) {
+							power = ship.nightAirAttackPower(this.fcontactId === 252);
+						}
 						const shellingPower = power;
-						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation, 
+						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation,
 							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
 						const precapPower = power;
 						({power} = ship.applyPowerCap(power, time, warfareType));
@@ -2068,7 +2069,6 @@ Used by SortieManager
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
 						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > eHp * 0.06 + (eHp - 1) * 0.08; }
 						if (unexpectedDamage || unexpectedFlag) {
-							
 							// TsunDB formatting
 							damageInstance.actualDamage = damage[i];
 							damageInstance.isCritical = acc[i] === 2;
@@ -2079,7 +2079,7 @@ Used by SortieManager
 							hpPercent = hpPercent > 0 ? hpPercent : 0;
 
 							result.ship = {
-								id: ship.masterId, 
+								id: ship.masterId,
 								damageStatus: Math.ceil(hpPercent / 25),
 								equip: ship.equipment(true).map(g => g.masterId || -1),
 								improvements: ship.equipment(true).map(g => g.stars || -1),
