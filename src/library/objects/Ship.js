@@ -2116,6 +2116,8 @@ KC3改 Ship Object
 			 * CutinMainMain + Double, CutinMainAPShell + CutinMainRadar + CutinMainSecond.
 			 * Here just check by strictness & modifier desc order and return one of them.
 			 */
+			// special Nelson Touch since 2018-09-15, conditions under verification
+			//if([571, 576].includes(this.masterId)) return ["Cutin", 100, "NelsonTouch", 1.0];
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
 			if(mainGunCnt >= 2 && apShellCnt >= 1) return ["Cutin", 6, "CutinMainMain", 1.5];
@@ -2288,6 +2290,8 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 			} else {
+				// special Nelson Touch since 2018-09-15, conditions under verification
+				//if([571, 576].includes(this.masterId)) return ["Cutin", 100, "NelsonTouch", 1.0];
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
