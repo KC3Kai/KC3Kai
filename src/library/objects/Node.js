@@ -21,7 +21,7 @@ Used by SortieManager
 	};
 
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
-	KC3Node.debugPrediction = function() { return true; };
+	KC3Node.debugPrediction = function() { return false; };
 	
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(){

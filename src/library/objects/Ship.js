@@ -1202,7 +1202,8 @@ KC3改 Ship Object
 			obj.modifiers = {
 				antiLandModifier,
 				antiLandAdditive,
-				postCapAntiLandModifier: postcapInfo.antiLandModifier
+				postCapAntiLandModifier: postcapInfo.antiLandModifier,
+				postCapAntiLandAdditive: postcapInfo.antiLandAdditive
 			};
 			obj.dayPower = Math.floor(power);
 			
@@ -1303,6 +1304,7 @@ KC3改 Ship Object
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
+	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
 	 * @return {Array} of [additive damage boost, multiplicative damage boost]
@@ -1358,7 +1360,8 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					return [0, landingBonus * wg42Bonus];
+					const shikonBonus = this.hasEquipment(230) ? 5 : 0;
+					return [shikonBonus, landingBonus * wg42Bonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
@@ -1678,15 +1681,15 @@ KC3改 Ship Object
 			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
 		}
 		// Anti-installation modifier
-		let antiLandModifier = 1;
+		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			antiLandModifier = this.antiLandWarfarePowerMods(targetShipMasterId, false)[1];
+			[antiLandAdditive, antiLandModifier]  = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		let result = Math.floor(Math.floor(
-					Math.floor(cappedPower * antiLandModifier) * apshellModifier
+					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
 			* antiPtImpModifier;
@@ -1721,6 +1724,7 @@ KC3改 Ship Object
 			airstrikeConcatModifier,
 			apshellModifier,
 			antiPtImpModifier,
+			antiLandAdditive,
 			antiLandModifier,
 			newDepthChargeBonus,
 			remainingAmmoModifier,

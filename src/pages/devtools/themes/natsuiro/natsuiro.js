@@ -4284,6 +4284,7 @@
 							Math.qckInt("floor", info.modifiers.antiLandModifier, 3),
 							info.modifiers.antiLandAdditive,
 							Math.qckInt("floor", info.modifiers.postCapAntiLandModifier, 3),
+							info.modifiers.postCapAntiLandAdditive,
 							info.damagedPowers[0],
 							info.damagedPowers[1]);
 						$(".modifiers", enemyBox).attr("title", tooltip).lazyInitTooltip();
