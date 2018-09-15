@@ -453,7 +453,7 @@
 
     return pipe(
       over(getPath(fleets, defender), takeDamage(damage, info)),
-      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info)) : x => x
     )(fleets);
   };
 
@@ -821,12 +821,13 @@
     position: api_df_list[0],
   });
 
-  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list }) => ({
+  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list, api_df_list }) => ({
     damage: api_damage,
     acc: api_cl_list,
     equip: api_si_list,
     cutin: api_at_type,
     ncutin: api_sp_list,
+    target: api_df_list,
   });
 
   /*--------------------------------------------------------*/
@@ -1316,8 +1317,8 @@
 
   Ship.installDamecon = (ship, damecon = 0) => Object.assign({}, ship, { damecon });
 
-  Ship.dealDamage = (damage, info, { position } = {}) => ship => {
-    if (info) { ship.attacks.push(Object.assign({}, info, { target: position, hp: ship.hp })); }
+  Ship.dealDamage = (damage, info) => ship => {
+    if (info) { ship.attacks.push(Object.assign({}, info, { hp: ship.hp })); }
 
     return Object.assign({}, ship, { damageDealt: ship.damageDealt + damage});
   };

@@ -21,7 +21,7 @@ Used by SortieManager
 	};
 
 	// set true to test HP, rank and MVP predicting easier via SRoom Maps History
-	KC3Node.debugPrediction = function() { return false; };
+	KC3Node.debugPrediction = function() { return true; };
 	
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(){
@@ -1975,18 +1975,21 @@ Used by SortieManager
 					hp = attack.hp,
 					ciequip = attack.equip,
 					time = attack.cutin >= 0 ? 'Day' : 'Night';
+
 				let nightSpecialAttackType = [],
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
-				const target = this.eships[attack.target],
+				let target = this.eships[attack.target[0]],
 					enemyShip = KC3Master.ship(target);
+
+				const getEquipTotalArmor = gearArr => gearArr.reduce((armor, mstId) => (
+					armor + (mstId > 0 ? KC3Master.slotitem(mstId).api_souk || 0 : 0)
+				), 0);
 				// Simulate an enemy ship to obtain armor stats from equipment,
 				// if uses actual ship master ID and methods in KC3Gear, armor bonuses from equipment could be counted for PvP,
 				// but if don't want to consume memory to simulate KC3Ship and KC3Gear instances, just use:
-				const eShipEquipArmor = (this.eSlot[attack.target] || []).reduce((armor, mstId) => (
-					armor + (mstId > 0 ? KC3Master.slotitem(mstId).api_souk || 0 : 0)
-				), 0);
+				let eShipEquipArmor = getEquipTotalArmor(this.eSlot[attack.target[0]] || []);
 				/*
 				const eShip = new KC3Ship();
 				eShip.rosterId = 1;
@@ -2009,7 +2012,7 @@ Used by SortieManager
 				const eShipEquipArmor = eShip.equipmentTotalStats("souk");
 				*/
 
-				const { isSubmarine, isLand } = ship.estimateTargetShipType(target);
+				let { isSubmarine, isLand } = ship.estimateTargetShipType(target);
 				// PLAYER SPECIAL ATTACKS
 				/*
 				 * CVCI/CVNCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
@@ -2053,24 +2056,35 @@ Used by SortieManager
 					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
 				const result = {};
-				// Simpler way of obtaining enemy health, its just for scratch damage check anyway
-				let eHp = attack.ehp || this.maxHPs.enemy[attack.target];
+				let eHp = attack.ehp || this.maxHPs.enemy[attack.target[0]];
 				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++) {
+
+					// Recaculate variables for Nelson Touch, warfareType should still be shelling
+					if (cutin === 100) {
+						eHp = this.maxHPs.enemy[attack.target[i]];
+						target =  this.eships[attack.target[i]];
+						({ isSubmarine, isLand } = ship.estimateTargetShipType(target));
+						enemyShip = KC3Master.ship(target);
+						eShipEquipArmor = getEquipTotalArmor(this.eSlot[attack.target[0]] || []);
+					}
+
 					// Remove Flagship protection flag
 					damage[i] = Math.floor(damage[i]);
 					// Skip unused values in CVNCI array of [x, -1, -1]
 					if (damage[i] === -1) { break; }
 					// Also ignore scratch damage or miss
 					if ((unexpectedFlag || damage[i] > eHp * 0.06 + (eHp - 1) * 0.08) && acc[i] !== 0) {
+
+
 						const damageInstance = {};
 						const isNightContacted = this.fcontactId === 252;
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
-							armor = this.eParam[attack.target][3] + eShipEquipArmor;
+							armor = this.eParam[attack.target[i]][3] + eShipEquipArmor;
 
 						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor)
 							: !isLand ? ship.nightBattlePower(isNightContacted) :
@@ -2128,11 +2142,11 @@ Used by SortieManager
 
 							result.enemy = {
 								id: target,
-								equip: this.eSlot[attack.target],
+								equip: this.eSlot[attack.target[i]],
 								formation: this.eformation,
-								position: attack.target,
+								position: attack.target[i],
 								armor: armor,
-								isMainFleet: !this.EnemyCombined ? true : attack.target < this.eshipsMain.length,
+								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < this.eshipsMain.length,
 								hp: eHp,
 							};
 

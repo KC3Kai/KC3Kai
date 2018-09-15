@@ -35,7 +35,7 @@
 
     return pipe(
       over(getPath(fleets, defender), takeDamage(damage, info)),
-      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info, defender)) : x => x
+      attacker ? over(getPath(fleets, attacker), dealDamage(damage, info)) : x => x
     )(fleets);
   };
 

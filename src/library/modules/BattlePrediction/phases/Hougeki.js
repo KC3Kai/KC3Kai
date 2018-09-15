@@ -101,12 +101,13 @@
     position: api_df_list[0],
   });
 
-  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list }) => ({
+  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list, api_df_list }) => ({
     damage: api_damage,
     acc: api_cl_list,
     equip: api_si_list,
     cutin: api_at_type,
     ncutin: api_sp_list,
+    target: api_df_list,
   });
 
   /*--------------------------------------------------------*/
