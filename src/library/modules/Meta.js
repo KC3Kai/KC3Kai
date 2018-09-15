@@ -219,7 +219,7 @@ Provides access to data on built-in JSON files
 				const iconMap = {};
 				$.each(KC3Master.all_slotitems(), (_, g) => {
 					if(KC3Master.isAbyssalGear(g.api_id)) return false;
-					// some items are belonged to XXX (II) type (93, 94)
+					// some items are belonged to XXX (II) type (38, 93, 94)
 					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
 					const iconId = g.api_type[3];
 					iconMap[t2Id] = iconMap[t2Id] || [];

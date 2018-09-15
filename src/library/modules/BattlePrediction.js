@@ -774,13 +774,14 @@
   // 1 Nelson Touch (CutIn) may attack 3 different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
   Hougeki.parseNelsonTouch = (isAllySideFriend, attackJson) => {
-    const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend,
+    const { parseDamage, parseNelsonTouchAttacker, parseDefender,
       parseInfo, isRealAttack } = KC3BattlePrediction.battle.phases.hougeki;
 
     const { api_df_list: defenders, api_damage: damages } = attackJson;
     return defenders.map((defender, index) => ({
       damage: parseDamage({ api_damage: [damages[index]] }),
-      attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
+      attacker: parseNelsonTouchAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})),
+      // Assume abyssal enemy cannot trigger it yet, but PvP unknown.
       defender: parseDefender({ api_df_list: [defender] }),
       info: parseInfo(attackJson),
     })).filter(isRealAttack);
@@ -788,9 +789,14 @@
 
   Hougeki.isRealAttack = ({ defender }) => defender.position !== -1;
 
-  Hougeki.isNelsonTouch = ({ api_at_type, api_sp_list }) => (
-    (api_at_type || api_sp_list) === 100
-  );
+  Hougeki.isNelsonTouch = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
+
+  // Uncertain: according MVP result, attacker might be set to corresponding
+  // ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0).
+  Hougeki.parseNelsonTouchAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
+    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
+    position: [0, 2, 4][index] || 0,
+  });
 
   Hougeki.parseDamage = ({ api_damage }) =>
     api_damage.reduce((result, n) => result + Math.max(0, n), 0);
@@ -800,14 +806,14 @@
     position: api_at_list,
   });
 
-  Hougeki.parseDefender = ({ api_at_eflag, api_df_list }) => ({
-    side: api_at_eflag === 1 ? Side.PLAYER : Side.ENEMY,
-    position: api_df_list[0],
-  });
-
   Hougeki.parseAttackerFriend = ({ api_at_eflag, api_at_list }) => ({
     side: api_at_eflag === 1 ? Side.ENEMY : Side.FRIEND,
     position: api_at_list,
+  });
+
+  Hougeki.parseDefender = ({ api_at_eflag, api_df_list }) => ({
+    side: api_at_eflag === 1 ? Side.PLAYER : Side.ENEMY,
+    position: api_df_list[0],
   });
 
   Hougeki.parseDefenderFriend = ({ api_at_eflag, api_df_list }) => ({

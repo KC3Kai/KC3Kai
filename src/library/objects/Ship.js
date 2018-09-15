@@ -2116,10 +2116,18 @@ KC3改 Ship Object
 			 * CutinMainMain + Double, CutinMainAPShell + CutinMainRadar + CutinMainSecond.
 			 * Here just check by strictness & modifier desc order and return one of them.
 			 */
-			// special Nelson Touch since 2018-09-15, conditions under verification
-			//if([571, 576].includes(this.masterId)) return ["Cutin", 100, "NelsonTouch", 1.0];
-			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
+			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			const apShellCnt = this.countEquipmentType(2, 19);
+			// special Nelson Touch since 2018-09-15
+			if([571, 576].includes(this.masterId)) {
+				const [shipPos, shipCnt] = this.fleetPosition();
+				// conditions under verification, known:
+				// Flagship is Nelson, Double Line variants formation, some equipment?
+				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
+				if(shipPos === 0 && shipCnt >= 5 && isDoubleLine && mainGunCnt > 0) {
+					return ["Cutin", 100, "NelsonTouch", 2.0];
+				}
+			}
 			if(mainGunCnt >= 2 && apShellCnt >= 1) return ["Cutin", 6, "CutinMainMain", 1.5];
 			const secondaryCnt = this.countEquipmentType(2, 4);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
@@ -2290,8 +2298,16 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 			} else {
-				// special Nelson Touch since 2018-09-15, conditions under verification
-				//if([571, 576].includes(this.masterId)) return ["Cutin", 100, "NelsonTouch", 1.0];
+				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
+				// special Nelson Touch since 2018-09-15
+				if([571, 576].includes(this.masterId)) {
+					const [shipPos, shipCnt] = this.fleetPosition();
+					// conditions under verification, might be the same with day time
+					const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
+					if(shipPos === 0 && shipCnt >= 5 && isDoubleLine && mainGunCnt > 0) {
+						return ["Cutin", 100, "NelsonTouch", 2.0];
+					}
+				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
@@ -2321,7 +2337,6 @@ KC3改 Ship Object
 				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
 				// will not mutex if 5 slots ships can equip torpedo
 				if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
-				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];
 				const secondaryCnt = this.countEquipmentType(2, 4);
 				if(mainGunCnt === 2 && secondaryCnt >= 1) return ["Cutin", 4, "CutinMainMainSecond", 1.75];
