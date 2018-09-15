@@ -1899,25 +1899,25 @@ Used by SortieManager
 					switch(typeof slot) {
 						case 'number':
 						case 'string':
-							/* Number/String => converted as equipment slot key */
-							return slot < 0 || slot >= this.shipData.equip.length ? this.equipment(true)[this.shipData.equip.length-1] : this.equipment(true)[slot];
+							// assume last element in this.shipData.equip is ex item
+							return slot < 0 || slot >= this.shipData.equip.length ?
+								this.equipment(true)[this.shipData.equip.length - 1] :
+								this.equipment(true)[slot];
 						case 'boolean':
-							/* Boolean => return all equipments with ex item if true */
-							return slot ? this.shipData.equip.map( (gId,idx) => {
-								const gearMst = KC3Master.slotitem(gId);
-								const g = new KC3Gear(gearMst);
-								g.masterId = gId;
-								g.itemId = 1;
-								g.ace = this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : 0;
-								g.stars = this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0;
-								return g;
-							}) : this.equipment();
+							// create and cache KC3Gear array based on this.shipData.equip
+							this.gearData = this.gearData ||
+								this.shipData.equip.map((masterId, idx) => new KC3Gear({
+									api_id: masterId > 0 ? idx + 1 : 0, // placeholder for rosterId
+									api_slotitem_id: masterId > 0 ? masterId : 0,
+									api_level: this.shipData.stars[idx] > 0 ? this.shipData.stars[idx] : 0,
+									api_alv: this.shipData.ace[idx] > 0 ? this.shipData.ace[idx] : undefined,
+									api_locked: 1 // assume all gear locked
+								}));
+							return slot ? this.gearData : this.gearData.slice(0, -1);
 						case 'undefined':
-							/* Undefined => returns whole equipment as equip object array */
-							return this.equipment(true).slice(0, this.shipData.equip.length-1);
+							return this.equipment(false);
 						case 'function':
-							/* Function => iterates over given callback for every equipment */
-							var equipObjs = this.equipment();
+							const equipObjs = this.equipment();
 							equipObjs.forEach((item, index) => {
 								slot.call(this, item.itemId, index, item);
 							});
@@ -1932,11 +1932,11 @@ Used by SortieManager
 				ship.fp[0] = shipMaster.api_houg[0] + (shipData.kyouka[0] || 0) + ship.equipmentTotalStats("houg");
 				ship.tp[0] = shipMaster.api_raig[0] + (shipData.kyouka[1] || 0) + ship.equipmentTotalStats("raig");
 				ship.as[0] = shipData.stats.as;
-				ship.hp[1] = this.maxHPs.ally[ this.playerCombined && fleetnum === 1 ? position + 6 : position ];
+				ship.hp[1] = this.maxHPs.ally[this.playerCombined && fleetnum === 1 ? position + 6 : position];
 				ship.mod = shipData.kyouka;
 
 				if (ship.as[0] === undefined){
-					const aswBound = WhoCallsTheFleetDb.getStatBound( shipData.mst_id, 'asw' );
+					const aswBound = WhoCallsTheFleetDb.getStatBound(shipData.mst_id, 'asw');
 					ship.as[0] = WhoCallsTheFleetDb.estimateStat(aswBound, shipData.level);
 				}
 
@@ -1947,7 +1947,7 @@ Used by SortieManager
 					let ammoPercent = 100,
 						reachedNode = false;
 					// Ignore maelstrom/whirlpool for now
-					this.nodeData.nodes.forEach( node => {
+					this.nodeData.nodes.forEach(node => {
 						if (this.id === node.id) { reachedNode = true; }
 						if (reachedNode) { return; }
 						// Cannot tell submarine node from node list?
@@ -1968,30 +1968,49 @@ Used by SortieManager
 			if (!attacks || !attacks.length) { return; }
 			if (ship.isDummy()) { return; }
 			attacks.forEach(attack => {
-
 				// BATTLE CONDITIONS
 				const damage = attack.damage,
 					cutin = attack.cutin >= 0 ? attack.cutin : attack.ncutin,
 					acc = attack.acc,
 					hp = attack.hp,
 					ciequip = attack.equip,
-					time = (attack.cutin >= 0) ? 'Day' : 'Night';
+					time = attack.cutin >= 0 ? 'Day' : 'Night';
 				let nightSpecialAttackType = [],
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
 				const target = this.eships[attack.target],
-					enemyShip = KC3Master.ship(target),
-					eShip = new KC3Ship();
-				
-				// Simulate an enemy ship to obtain armor from equipment
+					enemyShip = KC3Master.ship(target);
+				// Simulate an enemy ship to obtain armor stats from equipment,
+				// if uses actual ship master ID and methods in KC3Gear, armor bonuses from equipment could be counted for PvP,
+				// but if don't want to consume memory to simulate KC3Ship and KC3Gear instances, just use:
+				const eShipEquipArmor = (this.eSlot[attack.target] || []).reduce((armor, mstId) => (
+					armor + (mstId > 0 ? KC3Master.slotitem(mstId).api_souk || 0 : 0)
+				), 0);
+				/*
+				const eShip = new KC3Ship();
 				eShip.rosterId = 1;
-				eShip.masterId = 83;
+				eShip.masterId = target;
 				eShip.items = this.eSlot[attack.target];
+				// eSlot contains gear master IDs, have to simulate the KC3Gear converter too
+				eShip.equipment = function(slot) {
+					// only implement the method to return all gears for equipmentTotalStats
+					this.gearData = this.gearData ||
+						this.items.map((masterId, idx) => new KC3Gear({
+							api_id: masterId > 0 ? idx + 1 : 0,
+							api_slotitem_id: masterId > 0 ? masterId : 0,
+							// no info about enemy equipment's stars and ace
+							api_level: 0,
+							api_locked: 0
+						}));
+					// there is no ex item in eSlot, so add a dummy one
+					return slot ? this.gearData.concat(new KC3Gear()) : this.gearData;
+				};
+				const eShipEquipArmor = eShip.equipmentTotalStats("souk");
+				*/
 
-				// PLAYER SPECIALS
 				const { isSubmarine, isLand } = ship.estimateTargetShipType(target);
-
+				// PLAYER SPECIAL ATTACKS
 				/*
 				 * CVCI/CVNCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
 				 * Technically possible to guess exact cut-in from api_si_list (included per attack)
@@ -2039,7 +2058,7 @@ Used by SortieManager
 				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
 
 				// Simulating each attack
-				for (let i = 0; i < damage.length; i++){
+				for (let i = 0; i < damage.length; i++) {
 					// Remove Flagship protection flag
 					damage[i] = Math.floor(damage[i]);
 					// Skip unused values in CVNCI array of [x, -1, -1]
@@ -2047,17 +2066,18 @@ Used by SortieManager
 					// Also ignore scratch damage or miss
 					if ((unexpectedFlag || damage[i] > eHp * 0.06 + (eHp - 1) * 0.08) && acc[i] !== 0) {
 						const damageInstance = {};
+						const isNightContacted = this.fcontactId === 252;
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
-							armor = this.eParam[attack.target][3] + eShip.equipmentTotalStats("souk");
+							armor = this.eParam[attack.target][3] + eShipEquipArmor;
 
 						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor)
-							: !isLand ? ship.nightBattlePower(this.fcontactId === 252) :
-							ship.shellingFirePower(this.fcontactId === 252 ? 0 : -5);
+							: !isLand ? ship.nightBattlePower(isNightContacted) :
+							ship.shellingFirePower(isNightContacted ? 0 : -5);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
 						if (time === 'Night' && ship.canCarrierNightAirAttack()) {
-							power = ship.nightAirAttackPower(this.fcontactId === 252);
+							power = ship.nightAirAttackPower(isNightContacted);
 						}
 						const shellingPower = power;
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation,
@@ -2073,7 +2093,9 @@ Used by SortieManager
 
 						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
 						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
-						if (damage[i] > maxDam) { unexpectedDamage = damage[i] > eHp * 0.06 + (eHp - 1) * 0.08; }
+						if (damage[i] > maxDam) {
+							unexpectedDamage = damage[i] > eHp * 0.06 + (eHp - 1) * 0.08;
+						}
 						if (unexpectedDamage || unexpectedFlag) {
 							// TsunDB formatting
 							damageInstance.actualDamage = damage[i];
@@ -2081,9 +2103,7 @@ Used by SortieManager
 							damageInstance.expectedDamage = [minDam, maxDam];
 							result.damageInstance = damageInstance;
 
-							let hpPercent = Math.qckInt('floor', hp/ship.hp[1], 3) * 100;
-							hpPercent = hpPercent > 0 ? hpPercent : 0;
-
+							const hpPercent = Math.max(0, Math.qckInt('floor', hp / ship.hp[1], 3) * 100);
 							result.ship = {
 								id: ship.masterId,
 								damageStatus: Math.ceil(hpPercent / 25),
