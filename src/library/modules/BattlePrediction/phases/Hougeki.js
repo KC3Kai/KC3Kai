@@ -1,6 +1,6 @@
 (function () {
   const Hougeki = {};
-  const { pipe, map, Side } = KC3BattlePrediction;
+  const { pipe, map, juxt, flatten, Side } = KC3BattlePrediction;
 
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
@@ -23,40 +23,54 @@
   Hougeki.parseHougekiInternal = (battleData, isAllySideFriend = false) => {
     const { createAttack } = KC3BattlePrediction.battle;
     const { extractFromJson } = KC3BattlePrediction.battle.phases;
-    const { parseJson, parseJsonFriend } = KC3BattlePrediction.battle.phases.hougeki;
+    const { parseJson } = KC3BattlePrediction.battle.phases.hougeki;
     const HOUGEKI_PROPS = battleData.api_at_type ?
       ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_at_type'] :
       battleData.api_sp_list ?
       ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage', 'api_cl_list', 'api_si_list', 'api_sp_list'] :
       ['api_at_eflag', 'api_at_list', 'api_df_list', 'api_damage'];
+
     return pipe(
-      extractFromJson(HOUGEKI_PROPS),
-      map(isAllySideFriend ? parseJsonFriend : parseJson),
-      map(createAttack)
-    )(battleData);
+      juxt([pipe(
+        extractFromJson(HOUGEKI_PROPS),
+        map(parseJson.bind(null, isAllySideFriend))
+      )]),
+      flatten,
+      map(createAttack))(battleData);
   };
 
-  Hougeki.parseJson = (attackJson) => {
-    const { parseDamage, parseAttacker, parseDefender, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
+  Hougeki.parseJson = (isAllySideFriend, attackJson) => {
+    const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend, parseDefenderFriend,
+      parseInfo, isNelsonTouch, parseNelsonTouch } = KC3BattlePrediction.battle.phases.hougeki;
 
-    return {
+    return isNelsonTouch(attackJson) ? parseNelsonTouch(isAllySideFriend, attackJson) : {
       damage: parseDamage(attackJson),
-      attacker: parseAttacker(attackJson),
-      defender: parseDefender(attackJson),
+      attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
+      defender: isAllySideFriend ? parseDefenderFriend(attackJson) : parseDefender(attackJson),
       info: parseInfo(attackJson),
     };
   };
 
-  Hougeki.parseJsonFriend = (attackJson) => {
-    const { parseDamage, parseAttackerFriend, parseDefenderFriend, parseInfo } = KC3BattlePrediction.battle.phases.hougeki;
+  // 1 Nelson Touch (CutIn) may attack 3 different targets,
+  // cannot ignore elements besides 1st one in api_df_list[] any more.
+  Hougeki.parseNelsonTouch = (isAllySideFriend, attackJson) => {
+    const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend,
+      parseInfo, isRealAttack } = KC3BattlePrediction.battle.phases.hougeki;
 
-    return {
-      damage: parseDamage(attackJson),
-      attacker: parseAttackerFriend(attackJson),
-      defender: parseDefenderFriend(attackJson),
+    const { api_df_list: defenders, api_damage: damages } = attackJson;
+    return defenders.map((defender, index) => ({
+      damage: parseDamage({ api_damage: [damages[index]] }),
+      attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
+      defender: parseDefender({ api_df_list: [defender] }),
       info: parseInfo(attackJson),
-    };
+    })).filter(isRealAttack);
   };
+
+  Hougeki.isRealAttack = ({ defender }) => defender.position !== -1;
+
+  Hougeki.isNelsonTouch = ({ api_at_type, api_sp_list }) => (
+    (api_at_type || api_sp_list) === 100
+  );
 
   Hougeki.parseDamage = ({ api_damage }) =>
     api_damage.reduce((result, n) => result + Math.max(0, n), 0);
