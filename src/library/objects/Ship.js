@@ -1683,7 +1683,7 @@ KC3改 Ship Object
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier]  = this.antiLandWarfarePowerMods(targetShipMasterId, false);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
 		// About rounding and position of anti-land modifier:
