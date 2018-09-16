@@ -602,12 +602,14 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				this._battle.cutinDay[index] || "";
+				// move Nelson Touch index 100 to 20
+				this._battle.cutinDay[index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				this._battle.cutinNight[index] || "";
+				// move Nelson Touch index 100 to 20
+				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
 		aacitype :function(index){
