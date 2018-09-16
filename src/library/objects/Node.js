@@ -2059,12 +2059,12 @@ Used by SortieManager
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
 					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
-				const result = {};
 				let eHp = attack.ehp || this.maxHPs.enemy[targetIndex];
 				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++) {
+					const result = {};
 					// Remove Flagship protection flag
 					damage[i] = Math.floor(damage[i]);
 					// Skip unused values in CVNCI array of [x, -1, -1]
