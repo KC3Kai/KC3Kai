@@ -459,7 +459,7 @@
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
 			};
 			unexpectedList.forEach(a => {
-				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && this.currentMap[0] > 10)) {
+				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
 					this.unexpectedDamage = Object.assign({}, a, template);
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;

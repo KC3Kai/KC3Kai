@@ -346,6 +346,10 @@ KC3改 Equipment Object
 			"298": {
 				count: 0,
 				byClass: {
+					// Nelson Class
+					"88": {
+						multiple: { "houg": 2, "souk": 1 },
+					},
 					// Queen Elizabeth Class
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
@@ -361,6 +365,10 @@ KC3改 Equipment Object
 			"299": {
 				count: 0,
 				byClass: {
+					// Nelson Class
+					"88": {
+						multiple: { "houg": 2, "souk": 1 },
+					},
 					// Queen Elizabeth Class
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
@@ -376,6 +384,10 @@ KC3改 Equipment Object
 			"300": {
 				count: 0,
 				byClass: {
+					// Nelson Class
+					"88": {
+						multiple: { "houg": 2, "souk": 1 },
+					},
 					// Queen Elizabeth Class
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },

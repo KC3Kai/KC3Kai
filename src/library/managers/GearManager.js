@@ -61,7 +61,7 @@ Saves and loads list to and from localStorage
 			},
 			// Supply Depot Princess (no info on Daihatsu improvement)
 			3: {
-				modifier: [1.7,1.3,1,3.52,1],
+				modifier: [1.7,1.3,1,3.5,1],
 				improvement: [0.051,0.026,0,0,0],
 			},
 			// Summer Harbor Princess Damaged Form (no info on Shikon 11th tank)

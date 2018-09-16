@@ -200,11 +200,13 @@ Provides access to data on built-in JSON files
 		formationText :function(formationId){
 			return this._battle.formation[formationId] || "";
 		},
+		
 		itemIcon :function(type3Id, iconSetId = ConfigManager.info_items_iconset){
 			// current auto using phase 2
 			const path = "items" + (["_p2", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${type3Id}.png`);
 		},
+		
 		statIcon :function(statName, iconSetId = ConfigManager.info_stats_iconset){
 			// current auto using phase 1
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
@@ -217,7 +219,7 @@ Provides access to data on built-in JSON files
 				const iconMap = {};
 				$.each(KC3Master.all_slotitems(), (_, g) => {
 					if(KC3Master.isAbyssalGear(g.api_id)) return false;
-					// some items are belonged to XXX (II) type (93, 94)
+					// some items are belonged to XXX (II) type (38, 93, 94)
 					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
 					const iconId = g.api_type[3];
 					iconMap[t2Id] = iconMap[t2Id] || [];
@@ -600,12 +602,14 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				this._battle.cutinDay[index] || "";
+				// move Nelson Touch index 100 to 20
+				this._battle.cutinDay[index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				this._battle.cutinNight[index] || "";
+				// move Nelson Touch index 100 to 20
+				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
 		aacitype :function(index){

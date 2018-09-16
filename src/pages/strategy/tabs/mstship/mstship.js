@@ -460,6 +460,8 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
+				// Nelson Touch special type
+				if([571, 576].includes(ship_id)) availableTypes.push("special");
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
 					// Hide optional debuffed abyssal boss alt lines,
