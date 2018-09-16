@@ -229,8 +229,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		isSortieAt: function(world, map) {
 			// Always return false on event maps
-			// (speculated map_world for events > 10 as expedition format follows)
-			return (this.map_world == world && this.map_world < 10) &&
+			// (speculated map_world for events >= 10 as expedition format follows)
+			return (this.map_world == world && !KC3Meta.isEventWorld(this.map_world)) &&
 				(this.map_num == (map || this.map_num));
 		},
 		
@@ -467,7 +467,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		getCurrentFCF :function(){
 			// For now only to event map, can sortie with CF and SF
-			const isSortieAtEvent = this.map_world >= 10;
+			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);
 			if(!isSortieAtEvent || !sortiedFleets.length || !this.fcfCheck.length)
 				return { isAvailable: false };
@@ -696,7 +696,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			PlayerManager.hq.lastSortie = null;
 			// Record event debuff flags
 			if(portApiData && portApiData.api_event_object
-				&& this.map_world >= 10 && this.map_num > 0){
+				&& KC3Meta.isEventWorld(this.map_world) && this.map_num > 0){
 				const eventObject = portApiData.api_event_object;
 				const thisMap = this.getCurrentMapData(this.map_world, this.map_num);
 				if(eventObject.api_m_flag){

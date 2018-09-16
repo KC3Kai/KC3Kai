@@ -468,6 +468,7 @@ AntiAir: anti-air related calculations
 				67, // Queen Elizabeth Class
 				78, // Ark Royal Class
 				82, // Jervis Class
+				88, // Nelson Class
 			].indexOf( mst.api_ctype ) !== -1 ||
 			// Kongou Class Kai Ni
 			[149, 150, 151, 152].indexOf( mst.api_id ) !== -1;
@@ -904,7 +905,7 @@ AntiAir: anti-air related calculations
 	);
 
 	// British-relevant ships
-	//   Known for now: Warspite, Ark Royal, Jervis, all Kongou-class K2
+	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
 	declareAACI(
 		32, 3, 1.2,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
