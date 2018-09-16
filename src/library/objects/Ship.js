@@ -343,21 +343,22 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return a tuple for [position in fleet (0-based), fleet total ship amount].
-	 *         return [-1, 0] if this ship is not on any fleet.
+	 * @return a tuple for [position in fleet (0-based), fleet total ship amount, fleet number (1-based)].
+	 *         return [-1, 0, 0] if this ship is not on any fleet.
 	 */
 	KC3Ship.prototype.fleetPosition = function(){
 		var position = -1,
-			total = 0;
+			total = 0,
+			fleetNum = 0;
 		if(this.exists()) {
-			const fleetNum = this.onFleet();
+			fleetNum = this.onFleet();
 			if(fleetNum > 0) {
 				var fleet = PlayerManager.fleets[fleetNum - 1];
 				position = fleet.ships.indexOf(this.rosterId);
 				total = fleet.countShips();
 			}
 		}
-		return [position, total];
+		return [position, total, fleetNum];
 	};
 
 	KC3Ship.prototype.isRepairing = function(){
@@ -2040,6 +2041,37 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Conditions under verification, known for now:
+	 * Flagship is Nelson, Double Line variants formation, some equipment required
+	 *
+	 * @return true if this ship (Nelson) can do Nelson Touch cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Nelson
+	 */
+	KC3Ship.prototype.canDoNelsonTouch = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		if([571, 576].includes(this.masterId)) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			// Nelson is flagship of a fleet
+			if(fleetNum > 0 && shipPos === 0) {
+				// 3th and 5th ship are not carrier
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					invalidCombinedShipType = [fleetObj.ship(2), fleetObj.ship(4)]
+						.some(ship => ship.isCarrier());
+				// Double Line variants selected
+				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
+				// Equipping a seaplane recon and some guns
+				const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
+				const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) > 2 ||
+					(this.countEquipmentType(2, 19) > 0 && this.countEquipmentType(2, [3, 38]) > 1);
+				// min 5 ships needed? Nelson/3th/5th can be Chuuha / Taiha?
+				return shipCnt >= 5 && !invalidCombinedShipType
+					&& isDoubleLine && hasRecon && minGunCnt;
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
@@ -2120,18 +2152,10 @@ KC3改 Ship Object
 			 * CutinMainMain + Double, CutinMainAPShell + CutinMainRadar + CutinMainSecond.
 			 * Here just check by strictness & modifier desc order and return one of them.
 			 */
+			// special Nelson Touch since 2018-09-15
+			if(this.canDoNelsonTouch()) return ["Cutin", 100, "NelsonTouch", 2.0];
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			const apShellCnt = this.countEquipmentType(2, 19);
-			// special Nelson Touch since 2018-09-15
-			if([571, 576].includes(this.masterId)) {
-				const [shipPos, shipCnt] = this.fleetPosition();
-				// conditions under verification, known:
-				// Flagship is Nelson, Double Line variants formation, some equipment?
-				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
-				if(shipPos === 0 && shipCnt >= 5 && isDoubleLine && mainGunCnt > 0) {
-					return ["Cutin", 100, "NelsonTouch", 2.0];
-				}
-			}
 			if(mainGunCnt >= 2 && apShellCnt >= 1) return ["Cutin", 6, "CutinMainMain", 1.5];
 			const secondaryCnt = this.countEquipmentType(2, 4);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
@@ -2302,16 +2326,8 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
 			} else {
-				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
-				// special Nelson Touch since 2018-09-15
-				if([571, 576].includes(this.masterId)) {
-					const [shipPos, shipCnt] = this.fleetPosition();
-					// conditions under verification, might be the same with day time
-					const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
-					if(shipPos === 0 && shipCnt >= 5 && isDoubleLine && mainGunCnt > 0) {
-						return ["Cutin", 100, "NelsonTouch", 2.0];
-					}
-				}
+				// special Nelson Touch since 2018-09-15, conditions might be the same with day time
+				if(this.canDoNelsonTouch()) return ["Cutin", 100, "NelsonTouch", 2.0];
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
@@ -2341,6 +2357,7 @@ KC3改 Ship Object
 				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
 				// will not mutex if 5 slots ships can equip torpedo
 				if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
+				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];
 				const secondaryCnt = this.countEquipmentType(2, 4);
 				if(mainGunCnt === 2 && secondaryCnt >= 1) return ["Cutin", 4, "CutinMainMainSecond", 1.75];
