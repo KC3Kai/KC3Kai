@@ -5276,7 +5276,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 10,
-		SLOTS: [70, 62, 66, 0],
+		SLOTS: [72, 63, 63, 0],
 		EQUIPS: [547, 548, 549, 532],
 	},
 	1753: {
@@ -5740,6 +5740,26 @@ var SHIPDATA = {
 		SPD: 10,
 		SLOTS: [0, 0, 0],
 		EQUIPS: [553, 553, 580],
+	},
+	1776: {
+		name: 'CVL Nu-Class Elite 3',
+		nameJP: '軽母ヌ級',
+		image: 'SNuE.jpg',
+		type: 'CVL',
+		HP: 70,
+		FP: 15,
+		TP: 0,
+		AA: 15,
+		AR: 35,
+		EV: 10,
+		ASW: 0,
+		LOS: 30,
+		LUK: 10,
+		unknownstats: true,
+		RNG: 0,
+		SPD: 5,
+		SLOTS: [26, 22, 24],
+		EQUIPS: [581, 582, 583],
 	},
 	1777: {
 		name: 'CVL Nu-Class Elite 4',
@@ -6390,7 +6410,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 0,
-		SLOTS: [0, 0, 0, 61],
+		SLOTS: [0, 0, 0, 64],
 		EQUIPS: [565, 565, 580, 562],
 	},
 	1810: {
@@ -6411,7 +6431,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 0,
-		SLOTS: [0, 0, 0, 84],
+		SLOTS: [0, 0, 0, 81],
 		EQUIPS: [565, 565, 580, 562],
 	},
 	1811: {
@@ -6850,7 +6870,7 @@ var SHIPDATA = {
 		EQUIPS: [580, 580, 580],
 	},
 	1834: {
-		name: 'French Battleship Princess Vocation Mode 1',
+		name: 'French Battleship Princess Vacation Mode 1',
 		nameJP: '戦艦仏棲姫 バカンスmode',
 		image: 'S1834.jpg',
 		type: 'BBV',
@@ -6870,7 +6890,7 @@ var SHIPDATA = {
 		EQUIPS: [577, 577, 559, 574],
 	},
 	1835: {
-		name: 'French Battleship Princess Vocation Mode 2',
+		name: 'French Battleship Princess Vacation Mode 2',
 		nameJP: '戦艦仏棲姫 バカンスmode',
 		image: 'S1834.jpg',
 		type: 'BBV',
@@ -6890,7 +6910,7 @@ var SHIPDATA = {
 		EQUIPS: [577, 577, 559, 574],
 	},
 	1836: {
-		name: 'French Battleship Princess Vocation Mode 3',
+		name: 'French Battleship Princess Vacation Mode 3',
 		nameJP: '戦艦仏棲姫 バカンスmode',
 		image: 'S1834.jpg',
 		type: 'BBV',
@@ -6910,7 +6930,7 @@ var SHIPDATA = {
 		EQUIPS: [577, 577, 559, 574],
 	},
 	1837: {
-		name: 'French Battleship Princess Vocation Mode - Damaged 1',
+		name: 'French Battleship Princess Vacation Mode - Damaged 1',
 		nameJP: '戦艦仏棲姫-壊 バカンスmode',
 		image: 'S1837.jpg',
 		type: 'BBV',
@@ -6930,7 +6950,7 @@ var SHIPDATA = {
 		EQUIPS: [577, 577, 559, 574],
 	},
 	1838: {
-		name: 'French Battleship Princess Vocation Mode - Damaged 2',
+		name: 'French Battleship Princess Vacation Mode - Damaged 2',
 		nameJP: '戦艦仏棲姫-壊 バカンスmode',
 		image: 'S1837.jpg',
 		type: 'BBV',
@@ -6950,7 +6970,7 @@ var SHIPDATA = {
 		EQUIPS: [577, 577, 559, 574],
 	},
 	1839: {
-		name: 'French Battleship Princess Vocation Mode - Damaged 3',
+		name: 'French Battleship Princess Vacation Mode - Damaged 3',
 		nameJP: '戦艦仏棲姫-壊 バカンスmode',
 		image: 'S1837.jpg',
 		type: 'BBV',
@@ -6986,7 +7006,7 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 5,
-		SLOTS: [0, 0, 0],
+		SLOTS: [0, 0, 0, 25],
 		EQUIPS: [587, 587, 559, 586],
 	},
 	1841: {
