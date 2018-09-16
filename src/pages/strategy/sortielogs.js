@@ -305,7 +305,7 @@
 									// want to approach last kill as JUST DO IT instead leaving 1HP only.
 									// but recent boss changes form for possible last dance and HP becomes lesser,
 									// so only show it on 1HP, leave exact left HP shown even < element.baseHp.
-									if(element.curhp > 1){
+									if(element.curhp > 1 || element.kind === "gauge-tp"){
 										if((element.maxhp === 9999) || (element.curhp === 9999))
 											$(".map_hp_txt", mapBox).text( "???? / ????" );
 										else
