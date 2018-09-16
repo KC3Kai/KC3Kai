@@ -1980,8 +1980,10 @@ Used by SortieManager
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
-				const isAgainstEnemyEscort = this.isEnemyCombined && this.activatedEnemyFleet !== 1,
+				const isAgainstEnemyEscort = this.isEnemyCombined &&
+					this.activatedEnemyFleet !== undefined && this.activatedEnemyFleet !== 1,
 					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? this.eshipsMain.length : 0);
+				// Enemy arrays will be only 6 elements if abyssal escort fleet activated on night battle
 				let target = this.eships[targetIndex],
 					enemyShip = KC3Master.ship(target);
 
