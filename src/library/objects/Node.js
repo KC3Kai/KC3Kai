@@ -247,6 +247,8 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
+		// since Fall 2018
+		this.dudMessage = (nodeData.api_cell_flavor || {}).api_message;
 		return this;
 	};
 	
@@ -1506,7 +1508,7 @@ Used by SortieManager
 	/**
 	 * Build HTML tooltip for friendly fleet info and battle result.
 	 */
-	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight){
+	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight, sortieTime = this.stime){
 		//console.debug("Friendly battle", battleData, this.battleDay);
 		const friendlyTable = $('<table>' +
 			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="stats"></th><th class="equip">&nbsp;</th></tr>' +
@@ -1529,10 +1531,13 @@ Used by SortieManager
 		const sumFriendlyBattleDamages = (friendlyBattle, defenderFleetCount, attackerSide = 0) => {
 			const damages = new Array(defenderFleetCount).fill(0);
 			const hougeki = friendlyBattle.api_hougeki;
-			hougeki.api_at_eflag.forEach((sideFlag, idx) => {
+			hougeki.api_at_eflag.forEach((sideFlag, atkIdx) => {
 				if(sideFlag === attackerSide) {
-					const defender = hougeki.api_df_list[idx][0];
-					damages[defender] += sumSupportDamageArray(hougeki.api_damage[idx]);
+					hougeki.api_df_list[atkIdx].forEach((defender, dmgIdx) => {
+						if(defender >= 0 && defender < defenderFleetCount) {
+							damages[defender] += sumSupportDamageArray([hougeki.api_damage[atkIdx][dmgIdx] || 0]);
+						}
+					});
 				}
 			});
 			return damages;
@@ -1617,7 +1622,9 @@ Used by SortieManager
 					.attr("src", KC3Meta.abyssIcon(sid));
 				$(`.s_${shipIdx}`, tRow).append(shipIcon).css("padding-right", 3);
 				$(`.dmg_${shipIdx}`, tRow).append(-enemyFleetDamages[idx]).css("padding-right", 5);
-				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipBeforeHps[idx] - enemyFleetDamages[idx] <= 0;
+				const isSunk = enemyFleetDamages[idx] > 0 && enemyShipBeforeHps[idx] -
+					// before Phase 2, enemyShipBeforeHps meant enemyShipAfterHps
+					(KC3Meta.isPhase2Started(sortieTime) ? enemyFleetDamages[idx] : 0) <= 0;
 				if(isSunk) $(`.dmg_${shipIdx}`, tRow).css("color", "goldenrod");
 			}
 		});

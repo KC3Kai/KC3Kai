@@ -283,10 +283,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Selector";
 			}
 			// Battle avoided node (message might be: Enemy not found / Peace sea / etc)
-			// api_event_id = 6
-			// api_event_kind = 0/1/3/4/5/6/7/8/9
-			else if (nodeData.api_event_id === 6) {
-				// Might use another name to show a different message?
+			// api_event_id = 1 or 6
+			// api_event_kind = 0/1/3~25 (id 6, kind 2 used by route selection above)
+			else if (nodeData.api_event_id === 6 || nodeData.api_event_id === 1) {
+				// Might use another name to show a different message
+				// since Phase 2, possible to see `nodeData.api_cell_flavor.api_message`
 				nodeKind = "Dud";
 			}
 			// Resource Node
