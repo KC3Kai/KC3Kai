@@ -2110,6 +2110,37 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @param atType - id from `api_hougeki?.api_at_type` which indicates the special attack.
+	 * @param altCutinTerm - different term string for cutin has different variant, like CVCI.
+	 * @param altModifier - different power modifier for cutin has different variant, like CVCI.
+	 * @return known special attack (aka Cut-In) types definition tuple.
+	 *         will return an object mapped all IDs and tuples if atType is omitted.
+	 *         will return `["SingleAttack", 0]` if no matched ID found.
+	 * @see estimateDayAttackType
+	 */
+	KC3Ship.specialAttackTypeDay = function(atType, altCutinTerm, altModifier){
+		const knownDayAttackTypes = {
+			1: ["Cutin", 1, "Laser"], // no longer exists now
+			2: ["Cutin", 2, "DoubleAttack", 1.2],
+			3: ["Cutin", 3, "CutinMainSecond", 1.1],
+			4: ["Cutin", 4, "CutinMainRadar", 1.2],
+			5: ["Cutin", 5, "CutinMainApshell", 1.3],
+			6: ["Cutin", 6, "CutinMainMain", 1.5],
+			7: ["Cutin", 7, "CutinCVCI", 1.25],
+			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
+		};
+		if(atType === undefined) return knownDayAttackTypes;
+		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
+		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
+			const changed = $.extend([], matched);
+			if(altCutinTerm) changed[2] = altCutinTerm;
+			if(altModifier) changed[3] = altModifier;
+			return changed;
+		}
+		return matched;
+	};
+
+	/**
 	 * Estimate day time attack type of this ship.
 	 * Only according ship type and equipment, ignoring factors such as ship status, target-able.
 	 * @param {number} targetShipMasterId - a Master ID of being attacked ship, used to indicate some
@@ -2128,6 +2159,7 @@ KC3改 Ship Object
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
 	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtHougeki - client side codes of day attack type.
 	 * @see BattleMain.swf#battle.phase.hougeki.PhaseHougekiBase - client side hints of special cutin attack type.
+	 * @see specialAttackTypeDay
 	 * @see estimateNightAttackType
 	 * @see canDoOpeningTorpedo
 	 * @see canDoDayShellingAttack
@@ -2153,19 +2185,18 @@ KC3改 Ship Object
 			 * Here just check by strictness & modifier desc order and return one of them.
 			 */
 			// special Nelson Touch since 2018-09-15
-			if(this.canDoNelsonTouch()) return ["Cutin", 100, "NelsonTouch", 2.0];
+			if(this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeDay(100);
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			const apShellCnt = this.countEquipmentType(2, 19);
-			if(mainGunCnt >= 2 && apShellCnt >= 1) return ["Cutin", 6, "CutinMainMain", 1.5];
+			if(mainGunCnt >= 2 && apShellCnt >= 1) return KC3Ship.specialAttackTypeDay(6);
 			const secondaryCnt = this.countEquipmentType(2, 4);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
-				return ["Cutin", 5, "CutinMainApshell", 1.3];
+				return KC3Ship.specialAttackTypeDay(5);
 			const radarCnt = this.countEquipmentType(2, [12, 13]);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && radarCnt >= 1)
-				return ["Cutin", 4, "CutinMainRadar", 1.2];
-			if(mainGunCnt >= 1 && secondaryCnt >= 1) return ["Cutin", 3, "CutinMainSecond", 1.1];
-			if(mainGunCnt >= 2) return ["Cutin", 2, "DoubleAttack", 1.2];
-			// btw, ["Cutin", 1, "Laser"] no longer exists now
+				return KC3Ship.specialAttackTypeDay(4);
+			if(mainGunCnt >= 1 && secondaryCnt >= 1) return KC3Ship.specialAttackTypeDay(3);
+			if(mainGunCnt >= 2) return KC3Ship.specialAttackTypeDay(2);
 		} else if(trySpTypeFirst && isThisCarrier && isAirSuperiorityBetter) {
 			// day time carrier shelling cut-in
 			// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
@@ -2175,10 +2206,11 @@ KC3改 Ship Object
 			const diveBomberCnt = this.countNonZeroSlotEquipmentType(2, 7);
 			const torpedoBomberCnt = this.countNonZeroSlotEquipmentType(2, 8);
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
-				return ["Cutin", 7, "CutinFDBTB", 1.25];
+				return KC3Ship.specialAttackTypeDay(7, "CutinFDBTB", 1.25);
 			if(diveBomberCnt >= 2 && torpedoBomberCnt >= 1)
-				return ["Cutin", 7, "CutinDBDBTB", 1.2];
-			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1) return ["Cutin", 7, "CutinDBTB", 1.15];
+				return KC3Ship.specialAttackTypeDay(7, "CutinDBDBTB", 1.2);
+			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1)
+				return KC3Ship.specialAttackTypeDay(7, "CutinDBTB", 1.15);
 		}
 		
 		// is target a land installation
@@ -2273,6 +2305,38 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * @param spType - id from `api_hougeki.api_sp_list` which indicates the special attack.
+	 * @param altCutinTerm - different term string for cutin has different variant, like SS TCI, CVNCI, DDCI.
+	 * @param altModifier - different power modifier for cutin has different variant, like SS TCI, CVNCI, DDCI.
+	 * @return known special attack (aka Cut-In) types definition tuple.
+	 *         will return an object mapped all IDs and tuples if atType is omitted.
+	 *         will return `["SingleAttack", 0]` if no matched ID found.
+	 * @see estimateNightAttackType
+	 */
+	KC3Ship.specialAttackTypeNight = function(spType, altCutinTerm, altModifier){
+		const knownNightAttackTypes = {
+			1: ["Cutin", 1, "DoubleAttack", 1.2],
+			2: ["Cutin", 2, "CutinTorpTorpMain", 1.3],
+			3: ["Cutin", 3, "CutinTorpTorpTorp", 1.5],
+			4: ["Cutin", 4, "CutinMainMainSecond", 1.75],
+			5: ["Cutin", 5, "CutinMainMainMain", 2.0],
+			6: ["Cutin", 6, "CutinCVNCI", 1.25],
+			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
+			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
+			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
+		};
+		if(spType === undefined) return knownNightAttackTypes;
+		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
+		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
+			const changed = $.extend([], matched);
+			if(altCutinTerm) changed[2] = altCutinTerm;
+			if(altModifier) changed[3] = altModifier;
+			return changed;
+		}
+		return matched;
+	};
+
+	/**
 	 * Estimate night battle attack type of this ship.
 	 * Also just give possible attack type, no responsibility to check can do attack at night,
 	 * or that ship can be targeted or not, etc.
@@ -2282,6 +2346,7 @@ KC3改 Ship Object
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
 	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtNight - client side codes of night attack type.
 	 * @see BattleMain.swf#battle.phase.night.PhaseAttack - client side hints of special cutin attack type.
+	 * @see specialAttackTypeNight
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
 	 */
@@ -2311,23 +2376,30 @@ KC3改 Ship Object
 				const specialDBomberCnt = this.countNonZeroSlotEquipment([154]);
 				// Swordfish variants
 				const specialTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
-				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFNTB", 1.25];
-				if(nightFighterCnt >= 3) return ["Cutin", 6, "CutinNFNFNF", 1.18];
-				if(nightFighterCnt >= 2 && specialDBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFFBI", 1.18];
-				if(nightFighterCnt >= 2 && specialTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNFSF", 1.18];
-				if(nightFighterCnt >= 1 && specialTBomberCnt >= 2) return ["Cutin", 6, "CutinNFSFSF", 1.18];
+				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25);
+				if(nightFighterCnt >= 3)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", 1.18);
+				if(nightFighterCnt >= 2 && specialDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", 1.18);
+				if(nightFighterCnt >= 2 && specialTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", 1.18);
+				if(nightFighterCnt >= 1 && specialTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", 1.18);
 				if(nightFighterCnt >= 1 && specialDBomberCnt >= 1 && specialTBomberCnt >= 1)
-					return ["Cutin", 6, "CutinNFFBISF", 1.18];
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", 1.18);
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialDBomberCnt >= 1)
-					return ["Cutin", 6, "CutinNFNTBFBI", 1.18];
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", 1.18);
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && specialTBomberCnt >= 1)
-					return ["Cutin", 6, "CutinNFNTBSF", 1.18];
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", 1.18);
 				// https://twitter.com/imoDer_Tw/status/968294965745893377
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2) return ["Cutin", 6, "CutinNFNTBNTB", 1.25];
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1) return ["Cutin", 6, "CutinNFNTB", 1.2];
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", 1.25);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
 			} else {
 				// special Nelson Touch since 2018-09-15, conditions might be the same with day time
-				if(this.canDoNelsonTouch()) return ["Cutin", 100, "NelsonTouch", 2.0];
+				if(this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeNight(100);
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
@@ -2345,28 +2417,33 @@ KC3改 Ship Object
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					const modelDSmallGunModifier = [1, 1.25, 1.4][modelDSmallGunCnt] || 1;
 					if(hasCapableRadar && smallMainGunCnt >= 1)
-						return ["Cutin", 7, "CutinMainTorpRadar", 1.3 * modelDSmallGunModifier];
+						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookout)
-						return ["Cutin", 8, "CutinTorpRadarLookout", 1.2 * modelDSmallGunModifier];
+						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
-				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1) return ["Cutin", 3, "CutinTorpTorpTorp", 1.75];
-				if(lateTorpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.6];
+				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75);
+				if(lateTorpedoCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6);
 				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
 				// will not mutex if 5 slots ships can equip torpedo
-				if(torpedoCnt >= 2) return ["Cutin", 3, "CutinTorpTorpTorp", 1.5];
+				if(torpedoCnt >= 2) return KC3Ship.specialAttackTypeNight(3);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
-				if(mainGunCnt >= 3) return ["Cutin", 5, "CutinMainMainMain", 2.0];
+				if(mainGunCnt >= 3) return KC3Ship.specialAttackTypeNight(5);
 				const secondaryCnt = this.countEquipmentType(2, 4);
-				if(mainGunCnt === 2 && secondaryCnt >= 1) return ["Cutin", 4, "CutinMainMainSecond", 1.75];
+				if(mainGunCnt === 2 && secondaryCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(4);
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
-					(mainGunCnt === 1 && torpedoCnt === 1)) return ["Cutin", 2, "CutinTorpTorpMain", 1.3];
+					(mainGunCnt === 1 && torpedoCnt === 1))
+					return KC3Ship.specialAttackTypeNight(2);
 				// double attack can be torpedo attack animation if topmost slot is torpedo
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
 					(mainGunCnt === 1 && secondaryCnt >= 1) ||
-					(secondaryCnt >= 2 && torpedoCnt <= 1)) return ["Cutin", 1, "DoubleAttack", 1.2];
+					(secondaryCnt >= 2 && torpedoCnt <= 1))
+					return KC3Ship.specialAttackTypeNight(1);
 			}
 		}
 		

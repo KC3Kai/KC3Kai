@@ -2028,30 +2028,13 @@ Used by SortieManager
 					nightSpecialAttackType = ship.estimateNightAttackType(target, true);
 					// In case of re-roll attacks like 7/8
 					if (nightSpecialAttackType[1] !== cutin) {
-						nightSpecialAttackType = {
-							1: ["Cutin", 1, "DoubleAttack", 1.2],
-							2: ["Cutin", 2, "CutinTorpTorpMain", 1.3],
-							3: ["Cutin", 3, "CutinTorpTorpTorp", 1.5],
-							4: ["Cutin", 4, "CutinMainMainSecond", 1.75],
-							5: ["Cutin", 5, "CutinMainMainMain", 2.0],
-							6: ["Cutin", 6, "CutinNFNTB", 1.2],
-							7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
-							8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
-						}[cutin] || ['Single', 0];
+						nightSpecialAttackType = KC3Ship.specialAttackTypeNight(cutin);
 					}
 				} else {
 					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
 					if (daySpecialAttackType[1] !== cutin) {
 						// Artillery spotting will keep re-rolling sp attacks
-						daySpecialAttackType = {
-							0: ["SingleAttack", 0],
-							2: ["Cutin", 2, "DoubleAttack", 1.2],
-							3: ["Cutin", 3, "CutinMainSecond", 1.1],
-							4: ["Cutin", 4, "CutinMainRadar", 1.2],
-							5: ["Cutin", 5, "CutinMainApshell", 1.3],
-							6: ["Cutin", 6, "CutinMainMain", 1.5],
-							7: ["Cutin", 7, "CutinDBTB", 1.15],
-						}[cutin] || ['Single', 0];
+						daySpecialAttackType = KC3Ship.specialAttackTypeDay(cutin);
 					}
 				}
 				
