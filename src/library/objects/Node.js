@@ -1980,9 +1980,10 @@ Used by SortieManager
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
+				const combinedFleetIndexAlign = 6;
 				const isAgainstEnemyEscort = this.isEnemyCombined &&
 					this.activatedEnemyFleet !== undefined && this.activatedEnemyFleet !== 1,
-					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? this.eshipsMain.length : 0);
+					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
 				// Enemy arrays will be only 6 elements if abyssal escort fleet activated on night battle
 				let target = this.eships[targetIndex],
 					enemyShip = KC3Master.ship(target);
@@ -2027,30 +2028,13 @@ Used by SortieManager
 					nightSpecialAttackType = ship.estimateNightAttackType(target, true);
 					// In case of re-roll attacks like 7/8
 					if (nightSpecialAttackType[1] !== cutin) {
-						nightSpecialAttackType = {
-							1: ["Cutin", 1, "DoubleAttack", 1.2],
-							2: ["Cutin", 2, "CutinTorpTorpMain", 1.3],
-							3: ["Cutin", 3, "CutinTorpTorpTorp", 1.5],
-							4: ["Cutin", 4, "CutinMainMainSecond", 1.75],
-							5: ["Cutin", 5, "CutinMainMainMain", 2.0],
-							6: ["Cutin", 6, "CutinNFNTB", 1.2],
-							7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
-							8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
-						}[cutin] || ['Single', 0];
+						nightSpecialAttackType = KC3Ship.specialAttackTypeNight(cutin);
 					}
 				} else {
 					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
 					if (daySpecialAttackType[1] !== cutin) {
 						// Artillery spotting will keep re-rolling sp attacks
-						daySpecialAttackType = {
-							0: ["SingleAttack", 0],
-							2: ["Cutin", 2, "DoubleAttack", 1.2],
-							3: ["Cutin", 3, "CutinMainSecond", 1.1],
-							4: ["Cutin", 4, "CutinMainRadar", 1.2],
-							5: ["Cutin", 5, "CutinMainApshell", 1.3],
-							6: ["Cutin", 6, "CutinMainMain", 1.5],
-							7: ["Cutin", 7, "CutinDBTB", 1.15],
-						}[cutin] || ['Single', 0];
+						daySpecialAttackType = KC3Ship.specialAttackTypeDay(cutin);
 					}
 				}
 				
@@ -2059,19 +2043,19 @@ Used by SortieManager
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
 					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
-				const result = {};
 				let eHp = attack.ehp || this.maxHPs.enemy[targetIndex];
 				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++) {
+					const result = {};
 					// Remove Flagship protection flag
 					damage[i] = Math.floor(damage[i]);
 					// Skip unused values in CVNCI array of [x, -1, -1]
 					if (damage[i] === -1) { break; }
 
 					// Recalculate variables for Nelson Touch, warfareType should still be shelling
-					const damagedTargetIndex = attack.target[i] - (isAgainstEnemyEscort ? this.eshipsMain.length : 0);
+					const damagedTargetIndex = attack.target[i] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
 					if (cutin === 100) {
 						eHp = this.maxHPs.enemy[damagedTargetIndex];
 						target = this.eships[damagedTargetIndex];
@@ -2082,7 +2066,7 @@ Used by SortieManager
 
 					// Also ignore scratch damage or miss
 					const scratchDamage = eHp * 0.06 + (eHp - 1) * 0.08;
-					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] !== 0) {
+					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
 
 						const damageInstance = {};
 						const isNightContacted = this.fcontactId === 252;
@@ -2151,7 +2135,7 @@ Used by SortieManager
 								formation: this.eformation,
 								position: damagedTargetIndex,
 								armor: armor,
-								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < this.eshipsMain.length,
+								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
 								hp: eHp,
 							};
 
