@@ -1980,9 +1980,10 @@ Used by SortieManager
 					daySpecialAttackType = [];
 
 				// ENEMY STATS
+				const combinedFleetIndexAlign = 6;
 				const isAgainstEnemyEscort = this.isEnemyCombined &&
 					this.activatedEnemyFleet !== undefined && this.activatedEnemyFleet !== 1,
-					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? this.eshipsMain.length : 0);
+					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
 				// Enemy arrays will be only 6 elements if abyssal escort fleet activated on night battle
 				let target = this.eships[targetIndex],
 					enemyShip = KC3Master.ship(target);
@@ -2071,7 +2072,7 @@ Used by SortieManager
 					if (damage[i] === -1) { break; }
 
 					// Recalculate variables for Nelson Touch, warfareType should still be shelling
-					const damagedTargetIndex = attack.target[i] - (isAgainstEnemyEscort ? this.eshipsMain.length : 0);
+					const damagedTargetIndex = attack.target[i] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
 					if (cutin === 100) {
 						eHp = this.maxHPs.enemy[damagedTargetIndex];
 						target = this.eships[damagedTargetIndex];
@@ -2082,7 +2083,7 @@ Used by SortieManager
 
 					// Also ignore scratch damage or miss
 					const scratchDamage = eHp * 0.06 + (eHp - 1) * 0.08;
-					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] !== 0) {
+					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
 
 						const damageInstance = {};
 						const isNightContacted = this.fcontactId === 252;
@@ -2151,7 +2152,7 @@ Used by SortieManager
 								formation: this.eformation,
 								position: damagedTargetIndex,
 								armor: armor,
-								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < this.eshipsMain.length,
+								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
 								hp: eHp,
 							};
 

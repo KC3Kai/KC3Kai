@@ -761,7 +761,7 @@ KC3改 Ship Object
 	/**
 	 * Maxed stats of this ship.
 	 * @return stats without the equipment but with modernization at Lv.99,
-	 *         stats at Lv.165 can be only estimated by data from known database.
+	 *         stats at Lv.175 can be only estimated by data from known database.
 	 */
 	KC3Ship.prototype.maxedStats = function(statAttr, isMarried = this.isMarried()){
 		if(this.isDummy()) { return false; }
