@@ -351,8 +351,11 @@
 									this.mapInfoMeta);
 								loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`));
 								currentSpotCnt += foundSpotCnt;
-								if(!knownTotalSpotCnt || currentSpotCnt < knownTotalSpotCnt) {
+								if(this.digEventSpots || !knownTotalSpotCnt || currentSpotCnt < knownTotalSpotCnt) {
 									loadAdditonalInfo();
+								} else if(currentSpotCnt >= knownTotalSpotCnt) {
+									console.debug(`Found ${currentSpotCnt} /${knownTotalSpotCnt} spots totally`);
+									loader.load(() => { renderMapStage(); });
 								}
 							}).fail(xhr => {
 								console.debug("No more additional spot found");
@@ -360,6 +363,7 @@
 									console.debug(`Expected spots amount ${knownTotalSpotCnt} not met by ${initSpotCnt} + additional ${addedSpotCnt}, more hidden nodes existed?`);
 								}
 								if(currentSpotCnt > initSpotCnt) {
+									console.debug(`Found ${currentSpotCnt} /${knownTotalSpotCnt} spots totally`);
 									loader.load(() => { renderMapStage(); });
 								} else {
 									renderMapStage();

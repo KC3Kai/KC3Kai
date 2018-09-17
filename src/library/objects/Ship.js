@@ -2131,11 +2131,9 @@ KC3改 Ship Object
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
-		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
-			const changed = $.extend([], matched);
-			if(altCutinTerm) changed[2] = altCutinTerm;
-			if(altModifier) changed[3] = altModifier;
-			return changed;
+		if(matched[0] === "Cutin") {
+			if(altCutinTerm) matched[2] = altCutinTerm;
+			if(altModifier) matched[3] = altModifier;
 		}
 		return matched;
 	};
@@ -2327,11 +2325,9 @@ KC3改 Ship Object
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
-		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
-			const changed = $.extend([], matched);
-			if(altCutinTerm) changed[2] = altCutinTerm;
-			if(altModifier) changed[3] = altModifier;
-			return changed;
+		if(matched[0] === "Cutin") {
+			if(altCutinTerm) matched[2] = altCutinTerm;
+			if(altModifier) matched[3] = altModifier;
 		}
 		return matched;
 	};
