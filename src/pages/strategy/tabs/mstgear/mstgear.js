@@ -194,8 +194,8 @@
 			
 			// Equippable ship types / ships
 			$(".tab_mstgear .gearInfo .equippable > div").empty();
-			if(!KC3Master.isAbyssalGear(gear_id)) {
-				const equipOn = KC3Master.equip_on(gear_id);
+			const equipOn = KC3Master.equip_on(gear_id);
+			if(!KC3Master.isAbyssalGear(gear_id) && Array.isArray(equipOn.stypes)) {
 				$.each(KC3Meta.sortedStypes(), (_, stypeDef) => {
 					if(stypeDef.id <= 0 || stypeDef.order === 999) return;
 					const stypeBox = $("<div/>").appendTo(".tab_mstgear .gearInfo .equippable .stype");
@@ -203,6 +203,7 @@
 					stypeBox.toggleClass("capable", equipOn.stypes.includes(stypeDef.id));
 				});
 				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
+					if(!Array.isArray(shipIdArr)) return;
 					const shipClickFunc = function(e) {
 						KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 					};
@@ -218,22 +219,16 @@
 							)).lazyInitTooltip();
 					});
 				};
-				if(equipOn.includes.length) {
-					addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
-				}
-				if(equipOn.excludes.length) {
-					addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
-				}
-				// Improved Kanhon Type Turbine can be always equipped on capable ship types
+				addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
+				addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
+				// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
 				$('<div><img src="/assets/img/useitems/64.png" /></div>')
 					.toggleClass("incapable", !equipOn.exslot && gear_id !== 33)
-					.toggle(equipOn.exslot || gear_id === 33 || equipOn.exslotIncludes.length > 0)
+					.toggle(equipOn.exslot || gear_id === 33 || (equipOn.exslotIncludes && equipOn.exslotIncludes.length > 0))
 					.attr("title", "Capable on ex-slot for ships/types above or following ships")
 					.lazyInitTooltip()
 					.appendTo(".tab_mstgear .gearInfo .equippable .exslot");
-				if(equipOn.exslotIncludes.length) {
-					addEquipShips(equipOn.exslotIncludes, ".tab_mstgear .gearInfo .equippable .exslot");
-				}
+				addEquipShips(equipOn.exslotIncludes, ".tab_mstgear .gearInfo .equippable .exslot");
 			}
 			
 		}

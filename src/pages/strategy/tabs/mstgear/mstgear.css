@@ -170,14 +170,17 @@
 .tab_mstgear .gearInfo .equippable > div {
 	float:left;
 	width:100%;
-	margin-bottom:5px;
+	margin-bottom:3px;
 }
 
 .tab_mstgear .gearInfo .equippable .stype > div {
 	float:left;
 	width:70px;
+	height:18px;
+	line-height:18px;
 	border-radius:3px;
 	margin:0px 2px 1px 0px;
+	font-size:12px;
 	text-align:center;
 	overflow:hidden;
 	white-space:nowrap;
