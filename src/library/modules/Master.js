@@ -219,7 +219,7 @@ Saves and loads significant data for future use
 		 * @see graph - replace old swf filename method (tho it's still available for now)
 		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
 		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
-		 *               [`card`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`] for slotitem
+		 *               [`card`, `card_t`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`, `airunit_banner`, `airunit_fairy`, `airunit_name`] for slotitem
 		 * @param shipOrSlot - `ship` or `slot`
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
 		 * @param debuffedAbyssalSuffix - specify old suffix for debuffed abyssal boss full CG. btw suffix is `_d`
