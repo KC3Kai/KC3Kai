@@ -71,11 +71,19 @@ KC3改 Equipment Object
 			"82": {
 				count: 0,
 				byClass: {
-					// Taiyou Kai+ (CAUTION: remodel group starts from Kasugamaru)
-					// Unknown for Shinyou
+					// Taiyou Class
+					// Kasugamaru ctype is 75, but she is Taiyou remodel group 0
 					"76": {
-						remodel: 1,
-						excludes: [526],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+			},
+			// Type 97 Torpedo Bomber (931 Air Group / Skilled)
+			"302": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
 						multiple: { "tais": 1, "houk": 1 },
 					},
 				},
@@ -103,6 +111,9 @@ KC3改 Equipment Object
 						multiple: { "tais": 3, "houk": 2 },
 					},
 				],
+			},
+			// Ju 87C Kai Ni (w/ KMX / Skilled)
+			"306": {
 			},
 			// Suisei
 			"24": {
@@ -1526,12 +1537,14 @@ KC3改 Equipment Object
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
 		// Carrier-based or Land-base bombers for now;
 		// Torpedo bombers current implemented:
-		//   T97 / Tenzan (931 Air Group), Swordfish Mk.III (Skilled), TBM-3D, Toukai variants
+		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D
+		// Dive bombers current implemented: Ju87C Kai Ni (w/ KMX) variants
+		// LB attackers current implemented: Toukai variants
 		// AS-PBY, Autogyro capable for OASW:
 		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon capable for LBAS ASW attack:
 		//   Type 0 Model 11B variants
-		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26, 47];
+		const type2Ids = forLbas ? [7, 8, 10, 47] : [7, 8, 25, 26];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
