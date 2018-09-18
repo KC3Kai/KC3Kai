@@ -2061,16 +2061,6 @@ Used by SortieManager
 					// Skip unused values in CVNCI array of [x, -1, -1]
 					if (damage[i] === -1) { break; }
 
-					// Recalculate variables for Nelson Touch, warfareType should still be shelling
-					const damagedTargetIndex = attack.target[i] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
-					if (cutin === 100) {
-						eHp = this.maxHPs.enemy[damagedTargetIndex];
-						target = this.eships[damagedTargetIndex];
-						({ isSubmarine, isLand } = ship.estimateTargetShipType(target));
-						enemyShip = KC3Master.ship(target);
-						eShipEquipArmor = getEquipTotalArmor(this.eSlot[damagedTargetIndex] || []);
-					}
-
 					// Also ignore scratch damage or miss
 					const scratchDamage = eHp * 0.06 + (eHp - 1) * 0.08;
 					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
@@ -2080,7 +2070,7 @@ Used by SortieManager
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
-							armor = ((this.eParam[damagedTargetIndex] || [])[3] || 0) + eShipEquipArmor;
+							armor = ((this.eParam[targetIndex] || [])[3] || 0) + eShipEquipArmor;
 
 						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor)
 							: !isLand ? ship.nightBattlePower(isNightContacted) :
@@ -2138,9 +2128,9 @@ Used by SortieManager
 
 							result.enemy = {
 								id: target,
-								equip: this.eSlot[damagedTargetIndex],
+								equip: this.eSlot[targetIndex],
 								formation: this.eformation,
-								position: damagedTargetIndex,
+								position: targetIndex,
 								armor: armor,
 								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
 								hp: eHp,

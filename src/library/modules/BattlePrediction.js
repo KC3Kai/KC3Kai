@@ -783,7 +783,7 @@
       attacker: parseNelsonTouchAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})),
       // Assume abyssal enemy cannot trigger it yet, but PvP unknown.
       defender: parseDefender({ api_df_list: [defender] }),
-      info: parseInfo(attackJson),
+      info: parseInfo(attackJson, index),
     })).filter(isRealAttack);
   };
 
@@ -821,13 +821,13 @@
     position: api_df_list[0],
   });
 
-  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list, api_df_list }) => ({
-    damage: api_damage,
-    acc: api_cl_list,
+  Hougeki.parseInfo = ({ api_damage, api_cl_list, api_si_list, api_at_type, api_sp_list, api_df_list }, index = -1) => ({
+    damage: (index === -1 ? api_damage : [api_damage[index]]),
+    acc: (index === -1 ? api_cl_list : [api_cl_list[index]]),
     equip: api_si_list,
     cutin: api_at_type,
     ncutin: api_sp_list,
-    target: api_df_list,
+    target: (index === -1 ? api_df_list : [api_df_list[index]]),
   });
 
   /*--------------------------------------------------------*/
