@@ -1538,13 +1538,15 @@ KC3改 Equipment Object
 		// Carrier-based or Land-base bombers for now;
 		// Torpedo bombers current implemented:
 		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D
-		// Dive bombers current implemented: Ju87C Kai Ni (w/ KMX) variants
-		// LB attackers current implemented: Toukai variants
+		// LB attackers current implemented:
+		//   Toukai variants
+		// Dive bombers still NOT capable for OASW, unknown for LBAS:
+		//   Ju87C Kai Ni (w/ KMX) variants
 		// AS-PBY, Autogyro capable for OASW:
 		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon capable for LBAS ASW attack:
 		//   Type 0 Model 11B variants
-		const type2Ids = forLbas ? [7, 8, 10, 47] : [7, 8, 25, 26];
+		const type2Ids = forLbas ? [8, 10, 47] : [8, 25, 26];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
