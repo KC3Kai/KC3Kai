@@ -2047,7 +2047,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if([571, 576].includes(this.masterId)) {
+		if(KC3Meta.nelsonTouchShips.includes(this.masterId)) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
 			if(fleetNum > 0 && shipPos === 0) {

@@ -220,8 +220,12 @@
 			"Repair" : 6,
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
-			"FriendSupport" : 141,
-			"FriendSupport(2)" : 241,
+			"NelsonTouch" : 900,
+			"Friend41(1)" : 141,
+			"Friend41(2)" : 241,
+			"Friend42(1)" : 142,
+			"Friend42(2)" : 242,
+			"Friend42(3)" : 342,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -248,10 +252,10 @@
 			return this._idToDesc[k] || "";
 		},
 
-		// get available ship voice numbers by checking 
+		// get available ship voice numbers by checking
 		// voice flag of a ship.
 		// the result is sorted.
-		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true) {
+		getShipVoiceNums: function(masterId, includeHourlies = true, includeRepair = true, includeFriend = false) {
 			var sortedVoiceNums = [
 				1,25,2,3,4,28,24,8,13,9,10,26,27,11,
 				12,5,7,14,15,16,18,17,23,19,20,21,22,
@@ -272,12 +276,21 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
+			// add Nelson Touch key
+			if (KC3Meta.nelsonTouchShips.indexOf(masterId) > -1)
+				sortedVoiceNums.push(900);
+
 			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
 
+			// add special keys (Graf Zeppelin)
 			if (KC3Meta.specialShipVoices[masterId]){
 				sortedVoiceNums = sortedVoiceNums.concat(Object.keys(KC3Meta.specialShipVoices[masterId]));
 			}
+
+			// add known friend support keys (last 2 digits seem be event world id)
+			if (includeFriend)
+				sortedVoiceNums.push(...[141, 241, 142, 242, 342]);
 
 			return sortedVoiceNums;
 		},

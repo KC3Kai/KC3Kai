@@ -102,6 +102,8 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
+		// official announced it will be extended in future
+		nelsonTouchShips: [571, 576],
 		// from `ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
