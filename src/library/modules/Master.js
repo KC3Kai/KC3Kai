@@ -219,7 +219,7 @@ Saves and loads significant data for future use
 		 * @see graph - replace old swf filename method (tho it's still available for now)
 		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
 		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
-		 *               [`card`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`] for slotitem
+		 *               [`card`, `card_t`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`, `airunit_banner`, `airunit_fairy`, `airunit_name`] for slotitem
 		 * @param shipOrSlot - `ship` or `slot`
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
 		 * @param debuffedAbyssalSuffix - specify old suffix for debuffed abyssal boss full CG. btw suffix is `_d`
@@ -273,15 +273,7 @@ Saves and loads significant data for future use
 		},
 
 		equip_type_sp :function(slotitemId, defaultType){
-			// Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
-			// Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
-			const equipTypeSp = {
-				128: 38,
-				142: 93,
-				151: 94,
-				281: 38,
-			};
-			return equipTypeSp[slotitemId] || defaultType;
+			return KC3Meta.specialEquipTypeMap[slotitemId] || defaultType;
 		},
 
 		equip_ship :function(shipId){
@@ -307,6 +299,50 @@ Saves and loads significant data for future use
 			return !this.available ? [] : Object.keys(exslotShips)
 				.filter(i => exslotShips[i].api_ship_ids.includes(Number(shipId)))
 				.map(i => exslotShips[i].api_slotitem_id) || [];
+		},
+
+		equip_on :function(gearId, type2Id){
+			if(!this.available) return false;
+			if(!type2Id && gearId > 0) {
+				const slotitem = this.slotitem(gearId);
+				if(!slotitem) return false;
+				type2Id = this.equip_type_sp(slotitem.api_id, slotitem.api_type[2]);
+			}
+			const capableStypes = [];
+			$.each(this._raw.stype, (_, stype) => {
+				if(!!(stype.api_equip_type || {})[type2Id])
+					capableStypes.push(stype.api_id);
+			});
+			const capableShips = [], incapableShips = [];
+			$.each(this._raw.equip_ship, (_, equipShip) => {
+				const shipId = equipShip.api_ship_id,
+					shipMst = this.ship(shipId), stype = shipMst.api_stype;
+				const equipTypes = equipShip.api_equip_type;
+				if(!capableStypes.includes(stype) && equipTypes.includes(type2Id))
+					capableShips.push(shipId);
+				if(capableStypes.includes(stype) && !equipTypes.includes(type2Id))
+					incapableShips.push(shipId);
+			});
+			const generalExslotTypes = Object.keys(this._raw.equip_exslot).map(i => this._raw.equip_exslot[i]);
+			const isCapableToExslot = generalExslotTypes.includes(type2Id);
+			let exslotCapableShips = false;
+			if(gearId > 0) {
+				const exslotShips = this._raw.equip_exslot_ship || {};
+				const exslotGear = Object.keys(exslotShips)
+					.find(i => exslotShips[i].api_slotitem_id == gearId);
+				if(exslotGear) {
+					exslotCapableShips = exslotShips[exslotGear].api_ship_ids.slice(0);
+				} else {
+					exslotCapableShips = [];
+				}
+			}
+			return {
+				stypes: capableStypes,
+				includes: capableShips,
+				excludes: incapableShips,
+				exslot: isCapableToExslot,
+				exslotIncludes: exslotCapableShips,
+			};
 		},
 
 		useitem :function(id){

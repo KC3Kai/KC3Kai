@@ -83,26 +83,38 @@
 			return true;
 		},
 		
-		showGear :function(gear_id){
-			gear_id = Number(gear_id||"124");
+		showGear :function(gearId){
+			gearId = Number(gearId || "124");
 			const self = this;
-			const gearData = KC3Master.slotitem( gear_id );
+			const gearData = KC3Master.slotitem(gearId);
 			console.debug("Viewing gearData", gearData);
-			self.currentGearId = gear_id;
+			self.currentGearId = gearId;
+			const gearHost = `http://${this.server_ip}/kcs2/resources`;
 			
-			if(!KC3Master.isAbyssalGear(gear_id)){
-				const gearHost = `http://${this.server_ip}/kcs2/resources`;
-				$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
-				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost + KC3Master.png_file(gear_id, "card", "slot"));
-				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_character", "slot"));
-				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_up", "slot"));
-				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost + KC3Master.png_file(gear_id, "item_on", "slot"));
+			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
+			if(!KC3Master.isAbyssalGear(gearId)) {
+				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost + KC3Master.png_file(gearId, "card", "slot"));
+				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_character", "slot"));
+				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_up", "slot"));
+				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_on", "slot"));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
-			}else{
-				$(".tab_mstgear .gearInfo .gearAssets").hide();
+			} else {
+				// Map a abyssal gear to player gear for itemup image,
+				// see `SlotLoader.prototype.add` or `ResourceManager.prototype.getSlotitem`
+				const replacedId = KC3Meta.abyssalItemupReplace[gearId];
+				const mappedId = gearId - 500, mappedGear = KC3Master.slotitem(mappedId);
+				// Hide itemup image if category of mapped gear is different,
+				// itemup is used on cut-in scene, so items never shown may not be mapped correctly
+				if(replacedId || (mappedGear.api_type && mappedGear.api_type[0] === gearData.api_type[0])) {
+					$(".tab_mstgear .gearInfo .ga_1 img").attr("src",
+						gearHost + KC3Master.png_file(replacedId || mappedId, "item_up", "slot"));
+					$(".tab_mstgear .gearInfo .gearAssets").show();
+				} else {
+					$(".tab_mstgear .gearInfo .gearAssets").hide();
+				}
 			}
 			
-			var gearTypesBox = $(".tab_mstgear .gearInfo .types");
+			const gearTypesBox = $(".tab_mstgear .gearInfo .types");
 			gearTypesBox.text("{0} {3:type2} \u21da {2:type1} \u21da {1:type0}".format(
 				JSON.stringify(gearData.api_type),
 				KC3Meta.gearTypeName(0, gearData.api_type[0]),
@@ -119,13 +131,13 @@
 			}, 0);
 
 			$(".tab_mstgear .gearInfo .rarity").empty();
-			for(var bctr=0; bctr<gearData.api_rare; bctr++){
+			for(let bctr = 0; bctr < gearData.api_rare; bctr++) {
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
-			if(gearData.api_rare===0){
+			if(gearData.api_rare === 0){
 				$(".tab_mstgear .gearInfo .rarity").append("&#10031;");
 			}
-			if(!KC3Master.isAbyssalGear(gear_id) && gearData.api_broken.length >= 4){
+			if(!KC3Master.isAbyssalGear(gearId) && gearData.api_broken.length >= 4) {
 				$(".tab_mstgear .gearInfo .scrap .fuel span").text(gearData.api_broken[0]);
 				$(".tab_mstgear .gearInfo .scrap .ammo span").text(gearData.api_broken[1]);
 				$(".tab_mstgear .gearInfo .scrap .steel span").text(gearData.api_broken[2]);
@@ -135,13 +147,13 @@
 				$(".tab_mstgear .gearInfo .scrap").hide();
 			}
 			
-			$(".tab_mstgear .gearInfo .name").text( "[{0}] {1}".format(
-				gear_id, KC3Meta.gearName(gearData.api_name)) );
-			$(".tab_mstgear .gearInfo .intro").html( gearData.api_info );
+			$(".tab_mstgear .gearInfo .name").text(
+				"[{0}] {1}".format(gearId, KC3Meta.gearName(gearData.api_name))
+			);
+			$(".tab_mstgear .gearInfo .intro").html(gearData.api_info);
 			
 			// Stats
-			var statBox;
-			var planeOnlyStats = ["or", "kk"];
+			const planeOnlyStats = ["or", "kk"];
 			$(".tab_mstgear .gearInfo .stats").empty();
 			$.each([
 				["hp", "taik", "ShipHp"],
@@ -158,39 +170,82 @@
 				["rn", "leng", "ShipLength"],
 				["or", "distance", "ShipRadius"],
 				["kk", "cost", "ShipDeployCost"],
-			], function(index, sdata){
+			], (index, sdata) => {
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
 						planeOnlyStats.includes(sdata[0]) &&
 						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
 					)
 				)) {
-					var isLandFighter = gearData.api_type[2] === 48;
-					statBox = $(".tab_mstgear .factory .stat").clone();
+					const isLandFighter = gearData.api_type[2] === 48;
+					const statBox = $(".tab_mstgear .factory .stat").clone();
 					$("img", statBox)
 						.attr("src", KC3Meta.statIcon(sdata[
 							sdata.length > 3 && isLandFighter ? 3 : 0
 						])).attr("title", KC3Meta.term(
 							sdata[sdata.length > 4 && isLandFighter ? 4 : 2]) || "")
 						.lazyInitTooltip();
-					if(sdata[0]==="rn"){ // For range length
+					if(sdata[0] === "rn") { // For range length
 						$(".stat_value", statBox).text(
 							KC3Meta.gearRange(gearData["api_"+sdata[1]])
 						);
-					}else if(sdata[0]==="kk"){ // For bauxite cost when deploy to LBAS
-						var landSlot = KC3GearManager.landBaseReconnType2Ids.includes(gearData.api_type[2]) ?
+					} else if(sdata[0] === "kk") { // For bauxite cost when deploy to LBAS
+						const landSlot = KC3GearManager.landBaseReconnType2Ids.includes(gearData.api_type[2]) ?
 							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
-						var deployCost = gearData["api_"+sdata[1]] * landSlot;
-						$(".stat_value", statBox).text( "{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot) );
+						const deployCost = gearData["api_"+sdata[1]] * landSlot;
+						$(".stat_value", statBox).text(
+							"{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot)
+						);
 						$(statBox).css("width", "130px");
-					}else{
-						$(".stat_value", statBox).text( gearData["api_"+sdata[1]] );
+					} else {
+						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);
 					}
 					
 					statBox.appendTo(".tab_mstgear .gearInfo .stats");
 				}
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstgear .gearInfo .stats");
+			
+			// Equippable ship types / ships
+			$(".tab_mstgear .gearInfo .equippable > div").empty();
+			const equipOn = KC3Master.equip_on(gearId);
+			if(!KC3Master.isAbyssalGear(gearId) && Array.isArray(equipOn.stypes)) {
+				$.each(KC3Meta.sortedStypes(), (_, stypeDef) => {
+					if(stypeDef.id <= 0 || stypeDef.order === 999) return;
+					const stypeBox = $("<div/>").appendTo(".tab_mstgear .gearInfo .equippable .stype");
+					stypeBox.attr("stype", stypeDef.id).text(stypeDef.name);
+					stypeBox.toggleClass("capable", equipOn.stypes.includes(stypeDef.id));
+				});
+				const shipClickFunc = function(e) {
+					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+				};
+				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
+					if(!Array.isArray(shipIdArr)) return;
+					shipIdArr.forEach(shipId => {
+						const shipBox = $("<div><img/></div>").appendTo(appendTo);
+						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
+						const shipMst = KC3Master.ship(shipId);
+						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId))
+							.attr("alt", shipId).addClass("hover").click(shipClickFunc)
+							.attr("title", "[{0}] {1} {2}".format(shipId,
+								KC3Meta.shipName(shipMst.api_name),
+								KC3Meta.stype(shipMst.api_stype)
+							)).lazyInitTooltip();
+					});
+				};
+				addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
+				addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
+				// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
+				const isTurbine = gearId === 33;
+				const hasExslotCapableShips = Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.length > 0;
+				$('<div><img src="/assets/img/useitems/64.png" /></div>')
+					.toggleClass("incapable", !(equipOn.exslot || isTurbine))
+					.toggle(equipOn.exslot || isTurbine || hasExslotCapableShips)
+					.attr("title", "[Lighted] Capable on ex-slot of ships or types above\n[Greyed] Capable on ex-slot of following ships")
+					.lazyInitTooltip()
+					.appendTo(".tab_mstgear .gearInfo .equippable .exslot");
+				addEquipShips(equipOn.exslotIncludes, ".tab_mstgear .gearInfo .equippable .exslot");
+			}
 			
 		}
 		

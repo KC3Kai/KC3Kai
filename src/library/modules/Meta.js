@@ -102,6 +102,30 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
+		// key: slotitem ID, value: special type2 ID. from:
+		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
+		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
+		specialEquipTypeMap: {
+			128: 38,
+			142: 93,
+			151: 94,
+			281: 38,
+		},
+		// official announced it will be extended in future
+		nelsonTouchShips: [571, 576],
+		// from `main.js/ITEMUP_REPLACE`
+		abyssalItemupReplace: {
+			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
+			521: 518, 522: 516, 523: 516, 524: 517, 525: 518,
+			526: 518, 546: 518, 547: 547, 548: 548, 549: 549,
+			550: 3,   551: 128, 552: 76,  553: 3,   554: 554,
+			555: 555, 556: 556, 557: 557, 558: 558, 561: 561,
+			562: 562, 563: 162, 564: 549, 565: 79,  566: 547,
+			568: 161, 567: 13,  571: 571, 572: 572, 573: 573,
+			574: 574, 575: 574, 576: 231, 577: 245, 578: 190,
+			579: 7,   580: 58,  581: 581, 582: 582, 583: 583,
+			584: 7,   585: 161, 586: 574, 587: 298,
+		},
 		
 		/* Initialization
 		-------------------------------------------------------*/

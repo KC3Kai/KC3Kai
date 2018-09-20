@@ -8,6 +8,7 @@
 		repo_loc: "../../data/",
 		enQuotes: [],
 		jpQuotes: [],
+		showFriendLines: false,
 		
 		init :function() {
 			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
@@ -57,6 +58,10 @@
 				$(".ship_info .after_ship").off("click");
 				$(".ship_info .after_ship").hide();
 			}
+			$(".ship_info .friend_lines").off("click").click(function(){
+				self.showFriendLines = !self.showFriendLines;
+				self.showVoiceDetail( $(".ship_info .ship_name").data("id") );
+			});
 			var toFromFunc = function(){
 				self.scrollShipListTop($(this).data("sid"));
 				KC3StrategyTabs.gotoTab(null, $(this).data("sid"));
@@ -71,7 +76,7 @@
 					.join("</br>");
 			};
 
-			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true);
+			var allVoiceNums = KC3Translation.getShipVoiceNums(masterId, true, true, self.showFriendLines);
 			$.each(allVoiceNums,function(i,voiceNum) {
 				var elm = $(".factory .voice_entity").clone();
 
