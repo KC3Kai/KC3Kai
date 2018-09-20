@@ -273,15 +273,7 @@ Saves and loads significant data for future use
 		},
 
 		equip_type_sp :function(slotitemId, defaultType){
-			// Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
-			// Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
-			const equipTypeSp = {
-				128: 38,
-				142: 93,
-				151: 94,
-				281: 38,
-			};
-			return equipTypeSp[slotitemId] || defaultType;
+			return KC3Meta.specialEquipTypeMap[slotitemId] || defaultType;
 		},
 
 		equip_ship :function(shipId){

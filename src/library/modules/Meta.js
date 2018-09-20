@@ -102,9 +102,18 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
+		// key: slotitem ID, value: special type2 ID. from:
+		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
+		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
+		specialEquipTypeMap: {
+			128: 38,
+			142: 93,
+			151: 94,
+			281: 38,
+		},
 		// official announced it will be extended in future
 		nelsonTouchShips: [571, 576],
-		// from `ITEMUP_REPLACE`
+		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
 			521: 518, 522: 516, 523: 516, 524: 517, 525: 518,
