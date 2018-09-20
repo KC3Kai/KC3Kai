@@ -53,6 +53,15 @@
 			difficulty: null,
 			enemyComp: null
 		},
+		friendlyFleet: {
+			map: null,
+			node: null,
+			difficulty: null,
+			gaugeNum: null,
+			variation: null,
+			fleet: null,
+			uniquekey: null
+		},
 		shipDrop : {
 			map: null,
 			node: null,
@@ -294,9 +303,46 @@
 			}
 		},
 		
+		processFriendlyFleet: function(http){
+			const apiData = http.response.api_data.api_friendly_info;
+			this.friendlyFleet = {};
+			
+			this.friendlyFleet.map = this.data.map;
+			this.friendlyFleet.node = this.data.edgeID[this.data.edgeID.length - 1];
+			this.friendlyFleet.difficulty = this.data.difficulty;
+			this.friendlyFleet.gaugeNum = this.data.gaugeNum;
+			this.friendlyFleet.variation = apiData.api_production_type;
+			this.friendlyFleet.fleet = {
+				ship: apiData.api_ship_id,
+				lvl: apiData.api_ship_lv,
+				hp: apiData.api_maxhps,
+				nowhp: apiData.api_nowhps,
+				stats: apiData.api_Param,
+				equip: apiData.api_Slot
+			};
+			let uniqueSerialKey = "";
+			for(let i = 0; i < this.friendlyFleet.fleet.ship.length; i++){
+				let value = this.friendlyFleet.fleet.ship[i] + this.friendlyFleet.fleet.lvl[i] + this.friendlyFleet.fleet.nowhp[i];
+				for(let j of this.friendlyFleet.fleet.stats[i]){
+					value += j;
+				}
+				for(let k of this.friendlyFleet.fleet.equip[i]){
+					value += k;
+				}
+				uniqueSerialKey += String(value);
+			}
+			this.friendlyFleet.uniquekey = uniqueSerialKey;
+			this.sendData(this.friendlyFleet, 'friendlyfleet');
+		},
+		
 		processEnemy: function(http, airRaidData) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = airRaidData || http.response.api_data;
+			
+			if(apiData.api_friendly_info !== undefined){
+				this.processFriendlyFleet(http);
+			}
+			
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
