@@ -323,12 +323,12 @@
 			let uniqueSerialKey = "";
 			for(let i = 0; i < this.friendlyFleet.fleet.ship.length; i++){
 				let value = this.friendlyFleet.fleet.ship[i] + this.friendlyFleet.fleet.lvl[i] + this.friendlyFleet.fleet.nowhp[i];
-				this.friendlyFleet.fleet.stats[i].map(x => {
-					value += x;
-				});
-				this.friendlyFleet.fleet.equip[i].map(y => {
-					value += y;
-				});
+				for(let j of this.friendlyFleet.fleet.stats[i]){
+					value += j;
+				}
+				for(let k of this.friendlyFleet.fleet.equip[i]){
+					value += k;
+				}
 				uniqueSerialKey += String(value);
 			}
 			this.friendlyFleet.uniquekey = uniqueSerialKey;
