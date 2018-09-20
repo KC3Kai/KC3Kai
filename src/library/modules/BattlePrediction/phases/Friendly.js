@@ -1,6 +1,5 @@
 (function () {
   const Friendly = {};
-  const { pipe, map, filter, Side } = KC3BattlePrediction;
 
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */

@@ -2066,7 +2066,7 @@ Used by SortieManager
 					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
 
 						const damageInstance = {};
-						const isNightContacted = this.fcontactId === 252;
+						const isNightContacted = this.fcontactId === 102;
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
