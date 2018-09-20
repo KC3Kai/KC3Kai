@@ -1050,7 +1050,7 @@
 							if(battle.yasen.api_friendly_info){
 								$(".node_result", nodeBox).addClass("icon5");
 								$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
-								$(".node_friend", nodeBox).attr("title", thisNode.buildFriendlyBattleMessage(battle.yasen));
+								$(".node_friend", nodeBox).attr("title", thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime));
 							}else{
 								$(".node_result", nodeBox).removeClass("icon5");
 								$(".node_friend", nodeBox).hide();

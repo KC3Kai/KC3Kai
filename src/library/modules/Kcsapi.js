@@ -642,7 +642,9 @@ Previously known as "Reactor"
 			KC3QuestManager.get(606).increment(); // F2: Daily Construction 1
 			KC3QuestManager.get(608).increment(); // F4: Daily Construction 2
 			PlayerManager.setResources(utcHour * 3600, null,
-				this.shipConstruction.resources.slice(0, 4).map(v=>-v));
+				this.shipConstruction.resources.slice(0, 4).map(v => -v));
+			PlayerManager.consumables.devmats -= parseInt(this.shipConstruction.resources[4], 10);
+			PlayerManager.setConsumables();
 			KC3Network.trigger("Quests");
 			KC3Network.trigger("Consumables");
 		},

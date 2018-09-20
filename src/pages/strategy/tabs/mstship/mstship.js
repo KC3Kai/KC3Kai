@@ -461,7 +461,7 @@
 						'album_status'
 					];
 				// Nelson Touch special type
-				if([571, 576].includes(ship_id)) availableTypes.push("special");
+				if(KC3Meta.nelsonTouchShips.includes(ship_id)) availableTypes.push("special");
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
 					// Hide optional debuffed abyssal boss alt lines,

@@ -2046,6 +2046,14 @@ button, input, select, textarea {
 	filter:invert(100%);
 	-webkit-filter:invert(100%);
 }
+.tab_mstgear .gearInfo .equippable .stype > div {
+	color:#222 !important;
+}
+.tab_mstgear .gearInfo .equippable .stype > div.capable {
+	color:#fff !important;
+	background:#084 !important;
+}
+
 /* SHIP COMPARE
 --------------------------------*/
 .tab_compare .compare_select_back {

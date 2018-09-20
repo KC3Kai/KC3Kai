@@ -1860,44 +1860,42 @@ KC3改 Ship Object
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
 		if(this.isOaswShip()) { return true; }
-		const stype = this.master().api_stype,
-			ctype = this.master().api_ctype;
 
+		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
-		// is CVE (Taiyou series, Gambier Bay series, Zuihou K2B)
+		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
-		const hasLargeSonar = this.hasEquipmentType(2, 40);
-		// Taiyou series:
-		// tho Kasugamaru not possible to reach high asw for now
-		// and base asw stat of Kai and Kai2 already exceed 70
-		//const isTaiyouClass = ctype === 76;
-		//const isTaiyouBase = this.masterId === 526;
-		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
-			// Shinyou Kai+ included?
-			|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
+		// is Sonar equipped? also counted large one: Type 0 Sonar
+		const hasSonar = this.hasEquipmentType(1, 10);
 
-		// lower condition for DE and CVE, even lower if equips Large Sonar
-		const aswThreshold = isEscortLightCarrier && hasLargeSonar ? 50
+		// lower condition for DE and CVE, even lower if equips Sonar
+		const aswThreshold = isEscortLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
 			: 100;
 
-		// ship stats not updated in time when equipment changed, so take the diff if necessary
-		const shipAsw = this.as[0] + aswDiff;
+		// ship stats not updated in time when equipment changed, so take the diff if necessary,
+		// and explicit asw bonus from equipment on specific ship not counted.
+		// FIXME aswDiff will be inaccurate if there is bonus on old equipment
+		const shipAsw = this.as[0] + aswDiff - this.equipmentTotalStats("tais", true, true, true);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
 
-		// for Taiyou Kai or Kai Ni, any equippable aircraft with asw should work,
+		// is Taiyou-Class?
+		// initial asw stat of Taiyou Class is high enough to reach 50 / 65,
+		// but for Kasugamaru, since not possible to reach high asw for now, tests are not done.
+		// for Taiyou Class Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but CVE can still OASW. only Sonar equipped can do neither.
+		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
+			|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 		if (isTaiyouKaiAfter) {
 			return this.equipment(true).some(gear => gear.isAswAircraft(false));
 		} else if (isEscortLightCarrier) {
-			return this.equipment(true).some(gear => gear.isHighAswBomber());
+			return this.equipment(true).some(gear => gear.isHighAswBomber(false));
 		}
 
-		const hasSonar = this.hasEquipmentType(1, 10);
 		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		if(isEscort) {
 			if(hasSonar) return true;
@@ -2049,7 +2047,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if([571, 576].includes(this.masterId)) {
+		if(KC3Meta.nelsonTouchShips.includes(this.masterId)) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
 			if(fleetNum > 0 && shipPos === 0) {
@@ -2131,11 +2129,9 @@ KC3改 Ship Object
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
-		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
-			const changed = $.extend([], matched);
-			if(altCutinTerm) changed[2] = altCutinTerm;
-			if(altModifier) changed[3] = altModifier;
-			return changed;
+		if(matched[0] === "Cutin") {
+			if(altCutinTerm) matched[2] = altCutinTerm;
+			if(altModifier) matched[3] = altModifier;
 		}
 		return matched;
 	};
@@ -2174,6 +2170,8 @@ KC3改 Ship Object
 		const isThisCarrier = this.isCarrier();
 		const isThisSubmarine = this.isSubmarine();
 		
+		// Special Nelson Touch cutin since 2018-09-15, not needs isAirSuperiorityBetter
+		if(trySpTypeFirst && this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeDay(100);
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
 		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
@@ -2184,8 +2182,6 @@ KC3改 Ship Object
 			 * CutinMainMain + Double, CutinMainAPShell + CutinMainRadar + CutinMainSecond.
 			 * Here just check by strictness & modifier desc order and return one of them.
 			 */
-			// special Nelson Touch since 2018-09-15
-			if(this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeDay(100);
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			const apShellCnt = this.countEquipmentType(2, 19);
 			if(mainGunCnt >= 2 && apShellCnt >= 1) return KC3Ship.specialAttackTypeDay(6);
@@ -2327,11 +2323,9 @@ KC3改 Ship Object
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
-		if(matched[0] === "Cutin" && (altCutinTerm || altModifier)) {
-			const changed = $.extend([], matched);
-			if(altCutinTerm) changed[2] = altCutinTerm;
-			if(altModifier) changed[3] = altModifier;
-			return changed;
+		if(matched[0] === "Cutin") {
+			if(altCutinTerm) matched[2] = altCutinTerm;
+			if(altModifier) matched[3] = altModifier;
 		}
 		return matched;
 	};
