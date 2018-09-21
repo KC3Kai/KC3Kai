@@ -153,22 +153,27 @@
 				
 				'api_req_sortie/battle': [this.processEnemy, this.processAACI],
 				'api_req_sortie/airbattle': this.processEnemy,
-				'api_req_sortie/night_to_day': this.processEnemy,
+				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
-				'api_req_battle_midnight/sp_midnight': this.processEnemy,
+				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
+				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/airbattle': this.processEnemy,
 				'api_req_combined_battle/battle': this.processEnemy,
-				'api_req_combined_battle/sp_midnight': this.processEnemy,
+				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/battle_water': this.processEnemy,
 				'api_req_combined_battle/ld_airbattle': this.processEnemy,
 				'api_req_combined_battle/ec_battle': this.processEnemy,
 				'api_req_combined_battle/each_battle': this.processEnemy,
 				'api_req_combined_battle/each_airbattle': this.processEnemy,
-				'api_req_combined_battle/each_sp_midnight': this.processEnemy,
+				'api_req_combined_battle/each_sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_battle_water': this.processEnemy,
-				'api_req_combined_battle/ec_night_to_day': this.processEnemy,
+				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
-				// PvP battles and regular night battles are excluded intentionally
+				// Night battles as 2nd part following day part:
+				'api_req_battle_midnight/battle': this.processFriendlyFleet,
+				'api_req_combined_battle/midnight_battle': this.processFriendlyFleet,
+				'api_req_combined_battle/ec_midnight_battle': this.processFriendlyFleet,
+				// PvP battles are excluded intentionally
 				
 				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
 				'api_req_combined_battle/battleresult': [this.processDrop, this.processUnexpected],
@@ -304,32 +309,37 @@
 		},
 		
 		processFriendlyFleet: function(http){
-			const apiData = http.response.api_data.api_friendly_info;
+			const apiData = http.response.api_data;
+			const friendlyInfo = apiData.api_friendly_info;
+
+			if(!friendlyInfo || !this.currentMap[0] || !this.currentMap[1]) { return; }
 			this.friendlyFleet = {};
 			
 			this.friendlyFleet.map = this.data.map;
 			this.friendlyFleet.node = this.data.edgeID[this.data.edgeID.length - 1];
 			this.friendlyFleet.difficulty = this.data.difficulty;
 			this.friendlyFleet.gaugeNum = this.data.gaugeNum;
-			this.friendlyFleet.variation = apiData.api_production_type;
+			this.friendlyFleet.variation = friendlyInfo.api_production_type;
 			this.friendlyFleet.fleet = {
-				ship: apiData.api_ship_id,
-				lvl: apiData.api_ship_lv,
-				hp: apiData.api_maxhps,
-				nowhp: apiData.api_nowhps,
-				stats: apiData.api_Param,
-				equip: apiData.api_Slot
+				ship: friendlyInfo.api_ship_id,
+				lvl: friendlyInfo.api_ship_lv,
+				hp: friendlyInfo.api_maxhps,
+				nowhp: friendlyInfo.api_nowhps,
+				stats: friendlyInfo.api_Param,
+				equip: friendlyInfo.api_Slot
 			};
 			let uniqueSerialKey = "";
-			for(let i = 0; i < this.friendlyFleet.fleet.ship.length; i++){
-				let value = this.friendlyFleet.fleet.ship[i] + this.friendlyFleet.fleet.lvl[i] + this.friendlyFleet.fleet.nowhp[i];
-				for(let j of this.friendlyFleet.fleet.stats[i]){
-					value += j;
+			for(const i in this.friendlyFleet.fleet.ship) {
+				let accumulated = this.friendlyFleet.fleet.ship[i]
+					+ this.friendlyFleet.fleet.lvl[i]
+					+ this.friendlyFleet.fleet.nowhp[i];
+				for(const v of this.friendlyFleet.fleet.stats[i]) {
+					accumulated += v;
 				}
-				for(let k of this.friendlyFleet.fleet.equip[i]){
-					value += k;
+				for(const v of this.friendlyFleet.fleet.equip[i]) {
+					accumulated += v;
 				}
-				uniqueSerialKey += String(value);
+				uniqueSerialKey += String(accumulated);
 			}
 			this.friendlyFleet.uniquekey = uniqueSerialKey;
 			this.sendData(this.friendlyFleet, 'friendlyfleet');
@@ -338,11 +348,6 @@
 		processEnemy: function(http, airRaidData) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
 			const apiData = airRaidData || http.response.api_data;
-			
-			if(apiData.api_friendly_info !== undefined){
-				this.processFriendlyFleet(http);
-			}
-			
 			this.enemyComp = {};
 			
 			this.enemyComp.map = this.data.map;
