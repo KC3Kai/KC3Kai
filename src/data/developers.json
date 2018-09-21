@@ -733,6 +733,15 @@
 				"links" : {
 					"gh" : "https://github.com/whitekiw"
 				}
+			},
+			{
+				"name": "MacBread",
+				"avatar" : "https://avatars1.githubusercontent.com/u/37400313?s=460&v=4",
+				"desc" : "한국어",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/MacBread"
+				}
 			}
 		],
 		"AboutTesters": [
