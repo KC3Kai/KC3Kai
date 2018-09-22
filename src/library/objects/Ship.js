@@ -2799,6 +2799,9 @@ KC3改 Ship Object
 	/**
 	 * Anti-air Equipment Attack Effect implemented since 2018-02-05 in-game.
 	 * @return a tuple indicates the effect type ID and its term key.
+	 *   NOTE: type ID shifted to 1-based since Phase 2, but internal values here unchanged.
+	 * @see `TaskAircraftFlightBase.prototype._getAntiAircraftAbility`
+	 * @see `TaskAirWarAntiAircraft._type` - AA attack animation types
 	 */
 	KC3Ship.prototype.estimateAntiAirEffectType = function() {
 		const aaEquipType = (() => {
@@ -2827,13 +2830,13 @@ KC3改 Ship Object
 			return -1;
 		})();
 		switch(aaEquipType) {
-			case -1: return [-1, "None"];
-			case 0: return [0, "Normal"];
-			case 1: return [1, "HighAngleMount"];
-			case 2: return [2, "RocketLauncher"];
-			case 3: return [3, "RocketLauncherK2"];
-			case 4: return [4, "Type3Shell"];
-			case 5: return [5, "Type3ShellRockeLaunK2"];
+			case -1: return [0, "None"];
+			case 0: return [1, "Normal"];
+			case 1: return [2, "HighAngleMount"];
+			case 2: return [3, "RocketLauncher"];
+			case 3: return [4, "RocketLauncherK2"];
+			case 4: return [5, "Type3Shell"];
+			case 5: return [6, "Type3ShellRockeLaunK2"];
 			default: return [NaN, "Unknown"];
 		}
 	};
@@ -3318,9 +3321,9 @@ KC3改 Ship Object
 					 * btw1, 12cm Rocket Launcher non-Kai belongs to AA guns, no irregular attack effect.
 					 * btw2, flagship will fall-back to the effect user if none has any attack effect.
 					 */
-					aaEffectTypeId > -1 ?
+					aaEffectTypeId > 0 ?
 						" ({0})".format(
-							aaEffectTypeId === 3 ?
+							aaEffectTypeId === 4 ?
 								// Show a trigger chance for RosaK2 Defense, still unknown if with Type3 Shell
 								"{0}:{1}%".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm), shipObj.calcAntiAirEffectChance()) :
 								KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)
