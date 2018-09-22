@@ -2171,7 +2171,10 @@ KC3改 Ship Object
 		const isThisSubmarine = this.isSubmarine();
 		
 		// Special Nelson Touch cutin since 2018-09-15, not needs isAirSuperiorityBetter
-		if(trySpTypeFirst && this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeDay(100);
+		if(trySpTypeFirst && this.canDoNelsonTouch()) {
+			const isRedT = this.collectBattleConditions().engagementId === 4;
+			return KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0);
+		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
 		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
@@ -2393,7 +2396,10 @@ KC3改 Ship Object
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
 			} else {
 				// special Nelson Touch since 2018-09-15, conditions might be the same with day time
-				if(this.canDoNelsonTouch()) return KC3Ship.specialAttackTypeNight(100);
+				if(this.canDoNelsonTouch()) {
+					const isRedT = this.collectBattleConditions().engagementId === 4;
+					return KC3Ship.specialAttackTypeNight(100, null, isRedT ? 2.5 : 2.0);
+				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
