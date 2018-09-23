@@ -190,6 +190,16 @@ AntiAir: anti-air related calculations
 		return mst.api_id === 191;
 	}
 
+	function isItalianHighAngleGun(mst) {
+		// 90mm Single High-angle Gun Mount
+		return mst.api_id === 135;
+	}
+
+	function isNorthernEuropeanMachineGun(mst) {
+		// Bofors 40mm Quadruple Auto-cannon Mount
+		return mst.api_id === 173;
+	}
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -501,6 +511,7 @@ AntiAir: anti-air related calculations
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
 		warspiteIcon = 439,
+		gotlandKaiIcon = 579,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -529,6 +540,7 @@ AntiAir: anti-air related calculations
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
+	var isGotlandKai = masterIdEq( gotlandKaiIcon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -884,11 +896,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tenryuu K2
+	// Tenryuu K2, Gotland Kai
 	declareAACI(
 		30, 3, 1.3,
 		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
-		predAllOf(isTenryuuK2),
+		predAnyOf(isTenryuuK2, isGotlandKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 3 ))
@@ -914,6 +926,18 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( isBritishRocketLauncher ),
 				hasSome( isBritishPomPomGun ))
+		)
+	);
+
+	// Gotland Kai, placeholder, still under verification
+	declareAACI(
+		33, 1, 1.0,
+		[gotlandKaiIcon, biHaMountIcon, cdmgIcon],
+		predAllOf(isGotlandKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isItalianHighAngleGun ),
+				hasSome( isNorthernEuropeanMachineGun ))
 		)
 	);
 

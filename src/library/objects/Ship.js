@@ -545,7 +545,7 @@ KC3改 Ship Object
 			return Math.floor( a * percent + (roundUpFactor || 0) );
 		};
 		var marriageConserve = function (v) {
-			return self.isMarried() ? Math.floor(0.85 * v) : v;
+			return self.isMarried() && v > 0 ? Math.max(1, Math.floor(0.85 * v)) : v;
 		};
 		result.fuel = fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent);
 		result.ammo = ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent);
