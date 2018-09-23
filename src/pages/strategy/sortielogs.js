@@ -597,6 +597,20 @@
 					}
 				});
 			};
+			const openBattleLogsWindow = function(data, isPopup){
+				try {
+					const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
+					const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+					if(ref && !ref.closed){
+						// Update hash with latest battle data even if window already opened
+						ref.location.replace(url);
+						// Switch focus to the window if possible
+						if(ref.focus) ref.focus();
+					}
+				} catch (e) {
+					console.warn("Failed to open battle logs", e);
+				}
+			};
 			$.each(sortieList, function(id, sortie){
 				const mapkey = ["m", sortie.world, sortie.mapnum].join(''),
 					mapInfo = self.maps[mapkey] || {};
@@ -621,6 +635,9 @@
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
 					showSortieLedger(sortie.id, sortieBox);
+					$(".sortie_map", sortieBox).addClass("hover").on("click", function(e){
+						openBattleLogsWindow(sortie, e.altKey);
+					});
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
 					var edges = [];
