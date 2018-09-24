@@ -1552,6 +1552,10 @@
 							MainFleet.calcBattleCost(),
 							EscortFleet.calcBattleCost()
 						),
+					repairCost: Object.sumValuesByKey(
+							MainFleet.calcRepairCost(),
+							EscortFleet.calcRepairCost()
+						),
 					badState: [
 						MainFleet.needsSupply(false)|| EscortFleet.needsSupply(false),
 						MainFleet.needsSupply(true) || EscortFleet.needsSupply(true) ,
@@ -1616,6 +1620,7 @@
 					supplied: CurrentFleet.isSupplied(),
 					supplyCost: CurrentFleet.calcResupplyCost(),
 					battleCost: CurrentFleet.calcBattleCost(),
+					repairCost: CurrentFleet.calcRepairCost(),
 					badState: [
 						CurrentFleet.needsSupply(false) ||
 						(
@@ -1744,7 +1749,9 @@
 						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
 						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
-						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel))
+						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel
+					)) + (!(FleetSummary.repairCost.fuel || FleetSummary.repairCost.steel) ? "" :
+						"\n" + KC3Meta.term("PanelRepairCost").format(FleetSummary.repairCost.fuel, FleetSummary.repairCost.steel))
 				).lazyInitTooltip();
 
 				// STATUS: MORALE
