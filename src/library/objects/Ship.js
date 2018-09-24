@@ -545,11 +545,11 @@ KC3改 Ship Object
 			return Math.floor( a * percent + (roundUpFactor || 0) );
 		};
 		var marriageConserve = function (v) {
-			return self.isMarried() && v > 0 ? Math.max(1, Math.floor(0.85 * v)) : v;
+			return self.isMarried() && v > 1 ? Math.floor(0.85 * v) : v;
 		};
 		result.fuel = fuelPercent < 0 ? fullFuel - this.fuel : mulRounded(fullFuel, fuelPercent);
 		result.ammo = ammoPercent < 0 ? fullAmmo - this.ammo : mulRounded(fullAmmo, ammoPercent);
-		// After testing, 85% is applied to supply cost, not max value
+		// After testing, 85% is applied to resupply value, not max value. and cannot be less than 1
 		result.fuel = marriageConserve(result.fuel);
 		result.ammo = marriageConserve(result.ammo);
 		if(bauxiteNeeded){
