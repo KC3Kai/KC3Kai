@@ -303,7 +303,7 @@
 			
 			$("body").css("opacity", "0.5");
 			
-			if(this.stegcover64===""){
+			if(this.stegcover64 === ""){
 				this.stegcover64 = $.ajax({
 					async: false,
 					url: "../../../../assets/img/stegcover.b64"
@@ -370,8 +370,13 @@
 					};
 					
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
-							+ encodeURIComponent(JSON.stringify(encodeData), "_blank"));
+						if(e.altKey) {
+							window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#"
+								+ JSON.stringify(encodeData), "_blank");
+						} else {
+							window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+								+ encodeURIComponent(JSON.stringify(encodeData)), "_blank");
+						}
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
