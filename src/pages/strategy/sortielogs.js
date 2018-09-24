@@ -1245,7 +1245,7 @@
 								+ JSON.stringify(sortieData), "_blank");
 						} else {
 							window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
-								+ encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+								+ encodeURIComponent(JSON.stringify(sortieData)), "_blank");
 						}
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
