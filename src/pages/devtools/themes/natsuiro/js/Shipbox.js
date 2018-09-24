@@ -243,18 +243,17 @@ KC3改 Ship Box for Natsuiro theme
 		this.element.css("background-color", "transparent");
 		
 		// Import repair time script by @Javran
-		var RepairTimes = this.shipData.repairTime();
+		var repairTimes = this.shipData.repairTime();
 		var repairCost = this.shipData.calcRepairCost();
 
-		if(RepairTimes.docking > 0){
-			$(".ship_hp_box", this.element).attr("title", 
-				KC3Meta.term("PanelDocking")+": "+String(RepairTimes.docking).toHHMMSS()+"\n"
-				+KC3Meta.term("PanelAkashi")+": "+
-					((RepairTimes.akashi>0)
-						?String(RepairTimes.akashi).toHHMMSS()
-						:KC3Meta.term("PanelCantRepair"))+"\n"
-				+KC3Meta.term("PanelRepairCost").format(repairCost.fuel, repairCost.steel)
-			).lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
+		if(repairTimes.docking > 0){
+			$(".ship_hp_box", this.element).attr("title", [
+				KC3Meta.term("PanelDocking") + ": " + String(repairTimes.docking).toHHMMSS(),
+				KC3Meta.term("PanelAkashi")  + ": " + (
+					repairTimes.akashi > 0 ? String(repairTimes.akashi).toHHMMSS() : KC3Meta.term("PanelCantRepair")
+				),
+				KC3Meta.term("PanelRepairCost").format(repairCost.fuel, repairCost.steel)
+			].join("\n")).lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
 		}else{
 			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
 				.lazyInitTooltip({ position: { at: "left+25 bottom+5" } });

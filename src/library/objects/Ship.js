@@ -610,19 +610,25 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Calculate repair cost of the ship
-	 * returns an object: {fuel: <fuelCost>, steel: <steelCost>}
+	 * Get or calculate repair cost of this ship.
+	 * @param currentHp - assumed current HP value if this ship is not damaged effectively.
+	 * @return an object: {fuel: <fuelCost>, steel: <steelCost>}
 	 */
-	KC3Ship.prototype.calcRepairCost = function(){
-		var result = { 
+	KC3Ship.prototype.calcRepairCost = function(currentHp){
+		const result = {
 			fuel: 0, steel: 0
 		};
-		if (this.isDummy()) { return result; }
-		var master = this.master();
-		var fullFuel = master.api_fuel_max;
-		var hpLost = this.hp[1] - this.hp[0];
-		result.fuel = Math.floor(fullFuel * hpLost * 0.032);
-		result.steel = Math.floor(fullFuel * hpLost * 0.06);
+		if(this.isDummy()) { return result; }
+		if(currentHp > 0 && currentHp <= this.hp[1]) {
+			// formula see http://kancolle.wikia.com/wiki/Docking
+			const fullFuel = this.master().api_fuel_max;
+			const hpLost = this.hp[1] - currentHp;
+			result.fuel = Math.floor(fullFuel * hpLost * 0.032);
+			result.steel = Math.floor(fullFuel * hpLost * 0.06);
+		} else {
+			result.fuel = this.repair[1];
+			result.steel = this.repair[2];
+		}
 		return result;
 	};
 
