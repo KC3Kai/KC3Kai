@@ -190,16 +190,6 @@ AntiAir: anti-air related calculations
 		return mst.api_id === 191;
 	}
 
-	function isItalianHighAngleGun(mst) {
-		// 90mm Single High-angle Gun Mount
-		return mst.api_id === 135;
-	}
-
-	function isNorthernEuropeanMachineGun(mst) {
-		// Bofors 40mm Quadruple Auto-cannon Mount
-		return mst.api_id === 173;
-	}
-
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -929,15 +919,15 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Gotland Kai, placeholder, still under verification
+	// Gotland Kai
 	declareAACI(
-		33, 1, 1.0,
-		[gotlandKaiIcon, biHaMountIcon, cdmgIcon],
+		33, 3, 1.35,
+		[gotlandKaiIcon, haMountIcon, aaGunIcon],
 		predAllOf(isGotlandKai),
 		withEquipmentMsts(
 			predAllOf(
-				hasSome( isItalianHighAngleGun ),
-				hasSome( isNorthernEuropeanMachineGun ))
+				hasSome( isHighAngleMount ),
+				hasSome( isAAGun ))
 		)
 	);
 
