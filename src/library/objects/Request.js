@@ -7,12 +7,14 @@ Executes processing and relies on KC3Network for the triggers
 (function(){
 	"use strict";
 	
-	window.KC3Request = function( data ){
-		if(data){
-			this.url = data.request.url;
-			this.headers = data.response.headers;
-			this.statusCode = data.response.status;
-			this.params = data.request.postData.params;
+	window.KC3Request = function(har){
+		// HAR Specification (v1.2) see: http://www.softwareishard.com/blog/har-12-spec/
+		// Deep clone for avoiding direct references to HAR object members
+		if(har){
+			this.url = String(har.request.url);
+			this.headers = $.extend(true, [], har.response.headers);
+			this.statusCode = har.response.status;
+			this.params = $.extend(true, [], har.request.postData.params);
 			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
 		}
 		this.gameStatus = 0;
@@ -24,7 +26,7 @@ Executes processing and relies on KC3Network for the triggers
 	------------------------------------------*/
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
-		if(this.statusCode != 200){
+		if(this.statusCode !== 200){
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
@@ -33,22 +35,22 @@ Executes processing and relies on KC3Network for the triggers
 			return false;
 		}
 		
-		// Reformat headers
-		var reformatted = {};
+		// Reformat headers array to name-value object
+		var headersReformatted = {};
 		$.each(this.headers, function(index, element){
-			reformatted[ element.name ] = element.value;
+			headersReformatted[ element.name ] = element.value;
 		});
-		this.headers = reformatted;
+		this.headers = headersReformatted;
 		
 		// Reformat and decode parameters
-		reformatted = {};
+		var paramsReformatted = {};
 		var paramsDecoded = {};
 		$.each(this.params, function(index, element){
 			var paramName = decodeURI(element.name);
-			reformatted[ paramName ] = element.value;
+			paramsReformatted[ paramName ] = element.value;
 			paramsDecoded[ paramName ] = decodeURIComponent(element.value || "");
 		});
-		this.params = reformatted;
+		this.params = paramsReformatted;
 		this.paramsDecoded = paramsDecoded;
 		
 		return true;
@@ -57,16 +59,18 @@ Executes processing and relies on KC3Network for the triggers
 	/* READ RESPONSE
 	
 	------------------------------------------*/
-	KC3Request.prototype.readResponse = function( request, callback ){
+	KC3Request.prototype.readResponse = function(har, callback){
 		var self = this;
 		// Get response body
-		request.getContent(function( responseBody ){
+		har.getContent(function(responseBody){
 			// Strip svdata= from response body if exists then parse JSON
-			if(responseBody.indexOf("svdata=") >- 1){ responseBody = responseBody.substring(7); }
-			responseBody = JSON.parse(responseBody);
+			if(responseBody.indexOf("svdata=") >- 1){
+				responseBody = responseBody.substring(7);
+			}
+			var responseObj = JSON.parse(responseBody);
 			
-			self.gameStatus = responseBody.api_result;
-			self.response = responseBody;
+			self.gameStatus = responseObj.api_result;
+			self.response = responseObj;
 			
 			callback();
 		});
@@ -90,7 +94,7 @@ Executes processing and relies on KC3Network for the triggers
 			}
 			
 			// If it fails on "api_start2" which is the first API call
-			if(this.call == "api_start2"){
+			if(this.call.indexOf("api_start2") > -1){
 				KC3Network.trigger( "CatBomb", {
 					title: KC3Meta.term("CatBombHardAPIErrorTitle"),
 					message: KC3Meta.term("CatBombHardAPIErrorMsg")
@@ -151,7 +155,7 @@ Executes processing and relies on KC3Network for the triggers
 	------------------------------------------*/
 	KC3Request.prototype.process = function(){
 		// If API call is supported
-		if(typeof Kcsapi[this.call] != "undefined"){
+		if(typeof Kcsapi[this.call] === "function"){
 			// check clock and clear quests at 5AM JST
 			var serverTime = Date.safeToUtcTime( this.headers.Date );
 			KC3QuestManager.checkAndResetQuests(serverTime);

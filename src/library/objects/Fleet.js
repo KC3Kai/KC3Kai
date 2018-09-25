@@ -773,6 +773,20 @@ Contains summary information about a fleet and its ships
 			.value);
 	};
 
+	KC3Fleet.prototype.calcRepairCost = function() {
+		const totalCost = {
+			fuel: 0,
+			steel: 0,
+		};
+		for(let i = 0; i < this.countShips(); i++) {
+			const ship = this.ship(i);
+			const repairCost = ship.calcRepairCost();
+			totalCost.fuel += repairCost.fuel;
+			totalCost.steel += repairCost.steel;
+		}
+		return totalCost;
+	};
+
 	/*--------------------------------------------------------*/
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/

@@ -513,13 +513,16 @@ var interactions = {
 	
 	// Fit screen
 	fitScreen :function(request, sender, response){
+		var gameScale = (ConfigManager.api_gameScale || 100) / 100;
+		var topMargin = Math.ceil((ConfigManager.api_margin || 0) * gameScale);
+		
 		// Get browser zoon level for the page
-		chrome.tabs.getZoom(null, function(ZoomFactor){
+		chrome.tabs.getZoom(null, function(zoomFactor){
 			// Resize the window
 			chrome.windows.getCurrent(function(wind){
 				chrome.windows.update(wind.id, {
-					width: Math.ceil(1200*ZoomFactor) + (wind.width- Math.ceil($(window).width()*ZoomFactor) ),
-					height: Math.ceil(720*ZoomFactor) + (wind.height- Math.ceil($(window).height()*ZoomFactor) )
+					width: Math.ceil(1200 * gameScale * zoomFactor) + (wind.width  - Math.ceil($(window).width()  * zoomFactor)),
+					height: Math.ceil(720 * gameScale * zoomFactor) + (wind.height - Math.ceil($(window).height() * zoomFactor)) + topMargin
 				});
 			});
 		});
