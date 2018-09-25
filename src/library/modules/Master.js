@@ -416,6 +416,8 @@ Saves and loads significant data for future use
 						api_color_no: cell.api_color_no,
 						api_passed: cell.api_passed,
 					};
+					if(cell.api_distance !== undefined)
+						mapcell[cell.api_id].api_distance = cell.api_distance;
 				});
 				this._raw.mapcell = mapcell;
 				this.save();
