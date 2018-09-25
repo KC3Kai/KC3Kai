@@ -1436,6 +1436,7 @@ KC3改 Ship Object
 
 	/**
 	 * Get pre-cap carrier night aerial attack power of this ship.
+	 * This formula is the same with the one above besides slot bonus part and filtered equipment stats.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#nightAS
 	 */
@@ -1444,26 +1445,26 @@ KC3改 Ship Object
 		const equipTotals = {
 			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
 		};
-		// Ark Royal (Kai) + Swordfish - NOAP, might use normal formula, but
-		// in fact, this formula is the same thing besides slot bonus part.
+		// Generally, only fp + tp from night capable aircraft will be taken into account.
+		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
-		const noNightAvPersonnel = !this.hasEquipment([258, 259]);
+		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
 		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
 				const slot = this.slots[idx];
 				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
+				// Swordfish variants as special torpedo bombers
 				const isSwordfish = [242, 243, 244].includes(gear.masterId);
 				// Type 62 Fighter Bomber Iwai for now
 				const isSpecialNightPlane = [154].includes(gear.masterId);
-				const isLegacyArkRoyal = isThisArkRoyal && noNightAvPersonnel;
 				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane && slot > 0) {
-					// assume all master stats hold value 0 by default
-					equipTotals.fp += master.api_houg;
-					equipTotals.tp += master.api_raig;
+					equipTotals.fp += master.api_houg || 0;
+					equipTotals.tp += master.api_raig || 0;
 					if(!isLegacyArkRoyal) {
+						// Bonus from night aircraft slot which also takes bombing and asw stats into account
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
 						const ftbaPower = master.api_houg + master.api_raig + master.api_baku + master.api_tais;
 						equipTotals.slotBonus += Math.sqrt(slot) * ftbaPower * (isNightAircraftType ? 0.45 : 0.3);
@@ -2178,6 +2179,7 @@ KC3改 Ship Object
 	 * @see https://github.com/andanteyk/ElectronicObserver/blob/master/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%BB%E6%92%83%E7%A8%AE%E5%88%A5
 	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtHougeki - client side codes of day attack type.
 	 * @see BattleMain.swf#battle.phase.hougeki.PhaseHougekiBase - client side hints of special cutin attack type.
+	 * @see main.js#PhaseHougeki.prototype._getNormalAttackType - since Phase 2
 	 * @see specialAttackTypeDay
 	 * @see estimateNightAttackType
 	 * @see canDoOpeningTorpedo
@@ -2312,16 +2314,15 @@ KC3改 Ship Object
 	KC3Ship.prototype.canCarrierNightAirAttack = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(this.isCarrier()) {
-			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
+			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
 			const isThisSaratogaMk2 = this.masterId === 545;
-			const isThisArkRoyal = [515, 393].includes(this.masterId);
-			const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2),
-			// Swordfish variants are counted as night aircraft for Ark Royal + NOAP
-			if((hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2))
-				|| (hasNightAvPersonnel && isSwordfishArkRoyal))
-				return true;
+			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
+			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
+			//const isThisArkRoyal = [515, 393].includes(this.masterId);
+			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2)
+			return hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2);
 		}
 		return false;
 	};
@@ -2366,6 +2367,7 @@ KC3改 Ship Object
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
 	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtNight - client side codes of night attack type.
 	 * @see BattleMain.swf#battle.phase.night.PhaseAttack - client side hints of special cutin attack type.
+	 * @see main.js#PhaseHougekiBase.prototype._getNormalAttackType - since Phase 2
 	 * @see specialAttackTypeNight
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
@@ -2478,7 +2480,7 @@ KC3改 Ship Object
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
 			if(hasRocketLauncher) return ["Rocket", -1];
 		}
-		// priority to use server flag, but impossible to test on abyssal below for now
+		// priority to use server flag
 		if(isCarrierNightAirAttack) {
 			return ["AirAttack", 1];
 		}
