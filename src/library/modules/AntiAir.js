@@ -501,6 +501,7 @@ AntiAir: anti-air related calculations
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
 		warspiteIcon = 439,
+		gotlandKaiIcon = 579,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -529,6 +530,7 @@ AntiAir: anti-air related calculations
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
+	var isGotlandKai = masterIdEq( gotlandKaiIcon );
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -884,11 +886,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tenryuu K2
+	// Tenryuu K2, Gotland Kai
 	declareAACI(
 		30, 3, 1.3,
 		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
-		predAllOf(isTenryuuK2),
+		predAnyOf(isTenryuuK2, isGotlandKai),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 3 ))
@@ -914,6 +916,18 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( isBritishRocketLauncher ),
 				hasSome( isBritishPomPomGun ))
+		)
+	);
+
+	// Gotland Kai
+	declareAACI(
+		33, 3, 1.35,
+		[gotlandKaiIcon, haMountIcon, aaGunIcon],
+		predAllOf(isGotlandKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isHighAngleMount ),
+				hasSome( isAAGun ))
 		)
 	);
 

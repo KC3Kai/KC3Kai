@@ -1238,9 +1238,15 @@
 					
 					updateMapHpInfo(self, sortieData);
 					
+					// RMB clicked
 					if(e.which === 3) {
-						window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
-							+ encodeURIComponent(JSON.stringify(sortieData), "_blank"));
+						if(e.altKey) {
+							window.open("https://kc3kai.github.io/kancolle-replay/battleText.html#"
+								+ JSON.stringify(sortieData), "_blank");
+						} else {
+							window.open("https://kc3kai.github.io/kancolle-replay/battleplayer.html#"
+								+ encodeURIComponent(JSON.stringify(sortieData)), "_blank");
+						}
 						self.exportingReplay = false;
 						$("body").css("opacity", "1");
 						return true;
