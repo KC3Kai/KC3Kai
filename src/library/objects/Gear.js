@@ -55,7 +55,7 @@ KC3改 Equipment Object
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 279],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279],
 				airRadar: 0,
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279],
 				tripleTorpedo: 0,
@@ -1009,7 +1009,7 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.quadrupleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
-			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
+			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
 		if(bonusDefs) {
@@ -1200,7 +1200,7 @@ KC3改 Equipment Object
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
-					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
+					modifier = this.isSurfaceRadar() ? 1.7 : 1;
 				// Depth Charge Projector
 				if([15].includes(type2))
 					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown
@@ -1564,6 +1564,21 @@ KC3改 Equipment Object
 		return this.exists() &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 1;
+	};
+
+	KC3Gear.prototype.isSurfaceRadar = function(){
+		// currently uses high LoS definition instead of high accuracy one
+		return this.isHighLineOfSightRadar();
+	};
+
+	KC3Gear.prototype.isHighLineOfSightRadar = function(){
+		/* Another speculation of 'isSurfaceRadar' definition:
+		   uses 'api_saku > 4' instead of 'api_houm > 2',
+		   which the only difference is including '[278] SK Radar' large radar.
+		   sample: DD Kasumi K2 + SK Radar + Model C gun gets synergy bonus. */
+		return this.exists() &&
+			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_saku > 4;
 	};
 
 	KC3Gear.prototype.isHighAccuracyRadar = function(){

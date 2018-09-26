@@ -2432,7 +2432,7 @@ KC3改 Ship Object
 					// even large radars (Kasumi K2 can equip), air radars okay too, see:
 					// https://twitter.com/nicolai_2501/status/923172168141123584
 					// https://twitter.com/nicolai_2501/status/923175256092581888
-					const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
+					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
 					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni
