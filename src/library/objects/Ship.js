@@ -2288,7 +2288,7 @@ KC3改 Ship Object
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const isThisCarrier = this.isCarrier();
 		// even carrier can do shelling or air attack if her yasen power > 0 (no matter chuuha)
-		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Kai Ni
+		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni
 		if(isThisCarrier && initYasen > 0) return true;
 		// carriers without yasen power can do air attack under some conditions:
 		if(isThisCarrier) {

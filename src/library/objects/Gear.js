@@ -43,6 +43,7 @@ KC3改 Equipment Object
 	 * to correct the 'naked stats' for these cases, have to simulate them all.
 	 * It might be moved to an independent JSON, but stays here so that we can add comments.
 	 * @return the bonus definition table with new counters of related equipment.
+	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180810 ALL] https://imgur.com/a/kd3fSSo
@@ -114,6 +115,27 @@ KC3改 Equipment Object
 			},
 			// Ju 87C Kai Ni (w/ KMX / Skilled)
 			"306": {
+				count: 0,
+				byClass: {
+					// Graf Zeppelin Class
+					"63": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Aquila Class
+					"68": "63",
+				},
+				byShip: [
+					// Taiyou Kai Ni
+					{
+						ids: [529],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Shinyou
+					{
+						ids: [534, 381, 536],
+						multiple: { "tais": 3, "houk": 2 },
+					},
+				],
 			},
 			// Suisei
 			"24": {
@@ -272,6 +294,11 @@ KC3改 Equipment Object
 					// Agano Class
 					"41": "4",
 				},
+				byShip: {
+					// Gotland (and Kai?)
+					ids: [574],
+					multiple: { "houg": 1, "tais": 2, "houk": 2 },
+				},
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
@@ -424,6 +451,10 @@ KC3改 Equipment Object
 					"20": "4",
 					// Agano Class
 					"41": "4",
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
