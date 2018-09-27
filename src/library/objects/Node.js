@@ -1752,9 +1752,13 @@ Used by SortieManager
 		//console.debug("Raw Air Base Raid data", battleData);
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
-		this.eformation = battleData.api_formation[1];
+		// Pad ship array to 6 for saving into encounter record
+		this.eships = Array.pad(this.eships, 6, -1);
 		this.elevels = this.normalizeArrayIndex(battleData.api_ship_lv);
+		this.elevels = Array.pad(this.elevels, 6, -1);
 		this.eSlot = battleData.api_eSlot;
+		this.eSlot = Array.pad(this.eSlot, 6, -1);
+		this.eformation = battleData.api_formation[1];
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
 			ally: battleData.api_f_maxhps,
@@ -1807,6 +1811,8 @@ Used by SortieManager
 		this.baseDamage = bomberPhase && bomberPhase.api_fdam
 			? sumSupportDamageArray(bomberPhase.api_fdam)
 			: 0;
+		// Record encountered enemy air raid formation
+		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
 	};
 	
 	KC3Node.prototype.isBoss = function(){
@@ -2176,7 +2182,7 @@ Used by SortieManager
 		return tooltips;
 	};
 	
-	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){
+	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp, isAirBaseRaid){
 		// Update name and base exp only if new name offered
 		if(!battleData && !!updatedName){
 			if(!!this.enemyEncounter.uniqid){
@@ -2197,13 +2203,15 @@ Used by SortieManager
 			world: KC3SortieManager.map_world,
 			map: KC3SortieManager.map_num,
 			diff: KC3SortieManager.map_difficulty,
-			node: this.id,
+			node: isAirBaseRaid ? KC3Meta.getAirBaseFakeEdge() : this.id,
 			form: this.eformation,
 			// eships is padded array
 			ke: JSON.stringify(this.eships)
 		};
 		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke].filter(v => !!v).join("/");
 		KC3Database.Encounter(ed, true);
+		// Do not continue to save abyssal stats, thank to missing `api_eParam` on Land-Base Air Raid
+		if(!!isAirBaseRaid) { return true; }
 		this.enemyEncounter = ed;
 		// Save enemy info, maybe main fleet
 		(this.eshipsMain || this.eships).forEach((enemyId, i) => {

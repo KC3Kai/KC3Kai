@@ -5758,8 +5758,8 @@ var SHIPDATA = {
 		unknownstats: true,
 		RNG: 0,
 		SPD: 5,
-		SLOTS: [26, 22, 24],
-		EQUIPS: [581, 582, 583],
+		SLOTS: [26, 23, 23],
+		EQUIPS: [547, 574, 574],
 	},
 	1777: {
 		name: 'CVL Nu-Class Elite 4',
