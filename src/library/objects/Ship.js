@@ -2064,30 +2064,32 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is Nelson, Double Line variants formation, some equipment required
+	 * Flagship is healthy Nelson, Double Line variants formation selected.
+	 * No PvP sample found for now.
 	 *
 	 * @return true if this ship (Nelson) can do Nelson Touch cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nelson
+	 * @see https://wikiwiki.jp/kancolle/Nelson
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.nelsonTouchShips.includes(this.masterId)) {
+		// is this ship Nelson and not even Chuuha
+		// still okay even 3th and 5th ship are Taiha
+		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
 			if(fleetNum > 0 && shipPos === 0) {
-				// 3th and 5th ship are not carrier
-				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					invalidCombinedShipType = [fleetObj.ship(2), fleetObj.ship(4)]
-						.some(ship => ship.isCarrier());
 				// Double Line variants selected
 				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
-				// Equipping a seaplane recon and some guns
-				const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
-				const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) > 2 ||
-					(this.countEquipmentType(2, 19) > 0 && this.countEquipmentType(2, [3, 38]) > 1);
-				// min 5 ships needed? Nelson/3th/5th can be Chuuha / Taiha?
-				return shipCnt >= 5 && !invalidCombinedShipType
-					&& isDoubleLine && hasRecon && minGunCnt;
+				// 3th and 5th ship are not carrier or absent?
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
+						.some(ship => ship.isAbsent() || ship.isCarrier());
+				// Equipping a seaplane recon and some guns?
+				//const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
+				//const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) >= 1;
+				// min 5 ships needed? how about ship(s) sink or retreat in mid-sortie?
+				return shipCnt >= 5 && isDoubleLine && !invalidCombinedShips;
 			}
 		}
 		return false;
