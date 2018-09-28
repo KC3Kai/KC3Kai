@@ -1005,6 +1005,37 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
+			"308": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				},
+				byShip: {
+					// All Destroyers?
+					stypes: [2],
+					multiple: { "houg": 1 },
+				},
+			},
+			// GFCS Mk.37
+			"307": {
+				count: 0,
+				byClass: {
+					// Following Americans: Iowa Class
+					"65": {
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					// Lexington Class
+					"69": "65",
+					// Casablanca Class
+					"83": "65",
+					// Essex Class
+					"84": "65",
+				},
+			},
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,
