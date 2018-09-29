@@ -980,6 +980,22 @@ KC3改 Ship Object
 		return damecon.length > 0 ? damecon[0] : {pos: -1, code: 0};
 	};
 
+	/**
+	 * Static method of the same logic to find available damecon to be used first.
+	 * @param equipArray - the master ID array of ship's all equipment including ex-slot at the last.
+	 *        for 5-slot ship, array supposed to be 6 elements; otherwise should be always 5 elements.
+	 * @see KC3Ship.prototype.findDameCon
+	 * @see ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
+	 */
+	KC3Ship.findDamecon = function(equipArray = []) {
+		// push last item from ex-slot to 1st
+		const sortedMstIds = equipArray.slice(-1);
+		sortedMstIds.push(...equipArray.slice(0, -1));
+		const dameconId = sortedMstIds.find(id => id === 42 || id === 43);
+		// code 1 for repair team, 2 for repair goddess
+		return dameconId === 42 ? 1 : dameconId === 43 ? 2 : 0;
+	};
+
 	/* CALCULATE TRANSPORT POINT
 	Retrieve TP object related to the current ship
 	** TP Object Detail --
