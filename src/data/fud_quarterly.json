@@ -48,14 +48,14 @@
 			"2": { "type": "hp", "boss": [25] },
 			"3": { "type": "hp", "boss": [25] }
 		},
-		"424": {	
+		"424": {
 			"1": { "type": "tp", "boss": [12], "landing": [11] },
-			"2": { "type": "hp", "boss": [29,33] }
+			"2": { "type": "hp", "boss": [29, 33] }
 		},
 		"425": {
-			"1": { "type": "hp", "boss": [10,13] },
+			"1": { "type": "hp", "boss": [10, 13] },
 			"2": { "type": "hp", "boss": [26] },
-			"3": { "type": "hp", "boss": [35,40] }
+			"3": { "type": "hp", "boss": [35, 40] }
 		}
 	},
 	"abyssKaiShipIds": [
