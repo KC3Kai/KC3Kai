@@ -256,14 +256,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		setSlotitemConsumed :function(cond, requestParams){
 			if(cond === undefined && !!requestParams){
-				const dameconUsedType = parseInt(requestParams.api_recovery_type || "0", 10),
+				const dameconUsedType = parseInt(requestParams.api_recovery_type, 10) || 0,
 					resupplyUsedFlag = requestParams.api_supply_flag == 1,
 					rationUsedFlag = requestParams.api_ration_flag == 1;
 				// 1: repair team used, 2: repair goddess used
 				cond = dameconUsedType > 0 || resupplyUsedFlag || rationUsedFlag;
 			}
 			if(typeof cond === "function"){
-				this.slotitemConsumed |= !!cond.call(this);
+				this.slotitemConsumed = this.slotitemConsumed || !!cond.call(this);
 			} else if(!!cond){
 				this.slotitemConsumed = true;
 			}
