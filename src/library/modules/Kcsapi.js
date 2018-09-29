@@ -1606,6 +1606,7 @@ Previously known as "Reactor"
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.map_num    = 0;
 			KC3SortieManager.onPvP      = true;
+			KC3SortieManager.slotitemConsumed = false;
 			KC3SortieManager.clearNodes();
 			KC3SortieManager.snapshotFleetState();
 			// Create a battle node for the PvP battle

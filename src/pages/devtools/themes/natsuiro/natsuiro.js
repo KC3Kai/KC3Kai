@@ -628,6 +628,7 @@
 				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
 				if(ref && !ref.closed){
 					// Update hash with latest battle data even if window already opened
+					// this might not work for all browser versions as a vulnerability to bypass CORS
 					ref.location.replace(url);
 					// Switch focus to the window if possible
 					if(ref.focus) ref.focus();
