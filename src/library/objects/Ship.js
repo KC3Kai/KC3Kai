@@ -2096,7 +2096,9 @@ KC3改 Ship Object
 			// Nelson is flagship of a fleet
 			if(fleetNum > 0 && shipPos === 0) {
 				// Double Line variants selected
-				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
+				const isDoubleLine = [2, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
 				// 3th and 5th ship are not carrier or absent?
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
