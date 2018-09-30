@@ -1038,8 +1038,7 @@ Previously known as "Reactor"
 		/* Traverse Map
 		-------------------------------------------------------*/
 		"api_req_map/next":function(params, response, headers){
-			// 1: repair team used, 2: repair goddess used
-			var dameconUsedType = parseInt(params.api_recovery_type, 10);
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			KC3SortieManager.discardSunk();
 			var nextNode = KC3SortieManager.advanceNode(
 				response.api_data, Date.toUTCseconds(headers.Date)
@@ -1068,6 +1067,7 @@ Previously known as "Reactor"
 		/* NORMAL: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_sortie/battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
@@ -1087,6 +1087,7 @@ Previously known as "Reactor"
 		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
 		"api_req_combined_battle/battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "fc_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
@@ -1110,6 +1111,7 @@ Previously known as "Reactor"
 		/* NIGHT BATTLES to DAY BATTLES
 		-------------------------------------------------------*/
 		"api_req_sortie/night_to_day":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "night_to_day";
 			KC3SortieManager.engageBattle(
 				response.api_data,
@@ -1125,6 +1127,7 @@ Previously known as "Reactor"
 		/* BATTLE STARTS as NIGHT
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/sp_midnight":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "sp_midnight";
 			KC3SortieManager.engageBattleNight(
 				response.api_data,
@@ -1144,11 +1147,13 @@ Previously known as "Reactor"
 		/* NIGHT BATTLES as SECOND PART
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = "midnight_battle";
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
 		},
 		"api_req_combined_battle/midnight_battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = "fc_midnight_battle";
 			KC3SortieManager.engageNight( response.api_data );
 			KC3Network.trigger("BattleNight");
@@ -1157,6 +1162,7 @@ Previously known as "Reactor"
 		/* ENEMY COMBINED FLEET
 		-------------------------------------------------------*/
 		"api_req_combined_battle/ec_battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = "ec_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
@@ -1165,6 +1171,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = "ec_midnight_battle";
 			KC3SortieManager.engageNight(
 				response.api_data,
@@ -1176,6 +1183,7 @@ Previously known as "Reactor"
 		/* BOTH COMBINED FLEET
 		-------------------------------------------------------*/
 		"api_req_combined_battle/each_battle":function(params, response, headers){
+			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = response.api_data.api_name || "each_battle";
 			KC3SortieManager.engageBattle(
 				response.api_data,
@@ -1598,6 +1606,7 @@ Previously known as "Reactor"
 			KC3SortieManager.map_world  = -1;
 			KC3SortieManager.map_num    = 0;
 			KC3SortieManager.onPvP      = true;
+			KC3SortieManager.slotitemConsumed = false;
 			KC3SortieManager.clearNodes();
 			KC3SortieManager.snapshotFleetState();
 			// Create a battle node for the PvP battle

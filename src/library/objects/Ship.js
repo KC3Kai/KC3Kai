@@ -980,6 +980,22 @@ KC3改 Ship Object
 		return damecon.length > 0 ? damecon[0] : {pos: -1, code: 0};
 	};
 
+	/**
+	 * Static method of the same logic to find available damecon to be used first.
+	 * @param equipArray - the master ID array of ship's all equipment including ex-slot at the last.
+	 *        for 5-slot ship, array supposed to be 6 elements; otherwise should be always 5 elements.
+	 * @see KC3Ship.prototype.findDameCon
+	 * @see ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
+	 */
+	KC3Ship.findDamecon = function(equipArray = []) {
+		// push last item from ex-slot to 1st
+		const sortedMstIds = equipArray.slice(-1);
+		sortedMstIds.push(...equipArray.slice(0, -1));
+		const dameconId = sortedMstIds.find(id => id === 42 || id === 43);
+		// code 1 for repair team, 2 for repair goddess
+		return dameconId === 42 ? 1 : dameconId === 43 ? 2 : 0;
+	};
+
 	/* CALCULATE TRANSPORT POINT
 	Retrieve TP object related to the current ship
 	** TP Object Detail --
@@ -2064,30 +2080,34 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is Nelson, Double Line variants formation, some equipment required
+	 * Flagship is healthy Nelson, Double Line variants formation selected.
+	 * No PvP sample found for now.
 	 *
 	 * @return true if this ship (Nelson) can do Nelson Touch cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nelson
+	 * @see https://wikiwiki.jp/kancolle/Nelson
 	 */
 	KC3Ship.prototype.canDoNelsonTouch = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.nelsonTouchShips.includes(this.masterId)) {
+		// is this ship Nelson and not even Chuuha
+		// still okay even 3th and 5th ship are Taiha
+		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
 			if(fleetNum > 0 && shipPos === 0) {
-				// 3th and 5th ship are not carrier
-				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					invalidCombinedShipType = [fleetObj.ship(2), fleetObj.ship(4)]
-						.some(ship => ship.isCarrier());
 				// Double Line variants selected
-				const isDoubleLine = [2, 12].includes(this.collectBattleConditions().formationId);
-				// Equipping a seaplane recon and some guns
-				const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
-				const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) > 2 ||
-					(this.countEquipmentType(2, 19) > 0 && this.countEquipmentType(2, [3, 38]) > 1);
-				// min 5 ships needed? Nelson/3th/5th can be Chuuha / Taiha?
-				return shipCnt >= 5 && !invalidCombinedShipType
-					&& isDoubleLine && hasRecon && minGunCnt;
+				const isDoubleLine = [2, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				// 3th and 5th ship are not carrier or absent?
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
+						.some(ship => ship.isAbsent() || ship.isCarrier());
+				// Equipping a seaplane recon and some guns?
+				//const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
+				//const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) >= 1;
+				// min 5 ships needed? how about ship(s) sink or retreat in mid-sortie?
+				return shipCnt >= 5 && isDoubleLine && !invalidCombinedShips;
 			}
 		}
 		return false;
@@ -2288,7 +2308,7 @@ KC3改 Ship Object
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const isThisCarrier = this.isCarrier();
 		// even carrier can do shelling or air attack if her yasen power > 0 (no matter chuuha)
-		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Kai Ni
+		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni
 		if(isThisCarrier && initYasen > 0) return true;
 		// carriers without yasen power can do air attack under some conditions:
 		if(isThisCarrier) {
@@ -2432,7 +2452,7 @@ KC3改 Ship Object
 					// even large radars (Kasumi K2 can equip), air radars okay too, see:
 					// https://twitter.com/nicolai_2501/status/923172168141123584
 					// https://twitter.com/nicolai_2501/status/923175256092581888
-					const hasCapableRadar = this.equipment(true).some(gear => gear.isHighAccuracyRadar());
+					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
 					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni

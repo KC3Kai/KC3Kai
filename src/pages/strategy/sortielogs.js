@@ -916,15 +916,27 @@
 										KC3Meta.useItemName(battle.useitem)].filter(v => !!v).join(" + "));
 							}
 							
-							// Process Battle, simulate combinedFleet flag
-							PlayerManager.combinedFleet = sortie.combined;
-
-							// Known issue: prediction will fail when Damecon used,
-							// as Node not read equipped damecon from sortie history,
-							// and damecon used on which node during 1 sortie have to be remembered.
+							// Process Battle, simulate combinedFleet type
+							// should avoid state-ful PlayerManager dependency as possible as we can
+							//PlayerManager.combinedFleet = sortie.combined;
 							thisNode = (new KC3Node(battle.sortie_id, battle.node, battle.time,
 								sortie.world, sortie.mapnum, sortie)).defineAsBattle();
+							thisNode.playerCombinedType = sortie.combined;
 							thisNode.fleetStates = battle.fleetStates;
+							// Known issue: prediction will fail when Damecon used,
+							// because Node does not see equipped damecon from old sortie history,
+							// and damecon used on which node during 1 sortie was not remembered.
+							// So add initial equipment on sortie started instead,
+							// in order to allow Node to check if there is damecon at least for 1st time used.
+							(thisNode.fleetStates || []).forEach((fleet, idx) => {
+								if(!fleet.equip){
+									if(idx === 0) {
+										fleet.equip = sortie["fleet" + sortie.fleetnum].map(ship => ship.equip);
+									} else if(sortie.combined && idx === 1){
+										fleet.equip = sortie.fleet2.map(ship => ship.equip);
+									}
+								}
+							});
 							thisNode.sunken = sinkShips;
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){

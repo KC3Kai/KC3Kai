@@ -628,6 +628,7 @@
 				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
 				if(ref && !ref.closed){
 					// Update hash with latest battle data even if window already opened
+					// this might not work for all browser versions as a vulnerability to bypass CORS
 					ref.location.replace(url);
 					// Switch focus to the window if possible
 					if(ref.focus) ref.focus();
@@ -898,7 +899,7 @@
 	function clearSortieData(){
 		$(".module.activity .activity_box").hideChildrenTooltips();
 		$(".module.activity .activity_battle").css("opacity", "0.25");
-		$(".module.activity .map_world").text("");
+		$(".module.activity .map_world").text("").attr("title", "").removeClass("debuffed");
 		$(".module.activity .map_info").removeClass("map_finisher");
 		$(".module.activity .map_gauge *:not(.clear)").css("width", "0%");
 		$(".module.activity .map_hp").text("");
@@ -3213,7 +3214,8 @@
 
 			// Clear battle details box just to make sure
 			clearBattleData();
-			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") );
+			$(".module.activity .map_world").text( KC3Meta.term("BattleMapWorldPvP") )
+				.attr("title", "").removeClass("debuffed");
 			$(".module.activity .map_hp").text( KC3Meta.term("BattleMapNoHpGauge") );
 
 			// PvP enemy never combined
