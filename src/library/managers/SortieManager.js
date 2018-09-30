@@ -23,6 +23,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		escapedList: [],
 		materialGain: Array.apply(null, {length:8}).map(v => 0),
 		sinkList: {main:[], escr:[]},
+		slotitemConsumed: false,
 		sortieTime: 0,
 		
 		startSortie :function(world, mapnum, fleetNum, stime, eventData){
@@ -38,6 +39,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const thisMap = this.getCurrentMapData();
 			this.map_difficulty = world < 10 ? 0 : thisMap.difficulty || 0;
 			this.hqExpGained = 0;
+			this.slotitemConsumed = false;
 			this.boss = {
 				info: false,
 				bosscell: -1,
@@ -143,16 +145,18 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			PlayerManager.hq.save();
 		},
 		
-		getBattleFleetStates :function(){
-			const fleetStates = this.focusedFleet.map(id => PlayerManager.fleets[id]).map(fleet => ({
-				fuel: fleet.ships.map(ship => KC3ShipManager.get(ship).fuel),
-				ammo: fleet.ships.map(ship => KC3ShipManager.get(ship).ammo),
-				slots: fleet.ships.map(ship => KC3ShipManager.get(ship).slots),
+		getBattleFleetStates :function(addEquip = this.slotitemConsumed, addMorale = false){
+			const fleetStates = this.focusedFleet.map(id => PlayerManager.fleets[id]).map(fleet => {
+				const fleetState = {
+					fuel: fleet.ships.map(ship => KC3ShipManager.get(ship).fuel),
+					ammo: fleet.ships.map(ship => KC3ShipManager.get(ship).ammo),
+					slots: fleet.ships.map(ship => KC3ShipManager.get(ship).slots),
+				};
 				// Could add more if necessary to track these properties of ships
-				//items: fleet.ships.map(ship => KC3ShipManager.get(ship).items),
-				//exitem: fleet.ships.map(ship => KC3ShipManager.get(ship).ex_item),
-				//morale: fleet.ships.map(ship => KC3ShipManager.get(ship).morale),
-			}));
+				if(addEquip) fleetState.equip = fleet.ships.map(ship => KC3ShipManager.get(ship).equipment(true).map(g => g.masterId));
+				if(addMorale) fleetState.morale = fleet.ships.map(ship => KC3ShipManager.get(ship).morale);
+				return fleetState;
+			});
 			return fleetStates;
 		},
 		
@@ -248,6 +252,21 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.boss.comp = comp;
 			this.boss.letters = [KC3Meta.nodeLetter(this.map_world, this.map_num, cellno)];
 			console.debug("Boss node info on start", this.boss);
+		},
+		
+		setSlotitemConsumed :function(cond, requestParams){
+			if(cond === undefined && !!requestParams){
+				const dameconUsedType = parseInt(requestParams.api_recovery_type, 10) || 0,
+					resupplyUsedFlag = requestParams.api_supply_flag == 1,
+					rationUsedFlag = requestParams.api_ration_flag == 1;
+				// 1: repair team used, 2: repair goddess used
+				cond = dameconUsedType > 0 || resupplyUsedFlag || rationUsedFlag;
+			}
+			if(typeof cond === "function"){
+				this.slotitemConsumed = this.slotitemConsumed || !!cond.call(this);
+			} else if(!!cond){
+				this.slotitemConsumed = true;
+			}
 		},
 		
 		onBossAvailable :function(nodeObj){
@@ -748,6 +767,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.onSortie = false;
 			this.onPvP = false;
 			this.onCat = false;
+			this.slotitemConsumed = false;
 			this.sortieTime = 0;
 			this.save();
 		}

@@ -515,13 +515,15 @@ Used by SortieManager
 			const fleetId = this.fleetSent - 1;
 			// To work better on battle simulation, prefer to use `isPlayerCombined`,
 			// which check via API data instead of determining 'current state' of PlayerManager
-			//const isPlayerCombinedSent = fleetId === 0 && PlayerManager.combinedFleet > 0;
+			//const isPlayerCombinedSent = fleetId === 0 && (this.playerCombinedType || PlayerManager.combinedFleet) > 0;
 
 			// Find battle type
 			const player = (() => {
 				if (!isPlayerCombined) { return KC3BattlePrediction.Player.SINGLE; }
-
-				switch (PlayerManager.combinedFleet) {
+				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet;
+				switch (combinedFleetType) {
+					case 0: case undefined:
+						return KC3BattlePrediction.Player.SINGLE;
 					case 1:
 						return KC3BattlePrediction.Player.CTF;
 					case 2:
@@ -529,7 +531,7 @@ Used by SortieManager
 					case 3:
 						return KC3BattlePrediction.Player.TCF;
 					default:
-						throw new Error(`Unknown combined fleet code: ${PlayerManager.combinedFleet}`);
+						throw new Error(`Unknown combined fleet code: ${combinedFleetType}`);
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
@@ -539,7 +541,14 @@ Used by SortieManager
 
 			const dameConCode = (() => {
 				if (KC3SortieManager.isPvP()) { return {}; }
-
+				if (Array.isArray(this.fleetStates) && this.fleetStates.length > (isPlayerCombined & 1)) {
+					return {
+						main: this.fleetStates[0].equip.map(equip => KC3Ship.findDamecon(equip)),
+						escort: isPlayerCombined && this.fleetStates[1].equip.map(equip => KC3Ship.findDamecon(equip)),
+					};
+				} else if (!isRealBattle) {
+					return {};
+				}
 				return {
 					main: PlayerManager.fleets[fleetId].getDameConCodes(),
 					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
@@ -792,8 +801,8 @@ Used by SortieManager
 			// Find battle type
 			const player = (() => {
 				if (!isPlayerCombined) { return KC3BattlePrediction.Player.SINGLE; }
-
-				switch (PlayerManager.combinedFleet) {
+				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet;
+				switch (combinedFleetType) {
 					case 0: case undefined:
 						return KC3BattlePrediction.Player.SINGLE;
 					case 1:
@@ -803,14 +812,21 @@ Used by SortieManager
 					case 3:
 						return KC3BattlePrediction.Player.TCF;
 					default:
-						throw new Error(`Unknown combined fleet code: ${PlayerManager.combinedFleet}`);
+						throw new Error(`Unknown combined fleet code: ${combinedFleetType}`);
 				}
 			})();
 			const enemy = isEnemyCombined ? KC3BattlePrediction.Enemy.COMBINED : KC3BattlePrediction.Enemy.SINGLE;
 			const time = KC3BattlePrediction.Time.NIGHT;
 			const dameConCode = (() => {
 				if (KC3SortieManager.isPvP()) { return {}; }
-
+				if (Array.isArray(this.fleetStates) && this.fleetStates.length > (isPlayerCombined & 1)) {
+					return {
+						main: this.fleetStates[0].equip.map(equip => KC3Ship.findDamecon(equip)),
+						escort: isPlayerCombined && this.fleetStates[1].equip.map(equip => KC3Ship.findDamecon(equip)),
+					};
+				} else if (!isRealBattle) {
+					return {};
+				}
 				return {
 					main: PlayerManager.fleets[fleetId].getDameConCodes(),
 					escort: isPlayerCombined && PlayerManager.fleets[1].getDameConCodes(),
@@ -1124,6 +1140,11 @@ Used by SortieManager
 					}
 				}).filter(function(shipId){return shipId;});
 			});
+			
+			// If damecon used in a battle, will record changed equipment for this and later nodes
+			const isAnyDameconConsumed = (this.dameConConsumed || []).some(v => !!v) ||
+				(this.dameConConsumedEscort || []).some(v => !!v);
+			KC3SortieManager.setSlotitemConsumed(isAnyDameconConsumed);
 			
 			var sunkApCnt = 0;
 			for(var i = 0; i < this.eships.length; i++) {
@@ -1752,9 +1773,13 @@ Used by SortieManager
 		//console.debug("Raw Air Base Raid data", battleData);
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
-		this.eformation = battleData.api_formation[1];
+		// Pad ship array to 6 for saving into encounter record
+		this.eships = Array.pad(this.eships, 6, -1);
 		this.elevels = this.normalizeArrayIndex(battleData.api_ship_lv);
+		this.elevels = Array.pad(this.elevels, 6, -1);
 		this.eSlot = battleData.api_eSlot;
+		this.eSlot = Array.pad(this.eSlot, 6, -1);
+		this.eformation = battleData.api_formation[1];
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
 			ally: battleData.api_f_maxhps,
@@ -1807,6 +1832,8 @@ Used by SortieManager
 		this.baseDamage = bomberPhase && bomberPhase.api_fdam
 			? sumSupportDamageArray(bomberPhase.api_fdam)
 			: 0;
+		// Record encountered enemy air raid formation
+		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
 	};
 	
 	KC3Node.prototype.isBoss = function(){
@@ -2045,8 +2072,9 @@ Used by SortieManager
 					}
 				}
 				
+				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet || 0;
 				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
-					powerBonus = ship.combinedFleetPowerBonus(PlayerManager.combinedFleet, this.isEnemyCombined, warfareType),
+					powerBonus = ship.combinedFleetPowerBonus(combinedFleetType, this.isEnemyCombined, warfareType),
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
 					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
@@ -2115,7 +2143,7 @@ Used by SortieManager
 								position: position,
 								formation: formation,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
-								combinedFleet: PlayerManager.combinedFleet,
+								combinedFleet: combinedFleetType,
 								rAmmoMod: remainingAmmoModifier,
 								spAttackType: cutin,
 								cutinEquips: ciequip,
@@ -2176,7 +2204,7 @@ Used by SortieManager
 		return tooltips;
 	};
 	
-	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp){
+	KC3Node.prototype.saveEnemyEncounterInfo = function(battleData, updatedName, baseExp, isAirBaseRaid){
 		// Update name and base exp only if new name offered
 		if(!battleData && !!updatedName){
 			if(!!this.enemyEncounter.uniqid){
@@ -2197,13 +2225,15 @@ Used by SortieManager
 			world: KC3SortieManager.map_world,
 			map: KC3SortieManager.map_num,
 			diff: KC3SortieManager.map_difficulty,
-			node: this.id,
+			node: isAirBaseRaid ? KC3Meta.getAirBaseFakeEdge() : this.id,
 			form: this.eformation,
 			// eships is padded array
 			ke: JSON.stringify(this.eships)
 		};
 		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke].filter(v => !!v).join("/");
 		KC3Database.Encounter(ed, true);
+		// Do not continue to save abyssal stats, thank to missing `api_eParam` on Land-Base Air Raid
+		if(!!isAirBaseRaid) { return true; }
 		this.enemyEncounter = ed;
 		// Save enemy info, maybe main fleet
 		(this.eshipsMain || this.eships).forEach((enemyId, i) => {

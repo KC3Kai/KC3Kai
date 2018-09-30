@@ -185,7 +185,8 @@
 					}
 					// Check node box
 					const nodeLetter = KC3Meta.nodeLetter(encounter.world, encounter.map, encounter.node);
-					const nodeName = encounter.name || "";
+					const nodeName = encounter.name ||
+						(nodeLetter === KC3Meta.getAirBaseFakeEdge(true) ? "Land-Base Air Raid" : "");
 					curBox = $("#encounter-" + mapName + " .node-" + nodeLetter);
 					if(!curBox.length) {
 						curBox = $(".tab_encounters .factory .encounter_node").clone();
@@ -198,12 +199,13 @@
 					}
 					// Check formation and ships box
 					const curNodeBody = $("#encounter-" + mapName + " .node-" + nodeLetter + " .encounter_node_body");
-					const keSafe = encounter.ke.replace(/[\[\]\"\'\{\}]/g,"").replace(/[,:]/g,"_");
-					curBox = $(".formke-" + encounter.form + keSafe, curNodeBody);
+					const keSafe = encounter.ke.replace(/[\[\]\"\'\{\}]/g,"").replace(/[,:]/g, "_");
+					const formationUniqueClass = ["formke", encounter.form, keSafe].join("-");
+					curBox = $("." + formationUniqueClass, curNodeBody);
 					if(!curBox.length) {
 						// Clone record box
 						curBox = $(".tab_encounters .factory .encounter_record").clone();
-						curBox.addClass("formke-" + encounter.form + keSafe);
+						curBox.addClass(formationUniqueClass);
 						curBox.data("count", encounter.count || 1);
 						curBox.data("nodeName", nodeName);
 						curBox.appendTo(curNodeBody);

@@ -43,6 +43,7 @@ KC3改 Equipment Object
 	 * to correct the 'naked stats' for these cases, have to simulate them all.
 	 * It might be moved to an independent JSON, but stays here so that we can add comments.
 	 * @return the bonus definition table with new counters of related equipment.
+	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180810 ALL] https://imgur.com/a/kd3fSSo
@@ -55,9 +56,9 @@ KC3改 Equipment Object
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 279],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307],
 				tripleTorpedo: 0,
 				tripleTorpedoIds: [13, 125],
 				tripleTorpedoLateModel: 0,
@@ -114,6 +115,27 @@ KC3改 Equipment Object
 			},
 			// Ju 87C Kai Ni (w/ KMX / Skilled)
 			"306": {
+				count: 0,
+				byClass: {
+					// Graf Zeppelin Class
+					"63": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Aquila Class
+					"68": "63",
+				},
+				byShip: [
+					// Taiyou Kai Ni
+					{
+						ids: [529],
+						multiple: { "tais": 1, "houk": 1 },
+					},
+					// Shinyou
+					{
+						ids: [534, 381, 536],
+						multiple: { "tais": 3, "houk": 2 },
+					},
+				],
 			},
 			// Suisei
 			"24": {
@@ -272,6 +294,11 @@ KC3改 Equipment Object
 					// Agano Class
 					"41": "4",
 				},
+				byShip: {
+					// Gotland (and Kai?)
+					ids: [574],
+					multiple: { "houg": 1, "tais": 2, "houk": 2 },
+				},
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
@@ -424,6 +451,10 @@ KC3改 Equipment Object
 					"20": "4",
 					// Agano Class
 					"41": "4",
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
@@ -974,6 +1005,37 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
+			"308": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				},
+				byShip: {
+					// All Destroyers?
+					stypes: [2],
+					multiple: { "houg": 1 },
+				},
+			},
+			// GFCS Mk.37
+			"307": {
+				count: 0,
+				byClass: {
+					// Following Americans: Iowa Class
+					"65": {
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					// Lexington Class
+					"69": "65",
+					// Casablanca Class
+					"83": "65",
+					// Essex Class
+					"84": "65",
+				},
+			},
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,
@@ -1009,7 +1071,7 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.quadrupleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
-			if(gear.isHighAccuracyRadar()) synergyGears.surfaceRadar += 1;
+			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
 		if(bonusDefs) {
@@ -1200,7 +1262,7 @@ KC3改 Equipment Object
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
-					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
+					modifier = this.isSurfaceRadar() ? 1.7 : 1;
 				// Depth Charge Projector
 				if([15].includes(type2))
 					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown
@@ -1564,6 +1626,21 @@ KC3改 Equipment Object
 		return this.exists() &&
 			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 1;
+	};
+
+	KC3Gear.prototype.isSurfaceRadar = function(){
+		// currently uses high LoS definition instead of high accuracy one
+		return this.isHighLineOfSightRadar();
+	};
+
+	KC3Gear.prototype.isHighLineOfSightRadar = function(){
+		/* Another speculation of 'isSurfaceRadar' definition:
+		   uses 'api_saku > 4' instead of 'api_houm > 2',
+		   which the only difference is including '[278] SK Radar' large radar.
+		   sample: DD Kasumi K2 + SK Radar + Model C gun gets synergy bonus. */
+		return this.exists() &&
+			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_saku > 4;
 	};
 
 	KC3Gear.prototype.isHighAccuracyRadar = function(){

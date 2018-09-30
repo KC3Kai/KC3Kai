@@ -641,11 +641,19 @@ Provides access to data on built-in JSON files
 				this._battle.aacitype[index] || [];
 		},
 		
-		term: function(key) {
+		term :function(key) {
 			return (ConfigManager.info_troll && this._terms.troll[key]) || this._terms.lang[key] || key;
 		},
 		
-		nodeLetter : function(worldId, mapId, edgeId, timestamp) {
+		/** @return a fake edge ID/name used to indicate and save as land-base air raid encounter */
+		getAirBaseFakeEdge :function(returnFakeName = false) {
+			return returnFakeName ? "AB" : -99;
+		},
+		
+		nodeLetter :function(worldId, mapId, edgeId, timestamp) {
+			// return a string constant to indicate fake 'land base' node
+			if (edgeId === this.getAirBaseFakeEdge())
+				return this.getAirBaseFakeEdge(true);
 			const dataSource = this.isEventWorld(worldId) || this.isPhase2Started(timestamp) ?
 				this._edges : this._edgesOld;
 			const map = dataSource["World " + worldId + "-" + mapId];
@@ -663,7 +671,7 @@ Provides access to data on built-in JSON files
 			return this._nodes["World " + worldId + "-" + mapId] || {};
 		},
 		
-		nodeLetters : function(worldId, mapId) {
+		nodeLetters :function(worldId, mapId) {
 			var map = this._nodes["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined" && !!map.letters) {
 				return map.letters;
@@ -671,7 +679,7 @@ Provides access to data on built-in JSON files
 			return {};
 		},
 		
-		nodeMarkers : function(worldId, mapId) {
+		nodeMarkers :function(worldId, mapId) {
 			var map = this._nodes["World " + worldId + "-" + mapId];
 			if (typeof map !== "undefined" && !!map.markers) {
 				return map.markers;
@@ -679,7 +687,7 @@ Provides access to data on built-in JSON files
 			return [];
 		},
 		
-		tpObtained : function(kwargs) {
+		tpObtained :function(kwargs) {
 			function addTP(tp) {
 				var args = [].slice.call(arguments,1);
 				for(var i in args) {
