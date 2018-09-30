@@ -5,7 +5,21 @@
 <!-- HELP TOPICS -->
 <div class="page_help">
 	<div class="help_q">Basic Usages:</div>
-	<div class="help_a">TODO</div>
+	<div class="help_a"><ul>
+		<li>Input the world and map ID wanna to be viewed;
+		<li>Enabling <code>Edges</code> will show edges ID and nodes detials if map data is ready (have sortied to this map once);
+		<li>Enabling <code>Enemies</code> will show offical in-game abyssal ship icons (still no submarine icon for some nodes);
+		<li>Input / paste makers JSON, both markers and JSON texts will be updated on focus out;
+		<li>Drag markers to their proper position on map. Zoom to 100% if accurate coordinates needed;
+		<li>To remove marker, delete JSON directly or drag it out of map.
+	</ul></div>
+
+	<div class="help_q">How to show hidden nodes & routes before unlocked in game?</div>
+	<div class="help_a">
+		Enabling the data digging flag will do, execute this code in console:<br/>
+		<code>KC3StrategyTabs.mapmarkers.definition.digEventSpots = true</code><br/>
+		NOTE: Will try to fetch JSON data from official server until 404 is responded.
+	</div>
 
 </div>
 

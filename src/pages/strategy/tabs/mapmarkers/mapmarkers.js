@@ -278,7 +278,7 @@
 						const edge = edges[edgeKey];
 						const node = edge[0];
 						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
-						if(node.color || node.route) {
+						if(node.no && (node.color || node.route)) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
 							const sprite = new this.pixi.Sprite(frame);
 							let offsetX = 0, offsetY = 0;
@@ -294,6 +294,15 @@
 					}
 					stage.addChild(edgesContainer);
 					stage.addChild(labelsContainer);
+				}
+				// Show Land-Base 'AB' icon if exists
+				if(this.mapInfoMeta.airbase) {
+					const airbase = this.mapInfoMeta.airbase;
+					const frame = this.pixi.Texture.fromFrame("map_common_81");
+					const sprite = new this.pixi.Sprite(frame);
+					sprite.anchor.set(0.5, 0.5);
+					sprite.position.set(airbase.x, airbase.y);
+					stage.addChild(sprite);
 				}
 				if(this.isShowEnemies && this.mapInfoMeta.enemies) {
 					for(const enemy of this.mapInfoMeta.enemies) {
