@@ -484,7 +484,7 @@
             this.shipCount++;
         }
 
-        const groupShipsByClass = !!JSON.parse(localStorage.srShowcase || {}).groupShipsByClass;
+        const groupShipsByClass = !!(this.buildSettings || {}).groupShipsByClass;
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
                 this.allShipGroups[i].sort(function (shipA, shipB) {
@@ -493,13 +493,14 @@
                     if (groupShipsByClass && sidA !== sidB) {
                         return sidA - sidB;
                     }
-                    if (shipB.level !== shipA.level) {
+                    if (shipA.level !== shipB.level) {
                         return shipB.level - shipA.level;
                     }
                     return shipB.masterId - shipA.masterId;
                 });
             }
         }
+
         return true;
     };
 
