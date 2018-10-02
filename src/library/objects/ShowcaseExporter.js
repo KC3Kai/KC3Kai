@@ -484,16 +484,23 @@
             this.shipCount++;
         }
 
+        const groupShipsByClass = !!(this.buildSettings || {}).groupShipsByClass;
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
                 this.allShipGroups[i].sort(function (shipA, shipB) {
-                    if (shipB.level !== shipA.level)
+                    // Get api_sort_id to group by class
+                    var [sidA, sidB] = [shipA.master().api_sort_id, shipB.master().api_sort_id];
+                    if (groupShipsByClass && sidA !== sidB) {
+                        return sidA - sidB;
+                    }
+                    if (shipA.level !== shipB.level) {
                         return shipB.level - shipA.level;
-                    else
-                        return shipB.masterId - shipA.masterId;
+                    }
+                    return shipB.masterId - shipA.masterId;
                 });
             }
         }
+
         return true;
     };
 

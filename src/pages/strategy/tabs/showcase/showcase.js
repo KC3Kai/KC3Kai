@@ -186,7 +186,8 @@
 				exportMode: "standard",
 				output: 2, // new tab
 				exportName: false,
-				eventLocking: false
+				eventLocking: false,
+				groupShipsByClass: false,
 			};
 			var settings;
 			if (typeof localStorage.srShowcase === "undefined") {
@@ -210,6 +211,7 @@
 			$("#exportAddName")[0].checked = settings.exportName;
 			$("#exportMode").val(settings.exportMode);
 			$("#exportEventLocking")[0].checked = settings.eventLocking;
+			$("#groupShipsByClass")[0].checked = settings.groupShipsByClass;
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -312,6 +314,14 @@
 				var val = this.value;
 				self.modifySettings(function(settings){
 					settings.exportMode = val;
+					return settings;
+				});
+			});
+
+			$("#groupShipsByClass").change(function(){
+				var checked = this.checked;
+				self.modifySettings(function(settings){
+					settings.groupShipsByClass = checked;
 					return settings;
 				});
 			});
