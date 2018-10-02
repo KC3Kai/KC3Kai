@@ -606,11 +606,12 @@
 		"AboutForkContributors": [
 			{
 				"name": "HitomaruKonpaku",
-				"avatar" : "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
-				"desc" : "AboutDeveloper",
+				"avatar": "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
+				"desc": "AboutDeveloper",
 				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/HitomaruKonpaku"
+				"links": {
+					"gh": "https://github.com/HitomaruKonpaku",
+					"tw": "https://twitter.com/HitomaruKonpaku"
 				}
 			},
 			{
