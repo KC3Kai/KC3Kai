@@ -64,6 +64,13 @@
 	background: var(--lockColor6) !important;
 }
 
+.tab_locking .ship_count {
+	color: white;
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .tab_locking .map_area {
 	width:90px;
 	margin:0 0 5px 0;

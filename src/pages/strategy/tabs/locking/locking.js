@@ -113,6 +113,7 @@
         adjustHeight() {
             this.setStyleVar("--shipListOffsetTop",
                 $(".ship_list", this.tab).offset().top + "px");
+            this.updateLockCount();
         }
 
         mapShipLockingStatus(shipObj) {
@@ -172,6 +173,7 @@
                 });
                 this.lockPlans[tag] = shipIds.filter(id => id !== undefined);
             });
+            this.updateLockCount();
         }
 
         defineSorters() {
@@ -498,6 +500,14 @@
                 .text("").addClass("lock_mode_" + (newLockPlan + 1));
             ship.lockPlan = newLockPlan;
         }
+
+        updateLockCount() {
+            $('.lock_mode').each((i, e) => {
+                var count = $('.ships_area>div', e).length;
+                $('.ship_count', e).text(count);
+            })
+        }
+
     }
 
     KC3StrategyTabs.locking = new KC3StrategyTab("locking");
