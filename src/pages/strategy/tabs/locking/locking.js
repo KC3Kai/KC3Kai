@@ -505,7 +505,7 @@
             $('.lock_mode').each((i, e) => {
                 var count = $('.ships_area>div', e).length;
                 $('.ship_count', e).text(count);
-            })
+            });
         }
 
     }
