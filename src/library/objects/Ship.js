@@ -985,7 +985,7 @@ KC3改 Ship Object
 	 * @param equipArray - the master ID array of ship's all equipment including ex-slot at the last.
 	 *        for 5-slot ship, array supposed to be 6 elements; otherwise should be always 5 elements.
 	 * @see KC3Ship.prototype.findDameCon
-	 * @see ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
+	 * @see main.js#ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
 	 */
 	KC3Ship.findDamecon = function(equipArray = []) {
 		// push last item from ex-slot to 1st
