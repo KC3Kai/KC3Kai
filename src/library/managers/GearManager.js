@@ -44,10 +44,10 @@ Saves and loads list to and from localStorage
 		// Daihatsu landing craft anti-installation power modifiers per types and improvements
 		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus]
 		landingCraftModifiers: {
-			// Soft-skinned (currently only Shikon 11th tank)
+			// Soft-skinned
 			0: {
-				modifier: [1,1,1,1.39,1],
-				improvement: [0,0,0,0,0]
+				modifier: [1.5,2.1,1,2.8,1],
+				improvement: [0.03,0,0,0,0]
 			},
 			// Artillery Imp
 			1: {
@@ -64,7 +64,7 @@ Saves and loads list to and from localStorage
 				modifier: [1.7,1.3,1,3.5,1],
 				improvement: [0.051,0.026,0,0,0],
 			},
-			// Summer Harbor Princess Damaged Form (no info on Shikon 11th tank)
+			// Summer Harbor Princess (no info on Shikon 11th tank)
 			4: {
 				modifier: [2.8,3.7,1.8,1,1],
 				improvement: [0.093,0.074,0.036,0,0],
