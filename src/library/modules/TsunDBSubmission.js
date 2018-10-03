@@ -374,85 +374,85 @@
 			if(airRaidData) {
 				this.enemyComp.enemyComp.isAirRaid = true;
 			}
+			
 			this.enemyComp.airBattle = null;
 			// Process airbattle (if any)
-			if (apiData.api_kouku || apiData.api_air_base_attack) {
+			if(apiData.api_kouku || apiData.api_air_base_attack) {
 				const isLandBase = !!apiData.api_air_base_attack;
-				const processAirBattle = function (koukuApi) {
+				const buildAirBattleData = (koukuApi) => {
 					const obj = {
 						total: koukuApi.api_stage1.api_e_count,
 						lost: koukuApi.api_stage1.api_e_lostcount,
 						state: koukuApi.api_stage1.api_disp_seiku,
 					};
 					// api_stage2 can be null, bomber count can also be 0 during air_base_attack
-					if (koukuApi.api_stage2) {
+					if(koukuApi.api_stage2) {
 						obj.bomber = koukuApi.api_stage2.api_e_count;
 					}
 					return obj;
 				};
-
+				const buildShipFromBase = (baseInfo, squadronPlanes) => {
+					const obj = new KC3Ship();
+					// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
+					obj.rosterId = 1;
+					obj.masterId = 83;
+					obj.items = baseInfo.planes.map(planeInfo => planeInfo.api_state === 1 ? planeInfo.api_slotid : -1);
+					// Get latest exact count from API instead of land-base setup
+					obj.slots = squadronPlanes.map(plane => plane.api_count || 0);
+					return obj;
+				};
+				
 				const koukuApi = !isLandBase ? apiData.api_kouku : !airRaidData ? apiData.api_air_base_attack[0] : airRaidData.api_air_base_attack;
-				const airBattle = processAirBattle(koukuApi);
+				const airBattle = buildAirBattleData(koukuApi);
 				airBattle.landBase = isLandBase;
 				airBattle.jetPhase = !!(apiData.api_air_base_injection || apiData.api_injection_kouku);
-
-				let fp = 0, baseInfo, shipObj;
+				
+				let fp = 0;
 				const bases = PlayerManager.bases.filter(b => b.map === this.currentMap[0]);
-
-				// Get interception power of all bases involved in air raid
-				if (airRaidData) {
+				
+				// Get interception power of all land-bases involved in air raid
+				if(airRaidData) {
 					airBattle.planes = [];
 					airBattle.slots = [];
-					(koukuApi.api_plane_from[0] || []).forEach((base) => {
-						baseInfo = bases[base - 1];
-						shipObj = new KC3Ship();
-						// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
-						shipObj.rosterId = 1;
-						shipObj.masterId = 83;
-						shipObj.items = baseInfo.planes.map(function (planeInfo) {
-							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
-						});
-						const planes = shipObj.items.map(planeInfo => KC3GearManager.get(planeInfo).masterId);
+					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
+						const baseInfo = bases[baseId - 1];
+						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
+						const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
+						const planes = squadronPlanes.map(plane => plane.api_mst_id || -1);
 						airBattle.planes.push(planes);
-						shipObj.slots = baseInfo.planes.map(function (planeInfo) {
-							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
-						});
 						airBattle.slots.push(shipObj.slots);
 						fp += shipObj.interceptionPower();
-
+						
 						airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag.includes(1);
 						airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag.includes(1);
 						airBattle.damage = koukuApi.api_stage3.api_fdam;
 					});
 				}
-
-				// Get sortie power of the baee involved in the first wave
-				else if (isLandBase && !airRaidData) {
-					baseInfo = bases[koukuApi.api_base_id - 1];
-					shipObj = new KC3Ship();
-					shipObj.rosterId = 1;
-					shipObj.masterId = 83;
-					shipObj.items = baseInfo.planes.map(function (planeInfo) {
-						return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
-					});
-					shipObj.slots = baseInfo.planes.map(function (planeInfo) {
-						return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
-					});
+				
+				// Get sortie power of the land-base involved in the first wave
+				else if(isLandBase && !airRaidData) {
+					const baseInfo = bases[koukuApi.api_base_id - 1];
+					const squadronPlanes = koukuApi.api_squadron_plane || [];
+					const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
+					// fp will be an Array[2]
 					fp = shipObj.fighterBounds(true);
 				}
-
-				// Get fleet-based fighter power
+				
+				// Get fighter power of sortied fleet(s)
 				else {
-					fp = PlayerManager.fleets[apiData.api_deck_id - 1].fighterBounds();
-					if (this.data.fleetType > 0 && apiData.api_ship_ke_combined) {
+					// fp will be an Array[2]
+					fp = PlayerManager.fleets[this.data.sortiedFleet - 1].fighterBounds();
+					// Sum fighter power from escort fleet if abyssal combined too
+					if(apiData.api_ship_ke_combined && this.data.fleetType > 0 && this.data.sortiedFleet === 1) {
 						const escortFp = PlayerManager.fleets[1].fighterBounds();
-						fp = fp.map((num, idx) => num + escortFp[idx]);
+						fp.forEach((val, idx) => { fp[idx] = val + escortFp[idx]; });
 					}
 				}
-
+				
 				airBattle.fighterPower = fp;
 				this.enemyComp.airBattle = airBattle;
 			}
+			
 			this.sendData(this.enemyComp, 'enemy-comp');
 		},
 		
