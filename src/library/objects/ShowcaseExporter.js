@@ -466,7 +466,7 @@
 
     ShowcaseExporter.prototype._getShips = function () {
         KC3ShipManager.load();
-        var ships;
+        var ships, self = this;
         if(this.buildSettings.exportMode !== "full") {
             ships = KC3ShipManager.find(function (s) {
                 return s.lock !== 0;
@@ -484,20 +484,25 @@
             this.shipCount++;
         }
 
-        const groupShipsByClass = !!(this.buildSettings || {}).groupShipsByClass;
+        var sorter = function (shipA, shipB) {
+            var mstShipA = shipA.master(), mstShipB = shipB.master();
+            // There is sorting number named `api_sortno` for phase 1
+            // Get phase 2 `api_sort_id` to sort by class (in-game order) instead of ctype
+            var sortnoA = mstShipA.api_sort_id,
+                sortnoB = mstShipB.api_sort_id;
+            //var ctypeA = mstShipA.api_ctype,
+            //    ctypeB = mstShipB.api_ctype;
+            if (self.buildSettings.groupShipsByClass) {
+                return sortnoA - sortnoB;
+            }
+            if (shipA.level !== shipB.level) {
+                return shipB.level - shipA.level;
+            }
+            return sortnoA - sortnoB;
+        };
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
-                this.allShipGroups[i].sort(function (shipA, shipB) {
-                    // Get api_sort_id to group by class
-                    var [sidA, sidB] = [shipA.master().api_sort_id, shipB.master().api_sort_id];
-                    if (groupShipsByClass && sidA !== sidB) {
-                        return sidA - sidB;
-                    }
-                    if (shipA.level !== shipB.level) {
-                        return shipB.level - shipA.level;
-                    }
-                    return shipB.masterId - shipA.masterId;
-                });
+                this.allShipGroups[i].sort(sorter);
             }
         }
 
