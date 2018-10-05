@@ -249,6 +249,23 @@
 		switchToFleet(targetFleet);
 		return true;
 	}
+
+    function updateEnemyHPBackground(enemyHPPercent, selector) {
+        if (enemyHPPercent <= 0) {
+            $(selector).parent().css("background", "transparent");
+        } else {
+            $(selector).parent().css("background", "");
+        }
+        if (enemyHPPercent <= 0.25) {
+            $(selector).css("background", "#FF0000");
+        } else if (enemyHPPercent <= 0.50) {
+            $(selector).css("background", "#FF9900");
+        } else if (enemyHPPercent <= 0.75) {
+            $(selector).css("background", "#FFFF00");
+        } else {
+            $(selector).css("background", "#00FF00");
+        }
+    }
 	
 	/* Morale timers
 	- use end time difference not remaining decrements for accuracy against lag
@@ -2596,16 +2613,8 @@
 								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1))
 									.css("width", 28*enemyHPPercent);
 							}
-							
-							if(enemyHPPercent <= 0.25){
-								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
-							} else if(enemyHPPercent <= 0.50){
-								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
-							} else if(enemyHPPercent <= 0.75){
-								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
-							} else{
-								$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
-							}
+
+                            updateEnemyHPBackground(enemyHPPercent, enemyFleetBoxSelector + " .abyss_hp_bar_" + (index + 1));
 							
 						} else {
 							$(enemyFleetBoxSelector+" .abyss_hp_bar_"+(index+1)).css("background", "#999999");
@@ -2830,16 +2839,8 @@
 						
 						$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1))
 							.css("width", 28*enemyHPPercent);
-						
-						if(enemyHPPercent <= 0.25){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
-						} else if(enemyHPPercent <= 0.50){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
-						} else if(enemyHPPercent <= 0.75){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
-						} else{
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
-						}
+
+                        updateEnemyHPBackground(enemyHPPercent, ".module.activity .abyss_single .abyss_hp_bar_" + (index + 1));
 						
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).show();
 					}
@@ -3279,15 +3280,7 @@
 						enemyHPPercent = ( newEnemyHP / thisPvP.maxHPs.enemy[index] );
 						$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("width", 28*enemyHPPercent);
 
-						if(enemyHPPercent <= 0.25){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF0000");
-						} else if(enemyHPPercent <= 0.50){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FF9900");
-						} else if(enemyHPPercent <= 0.75){
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#FFFF00");
-						} else{
-							$(".module.activity .abyss_single .abyss_hp_bar_"+(index+1)).css("background", "#00FF00");
-						}
+						updateEnemyHPBackground(enemyHPPercent,".module.activity .abyss_single .abyss_hp_bar_"+(index+1));
 
 						$(".module.activity .abyss_single .abyss_hp_"+(index+1)).show();
 					}
