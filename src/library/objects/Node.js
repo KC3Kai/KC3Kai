@@ -2015,7 +2015,7 @@ Used by SortieManager
 
 				// ENEMY STATS
 				const combinedFleetIndexAlign = 6;
-				const isAgainstEnemyEscort = this.isEnemyCombined &&
+				const isAgainstEnemyEscort = this.enemyCombined &&
 					this.activatedEnemyFleet !== undefined && this.activatedEnemyFleet !== 1,
 					targetIndex = attack.target[0] - (isAgainstEnemyEscort ? combinedFleetIndexAlign : 0);
 				// Enemy arrays will be only 6 elements if abyssal escort fleet activated on night battle
@@ -2074,7 +2074,7 @@ Used by SortieManager
 				
 				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet || 0;
 				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
-					powerBonus = ship.combinedFleetPowerBonus(combinedFleetType, this.isEnemyCombined, warfareType),
+					powerBonus = ship.combinedFleetPowerBonus(combinedFleetType, this.enemyCombined, warfareType),
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
 					damageStatus = ['taiha', 'chuuha', 'shouha', 'normal'].find((_, idx) => (idx + 1) / 4 >= hp / ship.hp[1]);
 
@@ -2160,7 +2160,7 @@ Used by SortieManager
 								formation: this.eformation,
 								position: targetIndex,
 								armor: armor,
-								isMainFleet: !this.EnemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
+								isMainFleet: !this.enemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
 								hp: eHp,
 							};
 

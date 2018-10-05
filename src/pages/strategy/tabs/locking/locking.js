@@ -502,9 +502,10 @@
         }
 
         updateLockCount() {
-            $('.lock_mode').each((i, e) => {
-                var count = $('.ships_area>div', e).length;
-                $('.ship_count', e).text(count);
+            $(".lock_mode").each((_, lock) => {
+                const total = $(".ships_area > .lship", lock).length;
+                const planned = $(".ships_area > .lship.plannedlock", lock).length;
+                $(".ship_count", lock).text("{0} /{1}".format(planned, total));
             });
         }
 

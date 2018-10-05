@@ -451,8 +451,10 @@
 					] : [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg'
+						// some exists: 'banner3', 'banner3_g_dmg'
 					] : ['card', 'card_dmg',
 						'banner', 'banner_dmg', 'banner_g_dmg',
+						'banner2', 'banner2_dmg', 'banner2_g_dmg',
 						'full', 'full_dmg',
 						'character_full', 'character_full_dmg',
 						'character_up', 'character_up_dmg',
@@ -494,6 +496,7 @@
 							{ width: 218, height: 300, type: "square" },
 						showZoomer: false,
 					});
+					if(!cgswf.length || !this.croppie.length) return;
 					$(".tab_mstship .shipInfo .cgswf .cr-viewport").css("border", "none")
 						.css("box-shadow", "none");
 					$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "Loading");

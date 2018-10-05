@@ -33,7 +33,7 @@
 .tab_locking .lock_mode {
 	width: 100px;
 	float: left;
-	margin: 0 15px 0 0;
+	margin: 0 15px 5px 0;
 	padding:5px 5px 5px 5px;
 }
 
@@ -64,15 +64,9 @@
 	background: var(--lockColor6) !important;
 }
 
-.tab_locking .ship_count {
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-}
-
 .tab_locking .map_area {
-	width:90px;
-	margin:0 0 5px 0;
+	width:100%;
+	margin:0;
 }
 .tab_locking .map_area .map {
 	width:30px;
@@ -86,6 +80,18 @@
 	color:#000;
 	font-size:14px;
 	font-weight:bold;
+}
+
+.tab_locking .ship_count {
+	width:100%;
+	height:13px;
+	line-height:13px;
+	margin:0px 0px 5px 0px;
+	text-align:center;
+	font-size:12px;
+	font-weight:bold;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 .tab_locking .lock_mode .lship {
@@ -126,7 +132,7 @@
 
 .tab_locking .lock_mode .drop_area {
 	background:rgba(255,255,255,0.2);
-	width:90px;
+	width:100%;
 	height:50px;
 	line-height:20px;
 	margin:5px 0 0 0;

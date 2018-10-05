@@ -95,7 +95,7 @@
 		Prepares latest fleets data
 		---------------------------------*/
 		reload :function(){
-			var ctr, ThisShip, TempShipList, self=this;
+			const self = this;
 			// Reload data from local storage
 			KC3ShipManager.load();
 			KC3GearManager.load();
@@ -105,84 +105,80 @@
 			this.gearCache = {};
 
 			// Convert ship list object into array
-			TempShipList = $.map(KC3ShipManager.list, function(value, index) {
+			const tempShipList = $.map(KC3ShipManager.list, function(value, index) {
 				return [value];
 			});
 
 			// Order by level
-			TempShipList.sort(function(a,b){
-				return b.level  - a.level;
+			tempShipList.sort(function(a,b){
+				return b.level - a.level;
 			});
 
 			// Add leveled list to ship cache, max 6 per type
-			for(ctr in TempShipList){
-				ThisShip = TempShipList[ctr];
-				switch( ThisShip.master().api_stype ){
-					case 9: this.addToStypeList("bb", ThisShip); break;
-					case 10: this.addToStypeList("bbv", ThisShip); break;
-					case 8: this.addToStypeList("fbb", ThisShip); break;
-					case 18: this.addToStypeList("cv", ThisShip); break;
-					case 11: this.addToStypeList("cv", ThisShip); break;
-					case 7: this.addToStypeList("cvl", ThisShip); break;
-					case 5: this.addToStypeList("ca", ThisShip); break;
-					case 6: this.addToStypeList("cav", ThisShip); break;
-					case 3: this.addToStypeList("cl", ThisShip); break;
-					case 2: this.addToStypeList("dd", ThisShip); break;
-					case 4: this.addToStypeList("clt", ThisShip); break;
-					case 13: this.addToStypeList("ss", ThisShip); break;
-					case 14: this.addToStypeList("ss", ThisShip); break;
-					case 20: this.addToStypeList("ax", ThisShip); break;
-					case 21: this.addToStypeList("ax", ThisShip); break;
-					case 17: this.addToStypeList("ax", ThisShip); break;
-					case 19: this.addToStypeList("ax", ThisShip); break;
-					case 16: this.addToStypeList("ax", ThisShip); break;
-					case 22: this.addToStypeList("ax", ThisShip); break;
+			for(const ctr in tempShipList){
+				const thisShip = tempShipList[ctr];
+				switch( thisShip.master().api_stype ){
+					case 9: this.addToStypeList("bb", thisShip); break;
+					case 10: this.addToStypeList("bbv", thisShip); break;
+					case 8: this.addToStypeList("fbb", thisShip); break;
+					case 18: this.addToStypeList("cv", thisShip); break;
+					case 11: this.addToStypeList("cv", thisShip); break;
+					case 7: this.addToStypeList("cvl", thisShip); break;
+					case 5: this.addToStypeList("ca", thisShip); break;
+					case 6: this.addToStypeList("cav", thisShip); break;
+					case 3: this.addToStypeList("cl", thisShip); break;
+					case 2: this.addToStypeList("dd", thisShip); break;
+					case 4: this.addToStypeList("clt", thisShip); break;
+					case 13: this.addToStypeList("ss", thisShip); break;
+					case 14: this.addToStypeList("ss", thisShip); break;
+					case 20: this.addToStypeList("ax", thisShip); break;
+					case 21: this.addToStypeList("ax", thisShip); break;
+					case 17: this.addToStypeList("ax", thisShip); break;
+					case 19: this.addToStypeList("ax", thisShip); break;
+					case 16: this.addToStypeList("ax", thisShip); break;
+					case 22: this.addToStypeList("ax", thisShip); break;
 					default: break;
 				}
 			}
 
 			// Organize all owned equipment by slotitem_id
-			var GearRecords = {};
+			const gearRecords = {};
 			$.each(KC3GearManager.list, function(index, element){
+				const key = "g" + element.masterId;
 				// If slotitem_id does not exist yet
-				if(typeof GearRecords["g"+element.masterId] == "undefined"){
-					GearRecords["g"+element.masterId] = 0;
-				}
+				gearRecords[key] = gearRecords[key] || 0;
 				// Increment this gear to the slotitem_id
-				GearRecords["g"+element.masterId]++;
+				gearRecords[key] += 1;
 			});
 
 			// Organize slotitem_ids into their types
-			var GearMaster, GearType;
-			$.each(GearRecords, function(index, element){
-				GearMaster = KC3Master.slotitem( index.substr(1) );
-				if(!GearMaster) return;
-
-				GearType = GearMaster.api_type[3];
+			$.each(gearRecords, function(index, element){
+				const gearMaster = KC3Master.slotitem( index.substr(1) );
+				if(!gearMaster) return;
+				const gearType = gearMaster.api_type[3];
+				const key = "t" + gearType;
 				// If gear type does not exist yet
-				if(typeof self.gearCache["t"+GearType] == "undefined"){
-					self.gearCache["t"+GearType] = [];
-				}
+				self.gearCache[key] = self.gearCache[key] || [];
 				// Add this slotitem_id to the gear type
-				self.gearCache["t"+GearType].push({
-					id: GearMaster.api_id,
-					name: KC3Meta.gearName( GearMaster.api_name ),
+				self.gearCache[key].push({
+					id: gearMaster.api_id,
+					name: KC3Meta.gearName( gearMaster.api_name ),
 					count: element,
-					fp: GearMaster.api_houg,
-					tp: GearMaster.api_raig,
-					aa: GearMaster.api_tyku,
-					dv: GearMaster.api_baku,
-					ls: GearMaster.api_saku,
-					as: GearMaster.api_tais,
-					ht: GearMaster.api_houm,
-					ev: GearMaster.api_houk,
-					type: GearType
+					fp: gearMaster.api_houg,
+					tp: gearMaster.api_raig,
+					aa: gearMaster.api_tyku,
+					dv: gearMaster.api_baku,
+					ls: gearMaster.api_saku,
+					as: gearMaster.api_tais,
+					ht: gearMaster.api_houm,
+					ev: gearMaster.api_houk,
+					type: gearType
 				});
 			});
 		},
 
 		getSettings: function() {
-			var defSettings = {
+			const defSettings = {
 				exportMode: "standard",
 				output: 2, // new tab
 				exportName: false,
@@ -190,7 +186,7 @@
 				groupShipsByClass: false,
 			};
 			var settings;
-			if (typeof localStorage.srShowcase === "undefined") {
+			if (!localStorage.srShowcase) {
 				localStorage.srShowcase = JSON.stringify( defSettings );
 				settings = defSettings;
 			} else {
@@ -200,18 +196,18 @@
 		},
 
 		modifySettings: function(settingModifier) {
-			var newSettings = settingModifier(this.getSettings());
+			const newSettings = settingModifier(this.getSettings());
 			localStorage.srShowcase = JSON.stringify( newSettings );
 			return newSettings;
 		},
 
 		updateUI: function () {
-			var settings = this.getSettings();
+			const settings = this.getSettings();
 			$("#exportOutputMode").val(settings.output);
-			$("#exportAddName")[0].checked = settings.exportName;
+			$("#exportAddName").prop("checked", settings.exportName);
 			$("#exportMode").val(settings.exportMode);
-			$("#exportEventLocking")[0].checked = settings.eventLocking;
-			$("#groupShipsByClass")[0].checked = settings.groupShipsByClass;
+			$("#exportEventLocking").prop("checked", settings.eventLocking);
+			$("#groupShipsByClass").prop("checked", settings.groupShipsByClass);
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -249,9 +245,9 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var shipBox, self=this;
+			const self = this;
 
-			self.updateUI();
+			this.updateUI();
 
 			// BUTTONS
 			function setupExporter(button, exporterClass = window.ShowcaseExporter){
@@ -330,9 +326,9 @@
 			$.each(this.shipCache, function(stype, stypeList){
 
 				$.each(stypeList, function(index, shipObj){
-					if (shipObj.level == 1) return true;
+					if (shipObj.level <= 1) return true;
 
-					shipBox = $(".tab_showcase .factory .show_ship").clone();
+					const shipBox = $(".tab_showcase .factory .show_ship").clone();
 					$(".ship_pic img", shipBox).attr("src", KC3Meta.shipIcon( shipObj.masterId ) );
 					$(".ship_name", shipBox).html( shipObj.name() );
 					$(".ship_level", shipBox).html( KC3Meta.term("LevelShort")+" "+ shipObj.level );
@@ -351,68 +347,65 @@
 			});
 
 			// GEARS
-			var GearTypeBox, GearBox, TopGears, MergedList, GearTypeIcon;
 			$.each(this.equipTypes, function(index, element){
+				let mergedList = [], gearTypeIcon = 0;
 				// IS TYPE-SPECIFIC
-				if(typeof self.gearCache[index] != "undefined"){
-					MergedList = self.gearCache[index];
-					GearTypeIcon = index.substr(1);
+				if(self.gearCache[index] !== undefined){
+					mergedList = self.gearCache[index];
+					gearTypeIcon = Number(index.substr(1));
 
 				// Check if he does have any of this gear type
-				}else if(typeof element.types == "undefined"){
+				}else if(element.types === undefined){
 					return true;
 
 				// IS TYPE-COLLECTION
 				}else{
 					// Merge each type on this list
-					MergedList = [];
 					$.each(element.types, function(typeIndex, gearTypeId){
-						MergedList = MergedList.concat( self.gearCache["t"+gearTypeId] );
+						mergedList = mergedList.concat( self.gearCache["t" + gearTypeId] );
 					});
-					GearTypeIcon = 0;
 				}
 
 				// If has order-by parameter
-				if(typeof element.order != "undefined"){
-					MergedList.sort(function(a,b){
-						return b[ element.order ]  - a[ element.order ];
+				if(element.order !== undefined){
+					mergedList.sort(function(a,b){
+						return b[ element.order ] - a[ element.order ];
 					});
 				}
 
 				// Get 4 most powerful gear on this type
-				TopGears = MergedList.slice(0,4);
+				const topGearList = mergedList.slice(0,4);
 				// console.log("TopGears for", element.name, TopGears);
 
 				// Create gear-type box
-				GearTypeBox = $(".tab_showcase .factory .gtype_box").clone();
-				$(".gtype_title", GearTypeBox).html(element.name);
+				const gearTypeBox = $(".tab_showcase .factory .gtype_box").clone();
+				$(".gtype_title", gearTypeBox).text(element.name);
 
 				// Add gears on this gear-type
-				$.each(TopGears, function(gearIndex, ThisTopGear){
-					if(typeof ThisTopGear !== "undefined"){
-						GearBox = $(".tab_showcase .factory .show_gear").clone();
-						if(GearTypeIcon===0){ GearTypeIcon=ThisTopGear.type; }
-						$(".gear_icon img", GearBox).attr("src", KC3Meta.itemIcon(GearTypeIcon));
-						GearTypeIcon = 0;
-						$(".gear_name", GearBox).html( ThisTopGear.name );
-						$(".gear_name", GearBox).attr("title", ThisTopGear.name );
+				$.each(topGearList, function(gearIndex, thisTopGear){
+					if(thisTopGear){
+						const gearBox = $(".tab_showcase .factory .show_gear").clone();
+						$(".gear_icon img", gearBox).attr("src",
+							KC3Meta.itemIcon(gearTypeIcon || thisTopGear.type));
+						$(".gear_name", gearBox).text( thisTopGear.name );
+						$(".gear_name", gearBox).attr("title", thisTopGear.name );
 
-						if(typeof element.order !== "undefined"){
-							$(".gear_stat_icon img", GearBox).attr("src", KC3Meta.statIcon(element.order));
-							$(".gear_stat_val", GearBox).html( ThisTopGear[element.order] );
+						if(element.order){
+							$(".gear_stat_icon img", gearBox).attr("src", KC3Meta.statIcon(element.order));
+							$(".gear_stat_val", gearBox).text( thisTopGear[element.order] );
 						}else{
-							$(".gear_name", GearBox).css("width", "170px");
-							$(".gear_stat_icon", GearBox).hide();
-							$(".gear_stat_val", GearBox).hide();
+							$(".gear_name", gearBox).css("width", "170px");
+							$(".gear_stat_icon", gearBox).hide();
+							$(".gear_stat_val", gearBox).hide();
 						}
 
-						$(".gear_count", GearBox).html( ThisTopGear.count );
+						$(".gear_count", gearBox).text( thisTopGear.count );
 
-						$(".gtype_contents", GearTypeBox).append(GearBox);
+						$(".gtype_contents", gearTypeBox).append(gearBox);
 					}
 				});
 
-				$(".tab_showcase .gtype_boxes").append(GearTypeBox);
+				$(".tab_showcase .gtype_boxes").append(gearTypeBox);
 			});
 			$(".tab_showcase .gtype_boxes").append( $("<div/>").addClass("clear") );
 		},
@@ -421,7 +414,7 @@
 			var minStat = shipObj.master()[ apiStat ][0];
 			var maxStat = shipObj.master()[ apiStat ][1];
 			var modStat = shipObj.mod[ modIndex ];
-			if( minStat+modStat === maxStat ){
+			if( minStat + modStat === maxStat ){
 				$(".ship_mod_"+statCode, shipBox).html("&#10003;");
 				$(".ship_mod_"+statCode, shipBox).addClass("max");
 			}else{
