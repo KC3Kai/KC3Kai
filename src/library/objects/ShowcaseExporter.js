@@ -1,9 +1,6 @@
 (function () {
     "use strict";
 
-    var imgurLimit = 0;
-    var enableShelfTimer = null;
-
     function generateFontString(weight, px) {
         return weight + " " + px + "px \"Helvetica Neue\", Helvetica, Arial, sans-serif";
     }
@@ -608,7 +605,7 @@
             this.rowParams.width = 250;
         }
         var gears = this._getGears();
-        if(Object.keys(gears).length===0){
+        if(Object.keys(gears).length === 0){
             return this._heartLockAlert();
         }
         var self = this;
