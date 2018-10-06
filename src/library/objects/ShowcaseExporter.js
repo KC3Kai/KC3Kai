@@ -489,13 +489,16 @@
                 sortnoB = mstShipB.api_sort_id;
             //var ctypeA = mstShipA.api_ctype,
             //    ctypeB = mstShipB.api_ctype;
-            if (self.buildSettings.groupShipsByClass) {
+            if (self.buildSettings.groupShipsByClass && sortnoA !== sortnoB) {
                 return sortnoA - sortnoB;
             }
             if (shipA.level !== shipB.level) {
                 return shipB.level - shipA.level;
             }
-            return sortnoA - sortnoB;
+            if (sortnoA !== sortnoB) {
+                return sortnoA - sortnoB;
+            }
+            return shipB.rosterId - shipA.rosterId;
         };
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
