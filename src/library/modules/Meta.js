@@ -378,6 +378,7 @@ Provides access to data on built-in JSON files
 		
 		abyssShipName :function(ship){
 			var shipMaster = ship;
+			if(!shipMaster){ return ""; }
 			if(!shipMaster.api_name){
 				shipMaster = KC3Master.ship(Number(ship));
 			}

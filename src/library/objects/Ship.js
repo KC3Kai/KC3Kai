@@ -985,7 +985,7 @@ KC3改 Ship Object
 	 * @param equipArray - the master ID array of ship's all equipment including ex-slot at the last.
 	 *        for 5-slot ship, array supposed to be 6 elements; otherwise should be always 5 elements.
 	 * @see KC3Ship.prototype.findDameCon
-	 * @see ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
+	 * @see main.js#ShipModelReplica.prototype.useRepairItem - the repair items using order and the type codes
 	 */
 	KC3Ship.findDamecon = function(equipArray = []) {
 		// push last item from ex-slot to 1st
@@ -1221,9 +1221,9 @@ KC3改 Ship Object
 		}
 		// Dummy target enemy IDs, also used for abyssal icons
 		// 1573: Harbor Princess, 1665: Artillery Imp, 1668: Isolated Island Princess
-		// 1656: Supply Depot Princess - Damaged, 1702: Summer Harbor Princess - Damaged
+		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		// 1753: Summer Supply Depot Princess
-		const dummyEnemyList = [1573, 1665, 1668, 1656, 1702, 1753];
+		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699, 1753];
 		const basicPower = this.shellingFirePower();
 		const resultList = [];
 		// Fill damage lists for each enemy type
@@ -1344,6 +1344,7 @@ KC3改 Ship Object
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
+	 * @see https://twitter.com/KennethWWKK/status/1045315639127109634
 	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
@@ -1364,8 +1365,10 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
+					// Missing: SPF bonus modifiers
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					return [wg42Additive, t3Bonus * landingBonus];
+					wg42Bonus = [1, 1.3][wg42Count] || 1.3;
+					return [wg42Additive, t3Bonus * landingBonus * wg42Bonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1388,13 +1391,12 @@ KC3改 Ship Object
 					// Set WG42 additive modifier, multiply multiplicative modifiers
 					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
 				
-				case 5: // Summer Harbor Princess Damaged Form
+				case 5: // Summer Harbor Princess
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.8 : 1;
 					// Missing: AP Shell modifier, SPB/SPF modifier
-					// No additive WG42 bonus
-					return [0, wg42Bonus * t3Bonus * landingBonus];
+					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -2009,7 +2011,7 @@ KC3改 Ship Object
 	 *   Type 2: Artillery Imp, aka. Pillbox
 	 *   Type 3: Isolated Island Princess
 	 *   Type 4: Supply Depot Princess
-	 *   Type 5: Summer Harbor Princess Damaged Form
+	 *   Type 5: Summer Harbor Princess
 	 *   Type 6: Summer Supply Depot Princess
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
@@ -2030,8 +2032,8 @@ KC3改 Ship Object
 			return precap ? 1 : 6;
 		}
 		const abyssalIdTypeMap = {
-			// Summer Harbor Princess Damaged Form
-			"1702": 5, "1703": 5, "1704": 5,
+			// Summer Harbor Princess
+			"1699": 5, "1700": 5, "1701": 5, "1702": 5, "1703": 5, "1704": 5,
 			// Isolated Island Princess
 			"1668": 3, "1669": 3, "1670": 3, "1671": 3, "1672": 3,
 			// Artillery Imp
