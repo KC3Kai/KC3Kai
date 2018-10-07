@@ -660,7 +660,7 @@
 				// no value in master data, fall back to calculated naked + equip total
 				ship.ls[0] = shipObj.ls || ((noMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
 				ship.ev[0] = shipObj.ev || ((noMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats("houk"));
-				ship.as[0] = shipObj.as || ((noMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats("tais"));
+				ship.as[0] = shipObj.as || ((noMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats("tais") + (mod[6] || 0));
 
 				// just fall back to master data, to avoid recompute ship speed by updating a table about speed up ship classes
 				ship.speed = shipObj.sp || noMasterStats.sp || masterData.api_soku;

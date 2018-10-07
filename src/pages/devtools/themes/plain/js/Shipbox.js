@@ -1,10 +1,11 @@
-/* ShipboxShort.js
-KC3改 Ship Box for Natsuiro theme
-*/
+/**
+ * Shipbox.js
+ * KC3改 Ship Box for Plain theme
+ */
 (function(){
 	"use strict";
 	
-	window.KC3NatsuiroShipbox = function( base, rosterId ){
+	window.KC3PlainShipbox = function( base, rosterId ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
@@ -17,7 +18,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* SET SHIP
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.commonElements = function( rosterId ){
+	KC3PlainShipbox.prototype.commonElements = function( rosterId ){
 		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
@@ -49,7 +50,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE SHORT
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineShort = function(){
+	KC3PlainShipbox.prototype.defineShort = function(){
 		this.hpBarLength = 90;
 		this.showHP();
 		this.showPrediction();
@@ -72,7 +73,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE LONG
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineLong = function(){
+	KC3PlainShipbox.prototype.defineLong = function(){
 		this.hpBarLength = 135;
 		this.showHP();
 		this.showPrediction();
@@ -101,7 +102,7 @@ KC3改 Ship Box for Natsuiro theme
 	HP text, bars and its value-dependent colors
 	Includes highlighting for repair or damage states
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showHP = function(){
+	KC3PlainShipbox.prototype.showHP = function(){
 		// HP text
 		$(".ship_hp_cur", this.element).text( this.shipData.hp[0] );
 		$(".ship_hp_max", this.element).text( "/"+this.shipData.hp[1] );
@@ -172,7 +173,7 @@ KC3改 Ship Box for Natsuiro theme
 	This element will be removed if it does not meet the required condition.
 	[Being repaired/Repairing]
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.hideAkashi = function(){
+	KC3PlainShipbox.prototype.hideAkashi = function(){
 		if(!this.shipData.akashiMark)
 			$(".ship_repair_data",this.element).remove();
 		else
@@ -183,7 +184,7 @@ KC3改 Ship Box for Natsuiro theme
 	If enabled, and after-battle HP changed,
 	Show new HP bars and its color (not HP text)
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showPrediction = function(){
+	KC3PlainShipbox.prototype.showPrediction = function(){
 		// If prediction is disabled, cancel this function
 		if(!ConfigManager.info_battle){ return false; }
 		
@@ -216,7 +217,7 @@ KC3改 Ship Box for Natsuiro theme
 	Morale value on the circle, and its colors
 	Add special glow if more than 53
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showMorale = function(){
+	KC3PlainShipbox.prototype.showMorale = function(){
 		$(".ship_morale", this.element).text( this.shipData.morale );
 		switch(true){
 			case this.shipData.morale > 52:
@@ -244,7 +245,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* SHOW EQUIPMENT
 	
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.showEquipment = function( slot ){
+	KC3PlainShipbox.prototype.showEquipment = function( slot ){
 		var thisGear;
 		if(this.shipData.slotnum > slot){
 			
@@ -255,13 +256,13 @@ KC3改 Ship Box for Natsuiro theme
 				$(".ship_gear_"+(slot+1), this.element).addClass("equipped");
 				$(".ship_gear_"+(slot+1), this.element).attr("title", thisGear.name());
 				if (typeof thisGear.ace !== "undefined" && thisGear.ace > 0) {
-					// Is a plane with veterancy
+					// Is a plane with proficiency
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
 						.attr("src", "../../../../assets/img/client/achev/"+thisGear.ace+".png");
 				}
 				if (typeof thisGear.stars !== "undefined" && thisGear.stars > 0){
-				    // Is a normal equipment that can be upgraded
+					// Is a normal equipment that can be upgraded
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_star", this.element).text(thisGear.stars);
 				}

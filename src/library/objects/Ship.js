@@ -756,6 +756,25 @@ KC3改 Ship Object
 		return equipmentTotalAsw;
 	};
 
+	// estimated basic stats without equipments based on master data and modernization
+	KC3Ship.prototype.estimateNakedStats = function(statAttr) {
+		if(this.isDummy()) { return false; }
+		const shipMst = this.master();
+		if(!shipMst) { return false; }
+		const stats = {
+			fp: shipMst.api_houg[0] + this.mod[0],
+			tp: shipMst.api_raig[0] + this.mod[1],
+			aa: shipMst.api_tyku[0] + this.mod[2],
+			ar: shipMst.api_souk[0] + this.mod[3],
+			lk: shipMst.api_luck[0] + this.mod[4],
+			hp: this.maxHp(false) + (this.mod[5] || 0),
+		};
+		if(statAttr === "ls") return this.estimateNakedLoS();
+		if(statAttr === "as") return this.estimateNakedAsw() + (this.mod[6] || 0);
+		if(statAttr === "ev") return this.estimateNakedEvasion();
+		return !statAttr ? stats : stats[statAttr];
+	};
+
 	// estimated LoS without equipments based on WhoCallsTheFleetDb
 	KC3Ship.prototype.estimateNakedLoS = function() {
 		var losInfo = WhoCallsTheFleetDb.getLoSInfo( this.masterId );
@@ -1088,7 +1107,7 @@ KC3改 Ship Object
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.supportPower = function(){
 		if(this.isDummy()){ return 0; }
-		const fixedFP = this.nakedStats("fp") - 1;
+		const fixedFP = this.estimateNakedStats("fp") - 1;
 		var supportPower = 0;
 		// for carrier series: CV, CVL, CVB
 		if(this.isCarrier()){
@@ -1491,7 +1510,7 @@ KC3改 Ship Object
 				}
 			}
 		});
-		let shellingPower = this.nakedStats("fp");
+		let shellingPower = this.estimateNakedStats("fp");
 		shellingPower += equipTotals.fp + equipTotals.tp;
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
@@ -2077,7 +2096,7 @@ KC3改 Ship Object
 		if(targetShipType.isSubmarine || targetShipType.isLand) return false;
 		// DD, CL, CLT, CA, CAV, AV, SS, SSV, FBB, BB, BBV, CT
 		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 18, 21].includes(this.master().api_stype);
-		return isTorpedoStype && this.nakedStats("tp") > 0;
+		return isTorpedoStype && this.estimateNakedStats("tp") > 0;
 	};
 
 	/**
