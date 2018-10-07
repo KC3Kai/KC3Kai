@@ -413,8 +413,7 @@ Used by SortieManager
 		}
 		
 		// Air phases
-		var
-			planePhase  = battleData.api_kouku && battleData.api_kouku.api_stage1 || {
+		var planePhase = battleData.api_kouku && battleData.api_kouku.api_stage1 || {
 				api_touch_plane:[-1,-1],
 				api_f_count    :0,
 				api_f_lostcount:0,
@@ -455,20 +454,31 @@ Used by SortieManager
 		
 		// Bombing phase 1
 		this.planeBombers = { player:[0,0], abyssal:[0,0] };
-		if(attackPhase !== null){
+		if(attackPhase){
 			this.planeBombers.player[0] = attackPhase.api_f_count;
 			this.planeBombers.player[1] = attackPhase.api_f_lostcount;
 			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
+		this.takenAirBombingDamages = [];
+		const bombingPhaseMain = (battleData.api_kouku || {}).api_stage3 || {},
+			bombingPhaseEscort = (battleData.api_kouku || {}).api_stage3_combined || {},
+			bombingDamages = [],
+			damageToInteger = v => Math.floor(v);
+		// Although game codes use api_plane_from[1] only as prerequisite
+		if(this.planeBombers.abyssal[0] > 0){
+			bombingDamages.push((bombingPhaseMain.api_fdam || []).map(damageToInteger));
+			bombingDamages.push((bombingPhaseEscort.api_fdam || []).map(damageToInteger));
+		}
+		this.takenAirBombingDamages.push(bombingDamages);
 		
 		// Fighter phase 2
-		if(typeof battleData.api_kouku2 !== "undefined"){
+		if(battleData.api_kouku2){
 			this.planeFighters.player[1] += battleData.api_kouku2.api_stage1.api_f_lostcount;
 			this.planeFighters.abyssal[1] += battleData.api_kouku2.api_stage1.api_e_lostcount;
 			
 			// Bombing phase 2
-			if(battleData.api_kouku2.api_stage2 !== null){
+			if(battleData.api_kouku2.api_stage2){
 				this.planeBombers.player[1] += battleData.api_kouku2.api_stage2.api_f_lostcount;
 				this.planeBombers.abyssal[1] += battleData.api_kouku2.api_stage2.api_e_lostcount;
 				if(!!battleData.api_kouku2.api_stage2.api_air_fire){
@@ -478,6 +488,16 @@ Used by SortieManager
 					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
 				}
 			}
+			const bombingDamages2 = [];
+			if(battleData.api_kouku2.api_stage2 && battleData.api_kouku2.api_stage2.api_e_count > 0){
+				bombingDamages2.push(
+					((battleData.api_kouku2.api_stage3 || {}).api_fdam || []).map(damageToInteger)
+				);
+				bombingDamages2.push(
+					((battleData.api_kouku2.api_stage3_combined || {}).api_fdam || []).map(damageToInteger)
+				);
+			}
+			this.takenAirBombingDamages.push(bombingDamages2);
 		}
 		
 		// Jet plane phase, happen before fighter attack phase
@@ -1763,7 +1783,7 @@ Used by SortieManager
 		}
 		return [totalDamage, [...planeFromSet]];
 	};
-	
+
 	/**
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
@@ -1797,7 +1817,7 @@ Used by SortieManager
 				api_e_lostcount:0,
 			},
 			attackPhase = battleData.api_air_base_attack.api_stage2,
-			bomberPhase = battleData.api_air_base_attack.api_stage3;
+			bombingPhase = battleData.api_air_base_attack.api_stage3;
 		this.fplaneFrom = battleData.api_air_base_attack.api_plane_from[0];
 		this.fcontactId = planePhase.api_touch_plane[0];
 		this.fcontact = this.fcontactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
@@ -1829,13 +1849,41 @@ Used by SortieManager
 			this.planeBombers.abyssal[0] = attackPhase.api_e_count;
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
-		this.baseDamage = bomberPhase && bomberPhase.api_fdam
-			? sumSupportDamageArray(bomberPhase.api_fdam)
+		this.baseDamage = bombingPhase && bombingPhase.api_fdam
+			? sumSupportDamageArray(bombingPhase.api_fdam)
 			: 0;
 		// Record encountered enemy air raid formation
 		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
 	};
-	
+
+	/**
+	 * @param position - 0-based index of ship position, ranged in [0, 6].
+	 * @param isOnEscortFleet - if ship is on escort fleet of combined fleet.
+	 * @return true if ship at specified position is not taken any damage in any wave of opening airstrike,
+	 *         will return undefined if bombing phase not occur or no data for specified ship.
+	 * @see main.js#TaskAircraftFlightBase.prototype._antiAircraft
+	 * @see main.js#TaskAirWarAntiAircraft.prototype._start
+	 *      in-game `12cm 30tube Rocket Launcher Kai Ni` animation will show the banner if damage <= 0.
+	 */
+	KC3Node.prototype.isPlayerNotTakenAirBombingDamage = function(position, isOnEscortFleet){
+		if(Array.isArray(this.takenAirBombingDamages)) {
+			let isUndefined = false;
+			// takenAirBombingDamages contain all waves of opening airstrike damages dealt to player fleets,
+			// for now excluding LBAS battle (no damage can be taken), jet assaults (PvP ignored).
+			const found = this.takenAirBombingDamages.find(wave => {
+				const fleetIdx = isOnEscortFleet ? 1 : 0;
+				if(!Array.isArray(wave[fleetIdx]) || wave[fleetIdx][position] === undefined) {
+					isUndefined = true;
+					return true;
+				} else if(wave[fleetIdx][position] <= 0) {
+					return true;
+				}
+			}) !== undefined;
+			return isUndefined ? undefined : found;
+		}
+		return undefined;
+	};
+
 	KC3Node.prototype.isBoss = function(){
 		// see advanceNode() (SortieManager.js) for api details,
 		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
@@ -1846,7 +1894,7 @@ Used by SortieManager
 			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
 		);
 	};
-	
+
 	KC3Node.prototype.isValidBoss = function(){
 		if(!this.isBoss()) return false;
 		const thisMap = KC3SortieManager.getCurrentMapData(),
@@ -1855,7 +1903,7 @@ Used by SortieManager
 				eventMapGauge.boss.indexOf(this.id) === -1;
 		return !isInvalidBoss;
 	};
-	
+
 	KC3Node.prototype.isMvpPredictionCapable = function(){
 		// Rule unknown: ship nearest to flagship does not get MVP when same damage dealt
 		const battleRank = this.predictedRankNight || this.predictedRank;

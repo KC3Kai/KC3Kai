@@ -1049,10 +1049,7 @@ Previously known as "Reactor"
 				nextNode: response.api_data
 			})).execute();
 			KC3Network.trigger("CompassResult");
-			// Refresh fleet shipbox if fuel or ammo lost at maelstrom node
-			if(nextNode.type === "maelstrom" && [1, 2].indexOf(nextNode.item) > -1){
-				KC3Network.trigger("Fleet");
-			}
+			KC3Network.trigger("Fleet");
 			if(response.api_data.api_m1){
 				console.info("Map gimmick flag detected", response.api_data.api_m1);
 			}
