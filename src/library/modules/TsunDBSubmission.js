@@ -568,7 +568,7 @@
 				id: triggeredShip.masterId,
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
-				aa: triggeredShip.nakedStats("aa"),
+				aa: triggeredShip.estimateNakedStats("aa"),
 				luck: triggeredShip.lk[0]
 			};
 
