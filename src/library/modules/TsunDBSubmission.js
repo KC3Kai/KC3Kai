@@ -423,9 +423,11 @@
 						airBattle.slots.push(shipObj.slots);
 						fp += shipObj.interceptionPower();
 						
-						airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag.includes(1);
-						airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag.includes(1);
-						airBattle.damage = koukuApi.api_stage3.api_fdam;
+						if(koukuApi.api_stage3) {
+							airBattle.bakFlag = (koukuApi.api_stage3.api_fbak_flag || []).includes(1);
+							airBattle.raiFlag = (koukuApi.api_stage3.api_frai_flag || []).includes(1);
+							airBattle.damage = koukuApi.api_stage3.api_fdam;
+						}
 					});
 				}
 				
@@ -566,7 +568,7 @@
 				id: triggeredShip.masterId,
 				lvl: triggeredShip.level,
 				damage: Math.ceil(triggeredShip.hp[0] / triggeredShip.hp[1] * 4),
-				aa: triggeredShip.nakedStats("aa"),
+				aa: triggeredShip.estimateNakedStats("aa"),
 				luck: triggeredShip.lk[0]
 			};
 

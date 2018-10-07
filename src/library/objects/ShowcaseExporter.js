@@ -498,7 +498,7 @@
             if (sortnoA !== sortnoB) {
                 return sortnoA - sortnoB;
             }
-            return shipB.rosterId - shipA.rosterId;
+            return shipA.rosterId - shipB.rosterId;
         };
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {

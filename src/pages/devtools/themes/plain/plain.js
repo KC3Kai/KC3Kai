@@ -785,7 +785,7 @@
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId))
+						(new KC3PlainShipbox(".sship", rosterId))
 							.commonElements()
 							.defineShort( MainFleet )
 							.appendTo(".module.fleet .shiplist_main");
@@ -795,7 +795,7 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".sship", rosterId))
+						(new KC3PlainShipbox(".sship", rosterId))
 							.commonElements()
 							.defineShort( EscortFleet )
 							.appendTo(".module.fleet .shiplist_escort");
@@ -850,7 +850,7 @@
 				// Show ships on selected fleet
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > -1){
-						(new KC3NatsuiroShipbox(".lship", rosterId))
+						(new KC3PlainShipbox(".lship", rosterId))
 							.commonElements()
 							.defineLong( CurrentFleet )
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)

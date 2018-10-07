@@ -182,7 +182,7 @@
 ------------------------------*/
 .tab_locking .ship_list {
 	width: 602px;
-	min-height: 50px;
+	min-height: 65px;
 	margin: 0 0 5px 0;
 	/* scroll fix */
 	overflow-x: hidden;
@@ -347,7 +347,7 @@
 .tab_locking .filters {
 	float: left;
 	width: 88px;
-	min-height: 50px;
+	min-height: 65px;
 	margin: 27px 0 5px 0;
 	padding: 0 0 0 2px;
 	overflow-x: hidden;

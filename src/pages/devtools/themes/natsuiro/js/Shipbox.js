@@ -1,20 +1,20 @@
-/* ShipboxShort.js
-KC3改 Ship Box for Natsuiro theme
-*/
+/**
+ * Shipbox.js
+ * KC3改 Ship Box for Natsuiro theme
+ */
 (function(){
 	"use strict";
 	
-	window.KC3NatsuiroShipbox = function( base, rosterId, showCombinedFleetBars, dameConConsumed, isStarShellUsed ){
+	window.KC3NatsuiroShipbox = function( base, rosterId, position,
+		showCombinedFleetBars, dameConConsumed, isStarShellUsed, noAirBombingDamage ){
 		this.element = $("#factory "+base).clone();
 		this.element.attr("id", "ShipBox"+rosterId);
 		this.shipData = KC3ShipManager.get( rosterId );
+		this.position = position;
+		this.showCombinedFleetBars = showCombinedFleetBars || false;
 		this.dameConConsumed = dameConConsumed || false;
 		this.starShellUsed = isStarShellUsed || false;
-		
-		this.showCombinedFleetBars = true;
-		if(typeof showCombinedFleetBars != "undefined"){
-			this.showCombinedFleetBars = showCombinedFleetBars;
-		}
+		this.rosaK2Success = noAirBombingDamage === true && [4, 6].includes(this.shipData.estimateAntiAirEffectType()[0]);
 		
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
@@ -80,7 +80,10 @@ KC3改 Ship Box for Natsuiro theme
 		$(".ex_item", this.element).toggleClass("item_being_used",
 			ConfigManager.info_battle && (this.dameConConsumed.pos === 0 ||
 				// Although starshell not equippable at ex-slot for now
-				(this.starShellUsed && myExItem.masterId == 101))
+				(this.starShellUsed && myExItem.masterId == 101) ||
+				// Successful 12cm 30tube Rocket Launcher K2 AA defense
+				(this.rosaK2Success && myExItem.masterId === 274)
+			)
 		);
 		
 		// MVP icon
@@ -120,7 +123,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE SHORT
 	Short ship box for combined fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineShort = function( CurrentFleet ){
+	KC3NatsuiroShipbox.prototype.defineShort = function( currentFleet ){
 		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
@@ -152,7 +155,7 @@ KC3改 Ship Box for Natsuiro theme
 	/* DEFINE LONG
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
-	KC3NatsuiroShipbox.prototype.defineLong = function( CurrentFleet ){
+	KC3NatsuiroShipbox.prototype.defineLong = function( currentFleet ){
 		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
@@ -443,7 +446,9 @@ KC3改 Ship Box for Natsuiro theme
 						// Consumed damecon slot
 						this.dameConConsumed.pos === slot+1 ||
 						// Mark all equipped starshell
-						(this.starShellUsed && thisGear.masterId == 101)
+						(this.starShellUsed && thisGear.masterId == 101) ||
+						// Successful 12cm 30tube Rocket Launcher K2 AA defense
+						(this.rosaK2Success && thisGear.masterId === 274)
 					);
 				} else {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("item_being_used");
