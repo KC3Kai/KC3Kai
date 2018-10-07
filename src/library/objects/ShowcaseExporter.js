@@ -495,7 +495,10 @@
             if (shipA.level !== shipB.level) {
                 return shipB.level - shipA.level;
             }
-            return sortnoA - sortnoB || shipA.rosterId - shipB.rosterId;
+            if (sortnoA !== sortnoB) {
+                return sortnoA - sortnoB;
+            }
+            return shipA.rosterId - shipB.rosterId;
         };
         for (i in this.allShipGroups) {
             if (this.allShipGroups[i].length > 0) {
