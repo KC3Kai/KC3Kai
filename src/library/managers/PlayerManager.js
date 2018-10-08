@@ -373,6 +373,9 @@ Does not include Ships and Gears which are managed by other Managers
 		prepareDeckbuilder: function() {
 			return {
 				version: 4,
+				hqlv: PlayerManager.hqlv,
+				//lang: ["kr","jp","en","scn","tcn"].indexOf(ConfigManager.language) > 0 ? ConfigManager.language : "en",
+				//theme: ConfigManager.sr_theme,
 				f1: PlayerManager.fleets[0].deckbuilder(),
 				f2: PlayerManager.fleets[1].deckbuilder(),
 				f3: PlayerManager.fleets[2].deckbuilder(),

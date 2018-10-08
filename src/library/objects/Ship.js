@@ -3496,6 +3496,8 @@ KC3改 Ship Object
 			id: this.masterId,
 			lv: this.level,
 			luck: this.lk[0],
+			hp: this.hp[0],
+			asw : this.nakedAsw(),
 			items: itemsInfo
 		};
 
