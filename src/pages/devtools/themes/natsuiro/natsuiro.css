@@ -809,7 +809,7 @@ ABYSS FLEET
 	float:left;
 }
 .module.activity .abyss_single .abyss_hp.sunk {
-	opacity:0;
+	opacity:0.5;
 }
 .module.activity .abyss_single .abyss_hp_bar {
 	height:4px;
@@ -876,7 +876,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .module.activity .abyss_combined .abyss_hp.sunk {
-	opacity:0;
+	opacity:0.5;
 }
 .module.activity .abyss_combined .abyss_hp_bar {
 	height:15px;

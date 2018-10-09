@@ -39,15 +39,17 @@
 
 		 */
 
-		fleetsObjToDeckBuilder: function(fleetsObj) {
+		fleetsObjToDeckBuilder: function(fleetsObj, isImgBuilder = false) {
 			var self = this;
 			var dBuilder = {
 				version: 4,
-				hqlv: PlayerManager.hqlv,
-				theme: ConfigManager.sr_theme,
+				hqlv: PlayerManager.hq.level
 			};
-			if(["kr","jp","en","scn","tcn"].indexOf(ConfigManager.language) > -1) {
-				dBuilder.lang = ConfigManager.language;
+			if(isImgBuilder) {
+				dBuilder.theme = ConfigManager.sr_theme;
+				if(["kr", "jp", "en", "scn", "tcn"].includes(ConfigManager.language)) {
+					dBuilder.lang = ConfigManager.language;
+				}
 			}
 
 			fleetsObj
@@ -160,7 +162,7 @@
 			});
 
 			$("button#control_export_imgkcbuilder").on("click", function() {
-				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
+				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj, true );
 				console.log( "JSON to be exported", JSON.stringify( converted ) );
 				window.open("http://nishisonic.xsrv.jp/app/ImgKCbuilder/?predeck="+
 							encodeURI( JSON.stringify( converted )));
