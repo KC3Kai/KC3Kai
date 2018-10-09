@@ -46,7 +46,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-	 *  * [20180810 ALL] https://imgur.com/a/kd3fSSo
+	 *  * [20181001 ALL] https://imgur.com/a/Sz1hFpK
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
 	 *  * [20180726  DD] https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
 	 *  * [20180808  DD] https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E9%A7%86%E9%80%90%E8%89%A6%E3%81%AE%E4%B8%BB%E7%A0%B2%E3%83%95%E3%82%A3%E3%83%83%E3%83%88%E8%A3%9C%E6%AD%A3%E3%81%A8%E8%89%A6%E7%A8%AE%E5%88%A5%E3%81%8A/#i
@@ -99,17 +99,16 @@ KC3改 Equipment Object
 					},
 					// Aquila Class
 					"68": "63",
-				},
-				byShip: [
-					// Taiyou Kai Ni
-					{
-						ids: [529],
+					// Taiyou Class
+					"76": {
 						multiple: { "tais": 1, "houk": 1 },
 					},
-					// Shinyou
+				},
+				byShip: [
+					// extra +2 asw, +1 ev for Shinyou
 					{
 						ids: [534, 381, 536],
-						multiple: { "tais": 3, "houk": 2 },
+						multiple: { "tais": 2, "houk": 1 },
 					},
 				],
 			},
@@ -123,17 +122,16 @@ KC3改 Equipment Object
 					},
 					// Aquila Class
 					"68": "63",
-				},
-				byShip: [
-					// Taiyou Kai Ni
-					{
-						ids: [529],
+					// Taiyou Class
+					"76": {
 						multiple: { "tais": 1, "houk": 1 },
 					},
-					// Shinyou
+				},
+				byShip: [
+					// extra +2 asw, +1 ev for Shinyou
 					{
 						ids: [534, 381, 536],
-						multiple: { "tais": 3, "houk": 2 },
+						multiple: { "tais": 2, "houk": 1 },
 					},
 				],
 			},
@@ -1014,11 +1012,18 @@ KC3改 Equipment Object
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				},
-				byShip: {
-					// All Destroyers?
-					stypes: [2],
-					multiple: { "houg": 1 },
-				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// All DD
+						stypes: [2],
+						multiple: { "houg": 1 },
+					},
+				],
 			},
 			// GFCS Mk.37
 			"307": {
@@ -1034,6 +1039,8 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
+					// John C.Butler Class
+					"87": "65",
 				},
 			},
 			// 20-tube 7inch UP Rocket Launchers
@@ -1048,6 +1055,8 @@ KC3改 Equipment Object
 					"78": "67",
 					// Jervis Class
 					"82": "67",
+					// Nelson Class
+					"88": "67",
 				},
 			},
 			// Arctic Camouflage
