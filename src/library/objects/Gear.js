@@ -291,11 +291,10 @@ KC3改 Equipment Object
 					"20": "4",
 					// Agano Class
 					"41": "4",
-				},
-				byShip: {
-					// Gotland (and Kai?)
-					ids: [574],
-					multiple: { "houg": 1, "tais": 2, "houk": 2 },
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 1, "tais": 2, "houk": 2 },
+					},
 				},
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
