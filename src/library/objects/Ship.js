@@ -3192,8 +3192,9 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeDay[0]] || "Shelling";
+		const canAsw = shipObj.canDoASW();
 		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
-			|| (shipObj.canDoASW() && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
+			|| (canAsw && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
 		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
 		if(isAswPowerShown){
 			let power = shipObj.antiSubWarfarePower();
@@ -3217,7 +3218,7 @@ KC3改 Ship Object
 				}
 				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
-			let attackTypeIndicators = !canShellingAttack ?
+			let attackTypeIndicators = !canShellingAttack || !canAsw ?
 				KC3Meta.term("ShipAttackTypeNone") :
 				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
@@ -3495,6 +3496,8 @@ KC3改 Ship Object
 			id: this.masterId,
 			lv: this.level,
 			luck: this.lk[0],
+			hp: this.hp[0],
+			asw : this.nakedAsw(),
 			items: itemsInfo
 		};
 

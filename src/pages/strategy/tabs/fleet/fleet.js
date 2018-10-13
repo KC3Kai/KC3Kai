@@ -39,11 +39,18 @@
 
 		 */
 
-		fleetsObjToDeckBuilder: function(fleetsObj) {
+		fleetsObjToDeckBuilder: function(fleetsObj, isImgBuilder = false) {
 			var self = this;
 			var dBuilder = {
-				version: 4
+				version: 4,
+				hqlv: PlayerManager.hq.level
 			};
+			if(isImgBuilder) {
+				dBuilder.theme = ConfigManager.sr_theme;
+				if(["kr", "jp", "en", "scn", "tcn"].includes(ConfigManager.language)) {
+					dBuilder.lang = ConfigManager.language;
+				}
+			}
 
 			fleetsObj
 				.map( self.createKCFleetObject )
@@ -151,6 +158,13 @@
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj );
 				console.log( "JSON to be exported", JSON.stringify( converted ) );
 				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck="+
+							encodeURI( JSON.stringify( converted )));
+			});
+
+			$("button#control_export_imgkcbuilder").on("click", function() {
+				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj, true );
+				console.log( "JSON to be exported", JSON.stringify( converted ) );
+				window.open("http://nishisonic.xsrv.jp/app/ImgKCbuilder/?predeck="+
 							encodeURI( JSON.stringify( converted )));
 			});
 

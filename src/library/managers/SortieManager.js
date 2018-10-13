@@ -433,6 +433,36 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 		},
 		
+		/**
+		 * @param node - current battle node instance by default.
+		 * @param position - 0-based index of ship position, ranged in [0, 6].
+		 * @param isOnEscortFleet - if ship is on escort fleet of combined fleet.
+		 * @return true if ship at specified position is not taken any damage in any wave of opening airstrike,
+		 *         will return undefined if bombing phase not occur or no data for specified ship.
+		 * @see Node.js#takenAirBombingDamages - contains all waves of opening airstrike damages dealt to player fleets,
+		 *      for now excluding LBAS battle (no damage can be taken), jet assaults (PvP ignored).
+		 * @see main.js#TaskAircraftFlightBase.prototype._antiAircraft
+		 * @see main.js#TaskAirWarAntiAircraft.prototype._start
+		 *      in-game `12cm 30tube Rocket Launcher Kai Ni` animation will show the banner if damage <= 0.
+		 */
+		isPlayerNotTakenAirBombingDamage :function(node, position, isOnEscortFleet){
+			const thisNode = node || this.currentNode();
+			if(Array.isArray(thisNode.takenAirBombingDamages)) {
+				let isUndefined = false;
+				const found = thisNode.takenAirBombingDamages.find(wave => {
+					const fleetIdx = isOnEscortFleet ? 1 : 0;
+					if(!Array.isArray(wave[fleetIdx]) || wave[fleetIdx][position] === undefined) {
+						isUndefined = true;
+						return true;
+					} else if(wave[fleetIdx][position] <= 0) {
+						return true;
+					}
+				}) !== undefined;
+				return isUndefined ? undefined : found;
+			}
+			return undefined;
+		},
+		
 		updateMvps :function(mvps){
 			if(Array.isArray(mvps) && mvps.length){
 				if(this.isCombinedSortie()){
