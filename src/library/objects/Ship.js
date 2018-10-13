@@ -2115,20 +2115,19 @@ KC3改 Ship Object
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
-			if(fleetNum > 0 && shipPos === 0) {
+			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
 				// Double Line variants selected
 				const isDoubleLine = [2, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
-				// 3th and 5th ship are not carrier or absent?
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 3th and 5th ship are not carrier or absent?
 					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
-						.some(ship => ship.isAbsent() || ship.isCarrier());
-				// Equipping a seaplane recon and some guns?
-				//const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
-				//const minGunCnt = this.countEquipmentType(2, [1, 2, 3, 4, 38]) >= 1;
-				// min 5 ships needed? how about ship(s) sink or retreat in mid-sortie?
-				return shipCnt >= 5 && isDoubleLine && !invalidCombinedShips;
+						.some(ship => ship.isAbsent() || ship.isCarrier()),
+					// submarine in any position of the fleet?
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
+				return isDoubleLine && !invalidCombinedShips && !hasSubmarine;
 			}
 		}
 		return false;
