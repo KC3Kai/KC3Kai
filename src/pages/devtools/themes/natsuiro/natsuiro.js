@@ -1471,7 +1471,7 @@
 			$(".airbase_list").hide();
 
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
-			var thisNode = KC3SortieManager.currentNode();
+			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
 
 			// COMBINED
@@ -1490,7 +1490,7 @@
 							starShellUsed = (flarePos === index + 1) &&
 								!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
 							noAirBombingDamage = KC3SortieManager.fleetSent == 1 &&
-								thisNode.isPlayerNotTakenAirBombingDamage(index);
+								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index);
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
@@ -1517,7 +1517,7 @@
 								(!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 2);
 							starShellUsed = is2ndFleetUsed && (flarePos === index + 1);
 							noAirBombingDamage = is2ndFleetUsed &&
-								thisNode.isPlayerNotTakenAirBombingDamage(index, KC3SortieManager.isCombinedSortie());
+								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, KC3SortieManager.isCombinedSortie());
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
@@ -1606,8 +1606,8 @@
 						if(isSentOut){
 							starShellUsed = (flarePos === index + 1) &&
 								(isSelectedSortiedFleet || isSelected2ndFleetOnCombined);
-							noAirBombingDamage = isSelectedSortiedFleet && thisNode.isPlayerNotTakenAirBombingDamage(index) ||
-								isSelected2ndFleetOnCombined && thisNode.isPlayerNotTakenAirBombingDamage(index, true);
+							noAirBombingDamage = isSelectedSortiedFleet && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index) ||
+								isSelected2ndFleetOnCombined && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, true);
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()

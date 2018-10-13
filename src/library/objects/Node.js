@@ -1856,34 +1856,6 @@ Used by SortieManager
 		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
 	};
 
-	/**
-	 * @param position - 0-based index of ship position, ranged in [0, 6].
-	 * @param isOnEscortFleet - if ship is on escort fleet of combined fleet.
-	 * @return true if ship at specified position is not taken any damage in any wave of opening airstrike,
-	 *         will return undefined if bombing phase not occur or no data for specified ship.
-	 * @see main.js#TaskAircraftFlightBase.prototype._antiAircraft
-	 * @see main.js#TaskAirWarAntiAircraft.prototype._start
-	 *      in-game `12cm 30tube Rocket Launcher Kai Ni` animation will show the banner if damage <= 0.
-	 */
-	KC3Node.prototype.isPlayerNotTakenAirBombingDamage = function(position, isOnEscortFleet){
-		if(Array.isArray(this.takenAirBombingDamages)) {
-			let isUndefined = false;
-			// takenAirBombingDamages contain all waves of opening airstrike damages dealt to player fleets,
-			// for now excluding LBAS battle (no damage can be taken), jet assaults (PvP ignored).
-			const found = this.takenAirBombingDamages.find(wave => {
-				const fleetIdx = isOnEscortFleet ? 1 : 0;
-				if(!Array.isArray(wave[fleetIdx]) || wave[fleetIdx][position] === undefined) {
-					isUndefined = true;
-					return true;
-				} else if(wave[fleetIdx][position] <= 0) {
-					return true;
-				}
-			}) !== undefined;
-			return isUndefined ? undefined : found;
-		}
-		return undefined;
-	};
-
 	KC3Node.prototype.isBoss = function(){
 		// see advanceNode() (SortieManager.js) for api details,
 		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
