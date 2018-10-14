@@ -769,6 +769,7 @@ KC3改 Ship Object
 			lk: shipMst.api_luck[0] + this.mod[4],
 			hp: this.maxHp(false) + (this.mod[5] || 0),
 		};
+		// shortcuts for following funcs
 		if(statAttr === "ls") return this.estimateNakedLoS();
 		if(statAttr === "as") return this.estimateNakedAsw() + (this.mod[6] || 0);
 		if(statAttr === "ev") return this.estimateNakedEvasion();
@@ -792,6 +793,38 @@ KC3改 Ship Object
 		var evaInfo = WhoCallsTheFleetDb.getStatBound(this.masterId, "evasion");
 		var retVal = WhoCallsTheFleetDb.estimateStat(evaInfo, this.level);
 		return retVal === false ? 0 : retVal;
+	};
+
+	// estimated the base value (on lv1) of the 3-stats (evasion, asw, los) missing in master data,
+	// based on current naked stats and max value (on lv99),
+	// in case whoever wanna submit this in order to collect ship's exact stats quickly.
+	// NOTE: naked stats needed, so should ensure no equipment equipped or at least no on ship bonus.
+	// btw, exact evasion and asw values can be found at in-game picture book api data, but los missing still.
+	KC3Ship.prototype.estimateBaseMasterStats = function() {
+		if(this.isDummy()) { return false; }
+		const info = {
+			// evasion for ship should be `api_kaih`, here uses gear one instead
+			houk: [0, this.ev[1], this.ev[0]],
+			tais: [0, this.as[1], this.as[0]],
+			saku: [0, this.ls[1], this.ls[0]],
+		};
+		const level = this.level;
+		Object.keys(info).forEach(apiName => {
+			const lv99Stat = info[apiName][1];
+			const nakedStat = info[apiName][2] - this.equipmentTotalStats(apiName);
+			info[apiName][3] = nakedStat;
+			if(level && level > 99) {
+				info[apiName][0] = false;
+			} else {
+				info[apiName][0] = WhoCallsTheFleetDb.estimateStatBase(nakedStat, lv99Stat, level);
+				// try to get stats on maxed married level too
+				info[apiName][4] = WhoCallsTheFleetDb.estimateStat({base: info[apiName][0], max: lv99Stat}, KC3Ship.getMaxLevel());
+			}
+		});
+		info.level = level;
+		info.mstId = this.masterId;
+		info.equip = this.equipment(true).map(g => g.masterId);
+		return info;
 	};
 
 	KC3Ship.prototype.equipmentTotalImprovementBonus = function(attackType){
