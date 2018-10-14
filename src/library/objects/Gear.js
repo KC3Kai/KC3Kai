@@ -65,8 +65,8 @@ KC3改 Equipment Object
 				tripleTorpedoLateModelIds: [285],
 				tripleTorpedoOxygenLateModel: 0,
 				tripleTorpedoOxygenLateModelIds: [125, 285],
-				quadrupleTorpedoLateModel: 0,
-				quadrupleTorpedoLateModelIds: [286],
+				quadrupleTorpedoOxygenLateModel: 0,
+				quadrupleTorpedoOxygenLateModelIds: [15, 286],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 			},
@@ -895,16 +895,17 @@ KC3改 Equipment Object
 									"2": { "houg": 2, "raig": 6 },
 								},
 							},
+							{
+								// fp +2, tp +6 if equips both LM and non-LM at the same time
+								flags: [ "tripleTorpedo", "tripleTorpedoLateModel" ],
+								single: { "raig": -1 },
+							},
 						],
 					},
 					// Akatsuki Class
 					"5": "1",
 					// Fubuki Class
 					"12": "1",
-					// Hatsuharu Class
-					"10": {
-						multiple: { "houg": 2 },
-					},
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
@@ -946,7 +947,7 @@ KC3改 Equipment Object
 								single: { "houg": 1, "raig": 2, "houk": 2 },
 							},
 							{
-								flags: [ "tripleTorpedoOxygenLateModel" ],
+								flags: [ "quadrupleTorpedoOxygenLateModel" ],
 								single: { "houg": 1, "raig": 3 },
 							},
 						],
@@ -1088,7 +1089,7 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
-			if(synergyGears.quadrupleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
+			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
