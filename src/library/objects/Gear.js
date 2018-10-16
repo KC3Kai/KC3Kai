@@ -63,8 +63,10 @@ KC3改 Equipment Object
 				tripleTorpedoIds: [13, 125],
 				tripleTorpedoLateModel: 0,
 				tripleTorpedoLateModelIds: [285],
-				quadrupleTorpedoLateModel: 0,
-				quadrupleTorpedoLateModelIds: [286],
+				tripleTorpedoOxygenLateModel: 0,
+				tripleTorpedoOxygenLateModelIds: [125, 285],
+				quadrupleTorpedoOxygenLateModel: 0,
+				quadrupleTorpedoOxygenLateModelIds: [15, 286],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 			},
@@ -692,8 +694,8 @@ KC3改 Equipment Object
 			"294": {
 				count: 0,
 				byClass: {
-					// Fubuki Class
-					"12": {
+					// Ayanami Class
+					"1": {
 						multiple: { "houg": 1 },
 						synergy: [
 							{
@@ -702,7 +704,7 @@ KC3改 Equipment Object
 							},
 							{
 								flags: [ "tripleTorpedo" ],
-								// Not sure how more torpedoes will go? but no 4-slots for Fubuki Class
+								// Not sure how more torpedoes will go?
 								byCount: {
 									gear: "tripleTorpedo",
 									"1": { "houg": 1, "raig": 3 },
@@ -719,6 +721,10 @@ KC3改 Equipment Object
 							},
 						],
 					},
+					// Akatsuki Class
+					"5": "1",
+					// Fubuki Class
+					"12": "1",
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai Ni
@@ -889,16 +895,17 @@ KC3改 Equipment Object
 									"2": { "houg": 2, "raig": 6 },
 								},
 							},
+							{
+								// fp +2, tp +6 if equips both LM and non-LM at the same time
+								flags: [ "tripleTorpedo", "tripleTorpedoLateModel" ],
+								single: { "raig": -1 },
+							},
 						],
 					},
 					// Akatsuki Class
 					"5": "1",
 					// Fubuki Class
 					"12": "1",
-					// Hatsuharu Class
-					"10": {
-						multiple: { "houg": 2 },
-					},
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
@@ -920,7 +927,7 @@ KC3改 Equipment Object
 								single: { "houg": 1, "raig": 2, "houk": 2 },
 							},
 							{
-								flags: [ "tripleTorpedoLateModel" ],
+								flags: [ "tripleTorpedoOxygenLateModel" ],
 								single: { "houg": 1, "raig": 3 },
 							},
 						],
@@ -940,7 +947,7 @@ KC3改 Equipment Object
 								single: { "houg": 1, "raig": 2, "houk": 2 },
 							},
 							{
-								flags: [ "quadrupleTorpedoLateModel" ],
+								flags: [ "quadrupleTorpedoOxygenLateModel" ],
 								single: { "houg": 1, "raig": 3 },
 							},
 						],
@@ -956,6 +963,10 @@ KC3改 Equipment Object
 							{
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 1, "raig": 2, "houk": 2 },
+							},
+							{
+								flags: [ "tripleTorpedoOxygenLateModel" ],
+								single: { "houg": 1, "raig": 3 },
 							},
 						],
 					},
@@ -1077,7 +1088,8 @@ KC3改 Equipment Object
 		if(synergyGears) {
 			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
-			if(synergyGears.quadrupleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoLateModel += 1;
+			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
+			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
