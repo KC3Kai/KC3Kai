@@ -769,6 +769,11 @@
 				"img": "client/fuel.png",
 				"pos": [834, 282],
 				"size": [27, 27]
+			},
+			{
+				"img": "abyss/534.png",
+				"pos": [612, 430],
+				"size": [40, 40]
 			}
 		]
 	},

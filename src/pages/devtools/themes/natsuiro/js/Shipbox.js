@@ -56,7 +56,7 @@
 		
 		$(".ship_no_lock",this.element).text(KC3Meta.term("PanelRequireShipLockInFleet"));
 		
-		// Item on 5th slot
+		// Item on ex-slot
 		var myExItem = this.shipData.exItem();
 		if( myExItem.exists() ) {
 			$(".ex_item .gear_icon img", this.element)
@@ -69,7 +69,8 @@
 					})).execute();
 				})
 				.lazyInitTooltip();
-			$(".ex_item", this.element).toggleClass("goddess", myExItem.masterId == 43);
+			$(".ex_item", this.element).attr("data-mst-id", myExItem.masterId)
+				.toggleClass("goddess", myExItem.masterId == 43);
 			if (myExItem.stars > 0) {
 				$(".ex_item .gear_star", this.element).show()
 					.text(myExItem.stars >= 10 ? "\u2605" : myExItem.stars);
@@ -420,11 +421,9 @@
 						})).execute();
 					});
 				
-				if (thisGear.masterId == 43) {
-					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).addClass("goddess");
-				} else {
-					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).removeClass("goddess");
-				}
+				$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element)
+					.attr("data-mst-id", thisGear.masterId)
+					.toggleClass("goddess", thisGear.masterId == 43);
 				
 				if (thisGear.ace > 0) {
 					// Is a plane with proficiency level
@@ -440,7 +439,7 @@
 					);
 				}
 				
-				// Check damecon or starshell if prediction is enabled
+				// Check damecon, starshell or rosaK2 if prediction is enabled
 				if(ConfigManager.info_battle){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).toggleClass("item_being_used",
 						// Consumed damecon slot
