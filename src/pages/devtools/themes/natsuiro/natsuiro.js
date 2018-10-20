@@ -4238,7 +4238,52 @@
 			} else {
 				$(".activity_gunfit .aaci").hide();
 			}
-			
+
+			if (data.equipBonus && data.equipBonus.isShow) {
+				$(".activity_gunfit .equip").empty();
+				const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+				const equipBonus = newShipObj.equipmentBonusGearAndStats();
+				$.each(equipBonus.bonusGears, function(idx, gear) {
+					const equipBox = $("#factory .equipInfo").clone()
+						.appendTo(".activity_gunfit .equip");
+					const equipIcon = gear.icon;
+					for (let i = 0; i < gear.count; i++) {
+						if (i > 0) { $("<span></span>").html("+").appendTo($(".equipIcons", equipBox)); }
+						$("<img/>")
+						.attr("src", KC3Meta.itemIcon(equipIcon, 1))
+						.attr("title", gear.name)
+						.lazyInitTooltip()
+						.appendTo($(".equipIcons", equipBox));
+					}
+					gear.synergyIcons.forEach((icon, i) => {
+						$("<span></span>").html("+").appendTo($(".equipIcons", equipBox));
+						$("<img/>")
+						.attr("src", KC3Meta.itemIcon(icon, 1))
+						.attr("title", gear.synergyFlags[i])
+						.lazyInitTooltip()
+						.appendTo($(".equipIcons", equipBox));
+					});
+					equipBox.appendTo(".activity_gunfit .equipList");
+				});
+				const stats = equipBonus.stats;
+				var statsBox = $("<div></div>").addClass("statsBox");
+				for (const key in stats) {
+					if (stats[key] !== 0){
+                        $("<div></div>")
+                            .append(
+                                $("<span></span>").html((stats[key] > 0 ? "+" : "-") + stats[key])
+                            ).append(
+                            	$("<img/>").attr("src", KC3Meta.statIcon(key)).attr("title",key)
+                        	)
+							.appendTo(statsBox);
+					}
+				}
+				statsBox.appendTo(".activity_gunfit .equip");
+				$(".activity_gunfit .equip").show();
+			} else {
+				$(".activity_gunfit .equip").hide();
+			}
+
 			// Show anti-installation powers
 			if (data.antiLandPowers) {
 				$(".activity_gunfit .landingList").empty();
