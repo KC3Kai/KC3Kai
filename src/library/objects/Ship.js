@@ -768,7 +768,7 @@ KC3改 Ship Object
 							if (!(check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel)) {
 								flag = true;
 								if (check.single) { gear.count = 1; }
-								if (check.multiple) { gear.count = gear.count; }
+								if (check.multiple) { gear.count = count; }
 								// countCap/minCount take priority
 								if (check.countCap) { gear.count = Math.min(check.countCap, count); }
 								if (check.minCount) { gear.count = count; }

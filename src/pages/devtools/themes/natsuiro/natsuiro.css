@@ -2154,7 +2154,7 @@ ABYSS FLEET
 	line-height: 18px;
 	padding:2px;
     background: rgba(146, 146, 146, 0.49);
-    color: #ccc;
+    color: #fff;
 }
 .module.activity .activity_gunfit .equip .statsBox div {
 	display: inline-block;
@@ -2168,7 +2168,7 @@ ABYSS FLEET
 	margin: auto 2px;
 	height: 20px;
 	vertical-align: text-bottom;
-	background: #ddd;
+	background: #fff;
 	border-radius: 50%;
 	padding: 1px;
 }
