@@ -145,9 +145,24 @@
 		},
 		"markers": [
 			{
+				"img": "abyss/532.png",
+				"pos": [478, 357],
+				"size": [40, 40]
+			},
+			{
+				"img": "abyss/532.png",
+				"pos": [477, 543],
+				"size": [40, 40]
+			},
+			{
 				"img": "client/ammo.png",
 				"pos": [652, 534],
 				"size": [27, 27]
+			},
+			{
+				"img": "abyss/535.png",
+				"pos": [682, 239],
+				"size": [40, 40]
 			},
 			{
 				"img": "client/fuel.png",
