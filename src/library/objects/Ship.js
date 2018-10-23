@@ -716,6 +716,104 @@ KC3改 Ship Object
 		return total;
 	};
 
+	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
+		const masterId = (newGearObj || {}).masterId;
+		let gearFlag = false;
+		let synergyFlag = false;
+
+		const bonusDefs = KC3Gear.explicitStatsBonusGears();
+		const synergyGears = bonusDefs.synergyGears;
+		this.equipment().forEach(g => KC3Gear.accumulateShipBonusGear(bonusDefs, g));
+		let gearList = this.equipment().map(g => g.masterId);
+		gearList = gearList.filter((value, index, self) => self.indexOf(value) === index);
+		let bonusGears = gearList.map(gId => bonusDefs[gId]);
+		// Check if each gear works on the equipped ship
+		const shipId = this.masterId;
+		const ctype = "" + this.master().api_ctype;
+		const stype = this.master().api_stype;
+		const checkByShip = (byShip, shipId, stype) => 
+			(byShip.ids || []).includes(shipId) || (byShip.stypes || []).includes(stype);
+
+		// Check if ship is eligible for equip bonus and add synergy/id flags
+		bonusGears = bonusGears.filter((gear, idx) => {
+			if (!gear) { return false; }
+			gear.synergyFlags = [];
+			let flag = false;
+			for (const type in gear) {
+				if (type === "byClass") {
+					for (const key in gear[type]) {
+						if (key === ctype) {
+							gear.path = gear[type][key];
+						}
+					}
+				}
+				else if (type === "byShip") {
+					if (Array.isArray(gear[type])) {
+						for (let i = 0; i < gear[type].length; i++) {
+							if (checkByShip(gear[type][i], shipId, stype)) {
+								gear.path = gear[type][i];
+							}
+						}
+					}
+					else if (checkByShip(gear[type], shipId, stype)) {
+						gear.path = gear[type];
+					}
+				}
+				if (gear.path) {
+					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
+					const count = gear.count;
+					for (let g = 0; g < gear.path.length; g++) {
+						const check = gear.path[g];
+						if (!(check.excludes && check.excludes.includes(shipId))) {
+							if (!(check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel)) {
+								flag = true;
+								if (check.single) { gear.count = 1; }
+								if (check.multiple) { gear.count = count; }
+								// countCap/minCount take priority
+								if (check.countCap) { gear.count = Math.min(check.countCap, count); }
+								if (check.minCount) { gear.count = count; }
+							}
+						}
+						if (check.synergy) {
+							const synergyFlags = check.synergy.flags;
+							for (let i = 0; i < synergyFlags.length; i++) {
+								const equipFlag = synergyFlags[i];
+								if (synergyGears[equipFlag + "Ids"].includes(masterId)) { synergyFlag = true; }
+								if (synergyGears[equipFlag]) { gear.synergyFlags.push(equipFlag); }
+							}
+						}
+					}
+				}
+			}
+			gear.id = gearList[idx];
+			return flag;
+		});
+		if (!bonusGears.length) { return false; }
+
+		// Trim bonus gear object and add icon ids
+		const result = bonusGears.map(gear => {
+			let obj = {};
+			obj.count = gear.count;
+			const g = this.equipment().find(eq => eq.masterId === gear.id);
+			obj.name = g.name();
+			if (g.masterId === masterId) { gearFlag = true; }
+			obj.icon = g.master().api_type[3];
+			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index);
+			obj.synergyIcons = obj.synergyFlags.map(flag => {
+				if (flag === "surfaceRadar" || flag === "airRadar") { return 11; }
+				// Other than radar flag, rest is torpedo flags
+				else { return 5; }
+			});
+			return obj;
+		});
+		const stats = this.statsBonusOnShip();
+		return {
+			isShow: gearFlag || synergyFlag,
+			bonusGears: result,
+			stats: stats,
+		};
+	};
+
 	// faster naked asw stat method since frequently used
 	KC3Ship.prototype.nakedAsw = function(){
 		var asw = this.as[0];
@@ -2991,6 +3089,8 @@ KC3改 Ship Object
 		isShow = isShow || (oaswPower !== false);
 		const antiLandPowers = this.shipPossibleAntiLandPowers();
 		isShow = isShow || antiLandPowers.length > 0;
+		const equipBonus = this.equipmentBonusGearAndStats(newGearObj);
+		isShow = isShow || (equipBonus !== false && equipBonus.isShow);
 		// Possible TODO:
 		// can opening torpedo
 		// can cut-in (fire / air)
@@ -3004,6 +3104,7 @@ KC3改 Ship Object
 			shipAacis,
 			oaswPower,
 			antiLandPowers: antiLandPowers.length > 0,
+			equipBonus,
 		};
 	};
 
