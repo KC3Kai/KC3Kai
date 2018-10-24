@@ -4252,15 +4252,14 @@
 						$("<img/>")
 						.attr("src", KC3Meta.itemIcon(equipIcon, 1))
 						.attr("title", gear.name)
-						.lazyInitTooltip()
 						.appendTo($(".equipIcons", equipBox));
 					}
 					gear.synergyIcons.forEach((icon, i) => {
+						const synergyName = gear.synergyNames[i];
 						$("<span></span>").html("+").appendTo($(".equipIcons", equipBox));
 						$("<img/>")
 						.attr("src", KC3Meta.itemIcon(icon, 1))
-						.attr("title", gear.synergyFlags[i])
-						.lazyInitTooltip()
+						.attr("title",synergyName)
 						.appendTo($(".equipIcons", equipBox));
 					});
 					equipBox.appendTo(".activity_gunfit .equipList");
@@ -4269,12 +4268,13 @@
 				var statsBox = $("<div></div>").addClass("statsBox");
 				for (const key in stats) {
 					if (stats[key] !== 0){
-                        $("<div></div>")
+						$("<div></div>")
+							.append(
+								$("<img/>").attr("src", KC3Meta.statIcon(key)).attr("title",key)
+							)
                             .append(
                                 $("<span></span>").html((stats[key] > 0 ? "+" : "-") + stats[key])
-                            ).append(
-                            	$("<img/>").attr("src", KC3Meta.statIcon(key)).attr("title",key)
-                        	)
+                            )
 							.appendTo(statsBox);
 					}
 				}

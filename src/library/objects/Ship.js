@@ -737,7 +737,8 @@ KC3改 Ship Object
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
 			if (!gear) { return false; }
-			gear.synergyFlags = [];
+			const synergyFlags = [];
+			const synergyIds = [];
 			let flag = false;
 			for (const type in gear) {
 				if (type === "byClass") {
@@ -762,8 +763,8 @@ KC3改 Ship Object
 				if (gear.path) {
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
 					const count = gear.count;
-					for (let g = 0; g < gear.path.length; g++) {
-						const check = gear.path[g];
+					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
+						const check = gear.path[pathIdx];
 						if (!(check.excludes && check.excludes.includes(shipId))) {
 							if (!(check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel)) {
 								flag = true;
@@ -772,19 +773,30 @@ KC3改 Ship Object
 								// countCap/minCount take priority
 								if (check.countCap) { gear.count = Math.min(check.countCap, count); }
 								if (check.minCount) { gear.count = count; }
-							}
-						}
-						if (check.synergy) {
-							const synergyFlags = check.synergy.flags;
-							for (let i = 0; i < synergyFlags.length; i++) {
-								const equipFlag = synergyFlags[i];
-								if (synergyGears[equipFlag + "Ids"].includes(masterId)) { synergyFlag = true; }
-								if (synergyGears[equipFlag]) { gear.synergyFlags.push(equipFlag); }
+								
+								// Synergy check
+								if (check.synergy) {
+									let synergyCheck = check.synergy;
+									if (!Array.isArray(synergyCheck)) { synergyCheck = [synergyCheck]; }
+									for (let checkIdx = 0; checkIdx < synergyCheck.length; checkIdx++) {
+										const flagList = synergyCheck[checkIdx].flags;
+										for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
+											const equipFlag = flagList[flagIdx];
+											if (synergyGears[equipFlag] > 0) {
+												if (synergyGears[equipFlag + "Ids"].includes(masterId)) { synergyFlag = true; }
+												synergyFlags.push(equipFlag);
+												synergyIds.push(gearList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
+											}
+										}
+									}
+								}
 							}
 						}
 					}
 				}
 			}
+			gear.synergyFlags = synergyFlags;
+			gear.synergyIds = synergyIds;
 			gear.id = gearList[idx];
 			return flag;
 		});
@@ -798,7 +810,9 @@ KC3改 Ship Object
 			obj.name = g.name();
 			if (g.masterId === masterId) { gearFlag = true; }
 			obj.icon = g.master().api_type[3];
-			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index);
+			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index && !!value);
+			const synergyIds = gear.synergyIds.filter((value, index, self) => self.indexOf(value) === index && !!value);
+			obj.synergyNames = synergyIds.map(id => this.equipment().find(eq => eq.masterId === id).name());
 			obj.synergyIcons = obj.synergyFlags.map(flag => {
 				if (flag === "surfaceRadar" || flag === "airRadar") { return 11; }
 				// Other than radar flag, rest is torpedo flags
