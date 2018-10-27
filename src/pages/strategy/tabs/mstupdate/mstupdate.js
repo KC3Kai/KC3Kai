@@ -10,6 +10,8 @@
 		newCgs: [],
 		archivedCgs: [],
 		myServerIp: "",
+		listedShipId: 1,
+		shipsPerPage: 18,
 		
 		/* INIT
 		Prepares all data needed
@@ -209,6 +211,37 @@
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstseason");
 			$(".page_padding").createChildrenTooltips();
+			
+			const appendShipsByPage = (showAll = false) => {
+				const shipsToShown = showAll ? KC3Master.seasonalCgIdFrom : this.shipsPerPage;
+				let shipsAdded = 0;
+				for(let cnt = 0; cnt < shipsToShown; cnt++) {
+					let shipData = false;
+					while(!shipData && KC3Master.isRegularShip(this.listedShipId)) {
+						shipData = KC3Master.ship(this.listedShipId);
+						this.listedShipId += 1;
+					}
+					if(!shipData) break;
+					shipsAdded += 1;
+					const shipBox = $(".tab_mstupdate .factory .mstship").clone()
+						.appendTo(".tab_mstupdate .allships");
+					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_name));
+					const version = (KC3Master.graph(shipData.api_id).api_version || [])[0];
+					const imgFile = KC3Master.png_file(shipData.api_id, "full", "ship")
+						+ (!version ? "" : "?version=" + version);
+					$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${imgFile}`);
+					$(".ship_name", shipBox).text(shipName).css({"height": "30px", "line-height": "25px"});
+					shipBox.css("zoom", "0.5").css("height", "330px");
+				}
+				return shipsAdded;
+			};
+			$(".moreships_btn").on("click", (e) => {
+				$(".moreships_btn, .allships_btn").toggle(appendShipsByPage() > 0);
+			});
+			$(".allships_btn").on("click", (e) => {
+				appendShipsByPage(true);
+				$(".moreships_btn, .allships_btn").hide();
+			});
 		}
 		
 	};

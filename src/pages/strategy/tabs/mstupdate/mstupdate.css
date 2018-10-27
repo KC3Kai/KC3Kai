@@ -13,6 +13,10 @@
 .tab_mstupdate .new_ships_note em {
 	font-size:12px;
 }
+.tab_mstupdate .moreships_btn,
+.tab_mstupdate .allships_btn {
+	margin:5px;
+}
 
 /* SHIP
 --------------------------------*/
@@ -43,6 +47,9 @@
 	line-height:20px;
 	text-align:center;
 	font-size:12px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
 /* GEAR
