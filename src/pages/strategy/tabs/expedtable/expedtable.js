@@ -1,7 +1,7 @@
 (function(){
 	"use strict";
 
-	// some PureScript librarys, imported locally.
+	// some PureScript library, imported locally.
 	let ExpedInfo = PS["KanColle.Expedition.New.Info"];
 	let ExpedSType = PS["KanColle.Expedition.New.SType"];
 	let ExpedCostModel = PS["KanColle.Expedition.New.CostModel"];
@@ -354,8 +354,8 @@
 
 				$(".info_col.id", expedRow).text( eId );
 				let timeText = String( 60 * masterInfo.api_time ).toHHMMSS();
-				// total expedtion time always ends with ":00" in HHMMSS represetation,
-				// so we can cut that out as we've done in expedscorer
+				// total expedition time always ends with ":00" in HH:MM:SS representation,
+				// so we can cut that out as we've done in exped scorer
 				timeText =  /(.*):00$/.exec( timeText )[1];
 				$(".info_col.time", expedRow).text( timeText );
 
@@ -371,11 +371,11 @@
 					expedRow.toggleClass("active");
 					let expanding = expedRow.hasClass("active");
 					let configRoot = $(".exped_config", expedRow);
-					$(this).html( expanding ? "&#9660;" : "&#9668;");
+					$(this).html( expanding ? "&#9660;" : "&#9664;");
 					if (expanding) {
 						// when expanding, we need to put configs on UI.
 
-						// we prevent reseting UI every time
+						// we prevent resetting UI every time
 						// if nothing has been changed,
 						// local variable "configSynced" is used as an indicator
 						// to tell whether we need to update the config part of UI
@@ -529,7 +529,7 @@
 			});
 		},
 
-		// returns a sorting method ( data("sortBy"), and whether it is accending or descending. )
+		// returns a sorting method ( data("sortBy"), and whether it is ascending or descending. )
 		// returns "null", if none is active.
 		getActiveSortMethod: function() {
 			let expedTableRoot = $("#exped_table_content_root");
