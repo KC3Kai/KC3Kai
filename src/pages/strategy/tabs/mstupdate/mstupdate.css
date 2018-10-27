@@ -29,6 +29,10 @@
 	border:1px solid #ccc;
 	overflow:hidden;
 }
+.tab_mstupdate .mstship.smaller {
+	zoom:0.5;
+	height:330px;
+}
 .tab_mstupdate .mstship .ship_cg {
 	width:218px;
 	height:300px;
@@ -50,6 +54,10 @@
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
+}
+.tab_mstupdate .mstship.smaller .ship_name {
+	height:30px;
+	line-height:25px;
 }
 
 /* GEAR

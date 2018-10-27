@@ -224,14 +224,14 @@
 					if(!shipData) break;
 					shipsAdded += 1;
 					const shipBox = $(".tab_mstupdate .factory .mstship").clone()
+						.addClass("smaller")
 						.appendTo(".tab_mstupdate .allships");
-					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_name));
 					const version = (KC3Master.graph(shipData.api_id).api_version || [])[0];
 					const imgFile = KC3Master.png_file(shipData.api_id, "full", "ship")
 						+ (!version ? "" : "?version=" + version);
 					$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${imgFile}`);
-					$(".ship_name", shipBox).text(shipName).css({"height": "30px", "line-height": "25px"});
-					shipBox.css("zoom", "0.5").css("height", "330px");
+					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_name));
+					$(".ship_name", shipBox).text(shipName);
 				}
 				return shipsAdded;
 			};
