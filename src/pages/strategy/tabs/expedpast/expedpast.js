@@ -177,7 +177,7 @@
 						"Total pages: {0}, Total expeditions: {1}, Great Success /Total Success: {2} /{3} ({4}%)"
 							.format(KC3Meta.formatNumber(numPages), KC3Meta.formatNumber(numRecords),
 								KC3Meta.formatNumber(gs), KC3Meta.formatNumber(ns),
-								(gs / ns * 100).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))
+								((gs / ns * 100) || 0).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }))
 					).show();
 					$('.tab_expedpast .pagination').show();
 				}else{

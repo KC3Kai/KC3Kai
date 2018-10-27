@@ -414,18 +414,22 @@
 				if(airRaidData) {
 					airBattle.planes = [];
 					airBattle.slots = [];
+					airBattle.proficiency = [];
 					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
 						const baseInfo = bases[baseId - 1];
 						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
 						const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 						const planes = squadronPlanes.map(plane => plane.api_mst_id || -1);
+						const proficiency = shipObj.equipment().map(g => g.ace);
 						airBattle.planes.push(planes);
 						airBattle.slots.push(shipObj.slots);
+						airBattle.proficiency.push(proficiency);
 						fp += shipObj.interceptionPower();
 						
 						if(koukuApi.api_stage3) {
-							airBattle.bakFlag = (koukuApi.api_stage3.api_fbak_flag || []).includes(1);
-							airBattle.raiFlag = (koukuApi.api_stage3.api_frai_flag || []).includes(1);
+							airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag || [];
+							airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag || [];
+							airBattle.fclFlag = koukuApi.api_stage3.api_fcl_flag || [];
 							airBattle.damage = koukuApi.api_stage3.api_fdam;
 						}
 					});

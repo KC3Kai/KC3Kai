@@ -463,7 +463,7 @@ KC3改 Equipment Object
 					// Kagerou Class K2
 					"30": {
 						remodel: 2,
-						excludes: [556, 557, 558],
+						excludes: [556, 557, 558, 559],
 						multiple: { "raig": 2 },
 						countCap: 2,
 					},
@@ -573,7 +573,7 @@ KC3改 Equipment Object
 					"30": [
 						{
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							multiple: { "raig": 2, "houk": 1 },
 							countCap: 2,
 						},
@@ -581,7 +581,7 @@ KC3改 Equipment Object
 							// +1 tp if stars >= +5
 							minStars: 5,
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							multiple: { "raig": 1 },
 							countCap: 2,
 						},
@@ -589,7 +589,7 @@ KC3改 Equipment Object
 							// +1 fp if stars +max
 							minStars: 10,
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							multiple: { "houg": 1 },
 							countCap: 2,
 						},
@@ -788,14 +788,14 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							// Kagerou Class K2 total +2 fp til 2 guns
 							multiple: { "houg": 1 },
 							countCap: 2,
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							// Kagerou Class K2 total +5 instead of +4 if guns = 2
 							// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
 							single: { "houg": 1 },
@@ -856,7 +856,7 @@ KC3改 Equipment Object
 						{
 							// Kagerou Class K2, total +2 for 1st gun
 							remodel: 2,
-							excludes: [556, 557, 558],
+							excludes: [556, 557, 558, 559],
 							single: { "houg": 1 },
 						},
 					],

@@ -1968,9 +1968,17 @@ Previously known as "Reactor"
 							break;
 						case 6: // Fighter
 							KC3QuestManager.get(675).increment(0); // F67 quarterly index 0
+							KC3QuestManager.get(688).increment(0); // F79 quarterly index 0
+							break;
+						case 7: // Dive Bomber
+							KC3QuestManager.get(688).increment(1); // F79 quarterly index 1
+							break;
+						case 8: // Torpedo Bomber
+							KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
 							break;
 						case 10: // Recon Seaplane
 							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
+							KC3QuestManager.get(688).increment(3); // F79 quarterly index 3
 							break;
 						case 12: // Small Radar
 						case 13: // Large Radar
