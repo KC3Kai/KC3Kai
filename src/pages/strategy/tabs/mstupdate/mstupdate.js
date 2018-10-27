@@ -30,6 +30,7 @@
 			this.newGears.length = 0;
 			this.newCgs.length = 0;
 			this.archivedCgs.length = 0;
+			this.listedShipId = 1;
 			var masterChanged = false;
 			KC3Master.load();
 			const checkExpired = (masterColle, colleName, removeMethod, resolveMethod) => {
