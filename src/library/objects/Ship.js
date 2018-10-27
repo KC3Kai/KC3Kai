@@ -717,21 +717,22 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
-		const masterId = (newGearObj || {}).masterId;
+		const newGearMstId = (newGearObj || {}).masterId;
 		let gearFlag = false;
 		let synergyFlag = false;
 
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
-		this.equipment().forEach(g => KC3Gear.accumulateShipBonusGear(bonusDefs, g));
-		let gearList = this.equipment().map(g => g.masterId);
-		gearList = gearList.filter((value, index, self) => self.indexOf(value) === index);
-		let bonusGears = gearList.map(gId => bonusDefs[gId]);
+		const allGears = this.equipment(true);
+		allGears.forEach(g => KC3Gear.accumulateShipBonusGear(bonusDefs, g));
+		const masterIdList = allGears.map(g => g.masterId)
+			.filter((value, index, self) => self.indexOf(value) === index);
+		let bonusGears = masterIdList.map(mstId => bonusDefs[mstId]);
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
-		const ctype = "" + this.master().api_ctype;
+		const ctype = String(this.master().api_ctype);
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, stype) => 
+		const checkByShip = (byShip, shipId, stype) =>
 			(byShip.ids || []).includes(shipId) || (byShip.stypes || []).includes(stype);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
@@ -743,7 +744,7 @@ KC3改 Ship Object
 			for (const type in gear) {
 				if (type === "byClass") {
 					for (const key in gear[type]) {
-						if (key === ctype) {
+						if (key == ctype) {
 							gear.path = gear[type][key];
 						}
 					}
@@ -783,9 +784,9 @@ KC3改 Ship Object
 										for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
 											const equipFlag = flagList[flagIdx];
 											if (synergyGears[equipFlag] > 0) {
-												if (synergyGears[equipFlag + "Ids"].includes(masterId)) { synergyFlag = true; }
+												if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
 												synergyFlags.push(equipFlag);
-												synergyIds.push(gearList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
+												synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
 											}
 										}
 									}
@@ -797,7 +798,7 @@ KC3改 Ship Object
 			}
 			gear.synergyFlags = synergyFlags;
 			gear.synergyIds = synergyIds;
-			gear.id = gearList[idx];
+			gear.id = masterIdList[idx];
 			return flag;
 		});
 		if (!bonusGears.length) { return false; }
@@ -806,13 +807,12 @@ KC3改 Ship Object
 		const result = bonusGears.map(gear => {
 			let obj = {};
 			obj.count = gear.count;
-			const g = this.equipment().find(eq => eq.masterId === gear.id);
+			const g = allGears.find(eq => eq.masterId === gear.id);
 			obj.name = g.name();
-			if (g.masterId === masterId) { gearFlag = true; }
+			if (g.masterId === newGearMstId) { gearFlag = true; }
 			obj.icon = g.master().api_type[3];
 			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index && !!value);
-			const synergyIds = gear.synergyIds.filter((value, index, self) => self.indexOf(value) === index && !!value);
-			obj.synergyNames = synergyIds.map(id => this.equipment().find(eq => eq.masterId === id).name());
+			obj.synergyNames = gear.synergyIds.map(id => allGears.find(eq => eq.masterId === id).name());
 			obj.synergyIcons = obj.synergyFlags.map(flag => {
 				if (flag === "surfaceRadar" || flag === "airRadar") { return 11; }
 				// Other than radar flag, rest is torpedo flags

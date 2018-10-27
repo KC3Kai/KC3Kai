@@ -49,6 +49,7 @@
         // according to the following doc:
         // https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E6%94%B9%E8%A3%85%E6%99%82%E3%81%AB%E5%BF%85%E8%A6%81%E3%81%AA%E7%89%B9%E6%AE%8A%E8%B3%87%E6%9D%90
         // special case for Saratoga Mk.II converting: 5500 steel but 20 devmats
+        // Phase 2 see: main.js#ShipUpgradeModelHolder.prototype._getRequiredDevkitNum
         calcDevMat: function(steel, ship_id_from) {
             switch(ship_id_from) {
                 case 82: // Ise
@@ -61,7 +62,10 @@
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
+                case 381: // Shinyou Kai
                     return 40;
+                case 313: // Tanikaze
+                    return 50;
                 case 225: // Kagerou
                 case 226: // Shiranui
                 case 227: // Kuroshio
@@ -81,11 +85,13 @@
         // does not consume devmat if using blueprint, except:
         // still consumes devmat if converting Suzuya/Kumano K2 to Kou K2,
         // Kagerou-class K to K2, Ise K to K2
+        // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 && ![82, 225, 226, 227, 503, 504].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
+        // Phase 2 see: main.js#ShipUpgradeModelHolder.prototype._getRequiredBuildKitNum
         calcTorch: function(ship_id_from) {
             switch(ship_id_from) {
                 case 213: // Tenryuu
@@ -96,6 +102,8 @@
                 case 317: // Urakaze
                 case 320: // Isokaze
                     return 10;
+                case 313: // Tanikaze
+                    return 20;
                 case 503: // Suzuya K2
                 case 504: // Kumano K2
                 case 508: // Suzuya Kou K2
@@ -112,6 +120,7 @@
             }
         },
         // hard-coded new consumption 'New Artillery Material' since 2018-02-16
+        // see: main.js#ShipUpgradeModel.newkohohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
                 case 148: // Musashi K2

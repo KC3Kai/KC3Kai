@@ -4243,39 +4243,46 @@
 				$(".activity_gunfit .equip").empty();
 				const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
 				const equipBonus = newShipObj.equipmentBonusGearAndStats();
-				$.each(equipBonus.bonusGears, function(idx, gear) {
+				$.each(equipBonus.bonusGears, (idx, gear) => {
 					const equipBox = $("#factory .equipInfo").clone()
 						.appendTo(".activity_gunfit .equip");
 					const equipIcon = gear.icon;
 					for (let i = 0; i < gear.count; i++) {
-						if (i > 0) { $("<span></span>").html("+").appendTo($(".equipIcons", equipBox)); }
-						$("<img/>")
-						.attr("src", KC3Meta.itemIcon(equipIcon, 1))
-						.attr("title", gear.name)
-						.appendTo($(".equipIcons", equipBox));
+						if (i > 0) { $("<span></span>").text("+").appendTo($(".equipIcons", equipBox)); }
+						$("<img/>").appendTo($(".equipIcons", equipBox))
+							.attr("src", KC3Meta.itemIcon(equipIcon))
+							.attr("title", gear.name)
+							.lazyInitTooltip();
 					}
 					gear.synergyIcons.forEach((icon, i) => {
 						const synergyName = gear.synergyNames[i];
-						$("<span></span>").html("+").appendTo($(".equipIcons", equipBox));
-						$("<img/>")
-						.attr("src", KC3Meta.itemIcon(icon, 1))
-						.attr("title",synergyName)
-						.appendTo($(".equipIcons", equipBox));
+						$("<span></span>").text("+").appendTo($(".equipIcons", equipBox));
+						$("<img/>").appendTo($(".equipIcons", equipBox))
+							.attr("src", KC3Meta.itemIcon(icon))
+							.attr("title", synergyName)
+							.lazyInitTooltip();
 					});
 					equipBox.appendTo(".activity_gunfit .equipList");
 				});
 				const stats = equipBonus.stats;
-				var statsBox = $("<div></div>").addClass("statsBox");
+				const statsBox = $("<div></div>").addClass("statsBox");
+				const statsTermKeyMap = {
+					"fp": "ShipFire",
+					"tp": "ShipTorpedo",
+					"aa": "ShipAntiAir",
+					"ar": "ShipArmor",
+					"ev": "ShipEvasion",
+					"as": "ShipAsw",
+					"ls": "ShipLos",
+				};
 				for (const key in stats) {
-					if (stats[key] !== 0){
-						$("<div></div>")
-							.append(
-								$("<img/>").attr("src", KC3Meta.statIcon(key)).attr("title",key)
-							)
-                            .append(
-                                $("<span></span>").html((stats[key] > 0 ? "+" : "-") + stats[key])
-                            )
-							.appendTo(statsBox);
+					if (stats[key] !== 0) {
+						$("<div></div>").appendTo(statsBox)
+							.append($("<img/>").attr("src", KC3Meta.statIcon(key)))
+							.append($("<span></span>")
+								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "-", stats[key])))
+							.attr("title", KC3Meta.term(statsTermKeyMap[key]) || key)
+							.lazyInitTooltip();
 					}
 				}
 				statsBox.appendTo(".activity_gunfit .equip");
