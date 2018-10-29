@@ -213,16 +213,11 @@
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstseason");
 			$(".page_padding").createChildrenTooltips();
 			
-			const toggleImageFunc = (e) => {
-				const cgElm = $(e.target);
-				const imgType = cgElm.attr("data-url");
-				if(imgType === "full") {
-					cgElm.attr("data-url", "char")
-						.attr("src", cgElm.data("char"));
-				} else {
-					cgElm.attr("data-url", "full")
-						.attr("src", cgElm.data("full"));
-				}
+			const toggleImageFunc = function(e) {
+				const cgElm = $(this), imgElm = $("img", cgElm);
+				const isFullImage = !cgElm.hasClass("char_image");
+				cgElm.toggleClass("char_image", isFullImage);
+				imgElm.attr("src", cgElm.data(isFullImage ? "char" : "full"));
 			};
 			const appendShipsByPage = (showAll = false) => {
 				const addOneShip = (shipData) => {
@@ -236,11 +231,10 @@
 							+ (!version ? "" : "?version=" + version),
 						fullUrl = `http://${self.myServerIp}/kcs2/resources${imgFileFull}`,
 						charUrl = `http://${self.myServerIp}/kcs2/resources${imgFileChar}`;
-					$(".ship_cg img", shipBox).attr("src", fullUrl)
-						.attr("data-url", "full")
+					$(".ship_cg img", shipBox).attr("src", fullUrl);
+					$(".ship_cg", shipBox).addClass("hover").click(toggleImageFunc)
 						.attr("data-full", fullUrl)
-						.attr("data-char", charUrl)
-						.addClass("hover").click(toggleImageFunc);
+						.attr("data-char", charUrl);
 					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_name));
 					$(".ship_name", shipBox).text(shipName)
 						.data("tab", "mstship")

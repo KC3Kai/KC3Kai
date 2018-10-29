@@ -40,6 +40,9 @@
 	text-align:center;
 	overflow:hidden;
 }
+.tab_mstupdate .mstship .ship_cg.char_image {
+	background:#052f91;
+}
 .tab_mstupdate .mstship .ship_cg img {
 	max-width:300px;
 	height:300px;
