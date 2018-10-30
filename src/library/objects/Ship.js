@@ -2142,7 +2142,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoOpeningTorpedo = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		const hasKouhyouteki = this.hasEquipment(41);
+		const hasKouhyouteki = this.hasEquipmentType(2, 22);
 		const isThisSubmarine = this.isSubmarine();
 		return hasKouhyouteki || (isThisSubmarine && this.level >= 10);
 	};
