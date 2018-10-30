@@ -268,6 +268,9 @@
 				appendShipsByPage(true);
 				$(".moreships_btn, .allships_btn").hide();
 			});
+			if(!ConfigManager.devOnlyPages) {
+				$(".dev_only").hide();
+			}
 		}
 		
 	};
