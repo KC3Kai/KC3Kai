@@ -235,8 +235,9 @@ Saves and loads significant data for future use
 			);
 			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
 				suffix = getFilenameSuffix(id, typeWithPrefix);
-			const uniqueKey = type === "full" && shipOrSlot === "ship" ?
-				"_" + this.graph(id).api_filename : "";
+			const uniqueKey = type === "full" && shipOrSlot === "ship" ? ((key) => (
+					key ? "_" + key : ""
+				))(this.graph(id).api_filename) : "";
 			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}_${suffix}${uniqueKey}.png`;
 		},
 

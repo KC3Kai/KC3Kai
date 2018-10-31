@@ -261,6 +261,19 @@
 	font-weight:bold;
 	margin:0px 0px 3px 0px;
 }
+.tab_ships .ship_header .ship_item .ship_id {
+	text-align:center;
+}
+.tab_ships .ship_header .ship_item .ship_img {
+	display:none;
+}
+.tab_ships .ship_header .ship_item .ship_name {
+	text-align:center;
+}
+.tab_ships .ship_header .ship_item .ship_sortno {
+	width:20px;
+	text-align:center;
+}
 .tab_ships .ship_header .ship_stat img {
 	max-width:19px;
 	height:16px;
@@ -316,9 +329,18 @@
 	margin:0px 0px 5px 0px;
 }
 .tab_ships .ship_list.scroll_fix {
-	width:692px;
+	width:685px;
 	overflow-x:hidden;
 	overflow-y:scroll;
+}
+.tab_ships .ship_list.scroll_fix::-webkit-scrollbar {
+	width:10px;
+}
+.tab_ships .ship_list.scroll_fix::-webkit-scrollbar-track {
+	background:#ddd;
+}
+.tab_ships .ship_list.scroll_fix::-webkit-scrollbar-thumb {
+	background:#666;
 }
 /* Row */
 .tab_ships .ship_list .ship_item {
@@ -371,20 +393,10 @@
 /* Fields: Basic */
 .tab_ships .ship_item .ship_id {
 	width:44px;
-	text-align:center;
-}
-.tab_ships .ship_header .ship_item .ship_sortno {
-	width: 20px;
-	text-align: center;
-}
-.tab_ships .ship_header .ship_item .ship_id {
-	width: 22px;
-	text-align: center;
-}
-.tab_ships .ship_list .ship_item .ship_id {
-	width: 44px;
-	padding-right: 1px;
-	text-align: right;
+	text-align:right;
+	padding-right:1px;
+	overflow:hidden;
+	direction:rtl;
 }
 .tab_ships .ship_item .ship_img {
 	position:relative;
@@ -541,5 +553,5 @@
 }
 
 .tab_ships .page_padding.scroll_fix {
-	padding:0px 3px 0px;
+	padding:0px 5px 0px;
 }
