@@ -472,10 +472,13 @@
 				};
 				availableTypes.forEach(type => {
 					// Old suffix for debuffed boss CG used still, see `ShipLoader.hasai` & `hSuffix()`
-					const isDebuffedBoss = type.endsWith("_d");
-					const img = $("<img />"), imgUri = KC3Master.png_file(ship_id,
-						isDebuffedBoss ? type.slice(0, -2) : type, "ship", false,
-						isDebuffedBoss ? this.damagedBossFileSuffix : "");
+					const isDebuffedBoss = type.endsWith("_d"),
+						isDamaged = type.endsWith("_dmg"),
+						qualifiedType = isDebuffedBoss ? type.slice(0, -2) :
+							isDamaged ? type.slice(0, -4) : type;
+					const img = $("<img />"),
+						imgUri = KC3Master.png_file(ship_id, qualifiedType, "ship", isDamaged,
+							isDebuffedBoss ? this.damagedBossFileSuffix : "");
 					const url = `http://${this.server_ip}/kcs2/resources${imgUri}`
 						+ (this.currentCardVersion ? `?version=${this.currentCardVersion}` : "");
 					img.attr("src", url).attr("alt", imgUri).attr("title", type)
