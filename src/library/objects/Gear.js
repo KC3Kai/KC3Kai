@@ -569,7 +569,7 @@ KC3改 Equipment Object
 					// Yuugumo Class K2: Naganami K2 only
 					"38": "18",
 					// Kagerou Class K2
-					//  except Isokaze / Hamakaze B Kai, Urakaze D Kai
+					//  except Isokaze / Hamakaze B Kai, Urakaze / Tanikaze D Kai
 					"30": [
 						{
 							remodel: 2,
