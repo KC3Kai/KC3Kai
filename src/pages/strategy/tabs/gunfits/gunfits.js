@@ -11,27 +11,30 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			// TODO load/cache from some URL
-			this.tests = [
-				{
-					"shipId": 576,
-					"lvlRange": [90, 99],
-					"moraleRange": [0, 52],
-					"equipment": [289, 300]
-				},
-				{
-					"shipId": 576,
-					"lvlRange": [90, 99],
-					"moraleRange": [0, 52],
-					"equipment": [183]
-				},
-				{
-					"shipId": 571,
-					"lvlRange": [90, 99],
-					"moraleRange": [0, 52],
-					"equipment": [9]
-				}
-			];
+			let self = this;
+			let currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
+
+			let updateGunfits = function() {
+				$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, function(e) {
+					self.tests = e;
+					self.execute();
+
+					localStorage.tsundb_gunfits = JSON.stringify({
+						tests: e,
+						updateTime: currentTime
+					});
+				});
+			}
+
+			if(localStorage.tsundb_gunfits == undefined) {
+				updateGunfits();
+				return;
+			}
+
+			let gf = JSON.parse(localStorage.tsundb_gunfits);
+			self.tests = gf.tests;
+			if(currentTime > gf.updateTime + 3)
+				updateGunfits();
 		},
 
 		/* RELOAD
@@ -46,20 +49,20 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			var self = this;
+			let self = this;
 			
-			var shipClickFunc = function(e){
+			let shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var gearClickFunc = function(e){
+			let gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			var rangeText = function(range){
+			let rangeText = function(range){
 				if(range[0] == range[1])
 					return range[0];
 				return range.join(" ~ ");
-			}
-			var generateTestItem = function(test, testItem) {
+			};
+			let generateTestItem = function(test, testItem) {
 				// Generate ship info
 				let shipId = test.shipId;
 				let shipName = KC3Meta.shipName(KC3Master.ship(shipId).api_name);
@@ -98,7 +101,7 @@
 					let ship_gear = $(".tab_gunfits .factory .ship_gear").clone();
 					let masterGear = KC3Master.slotitem(gearId);
 					let gearName = KC3Meta.gearName(masterGear.api_name);
-					let ownedGear = KC3GearManager.find((a) => a.masterId == gearId)
+					let ownedGear = KC3GearManager.find((a) => a.masterId == gearId);
 
 					$(".gear_icon img", ship_gear)
 						.attr("src", KC3Meta.itemIcon(masterGear.api_type[3]))
@@ -116,11 +119,11 @@
 				});
 				
 				// Generate morale info
-				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`)
+				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`);
 			}
 
 			$.each( self.tests, function(i,test) {
-				let testItem = $(".tab_gunfits .factory .testitem").clone()
+				let testItem = $(".tab_gunfits .factory .testitem").clone();
 				generateTestItem(test, testItem);
 				testItem.appendTo(".section_currenttests .box_tests");
 			});

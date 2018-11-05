@@ -37,12 +37,15 @@
 	width: 100%;
 }
 .tab_gunfits .testitem .ship_gears .gearsbox .gear_icon img {
-	width: 25px;
+	vertical-align: middle;
+	width: 40px;
 	float: left;
 }
 .tab_gunfits .testitem .ship_gears .gearsbox .gear_name {
 	padding-left: 5px;
+	float: left;
 }
 .tab_gunfits .testitem .ship_gears .gearsbox .owned {
 	padding-left: 5px;
+	float: left;
 }
