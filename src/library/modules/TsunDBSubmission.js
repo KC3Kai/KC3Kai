@@ -133,6 +133,27 @@
 			},
 			kc3version: null,
 		},
+		gunFit: {
+			username: null,
+			id: null,
+			map: null,
+			edge: null,
+			kc3version: null,
+			ship: null,
+			lv: null,
+			position: null,
+			morale: null,
+			luck: null,
+			formation: null,
+			eformation: null,
+			equips: null,
+			improvements: null,
+			accVal: null,
+			api_cl: null,
+			enemy: null,
+			spAttackType: null,
+			time: null,
+		},
 		development : {
 			hqLvl: null,
 			flagship: {},
@@ -152,7 +173,7 @@
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				
-				'api_req_sortie/battle': [this.processEnemy, this.processAACI],
+				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit],
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
@@ -171,7 +192,7 @@
 				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
 				// Night battles as 2nd part following day part:
-				'api_req_battle_midnight/battle': this.processFriendlyFleet,
+				'api_req_battle_midnight/battle': [this.processFriendlyFleet, this.processGunfit],
 				'api_req_combined_battle/midnight_battle': this.processFriendlyFleet,
 				'api_req_combined_battle/ec_midnight_battle': this.processFriendlyFleet,
 				// PvP battles are excluded intentionally
@@ -605,6 +626,47 @@
 			});
 		},
 
+		processGunfit: function(){
+			const thisNode = KC3SortieManager.currentNode();
+			if (!(["1-1","1-2"].includes(this.data.map) && [1,4].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
+			this.updateGunfitsIfNeeded();
+
+			// Leave it as single-fleet check for now
+			const fleet = PlayerManager.fleets[this.data.sortiedFleet - 1];
+			const battleLog = (thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {}).playerMain;
+			const template = { 
+				username: PlayerManager.hq.name,
+				id: PlayerManager.hq.id,
+				map: this.data.map,
+				edge: thisNode.id,
+				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
+			};
+
+			// Implementing phase tagging to attacks in the future, so this part may need to be updated later
+			for (var idx = 0; idx < fleet.ships.length; idx++) {
+				const ship = fleet.ship(idx);
+				if (ship.isDummy()) { continue; }
+				if (this.checkGunFitsRequirements(ship) >= 0) {
+					const template2 = Object.assign({}, template, { ship: ship.masterId, lv: ship.level, position: idx, morale: ship.morale, luck: ship.lk[0],
+						formation: (thisNode.battleDay || thisNode.battleNight).api_formation[0], eformation: (thisNode.battleDay || thisNode.battleNight).api_formation[1],
+						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1) });
+					const formMod = ship.estimateShellingFormationModifier(template2.formation, template2.eformation, 'accuracy');
+					const accVal = ship.shellingAccuracy(formMod, false);
+					template2.accVal = accVal;
+					const shipLog = battleLog[idx].attacks;
+
+					for (var i = 0; i < shipLog.length; i++) {
+						const attack = shipLog[i];
+						for (var j = 0; j < attack.acc; j++) {
+							this.gunFit = Object.assign({}, template2, { api_cl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
+								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'Day' : 'Night' });
+							console.debug(this.gunFit);
+						}
+					}
+				}
+			}
+		},
+
 		processDevelopment: function(http){
 			this.cleanNonCombat();
 			const request = http.params;
@@ -655,7 +717,7 @@
 			let currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
 
 			if(localStorage.tsundb_gunfits != undefined) {
-				let gf = JSON.parse(localStorage.tsundb_gunfits)
+				let gf = JSON.parse(localStorage.tsundb_gunfits);
 				if (gf.updateTime + 3 > currentTime) // Cache for ~3h
 					return;
 			}

@@ -119,7 +119,7 @@
 					$(".curr_fleet_status", testItem).text(`First fleet ready!`);
 					testItem.addClass("testingActive");
 				}
-			}
+			};
 
 			$.each( self.tests, function(i,test) {
 				let testItem = $(".tab_gunfits .factory .testitem").clone();
