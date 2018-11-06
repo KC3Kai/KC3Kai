@@ -2445,3 +2445,9 @@ button, input, select, textarea {
 .tab_gunfits .testitem.testingImpossible {
     background: #621f1f;
 }
+.tab_gunfits .testitem.testingWrongMorale {
+    background: #736200;
+}
+.tab_gunfits .testitem.testingActive {
+    background: #1f9a00;
+}

@@ -12,29 +12,17 @@
 		---------------------------------*/
 		init :function(){
 			let self = this;
-			let currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
 
-			let updateGunfits = function() {
-				$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, function(e) {
-					self.tests = e;
-					self.execute();
+			TsunDBSubmission.updateGunfitsIfNeeded((e) => {
+				self.tests = e;
+				self.execute();
+			});
 
-					localStorage.tsundb_gunfits = JSON.stringify({
-						tests: e,
-						updateTime: currentTime
-					});
-				});
-			}
-
-			if(localStorage.tsundb_gunfits == undefined) {
-				updateGunfits();
+			if(localStorage.tsundb_gunfits != undefined) {
+				let gf = JSON.parse(localStorage.tsundb_gunfits);
+				self.tests = gf.tests;
 				return;
 			}
-
-			let gf = JSON.parse(localStorage.tsundb_gunfits);
-			self.tests = gf.tests;
-			if(currentTime > gf.updateTime + 3)
-				updateGunfits();
 		},
 
 		/* RELOAD
@@ -43,6 +31,7 @@
 		reload :function(){
 			KC3ShipManager.load();
 			KC3GearManager.load();
+			PlayerManager.loadFleets();
 		},
 
 		/* EXECUTE
@@ -120,6 +109,16 @@
 				
 				// Generate morale info
 				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`);
+
+				// Current fleet status
+				let fleetStatus = Math.max(...PlayerManager.fleets[0].ship().map((ship) => TsunDBSubmission.checkGunFitTestRequirements(ship, test)));
+				if(fleetStatus == -1) {
+					$(".curr_fleet_status", testItem).text(`In fleet but wrong morale`);
+					testItem.addClass("testingWrongMorale");
+				} else if(fleetStatus == 0) {
+					$(".curr_fleet_status", testItem).text(`First fleet ready!`);
+					testItem.addClass("testingActive");
+				}
 			}
 
 			$.each( self.tests, function(i,test) {
@@ -127,9 +126,6 @@
 				generateTestItem(test, testItem);
 				testItem.appendTo(".section_currenttests .box_tests");
 			});
-
 		}
-
 	};
-
 })();

@@ -184,6 +184,7 @@
 				'api_req_kousyou/createitem': this.processDevelopment
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
+			this.updateGunfitsIfNeeded();
 		},
 		
 		processMapInfo: function(http) {
@@ -648,6 +649,85 @@
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
 			}));
+		},
+
+		updateGunfitsIfNeeded: function(callback) {
+			let currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
+
+			if(localStorage.tsundb_gunfits != undefined) {
+				let gf = JSON.parse(localStorage.tsundb_gunfits)
+				if (gf.updateTime + 3 > currentTime) // Cache for ~3h
+					return;
+			}
+			$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, function(newGunfits) {
+				if(callback)
+					callback(newGunfits);
+
+				localStorage.tsundb_gunfits = JSON.stringify({
+					tests: newGunfits,
+					updateTime: currentTime
+				});
+			});
+		},
+
+		/*
+		* Returns: 
+		*   i: index of test (>= 0) matches test and morale
+		*  -1: matches a test but not morale
+		*  -2: doesn't match a test
+		* 
+		* Eg: if(checkGunFitsRequirements(ship) < 0) continue;
+		*/
+		checkGunFitsRequirements: function(ship) {
+			if(localStorage.tsundb_gunfits == undefined)
+				return -2;
+			
+			let status = -2;
+			let tests = JSON.parse(localStorage.tsundb_gunfits).tests;
+
+			for(let testId in tests) {
+				let testStatus = this.checkGunFitTestRequirements(ship, tests[testId]);
+
+				if(testStatus == 0)
+					return testId;
+
+				status = Math.max(status, testStatus);
+			}
+			
+			return status;
+		},
+		/*
+		* Returns: 
+			0: matches test and morale
+			-1: matches test but not morale
+			-2: doesn't match test
+		*/
+		checkGunFitTestRequirements: function(ship, test) {
+			if(ship.masterId !== test.shipId
+				|| ship.level < test.lvlRange[0]
+				|| ship.level > test.lvlRange[1])
+				return -2; // Wrong remodel/ship or wrong lvl
+
+			let equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
+			let testEquip = test.equipment;
+			
+			eqloop: for(let e of testEquip) {
+				for(let i in equip) {
+					if(e == equip[i].masterId) {
+						equip.splice(i, 1);
+						continue eqloop;
+					}
+				}
+				return -2; // Missing required equip
+			}
+
+			if(equip.length > 0)
+				return -2; // Too many equips, might ignore some equip types that don't affect acc
+			
+			if(ship.morale < test.moraleRange[0]
+				|| ship.morale > test.moraleRange[1])
+				return -1; // Wrong morale
+			return 0;
 		},
 		
 		/**

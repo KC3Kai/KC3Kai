@@ -1908,3 +1908,9 @@ body {
 .tab_gunfits .testitem.testingImpossible {
     background: #fcc;
 }
+.tab_gunfits .testitem.testingWrongMorale {
+    background: #ffc;
+}
+.tab_gunfits .testitem.testingActive {
+    background: #cfc;
+}
