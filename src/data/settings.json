@@ -979,6 +979,12 @@
 				"name" : "SettingsEnableTsunDBSubmission",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "TsunDBSubmissionExtra_enabled",
+				"name" : "SettingsEnableTsunDBExtraSubmission",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

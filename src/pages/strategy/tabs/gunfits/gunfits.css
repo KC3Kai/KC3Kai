@@ -6,6 +6,23 @@
 .tab_gunfits .factory {
 	display:none;
 }
+
+.tab_gunfits .setting_disabled {
+	background-color: #fdd;
+	color:#c44;
+	padding:10px;
+	margin: 10px;
+	border-radius:10px;
+}
+.tab_gunfits .setting_disabled .settings_link {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+.tab_gunfits .setting_disabled .settings_link a {
+	color:#f55;
+}
+
 .tab_gunfits .testitem.testingImpossible {
     opacity: 0.4;
 }

@@ -40,6 +40,11 @@
 		execute :function(){
 			let self = this;
 			
+			if(ConfigManager.TsunDBSubmissionExtra_enabled)
+				$(".setting_disabled").hide();
+			else
+				$(".setting_disabled").show();
+
 			let shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
@@ -85,6 +90,7 @@
 				}
 
 				// Generate equipment info
+				let requiredCount = {};
 				$(".ship_gears .gear_status", testItem).text("Good to go!");
 				$.each(test.equipment, function(i, gearId) {
 					let ship_gear = $(".tab_gunfits .factory .ship_gear").clone();
@@ -99,8 +105,8 @@
 						.click(gearClickFunc);
 					$(".gear_name", ship_gear).text(gearName);
 					$(".owned", ship_gear).text(`Owned: x${ownedGear.length}`);
-					if(ownedGear.length == 0) {
-						// TODO support multiple same equip
+					requiredCount[gearId] = (requiredCount[gearId] || 0) + 1;
+					if(ownedGear.length < requiredCount[gearId]) {
 						$(".ship_gears .gear_status", testItem).text("Missing some equipment");
 						testItem.addClass("testingImpossible");
 					}
