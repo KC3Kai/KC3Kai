@@ -373,8 +373,8 @@
 						tp: shipMst.api_raig[0] + ship.mod[1],
 						aa: shipMst.api_tyku[0] + ship.mod[2],
 						ar: shipMst.api_souk[0] + ship.mod[3],
-						lk: ship.lk[0],
-						hp: ship.hp[0],
+						lk: shipMst.api_luck[0] + ship.mod[4],
+                        hp: ship.maxHp() + ship.mod[5],
 						as: ship.nakedAsw()
 					});
 				}
