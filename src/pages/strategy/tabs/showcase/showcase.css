@@ -45,6 +45,9 @@
 .tab_showcase .exportResults a{
 	cursor: pointer;
 }
+.tab_showcase hr{
+	margin: 10px 0;
+}
 /* SHIPS
 -----------------------------*/
 .tab_showcase .stype_box {

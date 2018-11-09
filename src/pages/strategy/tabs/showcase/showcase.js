@@ -321,6 +321,53 @@
 					return settings;
 				});
 			});
+			$("#exportToKC3_moe").click(function(){
+				var button = this;
+                if ($(button).hasClass("disabled"))
+                    return null;
+                $(button).addClass("disabled");
+                KC3ShipManager.load();
+                let ships = [];
+
+                for(let i in KC3ShipManager.list){
+                    if(KC3ShipManager.hasOwnProperty(i))continue;
+                    let ship = KC3ShipManager.list[i];
+
+                    if(ship.lock!==1) continue;
+                    let MasterShip = ship.master();
+
+                    ships.push({
+                        id: ship.rosterId,
+                        masterId: ship.masterId,
+                        lvl: ship.level,
+                        sally: ship.sally,
+                        extra_slot: ship.ex_item !== 0 ? 1 : 0,
+                        fp: MasterShip.api_houg[0] +ship.mod[0],
+                        tp: MasterShip.api_raig[0] +ship.mod[1],
+                        aa: MasterShip.api_tyku[0] +ship.mod[2],
+                        ar: MasterShip.api_souk[0] +ship.mod[3],
+                        lk: ship.lk[0],
+                        hp: ship.hp[0],
+                        as: ship.nakedAsw()
+                    });
+                }
+                let listener = (m) => {
+                    if (m.origin !== "https://export.kc3.moe")
+                        return false;
+
+                    if (m.data === "EXPORTER_STATE_READY" && m.source) {
+                        m.source.postMessage({
+                            ships: JSON.stringify(ships),
+                            kc3assets: window.location.origin + "/assets/img/ships/",
+                            type: "KC3_SHIPS"
+                        }, "https://export.kc3.moe");
+                        window.removeEventListener("message", listener);
+                        $(button).removeClass("disabled");
+                    }
+                };
+                window.addEventListener("message", listener);
+                return window.open("https://export.kc3.moe/#/newTab/");
+			});
 
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){
