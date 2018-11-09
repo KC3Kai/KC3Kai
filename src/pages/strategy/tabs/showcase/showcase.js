@@ -3,6 +3,8 @@
 
 	KC3StrategyTabs.showcase = new KC3StrategyTab("showcase");
 
+	const ExportSiteHost = "https://export.kc3.moe";
+
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 
@@ -84,6 +86,7 @@
 				types: [ 20, 21, 22, 33 ]
 			}
 		},
+		shipsToExport: [],
 
 		/* INIT
 		Prepares static data needed
@@ -241,12 +244,35 @@
 			}
 		},
 
+		windowMessageHandler :function(e){
+			const self = KC3StrategyTabs.showcase.definition;
+			if(e.origin === ExportSiteHost && e.data === "EXPORTER_STATE_READY" && e.source) {
+				if(self.shipsToExport.length) {
+					const data = JSON.stringify(self.shipsToExport);
+					e.source.postMessage({
+						ships: data,
+						kc3assets: window.location.origin + "/assets/img/ships/",
+						type: "KC3_SHIPS"
+					}, ExportSiteHost);
+					console.debug("Ships data have been sent to " + ExportSiteHost, self.shipsToExport);
+					self.shipsToExport = [];
+				}
+				window.removeEventListener("message", self.windowMessageHandler);
+				$("#exportToKC3_moe").removeClass("disabled");
+				return true;
+			}
+			return false;
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			const self = this;
-
+			
+			// Clean unused ship list and message listener if tab switched eventually
+			this.shipsToExport.length = 0;
+			window.removeEventListener("message", self.windowMessageHandler);
 			this.updateUI();
 
 			// BUTTONS
@@ -322,51 +348,40 @@
 				});
 			});
 			$("#exportToKC3_moe").click(function(){
-				var button = this;
-                if ($(button).hasClass("disabled"))
-                    return null;
-                $(button).addClass("disabled");
-                KC3ShipManager.load();
-                let ships = [];
+				if($(this).hasClass("disabled")) {
+					return;
+				} else {
+					$(this).addClass("disabled");
+				}
 
-                for(let i in KC3ShipManager.list){
-                    if(KC3ShipManager.hasOwnProperty(i))continue;
-                    let ship = KC3ShipManager.list[i];
+				// Build the list of latest ships
+				KC3ShipManager.load();
+				self.shipsToExport = [];
+				for(const idx in KC3ShipManager.list) {
+					const ship = KC3ShipManager.list[idx];
+					// Skip ships not heart-locked
+					if(ship.lock !== 1) continue;
+					const shipMst = ship.master();
 
-                    if(ship.lock!==1) continue;
-                    let MasterShip = ship.master();
-
-                    ships.push({
-                        id: ship.rosterId,
-                        masterId: ship.masterId,
-                        lvl: ship.level,
-                        sally: ship.sally,
-                        extra_slot: ship.ex_item !== 0 ? 1 : 0,
-                        fp: MasterShip.api_houg[0] +ship.mod[0],
-                        tp: MasterShip.api_raig[0] +ship.mod[1],
-                        aa: MasterShip.api_tyku[0] +ship.mod[2],
-                        ar: MasterShip.api_souk[0] +ship.mod[3],
-                        lk: ship.lk[0],
-                        hp: ship.hp[0],
-                        as: ship.nakedAsw()
-                    });
-                }
-                let listener = (m) => {
-                    if (m.origin !== "https://export.kc3.moe")
-                        return false;
-
-                    if (m.data === "EXPORTER_STATE_READY" && m.source) {
-                        m.source.postMessage({
-                            ships: JSON.stringify(ships),
-                            kc3assets: window.location.origin + "/assets/img/ships/",
-                            type: "KC3_SHIPS"
-                        }, "https://export.kc3.moe");
-                        window.removeEventListener("message", listener);
-                        $(button).removeClass("disabled");
-                    }
-                };
-                window.addEventListener("message", listener);
-                return window.open("https://export.kc3.moe/#/newTab/");
+					self.shipsToExport.push({
+						id: ship.rosterId,
+						masterId: ship.masterId,
+						lvl: ship.level,
+						sally: ship.sally,
+						extra_slot: ship.ex_item !== 0 ? 1 : 0,
+						fp: shipMst.api_houg[0] + ship.mod[0],
+						tp: shipMst.api_raig[0] + ship.mod[1],
+						aa: shipMst.api_tyku[0] + ship.mod[2],
+						ar: shipMst.api_souk[0] + ship.mod[3],
+						lk: ship.lk[0],
+						hp: ship.hp[0],
+						as: ship.nakedAsw()
+					});
+				}
+				
+				window.removeEventListener("message", self.windowMessageHandler);
+				window.addEventListener("message", self.windowMessageHandler, false);
+				return window.open(ExportSiteHost + "/#/newTab/");
 			});
 
 			// SHIPS
