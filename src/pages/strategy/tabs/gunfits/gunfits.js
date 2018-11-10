@@ -127,7 +127,7 @@
 				}
 			};
 
-			$.each( self.tests, function(i,test) {
+			$.each( self.tests.filter((test) => test.active), function(i,test) {
 				let testItem = $(".tab_gunfits .factory .testitem").clone();
 				generateTestItem(test, testItem);
 				testItem.appendTo(".section_currenttests .box_tests");
