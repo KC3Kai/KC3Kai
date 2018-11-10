@@ -133,21 +133,25 @@
 			},
 			kc3version: null,
 		},
-		gunFit: {
-			username: null,
-			id: null,
-			map: null,
-			edge: null,
-			kc3version: null,
-			ship: null,
-			lv: null,
-			position: null,
-			morale: null,
-			luck: null,
-			formation: null,
-			eformation: null,
-			equips: null,
-			improvements: null,
+		gunfit: {
+			misc: {
+				username: null,
+				id: null,
+				map: null,
+				edge: null,
+				kc3version: null,
+				formation: null,
+				eformation: null,
+			},
+			ship: {
+				id: null,
+				lv: null,
+				position: null,
+				morale: null,
+				luck: null,
+				equips: null,
+				improvements: null,
+			},
 			accVal: null,
 			api_cl: null,
 			enemy: null,
@@ -627,8 +631,9 @@
 		},
 
 		processGunfit: function(){
+			this.gunfit = {};
 			const thisNode = KC3SortieManager.currentNode();
-			if (!(["1-1","1-2"].includes(this.data.map) && [1,4].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
+			if (!(["1-1","1-2"].includes(this.data.map) && [1,3].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
 			this.updateGunfitsIfNeeded();
 
 			// Leave it as single-fleet check for now
@@ -641,26 +646,28 @@
 				edge: thisNode.id,
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
 			};
-
+			const battleData = thisNode.battleDay || thisNode.battleNight;
+			template.formation = battleData.api_formation[0];
+			template.eformation = battleData.api_formation[1];
 			// Implementing phase tagging to attacks in the future, so this part may need to be updated later
 			for (var idx = 0; idx < fleet.ships.length; idx++) {
 				const ship = fleet.ship(idx);
 				if (ship.isDummy()) { continue; }
-				if (this.checkGunFitsRequirements(ship) >= 0) {
-					const template2 = Object.assign({}, template, { ship: ship.masterId, lv: ship.level, position: idx, morale: ship.morale, luck: ship.lk[0],
-						formation: (thisNode.battleDay || thisNode.battleNight).api_formation[0], eformation: (thisNode.battleDay || thisNode.battleNight).api_formation[1],
-						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1) });
+				const testId = this.checkGunFitsRequirements(ship);
+				if (testId >= 0) {
+					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: ship.morale, luck: ship.lk[0],
+						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testId: testId });
 					const formMod = ship.estimateShellingFormationModifier(template2.formation, template2.eformation, 'accuracy');
 					const accVal = ship.shellingAccuracy(formMod, false);
-					template2.accVal = accVal;
+					template2.accVal = accVal.basicAccuracy;
 					const shipLog = battleLog[idx].attacks;
 
 					for (var i = 0; i < shipLog.length; i++) {
 						const attack = shipLog[i];
 						for (var j = 0; j < attack.acc; j++) {
-							this.gunFit = Object.assign({}, template2, { api_cl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
+							this.gunfit = Object.assign({}, template2, { api_cl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
 								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'Day' : 'Night' });
-							console.debug(this.gunFit);
+							console.debug(this.gunfit);
 						}
 					}
 				}
@@ -747,11 +754,27 @@
 			let status = -2;
 			let tests = JSON.parse(localStorage.tsundb_gunfits).tests;
 
+			const onClick = e => {
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "gunfits"
+				})).execute();
+				return false;
+			};
+
 			for(let testId in tests) {
 				let testStatus = this.checkGunFitTestRequirements(ship, tests[testId]);
 
-				if(testStatus == 0)
+				if(testStatus == 0) {
+					if (!tests[testId].active) {
+						KC3Network.trigger("ModalBox", {
+							title: KC3Meta.term("TsunDBTestInactiveTitle"),
+							message: KC3Meta.term("TsunDBTestInactiveMessage"),
+							link: KC3Meta.term("TsunDBTestLink"),
+							onClick: onClick
+						});
+					}
 					return testId;
+				}
 
 				status = Math.max(status, testStatus);
 			}
