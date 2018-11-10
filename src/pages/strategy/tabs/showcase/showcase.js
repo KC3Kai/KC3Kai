@@ -87,6 +87,7 @@
 			}
 		},
 		shipsToExport: [],
+		gearsToExport: [],
 
 		/* INIT
 		Prepares static data needed
@@ -247,15 +248,17 @@
 		windowMessageHandler :function(e){
 			const self = KC3StrategyTabs.showcase.definition;
 			if(e.origin === ExportSiteHost && e.data === "EXPORTER_STATE_READY" && e.source) {
-				if(self.shipsToExport.length) {
-					const data = JSON.stringify(self.shipsToExport);
+				if(self.shipsToExport.length && self.gearsToExport.length) {
+					const ships = JSON.stringify(self.shipsToExport), gears = JSON.stringify(self.gearsToExport);
 					e.source.postMessage({
-						ships: data,
+						ships,
+                        gears,
 						kc3assets: window.location.origin + "/assets/img/ships/",
-						type: "KC3_SHIPS"
+						type: "KC3_DATA"
 					}, ExportSiteHost);
-					console.debug("Ships data have been sent to " + ExportSiteHost, self.shipsToExport);
+					console.debug("Ships & gears data have been sent to " + ExportSiteHost, self.shipsToExport, self.gearsToExport);
 					self.shipsToExport = [];
+                    self.gearsToExport = [];
 				}
 				window.removeEventListener("message", self.windowMessageHandler);
 				$("#exportToKC3_moe").removeClass("disabled");
@@ -272,6 +275,7 @@
 			
 			// Clean unused ship list and message listener if tab switched eventually
 			this.shipsToExport.length = 0;
+            this.gearsToExport.length = 0;
 			window.removeEventListener("message", self.windowMessageHandler);
 			this.updateUI();
 
@@ -378,7 +382,30 @@
 						as: ship.nakedAsw()
 					});
 				}
-				
+
+                KC3GearManager.load();
+                self.gearsToExport = [];
+                let gears = {};
+                //group all gears
+                for (const idx in KC3GearManager.list) {
+                    let gear = KC3GearManager.list[idx];
+                    // Skip not locked gears
+                    if (gear.lock !== 1) continue;
+                    if (typeof gears[`g${gear.masterId}`] === "undefined") {
+                        gears[`g${gear.masterId}`] = {
+                            id: gear.masterId,
+                            mod: Array(11).fill(0)
+                        };
+                    }
+                    gears[`g${gear.masterId}`].mod[gear.stars]++;
+                }
+                //convert to array
+                for (const idx in gears) {
+                    if (!gears[idx].id) continue;
+                    self.gearsToExport.push(gears[idx]);
+                }
+                self.gearsToExport.sort((a, b) => a.id - b.id);
+
 				window.removeEventListener("message", self.windowMessageHandler);
 				window.addEventListener("message", self.windowMessageHandler, false);
 				return window.open(ExportSiteHost + "/#/newTab/");
