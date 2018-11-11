@@ -775,7 +775,7 @@
 							onClick: onClick
 						});
 					}
-					return testId;
+					return parseInt(testId);
 				}
 
 				status = Math.max(status, testStatus);
