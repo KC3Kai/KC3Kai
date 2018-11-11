@@ -666,7 +666,7 @@
 
 					for (var i = 0; i < shipLog.length; i++) {
 						const attack = shipLog[i];
-						for (var j = 0; j < attack.acc; j++) {
+						for (var j = 0; j < attack.acc.length; j++) {
 							this.gunfit = Object.assign({}, template2, { api_cl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
 								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'Day' : 'Night' });
 							console.debug(this.gunfit);
