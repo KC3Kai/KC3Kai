@@ -649,13 +649,15 @@
 			const battleData = thisNode.battleDay || thisNode.battleNight;
 			template.formation = battleData.api_formation[0];
 			template.eformation = battleData.api_formation[1];
+			const initialMorale = KC3SortieManager.initialMorale;
+			
 			// Implementing phase tagging to attacks in the future, so this part may need to be updated later
 			for (var idx = 0; idx < fleet.ships.length; idx++) {
 				const ship = fleet.ship(idx);
 				if (ship.isDummy()) { continue; }
 				const testId = this.checkGunFitsRequirements(ship);
 				if (testId >= 0) {
-					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: ship.morale, luck: ship.lk[0],
+					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: initialMorale[idx], luck: ship.lk[0],
 						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testId: testId });
 					const formMod = ship.estimateShellingFormationModifier(template2.formation, template2.eformation, 'accuracy');
 					const accVal = ship.shellingAccuracy(formMod, false);
