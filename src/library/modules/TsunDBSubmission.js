@@ -156,6 +156,7 @@
 			api_cl: null,
 			enemy: null,
 			spAttackType: null,
+			testName: null,
 			time: null,
 		},
 		development : {
@@ -636,6 +637,10 @@
 			if (!(["1-1","1-2"].includes(this.data.map) && [1,3].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
 			this.updateGunfitsIfNeeded();
 
+			if(localStorage.tsundb_gunfits == undefined)
+				return;
+			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
+
 			// Leave it as single-fleet check for now
 			const fleet = PlayerManager.fleets[this.data.sortiedFleet - 1];
 			const battleLog = (thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {}).playerMain;
@@ -658,7 +663,7 @@
 				const testId = this.checkGunFitsRequirements(ship);
 				if (testId >= 0) {
 					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: initialMorale[idx], luck: ship.lk[0],
-						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testId: testId });
+						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testName: tests[testId].testName });
 					const formMod = ship.estimateShellingFormationModifier(template2.formation, template2.eformation, 'accuracy');
 					const accVal = ship.shellingAccuracy(formMod, false);
 					template2.accVal = accVal.basicAccuracy;
