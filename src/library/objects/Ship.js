@@ -1522,6 +1522,7 @@ KC3改 Ship Object
 		const hasT3Shell = this.hasEquipment(35);
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
+		let seaplaneBonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
@@ -1529,14 +1530,14 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
-					// Missing: SPF bonus modifiers
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3][wg42Count] || 1.3;
-					return [wg42Additive, t3Bonus * landingBonus * wg42Bonus];
+					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+					return [wg42Additive, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
-					const seaplaneBonus = this.hasEquipmentType(2, [10, 11, 39]) ? 1.5 : 1;
+					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// SS(V) bonus
