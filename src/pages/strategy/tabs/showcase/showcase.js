@@ -249,16 +249,17 @@
 			const self = KC3StrategyTabs.showcase.definition;
 			if(e.origin === ExportSiteHost && e.data === "EXPORTER_STATE_READY" && e.source) {
 				if(self.shipsToExport.length && self.gearsToExport.length) {
-					const ships = JSON.stringify(self.shipsToExport), gears = JSON.stringify(self.gearsToExport);
+					const ships = JSON.stringify(self.shipsToExport),
+						gears = JSON.stringify(self.gearsToExport);
 					e.source.postMessage({
 						ships,
-                        gears,
+						gears,
 						kc3assets: window.location.origin + "/assets/img/ships/",
 						type: "KC3_DATA"
 					}, ExportSiteHost);
 					console.debug("Ships & gears data have been sent to " + ExportSiteHost, self.shipsToExport, self.gearsToExport);
 					self.shipsToExport = [];
-                    self.gearsToExport = [];
+					self.gearsToExport = [];
 				}
 				window.removeEventListener("message", self.windowMessageHandler);
 				$("#exportToKC3_moe").removeClass("disabled");
@@ -275,7 +276,7 @@
 			
 			// Clean unused ship list and message listener if tab switched eventually
 			this.shipsToExport.length = 0;
-            this.gearsToExport.length = 0;
+			this.gearsToExport.length = 0;
 			window.removeEventListener("message", self.windowMessageHandler);
 			this.updateUI();
 
@@ -364,7 +365,7 @@
 				for(const idx in KC3ShipManager.list) {
 					const ship = KC3ShipManager.list[idx];
 					// Skip ships not heart-locked
-					if(ship.lock !== 1) continue;
+					if(!ship.lock) continue;
 					const shipMst = ship.master();
 
 					self.shipsToExport.push({
@@ -378,33 +379,34 @@
 						aa: shipMst.api_tyku[0] + ship.mod[2],
 						ar: shipMst.api_souk[0] + ship.mod[3],
 						lk: shipMst.api_luck[0] + ship.mod[4],
-                        hp: ship.maxHp() + ship.mod[5],
+						hp: ship.maxHp() + ship.mod[5],
 						as: ship.nakedAsw()
 					});
 				}
 
-                KC3GearManager.load();
-                self.gearsToExport = [];
-                let gears = {};
-                //group all gears
-                for (const idx in KC3GearManager.list) {
-                    let gear = KC3GearManager.list[idx];
-                    // Skip not locked gears
-                    if (gear.lock !== 1) continue;
-                    if (typeof gears[`g${gear.masterId}`] === "undefined") {
-                        gears[`g${gear.masterId}`] = {
-                            id: gear.masterId,
-                            mod: Array(11).fill(0)
-                        };
-                    }
-                    gears[`g${gear.masterId}`].mod[gear.stars]++;
-                }
-                //convert to array
-                for (const idx in gears) {
-                    if (!gears[idx].id) continue;
-                    self.gearsToExport.push(gears[idx]);
-                }
-                self.gearsToExport.sort((a, b) => a.id - b.id);
+				// Summarize improvement of all gears
+				KC3GearManager.load();
+				self.gearsToExport = [];
+				const gears = {};
+				for(const idx in KC3GearManager.list) {
+					const gear = KC3GearManager.list[idx];
+					// Skip unlocked gears
+					if(!gear.lock) continue;
+					const key = `g${gear.masterId}`;
+					if(gears[key] === undefined) {
+						gears[key] = {
+							id: gear.masterId,
+							mod: Array(11).fill(0)
+						};
+					}
+					gears[key].mod[gear.stars || 0]++;
+				}
+				// Convert to array
+				for(const key in gears) {
+					if(!gears[key].id) continue;
+					self.gearsToExport.push(gears[key]);
+				}
+				self.gearsToExport.sort((a, b) => a.id - b.id);
 
 				window.removeEventListener("message", self.windowMessageHandler);
 				window.addEventListener("message", self.windowMessageHandler, false);
