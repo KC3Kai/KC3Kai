@@ -185,9 +185,10 @@ AntiAir: anti-air related calculations
 		return [300, 301].indexOf(mst.api_id) !== -1;
 	}
 
-	function isBritishPomPomGun(mst) {
+	function isBritishAAGun(mst) {
 		// QF 2-pounder Octuple Pom-pom Gun Mount
-		return mst.api_id === 191;
+		// 20-tube 7inch UP Rocket Launchers
+		return [191, 301].indexOf(mst.api_id) !== -1;
 	}
 
 	// for equipments the coefficient is different for
@@ -916,7 +917,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isBritishRocketLauncher ),
-				hasSome( isBritishPomPomGun ))
+				hasSome( isBritishAAGun ))
 		)
 	);
 

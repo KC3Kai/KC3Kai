@@ -1703,7 +1703,7 @@
 					const f33Cn = Array.numbers(1, 4)
 						.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
 					$(".summary-eqlos").attr("title",
-						"x1={0}\nx3={2}\nx4={3}"
+						"x1={0}\nx2={1}\nx3={2}\nx4={3}"
 						.format(f33Cn)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
