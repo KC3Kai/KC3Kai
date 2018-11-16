@@ -41,9 +41,10 @@
 
   Hougeki.parseJson = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend, parseDefenderFriend,
-      parseInfo, isNelsonTouch, parseNelsonTouch } = KC3BattlePrediction.battle.phases.hougeki;
+      parseInfo, isNelsonTouch, isNagatoCutin, parseSpecialCutin } = KC3BattlePrediction.battle.phases.hougeki;
 
-    return isNelsonTouch(attackJson) ? parseNelsonTouch(isAllySideFriend, attackJson) : {
+    const isSpecialCutin = isNelsonTouch(attackJson) || isNagatoCutin(attackJson);
+    return isSpecialCutin ? parseSpecialCutin(isAllySideFriend, attackJson) : {
       damage: parseDamage(attackJson),
       attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
       defender: isAllySideFriend ? parseDefenderFriend(attackJson) : parseDefender(attackJson),
@@ -51,17 +52,19 @@
     };
   };
 
-  // 1 Nelson Touch (CutIn) may attack 3 different targets,
+  // 1 Special CutIn (Nelson Touch / Nagato) may attack 3 different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
-  Hougeki.parseNelsonTouch = (isAllySideFriend, attackJson) => {
-    const { parseDamage, parseNelsonTouchAttacker, parseDefender,
-      parseInfo, isRealAttack } = KC3BattlePrediction.battle.phases.hougeki;
+  Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
+    const { parseDamage, parseNelsonTouchAttacker, parseNagatoCutinAttacker, parseDefender,
+      parseInfo, isRealAttack, isNelsonTouch } = KC3BattlePrediction.battle.phases.hougeki;
 
     const { api_df_list: defenders, api_damage: damages } = attackJson;
     return defenders.map((defender, index) => ({
       damage: parseDamage({ api_damage: [damages[index]] }),
-      attacker: parseNelsonTouchAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})),
-      // Assume abyssal enemy cannot trigger it yet, but PvP unknown.
+      attacker: isNelsonTouch(attackJson) ?
+        parseNelsonTouchAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})) :
+        parseNagatoCutinAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})),
+      // Assume abyssal enemy and PvP cannot trigger it yet
       defender: parseDefender({ api_df_list: [defender] }),
       info: parseInfo(attackJson, index),
     })).filter(isRealAttack);
@@ -71,11 +74,19 @@
 
   Hougeki.isNelsonTouch = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
 
-  // Uncertain: according MVP result, attacker might be set to corresponding
+  Hougeki.isNagatoCutin = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 101;
+
+  // According MVP result, attacker might be set to corresponding
   // ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0).
   Hougeki.parseNelsonTouchAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
     side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
     position: [0, 2, 4][index] || 0,
+  });
+
+  // Just guess: 3-times attacks counted for 1st Nagato twice, 2nd once
+  Hougeki.parseNagatoCutinAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
+    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
+    position: [0, 0, 1][index] || 0,
   });
 
   Hougeki.parseDamage = ({ api_damage }) =>
