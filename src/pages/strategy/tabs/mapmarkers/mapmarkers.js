@@ -219,7 +219,7 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(spot.direction && isAddingRouteStart) {
+						if(!spot.route && spot.line && isAddingRouteStart) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);

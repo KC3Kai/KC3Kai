@@ -2090,6 +2090,12 @@ Previously known as "Reactor"
 				if(thisMap.api_defeat_count !== undefined) {
 					localMap.kills = thisMap.api_defeat_count;
 					localMap.kind  = "multiple";
+					if(thisMap.api_required_defeat_count !== undefined) {
+						localMap.killsRequired = thisMap.api_required_defeat_count;
+					}
+				}
+				if(thisMap.api_gauge_num !== undefined) {
+					localMap.gaugeNum = thisMap.api_gauge_num;
 				}
 				// Max Land-bases allowed to be sortied
 				if(thisMap.api_air_base_decks !== undefined) {

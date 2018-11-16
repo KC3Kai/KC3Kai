@@ -1983,8 +1983,8 @@
 						$(".base_name", baseBox).text(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
 						$(".base_range", baseBox).attr("title",
-								"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
-							).lazyInitTooltip();
+							"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
+						).lazyInitTooltip();
 						$(".base_action", baseBox).html([
 							KC3Meta.term("LandBaseActionWaiting"),
 							KC3Meta.term("LandBaseActionSortie"),
@@ -4513,7 +4513,7 @@
 					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
-					var totalKills = KC3Meta.gauge( thisMapId );
+					var totalKills = thisMap.killsRequired || KC3Meta.gauge( thisMapId );
 					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
