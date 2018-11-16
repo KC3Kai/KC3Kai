@@ -425,14 +425,13 @@
 						airBattle.slots.push(shipObj.slots);
 						airBattle.proficiency.push(proficiency);
 						fp += shipObj.interceptionPower();
-						
-						if(koukuApi.api_stage3) {
-							airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag || [];
-							airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag || [];
-							airBattle.fclFlag = koukuApi.api_stage3.api_fcl_flag || [];
-							airBattle.damage = koukuApi.api_stage3.api_fdam;
-						}
 					});
+					if(koukuApi.api_stage3) {
+						airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag || [];
+						airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag || [];
+						airBattle.fclFlag = koukuApi.api_stage3.api_fcl_flag || [];
+						airBattle.damage = koukuApi.api_stage3.api_fdam || [];
+					}
 				}
 				
 				// Get sortie power of the land-base involved in the first wave
