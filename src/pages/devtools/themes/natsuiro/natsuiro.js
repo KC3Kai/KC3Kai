@@ -1982,6 +1982,9 @@
 						$(".base_map", baseBox).text(baseInfo.map);
 						$(".base_name", baseBox).text(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
+						$(".base_range", baseBox).attr("title",
+								"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
+							).lazyInitTooltip();
 						$(".base_action", baseBox).html([
 							KC3Meta.term("LandBaseActionWaiting"),
 							KC3Meta.term("LandBaseActionSortie"),

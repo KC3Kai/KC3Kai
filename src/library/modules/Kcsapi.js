@@ -1326,7 +1326,14 @@ Previously known as "Reactor"
 		"api_req_air_corps/set_plane":function(params, response, headers){
 			$.each(PlayerManager.bases, function(i, base){
 				if(base.map == params.api_area_id && base.rid == params.api_base_id){
-					base.range = response.api_data.api_distance;
+					const distance = response.api_data.api_distance;
+					if(typeof distance === "object"){
+						base.rangeBase = distance.api_base;
+						base.rangeBonus = distance.api_bonus;
+						base.range = base.rangeBase + base.rangeBonus;
+					} else {
+						base.range = distance;
+					}
 					/* not work for swapping planes by drag and drop
 					$.each(params.api_squadron_id.split("%2C"), function(j, sid){
 						base.planes[sid-1] = response.api_data.api_plane_info[j];

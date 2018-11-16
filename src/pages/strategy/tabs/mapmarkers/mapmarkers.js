@@ -340,8 +340,7 @@
 					let currentSpotCnt = initSpotCnt, addedSpotCnt = 0;
 					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
 					// Confirmed condition if nodes amount at first not reach expected one
-					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) &&
-						this.isShowEdges && KC3Meta.isEventWorld(this.world)) {
+					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) && this.isShowEdges) {
 						// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
 						const loadAdditonalInfo = () => {
 							const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);

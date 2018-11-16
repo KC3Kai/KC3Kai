@@ -220,7 +220,7 @@
 			"Repair" : 6,
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
-			"NelsonTouch" : 900,
+			"SpCutin" : 900,
 			"Friend41(1)" : 141,
 			"Friend41(2)" : 241,
 			"Friend42(1)" : 142,
@@ -276,8 +276,8 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			// add Nelson Touch key
-			if (KC3Meta.nelsonTouchShips.indexOf(masterId) > -1)
+			// add special cut-in (Nelson Touch, Nagato Cutin) key
+			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
 
 			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))

@@ -2280,6 +2280,14 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * TODO to be implemented
+	 */
+	KC3Ship.prototype.canDoNagatoCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
@@ -2336,6 +2344,7 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.0],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2533,6 +2542,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];

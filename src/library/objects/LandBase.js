@@ -10,11 +10,17 @@
 		this.planes = [];
 		
 		// If specified with data, fill this object
-		if(typeof data != "undefined"){
+		if(typeof data !== "undefined"){
 			this.map = data.api_area_id;
 			this.rid = data.api_rid;
 			this.name = data.api_name;
-			this.range = data.api_distance;
+			if(typeof data.api_distance === "object"){
+				this.rangeBase = data.api_distance.api_base || 0;
+				this.rangeBonus = data.api_distance.api_bonus || 0;
+				this.range = this.rangeBase + this.rangeBonus;
+			} else {
+				this.range = data.api_distance;
+			}
 			this.action = data.api_action_kind;
 			
 			var self = this;
@@ -30,6 +36,8 @@
 			this.rid = data.rid;
 			this.name = data.name;
 			this.range = data.range;
+			this.rangeBase = data.rangeBase;
+			this.rangeBonus = data.rangeBonus;
 			this.action = data.action;
 			this.planes = data.planes;
 		}
