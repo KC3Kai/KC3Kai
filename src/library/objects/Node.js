@@ -993,7 +993,8 @@ Used by SortieManager
 					case 'single':   /* Single Victory */
 						break;
 					case 'multiple': /* Kill-based */
-						if((KC3Meta.gauge(ckey.replace("m","")) - (maps[ckey].kills || 0)) > 0)
+						const totalKills = maps[ckey].killsRequired || KC3Meta.gauge(ckey.replace("m",""));
+						if(totalKills - (maps[ckey].kills || 0) > 0)
 							maps[ckey].kills += mainFlagshipKilled;
 						break;
 					case 'gauge-hp': /* HP-Gauge */

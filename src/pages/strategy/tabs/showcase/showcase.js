@@ -3,6 +3,8 @@
 
 	KC3StrategyTabs.showcase = new KC3StrategyTab("showcase");
 
+	const ExportSiteHost = "https://export.kc3.moe";
+
 	KC3StrategyTabs.showcase.definition = {
 		tabSelf: KC3StrategyTabs.showcase,
 
@@ -84,6 +86,8 @@
 				types: [ 20, 21, 22, 33 ]
 			}
 		},
+		shipsToExport: [],
+		gearsToExport: [],
 
 		/* INIT
 		Prepares static data needed
@@ -241,12 +245,39 @@
 			}
 		},
 
+		windowMessageHandler :function(e){
+			const self = KC3StrategyTabs.showcase.definition;
+			if(e.origin === ExportSiteHost && e.data === "EXPORTER_STATE_READY" && e.source) {
+				if(self.shipsToExport.length && self.gearsToExport.length) {
+					const ships = JSON.stringify(self.shipsToExport),
+						gears = JSON.stringify(self.gearsToExport);
+					e.source.postMessage({
+						ships,
+						gears,
+						kc3assets: window.location.origin + "/assets/img/ships/",
+						type: "KC3_DATA"
+					}, ExportSiteHost);
+					console.debug("Ships & gears data have been sent to " + ExportSiteHost, self.shipsToExport, self.gearsToExport);
+					self.shipsToExport = [];
+					self.gearsToExport = [];
+				}
+				window.removeEventListener("message", self.windowMessageHandler);
+				$("#exportToKC3_moe").removeClass("disabled");
+				return true;
+			}
+			return false;
+		},
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
 			const self = this;
-
+			
+			// Clean unused ship list and message listener if tab switched eventually
+			this.shipsToExport.length = 0;
+			this.gearsToExport.length = 0;
+			window.removeEventListener("message", self.windowMessageHandler);
 			this.updateUI();
 
 			// BUTTONS
@@ -320,6 +351,66 @@
 					settings.groupShipsByClass = checked;
 					return settings;
 				});
+			});
+			$("#exportToKC3_moe").click(function(){
+				if($(this).hasClass("disabled")) {
+					return;
+				} else {
+					$(this).addClass("disabled");
+				}
+
+				// Build the list of latest ships
+				KC3ShipManager.load();
+				self.shipsToExport = [];
+				for(const idx in KC3ShipManager.list) {
+					const ship = KC3ShipManager.list[idx];
+					// Skip ships not heart-locked
+					if(!ship.lock) continue;
+					const shipMst = ship.master();
+
+					self.shipsToExport.push({
+						id: ship.rosterId,
+						masterId: ship.masterId,
+						lvl: ship.level,
+						sally: ship.sally,
+						extra_slot: ship.ex_item !== 0 ? 1 : 0,
+						fp: shipMst.api_houg[0] + ship.mod[0],
+						tp: shipMst.api_raig[0] + ship.mod[1],
+						aa: shipMst.api_tyku[0] + ship.mod[2],
+						ar: shipMst.api_souk[0] + ship.mod[3],
+						lk: shipMst.api_luck[0] + ship.mod[4],
+						hp: ship.maxHp() + ship.mod[5],
+						as: ship.nakedAsw()
+					});
+				}
+
+				// Summarize improvement of all gears
+				KC3GearManager.load();
+				self.gearsToExport = [];
+				const gears = {};
+				for(const idx in KC3GearManager.list) {
+					const gear = KC3GearManager.list[idx];
+					// Skip unlocked gears
+					if(!gear.lock) continue;
+					const key = `g${gear.masterId}`;
+					if(gears[key] === undefined) {
+						gears[key] = {
+							id: gear.masterId,
+							mod: Array(11).fill(0)
+						};
+					}
+					gears[key].mod[gear.stars || 0]++;
+				}
+				// Convert to array
+				for(const key in gears) {
+					if(!gears[key].id) continue;
+					self.gearsToExport.push(gears[key]);
+				}
+				self.gearsToExport.sort((a, b) => a.id - b.id);
+
+				window.removeEventListener("message", self.windowMessageHandler);
+				window.addEventListener("message", self.windowMessageHandler, false);
+				return window.open(ExportSiteHost + "/#/newTab/");
 			});
 
 			// SHIPS

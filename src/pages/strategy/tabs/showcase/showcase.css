@@ -8,21 +8,18 @@
 	float: left;
 }
 .tab_showcase .controls .control {
-	width: 140px;
+	width: auto;
+	min-width: 140px;
 	height: 20px;
 	line-height: 20px;
 	margin: 0px 5px 0px 0px;
+	padding: 0px 10px 0px 10px;
 	font-weight: bold;
 	font-size: 12px;
 	text-align: center;
 	float: left;
 	border-radius: 7px;
 }
-.tab_showcase .controls #eventShipList{
-	width: auto;
-	padding: 0px 10px 0px 10px;
-}
-
 .tab_showcase .control:hover {
 	background-color: #0066CC;
 }
@@ -44,6 +41,9 @@
 }
 .tab_showcase .exportResults a{
 	cursor: pointer;
+}
+.tab_showcase hr{
+	margin: 10px 0;
 }
 /* SHIPS
 -----------------------------*/

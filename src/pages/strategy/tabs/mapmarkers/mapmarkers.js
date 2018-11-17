@@ -219,7 +219,7 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(spot.direction && isAddingRouteStart) {
+						if(!spot.route && spot.line && isAddingRouteStart) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
@@ -340,8 +340,7 @@
 					let currentSpotCnt = initSpotCnt, addedSpotCnt = 0;
 					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
 					// Confirmed condition if nodes amount at first not reach expected one
-					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) &&
-						this.isShowEdges && KC3Meta.isEventWorld(this.world)) {
+					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) && this.isShowEdges) {
 						// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
 						const loadAdditonalInfo = () => {
 							const additionalUrl = getMapRscUrl(this.world, this.map, `info${currentSpotCnt}.json`);
