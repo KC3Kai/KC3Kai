@@ -188,6 +188,7 @@
 				exportName: false,
 				eventLocking: false,
 				groupShipsByClass: false,
+                exportToKC3_moe_locking: false
 			};
 			var settings;
 			if (!localStorage.srShowcase) {
@@ -212,6 +213,7 @@
 			$("#exportMode").val(settings.exportMode);
 			$("#exportEventLocking").prop("checked", settings.eventLocking);
 			$("#groupShipsByClass").prop("checked", settings.groupShipsByClass);
+            $("#exportToKC3_moe_locking").prop("checked", settings.exportToKC3_moe_locking);
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -248,7 +250,7 @@
 		windowMessageHandler :function(e){
 			const self = KC3StrategyTabs.showcase.definition;
 			if(e.origin === ExportSiteHost && e.data === "EXPORTER_STATE_READY" && e.source) {
-				if(self.shipsToExport.length && self.gearsToExport.length) {
+				if(self.shipsToExport.length || self.gearsToExport.length) {
 					const ships = JSON.stringify(self.shipsToExport),
 						gears = JSON.stringify(self.gearsToExport);
 					e.source.postMessage({
@@ -352,20 +354,27 @@
 					return settings;
 				});
 			});
+            $("#exportToKC3_moe_locking").change(function(){
+                var checked = this.checked;
+                self.modifySettings(function(settings){
+                    settings.exportToKC3_moe_locking = checked;
+                    return settings;
+                });
+            });
 			$("#exportToKC3_moe").click(function(){
 				if($(this).hasClass("disabled")) {
 					return;
 				} else {
 					$(this).addClass("disabled");
 				}
-
+                const settings = self.getSettings();
 				// Build the list of latest ships
 				KC3ShipManager.load();
 				self.shipsToExport = [];
 				for(const idx in KC3ShipManager.list) {
 					const ship = KC3ShipManager.list[idx];
 					// Skip ships not heart-locked
-					if(!ship.lock) continue;
+					if(!ship.lock && !settings.exportToKC3_moe_locking) continue;
 					const shipMst = ship.master();
 
 					self.shipsToExport.push({
@@ -391,7 +400,7 @@
 				for(const idx in KC3GearManager.list) {
 					const gear = KC3GearManager.list[idx];
 					// Skip unlocked gears
-					if(!gear.lock) continue;
+					if(!gear.lock && !settings.exportToKC3_moe_locking) continue;
 					const key = `g${gear.masterId}`;
 					if(gears[key] === undefined) {
 						gears[key] = {
