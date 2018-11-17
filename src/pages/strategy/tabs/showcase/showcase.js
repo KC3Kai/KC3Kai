@@ -188,7 +188,7 @@
 				exportName: false,
 				eventLocking: false,
 				groupShipsByClass: false,
-                exportToKC3_moe_locking: false
+				exportIncludesUnlocked: false
 			};
 			var settings;
 			if (!localStorage.srShowcase) {
@@ -213,7 +213,7 @@
 			$("#exportMode").val(settings.exportMode);
 			$("#exportEventLocking").prop("checked", settings.eventLocking);
 			$("#groupShipsByClass").prop("checked", settings.groupShipsByClass);
-            $("#exportToKC3_moe_locking").prop("checked", settings.exportToKC3_moe_locking);
+			$("#exportIncludesUnlocked").prop("checked", settings.exportIncludesUnlocked);
 		},
 
 		addToStypeList :function(stype, shipObj){
@@ -264,7 +264,7 @@
 					self.gearsToExport = [];
 				}
 				window.removeEventListener("message", self.windowMessageHandler);
-				$("#exportToKC3_moe").removeClass("disabled");
+				$("#exportToExternalSite").removeClass("disabled");
 				return true;
 			}
 			return false;
@@ -275,7 +275,7 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
-			
+
 			// Clean unused ship list and message listener if tab switched eventually
 			this.shipsToExport.length = 0;
 			this.gearsToExport.length = 0;
@@ -354,27 +354,27 @@
 					return settings;
 				});
 			});
-            $("#exportToKC3_moe_locking").change(function(){
-                var checked = this.checked;
-                self.modifySettings(function(settings){
-                    settings.exportToKC3_moe_locking = checked;
-                    return settings;
-                });
-            });
-			$("#exportToKC3_moe").click(function(){
+			$("#exportIncludesUnlocked").change(function(){
+				var checked = this.checked;
+				self.modifySettings(function(settings){
+					settings.exportIncludesUnlocked = checked;
+					return settings;
+				});
+			});
+			$("#exportToExternalSite").click(function(){
 				if($(this).hasClass("disabled")) {
 					return;
 				} else {
 					$(this).addClass("disabled");
 				}
-                const settings = self.getSettings();
+				const settings = self.getSettings();
 				// Build the list of latest ships
 				KC3ShipManager.load();
 				self.shipsToExport = [];
 				for(const idx in KC3ShipManager.list) {
 					const ship = KC3ShipManager.list[idx];
 					// Skip ships not heart-locked
-					if(!ship.lock && !settings.exportToKC3_moe_locking) continue;
+					if(!settings.exportIncludesUnlocked && !ship.lock) continue;
 					const shipMst = ship.master();
 
 					self.shipsToExport.push({
@@ -400,7 +400,7 @@
 				for(const idx in KC3GearManager.list) {
 					const gear = KC3GearManager.list[idx];
 					// Skip unlocked gears
-					if(!gear.lock && !settings.exportToKC3_moe_locking) continue;
+					if(!settings.exportIncludesUnlocked && !gear.lock) continue;
 					const key = `g${gear.masterId}`;
 					if(gears[key] === undefined) {
 						gears[key] = {
