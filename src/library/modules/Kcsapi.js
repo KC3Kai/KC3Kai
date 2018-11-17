@@ -2553,7 +2553,7 @@ Previously known as "Reactor"
 		if(rankPt==5 && KC3SortieManager.currentNode().allyNoDamage) rankPt++;
 		if(!isPvP) {
 			[ /* Rank Requirement Table */
-			  /* Define: [Quest ID, index of tracking, [world, map], isBoss, isCheckCompos] */
+			  /* Define: [Quest ID, index of tracking, [world, map], isBoss, isCheckCompos, [bossEdges]] */
 				[ /* E RANK / It does not matter */
 					[216,0,false,false], // Bd2: Defeat the flagship of an enemy fleet
 					[210,0,false,false], // Bd3: Attack 10 abyssal fleets
@@ -2592,6 +2592,10 @@ Previously known as "Reactor"
 					[888,0,[5,1], true, true], // Bq7: 1st requirement: [W5-1] S-rank the boss node
 					[888,1,[5,3], true, true], // Bq7: 2nd requirement: [W5-3] S-rank the boss node
 					[888,2,[5,4], true, true], // Bq7: 3rd requirement: [W5-4] S-rank the boss node
+					[893,0,[1,5], true], // Bq8: 1st requirement: [W1-5] S-rank the boss node 3 times
+					[893,1,[7,1], true], // Bq8: 2nd requirement: [W7-1] S-rank the boss node 3 times
+					[893,2,[7,2], true, false, [7] ], // Bq8: 3rd requirement: [W7-2-G] S-rank 1st boss nodes 3 times
+					[893,3,[7,2], true, false, [15]], // Bq8: 4th requirement: [W7-2-M] S-rank 2nd boss nodes 3 times
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
@@ -2601,6 +2605,7 @@ Previously known as "Reactor"
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
 						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
 						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
+						(!x[5] || x[5].includes(KC3SortieManager.currentNode().id))         && /* Is on specified boss node */
 						true
 					);
 				})
