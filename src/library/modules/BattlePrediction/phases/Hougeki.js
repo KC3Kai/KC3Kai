@@ -83,7 +83,7 @@
     position: [0, 2, 4][index] || 0,
   });
 
-  // Just guess: 3-times attacks counted for 1st Nagato twice, 2nd once
+  // Uncertain: 3-times attacks counted for 1st Nagato twice, 2nd ship once
   Hougeki.parseNagatoCutinAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
     side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
     position: [0, 0, 1][index] || 0,

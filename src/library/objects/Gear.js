@@ -449,14 +449,18 @@ KC3改 Equipment Object
 						},
 					},
 					{
+						// Aoba Kai, extra Air Radar synergy
+						ids: [264],
+						multiple: { "houg": 1, "tyku": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 5, "houk": 2 },
+						},
+					},
+					{
 						// Kinugasa Kai Ni
 						ids: [142],
 						multiple: { "houg": 2, "houk": 1 },
-					},
-					{
-						// Aoba Kai
-						ids: [264],
-						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Furutaka Kai Ni, Kako Kai Ni
