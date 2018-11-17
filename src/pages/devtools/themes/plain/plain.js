@@ -1137,7 +1137,7 @@
 						
 					// If kill-based gauge
 					}else{
-						var totalKills = KC3Meta.gauge( thisMapId.replace("m","") );
+						var totalKills = thisMap.killsRequired || KC3Meta.gauge( thisMapId.replace("m","") );
 						//console.debug("wm", KC3SortieManager.map_world, KC3SortieManager.map_num);
 						//console.debug("thisMapId", thisMapId);
 						//console.debug("totalKills", totalKills);

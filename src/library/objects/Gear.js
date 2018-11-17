@@ -436,6 +436,76 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 20.3cm (No.2) Twin Gun Mount
+			"90": {
+				count: 0,
+				byShip: [
+					{
+						// Radar synergy with following ships
+						ids: [142, 264, 416, 417],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "raig": 2, "houk": 2 },
+						},
+					},
+					{
+						// Aoba Kai, extra Air Radar synergy
+						ids: [264],
+						multiple: { "houg": 1, "tyku": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 5, "houk": 2 },
+						},
+					},
+					{
+						// Kinugasa Kai Ni
+						ids: [142],
+						multiple: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Furutaka Kai Ni, Kako Kai Ni
+						ids: [416, 417],
+						multiple: { "houg": 1 },
+					},
+				],
+			},
+			// Searchlight
+			"74": {
+				count: 0,
+				byShip: [
+					{
+						// Hiei, Kirishima, Choukai, Akatsuki
+						ids: [86, 150, 210, 85, 152, 212, 69, 272, 427, 34, 234, 437],
+						single: { "houg": 2, "houk": -1 },
+					},
+					{
+						// Jintsuu
+						ids: [55, 159, 223],
+						single: { "houg": 2, "raig": 2, "houk": -1 },
+					},
+					{
+						// Akigumo
+						ids: [132, 301],
+						single: { "houg": 1 },
+					},
+				],
+			},
+			// Type 96 150cm Searchlight
+			"140": {
+				count: 0,
+				byShip: [
+					{
+						// Hiei, Kirishima
+						ids: [86, 150, 210, 85, 152, 212],
+						single: { "houg": 3, "houk": -2 },
+					},
+					{
+						// Yamato, Musashi
+						ids: [131, 136, 143, 148, 546],
+						single: { "houg": 2, "houk": -1 },
+					},
+				],
+			},
 			// Bofors 15.2cm Twin Gun Mount Model 1930
 			"303": {
 				count: 0,

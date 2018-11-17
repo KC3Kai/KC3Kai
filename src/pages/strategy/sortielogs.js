@@ -297,7 +297,7 @@
 										.attr("title", "{0} / {1}".format(element.curhp, element.maxhp));
 								else if(!!KC3Meta.gauge(element.id))
 									$(".map_hp_txt", mapBox).lazyInitTooltip()
-										.attr("title", "{0} kills".format(KC3Meta.gauge(element.id)));
+										.attr("title", "{0} kills".format(element.killsRequired || KC3Meta.gauge(element.id)));
 							}else{
 								mapBox.addClass("notcleared");
 								// If HP-based gauge
@@ -323,7 +323,7 @@
 									}
 								// If kill-based gauge
 								}else{
-									var totalKills = KC3Meta.gauge( element.id );
+									var totalKills = element.killsRequired || KC3Meta.gauge( element.id );
 									var killsLeft = totalKills - element.kills;
 									if(totalKills){
 										if(killsLeft > 1)
@@ -1176,7 +1176,7 @@
 			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
 			let mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
-				let maxKills = KC3Meta.gauge(mapId.substr(1));
+				let maxKills = mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
 				if(!!sortieData.mapinfo.api_cleared){
 					sortieData.defeat_count = maxKills;
 				} else {

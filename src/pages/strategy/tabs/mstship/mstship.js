@@ -462,8 +462,8 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
-				// Nelson Touch special type
-				if(KC3Meta.nelsonTouchShips.includes(ship_id)) availableTypes.push("special");
+				// Special cut-in (Nelson Touch, Nagato Cutin) special type
+				if(KC3Meta.specialCutinIds.includes(ship_id)) availableTypes.push("special");
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
 					// Hide optional debuffed abyssal boss alt lines,

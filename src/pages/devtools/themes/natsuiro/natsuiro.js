@@ -1703,7 +1703,7 @@
 					const f33Cn = Array.numbers(1, 4)
 						.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
 					$(".summary-eqlos").attr("title",
-						"x1={0}\nx3={2}\nx4={3}"
+						"x1={0}\nx2={1}\nx3={2}\nx4={3}"
 						.format(f33Cn)
 					).lazyInitTooltip();
 				// No reference values for combined fleet yet, only show computed values
@@ -1982,6 +1982,9 @@
 						$(".base_map", baseBox).text(baseInfo.map);
 						$(".base_name", baseBox).text(baseInfo.name);
 						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
+						$(".base_range", baseBox).attr("title",
+							"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
+						).lazyInitTooltip();
 						$(".base_action", baseBox).html([
 							KC3Meta.term("LandBaseActionWaiting"),
 							KC3Meta.term("LandBaseActionSortie"),
@@ -4510,7 +4513,7 @@
 					requireFinisher = thisMap.curhp > 0 && thisMap.curhp <= thisMap.baseHp;
 				// If kill-based gauge
 				}else{
-					var totalKills = KC3Meta.gauge( thisMapId );
+					var totalKills = thisMap.killsRequired || KC3Meta.gauge( thisMapId );
 					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),

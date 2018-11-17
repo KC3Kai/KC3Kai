@@ -2699,5 +2699,37 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"1067": {
+		"api_id": 1067,
+		"api_name": "秋刀魚朝霜",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1082": {
+		"api_id": 1082,
+		"api_name": "ハロウィン朝潮",
+		"api_yomi": "あさしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1083": {
+		"api_id": 1083,
+		"api_name": "ハロウィン朝潮改二",
+		"api_yomi": "あさしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1084": {
+		"api_id": 1084,
+		"api_name": "ハロウィン朝潮改二丁",
+		"api_yomi": "あさしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
