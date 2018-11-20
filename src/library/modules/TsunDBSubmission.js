@@ -142,6 +142,9 @@
 				kc3version: null,
 				formation: null,
 				eformation: null,
+				starshell: null,
+				searchlight: null,
+				ncontact: null,
 			},
 			ship: {
 				id: null,
@@ -654,6 +657,9 @@
 				map: this.data.map,
 				edge: thisNode.id,
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
+				starshell: !!thisNode.flarePos,
+				searchlight: !!fleet.estimateUsableSearchlight(),
+				ncontact:  thisNode.fcontactId === 102,
 			};
 			const battleData = thisNode.battleDay || thisNode.battleNight;
 			template.formation = battleData.api_formation[0];

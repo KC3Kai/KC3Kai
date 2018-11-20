@@ -40,7 +40,7 @@
 		execute :function(){
 			let self = this;
 			
-			if(ConfigManager.TsunDBSubmissionExtra_enabled)
+			if(ConfigManager.TsunDBSubmissionExtra_enabled && ConfigManager.TsunDBSubmission_enabled)
 				$(".setting_disabled").hide();
 			else
 				$(".setting_disabled").show();
