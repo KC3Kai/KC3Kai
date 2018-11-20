@@ -153,7 +153,7 @@
 				improvements: null,
 			},
 			accVal: null,
-			api_cl: null,
+			apiCl: null,
 			enemy: null,
 			spAttackType: null,
 			testName: null,
@@ -634,7 +634,11 @@
 		processGunfit: function(){
 			this.gunfit = {};
 			const thisNode = KC3SortieManager.currentNode();
-			if (!(["1-1","1-2"].includes(this.data.map) && [1,3].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
+			const allowedNodes = {
+				"1-1": [1],
+				"1-2": [1, 3]
+			};
+			if (!(Object.keys(allowedNodes).includes(this.data.map) && allowedNodes[this.data.map].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
 			this.updateGunfitsIfNeeded();
 
 			if(localStorage.tsundb_gunfits == undefined)
@@ -660,7 +664,7 @@
 			for (var idx = 0; idx < fleet.ships.length; idx++) {
 				const ship = fleet.ship(idx);
 				if (ship.isDummy()) { continue; }
-				const testId = this.checkGunFitsRequirements(ship);
+				const testId = this.checkGunFitsRequirements(ship, initialMorale[idx]);
 				if (testId >= 0) {
 					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: initialMorale[idx], luck: ship.lk[0],
 						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testName: tests[testId].testName });
@@ -672,7 +676,7 @@
 					for (var i = 0; i < shipLog.length; i++) {
 						const attack = shipLog[i];
 						for (var j = 0; j < attack.acc.length; j++) {
-							this.gunfit = Object.assign({}, template2, { api_cl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
+							this.gunfit = Object.assign({}, template2, { apiCl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
 								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'day' : 'yasen' });
 							this.sendData(this.gunfit, 'fits');
 						}
@@ -754,7 +758,7 @@
 		* 
 		* Eg: if(checkGunFitsRequirements(ship) < 0) continue;
 		*/
-		checkGunFitsRequirements: function(ship) {
+		checkGunFitsRequirements: function(ship, morale = ship.morale) {
 			if(localStorage.tsundb_gunfits == undefined)
 				return -2;
 			
@@ -769,7 +773,7 @@
 			};
 
 			for(let testId in tests) {
-				let testStatus = this.checkGunFitTestRequirements(ship, tests[testId]);
+				let testStatus = this.checkGunFitTestRequirements(ship, tests[testId], morale);
 
 				if(testStatus == 0) {
 					if (!tests[testId].active) {
@@ -794,7 +798,7 @@
 			-1: matches test but not morale
 			-2: doesn't match test
 		*/
-		checkGunFitTestRequirements: function(ship, test) {
+		checkGunFitTestRequirements: function(ship, test, morale = ship.morale) {
 			if(ship.masterId !== test.shipId
 				|| ship.level < test.lvlRange[0]
 				|| ship.level > test.lvlRange[1])
@@ -816,8 +820,8 @@
 			if(equip.length > 0)
 				return -2; // Too many equips, might ignore some equip types that don't affect acc
 			
-			if(ship.morale < test.moraleRange[0]
-				|| ship.morale > test.moraleRange[1])
+			if(morale < test.moraleRange[0]
+				|| morale > test.moraleRange[1])
 				return -1; // Wrong morale
 			return 0;
 		},
