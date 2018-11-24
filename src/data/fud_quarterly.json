@@ -26,6 +26,10 @@
 		}
 	},
 	"eventMapGauges": {
+		"72": {
+			"1": { "type": "kills", "boss": [7] },
+			"2": { "type": "kills", "boss": [15] }
+		},
 		"415": {
 			"1": { "type": "tp", "boss": [12], "landing": [9] },
 			"2": { "type": "hp", "boss": [23] }

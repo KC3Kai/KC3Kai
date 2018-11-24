@@ -4283,7 +4283,7 @@
 						$("<div></div>").appendTo(statsBox)
 							.append($("<img/>").attr("src", KC3Meta.statIcon(key)))
 							.append($("<span></span>")
-								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "-", stats[key])))
+								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "", stats[key])))
 							.attr("title", KC3Meta.term(statsTermKeyMap[key]) || key)
 							.lazyInitTooltip();
 					}
