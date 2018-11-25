@@ -739,17 +739,18 @@
 		},
 		
 		updateGunfitsIfNeeded: function(callback) {
-			const currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
+			const currentHour = Date.toUTChours();
 			if(localStorage.tsundb_gunfits !== undefined) {
 				const gf = JSON.parse(localStorage.tsundb_gunfits);
-				if (gf.updateTime + 3 > currentTime) // Cache for ~3h
+				if(gf.updateTime + 3 > currentHour) // Cache for ~3h
 					return;
 			}
-			$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, newGunfitData => {
+			const dataSourceUrl = `https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
+			$.getJSON(dataSourceUrl, newGunfitData => {
 				if(callback) callback(newGunfitData);
 				localStorage.tsundb_gunfits = JSON.stringify({
 					tests: newGunfitData,
-					updateTime: currentTime
+					updateTime: currentHour
 				});
 			});
 		},

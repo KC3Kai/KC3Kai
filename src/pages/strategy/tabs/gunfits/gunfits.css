@@ -36,6 +36,9 @@
 	float: left;
 	margin-right: 10px;
 }
+.tab_gunfits .testitem .morale_range {
+	float: left;
+}
 .tab_gunfits .testitem .shipinfo .generalship {
 	display: table;
 }

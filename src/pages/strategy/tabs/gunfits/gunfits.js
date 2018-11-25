@@ -11,14 +11,9 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			const self = this;
-			TsunDBSubmission.updateGunfitsIfNeeded((e) => {
-				self.tests = e;
-				self.execute();
-			});
 			if(localStorage.tsundb_gunfits !== undefined) {
 				const gf = JSON.parse(localStorage.tsundb_gunfits);
-				self.tests = gf.tests;
+				this.tests = gf.tests;
 			}
 		},
 
@@ -29,6 +24,10 @@
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			PlayerManager.loadFleets();
+			TsunDBSubmission.updateGunfitsIfNeeded(data => {
+				this.tests = data;
+				console.debug("Latest gunfits tests updated", data);
+			});
 		},
 
 		/* EXECUTE
@@ -37,10 +36,9 @@
 		execute :function(){
 			const self = this;
 			
-			if(ConfigManager.TsunDBSubmissionExtra_enabled && ConfigManager.TsunDBSubmission_enabled)
-				$(".setting_disabled").hide();
-			else
-				$(".setting_disabled").show();
+			$(".setting_disabled").toggle(!(
+				ConfigManager.TsunDBSubmissionExtra_enabled && ConfigManager.TsunDBSubmission_enabled
+			));
 
 			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -50,7 +48,8 @@
 			};
 			const rangeText = (rangeArr) => (rangeArr[0] === rangeArr[1] ? String(rangeArr[0]) : rangeArr.join(" ~ "));
 			const itemNameTip = (id, name) => (`[${id}] ${name}`);
-			const generateTestItem = function(test, testItem) {
+
+			const generateTestItem = (test, testItem) => {
 				// Generate ship info
 				const shipId = test.shipId;
 				const shipName = KC3Meta.shipName(KC3Master.ship(shipId).api_name);
@@ -90,49 +89,48 @@
 				// Generate equipment info
 				const requiredCount = {};
 				$(".ship_gears .gear_status", testItem).text("Good to go!");
-				$.each(test.equipment, function(i, gearId) {
-					const ship_gear = $(".tab_gunfits .factory .ship_gear").clone();
+				$.each(test.equipment, (i, gearId) => {
+					const shipGear = $(".tab_gunfits .factory .ship_gear").clone()
+						.appendTo($(".ship_gears .gearsbox", testItem));
 					const masterGear = KC3Master.slotitem(gearId);
 					const gearName = KC3Meta.gearName(masterGear.api_name);
 					const ownedGear = KC3GearManager.find((a) => a.masterId == gearId);
 
-					$(".gear_icon img", ship_gear)
+					$(".gear_icon img", shipGear)
 						.attr("src", KC3Meta.itemIcon(masterGear.api_type[3]))
 						.attr("title", itemNameTip(gearId, gearName))
 						.attr("alt", gearId)
 						.click(gearClickFunc);
-					$(".gear_name", ship_gear).text(gearName);
-					$(".owned", ship_gear).text(`Owned: x${ownedGear.length}`);
+					$(".gear_name", shipGear).text(gearName);
+					$(".owned", shipGear).text(`Owned: x${ownedGear.length}`);
 					requiredCount[gearId] = (requiredCount[gearId] || 0) + 1;
 					if(ownedGear.length < requiredCount[gearId]) {
 						$(".ship_gears .gear_status", testItem).text("Missing some equipment");
 						testItem.addClass("testingImpossible");
 					}
-					ship_gear.appendTo($(".ship_gears .gearsbox", testItem));
 				});
-				
 				// Generate morale info
 				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`);
 
-				// Current fleet status
+				// Current fleet status, assuming 1st fleet will be sortied to test
 				const fleetStatus = Math.max(...PlayerManager.fleets[0].ship().map(
 					ship => TsunDBSubmission.checkGunFitTestRequirements(ship, test)
 				));
-				if(fleetStatus == -1) {
+				if(fleetStatus === -1) {
 					$(".curr_fleet_status", testItem).text(`In fleet but wrong morale`);
 					testItem.addClass("testingWrongMorale");
-				} else if(fleetStatus == 0) {
+				} else if(fleetStatus === 0) {
 					$(".curr_fleet_status", testItem).text(`First fleet ready!`);
 					testItem.addClass("testingActive");
 				}
 			};
 
-			$.each( self.tests.filter((test) => test.active), function(i,test) {
-				const testItem = $(".tab_gunfits .factory .testitem").clone();
+			const testsBox = $(".section_currenttests .box_tests").empty();
+			$.each(self.tests.filter((test) => test.active), (i, test) => {
+				const testItem = $(".tab_gunfits .factory .testitem").clone().appendTo(testsBox);
 				generateTestItem(test, testItem);
-				testItem.appendTo(".section_currenttests .box_tests");
 			});
-			$(".box_tests").createChildrenTooltips();
+			testsBox.createChildrenTooltips();
 		}
 	};
 })();
