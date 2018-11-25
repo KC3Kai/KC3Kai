@@ -972,11 +972,17 @@
 	},
 	{
 		"section": "SettingsTsunDBSubmission",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings:-Database-Submissions#tsundb-extra-submission",
 		"contents" :[
 			{
 				"id" : "TsunDBSubmission_enabled",
 				"name" : "SettingsEnableTsunDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "TsunDBSubmissionExtra_enabled",
+				"name" : "SettingsEnableTsunDBExtraSubmission",
 				"type" : "check",
 				"options" : {}
 			}

@@ -122,6 +122,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				});
 			}
+			if (ConfigManager.TsunDBSubmissionExtra_enabled) {
+				this.initialMorale = [];
+				for (let idx = 0; idx < fleet.ships.length; idx++){
+					let morale = 0;
+					const ship = fleet.ship(idx);
+					if (!ship.isDummy()) {
+						morale = ship.morale;
+					}
+					this.initialMorale.push(morale);
+				}
+			}
 		},
 		
 		snapshotFleetState :function(){

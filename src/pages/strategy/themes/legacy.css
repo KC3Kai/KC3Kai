@@ -1897,3 +1897,20 @@ body {
 .tab_shipdrop .filters .time_input input {
 	border:1px solid #aaa;
 }
+
+/* GUN_FITS
+--------------------------------*/
+.tab_gunfits .testitem {
+	border:10px solid transparent;
+	background:#def;
+	border-radius:10px;
+}
+.tab_gunfits .testitem.testingImpossible {
+    background: #fcc;
+}
+.tab_gunfits .testitem.testingWrongMorale {
+    background: #ffc;
+}
+.tab_gunfits .testitem.testingActive {
+    background: #cfc;
+}
