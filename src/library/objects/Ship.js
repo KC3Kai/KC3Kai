@@ -2282,7 +2282,13 @@ KC3改 Ship Object
 	/**
 	 * Conditions under verification, known for now:
 	 * Flagship is healthy Nagato Kai Ni, Echelon formation selected.
+	 *
+	 * Additional ammo consumption for Nagato & 2nd battleship:
+	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
+	 *
 	 * @return true if this ship (Nagato Kai Ni) can do special cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Nagato
+	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 */
 	KC3Ship.prototype.canDoNagatoCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
