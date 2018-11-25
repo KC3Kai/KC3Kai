@@ -632,7 +632,7 @@
 				}
 			});
 		},
-
+		
 		processGunfit: function(){
 			this.gunfit = {};
 			const thisNode = KC3SortieManager.currentNode();
@@ -640,17 +640,19 @@
 				"1-1": [1],
 				"1-2": [1, 3]
 			};
-			if (!(Object.keys(allowedNodes).includes(this.data.map) && allowedNodes[this.data.map].includes(thisNode.id) && ConfigManager.TsunDBSubmissionExtra_enabled)) { return; }
+			if (!(ConfigManager.TsunDBSubmissionExtra_enabled
+				&& Object.keys(allowedNodes).includes(this.data.map)
+				&& allowedNodes[this.data.map].includes(thisNode.id)
+			)) { return; }
 			this.updateGunfitsIfNeeded();
-
-			if(localStorage.tsundb_gunfits == undefined)
-				return;
+			
+			if(localStorage.tsundb_gunfits === undefined) { return; }
 			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
-
+			
 			// Leave it as single-fleet check for now
 			const fleet = PlayerManager.fleets[this.data.sortiedFleet - 1];
 			const battleLog = (thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {}).playerMain;
-			const template = { 
+			const template = {
 				username: PlayerManager.hq.name,
 				id: PlayerManager.hq.id,
 				map: this.data.map,
@@ -658,7 +660,7 @@
 				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
 				starshell: !!thisNode.flarePos,
 				searchlight: !!fleet.estimateUsableSearchlight(),
-				ncontact:  thisNode.fcontactId === 102,
+				ncontact: thisNode.fcontactId === 102,
 			};
 			const battleData = thisNode.battleDay || thisNode.battleNight;
 			template.formation = battleData.api_formation[0];
@@ -677,7 +679,7 @@
 					const accVal = ship.shellingAccuracy(formMod, false);
 					template2.accVal = accVal.basicAccuracy;
 					const shipLog = battleLog[idx].attacks;
-
+					
 					for (var i = 0; i < shipLog.length; i++) {
 						const attack = shipLog[i];
 						for (var j = 0; j < attack.acc.length; j++) {
@@ -689,7 +691,7 @@
 				}
 			}
 		},
-
+		
 		processDevelopment: function(http){
 			this.cleanNonCombat();
 			const request = http.params;
@@ -735,51 +737,45 @@
 				exslot: ship.exItem().masterId || -1
 			}));
 		},
-
+		
 		updateGunfitsIfNeeded: function(callback) {
-			let currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
-
-			if(localStorage.tsundb_gunfits != undefined) {
-				let gf = JSON.parse(localStorage.tsundb_gunfits);
+			const currentTime = Math.floor(new Date().getTime() / 3600 / 1000);
+			if(localStorage.tsundb_gunfits !== undefined) {
+				const gf = JSON.parse(localStorage.tsundb_gunfits);
 				if (gf.updateTime + 3 > currentTime) // Cache for ~3h
 					return;
 			}
-			$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, function(newGunfits) {
-				if(callback)
-					callback(newGunfits);
-
+			$.getJSON(`https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentTime}`, newGunfitData => {
+				if(callback) callback(newGunfitData);
 				localStorage.tsundb_gunfits = JSON.stringify({
-					tests: newGunfits,
+					tests: newGunfitData,
 					updateTime: currentTime
 				});
 			});
 		},
-
-		/*
-		* Returns: 
-		*   i: index of test (>= 0) matches test and morale
-		*  -1: matches a test but not morale
-		*  -2: doesn't match a test
-		* 
-		* Eg: if(checkGunFitsRequirements(ship) < 0) continue;
-		*/
+		
+		/**
+		 * @return
+		 *   i: index of test (>= 0) matches test and morale
+		 *  -1: matches a test but not morale
+		 *  -2: doesn't match a test
+		 * 
+		 * Eg: if(checkGunFitsRequirements(ship) < 0) continue;
+		 */
 		checkGunFitsRequirements: function(ship, morale = ship.morale) {
-			if(localStorage.tsundb_gunfits == undefined)
+			if(localStorage.tsundb_gunfits === undefined)
 				return -2;
 			
 			let status = -2;
-			let tests = JSON.parse(localStorage.tsundb_gunfits).tests;
-
+			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
 			const onClick = e => {
 				(new RMsg("service", "strategyRoomPage", {
 					tabPath: "gunfits"
 				})).execute();
 				return false;
 			};
-
-			for(let testId in tests) {
-				let testStatus = this.checkGunFitTestRequirements(ship, tests[testId], morale);
-
+			for(const testId in tests) {
+				const testStatus = this.checkGunFitTestRequirements(ship, tests[testId], morale);
 				if(testStatus == 0) {
 					if (!tests[testId].active) {
 						KC3Network.trigger("ModalBox", {
@@ -791,29 +787,29 @@
 					}
 					return parseInt(testId);
 				}
-
 				status = Math.max(status, testStatus);
 			}
 			
 			return status;
 		},
-		/*
-		* Returns: 
-			0: matches test and morale
-			-1: matches test but not morale
-			-2: doesn't match test
-		*/
+		
+		/**
+		 * @return
+		 *   0: matches test and morale
+		 *  -1: matches test but not morale
+		 *  -2: doesn't match test
+		 */
 		checkGunFitTestRequirements: function(ship, test, morale = ship.morale) {
 			if(ship.masterId !== test.shipId
 				|| ship.level < test.lvlRange[0]
 				|| ship.level > test.lvlRange[1])
 				return -2; // Wrong remodel/ship or wrong lvl
-
-			let equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
-			let testEquip = test.equipment;
 			
-			eqloop: for(let e of testEquip) {
-				for(let i in equip) {
+			const equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
+			const testEquip = test.equipment;
+			
+			eqloop: for(const e of testEquip) {
+				for(const i in equip) {
 					if(e == equip[i].masterId) {
 						equip.splice(i, 1);
 						continue eqloop;
@@ -821,7 +817,7 @@
 				}
 				return -2; // Missing required equip
 			}
-
+			
 			if(equip.length > 0)
 				return -2; // Too many equips, might ignore some equip types that don't affect acc
 			

@@ -2438,16 +2438,16 @@ button, input, select, textarea {
 /* GUN_FITS
 --------------------------------*/
 .tab_gunfits .testitem {
-	border-bottom:1px solid #555555;
-	border-radius:0px;
+	border-bottom: 1px solid #555555;
+	border-radius: 0px;
 	padding: 5px 0px 5px 0px !important;
 }
 .tab_gunfits .testitem.testingImpossible {
-    background: #621f1f;
+	background: #621f1f;
 }
 .tab_gunfits .testitem.testingWrongMorale {
-    background: #736200;
+	background: #736200;
 }
 .tab_gunfits .testitem.testingActive {
-    background: #1f9a00;
+	background: #1f9a00;
 }

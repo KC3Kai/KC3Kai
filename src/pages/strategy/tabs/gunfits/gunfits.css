@@ -24,17 +24,17 @@
 }
 
 .tab_gunfits .testitem.testingImpossible {
-    opacity: 0.4;
+	opacity: 0.4;
 }
 .tab_gunfits .testitem .shipinfo {
-    width: 130px;
-    float: left;
-    margin-right: 30px;
+	width: 130px;
+	float: left;
+	margin-right: 30px;
 }
 .tab_gunfits .testitem .ship_gears {
-    width: 400px;
-    float: left;
-    margin-right: 10px;
+	width: 400px;
+	float: left;
+	margin-right: 10px;
 }
 .tab_gunfits .testitem .shipinfo .generalship {
 	display: table;

@@ -11,17 +11,14 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			let self = this;
-
+			const self = this;
 			TsunDBSubmission.updateGunfitsIfNeeded((e) => {
 				self.tests = e;
 				self.execute();
 			});
-
-			if(localStorage.tsundb_gunfits != undefined) {
-				let gf = JSON.parse(localStorage.tsundb_gunfits);
+			if(localStorage.tsundb_gunfits !== undefined) {
+				const gf = JSON.parse(localStorage.tsundb_gunfits);
 				self.tests = gf.tests;
-				return;
 			}
 		},
 
@@ -38,35 +35,32 @@
 		Places data onto the interface
 		---------------------------------*/
 		execute :function(){
-			let self = this;
+			const self = this;
 			
 			if(ConfigManager.TsunDBSubmissionExtra_enabled && ConfigManager.TsunDBSubmission_enabled)
 				$(".setting_disabled").hide();
 			else
 				$(".setting_disabled").show();
 
-			let shipClickFunc = function(e){
+			const shipClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			let gearClickFunc = function(e){
+			const gearClickFunc = function(e){
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
-			let rangeText = function(range){
-				if(range[0] == range[1])
-					return range[0];
-				return range.join(" ~ ");
-			};
-			let generateTestItem = function(test, testItem) {
+			const rangeText = (rangeArr) => (rangeArr[0] === rangeArr[1] ? String(rangeArr[0]) : rangeArr.join(" ~ "));
+			const itemNameTip = (id, name) => (`[${id}] ${name}`);
+			const generateTestItem = function(test, testItem) {
 				// Generate ship info
-				let shipId = test.shipId;
-				let shipName = KC3Meta.shipName(KC3Master.ship(shipId).api_name);
-				let ownedShips = KC3ShipManager.find((a) => a.masterId == shipId);
+				const shipId = test.shipId;
+				const shipName = KC3Meta.shipName(KC3Master.ship(shipId).api_name);
+				const ownedShips = KC3ShipManager.find((a) => a.masterId == shipId);
 
 				$(".shipinfo .generalship .ship_icon img", testItem)
 					.attr("src", KC3Meta.shipIcon(shipId))
 					.attr("alt", shipId )
 					.click(shipClickFunc)
-					.attr("title", `${shipName} [${shipId}]`);
+					.attr("title", itemNameTip(shipId, shipName));
 				$(".shipinfo .generalship .name", testItem).text(shipName);
 
 				$(".shipinfo .lvl .requested", testItem).text(rangeText(test.lvlRange));
@@ -74,7 +68,9 @@
 					$(".shipinfo .lvl .lvl_status", testItem).text(ownedShips.map((a) => a.level).join(", "));
 
 					// check if owned are within requested level range
-					if(ownedShips.filter((a) => a.level >= test.lvlRange[0] && a.level <= test.lvlRange[1]).length > 0) {
+					if(ownedShips.filter(
+						ship => ship.level >= test.lvlRange[0] && ship.level <= test.lvlRange[1]
+					).length > 0) {
 						$(".shipinfo .ship_status", testItem).text("Good to go!");
 					} else {
 						$(".shipinfo .ship_status", testItem).text("You own this remodel, but not correct level");
@@ -82,7 +78,9 @@
 					}
 				} else {
 					$(".shipinfo .lvl .lvl_status", testItem).text("/");
-					if(KC3ShipManager.find((a) => RemodelDb.originOf(a.masterId) == RemodelDb.originOf(shipId)).length > 0)
+					if(KC3ShipManager.find(
+						ship => RemodelDb.originOf(ship.masterId) == RemodelDb.originOf(shipId)
+					).length > 0)
 						$(".shipinfo .ship_status", testItem).text("You own this ship, but not this remodel");
 					else
 						$(".shipinfo .ship_status", testItem).text("You don't own this ship");
@@ -90,17 +88,17 @@
 				}
 
 				// Generate equipment info
-				let requiredCount = {};
+				const requiredCount = {};
 				$(".ship_gears .gear_status", testItem).text("Good to go!");
 				$.each(test.equipment, function(i, gearId) {
-					let ship_gear = $(".tab_gunfits .factory .ship_gear").clone();
-					let masterGear = KC3Master.slotitem(gearId);
-					let gearName = KC3Meta.gearName(masterGear.api_name);
-					let ownedGear = KC3GearManager.find((a) => a.masterId == gearId);
+					const ship_gear = $(".tab_gunfits .factory .ship_gear").clone();
+					const masterGear = KC3Master.slotitem(gearId);
+					const gearName = KC3Meta.gearName(masterGear.api_name);
+					const ownedGear = KC3GearManager.find((a) => a.masterId == gearId);
 
 					$(".gear_icon img", ship_gear)
 						.attr("src", KC3Meta.itemIcon(masterGear.api_type[3]))
-						.attr("title", `${gearName} [${gearId}]`)
+						.attr("title", itemNameTip(gearId, gearName))
 						.attr("alt", gearId)
 						.click(gearClickFunc);
 					$(".gear_name", ship_gear).text(gearName);
@@ -117,7 +115,9 @@
 				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`);
 
 				// Current fleet status
-				let fleetStatus = Math.max(...PlayerManager.fleets[0].ship().map((ship) => TsunDBSubmission.checkGunFitTestRequirements(ship, test)));
+				const fleetStatus = Math.max(...PlayerManager.fleets[0].ship().map(
+					ship => TsunDBSubmission.checkGunFitTestRequirements(ship, test)
+				));
 				if(fleetStatus == -1) {
 					$(".curr_fleet_status", testItem).text(`In fleet but wrong morale`);
 					testItem.addClass("testingWrongMorale");
@@ -128,10 +128,11 @@
 			};
 
 			$.each( self.tests.filter((test) => test.active), function(i,test) {
-				let testItem = $(".tab_gunfits .factory .testitem").clone();
+				const testItem = $(".tab_gunfits .factory .testitem").clone();
 				generateTestItem(test, testItem);
 				testItem.appendTo(".section_currenttests .box_tests");
 			});
+			$(".box_tests").createChildrenTooltips();
 		}
 	};
 })();

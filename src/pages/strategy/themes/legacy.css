@@ -1901,16 +1901,17 @@ body {
 /* GUN_FITS
 --------------------------------*/
 .tab_gunfits .testitem {
-	border:10px solid transparent;
 	background:#def;
 	border-radius:10px;
+	padding:6px 8px;
+	margin-bottom:2px;
 }
 .tab_gunfits .testitem.testingImpossible {
-    background: #fcc;
+	background:#fcc;
 }
 .tab_gunfits .testitem.testingWrongMorale {
-    background: #ffc;
+	background:#ffc;
 }
 .tab_gunfits .testitem.testingActive {
-    background: #cfc;
+	background:#cfc;
 }
