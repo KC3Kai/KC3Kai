@@ -387,11 +387,14 @@ button, input, select, textarea {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1415px;
+	min-height:1260px;
 	float:left;
 	background:#222222;
 	overflow:hidden;
 	margin:0px 0px 60px 0px;
+}
+#content.dev-only {
+	min-height:1440px;
 }
 #contentHtml {
 	width:700px;
