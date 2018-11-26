@@ -44,7 +44,7 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 			const gearClickFunc = function(e){
-				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 			};
 			const rangeText = (rangeArr) => (rangeArr[0] === rangeArr[1] ? String(rangeArr[0]) : rangeArr.join(" ~ "));
 			const itemNameTip = (id, name) => (`[${id}] ${name}`);
