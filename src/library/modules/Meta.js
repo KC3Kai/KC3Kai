@@ -1012,6 +1012,10 @@ Provides access to data on built-in JSON files
 				number : number.toLocaleString(locale, options);
 		},
 		
+		formatDecimalOptions :function(fraction = 0, grouping = true){
+			return { useGrouping: grouping, minimumFractionDigits: fraction, maximumFractionDigits: fraction };
+		},
+		
 		isEventWorld :function(worldId) {
 			return Number(worldId) >= 10;
 		},
