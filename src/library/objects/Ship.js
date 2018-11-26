@@ -2282,7 +2282,13 @@ KC3改 Ship Object
 	/**
 	 * Conditions under verification, known for now:
 	 * Flagship is healthy Nagato Kai Ni, Echelon formation selected.
+	 *
+	 * Additional ammo consumption for Nagato & 2nd battleship:
+	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
+	 *
 	 * @return true if this ship (Nagato Kai Ni) can do special cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Nagato
+	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 */
 	KC3Ship.prototype.canDoNagatoCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
@@ -2361,7 +2367,7 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.6],
+			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2417,7 +2423,7 @@ KC3改 Ship Object
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoCutin()) {
 				const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-				return KC3Ship.specialAttackTypeDay(101, null, isPartnerMutsuKai ? 1.6 : 1.4);
+				return KC3Ship.specialAttackTypeDay(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2567,7 +2573,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.6],
+			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2649,7 +2655,7 @@ KC3改 Ship Object
 				// special Nagato Cutin since 2018-11-16
 				if(this.canDoNagatoCutin()) {
 					const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-					return KC3Ship.specialAttackTypeNight(101, null, isPartnerMutsuKai ? 1.6 : 1.4);
+					return KC3Ship.specialAttackTypeNight(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f

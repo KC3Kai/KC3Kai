@@ -1,0 +1,69 @@
+﻿
+@charset "utf-8";
+.tab_gunfits {
+	width:680px;
+}
+.tab_gunfits .factory {
+	display:none;
+}
+
+.tab_gunfits .setting_disabled {
+	background-color: #fdd;
+	color:#c44;
+	padding:10px;
+	margin: 10px;
+	border-radius:10px;
+}
+.tab_gunfits .setting_disabled .settings_link {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+.tab_gunfits .setting_disabled .settings_link a {
+	color:#f55;
+}
+
+.tab_gunfits .testitem.testingImpossible {
+	opacity: 0.4;
+}
+.tab_gunfits .testitem .shipinfo {
+	width: 130px;
+	float: left;
+	margin-right: 30px;
+}
+.tab_gunfits .testitem .ship_gears {
+	width: 400px;
+	float: left;
+	margin-right: 10px;
+}
+.tab_gunfits .testitem .morale_range {
+	float: left;
+}
+.tab_gunfits .testitem .shipinfo .generalship {
+	display: table;
+}
+.tab_gunfits .testitem .shipinfo .generalship .ship_icon img {
+	width: 50px;
+	float: left;
+}
+.tab_gunfits .testitem .shipinfo .generalship .name {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 5px;
+}
+
+.tab_gunfits .testitem .ship_gears .gearsbox {
+	display: table;
+	width: 100%;
+}
+.tab_gunfits .testitem .ship_gears .gearsbox .gear_icon img {
+	vertical-align: middle;
+	width: 40px;
+	float: left;
+}
+.tab_gunfits .testitem .ship_gears .gearsbox .gear_name {
+	padding-left: 5px;
+}
+.tab_gunfits .testitem .ship_gears .gearsbox .owned {
+	padding-left: 5px;
+}

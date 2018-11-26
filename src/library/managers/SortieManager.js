@@ -122,6 +122,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				});
 			}
+			// Remember morale values of sortied ships on sortieing started for GunFit tests
+			if(ConfigManager.TsunDBSubmissionExtra_enabled){
+				this.initialMorale = fleet.ships.map((rid, idx) => {
+					const ship = fleet.ship(idx);
+					return !ship.isDummy() ? ship.morale : 0;
+				});
+			} else {
+				this.initialMorale = [];
+			}
 		},
 		
 		snapshotFleetState :function(){
@@ -789,6 +798,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.supportFleet = [];
 			this.fcfCheck = [];
 			this.escapedList = [];
+			this.initialMorale = [];
 			this.materialGain.fill(0);
 			this.sinkList.main.splice(0);
 			this.sinkList.escr.splice(0);

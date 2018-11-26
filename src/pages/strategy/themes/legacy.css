@@ -367,7 +367,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1490px;
+	min-height:1320px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -375,6 +375,9 @@ body {
 	box-shadow:-1px 1px 3px #888;
 	overflow:hidden;
 	margin:0px 0px 60px 0px;
+}
+#content.dev-only {
+	min-height:1515px;
 }
 #contentHtml {
 	width:700px;
@@ -1896,4 +1899,22 @@ body {
 }
 .tab_shipdrop .filters .time_input input {
 	border:1px solid #aaa;
+}
+
+/* GUN_FITS
+--------------------------------*/
+.tab_gunfits .testitem {
+	background:#def;
+	border-radius:10px;
+	padding:6px 8px;
+	margin-bottom:2px;
+}
+.tab_gunfits .testitem.testingImpossible {
+	background:#fcc;
+}
+.tab_gunfits .testitem.testingWrongMorale {
+	background:#ffc;
+}
+.tab_gunfits .testitem.testingActive {
+	background:#cfc;
 }
