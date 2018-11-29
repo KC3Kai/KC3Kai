@@ -1207,10 +1207,27 @@ KC3改 Ship Object
 	KC3Ship.prototype.fighterBounds = function(forLbas = false){
 		if(this.isDummy()){ return [0, 0]; }
 		const powerBounds = this.equipment().map((g, i) => g.fighterBounds(this.slots[i], forLbas));
+		const reconModifier = this.fighterPowerReconModifier(forLbas);
 		return [
-			powerBounds.map(b => b[0]).sumValues(),
-			powerBounds.map(b => b[1]).sumValues()
+			powerBounds.map(b => b[0]).sumValues() * reconModifier,
+			powerBounds.map(b => b[1]).sumValues() * reconModifier
 		];
+	};
+
+	/**
+	 * @return value under verification of LB Recon modifier to LBAS sortie fighter power.
+	 */
+	KC3Ship.prototype.fighterPowerReconModifier = function(forLbas = false){
+		var reconModifier = 1;
+		this.equipment(function(id, idx, gear){
+			if(id === 0){ return; }
+			const type2 = gear.master().api_type[2];
+			if(forLbas && type2 === 49){
+				// placeholder value
+				reconModifier = 1.13;
+			}
+		});
+		return reconModifier;
 	};
 
 	/* FIGHTER POWER on Air Defense with INTERCEPTOR FORMULA
