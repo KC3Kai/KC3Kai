@@ -35,7 +35,7 @@ Saves and loads list to and from localStorage
 		landBaseOtherSortieAmmoCostPerSlot: 0.62,
 		landBaseReconnMaxSlot: 4,
 		landBaseOtherMaxSlot: 18,
-		landBaseReconnType2Ids: [9,10,41],
+		landBaseReconnType2Ids: [9,10,41,49],
 		// Jet aircraft mechanism still in progress
 		jetAircraftType2Ids: [56,57,58,59],
 		jetBomberSteelCostRatioPerSlot: 0.2,

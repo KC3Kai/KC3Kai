@@ -1004,6 +1004,7 @@ Contains summary information about a fleet and its ships
 			9 : 1.0, // Carrier-Based Reconnaissance Aircraft
 			10: 1.2, // Reconnaissance Seaplane
 			11: 1.1, // Seaplane Bomber
+			49: 1.0, // Land-Based Reconnaissance Aircraft
 			58: 0.8, // Jet Torpedo Bomber (reserved)
 			59: 1.0, // Jet Reconnaissance Aircraft (reserved)
 			94: 1.0, // Carrier-Based Reconnaissance Aircraft (II) (reserved)
