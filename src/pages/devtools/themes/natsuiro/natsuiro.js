@@ -983,6 +983,28 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
+			if (ConfigManager.backupReminder) {
+				let lastBackup = Number(localStorage.lastBackupTime) || 0;
+				const reminderSetting = { 
+					"weekly": 604800,
+					"monthly": 2629746,
+					"quarterly": 7889238,
+				}[ConfigManager.backupChoice];
+				const currentTime = Date.now();
+				if (currentTime > lastBackup + reminderSetting) {
+					this.ModalBox({
+						title: KC3Meta.term("BackupReminderTitle"),
+						link: KC3Meta.term("BackupLink"),
+						onClick: function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "databackup"
+							})).execute();
+							return false;
+						}
+					});
+					localStorage.lastBackupTime = currentTime;
+				}
+			}
 		},
 
 		CatBomb: function(data){

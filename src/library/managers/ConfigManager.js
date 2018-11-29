@@ -33,6 +33,8 @@ Retrieves when needed to apply on components
 				updateNotification   : 2,
 				dataSyncNotification : false,
 				chromeSyncQuests     : false,
+				backupReminder		 : false,
+				backupChoice		 : "monthly",
 				air_formula          : 3,
 				air_combined         : false,
 				powerCapApplyLevel   : 3,
