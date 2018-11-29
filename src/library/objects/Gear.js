@@ -1426,6 +1426,8 @@ KC3改 Equipment Object
 			case 9: // Recon plane
 			case 10: // Seaplane recon
 			case 49: // LB Recon
+			case 59: // Jet Recon
+			case 94: // Recon (II)
 				modifier = 1.2; break;
 			case 11: // Seaplane bomber
 				modifier = 1.15; break;
@@ -1708,7 +1710,7 @@ KC3改 Equipment Object
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
 		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat, LB Recon?
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
-		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59] : [9, 10, 41, 49, 59];
+		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59, 94] : [9, 10, 41, 49, 59, 94];
 		return this.exists() &&
 			type2.indexOf(this.master().api_type[2]) > -1;
 	};
