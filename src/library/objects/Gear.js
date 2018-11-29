@@ -436,6 +436,32 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 14cm Twin Gun Mount
+			"119": {
+				count: 0,
+				byClass: {
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 1 },
+					},
+					// Katori Class
+					"56": "34"
+				},
+			},
+			// 14cm Twin Gun Mount Kai
+			"310": {
+				count: 0,
+				byClass: {
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+					},
+					// Katori Class
+					"56": {
+						multiple: { "houg": 2, "houk": 1 },
+					},
+				},
+			},
 			// 20.3cm (No.2) Twin Gun Mount
 			"90": {
 				count: 0,
