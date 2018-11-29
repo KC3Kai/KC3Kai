@@ -759,16 +759,28 @@ KC3改 Equipment Object
 					// Hiburi Class
 					"85": "74",
 				},
-				byShip: {
-					// Yura K2
-					ids: [488],
-					minStars: 7,
-					multiple: { "houg": 2, "tyku": 3 },
-					synergy: {
-						flags: [ "surfaceRadar" ],
-						single: { "houg": 3, "houk": 2 },
+				byShip: [
+					{
+						// Kinu K2
+						ids: [487],
+						minStars: 7,
+						multiple: { "houg": 2, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 2 },
+						},
 					},
-				},
+					{
+						// Yura K2
+						ids: [488],
+						minStars: 7,
+						multiple: { "houg": 2, "tyku": 3 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 2 },
+						},
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model A
 			"297": {
