@@ -1173,17 +1173,19 @@
 		}
 		
 		function updateMapHpInfo(self, sortieData) {
-			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
-			let mapData = self.maps[mapId] || {};
+			const mapId = ["m", sortieData.world, sortieData.mapnum].join("");
+			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
-				let maxKills = mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
+				const maxKills = mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
 				if(!!sortieData.mapinfo.api_cleared){
 					sortieData.defeat_count = maxKills;
 				} else {
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
 				}
-				console.debug("Map {0} boss gauge: {1}/{2} kills"
-					.format(mapId, sortieData.defeat_count, maxKills)
+				const gaugeNum = sortieData.mapinfo.api_gauge_num;
+				if(gaugeNum > 1) sortieData.defeat_gauge = gaugeNum;
+				console.debug("Map {0} boss gauge {3}: {1}/{2} kills"
+					.format(mapId, sortieData.defeat_count, maxKills, gaugeNum || 1)
 				);
 			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
 				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;

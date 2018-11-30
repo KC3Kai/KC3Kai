@@ -2086,14 +2086,19 @@ Previously known as "Reactor"
 					kind: "single"
 				};
 				
-				// Check for boss gauge kills
-				if(thisMap.api_defeat_count !== undefined) {
-					localMap.kills = thisMap.api_defeat_count;
+				// Check for boss gauge of kills
+				if(thisMap.api_gauge_type === 1 || thisMap.api_defeat_count !== undefined) {
 					localMap.kind  = "multiple";
-					// for this case, api_gauge_type == 1
-					if(thisMap.api_required_defeat_count !== undefined) {
-						localMap.killsRequired = thisMap.api_required_defeat_count;
+					if(thisMap.api_defeat_count !== undefined) {
+						localMap.kills = thisMap.api_defeat_count;
+						if(thisMap.api_required_defeat_count !== undefined) {
+							localMap.killsRequired = thisMap.api_required_defeat_count;
+						}
+					} else {
+						if(oldMap.kills !== undefined) localMap.kills = oldMap.kills;
+						if(oldMap.killsRequired) localMap.killsRequired = oldMap.killsRequired;
 					}
+					// since 2018-11-16 map 7-2
 					if(thisMap.api_gauge_num !== undefined) {
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
