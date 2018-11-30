@@ -810,6 +810,190 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.slotitemConsumed = false;
 			this.sortieTime = 0;
 			this.save();
+		},
+
+		/**
+		 * Prepares encounter/real battle data for simulator export while on sortie
+		 * @see https://kc3kai.github.io/kancolle-replay/simulator-import-help.html
+		 */
+		prepareSimData :function(edata, resultFleets = {}, realBattle = false) {
+			let res = {};
+			const thisNode = this.currentNode();
+			const combined = this.isCombinedSortie();
+			const fleet = PlayerManager.fleets[this.fleetSent - 1];
+			const fleetF = {
+				ships: this.prepareSimPlayerFleetShips(fleet, realBattle),
+				formation: !combined ? 1 : 14
+			};
+			if (combined) {
+				fleetF.shipsC = this.prepareSimPlayerFleetShips(PlayerManager.fleets[1], realBattle);
+				fleetF.combineType = PlayerManager.combinedFleet;
+			}
+
+			const fleetE = {
+				ships: this.prepareSimEnemyFleetShips(edata.main, resultFleets.enemyMain)
+			};
+			if (edata.escort && edata.escort.length > 0) {
+				fleetE.shipsC = this.prepareSimEnemyFleetShips(edata.escort, resultFleets.enemyEscort);
+			}
+			const nodes = [{
+				fleetE: fleetE
+			}];
+
+			res = {
+				numSims: 1000,
+				fleetF: fleetF,
+				nodes: nodes,
+			};
+
+			// If real battle, we can ignore stuff like lbas/support fleets since we are only interested in yasen prediction
+			if (realBattle) {
+				res.nodes[0].NBOnly = 1;
+				const battleData = thisNode.battleDay || thisNode.battleNight;
+				fleetF.formation = battleData.api_formation[0];
+				fleetE.formation = battleData.api_formation[1];
+				return res;
+			}
+			
+			// For simulating from encounters, we need to prepare LBAS, Support Fleets and Enemy Formation
+
+			fleetE.formation = edata.formation;
+			const isBoss = thisNode.isBoss();
+			const supportFleetNum = this.getSupportingFleet(isBoss);
+			if (supportFleetNum > 0) {
+				const supportFleet = PlayerManager.fleets[supportFleetNum - 1];
+				res.fleetSupportB = this.prepareSimPlayerFleetShips(supportFleet);
+			}
+
+			const eventKind = thisNode.eventKind;
+			if (eventKind === 2) {
+				res.nodes[0].NBOnly = 1;
+			}
+			else if (eventKind === 4) {
+				res.nodes[0].airOnly = 1;
+			}
+			else if (eventKind === 6) {
+				res.nodes[0].airRaid = 1;
+			}
+			else if (isBoss) {
+				res.nodes[0].doNB = 1;
+			}
+
+			const bases = PlayerManager.bases.filter(base => base.action === 1 && base.map == this.map_world);
+			const nodeId = thisNode.id;
+			if (bases.length > 0) {
+				const lbas = [], waves = [];
+				for (let idx = 0; idx < bases.length; idx++) {
+					const strikePoints = bases[idx].strikePoints;
+					if (!strikePoints || !strikePoints.includes(nodeId)) { continue; }
+					const equips = [];
+					const base = bases[idx];
+					for (let plane = 0; plane < base.planes.length; plane++) {
+						const gear = KC3GearManager.get(base.planes[plane].api_slotid);
+						if (gear.isDummy()) { continue; }
+						equips.push({
+							masterId: gear.masterId,
+							improve: gear.stars,
+							proficiency: gear.ace
+						});
+					}
+					lbas.push({
+						equips: equips
+					});
+
+					for (let waveIdx = 0; waveIdx < strikePoints.length; waveIdx++) {
+						if (strikePoints[waveIdx] === nodeId) { waves.push(idx + 1); }
+					}
+				}
+				res.lbas = lbas;
+				res.nodes[0].lbas = waves;
+			}
+
+			return res;
+		},
+		
+		prepareSimEnemyFleetShips :function(midList, resultFleet){
+			midList = midList.filter(id => id > 0);
+			const simAbyssMasterIdMax = 1845, simAbyssEqIdMax = 587;
+			const list = [];
+			for (let idx = 0; idx < midList.length; idx++) {
+				const masterId = midList[idx];
+				const obj = {
+					masterId: masterId,
+					LVL: ![13, 14].includes(KC3Master.ship(masterId).api_stype) ? 1 : 50,
+					includeEquipStats: 0,
+				};
+				if (resultFleet) {
+					obj.HPInit = resultFleet[idx].hp;
+					// Filter sunk enemies
+					if (obj.HPInit <= 0) { continue; }
+				}
+
+				// If new enemy and not in sim yet, fill stats
+				if (masterId > simAbyssMasterIdMax) {
+					KC3Database.get_enemy(masterId, function (stats) {
+						obj.stats = {
+							HP: stats.hp,
+							FP: stats.fp,
+							TP: stats.tp,
+							AA: stats.aa,
+							AR: stats.ar
+						};
+
+						// Likely that new enemy will also be using new equips, so fill that too
+					});
+					list.push(obj);
+				}
+			}
+			return list;
+		},
+
+		prepareSimPlayerFleetShips :function(fleet, realBattle = false) {
+			const simPlayerEqIdMax = 308;
+			const list = [];
+			console.debug(fleet);
+			for (let idx = 0; idx < fleet.ships.length; idx++) {
+				const ship = fleet.ship(idx);
+				console.debug(ship);
+				if (ship.isDummy() || ship.isAway()) { continue; }
+				let stats = {
+					HP: ship.hp[1],
+					FP: ship.fp[0],
+					TP: ship.tp[0],
+					AA: ship.aa[0],
+					AR: ship.ar[0],
+					LUK: ship.lk[0],
+					EV: ship.ev[0],
+					ASW: ship.as[0],
+					LOS: ship.ls[0],
+					RNG: ship.range,
+					SPD: ship.speed,
+					SLOTS: ship.slots,
+					type: ship.master().api_stype
+				};
+				let equips = ship.equipment(true).map(gear => {
+					let equip = {
+						masterId: gear.masterId,
+						improve: gear.stars,
+						proficiency: gear.ace
+					};
+
+					// If equip data not in sim yet, fill with stats
+					return equip;
+				});
+				equips = equips.filter(equip => equip.masterId > 0);
+				list.push({
+					masterId: ship.masterId,
+					LVL: ship.level,
+					stats: stats,
+					HPInit: !realBattle ? ship.hp[0] : ship.afterHp[0],
+					fuelInit: ship.fuel / ship.master().api_fuel_max,
+					ammoInit: ship.ammo / ship.master().api_bull_max,
+					equips: equips,
+					includeEquipStats: 1
+				});
+			}
+			return list;
 		}
 		
 	};

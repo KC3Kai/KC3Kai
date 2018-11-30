@@ -1010,12 +1010,14 @@ Previously known as "Reactor"
 			var strikePoint1 = params.api_strike_point_1,
 				strikePoint2 = params.api_strike_point_2,
 				strikePoint3 = params.api_strike_point_3;
+                var strikePoints = [strikePoint1, strikePoint2, strikePoint3];
 			var utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
 			$.each(PlayerManager.bases, function(i, base){
 				// Land Base of this world, Action: sortie
 				if(base.map === KC3SortieManager.map_world && base.action === 1){
 					console.log("Sortied LBAS", base);
+					base.strikePoints = JSON.parse("[" + decodeURIComponent(strikePoints[i]) + "]");
 					var cost = base.calcSortieCost();
 					consumedFuel += cost.fuel;
 					consumedAmmo += cost.ammo;
