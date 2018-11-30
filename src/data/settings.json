@@ -977,18 +977,13 @@
 			{
 				"id" : "backupReminder",
 				"name" : "SettingsBackupReminder",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "backupChoice",
-				"name" : "SettingsBackupChoice",
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
-						[ "weekly", "BackupChoiceWeekly" ],
-						[ "monthly", "BackupChoiceMonthly" ],
-						[ "quarterly", "BackupChoiceQuarterly" ]
+						[ 0, "BackupChoiceNone" ],
+						[ 604800000, "BackupChoiceWeekly" ],
+						[ 2629746000, "BackupChoiceMonthly" ],
+						[ 7889238000, "BackupChoiceQuarterly" ]
 					]
 				}
 			}

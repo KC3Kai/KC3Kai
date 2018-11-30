@@ -983,17 +983,16 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
-			if (ConfigManager.backupReminder) {
+			if (ConfigManager.backupReminder > 0) {
 				let lastBackup = Number(localStorage.lastBackupTime) || 0;
-				const reminderSetting = { 
-					"weekly": 604800000,
-					"monthly": 2629746000,
-					"quarterly": 7889238000,
-				}[ConfigManager.backupChoice];
+				let lastReminder = Number(localStorage.lastBackupReminder) || 0;
+				const reminderSetting = ConfigManager.backupReminder;
 				const currentTime = Date.now();
-				if (currentTime > lastBackup + reminderSetting) {
+				if (currentTime > lastReminder + reminderSetting) {
+					const days = Math.floor((currentTime - lastBackup) / 3600000);
 					this.ModalBox({
 						title: KC3Meta.term("BackupReminderTitle"),
+						message: KC3Meta.term("BackupReminderMessage").format(days),
 						link: KC3Meta.term("BackupLink"),
 						onClick: function(e){
 							(new RMsg("service", "strategyRoomPage", {
@@ -1002,7 +1001,7 @@
 							return false;
 						}
 					});
-					localStorage.lastBackupTime = currentTime;
+					localStorage.lastBackupReminder = currentTime;
 				}
 			}
 		},
