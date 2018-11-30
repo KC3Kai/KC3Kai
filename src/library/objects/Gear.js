@@ -761,7 +761,7 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Kinu K2
+						// Kinu Kai Ni
 						ids: [487],
 						minStars: 7,
 						multiple: { "houg": 2, "tyku": 2 },
@@ -771,7 +771,7 @@ KC3改 Equipment Object
 						},
 					},
 					{
-						// Yura K2
+						// Yura Kai Ni
 						ids: [488],
 						minStars: 7,
 						multiple: { "houg": 2, "tyku": 3 },
