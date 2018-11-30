@@ -2312,8 +2312,8 @@
 							};
 							const edata = {
 								formation: encounter.form,
-								main: encounter.ke.slice(0,6),
-								escort: encounter.ke.slice(6,12)
+								main: shipList.slice(0,6),
+								escort: shipList.slice(6,12)
 							};
 							const encBox = $("#factory .encounter_record").clone();
 							$(".encounter_formation img", encBox).attr("src",

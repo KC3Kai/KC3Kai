@@ -942,8 +942,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 
 						// Likely that new enemy will also be using new equips, so fill that too
 					});
-					list.push(obj);
 				}
+				list.push(obj);
 			}
 			return list;
 		},
@@ -951,10 +951,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		prepareSimPlayerFleetShips :function(fleet, realBattle = false) {
 			const simPlayerEqIdMax = 308;
 			const list = [];
-			console.debug(fleet);
 			for (let idx = 0; idx < fleet.ships.length; idx++) {
 				const ship = fleet.ship(idx);
-				console.debug(ship);
 				if (ship.isDummy() || ship.isAway()) { continue; }
 				let stats = {
 					HP: ship.hp[1],
