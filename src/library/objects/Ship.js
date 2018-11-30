@@ -1220,11 +1220,16 @@ KC3改 Ship Object
 	KC3Ship.prototype.fighterPowerReconModifier = function(forLbas = false){
 		var reconModifier = 1;
 		this.equipment(function(id, idx, gear){
-			if(id === 0){ return; }
+			if(!id || gear.isDummy()){ return; }
 			const type2 = gear.master().api_type[2];
+			// LB Recon Aircraft
 			if(forLbas && type2 === 49){
-				// placeholder value
-				reconModifier = 1.13;
+				const los = gear.master().api_saku;
+				reconModifier = Math.max(reconModifier,
+					(los <= 7) ? 1.15 : // unknown
+					(los >= 9) ? 1.15 : // unknown
+					1.15
+				);
 			}
 		});
 		return reconModifier;
@@ -1237,22 +1242,24 @@ KC3改 Ship Object
 		if(this.isDummy()){ return 0; }
 		var reconModifier = 1;
 		this.equipment(function(id, idx, gear){
-			if(id === 0){ return; }
-			var type2 = gear.master().api_type[2];
-			var los = gear.master().api_saku;
+			if(!id || gear.isDummy()){ return; }
+			const type2 = gear.master().api_type[2];
 			if(KC3GearManager.landBaseReconnType2Ids.includes(type2)){
+				const los = gear.master().api_saku;
 				// Carrier Recon Aircraft
 				if(type2 == 9){
-					reconModifier =
+					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.2 :
 						(los >= 9) ? 1.3 :
-						1; // they say los = 8 not exists
+						1 // unknown
+					);
 				// Recon Seaplane, Flying Boat, etc
 				} else {
-					reconModifier =
+					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.1  :
 						(los >= 9) ? 1.16 :
-						1.13;
+						1.13
+					);
 				}
 			}
 		});
