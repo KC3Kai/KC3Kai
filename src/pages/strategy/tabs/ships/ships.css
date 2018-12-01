@@ -260,6 +260,7 @@
 	font-size:12px;
 	font-weight:bold;
 	margin:0px 0px 3px 0px;
+	display:flex;
 }
 .tab_ships .ship_header .ship_item .ship_id {
 	text-align:center;
@@ -330,11 +331,12 @@
 }
 .tab_ships .ship_list.scroll_fix {
 	width:685px;
-	overflow-x:hidden;
+	overflow-x:auto;
 	overflow-y:scroll;
 }
 .tab_ships .ship_list.scroll_fix::-webkit-scrollbar {
 	width:10px;
+	height:10px;
 }
 .tab_ships .ship_list.scroll_fix::-webkit-scrollbar-track {
 	background:#ddd;
@@ -344,13 +346,17 @@
 }
 /* Row */
 .tab_ships .ship_list .ship_item {
-	width:675px;
+	display:flex;
+	float:left;
+	width:auto;
+	/*width:675px;*/
 	height:20px;
 	line-height:20px;
 	font-size:12px;
 	margin:0px 0px 2px 0px;
 	overflow:hidden;
 	position:relative;
+	white-space:nowrap;
 }
 .tab_ships .ship_list .ship_item.hidden_by_name {
 	display: none;
