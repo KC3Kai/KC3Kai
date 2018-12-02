@@ -888,7 +888,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if (bases.length > 0) {
 				const lbas = [], waves = [], simPlayerEqIdMax = 308;
 				for (let idx = 0; idx < bases.length; idx++) {
-					const strikePoints = bases[idx].strikePoints.map(id => KC3Meta.nodeLetter(this.map_world, this.map_num, id));
+					let strikePoints = bases[idx].strikePoints, arr = [];
+					for (let point = 0; point < strikePoints.length; point++) {
+						arr.push(KC3Meta.nodeLetter(this.map_world, this.map_num, strikePoints[point]));
+					}
+					strikePoints = arr;
 					if (!strikePoints || !strikePoints.includes(node)) { continue; }
 					const equips = [], slotdata = [];
 					const base = bases[idx];
