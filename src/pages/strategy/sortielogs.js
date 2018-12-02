@@ -1177,16 +1177,17 @@
 			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
 				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
-				if(!!sortieData.mapinfo.api_cleared && sortieData.mapinfo.api_defeat_count === undefined){
-					sortieData.defeat_count = maxKills;
-				} else {
+				// keep defeat_count undefined after map cleared to hide replayer's gauge
+				if(!sortieData.mapinfo.api_cleared || sortieData.mapinfo.api_required_defeat_count){
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
+					sortieData.required_defeat_count = maxKills;
+					// pass to replayer for the 2nd gauge of 7-2
+					sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
 				}
-				sortieData.required_defeat_count = maxKills;
-				sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
-				console.debug("Map {0} boss gauge {3}: {1}/{2} kills"
-					.format(mapId, sortieData.defeat_count, maxKills, sortieData.gauge_num)
-				);
+				console.debug("Map {0} boss gauge {3}: {1}/{2} kills".format(mapId,
+					sortieData.defeat_count || (sortieData.mapinfo.api_cleared ? "post-cleared" : "?"),
+					maxKills, sortieData.gauge_num || 1
+				));
 			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
 				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;
 				sortieData.max_maphp = sortieData.eventmap.api_max_maphp;
