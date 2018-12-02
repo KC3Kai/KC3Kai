@@ -535,7 +535,9 @@
 
 /* Fields: HeartLock and Marriage Ring */
 .tab_ships .ship_item .ship_stat_icon {
-	width:20px;
+	width:0;
+	margin:0;
+	overflow:visible;
 }
 .tab_ships .ship_item .ship_stat_icon img {
 	width:20px;
@@ -545,7 +547,7 @@
 .tab_ships .ship_item .ship_lock img {
 	width:13px;
 	height:13px;
-	margin:-35px 0px 0px 39px;
+	margin:5px 0 0 -28px;
 	position:relative;
 	display:inline;
 	content:url("/assets/img/client/heartlock.png");
@@ -556,6 +558,11 @@
 
 .tab_ships .ship_item .ship_marry {
 	display:none;
+}
+.tab_ships .ship_item .ship_marry img {
+	margin:-4px 0 0 -22px;
+	position:relative;
+	display:inline;
 }
 
 .tab_ships .page_padding.scroll_fix {

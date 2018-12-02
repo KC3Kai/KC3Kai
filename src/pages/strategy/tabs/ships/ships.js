@@ -1124,6 +1124,7 @@
 						.attr("data-jpname-romaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
+						//$(".ship_marry", cElm).show();
 					}
 					if(cShip.fleet > 0) {
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
