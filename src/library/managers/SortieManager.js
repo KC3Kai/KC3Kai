@@ -823,7 +823,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const fleet = PlayerManager.fleets[this.fleetSent - 1];
 			const fleetF = {
 				ships: this.prepareSimPlayerFleetShips(fleet, realBattle),
-				formation: !combined ? 1 : 14
+				formation: ConfigManager.aaFormation
 			};
 			if (combined) {
 				fleetF.shipsC = this.prepareSimPlayerFleetShips(PlayerManager.fleets[1], realBattle);
@@ -836,12 +836,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if (edata.escort && edata.escort.length > 0) {
 				fleetE.shipsC = this.prepareSimEnemyFleetShips(edata.escort, resultFleets.enemyEscort);
 			}
+			// Remove combined escort if empty
 			const nodes = [{
 				fleetE: fleetE
 			}];
 
 			res = {
-				numSims: 1000,
+				numSims: 10000,
 				fleetF: fleetF,
 				nodes: nodes,
 			};
@@ -865,6 +866,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				res.fleetSupportB = this.prepareSimPlayerFleetShips(supportFleet);
 			}
 
+			// Simulator options
 			const eventKind = thisNode.eventKind;
 			if (eventKind === 2) {
 				res.nodes[0].NBOnly = 1;
@@ -879,59 +881,60 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				res.nodes[0].doNB = 1;
 			}
 
-			const bases = PlayerManager.bases.filter(base => base.action === 1 && base.map == this.map_world);
-			const nodeId = thisNode.id;
+			// Export LBAS (if any)
+			const bases = PlayerManager.bases.filter(base => base.action === 1 && base.map === this.map_world);
+			// Convert to node letter in case airstrike selected node id different from route node id (multiple path to same node)
+			const node = KC3Meta.nodeLetter(this.map_world, this.map_num, thisNode.id);
 			if (bases.length > 0) {
-				const lbas = [], waves = [];
+				const lbas = [], waves = [], simPlayerEqIdMax = 308;
 				for (let idx = 0; idx < bases.length; idx++) {
-					const strikePoints = bases[idx].strikePoints;
-					if (!strikePoints || !strikePoints.includes(nodeId)) { continue; }
-					const equips = [];
+					const strikePoints = bases[idx].strikePoints.map(id => KC3Meta.nodeLetter(this.map_world, this.map_num, id));
+					if (!strikePoints || !strikePoints.includes(node)) { continue; }
+					const equips = [], slotdata = [];
 					const base = bases[idx];
 					for (let plane = 0; plane < base.planes.length; plane++) {
 						const gear = KC3GearManager.get(base.planes[plane].api_slotid);
 						if (gear.isDummy()) { continue; }
-						equips.push({
+						const eqData = {
 							masterId: gear.masterId,
 							improve: gear.stars,
 							proficiency: gear.ace
-						});
+						};
+						slotdata.push(base.planes[plane].api_count);
+						if (gear.masterId > simPlayerEqIdMax) { eqData.stats = this.generateEquipStats(gear.masterId); }
+						equips.push(eqData);
 					}
 					lbas.push({
-						equips: equips
+						equips: equips,
+						slots: slotdata
 					});
 
 					for (let waveIdx = 0; waveIdx < strikePoints.length; waveIdx++) {
-						if (strikePoints[waveIdx] === nodeId) { waves.push(idx + 1); }
+						if (strikePoints[waveIdx] === node) { waves.push(idx + 1); }
 					}
 				}
 				res.lbas = lbas;
 				res.nodes[0].lbas = waves;
 			}
-
 			return res;
 		},
 		
 		prepareSimEnemyFleetShips :function(midList, resultFleet){
 			midList = midList.filter(id => id > 0);
-			const simAbyssMasterIdMax = 1845, simAbyssEqIdMax = 587;
+			const simAbyssMasterIdMax = 1845;
 			const list = [];
 			for (let idx = 0; idx < midList.length; idx++) {
 				const masterId = midList[idx];
 				const obj = {
 					masterId: masterId,
-					LVL: ![13, 14].includes(KC3Master.ship(masterId).api_stype) ? 1 : 50,
-					includeEquipStats: 0,
 				};
 				if (resultFleet) {
 					obj.HPInit = resultFleet[idx].hp;
-					// Filter sunk enemies
-					if (obj.HPInit <= 0) { continue; }
 				}
 
 				// If new enemy and not in sim yet, fill stats
 				if (masterId > simAbyssMasterIdMax) {
-					KC3Database.get_enemy(masterId, function (stats) {
+					KC3Database.get_enemyInfo(masterId, function (stats) {
 						obj.stats = {
 							HP: stats.hp,
 							FP: stats.fp,
@@ -941,6 +944,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						};
 
 						// Likely that new enemy will also be using new equips, so fill that too
+						const equips = [];
+						for (let eqIdx = 1; !stats["eq" + eqIdx]; eqIdx++) {
+							const gearId = stats["eq" + eqIdx];
+							equips.push({
+								masterId: gearId,
+								stats: this.generateEquipStats(gearId)
+							});
+						}
+						obj.equips = equips;
 					});
 				}
 				list.push(obj);
@@ -974,9 +986,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						masterId: gear.masterId,
 						improve: gear.stars,
 						proficiency: gear.ace
-					};
+					};					
 
 					// If equip data not in sim yet, fill with stats
+					if (equip.masterId > simPlayerEqIdMax) { equip.stats = this.generateEquipStats(gear.masterId); }
 					return equip;
 				});
 				equips = equips.filter(equip => equip.masterId > 0);
@@ -992,6 +1005,29 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				});
 			}
 			return list;
+		},
+
+		generateEquipStats :function(masterId) {
+			const gearMaster = KC3Master.slotitem(masterId),
+				stats = {},
+				simulatorKeys = {
+					FP: "api_houg",
+					TP: "api_raig",
+					AA:	"api_tyku",
+					AR:	"api_souk",
+					EV: "api_houk",
+					ASW: "api_tais",
+					LOS: "api_saku",
+					ACC: "api_houm",
+					DIVEBOMB: "api_baku",
+					RNG: "api_leng"
+			};
+			for (let key in simulatorKeys) {
+				const apiName = simulatorKeys[key];
+				stats[key] = gearMaster[apiName];
+			}
+			stats.type = gearMaster.api_type[3];
+			return stats;
 		}
 		
 	};
