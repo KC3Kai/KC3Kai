@@ -4484,7 +4484,7 @@
 		if(Object.keys(thisMap).length > 0){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			$(".module.activity .map_hp").removeAttr("title");
-			if( thisMap.clear ){
+			if( thisMap.clear && !thisMap.killsRequired ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
 			}else{

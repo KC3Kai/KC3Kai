@@ -2088,15 +2088,16 @@ Previously known as "Reactor"
 				
 				// Check for boss gauge of kills
 				if(thisMap.api_gauge_type === 1 || thisMap.api_defeat_count !== undefined) {
-					localMap.kind  = "multiple";
+					localMap.kind = "multiple";
 					if(thisMap.api_defeat_count !== undefined) {
 						localMap.kills = thisMap.api_defeat_count;
 						if(thisMap.api_required_defeat_count !== undefined) {
 							localMap.killsRequired = thisMap.api_required_defeat_count;
 						}
 					} else {
-						if(oldMap.kills !== undefined) localMap.kills = oldMap.kills;
-						if(oldMap.killsRequired) localMap.killsRequired = oldMap.killsRequired;
+						localMap.kills = oldMap.kills;
+						// to indicate in-game gauge disappeared after cleared
+						delete localMap.killsRequired;
 					}
 					// since 2018-11-16 map 7-2
 					if(thisMap.api_gauge_num !== undefined) {

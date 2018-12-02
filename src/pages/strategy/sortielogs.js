@@ -279,7 +279,7 @@
 								mapBox.addClass("easymodokimoi");
 							}
 							// If this map is already cleared
-							if(element.clear == 1){
+							if(element.clear == 1 && !element.killsRequired){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
 								if (cWorld>=10) {
@@ -1176,16 +1176,16 @@
 			const mapId = ["m", sortieData.world, sortieData.mapnum].join("");
 			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
-				const maxKills = mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
-				if(!!sortieData.mapinfo.api_cleared){
+				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
+				if(!!sortieData.mapinfo.api_cleared && sortieData.mapinfo.api_defeat_count === undefined){
 					sortieData.defeat_count = maxKills;
 				} else {
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
 				}
-				const gaugeNum = sortieData.mapinfo.api_gauge_num;
-				if(gaugeNum > 1) sortieData.defeat_gauge = gaugeNum;
+				sortieData.required_defeat_count = maxKills;
+				sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
 				console.debug("Map {0} boss gauge {3}: {1}/{2} kills"
-					.format(mapId, sortieData.defeat_count, maxKills, gaugeNum || 1)
+					.format(mapId, sortieData.defeat_count, maxKills, sortieData.gauge_num)
 				);
 			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
 				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;
