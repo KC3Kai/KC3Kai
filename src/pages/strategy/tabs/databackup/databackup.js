@@ -31,6 +31,7 @@
 							alert("finished!");
 							$(".tab_databackup .dataselect").show();
 							$(".tab_databackup .processDisplay").hide();
+							localStorage.lastBackupTime = Date.now();
 					});
 				}
 			});

@@ -970,6 +970,25 @@
 			}
 		]
 	},
+	{                                        		
+		"section" : "SettingsDataBackupReminder",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "backupReminder",
+				"name" : "SettingsBackupReminder",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ 0, "BackupChoiceNone" ],
+						[ 604800000, "BackupChoiceWeekly" ],
+						[ 2629746000, "BackupChoiceMonthly" ],
+						[ 7889238000, "BackupChoiceQuarterly" ]
+					]
+				}
+			}
+		]
+	},
 	{
 		"section": "SettingsTsunDBSubmission",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings:-Database-Submissions#tsundb-extra-submission",

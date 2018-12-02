@@ -983,6 +983,27 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
+			if (ConfigManager.backupReminder > 0) {
+				let lastBackup = Number(localStorage.lastBackupTime) || 0;
+				let lastReminder = Number(localStorage.lastBackupReminder) || 0;
+				const reminderSetting = ConfigManager.backupReminder;
+				const currentTime = Date.now();
+				if (currentTime > lastReminder + reminderSetting) {
+					const days = Math.floor((currentTime - lastBackup) / 3600000);
+					this.ModalBox({
+						title: KC3Meta.term("BackupReminderTitle"),
+						message: KC3Meta.term("BackupReminderMessage").format(days),
+						link: KC3Meta.term("BackupLink"),
+						onClick: function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "databackup"
+							})).execute();
+							return false;
+						}
+					});
+					localStorage.lastBackupReminder = currentTime;
+				}
+			}
 		},
 
 		CatBomb: function(data){
