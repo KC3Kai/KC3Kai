@@ -983,17 +983,17 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
-			if (ConfigManager.backupReminder > 0) {
-				let lastBackup = Number(localStorage.lastBackupTime) || 0;
-				let lastReminder = Number(localStorage.lastBackupReminder) || 0;
-				const reminderSetting = ConfigManager.backupReminder;
+			if(ConfigManager.backupReminder > 0) {
+				const lastBackup = Number(localStorage.lastBackupTime) || 0;
+				const lastReminder = Number(localStorage.lastBackupReminder) || 0;
 				const currentTime = Date.now();
-				if (currentTime > lastReminder + reminderSetting) {
-					const days = Math.floor((currentTime - lastBackup) / 3600000);
+				if(currentTime > lastReminder + ConfigManager.backupReminder) {
+					const days = !lastBackup ? "???" :
+						Math.floor((currentTime - lastBackup) / (1000 * 60 * 60 * 24));
 					this.ModalBox({
 						title: KC3Meta.term("BackupReminderTitle"),
 						message: KC3Meta.term("BackupReminderMessage").format(days),
-						link: KC3Meta.term("BackupLink"),
+						link: KC3Meta.term("BackupReminderLink"),
 						onClick: function(e){
 							(new RMsg("service", "strategyRoomPage", {
 								tabPath: "databackup"
@@ -1143,9 +1143,10 @@
 					new Date(PlayerManager.hq.lastPortTime * 1000).format("mm-dd HH:MM:ss")
 			);
 			const remainingTime = KC3Calc.remainingTimeUntilNextResets();
-			const resetTimeTips = "{0}: {2}\n{1}: {3}".format(
-				KC3Meta.term("MenuPvPReset"), KC3Meta.term("MenuQuestReset"),
-				remainingTime.pvp, remainingTime.quest
+			const resetTimeTips = "{0}: {1}\n{2}: {3}\n{4}: {5}".format(
+				KC3Meta.term("MenuPvPReset"), remainingTime.pvp,
+				KC3Meta.term("MenuQuestReset"), remainingTime.quest,
+				KC3Meta.term("MenuQuarterlyReset"), remainingTime.quarterly
 			);
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
