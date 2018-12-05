@@ -344,21 +344,27 @@ String.prototype.format = function(params) {
 
 /* SECONDS TO HH:MM:SS
 -------------------------------*/
-String.prototype.toHHMMSS = function () {
-	var sec_num = parseInt(this, 10); // don't forget the second param
+String.prototype.toHHMMSS = function (showDays) {
+	var sec_num = parseInt(this, 10);
 	var time;
 	if(isNaN(sec_num)) {
 		time = "--:--:--";
 	} else {
 		var isNeg   = sec_num < 0;
-
 		if(isNeg) sec_num = -sec_num;
-
+		var secsLeft = sec_num, days = 0;
 		var hours   = (Math.floor(sec_num / 3600)).toDigits(2);
-		var minutes = (Math.floor((sec_num - (hours * 3600)) / 60)).toDigits(2);
-		var seconds = (sec_num - (hours * 3600) - (minutes * 60)).toDigits(2);
-
-		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
+		secsLeft    -= hours * 3600;
+		if(showDays) {
+			days    = Math.floor(sec_num / 86400);
+			hours   = (Math.floor((sec_num % 86400) / 3600)).toDigits(2);
+		}
+		var minutes = (Math.floor(secsLeft / 60)).toDigits(2);
+		secsLeft   -= minutes * 60;
+		var seconds = (secsLeft).toDigits(2);
+		time = (isNeg ? "-" : (showDays ? "+" : "")) +
+			(showDays ? days + " " : "") +
+			hours + ':' + minutes + ':' + seconds;
 	}
 	return time;
 };

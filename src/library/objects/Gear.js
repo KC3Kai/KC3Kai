@@ -436,6 +436,32 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 14cm Twin Gun Mount
+			"119": {
+				count: 0,
+				byClass: {
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 1 },
+					},
+					// Katori Class
+					"56": "34"
+				},
+			},
+			// 14cm Twin Gun Mount Kai
+			"310": {
+				count: 0,
+				byClass: {
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+					},
+					// Katori Class
+					"56": {
+						multiple: { "houg": 2, "houk": 1 },
+					},
+				},
+			},
 			// 20.3cm (No.2) Twin Gun Mount
 			"90": {
 				count: 0,
@@ -733,16 +759,28 @@ KC3改 Equipment Object
 					// Hiburi Class
 					"85": "74",
 				},
-				byShip: {
-					// Yura K2
-					ids: [488],
-					minStars: 7,
-					multiple: { "houg": 2, "tyku": 3 },
-					synergy: {
-						flags: [ "surfaceRadar" ],
-						single: { "houg": 3, "houk": 2 },
+				byShip: [
+					{
+						// Kinu Kai Ni
+						ids: [487],
+						minStars: 7,
+						multiple: { "houg": 2, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 2 },
+						},
 					},
-				},
+					{
+						// Yura Kai Ni
+						ids: [488],
+						minStars: 7,
+						multiple: { "houg": 2, "tyku": 3 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 2 },
+						},
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model A
 			"297": {
@@ -1425,6 +1463,9 @@ KC3改 Equipment Object
 				modifier = 1.4; break;
 			case 9: // Recon plane
 			case 10: // Seaplane recon
+			case 49: // LB Recon
+			case 59: // Jet Recon
+			case 94: // Recon (II)
 				modifier = 1.2; break;
 			case 11: // Seaplane bomber
 				modifier = 1.15; break;
@@ -1705,9 +1746,9 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
-		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat
+		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat, LB Recon?
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
-		const type2 = isSelection ? [8, 9, 10, 41, 58, 59] : [9, 10, 41, 59];
+		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59, 94] : [9, 10, 41, 49, 59, 94];
 		return this.exists() &&
 			type2.indexOf(this.master().api_type[2]) > -1;
 	};
