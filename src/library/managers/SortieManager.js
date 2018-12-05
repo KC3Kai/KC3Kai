@@ -997,6 +997,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					return equip;
 				});
 				equips = equips.filter(equip => equip.masterId > 0);
+				let morale = ship.morale;
+				// Undo kc3 morale calc, ignore case for -9 and align morale to sim cutoffs
+				if (realBattle) {
+					morale += 3;
+				}
+				else if (morale > 49 && morale < 53) {
+					morale += 3;
+				}
 				list.push({
 					masterId: ship.masterId,
 					LVL: ship.level,
@@ -1004,6 +1012,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					HPInit: !realBattle ? ship.hp[0] : ship.afterHp[0],
 					fuelInit: ship.fuel / ship.master().api_fuel_max,
 					ammoInit: ship.ammo / ship.master().api_bull_max,
+					morale: morale,
 					equips: equips,
 					includesEquipStats: 1
 				});
