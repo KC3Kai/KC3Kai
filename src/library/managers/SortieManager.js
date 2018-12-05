@@ -1005,7 +1005,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					fuelInit: ship.fuel / ship.master().api_fuel_max,
 					ammoInit: ship.ammo / ship.master().api_bull_max,
 					equips: equips,
-					includeEquipStats: 1
+					includesEquipStats: 1
 				});
 			}
 			return list;
