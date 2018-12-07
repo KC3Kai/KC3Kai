@@ -213,7 +213,6 @@
 				'api_req_kousyou/createitem': this.processDevelopment
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
-			this.updateGunfitsIfNeeded();
 		},
 		
 		processMapInfo: function(http) {
