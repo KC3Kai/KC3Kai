@@ -2086,16 +2086,23 @@ Previously known as "Reactor"
 					kind: "single"
 				};
 				
-				// Check for boss gauge kills
-				if(thisMap.api_defeat_count !== undefined) {
-					localMap.kills = thisMap.api_defeat_count;
-					localMap.kind  = "multiple";
-					if(thisMap.api_required_defeat_count !== undefined) {
-						localMap.killsRequired = thisMap.api_required_defeat_count;
+				// Check for boss gauge of kills
+				if(thisMap.api_gauge_type === 1 || thisMap.api_defeat_count !== undefined) {
+					localMap.kind = "multiple";
+					if(thisMap.api_defeat_count !== undefined) {
+						localMap.kills = thisMap.api_defeat_count;
+						if(thisMap.api_required_defeat_count !== undefined) {
+							localMap.killsRequired = thisMap.api_required_defeat_count;
+						}
+					} else {
+						localMap.kills = oldMap.kills;
+						// to indicate in-game gauge disappeared after cleared
+						delete localMap.killsRequired;
 					}
-				}
-				if(thisMap.api_gauge_num !== undefined) {
-					localMap.gaugeNum = thisMap.api_gauge_num;
+					// since 2018-11-16 map 7-2
+					if(thisMap.api_gauge_num !== undefined) {
+						localMap.gaugeNum = thisMap.api_gauge_num;
+					}
 				}
 				// Max Land-bases allowed to be sortied
 				if(thisMap.api_air_base_decks !== undefined) {
@@ -2596,6 +2603,11 @@ Previously known as "Reactor"
 					[893,1,[7,1], true], // Bq8: 2nd requirement: [W7-1] S-rank the boss node 3 times
 					[893,2,[7,2], true, false, [7] ], // Bq8: 3rd requirement: [W7-2-G] S-rank 1st boss node 3 times
 					[893,3,[7,2], true, false, [15]], // Bq8: 4th requirement: [W7-2-M] S-rank 2nd boss node 3 times
+					[894,0,[1,3], true, true], // Bq9: 1st requirement: [W1-3] S-rank the boss node
+					[894,1,[1,4], true, true], // Bq9: 2nd requirement: [W1-4] S-rank the boss node
+					[894,2,[2,1], true, true], // Bq9: 3rd requirement: [W2-1] S-rank the boss node
+					[894,3,[2,2], true, true], // Bq9: 4th requirement: [W2-2] S-rank the boss node
+					[894,4,[2,3], true, true], // Bq9: 5th requirement: [W2-3] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

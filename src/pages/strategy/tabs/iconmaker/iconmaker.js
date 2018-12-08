@@ -72,8 +72,11 @@
 				this.isDamaged = damaged;
 				this.seasonalIdx = newSeasonal;
 				this.isOfficial = officialLink;
-				const dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`];
-				const illustId = this.seasonalIdx > 0 ? ((dbShip || {}).illust_extra || [])[this.seasonalIdx - 1] : this.shipId;
+				let dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`] || {};
+				if(dbShip.illust_same_as_prev) {
+					dbShip = WhoCallsTheFleetDb.db[`s${dbShip.remodel.prev}`] || {};
+				}
+				const illustId = this.seasonalIdx > 0 ? (dbShip.illust_extra || [])[this.seasonalIdx - 1] : dbShip.id || this.shipId;
 				const imgNo = 8 + (1 & this.isDamaged);
 				const baseUrl = [
 					"http://fleet.diablohu.com/!/pics-ships/",

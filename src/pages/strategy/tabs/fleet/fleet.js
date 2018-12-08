@@ -427,9 +427,15 @@
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
 			if(ConfigManager.elosFormula > 1) {
-				const f33Cn = Array.numbers(1, 5).map(cn => Math.qckInt("floor", kcFleet.eLos4(cn), 1));
+				const f33CnHq4 = Array.numbers(1, 5).map(cn =>
+					Math.qckInt("floor", kcFleet.eLos4(cn), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
+				));
+				const f33CnHq3 = Array.numbers(1, 5).map(cn =>
+					Math.qckInt("floor", kcFleet.eLos4(cn, 0.35), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
+				));
 				$(".detail_los .detail_value", fleetBox).attr("title",
-					"Cn1: {0}\nCn3: {1}\nCn4: {2}".format(f33Cn[0], f33Cn[2], f33Cn[3]));
+					"HLv: x0.4\tx0.35\nCn1: {0}\t{5}\nCn2: {1}\t{6}\nCn3: {2}\t{7}\nCn4: {3}\t{8}\nCn5: {4}\t{9}".format(f33CnHq4.concat(f33CnHq3))
+				);
 			} else {
 				$(".detail_los .detail_value").attr("title", "");
 			}
