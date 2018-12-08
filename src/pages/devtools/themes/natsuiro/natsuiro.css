@@ -407,6 +407,9 @@ html,body {
 	color:#FF7979;
 }
 .module.activity .consumable_text.danger {
+	color:#EAF918;
+}
+.module.activity .consumable_text.fulled {
 	color:#FF7979;
 }
 .module.activity .consumable_max {

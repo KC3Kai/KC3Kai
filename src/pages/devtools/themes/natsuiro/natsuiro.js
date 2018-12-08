@@ -1282,6 +1282,7 @@
 			$(".count_ships")
 				.text( shipCount )
 				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
+				.toggleClass( "fulled", (KC3ShipManager.max - shipCount) <= 0)
 				.attr("title", "\u2764 " + lockedShipCount)
 				.lazyInitTooltip();
 
@@ -1296,6 +1297,7 @@
 			$(".count_gear")
 				.text( gearCount )
 				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
+				.toggleClass("fulled", (KC3GearManager.max - gearCount) <= 3)
 				.attr("title", "\u2764 " + lockedGearCount)
 				.lazyInitTooltip();
 
