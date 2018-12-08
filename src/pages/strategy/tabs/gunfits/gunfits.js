@@ -27,6 +27,7 @@
 			TsunDBSubmission.updateGunfitsIfNeeded(data => {
 				this.tests = data;
 				console.debug("Latest gunfits tests updated", data);
+				this.execute();
 			});
 		},
 
