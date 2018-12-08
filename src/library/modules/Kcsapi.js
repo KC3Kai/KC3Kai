@@ -2603,6 +2603,11 @@ Previously known as "Reactor"
 					[893,1,[7,1], true], // Bq8: 2nd requirement: [W7-1] S-rank the boss node 3 times
 					[893,2,[7,2], true, false, [7] ], // Bq8: 3rd requirement: [W7-2-G] S-rank 1st boss node 3 times
 					[893,3,[7,2], true, false, [15]], // Bq8: 4th requirement: [W7-2-M] S-rank 2nd boss node 3 times
+					[894,0,[1,3], true, true], // Bq9: 1st requirement: [W1-3] S-rank the boss node
+					[894,0,[1,4], true, true], // Bq9: 2nd requirement: [W1-4] S-rank the boss node
+					[894,0,[2,1], true, true], // Bq9: 3rd requirement: [W2-1] S-rank the boss node
+					[894,0,[2,2], true, true], // Bq9: 4th requirement: [W2-2] S-rank the boss node
+					[894,0,[2,3], true, true], // Bq9: 5th requirement: [W2-3] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

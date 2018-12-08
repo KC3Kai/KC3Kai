@@ -2447,7 +2447,9 @@ KC3改 Ship Object
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoCutin()) {
 				const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-				return KC3Ship.specialAttackTypeDay(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
+				const hasApShell = this.hasEquipmentType(2, 19);
+				return KC3Ship.specialAttackTypeDay(101, null,
+					1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2679,7 +2681,9 @@ KC3改 Ship Object
 				// special Nagato Cutin since 2018-11-16
 				if(this.canDoNagatoCutin()) {
 					const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-					return KC3Ship.specialAttackTypeNight(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
+					const hasApShell = this.hasEquipmentType(2, 19);
+					return KC3Ship.specialAttackTypeNight(101, null,
+						1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
