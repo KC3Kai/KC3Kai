@@ -288,6 +288,11 @@
 		},
 		"markers": [
 			{
+				"img": "client/maelstrom.png",
+				"pos": [310, 221],
+				"size": [27, 27]
+			},
+			{
 				"img": "client/bucket.png",
 				"pos": [236, 102],
 				"size": [27, 27]
@@ -1232,8 +1237,8 @@
 				"size": [50, 50]
 			},
 			{
-				"img": "abyss/714.png",
-				"pos": [1046, 435],
+				"img": "abyss/618.png",
+				"pos": [1054, 433],
 				"size": [50, 50]
 			}
 		]

@@ -971,6 +971,25 @@
 		]
 	},
 	{
+		"section" : "SettingsDataBackupReminder",
+		"help" : "",
+		"contents" : [
+			{
+				"id" : "backupReminder",
+				"name" : "SettingsBackupFrequency",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsBackupFrequencyNone" ],
+						[ 604800000, "SettingsBackupFrequencyWeekly" ],
+						[ 2629746000, "SettingsBackupFrequencyMonthly" ],
+						[ 7889238000, "SettingsBackupFrequencyQuarterly" ]
+					]
+				}
+			}
+		]
+	},
+	{
 		"section": "SettingsTsunDBSubmission",
 		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings:-Database-Submissions#tsundb-extra-submission",
 		"contents" :[

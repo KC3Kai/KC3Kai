@@ -983,6 +983,27 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
+			if(ConfigManager.backupReminder > 0) {
+				const lastBackup = Number(localStorage.lastBackupTime) || 0;
+				const lastReminder = Number(localStorage.lastBackupReminder) || 0;
+				const currentTime = Date.now();
+				if(currentTime > lastReminder + ConfigManager.backupReminder) {
+					const days = !lastBackup ? "???" :
+						Math.floor((currentTime - lastBackup) / (1000 * 60 * 60 * 24));
+					this.ModalBox({
+						title: KC3Meta.term("BackupReminderTitle"),
+						message: KC3Meta.term("BackupReminderMessage").format(days),
+						link: KC3Meta.term("BackupReminderLink"),
+						onClick: function(e){
+							(new RMsg("service", "strategyRoomPage", {
+								tabPath: "databackup"
+							})).execute();
+							return false;
+						}
+					});
+					localStorage.lastBackupReminder = currentTime;
+				}
+			}
 		},
 
 		CatBomb: function(data){
@@ -1122,9 +1143,10 @@
 					new Date(PlayerManager.hq.lastPortTime * 1000).format("mm-dd HH:MM:ss")
 			);
 			const remainingTime = KC3Calc.remainingTimeUntilNextResets();
-			const resetTimeTips = "{0}: {2}\n{1}: {3}".format(
-				KC3Meta.term("MenuPvPReset"), KC3Meta.term("MenuQuestReset"),
-				remainingTime.pvp, remainingTime.quest
+			const resetTimeTips = "{0}: {1}\n{2}: {3}\n{4}: {5}".format(
+				KC3Meta.term("MenuPvPReset"), remainingTime.pvp,
+				KC3Meta.term("MenuQuestReset"), remainingTime.quest,
+				KC3Meta.term("MenuQuarterlyReset"), remainingTime.quarterly
 			);
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
@@ -1260,6 +1282,7 @@
 			$(".count_ships")
 				.text( shipCount )
 				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
+				.toggleClass( "fulled", (KC3ShipManager.max - shipCount) <= 0)
 				.attr("title", "\u2764 " + lockedShipCount)
 				.lazyInitTooltip();
 
@@ -1274,6 +1297,7 @@
 			$(".count_gear")
 				.text( gearCount )
 				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
+				.toggleClass("fulled", (KC3GearManager.max - gearCount) <= 3)
 				.attr("title", "\u2764 " + lockedGearCount)
 				.lazyInitTooltip();
 
@@ -4484,7 +4508,7 @@
 		if(Object.keys(thisMap).length > 0){
 			$(".module.activity .map_info").removeClass("map_finisher");
 			$(".module.activity .map_hp").removeAttr("title");
-			if( thisMap.clear ){
+			if( thisMap.clear && !thisMap.killsRequired ){
 				$(".module.activity .map_hp").text( KC3Meta.term("BattleMapCleared") );
 				$(".module.activity .map_gauge .curhp").css('width','0%');
 			}else{
