@@ -1247,12 +1247,15 @@ KC3改 Ship Object
 			if(KC3GearManager.landBaseReconnType2Ids.includes(type2)){
 				const los = gear.master().api_saku;
 				// Carrier Recon Aircraft
-				if(type2 == 9){
+				if(type2 === 9){
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.2 :
 						(los >= 9) ? 1.3 :
 						1 // unknown
 					);
+				// LB Recon Aircraft
+				} else if(type2 === 49){
+					reconModifier = Math.max(reconModifier, 1.18);
 				// Recon Seaplane, Flying Boat, etc
 				} else {
 					reconModifier = Math.max(reconModifier,
@@ -2391,7 +2394,7 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2599,7 +2602,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];

@@ -2024,7 +2024,7 @@
 							).lazyInitTooltip();
 						}
 						
-						const shipObj = baseInfo.convertToShipObject();
+						const shipObj = baseInfo.toShipObject();
 						
 						// Regular fighter power on sortie, LBAS counts recon planes too
 						const [afpLower, afpHigher] = shipObj.fighterBounds(true);

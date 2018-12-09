@@ -142,10 +142,14 @@
 		};
 	};
 	
-	KC3LandBase.prototype.convertToShipObject = function() {
+	/**
+	 * @return a fake carrier ship instance simulated by this land-base (4 squadrons mapped to 4 slots).
+	 */
+	KC3LandBase.prototype.toShipObject = function() {
 		const shipObj = new KC3Ship();
-		// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
+		// fixed ID 1 to ensure it's not a dummy ship
 		shipObj.rosterId = 1;
+		// starring by Akagi
 		shipObj.masterId = 83;
 		shipObj.hp = [1,1];
 		shipObj.items = this.planes.map(function (planeInfo) {

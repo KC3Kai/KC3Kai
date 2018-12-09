@@ -1946,7 +1946,7 @@ KC3改 Equipment Object
 			// Postcap LBAA recon modifier if LB recon is present
 			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
 			// https://twitter.com/syoukuretin/status/1068477784232587264
-			if (shipOrLb.convertToShipObject().fighterPowerReconModifier(true) > 1) {
+			if(shipOrLb.toShipObject().fighterPowerReconModifier(true) > 1) {
 				lbaaReconModifier = 1.125;
 			}
 			const onNormal = Math.floor(lbasPower
