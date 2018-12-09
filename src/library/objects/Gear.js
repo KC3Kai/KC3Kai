@@ -1942,8 +1942,15 @@ KC3改 Equipment Object
 			// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
+			let lbaaReconModifier = 1;
+			// Postcap LBAA recon modifier if LB recon is present
+			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
+			// https://twitter.com/syoukuretin/status/1068477784232587264
+			if (shipOrLb.convertToShipObject().fighterPowerReconModifier(true) > 1) {
+				lbaaReconModifier = 1.125;
+			}
 			const onNormal = Math.floor(lbasPower
-				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			// Proficiency critical modifier has been applied sometime since 2017-12-11?
 			// Modifier calculation is the same, but different from carrier-based,
 			// modifiers for squadron slots are independent and no first slot bonus.
@@ -1953,7 +1960,7 @@ KC3改 Equipment Object
 			const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
 			const criticalModifier = 1.5;
 			const onCritical = Math.floor(Math.floor(lbasPower * criticalModifier * proficiencyCriticalModifier)
-				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
 			$(".icon", powBox).attr("src", KC3Meta.statIcon(isLbaa ? "rk" : "kk"));

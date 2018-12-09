@@ -142,6 +142,21 @@
 		};
 	};
 	
+	KC3LandBase.prototype.convertToShipObject = function() {
+		const shipObj = new KC3Ship();
+		// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
+		shipObj.rosterId = 1;
+		shipObj.masterId = 83;
+		shipObj.hp = [1,1];
+		shipObj.items = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
+		});
+		shipObj.slots = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
+		});
+		return shipObj;
+	};
+
 	/**
 	 * Convert to new Object used to record sorties on indexedDB
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
