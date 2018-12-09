@@ -2038,7 +2038,8 @@
 						);
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
-						
+
+						let planeNames = "";
 						$.each(baseInfo.planes, function(i, planeInfo){
 							const planeBox = $("#factory .airbase_plane").clone();
 							
@@ -2053,7 +2054,8 @@
 								
 								$(".base_plane_name", planeBox).text(itemObj.name())
 									.attr("title", itemObj.name()).lazyInitTooltip();
-								
+								planeNames += itemObj.name() + "\n";
+
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
@@ -2129,6 +2131,8 @@
 							
 							$(".base_planes", baseBox).append(planeBox);
 						});
+						$(".base_name", baseBox).attr("title", planeNames
+						).lazyInitTooltip();
 						
 						$(".module.fleet .airbase_list").append(baseBox);
 					}
