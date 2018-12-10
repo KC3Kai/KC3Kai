@@ -3491,8 +3491,9 @@
 					$(".remodel_consume_amount", consumeGearBox)
 						.text("x{0}".format(recipeDetail.api_req_slot_num));
 					consumeGearBox.show();
-					const isToConsumeSameGear = masterId === recipeDetail.api_slot_id &&
-						!KC3GearManager.get(data.rosterId).stars;
+					const gearToRemodel = KC3GearManager.get(data.rosterId);
+					const isToConsumeSameGear = gearToRemodel.masterId === recipeDetail.api_slot_id
+						&& !gearToRemodel.lock && !gearToRemodel.stars;
 					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true)
 						- (isToConsumeSameGear & 1);
 					$(".owned_star0_item .value", remodelDetailBox)
