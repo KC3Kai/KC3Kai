@@ -2095,7 +2095,7 @@ Previously known as "Reactor"
 							localMap.killsRequired = thisMap.api_required_defeat_count;
 						}
 					} else {
-						localMap.kills = oldMap.kills;
+						localMap.kills = false;
 						// to indicate in-game gauge disappeared after cleared
 						delete localMap.killsRequired;
 					}
