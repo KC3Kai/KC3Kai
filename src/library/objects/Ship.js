@@ -1209,8 +1209,8 @@ KC3改 Ship Object
 		const powerBounds = this.equipment().map((g, i) => g.fighterBounds(this.slots[i], forLbas));
 		const reconModifier = this.fighterPowerReconModifier(forLbas);
 		return [
-			powerBounds.map(b => b[0]).sumValues() * reconModifier,
-			powerBounds.map(b => b[1]).sumValues() * reconModifier
+			Math.floor(powerBounds.map(b => b[0]).sumValues() * reconModifier),
+			Math.floor(powerBounds.map(b => b[1]).sumValues() * reconModifier)
 		];
 	};
 
@@ -1921,13 +1921,21 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
+		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Cutin
+		// https://twitter.com/syoukuretin/status/1071656926411337728
+		let nagatoCutinRadarModifier = 1;
+		if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 101) {
+			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
+			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
+		}
+		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		let result = Math.floor(Math.floor(
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier;
+			* antiPtImpModifier * nagatoCutinRadarModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -1958,6 +1966,7 @@ KC3改 Ship Object
 			dayCutinModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
+			nagatoCutinRadarModifier,
 			antiPtImpModifier,
 			antiLandAdditive,
 			antiLandModifier,
