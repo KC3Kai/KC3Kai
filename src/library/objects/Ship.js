@@ -2801,7 +2801,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(this.isDummy()) { return {}; }
-		const byLevel = 2 * Math.sqrt(this.level - 1);
+		const byLevel = 2 * Math.sqrt(this.level);
 		// formula from PSVita is sqrt(1.5 * lk) anyway,
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
@@ -3147,6 +3147,7 @@ KC3改 Ship Object
 	/**
 	 * To calculate 12cm 30tube Rocket Launcher Kai Ni (Rosa K2) trigger chance (for now),
 	 * we need adjusted AA of ship, number of Rosa K2, ctype and luck stat.
+	 * @see https://twitter.com/noratako5/status/1062027534026428416 - luck modifier
 	 * @see https://twitter.com/kankenRJ/status/979524073934893056 - current formula
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2471 - old formula verifying thread
 	 */
@@ -3162,7 +3163,7 @@ KC3改 Ship Object
 		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Rounding to x%
 		return Math.qckInt("floor",
-			(this.adjustedAntiAir() + this.lk[0]) /
+			(this.adjustedAntiAir() + this.lk[0] * 0.9) /
 				(400 - (rosaAdjustedAntiAir + 30 + 40 * rosaCount + classBonus)) * 100,
 			0);
 	};
