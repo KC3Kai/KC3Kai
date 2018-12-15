@@ -863,7 +863,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const supportFleetNum = this.getSupportingFleet(isBoss);
 			if (supportFleetNum > 0) {
 				const supportFleet = PlayerManager.fleets[supportFleetNum - 1];
-				res.fleetSupportB = this.prepareSimPlayerFleetShips(supportFleet);
+				res.fleetSupportB = {
+					ships: this.prepareSimPlayerFleetShips(supportFleet),
+					formation: fleetF.formation,
+				};
 			}
 
 			// Simulator options
@@ -969,7 +972,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const list = [];
 			for (let idx = 0; idx < fleet.ships.length; idx++) {
 				const ship = fleet.ship(idx);
-				if (ship.isDummy() || ship.isAway()) { continue; }
+				if (ship.isDummy() || ship.isAbsent()) { continue; }
 				let stats = {
 					HP: ship.hp[1],
 					FP: ship.fp[0],
