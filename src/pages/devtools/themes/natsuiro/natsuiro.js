@@ -2024,16 +2024,7 @@
 							).lazyInitTooltip();
 						}
 						
-						const shipObj = new KC3Ship();
-						// Simulate 1 land-base as a carrier, ensure it's not a dummy ship
-						shipObj.rosterId = 1;
-						shipObj.masterId = 83;
-						shipObj.items = baseInfo.planes.map(function(planeInfo){
-							return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
-						});
-						shipObj.slots = baseInfo.planes.map(function(planeInfo){
-							return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
-						});
+						const shipObj = baseInfo.toShipObject();
 						
 						// Regular fighter power on sortie, LBAS counts recon planes too
 						const [afpLower, afpHigher] = shipObj.fighterBounds(true);
@@ -2047,7 +2038,8 @@
 						);
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
-						
+
+						let planeNames = "";
 						$.each(baseInfo.planes, function(i, planeInfo){
 							const planeBox = $("#factory .airbase_plane").clone();
 							
@@ -2062,7 +2054,8 @@
 								
 								$(".base_plane_name", planeBox).text(itemObj.name())
 									.attr("title", itemObj.name()).lazyInitTooltip();
-								
+								planeNames += itemObj.name() + "\n";
+
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
@@ -2138,6 +2131,8 @@
 							
 							$(".base_planes", baseBox).append(planeBox);
 						});
+						$(".base_name", baseBox).attr("title", planeNames
+						).lazyInitTooltip();
 						
 						$(".module.fleet .airbase_list").append(baseBox);
 					}
@@ -3496,8 +3491,9 @@
 					$(".remodel_consume_amount", consumeGearBox)
 						.text("x{0}".format(recipeDetail.api_req_slot_num));
 					consumeGearBox.show();
-					const isToConsumeSameGear = masterId === recipeDetail.api_slot_id &&
-						!KC3GearManager.get(data.rosterId).stars;
+					const gearToRemodel = KC3GearManager.get(data.rosterId);
+					const isToConsumeSameGear = gearToRemodel.masterId === recipeDetail.api_slot_id
+						&& !gearToRemodel.lock && !gearToRemodel.stars;
 					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true)
 						- (isToConsumeSameGear & 1);
 					$(".owned_star0_item .value", remodelDetailBox)

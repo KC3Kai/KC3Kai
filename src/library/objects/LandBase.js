@@ -143,6 +143,25 @@
 	};
 	
 	/**
+	 * @return a fake carrier ship instance simulated by this land-base (4 squadrons mapped to 4 slots).
+	 */
+	KC3LandBase.prototype.toShipObject = function() {
+		const shipObj = new KC3Ship();
+		// fixed ID 1 to ensure it's not a dummy ship
+		shipObj.rosterId = 1;
+		// starring by Akagi
+		shipObj.masterId = 83;
+		shipObj.hp = [1,1];
+		shipObj.items = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
+		});
+		shipObj.slots = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
+		});
+		return shipObj;
+	};
+
+	/**
 	 * Convert to new Object used to record sorties on indexedDB
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
 	 */
