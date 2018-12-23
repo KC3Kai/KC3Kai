@@ -512,7 +512,12 @@ KC3改 Equipment Object
 					{
 						// Akigumo
 						ids: [132, 301],
-						single: { "houg": 1 },
+						multiple: { "houg": 1 },
+					},
+					{
+						// Yukikaze
+						ids: [20, 228],
+						multiple: { "tyku": 1 },
 					},
 				],
 			},
