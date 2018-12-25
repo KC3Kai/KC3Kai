@@ -615,6 +615,17 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 533mm Quintuple Torpedo Mount (Initial Model)
+			"314": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						multiple: { "houg": 1, "raig": 3 },
+						countCap: 2,
+					},
+				},
+			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
 			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"285": {
@@ -1164,6 +1175,26 @@ KC3改 Equipment Object
 					"84": "65",
 					// John C.Butler Class
 					"87": "65",
+				},
+			},
+			// SG Radar (Initial Model)
+			"315": {
+				count: 0,
+				byClass: {
+					// Following Americans: Iowa Class
+					"65": {
+						single: { "houg": 2, "houk": 3, "saku": 4 },
+					},
+					// Lexington Class
+					"69": "65",
+					// Casablanca Class
+					"83": "65",
+					// Essex Class
+					"84": "65",
+					// John C.Butler Class
+					"87": {
+						single: { "houg": 3, "houk": 3, "saku": 4 },
+					},
 				},
 			},
 			// 20-tube 7inch UP Rocket Launchers
