@@ -56,9 +56,9 @@ KC3改 Equipment Object
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
 				tripleTorpedo: 0,
 				tripleTorpedoIds: [13, 125],
 				tripleTorpedoLateModel: 0,
@@ -512,7 +512,12 @@ KC3改 Equipment Object
 					{
 						// Akigumo
 						ids: [132, 301],
-						single: { "houg": 1 },
+						multiple: { "houg": 1 },
+					},
+					{
+						// Yukikaze
+						ids: [20, 228],
+						multiple: { "tyku": 1 },
 					},
 				],
 			},
@@ -606,6 +611,17 @@ KC3改 Equipment Object
 					// Akizuki Class
 					"54": {
 						multiple: { "raig": 1 },
+						countCap: 2,
+					},
+				},
+			},
+			// 533mm Quintuple Torpedo Mount (Initial Model)
+			"314": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						multiple: { "houg": 1, "raig": 3 },
 						countCap: 2,
 					},
 				},
@@ -1159,6 +1175,26 @@ KC3改 Equipment Object
 					"84": "65",
 					// John C.Butler Class
 					"87": "65",
+				},
+			},
+			// SG Radar (Initial Model)
+			"315": {
+				count: 0,
+				byClass: {
+					// Following Americans: Iowa Class
+					"65": {
+						single: { "houg": 2, "houk": 3, "saku": 4 },
+					},
+					// Lexington Class
+					"69": "65",
+					// Casablanca Class
+					"83": "65",
+					// Essex Class
+					"84": "65",
+					// John C.Butler Class
+					"87": {
+						single: { "houg": 3, "houk": 3, "saku": 4 },
+					},
 				},
 			},
 			// 20-tube 7inch UP Rocket Launchers
