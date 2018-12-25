@@ -444,6 +444,8 @@
 					airBattle.planes = [];
 					airBattle.slots = [];
 					airBattle.proficiency = [];
+					airBattle.bases = bases.map(base => base.toShipObject().equipment().map(gear => gear.masterId));
+					airBattle.contact = koukuApi.api_stage1.api_touch_plane;
 					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
 						const baseInfo = bases[baseId - 1];
 						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
