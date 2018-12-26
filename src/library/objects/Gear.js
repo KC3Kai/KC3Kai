@@ -1191,9 +1191,9 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
-					// John C.Butler Class
+					// John C.Butler Class, range from medium to long
 					"87": {
-						single: { "houg": 3, "houk": 3, "saku": 4 },
+						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
 					},
 				},
 			},
