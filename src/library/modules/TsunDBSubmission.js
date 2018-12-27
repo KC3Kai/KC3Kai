@@ -444,6 +444,7 @@
 					airBattle.planes = [];
 					airBattle.slots = [];
 					airBattle.proficiency = [];
+					airBattle.improvements = [];
 					airBattle.bases = bases.map(base => base.toShipObject().equipment().map(gear => gear.masterId));
 					airBattle.contact = koukuApi.api_stage1.api_touch_plane;
 					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
@@ -451,10 +452,12 @@
 						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
 						const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 						const planes = squadronPlanes.map(plane => plane.api_mst_id || -1);
-						const proficiency = shipObj.equipment().map(g => g.ace);
+						const proficiency = shipObj.equipment().map(g => g.ace || -1);
+						const improvements = shipObj.equipment().map(g => g.stars || -1);
 						airBattle.planes.push(planes);
 						airBattle.slots.push(shipObj.slots);
 						airBattle.proficiency.push(proficiency);
+						airBattle.improvements.push(improvements);
 						fp += shipObj.interceptionPower();
 					});
 					if(koukuApi.api_stage3) {
