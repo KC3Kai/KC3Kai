@@ -709,6 +709,16 @@ html,body {
 	background-size: 28px 27px;
 	background-position: -53px -66px;
 }
+.module.activity .sortie_node.nc_long_range_raid {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+		#7d0000;
+	background-size: 28px 27px;
+	background-position: -53px -66px;
+}
 .module.activity .sortie_node.nc_enemy_combined {
 	background:
 		radial-gradient(#e20 0, #c00 7%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 100%),

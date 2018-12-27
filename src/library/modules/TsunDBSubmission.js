@@ -185,6 +185,7 @@
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
+				'api_req_sortie/ld_shooting': this.processEnemy,
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
 				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/airbattle': this.processEnemy,
@@ -192,6 +193,7 @@
 				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/battle_water': this.processEnemy,
 				'api_req_combined_battle/ld_airbattle': this.processEnemy,
+				'api_req_combined_battle/ld_shooting': this.processEnemy,
 				'api_req_combined_battle/ec_battle': this.processEnemy,
 				'api_req_combined_battle/each_battle': this.processEnemy,
 				'api_req_combined_battle/each_airbattle': this.processEnemy,
@@ -199,6 +201,7 @@
 				'api_req_combined_battle/each_battle_water': this.processEnemy,
 				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
+				'api_req_combined_battle/each_ld_shooting': this.processEnemy,
 				// Night battles as 2nd part following day part:
 				'api_req_battle_midnight/battle': [this.processFriendlyFleet, this.processGunfit],
 				'api_req_combined_battle/midnight_battle': this.processFriendlyFleet,
