@@ -177,7 +177,7 @@
 	},
 	"751": {
 		"api_id": 751,
-		"api_name": "XmasLibeccio",
+		"api_name": "クリスマスLibeccio",
 		"api_yomi": "リベッチオ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -734,7 +734,7 @@
 	},
 	"819": {
 		"api_id": 819,
-		"api_name": "ValentineCommandant Teste",
+		"api_name": "バレンタインCommandant Teste",
 		"api_yomi": "コマンダン・テスト",
 		"api_stype": 16,
 		"api_soku": 5,
@@ -886,7 +886,7 @@
 	},
 	"838": {
 		"api_id": 838,
-		"api_name": "XmasCommandant Teste",
+		"api_name": "クリスマスCommandant Teste",
 		"api_yomi": "コマンダン・テスト",
 		"api_stype": 16,
 		"api_soku": 5,
@@ -2867,5 +2867,69 @@
 		"api_stype": 16,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"1091": {
+		"api_id": 1091,
+		"api_name": "Xmas岸波",
+		"api_yomi": "きしなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1092": {
+		"api_id": 1092,
+		"api_name": "Xmas浜波",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1093": {
+		"api_id": 1093,
+		"api_name": "Xmas松輪",
+		"api_yomi": "まつわ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1094": {
+		"api_id": 1094,
+		"api_name": "クリスマスGotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1095": {
+		"api_id": 1095,
+		"api_name": "Xmas瑞鶴",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1096": {
+		"api_id": 1096,
+		"api_name": "クリスマスMaestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1097": {
+		"api_id": 1097,
+		"api_name": "Xmas福江",
+		"api_yomi": "ふかえ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1098": {
+		"api_id": 1098,
+		"api_name": "Xmas酒匂",
+		"api_yomi": "さかわ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

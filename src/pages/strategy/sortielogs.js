@@ -628,10 +628,8 @@
 						$.each(sortie.nodes, function(index, node) {
 							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
-							const battleKind = ["", "",
-								"night_battle", "night_battle",
-								"air_battle", "enemy_combined", "air_raid", "night_to_day"
-								][node.eventKind];
+							const battleKind = KC3Node.knownNodeExtraClasses(true)
+								.map(s => s.substr(3))[node.eventKind];
 							edges.push(node.id);
 							$(".sortie_edge_"+(index+1), sortieBox)
 								.addClass("edge_" + node.type)
@@ -1177,7 +1175,7 @@
 			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
 				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
-				// keep defeat_count undefined after map cleared to hide replayer's gauge
+				// keep defeat_count undefined after map cleared to hide replayer gauge
 				if(!sortieData.mapinfo.api_cleared || sortieData.mapinfo.api_required_defeat_count){
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
 					sortieData.required_defeat_count = maxKills;

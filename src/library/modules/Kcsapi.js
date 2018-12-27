@@ -1080,6 +1080,10 @@ Previously known as "Reactor"
 			response.api_data.api_name = "ld_airbattle";
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
+		"api_req_sortie/ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "ld_shooting";
+			this["api_req_sortie/battle"].apply(this,arguments);
+		},
 		
 		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
@@ -1102,6 +1106,10 @@ Previously known as "Reactor"
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			response.api_data.api_name = "fc_ld_airbattle";
+			this["api_req_combined_battle/battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "fc_ld_shooting";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		
@@ -1198,6 +1206,10 @@ Previously known as "Reactor"
 		},
 		"api_req_combined_battle/each_ld_airbattle":function(params, response, headers){
 			response.api_data.api_name = "each_ld_airbattle";
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "each_ld_shooting";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		
@@ -2115,9 +2127,10 @@ Previously known as "Reactor"
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
-					localMap.gaugeType  = eventData.api_gauge_type || 0;
+					// moved to parent node as normal maps since Winter 2019
+					localMap.gaugeType  = eventData.api_gauge_type || thisMap.api_gauge_type || 0;
 					// added since Winter 2018
-					localMap.gaugeNum   = eventData.api_gauge_num || 1;
+					localMap.gaugeNum   = eventData.api_gauge_num || thisMap.api_gauge_num || 1;
 					
 					switch(localMap.gaugeType) {
 						case 0:
@@ -2129,7 +2142,7 @@ Previously known as "Reactor"
 							break;
 						default:
 							localMap.kind = "gauge-hp";
-							console.info("Reported unknown API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
+							console.info("Reported unknown API gauge type", localMap.gaugeType);/*RemoveLogging:skip*/
 					}
 					
 					if(oldMap !== undefined) {

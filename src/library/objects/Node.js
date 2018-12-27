@@ -24,12 +24,13 @@ Used by SortieManager
 	KC3Node.debugPrediction = function() { return false; };
 	
 	// Update this list if more extra classes added
-	KC3Node.knownNodeExtraClasses = function(){
-		return [
+	KC3Node.knownNodeExtraClasses = function(isEmptyClassKept = false){
+		const classNameKindIdMap = ["", "",
 			"nc_night_battle", "nc_air_battle",
 			"nc_enemy_combined", "nc_air_raid",
-			"nc_night_to_day"
+			"nc_night_to_day", "nc_long_range_raid"
 		];
+		return isEmptyClassKept ? classNameKindIdMap : classNameKindIdMap.filter(n => !!n);
 	};
 	
 	KC3Node.prototype.isInitialized = function(){
@@ -56,12 +57,9 @@ Used by SortieManager
 					KC3Meta.term("BattleKindAirBattleOnly"),
 					KC3Meta.term("BattleKindEnemyCombined"),
 					KC3Meta.term("BattleKindAirDefendOnly"),
-					KC3Meta.term("BattleKindNightToDay")][this.eventKind];
-				this.nodeExtraClass = ["", "",
-					"nc_night_battle", "nc_night_battle",
-					"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
-					"nc_night_to_day"
-					][this.eventKind];
+					KC3Meta.term("BattleKindNightToDay"),
+					KC3Meta.term("BattleKindLongRangeRaid")][this.eventKind];
+				this.nodeExtraClass = KC3Node.knownNodeExtraClasses(true)[this.eventKind] || "";
 			}
 			
 			// If passed formatted enemy list from PVP

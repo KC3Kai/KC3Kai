@@ -455,6 +455,9 @@
 .tab_event .sortie_list .sortie_edge.air_raid {
 	background:#FFA500;
 }
+.tab_event .sortie_list .sortie_edge.long_range_raid {
+	background:#EE7400;
+}
 .tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
 	background-repeat:no-repeat;
