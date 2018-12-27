@@ -147,24 +147,25 @@
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
 					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
-					case -99: return 'map_common_81';
+					case -99: return 'map_common_82';
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
-					case 0: return 'map_common_145';
-					case 1: return 'map_common_138';
+					case 0: return 'map_common_149';
+					case 1: return 'map_common_142';
 					case 2:
-					case 6: return 'map_common_141';
-					case 3: return 'map_common_143';
-					case 4: return 'map_common_144';
-					case 5: return 'map_common_132';
-					case 7: return 'map_common_100';
-					case 8: return 'map_common_131';
-					case 9: return 'map_common_142';
-					case 10: return 'map_common_95';
-					case 11: return 'map_common_146';
-					case 12: return 'map_common_147';
-					case -2: return 'map_common_140';
-					case -3: return 'map_common_137';
+					case 6: return 'map_common_145';
+					case 3: return 'map_common_147';
+					case 4: return 'map_common_148';
+					case 5: return 'map_common_136';
+					case 7: return 'map_common_101';
+					case 8: return 'map_common_135';
+					case 9: return 'map_common_146';
+					case 10: return 'map_common_96';
+					case 11: return 'map_common_150';
+					case 12: return 'map_common_151';
+					case 13: return 'map_common_81';
+					case -2: return 'map_common_144';
+					case -3: return 'map_common_141';
 				}
 			};
 			this.isLoading = true;
@@ -221,7 +222,7 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(!spot.route && spot.line && isAddingRouteStart) {
+						if(!spot.route && !spot.line && isAddingRouteStart) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
@@ -280,7 +281,7 @@
 						const edge = edges[edgeKey];
 						const node = edge[0];
 						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
-						if(node.no && (node.color || node.route)) {
+						if(node.no && (node.color || node.route || node.line)) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
 							const sprite = new this.pixi.Sprite(frame);
 							let offsetX = 0, offsetY = 0;

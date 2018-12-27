@@ -31,18 +31,17 @@
 	width:680px;
 }
 .tab_locking .lock_mode {
-	width: 100px;
+	width: var(--lockModeWidth);
 	float: left;
-	margin: 0 15px 5px 0;
-	padding:5px 5px 5px 5px;
+	margin: 0 10px 5px 0;
+	padding: 5px;
+	margin-right: var(--lockMarginRight);
 }
-
 .tab_locking .lock_mode:first-child {
 	margin-left: 8px;
 }
-
 .tab_locking .lock_mode:last-child {
-	margin-right: -3px;
+	margin-right: -8px;
 }
 
 .tab_locking .lock_mode_1 {

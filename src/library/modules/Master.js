@@ -15,7 +15,7 @@ Saves and loads significant data for future use
 		abyssalGearIdFrom: 500,
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
-		seasonalCgIdFrom: 700,
+		seasonalCgIdFrom: 720,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
