@@ -624,6 +624,8 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "raig": 3 },
 						countCap: 2,
 					},
+					// Fletcher Class
+					"91": "87",
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
@@ -1145,6 +1147,8 @@ KC3改 Equipment Object
 					"87": {
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
+					// Fletcher Class
+					"91": "87",
 				},
 				byShip: [
 					{
@@ -1175,6 +1179,8 @@ KC3改 Equipment Object
 					"84": "65",
 					// John C.Butler Class
 					"87": "65",
+					// Fletcher Class
+					"91": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -1191,10 +1197,12 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
-					// John C.Butler Class
+					// John C.Butler Class, range from medium to long
 					"87": {
-						single: { "houg": 3, "houk": 3, "saku": 4 },
+						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
 					},
+					// Fletcher Class
+					"91": "87",
 				},
 			},
 			// 20-tube 7inch UP Rocket Launchers
