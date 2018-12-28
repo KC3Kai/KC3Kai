@@ -334,7 +334,7 @@ Used by SortieManager
 			this.flarePos = this.flarePos >= 0 ? 1 + (isPlayerCombined ? this.flarePos % 6 : this.flarePos) : -1;
 			this.eFlarePos = this.eFlarePos >= 0 ? 1 + (isEnemyCombined ? this.eFlarePos % 6 : this.eFlarePos) : -1;
 		}
-		if (battleData.api_friendly_info !== undefined) {
+		if(battleData.api_friendly_info !== undefined) {
 			this.friendlySupportFlag = true;
 		}
 		
@@ -378,6 +378,22 @@ Used by SortieManager
 
 		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
+		
+		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
+			this.isLongDistanceAirRaid = true;
+		}
+		/* Features of long range radar ambush battle implemented since Winter 2019:
+		 *   no formation selection, 1 (single) or 14 (combined) by default;
+		 *   shelling phase only, no friendly ship can attack, defend like air raid node;
+		 *   no detection, no contact, no air battle, no night gear triggered;
+		 *   night battle background, but API data structures follow day battle;
+		 *   friendly contact icon of in-game right top is fixed to red radar wave sign;
+		 */
+		if((battleData.api_name || "").includes("ld_shooting") || battleData.api_search === undefined) {
+			this.isLongRangeRaid = true;
+			// use special detection values instead if api_search not existed
+			this.detection = ["\u2212\u221a\u2212", "worse", KC3Meta.term("BattleKindLongRangeRaid")];
+		}
 		
 		// LBAS attack phase, including jet plane assault
 		this.lbasFlag = battleData.api_air_base_attack !== undefined;
@@ -1790,6 +1806,7 @@ Used by SortieManager
 	KC3Node.prototype.airBaseRaid = function( battleData ){
 		this.battleDestruction = battleData;
 		//console.debug("Raw Air Base Raid data", battleData);
+		this.isAirBaseEnemyRaid = true;
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
 		// Pad ship array to 6 for saving into encounter record
