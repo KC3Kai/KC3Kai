@@ -26,8 +26,8 @@ Used by SortieManager
 	// Update this list if more extra classes added
 	KC3Node.knownNodeExtraClasses = function(isEmptyClassKept = false){
 		const classNameKindIdMap = ["", "",
-			"nc_night_battle", "nc_air_battle",
-			"nc_enemy_combined", "nc_air_raid",
+			"nc_night_battle", "nc_night_battle",
+			"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
 			"nc_night_to_day", "nc_long_range_raid"
 		];
 		return isEmptyClassKept ? classNameKindIdMap : classNameKindIdMap.filter(n => !!n);
