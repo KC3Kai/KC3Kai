@@ -385,7 +385,7 @@ Used by SortieManager
 		/* Features of long range radar ambush battle implemented since Winter 2019:
 		 *   no formation selection, 1 (single) or 14 (combined) by default;
 		 *   shelling phase only, no friendly ship can attack, defend like air raid node;
-		 *   no detection, no contact, no air battle, no night gear triggered;
+		 *   no detection, no contact, no air battle (but LBAS comes), no night gear triggered;
 		 *   night battle background, but API data structures follow day battle;
 		 *   friendly contact icon of in-game right top is fixed to red radar wave sign;
 		 */
