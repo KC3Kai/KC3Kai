@@ -2782,7 +2782,7 @@
 	},
 	"1075": {
 		"api_id": 1075,
-		"api_name": "秋刀魚満潮",
+		"api_name": "秋刀魚大潮",
 		"api_yomi": "おおしお",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -2790,7 +2790,7 @@
 	},
 	"1076": {
 		"api_id": 1076,
-		"api_name": "秋刀魚満潮改二",
+		"api_name": "秋刀魚大潮改二",
 		"api_yomi": "おおしお",
 		"api_stype": 2,
 		"api_soku": 10,

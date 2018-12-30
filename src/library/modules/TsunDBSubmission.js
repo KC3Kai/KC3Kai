@@ -319,7 +319,7 @@
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
 				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
-				this.data.gaugeNum = mapData.api_gauge_num || 1;
+				this.data.gaugeNum = mapData.api_gauge_num;
 				this.data.gaugeType = mapData.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
