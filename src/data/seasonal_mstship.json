@@ -2868,6 +2868,22 @@
 		"api_soku": 5,
 		"api_slot_num": 2
 	},
+	"1089": {
+		"api_id": 1089,
+		"api_name": "秋の私服対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1090": {
+		"api_id": 1090,
+		"api_name": "シュークリームRichelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
 	"1091": {
 		"api_id": 1091,
 		"api_name": "Xmas岸波",
@@ -2931,5 +2947,13 @@
 		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"1099": {
+		"api_id": 1099,
+		"api_name": "超スーパー修羅場秋雲",
+		"api_yomi": "あきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

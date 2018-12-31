@@ -1395,7 +1395,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 42, 46].includes(type2))
+				if([1, 2, 3, 4, 5, 19, 22, 24, 29, 36, 42, 46].includes(type2))
 					modifier = 1;
 				break;
 			case "asw":
