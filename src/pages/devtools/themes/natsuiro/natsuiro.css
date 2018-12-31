@@ -3038,6 +3038,9 @@ ABYSS FLEET
 	float:left;
 	margin:0px 5px 0px 0px;
 }
+.module.fleet .attack_cutin {
+	background-color: rebeccapurple !important;
+}
 /* Long Ship */
 .module.fleet .lship {
 	width:340px;

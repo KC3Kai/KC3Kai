@@ -1004,6 +1004,8 @@
 					localStorage.lastBackupReminder = currentTime;
 				}
 			}
+
+			localStorage.setItem('attackCutin', JSON.stringify({}))
 		},
 
 		CatBomb: function(data){
@@ -1498,6 +1500,33 @@
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
 
+			var checkAttackCutin = (attackCutin, fleetIndex, shipIndex) => {
+				if (fleetIndex !== attackCutin.fleet) {
+					return false
+				}
+				switch (attackCutin.type) {
+					case 100:
+						return !(shipIndex % 2)
+					case 101:
+						return shipIndex < 2
+				}
+				return false
+			}
+
+			var attackCutin = {}
+			if (isSentOut) {
+				attackCutin = JSON.parse(localStorage.getItem('attackCutin')) || {}
+				var predictedFleets = thisNode.predictedFleetsDay || thisNode.predictedFleetsNight
+				if (predictedFleets) {
+					var cutinData = predictedFleets.playerMain[0].attacks.filter(attack => (attack.cutin || attack.ncutin) >= 100)
+					if (cutinData.length) {
+						attackCutin.fleet = KC3SortieManager.fleetSent
+						attackCutin.type = cutinData[0].cutin || cutinData[0].ncutin
+						localStorage.setItem('attackCutin', JSON.stringify(attackCutin))
+					}
+				}
+			}
+
 			// COMBINED
 			if(selectedFleet == 5){
 				var MainFleet = PlayerManager.fleets[0];
@@ -1518,7 +1547,8 @@
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
-							.defineShort( MainFleet )
+							.defineShort(MainFleet)
+							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, 1, index))
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -1545,7 +1575,8 @@
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
-							.defineShort( EscortFleet )
+							.defineShort(EscortFleet)
+							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, 2, index))
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
@@ -1635,8 +1666,9 @@
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
-							.defineLong( CurrentFleet )
+							.defineLong(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
+							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, selectedFleet, index))
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
