@@ -3041,8 +3041,21 @@ ABYSS FLEET
 	float:left;
 	margin:0px 5px 0px 0px;
 }
+.module.fleet .hp_repairing {
+	background-color: rgba(100, 255, 100, 0.3);
+}
+.module.fleet .hp_fcf {
+	background-color: rgba(255, 255, 255, 0.4);
+}
+.module.fleet .akashiMark {
+	background-color: rgba(191, 255, 100, 0.15);
+}
 .module.fleet .attack_cutin {
-	background-color: rebeccapurple !important;
+	background-color: rebeccapurple;
+}
+.module.fleet .hp_taiha,
+.module.fleet .hp_taiha.attack_cutin {
+	background-color: rgba(255, 0, 0, 0.4);
 }
 /* Long Ship */
 .module.fleet .lship {
@@ -3215,6 +3228,24 @@ ABYSS FLEET
 	border:1px solid #000;
 	background:#555;
 	position:relative;
+}
+.module.fleet .ship_hp_bar.hp_repairing {
+	background-color: #aaccee;
+}
+.module.fleet .ship_hp_bar.hp_fcf {
+	background-color: #fff;
+}
+.module.fleet .ship_hp_bar.hp_normal {
+	background-color: #0f0;
+}
+.module.fleet .ship_hp_bar.hp_shouha {
+	background-color: #ff0;
+}
+.module.fleet .ship_hp_bar.hp_chuuha {
+	background-color: #f90;
+}
+.module.fleet .ship_hp_bar.hp_taiha {
+	background-color: #f00;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;

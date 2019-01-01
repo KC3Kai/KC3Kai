@@ -244,7 +244,7 @@
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box colors
-		this.element.css("background-color", "transparent");
+		// this.element.css("background-color", "transparent");
 		
 		// Import repair time script by @Javran
 		var repairTimes = this.shipData.repairTime();
@@ -262,37 +262,42 @@
 			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
 				.lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
 		}
-		
+
+		// Clear all classes
+		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark']
+		this.element.removeClass(hpClasses.join(' '))
+		$(".ship_hp_bar", this.element).removeClass(hpClasses.join(' '))
+
 		// If ship is being repaired
-		if( PlayerManager.repairShips.indexOf( this.shipData.rosterId ) > -1){
-			$(".ship_hp_bar", this.element).css("background", "#aaccee");
-			this.element.css("background-color", "rgba(100,255,100,0.3)");
-		// If not being repaired
-		}else{
-			if(this.shipData.didFlee){
+		if (PlayerManager.repairShips.indexOf(this.shipData.rosterId) > -1) {
+			$(".ship_hp_bar", this.element).addClass("hp_repairing")
+			this.element.addClass("hp_repairing")
+			// If not being repaired
+		} else {
+			if (this.shipData.didFlee) {
 				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
 				// if FCF, mark background and hp bar as white
-				$(".ship_hp_bar", this.element).css("background", "#fff");
-				this.element.css("background", "rgba(255,255,255,0.4)");
-			}else{
-				if(hpPercent <= 0.25){
+				$(".ship_hp_bar", this.element).addClass("hp_fcf")
+				this.element.addClass("hp_fcf")
+			} else {
+				if (hpPercent <= 0.25) {
 					// mark hp bar and container box as red if taiha
-					$(".ship_hp_bar", this.element).css("background", "#FF0000");
-					this.element.css("background", "rgba(255,0,0,0.4)");
-				} else if(hpPercent <= 0.50){
-					$(".ship_hp_bar", this.element).css("background", "#FF9900");
-				} else if(hpPercent <= 0.75){
-					$(".ship_hp_bar", this.element).css("background", "#FFFF00");
-				} else{
-					$(".ship_hp_bar", this.element).css("background", "#00FF00");
+					$(".ship_hp_bar", this.element).addClass("hp_taiha")
+					this.element.addClass("hp_taiha")
+				} else if (hpPercent <= 0.50) {
+					$(".ship_hp_bar", this.element).addClass("hp_chuuha")
+				} else if (hpPercent <= 0.75) {
+					$(".ship_hp_bar", this.element).addClass("hp_shouha")
+				} else {
+					$(".ship_hp_bar", this.element).addClass("hp_normal")
 				}
 			}
-			
-			if(this.shipData.akashiMark) {
-				this.element.css("background-color", "rgba(191,255,100,0.15)");
+
+			if (this.shipData.akashiMark) {
+				this.element.addClass("akashiMark")
 			}
 		}
-		
+
 		this.hideAkashi();
 	};
 	
