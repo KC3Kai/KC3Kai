@@ -1004,8 +1004,6 @@
 					localStorage.lastBackupReminder = currentTime;
 				}
 			}
-
-			localStorage.setItem('attackCutin', JSON.stringify({}))
 		},
 
 		CatBomb: function(data){
@@ -1499,33 +1497,7 @@
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
-
-			var checkAttackCutin = (attackCutin, fleetIndex, shipIndex) => {
-				if (fleetIndex !== attackCutin.fleet) {
-					return false
-				}
-				switch (attackCutin.type) {
-					case 100:
-						return !(shipIndex % 2)
-					case 101:
-						return shipIndex < 2
-				}
-				return false
-			}
-
-			var attackCutin = {}
-			if (isSentOut) {
-				attackCutin = JSON.parse(localStorage.getItem('attackCutin')) || {}
-				var predictedFleets = thisNode.predictedFleetsDay || thisNode.predictedFleetsNight
-				if (predictedFleets) {
-					var cutinData = predictedFleets.playerMain[0].attacks.filter(attack => (attack.cutin || attack.ncutin) >= 100)
-					if (cutinData.length) {
-						attackCutin.fleet = KC3SortieManager.fleetSent
-						attackCutin.type = cutinData[0].cutin || cutinData[0].ncutin
-						localStorage.setItem('attackCutin', JSON.stringify(attackCutin))
-					}
-				}
-			}
+			var sortieSpecialAttack = ConfigManager.info_compass ? (thisNode.sortieSpecialAttack || []) : [];
 
 			// COMBINED
 			if(selectedFleet == 5){
@@ -1548,7 +1520,7 @@
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
 							.defineShort(MainFleet)
-							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, 1, index))
+							.toggleClass("attack_cutin", !!sortieSpecialAttack[index])
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -1576,7 +1548,6 @@
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
 							.defineShort(EscortFleet)
-							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, 2, index))
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
@@ -1668,7 +1639,7 @@
 							.commonElements()
 							.defineLong(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
-							.toggleClass("attack_cutin", checkAttackCutin(attackCutin, selectedFleet, index))
+							.toggleClass("attack_cutin", !!sortieSpecialAttack[index])
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
@@ -3003,6 +2974,13 @@
 						.delay( 5000 )
 						.fadeOut(1000, function(){ $(this).remove(); } );
 				});
+			}
+
+			// Add background to node letter if one-time special attack was used
+			const numNodes = KC3SortieManager.countNodes();
+			if (thisNode.sortieSpecialAttack && ConfigManager.info_compass) {
+				$(".module.activity .sortie_node_"+numNodes)
+					.toggleClass("attack_cutin", true);
 			}
 		},
 

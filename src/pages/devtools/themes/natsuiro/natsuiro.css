@@ -635,6 +635,9 @@ html,body {
 	font-size:9px;
 	letter-spacing:-1px;
 }
+.module.activity .sortie_node.attack_cutin {
+	box-shadow: 0px 0px 2px 2px #FF8C00;
+}
 .module.activity .sortie_nodes .boss_node {
 	float:left;
 	position:absolute;
