@@ -264,37 +264,37 @@
 		}
 
 		// Clear all classes
-		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark']
-		this.element.removeClass(hpClasses.join(' '))
-		$(".ship_hp_bar", this.element).removeClass(hpClasses.join(' '))
+		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark'];
+		this.element.removeClass(hpClasses.join(' '));
+		$(".ship_hp_bar", this.element).removeClass(hpClasses.join(' '));
 
 		// If ship is being repaired
 		if (PlayerManager.repairShips.indexOf(this.shipData.rosterId) > -1) {
-			$(".ship_hp_bar", this.element).addClass("hp_repairing")
-			this.element.addClass("hp_repairing")
+			$(".ship_hp_bar", this.element).addClass("hp_repairing");
+			this.element.addClass("hp_repairing");
 			// If not being repaired
 		} else {
 			if (this.shipData.didFlee) {
 				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
 				// if FCF, mark background and hp bar as white
-				$(".ship_hp_bar", this.element).addClass("hp_fcf")
-				this.element.addClass("hp_fcf")
+				$(".ship_hp_bar", this.element).addClass("hp_fcf");
+				this.element.addClass("hp_fcf");
 			} else {
 				if (hpPercent <= 0.25) {
 					// mark hp bar and container box as red if taiha
-					$(".ship_hp_bar", this.element).addClass("hp_taiha")
-					this.element.addClass("hp_taiha")
+					$(".ship_hp_bar", this.element).addClass("hp_taiha");
+					this.element.addClass("hp_taiha");
 				} else if (hpPercent <= 0.50) {
-					$(".ship_hp_bar", this.element).addClass("hp_chuuha")
+					$(".ship_hp_bar", this.element).addClass("hp_chuuha");
 				} else if (hpPercent <= 0.75) {
-					$(".ship_hp_bar", this.element).addClass("hp_shouha")
+					$(".ship_hp_bar", this.element).addClass("hp_shouha");
 				} else {
-					$(".ship_hp_bar", this.element).addClass("hp_normal")
+					$(".ship_hp_bar", this.element).addClass("hp_normal");
 				}
 			}
 
 			if (this.shipData.akashiMark) {
-				this.element.addClass("akashiMark")
+				this.element.addClass("akashiMark");
 			}
 		}
 

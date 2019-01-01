@@ -908,6 +908,7 @@
 		$(".module.activity .sortie_node").text("").removeAttr("title")
 			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
+		$(".module.activity .sortie_node").removeClass("attack_cutin");
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
 		$(".module.activity .node_types").hide();
