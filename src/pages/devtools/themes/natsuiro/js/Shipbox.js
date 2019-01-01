@@ -264,9 +264,9 @@
 		}
 
 		// Clear all classes
-		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark'];
-		this.element.removeClass(hpClasses.join(' '));
-		$(".ship_hp_bar", this.element).removeClass(hpClasses.join(' '));
+		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark'].join(' ');
+		this.element.removeClass(hpClasses);
+		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 
 		// If ship is being repaired
 		if (PlayerManager.repairShips.indexOf(this.shipData.rosterId) > -1) {
