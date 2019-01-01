@@ -1263,7 +1263,7 @@ KC3改 Equipment Object
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
-			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
+			if(Array.isArray(bonusDef.excludes) && bonusDef.excludes.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
