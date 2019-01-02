@@ -1987,12 +1987,15 @@ KC3改 Equipment Object
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
 			// Postcap LBAA recon modifier if LB recon is present
-			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
 			// https://twitter.com/syoukuretin/status/1068477784232587264
 			// https://twitter.com/Nishisonic/status/1080146808318263296
-			const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
-			const lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
-				lbfpReconModifier === 1.18 ? 1.15 : 1;
+			let lbaaReconModifier = 1;
+			if(isLbaa) {
+				// Check LB recon and set the value according FP modifier
+				const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
+				lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
+					lbfpReconModifier === 1.18 ? 1.15 : 1;
+			}
 			const onNormal = Math.floor(lbasPower
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			// Proficiency critical modifier has been applied sometime since 2017-12-11?
