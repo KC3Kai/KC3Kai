@@ -191,6 +191,13 @@ AntiAir: anti-air related calculations
 		return [191, 301].indexOf(mst.api_id) !== -1;
 	}
 
+	// GFCS Mk.37
+	var isGfcsRadar = masterIdEq(307);
+	// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
+	var is5inchSingleMountKaiWithGfcs = masterIdEq(308);
+	// 5inch Single Gun Mount Mk.30 Kai
+	var is5inchSingleMountKai = masterIdEq(313);
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -504,6 +511,7 @@ AntiAir: anti-air related calculations
 		hamakazeBkIcon = 558,
 		warspiteIcon = 439,
 		gotlandKaiIcon = 579,
+		johnstonIcon = 562,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -516,7 +524,8 @@ AntiAir: anti-air related calculations
 		haMountNbifdIcon = "16-30", // HA without AAFD
 		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
 		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
-		haMountKaiAmg = "16+15";    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
+		haMountKaiAmg = "16+15",    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
+		haMountKaiRadar = "16+11";  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
 
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
@@ -533,6 +542,9 @@ AntiAir: anti-air related calculations
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
+	// Both base form and Kai
+	var isJohnston = predAnyOf( masterIdEq(johnstonIcon), masterIdEq(689) );
+
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
@@ -930,6 +942,46 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( isHighAngleMount ),
 				hasSome( isAAGun ))
+		)
+	);
+
+	// WiP Johnston all forms
+	declareAACI(
+		34, 7, 1.1,
+		[johnstonIcon, haMountKaiRadar, haMountKaiRadar],
+		predAllOf(isJohnston),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ))
+		)
+	);
+	declareAACI(
+		35, 1, 1.1,
+		[johnstonIcon, haMountKaiRadar, haMountIcon],
+		predAllOf(isJohnston),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is5inchSingleMountKaiWithGfcs ),
+				hasSome( is5inchSingleMountKai ))
+		)
+	);
+	declareAACI(
+		36, 1, 1.1,
+		[johnstonIcon, haMountIcon, haMountIcon, radarIcon],
+		predAllOf(isJohnston),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchSingleMountKai, 2 ),
+				hasSome( isGfcsRadar ))
+		)
+	);
+	declareAACI(
+		37, 1, 1.1,
+		[johnstonIcon, haMountIcon, haMountIcon],
+		predAllOf(isJohnston),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchSingleMountKai, 2 ))
 		)
 	);
 

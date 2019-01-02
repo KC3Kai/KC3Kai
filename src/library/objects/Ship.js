@@ -1209,8 +1209,8 @@ KC3改 Ship Object
 		const powerBounds = this.equipment().map((g, i) => g.fighterBounds(this.slots[i], forLbas));
 		const reconModifier = this.fighterPowerReconModifier(forLbas);
 		return [
-			powerBounds.map(b => b[0]).sumValues() * reconModifier,
-			powerBounds.map(b => b[1]).sumValues() * reconModifier
+			Math.floor(powerBounds.map(b => b[0]).sumValues() * reconModifier),
+			Math.floor(powerBounds.map(b => b[1]).sumValues() * reconModifier)
 		];
 	};
 
@@ -1227,7 +1227,7 @@ KC3改 Ship Object
 				const los = gear.master().api_saku;
 				reconModifier = Math.max(reconModifier,
 					(los <= 7) ? 1.15 : // unknown
-					(los >= 9) ? 1.15 : // unknown
+					(los >= 9) ? 1.18 :
 					1.15
 				);
 			}
@@ -1247,11 +1247,18 @@ KC3改 Ship Object
 			if(KC3GearManager.landBaseReconnType2Ids.includes(type2)){
 				const los = gear.master().api_saku;
 				// Carrier Recon Aircraft
-				if(type2 == 9){
+				if(type2 === 9){
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.2 :
 						(los >= 9) ? 1.3 :
 						1 // unknown
+					);
+				// LB Recon Aircraft
+				} else if(type2 === 49){
+					reconModifier = Math.max(reconModifier,
+						(los <= 7) ? 1.18 : // unknown
+						(los >= 9) ? 1.18 : // unknown
+						1.18
 					);
 				// Recon Seaplane, Flying Boat, etc
 				} else {
@@ -1918,13 +1925,21 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
+		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Cutin
+		// https://twitter.com/syoukuretin/status/1071656926411337728
+		let nagatoCutinRadarModifier = 1;
+		if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 101) {
+			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
+			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
+		}
+		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		let result = Math.floor(Math.floor(
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier;
+			* antiPtImpModifier * nagatoCutinRadarModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -1955,6 +1970,7 @@ KC3改 Ship Object
 			dayCutinModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
+			nagatoCutinRadarModifier,
 			antiPtImpModifier,
 			antiLandAdditive,
 			antiLandModifier,
@@ -2082,8 +2098,8 @@ KC3改 Ship Object
 
 	// is this ship able to do OASW unconditionally
 	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai
-		return [141, 478, 394, 681].includes(this.masterId);
+		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai, Johnston
+		return [141, 478, 394, 681, 562, 689].includes(this.masterId);
 	};
 	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
@@ -2319,7 +2335,7 @@ KC3改 Ship Object
 		if(KC3Meta.nagatoCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
-				const isEchelon = [4].includes(
+				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -2391,7 +2407,7 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2447,7 +2463,9 @@ KC3改 Ship Object
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoCutin()) {
 				const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-				return KC3Ship.specialAttackTypeDay(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
+				const hasApShell = this.hasEquipmentType(2, 19);
+				return KC3Ship.specialAttackTypeDay(101, null,
+					1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2597,7 +2615,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 1.61],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2679,7 +2697,9 @@ KC3改 Ship Object
 				// special Nagato Cutin since 2018-11-16
 				if(this.canDoNagatoCutin()) {
 					const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-					return KC3Ship.specialAttackTypeNight(101, null, isPartnerMutsuKai ? 1.61 : 1.4);
+					const hasApShell = this.hasEquipmentType(2, 19);
+					return KC3Ship.specialAttackTypeNight(101, null,
+						1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
@@ -2785,7 +2805,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
 		if(this.isDummy()) { return {}; }
-		const byLevel = 2 * Math.sqrt(this.level - 1);
+		const byLevel = 2 * Math.sqrt(this.level);
 		// formula from PSVita is sqrt(1.5 * lk) anyway,
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
@@ -3131,6 +3151,7 @@ KC3改 Ship Object
 	/**
 	 * To calculate 12cm 30tube Rocket Launcher Kai Ni (Rosa K2) trigger chance (for now),
 	 * we need adjusted AA of ship, number of Rosa K2, ctype and luck stat.
+	 * @see https://twitter.com/noratako5/status/1062027534026428416 - luck modifier
 	 * @see https://twitter.com/kankenRJ/status/979524073934893056 - current formula
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:2471 - old formula verifying thread
 	 */
@@ -3146,7 +3167,7 @@ KC3改 Ship Object
 		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Rounding to x%
 		return Math.qckInt("floor",
-			(this.adjustedAntiAir() + this.lk[0]) /
+			(this.adjustedAntiAir() + this.lk[0] * 0.9) /
 				(400 - (rosaAdjustedAntiAir + 30 + 40 * rosaCount + classBonus)) * 100,
 			0);
 	};

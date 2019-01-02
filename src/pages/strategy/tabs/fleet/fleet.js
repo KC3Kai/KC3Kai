@@ -164,7 +164,7 @@
 			$("button#control_export_imgkcbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj, true );
 				console.log( "JSON to be exported", JSON.stringify( converted ) );
-				window.open("http://nishisonic.xsrv.jp/app/ImgKCbuilder/?predeck="+
+				window.open("https://www.nishikuma.net/ImgKCbuilder/?predeck="+
 							encodeURI( JSON.stringify( converted )));
 			});
 

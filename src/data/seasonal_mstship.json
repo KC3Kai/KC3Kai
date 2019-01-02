@@ -177,7 +177,7 @@
 	},
 	"751": {
 		"api_id": 751,
-		"api_name": "XmasLibeccio",
+		"api_name": "クリスマスLibeccio",
 		"api_yomi": "リベッチオ",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -734,7 +734,7 @@
 	},
 	"819": {
 		"api_id": 819,
-		"api_name": "ValentineCommandant Teste",
+		"api_name": "バレンタインCommandant Teste",
 		"api_yomi": "コマンダン・テスト",
 		"api_stype": 16,
 		"api_soku": 5,
@@ -886,7 +886,7 @@
 	},
 	"838": {
 		"api_id": 838,
-		"api_name": "XmasCommandant Teste",
+		"api_name": "クリスマスCommandant Teste",
 		"api_yomi": "コマンダン・テスト",
 		"api_stype": 16,
 		"api_soku": 5,
@@ -2700,10 +2700,138 @@
 		"api_soku": 10,
 		"api_slot_num": 3
 	},
+	"1065": {
+		"api_id": 1065,
+		"api_name": "秋刀魚択捉",
+		"api_yomi": "えとろふ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1066": {
+		"api_id": 1066,
+		"api_name": "秋刀魚佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
 	"1067": {
 		"api_id": 1067,
 		"api_name": "秋刀魚朝霜",
 		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1068": {
+		"api_id": 1068,
+		"api_name": "秋刀魚岸波",
+		"api_yomi": "きしなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1069": {
+		"api_id": 1069,
+		"api_name": "秋刀魚沖波",
+		"api_yomi": "おきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1070": {
+		"api_id": 1070,
+		"api_name": "秋刀魚Commandant Teste",
+		"api_yomi": "コマンダン・テスト",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"1071": {
+		"api_id": 1071,
+		"api_name": "秋刀魚Gambier Bay",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1072": {
+		"api_id": 1072,
+		"api_name": "秋刀魚Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1073": {
+		"api_id": 1073,
+		"api_name": "秋刀魚満潮",
+		"api_yomi": "みちしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1074": {
+		"api_id": 1074,
+		"api_name": "秋刀魚祥鳳",
+		"api_yomi": "しょうほう",
+		"api_stype": 7,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1075": {
+		"api_id": 1075,
+		"api_name": "秋刀魚大潮",
+		"api_yomi": "おおしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1076": {
+		"api_id": 1076,
+		"api_name": "秋刀魚大潮改二",
+		"api_yomi": "おおしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1077": {
+		"api_id": 1077,
+		"api_name": "秋刀魚初月",
+		"api_yomi": "はつづき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1078": {
+		"api_id": 1078,
+		"api_name": "秋刀魚曙",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1079": {
+		"api_id": 1079,
+		"api_name": "秋刀魚潮",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1080": {
+		"api_id": 1080,
+		"api_name": "秋刀魚朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1081": {
+		"api_id": 1081,
+		"api_name": "秋刀魚漣",
+		"api_yomi": "さざなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
@@ -2731,5 +2859,101 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"1085": {
+		"api_id": 1085,
+		"api_name": "秋の味覚瑞穂",
+		"api_yomi": "みずほ",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1089": {
+		"api_id": 1089,
+		"api_name": "晩秋の私服対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1090": {
+		"api_id": 1090,
+		"api_name": "シュークリームRichelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1091": {
+		"api_id": 1091,
+		"api_name": "Xmas岸波",
+		"api_yomi": "きしなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1092": {
+		"api_id": 1092,
+		"api_name": "Xmas浜波",
+		"api_yomi": "はまなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1093": {
+		"api_id": 1093,
+		"api_name": "Xmas松輪",
+		"api_yomi": "まつわ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1094": {
+		"api_id": 1094,
+		"api_name": "クリスマスGotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1095": {
+		"api_id": 1095,
+		"api_name": "Xmas瑞鶴",
+		"api_yomi": "ずいかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1096": {
+		"api_id": 1096,
+		"api_name": "クリスマスMaestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1097": {
+		"api_id": 1097,
+		"api_name": "Xmas福江",
+		"api_yomi": "ふかえ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1098": {
+		"api_id": 1098,
+		"api_name": "Xmas酒匂",
+		"api_yomi": "さかわ",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1099": {
+		"api_id": 1099,
+		"api_name": "超スーパー修羅場秋雲",
+		"api_yomi": "あきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

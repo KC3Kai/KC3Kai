@@ -434,7 +434,7 @@
     /**
      * Calculates the timestamp of next in-game Quest/PvP/RankPtCutOff reset.
      * @param {number} now - timestamp of 'now', current timestamp by default.
-     * @return {Object} an Object contains timestamp of {quest, pvp, rank}.
+     * @return {Object} an Object contains timestamp of {quest, pvp, rank, quarterly}.
      */
     const nextResetsTimestamp = (now = Date.now()) => {
         // Next Quest reset time (UTC 2000 / JST 0500)
@@ -442,6 +442,8 @@
             utc6am = new Date(now), utc6pm = new Date(now);
         utc8pm.setUTCHours(20, 0, 0, 0);
         if(utc8pm.getTime() < now) utc8pm.shiftDate(1);
+        // Next Quarterly Quests reset time
+        const quarterlyUtc8pm = KC3QuestManager.repeatableTypes.quarterly.calculateNextReset(now);
         // Next PvP reset time (UTC 1800,0600 / JST 0300,1500)
         utc6am.setUTCHours(6, 0, 0, 0);
         utc6pm.setUTCHours(18, 0, 0, 0);
@@ -466,13 +468,14 @@
             quest: utc8pm.getTime(),
             pvp: nextPvPstamp,
             rank: nextPtCutoff.getTime(),
+            quarterly: quarterlyUtc8pm,
         };
     };
 
     /**
      * Calculates remaining time until next in-game Quest/PvP/RankPtCutOff reset.
      * @param {number} now - timestamp of 'now', current timestamp by default.
-     * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank}.
+     * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank, quarterly}.
      */
     const remainingTimeUntilNextResets = (now = Date.now()) => {
         const nextResets = nextResetsTimestamp(now);
@@ -480,6 +483,7 @@
             quest: String(Math.floor((nextResets.quest - now) / 1000)).toHHMMSS(),
             pvp: String(Math.floor((nextResets.pvp - now) / 1000)).toHHMMSS(),
             rank: String(Math.floor((nextResets.rank - now) / 1000)).toHHMMSS(),
+            quarterly: String(Math.floor((nextResets.quarterly - now) / 1000)).toHHMMSS(true),
         };
     };
 

@@ -1082,6 +1082,10 @@ Previously known as "Reactor"
 			response.api_data.api_name = "ld_airbattle";
 			this["api_req_sortie/battle"].apply(this,arguments);
 		},
+		"api_req_sortie/ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "ld_shooting";
+			this["api_req_sortie/battle"].apply(this,arguments);
+		},
 		
 		/* PLAYER-ONLY COMBINED FLEET: BATTLE STARTS
 		-------------------------------------------------------*/
@@ -1104,6 +1108,10 @@ Previously known as "Reactor"
 		},
 		"api_req_combined_battle/ld_airbattle":function(params, response, headers){
 			response.api_data.api_name = "fc_ld_airbattle";
+			this["api_req_combined_battle/battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "fc_ld_shooting";
 			this["api_req_combined_battle/battle"].apply(this,arguments);
 		},
 		
@@ -1200,6 +1208,10 @@ Previously known as "Reactor"
 		},
 		"api_req_combined_battle/each_ld_airbattle":function(params, response, headers){
 			response.api_data.api_name = "each_ld_airbattle";
+			this["api_req_combined_battle/each_battle"].apply(this,arguments);
+		},
+		"api_req_combined_battle/each_ld_shooting":function(params, response, headers){
+			response.api_data.api_name = "each_ld_shooting";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		
@@ -2088,14 +2100,20 @@ Previously known as "Reactor"
 					kind: "single"
 				};
 				
-				// Check for boss gauge kills
-				if(thisMap.api_defeat_count !== undefined) {
-					localMap.kills = thisMap.api_defeat_count;
-					localMap.kind  = "multiple";
-					// for this case, api_gauge_type == 1
-					if(thisMap.api_required_defeat_count !== undefined) {
-						localMap.killsRequired = thisMap.api_required_defeat_count;
+				// Check for boss gauge of kills
+				if(thisMap.api_gauge_type === 1 || thisMap.api_defeat_count !== undefined) {
+					localMap.kind = "multiple";
+					if(thisMap.api_defeat_count !== undefined) {
+						localMap.kills = thisMap.api_defeat_count;
+						if(thisMap.api_required_defeat_count !== undefined) {
+							localMap.killsRequired = thisMap.api_required_defeat_count;
+						}
+					} else {
+						localMap.kills = false;
+						// to indicate in-game gauge disappeared after cleared
+						delete localMap.killsRequired;
 					}
+					// since 2018-11-16 map 7-2
 					if(thisMap.api_gauge_num !== undefined) {
 						localMap.gaugeNum = thisMap.api_gauge_num;
 					}
@@ -2111,9 +2129,10 @@ Previously known as "Reactor"
 					localMap.curhp      = eventData.api_now_maphp;
 					localMap.maxhp      = eventData.api_max_maphp;
 					localMap.difficulty = eventData.api_selected_rank;
-					localMap.gaugeType  = eventData.api_gauge_type || 0;
+					// moved to parent node as normal maps since Winter 2019
+					localMap.gaugeType  = eventData.api_gauge_type || thisMap.api_gauge_type || 0;
 					// added since Winter 2018
-					localMap.gaugeNum   = eventData.api_gauge_num || 1;
+					localMap.gaugeNum   = eventData.api_gauge_num || thisMap.api_gauge_num || 1;
 					
 					switch(localMap.gaugeType) {
 						case 0:
@@ -2125,7 +2144,7 @@ Previously known as "Reactor"
 							break;
 						default:
 							localMap.kind = "gauge-hp";
-							console.info("Reported unknown API gauge type", eventData.api_gauge_type);/*RemoveLogging:skip*/
+							console.info("Reported unknown API gauge type", localMap.gaugeType);/*RemoveLogging:skip*/
 					}
 					
 					if(oldMap !== undefined) {
@@ -2599,6 +2618,11 @@ Previously known as "Reactor"
 					[893,1,[7,1], true], // Bq8: 2nd requirement: [W7-1] S-rank the boss node 3 times
 					[893,2,[7,2], true, false, [7] ], // Bq8: 3rd requirement: [W7-2-G] S-rank 1st boss node 3 times
 					[893,3,[7,2], true, false, [15]], // Bq8: 4th requirement: [W7-2-M] S-rank 2nd boss node 3 times
+					[894,0,[1,3], true, true], // Bq9: 1st requirement: [W1-3] S-rank the boss node
+					[894,1,[1,4], true, true], // Bq9: 2nd requirement: [W1-4] S-rank the boss node
+					[894,2,[2,1], true, true], // Bq9: 3rd requirement: [W2-1] S-rank the boss node
+					[894,3,[2,2], true, true], // Bq9: 4th requirement: [W2-2] S-rank the boss node
+					[894,4,[2,3], true, true], // Bq9: 5th requirement: [W2-3] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

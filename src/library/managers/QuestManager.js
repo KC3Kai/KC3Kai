@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893],
+				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893, 894],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -542,6 +542,11 @@ Uses KC3Quest objects to play around with
 							   fleet.countShip(51)  + // Tenryuu any remodel
 							   fleet.countShip(115)   // Yuubari any remodel
 							>= 4;
+					},
+				"894": // Bq9 Sortie 1 CV(L/B)
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([7, 11, 18]) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

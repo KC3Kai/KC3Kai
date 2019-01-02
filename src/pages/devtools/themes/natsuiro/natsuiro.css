@@ -407,6 +407,9 @@ html,body {
 	color:#FF7979;
 }
 .module.activity .consumable_text.danger {
+	color:#EAF918;
+}
+.module.activity .consumable_text.fulled {
 	color:#FF7979;
 }
 .module.activity .consumable_max {
@@ -632,6 +635,9 @@ html,body {
 	font-size:9px;
 	letter-spacing:-1px;
 }
+.module.activity .sortie_node.special_cutin {
+	box-shadow:0px 0px 3px 1px #a08;
+}
 .module.activity .sortie_nodes .boss_node {
 	float:left;
 	position:absolute;
@@ -702,6 +708,16 @@ html,body {
 		#7d0000;
 	background:
 		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(238, 34, 0, 0.8) 75%),
+		#7d0000;
+	background-size: 28px 27px;
+	background-position: -53px -66px;
+}
+.module.activity .sortie_node.nc_long_range_raid {
+	background:
+		-webkit-linear-gradient(top right, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
+		#7d0000;
+	background:
+		linear-gradient(to bottom left, rgba(0,0,0,0) 75%, rgba(255, 152, 0, 0.8) 75%),
 		#7d0000;
 	background-size: 28px 27px;
 	background-position: -53px -66px;
@@ -3025,6 +3041,21 @@ ABYSS FLEET
 	float:left;
 	margin:0px 5px 0px 0px;
 }
+.module.fleet .shiplist .special_cutin {
+	background-color:rgba(170, 0, 136, 0.4);
+}
+.module.fleet .shiplist .hp_repairing {
+	background-color:rgba(100, 255, 100, 0.3);
+}
+.module.fleet .shiplist .hp_fcf {
+	background-color:rgba(255, 255, 255, 0.4);
+}
+.module.fleet .shiplist .akashiMark {
+	background-color:rgba(191, 255, 100, 0.15);
+}
+.module.fleet .shiplist .hp_taiha {
+	background-color:rgba(255, 0, 0, 0.4);
+}
 /* Long Ship */
 .module.fleet .lship {
 	width:340px;
@@ -3196,6 +3227,24 @@ ABYSS FLEET
 	border:1px solid #000;
 	background:#555;
 	position:relative;
+}
+.module.fleet .ship_hp_bar.hp_repairing {
+	background-color:#aaccee;
+}
+.module.fleet .ship_hp_bar.hp_fcf {
+	background-color:#fff;
+}
+.module.fleet .ship_hp_bar.hp_normal {
+	background-color:#0f0;
+}
+.module.fleet .ship_hp_bar.hp_shouha {
+	background-color:#ff0;
+}
+.module.fleet .ship_hp_bar.hp_chuuha {
+	background-color:#f90;
+}
+.module.fleet .ship_hp_bar.hp_taiha {
+	background-color:#f00;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;

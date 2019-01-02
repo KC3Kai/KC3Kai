@@ -279,7 +279,7 @@
 								mapBox.addClass("easymodokimoi");
 							}
 							// If this map is already cleared
-							if(element.clear == 1){
+							if(element.clear == 1 && !element.killsRequired){
 								$(".map_hp_txt", mapBox).text("Cleared!");
 								mapBox.addClass("cleared");
 								if (cWorld>=10) {
@@ -628,10 +628,8 @@
 						$.each(sortie.nodes, function(index, node) {
 							const letter = KC3Meta.nodeLetter(sortie.world, sortie.mapnum, node.id, sortieTime);
 							const isBattle = node.type === "battle";
-							const battleKind = ["", "",
-								"night_battle", "night_battle",
-								"air_battle", "enemy_combined", "air_raid", "night_to_day"
-								][node.eventKind];
+							const battleKind = KC3Node.knownNodeExtraClasses(true)
+								.map(s => s.substr(3))[node.eventKind];
 							edges.push(node.id);
 							$(".sortie_edge_"+(index+1), sortieBox)
 								.addClass("edge_" + node.type)
@@ -970,6 +968,10 @@
 									).lazyInitTooltip();
 								}
 							}
+							if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.some(v => !!v)) {
+								$(".node_id", nodeBox).addClass("special_cutin");
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
+							}
 							if(ConfigManager.sr_show_new_shipstate){
 								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
 								if(predicted){
@@ -1173,18 +1175,21 @@
 		}
 		
 		function updateMapHpInfo(self, sortieData) {
-			let mapId = ["m", sortieData.world, sortieData.mapnum].join("");
-			let mapData = self.maps[mapId] || {};
+			const mapId = ["m", sortieData.world, sortieData.mapnum].join("");
+			const mapData = self.maps[mapId] || {};
 			if(sortieData.mapinfo){
-				let maxKills = mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
-				if(!!sortieData.mapinfo.api_cleared){
-					sortieData.defeat_count = maxKills;
-				} else {
+				const maxKills = sortieData.mapinfo.api_required_defeat_count || mapData.killsRequired || KC3Meta.gauge(mapId.substr(1));
+				// keep defeat_count undefined after map cleared to hide replayer gauge
+				if(!sortieData.mapinfo.api_cleared || sortieData.mapinfo.api_required_defeat_count){
 					sortieData.defeat_count = sortieData.mapinfo.api_defeat_count || 0;
+					sortieData.required_defeat_count = maxKills;
+					// pass to replayer for the 2nd gauge of 7-2
+					sortieData.gauge_num = sortieData.mapinfo.api_gauge_num || 1;
 				}
-				console.debug("Map {0} boss gauge: {1}/{2} kills"
-					.format(mapId, sortieData.defeat_count, maxKills)
-				);
+				console.debug("Map {0} boss gauge {3}: {1}/{2} kills".format(mapId,
+					sortieData.defeat_count || (sortieData.mapinfo.api_cleared ? "post-cleared" : "?"),
+					maxKills, sortieData.gauge_num || 1
+				));
 			} else if(sortieData.eventmap && sortieData.eventmap.api_gauge_type !== undefined) {
 				sortieData.now_maphp = sortieData.eventmap.api_now_maphp;
 				sortieData.max_maphp = sortieData.eventmap.api_max_maphp;

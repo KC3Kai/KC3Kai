@@ -185,6 +185,7 @@
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
+				'api_req_sortie/ld_shooting': this.processEnemy,
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
 				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/airbattle': this.processEnemy,
@@ -192,6 +193,7 @@
 				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/battle_water': this.processEnemy,
 				'api_req_combined_battle/ld_airbattle': this.processEnemy,
+				'api_req_combined_battle/ld_shooting': this.processEnemy,
 				'api_req_combined_battle/ec_battle': this.processEnemy,
 				'api_req_combined_battle/each_battle': this.processEnemy,
 				'api_req_combined_battle/each_airbattle': this.processEnemy,
@@ -199,6 +201,7 @@
 				'api_req_combined_battle/each_battle_water': this.processEnemy,
 				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
+				'api_req_combined_battle/each_ld_shooting': this.processEnemy,
 				// Night battles as 2nd part following day part:
 				'api_req_battle_midnight/battle': [this.processFriendlyFleet, this.processGunfit],
 				'api_req_combined_battle/midnight_battle': this.processFriendlyFleet,
@@ -213,7 +216,6 @@
 				'api_req_kousyou/createitem': this.processDevelopment
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
-			this.updateGunfitsIfNeeded();
 		},
 		
 		processMapInfo: function(http) {
@@ -317,8 +319,8 @@
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
 				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
-				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num || 1;
-				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
+				this.data.gaugeNum = mapData.api_gauge_num;
+				this.data.gaugeType = mapData.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
 				this.sendData(this.data, 'eventrouting');
@@ -445,15 +447,20 @@
 					airBattle.planes = [];
 					airBattle.slots = [];
 					airBattle.proficiency = [];
+					airBattle.improvements = [];
+					airBattle.bases = bases.map(base => base.toShipObject().equipment().map(gear => gear.masterId));
+					airBattle.contact = koukuApi.api_stage1.api_touch_plane;
 					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
 						const baseInfo = bases[baseId - 1];
 						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
 						const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 						const planes = squadronPlanes.map(plane => plane.api_mst_id || -1);
-						const proficiency = shipObj.equipment().map(g => g.ace);
+						const proficiency = shipObj.equipment().map(g => g.ace || -1);
+						const improvements = shipObj.equipment().map(g => g.stars || -1);
 						airBattle.planes.push(planes);
 						airBattle.slots.push(shipObj.slots);
 						airBattle.proficiency.push(proficiency);
+						airBattle.improvements.push(improvements);
 						fp += shipObj.interceptionPower();
 					});
 					if(koukuApi.api_stage3) {

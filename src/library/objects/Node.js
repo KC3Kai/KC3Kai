@@ -24,12 +24,13 @@ Used by SortieManager
 	KC3Node.debugPrediction = function() { return false; };
 	
 	// Update this list if more extra classes added
-	KC3Node.knownNodeExtraClasses = function(){
-		return [
-			"nc_night_battle", "nc_air_battle",
-			"nc_enemy_combined", "nc_air_raid",
-			"nc_night_to_day"
+	KC3Node.knownNodeExtraClasses = function(isEmptyClassKept = false){
+		const classNameKindIdMap = ["", "",
+			"nc_night_battle", "nc_night_battle",
+			"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
+			"nc_night_to_day", "nc_long_range_raid"
 		];
+		return isEmptyClassKept ? classNameKindIdMap : classNameKindIdMap.filter(n => !!n);
 	};
 	
 	KC3Node.prototype.isInitialized = function(){
@@ -56,12 +57,9 @@ Used by SortieManager
 					KC3Meta.term("BattleKindAirBattleOnly"),
 					KC3Meta.term("BattleKindEnemyCombined"),
 					KC3Meta.term("BattleKindAirDefendOnly"),
-					KC3Meta.term("BattleKindNightToDay")][this.eventKind];
-				this.nodeExtraClass = ["", "",
-					"nc_night_battle", "nc_night_battle",
-					"nc_air_battle", "nc_enemy_combined", "nc_air_raid",
-					"nc_night_to_day"
-					][this.eventKind];
+					KC3Meta.term("BattleKindNightToDay"),
+					KC3Meta.term("BattleKindLongRangeRaid")][this.eventKind];
+				this.nodeExtraClass = KC3Node.knownNodeExtraClasses(true)[this.eventKind] || "";
 			}
 			
 			// If passed formatted enemy list from PVP
@@ -268,6 +266,19 @@ Used by SortieManager
 		return !data ? undefined : data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
 	};
 	
+	/**
+	 * Check for any one-time special cutin from player main fleet.
+	 * @param predictedFleets - result of predicted fleets.
+	 */
+	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
+		const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+		const playerMain = predictedFleets.playerMain,
+			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
+		if (flagshipSpecialAttack) {
+			this.sortieSpecialCutins = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+		}
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -336,7 +347,7 @@ Used by SortieManager
 			this.flarePos = this.flarePos >= 0 ? 1 + (isPlayerCombined ? this.flarePos % 6 : this.flarePos) : -1;
 			this.eFlarePos = this.eFlarePos >= 0 ? 1 + (isEnemyCombined ? this.eFlarePos % 6 : this.eFlarePos) : -1;
 		}
-		if (battleData.api_friendly_info !== undefined) {
+		if(battleData.api_friendly_info !== undefined) {
 			this.friendlySupportFlag = true;
 		}
 		
@@ -380,6 +391,22 @@ Used by SortieManager
 
 		this.detection = KC3Meta.detection( battleData.api_search ? battleData.api_search[0] : 0 );
 		this.engagement = KC3Meta.engagement( battleData.api_formation[2] );
+		
+		if((battleData.api_name || "").includes("ld_airbattle") || this.eventKind === 6) {
+			this.isLongDistanceAirRaid = true;
+		}
+		/* Features of long range radar ambush battle implemented since Winter 2019:
+		 *   no formation selection, 1 (single) or 14 (combined) by default;
+		 *   shelling phase only, no friendly ship can attack, defend like air raid node;
+		 *   no detection, no contact, no air battle (but LBAS comes), no night gear triggered;
+		 *   night battle background, but API data structures follow day battle;
+		 *   friendly contact icon of in-game right top is fixed to red radar wave sign;
+		 */
+		if((battleData.api_name || "").includes("ld_shooting") || battleData.api_search === undefined) {
+			this.isLongRangeRaid = true;
+			// use special detection values instead if api_search not existed
+			this.detection = ["\u2212\u221a\u2212", KC3Meta.detection(3)[1], KC3Meta.term("BattleKindLongRangeRaid")];
+		}
 		
 		// LBAS attack phase, including jet plane assault
 		this.lbasFlag = battleData.api_air_base_attack !== undefined;
@@ -648,6 +675,8 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle)
 			);
+
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -915,6 +944,8 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
+
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1792,6 +1823,7 @@ Used by SortieManager
 	KC3Node.prototype.airBaseRaid = function( battleData ){
 		this.battleDestruction = battleData;
 		//console.debug("Raw Air Base Raid data", battleData);
+		this.isAirBaseEnemyRaid = true;
 		this.lostKind = battleData.api_lost_kind;
 		this.eships = this.normalizeArrayIndex(battleData.api_ship_ke);
 		// Pad ship array to 6 for saving into encounter record

@@ -75,6 +75,8 @@
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                     return 5;
+                case 562: // Johnston
+                    return 80;
                 default:
                     return (steel < 4500) ? 0
                          : (steel < 5500) ? 10
@@ -115,6 +117,8 @@
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                     return 20;
+                case 562: // Johnston
+                    return 10;
                 default:
                     return 0;
             }

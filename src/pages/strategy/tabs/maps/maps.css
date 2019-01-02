@@ -394,6 +394,9 @@
 .tab_maps .sortie_list .sortie_edge.air_raid {
 	background:#FFA500;
 }
+.tab_maps .sortie_list .sortie_edge.long_range_raid {
+	background:#EE7400;
+}
 .tab_maps .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
 	background-repeat:no-repeat;
@@ -593,6 +596,9 @@
 	border-radius:12px;
 	font-size:12px;
 	font-weight:bold;
+}
+.tab_maps .sortie_list .special_cutin {
+	box-shadow: 0px 0px 2px 2px #a08;
 }
 .tab_maps .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;

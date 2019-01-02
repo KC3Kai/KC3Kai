@@ -56,9 +56,9 @@ KC3改 Equipment Object
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
 				tripleTorpedo: 0,
 				tripleTorpedoIds: [13, 125],
 				tripleTorpedoLateModel: 0,
@@ -512,7 +512,12 @@ KC3改 Equipment Object
 					{
 						// Akigumo
 						ids: [132, 301],
-						single: { "houg": 1 },
+						multiple: { "houg": 1 },
+					},
+					{
+						// Yukikaze
+						ids: [20, 228],
+						multiple: { "tyku": 1 },
 					},
 				],
 			},
@@ -608,6 +613,19 @@ KC3改 Equipment Object
 						multiple: { "raig": 1 },
 						countCap: 2,
 					},
+				},
+			},
+			// 533mm Quintuple Torpedo Mount (Initial Model)
+			"314": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						multiple: { "houg": 1, "raig": 3 },
+						countCap: 2,
+					},
+					// Fletcher Class
+					"91": "87",
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
@@ -761,7 +779,7 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Kinu K2
+						// Kinu Kai Ni
 						ids: [487],
 						minStars: 7,
 						multiple: { "houg": 2, "tyku": 2 },
@@ -771,7 +789,7 @@ KC3改 Equipment Object
 						},
 					},
 					{
-						// Yura K2
+						// Yura Kai Ni
 						ids: [488],
 						minStars: 7,
 						multiple: { "houg": 2, "tyku": 3 },
@@ -1127,8 +1145,10 @@ KC3改 Equipment Object
 				byClass: {
 					// John C.Butler Class
 					"87": {
-						single: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
+					// Fletcher Class
+					"91": "87",
 				},
 				byShip: [
 					{
@@ -1159,6 +1179,30 @@ KC3改 Equipment Object
 					"84": "65",
 					// John C.Butler Class
 					"87": "65",
+					// Fletcher Class
+					"91": "65",
+				},
+			},
+			// SG Radar (Initial Model)
+			"315": {
+				count: 0,
+				byClass: {
+					// Following Americans: Iowa Class
+					"65": {
+						single: { "houg": 2, "houk": 3, "saku": 4 },
+					},
+					// Lexington Class
+					"69": "65",
+					// Casablanca Class
+					"83": "65",
+					// Essex Class
+					"84": "65",
+					// John C.Butler Class, range from medium to long
+					"87": {
+						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
+					},
+					// Fletcher Class
+					"91": "87",
 				},
 			},
 			// 20-tube 7inch UP Rocket Launchers
@@ -1219,7 +1263,7 @@ KC3改 Equipment Object
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
-			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
+			if(Array.isArray(bonusDef.excludes) && bonusDef.excludes.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
@@ -1351,7 +1395,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 42, 46].includes(type2))
+				if([1, 2, 3, 4, 5, 19, 22, 24, 29, 36, 42, 46].includes(type2))
 					modifier = 1;
 				break;
 			case "asw":
@@ -1942,8 +1986,15 @@ KC3改 Equipment Object
 			// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
+			// Postcap LBAA recon modifier if LB recon is present
+			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
+			// https://twitter.com/syoukuretin/status/1068477784232587264
+			// https://twitter.com/Nishisonic/status/1080146808318263296
+			const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
+			const lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
+				lbfpReconModifier === 1.18 ? 1.15 : 1;
 			const onNormal = Math.floor(lbasPower
-				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			// Proficiency critical modifier has been applied sometime since 2017-12-11?
 			// Modifier calculation is the same, but different from carrier-based,
 			// modifiers for squadron slots are independent and no first slot bonus.
@@ -1953,7 +2004,7 @@ KC3改 Equipment Object
 			const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
 			const criticalModifier = 1.5;
 			const onCritical = Math.floor(Math.floor(lbasPower * criticalModifier * proficiencyCriticalModifier)
-				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier);
+				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
 			$(".icon", powBox).attr("src", KC3Meta.statIcon(isLbaa ? "rk" : "kk"));
