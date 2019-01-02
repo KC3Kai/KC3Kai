@@ -266,6 +266,19 @@ Used by SortieManager
 		return !data ? undefined : data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
 	};
 	
+	/**
+	 * Check for any one-time special cutin from player main fleet.
+	 * @param predictedFleets - result of predicted fleets.
+	 */
+	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
+		const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+		const playerMain = predictedFleets.playerMain,
+			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
+		if (flagshipSpecialAttack) {
+			this.sortieSpecialCutins = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+		}
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -663,12 +676,7 @@ Used by SortieManager
 				1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle)
 			);
 
-			// Check for any one-time special cutin
-			const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
-			const playerMain = result.fleets.playerMain;
-			if (checkSortieSpecialAttack(playerMain[0].attacks)) {
-				this.sortieSpecialAttack = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
-			}
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -936,12 +944,8 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
-			// Check for any one-time special cutin
-			const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
-			const playerMain = result.fleets.playerMain;
-			if (checkSortieSpecialAttack(playerMain[0].attacks)) {
-				this.sortieSpecialAttack = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
-			}
+
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 		
 		if(this.gaugeDamage > -1

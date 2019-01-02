@@ -635,8 +635,8 @@ html,body {
 	font-size:9px;
 	letter-spacing:-1px;
 }
-.module.activity .sortie_node.attack_cutin {
-	box-shadow: 0px 0px 2px 2px #FF8C00;
+.module.activity .sortie_node.special_cutin {
+	box-shadow:0px 0px 3px 1px #a08;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -3041,21 +3041,20 @@ ABYSS FLEET
 	float:left;
 	margin:0px 5px 0px 0px;
 }
-.module.fleet .hp_repairing {
-	background-color: rgba(100, 255, 100, 0.3);
+.module.fleet .shiplist .special_cutin {
+	background-color:rgba(170, 0, 136, 0.4);
 }
-.module.fleet .hp_fcf {
-	background-color: rgba(255, 255, 255, 0.4);
+.module.fleet .shiplist .hp_repairing {
+	background-color:rgba(100, 255, 100, 0.3);
 }
-.module.fleet .akashiMark {
-	background-color: rgba(191, 255, 100, 0.15);
+.module.fleet .shiplist .hp_fcf {
+	background-color:rgba(255, 255, 255, 0.4);
 }
-.module.fleet .attack_cutin {
-	background-color: rebeccapurple;
+.module.fleet .shiplist .akashiMark {
+	background-color:rgba(191, 255, 100, 0.15);
 }
-.module.fleet .hp_taiha,
-.module.fleet .hp_taiha.attack_cutin {
-	background-color: rgba(255, 0, 0, 0.4);
+.module.fleet .shiplist .hp_taiha {
+	background-color:rgba(255, 0, 0, 0.4);
 }
 /* Long Ship */
 .module.fleet .lship {
@@ -3230,22 +3229,22 @@ ABYSS FLEET
 	position:relative;
 }
 .module.fleet .ship_hp_bar.hp_repairing {
-	background-color: #aaccee;
+	background-color:#aaccee;
 }
 .module.fleet .ship_hp_bar.hp_fcf {
-	background-color: #fff;
+	background-color:#fff;
 }
 .module.fleet .ship_hp_bar.hp_normal {
-	background-color: #0f0;
+	background-color:#0f0;
 }
 .module.fleet .ship_hp_bar.hp_shouha {
-	background-color: #ff0;
+	background-color:#ff0;
 }
 .module.fleet .ship_hp_bar.hp_chuuha {
-	background-color: #f90;
+	background-color:#f90;
 }
 .module.fleet .ship_hp_bar.hp_taiha {
-	background-color: #f00;
+	background-color:#f00;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;

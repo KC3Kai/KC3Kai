@@ -243,8 +243,11 @@
 				.format(chuuhaHp, curHp - chuuhaHp);
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
-		// Clear box colors
-		// this.element.css("background-color", "transparent");
+		// Clear box & hp bar color classes
+		var hpClasses = ["hp_repairing", "akashiMark",
+			"hp_fcf", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
+		this.element.removeClass(hpClasses);
+		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
 		// Import repair time script by @Javran
 		var repairTimes = this.shipData.repairTime();
@@ -262,12 +265,7 @@
 			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
 				.lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
 		}
-
-		// Clear all classes
-		var hpClasses = ['hp_repairing', 'hp_fcf', 'hp_taiha', 'hp_chuuha', 'hp_shouha', 'hp_normal', 'akashiMark'].join(' ');
-		this.element.removeClass(hpClasses);
-		$(".ship_hp_bar", this.element).removeClass(hpClasses);
-
+		
 		// If ship is being repaired
 		if (PlayerManager.repairShips.indexOf(this.shipData.rosterId) > -1) {
 			$(".ship_hp_bar", this.element).addClass("hp_repairing");
