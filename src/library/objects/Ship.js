@@ -1227,7 +1227,7 @@ KC3改 Ship Object
 				const los = gear.master().api_saku;
 				reconModifier = Math.max(reconModifier,
 					(los <= 7) ? 1.15 : // unknown
-					(los >= 9) ? 1.15 : // unknown
+					(los >= 9) ? 1.18 :
 					1.15
 				);
 			}
@@ -1255,7 +1255,11 @@ KC3改 Ship Object
 					);
 				// LB Recon Aircraft
 				} else if(type2 === 49){
-					reconModifier = Math.max(reconModifier, 1.18);
+					reconModifier = Math.max(reconModifier,
+						(los <= 7) ? 1.18 : // unknown
+						(los >= 9) ? 1.18 : // unknown
+						1.18
+					);
 				// Recon Seaplane, Flying Boat, etc
 				} else {
 					reconModifier = Math.max(reconModifier,

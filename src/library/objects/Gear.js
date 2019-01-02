@@ -1145,7 +1145,7 @@ KC3改 Equipment Object
 				byClass: {
 					// John C.Butler Class
 					"87": {
-						single: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					// Fletcher Class
 					"91": "87",
@@ -1986,13 +1986,13 @@ KC3改 Equipment Object
 			// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
-			let lbaaReconModifier = 1;
 			// Postcap LBAA recon modifier if LB recon is present
 			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
 			// https://twitter.com/syoukuretin/status/1068477784232587264
-			if(shipOrLb.toShipObject().fighterPowerReconModifier(true) > 1) {
-				lbaaReconModifier = 1.125;
-			}
+			// https://twitter.com/Nishisonic/status/1080146808318263296
+			const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
+			const lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
+				lbfpReconModifier === 1.18 ? 1.15 : 1;
 			const onNormal = Math.floor(lbasPower
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			// Proficiency critical modifier has been applied sometime since 2017-12-11?

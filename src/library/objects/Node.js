@@ -392,7 +392,7 @@ Used by SortieManager
 		if((battleData.api_name || "").includes("ld_shooting") || battleData.api_search === undefined) {
 			this.isLongRangeRaid = true;
 			// use special detection values instead if api_search not existed
-			this.detection = ["\u2212\u221a\u2212", "worse", KC3Meta.term("BattleKindLongRangeRaid")];
+			this.detection = ["\u2212\u221a\u2212", KC3Meta.detection(3)[1], KC3Meta.term("BattleKindLongRangeRaid")];
 		}
 		
 		// LBAS attack phase, including jet plane assault
