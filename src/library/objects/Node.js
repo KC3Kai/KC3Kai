@@ -662,6 +662,13 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle)
 			);
+
+			// Check for any one-time special cutin
+			const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+			const playerMain = result.fleets.playerMain;
+			if (checkSortieSpecialAttack(playerMain[0].attacks)) {
+				this.sortieSpecialAttack = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+			}
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -929,6 +936,12 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
+			// Check for any one-time special cutin
+			const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+			const playerMain = result.fleets.playerMain;
+			if (checkSortieSpecialAttack(playerMain[0].attacks)) {
+				this.sortieSpecialAttack = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+			}
 		}
 		
 		if(this.gaugeDamage > -1
