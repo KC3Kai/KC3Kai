@@ -829,7 +829,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const fleet = PlayerManager.fleets[this.fleetSent - 1];
 			const fleetF = {
 				ships: this.prepareSimPlayerFleetShips(fleet, realBattle),
-				formation: ConfigManager.aaFormation
+				formation: (ConfigManager.aaFormation < 7 && !combined) || (ConfigManager.aaFormation > 10 && combined) ? ConfigManager.aaFormation 
+					: !combined ? 1 : 14
 			};
 			if (combined) {
 				fleetF.shipsC = this.prepareSimPlayerFleetShips(PlayerManager.fleets[1], realBattle);
@@ -842,7 +843,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if (edata.escort && edata.escort.length > 0) {
 				fleetE.shipsC = this.prepareSimEnemyFleetShips(edata.escort, resultFleets.enemyEscort);
 			}
-			// Remove combined escort if empty
 			const nodes = [{
 				fleetE: fleetE
 			}];
@@ -897,12 +897,12 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if (bases.length > 0) {
 				const lbas = [], waves = [], simPlayerEqIdMax = 308;
 				for (let idx = 0; idx < bases.length; idx++) {
-					let strikePoints = bases[idx].strikePoints, arr = [];
+					let strikePoints = bases[idx].strikePoints || [], arr = [];
 					for (let point = 0; point < strikePoints.length; point++) {
 						arr.push(KC3Meta.nodeLetter(this.map_world, this.map_num, strikePoints[point]));
 					}
 					strikePoints = arr;
-					if (!strikePoints || !strikePoints.includes(node)) { continue; }
+					if (strikePoints.length === 0 || !strikePoints.includes(node)) { continue; }
 					const equips = [], slotdata = [];
 					const base = bases[idx];
 					for (let plane = 0; plane < base.planes.length; plane++) {
@@ -958,7 +958,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 
 						// Likely that new enemy will also be using new equips, so fill that too
 						const equips = [];
-						for (let eqIdx = 1; !stats["eq" + eqIdx]; eqIdx++) {
+						for (let eqIdx = 1; !!stats["eq" + eqIdx]; eqIdx++) {
 							const gearId = stats["eq" + eqIdx];
 							equips.push({
 								masterId: gearId,
