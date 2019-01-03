@@ -249,11 +249,15 @@
 		this.element.removeClass(hpClasses);
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
-		// Import repair time script by @Javran
-		var onSortie = KC3SortieManager.isOnSortie() && (!KC3SortieManager.isCombinedSortie() ? [KC3SortieManager.fleetSent] : [1, 2]).includes(this.shipData.onFleet());
-		var repairTimes = this.shipData.repairTime(onSortie);
-		var repairCost = this.shipData.calcRepairCost(!onSortie ? this.shipData.hp[0] : this.shipData.afterHp[0]);
-
+		// Show time and cost based on predicted after-battle hp if setting enabled
+		var isAfterHpUsed = ConfigManager.info_battle &&
+			this.shipData.hp[0] !== this.shipData.afterHp[0] &&
+			KC3SortieManager.isOnSortie() && (
+				KC3SortieManager.isCombinedSortie() ? [1, 2] : [KC3SortieManager.fleetSent]
+			).includes(this.shipData.onFleet());
+		var repairTimes = this.shipData.repairTime(isAfterHpUsed);
+		var repairCost = this.shipData.calcRepairCost(isAfterHpUsed ? this.shipData.afterHp[0] : 0);
+		
 		if(repairTimes.docking > 0){
 			$(".ship_hp_box", this.element).attr("title", [
 				KC3Meta.term("PanelDocking") + ": " + String(repairTimes.docking).toHHMMSS(),
