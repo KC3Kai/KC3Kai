@@ -244,8 +244,8 @@
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes
-		var hpClasses = ["hp_repairing", "akashiMark",
-			"hp_fcf", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
+		var hpClasses = ["akashiMark", "hp_fcf", "hp_repairing", // used by root element
+			"hp_sunk", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
 		this.element.removeClass(hpClasses);
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
@@ -327,7 +327,7 @@
 		// Apply only if HP actually changed after prediction
 		if(this.shipData.hp[0] != this.shipData.afterHp[0]){
 			// Make original HP bar gray
-			$(".ship_hp_bar", this.element).css("background", "#ccc");
+			$(".ship_hp_bar", this.element).addClass("hp_sunk");
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
