@@ -762,33 +762,34 @@ KC3改 Ship Object
 					}
 				}
 				if (gear.path) {
+					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
+
 					const count = gear.count;
 					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
 						const check = gear.path[pathIdx];
-						if (!(check.excludes && check.excludes.includes(shipId))) {
-							if (!(check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel)) {
-								flag = true;
-								if (check.single) { gear.count = 1; }
-								if (check.multiple) { gear.count = count; }
-								// countCap/minCount take priority
-								if (check.countCap) { gear.count = Math.min(check.countCap, count); }
-								if (check.minCount) { gear.count = count; }
-								
-								// Synergy check
-								if (check.synergy) {
-									let synergyCheck = check.synergy;
-									if (!Array.isArray(synergyCheck)) { synergyCheck = [synergyCheck]; }
-									for (let checkIdx = 0; checkIdx < synergyCheck.length; checkIdx++) {
-										const flagList = synergyCheck[checkIdx].flags;
-										for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
-											const equipFlag = flagList[flagIdx];
-											if (synergyGears[equipFlag] > 0) {
-												if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
-												synergyFlags.push(equipFlag);
-												synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
-											}
-										}
+						if (check.excludes && check.excludes.includes(shipId)) { continue; }
+						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
+						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
+						flag = true;
+						if (check.single) { gear.count = 1; }
+						if (check.multiple) { gear.count = count; }
+						// countCap/minCount take priority
+						if (check.countCap) { gear.count = Math.min(check.countCap, count); }
+						if (check.minCount) { gear.count = count; }
+
+						// Synergy check
+						if (check.synergy) {
+							let synergyCheck = check.synergy;
+							if (!Array.isArray(synergyCheck)) { synergyCheck = [synergyCheck]; }
+							for (let checkIdx = 0; checkIdx < synergyCheck.length; checkIdx++) {
+								const flagList = synergyCheck[checkIdx].flags;
+								for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
+									const equipFlag = flagList[flagIdx];
+									if (synergyGears[equipFlag] > 0) {
+										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
+										synergyFlags.push(equipFlag);
+										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
 									}
 								}
 							}
