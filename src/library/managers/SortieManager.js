@@ -947,13 +947,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 
 				// If new enemy and not in sim yet, fill stats
 				if (masterId > simAbyssMasterIdMax) {
+					const master = KC3Master.ship(masterId) || {};
 					KC3Database.get_enemyInfo(masterId, function (stats) {
 						obj.stats = {
 							HP: stats.hp,
 							FP: stats.fp,
 							TP: stats.tp,
 							AA: stats.aa,
-							AR: stats.ar
+							AR: stats.ar,
+							type: master.api_stype
 						};
 
 						// Likely that new enemy will also be using new equips, so fill that too
