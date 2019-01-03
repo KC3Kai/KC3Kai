@@ -732,8 +732,10 @@ KC3改 Ship Object
 		const shipId = this.masterId;
 		const ctype = String(this.master().api_ctype);
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, stype) =>
-			(byShip.ids || []).includes(shipId) || (byShip.stypes || []).includes(stype);
+		const checkByShip = (byShip, shipId, stype, ctype) =>
+			(byShip.ids || []).includes(shipId) ||
+			(byShip.stypes || []).includes(stype) ||
+			(byShip.classes || []).includes(ctype);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -752,12 +754,12 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, stype)) {
+							if (checkByShip(gear[type][i], shipId, stype, ctype)) {
 								gear.path = gear[type][i];
 							}
 						}
 					}
-					else if (checkByShip(gear[type], shipId, stype)) {
+					else if (checkByShip(gear[type], shipId, stype, ctype)) {
 						gear.path = gear[type];
 					}
 				}
@@ -769,6 +771,8 @@ KC3改 Ship Object
 					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
 						const check = gear.path[pathIdx];
 						if (check.excludes && check.excludes.includes(shipId)) { continue; }
+						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
+						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
 						flag = true;
