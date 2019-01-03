@@ -663,6 +663,9 @@
 	font-size:12px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .special_cutin {
+	box-shadow: 0px 0px 2px 2px #a08;
+}
 .tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }

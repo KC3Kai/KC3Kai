@@ -732,8 +732,10 @@ KC3改 Ship Object
 		const shipId = this.masterId;
 		const ctype = String(this.master().api_ctype);
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, stype) =>
-			(byShip.ids || []).includes(shipId) || (byShip.stypes || []).includes(stype);
+		const checkByShip = (byShip, shipId, stype, ctype) =>
+			(byShip.ids || []).includes(shipId) ||
+			(byShip.stypes || []).includes(stype) ||
+			(byShip.classes || []).includes(ctype);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -752,43 +754,46 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, stype)) {
+							if (checkByShip(gear[type][i], shipId, stype, ctype)) {
 								gear.path = gear[type][i];
 							}
 						}
 					}
-					else if (checkByShip(gear[type], shipId, stype)) {
+					else if (checkByShip(gear[type], shipId, stype, ctype)) {
 						gear.path = gear[type];
 					}
 				}
 				if (gear.path) {
+					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
+
 					const count = gear.count;
 					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
 						const check = gear.path[pathIdx];
-						if (!(check.excludes && check.excludes.includes(shipId))) {
-							if (!(check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel)) {
-								flag = true;
-								if (check.single) { gear.count = 1; }
-								if (check.multiple) { gear.count = count; }
-								// countCap/minCount take priority
-								if (check.countCap) { gear.count = Math.min(check.countCap, count); }
-								if (check.minCount) { gear.count = count; }
-								
-								// Synergy check
-								if (check.synergy) {
-									let synergyCheck = check.synergy;
-									if (!Array.isArray(synergyCheck)) { synergyCheck = [synergyCheck]; }
-									for (let checkIdx = 0; checkIdx < synergyCheck.length; checkIdx++) {
-										const flagList = synergyCheck[checkIdx].flags;
-										for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
-											const equipFlag = flagList[flagIdx];
-											if (synergyGears[equipFlag] > 0) {
-												if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
-												synergyFlags.push(equipFlag);
-												synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
-											}
-										}
+						if (check.excludes && check.excludes.includes(shipId)) { continue; }
+						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
+						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
+						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
+						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
+						flag = true;
+						if (check.single) { gear.count = 1; }
+						if (check.multiple) { gear.count = count; }
+						// countCap/minCount take priority
+						if (check.countCap) { gear.count = Math.min(check.countCap, count); }
+						if (check.minCount) { gear.count = count; }
+
+						// Synergy check
+						if (check.synergy) {
+							let synergyCheck = check.synergy;
+							if (!Array.isArray(synergyCheck)) { synergyCheck = [synergyCheck]; }
+							for (let checkIdx = 0; checkIdx < synergyCheck.length; checkIdx++) {
+								const flagList = synergyCheck[checkIdx].flags;
+								for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
+									const equipFlag = flagList[flagIdx];
+									if (synergyGears[equipFlag] > 0) {
+										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
+										synergyFlags.push(equipFlag);
+										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
 									}
 								}
 							}
@@ -1227,7 +1232,7 @@ KC3改 Ship Object
 				const los = gear.master().api_saku;
 				reconModifier = Math.max(reconModifier,
 					(los <= 7) ? 1.15 : // unknown
-					(los >= 9) ? 1.15 : // unknown
+					(los >= 9) ? 1.18 :
 					1.15
 				);
 			}
@@ -1255,7 +1260,11 @@ KC3改 Ship Object
 					);
 				// LB Recon Aircraft
 				} else if(type2 === 49){
-					reconModifier = Math.max(reconModifier, 1.18);
+					reconModifier = Math.max(reconModifier,
+						(los <= 7) ? 1.18 : // unknown
+						(los >= 9) ? 1.18 : // unknown
+						1.18
+					);
 				// Recon Seaplane, Flying Boat, etc
 				} else {
 					reconModifier = Math.max(reconModifier,

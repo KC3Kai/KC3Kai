@@ -1145,7 +1145,7 @@ KC3改 Equipment Object
 				byClass: {
 					// John C.Butler Class
 					"87": {
-						single: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					// Fletcher Class
 					"91": "87",
@@ -1263,7 +1263,7 @@ KC3改 Equipment Object
 		const addBonusToTotalIfNecessary = (bonusDef, gearInfo) => {
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
-			if(Array.isArray(bonusDef.exlucdes) && bonusDef.exlucdes.includes(shipMasterId)) { return; }
+			if(Array.isArray(bonusDef.excludes) && bonusDef.excludes.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
@@ -1395,7 +1395,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 24, 29, 36, 42, 46].includes(type2))
+				if([1, 2, 3, 4, 5, 19, 22, 24, 29, 36, 42, 46].includes(type2))
 					modifier = 1;
 				break;
 			case "asw":
@@ -1986,12 +1986,15 @@ KC3改 Equipment Object
 			// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
-			let lbaaReconModifier = 1;
 			// Postcap LBAA recon modifier if LB recon is present
-			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
 			// https://twitter.com/syoukuretin/status/1068477784232587264
-			if(shipOrLb.toShipObject().fighterPowerReconModifier(true) > 1) {
-				lbaaReconModifier = 1.125;
+			// https://twitter.com/Nishisonic/status/1080146808318263296
+			let lbaaReconModifier = 1;
+			if(isLbaa) {
+				// Check LB recon and set the value according FP modifier
+				const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
+				lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
+					lbfpReconModifier === 1.18 ? 1.15 : 1;
 			}
 			const onNormal = Math.floor(lbasPower
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
