@@ -250,8 +250,9 @@
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
 		// Import repair time script by @Javran
-		var repairTimes = this.shipData.repairTime();
-		var repairCost = this.shipData.calcRepairCost();
+		var onSortie = KC3SortieManager.isOnSortie() && (!KC3SortieManager.isCombinedSortie() ? [KC3SortieManager.fleetSent] : [1, 2]).includes(this.shipData.onFleet());
+		var repairTimes = this.shipData.repairTime(onSortie);
+		var repairCost = this.shipData.calcRepairCost(!onSortie ? this.shipData.hp[0] : this.shipData.afterHp[0]);
 
 		if(repairTimes.docking > 0){
 			$(".ship_hp_box", this.element).attr("title", [
