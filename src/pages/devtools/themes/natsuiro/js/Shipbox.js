@@ -251,7 +251,6 @@
 		
 		// Show time and cost based on predicted after-battle hp if setting enabled
 		var isAfterHpUsed = ConfigManager.info_battle &&
-			this.shipData.hp[0] !== this.shipData.afterHp[0] &&
 			KC3SortieManager.isOnSortie() && (
 				KC3SortieManager.isCombinedSortie() ? [1, 2] : [KC3SortieManager.fleetSent]
 			).includes(this.shipData.onFleet());
