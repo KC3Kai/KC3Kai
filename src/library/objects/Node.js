@@ -266,6 +266,19 @@ Used by SortieManager
 		return !data ? undefined : data.api_f_maxhps === undefined && Array.isArray(data.api_maxhps);
 	};
 	
+	/**
+	 * Check for any one-time special cutin from player main fleet.
+	 * @param predictedFleets - result of predicted fleets.
+	 */
+	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
+		const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+		const playerMain = predictedFleets.playerMain,
+			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
+		if (flagshipSpecialAttack) {
+			this.sortieSpecialCutins = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+		}
+	};
+	
 	/* BATTLE FUNCTIONS
 	---------------------------------------------*/
 	KC3Node.prototype.engage = function( battleData, fleetSent ){
@@ -392,7 +405,7 @@ Used by SortieManager
 		if((battleData.api_name || "").includes("ld_shooting") || battleData.api_search === undefined) {
 			this.isLongRangeRaid = true;
 			// use special detection values instead if api_search not existed
-			this.detection = ["\u2212\u221a\u2212", "worse", KC3Meta.term("BattleKindLongRangeRaid")];
+			this.detection = ["\u2212\u221a\u2212", KC3Meta.detection(3)[1], KC3Meta.term("BattleKindLongRangeRaid")];
 		}
 		
 		// LBAS attack phase, including jet plane assault
@@ -662,6 +675,8 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, battleData.api_formation[0], battleData.api_formation[2], isRealBattle)
 			);
+
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 
 		if(this.gaugeDamage > -1) {
@@ -929,6 +944,8 @@ Used by SortieManager
 			this.unexpectedList.push(...this.unexpectedDamagePrediction(result.fleets.playerEscort,
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
+
+			this.checkSortieSpecialAttacks(result.fleets);
 		}
 		
 		if(this.gaugeDamage > -1

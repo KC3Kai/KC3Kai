@@ -968,6 +968,10 @@
 									).lazyInitTooltip();
 								}
 							}
+							if(thisNode.sortieSpecialCutins && thisNode.sortieSpecialCutins.some(v => !!v)) {
+								$(".node_id", nodeBox).addClass("special_cutin");
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("special_cutin");
+							}
 							if(ConfigManager.sr_show_new_shipstate){
 								const predicted = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay;
 								if(predicted){

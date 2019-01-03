@@ -907,6 +907,7 @@
 		$(".module.activity .sortie_nodes").removeAttr("style");
 		$(".module.activity .sortie_node").text("").removeAttr("title")
 			.removeClass("nc_battle nc_resource nc_maelstrom nc_select nc_avoid long_name")
+			.removeClass("special_cutin")
 			.removeClass(KC3Node.knownNodeExtraClasses().join(" "));
 		$(".module.activity .sortie_nodes .boss_node").removeAttr("style");
 		$(".module.activity .sortie_nodes .boss_node").hide();
@@ -1497,6 +1498,7 @@
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
+			var sortieSpecialCutins = ConfigManager.info_compass ? thisNode.sortieSpecialCutins || [] : [];
 
 			// COMBINED
 			if(selectedFleet == 5){
@@ -1518,7 +1520,8 @@
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
-							.defineShort( MainFleet )
+							.defineShort(MainFleet)
+							.toggleClass("special_cutin", !!sortieSpecialCutins[index])
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -1545,7 +1548,7 @@
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
-							.defineShort( EscortFleet )
+							.defineShort(EscortFleet)
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
@@ -1635,8 +1638,9 @@
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
-							.defineLong( CurrentFleet )
+							.defineLong(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
+							.toggleClass("special_cutin", !!sortieSpecialCutins[index])
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
@@ -2971,6 +2975,13 @@
 						.delay( 5000 )
 						.fadeOut(1000, function(){ $(this).remove(); } );
 				});
+			}
+
+			// Add glow to node letter if one-time special cut-in per sortie was used
+			if(ConfigManager.info_compass && Array.isArray(thisNode.sortieSpecialCutins)) {
+				const numNodes = KC3SortieManager.countNodes();
+				$(".module.activity .sortie_node_" + numNodes)
+					.toggleClass("special_cutin", thisNode.sortieSpecialCutins.some(v => !!v));
 			}
 		},
 
