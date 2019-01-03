@@ -894,6 +894,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const bases = PlayerManager.bases.filter(base => base.action === 1 && base.map === this.map_world);
 			// Convert to node letter in case airstrike selected node id different from route node id (multiple path to same node)
 			const node = KC3Meta.nodeLetter(this.map_world, this.map_num, thisNode.id);
+			let baseCount = 0;
 			if (bases.length > 0) {
 				const lbas = [], waves = [], simPlayerEqIdMax = 308;
 				for (let idx = 0; idx < bases.length; idx++) {
@@ -903,6 +904,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 					strikePoints = arr;
 					if (strikePoints.length === 0 || !strikePoints.includes(node)) { continue; }
+					baseCount++;
 					const equips = [], slotdata = [];
 					const base = bases[idx];
 					for (let plane = 0; plane < base.planes.length; plane++) {
@@ -923,7 +925,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					});
 
 					for (let waveIdx = 0; waveIdx < strikePoints.length; waveIdx++) {
-						if (strikePoints[waveIdx] === node) { waves.push(idx + 1); }
+						if (strikePoints[waveIdx] === node) { waves.push(baseCount); }
 					}
 				}
 				res.lbas = lbas;
@@ -948,27 +950,28 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				// If new enemy and not in sim yet, fill stats
 				if (masterId > simAbyssMasterIdMax) {
 					const master = KC3Master.ship(masterId) || {};
-					KC3Database.get_enemyInfo(masterId, function (stats) {
-						obj.stats = {
-							HP: stats.hp,
-							FP: stats.fp,
-							TP: stats.tp,
-							AA: stats.aa,
-							AR: stats.ar,
-							type: master.api_stype
-						};
+					obj.stats = {
+						type: master.api_stype,
+					};
+					if (KC3Master.abyssalShip(masterId)) {
+						const stats = KC3Master.abyssalShip(masterId);
+						obj.stats.HP = stats.api_taik;
+						obj.stats.FP = stats.api_houg;
+						obj.stats.TP = stats.api_raig;
+						obj.stats.AA = stats.api_tyku;
+						obj.stats.AR = stats.api_souk;
+						const equips = stats.kc3_slots || [];
+						obj.stats.SLOTS = stats.api_maxeq || equips.map(() => 0);
 
-						// Likely that new enemy will also be using new equips, so fill that too
-						const equips = [];
-						for (let eqIdx = 1; !!stats["eq" + eqIdx]; eqIdx++) {
-							const gearId = stats["eq" + eqIdx];
-							equips.push({
+						obj.equips = [];
+						for (let k = 0; k < equips.length; k++) {
+							const gearId = equips[k];
+							obj.equips.push({
 								masterId: gearId,
 								stats: this.generateEquipStats(gearId)
 							});
 						}
-						obj.equips = equips;
-					});
+					}
 				}
 				list.push(obj);
 			}
