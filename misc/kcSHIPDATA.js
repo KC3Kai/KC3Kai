@@ -3168,7 +3168,7 @@ var SHIPDATA = {
 		RNG: 2,
 		SPD: 0,
 		TACC: 50,
-		SLOTS: [12, 12, 6, 6],
+		SLOTS: [12, 12, 8, 4],
 		EQUIPS: [561,561,561,561],
 		fuel: 0,
 		ammo: 0
@@ -3191,7 +3191,7 @@ var SHIPDATA = {
 		RNG: 2,
 		SPD: 0,
 		TACC: 50,
-		SLOTS: [24, 12, 6, 6],
+		SLOTS: [16, 16, 12, 4],
 		EQUIPS: [562,561,561,561],
 		fuel: 0,
 		ammo: 0

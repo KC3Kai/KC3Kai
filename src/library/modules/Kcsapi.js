@@ -2086,9 +2086,9 @@ Previously known as "Reactor"
 			for(const idx in raws) {
 				const thisMap = raws[idx];
 				const key = "m" + thisMap.api_id;
-				const oldMap = maps[key];
+				const oldMap = maps[key] || {};
 				
-				if((oldMap || {}).curhp !== undefined)
+				if(oldMap.curhp !== undefined || oldMap.kind === "gauge-hp")
 					etcStat[key] = $.extend(true, {}, defStat, maps[key].stat);
 				
 				// Create map object
@@ -2124,8 +2124,14 @@ Previously known as "Reactor"
 				// Check for event map info
 				if(thisMap.api_eventmap !== undefined) {
 					const eventData = thisMap.api_eventmap;
-					localMap.curhp      = eventData.api_now_maphp;
-					localMap.maxhp      = eventData.api_max_maphp;
+					// still remember values post-clear even removed from api since Winter 2019
+					if(eventData.api_max_maphp === undefined && eventData.api_state > 1) {
+						localMap.curhp = oldMap.curhp;
+						localMap.maxhp = oldMap.maxhp;
+					} else {
+						localMap.curhp = eventData.api_now_maphp;
+						localMap.maxhp = eventData.api_max_maphp;
+					}
 					localMap.difficulty = eventData.api_selected_rank;
 					// moved to parent node as normal maps since Winter 2019
 					localMap.gaugeType  = eventData.api_gauge_type || thisMap.api_gauge_type || 0;
@@ -2145,7 +2151,7 @@ Previously known as "Reactor"
 							console.info("Reported unknown API gauge type", localMap.gaugeType);/*RemoveLogging:skip*/
 					}
 					
-					if(oldMap !== undefined) {
+					if(maps[key] !== undefined) {
 						if(oldMap.kinds  !== undefined) localMap.kinds = oldMap.kinds;
 						if(oldMap.maxhps !== undefined) localMap.maxhps = oldMap.maxhps;
 						if(oldMap.baseHp !== undefined) localMap.baseHp = oldMap.baseHp;
