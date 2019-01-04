@@ -322,7 +322,8 @@ Used by SortieManager
 		} else {
 			this.eSlot = Array.pad(this.eSlot, 6, -1);
 		}
-		this.eformation = (battleData.api_formation || [])[1] || this.eformation;
+		this.fformation = battleData.api_formation[0] || this.fformation;
+		this.eformation = battleData.api_formation[1] || this.eformation;
 		// api_eKyouka seems being removed since 2017-11-17, kept for compatibility
 		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 		// might use api_f_maxhps_combined instead
@@ -763,6 +764,7 @@ Used by SortieManager
 		var isPlayerCombined = nightData.api_fParam_combined !== undefined;
 		this.playerCombined = isPlayerCombined;
 		
+		this.fformation = (nightData.api_formation || [])[0] || this.fformation;
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 
@@ -1832,6 +1834,7 @@ Used by SortieManager
 		this.elevels = Array.pad(this.elevels, 6, -1);
 		this.eSlot = battleData.api_eSlot;
 		this.eSlot = Array.pad(this.eSlot, 6, -1);
+		//this.fformation = battleData.api_formation[0];
 		this.eformation = battleData.api_formation[1];
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
