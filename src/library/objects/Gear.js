@@ -449,6 +449,7 @@ KC3改 Equipment Object
 				},
 			},
 			// 14cm Twin Gun Mount Kai
+			// Mismatch: https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2
 			"310": {
 				count: 0,
 				byClass: {
@@ -459,6 +460,10 @@ KC3改 Equipment Object
 					// Katori Class
 					"56": {
 						multiple: { "houg": 2, "houk": 1 },
+					},
+					// Nisshin Class
+					"90": {
+						multiple: { "houg": 2, "raig": 1 },
 					},
 				},
 			},
