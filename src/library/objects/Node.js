@@ -2241,6 +2241,12 @@ Used by SortieManager
 
 	KC3Node.prototype.buildUnexpectedDamageMessage = function(unexpectedList = this.unexpectedList){
 		let tooltips = "";
+		const getScratchDamage = eHp => { 
+			return [0,0].map((value, ind) => {
+				const scratch = Math.floor(eHp * 0.06 + (ind === 1 ? (eHp - 1) * 0.08 : 0));
+				return Math.max(value, scratch);
+			});
+		};
 		if(Array.isArray(unexpectedList)) {
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected) {
@@ -2249,10 +2255,19 @@ Used by SortieManager
 					const defenderMstId = a.enemy.id,
 						defenderName = KC3Meta.abyssShipName(defenderMstId);
 					const dmg = a.damageInstance;
+					const expectedDamage = dmg.expectedDamage;
+					const scratchDamage = getScratchDamage(a.enemy.hp);
+					let displayedDamage = [0,0];
+					if (expectedDamage[1] <= 0) { displayedDamage = scratchDamage; }
+					else if (expectedDamage[0] <= 0) { 
+						displayedDamage[0] = Math.min(1, scratchDamage[0]);
+						displayedDamage[1] = expectedDamage[1];
+					}
+					else { displayedDamage = expectedDamage; }
 					if(tooltips) tooltips += "\n";
 					tooltips += KC3Meta.term("BattleUnexpectedDamageTip").format(
 						attackerName, defenderName, defenderMstId,
-						dmg.actualDamage, dmg.expectedDamage[0], dmg.expectedDamage[1]
+						dmg.actualDamage, displayedDamage[0], displayedDamage[1]
 					);
 				}
 			});
