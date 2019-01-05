@@ -578,13 +578,13 @@
 					topAntiBomberSquadNames: topAbSquadsName
 				};
 			};
-			const showSortieLedger = function (sortieId, sortieBox, sortieWorld) {
-				// LBAS consumptions not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
+			const showSortieLedger = function(sortieId, sortieBox, sortieWorld) {
+				// LBAS consumption not accurate, as they contain plane swap and sortie cost of next sortie, but sortie cost should be the same for back-to-back sorties
 				// Akashi repair not included either, belonged to its own type
 				const buildConsumptionArray = arr => arr.reduce((acc, o) =>
 					acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
-				const buildLedgerMessage = consumptions => {
-					return consumptions.map((v, i) => {
+				const buildLedgerMessage = consumption => {
+					return consumption.map((v, i) => {
 						const icon = $("<img />").attr("src", "/assets/img/client/" +
 							["fuel.png", "ammo.png", "steel.png", "bauxite.png",
 								"ibuild.png", "bucket.png", "devmat.png", "screws.png"][i]
@@ -592,29 +592,27 @@
 						return i < 4 || !!v ? $("<div/>").append(icon).append(v).html() : "";
 					}).join(" ");
 				};
-
 				KC3Database.con.navaloverall.where("type").equals("sortie" + sortieId).toArray(arr => {
-					const consumptions = buildConsumptionArray(arr);
-
-					let tooltip, lbTooltip;
-					if (arr.length && !consumptions.every(v => !v)) {
-						tooltip = buildLedgerMessage(consumptions);
-						if (KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6) {
+					const consumption = buildConsumptionArray(arr);
+					if(arr.length && !consumption.every(v => !v)) {
+						const tooltip = buildLedgerMessage(consumption);
+						if(KC3Meta.isEventWorld(sortieWorld) || sortieWorld === 6) {
+							let lbTooltip = "";
 							KC3Database.con.navaloverall.where("type").equals("sortie" + (sortieId - 1)).first(firstEntry => {
-								KC3Database.con.navaloverall.offset(firstEntry.id)
-									.until(entry => entry.type === "sortie" + (sortieId + 1))
-									.and(entry => "lbas" + sortieWorld === entry.type)
-									.toArray(lbArr => {
-										const lbConsumptions = buildConsumptionArray(lbArr);
-										if (lbArr.length && !lbConsumptions.every(v => !v)) {
-											lbTooltip = buildLedgerMessage(lbConsumptions);
-										}
-									}).then(() => $(".sortie_map", sortieBox).attr("titlealt",
-										!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip")
-											.format(tooltip, lbTooltip)).lazyInitTooltip());
+							KC3Database.con.navaloverall.offset(firstEntry.id)
+								.until(entry => entry.type === "sortie" + (sortieId + 1))
+								.and(entry => "lbas" + sortieWorld === entry.type)
+								.toArray(lbArr => {
+									const lbConsumption = buildConsumptionArray(lbArr);
+									if(lbArr.length && !lbConsumption.every(v => !v)) {
+										lbTooltip = buildLedgerMessage(lbConsumption);
+									}
+								}).then(() => $(".sortie_map", sortieBox).attr("titlealt",
+									(!lbTooltip ? "{0}" : KC3Meta.term("BattleHistoryFleetAndLbasCostTip"))
+										.format(tooltip, lbTooltip)).lazyInitTooltip()
+								);
 							});
-						}
-						else {
+						} else {
 							$(".sortie_map", sortieBox).attr("titlealt",
 								"{0}".format(tooltip)).lazyInitTooltip();
 						}
@@ -670,21 +668,21 @@
 									$(".sortie_edge_"+(index+1), sortieBox)
 										.addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 									// Show Enemy Air Raid damage
-										let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
-										oldTitle += oldTitle ? "\n" : "";
-										oldTitle += KC3Meta.term("BattleHistoryAirRaidTip").format(
-											airRaid.baseTotalDamage,
-											KC3Meta.airraiddamage(airRaid.airRaidLostKind),
-											airRaid.resourceLossAmount,
-											airRaid.airState,
-											"{0}%".format(airRaid.shotdownPercent),
-											KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
-											KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
-											airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
-											airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
-											KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
-										);
-										$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
+									let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
+									oldTitle += oldTitle ? "\n" : "";
+									oldTitle += KC3Meta.term("BattleHistoryAirRaidTip").format(
+										airRaid.baseTotalDamage,
+										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
+										airRaid.resourceLossAmount,
+										airRaid.airState,
+										"{0}%".format(airRaid.shotdownPercent),
+										KC3Meta.term(airRaid.isTorpedoBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										KC3Meta.term(airRaid.isDiveBombingFound ? "BattleContactYes" : "BattleContactNo"),
+										airRaid.topAntiBomberSquadNames[0], airRaid.topAntiBomberSquadNames[1],
+										airRaid.topAntiBomberSquadNames[2], airRaid.topAntiBomberSquadNames[3],
+										KC3Meta.term("InferredFighterPower").format(airRaid.eFighterPowers)
+									);
+									$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
 								}
 							}
 							if(index === 5) {
