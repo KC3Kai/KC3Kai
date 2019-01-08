@@ -1257,7 +1257,7 @@ KC3改 Ship Object
 				} else if(type2 === 49){
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.18 : // unknown
-						(los >= 9) ? 1.18 : // unknown
+						(los >= 9) ? 1.24 :
 						1.18
 					);
 				// Recon Seaplane, Flying Boat, etc
