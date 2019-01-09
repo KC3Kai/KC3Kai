@@ -2352,11 +2352,12 @@ KC3改 Ship Object
 
 	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
+	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
+	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
-		// Phase2 defined in `PhaseHougeki._getDaihatsuEffectType`
 		const isLand = targetShip.api_soku <= 0;
 		// most priority: Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
@@ -2381,9 +2382,9 @@ KC3改 Ship Object
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu
-			if(this.hasEquipment(193)) return 2;
+			if(this.hasEquipment(193)) return 3;
 			// Daihatsu
-			if(this.hasEquipment(68)) return 1;
+			if(this.hasEquipment(68)) return 3;
 		}
 		return 0;
 	};
