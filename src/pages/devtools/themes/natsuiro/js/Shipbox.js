@@ -244,15 +244,19 @@
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes
-		var hpClasses = ["hp_repairing", "akashiMark",
-			"hp_fcf", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
+		var hpClasses = ["akashiMark", "hp_fcf", "hp_repairing", // used by root element
+			"hp_sunk", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
 		this.element.removeClass(hpClasses);
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
-		// Import repair time script by @Javran
-		var repairTimes = this.shipData.repairTime();
-		var repairCost = this.shipData.calcRepairCost();
-
+		// Show time and cost based on predicted after-battle hp if setting enabled
+		var isAfterHpUsed = ConfigManager.info_battle &&
+			KC3SortieManager.isOnSortie() && (
+				KC3SortieManager.isCombinedSortie() ? [1, 2] : [KC3SortieManager.fleetSent]
+			).includes(this.shipData.onFleet());
+		var repairTimes = this.shipData.repairTime(isAfterHpUsed);
+		var repairCost = this.shipData.calcRepairCost(isAfterHpUsed ? this.shipData.afterHp[0] : 0);
+		
 		if(repairTimes.docking > 0){
 			$(".ship_hp_box", this.element).attr("title", [
 				KC3Meta.term("PanelDocking") + ": " + String(repairTimes.docking).toHHMMSS(),
@@ -322,7 +326,7 @@
 		// Apply only if HP actually changed after prediction
 		if(this.shipData.hp[0] != this.shipData.afterHp[0]){
 			// Make original HP bar gray
-			$(".ship_hp_bar", this.element).css("background", "#ccc");
+			$(".ship_hp_bar", this.element).addClass("hp_sunk");
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];

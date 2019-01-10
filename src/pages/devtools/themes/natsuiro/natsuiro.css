@@ -3228,12 +3228,6 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
-.module.fleet .ship_hp_bar.hp_repairing {
-	background-color:#aaccee;
-}
-.module.fleet .ship_hp_bar.hp_fcf {
-	background-color:#fff;
-}
 .module.fleet .ship_hp_bar.hp_normal {
 	background-color:#0f0;
 }
@@ -3245,6 +3239,15 @@ ABYSS FLEET
 }
 .module.fleet .ship_hp_bar.hp_taiha {
 	background-color:#f00;
+}
+.module.fleet .ship_hp_bar.hp_repairing {
+	background-color:#aaccee;
+}
+.module.fleet .ship_hp_bar.hp_fcf {
+	background-color:#fff;
+}
+.module.fleet .ship_hp_bar.hp_sunk {
+	background-color:#ccc;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;

@@ -437,6 +437,7 @@ KC3改 Equipment Object
 				},
 			},
 			// 14cm Twin Gun Mount
+			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2
 			"119": {
 				count: 0,
 				byClass: {
@@ -445,10 +446,15 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Katori Class
-					"56": "34"
+					"56": "34",
+					// Nisshin Class
+					"90": {
+						multiple: { "houg": 2, "raig": 1 },
+					},
 				},
 			},
 			// 14cm Twin Gun Mount Kai
+			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9
 			"310": {
 				count: 0,
 				byClass: {
@@ -459,6 +465,10 @@ KC3改 Equipment Object
 					// Katori Class
 					"56": {
 						multiple: { "houg": 2, "houk": 1 },
+					},
+					// Nisshin Class
+					"90": {
+						multiple: { "houg": 3, "raig": 2, "tyku": 1, "houk": 1 },
 					},
 				},
 			},
@@ -1139,11 +1149,23 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 5inch Single Gun Mount Mk.30 Kai
+			"313": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						multiple: { "houg": 2, "tyku": 2, "souk": 1, "houk": 1 },
+					},
+					// Fletcher Class
+					"91": "87",
+				},
+			},
 			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
 			"308": {
 				count: 0,
 				byClass: {
-					// John C.Butler Class
+					// John C.Butler Class, extra +1 fp from DD stype
 					"87": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
