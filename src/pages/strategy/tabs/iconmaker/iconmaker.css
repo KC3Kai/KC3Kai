@@ -35,11 +35,14 @@
 	text-align:right;
 }
 
+.tab_iconmaker .cropped_container {
+	display:none;
+}
 .tab_iconmaker .cropped {
 	padding-top:10px;
 	padding-bottom:10px;
 	background:#f0f;
-	display:none;
+	min-height:90px;
 }
 
 .tab_iconmaker .ship_id {
@@ -71,6 +74,18 @@
 }
 .tab_iconmaker .crop_controls .get_result {
 	margin-left:10px;
+}
+
+.tab_iconmaker .cropped_controls {
+	position:absolute;
+	margin:2px 0px 0px 632px;
+}
+.tab_iconmaker .cropped_controls .btn {
+	float:left;
+	width:20px;
+	height:20px;
+	padding:0px 2px;
+	margin:0px 2px;
 }
 
 .tab_iconmaker .preview {

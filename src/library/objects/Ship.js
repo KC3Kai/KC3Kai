@@ -490,30 +490,29 @@ KC3改 Ship Object
 	when optAfterHp is true, return repair time based on afterHp
 	--------------------------------------------------------------*/
 	KC3Ship.prototype.repairTime = function(optAfterHp){
-		var
-			HPPercent  = this.hp[0] / this.hp[1],
-			RepairTSec = Math.hrdInt('floor',this.repair[0],3,1),
-			RepairCalc = PS['KanColle.RepairTime'],
-
-			hpArr = optAfterHp ? this.afterHp : this.hp;
-
+		var hpArr = optAfterHp ? this.afterHp : this.hp,
+			HPPercent  = hpArr[0] / hpArr[1],
+			RepairCalc = PS['KanColle.RepairTime'];
 		var result = { akashi: 0 };
 
 		if (HPPercent > 0.5 && HPPercent < 1.00 && this.isFree()) {
-			var repairTime = KC3AkashiRepair.calculateRepairTime(this.repair[0]);
+			var dockTimeMillis = optAfterHp ?
+				RepairCalc.dockingInSecJSNum(this.master().api_stype, this.level, hpArr[0], hpArr[1]) * 1000 :
+				this.repair[0];
+			var repairTime = KC3AkashiRepair.calculateRepairTime(dockTimeMillis);
 			result.akashi = Math.max(
-				Math.hrdInt('floor', repairTime,3,1), // convert to seconds
+				Math.hrdInt('floor', repairTime, 3, 1), // convert to seconds
 				20 * 60 // should be at least 20 minutes
 			);
 		}
 
 		if (optAfterHp) {
-			result.docking = RepairCalc.dockingInSecJSNum( this.master().api_stype, this.level, hpArr[0], hpArr[1] );
+			result.docking = RepairCalc.dockingInSecJSNum(this.master().api_stype, this.level, hpArr[0], hpArr[1]);
 		} else {
 			result.docking = this.isRepairing() ?
 				Math.ceil(KC3TimerManager.repair(PlayerManager.repairShips.indexOf(this.rosterId)).remainingTime()) / 1000 :
 				/* RepairCalc. dockingInSecJSNum( this.master().api_stype, this.level, this.hp[0], this.hp[1] ) */
-				RepairTSec;
+				Math.hrdInt('floor', this.repair[0], 3, 1);
 		}
 		return result;
 	};
@@ -553,16 +552,12 @@ KC3改 Ship Object
 		result.fuel = marriageConserve(result.fuel);
 		result.ammo = marriageConserve(result.ammo);
 		if(bauxiteNeeded){
-			var slotsBauxiteCost = function(current, max) {
-				return current < max ? (max-current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0;
-			};
-			var shipBauxiteCost = function() {
-				return slotsBauxiteCost(self.slots[0], master.api_maxeq[0])
-					+ slotsBauxiteCost(self.slots[1], master.api_maxeq[1])
-					+ slotsBauxiteCost(self.slots[2], master.api_maxeq[2])
-					+ slotsBauxiteCost(self.slots[3], master.api_maxeq[3]);
-			};
-			result.bauxite = shipBauxiteCost();
+			var slotsBauxiteCost = (current, max) => (
+				current < max ? (max - current) * KC3GearManager.carrierSupplyBauxiteCostPerSlot : 0
+			);
+			result.bauxite = self.equipment()
+				.map((g, i) => slotsBauxiteCost(self.slots[i], master.api_maxeq[i]))
+				.sumValues();
 			// Bauxite cost to fill slots not affected by marriage.
 			// via http://kancolle.wikia.com/wiki/Marriage
 			//result.bauxite = marriageConserve(result.bauxite);
@@ -1262,7 +1257,7 @@ KC3改 Ship Object
 				} else if(type2 === 49){
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.18 : // unknown
-						(los >= 9) ? 1.18 : // unknown
+						(los >= 9) ? 1.24 :
 						1.18
 					);
 				// Recon Seaplane, Flying Boat, etc
@@ -2357,11 +2352,12 @@ KC3改 Ship Object
 
 	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
+	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
+	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
 	 */
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
-		// Phase2 defined in `PhaseHougeki._getDaihatsuEffectType`
 		const isLand = targetShip.api_soku <= 0;
 		// most priority: Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
@@ -2386,9 +2382,9 @@ KC3改 Ship Object
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu
-			if(this.hasEquipment(193)) return 2;
+			if(this.hasEquipment(193)) return 3;
 			// Daihatsu
-			if(this.hasEquipment(68)) return 1;
+			if(this.hasEquipment(68)) return 3;
 		}
 		return 0;
 	};

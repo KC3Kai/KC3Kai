@@ -1498,7 +1498,7 @@
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
-			var sortieSpecialCutins = ConfigManager.info_compass ? thisNode.sortieSpecialCutins || [] : [];
+			var sortieSpecialCutins = (ConfigManager.info_compass && ConfigManager.info_battle) ? thisNode.sortieSpecialCutins || [] : [];
 
 			// COMBINED
 			if(selectedFleet == 5){
@@ -1790,7 +1790,8 @@
 						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo,
 						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
-						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo
+						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo,
+						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel
 					)) + (!(FleetSummary.repairCost.fuel || FleetSummary.repairCost.steel) ? "" :
