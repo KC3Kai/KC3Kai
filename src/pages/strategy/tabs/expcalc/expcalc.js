@@ -230,6 +230,19 @@
 							return isUp * (+$(b).find(".ship_exp .ship_value").text() - +$(a).find(".ship_exp .ship_value").text());
 						} else if (sortType == "shiptype") {
 							return isUp * ($(b).find(".ship_info .ship_type").text().localeCompare($(a).find(".ship_info .ship_type").text()));
+						} else if (sortType == "gameorder") {
+							const getID = e => Number($(e).attr("id").substr(7))
+							const getShip = e => KC3ShipManager.get(getID(e))
+							const [shipA, shipB] = [getShip(a), getShip(b)]
+							const [masterA, masterB] = [shipA.master(), shipB.master()]
+							const sortIndicator = masterA.api_sort_id != masterB.api_sort_id
+								? masterA.api_sort_id - masterB.api_sort_id
+								: shipA.level != shipB.level
+									? shipB.level - shipA.level
+									: shipA.masterId != shipB.masterId
+										? shipA.masterId - shipB.masterId
+										: 0
+							return -isUp * sortIndicator
 						}
 					};
 					sortedElements.sort(function(a, b) {
