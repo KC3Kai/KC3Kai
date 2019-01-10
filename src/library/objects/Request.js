@@ -27,6 +27,11 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode !== 200){
+			// Do not trigger a catbomb box if server responds following:
+			if(this.statusCode === 302 || this.statusCode === 307){
+				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers);
+				return false;
+			}
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
