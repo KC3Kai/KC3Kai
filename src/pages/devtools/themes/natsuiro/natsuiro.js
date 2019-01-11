@@ -28,7 +28,6 @@
 	var critAnim = false;
 	const critSoundSrc = ConfigManager.alert_taiha_sound_src.trim();
 	const critSound = new Audio(critSoundSrc != "" ? critSoundSrc : "../../../../assets/snd/heart.mp3");
-	var critSound = new Audio("../../../../assets/snd/heart.mp3");
 	critSound.loop = true;
 
 	// The URL prefix of current player's KC server
