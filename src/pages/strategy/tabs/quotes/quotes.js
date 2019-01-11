@@ -180,8 +180,11 @@
 				var shipEntity = $(".factory .ship_entity").clone();
 				var shipData = allShips[masterId];
 
+				var graphFilename = KC3Master.graph(masterId).api_filename;
 				$(".ship_icon img",shipEntity).attr("src", KC3Meta.shipIcon(masterId));
-				$(".ship_name",shipEntity).text( self.buildShipName(masterId, shipData) );
+				$(".ship_name",shipEntity).text(self.buildShipName(masterId, shipData))
+					.attr("title", graphFilename);
+				$(".ship_graph",shipEntity).text(graphFilename);
 
 				var shipLines = quotes[masterId];
 				var availableVoiceNums = KC3Translation.getShipVoiceNums(masterId);
