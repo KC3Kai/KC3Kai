@@ -26,6 +26,8 @@
 	
 	// Critical Animation and Sound Effect
 	var critAnim = false;
+	const critSoundSrc = ConfigManager.alert_taiha_sound_src.trim();
+	const critSound = new Audio(critSoundSrc != "" ? critSoundSrc : "../../../../assets/snd/heart.mp3");
 	var critSound = new Audio("../../../../assets/snd/heart.mp3");
 	critSound.loop = true;
 
@@ -1433,7 +1435,7 @@
 					}
 				}
 
-				if(ConfigManager.alert_taiha_sound){
+				if (ConfigManager.alert_taiha_sound && critSound.paused) {
 					critSound.play();
 				}
 
@@ -1444,6 +1446,7 @@
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
 				critSound.pause();
+				critSound.currentTime = 0;
 
 				(new RMsg("service", "taihaAlertStop", {
 					tabId: chrome.devtools.inspectedWindow.tabId

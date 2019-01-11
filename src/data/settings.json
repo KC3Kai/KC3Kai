@@ -722,6 +722,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_taiha_sound_src",
+				"name" : "SettingsHeartbeatSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
+			},
+			{
 				"id" : "alert_taiha_panel",
 				"name" : "SettingsRedShadeOnPanel",
 				"type" : "check",
