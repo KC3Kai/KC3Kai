@@ -769,6 +769,7 @@ KC3改 Ship Object
 						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
+						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
 						flag = true;
 						if (check.single) { gear.count = 1; }
