@@ -233,16 +233,19 @@
 						} else if (sortType == "gameorder") {
 							const getID = e => Number($(e).attr("id").substr(7));
 							const getShip = e => KC3ShipManager.get(getID(e));
+							const [ridA, ridB] = [getID(a), getID(b)];
 							const [shipA, shipB] = [getShip(a), getShip(b)];
 							const [masterA, masterB] = [shipA.master(), shipB.master()];
-							const sortIndicator = masterA.api_sort_id != masterB.api_sort_id
-								? masterA.api_sort_id - masterB.api_sort_id
-								: shipA.level != shipB.level
-									? shipB.level - shipA.level
-									: shipA.masterId != shipB.masterId
-										? shipA.masterId - shipB.masterId
-										: 0;
-							return -isUp * sortIndicator;
+							return isUp * (
+								// Using the in-game combined order priority to ship class,
+								//   not the default one with 'Lv' icon.
+								// This also used by our ship list page and showcase exporter.
+								// Btw, order icon is always a 'down' arrow in-game,
+								//   we adapt it as our default 'up' arrow, so following conditions are reversed.
+								masterB.api_sort_id - masterA.api_sort_id ||
+								shipA.level - shipB.level ||
+								ridA - ridB
+							);
 						}
 					};
 					sortedElements.sort(function(a, b) {
