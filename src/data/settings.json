@@ -467,7 +467,8 @@
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsSSDirDesc",
-					"tooltip" : "SettingsSSDirDesc"
+					"tooltip" : "SettingsSSDirDesc",
+					"invalidregexp" : "(?:^[\\\\/]|[\\\\/]\\.\\.?|\\.\\.?[\\\\/]|[\\\\/]{2,}|[?*:\"<>|])"
 				}
 			},
 			{
@@ -723,7 +724,7 @@
 			},
 			{
 				"id" : "alert_taiha_sound_src",
-				"name" : "SettingsHeartbeatSound",
+				"name" : "SettingsAlertCustomSound",
 				"type" : "long_text",
 				"options" : { "placeholder" : "http://" }
 			},

@@ -136,7 +136,7 @@ To be dynamically used on the settings page
 		$(".options", this.element).append(
 			$("<input/>")
 			.attr("type", "text")
-			.attr("placeholder", KC3Meta.term( options.placeholder ) )
+			.attr("placeholder", KC3Meta.term( (options || {}).placeholder ) )
 			.attr("title", KC3Meta.term( (options || {}).tooltip ) )
 			.addClass("long_text")
 			.prop("disabled", this.disabled)
@@ -146,6 +146,18 @@ To be dynamically used on the settings page
 				if(isDangerous($(this).parent().parent(),self.config,$(this).val())) {
 					$(this).val(ConfigManager[self.config]);
 					return false;
+				}
+				// Invalid Value Attempt
+				if(options && $(this).val() && (options.invalidregexp || options.validregexp)) {
+					var ng = options.invalidregexp && new RegExp(options.invalidregexp).exec($(this).val());
+					var gd = options.validregexp && new RegExp(options.validregexp).exec($(this).val());
+					if(ng !== null || gd === null) {
+						console.log("Validation failed, N:/{1}/ G:/{2}/ I:`{0}`".format(
+							$(this).val(), options.invalidregexp, options.validregexp), ng);
+						elementControl($(this).parent().siblings(".note"), 'red', KC3Meta.term("SettingsErrorSuper"));
+						$(this).val(ConfigManager[self.config]);
+						return false;
+					}
 				}
 				ConfigManager.loadIfNecessary();
 				ConfigManager[ self.config ] = $(this).val();
