@@ -1319,8 +1319,8 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
-	 * Get fleet LoS for determining artillery spotting rate
-	 * @see KC3Ship.dayBattleBaseValue
+	 * Get fleet LoS for determining artillery spotting rate.
+	 * @see KC3Ship.daySpAttackBaseRate
 	 */
 	KC3Fleet.prototype.artillerySpottingLineOfSight = function() {
 		let value = 0;
@@ -1329,6 +1329,7 @@ Contains summary information about a fleet and its ships
 			ship.equipment().forEach((equip, index) => {
 				const master = equip.master();
 				if (master && [10, 11].includes(master.api_type[2])) {
+					// Unknown if explicit on ship LoS bonus gets in here or not
 					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
 				}
 			});

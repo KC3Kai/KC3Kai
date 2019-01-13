@@ -2796,124 +2796,120 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Calculates base value used in day battle artillery spotting chance
-	 * Likely to be revamped as formula comes from psvita and does not include CVCI
+	 * Calculates base value used in day battle artillery spotting process chance.
+	 * Likely to be revamped as formula comes from PSVita and does not include CVCI,
+	 * uncertain about Combined Fleet interaction.
 	 * @see https://kancolle.wikia.com/wiki/User_blog:Shadow27X/Artillery_Spotting_Rate_Formula
-	 * Unsure about CF interaction
 	 */
-	KC3Ship.prototype.dayBattleBaseValue = function() {
+	KC3Ship.prototype.daySpAttackBaseRate = function() {
 		if (this.isDummy() || !this.onFleet()) { return {}; }
-		const onFleet = this.onFleet();
-		const fleet = PlayerManager.fleets[onFleet - 1];
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		const fleet = PlayerManager.fleets[fleetNum - 1];
 		const fleetLoS = fleet.artillerySpottingLineOfSight();
 		const adjFleetLoS = Math.floor(Math.sqrt(fleetLoS) + fleetLoS / 10);
 		const adjLuck = Math.floor(Math.sqrt(this.lk[0]) + 10);
-		const equipLoS = this.equipment(true).map(equip => (equip.master() ? equip.master().api_saku || 0 : 0)).sumValues();
-		const [position] = this.fleetPosition();
-		const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-		KC3SortieManager.currentNode() : {};
-		const seiku = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ? currentNode.seiku : 1;
-		let baseValue = seiku === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 : seiku === 2 ? 
-			adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
+		// might exclude equipment on ship LoS bonus for now,
+		// to include LoS bonus, use `this.equipmentTotalLoS()` instead
+		const equipLoS = this.equipmentTotalStats("saku", true, false);
+		// assume to best condition AS+ by default (for non-battle)
+		const airBattleId = this.collectBattleConditions().airBattleId || 1;
+		const baseValue = airBattleId === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 :
+			airBattleId === 2 ? adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
 		return {
-			baseValue: baseValue,
-			isFlagship: position === 0,
-			equipLoS: equipLoS,
-			fleetLoS: fleetLoS,
-			seiku: seiku
+			baseValue,
+			isFlagship: shipPos === 0,
+			equipLoS,
+			fleetLoS,
+			dispSeiku: airBattleId
 		};
 	};
 
 	/**
-	 * Calculates base value used in night battle cut-in proc chance
-	 * @param {number} currentHp - Used if simulating from battle prediction or getting different chuuha/healthy values
+	 * Calculates base value used in night battle cut-in process chance.
+	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
 	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
 	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
 	 */
-	KC3Ship.prototype.nightBattleBaseValue = function(currentHp) {
-		if(this.isDummy()) { return {}; }
+	KC3Ship.prototype.nightSpAttackBaseRate = function(currentHp) {
+		if (this.isDummy()) { return {}; }
 		let baseValue = 0;
 		if (this.lk[0] < 50) {
 			baseValue += 15 + this.lk[0] + 0.75 * Math.sqrt(this.level);
-		}
-		else {
+		} else {
 			baseValue += 65 + Math.sqrt(this.lk[0] - 50) + 0.8 * Math.sqrt(this.level);
 		}
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		// Flagship bonus
-		const [position] = this.fleetPosition();
-		if (position === 0) { baseValue += 15; }
+		const isFlagship = shipPos === 0;
+		if (isFlagship) { baseValue += 15; }
 		// Chuuha bonus
 		const isChuuhaOrWorse = (currentHp || this.hp[0]) <= (this.hp[1] / 2);
-		if (isChuuhaOrWorse) {
-			baseValue += 18;
-		}
+		if (isChuuhaOrWorse) { baseValue += 18; }
 		// Skilled lookout bonus
 		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
 		// Searchlight bonus, large SL unknown for now
-		const fleetSearchlight = PlayerManager.fleets[this.onFleet() - 1].estimateUsableSearchlight();
+		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (fleetSearchlight) { baseValue += 7; }
 		// Starshell bonus/penalty
-		const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
-			KC3SortieManager.currentNode() : {};
-		const playerStarshell = currentNode.flarePos > -1;
+		const battleConds = this.collectBattleConditions();
+		const playerStarshell = battleConds.playerFlarePos > 0;
+		const enemyStarshell = battleConds.enemyFlarePos > 0;
 		if (playerStarshell) { baseValue += 4; }
-			const enemyStarshell = currentNode.eFlarePos > -1;
 		if (enemyStarshell) { baseValue += -10; }
 		return {
-			baseValue: baseValue,
-			isFlagship: position === 0,
-			isChuuhaOrWorse: isChuuhaOrWorse,
-			fleetSearchlight: fleetSearchlight,
-			playerStarShell: playerStarshell,
-			enemyStarshell: enemyStarshell
+			baseValue,
+			isFlagship,
+			isChuuhaOrWorse,
+			fleetSearchlight,
+			playerStarshell,
+			enemyStarshell
 		};
 	};
 
 	/**
-	 * Calculate ship artillery spotting rates based on known type factors
-	 * @see dayBattleBaseValue
+	 * Calculate ship day time artillery spotting process rate based on known type factors.
+	 * @param {number} at_type_id - Based on api_at_type value of artillery spotting type.
+	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
+	 * @see daySpAttackBaseRate
 	 * @see estimateDayAttackType
-	 * @param {number} at_type - Based on api_at_type value of arty spotting type
-	 * If unable to arty spot or unknown special attack, @return false
-	 * Else, @return {number} of arty spotting percentage
 	 */
-	KC3Ship.prototype.artillerySpottingRate = function(at_type = 0) {
-		if (at_type < 2 || this.isDummy() || !this.onFleet()) { return false; }
-		const formatNum = num => Math.floor(num * 1000) / 10;
-		const {baseValue, isFlagship} = this.dayBattleBaseValue();
+	KC3Ship.prototype.artillerySpottingRate = function(at_type_id = 0) {
+		if (at_type_id < 2 || this.isDummy() || !this.onFleet()) { return false; }
 		const typeFactor = {
 			2: 150,
 			3: 120,
 			4: 130,
 			5: 130,
 			6: 140,
-		}[at_type];
+		}[at_type_id];
 		if (!typeFactor) { return false; }
-		return formatNum(((Math.floor(baseValue) + (isFlagship ? 15 : 0)) / typeFactor) || 0);
+		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		return formatPercent(((Math.floor(baseValue) + (isFlagship ? 15 : 0)) / typeFactor) || 0);
 	};
 
 	/**
-	 * Calculate ship night battle cutin rate based on known type factors
-	 * @see nightBattleBaseValue
+	 * Calculate ship night battle special attack (cut-in and double attack) process rate based on known type factors.
+	 * @param {number} sp_list_id - Based on api_sp_list value of night special attack type.
+	 * @return {number} special attack percentage, false if unable to perform or unknown special attack.
+	 * @see nightSpAttackBaseRate
 	 * @see estimateDayAttackType
-	 * @param {number} sp_num - Based on api_sp_list value of special attack
-	 * If unable to perform special attack or unknown special attack, @return false
-	 * Else, @return {number} of special attack rate
 	 */
-	KC3Ship.prototype.nightCutinRate = function(sp_num = 0) {
-		if (sp_num < 1 || this.isDummy()) { return false; }
-		if (sp_num === 1) { return 99; }
-		const formatNum = num => Math.floor(num * 1000) / 10;
-		const {baseValue} = this.nightBattleBaseValue();
+	KC3Ship.prototype.nightCutinRate = function(sp_list_id = 0) {
+		if (sp_list_id < 1 || this.isDummy()) { return false; }
+		// not sure: DA success rate almost 99%
+		if (sp_list_id === 1) { return 99; }
 		const typeFactor = {
 			2: 130,
 			3: 122,
 			4: 130,
 			5: 140,
 			7: 130,
-		}[sp_num];
+		}[sp_list_id];
 		if (!typeFactor) { return false; }
-		return formatNum((Math.floor(baseValue) / typeFactor) || 0);
+		const {baseValue} = this.nightSpAttackBaseRate();
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		return formatPercent((Math.floor(baseValue) / typeFactor) || 0);
 	};
 
 	/**
