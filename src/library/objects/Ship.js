@@ -2281,8 +2281,8 @@ KC3改 Ship Object
 		if(this.isStriped()) return false;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		if(targetShipType.isSubmarine || targetShipType.isLand) return false;
-		// DD, CL, CLT, CA, CAV, AV, SS, SSV, FBB, BB, BBV, CT
-		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 18, 21].includes(this.master().api_stype);
+		// DD, CL, CLT, CA, CAV, FBB, BB, BBV, SS, SSV, AV, CT
+		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 16, 21].includes(this.master().api_stype);
 		return isTorpedoStype && this.estimateNakedStats("tp") > 0;
 	};
 
