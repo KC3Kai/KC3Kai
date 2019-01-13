@@ -454,6 +454,7 @@ Used by SortieManager
 		this.econtactId = planePhase.api_touch_plane[1];
 		this.econtact = this.econtactId > 0 ? KC3Meta.term("BattleContactYes") : KC3Meta.term("BattleContactNo");
 		
+		this.seiku = planePhase.api_disp_seiku;
 		this.airbattle = KC3Meta.airbattle( planePhase.api_disp_seiku );
 		
 		if(!!attackPhase && !!attackPhase.api_air_fire){
