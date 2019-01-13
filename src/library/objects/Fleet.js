@@ -749,8 +749,8 @@ Contains summary information about a fleet and its ships
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
 			// 10% since Fall 2017 event
-			totalCost.nightStartFuel += Math.ceil(maxFuel * 0.1);
-			totalCost.nightStartAmmo += Math.ceil(maxAmmo * 0.1);
+			totalCost.nightStartFuel += Math.floor(maxFuel * 0.1) || 1;
+			totalCost.nightStartAmmo += Math.floor(maxAmmo * 0.1) || 1;
 			// 8% fuel, no ammo since Fall 2017 event
 			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.aswAmmo += 0;
