@@ -1318,6 +1318,24 @@ Contains summary information about a fleet and its ships
 		return result.every(v => v === -1) ? false : result;
 	};
 
+	/**
+	 * Get fleet LoS for determining artillery spotting rate
+	 * @see KC3Ship.dayBattleBaseValue
+	 */
+	KC3Fleet.prototype.artillerySpottingLineOfSight = function() {
+		let value = 0;
+		this.shipsUnescaped().forEach(ship => {
+			value += ship.nakedLoS();
+			ship.equipment().forEach((equip, index) => {
+				const master = equip.master();
+				if (master && [10, 11].includes(master.api_type[2])) {
+					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
+				}
+			});
+		});
+		return value;
+	};
+
 	/*--------------------------------------------------------*/
 	/*----------------------[ DATA EXPORT ]-------------------*/
 	/*--------------------------------------------------------*/
