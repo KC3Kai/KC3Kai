@@ -774,6 +774,15 @@
 			if(localStorage.tsundb_gunfits === undefined)
 				return -2;
 			
+			const modalWarning = function (warning) {
+				const title = warning + "Title", message = warning + "Message";
+				if (KC3SortieManager.isOnSortie()) {
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term(title),
+						message: KC3Meta.term(message),
+					});
+				}
+			};
 			let status = -2;
 			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
 			const onClick = e => {
@@ -797,7 +806,9 @@
 				}
 				status = Math.max(status, testStatus);
 			}
-			
+			if (status < 0) {
+				modalWarning(status === -1 ? "TsunDBTestWrongMorale" : "TsunDBTestWrongSetup");
+			}
 			return status;
 		},
 		
@@ -815,6 +826,14 @@
 			
 			const equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
 			const testEquip = test.equipment;
+
+			if(test.minVersion) {
+				const kc3version = this.manifest.version;
+				const convertString = string => Number(string.replace(/[.]/g, ""));
+				if (convertString(test.minVersion) > convertString(kc3version)) {
+					return -2;
+				}
+			}
 			
 			eqloop: for(const e of testEquip) {
 				for(const i in equip) {
@@ -826,8 +845,26 @@
 				return -2; // Missing required equip
 			}
 			
-			if(equip.length > 0)
-				return -2; // Too many equips, might ignore some equip types that don't affect acc
+			if (test.accuracy) {
+				let equipAcc = 0;
+				const accCheck = test.accuracy;
+				const stype = ship.master().api_stype;
+				for (let idx in equip) {
+					const eqType2 = equip[idx].master().api_type[2];
+					// Either radars or medium caliber guns on (F)BB(V) to adjust accuracy
+					if ([12, 13].includes(eqType2) || (eqType2 === 2 && [8, 9, 10].includes(stype))) {
+						equipAcc += equip[idx].master().api_houm;
+					} else {
+						return -2; // Non-test related equipment
+					}
+				}
+				if (equipAcc !== accCheck) {
+					return -2; // Too little or too much accuracy
+				}
+			}	
+			else if(equip.length > 0) {
+				return -2; // Too many equips
+			}
 			
 			if(morale < test.moraleRange[0]
 				|| morale > test.moraleRange[1])
