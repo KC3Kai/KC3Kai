@@ -113,8 +113,10 @@
 				// Generate morale info
 				$(".morale_range", testItem).text(`Morale: ${rangeText(test.moraleRange)}`);
 
-				if (test.accuracy) {
-					$(".radar_offset", testItem).text((test.accuracy > 0 ? `Total Radar Accuracy Required: ` : `203mm Total Accuracy Penalty Required: `) + test.accuracy);
+				if(test.accuracy) {
+					$(".radar_offset", testItem).text(
+						`${test.accuracy > 0 ? "Total Radar Accuracy Required:" : "203mm Total Accuracy Penalty Required:"} ${test.accuracy}`
+					);
 				}
 
 				// Current fleet status, assuming 1st fleet will be sortied to test
