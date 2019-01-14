@@ -1320,7 +1320,7 @@ Contains summary information about a fleet and its ships
 
 	/**
 	 * Get fleet LoS for determining artillery spotting rate.
-	 * @see KC3Ship.daySpAttackBaseRate
+	 * @see KC3Ship.prototype.daySpAttackBaseRate
 	 */
 	KC3Fleet.prototype.artillerySpottingLineOfSight = function() {
 		let value = 0;

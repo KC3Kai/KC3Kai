@@ -2800,6 +2800,7 @@ KC3改 Ship Object
 	 * Likely to be revamped as formula comes from PSVita and does not include CVCI,
 	 * uncertain about Combined Fleet interaction.
 	 * @see https://kancolle.wikia.com/wiki/User_blog:Shadow27X/Artillery_Spotting_Rate_Formula
+	 * @see KC3Fleet.prototype.artillerySpottingLineOfSight
 	 */
 	KC3Ship.prototype.daySpAttackBaseRate = function() {
 		if (this.isDummy() || !this.onFleet()) { return {}; }
@@ -2829,6 +2830,7 @@ KC3改 Ship Object
 	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
 	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
 	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
+	 * @see KC3Fleet.prototype.estimateUsableSearchlight
 	 */
 	KC3Ship.prototype.nightSpAttackBaseRate = function(currentHp) {
 		if (this.isDummy()) { return {}; }
@@ -2868,20 +2870,21 @@ KC3改 Ship Object
 
 	/**
 	 * Calculate ship day time artillery spotting process rate based on known type factors.
-	 * @param {number} at_type_id - Based on api_at_type value of artillery spotting type.
+	 * @param {number} atType - based on api_at_type value of artillery spotting type.
 	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
 	 * @see daySpAttackBaseRate
 	 * @see estimateDayAttackType
 	 */
-	KC3Ship.prototype.artillerySpottingRate = function(at_type_id = 0) {
-		if (at_type_id < 2 || this.isDummy() || !this.onFleet()) { return false; }
+	KC3Ship.prototype.artillerySpottingRate = function(atType = 0) {
+		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
+		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
 		const typeFactor = {
 			2: 150,
 			3: 120,
 			4: 130,
 			5: 130,
 			6: 140,
-		}[at_type_id];
+		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
 		const formatPercent = num => Math.floor(num * 1000) / 10;
@@ -2890,22 +2893,22 @@ KC3改 Ship Object
 
 	/**
 	 * Calculate ship night battle special attack (cut-in and double attack) process rate based on known type factors.
-	 * @param {number} sp_list_id - Based on api_sp_list value of night special attack type.
+	 * @param {number} spType - based on api_sp_list value of night special attack type.
 	 * @return {number} special attack percentage, false if unable to perform or unknown special attack.
 	 * @see nightSpAttackBaseRate
-	 * @see estimateDayAttackType
+	 * @see estimateNightAttackType
 	 */
-	KC3Ship.prototype.nightCutinRate = function(sp_list_id = 0) {
-		if (sp_list_id < 1 || this.isDummy()) { return false; }
+	KC3Ship.prototype.nightCutinRate = function(spType = 0) {
+		if (spType < 1 || this.isDummy()) { return false; }
 		// not sure: DA success rate almost 99%
-		if (sp_list_id === 1) { return 99; }
+		if (spType === 1) { return 99; }
 		const typeFactor = {
 			2: 130,
 			3: 122,
 			4: 130,
 			5: 140,
 			7: 130,
-		}[sp_list_id];
+		}[spType];
 		if (!typeFactor) { return false; }
 		const {baseValue} = this.nightSpAttackBaseRate();
 		const formatPercent = num => Math.floor(num * 1000) / 10;
