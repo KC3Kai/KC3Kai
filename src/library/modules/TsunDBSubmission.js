@@ -774,8 +774,8 @@
 			if(localStorage.tsundb_gunfits === undefined)
 				return -2;
 			
-			const modalWarning = function (warning) {
-				const title = warning + "Title", message = warning + "Message";
+			const modalWarning = function (termPrefix) {
+				const title = termPrefix + "Title", message = termPrefix + "Message";
 				if (KC3SortieManager.isOnSortie()) {
 					KC3Network.trigger("ModalBox", {
 						title: KC3Meta.term(title),
@@ -829,9 +829,9 @@
 
 			if(test.minVersion) {
 				const kc3version = this.manifest.version;
-				const convertString = string => Number(string.replace(/[.]/g, ""));
-				if (convertString(test.minVersion) > convertString(kc3version)) {
-					return -2;
+				const verStr2Num = str => Number(str.replace(/[.]/g, ""));
+				if(verStr2Num(test.minVersion) > verStr2Num(kc3version)) {
+					return -2; // Wrong KC3 minimum version
 				}
 			}
 			
@@ -845,20 +845,20 @@
 				return -2; // Missing required equip
 			}
 			
-			if (test.accuracy) {
+			if(test.accuracy) {
 				let equipAcc = 0;
 				const accCheck = test.accuracy;
 				const stype = ship.master().api_stype;
 				for (let idx in equip) {
 					const eqType2 = equip[idx].master().api_type[2];
 					// Either radars or medium caliber guns on (F)BB(V) to adjust accuracy
-					if ([12, 13].includes(eqType2) || (eqType2 === 2 && [8, 9, 10].includes(stype))) {
+					if([12, 13].includes(eqType2) || (eqType2 === 2 && [8, 9, 10].includes(stype))) {
 						equipAcc += equip[idx].master().api_houm;
 					} else {
 						return -2; // Non-test related equipment
 					}
 				}
-				if (equipAcc !== accCheck) {
+				if(equipAcc !== accCheck) {
 					return -2; // Too little or too much accuracy
 				}
 			}	
