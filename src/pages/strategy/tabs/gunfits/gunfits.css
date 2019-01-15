@@ -39,6 +39,9 @@
 .tab_gunfits .testitem .morale_range {
 	float: left;
 }
+.tab_gunfits .testitem .radar_offset {
+	float: left;
+}
 .tab_gunfits .testitem .shipinfo .generalship {
 	display: table;
 }

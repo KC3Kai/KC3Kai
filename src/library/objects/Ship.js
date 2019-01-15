@@ -769,6 +769,7 @@ KC3改 Ship Object
 						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
+						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
 						flag = true;
 						if (check.single) { gear.count = 1; }
@@ -2280,8 +2281,8 @@ KC3改 Ship Object
 		if(this.isStriped()) return false;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		if(targetShipType.isSubmarine || targetShipType.isLand) return false;
-		// DD, CL, CLT, CA, CAV, AV, SS, SSV, FBB, BB, BBV, CT
-		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 18, 21].includes(this.master().api_stype);
+		// DD, CL, CLT, CA, CAV, FBB, BB, BBV, SS, SSV, AV, CT
+		const isTorpedoStype = [2, 3, 4, 5, 6, 8, 9, 10, 13, 14, 16, 21].includes(this.master().api_stype);
 		return isTorpedoStype && this.estimateNakedStats("tp") > 0;
 	};
 
@@ -2792,6 +2793,126 @@ KC3改 Ship Object
 		const topGear = this.equipment().find(gear => gear.exists() &&
 			[1, 2, 3].includes(gear.master().api_type[1]));
 		return topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0];
+	};
+
+	/**
+	 * Calculates base value used in day battle artillery spotting process chance.
+	 * Likely to be revamped as formula comes from PSVita and does not include CVCI,
+	 * uncertain about Combined Fleet interaction.
+	 * @see https://kancolle.wikia.com/wiki/User_blog:Shadow27X/Artillery_Spotting_Rate_Formula
+	 * @see KC3Fleet.prototype.artillerySpottingLineOfSight
+	 */
+	KC3Ship.prototype.daySpAttackBaseRate = function() {
+		if (this.isDummy() || !this.onFleet()) { return {}; }
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		const fleet = PlayerManager.fleets[fleetNum - 1];
+		const fleetLoS = fleet.artillerySpottingLineOfSight();
+		const adjFleetLoS = Math.floor(Math.sqrt(fleetLoS) + fleetLoS / 10);
+		const adjLuck = Math.floor(Math.sqrt(this.lk[0]) + 10);
+		// might exclude equipment on ship LoS bonus for now,
+		// to include LoS bonus, use `this.equipmentTotalLoS()` instead
+		const equipLoS = this.equipmentTotalStats("saku", true, false);
+		// assume to best condition AS+ by default (for non-battle)
+		const airBattleId = this.collectBattleConditions().airBattleId || 1;
+		const baseValue = airBattleId === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 :
+			airBattleId === 2 ? adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
+		return {
+			baseValue,
+			isFlagship: shipPos === 0,
+			equipLoS,
+			fleetLoS,
+			dispSeiku: airBattleId
+		};
+	};
+
+	/**
+	 * Calculates base value used in night battle cut-in process chance.
+	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
+	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
+	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
+	 * @see KC3Fleet.prototype.estimateUsableSearchlight
+	 */
+	KC3Ship.prototype.nightSpAttackBaseRate = function(currentHp) {
+		if (this.isDummy()) { return {}; }
+		let baseValue = 0;
+		if (this.lk[0] < 50) {
+			baseValue += 15 + this.lk[0] + 0.75 * Math.sqrt(this.level);
+		} else {
+			baseValue += 65 + Math.sqrt(this.lk[0] - 50) + 0.8 * Math.sqrt(this.level);
+		}
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		// Flagship bonus
+		const isFlagship = shipPos === 0;
+		if (isFlagship) { baseValue += 15; }
+		// Chuuha bonus
+		const isChuuhaOrWorse = (currentHp || this.hp[0]) <= (this.hp[1] / 2);
+		if (isChuuhaOrWorse) { baseValue += 18; }
+		// Skilled lookout bonus
+		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
+		// Searchlight bonus, large SL unknown for now
+		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
+		if (fleetSearchlight) { baseValue += 7; }
+		// Starshell bonus/penalty
+		const battleConds = this.collectBattleConditions();
+		const playerStarshell = battleConds.playerFlarePos > 0;
+		const enemyStarshell = battleConds.enemyFlarePos > 0;
+		if (playerStarshell) { baseValue += 4; }
+		if (enemyStarshell) { baseValue += -10; }
+		return {
+			baseValue,
+			isFlagship,
+			isChuuhaOrWorse,
+			fleetSearchlight,
+			playerStarshell,
+			enemyStarshell
+		};
+	};
+
+	/**
+	 * Calculate ship day time artillery spotting process rate based on known type factors.
+	 * @param {number} atType - based on api_at_type value of artillery spotting type.
+	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
+	 * @see daySpAttackBaseRate
+	 * @see estimateDayAttackType
+	 */
+	KC3Ship.prototype.artillerySpottingRate = function(atType = 0) {
+		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
+		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
+		const typeFactor = {
+			2: 150,
+			3: 120,
+			4: 130,
+			5: 130,
+			6: 140,
+		}[atType];
+		if (!typeFactor) { return false; }
+		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		return formatPercent(((Math.floor(baseValue) + (isFlagship ? 15 : 0)) / typeFactor) || 0);
+	};
+
+	/**
+	 * Calculate ship night battle special attack (cut-in and double attack) process rate based on known type factors.
+	 * @param {number} spType - based on api_sp_list value of night special attack type.
+	 * @return {number} special attack percentage, false if unable to perform or unknown special attack.
+	 * @see nightSpAttackBaseRate
+	 * @see estimateNightAttackType
+	 */
+	KC3Ship.prototype.nightCutinRate = function(spType = 0) {
+		if (spType < 1 || this.isDummy()) { return false; }
+		// not sure: DA success rate almost 99%
+		if (spType === 1) { return 99; }
+		const typeFactor = {
+			2: 130,
+			3: 122,
+			4: 130,
+			5: 140,
+			7: 130,
+		}[spType];
+		if (!typeFactor) { return false; }
+		const {baseValue} = this.nightSpAttackBaseRate();
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		return formatPercent((Math.floor(baseValue) / typeFactor) || 0);
 	};
 
 	/**
@@ -3491,6 +3612,7 @@ KC3改 Ship Object
 			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
 			const canClosingTorp = shipObj.canDoClosingTorpedo();
 			const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
+			const dayCutinRate = shipObj.artillerySpottingRate(spAttackType[1]);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				({power} = shipObj.applyPrecapModifiers(power, warfareTypeDay,
@@ -3510,7 +3632,7 @@ KC3改 Ship Object
 			}
 			let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
-					KC3Meta.cutinTypeDay(spAttackType[1]) :
+					KC3Meta.cutinTypeDay(spAttackType[1]) + (dayCutinRate ? " {0}%".format(dayCutinRate) : "") :
 					KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
@@ -3566,6 +3688,7 @@ KC3改 Ship Object
 			let criticalPower = false;
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
+			const nightCutinRate = shipObj.nightCutinRate(spAttackType[1]);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				({power} = shipObj.applyPrecapModifiers(power, warfareTypeNight,
@@ -3584,7 +3707,7 @@ KC3改 Ship Object
 			}
 			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
-					KC3Meta.cutinTypeNight(spAttackType[1]) :
+					KC3Meta.cutinTypeNight(spAttackType[1]) + (nightCutinRate ? " {0}%".format(nightCutinRate) : "") :
 					KC3Meta.term("ShipAttackType" + spAttackType[0]);
 			$(".nightAttack", tooltipBox).html(
 				KC3Meta.term("ShipNightAttack").format(

@@ -455,7 +455,7 @@
 			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
 				// CSV Headers
 				let exportData = [
-					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots"
+					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots", "Costs", "BuildMins"
 				].join(",") + CSV_LINE_BREAKS;
 				$.each(KC3Master.all_ships(true), (i, s) => {
 					const isAb = KC3Master.isAbyssalShip(s.api_id);
@@ -475,11 +475,13 @@
 							isAb ? s.api_tyku : s.api_tyku.join('/'),
 							isAb ? s.api_luck : s.api_luck.join('/'),
 							s.api_soku,
-							(s.api_maxeq || []).slice(0, s.api_slot_num).join('/')
+							(s.api_maxeq || []).slice(0, s.api_slot_num).join('/'),
+							isAb ? "-" : [s.api_fuel_max, s.api_bull_max].join('/'),
+							isAb ? "-" : s.api_buildtime
 						].join(",") + CSV_LINE_BREAKS;
 					}
 				});
-				const filename = self.makeFilename("Shipgirls", "csv");
+				const filename = self.makeFilename("Shipgirls", "csv", true);
 				self.saveFile(filename, exportData, "text/csv");
 			});
 			
@@ -514,7 +516,7 @@
 						].join(",") + CSV_LINE_BREAKS;
 					}
 				});
-				const filename = self.makeFilename("Equipment", "csv");
+				const filename = self.makeFilename("Equipment", "csv", true);
 				self.saveFile(filename, exportData, "text/csv");
 			});
 			
@@ -947,8 +949,13 @@
 			}
 		},
 		
-		makeFilename: function(type, ext){
-			return ["[",PlayerManager.hq.id,"] ",type," ",new Date().format("yyyy-mm-dd"),".",ext].join("");
+		makeFilename: function(type, ext, notPersonal){
+			return [
+				!notPersonal ? ["[", PlayerManager.hq.id, "] "].join("") : "",
+				type,
+				" ", new Date().format("yyyy-mm-dd"),
+				".", ext
+			].join("");
 		},
 		
 		saveFile: function(filename, data, type){

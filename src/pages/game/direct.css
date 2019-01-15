@@ -301,7 +301,7 @@ ul.altGameModes li .modePlay {
 }
 .instructStep .stepText {
 	width:720px;
-	height:30px;
+	height:auto;
 	line-height:30px;
 	float:left;
 }
