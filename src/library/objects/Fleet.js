@@ -749,8 +749,8 @@ Contains summary information about a fleet and its ships
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
 			// 10% since Fall 2017 event
-			totalCost.nightStartFuel += Math.ceil(maxFuel * 0.1);
-			totalCost.nightStartAmmo += Math.ceil(maxAmmo * 0.1);
+			totalCost.nightStartFuel += Math.floor(maxFuel * 0.1) || 1;
+			totalCost.nightStartAmmo += Math.floor(maxAmmo * 0.1) || 1;
 			// 8% fuel, no ammo since Fall 2017 event
 			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.aswAmmo += 0;
@@ -1316,6 +1316,25 @@ Contains summary information about a fleet and its ships
 			lookupSearchlight(smallSlType2Id);
 		}
 		return result.every(v => v === -1) ? false : result;
+	};
+
+	/**
+	 * Get fleet LoS for determining artillery spotting rate.
+	 * @see KC3Ship.prototype.daySpAttackBaseRate
+	 */
+	KC3Fleet.prototype.artillerySpottingLineOfSight = function() {
+		let value = 0;
+		this.shipsUnescaped().forEach(ship => {
+			value += ship.nakedLoS();
+			ship.equipment().forEach((equip, index) => {
+				const master = equip.master();
+				if (master && [10, 11].includes(master.api_type[2])) {
+					// Unknown if explicit on ship LoS bonus gets in here or not
+					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
+				}
+			});
+		});
+		return value;
 	};
 
 	/*--------------------------------------------------------*/

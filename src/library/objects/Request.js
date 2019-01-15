@@ -29,6 +29,7 @@ Executes processing and relies on KC3Network for the triggers
 		if(this.statusCode !== 200){
 			// Do not trigger a catbomb box if server responds following:
 			if(this.statusCode === 302 || this.statusCode === 307){
+				// Should be safe to ignore by checking if new location is game official host
 				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers);
 				return false;
 			}

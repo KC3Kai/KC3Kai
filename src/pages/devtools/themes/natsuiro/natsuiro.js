@@ -1433,8 +1433,23 @@
 					}
 				}
 
-				if(ConfigManager.alert_taiha_sound){
-					critSound.play();
+				if(ConfigManager.alert_taiha_sound) {
+					const critSoundSrc = ConfigManager.alert_taiha_sound_src.trim();
+					const isSoundCustomized = !!critSoundSrc;
+					if(isSoundCustomized && critSound.paused) {
+						critSound.pause();
+						critSound = new Audio(critSoundSrc);
+						critSound.loop = true;
+						critSound.play();
+					} else if(!isSoundCustomized) {
+						// To restore default heartbeat sound?
+						if(!critSound.src.includes("/assets/snd/heart.mp3")) {
+							critSound.pause();
+							critSound = new Audio("/assets/snd/heart.mp3");
+							critSound.loop = true;
+						}
+						critSound.play();
+					}
 				}
 
 				(new RMsg("service", "taihaAlertStart", {
