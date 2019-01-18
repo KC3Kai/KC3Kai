@@ -739,6 +739,12 @@
 				"name" : "SettingsNoAnimation",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_continue",
+				"name" : "SettingTaihaContinueWarning",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

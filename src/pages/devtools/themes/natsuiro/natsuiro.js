@@ -1133,6 +1133,18 @@
 			}
 		},
 
+		ContinueOnTaiha: function(data){
+			$("#catBomb").hide();
+			
+			if (!ConfigManager.alert_taiha_continue) return false;
+			
+			$("#catBomb .title").html( data.title );
+			$("#catBomb .description").html( data.message );
+			$("#catBomb .download").hide();
+			$("#catBomb .content").removeClass("withDownload");
+			$("#catBomb").fadeIn(300);
+		},
+
 		HQ: function(data){
 			$(".module.admiral").hideChildrenTooltips();
 			$(".admiral_name").text( PlayerManager.hq.name );
@@ -2486,6 +2498,27 @@
 				$(".module.activity .sortie_nodes .sortie_node").hide();
 			} else {
 				$(".module.activity .sortie_nodes .sortie_node").show();
+			}
+			
+			if (ConfigManager.alert_taiha_continue) {
+				let str = "";
+				const buildShipTaihaMessage = ship => KC3Meta.term("PanelTaihaContinueMessage").format(ship.name(), ship.level);
+				const fleet = PlayerManager.fleets[KC3SortieManager.fleetSent - 1];
+				let hasTaiha = fleet.hasTaiha();
+				let taihaIndexes = fleet.getTaihas();
+				taihaIndexes.forEach(index => str += buildShipTaihaMessage(fleet.ship(index)));
+				if (KC3SortieManager.isCombinedSortie()) {
+					const fleet2 = PlayerManager.fleets[1];
+					hasTaiha = hasTaiha || fleet2.hasTaiha();
+					taihaIndexes = fleet2.getTaihas();
+					taihaIndexes.forEach(index => str += buildShipTaihaMessage(fleet2.ship(index)));
+				}
+				if (hasTaiha) {
+					KC3Network.trigger("ContinueOnTaiha", {
+						title: KC3Meta.term("PanelTaihaContinueTitle"),
+						message: str,
+					});
+				}
 			}
 		},
 

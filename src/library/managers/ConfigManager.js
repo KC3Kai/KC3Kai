@@ -121,6 +121,7 @@ Retrieves when needed to apply on components
 				alert_taiha_homeport : false,
 				alert_taiha_damecon  : false,
 				alert_taiha_noanim   : false,
+				alert_taiha_continue : true,
 
 				api_translation   : true,
 				api_tracking      : true,

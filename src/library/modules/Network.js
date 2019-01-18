@@ -15,6 +15,7 @@ Listens to network history and triggers callback if game events happen
 			CatBomb: [],
 			APIError: [],
 			Bomb201: [],
+			ContinueOnTaiha: [],
 			ModalBox: [],
 			GameUpdate: [],
 			DebuffNotify: [],
