@@ -781,6 +781,7 @@ Previously known as "Reactor"
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
 				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
 			}
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
@@ -853,6 +854,7 @@ Previously known as "Reactor"
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
 				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
 			}
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
@@ -890,6 +892,7 @@ Previously known as "Reactor"
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
 				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
 			}
 			
 			// If ship is in a fleet, switch view to the fleet containing the ship
