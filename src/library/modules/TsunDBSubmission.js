@@ -766,13 +766,14 @@
 		 * @return
 		 *   i: index of test (>= 0) matches test and morale
 		 *  -1: matches a test but not morale
-		 *  -2: doesn't match a test
+		 *  -2: matches a test but not equips
+		 *  -3: does not match any test
 		 * 
 		 * Eg: if(checkGunFitsRequirements(ship) < 0) continue;
 		 */
 		checkGunFitsRequirements: function(ship, morale = ship.morale) {
 			if(localStorage.tsundb_gunfits === undefined)
-				return -2;
+				return -3;
 			
 			const modalWarning = function (termPrefix) {
 				const title = termPrefix + "Title", message = termPrefix + "Message";
@@ -783,7 +784,7 @@
 					});
 				}
 			};
-			let status = -2;
+			let status = -3;
 			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
 			const onClick = e => {
 				(new RMsg("service", "strategyRoomPage", {
@@ -806,7 +807,7 @@
 				}
 				status = Math.max(status, testStatus);
 			}
-			if (status < 0) {
+			if ([-2, -1].includes(status)) {
 				modalWarning(status === -1 ? "TsunDBTestWrongMorale" : "TsunDBTestWrongSetup");
 			}
 			return status;
@@ -816,13 +817,14 @@
 		 * @return
 		 *   0: matches test and morale
 		 *  -1: matches test but not morale
-		 *  -2: doesn't match test
+		 *  -2: matches test but not equip
+		 *  -3: does not match test at all
 		 */
 		checkGunFitTestRequirements: function(ship, test, morale = ship.morale) {
 			if(ship.masterId !== test.shipId
 				|| ship.level < test.lvlRange[0]
 				|| ship.level > test.lvlRange[1])
-				return -2; // Wrong remodel/ship or wrong lvl
+				return -3; // Wrong remodel/ship or wrong lvl
 			
 			const equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
 			const testEquip = test.equipment;

@@ -720,6 +720,21 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// 533mm Triple Torpedo Mount
+			"283": {
+				count: 0,
+				byClass: {
+					// Tashkent Class
+					"81": {
+						multiple: { "houk": 1, "raig": 3, "souk": 1 },
+					},
+				},
+				byShip: {
+					// Hibiki K2 (Bep)
+					ids: [147],
+					multiple: { "houk": 1, "raig": 3, "souk": 1 },
+				},
+			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
 				count: 0,
@@ -809,6 +824,21 @@ KC3改 Equipment Object
 						},
 					},
 				],
+			},
+			// 130mm B-13 Twin Gun Mount
+			"282": {
+				count: 0,
+				byClass: {
+					// Tashkent Class
+					"81": {
+						multiple: { "houk": 2, "souk": 1 },
+					},
+				},
+				byShip: {
+					// Hibiki K2 (Bep)
+					ids: [147],
+					multiple: { "houk": 2, "souk": 1 },
+				},
 			},
 			// 12.7cm Twin Gun Mount Model A
 			"297": {
@@ -1227,6 +1257,27 @@ KC3改 Equipment Object
 					"91": "87",
 				},
 			},
+			// Type 13 Air Radar Kai
+			"106": {
+				count: 0,
+				byShip: [
+					{
+						// Ushio,           Shigure,      Hatsushimo,   Haruna K2, Nagato K2
+						ids: [16, 233, 407, 43, 243, 145, 41, 241, 419, 151,       541],
+						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
+					},
+					{
+						// Isokaze,          Hamakaze,      Asashimo, Kasumi,            Yukikaze, Suzutsuki, Yahagi
+						ids: [167, 320, 557, 170, 312, 558, 425, 344, 49, 253, 464, 470, 20, 228,  532, 537,  139, 307],
+						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
+					},
+					{
+						// Hibiki,          Ooyodo,   Kashima
+						ids: [35, 235, 147, 183, 321, 465, 356],
+						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
+					},
+				],
+			},
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,
@@ -1242,6 +1293,22 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": "67",
 				},
+			},
+			// Type 3 Active Sonar
+			"47": {
+				count: 0,
+				byShip: [
+					{
+						// Kamikaze,    Harukaze, Shigure,      Yamakaze, Maikaze,  Asashimo
+						ids: [471, 476, 473, 363, 43, 243, 145, 457, 369, 122, 294, 425, 344],
+						multiple: { "houg": 1, "houk": 2, "tais": 3 },
+					},
+					{
+						// Ushio,           Ikazuchi,Yamagumo, Isokaze,       Hamakaze,      Kishinami
+						ids: [16, 233, 407, 36, 236, 414, 328, 167, 320, 557, 170, 312, 558, 527, 686],
+						multiple: { "houk": 2, "tais": 2 },
+					},
+				],
 			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
