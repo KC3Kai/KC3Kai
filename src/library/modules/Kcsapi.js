@@ -2396,16 +2396,16 @@ Previously known as "Reactor"
 				case 74: // exchange 1 dinner ticket with 3 mamiya
 					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
-				case 81: // exchange 2 beans with screw [0, 0, 0, 1]
+				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
 				case 82: // exchange 4 beans with a setsubun furniture
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
-				case 83: // exchange 8 beans + 10 devmats with Type 1 Land-based Attack Aircraft
+				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
-				case 84: // exchange 20 beans + 40 devmats with 1 Ginga
+				case 84: // exchange 20 beans + 40 devmats with a Ginga
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				default:
@@ -2450,6 +2450,11 @@ Previously known as "Reactor"
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
 						KC3GearManager.set([ getitem.api_slotitem ]);
 						console.log("Obtained slotitem:", getitem.api_slotitem);
+					}
+					// `api_mst_id` will be the furniture ID if `api_usemst` is 1
+					if([1].includes(getitem.api_usemst)){
+						const furnitureId = getitem.api_mst_id;
+						console.log("Obtained furniture:", furnitureId, KC3Master.furniture(furnitureId));
 					}
 				});
 			}
