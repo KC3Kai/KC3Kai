@@ -766,15 +766,25 @@
 		 * @return
 		 *   i: index of test (>= 0) matches test and morale
 		 *  -1: matches a test but not morale
-		 *  -2: doesn't match a test
+		 *  -2: matches a test but not equips
+		 *  -3: does not match any test
 		 * 
 		 * Eg: if(checkGunFitsRequirements(ship) < 0) continue;
 		 */
 		checkGunFitsRequirements: function(ship, morale = ship.morale) {
 			if(localStorage.tsundb_gunfits === undefined)
-				return -2;
+				return -3;
 			
-			let status = -2;
+			const modalWarning = function (termPrefix) {
+				const title = termPrefix + "Title", message = termPrefix + "Message";
+				if (KC3SortieManager.isOnSortie()) {
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term(title),
+						message: KC3Meta.term(message),
+					});
+				}
+			};
+			let status = -3;
 			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
 			const onClick = e => {
 				(new RMsg("service", "strategyRoomPage", {
@@ -797,7 +807,9 @@
 				}
 				status = Math.max(status, testStatus);
 			}
-			
+			if ([-2, -1].includes(status)) {
+				modalWarning(status === -1 ? "TsunDBTestWrongMorale" : "TsunDBTestWrongSetup");
+			}
 			return status;
 		},
 		
@@ -805,16 +817,25 @@
 		 * @return
 		 *   0: matches test and morale
 		 *  -1: matches test but not morale
-		 *  -2: doesn't match test
+		 *  -2: matches test but not equip
+		 *  -3: does not match test at all
 		 */
 		checkGunFitTestRequirements: function(ship, test, morale = ship.morale) {
 			if(ship.masterId !== test.shipId
 				|| ship.level < test.lvlRange[0]
 				|| ship.level > test.lvlRange[1])
-				return -2; // Wrong remodel/ship or wrong lvl
+				return -3; // Wrong remodel/ship or wrong lvl
 			
 			const equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
 			const testEquip = test.equipment;
+
+			if(test.minVersion) {
+				const kc3version = this.manifest.version;
+				const verStr2Num = str => Number(str.replace(/[.]/g, ""));
+				if(verStr2Num(test.minVersion) > verStr2Num(kc3version)) {
+					return -2; // Wrong KC3 minimum version
+				}
+			}
 			
 			eqloop: for(const e of testEquip) {
 				for(const i in equip) {
@@ -826,8 +847,26 @@
 				return -2; // Missing required equip
 			}
 			
-			if(equip.length > 0)
-				return -2; // Too many equips, might ignore some equip types that don't affect acc
+			if(test.accuracy) {
+				let equipAcc = 0;
+				const accCheck = test.accuracy;
+				const stype = ship.master().api_stype;
+				for (let idx in equip) {
+					const eqType2 = equip[idx].master().api_type[2];
+					// Either radars or medium caliber guns on (F)BB(V) to adjust accuracy
+					if([12, 13].includes(eqType2) || (eqType2 === 2 && [8, 9, 10].includes(stype))) {
+						equipAcc += equip[idx].master().api_houm;
+					} else {
+						return -2; // Non-test related equipment
+					}
+				}
+				if(equipAcc !== accCheck) {
+					return -2; // Too little or too much accuracy
+				}
+			}	
+			else if(equip.length > 0) {
+				return -2; // Too many equips
+			}
 			
 			if(morale < test.moraleRange[0]
 				|| morale > test.moraleRange[1])

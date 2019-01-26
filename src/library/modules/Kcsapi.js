@@ -346,6 +346,7 @@ Previously known as "Reactor"
 					case 87: PlayerManager.consumables.nori = thisItem.api_count; break;
 					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
 					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
+					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -530,54 +531,6 @@ Previously known as "Reactor"
 				});
 			}
 			console.log("Refresh unsetslot", KC3GearManager.unsetSlotitemByType2);
-		},
-		
-		// Equipment dragging
-		"api_req_kaisou/slot_exchange_index":function(params, response, headers){
-			var updatingShip = KC3ShipManager.get(params.api_id);
-			updatingShip.items = response.api_data.api_slot;
-			KC3ShipManager.save();
-			// If ship is in a fleet, switch view to the fleet containing the ship
-			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
-			if (fleetNum > -1) {
-				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
-			} else {
-				KC3Network.trigger("Fleet");
-			}
-		},
-		
-		// Equipment swap
-		"api_req_kaisou/slot_deprive":function(params, response, headers){
-			// it's not swap in fact, only move item from unset ship to set ship:
-			// old slot from unset ship will be empty, and old item from set ship (if any) will be freed
-			const setExSlot = params.api_set_slot_kind == 1;
-			const setShipRosterId = parseInt(params.api_set_ship, 10);
-			const setItemIndex = setExSlot ? -1 : parseInt(params.api_set_idx, 10);
-			const newShipData = response.api_data.api_ship_data;
-			
-			// old status of set ship
-			const oldShipObj = KC3ShipManager.get(setShipRosterId);
-			const oldGearObj = oldShipObj.equipment(setItemIndex);
-			// update set item only for equipment change checks
-			oldShipObj.items = newShipData.api_set_ship.api_slot;
-			if(setExSlot) oldShipObj.ex_item = newShipData.api_set_ship.api_slot_ex;
-			
-			// renew ship data for both set ship and unset ship
-			KC3ShipManager.set([newShipData.api_set_ship, newShipData.api_unset_ship]);
-			
-			// If ship is in a fleet, switch view to the fleet containing the ship
-			const fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
-			if (fleetNum > -1) {
-				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
-			} else {
-				KC3Network.trigger("Fleet");
-			}
-			
-			// get new status of set ship
-			const newShipObj = KC3ShipManager.get(setShipRosterId);
-			const newGearObj = newShipObj.equipment(setItemIndex);
-			// not followed by `api_get_member/ship3`, do not defer event
-			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
 		},
 		
 		/* Fleet list
@@ -821,6 +774,16 @@ Previously known as "Reactor"
 			shipObj.items[slotIndex] = itemID;
 			KC3ShipManager.save();
 			
+			// Bauxite might be refunded by changing regular plane to large flying boat
+			const utcHour = Date.toUTChours(headers.Date),
+				afterBauxite = response.api_data && response.api_data.api_bauxite;
+			if(afterBauxite) {
+				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
+				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
+				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
+			}
+			
 			// If ship is in a fleet, switch view to the fleet containing the ship
 			var fleetNum = KC3ShipManager.locateOnFleet(shipID);
 			if (fleetNum > -1) {
@@ -875,6 +838,76 @@ Previously known as "Reactor"
 			
 			// Although followed by `/ship3`, but nothing will be effect, so no defer
 			KC3Network.trigger("GunFit", shipObj.equipmentChangedEffects());
+		},
+		
+		/* Equipment dragging
+		-------------------------------------------------------*/
+		"api_req_kaisou/slot_exchange_index":function(params, response, headers){
+			// Changed to full ship data since 2019-01-22
+			//const updatingShip = KC3ShipManager.get(params.api_id);
+			//updatingShip.items = response.api_data.api_slot;
+			KC3ShipManager.set([response.api_data.api_ship_data]);
+			// Bauxite might be refunded by changing regular plane to large flying boat
+			const utcHour = Date.toUTChours(headers.Date),
+				afterBauxite = response.api_data.api_bauxite;
+			if(afterBauxite) {
+				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
+				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
+				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
+			}
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			var fleetNum = KC3ShipManager.locateOnFleet(params.api_id);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
+		},
+		
+		/* Equipment swapping between ships
+		-------------------------------------------------------*/
+		"api_req_kaisou/slot_deprive":function(params, response, headers){
+			// it's not swap in fact, only move item from unset ship to set ship:
+			// old slot from unset ship will be empty, and old item from set ship (if any) will be freed
+			const setExSlot = params.api_set_slot_kind == 1;
+			const setShipRosterId = parseInt(params.api_set_ship, 10);
+			const setItemIndex = setExSlot ? -1 : parseInt(params.api_set_idx, 10);
+			const newShipData = response.api_data.api_ship_data;
+			
+			// old status of set ship
+			const oldShipObj = KC3ShipManager.get(setShipRosterId);
+			const oldGearObj = oldShipObj.equipment(setItemIndex);
+			// update set item only for equipment change checks
+			oldShipObj.items = newShipData.api_set_ship.api_slot;
+			if(setExSlot) oldShipObj.ex_item = newShipData.api_set_ship.api_slot_ex;
+			
+			// renew ship data for both set ship and unset ship
+			KC3ShipManager.set([newShipData.api_set_ship, newShipData.api_unset_ship]);
+			
+			// bauxite might be refunded by changing regular plane to large flying boat
+			const utcHour = Date.toUTChours(headers.Date),
+				afterBauxite = response.api_data.api_bauxite;
+			if(afterBauxite) {
+				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
+				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
+				// TODO might add a record to Naverall for this type of ledger?
+				KC3Network.trigger("Consumables");
+			}
+			
+			// If ship is in a fleet, switch view to the fleet containing the ship
+			const fleetNum = KC3ShipManager.locateOnFleet(params.api_set_ship);
+			if (fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
+			
+			// get new status of set ship
+			const newShipObj = KC3ShipManager.get(setShipRosterId);
+			const newGearObj = newShipObj.equipment(setItemIndex);
+			// not followed by `api_get_member/ship3`, do not defer event
+			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
 		},
 		
 		/* Re-supply a ship
@@ -2022,10 +2055,16 @@ Previously known as "Reactor"
 							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
 							break;
 						case 19: // Type 96 Fighter
+							KC3QuestManager.get(626).increment(1); // F22 monthly index 1
 							KC3QuestManager.get(678).increment(0); // F70 quarterly index 0
 							break;
 						case 20: // Type 0 Fighter Model 21
+							KC3QuestManager.get(626).increment(0); // F22 monthly index 0
+							KC3QuestManager.get(643).increment(); // F39 quarterly
 							KC3QuestManager.get(678).increment(1); // F70 quarterly index 1
+							break;
+						case 21: // Type 0 Fighter Model 52
+							KC3QuestManager.get(628).increment(); // F25 monthly
 							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
@@ -2090,9 +2129,9 @@ Previously known as "Reactor"
 			for(const idx in raws) {
 				const thisMap = raws[idx];
 				const key = "m" + thisMap.api_id;
-				const oldMap = maps[key];
+				const oldMap = maps[key] || {};
 				
-				if((oldMap || {}).curhp !== undefined)
+				if(oldMap.curhp !== undefined || oldMap.kind === "gauge-hp")
 					etcStat[key] = $.extend(true, {}, defStat, maps[key].stat);
 				
 				// Create map object
@@ -2128,8 +2167,14 @@ Previously known as "Reactor"
 				// Check for event map info
 				if(thisMap.api_eventmap !== undefined) {
 					const eventData = thisMap.api_eventmap;
-					localMap.curhp      = eventData.api_now_maphp;
-					localMap.maxhp      = eventData.api_max_maphp;
+					// still remember values post-clear even removed from api since Winter 2019
+					if(eventData.api_max_maphp === undefined && eventData.api_state > 1) {
+						localMap.curhp = oldMap.curhp;
+						localMap.maxhp = oldMap.maxhp;
+					} else {
+						localMap.curhp = eventData.api_now_maphp;
+						localMap.maxhp = eventData.api_max_maphp;
+					}
 					localMap.difficulty = eventData.api_selected_rank;
 					// moved to parent node as normal maps since Winter 2019
 					localMap.gaugeType  = eventData.api_gauge_type || thisMap.api_gauge_type || 0;
@@ -2149,7 +2194,7 @@ Previously known as "Reactor"
 							console.info("Reported unknown API gauge type", localMap.gaugeType);/*RemoveLogging:skip*/
 					}
 					
-					if(oldMap !== undefined) {
+					if(maps[key] !== undefined) {
 						if(oldMap.kinds  !== undefined) localMap.kinds = oldMap.kinds;
 						if(oldMap.maxhps !== undefined) localMap.maxhps = oldMap.maxhps;
 						if(oldMap.baseHp !== undefined) localMap.baseHp = oldMap.baseHp;
@@ -2361,6 +2406,18 @@ Previously known as "Reactor"
 				case 74: // exchange 1 dinner ticket with 3 mamiya
 					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
+				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
+					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
+				break;
+				case 82: // exchange 4 beans with a setsubun furniture
+					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
+				break;
+				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft
+					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
+				break;
+				case 84: // exchange 20 beans + 40 devmats with a Ginga
+					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
+				break;
 				default:
 					if(isNaN(exchangeType)){
 						// exchange 1 chocolate with resources [700, 700, 700, 1500]
@@ -2403,6 +2460,11 @@ Previously known as "Reactor"
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
 						KC3GearManager.set([ getitem.api_slotitem ]);
 						console.log("Obtained slotitem:", getitem.api_slotitem);
+					}
+					// `api_mst_id` will be the furniture ID if `api_usemst` is 1
+					if([1].includes(getitem.api_usemst)){
+						const furnitureId = getitem.api_mst_id;
+						console.log("Obtained furniture:", furnitureId, KC3Master.furniture(furnitureId));
 					}
 				});
 			}

@@ -45,8 +45,8 @@ KC3改 Equipment Object
 	 * @return the bonus definition table with new counters of related equipment.
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
+	 *  * [20181228 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
-	 *  * [20181001 ALL] https://imgur.com/a/Sz1hFpK
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
 	 *  * [20180726  DD] https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
 	 *  * [20180808  DD] https://kitongame.com/%E3%80%90%E8%89%A6%E3%81%93%E3%82%8C%E3%80%91%E9%A7%86%E9%80%90%E8%89%A6%E3%81%AE%E4%B8%BB%E7%A0%B2%E3%83%95%E3%82%A3%E3%83%83%E3%83%88%E8%A3%9C%E6%AD%A3%E3%81%A8%E8%89%A6%E7%A8%AE%E5%88%A5%E3%81%8A/#i
@@ -437,6 +437,7 @@ KC3改 Equipment Object
 				},
 			},
 			// 14cm Twin Gun Mount
+			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2
 			"119": {
 				count: 0,
 				byClass: {
@@ -445,10 +446,15 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Katori Class
-					"56": "34"
+					"56": "34",
+					// Nisshin Class
+					"90": {
+						multiple: { "houg": 2, "raig": 1 },
+					},
 				},
 			},
 			// 14cm Twin Gun Mount Kai
+			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9
 			"310": {
 				count: 0,
 				byClass: {
@@ -459,6 +465,10 @@ KC3改 Equipment Object
 					// Katori Class
 					"56": {
 						multiple: { "houg": 2, "houk": 1 },
+					},
+					// Nisshin Class
+					"90": {
+						multiple: { "houg": 3, "raig": 2, "tyku": 1, "houk": 1 },
 					},
 				},
 			},
@@ -710,6 +720,21 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// 533mm Triple Torpedo Mount
+			"283": {
+				count: 0,
+				byClass: {
+					// Tashkent Class
+					"81": {
+						multiple: { "houg": 1, "raig": 3, "souk": 1 },
+					},
+				},
+				byShip: {
+					// Hibiki K2 (Bep)
+					ids: [147],
+					multiple: { "houg": 1, "raig": 3, "souk": 1 },
+				},
+			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
 				count: 0,
@@ -799,6 +824,23 @@ KC3改 Equipment Object
 						},
 					},
 				],
+			},
+			// 130mm B-13 Twin Gun Mount
+			"282": {
+				count: 0,
+				byClass: {
+					// Tashkent Class
+					"81": {
+						multiple: { "houg": 2, "souk": 1 },
+					},
+					// Yuubari Class
+					"34": "81",
+				},
+				byShip: {
+					// Hibiki K2 (Bep)
+					ids: [147],
+					multiple: { "houg": 2, "souk": 1 },
+				},
 			},
 			// 12.7cm Twin Gun Mount Model A
 			"297": {
@@ -1139,11 +1181,23 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 5inch Single Gun Mount Mk.30 Kai
+			"313": {
+				count: 0,
+				byClass: {
+					// John C.Butler Class
+					"87": {
+						multiple: { "houg": 2, "tyku": 2, "souk": 1, "houk": 1 },
+					},
+					// Fletcher Class
+					"91": "87",
+				},
+			},
 			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
 			"308": {
 				count: 0,
 				byClass: {
-					// John C.Butler Class
+					// John C.Butler Class, extra +1 fp from DD stype
 					"87": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
@@ -1205,6 +1259,27 @@ KC3改 Equipment Object
 					"91": "87",
 				},
 			},
+			// Type 13 Air Radar Kai
+			"106": {
+				count: 0,
+				byShip: [
+					{
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
+						ids: [407,   145,        419,             151,       541],
+						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
+					},
+					{
+						// Isokaze,          Hamakaze,      Asashimo, Kasumi,            Yukikaze, Suzutsuki, Yahagi
+						ids: [167, 320, 557, 170, 312, 558, 425, 344, 49, 253, 464, 470, 20, 228,  532, 537,  139, 307],
+						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
+					},
+					{
+						// Hibiki,          Ooyodo,   Kashima
+						ids: [35, 235, 147, 183, 321, 465, 356],
+						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
+					},
+				],
+			},
 			// 20-tube 7inch UP Rocket Launchers
 			"301": {
 				count: 0,
@@ -1220,6 +1295,22 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": "67",
 				},
+			},
+			// Type 3 Active Sonar
+			"47": {
+				count: 0,
+				byShip: [
+					{
+						// Kamikaze,    Harukaze, Shigure,      Yamakaze, Maikaze,  Asashimo
+						ids: [471, 476, 473, 363, 43, 243, 145, 457, 369, 122, 294, 425, 344],
+						multiple: { "houg": 1, "houk": 2, "tais": 3 },
+					},
+					{
+						// Ushio,           Ikazuchi,Yamagumo, Isokaze,       Hamakaze,      Kishinami
+						ids: [16, 233, 407, 36, 236, 414, 328, 167, 320, 557, 170, 312, 558, 527, 686],
+						multiple: { "houk": 2, "tais": 2 },
+					},
+				],
 			},
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
@@ -1987,12 +2078,15 @@ KC3改 Equipment Object
 			// https://twitter.com/muu_1106/status/850875064106889218
 			const lbaaAbyssalModifier = 1;
 			// Postcap LBAA recon modifier if LB recon is present
-			// Not sure if modifier is dependent on some equipment property, for now just set to only case of 1.125x
 			// https://twitter.com/syoukuretin/status/1068477784232587264
 			// https://twitter.com/Nishisonic/status/1080146808318263296
-			const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
-			const lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
-				lbfpReconModifier === 1.18 ? 1.15 : 1;
+			let lbaaReconModifier = 1;
+			if(isLbaa) {
+				// Check LB recon and set the value according FP modifier
+				const lbfpReconModifier = shipOrLb.toShipObject().fighterPowerReconModifier(true);
+				lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
+					lbfpReconModifier === 1.18 ? 1.15 : 1;
+			}
 			const onNormal = Math.floor(lbasPower
 				* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 			// Proficiency critical modifier has been applied sometime since 2017-12-11?

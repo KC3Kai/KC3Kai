@@ -187,8 +187,7 @@ AntiAir: anti-air related calculations
 
 	function isBritishAAGun(mst) {
 		// QF 2-pounder Octuple Pom-pom Gun Mount
-		// 20-tube 7inch UP Rocket Launchers
-		return [191, 301].indexOf(mst.api_id) !== -1;
+		return [191].indexOf(mst.api_id) !== -1;
 	}
 
 	// GFCS Mk.37
@@ -573,7 +572,8 @@ AntiAir: anti-air related calculations
 		};
 	}
 
-	// check if slot num of ship (excluding ex slot) equals or greater
+	// check if slot num of ship (excluding ex-slot) equals or greater
+	// note: 8cm HA mount variants and AA machine guns can be equipped in ex-slot
 	function slotNumAtLeast(n) {
 		return function(mst) {
 			var slotnum = mst.api_slot_num;
@@ -611,7 +611,9 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		7, 3, 1.35,
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
-		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
+		// 8cm HA variants can be equipped on ex-slot for some ships, min slots can be 2
+		// but for now, these ships are all not 2-slot DD
+		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -675,7 +677,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		25, 7, 1.55,
 		[iseIcon, aaGunK2RockeLaunIcon, radarIcon, type3ShellIcon],
-		predAllOf(isIseClassKai),
+		predAllOf(isIseClassKai, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is12cm30tubeRocketLauncherKai2 ),
@@ -714,7 +716,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		1, 7, 1.7,
 		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass),
+		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 2 ),
@@ -724,7 +726,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		2, 6, 1.7,
 		[akizukiIcon, haMountIcon, radarIcon],
-		predAllOf(isAkizukiClass),
+		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
@@ -734,7 +736,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		3, 4, 1.6,
 		[akizukiIcon, haMountIcon, haMountIcon],
-		predAllOf(isAkizukiClass),
+		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			hasAtLeast( isHighAngleMount, 2 )
 		)
@@ -927,9 +929,13 @@ AntiAir: anti-air related calculations
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
 		predAnyOf(isBritishShips),
 		withEquipmentMsts(
-			predAllOf(
-				hasSome( isBritishRocketLauncher ),
-				hasSome( isBritishAAGun ))
+			predAnyOf(
+				predAllOf(
+					hasSome( isBritishRocketLauncher ),
+					hasSome( isBritishAAGun )),
+				predAllOf(
+					hasAtLeast( isBritishRocketLauncher, 2 ))
+			)
 		)
 	);
 
@@ -945,9 +951,9 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// WiP Johnston all forms
+	// Johnston all forms
 	declareAACI(
-		34, 7, 1.1,
+		34, 7, 1.6,
 		[johnstonIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isJohnston),
 		withEquipmentMsts(
@@ -956,7 +962,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		35, 1, 1.1,
+		35, 6, 1.55,
 		[johnstonIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isJohnston),
 		withEquipmentMsts(
@@ -966,9 +972,10 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		36, 1, 1.1,
+		36, 6, 1.55,
 		[johnstonIcon, haMountIcon, haMountIcon, radarIcon],
-		predAllOf(isJohnston),
+		// there are enough slots for Johnston Kai only
+		predAllOf(isJohnston, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKai, 2 ),
@@ -976,7 +983,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		37, 1, 1.1,
+		37, 4, 1.45,
 		[johnstonIcon, haMountIcon, haMountIcon],
 		predAllOf(isJohnston),
 		withEquipmentMsts(

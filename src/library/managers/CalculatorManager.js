@@ -213,6 +213,8 @@
         const airBattleId = Object.getSafePath(currentNode.battleDay, "api_kouku.api_stage1.api_disp_seiku");
         const contactPlaneId = currentNode.fcontactId;
         const isStartFromNight = currentNode.startsFromNight;
+        const playerFlarePos = currentNode.flarePos;
+        const enemyFlarePos = currentNode.eFlarePos;
         return {
             isOnBattle,
             engagementId,
@@ -222,7 +224,9 @@
             contactPlaneId,
             playerCombinedFleetType,
             isEnemyCombined,
-            isStartFromNight
+            isStartFromNight,
+            playerFlarePos,
+            enemyFlarePos
         };
     };
 

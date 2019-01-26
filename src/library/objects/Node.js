@@ -322,7 +322,8 @@ Used by SortieManager
 		} else {
 			this.eSlot = Array.pad(this.eSlot, 6, -1);
 		}
-		this.eformation = (battleData.api_formation || [])[1] || this.eformation;
+		this.fformation = battleData.api_formation[0] || this.fformation;
+		this.eformation = battleData.api_formation[1] || this.eformation;
 		// api_eKyouka seems being removed since 2017-11-17, kept for compatibility
 		this.eKyouka = battleData.api_eKyouka || [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1];
 		// might use api_f_maxhps_combined instead
@@ -763,6 +764,7 @@ Used by SortieManager
 		var isPlayerCombined = nightData.api_fParam_combined !== undefined;
 		this.playerCombined = isPlayerCombined;
 		
+		this.fformation = (nightData.api_formation || [])[0] || this.fformation;
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;
 		this.eKyouka = nightData.api_eKyouka || [-1,-1,-1,-1,-1,-1];
 
@@ -1832,6 +1834,7 @@ Used by SortieManager
 		this.elevels = Array.pad(this.elevels, 6, -1);
 		this.eSlot = battleData.api_eSlot;
 		this.eSlot = Array.pad(this.eSlot, 6, -1);
+		//this.fformation = battleData.api_formation[0];
 		this.eformation = battleData.api_formation[1];
 		this.engagement = KC3Meta.engagement(battleData.api_formation[2]);
 		this.maxHPs = {
@@ -2238,6 +2241,11 @@ Used by SortieManager
 
 	KC3Node.prototype.buildUnexpectedDamageMessage = function(unexpectedList = this.unexpectedList){
 		let tooltips = "";
+		const getScratchDamage = eHp => (
+			[0, 0].map((z, i) =>
+				Math.max(z, Math.floor(eHp * 0.06 + (i === 1 ? (eHp - 1) * 0.08 : 0)))
+			)
+		);
 		if(Array.isArray(unexpectedList)) {
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected) {
@@ -2246,10 +2254,17 @@ Used by SortieManager
 					const defenderMstId = a.enemy.id,
 						defenderName = KC3Meta.abyssShipName(defenderMstId);
 					const dmg = a.damageInstance;
+					const expectedDamage = dmg.expectedDamage;
+					const scratchDamage = getScratchDamage(a.enemy.hp);
+					const displayedDamage = expectedDamage[1] <= 0 ? scratchDamage :
+						expectedDamage[0] <= 0 ? [
+							Math.min(1, scratchDamage[0]),
+							expectedDamage[1]
+						] : expectedDamage;
 					if(tooltips) tooltips += "\n";
 					tooltips += KC3Meta.term("BattleUnexpectedDamageTip").format(
 						attackerName, defenderName, defenderMstId,
-						dmg.actualDamage, dmg.expectedDamage[0], dmg.expectedDamage[1]
+						dmg.actualDamage, displayedDamage[0], displayedDamage[1]
 					);
 				}
 			});

@@ -1232,10 +1232,11 @@
 					.lazyInitTooltip();
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
-			$(".count_1classMedalsOrSaury").text(
-					PlayerManager.consumables.mackerel || PlayerManager.consumables.firstClassMedals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.mackerel ? 68 : 61) )
-				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.mackerel ? 68 : 61}.png`);
+			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
+				PlayerManager.consumables.setsubunBeans ? 90 : 61;
+			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
+				.prev().attr("title", KC3Meta.useItemName(firstItemId))
+				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
 			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
 				.prev().attr("title", KC3Meta.useItemName(57) );
 			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
@@ -1434,8 +1435,23 @@
 					}
 				}
 
-				if(ConfigManager.alert_taiha_sound){
-					critSound.play();
+				if(ConfigManager.alert_taiha_sound) {
+					const critSoundSrc = ConfigManager.alert_taiha_sound_src.trim();
+					const isSoundCustomized = !!critSoundSrc;
+					if(isSoundCustomized && critSound.paused) {
+						critSound.pause();
+						critSound = new Audio(critSoundSrc);
+						critSound.loop = true;
+						critSound.play();
+					} else if(!isSoundCustomized) {
+						// To restore default heartbeat sound?
+						if(!critSound.src.includes("/assets/snd/heart.mp3")) {
+							critSound.pause();
+							critSound = new Audio("/assets/snd/heart.mp3");
+							critSound.loop = true;
+						}
+						critSound.play();
+					}
 				}
 
 				(new RMsg("service", "taihaAlertStart", {
@@ -1499,7 +1515,7 @@
 			var isSentOut = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP();
 			var thisNode = isSentOut ? KC3SortieManager.currentNode() : {};
 			var flarePos = thisNode.flarePos || 0;
-			var sortieSpecialCutins = ConfigManager.info_compass ? thisNode.sortieSpecialCutins || [] : [];
+			var sortieSpecialCutins = (ConfigManager.info_compass && ConfigManager.info_battle) ? thisNode.sortieSpecialCutins || [] : [];
 
 			// COMBINED
 			if(selectedFleet == 5){
@@ -1791,7 +1807,8 @@
 						FleetSummary.battleCost.fuel, FleetSummary.battleCost.dayOnlyAmmo, FleetSummary.battleCost.nightBattleAmmo,
 						FleetSummary.battleCost.airRaidFuel, FleetSummary.battleCost.airRaidAmmo,
 						FleetSummary.battleCost.nightStartFuel, FleetSummary.battleCost.nightStartAmmo,
-						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo
+						FleetSummary.battleCost.aswFuel, FleetSummary.battleCost.aswAmmo,
+						FleetSummary.battleCost.ambushFuel, FleetSummary.battleCost.ambushAmmo
 					)) + (!FleetSummary.supplyCost.steel ? "" :
 						"\n" + KC3Meta.term("PanelConsumedSteel").format(FleetSummary.supplyCost.steel
 					)) + (!(FleetSummary.repairCost.fuel || FleetSummary.repairCost.steel) ? "" :

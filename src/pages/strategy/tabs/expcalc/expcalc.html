@@ -70,38 +70,39 @@
 
 <div class="box_control">
   <div class="box_control_line">
-	<dl>
-	  <dt>Sections</dt>
-	  <dd class="toggle_goal_templates hover toggle">Goal Templates</dd>
-	  <dd class="toggle_recommended hover toggle">Recommended</dd>
-	  <dd class="toggle_other_ships hover toggle">Other Ships</dd>
-	</dl>
+    <dl>
+      <dt>Sections</dt>
+      <dd class="toggle_goal_templates hover toggle">Goal Templates</dd>
+      <dd class="toggle_recommended hover toggle">Recommended</dd>
+      <dd class="toggle_other_ships hover toggle">Other Ships</dd>
+    </dl>
   </div>
   <div class="box_control_line">
-	<dl>
-	  <dt>Highlight</dt>
-	  <dd class="btn_hl_clear hover toggle">Clear All</dd>
-	  <dd class="btn_hl_close_to_remodel hover toggle">Close To Remodel</dd>
-	  <dd class="btn_hl_can_be_remodelled hover toggle">Can Be Remodelled</dd>
-	</dl>
+    <dl>
+      <dt>Highlight</dt>
+      <dd class="btn_hl_clear hover toggle">Clear All</dd>
+      <dd class="btn_hl_close_to_remodel hover toggle">Close To Remodel</dd>
+      <dd class="btn_hl_can_be_remodelled hover toggle">Can Be Remodelled</dd>
+    </dl>
   </div>
   <div class="box_control_line line_close_to_remodel">
-	<dl>
-	  <dt>Close-to-remodel maximum level difference</dt>
-	  <dd style="margin-left:5px"><input type="text" id="inp_lvl_diff"></dd>
-	</dl>
+    <dl>
+      <dt>Close-to-remodel maximum level difference</dt>
+      <dd style="margin-left:5px"><input type="text" id="inp_lvl_diff"></dd>
+    </dl>
   </div>
   <div class="box_control_line order_line">
-	<dl>
-	  <dt>Order Ships By</dt>
-	  <dd class="order_id hover toggle active up" data-order="id">ID</dd>
-	  <dd class="order_xpdiff hover toggle" data-order="xpdiff">XP Left</dd>
-	  <dd class="order_name hover toggle" data-order="name">Name</dd>
-	  <dd class="order_shiptype hover toggle" data-order="shiptype">Ship Type</dd>
-	  <dd class="order_level hover toggle" data-order="level">Level</dd>
-	  <dd class="order_remodel hover toggle" data-order="remodel">Goal</dd>
-	  <dd class="order_lvldiff hover toggle" data-order="lvldiff">Levels To Goal</dd>
-	</dl>
+    <dl>
+    <dt>Order Ships By</dt>
+    <dd class="order_id hover toggle active up" data-order="id">ID</dd>
+    <dd class="order_xpdiff hover toggle" data-order="xpdiff">XP Left</dd>
+    <dd class="order_name hover toggle" data-order="name">Name</dd>
+    <dd class="order_shiptype hover toggle" data-order="shiptype">Ship Type</dd>
+    <dd class="order_gameorder hover toggle" data-order="gameorder">In-Game Type</dd>
+    <dd class="order_level hover toggle" data-order="level">Level</dd>
+    <dd class="order_remodel hover toggle" data-order="remodel">Goal</dd>
+    <dd class="order_lvldiff hover toggle" data-order="lvldiff">Levels To Goal</dd>
+  </dl>
   </div>
 </div>
 
@@ -133,71 +134,71 @@
 <div class="factory">
 
   <div class="ship_goal">
-	<div class="ship_col ship_icon hover"><img/></div>
-	<div class="ship_col ship_info ship_activeOnly">
-	  <div class="ship_name"></div>
-	  <div class="ship_type"></div>
-	</div>
-	<div class="ship_col ship_lv">
-	  <div class="ship_label">Level</div>
-	  <div class="ship_value"></div>
-	</div>
-	<div class="ship_col ship_target">
-	  <div class="ship_label">Goal</div>
-	  <div class="ship_value"></div>
-	  <div class="ship_input"><input type="textbox"></div>
-	</div>
-	<div class="ship_col ship_exp ship_activeOnly">
-	  <div class="ship_label">Exp Left</div>
-	  <div class="ship_value"></div>
-	</div>
-	<div class="ship_col ship_result ship_activeOnly">
-	  <div class="ship_label">Battles</div>
-	  <div class="ship_value"></div>
-	</div>
-	<div class="ship_col ship_map ship_activeOnly">
-	  <div class="ship_label">Map</div>
-	  <div class="ship_value"></div>
-	  <div class="ship_input">
-		<select></select>
-	  </div>
-	</div>
-	<div class="ship_col ship_baseexp ship_activeOnly">
-	  <div class="ship_label">Base Exp</div>
-	  <div class="ship_value"></div>
-	  <div class="ship_input">
-		  <input type="textbox">
-	  </div>
-	</div>
-	<div class="ship_col ship_rank ship_activeOnly">
-	  <div class="ship_label">Rank</div>
-	  <div class="ship_value"></div>
-	  <div class="ship_input">
-		<select>
-		  <option value="6">S</option>
-		  <option value="5">A</option>
-		  <option value="4">B</option>
-		  <option value="3">C</option>
-		  <option value="2">D</option>
-		  <option value="1">E</option>
-		</select>
-	  </div>
-	</div>
-	<div class="ship_col ship_fs ship_activeOnly">
-	  <div class="ship_label">FS</div>
-	  <div class="ship_value yes_or_no"></div>
-	  <div class="ship_input"><input type="checkbox"></div>
-	</div>
-	<div class="ship_col ship_mvp ship_activeOnly">
-	  <div class="ship_label">MVP</div>
-	  <div class="ship_value yes_or_no"></div>
-	  <div class="ship_input"><input type="checkbox"></div>
-	</div>
-	<div class="ship_col ship_btn hover ship_add">+</div>
-	<div class="ship_col ship_btn hover ship_rem">X</div>
-	<div class="ship_col ship_btn hover ship_edit">E</div>
-	<div class="ship_col ship_btn hover ship_save">S</div>
-	<div class="clear"></div>
+    <div class="ship_col ship_icon hover"><img/></div>
+    <div class="ship_col ship_info ship_activeOnly">
+      <div class="ship_name"></div>
+      <div class="ship_type"></div>
+    </div>
+    <div class="ship_col ship_lv">
+      <div class="ship_label">Level</div>
+      <div class="ship_value"></div>
+    </div>
+    <div class="ship_col ship_target">
+      <div class="ship_label">Goal</div>
+      <div class="ship_value"></div>
+      <div class="ship_input"><input type="textbox"></div>
+    </div>
+    <div class="ship_col ship_exp ship_activeOnly">
+      <div class="ship_label">Exp Left</div>
+      <div class="ship_value"></div>
+    </div>
+    <div class="ship_col ship_result ship_activeOnly">
+      <div class="ship_label">Battles</div>
+      <div class="ship_value"></div>
+    </div>
+    <div class="ship_col ship_map ship_activeOnly">
+      <div class="ship_label">Map</div>
+      <div class="ship_value"></div>
+      <div class="ship_input">
+        <select></select>
+      </div>
+    </div>
+    <div class="ship_col ship_baseexp ship_activeOnly">
+      <div class="ship_label">Base Exp</div>
+      <div class="ship_value"></div>
+      <div class="ship_input">
+          <input type="textbox">
+      </div>
+    </div>
+    <div class="ship_col ship_rank ship_activeOnly">
+      <div class="ship_label">Rank</div>
+      <div class="ship_value"></div>
+      <div class="ship_input">
+        <select>
+          <option value="6">S</option>
+          <option value="5">A</option>
+          <option value="4">B</option>
+          <option value="3">C</option>
+          <option value="2">D</option>
+          <option value="1">E</option>
+        </select>
+      </div>
+    </div>
+    <div class="ship_col ship_fs ship_activeOnly">
+      <div class="ship_label">FS</div>
+      <div class="ship_value yes_or_no"></div>
+      <div class="ship_input"><input type="checkbox"></div>
+    </div>
+    <div class="ship_col ship_mvp ship_activeOnly">
+      <div class="ship_label">MVP</div>
+      <div class="ship_value yes_or_no"></div>
+      <div class="ship_input"><input type="checkbox"></div>
+    </div>
+    <div class="ship_col ship_btn hover ship_add">+</div>
+    <div class="ship_col ship_btn hover ship_rem">X</div>
+    <div class="ship_col ship_btn hover ship_edit">E</div>
+    <div class="ship_col ship_btn hover ship_save">S</div>
+    <div class="clear"></div>
   </div>
 
   <div class="goal_template">
