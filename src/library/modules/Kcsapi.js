@@ -2051,10 +2051,16 @@ Previously known as "Reactor"
 							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
 							break;
 						case 19: // Type 96 Fighter
+							KC3QuestManager.get(626).increment(1); // F22 monthly index 1
 							KC3QuestManager.get(678).increment(0); // F70 quarterly index 0
 							break;
 						case 20: // Type 0 Fighter Model 21
+							KC3QuestManager.get(626).increment(0); // F22 monthly index 0
+							KC3QuestManager.get(643).increment(); // F39 quarterly
 							KC3QuestManager.get(678).increment(1); // F70 quarterly index 1
+							break;
+						case 21: // Type 0 Fighter Model 52
+							KC3QuestManager.get(628).increment(); // F25 monthly
 							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
@@ -2396,16 +2402,16 @@ Previously known as "Reactor"
 				case 74: // exchange 1 dinner ticket with 3 mamiya
 					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
-				case 81: // exchange 2 beans with screw [0, 0, 0, 1]
+				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
 				case 82: // exchange 4 beans with a setsubun furniture
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
-				case 83: // exchange 8 beans + 10 devmats with Type 1 Land-based Attack Aircraft
+				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
-				case 84: // exchange 20 beans + 40 devmats with 1 Ginga
+				case 84: // exchange 20 beans + 40 devmats with a Ginga
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				default:
@@ -2450,6 +2456,11 @@ Previously known as "Reactor"
 						// since `api_get_member/slot_item` will not be called, have to update GearManager here
 						KC3GearManager.set([ getitem.api_slotitem ]);
 						console.log("Obtained slotitem:", getitem.api_slotitem);
+					}
+					// `api_mst_id` will be the furniture ID if `api_usemst` is 1
+					if([1].includes(getitem.api_usemst)){
+						const furnitureId = getitem.api_mst_id;
+						console.log("Obtained furniture:", furnitureId, KC3Master.furniture(furnitureId));
 					}
 				});
 			}

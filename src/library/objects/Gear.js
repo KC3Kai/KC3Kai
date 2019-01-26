@@ -726,13 +726,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Tashkent Class
 					"81": {
-						multiple: { "houk": 1, "raig": 3, "souk": 1 },
+						multiple: { "houg": 1, "raig": 3, "souk": 1 },
 					},
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
 					ids: [147],
-					multiple: { "houk": 1, "raig": 3, "souk": 1 },
+					multiple: { "houg": 1, "raig": 3, "souk": 1 },
 				},
 			},
 			// 12cm Single Gun Mount Kai Ni
@@ -831,13 +831,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Tashkent Class
 					"81": {
-						multiple: { "houk": 2, "souk": 1 },
+						multiple: { "houg": 2, "souk": 1 },
 					},
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
 					ids: [147],
-					multiple: { "houk": 2, "souk": 1 },
+					multiple: { "houg": 2, "souk": 1 },
 				},
 			},
 			// 12.7cm Twin Gun Mount Model A
