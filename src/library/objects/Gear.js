@@ -833,6 +833,8 @@ KC3改 Equipment Object
 					"81": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+					// Yuubari Class
+					"34": "81",
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
@@ -1262,8 +1264,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Ushio,           Shigure,      Hatsushimo,   Haruna K2, Nagato K2
-						ids: [16, 233, 407, 43, 243, 145, 41, 241, 419, 151,       541],
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
+						ids: [407,   145,        419,             151,       541],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
