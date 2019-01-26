@@ -606,7 +606,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		
 		updateNodeCompassResults: function(){
 			if(this.isOnSavedSortie()) {
-				KC3Database.updateNodes(this.onSortie, this.nodes.map(node => {
+				KC3Database.updateSortie(this.onSortie, {"nodes": this.nodes.map(node => {
 					// Basic edge ID and parsed type (dud === "")
 					const toSave = { id: node.id, type: node.type };
 					// Raw API result data
@@ -629,10 +629,19 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					if(node.nodeDesc)
 						toSave.desc = node.nodeDesc;
 					return toSave;
-				}));
+				})});
 			}
 		},
-
+		
+		updateSortiedLandBases: function(){
+			PlayerManager.saveBases();
+			if(this.isOnSavedSortie()) {
+				KC3Database.updateSortie(this.onSortie, {
+					"lbas": this.getWorldLandBases(this.map_world, this.map_num)
+				});
+			}
+		},
+		
 		// return empty object if not found
 		getAllMapData: function(){
 			return localStorage.getObject("maps") || {};
@@ -819,172 +828,157 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 
 		/**
-		 * Prepares encounter/real battle data for simulator export while on sortie
+		 * Prepares encounter/real battle data for simulator export while on sortie.
+		 * @param enemyData - an instance include enemy formation and ship master IDs of fleets.
+		 * @param resultFleets - predicated fleets data from BP module output.
+		 * @param realBattle - indicates real battle data not from encounter.
+		 * @return the constructed data object for exporting to simulator.
 		 * @see https://kc3kai.github.io/kancolle-replay/simulator-import-help.html
 		 */
-		prepareSimData :function(edata, resultFleets = {}, realBattle = false) {
-			let res = {};
+		prepareSimData :function(enemyData, resultFleets = {}, realBattle = false) {
 			const thisNode = this.currentNode();
 			const combined = this.isCombinedSortie();
 			const fleet = PlayerManager.fleets[this.fleetSent - 1];
 			const fleetF = {
 				ships: this.prepareSimPlayerFleetShips(fleet, realBattle),
-				formation: (ConfigManager.aaFormation < 7 && !combined) || (ConfigManager.aaFormation > 10 && combined) ? ConfigManager.aaFormation 
+				formation: (ConfigManager.aaFormation < 7 && !combined) || (ConfigManager.aaFormation > 10 && combined) ? ConfigManager.aaFormation
 					: !combined ? 1 : 14
 			};
 			if (combined) {
 				fleetF.shipsC = this.prepareSimPlayerFleetShips(PlayerManager.fleets[1], realBattle);
 				fleetF.combineType = PlayerManager.combinedFleet;
 			}
-
 			const fleetE = {
-				ships: this.prepareSimEnemyFleetShips(edata.main, resultFleets.enemyMain)
+				ships: this.prepareSimEnemyFleetShips(enemyData.main, resultFleets.enemyMain)
 			};
-			if (edata.escort && edata.escort.length > 0) {
-				fleetE.shipsC = this.prepareSimEnemyFleetShips(edata.escort, resultFleets.enemyEscort);
+			if (enemyData.escort && enemyData.escort.length > 0) {
+				fleetE.shipsC = this.prepareSimEnemyFleetShips(enemyData.escort, resultFleets.enemyEscort);
 			}
 			const nodes = [{
 				fleetE: fleetE
 			}];
-
-			res = {
+			const result = {
 				numSims: 10000,
 				fleetF: fleetF,
 				nodes: nodes,
 			};
-
 			// If real battle, we can ignore stuff like lbas/support fleets since we are only interested in yasen prediction
 			if (realBattle) {
-				res.nodes[0].NBOnly = 1;
+				result.nodes[0].NBOnly = 1;
 				const battleData = thisNode.battleDay || thisNode.battleNight;
 				fleetF.formation = battleData.api_formation[0];
 				fleetE.formation = battleData.api_formation[1];
-				return res;
+				return result;
 			}
 			
 			// For simulating from encounters, we need to prepare LBAS, Support Fleets and Enemy Formation
-
-			fleetE.formation = edata.formation;
+			fleetE.formation = enemyData.formation;
 			const isBoss = thisNode.isBoss();
 			const supportFleetNum = this.getSupportingFleet(isBoss);
 			if (supportFleetNum > 0) {
 				const supportFleet = PlayerManager.fleets[supportFleetNum - 1];
-				res.fleetSupportB = {
+				result.fleetSupportB = {
 					ships: this.prepareSimPlayerFleetShips(supportFleet),
 					formation: fleetF.formation,
 				};
 			}
-
 			// Simulator options
 			const eventKind = thisNode.eventKind;
 			if (eventKind === 2) {
-				res.nodes[0].NBOnly = 1;
+				result.nodes[0].NBOnly = 1;
 			}
 			else if (eventKind === 4) {
-				res.nodes[0].airOnly = 1;
+				result.nodes[0].airOnly = 1;
 			}
 			else if (eventKind === 6) {
-				res.nodes[0].airRaid = 1;
+				result.nodes[0].airRaid = 1;
 			}
 			else if (isBoss) {
-				res.nodes[0].doNB = 1;
+				result.nodes[0].doNB = 1;
 			}
-
 			// Export LBAS (if any)
 			const bases = PlayerManager.bases.filter(base => base.action === 1 && base.map === this.map_world);
 			// Convert to node letter in case airstrike selected node id different from route node id (multiple path to same node)
-			const node = KC3Meta.nodeLetter(this.map_world, this.map_num, thisNode.id);
-			let baseCount = 0;
+			const thisNodeName = KC3Meta.nodeLetter(this.map_world, this.map_num, thisNode.id);
+			let sortiedBaseNo = 0;
 			if (bases.length > 0) {
 				const lbas = [], waves = [], simPlayerEqIdMax = 308;
-				for (let idx = 0; idx < bases.length; idx++) {
-					let strikePoints = bases[idx].strikePoints || [], arr = [];
-					for (let point = 0; point < strikePoints.length; point++) {
-						arr.push(KC3Meta.nodeLetter(this.map_world, this.map_num, strikePoints[point]));
-					}
-					strikePoints = arr;
-					if (strikePoints.length === 0 || !strikePoints.includes(node)) { continue; }
-					baseCount++;
+				bases.forEach(base => {
+					const strikeNodes = (base.strikePoints || []).map(edge => (
+						KC3Meta.nodeLetter(this.map_world, this.map_num, edge)
+					));
+					if (!strikeNodes.length || !strikeNodes.includes(thisNodeName)) { return; }
+					sortiedBaseNo += 1;
 					const equips = [], slotdata = [];
-					const base = bases[idx];
-					for (let plane = 0; plane < base.planes.length; plane++) {
-						const gear = KC3GearManager.get(base.planes[plane].api_slotid);
-						if (gear.isDummy()) { continue; }
+					base.planes.forEach(plane => {
+						const gear = KC3GearManager.get(plane.api_slotid);
+						if (gear.isDummy()) { return; }
 						const eqData = {
 							masterId: gear.masterId,
 							improve: gear.stars,
 							proficiency: gear.ace
 						};
-						slotdata.push(base.planes[plane].api_count);
-						if (gear.masterId > simPlayerEqIdMax) { eqData.stats = this.generateEquipStats(gear.masterId); }
+						slotdata.push(plane.api_count);
+						if (gear.masterId > simPlayerEqIdMax) {
+							eqData.stats = this.buildEquipMasterStats(gear.masterId);
+						}
 						equips.push(eqData);
-					}
+					});
 					lbas.push({
 						equips: equips,
 						slots: slotdata
 					});
-
-					for (let waveIdx = 0; waveIdx < strikePoints.length; waveIdx++) {
-						if (strikePoints[waveIdx] === node) { waves.push(baseCount); }
-					}
-				}
-				res.lbas = lbas;
-				res.nodes[0].lbas = waves;
+					strikeNodes.forEach(nodeName => {
+						if (nodeName === thisNodeName) waves.push(sortiedBaseNo);
+					});
+				});
+				result.lbas = lbas;
+				result.nodes[0].lbas = waves;
 			}
-			return res;
+			return result;
 		},
 		
-		prepareSimEnemyFleetShips :function(midList, resultFleet){
-			midList = midList.filter(id => id > 0);
+		prepareSimEnemyFleetShips :function(masterIdList, predicatedShips){
+			// Enemies here are abyssal ships, PvP not supported
 			const simAbyssMasterIdMax = 1845;
-			const list = [];
-			for (let idx = 0; idx < midList.length; idx++) {
-				const masterId = midList[idx];
-				const obj = {
-					masterId: masterId,
-				};
-				if (resultFleet) {
-					obj.HPInit = resultFleet[idx].hp;
+			const buildEnemyStats = (masterId, idx) => {
+				const ship = { masterId: masterId };
+				if (predicatedShips) {
+					ship.HPInit = predicatedShips[idx].hp;
 				}
-
 				// If new enemy and not in sim yet, fill stats
 				if (masterId > simAbyssMasterIdMax) {
 					const master = KC3Master.ship(masterId) || {};
-					obj.stats = {
+					ship.stats = {
 						type: master.api_stype,
 					};
 					if (KC3Master.abyssalShip(masterId)) {
 						const stats = KC3Master.abyssalShip(masterId);
-						obj.stats.HP = stats.api_taik;
-						obj.stats.FP = stats.api_houg;
-						obj.stats.TP = stats.api_raig;
-						obj.stats.AA = stats.api_tyku;
-						obj.stats.AR = stats.api_souk;
+						ship.stats.HP = stats.api_taik;
+						ship.stats.FP = stats.api_houg;
+						ship.stats.TP = stats.api_raig;
+						ship.stats.AA = stats.api_tyku;
+						ship.stats.AR = stats.api_souk;
 						const equips = stats.kc3_slots || [];
-						obj.stats.SLOTS = stats.api_maxeq || equips.map(() => 0);
-
-						obj.equips = [];
-						for (let k = 0; k < equips.length; k++) {
-							const gearId = equips[k];
-							obj.equips.push({
-								masterId: gearId,
-								stats: this.generateEquipStats(gearId)
-							});
-						}
+						ship.stats.SLOTS = stats.api_maxeq || equips.map(() => 0);
+						ship.equips = equips.map(id => ({
+							masterId: id,
+							stats: this.buildEquipMasterStats(id)
+						}));
 					}
 				}
-				list.push(obj);
-			}
-			return list;
+				return ship;
+			};
+			// Assumed ID-0 ships are in the last part, to ensure index matches with predicatedShips array
+			return masterIdList.filter(id => id > 0).map(buildEnemyStats);
 		},
-
+		
 		prepareSimPlayerFleetShips :function(fleet, realBattle = false) {
 			const simPlayerEqIdMax = 308;
-			const list = [];
-			for (let idx = 0; idx < fleet.ships.length; idx++) {
-				const ship = fleet.ship(idx);
-				if (ship.isDummy() || ship.isAbsent()) { continue; }
-				let stats = {
+			const buildShipStats = ship => {
+				if (ship.isDummy() || ship.isAbsent()) return;
+				const shipMst = ship.master();
+				const stats = {
 					HP: ship.hp[1],
 					FP: ship.fp[0],
 					TP: ship.tp[0],
@@ -997,59 +991,58 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					RNG: ship.range,
 					SPD: ship.speed,
 					SLOTS: ship.slots,
-					type: ship.master().api_stype
+					type: shipMst.api_stype
 				};
-				let equips = ship.equipment(true).map(gear => {
-					let equip = {
+				const equips = ship.equipment(true).filter(g => !g.isDummy()).map(gear => {
+					const equip = {
 						masterId: gear.masterId,
 						improve: gear.stars,
 						proficiency: gear.ace
-					};					
-
+					};
 					// If equip data not in sim yet, fill with stats
-					if (equip.masterId > simPlayerEqIdMax) { equip.stats = this.generateEquipStats(gear.masterId); }
+					if (equip.masterId > simPlayerEqIdMax) {
+						equip.stats = this.buildEquipMasterStats(gear.masterId);
+					}
 					return equip;
 				});
-				equips = equips.filter(equip => equip.masterId > 0);
 				let morale = ship.morale;
-				// Undo kc3 morale calc, ignore case for -9 and align morale to sim cutoffs
+				// Undo KC3 morale decrement in Node.js, ignore case for -9 and align morale to sim cutoffs
 				if (realBattle) {
 					morale += 3;
-				}
-				else if (morale > 49 && morale < 53) {
+				} else if (morale > 49 && morale < 53) {
 					morale += 3;
 				}
-				list.push({
+				return {
 					masterId: ship.masterId,
 					LVL: ship.level,
 					stats: stats,
 					HPInit: !realBattle ? ship.hp[0] : ship.afterHp[0],
-					fuelInit: ship.fuel / ship.master().api_fuel_max,
-					ammoInit: ship.ammo / ship.master().api_bull_max,
+					fuelInit: ship.fuel / shipMst.api_fuel_max,
+					ammoInit: ship.ammo / shipMst.api_bull_max,
 					morale: morale,
 					equips: equips,
 					includesEquipStats: 1
-				});
-			}
-			return list;
+				};
+			};
+			return fleet.shipsUnescaped().map(buildShipStats);
 		},
-
-		generateEquipStats :function(masterId) {
+		
+		buildEquipMasterStats :function(masterId) {
 			const gearMaster = KC3Master.slotitem(masterId),
 				stats = {},
 				simulatorKeys = {
 					FP: "api_houg",
 					TP: "api_raig",
-					AA:	"api_tyku",
-					AR:	"api_souk",
+					AA: "api_tyku",
+					AR: "api_souk",
 					EV: "api_houk",
 					ASW: "api_tais",
 					LOS: "api_saku",
 					ACC: "api_houm",
 					DIVEBOMB: "api_baku",
 					RNG: "api_leng"
-			};
-			for (let key in simulatorKeys) {
+				};
+			for (const key in simulatorKeys) {
 				const apiName = simulatorKeys[key];
 				stats[key] = gearMaster[apiName];
 			}
