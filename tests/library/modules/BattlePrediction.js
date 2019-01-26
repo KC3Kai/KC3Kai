@@ -13,7 +13,7 @@ QUnit.skip( "Module", function() {
                 callback(-1);
                 return true;
             },
-            updateNodes: function(id, newNodes) {
+            updateSortie: function(id, updates) {
                 return true;
             }
         };
