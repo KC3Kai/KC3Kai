@@ -46,22 +46,22 @@ Saves and loads list to and from localStorage
 		landingCraftModifiers: {
 			// Soft-skinned
 			0: {
-				modifier: [1.5,2.1,1,2.8,1],
+				modifier: [1.5,2.1,1,2.82,1],
 				improvement: [0.03,0,0,0,0]
 			},
 			// Artillery Imp
 			1: {
-				modifier: [2.4,2.15,1.8,2.97,2.05],
+				modifier: [2.4,2.15,1.8,2.2,2.05],
 				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Isolated Island Princess
 			2: {
-				modifier: [2.4,2.15,1.8,2.97,1],
+				modifier: [2.4,2.15,1.8,2.2,1],
 				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Supply Depot Princess (no info on Daihatsu improvement)
 			3: {
-				modifier: [1.7,1.3,1,3.5,1],
+				modifier: [1.7,1.3,1.65,3.5,1],
 				improvement: [0.051,0.026,0,0,0],
 			},
 			// Summer Harbor Princess (no info on Shikon 11th tank)
