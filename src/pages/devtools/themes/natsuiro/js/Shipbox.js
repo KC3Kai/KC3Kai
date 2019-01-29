@@ -78,7 +78,8 @@
 		} else {
 			$(".ex_item .gear_icon img", this.element).hide();
 			// Still show the empty item background if ex-slot opened but equipped nothing
-			$(".ex_item", this.element).toggle(this.shipData.ex_item === -1);
+			$(".ex_item", this.element).toggle(this.shipData.ex_item === -1)
+				.toggleClass("empty", this.shipData.ex_item === -1);
 		}
 		$(".ex_item", this.element).toggleClass("item_being_used",
 			ConfigManager.info_battle && (this.dameConConsumed.pos === 0 ||
