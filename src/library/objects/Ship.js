@@ -2123,9 +2123,10 @@ KC3改 Ship Object
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
-		// and explicit asw bonus from equipment on specific ship not counted.
-		// FIXME aswDiff will be inaccurate if there is bonus on old equipment
-		const shipAsw = this.as[0] + aswDiff - this.equipmentTotalStats("tais", true, true, true);
+		// and explicit asw bonus from sonars taken into account now.
+		// ~~explicit asw bonus from Torpedo Bombers on CVE not counted?~~
+		// aswDiff will be inaccurate if there is bonus on old equipment
+		const shipAsw = this.as[0] + aswDiff;// - this.equipmentTotalStats("tais", true, true, true);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
