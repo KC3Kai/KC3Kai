@@ -2125,8 +2125,7 @@ KC3改 Ship Object
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from sonars taken into account now.
 		// ~~explicit asw bonus from Torpedo Bombers on CVE not counted?~~
-		// aswDiff will be inaccurate if there is bonus on old equipment
-		const shipAsw = this.as[0] + aswDiff;// - this.equipmentTotalStats("tais", true, true, true);
+		const shipAsw = this.as[0] + aswDiff;
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -3313,7 +3312,10 @@ KC3改 Ship Object
 		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
-		const aswDiff = newEquipAsw - oldEquipAsw;
+		const aswDiff = newEquipAsw - oldEquipAsw
+			// add explicit bonus from new equipment, but bonus from old missed,
+			// so aswDiff will be inaccurate if there is bonus on old equipment
+			+ this.equipmentTotalStats("tais", true, true, true);
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		const antiLandPowers = this.shipPossibleAntiLandPowers();
