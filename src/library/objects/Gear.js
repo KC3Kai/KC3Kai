@@ -205,6 +205,48 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Re.2001 OR Kai
+			"184": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+				},
+			},
+			// Re.2005 Kai
+			"189": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "tyku": 1, "houk": 2 },
+					},
+					// Graf
+					"63": "68",
+				},
+			},
+			// Re.2001 G Kai
+			"188": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 3, "tyku": 1, "houk": 1 },
+					},
+				},
+			},
+			// Re.2001 CB Kai
+			"316": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 4, "tyku": 1, "houk": 3 },
+					},
+				},
+			},
 			// Type 2 Reconnaissance Aircraft
 			"61": {
 				count: 0,
