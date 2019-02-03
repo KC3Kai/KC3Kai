@@ -245,11 +245,14 @@ Listens to network history and triggers callback if game events happen
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
 			// it only works if in-game SE is not completely off.
-			if(ConfigManager.focus_game_tab && KC3Network.battleEvent.entered
-				// Only after: daytime? day / night to day? night start?
-				// seems no side effect if game tab already focused, so use any time for now
-				//&& KC3Network.battleEvent.time === "day"
-				&& requestUrl.includes("/resources/se/217.")){
+			// Also, to trigger when first taiha/chuuha CG cutin occurs, as game may be paused if in background tab
+			// battle_cutin_damage requested only once per battle (but not sortie)
+			const focusPaths = ["/resources/se/217.", "img/battle/battle_cutin_damage."];
+            if(ConfigManager.focus_game_tab && KC3Network.battleEvent.entered
+                // Only after: daytime? day / night to day? night start?
+                // seems no side effect if game tab already focused, so use any time for now
+                //&& KC3Network.battleEvent.time === "day"
+                && focusPaths.some(path => requestUrl.includes(path))){
 				(new RMsg("service", "focusGameTab", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
