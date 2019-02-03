@@ -243,7 +243,7 @@ KC3改 Equipment Object
 				byClass: {
 					// Aquila Class
 					"68": {
-						multiple: { "houg": 4, "tyku": 1, "houk": 3 },
+						multiple: { "houg": 4, "tyku": 1, "houk": 1 },
 					},
 				},
 			},
