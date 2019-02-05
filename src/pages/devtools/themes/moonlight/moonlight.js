@@ -2981,7 +2981,7 @@
 					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
 					console.log("Ship exp goal", shipData.name(), grindGoal);
 					$("<div />").addClass("expNotice").text(grindGoal.battlesLeft )
-						.appendTo("#ShipBox" + rosterId + " .ship_exp_label")
+						.appendTo("#ShipBox" + rosterId + " .ship_exp_label");
 				});
 			}
 
