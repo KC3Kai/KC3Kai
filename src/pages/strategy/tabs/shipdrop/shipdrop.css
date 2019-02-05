@@ -34,6 +34,9 @@
 .tab_shipdrop .content_root .node_drop .ship img {
 	width: 24px;
 	height: 24px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_shipdrop .content_root .node_drop .ship {
 	display:inline-block;

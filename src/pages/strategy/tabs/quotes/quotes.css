@@ -180,6 +180,9 @@
 .tab_quotes .ship_list .ship_entity .ship_icon img {
 	width: 20px;
 	height: 20px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_name {
@@ -203,8 +206,8 @@
 .tab_quotes .ship_list .ship_entity .ship_pg_val1 {
 	width:65px;
 	height:10px;
-    background: #66FF66;
-    float: left;
+	background: #66FF66;
+	float: left;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_pg_val2 {
