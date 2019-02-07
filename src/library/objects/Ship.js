@@ -3345,11 +3345,10 @@ KC3改 Ship Object
 			args = $.extend({noFuel:0,noAmmo:0},args);
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
+			return true;
 		} catch (e) {
 			console.error("Failed when perform" + command, e);
 			return false;
-		} finally {
-			return true;
 		}
 	};
 	KC3Ship.prototype.performSupply = function(args) {
