@@ -462,9 +462,18 @@
 		if(ConfigManager.pan_drop_shadow_enabled == true) {
 			// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
 			$(".airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
-			$(".quest_color,.ship_exp_bar,.ship_gear_icon,.ex_item").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
+			$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
 			$(".module.activity").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
 			$(".activity_pvp,.activity_expeditionPlanner").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
+		}
+
+		// Accommodate Korean's very large text without redoing the layout for everyone else
+		if(ConfigManager.language == "kr") {
+			$(".lship .ship_level").css("left", "65px");
+			$(".lship .ship_level").css("text-align", "left");
+			$(".lship .ship_exp_label").css("text-align", "right");
+			$(".activity_expedition .expres_ships").css("font-size", "10px");
+			$(".map_hp").css("font-size", "9px");
 		}
 
 		// Panel customizations: bg image

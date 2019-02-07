@@ -1480,12 +1480,14 @@ ABYSS FLEET
 }
 
 .module.activity .activity_expedition .expres_ships {
-	width:170px;
+	width:180px;
 	line-height:18px;
 	font-size:12px;
+	position:relative;
+	left:-5px;
 }
 .module.activity .activity_expedition .expres_ship {
-	width:85px;
+	width:90px;
 	height:18px;
 	float:left;
 	margin:0px 0px 2px 0px;
@@ -3191,7 +3193,7 @@ ABYSS FLEET
 	object-fit: cover;
 }
 .module.fleet .lship .ship_type {
-	width:30px;
+	width:26px;
 	height:15px;
 	line-height:15px;
 	float:left;
@@ -3235,10 +3237,10 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_exp_label .expNotice {
 	width:45px;
-	height:22px;
-	line-height:22px;
-	position:absolute;
-	top:7px;
+	height:11px;
+	line-height:11px;
+	position:relative;
+	top:2px;
 	left:42px;
 	font-size:10px;
 	text-align:right;
