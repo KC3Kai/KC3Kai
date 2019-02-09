@@ -232,6 +232,32 @@ Object.safePropertyPath = function(isGetProp, root, props) {
 	return isGetProp ? root : true;
 };
 
+/** Sum values in Objects with same properties */
+Object.sumValuesByKey = function(){
+	return Array.from(arguments).reduce(function(acc, o){
+		for(var k in o){
+			if(o.hasOwnProperty(k))
+				acc[k] = Number(acc[k] || 0) + Number(o[k]);
+		}
+		return acc;
+	}, {});
+};
+
+/** Swap the position of keys and values for a simple 1-1 mapping dictionary object */
+Object.swapMapKeyValue = function(map, isNumericKey){
+	if(typeof map !== "object") return map;
+	var result = {};
+	Object.keys(map).forEach(function(key){
+		// only simple value type can be stringified to the new key
+		var value = map[key];
+		if(typeof value !== "string" && typeof value !== "number")
+			value = String(value);
+		// key will be string by default, even it is number in original map,
+		// and duplicated key will simply overwrite old ones.
+		result[value] = !!isNumericKey ? Number(key) : key;
+	});
+	return result;
+};
 
 /* PRIMITIVE */
 /*******************************\
@@ -667,20 +693,6 @@ Object.defineProperty(Array.prototype, "joinIfNeeded", {
 		return resultArray.join("");
 	}
 });
-
-/*******************************\
-|*** Object                     |
-\*******************************/
-/** Sum values in Objects with same properties */
-Object.sumValuesByKey = function(){
-	return Array.from(arguments).reduce(function(acc, o){
-		for(var k in o){
-			if(o.hasOwnProperty(k))
-				acc[k] = Number(acc[k] || 0) + Number(o[k]);
-		}
-		return acc;
-	}, {});
-};
 
 /*******************************\
 |*** Date                       |

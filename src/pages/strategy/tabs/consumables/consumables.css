@@ -134,3 +134,33 @@
 	height:20px;
 	display:block;
 }
+
+.tab_consumables .item_list {
+	width:100%;
+	height:auto;
+}
+.tab_consumables .item {
+	width:50%;
+	display:inline-block;
+	line-height:30px;
+}
+.tab_consumables .item img {
+	float:left;
+	height:30px;
+	margin-right:5px;
+}
+.tab_consumables .item .name {
+	float:left;
+	max-width:67%;
+	margin-right:5px;
+	white-space:nowrap;
+	overflow:hidden;
+}
+.tab_consumables .item .value {
+	float:right;
+	width:65px;
+	margin-right:5px;
+	white-space:nowrap;
+	overflow:hidden;
+	font-weight:bold;
+}

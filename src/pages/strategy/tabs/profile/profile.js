@@ -580,6 +580,15 @@
 				});
 			});
 			
+			// Clear all ledger data if tab becomes unavailable thank to unknown corrupted records
+			$(".tab_profile .clear_ledger").on("click", function(event){
+				if(!confirm("Are you sure? Lost data would not be recovered."))
+					return false;
+				KC3Database.con.navaloverall.clear().then(() => {
+					alert("Done!");
+				});
+			});
+			
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
@@ -764,6 +773,44 @@
 				}).catch(function(e){
 					handleError(e, "Fixing battle enemies error");
 				});
+			});
+			
+			// Fix ship bugged/desynced pendingConsumption records for some reasons
+			$(".tab_profile .fix_pending_ledger").on("click", function(event){
+				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))
+					return false;
+				KC3ShipManager.load();
+				const badStateShips = KC3ShipManager.find(ship => {
+					const sortieCnt = ship.lastSortie.length,
+						pendingCnt = Object.keys(ship.pendingConsumption).length;
+					return sortieCnt > 1 && pendingCnt > 0 && pendingCnt !== (sortieCnt - 1);
+				});
+				if(!badStateShips.length) {
+					alert("No such ship found");
+				} else {
+					alert("Found {0} ships with pending data,\n".format(badStateShips.length) +
+						"Will begin to update your database,\n" +
+						"might take a long time if the data amount is mass.\n" +
+						"Operation will be performed in background,\n" +
+						"keep eyes on your computer's CPU/disk usage.");
+					badStateShips.forEach(ship => {
+						ship.perform("repair");
+						ship.perform("supply");
+					});
+					console.info("Fixed ships with unexpected pendingConsumption", badStateShips.length);
+					alert("Might be still updating in background.\n" +
+						"Do not leave this page until your CPU/disk calm down!");
+				}
+				// Extra fix if there are some IDs left in `lastSortie` but no `pendingConsumption` record
+				const obsoleteSortieShips = KC3ShipManager.find(ship => ship.lastSortie.length > 2
+					&& Object.keys(ship.pendingConsumption).length === 0);
+				if(obsoleteSortieShips.length) {
+					obsoleteSortieShips.forEach(ship => {
+						ship.lastSortie = ["sortie0"];
+					});
+					KC3ShipManager.save();
+					console.info("Fixed ships with unexpected lastSortie", obsoleteSortieShips.length);
+				}
 			});
 			
 			const isEventMapInfoMissing = () => {

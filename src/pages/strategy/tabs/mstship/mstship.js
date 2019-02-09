@@ -872,6 +872,7 @@
 						const gearObj = KC3Master.slotitem(itemId);
 						$(".gearName", gunfitBox).text(
 							"[{0}] {1}".format(itemId, KC3Meta.gearName(gearObj.api_name))
+						).attr("title", KC3Meta.gearName(gearObj.api_name)
 						).data("id", itemId).on("click", gearClickFunc).addClass("hover");
 						
 						if (gunfitObj.unknown === true) {
