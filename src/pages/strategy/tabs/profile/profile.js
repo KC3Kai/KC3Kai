@@ -580,6 +580,15 @@
 				});
 			});
 			
+			// Clear all ledger data if tab becomes unavailable thank to unknown corrupted records
+			$(".tab_profile .clear_ledger").on("click", function(event){
+				if(!confirm("Are you sure? Lost data would not be recovered."))
+					return false;
+				KC3Database.con.navaloverall.clear().then(() => {
+					alert("Done!");
+				});
+			});
+			
 			// Reset Dismissed messages
 			$(".tab_profile .clear_dismissed").on("click", function(event){
 				// These variables may be moved into ConfigManager
@@ -637,15 +646,6 @@
 				} else {
 					alert("No bug found!");
 				}
-			});
-			
-			// Clear all ledger data if tab unavailable thanks to unknown corrupted records
-			$(".tab_profile .clear_ledger").on("click", function(event){
-				if(!confirm("Are you sure? Lost data would not be recovered."))
-					return false;
-				KC3Database.con.navaloverall.clear().then(() => {
-					alert("Done!");
-				});
 			});
 			
 			// Clear buggy encounter data
