@@ -791,12 +791,19 @@
 						$(".rfleet_lbas"+lbi+" .rfleet_title .num", sortieBox)
 							.text("#{0}".format(landbase.rid));
 						$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
-							.text([KC3Meta.term("LandBaseActionWaiting"),
-								KC3Meta.term("LandBaseActionSortie"),
-								KC3Meta.term("LandBaseActionDefend"),
-								KC3Meta.term("LandBaseActionRetreat"),
-								KC3Meta.term("LandBaseActionRest")
-								][landbase.action]);
+							.text(KC3Meta.term("LandBaseAction" + KC3LandBase.actionEnum(landbase.action)));
+						if(landbase.action === 1){
+							if(Array.isArray(landbase.edges)){
+								$(".rfleet_lbas"+lbi+" .rfleet_title", sortieBox).attr("title",
+									"{0} \u21db {1}".format(landbase.range, landbase.edges.map(
+										id => KC3Meta.nodeLetter(sortie.world, sortie.mapnum, id, sortieTime)
+									).join(", "))
+								);
+							} else {
+								$(".rfleet_lbas"+lbi+" .rfleet_title .action", sortieBox)
+									.attr("title", landbase.range);
+							}
+						}
 						$.each(landbase.planes, function(pi, plane){
 							if(!plane.mst_id){ return false; }
 							var planeBox = $(".tab_"+tabCode+" .factory .rfleet_lbas_plane").clone();

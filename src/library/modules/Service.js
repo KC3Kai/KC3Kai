@@ -94,8 +94,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					// Handler on notification box clicked
 					var clickHandler = function(clickedId){
 						if(clickedId === createdId){
-							var gameTabId = request.tabId;
 							chrome.notifications.clear(clickedId);
+							var gameTabId = request.tabId;
 							if(gameTabId){
 								chrome.tabs.get(gameTabId, function(tab){
 									chrome.windows.update(tab.windowId, { focused: true });
@@ -164,6 +164,19 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				response({ value: false });
 			}
 			return true;
+		},
+		
+		/* FOCUS ON GAME TAB
+		Force browser to switch and focus on current game tab.
+		------------------------------------------*/
+		"focusGameTab" :function(request, sender, callback){
+			var gameTabId = request.tabId;
+			if(gameTabId){
+				chrome.tabs.get(gameTabId, function(tab){
+					chrome.windows.update(tab.windowId, { focused: true });
+					chrome.tabs.update(gameTabId, { active: true });
+				});
+			}
 		},
 		
 		/* ACTIVATE GAME
@@ -480,10 +493,12 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					$.ajax({
 						url: soundUrl,
 						method: "GET",
+						/*
 						headers: {
 							// Referer not allowed to be set by browser
 							"X-Requested-With": "ShockwaveFlash/" + detectFlashVersionString()
 						},
+						*/
 						async: true,
 						cache: true,
 						processData: false,

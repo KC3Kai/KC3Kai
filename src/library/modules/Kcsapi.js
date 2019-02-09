@@ -780,7 +780,7 @@ Previously known as "Reactor"
 			if(afterBauxite) {
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
-				// TODO might add a record to Naverall for this type of ledger?
+				// might add a record for this type of ledger?
 				KC3Network.trigger("Consumables");
 			}
 			
@@ -853,7 +853,7 @@ Previously known as "Reactor"
 			if(afterBauxite) {
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
-				// TODO might add a record to Naverall for this type of ledger?
+				// might add a record for this type of ledger?
 				KC3Network.trigger("Consumables");
 			}
 			// If ship is in a fleet, switch view to the fleet containing the ship
@@ -891,7 +891,7 @@ Previously known as "Reactor"
 			if(afterBauxite) {
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
-				// TODO might add a record to Naverall for this type of ledger?
+				// might add a record for this type of ledger?
 				KC3Network.trigger("Consumables");
 			}
 			
@@ -1039,21 +1039,34 @@ Previously known as "Reactor"
 		
 		/* Start LBAS Sortie
 		-------------------------------------------------------*/
-		"api_req_map/start_air_base":function(params, response, headers){
-			var strikePoint1 = params.api_strike_point_1,
-				strikePoint2 = params.api_strike_point_2,
-				strikePoint3 = params.api_strike_point_3;
-			var utcHour = Date.toUTChours(headers.Date);
+		"api_req_map/start_air_base":function(params, response, headers, decodedParams){
+			// Target nodes attacked by sortied LB, format string: `edge1,edge2`
+			const strikePoints = [
+				decodedParams.api_strike_point_1,
+				decodedParams.api_strike_point_2,
+				decodedParams.api_strike_point_3
+			];
+			const utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
+			var sortiedBase = 0;
 			$.each(PlayerManager.bases, function(i, base){
 				// Land Base of this world, Action: sortie
 				if(base.map === KC3SortieManager.map_world && base.action === 1){
-					console.log("Sortied LBAS", base);
+					if(strikePoints[sortiedBase]){
+						base.strikePoints = JSON.parse(`[${strikePoints[sortiedBase]}]`);
+					}
+					sortiedBase += 1;
+					console.log("Sortied LBAS #" + sortiedBase, base);
 					var cost = base.calcSortieCost();
 					consumedFuel += cost.fuel;
 					consumedAmmo += cost.ammo;
 				}
 			});
+			if(sortiedBase > 0){
+				// Assume strikePoints can be kept until next set bases (mapinfo API call)
+				KC3SortieManager.updateSortiedLandBases();
+				KC3Network.trigger("Lbas");
+			}
 			// Record hidden fuel & ammo consumption of sortied LBAS
 			console.log("Consumed fuel & ammo:", consumedFuel, consumedAmmo);
 			if(consumedFuel > 0 || consumedAmmo > 0){
@@ -1065,7 +1078,6 @@ Previously known as "Reactor"
 				PlayerManager.setResources(utcHour * 3600, null, [-consumedFuel,-consumedAmmo,0,0]);
 				KC3Network.trigger("Consumables");
 			}
-			// TODO Show indicator of sortied LBAS at panel (also show stricken nodes name?)
 		},
 		
 		/* Traverse Map
@@ -1103,6 +1115,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_sortie/airbattle":function(params, response, headers){
@@ -1127,6 +1140,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/airbattle":function(params, response, headers){
@@ -1155,6 +1169,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "dawn", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/ec_night_to_day":function(params, response, headers){
@@ -1171,6 +1186,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "night", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
@@ -1186,15 +1202,14 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_battle_midnight/battle":function(params, response, headers){
 			KC3SortieManager.setSlotitemConsumed(undefined, params);
-			response.api_data.api_name = "midnight_battle";
+			response.api_data.api_name = response.api_data.api_name || "midnight_battle";
 			KC3SortieManager.engageNight( response.api_data );
+			KC3Network.setBattleEvent(true, "night", response.api_data.api_name);
 			KC3Network.trigger("BattleNight");
 		},
 		"api_req_combined_battle/midnight_battle":function(params, response, headers){
-			KC3SortieManager.setSlotitemConsumed(undefined, params);
 			response.api_data.api_name = "fc_midnight_battle";
-			KC3SortieManager.engageNight( response.api_data );
-			KC3Network.trigger("BattleNight");
+			this["api_req_battle_midnight/battle"].apply(this,arguments);
 		},
 		
 		/* ENEMY COMBINED FLEET
@@ -1206,6 +1221,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
@@ -1215,6 +1231,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "night", response.api_data.api_name);
 			KC3Network.trigger("BattleNight");
 		},
 		
@@ -1227,6 +1244,7 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
+			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
 		"api_req_combined_battle/each_airbattle":function(params, response, headers){
@@ -1242,6 +1260,7 @@ Previously known as "Reactor"
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
 		"api_req_combined_battle/each_ld_shooting":function(params, response, headers){
+			// not really existed yet for both side combined fleet in-game
 			response.api_data.api_name = "each_ld_shooting";
 			this["api_req_combined_battle/each_battle"].apply(this,arguments);
 		},
@@ -1261,6 +1280,7 @@ Previously known as "Reactor"
 					shipData.hp[0] = shipData.afterHp[0];
 				});
 			});
+			KC3Network.setBattleEvent(false, "result", "battleresult");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
@@ -1280,6 +1300,7 @@ Previously known as "Reactor"
 					shipData.hp[0] = shipData.afterHp[0];
 				});
 			});
+			KC3Network.setBattleEvent(false, "result", "cf_battleresult");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
@@ -1664,6 +1685,7 @@ Previously known as "Reactor"
 			pvpNode.letter = "PvP";
 			KC3SortieManager.appendNode(pvpNode);
 			KC3SortieManager.engageBattle(response.api_data);
+			KC3Network.setBattleEvent(true, "day", "p_battle");
 			KC3Network.trigger("PvPStart", {
 				battle: response.api_data,
 				fleetSent: params.api_deck_id
@@ -1679,6 +1701,7 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_practice/midnight_battle":function(params, response, headers){
 			KC3SortieManager.engageNight(response.api_data);
+			KC3Network.setBattleEvent(true, "night", "p_midnight_battle");
 			KC3Network.trigger("PvPNight", { battle: response.api_data });
 		},
 		
@@ -1687,6 +1710,7 @@ Previously known as "Reactor"
 		"api_req_practice/battle_result":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data,true);
 			KC3SortieManager.resultScreen(response.api_data);
+			KC3Network.setBattleEvent(false, "result", "p_battle_result");
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
