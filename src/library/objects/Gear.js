@@ -249,15 +249,60 @@ KC3改 Equipment Object
 				},
 			},
 			// Type 2 Reconnaissance Aircraft
+			// https://wikiwiki.jp/kancolle/%E4%BA%8C%E5%BC%8F%E8%89%A6%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F
 			"61": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2 },
+						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
 					},
 				},
+				byShip: [
+					{
+						// All CVL/CV/CVB/BBV? stars+2 extra +1 los
+						// BBV only applied to Ise K2 for now
+						stypes: [7, 11, 18, 12],
+						minStars: 2,
+						multiple: { "saku": 1 },
+					},
+					{
+						// All CVL/CV/CVB/BBV? stars+10 accumulative +2 fp, +3 los
+						// Suzuya/Kumano Kou K2, Zuihou K2B totally +3 fp, +4 los
+						// Hiryuu K2  totally +4 fp, +5 los
+						// Souryuu K2 totally +6 fp, +7 los
+						// Ise K2 totally +5 fp, +1 ar, +2 ev, +3 los, multiple part unknown
+						stypes: [7, 11, 18, 12],
+						minStars: 10,
+						multiple: { "houg": 2, "saku": 2 },
+					},
+					{
+						// Suzuya/Kumano Kou K2, Zuihou K2B star+1
+						ids: [508, 509, 560],
+						minStars: 1,
+						multiple: { "houg": 1, "saku": 1 },
+					},
+					{
+						// Hiryuu K2 star+1
+						ids: [196],
+						minStars: 1,
+						multiple: { "houg": 2, "saku": 2 },
+					},
+					{
+						// Souryuu K2 star+1
+						ids: [197],
+						minStars: 1,
+						multiple: { "houg": 3, "saku": 3 },
+					},
+					{
+						// Souryuu K2 stars+6 totally +4 fp, +5 los
+						ids: [197],
+						minStars: 6,
+						multiple: { "houg": 1, "saku": 1 },
+					},
+				],
 			},
 			// Zuiun (634 Air Group)
 			"79": {
@@ -733,7 +778,7 @@ KC3改 Equipment Object
 					],
 					// Shiratsuyu Class K2
 					"23": "18",
-					// Yuugumo Class K2: Naganami K2 only
+					// Yuugumo Class K2
 					"38": "18",
 					// Kagerou Class K2
 					//  except Isokaze / Hamakaze B Kai, Urakaze / Tanikaze D Kai
