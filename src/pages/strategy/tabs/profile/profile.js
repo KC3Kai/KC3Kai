@@ -802,7 +802,7 @@
 						"Do not leave this page until your CPU/disk calm down!");
 				}
 				// Extra fix if there are some IDs left in `lastSortie` but no `pendingConsumption` record
-				const obsoleteSortieShips = KC3ShipManager.find(ship => ship.lastSortie.length > 1
+				const obsoleteSortieShips = KC3ShipManager.find(ship => ship.lastSortie.length > 2
 					&& Object.keys(ship.pendingConsumption).length === 0);
 				if(obsoleteSortieShips.length) {
 					obsoleteSortieShips.forEach(ship => {
