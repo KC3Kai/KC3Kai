@@ -45,7 +45,8 @@ KC3改 Equipment Object
 	 * @return the bonus definition table with new counters of related equipment.
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
-	 *  * [20181228 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg
+	 *  * [20190130 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
 	 *  * [20180726  DD] https://zekamashi.net/kancolle-kouryaku/kutiku-fit/
@@ -205,16 +206,103 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Re.2001 OR Kai
+			"184": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+				},
+			},
+			// Re.2005 Kai
+			"189": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "tyku": 1, "houk": 2 },
+					},
+					// Graf
+					"63": "68",
+				},
+			},
+			// Re.2001 G Kai
+			"188": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 3, "tyku": 1, "houk": 1 },
+					},
+				},
+			},
+			// Re.2001 CB Kai
+			"316": {
+				count: 0,
+				byClass: {
+					// Aquila Class
+					"68": {
+						multiple: { "houg": 4, "tyku": 1, "houk": 1 },
+					},
+				},
+			},
 			// Type 2 Reconnaissance Aircraft
+			// https://wikiwiki.jp/kancolle/%E4%BA%8C%E5%BC%8F%E8%89%A6%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F
 			"61": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2 },
+						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
 					},
 				},
+				byShip: [
+					{
+						// All CVL/CV/CVB/BBV? stars+2 extra +1 los
+						// BBV only applied to Ise K2 for now
+						stypes: [7, 11, 18, 12],
+						minStars: 2,
+						multiple: { "saku": 1 },
+					},
+					{
+						// All CVL/CV/CVB/BBV? stars+10 accumulative +2 fp, +3 los
+						// Suzuya/Kumano Kou K2, Zuihou K2B totally +3 fp, +4 los
+						// Hiryuu K2  totally +4 fp, +5 los
+						// Souryuu K2 totally +6 fp, +7 los
+						// Ise K2 totally +5 fp, +1 ar, +2 ev, +3 los, multiple part unknown
+						stypes: [7, 11, 18, 12],
+						minStars: 10,
+						multiple: { "houg": 2, "saku": 2 },
+					},
+					{
+						// Suzuya/Kumano Kou K2, Zuihou K2B star+1
+						ids: [508, 509, 560],
+						minStars: 1,
+						multiple: { "houg": 1, "saku": 1 },
+					},
+					{
+						// Hiryuu K2 star+1
+						ids: [196],
+						minStars: 1,
+						multiple: { "houg": 2, "saku": 2 },
+					},
+					{
+						// Souryuu K2 star+1
+						ids: [197],
+						minStars: 1,
+						multiple: { "houg": 3, "saku": 3 },
+					},
+					{
+						// Souryuu K2 stars+6 totally +4 fp, +5 los
+						ids: [197],
+						minStars: 6,
+						multiple: { "houg": 1, "saku": 1 },
+					},
+				],
 			},
 			// Zuiun (634 Air Group)
 			"79": {
@@ -690,7 +778,7 @@ KC3改 Equipment Object
 					],
 					// Shiratsuyu Class K2
 					"23": "18",
-					// Yuugumo Class K2: Naganami K2 only
+					// Yuugumo Class K2
 					"38": "18",
 					// Kagerou Class K2
 					//  except Isokaze / Hamakaze B Kai, Urakaze / Tanikaze D Kai
@@ -833,6 +921,8 @@ KC3改 Equipment Object
 					"81": {
 						multiple: { "houg": 2, "souk": 1 },
 					},
+					// Yuubari Class
+					"34": "81",
 				},
 				byShip: {
 					// Hibiki K2 (Bep)
@@ -1262,8 +1352,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Ushio,           Shigure,      Hatsushimo,   Haruna K2, Nagato K2
-						ids: [16, 233, 407, 43, 243, 145, 41, 241, 419, 151,       541],
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
+						ids: [407,   145,        419,             151,       541],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{

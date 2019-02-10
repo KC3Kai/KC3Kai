@@ -1890,6 +1890,9 @@ Used by SortieManager
 			: 0;
 		// Record encountered enemy air raid formation
 		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
+		if(battleData.api_m1){
+			console.info("Map gimmick flag detected", battleData.api_m1);
+		}
 	};
 
 	KC3Node.prototype.isBoss = function(){

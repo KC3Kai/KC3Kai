@@ -187,8 +187,7 @@ AntiAir: anti-air related calculations
 
 	function isBritishAAGun(mst) {
 		// QF 2-pounder Octuple Pom-pom Gun Mount
-		// 20-tube 7inch UP Rocket Launchers
-		return [191, 301].indexOf(mst.api_id) !== -1;
+		return [191].indexOf(mst.api_id) !== -1;
 	}
 
 	// GFCS Mk.37
@@ -930,9 +929,13 @@ AntiAir: anti-air related calculations
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
 		predAnyOf(isBritishShips),
 		withEquipmentMsts(
-			predAllOf(
-				hasSome( isBritishRocketLauncher ),
-				hasSome( isBritishAAGun ))
+			predAnyOf(
+				predAllOf(
+					hasSome( isBritishRocketLauncher ),
+					hasSome( isBritishAAGun )),
+				predAllOf(
+					hasAtLeast( isBritishRocketLauncher, 2 ))
+			)
 		)
 	);
 

@@ -375,8 +375,12 @@ Uses KC3Quest objects to play around with
 			if(quest !== undefined && Array.isArray(quest.tracking)){
 				for(var ctr in quest.tracking){
 					var progress = quest.tracking[ctr];
-					if(progress.length > 1 && (!!forced || progress[0] < progress[1]))
+					if(progress.length > 1 && (!!forced || progress[0] < progress[1])){
 						progress[0] = 0;
+					}
+				}
+				if(!!forced){
+					this.isActive(questId, false);
 				}
 			}
 		},

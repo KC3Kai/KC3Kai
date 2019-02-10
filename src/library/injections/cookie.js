@@ -20,10 +20,10 @@ Redirects to KanColle game page after writing
 		var buildCookie = function(key, value, domain, path){
 			return key + "=" + value + ";expires=" + expireTime + ";domain=" + domain + ";path=" + path;
 		};
-		document.cookie = buildCookie("cklg", "ja", ".dmm.com", "/");
-		document.cookie = buildCookie("cklg", "ja", ".dmm.com", "/netgame/");
-		document.cookie = buildCookie("cklg", "ja", ".dmm.com", "/netgame_s/");
-		document.cookie = buildCookie("cklg", "ja", ".dmm.com", "/play/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/netgame_s/");
+		document.cookie = buildCookie("cklg", "welcome", ".dmm.com", "/play/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame/");
 		document.cookie = buildCookie("ckcy", "1", ".dmm.com", "/netgame_s/");

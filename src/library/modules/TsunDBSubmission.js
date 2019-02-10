@@ -396,6 +396,13 @@
 				equip: apiData.api_eSlot,
 				formation: apiData.api_formation[1]
 			};
+			if(KC3Meta.isEventWorld(this.currentMap[0])) {
+				this.enemyComp.enemyComp.mapStats = {
+					gaugeNum: this.data.gaugeNum,
+					currentHP: this.data.currentMapHP,
+					maxHP: this.data.maxMapHP
+				};
+			}
 			if(apiData.api_ship_ke_combined) {
 				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
 				this.enemyComp.enemyComp.lvlEscort = apiData.api_ship_lv_combined;
