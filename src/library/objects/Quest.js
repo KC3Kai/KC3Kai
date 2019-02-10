@@ -299,7 +299,8 @@ known IDs see QuestManager
 			return;
 		// client-side progress judgement for these:
 		// C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		if([318].indexOf(this.id) > -1) {
+		// F25, F39: 50% if 1st flagship or inventory has no required aircraft
+		if([318, 628, 643].indexOf(this.id) > -1) {
 			if (currentCount < maxCount && this.progress > 0)
 				trackingData[0] = maxCount;
 			return;
