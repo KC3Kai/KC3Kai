@@ -248,6 +248,7 @@
 				'api_port/port': this.processGimmick
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
+			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
 		},
 		
 		processMapInfo: function(http) {
@@ -662,7 +663,7 @@
 
 			this.aaci.equips = triggeredShip.equipment(true).map(g => g.masterId || -1);
 			this.aaci.improvements = triggeredShip.equipment(true).map(g => g.stars || -1);
-			this.aaci.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+			this.aaci.kc3version = this.kc3version;
 
 			this.sendData(this.aaci, 'aaci');
 		},
@@ -676,7 +677,7 @@
 				edgeID: thisNode.id,
 				map: this.data.map,
 				difficulty: this.data.difficulty,
-				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
+				kc3version: this.kc3version
 			};
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
@@ -712,7 +713,7 @@
 				id: PlayerManager.hq.id,
 				map: this.data.map,
 				edge: thisNode.id,
-				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
+				kc3version: this.kc3version,
 				starshell: !!thisNode.flarePos,
 				searchlight: !!fleet.estimateUsableSearchlight(),
 				ncontact: thisNode.fcontactId === 102,
@@ -748,17 +749,21 @@
 		},
 		
 		processGimmick: function(http, trigger = 'debuff'){
-			let apiData = {};
+			const apiData = http ? http.response.api_data : {};
 			if (http) {
-				apiData = http.response.api_data;
-				if (!((apiData.api_event_object && apiData.api_event_object.api_m_flag2) || apiData.api_m1)) { return; }
-			}
+				if (!(
+					// triggered by next node flag
+					apiData.api_m1 ||
+					// triggered by home port SE flag
+					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
+				)) { return; }
+			} // else triggered by battle/LB air raid result flag
 			this.gimmick.map = this.data.map;
 			this.gimmick.amountofnodes = this.data.nodeInfo.amountOfNodes;
 			this.gimmick.gaugenum = this.data.gaugeNum;
 			this.gimmick.trigger = trigger;
 			this.gimmick.nodes = this.data.edgeID;
-			this.gimmick.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+			this.gimmick.kc3version = this.kc3version;
 			if (apiData.api_m1) {
 				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
 			}
@@ -769,7 +774,7 @@
 			this.spAttack = {};
 			const thisNode = KC3SortieManager.currentNode();
 			const template = {
-				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d"),
+				kc3version: this.kc3version,
 				map: this.data.map,
 				node: thisNode.id
 			};
@@ -842,8 +847,12 @@
 					misc.acc = attack.acc;
 					misc.damage = attack.damage;
 					misc.contact = battleConds.airBattleId;
-					this.spAttack = Object.assign({}, template2, { misc: misc, cutin: cutin, cutinequips: cutinEquips,
-						cutintype: cutinType[2], time: time });
+					this.spAttack = Object.assign({}, template2, {
+						misc, cutin,
+						cutinequips: cutinEquips,
+						cutintype: cutinType[2],
+						time,
+					});
 					this.sendData(this.spAttack, 'spattack');
 				}
 			}
