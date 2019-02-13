@@ -145,6 +145,7 @@ Retrieves when needed to apply on components
 				map_markers       : true,
 				map_letters       : false,
 				mute_game_tab     : false,
+				focus_game_tab    : false,
 				fix_game_code     : false,
 				dmm_forcecookies  : false,
 				dmm_customize     : false,

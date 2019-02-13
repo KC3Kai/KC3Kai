@@ -1556,6 +1556,7 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
+		const shikonBonus = this.hasEquipment(230) ? 5 : 0;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1563,9 +1564,9 @@ KC3改 Ship Object
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					wg42Bonus = [1, 1.3][wg42Count] || 1.3;
+					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [wg42Additive + shikonBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1573,7 +1574,7 @@ KC3改 Ship Object
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// SS(V) bonus
-					const ssBonus = this.isSubmarine() ? 2.3 : 1;
+					const ssBonus = this.isSubmarine() ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
@@ -1599,7 +1600,6 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					const shikonBonus = this.hasEquipment(230) ? 5 : 0;
 					return [shikonBonus, landingBonus * wg42Bonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
@@ -2123,9 +2123,9 @@ KC3改 Ship Object
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
-		// and explicit asw bonus from equipment on specific ship not counted.
-		// FIXME aswDiff will be inaccurate if there is bonus on old equipment
-		const shipAsw = this.as[0] + aswDiff - this.equipmentTotalStats("tais", true, true, true);
+		// and explicit asw bonus from sonars taken into account now.
+		// ~~explicit asw bonus from Torpedo Bombers on CVE not counted?~~
+		const shipAsw = this.as[0] + aswDiff;
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -3312,7 +3312,10 @@ KC3改 Ship Object
 		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
-		const aswDiff = newEquipAsw - oldEquipAsw;
+		const aswDiff = newEquipAsw - oldEquipAsw
+			// add explicit bonus from new equipment, but bonus from old missed,
+			// so aswDiff will be inaccurate if there is bonus on old equipment
+			+ this.equipmentTotalStats("tais", true, true, true);
 		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
 		const antiLandPowers = this.shipPossibleAntiLandPowers();
@@ -3342,11 +3345,10 @@ KC3改 Ship Object
 			args = $.extend({noFuel:0,noAmmo:0},args);
 			command = command.slice(0,1).toUpperCase() + command.slice(1).toLowerCase();
 			this["perform"+command].call(this,args);
+			return true;
 		} catch (e) {
 			console.error("Failed when perform" + command, e);
 			return false;
-		} finally {
-			return true;
 		}
 	};
 	KC3Ship.prototype.performSupply = function(args) {

@@ -958,6 +958,7 @@
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
+		$(".module.activity .battle_night img").removeClass("hover");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
@@ -2047,14 +2048,18 @@
 						$(".base_range", baseBox).attr("title",
 							"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
 						).lazyInitTooltip();
-						$(".base_action", baseBox).html([
-							KC3Meta.term("LandBaseActionWaiting"),
-							KC3Meta.term("LandBaseActionSortie"),
-							KC3Meta.term("LandBaseActionDefend"),
-							KC3Meta.term("LandBaseActionRetreat"),
-							KC3Meta.term("LandBaseActionRest")
-						][baseInfo.action]);
-						if (baseInfo.action === 2) {
+						const actionTerm = baseInfo.getActionTerm();
+						$(".base_action", baseBox).text(KC3Meta.term("LandBaseAction" + actionTerm));
+						if (actionTerm === "Sortie") {
+							// Show a tooltip for supporting target nodes
+							if (KC3SortieManager.isOnSortie() && Array.isArray(baseInfo.strikePoints)) {
+								$(".base_action", baseBox).attr("title", "\u21db {0}".format(
+									baseInfo.strikePoints.map(edge => KC3Meta.nodeLetter(
+										KC3SortieManager.map_world, KC3SortieManager.map_num, edge
+									)).join(", ")
+								)).lazyInitTooltip();
+							}
+						} else if (actionTerm === "Defend") {
 							// Show a tooltip for shotdown ratios given to enemy slots
 							const shotdownRatios = baseInfo.shotdownRatio().formattedSlots;
 							$(".base_action", baseBox).attr("title",
@@ -2351,9 +2356,19 @@
 							let badEntry = ! (Array.isArray(shipList) && encounter.form > 0);
 							// Don't show 'broken' encounters with incorrect data
 							if(badEntry) return;
+							const edata = {
+								formation: encounter.form,
+								main: shipList.slice(0, 6),
+								escort: shipList.slice(6, 12)
+							};
 							const encBox = $("#factory .encounter_record").clone();
-							$(".encounter_formation img", encBox).attr("src",
-								KC3Meta.formationIcon(encounter.form));
+							$(".encounter_formation img", encBox)
+								.attr("src", KC3Meta.formationIcon(encounter.form))
+								.addClass("hover")
+								.on("click", function(e) {
+									const simData = KC3SortieManager.prepareSimData(edata);
+									if(simData) openSimulatorWindow(simData, e.altKey);
+								});
 							$.each(shipList, function(_, shipId){
 								if(shipId > 0){
 									if(!KC3Master.isAbyssalShip(shipId)){
@@ -2733,6 +2748,21 @@
 
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+
+				// Add option to simulate night battle
+				if (thisNode.yasenFlag) {
+					const edata = {
+						main: thisNode.eshipsMain || thisNode.eships,
+						escort: thisNode.eshipsEscort
+					};
+					$(".module.activity .battle_night img")
+						.addClass("hover").off("click")
+						.on("click", function (e) {
+							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
+							if(simData) openSimulatorWindow(simData, e.altKey);
+						});
+				}
+				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
 				if(thisNode.isNightToDay){
 					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
@@ -4417,6 +4447,22 @@
 			return false;
 		}
 	};
+
+	function openSimulatorWindow(hashData, isPopup) {
+		try {
+			const url = "https://kc3kai.github.io/kancolle-replay/simulator.html#" + JSON.stringify(hashData);
+			const ref = window.open(url, "simulator", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+			if(ref && !ref.closed){
+				// Update hash with latest battle data even if window already opened
+				// this might not work for all browser versions as a vulnerability to bypass CORS
+				ref.location.replace(url);
+				// Switch focus to the window if possible
+				if(ref.focus) ref.focus();
+			}
+		} catch (e) {
+			console.warn("Failed to open battle simulator", e);
+		}
+	}
 
 	function updateEnemyHpBarStyles(hpBarSelector, hpPercent, maxWidth) {
 		if(maxWidth > 0) {

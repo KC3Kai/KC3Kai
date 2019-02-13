@@ -8,6 +8,7 @@
 		this.range = -1;
 		this.action = -1;
 		this.planes = [];
+		this.strikePoints = undefined;
 		
 		// If specified with data, fill this object
 		if(typeof data !== "undefined"){
@@ -23,9 +24,8 @@
 			}
 			this.action = data.api_action_kind;
 			
-			var self = this;
-			data.api_plane_info.forEach(function(plane, index){
-				self.planes.push(plane);
+			data.api_plane_info.forEach((plane, index) => {
+				this.planes.push(plane);
 			});
 		}
 	};
@@ -40,8 +40,30 @@
 			this.rangeBonus = data.rangeBonus;
 			this.action = data.action;
 			this.planes = data.planes;
+			this.strikePoints = data.strikePoints;
 		}
 		return this;
+	};
+	
+	KC3LandBase.actionEnum = function(key){
+		// Action keys are now the suffix of term key in terms.json
+		const actionEnumsMap = {
+			0: "Waiting",
+			1: "Sortie",
+			2: "Defend",
+			3: "Retreat",
+			4: "Rest",
+		};
+		// return all enums
+		return key === undefined ? actionEnumsMap :
+		// return action id by term key
+			typeof key === "string" ? Number(Object.swapMapKeyValue(actionEnumsMap)[key] || -1) :
+		// return term key by action id
+			actionEnumsMap[key] || "";
+	};
+	
+	KC3LandBase.prototype.getActionTerm = function(){
+		return KC3LandBase.actionEnum(this.action);
 	};
 	
 	KC3LandBase.prototype.isPlanesSupplied = function(){
@@ -171,6 +193,9 @@
 			returnObj.rid = this.rid;
 			returnObj.range = this.range;
 			returnObj.action = this.action;
+			if(this.strikePoints){
+				returnObj.edges = this.strikePoints;
+			}
 			returnObj.planes = [];
 			$.each(this.planes, function(index, squad){
 				if(squad.api_slotid > 0){

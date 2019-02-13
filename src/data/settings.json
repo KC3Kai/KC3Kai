@@ -924,6 +924,14 @@
 				"options" : {}
 			},
 			{
+				"id" : "focus_game_tab",
+				"name" : "SettingsFocusGameTab",
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsFocusGameTabTip"
+				}
+			},
+			{
 				"id" : "fix_game_code",
 				"name" : "SettingsGameLibFixes",
 				"type" : "check",

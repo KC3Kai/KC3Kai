@@ -3166,6 +3166,9 @@ ABYSS FLEET
 	pointer-events:none;
 	display:none;
 }
+.module.fleet .lship .ex_item.empty {
+	background:rgba(255,255,255,0.8);
+}
 .module.fleet .lship .ex_item.item_being_used {
 	background:#fe3;
 }
@@ -3637,6 +3640,9 @@ ABYSS FLEET
 	background:#45a9a5;
 	pointer-events:none;
 	display:none;
+}
+.module.fleet .sship .ex_item.empty {
+	background:rgba(255,255,255,0.8);
 }
 .module.fleet .sship .ex_item.item_being_used {
 	background:#fe3;

@@ -20,7 +20,7 @@
 		
 		// Executes every tab visit
 		execute(){
-			let self = this;
+			const self = this;
 			
 			// Set default filter states
 			let startDate = new Date();
@@ -94,7 +94,7 @@
 		
 		// Get data via worker using specified filters
 		collectData(filters){
-			let DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
+			const DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
 			DataCollector.onmessage = (response) => {
 				if (response.data) {
 					this.refreshGraph(response.data);

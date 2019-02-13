@@ -248,9 +248,7 @@
 		// numeric voice key to descriptive one
 		voiceNumToDesc: function(k) {
 			if(!this._idToDesc) {
-				this._idToDesc = Object.keys(this._descToId).reduce(
-					(o, k) => Object.assign({}, o, { [this._descToId[k]]:k }), {}
-				);
+				this._idToDesc = Object.swapMapKeyValue(this._descToId);
 			}
 			return this._idToDesc[k] || "";
 		},

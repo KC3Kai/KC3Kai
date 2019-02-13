@@ -509,7 +509,8 @@ Does not include Ships and Gears which are managed by other Managers
 				"90": "setsubunBeans",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
-			return attrNameOnly ? attrNameMap[useitemId] : this.consumables[attrNameMap[useitemId]];
+			return useitemId === undefined ? attrNameMap :
+				attrNameOnly ? attrNameMap[useitemId] : this.consumables[attrNameMap[useitemId]];
 		},
 
 		saveBases :function(){

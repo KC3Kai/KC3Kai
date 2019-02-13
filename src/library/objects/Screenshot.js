@@ -122,7 +122,7 @@ KCScreenshot.prototype.crop = function(offset){
 	var self = this;
 	
 	// Get zoom factor
-	chrome.tabs.getZoom(null, function(zoomFactor){
+	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
 		// Get gamebox dimensions and position
 		var params = {
 			realWidth: 1200 * zoomFactor * self.scale,
