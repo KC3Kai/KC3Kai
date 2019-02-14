@@ -248,9 +248,9 @@ Retrieves when needed to apply on components
 		// Return the corresponding language code supported by now, see Translation.js#getLocale
 		detectBrowserLanguage : function(browserLangTag){
 			// Dummy for environment without `navigator` and `chrome.i18n` api
-			var i18n = navigator || { languages: [] };
+			var i18n = navigator || {};
 			// Prefer the topmost language in browser settings
-			var lang = browserLangTag || i18n.languages[0] || i18n.language;
+			var lang = browserLangTag || (i18n.languages || [])[0] || i18n.language;
 			// Try to detect full tag first (case sensitivity) for these special cases
 			var result = ({
 				// Perhaps needs to be updated for future browser versions
