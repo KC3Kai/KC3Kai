@@ -16,7 +16,7 @@ Executes processing and relies on KC3Network for the triggers
 			this.statusCode = har.response.status;
 			this.params = $.extend(true, [], har.request.postData.params);
 			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
-			this.parsePostDataTextIfNecessary(har);
+			this.parsePostDataTextIfNecessary(har.request);
 		}
 		this.gameStatus = 0;
 		this.response = {};
@@ -26,10 +26,12 @@ Executes processing and relies on KC3Network for the triggers
 	 * Parse the postData text in the request body instead, for these cases browser cannot do it for us:
 	 *   * Redirected request after a 307 response on Chrome m72 or later
 	 */
-	KC3Request.prototype.parsePostDataTextIfNecessary = function(har){
+	KC3Request.prototype.parsePostDataTextIfNecessary = function(request){
 		// Considered as necessary since KCSAPI is posting `application/x-www-form-urlencoded` data,
 		// as long as params is undefined and text exists, ignoring the original mine-type.
-		if(har.postData && !har.postData.params && har.postData.text && !this.params.length){
+		if(request.postData
+			&& !request.postData.params && request.postData.text
+			&& !this.params.length) {
 			// Simulate the parsing behavior browser does for HAR `postData.params`
 			const decodeFormUrlencoded = (text) => {
 				const result = [];
@@ -45,7 +47,8 @@ Executes processing and relies on KC3Network for the triggers
 				}
 				return result;
 			};
-			this.params = decodeFormUrlencoded(har.postData.text);
+			this.params = decodeFormUrlencoded(request.postData.text);
+			console.warn("Request post data reparsed:", this.params, $.extend(true, {}, request.postData));
 		}
 	};
 	
@@ -62,7 +65,7 @@ Executes processing and relies on KC3Network for the triggers
 				// Known issue: for some browsers, next redirected request might lose some headers,
 				// and cause post data can not be parsed as `x-www-form-urlencoded` properly,
 				// see #parsePostDataTextIfNecessary.
-				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers);
+				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers, this.params);
 				return false;
 			}
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
