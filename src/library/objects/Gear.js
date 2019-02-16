@@ -262,44 +262,56 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// All CVL/CV/CVB/BBV? stars+2 extra +1 los
+						// All CVL/CV/CVB/BBV stars+2 extra +1 los
 						// BBV only applied to Ise K2 for now
 						stypes: [7, 11, 18, 12],
 						minStars: 2,
 						multiple: { "saku": 1 },
 					},
 					{
-						// All CVL/CV/CVB/BBV? stars+10 accumulative +2 fp, +3 los
+						// All CVL/CV/CVB/BBV stars+4 extra +1 fp, accumulative +1 fp, +1 los
+						stypes: [7, 11, 18, 12],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// All CVL/CV/CVB/BBV stars+6 extra +1 los, accumulative +1 fp, +2 los
+						stypes: [7, 11, 18, 12],
+						minStars: 6,
+						multiple: { "saku": 1 },
+					},
+					{
+						// All CVL/CV/CVB/BBV stars+10 accumulative +2 fp, +3 los
 						// Suzuya/Kumano Kou K2, Zuihou K2B totally +3 fp, +4 los
 						// Hiryuu K2  totally +4 fp, +5 los
 						// Souryuu K2 totally +6 fp, +7 los
 						// Ise K2 totally +5 fp, +1 ar, +2 ev, +3 los, multiple part unknown
 						stypes: [7, 11, 18, 12],
 						minStars: 10,
-						multiple: { "houg": 2, "saku": 2 },
+						multiple: { "houg": 1, "saku": 1 },
 					},
 					{
-						// Suzuya/Kumano Kou K2, Zuihou K2B star+1
+						// Suzuya/Kumano Kou K2, Zuihou K2B stars+1
 						ids: [508, 509, 560],
 						minStars: 1,
 						multiple: { "houg": 1, "saku": 1 },
 					},
 					{
-						// Hiryuu K2 star+1
+						// Hiryuu K2 stars+1
 						ids: [196],
 						minStars: 1,
 						multiple: { "houg": 2, "saku": 2 },
 					},
 					{
-						// Souryuu K2 star+1
+						// Souryuu K2 stars+1
 						ids: [197],
 						minStars: 1,
 						multiple: { "houg": 3, "saku": 3 },
 					},
 					{
-						// Souryuu K2 stars+6 totally +4 fp, +5 los
+						// Souryuu K2 stars+8 totally +5 fp, +6 los
 						ids: [197],
-						minStars: 6,
+						minStars: 8,
 						multiple: { "houg": 1, "saku": 1 },
 					},
 				],

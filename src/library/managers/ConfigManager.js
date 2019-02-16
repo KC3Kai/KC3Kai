@@ -16,7 +16,7 @@ Retrieves when needed to apply on components
 		defaults : function(){
 			return {
 				version              : 8,
-				language             : "en",
+				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
 				elosFormula          : 2,
 				aaFormation          : 1,
@@ -243,6 +243,40 @@ Retrieves when needed to apply on components
 			return !this.idbSaveSortie ||
 				(Array.isArray(this.idbSaveExcludeMaps) &&
 				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
+		},
+		
+		// Return the corresponding language code supported by now, see Translation.js#getLocale
+		detectBrowserLanguage : function(browserLangTag){
+			// Dummy for environment without `navigator` and `chrome.i18n` api
+			var i18n = navigator || {};
+			// Prefer the topmost language in browser settings
+			var lang = browserLangTag || (i18n.languages || [])[0] || i18n.language;
+			// Try to detect full tag first (case sensitivity) for these special cases
+			var result = ({
+				// Perhaps needs to be updated for future browser versions
+				"zh-CN": "scn",
+				"zh-TW": "tcn",
+				"zh-HK": "tcn-yue",
+				"uk-UA": "ua", // uk is Ukrainian, UK is United Kingdom, UA is Ukraine
+				"uk": "ua",
+			})[lang];
+			if(!result){
+				// Try primary language subtag only
+				lang = lang.toLowerCase().split(/-/)[0];
+				result = ({
+					// our language codes messed up with region codes, compatible with them
+					"ja": "jp", "jp": "jp", // jp not exist
+					"ko": "kr", // kr is Kanuri, do not map it to Korean
+					"ua": "ua", // ua not exist
+					"zh": "scn", // scn not exist, even not a region code
+					// do remember update this list if new language added
+					"de": "de", "es": "es", "fr": "fr", "id": "id",
+					"it": "it", "nl": "nl", "pt": "pt", "ru": "ru",
+					"th": "th", "vi": "vi",
+				})[lang];
+			}
+			// Fall-back to `en` for unsupported language
+			return result || "en";
 		},
 		
 		// Current maximum pages of HQ info

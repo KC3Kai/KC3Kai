@@ -136,7 +136,7 @@
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");
 					return true;
 				}
-				var shipVersions = KC3Master.graph(self.currentShipId).api_version;
+				var shipVersions = KC3Master.graph(self.currentShipId).api_version || [];
 				var isPortVoices = vnum >= 2 && vnum <= 4;
 				// 0: ship card version, 1: voice version, 2: poke voice version?
 				var soundVersion = shipVersions[isPortVoices ? 2 : 1] || 1;
@@ -392,7 +392,7 @@
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			// Changed to an Array from 2016-04-01
-			var shipVersions = KC3Master.graph(ship_id).api_version;
+			var shipVersions = KC3Master.graph(ship_id).api_version || [];
 			//console.debug("shipgraph.api_version", shipVersions);
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
@@ -1039,7 +1039,7 @@
 				$(".tab_mstship .shipInfo .subtitles").hide();
 				$(".tab_mstship .shipInfo .cgswf")
 					.css("width", "100%").css("height", "600px")
-					.attr("scale", KC3Master.isSeasonalShip(ship_id) ? 1 : 600 / 1300);
+					.attr("scale", KC3Master.isSeasonalShip(ship_id) ? 600 / 645 : 600 / 1300);
 				
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();
