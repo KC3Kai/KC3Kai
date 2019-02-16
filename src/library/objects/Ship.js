@@ -742,7 +742,14 @@ KC3改 Ship Object
 				if (type === "byClass") {
 					for (const key in gear[type]) {
 						if (key == ctype) {
-							gear.path = gear[type][key];
+							if (Array.isArray(gear[type][key])) {
+								for (let i = 0; i < gear[type][key].length; i++) {
+									gear.path = gear.path || [];
+									gear.path.push(gear[type][key][i]);
+								}
+							} else {
+								gear.path = gear[type][key];
+							}
 						}
 					}
 				}
@@ -750,14 +757,14 @@ KC3改 Ship Object
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
 							if (checkByShip(gear[type][i], shipId, stype, ctype)) {
-								gear.path = gear[type][i];
+								gear.path = gear.path || [];
+								gear.path.push(gear[type][i]);
 							}
 						}
-					}
-					else if (checkByShip(gear[type], shipId, stype, ctype)) {
+					} else if (checkByShip(gear[type], shipId, stype, ctype)) {
 						gear.path = gear[type];
 					}
-				}
+				} 
 				if (gear.path) {
 					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
