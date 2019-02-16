@@ -16,9 +16,37 @@ Executes processing and relies on KC3Network for the triggers
 			this.statusCode = har.response.status;
 			this.params = $.extend(true, [], har.request.postData.params);
 			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
+			this.parsePostDataTextIfNecessary(har);
 		}
 		this.gameStatus = 0;
 		this.response = {};
+	};
+	
+	/**
+	 * Parse the postData text in the request body instead, for these cases browser cannot do it for us:
+	 *   * Redirected request after a 307 response on Chrome m72 or later
+	 */
+	KC3Request.prototype.parsePostDataTextIfNecessary = function(har){
+		// Considered as necessary since KCSAPI is posting `application/x-www-form-urlencoded` data,
+		// as long as params is undefined and text exists, ignoring the original mine-type.
+		if(har.postData && !har.postData.params && har.postData.text && !this.params.length){
+			// Simulate the parsing behavior browser does for HAR `postData.params`
+			const decodeFormUrlencoded = (text) => {
+				const result = [];
+				const keyValuePairs = text.split(/&+/);
+				for (const keyValuePair of keyValuePairs) {
+					const keyValue = keyValuePair.split(/=/);
+					// Not support yet: (Array/Dictionary) key, (fileName, contentType), comment
+					// And no `decodeURI` applied, seems browser doesnot do it in HAR either
+					const name = keyValue[0], value = keyValue[1];
+					result.push({
+						name, value
+					});
+				}
+				return result;
+			};
+			this.params = decodeFormUrlencoded(har.postData.text);
+		}
 	};
 	
 	/* VALIDATE HEADERS
@@ -28,8 +56,12 @@ Executes processing and relies on KC3Network for the triggers
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode !== 200){
 			// Do not trigger a catbomb box if server responds following:
-			if(this.statusCode === 302 || this.statusCode === 307){
-				// Should be safe to ignore by checking if new location is game official host
+			if(this.statusCode === 307){
+				// Should be safe to ignore by checking if new location is game official host.
+				// But the new location header value is `/kcsapi/...`, no host in it.
+				// Known issue: for some browsers, next redirected request might lose some headers,
+				// and cause post data can not be parsed as `x-www-form-urlencoded` properly,
+				// see #parsePostDataTextIfNecessary.
 				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers);
 				return false;
 			}
