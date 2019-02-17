@@ -27,6 +27,14 @@
 			fleet1: [],
 			fleet2: [],
 			sortiedFleet: 1,
+			fleetids: [],
+			fleetlevel: 0,
+			fleetoneequips: [],
+			fleetoneexslots: [],
+			fleetonetypes: [],
+			fleettwoequips: [],
+			fleettwoexslots: [],
+			fleettwotypes: [],
 			fleetSpeed: null,
 			edgeID: [],
 			los: [],
@@ -282,6 +290,9 @@
 			if(mapData.api_eventmap) {
 				this.celldata.difficulty = mapData.api_eventmap.api_selected_rank;
 			}
+			else{
+				this.celldata.difficulty = 0;
+			}
 			
 			this.sendData(this.celldata, 'celldata');
 		},
@@ -344,6 +355,24 @@
 			if(this.data.fleetType > 0 && this.data.sortiedFleet === 1) {
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
+
+			for(let ship of this.data.fleet1){
+				this.data.fleetids.push(ship.id);
+				this.data.fleetlevel += ship.level;
+				this.data.fleetoneequips.push(...ship.equip);
+				this.data.fleetoneexslots.push(ship.exslot);
+				this.data.fleetonetypes.push(ship.type);
+			}
+
+			if(this.data.fleet2.length > 0){
+				for(let ship of this.data.fleet2){
+					this.data.fleetids.push(ship.id);
+					this.data.fleetlevel += ship.level;
+					this.data.fleettwoequips.push(...ship.equip);
+					this.data.fleettwoexslots.push(ship.exslot);
+					this.data.fleettwotypes.push(ship.type);
+				}
+			}
 			
 			// Sets all the event related values
 			if(apiData.api_eventmap) {
@@ -358,14 +387,7 @@
 				
 				this.sendData(this.data, 'eventrouting');
 			} else {
-				// This is made to support the old schema for the routing. This will be deprecated in the future.
-				const oldFormatData = $.extend(true, {}, this.data);
-				delete oldFormatData.nodeInfo;
-				oldFormatData.nodeType = this.data.nodeInfo.nodeType;
-				oldFormatData.eventId = this.data.nodeInfo.eventId;
-				oldFormatData.eventKind = this.data.nodeInfo.eventKind;
-				
-				this.sendData(oldFormatData, 'routing');
+				this.sendData(this.data, 'routing');
 			}
 			
 			// Send Land-base Air Raid enemy compos
@@ -1166,7 +1188,7 @@
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json',
-					'tsun-ver': 'Kasumi'
+					'tsun-ver': 'Kasumi Kai'
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {

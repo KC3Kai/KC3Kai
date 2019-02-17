@@ -14,7 +14,7 @@ Executes processing and relies on KC3Network for the triggers
 			this.url = String(har.request.url);
 			this.headers = $.extend(true, [], har.response.headers);
 			this.statusCode = har.response.status;
-			this.params = $.extend(true, [], har.request.postData.params);
+			this.params = $.extend(true, [], (har.request.postData || {}).params);
 			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
 			this.parsePostDataTextIfNecessary(har.request);
 		}
@@ -24,7 +24,7 @@ Executes processing and relies on KC3Network for the triggers
 	
 	/**
 	 * Parse the postData text in the request body instead, for these cases browser cannot do it for us:
-	 *   * Redirected request after a 307 response on Chrome m72 or later
+	 *   * Redirected request after a 307 response on Chrome m72 stable?
 	 */
 	KC3Request.prototype.parsePostDataTextIfNecessary = function(request){
 		// Considered as necessary since KCSAPI is posting `application/x-www-form-urlencoded` data,
