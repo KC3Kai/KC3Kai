@@ -693,13 +693,18 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
-		isOnShipBonusIncluded = true, isOnShipBonusOnly = false){
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null){
 		var total = 0;
 		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
-				total += (equip.master()["api_" + apiName] || 0);
+				const gearMst = equip.master();
+				if(Array.isArray(limitEquipTypes) &&
+					!limitEquipTypes.includes(gearMst.api_type[2])) {
+					return;
+				}
+				total += gearMst["api_" + apiName] || 0;
 				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
 			}
 		});
