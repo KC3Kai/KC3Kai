@@ -1027,6 +1027,7 @@ Contains summary information about a fleet and its ships
 				const multiplier = multipliers[itemType] || defaultMultiplier;
 				// only item with los stat > 0 will be summed
 				// although some items are not equippable by ship, eg: LBAA
+				// and no explicit bonus on ship affect this part
 				if (itemLos > 0) {
 					equipTotal += multiplier * (itemLos + gearObj.losStatImprovementBonus());
 				}
@@ -1086,13 +1087,16 @@ Contains summary information about a fleet and its ships
 			// empty slots and retreated ships already filtered
 			availableShips = this.shipsUnescaped(),
 			// count for empty slots or ships retreated,
-			// according test https://twitter.com/CC_jabberwock/status/975369274804940801
+			// according tests https://twitter.com/CC_jabberwock/status/975369274804940801
 			// for 7 ships Striking Force fleet during event, it will be -1, which make finally elos -2.
 			emptyShipSlot = fullShipSlots - availableShips.length;
 		let total = 0;
 		availableShips.forEach(ship => {
+			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
+			// explicit LoS bonus from improved Type 2 Recon added to ship part
+			const reconLosOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9]) || 0;
 			// sum ship's naked LoS
-			total += Math.sqrt(ship.nakedLoS());
+			total += Math.sqrt(ship.nakedLoS() + reconLosOnShipBonus);
 			// sum equipment's eLoS
 			const equipTotal = KC3Fleet.sumShipEquipmentElos(ship);
 			total += nodeDivaricatedFactor * equipTotal;
