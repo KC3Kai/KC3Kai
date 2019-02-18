@@ -1,6 +1,9 @@
+	var goddesslvl = 1;
+	var goddessID = 50;
+
 /**
  * Shipbox.js
- * KC3改 Ship Box for Natsuiro theme
+ * KC3改 Ship Box for the Moonlight theme
  */
 (function(){
 	"use strict";
@@ -20,7 +23,7 @@
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
 		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
 	};
-	
+
 	/* SET SHIP
 	Short ship box for combined fleets
 	---------------------------------------------------*/
@@ -45,6 +48,11 @@
 				})).execute();
 			});
 		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
+		if(this.shipData.level > goddesslvl) {
+			goddesslvl = this.shipData.level;
+			goddessID = this.shipData.masterId;
+			$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
+		}
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
@@ -76,7 +84,7 @@
 					.text(myExItem.stars >= 10 ? "\u2605" : myExItem.stars);
 			}
 		} 
-        else {
+		else {
 			$(".ex_item .gear_icon img", this.element).hide();
 			// Still show the empty item background if ex-slot opened but equipped nothing
 			$(".ex_item", this.element).toggle(this.shipData.ex_item === -1)
@@ -502,7 +510,7 @@
 		}else{
 			$(".ship_gear_"+(slot+1)+" .ship_gear_icon", this.element).hide();
 			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).hide();
-            $(".ship_gear_"+(slot+1)+" .sship_gear_slot", this.element).hide();
+			$(".ship_gear_"+(slot+1)+" .sship_gear_slot", this.element).hide();
 		}
 	};
 	
