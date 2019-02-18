@@ -694,6 +694,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			var sentBattleSupportFleets = Array.isArray(PlayerManager.hq.lastSortie)
 				? this.focusedFleet.concat(this.supportFleet) : [];
 			sentBattleSupportFleets.map(id => PlayerManager.hq.lastSortie[id]).forEach(function(fleet, fleetIdx){
+				if(!fleet){
+					console.error("Last sortie fleets snapshot lost", sentBattleSupportFleets, PlayerManager.hq.lastSortie);
+				}
 				fleet.forEach(function(after, ship_pos){
 					var fleet_id = sentBattleSupportFleets[fleetIdx] + 1,
 						rosterId = after.rosterId,

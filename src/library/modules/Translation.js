@@ -496,7 +496,9 @@
 		},
 		
 		/**
-		 * @return the IANA standard (ISO-639) locale tag according our language code
+		 * @return the IANA standard (ISO-639) locale tag according our language code.
+		 * @see ConfigManager#detectBrowserLanguage - for all language codes we supported.
+		 * @see kc3-translation repo all subfolders in `data`.
 		 */
 		getLocale :function(languageCode = ConfigManager.language){
 			// Since some of our language codes are not standard such as JP, KR, SCN, TCN.

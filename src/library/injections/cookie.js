@@ -15,7 +15,7 @@ Redirects to KanColle game page after writing
 		var expireTime = function(){
 			var now = new Date();
 			now.setFullYear(now.getFullYear() + 1);
-			return now.toGMTString();
+			return now.toUTCString();
 		}();
 		var buildCookie = function(key, value, domain, path){
 			return key + "=" + value + ";expires=" + expireTime + ";domain=" + domain + ";path=" + path;
