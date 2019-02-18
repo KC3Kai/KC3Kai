@@ -18,6 +18,8 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
+				RotationPage         : 1,
+				Rotation2Page        : 1,
 				elosFormula          : 2,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
@@ -296,6 +298,30 @@ Retrieves when needed to apply on components
 			this.loadIfNecessary();
 			const maxPage = this.getMaxHqInfoPage() + (KC3Meta.isDuringFoodEvent() & 1);
 			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
+			this.save();
+		},
+
+		// Current maximum pages of the top-left boxes in Moonlight
+		getMaxRotationPage :function(){
+			return 3;
+		},
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecificPage :function(page){
+			this.loadIfNecessary();
+			this.RotationPage = page;
+			this.save();
+		},
+
+		// Current maximum pages of the bottom-right boxes in Moonlight
+		getMaxRotation2Page :function(){
+			return 2;
+		},
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecific2Page :function(page){
+			this.loadIfNecessary();
+			this.Rotation2Page = page;
 			this.save();
 		},
 		
