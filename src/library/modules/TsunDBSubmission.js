@@ -355,17 +355,16 @@
 			if(this.data.fleetType > 0 && this.data.sortiedFleet === 1) {
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
-
-			for(let ship of this.data.fleet1){
+			
+			for(const ship of this.data.fleet1) {
 				this.data.fleetids.push(ship.id);
 				this.data.fleetlevel += ship.level;
 				this.data.fleetoneequips.push(...ship.equip);
 				this.data.fleetoneexslots.push(ship.exslot);
 				this.data.fleetonetypes.push(ship.type);
 			}
-
-			if(this.data.fleet2.length > 0){
-				for(let ship of this.data.fleet2){
+			if(this.data.fleet2.length > 0) {
+				for(const ship of this.data.fleet2) {
 					this.data.fleetids.push(ship.id);
 					this.data.fleetlevel += ship.level;
 					this.data.fleettwoequips.push(...ship.equip);
@@ -1122,6 +1121,14 @@
 			this.data.fleet1 = [];
 			this.data.fleet2 = [];
 			this.data.fleetSpeed = 20;
+			this.data.fleetids = [];
+			this.data.fleetlevel = 0;
+			this.data.fleetoneequips = [];
+			this.data.fleetoneexslots = [];
+			this.data.fleetonetypes = [];
+			this.data.fleettwoequips = [];
+			this.data.fleettwoexslots = [];
+			this.data.fleettwotypes = [];
 			// optional properties for event only
 			this.data.difficulty = 0;
 			this.data.currentMapHP = 0;
