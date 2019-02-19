@@ -1191,6 +1191,12 @@
 				}
 			},
 			{
+				"id" : "moon_small_font",
+				"name" : "MoonSmallFont",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_custom_css",
 				"name" : "SettingsPanelCustomCSS",
 				"type" : "textarea",

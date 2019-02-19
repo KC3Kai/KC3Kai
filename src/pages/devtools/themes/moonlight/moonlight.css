@@ -336,8 +336,8 @@ html,body {
 	left:5px;
 }
 
-/*waifu display*/
-.module.BestGirl .waifu {
+/*Partner display*/
+.module.Partner .partner {
 	height:119px;
 	width:190px;
 	border-radius:5px;
@@ -347,7 +347,7 @@ html,body {
 	background-size: 15px 15px;
 	background-position: 0 0, 4px 37px;
 }
-.module.BestGirl .waifu img {
+.module.Partner .partner img {
 	height:119px;
 	width:190px;
 	border-radius:5px;
@@ -3179,13 +3179,13 @@ ABYSS FLEET
 	left:863px;
 	top:145px;
 }
-.rotation .rotarBestGirl {
+.rotation .rotarPartner {
 	position:absolute;
 	left:180px;
 	top:96px;
 	z-index:1;
 }
-.v .rotation .rotarBestGirl {
+.v .rotation .rotarPartner {
 	left:863px;
 	top:127px;
 }
@@ -4819,7 +4819,7 @@ ABYSS FLEET
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
-.h .module.BestGirl {
+.h .module.Partner {
 	left:5px; top:46px;
 	height:119px;
 	width:190px;
@@ -4938,7 +4938,7 @@ ABYSS FLEET
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
-.v .module.BestGirl {
+.v .module.Partner {
 	left:688px; top:79px;
 	height:119px;
 	width:190px;
@@ -5200,22 +5200,18 @@ ABYSS FLEET
 	border-left-color:#99b;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .equip {
-	font-size:10px;
 	color:#442;
 	margin-right:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .mod {
-	font-size:10px;
 	color:#fff;
 	margin-left:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .level {
-	font-size:10px;
 	color:#666;
 	margin-left:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .luck {
-	font-size:10px;
 	color:#fff;
 	margin-left:1px;
 }

@@ -465,6 +465,13 @@
 			$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
 		}
 
+		//$(".ship_face_tooltip .aa_col").css("font-size", ConfigManager.moon_small_fonts);
+		if(ConfigManager.moon_small_font == true) {
+			$(".base_plane_count,.airbase .base_action,.airbase .base_name,.airbase .base_stats .base_stat_value,.sship .ship_type,.sship .ship_name,.fit_gear_name, .admiral_lvnext, .base_plane_name, .ship_face_tooltip .ship_exp_next, .ship_face_tooltip .ship_morale, .ship_face_tooltip .stat_value, .ship_face_tooltip .aa_col, .ship_face_tooltip .stat_name, .ship_full_name span.ship_yomi, .ship_full_name span.ship_masterId").css("font-size", 11);
+			$(".admiral_lvtxt,.admiral_points").css("font-size", 12);
+			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
+		}
+
 		// Accommodate Korean's very large text without redoing the layout for everyone else
 		if(ConfigManager.language == "kr") {
 			$(".lship .ship_level").css("text-align", "left");
@@ -561,7 +568,7 @@
 			ConfigManager.scrollSpecificPage(2);
 			NatsuiroListeners.Rotation();
 		});
-		$(".rotation .rotarBestGirl").on("click",function(){
+		$(".rotation .rotarPartner").on("click",function(){
 			ConfigManager.scrollSpecificPage(3);
 			NatsuiroListeners.Rotation();
 		});
@@ -569,7 +576,7 @@
 			ConfigManager.scrollSpecificPage(4);
 			NatsuiroListeners.Rotation();
 		});
-
+        
 		// bottom right page toggles
 		$(".rotation2 .rotarBack").on("click",function(){
 			ConfigManager.scrollSpecific2Page(1);
@@ -1346,7 +1353,7 @@
 			$(`.rotation2 .rotated2.page${ConfigManager.Rotation2Page || 1}`).show();
 			$(".rotation2").createChildrenTooltips();
 		},
-
+        
 		ShipSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			const shipCount = KC3ShipManager.count(),
@@ -1477,7 +1484,7 @@
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets.filter((obj, i) => {
-				//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
@@ -1529,7 +1536,7 @@
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			} else {
-				//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
+				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
 				critSound.pause();
@@ -1940,7 +1947,7 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
-					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
@@ -2018,7 +2025,7 @@
 					}
 				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
-					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
@@ -2029,7 +2036,7 @@
 					);
 				// Condition Green
 				}else{
-					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
+					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")

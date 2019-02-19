@@ -169,6 +169,7 @@ Retrieves when needed to apply on components
 				pan_drop_shadow : "rgba(34, 65, 105, 1)",
 				pan_ship_icon_enabled : false,
 				pan_ship_icon_bg: "rgba(0, 42, 134, 0.7)",
+				moon_small_font: false,
 				pan_custom_css  : "",
 
 				dismissed_hints        : {},
@@ -314,7 +315,7 @@ Retrieves when needed to apply on components
 			this.Rotation2Page = page;
 			this.save();
 		},
-		
+
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
 			this.loadIfNecessary();
