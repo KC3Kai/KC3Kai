@@ -1475,7 +1475,7 @@
 			// if not PvP and Taiha alert setting is enabled
 			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
 				PlayerManager.fleets.filter((obj, i) => {
-				$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+				//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
@@ -1527,7 +1527,7 @@
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			} else {
-				$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
+				//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
 				critSound.pause();
@@ -1938,7 +1938,7 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
-					$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
@@ -2016,7 +2016,7 @@
 					}
 				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
-					$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
+					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 1));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
@@ -2027,7 +2027,7 @@
 					);
 				// Condition Green
 				}else{
-					$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
+					//$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")

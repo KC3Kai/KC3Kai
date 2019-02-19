@@ -1,5 +1,5 @@
-	var goddesslvl = 1;
-	var goddessID = 50;
+//	var goddesslvl = 1;
+//	var goddessID = 50;
 
 /**
  * Shipbox.js
@@ -48,11 +48,11 @@
 				})).execute();
 			});
 		$(".ship_img img", this.element).attr("src", this.shipData.shipIcon() );
-		if(this.shipData.level > goddesslvl) {
+		/*if(this.shipData.level > goddesslvl) {
 			goddesslvl = this.shipData.level;
 			goddessID = this.shipData.masterId;
 			$(".module.BestGirl .waifu img").attr("src", KC3Ship.shipIcon(goddessID, 2, 2));
-		}
+		}*/
 		$(".ship_name", this.element).text( this.shipData.name() );
 		$(".ship_type", this.element).text( this.shipData.stype() );
 		
