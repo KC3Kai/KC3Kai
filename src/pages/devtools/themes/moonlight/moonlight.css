@@ -231,6 +231,13 @@ html,body {
 	-webkit-filter:invert(35%);
 	image-rendering: auto;
 }
+.rotarHidden img {
+	width:10px;
+	height:10px;
+	margin:3px;
+	filter:invert(50%);
+	-webkit-filter:invert(50%);
+}
 .rotation {
 	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
 }
@@ -3142,35 +3149,45 @@ ABYSS FLEET
 }
 .module.summary {
 }
-.rotation .rotarBack {
+.rotation .rotarHidden {
 	position:absolute;
 	left:180px;
 	top:150px;
 	z-index:1;
 }
-.v .rotation .rotarBack {
+.v .rotation .rotarHidden {
 	left:863px;
 	top:181px;
 }
-.rotation .rotarExpedition {
+.rotation .rotarBack {
 	position:absolute;
 	left:180px;
 	top:132px;
 	z-index:1;
 }
-.v .rotation .rotarExpedition {
+.v .rotation .rotarBack {
 	left:863px;
 	top:163px;
 }
-.rotation .rotarBestGirl {
+.rotation .rotarExpedition {
 	position:absolute;
 	left:180px;
 	top:114px;
 	z-index:1;
 }
-.v .rotation .rotarBestGirl {
+.v .rotation .rotarExpedition {
 	left:863px;
 	top:145px;
+}
+.rotation .rotarBestGirl {
+	position:absolute;
+	left:180px;
+	top:96px;
+	z-index:1;
+}
+.v .rotation .rotarBestGirl {
+	left:863px;
+	top:127px;
 }
 .module.summary.disabled {
 	filter:brightness(0.5);
@@ -3845,7 +3862,7 @@ ABYSS FLEET
 	margin:0px 0px 2px 0px;
 	position:absolute;
 	color:#000;
-	top:3px;
+	top:5px;
   	left:317px;
 	border-radius:3px;
 	box-shadow:-3px 4px 7px rgba(255,255,255,0.4) inset, 0px 10px 7px rgba(0,0,0,0.15) inset;
@@ -3979,7 +3996,7 @@ ABYSS FLEET
 	height:40px;
 	float:left;
 	position:absolute;
-	top:16px;
+	top:19px;
   	left:312px;
 }
 .v .module.fleet .lship .ship_supplies {
@@ -4447,25 +4464,35 @@ ABYSS FLEET
 	visibility:visible;
 }
 /*------- STATUS -------*/
-.rotation2 .rotarBack {
+.rotation2 .rotarHidden {
 	position:absolute;
 	left:534px;
 	top:531px;
 	z-index:1;
 }
-.v .rotation2 .rotarBack {
+.v .rotation2 .rotarHidden {
 	left:1017px;
 	top:199px;
 }
-.rotation2 .rotarExpedition {
+.rotation2 .rotarBack {
 	position:absolute;
 	left:516px;
 	top:531px;
 	z-index:1;
 }
-.v .rotation2 .rotarExpedition {
+.v .rotation2 .rotarBack {
 	left:1017px;
 	top:217px;
+}
+.rotation2 .rotarExpedition {
+	position:absolute;
+	left:498px;
+	top:531px;
+	z-index:1;
+}
+.v .rotation2 .rotarExpedition {
+	left:1017px;
+	top:235px;
 }
 .module.status {
 	/*background:rgba(255,80,80,0.4);*/

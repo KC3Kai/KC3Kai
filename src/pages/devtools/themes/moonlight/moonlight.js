@@ -565,6 +565,10 @@
 			ConfigManager.scrollSpecificPage(3);
 			NatsuiroListeners.Rotation();
 		});
+		$(".rotation .rotarHidden").on("click",function(){
+			ConfigManager.scrollSpecificPage(4);
+			NatsuiroListeners.Rotation();
+		});
 
 		// bottom right page toggles
 		$(".rotation2 .rotarBack").on("click",function(){
@@ -573,6 +577,10 @@
 		});
 		$(".rotation2 .rotarExpedition").on("click",function(){
 			ConfigManager.scrollSpecific2Page(2);
+			NatsuiroListeners.Rotation2();
+		});
+		$(".rotation2 .rotarHidden").on("click",function(){
+			ConfigManager.scrollSpecific2Page(3);
 			NatsuiroListeners.Rotation2();
 		});
 
@@ -1325,9 +1333,6 @@
         
 		Rotation: function(data){
 			$(".rotation .rotated").hideChildrenTooltips();
-			if(ConfigManager.RotationPage > ConfigManager.getMaxRotationPage()){
-				ConfigManager.scrollRotationPage();
-			}
 			$(".rotation").hideChildrenTooltips();
 			$(".rotation .rotated").hide();
 			$(`.rotation .rotated.page${ConfigManager.RotationPage || 1}`).show();
@@ -1336,9 +1341,6 @@
 
 		Rotation2: function(data){
 			$(".rotation2 .rotated2").hideChildrenTooltips();
-			if(ConfigManager.Rotation2Page > ConfigManager.getMaxRotation2Page()){
-				ConfigManager.scrollRotation2Page();
-			}
 			$(".rotation2").hideChildrenTooltips();
 			$(".rotation2 .rotated2").hide();
 			$(`.rotation2 .rotated2.page${ConfigManager.Rotation2Page || 1}`).show();

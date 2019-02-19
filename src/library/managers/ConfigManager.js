@@ -301,21 +301,11 @@ Retrieves when needed to apply on components
 			this.save();
 		},
 
-		// Current maximum pages of the top-left boxes in Moonlight
-		getMaxRotationPage :function(){
-			return 3;
-		},
-
 		// Toggle top-left boxes in Moonlight
 		scrollSpecificPage :function(page){
 			this.loadIfNecessary();
 			this.RotationPage = page;
 			this.save();
-		},
-
-		// Current maximum pages of the bottom-right boxes in Moonlight
-		getMaxRotation2Page :function(){
-			return 2;
 		},
 
 		// Toggle top-left boxes in Moonlight
@@ -331,7 +321,7 @@ Retrieves when needed to apply on components
 			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
-		
+
 		// Toggle Fighter Power
 		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
