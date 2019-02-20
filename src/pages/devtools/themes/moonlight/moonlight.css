@@ -3410,7 +3410,6 @@ ABYSS FLEET
 .v .module.fleet .shiplist_combined_fleet {
 	width:240px;	
 	height:274px;
-	overflow:hidden;
 }
 .module.fleet .shiplist .special_cutin {
 	background-color:rgba(170, 0, 136, 0.4);
