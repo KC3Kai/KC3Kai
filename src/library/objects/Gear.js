@@ -316,6 +316,38 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Prototype Keiun (Carrier-based Reconnaissance Model)
+			// https://wikiwiki.jp/kancolle/%E8%A9%A6%E8%A3%BD%E6%99%AF%E9%9B%B2%28%E8%89%A6%E5%81%B5%E5%9E%8B%29
+			"151": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All CVB stars+2 extra +1 los
+						stypes: [18],
+						minStars: 2,
+						multiple: { "saku": 1 },
+					},
+					{
+						// All CVB stars+4 extra +1 fp, accumulative +1 fp, +1 los
+						stypes: [18],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// All CVB stars+6 extra +1 los, accumulative +1 fp, +2 los
+						stypes: [18],
+						minStars: 6,
+						multiple: { "saku": 1 },
+					},
+					{
+						// All CVB stars+10 extra +1 fp, +1 los, accumulative +2 fp, +3 los
+						stypes: [18],
+						minStars: 10,
+						multiple: { "houg": 1, "saku": 1 },
+					},
+				],
+			},
 			// Zuiun (634 Air Group)
 			"79": {
 				count: 0,
