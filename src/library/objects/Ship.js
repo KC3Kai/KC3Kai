@@ -827,9 +827,10 @@ KC3改 Ship Object
 			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index && !!value);
 			obj.synergyNames = gear.synergyIds.map(id => allGears.find(eq => eq.masterId === id).name());
 			obj.synergyIcons = obj.synergyFlags.map(flag => {
-				if (flag === "surfaceRadar" || flag === "airRadar") { return 11; }
-				// Other than radar flag, rest is torpedo flags
-				else { return 5; }
+				if (flag.includes("Radar")) { return 11; }
+				else if (flag.includes("Torpedo")) { return 5; }
+				else if (flag.includes("LargeGunMount")) { return 3; }
+				return 0; // Unknown synergy type
 			});
 			return obj;
 		});

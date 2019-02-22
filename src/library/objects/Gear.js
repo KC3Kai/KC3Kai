@@ -45,7 +45,7 @@ KC3改 Equipment Object
 	 * @return the bonus definition table with new counters of related equipment.
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see URLs some summary tables:
-	 *  * [20190130 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190222 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -70,6 +70,8 @@ KC3改 Equipment Object
 				quadrupleTorpedoOxygenLateModelIds: [15, 286],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
+				tripleLargeGunMountK2: 0,
+				tripleLargeGunMountK2Ids: [290],
 			},
 			// Type 97 Torpedo Bomber (931 Air Group)
 			"82": {
@@ -512,15 +514,36 @@ KC3改 Equipment Object
 				},
 			},
 			// 41cm Twin Gun Mount Kai Ni
+			// https://wikiwiki.jp/kancolle/41cm%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
 			"318": {
 				count: 0,
-				byShip: [
-					{
-						// Nagato K2 +3 fp, +2 aa, +1 ev
-						ids: [541],
+				byClass: {
+					// Ise Class Kai+ +2 fp, +2 aa, +2 ev
+					"2": {
+						remodel: 1,
+						multiple: { "houg": 2, "tkyu": 2, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+							{
+								flags: [ "tripleLargeGunMountK2" ],
+								single: { "souk": 1, "houk": 2 },
+							},
+						],
+					},
+					// Nagato Class Kai Ni +3 fp, +2 aa, +1 ev
+					"19": {
+						remodel: 2,
 						multiple: { "houg": 3, "tkyu": 2, "houk": 1 },
 					},
-				],
+					// Fusou Class Kai Ni
+					"26": {
+						remodel: 2,
+						multiple: { "houg": 1 },
+					},
+				},
 			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
@@ -1452,31 +1475,32 @@ KC3改 Equipment Object
 			// Type 3 Shell Kai
 			"317": {
 				count: 0,
+				byClass: {
+					// Kongou Class +1 fp, +1 aa
+					"6": {
+						single: { "houg": 1, "tkyu": 1 },
+					},
+				},
 				byShip: [
 					{
-						// Kongou +2 fp, +2 aa
-						ids: [78, 209, 149],
+						// Kongou K2 totally +3 fp, +3 aa
+						ids: [149],
 						single: { "houg": 2, "tkyu": 2 },
 					},
 					{
-						// Hiei +1 fp, +1 aa
-						ids: [86, 210, 150],
+						// Hiei K2 totally +2 fp, +2 aa
+						ids: [150],
 						single: { "houg": 1, "tkyu": 1 },
 					},
 					{
-						// Haruna +1 fp, +1 aa, +1 ev
-						ids: [79, 211, 151],
+						// Haruna K2 totally +2 fp, +2 aa, +1 ev
+						ids: [151],
 						single: { "houg": 1, "tkyu": 1, "houk": 1 },
 					},
 					{
-						// Kirishima +2 fp, +1 aa
-						ids: [85, 212, 152],
+						// Kirishima K2 totally +3 fp, +2 aa
+						ids: [152],
 						single: { "houg": 2, "tkyu": 1 },
-					},
-					{
-						// All Kongou Class K2 extra +1 fp, +1 aa
-						ids: [149, 150, 151, 152],
-						single: { "houg": 1, "tkyu": 1 },
 					},
 					{
 						// Nagato K2 +1 fp, +2 aa
@@ -1539,6 +1563,7 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
 			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
+			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) synergyGears.tripleLargeGunMountK2 += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
