@@ -1413,7 +1413,7 @@ KC3改 Ship Object
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
 		const hasWG42 = this.hasEquipment(126);
-		const hasT3Shell = this.hasEquipment(35);
+		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
 		// WG42/landing craft-type eligible for all
 		if (hasWG42 || hasLandingCraft){
@@ -1563,7 +1563,7 @@ KC3改 Ship Object
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
-		const hasT3Shell = this.hasEquipment(35);
+		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
@@ -1929,7 +1929,7 @@ KC3改 Ship Object
 			const lightGunBonus = this.countEquipmentType(2, 1) >= 2 ? 1.2 : 1;
 			const aaGunBonus = this.countEquipmentType(2, 21) >= 2 ? 1.1 : 1;
 			const secondaryGunBonus = this.countEquipmentType(2, 4) >= 2 ? 1.2 : 1;
-			const t3Bonus = this.hasEquipment(35) ? 1.3 : 1;
+			const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
 			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
 		}
 		// Anti-installation modifier

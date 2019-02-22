@@ -326,25 +326,25 @@ KC3改 Equipment Object
 						// All CVB stars+2 extra +1 los
 						stypes: [18],
 						minStars: 2,
-						multiple: { "saku": 1 },
+						single: { "saku": 1 },
 					},
 					{
 						// All CVB stars+4 extra +1 fp, accumulative +1 fp, +1 los
 						stypes: [18],
 						minStars: 4,
-						multiple: { "houg": 1 },
+						single: { "houg": 1 },
 					},
 					{
 						// All CVB stars+6 extra +1 los, accumulative +1 fp, +2 los
 						stypes: [18],
 						minStars: 6,
-						multiple: { "saku": 1 },
+						single: { "saku": 1 },
 					},
 					{
 						// All CVB stars+10 extra +1 fp, +1 los, accumulative +2 fp, +3 los
 						stypes: [18],
 						minStars: 10,
-						multiple: { "houg": 1, "saku": 1 },
+						single: { "houg": 1, "saku": 1 },
 					},
 				],
 			},
@@ -510,6 +510,17 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 				},
+			},
+			// 41cm Twin Gun Mount Kai Ni
+			"318": {
+				count: 0,
+				byShip: [
+					{
+						// Nagato K2 +3 fp, +2 aa, +1 ev
+						ids: [541],
+						multiple: { "houg": 3, "tkyu": 2, "houk": 1 },
+					},
+				],
 			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
@@ -1409,6 +1420,68 @@ KC3改 Equipment Object
 						// Hibiki,          Ooyodo,   Kashima
 						ids: [35, 235, 147, 183, 321, 465, 356],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
+					},
+				],
+			},
+			// Type 3 Shell
+			"35": {
+				count: 0,
+				byShip: [
+					{
+						// Kongou K2 +1 fp, +1 aa
+						ids: [149],
+						single: { "houg": 1, "tkyu": 1 },
+					},
+					{
+						// Hiei K2 +1 aa
+						ids: [150],
+						single: { "tkyu": 1 },
+					},
+					{
+						// Haruna K2 +1 aa, +1 ev
+						ids: [151],
+						single: { "tkyu": 1, "houk": 1 },
+					},
+					{
+						// Kirishima K2 +1 fp
+						ids: [152],
+						single: { "houg": 1 },
+					},
+				],
+			},
+			// Type 3 Shell Kai
+			"317": {
+				count: 0,
+				byShip: [
+					{
+						// Kongou +2 fp, +2 aa
+						ids: [78, 209, 149],
+						single: { "houg": 2, "tkyu": 2 },
+					},
+					{
+						// Hiei +1 fp, +1 aa
+						ids: [86, 210, 150],
+						single: { "houg": 1, "tkyu": 1 },
+					},
+					{
+						// Haruna +1 fp, +1 aa, +1 ev
+						ids: [79, 211, 151],
+						single: { "houg": 1, "tkyu": 1, "houk": 1 },
+					},
+					{
+						// Kirishima +2 fp, +1 aa
+						ids: [85, 212, 152],
+						single: { "houg": 2, "tkyu": 1 },
+					},
+					{
+						// All Kongou Class K2 extra +1 fp, +1 aa
+						ids: [149, 150, 151, 152],
+						single: { "houg": 1, "tkyu": 1 },
+					},
+					{
+						// Nagato K2 +1 fp, +2 aa
+						ids: [541],
+						single: { "houg": 1, "tkyu": 2 },
 					},
 				],
 			},
