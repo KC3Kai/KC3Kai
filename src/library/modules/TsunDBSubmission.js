@@ -1192,7 +1192,7 @@
 			//console.debug(JSON.stringify(payload));
 			$.ajax({
 				url: `https://tsundb.kc3.moe/api/${type}`,
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'content-type': 'application/json',
 					'tsun-ver': 'Kasumi Kai'
