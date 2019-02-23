@@ -497,7 +497,7 @@ KC3改 Equipment Object
 							multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 							synergy: {
 								flags: [ "airRadar" ],
-								single: { "tyku": 2, "houk": 3 },
+								distinct: { "tyku": 2, "houk": 3 },
 							},
 						},
 						// extra +1 fp for Ise Class Kai Ni
@@ -521,12 +521,16 @@ KC3改 Equipment Object
 					// Ise Class Kai+ +2 fp, +2 aa, +2 ev
 					"2": {
 						remodel: 1,
-						multiple: { "houg": 2, "tkyu": 2, "houk": 2 },
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
 						synergy: [
+							// `distinct` means only 1 set takes effect at the same time,
+							// not stackable with 41cm Triple K2's air radar synergy
+							// see https://twitter.com/KennethWWKK/status/1098960971865894913
 							{
 								flags: [ "airRadar" ],
-								single: { "tyku": 2, "houk": 3 },
+								distinct: { "tyku": 2, "houk": 3 },
 							},
+							// Synergy with `41cm Triple Gun Mount Kai Ni`
 							{
 								flags: [ "tripleLargeGunMountK2" ],
 								single: { "souk": 1, "houk": 2 },
@@ -536,7 +540,11 @@ KC3改 Equipment Object
 					// Nagato Class Kai Ni +3 fp, +2 aa, +1 ev
 					"19": {
 						remodel: 2,
-						multiple: { "houg": 3, "tkyu": 2, "houk": 1 },
+						multiple: { "houg": 3, "tyku": 2, "houk": 1 },
+						synergy: {
+							flags: [ "tripleLargeGunMountK2" ],
+							single: { "houg": 2, "souk": 1, "houk": 2 },
+						},
 					},
 					// Fusou Class Kai Ni
 					"26": {
@@ -1453,17 +1461,17 @@ KC3改 Equipment Object
 					{
 						// Kongou K2 +1 fp, +1 aa
 						ids: [149],
-						single: { "houg": 1, "tkyu": 1 },
+						single: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Hiei K2 +1 aa
 						ids: [150],
-						single: { "tkyu": 1 },
+						single: { "tyku": 1 },
 					},
 					{
 						// Haruna K2 +1 aa, +1 ev
 						ids: [151],
-						single: { "tkyu": 1, "houk": 1 },
+						single: { "tyku": 1, "houk": 1 },
 					},
 					{
 						// Kirishima K2 +1 fp
@@ -1478,34 +1486,34 @@ KC3改 Equipment Object
 				byClass: {
 					// Kongou Class +1 fp, +1 aa
 					"6": {
-						single: { "houg": 1, "tkyu": 1 },
+						single: { "houg": 1, "tyku": 1 },
+					},
+					// Nagato Class Kai Ni +1 fp, +2 aa
+					"19": {
+						remodel: 2,
+						single: { "houg": 1, "tyku": 2 },
 					},
 				},
 				byShip: [
 					{
 						// Kongou K2 totally +3 fp, +3 aa
 						ids: [149],
-						single: { "houg": 2, "tkyu": 2 },
+						single: { "houg": 2, "tyku": 2 },
 					},
 					{
 						// Hiei K2 totally +2 fp, +2 aa
 						ids: [150],
-						single: { "houg": 1, "tkyu": 1 },
+						single: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Haruna K2 totally +2 fp, +2 aa, +1 ev
 						ids: [151],
-						single: { "houg": 1, "tkyu": 1, "houk": 1 },
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
 						// Kirishima K2 totally +3 fp, +2 aa
 						ids: [152],
-						single: { "houg": 2, "tkyu": 1 },
-					},
-					{
-						// Nagato K2 +1 fp, +2 aa
-						ids: [541],
-						single: { "houg": 1, "tkyu": 2 },
+						single: { "houg": 2, "tyku": 1 },
 					},
 				],
 			},
@@ -1608,6 +1616,11 @@ KC3改 Equipment Object
 					// All flags are true (logic AND, no logic OR/NOT yet)
 					if(synergy.flags.every(flag => synergyGears[flag] > 0)) {
 						if(synergy.single) { total += synergy.single[apiName] || 0; }
+						if(synergy.distinct) {
+							const flagsKey = synergy.flags.join("_") + "Applied";
+							synergyGears[flagsKey] = (synergyGears[flagsKey] || 0) + 1;
+							if(synergyGears[flagsKey] < 2) { total += synergy.distinct[apiName] || 0; }
+						}
 						if(synergy.byCount) {
 							const gearName = synergy.byCount.gear;
 							const countAmount = gearName === "this" ? gearCount : synergyGears[gearName] || 0;
