@@ -735,7 +735,7 @@ KC3改 Ship Object
 		const checkByShip = (byShip, shipId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(ctype);
+			(byShip.classes || []).includes(Number(ctype));
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -769,7 +769,7 @@ KC3改 Ship Object
 					} else if (checkByShip(gear[type], shipId, stype, ctype)) {
 						gear.path = gear[type];
 					}
-				} 
+				}
 				if (gear.path) {
 					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
@@ -782,7 +782,8 @@ KC3改 Ship Object
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
-						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
+						// Known issue: exact corresponding stars will not be found since identical equipment merged
+						if (check.minStars && allGears.find(g => g.masterId === masterIdList[idx]).stars < check.minStars) { continue; }
 						flag = true;
 						if (check.single) { gear.count = 1; }
 						if (check.multiple) { gear.count = count; }
@@ -818,7 +819,7 @@ KC3改 Ship Object
 
 		// Trim bonus gear object and add icon ids
 		const result = bonusGears.map(gear => {
-			let obj = {};
+			const obj = {};
 			obj.count = gear.count;
 			const g = allGears.find(eq => eq.masterId === gear.id);
 			obj.name = g.name();
