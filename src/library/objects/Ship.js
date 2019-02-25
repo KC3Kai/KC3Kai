@@ -742,6 +742,7 @@ KC3改 Ship Object
 			if (!gear) { return false; }
 			const synergyFlags = [];
 			const synergyIds = [];
+			const matchGearByMstId = (g) => g.masterId === masterIdList[idx];
 			let flag = false;
 			for (const type in gear) {
 				if (type === "byClass") {
@@ -783,7 +784,7 @@ KC3改 Ship Object
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
-						if (check.minStars && allGears.find(g => g.masterId === masterIdList[idx]).stars < check.minStars) { continue; }
+						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						flag = true;
 						if (check.single) { gear.count = 1; }
 						if (check.multiple) { gear.count = count; }
