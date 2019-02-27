@@ -1723,18 +1723,19 @@ KC3改 Ship Object
 			isNightStart = false, isCombined = false, targetShipMasterId = 0, damageStatus = this.damageStatus()){
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
-		// Formation modifier
-		let formationModifier = (warfareType === "Antisub" ?
-			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
-			// ID 6: new Vanguard formation since 2017-11-17
-			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
-			// 0 are placeholders for non-exists ID
-			[0, 0.6, 0.8, 1.2, 1.07, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
+		// Formation modifier, about formation IDs:
+		// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
+		// ID 6: new Vanguard formation since 2017-11-17
+		// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
+		// 0 are placeholders for non-exists ID
+		let formationModifier = (
+			warfareType === "Antisub" ?
+			[0, 0.6, 0.8, 1.2, 1.07, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1  , 0.7] :
 			warfareType === "Shelling" ?
-			[0, 1, 0.8, 0.7, 0.7, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
+			[0, 1  , 0.8, 0.7, 0.7 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
 			warfareType === "Torpedo" ?
-			[0, 1, 0.8, 0.7, 0.6, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
-			// Aerial Opening Airstrike not affected
+			[0, 1  , 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
 		// Modifier of vanguard formation depends on the position in the fleet
@@ -2338,13 +2339,13 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Conditions under verification, known for now:
+	 * Conditions known for now:
 	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
 	 *
-	 * Additional ammo consumption for Nagato & 2nd battleship:
+	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
 	 *
-	 * @return true if this ship (Nagato Kai Ni) can do special cut-in attack.
+	 * @return true if this ship (Nagato/Mutsu Kai Ni) can do special cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nagato
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 * @see http://kancolle.wikia.com/wiki/Mutsu
