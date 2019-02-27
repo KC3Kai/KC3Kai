@@ -1729,8 +1729,10 @@ KC3改 Ship Object
 			// ID 6: new Vanguard formation since 2017-11-17
 			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
 			// 0 are placeholders for non-exists ID
-			[0, 0.6, 0.8, 1.2, 1, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
-			warfareType === "Shelling" || warfareType === "Torpedo" ?
+			[0, 0.6, 0.8, 1.2, 1.07, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
+			warfareType === "Shelling" ?
+			[0, 1, 0.8, 0.7, 0.7, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
+			warfareType === "Torpedo" ?
 			[0, 1, 0.8, 0.7, 0.6, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
 			// Aerial Opening Airstrike not affected
 			[]
@@ -1941,10 +1943,10 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
-		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Cutin
+		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Class Cutin
 		// https://twitter.com/syoukuretin/status/1071656926411337728
 		let nagatoCutinRadarModifier = 1;
-		if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 101) {
+		if(daySpecialAttackType[0] === "Cutin" && [101, 102].includes(daySpecialAttackType[1])) {
 			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
 			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
 		}
@@ -2337,7 +2339,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nagato Kai Ni, Echelon formation selected.
+	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
 	 *
 	 * Additional ammo consumption for Nagato & 2nd battleship:
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
@@ -2345,10 +2347,12 @@ KC3改 Ship Object
 	 * @return true if this ship (Nagato Kai Ni) can do special cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nagato
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
+	 * @see http://kancolle.wikia.com/wiki/Mutsu
+	 * @see https://wikiwiki.jp/kancolle/%E9%99%B8%E5%A5%A5%E6%94%B9%E4%BA%8C
 	 */
-	KC3Ship.prototype.canDoNagatoCutin = function() {
+	KC3Ship.prototype.canDoNagatoClassCutin = function(flagShipIds = KC3Meta.nagatoClassCutinShips) {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.nagatoCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(flagShipIds.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
 				const isEchelon = [4, 12].includes(
@@ -2425,6 +2429,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2478,11 +2483,20 @@ KC3改 Ship Object
 				return KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0);
 			}
 			// Nagato cutin since 2018-11-16
-			if(this.canDoNagatoCutin()) {
-				const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
+			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
+				// There might be new modifier for Mutsu base remodel since 901 voice added?
+				const isPartnerMutsuKaiLater = [276, 573].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
+				// There might be new modifier for Nelson since 903 voice added?
 				const hasApShell = this.hasEquipmentType(2, 19);
 				return KC3Ship.specialAttackTypeDay(101, null,
-					1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+					1.4 * (isPartnerMutsuKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+			}
+			// Mutsu cutin since 2019-02-27
+			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
+				const isPartnerNagatoKaiLater = [275, 541].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
+				const hasApShell = this.hasEquipmentType(2, 19);
+				return KC3Ship.specialAttackTypeDay(102, null,
+					1.4 * (isPartnerNagatoKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2633,6 +2647,7 @@ KC3改 Ship Object
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2712,11 +2727,18 @@ KC3改 Ship Object
 					return KC3Ship.specialAttackTypeNight(100, null, isRedT ? 2.5 : 2.0);
 				}
 				// special Nagato Cutin since 2018-11-16
-				if(this.canDoNagatoCutin()) {
-					const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
+				if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
+					const isPartnerMutsuKaiLater = [276, 573].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
 					const hasApShell = this.hasEquipmentType(2, 19);
 					return KC3Ship.specialAttackTypeNight(101, null,
-						1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+						1.4 * (isPartnerMutsuKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+				}
+				// special Mutsu Cutin since 2019-02-27
+				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
+					const isPartnerNagatoKaiLater = [275, 541].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
+					const hasApShell = this.hasEquipmentType(2, 19);
+					return KC3Ship.specialAttackTypeNight(102, null,
+						1.4 * (isPartnerNagatoKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f

@@ -462,7 +462,7 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
-				// Special cut-in (Nelson Touch, Nagato Cutin) special type
+				// Special cut-in (Nelson Touch, Nagato/Mutsu Cutin) special type
 				if(KC3Meta.specialCutinIds.includes(ship_id)) availableTypes.push("special");
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
