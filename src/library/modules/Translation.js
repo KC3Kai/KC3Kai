@@ -221,6 +221,9 @@
 			"Yasen(3)" : 917,
 			"Yasen(4)" : 918,
 			"SpCutin" : 900,
+			"SpCCutin(1)" : 901,
+			"SpCCutin(2)" : 902,
+			"SpCCutin(3)" : 903,
 			"Friend41(1)" : 141,
 			"Friend41(2)" : 241,
 			"Friend42(1)" : 142,
@@ -277,9 +280,16 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			// add special cut-in (Nelson Touch, Nagato Cutin) key
+			// add special cut-in (Nelson Touch, Nagato/Mutsu Cutin) key
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
+			// add special cut-in voice keys for Nagato class combination
+			// when Nagato cutin, 902 for combined with Kai Ni, 901 for base remodel and Kai, 903 for Nelson
+			if (KC3Meta.nagatoCutinShips.indexOf(masterId) > -1)
+				sortedVoiceNums.push(901, 902, 903);
+			// when Mutsu cutin,  902 for combined with Kai Ni, 901 for base remodel and Kai, no 903
+			if (KC3Meta.mutsuCutinShips.indexOf(masterId) > -1)
+				sortedVoiceNums.push(901, 902);
 
 			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);

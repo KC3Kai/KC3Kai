@@ -112,9 +112,11 @@ Provides access to data on built-in JSON files
 			281: 38,
 		},
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 576],
+		specialCutinIds: [541, 571, 573, 576],
 		nelsonTouchShips: [571, 576],
+		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
+		mutsuCutinShips: [573],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,

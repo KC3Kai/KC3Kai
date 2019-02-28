@@ -42,6 +42,7 @@
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4
+			this.seedBranch( rootQuestTree, 280 ); // Bm8
 			this.seedBranch( rootQuestTree, 861 ); // Bq3
 			this.seedBranch( rootQuestTree, 873 ); // Bq5
 			this.seedBranch( rootQuestTree, 888 ); // Bq7
