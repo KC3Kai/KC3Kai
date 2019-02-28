@@ -1515,6 +1515,11 @@ KC3改 Equipment Object
 						ids: [152],
 						single: { "houg": 2, "tyku": 1 },
 					},
+					{
+						// Mutsu Kai Ni totally +2 fp, +2 aa, +1 ev
+						ids: [573],
+						single: { "houg": 1, "houk": 1 },
+					},
 				],
 			},
 			// 20-tube 7inch UP Rocket Launchers

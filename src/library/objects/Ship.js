@@ -2372,6 +2372,43 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Nagato/Mutsu Kai Ni special cut-in attack modifiers are variant depending on the fleet 2nd ship.
+	 * And there are different modifiers for 2nd ship's 3rd attack.
+	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
+	 * @return the modifier, 1 by default for unknown conditions.
+	 */
+	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
+		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
+		const ship2ndMstId = locatedFleet.ship(1).masterId;
+		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
+			(modifierFor2ndShip ? {
+				"81": 1.35, "276": 1.35, // Mutsu and Kai
+				"573": 1.4, // Mutsu Kai Ni
+				"576": 1.25, // Nelson Kai
+			} : {
+				"81": 1.15, "276": 1.15, // Mutsu and Kai
+				"573": 1.2, // Mutsu Kai Ni
+				"576": 1.1, // Nelson Kai
+			}) :
+			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
+			// There are guessed from Nagato's
+			(modifierFor2ndShip ? {
+				"80": 1.35, "275": 1.35, // Nagato and Kai
+				"541": 1.4, // Nagato Kai Ni
+			} : {
+				"80": 1.15, "275": 1.15, // Nagato and Kai
+				"541": 1.2, // Nagato Kai Ni
+			}) : {};
+		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
+		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
+		return baseModifier * partnerModifier * apShellModifier;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -2485,19 +2522,12 @@ KC3改 Ship Object
 			}
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
-				// There might be new modifier for Mutsu base remodel since 901 voice added?
-				const isPartnerMutsuKaiLater = [276, 573].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
-				// There might be new modifier for Nelson since 903 voice added?
-				const hasApShell = this.hasEquipmentType(2, 19);
-				return KC3Ship.specialAttackTypeDay(101, null,
-					1.4 * (isPartnerMutsuKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+				// To clarify: here only indicates the modifier of flagship's first 2 attacks
+				return KC3Ship.specialAttackTypeDay(101, null, this.estimateNagatoClassCutinModifier());
 			}
 			// Mutsu cutin since 2019-02-27
 			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
-				const isPartnerNagatoKaiLater = [275, 541].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
-				const hasApShell = this.hasEquipmentType(2, 19);
-				return KC3Ship.specialAttackTypeDay(102, null,
-					1.4 * (isPartnerNagatoKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2729,17 +2759,11 @@ KC3改 Ship Object
 				}
 				// special Nagato Cutin since 2018-11-16
 				if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
-					const isPartnerMutsuKaiLater = [276, 573].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
-					const hasApShell = this.hasEquipmentType(2, 19);
-					return KC3Ship.specialAttackTypeNight(101, null,
-						1.4 * (isPartnerMutsuKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+					return KC3Ship.specialAttackTypeNight(101, null, this.estimateNagatoClassCutinModifier());
 				}
 				// special Mutsu Cutin since 2019-02-27
 				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
-					const isPartnerNagatoKaiLater = [275, 541].includes(PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId);
-					const hasApShell = this.hasEquipmentType(2, 19);
-					return KC3Ship.specialAttackTypeNight(102, null,
-						1.4 * (isPartnerNagatoKaiLater ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
