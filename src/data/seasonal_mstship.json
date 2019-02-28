@@ -3027,5 +3027,69 @@
 		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"1108": {
+		"api_id": 1108,
+		"api_name": "バレンタイン狭霧",
+		"api_yomi": "さぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1109": {
+		"api_id": 1109,
+		"api_name": "バレンタインRichelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1110": {
+		"api_id": 1110,
+		"api_name": "バレンタイン舞風",
+		"api_yomi": "まいかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1111": {
+		"api_id": 1111,
+		"api_name": "バレンタイン古鷹",
+		"api_yomi": "ふるたか",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"1112": {
+		"api_id": 1112,
+		"api_name": "バレンタインLittorio",
+		"api_yomi": "リットリオ・イタリア",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1113": {
+		"api_id": 1113,
+		"api_name": "バレンタインItalia",
+		"api_yomi": "リットリオ・イタリア",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"1114": {
+		"api_id": 1114,
+		"api_name": "海鮮おにぎり瑞穂",
+		"api_yomi": "みずほ",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1115": {
+		"api_id": 1115,
+		"api_name": "もぐもぐ早波",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

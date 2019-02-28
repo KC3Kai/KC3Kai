@@ -154,7 +154,7 @@ Uses KC3Quest objects to play around with
 			monthly: {
 				type: 'monthly',
 				key: 'timeToResetMonthlyQuests',
-				questIds: [249, 256, 257, 259, 265, 264, 266, 311, 318, 424, 626, 628, 645],
+				questIds: [249, 256, 257, 259, 265, 264, 266, 280, 311, 318, 424, 626, 628, 645],
 				resetQuests: function () { KC3QuestManager.resetMonthlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -478,6 +478,12 @@ Uses KC3Quest objects to play around with
 								2,  // Ise-class
 								26, // Fusou-class
 							]) === 3 && fleet.countShipType(3) === 1;
+					},
+				"280": // Bm8 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([3, 4, 7, 21]) >= 1
+							&& fleet.countShipType([1, 2]) >= 3;
 					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
 					() => {
