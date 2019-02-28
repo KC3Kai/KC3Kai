@@ -2692,6 +2692,10 @@ Previously known as "Reactor"
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
 					[243,0,[5,2], true], // Bw9: Sortie to [W5-2] and S-rank the boss node 2 times
 					[256,0,[6,1], true], // Bm2: Deploy to [W6-1] and obtain an S-rank the boss node 3 times
+					[280,0,[1,2], true, true], // Bm8: 1st requirement: [W1-2] S-rank the boss node
+					[280,1,[1,3], true, true], // Bm8: 2nd requirement: [W1-3] S-rank the boss node
+					[280,2,[1,4], true, true], // Bm8: 3rd requirement: [W1-4] S-rank the boss node
+					[280,3,[2,1], true, true], // Bm8: 4th requirement: [W2-1] S-rank the boss node
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 					[854,3,[6,4], true, true], // Bq2: 4th requirement: [W6-4] S-rank the boss node
 					[875,0,[5,4], true, true], // Bq6: Sortie to [W5-4] S-rank the boss node

@@ -735,13 +735,14 @@ KC3改 Ship Object
 		const checkByShip = (byShip, shipId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(ctype);
+			(byShip.classes || []).includes(Number(ctype));
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
 			if (!gear) { return false; }
 			const synergyFlags = [];
 			const synergyIds = [];
+			const matchGearByMstId = (g) => g.masterId === masterIdList[idx];
 			let flag = false;
 			for (const type in gear) {
 				if (type === "byClass") {
@@ -769,7 +770,7 @@ KC3改 Ship Object
 					} else if (checkByShip(gear[type], shipId, stype, ctype)) {
 						gear.path = gear[type];
 					}
-				} 
+				}
 				if (gear.path) {
 					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
@@ -782,7 +783,8 @@ KC3改 Ship Object
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
-						if (check.minStars && allGears[idx].stars < check.minStars) { continue; }
+						// Known issue: exact corresponding stars will not be found since identical equipment merged
+						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						flag = true;
 						if (check.single) { gear.count = 1; }
 						if (check.multiple) { gear.count = count; }
@@ -818,7 +820,7 @@ KC3改 Ship Object
 
 		// Trim bonus gear object and add icon ids
 		const result = bonusGears.map(gear => {
-			let obj = {};
+			const obj = {};
 			obj.count = gear.count;
 			const g = allGears.find(eq => eq.masterId === gear.id);
 			obj.name = g.name();
@@ -827,9 +829,10 @@ KC3改 Ship Object
 			obj.synergyFlags = gear.synergyFlags.filter((value, index, self) => self.indexOf(value) === index && !!value);
 			obj.synergyNames = gear.synergyIds.map(id => allGears.find(eq => eq.masterId === id).name());
 			obj.synergyIcons = obj.synergyFlags.map(flag => {
-				if (flag === "surfaceRadar" || flag === "airRadar") { return 11; }
-				// Other than radar flag, rest is torpedo flags
-				else { return 5; }
+				if (flag.includes("Radar")) { return 11; }
+				else if (flag.includes("Torpedo")) { return 5; }
+				else if (flag.includes("LargeGunMount")) { return 3; }
+				return 0; // Unknown synergy type
 			});
 			return obj;
 		});
@@ -1413,7 +1416,7 @@ KC3改 Ship Object
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
 		const hasWG42 = this.hasEquipment(126);
-		const hasT3Shell = this.hasEquipment(35);
+		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
 		// WG42/landing craft-type eligible for all
 		if (hasWG42 || hasLandingCraft){
@@ -1563,7 +1566,7 @@ KC3改 Ship Object
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
-		const hasT3Shell = this.hasEquipment(35);
+		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
@@ -1720,16 +1723,19 @@ KC3改 Ship Object
 			isNightStart = false, isCombined = false, targetShipMasterId = 0, damageStatus = this.damageStatus()){
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
-		// Formation modifier
-		let formationModifier = (warfareType === "Antisub" ?
-			// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
-			// ID 6: new Vanguard formation since 2017-11-17
-			// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
-			// 0 are placeholders for non-exists ID
-			[0, 0.6, 0.8, 1.2, 1, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1, 0.7] :
-			warfareType === "Shelling" || warfareType === "Torpedo" ?
-			[0, 1, 0.8, 0.7, 0.6, 0.6, 1, 0, 0, 0, 0, 0.8, 1, 0.7, 1.1] :
-			// Aerial Opening Airstrike not affected
+		// Formation modifier, about formation IDs:
+		// ID 1~5: Line Ahead / Double Line / Diamond / Echelon / Line Abreast
+		// ID 6: new Vanguard formation since 2017-11-17
+		// ID 11~14: 1st anti-sub / 2nd forward / 3rd diamond / 4th battle
+		// 0 are placeholders for non-exists ID
+		let formationModifier = (
+			warfareType === "Antisub" ?
+			[0, 0.6, 0.8, 1.2, 1.07, 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1  , 0.7] :
+			warfareType === "Shelling" ?
+			[0, 1  , 0.8, 0.7, 0.7 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			warfareType === "Torpedo" ?
+			[0, 1  , 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
 		// Modifier of vanguard formation depends on the position in the fleet
@@ -1929,7 +1935,7 @@ KC3改 Ship Object
 			const lightGunBonus = this.countEquipmentType(2, 1) >= 2 ? 1.2 : 1;
 			const aaGunBonus = this.countEquipmentType(2, 21) >= 2 ? 1.1 : 1;
 			const secondaryGunBonus = this.countEquipmentType(2, 4) >= 2 ? 1.2 : 1;
-			const t3Bonus = this.hasEquipment(35) ? 1.3 : 1;
+			const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
 			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
 		}
 		// Anti-installation modifier
@@ -1938,10 +1944,10 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
-		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Cutin
+		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Class Cutin
 		// https://twitter.com/syoukuretin/status/1071656926411337728
 		let nagatoCutinRadarModifier = 1;
-		if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 101) {
+		if(daySpecialAttackType[0] === "Cutin" && [101, 102].includes(daySpecialAttackType[1])) {
 			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
 			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
 		}
@@ -2333,19 +2339,21 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nagato Kai Ni, Echelon formation selected.
+	 * Conditions known for now:
+	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
 	 *
-	 * Additional ammo consumption for Nagato & 2nd battleship:
+	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
 	 *
-	 * @return true if this ship (Nagato Kai Ni) can do special cut-in attack.
+	 * @return true if this ship (Nagato/Mutsu Kai Ni) can do special cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nagato
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
+	 * @see http://kancolle.wikia.com/wiki/Mutsu
+	 * @see https://wikiwiki.jp/kancolle/%E9%99%B8%E5%A5%A5%E6%94%B9%E4%BA%8C
 	 */
-	KC3Ship.prototype.canDoNagatoCutin = function() {
+	KC3Ship.prototype.canDoNagatoClassCutin = function(flagShipIds = KC3Meta.nagatoClassCutinShips) {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		if(KC3Meta.nagatoCutinShips.includes(this.masterId) && !this.isStriped()) {
+		if(flagShipIds.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
 				const isEchelon = [4, 12].includes(
@@ -2361,6 +2369,43 @@ KC3改 Ship Object
 			}
 		}
 		return false;
+	};
+
+	/**
+	 * Nagato/Mutsu Kai Ni special cut-in attack modifiers are variant depending on the fleet 2nd ship.
+	 * And there are different modifiers for 2nd ship's 3rd attack.
+	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
+	 * @return the modifier, 1 by default for unknown conditions.
+	 */
+	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
+		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
+		const ship2ndMstId = locatedFleet.ship(1).masterId;
+		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
+			(modifierFor2ndShip ? {
+				"81": 1.35, "276": 1.35, // Mutsu and Kai
+				"573": 1.4, // Mutsu Kai Ni
+				"576": 1.25, // Nelson Kai
+			} : {
+				"81": 1.15, "276": 1.15, // Mutsu and Kai
+				"573": 1.2, // Mutsu Kai Ni
+				"576": 1.1, // Nelson Kai
+			}) :
+			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
+			// There are guessed from Nagato's
+			(modifierFor2ndShip ? {
+				"80": 1.35, "275": 1.35, // Nagato and Kai
+				"541": 1.4, // Nagato Kai Ni
+			} : {
+				"80": 1.15, "275": 1.15, // Nagato and Kai
+				"541": 1.2, // Nagato Kai Ni
+			}) : {};
+		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
+		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
+		return baseModifier * partnerModifier * apShellModifier;
 	};
 
 	/**
@@ -2422,6 +2467,7 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2475,11 +2521,13 @@ KC3改 Ship Object
 				return KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0);
 			}
 			// Nagato cutin since 2018-11-16
-			if(this.canDoNagatoCutin()) {
-				const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-				const hasApShell = this.hasEquipmentType(2, 19);
-				return KC3Ship.specialAttackTypeDay(101, null,
-					1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
+				// To clarify: here only indicates the modifier of flagship's first 2 attacks
+				return KC3Ship.specialAttackTypeDay(101, null, this.estimateNagatoClassCutinModifier());
+			}
+			// Mutsu cutin since 2019-02-27
+			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
+				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2630,6 +2678,7 @@ KC3改 Ship Object
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2709,11 +2758,12 @@ KC3改 Ship Object
 					return KC3Ship.specialAttackTypeNight(100, null, isRedT ? 2.5 : 2.0);
 				}
 				// special Nagato Cutin since 2018-11-16
-				if(this.canDoNagatoCutin()) {
-					const isPartnerMutsuKai = 276 === PlayerManager.fleets[this.onFleet() - 1].ship(1).masterId;
-					const hasApShell = this.hasEquipmentType(2, 19);
-					return KC3Ship.specialAttackTypeNight(101, null,
-						1.4 * (isPartnerMutsuKai ? 1.15 : 1) * (hasApShell ? 1.35 : 1));
+				if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
+					return KC3Ship.specialAttackTypeNight(101, null, this.estimateNagatoClassCutinModifier());
+				}
+				// special Mutsu Cutin since 2019-02-27
+				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
+					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
