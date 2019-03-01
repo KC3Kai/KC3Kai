@@ -1519,13 +1519,16 @@
 
 			// COMBINED
 			if(selectedFleet == 5){
-				var MainFleet = PlayerManager.fleets[0];
-				var EscortFleet = PlayerManager.fleets[1];
+				const MainFleet = PlayerManager.fleets[0],
+					EscortFleet = PlayerManager.fleets[1];
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
 					if(rosterId > 0){
-						let dameConConsumed = false, starShellUsed = false, noAirBombingDamage;
+						let dameConConsumed = false,
+							starShellUsed = false,
+							noAirBombingDamage = false,
+							spCutinUsed = false;
 						if(KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1){
 							dameConConsumed = (thisNode.dameConConsumed || [])[index];
 						}
@@ -1534,11 +1537,12 @@
 								!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
 							noAirBombingDamage = KC3SortieManager.fleetSent == 1 &&
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index);
+							spCutinUsed = !!sortieSpecialCutins[index] && KC3SortieManager.fleetSent == 1;
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
 							.defineShort(MainFleet)
-							.toggleClass("special_cutin", !!sortieSpecialCutins[index])
+							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_main");
 					}
 				});
@@ -1546,7 +1550,10 @@
 				// Show ships on escort fleet
 				$.each(EscortFleet.ships, function(index, rosterId){
 					if(rosterId > 0){
-						let dameConConsumed = false, starShellUsed = false, noAirBombingDamage;
+						let dameConConsumed = false,
+							starShellUsed = false,
+							noAirBombingDamage = false,
+							spCutinUsed = false;
 						if(KC3SortieManager.isOnSortie()){
 							if(KC3SortieManager.isCombinedSortie()){
 								// Send combined fleet, get escort info
@@ -1562,10 +1569,12 @@
 							starShellUsed = is2ndFleetUsed && (flarePos === index + 1);
 							noAirBombingDamage = is2ndFleetUsed &&
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, KC3SortieManager.isCombinedSortie());
+							spCutinUsed = !!sortieSpecialCutins[index] && KC3SortieManager.fleetSent == 2;
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
 							.defineShort(EscortFleet)
+							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_escort");
 					}
 				});
@@ -1627,18 +1636,21 @@
 
 			// SINGLE
 			} else {
-				var CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				const CurrentFleet = PlayerManager.fleets[selectedFleet-1];
 				$(".module.controls .fleet_num.active").attr("title", CurrentFleet.name || "");
 
 				// Calculate Highest Repair Times for status indicators
 				MainRepairs = CurrentFleet.highestRepairTimes(true);
 
 				// Show ships on selected fleet
-				let isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
-				let isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.isCombinedSortie());
+				const isSelectedSortiedFleet = (selectedFleet == KC3SortieManager.fleetSent);
+				const isSelected2ndFleetOnCombined = (selectedFleet == 2 && KC3SortieManager.isCombinedSortie());
 				$.each(CurrentFleet.ships, function(index, rosterId){
 					if(rosterId > 0){
-						let dameConConsumed = false, starShellUsed = false, noAirBombingDamage;
+						let dameConConsumed = false,
+							starShellUsed = false,
+							noAirBombingDamage = false,
+							spCutinUsed = false;
 						if(KC3SortieManager.isOnSortie()){
 							if(isSelectedSortiedFleet){
 								dameConConsumed = (thisNode.dameConConsumed || [])[index];
@@ -1652,12 +1664,13 @@
 								(isSelectedSortiedFleet || isSelected2ndFleetOnCombined);
 							noAirBombingDamage = isSelectedSortiedFleet && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index) ||
 								isSelected2ndFleetOnCombined && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, true);
+							spCutinUsed = !!sortieSpecialCutins[index] && isSelectedSortiedFleet;
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
 							.defineLong(CurrentFleet)
 							.toggleClass("seven", CurrentFleet.countShips() >= 7)
-							.toggleClass("special_cutin", !!sortieSpecialCutins[index])
+							.toggleClass("special_cutin", spCutinUsed)
 							.appendTo(".module.fleet .shiplist_single");
 					}
 				});
