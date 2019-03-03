@@ -3412,7 +3412,7 @@ ABYSS FLEET
 	height:274px;
 }
 .module.fleet .shiplist .special_cutin {
-	background-color:rgba(170, 0, 136, 0.4);
+	background-image: radial-gradient(rgba(0, 195, 178, 0.07) 20%, rgba(0, 195, 178, 0.4) 75%, rgba(0, 195, 178, 0.6) 99%);
 }
 .module.fleet .shiplist .hp_repairing {
 	background-image: radial-gradient(rgba(162, 192, 238, 0.07) 20%, rgba(162, 192, 238, 0.4) 75%, rgba(162, 192, 238, 0.6) 99%);
