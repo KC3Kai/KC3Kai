@@ -329,12 +329,13 @@ AntiAir: anti-air related calculations
 	}
 
 	function shipAdjustedAntiAir(shipObj) {
+		//return shipObj.aa[1] + shipEquipmentAntiAir(shipObj, false);
 		// here aa[1] is max naked stat on lv99, equaled to api_tyku[1], to get current level naked stat,
 		// might use current naked stat: aa[0] - equipment stat.
 		// according verification, AA bonus of specific equip on specific ship not counted,
 		// it seems be better not to use aa[0] property,
 		// might use `shipObj.estimateNakedStats("aa")` instead.
-		return shipObj.aa[1] + shipEquipmentAntiAir(shipObj, false);
+		return shipObj.estimateNakedStats("aa") + shipEquipmentAntiAir(shipObj, false);
 	}
 
 	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
