@@ -1697,6 +1697,7 @@ KC3改 Equipment Object
 				switch(type2) {
 					case 1: // Small Cal. Main
 					case 2: // Medium Cal. Main
+					case 18: // Type 3 Shell
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
 					case 24: // Landing Craft
