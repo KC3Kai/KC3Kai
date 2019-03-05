@@ -207,6 +207,12 @@ html,body {
 	left:0px;
 	background:url(img/wrapper.png);
 }
+.h .wrapper_bg {
+	background-size:auto 100%;
+}
+.v .wrapper_bg {
+	background-size:100% auto;
+}
 .module {
 	position:absolute;
 	/*background:rgba(255,0,0,.3);*/
@@ -639,11 +645,14 @@ html,body {
 }
 /* bottom right timers */
 .module.expeditions2 .timers {
-	width:184px;
+	width:204px;
 	height:108px;
 	position:absolute;
 	top:3px;
-	left:100px;
+	left:110px;
+}
+.module.expeditions2 .timer_boxes {
+	width:102px;
 }
 
 /*------- ACTIVITY: BATTLE -------*/
