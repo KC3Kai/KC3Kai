@@ -627,9 +627,9 @@
 				map: shipdrop.map,
 				node: shipdrop.node,
 				rank: shipdrop.rank,
-				difficuulty: shipdrop.difficulty
-			}
-			this.sendData(data, 'droplocs')
+				difficulty: shipdrop.difficulty
+			};
+			this.sendData(data, 'droplocs');
 		},
 
 		processAACI: function(http) {
