@@ -412,6 +412,8 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+	object-fit: cover;
+	image-rendering: auto;
 }
 .tab_ships .ship_item .ship_img img.ship_kekkon {
 	position:absolute;

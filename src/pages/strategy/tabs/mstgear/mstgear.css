@@ -212,6 +212,9 @@
 	width:30px;
 	height:30px;
 	vertical-align:top;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 
 /* INTRO */
