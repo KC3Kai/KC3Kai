@@ -276,8 +276,6 @@
 	width:30px;
 	height:30px;
 	vertical-align:top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .sortie_combined_ship {
 	position:absolute;
@@ -475,9 +473,6 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .rfleet_name {
 	width:55px;
@@ -635,9 +630,6 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .node_result_box .exped {
 	width:10px;

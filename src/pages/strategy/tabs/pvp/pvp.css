@@ -162,9 +162,6 @@
 .tab_pvp .pvp_ship_icon img {
 	width:32px;
 	height:32px;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_pvp .pvp_ship_mvp_icon {
 	width:15px;

@@ -114,8 +114,6 @@
 	height:28px;
 	margin:-1px 0px 0px -1px;
 	vertical-align:top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_locking .lock_mode .lship .level {
 	width:18px;
@@ -235,8 +233,6 @@
 	width: 20px;
 	height: 20px;
 	vertical-align: top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 
 .tab_locking .ship_item .ship_name {

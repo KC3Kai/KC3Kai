@@ -118,8 +118,6 @@
 	margin:-1px 0px 0px -1px;
 	position:relative;
 	vertical-align: top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 
 .tab_expcalc .ship_goal .ship_info {

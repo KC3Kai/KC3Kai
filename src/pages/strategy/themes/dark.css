@@ -1305,7 +1305,7 @@ button, input, select, textarea {
 
 /* Badge */
 .tab_badge .export_box {
-	background:#131313;
+    background:#131313;
 }
 .tab_badge .export_parts .export_value {
 	background:#333333 !important;
@@ -1594,9 +1594,9 @@ button, input, select, textarea {
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:210px;
+	width:140px;
 	height:140px;
-	margin:-32px 0px 0px -48px
+	margin:-32px 0px 0px -16px
 }
 
 .tab_fleet .fleet_ship .ship_lv {
@@ -2215,10 +2215,10 @@ button, input, select, textarea {
 }
 
 .tab_quotes .part_right .voice_entity.inherit .source {
-	color: #00ffff;
+    color: #00ffff;
 }
 .tab_quotes .part_right .voice_entity.direct .source {
-	color: #00ff00;
+    color: #00ff00;
 }
 /* TRANSLATIONS
 --------------------------------*/
@@ -2249,9 +2249,9 @@ button, input, select, textarea {
 	border:1px solid #555 !important;
 }
 .tab_expedtable .btn-group button {
-	background-color: #141414;
-	background-image: none;
-	border: 0px none !important;
+    background-color: #141414;
+    background-image: none;
+    border: 0px none !important;
 	border-radius:0px !important;
 	color: #aaa;
 }

@@ -196,8 +196,6 @@
 	position:relative;
 	margin:-1px 0px 0px -1px;
 	vertical-align:top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_expedpast .exped_ship_exp {
 	width:30px;

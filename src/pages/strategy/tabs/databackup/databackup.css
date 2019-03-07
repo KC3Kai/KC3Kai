@@ -21,8 +21,8 @@
 	padding : 5px;
 }
 .tab_databackup th, .tab_databackup td {
-	padding: 15px;
-	text-align: left;
+    padding: 15px;
+    text-align: left;
 }
 .tab_databackup strong {
 		text-decoration: underline;

@@ -226,9 +226,6 @@
 	width:		24px;
 	height:		24px;
 	margin-top: -2px;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_gears .slotitem .holders dl dd .holder font{
 	width:		calc(100% - 24px - 40px - 16px);

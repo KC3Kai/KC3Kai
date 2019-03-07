@@ -1337,19 +1337,19 @@
 					if(sortieData.combined) {
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
 								(18 + (60 * shipIndex)) * scale, 227 * scale, 50 * scale, 50 * scale);
 						});
 						$.each(sortieData.fleet2, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
 								(45 + (60 * shipIndex)) * scale, 253 * scale, 35 * scale, 35 * scale);
 						});
 					} else {
 						var shipImageSize = Math.min(55, 300 / fleetUsed.length);
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
+							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
 								((shipImageSize / 2) + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (65 - shipImageSize) / 2) * scale, shipImageSize * scale, shipImageSize * scale);
 						});
 					}

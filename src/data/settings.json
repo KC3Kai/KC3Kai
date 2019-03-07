@@ -1079,12 +1079,10 @@
 				"options" : {
 					"choices" : [
 						[ "natsuiro", "Natsuiro" ],
-						[ "plain", "Plain" ],
-						[ "moonlight", "Moonlight" ]
+						[ "plain", "Plain" ]
 					]
 				}
 			},
-
 			{
 				"id" : "pan_bg_color",
 				"name" : "SettingsBGColor",
@@ -1131,12 +1129,6 @@
 				"options" : { "label" : "%" }
 			},
 			{
-				"id" : "pan_box_bcolor_enabled",
-				"name" : "SettingsPanelBoxBackColorChk",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
@@ -1144,57 +1136,6 @@
 					"placeholder" : "SettingsBGColorDesc",
 					"tooltip" : "SettingsBGColorDesc"
 				}
-			},
-			{
-				"id" : "pan_shiplist_bg_enabled",
-				"name" : "SettingsShipListBGChk",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "pan_shiplist_bg",
-				"name" : "SettingsShipListBG",
-				"type" : "long_text",
-				"options" : {
-					"placeholder" : "SettingsShipListBG",
-					"tooltip" : "SettingsShipListBG"
-				}
-			},
-			{
-				"id" : "pan_drop_shadow_enabled",
-				"name" : "SettingsPanelDropShadowChk",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "pan_drop_shadow",
-				"name" : "SettingsPanelDropShadow",
-				"type" : "long_text",
-				"options" : {
-					"placeholder" : "SettingsPanelDropShadow",
-					"tooltip" : "SettingsPanelDropShadow"
-				}
-			},
-			{
-				"id" : "pan_ship_icon_bg_enabled",
-				"name" : "SettingsShipIconBGChk",
-				"type" : "check",
-				"options" : {}
-			},
-			{
-				"id" : "pan_ship_icon_bg",
-				"name" : "SettingsShipIconBG",
-				"type" : "long_text",
-				"options" : {
-					"placeholder" : "SettingsShipIconBG",
-					"tooltip" : "SettingsShipIconBG"
-				}
-			},
-			{
-				"id" : "moon_small_font",
-				"name" : "MoonSmallFont",
-				"type" : "check",
-				"options" : {}
 			},
 			{
 				"id" : "pan_custom_css",

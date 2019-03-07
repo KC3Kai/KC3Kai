@@ -18,8 +18,6 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
-				RotationPage         : 1,
-				Rotation2Page        : 1,
 				elosFormula          : 2,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
@@ -161,15 +159,7 @@ Retrieves when needed to apply on components
 				pan_bg_size     : "cover",
 				pan_bg_position : "top center",
 				pan_opacity     : 100,
-				pan_box_bcolor_enabled: false,
 				pan_box_bcolor  : "rgba(100, 100, 100, 0.618)",
-				pan_shiplist_bg_enabled: false,
-				pan_shiplist_bg : "rgba(30, 72, 164, 0.4)",
-				pan_drop_shadow_enabled : false,
-				pan_drop_shadow : "rgba(34, 65, 105, 1)",
-				pan_ship_icon_enabled : false,
-				pan_ship_icon_bg: "rgba(0, 42, 134, 0.7)",
-				moon_small_font: false,
 				pan_custom_css  : "",
 
 				dismissed_hints        : {},
@@ -301,28 +291,14 @@ Retrieves when needed to apply on components
 			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
 			this.save();
 		},
-
-		// Toggle top-left boxes in Moonlight
-		scrollSpecificPage :function(page){
-			this.loadIfNecessary();
-			this.RotationPage = page;
-			this.save();
-		},
-
-		// Toggle top-left boxes in Moonlight
-		scrollSpecific2Page :function(page){
-			this.loadIfNecessary();
-			this.Rotation2Page = page;
-			this.save();
-		},
-
+		
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
 			this.loadIfNecessary();
 			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
-
+		
 		// Toggle Fighter Power
 		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
