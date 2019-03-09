@@ -465,7 +465,6 @@
 			$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
 		}
 
-		//$(".ship_face_tooltip .aa_col").css("font-size", ConfigManager.moon_small_fonts);
 		if(ConfigManager.moon_small_font == true) {
 			$(".base_plane_count,.airbase .base_action,.airbase .base_name,.airbase .base_stats .base_stat_value,.sship .ship_type,.sship .ship_name,.fit_gear_name, .admiral_lvnext, .base_plane_name, .ship_face_tooltip .ship_exp_next, .ship_face_tooltip .ship_morale, .ship_face_tooltip .stat_value, .ship_face_tooltip .aa_col, .ship_face_tooltip .stat_name, .ship_full_name span.ship_yomi, .ship_full_name span.ship_masterId").css("font-size", 11);
 			$(".admiral_lvtxt,.admiral_points").css("font-size", 12);
@@ -568,10 +567,10 @@
 			ConfigManager.scrollSpecificPage(2);
 			NatsuiroListeners.Rotation();
 		});
-		$(".rotation .rotarPartner").on("click",function(){
+		/*$(".rotation .rotarPartner").on("click",function(){
 			ConfigManager.scrollSpecificPage(3);
 			NatsuiroListeners.Rotation();
-		});
+		});*/
 		$(".rotation .rotarHidden").on("click",function(){
 			ConfigManager.scrollSpecificPage(4);
 			NatsuiroListeners.Rotation();

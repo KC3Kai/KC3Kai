@@ -343,7 +343,7 @@ html,body {
 }
 
 /*Partner display*/
-.module.Partner .partner {
+/*.module.Partner .partner {
 	height:119px;
 	width:190px;
 	border-radius:5px;
@@ -359,7 +359,7 @@ html,body {
 	border-radius:5px;
 	object-fit: cover;
 	image-rendering: auto;
-}
+}*/
 
 /*------- ACTIVITY -------*/
 .module.activity {
@@ -3188,7 +3188,7 @@ ABYSS FLEET
 	left:863px;
 	top:145px;
 }
-.rotation .rotarPartner {
+/*.rotation .rotarPartner {
 	position:absolute;
 	left:180px;
 	top:96px;
@@ -3197,7 +3197,7 @@ ABYSS FLEET
 .v .rotation .rotarPartner {
 	left:863px;
 	top:127px;
-}
+}*/
 .module.summary.disabled {
 	filter:brightness(0.5);
 	-webkit-filter:brightness(0.5);
@@ -3673,15 +3673,14 @@ ABYSS FLEET
 	line-height:20px;
 	float:left;
 	position:absolute;
-	left: -4px;
-	top:24px;
+	left: 64px;
+	top:11px;
 	z-index:1;
 	overflow:hidden;
 	display:none;
 }
 .v .module.fleet .lship .mvp_icon {
-	left: 39px;
-	top:24px;
+	left:114px;
 	z-index:2;
 }
 .module.fleet .lship .mvp_icon img {
@@ -3800,7 +3799,7 @@ ABYSS FLEET
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
 	top:-12px;
-	left:-35px;
+	left:-20px;
 	width:100%;
 	line-height:7px;
 	text-align:center;
@@ -4827,13 +4826,13 @@ ABYSS FLEET
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
-.h .module.Partner {
+/*.h .module.Partner {
 	left:5px; top:46px;
 	height:119px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
-}
+}*/
 .h .module.activity {
 	left:5px; top:168px;
 }
@@ -4946,13 +4945,13 @@ ABYSS FLEET
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
-.v .module.Partner {
+/*.v .module.Partner {
 	left:688px; top:79px;
 	height:119px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
-}
+}*/
 .v .module.activity {
 	left:5px; top:2px;
 }

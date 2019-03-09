@@ -3690,6 +3690,7 @@ ABYSS FLEET
 .module.fleet .sship .ship_img img {
 	width:40px;
 	height:40px;
+	object-fit: cover;
 	position:relative;
 	margin:-1px 0px 0px -1px;
 }

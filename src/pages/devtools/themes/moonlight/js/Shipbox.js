@@ -34,8 +34,8 @@
 		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
 		$(".ship_img", this.element).tooltip({
-			position: { my: !!isCombinedEscort ? "left-100 top" : "left+50 top",
-				at: "left top", of: $(".module.fleet") },
+			position: { my: !!isCombinedEscort ? "right+80 top" : "right-25 top",
+				at: "right top", of: $(".module.fleet") },
 			items: "div",
 			content: tooltipBox.html(),
 			open: KC3Ship.onShipTooltipOpen
