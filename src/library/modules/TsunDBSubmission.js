@@ -609,6 +609,7 @@
 				&& (KC3ShipManager.count() >= KC3ShipManager.max
 				 || KC3GearManager.count() >= KC3GearManager.max - 3)
 			) { return; }
+			this.processDropLoc(this.shipDrop);
 			this.sendData(this.shipDrop, 'drops');
 			
 			// To avoid iterating all ships every time,
@@ -618,6 +619,17 @@
 				const baseFormId = RemodelDb.originOf(this.shipDrop.ship);
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
 			}
+		},
+
+		processDropLoc(shipdrop){
+			let data = {
+				ship: shipdrop.ship,
+				map: shipdrop.map,
+				node: shipdrop.node,
+				rank: shipdrop.rank,
+				difficulty: shipdrop.difficulty
+			};
+			this.sendData(data, 'droplocs');
 		},
 
 		processAACI: function(http) {
@@ -1195,7 +1207,9 @@
 				method: 'PUT',
 				headers: {
 					'content-type': 'application/json',
-					'tsun-ver': 'Kasumi Kai'
+					'tsun-ver': 'Kasumi Kai',
+					'origin': "kc3",
+					"version": this.kc3version
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {

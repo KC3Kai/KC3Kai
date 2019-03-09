@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893, 894],
+				questIds: [330, 426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893, 894],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -401,9 +401,9 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
-			// Monthly PvP counter reset to 0 if not click complete in a day:
-			// C8
-			this.resetCounterLoop([311], true);
+			// Monthly/Quarterly PvP counter reset to 0 if not click complete in a day:
+			// C8, C29?
+			this.resetCounterLoop([311, 330], true);
 			// Daily counter not reset for monthly PvP: C16
 			//this.resetCounterLoop([318], false);
 			this.save();
@@ -461,7 +461,7 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShip(62) && fleet.hasShip(63) && fleet.hasShip(65);
 					},
-				"257": // Bm3 Sortie 1 CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
+				"257": // Bm3 Sortie CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShipType(3, 0)
@@ -490,6 +490,14 @@ Uses KC3Quest objects to play around with
 						const firstFleet = PlayerManager.fleets[0];
 						return KC3SortieManager.isPvP() && KC3SortieManager.fleetSent == 1 &&
 							firstFleet.countShipType(3) >= 2;
+					},
+				"330": // C29 PvP with CV(L/B) as flagship, 1 more CV(L/B) and 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipType([7, 11, 18], 0) &&
+							fleet.countShipType([7, 11, 18]) >= 2 &&
+							fleet.countShipType(2) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

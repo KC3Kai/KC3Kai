@@ -572,12 +572,12 @@
 		},
 		"markers": [
 			{
-				"img": "client/steel.png",
+				"img": "client/bauxite.png",
 				"pos": [198, 152],
 				"size": [27, 27]
 			},
 			{
-				"img": "client/bauxite.png",
+				"img": "client/steel.png",
 				"pos": [155, 310],
 				"size": [27, 27]
 			},
