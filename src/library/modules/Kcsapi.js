@@ -2735,6 +2735,8 @@ Previously known as "Reactor"
 				KC3QuestManager.get(311).increment(); // C8: Monthly Exercises 1
 				if(KC3QuestManager.isPrerequisiteFulfilled(318))
 					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
+				if(KC3QuestManager.isPrerequisiteFulfilled(330))
+					KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises
 			}
 		}
 	}
