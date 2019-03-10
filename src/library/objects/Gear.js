@@ -42,9 +42,10 @@ KC3改 Equipment Object
 	 * Explicit stats bonuses from equipment on specific ship are added to API result by server-side,
 	 * to correct the 'naked stats' for these cases, have to simulate them all.
 	 * It might be moved to an independent JSON, but stays here so that we can add comments.
-	 * @return the bonus definition table with new counters of related equipment.
+	 * @return the bonus definition table with new counters bound to relevant equipment IDs.
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
-	 * @see URLs some summary tables:
+	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
+	 * @see URLs some other summary tables:
 	 *  * [20190222 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3

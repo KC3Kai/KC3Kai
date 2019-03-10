@@ -3197,6 +3197,10 @@ KC3改 Ship Object
 					result += value * Math.sqrt(count);
 				});
 				break;
+			case 16: // for Seaplane Tender
+				// Medium cal. guns for partial AVs, no formula summarized
+				// https://docs.google.com/spreadsheets/d/1wl9v3NqPuRawSuFadokgYh1R1R1W82H51JNC66DH2q8/htmlview
+				break;
 			default:
 				// not found for other ships
 		}
