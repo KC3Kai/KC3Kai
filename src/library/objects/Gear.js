@@ -4,7 +4,7 @@ KC3改 Equipment Object
 (function(){
 	"use strict";
 
-	window.KC3Gear = function( data ){
+	window.KC3Gear = function( data, toClone ){
 		// Default object properties included in stringifications
 		this.itemId = 0;
 		this.masterId = 0;
@@ -26,9 +26,13 @@ KC3改 Equipment Object
 					this.ace = data.api_alv;
 				}
 
-			// Initialized with formatted data
-			}else{
-				$.extend(this, data);
+			// Initialized with formatted data, deep clone if demanded
+			} else {
+				if(!!toClone)
+					$.extend(true, this, data);
+				else
+					// jquery: can not use `extend(false, this, data)`
+					$.extend(this, data);
 			}
 		}
 	};

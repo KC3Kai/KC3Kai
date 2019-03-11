@@ -6,7 +6,7 @@ KC3改 Ship Object
 
 	var deferList = {};
 
-	window.KC3Ship = function( data ){
+	window.KC3Ship = function( data, toClone ){
 		// Default object properties included in stringifications
 		this.rosterId = 0;
 		this.masterId = 0;
@@ -136,9 +136,12 @@ KC3改 Ship Object
 				this.stars = data.api_srate;
 				this.morale = data.api_cond;
 				this.lock = data.api_locked;
-			// Initialized with formatted data
-			}else{
-				$.extend(this, data);
+			// Initialized with formatted data, deep clone if demanded
+			} else {
+				if(!!toClone)
+					$.extend(true, this, data);
+				else
+					$.extend(this, data);
 			}
 			if(this.getDefer().length <= 0)
 				this.checkDefer();
@@ -3364,8 +3367,9 @@ KC3改 Ship Object
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
 	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
+	 * @param {Object} oldShipObj - the cloned old ship instance with stats and item IDs before equipment changed.
 	 */
-	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}) {
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}, oldShipObj = this) {
 		if(!this.masterId) return {isShow: false};
 		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
 		let isShow = gunFit !== false;
@@ -3373,20 +3377,26 @@ KC3改 Ship Object
 		isShow = isShow || shipAacis.length > 0;
 		// NOTE: shipObj here to be returned will be the 'old' ship instance,
 		// whose stats, like fp, tp, asw, are the values before equipment change.
+		// but its items array (including ex item) are post-change values.
+		const shipObj = this;
 		// To get the 'latest' ship stats, should defer `GunFit` event after `api_get_member/ship3` call,
-		// and retrieve latest ship instance via KC3ShipManager.get method.
+		// and retrieve latest ship instance via KC3ShipManager.get method like this:
+		//   const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+		// It can not be latest ship at the timing of this equipmentChangedEffects invoked,
+		// because the api call above not executed, KC3ShipManager data not updated yet.
 		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
 		const aswDiff = newEquipAsw - oldEquipAsw
-			// add explicit bonus from new equipment, but bonus from old missed,
-			// so aswDiff will be inaccurate if there is bonus on old equipment
-			+ this.equipmentTotalStats("tais", true, true, true);
-		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
+			// explicit asw bonus from new equipment
+			+ shipObj.equipmentTotalStats("tais", true, true, true)
+			// explicit asw bonus from old equipment
+			- oldShipObj.equipmentTotalStats("tais", true, true, true);
+		const oaswPower = shipObj.canDoOASW(aswDiff) ? shipObj.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
-		const antiLandPowers = this.shipPossibleAntiLandPowers();
+		const antiLandPowers = shipObj.shipPossibleAntiLandPowers();
 		isShow = isShow || antiLandPowers.length > 0;
-		const equipBonus = this.equipmentBonusGearAndStats(newGearObj);
+		const equipBonus = shipObj.equipmentBonusGearAndStats(newGearObj);
 		isShow = isShow || (equipBonus !== false && equipBonus.isShow);
 		// Possible TODO:
 		// can opening torpedo
@@ -3395,7 +3405,8 @@ KC3改 Ship Object
 		// can night cut-in
 		return {
 			isShow,
-			shipObj: this,
+			shipObj,
+			shipOld: oldShipObj,
 			gearObj: newGearObj.masterId ? newGearObj : false,
 			gunFit,
 			shipAacis,
