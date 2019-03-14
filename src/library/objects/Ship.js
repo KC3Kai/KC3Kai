@@ -1947,21 +1947,13 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
-		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Class Cutin
-		// https://twitter.com/syoukuretin/status/1071656926411337728
-		let nagatoCutinRadarModifier = 1;
-		if(daySpecialAttackType[0] === "Cutin" && [101, 102].includes(daySpecialAttackType[1])) {
-			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
-			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
-		}
-		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		let result = Math.floor(Math.floor(
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier * nagatoCutinRadarModifier;
+			* antiPtImpModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -1992,7 +1984,6 @@ KC3改 Ship Object
 			dayCutinModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
-			nagatoCutinRadarModifier,
 			antiPtImpModifier,
 			antiLandAdditive,
 			antiLandModifier,
@@ -2379,36 +2370,41 @@ KC3改 Ship Object
 	 * And there are different modifiers for 2nd ship's 3rd attack.
 	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
 	 * @return the modifier, 1 by default for unknown conditions.
+	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
+	 * @see https://twitter.com/Nishisonic/status/1102223560754421760
 	 */
 	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
-		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(modifierFor2ndShip ? {
-				"81": 1.35, "276": 1.35, // Mutsu and Kai
-				"573": 1.4, // Mutsu Kai Ni
+				"573": 1.4,  // Mutsu Kai Ni
+				"276": 1.35, // Mutsu Kai, base form unverified?
 				"576": 1.25, // Nelson Kai
 			} : {
-				"81": 1.15, "276": 1.15, // Mutsu and Kai
-				"573": 1.2, // Mutsu Kai Ni
-				"576": 1.1, // Nelson Kai
+				"573": 1.2,  // Mutsu Kai Ni
+				"276": 1.15, // Mutsu Kai, base form unverified?
+				"576": 1.1,  // Nelson Kai
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
-			// There are guessed from Nagato's
+			// Unconfirmed, guessed from Nagato's
 			(modifierFor2ndShip ? {
-				"80": 1.35, "275": 1.35, // Nagato and Kai
-				"541": 1.4, // Nagato Kai Ni
+				"541": 1.4,  // Nagato Kai Ni
+				"275": 1.35, // Nagato Kai
 			} : {
-				"80": 1.15, "275": 1.15, // Nagato and Kai
-				"541": 1.2, // Nagato Kai Ni
+				"541": 1.2,  // Nagato Kai Ni
+				"275": 1.15, // Nagato Kai
 			}) : {};
+		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
 		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
-		return baseModifier * partnerModifier * apShellModifier;
+		// Surface Radar modifier not always limited to post-cap and AP Shell synergy now,
+		// can be applied to night battle (pre-cap) independently?
+		const surfaceRadarModifier = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		return baseModifier * partnerModifier * apShellModifier * surfaceRadarModifier;
 	};
 
 	/**
@@ -2469,8 +2465,8 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2680,8 +2676,8 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
