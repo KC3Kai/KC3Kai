@@ -407,7 +407,7 @@
 		var thisGear;
 		if(this.shipData.slotnum > slot){
 			
-			if(this.shipData.items[slot] > -1){
+			if(this.shipData.items[slot] > 0){
 				
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				

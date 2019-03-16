@@ -401,11 +401,19 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
-			// Monthly/Quarterly PvP counter reset to 0 if not click complete in a day:
-			// C8, C29?
-			this.resetCounterLoop([311, 330], true);
-			// Daily counter not reset for monthly PvP: C16
+			
+			// Progress counter reset to 0 even if completed but reward not clicked in a day:
+			// Monthly PvP C8
+			this.resetCounterLoop([311], true);
+			
+			// Progress counter reset to 0 only if progress not completed in a day:
+			// Quarterly PvP C29
+			this.resetCounterLoop([330], false);
+			
+			// Progress counter not changed at all on daily reset:
+			// Monthly PvP C16
 			//this.resetCounterLoop([318], false);
+			
 			this.save();
 		},
 		
