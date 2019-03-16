@@ -771,6 +771,7 @@ Previously known as "Reactor"
 			var shipID = parseInt(params.api_id, 10);
 			var shipObj = KC3ShipManager.get(shipID);
 			var oldItemId = shipObj.items[slotIndex];
+			var oldShipObj = new KC3Ship(shipObj, true);
 			shipObj.items[slotIndex] = itemID;
 			KC3ShipManager.save();
 			
@@ -796,13 +797,14 @@ Previously known as "Reactor"
 			var oldGearObj = KC3GearManager.get(oldItemId);
 			var gearObj = KC3GearManager.get(itemID);
 			// Will be followed by `api_get_member/ship3`, defer event 1 call
-			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj, oldShipObj));
 		},
 		
 		"api_req_kaisou/slotset_ex":function(params, response, headers){
 			var itemID = parseInt(decodeURIComponent(params.api_item_id), 10);
 			var shipID = parseInt(params.api_id, 10);
 			var shipObj = KC3ShipManager.get(shipID);
+			var oldShipObj = new KC3Ship(shipObj, true);
 			var oldGearObj = KC3GearManager.get(shipObj.ex_item);
 			var gearObj = KC3GearManager.get(itemID);
 			shipObj.ex_item = itemID;
@@ -816,7 +818,7 @@ Previously known as "Reactor"
 				KC3Network.trigger("Fleet");
 			}
 			// Will be followed by `api_get_member/ship3`, defer event 1 call
-			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj));
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(gearObj, oldGearObj, oldShipObj));
 		},
 		
 		/* Remove all equipment of a ship
@@ -877,6 +879,7 @@ Previously known as "Reactor"
 			
 			// old status of set ship
 			const oldShipObj = KC3ShipManager.get(setShipRosterId);
+			const oldShipObjClone = new KC3Ship(oldShipObj, true);
 			const oldGearObj = oldShipObj.equipment(setItemIndex);
 			// update set item only for equipment change checks
 			oldShipObj.items = newShipData.api_set_ship.api_slot;
@@ -907,7 +910,7 @@ Previously known as "Reactor"
 			const newShipObj = KC3ShipManager.get(setShipRosterId);
 			const newGearObj = newShipObj.equipment(setItemIndex);
 			// not followed by `api_get_member/ship3`, do not defer event
-			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj));
+			KC3Network.trigger("GunFit", oldShipObj.equipmentChangedEffects(newGearObj, oldGearObj, oldShipObjClone));
 		},
 		
 		/* Re-supply a ship
