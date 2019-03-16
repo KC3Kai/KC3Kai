@@ -2444,9 +2444,19 @@
 							let badEntry = ! (Array.isArray(shipList) && encounter.form > 0);
 							// Don't show 'broken' encounters with incorrect data
 							if(badEntry) return;
+							const edata = {
+								formation: encounter.form,
+								main: shipList.slice(0, 6),
+								escort: shipList.slice(6, 12)
+							};
 							const encBox = $("#factory .encounter_record").clone();
-							$(".encounter_formation img", encBox).attr("src",
-								KC3Meta.formationIcon(encounter.form));
+							$(".encounter_formation img", encBox)
+								.attr("src", KC3Meta.formationIcon(encounter.form))
+								.addClass("hover")
+								.on("click", function(e) {
+									const simData = KC3SortieManager.prepareSimData(edata);
+									if(simData) openSimulatorWindow(simData, e.altKey);
+								});
 							$.each(shipList, function(_, shipId){
 								if(shipId > 0){
 									if(!KC3Master.isAbyssalShip(shipId)){
@@ -2826,6 +2836,21 @@
 
 				// If night battle will be asked after this battle
 				$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_yasen"+["-x",""][thisNode.yasenFlag&1]+".png");
+
+				// Add option to simulate night battle
+				if (thisNode.yasenFlag) {
+					const edata = {
+						main: thisNode.eshipsMain || thisNode.eships,
+						escort: thisNode.eshipsEscort
+					};
+					$(".module.activity .battle_night img")
+						.addClass("hover").off("click")
+						.on("click", function (e) {
+							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
+							if(simData) openSimulatorWindow(simData, e.altKey);
+						});
+				}
+
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
 				if(thisNode.isNightToDay){
 					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
@@ -4507,6 +4532,22 @@
 			return false;
 		}
 	};
+
+	function openSimulatorWindow(hashData, isPopup) {
+		try {
+			const url = "https://kc3kai.github.io/kancolle-replay/simulator.html#" + JSON.stringify(hashData);
+			const ref = window.open(url, "simulator", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+			if(ref && !ref.closed){
+				// Update hash with latest battle data even if window already opened
+				// this might not work for all browser versions as a vulnerability to bypass CORS
+				ref.location.replace(url);
+				// Switch focus to the window if possible
+				if(ref.focus) ref.focus();
+			}
+		} catch (e) {
+			console.warn("Failed to open battle simulator", e);
+		}
+	}
 
 	function updateEnemyHpBarStyles(hpBarSelector, hpPercent, maxWidth) {
 		if(maxWidth > 0) {
