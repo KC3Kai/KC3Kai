@@ -6,7 +6,7 @@ KC3改 Ship Object
 
 	var deferList = {};
 
-	window.KC3Ship = function( data ){
+	window.KC3Ship = function( data, toClone ){
 		// Default object properties included in stringifications
 		this.rosterId = 0;
 		this.masterId = 0;
@@ -136,9 +136,12 @@ KC3改 Ship Object
 				this.stars = data.api_srate;
 				this.morale = data.api_cond;
 				this.lock = data.api_locked;
-			// Initialized with formatted data
-			}else{
-				$.extend(this, data);
+			// Initialized with formatted data, deep clone if demanded
+			} else {
+				if(!!toClone)
+					$.extend(true, this, data);
+				else
+					$.extend(this, data);
 			}
 			if(this.getDefer().length <= 0)
 				this.checkDefer();
@@ -1944,21 +1947,13 @@ KC3改 Ship Object
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
 		}
 		
-		// Special postcap modifier if AP Shell and Surface Radar equipped for Nagato Class Cutin
-		// https://twitter.com/syoukuretin/status/1071656926411337728
-		let nagatoCutinRadarModifier = 1;
-		if(daySpecialAttackType[0] === "Cutin" && [101, 102].includes(daySpecialAttackType[1])) {
-			const hasSurfaceRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
-			nagatoCutinRadarModifier = hasSurfaceRadar && this.hasEquipmentType(2, 19) ? 1.15 : 1;
-		}
-		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
 		let result = Math.floor(Math.floor(
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier * nagatoCutinRadarModifier;
+			* antiPtImpModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -1989,7 +1984,6 @@ KC3改 Ship Object
 			dayCutinModifier,
 			airstrikeConcatModifier,
 			apshellModifier,
-			nagatoCutinRadarModifier,
 			antiPtImpModifier,
 			antiLandAdditive,
 			antiLandModifier,
@@ -2376,36 +2370,41 @@ KC3改 Ship Object
 	 * And there are different modifiers for 2nd ship's 3rd attack.
 	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
 	 * @return the modifier, 1 by default for unknown conditions.
+	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
+	 * @see https://twitter.com/Nishisonic/status/1102223560754421760
 	 */
 	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
-		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(modifierFor2ndShip ? {
-				"81": 1.35, "276": 1.35, // Mutsu and Kai
-				"573": 1.4, // Mutsu Kai Ni
+				"573": 1.4,  // Mutsu Kai Ni
+				"276": 1.35, // Mutsu Kai, base form unverified?
 				"576": 1.25, // Nelson Kai
 			} : {
-				"81": 1.15, "276": 1.15, // Mutsu and Kai
-				"573": 1.2, // Mutsu Kai Ni
-				"576": 1.1, // Nelson Kai
+				"573": 1.2,  // Mutsu Kai Ni
+				"276": 1.15, // Mutsu Kai, base form unverified?
+				"576": 1.1,  // Nelson Kai
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
-			// There are guessed from Nagato's
+			// Unconfirmed, guessed from Nagato's
 			(modifierFor2ndShip ? {
-				"80": 1.35, "275": 1.35, // Nagato and Kai
-				"541": 1.4, // Nagato Kai Ni
+				"541": 1.4,  // Nagato Kai Ni
+				"275": 1.35, // Nagato Kai
 			} : {
-				"80": 1.15, "275": 1.15, // Nagato and Kai
-				"541": 1.2, // Nagato Kai Ni
+				"541": 1.2,  // Nagato Kai Ni
+				"275": 1.15, // Nagato Kai
 			}) : {};
+		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
 		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
-		return baseModifier * partnerModifier * apShellModifier;
+		// Surface Radar modifier not always limited to post-cap and AP Shell synergy now,
+		// can be applied to night battle (pre-cap) independently?
+		const surfaceRadarModifier = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		return baseModifier * partnerModifier * apShellModifier * surfaceRadarModifier;
 	};
 
 	/**
@@ -2466,8 +2465,8 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2677,8 +2676,8 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.17],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.17],
+			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
+			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3197,6 +3196,10 @@ KC3改 Ship Object
 					result += value * Math.sqrt(count);
 				});
 				break;
+			case 16: // for Seaplane Tender
+				// Medium cal. guns for partial AVs, no formula summarized
+				// https://docs.google.com/spreadsheets/d/1wl9v3NqPuRawSuFadokgYh1R1R1W82H51JNC66DH2q8/htmlview
+				break;
 			default:
 				// not found for other ships
 		}
@@ -3360,8 +3363,9 @@ KC3改 Ship Object
 	 * Check known possible effects on equipment changed.
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
 	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
+	 * @param {Object} oldShipObj - the cloned old ship instance with stats and item IDs before equipment changed.
 	 */
-	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}) {
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}, oldShipObj = this) {
 		if(!this.masterId) return {isShow: false};
 		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
 		let isShow = gunFit !== false;
@@ -3369,20 +3373,26 @@ KC3改 Ship Object
 		isShow = isShow || shipAacis.length > 0;
 		// NOTE: shipObj here to be returned will be the 'old' ship instance,
 		// whose stats, like fp, tp, asw, are the values before equipment change.
+		// but its items array (including ex item) are post-change values.
+		const shipObj = this;
 		// To get the 'latest' ship stats, should defer `GunFit` event after `api_get_member/ship3` call,
-		// and retrieve latest ship instance via KC3ShipManager.get method.
+		// and retrieve latest ship instance via KC3ShipManager.get method like this:
+		//   const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+		// It can not be latest ship at the timing of this equipmentChangedEffects invoked,
+		// because the api call above not executed, KC3ShipManager data not updated yet.
 		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
 		const aswDiff = newEquipAsw - oldEquipAsw
-			// add explicit bonus from new equipment, but bonus from old missed,
-			// so aswDiff will be inaccurate if there is bonus on old equipment
-			+ this.equipmentTotalStats("tais", true, true, true);
-		const oaswPower = this.canDoOASW(aswDiff) ? this.antiSubWarfarePower(aswDiff) : false;
+			// explicit asw bonus from new equipment
+			+ shipObj.equipmentTotalStats("tais", true, true, true)
+			// explicit asw bonus from old equipment
+			- oldShipObj.equipmentTotalStats("tais", true, true, true);
+		const oaswPower = shipObj.canDoOASW(aswDiff) ? shipObj.antiSubWarfarePower(aswDiff) : false;
 		isShow = isShow || (oaswPower !== false);
-		const antiLandPowers = this.shipPossibleAntiLandPowers();
+		const antiLandPowers = shipObj.shipPossibleAntiLandPowers();
 		isShow = isShow || antiLandPowers.length > 0;
-		const equipBonus = this.equipmentBonusGearAndStats(newGearObj);
+		const equipBonus = shipObj.equipmentBonusGearAndStats(newGearObj);
 		isShow = isShow || (equipBonus !== false && equipBonus.isShow);
 		// Possible TODO:
 		// can opening torpedo
@@ -3391,7 +3401,8 @@ KC3改 Ship Object
 		// can night cut-in
 		return {
 			isShow,
-			shipObj: this,
+			shipObj,
+			shipOld: oldShipObj,
 			gearObj: newGearObj.masterId ? newGearObj : false,
 			gunFit,
 			shipAacis,
