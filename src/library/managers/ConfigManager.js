@@ -166,7 +166,7 @@ Retrieves when needed to apply on components
 				pan_shiplist_bg_enabled: false,
 				pan_shiplist_bg : "rgba(30, 72, 164, 0.4)",
 				pan_drop_shadow_enabled : false,
-				pan_drop_shadow : "rgba(34, 65, 105, 1)",
+				pan_drop_shadow : "rgba(65, 0, 103, 0.7)",
 				pan_ship_icon_enabled : false,
 				pan_ship_icon_bg: "rgba(0, 42, 134, 0.7)",
 				moon_small_font: false,
