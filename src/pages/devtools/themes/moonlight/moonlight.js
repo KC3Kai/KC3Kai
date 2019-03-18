@@ -1819,6 +1819,7 @@
 			/*$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats_p2/los" + ConfigManager.elosFormula + ".png");*/
 			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
+			ConfigManager.setElosMode(1);
 			$(".summary-eqlos .summary_textsum").text("Σ: "+ FleetSummary.elos);
 			$(".summary-transport").attr("title",
 				KC3Meta.term("PanelTransportPoints").format(

@@ -323,6 +323,12 @@ Retrieves when needed to apply on components
 			this.save();
 		},
 
+		setElosMode :function(type){
+			this.loadIfNecessary();
+			this.elosFormula = type;
+			this.save();
+		},
+
 		// Toggle Fighter Power
 		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
