@@ -2997,7 +2997,6 @@ ABYSS FLEET
 
 /*------- CONTROLS -------*/
 .module.controls {
-
 }
 .module.controls .control {
 	height:30px;
@@ -3085,12 +3084,12 @@ ABYSS FLEET
 	overflow-x:hidden;
 	overflow-y:hidden;
 }
-.v .module.controls .scrollable {
+/*.v .module.controls .scrollable {
 	position:absolute;
 	float:left;
 	left:-655px;
 	top:257px;
-}
+}*/
 .module.controls .scroll_btn {
 	width:0px;
 	height:0px;
@@ -3101,23 +3100,23 @@ ABYSS FLEET
 	border-bottom:13px solid transparent;
 	border-right:15px solid #666;
 }
-.v .module.controls .scroll_left {
+/*.v .module.controls .scroll_left {
 	position:absolute;
 	float:left;
 	left:-675px;
 	top:257px;
-}
+}*/
 .module.controls .scroll_right {
 	border-top:13px solid transparent;
 	border-bottom:13px solid transparent;
 	border-left:15px solid #666;
 }
-.v .module.controls .scroll_right {
+/*.v .module.controls .scroll_right {
 	position:absolute;
 	float:left;
 	left:-519px;
 	top:257px;
-}
+}*/
 .module.controls .scroll_left.disabled {
 	border-right:15px solid #333;
 }
@@ -3165,7 +3164,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation .rotarHidden {
-	left:863px;
+	left:925px;
 	top:181px;
 }
 .rotation .rotarBack {
@@ -3175,7 +3174,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation .rotarBack {
-	left:863px;
+	left:925px;
 	top:163px;
 }
 .rotation .rotarExpedition {
@@ -3185,7 +3184,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation .rotarExpedition {
-	left:863px;
+	left:925px;
 	top:145px;
 }
 /*.rotation .rotarPartner {
@@ -3195,7 +3194,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation .rotarPartner {
-	left:863px;
+	left:925px;
 	top:127px;
 }*/
 .module.summary.disabled {
@@ -4478,7 +4477,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation2 .rotarHidden {
-	left:1017px;
+	left:1079px;
 	top:199px;
 }
 .rotation2 .rotarBack {
@@ -4488,7 +4487,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation2 .rotarBack {
-	left:1017px;
+	left:1079px;
 	top:217px;
 }
 .rotation2 .rotarExpedition {
@@ -4498,7 +4497,7 @@ ABYSS FLEET
 	z-index:1;
 }
 .v .rotation2 .rotarExpedition {
-	left:1017px;
+	left:1079px;
 	top:235px;
 }
 .module.status {
@@ -4918,56 +4917,56 @@ ABYSS FLEET
 /* VERTICAL LAYOUT
 ------------------------------*/
 .wrapper.v {
-	width:1035px;
+	width:1200px;
 	height:325px;
 }
 .wrapper.v img {
 	image-rendering: auto;
 }
 .v .module.admiral {
-	left:688px; top:37px;
+	left:750px; top:37px;
 	height:40px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 .v .module.expeditions3 {
-	left:688px; top:37px;
+	left:750px; top:37px;
 	height:162px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 .v .module.summary {
-	left:688px; top:79px;
+	left:750px; top:79px;
 	height:119px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 /*.v .module.Partner {
-	left:688px; top:79px;
+	left:750px; top:79px;
 	height:119px;
 	width:190px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }*/
 .v .module.activity {
-	left:5px; top:2px;
+	left:67px; top:2px;
 }
 .v .module.fleet {
-	left:197px; top:2px;
+	left:259px; top:2px;
 }
 .v .module.controls {
-	width: 250px;
-	left:690px; top:2px;
+	width: 450px;
+	left:750px; top:2px;
 	float:left;
 }
 .v .module.controls .scrollable {
 	width:130px;
 }
 .v .module.status {
-	left:688px; top:200px;
+	left:750px; top:200px;
 	width:345px;
 	height:65px;
 	border-radius:5px;
@@ -4976,23 +4975,25 @@ ABYSS FLEET
 .v .module.expeditions2 {
 	width:345px;
 	height:120px;
-	left:688px; top:200px;
+	left:750px; top:200px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 .v .module.quests {
-	width:151px;
+	width:190px;
 	height:120px;
-	left:881px; top:35px;
+	left:943px; top:35px;
+	/*border-radius:5px;
+	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.3) 98%, rgba(200, 200, 255, 0.5) 99%);*/
 }
 .v .module.quests .quest {
-	width:151px;
+	width:190px;
 }
 .v .module.quests .quest_text {
-	width:96px;
+	width:130px;
 }
 .v .module.quests .untracked .quest_text {
-	width:131px;
+	width:175px;
 }
 
 /* ANIMATIONS
