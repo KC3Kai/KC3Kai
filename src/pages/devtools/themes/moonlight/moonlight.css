@@ -1657,7 +1657,7 @@ ABYSS FLEET
 	width:60px;
 	height:40px;
 	position:relative;
-	border-radius: 10px;
+	border-radius: 5px;
 	margin:-1px 0px 0px -1px;
 }
 .module.activity .activity_modernization .mod_ship_name {
@@ -2649,9 +2649,11 @@ ABYSS FLEET
 .module.activity .activity_pvp .pvp_formation img {
 	width: 15px;
 	height: 15px;
-	background-color: #fff;
 	border-radius: 10px;
 	vertical-align: inherit;
+	filter:invert(90%);
+	-webkit-filter:invert(90%);
+	background:#ddb;
 }
 /*------- ACTIVITY: Remodel Info -------*/
 .module.activity .activity_remodel {
@@ -3436,7 +3438,7 @@ ABYSS FLEET
 	animation-direction: alternate;
 	animation-duration: 2.0s;
 }
-.module.fleet .ship_name, .ship_type, .ship_level, .ship_hp_text, .ship_exp_label, .ship_exp_next, .ship_gear_slot {
+.module.fleet .ship_name, .ship_type, .module.fleet .ship_level, .ship_hp_text, .module.fleet .ship_exp_label, .module.fleet .ship_exp_next, .ship_gear_slot {
 	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
 }
 .module.fleet .ship_gear_icon {
@@ -5043,9 +5045,8 @@ ABYSS FLEET
 	color:#fbb;
 	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
 }
-
 .ui-tooltip-content .ship_face_tooltip {
-	width:252px;
+	width:250px;
 	height:auto;
 	font-size:10px;
 }
@@ -5059,7 +5060,7 @@ ABYSS FLEET
 	white-space:nowrap;
 	text-overflow:ellipsis;
 	font-size:12px;
-	color:#b0b0e0;
+	color:#c0c0e0;
 	font-weight: bold;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name span.ship_masterId {
@@ -5154,14 +5155,16 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_col {
-	width:126px;
+	width:125px;
 	margin:0px 0px 0px 0px;
 	float:left;
+	background:#1C2939;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stats_row {
 	width:250px;
 	margin:0px 0px 0px 0px;
 	float:left;
+	background:#1C2939;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_icon {
 	width:52px;
@@ -5171,10 +5174,10 @@ ABYSS FLEET
 	float:left;
 	overflow:hidden;
 	white-space:nowrap;
-	background-color:#335;
-	border:1px solid #a0a0a0;
-	border-right-color:#335;
-	border-bottom-color:#335;
+	background-color:#16202A;
+	border:1px solid #46505A;
+	border-right-color:#16202A;
+	border-bottom-color:#16202A;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_icon img {
 	max-width:19px;
@@ -5190,47 +5193,47 @@ ABYSS FLEET
 	margin:0px 0px 0px 2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value {
-	width:71px;
+	width:72px;
 	height:16px;
 	line-height:15px;
 	padding:0px 3px 1px 2px;
-	margin:0px 2px 1px 0px;
+	margin:0px 1px 1px 0px;
 	float:left;
 	font-size:10px;
 	text-align:right;
 	overflow:hidden;
 	white-space:nowrap;
-	color:#000;
-	background-color:#99c;
-	border:1px solid #fff;
-	border-right-color:#99b;
-	border-bottom-color:#99b;
-	border-left-color:#99b;
+	color:#c0c0c0;
+	background-color:#2C3949;
+	border:1px solid #4C4959;
+	border-top-color:#4C5969;
+	border-left-color:#2C3949;
+	border-bottom-color:#2C3949;
+}
+.ui-tooltip-content .ship_face_tooltip .aatooltipstart {
+	margin:5px 2px 1px 0px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .equip {
-	color:#442;
+	color:#8496A2;
 	margin-right:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .mod {
-	color:#fff;
+	color:#278FD6;
 	margin-left:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .level {
-	color:#666;
+	color:#6a6;
 	margin-left:1px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .luck {
-	color:#fff;
+	color:#278FD6;
 	margin-left:1px;
 }
-.ui-tooltip-content .ship_face_tooltip .stat_value .oasw {
-	color:#aadbf8;
-	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
-}
+.ui-tooltip-content .ship_face_tooltip .stat_value .oasw,
 .ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFaster,
 .ui-tooltip-content .ship_face_tooltip .stat_value.SpeedFastest,
 .ui-tooltip-content .ship_face_tooltip .stat_value.RangeChanged {
-	color:#aadbf8;
+	color:#9aabff;
 	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
 }
 .ui-tooltip-content .ship_face_tooltip .stat_wide {
@@ -5246,21 +5249,20 @@ ABYSS FLEET
 }
 .ui-tooltip-content .ship_face_tooltip .aa_col {
 	width:49px;
-	height:19px;
-	line-height:17px;
-	padding:0px 2px 0px 2px;
-	margin:5px 1px 1px 0px;
+	height:16px;
+	line-height:15px;
+	padding:0px 3px 1px 2px;
+	margin:0px 1px 1px 0px;
 	float:left;
 	font-size:10px;
 	text-align:center;
 	overflow:hidden;
-	color:#000;
-	white-space:nowrap;
-	background-color:#99c;
-	border:1px solid #fff;
-	border-right-color:#99b;
-	border-bottom-color:#99b;
-	border-left-color:#99b;
+	color:#c0c0c0;
+	background-color:#2C3949;
+	border:1px solid #4C4959;
+	border-top-color:#4C5969;
+	border-left-color:#2C3949;
+	border-bottom-color:#2C3949;
 }
 .ui-tooltip-content .ship_face_tooltip .aa_col.bomberSlot {
 	text-align:center;
@@ -5278,13 +5280,14 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .aa_col.sd_prop,
 .ui-tooltip-content .ship_face_tooltip .aa_col.sd_fixed,
 .ui-tooltip-content .ship_face_tooltip .aa_col.sd_fail {
-	color:#040;
 	margin:0px 1px 1px 0px;
+	color:#6a6;
 }
 .ui-tooltip-content .ship_face_tooltip .text_center {
 	text-align:center;
 }
 .ui-tooltip-content .ship_face_tooltip .text_left {
+	border-left-color:#4C5969;
 	text-align:left;
 }
 .ui-tooltip-content .ship_face_tooltip .text_right {
