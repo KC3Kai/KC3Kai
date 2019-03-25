@@ -201,7 +201,7 @@
 	},
 	"754": {
 		"api_id": 754,
-		"api_name": "決戦山雲",
+		"api_name": "秋冬制服山雲",
 		"api_yomi": "やまぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -209,7 +209,7 @@
 	},
 	"755": {
 		"api_id": 755,
-		"api_name": "決戦朝雲",
+		"api_name": "秋冬制服朝雲",
 		"api_yomi": "あさぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -2622,7 +2622,7 @@
 	},
 	"1055": {
 		"api_id": 1055,
-		"api_name": "夏服夕雲改二",
+		"api_name": "夏制服夕雲改二",
 		"api_yomi": "ゆうぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -2630,7 +2630,7 @@
 	},
 	"1056": {
 		"api_id": 1056,
-		"api_name": "夏服長波改二",
+		"api_name": "夏制服長波改二",
 		"api_yomi": "ながなみ",
 		"api_stype": 2,
 		"api_soku": 10,
