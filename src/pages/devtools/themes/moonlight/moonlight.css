@@ -1939,9 +1939,9 @@ ABYSS FLEET
 	color:#00cc55;
 	background-image: radial-gradient(rgba(200, 255, 255, 0.04) 40%, rgba(200, 255, 255, 0.6) 80%, rgba(200, 255, 255, 0.9) 90%);
 }
-.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {
-	color:#black;
-}
+/*.module.activity .activity_expeditionPlanner .expedition_entry.cond_failed {
+	color:black;
+}*/
 /*------- ACTIVITY: FIT -------*/
 .module.activity .activity_gunfit {
 	padding:5px 10px;
@@ -4947,7 +4947,7 @@ ABYSS FLEET
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 /*.v .module.Partner {
-	left:688px; top:79px;
+	left:688px; top:80px;
 	height:119px;
 	width:190px;
 	border-radius:5px;
@@ -5060,7 +5060,7 @@ ABYSS FLEET
 	white-space:nowrap;
 	text-overflow:ellipsis;
 	font-size:12px;
-	color:#c0c0e0;
+	color:#00a0b0;
 	font-weight: bold;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_full_name span.ship_masterId {
@@ -5281,7 +5281,7 @@ ABYSS FLEET
 .ui-tooltip-content .ship_face_tooltip .aa_col.sd_fixed,
 .ui-tooltip-content .ship_face_tooltip .aa_col.sd_fail {
 	margin:0px 1px 1px 0px;
-	color:#6a6;
+	color:#00c090;
 }
 .ui-tooltip-content .ship_face_tooltip .text_center {
 	text-align:center;
