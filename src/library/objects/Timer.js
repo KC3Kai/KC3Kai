@@ -61,7 +61,7 @@ Has functions for TimerManager to use
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", this.rosterId > 0 ?
 				KC3ShipManager.get(this.rosterId).shipIcon() :
-				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png", true, false, (this.type == 2)));
+				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png"));
 			$(".timer-img", this.element).attr("title",
 				KC3Meta.shipName( KC3Master.ship(this.faceId).api_name )
 			);
