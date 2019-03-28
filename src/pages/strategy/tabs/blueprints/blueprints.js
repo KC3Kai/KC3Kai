@@ -114,7 +114,8 @@
 			this.shipList.length = 0;
 			Object.keys(allRemodelInfo).forEach(key => {
 				const remodelInfo = allRemodelInfo[key];
-				if(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat) {
+				if(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
+					|| remodelInfo.gunmat || remodelInfo.airmat) {
 					const shipMaster = KC3Master.ship(remodelInfo.ship_id_from);
 					const shipData = {
 						id: remodelInfo.ship_id_from,
@@ -190,6 +191,14 @@
 						});
 						mappedObj.materialsUsed += isUsed;
 					}
+					if(remodelInfo.airmat) {
+						mappedObj.materials.push({
+							icon: 77,
+							info: remodelInfo,
+							used: isUsed
+						});
+						mappedObj.materialsUsed += isUsed;
+					}
 				}
 			}
 			return mappedObj;
@@ -255,6 +264,7 @@
 									m.icon === 65 ? m.info.catapult :
 									m.icon === 78 ? m.info.report :
 									m.icon === 75 ? m.info.gunmat :
+									m.icon === 77 ? m.info.airmat :
 									1).fill(m.icon)
 				))).map(iconArr => {
 					const icon = iconArr[0];
@@ -297,6 +307,9 @@
 						break;
 					case 75:
 						appendOwnedItem(iconImg, PlayerManager.consumables.newArtilleryMaterial);
+						break;
+					case 77:
+						appendOwnedItem(iconImg, PlayerManager.consumables.newAviationMaterial);
 						break;
 					case 78:
 						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
@@ -396,6 +409,16 @@
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.gunmat)
+					.appendTo(line);
+			}
+			if(remodelInfo.airmat) {
+				$("<img />")
+					.attr("src", "/assets/img/useitems/77.png")
+					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 10)
+					.text(remodelInfo.airmat)
 					.appendTo(line);
 			}
 			if(remodelInfo.devmat) {

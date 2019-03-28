@@ -473,6 +473,12 @@ Previously known as "Reactor"
 			if(remodel.report > 0){
 				PlayerManager.consumables.actionReport -= remodel.report;
 			}
+			if(remodel.gunmat > 0){
+				PlayerManager.consumables.newArtilleryMaterial -= remodel.gunmat;
+			}
+			if(remodel.airmat > 0){
+				PlayerManager.consumables.newAviationMaterial -= remodel.airmat;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");

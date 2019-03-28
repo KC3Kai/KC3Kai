@@ -2876,6 +2876,14 @@
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
+	"1088": {
+		"api_id": 1088,
+		"api_name": "秋の私服不知火改二",
+		"api_yomi": "しらぬい",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
 	"1089": {
 		"api_id": 1089,
 		"api_name": "晩秋の私服対馬",
@@ -3088,6 +3096,38 @@
 		"api_id": 1115,
 		"api_name": "もぐもぐ早波",
 		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1116": {
+		"api_id": 1116,
+		"api_name": "桃節句対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1117": {
+		"api_id": 1117,
+		"api_name": "桃節句福江",
+		"api_yomi": "ふかえ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"1118": {
+		"api_id": 1118,
+		"api_name": "桃節句狭霧",
+		"api_yomi": "さぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"1119": {
+		"api_id": 1119,
+		"api_name": "お出掛け夕雲",
+		"api_yomi": "ゆうぐも",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
