@@ -190,8 +190,14 @@ Provides access to data on built-in JSON files
 			this._defaultIcon = iconSrc;
 			return this;
 		},
-		getIcon: function(id, empty, useSeasonal = true, isDamaged = false) {
+		getIcon: function(id, empty, useSeasonal = true, isDamaged = false, useAF2019 = false) {
 			id = Number(id);
+			if (useAF2019 && id == 56) {
+				var now = Date.now();
+				if (now >= Date.UTC(2019,2,31,15,0,0,0) && now <= Date.UTC(2019,3,2,3,0,0,0)) {
+					id = 131;
+				}
+			}
 			if(this._icons.indexOf(id) > -1){
 				const isAbyssal = KC3Master.isAbyssalShip(id);
 				let path = isAbyssal ? "abyss/" : "ships/";

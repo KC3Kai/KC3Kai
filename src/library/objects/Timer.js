@@ -19,14 +19,6 @@ Has functions for TimerManager to use
 	KC3Timer.prototype.hide = function(element){ this.element.hide(); };
 	
 	KC3Timer.prototype.activate = function(completion, faceId, expedNum, rosterId){
-		//april fools 2019-------------
-		if (faceId == 56) {
-			var now = Date.now();
-			if (now >= Date.UTC(2019,2,31,15,0,0,0) && now <= Date.UTC(2019,3,2,3,0,0,0)) {
-				faceId = 131;
-			}
-		}
-		//-----------------------------
 		this.active = true;
 		this.completion = completion;
 		if(faceId > 0){ this.faceId = faceId; }
@@ -69,7 +61,7 @@ Has functions for TimerManager to use
 		if(this.faceId > 0){
 			$(".timer-img img", this.element).attr("src", this.rosterId > 0 ?
 				KC3ShipManager.get(this.rosterId).shipIcon() :
-				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png"));
+				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png", true, false, (this.type == 2)));
 			$(".timer-img", this.element).attr("title",
 				KC3Meta.shipName( KC3Master.ship(this.faceId).api_name )
 			);
