@@ -2990,17 +2990,26 @@
 			// If there is a ship drop
 			if(thisNode.drop > 0) {
 				// If drop spoiler is enabled on settings
+				//april fools 2019-------
+				var drop = thisNode.drop;
+				if (drop == 56) {
+					var now = Date.now();
+					if (now >= Date.UTC(2019,2,31,15,0,0,0) && now <= Date.UTC(2019,3,2,3,0,0,0)) {
+						drop = 131;
+					}
+				}
+				//-----------------------
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
-						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
+						.attr("src", KC3Meta.shipIcon(drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
-						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
+						.attr("title", KC3Meta.shipName( KC3Master.ship(drop).api_name ))
 						.toggleClass("new_ship", ConfigManager.info_dex_owned_ship ?
 							// Not own this shipgirl of any remodel form, judged by picture book history or current ships
-							! PictureBook.isEverOwnedShip(thisNode.drop) :
-							! KC3ShipManager.masterExists(thisNode.drop)
+							! PictureBook.isEverOwnedShip(drop) :
+							! KC3ShipManager.masterExists(drop)
 						).lazyInitTooltip();
 				}
 				// Update counts
