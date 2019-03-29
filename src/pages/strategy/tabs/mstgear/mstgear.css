@@ -97,23 +97,21 @@
 	white-space:normal;
 }
 .tab_mstgear .gearInfo .types {
-	width:270px;
+	width:368px;
 	height:20px;
-	float:left;
 	line-height:20px;
-	margin:0px 0px 10px 0px;
+	margin:0px 0px 2px 0px;
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
 }
 .tab_mstgear .gearInfo .rarity {
-	width:98px;
+	width:368px;
 	height:20px;
-	float:right;
 	line-height:20px;
 	font-size:20px;
 	color:#ec6;
-	margin:0px 0px 10px 0px;
+	margin:-2px 0px 4px 0px;
 }
 
 /* STATS */

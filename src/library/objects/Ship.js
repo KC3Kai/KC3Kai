@@ -2127,11 +2127,13 @@ KC3改 Ship Object
 		const isEscortLightCarrier = this.isEscortLightCarrier();
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
+		const isHyuugaKaiNi = this.masterId === 554;
 
 		// lower condition for DE and CVE, even lower if equips Sonar
 		const aswThreshold = isEscortLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
+			: isHyuugaKaiNi ? 80 // unknown, guessed from her min asw 68 + 12 (1x helicopter)
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
@@ -2163,6 +2165,15 @@ KC3改 Ship Object
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
+		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
+		//   but her initial asw too high to verify the lower threshold.
+		if(isHyuugaKaiNi) {
+			return this.countEquipmentType(1, 15) > 1 ||
+				this.countEquipmentType(1, 44) > 0;
+		}
+
+		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
+		// perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		return hasSonar;
 	};
 
@@ -2465,8 +2476,10 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
+			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
+			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
+			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -2530,6 +2543,22 @@ KC3改 Ship Object
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
+		// Special Multi-Angle cutins do not need recon plane and probably higher priority
+		if(trySpTypeFirst && isAirSuperiorityBetter) {
+			const isThisHealthyIseClassK2 = [553, 554].includes(this.masterId) && !this.isTaiha();
+			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
+			if(isThisHealthyIseClassK2 && mainGunCnt > 0) {
+				// Ise-class Kai Ni Zuiun Multi-Angle Attack since 2019-03-27
+				// All seaplane bombers named Zuiun capable?
+				// Zuiun priority to Air/Sea Attack when they are both equipped
+				const spZuiunCnt = this.countNonZeroSlotEquipment([26, 79, 80, 81, 207, 237, 322, 323]);
+				if(spZuiunCnt > 1) return KC3Ship.specialAttackTypeDay(200);
+				// Ise-class Kai Ni Air/Sea Multi-Angle Attack since 2019-03-27
+				// Capable Suisei unconfirmed, db stat > 10?
+				const spSuiseiCnt = this.countNonZeroSlotEquipment([100, 111, 291, 292, 319]);
+				if(spSuiseiCnt > 1) return KC3Ship.specialAttackTypeDay(201);
+			}
+		}
 		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
 		if(trySpTypeFirst && hasRecon && isAirSuperiorityBetter) {
 			/*
@@ -2676,8 +2705,8 @@ KC3改 Ship Object
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoCutin", 2.27],
-			102: ["Cutin", 102, "CutinMutsuCutin", 2.27],
+			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
+			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
