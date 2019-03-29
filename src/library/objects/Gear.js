@@ -269,6 +269,11 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
+						// Hyuuga Kai Ni, extra +2 ar, +1 ev
+						ids: [554],
+						single: { "souk": 2, "houk": 1 },
+					},
+					{
 						// All CVL/CV/CVB/BBV stars+2 extra +1 los
 						// BBV only applied to Ise K2 for now
 						stypes: [7, 11, 18, 12],
@@ -437,6 +442,27 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "tais": 2, "houk": 2 },
 					},
 				},
+			},
+			// O Type Observation Autogyro Kai
+			"324": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Hyuuga Kai Ni, extra +1 as
+						ids: [554],
+						single: { "tais": 1 },
+					},
+				],
+			},
+			// O Type Observation Autogyro Kai Ni
+			"325": {
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {

@@ -651,7 +651,8 @@
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
 					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
 						// show blueprint icon for all these special materials
-						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat)
+						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
+							|| remodelInfo.gunmat || remodelInfo.airmat)
 					);
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
