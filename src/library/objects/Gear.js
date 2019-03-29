@@ -516,6 +516,21 @@ KC3改 Equipment Object
 			},
 			// S-51J Kai
 			"327": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 1, "tais": 3, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Hyuuga Kai Ni, extra +1 fp, +1 as, +1 ev
+						ids: [554],
+						single: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+				],
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
