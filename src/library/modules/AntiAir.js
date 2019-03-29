@@ -466,6 +466,7 @@ AntiAir: anti-air related calculations
 			82, // Ise Kai
 			553, // Ise K2
 			88, // Hyuuga Kai
+			554, // Hyuuga K2
 			148, // Musashi Kai
 			546, // Musashi K2
 		].indexOf( mst.api_id ) !== -1;
