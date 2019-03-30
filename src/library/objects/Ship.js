@@ -2136,7 +2136,7 @@ KC3改 Ship Object
 		const aswThreshold = isEscortLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
-			// Nyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
+			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
 			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter)
 			: isHyuugaKaiNi ? 90
 			: 100;

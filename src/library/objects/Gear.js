@@ -586,9 +586,54 @@ KC3改 Equipment Object
 			},
 			// 35.6cm Twin Gun Mount Kai
 			"328": {
+				count: 0,
+				byClass: {
+					"6": [
+						// Kongou Class
+						{
+							multiple: { "houg": 1 },
+						},
+						// extra +1 fp, +1 ev for Kongou Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+					],
+					// Ise Class
+					"2": {
+						multiple: { "houg": 1 },
+					},
+					// Fusou Class
+					"26": 2
+				},
 			},
 			// 35.6cm Twin Gun Mount Kai Ni
 			"329": {
+				count: 0,
+				byClass: {
+					"6": [
+						// Kongou Class
+						{
+							multiple: { "houg": 1 },
+						},
+						// extra +1 fp, +1 ev for Kongou Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						// extra +1 fp, +1 aa for Kongou Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+					],
+					// Ise Class
+					"2": {
+						multiple: { "houg": 1 },
+					},
+					// Fusou Class
+					"26": 2
+				},
 			},
 			// 41cm Triple Gun Mount Kai Ni
 			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
