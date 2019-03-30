@@ -220,7 +220,7 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "houg": 7, "souk": 2, "houk": 3 },
+						multiple: { "houg": 7, "tyku": 3, "houk": 2 },
 					},
 				},
 			},
