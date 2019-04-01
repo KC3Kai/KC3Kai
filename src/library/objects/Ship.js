@@ -2125,9 +2125,9 @@ KC3改 Ship Object
 		const isEscort = stype === 1;
 		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
-		// is ASW method not supposed to depth charge attack? (CAV, BBV, LHA)
-		//   except CVL, but unconfirmed for AV, AO and Hayasui Kai
-		const isAirAntiSubStype = [6, 10, 17].includes(stype);
+		// is ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
+		//   but unconfirmed for CVL, AO and Hayasui Kai
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
@@ -2137,7 +2137,7 @@ KC3改 Ship Object
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
-			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter)
+			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
 			: isHyuugaKaiNi ? 90
 			: 100;
 
@@ -2173,14 +2173,15 @@ KC3改 Ship Object
 		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
 		//   but her initial naked asw too high to verify the lower threshold.
 		// Fusou-class Kai Ni can OASW with 1 Helicopter and asw >= 100.
+		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
+		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
+		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
 			return this.countEquipmentType(1, 15) >= 2 ||
 				this.countEquipmentType(1, 44) >= 1;
 		}
 
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
-		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
-		//   at least 1 slot of ASW capable aircraft needed.
+		// for other ship types who can do ASW with Depth Charge
 		return hasSonar;
 	};
 

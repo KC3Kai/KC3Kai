@@ -440,7 +440,7 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "houg": 4, "tyku": 3, "houk": 2 },
+						multiple: { "houg": 5, "tyku": 2, "tais": 1, "houk": 2 },
 					},
 				},
 			},
@@ -510,7 +510,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, extra +1 as, +1 ev
 						ids: [554],
-						single: { "tais": 1, "houk": 1 },
+						single: { "houg": 1, "tais": 1, "houk": 1 },
 					},
 				],
 			},
@@ -604,7 +604,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2
+					"26": 2,
 				},
 			},
 			// 35.6cm Twin Gun Mount Kai Ni
@@ -632,7 +632,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2
+					"26": 2,
 				},
 			},
 			// 41cm Triple Gun Mount Kai Ni
