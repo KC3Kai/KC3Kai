@@ -271,7 +271,7 @@ Used by SortieManager
 	 * @param predictedFleets - result of predicted fleets.
 	 */
 	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
-		const checkSortieSpecialAttack = attacks => attacks.some(attack => (attack.cutin || attack.ncutin) >= 100);
+		const checkSortieSpecialAttack = attacks => attacks.some(attack => [100, 101].includes(attack.cutin || attack.ncutin));
 		const playerMain = predictedFleets.playerMain,
 			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
 		if (flagshipSpecialAttack) {
