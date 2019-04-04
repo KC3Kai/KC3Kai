@@ -273,7 +273,7 @@ Used by SortieManager
 	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
 		const checkSortieSpecialAttack = attacks => attacks.some(
 			// special attacks ID ranged in [100, 200), >= 200 used by multi-angle attacks
-			Number(attack.cutin || attack.ncutin).inside(100, 199)
+			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
 		);
 		const playerMain = predictedFleets.playerMain,
 			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
