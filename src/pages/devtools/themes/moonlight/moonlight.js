@@ -1397,6 +1397,16 @@
 			KC3TimerManager._repair[1].face();
 			KC3TimerManager._repair[2].face(undefined, PlayerManager.repairSlots < 3);
 			KC3TimerManager._repair[3].face(undefined, PlayerManager.repairSlots < 4);
+			if(PlayerManager.repairSlots >= 3) {
+				$(".module.expeditions2 .repair_3").css("display", "block");
+				$(".module.expeditions2 .repair_4").css("display", "block");
+			}
+			if(PlayerManager.repairSlots < 3) {
+				$(".module.expeditions2 .repair_3").css("display", "none");
+			}
+			if(PlayerManager.repairSlots < 4) {
+				$(".module.expeditions2 .repair_4").css("display", "none");
+			}
 
 			// Construction faces
 			if(ConfigManager.info_face){
@@ -1404,6 +1414,16 @@
 				KC3TimerManager._build[1].face();
 				KC3TimerManager._build[2].face(undefined, PlayerManager.buildSlots < 3);
 				KC3TimerManager._build[3].face(undefined, PlayerManager.buildSlots < 4);
+			}
+			if(PlayerManager.buildSlots >= 3) {
+				$(".module.expeditions2 .build_3").css("display", "block");
+				$(".module.expeditions2 .build_4").css("display", "block");
+			}
+			if(PlayerManager.buildSlots < 3) {
+				$(".module.expeditions2 .build_3").css("display", "none");
+			}
+			if(PlayerManager.buildSlots < 4) {
+				$(".module.expeditions2 .build_4").css("display", "none");
 			}
 
 			$(".expeditions").createChildrenTooltips();
@@ -3195,10 +3215,11 @@
 			}
 
 			// Show resource used
-			$(".activity_crafting .used1").text( data.resourceUsed[0] );
-			$(".activity_crafting .used2").text( data.resourceUsed[1] );
-			$(".activity_crafting .used3").text( data.resourceUsed[2] );
-			$(".activity_crafting .used4").text( data.resourceUsed[3] );
+			$(".activity_crafting .used1").text( "-" + data.resourceUsed[0] );
+			$(".activity_crafting .used2").text( "-" + data.resourceUsed[1] );
+			$(".activity_crafting .used3").text( "-" + data.resourceUsed[2] );
+			$(".activity_crafting .used4").text( "-" + data.resourceUsed[3] );
+			$(".activity_crafting .used5").text( PlayerManager.consumables.devmats );
 
 			// Show the box
 			$(".module.activity .activity_tab").removeClass("active");
