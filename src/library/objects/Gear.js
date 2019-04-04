@@ -495,6 +495,21 @@ KC3改 Equipment Object
 			},
 			// O Type Observation Autogyro Kai Ni
 			"325": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "tais": 1, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Hyuuga Kai Ni, extra +1 as
+						ids: [554],
+						single: { "tais": 1 },
+					},
+				],
 			},
 			// S-51J
 			"326": {
