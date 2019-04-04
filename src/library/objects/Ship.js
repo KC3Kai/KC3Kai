@@ -2125,6 +2125,9 @@ KC3改 Ship Object
 		const isEscort = stype === 1;
 		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
+		// is ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
+		//   but unconfirmed for CVL, AO and Hayasui Kai
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
@@ -2133,7 +2136,9 @@ KC3改 Ship Object
 		const aswThreshold = isEscortLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
-			: isHyuugaKaiNi ? 80 // unknown, guessed from her min asw 68 + 12 (1x helicopter)
+			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
+			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
+			: isHyuugaKaiNi ? 90
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
@@ -2166,14 +2171,17 @@ KC3改 Ship Object
 		}
 
 		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
-		//   but her initial asw too high to verify the lower threshold.
-		if(isHyuugaKaiNi) {
-			return this.countEquipmentType(1, 15) > 1 ||
-				this.countEquipmentType(1, 44) > 0;
+		//   but her initial naked asw too high to verify the lower threshold.
+		// Fusou-class Kai Ni can OASW with 1 Helicopter and asw >= 100.
+		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
+		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
+		//   at least 1 slot of ASW capable aircraft needed.
+		if(isAirAntiSubStype) {
+			return this.countEquipmentType(1, 15) >= 2 ||
+				this.countEquipmentType(1, 44) >= 1;
 		}
 
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
-		// perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
+		// for other ship types who can do ASW with Depth Charge
 		return hasSonar;
 	};
 
@@ -2545,17 +2553,21 @@ KC3改 Ship Object
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
 		// Special Multi-Angle cutins do not need recon plane and probably higher priority
 		if(trySpTypeFirst && isAirSuperiorityBetter) {
-			const isThisHealthyIseClassK2 = [553, 554].includes(this.masterId) && !this.isTaiha();
+			const isThisIseClassK2 = [553, 554].includes(this.masterId);
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
-			if(isThisHealthyIseClassK2 && mainGunCnt > 0) {
+			if(isThisIseClassK2 && mainGunCnt > 0 && !this.isTaiha()) {
 				// Ise-class Kai Ni Zuiun Multi-Angle Attack since 2019-03-27
-				// All seaplane bombers named Zuiun capable?
+				const spZuiunCnt = this.countNonZeroSlotEquipment(
+					// All seaplane bombers named Zuiun capable?
+					[26, 79, 80, 81, 207, 237, 322, 323]
+				);
 				// Zuiun priority to Air/Sea Attack when they are both equipped
-				const spZuiunCnt = this.countNonZeroSlotEquipment([26, 79, 80, 81, 207, 237, 322, 323]);
 				if(spZuiunCnt > 1) return KC3Ship.specialAttackTypeDay(200);
 				// Ise-class Kai Ni Air/Sea Multi-Angle Attack since 2019-03-27
-				// Capable Suisei unconfirmed, db stat > 10?
-				const spSuiseiCnt = this.countNonZeroSlotEquipment([100, 111, 291, 292, 319]);
+				const spSuiseiCnt = this.countNonZeroSlotEquipment(
+					// Only Suisei named 634th Air Group capable?
+					[291, 292, 319]
+				);
 				if(spSuiseiCnt > 1) return KC3Ship.specialAttackTypeDay(201);
 			}
 		}

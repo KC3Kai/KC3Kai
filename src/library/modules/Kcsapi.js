@@ -401,6 +401,7 @@ Previously known as "Reactor"
 			PlayerManager.setConsumables();
 			console.log("Extra Slot unlocked for", sid, ship.name());
 			KC3Network.trigger("Consumables");
+			KC3Network.trigger("Fleet");
 		},
 		
 		"api_req_kaisou/marriage":function(params, response, headers){

@@ -855,15 +855,17 @@
 					const time = attack.cutin >= 0 ? "day" : "yasen";
 					const cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 						: ship.estimateNightAttackType(enemy, true);
-					if (cutinType[1] >= 100 && this.sortieSpecialAttack === true) { continue; }
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
 					let misc = {};
-					if (cutin >= 100) {
-						if (this.sortieSpecialAttack) { continue; }
+					if ([100, 101].includes(cutinType[1])) {
+						if (this.sortieSpecialAttack === true) { continue; }
+						misc = buildSortieSpecialInfo(fleet, cutin[1]);
+					}
+					if ([100, 101].includes(cutin)) {
+						if (this.sortieSpecialAttack === true) { continue; }
 						this.sortieSpecialAttack = true;
-						misc = buildSortieSpecialInfo(fleet, cutin);
 					} 
 					else if (time === "day" && !(thisNode.planeFighters.player[0] === 0 && thisNode.planeFighters.abyssal[0] === 0)) {
 						misc = ship.daySpAttackBaseRate();
@@ -1122,6 +1124,7 @@
 				lbasdef: [],
 				amountofnodes: null,
 			};
+			this.sortieSpecialAttack = null;
 		},
 		
 		/**
