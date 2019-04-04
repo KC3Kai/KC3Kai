@@ -213,6 +213,17 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
+			"319": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 7, "tyku": 3, "houk": 2 },
+					},
+				},
+			},
 			// Re.2001 OR Kai
 			"184": {
 				count: 0,
@@ -275,20 +286,19 @@ KC3改 Equipment Object
 					},
 					{
 						// All CVL/CV/CVB/BBV stars+2 extra +1 los
-						// BBV only applied to Ise K2 for now
-						stypes: [7, 11, 18, 12],
+						stypes: [7, 11, 18, 10],
 						minStars: 2,
 						multiple: { "saku": 1 },
 					},
 					{
 						// All CVL/CV/CVB/BBV stars+4 extra +1 fp, accumulative +1 fp, +1 los
-						stypes: [7, 11, 18, 12],
+						stypes: [7, 11, 18, 10],
 						minStars: 4,
 						multiple: { "houg": 1 },
 					},
 					{
 						// All CVL/CV/CVB/BBV stars+6 extra +1 los, accumulative +1 fp, +2 los
-						stypes: [7, 11, 18, 12],
+						stypes: [7, 11, 18, 10],
 						minStars: 6,
 						multiple: { "saku": 1 },
 					},
@@ -298,7 +308,7 @@ KC3改 Equipment Object
 						// Hiryuu K2  totally +4 fp, +5 los
 						// Souryuu K2 totally +6 fp, +7 los
 						// Ise K2 totally +5 fp, +1 ar, +2 ev, +3 los, multiple part unknown
-						stypes: [7, 11, 18, 12],
+						stypes: [7, 11, 18, 10],
 						minStars: 10,
 						multiple: { "houg": 1, "saku": 1 },
 					},
@@ -423,6 +433,28 @@ KC3改 Equipment Object
 					multiple: { "houg": 3, "houk": 1 },
 				},
 			},
+			// Zuiun Kai Ni (634 Air Group)
+			"322": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 5, "tyku": 2, "tais": 1, "houk": 2 },
+					},
+				},
+			},
+			// Zuiun Kai Ni (634 Air Group / Skilled)
+			"323": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 6, "tyku": 3, "tais": 2, "houk": 3 },
+					},
+				},
+			},
 			// S9 Osprey
 			"304": {
 				count: 0,
@@ -463,6 +495,42 @@ KC3改 Equipment Object
 			},
 			// O Type Observation Autogyro Kai Ni
 			"325": {
+			},
+			// S-51J
+			"326": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "tais": 2, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Hyuuga Kai Ni, extra +1 as, +1 ev
+						ids: [554],
+						single: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+				],
+			},
+			// S-51J Kai
+			"327": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai Ni
+					"2": {
+						remodel: 2,
+						multiple: { "houg": 1, "tais": 3, "houk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Hyuuga Kai Ni, extra +1 fp, +1 as, +1 ev
+						ids: [554],
+						single: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+				],
 			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
@@ -516,6 +584,57 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 35.6cm Twin Gun Mount Kai
+			"328": {
+				count: 0,
+				byClass: {
+					"6": [
+						// Kongou Class
+						{
+							multiple: { "houg": 1 },
+						},
+						// extra +1 fp, +1 ev for Kongou Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+					],
+					// Ise Class
+					"2": {
+						multiple: { "houg": 1 },
+					},
+					// Fusou Class
+					"26": 2,
+				},
+			},
+			// 35.6cm Twin Gun Mount Kai Ni
+			"329": {
+				count: 0,
+				byClass: {
+					"6": [
+						// Kongou Class
+						{
+							multiple: { "houg": 1 },
+						},
+						// extra +1 fp, +1 ev for Kongou Class Kai+
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						// extra +1 fp, +1 aa for Kongou Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+					],
+					// Ise Class
+					"2": {
+						multiple: { "houg": 1 },
+					},
+					// Fusou Class
+					"26": 2,
+				},
+			},
 			// 41cm Triple Gun Mount Kai Ni
 			// https://wikiwiki.jp/kancolle/41cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%E4%BA%8C
 			"290": {
@@ -542,6 +661,11 @@ KC3改 Equipment Object
 						remodel: 2,
 						multiple: { "houg": 1 },
 					},
+				},
+				byShip: {
+					// extra +1 ev for Hyuuga Kai Ni
+					ids: [554],
+					multiple: { "houk": 1 },
 				},
 			},
 			// 41cm Twin Gun Mount Kai Ni
@@ -581,6 +705,16 @@ KC3改 Equipment Object
 					"26": {
 						remodel: 2,
 						multiple: { "houg": 1 },
+					},
+				},
+				byShip: {
+					// extra +1 fp for Hyuuga Kai Ni
+					ids: [554],
+					multiple: { "houg": 1 },
+					// extra +1 fp when synergy with `41cm Triple Gun Mount Kai Ni`
+					synergy: {
+						flags: [ "tripleLargeGunMountK2" ],
+						single: { "houg": 1 },
 					},
 				},
 			},
@@ -1773,6 +1907,8 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
+				// Autogyro and Helicopter
+				if(type2 === 25) return 0.3 * stars;
 				break;
 			case "airstrike":
 				// for normal opening airstrike, only seaplane bomber bonus confirmed
