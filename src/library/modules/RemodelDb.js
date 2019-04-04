@@ -88,7 +88,7 @@
         },
         // does not consume devmat if using blueprint, except:
         // still consumes devmat if converting Suzuya/Kumano K2 to Kou K2,
-        // Kagerou-class K to K2, Ise K to K2
+        // Kagerou-class K to K2, Ise-class K to K2
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 && ![82, 88, 225, 226, 227, 503, 504].includes(ship_id_from);
