@@ -859,11 +859,11 @@
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
 					let misc = {};
-					if ([100, 101].includes(cutinType[1])) {
+					if ([100, 101, 102].includes(cutinType[1])) {
 						if (this.sortieSpecialAttack === true) { continue; }
-						misc = buildSortieSpecialInfo(fleet, cutin[1]);
+						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					}
-					if ([100, 101].includes(cutin)) {
+					if ([100, 101, 102].includes(cutin)) {
 						if (this.sortieSpecialAttack === true) { continue; }
 						this.sortieSpecialAttack = true;
 					} 
