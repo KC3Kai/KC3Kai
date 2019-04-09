@@ -271,7 +271,10 @@ Used by SortieManager
 	 * @param predictedFleets - result of predicted fleets.
 	 */
 	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
-		const checkSortieSpecialAttack = attacks => attacks.some(attack => [100, 101].includes(attack.cutin || attack.ncutin));
+		const checkSortieSpecialAttack = attacks => attacks.some(
+			// special attacks ID ranged in [100, 200), >= 200 used by multi-angle attacks
+			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
+		);
 		const playerMain = predictedFleets.playerMain,
 			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
 		if (flagshipSpecialAttack) {
