@@ -489,7 +489,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, extra +1 as
 						ids: [554],
-						single: { "tais": 1 },
+						multiple: { "tais": 1 },
 					},
 				],
 			},
@@ -507,7 +507,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, extra +1 as
 						ids: [554],
-						single: { "tais": 1 },
+						multiple: { "tais": 1 },
 					},
 				],
 			},
@@ -525,7 +525,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, extra +1 as, +1 ev
 						ids: [554],
-						single: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
 					},
 				],
 			},
@@ -543,7 +543,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, extra +1 fp, +1 as, +1 ev
 						ids: [554],
-						single: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
 					},
 				],
 			},
