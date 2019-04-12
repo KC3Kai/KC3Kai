@@ -272,7 +272,7 @@ KC3改 Equipment Object
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Ise Class Kai Ni
+					// Ise Class Kai Ni, range +1 too, can be extreme long
 					"2": {
 						remodel: 2,
 						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
@@ -983,7 +983,7 @@ KC3改 Equipment Object
 			"314": {
 				count: 0,
 				byClass: {
-					// John C.Butler Class
+					// John C. Butler Class
 					"87": {
 						multiple: { "houg": 1, "raig": 3 },
 						countCap: 2,
@@ -1539,7 +1539,7 @@ KC3改 Equipment Object
 			"313": {
 				count: 0,
 				byClass: {
-					// John C.Butler Class
+					// John C. Butler Class
 					"87": {
 						multiple: { "houg": 2, "tyku": 2, "souk": 1, "houk": 1 },
 					},
@@ -1551,7 +1551,7 @@ KC3改 Equipment Object
 			"308": {
 				count: 0,
 				byClass: {
-					// John C.Butler Class, extra +1 fp from DD stype
+					// John C. Butler Class, totally +2 fp from DD stype
 					"87": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
@@ -1585,7 +1585,7 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
-					// John C.Butler Class
+					// John C. Butler Class
 					"87": "65",
 					// Fletcher Class
 					"91": "65",
@@ -1605,7 +1605,7 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
-					// John C.Butler Class, range from medium to long
+					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
 					},
@@ -1922,7 +1922,7 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Autogyro and Helicopter
+				// Autogyro or Helicopter
 				if(type2 === 25) return 0.3 * stars;
 				break;
 			case "airstrike":
@@ -2167,7 +2167,6 @@ KC3改 Equipment Object
 				this.master().api_houk +
 				// Anti-Bomber is from hit accuracy
 				this.master().api_houm * 2 +
-				// Although no interceptor can be improved for now
 				this.aaStatImprovementBonus()
 			) * Math.sqrt(capacity);
 			
@@ -2274,7 +2273,7 @@ KC3改 Equipment Object
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 10: Seaplane Recon (only capable for ASW support)
 		 * - 11: Seaplane Bomber
-		 * - 25: Autogyro (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
+		 * - 25: Autogyro/Helicopter (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
 		 * - 26: Anti-Sub PBY (CVL shelling incapable, but capable for CVE OASW and CVL ASW support)
 		 * - 41: Large Flying Boat
 		 * - 45: Seaplane Fighter (only capable for ASW support)
@@ -2301,7 +2300,7 @@ KC3改 Equipment Object
 		//   Toukai variants
 		// Dive bombers still NOT capable for OASW, unknown for LBAS:
 		//   Ju87C Kai Ni (w/ KMX) variants
-		// AS-PBY, Autogyro capable for OASW:
+		// AS-PBY, Autogyro/Helicopter capable for OASW:
 		//   https://twitter.com/FlatIsNice/status/966332515681296384
 		// Seaplane Recon capable for LBAS ASW attack:
 		//   Type 0 Model 11B variants
