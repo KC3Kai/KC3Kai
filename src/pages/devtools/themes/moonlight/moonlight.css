@@ -628,9 +628,6 @@ html,body {
 	top:49px;
 	left:5px;
 }
-.module.expeditions3 .timer_box .timer-time {
-	margin:2px 0px 0px -1px;
-}
 
 /* Bottom right expedition window */
 .module.expeditions2 .expeditions {
@@ -3052,8 +3049,8 @@ ABYSS FLEET
 	text-overflow: ellipsis;
 	color:#cdd;
 	float:left;
-	position:absolute;
-	left:16px;
+	position:relative;
+	left:0px;
 }
 .v .module.quests .quest_text {
 	white-space:normal;
@@ -3063,6 +3060,7 @@ ABYSS FLEET
 	word-wrap: break-word;
 	margin:2px 1px 1px 1px;
 	border-bottom: 1px solid #779;
+	position:absolute;
 	left:13px;
 }
 .module.quests .quest_track {
@@ -3097,30 +3095,25 @@ ABYSS FLEET
 	color:#c0c0c0;
 }
 .module.controls .fleet_num {
-	width:30px;
-	line-height:30px;
-	border-radius:8px;
-	background:rgba(50,50,50,1);
+	height:26px;
+	width:20px !important;
+	background:rgba(50,50,90,0.4);
 	text-align:center;
-	margin:0px 5px 3px 0px;
-	font-size:19px;
+	margin:0px 0px 3px 0px;
+	font-size:18px;
 	font-weight:bold;
+	line-height:24px;
 	text-align:center;
-	/*border:1px solid #ccc;*/
+	text-shadow:-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1);
+	border:1px solid #424;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_num.onExped {
-	border:2px solid #707098;
-	line-height:24px;
-}
-.v .module.controls .fleet_num.onExped {
-	border:3px solid #707098;
+	background:rgba(112,112,152,0.7);
 }
 .module.controls .fleet_num.needsSupply {
-	border:2px solid #f00;
-	line-height:24px;
-}
-.v .module.controls .fleet_num.needsSupply {
-	border:3px solid #f00;
+	background:rgba(255,0,0,0.7);
 }
 .module.controls .fleet_num.hasTaiha {
 	animation: taihaPulse 5s infinite;
@@ -3128,34 +3121,50 @@ ABYSS FLEET
 	animation-duration: 2.0s;
 }
 .module.controls .fleet_rengo {
-	width:45px;
-	border-radius:8px;
-	background:rgba(50,50,50,1);
+	height:26px;
+	width:40px;
+	border-radius:0px !important;
+	background:rgba(50,50,90,0.4);
 	text-align:center;
-	margin:0px 5px 3px 0px;
+	margin:0px 0px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
+	border:1px solid #424;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_rengo img {
-	width:43px;
-	height:28px;
-	opacity:0.75;
+	width:34px;
+	height:27px;
+	margin:-3px 0px 0px -3px;
+	filter:invert(90%);
+	-webkit-filter:invert(90%);
+	filter:grayscale(100%);
+	-webkit-filter:grayscale(100%);
+	-webkit-transform: skew(10deg);
 }
 .module.controls .fleet_lbas {
-	width:40px;
-	border-radius:8px;
-	background:rgba(50,50,50,1);
+	height:26px;
+	width:30px;
+	border-radius:0px !important;
+	background:rgba(50,50,90,0.4);
 	text-align:center;
-	margin:0px 5px 3px 0px;
+	margin:0px 0px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
 	text-align:center;
+	border:1px solid #424;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_lbas img {
-	width:30px;
-	height:30px;
-	opacity:0.85;
+	width:28px;
+	height:28px;
+	margin:-2px 0px 0px -2px;
+	-webkit-transform: skew(10deg);
+	filter:drop-shadow(0px 0px 5px #000);
+	-webkit-filter:drop-shadow(0px 0px 1px #000);
 }
 .module.controls .fleet_lbas.badMorale {
 	border:2px solid #faa;
@@ -3174,19 +3183,22 @@ ABYSS FLEET
 	word-spacing:0px;
 	letter-spacing:0px;
 	white-space:nowrap;
-	overflow-x:hidden;
-	overflow-y:hidden;
+	/*overflow-x:hidden;
+	overflow-y:hidden;*/
 }
 .v .module.controls .scrollable {
 	position:absolute;
 	float:left;
-	left:-655px;
+	left:-678px;
 	top:257px;
 }
 .module.controls .scroll_btn {
 	width:0px;
 	height:0px;
 	margin:2px 5px 3px 0px;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
+	display:none;
 }
 .module.controls .scroll_left {
 	border-top:13px solid transparent;
@@ -3211,31 +3223,56 @@ ABYSS FLEET
 	top:257px;
 }
 .module.controls .scroll_left.disabled {
-	border-right:15px solid #333;
+	border-right:15px solid #424;
 }
 .module.controls .scroll_right.disabled {
-	border-left:15px solid #333;
+	border-left:15px solid #424;
 }
 .module.controls .control_btn {
-	width:40px;
-	border-radius:15px;
-	background:rgba(150,150,150,0.7);
-	margin:0px 5px 0px 0px;
+	float:right;
+	line-height:29px;
+	height:26px;
+	width:30px;
+	background:rgba(41,80,110,0.8);
+	margin:0px 0px 0px 0px;
 	text-align:center;
-	overflow:hidden;
-	padding:3px;
+	overflow:visible;
+	padding:1px;
 	display:inline-block;
 	float:initial;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 50%, rgba(200, 200, 255, 0.2) 70%, rgba(200, 200, 255, 0.3) 90%);
+	border:1px solid #424;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .control_btn img {
-	width:34px;
-	height:24px;
+	width:26px;
+	height:20px;
+	margin:-6px 0px 0px 0px;
 	opacity:0.8;
+	-webkit-transform: skew(10deg);
+}
+.module.controls .btn_mute img,
+.module.controls .btn_resize img,
+.module.controls .btn_ss1 img {
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+.module.controls .control_btn.btn_reload_quotes img,
+.module.controls .control_btn.btn_reload_quests img {
+	width:24px;
+	height:24px;
+	margin:-7px 0px 0px 0px;
+}
+.module.controls .btn_export img {
+	object-fit:cover;
+	height:24px;
+	width:27px;
+	margin:-7px 0px 0px -2px;
 }
 .module.controls .control.active {
-	background:#707098;
+	background:#8080a8;
 	color:#fff;
+	height:25px;
 }
 
 /*------- SUMMARY -------*/
@@ -4571,7 +4608,7 @@ ABYSS FLEET
 }
 .v .rotation2 .rotarHidden {
 	left:1017px;
-	top:199px;
+	top:201px;
 }
 .rotation2 .rotarBack {
 	position:absolute;
@@ -4581,7 +4618,7 @@ ABYSS FLEET
 }
 .v .rotation2 .rotarBack {
 	left:1017px;
-	top:217px;
+	top:219px;
 }
 .rotation2 .rotarExpedition {
 	position:absolute;
@@ -4591,7 +4628,7 @@ ABYSS FLEET
 }
 .v .rotation2 .rotarExpedition {
 	left:1017px;
-	top:235px;
+	top:237px;
 }
 .module.status {
 	/*background:rgba(255,80,80,0.4);*/
@@ -4929,11 +4966,23 @@ ABYSS FLEET
 	left:5px; top:168px;
 }
 .h .module.quests {
-	width:190px;
+	width:400px;
+	columns: 2 190px;
+	column-gap: 5px;
+	column-fill: auto;
 	height:120px;
 	left:5px; top:425px;
 	/*border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.3) 98%, rgba(200, 200, 255, 0.5) 99%);*/
+}
+/*.h .module.quests2 {
+	width:197px;
+	height:130px;
+	left:5px; top:425px;
+	overflow:scroll;
+}*/
+::-webkit-scrollbar-corner {
+  background: rgba(0,0,0,0);
 }
 .h .module.quests .quest {
 	width:190px;
@@ -4947,22 +4996,7 @@ ABYSS FLEET
 .h .module.controls {
 	width:340px;
 	height:30px;
-	left:205px; top:3px;
-}
-.h .module.controls .control_btn {
-/*	float:right;*/
-	width:30px;
-	line-height:29px;
-	padding:1px;
-}
-.h .module.controls .control_btn img {
-	width:26px;
-	height:20px;
-}
-.h .module.controls .control_btn.btn_reload_quotes img,
-.h .module.controls .control_btn.btn_reload_quests img {
-	width:22px;
-	height:22px;
+	left:208px; top:17px;
 }
 .h .module.summary {
 	left:5px; top:46px;
@@ -4973,21 +5007,6 @@ ABYSS FLEET
 }
 .h .module.fleet {
 	left:203px; top:46px;
-}
-.h .module.controls .fleet_num {
-	width:23px;
-	line-height:30px;
-	border-radius:5px;
-	margin:0px 2px 3px 0px;
-}
-.h .module.controls .fleet_num.onExped {
-	line-height:26px;
-}
-.h .module.controls .fleet_num.needsSupply {
-	line-height:26px;
-}
-.h .module.controls .fleet_rengo {
-	margin:0px 2px 3px 0px;
 }
 .h .module.controls .scrollable {
 	width:100px;
@@ -5052,7 +5071,7 @@ ABYSS FLEET
 }
 .v .module.controls {
 	width: 250px;
-	left:688px; top:2px;
+	left:688px; top:9px;
 	float:left;
 }
 .v .module.controls .scrollable {
@@ -5068,14 +5087,14 @@ ABYSS FLEET
 .v .module.expeditions2 {
 	width:345px;
 	height:120px;
-	left:688px; top:200px;
+	left:688px; top:202px;
 	border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%);
 }
 .v .module.quests {
 	width:151px;
 	height:120px;
-	left:881px; top:35px;
+	left:881px; top:10px;
 	/*border-radius:5px;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.3) 98%, rgba(200, 200, 255, 0.5) 99%);*/
 }
