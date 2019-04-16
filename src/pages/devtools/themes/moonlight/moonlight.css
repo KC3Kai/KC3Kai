@@ -1127,8 +1127,6 @@ ABYSS FLEET
 	width:24px;
 	height:24px;
 	margin:3px;
-	filter:greyscale(100%);
-	-webkit-filter:greyscale(100%);	
 	filter:invert(75%);
 	-webkit-filter:invert(75%);
 }
@@ -3135,14 +3133,10 @@ ABYSS FLEET
 	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_rengo img {
-	width:34px;
-	height:27px;
-	margin:-3px 0px 0px -3px;
-	filter:invert(90%);
-	-webkit-filter:invert(90%);
-	filter:grayscale(100%);
-	-webkit-filter:grayscale(100%);
+	width:30px;
+	margin:-3px 0px 0px 0px;
 	-webkit-transform: skew(10deg);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_lbas {
 	height:26px;
@@ -3159,18 +3153,18 @@ ABYSS FLEET
 	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_lbas img {
-	width:28px;
-	height:28px;
-	margin:-2px 0px 0px -2px;
+	width:20px;
+	margin:-3px 0px 0px 0px;
 	-webkit-transform: skew(10deg);
 	filter:drop-shadow(0px 0px 5px #000);
-	-webkit-filter:drop-shadow(0px 0px 1px #000);
+	-webkit-filter:drop-shadow(0px 0px 2px #000);
+	-webkit-backface-visibility: hidden;
 }
 .module.controls .fleet_lbas.badMorale {
-	border:2px solid #faa;
+	background:rgba(255,170,170,0.7);
 }
 .module.controls .fleet_lbas.needsSupply {
-	border:2px solid #f00;
+	background:rgba(255,0,0,0.7);
 }
 .module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
@@ -3178,7 +3172,7 @@ ABYSS FLEET
 }
 .module.controls .scrollable {
 	height:38px;
-	margin:0px 5px 3px 0px;
+	margin:-14px 0px 0px 0px;
 	font-size:0px;
 	word-spacing:0px;
 	letter-spacing:0px;
@@ -3187,6 +3181,7 @@ ABYSS FLEET
 	overflow-y:hidden;*/
 }
 .v .module.controls .scrollable {
+	margin:0px 5px 3px 0px;
 	position:absolute;
 	float:left;
 	left:-678px;
@@ -3246,33 +3241,68 @@ ABYSS FLEET
 }
 .module.controls .control_btn img {
 	width:26px;
-	height:20px;
 	margin:-6px 0px 0px 0px;
-	opacity:0.8;
 	-webkit-transform: skew(10deg);
+	-webkit-backface-visibility: hidden;
+}
+.module.controls .btn_mute {
+	margin:0px 0px 0px 1px;
 }
 .module.controls .btn_mute img,
 .module.controls .btn_resize img,
 .module.controls .btn_ss1 img {
-	filter:invert(100%);
-	-webkit-filter:invert(100%);
+	filter:invert(80%);
+	-webkit-filter:invert(80%);
 }
 .module.controls .control_btn.btn_reload_quotes img,
 .module.controls .control_btn.btn_reload_quests img {
 	width:24px;
-	height:24px;
 	margin:-7px 0px 0px 0px;
 }
 .module.controls .btn_export img {
-	object-fit:cover;
-	height:24px;
 	width:27px;
 	margin:-7px 0px 0px -2px;
 }
 .module.controls .control.active {
 	background:#8080a8;
 	color:#fff;
-	height:25px;
+}
+.module.controls .control_line {
+	height:41px;
+	width:150px;
+	float:left;
+	z-index:2;
+	position:absolute;
+	top:-14px;
+	left:1px;
+	border-bottom:2px solid #305050;	
+	border-right:2px solid #305050;
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
+	pointer-events: none;
+}
+.v .module.controls .control_line {
+	border-bottom:2px solid #424;	
+	border-right:0px solid rgba(0,0,0,0);
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
+}
+.module.controls .control_line2 {
+	height:35px;
+	width:180px;
+	float:left;
+	z-index:2;
+	position:absolute;
+	top:-14px;
+	left:150px;
+	border-top:2px solid #305050;
+	/*border-bottom:2px solid #307050;*/
+	-webkit-transform: skew(-10deg);
+	-webkit-backface-visibility: hidden;
+	pointer-events: none;
+}
+.v .module.controls .control_line2 {
+	display:none;
 }
 
 /*------- SUMMARY -------*/
@@ -5071,7 +5101,7 @@ ABYSS FLEET
 }
 .v .module.controls {
 	width: 250px;
-	left:688px; top:9px;
+	left:691px; top:9px;
 	float:left;
 }
 .v .module.controls .scrollable {
