@@ -47,7 +47,11 @@
   KC3ImageExport.prototype.saveDownload = function () {
     const { composeDownloadPath, download } = KC3ImageExport;
 
-    const path = composeDownloadPath(this.dir, this.filename, this.format);
+    const path = composeDownloadPath(
+        this.dir.toSafeFilename(undefined, true),
+        this.filename.toSafeFilename(),
+        this.format
+    );
 
     return this.imageData.toUrl()
       .then(download.bind(null, path));
