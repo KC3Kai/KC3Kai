@@ -40,9 +40,13 @@
 
 					chrome.downloads.download({
 						url: objurl,
-						filename: ConfigManager.ss_directory+'/Backup/'+
-						"["+PlayerManager.hq.name+"] "+
-						dateFormat("yyyy-mm-dd")+".kc3data",
+						filename: (
+							ConfigManager.ss_directory.toSafeFilename(undefined, true) +
+							'/Backup/' +
+							("[" + PlayerManager.hq.name + "] " +
+								dateFormat("yyyy-mm-dd")).toSafeFilename() +
+							".kc3data"
+						),
 						conflictAction: "uniquify"
 					}, function(downloadId){
 					});

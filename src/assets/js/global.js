@@ -303,6 +303,31 @@ String.prototype.toCamelCase = function(isToUpper) {
 };
 
 /**
+ * Replace illegal chars with safe char to make a filename-safe string.
+ * @param replacement - a string used to replace unsafe char, "-" by default.
+ * @param isPathAllowed - allow directory separator: '/', '\'.
+ *
+ * All potential problemtic chars for `saveAs` API will be replaced with '-',
+ * but for `chrome.downloads` API, runtime.lastError `Invalid filename` will be set instead,
+ * even they are safe for the file system of some platforms,
+ * about illegal chars defined by Chromium, see `IllegalCharacters::IllegalCharacters()` at
+ *   https://github.com/chromium/chromium/blob/master/base/i18n/file_util_icu.cc
+ */
+String.prototype.toSafeFilename = function(replacement, isPathAllowed) {
+	if(replacement == undefined) replacement = "-";
+	var filenameReservedReg = !!isPathAllowed ?
+		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"]/g :
+		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"\/\\]|^[.]|[.]$/g;
+	// These names not allowed on Windows platform, something like `nul.zip` neither,
+	// Chromium denies them even on other platforms, so does for: device.*, desktop.ini, thumbs.db
+	// see https://github.com/chromium/chromium/blob/master/net/base/filename_util.cc
+	var win32ReservedNames = /^((CON|PRN|AUX|NUL|CLOCK\$|COM[1-9]|LPT[1-9])(\..*)?|device(\..*)?|desktop.ini|thumbs.db)$/i;
+	if(!isPathAllowed && win32ReservedNames.test(this))
+		return (replacement || "_") + this.replace(filenameReservedReg, replacement);
+	return this.replace(filenameReservedReg, replacement);
+};
+
+/**
  * Pad the current string with a given string (repeated, if needed)
  * so that the resulting string reaches a given length.
  * @see https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
