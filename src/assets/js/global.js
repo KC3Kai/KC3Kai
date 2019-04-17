@@ -310,7 +310,7 @@ String.prototype.toCamelCase = function(isToUpper) {
  * All potential problemtic chars for `saveAs` API will be replaced with '-',
  * but for `chrome.downloads` API, runtime.lastError `Invalid filename` will be set instead,
  * even they are safe for the file system of some platforms,
- * about illegal chars defined in chromium, see `IllegalCharacters::IllegalCharacters()` at
+ * about illegal chars defined by Chromium, see `IllegalCharacters::IllegalCharacters()` at
  *   https://github.com/chromium/chromium/blob/master/base/i18n/file_util_icu.cc
  */
 String.prototype.toSafeFilename = function(replacement, isPathAllowed) {
@@ -319,9 +319,9 @@ String.prototype.toSafeFilename = function(replacement, isPathAllowed) {
 		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"]/g :
 		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"\/\\]|^[.]|[.]$/g;
 	// These names not allowed on Windows platform, something like `nul.zip` neither,
-	// chromium deny them even for other platforms, and either for: device.*, desktop.ini, thumbs.db
+	// Chromium denies them even on other platforms, so does for: device.*, desktop.ini, thumbs.db
 	// see https://github.com/chromium/chromium/blob/master/net/base/filename_util.cc
-	var win32ReservedNames = /^((CON|PRN|AUX|NUL|CLOCK\$|COM[0-9]|lLPT[0-9])(\..*$)?|device(\..*$)?|desktop.ini|thumbs.db)$/i;
+	var win32ReservedNames = /^((CON|PRN|AUX|NUL|CLOCK\$|COM[1-9]|LPT[1-9])(\..*)?|device(\..*)?|desktop.ini|thumbs.db)$/i;
 	if(!isPathAllowed && win32ReservedNames.test(this))
 		return (replacement || "_") + this.replace(filenameReservedReg, replacement);
 	return this.replace(filenameReservedReg, replacement);
