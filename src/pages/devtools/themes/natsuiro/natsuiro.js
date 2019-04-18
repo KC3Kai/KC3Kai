@@ -1426,7 +1426,7 @@
 							&& (!ConfigManager.alert_taiha_ignore_unlock_ships || shipObj.lock);
 					})
 				// if not disabled at Home Port
-				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport)
+				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport);
 
 			if (taihaCheck) {
 				if(ConfigManager.alert_taiha_panel){

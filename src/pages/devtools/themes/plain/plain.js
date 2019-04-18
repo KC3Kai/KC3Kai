@@ -1047,7 +1047,7 @@
 						&& shipObj.isTaiha()
 						&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0)
 						&& (!ConfigManager.alert_taiha_ignore_unlock_ships || shipObj.lock);
-				})
+				});
 
 			if (taihaCheck) {
 				if(ConfigManager.alert_taiha){
