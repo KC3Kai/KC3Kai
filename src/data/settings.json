@@ -699,6 +699,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_taiha_ignore_unlock_ships",
+				"name" : "SettingsDisableUnlockShips",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_taiha_blur",
 				"name" : "SettingsScreenBlur",
 				"type" : "check",

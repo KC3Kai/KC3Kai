@@ -1405,24 +1405,30 @@
 
 			// TAIHA ALERT CHECK
 			// if not PvP and Taiha alert setting is enabled
-			if(ConfigManager.alert_taiha && !KC3SortieManager.isPvP() &&
-				PlayerManager.fleets.filter((obj, i) => {
+			const taihaCheck = ConfigManager.alert_taiha
+				&& !KC3SortieManager.isPvP()
+				&& PlayerManager.fleets
+					.filter((obj, i) => {
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
 						return !so || ((cf && fs === 1) ? i <= 1 : i == fs - 1);
 					})
-					.map    ((fleetObj) => fleetObj.ships.slice(1))    // Convert to non-flagship ID arrays
-					.reduce ((acc, arr) => acc.concat(arr))            // Join IDs into an array
-					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
-					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
-					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
-						return !shipObj.isAbsent() && shipObj.isTaiha()
-							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
+					.map((fleetObj) => fleetObj.ships.slice(1))  // Convert to non-flagship ID arrays
+					.reduce((acc, arr) => acc.concat(arr))       // Join IDs into an array
+					.filter((shipId) => shipId > 0)              // Remove ID -1
+					.map((shipId) => KC3ShipManager.get(shipId)) // Convert to Ship instance
+					.some((shipObj) => {
+						// Check if any ship is Taiha, not flee, no damecon found
+						return !shipObj.isAbsent()
+							&& shipObj.isTaiha()
+							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0)
+							&& (!ConfigManager.alert_taiha_ignore_unlock_ships || shipObj.lock);
 					})
 				// if not disabled at Home Port
 				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport)
-			) {
+
+			if (taihaCheck) {
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
 					if(critAnim){ clearInterval(critAnim); }
