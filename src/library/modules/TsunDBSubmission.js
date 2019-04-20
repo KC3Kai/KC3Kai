@@ -206,7 +206,18 @@
 			result: null,
 			success: null
 		},
+		lolimodfod: {
+			shipid: null,
+			shiplvl: null,
+			modids: null,
+			modlvls: null,
+
+			modbefore: null,
+			modafter: null,
+			modleft: null
+		},
 		handlers : {},
+		networkListener: false,
 		mapInfo : [],
 		currentMap : [0, 0],
 		
@@ -253,12 +264,26 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Debuff gimmick check
-				'api_port/port': this.processGimmick
+				'api_port/port': [this.processGimmick, this.addListener],
+
+				'Modernize': this.processModernize
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
 			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
 		},
 		
+		addListener: function() {
+			if(!this.networkListener) {
+				this.networkListener = true;
+				const handlers = this.handlers;
+
+				KC3Network.addGlobalListener(function(event, data) {
+					if(handlers[event] != undefined)
+						handlers[event](data);
+				});
+			}
+		},
+
 		processMapInfo: function(http) {
 			this.mapInfo = $.extend(true, [], http.response.api_data.api_map_info);
 		},
@@ -917,7 +942,29 @@
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
 		},
-		
+
+		processModernize: function(data) {
+			const ship = KC3ShipManager.get(data.rosterId);
+			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
+
+			// DE mod filter
+			if (modFod.filter((s) => s.api_stype == 1).length == 0)
+				return;
+
+			this.lolimodfod = {
+				shipid: ship.masterId,
+				shiplvl: ship.level,
+				modids: data.consumedMasterIds,
+				modlvls: data.consumedMasterLevels,
+	
+				modbefore: data.oldMod,
+				modafter: data.newMod,
+				modleft: data.left
+			};
+			//console.debug(this.lolimodfod);
+			this.sendData(this.lolimodfod, 'lolimodfod');
+		},
+
 		handleFleet: function(fleet) {
 			// Update fleet minimal speed
 			fleet.speed();
@@ -946,7 +993,7 @@
 				if(gf.updateTime + 3 > currentHour) // Cache for ~3h
 					return;
 			}
-			const dataSourceUrl = `https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
+			const dataSourceUrl = `https://raw.githubusercontent.com/Tibowl/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
 			$.getJSON(dataSourceUrl, newGunfitData => {
 				if(callback) callback(newGunfitData);
 				localStorage.tsundb_gunfits = JSON.stringify({

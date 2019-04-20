@@ -2266,26 +2266,14 @@ Previously known as "Reactor"
 		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
-			// Remove consumed ships and their equipment
-			var consumed_ids = params.api_id_items;
-			$.each(consumed_ids.split("%2C"), function(index, element){
-				KC3ShipManager.remove(element);
-				KC3Network.trigger("ShipSlots");
-				KC3Network.trigger("GearSlots");
-			});
-			
-			// Check if successful modernization
-			if(response.api_data.api_powerup_flag==1){
-				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
-				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
-				KC3Network.trigger("Quests");
-			}
+			const consumed_ids = params.api_id_items;
+			const consumedShips = consumed_ids.split("%2C").map((id) => KC3ShipManager.get(id));
 			
 			// Activity Notification
-			var NewShipRaw = response.api_data.api_ship;
-			var OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
-			var MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
-			var newShipMod = NewShipRaw.api_kyouka;
+			const NewShipRaw = response.api_data.api_ship;
+			const OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
+			const MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
+			const newShipMod = NewShipRaw.api_kyouka;
 			
 			KC3Network.trigger("Modernize", {
 				rosterId: response.api_data.api_ship.api_id,
@@ -2315,9 +2303,27 @@ Previously known as "Reactor"
 					MasterShip.api_luck[1] - (MasterShip.api_luck[0] + newShipMod[4]),
 					OldShipObj.maxHp(true) - (OldShipObj.hp[1] - OldShipObj.mod[5] + newShipMod[5]),
 					OldShipObj.maxAswMod() - (OldShipObj.nakedAsw() - OldShipObj.mod[6] + newShipMod[6])
-				]
+				],
+				oldMod: OldShipObj.mod,
+				newMod: newShipMod,
+				consumedMasterIds: consumedShips.map((s) => s.masterId),
+				consumedMasterLevels: consumedShips.map((s) => s.level)
 			});
 			
+			// Remove consumed ships and their equipment
+			$.each(consumed_ids.split("%2C"), function(index, element){
+				KC3ShipManager.remove(element);
+				KC3Network.trigger("ShipSlots");
+				KC3Network.trigger("GearSlots");
+			});
+
+			// Check if successful modernization
+			if(response.api_data.api_powerup_flag==1){
+				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
+				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
+				KC3Network.trigger("Quests");
+			}
+
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();
 			
