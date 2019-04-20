@@ -2822,31 +2822,28 @@ ABYSS FLEET
 
 }
 .module.quests .quest {
-	height:20px;
-	line-height:20px;
+	height:18px;
+	line-height:18px;
 }
-.module.quests  .quest.complete {
+.module.quests .quest.complete {
 	background:rgba(0,255,0,0.25);
 }
 
 .module.quests .quest_color {
 	width:14px;
 	height:14px;
-	margin:3px;
+	margin:2px;
 	background:#555;
 	float:left;
-	line-height:normal;
-	text-align:center;
 }
 .module.quests .quest.complete .quest_color {
-	width:16px;
-	height:16px;
+	width:14px;
+	height:14px;
 	line-height:12px;
 	font-size:10px;
 	margin:2px;
 	background:#555;
 	float:left;
-	line-height:normal;
 	text-align:center;
 	border:2px solid #0f0;
 	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
@@ -2854,7 +2851,6 @@ ABYSS FLEET
 
 .module.quests .quest_text {
 	width:130px;
-	height:20px;
 	float:left;
 	font-size:11px;
 	white-space:nowrap;
@@ -2865,7 +2861,8 @@ ABYSS FLEET
 
 .module.quests .quest_track {
 	width:40px;
-	height:18px;
+	height:16px;
+	line-height:16px;
 	margin:1px 0px;
 	background:rgba(60,60,60,0.7);
 	font-size:12px;
@@ -4106,8 +4103,8 @@ ABYSS FLEET
 }
 .h .module.quests {
 	width:190px;
-	height:120px;
-	left:5px; top:325px;
+	height:126px;
+	left:5px; top:322px;
 }
 .h .module.quests .quest {
 	width:190px;
@@ -4205,8 +4202,8 @@ ABYSS FLEET
 }
 .v .module.quests {
 	width:240px;
-	height:120px;
-	left:555px; top:200px;
+	height:126px;
+	left:555px; top:196px;
 }
 .v .module.quests .quest {
 	width:240px;

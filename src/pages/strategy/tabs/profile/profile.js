@@ -1002,7 +1002,7 @@
 				type,
 				" ", new Date().format("yyyy-mm-dd"),
 				".", ext
-			].join("");
+			].join("").toSafeFilename();
 		},
 		
 		saveFile: function(filename, data, type){

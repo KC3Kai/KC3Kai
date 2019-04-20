@@ -468,7 +468,7 @@
 				"options" : {
 					"placeholder" : "SettingsSSDirDesc",
 					"tooltip" : "SettingsSSDirDesc",
-					"invalidregexp" : "(?:^[\\\\/]|[\\\\/]\\.\\.?|\\.\\.?[\\\\/]|[\\\\/]{2,}|[?*:\"<>|])"
+					"invalidregexp" : "(?:^[\\\\/]|[\\\\/]\\.\\.?|\\.\\.?[\\\\/]|[\\\\/]{2,}|[?*:~\"<>|\\x00]|[\\\\/]$)"
 				}
 			},
 			{
