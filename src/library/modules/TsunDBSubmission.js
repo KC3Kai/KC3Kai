@@ -946,9 +946,12 @@
 		processModernize: function(data) {
 			const ship = KC3ShipManager.get(data.rosterId);
 			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
+			const deCount = modFod.filter((s) => s.api_stype == 1).length;
+			const mizuhoKamoiCount = modFod.filter((s) => [62, 72].indexOf(s.api_ctype)).length;
+			const isMizuhoKamoiHPAble = [72, 62, 41, 37].indexOf(ship.master().api_ctype) >= 0;
 
-			// DE mod filter
-			if (modFod.filter((s) => s.api_stype == 1).length == 0)
+			// DE / Mizuho/Kamoi mod filter
+			if (deCount == 0 && !(isMizuhoKamoiHPAble && mizuhoKamoiCount > 0))
 				return;
 
 			this.lolimodfod = {
