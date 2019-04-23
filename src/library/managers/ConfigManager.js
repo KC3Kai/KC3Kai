@@ -120,6 +120,7 @@ Retrieves when needed to apply on components
 				alert_taiha_panel    : true,
 				alert_taiha_homeport : false,
 				alert_taiha_damecon  : false,
+				alert_taiha_unlock   : false,
 				alert_taiha_noanim   : false,
 
 				api_translation   : true,
