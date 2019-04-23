@@ -217,7 +217,7 @@
 			modleft: null
 		},
 		handlers : {},
-		networkListener: false,
+		isListenerRegistered: false,
 		mapInfo : [],
 		currentMap : [0, 0],
 		
@@ -264,7 +264,7 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Debuff gimmick check
-				'api_port/port': [this.processGimmick, this.initNetworkListener],
+				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener],
 
 				'Modernize': this.processModernizeEvent
 			};
@@ -272,11 +272,20 @@
 			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
 		},
 		
-		initNetworkListener: function() {
-			if(!this.networkListener) {
-				this.networkListener = true;
+		lazyInitNetworkListener: function() {
+			if(!this.isListenerRegistered) {
+				this.isListenerRegistered = true;
+				/**
+				 * Lazy register to KC3Network global listener
+				 * @param event - the triggered event name.
+				 * @param data - the data object built by Kcsapi handler, {} by default.
+				 */
 				KC3Network.addGlobalListener((event, data) => {
-					if(this.handlers[event]) this.handlers[event](data);
+					const eventHandler = this.handlers[event];
+					if(Array.isArray(eventHandler))
+						eventHandler.forEach(h => h && h.call(this, data));
+					else if(typeof eventHandler === "function")
+						eventHandler.call(this, data);
 				});
 			}
 		},
@@ -941,8 +950,9 @@
 		},
 
 		/**
-		 * CAUTION: This will be called from KC3Network listener,
-		 * so `this` doesn't reference to TsunDBSubmission, but to KC3Network.
+		 * This will be called from KC3Network listener,
+		 * when an event is triggered by a Kcsapi handler.
+		 * @param data - the data instance including mod ship and fodders.
 		 */
 		processModernizeEvent: function(data) {
 			const ship = KC3ShipManager.get(data.rosterId);
@@ -957,23 +967,24 @@
 			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
 			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
 
-			// DE / Mizuho/Kamoi mod filter
+			// DE / Mizuho / Kamoi mod filter
 			if (deCount === 0 &&
-				!(isMizuhoHPAble && mizuhoCount >= 2) && !(isKamoiHPAble && kamoiCount >= 2)
+				!(isMizuhoHPAble && mizuhoCount >= 2) &&
+				!(isKamoiHPAble && kamoiCount >= 2)
 			) return;
 
-			TsunDBSubmission.lolimodfod = {
+			this.lolimodfod = {
 				shipid: ship.masterId,
 				shiplvl: ship.level,
 				modids: data.consumedMasterIds,
 				modlvls: data.consumedMasterLevels,
-	
+
 				modbefore: data.oldMod,
 				modafter: data.newMod,
 				modleft: data.left
 			};
-			//console.debug(TsunDBSubmission.lolimodfod);
-			TsunDBSubmission.sendData(TsunDBSubmission.lolimodfod, 'lolimodfod');
+			//console.debug(this.lolimodfod);
+			this.sendData(this.lolimodfod, 'lolimodfod');
 		},
 
 		handleFleet: function(fleet) {

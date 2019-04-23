@@ -2269,7 +2269,7 @@ Previously known as "Reactor"
 			const consumedShipIds = params.api_id_items.split("%2C");
 			const consumedShips = consumedShipIds.map(id => KC3ShipManager.get(id));
 			
-			// To trigger panel activity notification, and TsuDB data submission
+			// To trigger panel activity notification, and TsunDB data submission
 			const NewShipRaw = response.api_data.api_ship;
 			const OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
 			const MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
