@@ -206,7 +206,18 @@
 			result: null,
 			success: null
 		},
+		lolimodfod: {
+			shipid: null,
+			shiplvl: null,
+			modids: null,
+			modlvls: null,
+
+			modbefore: null,
+			modafter: null,
+			modleft: null
+		},
 		handlers : {},
+		networkListener: false,
 		mapInfo : [],
 		currentMap : [0, 0],
 		
@@ -253,10 +264,21 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Debuff gimmick check
-				'api_port/port': this.processGimmick
+				'api_port/port': [this.processGimmick, this.initNetworkListener],
+
+				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
 			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+		},
+		
+		initNetworkListener: function() {
+			if(!this.networkListener) {
+				this.networkListener = true;
+				KC3Network.addGlobalListener((event, data) => {
+					if(this.handlers[event]) this.handlers[event](data);
+				});
+			}
 		},
 		
 		processMapInfo: function(http) {
@@ -917,7 +939,43 @@
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
 		},
-		
+
+		/**
+		 * CAUTION: This will be called from KC3Network listener,
+		 * so `this` doesn't reference to TsunDBSubmission, but to KC3Network.
+		 */
+		processModernizeEvent: function(data) {
+			const ship = KC3ShipManager.get(data.rosterId);
+			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
+
+			// Checks in `main.js#RemodelUtil.calcPowerUpParams`
+			const deCount = modFod.filter((s) => s.api_stype === 1).length;
+
+			const mizuhoCount = modFod.filter((s) => s.api_ctype === 62).length;
+			const isMizuhoHPAble = [62, 72].includes(ship.master().api_ctype);
+
+			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
+			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
+
+			// DE / Mizuho/Kamoi mod filter
+			if (deCount === 0 &&
+				!(isMizuhoHPAble && mizuhoCount >= 2) && !(isKamoiHPAble && kamoiCount >= 2)
+			) return;
+
+			TsunDBSubmission.lolimodfod = {
+				shipid: ship.masterId,
+				shiplvl: ship.level,
+				modids: data.consumedMasterIds,
+				modlvls: data.consumedMasterLevels,
+	
+				modbefore: data.oldMod,
+				modafter: data.newMod,
+				modleft: data.left
+			};
+			//console.debug(TsunDBSubmission.lolimodfod);
+			TsunDBSubmission.sendData(TsunDBSubmission.lolimodfod, 'lolimodfod');
+		},
+
 		handleFleet: function(fleet) {
 			// Update fleet minimal speed
 			fleet.speed();
@@ -946,7 +1004,7 @@
 				if(gf.updateTime + 3 > currentHour) // Cache for ~3h
 					return;
 			}
-			const dataSourceUrl = `https://raw.githubusercontent.com/Tibo442/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
+			const dataSourceUrl = `https://raw.githubusercontent.com/Tibowl/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
 			$.getJSON(dataSourceUrl, newGunfitData => {
 				if(callback) callback(newGunfitData);
 				localStorage.tsundb_gunfits = JSON.stringify({
