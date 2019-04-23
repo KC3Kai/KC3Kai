@@ -613,6 +613,11 @@ KC3改 Equipment Object
 							remodel: 1,
 							multiple: { "houg": 1, "houk": 1 },
 						},
+						// extra +1 fp, +1 tp for Kongou Kai Ni C
+						{
+							remodel: 3,
+							multiple: { "houg": 1, "raig": 1 },
+						},
 					],
 					// Ise Class
 					"2": {
@@ -640,6 +645,11 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "houg": 1, "tyku": 1 },
+						},
+						// extra +1 fp, +2 tp for Kongou Kai Ni C
+						{
+							remodel: 3,
+							multiple: { "houg": 1, "raig": 2 },
 						},
 					],
 					// Ise Class
@@ -745,11 +755,18 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class Kai Ni
-					"6": {
-						remodel: 2,
-						multiple: { "houg": 1, "souk": 1, "houk": -3 },
-					},
+					"6": [
+						// Kongou Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "souk": 1, "houk": -3 },
+						},
+						// no bonus for Kongou Kai Ni C
+						{
+							remodel: 3,
+							multiple: { "houg": -1, "souk": -1, "houk": 3 },
+						},
+					],
 				},
 			},
 			// 16inch Mk.I Triple Gun Mount + AFCT Kai
@@ -764,11 +781,18 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class Kai Ni
-					"6": {
-						remodel: 2,
-						multiple: { "houg": 1, "souk": 1, "houk": -3 },
-					},
+					"6": [
+						// Kongou Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "souk": 1, "houk": -3 },
+						},
+						// no bonus for Kongou Class Kai Ni C
+						{
+							remodel: 3,
+							multiple: { "houg": -1, "souk": -1, "houk": 3 },
+						},
+					],
 				},
 			},
 			// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284
@@ -783,11 +807,18 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					// Kongou Class Kai Ni
-					"6": {
-						remodel: 2,
-						multiple: { "houg": 1, "souk": 1, "houk": -3 },
-					},
+					"6": [
+						// Kongou Class Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "souk": 1, "houk": -3 },
+						},
+						// no bonus for Kongou Class Kai Ni C
+						{
+							remodel: 3,
+							multiple: { "houg": -1, "souk": -1, "houk": 3 },
+						},
+					],
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -954,6 +985,24 @@ KC3改 Equipment Object
 					// Akizuki Class (not only Kai?)
 					"54": {
 						multiple: { "raig": 1 },
+						countCap: 2,
+					},
+				},
+			},
+			// 53cm Twin Torpedo Mount
+			// https://wikiwiki.jp/kancolle/53cm%E9%80%A3%E8%A3%85%E9%AD%9A%E9%9B%B7
+			"174": {
+				count: 0,
+				byClass: {
+					// Kamikaze Class
+					"66": {
+						multiple: { "raig": 1, "houk": 2 },
+						countCap: 2,
+					},
+					// Kongou Kai Ni C
+					"8": {
+						remodel: 3,
+						multiple: { "raig": 6, "houk": 3 },
 						countCap: 2,
 					},
 				},

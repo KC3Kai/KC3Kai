@@ -52,10 +52,12 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder.prototype._getRequiredDevkitNum
         calcDevMat: function(steel, ship_id_from) {
             switch(ship_id_from) {
-                case 82: // Ise
+                case 82: // Ise Kai
                     return 80;
-                case 88: // Hyuuga
+                case 88: // Hyuuga Kai
                     return 181;
+                case 149: // Kongou K2
+                    return 300;
                 case 213: // Tenryuu
                     return 24;
                 case 214: // Tatsuta
@@ -91,7 +93,7 @@
         // Kagerou-class K to K2, Ise-class K to K2
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
-            return blueprint_count > 0 && ![82, 88, 225, 226, 227, 503, 504].includes(ship_id_from);
+            return blueprint_count > 0 && ![82, 88, 149, 225, 226, 227, 503, 504].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -126,11 +128,13 @@
             }
         },
         // hard-coded new consumption 'New Artillery Material' since 2018-02-16
-        // see: main.js#ShipUpgradeModel.newkohohesosizai
+        // see: main.js#ShipUpgradeModel.prototype.newhokohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
                 case 148: // Musashi K2
                     return 3;
+                case 149: // Kongou K2C
+                    return 2;
                 default: return 0;
             }
         },
