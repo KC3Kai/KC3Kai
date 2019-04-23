@@ -1502,7 +1502,7 @@ Previously known as "Reactor"
 				data     = response.api_data,
 				material = data.api_material,
 				consume  = [0,0,0,0],
-				bonuses  = data.api_bounus;
+				bonuses  = data.api_bounus || [];
 			console.log("Quest clear", quest, data);
 			
 			// Force to mark quest as complete
