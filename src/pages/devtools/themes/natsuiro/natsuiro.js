@@ -1403,12 +1403,13 @@
 				$(".activity_basic .expeditions").createChildrenTooltips();
 			}
 
-			// TAIHA ALERT CHECK
-			// if not PvP and Taiha alert setting is enabled
-			const taihaCheck = ConfigManager.alert_taiha
+			// TAIHA ALERT CONDITIONS CHECK
+				// is Taiha alert setting enabled?
+			const isTaihaToBeAlerted = ConfigManager.alert_taiha
+				// not PvP?
 				&& !KC3SortieManager.isPvP()
-				&& PlayerManager.fleets
-					.filter((obj, i) => {
+				// check states of fleet members
+				&& PlayerManager.fleets.filter((obj, i) => {
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
@@ -1419,16 +1420,16 @@
 					.filter((shipId) => shipId > 0)              // Remove ID -1
 					.map((shipId) => KC3ShipManager.get(shipId)) // Convert to Ship instance
 					.some((shipObj) => {
-						// Check if any ship is Taiha, not flee, no damecon found
+						// if any ship is Taiha, but not flee / no damecon found / locked?
 						return !shipObj.isAbsent()
 							&& shipObj.isTaiha()
 							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0)
-							&& (!ConfigManager.alert_taiha_ignore_unlock_ships || shipObj.lock);
+							&& (!ConfigManager.alert_taiha_unlock || !!shipObj.lock);
 					})
-				// if not disabled at Home Port
+				// not disabled at Home Port?
 				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport);
 
-			if (taihaCheck) {
+			if(isTaihaToBeAlerted){
 				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
 					if(critAnim){ clearInterval(critAnim); }

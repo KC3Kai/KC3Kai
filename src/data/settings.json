@@ -699,7 +699,7 @@
 				"options" : {}
 			},
 			{
-				"id" : "alert_taiha_ignore_unlock_ships",
+				"id" : "alert_taiha_unlock",
 				"name" : "SettingsDisableUnlockShips",
 				"type" : "check",
 				"options" : {}
