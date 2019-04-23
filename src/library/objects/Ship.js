@@ -218,9 +218,9 @@ KC3改 Ship Object
 	KC3Ship.prototype.rangeName = function(){ return KC3Meta.shipRange(this.range); };
 	KC3Ship.getMarriedLevel = function(){ return 100; };
 	KC3Ship.getMaxLevel = function(){ return 175; };
-	// hard-coded at `Core.swf/vo.UserShipData.VHP`
+	// hard-coded at `Core.swf/vo.UserShipData.VHP` / `main.js#ShipModel.prototype.VHP`
 	KC3Ship.getMaxHpModernize = function() { return 2; };
-	// hard-coded at `Core.swf/vo.UserShipData.VAS`
+	// hard-coded at `Core.swf/vo.UserShipData.VAS` / `main.js#ShipModel.prototype.VAS`
 	KC3Ship.getMaxAswModernize = function() { return 9; };
 	KC3Ship.prototype.isMarried = function(){ return this.level >= KC3Ship.getMarriedLevel(); };
 	KC3Ship.prototype.levelClass = function(){

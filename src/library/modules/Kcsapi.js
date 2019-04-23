@@ -1502,7 +1502,7 @@ Previously known as "Reactor"
 				data     = response.api_data,
 				material = data.api_material,
 				consume  = [0,0,0,0],
-				bonuses  = data.api_bounus;
+				bonuses  = data.api_bounus || [];
 			console.log("Quest clear", quest, data);
 			
 			// Force to mark quest as complete
@@ -2266,26 +2266,14 @@ Previously known as "Reactor"
 		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
-			// Remove consumed ships and their equipment
-			var consumed_ids = params.api_id_items;
-			$.each(consumed_ids.split("%2C"), function(index, element){
-				KC3ShipManager.remove(element);
-				KC3Network.trigger("ShipSlots");
-				KC3Network.trigger("GearSlots");
-			});
+			const consumedShipIds = params.api_id_items.split("%2C");
+			const consumedShips = consumedShipIds.map(id => KC3ShipManager.get(id));
 			
-			// Check if successful modernization
-			if(response.api_data.api_powerup_flag==1){
-				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
-				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
-				KC3Network.trigger("Quests");
-			}
-			
-			// Activity Notification
-			var NewShipRaw = response.api_data.api_ship;
-			var OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
-			var MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
-			var newShipMod = NewShipRaw.api_kyouka;
+			// To trigger panel activity notification, and TsunDB data submission
+			const NewShipRaw = response.api_data.api_ship;
+			const OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
+			const MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
+			const newShipMod = NewShipRaw.api_kyouka;
 			
 			KC3Network.trigger("Modernize", {
 				rosterId: response.api_data.api_ship.api_id,
@@ -2315,8 +2303,27 @@ Previously known as "Reactor"
 					MasterShip.api_luck[1] - (MasterShip.api_luck[0] + newShipMod[4]),
 					OldShipObj.maxHp(true) - (OldShipObj.hp[1] - OldShipObj.mod[5] + newShipMod[5]),
 					OldShipObj.maxAswMod() - (OldShipObj.nakedAsw() - OldShipObj.mod[6] + newShipMod[6])
-				]
+				],
+				// These properties are used by TsuDBSubmission
+				oldMod: OldShipObj.mod,
+				newMod: newShipMod,
+				consumedMasterIds: consumedShips.map(s => s.masterId),
+				consumedMasterLevels: consumedShips.map(s => s.level)
 			});
+			
+			// Remove consumed ships and their equipment
+			$.each(consumedShipIds, function(_, rosterId){
+				KC3ShipManager.remove(rosterId);
+				KC3Network.trigger("ShipSlots");
+				KC3Network.trigger("GearSlots");
+			});
+			
+			// Check if successful modernization
+			if(response.api_data.api_powerup_flag == 1){
+				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
+				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
+				KC3Network.trigger("Quests");
+			}
 			
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();
