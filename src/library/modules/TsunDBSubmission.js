@@ -960,7 +960,7 @@
 			if (deCount == 0 && !(isMizuhoHPAble && mizuhoCount >= 2) && !(isKamoiHPAble && kamoiCount >= 2))
 				return;
 
-			this.lolimodfod = {
+			TsunDBSubmission.lolimodfod = {
 				shipid: ship.masterId,
 				shiplvl: ship.level,
 				modids: data.consumedMasterIds,
@@ -970,8 +970,9 @@
 				modafter: data.newMod,
 				modleft: data.left
 			};
-			//console.debug(this.lolimodfod);
-			this.sendData(this.lolimodfod, 'lolimodfod');
+			//console.debug(TsunDBSubmission.lolimodfod);
+			// Called from listener so this doesn't reference to TsunDBSubmission, but to KC3Network listener
+			TsunDBSubmission.sendData(TsunDBSubmission.lolimodfod, 'lolimodfod');
 		},
 
 		handleFleet: function(fleet) {
