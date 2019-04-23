@@ -947,7 +947,7 @@
 			const ship = KC3ShipManager.get(data.rosterId);
 			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
 
-			// Checks in RemodelUtils.calcPowerUpParams
+			// Checks in main.js#RemodelUtils.calcPowerUpParams
 			const deCount = modFod.filter((s) => s.api_stype == 1).length;
 
 			const mizuhoCount = modFod.filter((s) => s.api_ctype == 62).length;
