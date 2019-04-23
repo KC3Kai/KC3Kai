@@ -264,26 +264,23 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Debuff gimmick check
-				'api_port/port': [this.processGimmick, this.addListener],
+				'api_port/port': [this.processGimmick, this.initNetworkListener],
 
-				'Modernize': this.processModernize
+				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
 			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
 		},
 		
-		addListener: function() {
+		initNetworkListener: function() {
 			if(!this.networkListener) {
 				this.networkListener = true;
-				const handlers = this.handlers;
-
-				KC3Network.addGlobalListener(function(event, data) {
-					if(handlers[event] != undefined)
-						handlers[event](data);
+				KC3Network.addGlobalListener((event, data) => {
+					if(this.handlers[event]) this.handlers[event](data);
 				});
 			}
 		},
-
+		
 		processMapInfo: function(http) {
 			this.mapInfo = $.extend(true, [], http.response.api_data.api_map_info);
 		},
@@ -943,22 +940,27 @@
 			this.sendData(this.development, 'development');
 		},
 
-		processModernize: function(data) {
+		/**
+		 * CAUTION: This will be called from KC3Network listener,
+		 * so `this` doesn't reference to TsunDBSubmission, but to KC3Network.
+		 */
+		processModernizeEvent: function(data) {
 			const ship = KC3ShipManager.get(data.rosterId);
 			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
 
-			// Checks in main.js#RemodelUtils.calcPowerUpParams
-			const deCount = modFod.filter((s) => s.api_stype == 1).length;
+			// Checks in `main.js#RemodelUtil.calcPowerUpParams`
+			const deCount = modFod.filter((s) => s.api_stype === 1).length;
 
-			const mizuhoCount = modFod.filter((s) => s.api_ctype == 62).length;
-			const isMizuhoHPAble = [62, 72].indexOf(ship.master().api_ctype) >= 0;
+			const mizuhoCount = modFod.filter((s) => s.api_ctype === 62).length;
+			const isMizuhoHPAble = [62, 72].includes(ship.master().api_ctype);
 
-			const kamoiCount = modFod.filter((s) => s.api_ctype == 72).length;
-			const isKamoiHPAble = [72, 62, 41, 37].indexOf(ship.master().api_ctype) >= 0;
+			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
+			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
 
 			// DE / Mizuho/Kamoi mod filter
-			if (deCount == 0 && !(isMizuhoHPAble && mizuhoCount >= 2) && !(isKamoiHPAble && kamoiCount >= 2))
-				return;
+			if (deCount === 0 &&
+				!(isMizuhoHPAble && mizuhoCount >= 2) && !(isKamoiHPAble && kamoiCount >= 2)
+			) return;
 
 			TsunDBSubmission.lolimodfod = {
 				shipid: ship.masterId,
@@ -971,7 +973,6 @@
 				modleft: data.left
 			};
 			//console.debug(TsunDBSubmission.lolimodfod);
-			// Called from listener so this doesn't reference to TsunDBSubmission, but to KC3Network listener
 			TsunDBSubmission.sendData(TsunDBSubmission.lolimodfod, 'lolimodfod');
 		},
 

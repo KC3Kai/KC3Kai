@@ -2266,10 +2266,10 @@ Previously known as "Reactor"
 		/* Ship Modernize
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
-			const consumed_ids = params.api_id_items;
-			const consumedShips = consumed_ids.split("%2C").map((id) => KC3ShipManager.get(id));
+			const consumedShipIds = params.api_id_items.split("%2C");
+			const consumedShips = consumedShipIds.map(id => KC3ShipManager.get(id));
 			
-			// Activity Notification
+			// To trigger panel activity notification, and TsuDB data submission
 			const NewShipRaw = response.api_data.api_ship;
 			const OldShipObj = KC3ShipManager.get( NewShipRaw.api_id );
 			const MasterShip = KC3Master.ship( NewShipRaw.api_ship_id );
@@ -2304,26 +2304,27 @@ Previously known as "Reactor"
 					OldShipObj.maxHp(true) - (OldShipObj.hp[1] - OldShipObj.mod[5] + newShipMod[5]),
 					OldShipObj.maxAswMod() - (OldShipObj.nakedAsw() - OldShipObj.mod[6] + newShipMod[6])
 				],
+				// These properties are used by TsuDBSubmission
 				oldMod: OldShipObj.mod,
 				newMod: newShipMod,
-				consumedMasterIds: consumedShips.map((s) => s.masterId),
-				consumedMasterLevels: consumedShips.map((s) => s.level)
+				consumedMasterIds: consumedShips.map(s => s.masterId),
+				consumedMasterLevels: consumedShips.map(s => s.level)
 			});
 			
 			// Remove consumed ships and their equipment
-			$.each(consumed_ids.split("%2C"), function(index, element){
-				KC3ShipManager.remove(element);
+			$.each(consumedShipIds, function(_, rosterId){
+				KC3ShipManager.remove(rosterId);
 				KC3Network.trigger("ShipSlots");
 				KC3Network.trigger("GearSlots");
 			});
-
+			
 			// Check if successful modernization
-			if(response.api_data.api_powerup_flag==1){
+			if(response.api_data.api_powerup_flag == 1){
 				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
 				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
 				KC3Network.trigger("Quests");
 			}
-
+			
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();
 			
