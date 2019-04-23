@@ -281,6 +281,8 @@
 				 * @param data - the data object built by Kcsapi handler, {} by default.
 				 */
 				KC3Network.addGlobalListener((event, data) => {
+					if(!ConfigManager.TsunDBSubmission_enabled)
+						return;
 					const eventHandler = this.handlers[event];
 					if(Array.isArray(eventHandler))
 						eventHandler.forEach(h => h && h.call(this, data));
@@ -951,7 +953,7 @@
 
 		/**
 		 * This will be called from KC3Network listener,
-		 * when an event is triggered by a Kcsapi handler.
+		 * when the ship modernize event is triggered by the Kcsapi handler.
 		 * @param data - the data instance including mod ship and fodders.
 		 */
 		processModernizeEvent: function(data) {
