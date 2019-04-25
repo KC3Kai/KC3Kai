@@ -393,13 +393,16 @@ Previously known as "Reactor"
 		},
 		
 		"api_req_kaisou/open_exslot":function(params, response, headers){
-			var sid  = parseInt(params.api_id,10),
-				ship = KC3ShipManager.get(sid),
-				mast = ship.master();
-			// Assume KC client already checked 1 item left at least
+			var rosterId = parseInt(params.api_id, 10),
+				shipObj  = KC3ShipManager.get(rosterId);
+			// According `main.js#OpenExSlotAPI`,
+			// update ship ex-slot here because no /ship3 or /ship2 call followed
+			shipObj.ex_item = -1;
+			KC3ShipManager.save();
+			// assume KC client has already checked 1 item left at least
 			PlayerManager.consumables.reinforceExpansion -= 1;
 			PlayerManager.setConsumables();
-			console.log("Extra Slot unlocked for", sid, ship.name());
+			console.log("Extra Slot unlocked for", rosterId, shipObj.name());
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Fleet");
 		},
