@@ -785,6 +785,7 @@ KC3改 Ship Object
 						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
+						if (check.remodelCap && RemodelDb.remodelGroup(shipId).indexOf(shipId) > check.remodelCap) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
