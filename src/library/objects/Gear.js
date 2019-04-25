@@ -755,18 +755,12 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					"6": [
-						// Kongou Class Kai Ni
-						{
-							remodel: 2,
-							multiple: { "houg": 1, "souk": 1, "houk": -3 },
-						},
-						// no bonus for Kongou Kai Ni C
-						{
-							remodel: 3,
-							multiple: { "houg": -1, "souk": -1, "houk": 3 },
-						},
-					],
+					// Kongou Class Kai Ni only (K2C incapable)
+					"6": {
+						remodel: 2,
+						remodelCap: 2,
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
 				},
 			},
 			// 16inch Mk.I Triple Gun Mount + AFCT Kai
@@ -781,18 +775,12 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					"6": [
-						// Kongou Class Kai Ni
-						{
-							remodel: 2,
-							multiple: { "houg": 1, "souk": 1, "houk": -3 },
-						},
-						// no bonus for Kongou Kai Ni C
-						{
-							remodel: 3,
-							multiple: { "houg": -1, "souk": -1, "houk": 3 },
-						},
-					],
+					// Kongou Class Kai Ni only (K2C incapable)
+					"6": {
+						remodel: 2,
+						remodelCap: 2,
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
 				},
 			},
 			// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284
@@ -807,18 +795,12 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 2, "souk": 1, "houk": -2 },
 					},
-					"6": [
-						// Kongou Class Kai Ni
-						{
-							remodel: 2,
-							multiple: { "houg": 1, "souk": 1, "houk": -3 },
-						},
-						// no bonus for Kongou Kai Ni C
-						{
-							remodel: 3,
-							multiple: { "houg": -1, "souk": -1, "houk": 3 },
-						},
-					],
+					// Kongou Class Kai Ni only (K2C incapable)
+					"6": {
+						remodel: 2,
+						remodelCap: 2,
+						multiple: { "houg": 1, "souk": 1, "houk": -3 },
+					},
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -997,13 +979,11 @@ KC3改 Equipment Object
 					// Kamikaze Class
 					"66": {
 						multiple: { "raig": 1, "houk": 2 },
-						countCap: 2,
 					},
 					// Kongou Kai Ni C
 					"8": {
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
-						countCap: 2,
 					},
 				},
 			},
@@ -1831,8 +1811,11 @@ KC3改 Equipment Object
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
 			if(Array.isArray(bonusDef.excludeStypes) && bonusDef.excludeStypes.includes(shipTypeId)) { return; }
-			if(bonusDef.remodel &&
-				RemodelDb.remodelGroup(shipMasterId).indexOf(shipMasterId) < bonusDef.remodel) { return; }
+			if(bonusDef.remodel || bonusDef.remodelCap) {
+				const remodelGroup = RemodelDb.remodelGroup(shipMasterId);
+				if(remodelGroup.indexOf(shipMasterId) < bonusDef.remodel) { return; }
+				if(remodelGroup.indexOf(shipMasterId) > bonusDef.remodelCap) { return; }
+			}
 			let gearCount = gearInfo.count;
 			if(bonusDef.minStars && gearInfo.starsDist) {
 				gearCount = gearInfo.starsDist.slice(bonusDef.minStars).sumValues();
