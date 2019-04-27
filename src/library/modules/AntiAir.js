@@ -457,7 +457,10 @@ AntiAir: anti-air related calculations
 	function isIseClassKai( mst ) {
 		return mst.api_ctype === 2
 			// if non-Kai excluded
-			&& mst.api_id !== 77 && mst.api_id !== 87;
+			&& mst.api_id !== 77 && mst.api_id !== 87
+			// Ise Kai Ni included, but Hyuuga Kai Ni incapable for both kind 25 and 28
+			// https://twitter.com/MadonoHaru/status/1121902964120023040
+			&& mst.api_id !== 554;
 	}
 
 	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
@@ -466,7 +469,7 @@ AntiAir: anti-air related calculations
 			82, // Ise Kai
 			553, // Ise K2
 			88, // Hyuuga Kai
-			554, // Hyuuga K2
+			//554, // Hyuuga K2
 			148, // Musashi Kai
 			546, // Musashi K2
 		].indexOf( mst.api_id ) !== -1;
