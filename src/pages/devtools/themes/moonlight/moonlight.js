@@ -445,25 +445,18 @@
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
-		if(ConfigManager.pan_box_bcolor_enabled == true) {
-			$(".module.activity .activity_tab").css("background", ConfigManager.pan_box_bcolor);
-			$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor);
-		}
-		
-		if(ConfigManager.pan_shiplist_bg_enabled == true) {
-			$(".module.fleet,.module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_shiplist_bg);
-		}
+		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
+		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
+		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
+		$(".ship_img,.expeditions .timer-img img").css("background", ConfigManager.pan_ship_icon_bg_moon);
+		$(".ship_img img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border_moon);
+		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
+		/*$(".module.activity .activity_expeditionPlanner .expPlan_dropdown_title").css("border-color", ConfigManager.pan_outline_moon);*/
+		$(".pvpFleetShip,.module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
 
-		if(ConfigManager.pan_ship_icon_bg_enabled == true) {
-			$(".ship_img").css("background", ConfigManager.pan_ship_icon_bg);
-			$(".ship_img").css("box-shadow", "-1px -1px 1px rgba(34, 65, 105, 1), 0px -1px 1px rgba(34, 65, 105, 1), 1px -1px 1px rgba(34, 65, 105, 1), -1px 0px 1px rgba(34, 65, 105, 1), 1px 0px 1px rgba(34, 65, 105, 1), -1px 1px 1px rgba(34, 65, 105, 1), 0px 1px 1px rgba(34, 65, 105, 1), 1px 1px 1px rgba(34, 65, 105, 1) inset");
-		}
-
-		if(ConfigManager.pan_drop_shadow_enabled == true) {
-			// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
-			$(".rotation,.rotation2,.module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot,.fleet_num").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
-			$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
-		}
+		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
+		$(".rotation,.rotation2,.module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot,.fleet_num").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 1px 1px "+ConfigManager.pan_drop_shadow_moon);
+		$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 1px 1px "+ConfigManager.pan_drop_shadow_moon);
 
 		if(ConfigManager.moon_small_font == true) {
 			$(".base_plane_count,.airbase .base_action,.airbase .base_name,.airbase .base_stats .base_stat_value,.sship .ship_type,.sship .ship_name,.fit_gear_name, .admiral_lvnext, .base_plane_name, .ship_face_tooltip .ship_exp_next, .ship_face_tooltip .ship_morale, .ship_face_tooltip .stat_value, .ship_face_tooltip .aa_col, .ship_face_tooltip .stat_name, .ship_full_name span.ship_yomi, .ship_full_name span.ship_masterId").css("font-size", 11);
@@ -493,7 +486,7 @@
 		var customCSS = document.createElement("style");
 		customCSS.type = "text/css";
 		customCSS.id = "pan_custom_css";
-		customCSS.innerHTML = ConfigManager.pan_custom_css;
+		customCSS.innerHTML = ConfigManager.pan_custom_css_moon;
 		$("head").append(customCSS);
 
 		const updateShipTooltipStatsIconset = () => {

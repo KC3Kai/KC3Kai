@@ -342,7 +342,6 @@ html,body {
 	border-radius:5px;
 	overflow:hidden;
 	white-space:initial;
-	background:rgba(100, 100, 100, 0.618);
 }
 .module.activity .activity_box {
 	width:190px;
