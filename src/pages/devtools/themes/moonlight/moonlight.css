@@ -82,7 +82,7 @@ html,body {
 }
 #catBomb .content {
 	width:400px;
-	height:120px;
+	height:140px;
 	background-color: #fdd;
 	margin:-60px auto 0px -200px;
 	color:#c44;
@@ -129,6 +129,7 @@ html,body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+	white-space:normal;
 }
 #catBomb .download {
 	text-align: center;
@@ -144,7 +145,7 @@ html,body {
 }
 #gameUpdate .content {
 	width:400px;
-	height:120px;
+	height:140px;
 	background-color: #dfd;
 	margin:-60px auto 0px -200px;
 	color:#0c0;
@@ -187,6 +188,7 @@ html,body {
 	width:380px;
 	margin:10px 0px 0px 0px;
 	font-size:12px;
+	white-space:normal;
 }
 
 /* MODULES
