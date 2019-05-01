@@ -132,6 +132,8 @@
 			};
 			// Get total records of this recipe first
 			KC3Database.count_devmt(this.filterFunc.bind(this, true), total => {
+				// Prevent to continue if active tab already switched to another
+				if(activeTab && activeTab.name !== "crafts") return;
 				this.totalItems = total;
 				$(".build_list").empty();
 				$(".page_items .total_items").text(this.totalItems);
@@ -182,6 +184,7 @@
 			};
 			$(".build_list").empty();
 			KC3Database.get_devmt(this.filterFunc.bind(this, false), pageNumber, this.itemsPerPage, resultArray => {
+				if(activeTab && activeTab.name !== "crafts") return;
 				for(const index in resultArray){
 					const thisBuild = resultArray[index];
 					const buildBox = $(".factory .build_item").clone()

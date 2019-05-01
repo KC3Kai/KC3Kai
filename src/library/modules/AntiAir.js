@@ -458,6 +458,11 @@ AntiAir: anti-air related calculations
 		return mst.api_ctype === 2
 			// if non-Kai excluded
 			&& mst.api_id !== 77 && mst.api_id !== 87;
+			// ~~Ise Kai Ni included, but Hyuuga Kai Ni incapable for both kind 25 and 28~~
+			// https://twitter.com/MadonoHaru/status/1121902964120023040
+			// wtf, it was a bug before 2019-04-30 maint
+			// https://twitter.com/KanColle_STAFF/status/1123197646561136642
+			//&& mst.api_id !== 554;
 	}
 
 	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
