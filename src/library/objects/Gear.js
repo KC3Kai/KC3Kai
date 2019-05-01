@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190423 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190430 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -98,6 +98,127 @@ KC3改 Equipment Object
 						multiple: { "tais": 1, "houk": 1 },
 					},
 				},
+			},
+			// Type 97 Torpedo Bomber (Tomonaga Squadron)
+			"93": {
+				count: 0,
+				byClass: {
+					// Souryuu Kai Ni
+					"17": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+					// Hiryuu Kai Ni
+					"25": {
+						remodel: 2,
+						single: { "houg": 3 },
+					},
+					// Ryuujou Kai Ni
+					"32": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+				},
+			},
+			// Tenzan Model 12 (Tomonaga Squadron)
+			"94": {
+				count: 0,
+				byClass: {
+					// Souryuu Kai Ni
+					"17": {
+						remodel: 2,
+						single: { "houg": 3 },
+					},
+					// Hiryuu Kai Ni
+					"25": {
+						remodel: 2,
+						single: { "houg": 7 },
+					},
+					// Ryuujou Kai Ni
+					"32": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+				},
+			},
+			// Type 97 Torpedo Bomber (Murata Squadron)
+			// https://wikiwiki.jp/kancolle/%E5%A4%A9%E5%B1%B1%28%E6%9D%91%E7%94%B0%E9%9A%8A%29
+			"143": {
+				count: 0,
+				byClass: {
+					// Kaga Kai
+					"3": {
+						remodel: 1,
+						single: { "houg": 2 },
+					},
+					// Akagi Kai
+					"14": {
+						remodel: 1,
+						single: { "houg": 3 },
+					},
+					// Ryuujou Kai Ni
+					"32": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+					// Shoukaku Class
+					"33": {
+						single: { "houg": 1 },
+					},
+				},
+				byShip: [
+					// extra +1 fp for Shoukaku
+					{
+						ids: [110, 288, 461],
+						single: { "houg": 1 },
+					},
+				],
+			},
+			// Tenzan Model 12 (Murata Squadron)
+			// https://wikiwiki.jp/kancolle/%E5%A4%A9%E5%B1%B1%28%E6%9D%91%E7%94%B0%E9%9A%8A%29
+			"144": {
+				count: 0,
+				byClass: {
+					// Kaga Kai
+					"3": {
+						remodel: 1,
+						single: { "houg": 2 },
+					},
+					// Akagi Kai
+					"14": {
+						remodel: 1,
+						single: { "houg": 3 },
+					},
+					// Ryuujou Kai Ni
+					"32": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+					// Shoukaku Class
+					"33": [
+						// Base and Kai
+						{
+							single: { "houg": 1 },
+						},
+						// Kai Ni A
+						{
+							remodel: 2,
+							single: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					// extra +1 fp for Shoukaku base, Kai
+					{
+						ids: [110, 288],
+						single: { "houg": 1 },
+					},
+					// extra +2 fp for Shoukaku K2A
+					{
+						ids: [461],
+						single: { "houg": 2 },
+					},
+				],
 			},
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
@@ -178,6 +299,23 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Type 99 Dive Bomber (Egusa Squadron)
+			// https://wikiwiki.jp/kancolle/%E4%B9%9D%E4%B9%9D%E5%BC%8F%E8%89%A6%E7%88%86%28%E6%B1%9F%E8%8D%89%E9%9A%8A%29
+			"99": {
+				count: 0,
+				byClass: {
+					// Souryuu Kai Ni
+					"17": {
+						remodel: 2,
+						single: { "houg": 4 },
+					},
+					// Hiryuu Kai Ni
+					"25": {
+						remodel: 2,
+						single: { "houg": 1 },
+					},
+				},
+			},
 			// Suisei (Egusa Squadron)
 			"100": {
 				count: 0,
@@ -186,6 +324,16 @@ KC3改 Equipment Object
 					"2": {
 						remodel: 2,
 						multiple: { "houg": 4 },
+					},
+					// Souryuu Kai Ni
+					"17": {
+						remodel: 2,
+						multiple: { "houg": 6 },
+					},
+					// Hiryuu Kai Ni
+					"25": {
+						remodel: 2,
+						multiple: { "houg": 3 },
 					},
 				},
 			},
@@ -199,6 +347,13 @@ KC3改 Equipment Object
 						remodel: 2,
 						multiple: { "houg": 6, "houk": 1 },
 					},
+					// Souryuu Kai Ni range +2
+					"17": {
+						remodel: 2,
+						single: { "leng": 1 },
+					},
+					// Hiryuu Kai Ni range +2
+					"25": 17,
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -211,6 +366,13 @@ KC3改 Equipment Object
 						remodel: 2,
 						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
 					},
+					// Souryuu Kai Ni range +2
+					"17": {
+						remodel: 2,
+						single: { "leng": 1 },
+					},
+					// Hiryuu Kai Ni range +2
+					"25": 17,
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -223,6 +385,28 @@ KC3改 Equipment Object
 						multiple: { "houg": 7, "tyku": 3, "houk": 2 },
 					},
 				},
+			},
+			// Suisei Model 12 (w/Type 31 Photoelectric Fuze Bombs)
+			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%B8%80%E4%BA%8C%E5%9E%8B%28%E4%B8%89%E4%B8%80%E5%8F%B7%E5%85%89%E9%9B%BB%E7%AE%A1%E7%88%86%E5%BC%BE%E6%90%AD%E8%BC%89%E6%A9%9F%29
+			"320": {
+				count: 0,
+				byShip: [
+					{
+						// Ise Kai Ni +2 fp
+						ids: [553],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Hiryuu/Souryuu K2 +3 fp
+						ids: [196, 197],
+						multiple: { "houg": 3 },
+					},
+					{
+						// Suzuya/Kumano CVL, Hyuuga Kai Ni +4 fp
+						ids: [508, 509, 554],
+						multiple: { "houg": 4 },
+					},
+				],
 			},
 			// Re.2001 OR Kai
 			"184": {
@@ -277,6 +461,13 @@ KC3改 Equipment Object
 						remodel: 2,
 						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
 					},
+					// Souryuu Kai Ni range +1
+					"17": {
+						remodel: 2,
+						single: { "leng": 1 },
+					},
+					// Hiryuu Kai Ni range +1
+					"25": 17,
 				},
 				byShip: [
 					{
@@ -801,6 +992,74 @@ KC3改 Equipment Object
 						remodelCap: 2,
 						multiple: { "houg": 1, "souk": 1, "houk": -3 },
 					},
+				},
+			},
+			// 16inch Mk.I Twin Gun Mount
+			// https://wikiwiki.jp/kancolle/16inch%20Mk.I%E9%80%A3%E8%A3%85%E7%A0%B2
+			"330": {
+				count: 0,
+				byClass: {
+					// Nelson Kai
+					"88": {
+						remodel: 1,
+						multiple: { "houg": 2 },
+					},
+					// Nagato Class
+					"19": [
+						{
+							multiple: { "houg": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
+			// 16inch Mk.V Twin Gun Mount
+			"331": {
+				count: 0,
+				byClass: {
+					// Nelson Kai
+					"88": {
+						remodel: 1,
+						multiple: { "houg": 2 },
+					},
+					// Nagato Class
+					"19": [
+						{
+							multiple: { "houg": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
+			// 16inch Mk.VIII Twin Gun Mount Kai
+			// https://wikiwiki.jp/kancolle/16inch%20Mk.VIII%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9
+			"332": {
+				count: 0,
+				byClass: {
+					// Nelson Kai
+					"88": {
+						remodel: 1,
+						multiple: { "houg": 2 },
+					},
+					// Nagato Class
+					"19": [
+						{
+							multiple: { "houg": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 			},
 			// 14cm Twin Gun Mount
