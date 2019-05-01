@@ -1690,7 +1690,8 @@ KC3改 Ship Object
 				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
 				// Swordfish variants as special torpedo bombers
 				const isSwordfish = [242, 243, 244].includes(gear.masterId);
-				// Type 62 Fighter Bomber, Suisei Model 12 (Type 31 Photoelectric Fuze Bombs)
+				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
+				// Suisei Model 12 (Type 31 Photoelectric Fuze Bombs)
 				const isSpecialNightPlane = [154, 320].includes(gear.masterId);
 				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
@@ -2767,8 +2768,8 @@ KC3改 Ship Object
 				// https://twitter.com/Nishisonic/status/911143760544751616
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
-				// Fighter Bomber Iwai
-				const iwaiDBomberCnt = this.countNonZeroSlotEquipment([154]);
+				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
+				const iwaiDBomberCnt = this.countNonZeroSlotEquipment(154);
 				// Swordfish variants
 				const swordfishTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
 				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
@@ -2789,13 +2790,13 @@ KC3改 Ship Object
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", 1.18);
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", 1.18);
-				// put here not to mask previous 2 patterns, tho this rate might be higher
+				// put this here not to mask previous 2 patterns, tho its rate might be higher
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
-				// Suisei Model 12 (Type 31 Photoelectric Fuze Bombs)
-				// new patterns since 2019-04-03, modifiers from:
+				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs),
+				// since 2019-04-30, modifiers from:
 				// https://twitter.com/imoDer_Tw/status/1123415084707880963
-				const photoDBomberCnt = this.countNonZeroSlotEquipment([320]);
+				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
 				// https://twitter.com/MorimotoKou/status/1123196517680947200
 				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNTBFBP", 1.2);
