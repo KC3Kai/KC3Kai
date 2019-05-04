@@ -639,6 +639,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_focustab",
+				"name" : "SettingsSwitchToTab",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_idle_counter",
 				"name" : "SettingsIdleWarning",
 				"type" : "radio",
