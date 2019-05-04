@@ -2560,7 +2560,7 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){
 		/* These type of aircraft with asw stat > 0 can do (o)asw (support):
-		 * - 7: Dive Bomber
+		 * - 7: Dive Bomber (known 0 asw stat: Suisei 12 w/Type 31 Photo Bombs)
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 10: Seaplane Recon (only capable for ASW support)
 		 * - 11: Seaplane Bomber

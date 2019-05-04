@@ -296,6 +296,12 @@
 						},
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
+					// Focus game tab
+					if(ConfigManager.focus_game_tab){
+						(new RMsg("service", "focusGameTab", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
 				}
 			}
 		}
