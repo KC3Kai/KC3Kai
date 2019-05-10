@@ -708,6 +708,132 @@
 	background:inherit;
 	text-shadow:inherit;
 }
+/* GEAR BONUS
+-------------------------------*/
+.tab_mstship .shipInfo .bonusList {
+	width: 458px;
+}
+
+.tab_mstship .shipInfo .bonusList .synergyIcon img,
+.tab_mstship .shipInfo .bonusList .gearIcon img,
+.tab_mstship .shipInfo .bonusList .gearType img {
+	width: 30px;
+	height: 30px;
+}
+
+.tab_mstship .shipInfo .bonusList hr {
+	margin: 7px auto;
+	opacity: 0.3;
+	border-color: #000;
+}
+
+.tab_mstship .shipInfo .bonusList .basicBonusInfo,
+.tab_mstship .shipInfo .bonusList .bonusStatsList,
+.tab_mstship .shipInfo .bonusList .gearStatBonus,
+.tab_mstship .shipInfo .bonusList .gearLevelBonus,
+.tab_mstship .shipInfo .bonusList .synergyFlag,
+.tab_mstship .shipInfo .bonusList .synergyBonusRow {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.tab_mstship .shipInfo .bonusList .gearBonuses {
+	padding: 5px 0;
+}
+
+.tab_mstship .shipInfo .gearBonuses {
+	background: #ddd;
+	border-radius: 5px;
+	margin: 5px 0;
+}
+
+.tab_mstship .shipInfo .gearBonuses:nth-child(2n+1) {
+	background: #ccc;
+}
+
+.tab_mstship .shipInfo .bonusList .gearId {
+	padding: 0 5px;
+}
+
+.tab_mstship .shipInfo .bonusList .gearId,
+.tab_mstship .shipInfo .bonusList .gearName,
+.tab_mstship .shipInfo .bonusList .synergyType,
+.tab_mstship .shipInfo .bonusList .gearCount,
+.tab_mstship .shipInfo .bonusList .bonusStatsList,
+.tab_mstship .shipInfo .bonusList .gearLevel {
+	line-height: 30px;
+	height: 30px;
+	vertical-align: middle;
+}
+
+.tab_mstship .shipInfo .bonusList .gearName {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 386px;
+	overflow: hidden;
+}
+
+.tab_mstship .shipInfo .bonusList .gearId,
+.tab_mstship .shipInfo .bonusList .gearIcon,
+.tab_mstship .shipInfo .bonusList .gearLevel,
+.tab_mstship .shipInfo .bonusList .synergyIcon,
+.tab_mstship .shipInfo .bonusList .gearType {
+	width: 45px;
+}
+
+.tab_mstship .shipInfo .bonusList .synergyIcon:before {
+	margin-left: -10px;
+	height: 30px;
+	content: "+";
+	position: absolute;
+	line-height: 30px;
+	font-size: 20px;
+}
+
+.tab_mstship .shipInfo .bonusList .synergy.distinct .synergyFlag:first-child .synergyType{
+	position:relative;
+}
+.tab_mstship .shipInfo .bonusList .synergy.distinct .synergyFlag:first-child .synergyType:after{
+	position:absolute;
+	top:0;
+	right:-10px;
+	content:"*";
+	color: #ff5151;
+	font-weight: 700;
+	font-size: 20px;
+}
+
+.tab_mstship .shipInfo .bonusList .gearLevel {
+	text-align: right;
+}
+
+.tab_mstship .shipInfo .bonusList .leveledBonusStatsList,
+.tab_mstship .shipInfo .bonusList .synergyGears {
+	padding-left: 40px;
+}
+
+.tab_mstship .shipInfo .bonusList .leveledBonusStatsList .bonusStatsList {
+	padding-left: 20px;
+}
+
+.tab_mstship .shipInfo .bonusList .synergyFlag {
+	padding-left: 20px;
+}
+
+.tab_mstship .shipInfo .bonusList .gearCount {
+	width: 20px;
+	text-align: right;
+}
+
+
+.tab_mstship .shipInfo .bonusList .gearStatBonus {
+	margin-right: 5px;
+}
+
+.tab_mstship .shipInfo .bonusList .statValue {
+	margin-right: 2px;
+}
 
 /* SPECIAL (Salt Check)
 -------------------------------*/
