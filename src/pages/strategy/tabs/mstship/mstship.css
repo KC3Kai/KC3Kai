@@ -782,26 +782,19 @@
 	width: 45px;
 }
 
-.tab_mstship .shipInfo .bonusList .synergyIcon:before {
-	margin-left: -10px;
-	height: 30px;
-	content: "+";
-	position: absolute;
-	line-height: 30px;
+.tab_mstship .shipInfo .bonusList .synergy .synergyFlag span{
 	font-size: 20px;
+	line-height: 30px;
+	vertical-align: middle;	
 }
 
-.tab_mstship .shipInfo .bonusList .synergy.distinct .synergyFlag:first-child .synergyType{
-	position:relative;
-}
-.tab_mstship .shipInfo .bonusList .synergy.distinct .synergyFlag:first-child .synergyType:after{
-	position:absolute;
-	top:0;
-	right:-10px;
+.tab_mstship .shipInfo .bonusList .synergy .synergyFlag .synergyType span{
 	content:"*";
+	vertical-align: top;
 	color: #ff5151;
 	font-weight: 700;
 	font-size: 20px;
+	margin-left:4px;
 }
 
 .tab_mstship .shipInfo .bonusList .gearLevel {
@@ -817,8 +810,8 @@
 	padding-left: 20px;
 }
 
-.tab_mstship .shipInfo .bonusList .synergyFlag {
-	padding-left: 20px;
+.tab_mstship .shipInfo .bonusList .statIcon{
+	margin-right:5px;
 }
 
 .tab_mstship .shipInfo .bonusList .gearCount {

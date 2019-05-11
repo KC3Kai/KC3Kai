@@ -924,7 +924,7 @@
 					Object.keys(stats).forEach(function (stat) {
 						const statBox = $(".tab_mstship .factory .gearStatBonus").clone();
 						$(".statIcon img", statBox).attr("src", KC3Meta.statIconApi(stat));
-						$(".statValue", statBox).html(stats[stat]);
+						$(".statValue", statBox).html((stats[stat] > 0 ? "+" : "") + stats[stat]);
 						$(".bonusStatsList", box).append(statBox);
 					});
 				}; 				
@@ -1029,7 +1029,7 @@
 										const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
-											synergyBox.addClass('distinct');
+											$(".synergyType", synergyBox).append($("<span>*</span>"));
 										}
 										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
 									} else if (syn.byCount) {
