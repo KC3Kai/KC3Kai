@@ -797,6 +797,10 @@
 	margin-left:4px;
 }
 
+.tab_mstship .shipInfo .bonusList .synergyFlags{
+    padding-left: 9px;
+} 
+
 .tab_mstship .shipInfo .bonusList .gearLevel {
 	text-align: right;
 }
