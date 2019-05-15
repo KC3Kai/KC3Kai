@@ -894,12 +894,14 @@
 					let misc = {};
 					if ([100, 101, 102].includes(cutinType[1])) {
 						if (this.sortieSpecialAttack === true) { continue; }
-						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					}
 					if ([100, 101, 102].includes(cutin)) {
 						if (this.sortieSpecialAttack === true) { continue; }
 						this.sortieSpecialAttack = true;
 					} 
+					if ([100, 101, 102].includes(cutinType[1])) {
+						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+					}
 					else if (time === "day" && !(thisNode.planeFighters.player[0] === 0 && thisNode.planeFighters.abyssal[0] === 0)) {
 						misc = ship.daySpAttackBaseRate();
 						if (isCombined) {
@@ -1004,7 +1006,6 @@
 				type: ship.master().api_stype,
 				speed: ship.speed,
 				flee: ship.didFlee,
-				slots: ship.api_slot_num,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
 			}));
