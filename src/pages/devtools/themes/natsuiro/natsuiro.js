@@ -296,6 +296,12 @@
 						},
 						tabId: chrome.devtools.inspectedWindow.tabId
 					})).execute();
+					// Focus game tab if settings enabled
+					if(ConfigManager.alert_focustab){
+						(new RMsg("service", "focusGameTab", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						})).execute();
+					}
 				}
 			}
 		}

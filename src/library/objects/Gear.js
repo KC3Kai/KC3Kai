@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190430 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190504 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -169,7 +169,7 @@ KC3改 Equipment Object
 				byShip: [
 					// extra +1 fp for Shoukaku
 					{
-						ids: [110, 288, 461],
+						ids: [110, 288, 461, 466],
 						single: { "houg": 1 },
 					},
 				],
@@ -208,14 +208,14 @@ KC3改 Equipment Object
 					],
 				},
 				byShip: [
-					// extra +1 fp for Shoukaku base, Kai
+					// extra +1 fp for Shoukaku base and Kai
 					{
 						ids: [110, 288],
 						single: { "houg": 1 },
 					},
-					// extra +2 fp for Shoukaku K2A
+					// extra +2 fp for Shoukaku K2 and K2A
 					{
-						ids: [461],
+						ids: [461, 466],
 						single: { "houg": 2 },
 					},
 				],
@@ -2560,7 +2560,7 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){
 		/* These type of aircraft with asw stat > 0 can do (o)asw (support):
-		 * - 7: Dive Bomber
+		 * - 7: Dive Bomber (known 0 asw stat: Suisei 12 w/Type 31 Photo Bombs)
 		 * - 8: Torpedo Bomber (known 0 asw stat: Re.2001 G Kai)
 		 * - 10: Seaplane Recon (only capable for ASW support)
 		 * - 11: Seaplane Bomber
