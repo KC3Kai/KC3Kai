@@ -240,6 +240,21 @@ Provides access to data on built-in JSON files
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
 		},
+
+		statIconApi :function (statName, iconSetId = ConfigManager.info_stats_iconset) {
+			const statApiNames = {
+				"tyku": "aa",
+				"souk": "ar",
+				"tais": "as",
+				"houk": "ev",
+				"houg": "fp",
+				"saku": "ls",
+				"raig": "tp",
+				"houm": "ac",
+				"leng": "rn"
+			};
+			return KC3Meta.statIcon(statApiNames[statName], iconSetId);
+		},
 		
 		itemIconsByType2 :function(type2Id){
 			if(!this._type2IconMap){

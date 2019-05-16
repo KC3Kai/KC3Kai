@@ -107,6 +107,7 @@ Retrieves when needed to apply on components
 				alert_custom_cship : "",
 				alert_volume       : 60,
 				alert_desktop      : true,
+				alert_focustab     : false,
 				alert_supply       : 3,
 				alert_supply_exped : true,
 				alert_idle_counter : 1,

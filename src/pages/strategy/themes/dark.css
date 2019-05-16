@@ -2039,7 +2039,21 @@ button, input, select, textarea {
 .tab_mstship .shipInfo .equipExSlot .equippableType {
 	background:#444;
 }
-
+.tab_mstship .shipInfo .gearBonuses {
+	background: #444 !important;
+}
+.tab_mstship .shipInfo .gearBonuses:nth-child(2n+1) {
+	background: #333 !important;
+}
+.tab_mstship .shipInfo .bonusList .statIcon img{
+	filter: invert(1);
+}
+.tab_mstship .shipInfo .tokubest .to-quotes {
+	background: #2b2b5a !important;
+}
+.tab_mstship .shipInfo .bonusList hr {
+	border-color: #FFF !important;
+}
 /* GEARS LIBRARY
 --------------------------------*/
 .tab_mstgear .gearRecords {

@@ -178,6 +178,12 @@ Has functions for TimerManager to use
 				tabId: chrome.devtools.inspectedWindow.tabId
 			})).execute();
 		}
+		// Tell background page to focus game tab
+		if(ConfigManager.alert_focustab){
+			(new RMsg("service", "focusGameTab", {
+				tabId: chrome.devtools.inspectedWindow.tabId
+			})).execute();
+		}
 	
 	};
 

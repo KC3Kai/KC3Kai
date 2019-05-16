@@ -2190,7 +2190,7 @@ KC3改 Ship Object
 	/**
 	 * @return true if this ship can do ASW attack.
 	 */
-	KC3Ship.prototype.canDoASW = function() {
+	KC3Ship.prototype.canDoASW = function(time = "Day") {
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -2198,9 +2198,15 @@ KC3改 Ship Object
 		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
 		if(isAirAntiSubStype) {
 			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber;
-			// false if CVL or CVL-like chuuha
+			// At night, most ship types cannot do ASW,
+			// only CVL can ASW with depth charge if naked asw is not 0 and not taiha,
+			// even no plane equipped or survived, such as Taiyou Kai Ni, Hayasui Kai.
+			// but CVE will attack surface target first if NCVCI met.
+			// *Some Abyssal AV/BBV can do ASW with air attack at night.
+			if(time === "Night") return isCvlLike && !this.isTaiha() && this.as[1] > 0;
+			// For day time, false if CVL or CVL-like chuuha
 			if(isCvlLike && this.isStriped()) return false;
-			// if ASW plane equipped and slot > 0
+			// and if ASW plane equipped and its slot > 0
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
 		// DE, DD, CL, CLT, CT, AO(*)
@@ -2794,6 +2800,7 @@ KC3改 Ship Object
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
 				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs),
+				// more likely to be acted as a night torpedo bomber, not another Fighter Bomber Iwai
 				// since 2019-04-30, modifiers from:
 				// https://twitter.com/imoDer_Tw/status/1123415084707880963
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
@@ -2803,6 +2810,9 @@ KC3改 Ship Object
 				// https://twitter.com/ratilt_hekikuu/status/1123201565664235521
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBI", 1.18);
+				// https://twitter.com/kaedec_adm/status/1124988107948871680
+				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPSF", 1.18);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBP", 1.2);
 			} else {
@@ -3167,7 +3177,7 @@ KC3改 Ship Object
 	 * @see http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#fitarms
 	 */
-	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "day") {
+	KC3Ship.prototype.shellingGunFitAccuracy = function(time = "Day") {
 		if(this.isDummy()) { return 0; }
 		var result = 0;
 		// Fit bonus or overweight penalty for ship types:
@@ -3208,7 +3218,7 @@ KC3改 Ship Object
 			case 5:
 			case 6: // for Heavy Cruisers
 				// fit bonus at night battle for 20.3cm variants
-				if(time === "night") {
+				if(time === "Night") {
 					const has203TwinGun = this.hasEquipment(6);
 					const has203No3TwinGun = this.hasEquipment(50);
 					const has203No2TwinGun = this.hasEquipment(90);
