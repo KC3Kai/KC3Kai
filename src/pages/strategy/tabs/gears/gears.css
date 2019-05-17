@@ -97,6 +97,30 @@
 	font-size:12px;
 }
 
+.tab_gears .slotitem .info .upgradeDays {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+}
+
+.tab_gears .slotitem .info .upgradeDays a:visited,
+.tab_gears .slotitem .info .upgradeDays a:hover {
+	text-decoration: none;
+}
+
+.tab_gears .slotitem .info .upgradeDays .sel {
+	color: #000;
+}
+
+.tab_gears .slotitem .info .upgradeDays a {
+	padding: 1px 4px;
+	background: rgba(255, 255, 255, 0.6);
+	cursor: pointer;
+	margin: 2px 5px;
+}
+
 /*
 .tab_gears .slotitem .holders {
 	width:400px;
