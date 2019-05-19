@@ -43,7 +43,7 @@
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
 
-	let timerReminderRefresh
+	let timerReminderRefresh;
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
@@ -1017,22 +1017,22 @@
 			}
 
 			if (ConfigManager.reminderRefreshStart > 0 && !timerReminderRefresh) {
-				console.log('Refresh reminder enabled')
-				const timeScale = 1000 * 60
+				console.log('Refresh reminder enabled');
+				const timeScale = 1000 * 60;
 				const showReminder = () => {
 					this.ModalBox({
 						title: KC3Meta.term("SettingsReminderRefreshPopupTitle"),
 						message: KC3Meta.term("SettingsReminderRefreshPopupMessage")
-					})
-				}
+					});
+				};
 				timerReminderRefresh = setTimeout(() => {
-					showReminder()
+					showReminder();
 					if (ConfigManager.reminderRefreshRepeat > 0) {
 						timerReminderRefresh = setInterval(() => {
-							showReminder()
-						}, ConfigManager.reminderRefreshRepeat * timeScale)
+							showReminder();
+						}, ConfigManager.reminderRefreshRepeat * timeScale);
 					}
-				}, ConfigManager.reminderRefreshStart * timeScale)
+				}, ConfigManager.reminderRefreshStart * timeScale);
 			}
 
 		},
