@@ -18,6 +18,53 @@
 	display:none;
 }
 
+/* OVERLAY: NEXT BUTTON BLOCK 
+--------------------------*/
+.kc3 .overlay_next {
+	font-family: "Helvetica Neue", Tahoma, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: 800;
+	width: 633px;
+	height: 720px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	color: #df0020;
+	
+	z-index: 1000;
+	display: none;
+	pointer-events:none;
+}
+
+.kc3 .overlay_next span {
+	position: absolute;
+	bottom: 0;
+	left: 5px;
+	pointer-events:none;
+}
+
+.kc3 .overlay_next .nextButtonBlock {
+	position: absolute;
+	top: 196px;
+	left: 274px;
+	width: 320px;
+	height: 320px;
+	pointer-events: auto;
+	background-position: center;
+}
+.kc3 .overlay_next .nextButtonBlock.bg-grey:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: block;
+	background: rgba(0,0,0,0.2);
+	border-radius: 15px;
+}
+
 /* OVERLAY: QUEST
 --------------------------*/
 .kc3 .overlays {

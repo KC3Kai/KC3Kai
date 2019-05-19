@@ -7,6 +7,12 @@ Listens to network history and triggers callback if game events happen
 (function(){
 	"use strict";
 
+	// Next node button blocker
+	let next_armed = false;
+	// se/217.mp3 might fire twice. once for yasen and once for next node
+	// this flag prevents blocking until result data actually recieved
+	let battle_result_recieved = false;
+
 	window.KC3Network = {
 		hasOverlay: false,
 		lastUrl: "",
@@ -160,12 +166,92 @@ Listens to network history and triggers callback if game events happen
 							}
 						}
 					});
+					// reloads settings for next button locker if needed
+					ConfigManager.load();
 				}
 			};
 			// Do not try to call this multiple times, otherwise this is needed:
 			//window.removeEventListener("storage", configChangeListener);
 			// Listen to the changes of local storage configs
 			window.addEventListener("storage", configChangedListener);
+		},
+
+		/* NEXT BLOCK CHECK
+		For every theme it checks HP predictions. If any ship predicted 
+		to be in Taiha it arms locker in game page preventing player
+		from advancing into next node 
+		-------------------------------------------------------*/
+		nextBlockCheck: function(){
+			// TODO exclude damecons and retreated ships. I found it too risky to play around and check those.
+			// TODO Escort flagship taiha. I'd rather keep showing block for escort Taiha since people keep asking if it's safe every event.
+			// TODO cases like 1-6, where end node is next node and it safe to continue
+			// drop flags
+			next_armed = false;
+			battle_result_recieved = false;
+			
+			const currentNode = KC3SortieManager.currentNode();
+			let fireTaiha = false;
+			let autoretreat = false;
+			if(currentNode) {
+				const predicted = currentNode.predictedFleetsNight || currentNode.predictedFleetsDay;
+				currentNode.maxHPs.ally.map((maxHP, shipIndex)=>{
+					if (maxHP <= 0 || autoretreat) { // empty slot
+						return;
+					}
+					let currentHP = 0;
+					if(predicted.playerMain[shipIndex]) {
+						currentHP = predicted.playerMain[shipIndex].hp;
+					} else if (predicted.playerEscort[shipIndex - predicted.playerMain.length]) {
+						// TODO recheck combined fleets
+						currentHP = predicted.playerEscort[shipIndex - predicted.playerMain.length].hp;
+					} // else { that shouldn't happen. ship wasn't found. force trigger maybe? }
+					fireTaiha = fireTaiha || (currentHP / maxHP <= 0.25);
+					if(fireTaiha && shipIndex === 0){
+						// it's autoretreat. FS low hp
+						autoretreat = true;
+						return;
+					}
+				});
+			}
+			// ignore cases with autoretreat
+			next_armed = fireTaiha && !autoretreat;
+		},
+
+		/* NEXT BLOCK TRIGGER
+		signals to game tab that next button blocking overlay needs to be shown
+		triggered either by network request to results or SE network request
+		-------------------------------------------------------*/
+		nextBlockTrigger: function (SE = false) {
+			let show = false;
+			let fairy = false;
+			if (next_armed && ConfigManager.next_blocker) {
+				if (SE) { // Fairy in case it was from SE. otherwise it'll look ugly
+					if (battle_result_recieved) {
+						fairy = true;
+						show = true;
+					} // else {
+					// result data wasn't recieved. it must be yasen switch. show translation divs?
+					// }
+				} else {
+					if (ConfigManager.next_blocker === 2) {
+						// not from SE check and player selected api check
+						// start showing block now
+						show = true;
+					} else {
+						// if player wants it through sound warnings we must signal that we must mark that we got result
+						// to distinguish it from yasen switch
+						battle_result_recieved = true;
+					}
+				}
+			}
+
+			if(show){
+				KC3Network.hasOverlay = true;
+				(new RMsg("service", "nextBlockShow", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					fairy:fairy
+				})).execute();	
+			}
 		},
 
 		/* RECEIVED
@@ -241,6 +327,10 @@ Listens to network history and triggers callback if game events happen
 				// Clear overlays upon entering furniture menu,
 				// not work everytime since Phase 2 caches assets
 				KC3Network.clearOverlays();
+			}
+			// If it's switching to NextNode or Yasen screen (might be others?)
+			if(requestUrl.includes("/kcs2/resources/se/217.mp3")){
+				KC3Network.nextBlockTrigger(true);
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
