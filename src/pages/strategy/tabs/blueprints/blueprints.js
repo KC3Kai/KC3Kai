@@ -28,11 +28,16 @@
 				const thisRemodelLevel = RemodelDb.remodelGroup(ship.masterId).indexOf(ship.masterId);
 				return thisRemodelLevel >= Math.max(...dupeRemodelLevels);
 			});
+			this.defineSimpleFilter("hideCompleted", [], 0, (fd, ship) => {
+				if(!fd.currentIndex) return true;
+				return ship.materials.filter((m)=>!m.used).length > 0;
+			});
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
 			this.viewType = "owned";
 			this.hideUnlock = false;
 			this.hideDupe = false;
+			this.hideCompleted = false;
 		}
 
 		/* RELOAD
@@ -49,8 +54,9 @@
 		execute() {
 			const joinPageParams = () => (
 				[this.viewType,
-					this.hideUnlock ? "locked" : this.hideDupe && "all",
-					this.hideDupe && "nodupe"].filter(v => !!v)
+					this.hideUnlock ? "locked" : (this.hideDupe || this.hideCompleted) && "all",
+					this.hideDupe ? "nodupe" : this.hideCompleted && "all",
+					this.hideCompleted && "nocompleted"].filter(v => !!v)
 			);
 			$(".tab_blueprints .view_type input[type=radio][name=view_type]").on("change", (e) => {
 				this.viewType = $(".view_type input[type=radio][name=view_type]:checked").val();
@@ -62,6 +68,10 @@
 			});
 			$(".tab_blueprints .view_type input[type=checkbox][name=hide_dupe]").on("change", (e) => {
 				this.hideDupe = $(".view_type input[type=checkbox][name=hide_dupe]").prop("checked");
+				KC3StrategyTabs.gotoTab(undefined, ...joinPageParams());
+			});
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_completed]").on("change", (e) => {
+				this.hideCompleted = $(".view_type input[type=checkbox][name=hide_completed]").prop("checked");
 				KC3StrategyTabs.gotoTab(undefined, ...joinPageParams());
 			});
 			this.shipListDiv = $(".tab_blueprints .ship_list");
@@ -76,31 +86,37 @@
 			this.shipListDiv.on("postShow", this.showTotalMaterials);
 			this.loadView(KC3StrategyTabs.pageParams[1],
 				KC3StrategyTabs.pageParams[2] === "locked",
-				KC3StrategyTabs.pageParams[3] === "nodupe");
+				KC3StrategyTabs.pageParams[3] === "nodupe",
+				KC3StrategyTabs.pageParams[4] === "nocompleted");
 		}
 
-		loadView(viewType = "owned", hideUnlock = false, hideDupe = false) {
+		loadView(viewType = "owned", hideUnlock = false, hideDupe = false, hideCompleted = false) {
 			this.viewType = viewType;
 			this.hideUnlock = hideUnlock;
 			this.hideDupe = hideDupe;
+			this.hideCompleted = hideCompleted;
 			$(".tab_blueprints .view_type input[type=radio][name=view_type][value={0}]"
 				.format(this.viewType)).prop("checked", true);
 			$(".tab_blueprints .view_type input[type=checkbox][name=hide_unlock]")
 				.prop("checked", this.hideUnlock);
 			$(".tab_blueprints .view_type input[type=checkbox][name=hide_dupe]")
 				.prop("checked", this.hideDupe);
+			$(".tab_blueprints .view_type input[type=checkbox][name=hide_completed]")
+				.prop("checked", this.hideCompleted);
 			switch(this.viewType) {
 				case "owned":
 					this.setSorter("lv");
 					this.prepareShipList(true, this.mapRemodelMaterials);
 					this.filterDefinitions.hideUnlock.currentIndex = this.hideUnlock & 1;
 					this.filterDefinitions.hideDupe.currentIndex = this.hideDupe & 1;
+					this.filterDefinitions.hideCompleted.currentIndex = this.hideCompleted & 1;
 					break;
 				case "all":
 					this.setSorter("type");
 					this.prepareShipListFromRemodelDb();
 					this.filterDefinitions.hideUnlock.currentIndex = 0;
 					this.filterDefinitions.hideDupe.currentIndex = 0;
+					this.filterDefinitions.hideCompleted.currentIndex = 0;
 					break;
 				default:
 					console.warn("Unsupported view type:", this.viewType);
