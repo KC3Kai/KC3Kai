@@ -43,7 +43,8 @@
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
 
-	let timerReminderRefresh;
+	// Panel Reload Reminder Timer
+	var reloadReminderHandler = 0;
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
@@ -1016,23 +1017,36 @@
 				}
 			}
 
-			if (ConfigManager.reminderRefreshStart > 0 && !timerReminderRefresh) {
-				console.log('Refresh reminder enabled');
-				const timeScale = 1000 * 60;
-				const showReminder = () => {
-					this.ModalBox({
-						title: KC3Meta.term("SettingsReminderRefreshPopupTitle"),
-						message: KC3Meta.term("SettingsReminderRefreshPopupMessage")
-					});
-				};
-				timerReminderRefresh = setTimeout(() => {
-					showReminder();
-					if (ConfigManager.reminderRefreshRepeat > 0) {
-						timerReminderRefresh = setInterval(() => {
-							showReminder();
-						}, ConfigManager.reminderRefreshRepeat * timeScale);
-					}
-				}, ConfigManager.reminderRefreshStart * timeScale);
+			if(ConfigManager.pan_reloadreminder_start > 0) {
+				if(!reloadReminderHandler) {
+					const timeScale = 1000 * 60;
+					const showReminder = () => {
+						this.ModalBox({
+							title: KC3Meta.term("PanelReloadReminderTitle"),
+							message: KC3Meta.term("PanelReloadReminderMessage")
+						});
+					};
+					console.log("Panel reload reminder enabled", ConfigManager.pan_reloadreminder_start);
+					reloadReminderHandler = setTimeout(() => {
+						showReminder();
+						if(ConfigManager.pan_reloadreminder_repeat > 0) {
+							console.log("Panel reload reminder will repeat every", ConfigManager.pan_reloadreminder_repeat);
+							reloadReminderHandler = setInterval(() => {
+								if(ConfigManager.pan_reloadreminder_repeat > 0) {
+									showReminder();
+								} else {
+									clearInterval(reloadReminderHandler);
+								}
+							}, ConfigManager.pan_reloadreminder_repeat * timeScale);
+						}
+					}, ConfigManager.pan_reloadreminder_start * timeScale);
+				}
+			} else {
+				if(!!reloadReminderHandler) {
+					clearTimeout(reloadReminderHandler);
+					clearInterval(reloadReminderHandler);
+					reloadReminderHandler = 0;
+				}
 			}
 
 		},
