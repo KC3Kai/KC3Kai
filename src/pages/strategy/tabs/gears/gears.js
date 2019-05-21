@@ -494,13 +494,7 @@
 			}
 
 			SlotItems.sort( comparator );
-			let dayOfWeek = new Date();
-			if (dayOfWeek.getUTCHours() > 15) {
-				dayOfWeek = dayOfWeek.getUTCDay() + 1;
-			} else {
-				dayOfWeek = dayOfWeek.getUTCDay();
-			}
-			
+			const dayOfWeek = Date.getJstDate().getDay();
 			const allProperties = this._allProperties;
 			$.each(SlotItems, function(index, ThisSlotitem) {
 				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
@@ -514,16 +508,17 @@
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 
-				["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map((day, dayIndex) => {
-					if (self.upgrades[day] && self.upgrades[day][ThisSlotitem.id]) {
-						const dayDiv = $("<a></a>").html(day.toUpperCase())
-							.attr('title',
-								self.upgrades[day][ThisSlotitem.id].map((shipId) =>
+				["sun", "mon", "tue", "wed", "thu", "fri", "sat"].forEach((day, dayIndex) => {
+					if (self.upgrades[day] && Array.isArray(self.upgrades[day][ThisSlotitem.id])) {
+						// Just day index for fixed width if no better l10n abbrs can be used?
+						$("<a></a>").text(dayIndex)
+							.attr("title",
+								self.upgrades[day][ThisSlotitem.id].map(shipId =>
 									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
 								).join(", ")
 							).attr("href", `#akashi-${day}`)
-							.toggleClass("sel", dayIndex === dayOfWeek);
-						$(".upgradeDays", ItemElem).append(dayDiv);
+							.toggleClass("sel", dayIndex === dayOfWeek)
+							.appendTo($(".upgradeDays", ItemElem));
 					}
 				});
 

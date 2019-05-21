@@ -498,22 +498,21 @@
 			});
 			
 		},
-
+		
 		getPriorities: function() {
-			const defPriorities = [];
-			var priorities;
+			var priorities = [];
 			if (!localStorage.srAkashiPriorities) {
-				localStorage.srAkashiPriorities = JSON.stringify( defPriorities );
-				priorities = defPriorities;
+				localStorage.srAkashiPriorities = JSON.stringify( priorities );
 			} else {
 				priorities = JSON.parse( localStorage.srAkashiPriorities );
 			}
 			return priorities;
 		},
-
+		
 		setPriorities: function(priorityList) {
 			localStorage.srAkashiPriorities = JSON.stringify( priorityList );
 		},
+		
 		savePriorities: function () {
 			this.setPriorities(this.priorities);
 		}

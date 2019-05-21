@@ -73,7 +73,7 @@
 }
 .tab_gears .slotitem .info .stats {
 	width:230px;
-	height:20px;
+	height:auto;
 	line-height:20px;
 	margin:0px 0px 5px 0px;
 }
@@ -105,20 +105,21 @@
 	flex-wrap: wrap;
 }
 
-.tab_gears .slotitem .info .upgradeDays a:visited,
+.tab_gears .slotitem .info .upgradeDays a {
+	min-width: 28px;
+	padding: 1px 10px;
+	background: rgba(255, 255, 255, 0.6);
+	text-decoration: none;
+	cursor: pointer;
+	margin: 2px 2px;
+}
 .tab_gears .slotitem .info .upgradeDays a:hover {
 	text-decoration: none;
+	color: #fff;
 }
 
 .tab_gears .slotitem .info .upgradeDays .sel {
 	color: #000;
-}
-
-.tab_gears .slotitem .info .upgradeDays a {
-	padding: 1px 4px;
-	background: rgba(255, 255, 255, 0.6);
-	cursor: pointer;
-	margin: 2px 5px;
 }
 
 /*
