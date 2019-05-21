@@ -43,6 +43,8 @@
 	var uiTimerHandler = 0;
 	var uiTimerLastUpdated = 0;
 
+	let timerReminderRefresh;
+
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
@@ -991,6 +993,7 @@
 				window.location.href = "../../nomaster.html";
 				return false;
 			}
+
 			if(ConfigManager.backupReminder > 0) {
 				const lastBackup = Number(localStorage.lastBackupTime) || 0;
 				const lastReminder = Number(localStorage.lastBackupReminder) || 0;
@@ -1012,6 +1015,26 @@
 					localStorage.lastBackupReminder = currentTime;
 				}
 			}
+
+			if (ConfigManager.reminderRefreshStart > 0 && !timerReminderRefresh) {
+				console.log('Refresh reminder enabled');
+				const timeScale = 1000 * 60;
+				const showReminder = () => {
+					this.ModalBox({
+						title: KC3Meta.term("SettingsReminderRefreshPopupTitle"),
+						message: KC3Meta.term("SettingsReminderRefreshPopupMessage")
+					});
+				};
+				timerReminderRefresh = setTimeout(() => {
+					showReminder();
+					if (ConfigManager.reminderRefreshRepeat > 0) {
+						timerReminderRefresh = setInterval(() => {
+							showReminder();
+						}, ConfigManager.reminderRefreshRepeat * timeScale);
+					}
+				}, ConfigManager.reminderRefreshStart * timeScale);
+			}
+
 		},
 
 		CatBomb: function(data){

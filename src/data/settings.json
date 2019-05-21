@@ -998,6 +998,38 @@
 		]
 	},
 	{
+		"section": "SettingsReminder",
+		"help": "",
+		"contents": [
+			{
+				"id": "reminderRefreshStart",
+				"name": "SettingsReminderRefreshStart",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsReminderRefreshStartDesc"
+				}
+			},
+			{
+				"id": "reminderRefreshRepeat",
+				"name": "SettingsReminderRefreshRepeat",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsReminderRefreshRepeatDesc"
+				}
+			}
+		]
+	},
+	{
 		"section" : "SettingsDataBackupReminder",
 		"help" : "",
 		"contents" : [
