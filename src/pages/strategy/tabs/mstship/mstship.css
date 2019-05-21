@@ -711,7 +711,7 @@
 /* GEAR BONUS
 -------------------------------*/
 .tab_mstship .shipInfo .bonusList {
-	width: 458px;
+	width: 455px;
 }
 
 .tab_mstship .shipInfo .bonusList .synergyIcon img,
@@ -753,7 +753,7 @@
 }
 
 .tab_mstship .shipInfo .bonusList .gearId {
-	padding: 0 5px;
+	padding-left: 10px;
 }
 
 .tab_mstship .shipInfo .bonusList .gearId,
@@ -766,11 +766,16 @@
 	height: 30px;
 	vertical-align: middle;
 }
+.tab_mstship .shipInfo .bonusList .synergyType {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
 
 .tab_mstship .shipInfo .bonusList .gearName {
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 386px;
+	width: 375px;
 	overflow: hidden;
 }
 
@@ -781,15 +786,18 @@
 .tab_mstship .shipInfo .bonusList .gearType {
 	width: 45px;
 }
+.tab_mstship .shipInfo .bonusList .gearIcon {
+	width: 35px;
+}
 
-.tab_mstship .shipInfo .bonusList .synergy .synergyFlag span{
+.tab_mstship .shipInfo .bonusList .synergy .synergyFlag span {
 	font-size: 20px;
 	line-height: 30px;
 	vertical-align: middle;	
 }
 
-.tab_mstship .shipInfo .bonusList .synergy .synergyFlag .synergyType span{
-	content:"*";
+.tab_mstship .shipInfo .bonusList .synergy .synergyFlag .synergyType span {
+	content: "*";
 	vertical-align: top;
 	color: #ff5151;
 	font-weight: 700;
@@ -797,7 +805,7 @@
 	margin-left:4px;
 }
 
-.tab_mstship .shipInfo .bonusList .synergyFlags{
+.tab_mstship .shipInfo .bonusList .synergyFlags {
     padding-left: 9px;
 } 
 
@@ -814,10 +822,6 @@
 	padding-left: 20px;
 }
 
-.tab_mstship .shipInfo .bonusList .statIcon{
-	margin-right:5px;
-}
-
 .tab_mstship .shipInfo .bonusList .gearCount {
 	width: 20px;
 	text-align: right;
@@ -826,6 +830,13 @@
 
 .tab_mstship .shipInfo .bonusList .gearStatBonus {
 	margin-right: 5px;
+}
+.tab_mstship .shipInfo .bonusList .gearStatBonus .statIcon {
+	margin-right: 2px;
+}
+.tab_mstship .shipInfo .bonusList .gearStatBonus .statIcon img {
+	max-width: 22px;
+	height: 18px;
 }
 
 .tab_mstship .shipInfo .bonusList .statValue {

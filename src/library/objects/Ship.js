@@ -648,8 +648,10 @@ KC3改 Ship Object
 			ls: this.ls[0],
 			tp: this.tp[0],
 			// Accuracy not shown in-game, so naked value might be plus-minus 0
-			ac: 0
+			ht: 0
 		};
+		// Limited to currently used stats only,
+		// all implemented see `KC3Meta.js#statApiNameMap`
 		const statApiNames = {
 			"tyku": "aa",
 			"souk": "ar",
@@ -658,7 +660,7 @@ KC3改 Ship Object
 			"houg": "fp",
 			"saku": "ls",
 			"raig": "tp",
-			"houm": "ac"
+			"houm": "ht"
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
@@ -678,7 +680,7 @@ KC3改 Ship Object
 			"tyku": "aa",
 			"tais": "as",
 			"saku": "ls",
-			//"houm": "ac",
+			//"houm": "ht",
 		};
 		for(const apiName in statApiNames) {
 			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
@@ -3058,7 +3060,7 @@ KC3改 Ship Object
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
-		const byEquip = -this.nakedStats("ac");
+		const byEquip = -this.nakedStats("ht");
 		const byImprove = this.equipment(true)
 			.map(g => g.accStatImprovementBonus("fire"))
 			.sumValues();
