@@ -4855,6 +4855,9 @@ ABYSS FLEET
 	height:130px;
 	margin:0px 0px 3px 0px;
 }
+.v .airbase {
+	margin:0px 0px 3px 138px;
+}
 
 .airbase .airbase_infos {
 	width:340px;
@@ -5013,7 +5016,8 @@ ABYSS FLEET
 	line-height:12px;
 	margin:2px 0px 0px 5px;
 	position:relative;
-	top:7px;
+	top:-17px;
+	left:62px;
 }
 .base_plane_icon img {
 	width:16px;
@@ -5024,7 +5028,8 @@ ABYSS FLEET
 	width:20px;
 	margin:0px 2px 0px 0px;
 	position:relative;
-	top:7px;
+	top:-18px;
+	left:62px;
 }
 .base_plane_chevs img {
 	width:18px;
@@ -5041,8 +5046,7 @@ ABYSS FLEET
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
-	position:absolute;
-	left:77px;
+	position:relative;
 }
 .base_plane_count {
 	line-height:12px;
@@ -5054,7 +5058,8 @@ ABYSS FLEET
 	color:#bbb;
 	margin:0px 1px 0px 0px;
 	position:relative;
-	top:12px;
+	top:-13px;
+	left:62px;
 }
 .base_plane_count.unsupplied {
 	color:#f55;
