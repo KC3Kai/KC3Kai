@@ -12,7 +12,7 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
-            this.lockLimit = 3;
+            this.lockLimit = 5;
             this.heartLockMode = 2;
             this.showShipLevel = true;
         }

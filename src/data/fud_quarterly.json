@@ -72,6 +72,14 @@
 		"433": {
 			"1": { "type": "tp", "boss": [19], "landing": [16, 25, 26] },
 			"2": { "type": "hp", "boss": [33, 35, 38] }
+		},
+		"442": {
+			"1": { "type": "tp", "boss": [12], "landing": [11] },
+			"2": { "type": "hp", "boss": [32] }
+		},
+		"443": {
+			"1": { "type": "hp", "boss": [14] },
+			"2": { "type": "hp", "boss": [30] }
 		}
 	},
 	"abyssKaiShipIds": [

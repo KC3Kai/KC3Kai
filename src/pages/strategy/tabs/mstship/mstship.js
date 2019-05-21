@@ -904,7 +904,7 @@
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
 					if (bonusDef.excludeClasses && bonusDef.excludeClasses.includes(ctype)) { return false; }
 					if (bonusDef.excludeStypes && bonusDef.excludeStypes.includes(stype)) { return false; }
-					if(bonusDef.remodel || bonusDef.remodelCap) {
+					if (bonusDef.remodel || bonusDef.remodelCap) {
 						const remodelGroup = RemodelDb.remodelGroup(shipId);
 						if(remodelGroup.indexOf(shipId) < bonusDef.remodel) { return false; }
 						if(remodelGroup.indexOf(shipId) > bonusDef.remodelCap) { return false; }
@@ -939,12 +939,18 @@
 					return 0;
 				};
 				
-				for (const eqId in bonusDefs) {
-					const gear = bonusDefs[eqId];
-					let obj = {};
-					if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) { obj = Object.assign({}, gear); }
-					else if (gear.byShip && checkByShipBonusRequirements(gear.byShip, shipData.api_id, shipData.api_stype)) { obj = Object.assign({}, gear); }
-					if (Object.keys(obj).length > 0) { obj.id = eqId; bonusList.push(obj); }
+				for (const mstId in bonusDefs) {
+					const def = bonusDefs[mstId];
+					let bonus = {};
+					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
+						bonus = Object.assign(bonus, def);
+					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype)) {
+						bonus = Object.assign(bonus, def);
+					}
+					if (Object.keys(bonus).length) {
+						bonus.id = mstId;
+						bonusList.push(bonus);
+					}
 				}
 				$(".bonusList").parent().prev().toggle(!!bonusList.length);
 				
