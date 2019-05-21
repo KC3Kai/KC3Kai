@@ -83,6 +83,7 @@
 .tab_akashi .equipment .eq_priority > div.off {
 	color: #353535;
 	cursor: default;
+	visibility: hidden;
 }
 
 .tab_akashi .equipment .eq_priority .eq_priority--up {
@@ -100,7 +101,7 @@
 }
 .tab_akashi .equipment .eq_priority .eq_priority--toggle:hover,
 .tab_akashi .equipment .eq_priority .eq_priority--toggle.on{
-	color: #FFCC66;
+	color: #ffcc66;
 }
 
 .tab_akashi .equipment .eq_icon {
