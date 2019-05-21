@@ -179,6 +179,10 @@ Retrieves when needed to apply on components
 				forwardConsoleOutput   : false,
 				hoursToKeepLogs        : 12,
 				hoursToKeepErrors      : 168,
+
+				reminderRefreshStart: 60,
+				reminderRefreshRepeat: 5,
+
 			};
 		},
 		
