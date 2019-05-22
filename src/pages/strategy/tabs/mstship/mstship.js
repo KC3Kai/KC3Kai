@@ -863,7 +863,7 @@
 							["fit_penalty", "fit_neutral", "fit_bonus"][Math.sign(value) + 1]
 						);
 					};
-					$.each(gunfits, function(idx, gunfitObj){
+					$.each(gunfits, function(idx, gunfitObj) {
 						if(lastWeightClass != gunfitObj.weight) {
 							isOdd = !isOdd;
 							lastWeightClass = gunfitObj.weight;
@@ -898,13 +898,13 @@
 				const bonusDefs = KC3Gear.explicitStatsBonusGears();
 				const bonusList = [];
 				const synergyList = bonusDefs.synergyGears;
-
-				const checkArray = array => Array.isArray(array) ? array : [array];
+				
+				const ensureArray = array => Array.isArray(array) ? array : [array];
 				const checkBonusExtraRequirements = (bonusDef, shipId, ctype, stype) => {
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
 					if (bonusDef.excludeClasses && bonusDef.excludeClasses.includes(ctype)) { return false; }
 					if (bonusDef.excludeStypes && bonusDef.excludeStypes.includes(stype)) { return false; }
-					if(bonusDef.remodel || bonusDef.remodelCap) {
+					if (bonusDef.remodel || bonusDef.remodelCap) {
 						const remodelGroup = RemodelDb.remodelGroup(shipId);
 						if(remodelGroup.indexOf(shipId) < bonusDef.remodel) { return false; }
 						if(remodelGroup.indexOf(shipId) > bonusDef.remodelCap) { return false; }
@@ -912,47 +912,57 @@
 					if (bonusDef.stypes && !bonusDef.stypes.includes(stype)) { return false; }
 					return true;
 				};
-				const checkByShipBonusRequirements = (byShip, shipId, stype) => checkArray(byShip).some(bonusDef => (bonusDef.ids && bonusDef.ids.includes(shipId)) ||
-					(bonusDef.stypes && bonusDef.stypes.includes(stype)));
+				const checkByShipBonusRequirements = (byShip, shipId, stype) =>
+					ensureArray(byShip).some(bonusDef =>
+						(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+						(bonusDef.stypes && bonusDef.stypes.includes(stype))
+					);
 				const addObjects = (obj1, obj2) => {
-					for (let key in obj2) {
+					for (const key in obj2) {
 						obj1[key] = obj1[key] ? obj1[key] + obj2[key] : obj2[key];
 					}
 					return obj1;
-				};				
+				};
 				const addStatsToBox = (stats, box) => {
 					Object.keys(stats).forEach(function (stat) {
 						const statBox = $(".tab_mstship .factory .gearStatBonus").clone();
-						$(".statIcon img", statBox).attr("src", KC3Meta.statIconApi(stat));
-						$(".statValue", statBox).html((stats[stat] > 0 ? "+" : "") + stats[stat]);
+						$(".statIcon img", statBox).attr("src", KC3Meta.statIconByApi(stat))
+							.attr("title", KC3Meta.statNameTerm(stat, true));
+						$(".statValue", statBox).text((stats[stat] > 0 ? "+" : "") + stats[stat]);
 						$(".bonusStatsList", box).append(statBox);
 					});
-				}; 				
+				};
 				const synergyIcon = (flag) =>{
 					if (flag.includes("Radar")) { return 11; }
 					else if (flag.includes("Torpedo")) { return 5; }
 					else if (flag.includes("LargeGunMount")) { return 3; }
 					return 0;
 				};
-
-				for (const eqId in bonusDefs) {
-					const gear = bonusDefs[eqId];
-					let obj = {};
-					if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) { obj = Object.assign({}, gear); }
-					else if (gear.byShip && checkByShipBonusRequirements(gear.byShip, shipData.api_id, shipData.api_stype)) { obj = Object.assign({}, gear); }
-					if (Object.keys(obj).length > 0) { obj.id = eqId; bonusList.push(obj); }
+				
+				for (const mstId in bonusDefs) {
+					const def = bonusDefs[mstId];
+					let bonus = {};
+					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
+						bonus = Object.assign(bonus, def);
+					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype)) {
+						bonus = Object.assign(bonus, def);
+					}
+					if (Object.keys(bonus).length) {
+						bonus.id = mstId;
+						bonusList.push(bonus);
+					}
 				}
 				$(".bonusList").parent().prev().toggle(!!bonusList.length);
-
+				
 				if (bonusList.length > 0) {
 					$.each(bonusList, function (idx, gear) {
 						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {};
-
+						
 						// Class bonuses
 						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
 							let classBonus = gear.byClass[shipData.api_ctype];
 							if (typeof classBonus === 'string') { classBonus = gear.byClass[classBonus]; }
-							classBonus = checkArray(classBonus);
+							classBonus = ensureArray(classBonus);
 							classBonus.forEach(bonus => {
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
 									found = true;
@@ -964,9 +974,10 @@
 						}
 						// Ship bonuses
 						if (gear.byShip) {
-							let list = checkArray(gear.byShip);
-							list = list.filter(bonusDef => (bonusDef.ids && bonusDef.ids.includes(shipData.api_id)) ||
-								(bonusDef.stypes && bonusDef.stypes.includes(shipData.api_stype)));
+							const list = ensureArray(gear.byShip).filter(bonusDef =>
+								(bonusDef.ids && bonusDef.ids.includes(shipData.api_id)) ||
+								(bonusDef.stypes && bonusDef.stypes.includes(shipData.api_stype))
+							);
 							list.forEach(shipBonus => {
 								found = true;
 								if (!shipBonus.minStars) {
@@ -977,9 +988,9 @@
 								else { starBonus[shipBonus.minStars] = {}; }
 							});
 							// Improvement bonuses
-							for (let minStar in starBonus) {
+							for (const minStar in starBonus) {
 								starBonus[minStar] = Object.assign({}, totalStats);
-								for (let bonusDef of list) {
+								for (const bonusDef of list) {
 									if (bonusDef.minStars <= minStar) {
 										bonusStats = bonusDef.single || bonusDef.multiple;
 										starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
@@ -987,49 +998,55 @@
 								}
 							}
 						}
-
+						
 						if (found) {
 							const master = KC3Master.slotitem(gear.id);
 							const gearName = KC3Meta.gearName(master.api_name);
 							const gearBox = $(".tab_mstship .factory .gearBonuses").clone();
-							$(".gearId", gearBox).html(`[${gear.id}]`);
+							$(".gearId", gearBox).text(`[${gear.id}]`);
 							$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(master.api_type[3], 1));
-							$(".gearName", gearBox).html(gearName).attr("title", gearName);
-
-							let levelBox = null;
+							$(".gearName", gearBox).text(gearName).attr("title", gearName);
+							
 							if (Object.keys(totalStats).length > 0) {
-								levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
 								addStatsToBox(totalStats, levelBox);
 								$(".leveledBonusStatsList", gearBox).append(levelBox);
 							}
-
+							
 							Object.keys(starBonus).forEach(function (level) {
-								levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
-								$(".gearLevel", levelBox).html(`${level === '10' ? 'max' : ('+' + level)} &#9733;`);
+								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+								$(".gearLevel", levelBox).html("&#9733;{0}".format(
+									Number(level) >= 10 ?
+										'<span style="font-size: smaller">max</span>' :
+										'+' + level
+									)
+								);
 								addStatsToBox(starBonus[level], levelBox);
 								$(".leveledBonusStatsList", gearBox).append(levelBox);
 							});
-
+							
 							synergyGear.map((synergy) => {
-								synergy = checkArray(synergy);
-								synergy.map((syn) => {
+								ensureArray(synergy).map((syn) => {
 									const synergyBox = $(".tab_mstship .factory .synergy").clone();
 									syn.flags.map((flag) => {
 										const synergyFlag = $(".tab_mstship .factory .synergyFlag").clone();
 										$(".synergyIcon img", synergyFlag).attr("src", KC3Meta.itemIcon(synergyIcon(flag)));
 										const idList = synergyList[flag + "Ids"];
-										let synergyName = flag[0].toUpperCase() + flag.slice(1);
-										synergyName = (idList && idList.length === 1) ? KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) : KC3Meta.term(synergyName);
+										const synergyName = (idList && idList.length === 1) ?
+											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
+											KC3Meta.term(flag.toCamelCase(true));
 										$(".synergyType", synergyFlag).html(synergyName);
 										$(".synergyFlags", synergyBox).append(synergyFlag);
 									});
-
+									
 									if (syn.single || syn.distinct) {
 										const bonus = syn.single || syn.distinct;
 										const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
-											$(".synergyType", synergyBox).append($("<span>*</span>"));
+											$(".synergyType", synergyBox).append(
+												$("<span>*</span>").attr("title", "Bonus with * mark effected only once")
+											);
 										}
 										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
 									} else if (syn.byCount) {
@@ -1039,7 +1056,7 @@
 											}
 											const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 											addStatsToBox(syn.byCount[number], synergyBonusBox);
-											$(".gearCount", synergyBonusBox).html(`x${number}`);
+											$(".gearCount", synergyBonusBox).text(`x${number}`);
 											$(".gearType", synergyBonusBox).append($("<img>").attr("src", KC3Meta.itemIcon(synergyIcon(syn.byCount.gear))));
 											$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
 										});
@@ -1047,7 +1064,7 @@
 									$(".synergyGears", gearBox).append(synergyBox);
 								});
 							});
-
+							
 							$(".bonusList").append(gearBox);
 						}
 					});

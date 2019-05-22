@@ -2077,6 +2077,13 @@ button, input, select, textarea {
 	background:#084 !important;
 }
 
+.tab_gears .slotitem .info .upgradeDays a {
+	background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.tab_gears .slotitem .info .upgradeDays .sel {
+	color: #FFF !important;
+}
 /* SHIP COMPARE
 --------------------------------*/
 .tab_compare .compare_select_back {

@@ -178,6 +178,7 @@
 			amountofnodes: null,
 			battles: [],
 			lbasdef: [],
+			difficulty: null,
 			kc3version: null
 		},
 		spAttack: {
@@ -830,6 +831,7 @@
 			this.gimmick.trigger = trigger;
 			this.gimmick.nodes = this.data.edgeID;
 			this.gimmick.kc3version = this.kc3version;
+			this.gimmick.difficulty = this.data.difficulty;
 			if (apiData.api_m1) {
 				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
 			}
@@ -1195,6 +1197,7 @@
 				battles: [],
 				lbasdef: [],
 				amountofnodes: null,
+				difficulty: null
 			};
 			this.sortieSpecialAttack = null;
 		},
