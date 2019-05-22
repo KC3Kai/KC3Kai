@@ -990,7 +990,7 @@
 							// Improvement bonuses
 							for (const minStar in starBonus) {
 								starBonus[minStar] = Object.assign({}, totalStats);
-								for (let bonusDef of list) {
+								for (const bonusDef of list) {
 									if (bonusDef.minStars <= minStar) {
 										bonusStats = bonusDef.single || bonusDef.multiple;
 										starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
@@ -1044,7 +1044,9 @@
 										const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
-											$(".synergyType", synergyBox).append($("<span>*</span>"));
+											$(".synergyType", synergyBox).append(
+												$("<span>*</span>").attr("title", "Bonus with * mark effected only once")
+											);
 										}
 										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
 									} else if (syn.byCount) {
