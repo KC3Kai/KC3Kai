@@ -1280,7 +1280,7 @@ KC3改 Equipment Object
 						multiple: { "raig": 1, "houk": 2 },
 					},
 					// Kongou Kai Ni C
-					"8": {
+					"6": {
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
 					},
