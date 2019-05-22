@@ -79,7 +79,7 @@
 		},
 		"443": {
 			"1": { "type": "hp", "boss": [14] },
-			"2": { "type": "hp", "boss": [30] }
+			"2": { "type": "hp", "boss": [25, 30] }
 		}
 	},
 	"abyssKaiShipIds": [
