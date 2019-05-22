@@ -240,20 +240,52 @@ Provides access to data on built-in JSON files
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
 		},
-
-		statIconApi :function (statName, iconSetId = ConfigManager.info_stats_iconset) {
-			const statApiNames = {
-				"tyku": "aa",
-				"souk": "ar",
-				"tais": "as",
-				"houk": "ev",
+		
+		statApiNameMap :function(){
+			return ({
+				"taik": "hp",
 				"houg": "fp",
-				"saku": "ls",
 				"raig": "tp",
-				"houm": "ac",
-				"leng": "rn"
+				"baku": "dv",
+				"souk": "ar",
+				"tyku": "aa",
+				"tais": "as",
+				"houm": "ht",
+				"houk": "ev",
+				"saku": "ls",
+				"luck": "lk",
+				"soku": "sp",
+				"leng": "rn",
+				"cost": "kk",
+				"distance": "or",
+			});
+		},
+		statIconByApi :function(apiName, iconSetId = ConfigManager.info_stats_iconset){
+			return this.statIcon(this.statApiNameMap()[apiName], iconSetId);
+		},
+		
+		statNameTerm :function(name, isApiName = false, returnTerm = false){
+			const statNameTermMap = {
+				"hp": "ShipHp",
+				"fp": "ShipFire",
+				"tp": "ShipTorpedo",
+				"dv": "ShipBombing",
+				"ar": "ShipArmor",
+				"aa": "ShipAntiAir",
+				"as": "ShipAsw",
+				"ht": "ShipAccuracy",
+				"ev": "ShipEvasion",
+				"ib": "ShipAccAntiBomber",
+				"if": "ShipEvaInterception",
+				"ls": "ShipLos",
+				"lk": "ShipLuck",
+				"sp": "ShipSpeed",
+				"rn": "ShipLength",
+				"or": "ShipRadius",
+				"kk": "ShipDeployCost",
 			};
-			return KC3Meta.statIcon(statApiNames[statName], iconSetId);
+			const term = statNameTermMap[isApiName ? this.statApiNameMap()[name] : name] || "";
+			return !returnTerm ? this.term(term) : term;
 		},
 		
 		itemIconsByType2 :function(type2Id){
