@@ -163,6 +163,8 @@ Retrieves when needed to apply on components
 				pan_opacity     : 100,
 				pan_box_bcolor  : "rgba(100, 100, 100, 0.618)",
 				pan_custom_css  : "",
+				pan_reloadreminder_start  : 120,
+				pan_reloadreminder_repeat : 0,
 
 				dismissed_hints        : {},
 				sr_theme               : "legacy",

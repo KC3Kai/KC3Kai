@@ -1156,6 +1156,32 @@
 				"options" : {
 					"tooltip" : "SettingsPanelCustomCSSTip"
 				}
+			},
+			{
+				"id": "pan_reloadreminder_start",
+				"name": "SettingsPanelReloadReminderStart",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsPanelReloadReminderStartTip"
+				}
+			},
+			{
+				"id": "pan_reloadreminder_repeat",
+				"name": "SettingsPanelReloadReminderStartRepeat",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsPanelReloadReminderStartRepeatTip"
+				}
 			}
 		]
 	},
