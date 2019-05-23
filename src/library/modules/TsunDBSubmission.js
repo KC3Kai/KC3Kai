@@ -893,18 +893,21 @@
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
+					const specialCutinIds = [100, 101, 102];
 					let misc = {};
-					if ([100, 101, 102].includes(cutinType[1])) {
-						if (this.sortieSpecialAttack === true) { continue; }
-					}
-					if ([100, 101, 102].includes(cutin)) {
-						if (this.sortieSpecialAttack === true) { continue; }
+					if (this.sortieSpecialAttack && (
+							specialCutinIds.includes(cutinType[1]) ||
+							specialCutinIds.includes(cutin)
+						)
+					) { continue; }
+					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
-					} 
-					if ([100, 101, 102].includes(cutinType[1])) {
-						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					}
-					else if (time === "day" && !(thisNode.planeFighters.player[0] === 0 && thisNode.planeFighters.abyssal[0] === 0)) {
+					if (specialCutinIds.includes(cutinType[1])) {
+						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+					} else if (time === "day"
+						&& !(thisNode.planeFighters.player[0] === 0
+							&& thisNode.planeFighters.abyssal[0] === 0)) {
 						misc = ship.daySpAttackBaseRate();
 						if (isCombined) {
 							if (isEscort) { misc.fleetMainLoS = PlayerManager.fleets[0].artillerySpottingLineOfSight(); }

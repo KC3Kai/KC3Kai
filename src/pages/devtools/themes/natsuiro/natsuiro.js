@@ -1025,7 +1025,14 @@
 					const showReminder = () => {
 						this.ModalBox({
 							title: KC3Meta.term("PanelReloadReminderTitle"),
-							message: KC3Meta.term("PanelReloadReminderMessage")
+							message: KC3Meta.term("PanelReloadReminderMessage"),
+							link: KC3Meta.term("PanelReloadReminderLink"),
+							onClick: function(e){
+								(new RMsg("service", "openExtensionPage", {
+									path: "pages/settings/settings.html#panel"
+								})).execute();
+								return false;
+							}
 						});
 					};
 					console.log("Panel reload reminder enabled", ConfigManager.pan_reloadreminder_start);
