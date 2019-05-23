@@ -510,14 +510,12 @@
 
 				["sun", "mon", "tue", "wed", "thu", "fri", "sat"].forEach((day, dayIndex) => {
 					if (self.upgrades[day] && Array.isArray(self.upgrades[day][ThisSlotitem.id])) {
-						const dayName = Date.getDayName(dayIndex);
-						$("<a></a>").text(dayName)
+						$("<a></a>").text(Date.getDayName(dayIndex))
 							.attr("title",
 								self.upgrades[day][ThisSlotitem.id].map(shipId =>
 									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
 								).join(", ")
 							).attr("href", `#akashi-${day}`)
-							.css("font-size", dayName.length > 1 ? "smaller" : "")
 							.toggleClass("sel", dayIndex === dayOfWeek)
 							.appendTo($(".upgradeDays", ItemElem));
 					}
