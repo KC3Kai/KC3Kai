@@ -817,6 +817,8 @@
 			$(".module.activity .build_4")
 		]);
 
+		// Restore build docks timer if panel reopened, not from game start
+		PlayerManager.setBuildDocksByCache();
 		// Update Timer UIs
 		checkAndRestartUiTimer();
 

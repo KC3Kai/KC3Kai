@@ -94,6 +94,9 @@
 			self.hideNotImprovable = false;
 			this.reload();
 			
+			$(".tab_akashi .weekday").each(function(){
+				$(this).text(Date.getDayName($(this).prop("id").substr(8)).toUpperCase());
+			});
 			$(".tab_akashi .weekday").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
 			});

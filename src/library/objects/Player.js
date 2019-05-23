@@ -152,6 +152,7 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("bases");
 		localStorage.removeItem("consumables");
 		localStorage.removeItem("dockingShips");
+		localStorage.removeItem("buildingShips");
 		localStorage.removeItem("longestIdleTime");
 		localStorage.removeItem("pictureBook");
 		localStorage.removeItem("playerNewsFeed");
