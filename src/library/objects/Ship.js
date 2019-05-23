@@ -1576,8 +1576,9 @@ KC3改 Ship Object
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
+		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
-		const shikonBonus = this.hasEquipment(230) ? 5 : 0;
+		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1587,22 +1588,20 @@ KC3改 Ship Object
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive + shikonBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [wg42Additive + shikonBonus + submarineBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
-					// SS(V) bonus
-					const ssBonus = this.isSubmarine() ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus * ssBonus];
+					return [wg42Additive + shikonBonus +  submarineBonus, seaplaneBonus * lightShipBonus * wg42Bonus
+						* apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
@@ -1621,7 +1620,8 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					return [shikonBonus, landingBonus * wg42Bonus];
+					const t3KaiBonus = this.hasEquipment(317) ? 2.5 : 1;
+					return [0, landingBonus * wg42Bonus * t3KaiBonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
