@@ -2437,6 +2437,39 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Conditions under verification, known for now:
+	 * Flagship is healthy Colorado.
+	 * No PvP sample found for now.
+	 *
+	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Colorado
+	 * @see https://wikiwiki.jp/kancolle/Colorado
+	 */
+	KC3Ship.prototype.canDoColoradoCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship Colorado and not even Chuuha
+		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			// Colorado is flagship of a fleet
+			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+				// unknown, placeholder
+				const isDoubleLine = [2, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd and 3rd ship are not carrier or absent?
+					invalidCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
+						.some(ship => ship.isAbsent() || ship.isCarrier()),
+					// submarine in any position of the fleet?
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
+				return isDoubleLine && !invalidCombinedShips && !hasSubmarine;
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -2496,6 +2529,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 		};
@@ -2558,6 +2592,10 @@ KC3改 Ship Object
 			// Mutsu cutin since 2019-02-27
 			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
+			}
+			// Colorado cutin since 2019-05-25
+			if(this.canDoColoradoCutin()) {
+				return KC3Ship.specialAttackTypeDay(103, null, 2.0);
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2730,6 +2768,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2831,6 +2870,10 @@ KC3改 Ship Object
 				// special Mutsu Cutin since 2019-02-27
 				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
+				}
+				// special Colorado Cutin since 2019-05-25
+				if(this.canDoColoradoCutin()) {
+					return KC3Ship.specialAttackTypeNight(103, null, 2.0);
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f

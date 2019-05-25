@@ -893,7 +893,7 @@
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102];
+					const specialCutinIds = [100, 101, 102, 103];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||

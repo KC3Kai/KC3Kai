@@ -16,6 +16,8 @@ Saves and loads significant data for future use
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
 		seasonalCgIdFrom: 720,
+		// Devs assigned Colorado Kai to 1496 making more things strange since 2019-05-25
+		seasonalCgIdTo: 1400,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
@@ -454,7 +456,7 @@ Saves and loads significant data for future use
 		},
 
 		isSeasonalShip :function(id){
-			return id > this.seasonalCgIdFrom && id <= this.abyssalShipIdFrom;
+			return id > this.seasonalCgIdFrom && id <= this.seasonalCgIdTo;
 		},
 
 		isAbyssalShip :function(id){
