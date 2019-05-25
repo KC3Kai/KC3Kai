@@ -109,6 +109,7 @@
 				actualDamage: null,
 				expectedDamage: null,
 				isCritical: null,
+				amountOfNodes: null
 			},
 			ship: {
 				id: null, 
@@ -749,6 +750,7 @@
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
 					this.unexpectedDamage = Object.assign({}, a, template);
+					this.unexpectedDamage.damageInstance.amountOfNodes = this.data.nodeInfo.amountOfNodes;
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;
 					this.sendData(this.unexpectedDamage, 'abnormal');
