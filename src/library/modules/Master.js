@@ -32,7 +32,11 @@ Saves and loads significant data for future use
 				return this.processRaw( raw );
 			}
 
-			this.updateRemodelTable();
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
 			return false;
 		},
 
@@ -100,7 +104,13 @@ Saves and loads significant data for future use
 				this._raw.newShips[KC3Meta.getAF(4)] = KC3Meta.getAF(2) - KC3Master.newUpdatesExpiredAfter;
 				if(beforeCounts) beforeCounts[0] -= 1;
 			}
-			this.updateRemodelTable();
+
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
+
 			this.save();
 			this.available = true;
 
