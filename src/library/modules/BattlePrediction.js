@@ -777,21 +777,21 @@
   // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado) may attack 3 different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
   Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
-    const { parseDamage, parseDefender, parseInfo, isRealAttack, parseAttacker, parseAttackerFriend,
-      parseNelsonTouchAttacker, parseNagatoCutinAttacker, parseMutsuCutinAttacker, parseColoradoCutinAttacker,
+    const { parseDamage, parseDefender, parseInfo, isRealAttack,
+      parseAttacker, parseAttackerFriend, parseAttackerSpecial,
       isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin } = KC3BattlePrediction.battle.phases.hougeki;
 
     const { api_df_list: defenders, api_damage: damages } = attackJson;
     return defenders.map((defender, index) => ({
       damage: parseDamage({ api_damage: [damages[index]] }),
       attacker: isNelsonTouch(attackJson) ?
-          parseNelsonTouchAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 2, 4], isAllySideFriend, index})) :
         isNagatoCutin(attackJson) ?
-          parseNagatoCutinAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1], isAllySideFriend, index})) :
         isMutsuCutin(attackJson) ?
-          parseMutsuCutinAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1], isAllySideFriend, index})) :
         isColoradoCutin(attackJson) ?
-          parseColoradoCutinAttacker(Object.assign({}, attackJson, {isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2], isAllySideFriend, index})) :
         // Unreachable exception
         (isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson)),
       // Assume abyssal enemy and PvP cannot trigger it yet
@@ -807,29 +807,13 @@
   Hougeki.isMutsuCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 102;
   Hougeki.isColoradoCutin = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 103;
 
-  // According MVP result, attacker might be set to corresponding
-  // ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0).
-  Hougeki.parseNelsonTouchAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
+  // According MVP result, Nelson Touch attackers might be set to corresponding
+  //   ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0);
+  // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
+  // For Colorado, 3 attacks assigned to first 3 ships;
+  Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag }) => ({
     side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
-    position: [0, 2, 4][index] || 0,
-  });
-
-  // 3-times attacks counted for 1st Nagato twice, 2nd ship once
-  Hougeki.parseNagatoCutinAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
-    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
-    position: [0, 0, 1][index] || 0,
-  });
-
-  // 3-times attacks counted for 1st Mutsu twice, 2nd ship once
-  Hougeki.parseMutsuCutinAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
-    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
-    position: [0, 0, 1][index] || 0,
-  });
-
-  // 3-times attacks counted for first 3 ships, smoke effect decided by 3rd ship
-  Hougeki.parseColoradoCutinAttacker = ({ isAllySideFriend, index, api_at_eflag }) => ({
-    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
-    position: [0, 1, 2][index] || 0,
+    position: attackerPos[index] || 0,
   });
 
   Hougeki.parseDamage = ({ api_damage }) =>

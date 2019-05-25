@@ -2438,8 +2438,11 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Colorado.
+	 * Flagship is healthy Colorado, Echelon formation selected..
 	 * No PvP sample found for now.
+	 *
+	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
+	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
 	 *
 	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Colorado
@@ -2453,8 +2456,7 @@ KC3改 Ship Object
 			// Colorado is flagship of a fleet
 			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
-				// unknown, placeholder
-				const isDoubleLine = [2, 12].includes(
+				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -2463,7 +2465,7 @@ KC3改 Ship Object
 						.some(ship => ship.isAbsent() || ship.isCarrier()),
 					// submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
-				return isDoubleLine && !invalidCombinedShips && !hasSubmarine;
+				return isEchelon && !invalidCombinedShips && !hasSubmarine;
 			}
 		}
 		return false;
