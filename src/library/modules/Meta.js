@@ -112,11 +112,12 @@ Provides access to data on built-in JSON files
 			281: 38,
 		},
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576],
+		specialCutinIds: [541, 571, 573, 576, 601, 1496],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
+		coloradoCutinShips: [601, 1496],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -128,7 +129,8 @@ Provides access to data on built-in JSON files
 			568: 161, 567: 13,  571: 571, 572: 572, 573: 573,
 			574: 574, 575: 574, 576: 231, 577: 245, 578: 190,
 			579: 7,   580: 58,  581: 581, 582: 582, 583: 583,
-			584: 7,   585: 161, 586: 574, 587: 298,
+			584: 7,   585: 161, 586: 574, 587: 298, 588: 266,
+			589: 310, 590: 309, 591: 284, 592: 332, 593: 314,
 		},
 		
 		/* Initialization

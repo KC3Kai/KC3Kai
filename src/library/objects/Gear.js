@@ -92,11 +92,18 @@ KC3改 Equipment Object
 					// Taihou Class Kai
 					"43": "3",
 				},
-				byShip: {
-					// extra +1 fp, +1 ev for Akagi Kai Ni E
-					ids: [599],
-					multiple: { "houg": 1, "houk": 1 },
-				},
+				byShip: [
+					{
+						// extra +1 ev for Akagi Kai Ni
+						ids: [594],
+						multiple: { "houk": 1 },
+					},
+					{
+						// extra +1 fp, +1 ev for Akagi Kai Ni E
+						ids: [599],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
 			},
 			// Ryuusei Kai
 			"52": {
@@ -112,11 +119,18 @@ KC3改 Equipment Object
 					// Taihou Class Kai
 					"43": "3",
 				},
-				byShip: {
-					// extra +1 fp, +1 ev for Akagi Kai Ni E
-					ids: [599],
-					multiple: { "houg": 1, "houk": 1 },
-				},
+				byShip: [
+					{
+						// extra +1 ev for Akagi Kai Ni
+						ids: [594],
+						multiple: { "houk": 1 },
+					},
+					{
+						// extra +1 fp, +1 ev for Akagi Kai Ni E
+						ids: [599],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
 			},
 			// Type 97 Torpedo Bomber (931 Air Group)
 			"82": {
@@ -447,6 +461,50 @@ KC3改 Equipment Object
 						multiple: { "houg": 4 },
 					},
 				],
+			},
+			// Reppuu Kai (Prototype Carrier-based Model)
+			"335": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					// Akagi Class Kai+?
+					"14": [
+						{
+							remodel: 1,
+							multiple: { "tyku": 1, "houk": 1 },
+						},
+						{
+							remodel: 2,
+							multiple: { "tyku": 1 },
+						},
+					],
+				},
+			},
+			// Reppuu Kai Ni
+			"336": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					// Akagi Class Kai+?
+					"14": [
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+						{
+							remodel: 2,
+							multiple: { "tyku": 1 },
+						},
+					],
+				},
 			},
 			// Re.2001 OR Kai
 			"184": {
@@ -1170,6 +1228,26 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 				],
+			},
+			// 152mm/55 Triple Rapid Fire Gun Mount
+			"340": {
+				count: 0,
+				byClass: {
+					// Duca degli Abruzzi Class Garibaldi
+					"92": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					}
+				},
+			},
+			// 152mm/55 Triple Rapid Fire Gun Mount Kai
+			"341": {
+				count: 0,
+				byClass: {
+					// Duca degli Abruzzi Class Garibaldi
+					"92": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+					}
+				},
 			},
 			// Searchlight
 			"74": {
