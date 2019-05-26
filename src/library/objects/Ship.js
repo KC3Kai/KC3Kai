@@ -1619,9 +1619,8 @@ KC3改 Ship Object
 		} else { // Post-cap types
 			switch(installationType) {
 				case 4: // Supply Depot Princess
-					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					const t3KaiBonus = this.hasEquipment(317) ? 2.5 : 1;
-					return [0, landingBonus * wg42Bonus * t3KaiBonus];
+					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
+					return [0, landingBonus * wg42Bonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
