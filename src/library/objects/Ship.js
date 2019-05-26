@@ -1576,8 +1576,9 @@ KC3改 Ship Object
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
+		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
-		const shikonBonus = this.hasEquipment(230) ? 5 : 0;
+		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1587,22 +1588,20 @@ KC3改 Ship Object
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive + shikonBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [wg42Additive + shikonBonus + submarineBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
-					// SS(V) bonus
-					const ssBonus = this.isSubmarine() ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus * ssBonus];
+					return [wg42Additive + shikonBonus +  submarineBonus, seaplaneBonus * lightShipBonus * wg42Bonus
+						* apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
@@ -1621,7 +1620,8 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					return [shikonBonus, landingBonus * wg42Bonus];
+					const t3KaiBonus = this.hasEquipment(317) ? 2.5 : 1;
+					return [0, landingBonus * wg42Bonus * t3KaiBonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
@@ -2437,6 +2437,41 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Conditions under verification, known for now:
+	 * Flagship is healthy Colorado, Echelon formation selected..
+	 * No PvP sample found for now.
+	 *
+	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
+	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
+	 *
+	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Colorado
+	 * @see https://wikiwiki.jp/kancolle/Colorado
+	 */
+	KC3Ship.prototype.canDoColoradoCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship Colorado and not even Chuuha
+		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			// Colorado is flagship of a fleet
+			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+				const isEchelon = [4, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd and 3rd ship are not carrier or absent?
+					invalidCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
+						.some(ship => ship.isAbsent() || ship.isCarrier()),
+					// submarine in any position of the fleet?
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
+				return isEchelon && !invalidCombinedShips && !hasSubmarine;
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -2496,6 +2531,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 		};
@@ -2558,6 +2594,10 @@ KC3改 Ship Object
 			// Mutsu cutin since 2019-02-27
 			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
+			}
+			// Colorado cutin since 2019-05-25
+			if(this.canDoColoradoCutin()) {
+				return KC3Ship.specialAttackTypeDay(103, null, 2.0);
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2730,6 +2770,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2831,6 +2872,10 @@ KC3改 Ship Object
 				// special Mutsu Cutin since 2019-02-27
 				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
+				}
+				// special Colorado Cutin since 2019-05-25
+				if(this.canDoColoradoCutin()) {
+					return KC3Ship.specialAttackTypeNight(103, null, 2.0);
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f

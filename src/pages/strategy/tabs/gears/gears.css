@@ -106,10 +106,14 @@
 }
 
 .tab_gears .slotitem .info .upgradeDays a {
-	min-width: 28px;
-	padding: 1px 10px;
+	width: 28px;
+	padding: 1px 1px;
 	background: rgba(255, 255, 255, 0.6);
+	font-size: 12px;
 	text-decoration: none;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
 	cursor: pointer;
 	margin: 2px 2px;
 }
