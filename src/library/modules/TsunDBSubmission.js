@@ -109,6 +109,7 @@
 				actualDamage: null,
 				expectedDamage: null,
 				isCritical: null,
+				amountOfNodes: null
 			},
 			ship: {
 				id: null, 
@@ -749,6 +750,7 @@
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
 					this.unexpectedDamage = Object.assign({}, a, template);
+					this.unexpectedDamage.damageInstance.amountOfNodes = this.data.nodeInfo.amountOfNodes;
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;
 					this.sendData(this.unexpectedDamage, 'abnormal');
@@ -893,18 +895,21 @@
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
+					const specialCutinIds = [100, 101, 102, 103];
 					let misc = {};
-					if ([100, 101, 102].includes(cutinType[1])) {
-						if (this.sortieSpecialAttack === true) { continue; }
-					}
-					if ([100, 101, 102].includes(cutin)) {
-						if (this.sortieSpecialAttack === true) { continue; }
+					if (this.sortieSpecialAttack && (
+							specialCutinIds.includes(cutinType[1]) ||
+							specialCutinIds.includes(cutin)
+						)
+					) { continue; }
+					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
-					} 
-					if ([100, 101, 102].includes(cutinType[1])) {
-						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					}
-					else if (time === "day" && !(thisNode.planeFighters.player[0] === 0 && thisNode.planeFighters.abyssal[0] === 0)) {
+					if (specialCutinIds.includes(cutinType[1])) {
+						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+					} else if (time === "day"
+						&& !(thisNode.planeFighters.player[0] === 0
+							&& thisNode.planeFighters.abyssal[0] === 0)) {
 						misc = ship.daySpAttackBaseRate();
 						if (isCombined) {
 							if (isEscort) { misc.fleetMainLoS = PlayerManager.fleets[0].artillerySpottingLineOfSight(); }

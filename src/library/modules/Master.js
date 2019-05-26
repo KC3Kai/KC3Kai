@@ -16,6 +16,8 @@ Saves and loads significant data for future use
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
 		seasonalCgIdFrom: 720,
+		// Devs assigned Colorado Kai to 1496 making more things strange since 2019-05-25
+		seasonalCgIdTo: 1400,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
@@ -30,7 +32,11 @@ Saves and loads significant data for future use
 				return this.processRaw( raw );
 			}
 
-			this.updateRemodelTable();
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
 			return false;
 		},
 
@@ -98,7 +104,13 @@ Saves and loads significant data for future use
 				this._raw.newShips[KC3Meta.getAF(4)] = KC3Meta.getAF(2) - KC3Master.newUpdatesExpiredAfter;
 				if(beforeCounts) beforeCounts[0] -= 1;
 			}
-			this.updateRemodelTable();
+
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
+
 			this.save();
 			this.available = true;
 
@@ -454,7 +466,7 @@ Saves and loads significant data for future use
 		},
 
 		isSeasonalShip :function(id){
-			return id > this.seasonalCgIdFrom && id <= this.abyssalShipIdFrom;
+			return id > this.seasonalCgIdFrom && id <= this.seasonalCgIdTo;
 		},
 
 		isAbyssalShip :function(id){

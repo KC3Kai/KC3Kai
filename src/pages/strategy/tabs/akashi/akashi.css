@@ -50,6 +50,8 @@
 	margin:0px 5px 0px 0px;
 	float:left;
 	text-align:center;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 /* EQUIPMENT
