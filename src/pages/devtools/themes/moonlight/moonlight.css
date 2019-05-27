@@ -4439,6 +4439,9 @@ ABYSS FLEET
 	text-align:center;
 	display:none;
 }
+.v .module.fleet .sship .ship_hp_pred_value {
+	top:-14px;
+}
 .module.fleet .sship .ship_hp_pred_value .ship_hp_diff {
 	color:#ff6565;
 	font-size:11px;
@@ -4494,7 +4497,7 @@ ABYSS FLEET
 	border:1px solid #004;
 	border-radius:3px;
 }
-.module.fleet .sship .ship_supply {
+.v .module.fleet .sship .ship_supply {
 	margin:2px 0px;
 }
 .module.fleet .sship .ship_supply_text {

@@ -947,7 +947,7 @@
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "0px");
 				$(".lship .ship_exp_label").css("text-align", "left");
-		}
+			}
 		// Narrow interface, switch to horizontal if not yet
 		} else if($(window).width() < expectedVerticalWidth && currentLayout != "horizontal"){
 			$(".wrapper").removeClass("v").addClass("h");
@@ -955,7 +955,7 @@
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "65px");
 				$(".lship .ship_exp_label").css("text-align", "right");
-		}
+			}
 		}
 		$(".module.controls .scrollable").scrollLeft(0);
 		$(".module.controls .scroll_left").addClass("disabled");
@@ -1007,6 +1007,7 @@
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
+		$(".module.activity .battle_night img").removeClass("hover");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
@@ -2212,14 +2213,18 @@
 						$(".base_range", baseBox).attr("title",
 							"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)
 						).lazyInitTooltip();
-						$(".base_action", baseBox).html([
-							KC3Meta.term("LandBaseActionWaiting"),
-							KC3Meta.term("LandBaseActionSortie"),
-							KC3Meta.term("LandBaseActionDefend"),
-							KC3Meta.term("LandBaseActionRetreat"),
-							KC3Meta.term("LandBaseActionRest")
-						][baseInfo.action]);
-						if (baseInfo.action === 2) {
+						const actionTerm = baseInfo.getActionTerm();
+						$(".base_action", baseBox).text(KC3Meta.term("LandBaseAction" + actionTerm));
+						if (actionTerm === "Sortie") {
+							// Show a tooltip for supporting target nodes
+							if (KC3SortieManager.isOnSortie() && Array.isArray(baseInfo.strikePoints)) {
+								$(".base_action", baseBox).attr("title", "\u21db {0}".format(
+									baseInfo.strikePoints.map(edge => KC3Meta.nodeLetter(
+										KC3SortieManager.map_world, KC3SortieManager.map_num, edge
+									)).join(", ")
+								)).lazyInitTooltip();
+							}
+						} else if (actionTerm === "Defend") {
 							// Show a tooltip for shotdown ratios given to enemy slots
 							const shotdownRatios = baseInfo.shotdownRatio().formattedSlots;
 							$(".base_action", baseBox).attr("title",
@@ -2922,7 +2927,7 @@
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});
 				}
-
+				
 				// Indicate night to day battle, and if battle is kept to dawn (day time)
 				if(thisNode.isNightToDay){
 					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
