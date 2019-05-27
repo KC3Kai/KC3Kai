@@ -3335,14 +3335,30 @@
 				KC3Meta.term("PvpListCreateType{0}".format(data.api_create_kind))
 			);
 			$(".activity_pvp .pvp_list").empty();
+			let pvpFriends = ConfigManager.pan_pvp_friends.split("\n");
 			$.each(data.api_list, function(idx, enemy){
 				var enemyBox = $("#factory .pvpEnemyInfo").clone();
 				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
 				$(".pvp_enemy_pic", enemyBox)
 					.attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name))
 					.lazyInitTooltip();
-				$(".pvp_enemy_name", enemyBox).text(enemy.api_enemy_name);
-				$(".pvp_enemy_name", enemyBox).attr("title", enemy.api_enemy_name).lazyInitTooltip();
+				$(".pvp_enemy_name", enemyBox)
+					.text(enemy.api_enemy_name)
+					.attr("title", enemy.api_enemy_name).lazyInitTooltip()
+					.toggleClass("friend", pvpFriends.includes(enemy.api_enemy_name))
+					.click(function() {
+						let pvpFriends = ConfigManager.pan_pvp_friends.split("\n");
+						if(pvpFriends.includes(enemy.api_enemy_name)) {
+							pvpFriends.pop(pvpFriends.indexOf(enemy.api_enemy_name));
+						} else {
+							pvpFriends.push(enemy.api_enemy_name);
+						}
+
+						ConfigManager.pan_pvp_friends = pvpFriends.join("\n");
+						ConfigManager.save();
+
+						$(this).toggleClass("friend", pvpFriends.includes(enemy.api_enemy_name));
+					});
 				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
 				// api_enemy_rank is not int ID of rank, fml
 				var rankId = jpRankArr.indexOf(enemy.api_enemy_rank);
