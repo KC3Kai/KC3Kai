@@ -104,14 +104,23 @@ Executes processing and relies on KC3Network for the triggers
 		var self = this;
 		// Get response body
 		har.getContent(function(responseBody){
-			// Strip svdata= from response body if exists then parse JSON
-			if(responseBody.indexOf("svdata=") >- 1){
-				responseBody = responseBody.substring(7);
+			if(typeof responseBody === "string"){
+				// Strip `svdata=` from response body if exists then parse JSON
+				if(responseBody.indexOf("svdata=") === 0){
+					responseBody = responseBody.substring(7);
+				}
+				try {
+					self.response = JSON.parse(responseBody);
+					self.gameStatus = self.response.api_result;
+				} catch (e) {
+					// Keep this.response untouched, should be {}
+					self.gameStatus = 0;
+					console.warn("Parsing Game Response:", e, responseBody);
+				}
+			} else {
+				self.gameStatus = 0;
+				console.warn("Unexpected response body:", responseBody);
 			}
-			var responseObj = JSON.parse(responseBody);
-			
-			self.gameStatus = responseObj.api_result;
-			self.response = responseObj;
 			
 			callback();
 		});
