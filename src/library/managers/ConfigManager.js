@@ -182,6 +182,7 @@ Retrieves when needed to apply on components
 
 				pan_reloadreminder_start  : 120,
 				pan_reloadreminder_repeat : 0,
+				pan_pvp_friends : "",
 
 				dismissed_hints        : {},
 				sr_theme               : "legacy",

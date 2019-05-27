@@ -1619,9 +1619,8 @@ KC3改 Ship Object
 		} else { // Post-cap types
 			switch(installationType) {
 				case 4: // Supply Depot Princess
-					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					const t3KaiBonus = this.hasEquipment(317) ? 2.5 : 1;
-					return [0, landingBonus * wg42Bonus * t3KaiBonus];
+					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
+					return [0, landingBonus * wg42Bonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
@@ -2438,7 +2437,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Colorado, Echelon formation selected..
+	 * Flagship is healthy Colorado, Echelon formation selected.
 	 * No PvP sample found for now.
 	 *
 	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
@@ -2460,15 +2459,55 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are not carrier or absent?
-					invalidCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.some(ship => ship.isAbsent() || ship.isCarrier()),
+					// 2nd and 3rd ship are (F)BB(V) only?
+					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
+						.some(ship => !ship.isAbsent() && !ship.isTaiha()
+							&& [8, 9, 10].includes(ship.master().api_stype)),
 					// submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
-				return isEchelon && !invalidCombinedShips && !hasSubmarine;
+				return isEchelon && validCombinedShips && !hasSubmarine;
 			}
 		}
 		return false;
+	};
+
+	/**
+	 * Colorado special cut-in attack modifiers are variant,
+	 * depending on equipment and 2nd and 3rd ship in the fleet.
+	 */
+	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.coloradoCutinShips.includes(flagshipMstId)) return 1;
+
+		// Under verification: https://twitter.com/syoukuretin/status/1132763536222969856
+		const combinedModifierMaps = [
+			// No more mods for flagship?
+			{},
+			// x1.1 for 2nd ship Big 7 Kai/Kai Ni?
+			{
+				"541": 1.1, "573": 1.1, "576": 1.1,
+			},
+			// x1.15 for 3rd ship Big 7 Kai/Kai Ni?
+			{
+				"541": 1.15, "573": 1.15, "576": 1.15,
+			},
+		];
+
+		forShipPos = (forShipPos || 0) % 3;
+		const baseModifier = [1.3, 1.15, 1.15][forShipPos];
+		const targetShip = locatedFleet.ship(forShipPos),
+			targetShipMstId = targetShip.masterId,
+			targetShipModifier = combinedModifierMaps[forShipPos][targetShipMstId] || 1;
+		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
+		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+
+		const ship2ndMstId = locatedFleet.ship(1).masterId,
+			ship2ndModifier = combinedModifierMaps[1][ship2ndMstId] || 1;
+		return baseModifier * targetShipModifier
+			* (forShipPos === 2 && targetShipModifier > 1 ? ship2ndModifier : 1)
+			* apShellModifier * surfaceRadarModifier;
 	};
 
 	/**
@@ -2531,7 +2570,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
-			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 		};
@@ -2597,7 +2636,7 @@ KC3改 Ship Object
 			}
 			// Colorado cutin since 2019-05-25
 			if(this.canDoColoradoCutin()) {
-				return KC3Ship.specialAttackTypeDay(103, null, 2.0);
+				return KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier());
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2770,7 +2809,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
-			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2875,7 +2914,7 @@ KC3改 Ship Object
 				}
 				// special Colorado Cutin since 2019-05-25
 				if(this.canDoColoradoCutin()) {
-					return KC3Ship.specialAttackTypeNight(103, null, 2.0);
+					return KC3Ship.specialAttackTypeNight(103, null, this.estimateColoradoCutinModifier());
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
