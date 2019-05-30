@@ -132,6 +132,66 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Ryuusei Kai (CarDiv 1)
+			"342": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "houg": 1 },
+					},
+					// Akagi Class Kai+
+					"14": "3",
+					// Shoukaku Class Kai Ni+
+					"43": {
+						remodel: 2,
+						multiple: { "houg": 1 },
+					},
+				},
+				byShip: [
+					{
+						// extra +1 fp, +1 aa, +1 ev for Akagi Kai Ni
+						ids: [594],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// extra +2 fp, +2 aa, +2 ev for Akagi Kai Ni E
+						ids: [599],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+				],
+			},
+			// Ryuusei Kai (CarDiv 1 / Skilled)
+			"343": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "houg": 2 },
+					},
+					// Akagi Class Kai+
+					"14": "3",
+					// Shoukaku Class Kai Ni+
+					"43": {
+						remodel: 2,
+						multiple: { "houg": 1 },
+					},
+				},
+				byShip: [
+					{
+						// extra +1 fp, +2 aa, +1 ev for Akagi Kai Ni
+						ids: [594],
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+					{
+						// extra +3 fp, +3 aa, +3 ev for Akagi Kai Ni E
+						ids: [599],
+						multiple: { "houg": 3, "tyku": 3, "houk": 3 },
+					},
+				],
+			},
 			// Type 97 Torpedo Bomber (931 Air Group)
 			"82": {
 				count: 0,
