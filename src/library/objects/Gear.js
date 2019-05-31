@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190521 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190530 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -562,6 +562,54 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "tyku": 1 },
+						},
+					],
+				},
+			},
+			// Reppuu Kai Ni Model E
+			"338": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+					},
+					// Akagi Class Kai+
+					"14": [
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						},
+						{
+							remodel: 2,
+							multiple: { "tyku": 1, "houk": 1 },
+						},
+					],
+				},
+			},
+			// Reppuu Kai Ni Model E (CarDiv 1 / Skilled)
+			"339": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai
+					"3": {
+						remodel: 1,
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+					// Akagi Class Kai+
+					"14": [
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						},
+						{
+							remodel: 2,
+							multiple: { "tyku": 1, "houk": 2 },
+						},
+						{
+							remodel: 3,
+							multiple: { "houg": 5, "tyku": 1, "houk": 1 },
 						},
 					],
 				},
@@ -2764,7 +2812,7 @@ KC3改 Equipment Object
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
 		// Carrier-based or Land-base bombers for now;
 		// Torpedo bombers current implemented:
-		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D
+		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D, Ryuusei Kai(CD1/Sk)
 		// LB attackers current implemented:
 		//   Toukai variants
 		// Dive bombers still NOT capable for OASW, unknown for LBAS:
