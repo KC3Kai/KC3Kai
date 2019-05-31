@@ -463,7 +463,8 @@
 				hp: friendlyInfo.api_maxhps,
 				nowhp: friendlyInfo.api_nowhps,
 				stats: friendlyInfo.api_Param,
-				equip: friendlyInfo.api_Slot
+				equip: friendlyInfo.api_Slot,
+				requestType: PlayerManager.friendlySettings.api_request_type
 			};
 			let uniqueSerialKey = "";
 			for(const i in this.friendlyFleet.fleet.ship) {
