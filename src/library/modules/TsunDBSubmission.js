@@ -201,6 +201,14 @@
 			time: null,
 			kc3version: null
 		},
+		maelstrom : {
+			map: null,
+			node: null,
+			radars: [],
+			loss: null,
+			resources: [],
+			type: null
+		},
 		development : {
 			hqLvl: null,
 			flagship: {},
@@ -431,6 +439,9 @@
 			}
 			if(apiData.api_m1) {
 				this.processGimmick(http);
+			}
+			if(apiData.api_happening) {
+				this.processMaelstrom(apiData.api_happening);
 			}
 		},
 		
@@ -933,6 +944,25 @@
 					this.sendData(this.spAttack, 'spattack');
 				}
 			}
+		},
+
+		processMaelstrom: function(apiData) {
+			this.maelstrom = {
+				map: this.data.map,
+				node: this.data.edgeID[this.data.edgeID.length - 1],
+				loss: apiData.api_count,
+				type: apiData.api_mst_id,
+				radars: [],
+				resources: []
+			};
+			const rscType = ["", "fuel", "ammo"][apiData.api_mst_id] || "";
+			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
+				fleet.shipsUnescaped().forEach(ship => {
+					this.maelstrom.resources.push(ship[rscType] || 0);
+					this.maelstrom.radars.push(ship.countEquipmentType(2, [12, 13]));
+				});
+			});
+			this.sendData(this.maelstrom, 'maelstrom');
 		},
 		
 		processDevelopment: function(http){
