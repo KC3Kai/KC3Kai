@@ -306,6 +306,7 @@
 				const totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 				const iconImg = $("<img />")
 					.attr("src", "/assets/img/useitems/" + icon + ".png")
+					.attr("title", KC3Meta.useItemName(icon))
 					.appendTo(totalItemDiv);
 				$("<span></span>")
 					.text("x{0}/{1}".format(
@@ -314,8 +315,10 @@
 					)).appendTo(totalItemDiv);
 				switch(Number(icon)) {
 					case 58:
-						appendOwnedItem(iconImg.clone().attr("src", "/assets/img/useitems/57.png"),
-							PlayerManager.consumables.medals);
+						const medalIcon = iconImg.clone()
+							.attr("src", "/assets/img/useitems/57.png")
+							.attr("title", KC3Meta.useItemName(57));
+						appendOwnedItem(medalIcon, PlayerManager.consumables.medals);
 						appendOwnedItem(iconImg, PlayerManager.consumables.blueprints);
 						break;
 					case 65:

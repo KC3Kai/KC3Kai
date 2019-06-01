@@ -224,7 +224,7 @@ Listens to network history and triggers callback if game events happen
 							// Only prevent the data parsing error
 							message.api_status = e.name;
 							message.api_result = e.message;
-							console.error("Prevented " + e.name, e.message, e);
+							console.warn("Prevented unhandled", e);
 						} finally {
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}

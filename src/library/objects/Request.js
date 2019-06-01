@@ -104,14 +104,23 @@ Executes processing and relies on KC3Network for the triggers
 		var self = this;
 		// Get response body
 		har.getContent(function(responseBody){
-			// Strip svdata= from response body if exists then parse JSON
-			if(responseBody.indexOf("svdata=") >- 1){
-				responseBody = responseBody.substring(7);
+			if(typeof responseBody === "string"){
+				// Strip `svdata=` from response body if exists then parse JSON
+				if(responseBody.indexOf("svdata=") === 0){
+					responseBody = responseBody.substring(7);
+				}
+				try {
+					self.response = JSON.parse(responseBody);
+					self.gameStatus = self.response.api_result;
+				} catch (e) {
+					// Keep this.response untouched, should be {}
+					self.gameStatus = 0;
+					console.warn("Parsing game response:", e, responseBody, self.params);
+				}
+			} else {
+				self.gameStatus = 0;
+				console.warn("Unexpected response body:", responseBody, self.params);
 			}
-			var responseObj = JSON.parse(responseBody);
-			
-			self.gameStatus = responseObj.api_result;
-			self.response = responseObj;
 			
 			callback();
 		});
@@ -123,7 +132,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.warn("Game Status Error:", this.gameStatus, this.response);
+			console.warn("Game Status Error:", this.gameStatus, this.call, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {

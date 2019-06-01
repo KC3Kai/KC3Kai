@@ -3226,14 +3226,33 @@
 				KC3Meta.term("PvpListCreateType{0}".format(data.api_create_kind))
 			);
 			$(".activity_pvp .pvp_list").empty();
+			const lines2Array = (s) => (s || "").split(/[\r\n]/).filter(l => !!l);
+			const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends);
+			const enemyNameClickFunc = function(e) {
+				const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends),
+					name = $(this).text(),
+					namePos = pvpFriends.indexOf(name);
+				if(namePos >= 0) {
+					pvpFriends.splice(namePos, 1);
+				} else {
+					pvpFriends.push(name);
+				}
+				// to indicate if there are other same names existed in list after removing
+				$(this).toggleClass("friend", pvpFriends.includes(name));
+				ConfigManager.pan_pvp_friends = pvpFriends.join("\n");
+				ConfigManager.save();
+			};
 			$.each(data.api_list, function(idx, enemy){
 				var enemyBox = $("#factory .pvpEnemyInfo").clone();
 				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
 				$(".pvp_enemy_pic", enemyBox)
 					.attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name))
 					.lazyInitTooltip();
-				$(".pvp_enemy_name", enemyBox).text(enemy.api_enemy_name);
-				$(".pvp_enemy_name", enemyBox).attr("title", enemy.api_enemy_name).lazyInitTooltip();
+				$(".pvp_enemy_name", enemyBox)
+					.text(enemy.api_enemy_name)
+					.attr("title", enemy.api_enemy_name).lazyInitTooltip()
+					.toggleClass("friend", pvpFriends.includes(enemy.api_enemy_name))
+					.click(enemyNameClickFunc);
 				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
 				// api_enemy_rank is not int ID of rank, fml
 				var rankId = jpRankArr.indexOf(enemy.api_enemy_rank);

@@ -1182,6 +1182,14 @@
 				"options" : {
 					"tooltip" : "SettingsPanelCustomCSSTip"
 				}
+			},
+			{
+				"id" : "pan_pvp_friends",
+				"name" : "SettingsPanelPvPFriends",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelPvPFriendsTip"
+				}
 			}
 		]
 	},
