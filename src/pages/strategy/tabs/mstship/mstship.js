@@ -1004,7 +1004,10 @@
 							const gearName = KC3Meta.gearName(master.api_name);
 							const gearBox = $(".tab_mstship .factory .gearBonuses").clone();
 							$(".gearId", gearBox).text(`[${gear.id}]`);
-							$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(master.api_type[3]));
+							$(".gearIcon img", gearBox)
+								.attr("src", KC3Meta.itemIcon(master.api_type[3]))
+								.attr("alt", gear.id).click(gearClickFunc);
+							$(".gearIcon", gearBox).addClass("hover");
 							$(".gearName", gearBox).text(gearName).attr("title", gearName);
 							
 							if (Object.keys(totalStats).length > 0) {

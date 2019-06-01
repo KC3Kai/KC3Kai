@@ -3343,7 +3343,7 @@ KC3改 Ship Object
 				});
 				$.each(gunCountFitMap, (_, fit) => {
 					const count = fit[0];
-					let value = fit[1][time] || 0;
+					let value = fit[1][time.toCamelCase()] || 0;
 					if(this.isMarried()) value *= fit[1].married || 1;
 					result += value * Math.sqrt(count);
 				});
