@@ -20,6 +20,7 @@ Does not include Ships and Gears which are managed by other Managers
 		repairShips: [-1,-1,-1,-1,-1],
 		buildSlots: 2,
 		combinedFleet: 0,
+		friendlySettings: {},
 		extraSupply: [0, 0],
 		statistics: {},
 		maxResource: 300000,
