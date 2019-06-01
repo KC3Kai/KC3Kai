@@ -3234,11 +3234,11 @@
 					namePos = pvpFriends.indexOf(name);
 				if(namePos >= 0) {
 					pvpFriends.splice(namePos, 1);
-					$(this).removeClass("friend");
 				} else {
 					pvpFriends.push(name);
-					$(this).addClass("friend");
 				}
+				// to indicate if there are other same names existed in list after removing
+				$(this).toggleClass("friend", pvpFriends.includes(name));
 				ConfigManager.pan_pvp_friends = pvpFriends.join("\n");
 				ConfigManager.save();
 			};
