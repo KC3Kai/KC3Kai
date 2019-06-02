@@ -3230,7 +3230,7 @@
 			const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends);
 			const enemyNameClickFunc = function(e) {
 				const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends),
-					name = $(this).text(),
+					name = $(".pvp_enemy_name", $(this).parent()).text(),
 					namePos = pvpFriends.indexOf(name);
 				if(namePos >= 0) {
 					pvpFriends.splice(namePos, 1);
@@ -3249,10 +3249,12 @@
 				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
 				$(".pvp_enemy_pic", enemyBox)
 					.attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name))
-					.lazyInitTooltip();
+					.lazyInitTooltip()
+					.click(enemyNameClickFunc);
 				$(".pvp_enemy_name", enemyBox)
 					.text(enemy.api_enemy_name)
-					.attr("title", enemy.api_enemy_name).lazyInitTooltip()
+					.attr("title", enemy.api_enemy_name)
+					.lazyInitTooltip()
 					.click(enemyNameClickFunc);
 				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
 				// api_enemy_rank is not int ID of rank, fml
