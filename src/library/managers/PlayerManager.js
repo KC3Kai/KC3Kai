@@ -210,6 +210,7 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		setBuildDocks :function( data ){
+			const buildingShips = [];
 			$.each(data, function(ctr, kdock){
 				if(kdock.api_state > 0){
 					const faceId = kdock.api_created_ship_id;
@@ -229,7 +230,39 @@ Does not include Ships and Gears which are managed by other Managers
 				}else{
 					KC3TimerManager.build( kdock.api_id ).deactivate();
 				}
+				buildingShips.push({
+					num: kdock.api_id,
+					state: kdock.api_state,
+					id: kdock.api_created_ship_id,
+					completeTime: kdock.api_complete_time,
+					lsc: kdock.api_item1 > 999,
+				});
 			});
+			localStorage.buildingShips = JSON.stringify(buildingShips);
+			return this;
+		},
+
+		setBuildDocksByCache :function(){
+			if(!!localStorage.buildingShips){
+				try {
+					const buildingShips = JSON.parse(localStorage.buildingShips);
+					$.each(buildingShips, function(idx, kdock){
+						if(kdock.state > 0){
+							const faceId = kdock.id;
+							const timer = KC3TimerManager.build(kdock.num);
+							timer.activate(kdock.completeTime, faceId);
+							timer.lsc = kdock.lsc;
+							timer.newShip = ConfigManager.info_dex_owned_ship ?
+								! PictureBook.isEverOwnedShip(faceId) :
+								! KC3ShipManager.masterExists(faceId);
+						} else {
+							KC3TimerManager.build(kdock.num).deactivate();
+						}
+					});
+				} catch (err) {
+					console.error("Error while processing cached building ship", err);
+				}
+			}
 			return this;
 		},
 

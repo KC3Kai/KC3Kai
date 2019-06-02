@@ -112,11 +112,12 @@ Provides access to data on built-in JSON files
 			281: 38,
 		},
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576],
+		specialCutinIds: [541, 571, 573, 576, 601, 1496],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
+		coloradoCutinShips: [601, 1496],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -128,7 +129,8 @@ Provides access to data on built-in JSON files
 			568: 161, 567: 13,  571: 571, 572: 572, 573: 573,
 			574: 574, 575: 574, 576: 231, 577: 245, 578: 190,
 			579: 7,   580: 58,  581: 581, 582: 582, 583: 583,
-			584: 7,   585: 161, 586: 574, 587: 298,
+			584: 7,   585: 161, 586: 574, 587: 298, 588: 266,
+			589: 310, 590: 309, 591: 284, 592: 332, 593: 314,
 		},
 		
 		/* Initialization
@@ -240,20 +242,52 @@ Provides access to data on built-in JSON files
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
 		},
-
-		statIconApi :function (statName, iconSetId = ConfigManager.info_stats_iconset) {
-			const statApiNames = {
-				"tyku": "aa",
-				"souk": "ar",
-				"tais": "as",
-				"houk": "ev",
+		
+		statApiNameMap :function(){
+			return ({
+				"taik": "hp",
 				"houg": "fp",
-				"saku": "ls",
 				"raig": "tp",
-				"houm": "ac",
-				"leng": "rn"
+				"baku": "dv",
+				"souk": "ar",
+				"tyku": "aa",
+				"tais": "as",
+				"houm": "ht",
+				"houk": "ev",
+				"saku": "ls",
+				"luck": "lk",
+				"soku": "sp",
+				"leng": "rn",
+				"cost": "kk",
+				"distance": "or",
+			});
+		},
+		statIconByApi :function(apiName, iconSetId = ConfigManager.info_stats_iconset){
+			return this.statIcon(this.statApiNameMap()[apiName], iconSetId);
+		},
+		
+		statNameTerm :function(name, isApiName = false, returnTerm = false){
+			const statNameTermMap = {
+				"hp": "ShipHp",
+				"fp": "ShipFire",
+				"tp": "ShipTorpedo",
+				"dv": "ShipBombing",
+				"ar": "ShipArmor",
+				"aa": "ShipAntiAir",
+				"as": "ShipAsw",
+				"ht": "ShipAccuracy",
+				"ev": "ShipEvasion",
+				"ib": "ShipAccAntiBomber",
+				"if": "ShipEvaInterception",
+				"ls": "ShipLos",
+				"lk": "ShipLuck",
+				"sp": "ShipSpeed",
+				"rn": "ShipLength",
+				"or": "ShipRadius",
+				"kk": "ShipDeployCost",
 			};
-			return KC3Meta.statIcon(statApiNames[statName], iconSetId);
+			const term = statNameTermMap[isApiName ? this.statApiNameMap()[name] : name] || "";
+			return !returnTerm ? this.term(term) : term;
 		},
 		
 		itemIconsByType2 :function(type2Id){

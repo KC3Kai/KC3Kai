@@ -127,7 +127,7 @@ dateFormat.masks = {
 	isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
 };
 
-// Internationalization strings
+// Internationalization strings (English only)
 dateFormat.i18n = {
 	dayNames: [
 		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
@@ -137,6 +137,18 @@ dateFormat.i18n = {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 	]
+};
+// These will be filled with real localized strings later
+dateFormat.l10n = { dayNames: [], monthNames: [] };
+// Get localized weekday name, dow is 0-based
+Date.getDayName = function(dow, forLong) {
+	return dateFormat.l10n.dayNames[Math.abs(Number(dow) % 7)
+		+ (!!forLong && forLong !== "short" ? 7 : 0)];
+};
+// Get localized month name, month is 1-based
+Date.getMonthName = function(month, forLong) {
+	return dateFormat.l10n.monthNames[Math.abs((Number(month) - 1) % 12)
+		+ (!!forLong && forLong !== "short" ? 12 : 0)];
 };
 
 /* GET DATE IN Japan Standard TimeZone
@@ -151,7 +163,7 @@ Date.getJstDate = function() {
 	var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
 	// create new Date object for different city
 	// using supplied offset
-	return new Date(utc + (3600000*9));
+	return new Date(utc + (3600000 * 9));
 };
 
 /**

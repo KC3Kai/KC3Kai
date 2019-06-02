@@ -648,8 +648,10 @@ KC3改 Ship Object
 			ls: this.ls[0],
 			tp: this.tp[0],
 			// Accuracy not shown in-game, so naked value might be plus-minus 0
-			ac: 0
+			ht: 0
 		};
+		// Limited to currently used stats only,
+		// all implemented see `KC3Meta.js#statApiNameMap`
 		const statApiNames = {
 			"tyku": "aa",
 			"souk": "ar",
@@ -658,7 +660,7 @@ KC3改 Ship Object
 			"houg": "fp",
 			"saku": "ls",
 			"raig": "tp",
-			"houm": "ac"
+			"houm": "ht"
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
@@ -678,7 +680,7 @@ KC3改 Ship Object
 			"tyku": "aa",
 			"tais": "as",
 			"saku": "ls",
-			//"houm": "ac",
+			//"houm": "ht",
 		};
 		for(const apiName in statApiNames) {
 			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
@@ -1574,8 +1576,9 @@ KC3改 Ship Object
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
+		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
-		const shikonBonus = this.hasEquipment(230) ? 5 : 0;
+		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1585,22 +1588,20 @@ KC3改 Ship Object
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive + shikonBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [wg42Additive + shikonBonus + submarineBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
-					// SS(V) bonus
-					const ssBonus = this.isSubmarine() ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus * ssBonus];
+					return [wg42Additive + shikonBonus +  submarineBonus, seaplaneBonus * lightShipBonus * wg42Bonus
+						* apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
@@ -1619,7 +1620,8 @@ KC3改 Ship Object
 			switch(installationType) {
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.625][wg42Count] || 1.625;
-					return [shikonBonus, landingBonus * wg42Bonus];
+					const t3KaiBonus = this.hasEquipment(317) ? 2.5 : 1;
+					return [0, landingBonus * wg42Bonus * t3KaiBonus];
 
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
@@ -2435,6 +2437,41 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Conditions under verification, known for now:
+	 * Flagship is healthy Colorado, Echelon formation selected..
+	 * No PvP sample found for now.
+	 *
+	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
+	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
+	 *
+	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
+	 * @see http://kancolle.wikia.com/wiki/Colorado
+	 * @see https://wikiwiki.jp/kancolle/Colorado
+	 */
+	KC3Ship.prototype.canDoColoradoCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship Colorado and not even Chuuha
+		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			// Colorado is flagship of a fleet
+			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+				const isEchelon = [4, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd and 3rd ship are not carrier or absent?
+					invalidCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
+						.some(ship => ship.isAbsent() || ship.isCarrier()),
+					// submarine in any position of the fleet?
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
+				return isEchelon && !invalidCombinedShips && !hasSubmarine;
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -2494,6 +2531,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 		};
@@ -2556,6 +2594,10 @@ KC3改 Ship Object
 			// Mutsu cutin since 2019-02-27
 			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
+			}
+			// Colorado cutin since 2019-05-25
+			if(this.canDoColoradoCutin()) {
+				return KC3Ship.specialAttackTypeDay(103, null, 2.0);
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -2694,13 +2736,14 @@ KC3改 Ship Object
 		if(this.isCarrier()) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
-			const isThisSaratogaMk2 = this.masterId === 545;
+			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E
+			const isThisNightCarrier = [545, 599].includes(this.masterId);
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
 			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2)
-			return hasNightAircraft && (hasNightAvPersonnel || isThisSaratogaMk2);
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E)
+			return hasNightAircraft && (hasNightAvPersonnel || isThisNightCarrier);
 		}
 		return false;
 	};
@@ -2727,6 +2770,7 @@ KC3改 Ship Object
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -2768,7 +2812,7 @@ KC3改 Ship Object
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
 			
-			// carrier night cut-in, NOAP or Saratoga Mk.II needed
+			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E needed
 			if(isCarrierNightAirAttack) {
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 				// https://twitter.com/Nishisonic/status/911143760544751616
@@ -2828,6 +2872,10 @@ KC3改 Ship Object
 				// special Mutsu Cutin since 2019-02-27
 				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
 					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
+				}
+				// special Colorado Cutin since 2019-05-25
+				if(this.canDoColoradoCutin()) {
+					return KC3Ship.specialAttackTypeNight(103, null, 2.0);
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
@@ -3058,7 +3106,7 @@ KC3改 Ship Object
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
-		const byEquip = -this.nakedStats("ac");
+		const byEquip = -this.nakedStats("ht");
 		const byImprove = this.equipment(true)
 			.map(g => g.accStatImprovementBonus("fire"))
 			.sumValues();
@@ -3694,10 +3742,7 @@ KC3改 Ship Object
 			"Rocket"        : "AntiLand"
 			}[attackTypeDay[0]] || "Shelling";
 		const canAsw = shipObj.canDoASW();
-		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
-			|| (canAsw && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
-		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
-		if(isAswPowerShown){
+		if(canAsw){
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
 			let isCapped = false;
@@ -3726,7 +3771,7 @@ KC3改 Ship Object
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
 			if(canClosingTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseClosingTorpedo"));
-			$(".dayAttack", tooltipBox).html(
+			$(".dayAswPower", tooltipBox).html(
 				KC3Meta.term("ShipDayAttack").format(
 					KC3Meta.term("ShipWarfareAntisub"),
 					joinPowerAndCritical(power, criticalPower, isCapped),
@@ -3734,58 +3779,69 @@ KC3改 Ship Object
 				)
 			);
 		} else {
-			let combinedFleetBonus = 0;
-			if(onFleetNum) {
-				const powerBonus = shipObj.combinedFleetPowerBonus(
-					battleConds.playerCombinedFleetType, battleConds.isEnemyCombined, warfareTypeDay
-				);
-				combinedFleetBonus = onFleetNum === 1 ? powerBonus.main :
-					onFleetNum === 2 ? powerBonus.escort : 0;
-			}
-			let power = warfareTypeDay === "Torpedo" ?
-				shipObj.shellingTorpedoPower(combinedFleetBonus) :
-				shipObj.shellingFirePower(combinedFleetBonus);
-			let criticalPower = false;
-			let isCapped = false;
-			const canShellingAttack = warfareTypeDay === "Torpedo" ||
-				shipObj.canDoDayShellingAttack();
-			const canOpeningTorp = shipObj.canDoOpeningTorpedo();
-			const canClosingTorp = shipObj.canDoClosingTorpedo();
-			const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
-			const dayCutinRate = shipObj.artillerySpottingRate(spAttackType[1]);
-			// Apply power cap by configured level
-			if(ConfigManager.powerCapApplyLevel >= 1) {
-				({power} = shipObj.applyPrecapModifiers(power, warfareTypeDay,
-					battleConds.engagementId, battleConds.formationId));
-			}
-			if(ConfigManager.powerCapApplyLevel >= 2) {
-				({power, isCapped} = shipObj.applyPowerCap(power, "Day", warfareTypeDay));
-			}
-			if(ConfigManager.powerCapApplyLevel >= 3) {
-				if(ConfigManager.powerCritical) {
-					criticalPower = shipObj.applyPostcapModifiers(
-						power, warfareTypeDay, spAttackType, undefined,
-						true, attackTypeDay[0] === "AirAttack").power;
-				}
-				({power} = shipObj.applyPostcapModifiers(power, warfareTypeDay,
-					spAttackType));
-			}
-			let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
-				spAttackType[0] === "Cutin" ?
-					KC3Meta.cutinTypeDay(spAttackType[1]) + (dayCutinRate ? " {0}%".format(dayCutinRate) : "") :
-					KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
-			if(canOpeningTorp) attackTypeIndicators += ", {0}"
-				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
-			if(canClosingTorp) attackTypeIndicators += ", {0}"
-				.format(KC3Meta.term("ShipExtraPhaseClosingTorpedo"));
-			$(".dayAttack", tooltipBox).html(
-				KC3Meta.term("ShipDayAttack").format(
-					KC3Meta.term("ShipWarfare" + warfareTypeDay),
-					joinPowerAndCritical(power, criticalPower, isCapped),
-					attackTypeIndicators
-				)
-			);
+			$(".dayAswPower", tooltipBox).html("-");
 		}
+		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
+			|| (canAsw && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
+		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
+		if(isAswPowerShown){
+			$(".dayAttack", tooltipBox).parent().parent().hide();
+		} else {
+			$(".dayAswPower", tooltipBox).parent().parent().hide();
+		}
+		
+		let combinedFleetBonus = 0;
+		if(onFleetNum) {
+			const powerBonus = shipObj.combinedFleetPowerBonus(
+				battleConds.playerCombinedFleetType, battleConds.isEnemyCombined, warfareTypeDay
+			);
+			combinedFleetBonus = onFleetNum === 1 ? powerBonus.main :
+				onFleetNum === 2 ? powerBonus.escort : 0;
+		}
+		let power = warfareTypeDay === "Torpedo" ?
+			shipObj.shellingTorpedoPower(combinedFleetBonus) :
+			shipObj.shellingFirePower(combinedFleetBonus);
+		let criticalPower = false;
+		let isCapped = false;
+		const canShellingAttack = warfareTypeDay === "Torpedo" ||
+			shipObj.canDoDayShellingAttack();
+		const canOpeningTorp = shipObj.canDoOpeningTorpedo();
+		const canClosingTorp = shipObj.canDoClosingTorpedo();
+		const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
+		const dayCutinRate = shipObj.artillerySpottingRate(spAttackType[1]);
+		// Apply power cap by configured level
+		if(ConfigManager.powerCapApplyLevel >= 1) {
+			({power} = shipObj.applyPrecapModifiers(power, warfareTypeDay,
+				battleConds.engagementId, battleConds.formationId));
+		}
+		if(ConfigManager.powerCapApplyLevel >= 2) {
+			({power, isCapped} = shipObj.applyPowerCap(power, "Day", warfareTypeDay));
+		}
+		if(ConfigManager.powerCapApplyLevel >= 3) {
+			if(ConfigManager.powerCritical) {
+				criticalPower = shipObj.applyPostcapModifiers(
+					power, warfareTypeDay, spAttackType, undefined,
+					true, attackTypeDay[0] === "AirAttack").power;
+			}
+			({power} = shipObj.applyPostcapModifiers(power, warfareTypeDay,
+				spAttackType));
+		}
+		let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
+			spAttackType[0] === "Cutin" ?
+				KC3Meta.cutinTypeDay(spAttackType[1]) + (dayCutinRate ? " {0}%".format(dayCutinRate) : "") :
+				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
+		if(canOpeningTorp) attackTypeIndicators += ", {0}"
+			.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
+		if(canClosingTorp) attackTypeIndicators += ", {0}"
+			.format(KC3Meta.term("ShipExtraPhaseClosingTorpedo"));
+		$(".dayAttack", tooltipBox).html(
+			KC3Meta.term("ShipDayAttack").format(
+				KC3Meta.term("ShipWarfare" + warfareTypeDay),
+				joinPowerAndCritical(power, criticalPower, isCapped),
+				attackTypeIndicators
+			)
+		);
+		
 		const attackTypeNight = shipObj.estimateNightAttackType();
 		const canNightAttack = shipObj.canDoNightAttack();
 		const warfareTypeNight = {
@@ -3990,6 +4046,17 @@ KC3改 Ship Object
 			if(over < -8) { $(this).addClass("use-gpu slide"); }
 		});
 		setStyleVar("--maxOverflow", maxOverflow + "px");
+		// show day shelling power instead of ASW power (if any) on holding Alt key
+		if(event.altKey && $(".dayAswPower", ui.tooltip).is(":visible")) {
+			$(".dayAswPower", ui.tooltip).parent().parent().hide();
+			$(".dayAttack", ui.tooltip).parent().parent().show();
+		}
+		// show day ASW power instead of shelling power if can ASW on holding Ctrl/Meta key
+		if((event.ctrlKey || event.metaKey) && !$(".dayAswPower", ui.tooltip).is(":visible")
+			&& $(".dayAswPower", ui.tooltip).text() !== "-") {
+			$(".dayAswPower", ui.tooltip).parent().parent().show();
+			$(".dayAttack", ui.tooltip).parent().parent().hide();
+		}
 		return true;
 	};
 

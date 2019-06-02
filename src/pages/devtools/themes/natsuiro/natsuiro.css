@@ -74,7 +74,8 @@ html,body {
 }
 #catBomb .content {
 	width:400px;
-	height:120px;
+	min-height:120px;
+	max-height:220px;
 	background-color: #fdd;
 	margin:-60px auto 0px -200px;
 	color:#c44;
@@ -136,7 +137,8 @@ html,body {
 }
 #gameUpdate .content {
 	width:400px;
-	height:120px;
+	min-height:120px;
+	max-height:220px;
 	background-color: #dfd;
 	margin:-60px auto 0px -200px;
 	color:#0c0;

@@ -164,6 +164,8 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+			const akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
+			this.upgrades = JSON.parse(akashiData);
 			this.initComparator();
 		},
 
@@ -492,7 +494,7 @@
 			}
 
 			SlotItems.sort( comparator );
-
+			const dayOfWeek = Date.getJstDate().getDay();
 			const allProperties = this._allProperties;
 			$.each(SlotItems, function(index, ThisSlotitem) {
 				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
@@ -505,6 +507,19 @@
 					.on("click", self.gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
+
+				["sun", "mon", "tue", "wed", "thu", "fri", "sat"].forEach((day, dayIndex) => {
+					if (self.upgrades[day] && Array.isArray(self.upgrades[day][ThisSlotitem.id])) {
+						$("<a></a>").text(Date.getDayName(dayIndex))
+							.attr("title",
+								self.upgrades[day][ThisSlotitem.id].map(shipId =>
+									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
+								).join(", ")
+							).attr("href", `#akashi-${day}`)
+							.toggleClass("sel", dayIndex === dayOfWeek)
+							.appendTo($(".upgradeDays", ItemElem));
+					}
+				});
 
 				allProperties.forEach( function(v,i) {
 					self.slotitem_stat(ItemElem, ThisSlotitem, v);
