@@ -1322,8 +1322,8 @@
 				headers: {
 					'content-type': 'application/json',
 					'tsun-ver': 'Kasumi Kai',
-					'dataorigin': "kc3",
-					"version": this.kc3version
+					'dataorigin': 'kc3',
+					'version': this.kc3version
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {
