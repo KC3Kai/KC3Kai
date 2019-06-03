@@ -422,6 +422,19 @@
 				}
 			});
 
+			// show special stats icon for interceptor and land base fighter
+			if(KC3GearManager.interceptorsType3Ids.includes(Number(type_id))){
+				$(".itemSorters .sortControl.ht").attr("title", KC3Meta.term("ShipAccAntiBomber"));
+				$(".itemSorters .sortControl.ht img").attr("src", KC3Meta.statIcon("ib"));
+				$(".itemSorters .sortControl.ev").attr("title", KC3Meta.term("ShipEvaInterception"));
+				$(".itemSorters .sortControl.ev img").attr("src", KC3Meta.statIcon("if"));
+			} else {
+				$(".itemSorters .sortControl.ht").attr("title", KC3Meta.term("ShipAccuracy"));
+				$(".itemSorters .sortControl.ht img").attr("src", KC3Meta.statIcon("ht"));
+				$(".itemSorters .sortControl.ev").attr("title", KC3Meta.term("ShipEvasion"));
+				$(".itemSorters .sortControl.ev img").attr("src", KC3Meta.statIcon("ev"));
+			}
+
 			const q = ".tab_gears .itemSorters .sortControl.type";
 			if (type_id === "all") {
 				$(q).removeClass("hide");
@@ -566,6 +579,18 @@
 			if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
 			)){
+				// accuray icon -> anti-bomber
+				if(statName === "ht" &&
+					KC3GearManager.interceptorsType3Ids.includes(Number(SlotItem.type_id))){
+					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccAntiBomber"));
+					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ib"));
+				}
+				// evasion icon -> interception
+				if(statName === "ev" &&
+					KC3GearManager.interceptorsType3Ids.includes(Number(SlotItem.type_id))){
+					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvaInterception"));
+					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("if"));
+				}
 				if(statName === "rn"){
 					$(".stats .item_{0} span".format(statName), ItemElem)
 						.text(KC3Meta.gearRange(SlotItem.stats[statName]));

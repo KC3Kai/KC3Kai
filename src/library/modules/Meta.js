@@ -680,14 +680,14 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				// move Nelson Touch/Nagato-class Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
 				this._battle.cutinDay[index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
