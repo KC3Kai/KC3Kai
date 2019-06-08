@@ -105,21 +105,23 @@ Executes processing and relies on KC3Network for the triggers
 		// Get response body
 		har.getContent(function(responseBody){
 			if(typeof responseBody === "string"){
-				// Strip `svdata=` from response body if exists then parse JSON
-				if(responseBody.indexOf("svdata=") === 0){
-					responseBody = responseBody.substring(7);
-				}
 				try {
-					self.response = JSON.parse(responseBody);
+					// Strip `svdata=` from response body if exists then parse JSON
+					var json = responseBody.replace(/[\s\S]*svdata=/, "");
+					self.response = JSON.parse(json);
 					self.gameStatus = self.response.api_result;
 				} catch (e) {
 					// Keep this.response untouched, should be {}
 					self.gameStatus = 0;
-					console.warn("Parsing game response:", e, responseBody, self.params);
+					console.warn("Parsing game response:", e, responseBody, self.call, self.params);
 				}
 			} else {
 				self.gameStatus = 0;
-				console.warn("Unexpected response body:", responseBody, self.params);
+				console.warn("Unexpected response body:", responseBody, self.call, self.params);
+				// seems Chromium m74 has introduced some bug causing null value for unknown reason
+				if(har.response && har.response.content){
+					console.warn("Actual response content:", har.response.bodySize, har.response.content);
+				}
 			}
 			
 			callback();
@@ -153,7 +155,7 @@ Executes processing and relies on KC3Network for the triggers
 			}
 			
 			// If it fails on "api_port" which is usually caused by system clock
-			if(this.call == "api_port/port"){
+			if(this.call == "api_port/port" && !!this.gameStatus){
 				// Check if user's clock is correct
 				var computerClock = new Date().getTime();
 				var serverClock = new Date( this.headers.Date ).getTime();
@@ -165,9 +167,9 @@ Executes processing and relies on KC3Network for the triggers
 						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
 						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
-					
+				
 				// Something else other than clock is wrong
-				}else{
+				} else {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
 						message: KC3Meta.term("CatBombErrorOnHomePortMsg")

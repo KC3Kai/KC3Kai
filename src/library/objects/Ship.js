@@ -2342,7 +2342,7 @@ KC3改 Ship Object
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Nelson is flagship of a fleet
-			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			// min 6 ships needed, no ship(s) sink or retreat in mid-sortie
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
 				// Double Line variants selected
 				const isDoubleLine = [2, 12].includes(
@@ -2453,17 +2453,17 @@ KC3改 Ship Object
 		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			// Colorado is flagship of a fleet
-			// min 6 ships needed? how about ship(s) sink or retreat in mid-sortie?
+			// uncertain: min 6 ships needed?
 			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
 				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are (F)BB(V) only?
+					// 2nd and 3rd ship are (F)BB(V) only, not even Chuuha?
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.some(ship => !ship.isAbsent() && !ship.isTaiha()
+						.some(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
-					// submarine in any position of the fleet?
+					// uncertain: submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
 				return isEchelon && validCombinedShips && !hasSubmarine;
 			}
@@ -2481,15 +2481,17 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.coloradoCutinShips.includes(flagshipMstId)) return 1;
 
-		// Under verification: https://twitter.com/syoukuretin/status/1132763536222969856
+		// https://twitter.com/syoukuretin/status/1132763536222969856
 		const combinedModifierMaps = [
 			// No more mods for flagship?
 			{},
 			// x1.1 for 2nd ship Big 7 Kai/Kai Ni?
+			// no verified datasource for base form and Nagato-class Kai
 			{
 				"541": 1.1, "573": 1.1, "576": 1.1,
 			},
 			// x1.15 for 3rd ship Big 7 Kai/Kai Ni?
+			// no verified datasource for base form and Nagato-class Kai
 			{
 				"541": 1.15, "573": 1.15, "576": 1.15,
 			},

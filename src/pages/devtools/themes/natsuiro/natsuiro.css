@@ -2248,7 +2248,7 @@ ABYSS FLEET
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-.module.activity .activity_pvp .pvp_enemy_name.friend {
+.module.activity .activity_pvp .pvpEnemyInfo.friend .pvp_enemy_name {
 	color: #3ec03e;
 }
 .module.activity .activity_pvp .pvp_enemy_level {
