@@ -4558,8 +4558,11 @@ ABYSS FLEET
 .module.fleet .sship .ship_gear.ship_gear_5 {
 	display:none;
 	position:relative;
-	left:0px;
+	left:1px;
 	top:0px;
+}
+.v .module.fleet .sship .ship_gear.ship_gear_5 {
+	left:0px;
 }
 .module.fleet .sship .ship_gear_star {
 	width:10px;
