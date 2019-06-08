@@ -217,7 +217,7 @@ Listens to network history and triggers callback if game events happen
 					});
 					har.getContent(function(x){
 						try {
-							var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
+							var data = JSON.parse(/^[\s\S]*svdata=(.+)$/.exec(x)[1]);
 							message.api_status = data.api_result;
 							message.api_result = data.api_result_msg;
 						} catch (e) {
