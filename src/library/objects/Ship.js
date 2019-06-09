@@ -3157,14 +3157,16 @@ KC3改 Ship Object
 		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
 		let artillerySpottingModifier = 1;
-		// there is trigger chance rate for Artillery Spotting itself
+		// there is trigger chance rate for Artillery Spotting itself, see #artillerySpottingRate
 		if(applySpAttackModifiers) {
 			artillerySpottingModifier = (type => {
 				if(type[0] === "Cutin") {
-					// ID from `api_hougeki.api_at_type`, see #estimateDayAttackType:
-					// [regular attack, Laser, DA, Main Second, Main Radar, Main Second AP, Main Main AP, CVCI]
-					// modifier for CVCI still unknown
-					return [0, 0, 1.1, 1.3, 1.5, 1.3, 1.2, 1][type[1]] || 1;
+					return ({
+						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
+						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
+						// modifier for 7 (CVCI) still unknown
+						// modifiers for [100, 201] (special cutins) still unknown
+					})[type[1]] || 1;
 				}
 				return 1;
 			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
