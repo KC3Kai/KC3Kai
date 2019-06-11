@@ -2975,13 +2975,14 @@ KC3改 Ship Object
 		}
 		// priority to use server flag
 		if(isCarrierNightAirAttack) {
-			return ["AirAttack", 1];
+			return ["AirAttack", 1, true];
 		}
 		if(targetShipType.isSubmarine && isThisLightCarrier) {
 			return ["DepthCharge", 2];
 		}
 		if(isThisCarrier) {
-			// these abyssal ships can only be shelling attacked
+			// these abyssal ships can only be shelling attacked,
+			// see `main.js#PhaseHougekiBase.prototype._getNormalAttackType`
 			const isSpecialAbyssal = [
 				1679, 1680, 1681, 1682, 1683, // Lycoris Princess
 				1711, 1712, 1713, // Jellyfish Princess
@@ -2991,7 +2992,7 @@ KC3改 Ship Object
 				433 // Saratoga (base form)
 				].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) return ["SingleAttack", 0];
-			// here just indicates 'attack type', not 'can attack or not', see canDoNightAttack
+			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
 			return ["AirAttack", 1];
@@ -3775,6 +3776,7 @@ KC3改 Ship Object
 				(cap ? '(<span class="power_capped">{0}</span>)' : "({0})")
 					.format(Math.qckInt("floor", cp, 0))
 			);
+		const shipMst = shipObj.master();
 		const onFleetNum = shipObj.onFleet();
 		const battleConds = shipObj.collectBattleConditions();
 		const attackTypeDay = shipObj.estimateDayAttackType();
@@ -3887,13 +3889,18 @@ KC3改 Ship Object
 		
 		const attackTypeNight = shipObj.estimateNightAttackType();
 		const canNightAttack = shipObj.canDoNightAttack();
+		// See functions in previous 2 lines, ships whose night attack is AirAttack,
+		// but power formula seems be shelling: Taiyou Kai Ni, Shinyou Kai Ni
+		const hasYasenPower = (shipMst.api_houg || [])[0] + (shipMst.api_raig || [])[0] > 0;
+		const hasNightFlag = attackTypeNight[0] === "AirAttack" && attackTypeNight[2] === true;
 		const warfareTypeNight = {
 			"Torpedo"       : "Torpedo",
 			"DepthCharge"   : "Antisub",
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
-		if(attackTypeNight[0] === "AirAttack" && canNightAttack){
+		if(attackTypeNight[0] === "AirAttack" && canNightAttack &&
+			(!hasYasenPower && !hasNightFlag || hasYasenPower && hasNightFlag)){
 			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
 			let criticalPower = false;
 			let isCapped = false;
