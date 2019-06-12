@@ -698,7 +698,7 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
-		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null){
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null, limitEquipIds = null){
 		var total = 0;
 		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
@@ -706,9 +706,10 @@ KC3改 Ship Object
 			if(equip.exists()) {
 				const gearMst = equip.master();
 				if(Array.isArray(limitEquipTypes) &&
-					!limitEquipTypes.includes(gearMst.api_type[2])) {
-					return;
-				}
+					!limitEquipTypes.includes(gearMst.api_type[2]) ||
+					Array.isArray(limitEquipIds) &&
+					!limitEquipIds.includes(gearMst.api_id)
+				) { return; }
 				total += gearMst["api_" + apiName] || 0;
 				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
 			}
@@ -1335,11 +1336,12 @@ KC3改 Ship Object
 	 * Get basic pre-cap shelling fire power of this ship (without pre-cap / post-cap modifiers).
 	 *
 	 * @param {number} combinedFleetFactor - additional power if ship is on a combined fleet.
+	 * @param {boolean} isTargetLand - if the power is applied to a land-installation target.
 	 * @return {number} computed fire power, return 0 if unavailable.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#ua92169d
 	 */
-	KC3Ship.prototype.shellingFirePower = function(combinedFleetFactor = 0){
+	KC3Ship.prototype.shellingFirePower = function(combinedFleetFactor = 0, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		let isCarrierShelling = this.isCarrier();
 		if(!isCarrierShelling) {
@@ -1348,8 +1350,20 @@ KC3改 Ship Object
 		}
 		let shellingPower = this.fp[0];
 		if(isCarrierShelling) {
-			shellingPower += this.equipmentTotalStats("raig");
-			shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			if(isTargetLand) {
+				// Still count TP from Torpedo Bombers?
+				shellingPower += this.equipmentTotalStats("raig", true, true, false, [8, 58]);
+				// Regular Dive Bombers make carrier cannot attack land-installation,
+				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
+				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
+				// DV power from items other than previous ones should not be counted
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
+					[64, 148, 233, 277, 305, 306, 319]));
+			} else {
+				// Should limit to TP power from equippable aircraft?
+				shellingPower += this.equipmentTotalStats("raig");
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
 			shellingPower = Math.floor(1.5 * shellingPower);
