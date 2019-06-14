@@ -877,7 +877,12 @@
 			});
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
-				const shipIndexList = cutin === 100 ? [2, 4] : [1];
+				const shipIndexList = {
+					100: [2, 4],
+					101: [1],
+					102: [1],
+					103: [1, 2]
+				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
 					misc["ship" + (idx + 1)] = fillShipInfo(ship);
