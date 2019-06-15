@@ -1205,6 +1205,10 @@ KC3改 Equipment Object
 			"330": {
 				count: 0,
 				byClass: {
+					// Colorado Class
+					"93": {
+						multiple: { "houg": 1 },
+					},
 					// Nelson Kai
 					"88": {
 						remodel: 1,
@@ -1227,6 +1231,16 @@ KC3改 Equipment Object
 			"331": {
 				count: 0,
 				byClass: {
+					// Colorado Class
+					"93": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+					],
 					// Nelson Kai
 					"88": {
 						remodel: 1,
@@ -1250,6 +1264,16 @@ KC3改 Equipment Object
 			"332": {
 				count: 0,
 				byClass: {
+					// Colorado Class
+					"93": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+					],
 					// Nelson Kai
 					"88": {
 						remodel: 1,
