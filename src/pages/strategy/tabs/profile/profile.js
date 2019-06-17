@@ -455,7 +455,7 @@
 			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
 				// CSV Headers
 				let exportData = [
-					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots", "Costs", "BuildMins"
+					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots", "Costs", "BuildMins", "Graph"
 				].join(",") + CSV_LINE_BREAKS;
 				$.each(KC3Master.all_ships(true), (i, s) => {
 					const isAb = KC3Master.isAbyssalShip(s.api_id);
@@ -477,7 +477,8 @@
 							s.api_soku,
 							(s.api_maxeq || []).slice(0, s.api_slot_num).join('/'),
 							isAb ? "-" : [s.api_fuel_max, s.api_bull_max].join('/'),
-							isAb ? "-" : s.api_buildtime
+							isAb ? "-" : s.api_buildtime,
+							KC3Master.graph(s.api_id).api_filename
 						].join(",") + CSV_LINE_BREAKS;
 					}
 				});
