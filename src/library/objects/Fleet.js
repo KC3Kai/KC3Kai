@@ -241,8 +241,9 @@ Contains summary information about a fleet and its ships
 	/*------------------[ FLEET ATTRIBUTES ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.countShips = function(){
-		return (this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
+	KC3Fleet.prototype.countShips = function(excludeEscaped = false){
+		return excludeEscaped ? this.shipsUnescaped().length :
+			(this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
