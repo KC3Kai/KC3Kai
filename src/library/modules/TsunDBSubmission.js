@@ -923,6 +923,7 @@
 						this.sortieSpecialAttack = true;
 					}
 					if (specialCutinIds.includes(cutinType[1])) {
+						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					} else if (time === "day"
 						&& !(thisNode.planeFighters.player[0] === 0
