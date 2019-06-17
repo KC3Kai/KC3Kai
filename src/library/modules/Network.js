@@ -499,6 +499,14 @@ Listens to network history and triggers callback if game events happen
 			}
 		},
 
+		/* Disarms Next Node Blocker
+		 */
+		disarmNextBlock :function(){
+			next_armed = false;
+			battle_result_recieved = false;
+			this.clearOverlays();
+		},
+
 		/* CLEAR OVERLAYS
 		Ask background page to forward a message to play screen.
 		Requests to remove existing HTML on-screen overlays

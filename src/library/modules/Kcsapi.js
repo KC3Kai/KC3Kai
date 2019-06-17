@@ -168,7 +168,7 @@ Previously known as "Reactor"
 				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
 			}
 			// to automaticly remove "next blocker" once in port
-			KC3Network.clearOverlays();
+			KC3Network.disarmNextBlock();
 		},
 		
 		/*-------------------------------------------------------*/
