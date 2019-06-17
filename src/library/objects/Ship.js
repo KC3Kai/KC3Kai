@@ -698,7 +698,7 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
-		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null){
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null, limitEquipIds = null){
 		var total = 0;
 		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
@@ -706,9 +706,10 @@ KC3改 Ship Object
 			if(equip.exists()) {
 				const gearMst = equip.master();
 				if(Array.isArray(limitEquipTypes) &&
-					!limitEquipTypes.includes(gearMst.api_type[2])) {
-					return;
-				}
+					!limitEquipTypes.includes(gearMst.api_type[2]) ||
+					Array.isArray(limitEquipIds) &&
+					!limitEquipIds.includes(gearMst.api_id)
+				) { return; }
 				total += gearMst["api_" + apiName] || 0;
 				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
 			}
@@ -1335,11 +1336,12 @@ KC3改 Ship Object
 	 * Get basic pre-cap shelling fire power of this ship (without pre-cap / post-cap modifiers).
 	 *
 	 * @param {number} combinedFleetFactor - additional power if ship is on a combined fleet.
+	 * @param {boolean} isTargetLand - if the power is applied to a land-installation target.
 	 * @return {number} computed fire power, return 0 if unavailable.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#ua92169d
 	 */
-	KC3Ship.prototype.shellingFirePower = function(combinedFleetFactor = 0){
+	KC3Ship.prototype.shellingFirePower = function(combinedFleetFactor = 0, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		let isCarrierShelling = this.isCarrier();
 		if(!isCarrierShelling) {
@@ -1348,8 +1350,20 @@ KC3改 Ship Object
 		}
 		let shellingPower = this.fp[0];
 		if(isCarrierShelling) {
-			shellingPower += this.equipmentTotalStats("raig");
-			shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			if(isTargetLand) {
+				// Still count TP from Torpedo Bombers?
+				shellingPower += this.equipmentTotalStats("raig", true, true, false, [8, 58]);
+				// Regular Dive Bombers make carrier cannot attack land-installation,
+				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
+				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
+				// DV power from items other than previous ones should not be counted
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
+					[64, 148, 233, 277, 305, 306, 319]));
+			} else {
+				// Should limit to TP power from equippable aircraft?
+				shellingPower += this.equipmentTotalStats("raig");
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
 			shellingPower = Math.floor(1.5 * shellingPower);
@@ -2114,8 +2128,8 @@ KC3改 Ship Object
 
 	// is this ship able to do OASW unconditionally
 	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai, Johnston
-		return [141, 478, 394, 681, 562, 689].includes(this.masterId);
+		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai, Johnston, Fletcher
+		return [141, 478, 394, 681, 562, 689, 596, 692].includes(this.masterId);
 	};
 	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
@@ -2329,7 +2343,12 @@ KC3改 Ship Object
 	/**
 	 * Conditions under verification, known for now:
 	 * Flagship is healthy Nelson, Double Line variants formation selected.
+	 * Min 6 ships fleet needed, main fleet only for Combined Fleet.
+	 * 3rd, 5th ship not carrier, no any submarine in fleet.
+	 * No AS/AS+ air battle needed like regular Artillery Spotting.
+	 *
 	 * No PvP sample found for now.
+	 * Can be triggered in 1 battle per sortie, max 3 chances to roll (if yasen).
 	 *
 	 * @return true if this ship (Nelson) can do Nelson Touch cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Nelson
@@ -2341,9 +2360,10 @@ KC3改 Ship Object
 		// still okay even 3th and 5th ship are Taiha
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			// Nelson is flagship of a fleet
-			// min 6 ships needed, no ship(s) sink or retreat in mid-sortie
-			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+			// Nelson is flagship of a fleet, which min 6 ships needed
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				// not in any escort fleet of Combined Fleet
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
 				// Double Line variants selected
 				const isDoubleLine = [2, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
@@ -2353,16 +2373,19 @@ KC3改 Ship Object
 					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
 						.some(ship => ship.isAbsent() || ship.isCarrier()),
 					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
-				return isDoubleLine && !invalidCombinedShips && !hasSubmarine;
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
+					// no ship(s) sunk or retreated in mid-sortie?
+					hasSixShips = fleetObj.countShips(true) >= 6;
+				return isDoubleLine && !invalidCombinedShips && !hasSubmarine && hasSixShips;
 			}
 		}
 		return false;
 	};
 
 	/**
-	 * Conditions known for now:
+	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
+	 * 2nd ship is a battleship, Chuuha ok, Taiha unknown.
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
@@ -2377,7 +2400,8 @@ KC3改 Ship Object
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		if(flagShipIds.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
 				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
@@ -2385,9 +2409,9 @@ KC3改 Ship Object
 					// 2nd ship not battle ship?
 					invalidCombinedShips = [fleetObj.ship(1)].some(ship =>
 						ship.isAbsent() || ![8, 9, 10].includes(ship.master().api_stype)),
-					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
-				return isEchelon && !invalidCombinedShips && !hasSubmarine;
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
+					hasSixShips = fleetObj.countShips(true) >= 6;
+				return isEchelon && !invalidCombinedShips && !hasSubmarine && hasSixShips;
 			}
 		}
 		return false;
@@ -2436,9 +2460,11 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Conditions under verification, known for now:
+	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Colorado, Echelon formation selected.
-	 * No PvP sample found for now.
+	 * 2nd and 3rd ships are healthy battleship, neither Taiha nor Chuuha.
+	 *
+	 * The same additional ammo consumption like Nagato/Mutsu cutin for top 3 battleships.
 	 *
 	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
 	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
@@ -2452,9 +2478,8 @@ KC3改 Ship Object
 		// is this ship Colorado and not even Chuuha
 		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			// Colorado is flagship of a fleet
-			// uncertain: min 6 ships needed?
-			if(fleetNum > 0 && shipPos === 0 && shipCnt > 5) {
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
 				const isEchelon = [4, 12].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
@@ -2464,8 +2489,10 @@ KC3改 Ship Object
 						.some(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
 					// uncertain: submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine());
-				return isEchelon && validCombinedShips && !hasSubmarine;
+					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
+					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
+					hasSixShips = fleetObj.countShips(true) >= 6;
+				return isEchelon && validCombinedShips && !hasSubmarine && hasSixShips;
 			}
 		}
 		return false;
@@ -2975,13 +3002,14 @@ KC3改 Ship Object
 		}
 		// priority to use server flag
 		if(isCarrierNightAirAttack) {
-			return ["AirAttack", 1];
+			return ["AirAttack", 1, true];
 		}
 		if(targetShipType.isSubmarine && isThisLightCarrier) {
 			return ["DepthCharge", 2];
 		}
 		if(isThisCarrier) {
-			// these abyssal ships can only be shelling attacked
+			// these abyssal ships can only be shelling attacked,
+			// see `main.js#PhaseHougekiBase.prototype._getNormalAttackType`
 			const isSpecialAbyssal = [
 				1679, 1680, 1681, 1682, 1683, // Lycoris Princess
 				1711, 1712, 1713, // Jellyfish Princess
@@ -2991,7 +3019,7 @@ KC3改 Ship Object
 				433 // Saratoga (base form)
 				].includes(this.masterId);
 			if(isSpecialCarrier || isSpecialAbyssal) return ["SingleAttack", 0];
-			// here just indicates 'attack type', not 'can attack or not', see canDoNightAttack
+			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
 			return ["AirAttack", 1];
@@ -3157,14 +3185,16 @@ KC3改 Ship Object
 		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
 		let artillerySpottingModifier = 1;
-		// there is trigger chance rate for Artillery Spotting itself
+		// there is trigger chance rate for Artillery Spotting itself, see #artillerySpottingRate
 		if(applySpAttackModifiers) {
 			artillerySpottingModifier = (type => {
 				if(type[0] === "Cutin") {
-					// ID from `api_hougeki.api_at_type`, see #estimateDayAttackType:
-					// [regular attack, Laser, DA, Main Second, Main Radar, Main Second AP, Main Main AP, CVCI]
-					// modifier for CVCI still unknown
-					return [0, 0, 1.1, 1.3, 1.5, 1.3, 1.2, 1][type[1]] || 1;
+					return ({
+						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
+						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
+						// modifier for 7 (CVCI) still unknown
+						// modifiers for [100, 201] (special cutins) still unknown
+					})[type[1]] || 1;
 				}
 				return 1;
 			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
@@ -3773,6 +3803,7 @@ KC3改 Ship Object
 				(cap ? '(<span class="power_capped">{0}</span>)' : "({0})")
 					.format(Math.qckInt("floor", cp, 0))
 			);
+		const shipMst = shipObj.master();
 		const onFleetNum = shipObj.onFleet();
 		const battleConds = shipObj.collectBattleConditions();
 		const attackTypeDay = shipObj.estimateDayAttackType();
@@ -3885,13 +3916,18 @@ KC3改 Ship Object
 		
 		const attackTypeNight = shipObj.estimateNightAttackType();
 		const canNightAttack = shipObj.canDoNightAttack();
+		// See functions in previous 2 lines, ships whose night attack is AirAttack,
+		// but power formula seems be shelling: Taiyou Kai Ni, Shinyou Kai Ni
+		const hasYasenPower = (shipMst.api_houg || [])[0] + (shipMst.api_raig || [])[0] > 0;
+		const hasNightFlag = attackTypeNight[0] === "AirAttack" && attackTypeNight[2] === true;
 		const warfareTypeNight = {
 			"Torpedo"       : "Torpedo",
 			"DepthCharge"   : "Antisub",
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
-		if(attackTypeNight[0] === "AirAttack" && canNightAttack){
+		if(attackTypeNight[0] === "AirAttack" && canNightAttack &&
+			(!hasYasenPower && !hasNightFlag || hasYasenPower && hasNightFlag)){
 			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
 			let criticalPower = false;
 			let isCapped = false;
