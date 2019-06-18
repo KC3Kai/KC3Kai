@@ -966,11 +966,26 @@
 							classBonus.forEach(bonus => {
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
 									found = true;
-									bonusStats = bonus.single || bonus.multiple;
-									totalStats = addObjects(totalStats, bonusStats);
-									if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+									if (!bonus.minStars) {
+										bonusStats = bonus.single || bonus.multiple;
+										totalStats = addObjects(totalStats, bonusStats);
+										if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+									}
+									else { starBonus[bonus.minStars] = {}; }
 								}
 							});
+							// Improvement bonuses
+							if (classBonus.length) {
+								for (const minStar in starBonus) {
+									starBonus[minStar] = Object.assign({}, totalStats);
+									for (const bonusDef of classBonus) {
+										if (bonusDef.minStars <= minStar) {
+											bonusStats = bonusDef.single || bonusDef.multiple;
+											starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+										}
+									}
+								}
+							}
 						}
 						// Ship bonuses
 						if (gear.byShip) {
@@ -988,12 +1003,14 @@
 								else { starBonus[shipBonus.minStars] = {}; }
 							});
 							// Improvement bonuses
-							for (const minStar in starBonus) {
-								starBonus[minStar] = Object.assign({}, totalStats);
-								for (const bonusDef of list) {
-									if (bonusDef.minStars <= minStar) {
-										bonusStats = bonusDef.single || bonusDef.multiple;
-										starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+							if (list.length) {
+								for (const minStar in starBonus) {
+									starBonus[minStar] = Object.assign({}, totalStats);
+									for (const bonusDef of list) {
+										if (bonusDef.minStars <= minStar) {
+											bonusStats = bonusDef.single || bonusDef.multiple;
+											starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+										}
 									}
 								}
 							}

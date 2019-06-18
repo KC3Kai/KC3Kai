@@ -495,6 +495,12 @@ AntiAir: anti-air related calculations
 		};
 	}
 
+	function ctypeIdEq( n ) {
+		return function(mst) {
+			return mst.api_ctype === n;
+		};
+	}
+
 	// Icons used to declare AACI type
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
@@ -518,6 +524,7 @@ AntiAir: anti-air related calculations
 		warspiteIcon = 439,
 		gotlandKaiIcon = 579,
 		johnstonIcon = 562,
+		fletcherIcon = 596,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -548,8 +555,7 @@ AntiAir: anti-air related calculations
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
-	// Both base form and Kai
-	var isJohnston = predAnyOf( masterIdEq(johnstonIcon), masterIdEq(689) );
+	var isFletcherClass = ctypeIdEq(91);
 
 
 	// turns a "shipObj" into the list of her equipments
@@ -958,11 +964,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Johnston all forms
+	// Fletcher-class all forms (Fletcher, Johnston)
 	declareAACI(
 		34, 7, 1.6,
 		[johnstonIcon, haMountKaiRadar, haMountKaiRadar],
-		predAllOf(isJohnston),
+		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ))
@@ -971,7 +977,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		35, 6, 1.55,
 		[johnstonIcon, haMountKaiRadar, haMountIcon],
-		predAllOf(isJohnston),
+		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is5inchSingleMountKaiWithGfcs ),
@@ -981,8 +987,8 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		36, 6, 1.55,
 		[johnstonIcon, haMountIcon, haMountIcon, radarIcon],
-		// there are enough slots for Johnston Kai only
-		predAllOf(isJohnston, slotNumAtLeast(3)),
+		// there are enough slots for Kai only
+		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKai, 2 ),
@@ -992,7 +998,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		37, 4, 1.45,
 		[johnstonIcon, haMountIcon, haMountIcon],
-		predAllOf(isJohnston),
+		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKai, 2 ))

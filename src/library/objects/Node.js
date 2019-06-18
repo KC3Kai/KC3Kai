@@ -2162,9 +2162,9 @@ Used by SortieManager
 							remainingAmmoModifier = 1,
 							armor = ((this.eParam[targetIndex] || [])[3] || 0) + eShipEquipArmor;
 
-						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor)
+						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor, isLand)
 							: !isLand ? ship.nightBattlePower(isNightContacted) :
-							ship.shellingFirePower(isNightContacted ? 0 : -5);
+							ship.shellingFirePower(isNightContacted ? 0 : -5, isLand);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
 						if (time === 'Night' && ship.canCarrierNightAirAttack()) {
 							power = ship.nightAirAttackPower(isNightContacted);
