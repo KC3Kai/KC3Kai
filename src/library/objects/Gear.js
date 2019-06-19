@@ -585,6 +585,10 @@ KC3改 Equipment Object
 							remodel: 2,
 							multiple: { "tyku": 1, "houk": 1 },
 						},
+						{
+							remodel: 3,
+							multiple: { "houg": 3, "tyku": 1, "houk": 1 },
+						},
 					],
 				},
 			},
