@@ -3927,8 +3927,7 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
-		if(attackTypeNight[0] === "AirAttack" && canNightAttack &&
-			(!hasYasenPower && !hasNightFlag || hasYasenPower && hasNightFlag)){
+		if(attackTypeNight[0] === "AirAttack" && canNightAttack && (hasNightFlag || !hasYasenPower)){
 			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
 			let criticalPower = false;
 			let isCapped = false;
