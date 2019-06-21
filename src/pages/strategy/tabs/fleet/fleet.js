@@ -663,8 +663,8 @@
 						gear.itemId = ship.items[ind];
 					}
 					gear.masterId = equipment.id;
-					gear.stars = equipment.improve ? equipment.improve : 0;
-					gear.ace = equipment.ace ? equipment.ace : 0;
+					gear.stars = Number(equipment.improve) || 0;
+					gear.ace = Number(equipment.ace) || 0;
 				});
 
 				// estimate ship's stats from known facts as possible as we can
