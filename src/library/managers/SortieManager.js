@@ -743,17 +743,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 						console.log("Supply & repair pending consumption #", fleet_id, ship_pos, rosterId, supply, repair);
 						before.pendingConsumption[cons.name] = [supply, repair];
 					}
-					// Count torches consumed by powerful friend fleet,
-					// assuming materialGain and consumables already updated before this invoked
-					if(self.materialBefore && !!PlayerManager.friendlySettings.api_request_type) {
-						const usedTorch = self.materialBefore[4] + self.materialGain[4] - PlayerManager.consumables.torch;
-						if(usedTorch > 0) {
-							cons.resc[4] -= usedTorch;
-							console.log("Powerful friend fleet consumption detected", usedTorch);
-						}
-					}
 				});
 			});
+			// Count torches consumed by powerful friend fleet,
+			// assuming materialGain and consumables already updated before this invoked
+			if(this.materialBefore && !!PlayerManager.friendlySettings.api_request_type) {
+				const usedTorch = this.materialBefore[4] + this.materialGain[4] - PlayerManager.consumables.torch;
+				if(usedTorch > 0) {
+					cons.resc[4] -= usedTorch;
+					console.log("Powerful friend fleet consumption detected", usedTorch);
+				}
+			}
 			if(cons.name !== "sortie0") {
 				console.log("Before " + cons.name +" sent fleets", sentBattleSupportFleets, PlayerManager.hq.lastSortie);
 				console.log("After " + cons.name +" battle consumption and fleets", cons.resc, PlayerManager.cloneFleets());
