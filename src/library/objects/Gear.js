@@ -1275,7 +1275,7 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "tyku": 1 },
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
 					],
 					// Nelson Kai
