@@ -111,6 +111,14 @@ Provides access to data on built-in JSON files
 			151: 94,
 			281: 38,
 		},
+		// ships with special remodeling animation, ordered by implementated time,
+		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
+		specialRemodelFromIds: [
+			149, // Kongou K2 -> K2C
+			277, // Akagi Kai -> K2
+			594, // Akagi K2 -> K2E
+			350, // Umikaze Kai -> K2
+		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 601, 1496],
 		nelsonTouchShips: [571, 576],
