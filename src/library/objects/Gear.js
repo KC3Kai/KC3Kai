@@ -2494,8 +2494,8 @@ KC3改 Equipment Object
 				if(type2 === 25) return 0.3 * stars;
 				break;
 			case "airstrike":
-				// for normal opening airstrike, only seaplane bomber bonus confirmed
-				if(type2 === 11) return 0.2 * stars;
+				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
+				if([8, 11].includes(type2)) return 0.2 * stars;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
