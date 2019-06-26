@@ -660,6 +660,17 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Saiun
+			"54": {
+				count: 0,
+				starsDist: [],
+				byShip: {
+					// All ship types can equip it?, stars+2 extra +1 los
+					stypes: [7, 11, 18, 10],
+					minStars: 2,
+					multiple: { "saku": 1 },
+				},
+			},
 			// Type 2 Reconnaissance Aircraft
 			// https://wikiwiki.jp/kancolle/%E4%BA%8C%E5%BC%8F%E8%89%A6%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F
 			"61": {
