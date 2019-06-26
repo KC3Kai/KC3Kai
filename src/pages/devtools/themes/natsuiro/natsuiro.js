@@ -3073,13 +3073,10 @@
 				this.ShipSlots({});
 				this.GearSlots({});
 			} else {
-				if (ConfigManager.info_troll) {
-					$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/jervaited.png");
-				} else {
-					$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
-				}
+				$(".module.activity .battle_drop img")
+					.attr("src", ConfigManager.info_troll ?
+						"/assets/img/ui/jervaited.png" :
+						"/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
