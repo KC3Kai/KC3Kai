@@ -931,11 +931,9 @@
 									.click(shipClickFunc);
 								$(".node_drop", nodeBox).addClass("hover");
 							}else{
-								if (ConfigManager.info_troll) {
-									$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/jervaited.png");
-								} else {
-									$(".node_drop img", nodeBox).attr("src", "../../assets/img/ui/shipdrop-x.png");
-								}
+								$(".node_drop img", nodeBox).attr("src", ConfigManager.info_troll ?
+									"../../assets/img/ui/jervaited.png" :
+									"../../assets/img/ui/shipdrop-x.png");
 							}
 							// Useitem Drop
 							if(battle.useitem > 0){

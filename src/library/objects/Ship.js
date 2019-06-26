@@ -2385,7 +2385,7 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
-	 * 2nd ship is a battleship, Chuuha ok, Taiha unknown.
+	 * 2nd ship is a battleship, Chuuha ok, Taiha no good.
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
@@ -2408,7 +2408,8 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd ship not battle ship?
 					invalidCombinedShips = [fleetObj.ship(1)].some(ship =>
-						ship.isAbsent() || ![8, 9, 10].includes(ship.master().api_stype)),
+						ship.isAbsent() || ship.isTaiha() ||
+						![8, 9, 10].includes(ship.master().api_stype)),
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
 					hasSixShips = fleetObj.countShips(true) >= 6;
 				return isEchelon && !invalidCombinedShips && !hasSubmarine && hasSixShips;
@@ -3926,8 +3927,7 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
-		if(attackTypeNight[0] === "AirAttack" && canNightAttack &&
-			(!hasYasenPower && !hasNightFlag || hasYasenPower && hasNightFlag)){
+		if(attackTypeNight[0] === "AirAttack" && canNightAttack && (hasNightFlag || !hasYasenPower)){
 			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
 			let criticalPower = false;
 			let isCapped = false;

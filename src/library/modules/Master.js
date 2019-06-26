@@ -15,9 +15,10 @@ Saves and loads significant data for future use
 		abyssalGearIdFrom: 500,
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
-		seasonalCgIdFrom: 720,
+		// Since 2019-06-25, devs shifted IDs from 729~ to 5001~
+		seasonalCgIdFrom: 5000,
 		// Devs assigned Colorado Kai to 1496 making more things strange since 2019-05-25
-		seasonalCgIdTo: 1400,
+		//seasonalCgIdTo: 1400,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
@@ -228,11 +229,13 @@ Saves and loads significant data for future use
 
 		/**
 		 * Build image URI of asset resources (like ship, equipment) since KC2ndSeq (HTML5 mode) on 2018-08-17.
-		 * @see graph - replace old swf filename method (tho it's still available for now)
+		 * @see graph - replace old swf filename method, its filename now used as `uniqueKey` for some case
+		 * @see main.js/ShipLoader.getPath - for the method of constructing resource path and usage of `uniqueKey` above
+		 * @see main.js/SuffixUtil - for the method of calculating suffix numbers
 		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
 		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
 		 *               [`card`, `card_t`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`, `airunit_banner`, `airunit_fairy`, `airunit_name`] for slotitem
-		 * @param shipOrSlot - `ship` or `slot`
+		 * @param shipOrSlot - `ship` or `slot`, or other known resource sub-folders
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
 		 * @param debuffedAbyssalSuffix - specify old suffix for debuffed abyssal boss full CG. btw suffix is `_d`
 		 */
@@ -245,12 +248,15 @@ Saves and loads significant data for future use
 				1000 + 17 * (Number(id) + 7) *
 				KC3Meta.resourceKeys[(key(typeStr) + Number(id) * typeStr.length) % 100] % 8973
 			);
-			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
-				suffix = getFilenameSuffix(id, typeWithPrefix);
+			const padWidth = ({
+				"ship": 4, "slot": 3, "furniture": 3, "useitem": 3,
+			})[shipOrSlot];
+			const paddedId = String(id).padStart(padWidth || 3, "0"),
+				suffix = shipOrSlot !== "useitem" ? "_" + getFilenameSuffix(id, typeWithPrefix) : "";
 			const uniqueKey = type === "full" && shipOrSlot === "ship" ? ((key) => (
 					key ? "_" + key : ""
 				))(this.graph(id).api_filename) : "";
-			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}_${suffix}${uniqueKey}.png`;
+			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}${suffix}${uniqueKey}.png`;
 		},
 
 		slotitem :function(id){
@@ -466,11 +472,11 @@ Saves and loads significant data for future use
 		},
 
 		isSeasonalShip :function(id){
-			return id > this.seasonalCgIdFrom && id <= this.seasonalCgIdTo;
+			return id > this.seasonalCgIdFrom; // && id <= this.seasonalCgIdTo;
 		},
 
 		isAbyssalShip :function(id){
-			return id > this.abyssalShipIdFrom;
+			return id > this.abyssalShipIdFrom && id <= this.seasonalCgIdFrom;
 		},
 
 		isAbyssalGear :function(id){
