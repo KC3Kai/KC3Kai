@@ -660,16 +660,33 @@ KC3改 Equipment Object
 					},
 				},
 			},
-			// Saiun
-			"54": {
+			// All carrier-based improved recon planes on all ships can equip, current implemented:
+			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
+			"t2_9": {
 				count: 0,
 				starsDist: [],
-				byShip: {
-					// All ship types can equip it?, stars+2 extra +1 los
-					stypes: [7, 11, 18, 10],
-					minStars: 2,
-					multiple: { "saku": 1 },
-				},
+				byShip: [
+					{
+						// stars+2, +1 los
+						minStars: 2,
+						single: { "houg": 0, "saku": 1 },
+					},
+					{
+						// stars+4 extra +1 fp, accumulative +1 fp, +1 los
+						minStars: 4,
+						single: { "houg": 1 },
+					},
+					{
+						// stars+6 extra +1 los, accumulative +1 fp, +2 los
+						minStars: 6,
+						single: { "saku": 1 },
+					},
+					{
+						// stars+10 accumulative +2 fp, +3 los
+						minStars: 10,
+						single: { "houg": 1, "saku": 1 },
+					},
+				],
 			},
 			// Type 2 Reconnaissance Aircraft
 			// https://wikiwiki.jp/kancolle/%E4%BA%8C%E5%BC%8F%E8%89%A6%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F
@@ -682,13 +699,35 @@ KC3改 Equipment Object
 						remodel: 2,
 						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
 					},
-					// Souryuu Kai Ni range +1
-					"17": {
-						remodel: 2,
-						single: { "leng": 1 },
-					},
-					// Hiryuu Kai Ni range +1
-					"25": 17,
+					"17": [
+						{
+							// Souryuu stars+1
+							minStars: 1,
+							single: { "houg": 3, "saku": 3 },
+						},
+						{
+							// Souryuu stars+8 totally +5 fp, +6 los
+							minStars: 8,
+							single: { "houg": 1, "saku": 1 },
+						},
+						{
+							// Souryuu Kai Ni range +1
+							remodel: 2,
+							single: { "leng": 1 },
+						},
+					],
+					"25": [
+						{
+							// Hiryuu K2 stars+1
+							minStars: 1,
+							single: { "houg": 2, "saku": 2 },
+						},
+						{
+							// Hiryuu Kai Ni range +1
+							remodel: 2,
+							single: { "leng": 1 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -697,87 +736,9 @@ KC3改 Equipment Object
 						single: { "souk": 2, "houk": 1 },
 					},
 					{
-						// All CVL/CV/CVB/BBV stars+2 extra +1 los
-						stypes: [7, 11, 18, 10],
-						minStars: 2,
-						multiple: { "saku": 1 },
-					},
-					{
-						// All CVL/CV/CVB/BBV stars+4 extra +1 fp, accumulative +1 fp, +1 los
-						stypes: [7, 11, 18, 10],
-						minStars: 4,
-						multiple: { "houg": 1 },
-					},
-					{
-						// All CVL/CV/CVB/BBV stars+6 extra +1 los, accumulative +1 fp, +2 los
-						stypes: [7, 11, 18, 10],
-						minStars: 6,
-						multiple: { "saku": 1 },
-					},
-					{
-						// All CVL/CV/CVB/BBV stars+10 accumulative +2 fp, +3 los
-						// Suzuya/Kumano Kou K2, Zuihou K2B totally +3 fp, +4 los
-						// Hiryuu K2  totally +4 fp, +5 los
-						// Souryuu K2 totally +6 fp, +7 los
-						// Ise K2 totally +5 fp, +1 ar, +2 ev, +3 los, multiple part unknown
-						stypes: [7, 11, 18, 10],
-						minStars: 10,
-						multiple: { "houg": 1, "saku": 1 },
-					},
-					{
 						// Suzuya/Kumano Kou K2, Zuihou K2B stars+1
 						ids: [508, 509, 560],
 						minStars: 1,
-						multiple: { "houg": 1, "saku": 1 },
-					},
-					{
-						// Hiryuu K2 stars+1
-						ids: [196],
-						minStars: 1,
-						multiple: { "houg": 2, "saku": 2 },
-					},
-					{
-						// Souryuu K2 stars+1
-						ids: [197],
-						minStars: 1,
-						multiple: { "houg": 3, "saku": 3 },
-					},
-					{
-						// Souryuu K2 stars+8 totally +5 fp, +6 los
-						ids: [197],
-						minStars: 8,
-						multiple: { "houg": 1, "saku": 1 },
-					},
-				],
-			},
-			// Prototype Keiun (Carrier-based Reconnaissance Model)
-			// https://wikiwiki.jp/kancolle/%E8%A9%A6%E8%A3%BD%E6%99%AF%E9%9B%B2%28%E8%89%A6%E5%81%B5%E5%9E%8B%29
-			"151": {
-				count: 0,
-				starsDist: [],
-				byShip: [
-					{
-						// All CVB stars+2 extra +1 los
-						stypes: [18],
-						minStars: 2,
-						single: { "saku": 1 },
-					},
-					{
-						// All CVB stars+4 extra +1 fp, accumulative +1 fp, +1 los
-						stypes: [18],
-						minStars: 4,
-						single: { "houg": 1 },
-					},
-					{
-						// All CVB stars+6 extra +1 los, accumulative +1 fp, +2 los
-						stypes: [18],
-						minStars: 6,
-						single: { "saku": 1 },
-					},
-					{
-						// All CVB stars+10 extra +1 fp, +1 los, accumulative +2 fp, +3 los
-						stypes: [18],
-						minStars: 10,
 						single: { "houg": 1, "saku": 1 },
 					},
 				],
@@ -2337,6 +2298,14 @@ KC3改 Equipment Object
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
 		if(bonusDefs) {
+			if(bonusDefs.count >= 0) bonusDefs.count += 1;
+			if(Array.isArray(bonusDefs.starsDist)) {
+				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);
+			}
+		}
+		const gearTypes = gear.master().api_type;
+		if(gearTypes && bonusGears["t2_" + gearTypes[2]]) {
+			const bonusDefs = bonusGears["t2_" + gearTypes[2]];
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;
 			if(Array.isArray(bonusDefs.starsDist)) {
 				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);

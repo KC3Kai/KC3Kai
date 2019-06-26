@@ -912,11 +912,18 @@
 					if (bonusDef.stypes && !bonusDef.stypes.includes(stype)) { return false; }
 					return true;
 				};
-				const checkByShipBonusRequirements = (byShip, shipId, stype) =>
-					ensureArray(byShip).some(bonusDef =>
-						(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
-						(bonusDef.stypes && bonusDef.stypes.includes(stype))
-					);
+				const checkByShipBonusDef = (bonusDef, shipId, stype, gearType2) => (
+					(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+					(bonusDef.stypes && bonusDef.stypes.includes(stype)
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
+					(bonusDef.excludes && !bonusDef.bonusDef.includes(shipId)) ||
+					(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
+					(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2))
+				);
+				const checkByShipBonusRequirements = (byShip, shipId, stype, gearType2) =>
+					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, stype, gearType2));
 				const addObjects = (obj1, obj2) => {
 					for (const key in obj2) {
 						obj1[key] = obj1[key] ? obj1[key] + obj2[key] : obj2[key];
@@ -925,6 +932,7 @@
 				};
 				const addStatsToBox = (stats, box) => {
 					Object.keys(stats).forEach(function (stat) {
+						if(!stats[stat]) return;
 						const statBox = $(".tab_mstship .factory .gearStatBonus").clone();
 						$(".statIcon img", statBox).attr("src", KC3Meta.statIconByApi(stat))
 							.attr("title", KC3Meta.statNameTerm(stat, true));
@@ -942,9 +950,12 @@
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
+					const gearType2 = mstId.startsWith("t2_") ?
+						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?
+						KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
 						bonus = Object.assign(bonus, def);
-					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype)) {
+					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype, gearType2)) {
 						bonus = Object.assign(bonus, def);
 					}
 					if (Object.keys(bonus).length) {
@@ -988,10 +999,11 @@
 						}
 						// Ship bonuses
 						if (gear.byShip) {
+							const gearType2 = gear.id.startsWith("t2_") ?
+								Number(gear.id.substr(3)) : Number.isInteger(Number(gear.id)) ?
+								KC3Master.slotitem(gear.id).api_type[2] : 0;
 							const list = ensureArray(gear.byShip).filter(bonusDef =>
-								(bonusDef.ids && bonusDef.ids.includes(shipData.api_id)) ||
-								(bonusDef.stypes && bonusDef.stypes.includes(shipData.api_stype))
-							);
+								checkByShipBonusDef(bonusDef, shipData.api_id, shipData.api_stype, gearType2));
 							list.forEach(shipBonus => {
 								found = true;
 								if (!shipBonus.minStars) {
@@ -1016,15 +1028,28 @@
 						}
 						
 						if (found) {
-							const master = KC3Master.slotitem(gear.id);
-							const gearName = KC3Meta.gearName(master.api_name);
 							const gearBox = $(".tab_mstship .factory .gearBonuses").clone();
-							$(".gearId", gearBox).text(`[${gear.id}]`);
-							$(".gearIcon img", gearBox)
-								.attr("src", KC3Meta.itemIcon(master.api_type[3]))
-								.attr("alt", gear.id).click(gearClickFunc);
-							$(".gearIcon", gearBox).addClass("hover");
-							$(".gearName", gearBox).text(gearName).attr("title", gearName);
+							if (gear.id.startsWith("t2_")) {
+								const typeId = gear.id.substr(3);
+								const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
+								const typeName = KC3Meta.gearTypeName(2, typeId);
+								$(".gearId", gearBox).text(`[T${typeId}]`);
+								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(firstIconId));
+								const allGears = KC3Master.all_slotitems();
+								const matchedGearNames = Object.keys(allGears).filter(
+									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[2] == typeId
+								).map(id => KC3Meta.gearName(allGears[id].api_name)).join("\n");
+								$(".gearName", gearBox).text(typeName).attr("title", matchedGearNames);
+							} else {
+								const master = KC3Master.slotitem(gear.id);
+								const gearName = KC3Meta.gearName(master.api_name);
+								$(".gearId", gearBox).text(`[${gear.id}]`);
+								$(".gearIcon img", gearBox)
+									.attr("src", KC3Meta.itemIcon(master.api_type[3]))
+									.attr("alt", gear.id).click(gearClickFunc);
+								$(".gearIcon", gearBox).addClass("hover");
+								$(".gearName", gearBox).text(gearName).attr("title", gearName);
+							}
 							
 							if (Object.keys(totalStats).length > 0) {
 								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();

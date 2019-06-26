@@ -730,10 +730,15 @@ KC3改 Ship Object
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
 		const allGears = this.equipment(true);
-		allGears.forEach(g => KC3Gear.accumulateShipBonusGear(bonusDefs, g));
+		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
-			.filter((value, index, self) => self.indexOf(value) === index);
-		let bonusGears = masterIdList.map(mstId => bonusDefs[mstId]);
+			.filter((value, index, self) => value > 0 && self.indexOf(value) === index);
+		let bonusGears = masterIdList.map(mstId => bonusDefs[mstId])
+			.concat(masterIdList.map(mstId => {
+				const typeDefs = bonusDefs[`t2_${KC3Master.slotitem(mstId).api_type[2]}`];
+				if (!typeDefs) return; else return $.extend(true, {}, typeDefs);
+			}));
+		masterIdList.push(...masterIdList);
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
 		const ctype = String(this.master().api_ctype);
@@ -741,7 +746,8 @@ KC3改 Ship Object
 		const checkByShip = (byShip, shipId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(Number(ctype));
+			(byShip.classes || []).includes(Number(ctype)) ||
+			(!byShip.ids && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -820,13 +826,15 @@ KC3改 Ship Object
 			}
 			gear.synergyFlags = synergyFlags;
 			gear.synergyIds = synergyIds;
+			gear.byType = idx >= Math.floor(masterIdList.length / 2);
 			gear.id = masterIdList[idx];
 			return flag;
 		});
 		if (!bonusGears.length) { return false; }
 
 		// Trim bonus gear object and add icon ids
-		const result = bonusGears.map(gear => {
+		const byIdGears = bonusGears.filter(g => !g.byType).map(g => g.id);
+		const result = bonusGears.filter(g => !g.byType || !byIdGears.includes(g.id)).map(gear => {
 			const obj = {};
 			obj.count = gear.count;
 			const g = allGears.find(eq => eq.masterId === gear.id);
@@ -1679,6 +1687,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
 		if(this.isDummy()) { return 0; }
+		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
+		// but currently only Type 98 Night Recon implemented (acc: 1), so always +5
 		return (isNightContacted ? 5 : 0) + this.fp[0] + this.tp[0]
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
