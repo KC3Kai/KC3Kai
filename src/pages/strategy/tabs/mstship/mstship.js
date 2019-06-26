@@ -952,8 +952,7 @@
 						bonusList.push(bonus);
 					}
 				}
-				$(".bonusList").parent().prev().toggle(!!bonusList.length);
-				
+				let bonusFound = false;
 				if (bonusList.length > 0) {
 					$.each(bonusList, function (idx, gear) {
 						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {};
@@ -1086,9 +1085,11 @@
 							});
 							
 							$(".bonusList").append(gearBox);
+							bonusFound = true;
 						}
 					});
 				}
+				$(".bonusList").parent().prev().toggle(bonusFound);
 
 				// BOXES
 				$(".tab_mstship .shipInfo .stats").show();

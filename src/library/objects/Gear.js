@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190530 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190625 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -585,6 +585,10 @@ KC3改 Equipment Object
 							remodel: 2,
 							multiple: { "tyku": 1, "houk": 1 },
 						},
+						{
+							remodel: 3,
+							multiple: { "houg": 3, "tyku": 1, "houk": 1 },
+						},
 					],
 				},
 			},
@@ -850,6 +854,29 @@ KC3改 Equipment Object
 						remodel: 2,
 						multiple: { "houg": 6, "tyku": 3, "tais": 2, "houk": 3 },
 					},
+				},
+			},
+			// Laté 298B
+			"194": {
+				count: 0,
+				byClass: {
+					// Commandant Teste Kai?
+					"70": {
+						remodel: 1,
+						multiple: { "houg": 3, "houk": 2, "saku": 2 },
+					},
+					// Richelieu Kai
+					"79": {
+						remodel: 1,
+						multiple: { "houg": 1, "houk": 2, "saku": 2 },
+					},
+					// Mizuho Kai?
+					"62": {
+						remodel: 1,
+						multiple: { "houk": 1, "saku": 2 },
+					},
+					// Kamoi Kai+
+					"72": "62",
 				},
 			},
 			// S9 Osprey
@@ -1271,7 +1298,7 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "tyku": 1 },
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
 					],
 					// Nelson Kai
@@ -2033,8 +2060,8 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra synergies for Yuudachi/Shigure/Kawakaze/Shiratsuyu/Murasame K2
-						ids: [144, 145, 469, 497, 498],
+						// extra synergies for Yuudachi/Shigure/Kawakaze/Shiratsuyu/Murasame/Umikaze K2
+						ids: [144, 145, 469, 497, 498, 587],
 						synergy: [
 							{
 								flags: [ "airRadar" ],
@@ -2067,8 +2094,8 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 2 },
 					},
 					{
-						// Kawakaze K2
-						ids: [469],
+						// Kawakaze/Umikaze K2
+						ids: [469, 587],
 						multiple: { "houk": 2 },
 					},
 				],
@@ -2467,8 +2494,8 @@ KC3改 Equipment Object
 				if(type2 === 25) return 0.3 * stars;
 				break;
 			case "airstrike":
-				// for normal opening airstrike, only seaplane bomber bonus confirmed
-				if(type2 === 11) return 0.2 * stars;
+				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
+				if([8, 11].includes(type2)) return 0.2 * stars;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now

@@ -3067,7 +3067,9 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
+					.attr("src", ConfigManager.info_troll ?
+						"/assets/img/ui/jervaited.png" :
+						"/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
