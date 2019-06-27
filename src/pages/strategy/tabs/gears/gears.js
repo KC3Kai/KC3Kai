@@ -10,7 +10,7 @@
 		_holders: {},
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or"],
+		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","rk"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -223,7 +223,8 @@
 							dv: MasterItem.api_baku,
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
-							or: MasterItem.api_distance
+							or: MasterItem.api_distance,
+							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId),
 						},
 						held: [],
 						extras: [],
@@ -438,6 +439,8 @@
 			const q = ".tab_gears .itemSorters .sortControl.type";
 			if (type_id === "all") {
 				$(q).removeClass("hide");
+				// there are too many sorters
+				$(".tab_gears .itemSorters .sortControl.rk").addClass("hide");
 			} else {
 				$(q).addClass("hide");
 			}
@@ -576,7 +579,9 @@
 		/* Determine if an item has a specific stat
 		--------------------------------------------*/
 		slotitem_stat :function(ItemElem, SlotItem, statName){
-			if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
+			if(statName === "rk") {
+				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
+			} else if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
 			)){
 				// accuray icon -> anti-bomber

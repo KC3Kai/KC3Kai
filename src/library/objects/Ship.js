@@ -1366,7 +1366,7 @@ KC3改 Ship Object
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
-					[64, 148, 233, 277, 305, 306, 319]));
+					KC3GearManager.antiLandDiveBomberIds));
 			} else {
 				// Should limit to TP power from equippable aircraft?
 				shellingPower += this.equipmentTotalStats("raig");

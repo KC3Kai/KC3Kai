@@ -172,6 +172,7 @@
 				["rn", "leng", "ShipLength"],
 				["or", "distance", "ShipRadius"],
 				["kk", "cost", "ShipDeployCost"],
+				["rk", "baku", "ShipGearAntiLand"],
 			], (index, sdata) => {
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
@@ -180,7 +181,8 @@
 					)
 				)) {
 					const isLandFighter = gearData.api_type[2] === 48;
-					const statBox = $(".tab_mstgear .factory .stat").clone();
+					const statBox = $(".tab_mstgear .factory .stat").clone()
+						.appendTo(".tab_mstgear .gearInfo .stats");
 					$("img", statBox)
 						.attr("src", KC3Meta.statIcon(sdata[
 							sdata.length > 3 && isLandFighter ? 3 : 0
@@ -199,11 +201,13 @@
 							"{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot)
 						);
 						$(statBox).css("width", "130px");
+					} else if(sdata[0] === "rk") { // For dive bomber who can anti-land
+						$(".stat_value", statBox).text("");
+						const canAntiLand = KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id);
+						if(!canAntiLand) { statBox.remove(); }
 					} else {
 						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);
 					}
-					
-					statBox.appendTo(".tab_mstgear .gearInfo .stats");
 				}
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstgear .gearInfo .stats");
