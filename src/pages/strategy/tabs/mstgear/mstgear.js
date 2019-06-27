@@ -178,7 +178,8 @@
 					!planeOnlyStats.includes(sdata[0]) || (
 						planeOnlyStats.includes(sdata[0]) &&
 						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
-					)
+					)) && (
+					sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 				)) {
 					const isLandFighter = gearData.api_type[2] === 48;
 					const statBox = $(".tab_mstgear .factory .stat").clone()
@@ -203,8 +204,6 @@
 						$(statBox).css("width", "130px");
 					} else if(sdata[0] === "rk") { // For dive bomber who can anti-land
 						$(".stat_value", statBox).text("");
-						const canAntiLand = KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id);
-						if(!canAntiLand) { statBox.remove(); }
 					} else {
 						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);
 					}

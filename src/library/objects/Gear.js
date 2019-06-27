@@ -2978,18 +2978,23 @@ KC3改 Equipment Object
 			["ev", "houk"],
 			["ls", "saku"],
 			["rn", "leng"],
-			["or", "distance"]
+			["or", "distance"],
+			["rk", "baku"],
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
 			if((gearData["api_" + sdata[1]] || 0) !== 0 && (
 				!planeStats.includes(sdata[0]) || (planeStats.includes(sdata[0]) &&
 					KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3]))
+			) && (
+				sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 			)) {
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
+				} else if(sdata[0] === "rk") {
+					$(".value", statBox).text("");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);
 				}

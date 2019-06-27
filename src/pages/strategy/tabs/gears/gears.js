@@ -118,7 +118,8 @@
 					// additionally, if they look the same on the given stat
 					// we compare all properties by taking their sum.
 					if (result === 0) {
-						return sumAllGetter(b) - sumAllGetter(a);
+						return sumAllGetter(b) - sumAllGetter(a)
+							|| a.id - b.id;
 					} else {
 						return result;
 					}
@@ -224,7 +225,7 @@
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
-							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId),
+							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
 						},
 						held: [],
 						extras: [],

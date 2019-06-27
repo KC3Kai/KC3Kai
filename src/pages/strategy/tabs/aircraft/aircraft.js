@@ -121,7 +121,7 @@
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
-							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId),
+							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
 						},
 						instances: []
 					};
