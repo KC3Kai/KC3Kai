@@ -2303,7 +2303,7 @@ KC3改 Equipment Object
 				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);
 			}
 		}
-		const gearTypes = gear.master().api_type;
+		const gearTypes = gear.master().api_type || [];
 		if(gearTypes && bonusGears["t2_" + gearTypes[2]]) {
 			const bonusDefs = bonusGears["t2_" + gearTypes[2]];
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;

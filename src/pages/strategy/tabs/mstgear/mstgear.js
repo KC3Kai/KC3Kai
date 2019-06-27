@@ -150,7 +150,9 @@
 			$(".tab_mstgear .gearInfo .name").text(
 				"[{0}] {1}".format(gearId, KC3Meta.gearName(gearData.api_name))
 			);
-			$(".tab_mstgear .gearInfo .intro").html(gearData.api_info);
+			// Devs removed this property from master since 2019-06-25
+			// Picture book API will return it for those unlocked items only
+			$(".tab_mstgear .gearInfo .intro").html(gearData.api_info || "");
 			
 			// Stats
 			const planeOnlyStats = ["or", "kk"];
