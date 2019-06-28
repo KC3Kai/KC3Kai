@@ -632,6 +632,7 @@ Provides access to data on built-in JSON files
 				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
 				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
 				antiLandDiveBomberIds: d.antiLandDiveBomberIds,
+				evadeAntiAirFireIds: d.evadeAntiAirFireIds,
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,

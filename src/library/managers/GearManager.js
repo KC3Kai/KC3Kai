@@ -19,6 +19,7 @@ Saves and loads list to and from localStorage
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47],
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,56,57],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319],
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323],
 		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
 		interceptorsType3Ids: [38,44],

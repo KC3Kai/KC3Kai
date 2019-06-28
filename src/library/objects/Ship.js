@@ -1702,7 +1702,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
 		if(this.isDummy()) { return 0; }
 		const equipTotals = {
-			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
+			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
 		};
 		// Generally, only fp + tp from night capable aircraft will be taken into account.
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
@@ -1723,6 +1723,7 @@ KC3改 Ship Object
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
 					equipTotals.tp += master.api_raig || 0;
+					equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
@@ -1734,7 +1735,7 @@ KC3改 Ship Object
 			}
 		});
 		let shellingPower = this.estimateNakedStats("fp");
-		shellingPower += equipTotals.fp + equipTotals.tp;
+		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
 		shellingPower += isNightContacted ? 5 : 0;
