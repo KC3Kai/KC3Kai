@@ -288,6 +288,59 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Prototype Type 97 Torpedo Bomber Kai Type 3 Model E (w/ Type 6 Airborne Radar Kai)
+			"344": {
+				count: 0,
+				byShip: [
+					{
+						// Ryuuhou Kai
+						// Note: Taigei ctype is 50, but her remodel group index is 0 in Ryuuhou
+						ids: [318],
+						single: { "houg": 4, "tais": 1 },
+					},
+					{
+						// Zuihou Kai Ni+
+						ids: [555, 560],
+						single: { "houg": 2, "tais": 2 },
+					},
+					{
+						// Shouhou Kai
+						ids: [282],
+						single: { "houg": 2, "tais": 1 },
+					},
+					{
+						// Akagi Kai Ni E
+						ids: [599],
+						single: { "houg": 3 },
+					},
+				],
+			},
+			// Prototype Type 97 Torpedo Bomber Kai (Skilled) Type 3 Model E (w/ Type 6 Airborne Radar Kai)
+			"345": {
+				count: 0,
+				byShip: [
+					{
+						// Ryuuhou Kai
+						ids: [318],
+						single: { "houg": 5, "tais": 1, "houk": 1 },
+					},
+					{
+						// Zuihou Kai Ni+
+						ids: [555, 560],
+						single: { "houg": 3, "tais": 2, "houk": 2 },
+					},
+					{
+						// Shouhou Kai
+						ids: [282],
+						single: { "houg": 3, "tais": 1, "houk": 1 },
+					},
+					{
+						// Akagi Kai Ni E
+						ids: [599],
+						single: { "houg": 3, "houk": 1 },
+					},
+				],
+			},
 			// Tenzan Model 12 (Murata Squadron)
 			// https://wikiwiki.jp/kancolle/%E5%A4%A9%E5%B1%B1%28%E6%9D%91%E7%94%B0%E9%9A%8A%29
 			"144": {
