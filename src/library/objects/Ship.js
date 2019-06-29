@@ -880,7 +880,7 @@ KC3改 Ship Object
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
+		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -888,8 +888,8 @@ KC3改 Ship Object
 			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
 			// autogyro on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
 			if(isAirAntiSubStype) {
-				// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
-				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
 			}
 		}
 		const equipmentTotalAsw = this.equipment(true)
@@ -2170,9 +2170,13 @@ KC3改 Ship Object
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
-		// and explicit asw bonus from sonars taken into account now.
-		// ~~explicit asw bonus from Torpedo Bombers on CVE not counted?~~
-		const shipAsw = this.as[0] + aswDiff;
+		// and explicit asw bonus from Sonars taken into account confirmed.
+		const shipAsw = this.as[0] + aswDiff
+		// explicit asw bonus from Torpedo Bombers still not counted,
+		// confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
+		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
+		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
+			- this.equipmentTotalStats("tais", true, true, true, [8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2500,7 +2504,7 @@ KC3改 Ship Object
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
 						.some(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
-					// uncertain: submarine in any position of the fleet?
+					// submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
 					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
 					hasSixShips = fleetObj.countShips(true) >= 6;

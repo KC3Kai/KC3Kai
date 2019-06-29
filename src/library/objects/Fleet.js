@@ -756,7 +756,7 @@ Contains summary information about a fleet and its ships
 			// 8% fuel, no ammo since Fall 2017 event
 			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.aswAmmo += 0;
-			// 8% -> 6% since Fall 2017 event
+			// 8% -> 6% since Fall 2017 event, but World 6 uses next values 4% + 8%?
 			totalCost.airRaidFuel += Math.floor(maxFuel * 0.06) || 1;
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 			// 4% fuel, no ammo for radar ambush, 8% for PT imps since Winter 2019 event

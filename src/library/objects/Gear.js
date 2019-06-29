@@ -2339,7 +2339,6 @@ KC3改 Equipment Object
 
 	KC3Gear.accumulateShipBonusGear = function(bonusGears, gear){
 		const synergyGears = bonusGears.synergyGears;
-		const bonusDefs = bonusGears[gear.masterId];
 		if(synergyGears) {
 			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
@@ -2350,19 +2349,28 @@ KC3改 Equipment Object
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
+		const addupStarsDistribution = (bonusDefs) => {
+			if(Array.isArray(bonusDefs.starsDist)) {
+				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);
+			}
+		};
+		const bonusDefs = bonusGears[gear.masterId];
 		if(bonusDefs) {
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;
-			if(Array.isArray(bonusDefs.starsDist)) {
-				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);
-			}
+			addupStarsDistribution(bonusDefs);
 		}
-		const gearTypes = gear.master().api_type || [];
-		if(gearTypes && bonusGears["t2_" + gearTypes[2]]) {
-			const bonusDefs = bonusGears["t2_" + gearTypes[2]];
+		const gearTypes = gear.master().api_type || [],
+			type2Key = "t2_" + gearTypes[2],
+			type3Key = "t3_" + gearTypes[3];
+		if(gearTypes.length && bonusGears[type2Key]) {
+			const bonusDefs = bonusGears[type2Key];
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;
-			if(Array.isArray(bonusDefs.starsDist)) {
-				bonusDefs.starsDist[gear.stars || 0] = 1 + (bonusDefs.starsDist[gear.stars || 0] || 0);
-			}
+			addupStarsDistribution(bonusDefs);
+		}
+		if(gearTypes.length && bonusGears[type3Key]) {
+			const bonusDefs = bonusGears[type3Key];
+			if(bonusDefs.count >= 0) bonusDefs.count += 1;
+			addupStarsDistribution(bonusDefs);
 		}
 	};
 
@@ -2501,6 +2509,9 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 8: // Torpedo Bomber
+					case 58: // Jet Torpedo Bomber
+						return 0.2 * stars;
 					case 14: // Sonar
 					case 40: // Large Sonar
 						modifier = 0.75; break;
@@ -2523,12 +2534,17 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
+				// Torpedo Bomber, uncertained: 0.18~0.2 per star?
+				if([8, 58].includes(type2))
+					return 0.18 * stars;
 				// Autogyro or Helicopter
-				if(type2 === 25) return 0.3 * stars;
+				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
+				if(type2 === 25)
+					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
 				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
-				if([8, 11].includes(type2)) return 0.2 * stars;
+				if([8, 11, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
@@ -2653,6 +2669,7 @@ KC3改 Equipment Object
 			case 6: // carrier-based fighter
 				modifier = 0.2; break;
 			case 7: // fighter bomber (dive bomber with AA stat)
+			case 57: // jet bomber
 				modifier = 0.25; break;
 			case 45: // seaplane fighter
 				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
