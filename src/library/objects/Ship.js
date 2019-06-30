@@ -2927,18 +2927,15 @@ KC3改 Ship Object
 				// put this here not to mask previous 2 patterns, tho its rate might be higher
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
-				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs),
-				// more likely to be acted as a night torpedo bomber, not another Fighter Bomber Iwai
-				// since 2019-04-30, modifiers from:
-				// https://twitter.com/imoDer_Tw/status/1123415084707880963
+				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30
+				// all patterns may not be found yet, regularly mod of 2 planes: 1.2, 3 planes: 1.18
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				// https://twitter.com/MorimotoKou/status/1123196517680947200
 				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNTBFBP", 1.2);
-				// https://twitter.com/ratilt_hekikuu/status/1123201565664235521
+				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBP", 1.18);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBI", 1.18);
-				// https://twitter.com/kaedec_adm/status/1124988107948871680
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPSF", 1.18);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
