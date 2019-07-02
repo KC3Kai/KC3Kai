@@ -322,6 +322,17 @@ Saves and loads significant data for future use
 				.map(i => exslotShips[i].api_slotitem_id) || [];
 		},
 
+		/**
+		 * Special cases hard-coded at client-side:
+		 *   * [553/554] Ise-class Kai Ni can equip main gun on first 2 slots only,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
+		 *   * [392] Richelieu Kai can equip seaplane bomber [194] Laté 298B only,
+		 *     either hard-coded the exception conndition in following codes.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
+		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
 			if(!type2Id && gearId > 0) {
@@ -356,6 +367,11 @@ Saves and loads significant data for future use
 				} else {
 					exslotCapableShips = [];
 				}
+			}
+			// Remove Richelieu Kai from Seaplane Bomber type list except Late 298B
+			if(type2Id === 11 && gearId !== 194) {
+				const richelieuKaiPos = capableShips.indexOf(392);
+				if(richelieuKaiPos >= 0) capableShips.splice(richelieuKaiPos, 1);
 			}
 			return {
 				stypes: capableStypes,

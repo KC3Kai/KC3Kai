@@ -730,10 +730,15 @@ KC3改 Ship Object
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
 		const allGears = this.equipment(true);
-		allGears.forEach(g => KC3Gear.accumulateShipBonusGear(bonusDefs, g));
+		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
-			.filter((value, index, self) => self.indexOf(value) === index);
-		let bonusGears = masterIdList.map(mstId => bonusDefs[mstId]);
+			.filter((value, index, self) => value > 0 && self.indexOf(value) === index);
+		let bonusGears = masterIdList.map(mstId => bonusDefs[mstId])
+			.concat(masterIdList.map(mstId => {
+				const typeDefs = bonusDefs[`t2_${KC3Master.slotitem(mstId).api_type[2]}`];
+				if (!typeDefs) return; else return $.extend(true, {}, typeDefs);
+			}));
+		masterIdList.push(...masterIdList);
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
 		const ctype = String(this.master().api_ctype);
@@ -741,7 +746,8 @@ KC3改 Ship Object
 		const checkByShip = (byShip, shipId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(Number(ctype));
+			(byShip.classes || []).includes(Number(ctype)) ||
+			(!byShip.ids && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -820,13 +826,15 @@ KC3改 Ship Object
 			}
 			gear.synergyFlags = synergyFlags;
 			gear.synergyIds = synergyIds;
+			gear.byType = idx >= Math.floor(masterIdList.length / 2);
 			gear.id = masterIdList[idx];
 			return flag;
 		});
 		if (!bonusGears.length) { return false; }
 
 		// Trim bonus gear object and add icon ids
-		const result = bonusGears.map(gear => {
+		const byIdGears = bonusGears.filter(g => !g.byType).map(g => g.id);
+		const result = bonusGears.filter(g => !g.byType || !byIdGears.includes(g.id)).map(gear => {
 			const obj = {};
 			obj.count = gear.count;
 			const g = allGears.find(eq => eq.masterId === gear.id);
@@ -872,7 +880,7 @@ KC3改 Ship Object
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47, 57];
+		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -880,8 +888,8 @@ KC3改 Ship Object
 			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
 			// autogyro on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
 			if(isAirAntiSubStype) {
-				// exclude bomber, seaplane bomber, autogyro, as-pby too if not able to air attack
-				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26]);
+				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
 			}
 		}
 		const equipmentTotalAsw = this.equipment(true)
@@ -1358,7 +1366,7 @@ KC3改 Ship Object
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
-					[64, 148, 233, 277, 305, 306, 319]));
+					KC3GearManager.antiLandDiveBomberIds));
 			} else {
 				// Should limit to TP power from equippable aircraft?
 				shellingPower += this.equipmentTotalStats("raig");
@@ -1679,6 +1687,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
 		if(this.isDummy()) { return 0; }
+		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
+		// but currently only Type 98 Night Recon implemented (acc: 1), so always +5
 		return (isNightContacted ? 5 : 0) + this.fp[0] + this.tp[0]
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
@@ -1692,7 +1702,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
 		if(this.isDummy()) { return 0; }
 		const equipTotals = {
-			fp: 0, tp: 0, slotBonus: 0, improveBonus: 0
+			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
 		};
 		// Generally, only fp + tp from night capable aircraft will be taken into account.
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
@@ -1713,6 +1723,7 @@ KC3改 Ship Object
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
 					equipTotals.tp += master.api_raig || 0;
+					equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
@@ -1724,7 +1735,7 @@ KC3改 Ship Object
 			}
 		});
 		let shellingPower = this.estimateNakedStats("fp");
-		shellingPower += equipTotals.fp + equipTotals.tp;
+		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
 		shellingPower += isNightContacted ? 5 : 0;
@@ -2159,9 +2170,13 @@ KC3改 Ship Object
 			: 100;
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
-		// and explicit asw bonus from sonars taken into account now.
-		// ~~explicit asw bonus from Torpedo Bombers on CVE not counted?~~
-		const shipAsw = this.as[0] + aswDiff;
+		// and explicit asw bonus from Sonars taken into account confirmed.
+		const shipAsw = this.as[0] + aswDiff
+		// explicit asw bonus from Torpedo Bombers still not counted,
+		// confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
+		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
+		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
+			- this.equipmentTotalStats("tais", true, true, true, [8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2489,7 +2504,7 @@ KC3改 Ship Object
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
 						.some(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
-					// uncertain: submarine in any position of the fleet?
+					// submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
 					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
 					hasSixShips = fleetObj.countShips(true) >= 6;
@@ -2912,18 +2927,15 @@ KC3改 Ship Object
 				// put this here not to mask previous 2 patterns, tho its rate might be higher
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
-				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs),
-				// more likely to be acted as a night torpedo bomber, not another Fighter Bomber Iwai
-				// since 2019-04-30, modifiers from:
-				// https://twitter.com/imoDer_Tw/status/1123415084707880963
+				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30
+				// all patterns may not be found yet, regularly mod of 2 planes: 1.2, 3 planes: 1.18
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				// https://twitter.com/MorimotoKou/status/1123196517680947200
 				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNTBFBP", 1.2);
-				// https://twitter.com/ratilt_hekikuu/status/1123201565664235521
+				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBP", 1.18);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBI", 1.18);
-				// https://twitter.com/kaedec_adm/status/1124988107948871680
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPSF", 1.18);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)

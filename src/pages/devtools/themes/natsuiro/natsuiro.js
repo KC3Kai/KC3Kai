@@ -4570,7 +4570,7 @@
 				.attr("src", `${myKcServerHost}/kcs2/resources${gearPng}`)
 				.attr("alt", "[{0}]".format(gearMst.api_id))
 				.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); })
-				.attr("title", gearMst.api_info)
+				//.attr("title", gearMst.api_info)
 				.data("masterId", gearMst.api_id)
 				.on("click", self.gearDoubleClickFunction);
 		} else {
