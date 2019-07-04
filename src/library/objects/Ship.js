@@ -2204,13 +2204,15 @@ KC3改 Ship Object
 
 		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
 		//   but her initial naked asw too high to verify the lower threshold.
-		// Fusou-class Kai Ni can OASW with 1 Helicopter and asw >= 100.
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
+		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
+		//   https://twitter.com/cat_lost/status/1146075888636710912
+		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW with Depth Charge.
 		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
-			return this.countEquipmentType(1, 15) >= 2 ||
-				this.countEquipmentType(1, 44) >= 1;
+			return (isHyuugaKaiNi || hasSonar) &&
+				(this.countEquipmentType(1, 15) >= 2 ||
+				this.countEquipmentType(1, 44) >= 1);
 		}
 
 		// for other ship types who can do ASW with Depth Charge
