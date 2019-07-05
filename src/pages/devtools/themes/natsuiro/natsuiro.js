@@ -3067,7 +3067,9 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
+					.attr("src", ConfigManager.info_troll ?
+						"/assets/img/ui/jervaited.png" :
+						"/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
@@ -3221,19 +3223,41 @@
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.debug("PvP Enemy List", data);
-			var jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
+			const jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
+			const lines2Array = (s) => (s || "").split(/[\r\n]/).filter(l => !!l);
+			const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends);
+			const pvpFriendToggleFunc = function(e) {
+				const enemyBox = $(this).parent();
+				const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends),
+					name = $(".pvp_enemy_name", enemyBox).text(),
+					namePos = pvpFriends.indexOf(name);
+				if(namePos >= 0) {
+					pvpFriends.splice(namePos, 1);
+				} else {
+					pvpFriends.push(name);
+				}
+				// to indicate if there are other same names existed in list after removing
+				enemyBox.toggleClass("friend", pvpFriends.includes(name));
+				ConfigManager.pan_pvp_friends = pvpFriends.join("\n");
+				ConfigManager.save();
+			};
 			$(".activity_pvp .pvp_header .pvp_create_kind").text(
 				KC3Meta.term("PvpListCreateType{0}".format(data.api_create_kind))
 			);
 			$(".activity_pvp .pvp_list").empty();
 			$.each(data.api_list, function(idx, enemy){
-				var enemyBox = $("#factory .pvpEnemyInfo").clone();
+				const enemyBox = $("#factory .pvpEnemyInfo").clone().appendTo(".activity_pvp .pvp_list");
+				enemyBox.toggleClass("friend", pvpFriends.includes(enemy.api_enemy_name));
 				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
 				$(".pvp_enemy_pic", enemyBox)
 					.attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name))
-					.lazyInitTooltip();
-				$(".pvp_enemy_name", enemyBox).text(enemy.api_enemy_name);
-				$(".pvp_enemy_name", enemyBox).attr("title", enemy.api_enemy_name).lazyInitTooltip();
+					.lazyInitTooltip()
+					.click(pvpFriendToggleFunc);
+				$(".pvp_enemy_name", enemyBox)
+					.text(enemy.api_enemy_name)
+					.attr("title", enemy.api_enemy_name)
+					.lazyInitTooltip()
+					.click(pvpFriendToggleFunc);
 				$(".pvp_enemy_level", enemyBox).text(enemy.api_enemy_level);
 				// api_enemy_rank is not int ID of rank, fml
 				var rankId = jpRankArr.indexOf(enemy.api_enemy_rank);
@@ -3248,12 +3272,12 @@
 				}
 				if(enemy.api_state > 0){
 					$(".pvp_enemy_state img", enemyBox).attr("src",
-						"../../../../assets/img/client/ratings/{0}.png".format(["","E","D","C","B","A","S"][enemy.api_state])
+						"../../../../assets/img/client/ratings/{0}.png"
+							.format(["","E","D","C","B","A","S"][enemy.api_state] || "")
 					);
 				} else {
 					$(".pvp_enemy_state", enemyBox).hide();
 				}
-				enemyBox.appendTo(".activity_pvp .pvp_list");
 			});
 			$(".module.activity .activity_tab").removeClass("active");
 			$("#atab_activity").addClass("active");
@@ -3265,7 +3289,7 @@
 		},
 
 		PvPFleet: function(data){
-			var self = this;
+			const self = this;
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.debug("PvP Enemy Fleet", data);
@@ -3342,7 +3366,7 @@
 		},
 
 		PvPStart: function(data){
-			var self = this;
+			const self = this;
 			var thisPvP = KC3SortieManager.currentNode();
 
 			// Clear battle details box just to make sure
@@ -4546,7 +4570,7 @@
 				.attr("src", `${myKcServerHost}/kcs2/resources${gearPng}`)
 				.attr("alt", "[{0}]".format(gearMst.api_id))
 				.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); })
-				.attr("title", gearMst.api_info)
+				//.attr("title", gearMst.api_info)
 				.data("masterId", gearMst.api_id)
 				.on("click", self.gearDoubleClickFunction);
 		} else {

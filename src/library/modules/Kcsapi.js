@@ -149,6 +149,7 @@ Previously known as "Reactor"
 			.setNewsfeed(response.api_data.api_log, utcSeconds * 1000);
 			
 			PlayerManager.combinedFleet = response.api_data.api_combined_flag || 0;
+			PlayerManager.friendlySettings = response.api_data.api_friendly_setting || {};
 			
 			KC3SortieManager.endSortie(response.api_data);
 			
@@ -355,6 +356,20 @@ Previously known as "Reactor"
 			console.log("Refresh useitems", PlayerManager.consumables);
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
+		},
+		
+		/* Set friendly support fleet since 2019-05-31.
+		   This settings might disappear after event, so not persistent,
+			and default to {}
+		-------------------------------------------------------*/
+		"api_req_member/set_friendly_request":function(params, response, headers, decodedParams){
+			const newSettings = {
+				// 1 if request friendly fleet
+				api_request_flag: parseInt(decodedParams.api_request_flag, 10),
+				// 1 if request stronger fleet by consuming 1~6 torches
+				api_request_type: parseInt(decodedParams.api_request_type, 10),
+			};
+			PlayerManager.friendlySettings = $.extend(PlayerManager.friendlySettings || {}, newSettings);
 		},
 		
 		

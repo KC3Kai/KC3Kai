@@ -68,6 +68,8 @@
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
                     return 15;
+                case 350: // Umikaze
+                    return 30;
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
@@ -85,10 +87,8 @@
                 case 560: // Zuihou K2B
                     return 5;
                 case 562: // Johnston
+                case 596: // Fletcher
                     return 80;
-                case 594: // Akagi Kai Ni
-                case 599: // Akagi Kai Ni E
-                    return 30;
                 default:
                     return (steel < 4500) ? 0
                          : (steel < 5500) ? 10
@@ -131,6 +131,7 @@
                 case 560: // Zuihou K2B
                     return 20;
                 case 562: // Johnston
+                case 596: // Fletcher
                     return 10;
                 case 594: // Akagi Kai Ni
                 case 599: // Akagi Kai Ni E

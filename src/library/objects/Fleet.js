@@ -241,8 +241,9 @@ Contains summary information about a fleet and its ships
 	/*------------------[ FLEET ATTRIBUTES ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.countShips = function(){
-		return (this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
+	KC3Fleet.prototype.countShips = function(excludeEscaped = false){
+		return excludeEscaped ? this.shipsUnescaped().length :
+			(this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -584,7 +585,7 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
-	 * Night recon contact chance, under verifying, not usable.
+	 * Night recon contact chance, under verifying.
 	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
 	 */
 	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
@@ -602,8 +603,9 @@ Contains summary information about a fleet and its ships
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
-						// no info about how slot size multiply, just know 0 will not trigger
-						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slotSize(gearIdx)) / 100
+						// https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29
+						// larger slot size can increase rate near but not reach to 100%
+						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku * ship.level)) * 4 / 100 : 0
 					});
 				}
 			});
@@ -754,7 +756,7 @@ Contains summary information about a fleet and its ships
 			// 8% fuel, no ammo since Fall 2017 event
 			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.aswAmmo += 0;
-			// 8% -> 6% since Fall 2017 event
+			// 8% -> 6% since Fall 2017 event, but World 6 uses next values 4% + 8%?
 			totalCost.airRaidFuel += Math.floor(maxFuel * 0.06) || 1;
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
 			// 4% fuel, no ammo for radar ambush, 8% for PT imps since Winter 2019 event

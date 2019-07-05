@@ -21,6 +21,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		supportFleet: [],
 		fcfCheck: [],
 		escapedList: [],
+		materialBefore: false,
 		materialGain: Array.apply(null, {length:8}).map(v => 0),
 		sinkList: {main:[], escr:[]},
 		slotitemConsumed: false,
@@ -39,6 +40,12 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const thisMap = this.getCurrentMapData();
 			this.map_difficulty = world < 10 ? 0 : thisMap.difficulty || 0;
 			this.hqExpGained = 0;
+			this.materialBefore = PlayerManager.hq.lastMaterial.concat(
+				PlayerManager.consumables.torch,
+				PlayerManager.consumables.buckets,
+				PlayerManager.consumables.devmats,
+				PlayerManager.consumables.screws
+			);
 			this.slotitemConsumed = false;
 			this.boss = {
 				info: false,
@@ -738,6 +745,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				});
 			});
+			// Count torches consumed by powerful friend fleet,
+			// assuming materialGain and consumables already updated before this invoked
+			if(this.materialBefore && !!PlayerManager.friendlySettings.api_request_type) {
+				const usedTorch = this.materialBefore[4] + this.materialGain[4] - PlayerManager.consumables.torch;
+				if(usedTorch > 0) {
+					cons.resc[4] -= usedTorch;
+					console.log("Powerful friend fleet consumption detected", usedTorch);
+				}
+			}
 			if(cons.name !== "sortie0") {
 				console.log("Before " + cons.name +" sent fleets", sentBattleSupportFleets, PlayerManager.hq.lastSortie);
 				console.log("After " + cons.name +" battle consumption and fleets", cons.resc, PlayerManager.cloneFleets());
@@ -817,6 +833,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.fcfCheck = [];
 			this.escapedList = [];
 			this.initialMorale = [];
+			this.materialBefore = false;
 			this.materialGain.fill(0);
 			this.sinkList.main.splice(0);
 			this.sinkList.escr.splice(0);

@@ -104,14 +104,25 @@ Executes processing and relies on KC3Network for the triggers
 		var self = this;
 		// Get response body
 		har.getContent(function(responseBody){
-			// Strip svdata= from response body if exists then parse JSON
-			if(responseBody.indexOf("svdata=") >- 1){
-				responseBody = responseBody.substring(7);
+			if(typeof responseBody === "string"){
+				try {
+					// Strip `svdata=` from response body if exists then parse JSON
+					var json = responseBody.replace(/[\s\S]*svdata=/, "");
+					self.response = JSON.parse(json);
+					self.gameStatus = self.response.api_result;
+				} catch (e) {
+					// Keep this.response untouched, should be {}
+					self.gameStatus = 0;
+					console.warn("Parsing game response:", e, responseBody, self.call, self.params);
+				}
+			} else {
+				self.gameStatus = 0;
+				console.warn("Unexpected response body:", responseBody, self.call, self.params);
+				// seems Chromium m74 has introduced some bug causing null value for unknown reason
+				if(har.response && har.response.content){
+					console.warn("Actual response content:", har.response.bodySize, har.response.content);
+				}
 			}
-			var responseObj = JSON.parse(responseBody);
-			
-			self.gameStatus = responseObj.api_result;
-			self.response = responseObj;
 			
 			callback();
 		});
@@ -123,7 +134,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.warn("Game Status Error:", this.gameStatus, this.response);
+			console.warn("Game Status Error:", this.gameStatus, this.call, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
@@ -144,7 +155,7 @@ Executes processing and relies on KC3Network for the triggers
 			}
 			
 			// If it fails on "api_port" which is usually caused by system clock
-			if(this.call == "api_port/port"){
+			if(this.call == "api_port/port" && !!this.gameStatus){
 				// Check if user's clock is correct
 				var computerClock = new Date().getTime();
 				var serverClock = new Date( this.headers.Date ).getTime();
@@ -156,9 +167,9 @@ Executes processing and relies on KC3Network for the triggers
 						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
 						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
-					
+				
 				// Something else other than clock is wrong
-				}else{
+				} else {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
 						message: KC3Meta.term("CatBombErrorOnHomePortMsg")

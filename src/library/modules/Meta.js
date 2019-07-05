@@ -111,6 +111,14 @@ Provides access to data on built-in JSON files
 			151: 94,
 			281: 38,
 		},
+		// ships with special remodeling animation, ordered by implementated time,
+		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
+		specialRemodelFromIds: [
+			149, // Kongou K2 -> K2C
+			277, // Akagi Kai -> K2
+			594, // Akagi K2 -> K2E
+			350, // Umikaze Kai -> K2
+		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 601, 1496],
 		nelsonTouchShips: [571, 576],
@@ -126,11 +134,12 @@ Provides access to data on built-in JSON files
 			550: 3,   551: 128, 552: 76,  553: 3,   554: 554,
 			555: 555, 556: 556, 557: 557, 558: 558, 561: 561,
 			562: 562, 563: 162, 564: 549, 565: 79,  566: 547,
-			568: 161, 567: 13,  571: 571, 572: 572, 573: 573,
-			574: 574, 575: 574, 576: 231, 577: 245, 578: 190,
-			579: 7,   580: 58,  581: 581, 582: 582, 583: 583,
-			584: 7,   585: 161, 586: 574, 587: 298, 588: 266,
-			589: 310, 590: 309, 591: 284, 592: 332, 593: 314,
+			567: 13,  568: 161, 569: 562, 570: 15,  571: 571,
+			572: 572, 573: 573, 574: 574, 575: 574, 576: 231,
+			577: 245, 578: 190, 579: 7,   580: 58,  581: 581,
+			582: 582, 583: 583, 584: 7,   585: 161, 586: 574,
+			587: 298, 588: 266, 589: 310, 590: 309, 591: 284,
+			592: 332, 593: 314,
 		},
 		
 		/* Initialization
@@ -622,6 +631,8 @@ Provides access to data on built-in JSON files
 				landBasedAircraftType3Ids: d.landBasedAircraftType3Ids,
 				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
 				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
+				antiLandDiveBomberIds: d.antiLandDiveBomberIds,
+				evadeAntiAirFireIds: d.evadeAntiAirFireIds,
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,
@@ -680,14 +691,14 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				// move Nelson Touch/Nagato-class Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
 				this._battle.cutinDay[index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
