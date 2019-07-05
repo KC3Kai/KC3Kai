@@ -885,9 +885,8 @@ KC3改 Equipment Object
 			"194": {
 				count: 0,
 				byClass: {
-					// Commandant Teste Kai?
+					// Commandant Teste
 					"70": {
-						remodel: 1,
 						multiple: { "houg": 3, "houk": 2, "saku": 2 },
 					},
 					// Richelieu Kai
@@ -900,7 +899,7 @@ KC3改 Equipment Object
 						remodel: 1,
 						multiple: { "houk": 1, "saku": 2 },
 					},
-					// Kamoi Kai+
+					// Kamoi Kai+?
 					"72": "62",
 				},
 			},
@@ -2534,9 +2533,9 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Torpedo Bomber, uncertained: 0.18~0.2 per star?
+				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
 				if([8, 58].includes(type2))
-					return 0.18 * stars;
+					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
 				if(type2 === 25)
