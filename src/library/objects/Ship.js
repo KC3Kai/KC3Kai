@@ -2900,6 +2900,7 @@ KC3改 Ship Object
 			
 			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E needed
 			if(isCarrierNightAirAttack) {
+				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 				// https://twitter.com/Nishisonic/status/911143760544751616
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
@@ -2908,40 +2909,56 @@ KC3改 Ship Object
 				const iwaiDBomberCnt = this.countNonZeroSlotEquipment(154);
 				// Swordfish variants
 				const swordfishTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
-				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", 1.25);
-				if(nightFighterCnt >= 3)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", 1.18);
-				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", 1.18);
-				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", 1.18);
-				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", 1.18);
-				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", 1.18);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", 1.18);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", 1.18);
-				// put this here not to mask previous 2 patterns, tho its rate might be higher
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
-				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30
-				// all patterns may not be found yet, regularly mod of 2 planes: 1.2, 3 planes: 1.18
+				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30,
+				// it more likely acts as yet unimplemented Night Dive Bomber type
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNTBFBP", 1.2);
+				// might extract this out for estimating unexpected damage actual pattern modifier
+				const ncvciModifier = (() => {
+					const otherCnt = photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
+					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return 1.25;
+					if(nightFighterCnt + nightTBomberCnt + otherCnt === 2) return 1.2;
+					if(nightFighterCnt + nightTBomberCnt + otherCnt >= 3) return 1.18;
+					return 1; // should not reach here
+				})();
+				// first place thank to its highest mod 1.25
+				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", ncvciModifier);
+				// 3 planes mod 1.18
+				if(nightFighterCnt >= 3)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", ncvciModifier);
+				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", ncvciModifier);
+				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", ncvciModifier);
+				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBIFBI", ncvciModifier);
+				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", ncvciModifier);
+				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", ncvciModifier);
+				if(nightFighterCnt >= 2 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNDB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBP", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBNDB", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNDB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBI", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPSF", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier);
+				// 2 planes mod 1.2, put here not to mask previous patterns, tho proc rate might be higher
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBP", 1.2);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", ncvciModifier);
+				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNTBNDB", ncvciModifier);
 			} else {
 				// special Nelson Touch since 2018-09-15
 				if(this.canDoNelsonTouch()) {
