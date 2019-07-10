@@ -971,7 +971,7 @@
 						// Class bonuses
 						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
 							let classBonus = gear.byClass[shipData.api_ctype];
-							if (typeof classBonus === 'string') { classBonus = gear.byClass[classBonus]; }
+							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
 							classBonus = ensureArray(classBonus);
 							classBonus.forEach(bonus => {
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {

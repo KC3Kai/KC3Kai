@@ -520,7 +520,7 @@ KC3改 Equipment Object
 						single: { "leng": 1 },
 					},
 					// Hiryuu Kai Ni range +2
-					"25": 17,
+					"25": "17",
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -539,7 +539,7 @@ KC3改 Equipment Object
 						single: { "leng": 1 },
 					},
 					// Hiryuu Kai Ni range +2
-					"25": 17,
+					"25": "17",
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -1072,7 +1072,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2,
+					"26": "2",
 				},
 			},
 			// 35.6cm Twin Gun Mount Kai Ni
@@ -1105,7 +1105,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2,
+					"26": "2",
 				},
 			},
 			// 41cm Triple Gun Mount Kai Ni
@@ -2437,7 +2437,7 @@ KC3改 Equipment Object
 					let byClass = gearInfo.byClass[shipClassId];
 					if(byClass) {
 						// Refer to another ship class if bonuses supposed to be the same
-						if(typeof byClass === "string") {
+						if(typeof byClass !== "object") {
 							byClass = gearInfo.byClass[byClass] || {};
 						}
 						if(Array.isArray(byClass)) {

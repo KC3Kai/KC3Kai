@@ -784,7 +784,7 @@ KC3改 Ship Object
 					}
 				}
 				if (gear.path) {
-					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
+					if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
 
 					const count = gear.count;
@@ -2441,7 +2441,6 @@ KC3改 Ship Object
 	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
 	 * @return the modifier, 1 by default for unknown conditions.
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
-	 * @see https://twitter.com/Nishisonic/status/1102223560754421760
 	 */
 	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -2519,6 +2518,7 @@ KC3改 Ship Object
 	/**
 	 * Colorado special cut-in attack modifiers are variant,
 	 * depending on equipment and 2nd and 3rd ship in the fleet.
+	 * @see https://twitter.com/syoukuretin/status/1132763536222969856
 	 */
 	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -2526,7 +2526,6 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.coloradoCutinShips.includes(flagshipMstId)) return 1;
 
-		// https://twitter.com/syoukuretin/status/1132763536222969856
 		const combinedModifierMaps = [
 			// No more mods for flagship?
 			{},
@@ -2902,7 +2901,6 @@ KC3改 Ship Object
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
-				// https://twitter.com/Nishisonic/status/911143760544751616
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
 				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
