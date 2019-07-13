@@ -1095,10 +1095,11 @@ Contains summary information about a fleet and its ships
 		let total = 0;
 		availableShips.forEach(ship => {
 			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
-			// explicit LoS bonus from improved Type 2 Recon added to ship part
-			const reconLosOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9]) || 0;
+			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
+			// explicit LoS bonus from Late 298B and improved Type 2 Recon added to ship part
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 11]) || 0;
 			// sum ship's naked LoS
-			total += Math.sqrt(ship.nakedLoS() + reconLosOnShipBonus);
+			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS
 			const equipTotal = KC3Fleet.sumShipEquipmentElos(ship);
 			total += nodeDivaricatedFactor * equipTotal;
