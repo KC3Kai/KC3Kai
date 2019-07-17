@@ -10922,7 +10922,7 @@ var PS = {};
           return 2.0;
       };
       if (v instanceof KanColle_Generated_SType.DE) {
-          return 1.0;
+          return 0.5;
       };
       if (v instanceof KanColle_Generated_SType.XBB) {
           return 2.0;
