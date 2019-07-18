@@ -37,7 +37,7 @@
 					m.api_details,
 					"Difficulty: {0}".format(m.api_difficulty),
 					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
-					"Success rewards levels:\n"
+					"Levels of successful rewards:\n"
 					+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
 					+ (m.api_win_item1[0] > 0 ?
 						["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
