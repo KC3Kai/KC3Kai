@@ -31,6 +31,22 @@
 		execute :function(){
 			const self = this;
 			
+			// Build more details from expedition master data
+			const buildExpedTooltip = (m) => (
+				["[{0}] ".format(m.api_id) + m.api_name,
+					m.api_details,
+					"Difficulty: {0}".format(m.api_difficulty),
+					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
+					"Success rewards levels:\n"
+					+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
+					+ (m.api_win_item1[0] > 0 ?
+						["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
+					+ (m.api_win_item2[0] > 0 ?
+						[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
+					String(m.api_deck_num) + " ships fleet: "
+					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(",")
+				].join("\n")
+			);
 			// Add all expedition numbers on the filter list
 			$('.tab_expedpast .expedNumbers').empty();
 			if(KC3Master.available) {
@@ -40,8 +56,15 @@
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.api_id);
 					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
-					$(".expedText", row).text( curVal.api_disp_no );
-					$(".expedTime", row).text( (curVal.api_time * 60).toString().toHHMMSS().substring(0,5) );
+					$(".expedText .disp", row).text(curVal.api_disp_no);
+					// Support fleet expeditions (33, 34) cannot be cancelled
+					$(".expedText .flag", row).text(!curVal.api_return_flag ? "*" : "");
+					$(".expedTime", row).text(
+						(curVal.api_time * 60).toString().toHHMMSS().substring(0,5)
+					);
+					$(".expedText", row).toggleClass("monthly", curVal.api_reset_type == 1);
+					$(".expedTime", row).toggleClass("battle", curVal.api_damage_type > 0);
+					$(".expedText", row).attr("title", buildExpedTooltip(curVal)).lazyInitTooltip();
 					
 					self.exped_filters.push(curVal.api_id);
 					
@@ -54,8 +77,10 @@
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.id);
 					$(".expedCheck input", row).attr("world", curVal.world);
-					$(".expedText", row).text( curVal.name );
-					$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
+					$(".expedText .disp", row).text(curVal.name);
+					$(".expedTime", row).text(
+						(curVal.cost.time*60).toString().toHHMMSS().substring(0,5)
+					);
 					
 					self.exped_filters.push(curVal.id);
 					
@@ -65,21 +90,22 @@
 			
 			// Add world toggle
 			$(".tab_expedpast .expedNumBox")
-				.filter(function(i,x){return $(x).hasClass("expedNumBox_"+(i+1));})
-				.each(function(i,x){
+				.filter(function(i,x) { return !!$(x).data("world"); })
+				.each(function(i,x) {
 					const row = $('.tab_expedpast .factory .expedNum').clone()
 						.addClass("expedWhole").removeClass("expedNum");
+					const world = $(x).data("world");
 					let val = true;
-					$("input",".expedNumBox_"+(i+1)).each(function(id,elm){
+					$("input",".expedNumBox_"+world).each(function(id,elm){
 						val &= $(elm).prop("checked");
 					});
 					$(row)
 						.find(".expedCheck input")
-							.attr("value", i+1)
+							.attr("value", world)
 							.prop("checked", val)
 						.end()
 						.find(".expedText")
-							.text( "World " + (i+1) )
+							.text( "World " + world).attr("title", KC3Meta.worldToDesc(world))
 						.end()
 						.find(".expedTime")
 							.remove()

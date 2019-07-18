@@ -7711,9 +7711,9 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(40);
-  allExpeditionIds.push(...Data_Array.range(100)(102));
-  allExpeditionIds.push(...Data_Array.range(110)(111));
+  var allExpeditionIds = Data_Array.range(1)(44);
+  allExpeditionIds.push(...Data_Array.range(100)(103));
+  allExpeditionIds.push(...Data_Array.range(110)(113));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -8056,6 +8056,18 @@ var PS = {};
       if (eId === 40) {
           return c(8)(7)(hm(6)(50));
       };
+      if (eId === 41) {
+          return c(5)(5)(hr(1));
+      };
+      if (eId === 42) {
+          return c(8)(6.5)(hr(8));
+      };
+      if (eId === 43) {
+          return c(8.5)(9)(hr(12));
+      };
+      if (eId === 44) {
+          return c(8)(4)(hr(10));
+      };
       if (eId === 100) {
           return c(3.5)(0)(25);
       };
@@ -8065,11 +8077,20 @@ var PS = {};
       if (eId === 102) {
           return c(6.5)(3.5)(hm(2)(15));
       };
+      if (eId === 103) {
+          return c(7.5)(6)(hm(1)(50));
+      };
       if (eId === 110) {
           return c(4.5)(1.5)((35));
       };
       if (eId === 111) {
           return c(8)(6.5)(hm(8)(40));
+      };
+      if (eId === 112) {
+          return c(6.5)(8)(hm(2)(50));
+      };
+      if (eId === 113) {
+          return c(8.5)(8.5)(hm(7)(30));
       };
       return noCost;
   };
@@ -8102,10 +8123,10 @@ var PS = {};
   var getExpeditionDisplayName = function (eId) {
       return eId >= 100 && eId < 110 ? "A" + (eId - 99)
         : eId >= 110 && eId < 120 ? "B" + (eId - 109)
-        : eId;
+        : eId < 10 ? "0" + eId : eId;
   };
   var getExpeditionWorld = function (eId) {
-      return eId < 100 ? Math.ceil(eId / 8) : Math.ceil((eId - 99) / 10);
+      return eId < 100 ? eId > 40 ? Math.ceil((eId + 10) / 8) : Math.ceil(eId / 8) : Math.ceil((eId - 99) / 10);
   };
   var getExpeditionInfo = function (eId) {
       return {

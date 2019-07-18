@@ -554,6 +554,39 @@ Provides access to data on built-in JSON files
 			};
 		},
 		
+		// ship category defined by in-game client, see `main.js#ShipCategory`
+		shipCategory :function(stype){
+			return ((t) => {
+				switch(t) {
+					case 1: return "DE";
+					case 2: return "DD";
+					case 3: // CL + CLT
+					case 4: return "CL";
+					case 5: // CA + CAV
+					case 6: return "CA";
+					case 7: // CVL
+					case 11: // CV + CVB
+					case 18: return "CV_CVL";
+					case 8: // BC = FBB
+					case 9: // BB
+					case 12: // unused XBB
+						return "BB_BC";
+					case 10: return "BBV";
+					case 13: // SS + SSV
+					case 14: return "SS";
+					case 15: // unused AP
+					case 16: // AV
+					case 17: // LHA
+					case 19: // AR
+					case 20: // AS
+					case 22: // AO
+						return "AV_AO_AS";
+					case 21: return "CLT"; // should be CT
+					default: return "Unsupport type";
+				}
+			})(stype);
+		},
+		
 		ctype :function(id){
 			return this._ctype[id] || "??";
 		},
