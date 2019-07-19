@@ -51,6 +51,7 @@
 				].join("\n")
 			);
 			// Add all expedition numbers on the filter list
+			self.exped_filters = [];
 			$('.tab_expedpast .expedNumbers').empty();
 			if(KC3Master.available) {
 				$.each(KC3Master.all_missions(), function(ind, curVal) {
