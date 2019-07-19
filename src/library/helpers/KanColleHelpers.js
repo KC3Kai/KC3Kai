@@ -7767,7 +7767,7 @@ var PS = {};
           return income(30)(30)(40)(0);
       };
       if (eId === 4) {
-          return income(0)(60)(0)(0);
+          return income(0)(70)(0)(0);
       };
       if (eId === 5) {
           return income(200)(200)(20)(20);
@@ -7842,10 +7842,10 @@ var PS = {};
           return income(0)(0)(900)(350);
       };
       if (eId === 29) {
-          return income(0)(0)(0)(100);
+          return income(0)(0)(0)(100); // TODO: add ammo
       };
       if (eId === 30) {
-          return income(0)(0)(0)(100);
+          return income(0)(0)(0)(100); // TODO: add ammo
       };
       if (eId === 31) {
           return income(0)(30)(0)(0);
@@ -7872,7 +7872,7 @@ var PS = {};
           return income(420)(0)(200)(0);
       };
       if (eId === 39) {
-          return income(0)(0)(300)(0);
+          return income(0)(0)(300)(0); // TODO: add ammo
       };
       if (eId === 40) {
           return income(300)(300)(0)(100);
@@ -7908,7 +7908,7 @@ var PS = {};
           return income(300)(200)(100)(0);
       };
       if (eId === 112) {
-          return income(0)(100)(100)(80);
+          return income(0)(100)(100)(180);
       };
 //      if (eId === 113) {
 //          return income(0)(0)(750)(500);
