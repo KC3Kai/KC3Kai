@@ -658,7 +658,10 @@ Contains summary information about a fleet and its ships
 	 */ 
 	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
 		var KEC = PS["KanColle.Expedition.Cost"];
-		var costPercent = KEC.getExpeditionCost( expeditionId );
+		var costPercent = KEC.getExpeditionCost(expeditionId);
+		var expedMaster = KC3Master.mission(expeditionId);
+		costPercent.fuel = costPercent.fuel || expedMaster.api_use_fuel;
+		costPercent.ammo = costPercent.ammo || expedMaster.api_use_bull;
 		var totalFuel = 0;
 		var totalAmmo = 0;
 		var self = this;

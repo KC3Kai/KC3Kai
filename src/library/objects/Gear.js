@@ -885,7 +885,7 @@ KC3改 Equipment Object
 			"194": {
 				count: 0,
 				byClass: {
-					// Commandant Teste
+					// Commandant Teste Class
 					"70": {
 						multiple: { "houg": 3, "houk": 2, "saku": 2 },
 					},
@@ -894,12 +894,11 @@ KC3改 Equipment Object
 						remodel: 1,
 						multiple: { "houg": 1, "houk": 2, "saku": 2 },
 					},
-					// Mizuho Kai?
+					// Mizuho Class
 					"62": {
-						remodel: 1,
 						multiple: { "houk": 1, "saku": 2 },
 					},
-					// Kamoi Kai+?
+					// Kamoi Class
 					"72": "62",
 				},
 			},
