@@ -7842,10 +7842,10 @@ var PS = {};
           return income(0)(0)(900)(350);
       };
       if (eId === 29) {
-          return income(0)(0)(0)(100); // TODO: add ammo
+          return income(0)(0)(0)(100); // TODO: add ammo (50?)
       };
       if (eId === 30) {
-          return income(0)(0)(0)(100); // TODO: add ammo
+          return income(0)(50)(0)(100);
       };
       if (eId === 31) {
           return income(0)(30)(0)(0);
