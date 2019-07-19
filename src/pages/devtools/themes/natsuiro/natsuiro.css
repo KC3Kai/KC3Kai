@@ -1649,7 +1649,7 @@ ABYSS FLEET
 	padding: 0;
 	width: 50%;
 	font-size: 13px;
-	line-height: 16px;
+	line-height: 15px;
 }
 
 .module.activity .activity_expeditionPlanner li ui li {
@@ -1661,14 +1661,12 @@ ABYSS FLEET
 	width: 50px;
 }
 
-
 .module.activity .activity_expeditionPlanner li ul ul {
 	top:0%;
 	left:100%;
 	cursor:pointer;
 	width:100%;
 }
-
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
 	display: none;

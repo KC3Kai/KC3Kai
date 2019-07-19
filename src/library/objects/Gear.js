@@ -520,7 +520,7 @@ KC3改 Equipment Object
 						single: { "leng": 1 },
 					},
 					// Hiryuu Kai Ni range +2
-					"25": 17,
+					"25": "17",
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -539,7 +539,7 @@ KC3改 Equipment Object
 						single: { "leng": 1 },
 					},
 					// Hiryuu Kai Ni range +2
-					"25": 17,
+					"25": "17",
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -885,9 +885,8 @@ KC3改 Equipment Object
 			"194": {
 				count: 0,
 				byClass: {
-					// Commandant Teste Kai?
+					// Commandant Teste Class
 					"70": {
-						remodel: 1,
 						multiple: { "houg": 3, "houk": 2, "saku": 2 },
 					},
 					// Richelieu Kai
@@ -895,12 +894,11 @@ KC3改 Equipment Object
 						remodel: 1,
 						multiple: { "houg": 1, "houk": 2, "saku": 2 },
 					},
-					// Mizuho Kai?
+					// Mizuho Class
 					"62": {
-						remodel: 1,
 						multiple: { "houk": 1, "saku": 2 },
 					},
-					// Kamoi Kai+
+					// Kamoi Class
 					"72": "62",
 				},
 			},
@@ -1073,7 +1071,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2,
+					"26": "2",
 				},
 			},
 			// 35.6cm Twin Gun Mount Kai Ni
@@ -1106,7 +1104,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Fusou Class
-					"26": 2,
+					"26": "2",
 				},
 			},
 			// 41cm Triple Gun Mount Kai Ni
@@ -2438,7 +2436,7 @@ KC3改 Equipment Object
 					let byClass = gearInfo.byClass[shipClassId];
 					if(byClass) {
 						// Refer to another ship class if bonuses supposed to be the same
-						if(typeof byClass === "string") {
+						if(typeof byClass !== "object") {
 							byClass = gearInfo.byClass[byClass] || {};
 						}
 						if(Array.isArray(byClass)) {
@@ -2534,9 +2532,9 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Torpedo Bomber, uncertained: 0.18~0.2 per star?
+				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
 				if([8, 58].includes(type2))
-					return 0.18 * stars;
+					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
 				if(type2 === 25)

@@ -30,7 +30,7 @@
 			});
 			this.defineSimpleFilter("hideCompleted", [], 0, (fd, ship) => {
 				if(!fd.currentIndex) return true;
-				return ship.materials.filter((m)=>!m.used).length > 0;
+				return ship.materials.filter(m => !m.used).length > 0;
 			});
 			this.showListRowCallback = this.showRemodelMaterials;
 			this.heartLockMode = 2;
@@ -56,7 +56,8 @@
 				[this.viewType,
 					this.hideUnlock ? "locked" : (this.hideDupe || this.hideCompleted) && "all",
 					this.hideDupe ? "nodupe" : this.hideCompleted && "all",
-					this.hideCompleted && "nocompleted"].filter(v => !!v)
+					this.hideCompleted && "nocompleted"
+				].filter(v => !!v)
 			);
 			$(".tab_blueprints .view_type input[type=radio][name=view_type]").on("change", (e) => {
 				this.viewType = $(".view_type input[type=radio][name=view_type]:checked").val();
@@ -87,7 +88,8 @@
 			this.loadView(KC3StrategyTabs.pageParams[1],
 				KC3StrategyTabs.pageParams[2] === "locked",
 				KC3StrategyTabs.pageParams[3] === "nodupe",
-				KC3StrategyTabs.pageParams[4] === "nocompleted");
+				KC3StrategyTabs.pageParams[4] === "nocompleted"
+			);
 		}
 
 		loadView(viewType = "owned", hideUnlock = false, hideDupe = false, hideCompleted = false) {
@@ -168,7 +170,7 @@
 			const remodelGroup = RemodelDb.remodelGroup(mappedObj.masterId);
 			mappedObj.materials = [];
 			mappedObj.materialsUsed = 0;
-			for(let masterId of remodelFormIds) {
+			for(const masterId of remodelFormIds) {
 				const remodelInfo = RemodelDb.remodelInfo(masterId);
 				if(remodelInfo) {
 					// Check and mark possibly used material
@@ -222,7 +224,7 @@
 
 		showRemodelMaterials(ship, shipRow) {
 			let firstMaterial = null;
-			for(let material of ship.materials) {
+			for(const material of ship.materials) {
 				firstMaterial = firstMaterial || material;
 				const iconDiv = $("<div />")
 					.addClass("ship_field icon")
@@ -302,7 +304,7 @@
 					.text("x{0}".format(count || 0))
 					.appendTo(ownedItemDiv);
 			};
-			for(let icon in materialCount) {
+			for(const icon in materialCount) {
 				const totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 				const iconImg = $("<img />")
 					.attr("src", "/assets/img/useitems/" + icon + ".png")

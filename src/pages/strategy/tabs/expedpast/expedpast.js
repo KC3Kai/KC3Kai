@@ -8,13 +8,16 @@
 		
 		exped_filters: [],
 		fleet_filters: [2,3,4],
+		// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
 		useItemMap: {
-			1:"bucket",
-			2:"ibuild",
-			3:"devmat",
-			4:"box1",
-			5:"box2",
-			6:"box3",
+			1:"bucket", // flag value
+			2:"ibuild", // flag value
+			3:"devmat", // flag value
+			4:"screw",  // master id
+			5:"coin",   // flag value, its master id is 44
+			10:"box1",  // master id
+			11:"box2",  // master id
+			12:"box3",  // master id
 		},
 			
 		/* INIT
@@ -31,7 +34,24 @@
 		execute :function(){
 			const self = this;
 			
+			// Build more details from expedition master data
+			const buildExpedTooltip = (m) => (
+				["[{0}] ".format(m.api_id) + m.api_name,
+					m.api_details,
+					"Difficulty: {0}".format(m.api_difficulty),
+					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
+					"Levels of successful rewards:\n"
+					+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
+					+ (m.api_win_item1[0] > 0 ?
+						["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
+					+ (m.api_win_item2[0] > 0 ?
+						[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
+					String(m.api_deck_num) + " ships fleet: "
+					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+				].join("\n")
+			);
 			// Add all expedition numbers on the filter list
+			self.exped_filters = [];
 			$('.tab_expedpast .expedNumbers').empty();
 			if(KC3Master.available) {
 				$.each(KC3Master.all_missions(), function(ind, curVal) {
@@ -40,8 +60,15 @@
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.api_id);
 					$(".expedCheck input", row).attr("world", curVal.api_maparea_id);
-					$(".expedText", row).text( curVal.api_disp_no );
-					$(".expedTime", row).text( (curVal.api_time * 60).toString().toHHMMSS().substring(0,5) );
+					$(".expedText .disp", row).text(curVal.api_disp_no);
+					// Support fleet expeditions (33, 34) cannot be cancelled
+					$(".expedText .flag", row).text(!curVal.api_return_flag ? "*" : "");
+					$(".expedTime", row).text(
+						(curVal.api_time * 60).toString().toHHMMSS().substring(0,5)
+					);
+					$(".expedText", row).toggleClass("monthly", curVal.api_reset_type == 1);
+					$(".expedTime", row).toggleClass("battle", curVal.api_damage_type > 0);
+					$(".expedText", row).attr("title", buildExpedTooltip(curVal)).lazyInitTooltip();
 					
 					self.exped_filters.push(curVal.api_id);
 					
@@ -54,8 +81,10 @@
 					var row = $('.tab_expedpast .factory .expedNum').clone();
 					$(".expedCheck input", row).attr("value", curVal.id);
 					$(".expedCheck input", row).attr("world", curVal.world);
-					$(".expedText", row).text( curVal.name );
-					$(".expedTime", row).text( (curVal.cost.time*60).toString().toHHMMSS().substring(0,5) );
+					$(".expedText .disp", row).text(curVal.name);
+					$(".expedTime", row).text(
+						(curVal.cost.time*60).toString().toHHMMSS().substring(0,5)
+					);
 					
 					self.exped_filters.push(curVal.id);
 					
@@ -65,21 +94,22 @@
 			
 			// Add world toggle
 			$(".tab_expedpast .expedNumBox")
-				.filter(function(i,x){return $(x).hasClass("expedNumBox_"+(i+1));})
-				.each(function(i,x){
+				.filter(function(i,x) { return !!$(x).data("world"); })
+				.each(function(i,x) {
 					const row = $('.tab_expedpast .factory .expedNum').clone()
 						.addClass("expedWhole").removeClass("expedNum");
+					const world = $(x).data("world");
 					let val = true;
-					$("input",".expedNumBox_"+(i+1)).each(function(id,elm){
+					$("input",".expedNumBox_"+world).each(function(id,elm){
 						val &= $(elm).prop("checked");
 					});
 					$(row)
 						.find(".expedCheck input")
-							.attr("value", i+1)
+							.attr("value", world)
 							.prop("checked", val)
 						.end()
 						.find(".expedText")
-							.text( "World " + (i+1) )
+							.text( "World " + world).attr("title", KC3Meta.worldToDesc(world))
 						.end()
 						.find(".expedTime")
 							.remove()
@@ -101,7 +131,7 @@
 				filterExpeds.each( function() {
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			}).on("click", ".expedWhole input", function() {
 				const
 					worldNum = $(this).val(),
@@ -121,7 +151,7 @@
 					}
 				});
 				self.exped_filters.sort(function(a,b){return a-b;});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Fleet Number Filter
@@ -131,14 +161,14 @@
 				filterFleets.each( function() {
 					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function(){
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Show initial list
-			self.tabSelf.definition.refreshList();
+			self.refreshList();
 		},
 		
 		refreshList :function(){
@@ -170,7 +200,7 @@
 						totalPages: numPages,
 						visiblePages: 9,
 						onPageClick: function (event, page) {
-							self.tabSelf.definition.showPage( page );
+							self.showPage( page );
 						}
 					});
 					$('.tab_expedpast .exped_count').text(
@@ -260,22 +290,24 @@
 					
 					// Reward item 1
 					if(ThisExped.data.api_useitem_flag[0] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[0];
+						const itemGet = ThisExped.data.api_get_item1;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item1 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[0]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item1 img", ExpedBox).hide();
 					}
 					
 					// Reward item 2
 					if(ThisExped.data.api_useitem_flag[1] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[1];
+						const itemGet = ThisExped.data.api_get_item2;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item2 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[1]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item2 img", ExpedBox).hide();
 					}

@@ -3,6 +3,10 @@ dist: trusty
 language: node_js
 node_js:
 - "6"
+# travis-ci has enabled npm cache by default since July 2019,
+# disable it because it will fail our uglify-harmony patching
+cache:
+  npm: false
 before_install:
 - npm install -g grunt-cli
 - npm install

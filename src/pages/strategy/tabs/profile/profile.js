@@ -262,7 +262,7 @@
 						getItem = data["api_get_item" + index];
 					return csvQuoteIfNecessary(
 						(flag === 4 ? KC3Meta.useItemName(getItem.api_useitem_id) :
-						({"0":"None","1":"Bucket","2":"Blowtorch","3":"DevMat"})[flag] || flag)
+						({"0":"None","1":"Bucket","2":"Blowtorch","3":"DevMat","5":"Fcoin"})[flag] || flag)
 						+
 						(flag > 0 && getItem ? " x" + getItem.api_useitem_count : "")
 					);

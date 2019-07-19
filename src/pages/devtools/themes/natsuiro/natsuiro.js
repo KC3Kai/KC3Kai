@@ -123,7 +123,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..40, 100..102, 110, 111
+		// * expedNum: 1..44, 100..103, 110..113
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -141,14 +141,15 @@
 				data.fleetConf[i] = { expedition: 1 };
 			}
 			data.expedConf = {};
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 40));
-			fillExpedConfDefaultGreatSuccess(100, 101, 102, 110, 111);
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 44));
+			fillExpedConfDefaultGreatSuccess(100, 101, 102, 103, 110, 111, 112, 113);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
 			// add default GS config for new added expeditions
 			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
 			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
+			// * extended since 2019-07-18: A4, B3, B4 and World 7. Monthly.
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -3844,6 +3845,8 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
+					 4:"screw",
+					 5:"coin",
 					10:"box1",
 					11:"box2",
 					12:"box3",
@@ -3907,10 +3910,15 @@
 			// if expedition planner not activated, no update required
 			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
+			var expedMaster = KC3Master.mission(selectedExpedition);
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".module.activity .activity_expeditionPlanner .dropdown_title")
-				.text(KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition));
+			$(".module.activity .activity_expeditionPlanner .dropdown_title").text(
+				KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition)
+				+ (expedMaster.api_reset_type == 1 ? " (M)" : "") // Monthly
+				+ (expedMaster.api_damage_type > 0 ? " (C)" : "") // Combat
+				+ (!expedMaster.api_return_flag ? " (S)" : "")    // Support
+			);
 
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
@@ -3970,9 +3978,10 @@
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
+			var expedTime = ExpdCost.time || expedMaster.api_time;
 			$(".module.activity .activity_expeditionPlanner .estimated_time")
-				.text(String(60 * ExpdCost.time).toHHMMSS())
-				.attr("title", String(60 * ExpdCost.time).plusCurrentTime(true))
+				.text(String(60 * expedTime).toHHMMSS())
+				.attr("title", String(60 * expedTime).plusCurrentTime(true))
 				.lazyInitTooltip();
 
 			// setup expedition item colors
@@ -4020,7 +4029,7 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [101, 102].indexOf(selectedExpedition) > -1;
+			var condIsGsWithoutSparkle = [41, 101, 102].indexOf(selectedExpedition) > -1;
 
 			var estSuccessRate = -1;
 			// can GS if:
@@ -4129,9 +4138,17 @@
 				$(".module.activity .activity_expeditionPlanner .flagshipType"));
 
 			setupJQObject(
-				ExpdReqPack.shipCount,
+				ExpdReqPack.shipCount === 1 ? expedMaster.api_deck_num : ExpdReqPack.shipCount,
 				ExpdCheckerResult.shipCount,
-				$(".module.activity .activity_expeditionPlanner .shipNum"));
+				$(".module.activity .activity_expeditionPlanner .shipNum"),
+				function(dataReq, dataResult, jq) {
+					jq.text(dataReq);
+					if (Array.isArray(expedMaster.api_sample_fleet)) {
+						jq.parent().attr("title", "{0}: {1}".format(KC3Meta.term("ExpedSampleFleet"),
+							expedMaster.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+						)).lazyInitTooltip();
+					}
+				});
 
 			setupJQObject(
 				ExpdReqPack.levelCount,

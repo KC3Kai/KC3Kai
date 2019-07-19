@@ -404,7 +404,7 @@
 	
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showEquipment = function( slot ){
-		var thisGear;
+		var thisGear = false;
 		if(this.shipData.slotnum > slot){
 			
 			if(this.shipData.items[slot] > 0){
@@ -469,10 +469,13 @@
 			}
 			
 			if(this.shipData.slots[ slot ] > 0 ||
-				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1) ){
+				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3]) > -1)
+			){
 				var slotCurr = this.shipData.slots[slot];
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( slotCurr );
-				var slotMax = this.shipData.master().api_maxeq[slot];
+				// For now, max slot size will be forced to 1 if Large Flying Boat equipped,
+				// and will restore to its default capacity on resupply if other equipped
+				var slotMax = thisGear && thisGear.master().api_type[2] === 41 ? 1 : this.shipData.master().api_maxeq[slot];
 				if(slotCurr < slotMax){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
 						"{0} /{1}".format(slotCurr, slotMax) ).lazyInitTooltip();
