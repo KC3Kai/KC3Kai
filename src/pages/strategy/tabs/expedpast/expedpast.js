@@ -44,7 +44,7 @@
 					+ (m.api_win_item2[0] > 0 ?
 						[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
 					String(m.api_deck_num) + " ships fleet: "
-					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(",")
+					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
 				].join("\n")
 			);
 			// Add all expedition numbers on the filter list
