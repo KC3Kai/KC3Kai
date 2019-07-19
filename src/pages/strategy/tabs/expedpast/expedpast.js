@@ -8,13 +8,16 @@
 		
 		exped_filters: [],
 		fleet_filters: [2,3,4],
+		// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
 		useItemMap: {
-			1:"bucket",
-			2:"ibuild",
-			3:"devmat",
-			4:"box1",
-			5:"box2",
-			6:"box3",
+			1:"bucket", // flag value
+			2:"ibuild", // flag value
+			3:"devmat", // flag value
+			4:"screw",  // master id
+			5:"coin",   // flag value, its master id is 44
+			10:"box1",  // master id
+			11:"box2",  // master id
+			12:"box3",  // master id
 		},
 			
 		/* INIT
@@ -37,14 +40,14 @@
 					m.api_details,
 					"Difficulty: {0}".format(m.api_difficulty),
 					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
-					"Success rewards levels:\n"
+					"Levels of successful rewards:\n"
 					+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
 					+ (m.api_win_item1[0] > 0 ?
 						["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
 					+ (m.api_win_item2[0] > 0 ?
 						[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
 					String(m.api_deck_num) + " ships fleet: "
-					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(",")
+					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
 				].join("\n")
 			);
 			// Add all expedition numbers on the filter list
@@ -127,7 +130,7 @@
 				filterExpeds.each( function() {
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			}).on("click", ".expedWhole input", function() {
 				const
 					worldNum = $(this).val(),
@@ -147,7 +150,7 @@
 					}
 				});
 				self.exped_filters.sort(function(a,b){return a-b;});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Fleet Number Filter
@@ -157,14 +160,14 @@
 				filterFleets.each( function() {
 					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function(){
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Show initial list
-			self.tabSelf.definition.refreshList();
+			self.refreshList();
 		},
 		
 		refreshList :function(){
@@ -196,7 +199,7 @@
 						totalPages: numPages,
 						visiblePages: 9,
 						onPageClick: function (event, page) {
-							self.tabSelf.definition.showPage( page );
+							self.showPage( page );
 						}
 					});
 					$('.tab_expedpast .exped_count').text(
@@ -286,22 +289,24 @@
 					
 					// Reward item 1
 					if(ThisExped.data.api_useitem_flag[0] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[0];
+						const itemGet = ThisExped.data.api_get_item1;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item1 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[0]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item1 img", ExpedBox).hide();
 					}
 					
 					// Reward item 2
 					if(ThisExped.data.api_useitem_flag[1] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[1];
+						const itemGet = ThisExped.data.api_get_item2;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item2 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[1]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item2 img", ExpedBox).hide();
 					}

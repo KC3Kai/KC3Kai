@@ -3852,6 +3852,8 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
+					 4:"screw",
+					 5:"coin",
 					10:"box1",
 					11:"box2",
 					12:"box3",
@@ -3915,10 +3917,15 @@
 			// if expedition planner not activated, no update required
 			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
+			var expedMaster = KC3Master.mission(selectedExpedition);
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
-			$(".module.activity .activity_expeditionPlanner .dropdown_title")
-				.text(KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition));
+			$(".module.activity .activity_expeditionPlanner .dropdown_title").text(
+				KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition)
+				+ (expedMaster.api_reset_type == 1 ? " (M)" : "") // Monthly
+				+ (expedMaster.api_damage_type > 0 ? " (C)" : "") // Combat
+				+ (!expedMaster.api_return_flag ? " (S)" : "")    // Support
+			);
 
 			var allShips,
 				fleetObj = PlayerManager.fleets[selectedFleet-1];
@@ -3978,9 +3985,10 @@
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
 
 			$(".module.activity .activity_expeditionPlanner").hideChildrenTooltips();
+			var expedTime = ExpdCost.time || expedMaster.api_time;
 			$(".module.activity .activity_expeditionPlanner .estimated_time")
-				.text(String(60 * ExpdCost.time).toHHMMSS())
-				.attr("title", String(60 * ExpdCost.time).plusCurrentTime(true))
+				.text(String(60 * expedTime).toHHMMSS())
+				.attr("title", String(60 * expedTime).plusCurrentTime(true))
 				.lazyInitTooltip();
 
 			// setup expedition item colors
@@ -4137,9 +4145,17 @@
 				$(".module.activity .activity_expeditionPlanner .flagshipType"));
 
 			setupJQObject(
-				ExpdReqPack.shipCount,
+				ExpdReqPack.shipCount === 1 ? expedMaster.api_deck_num : ExpdReqPack.shipCount,
 				ExpdCheckerResult.shipCount,
-				$(".module.activity .activity_expeditionPlanner .shipNum"));
+				$(".module.activity .activity_expeditionPlanner .shipNum"),
+				function(dataReq, dataResult, jq) {
+					jq.text(dataReq);
+					if (Array.isArray(expedMaster.api_sample_fleet)) {
+						jq.parent().attr("title", "{0}: {1}".format(KC3Meta.term("ExpedSampleFleet"),
+							expedMaster.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+						)).lazyInitTooltip();
+					}
+				});
 
 			setupJQObject(
 				ExpdReqPack.levelCount,

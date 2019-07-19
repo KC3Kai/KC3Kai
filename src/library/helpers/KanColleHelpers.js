@@ -7797,7 +7797,7 @@ var PS = {};
           return income(240)(300)(0)(0);
       };
       if (eId === 14) {
-          return income(0)(240)(200)(0);
+          return income(0)(280)(200)(30);
       };
       if (eId === 15) {
           return income(0)(0)(300)(400);
@@ -7877,6 +7877,12 @@ var PS = {};
       if (eId === 40) {
           return income(300)(300)(0)(100);
       };
+      if (eId === 41) {
+          return income(100)(0)(0)(20);
+      };
+      if (eId === 42) {
+          return income(800)(0)(0)(200);
+      };
       if (eId === 100) {
           return income(45)(45)(0)(0);
       };
@@ -7885,6 +7891,9 @@ var PS = {};
       };
       if (eId === 102) {
           return income(120)(0)(60)(60);
+      };
+      if (eId === 103) {
+          return income(80)(120)(0)(100);
       };
       if (eId === 110) {
           return income(0)(0)(10)(30);
@@ -9194,19 +9203,19 @@ var PS = {};
       return EA(Data_Unfoldable.replicate(Data_Unfoldable.unfoldableArray)(40)($42));
   };
   var mkEA = function (xs) {
-      if (Data_Array.length(xs) === 45) {
+      if (Data_Array.length(xs) >= 45) {
           return xs;
       };
       if (Data_Boolean.otherwise) {
           return Partial_Unsafe.unsafePartial(function (dictPartial) {
-              return Partial.crash(dictPartial)("expecting exactly 45 elements");
+              return Partial.crash(dictPartial)("expecting at least 45 elements");
           });
       };
       throw new Error("Failed pattern match at KanColle.Expedition.New.EArray line 26, column 1 - line 28, column 72: " + [ xs.constructor.name ]);
   };
   var indEA = function (v) {
       return function (i) {
-          if (1 <= i && i <= 40) {
+          if (1 <= i && i <= 50) {
               return Partial_Unsafe.unsafePartial(function (dictPartial) {
                   return v[i - 1];
               });
@@ -9876,7 +9885,7 @@ var PS = {};
               "api_use_fuel":0.9,
               "api_use_bull":0.7,
               "api_win_item1":[3,3],
-              "api_win_item2":[0,0]
+              "api_win_item2":[12,1]
           },
           {
               "api_id":31,
@@ -9959,6 +9968,46 @@ var PS = {};
               "api_win_item2":[1,1]
           },
           {
+              "api_id":41,
+              "api_deck_num":3,
+              "api_time":60,
+              "api_use_fuel":0.5,
+              "api_use_bull":0.5,
+              "api_win_item1":[3,1],
+              "api_win_item2":[1,1]
+          },
+          {
+              "api_id":42,
+              "api_deck_num":4,
+              "api_time":480,
+              "api_reset_type":1,
+              "api_use_fuel":0.8,
+              "api_use_bull":0.65,
+              "api_win_item1":[12,1],
+              "api_win_item2":[2,3]
+          },
+          {
+              "api_id":43,
+              "api_time":720,
+              "api_deck_num":6,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.85,
+              "api_use_bull":0.9,
+              "api_win_item1":[3,4],
+              "api_win_item2":[4,1]
+          },
+          {
+              "api_id":44,
+              "api_time":600,
+              "api_deck_num":6,
+              "api_reset_type":1,
+              "api_use_fuel":0.8,
+              "api_use_bull":0.4,
+              "api_win_item1":[3,4],
+              "api_win_item2":[12,2]
+          },
+          {
               "api_id":100,
               "api_disp_no":"A1",
               "api_deck_num":4,
@@ -9989,6 +10038,17 @@ var PS = {};
               "api_win_item2":[3,2]
           },
           {
+              "api_id":103,
+              "api_disp_no":"A4",
+              "api_deck_num":5,
+              "api_time":110,
+              "api_reset_type":1,
+              "api_use_fuel":0.75,
+              "api_use_bull":0.6,
+              "api_win_item1":[1,2],
+              "api_win_item2":[2,2]
+          },
+          {
               "api_id":110,
               "api_disp_no":"B1",
               "api_deck_num":6,
@@ -10003,10 +10063,34 @@ var PS = {};
               "api_disp_no":"B2",
               "api_deck_num":6,
               "api_time":520,
+              "api_reset_type":1,
               "api_use_fuel":0.65,
               "api_use_bull":0.8,
               "api_win_item1":[3,2],
               "api_win_item2":[1,2]
+          },
+          {
+              "api_id":112,
+              "api_disp_no":"B3",
+              "api_deck_num":6,
+              "api_time":170,
+              "api_reset_type":1,
+              "api_use_fuel":0.65,
+              "api_use_bull":0.8,
+              "api_win_item1":[12,1],
+              "api_win_item2":[1,2]
+          },
+          {
+              "api_id":113,
+              "api_disp_no":"B4",
+              "api_deck_num":6,
+              "api_time":450,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.85,
+              "api_use_bull":0.85,
+              "api_win_item1":[3,4],
+              "api_win_item2":[4,1]
           }
       ];
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});
