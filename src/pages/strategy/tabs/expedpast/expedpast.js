@@ -8,13 +8,16 @@
 		
 		exped_filters: [],
 		fleet_filters: [2,3,4],
+		// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
 		useItemMap: {
-			1:"bucket",
-			2:"ibuild",
-			3:"devmat",
-			4:"box1",
-			5:"box2",
-			6:"box3",
+			1:"bucket", // flag value
+			2:"ibuild", // flag value
+			3:"devmat", // flag value
+			4:"screw",  // master id
+			5:"coin",   // flag value, its master id is 44
+			10:"box1",  // master id
+			11:"box2",  // master id
+			12:"box3",  // master id
 		},
 			
 		/* INIT
@@ -127,7 +130,7 @@
 				filterExpeds.each( function() {
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			}).on("click", ".expedWhole input", function() {
 				const
 					worldNum = $(this).val(),
@@ -147,7 +150,7 @@
 					}
 				});
 				self.exped_filters.sort(function(a,b){return a-b;});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Fleet Number Filter
@@ -157,14 +160,14 @@
 				filterFleets.each( function() {
 					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
 				});
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			$(".tab_expedpast .expedNumBox").on("change", '.fleetSparkles', function(){
-				self.tabSelf.definition.refreshList();
+				self.refreshList();
 			});
 			
 			// Show initial list
-			self.tabSelf.definition.refreshList();
+			self.refreshList();
 		},
 		
 		refreshList :function(){
@@ -196,7 +199,7 @@
 						totalPages: numPages,
 						visiblePages: 9,
 						onPageClick: function (event, page) {
-							self.tabSelf.definition.showPage( page );
+							self.showPage( page );
 						}
 					});
 					$('.tab_expedpast .exped_count').text(
@@ -286,22 +289,24 @@
 					
 					// Reward item 1
 					if(ThisExped.data.api_useitem_flag[0] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[0];
+						const itemGet = ThisExped.data.api_get_item1;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item1 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[0]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item1 img", ExpedBox).hide();
 					}
 					
 					// Reward item 2
 					if(ThisExped.data.api_useitem_flag[1] > 0){
+						const itemFlag = ThisExped.data.api_useitem_flag[1];
+						const itemGet = ThisExped.data.api_get_item2;
+						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item2 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+
-							self.tabSelf.definition.useItemMap[
-								ThisExped.data.api_useitem_flag[1]
-							]+".png");
+							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
+							.attr("title", itemGet.api_useitem_count || 1);
 					}else{
 						$("exped_item2 img", ExpedBox).hide();
 					}

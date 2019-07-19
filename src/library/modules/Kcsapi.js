@@ -1860,7 +1860,7 @@ Previously known as "Reactor"
 					var
 						rsc = response.api_data.api_get_material,
 						csm = [0,0,0,0],
-						csmap = [0,2,1,3],
+						csmap = [0,2,1,3,0,0],
 						uniqId = "exped" + dbId;
 					
 					// Record expedition gain
@@ -1868,13 +1868,18 @@ Previously known as "Reactor"
 					 1:"bucket", => 5
 					 2:"ibuild", => 4
 					 3:"devmat", => 6
+					 4:"screw",  => 7
 					*/
 					response.api_data.api_useitem_flag.forEach(function(x,i){
-						var
-							useMap = csmap[x],
+						var useMap = csmap[x],
 							useItm = response.api_data["api_get_item"+(i+1)];
+						// count for buckets, torches, devmats
 						if(!!useMap && !!useItm) {
 							csm[useMap - 1] += useItm.api_useitem_count;
+						}
+						// count for screws
+						if(x == 4 && !!useItm && useItm.api_useitem_id == 4) {
+							csm[3] += useItm.api_useitem_count;
 						}
 					});
 					
