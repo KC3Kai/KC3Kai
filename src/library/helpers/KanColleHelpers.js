@@ -7812,7 +7812,7 @@ var PS = {};
           return income(0)(0)(300)(100);
       };
       if (eId === 19) {
-          return income(400)(0)(50)(30);
+          return income(400)(50)(50)(30);
       };
       if (eId === 20) {
           return income(0)(0)(150)(0);
@@ -7883,6 +7883,12 @@ var PS = {};
       if (eId === 42) {
           return income(800)(0)(0)(200);
       };
+//      if (eId === 43) {
+//          return income(750)(0)(0)(250);
+//      };
+      if (eId === 44) {
+          return income(0)(200)(0)(800);
+      };
       if (eId === 100) {
           return income(45)(45)(0)(0);
       };
@@ -7901,6 +7907,12 @@ var PS = {};
       if (eId === 111) {
           return income(300)(200)(100)(0);
       };
+      if (eId === 112) {
+          return income(0)(100)(100)(80);
+      };
+//      if (eId === 113) {
+//          return income(0)(0)(750)(500);
+//      };
       return Data_Monoid.mempty(incomeMonoid);
   };
   exports["getExpeditionIncomeBase"] = getExpeditionIncomeBase;
