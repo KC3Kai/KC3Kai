@@ -295,9 +295,13 @@
 						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item1 img", ExpedBox).attr("src",
 							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
-							.attr("title", itemGet.api_useitem_count || 1);
+							.attr("title", KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId));
+						$(".exped_item1 span", ExpedBox).text(
+							itemGet.api_useitem_count > 1 ? itemGet.api_useitem_count : ""
+						);
 					}else{
-						$("exped_item1 img", ExpedBox).hide();
+						$(".exped_item1 img", ExpedBox).hide();
+						$(".exped_item1 span", ExpedBox).hide();
 					}
 					
 					// Reward item 2
@@ -307,9 +311,13 @@
 						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
 						$(".exped_item2 img", ExpedBox).attr("src",
 							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
-							.attr("title", itemGet.api_useitem_count || 1);
+							.attr("title", KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId));
+						$(".exped_item2 span", ExpedBox).text(
+							itemGet.api_useitem_count > 1 ? itemGet.api_useitem_count : ""
+						);
 					}else{
-						$("exped_item2 img", ExpedBox).hide();
+						$(".exped_item2 img", ExpedBox).hide();
+						$(".exped_item2 span", ExpedBox).hide();
 					}
 				}
 			});

@@ -7883,9 +7883,9 @@ var PS = {};
       if (eId === 42) {
           return income(800)(0)(0)(200);
       };
-//      if (eId === 43) {
-//          return income(750)(0)(0)(250);
-//      };
+      if (eId === 43) {
+          return income(400)(0)(0)(2000);
+      };
       if (eId === 44) {
           return income(0)(200)(0)(800);
       };
@@ -7910,9 +7910,9 @@ var PS = {};
       if (eId === 112) {
           return income(0)(100)(100)(180);
       };
-//      if (eId === 113) {
-//          return income(0)(0)(750)(500);
-//      };
+      if (eId === 113) {
+          return income(0)(0)(1200)(650);
+      };
       return Data_Monoid.mempty(incomeMonoid);
   };
   exports["getExpeditionIncomeBase"] = getExpeditionIncomeBase;
