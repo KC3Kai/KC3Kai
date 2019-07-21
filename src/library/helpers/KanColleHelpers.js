@@ -7346,7 +7346,7 @@ var PS = {};
       };
       var sty = function (n) {
           return function (stype) {
-              return [ new FleetSTypeCount(n, [ stype ]) ];
+              return [ new FleetSTypeCount(n, Array.isArray(stype) ? stype : [ stype ]) ];
           };
       };
       var lvlCnt = function (n) {
@@ -7494,6 +7494,12 @@ var PS = {};
       if (v === 40) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))([ new Flagship(new ShipTypeOneOf([ KanColle_Generated_SType.CL.value ])) ])))));
       };
+      if (v === 41) {
+          return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))((aswTotal(210)))));
+      };
+      if (v === 42) {
+          return addGroup(fslAndSc(1)(4))(addGroup(sty(1)([ KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.CL.value ]))(addGroup(ddde(3))(aswTotal(260))));
+      };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
       };
@@ -7503,11 +7509,17 @@ var PS = {};
       if (v === 102) {
           return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60)))))));
       };
+      if (v === 103) {
+          return addGroup(fslAndSc(1)(5))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(fpTotal(300))(aswTotal(200)))));
+      };
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
       };
       if (v === 111) {
           return addGroup(fslAndSc(45)(6))(addGroup(lvlCnt(290))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(3)(KanColle_Generated_SType.DD.value))(fpTotal(360))))));
+      };
+      if (v === 112) {
+          return addGroup(fslAndSc(1)(6))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(300))))));
       };
       return [  ];
   };

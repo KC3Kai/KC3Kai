@@ -68,7 +68,7 @@
 	font-size:11px;
 	color:#999;
 }
-.tab_expedpast .expedNumBox .expedTime.battle {
+.tab_expedpast .expedNumBox .expedTime.combat {
 	color:#cc1111;
 }
 
@@ -264,22 +264,18 @@
 	margin:0px 0px 0px -50px;
 	position:relative;
 }
-.tab_expedpast .exped_item1 {
+.tab_expedpast .exped_reward {
 	width:30px;
-	margin:0px 3px 0px 0px;
+	white-space:nowrap;
 }
-.tab_expedpast .exped_item1 img {
+.tab_expedpast .exped_reward img {
 	vertical-align:text-top;
 }
-.tab_expedpast .exped_item1 span {
+.tab_expedpast .exped_reward span {
 	padding-left:2px;
+}
+.tab_expedpast .exped_item1 {
+	margin-right:3px;
 }
 .tab_expedpast .exped_item2 {
-	width:30px;
-}
-.tab_expedpast .exped_item2 img {
-	vertical-align:text-top;
-}
-.tab_expedpast .exped_item2 span {
-	padding-left:2px;
 }

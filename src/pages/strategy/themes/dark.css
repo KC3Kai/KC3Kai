@@ -2189,6 +2189,9 @@ button, input, select, textarea {
 .tab_expedpast .exped_item .exped_info {
 	color: white;
 }
+.tab_expedpast .exped_item .exped_reward {
+	color: #bbb;
+}
 
 .tab_expedpast .pagination > li > a {
 	color: white;

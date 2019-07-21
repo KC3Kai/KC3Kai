@@ -8,18 +8,7 @@
 		
 		exped_filters: [],
 		fleet_filters: [2,3,4],
-		// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
-		useItemMap: {
-			1:"bucket", // flag value
-			2:"ibuild", // flag value
-			3:"devmat", // flag value
-			4:"screw",  // master id
-			5:"coin",   // flag value, its master id is 44
-			10:"box1",  // master id
-			11:"box2",  // master id
-			12:"box3",  // master id
-		},
-			
+		
 		/* INIT
 		Prepares all data needed
 		---------------------------------*/
@@ -39,15 +28,17 @@
 				["[{0}] ".format(m.api_id) + m.api_name,
 					m.api_details,
 					"Difficulty: {0}".format(m.api_difficulty),
+					"Reset type: {0}".format(m.api_reset_type),
+					"Damage type: {0}".format(m.api_damage_type),
 					"Cost fuel: {0}%, ammo: {1}%".format(m.api_use_fuel * 100, m.api_use_bull * 100),
 					"Levels of successful rewards:\n"
-					+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
-					+ (m.api_win_item1[0] > 0 ?
-						["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
-					+ (m.api_win_item2[0] > 0 ?
-						[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
+						+ "\tfuel: {0}, ammo: {1}, steel: {2}, bauxite: {3}".format(m.api_win_mat_level)
+						+ (m.api_win_item1[0] > 0 ?
+							["\n\t", PlayerManager.getConsumableById(m.api_win_item1[0], true), ": ", m.api_win_item1[1]].join("") : "")
+						+ (m.api_win_item2[0] > 0 ?
+							[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
 					String(m.api_deck_num) + " ships fleet: "
-					+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+						+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
 				].join("\n")
 			);
 			// Add all expedition numbers on the filter list
@@ -67,7 +58,7 @@
 						(curVal.api_time * 60).toString().toHHMMSS().substring(0,5)
 					);
 					$(".expedText", row).toggleClass("monthly", curVal.api_reset_type == 1);
-					$(".expedTime", row).toggleClass("battle", curVal.api_damage_type > 0);
+					$(".expedTime", row).toggleClass("combat", curVal.api_damage_type > 0);
 					$(".expedText", row).attr("title", buildExpedTooltip(curVal)).lazyInitTooltip();
 					
 					self.exped_filters.push(curVal.api_id);
@@ -236,11 +227,12 @@
 				//console.debug("get_expeds", response, self.exped_filters, self.fleet_filters);
 				$(".tab_expedpast .exped_list").empty();
 				
-				for(let ctr in response){
+				for(const ctr in response){
 					const ThisExped = response[ctr];
 					//console.debug(ThisExped);
 					
-					const ExpedBox = $(".tab_expedpast .factory .exped_item").clone().appendTo(".tab_expedpast .exped_list");
+					const ExpedBox = $(".tab_expedpast .factory .exped_item").clone()
+						.appendTo(".tab_expedpast .exped_list");
 					
 					// Expedition date
 					const expedDate = new Date(ThisExped.time * 1000);
@@ -281,44 +273,45 @@
 							$(".exped_rsc"+(rctr+1), ExpedBox).addClass("empty");
 						}
 					}
-					
+
 					// Result image
 					$(".exped_result img", ExpedBox).attr("src",
 						"../../../../assets/img/client/exped_"+
 						(["fail","fail","success","gs"][ThisExped.data.api_clear_result+1])
 						+".png");
-					
-					// Reward item 1
-					if(ThisExped.data.api_useitem_flag[0] > 0){
-						const itemFlag = ThisExped.data.api_useitem_flag[0];
-						const itemGet = ThisExped.data.api_get_item1;
-						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
-						$(".exped_item1 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
-							.attr("title", KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId));
-						$(".exped_item1 span", ExpedBox).text(
-							itemGet.api_useitem_count > 1 ? itemGet.api_useitem_count : ""
-						);
-					}else{
-						$(".exped_item1 img", ExpedBox).hide();
-						$(".exped_item1 span", ExpedBox).hide();
+
+					// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
+					const useItemMap = {
+						1:"bucket", // flag value
+						2:"ibuild", // flag value
+						3:"devmat", // flag value
+						4:"screw",  // master id
+						5:"coin",   // flag value, its master id is 44
+						10:"box1",  // master id
+						11:"box2",  // master id
+						12:"box3",  // master id
+					};
+					// Reward item1 and item2
+					for(const fctr in ThisExped.data.api_useitem_flag) {
+						const flag = ThisExped.data.api_useitem_flag[fctr];
+						const itemIndex = parseInt(fctr, 10) + 1;
+						const itemDiv = $(".exped_item" + itemIndex, ExpedBox);
+						if(flag > 0) {
+							const getItem = ThisExped.data["api_get_item" + itemIndex];
+							const useitemId = flag === 4 ? getItem.api_useitem_id : flag;
+							const useitemCount = getItem.api_useitem_count;
+							$("img", itemDiv).attr("src",
+								`/assets/img/client/${useItemMap[useitemId]}.png`
+							).attr("title",
+								KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId)
+							);
+							$("span", itemDiv).text(useitemCount > 1 ? useitemCount : "");
+						} else {
+							$("img", itemDiv).hide();
+							$("span", itemDiv).hide();
+						}
 					}
-					
-					// Reward item 2
-					if(ThisExped.data.api_useitem_flag[1] > 0){
-						const itemFlag = ThisExped.data.api_useitem_flag[1];
-						const itemGet = ThisExped.data.api_get_item2;
-						const useitemId = itemFlag === 4 ? itemGet.api_useitem_id : itemFlag;
-						$(".exped_item2 img", ExpedBox).attr("src",
-							"../../assets/img/client/"+self.useItemMap[useitemId]+".png")
-							.attr("title", KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId));
-						$(".exped_item2 span", ExpedBox).text(
-							itemGet.api_useitem_count > 1 ? itemGet.api_useitem_count : ""
-						);
-					}else{
-						$(".exped_item2 img", ExpedBox).hide();
-						$(".exped_item2 span", ExpedBox).hide();
-					}
+
 				}
 			});
 		}
