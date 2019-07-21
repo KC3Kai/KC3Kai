@@ -285,7 +285,7 @@
 						1:"bucket", // flag value
 						2:"ibuild", // flag value
 						3:"devmat", // flag value
-						4:"screw",  // master id
+						4:"screws", // master id
 						5:"coin",   // flag value, its master id is 44
 						10:"box1",  // master id
 						11:"box2",  // master id

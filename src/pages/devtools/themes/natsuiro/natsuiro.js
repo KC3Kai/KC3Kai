@@ -3845,7 +3845,7 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
-					 4:"screw",
+					 4:"screws",
 					 5:"coin",
 					10:"box1",
 					11:"box2",
@@ -4029,7 +4029,7 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [41, 101, 102].indexOf(selectedExpedition) > -1;
+			var condIsGsWithoutSparkle = [41, 101, 102, 103].indexOf(selectedExpedition) > -1;
 
 			var estSuccessRate = -1;
 			// can GS if:

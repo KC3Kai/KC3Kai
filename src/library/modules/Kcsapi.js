@@ -1868,7 +1868,7 @@ Previously known as "Reactor"
 					 1:"bucket", => 5
 					 2:"ibuild", => 4
 					 3:"devmat", => 6
-					 4:"screw",  => 7
+					 4:"screws", => 7
 					*/
 					response.api_data.api_useitem_flag.forEach(function(x,i){
 						var useMap = csmap[x],
