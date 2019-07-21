@@ -1,6 +1,11 @@
 .tab_akashi {
 	width:680px;
 }
+.tab_akashi img {
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
+}
 .tab_akashi .factory {
 	display:none;
 }
@@ -148,9 +153,6 @@
 	width:20px;
 	height:20px;
 	margin:2px;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_akashi .eq_ship .eq_ship_name {
 	width:95px;
