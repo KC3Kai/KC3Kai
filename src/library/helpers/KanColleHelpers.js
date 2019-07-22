@@ -7349,6 +7349,9 @@ var PS = {};
               return [ new FleetSTypeCount(n, Array.isArray(stype) ? stype : [ stype ]) ];
           };
       };
+      var fsty = function (stype) {
+          return [ new Flagship(new ShipTypeOneOf(Array.isArray(stype) ? stype : [ stype ])) ];
+      };
       var lvlCnt = function (n) {
           return [ new FleetLevel(n) ];
       };
@@ -7371,6 +7374,10 @@ var PS = {};
       };
       var carrier = function (n) {
           return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.CV.value, KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.AV.value ]) ];
+      };
+      // TODO check if CVL is real CVE
+      var cvecl = function(n) {
+          return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.CL.value ]) ];
       };
       if (v === 1) {
           return fslAndSc(1)(2);
@@ -7444,7 +7451,7 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(50)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.BBV.value))(sty(2)(KanColle_Generated_SType.DD.value))));
       };
       if (v === 24) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(50)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))([ new Flagship(new ShipTypeOneOf([ KanColle_Generated_SType.CL.value ])) ]))));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(50)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(ddde(4))(fsty(KanColle_Generated_SType.CL.value)))));
       };
       if (v === 25) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.CA.value))(sty(2)(KanColle_Generated_SType.DD.value)));
@@ -7468,7 +7475,7 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(60)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(200))(submarine(4)));
       };
       if (v === 32) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(5)(3))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CT.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))([ new Flagship(new ShipTypeOneOf([ KanColle_Generated_SType.CT.value ])) ])));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(5)(3))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CT.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))(fsty(KanColle_Generated_SType.CT.value))));
       };
       if (v === 33) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(1)(2))(sty(2)(KanColle_Generated_SType.DD.value));
@@ -7492,13 +7499,19 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(3)(5))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(180))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.AS.value))(submarine(4))));
       };
       if (v === 40) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))([ new Flagship(new ShipTypeOneOf([ KanColle_Generated_SType.CL.value ])) ])))));
+          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))(fsty(KanColle_Generated_SType.CL.value))))));
       };
       if (v === 41) {
           return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))((aswTotal(210)))));
       };
       if (v === 42) {
-          return addGroup(fslAndSc(1)(4))(addGroup(sty(1)([ KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.CL.value ]))(addGroup(ddde(3))(aswTotal(260))));
+          return addGroup(fslAndSc(50)(4))(addGroup(cvecl(1))(addGroup(ddde(3))(aswTotal(230))));
+      };
+      if (v === 43) {
+          return addGroup(fslAndSc(1)(6))(addGroup(cvecl(1))(addGroup(ddde(3))(addGroup(fsty([ KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.CL.value ]))(addGroup(fpTotal(500))(aswTotal(280))))));
+      };
+      if (v === 44) {
+          return addGroup(fslAndSc(1)(6))(addGroup(carrier(2))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ]))));
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
@@ -7510,7 +7523,7 @@ var PS = {};
           return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60)))))));
       };
       if (v === 103) {
-          return addGroup(fslAndSc(1)(5))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(fpTotal(300))(aswTotal(200)))));
+          return addGroup(fslAndSc(1)(5))(addGroup(cvecl(1))(addGroup(ddde(4))(addGroup(fpTotal(300))(aswTotal(200)))));
       };
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
@@ -7519,7 +7532,10 @@ var PS = {};
           return addGroup(fslAndSc(45)(6))(addGroup(lvlCnt(290))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(3)(KanColle_Generated_SType.DD.value))(fpTotal(360))))));
       };
       if (v === 112) {
-          return addGroup(fslAndSc(1)(6))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(300))))));
+          return addGroup(fslAndSc(65)(6))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(240))))));
+      };
+      if (v === 113) {
+          return addGroup(fslAndSc(1)(6))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280)))))));
       };
       return [  ];
   };
@@ -7854,7 +7870,7 @@ var PS = {};
           return income(0)(0)(900)(350);
       };
       if (eId === 29) {
-          return income(0)(0)(0)(100); // TODO: add ammo (50?)
+          return income(0)(50)(0)(100);
       };
       if (eId === 30) {
           return income(0)(50)(0)(100);
