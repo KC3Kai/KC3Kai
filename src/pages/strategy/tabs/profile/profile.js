@@ -301,8 +301,8 @@
 				};
 				// Get data from local DB
 				let db = KC3Database.con.expedition.where("hq").equals(PlayerManager.hq.id);
-				// Only need mission ID >= 100
-				if(forAsw) db = db.and(r => r.mission >= 100);
+				// Only need mission ID > 40 (not only asw, but all news)
+				if(forAsw) db = db.and(r => r.mission > 40);
 				db.reverse().toArray(function(result){
 					result.forEach(function(expedInfo){
 						const fleetStats = {
