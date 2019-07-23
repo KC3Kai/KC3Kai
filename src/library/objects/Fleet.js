@@ -256,7 +256,7 @@ Contains summary information about a fleet and its ships
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
 			ev: 0, as: 0, ls: 0, lk: 0,
-			ac: 0
+			ht: 0
 		};
 		this.ship((rid, idx, ship) =>{
 			// always includes modded/marriage bonus values
@@ -264,11 +264,11 @@ Contains summary information about a fleet and its ships
 				hp: ship.hp[1],
 				fp: ship.fp[0], tp: ship.tp[0], aa: ship.aa[0], ar: ship.ar[0],
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
-				ac: ship.equipmentTotalStats("houm")
+				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
 			if(!includeEquip) {
 				// no accuracy if excludes equipment
-				ss.ac = 0;
+				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
 			} else {
@@ -287,7 +287,7 @@ Contains summary information about a fleet and its ships
 					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
 					ss.as += gear.attackPowerImprovementBonus("asw");
 					ss.ls += gear.losStatImprovementBonus();
-					ss.ac += gear.accStatImprovementBonus(includeImproveType);
+					ss.ht += gear.accStatImprovementBonus(includeImproveType);
 				});
 			}
 			Object.keys(stats).forEach(stat => {

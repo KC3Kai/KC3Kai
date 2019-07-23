@@ -3845,7 +3845,7 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
-					 4:"screw",
+					 4:"screws",
 					 5:"coin",
 					10:"box1",
 					11:"box2",
@@ -3944,6 +3944,7 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = shipInst.level;
 				var drumCount = CurrentShip.countDrums();
+				// to be confirmed: improvement bonus might be counted for new exped OR all?
 				var los = shipInst.ls[0], aa = shipInst.aa[0], fp = shipInst.fp[0];
 				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
 				return {
@@ -4029,7 +4030,7 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [41, 101, 102].indexOf(selectedExpedition) > -1;
+			var condIsGsWithoutSparkle = [41, 42, 43, 44, 101, 102, 103].indexOf(selectedExpedition) > -1;
 
 			var estSuccessRate = -1;
 			// can GS if:
@@ -4214,8 +4215,8 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE patterns for exped 4, 5, 9 and A3:
-						if([4, 5, 9, 102].includes(selectedExpedition)) {
+						// alternative DE/CVE patterns for exped 4, 5, 9, 42, 43, A3, A4:
+						if([4, 5, 9, 42, 43, 102, 103].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
