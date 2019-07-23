@@ -3951,6 +3951,7 @@
 					ammo : 0,
 					morale : 0,
 					stype : stype,
+					//isCve : shipInst.isEscortLightCarrier(),
 					level : level,
 					drumCount : drumCount,
 					asw : asw,
