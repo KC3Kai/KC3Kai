@@ -2327,6 +2327,7 @@ ABYSS FLEET
 	background-color: #eee;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-shadow:none;
 }
 .module.activity .activity_pvp .pvp_enemy_medals {
 	width: 17px;
@@ -2421,6 +2422,7 @@ ABYSS FLEET
 	border-radius: 5px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-shadow:none;
 }
 .module.activity .activity_pvp .pvp_admiral .pvp_admiral_label {
 	width: 110px;
@@ -2457,6 +2459,7 @@ ABYSS FLEET
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	text-shadow:none;
 }
 .module.activity .activity_pvp .pvp_fleet_list {
 	width: 170px;
