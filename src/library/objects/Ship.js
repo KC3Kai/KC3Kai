@@ -876,7 +876,7 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
@@ -894,7 +894,8 @@ KC3改 Ship Object
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
-				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
+				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 :
+					g.master().api_tais + (!!includeImprove && g.attackPowerImprovementBonus("asw"))
 			).sumValues();
 		return equipmentTotalAsw;
 	};
@@ -1395,14 +1396,18 @@ KC3改 Ship Object
 			this.equipmentTotalImprovementBonus("torpedo");
 	};
 
+	KC3Ship.prototype.isAswAirAttack = function(){
+		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
+		return this.estimateDayAttackType(1530, false)[0] === "AirAttack";
+	};
+
 	/**
 	 * Get pre-cap anti-sub power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#AntiSubmarine
 	 */
 	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
-		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
-		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
+		const isAirAttack = this.isAswAirAttack();
 		const attackMethodConst = isAirAttack ? 8 : 13;
 		const nakedAsw = this.nakedAsw() + aswDiff;
 		// only asw stat from partial types of equipment taken into account
