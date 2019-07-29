@@ -7527,10 +7527,10 @@ var PS = {};
           return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(ddde(3))));
       };
       if (v === 43) {
-          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(400))(addGroup(sty(1)(KanColle_Generated_SType.CVL.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(fsty([ KanColle_Generated_SType.CVL.value ]))(addGroup(fpTotal(500))(aswTotal(280))))))));
+          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(340))(addGroup(sty(1)(KanColle_Generated_SType.CVL.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(fsty([ KanColle_Generated_SType.CVL.value ]))(addGroup(fpTotal(500))(aswTotal(280))))))));
       };
       if (v === 44) {
-          return addGroup(fslAndSc(45)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ]))));
+          return addGroup(fslAndSc(45)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ])))));
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));

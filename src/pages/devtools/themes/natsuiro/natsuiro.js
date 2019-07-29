@@ -3946,7 +3946,7 @@
 				// to be confirmed: improvement bonus only counted for these new expeds OR all expeds?
 				var includeImprove = [43, 113].includes(selectedExpedition);
 				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove);
+				var asw = ship.nakedAsw() + Math.floor(ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove));
 				if(includeImprove) {
 					// unknown: should be floored here?
 					los += Math.floor(ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues());
