@@ -257,14 +257,12 @@
 	padding-right:2px;
 	text-align:right;
 	color:#45a9a5;
-	display:none;
 }
 .tab_fleet .fleet_ship .gear_ace {
 	float:right;
 	width:30px;
 	position:absolute;
 	right:0px;
-	display:none;
 }
 .tab_fleet .fleet_ship .gear_ace img {
 	width:20px;
