@@ -4229,9 +4229,9 @@
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
 						}
-						// alternative compo with CVE for exped 43
+						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
-							shipReqBox.attr("title", "CVE:1 DD/DE:2 + ??:3").lazyInitTooltip();
+							shipReqBox.attr("title", "CVL:1 + CL:1 + DD/DE:4").lazyInitTooltip();
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
