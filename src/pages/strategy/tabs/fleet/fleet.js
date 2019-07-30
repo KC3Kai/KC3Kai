@@ -599,20 +599,22 @@
 				.click(function(){
 					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				});
-			$(".gear_name", gearBox).text(kcGear.name());
+			$(".gear_name", gearBox).text(kcGear.name()).attr("title",
+				kcGear.htmlTooltip(capacity, kcShip)).lazyInitTooltip();
 			if(kcGear.stars > 0){
-				$(".gear_stars", gearBox).text
-					("\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)
-				).show();
+				$(".gear_stars", gearBox).text(
+					"\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)
+				);
+			} else {
+				$(".gear_stars", gearBox).hide();
 			}
 			if(kcGear.ace > 0){
-				$(".gear_ace img", gearBox).attr("src", "/assets/img/client/achev/" +
-					Math.min(kcGear.ace, 7) + ".png");
-				$(".gear_ace", gearBox).show();
+				$(".gear_ace img", gearBox).attr("src",
+					"/assets/img/client/achev/" + Math.min(kcGear.ace, 7) + ".png"
+				);
+			} else {
+				$(".gear_ace", gearBox).hide();
 			}
-			$(".gear_name", gearBox).attr("title",
-				kcGear.htmlTooltip(capacity, kcShip))
-				.lazyInitTooltip();
 			gearBox.toggleClass("ex_slot", isExslot).show();
 		},
 
