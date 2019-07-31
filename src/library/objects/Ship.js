@@ -1449,11 +1449,11 @@ KC3改 Ship Object
 	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
-		const hasWG42 = this.hasEquipment(126/*, 346, 347, 348*/);
+		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
-		// WG42/landing craft-type eligible for all
-		if (hasWG42 || hasLandingCraft){
+		// WG42 variants/landing craft-type eligible for all
+		if (hasAntiLandRocket || hasLandingCraft){
 			possibleTypes = [1, 2, 3, 4, 5, 6];
 		}
 		// T3 Shell eligible for all except Pillbox
@@ -1600,7 +1600,9 @@ KC3改 Ship Object
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		// Type4 20cm Rocket might be the same? devs said Type2 12cm Mortars anti-land 'limited'
-		const wg42Count = this.countEquipment(126/*, 346, 347, 348*/);
+		const wg42Count = this.countEquipment(126);
+		// TODO investigate difference between these and WG42
+		const mortarCount = this.countEquipment([346, 347, 348]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
