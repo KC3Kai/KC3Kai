@@ -4043,20 +4043,27 @@
 			var KERO = PS["KanColle.Expedition.RequirementObject"];
 			var ST = PS["KanColle.Generated.SType"];
 
-			var allShipsForLib = allShips.map(function(CurrentShip, ind) {
-				var shipInst = CurrentShip;
-				var shipModel = CurrentShip.master();
-				var stypeId = shipModel.api_stype;
+			var allShipsForLib = allShips.map(function(ship, idx) {
+				var shipMst = ship.master();
+				var stypeId = shipMst.api_stype;
 				var stype = ST.showSType(ST.fromInt(stypeId));
-				var level = shipInst.level;
-				var drumCount = CurrentShip.countDrums();
-				// to be confirmed: improvement bonus might be counted for new exped OR all?
-				var los = shipInst.ls[0], aa = shipInst.aa[0], fp = shipInst.fp[0];
-				var asw = shipInst.nakedAsw() + shipInst.effectiveEquipmentTotalAsw();
+				var level = ship.level;
+				var drumCount = ship.countDrums();
+				// to be confirmed: improvement bonus only counted for these new expeds OR all expeds?
+				var includeImprove = [43, 113].includes(selectedExpedition);
+				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
+				var asw = ship.nakedAsw() + Math.floor(ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove));
+				if(includeImprove) {
+					// unknown: should be floored here?
+					los += Math.floor(ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues());
+					aa += Math.floor(ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues());
+					fp += Math.floor(ship.equipment(true).map(g => g.attackPowerImprovementBonus("fire")).sumValues());
+				}
 				return {
 					ammo : 0,
 					morale : 0,
 					stype : stype,
+					isCve : ship.isEscortLightCarrier(),
 					level : level,
 					drumCount : drumCount,
 					asw : asw,
@@ -4321,12 +4328,16 @@
 							.appendTo( jq );
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE patterns for exped 4, 5, 9, 42, 43, A3, A4:
-						if([4, 5, 9, 42, 43, 102, 103].includes(selectedExpedition)) {
+						// alternative DE/CVE patterns for exped 4, 5, 9, 42, A3, A4:
+						if([4, 5, 9, 42, 102, 103].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
+						}
+						// alternative compo with CVL + CL for exped 43
+						else if([43].includes(selectedExpedition)) {
+							shipReqBox.attr("title", "CVL:1 + CL:1 + DD/DE:4").lazyInitTooltip();
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
