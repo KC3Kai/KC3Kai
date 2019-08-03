@@ -418,11 +418,12 @@
 			const fstats = kcFleet.totalStats(true);
 			const fstatsImp = kcFleet.totalStats(true, "fire");
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
-				.attr("title", "w/Imp: No\tYes\n{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
+				.attr("title", "{4}: -\u2605\t+\u2605\n{0}: {5}\t{9}\n{1}: {6}\t{10}\n{2}: {7}\t{11}\n{3}: {8}\t{12}".format(
 					KC3Meta.term("ExpedTotalFp"),
 					KC3Meta.term("ExpedTotalAa"),
 					KC3Meta.term("ExpedTotalAsw"),
 					KC3Meta.term("ExpedTotalLos"),
+					KC3Meta.term("ExpedTotalImp"),
 					fstats.fp, fstats.aa, fstats.as, fstats.ls,
 					Math.qckInt("floor", fstatsImp.fp , 1),
 					Math.qckInt("floor", fstatsImp.aa , 1),
