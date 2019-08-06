@@ -1780,22 +1780,24 @@
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
 				.attr("title", (fleetNum => {
-					switch(fleetNum) {
-						case 1: return KC3Meta.term("FirstFleetLevelTip")
-							.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-						case 2:
-						case 3:
-						case 4:
-							const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-							return "{0}: {4}\n{1}: {5}\n{2}: {6}\n{3}: {7}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.aa, fstats.as, fstats.ls
-							);
-						default: return "";
-					}
+					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
+						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
+					const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "fire");
+					tips += (!tips ? "" : "\n")
+						+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
+						+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
+							KC3Meta.term("ExpedTotalFp"),
+							KC3Meta.term("ExpedTotalAa"),
+							KC3Meta.term("ExpedTotalAsw"),
+							KC3Meta.term("ExpedTotalLos"),
+							fstats.fp, fstats.aa, fstats.as, fstats.ls,
+							Math.qckInt("floor", fstatsImp.fp , 1),
+							Math.qckInt("floor", fstatsImp.aa , 1),
+							Math.qckInt("floor", fstatsImp.as , 1),
+							Math.qckInt("floor", fstatsImp.ls , 1)
+						);
+					return tips;
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
