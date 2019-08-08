@@ -1599,10 +1599,11 @@ KC3改 Ship Object
 		if(this.isDummy()) { return [0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
-		// Type4 20cm Rocket might be the same? devs said Type2 12cm Mortars anti-land 'limited'
 		const wg42Count = this.countEquipment(126);
 		// TODO investigate difference between these and WG42
-		const mortarCount = this.countEquipment([346, 347, 348]);
+		// Type4 20cm Rocket might be the same? devs said Type2 12cm Mortars anti-land 'limited'
+		const type4RocketCount = this.countEquipment(348);
+		const mortarCount = this.countEquipment([346, 347]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let t3Bonus = 1;
