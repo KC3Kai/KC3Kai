@@ -1549,7 +1549,7 @@ Previously known as "Reactor"
 				const bonusType = bonus.api_type;
 				// Known types: 1=Consumable, 2=Unlock a fleet, 3=Furniture box, 4=LSC unlock,
 				//   5=LBAS unlock, 6=Exped resupply unlock, 11=Ship, 12=Slotitem, 13=Useitem,
-				//   14=Furniture, 15=Aircraft conversion, 16=Equipment consumption
+				//   14=Furniture, 15=Equipment conversion, 16=Equipment consumption, 18=Rank points
 				if(bonusType === 11){
 					const shipId = (bonus.api_item || {}).api_ship_id;
 					console.log("Quest gained ship", quest, shipId, bonus);
@@ -1751,6 +1751,12 @@ Previously known as "Reactor"
 		/* Expedition Selection Screen
 		  -------------------------------------------------------*/
 		"api_get_member/mission":function(params, response, headers) {
+			if(Array.isArray(response.api_data.api_limit_time)) {
+				// Actual Monthly Expedition reset time in minutes,
+				// might be more in this array for other time periods?
+				PlayerManager.hq.monthlyExpedResetTime = response.api_data.api_limit_time[0] || 0;
+				PlayerManager.hq.save();
+			}
 			KC3Network.trigger("ExpeditionSelection");
 		},
 
@@ -2738,11 +2744,15 @@ Previously known as "Reactor"
 					[280,2,[1,4], true, true], // Bm8: 3rd requirement: [W1-4] S-rank the boss node
 					[280,3,[2,1], true, true], // Bm8: 4th requirement: [W2-1] S-rank the boss node
 					[284,0,[1,4], true, true], // Bq11: 1st requirement: [W1-4] S-rank the boss node
-					[284,0,[2,1], true, true], // Bq11: 2nd requirement: [W2-1] S-rank the boss node
-					[284,0,[2,2], true, true], // Bq11: 3rd requirement: [W2-2] S-rank the boss node
-					[284,0,[2,3], true, true], // Bq11: 4th requirement: [W2-3] S-rank the boss node
+					[284,1,[2,1], true, true], // Bq11: 2nd requirement: [W2-1] S-rank the boss node
+					[284,2,[2,2], true, true], // Bq11: 3rd requirement: [W2-2] S-rank the boss node
+					[284,3,[2,3], true, true], // Bq11: 4th requirement: [W2-3] S-rank the boss node
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
 					[854,3,[6,4], true, true], // Bq2: 4th requirement: [W6-4] S-rank the boss node
+					[872,0,[7,2], true, true, [15]], // Bq10: 1st requirement: [W7-2-M] S-rank 2nd boss node
+					[872,1,[5,5], true, true], // Bq10: 2nd requirement: [W5-5] S-rank the boss node
+					[872,2,[6,2], true, true], // Bq10: 3rd requirement: [W6-2] S-rank the boss node
+					[872,3,[6,5], true, true], // Bq10: 4th requirement: [W6-5] S-rank the boss node
 					[875,0,[5,4], true, true], // Bq6: Sortie to [W5-4] S-rank the boss node
 					[888,0,[5,1], true, true], // Bq7: 1st requirement: [W5-1] S-rank the boss node
 					[888,1,[5,3], true, true], // Bq7: 2nd requirement: [W5-3] S-rank the boss node

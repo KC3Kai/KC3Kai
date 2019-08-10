@@ -2182,11 +2182,12 @@ KC3改 Ship Object
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from Sonars taken into account confirmed.
 		const shipAsw = this.as[0] + aswDiff
-		// explicit asw bonus from Torpedo Bombers still not counted,
+		// explicit asw bonus from Fighters and Torpedo Bombers still not counted,
 		// confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
+		// 2019-08-09: https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AD%E5%BC%8F%E8%89%A6%E6%88%A6%E6%94%B9
 		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
 		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
-			- this.equipmentTotalStats("tais", true, true, true, [8]);
+			- this.equipmentTotalStats("tais", true, true, true, [6, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -3857,6 +3858,7 @@ KC3改 Ship Object
 			}[attackTypeDay[0]] || "Shelling";
 		const canAsw = shipObj.canDoASW();
 		if(canAsw){
+			const aswAttackType = shipObj.estimateDayAttackType(1530, false);
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
 			let isCapped = false;
@@ -3874,13 +3876,13 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, "Antisub", undefined, undefined,
-						true, attackTypeDay[0] === "AirAttack").power;
+						true, aswAttackType[0] === "AirAttack").power;
 				}
 				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
 			let attackTypeIndicators = !canShellingAttack || !canAsw ?
 				KC3Meta.term("ShipAttackTypeNone") :
-				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
+				KC3Meta.term("ShipAttackType" + aswAttackType[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
 			if(canClosingTorp) attackTypeIndicators += ", {0}"

@@ -7521,7 +7521,7 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))(fsty(KanColle_Generated_SType.CL.value))))));
       };
       if (v === 41) {
-          return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))(addGroup(aaTotal(80))(aswTotal(210)))));
+          return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))(addGroup(fpTotal(60))(addGroup(aaTotal(80))(aswTotal(210))))));
       };
       if (v === 42) {
           return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(ddde(3))));
@@ -7551,7 +7551,7 @@ var PS = {};
           return addGroup(fslAndSc(45)(6))(addGroup(lvlCnt(290))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(3)(KanColle_Generated_SType.DD.value))(fpTotal(360))))));
       };
       if (v === 112) {
-          return addGroup(fslAndSc(50)(6))(addGroup(lvlCnt(350))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(ddde(2))(addGroup(fpTotal(400))(aswTotal(220))))))));
+          return addGroup(fslAndSc(50)(6))(addGroup(lvlCnt(350))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(220))))))));
       };
       if (v === 113) {
           return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(390))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280))))))));

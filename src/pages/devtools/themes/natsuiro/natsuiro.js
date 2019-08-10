@@ -1197,11 +1197,13 @@
 				!PlayerManager.hq.lastPortTime ? "?" :
 					new Date(PlayerManager.hq.lastPortTime * 1000).format("mm-dd HH:MM:ss")
 			);
-			const remainingTime = KC3Calc.remainingTimeUntilNextResets();
-			const resetTimeTips = "{0}: {1}\n{2}: {3}\n{4}: {5}".format(
+			const remainingTime = KC3Calc.remainingTimeUntilNextResets(undefined,
+				PlayerManager.hq.monthlyExpedResetTime * 1000);
+			const resetTimeTips = "{0}: {1}\n{2}: {3}\n{4}: {5}\n{6}: {7}".format(
 				KC3Meta.term("MenuPvPReset"), remainingTime.pvp,
 				KC3Meta.term("MenuQuestReset"), remainingTime.quest,
-				KC3Meta.term("MenuQuarterlyReset"), remainingTime.quarterly
+				KC3Meta.term("MenuQuarterlyReset"), remainingTime.quarterly,
+				KC3Meta.term("MenuMonthlyExpedReset"), remainingTime.exped
 			);
 			if(ConfigManager.rankPtsMode === 2){
 				$(".admiral_rank").text(PlayerManager.hq.getRankPoints()
@@ -3917,7 +3919,8 @@
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title").text(
 				KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition)
-				+ (expedMaster.api_reset_type == 1 ? " (M)" : "") // Monthly
+				 // Monthly or unknown period
+				+ (expedMaster.api_reset_type == 1 ? " (M)" : expedMaster.api_reset_type > 0 ? "(?)" : "")
 				+ (expedMaster.api_damage_type > 0 ? " (C)" : "") // Combat
 				+ (!expedMaster.api_return_flag ? " (S)" : "")    // Support
 			);
@@ -3993,6 +3996,21 @@
 				.text(String(60 * expedTime).toHHMMSS())
 				.attr("title", String(60 * expedTime).plusCurrentTime(true))
 				.lazyInitTooltip();
+			if(expedMaster.api_reset_type > 0) {
+				const resetTimeTips = [
+					$(".module.activity .activity_expeditionPlanner .estimated_time").attr("title")
+				];
+				if(expedMaster.api_reset_type == 1 && !!PlayerManager.hq.monthlyExpedResetTime) {
+					const monthlyResetPoint = String(Math.ceil(
+						(PlayerManager.hq.monthlyExpedResetTime * 1000 - Date.now()) / 1000
+					)).plusCurrentTime(true);
+					resetTimeTips.push("{0}: {1}".format(
+						KC3Meta.term("MenuMonthlyExpedReset"), monthlyResetPoint
+					));
+				}
+				$(".module.activity .activity_expeditionPlanner .estimated_time")
+					.attr("title", resetTimeTips.join("\n"));
+			}
 
 			// setup expedition item colors
 			$( ".activity_expeditionPlanner .expedition_entry" ).each( function(i,v) {
@@ -4097,7 +4115,7 @@
 
 			// hide GS rate if user does not intend doing so.
 			$(".module.activity .activity_expeditionPlanner .row_gsrate")
-				.toggle( plannerIsGreatSuccess );
+				.toggle(plannerIsGreatSuccess);
 
 			var markFailed = function (jq) {
 				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
@@ -4114,11 +4132,12 @@
 			//		 false: check failed
 			//		 true: check passed
 			//		 <other values>: no effect
+			// dataActual: like dataResult, actual fleet value
 			// jq: the jq object
-			// postActions: (optional) call postActions(dataReq,dataResult,jq) perform actions after jq object is properly set.
-			//				note that postActions is only called if the requirement is not null
-			//				the default action is setting the requirement to jq text
-			var setupJQObject = function( dataReq, dataResult, jq, postActions ) {
+			// postActions: (optional) call postActions(dataReq,dataResult,jq, dataActual)
+			//				perform actions after jq object is properly set.
+			//				note that postActions is only called if the requirement is not null.
+			var setupJQObject = function(dataReq, dataResult, dataActual, jq, postActions) {
 				if (dataReq === null) {
 					jq.hide();
 				} else {
@@ -4130,98 +4149,93 @@
 						// when this condition is met
 						markPassed( jq );
 					}
-					var setJQText = function( dataReq, dataResult, jq ) { jq.text( dataReq ); };
-					postActions = postActions || setJQText;
-					postActions( dataReq, dataResult, jq );
+					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();
+					if (typeof(postActions) === "function")
+						postActions(dataReq, dataResult, jq, dataActual);
 				}
 			};
 
 			setupJQObject(
 				ExpdReqPack.flagShipLevel,
 				ExpdCheckerResult.flagShipLevel,
+				fleet[0] && fleet[0].level,
 				$(".module.activity .activity_expeditionPlanner .flagshipLv"));
 
 
 			setupJQObject(
 				ExpdReqPack.flagShipTypeOf,
 				ExpdCheckerResult.flagShipTypeOf,
+				null,
 				$(".module.activity .activity_expeditionPlanner .flagshipType"));
 
 			setupJQObject(
 				ExpdReqPack.shipCount === 1 ? expedMaster.api_deck_num : ExpdReqPack.shipCount,
 				ExpdCheckerResult.shipCount,
-				$(".module.activity .activity_expeditionPlanner .shipNum"),
-				function(dataReq, dataResult, jq) {
-					jq.text(dataReq);
-					if (Array.isArray(expedMaster.api_sample_fleet)) {
-						jq.parent().attr("title", "{0}: {1}".format(KC3Meta.term("ExpedSampleFleet"),
-							expedMaster.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
-						)).lazyInitTooltip();
-					}
-				});
+				fleet.length,
+				$(".module.activity .activity_expeditionPlanner .shipNum")
+			);
+			if (Array.isArray(expedMaster.api_sample_fleet)) {
+				$(".module.activity .activity_expeditionPlanner .shipNum").parent().attr("title",
+				"{0}: {1}".format(KC3Meta.term("ExpedSampleFleet"),
+					expedMaster.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
+				)).lazyInitTooltip();
+			}
 
 			setupJQObject(
 				ExpdReqPack.levelCount,
 				ExpdCheckerResult.levelCount,
+				fleet.map(f => f.level).sumValues(),
 				$(".module.activity .activity_expeditionPlanner .fleetLv")
 			);
-			if (ExpdReqPack.levelCount === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLv").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLv").show();
-			}
+			$(".module.activity .activity_expeditionPlanner .hasTotalLv")
+				.toggle(ExpdReqPack.levelCount !== null);
 
 			setupJQObject(
 				ExpdReqPack.totalAsw,
 				ExpdCheckerResult.totalAsw,
+				fleet.map(f => f.asw).sumValues(),
 				$(".module.activity .activity_expeditionPlanner .totalAsw")
 			);
-			if (ExpdReqPack.totalAsw === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalAsw").show();
-			}
+			$(".module.activity .activity_expeditionPlanner .hasTotalAsw")
+				.toggle(ExpdReqPack.totalAsw !== null);
+
 			setupJQObject(
 				ExpdReqPack.totalAa,
 				ExpdCheckerResult.totalAa,
+				fleet.map(f => f.aa).sumValues(),
 				$(".module.activity .activity_expeditionPlanner .totalAa")
 			);
-			if (ExpdReqPack.totalAa === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalAa").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalAa").show();
-			}
+			$(".module.activity .activity_expeditionPlanner .hasTotalAa")
+				.toggle(ExpdReqPack.totalAa !== null);
+
 			setupJQObject(
 				ExpdReqPack.totalLos,
 				ExpdCheckerResult.totalLos,
+				fleet.map(f => f.los).sumValues(),
 				$(".module.activity .activity_expeditionPlanner .totalLos")
 			);
-			if (ExpdReqPack.totalLos === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLos").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalLos").show();
-			}
+			$(".module.activity .activity_expeditionPlanner .hasTotalLos")
+				.toggle(ExpdReqPack.totalLos !== null);
+
 			setupJQObject(
 				ExpdReqPack.totalFp,
 				ExpdCheckerResult.totalFp,
+				fleet.map(f => f.fp).sumValues(),
 				$(".module.activity .activity_expeditionPlanner .totalFp")
 			);
-			if (ExpdReqPack.totalFp === null) {
-				$(".module.activity .activity_expeditionPlanner .hasTotalFp").hide();
-			} else {
-				$(".module.activity .activity_expeditionPlanner .hasTotalFp").show();
-			}
+			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
+				.toggle(ExpdReqPack.totalFp !== null);
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,
 				ExpdCheckerResult.fleetSType,
-				$( ".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition" ),
-				function ( dataReq, dataResult, jq ) {
-					jq.empty();
-					$.each( dataReq, function(index, value){
+				null,
+				$(".module.activity .activity_expeditionPlanner .expPlanner_req_fleetComposition"),
+				function (dataReq, dataResult, jq) {
+					jq.empty().removeAttr("title");
+					$.each(dataReq, function(index, value) {
 						var shipReqBox = $("#factory .expPlanner_shipReqBox")
-							.clone()
-							.appendTo( jq );
+							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
 						// alternative DE/CVE patterns for exped 4, 5, 9, 42, A3, A4:
@@ -4246,81 +4260,35 @@
 			setupJQObject(
 				ExpdReqPack.drumCount,
 				ExpdCheckerResult.drumCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterNum" ));
+				fleet.map(f => f.drumCount).sumValues(),
+				$(".module.activity .activity_expeditionPlanner .canisterNum")
+			);
 
 			setupJQObject(
 				ExpdReqPack.drumCarrierCount,
 				ExpdCheckerResult.drumCarrierCount,
-				$( ".module.activity .activity_expeditionPlanner .canisterShipNum" )
+				fleet.map(f => f.drumCount > 0 & 1).sumValues(),
+				$(".module.activity .activity_expeditionPlanner .canisterShipNum")
 			);
-			if (ExpdReqPack.drumCount === null &&
-				ExpdReqPack.drumCarrierCount === null) {
-				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).hide();
-			} else {
-				$( ".module.activity .activity_expeditionPlanner .canister_criterias" ).show();
-			}
+			$(".module.activity .activity_expeditionPlanner .canister_criterias")
+				.toggle(ExpdReqPack.drumCount !== null ||
+					ExpdReqPack.drumCarrierCount !== null);
 
 			if (fleetObj.isSupplied()) {
-				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).show();
-				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelSupplied"));
-
-				markPassed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck") );
+				$(".module.activity .activity_expeditionPlanner .icon.supplyCheck").show();
+				$(".module.activity .activity_expeditionPlanner .text.supplyCheck").text(KC3Meta.term("PanelSupplied"));
+				markPassed($(".module.activity .activity_expeditionPlanner .text.supplyCheck"));
 			} else {
-				$( ".module.activity .activity_expeditionPlanner .icon.supplyCheck" ).hide();
-				$( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ).text(KC3Meta.term("PanelUnderSupplied"));
-
-				markFailed( $( ".module.activity .activity_expeditionPlanner .text.supplyCheck" ) );
+				$(".module.activity .activity_expeditionPlanner .icon.supplyCheck").hide();
+				$(".module.activity .activity_expeditionPlanner .text.supplyCheck").text(KC3Meta.term("PanelUnderSupplied"));
+				markFailed($(".module.activity .activity_expeditionPlanner .text.supplyCheck"));
 			}
 
 			if (condCheckWithoutResupply && fleetObj.isSupplied()) {
-				markPassed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+				markPassed($(".module.activity .activity_expeditionPlanner .dropdown_title"));
 			} else {
-				markFailed( $(".module.activity .activity_expeditionPlanner .dropdown_title") );
+				markFailed($(".module.activity .activity_expeditionPlanner .dropdown_title"));
 			}
-
-			return;
-
-				/*
-				 *
-				 * Sample result for ExpdReqPack and ExpdCheckerResult on expedition 21#
-				 *
-				 * {
-						"flagShipLevel":15,
-						"shipCount":5,
-						"flagShipTypeOf":null,
-						"levelCount":30,
-						"drumCount":null,
-						"drumCarrierCount":3,
-						"fleetSType":[
-							{
-								"stypeReqCount":1,
-								"stypeOneOf":[
-									"CL"
-								]
-							},
-							{
-								"stypeReqCount":4,
-								"stypeOneOf":[
-									"DD"
-								]
-							}
-						]
-					}
-					---------------------
-					{
-						"flagShipLevel":true,
-						"shipCount":false,
-						"flagShipTypeOf":null,
-						"levelCount":true,
-						"drumCount":null,
-						"drumCarrierCount":false,
-						"fleetSType":[
-							true,
-							false
-						]
-					}
-				 */
-
 		},
 		
 		GunFit: function(data) {
