@@ -272,8 +272,9 @@ Contains summary information about a fleet and its ships
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
 			} else {
-				// asw with equipment is a special case
-				ss.as = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw();
+				// asw with equipment is a special case, only some equip types counted
+				ss.as = ship.nakedAsw()
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
@@ -285,7 +286,6 @@ Contains summary information about a fleet and its ships
 					ss.aa += gear.aaStatImprovementBonus();
 					//ss.ar += gear.armorStatImprovementBonus();
 					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
-					ss.as += gear.attackPowerImprovementBonus("asw");
 					ss.ls += gear.losStatImprovementBonus();
 					ss.ht += gear.accStatImprovementBonus(includeImproveType);
 				});

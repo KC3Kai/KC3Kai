@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190625 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190808 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -574,6 +574,48 @@ KC3改 Equipment Object
 						multiple: { "houg": 4 },
 					},
 				],
+			},
+			// Type 96 Fighter
+			"19": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
+						multiple: { "houg": 1, "tais": 2 },
+					},
+					// Kasugamaru Class
+					"75": "76",
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+				},
+				byShip: {
+					// All CVL +1 aa, +1 ev
+					stype: [7],
+					multiple: { "tyku": 1, "houk": 1 },
+				},
+			},
+			// Type 96 Fighter Kai
+			"228": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
+						multiple: { "houg": 1, "tyku": 1, "tais": 2, "houk": 1 },
+					},
+					// Kasugamaru Class
+					"75": "76",
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+				},
+				byShip: {
+					// All CVL +1 aa, +1 ev, +2 asw
+					stype: [7],
+					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
+				},
 			},
 			// Reppuu Kai (Prototype Carrier-based Model)
 			"335": {
