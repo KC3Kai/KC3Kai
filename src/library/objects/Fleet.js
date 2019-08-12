@@ -281,7 +281,7 @@ Contains summary information about a fleet and its ships
 			if(includeImproveType) {
 				// TODO use accurate types
 				ship.equipment(true).forEach(gear => {
-					ss.fp += gear.attackPowerImprovementBonus("fire");
+					ss.fp += gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire");
 					ss.tp += gear.attackPowerImprovementBonus("torpedo");
 					ss.aa += gear.aaStatImprovementBonus();
 					//ss.ar += gear.armorStatImprovementBonus();

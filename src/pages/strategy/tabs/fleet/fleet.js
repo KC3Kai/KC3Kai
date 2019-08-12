@@ -416,7 +416,7 @@
 
 			// Show fleet info
 			const fstats = kcFleet.totalStats(true);
-			const fstatsImp = kcFleet.totalStats(true, "fire");
+			const fstatsImp = kcFleet.totalStats(true, "exped");
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
 				.attr("title", "{4}: -\u2605\t+\u2605\n{0}: {5}\t{9}\n{1}: {6}\t{10}\n{2}: {7}\t{11}\n{3}: {8}\t{12}".format(
 					KC3Meta.term("ExpedTotalFp"),
