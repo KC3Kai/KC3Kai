@@ -50,7 +50,7 @@ KC3改 Equipment Object
 	 * @see https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus - about naming of this bonus type
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see URLs some other summary tables:
-	 *  * [20190625 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20190808 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -574,6 +574,48 @@ KC3改 Equipment Object
 						multiple: { "houg": 4 },
 					},
 				],
+			},
+			// Type 96 Fighter
+			"19": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
+						multiple: { "houg": 1, "tais": 2 },
+					},
+					// Kasugamaru Class
+					"75": "76",
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+				},
+				byShip: {
+					// All CVL +1 aa, +1 ev
+					stype: [7],
+					multiple: { "tyku": 1, "houk": 1 },
+				},
+			},
+			// Type 96 Fighter Kai
+			"228": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
+						multiple: { "houg": 1, "tyku": 1, "tais": 2, "houk": 1 },
+					},
+					// Kasugamaru Class
+					"75": "76",
+					// Houshou Class
+					"27": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+				},
+				byShip: {
+					// All CVL +1 aa, +1 ev, +2 asw
+					stype: [7],
+					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
+				},
 			},
 			// Reppuu Kai (Prototype Carrier-based Model)
 			"335": {
@@ -2464,7 +2506,7 @@ KC3改 Equipment Object
 	 * Modifiers might be broken into a JSON for better maintenance.
 	 * 
 	 * @param {string} type - attack type identifier, allow values for now:
-	 *                        `fire`, `torpedo`, `yasen`, `asw`, `support`
+	 *                        `fire`, `torpedo`, `yasen`, `asw`, `support`, `exped`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
 	 * @see accStatImprovementBonus for accuracy improvement bonus
 	 * @see losStatImprovementBonus for LoS improvement bonus
@@ -2546,6 +2588,37 @@ KC3改 Equipment Object
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
+				break;
+			case "exped":
+				// Fire power bonus for some combat expeditions, such as 43, B4
+				// https://twitter.com/syoukuretin/status/1156734476870811648
+				switch(type2) {
+					case 1: // Small Cal. Main
+					case 2: // Medium Cal. Main
+					case 18: // Type 3 Shell
+					case 19: // AP Shell
+					case 21: // AA Machine Gun
+					case 29: // Searchlight
+					case 42: // Large Searchlight
+					case 36: // AA Fire Director
+						modifier = 1; break;
+					case 3: // Large Cal. Main
+						modifier = 1.5; break;
+					case 4: // Secondary
+						// 0.2 per star for green HA guns,
+						// 0.3 per star for yellow guns,
+						modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
+						return modifier * stars;
+					case 8: // Torpedo Bomber
+					case 58: // Jet Torpedo Bomber
+						return 0.2 * stars;
+					case 14: // Sonar
+					case 40: // Large Sonar
+						modifier = 0.75; break;
+					case 15: // Depth Charge (Projector)
+						modifier = this.isDepthCharge() ? 0 : 0.75;
+						break;
+				}
 				break;
 			default:
 				console.warn("Unknown attack type:", type);

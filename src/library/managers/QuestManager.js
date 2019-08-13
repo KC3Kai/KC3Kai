@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [330, 426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893, 894],
+				questIds: [284, 330, 426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 872, 873, 875, 888, 893, 894],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -493,6 +493,12 @@ Uses KC3Quest objects to play around with
 						return fleet.countShipType([3, 4, 7, 21]) >= 1
 							&& fleet.countShipType([1, 2]) >= 3;
 					},
+				"284": // Bq11 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([3, 4, 7, 21]) >= 1
+							&& fleet.countShipType([1, 2]) >= 3;
+					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -542,6 +548,8 @@ Uses KC3Quest objects to play around with
 						return fleet.countShipType(16) >= 1
 							&& fleet.countShipType(3) >= 2;
 					},
+				"872": // Bq10 Sortie 1st fleet
+					() => KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1,
 				"873": // Bq5 Sortie 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
