@@ -3335,7 +3335,8 @@
 			if(!ConfigManager.info_pvp_info)
 				return;
 			console.debug("PvP Enemy List", data);
-			const jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];			const lines2Array = (s) => (s || "").split(/[\r\n]/).filter(l => !!l);
+			const jpRankArr = ["","\u5143\u5e25","\u5927\u5c06","\u4e2d\u5c06","\u5c11\u5c06","\u5927\u4f50","\u4e2d\u4f50","\u65b0\u7c73\u4e2d\u4f50","\u5c11\u4f50","\u4e2d\u5805\u5c11\u4f50","\u65b0\u7c73\u5c11\u4f50"];
+			const lines2Array = (s) => (s || "").split(/[\r\n]/).filter(l => !!l);
 			const pvpFriends = lines2Array(ConfigManager.pan_pvp_friends);
 			const pvpFriendToggleFunc = function(e) {
 				const enemyBox = $(this).parent();
@@ -3348,8 +3349,8 @@
 					pvpFriends.push(name);
 				}
 				// to indicate if there are other same names existed in list after removing
-				$(this).toggleClass("friend", pvpFriends.includes(name));
 				enemyBox.toggleClass("friend", pvpFriends.includes(name));
+				ConfigManager.pan_pvp_friends = pvpFriends.join("\n");
 				ConfigManager.save();
 			};
 			$(".activity_pvp .pvp_header .pvp_create_kind").text(
