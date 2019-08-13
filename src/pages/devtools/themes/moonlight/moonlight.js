@@ -1877,7 +1877,7 @@
 					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
 						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
 					const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-					const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "fire");
+					const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
 					tips += (!tips ? "" : "\n")
 						+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
 						+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
@@ -4057,12 +4057,13 @@
 				// to be confirmed: improvement bonus only counted for these new expeds OR all expeds?
 				var includeImprove = [43, 113].includes(selectedExpedition);
 				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
-				var asw = ship.nakedAsw() + Math.floor(ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove));
+				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
 				if(includeImprove) {
-					// unknown: should be floored here?
-					los += Math.floor(ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues());
-					aa += Math.floor(ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues());
-					fp += Math.floor(ship.equipment(true).map(g => g.attackPowerImprovementBonus("fire")).sumValues());
+					// Should be floored after summing up all ships' stats
+					// https://twitter.com/CainRavenK/status/1157636860933337089
+					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
+					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
+					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4299,7 +4300,7 @@
 			setupJQObject(
 				ExpdReqPack.totalAsw,
 				ExpdCheckerResult.totalAsw,
-				fleet.map(f => f.asw).sumValues(),
+				Math.floor(fleet.map(f => f.asw).sumValues()),
 				$(".module.activity .activity_expeditionPlanner .totalAsw")
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAsw")
@@ -4308,7 +4309,7 @@
 			setupJQObject(
 				ExpdReqPack.totalAa,
 				ExpdCheckerResult.totalAa,
-				fleet.map(f => f.aa).sumValues(),
+				Math.floor(fleet.map(f => f.aa).sumValues()),
 				$(".module.activity .activity_expeditionPlanner .totalAa")
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAa")
@@ -4317,7 +4318,7 @@
 			setupJQObject(
 				ExpdReqPack.totalLos,
 				ExpdCheckerResult.totalLos,
-				fleet.map(f => f.los).sumValues(),
+				Math.floor(fleet.map(f => f.los).sumValues()),
 				$(".module.activity .activity_expeditionPlanner .totalLos")
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalLos")
@@ -4326,7 +4327,7 @@
 			setupJQObject(
 				ExpdReqPack.totalFp,
 				ExpdCheckerResult.totalFp,
-				fleet.map(f => f.fp).sumValues(),
+				Math.floor(fleet.map(f => f.fp).sumValues()),
 				$(".module.activity .activity_expeditionPlanner .totalFp")
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
