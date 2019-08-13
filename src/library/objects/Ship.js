@@ -876,11 +876,14 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false, forExped = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		// But for expeditions, some types might be counted
+		// https://twitter.com/syoukuretin/status/1156734476870811648
+		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
+		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -1601,11 +1604,12 @@ KC3改 Ship Object
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
 		// TODO investigate difference between these and WG42
-		// Type4 20cm Rocket might be the same? devs said Type2 12cm Mortars anti-land 'limited'
 		const type4RocketCount = this.countEquipment(348);
 		const mortarCount = this.countEquipment([346, 347]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
+		let type4RocketBonus = 1;
+		let mortarBonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
@@ -1614,13 +1618,19 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
+			const type4RocketAdditive = type4RocketCount > 0 ? 55 : 0;
+			const mortarAdditive = mortarCount > 0 ? 30 : 0;
+			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
+					type4RocketBonus = [1, 1.25][type4RocketCount] || 1.25;
+					mortarBonus = [1, 1.2][mortarCount] || 1.2;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive + shikonBonus + submarineBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [rocketsAdditive + shikonBonus + submarineBonus,
+						t3Bonus * landingBonus * wg42Bonus * type4RocketBonus * mortarBonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1631,22 +1641,22 @@ KC3改 Ship Object
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
-					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive + shikonBonus +  submarineBonus, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus];
+					// Set additive modifier, multiply multiplicative modifiers
+					return [rocketsAdditive + shikonBonus +  submarineBonus,
+						seaplaneBonus * lightShipBonus * wg42Bonus * apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
-					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+					// Set additive modifier, multiply multiplicative modifiers
+					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
 				
 				case 5: // Summer Harbor Princess
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.8 : 1;
 					// Missing: AP Shell modifier, SPB/SPF modifier
-					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
