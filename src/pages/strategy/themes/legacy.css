@@ -1265,6 +1265,9 @@ body {
 .tab_fleet .fleet_ship .ship_pic img {
 	width:48px;
 	height:48px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_fleet .fleet_ship .ship_tiny_stats {
 	float:left;
@@ -1739,10 +1742,10 @@ body {
 	background: #def;
 }
 .tab_quotes .part_right .voice_entity.inherit .source {
-    color: blue;
+	color: blue;
 }
 .tab_quotes .part_right .voice_entity.direct .source {
-    color: green;
+	color: green;
 }
 /* TRANSLATIONS
 --------------------------------*/

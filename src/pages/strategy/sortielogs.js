@@ -1339,20 +1339,38 @@
 					if(sortieData.combined) {
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+							rcontext.save();
+							rcontext.beginPath();
+							rcontext.arc((43 + (60 * shipIndex)) * scale, (25 + (227 * scale)),25,0,2*Math.PI);
+							rcontext.closePath();
+							rcontext.clip();
+							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
 								(18 + (60 * shipIndex)) * scale, 227 * scale, 50 * scale, 50 * scale);
+							rcontext.restore();
 						});
 						$.each(sortieData.fleet2, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+							rcontext.save();
+							rcontext.beginPath();
+							rcontext.arc((63 + (60 * shipIndex)) * scale, (18 + (253 * scale)),17,0,2*Math.PI);
+							rcontext.closePath();
+							rcontext.clip();
+							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
 								(45 + (60 * shipIndex)) * scale, 253 * scale, 35 * scale, 35 * scale);
+							rcontext.restore();
 						});
 					} else {
 						var shipImageSize = Math.min(55, 300 / fleetUsed.length);
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-							rcontext.drawImage(shipIconImage, 0, 0, 70, 70,
+							rcontext.save();
+							rcontext.beginPath();
+							rcontext.arc((shipImageSize + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (83 - shipImageSize)) * scale,25,0,2*Math.PI);
+							rcontext.closePath();
+							rcontext.clip();
+							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
 								((shipImageSize / 2) + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (65 - shipImageSize) / 2) * scale, shipImageSize * scale, shipImageSize * scale);
+							rcontext.restore();
 						});
 					}
 					
