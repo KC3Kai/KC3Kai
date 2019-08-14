@@ -784,7 +784,7 @@ KC3改 Ship Object
 					}
 				}
 				if (gear.path) {
-					if (typeof gear.path === "string") { gear.path = gear[type][gear.path]; }
+					if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
 
 					const count = gear.count;
@@ -876,11 +876,14 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false, forExped = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
-		const noCountEquipType2Ids = [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		// But for expeditions, some types might be counted
+		// https://twitter.com/syoukuretin/status/1156734476870811648
+		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
+		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -894,7 +897,8 @@ KC3改 Ship Object
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
-				!noCountEquipType2Ids.includes(g.master().api_type[2]) ? g.master().api_tais : 0
+				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 :
+					g.master().api_tais + (!!includeImprove && g.attackPowerImprovementBonus("asw"))
 			).sumValues();
 		return equipmentTotalAsw;
 	};
@@ -1395,14 +1399,18 @@ KC3改 Ship Object
 			this.equipmentTotalImprovementBonus("torpedo");
 	};
 
+	KC3Ship.prototype.isAswAirAttack = function(){
+		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
+		return this.estimateDayAttackType(1530, false)[0] === "AirAttack";
+	};
+
 	/**
 	 * Get pre-cap anti-sub power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#AntiSubmarine
 	 */
 	KC3Ship.prototype.antiSubWarfarePower = function(aswDiff = 0){
 		if(this.isDummy()) { return 0; }
-		// check asw attack type, 1530 is Abyssal Submarine Ka-Class
-		const isAirAttack = this.estimateDayAttackType(1530, false)[0] === "AirAttack";
+		const isAirAttack = this.isAswAirAttack();
 		const attackMethodConst = isAirAttack ? 8 : 13;
 		const nakedAsw = this.nakedAsw() + aswDiff;
 		// only asw stat from partial types of equipment taken into account
@@ -1415,7 +1423,8 @@ KC3改 Ship Object
 		let synergyModifier = 1;
 		// new DC + DCP synergy (x1.1 / x1.25)
 		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
-		// T3DCP CD and 15cm9t ASW Rocket are not counted yet, so `isDepthChargeProjectorEquipped` not used
+		// T3DCP CD, 15cm9t ASW Rocket and Type2 12cm Mortar Kais are not counted yet,
+		// so `isDepthChargeProjectorEquipped` not used
 		//const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
 		if(isNewDepthChargeEquipped && this.hasEquipment([44, 45])) {
 			// Large Sonar, like T0 Sonar, not counted here
@@ -1443,11 +1452,11 @@ KC3改 Ship Object
 	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
-		const hasWG42 = this.hasEquipment(126);
+		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
-		// WG42/landing craft-type eligible for all
-		if (hasWG42 || hasLandingCraft){
+		// WG42 variants/landing craft-type eligible for all
+		if (hasAntiLandRocket || hasLandingCraft){
 			possibleTypes = [1, 2, 3, 4, 5, 6];
 		}
 		// T3 Shell eligible for all except Pillbox
@@ -1594,8 +1603,13 @@ KC3改 Ship Object
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
+		// TODO investigate difference between these and WG42
+		const type4RocketCount = this.countEquipment(348);
+		const mortarCount = this.countEquipment([346, 347]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
+		let type4RocketBonus = 1;
+		let mortarBonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
@@ -1604,13 +1618,19 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
+			const type4RocketAdditive = type4RocketCount > 0 ? 55 : 0;
+			const mortarAdditive = mortarCount > 0 ? 30 : 0;
+			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
+					type4RocketBonus = [1, 1.25][type4RocketCount] || 1.25;
+					mortarBonus = [1, 1.2][mortarCount] || 1.2;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					return [wg42Additive + shikonBonus + submarineBonus, t3Bonus * landingBonus * wg42Bonus * seaplaneBonus];
+					return [rocketsAdditive + shikonBonus + submarineBonus,
+						t3Bonus * landingBonus * wg42Bonus * type4RocketBonus * mortarBonus * seaplaneBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1621,22 +1641,22 @@ KC3改 Ship Object
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
-					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive + shikonBonus +  submarineBonus, seaplaneBonus * lightShipBonus * wg42Bonus
-						* apShellBonus * landingBonus];
+					// Set additive modifier, multiply multiplicative modifiers
+					return [rocketsAdditive + shikonBonus +  submarineBonus,
+						seaplaneBonus * lightShipBonus * wg42Bonus * apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
-					// Set WG42 additive modifier, multiply multiplicative modifiers
-					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+					// Set additive modifier, multiply multiplicative modifiers
+					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
 				
 				case 5: // Summer Harbor Princess
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.8 : 1;
 					// Missing: AP Shell modifier, SPB/SPF modifier
-					return [wg42Additive, wg42Bonus * t3Bonus * landingBonus];
+					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -2172,11 +2192,12 @@ KC3改 Ship Object
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from Sonars taken into account confirmed.
 		const shipAsw = this.as[0] + aswDiff
-		// explicit asw bonus from Torpedo Bombers still not counted,
+		// explicit asw bonus from Fighters and Torpedo Bombers still not counted,
 		// confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
+		// 2019-08-09: https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AD%E5%BC%8F%E8%89%A6%E6%88%A6%E6%94%B9
 		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
 		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
-			- this.equipmentTotalStats("tais", true, true, true, [8]);
+			- this.equipmentTotalStats("tais", true, true, true, [6, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2204,13 +2225,15 @@ KC3改 Ship Object
 
 		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
 		//   but her initial naked asw too high to verify the lower threshold.
-		// Fusou-class Kai Ni can OASW with 1 Helicopter and asw >= 100.
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW shelling.
+		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
+		//   https://twitter.com/cat_lost/status/1146075888636710912
+		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW with Depth Charge.
 		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
-			return this.countEquipmentType(1, 15) >= 2 ||
-				this.countEquipmentType(1, 44) >= 1;
+			return (isHyuugaKaiNi || hasSonar) &&
+				(this.countEquipmentType(1, 15) >= 2 ||
+				this.countEquipmentType(1, 44) >= 1);
 		}
 
 		// for other ship types who can do ASW with Depth Charge
@@ -2439,7 +2462,6 @@ KC3改 Ship Object
 	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
 	 * @return the modifier, 1 by default for unknown conditions.
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
-	 * @see https://twitter.com/Nishisonic/status/1102223560754421760
 	 */
 	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -2517,6 +2539,7 @@ KC3改 Ship Object
 	/**
 	 * Colorado special cut-in attack modifiers are variant,
 	 * depending on equipment and 2nd and 3rd ship in the fleet.
+	 * @see https://twitter.com/syoukuretin/status/1132763536222969856
 	 */
 	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -2524,7 +2547,6 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.coloradoCutinShips.includes(flagshipMstId)) return 1;
 
-		// https://twitter.com/syoukuretin/status/1132763536222969856
 		const combinedModifierMaps = [
 			// No more mods for flagship?
 			{},
@@ -2747,7 +2769,9 @@ KC3改 Ship Object
 			if(landingAttackType > 0) {
 				return ["LandingAttack", landingAttackType];
 			}
-			const hasRocketLauncher = this.hasEquipmentType(2, 37);
+			// see `main.js#PhaseHougeki.prototype._hasRocketEffect` or same method of `PhaseHougekiBase`,
+			// and if base attack method is NOT air attack
+			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// no such ID -1, just mean higher priority
 			if(hasRocketLauncher) return ["Rocket", -1];
 		}
@@ -2898,48 +2922,64 @@ KC3改 Ship Object
 			
 			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E needed
 			if(isCarrierNightAirAttack) {
+				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
-				// https://twitter.com/Nishisonic/status/911143760544751616
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
 				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
 				const iwaiDBomberCnt = this.countNonZeroSlotEquipment(154);
 				// Swordfish variants
 				const swordfishTBomberCnt = this.countNonZeroSlotEquipment([242, 243, 244]);
-				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", 1.25);
-				if(nightFighterCnt >= 3)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", 1.18);
-				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", 1.18);
-				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", 1.18);
-				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", 1.18);
-				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", 1.18);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", 1.18);
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", 1.18);
-				// put this here not to mask previous 2 patterns, tho its rate might be higher
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2);
-				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30
-				// all patterns may not be found yet, regularly mod of 2 planes: 1.2, 3 planes: 1.18
+				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30,
+				// it more likely acts as yet unimplemented Night Dive Bomber type
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNTBFBP", 1.2);
+				// might extract this out for estimating unexpected damage actual pattern modifier
+				const ncvciModifier = (() => {
+					const otherCnt = photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
+					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return 1.25;
+					if(nightFighterCnt + nightTBomberCnt + otherCnt === 2) return 1.2;
+					if(nightFighterCnt + nightTBomberCnt + otherCnt >= 3) return 1.18;
+					return 1; // should not reach here
+				})();
+				// first place thank to its highest mod 1.25
+				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", ncvciModifier);
+				// 3 planes mod 1.18
+				if(nightFighterCnt >= 3)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", ncvciModifier);
+				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", ncvciModifier);
+				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", ncvciModifier);
+				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBIFBI", ncvciModifier);
+				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", ncvciModifier);
+				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", ncvciModifier);
+				if(nightFighterCnt >= 2 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNDB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBP", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBNDB", ncvciModifier);
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNDB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPFBI", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBPSF", 1.18);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier);
+				// 2 planes mod 1.2, put here not to mask previous patterns, tho proc rate might be higher
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", ncvciModifier);
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBP", 1.2);
+					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", ncvciModifier);
+				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
+					return KC3Ship.specialAttackTypeNight(6, "CutinNTBNDB", ncvciModifier);
 			} else {
 				// special Nelson Touch since 2018-09-15
 				if(this.canDoNelsonTouch()) {
@@ -3828,6 +3868,7 @@ KC3改 Ship Object
 			}[attackTypeDay[0]] || "Shelling";
 		const canAsw = shipObj.canDoASW();
 		if(canAsw){
+			const aswAttackType = shipObj.estimateDayAttackType(1530, false);
 			let power = shipObj.antiSubWarfarePower();
 			let criticalPower = false;
 			let isCapped = false;
@@ -3845,13 +3886,13 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, "Antisub", undefined, undefined,
-						true, attackTypeDay[0] === "AirAttack").power;
+						true, aswAttackType[0] === "AirAttack").power;
 				}
 				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
 			let attackTypeIndicators = !canShellingAttack || !canAsw ?
 				KC3Meta.term("ShipAttackTypeNone") :
-				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
+				KC3Meta.term("ShipAttackType" + aswAttackType[0]);
 			if(canOpeningTorp) attackTypeIndicators += ", {0}"
 				.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
 			if(canClosingTorp) attackTypeIndicators += ", {0}"

@@ -416,14 +416,20 @@
 
 			// Show fleet info
 			const fstats = kcFleet.totalStats(true);
+			const fstatsImp = kcFleet.totalStats(true, "exped");
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
-				.attr("title", "{0}: {4}\n{1}: {5}\n{2}: {6}\n{3}: {7}".format(
+				.attr("title", "{4}: -\u2605\t+\u2605\n{0}: {5}\t{9}\n{1}: {6}\t{10}\n{2}: {7}\t{11}\n{3}: {8}\t{12}".format(
 					KC3Meta.term("ExpedTotalFp"),
 					KC3Meta.term("ExpedTotalAa"),
 					KC3Meta.term("ExpedTotalAsw"),
 					KC3Meta.term("ExpedTotalLos"),
-					fstats.fp, fstats.aa, fstats.as, fstats.ls)
-				);
+					KC3Meta.term("ExpedTotalImp"),
+					fstats.fp, fstats.aa, fstats.as, fstats.ls,
+					Math.qckInt("floor", fstatsImp.fp , 1),
+					Math.qckInt("floor", fstatsImp.aa , 1),
+					Math.qckInt("floor", fstatsImp.as , 1),
+					Math.qckInt("floor", fstatsImp.ls , 1)
+				));
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
 			if(ConfigManager.elosFormula > 1) {
@@ -569,7 +575,8 @@
 				return;
 			}
 			const masterData = kcGear.master();
-			const slotMaxSize = kcShip.master().api_maxeq[index];
+			// to avoid red slot size 1 when Large Flying Boat equipped
+			const slotMaxSize = masterData.api_type[2] === 41 ? 1 : kcShip.master().api_maxeq[index];
 			const isExslot = index >= kcShip.slotnum;
 			// ex-slot capacity not implemented yet, no aircraft equippable
 			$(".slot_capacity", gearBox).text(isExslot ? "-" : capacity)
@@ -593,20 +600,22 @@
 				.click(function(){
 					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				});
-			$(".gear_name", gearBox).text(kcGear.name());
+			$(".gear_name", gearBox).text(kcGear.name()).attr("title",
+				kcGear.htmlTooltip(capacity, kcShip)).lazyInitTooltip();
 			if(kcGear.stars > 0){
-				$(".gear_stars", gearBox).text
-					("\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)
-				).show();
+				$(".gear_stars", gearBox).text(
+					"\u2605{0}".format(kcGear.stars >= 10 ? "m" : kcGear.stars)
+				);
+			} else {
+				$(".gear_stars", gearBox).hide();
 			}
 			if(kcGear.ace > 0){
-				$(".gear_ace img", gearBox).attr("src", "/assets/img/client/achev/" +
-					Math.min(kcGear.ace, 7) + ".png");
-				$(".gear_ace", gearBox).show();
+				$(".gear_ace img", gearBox).attr("src",
+					"/assets/img/client/achev/" + Math.min(kcGear.ace, 7) + ".png"
+				);
+			} else {
+				$(".gear_ace", gearBox).hide();
 			}
-			$(".gear_name", gearBox).attr("title",
-				kcGear.htmlTooltip(capacity, kcShip))
-				.lazyInitTooltip();
 			gearBox.toggleClass("ex_slot", isExslot).show();
 		},
 

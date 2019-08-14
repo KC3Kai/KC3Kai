@@ -247,9 +247,8 @@
 				"married": 0.6
 			},
 			"weight5": {
-				"day": -5,
-				"night": -5,
-				"married": 0.4
+				"day": 0,
+				"night": 0
 			},
 			"weight6": {
 				"day": -2,

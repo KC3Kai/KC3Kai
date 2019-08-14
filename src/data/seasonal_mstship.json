@@ -3187,5 +3187,77 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5398": {
+		"api_id": 5398,
+		"api_name": "梅雨天霧",
+		"api_yomi": "あまぎり",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5399": {
+		"api_id": 5399,
+		"api_name": "梅雨早波",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5400": {
+		"api_id": 5400,
+		"api_name": "梅雨佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5401": {
+		"api_id": 5401,
+		"api_name": "梅雨Gambier Bay",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5402": {
+		"api_id": 5402,
+		"api_name": "梅雨大井",
+		"api_yomi": "おおい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5403": {
+		"api_id": 5403,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5404": {
+		"api_id": 5404,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5405": {
+		"api_id": 5405,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5406": {
+		"api_id": 5406,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

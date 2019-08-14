@@ -1781,6 +1781,8 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
+					 4:"screws",
+					 5:"coin",
 					10:"box1",
 					11:"box2",
 					12:"box3",

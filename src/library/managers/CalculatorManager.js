@@ -468,26 +468,34 @@
                 nextPtCutoff.shiftHour(-1);
             }
         }
+        // Next monthly expedition reset time (15th JST 1200)
+        const utc3am15th = new Date(now);
+        utc3am15th.setUTCHours(3, 0, 0, 0);
+        utc3am15th.setUTCDate(15);
+        if(utc3am15th.getTime() < now) utc3am15th.shiftMonth(1);
         return {
             quest: utc8pm.getTime(),
             pvp: nextPvPstamp,
             rank: nextPtCutoff.getTime(),
             quarterly: quarterlyUtc8pm,
+            exped: utc3am15th.getTime(),
         };
     };
 
     /**
      * Calculates remaining time until next in-game Quest/PvP/RankPtCutOff reset.
      * @param {number} now - timestamp of 'now', current timestamp by default.
+     * @param {number} expedLimitTimestamp - monthly exped reset timestamp from API result.
      * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank, quarterly}.
      */
-    const remainingTimeUntilNextResets = (now = Date.now()) => {
+    const remainingTimeUntilNextResets = (now = Date.now(), expedLimitTimestamp = 0) => {
         const nextResets = nextResetsTimestamp(now);
         return {
             quest: String(Math.floor((nextResets.quest - now) / 1000)).toHHMMSS(),
             pvp: String(Math.floor((nextResets.pvp - now) / 1000)).toHHMMSS(),
             rank: String(Math.floor((nextResets.rank - now) / 1000)).toHHMMSS(),
             quarterly: String(Math.floor((nextResets.quarterly - now) / 1000)).toHHMMSS(true),
+            exped: String(Math.floor(((expedLimitTimestamp || nextResets.exped) - now) / 1000)).toHHMMSS(true),
         };
     };
 
