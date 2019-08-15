@@ -2637,6 +2637,7 @@ KC3改 Equipment Object
 		const stars = this.stars || 0;
 		let modifier = 0;
 		switch(type.toLowerCase()) {
+			case "exped":
 			case "fire":
 				// Main gun/Secondary gun/AP shell/AAFD/Searchlight
 				// wikia says Sonar gives shelling acc bonus?
@@ -2663,6 +2664,9 @@ KC3改 Equipment Object
 				if([14, 40].includes(type2))
 					modifier = 1.3;
 				break;
+			case "support":
+				// unknown
+				break;
 			default:
 				console.warn("Unknown attack type:", type);
 		}
@@ -2680,6 +2684,7 @@ KC3改 Equipment Object
 		const stars = this.stars || 0;
 		let modifier = 0;
 		switch(type.toLowerCase()) {
+			case "exped":
 			case "fire":
 				// Engine Boiler
 				if(type2 === 17) modifier = 1.5;
@@ -2690,7 +2695,6 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// unknown
-				break;
 			case "asw":
 				// unknown
 				break;

@@ -1618,16 +1618,16 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
-			const type4RocketAdditive = type4RocketCount > 0 ? 55 : 0;
-			const mortarAdditive = mortarCount > 0 ? 30 : 0;
+			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115][type4RocketCount] || 115;
+			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75][mortarCount] || 75;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.3;
-					type4RocketBonus = [1, 1.25][type4RocketCount] || 1.25;
-					mortarBonus = [1, 1.2][mortarCount] || 1.2;
+					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.8;
+					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount] || 1.875;
+					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount] || 1.56;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
 					return [rocketsAdditive + shikonBonus + submarineBonus,
 						t3Bonus * landingBonus * wg42Bonus * type4RocketBonus * mortarBonus * seaplaneBonus];
