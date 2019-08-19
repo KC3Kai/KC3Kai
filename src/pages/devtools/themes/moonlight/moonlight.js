@@ -473,6 +473,15 @@
 			$(".admiral_lvtxt,.admiral_points").css("font-size", 12);
 			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
 		}
+		if(ConfigManager.moon_lighting_effect == false) {
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status").css("background-image", "none", "important");
+			$(".lship,.sship").css("background-image", "none", "important");
+			$(".activity_body").css("background-image", "none", "important");
+		}
+		else {
+			$(".admiral,.activity_body,.expeditions3,.summary,.status").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%)", "important");
+			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%)", "important");
+		}
 
 		// Accommodate Korean's very large text without redoing the layout for everyone else
 		if(ConfigManager.language == "kr") {

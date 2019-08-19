@@ -1167,6 +1167,14 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "pan_pvp_friends",
+				"name" : "SettingsPanelPvPFriends",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelPvPFriendsTip"
+				}
 			}
 		]
 	},
@@ -1224,14 +1232,6 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsPanelCustomCSSTip"
-				}
-			},
-			{
-				"id" : "pan_pvp_friends",
-				"name" : "SettingsPanelPvPFriends",
-				"type" : "textarea",
-				"options" : {
-					"tooltip" : "SettingsPanelPvPFriendsTip"
 				}
 			}
 		]
@@ -1314,6 +1314,12 @@
 			{
 				"id" : "moon_small_font",
 				"name" : "MoonSmallFont",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "moon_lighting_effect",
+				"name" : "MoonLightingEffect",
 				"type" : "check",
 				"options" : {}
 			},

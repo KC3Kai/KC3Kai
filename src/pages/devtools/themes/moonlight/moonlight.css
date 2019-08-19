@@ -255,7 +255,6 @@ html,body {
 	width:190px;
 	height:40px;
 	border-radius:5px;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%) !important;
 }
 .module.admiral .admiral_level {
 	width:60px;
@@ -407,7 +406,6 @@ html,body {
 	border-radius:5px;
 	overflow:hidden;
 	white-space:initial;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.12) 70%, rgba(200, 200, 255, 0.2) 85%, rgba(200, 200, 255, 0.5) 99%) !important;
 }
 .module.activity .activity_box {
 	width:190px;
@@ -625,7 +623,6 @@ html,body {
 /* Top-Left Expedition window */
 .module.expeditions3 {
 	border-radius:5px;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%) !important;
 }
 .module.expeditions3 .expeditions {
 	position:absolute;
@@ -642,7 +639,6 @@ html,body {
 /* Bottom right expedition window */
 .module.expeditions2 {
 	border-radius:5px;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%) !important;
 }
 .module.expeditions2 .expeditions {
 	width:100px;
@@ -3342,7 +3338,6 @@ ABYSS FLEET
 }
 .module.summary {
 	border-radius:5px;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%) !important;
 }
 .rotation .rotarHidden {
 	position:absolute;
@@ -4785,7 +4780,6 @@ ABYSS FLEET
 }
 .module.status {
 	border-radius:5px;
-	background-image: radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%) !important;
 }
 .rotation2 .rotated2.page1 {
 	display:block;
