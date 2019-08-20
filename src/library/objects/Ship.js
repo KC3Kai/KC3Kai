@@ -1605,7 +1605,8 @@ KC3改 Ship Object
 		const wg42Count = this.countEquipment(126);
 		// TODO investigate difference between these and WG42
 		const type4RocketCount = this.countEquipment(348);
-		const mortarCount = this.countEquipment([346, 347]);
+		const mortarCount = this.countEquipment(346);
+		const mortarCdCount = this.countEquipment(347);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
@@ -1620,14 +1621,15 @@ KC3改 Ship Object
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115][type4RocketCount] || 115;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75][mortarCount] || 75;
-			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60][mortarCount] || 60;
+			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.8;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount] || 1.875;
-					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount] || 1.56;
+					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
 					return [rocketsAdditive + shikonBonus + submarineBonus,
 						t3Bonus * landingBonus * wg42Bonus * type4RocketBonus * mortarBonus * seaplaneBonus];

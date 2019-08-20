@@ -54,14 +54,17 @@
 			success: function(response){
 				var releaseBox;
 				var foundInstalled = false;
+				// Only show PR labelled with `type:release`
 				// Only show recent 10 releases of page1 (30/p),
 				// Order by `merged_at desc, created_at desc` as API not support
-				var orderedReleases = response.slice(0, 10).sort(function(a, b){
-					// let null (not released) on top
-					return (b.merged_at === null) - (a.merged_at === null) ||
-					new Date(b.merged_at).getTime() - new Date(a.merged_at).getTime() ||
-					new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-				});
+				var orderedReleases = response
+					.filter(p => p.labels.some(l => l.name === "type:release"))
+					.slice(0, 10).sort((a, b) => (
+						// let null (not released) on top
+						(b.merged_at === null) - (a.merged_at === null) ||
+						new Date(b.merged_at).getTime() - new Date(a.merged_at).getTime() ||
+						new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+					));
 				$.each(orderedReleases, function(i, rel){
 					// Create new entry on list
 					releaseBox = $("#factory .versionPR").clone();
