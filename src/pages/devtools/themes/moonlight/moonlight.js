@@ -4062,9 +4062,11 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = ship.level;
 				var drumCount = ship.countDrums();
-				// to be confirmed: improvement bonus only counted for these new expeds OR all expeds?
-				var includeImprove = [43, 113].includes(selectedExpedition);
+				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
+				var includeImprove = selectedExpedition > 40;
 				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
+				// TODO asw stats from aircraft seem be quite different for expeditions
+				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
 				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
 				if(includeImprove) {
 					// Should be floored after summing up all ships' stats
@@ -4172,7 +4174,7 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [41, 42, 43, 44, 101, 102, 103].indexOf(selectedExpedition) > -1;
+			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 101, 102, 103, 112, 113].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
 			// can GS if:
@@ -4353,10 +4355,10 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE patterns for exped 4, 5, 9, 42, A3, A4:
-						if([4, 5, 9, 42, 102, 103].includes(selectedExpedition)) {
+						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3:
+						if([4, 5, 9, 42, 102].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
-								"CL/CT:1 DD/DE:2 / DD:1 DE:3 / CVE:1 DD/DE:2 + ??\n" +
+								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
 						}
