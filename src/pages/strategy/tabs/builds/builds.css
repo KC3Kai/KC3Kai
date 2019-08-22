@@ -33,6 +33,8 @@
 	width:20px;
 	height:20px;
 	margin:2px;
+	object-fit: cover;
+	image-rendering: auto;
 }
 .tab_builds .build_item .build_name {
 	width:115px;

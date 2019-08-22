@@ -183,6 +183,9 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_aircraft .slotitem .holder_name {
 	width:90px;

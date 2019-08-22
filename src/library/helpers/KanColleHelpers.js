@@ -7396,7 +7396,7 @@ var PS = {};
           return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.CV.value, KanColle_Generated_SType.CVL.value, KanColle_Generated_SType.AV.value ]) ];
       };
       var cvecl = function(n) {
-          return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.CVE.value, KanColle_Generated_SType.CL.value, KanColle_Generated_SType.CT.value ]) ];
+          return [ new FleetSTypeCount(n, [ KanColle_Generated_SType.CVE.value, KanColle_Generated_SType.CL.value ]) ];
       };
       if (v === 1) {
           return fslAndSc(1)(2);
@@ -7408,12 +7408,13 @@ var PS = {};
           return fslAndSc(3)(3);
       };
       if (v === 4) {
+          return addGroup(fslAndSc(3)(3))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
           // TODO add OR logic to stype count predicates: AnyOf
-          //return addGroup(fslAndSc(3)(3))(new AnyOf(addGroup(sty(1)([KanColle_Generated_SType.CL.value, KanColle_Generated_SType.CT.value]))(ddOrDe(2)), addGroup(sty(1)(KanColle_Generated_SType.DD.value))(sty(3)(KanColle_Generated_SType.DE.value)), addGroup(sty(1)(KanColle_Generated_SType.CVL.value))(ddOrDe(2))));
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(3)(3))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
+          // to describe accurate patterns: 1CT + 2DE, 1DD + 3DE, 1CVE + 2DD or 2DE (not mixed), 1CL + 2DD/DE (mixable)
+          //return addGroup(fslAndSc(3)(3))(new AnyOf(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)), addGroup(sty(1)(KanColle_Generated_SType.DD.value))(sty(3)(KanColle_Generated_SType.DE.value)), addGroup(sty(1)(KanColle_Generated_SType.CVE.value))(ddOrDe(2)), addGroup(sty(1)(KanColle_Generated_SType.CT.value))(sty(2)(KanColle_Generated_SType.DE.value))));
       };
       if (v === 5) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(3)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
+          return addGroup(fslAndSc(3)(4))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
       };
       if (v === 6) {
           return fslAndSc(4)(4);
@@ -7425,7 +7426,7 @@ var PS = {};
           return fslAndSc(6)(6);
       };
       if (v === 9) {
-          return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(3)(4))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
+          return addGroup(fslAndSc(3)(4))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(ddde(2)));
       };
       if (v === 10) {
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(3)(3))(sty(2)(KanColle_Generated_SType.CL.value));
@@ -7524,13 +7525,13 @@ var PS = {};
           return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))(addGroup(fpTotal(60))(addGroup(aaTotal(80))(aswTotal(210))))));
       };
       if (v === 42) {
-          return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(ddde(3))));
+          return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(ddde(3)))));
       };
       if (v === 43) {
           return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(300))(addGroup(sty(1)(KanColle_Generated_SType.CVE.value))(addGroup(ddde(2))(addGroup(fsty([ KanColle_Generated_SType.CVE.value ]))(addGroup(fpTotal(500))(aswTotal(280)))))));
       };
       if (v === 44) {
-          return addGroup(fslAndSc(35)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ])))));
+          return addGroup(fslAndSc(35)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ]))))));
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
@@ -7539,10 +7540,10 @@ var PS = {};
           return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(aswTotal(180))(addGroup(aaTotal(70))(losTotal(73)))));
       };
       if (v === 102) {
-          return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(cvecl(1))(addGroup(ddde(4))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60)))))));
+          return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(addGroup(ddde(3))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60))))))));
       };
       if (v === 103) {
-          return addGroup(fslAndSc(40)(5))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(ddde(4))(addGroup(fpTotal(300))(aswTotal(200))))));
+          return addGroup(fslAndSc(40)(5))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(addGroup(fpTotal(300))(aswTotal(200))))));
       };
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
