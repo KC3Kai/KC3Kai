@@ -1641,17 +1641,21 @@ KC3改 Ship Object
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
+					type4RocketBonus = [1, 1.5, 1.5 * 1.85][type4RocketCount] || 2.775;
+					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive + shikonBonus +  submarineBonus,
-						seaplaneBonus * lightShipBonus * wg42Bonus * apShellBonus * landingBonus];
+						seaplaneBonus * lightShipBonus * wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					type4RocketBonus = [1, 1.35, 1.35 * 1.6][type4RocketCount] || 2.16;
+					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
+					return [rocketsAdditive, wg42Bonus * type4RocketBonus * mortarBonus * t3Bonus * landingBonus];
 				
 				case 5: // Summer Harbor Princess
 					// Multiplicative WG42 bonus

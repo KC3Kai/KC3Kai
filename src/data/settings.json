@@ -1090,9 +1090,9 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
+						[ "moonlight", "Moonlight" ],
 						[ "natsuiro", "Natsuiro" ],
-						[ "plain", "Plain" ],
-						[ "moonlight", "Moonlight" ]
+						[ "plain", "Plain" ]
 					]
 				}
 			},
@@ -1313,13 +1313,13 @@
 			},
 			{
 				"id" : "moon_small_font",
-				"name" : "MoonSmallFont",
+				"name" : "SettingsMoonSmallFont",
 				"type" : "check",
 				"options" : {}
 			},
 			{
 				"id" : "moon_lighting_effect",
-				"name" : "MoonLightingEffect",
+				"name" : "SettingsMoonLightingEffect",
 				"type" : "check",
 				"options" : {}
 			},

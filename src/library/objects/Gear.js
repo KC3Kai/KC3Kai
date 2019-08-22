@@ -2601,7 +2601,7 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 36: // AA Fire Director
-						modifier = 1; break;
+						modifier = 0.6; break;
 					case 3: // Large Cal. Main
 						modifier = 1; break;
 					case 4: // Secondary
