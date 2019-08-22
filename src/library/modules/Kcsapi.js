@@ -1752,7 +1752,7 @@ Previously known as "Reactor"
 		  -------------------------------------------------------*/
 		"api_get_member/mission":function(params, response, headers) {
 			if(Array.isArray(response.api_data.api_limit_time)) {
-				// Actual Monthly Expedition reset time in minutes,
+				// Actual Monthly Expedition reset time in seconds,
 				// might be more in this array for other time periods?
 				PlayerManager.hq.monthlyExpedResetTime = response.api_data.api_limit_time[0] || 0;
 				PlayerManager.hq.save();

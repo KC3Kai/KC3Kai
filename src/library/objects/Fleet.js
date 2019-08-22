@@ -274,7 +274,7 @@ Contains summary information about a fleet and its ships
 			} else {
 				// asw with equipment is a special case, only some equip types counted
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType);
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
