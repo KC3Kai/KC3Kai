@@ -1956,7 +1956,7 @@
 							"width":"15px", "height":"15px",
 							"margin-top":"-3px", "margin-right":"3px"
 						};
-						$("<img/>").css(iconStyles)
+						$("<img/>").css(iconStyles).css("image-rendering", "auto")
 							.attr("src", fcfInfo.shipToRetreat.shipIcon())
 							.appendTo(fcfTips);
 						fcfTips.append("{0} Lv {1} {2}\n".format(
@@ -1965,7 +1965,7 @@
 							KC3Meta.term("PanelFCFTipTaihaShip")
 						));
 						if(fcfInfo.isCombined) {
-							$("<img/>").css(iconStyles)
+							$("<img/>").css(iconStyles).css("image-rendering", "auto")
 								.attr("src", fcfInfo.shipToEscort.shipIcon())
 								.appendTo(fcfTips);
 							fcfTips.append("{0}\n".format(KC3Meta.term("PanelFCFTipEscortShip")));
