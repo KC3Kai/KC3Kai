@@ -1588,18 +1588,20 @@ KC3改 Ship Object
 
 	/**
 	 * Get anti land installation power bonus & multiplier of this ship.
+	 * @param targetShipMasterId - target land installation master ID.
 	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
+	 * @param warfareType - to indicate if use different modifiers for phases other than day shelling.
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
 	 * @see https://twitter.com/KennethWWKK/status/1045315639127109634
 	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
-	 * @see https://cdn.discordapp.com/attachments/425302689887289344/614365176027807744/ECoPWzBUYAElyrS.jpg_orig.jpg
+	 * @see https://cdn.discordapp.com/attachments/425302689887289344/614879250419417132/ECrra66VUAAzYMc.jpg_orig.jpg
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
 	 * @return {Array} of [additive damage boost, multiplicative damage boost]
 	 */
-	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true){
+	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling"){
 		if(this.isDummy()) { return [0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
@@ -1614,6 +1616,7 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
 		let alDiveBomberBonus = 1;
+		let airstrikeBomberBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
@@ -1671,6 +1674,15 @@ KC3改 Ship Object
 			}
 		} else { // Post-cap types
 			switch(installationType) {
+				case 2: // Pillbox, Artillery Imp
+					// Dive Bomber, Seaplane Bomber, LBAA, Jet Bomber on airstrike phase
+					airstrikeBomberBonus = warfareType === "Aerial" &&
+						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
+					return [0, airstrikeBomberBonus];
+				case 3: // Isolated Island Princess
+					airstrikeBomberBonus = warfareType === "Aerial" &&
+						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.7 : 1;
+					return [0, airstrikeBomberBonus];
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount] || 1.68;
@@ -1784,7 +1796,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
-			isNightStart = false, isCombined = false, targetShipMasterId = 0, damageStatus = this.damageStatus()){
+			isNightStart = false, isCombined = false, targetShipMasterId = 0,
+			damageStatus = this.damageStatus()){
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
 		// Formation modifier, about formation IDs:
@@ -1844,7 +1857,7 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
 		}
 		
 		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
@@ -2005,7 +2018,7 @@ KC3改 Ship Object
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
 		}
 		
 		// About rounding and position of anti-land modifier:
