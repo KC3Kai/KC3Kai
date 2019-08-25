@@ -981,7 +981,7 @@
 	},
 	{
 		"section" : "SettingsDataSynchronization",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" : [
 			{
 				"id" : "chromeSyncQuests",
@@ -1058,7 +1058,7 @@
 	},
 	{
 		"section": "SettingsPoiDBSubmission",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" :[
 			{
 				"id" : "PoiDBSubmission_enabled",
@@ -1070,7 +1070,7 @@
 	},
 	{
 		"section": "SettingsOpenDBSubmission",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" :[
 			{
 				"id" : "OpenDBSubmission_enabled",
