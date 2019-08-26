@@ -1088,7 +1088,7 @@
 				const filteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
 				});
-				var totalLevel = 0;
+				var totalLevel = 0, totalExp = 0;
 
 				// Sorting
 				filteredShips.sort( self.makeComparator() );
@@ -1098,6 +1098,7 @@
 					const cShip = filteredShips[shipCtr];
 					const shipLevel = cShip.level;
 					totalLevel += cShip.level;
+					totalExp += cShip.ship.exp[0];
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
@@ -1108,7 +1109,6 @@
 							cElm.onRecompute(cShip);
 						return;
 					}
-
 					// elements constructing for the time-consuming 'first time rendering'
 					const cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
@@ -1225,6 +1225,13 @@
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
 				$(".ship_average_level .average_level_value .average_level").text(filteredShips.length > 0 ? (totalLevel / filteredShips.length).toFixed(2) : 0);
+				var shipAverageLevelHover = "";
+				if (filteredShips.length > 0) {
+					shipAverageLevelHover = "Total: " + totalLevel + "\n" +
+					"Total exp: " + totalExp + "\n" +
+					"Average exp: " + (totalExp / filteredShips.length).toFixed(2);
+				} 
+				$(".ship_average_level").attr("title", shipAverageLevelHover);
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
