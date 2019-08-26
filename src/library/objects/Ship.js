@@ -1635,6 +1635,7 @@ KC3改 Ship Object
 					wg42Bonus = [1, 1.3, 1.82][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
+					
 					return [rocketsAdditive + shikonBonus + submarineBonus,
 						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
 				
@@ -1661,6 +1662,7 @@ KC3改 Ship Object
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
+					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
@@ -1679,16 +1681,18 @@ KC3改 Ship Object
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
 					return [0, airstrikeBomberBonus];
+				
 				case 3: // Isolated Island Princess
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.7 : 1;
 					return [0, airstrikeBomberBonus];
+				
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
 					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
-
+				
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
 			}
@@ -2380,8 +2384,11 @@ KC3改 Ship Object
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
 			if(targetShipType.isSubmarine) return this.canDoASW();
-			// can not attack land installation if dive bomber equipped
-			if(targetShipType.isLand && this.hasNonZeroSlotEquipmentType(2, 7)) return false;
+			// can not attack land installation if dive bomber equipped, except some exceptions
+			if(targetShipType.isLand && this.equipment().some((g, i) => this.slots[i] > 0 &&
+				g.master().api_type[2] === 7 &&
+				!KC3GearManager.antiLandDiveBomberIds.includes(g.masterId)
+			)) return false;
 			// can not attack if no bomber with slot > 0 equipped
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
 		}
