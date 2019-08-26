@@ -288,6 +288,11 @@
 		},
 		"markers": [
 			{
+				"img": "client/maelstrom.png",
+				"pos": [310, 221],
+				"size": [27, 27]
+			},
+			{
 				"img": "client/bucket.png",
 				"pos": [236, 102],
 				"size": [27, 27]
@@ -567,12 +572,12 @@
 		},
 		"markers": [
 			{
-				"img": "client/steel.png",
+				"img": "client/bauxite.png",
 				"pos": [198, 152],
 				"size": [27, 27]
 			},
 			{
-				"img": "client/bauxite.png",
+				"img": "client/steel.png",
 				"pos": [155, 310],
 				"size": [27, 27]
 			},
@@ -1190,6 +1195,50 @@
 			{
 				"img": "abyss/572.png",
 				"pos": [1076, 196],
+				"size": [50, 50]
+			}
+		]
+	},
+	"World 7-2": {
+		"letters": {
+			"A": [284, 464],
+			"B": [480, 524],
+			"C": [562, 462],
+			"D": [692, 529],
+			"E": [685, 383],
+			"F": [785, 313],
+			"G": [609, 246],
+			"H": [864, 517],
+			"I": [913, 386],
+			"J": [984, 226],
+			"K": [973, 138],
+			"L": [1039, 307],
+			"M": [1037, 488]
+		},
+		"markers": [
+			{
+				"img": "client/maelstrom.png",
+				"pos": [266, 439],
+				"size": [27, 27]
+			},
+			{
+				"img": "abyss/532.png",
+				"pos": [545, 390],
+				"size": [40, 40]
+			},
+			{
+				"img": "abyss/532.png",
+				"pos": [661, 311],
+				"size": [40, 40]
+			},
+			{
+				"img": "abyss/572.png",
+				"pos": [616, 193],
+				"size": [50, 50]
+			},
+			{
+				"img": "abyss/618.png",
+				"pos": [1054, 433],
 				"size": [50, 50]
 			}
 		]

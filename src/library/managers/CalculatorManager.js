@@ -213,6 +213,8 @@
         const airBattleId = Object.getSafePath(currentNode.battleDay, "api_kouku.api_stage1.api_disp_seiku");
         const contactPlaneId = currentNode.fcontactId;
         const isStartFromNight = currentNode.startsFromNight;
+        const playerFlarePos = currentNode.flarePos;
+        const enemyFlarePos = currentNode.eFlarePos;
         return {
             isOnBattle,
             engagementId,
@@ -222,7 +224,9 @@
             contactPlaneId,
             playerCombinedFleetType,
             isEnemyCombined,
-            isStartFromNight
+            isStartFromNight,
+            playerFlarePos,
+            enemyFlarePos
         };
     };
 
@@ -434,7 +438,7 @@
     /**
      * Calculates the timestamp of next in-game Quest/PvP/RankPtCutOff reset.
      * @param {number} now - timestamp of 'now', current timestamp by default.
-     * @return {Object} an Object contains timestamp of {quest, pvp, rank}.
+     * @return {Object} an Object contains timestamp of {quest, pvp, rank, quarterly}.
      */
     const nextResetsTimestamp = (now = Date.now()) => {
         // Next Quest reset time (UTC 2000 / JST 0500)
@@ -442,6 +446,8 @@
             utc6am = new Date(now), utc6pm = new Date(now);
         utc8pm.setUTCHours(20, 0, 0, 0);
         if(utc8pm.getTime() < now) utc8pm.shiftDate(1);
+        // Next Quarterly Quests reset time
+        const quarterlyUtc8pm = KC3QuestManager.repeatableTypes.quarterly.calculateNextReset(now);
         // Next PvP reset time (UTC 1800,0600 / JST 0300,1500)
         utc6am.setUTCHours(6, 0, 0, 0);
         utc6pm.setUTCHours(18, 0, 0, 0);
@@ -462,24 +468,34 @@
                 nextPtCutoff.shiftHour(-1);
             }
         }
+        // Next monthly expedition reset time (15th JST 1200)
+        const utc3am15th = new Date(now);
+        utc3am15th.setUTCHours(3, 0, 0, 0);
+        utc3am15th.setUTCDate(15);
+        if(utc3am15th.getTime() < now) utc3am15th.shiftMonth(1);
         return {
             quest: utc8pm.getTime(),
             pvp: nextPvPstamp,
             rank: nextPtCutoff.getTime(),
+            quarterly: quarterlyUtc8pm,
+            exped: utc3am15th.getTime(),
         };
     };
 
     /**
      * Calculates remaining time until next in-game Quest/PvP/RankPtCutOff reset.
      * @param {number} now - timestamp of 'now', current timestamp by default.
-     * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank}.
+     * @param {number} expedLimitTimestamp - monthly exped reset timestamp from API result.
+     * @return {Object} an Object contains the HH:MM:SS strings of {quest, pvp, rank, quarterly}.
      */
-    const remainingTimeUntilNextResets = (now = Date.now()) => {
+    const remainingTimeUntilNextResets = (now = Date.now(), expedLimitTimestamp = 0) => {
         const nextResets = nextResetsTimestamp(now);
         return {
             quest: String(Math.floor((nextResets.quest - now) / 1000)).toHHMMSS(),
             pvp: String(Math.floor((nextResets.pvp - now) / 1000)).toHHMMSS(),
             rank: String(Math.floor((nextResets.rank - now) / 1000)).toHHMMSS(),
+            quarterly: String(Math.floor((nextResets.quarterly - now) / 1000)).toHHMMSS(true),
+            exped: String(Math.floor(((expedLimitTimestamp || nextResets.exped) - now) / 1000)).toHHMMSS(true),
         };
     };
 

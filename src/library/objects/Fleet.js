@@ -241,8 +241,9 @@ Contains summary information about a fleet and its ships
 	/*------------------[ FLEET ATTRIBUTES ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.countShips = function(){
-		return (this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
+	KC3Fleet.prototype.countShips = function(excludeEscaped = false){
+		return excludeEscaped ? this.shipsUnescaped().length :
+			(this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
 	KC3Fleet.prototype.totalLevel = function(){
@@ -255,7 +256,7 @@ Contains summary information about a fleet and its ships
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
 			ev: 0, as: 0, ls: 0, lk: 0,
-			ac: 0
+			ht: 0
 		};
 		this.ship((rid, idx, ship) =>{
 			// always includes modded/marriage bonus values
@@ -263,30 +264,30 @@ Contains summary information about a fleet and its ships
 				hp: ship.hp[1],
 				fp: ship.fp[0], tp: ship.tp[0], aa: ship.aa[0], ar: ship.ar[0],
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
-				ac: ship.equipmentTotalStats("houm")
+				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
 			if(!includeEquip) {
 				// no accuracy if excludes equipment
-				ss.ac = 0;
+				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
 			} else {
-				// asw with equipment is a special case
-				ss.as = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw();
+				// asw with equipment is a special case, only some equip types counted
+				ss.as = ship.nakedAsw()
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
 			if(includeImproveType) {
 				// TODO use accurate types
 				ship.equipment(true).forEach(gear => {
-					ss.fp += gear.attackPowerImprovementBonus("fire");
+					ss.fp += gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire");
 					ss.tp += gear.attackPowerImprovementBonus("torpedo");
 					ss.aa += gear.aaStatImprovementBonus();
 					//ss.ar += gear.armorStatImprovementBonus();
 					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
-					ss.as += gear.attackPowerImprovementBonus("asw");
 					ss.ls += gear.losStatImprovementBonus();
-					ss.ac += gear.accStatImprovementBonus(includeImproveType);
+					ss.ht += gear.accStatImprovementBonus(includeImproveType);
 				});
 			}
 			Object.keys(stats).forEach(stat => {
@@ -584,7 +585,7 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
-	 * Night recon contact chance, under verifying, not usable.
+	 * Night recon contact chance, under verifying.
 	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
 	 */
 	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
@@ -602,8 +603,9 @@ Contains summary information about a fleet and its ships
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
-						// no info about how slot size multiply, just know 0 will not trigger
-						rate: (Math.sqrt(50 * ship.level) - 3) * Math.sqrt(ship.slotSize(gearIdx)) / 100
+						// https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29
+						// larger slot size can increase rate near but not reach to 100%
+						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku * ship.level)) * 4 / 100 : 0
 					});
 				}
 			});
@@ -656,7 +658,10 @@ Contains summary information about a fleet and its ships
 	 */ 
 	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
 		var KEC = PS["KanColle.Expedition.Cost"];
-		var costPercent = KEC.getExpeditionCost( expeditionId );
+		var costPercent = KEC.getExpeditionCost(expeditionId);
+		var expedMaster = KC3Master.mission(expeditionId);
+		costPercent.fuel = costPercent.fuel || expedMaster.api_use_fuel;
+		costPercent.ammo = costPercent.ammo || expedMaster.api_use_bull;
 		var totalFuel = 0;
 		var totalAmmo = 0;
 		var self = this;
@@ -737,7 +742,9 @@ Contains summary information about a fleet and its ships
 			aswFuel: 0,
 			aswAmmo: 0,
 			airRaidFuel: 0,
-			airRaidAmmo: 0
+			airRaidAmmo: 0,
+			ambushFuel: 0,
+			ambushAmmo: 0,
 		};
 		for(let i = 0; i < this.countShips(); i++) {
 			const ship = this.ship(i);
@@ -747,14 +754,17 @@ Contains summary information about a fleet and its ships
 			totalCost.dayOnlyAmmo += Math.ceil(maxAmmo * 0.2);
 			totalCost.nightBattleAmmo += Math.ceil(maxAmmo * 0.3);
 			// 10% since Fall 2017 event
-			totalCost.nightStartFuel += Math.ceil(maxFuel * 0.1);
-			totalCost.nightStartAmmo += Math.ceil(maxAmmo * 0.1);
+			totalCost.nightStartFuel += Math.floor(maxFuel * 0.1) || 1;
+			totalCost.nightStartAmmo += Math.floor(maxAmmo * 0.1) || 1;
 			// 8% fuel, no ammo since Fall 2017 event
 			totalCost.aswFuel += Math.floor(maxFuel * 0.08) || 1;
 			totalCost.aswAmmo += 0;
-			// 8% -> 6% since Fall 2017 event
+			// 8% -> 6% since Fall 2017 event, but World 6 uses next values 4% + 8%?
 			totalCost.airRaidFuel += Math.floor(maxFuel * 0.06) || 1;
 			totalCost.airRaidAmmo += Math.floor(maxAmmo * 0.04) || 1;
+			// 4% fuel, no ammo for radar ambush, 8% for PT imps since Winter 2019 event
+			totalCost.ambushFuel += Math.floor(maxFuel * 0.04) || 1;
+			totalCost.ambushAmmo += Math.floor(maxAmmo * 0.08) || 1;
 		}
 		return totalCost;
 	};
@@ -1004,6 +1014,7 @@ Contains summary information about a fleet and its ships
 			9 : 1.0, // Carrier-Based Reconnaissance Aircraft
 			10: 1.2, // Reconnaissance Seaplane
 			11: 1.1, // Seaplane Bomber
+			49: 1.0, // Land-Based Reconnaissance Aircraft
 			58: 0.8, // Jet Torpedo Bomber (reserved)
 			59: 1.0, // Jet Reconnaissance Aircraft (reserved)
 			94: 1.0, // Carrier-Based Reconnaissance Aircraft (II) (reserved)
@@ -1021,6 +1032,7 @@ Contains summary information about a fleet and its ships
 				const multiplier = multipliers[itemType] || defaultMultiplier;
 				// only item with los stat > 0 will be summed
 				// although some items are not equippable by ship, eg: LBAA
+				// and no explicit bonus on ship affect this part
 				if (itemLos > 0) {
 					equipTotal += multiplier * (itemLos + gearObj.losStatImprovementBonus());
 				}
@@ -1030,33 +1042,73 @@ Contains summary information about a fleet and its ships
 	};
 	
 	/**
+	 * (UNUSED) The modifier by maps should be applied to equipment eLoS since game phase 2.
+	 * @return 1 by default. Other values are still investigating, missing summarized data.
+	 * @see https://docs.google.com/spreadsheets/d/1KC-hAbxkExKy2RJ1uf32BCJI8hNyNc3Cz4QidGkZ4TQ
+	 */
+	KC3Fleet.nodeDivaricatedFactorByMap = function(world, map){
+		const mapKey = map === undefined ? String(world) : [world, map].join("");
+		return ({
+			"16": 3,
+			"35": 4,
+			"52": 2,
+			"61": 4,
+			"62": 3,
+			"63": 3,
+			"65": 3,
+		})[mapKey] || 1;
+	};
+	
+	/**
+	 * (UNUSED) The modifier by maps should be applied to HQ level adjustment since game phase 2.
+	 * @return 0.4 by default. Other values are still investigating, missing summarized data.
+	 * @see #nodeDivaricatedFactorByMap
+	 */
+	KC3Fleet.hqModifierByMap = function(world, map){
+		const mapKey = map === undefined ? String(world) : [world, map].join("");
+		return ({
+			"35": 0.35,
+			"52": 0.35,
+			"63": 0.35,
+		})[mapKey] || 0.4;
+	};
+	
+	/**
 	 * Implementation of effective LoS : "Formula 33".
 	 * @see http://kancolle.wikia.com/wiki/Line_of_Sight
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
 	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default.
-	 *        For phase 1: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+	 * @see #nodeDivaricatedFactorByMap - Known:
+	 *    For phase 1: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
+	 *    For phase 2: 2-5(H,I):x1, 5-2(F):x2, 1-6(M)/6-2(E,H,I)/6-3(H)/6-5(G):x3, 3-5(G)/6-1(G,H):x4
+	 * @param {number} hqModifier - the weight applied to HQ level adjustment, 0.4 by default.
+	 * @see #hqModifierByMap - Known exception is 0.35 used by 3-5, 5-2, 6-3.
 	 * @param {number} hqLevel - the expected level of player HQ to compute old history value,
 	 *        current player level by default.
 	 * @return {number} F33 eLoS value of this fleet.
 	 */
-	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor = 1, hqLevel = PlayerManager.hq.level){
+	KC3Fleet.prototype.eLos4 = function(nodeDivaricatedFactor = 1, hqModifier = 0.4, hqLevel = PlayerManager.hq.level){
 		const fullShipSlots = 6,
 			// empty slots and retreated ships already filtered
 			availableShips = this.shipsUnescaped(),
 			// count for empty slots or ships retreated,
-			// according test https://twitter.com/CC_jabberwock/status/975369274804940801
+			// according tests https://twitter.com/CC_jabberwock/status/975369274804940801
 			// for 7 ships Striking Force fleet during event, it will be -1, which make finally elos -2.
 			emptyShipSlot = fullShipSlots - availableShips.length;
 		let total = 0;
 		availableShips.forEach(ship => {
+			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
+			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
+			// explicit LoS bonus from Late 298B and improved Type 2 Recon added to ship part
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 11]) || 0;
 			// sum ship's naked LoS
-			total += Math.sqrt(ship.nakedLoS());
+			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS
 			const equipTotal = KC3Fleet.sumShipEquipmentElos(ship);
 			total += nodeDivaricatedFactor * equipTotal;
 		});
 		// player hq level adjustment
-		total -= Math.ceil(0.4 * hqLevel);
+		total -= Math.ceil(hqLevel * hqModifier);
 		// empty ship slot adjustment
 		total += 2 * emptyShipSlot;
 		return total;
@@ -1274,6 +1326,25 @@ Contains summary information about a fleet and its ships
 			lookupSearchlight(smallSlType2Id);
 		}
 		return result.every(v => v === -1) ? false : result;
+	};
+
+	/**
+	 * Get fleet LoS for determining artillery spotting rate.
+	 * @see KC3Ship.prototype.daySpAttackBaseRate
+	 */
+	KC3Fleet.prototype.artillerySpottingLineOfSight = function() {
+		let value = 0;
+		this.shipsUnescaped().forEach(ship => {
+			value += ship.nakedLoS();
+			ship.equipment().forEach((equip, index) => {
+				const master = equip.master();
+				if (master && [10, 11].includes(master.api_type[2])) {
+					// Unknown if explicit on ship LoS bonus gets in here or not
+					value += Math.floor(Math.sqrt(ship.slots[index] || 0)) * (master.api_saku || 0);
+				}
+			});
+		});
+		return value;
 	};
 
 	/*--------------------------------------------------------*/

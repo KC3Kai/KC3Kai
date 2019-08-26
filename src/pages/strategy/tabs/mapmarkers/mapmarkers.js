@@ -10,7 +10,7 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
-			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.1/pixi.min.js";
+			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.7/pixi.min.js";
 			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
 			this.jsonMaxLength = 60;
 			this.world = 0;
@@ -18,6 +18,7 @@
 			this.zoom = 55;
 			this.isShowEdges = true;
 			this.isShowEnemies = false;
+			this.isShowArrows = true;
 			this.isShowMarkers = true;
 			this.isLoading = false;
 			this.digEventSpots = false;
@@ -146,23 +147,26 @@
 			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
+					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
+					case -99: return 'map_common_82';
 					case -1:
-					// undefined in `_getTexture`, just used for default white dot
-					case 0: return 'map_common_133';
-					case 1: return 'map_common_126';
+					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
+					case 0: return 'map_common_152';
+					case 1: return 'map_common_145';
 					case 2:
-					case 6: return 'map_common_129';
-					case 3: return 'map_common_131';
-					case 4: return 'map_common_132';
-					case 5: return 'map_common_120';
-					case 7: return 'map_common_100';
-					case 8: return 'map_common_119';
-					case 9: return 'map_common_130';
-					case 10: return 'map_common_95';
-					case 11: return 'map_common_134';
-					case 12: return 'map_common_135';
-					case -2: return 'map_common_128';
-					case -3: return 'map_common_125';
+					case 6: return 'map_common_148';
+					case 3: return 'map_common_150';
+					case 4: return 'map_common_151';
+					case 5: return 'map_common_139';
+					case 7: return 'map_common_101';
+					case 8: return 'map_common_138';
+					case 9: return 'map_common_149';
+					case 10: return 'map_common_96';
+					case 11: return 'map_common_153';
+					case 12: return 'map_common_154';
+					case 13: return 'map_common_81';
+					case -2: return 'map_common_147';
+					case -3: return 'map_common_144';
 				}
 			};
 			this.isLoading = true;
@@ -219,7 +223,7 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(!spot.route && spot.line && isAddingRouteStart) {
+						if(!spot.route && !spot.line && isAddingRouteStart) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 							const sprite = new this.pixi.Sprite(frame);
 							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
@@ -235,26 +239,28 @@
 						// Fill lines of additional routes
 						if(isAddingRoute) stage.addChild(sprite);
 						const bounds = sprite.getBounds();
-						// Draw an arrow to indicate the edge direction
 						const fromSpot = {x: bounds.x + bounds.width, y: bounds.y + bounds.height};
 						if(spot.line.x < 0) fromSpot.x += spot.line.x;
 						if(spot.line.y < 0) fromSpot.y += spot.line.y;
-						const grp = new this.pixi.Graphics();
 						const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
-						grp.setTransform(
-							spot.x + (fromSpot.x - spot.x) / 2,
-							spot.y + (fromSpot.y - spot.y) / 2,
-							1, 1, angle);
-						const arrowHeight = 18, arrowColor = 0xcdcde9;
-						grp.lineStyle(2, arrowColor, 1);
-						grp.moveTo(0, 0);
-						grp.beginFill(arrowColor);
-						grp.lineTo(-arrowHeight, -arrowHeight / 1.5);
-						grp.lineTo(-arrowHeight / 1.4, 0);
-						grp.lineTo(-arrowHeight, +arrowHeight / 1.5);
-						grp.lineTo(0, 0);
-						grp.endFill();
-						stage.addChild(grp);
+						// Draw an arrow to indicate the edge direction
+						if(this.isShowArrows) {
+							const grp = new this.pixi.Graphics();
+							grp.setTransform(
+								spot.x + (fromSpot.x - spot.x) / 2,
+								spot.y + (fromSpot.y - spot.y) / 2,
+								1, 1, angle);
+							const arrowHeight = 18, arrowColor = 0xcdcde9;
+							grp.lineStyle(2, arrowColor, 1);
+							grp.moveTo(0, 0);
+							grp.beginFill(arrowColor);
+							grp.lineTo(-arrowHeight, -arrowHeight / 1.5);
+							grp.lineTo(-arrowHeight / 1.4, 0);
+							grp.lineTo(-arrowHeight, +arrowHeight / 1.5);
+							grp.lineTo(0, 0);
+							grp.endFill();
+							stage.addChild(grp);
+						}
 						// Show edge numbers
 						const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
 						edgeText.anchor.set(
@@ -278,7 +284,7 @@
 						const edge = edges[edgeKey];
 						const node = edge[0];
 						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
-						if(node.no && (node.color || node.route)) {
+						if(node.no && (node.color || node.route || node.line)) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
 							const sprite = new this.pixi.Sprite(frame);
 							let offsetX = 0, offsetY = 0;
@@ -298,7 +304,7 @@
 				// Show Land-Base 'AB' icon if exists
 				if(this.mapInfoMeta.airbase) {
 					const airbase = this.mapInfoMeta.airbase;
-					const frame = this.pixi.Texture.fromFrame("map_common_81");
+					const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-99));
 					const sprite = new this.pixi.Sprite(frame);
 					sprite.anchor.set(0.5, 0.5);
 					sprite.position.set(airbase.x, airbase.y);

@@ -18,6 +18,10 @@ Saves and loads list to and from localStorage
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47],
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,56,57],
+		antiLandDiveBomberIds: [64,148,233,277,305,306,319],
+		// WiP modifiers applied to enemy fleet's AA fire formula:
+		// https://twitter.com/muu_1106/status/1124658313428213760
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323],
 		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
 		interceptorsType3Ids: [38,44],
@@ -35,7 +39,7 @@ Saves and loads list to and from localStorage
 		landBaseOtherSortieAmmoCostPerSlot: 0.62,
 		landBaseReconnMaxSlot: 4,
 		landBaseOtherMaxSlot: 18,
-		landBaseReconnType2Ids: [9,10,41],
+		landBaseReconnType2Ids: [9,10,41,49],
 		// Jet aircraft mechanism still in progress
 		jetAircraftType2Ids: [56,57,58,59],
 		jetBomberSteelCostRatioPerSlot: 0.2,
@@ -46,22 +50,22 @@ Saves and loads list to and from localStorage
 		landingCraftModifiers: {
 			// Soft-skinned
 			0: {
-				modifier: [1.5,2.1,1,2.8,1],
+				modifier: [1.5,1.5,1,1.8,1.15],
 				improvement: [0.03,0,0,0,0]
 			},
 			// Artillery Imp
 			1: {
-				modifier: [2.4,2.15,1.8,2.97,2.05],
+				modifier: [2.4,2.15,1.8,2.2,2.05],
 				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Isolated Island Princess
 			2: {
-				modifier: [2.4,2.15,1.8,2.97,1],
+				modifier: [2.4,2.15,1.8,3.5,1],
 				improvement: [0.08,0.043,0.0036,0,0],
 			},
 			// Supply Depot Princess (no info on Daihatsu improvement)
 			3: {
-				modifier: [1.7,1.3,1,3.5,1],
+				modifier: [1.9,2.15,1.65,1.7,1],
 				improvement: [0.051,0.026,0,0,0],
 			},
 			// Summer Harbor Princess (no info on Shikon 11th tank)

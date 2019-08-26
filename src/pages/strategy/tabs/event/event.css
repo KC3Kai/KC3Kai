@@ -326,6 +326,9 @@
 	height:30px;
 	vertical-align:top;
 	visibility:hidden;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_event .sortie_list .seven_ships .sortie_ship {
 	margin:3px 5px 0px 0px;
@@ -336,6 +339,9 @@
 .tab_event .sortie_list .seven_ships .sortie_ship img {
 	width:25px;
 	height:25px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_event .sortie_list .sortie_combined_ship {
 	position:absolute;
@@ -455,6 +461,9 @@
 .tab_event .sortie_list .sortie_edge.air_raid {
 	background:#FFA500;
 }
+.tab_event .sortie_list .sortie_edge.long_range_raid {
+	background:#EE7400;
+}
 .tab_event .sortie_list .sortie_edges .sortie_edge.active.boss {
 	background-image:url(../../../../assets/img/client/boss.png);
 	background-repeat:no-repeat;
@@ -535,6 +544,9 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_event .sortie_list .rfleet_name {
 	width:55px;
@@ -660,6 +672,9 @@
 	font-size:12px;
 	font-weight:bold;
 }
+.tab_event .sortie_list .special_cutin {
+	box-shadow: 0px 0px 2px 2px #a08;
+}
 .tab_event .sortie_list .nodamage {
 	box-shadow: 0px 0px 2px 2px #8c4;
 }
@@ -694,6 +709,9 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_event .sortie_list .node_result_box .exped {
 	width:10px;

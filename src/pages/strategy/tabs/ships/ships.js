@@ -238,7 +238,7 @@
 			// Binding click event ends
 
 			// Update ship stats header icon set
-			$(".tab_ships .ship_header .ship_stat img").each((_, img) => {
+			$(".tab_ships .ship_header .ship_stat:not(.not_stat) img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("type")));
 			});
 			$(".ship_tooltip .stat_icon img").each((_, img) => {
@@ -552,14 +552,18 @@
 				ev: [this.getDerivedStatNaked("houk", ThisShip.ev[0], ThisShip), ThisShip.ev[0] ],
 				ls: [this.getDerivedStatNaked("saku", ThisShip.ls[0], ThisShip), ThisShip.ls[0] ],
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
+				fuel: [MasterShip.api_fuel_max, ThisShip.fuel],
+				ammo: [MasterShip.api_bull_max, ThisShip.ammo],
 				sp: ThisShip.speed,
+				isp: MasterShip.api_soku,
 				range: ThisShip.range,
+				irange: MasterShip.api_leng,
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				slotNum: ThisShip.slotnum,
 				fleet: ThisShip.onFleet(),
 				ship: ThisShip,
-				master: ThisShip.master(),
+				master: MasterShip,
 				// Check whether remodel is max
 				remodel: RemodelDb.isFinalForm(ship.masterId),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu()
@@ -1044,6 +1048,10 @@
 				   function(x) { return -x.ls[this.equipMode]; });
 			define("lk", "Luck",
 				   function(x) { return -x.lk[0]; });
+			define("fuel", "Fuel",
+				   function(x) { return x.fuel[1]; });
+			define("ammo", "Ammo",
+				   function(x) { return x.ammo[1]; });
 			define("ctype", "Class",
 				   function(x) { return x.ctype; });
 			define("bid", "Master-ID",
@@ -1118,6 +1126,7 @@
 						.attr("data-jpname-romaji", cShip.jpNameRomaji);
 					if(shipLevel >= 100) {
 						$(".ship_name", cElm).addClass("ship_kekkon-color");
+						//$(".ship_marry", cElm).show();
 					}
 					if(cShip.fleet > 0) {
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
@@ -1173,6 +1182,8 @@
 							$(".ship_ls", this).text( thisShip.ls[self.equipMode] );
 							self.modernizableStat("lk", this, thisShip.lk, 0, 0, true);
 							$(".ship_hp", this).attr("data-equip-mode", self.equipMode);
+							$(".ship_fuel", this).text( thisShip.fuel[1] );
+							$(".ship_ammo", this).text( thisShip.ammo[1] );
 						}
 						// Reset heart-lock icon
 						if((self.heartLockMode === 1 && thisShip.locked)

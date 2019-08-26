@@ -52,13 +52,24 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder.prototype._getRequiredDevkitNum
         calcDevMat: function(steel, ship_id_from) {
             switch(ship_id_from) {
-                case 82: // Ise
+                case 82: // Ise Kai
+                    return 80;
+                case 88: // Hyuuga Kai
+                    return 181;
+                case 149: // Kongou K2
+                    return 300;
+                case 277: // Akagi Kai
+                    return 100;
+                case 594: // Akagi Kai Ni
+                case 599: // Akagi Kai Ni E
                     return 80;
                 case 213: // Tenryuu
                     return 24;
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
                     return 15;
+                case 350: // Umikaze
+                    return 30;
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
@@ -75,6 +86,9 @@
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                     return 5;
+                case 562: // Johnston
+                case 596: // Fletcher
+                    return 80;
                 default:
                     return (steel < 4500) ? 0
                          : (steel < 5500) ? 10
@@ -84,10 +98,11 @@
         },
         // does not consume devmat if using blueprint, except:
         // still consumes devmat if converting Suzuya/Kumano K2 to Kou K2,
-        // Kagerou-class K to K2, Ise K to K2
+        // Kagerou-class K to K2, Ise-class K to K2, converting between Akagi K2 and K2E
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
-            return blueprint_count > 0 && ![82, 225, 226, 227, 503, 504].includes(ship_id_from);
+            return blueprint_count > 0 &&
+            	![82, 88, 149, 225, 226, 227, 277, 503, 504, 594, 599].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -115,16 +130,24 @@
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                     return 20;
+                case 562: // Johnston
+                case 596: // Fletcher
+                    return 10;
+                case 594: // Akagi Kai Ni
+                case 599: // Akagi Kai Ni E
+                    return 30;
                 default:
                     return 0;
             }
         },
         // hard-coded new consumption 'New Artillery Material' since 2018-02-16
-        // see: main.js#ShipUpgradeModel.newkohohesosizai
+        // see: main.js#ShipUpgradeModel.prototype.newhokohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
                 case 148: // Musashi K2
                     return 3;
+                case 149: // Kongou K2C
+                    return 2;
                 default: return 0;
             }
         },
@@ -141,6 +164,8 @@
                  , catapult: Int
                  , blueprint: Int
                  , report: Int
+                 , gunmat: Int
+                 , airmat: Int
                  , devmat: Int
                  , torch: Int
                  }
@@ -172,6 +197,8 @@
                       catapult: 0,
                       blueprint: 0,
                       report: 0,
+                      gunmat: 0,
+                      airmat: 0,
                       devmat: 0,
                       torch: 0
                     };
@@ -197,6 +224,7 @@
                 remodel.catapult = x.api_catapult_count;
                 remodel.blueprint = x.api_drawing_count;
                 remodel.report = x.api_report_count;
+                remodel.airmat = x.api_aviation_mat_count;
                 if(self.isIgnoreDevMat(remodel.blueprint, remodel.ship_id_from))
                     remodel.devmat = 0;
             });

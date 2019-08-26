@@ -1028,25 +1028,31 @@
 			}else{
 				$(".module.status").hide();
 			}
-			
-			// TAIHA ALERT CHECK
-			if (
-				PlayerManager.fleets.filter((obj, i) => {
+
+			// TAIHA ALERT CONDITIONS CHECK
+			const isTaihaToBeAlerted = ConfigManager.alert_taiha
+				&& !KC3SortieManager.isPvP()
+				&& PlayerManager.fleets.filter((obj, i) => {
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
 						return !so || ((cf && fs === 1) ? i <= 1 : i == fs - 1);
 					})
-					.map    ((fleetObj) => fleetObj.ships.slice(1))    // Convert to non-flagship ID arrays
-					.reduce ((acc, arr) => acc.concat(arr))            // Join IDs into an array
-					.filter ((shipId)   => shipId > 0)                 // Remove ID -1
-					.map    ((shipId)   => KC3ShipManager.get(shipId)) // Convert to Ship instance
-					.some   ((shipObj)  => { // Check if any ship is Taiha, not flee, no damecon found
-						return !shipObj.isAbsent() && shipObj.isTaiha()
-							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0);
+					.map((fleetObj) => fleetObj.ships.slice(1))  // Convert to non-flagship ID arrays
+					.reduce((acc, arr) => acc.concat(arr))       // Join IDs into an array
+					.filter((shipId) => shipId > 0)              // Remove ID -1
+					.map((shipId) => KC3ShipManager.get(shipId)) // Convert to Ship instance
+					.some((shipObj) => {
+						// Check if any ship is Taiha, not flee, no damecon found
+						return !shipObj.isAbsent()
+							&& shipObj.isTaiha()
+							&& (!ConfigManager.alert_taiha_damecon || shipObj.findDameCon().pos < 0)
+							&& (!ConfigManager.alert_taiha_unlock || !!shipObj.lock);
 					})
-			) {
-				if(ConfigManager.alert_taiha){
+				&& (KC3SortieManager.isOnSortie() || !ConfigManager.alert_taiha_homeport);
+
+			if(isTaihaToBeAlerted){
+				if(ConfigManager.alert_taiha_panel){
 					$("#critical").show();
 					if(critAnim){ clearInterval(critAnim); }
 					critAnim = setInterval(function() {
@@ -1775,6 +1781,8 @@
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
+					 4:"screws",
+					 5:"coin",
 					10:"box1",
 					11:"box2",
 					12:"box3",

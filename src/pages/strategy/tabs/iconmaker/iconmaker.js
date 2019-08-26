@@ -72,8 +72,11 @@
 				this.isDamaged = damaged;
 				this.seasonalIdx = newSeasonal;
 				this.isOfficial = officialLink;
-				const dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`];
-				const illustId = this.seasonalIdx > 0 ? ((dbShip || {}).illust_extra || [])[this.seasonalIdx - 1] : this.shipId;
+				let dbShip = WhoCallsTheFleetDb.db[`s${this.shipId}`] || {};
+				if(dbShip.illust_same_as_prev) {
+					dbShip = WhoCallsTheFleetDb.db[`s${dbShip.remodel.prev}`] || {};
+				}
+				const illustId = this.seasonalIdx > 0 ? (dbShip.illust_extra || [])[this.seasonalIdx - 1] : dbShip.id || this.shipId;
 				const imgNo = 8 + (1 & this.isDamaged);
 				const baseUrl = [
 					"http://fleet.diablohu.com/!/pics-ships/",
@@ -151,13 +154,27 @@
 						.attr("src", resp)
 						.attr("alt", `${this.shipId}${this.isDamaged ? "_d" : ""}.png`);
 					$(".cropped").append(imgElm);
-					$(".cropped").show();
+					$(".cropped_container").show();
 					$(".preview img").attr("src", resp);
 					$(".preview").show();
 				});
 			});
 			$(".cropped").on("click", ".cropped_icon,.existed_icon", e => {
 				$(e.target).remove();
+			});
+			$(".cropped_controls .clear_all").on("click", e => {
+				$(".cropped").empty();
+			});
+			$(".cropped_controls .list_all").on("click", e => {
+				$(".cropped").empty();
+				KC3Meta._seasonal.forEach(id => {
+					$(".cropped").append(
+						$("<img/>").addClass("existed_icon")
+						.attr("src", `/assets/img/shipseasonal/${id}${this.isDamaged ? "_d" : ""}.png`)
+						.attr("title", id)
+					);
+				});
+				$(".cropped").append("&nbsp;");
 			});
 		},
 
@@ -197,8 +214,9 @@
 					$(".cropped").append("&nbsp;").append(
 					$("<img/>").addClass("existed_icon").attr("src",
 						`/assets/img/${this.isAbyssal ? "abyss" : "ships"}/${refId}${this.isDamaged ? "_d" : ""}.png`)
+						.attr("title", refId)
 					);
-					$(".cropped").show();
+					$(".cropped_container").show();
 				}
 			}).catch(e => {
 				$(".loading").css("visibility", "hidden");
@@ -211,8 +229,9 @@
 					$(".cropped").append("&nbsp;").append(
 						$("<img/>").addClass("existed_icon")
 							.attr("src", `/assets/img/abyss/${this.refId}$.png`)
+							.attr("title", refId)
 					);
-					$(".cropped").show();
+					$(".cropped_container").show();
 				}
 			});
 		},

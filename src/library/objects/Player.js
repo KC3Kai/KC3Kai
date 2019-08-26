@@ -29,6 +29,7 @@ Instantiate-able class to represent one player
 			this.shipSlots = 100;
 			this.gearSlots = 500;
 			this.parallelQuestCount = 5;
+			this.monthlyExpedResetTime = 0;
 		}
 	};
 	
@@ -152,6 +153,7 @@ Instantiate-able class to represent one player
 		localStorage.removeItem("bases");
 		localStorage.removeItem("consumables");
 		localStorage.removeItem("dockingShips");
+		localStorage.removeItem("buildingShips");
 		localStorage.removeItem("longestIdleTime");
 		localStorage.removeItem("pictureBook");
 		localStorage.removeItem("playerNewsFeed");
@@ -196,6 +198,7 @@ Instantiate-able class to represent one player
 			this.shipSlots = playerInfo.shipSlots || 100;
 			this.gearSlots = playerInfo.gearSlots || 500;
 			this.parallelQuestCount = playerInfo.parallelQuestCount || 5;
+			this.monthlyExpedResetTime = playerInfo.monthlyExpedResetTime || 0;
 			return true;
 		}
 		return false;

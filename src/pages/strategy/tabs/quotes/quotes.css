@@ -180,14 +180,17 @@
 .tab_quotes .ship_list .ship_entity .ship_icon img {
 	width: 20px;
 	height: 20px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_name {
 	width: 141px;
 	height: 20px;
 	float: left;
-	padding:0px 0px 0px 1px;
-	white-space:nowrap;
+	padding: 0px 0px 0px 1px;
+	white-space: nowrap;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_pg_box {
@@ -203,13 +206,20 @@
 .tab_quotes .ship_list .ship_entity .ship_pg_val1 {
 	width:65px;
 	height:10px;
-    background: #66FF66;
-    float: left;
+	background: #66FF66;
+	float: left;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_pg_val2 {
 	width:34px;
 	height:10px;
-    background: #6666FF;
-    float: left;
+	background: #6666FF;
+	float: left;
+}
+
+.tab_quotes .ship_list .ship_entity .ship_graph {
+	float: right;
+	margin-right: -60px;
+	margin-top: -36px;
+	display: none;
 }

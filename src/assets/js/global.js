@@ -127,7 +127,7 @@ dateFormat.masks = {
 	isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
 };
 
-// Internationalization strings
+// Internationalization strings (English only)
 dateFormat.i18n = {
 	dayNames: [
 		"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
@@ -137,6 +137,18 @@ dateFormat.i18n = {
 		"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 	]
+};
+// These will be filled with real localized strings later
+dateFormat.l10n = { dayNames: [], monthNames: [] };
+// Get localized weekday name, dow is 0-based
+Date.getDayName = function(dow, forLong) {
+	return dateFormat.l10n.dayNames[Math.abs(Number(dow) % 7)
+		+ (!!forLong && forLong !== "short" ? 7 : 0)];
+};
+// Get localized month name, month is 1-based
+Date.getMonthName = function(month, forLong) {
+	return dateFormat.l10n.monthNames[Math.abs((Number(month) - 1) % 12)
+		+ (!!forLong && forLong !== "short" ? 12 : 0)];
 };
 
 /* GET DATE IN Japan Standard TimeZone
@@ -151,7 +163,7 @@ Date.getJstDate = function() {
 	var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
 	// create new Date object for different city
 	// using supplied offset
-	return new Date(utc + (3600000*9));
+	return new Date(utc + (3600000 * 9));
 };
 
 /**
@@ -232,6 +244,32 @@ Object.safePropertyPath = function(isGetProp, root, props) {
 	return isGetProp ? root : true;
 };
 
+/** Sum values in Objects with same properties */
+Object.sumValuesByKey = function(){
+	return Array.from(arguments).reduce(function(acc, o){
+		for(var k in o){
+			if(o.hasOwnProperty(k))
+				acc[k] = Number(acc[k] || 0) + Number(o[k]);
+		}
+		return acc;
+	}, {});
+};
+
+/** Swap the position of keys and values for a simple 1-1 mapping dictionary object */
+Object.swapMapKeyValue = function(map, isNumericKey){
+	if(typeof map !== "object") return map;
+	var result = {};
+	Object.keys(map).forEach(function(key){
+		// only simple value type can be stringified to the new key
+		var value = map[key];
+		if(typeof value !== "string" && typeof value !== "number")
+			value = String(value);
+		// key will be string by default, even it is number in original map,
+		// and duplicated key will simply overwrite old ones.
+		result[value] = !!isNumericKey ? Number(key) : key;
+	});
+	return result;
+};
 
 /* PRIMITIVE */
 /*******************************\
@@ -274,6 +312,31 @@ String.prototype.toCamelCase = function(isToUpper) {
 		if(p2) return p2.toUpperCase();
 		return isToUpper ? p1.toUpperCase() : p1.toLowerCase();
 	});
+};
+
+/**
+ * Replace illegal chars with safe char to make a filename-safe string.
+ * @param replacement - a string used to replace unsafe char, "-" by default.
+ * @param isPathAllowed - allow directory separator: '/', '\'.
+ *
+ * All potential problemtic chars for `saveAs` API will be replaced with '-',
+ * but for `chrome.downloads` API, runtime.lastError `Invalid filename` will be set instead,
+ * even they are safe for the file system of some platforms,
+ * about illegal chars defined by Chromium, see `IllegalCharacters::IllegalCharacters()` at
+ *   https://github.com/chromium/chromium/blob/master/base/i18n/file_util_icu.cc
+ */
+String.prototype.toSafeFilename = function(replacement, isPathAllowed) {
+	if(replacement == undefined) replacement = "-";
+	var filenameReservedReg = !!isPathAllowed ?
+		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"]/g :
+		/[:<>|~?*\x00-\x1F\uFDD0-\uFDEF"\/\\]|^[.]|[.]$/g;
+	// These names not allowed on Windows platform, something like `nul.zip` neither,
+	// Chromium denies them even on other platforms, so does for: device.*, desktop.ini, thumbs.db
+	// see https://github.com/chromium/chromium/blob/master/net/base/filename_util.cc
+	var win32ReservedNames = /^((CON|PRN|AUX|NUL|CLOCK\$|COM[1-9]|LPT[1-9])(\..*)?|device(\..*)?|desktop.ini|thumbs.db)$/i;
+	if(!isPathAllowed && win32ReservedNames.test(this))
+		return (replacement || "_") + this.replace(filenameReservedReg, replacement);
+	return this.replace(filenameReservedReg, replacement);
 };
 
 /**
@@ -344,21 +407,27 @@ String.prototype.format = function(params) {
 
 /* SECONDS TO HH:MM:SS
 -------------------------------*/
-String.prototype.toHHMMSS = function () {
-	var sec_num = parseInt(this, 10); // don't forget the second param
+String.prototype.toHHMMSS = function (showDays) {
+	var sec_num = parseInt(this, 10);
 	var time;
 	if(isNaN(sec_num)) {
 		time = "--:--:--";
 	} else {
 		var isNeg   = sec_num < 0;
-
 		if(isNeg) sec_num = -sec_num;
-
+		var secsLeft = sec_num, days = 0;
 		var hours   = (Math.floor(sec_num / 3600)).toDigits(2);
-		var minutes = (Math.floor((sec_num - (hours * 3600)) / 60)).toDigits(2);
-		var seconds = (sec_num - (hours * 3600) - (minutes * 60)).toDigits(2);
-
-		time    = (isNeg ? "-" : "")+hours+':'+minutes+':'+seconds;
+		secsLeft    -= hours * 3600;
+		if(showDays) {
+			days    = Math.floor(sec_num / 86400);
+			hours   = (Math.floor((sec_num % 86400) / 3600)).toDigits(2);
+		}
+		var minutes = (Math.floor(secsLeft / 60)).toDigits(2);
+		secsLeft   -= minutes * 60;
+		var seconds = (secsLeft).toDigits(2);
+		time = (isNeg ? "-" : (showDays ? "+" : "")) +
+			(showDays ? days + " " : "") +
+			hours + ':' + minutes + ':' + seconds;
 	}
 	return time;
 };
@@ -661,20 +730,6 @@ Object.defineProperty(Array.prototype, "joinIfNeeded", {
 		return resultArray.join("");
 	}
 });
-
-/*******************************\
-|*** Object                     |
-\*******************************/
-/** Sum values in Objects with same properties */
-Object.sumValuesByKey = function(){
-	return Array.from(arguments).reduce(function(acc, o){
-		for(var k in o){
-			if(o.hasOwnProperty(k))
-				acc[k] = Number(acc[k] || 0) + Number(o[k]);
-		}
-		return acc;
-	}, {});
-};
 
 /*******************************\
 |*** Date                       |

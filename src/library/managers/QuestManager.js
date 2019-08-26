@@ -154,7 +154,7 @@ Uses KC3Quest objects to play around with
 			monthly: {
 				type: 'monthly',
 				key: 'timeToResetMonthlyQuests',
-				questIds: [249, 256, 257, 259, 265, 264, 266, 311, 318, 424, 626, 628, 645],
+				questIds: [249, 256, 257, 259, 265, 264, 266, 280, 311, 318, 424, 626, 628, 645],
 				resetQuests: function () { KC3QuestManager.resetMonthlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 873, 875, 888, 893],
+				questIds: [284, 330, 426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 872, 873, 875, 888, 893, 894],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -375,8 +375,12 @@ Uses KC3Quest objects to play around with
 			if(quest !== undefined && Array.isArray(quest.tracking)){
 				for(var ctr in quest.tracking){
 					var progress = quest.tracking[ctr];
-					if(progress.length > 1 && (!!forced || progress[0] < progress[1]))
+					if(progress.length > 1 && (!!forced || progress[0] < progress[1])){
 						progress[0] = 0;
+					}
+				}
+				if(!!forced){
+					this.isActive(questId, false);
 				}
 			}
 		},
@@ -397,11 +401,19 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting dailies");
 			this.resetLoop(this.getRepeatableIds('daily'));
-			// Monthly PvP counter reset to 0 if not click complete in a day:
-			// C8
+			
+			// Progress counter reset to 0 even if completed but reward not clicked in a day:
+			// Monthly PvP C8
 			this.resetCounterLoop([311], true);
-			// Daily counter not reset for monthly PvP: C16
+			
+			// Progress counter reset to 0 only if progress not completed in a day:
+			// Quarterly PvP C29
+			this.resetCounterLoop([330], false);
+			
+			// Progress counter not changed at all on daily reset:
+			// Monthly PvP C16
 			//this.resetCounterLoop([318], false);
+			
 			this.save();
 		},
 		
@@ -457,7 +469,7 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShip(62) && fleet.hasShip(63) && fleet.hasShip(65);
 					},
-				"257": // Bm3 Sortie 1 CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
+				"257": // Bm3 Sortie CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShipType(3, 0)
@@ -475,11 +487,31 @@ Uses KC3Quest objects to play around with
 								26, // Fusou-class
 							]) === 3 && fleet.countShipType(3) === 1;
 					},
+				"280": // Bm8 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([3, 4, 7, 21]) >= 1
+							&& fleet.countShipType([1, 2]) >= 3;
+					},
+				"284": // Bq11 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([3, 4, 7, 21]) >= 1
+							&& fleet.countShipType([1, 2]) >= 3;
+					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
 						return KC3SortieManager.isPvP() && KC3SortieManager.fleetSent == 1 &&
 							firstFleet.countShipType(3) >= 2;
+					},
+				"330": // C29 PvP with CV(L/B) as flagship, 1 more CV(L/B) and 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipType([7, 11, 18], 0) &&
+							fleet.countShipType([7, 11, 18]) >= 2 &&
+							fleet.countShipType(2) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
@@ -516,6 +548,8 @@ Uses KC3Quest objects to play around with
 						return fleet.countShipType(16) >= 1
 							&& fleet.countShipType(3) >= 2;
 					},
+				"872": // Bq10 Sortie 1st fleet
+					() => KC3SortieManager.isOnSortie() && KC3SortieManager.fleetSent == 1,
 				"873": // Bq5 Sortie 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
@@ -542,6 +576,11 @@ Uses KC3Quest objects to play around with
 							   fleet.countShip(51)  + // Tenryuu any remodel
 							   fleet.countShip(115)   // Yuubari any remodel
 							>= 4;
+					},
+				"894": // Bq9 Sortie 1 CV(L/B)
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([7, 11, 18]) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

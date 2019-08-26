@@ -10,12 +10,15 @@
 	
 	<div class="help_q">Where are the stock equipment, and default evasion, LoS, ASW?</div>
 	<div class="help_a">New ship data might be not ready, just wait for <a href="https://github.com/TeamFleet/WhoCallsTheFleet-DB" target="_blank">WhoCallsTheFleet-DB</a> updating.
-		<a href="http://kancolle.wikia.com" target="_blank">Or just visit a wiki</a>.
+		<a href="https://kancolle.fandom.com/wiki/Ship" target="_blank">Or just visit a wiki</a>.
 	</div>
 	
 	<div class="help_q">Why are some values of battleship fit gun bonus still unknown or looking wrong?</div>
 	<div class="help_a">Fit gun mechanics are still being investigated to this day, hence the values are not final and may be subject to changes. Accuracy verifications are hard work, to get a conclusion, mass samples needed to be summarized.
-		<a href="http://kancolle.wikia.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus" target="_blank">Data source</a>.
+		Some sources are listed here:
+		<a href="https://kancolle.fandom.com/wiki/Combat/Overweight_Penalty_and_Fit_Gun_Bonus" target="_blank">Wiki Page</a>,
+		<a href="https://docs.google.com/spreadsheets/d/1tN3X92q9zaWC0IMHfgw-dSqWnuscgKJT7ZOf9M9_Hjk" target="_blank">JP Spreadsheet</a>,
+		<a href="https://docs.google.com/spreadsheets/d/11-nekeN0IBLtzdxxIzV0Gm3T7U4BpCrYA1lGsQYAEJo" target="_blank">EN Spreadsheet</a>.
 	</div>
 	
 	<div class="help_q">What do those icons mean for abyssal?</div>
@@ -27,7 +30,15 @@
 		<li>If you see different text color of stats or equipment, that means our internal data is different with your encounter's. You could help us by reporting the correct value on tool-tip to us.</li>
 		<li>If you see no stats and equipment but a JSON text, that means there is no data yet for her in our internal data. You could help us once you encounter her.</li>
 	</ul></div>
-	
+
+	<div class="help_q">Why do some equipment bonuses not appear in KC3?</div>
+	<div class="help_a">New equipment bonuses may not have been updated yet. Please report to the KC3 Team if you have found any.
+		Some sites that you can check:
+		<a href="https://kancolle.fandom.com/wiki/Equipment_Bonuses" target="_blank">Wiki Page</a>,
+		<a href="https://wikiwiki.jp/kancolle/%E8%A3%85%E5%82%99#bonus" target="_blank">JP wikiwiki Page</a>,
+		<a href="https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview" target="_blank">EN Spreadsheet</a>.
+	</div>
+
 	<div class="help_q">Why is Harusame so cute?</div>
 	<div class="help_a">I know right! kyaaa!</div>
 </div>
@@ -271,6 +282,12 @@
 				<div class="gunfit gunfitList">
 				</div>
 			</div>
+
+			<div class="clear"></div>
+			<div class="head hover">Equipment Visible Bonuses</div>
+			<div class="body">
+				<div class="bonusList"></div>
+			</div>
 		</div>
 		
 		<div class="clear"></div>
@@ -321,4 +338,42 @@
 		<div class="typeName"></div>
 	</div>
 	
+	<div class="gearBonuses">
+		<div class="basicBonusInfo">
+			<div class="gearId"></div>
+			<div class="gearIcon"><img/></div>
+			<div class="gearName"></div>
+		</div>
+		<div>
+			<div class="leveledBonusStatsList"></div>
+			<div class="synergyGears"></div>
+		</div>
+	</div>
+	
+	<div class="gearLevelBonus">
+		<div class="gearLevel"></div>
+		<div class="bonusStatsList"></div>
+	</div>
+	
+	<div class="gearStatBonus">
+		<div class="statIcon"><img/></div>
+		<div class="statValue"></div>
+	</div>
+	
+	<div class="synergy">
+		<hr/>
+		<div class="synergyFlags"></div>
+		<div class="synergyBonusRows"></div>
+	</div>
+	
+	<div class="synergyFlag">
+		<div class="synergyIcon"><span>+</span><img/></div>
+		<div class="synergyType"></div>
+	</div>
+	
+	<div class="synergyBonusRow">
+		<div class="gearCount"></div>
+		<div class="gearType"></div>
+		<div class="bonusStatsList"></div>
+	</div>
 </div>

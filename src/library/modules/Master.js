@@ -15,7 +15,10 @@ Saves and loads significant data for future use
 		abyssalGearIdFrom: 500,
 		// Devs still archive seasonal ID backward from old max 997
 		// Since 2017-11-27, 998~ going to be used
-		seasonalCgIdFrom: 700,
+		// Since 2019-06-25, devs shifted IDs from 729~ to 5001~
+		seasonalCgIdFrom: 5000,
+		// Devs assigned Colorado Kai to 1496 making more things strange since 2019-05-25
+		//seasonalCgIdTo: 1400,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
 
@@ -30,7 +33,11 @@ Saves and loads significant data for future use
 				return this.processRaw( raw );
 			}
 
-			this.updateRemodelTable();
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
 			return false;
 		},
 
@@ -98,7 +105,13 @@ Saves and loads significant data for future use
 				this._raw.newShips[KC3Meta.getAF(4)] = KC3Meta.getAF(2) - KC3Master.newUpdatesExpiredAfter;
 				if(beforeCounts) beforeCounts[0] -= 1;
 			}
-			this.updateRemodelTable();
+
+			try {
+				this.updateRemodelTable();
+			} catch(e) {
+				console.warn("Updating remodel table unexpected", e);
+			}
+
 			this.save();
 			this.available = true;
 
@@ -216,11 +229,13 @@ Saves and loads significant data for future use
 
 		/**
 		 * Build image URI of asset resources (like ship, equipment) since KC2ndSeq (HTML5 mode) on 2018-08-17.
-		 * @see graph - replace old swf filename method (tho it's still available for now)
+		 * @see graph - replace old swf filename method, its filename now used as `uniqueKey` for some case
+		 * @see main.js/ShipLoader.getPath - for the method of constructing resource path and usage of `uniqueKey` above
+		 * @see main.js/SuffixUtil - for the method of calculating suffix numbers
 		 * @param id - master id of ship or slotitem (also possible for furniture/useitem...)
 		 * @param type - [`card`, `banner`, `full`, `character_full`, `character_up`, `remodel`, `supply_character`, `album_status`] for ship;
 		 *               [`card`, `card_t`, `item_character`, `item_up`, `item_on`, `remodel`, `btxt_flat`, `statustop_item`, `airunit_banner`, `airunit_fairy`, `airunit_name`] for slotitem
-		 * @param shipOrSlot - `ship` or `slot`
+		 * @param shipOrSlot - `ship` or `slot`, or other known resource sub-folders
 		 * @param isDamaged - for damaged ship CG, even some abyssal bosses
 		 * @param debuffedAbyssalSuffix - specify old suffix for debuffed abyssal boss full CG. btw suffix is `_d`
 		 */
@@ -233,12 +248,15 @@ Saves and loads significant data for future use
 				1000 + 17 * (Number(id) + 7) *
 				KC3Meta.resourceKeys[(key(typeStr) + Number(id) * typeStr.length) % 100] % 8973
 			);
-			const paddedId = String(id).padStart(shipOrSlot === "slot" ? 3 : 4, "0"),
-				suffix = getFilenameSuffix(id, typeWithPrefix);
+			const padWidth = ({
+				"ship": 4, "slot": 3, "furniture": 3, "useitem": 3,
+			})[shipOrSlot];
+			const paddedId = String(id).padStart(padWidth || 3, "0"),
+				suffix = shipOrSlot !== "useitem" ? "_" + getFilenameSuffix(id, typeWithPrefix) : "";
 			const uniqueKey = type === "full" && shipOrSlot === "ship" ? ((key) => (
 					key ? "_" + key : ""
 				))(this.graph(id).api_filename) : "";
-			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}_${suffix}${uniqueKey}.png`;
+			return `/${shipOrSlot}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}${suffix}${uniqueKey}.png`;
 		},
 
 		slotitem :function(id){
@@ -304,6 +322,17 @@ Saves and loads significant data for future use
 				.map(i => exslotShips[i].api_slotitem_id) || [];
 		},
 
+		/**
+		 * Special cases hard-coded at client-side:
+		 *   * [553/554] Ise-class Kai Ni can equip main gun on first 2 slots only,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
+		 *   * [392] Richelieu Kai can equip seaplane bomber [194] Laté 298B only,
+		 *     either hard-coded the exception conndition in following codes.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
+		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
 			if(!type2Id && gearId > 0) {
@@ -338,6 +367,11 @@ Saves and loads significant data for future use
 				} else {
 					exslotCapableShips = [];
 				}
+			}
+			// Remove Richelieu Kai from Seaplane Bomber type list except Late 298B
+			if(type2Id === 11 && gearId !== 194) {
+				const richelieuKaiPos = capableShips.indexOf(392);
+				if(richelieuKaiPos >= 0) capableShips.splice(richelieuKaiPos, 1);
 			}
 			return {
 				stypes: capableStypes,
@@ -454,11 +488,11 @@ Saves and loads significant data for future use
 		},
 
 		isSeasonalShip :function(id){
-			return id > this.seasonalCgIdFrom && id <= this.abyssalShipIdFrom;
+			return id > this.seasonalCgIdFrom; // && id <= this.seasonalCgIdTo;
 		},
 
 		isAbyssalShip :function(id){
-			return id > this.abyssalShipIdFrom;
+			return id > this.abyssalShipIdFrom && id <= this.seasonalCgIdFrom;
 		},
 
 		isAbyssalGear :function(id){

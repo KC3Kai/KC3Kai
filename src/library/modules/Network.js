@@ -52,6 +52,11 @@ Listens to network history and triggers callback if game events happen
 		},
 		delayedUpdate: {},
 		deferredEvents: [],
+		battleEvent: {
+			entered: false,
+			time: undefined,
+			identifier: undefined,
+		},
 		submissionModuleNames: ["PoiDBSubmission", "OpenDBSubmission", "TsunDBSubmission"],
 		submissionConfigs: {},
 
@@ -201,6 +206,8 @@ Listens to network history and triggers callback if game events happen
 							
 							// Trigger deferred events before this API call if there are some
 							//KC3Network.handleDeferredEvents(thisRequest, "before");
+							// Reset battle event before any valided API call
+							KC3Network.setBattleEvent(false);
 							
 							thisRequest.process();
 							
@@ -210,14 +217,14 @@ Listens to network history and triggers callback if game events happen
 					});
 					har.getContent(function(x){
 						try {
-							var data = JSON.parse(/svdata=(.+)$/.exec(x)[1]);
+							var data = JSON.parse(/^[\s\S]*svdata=(.+)$/.exec(x)[1]);
 							message.api_status = data.api_result;
 							message.api_result = data.api_result_msg;
 						} catch (e) {
 							// Only prevent the data parsing error
 							message.api_status = e.name;
 							message.api_result = e.message;
-							console.error("Prevented " + e.name, e.message, e);
+							console.warn("Prevented unhandled", e);
 						} finally {
 							(new RMsg("service", "gameScreenChg", message)).execute();
 						}
@@ -230,14 +237,39 @@ Listens to network history and triggers callback if game events happen
 			}
 			
 			// If request is a furniture asset
-			if(requestUrl.indexOf("/img/interior/interior_parts") > -1){
-				// Clear overlays upon entering furniture menu
-				// No longer work again since Phase 2 caches assets
+			if(requestUrl.includes("/img/interior/interior_parts")){
+				// Clear overlays upon entering furniture menu,
+				// not work everytime since Phase 2 caches assets
 				KC3Network.clearOverlays();
+			}
+			// If request is a sound effect of closing shutter animation on battle ended,
+			// to activiate and focus on game tab before battle result API call,
+			// it only works if in-game SE is not completely off.
+			// Also, to trigger when first taiha/chuuha CG cutin occurs, as game may be paused if in background tab
+			// battle_cutin_damage requested only once per battle (but not sortie)
+			const focusPaths = ["/resources/se/217.", "img/battle/battle_cutin_damage.json"];
+			if(ConfigManager.focus_game_tab && KC3Network.battleEvent.entered
+				// Only after: daytime? day / night to day? night start?
+				// seems no side effect if game tab already focused, so use any time for now
+				//&& KC3Network.battleEvent.time === "day"
+				&& focusPaths.some(path => requestUrl.includes(path))){
+				(new RMsg("service", "focusGameTab", {
+					tabId: chrome.devtools.inspectedWindow.tabId
+				})).execute();
+				// console.debug("Battle end SE detected, focus on game tab requested");
 			}
 			
 			// Overlay subtitles
 			KC3Network.showSubtitle(har);
+		},
+
+		/**
+		 * Set some state attributes for tracking events of game battle.
+		 */
+		setBattleEvent :function(isEntered = false, time = undefined, identifier = undefined){
+			this.battleEvent.entered = isEntered;
+			this.battleEvent.time = time;
+			this.battleEvent.identifier = identifier;
 		},
 
 		/**

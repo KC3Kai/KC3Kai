@@ -150,7 +150,9 @@
 			$(".tab_mstgear .gearInfo .name").text(
 				"[{0}] {1}".format(gearId, KC3Meta.gearName(gearData.api_name))
 			);
-			$(".tab_mstgear .gearInfo .intro").html(gearData.api_info);
+			// Devs removed this property from master since 2019-06-25
+			// Picture book API will return it for those unlocked items only
+			$(".tab_mstgear .gearInfo .intro").html(gearData.api_info || "");
 			
 			// Stats
 			const planeOnlyStats = ["or", "kk"];
@@ -170,15 +172,18 @@
 				["rn", "leng", "ShipLength"],
 				["or", "distance", "ShipRadius"],
 				["kk", "cost", "ShipDeployCost"],
+				["rk", "baku", "ShipGearAntiLand"],
 			], (index, sdata) => {
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
 						planeOnlyStats.includes(sdata[0]) &&
 						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
-					)
+					)) && (
+					sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 				)) {
 					const isLandFighter = gearData.api_type[2] === 48;
-					const statBox = $(".tab_mstgear .factory .stat").clone();
+					const statBox = $(".tab_mstgear .factory .stat").clone()
+						.appendTo(".tab_mstgear .gearInfo .stats");
 					$("img", statBox)
 						.attr("src", KC3Meta.statIcon(sdata[
 							sdata.length > 3 && isLandFighter ? 3 : 0
@@ -197,11 +202,11 @@
 							"{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot)
 						);
 						$(statBox).css("width", "130px");
+					} else if(sdata[0] === "rk") { // For dive bomber who can anti-land
+						$(".stat_value", statBox).text("");
 					} else {
 						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);
 					}
-					
-					statBox.appendTo(".tab_mstgear .gearInfo .stats");
 				}
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstgear .gearInfo .stats");

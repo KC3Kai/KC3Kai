@@ -6,6 +6,83 @@
 (function(){
 	"use strict";
 	
+	// CRC32C as per https://github.com/ashi009/node-fast-crc32c/blob/master/impls/js_crc32c.js
+
+	const crc32cTable = new Int32Array([
+		0x00000000, 0xf26b8303, 0xe13b70f7, 0x1350f3f4,
+		0xc79a971f, 0x35f1141c, 0x26a1e7e8, 0xd4ca64eb,
+		0x8ad958cf, 0x78b2dbcc, 0x6be22838, 0x9989ab3b,
+		0x4d43cfd0, 0xbf284cd3, 0xac78bf27, 0x5e133c24,
+		0x105ec76f, 0xe235446c, 0xf165b798, 0x030e349b,
+		0xd7c45070, 0x25afd373, 0x36ff2087, 0xc494a384,
+		0x9a879fa0, 0x68ec1ca3, 0x7bbcef57, 0x89d76c54,
+		0x5d1d08bf, 0xaf768bbc, 0xbc267848, 0x4e4dfb4b,
+		0x20bd8ede, 0xd2d60ddd, 0xc186fe29, 0x33ed7d2a,
+		0xe72719c1, 0x154c9ac2, 0x061c6936, 0xf477ea35,
+		0xaa64d611, 0x580f5512, 0x4b5fa6e6, 0xb93425e5,
+		0x6dfe410e, 0x9f95c20d, 0x8cc531f9, 0x7eaeb2fa,
+		0x30e349b1, 0xc288cab2, 0xd1d83946, 0x23b3ba45,
+		0xf779deae, 0x05125dad, 0x1642ae59, 0xe4292d5a,
+		0xba3a117e, 0x4851927d, 0x5b016189, 0xa96ae28a,
+		0x7da08661, 0x8fcb0562, 0x9c9bf696, 0x6ef07595,
+		0x417b1dbc, 0xb3109ebf, 0xa0406d4b, 0x522bee48,
+		0x86e18aa3, 0x748a09a0, 0x67dafa54, 0x95b17957,
+		0xcba24573, 0x39c9c670, 0x2a993584, 0xd8f2b687,
+		0x0c38d26c, 0xfe53516f, 0xed03a29b, 0x1f682198,
+		0x5125dad3, 0xa34e59d0, 0xb01eaa24, 0x42752927,
+		0x96bf4dcc, 0x64d4cecf, 0x77843d3b, 0x85efbe38,
+		0xdbfc821c, 0x2997011f, 0x3ac7f2eb, 0xc8ac71e8,
+		0x1c661503, 0xee0d9600, 0xfd5d65f4, 0x0f36e6f7,
+		0x61c69362, 0x93ad1061, 0x80fde395, 0x72966096,
+		0xa65c047d, 0x5437877e, 0x4767748a, 0xb50cf789,
+		0xeb1fcbad, 0x197448ae, 0x0a24bb5a, 0xf84f3859,
+		0x2c855cb2, 0xdeeedfb1, 0xcdbe2c45, 0x3fd5af46,
+		0x7198540d, 0x83f3d70e, 0x90a324fa, 0x62c8a7f9,
+		0xb602c312, 0x44694011, 0x5739b3e5, 0xa55230e6,
+		0xfb410cc2, 0x092a8fc1, 0x1a7a7c35, 0xe811ff36,
+		0x3cdb9bdd, 0xceb018de, 0xdde0eb2a, 0x2f8b6829,
+		0x82f63b78, 0x709db87b, 0x63cd4b8f, 0x91a6c88c,
+		0x456cac67, 0xb7072f64, 0xa457dc90, 0x563c5f93,
+		0x082f63b7, 0xfa44e0b4, 0xe9141340, 0x1b7f9043,
+		0xcfb5f4a8, 0x3dde77ab, 0x2e8e845f, 0xdce5075c,
+		0x92a8fc17, 0x60c37f14, 0x73938ce0, 0x81f80fe3,
+		0x55326b08, 0xa759e80b, 0xb4091bff, 0x466298fc,
+		0x1871a4d8, 0xea1a27db, 0xf94ad42f, 0x0b21572c,
+		0xdfeb33c7, 0x2d80b0c4, 0x3ed04330, 0xccbbc033,
+		0xa24bb5a6, 0x502036a5, 0x4370c551, 0xb11b4652,
+		0x65d122b9, 0x97baa1ba, 0x84ea524e, 0x7681d14d,
+		0x2892ed69, 0xdaf96e6a, 0xc9a99d9e, 0x3bc21e9d,
+		0xef087a76, 0x1d63f975, 0x0e330a81, 0xfc588982,
+		0xb21572c9, 0x407ef1ca, 0x532e023e, 0xa145813d,
+		0x758fe5d6, 0x87e466d5, 0x94b49521, 0x66df1622,
+		0x38cc2a06, 0xcaa7a905, 0xd9f75af1, 0x2b9cd9f2,
+		0xff56bd19, 0x0d3d3e1a, 0x1e6dcdee, 0xec064eed,
+		0xc38d26c4, 0x31e6a5c7, 0x22b65633, 0xd0ddd530,
+		0x0417b1db, 0xf67c32d8, 0xe52cc12c, 0x1747422f,
+		0x49547e0b, 0xbb3ffd08, 0xa86f0efc, 0x5a048dff,
+		0x8ecee914, 0x7ca56a17, 0x6ff599e3, 0x9d9e1ae0,
+		0xd3d3e1ab, 0x21b862a8, 0x32e8915c, 0xc083125f,
+		0x144976b4, 0xe622f5b7, 0xf5720643, 0x07198540,
+		0x590ab964, 0xab613a67, 0xb831c993, 0x4a5a4a90,
+		0x9e902e7b, 0x6cfbad78, 0x7fab5e8c, 0x8dc0dd8f,
+		0xe330a81a, 0x115b2b19, 0x020bd8ed, 0xf0605bee,
+		0x24aa3f05, 0xd6c1bc06, 0xc5914ff2, 0x37faccf1,
+		0x69e9f0d5, 0x9b8273d6, 0x88d28022, 0x7ab90321,
+		0xae7367ca, 0x5c18e4c9, 0x4f48173d, 0xbd23943e,
+		0xf36e6f75, 0x0105ec76, 0x12551f82, 0xe03e9c81,
+		0x34f4f86a, 0xc69f7b69, 0xd5cf889d, 0x27a40b9e,
+		0x79b737ba, 0x8bdcb4b9, 0x988c474d, 0x6ae7c44e,
+		0xbe2da0a5, 0x4c4623a6, 0x5f16d052, 0xad7d5351
+	]);
+
+	const crc32c = str => {
+		let crc = -1;
+		for (const char of str) {
+			crc = crc32cTable[(crc ^ char.charCodeAt(0)) & 0xff] ^ (crc >>> 8);
+		}
+		return (crc ^ -1) >>> 0;
+	};
+
 	window.TsunDBSubmission = {
 		celldata : {
 			map: null,
@@ -27,6 +104,14 @@
 			fleet1: [],
 			fleet2: [],
 			sortiedFleet: 1,
+			fleetids: [],
+			fleetlevel: 0,
+			fleetoneequips: [],
+			fleetoneexslots: [],
+			fleetonetypes: [],
+			fleettwoequips: [],
+			fleettwoexslots: [],
+			fleettwotypes: [],
 			fleetSpeed: null,
 			edgeID: [],
 			los: [],
@@ -101,6 +186,7 @@
 				actualDamage: null,
 				expectedDamage: null,
 				isCritical: null,
+				amountOfNodes: null
 			},
 			ship: {
 				id: null, 
@@ -133,6 +219,73 @@
 			},
 			kc3version: null,
 		},
+		gunfit: {
+			misc: {
+				username: null,
+				id: null,
+				map: null,
+				edge: null,
+				kc3version: null,
+				formation: null,
+				eformation: null,
+				starshell: null,
+				searchlight: null,
+				ncontact: null,
+			},
+			ship: {
+				id: null,
+				lv: null,
+				position: null,
+				morale: null,
+				luck: null,
+				equips: null,
+				improvements: null,
+			},
+			accVal: null,
+			apiCl: null,
+			enemy: null,
+			spAttackType: null,
+			testName: null,
+			time: null,
+		},
+		gimmick: {
+			map: null,
+			nodes: [],
+			gaugenum: null,
+			trigger: null,
+			amountofnodes: null,
+			battles: [],
+			lbasdef: [],
+			difficulty: null,
+			kc3version: null
+		},
+		spAttack: {
+			ship: {
+				id: null,
+				lv: null,
+				position: null,
+				morale: null,
+				stats: null,
+				equips: null,
+				proficiency: null,
+			},
+			misc: null,
+			map: null,
+			node: null,
+			cutin: null,
+			cutintype: null,
+			cutinequips: null,
+			time: null,
+			kc3version: null
+		},
+		maelstrom : {
+			map: null,
+			node: null,
+			radars: [],
+			loss: null,
+			resources: [],
+			type: null
+		},
 		development : {
 			hqLvl: null,
 			flagship: {},
@@ -140,7 +293,18 @@
 			result: null,
 			success: null
 		},
+		lolimodfod: {
+			shipid: null,
+			shiplvl: null,
+			modids: null,
+			modlvls: null,
+
+			modbefore: null,
+			modafter: null,
+			modleft: null
+		},
 		handlers : {},
+		isListenerRegistered: false,
 		mapInfo : [],
 		currentMap : [0, 0],
 		
@@ -152,28 +316,31 @@
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				
-				'api_req_sortie/battle': [this.processEnemy, this.processAACI],
+				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit, this.processSpAttack],
 				'api_req_sortie/airbattle': this.processEnemy,
-				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet],
+				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
+				'api_req_sortie/ld_shooting': this.processEnemy,
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
-				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
+				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack],
 				'api_req_combined_battle/airbattle': this.processEnemy,
-				'api_req_combined_battle/battle': this.processEnemy,
-				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet],
-				'api_req_combined_battle/battle_water': this.processEnemy,
+				'api_req_combined_battle/battle': [this.processEnemy, this.processSpAttack],
+				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack],
+				'api_req_combined_battle/battle_water': [this.processEnemy, this.processSpAttack],
 				'api_req_combined_battle/ld_airbattle': this.processEnemy,
-				'api_req_combined_battle/ec_battle': this.processEnemy,
-				'api_req_combined_battle/each_battle': this.processEnemy,
+				'api_req_combined_battle/ld_shooting': this.processEnemy,
+				'api_req_combined_battle/ec_battle': [this.processEnemy, this.processSpAttack],
+				'api_req_combined_battle/each_battle': [this.processEnemy, this.processSpAttack],
 				'api_req_combined_battle/each_airbattle': this.processEnemy,
-				'api_req_combined_battle/each_sp_midnight': [this.processEnemy, this.processFriendlyFleet],
-				'api_req_combined_battle/each_battle_water': this.processEnemy,
-				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet],
+				'api_req_combined_battle/each_sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack],
+				'api_req_combined_battle/each_battle_water': [this.processEnemy, this.processSpAttack],
+				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
+				'api_req_combined_battle/each_ld_shooting': this.processEnemy,
 				// Night battles as 2nd part following day part:
-				'api_req_battle_midnight/battle': this.processFriendlyFleet,
-				'api_req_combined_battle/midnight_battle': this.processFriendlyFleet,
-				'api_req_combined_battle/ec_midnight_battle': this.processFriendlyFleet,
+				'api_req_battle_midnight/battle': [this.processFriendlyFleet, this.processGunfit, this.processSpAttack],
+				'api_req_combined_battle/midnight_battle': [this.processFriendlyFleet, this.processSpAttack],
+				'api_req_combined_battle/ec_midnight_battle': [this.processFriendlyFleet, this.processSpAttack],
 				// PvP battles are excluded intentionally
 				
 				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
@@ -181,9 +348,35 @@
 				// PvP battle_result excluded intentionally
 				
 				// Development related
-				'api_req_kousyou/createitem': this.processDevelopment
+				'api_req_kousyou/createitem': this.processDevelopment,
+
+				// Debuff gimmick check
+				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener],
+
+				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
+			this.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+		},
+		
+		lazyInitNetworkListener: function() {
+			if(!this.isListenerRegistered) {
+				this.isListenerRegistered = true;
+				/**
+				 * Lazy register to KC3Network global listener
+				 * @param event - the triggered event name.
+				 * @param data - the data object built by Kcsapi handler, {} by default.
+				 */
+				KC3Network.addGlobalListener((event, data) => {
+					if(!ConfigManager.TsunDBSubmission_enabled)
+						return;
+					const eventHandler = this.handlers[event];
+					if(Array.isArray(eventHandler))
+						eventHandler.forEach(h => h && h.call(this, data));
+					else if(typeof eventHandler === "function")
+						eventHandler.call(this, data);
+				});
+			}
 		},
 		
 		processMapInfo: function(http) {
@@ -216,6 +409,9 @@
 			this.celldata.cleared = mapData.api_cleared;
 			if(mapData.api_eventmap) {
 				this.celldata.difficulty = mapData.api_eventmap.api_selected_rank;
+			}
+			else{
+				this.celldata.difficulty = 0;
 			}
 			
 			this.sendData(this.celldata, 'celldata');
@@ -280,6 +476,23 @@
 				this.data.fleet2 = this.handleFleet(PlayerManager.fleets[1]);
 			}
 			
+			for(const ship of this.data.fleet1) {
+				this.data.fleetids.push(ship.id);
+				this.data.fleetlevel += ship.level;
+				this.data.fleetoneequips.push(...ship.equip);
+				this.data.fleetoneexslots.push(ship.exslot);
+				this.data.fleetonetypes.push(ship.type);
+			}
+			if(this.data.fleet2.length > 0) {
+				for(const ship of this.data.fleet2) {
+					this.data.fleetids.push(ship.id);
+					this.data.fleetlevel += ship.level;
+					this.data.fleettwoequips.push(...ship.equip);
+					this.data.fleettwoexslots.push(ship.exslot);
+					this.data.fleettwotypes.push(ship.type);
+				}
+			}
+			
 			// Sets all the event related values
 			if(apiData.api_eventmap) {
 				const mapStorage = KC3SortieManager.getCurrentMapData(this.currentMap[0], this.currentMap[1]);
@@ -287,25 +500,25 @@
 				this.data.currentMapHP = apiData.api_eventmap.api_now_maphp;
 				this.data.maxMapHP = apiData.api_eventmap.api_max_maphp;
 				this.data.difficulty = mapData.api_eventmap.api_selected_rank;
-				this.data.gaugeNum = mapData.api_eventmap.api_gauge_num || 1;
-				this.data.gaugeType = mapData.api_eventmap.api_gauge_type;
+				this.data.gaugeNum = mapData.api_gauge_num;
+				this.data.gaugeType = mapData.api_gauge_type;
 				this.data.debuffSound = mapStorage.debuffSound;
 				
 				this.sendData(this.data, 'eventrouting');
 			} else {
-				// This is made to support the old schema for the routing. This will be deprecated in the future.
-				const oldFormatData = $.extend(true, {}, this.data);
-				delete oldFormatData.nodeInfo;
-				oldFormatData.nodeType = this.data.nodeInfo.nodeType;
-				oldFormatData.eventId = this.data.nodeInfo.eventId;
-				oldFormatData.eventKind = this.data.nodeInfo.eventKind;
-				
-				this.sendData(oldFormatData, 'routing');
+				this.sendData(this.data, 'routing');
 			}
 			
 			// Send Land-base Air Raid enemy compos
 			if(apiData.api_destruction_battle) {
 				this.processEnemy(http, apiData.api_destruction_battle);
+				this.fillGimmickInfo(apiData.api_destruction_battle, true);
+			}
+			if(apiData.api_m1) {
+				this.processGimmick(http);
+			}
+			if(apiData.api_happening) {
+				this.processMaelstrom(apiData.api_happening);
 			}
 		},
 		
@@ -327,22 +540,13 @@
 				hp: friendlyInfo.api_maxhps,
 				nowhp: friendlyInfo.api_nowhps,
 				stats: friendlyInfo.api_Param,
-				equip: friendlyInfo.api_Slot
+				equip: friendlyInfo.api_Slot,
+				requestType: PlayerManager.friendlySettings.api_request_type,
+				voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
+				fleet1: (this.data.fleet1 || []).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b),
+				fleet2: (this.data.fleet2 || []).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b),
 			};
-			let uniqueSerialKey = "";
-			for(const i in this.friendlyFleet.fleet.ship) {
-				let accumulated = this.friendlyFleet.fleet.ship[i]
-					+ this.friendlyFleet.fleet.lvl[i]
-					+ this.friendlyFleet.fleet.nowhp[i];
-				for(const v of this.friendlyFleet.fleet.stats[i]) {
-					accumulated += v;
-				}
-				for(const v of this.friendlyFleet.fleet.equip[i]) {
-					accumulated += v;
-				}
-				uniqueSerialKey += String(accumulated);
-			}
-			this.friendlyFleet.uniquekey = uniqueSerialKey;
+			this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
 			this.sendData(this.friendlyFleet, 'friendlyfleet');
 		},
 		
@@ -364,6 +568,13 @@
 				equip: apiData.api_eSlot,
 				formation: apiData.api_formation[1]
 			};
+			if(KC3Meta.isEventWorld(this.currentMap[0])) {
+				this.enemyComp.enemyComp.mapStats = {
+					gaugeNum: this.data.gaugeNum,
+					currentHP: this.data.currentMapHP,
+					maxHP: this.data.maxMapHP
+				};
+			}
 			if(apiData.api_ship_ke_combined) {
 				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
 				this.enemyComp.enemyComp.lvlEscort = apiData.api_ship_lv_combined;
@@ -415,15 +626,20 @@
 					airBattle.planes = [];
 					airBattle.slots = [];
 					airBattle.proficiency = [];
+					airBattle.improvements = [];
+					airBattle.bases = bases.map(base => base.toShipObject().equipment().map(gear => gear.masterId));
+					airBattle.contact = koukuApi.api_stage1.api_touch_plane;
 					(koukuApi.api_plane_from[0] || []).forEach(baseId => {
 						const baseInfo = bases[baseId - 1];
 						const squadronPlanes = koukuApi.api_map_squadron_plane[baseId] || [];
 						const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 						const planes = squadronPlanes.map(plane => plane.api_mst_id || -1);
-						const proficiency = shipObj.equipment().map(g => g.ace);
+						const proficiency = shipObj.equipment().map(g => g.ace || -1);
+						const improvements = shipObj.equipment().map(g => g.stars || -1);
 						airBattle.planes.push(planes);
 						airBattle.slots.push(shipObj.slots);
 						airBattle.proficiency.push(proficiency);
+						airBattle.improvements.push(improvements);
 						fp += shipObj.interceptionPower();
 					});
 					if(koukuApi.api_stage3) {
@@ -477,6 +693,11 @@
 			if(apiData.api_get_eventitem !== undefined) {
 				this.processEventReward(http);
 			}
+			
+			if (KC3Meta.isEventWorld(this.currentMap[0])) {
+				this.fillGimmickInfo(apiData);
+			}
+
 			const lastShipCounts = this.shipDrop.counts || {};
 			this.shipDrop = {};
 			
@@ -502,6 +723,7 @@
 				&& (KC3ShipManager.count() >= KC3ShipManager.max
 				 || KC3GearManager.count() >= KC3GearManager.max - 3)
 			) { return; }
+			this.processDropLoc(this.shipDrop);
 			this.sendData(this.shipDrop, 'drops');
 			
 			// To avoid iterating all ships every time,
@@ -511,6 +733,17 @@
 				const baseFormId = RemodelDb.originOf(this.shipDrop.ship);
 				this.shipDrop.counts[baseFormId] = 1 + (this.shipDrop.counts[baseFormId] || 0);
 			}
+		},
+
+		processDropLoc(shipdrop){
+			let data = {
+				ship: shipdrop.ship,
+				map: shipdrop.map,
+				node: shipdrop.node,
+				rank: shipdrop.rank,
+				difficulty: shipdrop.difficulty
+			};
+			this.sendData(data, 'droplocs');
 		},
 
 		processAACI: function(http) {
@@ -577,7 +810,7 @@
 
 			this.aaci.equips = triggeredShip.equipment(true).map(g => g.masterId || -1);
 			this.aaci.improvements = triggeredShip.equipment(true).map(g => g.stars || -1);
-			this.aaci.kc3version = this.manifest.version + ("update_url" in this.manifest ? "" : "d");
+			this.aaci.kc3version = this.kc3version;
 
 			this.sendData(this.aaci, 'aaci');
 		},
@@ -591,18 +824,221 @@
 				edgeID: thisNode.id,
 				map: this.data.map,
 				difficulty: this.data.difficulty,
-				kc3version: this.manifest.version + ("update_url" in this.manifest ? "" : "d")
+				kc3version: this.kc3version
 			};
 			unexpectedList.forEach(a => {
 				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
 					this.unexpectedDamage = Object.assign({}, a, template);
+					this.unexpectedDamage.damageInstance.amountOfNodes = this.data.nodeInfo.amountOfNodes;
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;
 					this.sendData(this.unexpectedDamage, 'abnormal');
 				}
 			});
 		},
+		
+		processGunfit: function(){
+			this.gunfit = {};
+			const thisNode = KC3SortieManager.currentNode();
+			const allowedNodes = {
+				"1-1": [1],
+				"1-2": [1, 3]
+			};
+			if (!(ConfigManager.TsunDBSubmissionExtra_enabled
+				&& Object.keys(allowedNodes).includes(this.data.map)
+				&& allowedNodes[this.data.map].includes(thisNode.id)
+			)) { return; }
+			this.updateGunfitsIfNeeded();
+			
+			if(localStorage.tsundb_gunfits === undefined) { return; }
+			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
+			
+			// Leave it as single-fleet check for now
+			const fleet = PlayerManager.fleets[this.data.sortiedFleet - 1];
+			const battleLog = (thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {}).playerMain;
+			const template = {
+				username: PlayerManager.hq.name,
+				id: PlayerManager.hq.id,
+				map: this.data.map,
+				edge: thisNode.id,
+				kc3version: this.kc3version,
+				starshell: !!thisNode.flarePos,
+				searchlight: !!fleet.estimateUsableSearchlight(),
+				ncontact: thisNode.fcontactId === 102,
+			};
+			const battleData = thisNode.battleDay || thisNode.battleNight;
+			template.formation = battleData.api_formation[0];
+			template.eformation = battleData.api_formation[1];
+			const initialMorale = KC3SortieManager.initialMorale;
+			
+			// Implementing phase tagging to attacks in the future, so this part may need to be updated later
+			for (var idx = 0; idx < fleet.ships.length; idx++) {
+				const ship = fleet.ship(idx);
+				if (ship.isDummy()) { continue; }
+				const testId = this.checkGunFitsRequirements(ship, initialMorale[idx]);
+				if (testId >= 0) {
+					const template2 = Object.assign({}, { misc: template, ship: { id:ship.masterId, lv: ship.level, position: idx, morale: initialMorale[idx], luck: ship.lk[0],
+						equips: ship.equipment(true).map(g => g.masterId || -1), improvements: ship.equipment(true).map(g => g.stars || -1), }, testName: tests[testId].testName });
+					const formMod = ship.estimateShellingFormationModifier(template2.formation, template2.eformation, 'accuracy');
+					const accVal = ship.shellingAccuracy(formMod, false);
+					template2.accVal = accVal.basicAccuracy;
+					const shipLog = battleLog[idx].attacks;
+					
+					for (var i = 0; i < shipLog.length; i++) {
+						const attack = shipLog[i];
+						for (var j = 0; j < attack.acc.length; j++) {
+							this.gunfit = Object.assign({}, template2, { apiCl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
+								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'day' : 'yasen' });
+							this.sendData(this.gunfit, 'fits');
+						}
+					}
+				}
+			}
+		},
+		
+		processGimmick: function(http, trigger = 'debuff'){
+			const apiData = http ? http.response.api_data : {};
+			if (http) {
+				if (!(
+					// triggered by next node flag
+					apiData.api_m1 ||
+					// triggered by home port SE flag
+					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
+				)) { return; }
+			} // else triggered by battle/LB air raid result flag
+			this.gimmick.map = this.data.map;
+			this.gimmick.amountofnodes = this.data.nodeInfo.amountOfNodes;
+			this.gimmick.gaugenum = this.data.gaugeNum;
+			this.gimmick.trigger = trigger;
+			this.gimmick.nodes = this.data.edgeID;
+			this.gimmick.kc3version = this.kc3version;
+			this.gimmick.difficulty = this.data.difficulty;
+			if (apiData.api_m1) {
+				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
+			}
+			this.sendData(this.gimmick, 'gimmick');
+		},
 
+		processSpAttack: function() {
+			this.spAttack = {};
+			const thisNode = KC3SortieManager.currentNode();
+			const template = {
+				kc3version: this.kc3version,
+				map: this.data.map,
+				node: thisNode.id
+			};
+			const enemyList = thisNode.eships, isCombined = KC3SortieManager.isCombinedSortie();
+			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
+			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
+			const fleetSent = this.data.sortiedFleet;
+			const battleConds = KC3Calc.collectBattleConditions();
+			const fillShipInfo = ship => ({
+				id: ship.masterId,
+				lvl: ship.level,
+				morale: ship.morale,
+				stats: ship.estimateNakedStats(),
+				equips: ship.equipment(true).map(g => g.masterId || -1), 
+				improvements: ship.equipment(true).map(g => g.stars || -1),
+				proficiency: ship.equipment(true).map(g => g.ace || -1),
+				slots: ship.slots,
+			});
+			const buildSortieSpecialInfo = (fleet, cutin) => {
+				const misc = {};
+				const shipIndexList = {
+					100: [2, 4],
+					101: [1],
+					102: [1],
+					103: [1, 2]
+				}[cutin] || [];
+				shipIndexList.forEach(idx => {
+					const ship = fleet.ship(idx);
+					misc["ship" + (idx + 1)] = fillShipInfo(ship);
+				});
+				return misc;
+			};
+			for (let idx = 0; idx < playerShips.length; idx++) {
+				const attacks = (playerShips[idx] || {}).attacks || [];
+				if (attacks.length === 0) { continue; }
+				const isEscort = isCombined && idx > 5;
+				const shipPos = !isEscort ? idx : idx - 6;
+				const fleet = PlayerManager.fleets[!isEscort ? fleetSent - 1 : 1];
+				const ship = fleet.ship(shipPos);
+				const shipInfo = fillShipInfo(ship);
+				shipInfo.position = shipPos;
+				const template2 = Object.assign({}, template, {ship: shipInfo});
+				for (let num = 0; num < attacks.length; num++) {
+					const attack = attacks[num];
+					let target = attack.target;
+					if (Array.isArray(target)) { target = target[0]; }
+					let enemy = enemyList[target];
+					const {isLand, isSubmarine} = ship.estimateTargetShipType(enemy);
+					if (isLand || isSubmarine) { continue; }
+					const time = attack.cutin >= 0 ? "day" : "yasen";
+					const cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+						: ship.estimateNightAttackType(enemy, true);
+					if (cutinType[1] === 0) { break; }
+					const cutin = attack.cutin || attack.ncutin || 0;
+					const cutinEquips = attack.equip || [-1];
+					const specialCutinIds = [100, 101, 102, 103];
+					let misc = {};
+					if (this.sortieSpecialAttack && (
+							specialCutinIds.includes(cutinType[1]) ||
+							specialCutinIds.includes(cutin)
+						)
+					) { continue; }
+					if (specialCutinIds.includes(cutin)) {
+						this.sortieSpecialAttack = true;
+					}
+					if (specialCutinIds.includes(cutinType[1])) {
+						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
+						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+					} else if (time === "day"
+						&& !(thisNode.planeFighters.player[0] === 0
+							&& thisNode.planeFighters.abyssal[0] === 0)) {
+						misc = ship.daySpAttackBaseRate();
+						if (isCombined) {
+							if (isEscort) { misc.fleetMainLoS = PlayerManager.fleets[0].artillerySpottingLineOfSight(); }
+							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
+						}
+					} else {
+						misc = ship.nightSpAttackBaseRate();
+					}
+					if (Object.keys(misc).length === 0) { continue; }
+					misc.isCombined = isCombined;
+					misc.enemy = enemy;
+					misc.acc = attack.acc;
+					misc.damage = attack.damage;
+					misc.contact = battleConds.airBattleId;
+					this.spAttack = Object.assign({}, template2, {
+						misc, cutin,
+						cutinequips: cutinEquips,
+						cutintype: cutinType[2],
+						time,
+					});
+					this.sendData(this.spAttack, 'spattack');
+				}
+			}
+		},
+
+		processMaelstrom: function(apiData) {
+			this.maelstrom = {
+				map: this.data.map,
+				node: this.data.edgeID[this.data.edgeID.length - 1],
+				loss: apiData.api_count,
+				type: apiData.api_mst_id,
+				radars: [],
+				resources: []
+			};
+			const rscType = ["", "fuel", "ammo"][apiData.api_mst_id] || "";
+			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
+				fleet.shipsUnescaped().forEach(ship => {
+					this.maelstrom.resources.push(ship[rscType] || 0);
+					this.maelstrom.radars.push(ship.countEquipmentType(2, [12, 13]));
+				});
+			});
+			this.sendData(this.maelstrom, 'maelstrom');
+		},
+		
 		processDevelopment: function(http){
 			this.cleanNonCombat();
 			const request = http.params;
@@ -627,7 +1063,45 @@
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
 		},
-		
+
+		/**
+		 * This will be called from KC3Network listener,
+		 * when the ship modernize event is triggered by the Kcsapi handler.
+		 * @param data - the data instance including mod ship and fodders.
+		 */
+		processModernizeEvent: function(data) {
+			const ship = KC3ShipManager.get(data.rosterId);
+			const modFod = data.consumedMasterIds.map((id) => KC3Master.ship(id));
+
+			// Checks in `main.js#RemodelUtil.calcPowerUpParams`
+			const deCount = modFod.filter((s) => s.api_stype === 1).length;
+
+			const mizuhoCount = modFod.filter((s) => s.api_ctype === 62).length;
+			const isMizuhoHPAble = [62, 72].includes(ship.master().api_ctype);
+
+			const kamoiCount = modFod.filter((s) => s.api_ctype === 72).length;
+			const isKamoiHPAble = [72, 62, 41, 37].includes(ship.master().api_ctype);
+
+			// DE / Mizuho / Kamoi mod filter
+			if (deCount === 0 &&
+				!(isMizuhoHPAble && mizuhoCount >= 2) &&
+				!(isKamoiHPAble && kamoiCount >= 2)
+			) return;
+
+			this.lolimodfod = {
+				shipid: ship.masterId,
+				shiplvl: ship.level,
+				modids: data.consumedMasterIds,
+				modlvls: data.consumedMasterLevels,
+
+				modbefore: data.oldMod,
+				modafter: data.newMod,
+				modleft: data.left
+			};
+			//console.debug(this.lolimodfod);
+			this.sendData(this.lolimodfod, 'lolimodfod');
+		},
+
 		handleFleet: function(fleet) {
 			// Update fleet minimal speed
 			fleet.speed();
@@ -643,10 +1117,168 @@
 				type: ship.master().api_stype,
 				speed: ship.speed,
 				flee: ship.didFlee,
-				slots: ship.api_slot_num,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
 				exslot: ship.exItem().masterId || -1
 			}));
+		},
+		
+		updateGunfitsIfNeeded: function(callback) {
+			const currentHour = Date.toUTChours();
+			if(localStorage.tsundb_gunfits !== undefined) {
+				const gf = JSON.parse(localStorage.tsundb_gunfits);
+				if(gf.updateTime + 3 > currentHour) // Cache for ~3h
+					return;
+			}
+			const dataSourceUrl = `https://raw.githubusercontent.com/Tibowl/TsunTools/master/config/gunfits.json?cache=${currentHour}`;
+			$.getJSON(dataSourceUrl, newGunfitData => {
+				if(callback) callback(newGunfitData);
+				localStorage.tsundb_gunfits = JSON.stringify({
+					tests: newGunfitData,
+					updateTime: currentHour
+				});
+			});
+		},
+		
+		/**
+		 * @return
+		 *   i: index of test (>= 0) matches test and morale
+		 *  -1: matches a test but not morale
+		 *  -2: matches a test but not equips
+		 *  -3: does not match any test
+		 * 
+		 * Eg: if(checkGunFitsRequirements(ship) < 0) continue;
+		 */
+		checkGunFitsRequirements: function(ship, morale = ship.morale) {
+			if(localStorage.tsundb_gunfits === undefined)
+				return -3;
+			
+			const modalWarning = function (termPrefix) {
+				const title = termPrefix + "Title", message = termPrefix + "Message";
+				if (KC3SortieManager.isOnSortie()) {
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term(title),
+						message: KC3Meta.term(message),
+					});
+				}
+			};
+			let status = -3;
+			const tests = JSON.parse(localStorage.tsundb_gunfits).tests;
+			const onClick = e => {
+				(new RMsg("service", "strategyRoomPage", {
+					tabPath: "gunfits"
+				})).execute();
+				return false;
+			};
+			for(const testId in tests) {
+				const testStatus = this.checkGunFitTestRequirements(ship, tests[testId], morale);
+				if(testStatus == 0) {
+					if (!tests[testId].active) {
+						KC3Network.trigger("ModalBox", {
+							title: KC3Meta.term("TsunDBTestInactiveTitle"),
+							message: KC3Meta.term("TsunDBTestInactiveMessage"),
+							link: KC3Meta.term("TsunDBTestLink"),
+							onClick: onClick
+						});
+					}
+					return parseInt(testId);
+				}
+				status = Math.max(status, testStatus);
+			}
+			if ([-2, -1].includes(status)) {
+				modalWarning(status === -1 ? "TsunDBTestWrongMorale" : "TsunDBTestWrongSetup");
+			}
+			return status;
+		},
+		
+		/**
+		 * @return
+		 *   0: matches test and morale
+		 *  -1: matches test but not morale
+		 *  -2: matches test but not equip
+		 *  -3: does not match test at all
+		 */
+		checkGunFitTestRequirements: function(ship, test, morale = ship.morale) {
+			if(ship.masterId !== test.shipId
+				|| ship.level < test.lvlRange[0]
+				|| ship.level > test.lvlRange[1])
+				return -3; // Wrong remodel/ship or wrong lvl
+			
+			const equip = ship.equipment(true).filter((gear) => gear.masterId > 0);
+			const testEquip = test.equipment;
+
+			if(test.minVersion) {
+				const kc3version = this.manifest.version;
+				const verStr2Num = str => Number(str.replace(/[.]/g, ""));
+				if(verStr2Num(test.minVersion) > verStr2Num(kc3version)) {
+					return -2; // Wrong KC3 minimum version
+				}
+			}
+			
+			eqloop: for(const e of testEquip) {
+				for(const i in equip) {
+					if(e == equip[i].masterId) {
+						equip.splice(i, 1);
+						continue eqloop;
+					}
+				}
+				return -2; // Missing required equip
+			}
+			
+			if(test.accuracy) {
+				let equipAcc = 0;
+				const accCheck = test.accuracy;
+				const stype = ship.master().api_stype;
+				for (let idx in equip) {
+					const eqType2 = equip[idx].master().api_type[2];
+					// Either radars or medium caliber guns on (F)BB(V) to adjust accuracy
+					if([12, 13].includes(eqType2) || (eqType2 === 2 && [8, 9, 10].includes(stype))) {
+						equipAcc += equip[idx].master().api_houm;
+					} else {
+						return -2; // Non-test related equipment
+					}
+				}
+				if(equipAcc !== accCheck) {
+					return -2; // Too little or too much accuracy
+				}
+			}	
+			else if(equip.length > 0) {
+				return -2; // Too many equips
+			}
+			
+			if(morale < test.moraleRange[0]
+				|| morale > test.moraleRange[1])
+				return -1; // Wrong morale
+			return 0;
+		},
+		
+		fillGimmickInfo: function(apiData, isAirRaid) {
+			const thisNode = KC3SortieManager.currentNode();
+			const battleConds = KC3Calc.collectBattleConditions();
+			let obj = {};
+			if (!isAirRaid) {
+				const predictedFleet = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
+				obj = {
+					node: thisNode.id,
+					seiku: battleConds.airBattleId,
+					lbasPresent: thisNode.lbasFlag,
+					rank: apiData.api_win_rank,
+					flagshipSunk: Object.getSafePath(predictedFleet, "enemyMain.0.hp") < 1,
+				};
+				this.gimmick.battles.push(obj);
+			} else {
+				const airRaidData = apiData.api_air_base_attack;
+				obj = {
+					node: thisNode.id,
+					damaged: airRaidData.api_stage3 ? !airRaidData.api_stage3.api_fdam.every(v => v === 0) : false,
+					seiku: airRaidData.api_stage1.api_disp_seiku,
+					success: apiData.api_lost_kind === 4
+				};
+				this.gimmick.lbasdef.push(obj);
+			}
+			if (apiData.api_m1) {
+				obj.api_m1 = apiData.api_m1;
+				this.processGimmick(false, isAirRaid ? 'nodeAB' : 'nodeBattle');
+			}
 		},
 		
 		/**
@@ -666,6 +1298,17 @@
 				itemGet: []
 			};
 			this.shipDrop.counts = {};
+			this.gimmick = {
+				map: null,
+				nodes: [],
+				gaugenum: null,
+				trigger: null,
+				battles: [],
+				lbasdef: [],
+				amountofnodes: null,
+				difficulty: null
+			};
+			this.sortieSpecialAttack = null;
 		},
 		
 		/**
@@ -677,6 +1320,14 @@
 			this.data.fleet1 = [];
 			this.data.fleet2 = [];
 			this.data.fleetSpeed = 20;
+			this.data.fleetids = [];
+			this.data.fleetlevel = 0;
+			this.data.fleetoneequips = [];
+			this.data.fleetoneexslots = [];
+			this.data.fleetonetypes = [];
+			this.data.fleettwoequips = [];
+			this.data.fleettwoexslots = [];
+			this.data.fleettwotypes = [];
 			// optional properties for event only
 			this.data.difficulty = 0;
 			this.data.currentMapHP = 0;
@@ -740,10 +1391,12 @@
 			//console.debug(JSON.stringify(payload));
 			$.ajax({
 				url: `https://tsundb.kc3.moe/api/${type}`,
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'content-type': 'application/json',
-					'tsun-ver': 'Kasumi'
+					'tsun-ver': 'Kasumi Kai',
+					'dataorigin': 'kc3',
+					'version': this.kc3version
 				},
 				data: JSON.stringify(payload)
 			}).done( function() {

@@ -20,6 +20,7 @@ known IDs see QuestManager
 		this.id = 0;
 		this.type = 0;
 		this.status = 0;
+		this.hash = 0;
 		this.progress = 0;
 		this.materials = [0,0,0,0];
 		this.tracking = false;
@@ -32,6 +33,7 @@ known IDs see QuestManager
 		this.id = data.id;
 		this.status = data.status;
 		this.type = data.type;
+		this.hash = data.hash;
 		if (data.progress) {
 			this.progress = data.progress;
 		} else {
@@ -50,15 +52,19 @@ known IDs see QuestManager
 	Fill object with quest data from Raw API response
 	------------------------------------------*/
 	KC3Quest.prototype.defineRaw = function( data ){
+		// Attach temporary raw data for quick reference
+		this.raw = function(){ return data; };
 		this.id = data.api_no;
 		this.status = data.api_state;
 		this.type = data.api_type;
+		// for simplicity, only use string simple hash on `api_title`,
+		// for accurate identitifer, might add more properties or use less collision hash.
+		// but notice: text not exactly the same will raise issue,
+		// and in-game `api_detail` is using `<br>`, always removed by wiki and us.
+		this.hash = (data.api_title || "").hashCode();
 		this.progress = data.api_progress_flag;
 		this.materials = data.api_get_material;
 		this.attachMeta();
-
-		// Attach temporary raw data for quick reference
-		this.raw = function(){ return data; };
 	};
 
 	/* OUTPUT SHORT
@@ -174,13 +180,26 @@ known IDs see QuestManager
 	Define tracking from meta if current object's is empty
 	------------------------------------------*/
 	KC3Quest.prototype.attachMeta = function(){
-		var questMeta = KC3Meta.quest(this.id);
+		const questMeta = KC3Meta.quest(this.id);
+		const noMeta = function() { return {
+			available : undefined,
+			code : "N/A",
+			name : KC3Meta.term("UntranslatedQuest"),
+			desc : KC3Meta.term("UntranslatedQuestTip")
+		}; };
+		const checkExpectedHash = (meta) => {
+			if(meta.hash && this.hash && meta.hash !== this.hash) {
+				console.log(`Quest ${this.id} hash ${this.hash}, expected:`, meta.hash);
+				return false;
+			}
+			return true;
+		};
 		// If this object doesn't have meta yet
-		if(this.meta === undefined || !this.meta().available){
-			// If we have meta for this quest
-			if(questMeta){
+		if(this.meta === undefined || !this.meta().available) {
+			// If we have meta for this quest, and not an ID-reused seasonal one
+			if(questMeta && checkExpectedHash(questMeta)) {
 				// Attach meta info to this object
-				this.meta = function(){ return {
+				this.meta = function() { return {
 					available : true,
 					code : questMeta.code,
 					name : questMeta.name,
@@ -189,16 +208,11 @@ known IDs see QuestManager
 					trackingDesc : questMeta.trackingDesc
 				}; };
 				// If tracking is empty and Meta is defined
-				if(this.tracking === false && Array.isArray(questMeta.tracking)){
+				if(this.tracking === false && Array.isArray(questMeta.tracking)) {
 					this.tracking = questMeta.tracking;
 				}
 			} else if(this.meta === undefined) {
-				this.meta = function(){ return {
-					available : undefined,
-					code : "N/A",
-					name : KC3Meta.term("UntranslatedQuest"),
-					desc : KC3Meta.term("UntranslatedQuestTip")
-				}; };
+				this.meta = noMeta;
 			}
 		} else {
 			// Check if translation updated
@@ -209,9 +223,9 @@ known IDs see QuestManager
 				|| oldMeta.desc !== questMeta.desc
 				|| oldMeta.memo !== questMeta.memo
 				|| oldMeta.trackingDesc !== questMeta.trackingDesc
-				)){
+				)) {
 				// Only update meta text, keep tracking untouched
-				this.meta = function(){ return {
+				this.meta = function() { return {
 					available : true,
 					code : questMeta.code,
 					name : questMeta.name,
@@ -219,6 +233,8 @@ known IDs see QuestManager
 					memo : questMeta.memo,
 					trackingDesc : questMeta.trackingDesc
 				}; };
+			} else if(questMeta && !checkExpectedHash(questMeta)) {
+				this.meta = noMeta;
 			}
 		}
 	};
@@ -299,7 +315,8 @@ known IDs see QuestManager
 			return;
 		// client-side progress judgement for these:
 		// C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		if([318].indexOf(this.id) > -1) {
+		// F25, F39: 50% if 1st flagship or inventory has no required aircraft
+		if([318, 628, 643].indexOf(this.id) > -1) {
 			if (currentCount < maxCount && this.progress > 0)
 				trackingData[0] = maxCount;
 			return;

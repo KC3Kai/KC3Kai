@@ -43,6 +43,7 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
+			self.refresh();
 			
 			$(".tab_compare .compare_selector .config_stat img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon(self.statList[$(img).parent().data("stat")][0]));

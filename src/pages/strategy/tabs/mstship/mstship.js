@@ -136,7 +136,7 @@
 					$(".tab_mstship .shipInfo .subtitles").html("This voice is currently disabled to be replayable in KC3Kai");
 					return true;
 				}
-				var shipVersions = KC3Master.graph(self.currentShipId).api_version;
+				var shipVersions = KC3Master.graph(self.currentShipId).api_version || [];
 				var isPortVoices = vnum >= 2 && vnum <= 4;
 				// 0: ship card version, 1: voice version, 2: poke voice version?
 				var soundVersion = shipVersions[isPortVoices ? 2 : 1] || 1;
@@ -392,7 +392,7 @@
 			// CG VIEWER
 			var shipFile = KC3Master.graph(ship_id).api_filename;
 			// Changed to an Array from 2016-04-01
-			var shipVersions = KC3Master.graph(ship_id).api_version;
+			var shipVersions = KC3Master.graph(ship_id).api_version || [];
 			//console.debug("shipgraph.api_version", shipVersions);
 			this.currentGraph = shipFile;
 			this.currentCardVersion = shipVersions[0];
@@ -433,11 +433,11 @@
 				const cgList = $('<div class="cglist"></div>').appendTo(".tab_mstship .shipInfo .basic");
 				// To avoid loading seasonal image types not existed,
 				// see `ShipLoader.prototype.getSpecificAlbumImageLoadList`
-				const isSpecificAlbumTypes = [754, 755, 984, 1003, 1004,
+				const isSpecificAlbumTypes = [754, 755, 984, 997, 1003, 1004,
 					1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013,
 					1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022,
 					1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031,
-					1032, 1033, 1034].includes(ship_id);
+					1032, 1033, 1034, 1085].includes(ship_id);
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
 					isSpecificAlbumTypes ? ['character_full', 'character_up'] : [
 						'card', 'character_full', 'character_full_dmg',
@@ -462,7 +462,7 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
-				// Special cut-in (Nelson Touch, Nagato Cutin) special type
+				// Special cut-in (Nelson Touch, Nagato/Mutsu Cutin) special type
 				if(KC3Meta.specialCutinIds.includes(ship_id)) availableTypes.push("special");
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
@@ -651,7 +651,8 @@
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
 					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
 						// show blueprint icon for all these special materials
-						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report || remodelInfo.gunmat)
+						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
+							|| remodelInfo.gunmat || remodelInfo.airmat)
 					);
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
@@ -862,7 +863,7 @@
 							["fit_penalty", "fit_neutral", "fit_bonus"][Math.sign(value) + 1]
 						);
 					};
-					$.each(gunfits, function(idx, gunfitObj){
+					$.each(gunfits, function(idx, gunfitObj) {
 						if(lastWeightClass != gunfitObj.weight) {
 							isOdd = !isOdd;
 							lastWeightClass = gunfitObj.weight;
@@ -872,6 +873,7 @@
 						const gearObj = KC3Master.slotitem(itemId);
 						$(".gearName", gunfitBox).text(
 							"[{0}] {1}".format(itemId, KC3Meta.gearName(gearObj.api_name))
+						).attr("title", KC3Meta.gearName(gearObj.api_name)
 						).data("id", itemId).on("click", gearClickFunc).addClass("hover");
 						
 						if (gunfitObj.unknown === true) {
@@ -890,7 +892,230 @@
 				} else {
 					$(".gunfit").parent().prev().hide();
 				}
+
+				// VISIBLE EQUIPMENT BONUS
+				$(".bonusList").empty();
+				const bonusDefs = KC3Gear.explicitStatsBonusGears();
+				const bonusList = [];
+				const synergyList = bonusDefs.synergyGears;
 				
+				const ensureArray = array => Array.isArray(array) ? array : [array];
+				const checkBonusExtraRequirements = (bonusDef, shipId, ctype, stype) => {
+					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
+					if (bonusDef.excludeClasses && bonusDef.excludeClasses.includes(ctype)) { return false; }
+					if (bonusDef.excludeStypes && bonusDef.excludeStypes.includes(stype)) { return false; }
+					if (bonusDef.remodel || bonusDef.remodelCap) {
+						const remodelGroup = RemodelDb.remodelGroup(shipId);
+						if(remodelGroup.indexOf(shipId) < bonusDef.remodel) { return false; }
+						if(remodelGroup.indexOf(shipId) > bonusDef.remodelCap) { return false; }
+					}
+					if (bonusDef.stypes && !bonusDef.stypes.includes(stype)) { return false; }
+					return true;
+				};
+				const checkByShipBonusDef = (bonusDef, shipId, stype, gearType2) => (
+					(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+					(bonusDef.stypes && bonusDef.stypes.includes(stype)
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
+					(bonusDef.excludes && !bonusDef.bonusDef.includes(shipId)) ||
+					(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
+					(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes
+						&& KC3Master.equip_type(stype, shipId).includes(gearType2))
+				);
+				const checkByShipBonusRequirements = (byShip, shipId, stype, gearType2) =>
+					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, stype, gearType2));
+				const addObjects = (obj1, obj2) => {
+					for (const key in obj2) {
+						obj1[key] = obj1[key] ? obj1[key] + obj2[key] : obj2[key];
+					}
+					return obj1;
+				};
+				const addStatsToBox = (stats, box) => {
+					Object.keys(stats).forEach(function (stat) {
+						if(!stats[stat]) return;
+						const statBox = $(".tab_mstship .factory .gearStatBonus").clone();
+						$(".statIcon img", statBox).attr("src", KC3Meta.statIconByApi(stat))
+							.attr("title", KC3Meta.statNameTerm(stat, true));
+						$(".statValue", statBox).text((stats[stat] > 0 ? "+" : "") + stats[stat]);
+						$(".bonusStatsList", box).append(statBox);
+					});
+				};
+				const synergyIcon = (flag) =>{
+					if (flag.includes("Radar")) { return 11; }
+					else if (flag.includes("Torpedo")) { return 5; }
+					else if (flag.includes("LargeGunMount")) { return 3; }
+					return 0;
+				};
+				
+				for (const mstId in bonusDefs) {
+					const def = bonusDefs[mstId];
+					let bonus = {};
+					const gearType2 = mstId.startsWith("t2_") ?
+						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?
+						KC3Master.slotitem(mstId).api_type[2] : 0;
+					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
+						bonus = Object.assign(bonus, def);
+					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype, gearType2)) {
+						bonus = Object.assign(bonus, def);
+					}
+					if (Object.keys(bonus).length) {
+						bonus.id = mstId;
+						bonusList.push(bonus);
+					}
+				}
+				let bonusFound = false;
+				if (bonusList.length > 0) {
+					$.each(bonusList, function (idx, gear) {
+						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {};
+						
+						// Class bonuses
+						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
+							let classBonus = gear.byClass[shipData.api_ctype];
+							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
+							classBonus = ensureArray(classBonus);
+							classBonus.forEach(bonus => {
+								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
+									found = true;
+									if (!bonus.minStars) {
+										bonusStats = bonus.single || bonus.multiple;
+										totalStats = addObjects(totalStats, bonusStats);
+										if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+									}
+									else { starBonus[bonus.minStars] = {}; }
+								}
+							});
+							// Improvement bonuses
+							if (classBonus.length) {
+								for (const minStar in starBonus) {
+									starBonus[minStar] = Object.assign({}, totalStats);
+									for (const bonusDef of classBonus) {
+										if (bonusDef.minStars <= minStar) {
+											bonusStats = bonusDef.single || bonusDef.multiple;
+											starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+										}
+									}
+								}
+							}
+						}
+						// Ship bonuses
+						if (gear.byShip) {
+							const gearType2 = gear.id.startsWith("t2_") ?
+								Number(gear.id.substr(3)) : Number.isInteger(Number(gear.id)) ?
+								KC3Master.slotitem(gear.id).api_type[2] : 0;
+							const list = ensureArray(gear.byShip).filter(bonusDef =>
+								checkByShipBonusDef(bonusDef, shipData.api_id, shipData.api_stype, gearType2));
+							list.forEach(shipBonus => {
+								found = true;
+								if (!shipBonus.minStars) {
+									bonusStats = shipBonus.single || shipBonus.multiple;
+									totalStats = addObjects(totalStats, bonusStats);
+									if (shipBonus.synergy) { synergyGear.push(shipBonus.synergy); }
+								}
+								else { starBonus[shipBonus.minStars] = {}; }
+							});
+							// Improvement bonuses
+							if (list.length) {
+								for (const minStar in starBonus) {
+									starBonus[minStar] = Object.assign({}, totalStats);
+									for (const bonusDef of list) {
+										if (bonusDef.minStars <= minStar) {
+											bonusStats = bonusDef.single || bonusDef.multiple;
+											starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+										}
+									}
+								}
+							}
+						}
+						
+						if (found) {
+							const gearBox = $(".tab_mstship .factory .gearBonuses").clone();
+							if (gear.id.startsWith("t2_")) {
+								const typeId = gear.id.substr(3);
+								const firstIconId = KC3Meta.itemIconsByType2(typeId)[typeId === 4 ? 1 : 0];
+								const typeName = KC3Meta.gearTypeName(2, typeId);
+								$(".gearId", gearBox).text(`[T${typeId}]`);
+								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(firstIconId));
+								const allGears = KC3Master.all_slotitems();
+								const matchedGearNames = Object.keys(allGears).filter(
+									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[2] == typeId
+								).map(id => KC3Meta.gearName(allGears[id].api_name)).join("\n");
+								$(".gearName", gearBox).text(typeName).attr("title", matchedGearNames);
+							} else {
+								const master = KC3Master.slotitem(gear.id);
+								const gearName = KC3Meta.gearName(master.api_name);
+								$(".gearId", gearBox).text(`[${gear.id}]`);
+								$(".gearIcon img", gearBox)
+									.attr("src", KC3Meta.itemIcon(master.api_type[3]))
+									.attr("alt", gear.id).click(gearClickFunc);
+								$(".gearIcon", gearBox).addClass("hover");
+								$(".gearName", gearBox).text(gearName).attr("title", gearName);
+							}
+							
+							if (Object.keys(totalStats).length > 0) {
+								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+								addStatsToBox(totalStats, levelBox);
+								$(".leveledBonusStatsList", gearBox).append(levelBox);
+							}
+							
+							Object.keys(starBonus).forEach(function (level) {
+								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
+								$(".gearLevel", levelBox).html("&#9733;{0}".format(
+									Number(level) >= 10 ?
+										'<span style="font-size: smaller">max</span>' :
+										'+' + level
+									)
+								);
+								addStatsToBox(starBonus[level], levelBox);
+								$(".leveledBonusStatsList", gearBox).append(levelBox);
+							});
+							
+							synergyGear.map((synergy) => {
+								ensureArray(synergy).map((syn) => {
+									const synergyBox = $(".tab_mstship .factory .synergy").clone();
+									syn.flags.map((flag) => {
+										const synergyFlag = $(".tab_mstship .factory .synergyFlag").clone();
+										$(".synergyIcon img", synergyFlag).attr("src", KC3Meta.itemIcon(synergyIcon(flag)));
+										const idList = synergyList[flag + "Ids"];
+										const synergyName = (idList && idList.length === 1) ?
+											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
+											KC3Meta.term(flag.toCamelCase(true));
+										$(".synergyType", synergyFlag).html(synergyName);
+										$(".synergyFlags", synergyBox).append(synergyFlag);
+									});
+									
+									if (syn.single || syn.distinct) {
+										const bonus = syn.single || syn.distinct;
+										const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
+										addStatsToBox(bonus, synergyBonusBox);
+										if (syn.distinct) {
+											$(".synergyType", synergyBox).append(
+												$("<span>*</span>").attr("title", "Bonus with * mark effected only once")
+											);
+										}
+										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
+									} else if (syn.byCount) {
+										Object.keys(syn.byCount).forEach(function (number) {
+											if (isNaN(parseInt(number))) {
+												return;
+											}
+											const synergyBonusBox = $(".tab_mstship .factory .synergyBonusRow").clone();
+											addStatsToBox(syn.byCount[number], synergyBonusBox);
+											$(".gearCount", synergyBonusBox).text(`x${number}`);
+											$(".gearType", synergyBonusBox).append($("<img>").attr("src", KC3Meta.itemIcon(synergyIcon(syn.byCount.gear))));
+											$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
+										});
+									}
+									$(".synergyGears", gearBox).append(synergyBox);
+								});
+							});
+							
+							$(".bonusList").append(gearBox);
+							bonusFound = true;
+						}
+					});
+				}
+				$(".bonusList").parent().prev().toggle(bonusFound);
+
 				// BOXES
 				$(".tab_mstship .shipInfo .stats").show();
 				$(".tab_mstship .shipInfo .equipments").show();
@@ -1038,7 +1263,7 @@
 				$(".tab_mstship .shipInfo .subtitles").hide();
 				$(".tab_mstship .shipInfo .cgswf")
 					.css("width", "100%").css("height", "600px")
-					.attr("scale", KC3Master.isSeasonalShip(ship_id) ? 1 : 600 / 1300);
+					.attr("scale", KC3Master.isSeasonalShip(ship_id) ? 600 / 645 : 600 / 1300);
 				
 				$(".tab_mstship .shipInfo .voices").hide();
 				$(".tab_mstship .shipInfo .hourlies").hide();

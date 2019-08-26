@@ -467,7 +467,8 @@
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsSSDirDesc",
-					"tooltip" : "SettingsSSDirDesc"
+					"tooltip" : "SettingsSSDirDesc",
+					"invalidregexp" : "(?:^[\\\\/]|[\\\\/]\\.\\.?|\\.\\.?[\\\\/]|[\\\\/]{2,}|[?*:~\"<>|\\x00]|[\\\\/]$)"
 				}
 			},
 			{
@@ -638,6 +639,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_focustab",
+				"name" : "SettingsSwitchToTab",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_idle_counter",
 				"name" : "SettingsIdleWarning",
 				"type" : "radio",
@@ -698,6 +705,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "alert_taiha_unlock",
+				"name" : "SettingsDisableUnlockShips",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "alert_taiha_blur",
 				"name" : "SettingsScreenBlur",
 				"type" : "check",
@@ -720,6 +733,12 @@
 				"name" : "SettingsHeartbeatSound",
 				"type" : "check",
 				"options" : {}
+			},
+			{
+				"id" : "alert_taiha_sound_src",
+				"name" : "SettingsAlertCustomSound",
+				"type" : "long_text",
+				"options" : { "placeholder" : "http://" }
 			},
 			{
 				"id" : "alert_taiha_panel",
@@ -917,6 +936,14 @@
 				"options" : {}
 			},
 			{
+				"id" : "focus_game_tab",
+				"name" : "SettingsFocusGameTab",
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsFocusGameTabTip"
+				}
+			},
+			{
 				"id" : "fix_game_code",
 				"name" : "SettingsGameLibFixes",
 				"type" : "check",
@@ -971,12 +998,37 @@
 		]
 	},
 	{
-		"section": "SettingsTsunDBSubmission",
+		"section" : "SettingsDataBackupReminder",
 		"help" : "",
+		"contents" : [
+			{
+				"id" : "backupReminder",
+				"name" : "SettingsBackupFrequency",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "SettingsBackupFrequencyNone" ],
+						[ 604800000, "SettingsBackupFrequencyWeekly" ],
+						[ 2629746000, "SettingsBackupFrequencyMonthly" ],
+						[ 7889238000, "SettingsBackupFrequencyQuarterly" ]
+					]
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsTsunDBSubmission",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Settings:-Database-Submissions#tsundb-extra-submission",
 		"contents" :[
 			{
 				"id" : "TsunDBSubmission_enabled",
 				"name" : "SettingsEnableTsunDBSubmission",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "TsunDBSubmissionExtra_enabled",
+				"name" : "SettingsEnableTsunDBExtraSubmission",
 				"type" : "check",
 				"options" : {}
 			}
@@ -1038,9 +1090,37 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
+						[ "moonlight", "Moonlight" ],
 						[ "natsuiro", "Natsuiro" ],
 						[ "plain", "Plain" ]
 					]
+				}
+			},
+
+			{
+				"id": "pan_reloadreminder_start",
+				"name": "SettingsPanelReloadReminderStart",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsPanelReloadReminderStartTip"
+				}
+			},
+			{
+				"id": "pan_reloadreminder_repeat",
+				"name": "SettingsPanelReloadReminderStartRepeat",
+				"type": "small_text",
+				"bound": {
+					"min": 0,
+					"type": "Number"
+				},
+				"options": {
+					"label": "SettingsMinutes",
+					"tooltip": "SettingsPanelReloadReminderStartRepeatTip"
 				}
 			},
 			{
@@ -1089,16 +1169,162 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "pan_pvp_friends",
+				"name" : "SettingsPanelPvPFriends",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelPvPFriendsTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "Natsuiro",
+		"contents" : [
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsBGColorDesc",
-					"tooltip" : "SettingsBGColorDesc"
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_shiplist_bg",
+				"name" : "SettingsShipListBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipListBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_drop_shadow",
+				"name" : "SettingsPanelDropShadow",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelDropShadow",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_bg",
+				"name" : "SettingsShipIconBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_border",
+				"name" : "SettingsShipIconBorder",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBorder",
+					"tooltip" : "SettingsPanelColorTip"
 				}
 			},
 			{
 				"id" : "pan_custom_css",
+				"name" : "SettingsPanelCustomCSS",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelCustomCSSTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "Moonlight",
+		"contents" : [
+			{
+				"id" : "pan_box_bcolor_moon",
+				"name" : "SettingsPanelBoxBackColor",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_shiplist_bg_moon",
+				"name" : "SettingsShipListBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipListBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_misc_bg_moon",
+				"name" : "SettingsMiscBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsMiscBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_drop_shadow_moon",
+				"name" : "SettingsPanelDropShadow",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelDropShadow",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_bg_moon",
+				"name" : "SettingsShipIconBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_border_moon",
+				"name" : "SettingsShipIconBorder",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBorder",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_outline_moon",
+				"name" : "SettingsPanelOutline",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelOutline",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_outline_bright_moon",
+				"name" : "SettingsPanelOutlineBright",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelOutlineBright",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "moon_small_font",
+				"name" : "SettingsMoonSmallFont",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "moon_lighting_effect",
+				"name" : "SettingsMoonLightingEffect",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "pan_custom_css_moon",
 				"name" : "SettingsPanelCustomCSS",
 				"type" : "textarea",
 				"options" : {

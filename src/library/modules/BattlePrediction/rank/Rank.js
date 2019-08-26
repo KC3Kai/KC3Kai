@@ -27,6 +27,7 @@
 
   const predictors = {
     ld_airbattle: 'airRaid',
+    ld_shooting: 'airRaid',
   };
   const getRankPredictor = (apiName = '') => {
     const Rank = KC3BattlePrediction.rank;

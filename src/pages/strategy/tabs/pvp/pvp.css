@@ -162,6 +162,9 @@
 .tab_pvp .pvp_ship_icon img {
 	width:32px;
 	height:32px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
 }
 .tab_pvp .pvp_ship_mvp_icon {
 	width:15px;
@@ -261,6 +264,7 @@
 	float:left;
 	padding:3px 5px;
 	color:#fff;
+	text-shadow:1px 1px #222;
 }
 .tab_pvp .pvp_battle_day {
 	margin:0px 0px 0px 8px;
@@ -285,71 +289,66 @@
 ---------------------------------*/
 .tab_pvp .node_conds {
 	width:120px;
-	height:64px;
+	height:auto;
+	margin-bottom:1px;
 }
 .tab_pvp .node_cond {
 	width:120px;
 	height:15px;
 	line-height:15px;
 	font-size:11px;
-	margin:0px 0px 1px 0px;
+	margin:0px 0px 0px 0px;
 }
+
 .tab_pvp .node_cond_label {
 	width:50px;
-	height:15px;
-	
 	float:left;
 }
 .tab_pvp .node_cond_value {
 	width:70px;
-	height:15px;
 	float:left;
 	font-weight:bold;
+}
+.tab_pvp .node_cond_value img {
+	width:15px;
+	height:15px;
+	vertical-align:top;
+}
+.tab_pvp .node_cond_value.node_formation img {
+	background-color:#fff;
+	border-radius:50%;
+}
+.tab_pvp .node_cond_value span.vs {
+	margin:0px 4px;
 }
 
 .tab_pvp .node_planes {
 	width:120px;
+	height:auto;
 }
-.tab_pvp .node_airsides {
-	width:120px;
-	height:15px;
-	line-height:15px;
-	text-align:center;
-}
-.tab_pvp .node_airside {
-	width:60px;
-	height:15px;
-	font-size:11px;
-	font-weight:bold;
-	float:left;
-}
-
 .tab_pvp .node_airtype {
 	width:120px;
-	height:20px;
-	line-height:20px;
 }
 .tab_pvp .node_planeside {
 	width:60px;
-	height:20px;
 	float:left;
 }
 .tab_pvp .node_airicon {
-	width: 18px;
-	height:20px;
-	line-height:20px;
+	width:18px;
+	height:14px;
+	line-height:14px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
 .tab_pvp .node_airicon img {
-	width:18px;
-	height:18px;
+	width:16px;
+	height:16px;
 	vertical-align:top;
-	margin:1px;
+	margin:-2px 1px 0px 1px;
 }
 .tab_pvp .node_airtext {
-	width: 40px;
-	height:20px;
+	width:40px;
+	height:14px;
 	float:left;
 	font-size:11px;
 }

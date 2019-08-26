@@ -1,6 +1,11 @@
 .tab_akashi {
 	width:680px;
 }
+.tab_akashi img {
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
+}
 .tab_akashi .factory {
 	display:none;
 }
@@ -50,6 +55,8 @@
 	margin:0px 5px 0px 0px;
 	float:left;
 	text-align:center;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 /* EQUIPMENT
@@ -64,25 +71,65 @@
 	padding:5px;
 }
 
+.tab_akashi .equipment .eq_priority {
+	width: 16px;
+	float: left;
+	margin: 0 1px;
+}
+
+.tab_akashi .equipment .eq_priority > div {
+	line-height: 16px;
+	height: 16px;
+	width: 16px;
+	text-align: center;
+	cursor: pointer;
+	float: left;
+	margin: 0 1px;
+}
+
+.tab_akashi .equipment .eq_priority > div.off {
+	color: #353535;
+	cursor: default;
+	visibility: hidden;
+}
+
+.tab_akashi .equipment .eq_priority .eq_priority--up {
+	color: #7bcb52;
+}
+
+.tab_akashi .equipment .eq_priority .eq_priority--down {
+	color: #e88;
+}
+
+.tab_akashi .equipment .eq_priority .eq_priority--toggle,
+.tab_akashi .equipment .eq_priority .eq_priority--toggle.on:hover{;
+	margin: 0 1px;
+	color: #aaa;
+}
+.tab_akashi .equipment .eq_priority .eq_priority--toggle:hover,
+.tab_akashi .equipment .eq_priority .eq_priority--toggle.on{
+	color: #ffcc66;
+}
+
 .tab_akashi .equipment .eq_icon {
 	width:24px;
 	height:24px;
 	float:left;
-	margin:0px 1px;
+	margin:12px 1px 0;
 }
 .tab_akashi .equipment .eq_icon img {
 	width:24px;
 	height:24px;
 }
 .tab_akashi .equipment .eq_name {
-	width:170px;
+	width:152px;
 	height:24px;
 	font-size:12px;
 	float:left;
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
-	margin:0px 5px 0px 0px;
+	margin:12px 5px 0px 0px;
 }
 
 

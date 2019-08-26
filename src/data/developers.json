@@ -504,17 +504,6 @@
 				}
 			},
 			{
-				"name": "omekeki",
-				"avatar" : "https://avatars1.githubusercontent.com/u/15091910?v=3&s=40",
-				"desc" : "Dutch",
-				"active": 0,
-				"links" : {
-					"gh" : "https://github.com/omekeki",
-					"tw" : "https://twitter.com/omekeki",
-					"wk" : "http://kancolle.wikia.com/wiki/User:Omekeki"
-				}
-			},
-			{
 				"name": "ForteBX",
 				"avatar" : "../../assets/img/ui/empty.png",
 				"desc" : "Español",

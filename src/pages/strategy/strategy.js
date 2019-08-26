@@ -57,6 +57,7 @@
 		// show dev-only pages conditionally
 		if ( ConfigManager.devOnlyPages ) {
 			$("#menu .submenu.dev-only").show();
+			$("#content").addClass("dev-only");
 		}
 		
 		// Click a menu item

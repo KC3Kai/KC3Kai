@@ -108,6 +108,9 @@
             tagColors.forEach((color, i) => {
                 this.setStyleVar(`--lockColor${i + 1}`, color);
             });
+            // try to auto adjust lock mode box width and margin
+            this.setStyleVar(`--lockModeWidth`, ([0, 0, 0, 0, 160, 130, 100][this.lockLimit] || 160) + "px");
+            this.setStyleVar(`--lockMarginRight`, ([0, 0, 0, 0, 10, 6, 15][this.lockLimit] || 10) + "px");
         }
 
         adjustHeight() {

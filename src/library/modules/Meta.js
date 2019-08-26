@@ -111,10 +111,21 @@ Provides access to data on built-in JSON files
 			151: 94,
 			281: 38,
 		},
+		// ships with special remodeling animation, ordered by implementated time,
+		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
+		specialRemodelFromIds: [
+			149, // Kongou K2 -> K2C
+			277, // Akagi Kai -> K2
+			594, // Akagi K2 -> K2E
+			350, // Umikaze Kai -> K2
+		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 576],
+		specialCutinIds: [541, 571, 573, 576, 601, 1496],
 		nelsonTouchShips: [571, 576],
+		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
+		mutsuCutinShips: [573],
+		coloradoCutinShips: [601, 1496],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -123,10 +134,12 @@ Provides access to data on built-in JSON files
 			550: 3,   551: 128, 552: 76,  553: 3,   554: 554,
 			555: 555, 556: 556, 557: 557, 558: 558, 561: 561,
 			562: 562, 563: 162, 564: 549, 565: 79,  566: 547,
-			568: 161, 567: 13,  571: 571, 572: 572, 573: 573,
-			574: 574, 575: 574, 576: 231, 577: 245, 578: 190,
-			579: 7,   580: 58,  581: 581, 582: 582, 583: 583,
-			584: 7,   585: 161, 586: 574, 587: 298,
+			567: 13,  568: 161, 569: 562, 570: 15,  571: 571,
+			572: 572, 573: 573, 574: 574, 575: 574, 576: 231,
+			577: 245, 578: 190, 579: 7,   580: 58,  581: 581,
+			582: 582, 583: 583, 584: 7,   585: 161, 586: 574,
+			587: 298, 588: 266, 589: 310, 590: 309, 591: 284,
+			592: 332, 593: 314,
 		},
 		
 		/* Initialization
@@ -237,6 +250,53 @@ Provides access to data on built-in JSON files
 			// current auto using phase 1
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
+		},
+		
+		statApiNameMap :function(){
+			return ({
+				"taik": "hp",
+				"houg": "fp",
+				"raig": "tp",
+				"baku": "dv",
+				"souk": "ar",
+				"tyku": "aa",
+				"tais": "as",
+				"houm": "ht",
+				"houk": "ev",
+				"saku": "ls",
+				"luck": "lk",
+				"soku": "sp",
+				"leng": "rn",
+				"cost": "kk",
+				"distance": "or",
+			});
+		},
+		statIconByApi :function(apiName, iconSetId = ConfigManager.info_stats_iconset){
+			return this.statIcon(this.statApiNameMap()[apiName], iconSetId);
+		},
+		
+		statNameTerm :function(name, isApiName = false, returnTerm = false){
+			const statNameTermMap = {
+				"hp": "ShipHp",
+				"fp": "ShipFire",
+				"tp": "ShipTorpedo",
+				"dv": "ShipBombing",
+				"ar": "ShipArmor",
+				"aa": "ShipAntiAir",
+				"as": "ShipAsw",
+				"ht": "ShipAccuracy",
+				"ev": "ShipEvasion",
+				"ib": "ShipAccAntiBomber",
+				"if": "ShipEvaInterception",
+				"ls": "ShipLos",
+				"lk": "ShipLuck",
+				"sp": "ShipSpeed",
+				"rn": "ShipLength",
+				"or": "ShipRadius",
+				"kk": "ShipDeployCost",
+			};
+			const term = statNameTermMap[isApiName ? this.statApiNameMap()[name] : name] || "";
+			return !returnTerm ? this.term(term) : term;
 		},
 		
 		itemIconsByType2 :function(type2Id){
@@ -494,6 +554,39 @@ Provides access to data on built-in JSON files
 			};
 		},
 		
+		// ship category defined by in-game client, see `main.js#ShipCategory`
+		shipCategory :function(stype){
+			return ((t) => {
+				switch(t) {
+					case 1: return "DE";
+					case 2: return "DD";
+					case 3: // CL + CLT
+					case 4: return "CL";
+					case 5: // CA + CAV
+					case 6: return "CA";
+					case 7: // CVL
+					case 11: // CV + CVB
+					case 18: return "CV_CVL";
+					case 8: // BC = FBB
+					case 9: // BB
+					case 12: // unused XBB
+						return "BB_BC";
+					case 10: return "BBV";
+					case 13: // SS + SSV
+					case 14: return "SS";
+					case 15: // unused AP
+					case 16: // AV
+					case 17: // LHA
+					case 19: // AR
+					case 20: // AS
+					case 22: // AO
+						return "AV_AO_AS";
+					case 21: return "CLT"; // should be CT
+					default: return "Unsupport type";
+				}
+			})(stype);
+		},
+		
 		ctype :function(id){
 			return this._ctype[id] || "??";
 		},
@@ -571,6 +664,8 @@ Provides access to data on built-in JSON files
 				landBasedAircraftType3Ids: d.landBasedAircraftType3Ids,
 				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
 				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
+				antiLandDiveBomberIds: d.antiLandDiveBomberIds,
+				evadeAntiAirFireIds: d.evadeAntiAirFireIds,
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,
@@ -629,13 +724,14 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeDay :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinDay :
-				// move Nelson Touch index 100 to 20
-				this._battle.cutinDay[index >= 100 ? index - 80 : index] || "";
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
+				this._battle.cutinDay[index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
@@ -1010,6 +1106,10 @@ Provides access to data on built-in JSON files
 		formatNumber :function(number, locale, options){
 			return !ConfigManager.info_format_numbers || $.type(number) !== "number" ?
 				number : number.toLocaleString(locale, options);
+		},
+		
+		formatDecimalOptions :function(fraction = 0, grouping = true){
+			return { useGrouping: grouping, minimumFractionDigits: fraction, maximumFractionDigits: fraction };
 		},
 		
 		isEventWorld :function(worldId) {

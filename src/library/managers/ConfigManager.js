@@ -16,8 +16,10 @@ Retrieves when needed to apply on components
 		defaults : function(){
 			return {
 				version              : 8,
-				language             : "en",
+				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
+				RotationPage         : 1,
+				Rotation2Page        : 1,
 				elosFormula          : 2,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
@@ -33,6 +35,7 @@ Retrieves when needed to apply on components
 				updateNotification   : 2,
 				dataSyncNotification : false,
 				chromeSyncQuests     : false,
+				backupReminder       : 0,
 				air_formula          : 3,
 				air_combined         : false,
 				powerCapApplyLevel   : 3,
@@ -47,6 +50,7 @@ Retrieves when needed to apply on components
 				KC3DBSubmission_enabled : false,
 				OpenDBSubmission_enabled : false,
 				TsunDBSubmission_enabled : false,
+				TsunDBSubmissionExtra_enabled : false,
 				PushAlerts_enabled   : 0,
 				PushAlerts_key       : '',
 
@@ -103,6 +107,7 @@ Retrieves when needed to apply on components
 				alert_custom_cship : "",
 				alert_volume       : 60,
 				alert_desktop      : true,
+				alert_focustab     : false,
 				alert_supply       : 3,
 				alert_supply_exped : true,
 				alert_idle_counter : 1,
@@ -114,9 +119,11 @@ Retrieves when needed to apply on components
 				alert_taiha_blood    : false,
 				alert_taiha_ss       : false,
 				alert_taiha_sound    : false,
+				alert_taiha_sound_src: "",
 				alert_taiha_panel    : true,
 				alert_taiha_homeport : false,
 				alert_taiha_damecon  : false,
+				alert_taiha_unlock   : false,
 				alert_taiha_noanim   : false,
 
 				api_translation   : true,
@@ -142,6 +149,7 @@ Retrieves when needed to apply on components
 				map_markers       : true,
 				map_letters       : false,
 				mute_game_tab     : false,
+				focus_game_tab    : false,
 				fix_game_code     : false,
 				dmm_forcecookies  : false,
 				dmm_customize     : false,
@@ -156,7 +164,26 @@ Retrieves when needed to apply on components
 				pan_bg_position : "top center",
 				pan_opacity     : 100,
 				pan_box_bcolor  : "rgba(100, 100, 100, 0.618)",
+				pan_box_bcolor_moon  : "rgba(25, 50, 100, 0.2)",
+				pan_shiplist_bg : "rgba(100, 100, 100, 0)",
+				pan_shiplist_bg_moon : "rgba(25, 50, 100, 0.2)",
+				pan_misc_bg_moon  : "rgba(25, 50, 100, 0.2)",
+				pan_drop_shadow : "rgba(65, 0, 103, 0)",
+				pan_drop_shadow_moon : "rgba(24, 45, 85, 1)",
+				pan_ship_icon_bg: "rgba(0, 114, 207, 1)",
+				pan_ship_icon_bg_moon: "rgba(0, 42, 134, 0)",
+				pan_ship_icon_border: "rgba(34, 65, 105, 1)",
+				pan_ship_icon_border_moon: "rgba(34, 65, 105, 0)",
+				pan_outline_moon: "rgba(68, 34, 68, 1)",
+				pan_outline_bright_moon: "rgba(140, 140, 192, 1)",
+				moon_small_font: false,
+				moon_lighting_effect: true,
 				pan_custom_css  : "",
+				pan_custom_css_moon  : "",
+
+				pan_reloadreminder_start  : 120,
+				pan_reloadreminder_repeat : 0,
+				pan_pvp_friends : "",
 
 				dismissed_hints        : {},
 				sr_theme               : "legacy",
@@ -241,6 +268,40 @@ Retrieves when needed to apply on components
 				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
 		},
 		
+		// Return the corresponding language code supported by now, see Translation.js#getLocale
+		detectBrowserLanguage : function(browserLangTag){
+			// Dummy for environment without `navigator` and `chrome.i18n` api
+			var i18n = navigator || {};
+			// Prefer the topmost language in browser settings
+			var lang = browserLangTag || (i18n.languages || [])[0] || i18n.language;
+			// Try to detect full tag first (case sensitivity) for these special cases
+			var result = ({
+				// Perhaps needs to be updated for future browser versions
+				"zh-CN": "scn",
+				"zh-TW": "tcn",
+				"zh-HK": "tcn-yue",
+				"uk-UA": "ua", // uk is Ukrainian, UK is United Kingdom, UA is Ukraine
+				"uk": "ua",
+			})[lang];
+			if(!result){
+				// Try primary language subtag only
+				lang = lang.toLowerCase().split(/-/)[0];
+				result = ({
+					// our language codes messed up with region codes, compatible with them
+					"ja": "jp", "jp": "jp", // jp not exist
+					"ko": "kr", // kr is Kanuri, do not map it to Korean
+					"ua": "ua", // ua not exist
+					"zh": "scn", // scn not exist, even not a region code
+					// do remember update this list if new language added
+					"de": "de", "es": "es", "fr": "fr", "id": "id",
+					"it": "it", "nl": "nl", "pt": "pt", "ru": "ru",
+					"th": "th", "vi": "vi",
+				})[lang];
+			}
+			// Fall-back to `en` for unsupported language
+			return result || "en";
+		},
+		
 		// Current maximum pages of HQ info
 		getMaxHqInfoPage :function(){
 			return 3;
@@ -253,14 +314,34 @@ Retrieves when needed to apply on components
 			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
 			this.save();
 		},
-		
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecificPage :function(page){
+			this.loadIfNecessary();
+			this.RotationPage = page;
+			this.save();
+		},
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecific2Page :function(page){
+			this.loadIfNecessary();
+			this.Rotation2Page = page;
+			this.save();
+		},
+
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
 			this.loadIfNecessary();
 			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
-		
+
+		setElosMode :function(type){
+			this.loadIfNecessary();
+			this.elosFormula = type;
+			this.save();
+		},
+
 		// Toggle Fighter Power
 		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){

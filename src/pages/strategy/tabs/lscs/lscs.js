@@ -138,6 +138,7 @@
 			};
 			// Get total records of this recipe first
 			KC3Database.count_lscs(this.filterFunc.bind(this, true), total => {
+				if(activeTab && activeTab.name !== "lscs") return;
 				this.totalItems = total;
 				$(".build_list").empty();
 				$(".page_items .total_items").text(this.totalItems);
@@ -185,6 +186,7 @@
 			};
 			$(".build_list").empty();
 			KC3Database.get_lscs(this.filterFunc.bind(this, false), pageNumber, this.itemsPerPage, resultArray => {
+				if(activeTab && activeTab.name !== "lscs") return;
 				for(const index in resultArray){
 					const thisBuild = resultArray[index];
 					const buildBox = $(".factory .build_item").clone()

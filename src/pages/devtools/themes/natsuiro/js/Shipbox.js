@@ -76,7 +76,10 @@
 					.text(myExItem.stars >= 10 ? "\u2605" : myExItem.stars);
 			}
 		} else {
-			$(".ex_item", this.element).hide();
+			$(".ex_item .gear_icon img", this.element).hide();
+			// Still show the empty item background if ex-slot opened but equipped nothing
+			$(".ex_item", this.element).toggle(this.shipData.ex_item === -1)
+				.toggleClass("empty", this.shipData.ex_item === -1);
 		}
 		$(".ex_item", this.element).toggleClass("item_being_used",
 			ConfigManager.info_battle && (this.dameConConsumed.pos === 0 ||
@@ -243,13 +246,20 @@
 				.format(chuuhaHp, curHp - chuuhaHp);
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
-		// Clear box colors
-		this.element.css("background-color", "transparent");
+		// Clear box & hp bar color classes
+		var hpClasses = ["akashiMark", "hp_fcf", "hp_repairing", // used by root element
+			"hp_sunk", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
+		this.element.removeClass(hpClasses);
+		$(".ship_hp_bar", this.element).removeClass(hpClasses);
 		
-		// Import repair time script by @Javran
-		var repairTimes = this.shipData.repairTime();
-		var repairCost = this.shipData.calcRepairCost();
-
+		// Show time and cost based on predicted after-battle hp if setting enabled
+		var isAfterHpUsed = ConfigManager.info_battle &&
+			KC3SortieManager.isOnSortie() && (
+				KC3SortieManager.isCombinedSortie() ? [1, 2] : [KC3SortieManager.fleetSent]
+			).includes(this.shipData.onFleet());
+		var repairTimes = this.shipData.repairTime(isAfterHpUsed);
+		var repairCost = this.shipData.calcRepairCost(isAfterHpUsed ? this.shipData.afterHp[0] : 0);
+		
 		if(repairTimes.docking > 0){
 			$(".ship_hp_box", this.element).attr("title", [
 				KC3Meta.term("PanelDocking") + ": " + String(repairTimes.docking).toHHMMSS(),
@@ -264,35 +274,35 @@
 		}
 		
 		// If ship is being repaired
-		if( PlayerManager.repairShips.indexOf( this.shipData.rosterId ) > -1){
-			$(".ship_hp_bar", this.element).css("background", "#aaccee");
-			this.element.css("background-color", "rgba(100,255,100,0.3)");
-		// If not being repaired
-		}else{
-			if(this.shipData.didFlee){
+		if (PlayerManager.repairShips.indexOf(this.shipData.rosterId) > -1) {
+			$(".ship_hp_bar", this.element).addClass("hp_repairing");
+			this.element.addClass("hp_repairing");
+			// If not being repaired
+		} else {
+			if (this.shipData.didFlee) {
 				//console.debug("Ship", this.shipData.name(), "fled, setting backgrounds to white");
 				// if FCF, mark background and hp bar as white
-				$(".ship_hp_bar", this.element).css("background", "#fff");
-				this.element.css("background", "rgba(255,255,255,0.4)");
-			}else{
-				if(hpPercent <= 0.25){
+				$(".ship_hp_bar", this.element).addClass("hp_fcf");
+				this.element.addClass("hp_fcf");
+			} else {
+				if (hpPercent <= 0.25) {
 					// mark hp bar and container box as red if taiha
-					$(".ship_hp_bar", this.element).css("background", "#FF0000");
-					this.element.css("background", "rgba(255,0,0,0.4)");
-				} else if(hpPercent <= 0.50){
-					$(".ship_hp_bar", this.element).css("background", "#FF9900");
-				} else if(hpPercent <= 0.75){
-					$(".ship_hp_bar", this.element).css("background", "#FFFF00");
-				} else{
-					$(".ship_hp_bar", this.element).css("background", "#00FF00");
+					$(".ship_hp_bar", this.element).addClass("hp_taiha");
+					this.element.addClass("hp_taiha");
+				} else if (hpPercent <= 0.50) {
+					$(".ship_hp_bar", this.element).addClass("hp_chuuha");
+				} else if (hpPercent <= 0.75) {
+					$(".ship_hp_bar", this.element).addClass("hp_shouha");
+				} else {
+					$(".ship_hp_bar", this.element).addClass("hp_normal");
 				}
 			}
-			
-			if(this.shipData.akashiMark) {
-				this.element.css("background-color", "rgba(191,255,100,0.15)");
+
+			if (this.shipData.akashiMark) {
+				this.element.addClass("akashiMark");
 			}
 		}
-		
+
 		this.hideAkashi();
 	};
 	
@@ -319,7 +329,7 @@
 		// Apply only if HP actually changed after prediction
 		if(this.shipData.hp[0] != this.shipData.afterHp[0]){
 			// Make original HP bar gray
-			$(".ship_hp_bar", this.element).css("background", "#ccc");
+			$(".ship_hp_bar", this.element).addClass("hp_sunk");
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
@@ -394,10 +404,10 @@
 	
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showEquipment = function( slot ){
-		var thisGear;
+		var thisGear = false;
 		if(this.shipData.slotnum > slot){
 			
-			if(this.shipData.items[slot] > -1){
+			if(this.shipData.items[slot] > 0){
 				
 				thisGear = KC3GearManager.get( this.shipData.items[slot] );
 				
@@ -459,10 +469,13 @@
 			}
 			
 			if(this.shipData.slots[ slot ] > 0 ||
-				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3])>-1) ){
+				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3]) > -1)
+			){
 				var slotCurr = this.shipData.slots[slot];
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text( slotCurr );
-				var slotMax = this.shipData.master().api_maxeq[slot];
+				// For now, max slot size will be forced to 1 if Large Flying Boat equipped,
+				// and will restore to its default capacity on resupply if other equipped
+				var slotMax = thisGear && thisGear.master().api_type[2] === 41 ? 1 : this.shipData.master().api_maxeq[slot];
 				if(slotCurr < slotMax){
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).attr("title",
 						"{0} /{1}".format(slotCurr, slotMax) ).lazyInitTooltip();

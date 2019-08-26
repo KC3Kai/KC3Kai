@@ -21,16 +21,16 @@
 	
 }
 .tab_expedpast .expedNumBox {
-	width:110px;
-	height:197px;
+	width:94px;
+	min-height:215px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	border-radius:8px;
-	padding:3px 5px;
+	padding:3px 3px;
 }
 .tab_expedpast .expedNumBox .expedNum,
 .tab_expedpast .expedNumBox .expedWhole {
-	width:100px;
+	width:88px;
 	height:15px;
 	line-height:15px;
 	margin:0px 0px 1px 0px;
@@ -54,17 +54,24 @@
 	margin:0px 5px 0px 0px;
 	font-size:12px;
 }
+.tab_expedpast .expedNumBox .expedText.monthly {
+	color:#1111cc;
+}
 .tab_expedpast .expedNumBox .expedWhole .expedText {
-	width:70px;
+	width:63px;
 	margin:0px;
 }
 .tab_expedpast .expedNumBox .expedTime {
-	width:40px;
+	width:33px;
 	height:15px;
 	float:left;
 	font-size:11px;
 	color:#999;
 }
+.tab_expedpast .expedNumBox .expedTime.combat {
+	color:#cc1111;
+}
+
 .tab_expedpast .fleetCounts .fleetCount {
 	width:100px;
 	height:20px;
@@ -196,6 +203,8 @@
 	position:relative;
 	margin:-1px 0px 0px -1px;
 	vertical-align:top;
+	object-fit: cover;
+	image-rendering: auto;
 }
 .tab_expedpast .exped_ship_exp {
 	width:30px;
@@ -257,10 +266,18 @@
 	margin:0px 0px 0px -50px;
 	position:relative;
 }
-.tab_expedpast .exped_item1 {
+.tab_expedpast .exped_reward {
 	width:30px;
-	margin:0px 3px 0px 0px;
+	white-space:nowrap;
+}
+.tab_expedpast .exped_reward img {
+	vertical-align:text-top;
+}
+.tab_expedpast .exped_reward span {
+	padding-left:2px;
+}
+.tab_expedpast .exped_item1 {
+	margin-right:3px;
 }
 .tab_expedpast .exped_item2 {
-	width:30px;
 }

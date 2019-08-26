@@ -14,11 +14,42 @@ Executes processing and relies on KC3Network for the triggers
 			this.url = String(har.request.url);
 			this.headers = $.extend(true, [], har.response.headers);
 			this.statusCode = har.response.status;
-			this.params = $.extend(true, [], har.request.postData.params);
+			this.params = $.extend(true, [], (har.request.postData || {}).params);
 			this.call = this.url.substring(this.url.indexOf("/kcsapi/") + 8);
+			this.parsePostDataTextIfNecessary(har.request);
 		}
 		this.gameStatus = 0;
 		this.response = {};
+	};
+	
+	/**
+	 * Parse the postData text in the request body instead, for these cases browser cannot do it for us:
+	 *   * Redirected request after a 307 response on Chrome m72 stable?
+	 */
+	KC3Request.prototype.parsePostDataTextIfNecessary = function(request){
+		// Considered as necessary since KCSAPI is posting `application/x-www-form-urlencoded` data,
+		// as long as params is undefined and text exists, ignoring the original mine-type.
+		if(request.postData
+			&& !request.postData.params && request.postData.text
+			&& !this.params.length) {
+			// Simulate the parsing behavior browser does for HAR `postData.params`
+			const decodeFormUrlencoded = (text) => {
+				const result = [];
+				const keyValuePairs = text.split(/&+/);
+				for (const keyValuePair of keyValuePairs) {
+					const keyValue = keyValuePair.split(/=/);
+					// Not support yet: (Array/Dictionary) key, (fileName, contentType), comment
+					// And no `decodeURI` applied, seems browser doesnot do it in HAR either
+					const name = keyValue[0], value = keyValue[1];
+					result.push({
+						name, value
+					});
+				}
+				return result;
+			};
+			this.params = decodeFormUrlencoded(request.postData.text);
+			console.warn("Request post data reparsed:", this.params, $.extend(true, {}, request.postData));
+		}
 	};
 	
 	/* VALIDATE HEADERS
@@ -27,6 +58,16 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateHeaders = function(){
 		// If response header statusCode is not 200, means non-in-game error
 		if(this.statusCode !== 200){
+			// Do not trigger a catbomb box if server responds following:
+			if(this.statusCode === 307){
+				// Should be safe to ignore by checking if new location is game official host.
+				// But the new location header value is `/kcsapi/...`, no host in it.
+				// Known issue: for some browsers, next redirected request might lose some headers,
+				// and cause post data can not be parsed as `x-www-form-urlencoded` properly,
+				// see #parsePostDataTextIfNecessary.
+				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers, this.params);
+				return false;
+			}
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombServerCommErrorTitle"),
@@ -63,14 +104,25 @@ Executes processing and relies on KC3Network for the triggers
 		var self = this;
 		// Get response body
 		har.getContent(function(responseBody){
-			// Strip svdata= from response body if exists then parse JSON
-			if(responseBody.indexOf("svdata=") >- 1){
-				responseBody = responseBody.substring(7);
+			if(typeof responseBody === "string"){
+				try {
+					// Strip `svdata=` from response body if exists then parse JSON
+					var json = responseBody.replace(/[\s\S]*svdata=/, "");
+					self.response = JSON.parse(json);
+					self.gameStatus = self.response.api_result;
+				} catch (e) {
+					// Keep this.response untouched, should be {}
+					self.gameStatus = 0;
+					console.warn("Parsing game response:", e, responseBody, self.call, self.params);
+				}
+			} else {
+				self.gameStatus = 0;
+				console.warn("Unexpected response body:", responseBody, self.call, self.params);
+				// seems Chromium m74 has introduced some bug causing null value for unknown reason
+				if(har.response && har.response.content){
+					console.warn("Actual response content:", har.response.bodySize, har.response.content);
+				}
 			}
-			var responseObj = JSON.parse(responseBody);
-			
-			self.gameStatus = responseObj.api_result;
-			self.response = responseObj;
 			
 			callback();
 		});
@@ -82,7 +134,7 @@ Executes processing and relies on KC3Network for the triggers
 	KC3Request.prototype.validateData = function(){
 		// If gameStatus is not 1. Game API returns 1 if complete success
 		if(this.gameStatus != 1){
-			console.warn("Game Status Error:", this.gameStatus, this.response);
+			console.warn("Game Status Error:", this.gameStatus, this.call, this.response);
 			
 			// Error 201
 			if (parseInt(this.gameStatus, 10) === 201) {
@@ -103,7 +155,7 @@ Executes processing and relies on KC3Network for the triggers
 			}
 			
 			// If it fails on "api_port" which is usually caused by system clock
-			if(this.call == "api_port/port"){
+			if(this.call == "api_port/port" && !!this.gameStatus){
 				// Check if user's clock is correct
 				var computerClock = new Date().getTime();
 				var serverClock = new Date( this.headers.Date ).getTime();
@@ -115,9 +167,9 @@ Executes processing and relies on KC3Network for the triggers
 						title: KC3Meta.term("CatBombWrongComputerClockTitle"),
 						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
-					
+				
 				// Something else other than clock is wrong
-				}else{
+				} else {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
 						message: KC3Meta.term("CatBombErrorOnHomePortMsg")

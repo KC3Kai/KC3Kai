@@ -8,6 +8,7 @@
 		this.range = -1;
 		this.action = -1;
 		this.planes = [];
+		this.strikePoints = undefined;
 		
 		// If specified with data, fill this object
 		if(typeof data !== "undefined"){
@@ -23,9 +24,8 @@
 			}
 			this.action = data.api_action_kind;
 			
-			var self = this;
-			data.api_plane_info.forEach(function(plane, index){
-				self.planes.push(plane);
+			data.api_plane_info.forEach((plane, index) => {
+				this.planes.push(plane);
 			});
 		}
 	};
@@ -40,8 +40,30 @@
 			this.rangeBonus = data.rangeBonus;
 			this.action = data.action;
 			this.planes = data.planes;
+			this.strikePoints = data.strikePoints;
 		}
 		return this;
+	};
+	
+	KC3LandBase.actionEnum = function(key){
+		// Action keys are now the suffix of term key in terms.json
+		const actionEnumsMap = {
+			0: "Waiting",
+			1: "Sortie",
+			2: "Defend",
+			3: "Retreat",
+			4: "Rest",
+		};
+		// return all enums
+		return key === undefined ? actionEnumsMap :
+		// return action id by term key
+			typeof key === "string" ? Number(Object.swapMapKeyValue(actionEnumsMap)[key] || -1) :
+		// return term key by action id
+			actionEnumsMap[key] || "";
+	};
+	
+	KC3LandBase.prototype.getActionTerm = function(){
+		return KC3LandBase.actionEnum(this.action);
 	};
 	
 	KC3LandBase.prototype.isPlanesSupplied = function(){
@@ -143,6 +165,25 @@
 	};
 	
 	/**
+	 * @return a fake carrier ship instance simulated by this land-base (4 squadrons mapped to 4 slots).
+	 */
+	KC3LandBase.prototype.toShipObject = function() {
+		const shipObj = new KC3Ship();
+		// fixed ID 1 to ensure it's not a dummy ship
+		shipObj.rosterId = 1;
+		// starring by Akagi
+		shipObj.masterId = 83;
+		shipObj.hp = [1,1];
+		shipObj.items = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_slotid : -1;
+		});
+		shipObj.slots = this.planes.map(function (planeInfo) {
+			return planeInfo.api_state == 1 ? planeInfo.api_count : 0;
+		});
+		return shipObj;
+	};
+
+	/**
 	 * Convert to new Object used to record sorties on indexedDB
 	 * Use masterId instead of rosterId, also record stars and ace of aircraft.
 	 */
@@ -152,6 +193,9 @@
 			returnObj.rid = this.rid;
 			returnObj.range = this.range;
 			returnObj.action = this.action;
+			if(this.strikePoints){
+				returnObj.edges = this.strikePoints;
+			}
 			returnObj.planes = [];
 			$.each(this.planes, function(index, squad){
 				if(squad.api_slotid > 0){
