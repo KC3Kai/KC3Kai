@@ -160,17 +160,20 @@
 	float:left;
 }
 
-.tab_ships .ship_count {
+.tab_ships .ship_count,
+.tab_ships .ship_average_level {
 	float:left;
 	margin:0px 0px 2px 0px;
 	line-height:18px;
 	width:220px;
 }
-.tab_ships .ship_count div {
+.tab_ships .ship_count div,
+.tab_ships .ship_average_level div {
 	float:left;
 	font-size:12px;
 }
-.tab_ships .ship_count .count_label {
+.tab_ships .ship_count .count_label,
+.tab_ships .ship_average_level .average_level_label {
 	font-weight:bold;
 	padding-right:5px;
 }

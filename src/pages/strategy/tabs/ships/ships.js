@@ -1080,6 +1080,7 @@
 				const filteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
 				});
+				var totalLevel = 0;
 
 				// Sorting
 				filteredShips.sort( self.makeComparator() );
@@ -1088,6 +1089,7 @@
 				Object.keys(filteredShips).forEach(function(shipCtr){
 					const cShip = filteredShips[shipCtr];
 					const shipLevel = cShip.level;
+					totalLevel += cShip.level;
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
@@ -1211,6 +1213,7 @@
 					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
+				$(".ship_average_level .average_level_value .average_level").text(filteredShips.length > 0 ? (totalLevel / filteredShips.length).toFixed(2) : 0);
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
