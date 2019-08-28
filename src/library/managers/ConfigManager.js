@@ -18,8 +18,6 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
-				RotationPage         : 1,
-				Rotation2Page        : 1,
 				elosFormula          : 2,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
@@ -181,6 +179,10 @@ Retrieves when needed to apply on components
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
+				pan_layout           : 1,
+				RotationPage         : 1,
+				Rotation2Page        : 4,
+
 				pan_reloadreminder_start  : 120,
 				pan_reloadreminder_repeat : 0,
 				pan_pvp_friends : "",
@@ -326,6 +328,13 @@ Retrieves when needed to apply on components
 		scrollSpecific2Page :function(page){
 			this.loadIfNecessary();
 			this.Rotation2Page = page;
+			this.save();
+		},
+
+		// Toggle layouts in Moonlight
+		setLayout :function(layoutType){
+			this.loadIfNecessary();
+			this.pan_layout = layoutType;
 			this.save();
 		},
 
