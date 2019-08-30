@@ -460,7 +460,7 @@
 		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
 		$(".ship_img,.expeditions .timer-img img").css("background", ConfigManager.pan_ship_icon_bg_moon);
 		$(".ship_img img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border_moon);
-		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
+		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
 		/*$(".module.activity .activity_expeditionPlanner .expPlan_dropdown_title").css("border-color", ConfigManager.pan_outline_moon);*/
 		$(".pvpFleetShip,.module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
 
@@ -474,10 +474,10 @@
 			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
 		}
 		if(ConfigManager.moon_lighting_effect == false) {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body").css("background-image", "none", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts").css("background-image", "none", "important");
 		}
 		else {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%)", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 75%, rgba(200, 200, 255, 0.4) 98%, rgba(200, 200, 255, 0.6) 99%)", "important");
 			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.12) 70%, rgba(200, 200, 255, 0.2) 85%, rgba(200, 200, 255, 0.5) 99%)", "important");
 		}
 
@@ -577,10 +577,10 @@
 			ConfigManager.scrollSpecificPage(2);
 			NatsuiroListeners.Rotation();
 		});
-		/*$(".rotation .rotarPartner").on("click",function(){
+		$(".rotation .rotarQuests").on("click",function(){
 			ConfigManager.scrollSpecificPage(3);
 			NatsuiroListeners.Rotation();
-		});*/
+		});
 		$(".rotation .rotarHidden").on("click",function(){
 			ConfigManager.scrollSpecificPage(4);
 			NatsuiroListeners.Rotation();
@@ -599,6 +599,11 @@
 			ConfigManager.scrollSpecific2Page(3);
 			NatsuiroListeners.Rotation2();
 		});
+		$(".rotation2 .rotarLayout").on("click",function(){
+			ConfigManager.scrollSpecific2Page(4);
+			NatsuiroListeners.Rotation2();
+		});
+		$(".layout_header").text( KC3Meta.term("PanelLayoutSelection") );
 
 		// eLoS Toggle
 		/*$(".summary-eqlos").on("click",function(){
@@ -657,6 +662,23 @@
 			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
 				JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
+		});
+
+		$(".module.layouts .btn_change_layout").on("click", function(){
+			ConfigManager.setLayout(1);
+			Orientation();
+		});
+		$(".module.layouts .btn_change_layout2").on("click", function(){
+			ConfigManager.setLayout(2);
+			Orientation();
+		});
+		$(".module.layouts .btn_change_layout3").on("click", function(){
+			ConfigManager.setLayout(3);
+			Orientation();
+		});
+		$(".module.layouts .btn_change_layout4").on("click", function(){
+			ConfigManager.setLayout(4);
+			Orientation();
 		});
 
 		const prepareBattleLogsData = function(){
@@ -931,9 +953,9 @@
 		}).addClass("waitingForActions").html( KC3Meta.term("PanelWaitActions") ).appendTo("body");
 	});
 
-	$(window).on("resize", function(){
+	/*$(window).on("resize", function(){
 		Orientation();
-	});
+	});*/
 
 	function Activate(){
 		if(isRunning === true){ return true; }
@@ -945,29 +967,41 @@
 
 	function Orientation(){
 		if(!isRunning){ return false; }
-		var scrollBarWidth = (window.innerWidth - $(window).width()) || 0;
-		var expectedVerticalWidth = 1038 - scrollBarWidth;
-		// Wide interface, switch to vertical if not yet
-		if($(window).width() >= expectedVerticalWidth && currentLayout != "vertical"){
-			$(".wrapper").removeClass("h").addClass("v");
+		// Square layout. The default
+		if(ConfigManager.pan_layout == 1) {
+			$(".wrapper").removeClass("v").removeClass("c").removeClass("t").addClass("h");
+			currentLayout = "horizontal";
+			if(ConfigManager.language == "kr") {
+				$(".lship .ship_level").css("left", "65px");
+				$(".lship .ship_exp_label").css("text-align", "right");
+			}
+		$(".module.controls .scrollable").scrollLeft(0);
+		$(".module.controls .scroll_left").addClass("disabled");
+		$(".module.controls .scroll_right").removeClass("disabled");
+		}
+		// Very wide layout.
+		else if(ConfigManager.pan_layout == 2) {
+			$(".wrapper").removeClass("h").removeClass("c").removeClass("t").addClass("v");
 			currentLayout = "vertical";
 			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "0px");
 				$(".lship .ship_exp_label").css("text-align", "left");
 			}
-		// Narrow interface, switch to horizontal if not yet
-		} else if($(window).width() < expectedVerticalWidth && currentLayout != "horizontal"){
-			$(".wrapper").removeClass("v").addClass("h");
-			currentLayout = "horizontal";
-			if(ConfigManager.language == "kr") {
-				$(".lship .ship_level").css("left", "65px");
-				$(".lship .ship_exp_label").css("text-align", "right");
-			}
 		}
-		$(".module.controls .scrollable").scrollLeft(0);
-		$(".module.controls .scroll_left").addClass("disabled");
-		$(".module.controls .scroll_right").removeClass("disabled");
+		else if(ConfigManager.pan_layout == 3) {
+			$(".wrapper").removeClass("h").removeClass("v").removeClass("t").addClass("c");
+			currentLayout = "compact";
+		}
+		else if(ConfigManager.pan_layout == 4) {
+			$(".wrapper").removeClass("h").removeClass("v").removeClass("c").addClass("t");
+			currentLayout = "tall";
+		}
+		// Load the user's selected panel display
+		ConfigManager.scrollSpecificPage(ConfigManager.RotationPage);
+		NatsuiroListeners.Rotation();
+		ConfigManager.scrollSpecific2Page(ConfigManager.Rotation2Page);
+		NatsuiroListeners.Rotation2();
 	}
 
 	function clearSortieData(){
@@ -1501,9 +1535,9 @@
 					$(this).parent().removeClass("complete");
 				}
 			};
-			$(".module.quests").empty();
+			$(".module.quests,.module.quests2").empty();
 			$.each(KC3QuestManager.getActives(), function(index, quest){
-				questBox = $("#factory .quest").clone().appendTo(".module.quests");
+				questBox = $("#factory .quest").clone().appendTo(".module.quests,.module.quests2");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
 				$(".quest_color", questBox).css("background", quest.getColor() )
 					.addClass("hover")
