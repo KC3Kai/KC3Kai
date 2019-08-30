@@ -353,6 +353,9 @@
 				// Debuff gimmick check
 				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener],
 
+				// Equipment list
+				'api_get_member/picture_book': this.processPictureBook,
+
 				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
@@ -1062,6 +1065,35 @@
 			this.development.success = response.api_create_flag;
 			//console.debug(this.development);
 			this.sendData(this.development, 'development');
+		},
+
+		processPictureBook: function(http) {
+			const request = http.params;
+			const response = http.response.api_data;
+
+			if(request.api_type !== "2") return; // Equipment only
+			if(response == null || response.api_list === null) return; // Pages with content only
+
+			const equips = response.api_list.map((equip) => {
+				return {
+					id: equip.api_table_id[0],
+					name: equip.api_name,
+					description: equip.api_info,
+					firepower: equip.api_houg,
+					torpedo: equip.api_raig,
+					aa: equip.api_tyku,
+					armor: equip.api_souk,
+					los: equip.api_saku,
+					range: equip.api_leng,
+					bombing: equip.api_baku,
+					evasion: equip.api_houk,
+					accuracy: equip.api_houm,
+					speed: equip.api_soku,
+					asw: equip.api_tais,
+					type: equip.api_type
+				};
+			});
+			this.sendData({equips}, "equips");
 		},
 
 		/**
