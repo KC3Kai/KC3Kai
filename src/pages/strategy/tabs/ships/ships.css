@@ -6,12 +6,15 @@
 ------------------------------*/
 .tab_ships .filters {
 }
-.tab_ships .filters .filters_label {
+.tab_ships .filters .filters_label,
+.tab_ships .filters .fleet_stats_label,
+.tab_ships .filters .stats_label {
 	font-size:12px;
 	font-weight:bold;
 	margin:0px 0px 2px 0px;
 }
-.tab_ships .filters .fold_button {
+.tab_ships .filters .fold_button,
+.tab_ships .filters .fold_button_fleet_stats {
 	float:right;
 	margin-right:8px;
 }
@@ -174,6 +177,32 @@
 .tab_ships .ship_count .count_label {
 	font-weight:bold;
 	padding-right:5px;
+}
+
+.tab_ships .fleet_stats_label .sum_ships {
+	font-weight:normal;
+	padding-left:2px;
+}
+.tab_ships .fleet_stats {
+	display:none;
+	font-size:12px;
+	height:auto;
+	margin:0px 0px 2px 0px;
+	padding:0px 10px 0px 10px;
+}
+.tab_ships .fleet_stats .fleet_stat .stats_label,
+.tab_ships .fleet_stats .fleet_stat .stats_value {
+	display:inline-block;
+	margin-bottom:0px;
+	line-height:18px;
+}
+.tab_ships .fleet_stats .fleet_stat {
+	width:33%;
+	display:inline-block;
+	height:18px;
+	vertical-align:top;
+	margin:0px 0px 0px 0px;
+	overflow:hidden;
 }
 
 .tab_ships .ship_export {
