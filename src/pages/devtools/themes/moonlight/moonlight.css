@@ -3021,7 +3021,7 @@ ABYSS FLEET
 	line-height:13px;
 }
 .module.quests  .quest.complete {
-	background:rgba(0,100,150,0.4);
+	background:rgba(0,150,150,0.75);
 	border-radius:3px;
 }
 .module.quests .quest_color {
