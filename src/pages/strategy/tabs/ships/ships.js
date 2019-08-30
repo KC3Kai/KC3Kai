@@ -70,13 +70,20 @@
 				$(".filters .ship_types").slideToggle(300);
 				$(".filters .input_filter").slideToggle(300);
 				$(".filters .massSelect").slideToggle(300, function(){
-					$(".fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
-					$(".fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
+					$(".filters_label .fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
+					$(".filters_label .fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
 					if(self.scrollList){
 						self.toggleTableScrollbar(true);
 					}
 				});
 			});
+			$(".fleet_stats_label").on("click", function(){
+				$(".filters .fleet_stats").slideToggle(300, function(){
+					$(".fleet_stats_label .fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
+					$(".fleet_stats_label .fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
+				});
+			});
+			$(".fleet_stats_label").click();
 			$(".pages_yes").on("click", function(){
 				if(!self.pageNo){
 					self.pageNo = true;
@@ -1088,6 +1095,7 @@
 				const filteredShips = self.shipCache.filter(function(x) {
 					return self.executeFilters(x);
 				});
+				var sumLevel = 0, sumExp = 0;
 
 				// Sorting
 				filteredShips.sort( self.makeComparator() );
@@ -1096,6 +1104,8 @@
 				Object.keys(filteredShips).forEach(function(shipCtr){
 					const cShip = filteredShips[shipCtr];
 					const shipLevel = cShip.level;
+					sumLevel += cShip.level;
+					sumExp += cShip.ship.exp[0];
 
 					// we can save some time by avoiding constructing jquery object
 					// if we already have one
@@ -1106,7 +1116,6 @@
 							cElm.onRecompute(cShip);
 						return;
 					}
-
 					// elements constructing for the time-consuming 'first time rendering'
 					const cElm = $(".tab_ships .factory .ship_item").clone().appendTo(self.shipList);
 					cShip.view = cElm;
@@ -1222,6 +1231,10 @@
 					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
+				$(".fleet_stats .fleet_stat .average_level").text(filteredShips.length > 0 ? (sumLevel / filteredShips.length).toFixed(2) : 0);
+				$(".fleet_stats .fleet_stat .sum_level").text(sumLevel);
+				$(".fleet_stats .fleet_stat .average_exp").text(filteredShips.length > 0 ? (sumExp / filteredShips.length).toFixed(2) : 0);
+				$(".fleet_stats .fleet_stat .sum_exp").text(sumExp);
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
