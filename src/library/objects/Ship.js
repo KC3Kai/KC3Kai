@@ -1588,22 +1588,24 @@ KC3改 Ship Object
 
 	/**
 	 * Get anti land installation power bonus & multiplier of this ship.
+	 * @param targetShipMasterId - target land installation master ID.
 	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
+	 * @param warfareType - to indicate if use different modifiers for phases other than day shelling.
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
 	 * @see https://twitter.com/KennethWWKK/status/1045315639127109634
 	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
+	 * @see https://cdn.discordapp.com/attachments/425302689887289344/614879250419417132/ECrra66VUAAzYMc.jpg_orig.jpg
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
 	 * @return {Array} of [additive damage boost, multiplicative damage boost]
 	 */
-	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true){
+	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling"){
 		if(this.isDummy()) { return [0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
-		// TODO investigate difference between these and WG42
 		const type4RocketCount = this.countEquipment(348);
 		const mortarCount = this.countEquipment(346);
 		const mortarCdCount = this.countEquipment(347);
@@ -1613,6 +1615,8 @@ KC3改 Ship Object
 		let mortarBonus = 1;
 		let t3Bonus = 1;
 		let seaplaneBonus = 1;
+		let alDiveBomberBonus = 1;
+		let airstrikeBomberBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
 		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
@@ -1621,22 +1625,24 @@ KC3改 Ship Object
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115][type4RocketCount] || 115;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75][mortarCount] || 75;
-			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60][mortarCount] || 60;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110][mortarCount] || 110;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					wg42Bonus = [1, 1.3, 1.8][wg42Count] || 1.8;
+					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+					wg42Bonus = [1, 1.3, 1.82][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+					
 					return [rocketsAdditive + shikonBonus + submarineBonus,
-						t3Bonus * landingBonus * wg42Bonus * type4RocketBonus * mortarBonus * seaplaneBonus];
+						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
+					alDiveBomberBonus = this.hasEquipment(KC3GearManager.antiLandDiveBomberIds) ? 1.5 : 1;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
@@ -1647,15 +1653,19 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive + shikonBonus +  submarineBonus,
-						seaplaneBonus * lightShipBonus * wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
+						seaplaneBonus * alDiveBomberBonus * lightShipBonus
+							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
+					alDiveBomberBonus = this.hasEquipment(KC3GearManager.antiLandDiveBomberIds) ? 1.4 : 1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
-					type4RocketBonus = [1, 1.35, 1.35 * 1.6][type4RocketCount] || 2.16;
+					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
+					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, wg42Bonus * type4RocketBonus * mortarBonus * t3Bonus * landingBonus];
+					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
+						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
 				
 				case 5: // Summer Harbor Princess
 					// Multiplicative WG42 bonus
@@ -1666,10 +1676,23 @@ KC3改 Ship Object
 			}
 		} else { // Post-cap types
 			switch(installationType) {
+				case 2: // Pillbox, Artillery Imp
+					// Dive Bomber, Seaplane Bomber, LBAA, Jet Bomber on airstrike phase
+					airstrikeBomberBonus = warfareType === "Aerial" &&
+						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
+					return [0, airstrikeBomberBonus];
+				
+				case 3: // Isolated Island Princess
+					airstrikeBomberBonus = warfareType === "Aerial" &&
+						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.7 : 1;
+					return [0, airstrikeBomberBonus];
+				
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
-					return [0, landingBonus * wg42Bonus];
-
+					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount] || 1.68;
+					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
+					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
+				
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
 					return [0, landingBonus];
 			}
@@ -1777,7 +1800,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
-			isNightStart = false, isCombined = false, targetShipMasterId = 0, damageStatus = this.damageStatus()){
+			isNightStart = false, isCombined = false, targetShipMasterId = 0,
+			damageStatus = this.damageStatus()){
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
 		// Formation modifier, about formation IDs:
@@ -1837,7 +1861,7 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
 		}
 		
 		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
@@ -1998,7 +2022,7 @@ KC3改 Ship Object
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
 		}
 		
 		// About rounding and position of anti-land modifier:
@@ -2360,8 +2384,11 @@ KC3改 Ship Object
 			const isNotCvb = this.master().api_stype !== 18;
 			if(isNotCvb && this.isStriped()) return false;
 			if(targetShipType.isSubmarine) return this.canDoASW();
-			// can not attack land installation if dive bomber equipped
-			if(targetShipType.isLand && this.hasNonZeroSlotEquipmentType(2, 7)) return false;
+			// can not attack land installation if dive bomber equipped, except some exceptions
+			if(targetShipType.isLand && this.equipment().some((g, i) => this.slots[i] > 0 &&
+				g.master().api_type[2] === 7 &&
+				!KC3GearManager.antiLandDiveBomberIds.includes(g.masterId)
+			)) return false;
 			// can not attack if no bomber with slot > 0 equipped
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAirstrikeAircraft());
 		}

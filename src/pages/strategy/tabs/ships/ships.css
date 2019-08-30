@@ -158,6 +158,7 @@
 	height:18px;
 	line-height:18px;
 	float:left;
+	margin-bottom:-1px;
 }
 
 .tab_ships .ship_count {

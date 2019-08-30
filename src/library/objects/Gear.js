@@ -2594,6 +2594,7 @@ KC3改 Equipment Object
 				// https://twitter.com/syoukuretin/status/1156734476870811648
 				switch(type2) {
 					case 1: // Small Cal. Main
+						modifier = 0.5; break;
 					case 2: // Medium Cal. Main
 					case 18: // Type 3 Shell
 					case 19: // AP Shell
@@ -2601,7 +2602,6 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 36: // AA Fire Director
-						modifier = 0.6; break;
 					case 3: // Large Cal. Main
 						modifier = 1; break;
 					case 4: // Secondary
