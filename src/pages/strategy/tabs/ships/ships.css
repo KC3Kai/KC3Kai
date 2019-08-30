@@ -174,23 +174,35 @@
 	float:left;
 	font-size:12px;
 }
-.tab_ships .ship_count .count_label{
+.tab_ships .ship_count .count_label {
 	font-weight:bold;
 	padding-right:5px;
 }
 
+.tab_ships .fleet_stats_label .sum_ships {
+	font-weight:normal;
+	padding-left:2px;
+}
+.tab_ships .fleet_stats {
+	display:none;
+	font-size:12px;
+	height:auto;
+	margin:0px 0px 2px 0px;
+	padding:0px 10px 0px 10px;
+}
 .tab_ships .fleet_stats .fleet_stat .stats_label,
 .tab_ships .fleet_stats .fleet_stat .stats_value {
-	display: inline-block;
-	font-size:12px;
-	
+	display:inline-block;
+	margin-bottom:0px;
+	line-height:18px;
 }
 .tab_ships .fleet_stats .fleet_stat {
-	width: 300px;
-	display: inline-block;
-	vertical-align: top;
-	margin: 0px 0px 5px 0px;
-	overflow: hidden;
+	width:33%;
+	display:inline-block;
+	height:18px;
+	vertical-align:top;
+	margin:0px 0px 0px 0px;
+	overflow:hidden;
 }
 
 .tab_ships .ship_export {

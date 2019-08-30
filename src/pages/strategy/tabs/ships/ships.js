@@ -81,9 +81,11 @@
 				$(".filters .fleet_stats").slideToggle(300, function(){
 					$(".fleet_stats_label .fold_button").toggleClass("glyph_minus", $(this).is(":visible"));
 					$(".fleet_stats_label .fold_button").toggleClass("glyph_plus", !$(this).is(":visible"));
+					if(self.scrollList){
+						self.toggleTableScrollbar(true);
+					}
 				});
 			});
-			$(".fleet_stats_label").click();
 			$(".pages_yes").on("click", function(){
 				if(!self.pageNo){
 					self.pageNo = true;
@@ -1231,10 +1233,15 @@
 					.data("filtered", filteredShips.length);
 				$(".ship_count .count_value .total").text(self.shipCache.length);
 				$(".ship_count .count_value").show();
-				$(".fleet_stats .fleet_stat .average_level").text(filteredShips.length > 0 ? (sumLevel / filteredShips.length).toFixed(2) : 0);
+				$(".fleet_stats .fleet_stat .average_level").text(
+					filteredShips.length > 0 ? (sumLevel / filteredShips.length).toFixed(1) : 0
+				);
 				$(".fleet_stats .fleet_stat .sum_level").text(sumLevel);
-				$(".fleet_stats .fleet_stat .average_exp").text(filteredShips.length > 0 ? (sumExp / filteredShips.length).toFixed(2) : 0);
+				$(".fleet_stats .fleet_stat .average_exp").text(
+					filteredShips.length > 0 ? (sumExp / filteredShips.length).toFixed(2) : 0
+				);
 				$(".fleet_stats .fleet_stat .sum_exp").text(sumExp);
+				$(".fleet_stats_label .sum_ships").text(filteredShips.length);
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
