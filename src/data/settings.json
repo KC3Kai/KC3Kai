@@ -994,7 +994,7 @@
 	},
 	{
 		"section" : "SettingsDataSynchronization",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" : [
 			{
 				"id" : "chromeSyncQuests",
@@ -1071,7 +1071,7 @@
 	},
 	{
 		"section": "SettingsPoiDBSubmission",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" :[
 			{
 				"id" : "PoiDBSubmission_enabled",
@@ -1083,7 +1083,7 @@
 	},
 	{
 		"section": "SettingsOpenDBSubmission",
-		"help" : "",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
 		"contents" :[
 			{
 				"id" : "OpenDBSubmission_enabled",
@@ -1103,11 +1103,13 @@
 				"type" : "radio",
 				"options" : {
 					"choices" : [
+						[ "moonlight", "Moonlight" ],
 						[ "natsuiro", "Natsuiro" ],
 						[ "plain", "Plain" ]
 					]
 				}
 			},
+
 			{
 				"id": "pan_reloadreminder_start",
 				"name": "SettingsPanelReloadReminderStart",
@@ -1180,12 +1182,61 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "pan_pvp_friends",
+				"name" : "SettingsPanelPvPFriends",
+				"type" : "textarea",
+				"options" : {
+					"tooltip" : "SettingsPanelPvPFriendsTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "Natsuiro",
+		"contents" : [
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsBGColorDesc",
-					"tooltip" : "SettingsBGColorDesc"
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_shiplist_bg",
+				"name" : "SettingsShipListBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipListBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_drop_shadow",
+				"name" : "SettingsPanelDropShadow",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelDropShadow",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_bg",
+				"name" : "SettingsShipIconBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_border",
+				"name" : "SettingsShipIconBorder",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBorder",
+					"tooltip" : "SettingsPanelColorTip"
 				}
 			},
 			{
@@ -1195,13 +1246,102 @@
 				"options" : {
 					"tooltip" : "SettingsPanelCustomCSSTip"
 				}
+			}
+		]
+	},
+	{
+		"section": "Moonlight",
+		"contents" : [
+			{
+				"id" : "pan_box_bcolor_moon",
+				"name" : "SettingsPanelBoxBackColor",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsBGColorDesc",
+					"tooltip" : "SettingsPanelColorTip"
+				}
 			},
 			{
-				"id" : "pan_pvp_friends",
-				"name" : "SettingsPanelPvPFriends",
+				"id" : "pan_shiplist_bg_moon",
+				"name" : "SettingsShipListBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipListBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_misc_bg_moon",
+				"name" : "SettingsMiscBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsMiscBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_drop_shadow_moon",
+				"name" : "SettingsPanelDropShadow",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelDropShadow",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_bg_moon",
+				"name" : "SettingsShipIconBG",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBG",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_ship_icon_border_moon",
+				"name" : "SettingsShipIconBorder",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsShipIconBorder",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_outline_moon",
+				"name" : "SettingsPanelOutline",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelOutline",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_outline_bright_moon",
+				"name" : "SettingsPanelOutlineBright",
+				"type" : "long_text",
+				"options" : {
+					"placeholder" : "SettingsPanelOutlineBright",
+					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "moon_small_font",
+				"name" : "SettingsMoonSmallFont",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "moon_lighting_effect",
+				"name" : "SettingsMoonLightingEffect",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "pan_custom_css_moon",
+				"name" : "SettingsPanelCustomCSS",
 				"type" : "textarea",
 				"options" : {
-					"tooltip" : "SettingsPanelPvPFriendsTip"
+					"tooltip" : "SettingsPanelCustomCSSTip"
 				}
 			}
 		]

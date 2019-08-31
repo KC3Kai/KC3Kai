@@ -13,6 +13,7 @@
         this.loading = 0;
         this.isShipList = true;
         this.shipCount = 0;
+        this.statLineWidth = 3;
         this.rowParams = {
             width: 330,
             height: 35
@@ -533,13 +534,13 @@
             }
         }
 
+        this._drawIcon(x + xOffset, y, ship.masterId);
+        
         this._drawStat(ship, "fp", x + xOffset, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statFP);
         this._drawStat(ship, "tp", x + xOffset + this.rowParams.height / 2, y, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statTP);
         this._drawStat(ship, "aa", x + xOffset + this.rowParams.height / 2, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAA);
         this._drawStat(ship, "ar", x + xOffset, y + this.rowParams.height / 2, this.rowParams.height / 2, this.rowParams.height / 2, this.colors.statAR);
         this._drawStat(ship, "lk", x + xOffset + this.rowParams.height, y, this.rowParams.height / 5, this.rowParams.height, this.colors.statLK);
-
-        this._drawIcon(x + xOffset, y, ship.masterId);
 
         this.ctx.font = generateFontString(400, 24);
         this.ctx.fillStyle = this.colors.shipInfo;
@@ -565,10 +566,18 @@
     };
 
     ShowcaseExporter.prototype._drawIcon = function (x, y, shipId) {
+        this.ctx.imageSmoothingQuality = 'high';
         this.ctx.drawImage(
-            this._shipImages[shipId],
-            0, 0, this._shipImages[shipId].width, this._shipImages[shipId].height,
-            x, y, this.rowParams.height, this.rowParams.height
+          // image
+          this._shipImages[shipId],
+          // source x and y
+          (this._shipImages[shipId].width / 6), 0,
+          // source width and height
+          (this._shipImages[shipId].width / 3 * 2), this._shipImages[shipId].height,
+          // target x and y
+          x + this.statLineWidth, y + this.statLineWidth,
+          // target width and height
+          this.rowParams.height - (this.statLineWidth * 2), this.rowParams.height - (this.statLineWidth * 2)
         );
     };
 
@@ -582,7 +591,28 @@
                 this.ctx.fillRect(x, y + h/4, w, h / 2);
             }
         } else if (MasterShipStat[0] + ship.mod[this._modToParam.indexOf(stat)] >= MasterShipStat[1]) {
-            this.ctx.fillRect(x, y, w, h);
+            switch (stat) {
+                case "fp":
+                    // top left
+                    this.ctx.fillRect(x, y, this.statLineWidth, h);
+                    this.ctx.fillRect(x, y, w, this.statLineWidth);
+                    break;
+                case "tp":
+                    // top right
+                    this.ctx.fillRect(x + w - this.statLineWidth, y, this.statLineWidth, h);
+                    this.ctx.fillRect(x, y, w, this.statLineWidth);
+                    break;
+                case "ar":
+                    // bottom left
+                    this.ctx.fillRect(x, y, this.statLineWidth, h);
+                    this.ctx.fillRect(x, y + h - this.statLineWidth, w, this.statLineWidth);
+                    break;
+                case "aa":
+                    // bottom right
+                    this.ctx.fillRect(x + w - this.statLineWidth, y, this.statLineWidth, h);
+                    this.ctx.fillRect(x, y + h - this.statLineWidth, w, this.statLineWidth);
+                    break;
+            }
         }
     };
 

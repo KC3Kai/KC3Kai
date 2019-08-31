@@ -2594,6 +2594,7 @@ KC3改 Equipment Object
 				// https://twitter.com/syoukuretin/status/1156734476870811648
 				switch(type2) {
 					case 1: // Small Cal. Main
+						modifier = 0.5; break;
 					case 2: // Medium Cal. Main
 					case 18: // Type 3 Shell
 					case 19: // AP Shell
@@ -2601,9 +2602,8 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 36: // AA Fire Director
-						modifier = 1; break;
 					case 3: // Large Cal. Main
-						modifier = 1.5; break;
+						modifier = 1; break;
 					case 4: // Secondary
 						// 0.2 per star for green HA guns,
 						// 0.3 per star for yellow guns,
@@ -2637,6 +2637,7 @@ KC3改 Equipment Object
 		const stars = this.stars || 0;
 		let modifier = 0;
 		switch(type.toLowerCase()) {
+			case "exped":
 			case "fire":
 				// Main gun/Secondary gun/AP shell/AAFD/Searchlight
 				// wikia says Sonar gives shelling acc bonus?
@@ -2663,6 +2664,9 @@ KC3改 Equipment Object
 				if([14, 40].includes(type2))
 					modifier = 1.3;
 				break;
+			case "support":
+				// unknown
+				break;
 			default:
 				console.warn("Unknown attack type:", type);
 		}
@@ -2680,6 +2684,7 @@ KC3改 Equipment Object
 		const stars = this.stars || 0;
 		let modifier = 0;
 		switch(type.toLowerCase()) {
+			case "exped":
 			case "fire":
 				// Engine Boiler
 				if(type2 === 17) modifier = 1.5;
@@ -2690,7 +2695,6 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// unknown
-				break;
 			case "asw":
 				// unknown
 				break;

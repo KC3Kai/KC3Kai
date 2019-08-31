@@ -351,6 +351,8 @@ Previously known as "Reactor"
 					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
 					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
+					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
+					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -1762,7 +1764,7 @@ Previously known as "Reactor"
 		  -------------------------------------------------------*/
 		"api_get_member/mission":function(params, response, headers) {
 			if(Array.isArray(response.api_data.api_limit_time)) {
-				// Actual Monthly Expedition reset time in minutes,
+				// Actual Monthly Expedition reset time in seconds,
 				// might be more in this array for other time periods?
 				PlayerManager.hq.monthlyExpedResetTime = response.api_data.api_limit_time[0] || 0;
 				PlayerManager.hq.save();

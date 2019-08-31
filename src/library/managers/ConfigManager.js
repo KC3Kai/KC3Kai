@@ -163,7 +163,27 @@ Retrieves when needed to apply on components
 				pan_bg_position : "top center",
 				pan_opacity     : 100,
 				pan_box_bcolor  : "rgba(100, 100, 100, 0.618)",
+				pan_box_bcolor_moon  : "rgba(25, 50, 100, 0.2)",
+				pan_shiplist_bg : "rgba(100, 100, 100, 0)",
+				pan_shiplist_bg_moon : "rgba(25, 50, 100, 0.2)",
+				pan_misc_bg_moon  : "rgba(25, 50, 100, 0.2)",
+				pan_drop_shadow : "rgba(65, 0, 103, 0)",
+				pan_drop_shadow_moon : "rgba(24, 45, 85, 1)",
+				pan_ship_icon_bg: "rgba(0, 114, 207, 1)",
+				pan_ship_icon_bg_moon: "rgba(0, 42, 134, 0)",
+				pan_ship_icon_border: "rgba(34, 65, 105, 1)",
+				pan_ship_icon_border_moon: "rgba(34, 65, 105, 0)",
+				pan_outline_moon: "rgba(68, 34, 68, 1)",
+				pan_outline_bright_moon: "rgba(140, 140, 192, 1)",
+				moon_small_font: false,
+				moon_lighting_effect: true,
 				pan_custom_css  : "",
+				pan_custom_css_moon  : "",
+
+				pan_layout           : 1,
+				RotationPage         : 1,
+				Rotation2Page        : 4,
+
 				pan_reloadreminder_start  : 120,
 				pan_reloadreminder_repeat : 0,
 				pan_pvp_friends : "",
@@ -297,14 +317,41 @@ Retrieves when needed to apply on components
 			this.hqInfoPage = (this.hqInfoPage % maxPage) + 1;
 			this.save();
 		},
-		
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecificPage :function(page){
+			this.loadIfNecessary();
+			this.RotationPage = page;
+			this.save();
+		},
+
+		// Toggle top-left boxes in Moonlight
+		scrollSpecific2Page :function(page){
+			this.loadIfNecessary();
+			this.Rotation2Page = page;
+			this.save();
+		},
+
+		// Toggle layouts in Moonlight
+		setLayout :function(layoutType){
+			this.loadIfNecessary();
+			this.pan_layout = layoutType;
+			this.save();
+		},
+
 		// Toggle Equipment LoS
 		scrollElosMode :function(){
 			this.loadIfNecessary();
 			this.elosFormula = (this.elosFormula % 4) + 1;
 			this.save();
 		},
-		
+
+		setElosMode :function(type){
+			this.loadIfNecessary();
+			this.elosFormula = type;
+			this.save();
+		},
+
 		// Toggle Fighter Power
 		// 1=no proficiency 2=proficiency average 3=proficiency bounds
 		scrollFighterPowerMode :function(){
