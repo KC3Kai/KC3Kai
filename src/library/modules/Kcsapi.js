@@ -349,6 +349,8 @@ Previously known as "Reactor"
 					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
 					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
+					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
+					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}

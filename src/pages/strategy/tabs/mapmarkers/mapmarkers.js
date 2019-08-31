@@ -148,25 +148,26 @@
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
 					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
-					case -99: return 'map_common_82';
+					case -99: return 'map_common_84';
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
-					case 0: return 'map_common_152';
-					case 1: return 'map_common_145';
+					case 0: return 'map_common_159';
+					case 1: return 'map_common_152';
 					case 2:
-					case 6: return 'map_common_148';
-					case 3: return 'map_common_150';
-					case 4: return 'map_common_151';
-					case 5: return 'map_common_139';
-					case 7: return 'map_common_101';
-					case 8: return 'map_common_138';
-					case 9: return 'map_common_149';
-					case 10: return 'map_common_96';
-					case 11: return 'map_common_153';
-					case 12: return 'map_common_154';
-					case 13: return 'map_common_81';
-					case -2: return 'map_common_147';
-					case -3: return 'map_common_144';
+					case 6: return 'map_common_155';
+					case 3: return 'map_common_157';
+					case 4: return 'map_common_158';
+					case 5: return 'map_common_146';
+					case 7: return 'map_common_108';
+					case 8: return 'map_common_145';
+					case 9: return 'map_common_156';
+					case 10: return 'map_common_101';
+					case 11: return 'map_common_160';
+					case 12: return 'map_common_161';
+					case 13: return 'map_common_83';
+					case 14: return 'map_common_152';
+					case -2: return 'map_common_154';
+					case -3: return 'map_common_151';
 				}
 			};
 			this.isLoading = true;

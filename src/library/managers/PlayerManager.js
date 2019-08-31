@@ -541,6 +541,8 @@ Does not include Ships and Gears which are managed by other Managers
 				"88": "tea",
 				"89": "dinnerTicket",
 				"90": "setsubunBeans",
+				"91": "emergencyRepair",
+				"92": "newRocketDevMaterial",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

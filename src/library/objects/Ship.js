@@ -2619,7 +2619,9 @@ KC3改 Ship Object
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
 		const isLand = targetShip.api_soku <= 0;
-		// most priority: Toku Daihatsu + 11th Tank
+		// new equipment: M4A1 DD
+		if(this.hasEquipment(355) && isLand) return 6;
+		// higher priority: Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
 		// Abyssal hard land installation could be landing attacked
 		const isTargetLandable =
@@ -2639,6 +2641,7 @@ KC3改 Ship Object
 			return 0;
 		}
 		if(isTargetLandable) {
+			if(this.hasEquipment(355)) return 6;
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu

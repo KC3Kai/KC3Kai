@@ -433,11 +433,12 @@
 				const cgList = $('<div class="cglist"></div>').appendTo(".tab_mstship .shipInfo .basic");
 				// To avoid loading seasonal image types not existed,
 				// see `ShipLoader.prototype.getSpecificAlbumImageLoadList`
-				const isSpecificAlbumTypes = [754, 755, 984, 997, 1003, 1004,
-					1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013,
-					1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022,
-					1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031,
-					1032, 1033, 1034, 1085].includes(ship_id);
+				const isSpecificAlbumTypes = [
+					5026, 5027, 5256, 5269, 5275, 5276, 5277, 5278, 5279, 5280,
+					5281, 5282, 5283, 5284, 5285, 5286, 5287, 5288, 5289, 5290,
+					5291, 5292, 5293, 5294, 5295, 5296, 5297, 5298, 5299, 5300,
+					5301, 5302, 5303, 5304, 5305, 5306, 5357,
+				].includes(ship_id);
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
 					isSpecificAlbumTypes ? ['character_full', 'character_up'] : [
 						'card', 'character_full', 'character_full_dmg',
