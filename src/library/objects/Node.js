@@ -247,6 +247,13 @@ Used by SortieManager
 		this.type = "";
 		// since Fall 2018
 		this.dudMessage = (nodeData.api_cell_flavor || {}).api_message;
+		// since Summer 2019, message from `main.js#CellTaskAnchorageRepair.prototype._start`,
+		// no evidence proves that emergency anchorage repair only occurs at non-battle node,
+		// but yes, we assume this message will only appear there :P
+		if(nodeData.api_anchorage_flag) {
+			this.emergencyRepairFlag = true;
+			if(!this.dudMessage) this.dudMessage = "波静かな、泊地に適した海域です。";
+		}
 		return this;
 	};
 	
