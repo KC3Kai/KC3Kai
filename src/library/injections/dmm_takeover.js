@@ -106,7 +106,7 @@
 
 			$("<div>").addClass("overlay_next notranslate")
 				.append($("<div>").addClass("nextButtonBlock"))
-				.append($("<span>").html("Taiha predicted. Next Button blocked. Use F10 to clear."))
+				.append($("<span>").html(KC3Meta.term("nextButtonBlockOverlay")))
 				.appendTo("#area-game");
 		},
 
