@@ -308,54 +308,66 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			return this.nodes[ this.nodes.length - 1 ] || new KC3Node();
 		},
 		
+		/**
+		 * @see Next node event selection in-game client references since Phase 2:
+		 *      `main.js#TaskNextSpot.prototype._cellEvent`, `MapScene.prototype._preNext` and `NextModel`
+		 */
 		advanceNode :function( nodeData, UTCTime ){
 			//console.debug("Raw next node data", nodeData);
 			let nodeKind = "Dud";
-			// Map Start Point
+			// Map Start Point (not exists anyway)
 			// api_event_id = 0
 			if (nodeData.api_event_id === 0) {
 				nodeKind = "Dud";
 			}
-			// Route Selection Node
+			// Route Selection Node (TaskBranchRoute)
 			// api_event_id = 6
 			// api_event_kind = 2
+			// unrelated to api_event_id, map pre-next judged it by
+			//   `api_select_route` existed and `.api_select_cells` length > 1,
+			// in fact, only 2-cells junction has been implemented in-game for now
 			else if (typeof nodeData.api_select_route !== "undefined") {
 				nodeKind = "Selector";
 			}
-			// Battle avoided node (message might be: Enemy not found / Peace sea / etc)
-			// api_event_id = 1 or 6
-			// api_event_kind = 0/1/3~25 (id 6, kind 2 used by route selection above)
+			// Battle avoided node (CellTaskFancy), message might be: Enemy not found / Peace sea / etc
+			// api_event_id = 1/6
+			// api_event_kind = 0/1/3~25
+			// in fact, api_event_id = 1 not exists any more; api_event_kind = 2 taken by route branching
+			// since Phase 2, message might be seen in `nodeData.api_cell_flavor.api_message`
 			else if (nodeData.api_event_id === 6 || nodeData.api_event_id === 1) {
-				// Might use another name to show a different message
-				// since Phase 2, possible to see `nodeData.api_cell_flavor.api_message`
 				nodeKind = "Dud";
 			}
-			// Resource Node
+			// Resource Node (CellTaskItem)
 			// api_event_id = 2
 			else if (typeof nodeData.api_itemget !== "undefined") {
 				nodeKind = "Resource";
 			}
-			// Maelstrom Node
+			// Maelstrom Node (CellTaskHappening)
 			// api_event_id = 3
 			else if (typeof nodeData.api_happening !== "undefined") {
 				nodeKind = "Maelstrom";
 			}
-			// Aerial Reconnaissance Node
+			// Aerial Reconnaissance Node (CellTaskAirReconnaissance)
 			// api_event_id = 7
 			// api_event_kind = 0
 			else if (nodeData.api_event_id === 7 && nodeData.api_event_kind === 0) {
 				// similar with both Resource and Transport, found at 6-3 G & H
 				nodeKind = "Dud";
 			}
-			// Bounty Node, typical example: 1-6-N
+			// Bounty Node (CellTaskAnchor), typical example: 1-6-N
 			// api_event_id = 8
 			else if (typeof nodeData.api_itemget_eo_comment !== "undefined") {
 				nodeKind = "Bounty";
 			}
-			// Transport Node, event only for now
+			// Transport Node (CellTaskLanding), event only for now
 			// api_event_id = 9
 			else if (nodeData.api_event_id === 9) {
 				nodeKind = "Transport";
+			}
+			// Emergency Anchorage Repair Node (CellTaskAnchorageRepair), event only for now
+			// api_event_id = 10
+			else if (nodeData.api_event_id === 10) {
+				nodeKind = "Dud";
 			}
 			// Battle Node
 			// api_event_kind = 1 (start from day battle)
@@ -368,13 +380,16 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_kind = 8 (long range radar ambush battle), since event winter 2019
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss battle)
-			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0))
-			// api_event_id = 10 (long distance aerial raid)
-			else if ([1, 2, 3, 4, 5, 6, 7, 8].indexOf(nodeData.api_event_kind) >= 0) {
-				// api_event_id not used, might cause misjudging if new id added
+			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0)) (battle removed?)
+			else if ([4, 5, 7].includes(nodeData.api_event_id) && nodeData.api_event_kind > 0) {
+				// Log unknown value of api_event_kind
+				if (nodeData.api_event_kind > 8) {
+					console.log(`Unknown node kind, api_event_id = ${nodeData.api_event_id} and api_event_kind = ${nodeData.api_event_kind}, defining as battle`);
+				}
 				nodeKind = "Battle";
 			} else {
-				// Otherwise, supposed to be non-battle node
+				// Otherwise, we supposed to be non-battle node,
+				// however in-game client uses CellTaskItem (item gains) as default event
 				console.log(`Unknown node kind, api_event_id = ${nodeData.api_event_id} and api_event_kind = ${nodeData.api_event_kind}, defining as dud`);
 				nodeKind = "Dud";
 			}

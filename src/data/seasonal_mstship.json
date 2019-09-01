@@ -3259,5 +3259,29 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5407": {
+		"api_id": 5407,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5408": {
+		"api_id": 5408,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5409": {
+		"api_id": 5409,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

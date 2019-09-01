@@ -58,25 +58,33 @@
             const ids = [], rings = [];
             if (Array.isArray(apiList)) {
                 apiList.forEach(item => {
-                    const shipIds = item.api_table_id.filter(id => KC3Master.isRegularShip(id));
-                    // note: not all forms of a ship will exist, mostly Kai form missing
-                    ids.push(...shipIds);
-                    // for ship, `api_state` arrays are used to indicate type of CG/event unlocked:
-                    // [0] = basic unlocked, [1] = chuuha CG, [2] = Married, [3], [4] = ?
                     if (type === "ship") {
+                        const shipIds = item.api_table_id.filter(id => KC3Master.isRegularShip(id));
+                        // note: not all forms of a ship will exist, mostly Kai form missing
+                        ids.push(...shipIds);
+                        // for ship, `api_state` arrays are used to indicate type of CG/event unlocked:
+                        // [0] = basic unlocked, [1] = chuuha CG, [2] = Married, [3], [4] = ?
                         item.api_state.forEach((state, index) => {
                             if (state[0] && state[2]) {
                                 rings.push(item.api_table_id[index]);
                             }
                         });
+                        // record base form ID of all ships for duplicated ships checking
+                        shipIds.forEach(id => {
+                            const baseId = RemodelDb.originOf(id);
+                            if (baseId && baseShips.indexOf(baseId) === -1) {
+                                baseShips.push(baseId);
+                            }
+                        });
                     }
-                    // record base form ID of all ships for duplicated ships checking
-                    shipIds.forEach(id => {
-                        const baseId = RemodelDb.originOf(id);
-                        if (baseId && baseShips.indexOf(baseId) === -1) {
-                            baseShips.push(baseId);
+                    if (type === "gear") {
+                        ids.push(...item.api_table_id);
+                        // api_info removed from master since 2019-06-25, try to cache it here
+                        // not saved into storage, so it only affects current thread (eg: devtools panel)
+                        if (KC3Master.slotitem(item.api_index_no).api_name === item.api_name) {
+                            KC3Master.slotitem(item.api_index_no).api_info = item.api_info;
                         }
-                    });
+                    }
                 });
             }
             const currentType = pictureBook[type] = pictureBook[type] || {};
