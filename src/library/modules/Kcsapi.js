@@ -349,6 +349,8 @@ Previously known as "Reactor"
 					case 88: PlayerManager.consumables.tea = thisItem.api_count; break;
 					case 89: PlayerManager.consumables.dinnerTicket = thisItem.api_count; break;
 					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
+					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
+					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -1132,6 +1134,25 @@ Previously known as "Reactor"
 					response.api_data.api_destruction_battle
 				);
 				KC3Network.trigger("LandBaseAirRaid");
+			}
+		},
+		
+		/* Emergency Anchorage Repair Confirmed
+		-------------------------------------------------------*/
+		"api_req_map/anchorage_repair":function(params, response, headers){
+			const usedShip = response.api_data.api_used_ship,
+				updatedShips = response.api_data.api_ship_data;
+			console.log("Emergency Anchorage Repair used", usedShip, updatedShips);
+			// uncertain: consume material amount
+			PlayerManager.consumables.emergencyRepair -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
+			// Since this type repairing supposed to be happened on non-battle node,
+			// no `api_get_member/ship_deck` API call beofore next `/next` call,
+			// repaired ships data will be updated by result of this call.
+			if(Array.isArray(updatedShips)) {
+				KC3ShipManager.set(updatedShips);
+				KC3Network.trigger("Fleet");
 			}
 		},
 		

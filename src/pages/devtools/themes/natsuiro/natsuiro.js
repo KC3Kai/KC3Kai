@@ -2373,6 +2373,7 @@
 
 			$(".module.activity .node_type_text").removeClass("dud");
 			$(".module.activity .node_type_text").removeClass("select");
+			$(".module.activity .node_type_text").removeAttr("title");
 
 			// Swap fish and support icons
 			$(".module.activity .battle_fish").hide();
@@ -2575,7 +2576,10 @@
 						.addClass(thisNode.nodeExtraClass || "")
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
-					$(".module.activity .node_type_text").text( KC3Meta.term("BattleAvoided") );
+					$(".module.activity .node_type_text")
+						.text(KC3Meta.term(!!thisNode.isEmergencyRepairNode ? "BattleAnchorage" : "BattleAvoided"))
+						.attr("title", thisNode.dudMessage || "")
+						.lazyInitTooltip();
 					$(".module.activity .node_type_text").addClass("dud");
 					$(".module.activity .node_type_text").show();
 					break;
@@ -4581,7 +4585,7 @@
 				.attr("src", `${myKcServerHost}/kcs2/resources${gearPng}`)
 				.attr("alt", "[{0}]".format(gearMst.api_id))
 				.error(function() { $(this).off("error").attr("src", "/assets/img/ui/empty.png"); })
-				//.attr("title", gearMst.api_info)
+				.attr("title", gearMst.api_info || "")
 				.data("masterId", gearMst.api_id)
 				.on("click", self.gearDoubleClickFunction);
 		} else {

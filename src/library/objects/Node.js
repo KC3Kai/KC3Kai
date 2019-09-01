@@ -245,8 +245,23 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
-		// since Fall 2018
+		// since Fall 2018, use message from API first
 		this.dudMessage = (nodeData.api_cell_flavor || {}).api_message;
+		// since Summer 2019, message from `main.js#CellTaskAnchorageRepair.prototype._start`
+		if(nodeData.api_event_id === 10) {
+			this.isEmergencyRepairNode = true;
+			this.canEmergencyRepairFlag = nodeData.api_anchorage_flag;
+			if(!this.dudMessage) this.dudMessage = "波静かな、泊地に適した海域です。";
+		}
+		// hard-coded messages, see `main.js#CellTaskFancy.prototype._selectMessage`
+		if(!this.dudMessage) this.dudMessage = ({
+			0: "気のせいだった。",
+			1: "敵影を見ず。",
+			3: "穏やかな海です。",
+			4: "穏やかな海峡です。",
+			5: "警戒が必要です。",
+			6: "静かな海です。",
+		})[nodeData.api_event_kind];
 		return this;
 	};
 	
@@ -1901,12 +1916,10 @@ Used by SortieManager
 	KC3Node.prototype.isBoss = function(){
 		// see advanceNode() (SortieManager.js) for api details,
 		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
-		return (
-			// boss battle
-			this.eventId === 5 &&
-			// enemy single || enemy combined || night-to-day
-			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
-		);
+		// since Phase 2, see from `main.js#TaskNextSpot.prototype._createCellTaskBattle`
+		//                      to `main.js#BattleSceneModel.map_info.prototype.isBoss`
+		// only decided by api_event_id = 5, irrelevant to api_event_kind
+		return this.eventId === 5;
 	};
 
 	KC3Node.prototype.isValidBoss = function(){

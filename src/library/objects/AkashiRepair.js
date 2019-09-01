@@ -1,6 +1,8 @@
 /* AkashiRepair.js
 
 Manages the timer for a player's Akashi repairs.
+NOTE: new repair mechanic, happens on event sortie node, called 'Emergency Anchorage Repair',
+has been implemented since 2019-8, so don't just simply word this 'home port' one with 'Anchorage Repair'.
 */
 (function () {
   "use strict";
