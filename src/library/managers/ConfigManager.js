@@ -123,6 +123,7 @@ Retrieves when needed to apply on components
 				alert_taiha_damecon  : false,
 				alert_taiha_unlock   : false,
 				alert_taiha_noanim   : false,
+				next_blocker  : 0,
 
 				api_translation   : true,
 				api_tracking      : true,

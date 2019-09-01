@@ -217,6 +217,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			})).execute();
 		},
 		
+		/* NEXT BLOCK SHOW
+		Request from devTools to display "next node" button blocker.  
+		------------------------------------------*/
+		"nextBlockShow": function (request, sender, response) {
+			(new TMsg(request.tabId, "gamescreen", "nextBlockShow", {fairy: request.fairy})).execute();
+		},
+		
 		/* CLEAR OVERLAYS
 		Request from devTools to clear overlays on its inspected window
 		DevTools does not have access to chrome.tabs API thus cannot send this message on its own

@@ -169,6 +169,8 @@ Previously known as "Reactor"
 			if(response.api_data.api_event_object){
 				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
 			}
+			// to automaticly remove "next blocker" once in port
+			KC3Network.disarmNextBlock();
 		},
 		
 		/*-------------------------------------------------------*/
@@ -1336,6 +1338,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
+			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
@@ -1356,6 +1359,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
+			KC3Network.nextBlockCheck();
 		},
 		
 		/* FCF TRIGGER

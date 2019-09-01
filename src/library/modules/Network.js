@@ -7,6 +7,12 @@ Listens to network history and triggers callback if game events happen
 (function(){
 	"use strict";
 
+	// Next node button blocker
+	let next_armed = false;
+	// se/217.mp3 might fire twice. once for yasen and once for next node
+	// this flag prevents blocking until result data actually recieved
+	let battle_result_recieved = false;
+
 	window.KC3Network = {
 		hasOverlay: false,
 		lastUrl: "",
@@ -160,12 +166,61 @@ Listens to network history and triggers callback if game events happen
 							}
 						}
 					});
+					// reloads settings for next button locker if needed
+					ConfigManager.load();
 				}
 			};
 			// Do not try to call this multiple times, otherwise this is needed:
 			//window.removeEventListener("storage", configChangeListener);
 			// Listen to the changes of local storage configs
 			window.addEventListener("storage", configChangedListener);
+		},
+
+		/* NEXT BLOCK CHECK
+		For every theme it checks HP predictions. If any ship predicted 
+		to be in Taiha it arms locker in game page preventing player
+		from advancing into next node 
+		-------------------------------------------------------*/
+		nextBlockCheck: function(){
+			next_armed = PlayerManager.checkTaihaShips();
+			this.nextBlockTrigger(false);
+		},
+
+		/* NEXT BLOCK TRIGGER
+		signals to game tab that next button blocking overlay needs to be shown
+		triggered either by network request to results or SE network request
+		-------------------------------------------------------*/
+		nextBlockTrigger: function (SE = false) {
+			let show = false;
+			if (next_armed && ConfigManager.next_blocker) {
+				if (SE) { // Fairy
+					if (battle_result_recieved) {
+						show = true;
+					} // else {
+					// result data wasn't recieved. it must be yasen switch. show translation divs?
+					// }
+				} else {
+					if (ConfigManager.next_blocker === 2) {
+						// not from SE check and player selected api check
+						// start showing block now
+						show = true;
+					} else {
+						// if player wants it through sound warnings we must signal that we got result
+						// to distinguish it from yasen switch
+						battle_result_recieved = true;
+					}
+				}
+			}
+
+			if(show){
+				// reset flag, so if player choose to risk, it wouldn't interfere on next node
+				battle_result_recieved = false;
+				KC3Network.hasOverlay = true;
+				(new RMsg("service", "nextBlockShow", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					fairy:SE
+				})).execute();	
+			}
 		},
 
 		/* RECEIVED
@@ -241,6 +296,10 @@ Listens to network history and triggers callback if game events happen
 				// Clear overlays upon entering furniture menu,
 				// not work everytime since Phase 2 caches assets
 				KC3Network.clearOverlays();
+			}
+			// If it's switching to NextNode or Yasen screen (might be others?)
+			if(requestUrl.includes("/kcs2/resources/se/217.mp3")){
+				KC3Network.nextBlockTrigger(true);
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
@@ -407,6 +466,14 @@ Listens to network history and triggers callback if game events happen
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
+		},
+
+		/* Disarms Next Node Blocker
+		 */
+		disarmNextBlock :function(){
+			next_armed = false;
+			battle_result_recieved = false;
+			this.clearOverlays();
 		},
 
 		/* CLEAR OVERLAYS
