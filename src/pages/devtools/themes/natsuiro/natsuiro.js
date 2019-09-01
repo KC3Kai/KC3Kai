@@ -2577,7 +2577,7 @@
 						.attr("title", thisNode.nodeDesc || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_text")
-						.text(KC3Meta.term(!!thisNode.emergencyRepairFlag ? "BattleAnchorage" : "BattleAvoided"))
+						.text(KC3Meta.term(!!thisNode.isEmergencyRepairNode ? "BattleAnchorage" : "BattleAvoided"))
 						.attr("title", thisNode.dudMessage || "")
 						.lazyInitTooltip();
 					$(".module.activity .node_type_text").addClass("dud");

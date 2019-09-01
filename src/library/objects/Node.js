@@ -245,15 +245,23 @@ Used by SortieManager
 	
 	KC3Node.prototype.defineAsDud = function( nodeData ){
 		this.type = "";
-		// since Fall 2018
+		// since Fall 2018, use message from API first
 		this.dudMessage = (nodeData.api_cell_flavor || {}).api_message;
-		// since Summer 2019, message from `main.js#CellTaskAnchorageRepair.prototype._start`,
-		// no evidence proves that emergency anchorage repair only occurs at non-battle node,
-		// but yes, we assume this message will only appear there :P
-		if(nodeData.api_anchorage_flag) {
-			this.emergencyRepairFlag = true;
+		// since Summer 2019, message from `main.js#CellTaskAnchorageRepair.prototype._start`
+		if(nodeData.api_event_id === 10) {
+			this.isEmergencyRepairNode = true;
+			this.canEmergencyRepairFlag = nodeData.api_anchorage_flag;
 			if(!this.dudMessage) this.dudMessage = "波静かな、泊地に適した海域です。";
 		}
+		// hard-coded messages, see `main.js#CellTaskFancy.prototype._selectMessage`
+		if(!this.dudMessage) this.dudMessage = ({
+			0: "気のせいだった。",
+			1: "敵影を見ず。",
+			3: "穏やかな海です。",
+			4: "穏やかな海峡です。",
+			5: "警戒が必要です。",
+			6: "静かな海です。",
+		})[nodeData.api_event_kind];
 		return this;
 	};
 	
