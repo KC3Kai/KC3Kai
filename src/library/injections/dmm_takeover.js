@@ -106,7 +106,7 @@
 
 			$("<div>").addClass("overlay_next notranslate")
 				.append($("<div>").addClass("nextButtonBlock"))
-				.append($("<span>").html(KC3Meta.term("nextButtonBlockOverlay")))
+				.append($("<span>").html(KC3Meta.term("NextButtonBlockOverlay")))
 				.appendTo("#area-game");
 		},
 
