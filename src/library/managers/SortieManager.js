@@ -323,7 +323,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// Route Selection Node (TaskBranchRoute)
 			// api_event_id = 6
 			// api_event_kind = 2
-			// unrelated to api_event_id, pre-next juged it by
+			// unrelated to api_event_id, map pre-next judged it by
 			//   `api_select_route` existed and `.api_select_cells` length > 1,
 			// in fact, only 2-cells junction has been implemented in-game for now
 			else if (typeof nodeData.api_select_route !== "undefined") {
@@ -332,7 +332,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// Battle avoided node (CellTaskFancy), message might be: Enemy not found / Peace sea / etc
 			// api_event_id = 1/6
 			// api_event_kind = 0/1/3~25
-			// api_event_id = 1 not exists; api_event_kind = 2 taken by route branching
+			// in fact, api_event_id = 1 not exists any more; api_event_kind = 2 taken by route branching
 			// since Phase 2, message might be seen in `nodeData.api_cell_flavor.api_message`
 			else if (nodeData.api_event_id === 6 || nodeData.api_event_id === 1) {
 				nodeKind = "Dud";
@@ -380,13 +380,16 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// api_event_kind = 8 (long range radar ambush battle), since event winter 2019
 			// api_event_id = 4 (normal battle)
 			// api_event_id = 5 (boss battle)
-			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0))
-			else if ([1, 2, 3, 4, 5, 6, 7, 8].indexOf(nodeData.api_event_kind) >= 0) {
-				// api_event_id not used here, might cause misjudging if new id added
+			// api_event_id = 7 (aerial battle / reconnaissance (api_event_kind = 0)) (battle removed?)
+			else if ([4, 5, 7].includes(nodeData.api_event_id) && nodeData.api_event_kind > 0) {
+				// Log unknown value of api_event_kind
+				if (nodeData.api_event_kind > 8) {
+					console.log(`Unknown node kind, api_event_id = ${nodeData.api_event_id} and api_event_kind = ${nodeData.api_event_kind}, defining as battle`);
+				}
 				nodeKind = "Battle";
 			} else {
-				// Otherwise, we supposed to be non-battle node.
-				// However in-game client uses CellTaskItem (item gains) as default event
+				// Otherwise, we supposed to be non-battle node,
+				// however in-game client uses CellTaskItem (item gains) as default event
 				console.log(`Unknown node kind, api_event_id = ${nodeData.api_event_id} and api_event_kind = ${nodeData.api_event_kind}, defining as dud`);
 				nodeKind = "Dud";
 			}

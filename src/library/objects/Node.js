@@ -1916,12 +1916,10 @@ Used by SortieManager
 	KC3Node.prototype.isBoss = function(){
 		// see advanceNode() (SortieManager.js) for api details,
 		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`
-		return (
-			// boss battle
-			this.eventId === 5 &&
-			// enemy single || enemy combined || night-to-day
-			(this.eventKind === 1 || this.eventKind === 5 || this.eventKind === 7)
-		);
+		// since Phase 2, see from `main.js#TaskNextSpot.prototype._createCellTaskBattle`
+		//                      to `main.js#BattleSceneModel.map_info.prototype.isBoss`
+		// only decided by api_event_id = 5, irrelevant to api_event_kind
+		return this.eventId === 5;
 	};
 
 	KC3Node.prototype.isValidBoss = function(){
