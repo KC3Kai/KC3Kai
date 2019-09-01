@@ -1148,7 +1148,6 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
-			KC3Network.nextBlockCheck();
 			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
@@ -1174,7 +1173,6 @@ Previously known as "Reactor"
 				response.api_data,
 				Date.toUTCseconds(headers.Date)
 			);
-			KC3Network.nextBlockCheck();
 			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
 		},
@@ -1206,7 +1204,6 @@ Previously known as "Reactor"
 			);
 			KC3Network.setBattleEvent(true, "dawn", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
-			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/ec_night_to_day":function(params, response, headers){
 			response.api_data.api_name = "ec_night_to_day";
@@ -1224,7 +1221,6 @@ Previously known as "Reactor"
 			);
 			KC3Network.setBattleEvent(true, "night", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
-			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/sp_midnight":function(params, response, headers){
 			response.api_data.api_name = "fc_sp_midnight";
@@ -1260,7 +1256,6 @@ Previously known as "Reactor"
 			);
 			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
-			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/ec_midnight_battle":function(params, response, headers){
 			KC3SortieManager.setSlotitemConsumed(undefined, params);
@@ -1284,7 +1279,6 @@ Previously known as "Reactor"
 			);
 			KC3Network.setBattleEvent(true, "day", response.api_data.api_name);
 			KC3Network.trigger("BattleStart");
-			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/each_airbattle":function(params, response, headers){
 			response.api_data.api_name = "each_airbattle";
@@ -1325,7 +1319,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
-			KC3Network.nextBlockTrigger(false);
+			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
@@ -1346,7 +1340,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
-			KC3Network.nextBlockTrigger(false);
+			KC3Network.nextBlockCheck();
 		},
 		
 		/* FCF TRIGGER

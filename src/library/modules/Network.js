@@ -182,39 +182,8 @@ Listens to network history and triggers callback if game events happen
 		from advancing into next node 
 		-------------------------------------------------------*/
 		nextBlockCheck: function(){
-			// TODO exclude damecons and retreated ships. I found it too risky to play around and check those.
-			// TODO Escort flagship taiha. I'd rather keep showing block for escort Taiha since people keep asking if it's safe every event.
-			// TODO cases like 1-6, where end node is next node and it safe to continue
-			// drop flags
-			next_armed = false;
-			battle_result_recieved = false;
-			
-			const currentNode = KC3SortieManager.currentNode();
-			let fireTaiha = false;
-			let autoretreat = false;
-			if(currentNode) {
-				const predicted = currentNode.predictedFleetsNight || currentNode.predictedFleetsDay;
-				currentNode.maxHPs.ally.map((maxHP, shipIndex)=>{
-					if (maxHP <= 0 || autoretreat) { // empty slot
-						return;
-					}
-					let currentHP = 0;
-					if(predicted.playerMain[shipIndex]) {
-						currentHP = predicted.playerMain[shipIndex].hp;
-					} else if (predicted.playerEscort[shipIndex - predicted.playerMain.length]) {
-						// TODO recheck combined fleets
-						currentHP = predicted.playerEscort[shipIndex - predicted.playerMain.length].hp;
-					} // else { that shouldn't happen. ship wasn't found. force trigger maybe? }
-					fireTaiha = fireTaiha || (currentHP / maxHP <= 0.25);
-					if(fireTaiha && shipIndex === 0){
-						// it's autoretreat. FS low hp
-						autoretreat = true;
-						return;
-					}
-				});
-			}
-			// ignore cases with autoretreat
-			next_armed = fireTaiha && !autoretreat;
+			next_armed = PlayerManager.checkTaihaShips();
+			this.nextBlockTrigger(false);
 		},
 
 		/* NEXT BLOCK TRIGGER
@@ -223,11 +192,9 @@ Listens to network history and triggers callback if game events happen
 		-------------------------------------------------------*/
 		nextBlockTrigger: function (SE = false) {
 			let show = false;
-			let fairy = false;
 			if (next_armed && ConfigManager.next_blocker) {
-				if (SE) { // Fairy in case it was from SE. otherwise it'll look ugly
+				if (SE) { // Fairy
 					if (battle_result_recieved) {
-						fairy = true;
 						show = true;
 					} // else {
 					// result data wasn't recieved. it must be yasen switch. show translation divs?
@@ -238,7 +205,7 @@ Listens to network history and triggers callback if game events happen
 						// start showing block now
 						show = true;
 					} else {
-						// if player wants it through sound warnings we must signal that we must mark that we got result
+						// if player wants it through sound warnings we must signal that we got result
 						// to distinguish it from yasen switch
 						battle_result_recieved = true;
 					}
@@ -246,10 +213,12 @@ Listens to network history and triggers callback if game events happen
 			}
 
 			if(show){
+				// reset flag, so if player choose to risk, it wouldn't interfere on next node
+				battle_result_recieved = false;
 				KC3Network.hasOverlay = true;
 				(new RMsg("service", "nextBlockShow", {
 					tabId: chrome.devtools.inspectedWindow.tabId,
-					fairy:fairy
+					fairy:SE
 				})).execute();	
 			}
 		},

@@ -573,6 +573,27 @@ Does not include Ships and Gears which are managed by other Managers
 					return new KC3Ship(KC3ShipManager.get(s));
 				});
 			});
+		},
+
+		checkTaihaShips: function () {
+			// TODO cases like 1-6, where end node is next node and it safe to continue
+			let hasTaihaShip = false;
+			let autoretreat = false;
+			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetNum) => {
+				const fleet = PlayerManager.fleets[fleetId];
+				fleet.ship().forEach((ship, slotId) => {
+					if (autoretreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0) {
+						return;
+					}
+					// flagship of first fleet in taiha with no damecon
+					if (fleetNum === 0 && slotId === 0) {
+						autoretreat = true;
+					}
+					hasTaihaShip = true;
+				});
+			});
+
+			return hasTaihaShip && !autoretreat;
 		}
 		
 	};
