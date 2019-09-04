@@ -4735,11 +4735,10 @@ ABYSS FLEET
 	pointer-events:none;
 	display:none;
 	left:-2px;
-	top:-27px;
+	top:-17px;
 }
 .v .module.fleet .sship .ship_gear_ace {
 	left:-5px;
-	top:-27px;
 }
 .module.fleet .sship .ship_gear_ace img {
 	vertical-align:middle;
