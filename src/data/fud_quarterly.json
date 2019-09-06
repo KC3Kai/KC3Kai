@@ -88,6 +88,10 @@
 		"452": {
 			"1": { "type": "hp", "boss": [14] },
 			"2": { "type": "hp", "boss": [28, 30, 31] }
+		},
+		"453": {
+			"1": { "type": "hp", "boss": [10] },
+			"2": { "type": "hp", "boss": [26] }
 		}
 	},
 	"abyssKaiShipIds": [
