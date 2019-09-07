@@ -520,6 +520,10 @@
 			if(apiData.api_m1) {
 				this.processGimmick(http);
 			}
+			// Currently not present in /next
+			if(apiData.api_m2) {
+				this.processGimmick(http);
+			}
 			if(apiData.api_happening) {
 				this.processMaelstrom(apiData.api_happening);
 			}
@@ -899,12 +903,14 @@
 			}
 		},
 		
-		processGimmick: function(http, trigger = 'debuff'){
+		processGimmick: function(http, trigger = 'port'){
 			const apiData = http ? http.response.api_data : {};
 			if (http) {
 				if (!(
 					// triggered by next node flag
 					apiData.api_m1 ||
+					// "new" debuff flag, currently not present in next
+					apiData.api_m2 || 
 					// triggered by home port SE flag
 					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
 				)) { return; }
@@ -918,6 +924,9 @@
 			this.gimmick.difficulty = this.data.difficulty;
 			if (apiData.api_m1) {
 				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
+			}
+			if (apiData.api_m2) {
+				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
 			}
 			this.sendData(this.gimmick, 'gimmick');
 		},
@@ -1310,6 +1319,10 @@
 			if (apiData.api_m1) {
 				obj.api_m1 = apiData.api_m1;
 				this.processGimmick(false, isAirRaid ? 'nodeAB' : 'nodeBattle');
+			}
+			if (apiData.api_m2) {
+				obj.api_m2 = apiData.api_m2;
+				this.processGimmick(false, isAirRaid ? 'nodeAB2' : 'nodeBattle2');
 			}
 		},
 		
