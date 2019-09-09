@@ -2303,7 +2303,12 @@
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
-						
+						const haifp = Math.floor(ifp * KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map));
+						if (!!ifp) {
+							$(".base_ifp .base_stat_value", baseBox).attr("title",
+								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifp)
+							).lazyInitTooltip();
+						}												
 						//$(".airbase_infos", baseBox).on("click", togglePlaneName);
 
 						let planeNames = "";
