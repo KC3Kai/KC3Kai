@@ -1260,15 +1260,26 @@
 		},
 
 		DebuffNotify: function(data){
+			// From Event Summer 2019,
+			// devs set api_m2 on battleresult and destruction_battle to indicate debuff activated, for Summer 19, plays a voice line
+			if (data.api_m2) {
+				this.ModalBox({
+					title: KC3Meta.term("BossDebuffedTitle"),
+					message: KC3Meta.term("BossDebuffedMessage").format(
+						KC3Meta.term("BossDebuffedYes")
+					)
+				});
 			// From Event Summer 2016,
 			// devs set api_m_flag2 to 1 on port, to play the debuff SE.
-			if(data.api_m_flag2 === undefined){
+			} else if(data.api_m_flag2 === undefined){
 				lastApiFlag2 = false;
 			} else if(data.api_m_flag2 > 0){
 				// so the flag does not indicate state of the debuff,
 				// it only indicates: time to play a SE.
 				// we cannot detect: is the debuff reset?
 				//let isDebuffed = data.api_m_flag2 == 1;
+
+				// From Event Spring 2019 onwards, the home port SE is played when any step for unlocking a gimmick is complete.
 				this.ModalBox({
 					title: KC3Meta.term("BossDebuffedTitle"),
 					message: KC3Meta.term("BossDebuffedMessage").format(

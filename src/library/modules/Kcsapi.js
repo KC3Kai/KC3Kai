@@ -1134,6 +1134,9 @@ Previously known as "Reactor"
 					response.api_data.api_destruction_battle
 				);
 				KC3Network.trigger("LandBaseAirRaid");
+				if(response.api_data.api_destruction_battle.api_m2 > 0){ 
+					KC3Network.trigger("DebuffNotify", response.api_data.api_destruction_battle);
+				}				
 			}
 		},
 		
@@ -1336,6 +1339,8 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
+			if(response.api_data.api_m2 > 0) 
+				KC3Network.trigger("DebuffNotify", response.api_data);	
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
