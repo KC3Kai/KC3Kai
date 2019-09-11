@@ -656,6 +656,9 @@ html,body {
 	margin:2px 0px 0px 6px;
 	background:rgba(77, 255, 255, 0.4);
 }
+.t .module.expeditions2 .expeditions .timer-img {
+	margin:0px 0px 0px 6px;
+}
 .module.expeditions2 .expeditions .timer-img img {
 	width:100px;
 	height:20px;
@@ -695,6 +698,9 @@ html,body {
 	position:absolute;
 	top:3px;
 	left:123px;
+}
+.t .module.expeditions2 .timers {
+	top:1px;
 }
 .module.expeditions2 .timer_boxes {
 	width:112px;
@@ -3245,7 +3251,11 @@ ABYSS FLEET
 	top:257px;
 }
 .t .module.controls .scrollable {
-	margin:20px 0px 0px 0px;
+	margin:0px;
+	position:absolute;
+	float:left;
+	left:-345px;
+	top:-286px;
 }
 .module.controls .scroll_btn {
 	width:0px;
@@ -3300,8 +3310,6 @@ ABYSS FLEET
 	-webkit-backface-visibility: hidden;
 }
 .t .module.controls .control_btn {
-	display:block;
-	width:26px;
 	-webkit-transform: none;
 	-webkit-backface-visibility: none;
 }
@@ -3312,7 +3320,6 @@ ABYSS FLEET
 	-webkit-backface-visibility: hidden;
 }
 .t .module.controls .control_btn img {
-	width:22px;
 	-webkit-transform: none;
 	-webkit-backface-visibility: none;
 }
@@ -3450,16 +3457,16 @@ ABYSS FLEET
 	display:block;
 }
 .t .rotation .rotarBack {
-	left:363px;
-	top:221px;
+	left:361px;
+	top:238px;
 }
 .t .rotation .rotarExpedition {
-	left:363px;
-	top:240px;
+	left:361px;
+	top:257px;
 }
 .t .rotation .rotarHidden {
-	left:363px;
-	top:258px;
+	left:361px;
+	top:275px;
 }
 .module.summary.disabled {
 	filter:brightness(0.5);
@@ -4675,8 +4682,8 @@ ABYSS FLEET
 	box-shadow:-1px 1px 2px rgba(255,255,255,0.5) inset, -1px -3px 8px rgba(255,255,255,0.1) inset, 2px -7px 7px rgba(0,49,34,0.5) inset;
 }
 .module.fleet .sship .ship_gears {
-	width:190px;
-	height:80px;
+	width:150px;
+	height:20px;
 	float:left;
 	margin:0px 3px 0px 0px;
 	position:absolute;
@@ -4950,20 +4957,20 @@ ABYSS FLEET
 	top:305px;
 }
 .t .rotation2 .rotarHidden {
-	left:349px;
-	top:654px;
+	left:350px;
+	top:671px;
 }
 .t .rotation2 .rotarBack {
-	left:349px;
-	top:672px;
+	left:350px;
+	top:689px;
 }
 .t .rotation2 .rotarExpedition {
-	left:349px;
-	top:690px;
+	left:350px;
+	top:707px;
 }
 .t .rotation2 .rotarLayout {
-	left:349px;
-	top:708px;
+	left:350px;
+	top:722px;
 }
 .module.status {
 	border-radius:5px;
@@ -5297,6 +5304,9 @@ ABYSS FLEET
 .c .module.layouts .layout_btn {
 	margin:-10px 0px 0px 9px;
 }
+.t .module.layouts .layout_btn {
+	margin:10px 0px 0px 9px;
+}
 .module.layouts .layout_btn img {
 	width:60px;
 	height:60px;
@@ -5536,25 +5546,26 @@ ABYSS FLEET
 	image-rendering: auto;
 }
 .t .module.admiral {
-	left:195px; top:112px;
+	left:195px; top:129px;
 }
 .t .module.summary {
-	left:195px; top:155px;
+	left:195px; top:172px;
 	height:119px;
 	width:182px;
 }
 .t .module.expeditions3 {
-	left:195px; top:1112px;
+	left:195px; top:129px;
 	height:162px;
-	width:184px;
+	width:182px;
 }
 .t .module.activity {
-	left:3px; top:21px;
+	left:3px; top:38px;
 }
 .t .module.quests {
 	width:186px;
-	height:150px;
-	left:195px; top:3px;
+	height:125px;
+	left:195px; top:2px;
+	overflow:hidden;
 }
 .t .module.quests .quest {
 	width:179px;
@@ -5568,28 +5579,28 @@ ABYSS FLEET
 .t .module.controls {
 	width:30px;
 	height:350px;
-	left:352px; top:276px;
+	left:352px; top:293px;
 }
 .t .module.controls .scrollable {
 	width:100px;
 }
 .t .module.fleet {
-	left:1px; top:276px;
+	left:1px; top:293px;
 }
 .t .module.status {
 	width:347px;
 	height:65px;
-	left:3px; top:654px;
+	left:3px; top:671px;
 }
 .t .module.expeditions2 {
 	width:347px;
-	height:119px;
-	left:3px; top:654px;
+	height:102px;
+	left:3px; top:671px;
 }
 .t .module.layouts {
 	width:347px;
-	height:119px;
-	left:3px; top:654px;
+	height:102px;
+	left:3px; top:671px;
 }
 .t .module.quests2 {
 	display:none;
