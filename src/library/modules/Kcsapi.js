@@ -1072,11 +1072,12 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_map/start_air_base":function(params, response, headers, decodedParams){
 			// Target nodes attacked by sortied LB, format string: `edge1,edge2`
+			// strike_point_x refers to the sortied base and not the order
 			const strikePoints = [
 				decodedParams.api_strike_point_1,
 				decodedParams.api_strike_point_2,
 				decodedParams.api_strike_point_3
-			];
+			].filter(element => !!element);
 			const utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
 			var sortiedBase = 0;
