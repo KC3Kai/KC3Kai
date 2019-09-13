@@ -1172,15 +1172,31 @@
 		},
 
 		DebuffNotify: function(data){
-			// From Event Summer 2016,
+			// since Event Summer 2019,
+			// api_m2 is set on `/api_battleresult` or `/api_destruction_battle`,
+			// to indicate Armor Broken debuff activated for E-3 BOSS.
+			// at this timing, SE file 258.mp3 is played, actually, it's a voice line of abyssal boss.
+			if (data.api_m2) {
+				this.ModalBox({
+					title: KC3Meta.term("BossDebuffedTitle"),
+					message: KC3Meta.term("BossDebuffedMessage").format(
+						KC3Meta.term("BossDebuffedYes")
+					)
+				});
+			// since Event Summer 2016,
 			// devs set api_m_flag2 to 1 on port, to play the debuff SE.
-			if(data.api_m_flag2 === undefined){
+			} else if(data.api_m_flag2 === undefined){
 				lastApiFlag2 = false;
 			} else if(data.api_m_flag2 > 0){
 				// so the flag does not indicate state of the debuff,
 				// it only indicates: time to play a SE.
 				// we cannot detect: is the debuff reset?
 				//let isDebuffed = data.api_m_flag2 == 1;
+
+				// since Event Spring 2019 onwards, the home port SE (215.mp3) is played,
+				// whenever any step for unlocking a gimmick is completed.
+				// and secretary's Equip(3) line (voicenum 26) played instead of regular Return line.
+				// see `main.js#InitializeTask.prototype._playVoice`
 				this.ModalBox({
 					title: KC3Meta.term("BossDebuffedTitle"),
 					message: KC3Meta.term("BossDebuffedMessage").format(
@@ -2148,6 +2164,12 @@
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
+						if (!!ifp) {
+							const haifp = Math.floor(ifp * KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map));
+							$(".base_ifp .base_stat_value", baseBox).attr("title",
+								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifp)
+							).lazyInitTooltip();
+						}
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
 

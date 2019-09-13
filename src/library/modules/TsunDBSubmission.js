@@ -384,6 +384,15 @@
 		
 		processMapInfo: function(http) {
 			this.mapInfo = $.extend(true, [], http.response.api_data.api_map_info);
+
+			// Update enemycomp with leftover slots from air battle
+			if (this.delayedABSubmission && this.enemyComp.airBattle) {
+				this.delayedABSubmission = null;				
+				const base = http.response.api_data.api_air_base.find(base => base.api_area_id === this.currentMap[0] && base.api_rid === this.enemyComp.airBattle.enemyShotdown.baseId);
+				this.enemyComp.airBattle.enemyShotdown.finalSlots = base.api_plane_info.map(slot => slot.api_count);
+
+				this.sendData(this.enemyComp, 'enemy-comp');
+			}
 		},
 		
 		processSelectEventMapRank: function(http) {
@@ -664,6 +673,19 @@
 					const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 					// fp will be an Array[2]
 					fp = shipObj.fighterBounds(true);
+					// Prepare enemy shootdown submission, only use last nodes to prevent all submissions from being delayed
+					// Also enforce that both strikepoints are on same node
+					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1])) {
+						this.delayedABSubmission = true;
+						const waveData = apiData.api_air_base_attack[1];
+						airBattle.enemyShotdown = {
+							baseId: koukuApi.api_base_id,
+							planes: waveData.api_squadron_plane.map(plane => plane.api_mst_id || -1),
+							initialSlots: shipObj.slots,
+							initialCount: waveData.api_stage2.api_f_count,
+							totalLoss: waveData.api_stage2.api_f_lostcount
+						};
+					}
 				}
 				
 				// Get fighter power of sortied fleet(s)
@@ -681,7 +703,7 @@
 				this.enemyComp.airBattle = airBattle;
 			}
 			
-			this.sendData(this.enemyComp, 'enemy-comp');
+			if (!this.delayedABSubmission) { this.sendData(this.enemyComp, 'enemy-comp'); }
 		},
 		
 		processEventReward: function(http){
@@ -1354,6 +1376,7 @@
 				difficulty: null
 			};
 			this.sortieSpecialAttack = null;
+			this.delayedABSubmission = null;
 		},
 		
 		/**

@@ -130,7 +130,7 @@
 	 *         { `minShotdownSlots`, `maxShotdownSlots`, `formattedSlots` }.
 	 * @see https://kancolle.wikia.com/wiki/Land_Base_Aerial_Support#Enemy_Raid_2
 	 */
-	KC3LandBase.prototype.shotdownRatio = function(dispSeiku = 2){
+	KC3LandBase.prototype.shotdownRatio = function(dispSeiku = 2) {
 		const airStateMod = [6, 10, 8, 4, 1][dispSeiku] || 8;
 		const minShotdownSlots = [],
 			maxShotdownSlots = [],
@@ -162,6 +162,10 @@
 			maxShotdownSlots,
 			formattedSlots,
 		};
+	};
+	
+	KC3LandBase.prototype.getHighAltitudeInterceptorCount = function() {
+		return this.planes.reduce((acc, id) => acc + (KC3GearManager.highAltitudeInterceptorIds.includes(id) ? 1 : 0), 0);
 	};
 	
 	/**
@@ -215,5 +219,5 @@
 		}
 		return returnObj;
 	};
-	
+
 })();
