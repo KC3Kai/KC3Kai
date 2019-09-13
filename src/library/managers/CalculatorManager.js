@@ -283,13 +283,16 @@
     const isLandBasesSupplied = () => {
         return PlayerManager.bases.every(base => base.isPlanesSupplied());
     };
+
     /**
      * @return {number} the fighter power modifier dependent on how many high-altitude interceptors on defense mode, capped at 3
      * @see https://cdn.discordapp.com/attachments/208624431818342400/620539904694288395/lbas_tables_swdn.png
      */
     const getLandBaseHighAltitudeModifier = (world) => {
-        return [0.5, 0.8, 1.1, 1.2][PlayerManager.bases.filter(base => base.map === world && base.action === 2).reduce((acc, base) => 
-            acc + base.getHighAltitudeInterceptorCount(), 0)] || 1.2;
+        return [0.5, 0.8, 1.1, 1.2][PlayerManager.bases
+            .filter(base => base.map === world && base.action === 2)
+            .reduce((acc, base) => acc + base.getHighAltitudeInterceptorCount(), 0)
+        ] || 1.2;
     };
 
     /**

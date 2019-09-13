@@ -1071,13 +1071,15 @@ Previously known as "Reactor"
 		/* Start LBAS Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start_air_base":function(params, response, headers, decodedParams){
-			// Target nodes attacked by sortied LB, format string: `edge1,edge2`
-			// strike_point_x refers to the sortied base and not the order
+			// Target nodes attacked by sortied LB, format string: `edge1,edge2`,
+			// 'strike_point_N' refers to the sequence number of land base (`.api_rid`),
+			// which means `api_strike_point_1` will be undefined if LB #2 or #3 sortied only.
+			// see `main.js#AirUnitGoAPI.prototype._connect`
 			const strikePoints = [
 				decodedParams.api_strike_point_1,
 				decodedParams.api_strike_point_2,
 				decodedParams.api_strike_point_3
-			].filter(element => !!element);
+			].filter(p => !!p);
 			const utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
 			var sortiedBase = 0;
