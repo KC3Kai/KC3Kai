@@ -1071,12 +1071,15 @@ Previously known as "Reactor"
 		/* Start LBAS Sortie
 		-------------------------------------------------------*/
 		"api_req_map/start_air_base":function(params, response, headers, decodedParams){
-			// Target nodes attacked by sortied LB, format string: `edge1,edge2`
+			// Target nodes attacked by sortied LB, format string: `edge1,edge2`,
+			// 'strike_point_N' refers to the sequence number of land base (`.api_rid`),
+			// which means `api_strike_point_1` will be undefined if LB #2 or #3 sortied only.
+			// see `main.js#AirUnitGoAPI.prototype._connect`
 			const strikePoints = [
 				decodedParams.api_strike_point_1,
 				decodedParams.api_strike_point_2,
 				decodedParams.api_strike_point_3
-			];
+			].filter(p => !!p);
 			const utcHour = Date.toUTChours(headers.Date);
 			var consumedFuel = 0, consumedAmmo = 0;
 			var sortiedBase = 0;
@@ -1134,6 +1137,9 @@ Previously known as "Reactor"
 					response.api_data.api_destruction_battle
 				);
 				KC3Network.trigger("LandBaseAirRaid");
+				if(response.api_data.api_destruction_battle.api_m2 > 0){ 
+					KC3Network.trigger("DebuffNotify", response.api_data.api_destruction_battle);
+				}
 			}
 		},
 		
@@ -1336,6 +1342,9 @@ Previously known as "Reactor"
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
+			if(response.api_data.api_m2 > 0) {
+				KC3Network.trigger("DebuffNotify", response.api_data);
+			}
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);

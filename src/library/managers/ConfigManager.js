@@ -175,7 +175,7 @@ Retrieves when needed to apply on components
 				pan_outline_moon: "rgba(68, 34, 68, 1)",
 				pan_outline_bright_moon: "rgba(140, 140, 192, 1)",
 				moon_small_font: false,
-				moon_lighting_effect: true,
+				moon_lighting_effect: false,
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
