@@ -165,7 +165,9 @@
 	};
 	
 	KC3LandBase.prototype.getHighAltitudeInterceptorCount = function() {
-		return this.planes.reduce((acc, id) => acc + (KC3GearManager.highAltitudeInterceptorIds.includes(id) ? 1 : 0), 0);
+		return this.planes.reduce((acc, p) => acc + (
+			KC3GearManager.highAltitudeInterceptorIds.includes(KC3GearManager.get(p.api_slotid).master().api_id) ? 1 : 0
+		), 0);
 	};
 	
 	/**
