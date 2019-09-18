@@ -33,13 +33,39 @@
 		tooltipBox.hide().appendTo(this.element);
 		this.shipData.htmlTooltip(tooltipBox);
 		// Show a rich text tool-tip like stats in game
-		$(".ship_img", this.element).tooltip({
-			position: { my: !!isCombinedEscort ? "right+80 top" : "right-25 top",
-				at: "right top", of: $(".module.fleet") },
-			items: "div",
-			content: tooltipBox.html(),
-			open: KC3Ship.onShipTooltipOpen
-		});
+		if($(".wrapper").hasClass("h"))	{
+			$(".ship_img", this.element).tooltip({
+				position: { my: !!isCombinedEscort ? "right-170 top" : "right-25 top",
+					at: "right top", of: $(".module.fleet") },
+				items: "div",
+				content: tooltipBox.html(),
+				open: KC3Ship.onShipTooltipOpen
+			});
+		} else if($(".wrapper").hasClass("v"))	{
+			$(".ship_img", this.element).tooltip({
+				position: { my: !!isCombinedEscort ? "right+60 top" : "right-105 top",
+					at: "right top", of: $(".module.fleet") },
+				items: "div",
+				content: tooltipBox.html(),
+				open: KC3Ship.onShipTooltipOpen
+			});
+		} else if($(".wrapper").hasClass("c")) {
+			$(".ship_img", this.element).tooltip({
+				position: { my: !!isCombinedEscort ? "right+135 top" : "right-35 top",
+					at: "right top", of: $(".module.fleet") },
+				items: "div",
+				content: tooltipBox.html(),
+				open: KC3Ship.onShipTooltipOpen
+			});
+		} else if($(".wrapper").hasClass("t")) {
+			$(".ship_img", this.element).tooltip({
+				position: { my: !!isCombinedEscort ? "right top" : "right top",
+					at: "right top", of: $(".module.quests") },
+				items: "div",
+				content: tooltipBox.html(),
+				open: KC3Ship.onShipTooltipOpen
+			});
+		}
 		// Double click on icon to show Strategy Room Ship Library page
 		$(".ship_img", this.element).data("masterId", this.shipData.masterId)
 			.on("dblclick", function(e){

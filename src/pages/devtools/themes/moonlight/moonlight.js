@@ -971,6 +971,8 @@
 		if(ConfigManager.pan_layout == 1) {
 			$(".wrapper").removeClass("v").removeClass("c").removeClass("t").addClass("h");
 			currentLayout = "horizontal";
+			NatsuiroListeners.Fleet();
+			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "65px");
 				$(".lship .ship_exp_label").css("text-align", "right");
@@ -983,6 +985,7 @@
 		else if(ConfigManager.pan_layout == 2) {
 			$(".wrapper").removeClass("h").removeClass("c").removeClass("t").addClass("v");
 			currentLayout = "vertical";
+			NatsuiroListeners.Fleet();
 			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "0px");
@@ -992,10 +995,12 @@
 		else if(ConfigManager.pan_layout == 3) {
 			$(".wrapper").removeClass("h").removeClass("v").removeClass("t").addClass("c");
 			currentLayout = "compact";
+			NatsuiroListeners.Fleet();
 		}
 		else if(ConfigManager.pan_layout == 4) {
 			$(".wrapper").removeClass("h").removeClass("v").removeClass("c").addClass("t");
 			currentLayout = "tall";
+			NatsuiroListeners.Fleet();
 		}
 		// Load the user's selected panel display
 		ConfigManager.scrollSpecificPage(ConfigManager.RotationPage);
