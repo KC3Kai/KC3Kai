@@ -2,7 +2,64 @@
     "use strict";
 
     const eventConfigDefs = {
-        // European ships
+        // Foreign ships
+        "foreignShips": {
+            baseImgSrc: "/assets/img/ui/foreign_ships.png",
+            exportFileName: "Foreign Ship List",
+            disclaimerHeightOffset: null,
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            lvlFontSize: 55,
+            maxBoxWidth: 215,
+            shipPositions: [
+                {"x": 672+744*0, "y": 328+148.5* 0, "id": 174}, // Z1
+                {"x": 672+744*0, "y": 328+148.5* 1, "id": 175}, // Z3
+                {"x": 672+744*0, "y": 328+148.5* 2, "id": 176}, // Prinz Eugen
+                {"x": 672+744*0, "y": 328+148.5* 3, "id": 171}, // Bismarck
+                {"x": 672+744*0, "y": 328+148.5* 4, "id": 432}, // Graf Zeppelin
+                {"x": 672+744*0, "y": 328+148.5* 5, "id": 431}, // U-511
+
+                {"x": 672+744*1, "y": 328+148.5* 0, "id": 575}, // Maestrale
+                {"x": 672+744*1, "y": 328+148.5* 1, "id": 443}, // Libeccio
+                {"x": 672+744*1, "y": 328+148.5* 2, "id": 614}, // Grecale
+                {"x": 672+744*1, "y": 328+148.5* 3, "id": 589}, // Duca degli Abruzzi
+                {"x": 672+744*1, "y": 328+148.5* 4, "id": 590}, // G. Garibaldi
+                {"x": 672+744*1, "y": 328+148.5* 5, "id": 448}, // Zara
+                {"x": 672+744*1, "y": 328+148.5* 6, "id": 449}, // Pola
+                {"x": 672+744*1, "y": 328+148.5* 7, "id": 441}, // Littorio
+                {"x": 672+744*1, "y": 328+148.5* 8, "id": 442}, // Roma
+                {"x": 672+744*1, "y": 328+148.5* 9, "id": 444}, // Aquila
+                {"x": 672+744*1, "y": 328+148.5*10, "id": 535}, // Luigi Torelli
+
+                {"x": 672+744*2, "y": 328+148.5* 0, "id": 519}, // Jervis
+                {"x": 672+744*2, "y": 328+148.5* 1, "id": 520}, // Janus
+                {"x": 672+744*2, "y": 328+148.5* 2, "id": 439}, // Warspite
+                {"x": 672+744*2, "y": 328+148.5* 3, "id": 571}, // Nelson
+                {"x": 672+744*2, "y": 328+148.5* 4, "id": 515}, // Ark Royal
+
+                {"x": 672+744*3, "y": 328+148.5* 0, "id": 561}, // Samuel B. Roberts
+                {"x": 672+744*3, "y": 328+148.5* 1, "id": 596}, // Fletcher
+                {"x": 672+744*3, "y": 328+148.5* 2, "id": 562}, // Johnston
+                {"x": 672+744*3, "y": 328+148.5* 3, "id": 440}, // Iowa
+                {"x": 672+744*3, "y": 328+148.5* 4, "id": 601}, // Colorado
+                {"x": 672+744*3, "y": 328+148.5* 5, "id": 544}, // Gambier Bay
+                {"x": 672+744*3, "y": 328+148.5* 6, "id": 433}, // Saratoga
+                {"x": 672+744*3, "y": 328+148.5* 7, "id": 549}, // Intrepid
+
+                {"x": 672+744*0, "y": 328+148.5* 9, "id": 492}, // Richelieu
+                {"x": 672+744*0, "y": 328+148.5*10, "id": 491}, // Comdt. Teste
+
+                {"x": 672+744*2, "y": 328+148.5* 9, "id": 516}, // Tashkent
+                {"x": 672+744*2, "y": 328+148.5*10, "id": 511}, // Gangut
+
+                {"x": 672+744*3, "y": 328+148.5*10, "id": 574}, // Gotland
+
+                {"x": 654+744*0, "y": 2112+154*  0, "id": 534}, // Shinyou
+                {"x": 654+744*0, "y": 2112+154*  1, "id": 162}, // Kamoi
+                {"x": 654+744*1, "y": 2112+154*  0, "id":  78}, // Kongou
+
+                {"x":      2183, "y": 2112+154*  0, "id":  35}  // Hibiki
+            ],
+        },
         "europeanShips": {
             baseImgSrc: "/assets/img/ui/european_ships.png",
             exportFileName: "European Ship List",
@@ -235,7 +292,7 @@
         }
 
         exportList(configName) {
-            this.eventConfig = eventConfigDefs[configName] || eventConfigDefs.europeanShips;
+            this.eventConfig = eventConfigDefs[configName] || eventConfigDefs.foreignShips;
             this.baseImage.onload = this.fillShipLvls.bind(this);
             this.baseImage.src = this.eventConfig.baseImgSrc;
         }
