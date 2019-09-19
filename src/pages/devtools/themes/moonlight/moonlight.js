@@ -1929,7 +1929,7 @@
 			console.debug("Current fleet summary", FleetSummary);
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
-			$(".summary-level .summary_text").text( FleetSummary.lv )
+			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
