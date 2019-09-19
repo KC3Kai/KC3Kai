@@ -1341,7 +1341,7 @@
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.save();
 							rcontext.beginPath();
-							rcontext.arc((43 + (60 * shipIndex)) * scale, (25 + (227 * scale)),25,0,2*Math.PI);
+							rcontext.arc((43 + (60 * shipIndex)) * scale, (25 + 227) * scale,25*scale,0,2*Math.PI);
 							rcontext.closePath();
 							rcontext.clip();
 							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
@@ -1352,7 +1352,7 @@
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.save();
 							rcontext.beginPath();
-							rcontext.arc((63 + (60 * shipIndex)) * scale, (18 + (253 * scale)),17,0,2*Math.PI);
+							rcontext.arc((63 + (60 * shipIndex)) * scale, (18 + 253) * scale,17*scale,0,2*Math.PI);
 							rcontext.closePath();
 							rcontext.clip();
 							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
@@ -1365,7 +1365,7 @@
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.save();
 							rcontext.beginPath();
-							rcontext.arc((shipImageSize + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (83 - shipImageSize)) * scale,25,0,2*Math.PI);
+							rcontext.arc((shipImageSize + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (83 - shipImageSize)) * scale,25*scale,0,2*Math.PI);
 							rcontext.closePath();
 							rcontext.clip();
 							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
