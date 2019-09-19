@@ -3414,7 +3414,7 @@ ABYSS FLEET
 	top:130px;
 	z-index:1;
 }
-.rotation .rotarExpedition {
+.rotation .rotarSumStats {
 	position:absolute;
 	left:179px;
 	top:112px;
@@ -3427,17 +3427,27 @@ ABYSS FLEET
 	z-index:1;
 	display:none;
 }
-.v .rotation .rotarBack {
-	left:862px;
-	top:161px;
-}
-.v .rotation .rotarExpedition {
-	left:862px;
-	top:143px;
+.rotation .rotarExpedition {
+	position:absolute;
+	left:179px;
+	top:94px;
+	z-index:1;
 }
 .v .rotation .rotarHidden {
 	left:862px;
 	top:179px;
+}
+.v .rotation .rotarBack {
+	left:862px;
+	top:161px;
+}
+.v .rotation .rotarSumStats {
+	left:862px;
+	top:143px;
+}
+.v .rotation .rotarExpedition {
+	left:862px;
+	top:125px;
 }
 .c .rotation .rotarHidden {
 	left:777px;
@@ -3451,22 +3461,30 @@ ABYSS FLEET
 	left:777px;
 	top:143px;
 }
-.c .rotation .rotarQuests {
+.c .rotation .rotarSumStats {
 	left:777px;
 	top:125px;
+}
+.c .rotation .rotarQuests {
+	left:777px;
+	top:107px;
 	display:block;
 }
+.t .rotation .rotarHidden {
+	left:361px;
+	top:275px;
+}
 .t .rotation .rotarBack {
+	left:361px;
+	top:257px;
+}
+.t .rotation .rotarSumStats {
 	left:361px;
 	top:238px;
 }
 .t .rotation .rotarExpedition {
 	left:361px;
-	top:257px;
-}
-.t .rotation .rotarHidden {
-	left:361px;
-	top:275px;
+	top:220px;
 }
 .module.summary.disabled {
 	filter:brightness(0.5);
@@ -3507,15 +3525,6 @@ ABYSS FLEET
 	white-space:nowrap;
 	overflow:hidden;
 }
-/*.module.summary .summary-level {
-	width:57px;
-	position:absolute;
-	left:3px;
-	top:3px;
-}
-.module.summary .summary-level .summary_text {
-	width:32px;
-}*/
 .module.summary .summary-airfp {
 	width:85px;
 	position:absolute;
@@ -3638,11 +3647,6 @@ ABYSS FLEET
 	left:22px;
 	top:53px;
 }
-.module.summary .summary-eqlos .summary_textsum {
-	position:absolute;
-	left:22px;
-	top:66px;
-}
 .module.summary .summary_sub {
 	width:12px;
 	height:12px;
@@ -3657,6 +3661,75 @@ ABYSS FLEET
 	overflow:hidden;
 	pointer-events:none;
 	display:none;
+}
+.module.summary .summed {
+	width:40px;
+	height:40px;
+	position:relative;
+	top:-20px;
+	left:25px;
+	color:#99b;
+}
+.module.summary .summed_imp {
+	width:40px;
+	height:40px;
+	position:relative;
+	top:-60px;
+	left:55px;
+}
+.module.summary .summary-level {
+	position:absolute;
+	top:30px;
+	left:105px;
+}
+.module.summary .summary-level .summary_text {
+	position:relative;
+	top:-20px;
+	left:25px;
+}
+.module.summary .summary-sumfp {
+	position:absolute;
+	top:30px;
+	left:10px;
+}
+.module.summary .summary-sumaa {
+	position:absolute;
+	top:50px;
+	left:10px;
+}
+.module.summary .summary-sumasw {
+	position:absolute;
+	top:70px;
+	left:10px;
+}
+.module.summary .summary-sumlos {
+	position:absolute;
+	top:90px;
+	left:10px;
+}
+.module.summary .improvement_icon img {
+	height:25px;
+	width:25px;
+	object-fit: cover;
+	image-rendering: auto;
+	border-radius:5px;
+}
+.module.summary .imp_rejected_icon img {
+	opacity:0.65;
+}
+.module.summary .summary_icon_uimp {
+	position:absolute;
+	top:5px;
+	left:33px;
+}
+.module.summary .uimp_icon img {
+	-webkit-filter: grayscale(100%);
+}
+
+.module.summary .summary_icon_imp {
+	position:absolute;
+	top:5px;
+	left:64px;
 }
 
 /*------- FLEET -------*/
@@ -3846,10 +3919,9 @@ ABYSS FLEET
 	left:54px;
 }
 .c .module.fleet .lship .ship_img {
-	height:50px;
+	height:37px;
 	width:50px;
 	float:left;
-	margin:0px 5px 0px 0px;
 }
 .module.fleet .lship .ship_img img {
 	width:60px;
@@ -3865,7 +3937,6 @@ ABYSS FLEET
 .c .module.fleet .lship .ship_img img {
 	height:37px;
 	width:50px;
-	margin:-1px 0px 0px -1px;
 }
 .module.fleet .lship .ship_type {
 	width:26px;

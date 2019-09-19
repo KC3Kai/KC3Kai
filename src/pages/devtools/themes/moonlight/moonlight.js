@@ -585,6 +585,10 @@
 			ConfigManager.scrollSpecificPage(4);
 			NatsuiroListeners.Rotation();
 		});
+		$(".rotation .rotarSumStats").on("click",function(){
+			ConfigManager.scrollSpecificPage(5);
+			NatsuiroListeners.Rotation();
+		});
         
 		// bottom right page toggles
 		$(".rotation2 .rotarBack").on("click",function(){
@@ -971,7 +975,6 @@
 		if(ConfigManager.pan_layout == 1) {
 			$(".wrapper").removeClass("v").removeClass("c").removeClass("t").addClass("h");
 			currentLayout = "horizontal";
-			NatsuiroListeners.Fleet();
 			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "65px");
@@ -985,7 +988,6 @@
 		else if(ConfigManager.pan_layout == 2) {
 			$(".wrapper").removeClass("h").removeClass("c").removeClass("t").addClass("v");
 			currentLayout = "vertical";
-			NatsuiroListeners.Fleet();
 			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
 				$(".lship .ship_level").css("left", "0px");
@@ -995,13 +997,12 @@
 		else if(ConfigManager.pan_layout == 3) {
 			$(".wrapper").removeClass("h").removeClass("v").removeClass("t").addClass("c");
 			currentLayout = "compact";
-			NatsuiroListeners.Fleet();
 		}
 		else if(ConfigManager.pan_layout == 4) {
 			$(".wrapper").removeClass("h").removeClass("v").removeClass("c").addClass("t");
 			currentLayout = "tall";
-			NatsuiroListeners.Fleet();
 		}
+		NatsuiroListeners.Fleet();
 		// Load the user's selected panel display
 		ConfigManager.scrollSpecificPage(ConfigManager.RotationPage);
 		NatsuiroListeners.Rotation();
@@ -1928,7 +1929,7 @@
 			console.debug("Current fleet summary", FleetSummary);
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
-			//$(".summary-level .summary_text").text( FleetSummary.lv )
+			$(".summary-level .summary_text").text( FleetSummary.lv )
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
@@ -1949,20 +1950,24 @@
 								Math.qckInt("floor", fstatsImp.as , 1),
 								Math.qckInt("floor", fstatsImp.ls , 1)
 							);
+						$(".summary-sumfp .summed").text(fstats.fp);
+						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsImp.fp , 1));
+						$(".summary-sumaa .summed").text(fstats.aa);
+						$(".summary-sumaa .summed_imp").text(Math.qckInt("floor", fstatsImp.aa , 1));
+						$(".summary-sumasw .summed").text(fstats.as);
+						$(".summary-sumasw .summed_imp").text(Math.qckInt("floor", fstatsImp.as , 1));
+						$(".summary-sumlos .summed").text(fstats.ls);
+						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsImp.ls , 1));
 					}
 					return tips;
 				})(selectedFleet)).lazyInitTooltip();
-			/*$(".summary-eqlos .summary_icon img").attr("src",
-				"../../../../assets/img/stats_p2/los" + ConfigManager.elosFormula + ".png");*/
-			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
-			ConfigManager.setElosMode(1);
-			$(".summary-eqlos .summary_textsum").text("Σ: "+ FleetSummary.elos);
 			$(".summary-transport").attr("title",
 				KC3Meta.term("PanelTransportPoints").format(
 					isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
 					isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
 				)
 			).lazyInitTooltip();
+			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
 			$(".summary-transport .summary_text").text(KC3Meta.term("PanelTransportPointsAbbr"));
 			$(".summary-transport .summary_textS").text("S: " + (isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum));
 			$(".summary-transport .summary_textA").text("A: " + (isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum)));
