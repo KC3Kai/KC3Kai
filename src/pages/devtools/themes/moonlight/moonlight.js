@@ -2420,6 +2420,8 @@
 					}
 				});
 			}
+			$(".base_afp").lazyInitTooltip();
+			$(".base_ifp").lazyInitTooltip();
 		},
 
 		LbasStatus: function(){
