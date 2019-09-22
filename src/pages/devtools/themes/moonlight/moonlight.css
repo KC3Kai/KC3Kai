@@ -3145,7 +3145,7 @@ ABYSS FLEET
 	background:rgba(0,70,100,0.9);
 }
 .module.controls .fleet_num.needsSupply {
-	background:rgba(0,175,75,0.7);
+	background:rgba(211,12,123,0.9);
 }
 .module.controls .fleet_num.hasTaiha {
 	background:rgba(155,0,0,1);
@@ -3217,7 +3217,7 @@ ABYSS FLEET
 	background:rgba(255,170,170,0.7);
 }
 .module.controls .fleet_lbas.needsSupply {
-	background:rgba(0,175,75,0.7);
+	background:rgba(211,12,123,0.9);
 }
 .module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
