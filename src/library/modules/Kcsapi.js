@@ -1146,16 +1146,18 @@ Previously known as "Reactor"
 		/* Emergency Anchorage Repair Confirmed
 		-------------------------------------------------------*/
 		"api_req_map/anchorage_repair":function(params, response, headers){
-			const usedShip = response.api_data.api_used_ship,
+			const usedShipMstId = response.api_data.api_used_ship,
+				usedShipMst = KC3Master.ship(usedShipMstId),
 				updatedShips = response.api_data.api_ship_data;
-			console.log("Emergency Anchorage Repair used", usedShip, updatedShips);
-			// uncertain: consume material amount
+			console.log("Emergency Anchorage Repair performed by", KC3Meta.shipName(usedShipMst.api_name), updatedShips);
+			// Consume 1 emergency repair material for now
 			PlayerManager.consumables.emergencyRepair -= 1;
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
 			// Since this type repairing supposed to be happened on non-battle node,
 			// no `api_get_member/ship_deck` API call beofore next `/next` call,
 			// repaired ships data will be updated by result of this call.
+			// Conditions of starting repair, repair amounts and etc still under verification.
 			if(Array.isArray(updatedShips)) {
 				KC3ShipManager.set(updatedShips);
 				KC3Network.trigger("Fleet");
