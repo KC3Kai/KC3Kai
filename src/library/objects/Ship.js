@@ -2189,8 +2189,8 @@ KC3改 Ship Object
 
 	// is this ship able to do OASW unconditionally
 	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai, Samuel B.Roberts Kai, Johnston, Fletcher
-		return [141, 478, 394, 681, 562, 689, 596, 692].includes(this.masterId);
+		// Isuzu K2, Tatsuta K2, Jervis Kai, Janus Kai, Samuel B.Roberts Kai, Fletcher-Class
+		return [141, 478, 394, 893, 681, 562, 689, 596, 692].includes(this.masterId);
 	};
 	// test to see if this ship (with equipment) is capable of opening ASW
 	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
