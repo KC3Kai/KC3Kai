@@ -1240,6 +1240,43 @@
 		"section": "Moonlight",
 		"contents" : [
 			{
+				"id" : "pan_moon_bar_style",
+				"name" : "SettingsBarStyle",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "fluid", "SettingsBarFluid" ],
+						[ "flats", "SettingsBarFlats" ],
+						[ "natsuiro", "Natsuiro" ],
+						[ "glassy", "SettingsBarGlassy" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_bar_shape",
+				"name" : "SettingsBarShape",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "shape_rect", "SettingsBarRect" ],
+						[ "shape_round", "SettingsBarRound" ],
+						[ "shape_rounder", "SettingsBarRounder" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_bar_colors",
+				"name" : "SettingsBarColors",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "clrmoonlight", "Moonlight" ],
+						[ "clrnatsuiro", "Natsuiro" ],
+						[ "clrdim", "SettingsBarDim" ]
+					]
+				}
+			},
+			{
 				"id" : "pan_box_bcolor_moon",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
