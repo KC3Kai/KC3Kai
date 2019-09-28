@@ -177,7 +177,7 @@ Retrieves when needed to apply on components
 				moon_small_font: false,
 				moon_lighting_effect: true,
 				pan_moon_bar_style: "fluid",
-				pan_moon_bar_shape: "round",
+				pan_moon_bar_shape: "shape_round",
 				pan_moon_bar_colors: "clrdim",
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
