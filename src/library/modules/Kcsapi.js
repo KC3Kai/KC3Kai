@@ -1150,14 +1150,18 @@ Previously known as "Reactor"
 				usedShipMst = KC3Master.ship(usedShipMstId),
 				updatedShips = response.api_data.api_ship_data;
 			console.log("Emergency Anchorage Repair performed by", KC3Meta.shipName(usedShipMst.api_name), updatedShips);
-			// Consume 1 emergency repair material for now
+			// Akashi (any form)/Akitsushima Kai in fleet, < Chuuha?
+			// Repaired ships < Taiha, gain ceil(30%/25% of max hp) in range of Ship Repair Facilities,
+			// Steel should be consumed either, repaired ships also gain 15-20 morale.
+			// see https://kancolle.fandom.com/wiki/Emergency_Repair_Material
+			// TODO: PlayerManager.lastMaterial[2] -= consumedTotalSteel
+			// Consume 1 emergency repair material
 			PlayerManager.consumables.emergencyRepair -= 1;
 			PlayerManager.setConsumables();
 			KC3Network.trigger("Consumables");
 			// Since this type repairing supposed to be happened on non-battle node,
 			// no `api_get_member/ship_deck` API call beofore next `/next` call,
 			// repaired ships data will be updated by result of this call.
-			// Conditions of starting repair, repair amounts and etc still under verification.
 			if(Array.isArray(updatedShips)) {
 				KC3ShipManager.set(updatedShips);
 				KC3Network.trigger("Fleet");
