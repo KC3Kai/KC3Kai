@@ -356,6 +356,8 @@
 				// Equipment list
 				'api_get_member/picture_book': this.processPictureBook,
 
+				'api_req_mission/result': this.processExped,
+
 				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
@@ -1127,6 +1129,47 @@
 			this.sendData({equips}, "equips");
 		},
 
+		processExped: function(http) {
+			const request = http.params;
+			const response = http.response.api_data;
+
+			const deck = request.api_deck_id;
+			
+			const exped = {
+				deck,
+				fleet: PlayerManager.fleets[deck - 1].ship().map(ship => {
+					return {
+						id: ship.masterId,
+						lvl: ship.level,
+						morale: ship.morale,
+						stats: ship.nakedStats(),
+						kyouka: ship.mod,
+						equips: ship.equipment(true).map(g => g.masterId || -1), 
+						improvements: ship.equipment(true).map(g => g.stars || -1),
+						proficiency: ship.equipment(true).map(g => g.ace || -1),
+						slots: ship.slots,
+								
+						fuel: [ship.fuel, ship.master().api_fuel_max],
+						ammo: [ship.ammo, ship.master().api_bull_max]
+					};
+				}),
+				result: response.api_clear_result,
+				hqXP: response.api_get_exp,
+				shipXP: response.api_get_ship_exp,
+				items: [1,2].map((x) => response["api_get_item"+x] || null).map(x => {
+					if(!x) return x;
+					return {
+						id: x.api_useitem_id,
+						count: x.api_useitem_count
+					};
+				}),
+				resources: response.api_get_material,
+				expedID: KC3TimerManager._exped[deck - 2].expedNum
+			};
+
+			this.sendData(exped, "expeds");
+		},
+
 		/**
 		 * This will be called from KC3Network listener,
 		 * when the ship modernize event is triggered by the Kcsapi handler.
@@ -1181,6 +1224,8 @@
 				speed: ship.speed,
 				flee: ship.didFlee,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
+				stars: ship.equipment(true).map(gear => gear.stars === 0 ? 0 : (gear.stars || -1)),
+				ace: ship.equipment(true).map(gear => gear.ace === 0 ? 0 : (gear.ace || -1)),
 				exslot: ship.exItem().masterId || -1
 			}));
 		},
