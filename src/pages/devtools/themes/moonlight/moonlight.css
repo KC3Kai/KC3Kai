@@ -1435,50 +1435,58 @@ ABYSS FLEET
 
 /*------- ACTIVITY: CRAFTING -------*/
 .module.activity .activity_crafting {
-	padding:10px;
+	padding:5px;
+}
+.module.activity .activity_crafting .scrollable {
+	width:176px;
+	max-height:220px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.module.activity .activity_crafting .scrollable::-webkit-scrollbar {
+	width: 3px;
+}
+.module.activity .activity_crafting .equipItem {
+	border-bottom: 1px solid #779;
+	margin-bottom: 2px;
 }
 .module.activity .activity_crafting .equipIcon {
-	width:30px;
-	height:30px;
-	line-height:16px;
+	width:28px;
+	height:28px;
+	line-height:14px;
 	float:left;
 	background:#335;
-	border-radius:15px;
-	margin:0px 5px 5px 0px;
+	border-radius:50%;
+	margin:0px 5px 3px 0px;
 }
 .module.activity .activity_crafting .equipIcon img {
 	width:24px;
 	height:24px;
-	margin:3px;
+	margin:2px;
 	vertical-align:top;
 }
 .module.activity .activity_crafting .equipName {
 	width:135px;
-	/*height:30px;*/
-	line-height:15px;
+	line-height:14px;
 	float:left;
-	/*background:#fcc;*/
 	font-size:12px;
 	color:#fff;
 	font-weight:bold;
-	/*white-space:nowrap; */
 	overflow:hidden;
 	text-overflow:ellipsis;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 }
 .module.activity .activity_crafting .equipNote {
 	width:170px;
-	/*background:#cfc;*/
 	line-height:16px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 	color:#ccc;
 	font-size:12px;
 }
 .module.activity .activity_crafting .equipStats {
 	width:170px;
-	/*background:#cfc;*/
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 }
 .module.activity .activity_crafting .equipStat {
 	width:45px;
@@ -1513,14 +1521,12 @@ ABYSS FLEET
 
 .module.activity .activity_crafting .equipResources {
 	width:180px;
-	/*background:#cfc;*/
 	height:36px;
 	line-height:16px;
 }
 .module.activity .activity_crafting .equipResource {
 	width:85px;
 	float:left;
-	/*background:#fcc;*/
 	height:16px;
 	line-height:16px;
 	margin:0px 0px 2px 0px;
@@ -1530,13 +1536,11 @@ ABYSS FLEET
 	height:16px;
 	float:left;
 	margin:0px 9px 0px 0px;
-	/*background:#fcf;*/
 }
 .module.activity .activity_crafting .equipResoAmt {
 	width:60px;
 	height:16px;
 	float:left;
-	/*background:#ccf;*/
 	font-size:12px;
 	color:#fff;
 }
