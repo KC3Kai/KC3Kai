@@ -5234,6 +5234,19 @@ ABYSS FLEET
 		rgba(234,7,7,1) 50%,rgba(241,44,44,1) 100%);
 }
 
+.module.fleet .ship_hp_prediction.hp_normal.glassy {
+     background-color: #0b4 !important;
+}
+.module.fleet .ship_hp_prediction.hp_shouha.glassy {
+     background-color: #ff0 !important;
+}
+.module.fleet .ship_hp_prediction.hp_chuuha.glassy {
+     background-color: #f90 !important;
+}
+.module.fleet .ship_hp_prediction.hp_taiha.glassy {
+     background-color: #0f0 !important;
+}
+
 /* Glassy supply bars */
 .module.fleet .ship_supply.glassy {
 	border: 1px solid rgba(0,0,0,.5);

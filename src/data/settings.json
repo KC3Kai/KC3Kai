@@ -1241,38 +1241,38 @@
 		"contents" : [
 			{
 				"id" : "pan_moon_bar_style",
-				"name" : "SettingsBarStyle",
+				"name" : "SettingsPanelBarStyle",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "fluid", "SettingsBarFluid" ],
-						[ "flats", "SettingsBarFlats" ],
+						[ "fluid", "SettingsPanelBarFluid" ],
+						[ "flats", "SettingsPanelBarFlats" ],
 						[ "natsuiro", "Natsuiro" ],
-						[ "glassy", "SettingsBarGlassy" ]
+						[ "glassy", "SettingsPanelBarGlassy" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_moon_bar_shape",
-				"name" : "SettingsBarShape",
+				"name" : "SettingsPanelBarShape",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
-						[ "shape_rect", "SettingsBarRect" ],
-						[ "shape_round", "SettingsBarRound" ],
-						[ "shape_rounder", "SettingsBarRounder" ]
+						[ "shape_rect", "SettingsPanelBarRect" ],
+						[ "shape_round", "SettingsPanelBarRound" ],
+						[ "shape_rounder", "SettingsPanelBarRounder" ]
 					]
 				}
 			},
 			{
 				"id" : "pan_moon_bar_colors",
-				"name" : "SettingsBarColors",
+				"name" : "SettingsPanelBarColors",
 				"type" : "radio",
 				"options" : {
 					"choices" : [
 						[ "clrmoonlight", "Moonlight" ],
 						[ "clrnatsuiro", "Natsuiro" ],
-						[ "clrdim", "SettingsBarDim" ]
+						[ "clrdim", "SettingsPanelBarDim" ]
 					]
 				}
 			},
