@@ -4157,7 +4157,7 @@ ABYSS FLEET
 	top:30px;
 	left:65px;
 }
-.module.fleet .ship_hp_bar_cover {
+.module.fleet .lship .ship_hp_bar_cover {
 	width:118px;
 	height:9px;
 	float:left;
@@ -4650,6 +4650,11 @@ ABYSS FLEET
 	border:1px solid #004;
 	background:#555;
 	position:relative;
+}
+.module.fleet .sship .ship_hp_bar_cover {
+	width:88px;
+	height:9px;
+	float:left;
 }
 .module.fleet .sship .ship_hp_bar {
 	height:9px;
