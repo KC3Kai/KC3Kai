@@ -455,7 +455,7 @@
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
-		$(".ship_hp_bar,.ship_hp_prediction,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_style);
+		$(".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_style);
 		$(".admiral_lvbox,.admiral_lvbar,.ship_morale,.ship_hp_bar,.ship_hp_box,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_shape);
 		$(".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_colors);
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
