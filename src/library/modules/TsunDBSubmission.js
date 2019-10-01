@@ -1156,10 +1156,12 @@
 				result: response.api_clear_result,
 				hqXP: response.api_get_exp,
 				shipXP: response.api_get_ship_exp,
-				items: [1,2].map((x) => response["api_get_item"+x] || null).map(x => {
-					if(!x) return x;
+				items: [1,2].map((ind) => {
+					const x = response["api_get_item" + ind];
+					if(!x)
+						return x;
 					return {
-						id: x.api_useitem_id,
+						id: (x.api_useitem_id == -1 ? response.api_useitem_flag[ind-1] : x.api_useitem_id),
 						count: x.api_useitem_count
 					};
 				}),
