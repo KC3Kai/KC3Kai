@@ -1969,63 +1969,80 @@ Previously known as "Reactor"
 		
 		/* Craft Equipment
 		-------------------------------------------------------*/
-		"api_req_kousyou/createitem":function(params, response, headers){
-			var
-				resourceUsed = [ params.api_item1, params.api_item2, params.api_item3, params.api_item4 ],
-				failed       = (typeof response.api_data.api_slot_item == "undefined"),
+		"api_req_kousyou/createitem":function(params, response, headers, decodedParams){
+			const // resources used per item
+				resourceUsed = [decodedParams.api_item1, decodedParams.api_item2,
+					decodedParams.api_item3, decodedParams.api_item4]
+					.map(v => parseInt(v, 10)),
+				// will be 1 if multiple crafting (3 times in a row currently) is enabled
+				multiFlag    = parseInt(decodedParams.api_multiple_flag, 10) > 0,
+				// total flag, will be 1 if any craft gets successful item
+				failedFlag   = !response.api_data.api_create_flag,
+				itemsCreated = response.api_data.api_get_items,
+				materials    = response.api_data.api_material,
 				utcSeconds   = Date.toUTCseconds(headers.Date),
 				utcHour      = Date.toUTChours(headers.Date);
+			var lastSuccessRosterId = null, lastSuccessMasterId = null;
+			const devmatsBefore = PlayerManager.consumables.devmats;
+			const devmatsAfter = (materials && materials[6]) || devmatsBefore;
 			
-			// Log into development History
-			KC3Database.Develop({
-				flag: PlayerManager.fleets[0].ship(0).masterId,
-				rsc1: resourceUsed[0],
-				rsc2: resourceUsed[1],
-				rsc3: resourceUsed[2],
-				rsc4: resourceUsed[3],
-				result: (!failed)?response.api_data.api_slot_item.api_slotitem_id:-1,
-				time: utcSeconds
-			});
+			if(Array.isArray(itemsCreated)) {
+				itemsCreated.forEach(item => {
+					const success = item && item.api_slotitem_id > 0;
+					
+					// Log into development History
+					KC3Database.Develop({
+						flag: PlayerManager.fleets[0].ship(0).masterId,
+						rsc1: resourceUsed[0],
+						rsc2: resourceUsed[1],
+						rsc3: resourceUsed[2],
+						rsc4: resourceUsed[3],
+						result: success ? item.api_slotitem_id : -1,
+						time: utcSeconds
+					});
+					
+					KC3Database.Naverall({
+						hour: utcHour,
+						type: "critem",
+						data: resourceUsed.concat([0,0,success,0]).map(v => -v)
+					});
+					
+					KC3QuestManager.get(605).increment(); // F1: Daily Development 1
+					KC3QuestManager.get(607).increment(); // F3: Daily Development 2
+					
+					// Checks if the single development went great
+					if(success) {
+						// Add new equipment to local data
+						KC3GearManager.set([{
+							api_id: item.api_id,
+							api_level: 0,
+							api_locked: 0,
+							api_slotitem_id: item.api_slotitem_id
+						}]);
+						// Remember last successful item for compatibility
+						lastSuccessRosterId = item.api_id;
+						lastSuccessMasterId = item.api_slotitem_id;
+					}
+				});
+			}
 			
-			KC3Database.Naverall({
-				hour: utcHour,
-				type: "critem",
-				data: resourceUsed.concat([0,0,!failed,0]).map(function(x){return -x;})
-			});
-			
-			if(Array.isArray(response.api_data.api_material)){
-				PlayerManager.setResources(utcSeconds, response.api_data.api_material.slice(0,4));
-				PlayerManager.consumables.devmats = response.api_data.api_material[6];
+			if(Array.isArray(materials)) {
+				PlayerManager.setResources(utcSeconds, materials.slice(0,4));
+				PlayerManager.consumables.devmats = devmatsAfter;
 				PlayerManager.setConsumables();
 			}
 			
-			KC3QuestManager.get(605).increment(); // F1: Daily Development 1
-			KC3QuestManager.get(607).increment(); // F3: Daily Development 2
-			
-			// Checks if the development went great
-			if(!failed){
-				// Add new equipment to local data
-				KC3GearManager.set([{
-					api_id: response.api_data.api_slot_item.api_id,
-					api_level: 0,
-					api_locked: 0,
-					api_slotitem_id: response.api_data.api_slot_item.api_slotitem_id
-				}]);
-				
-				// Trigger listeners passing crafted IDs
-				KC3Network.trigger("CraftGear", {
-					itemId: response.api_data.api_slot_item.api_id,
-					itemMasterId: response.api_data.api_slot_item.api_slotitem_id,
-					resourceUsed: resourceUsed
-				});
-			} else {
-				KC3Network.trigger("CraftGear", {
-					itemId: null,
-					itemMasterId: null,
-					resourceUsed: resourceUsed
-				});
-			}
-			
+			// Trigger panel activity event according result(s)
+			KC3Network.trigger("CraftGear", {
+				// Keep old properties for compatibility of other panel themes
+				itemId: lastSuccessRosterId,
+				itemMasterId: lastSuccessMasterId,
+				failedFlag: failedFlag,
+				multiFlag: multiFlag,
+				items: itemsCreated,
+				devmats: [devmatsBefore, devmatsAfter],
+				resourceUsed: resourceUsed
+			});
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Quests");
 		},
@@ -2149,6 +2166,9 @@ Previously known as "Reactor"
 					switch(gearMaster.api_id){
 						case 3: // 10cm Twin High-angle Gun Mount
 							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
+							break;
+						case 4: // 14cm Single Gun Mount
+							KC3QuestManager.get(653).increment(); // F90? quarterly
 							break;
 						case 19: // Type 96 Fighter
 							KC3QuestManager.get(626).increment(1); // F22 monthly index 1
@@ -2784,6 +2804,11 @@ Previously known as "Reactor"
 					[284,2,[2,2], true, true], // Bq11: 3rd requirement: [W2-2] S-rank the boss node
 					[284,3,[2,3], true, true], // Bq11: 4th requirement: [W2-3] S-rank the boss node
 					[822,0,[2,4], true], // Bq1: Sortie to [W2-4] and S-rank the boss node 2 times
+					[845,0,[4,1], true], // Bq12: 1st requirement: [W4-1] S-rank the boss node
+					[845,1,[4,2], true], // Bq12: 2nd requirement: [W4-2] S-rank the boss node
+					[845,2,[4,3], true], // Bq12: 3rd requirement: [W4-3] S-rank the boss node
+					[845,3,[4,4], true], // Bq12: 4th requirement: [W4-4] S-rank the boss node
+					[845,4,[4,5], true], // Bq12: 5th requirement: [W4-5] S-rank the boss node
 					[854,3,[6,4], true, true], // Bq2: 4th requirement: [W6-4] S-rank the boss node
 					[872,0,[7,2], true, true, [15]], // Bq10: 1st requirement: [W7-2-M] S-rank 2nd boss node
 					[872,1,[5,5], true, true], // Bq10: 2nd requirement: [W5-5] S-rank the boss node
