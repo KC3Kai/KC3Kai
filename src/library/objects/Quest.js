@@ -189,7 +189,7 @@ known IDs see QuestManager
 		}; };
 		const checkExpectedHash = (meta) => {
 			if(meta.hash && this.hash && meta.hash !== this.hash) {
-				console.log(`Quest ${this.id} hash ${this.hash}, expected:`, meta.hash);
+				console.debug(`Quest ${this.id} hash ${this.hash}, expected:`, meta.hash);
 				return false;
 			}
 			return true;

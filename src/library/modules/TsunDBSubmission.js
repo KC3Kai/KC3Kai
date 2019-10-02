@@ -286,13 +286,6 @@
 			resources: [],
 			type: null
 		},
-		development : {
-			hqLvl: null,
-			flagship: {},
-			resources: {},
-			result: null,
-			success: null
-		},
 		lolimodfod: {
 			shipid: null,
 			shiplvl: null,
@@ -1073,29 +1066,27 @@
 			this.sendData(this.maelstrom, 'maelstrom');
 		},
 		
-		processDevelopment: function(http){
-			this.cleanNonCombat();
+		processDevelopment: function(http) {
 			const request = http.params;
 			const response = http.response.api_data;
-			
-			this.development.hqLvl = PlayerManager.hq.level;
-			this.development.flagship = {
-				id: PlayerManager.fleets[0].ship(0).masterId,
-				type: PlayerManager.fleets[0].ship(0).master().api_stype,
-				lvl: PlayerManager.fleets[0].ship(0).level
-			};
-			this.development.resources = {
-				fuel: request.api_item1,
-				ammo: request.api_item2,
-				steel: request.api_item3,
-				bauxite: request.api_item4
-			};
-			this.development.result = response.api_create_flag ?
-				response.api_slot_item.api_slotitem_id :
-				Number(response.api_fdata.split(',')[1]);
-			this.development.success = response.api_create_flag;
-			//console.debug(this.development);
-			this.sendData(this.development, 'development');
+			response.api_get_items.forEach(e => {
+				this.sendData({
+					hqLvl: PlayerManager.hq.level,
+					flagship: {
+						id: PlayerManager.fleets[0].ship(0).masterId,
+						type: PlayerManager.fleets[0].ship(0).master().api_stype,
+						lvl: PlayerManager.fleets[0].ship(0).level,
+					},
+					resources: {
+						fuel: request.api_item1,
+						ammo: request.api_item2,
+						steel: request.api_item3,
+						bauxite: request.api_item4,
+					},
+					result: e.api_slotitem_id,
+					success: e.api_slotitem_id !== -1 ? 1 : 0,
+				}, 'development');
+			});
 		},
 
 		processPictureBook: function(http) {
@@ -1403,21 +1394,13 @@
 			this.data.gaugeNum = 0;
 			this.data.gaugeType = 0;
 		},
-		
-		/**
-		 * Cleans up the data of non-combat related things.
-		 */
-		cleanNonCombat: function(){
-			this.development = {};
-		},
-		
+
 		/**
 		 * SPI: clean all previous states up.
 		 */
 		cleanup: function(){
 			this.cleanOnStart();
 			this.cleanOnNext();
-			this.cleanNonCombat();
 		},
 		
 		/**

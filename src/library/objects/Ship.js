@@ -1606,9 +1606,10 @@ KC3改 Ship Object
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
 		const wg42Count = this.countEquipment(126);
-		const type4RocketCount = this.countEquipment(348);
 		const mortarCount = this.countEquipment(346);
 		const mortarCdCount = this.countEquipment(347);
+		const type4RocketCount = this.countEquipment(348);
+		const type4RocketCdCount = this.countEquipment(349);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
@@ -1623,17 +1624,19 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
-			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115][type4RocketCount] || 115;
+			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 195][type4RocketCount] || 195;
+			// TODO update this placeholder
+			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 55][type4RocketCdCount] || 55;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
 			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110][mortarCount] || 110;
-			const rocketsAdditive = wg42Additive + type4RocketAdditive + mortarAdditive + mortarCdAdditive;
+			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
 					wg42Bonus = [1, 1.3, 1.82][wg42Count] || 1.82;
-					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount] || 1.875;
+					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
 					
 					return [rocketsAdditive + shikonBonus + submarineBonus,
@@ -1647,7 +1650,7 @@ KC3改 Ship Object
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
-					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount] || 2.7;
+					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount + type4RocketCdCount] || 2.7;
 					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
 					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
@@ -1660,7 +1663,7 @@ KC3改 Ship Object
 					alDiveBomberBonus = this.hasEquipment(KC3GearManager.antiLandDiveBomberIds) ? 1.4 : 1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
-					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount] || 2.145;
+					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					
 					// Set additive modifier, multiply multiplicative modifiers
@@ -1689,7 +1692,7 @@ KC3改 Ship Object
 				
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
-					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount] || 1.68;
+					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
 					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
 				
