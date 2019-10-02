@@ -1456,19 +1456,21 @@ KC3改 Equipment Object
 			// 152mm/55 Triple Rapid Fire Gun Mount
 			"340": {
 				count: 0,
-				byShip: {
-					// Garibaldi only, not Duca degli Abruzzi Class?
-					ids: [590, 691],
-					multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+				byClass: {
+					// Duca degli Abruzzi Class
+					"92": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
 				},
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount Kai
 			"341": {
 				count: 0,
-				byShip: {
-					// Garibaldi only, not Duca degli Abruzzi Class?
-					ids: [590, 691],
-					multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+				byClass: {
+					// Duca degli Abruzzi Class
+					"92": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+					},
 				},
 			},
 			// Searchlight

@@ -1252,47 +1252,42 @@ ABYSS FLEET
 	padding:10px;
 }
 .module.activity .activity_crafting .equipIcon {
-	width:30px;
-	height:30px;
-	line-height:16px;
+	width:28px;
+	height:28px;
+	line-height:14px;
 	float:left;
 	background:#fff;
-	border-radius:15px;
-	margin:0px 5px 5px 0px;
+	border-radius:50%;
+	margin:0px 5px 3px 0px;
 }
 .module.activity .activity_crafting .equipIcon img {
 	width:24px;
 	height:24px;
-	margin:3px;
+	margin:2px;
 	vertical-align:top;
 }
 .module.activity .activity_crafting .equipName {
 	width:135px;
-	/*height:30px;*/
-	line-height:15px;
+	line-height:14px;
 	float:left;
-	/*background:#fcc;*/
 	font-size:12px;
 	color:#fff;
 	font-weight:bold;
-	/*white-space:nowrap; */
 	overflow:hidden;
 	text-overflow:ellipsis;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 }
 .module.activity .activity_crafting .equipNote {
 	width:170px;
-	/*background:#cfc;*/
 	line-height:16px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 	color:#ccc;
 	font-size:12px;
 }
 .module.activity .activity_crafting .equipStats {
 	width:170px;
-	/*background:#cfc;*/
 	line-height:20px;
-	margin:0px 0px 5px 0px;
+	margin:0px 0px 3px 0px;
 }
 .module.activity .activity_crafting .equipStat {
 	width:45px;
@@ -1325,14 +1320,12 @@ ABYSS FLEET
 
 .module.activity .activity_crafting .equipResources {
 	width:170px;
-	/*background:#cfc;*/
 	height:36px;
 	line-height:16px;
 }
 .module.activity .activity_crafting .equipResource {
 	width:85px;
 	float:left;
-	/*background:#fcc;*/
 	height:16px;
 	line-height:16px;
 	margin:0px 0px 2px 0px;
@@ -1342,13 +1335,26 @@ ABYSS FLEET
 	height:16px;
 	float:left;
 	margin:0px 9px 0px 0px;
-	/*background:#fcf;*/
 }
 .module.activity .activity_crafting .equipResoAmt {
 	width:60px;
 	height:16px;
 	float:left;
-	/*background:#ccf;*/
+	font-size:12px;
+	color:#fff;
+}
+.module.activity .activity_crafting .equipFooter {
+	width:170px;
+	line-height:16px;
+}
+.module.activity .activity_crafting .equipFooter img {
+	width:14px;
+	height:14px;
+	vertical-align:text-bottom;
+	margin-right:2px;
+}
+.module.activity .activity_crafting .equipFooter span {
+	line-height:16px;
 	font-size:12px;
 	color:#fff;
 }

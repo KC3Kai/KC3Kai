@@ -133,28 +133,23 @@
 			this.sendData("create_ship", createShipData);
 			this.state = null;
 		},
-		processCreateItem: function( requestObj ) {
-			this.cleanup();
-			var params = requestObj.params;
-			var response = requestObj.response.api_data;
-			var createItemData = {
-				items: [
-					parseInt(params.api_item1),
-					parseInt(params.api_item2),
-					parseInt(params.api_item3),
-					parseInt(params.api_item4)],
-				secretary: PlayerManager.fleets[0].ship(0).masterId,
-				teitokuLv: PlayerManager.hq.level
-			};
-
-			createItemData.successful = (response.api_create_flag === 1);
-			if (createItemData.successful) {
-				createItemData.itemId = response.api_slot_item.api_slotitem_id;
-			} else {
-				createItemData.itemId = parseInt( response.api_fdata.split(',')[1] );
-			}
-			// console.log( "[createitem] prepared: " + JSON.stringify( createItemData ));
-			this.sendData("create_item", createItemData);
+		processCreateItem: function(http) {
+			const postBody = http.params;
+			const body = http.response.api_data;
+			body.api_get_items.forEach(e => {
+				this.sendData('create_item', {
+					items: [
+						parseInt(postBody.api_item1),
+						parseInt(postBody.api_item2),
+						parseInt(postBody.api_item3),
+						parseInt(postBody.api_item4),
+					],
+					itemId: e.api_slotitem_id,
+					teitokuLv: PlayerManager.hq.level,
+					secretary: PlayerManager.fleets[0].ship(0).masterId,
+					successful: e.api_slotitem_id !== -1,
+				});
+			});
 		},
 		processRemodelRecipeList: function( requestObj ) {
 			// To avoid state warning log if previous details viewed and canceled
