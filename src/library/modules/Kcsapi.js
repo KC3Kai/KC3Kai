@@ -2845,7 +2845,7 @@ Previously known as "Reactor"
 				});
 		} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
-			if(rankPt >= 3) {
+			if(rankPt >= 3) { // B-Rank+
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 				KC3QuestManager.get(311).increment(); // C8: Monthly Exercises 1
@@ -2853,6 +2853,8 @@ Previously known as "Reactor"
 					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(330))
 					KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises 1
+			}
+			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
 					KC3QuestManager.get(337).increment(); // C39?: Quarterly Exercises 2
 			}
