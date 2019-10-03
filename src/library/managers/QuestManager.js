@@ -407,7 +407,7 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C39?
+			// Quarterly PvP C29, C38
 			this.resetCounterLoop([330, 337], false);
 			
 			// Progress counter not changed at all on daily reset:
@@ -513,7 +513,7 @@ Uses KC3Quest objects to play around with
 							fleet.countShipType([7, 11, 18]) >= 2 &&
 							fleet.countShipType(2) >= 2;
 					},
-				"337": // C39? PvP with Arare, Kagerou, Kasumi, Shiranui
+				"337": // C38 PvP with Arare, Kagerou, Kasumi, Shiranui
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return KC3SortieManager.isPvP() && (
