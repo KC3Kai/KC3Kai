@@ -3204,6 +3204,22 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Calculate Nelson Touch process rate, currently only known in day
+	 * @param {boolean} isNight - Nelson Touch has lower modifier at night?
+	 * @return {number} special attack rate
+	 * @see https://twitter.com/Xe_UCH/status/1180283907284979713
+	 */
+	KC3Ship.prototype.nelsonTouchRate = function(isNight) {
+		if (this.isDummy() || isNight) { return false; }
+		const fleetNum = this.fleetPosition()[2];
+		const fleetObj = PlayerManager.fleets[fleetNum - 1];
+		const combinedShips = [2, 4].map(pos => fleetObj.ship(pos));
+		const combinedShipsLevel = combinedShips.reduce((acc, ship) => acc + ship.level, 0);
+		const combinedShipsPenalty = combinedShips.some(ship => [2, 16].includes(ship.master().api_stype)) ? 10 : 0; // estimate
+		return (0.08 * this.level + 0.04 * combinedShipsLevel + 0.24 * this.lk[0] + 36 - combinedShipsPenalty) / 100;
+	};
+
+	/**
 	 * Calculate ship day time artillery spotting process rate based on known type factors.
 	 * @param {number} atType - based on api_at_type value of artillery spotting type.
 	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
@@ -3213,6 +3229,11 @@ KC3改 Ship Object
 	KC3Ship.prototype.artillerySpottingRate = function(atType = 0) {
 		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
 		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		// Nelson Touch
+		if (atType === 100) {
+			return formatPercent(this.nelsonTouchRate(false));
+		}
 		const typeFactor = {
 			2: 150,
 			3: 120,
@@ -3222,7 +3243,6 @@ KC3改 Ship Object
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
-		const formatPercent = num => Math.floor(num * 1000) / 10;
 		return formatPercent(((Math.floor(baseValue) + (isFlagship ? 15 : 0)) / typeFactor) || 0);
 	};
 
