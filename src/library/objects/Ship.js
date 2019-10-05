@@ -3211,7 +3211,10 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.nelsonTouchRate = function(isNight) {
 		if (this.isDummy() || isNight) { return false; }
-		const fleetNum = this.fleetPosition()[2];
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		// Nelson Touch prerequisite should be fulfilled before calling this, see also #canDoNelsonTouch
+		// here only to ensure fleetObj and combinedShips below not undefined if this invoked unexpectedly
+		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
 		const fleetObj = PlayerManager.fleets[fleetNum - 1];
 		const combinedShips = [2, 4].map(pos => fleetObj.ship(pos));
 		const combinedShipsLevel = combinedShips.reduce((acc, ship) => acc + ship.level, 0);
