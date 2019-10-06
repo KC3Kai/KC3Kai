@@ -3243,6 +3243,7 @@ KC3改 Ship Object
 			4: 130,
 			5: 130,
 			6: 140,
+			200: 120
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
