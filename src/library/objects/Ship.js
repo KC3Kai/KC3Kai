@@ -1624,7 +1624,7 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
-			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 195][type4RocketCount] || 195;
+			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
 			// TODO update this placeholder
 			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80][type4RocketCdCount] || 80;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
