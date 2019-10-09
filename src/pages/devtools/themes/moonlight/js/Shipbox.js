@@ -288,6 +288,7 @@
 			"hp_sunk", "hp_taiha", "hp_chuuha", "hp_shouha", "hp_normal"].join(" ");
 		this.element.removeClass(hpClasses);
 		$(".ship_hp_bar", this.element).removeClass(hpClasses);
+		$(".ship_hp_prediction", this.element).removeClass(hpClasses);
 		
 		// Show time and cost based on predicted after-battle hp if setting enabled
 		var isAfterHpUsed = ConfigManager.info_battle &&
@@ -371,7 +372,7 @@
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
 			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
-			
+
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
 			if(this.shipData.hp[0] <= 0) {
@@ -390,13 +391,13 @@
 				$(this.element).addClass("ship-stamp");
 				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
-				$(".ship_hp_prediction", this.element).css("background", "#bb0000");
+				$(".ship_hp_prediction", this.element).addClass("hp_taiha");
 			} else if(afterHpPercent <= 0.50){
-				$(".ship_hp_prediction", this.element).css("background", "#ff9900");
+				$(".ship_hp_prediction", this.element).addClass("hp_chuuha");
 			} else if(afterHpPercent <= 0.75){
-				$(".ship_hp_prediction", this.element).css("background", "#ffff00");
+				$(".ship_hp_prediction", this.element).addClass("hp_shouha");
 			} else{
-				$(".ship_hp_prediction", this.element).css("background", "#00ff55");
+				$(".ship_hp_prediction", this.element).addClass("hp_normal");
 			}
 			
 			// Change to damaged ship icon if worse than 'chuuha'
