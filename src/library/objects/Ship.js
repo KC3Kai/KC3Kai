@@ -1452,7 +1452,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
-		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348]);
+		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348, 349]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
 		// WG42 variants/landing craft-type eligible for all
