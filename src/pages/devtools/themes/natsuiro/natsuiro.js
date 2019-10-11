@@ -781,7 +781,7 @@
 		});
 
 		$(".module.controls .btn_alert_toggle").on("click", function () {
-			critSound.paused ? critSound.play() : critSound.pause()
+			critSound.paused ? critSound.play() : critSound.pause();
 		});
 
 		// Reload subtitle quotes
