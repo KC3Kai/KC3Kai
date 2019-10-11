@@ -2533,6 +2533,7 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 36: // AA Fire Director
+					case 37: // Anti-Ground Rocket
 					case 46: // Amphibious Tank
 						modifier = 1; break;
 					case 3: // Large Cal. Main
@@ -2602,6 +2603,7 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 36: // AA Fire Director
+					case 37: // Anti-Ground Rocket
 					case 3: // Large Cal. Main
 						modifier = 1; break;
 					case 4: // Secondary

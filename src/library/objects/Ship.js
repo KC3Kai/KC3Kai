@@ -1452,7 +1452,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.shipPossibleAntiLandPowers = function(){
 		if(this.isDummy()) { return []; }
 		let possibleTypes = [];
-		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348]);
+		const hasAntiLandRocket = this.hasEquipment([126, 346, 347, 348, 349]);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
 		// WG42 variants/landing craft-type eligible for all
@@ -1624,9 +1624,9 @@ KC3改 Ship Object
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
-			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 195][type4RocketCount] || 195;
+			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
 			// TODO update this placeholder
-			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 55][type4RocketCdCount] || 55;
+			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80][type4RocketCdCount] || 80;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
 			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110][mortarCount] || 110;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
@@ -3204,6 +3204,25 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Calculate Nelson Touch process rate, currently only known in day
+	 * @param {boolean} isNight - Nelson Touch has lower modifier at night?
+	 * @return {number} special attack rate
+	 * @see https://twitter.com/Xe_UCH/status/1180283907284979713
+	 */
+	KC3Ship.prototype.nelsonTouchRate = function(isNight) {
+		if (this.isDummy() || isNight) { return false; }
+		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		// Nelson Touch prerequisite should be fulfilled before calling this, see also #canDoNelsonTouch
+		// here only to ensure fleetObj and combinedShips below not undefined if this invoked unexpectedly
+		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
+		const fleetObj = PlayerManager.fleets[fleetNum - 1];
+		const combinedShips = [2, 4].map(pos => fleetObj.ship(pos));
+		const combinedShipsLevel = combinedShips.reduce((acc, ship) => acc + ship.level, 0);
+		const combinedShipsPenalty = combinedShips.some(ship => [2, 16].includes(ship.master().api_stype)) ? 10 : 0; // estimate
+		return (0.08 * this.level + 0.04 * combinedShipsLevel + 0.24 * this.lk[0] + 36 - combinedShipsPenalty) / 100;
+	};
+
+	/**
 	 * Calculate ship day time artillery spotting process rate based on known type factors.
 	 * @param {number} atType - based on api_at_type value of artillery spotting type.
 	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
@@ -3213,16 +3232,21 @@ KC3改 Ship Object
 	KC3Ship.prototype.artillerySpottingRate = function(atType = 0) {
 		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
 		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
+		const formatPercent = num => Math.floor(num * 1000) / 10;
+		// Nelson Touch
+		if (atType === 100) {
+			return formatPercent(this.nelsonTouchRate(false));
+		}
 		const typeFactor = {
 			2: 150,
 			3: 120,
 			4: 130,
 			5: 130,
 			6: 140,
+			200: 120
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
-		const formatPercent = num => Math.floor(num * 1000) / 10;
 		return formatPercent(((Math.floor(baseValue) + (isFlagship ? 15 : 0)) / typeFactor) || 0);
 	};
 
