@@ -7923,7 +7923,7 @@ var PS = {};
           return income(420)(0)(200)(0);
       };
       if (eId === 39) {
-          return income(0)(0)(300)(0); // TODO: add ammo
+          return income(0)(30)(300)(0);
       };
       if (eId === 40) {
           return income(300)(300)(0)(100);
