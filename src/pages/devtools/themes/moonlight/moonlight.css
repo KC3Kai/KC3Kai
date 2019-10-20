@@ -3438,23 +3438,23 @@ ABYSS FLEET
 	top:125px;
 }
 .c .rotation .rotarHidden {
-	left:777px;
+	left:780px;
 	top:179px;
 }
 .c .rotation .rotarBack {
-	left:777px;
+	left:780px;
 	top:161px;
 }
 .c .rotation .rotarExpedition {
-	left:777px;
+	left:780px;
 	top:143px;
 }
 .c .rotation .rotarSumStats {
-	left:777px;
+	left:780px;
 	top:125px;
 }
 .c .rotation .rotarQuests {
-	left:777px;
+	left:780px;
 	top:107px;
 	display:block;
 }
@@ -3730,6 +3730,9 @@ ABYSS FLEET
 	width:490px;
 	height:281px;
 }
+.c .module.fleet {
+	height:318px;
+}
 .module.fleet .shiplist {
 	width:350px;
 	height:376px;
@@ -3739,6 +3742,9 @@ ABYSS FLEET
 	width:490px;
 	height:281px;
 	margin:0px 3px 0px 2px;
+}
+.c .module.fleet .shiplist {
+	height:318px;
 }
 .module.fleet .shiplist_combined_fleet {
 	width:170px;
@@ -5352,7 +5358,7 @@ ABYSS FLEET
 	top:305px;
 }
 .c .rotation2 .rotarHidden {
-	left:777px;
+	left:780px;
 	top:305px;
 }
 .rotation2 .rotarBack {
@@ -5366,7 +5372,7 @@ ABYSS FLEET
 	top:305px;
 }
 .c .rotation2 .rotarBack {
-	left:759px;
+	left:762px;
 	top:305px;
 }
 .rotation2 .rotarExpedition {
@@ -5380,7 +5386,7 @@ ABYSS FLEET
 	top:305px;
 }
 .c .rotation2 .rotarExpedition {
-	left:741px;
+	left:744px;
 	top:305px;
 }
 .rotation2 .rotarLayout {
@@ -5394,7 +5400,7 @@ ABYSS FLEET
 	top:305px;
 }
 .c .rotation2 .rotarLayout {
-	left:723px;
+	left:726px;
 	top:305px;
 }
 .t .rotation2 .rotarHidden {
@@ -5915,46 +5921,46 @@ ABYSS FLEET
 	image-rendering: auto;
 }
 .c .module.admiral {
-	left:548px; top:33px;
+	left:551px; top:33px;
 }
 .c .module.expeditions3 {
-	left:548px; top:33px;
+	left:551px; top:33px;
 	height:162px;
 	width:190px;
 }
 .c .module.summary {
-	left:548px; top:76px;
+	left:551px; top:76px;
 	height:119px;
 	width:190px;
 }
 .c .module.activity {
-	left:5px; top:2px;
+	left:4px; top:2px;
 }
 .c .module.fleet {
 	left:197px; top:4px;
 }
 .c .module.controls {
 	width: 150px;
-	left:551px; top:4px;
+	left:554px; top:4px;
 	float:left;
 }
 .c .module.controls .scrollable {
 	width:130px;
 }
 .c .module.status {
-	left:548px; top:198px;
+	left:551px; top:198px;
 	width:245px;
 	height:87px;
 }
 .c .module.expeditions2 {
 	width:245px;
 	height:124px;
-	left:548px; top:198px;
+	left:551px; top:198px;
 }
 .c .module.layouts {
 	width:245px;
 	height:124px;
-	left:548px; top:198px;
+	left:551px; top:198px;
 }
 .c .module.quests {
 	display:none;
