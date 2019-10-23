@@ -1125,6 +1125,13 @@
 			const response = http.response.api_data;
 
 			const deck = request.api_deck_id;
+			const expedID = KC3TimerManager._exped[deck - 2].expedNum;
+
+			// Can happen when expedition cleared before listener executes
+			if(expedID === 0) {
+				console.log(`[TsunDB] Cancelling submissions, unknown expedition ID for deck ${deck}`);
+				return;
+			}
 			
 			const exped = {
 				deck,
@@ -1156,8 +1163,8 @@
 						count: x.api_useitem_count
 					};
 				}),
-				resources: response.api_get_material,
-				expedID: KC3TimerManager._exped[deck - 2].expedNum
+				resources: (response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
+				expedID
 			};
 
 			this.sendData(exped, "expeds");
