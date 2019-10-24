@@ -1163,7 +1163,7 @@
 						count: x.api_useitem_count
 					};
 				}),
-				resources: (response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
+				resources: (!response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
 				expedID
 			};
 
