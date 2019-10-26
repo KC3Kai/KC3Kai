@@ -351,6 +351,7 @@ Previously known as "Reactor"
 					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
 					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
+					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					default: break;
 				}
 			}

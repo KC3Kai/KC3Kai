@@ -1625,10 +1625,9 @@ KC3改 Ship Object
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
-			// TODO update this placeholder
-			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80][type4RocketCdCount] || 80;
+			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170][type4RocketCdCount] || 170;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
-			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110][mortarCount] || 110;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCount] || 150;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
