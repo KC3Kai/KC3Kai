@@ -798,7 +798,7 @@
 				fleettwoexslots: this.data.fleettwoexslots,
 				los: this.data.los
 			}
-			this.sendData(data, 'sanma')
+			this.sendData(data, 'sanma');
 		},
 
 		processAACI: function(http) {
