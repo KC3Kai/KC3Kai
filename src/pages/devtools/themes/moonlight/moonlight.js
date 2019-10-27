@@ -1970,6 +1970,8 @@
 					isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
 				)
 			).lazyInitTooltip();
+			$(".summary-saury .summary_text").text( PlayerManager.consumables.mackerel );
+			$(".summary-sardines .summary_text").text( PlayerManager.consumables.sardine );
 			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
 			$(".summary-transport .summary_text").text(KC3Meta.term("PanelTransportPointsAbbr"));
 			$(".summary-transport .summary_textS").text("S: " + (isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum));

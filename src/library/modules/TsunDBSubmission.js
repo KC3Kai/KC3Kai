@@ -336,8 +336,8 @@
 				'api_req_combined_battle/ec_midnight_battle': [this.processFriendlyFleet, this.processSpAttack],
 				// PvP battles are excluded intentionally
 				
-				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
-				'api_req_combined_battle/battleresult': [this.processDrop, this.processUnexpected],
+				'api_req_sortie/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
+				'api_req_combined_battle/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
 				// PvP battle_result excluded intentionally
 				
 				// Development related
@@ -770,6 +770,37 @@
 			this.sendData(data, 'droplocs');
 		},
 
+		processSanma: function(http) {
+			const apiData = http.response.api_data;
+			let data = {
+				uid: PlayerManager.hq.id,
+				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : -1,
+				hqlvl: this.data.hqLvl, 
+				map: this.data.map,
+				node: this.data.node,
+				cleared: this.data.cleared,
+				rank: apiData.api_win_rank,
+				count: {
+					68: PlayerManager.getConsumableById(68),
+					93: PlayerManager.getConsumableById(93)
+				},
+				difficulty: this.data.difficulty,
+				fleettype: this.data.fleetType,
+				fleetids: this.data.fleetids,
+				fleetlevel: this.data.fleetlevel,
+				fleet1: this.data.fleet1,
+				fleetonetypes: this.data.fleetonetypes,
+				fleetoneequips: this.data.fleetoneequips,
+				fleetoneexslots: this.data.fleetoneexslots,
+				fleet2: this.data.fleet2,
+				fleettwotypes: this.data.fleettwotypes,
+				fleettwoequips: this.data.fleettwoequips,
+				fleettwoexslots: this.data.fleettwoexslots,
+				los: this.data.los
+			};
+			this.sendData(data, 'sanma');
+		},
+
 		processAACI: function(http) {
 			const apiData = http.response.api_data;
 			this.aaci = {};
@@ -1125,6 +1156,13 @@
 			const response = http.response.api_data;
 
 			const deck = request.api_deck_id;
+			const expedID = KC3TimerManager._exped[deck - 2].expedNum;
+
+			// Can happen when expedition cleared before listener executes
+			if(expedID === 0) {
+				console.log(`[TsunDB] Cancelling submissions, unknown expedition ID for deck ${deck}`);
+				return;
+			}
 			
 			const exped = {
 				deck,
@@ -1156,8 +1194,8 @@
 						count: x.api_useitem_count
 					};
 				}),
-				resources: response.api_get_material,
-				expedID: KC3TimerManager._exped[deck - 2].expedNum
+				resources: (!response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
+				expedID
 			};
 
 			this.sendData(exped, "expeds");
