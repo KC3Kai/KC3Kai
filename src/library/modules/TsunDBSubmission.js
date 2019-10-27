@@ -336,8 +336,8 @@
 				'api_req_combined_battle/ec_midnight_battle': [this.processFriendlyFleet, this.processSpAttack],
 				// PvP battles are excluded intentionally
 				
-				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
-				'api_req_combined_battle/battleresult': [this.processDrop, this.processUnexpected],
+				'api_req_sortie/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
+				'api_req_combined_battle/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
 				// PvP battle_result excluded intentionally
 				
 				// Development related
@@ -768,6 +768,33 @@
 				difficulty: shipdrop.difficulty
 			};
 			this.sendData(data, 'droplocs');
+		},
+
+		processSanma: function(http) {
+			const apiData = http.response.api_data;
+			let data = {
+				uid: PlayerManager.hq.id,
+				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : undefined,
+				hqlvl: this.data.hqLvl, 
+				map: this.data.map,
+				node: this.data.node,
+				cleared: this.data.cleared,
+				rank: apiData.api_win_rank,
+				difficulty: this.data.difficulty,
+				fleettype: this.data.fleetType,
+				fleetids: this.data.fleetids,
+				fleetlevel: this.data.fleetlevel,
+				fleet1: this.data.fleet1,
+				fleetonetypes: this.data.fleetonetypes,
+				fleetoneequips: this.data.fleetoneequips,
+				fleetoneexslots: this.data.fleetoneexslots,
+				fleet2: this.data.fleet2,
+				fleettwotypes: this.data.fleettwotypes,
+				fleettwoequips: this.data.fleettwoequips,
+				fleettwoexslots: this.data.fleettwoexslots,
+				los: this.data.los
+			}
+			this.sendData(data, 'sanma')
 		},
 
 		processAACI: function(http) {
