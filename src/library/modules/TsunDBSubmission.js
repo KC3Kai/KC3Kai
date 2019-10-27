@@ -797,7 +797,7 @@
 				fleettwoequips: this.data.fleettwoequips,
 				fleettwoexslots: this.data.fleettwoexslots,
 				los: this.data.los
-			}
+			};
 			this.sendData(data, 'sanma');
 		},
 
