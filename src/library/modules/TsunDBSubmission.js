@@ -774,7 +774,7 @@
 			const apiData = http.response.api_data;
 			let data = {
 				uid: PlayerManager.hq.id,
-				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : undefined,
+				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : -1,
 				hqlvl: this.data.hqLvl, 
 				map: this.data.map,
 				node: this.data.node,
