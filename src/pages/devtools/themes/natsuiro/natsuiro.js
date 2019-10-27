@@ -1311,6 +1311,7 @@
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
+				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 : 61;
 			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))

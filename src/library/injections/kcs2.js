@@ -28,6 +28,7 @@
 				gameCanvas.css("width", "100%");
 				// Scale edit box to right position too
 				editArea.css("zoom", scale);
+				$("body").css("overflow", "hidden");
 			}
 		}
 		// Experimental function: improve 3rd-party components used by game
