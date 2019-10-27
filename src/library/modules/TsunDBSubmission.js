@@ -780,6 +780,10 @@
 				node: this.data.node,
 				cleared: this.data.cleared,
 				rank: apiData.api_win_rank,
+				count: {
+					68: PlayerManager.getConsumableById(68),
+					93: PlayerManager.getConsumableById(93)
+				},
 				difficulty: this.data.difficulty,
 				fleettype: this.data.fleetType,
 				fleetids: this.data.fleetids,
