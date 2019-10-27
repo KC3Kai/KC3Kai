@@ -3230,54 +3230,62 @@
 	},
 	"5403": {
 		"api_id": 5403,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着村雨改二",
+		"api_yomi": "むらさめ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5404": {
 		"api_id": 5404,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着雪風",
+		"api_yomi": "ゆきかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5405": {
 		"api_id": 5405,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Samuel B.Roberts",
+		"api_yomi": "サミュエル・B・ロバーツ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5406": {
 		"api_id": 5406,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Samuel B.Roberts改",
+		"api_yomi": "サミュエル・B・ロバーツ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5407": {
 		"api_id": 5407,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Johnston",
+		"api_yomi": "ジョンストン",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5408": {
 		"api_id": 5408,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着Johnston改",
+		"api_yomi": "ジョンストン",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5409": {
 		"api_id": 5409,
+		"api_name": "夏のお嬢さん雪風改",
+		"api_yomi": "ゆきかぜ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5410": {
+		"api_id": 5410,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,

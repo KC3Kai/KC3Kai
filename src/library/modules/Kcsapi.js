@@ -351,6 +351,7 @@ Previously known as "Reactor"
 					case 90: PlayerManager.consumables.setsubunBeans = thisItem.api_count; break;
 					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
+					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -2168,7 +2169,7 @@ Previously known as "Reactor"
 							KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
 							break;
 						case 4: // 14cm Single Gun Mount
-							KC3QuestManager.get(653).increment(); // F90? quarterly
+							KC3QuestManager.get(653).increment(); // F90 quarterly
 							break;
 						case 19: // Type 96 Fighter
 							KC3QuestManager.get(626).increment(1); // F22 monthly index 1
@@ -2845,7 +2846,7 @@ Previously known as "Reactor"
 				});
 		} else {
 			KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
-			if(rankPt >= 3) {
+			if(rankPt >= 3) { // B-Rank+
 				KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
 				KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
 				KC3QuestManager.get(311).increment(); // C8: Monthly Exercises 1
@@ -2853,8 +2854,10 @@ Previously known as "Reactor"
 					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(330))
 					KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises 1
+			}
+			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
-					KC3QuestManager.get(337).increment(); // C39?: Quarterly Exercises 2
+					KC3QuestManager.get(337).increment(); // C38: Quarterly Exercises 2
 			}
 		}
 	}

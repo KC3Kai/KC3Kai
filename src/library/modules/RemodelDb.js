@@ -68,6 +68,7 @@
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
                     return 15;
+                case 344: // Asashimo
                 case 350: // Umikaze
                     return 30;
                 case 312: // Hamakaze

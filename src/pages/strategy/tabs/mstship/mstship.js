@@ -244,9 +244,7 @@
 			
 			// Show damaged CG of shipgirl or abyssal boss
 			$(".tab_mstship .shipInfo .cgswf .dmg_mode").on("click", function(e){
-				if(!KC3Master.isSeasonalShip(self.currentShipId)){
-					self.showShip(self.currentShipId, true, false);
-				}
+				self.showShip(self.currentShipId, true, false);
 			});
 			
 			// View all CG types
@@ -424,7 +422,7 @@
 				KC3Master.isAbyssalShip(ship_id) || viewCgMode ? "full" :
 				"card";
 			var kcs2Src = `http://${this.server_ip}/kcs2/resources` +
-				KC3Master.png_file(ship_id, cgType, "ship", tryDamagedGraph && !KC3Master.isSeasonalShip(ship_id));
+				KC3Master.png_file(ship_id, cgType, "ship", tryDamagedGraph);
 			if(this.currentCardVersion) kcs2Src += `?version=${this.currentCardVersion}`;
 			
 			if(this.croppie) this.croppie.croppie("destroy");
