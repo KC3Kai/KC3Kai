@@ -5315,16 +5315,28 @@ ABYSS FLEET
 }
 
 .module.fleet .ship_hp_prediction.hp_normal.glassy {
-     background-color: #369A3A !important;
+	background-color: #369A3A !important;
 }
 .module.fleet .ship_hp_prediction.hp_shouha.glassy {
-     background-color: #C2A249 !important;
+	background: linear-gradient(to bottom,
+		rgb(252,234,187) 0,
+		rgb(252,205,77) 49%,
+		rgb(248,181,0) 50%,
+		rgb(251,223,147) 100%) !important;
 }
 .module.fleet .ship_hp_prediction.hp_chuuha.glassy {
-     background-color: #333 !important;
+	background: linear-gradient(to bottom,
+		rgb(244,114,60) 0,
+		rgb(245,126,67) 49%,
+		rgb(234,85,7) 50%,
+		rgb(241,109,44) 100%) !important;
 }
 .module.fleet .ship_hp_prediction.hp_taiha.glassy {
-     background-color: #000 !important;
+	background: linear-gradient(to bottom,
+		rgb(244,60,60) 0,
+		rgb(245,67,67) 49%,
+		rgb(234,7,7) 50%,
+		rgb(241,44,44) 100%) !important;
 }
 
 /* Glassy supply bars */
