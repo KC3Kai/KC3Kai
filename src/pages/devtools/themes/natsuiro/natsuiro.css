@@ -2733,6 +2733,7 @@ ABYSS FLEET
 	height: 15px;
 	line-height: 15px;
 	margin-left: 2px;
+	display: inline-block;
 }
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs img {
 	width: 12px;
@@ -2746,7 +2747,6 @@ ABYSS FLEET
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs span.certain {
 	color: #8ae9e4;
 	margin-left: 1px;
-	display: none;
 }
 .module.activity .activity_remodel .remodel_consumptions {
 	font-size: 11px;
