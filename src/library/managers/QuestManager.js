@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 426, 428, 637, 643, 663, 675, 678, 680, 686, 688, 822, 854, 861, 862, 872, 873, 875, 888, 893, 894],
+				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -407,8 +407,8 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29
-			this.resetCounterLoop([330], false);
+			// Quarterly PvP C29, C38
+			this.resetCounterLoop([330, 337], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -512,6 +512,16 @@ Uses KC3Quest objects to play around with
 							fleet.hasShipType([7, 11, 18], 0) &&
 							fleet.countShipType([7, 11, 18]) >= 2 &&
 							fleet.countShipType(2) >= 2;
+					},
+				"337": // C38 PvP with Arare, Kagerou, Kasumi, Shiranui
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(17) + // Kagerou any remodel
+							fleet.countShip(18) + // Shiranui any remodel
+							fleet.countShip(48) + // Arare any remodel
+							fleet.countShip(49)   // Kasumi any remodel
+						) >= 4;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

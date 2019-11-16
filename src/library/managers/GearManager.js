@@ -22,6 +22,7 @@ Saves and loads list to and from localStorage
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://twitter.com/muu_1106/status/1124658313428213760
 		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323],
+		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
 		interceptorsType3Ids: [38,44],

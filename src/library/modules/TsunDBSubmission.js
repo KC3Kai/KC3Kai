@@ -286,13 +286,6 @@
 			resources: [],
 			type: null
 		},
-		development : {
-			hqLvl: null,
-			flagship: {},
-			resources: {},
-			result: null,
-			success: null
-		},
 		lolimodfod: {
 			shipid: null,
 			shiplvl: null,
@@ -343,8 +336,8 @@
 				'api_req_combined_battle/ec_midnight_battle': [this.processFriendlyFleet, this.processSpAttack],
 				// PvP battles are excluded intentionally
 				
-				'api_req_sortie/battleresult': [this.processDrop, this.processUnexpected],
-				'api_req_combined_battle/battleresult': [this.processDrop, this.processUnexpected],
+				'api_req_sortie/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
+				'api_req_combined_battle/battleresult': [this.processDrop, this.processSanma, this.processUnexpected],
 				// PvP battle_result excluded intentionally
 				
 				// Development related
@@ -355,6 +348,8 @@
 
 				// Equipment list
 				'api_get_member/picture_book': this.processPictureBook,
+
+				'api_req_mission/result': this.processExped,
 
 				'Modernize': this.processModernizeEvent
 			};
@@ -384,6 +379,15 @@
 		
 		processMapInfo: function(http) {
 			this.mapInfo = $.extend(true, [], http.response.api_data.api_map_info);
+
+			// Update enemycomp with leftover slots from air battle
+			if (this.delayedABSubmission && this.enemyComp.airBattle) {
+				this.delayedABSubmission = null;				
+				const base = http.response.api_data.api_air_base.find(base => base.api_area_id === this.currentMap[0] && base.api_rid === this.enemyComp.airBattle.enemyShotdown.baseId);
+				this.enemyComp.airBattle.enemyShotdown.finalSlots = base.api_plane_info.map(slot => slot.api_count);
+
+				this.sendData(this.enemyComp, 'enemy-comp');
+			}
 		},
 		
 		processSelectEventMapRank: function(http) {
@@ -518,6 +522,10 @@
 				this.fillGimmickInfo(apiData.api_destruction_battle, true);
 			}
 			if(apiData.api_m1) {
+				this.processGimmick(http);
+			}
+			// Currently not present in /next
+			if(apiData.api_m2) {
 				this.processGimmick(http);
 			}
 			if(apiData.api_happening) {
@@ -660,6 +668,19 @@
 					const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 					// fp will be an Array[2]
 					fp = shipObj.fighterBounds(true);
+					// Prepare enemy shootdown submission, only use last nodes to prevent all submissions from being delayed
+					// Also enforce that both strikepoints are on same node
+					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1])) {
+						this.delayedABSubmission = true;
+						const waveData = apiData.api_air_base_attack[1];
+						airBattle.enemyShotdown = {
+							baseId: koukuApi.api_base_id,
+							planes: waveData.api_squadron_plane.map(plane => plane.api_mst_id || -1),
+							initialSlots: shipObj.slots,
+							initialCount: waveData.api_stage2.api_f_count,
+							totalLoss: waveData.api_stage2.api_f_lostcount
+						};
+					}
 				}
 				
 				// Get fighter power of sortied fleet(s)
@@ -677,7 +698,7 @@
 				this.enemyComp.airBattle = airBattle;
 			}
 			
-			this.sendData(this.enemyComp, 'enemy-comp');
+			if (!this.delayedABSubmission) { this.sendData(this.enemyComp, 'enemy-comp'); }
 		},
 		
 		processEventReward: function(http){
@@ -747,6 +768,37 @@
 				difficulty: shipdrop.difficulty
 			};
 			this.sendData(data, 'droplocs');
+		},
+
+		processSanma: function(http) {
+			const apiData = http.response.api_data;
+			let data = {
+				uid: PlayerManager.hq.id,
+				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : -1,
+				hqlvl: this.data.hqLvl, 
+				map: this.data.map,
+				node: this.data.node,
+				cleared: this.data.cleared,
+				rank: apiData.api_win_rank,
+				count: {
+					68: PlayerManager.getConsumableById(68),
+					93: PlayerManager.getConsumableById(93)
+				},
+				difficulty: this.data.difficulty,
+				fleettype: this.data.fleetType,
+				fleetids: this.data.fleetids,
+				fleetlevel: this.data.fleetlevel,
+				fleet1: this.data.fleet1,
+				fleetonetypes: this.data.fleetonetypes,
+				fleetoneequips: this.data.fleetoneequips,
+				fleetoneexslots: this.data.fleetoneexslots,
+				fleet2: this.data.fleet2,
+				fleettwotypes: this.data.fleettwotypes,
+				fleettwoequips: this.data.fleettwoequips,
+				fleettwoexslots: this.data.fleettwoexslots,
+				los: this.data.los
+			};
+			this.sendData(data, 'sanma');
 		},
 
 		processAACI: function(http) {
@@ -899,12 +951,14 @@
 			}
 		},
 		
-		processGimmick: function(http, trigger = 'debuff'){
+		processGimmick: function(http, trigger = 'port'){
 			const apiData = http ? http.response.api_data : {};
 			if (http) {
 				if (!(
 					// triggered by next node flag
 					apiData.api_m1 ||
+					// "new" debuff flag, currently not present in next
+					apiData.api_m2 || 
 					// triggered by home port SE flag
 					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
 				)) { return; }
@@ -918,6 +972,9 @@
 			this.gimmick.difficulty = this.data.difficulty;
 			if (apiData.api_m1) {
 				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
+			}
+			if (apiData.api_m2) {
+				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
 			}
 			this.sendData(this.gimmick, 'gimmick');
 		},
@@ -1042,29 +1099,27 @@
 			this.sendData(this.maelstrom, 'maelstrom');
 		},
 		
-		processDevelopment: function(http){
-			this.cleanNonCombat();
+		processDevelopment: function(http) {
 			const request = http.params;
 			const response = http.response.api_data;
-			
-			this.development.hqLvl = PlayerManager.hq.level;
-			this.development.flagship = {
-				id: PlayerManager.fleets[0].ship(0).masterId,
-				type: PlayerManager.fleets[0].ship(0).master().api_stype,
-				lvl: PlayerManager.fleets[0].ship(0).level
-			};
-			this.development.resources = {
-				fuel: request.api_item1,
-				ammo: request.api_item2,
-				steel: request.api_item3,
-				bauxite: request.api_item4
-			};
-			this.development.result = response.api_create_flag ?
-				response.api_slot_item.api_slotitem_id :
-				Number(response.api_fdata.split(',')[1]);
-			this.development.success = response.api_create_flag;
-			//console.debug(this.development);
-			this.sendData(this.development, 'development');
+			response.api_get_items.forEach(e => {
+				this.sendData({
+					hqLvl: PlayerManager.hq.level,
+					flagship: {
+						id: PlayerManager.fleets[0].ship(0).masterId,
+						type: PlayerManager.fleets[0].ship(0).master().api_stype,
+						lvl: PlayerManager.fleets[0].ship(0).level,
+					},
+					resources: {
+						fuel: request.api_item1,
+						ammo: request.api_item2,
+						steel: request.api_item3,
+						bauxite: request.api_item4,
+					},
+					result: e.api_slotitem_id,
+					success: e.api_slotitem_id !== -1 ? 1 : 0,
+				}, 'development');
+			});
 		},
 
 		processPictureBook: function(http) {
@@ -1094,6 +1149,56 @@
 				};
 			});
 			this.sendData({equips}, "equips");
+		},
+
+		processExped: function(http) {
+			const request = http.params;
+			const response = http.response.api_data;
+
+			const deck = request.api_deck_id;
+			const expedID = KC3TimerManager._exped[deck - 2].expedNum;
+
+			// Can happen when expedition cleared before listener executes
+			if(expedID === 0) {
+				console.log(`[TsunDB] Cancelling submissions, unknown expedition ID for deck ${deck}`);
+				return;
+			}
+			
+			const exped = {
+				deck,
+				fleet: PlayerManager.fleets[deck - 1].ship().map(ship => {
+					return {
+						id: ship.masterId,
+						lvl: ship.level,
+						morale: ship.morale,
+						stats: ship.nakedStats(),
+						kyouka: ship.mod,
+						equips: ship.equipment(true).map(g => g.masterId || -1), 
+						improvements: ship.equipment(true).map(g => g.stars || -1),
+						proficiency: ship.equipment(true).map(g => g.ace || -1),
+						slots: ship.slots,
+								
+						fuel: [ship.fuel, ship.master().api_fuel_max],
+						ammo: [ship.ammo, ship.master().api_bull_max]
+					};
+				}),
+				result: response.api_clear_result,
+				hqXP: response.api_get_exp,
+				shipXP: response.api_get_ship_exp,
+				items: [1,2].map((ind) => {
+					const x = response["api_get_item" + ind];
+					if(!x)
+						return x;
+					return {
+						id: (x.api_useitem_id == -1 ? response.api_useitem_flag[ind-1] : x.api_useitem_id),
+						count: x.api_useitem_count
+					};
+				}),
+				resources: (!response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
+				expedID
+			};
+
+			this.sendData(exped, "expeds");
 		},
 
 		/**
@@ -1150,6 +1255,8 @@
 				speed: ship.speed,
 				flee: ship.didFlee,
 				equip: ship.equipment(false).map(gear => gear.masterId || -1),
+				stars: ship.equipment(true).map(gear => gear.stars === 0 ? 0 : (gear.stars || -1)),
+				ace: ship.equipment(true).map(gear => gear.ace === 0 ? 0 : (gear.ace || -1)),
 				exslot: ship.exItem().masterId || -1
 			}));
 		},
@@ -1311,6 +1418,10 @@
 				obj.api_m1 = apiData.api_m1;
 				this.processGimmick(false, isAirRaid ? 'nodeAB' : 'nodeBattle');
 			}
+			if (apiData.api_m2) {
+				obj.api_m2 = apiData.api_m2;
+				this.processGimmick(false, isAirRaid ? 'nodeAB2' : 'nodeBattle2');
+			}
 		},
 		
 		/**
@@ -1341,6 +1452,7 @@
 				difficulty: null
 			};
 			this.sortieSpecialAttack = null;
+			this.delayedABSubmission = null;
 		},
 		
 		/**
@@ -1367,21 +1479,13 @@
 			this.data.gaugeNum = 0;
 			this.data.gaugeType = 0;
 		},
-		
-		/**
-		 * Cleans up the data of non-combat related things.
-		 */
-		cleanNonCombat: function(){
-			this.development = {};
-		},
-		
+
 		/**
 		 * SPI: clean all previous states up.
 		 */
 		cleanup: function(){
 			this.cleanOnStart();
 			this.cleanOnNext();
-			this.cleanNonCombat();
 		},
 		
 		/**

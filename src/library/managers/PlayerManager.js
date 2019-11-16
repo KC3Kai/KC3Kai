@@ -543,6 +543,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"90": "setsubunBeans",
 				"91": "emergencyRepair",
 				"92": "newRocketDevMaterial",
+				"93": "sardine",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

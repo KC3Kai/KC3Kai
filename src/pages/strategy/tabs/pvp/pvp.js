@@ -346,7 +346,14 @@
 					var shipIconImage;
 					$.each(pvpData.fleet, function(ShipIndex, ShipData){
 						shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
-						rcontext.drawImage(shipIconImage,0,0,70,70,25+(60*ShipIndex),233,50,50);
+						rcontext.save();
+						rcontext.beginPath();
+						rcontext.arc((50 + 60 * ShipIndex),258,25,0,2*Math.PI);
+						rcontext.closePath();
+						rcontext.clip();
+						rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
+							(25 + 60 * ShipIndex), 232.5, 50, 50);
+						rcontext.restore();
 					});
 					
 					withDataCover64 = rcanvas.toDataURL("image/png");

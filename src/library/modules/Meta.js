@@ -140,6 +140,7 @@ Provides access to data on built-in JSON files
 			582: 582, 583: 583, 584: 7,   585: 161, 586: 574,
 			587: 298, 588: 266, 589: 310, 590: 309, 591: 284,
 			592: 332, 593: 314, 594: 594, 595: 595, 596: 340,
+			597: 597, 598: 598, 599: 280,
 		},
 		
 		/* Initialization
@@ -666,6 +667,7 @@ Provides access to data on built-in JSON files
 				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
 				antiLandDiveBomberIds: d.antiLandDiveBomberIds,
 				evadeAntiAirFireIds: d.evadeAntiAirFireIds,
+				highAltitudeInterceptorIds: d.highAltitudeInterceptorIds,
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,

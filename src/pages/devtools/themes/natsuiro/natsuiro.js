@@ -1172,15 +1172,31 @@
 		},
 
 		DebuffNotify: function(data){
-			// From Event Summer 2016,
+			// since Event Summer 2019,
+			// api_m2 is set on `/api_battleresult` or `/api_destruction_battle`,
+			// to indicate Armor Broken debuff activated for E-3 BOSS.
+			// at this timing, SE file 258.mp3 is played, actually, it's a voice line of abyssal boss.
+			if (data.api_m2) {
+				this.ModalBox({
+					title: KC3Meta.term("BossDebuffedTitle"),
+					message: KC3Meta.term("BossDebuffedMessage").format(
+						KC3Meta.term("BossDebuffedYes")
+					)
+				});
+			// since Event Summer 2016,
 			// devs set api_m_flag2 to 1 on port, to play the debuff SE.
-			if(data.api_m_flag2 === undefined){
+			} else if(data.api_m_flag2 === undefined){
 				lastApiFlag2 = false;
 			} else if(data.api_m_flag2 > 0){
 				// so the flag does not indicate state of the debuff,
 				// it only indicates: time to play a SE.
 				// we cannot detect: is the debuff reset?
 				//let isDebuffed = data.api_m_flag2 == 1;
+
+				// since Event Spring 2019 onwards, the home port SE (215.mp3) is played,
+				// whenever any step for unlocking a gimmick is completed.
+				// and secretary's Equip(3) line (voicenum 26) played instead of regular Return line.
+				// see `main.js#InitializeTask.prototype._playVoice`
 				this.ModalBox({
 					title: KC3Meta.term("BossDebuffedTitle"),
 					message: KC3Meta.term("BossDebuffedMessage").format(
@@ -1295,6 +1311,7 @@
 			}
 			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
+				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 : 61;
 			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
@@ -2148,6 +2165,12 @@
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
+						if (!!ifp) {
+							const haifp = Math.floor(ifp * KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map));
+							$(".base_ifp .base_stat_value", baseBox).attr("title",
+								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifp)
+							).lazyInitTooltip();
+						}
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
 
@@ -3130,63 +3153,84 @@
 
 			// If craft spoiler is disabled on settings
 			if(!ConfigManager.info_craft){ return true; }
-
-			var icon = "../../../../assets/img/client/penguin.png";
 			console.debug("Crafted Gear", data);
 
-			// If success crafting
-			if (data.itemId !== null) {
-				// Get equipment data
-				var PlayerItem = KC3GearManager.get( data.itemId );
-				var MasterItem = KC3Master.slotitem( data.itemMasterId );
-				var countExisting = KC3GearManager.countByMasterId( data.itemMasterId );
-
-				icon = KC3Meta.itemIcon(MasterItem.api_type[3]);
-				$(".activity_crafting .equipIcon img").attr("src", icon);
-				$(".activity_crafting .equipName").text( PlayerItem.name() );
-
-				// Show extra item info
-				if(countExisting == 1){
-					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteFirst") );
-				}else{
-					$(".activity_crafting .equipNote").html( KC3Meta.term("CraftEquipNoteExists").format(countExisting) );
-				}
-
-				const CraftGearStats = (itemMst, statProperty, code) => {
-					if(parseInt(itemMst["api_"+statProperty], 10) !== 0){
-						const thisStatBox = $("#factory .equipStat").clone()
-							.appendTo(".module.activity .activity_crafting .equipStats");
-						$("img", thisStatBox).attr("src", KC3Meta.statIcon(code));
-						$(".equipStatText", thisStatBox).text( itemMst["api_"+statProperty] );
+			const penguinIcon = "/assets/img/client/penguin.png";
+			// If crafting success
+			if(!data.failedFlag && Array.isArray(data.items)){
+				// Treat first equipItem div as factory template here
+				const firstItemDiv = $(".activity_crafting .equipItems .equipItem.first").clone();
+				$(".activity_crafting .equipItems").empty().append(firstItemDiv);
+				data.items.forEach((item, idx) => {
+					const itemDiv = idx === 0 ? firstItemDiv : firstItemDiv.clone()
+						.removeClass("first").appendTo(".activity_crafting .equipItems");
+					// api_slotitem_id will be -1 if failed
+					const masterId = item.api_slotitem_id;
+					if(masterId > 0) {
+						// Show equipment data
+						const playerItem = KC3GearManager.get(item.api_id);
+						const masterItem = KC3Master.slotitem(masterId);
+						const icon = KC3Meta.itemIcon(masterItem.api_type[3]);
+						$(".equipIcon img", itemDiv).attr("src", icon);
+						$(".equipName", itemDiv).text(playerItem.name());
+						// Show extra item info
+						const existedCount = KC3GearManager.countByMasterId(masterId);
+						$(".equipNote", itemDiv).html(
+							existedCount === 1 ? KC3Meta.term("CraftEquipNoteFirst") :
+								KC3Meta.term("CraftEquipNoteExists").format(existedCount)
+						);
+						const CraftGearStats = (itemMst, statProperty, code) => {
+							if(parseInt(itemMst["api_"+statProperty], 10) !== 0){
+								const thisStatBox = $("#factory .equipStat").clone()
+									.appendTo($(".equipStats", itemDiv));
+								$("img", thisStatBox).attr("src", KC3Meta.statIcon(code));
+								$(".equipStatText", thisStatBox).text( itemMst["api_"+statProperty] );
+							}
+						};
+						// Hide equipment stats if multiple crafting for limited spaces
+						$(".equipStats", itemDiv).empty().toggle(!data.multiFlag);
+						CraftGearStats(masterItem, "souk", "ar");
+						CraftGearStats(masterItem, "houg", "fp");
+						CraftGearStats(masterItem, "raig", "tp");
+						CraftGearStats(masterItem, "soku", "sp");
+						CraftGearStats(masterItem, "baku", "dv");
+						CraftGearStats(masterItem, "tyku", "aa");
+						CraftGearStats(masterItem, "tais", "as");
+						CraftGearStats(masterItem, "houm", "ht");
+						CraftGearStats(masterItem, "houk", "ev");
+						CraftGearStats(masterItem, "saku", "ls");
+						CraftGearStats(masterItem, "leng", "rn");
+						$("<div />").addClass("clear").appendTo($(".equipStats", itemDiv));
+					} else {
+						$(".equipIcon img", itemDiv).attr("src", penguinIcon);
+						$(".equipName", itemDiv).text(KC3Meta.term("CraftEquipNotePenguin"));
+						$(".equipNote", itemDiv).empty();
+						$(".equipStats", itemDiv).empty();
 					}
-				};
-				$(".activity_crafting .equipStats").empty();
-				CraftGearStats(MasterItem, "souk", "ar");
-				CraftGearStats(MasterItem, "houg", "fp");
-				CraftGearStats(MasterItem, "raig", "tp");
-				CraftGearStats(MasterItem, "soku", "sp");
-				CraftGearStats(MasterItem, "baku", "dv");
-				CraftGearStats(MasterItem, "tyku", "aa");
-				CraftGearStats(MasterItem, "tais", "as");
-				CraftGearStats(MasterItem, "houm", "ht");
-				CraftGearStats(MasterItem, "houk", "ev");
-				CraftGearStats(MasterItem, "saku", "ls");
-				CraftGearStats(MasterItem, "leng", "rn");
-				$("<div />").addClass("clear").appendTo(".module.activity .activity_crafting .equipStats");
-
-			// If penguin
+				});
+			
+			// If all penguin
 			} else {
-				$(".activity_crafting .equipIcon img").attr("src", icon);
-				$(".activity_crafting .equipName").text( KC3Meta.term("CraftEquipNotePenguin") );
+				const firstItemDiv = $(".activity_crafting .equipItems .equipItem.first").clone();
+				$(".activity_crafting .equipItems").empty().append(firstItemDiv);
+				$(".activity_crafting .equipIcon img").attr("src", penguinIcon);
+				$(".activity_crafting .equipName").text(KC3Meta.term("CraftEquipNotePenguin"));
 				$(".activity_crafting .equipNote").empty();
 				$(".activity_crafting .equipStats").empty();
 			}
 
-			// Show resource used
-			$(".activity_crafting .used1").text( data.resourceUsed[0] );
-			$(".activity_crafting .used2").text( data.resourceUsed[1] );
-			$(".activity_crafting .used3").text( data.resourceUsed[2] );
-			$(".activity_crafting .used4").text( data.resourceUsed[3] );
+			// Show resource used (per item)
+			$(".activity_crafting .equipResources .used1").text(data.resourceUsed[0]);
+			$(".activity_crafting .equipResources .used2").text(data.resourceUsed[1]);
+			$(".activity_crafting .equipResources .used3").text(data.resourceUsed[2]);
+			$(".activity_crafting .equipResources .used4").text(data.resourceUsed[3]);
+			// Show multiple crafting amount
+			$(".activity_crafting .equipFooter .multiCount").html(
+				data.multiFlag && data.items ? `x${data.items.length || 1}&emsp;` : ""
+			);
+			// Show devmats change
+			$(".activity_crafting .equipFooter .devmatsBefore").text(data.devmats[0]);
+			$(".activity_crafting .equipFooter .devmatsAfter").text(data.devmats[1]);
 
 			// Show the box
 			$(".module.activity .activity_tab").removeClass("active");
