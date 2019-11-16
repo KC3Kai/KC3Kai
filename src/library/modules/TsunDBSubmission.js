@@ -1032,7 +1032,7 @@
 					if (Array.isArray(target)) { target = target[0]; }
 					let enemy = enemyList[target];
 					const {isLand, isSubmarine} = ship.estimateTargetShipType(enemy);
-					if (isLand || isSubmarine) { continue; }
+					if (isSubmarine) { continue; }
 					const time = attack.cutin >= 0 ? "day" : "yasen";
 					const cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 						: ship.estimateNightAttackType(enemy, true);
@@ -1069,6 +1069,7 @@
 					misc.acc = attack.acc;
 					misc.damage = attack.damage;
 					misc.contact = battleConds.airBattleId;
+					misc.isLand = isLand;
 					this.spAttack = Object.assign({}, template2, {
 						misc, cutin,
 						cutinequips: cutinEquips,
