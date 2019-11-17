@@ -780,6 +780,14 @@
 			})).execute();
 		});
 
+		$(".module.controls .btn_alert_toggle").on("click", function () {
+			if (critSound.paused) {
+				critSound.play();
+			} else {
+				critSound.pause();
+			}
+		});
+
 		// Reload subtitle quotes
 		$(".module.controls .btn_reload_quotes").on("click", function(){
 			// TODO request latest quotes.json for current lang from remote repo
