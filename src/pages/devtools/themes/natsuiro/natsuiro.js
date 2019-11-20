@@ -4678,7 +4678,7 @@
 							"screws": "remodelkit"
 						}[key] || key)] || 0;
 					$(`.remodel_slot_reqs .remodel_req_${key} span.certain`, itemBox)
-						.text(`(${certainValue})`).toggle(certainValue > 0);
+						.text(`(${certainValue})`).css("display", certainValue > 0 ? "inline" : "none");
 				}
 			});
 		}

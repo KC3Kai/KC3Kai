@@ -2,6 +2,83 @@
     "use strict";
 
     const eventConfigDefs = {
+        // Fall 2019 speculation
+        "2019fall-nishikuma": {
+            baseImgSrc: "/assets/img/ui/2019fall-nishikuma.png",
+            exportFileName: "2019 Fall - Nishikuma",
+            disclaimerHeightOffset: null,
+            fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            lvlFontSize: 41,
+            maxBoxWidth: 149,
+            shipPositions: [
+                // Battle of Balikpapan
+                {"x": 617+705.6*0, "y": 138+130.5* 0, "id":  56}, // Naka
+                {"x": 617+705.6*0, "y": 138+130.5* 1, "id":  44}, // Murasame
+                {"x": 617+705.6*0, "y": 138+130.5* 2, "id":  45}, // Yuudachi
+                {"x": 617+705.6*0, "y": 138+130.5* 3, "id": 405}, // Harusame
+                {"x": 617+705.6*0, "y": 138+130.5* 4, "id":  46}, // Samidare
+                {"x": 617+705.6*0, "y": 138+130.5* 5, "id": 413}, // Asagumo
+                {"x": 617+705.6*0, "y": 138+130.5* 6, "id": 583}, // Minegumo
+                {"x": 617+705.6*0, "y": 138+130.5* 7, "id": 458}, // Umikaze
+                {"x": 617+705.6*0, "y": 138+130.5* 8, "id": 459}, // Kawakaze
+
+                // Battle of Ambon
+                {"x": 617+705.6*1, "y": 138+130.5* 0, "id":  90}, // Souryuu
+                {"x": 617+705.6*1, "y": 138+130.5* 1, "id":  91}, // Hiryuu
+
+                // Battle of Badung Strait
+                {"x": 617+705.6*1, "y": 138+130.5* 3, "id":  95}, // Asashio
+                {"x": 617+705.6*1, "y": 138+130.5* 4, "id":  96}, // Ooshio
+                {"x": 617+705.6*1, "y": 138+130.5* 5, "id":  97}, // Michishio
+                {"x": 617+705.6*1, "y": 138+130.5* 6, "id":  98}, // Arashio
+
+                // Battle of the Java Sea
+                {"x": 617+705.6*2, "y": 138+130.5* 0, "id":  63}, // Nachi
+                {"x": 617+705.6*2, "y": 138+130.5* 1, "id":  65}, // Haguro
+                {"x": 617+705.6*2, "y": 138+130.5* 2, "id":  94}, // Sazanami
+                {"x": 617+705.6*2, "y": 138+130.5* 3, "id":  16}, // Ushio
+                {"x": 617+705.6*2, "y": 138+130.5* 4, "id": 457}, // Yamakaze
+                {"x": 617+705.6*2, "y": 138+130.5* 5, "id": 459}, // Kawakaze
+                {"x": 617+705.6*2, "y": 138+130.5* 6, "id":  56}, // Naka
+                {"x": 617+705.6*2, "y": 138+130.5* 7, "id":  44}, // Murasame
+                {"x": 617+705.6*2, "y": 138+130.5* 8, "id":  45}, // Yuudachi
+                {"x": 617+705.6*2, "y": 138+130.5* 9, "id": 405}, // Harusame
+                {"x": 617+705.6*2, "y": 138+130.5*10, "id":  46}, // Samidare
+                {"x": 617+705.6*2, "y": 138+130.5*11, "id": 413}, // Asagumo
+                {"x": 617+705.6*2, "y": 138+130.5*12, "id": 583}, // Minegumo
+
+                {"x": 617+705.6*3, "y": 138+130.5* 0, "id":  55}, // Jintsuu
+                {"x": 617+705.6*3, "y": 138+130.5* 1, "id":  20}, // Yukikaze
+                {"x": 617+705.6*3, "y": 138+130.5* 2, "id": 186}, // Tokitsukaze
+                {"x": 617+705.6*3, "y": 138+130.5* 3, "id": 190}, // Hatsukaze
+                {"x": 617+705.6*3, "y": 138+130.5* 4, "id": 181}, // Amatsukaze
+                {"x": 617+705.6*3, "y": 138+130.5* 5, "id":  76}, // Ryuujou
+                {"x": 617+705.6*3, "y": 138+130.5* 6, "id":  62}, // Myoukou
+                {"x": 617+705.6*3, "y": 138+130.5* 7, "id":  64}, // Ashigara
+                {"x": 617+705.6*3, "y": 138+130.5* 8, "id":  14}, // Shikinami
+                {"x": 617+705.6*3, "y": 138+130.5* 9, "id":  15}, // Akebono
+                {"x": 617+705.6*3, "y": 138+130.5*10, "id":  36}, // Ikazuchi
+                {"x": 617+705.6*3, "y": 138+130.5*11, "id":  37}, // Inazuma
+
+                // Battle of the Sunda Strait
+                {"x": 617+705.6*4, "y": 138+130.5* 0, "id":  53}, // Natori
+                {"x": 617+705.6*4, "y": 138+130.5* 1, "id": 472}, // Asakaze
+                {"x": 617+705.6*4, "y": 138+130.5* 2, "id": 473}, // Harukaze
+                {"x": 617+705.6*4, "y": 138+130.5* 3, "id": 475}, // Hatakaze
+                {"x": 617+705.6*4, "y": 138+130.5* 4, "id":  28}, // Satsuki
+                {"x": 617+705.6*4, "y": 138+130.5* 5, "id": 481}, // Minazuki
+                {"x": 617+705.6*4, "y": 138+130.5* 6, "id":  29}, // Fumizuki
+                {"x": 617+705.6*4, "y": 138+130.5* 7, "id":   6}, // Nagatsuki
+                {"x": 617+705.6*4, "y": 138+130.5* 8, "id":   9}, // Fubuki
+                {"x": 617+705.6*4, "y": 138+130.5* 9, "id":  10}, // Shirayuki
+                {"x": 617+705.6*4, "y": 138+130.5*10, "id":  32}, // Hatsuyuki
+                {"x": 617+705.6*4, "y": 138+130.5*11, "id":  33}, // Murakumo
+
+                {"x": 617+705.6*5, "y": 138+130.5* 0, "id":  70}, // Mogami
+                {"x": 617+705.6*5, "y": 138+130.5* 1, "id": 120}, // Mikuma
+                {"x": 617+705.6*5, "y": 138+130.5* 2, "id":  14}, // Shikinami
+            ],
+        },
         // Foreign ships
         "foreignShips": {
             baseImgSrc: "/assets/img/ui/foreign_ships.png",
@@ -292,7 +369,7 @@
         }
 
         exportList(configName) {
-            this.eventConfig = eventConfigDefs[configName] || eventConfigDefs.foreignShips;
+            this.eventConfig = eventConfigDefs[configName] || eventConfigDefs["2019fall-nishikuma"];
             this.baseImage.onload = this.fillShipLvls.bind(this);
             this.baseImage.src = this.eventConfig.baseImgSrc;
         }

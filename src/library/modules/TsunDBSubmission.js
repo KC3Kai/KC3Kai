@@ -669,8 +669,8 @@
 					// fp will be an Array[2]
 					fp = shipObj.fighterBounds(true);
 					// Prepare enemy shootdown submission, only use last nodes to prevent all submissions from being delayed
-					// Also enforce that both strikepoints are on same node
-					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1])) {
+					// Also enforce that both strikepoints are on same node and wave is not fighter sweep
+					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1]) && !!apiData.api_air_base_attack[1].api_stage2) {
 						this.delayedABSubmission = true;
 						const waveData = apiData.api_air_base_attack[1];
 						airBattle.enemyShotdown = {
@@ -1032,7 +1032,7 @@
 					if (Array.isArray(target)) { target = target[0]; }
 					let enemy = enemyList[target];
 					const {isLand, isSubmarine} = ship.estimateTargetShipType(enemy);
-					if (isLand || isSubmarine) { continue; }
+					if (isSubmarine) { continue; }
 					const time = attack.cutin >= 0 ? "day" : "yasen";
 					const cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 						: ship.estimateNightAttackType(enemy, true);
@@ -1069,6 +1069,7 @@
 					misc.acc = attack.acc;
 					misc.damage = attack.damage;
 					misc.contact = battleConds.airBattleId;
+					misc.isLand = isLand;
 					this.spAttack = Object.assign({}, template2, {
 						misc, cutin,
 						cutinequips: cutinEquips,
