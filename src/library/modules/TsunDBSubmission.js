@@ -669,8 +669,8 @@
 					// fp will be an Array[2]
 					fp = shipObj.fighterBounds(true);
 					// Prepare enemy shootdown submission, only use last nodes to prevent all submissions from being delayed
-					// Also enforce that both strikepoints are on same node
-					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1])) {
+					// Also enforce that both strikepoints are on same node and wave is not fighter sweep
+					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1]) && !!apiData.api_air_base_attack[1].api_stage2) {
 						this.delayedABSubmission = true;
 						const waveData = apiData.api_air_base_attack[1];
 						airBattle.enemyShotdown = {
