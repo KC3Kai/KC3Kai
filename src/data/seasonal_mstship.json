@@ -3291,5 +3291,29 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5411": {
+		"api_id": 5411,
+		"api_name": "ハロウィン夕立",
+		"api_yomi": "ゆうだち",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5412": {
+		"api_id": 5412,
+		"api_name": "ハロウィン夕立改二",
+		"api_yomi": "ゆうだち",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5413": {
+		"api_id": 5413,
+		"api_name": "ハロウィンGrecale",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
