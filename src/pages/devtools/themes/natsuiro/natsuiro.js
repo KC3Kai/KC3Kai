@@ -780,6 +780,14 @@
 			})).execute();
 		});
 
+		$(".module.controls .btn_alert_toggle").on("click", function () {
+			if (critSound.paused) {
+				critSound.play();
+			} else {
+				critSound.pause();
+			}
+		});
+
 		// Reload subtitle quotes
 		$(".module.controls .btn_reload_quotes").on("click", function(){
 			// TODO request latest quotes.json for current lang from remote repo
@@ -4670,7 +4678,7 @@
 							"screws": "remodelkit"
 						}[key] || key)] || 0;
 					$(`.remodel_slot_reqs .remodel_req_${key} span.certain`, itemBox)
-						.text(`(${certainValue})`).toggle(certainValue > 0);
+						.text(`(${certainValue})`).css("display", certainValue > 0 ? "inline" : "none");
 				}
 			});
 		}

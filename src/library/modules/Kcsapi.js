@@ -2546,6 +2546,15 @@ Previously known as "Reactor"
 				case 84: // exchange 20 beans + 40 devmats with a Ginga
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
+				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
+					//if(itemId === 93) PlayerManager.consumables.sardine -= 3;
+				break;
+				case 92: // exchange 7 sardine with materials [0, 1, 0, 1]
+					//if(itemId === 93) PlayerManager.consumables.sardine -= 7;
+				break;
+				case 93: // exchange 30 sardine with a Type 2 12cm Mortar Kai and 3 devmats
+					//if(itemId === 93) PlayerManager.consumables.sardine -= 30;
+				break;
 				default:
 					if(isNaN(exchangeType)){
 						// exchange 1 chocolate with resources [700, 700, 700, 1500]
