@@ -3286,10 +3286,10 @@
 	},
 	"5410": {
 		"api_id": 5410,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "法被対馬",
+		"api_yomi": "つしま",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5411": {
