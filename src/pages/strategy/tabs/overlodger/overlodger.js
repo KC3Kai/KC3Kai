@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
 	"use strict";
 	/*jshint: validthis true*/
 	
@@ -1003,7 +1003,9 @@
 										givenAry.push(newItem);
 										newTotalBuffer.push(newItem);
 									}
-									[].unshift.apply(self.totalBuffer,newTotalBuffer);
+									for (var n = newTotalBuffer.length; n > 0; n-=1000) {
+										newTotalBuffer.unshift.apply(self.totalBuffer, newTotalBuffer.slice(Math.max(0, n - 1000), n));
+									}
 								} catch (e) {
 									console.error("Fetching incremental data", e);
 								} finally {
