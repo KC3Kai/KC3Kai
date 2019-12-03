@@ -186,7 +186,8 @@
 				actualDamage: null,
 				expectedDamage: null,
 				isCritical: null,
-				amountOfNodes: null
+				amountOfNodes: null,
+				resupplyUsed: null
 			},
 			ship: {
 				id: null, 
@@ -563,6 +564,7 @@
 		
 		processEnemy: function(http, airRaidData) {
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
+			this.resupplyUsed = !!http.params.api_supply_flag;
 			const apiData = airRaidData || http.response.api_data;
 			this.enemyComp = {};
 			
@@ -885,6 +887,7 @@
 				if(a.isUnexpected || a.landFlag || (thisNode.isBoss() && KC3Meta.isEventWorld(this.currentMap[0]))) {
 					this.unexpectedDamage = Object.assign({}, a, template);
 					this.unexpectedDamage.damageInstance.amountOfNodes = this.data.nodeInfo.amountOfNodes;
+					this.unexpectedDamage.damageInstance.resupplyUsed = this.resupplyUsed;
 					delete this.unexpectedDamage.landFlag;
 					delete this.unexpectedDamage.isUnexpected;
 					this.sendData(this.unexpectedDamage, 'abnormal');
@@ -1454,6 +1457,7 @@
 			};
 			this.sortieSpecialAttack = null;
 			this.delayedABSubmission = null;
+			this.resupplyUsed = false;
 		},
 		
 		/**
@@ -1479,6 +1483,7 @@
 			this.data.maxMapHP = 0;
 			this.data.gaugeNum = 0;
 			this.data.gaugeType = 0;
+			this.resupplyUsed = false;
 		},
 
 		/**
