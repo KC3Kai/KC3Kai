@@ -1611,10 +1611,12 @@ KC3改 Ship Object
 		const type4RocketCount = this.countEquipment(348);
 		const type4RocketCdCount = this.countEquipment(349);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
+		const alDiveBomberCount = this.countEquipment(KC3GearManager.antiLandDiveBomberIds);
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
 		let mortarBonus = 1;
 		let t3Bonus = 1;
+		let apShellBonus = 1;
 		let seaplaneBonus = 1;
 		let alDiveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
@@ -1644,14 +1646,14 @@ KC3改 Ship Object
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
-					alDiveBomberBonus = this.hasEquipment(KC3GearManager.antiLandDiveBomberIds) ? 1.5 : 1;
+					alDiveBomberBonus = [1, 1.5, 1.5 * 2.0][alDiveBomberCount] || 3;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
 					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount + type4RocketCdCount] || 2.7;
 					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
-					const apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
+					apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive + shikonBonus +  submarineBonus,
@@ -1659,7 +1661,7 @@ KC3改 Ship Object
 							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
 				
 				case 3: // Isolated Island Princess
-					alDiveBomberBonus = this.hasEquipment(KC3GearManager.antiLandDiveBomberIds) ? 1.4 : 1;
+					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
@@ -1670,11 +1672,17 @@ KC3改 Ship Object
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
 				
 				case 5: // Summer Harbor Princess
-					// Multiplicative WG42 bonus
+					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
+					alDiveBomberBonus = [1, 1.3, 1.3 * 1.2][alDiveBomberCount] || 1.56;
 					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
-					t3Bonus = hasT3Shell ? 1.8 : 1;
-					// Missing: AP Shell modifier, SPB/SPF modifier
-					return [rocketsAdditive, wg42Bonus * t3Bonus * landingBonus];
+					t3Bonus = hasT3Shell ? 1.75 : 1;
+					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
+					mortarBonus = [1, 1.1, 1.1 * 1.15][mortarCount + mortarCdCount] || 1.265;
+					apShellBonus = this.hasEquipmentType(2, 19) ? 1.3 : 1;
+					
+					// Set additive modifier, multiply multiplicative modifiers
+					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
+						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -2515,13 +2523,12 @@ KC3改 Ship Object
 				"576": 1.1,  // Nelson Kai
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
-			// Unconfirmed, guessed from Nagato's
 			(modifierFor2ndShip ? {
 				"541": 1.4,  // Nagato Kai Ni
-				"275": 1.35, // Nagato Kai
+				"275": 1.4,  // Nagato Kai
 			} : {
 				"541": 1.2,  // Nagato Kai Ni
-				"275": 1.15, // Nagato Kai
+				"275": 1.2,  // Nagato Kai
 			}) : {};
 		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
