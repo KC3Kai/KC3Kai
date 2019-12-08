@@ -1360,11 +1360,11 @@
 						$("span",elm).text(matrOvr ? matrVal.shorten() : matrVal);
 					}).end()
 					.show(100);
-				console.debug.apply(console,["Done refreshing", k]);
+				//console.debug("Refreshing", k, "done");
 			}.bind(ctx));
 			
 			$(".filterRefresh",baseContext).trigger('enable-flag');
-			console.debug.apply(console, ["All items done refreshing"]);
+			//console.debug("All items refreshing done");
 		},
 		
 		resetBuffer :function(){
