@@ -475,7 +475,12 @@
 			this.data.nodeInfo.eventKind = apiData.api_event_kind;
 			this.data.nodeInfo.nodeColor = apiData.api_color_no;
 			this.data.nodeInfo.itemGet = apiData.api_itemget || [];
-			
+
+			if ((apiData.api_cell_flavor || {}).api_message) {
+				this.data.nodeInfo.flavorType = apiData.api_cell_flavor.api_type;
+				this.data.nodeInfo.flavorMessage = apiData.api_cell_flavor.api_message;
+			}
+
 			// Checks whether the fleet has hit a dead end or not
 			this.data.nextRoute = apiData.api_next;
 			
