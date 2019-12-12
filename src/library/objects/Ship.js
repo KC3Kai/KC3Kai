@@ -879,11 +879,12 @@ KC3改 Ship Object
 	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false, forExped = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
-		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
+		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
+		// For damage: PSVita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby
 		// But for expeditions, some types might be counted
 		// https://twitter.com/syoukuretin/status/1156734476870811648
 		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
-		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
