@@ -1848,9 +1848,10 @@ KC3改 Ship Object
 		const isNightBattle = nightSpecialAttackType.length > 0;
 		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
 		// No engagement and formation modifier except night starts / combined ASW attack
+		// Vanguard still applies for night battle
 		if(isNightBattle && !canNightAntisub) {
 			engagementModifier = 1;
-			formationModifier = 1;
+			formationModifier = formationId !== 6 ? 1 : formationModifier;
 		}
 		// Damage percent modifier
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
