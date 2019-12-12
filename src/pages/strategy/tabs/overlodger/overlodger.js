@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
 	"use strict";
 	/*jshint: validthis true*/
 	
@@ -1003,7 +1003,9 @@
 										givenAry.push(newItem);
 										newTotalBuffer.push(newItem);
 									}
-									[].unshift.apply(self.totalBuffer,newTotalBuffer);
+									for (var n = newTotalBuffer.length; n > 0; n-=1000) {
+										newTotalBuffer.unshift.apply(self.totalBuffer, newTotalBuffer.slice(Math.max(0, n - 1000), n));
+									}
 								} catch (e) {
 									console.error("Fetching incremental data", e);
 								} finally {
@@ -1265,7 +1267,7 @@
 		refreshList :function(){
 			var
 				self = this,
-				timeRangeAry = [lookupDays()];
+				timeRangeAry = lookupDays();
 			
 			$(".lodger-header",baseContext).text(
 				[1,2].reduce(function(str,key,ind){
@@ -1291,7 +1293,7 @@
 					matrSum   = [0,0,0,0,0,0,0,0],
 					rating    = {
 						box : $(".lodger-data." + k,".lodger-statistics"),
-						val : availData.length ? calculateRating.apply(null,timeRangeAry.concat(availData)) : NaN
+						val : availData.length ? calculateRating.call(null, timeRangeAry, availData) : NaN
 					};
 				
 				
@@ -1347,7 +1349,7 @@
 					.find('.materials .material').each(function(idx,elm){
 						var
 							matrVal = matrSum[idx],
-							matrScl = (dataScale[Object.keys(self.dataBuffer).indexOf( k )] || 0) / (ctx.dayScaleCoef( timeRangeAry[0] )),
+							matrScl = (dataScale[Object.keys(self.dataBuffer).indexOf( k )] || 0) / (ctx.dayScaleCoef( timeRangeAry )),
 							matrOvr = Math.abs(matrVal) > 99999,
 							matrExc = Math.abs(matrVal * matrScl && !matrOvr) > ctx.resourcePeak(idx),
 							matrHlf = Math.abs(matrVal * matrScl && !(matrOvr || matrExc)) > (ctx.resourcePeak(idx) * ctx.ratingHScore);
@@ -1358,9 +1360,11 @@
 						$("span",elm).text(matrOvr ? matrVal.shorten() : matrVal);
 					}).end()
 					.show(100);
+				//console.debug("Refreshing", k, "done");
 			}.bind(ctx));
 			
 			$(".filterRefresh",baseContext).trigger('enable-flag');
+			//console.debug("All items refreshing done");
 		},
 		
 		resetBuffer :function(){
@@ -1580,7 +1584,7 @@
 			}
 		}
 		this.flatBuffer = Object.freeze(allBuffer.sort(function(x,y){return x.hour - y.hour;}).slice(0));
-		this.dataRating = calculateRating.apply(null,[lookupDays()].concat(allBuffer));
+		this.dataRating = calculateRating.call(null, lookupDays(), allBuffer);
 		
 		return true;
 	}
@@ -1641,18 +1645,18 @@
 		return isFinite(result) ? result : 1;
 	}
 	
-	function calculateRating( /* bufferList */ ){
+	function calculateRating(daysIncluded, inputBufferList){
 		var
 			days = 1,
-			args = [].slice.apply(arguments);
-		if(typeof args[0] == 'number')
-			days = Math.max(1,args.shift());
+			bufferList = [].slice.apply(inputBufferList);
+		if(typeof daysIncluded == 'number')
+			days = Math.max(1,daysIncluded);
 		
 		// Check Emptiness
-		if(!args.length)
+		if(!bufferList.length)
 			return 5;
 		// Validate Parameters
-		[].forEach.call(args,function(bufferData){
+		[].forEach.call(bufferList, function(bufferData){
 			if(!(bufferData instanceof KC3LedgerBuffer))
 				throw new TypeError(["Given item is not a KC3Buffer class! (",String(bufferData),")"].join(''));
 		});
@@ -1660,7 +1664,7 @@
 		var dcCoef, dataSum, dataAvg, aRating, sRatio, dRating, pRatio, bResult;
 		
 		dcCoef  = CONST.dayScaleCoef(days);
-		dataSum = [].map.call(args,function(bufferData,index,array){
+		dataSum = [].map.call(bufferList, function(bufferData,index,array){
 			return bufferData.matr.map(function(rsc){
 				return rsc * bufferData.mult;
 			});
@@ -1670,7 +1674,7 @@
 			});
 		},Array.apply(null,{length:8}).map(function(){return 0;}));
 		
-		dataAvg = [].map.call(args,function(bufferData,index,array){
+		dataAvg = [].map.call(bufferList,function(bufferData,index,array){
 			return bufferData.bRating;
 		});
 		

@@ -1984,12 +1984,14 @@ Used by SortieManager
 		isRealBattle = true) {
 		const unexpectedList = [];
 		let sunkenShips = 0;
+		let shipCount = PlayerManager.fleets[fleetnum].ships.filter(id => id > 0).length;
 		predictedFleet.forEach(({ attacks }, position) => {
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
 			// SHIP SIMULATION FOR SORTIE HISTORY
 			if (!isRealBattle && KC3Node.debugPrediction() && this.nodeData.id) {
 				position = position + sunkenShips;
+				shipCount = this.nodeData["fleet" + (fleetnum + 1)].length;
 				let shipData = this.nodeData["fleet" + (fleetnum + 1)][position];
 				while(this.sunken && this.sunken[this.playerCombined ? fleetnum : 0].includes(shipData.mst_id)) {
 					sunkenShips++;
@@ -2216,6 +2218,7 @@ Used by SortieManager
 								slots: ship.slots,
 								stats: ship.nakedStats(),
 								position: position,
+								shipCount: shipCount,
 								formation: formation,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
 								combinedFleet: combinedFleetType,

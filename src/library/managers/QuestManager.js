@@ -572,7 +572,7 @@ Uses KC3Quest objects to play around with
 							fleet.countShip([
 								345, // Takanami Kai
 								359, // Okinami Kai
-								344, // Asashimo Kai
+								344, 578, // Asashimo Kai/K2
 							]) >= 1;
 					},
 				"888": // Bq7 Sortie New Mikawa Fleet
