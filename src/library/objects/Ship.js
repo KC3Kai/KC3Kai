@@ -1883,7 +1883,7 @@ KC3改 Ship Object
 		const ctype = this.master().api_ctype;
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
-		if(isThisLightCruiser) {
+		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139]);

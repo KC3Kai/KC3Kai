@@ -1593,7 +1593,7 @@ KC3改 Equipment Object
 			"359": {
 				count: 0,
 				byClass: {
-					// Leander Class
+					// Perth Class
 					"96": {
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
 					},
@@ -1638,7 +1638,85 @@ KC3改 Equipment Object
 					// Atlanta Class
 					"99": {
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+					}, 
+					// Colorado Class
+					"93": {
+						multiple: { "tyku": 1, "houk": 1 }
 					},
+					// Northampton Class
+					"95": "99",
+					// Agano Class
+					"41": {
+						multiple: { "tyku": -1, "houk": -2 }
+					},
+					// Ooyodo Class
+					"52": "41",
+					// De Ryuter Class
+					"98": "41",
+					// Katori Class
+					"56": {
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+					},
+					// Gotland Class
+					"89": "56",
+					// Kuma Class
+					"4": {
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+					},
+					// Nagara Class
+					"20": "4",
+					// Sendai Class
+					"16": "4",
+					// Tenryuu Class
+					"21": {
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+					},
+					// Yuubari Class
+					"34" : "21"
+				}
+			},
+			// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+			"363": {
+				count: 0,
+				byClass: {
+					// Atlanta Class
+					"99": {
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+					}, 
+					// Colorado Class
+					"93": {
+						multiple: { "tyku": 1, "houk": 1 }
+					},
+					// Northampton Class
+					"95": "99",
+					// Agano Class
+					"41": {
+						multiple: { "tyku": -1, "houk": -2 }
+					},
+					// Ooyodo Class
+					"52": "41",
+					// De Ryuter Class
+					"98": "41",
+					// Katori Class
+					"56": {
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+					},
+					// Gotland Class
+					"89": "56",
+					// Kuma Class
+					"4": {
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+					},
+					// Nagara Class
+					"20": "4",
+					// Sendai Class
+					"16": "4",
+					// Tenryuu Class
+					"21": {
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+					},
+					// Yuubari Class
+					"31" : "21"
 				}
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
