@@ -1535,6 +1535,190 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// 8inch Triple Gun Mount Mk.9
+			"356": {
+				count: 0,
+				byClass: {
+					// Mogami Class
+					"9": {
+						multiple: { "houg": 1 }
+					},
+					// Northampton Class
+					"95": {
+						multiple: { "houg": 2 }
+					}
+				}
+			},
+			// 8inch Triple Gun Mount Mk.9 mod.2
+			"357": {
+				count: 0,
+				byClass: {
+					// Mogami Class
+					"9": {
+						multiple: { "houg": 1 }
+					},
+					// Northampton Class
+					"95": {
+						multiple: { "houg": 2 }
+					}
+				}
+			},
+			// 5inch Single High-angle Gun Mount Battery
+			"358": {
+				count: 0,
+				byClass: {
+					// Northampton Class
+					"95": {
+						multiple: { "houg": 2, "tyku": 3, "houk": 3 }
+					},
+					// Following British and Americans: Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 }
+					},
+					// Ark Royal Class
+					"78": "67",
+					// Nelson Class
+					"88": "67",
+					// Iowa Class
+					"65": "67",
+					// Lexington Class
+					"69": "67",
+					// Casablanca Class
+					"83": "67",
+					// Essex Class
+					"84": "67"
+				}
+			},
+			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
+			"359": {
+				count: 0,
+				byClass: {
+					// Perth Class
+					"96": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+					},
+				}
+			},
+			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Model 1938
+			"360": {
+				count: 0,
+				byClass: {
+					// Agano Class
+					"41": {
+						multiple: { "houg": 1, "tyku": 1 }
+					},
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
+					},
+					// De Ryuter Class
+					"98": "89"
+				}
+			},
+			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Kai + Single Rapid Fire Gun Mount Mk.10 Kai Model 1938
+			"361": {
+				count: 0,
+				byClass: {
+					// Agano Class
+					"41": {
+						multiple: { "houg": 1, "tyku": 1 }
+					},
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
+					},
+					// De Ryuter Class
+					"98": "89"
+				}
+			},
+			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+			"362": {
+				count: 0,
+				byClass: {
+					// Atlanta Class
+					"99": {
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+					}, 
+					// Colorado Class
+					"93": {
+						multiple: { "tyku": 1, "houk": 1 }
+					},
+					// Northampton Class
+					"95": "99",
+					// Agano Class
+					"41": {
+						multiple: { "tyku": -1, "houk": -2 }
+					},
+					// Ooyodo Class
+					"52": "41",
+					// De Ryuter Class
+					"98": "41",
+					// Katori Class
+					"56": {
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+					},
+					// Gotland Class
+					"89": "56",
+					// Kuma Class
+					"4": {
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+					},
+					// Nagara Class
+					"20": "4",
+					// Sendai Class
+					"16": "4",
+					// Tenryuu Class
+					"21": {
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+					},
+					// Yuubari Class
+					"34" : "21"
+				}
+			},
+			// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+			"363": {
+				count: 0,
+				byClass: {
+					// Atlanta Class
+					"99": {
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+					}, 
+					// Colorado Class
+					"93": {
+						multiple: { "tyku": 1, "houk": 1 }
+					},
+					// Northampton Class
+					"95": "99",
+					// Agano Class
+					"41": {
+						multiple: { "tyku": -1, "houk": -2 }
+					},
+					// Ooyodo Class
+					"52": "41",
+					// De Ryuter Class
+					"98": "41",
+					// Katori Class
+					"56": {
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+					},
+					// Gotland Class
+					"89": "56",
+					// Kuma Class
+					"4": {
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+					},
+					// Nagara Class
+					"20": "4",
+					// Sendai Class
+					"16": "4",
+					// Tenryuu Class
+					"21": {
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+					},
+					// Yuubari Class
+					"31" : "21"
+				}
+			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,

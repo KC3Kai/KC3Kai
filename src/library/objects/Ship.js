@@ -879,11 +879,12 @@ KC3改 Ship Object
 	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false, forExped = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
-		// main gun, recon seaplane, seaplane fighter, radar, large flying boat, LBAA
+		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
+		// For damage: PSVita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby
 		// But for expeditions, some types might be counted
 		// https://twitter.com/syoukuretin/status/1156734476870811648
 		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
-		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 10, 12, 13, 41, 45, 47];
+		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
@@ -1847,9 +1848,10 @@ KC3改 Ship Object
 		const isNightBattle = nightSpecialAttackType.length > 0;
 		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
 		// No engagement and formation modifier except night starts / combined ASW attack
+		// Vanguard still applies for night battle
 		if(isNightBattle && !canNightAntisub) {
 			engagementModifier = 1;
-			formationModifier = 1;
+			formationModifier = formationId !== 6 ? 1 : formationModifier;
 		}
 		// Damage percent modifier
 		// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#m8aa1749
@@ -1883,7 +1885,7 @@ KC3改 Ship Object
 		const ctype = this.master().api_ctype;
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
-		if(isThisLightCruiser) {
+		if(isThisLightCruiser && warfareType !== "Antisub") {
 			// 14cm, 15.2cm
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139]);
