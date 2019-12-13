@@ -158,24 +158,20 @@
         }
 
         fillLockBoxes() {
+            const compareShips = (a, b) => a.sortId - b.sortId || b.level - a.level || a.id - b.id
+            this.shipList.sort(compareShips)
             this.shipList.forEach(ship => {
                 if (ship.sally !== 0) {
                     this.addShipToBox(ship.sally - 1, ship);
                 }
             });
-            this.lockPlans.forEach((shipIds, tag) => {
-                shipIds.forEach((shipId, idx) => {
-                    const found = !! this.shipList.find(ship => {
-                        if(ship.id === shipId && ship.sally === 0) {
-                            this.addShipToBox(tag, ship);
-                            return true;
-                        }
-                    });
-                    // clean ship id already sally or non-existed
-                    if(!found) delete shipIds[idx];
-                });
-                this.lockPlans[tag] = shipIds.filter(id => id !== undefined);
-            });
+            this.lockPlans = this.lockPlans.map((ids, tag) => {
+                if (!ids.length) return []
+                const ships = this.shipList.filter(ship => ids.includes(ship.id) && ship.sally === 0)
+                ships.sort(compareShips)
+                ships.forEach(ship => this.addShipToBox(tag, ship))
+                return ships.map(ship => ship.id)
+            })
             this.updateLockCount();
         }
 
