@@ -54,6 +54,7 @@
 			this.shipCache = [];
 			for(const key in KC3ShipManager.list){
 				const shipData = KC3ShipManager.list[key];
+				if (!KC3Master.ship(shipData.masterId)) continue
 				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
