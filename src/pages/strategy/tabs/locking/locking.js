@@ -158,20 +158,22 @@
         }
 
         fillLockBoxes() {
-            const compareShips = (a, b) => a.sortId - b.sortId || b.level - a.level || a.id - b.id
-            this.shipList.sort(compareShips)
+            const compareShips = (a, b) => a.sortId - b.sortId || b.level - a.level || a.id - b.id;
+            this.shipList.sort(compareShips);
             this.shipList.forEach(ship => {
                 if (ship.sally !== 0) {
                     this.addShipToBox(ship.sally - 1, ship);
                 }
             });
             this.lockPlans = this.lockPlans.map((ids, tag) => {
-                if (!ids.length) return []
-                const ships = this.shipList.filter(ship => ids.includes(ship.id) && ship.sally === 0)
-                ships.sort(compareShips)
-                ships.forEach(ship => this.addShipToBox(tag, ship))
-                return ships.map(ship => ship.id)
-            })
+                if (!ids.length) {
+                    return [];
+                }
+                const ships = this.shipList.filter(ship => ids.includes(ship.id) && ship.sally === 0);
+                ships.sort(compareShips);
+                ships.forEach(ship => this.addShipToBox(tag, ship));
+                return ships.map(ship => ship.id);
+            });
             this.updateLockCount();
         }
 

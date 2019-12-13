@@ -132,7 +132,9 @@
 			this.shipList.length = 0;
 			for(let key in KC3ShipManager.list) {
 				const shipObj = KC3ShipManager.list[key];
-				if (!KC3Master.ship(shipObj.masterId)) continue
+				if (!KC3Master.ship(shipObj.masterId)) {
+					continue;
+				}
 				if(initShipFilter(shipObj)) {
 					const shipData = mapShipDataCallback.call(this, shipObj);
 					this.shipList.push(shipData);
@@ -188,7 +190,7 @@
 		executeFilters(ship) {
 			// Exclude ship that not exist in master to avoid render error
 			if (!KC3Master.ship(ship.id)) {
-				return false
+				return false;
 			}
 			for (let key in this.filterDefinitions) {
 				var filter = this.filterDefinitions[key].testShip;

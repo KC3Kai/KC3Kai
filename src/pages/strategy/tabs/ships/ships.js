@@ -54,7 +54,9 @@
 			this.shipCache = [];
 			for(const key in KC3ShipManager.list){
 				const shipData = KC3ShipManager.list[key];
-				if (!KC3Master.ship(shipData.masterId)) continue
+				if (!KC3Master.ship(shipData.masterId)) {
+					continue;
+				}
 				const preparedData = this.prepareShipData(shipData);
 				this.shipCache.push(preparedData);
 			}
@@ -373,7 +375,7 @@
 			$(".ingame_page").remove();
 
 			let visibleShips = 0;
-			let [sumLevel, sumExp] = [0, 0]
+			let [sumLevel, sumExp] = [0, 0];
 
 			$(".ship_list .ship_item").each(function () {
 				if (!$(this).hasClass("hidden_by_name")) {
@@ -388,11 +390,11 @@
 					visibleShips++;
 
 					// Calculate statistic
-					const id = Number($('.ship_id', $(this)).text())
-					const ship = KC3ShipManager.get(id)
+					const id = Number($('.ship_id', $(this)).text());
+					const ship = KC3ShipManager.get(id);
 					if (ship.rosterId) {
-						sumLevel += ship.level
-						sumExp += ship.exp[0]
+						sumLevel += ship.level;
+						sumExp += ship.exp[0];
 					}
 				}
 			});
@@ -401,9 +403,9 @@
 			const localeOptions = {
 				minimumFractionDigits: 1,
 				maximumFractionDigits: 1
-			}
-			const getSumDisplay = n => n.toLocaleString()
-			const getAvarageDisplay = n => visibleShips ? (n / visibleShips).toLocaleString(undefined, localeOptions) : 0
+			};
+			const getSumDisplay = n => n.toLocaleString();
+			const getAvarageDisplay = n => visibleShips ? (n / visibleShips).toLocaleString(undefined, localeOptions) : 0;
 			// $(".fleet_stats_label .sum_ships").text(visibleShips);
 			$(".fleet_stats .fleet_stat .sum_level").text(getSumDisplay(sumLevel));
 			$(".fleet_stats .fleet_stat .average_level").text(getAvarageDisplay(sumLevel));
