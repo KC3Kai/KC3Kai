@@ -455,9 +455,21 @@
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
+		// general element corner shape presets
+		$(".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055").addClass(ConfigManager.pan_moon_element_shape);
+		// bar style presets
 		$(".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_style);
-		$(".admiral_lvbox,.admiral_lvbar,.ship_morale,.ship_hp_bar,.ship_hp_box,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_shape);
+		// bar corner shape presets
+		$(".bar_border_radius4,.bar_border_radius3").addClass(ConfigManager.pan_moon_bar_shape);
+		// bar color presets
 		$(".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_colors);
+		// control button corner shape presets
+		$(".conbut_radius_5,.conbut_radius_5500").addClass(ConfigManager.pan_moon_conbut_shape);		
+		// control button skew or tilt. images are usually untilted because of image quality issues
+		if(ConfigManager.pan_moon_conbut_skew == true) {
+			$(".skew_me,.unskew_me").addClass("skew_it");
+		}
+		
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
 		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
 		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
@@ -853,6 +865,15 @@
 				$(".module.controls .btn_mute img")
 					.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
 			})).execute();
+		});
+		
+		//Button to pause the Taiha Alert sound
+		$(".module.controls .btn_alert_toggle").on("click", function () {
+			if (critSound.paused) {
+				critSound.play();
+			} else {
+				critSound.pause();
+			}
 		});
 
 		// Reload subtitle quotes
@@ -4649,7 +4670,7 @@
 					equipBox.appendTo(".activity_gunfit .equipList");
 				});
 				const stats = equipBonus.stats;
-				const statsBox = $("<div></div>").addClass("statsBox");
+				const statsBox = $("<div></div>").addClass("statsBox border_radius_5").addClass(ConfigManager.pan_moon_element_shape);
 				const statsTermKeyMap = {
 					"fp": "ShipFire",
 					"tp": "ShipTorpedo",
