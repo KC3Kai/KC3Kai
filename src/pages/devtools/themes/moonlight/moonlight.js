@@ -2360,8 +2360,13 @@
 									return;
 								}
 								
-								$(".base_plane_name", planeBox).text(itemObj.name())
-									.attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
+								if (itemObj.stars > 0) {
+									$(".base_plane_name", planeBox).text("+" + itemObj.stars + " " + itemObj.name());
+								}
+								else {
+									$(".base_plane_name", planeBox).text(itemObj.name());
+								}
+								$(".base_plane_name", planeBox).attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
 								planeNames += itemObj.name() + "\n";
 
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
@@ -2393,11 +2398,6 @@
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
-								
-								if (itemObj.stars > 0) {
-									$(".base_plane_star", planeBox).text(itemObj.stars);
-									$(".base_plane_star", planeBox).show();
-								}
 								
 								if (itemObj.ace > -1) {
 									const eqChevSrc = "/assets/img/client/achev/"+itemObj.ace+".png";

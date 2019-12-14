@@ -2992,6 +2992,11 @@ ABYSS FLEET
 	height:14px;
 	margin:1px 1px 0px 0px;
 }
+.t .quest.complete .quest_color {
+	width:15px;
+	margin:1px 1px 0px 0px;
+}
+
 .quest_text {
 	width:110px;
 	height:16px;
@@ -4480,6 +4485,10 @@ ABYSS FLEET
 	color:#00FF00;
 	text-align:right;
 }
+.h .module.fleet .sship .ship_hp_text {
+	position:relative;
+	top:-1px;
+}
 .v .module.fleet .sship .ship_hp_text {
 	position:relative;
 	top:-2px;
@@ -4519,6 +4528,9 @@ ABYSS FLEET
 	line-height:11px;
 	text-align:center;
 	display:none;
+}
+.h .module.fleet .sship .ship_hp_pred_value {
+	top:-13px;
 }
 .v .module.fleet .sship .ship_hp_pred_value {
 	top:-14px;
@@ -5502,22 +5514,6 @@ ABYSS FLEET
 	margin:-60% -50%;
 	-webkit-mask-image:-webkit-linear-gradient(right, rgba(34,34,34,1) 30%,rgba(34,34,34,0) 100%);
 }
-.base_plane_star {
-	width:12px;
-	height:12px;
-	position:relative;
-	float:left;
-	margin:10px 0px 0px -24px;
-	border-radius:6px;
-	font-size:10px;
-	line-height:12px;
-	text-align:center;
-	overflow:hidden;
-	color:#ff0;
-	background:#45a9a5;
-	pointer-events:none;
-	display:none;
-}
 .base_plane_icon {
 	width:20px;
 	line-height:12px;
@@ -5644,9 +5640,9 @@ ABYSS FLEET
 	left:5px; top:165px;
 }
 .h .module.quests {
-	width:197px;
+	width:196px;
 	height:150px;
-	left:5px; top:421px;
+	left:6px; top:421px;
 	/*overflow:scroll;*/
 }
 ::-webkit-scrollbar-corner {
@@ -5862,7 +5858,7 @@ ABYSS FLEET
 .t .module.quests {
 	width:186px;
 	height:125px;
-	left:195px; top:2px;
+	left:197px; top:2px;
 	overflow:hidden;
 }
 .t .module.quests .quest {
