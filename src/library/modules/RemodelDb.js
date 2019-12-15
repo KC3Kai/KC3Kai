@@ -92,6 +92,8 @@
                     return 80;
                 case 520: // Janus
                     return 90;
+                case 597: // Atlanta
+                    return 100;
                 default:
                     return (steel < 4500) ? 0
                          : (steel < 5500) ? 10
@@ -137,6 +139,8 @@
                 case 596: // Fletcher
                 case 520: // Janus
                     return 10;
+                case 597: // Atlanta
+                    return 20;
                 case 594: // Akagi Kai Ni
                 case 599: // Akagi Kai Ni E
                     return 30;
