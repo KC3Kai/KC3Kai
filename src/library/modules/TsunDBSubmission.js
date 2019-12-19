@@ -1072,8 +1072,11 @@
 						misc = ship.nightSpAttackBaseRate();
 					}
 					if (Object.keys(misc).length === 0) { continue; }
+					misc.formation = [thisNode.fformation, thisNode.eformation];
 					misc.isCombined = isCombined;
 					misc.enemy = enemy;
+					misc.eposition = target;
+					misc.ehp = attack.ehp;
 					misc.acc = attack.acc;
 					misc.damage = attack.damage;
 					misc.contact = battleConds.airBattleId;
