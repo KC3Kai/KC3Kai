@@ -196,6 +196,10 @@ AntiAir: anti-air related calculations
 	var is5inchSingleMountKaiWithGfcs = masterIdEq(308);
 	// 5inch Single Gun Mount Mk.30 Kai
 	var is5inchSingleMountKai = masterIdEq(313);
+	// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+	var is5inchTwinDualMountCD = masterIdEq(362);
+	// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+	var is5inchTwinDualMountCDWithGfcs = masterIdEq(363);
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -525,6 +529,7 @@ AntiAir: anti-air related calculations
 		gotlandKaiIcon = 579,
 		johnstonIcon = 562,
 		fletcherIcon = 596,
+		atlantaIcon = 597,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
@@ -556,6 +561,7 @@ AntiAir: anti-air related calculations
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
 	var isFletcherClass = ctypeIdEq(91);
+	var isAtlantaClass = ctypeIdEq(99);
 
 
 	// turns a "shipObj" into the list of her equipments
@@ -1002,6 +1008,35 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKai, 2 ))
+		)
+	);
+	declareAACI(
+		39, 10, 1.7,
+		[atlantaIcon, haMountKaiRadar, haMountIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is5inchTwinDualMountCDWithGfcs ),
+				hasSome( is5inchTwinDualMountCD ))
+		)
+	);
+	declareAACI(
+		40, 10, 1.7,
+		[atlantaIcon, haMountIcon, haMountIcon, radarIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCD, 2 ),
+				hasSome( isGfcsRadar ))
+		)
+	);
+	declareAACI(
+		41, 9, 1.65,
+		[atlantaIcon, haMountIcon, haMountIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCD, 2 ))
 		)
 	);
 
