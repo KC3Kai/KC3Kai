@@ -536,14 +536,15 @@ AntiAir: anti-air related calculations
 		aaGunIcon = 15,
 		lcMainGunIcon = 3,
 		type3ShellIcon = 12,
-		// Special combined icons for Build-in HA / CDMG
+		// Special combined icons for Build-in HA / CDMG / etc
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
 		haMountNbifdIcon = "16-30", // HA without AAFD
 		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
 		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
 		haMountKaiAmg = "16+15",    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
-		haMountKaiRadar = "16+11";  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
+		haMountKaiRadar = "16+11",  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37 / GFCS Mk.37 + next one
+		haMountCdIcon = "16+16";  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
@@ -1010,9 +1011,11 @@ AntiAir: anti-air related calculations
 				hasAtLeast( is5inchSingleMountKai, 2 ))
 		)
 	);
+
+	// Atlanta-class
 	declareAACI(
 		39, 10, 1.7,
-		[atlantaIcon, haMountKaiRadar, haMountIcon],
+		[atlantaIcon, haMountKaiRadar, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
@@ -1022,7 +1025,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		40, 10, 1.7,
-		[atlantaIcon, haMountIcon, haMountIcon, radarIcon],
+		[atlantaIcon, haMountCdIcon, haMountCdIcon, radarIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
@@ -1032,7 +1035,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		41, 9, 1.65,
-		[atlantaIcon, haMountIcon, haMountIcon],
+		[atlantaIcon, haMountCdIcon, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
