@@ -196,6 +196,10 @@ AntiAir: anti-air related calculations
 	var is5inchSingleMountKaiWithGfcs = masterIdEq(308);
 	// 5inch Single Gun Mount Mk.30 Kai
 	var is5inchSingleMountKai = masterIdEq(313);
+	// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+	var is5inchTwinDualMountCD = masterIdEq(362);
+	// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+	var is5inchTwinDualMountCDWithGfcs = masterIdEq(363);
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -525,20 +529,22 @@ AntiAir: anti-air related calculations
 		gotlandKaiIcon = 579,
 		johnstonIcon = 562,
 		fletcherIcon = 596,
+		atlantaIcon = 597,
 		haMountIcon = 16,
 		radarIcon = 11,
 		aaFdIcon = 30,
 		aaGunIcon = 15,
 		lcMainGunIcon = 3,
 		type3ShellIcon = 12,
-		// Special combined icons for Build-in HA / CDMG
+		// Special combined icons for Build-in HA / CDMG / etc
 		biHaMountIcon = "16+30",    // HA plus AAFD
 		cdmgIcon = "15+15",         // AAGun double
 		haMountNbifdIcon = "16-30", // HA without AAFD
 		aaGunNotCdIcon = "15-15",   // Non-CD AA Machine Gun
 		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
 		haMountKaiAmg = "16+15",    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
-		haMountKaiRadar = "16+11";  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
+		haMountKaiRadar = "16+11",  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37 / GFCS Mk.37 + next one
+		haMountCdIcon = "16+16";  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
@@ -556,6 +562,7 @@ AntiAir: anti-air related calculations
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
 	var isFletcherClass = ctypeIdEq(91);
+	var isAtlantaClass = ctypeIdEq(99);
 
 
 	// turns a "shipObj" into the list of her equipments
@@ -1002,6 +1009,37 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( is5inchSingleMountKai, 2 ))
+		)
+	);
+
+	// Atlanta-class
+	declareAACI(
+		39, 10, 1.7,
+		[atlantaIcon, haMountKaiRadar, haMountCdIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is5inchTwinDualMountCDWithGfcs ),
+				hasSome( is5inchTwinDualMountCD ))
+		)
+	);
+	declareAACI(
+		40, 10, 1.7,
+		[atlantaIcon, haMountCdIcon, haMountCdIcon, radarIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCD, 2 ),
+				hasSome( isGfcsRadar ))
+		)
+	);
+	declareAACI(
+		41, 9, 1.65,
+		[atlantaIcon, haMountCdIcon, haMountCdIcon],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCD, 2 ))
 		)
 	);
 

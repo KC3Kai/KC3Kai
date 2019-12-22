@@ -1964,11 +1964,12 @@ KC3改 Ship Object
 			airstrikeConcatModifier = contactPlaneAcc >= 3 ? 1.2 :
 				contactPlaneAcc >= 2 ? 1.17 : 1.12;
 		}
+		const isNightBattle = daySpecialAttackType.length === 0;
 		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
-		if(isTargetShipTypeMatched) {
+		if(isTargetShipTypeMatched && !isNightBattle) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
 			const secondaryCnt = this.countEquipmentType(2, 4);
