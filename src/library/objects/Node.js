@@ -2147,6 +2147,21 @@ Used by SortieManager
 						// Artillery spotting will keep re-rolling sp attacks
 						daySpecialAttackType = KC3Ship.specialAttackTypeDay(cutin);
 					}
+					// CVCI modifier correction for cutin type
+					if (cutin === 7) {
+						if (ciequip.length === 2) { daySpecialAttackType[3] = 1.15; }
+						else {
+							let torpedoBomberCnt = 0, 
+								diveBomberCnt = 0;
+							ciequip.forEach(slotitem => {
+								const master = KC3Master.slotitem(slotitem);
+								if (!master) { return; }
+								if (master.api_type[2] === 7) { diveBomberCnt++; }
+								else if (master.api_type[2] === 8) { torpedoBomberCnt++; }
+							});
+							if (torpedoBomberCnt === 1 && diveBomberCnt === 2) { daySpecialAttackType[3] = 1.2; }
+						}
+					}
 				}
 				
 				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet || 0;
