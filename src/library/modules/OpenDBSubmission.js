@@ -104,22 +104,20 @@
 			this.submitData("ship_build.php", createShipData);
 			this.state = null;
 		},
-		processCreateItem: function( requestObj ) {
-			this.cleanup();
-			var params = requestObj.params;
-			var response = requestObj.response.api_data;
-			var createItemData = {
-				apiver: 2,
-				flagship: PlayerManager.fleets[0].ship(0).masterId,
-				fuel: params.api_item1,
-				ammo: params.api_item2,
-				steel: params.api_item3,
-				bauxite: params.api_item4,
-				result: (response.api_slot_item === undefined) ? 0 : response.api_slot_item.api_slotitem_id
-			};
-
-			// console.debug( "[createitem] prepared: " + JSON.stringify( createItemData ));
-			this.submitData("equip_build.php", createItemData);
+		processCreateItem: function(http) {
+			const postBody = http.params;
+			const body = http.response.api_data;
+			body.api_get_items.forEach(e => {
+				this.submitData('equip_build.php', {
+					apiver: 3,
+					flagship: PlayerManager.fleets[0].ship(0).masterId,
+					fuel: postBody.api_item1,
+					ammo: postBody.api_item2,
+					steel: postBody.api_item3,
+					bauxite: postBody.api_item4,
+					result: e.api_slotitem_id === -1 ? 0 : e.api_slotitem_id,
+				});
+			});
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
