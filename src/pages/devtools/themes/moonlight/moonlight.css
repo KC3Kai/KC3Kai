@@ -6094,6 +6094,7 @@ ABYSS FLEET
 	margin:0px 0px 0px 2px;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value {
+	display:inline-block;
 	width:72px;
 	height:16px;
 	line-height:15px;
@@ -6113,6 +6114,9 @@ ABYSS FLEET
 }
 .ui-tooltip-content .ship_face_tooltip .aatooltipstart {
 	margin:5px 2px 1px 0px;
+}
+.ui-tooltip-content .ship_face_tooltip .stat_value span {
+	display:inline;
 }
 .ui-tooltip-content .ship_face_tooltip .stat_value .equip {
 	color:#8496A2;
