@@ -8296,7 +8296,7 @@ var SHIPDATA = {
 		FP: 150,
 		TP: 145,
 		AA: 240,
-		AR: 155,
+		AR: 255,
 		EV: 50,
 		ASW: 0,
 		LOS: 70,
