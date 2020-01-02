@@ -429,7 +429,7 @@
 			if(showAllGraphs){
 				$(".tab_mstship .shipInfo .cgswf").hide();
 				const cgList = $('<div class="cglist"></div>').appendTo(".tab_mstship .shipInfo .basic");
-				// To avoid loading seasonal image types not existed,
+				// To avoid loading seasonal image types not existed (no card and damaged basically),
 				// see `ShipLoader.prototype.getSpecificAlbumImageLoadList`
 				const isSpecificAlbumTypes = [
 					5026, 5027, 5256, 5269, 5275, 5276, 5277, 5278, 5279, 5280,
@@ -437,8 +437,13 @@
 					5291, 5292, 5293, 5294, 5295, 5296, 5297, 5298, 5299, 5300,
 					5301, 5302, 5303, 5304, 5305, 5306, 5357,
 				].includes(ship_id);
+				// No card but has damaged image
+				const isSpButHasTaiha = [5269, 5357].includes(ship_id);
 				const availableTypes = KC3Master.isSeasonalShip(ship_id) ?
-					isSpecificAlbumTypes ? ['character_full', 'character_up'] : [
+					isSpecificAlbumTypes ? isSpButHasTaiha ? [
+						'character_full', 'character_full_dmg',
+						'character_up', 'character_up_dmg'
+					] : ['character_full', 'character_up'] : [
 						'card', 'character_full', 'character_full_dmg',
 						'character_up', 'character_up_dmg'
 					] : KC3Master.isAbyssalShip(ship_id) ?
@@ -467,7 +472,9 @@
 					$(this).unbind("error");
 					// Hide optional debuffed abyssal boss alt lines,
 					// since damaged boss state can be only determined via battle API `api_xal01` property.
-					if($(this).attr("title").endsWith("_d")) $(this).hide();
+					// And _dmg images are not available since boss 1846
+					const typeTip = $(this).attr("title");
+					if(typeTip.endsWith("_d") || typeTip.endsWith("_dmg")) $(this).hide();
 				};
 				availableTypes.forEach(type => {
 					// Old suffix for debuffed boss CG used still, see `ShipLoader.hasai` & `hSuffix()`
