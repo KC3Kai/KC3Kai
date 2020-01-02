@@ -3834,6 +3834,7 @@ KC3改 Ship Object
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
+		$(".stat_value span", tooltipBox).css("display", "inline");
 		$(".ship_full_name .ship_masterId", tooltipBox).text("[{0}]".format(shipObj.masterId));
 		$(".ship_full_name span.value", tooltipBox).text(shipObj.name());
 		$(".ship_full_name .ship_yomi", tooltipBox).text(ConfigManager.info_ship_class_name ?
