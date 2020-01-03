@@ -779,9 +779,10 @@
 
 		processSanma: function(http) {
 			const apiData = http.response.api_data;
+			if(apiData.api_get_useitem == undefined) return;
 			let data = {
 				uid: PlayerManager.hq.id,
-				item: (apiData.api_get_useitem !== undefined) ? apiData.api_get_useitem.api_useitem_id : -1,
+				item: apiData.api_get_useitem.api_useitem_id,
 				hqlvl: this.data.hqLvl, 
 				map: this.data.map,
 				node: this.data.node,
@@ -1072,8 +1073,11 @@
 						misc = ship.nightSpAttackBaseRate();
 					}
 					if (Object.keys(misc).length === 0) { continue; }
+					misc.formation = [thisNode.fformation, thisNode.eformation];
 					misc.isCombined = isCombined;
 					misc.enemy = enemy;
+					misc.eposition = target;
+					misc.ehp = attack.ehp;
 					misc.acc = attack.acc;
 					misc.damage = attack.damage;
 					misc.contact = battleConds.airBattleId;

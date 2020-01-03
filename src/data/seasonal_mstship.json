@@ -3315,5 +3315,37 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5414": {
+		"api_id": 5414,
+		"api_name": "Xmas択捉",
+		"api_yomi": "えとろふ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5415": {
+		"api_id": 5415,
+		"api_name": "クリスマスDe Ruyter",
+		"api_yomi": "デ・ロイテル",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5416": {
+		"api_id": 5416,
+		"api_name": "Xmas深雪",
+		"api_yomi": "みゆき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5417": {
+		"api_id": 5417,
+		"api_name": "Xmas親潮",
+		"api_yomi": "おやしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

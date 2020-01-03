@@ -968,7 +968,7 @@
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
-		$(".module.activity .battle_night img").removeClass("hover");
+		$(".module.activity .battle_night img").removeClass("hover").off("dblclick");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
@@ -2064,15 +2064,23 @@
 					switch(Number(PlayerManager.combinedFleet)){
 						case 1:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_carrier.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_carrier.png");
 							break;
 						case 2:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_surface.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_surface.png");
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_transport.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_transport.png");
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_single.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_none.png");
 							break;
 					}
 					$(".module.status .status_butai .status_text").attr("title",
@@ -2466,7 +2474,7 @@
 							$(".encounter_formation img", encBox)
 								.attr("src", KC3Meta.formationIcon(encounter.form))
 								.addClass("hover")
-								.on("click", function(e) {
+								.on("dblclick", function(e) {
 									const simData = KC3SortieManager.prepareSimData(edata);
 									if(simData) openSimulatorWindow(simData, e.altKey);
 								});
@@ -2860,8 +2868,8 @@
 						escort: thisNode.eshipsEscort
 					};
 					$(".module.activity .battle_night img")
-						.addClass("hover").off("click")
-						.on("click", function (e) {
+						.addClass("hover").off("dblclick")
+						.on("dblclick", function (e) {
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});

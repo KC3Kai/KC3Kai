@@ -2403,6 +2403,10 @@ KC3改 Equipment Object
 					"87": "65",
 					// Fletcher Class
 					"91": "65",
+					// Northampton Class
+					"95": "65",
+					// Atlanta Class
+					"99": "65"
 				},
 			},
 			// SG Radar (Initial Model)
@@ -2419,6 +2423,10 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
+					// Northampton Class
+					"95": "65",
+					// Atlanta Class
+					"99": "65",
 					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
