@@ -872,7 +872,7 @@
 			if (critSound.paused) {
 				$(".module.controls .btn_alert_toggle img")
 					.attr("src", "../../../../assets/img/ui/alertfairy.png");
-				NatsuiroListeners.Fleet()
+				NatsuiroListeners.Fleet();
 			} else if (ConfigManager.alert_taiha_sound) {
 				critSound.pause();
 				$(".module.controls .btn_alert_toggle img")
