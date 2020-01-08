@@ -176,9 +176,12 @@ Retrieves when needed to apply on components
 				pan_outline_bright_moon: "rgba(0, 190, 190, 0.5)",
 				moon_small_font: false,
 				moon_lighting_effect: true,
+				pan_moon_element_shape: "shape_round",
 				pan_moon_bar_style: "fluid",
 				pan_moon_bar_shape: "shape_round",
 				pan_moon_bar_colors: "clrdim",
+				pan_moon_conbut_shape: "shape_round",
+				pan_moon_conbut_skew: true,
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
