@@ -38,6 +38,7 @@
 			
 			this.ships = [];
 			this.gears = [];
+			this.heldGearRosterIds = [];
 			this.instances = {};
 			this.priorities = this.getPriorities();
 			
@@ -46,7 +47,7 @@
 				if(self.ships.indexOf(ThisShip.masterId) === -1){
 					self.ships.push(ThisShip.masterId);
 					// Doesn't matter to hold some -1 in array
-					[].push.apply(self.heldGearRosterIds, ThisShip.items);
+					self.heldGearRosterIds.push(...ThisShip.items);
 				}
 			});
 			
