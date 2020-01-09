@@ -780,7 +780,7 @@
 			})).execute();
 		});
 
-		if (!ConfigManager.alert_taiha) {
+		if (!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound) {
 			$(".module.controls .btn_alert_toggle").hide();
 		}
 
