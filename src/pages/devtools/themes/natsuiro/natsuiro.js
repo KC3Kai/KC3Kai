@@ -780,6 +780,10 @@
 			})).execute();
 		});
 
+		if (!ConfigManager.alert_taiha) {
+			$(".module.controls .btn_alert_toggle").hide();
+		}
+
 		$(".module.controls .btn_alert_toggle").on("click", function () {
 			if (critSound.paused) {
 				critSound.play();
