@@ -986,9 +986,9 @@ AntiAir: anti-air related calculations
 		[johnstonIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAllOf(
-				hasSome( is5inchSingleMountKaiWithGfcs ),
-				predAnyOf(
+			predAnyOf(
+				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
+				predAllOf(
 					hasSome( is5inchSingleMountKai ),
 					hasSome( is5inchSingleMountKaiWithGfcs ))
 			)
