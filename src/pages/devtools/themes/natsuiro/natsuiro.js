@@ -786,8 +786,8 @@
 
 		$(".module.controls .btn_alert_toggle").on("click", function () {
 			if (critSound.paused) {
-				critSound.play();
-			} else {
+				NatsuiroListeners.Fleet();
+			} else if (ConfigManager.alert_taiha_sound) {
 				critSound.pause();
 			}
 		});
