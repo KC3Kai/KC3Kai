@@ -870,9 +870,13 @@
 		//Button to pause the Taiha Alert sound
 		$(".module.controls .btn_alert_toggle").on("click", function () {
 			if (critSound.paused) {
-				critSound.play();
-			} else {
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairy.png");
+				NatsuiroListeners.Fleet();
+			} else if (ConfigManager.alert_taiha_sound) {
 				critSound.pause();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairytea.png");
 			}
 		});
 
@@ -1636,7 +1640,6 @@
 				&& !KC3SortieManager.isPvP()
 				// check states of fleet members
 				&& PlayerManager.fleets.filter((obj, i) => {
-				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
@@ -1691,8 +1694,9 @@
 				(new RMsg("service", "taihaAlertStart", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairy.png");
 			} else {
-				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
 				critSound.pause();
@@ -1700,6 +1704,8 @@
 				(new RMsg("service", "taihaAlertStop", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairytea.png");
 			}
 
 			// Close opened tooltips to avoid buggy double popup
@@ -2127,7 +2133,6 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
@@ -2205,7 +2210,6 @@
 					}
 				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
@@ -2216,7 +2220,6 @@
 					);
 				// Condition Green
 				}else{
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")
@@ -2230,15 +2233,23 @@
 					switch(Number(PlayerManager.combinedFleet)){
 						case 1:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_carrier.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo2.png");
 							break;
 						case 2:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_surface.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_surface2.png");
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_transport.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_transport2.png");
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_single.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/fleet_single2.png");
 							break;
 					}
 					$(".module.status .status_butai .status_text").attr("title",
