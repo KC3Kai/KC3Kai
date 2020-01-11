@@ -986,9 +986,12 @@ AntiAir: anti-air related calculations
 		[johnstonIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAllOf(
-				hasSome( is5inchSingleMountKaiWithGfcs ),
-				hasSome( is5inchSingleMountKai ))
+			predAnyOf(
+				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
+				predAllOf(
+					hasSome( is5inchSingleMountKai ),
+					hasSome( is5inchSingleMountKaiWithGfcs ))
+			)
 		)
 	);
 	declareAACI(
@@ -998,7 +1001,13 @@ AntiAir: anti-air related calculations
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
-				hasAtLeast( is5inchSingleMountKai, 2 ),
+				predAnyOf(
+					hasAtLeast( is5inchSingleMountKai, 2 ),
+					hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
+					predAllOf(
+						hasSome( is5inchSingleMountKai ),
+						hasSome( is5inchSingleMountKaiWithGfcs ))
+				),
 				hasSome( isGfcsRadar ))
 		)
 	);
@@ -1007,8 +1016,13 @@ AntiAir: anti-air related calculations
 		[johnstonIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAllOf(
-				hasAtLeast( is5inchSingleMountKai, 2 ))
+			predAnyOf(
+				hasAtLeast( is5inchSingleMountKai, 2 ),
+				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
+				predAllOf(
+					hasSome( is5inchSingleMountKai ),
+					hasSome( is5inchSingleMountKaiWithGfcs ))
+			)
 		)
 	);
 
@@ -1029,7 +1043,12 @@ AntiAir: anti-air related calculations
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
-				hasAtLeast( is5inchTwinDualMountCD, 2 ),
+				predAnyOf(
+					hasAtLeast( is5inchTwinDualMountCD, 2 ),
+					predAllOf(
+						hasSome( is5inchTwinDualMountCD ),
+						hasSome( is5inchTwinDualMountCDWithGfcs ))
+				),
 				hasSome( isGfcsRadar ))
 		)
 	);
@@ -1038,8 +1057,12 @@ AntiAir: anti-air related calculations
 		[atlantaIcon, haMountCdIcon, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
-			predAllOf(
-				hasAtLeast( is5inchTwinDualMountCD, 2 ))
+			predAnyOf(
+				hasAtLeast( is5inchTwinDualMountCD, 2 ),
+				predAllOf(
+					hasSome( is5inchTwinDualMountCD ),
+					hasSome( is5inchTwinDualMountCDWithGfcs ))
+			)
 		)
 	);
 
