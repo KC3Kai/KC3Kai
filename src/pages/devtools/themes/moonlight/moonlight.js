@@ -867,7 +867,7 @@
 			})).execute();
 		});
 		
-		//Button to pause the Taiha Alert sound
+		// Button to pause the Taiha Alert sound
 		$(".module.controls .btn_alert_toggle").on("click", function () {
 			if (critSound.paused) {
 				$(".module.controls .btn_alert_toggle img")

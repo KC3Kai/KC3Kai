@@ -505,6 +505,8 @@
 				if($(".ship_face_tooltip").data("statsIconset") != ConfigManager.info_stats_iconset){
 					updateShipTooltipStatsIconset();
 				}
+				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
+					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 			}
 		});
 
@@ -780,17 +782,15 @@
 			})).execute();
 		});
 
-		if (!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound) {
-			$(".module.controls .btn_alert_toggle").hide();
-		}
-
-		$(".module.controls .btn_alert_toggle").on("click", function () {
-			if (critSound.paused) {
+		// Taiha Alert toggle button
+		$(".module.controls .btn_alert_toggle").on("click", function (){
+			if(critSound.paused) {
+				if($(this).hasClass("disabled")) return;
 				NatsuiroListeners.Fleet();
-			} else if (ConfigManager.alert_taiha_sound) {
+			} else {
 				critSound.pause();
 			}
-		});
+		}).toggleClass("disabled", !ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 
 		// Reload subtitle quotes
 		$(".module.controls .btn_reload_quotes").on("click", function(){
