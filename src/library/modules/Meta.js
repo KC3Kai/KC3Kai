@@ -118,6 +118,7 @@ Provides access to data on built-in JSON files
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2
+			293, // Yuubari Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 601, 1496],

@@ -561,8 +561,9 @@ AntiAir: anti-air related calculations
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
-	var isFletcherClass = ctypeIdEq(91);
-	var isAtlantaClass = ctypeIdEq(99);
+	var isFletcherClass = ctypeIdEq( 91 );
+	var isAtlantaClass = ctypeIdEq( 99 );
+	var isYuubariK2 = masterIdEq( 622 );
 
 
 	// turns a "shipObj" into the list of her equipments
@@ -811,11 +812,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Kasumi K2B
+	// Kasumi K2B, Yuubari K2
 	declareAACI(
 		16, 4, 1.4,
 		[kasumiK2BIcon, haMountIcon, aaGunIcon, radarIcon],
-		predAllOf(isKasumiK2B),
+		predAnyOf(isKasumiK2B, isYuubariK2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
