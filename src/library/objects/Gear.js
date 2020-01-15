@@ -1407,9 +1407,20 @@ KC3改 Equipment Object
 				count: 0,
 				byClass: {
 					// Yuubari Class
-					"34": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
-					},
+					"34": [
+						{
+							multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+						},
+						// Yuubari K2 (all forms)
+						{
+							remodel: 2,
+							multiple: { "houg": 2, "tais": 1, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 2, "houk": 2 },
+							},
+						}
+					],
 					// Katori Class
 					"56": {
 						multiple: { "houg": 2, "houk": 1 },
@@ -1597,6 +1608,17 @@ KC3改 Equipment Object
 					"96": {
 						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
 					},
+					// Yuubari Class
+					"34": [
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+						// Yuubari K2 (all forms)
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "tyku": 1 },
+						}
+					],
 				}
 			},
 			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Model 1938
@@ -1716,7 +1738,7 @@ KC3改 Equipment Object
 						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
 					},
 					// Yuubari Class
-					"31" : "21"
+					"34" : "21"
 				}
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
@@ -1770,6 +1792,11 @@ KC3改 Equipment Object
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
 					},
+					// Yuubari K2 (all forms)
+					"34": {
+						remodel: 2,
+						multiple: { "houg": 2, "raig": 4, "houk": 4 },
+					}
 				},
 			},
 			// 53cm Bow (Oxygen) Torpedo Mount
@@ -1903,6 +1930,32 @@ KC3改 Equipment Object
 					multiple: { "houg": 1, "raig": 3, "souk": 1 },
 				},
 			},
+			// Type D Kai Kouhyouteki
+			"364": {
+				count: 0,
+				byShip: [
+					{
+						// Yuubari K2T
+						ids: [623],
+						multiple: { "houg": 1, "raig": 4, "houk": -2 },
+					},
+					{
+						// Kitakami K2
+						ids: [119],
+						multiple: { "raig": 2, "houk": -2 },
+					},
+					{
+						// Ooi K2, Nisshin A
+						ids: [118, 586],
+						multiple: { "raig": 1, "houk": -2 },
+					},
+					{
+						// All other ships
+						excludes: [118, 119, 586, 623],
+						multiple: { "houg": -1, "houk": -7 },
+					},
+				],
+			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
 				count: 0,
@@ -1990,6 +2043,21 @@ KC3改 Equipment Object
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "houk": 2 },
 						},
+					},
+					{
+						// Yuubari Kai Ni (all forms)
+						ids: [622, 623, 624],
+						multiple: { "houg": 1, "tyku": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},					
+						],
 					},
 				],
 			},
@@ -2556,6 +2624,50 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Type 4 Passive Sonar
+			"149": {
+				count: 0,
+				byShip: [
+					{
+						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2
+						ids: [622, 623,  141, 	   160, 	488],
+						multiple: { "houk": 3, "tais": 1 },
+					},
+					{
+						// Yuubari K2D
+						ids: [624],
+						multiple: { "houk": 5, "tais": 3 },
+					},
+				],
+			},
+			// Type 3 Depth Charge Projector (Concentrated Deployment)
+			"287": {
+				count: 0,
+				byShip: [
+					{
+						// Yuubari K2D, Isuzu K2, Naka K2, Yura K2
+						ids: [624,      141, 	  160, 	   488],
+						multiple: { "houk": 1, "tais": 1 },
+					},
+				],
+			},
+			// Prototype 15cm 9-tube ASW Rocket Launcher
+			"288": {
+				count: 0,
+				byShip: [
+					{
+						// Isuzu K2, Naka K2, Yura K2
+						ids: [141,	 160,	  488],
+						multiple: { "houk": 1, "tais": 2 },
+					},
+					{
+						// Yuubari K2D
+						ids: [624],
+						multiple: { "houk": 2, "tais": 3 },
+					},
+				],
+			},
+			
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 			"268": {
