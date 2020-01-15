@@ -6,7 +6,9 @@
 	background:#33A459;
 	color:#fff;
 }
-.tab_shipquests .ship_item .questIcon.type2 {
+.tab_shipquests .ship_item .questIcon.type2,
+.tab_shipquests .ship_item .questIcon.type8,
+.tab_shipquests .ship_item .questIcon.type9 {
 	background:#D75048;
 	color:#fff;
 }
@@ -30,15 +32,13 @@
 	background:#AE76FA;
 	color:#fff;
 }
-.tab_shipquests .ship_item .questIcon.type8 {
-	background:#D75048;
-	color:#fff;
-}
 .tab_shipquests .ship_item.even .questIcon.type1 {
 	background:#33A459;
 	color:#fff;
 }
-.tab_shipquests .ship_item.even .questIcon.type2 {
+.tab_shipquests .ship_item.even .questIcon.type2,
+.tab_shipquests .ship_item.even .questIcon.type8,
+.tab_shipquests .ship_item.even .questIcon.type9 {
 	background:#D75048;
 	color:#fff;
 }
@@ -62,15 +62,13 @@
 	background:#AE76FA;
 	color:#fff;
 }
-.tab_shipquests .ship_item.even .questIcon.type8 {
-	background:#D75048;
-	color:#fff;
-}
 .tab_shipquests .ship_item.odd .questIcon.type1 {
 	background:#33A459;
 	color:#fff;
 }
-.tab_shipquests .ship_item.odd .questIcon.type2 {
+.tab_shipquests .ship_item.odd .questIcon.type2,
+.tab_shipquests .ship_item.odd .questIcon.type8,
+.tab_shipquests .ship_item.odd .questIcon.type9 {
 	background:#D75048;
 	color:#fff;
 }
@@ -92,10 +90,6 @@
 }
 .tab_shipquests .ship_item.odd .questIcon.type7 {
 	background:#AE76FA;
-	color:#fff;
-}
-.tab_shipquests .ship_item.odd .questIcon.type8 {
-	background:#D75048;
 	color:#fff;
 }
 .tab_shipquests .ship_item .questIcon.completed,

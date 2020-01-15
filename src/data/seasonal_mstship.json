@@ -3347,5 +3347,45 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5418": {
+		"api_id": 5418,
+		"api_name": "正月風雲",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5419": {
+		"api_id": 5419,
+		"api_name": "正月赤城",
+		"api_yomi": "あかぎ",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5420": {
+		"api_id": 5420,
+		"api_name": "正月Samuel B.Roberts",
+		"api_yomi": "サミュエル・B・ロバーツ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5421": {
+		"api_id": 5421,
+		"api_name": "正月Samuel B.Roberts改",
+		"api_yomi": "サミュエル・B・ロバーツ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5422": {
+		"api_id": 5422,
+		"api_name": "正月比叡改二",
+		"api_yomi": "ひえい",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }

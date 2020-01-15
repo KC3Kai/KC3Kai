@@ -3049,20 +3049,18 @@ ABYSS FLEET
 .module.controls {
 }
 .module.controls .control {
-	height:30px;
+	height:26px;
 	float:left;
 	color:#c0c0c0;
+	text-align:center;
+	line-height:24px;
 }
 .module.controls .fleet_num {
-	height:26px;
 	width:20px;
 	background:rgba(50,50,50,0.4);
-	text-align:center;
 	margin:0px 0px 3px 0px;
 	font-size:18px;
 	font-weight:bold;
-	line-height:24px;
-	text-align:center;
 }
 .t .module.controls .fleet_num {
 	width:26px;
@@ -3079,10 +3077,8 @@ ABYSS FLEET
 	background:rgba(155,0,0,1);
 }
 .module.controls .fleet_rengo {
-	height:26px;
-	width:40px;
+	width:38px;
 	background:rgba(50,50,50,0.4);
-	text-align:center;
 	margin:0px 0px 3px 0px;
 	font-size:16px;
 }
@@ -3101,14 +3097,11 @@ ABYSS FLEET
 	-webkit-backface-visibility: none;
 }
 .module.controls .fleet_lbas {
-	height:26px;
 	width:30px;
 	background:rgba(50,50,50,0.4);
-	text-align:center;
 	margin:0px 0px 3px 0px;
 	font-size:16px;
 	font-weight:bold;
-	text-align:center;
 }
 .t .module.controls .fleet_lbas {
 	width:26px;
@@ -3138,6 +3131,7 @@ ABYSS FLEET
 	margin-top:-2px;
 }
 .module.controls .scrollable {
+	width:100px;
 	height:38px;
 	margin:-10px 0px 0px 0px;
 	font-size:0px;
@@ -3147,26 +3141,40 @@ ABYSS FLEET
 	/*overflow-x:hidden;
 	overflow-y:hidden;*/
 }
-.v .module.controls .scrollable {
+.v .module.controls .scrollable,
+.c .module.controls .scrollable {
 	margin:0px 5px 3px 0px;
 	position:absolute;
 	float:left;
 	left:-681px;
 	top:257px;
+	width:150px;
+	white-space:normal;
+}
+.v .module.controls .scrollable {
+	left:-665px;
+	top:257px;
 }
 .c .module.controls .scrollable {
-	margin:0px 5px 3px 0px;
-	position:absolute;
-	float:left;
-	left:-546px;
+	left:-531px;
 	top:257px;
 }
 .t .module.controls .scrollable {
 	margin:0px;
 	position:absolute;
 	float:left;
-	left:-345px;
+	left:-329px;
 	top:-286px;
+	overflow-x:hidden;
+	overflow-y:hidden;
+	width:150px;
+}
+.module.controls .control_new_line {
+	display:inline;
+}
+.v .module.controls .control_new_line,
+.c .module.controls .control_new_line {
+	display:block;
 }
 .module.controls .scroll_btn {
 	width:0px;
@@ -3174,10 +3182,13 @@ ABYSS FLEET
 	margin:2px 5px 3px 0px;
 	display:none;
 }
+.t .module.controls .scroll_btn {
+	display:block;
+}
 .module.controls .scroll_left {
 	border-top:13px solid transparent;
 	border-bottom:13px solid transparent;
-	border-right:15px solid #666;
+	border-right:12px solid #004664;
 }
 .v .module.controls .scroll_left {
 	position:absolute;
@@ -3185,10 +3196,16 @@ ABYSS FLEET
 	left:-675px;
 	top:257px;
 }
+.t .module.controls .scroll_left {
+	position:absolute;
+	float:left;
+	left:-343px;
+	top:-288px;
+}
 .module.controls .scroll_right {
 	border-top:13px solid transparent;
 	border-bottom:13px solid transparent;
-	border-left:15px solid #666;
+	border-left:12px solid #004664;
 }
 .v .module.controls .scroll_right {
 	position:absolute;
@@ -3196,24 +3213,33 @@ ABYSS FLEET
 	left:-519px;
 	top:257px;
 }
+.t .module.controls .scroll_right {
+	position:absolute;
+	float:left;
+	left:-177px;
+	top:-288px;
+}
 .module.controls .scroll_left.disabled {
-	border-right:15px solid #424;
+	border-right:12px solid #012;
+	display:none;
 }
 .module.controls .scroll_right.disabled {
-	border-left:15px solid #424;
+	border-left:12px solid #012;
+	display:none;
 }
 .module.controls .control_btn {
 	float:right;
 	line-height:29px;
-	height:26px;
 	width:30px;
 	margin:0px 0px 0px 0px;
 	background:rgba(0,70,100,0.9);
-	text-align:center;
 	overflow:visible;
 	padding:1px;
 	display:inline-block;
 	float:initial;
+}
+.h .module.controls .control_btn {
+	width:28px;
 }
 .t .module.controls .control_btn {
 	-webkit-transform: none;
@@ -3222,6 +3248,14 @@ ABYSS FLEET
 .module.controls .control_btn img {
 	width:26px;
 	margin:-6px 0px 0px 0px;
+}
+.h .module.controls .control_btn img {
+	width:25px;
+	margin:-7px 0px 0px -1px;
+}
+.h .module.controls .control_btn.btn_export img {
+	width:25px;
+	margin:-5px 0px 0px -1px;
 }
 .t .module.controls .control_btn img {
 	-webkit-transform: none;
@@ -3239,13 +3273,17 @@ ABYSS FLEET
 	filter:invert(80%);
 	-webkit-filter:invert(80%);
 }
-.module.controls .btn_alert_toggle {
-	display:none;
-}
 .module.controls .control_btn.btn_reload_quotes img,
 .module.controls .control_btn.btn_reload_quests img {
 	width:24px;
 	margin:-7px 0px 0px 0px;
+}
+.module.controls .control_btn.btn_alert_toggle img {
+	width:24px;
+	margin:-7px 10px 0px 0px;
+}
+.h .module.controls .control_btn.btn_alert_toggle img {
+	width:23px;
 }
 .module.controls .btn_export img {
 	width:27px;
@@ -5670,9 +5708,6 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
-.h .module.controls .scrollable {
-	width:100px;
-}
 .h .module.fleet {
 	left:200px; top:41px;
 }
@@ -5724,9 +5759,6 @@ ABYSS FLEET
 	width: 150px;
 	left:691px; top:4px;
 	float:left;
-}
-.v .module.controls .scrollable {
-	width:130px;
 }
 .v .module.status {
 	left:688px; top:198px;
@@ -5793,9 +5825,6 @@ ABYSS FLEET
 	width: 150px;
 	left:554px; top:4px;
 	float:left;
-}
-.c .module.controls .scrollable {
-	width:130px;
 }
 .c .module.status {
 	left:551px; top:198px;
@@ -5874,9 +5903,6 @@ ABYSS FLEET
 	width:30px;
 	height:350px;
 	left:352px; top:293px;
-}
-.t .module.controls .scrollable {
-	width:100px;
 }
 .t .module.fleet {
 	left:1px; top:293px;
