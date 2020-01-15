@@ -919,14 +919,12 @@
 					return true;
 				};
 				const checkByShipBonusDef = (bonusDef, shipId, stype, gearType2) => (
-					(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
-					(bonusDef.stypes && bonusDef.stypes.includes(stype)
-						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
-					(bonusDef.excludes && !bonusDef.bonusDef.includes(shipId)) ||
-					(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)
-						&& KC3Master.equip_type(stype, shipId).includes(gearType2)) ||
-					(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes
-						&& KC3Master.equip_type(stype, shipId).includes(gearType2))
+					KC3Master.equip_type(stype, shipId).includes(gearType2) &&
+					((bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+					(bonusDef.stypes && bonusDef.stypes.includes(stype)) ||
+					(bonusDef.excludes && !bonusDef.excludes.includes(shipId)) ||
+					(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)) ||
+					(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes))
 				);
 				const checkByShipBonusRequirements = (byShip, shipId, stype, gearType2) =>
 					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, stype, gearType2));

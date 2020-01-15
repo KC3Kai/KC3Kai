@@ -415,7 +415,7 @@ known IDs see QuestManager
 			"#996600", //6
 			"#AE76FA", //7
 			"#D75048", //8
-			"#555555", //9
+			"#D75048", //9
 		][(this.id+"").substring(0,1)];
 	};
 
