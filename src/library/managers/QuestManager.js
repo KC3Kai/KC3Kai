@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894],
+				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -591,6 +591,21 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType([7, 11, 18]) >= 1;
+					},
+				"903": // Bq13 Sortie Yuubari K2+ as flagship, 2 of 6th Torpedo Squad, or Yura K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						// Yuubari Kai Ni any variant as flagship
+						return RemodelDb.remodelGroup(115).indexOf(fleet.ship(0).masterId) >= 2 && ((
+							fleet.countShip(1)   + // Mutsuki any remodel
+							fleet.countShip(2)   + // Kisaragi any remodel
+							fleet.countShip(30)  + // Kikuzuki any remodel
+							fleet.countShip(31)  + // Mochizuki any remodel
+							fleet.countShip(164) + // Yayoi any remodel
+							fleet.countShip(165)   // Uzuki any remodel
+						) >= 2 || (
+							fleet.countShip([488]) >= 1 // Yura K2
+						));
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
