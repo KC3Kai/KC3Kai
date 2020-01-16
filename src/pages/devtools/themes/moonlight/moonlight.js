@@ -455,9 +455,21 @@
 
 		// Panel customizations: panel opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
+		// general element corner shape presets
+		$(".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055").addClass(ConfigManager.pan_moon_element_shape);
+		// bar style presets
 		$(".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_style);
-		$(".admiral_lvbox,.admiral_lvbar,.ship_morale,.ship_hp_bar,.ship_hp_box,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_shape);
+		// bar corner shape presets
+		$(".bar_border_radius4,.bar_border_radius3").addClass(ConfigManager.pan_moon_bar_shape);
+		// bar color presets
 		$(".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_colors);
+		// control button corner shape presets
+		$(".conbut_radius_5,.conbut_radius_5500").addClass(ConfigManager.pan_moon_conbut_shape);		
+		// control button skew or tilt. images are usually untilted because of image quality issues
+		if(ConfigManager.pan_moon_conbut_skew == true) {
+			$(".skew_me,.unskew_me").addClass("skew_it");
+		}
+		
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
 		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
 		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
@@ -854,6 +866,19 @@
 					.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
 			})).execute();
 		});
+		
+		// Button to pause the Taiha Alert sound
+		$(".module.controls .btn_alert_toggle").on("click", function () {
+			if (critSound.paused) {
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairy.png");
+				NatsuiroListeners.Fleet();
+			} else if (ConfigManager.alert_taiha_sound) {
+				critSound.pause();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairytea.png");
+			}
+		});
 
 		// Reload subtitle quotes
 		$(".module.controls .btn_reload_quotes").on("click", function(){
@@ -1058,7 +1083,7 @@
 		$(".module.activity .battle_fish").attr("title", KC3Meta.term("BattleItemDrop")).lazyInitTooltip();
 		$(".module.activity .battle_aaci img").attr("src", "../../../../assets/img/ui/dark_aaci.png");
 		$(".module.activity .battle_aaci").attr("title", KC3Meta.term("BattleAntiAirCutIn")).lazyInitTooltip();
-		$(".module.activity .battle_night img").removeClass("hover");
+		$(".module.activity .battle_night img").removeClass("hover").off("dblclick");
 		$(".module.activity .battle_night img").attr("src", "../../../../assets/img/ui/dark_yasen.png");
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
@@ -1615,7 +1640,6 @@
 				&& !KC3SortieManager.isPvP()
 				// check states of fleet members
 				&& PlayerManager.fleets.filter((obj, i) => {
-				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 						const cf = PlayerManager.combinedFleet,   // Marks combined flag
 							fs = KC3SortieManager.fleetSent,      // Which fleet that requires to focus out
 							so = KC3SortieManager.isOnSortie();   // Is it on sortie or not? if not, focus all fleets.
@@ -1670,8 +1694,9 @@
 				(new RMsg("service", "taihaAlertStart", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairy.png");
 			} else {
-				//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 				if(critAnim){ clearInterval(critAnim); }
 				$("#critical").hide();
 				critSound.pause();
@@ -1679,6 +1704,8 @@
 				(new RMsg("service", "taihaAlertStop", {
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
+				$(".module.controls .btn_alert_toggle img")
+					.attr("src", "../../../../assets/img/ui/alertfairytea.png");
 			}
 
 			// Close opened tooltips to avoid buggy double popup
@@ -2106,7 +2133,6 @@
 					) // if not flagship only for combined fleet
 					&& !KC3SortieManager.isPvP() // if PvP, no taiha alert
 				){
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text").text( KC3Meta.term(
 						(FleetSummary.badState[2] ? "PanelFSTaiha" : "PanelHasTaiha")
 					) );
@@ -2184,7 +2210,6 @@
 					}
 				// Flagship Chuuha or worse for Combined Fleet only
 				}else if (FleetSummary.badState[3]) {
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 1));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
@@ -2195,7 +2220,6 @@
 					);
 				// Condition Green
 				}else{
-					//$(".module.Partner .partner img").attr("src", KC3Ship.shipIcon(partnerID, 2, 2));
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")
@@ -2209,15 +2233,23 @@
 					switch(Number(PlayerManager.combinedFleet)){
 						case 1:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedCarrier") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_carrier.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo2.png");
 							break;
 						case 2:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedSurface") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_surface.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_surface2.png");
 							break;
 						case 3:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedTransport") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_combined_transport.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/rengo_transport2.png");
 							break;
 						default:
 							$(".module.status .status_butai .status_text").text( KC3Meta.term("CombinedNone") );
+							$(".module.status .status_butai .status_icon img").attr("src", "/assets/img/ui/fleet_single.png");
+							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/fleet_single2.png");
 							break;
 					}
 					$(".module.status .status_butai .status_text").attr("title",
@@ -2339,8 +2371,13 @@
 									return;
 								}
 								
-								$(".base_plane_name", planeBox).text(itemObj.name())
-									.attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
+								if (itemObj.stars > 0) {
+									$(".base_plane_name", planeBox).text("+" + itemObj.stars + " " + itemObj.name());
+								}
+								else {
+									$(".base_plane_name", planeBox).text(itemObj.name());
+								}
+								$(".base_plane_name", planeBox).attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
 								planeNames += itemObj.name() + "\n";
 
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
@@ -2372,11 +2409,6 @@
 									.lazyInitTooltip()
 									.data("masterId", itemObj.masterId)
 									.on("dblclick", self.gearDoubleClickFunction);
-								
-								if (itemObj.stars > 0) {
-									$(".base_plane_star", planeBox).text(itemObj.stars);
-									$(".base_plane_star", planeBox).show();
-								}
 								
 								if (itemObj.ace > -1) {
 									const eqChevSrc = "/assets/img/client/achev/"+itemObj.ace+".png";
@@ -2612,7 +2644,7 @@
 							$(".encounter_formation img", encBox)
 								.attr("src", KC3Meta.formationIcon(encounter.form))
 								.addClass("hover")
-								.on("click", function(e) {
+								.on("dblclick", function(e) {
 									const simData = KC3SortieManager.prepareSimData(edata);
 									if(simData) openSimulatorWindow(simData, e.altKey);
 								});
@@ -3006,8 +3038,8 @@
 						escort: thisNode.eshipsEscort
 					};
 					$(".module.activity .battle_night img")
-						.addClass("hover").off("click")
-						.on("click", function (e) {
+						.addClass("hover").off("dblclick")
+						.on("dblclick", function (e) {
 							const simData = KC3SortieManager.prepareSimData(edata, thisNode.predictedFleetsDay, true);
 							if(simData) openSimulatorWindow(simData, e.altKey);
 						});
@@ -4649,7 +4681,7 @@
 					equipBox.appendTo(".activity_gunfit .equipList");
 				});
 				const stats = equipBonus.stats;
-				const statsBox = $("<div></div>").addClass("statsBox");
+				const statsBox = $("<div></div>").addClass("statsBox border_radius_5").addClass(ConfigManager.pan_moon_element_shape);
 				const statsTermKeyMap = {
 					"fp": "ShipFire",
 					"tp": "ShipTorpedo",

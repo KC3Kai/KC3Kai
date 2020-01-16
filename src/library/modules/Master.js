@@ -332,6 +332,10 @@ Saves and loads significant data for future use
 		 *     either hard-coded the exception conndition in following codes.
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;

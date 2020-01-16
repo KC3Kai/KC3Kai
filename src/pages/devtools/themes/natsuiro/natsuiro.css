@@ -3002,6 +3002,9 @@ ABYSS FLEET
 	display:inline-block;
 	float:initial;
 }
+.module.controls .control_btn.disabled {
+	background:#333333;
+}
 .module.controls .control_btn img {
 	width:34px;
 	height:24px;

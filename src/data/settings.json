@@ -1253,9 +1253,21 @@
 		"section": "Moonlight",
 		"contents" : [
 			{
+				"id" : "pan_moon_element_shape",
+				"name" : "SettingsPanelElementShape",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "shape_rect", "SettingsPanelBarRect" ],
+						[ "shape_round", "SettingsPanelBarRound" ],
+						[ "shape_rounder", "SettingsPanelBarRounder" ]
+					]
+				}
+			},
+			{
 				"id" : "pan_moon_bar_style",
 				"name" : "SettingsPanelBarStyle",
-				"type" : "radio",
+				"type" : "dropdown",
 				"options" : {
 					"choices" : [
 						[ "fluid", "SettingsPanelBarFluid" ],
@@ -1268,7 +1280,7 @@
 			{
 				"id" : "pan_moon_bar_shape",
 				"name" : "SettingsPanelBarShape",
-				"type" : "radio",
+				"type" : "dropdown",
 				"options" : {
 					"choices" : [
 						[ "shape_rect", "SettingsPanelBarRect" ],
@@ -1280,7 +1292,7 @@
 			{
 				"id" : "pan_moon_bar_colors",
 				"name" : "SettingsPanelBarColors",
-				"type" : "radio",
+				"type" : "dropdown",
 				"options" : {
 					"choices" : [
 						[ "clrmoonlight", "Moonlight" ],
@@ -1288,6 +1300,24 @@
 						[ "clrdim", "SettingsPanelBarDim" ]
 					]
 				}
+			},
+			{
+				"id" : "pan_moon_conbut_shape",
+				"name" : "SettingsPanelConButShape",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "shape_rect", "SettingsPanelBarRect" ],
+						[ "shape_round", "SettingsPanelBarRound" ],
+						[ "shape_rounder", "SettingsPanelBarRounder" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_conbut_skew",
+				"name" : "SettingsPanelConButSkew",
+				"type" : "check",
+				"options" : {}
 			},
 			{
 				"id" : "pan_box_bcolor_moon",

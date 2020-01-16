@@ -2358,6 +2358,8 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_kaisou/powerup":function(params, response, headers){
 			const consumedShipIds = params.api_id_items.split("%2C");
+			// New flag for in-game button: Remodeling (Post unequip) since 2020-01-14
+			const scrapGearFlag = params.api_slot_dest_flag == 1;
 			const consumedShips = consumedShipIds.map(id => KC3ShipManager.get(id));
 			
 			// To trigger panel activity notification, and TsunDB data submission
@@ -2402,9 +2404,9 @@ Previously known as "Reactor"
 				consumedMasterLevels: consumedShips.map(s => s.level)
 			});
 			
-			// Remove consumed ships and their equipment
+			// Remove consumed ships and (optional) their equipment
 			$.each(consumedShipIds, function(_, rosterId){
-				KC3ShipManager.remove(rosterId);
+				KC3ShipManager.remove(rosterId, !scrapGearFlag);
 				KC3Network.trigger("ShipSlots");
 				KC3Network.trigger("GearSlots");
 			});
