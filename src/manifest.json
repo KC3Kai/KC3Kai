@@ -24,8 +24,6 @@
 		"activeTab",
 		"notifications",
 		"cookies",
-		"webRequest",
-		"webRequestBlocking",
 		"<all_urls>"
 	],
 	"background": {
