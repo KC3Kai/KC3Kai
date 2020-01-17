@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894],
+				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -490,13 +490,13 @@ Uses KC3Quest objects to play around with
 				"280": // Bm8 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([3, 4, 7, 21]) >= 1
+						return fleet.hasShipType([3, 4, 7, 21])
 							&& fleet.countShipType([1, 2]) >= 3;
 					},
 				"284": // Bq11 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([3, 4, 7, 21]) >= 1
+						return fleet.hasShipType([3, 4, 7, 21])
 							&& fleet.countShipType([1, 2]) >= 3;
 					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
@@ -555,7 +555,7 @@ Uses KC3Quest objects to play around with
 				"862": // Bq4 Sortie 1 AV, 2 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(16) >= 1
+						return fleet.hasShipType(16)
 							&& fleet.countShipType(3) >= 2;
 					},
 				"872": // Bq10 Sortie 1st fleet
@@ -563,17 +563,17 @@ Uses KC3Quest objects to play around with
 				"873": // Bq5 Sortie 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(3) >= 1;
+						return fleet.hasShipType(3);
 					},
 				"875": // Bq6 Sortie DesDiv 31
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShip(543) >= 1 && // Naganami K2
-							fleet.countShip([
+						return fleet.hasShip([543]) // Naganami K2
+							&& fleet.hasShip([
 								345, // Takanami Kai
 								359, // Okinami Kai
 								344, 578, // Asashimo Kai/K2
-							]) >= 1;
+							]);
 					},
 				"888": // Bq7 Sortie New Mikawa Fleet
 					({fleetSent = KC3SortieManager.fleetSent}) => {
@@ -590,7 +590,22 @@ Uses KC3Quest objects to play around with
 				"894": // Bq9 Sortie 1 CV(L/B)
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([7, 11, 18]) >= 1;
+						return fleet.hasShipType([7, 11, 18]);
+					},
+				"903": // Bq13 Sortie Yuubari K2+ as flagship, 2 of 6th Torpedo Squad, or Yura K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						// Yuubari Kai Ni any variant as flagship
+						return RemodelDb.remodelGroup(115).indexOf(fleet.ship(0).masterId) >= 2 && ((
+							fleet.countShip(1)   + // Mutsuki any remodel
+							fleet.countShip(2)   + // Kisaragi any remodel
+							fleet.countShip(30)  + // Kikuzuki any remodel
+							fleet.countShip(31)  + // Mochizuki any remodel
+							fleet.countShip(164) + // Yayoi any remodel
+							fleet.countShip(165)   // Uzuki any remodel
+						) >= 2 || (
+							fleet.hasShip([488])   // Yura K2
+						));
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
