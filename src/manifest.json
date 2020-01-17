@@ -21,10 +21,8 @@
 		"downloads",
 		"downloads.shelf",
 		"tabs",
-		"activeTab",
 		"notifications",
-		"cookies",
-		"<all_urls>"
+		"cookies"
 	],
 	"background": {
 		"scripts": [
