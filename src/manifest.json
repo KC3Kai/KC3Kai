@@ -22,6 +22,7 @@
 		"downloads.shelf",
 		"tabs",
 		"notifications",
+		"<all_urls>",
 		"cookies"
 	],
 	"background": {
