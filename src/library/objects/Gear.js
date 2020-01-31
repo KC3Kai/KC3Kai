@@ -2531,6 +2531,48 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Type 1 Armor-Piercing Shell Kai
+			"365": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai+
+					"2": {
+						remodel: 1,
+						multiple: { "houg": 1 },
+					},
+					// Kongou Class Kai+
+					"6": "2",
+					// Nagato Class
+					"19": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Fusou Class
+					"26": {
+						multiple: { "houg": 1 },
+					},
+					// Yamato Class
+					"37": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Kongou K2C
+					ids: [591],
+					single: { "houg": 2 },
+				}
+			},
 			// Type 3 Shell
 			"35": {
 				count: 0,
