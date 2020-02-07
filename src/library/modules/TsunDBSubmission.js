@@ -1185,6 +1185,7 @@
 						lvl: ship.level,
 						morale: ship.morale,
 						stats: ship.nakedStats(),
+						visibleStats: Object.fromEntries(["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),
