@@ -7762,9 +7762,10 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(44);
+  var allExpeditionIds = Data_Array.range(1)(45);
   allExpeditionIds.push(...Data_Array.range(100)(103));
   allExpeditionIds.push(...Data_Array.range(110)(113));
+  allExpeditionIds.push(...Data_Array.range(131)(132));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -7964,6 +7965,9 @@ var PS = {};
       if (eId === 113) {
           return income(0)(0)(1200)(650);
       };
+      if (eId === 131) {
+          return income(20)(20)(0)(100);
+      };
       return Data_Monoid.mempty(incomeMonoid);
   };
   exports["getExpeditionIncomeBase"] = getExpeditionIncomeBase;
@@ -8140,6 +8144,9 @@ var PS = {};
       if (eId === 44) {
           return c(8)(4)(hr(10));
       };
+      if (eId === 45) {
+          return c(6)(4)(hm(3)(20));
+      };
       if (eId === 100) {
           return c(3.5)(0)(25);
       };
@@ -8163,6 +8170,12 @@ var PS = {};
       };
       if (eId === 113) {
           return c(8.5)(8.5)(hm(7)(30));
+      };
+      if (eId === 131) {
+          return c(7.5)(5)(hr(2));
+      };
+      if (eId === 132) {
+          return c(9)(9)(hr(10));
       };
       return noCost;
   };
@@ -8195,6 +8208,7 @@ var PS = {};
   var getExpeditionDisplayName = function (eId) {
       return eId >= 100 && eId < 110 ? "A" + (eId - 99)
         : eId >= 110 && eId < 120 ? "B" + (eId - 109)
+        : eId >= 131 && eId < 140 ? "D" + (eId - 130)
         : eId < 10 ? "0" + eId : eId;
   };
   var getExpeditionWorld = function (eId) {
@@ -9283,7 +9297,7 @@ var PS = {};
                   return v[i - 1];
               });
           };
-          if (1 <= 100 && i <= 120) {
+          if (1 <= 100 && i <= 140) {
               return Partial_Unsafe.unsafePartial(function (dictPartial) {
                   return v[i - 60];
               });
@@ -10071,6 +10085,15 @@ var PS = {};
               "api_win_item2":[12,2]
           },
           {
+              "api_id":45,
+              "api_time":200,
+              "api_deck_num":5,
+              "api_use_fuel":0.6,
+              "api_use_bull":0.4,
+              "api_win_item1":[11,1],
+              "api_win_item2":[0,0]
+          },
+          {
               "api_id":100,
               "api_disp_no":"A1",
               "api_deck_num":4,
@@ -10154,6 +10177,28 @@ var PS = {};
               "api_use_bull":0.85,
               "api_win_item1":[3,4],
               "api_win_item2":[4,1]
+          },
+          {
+              "api_id":131,
+              "api_disp_no":"D1",
+              "api_deck_num":5,
+              "api_time":120,
+              "api_use_fuel":0.75,
+              "api_use_bull":0.5,
+              "api_win_item1":[1,1],
+              "api_win_item2":[0,0]
+          },
+          {
+              "api_id":132,
+              "api_disp_no":"D2",
+              "api_deck_num":5,
+              "api_time":600,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.9,
+              "api_win_item1":[59,1],
+              "api_win_item2":[12,1]
           }
       ];
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});

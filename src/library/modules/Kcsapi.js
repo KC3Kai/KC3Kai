@@ -2535,13 +2535,15 @@ Previously known as "Reactor"
 				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
-				case 82: // exchange 4 beans with a setsubun furniture
+				case 82: // exchange 4 beans with a setsubun furniture in 2019
+					// 10 beans with a Action Report in 2020 (once)
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
-				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft
+				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
+					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
-				case 84: // exchange 20 beans + 40 devmats with a Ginga
+				case 84: // exchange 20 beans + 40 devmats with a Ginga (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
