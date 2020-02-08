@@ -1597,7 +1597,9 @@ KC3改 Equipment Object
 					// Casablanca Class
 					"83": "67",
 					// Essex Class
-					"84": "67"
+					"84": "67",
+					// Colorado Class
+					"93": "67"
 				}
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -1950,7 +1952,8 @@ KC3改 Equipment Object
 						multiple: { "raig": 1, "houk": -2 },
 					},
 					{
-						// All other ships
+						// All other ships who can equip it
+						stypes: [4, 13, 14, 16],
 						excludes: [118, 119, 586, 623],
 						multiple: { "houg": -1, "houk": -7 },
 					},
@@ -2056,7 +2059,7 @@ KC3改 Equipment Object
 							{
 								flags: [ "airRadar" ],
 								single: { "tyku": 2, "houk": 2 },
-							},					
+							},
 						],
 					},
 				],
@@ -2471,6 +2474,8 @@ KC3改 Equipment Object
 					"87": "65",
 					// Fletcher Class
 					"91": "65",
+					// Colorado Class
+					"93": "65",
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
@@ -2491,6 +2496,8 @@ KC3改 Equipment Object
 					"83": "65",
 					// Essex Class
 					"84": "65",
+					// Colorado Class
+					"93": "65",					
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
@@ -2630,7 +2637,7 @@ KC3改 Equipment Object
 				byShip: [
 					{
 						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2
-						ids: [622, 623,  141, 	   160, 	488],
+						ids: [622, 623,  141,      160,     488],
 						multiple: { "houk": 3, "tais": 1 },
 					},
 					{
@@ -2639,6 +2646,12 @@ KC3改 Equipment Object
 						multiple: { "houk": 5, "tais": 3 },
 					},
 				],
+				byClass: {
+					// Akizuki Class
+					"54": {
+						multiple: { "houk": 2, "tais": 1 },
+					},
+				}
 			},
 			// Type 3 Depth Charge Projector (Concentrated Deployment)
 			"287": {
@@ -2646,7 +2659,7 @@ KC3改 Equipment Object
 				byShip: [
 					{
 						// Yuubari K2D, Isuzu K2, Naka K2, Yura K2
-						ids: [624,      141, 	  160, 	   488],
+						ids: [624,      141,      160,     488],
 						multiple: { "houk": 1, "tais": 1 },
 					},
 				],
@@ -2657,7 +2670,7 @@ KC3改 Equipment Object
 				byShip: [
 					{
 						// Isuzu K2, Naka K2, Yura K2
-						ids: [141,	 160,	  488],
+						ids: [141,   160,     488],
 						multiple: { "houk": 1, "tais": 2 },
 					},
 					{
