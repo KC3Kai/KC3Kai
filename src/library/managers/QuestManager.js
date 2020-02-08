@@ -420,8 +420,8 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C38
-			this.resetCounterLoop([330, 337], false);
+			// Quarterly PvP C29, C38, C42
+			this.resetCounterLoop([330, 337, 339], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
