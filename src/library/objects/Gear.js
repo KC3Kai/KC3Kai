@@ -2154,8 +2154,8 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "raig": 1, "tyku": 1, "houk": 2 },
 					},
 					{
-						// Shigure K2
-						ids: [145],
+						// Shigure K2, Shikinami K2
+						ids: [145, 627],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -2418,6 +2418,11 @@ KC3改 Equipment Object
 						ids: [469, 587],
 						multiple: { "houk": 2 },
 					},
+					{
+						// Shikinami K2
+						ids: [627],
+						multiple: { "houg": 2, "raig": 1},
+					}
 				],
 			},
 			// 5inch Single Gun Mount Mk.30 Kai
