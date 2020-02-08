@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
+				questIds: [284, 330, 337, 339, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -206,6 +206,19 @@ Uses KC3Quest objects to play around with
 							// should be unreachable
 							throw new Error(`Bad month: ${month}`);
 					}
+				},
+			},
+			yearly: {
+				type: 'yearly',
+				key: 'timeToResetYearlyQuests',
+				questIds: [434, 904, 905],
+				resetQuests: function () { KC3QuestManager.resetYearlies(); },
+				calculateNextReset: function (serverTime) {
+					// Uncertained: other reset timings will be implemented rather than 1st Feb?
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, FEBRUARY));
+					return nextYearFebruary.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
 		},
@@ -438,6 +451,13 @@ Uses KC3Quest objects to play around with
 			this.save();
 		},
 		
+		resetYearlies :function(){
+			this.load();
+			console.log("Resetting yearlies");
+			this.resetLoop(this.getRepeatableIds('yearly'));
+			this.save();
+		},
+		
 		clear :function(){
 			this.list = {};
 			this.active = [];
@@ -523,6 +543,16 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(49)   // Kasumi any remodel
 						) >= 4;
 					},
+				"339": // C42 PvP with Isonami, Uranami, Ayanami, Shikinami
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(12)  + // Isonami any remodel
+							fleet.countShip(486) + // Uranami any remodel
+							fleet.countShip(13)  + // Ayanami any remodel
+							fleet.countShip(14)    // Shikinami any remodel
+						) >= 4;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -606,6 +636,19 @@ Uses KC3Quest objects to play around with
 						) >= 2 || (
 							fleet.hasShip([488])   // Yura K2
 						));
+					},
+				"904": // By1 Sortie Ayanami K2, Shikinami K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([
+							195, // Ayanami K2
+							627, // Shikinami K2
+						]);
+					},
+				"905": // By2 Sortie 3 DE, up to 5 ships
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(1) >= 3 && fleet.countShips() <= 5;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
