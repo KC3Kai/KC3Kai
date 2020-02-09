@@ -208,13 +208,14 @@ Uses KC3Quest objects to play around with
 					}
 				},
 			},
-			yearly: {
-				type: 'yearly',
-				key: 'timeToResetYearlyQuests',
+			// Uncertained?: Add Feb suffix in case that other reset timings will be implemented later rather than 1st Feb
+			yearlyFeb: {
+				type: 'yearlyFeb',
+				key: 'timeToResetYearlyFebQuests',
+				resetMonth: FEBRUARY,
 				questIds: [434, 904, 905],
 				resetQuests: function () { KC3QuestManager.resetYearlies(); },
 				calculateNextReset: function (serverTime) {
-					// Uncertained: other reset timings will be implemented rather than 1st Feb?
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
 					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, FEBRUARY));
@@ -453,8 +454,9 @@ Uses KC3Quest objects to play around with
 		
 		resetYearlies :function(){
 			this.load();
-			console.log("Resetting yearlies");
-			this.resetLoop(this.getRepeatableIds('yearly'));
+			console.log("Resetting yearlies in February");
+			this.resetLoop(this.getRepeatableIds('yearlyFeb'));
+			// may add more yearly types (months) here
 			this.save();
 		},
 		

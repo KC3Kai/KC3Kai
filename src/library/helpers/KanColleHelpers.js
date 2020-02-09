@@ -7941,6 +7941,9 @@ var PS = {};
       if (eId === 44) {
           return income(0)(200)(0)(800);
       };
+      if (eId === 45) {
+          return income(40)(0)(0)(220);
+      };
       if (eId === 100) {
           return income(45)(45)(0)(0);
       };
@@ -7966,7 +7969,10 @@ var PS = {};
           return income(0)(0)(1200)(650);
       };
       if (eId === 131) {
-          return income(20)(20)(0)(100);
+          return income(0)(20)(20)(100);
+      };
+      if (eId === 132) {
+          return income(0)(0)(400)(800);
       };
       return Data_Monoid.mempty(incomeMonoid);
   };
