@@ -1,7 +1,7 @@
 {
-	"version" : "34.3.2",
+	"version" : "34.4.0",
 	"pr" : "https://github.com/KC3Kai/KC3Kai/pulls?q=label%3Atype%3Arelease%20",
-	"time" : "",
+	"time" : "Mod, 10 February 2020 11:00:00 +0900",
 	"maintenance_start": "Wed, 20 November 2019 11:00:00 +0900",
 	"maintenance_end": "Wed, 20 November 2019 15:30:00 +0900"
 }
