@@ -78,6 +78,7 @@
                     return 40;
                 case 313: // Tanikaze
                     return 50;
+                case 208: // Shikinami
                 case 225: // Kagerou
                 case 226: // Shiranui
                 case 227: // Kuroshio

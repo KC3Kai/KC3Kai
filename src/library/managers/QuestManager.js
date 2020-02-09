@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
+				questIds: [284, 330, 337, 339, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -206,6 +206,20 @@ Uses KC3Quest objects to play around with
 							// should be unreachable
 							throw new Error(`Bad month: ${month}`);
 					}
+				},
+			},
+			// Uncertained?: Add Feb suffix in case that other reset timings will be implemented later rather than 1st Feb
+			yearlyFeb: {
+				type: 'yearlyFeb',
+				key: 'timeToResetYearlyFebQuests',
+				resetMonth: FEBRUARY,
+				questIds: [434, 904, 905],
+				resetQuests: function () { KC3QuestManager.resetYearlies(); },
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, FEBRUARY));
+					return nextYearFebruary.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
 		},
@@ -407,8 +421,8 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C38
-			this.resetCounterLoop([330, 337], false);
+			// Quarterly PvP C29, C38, C42
+			this.resetCounterLoop([330, 337, 339], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -435,6 +449,14 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting quarterlies");
 			this.resetLoop(this.getRepeatableIds('quarterly'));
+			this.save();
+		},
+		
+		resetYearlies :function(){
+			this.load();
+			console.log("Resetting yearlies in February");
+			this.resetLoop(this.getRepeatableIds('yearlyFeb'));
+			// may add more yearly types (months) here
 			this.save();
 		},
 		
@@ -523,6 +545,16 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(49)   // Kasumi any remodel
 						) >= 4;
 					},
+				"339": // C42 PvP with Isonami, Uranami, Ayanami, Shikinami
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(12)  + // Isonami any remodel
+							fleet.countShip(486) + // Uranami any remodel
+							fleet.countShip(13)  + // Ayanami any remodel
+							fleet.countShip(14)    // Shikinami any remodel
+						) >= 4;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -606,6 +638,19 @@ Uses KC3Quest objects to play around with
 						) >= 2 || (
 							fleet.hasShip([488])   // Yura K2
 						));
+					},
+				"904": // By1 Sortie Ayanami K2, Shikinami K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([
+							195, // Ayanami K2
+							627, // Shikinami K2
+						]);
+					},
+				"905": // By2 Sortie 3 DE, up to 5 ships
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(1) >= 3 && fleet.countShips() <= 5;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

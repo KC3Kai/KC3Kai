@@ -2154,8 +2154,8 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "raig": 1, "tyku": 1, "houk": 2 },
 					},
 					{
-						// Shigure K2
-						ids: [145],
+						// Shigure K2, Shikinami K2
+						ids: [145, 627],
 						multiple: { "houg": 1 },
 					},
 					{
@@ -2418,6 +2418,11 @@ KC3改 Equipment Object
 						ids: [469, 587],
 						multiple: { "houk": 2 },
 					},
+					{
+						// Shikinami K2
+						ids: [627],
+						multiple: { "houg": 2, "raig": 1},
+					}
 				],
 			},
 			// 5inch Single Gun Mount Mk.30 Kai
@@ -2530,6 +2535,48 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
 					},
 				],
+			},
+			// Type 1 Armor-Piercing Shell Kai
+			"365": {
+				count: 0,
+				byClass: {
+					// Ise Class Kai+
+					"2": {
+						remodel: 1,
+						multiple: { "houg": 1 },
+					},
+					// Kongou Class Kai+
+					"6": "2",
+					// Nagato Class
+					"19": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 2,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Fusou Class
+					"26": {
+						multiple: { "houg": 1 },
+					},
+					// Yamato Class
+					"37": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Kongou K2C
+					ids: [591],
+					single: { "houg": 2 },
+				}
 			},
 			// Type 3 Shell
 			"35": {

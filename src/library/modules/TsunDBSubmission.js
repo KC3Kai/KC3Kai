@@ -1185,6 +1185,9 @@
 						lvl: ship.level,
 						morale: ship.morale,
 						stats: ship.nakedStats(),
+						// Caution: `fromEntries` supported since Chromium m73. Alternative:
+						//   (() => { let o = {}; ["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].forEach(s => o[s] = ship[s][0]); return o; })()
+						visibleStats: Object.fromEntries(["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),

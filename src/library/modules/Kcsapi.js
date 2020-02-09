@@ -1860,6 +1860,7 @@ Previously known as "Reactor"
 					switch(Number(expedNum)){
 					case 3:
 						KC3QuestManager.get(426).increment(0); // D24: Quarterly, index 0
+						KC3QuestManager.get(434).increment(0); // D32: Yearly, index 0
 						break;
 					case 4:
 						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
@@ -1868,6 +1869,10 @@ Previously known as "Reactor"
 					case 5:
 						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
 						KC3QuestManager.get(426).increment(2); // D24: Quarterly, index 2
+						KC3QuestManager.get(434).increment(1); // D32: Yearly, index 1
+						break;
+					case 9:
+						KC3QuestManager.get(434).increment(4); // D32: Yearly, index 4
 						break;
 					case 10:
 						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
@@ -1877,8 +1882,12 @@ Previously known as "Reactor"
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 						break;
+					case 100: // A1
+						KC3QuestManager.get(434).increment(2); // D32: Yearly, index 2
+						break;
 					case 101: // A2
 						KC3QuestManager.get(428).increment(1); // D26: Quarterly, index 1
+						KC3QuestManager.get(434).increment(3); // D32: Yearly, index 3
 						break;
 					case 102: // A3
 						KC3QuestManager.get(428).increment(2); // D26: Quarterly, index 2
@@ -2535,13 +2544,15 @@ Previously known as "Reactor"
 				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
-				case 82: // exchange 4 beans with a setsubun furniture
+				case 82: // exchange 4 beans with a setsubun furniture in 2019
+					// 10 beans with a Action Report in 2020 (once)
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
-				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft
+				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
+					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
-				case 84: // exchange 20 beans + 40 devmats with a Ginga
+				case 84: // exchange 20 beans + 40 devmats with a Ginga (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
@@ -2873,6 +2884,8 @@ Previously known as "Reactor"
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
 					KC3QuestManager.get(337).increment(); // C38: Quarterly Exercises 2
+				if(KC3QuestManager.isPrerequisiteFulfilled(339))
+					KC3QuestManager.get(339).increment(); // C42: Quarterly Exercises 3
 			}
 		}
 	}
