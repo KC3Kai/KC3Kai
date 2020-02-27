@@ -2813,6 +2813,10 @@ Previously known as "Reactor"
 					[873,0,[3,1], true, true], // Bq5: 1st requirement: [W3-1] A-rank+ the boss node
 					[873,1,[3,2], true, true], // Bq5: 2nd requirement: [W3-2] A-rank+ the boss node
 					[873,2,[3,3], true, true], // Bq5: 3rd requirement: [W3-3] A-rank+ the boss node
+					[905,0,[1,1], true, true], // By2: 1st requirement: [W1-1] A-rank+ the boss node
+					[905,1,[1,2], true, true], // By2: 2nd requirement: [W1-2] A-rank+ the boss node
+					[905,2,[1,3], true, true], // By2: 3rd requirement: [W1-3] A-rank+ the boss node
+					[905,3,[1,5], true, true], // By2: 4th requirement: [W1-5] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -2854,6 +2858,10 @@ Previously known as "Reactor"
 					[903,1,[5,4], true, true], // Bq13: 2nd requirement: [W5-4] S-rank the boss node
 					[903,2,[6,4], true, true], // Bq13: 3rd requirement: [W6-4] S-rank the boss node
 					[903,3,[6,5], true, true], // Bq13: 4th requirement: [W6-5] S-rank the boss node
+					[904,0,[2,5], true, true], // By1: 1st requirement: [W2-5] S-rank the boss node
+					[904,1,[3,4], true, true], // By1: 2nd requirement: [W3-4] S-rank the boss node
+					[904,2,[4,5], true, true], // By1: 3rd requirement: [W4-5] S-rank the boss node
+					[904,3,[5,3], true, true], // By1: 4th requirement: [W5-3] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
