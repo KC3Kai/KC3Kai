@@ -271,6 +271,45 @@ Object.swapMapKeyValue = function(map, isNumericKey){
 	return result;
 };
 
+/**
+ * Legacy polyfill for `Object.entries`, supported since Chromium m54
+ * No exception will be thrown
+ * @see https://github.com/es-shims/Object.entries
+ */
+if (!Object.entries) {
+	Object.entries = function(obj) {
+		var result = [];
+		if(typeof obj == "object"){
+			for(var key in obj){
+				if(obj.hasOwnProperty(key) && obj.propertyIsEnumerable(key)){
+					result.push([key, obj[key]]);
+				}
+			}
+		}
+		return result;
+	};
+}
+
+/**
+ * Legacy polyfill for `Object.fromEntries` (since m73), the reserve of `Object.entries`
+ * No exception will be thrown. Only Array, no Symbol/Iterable supported
+ * @see https://github.com/es-shims/Object.fromEntries
+ */
+if (!Object.fromEntries) {
+	Object.fromEntries = function(arr) {
+		var result = {};
+		if(Array.isArray(arr)){
+			for(var idx in arr){
+				var pair = arr[idx];
+				if(typeof pair == "object"){
+					result[pair[0]] = pair[1];
+				}
+			}
+		}
+		return result;
+	};
+}
+
 /* PRIMITIVE */
 /*******************************\
 |*** String                     |
