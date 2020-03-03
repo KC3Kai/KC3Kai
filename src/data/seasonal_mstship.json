@@ -3403,5 +3403,45 @@
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5425": {
+		"api_id": 5425,
+		"api_name": "バレンタイン早波",
+		"api_yomi": "はやなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5426": {
+		"api_id": 5426,
+		"api_name": "バレンタイン福江",
+		"api_yomi": "ふかえ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5427": {
+		"api_id": 5427,
+		"api_name": "バレンタイン秋霜",
+		"api_yomi": "あきしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5428": {
+		"api_id": 5428,
+		"api_name": "バレンタイン早霜",
+		"api_yomi": "はやしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5429": {
+		"api_id": 5429,
+		"api_name": "バレンタインGrecale",
+		"api_yomi": "グレカーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
