@@ -185,6 +185,11 @@ AntiAir: anti-air related calculations
 		return [300, 301].indexOf(mst.api_id) !== -1;
 	}
 
+	function is20tube7inchUPRocketLaunchers(mst) {
+		// 20-tube 7inch UP Rocket Launchers
+		return mst.api_id === 301;
+	}
+
 	function isBritishAAGun(mst) {
 		// QF 2-pounder Octuple Pom-pom Gun Mount
 		return [191].indexOf(mst.api_id) !== -1;
@@ -945,6 +950,7 @@ AntiAir: anti-air related calculations
 
 	// British-relevant ships
 	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
+	// (QF2 + FCR) OR (QF2 + 7UP) OR (7UP + 7UP)
 	declareAACI(
 		32, 3, 1.2,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
@@ -955,7 +961,7 @@ AntiAir: anti-air related calculations
 					hasSome( isBritishRocketLauncher ),
 					hasSome( isBritishAAGun )),
 				predAllOf(
-					hasAtLeast( isBritishRocketLauncher, 2 ))
+					hasAtLeast( is20tube7inchUPRocketLaunchers, 2 ))
 			)
 		)
 	);
@@ -975,7 +981,7 @@ AntiAir: anti-air related calculations
 	// Fletcher-class all forms (Fletcher, Johnston)
 	declareAACI(
 		34, 7, 1.6,
-		[johnstonIcon, haMountKaiRadar, haMountKaiRadar],
+		[fletcherIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAllOf(
@@ -984,7 +990,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		35, 6, 1.55,
-		[johnstonIcon, haMountKaiRadar, haMountIcon],
+		[fletcherIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAnyOf(
@@ -997,7 +1003,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		36, 6, 1.55,
-		[johnstonIcon, haMountIcon, haMountIcon, radarIcon],
+		[fletcherIcon, haMountIcon, haMountIcon, radarIcon],
 		// there are enough slots for Kai only
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -1014,7 +1020,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		37, 4, 1.45,
-		[johnstonIcon, haMountIcon, haMountIcon],
+		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAnyOf(

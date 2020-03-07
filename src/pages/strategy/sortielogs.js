@@ -540,7 +540,7 @@
 					for(const idx in topAbSquadSlots){
 						for(const base in defenderSquads){
 							// Check if defender plane is non-zeroed LBF/LBI
-							const basePlaneId = defenderSquads[base][idx].api_mst_id;
+							const basePlaneId = (defenderSquads[base][idx] || {}).api_mst_id;
 							if(basePlaneId > 0 && defenderSquads[base][idx].api_count > 0
 								&& KC3GearManager.interceptorsType3Ids.includes(KC3Master.slotitem(basePlaneId).api_type[3])){
 								const topPlaneId = topAbSquadSlots[idx];
