@@ -150,10 +150,15 @@ Used by SortieManager
 		currentMap.clear |= (++currentMap.kills) >= KC3Meta.gauge(mapKey);
 		KC3SortieManager.setCurrentMapData(currentMap);
 		
-		// Bq3: Sortie 2 BBV/AO to [W1-6], reach node N twice
-		if(KC3SortieManager.isSortieAt(1, 6)
-			&& KC3QuestManager.isPrerequisiteFulfilled(861)){
-			KC3QuestManager.get(861).increment();
+		if(KC3SortieManager.isSortieAt(1, 6)){
+			// Bq3: Sortie 2 BBV/AO to [W1-6], reach node N twice
+			if(KC3QuestManager.isPrerequisiteFulfilled(861)){
+				KC3QuestManager.get(861).increment();
+			}
+			// By2: 5th requirement: reach [W1-6] node N once
+			if(KC3QuestManager.isPrerequisiteFulfilled(905)){
+				KC3QuestManager.get(905).increment(4);
+			}
 		}
 		return this;
 	};

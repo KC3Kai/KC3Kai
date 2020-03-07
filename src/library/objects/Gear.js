@@ -2269,6 +2269,87 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// 12.7cm Twin Gun Mount Model D Kai 3
+			"366": {
+				count: 0,
+				byClass: {
+					// Shimakaze Class
+					"22": [
+						// One-time +3 AA
+						{
+							single: { "tyku": 3 }
+						},
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							// Shimakaze Kai
+							remodel: 1,
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 2, "raig": 4, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "houg": 1, "tyku": 5, "houk": 2 },
+								},
+							],
+						},
+					],
+					// Yuugumo Class
+					"38": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							// Yuugumo Class K2
+							remodel: 2,
+							multiple: { "houg": 1 },
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 2, "raig": 4, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "houg": 1, "tyku": 5, "houk": 2 },
+								}
+							],
+						},
+						{
+							// Yuugumo Class K2, one-time +3 AA
+							remodel: 2,
+							single: { "tyku": 3 },
+						},
+						{
+							remodel: 2,
+							// Yuugumo Class K2, one-time +5 AA for 2 guns
+							single: { "tyku": 2 },
+							minCount: 2,
+						},
+					],
+					// Kagerou Class
+					"30": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							// Kagerou Class K2, one-time +1 FP, +2 AA for one gun
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							single: { "houg": 1, "tyku": 2 },
+						},
+						{
+							// Kagerou Class K2, one-time +2 FP, +4 AA for two guns
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							single: { "houg": 1, "tyku": 2 },
+							minCount: 2,
+						},
+					],
+				},
+			},
 			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
 			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2A%E5%9E%8B%E6%94%B9%E4%B8%89%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE
 			"295": {
