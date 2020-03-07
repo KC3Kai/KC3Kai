@@ -185,14 +185,14 @@ AntiAir: anti-air related calculations
 		return [300, 301].indexOf(mst.api_id) !== -1;
 	}
 
-	function isBritishAAGun(mst) {
-		// QF 2-pounder Octuple Pom-pom Gun Mount
-		return [191].indexOf(mst.api_id) !== -1;
-	}
-
 	function is20tube7inchUPRocketLaunchers(mst) {
 		// 20-tube 7inch UP Rocket Launchers
 		return mst.api_id === 301;
+	}
+
+	function isBritishAAGun(mst) {
+		// QF 2-pounder Octuple Pom-pom Gun Mount
+		return [191].indexOf(mst.api_id) !== -1;
 	}
 
 	// GFCS Mk.37
