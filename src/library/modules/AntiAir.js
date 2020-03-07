@@ -975,7 +975,7 @@ AntiAir: anti-air related calculations
 	// Fletcher-class all forms (Fletcher, Johnston)
 	declareAACI(
 		34, 7, 1.6,
-		[johnstonIcon, haMountKaiRadar, haMountKaiRadar],
+		[fletcherIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAllOf(
@@ -984,7 +984,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		35, 6, 1.55,
-		[johnstonIcon, haMountKaiRadar, haMountIcon],
+		[fletcherIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAnyOf(
@@ -997,7 +997,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		36, 6, 1.55,
-		[johnstonIcon, haMountIcon, haMountIcon, radarIcon],
+		[fletcherIcon, haMountIcon, haMountIcon, radarIcon],
 		// there are enough slots for Kai only
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -1014,7 +1014,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		37, 4, 1.45,
-		[johnstonIcon, haMountIcon, haMountIcon],
+		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
 			predAnyOf(
