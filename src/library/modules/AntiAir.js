@@ -190,6 +190,11 @@ AntiAir: anti-air related calculations
 		return [191].indexOf(mst.api_id) !== -1;
 	}
 
+	function is20tube7inchUPRocketLaunchers(mst) {
+		// 20-tube 7inch UP Rocket Launchers
+		return mst.api_id === 301;
+	}
+
 	// GFCS Mk.37
 	var isGfcsRadar = masterIdEq(307);
 	// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
@@ -945,6 +950,7 @@ AntiAir: anti-air related calculations
 
 	// British-relevant ships
 	//   Known for now: Nelson, Warspite, Ark Royal, Jervis, all Kongou-class K2
+	// (QF2 + FCR) OR (QF2 + 7UP) OR (7UP + 7UP)
 	declareAACI(
 		32, 3, 1.2,
 		[warspiteIcon, aaGunK2RockeLaunIcon, cdmgIcon],
@@ -955,7 +961,7 @@ AntiAir: anti-air related calculations
 					hasSome( isBritishRocketLauncher ),
 					hasSome( isBritishAAGun )),
 				predAllOf(
-					hasAtLeast( isBritishRocketLauncher, 2 ))
+					hasAtLeast( is20tube7inchUPRocketLaunchers, 2 ))
 			)
 		)
 	);

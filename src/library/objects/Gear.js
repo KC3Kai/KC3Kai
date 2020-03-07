@@ -2425,6 +2425,88 @@ KC3改 Equipment Object
 					}
 				],
 			},
+			// 12.7cm Twin Gun Mount Model D Kai 3
+			"366": {
+				count: 0,
+				byClass: {
+					// Shimakaze Class
+					"22": [
+						// One-time +3 AA
+						{
+							single: { "tyku": 3 }
+						},
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							// Shimakaze Kai
+							remodel: 1,
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 2, "raig": 4, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "houg": 1, "tyku": 5, "houk": 2 },
+								},
+
+							],
+						},
+					],
+					// Yuugumo Class
+					"38": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							// Yuugumo Class K2
+							remodel: 2,
+							multiple: { "houg": 1 },
+							synergy: [
+								{
+									flags: [ "surfaceRadar" ],
+									single: { "houg": 2, "raig": 4, "houk": 2 },
+								},
+								{
+									flags: [ "airRadar" ],
+									single: { "houg": 1, "tyku": 5, "houk": 2 },
+								}
+							],
+						},
+						{
+							// Yuugumo Class K2, one-time +3 AA
+							remodel: 2,
+							single: { "tyku": 3 },
+						},
+						{
+							remodel: 2,
+							//Yuugumo Class K2, one-time +5 AA for 2 guns
+							single: { "tyku": 2 },
+							minCount: 2,
+						},
+					],
+					// Kagerou Class
+					"30": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							// Kagerou Class K2, one-time +1 FP, +2 AA for one gun
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							single: { "houg": 1, "tyku": 2 },
+						},
+						{
+							// Kagerou Class K2, one-time +2 FP, +4 AA for two guns
+							remodel: 2,
+							excludes: [556, 557, 558, 559],
+							single: { "houg": 1, "tyku": 2 },
+							minCount: 2,
+						},
+					],
+				},
+			},
 			// 5inch Single Gun Mount Mk.30 Kai
 			"313": {
 				count: 0,

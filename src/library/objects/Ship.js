@@ -2363,7 +2363,7 @@ KC3改 Ship Object
 		if(!this.masterId || !targetShip) { return 0; }
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
-		if([1653, 1654, 1655, 1656, 1657, 1658].includes(targetShipMasterId)) {
+		if([1653, 1654, 1655, 1656, 1657, 1658, 1921, 1922, 1923, 1924, 1925, 1926].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
 		}
