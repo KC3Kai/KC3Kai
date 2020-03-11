@@ -3056,9 +3056,9 @@ KC3改 Ship Object
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
 					const hasSkilledLookout = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
-					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni
+					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
 					// https://twitter.com/ayanamist_m2/status/944176834551222272
-					const modelDSmallGunCnt = this.countEquipment(267);
+					const modelDSmallGunCnt = this.countEquipment([267, 366]);
 					// Possible to equip 2 D guns for 4 slots Tashkent
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					const modelDSmallGunModifier = [1, 1.25, 1.4][modelDSmallGunCnt] || 1;
