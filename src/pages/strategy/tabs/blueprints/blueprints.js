@@ -349,6 +349,7 @@
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
+				.css("object-fit", "cover")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_from).api_name)
@@ -361,6 +362,7 @@
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_to))
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
+				.css("object-fit", "cover")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_to).api_name)
