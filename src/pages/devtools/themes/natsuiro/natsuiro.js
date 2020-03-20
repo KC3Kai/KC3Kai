@@ -1322,44 +1322,59 @@
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
-			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js, or `PlayerManager.getConsumableById()`
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
 				PlayerManager.consumables.sardine ? 93 :
-				PlayerManager.consumables.setsubunBeans ? 90 : 61;
-			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
+				PlayerManager.consumables.setsubunBeans ? 90 :
+				PlayerManager.consumables.hishimochi ? 62 : 60;
+			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
-			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(57) );
-			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
-				.prev().attr("title", KC3Meta.useItemName(58) );
-			$(".count_newGunMats").text( PlayerManager.consumables.newArtilleryMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(75) );
-			$(".count_newAvMats").text( PlayerManager.consumables.newAviationMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(77) );
-			$(".count_actionReportOrSkilledCrew").text(
-					PlayerManager.consumables.actionReport || PlayerManager.consumables.skilledCrew || 0 )
-				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.actionReport ? 78 : 70) )
-				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.actionReport ? 78 : 70}.png`);
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
-				.prev().attr("title", KC3Meta.useItemName(64) );
-			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
-				.prev().attr("title", KC3Meta.useItemName(52) );
-			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				                   + (PlayerManager.consumables.irako || 0)
-			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			// Count all consumable slotitems via GearManager
+			const consumableSlotitemMap = {
+				"50": { "slotitem":  42 }, // repairTeam
+				"51": { "slotitem":  43 }, // repairGoddess
+				"66": { "slotitem": 145 }, // ration
+				"67": { "slotitem": 146 }, // resupplier
+				"69": { "slotitem": 150 }, // mackerelCan
+				"76": { "slotitem": 241 }, // rationSpecial
+			};
+			Object.keys(consumableSlotitemMap).forEach(useitemId => {
+				const item = consumableSlotitemMap[useitemId];
+				item.attrName = PlayerManager.getConsumableById(useitemId, true);
+				item.amount = KC3GearManager.count(g => g.masterId === item.slotitem) || 0;
+			});
+			// Update simple amount of single useitem (or slotitem) by ID and name (matching with CSS class: `count_` + name)
+			const updateCountByUseitemId = (useitemId) => {
+				const attrName = PlayerManager.getConsumableById(useitemId, true);
+				let amount = PlayerManager.getConsumableById(useitemId) || 0;
+				const slotitem = consumableSlotitemMap[useitemId];
+				if(slotitem) amount = slotitem.amount;
+				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
+			};
+			// Total items of 1 page should be 3 x 3 for current page layout and styles
+			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
+			// Update amounts of combined counting
+			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
+					consumableSlotitemMap[51].amount, KC3Meta.useItemName(51)
+				));
+			$(".count_supply").text([66, 67, 69, 76].map(id => consumableSlotitemMap[id].amount).sumValues())
+				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5} +\nx{6} {7}".format(
+					consumableSlotitemMap[67].amount, KC3Meta.useItemName(67),
+					consumableSlotitemMap[66].amount, KC3Meta.useItemName(66),
+					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
+					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
+				));
+			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+				));
+			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
-				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
-				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
-					const attrName = PlayerManager.getConsumableById(id, true);
-					let amount = PlayerManager.getConsumableById(id) || 0;
-					// slotitem like rations should be counted via GearManager
-					const slotitemMstId = slotitemIdMap[id];
-					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
-					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
-				});
+				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
 			}
