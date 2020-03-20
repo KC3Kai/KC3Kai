@@ -8202,7 +8202,7 @@ var SHIPDATA = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [58, 52, 50, 30],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [581, 582, 558, 583],
 	},
 	1908: {
 		name: 'Aircraft Carrier Princess Kai 3',
@@ -8222,7 +8222,7 @@ var SHIPDATA = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [60, 52, 56, 30],
-		EQUIPS: [581, 557, 558, 583],
+		EQUIPS: [581, 582, 558, 583],
 	},
 	1909: {
 		name: 'Anti-Air Cruiser Princess 1',
