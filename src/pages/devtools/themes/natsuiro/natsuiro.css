@@ -428,13 +428,11 @@ html,body {
 .module.activity .consumables .consumable.page2 {
 	display:none;
 }
-.module.activity .consumables .consumable.page3,
-.module.activity .consumables .consumable.page4 {
+.module.activity .consumables .consumable.itemPage {
 	display:none;
 	width:60px;
 }
-.module.activity .consumables .consumable.page3 .consumable_ltext,
-.module.activity .consumables .consumable.page4 .consumable_ltext {
+.module.activity .consumables .consumable.itemPage .consumable_ltext {
 	width:40px;
 }
 

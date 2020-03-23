@@ -313,7 +313,7 @@ Retrieves when needed to apply on components
 		
 		// Current maximum pages of HQ info
 		getMaxHqInfoPage :function(){
-			return 3;
+			return 4;
 		},
 		
 		// Toggle HQ Info Page

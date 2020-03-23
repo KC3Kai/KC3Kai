@@ -3443,5 +3443,29 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5430": {
+		"api_id": 5430,
+		"api_name": "桃節句Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5431": {
+		"api_id": 5431,
+		"api_name": "桃節句峯雲",
+		"api_yomi": "みねぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5432": {
+		"api_id": 5432,
+		"api_name": "桃節句Richelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }
