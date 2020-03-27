@@ -10,7 +10,7 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
-			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.7/pixi.min.js";
+			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.8/pixi.min.js";
 			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
 			this.jsonMaxLength = 60;
 			this.world = 0;

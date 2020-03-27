@@ -1535,10 +1535,12 @@ Previously known as "Reactor"
 		"api_get_member/questlist":function(params, response, headers){
 			KC3QuestManager.load();
 			
-			// Update quest data for this page
+			// API changed since 2020-03-27, `api_disp_page` removed, all items will be returned based on `api_tab_id`
+			// Update quest data for ~this page~ this type of peroid tab
 			KC3QuestManager.definePage(
 				response.api_data.api_list,
-				response.api_data.api_disp_page
+				response.api_data.api_disp_page,
+				Number(params.api_tab_id)
 			);
 			
 			// Tell service to pass a message to gamescreen on inspected window to show overlays
@@ -2457,9 +2459,9 @@ Previously known as "Reactor"
 				case 13: // exchange 1 present box with 1 irako
 					//if(itemId === 60) PlayerManager.consumables.presents -= 1;
 				break;
-				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200] (guessed)
+				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200]
 				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
-				case 23: // exchange 1 hishimochi with 1 irako (guessed)
+				case 23: // exchange 1 hishimochi with 1 irako
 					//if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
 				break;
 				case 31: // exchange 3 saury (sashimi) with resources [0, 300, 150, 0]

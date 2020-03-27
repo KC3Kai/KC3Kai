@@ -8177,11 +8177,17 @@ var PS = {};
       if (eId === 113) {
           return c(8.5)(8.5)(hm(7)(30));
       };
+      if (eId === 114) {
+          return c(9)(9.5)(hm(6)(30));
+      };
       if (eId === 131) {
           return c(7.5)(5)(hr(2));
       };
       if (eId === 132) {
           return c(9)(9)(hr(10));
+      };
+      if (eId === 141) {
+          return c(9.5)(8.5)(hm(7)(30));
       };
       return noCost;
   };
@@ -8214,7 +8220,9 @@ var PS = {};
   var getExpeditionDisplayName = function (eId) {
       return eId >= 100 && eId < 110 ? "A" + (eId - 99)
         : eId >= 110 && eId < 120 ? "B" + (eId - 109)
+        : eId >= 121 && eId < 130 ? "C" + (eId - 120)
         : eId >= 131 && eId < 140 ? "D" + (eId - 130)
+        : eId >= 141 && eId < 150 ? "E" + (eId - 140)
         : eId < 10 ? "0" + eId : eId;
   };
   var getExpeditionWorld = function (eId) {
@@ -9303,7 +9311,7 @@ var PS = {};
                   return v[i - 1];
               });
           };
-          if (1 <= 100 && i <= 140) {
+          if (1 <= 100 && i <= 150) {
               return Partial_Unsafe.unsafePartial(function (dictPartial) {
                   return v[i - 60];
               });
@@ -10185,6 +10193,18 @@ var PS = {};
               "api_win_item2":[4,1]
           },
           {
+              "api_id":114,
+              "api_disp_no":"B5",
+              "api_deck_num":6,
+              "api_time":390,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.95,
+              "api_win_item1":[1,4],
+              "api_win_item2":[4,1]
+          },
+          {
               "api_id":131,
               "api_disp_no":"D1",
               "api_deck_num":5,
@@ -10205,6 +10225,18 @@ var PS = {};
               "api_use_bull":0.9,
               "api_win_item1":[59,1],
               "api_win_item2":[12,1]
+          },
+          {
+              "api_id":141,
+              "api_disp_no":"E1",
+              "api_deck_num":6,
+              "api_time":450,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.95,
+              "api_use_bull":0.85,
+              "api_win_item1":[12,2],
+              "api_win_item2":[4,1]
           }
       ];
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});
