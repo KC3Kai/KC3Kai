@@ -1841,15 +1841,15 @@
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
 						const formatStatTip = (term, rawStat, impStat) => String(term).padEnd(5, ' ') + String(rawStat).padStart(6, ' ') + String(Math.qckInt("floor", impStat, 0)).padStart(6, ' ');
-						tips += !tips ? "" : "\n"
-						tips += "{0}:   -\u2605    +\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
+						tips += !tips ? "" : "\n";
+						tips += "{0}:   -\u2605    +\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
 						tips += [
 							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
 							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
 							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
 							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
 							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
-						].join('\n')
+						].join('\n');
 					}
 					return tips;
 				})(selectedFleet)).lazyInitTooltip();
