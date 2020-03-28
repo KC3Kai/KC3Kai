@@ -208,32 +208,38 @@ Uses KC3Quest objects to play around with
 					}
 				},
 			},
-			// Reset on 1st Feb every year
+			// Reset on 1st February every year
 			yearlyFeb: {
 				type: 'yearlyFeb',
 				key: 'timeToResetYearlyFebQuests',
 				resetMonth: FEBRUARY,
 				questIds: [434, 904, 905],
-				resetQuests: function () { KC3QuestManager.resetYearlies(); },
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
+				},
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, FEBRUARY));
-					return nextYearFebruary.getTime() - (4 * MS_PER_HOUR);
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
-			// Uncertained?: Reset on 1st March every year?
+			// Reset on 1st March every year?
 			yearlyMar: {
 				type: 'yearlyMar',
 				key: 'timeToResetYearlyMarQuests',
 				resetMonth: MARCH,
 				questIds: [436, 912, 914],
-				resetQuests: function () { KC3QuestManager.resetYearlies(); },
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMar.type);
+				},
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, MARCH));
-					return nextYearFebruary.getTime() - (4 * MS_PER_HOUR);
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
 		},
@@ -470,12 +476,10 @@ Uses KC3Quest objects to play around with
 			this.save();
 		},
 		
-		resetYearlies :function(){
+		resetYearlies :function(typeId){
 			this.load();
-			console.log("Resetting yearlies");
-			this.resetLoop(this.getRepeatableIds('yearlyFeb'));
-			this.resetLoop(this.getRepeatableIds('yearlyMar'));
-			// may add more yearly types (months) here
+			console.log("Resetting yearlies", typeId);
+			this.resetLoop(this.getRepeatableIds(typeId));
 			this.save();
 		},
 		
@@ -676,10 +680,10 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.ship(0).master().api_stype === 19 && fleet.countShipType(2) >= 3;
 					},
-				"914": // By4 Sortie 3 CA(V), 1 DD
+				"914": // By4 Sortie 3 CA, 1 DD
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([5, 6]) >= 3 && fleet.countShipType(2) >= 1;
+						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
