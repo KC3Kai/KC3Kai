@@ -1638,6 +1638,10 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner {
 	text-align:center;
 	white-space:nowrap;
+	overflow: auto;
+}
+.module.activity .activity_expeditionPlanner::-webkit-scrollbar {
+	width: 5px;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
 	color:#006600;
@@ -1730,7 +1734,7 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .estimated_time {
 	float: right;
 	text-align: right;
-	width: 67px;
+	/* width: 67px; */
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {

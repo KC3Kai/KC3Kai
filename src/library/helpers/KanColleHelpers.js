@@ -7304,6 +7304,15 @@ var PS = {};
       };
       return FleetTotalFp;
   })();
+  var FleetTotalTorp = (function () {
+      function FleetTotalTorp(value0) {
+          this.value0 = value0;
+      };
+      FleetTotalTorp.create = function (value0) {
+          return new FleetTotalTorp(value0);
+      };
+      return FleetTotalTorp;
+  })();
   var FleetDrum = (function () {
       function FleetDrum(value0) {
           this.value0 = value0;
@@ -7386,6 +7395,9 @@ var PS = {};
       };
       var fpTotal = function (n) {
           return [ new FleetTotalFp(n) ];
+      };
+      var torpTotal = function (n) {
+          return [ new FleetTotalTorp(n) ];
       };
       var fslAndSc = function (fsl) {
           return function (sc) {
@@ -7557,6 +7569,22 @@ var PS = {};
       if (v === 113) {
           return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(390))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280))))))));
       };
+      if (v === 132) {
+          return addGroup(fslAndSc(1)(6))
+              (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                      (addGroup(submarine(3))
+                          (addGroup(torpTotal(390))
+                              (addGroup(aaTotal(110))
+                                  (addGroup(aswTotal(55))
+                                      (losTotal(260))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              )
+      }
       return [  ];
   };
   var fromRawShip = function (s) {
@@ -7597,6 +7625,9 @@ var PS = {};
       };
       if (v instanceof FleetTotalFp) {
           return "fleet fire-power stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
+      };
+      if (v instanceof FleetTotalTorp) {
+          return "fleet torpedo stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
       };
       if (v instanceof FleetDrum) {
           return "fleet should have at least " + (Data_Show.show(Data_Show.showInt)(v.value0) + " drum(s)");
@@ -7666,6 +7697,11 @@ var PS = {};
                       return x.fp;
                   })(fleet)) >= req.value0;
               };
+              if (req instanceof FleetTotalTorp) {
+                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                      return x.tp;
+                  })(fleet)) >= req.value0;
+              };
               if (req instanceof FleetDrum) {
                   return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.drumCount;
@@ -7711,6 +7747,7 @@ var PS = {};
   exports["FleetTotalLos"] = FleetTotalLos;
   exports["FleetTotalAa"] = FleetTotalAa;
   exports["FleetTotalFp"] = FleetTotalFp;
+  exports["FleetTotalTorp"] = FleetTotalTorp;
   exports["FleetDrum"] = FleetDrum;
   exports["FleetShipWithDrum"] = FleetShipWithDrum;
   exports["FleetSTypeCount"] = FleetSTypeCount;
@@ -10555,6 +10592,7 @@ var PS = {};
       $2.totalLos = Data_Nullable.toNullable(rp.totalLos);
       $2.totalAa = Data_Nullable.toNullable(rp.totalAa);
       $2.totalFp = Data_Nullable.toNullable(rp.totalFp);
+      $2.totalTorp = Data_Nullable.toNullable(rp.totalTorp);
       $2.drumCount = Data_Nullable.toNullable(rp.drumCount);
       $2.drumCarrierCount = Data_Nullable.toNullable(rp.drumCarrierCount);
       return $2;
@@ -10575,6 +10613,7 @@ var PS = {};
           totalLos: Data_Nullable.toNullable(rp.totalLos),
           totalAa: Data_Nullable.toNullable(rp.totalAa),
           totalFp: Data_Nullable.toNullable(rp.totalFp),
+          totalTorp: Data_Nullable.toNullable(rp.totalTorp),
           drumCount: Data_Nullable.toNullable(rp.drumCount),
           drumCarrierCount: Data_Nullable.toNullable(rp.drumCarrierCount),
           fleetSType: Data_Functor.map(Data_Functor.functorArray)(cov)(rp.fleetSType)
@@ -10589,6 +10628,7 @@ var PS = {};
       totalLos: Data_Maybe.Nothing.value,
       totalAa: Data_Maybe.Nothing.value,
       totalFp: Data_Maybe.Nothing.value,
+      totalTorp: Data_Maybe.Nothing.value,
       drumCount: Data_Maybe.Nothing.value,
       drumCarrierCount: Data_Maybe.Nothing.value,
       fleetSType: [  ]
@@ -10668,6 +10708,16 @@ var PS = {};
                   };
                   $183.totalFp = new Data_Maybe.Just(fleetReq.value0);
                   return $183;
+              };
+              if (fleetReq instanceof KanColle_Expedition_Requirement.FleetTotalTorp) {
+                  var $184 = {};
+                  for (var $194 in p) {
+                      if ({}.hasOwnProperty.call(p, $194)) {
+                          $184[$194] = p[$194];
+                      };
+                  };
+                  $184.totalTorp = new Data_Maybe.Just(fleetReq.value0);
+                  return $184;
               };
               if (fleetReq instanceof KanColle_Expedition_Requirement.FleetDrum) {
                   var $20 = {};
@@ -10775,6 +10825,11 @@ var PS = {};
                           return s.fp;
                       })(fleet)) >= tfp;
                   })(req.totalFp),
+                  totalTorp: Data_Functor.map(Data_Maybe.functorMaybe)(function (ttp) {
+                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                          return s.tp;
+                      })(fleet)) >= ttp;
+                  })(req.totalTorp),
                   drumCount: Data_Functor.map(Data_Maybe.functorMaybe)(function (dc) {
                       return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.drumCount;
@@ -10805,6 +10860,7 @@ var PS = {};
                   totalLos: toFalseF(Data_Maybe.functorMaybe)(req.totalLos),
                   totalAa: toFalseF(Data_Maybe.functorMaybe)(req.totalAa),
                   totalFp: toFalseF(Data_Maybe.functorMaybe)(req.totalFp),
+                  totalTorp: toFalseF(Data_Maybe.functorMaybe)(req.totalTorp),
                   drumCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCount),
                   drumCarrierCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCarrierCount),
                   fleetSType: toFalseF(Data_Functor.functorArray)(req.fleetSType)

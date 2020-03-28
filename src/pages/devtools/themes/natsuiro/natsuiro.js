@@ -4041,16 +4041,20 @@
 				var drumCount = ship.countDrums();
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
+				var los = ship.ls[0],
+					aa = ship.aa[0],
+					fp = ship.fp[0],
+					tp = ship.tp[0];
 				// TODO asw stats from aircraft seem be quite different for expeditions
 				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
 				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
-				if(includeImprove) {
+				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
+					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4062,7 +4066,8 @@
 					asw : asw,
 					los : los,
 					aa : aa,
-					fp : fp
+					fp : fp,
+					tp : tp
 				};
 			});
 
@@ -4319,6 +4324,15 @@
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
 				.toggle(ExpdReqPack.totalFp !== null);
+
+			setupJQObject(
+				ExpdReqPack.totalTorp,
+				ExpdCheckerResult.totalTorp,
+				Math.floor(fleet.map(f => f.tp).sumValues()),
+				$(".module.activity .activity_expeditionPlanner .totalTorp")
+			);
+			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
+				.toggle(ExpdReqPack.totalTorp !== null);
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,
