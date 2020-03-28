@@ -4141,7 +4141,8 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
+			const shipFlagship = fleetObj.ship()[0] || {};
+			var sparkledCount = fleetObj.ship().filter(s => s.morale >= 50).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
@@ -4172,7 +4173,15 @@
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
 				} else if (condIsGsWithoutSparkle) {
-					// keep -1 for unknown
+					// https://kancolle.fandom.com/wiki/Great_Success
+					// A2 -> 101
+					// 41 -> 41
+					if ([101, 41].includes(selectedExpedition)) {
+						const level = shipFlagship.level;
+						estSuccessRate = 16 + 15 * sparkledCount + Math.floor(Math.sqrt(level) + level / 10);
+					} else {
+						// keep -1 for unknown
+					}
 				} else {
 					estSuccessRate = 0;
 				}
