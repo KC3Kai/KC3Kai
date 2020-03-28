@@ -1834,24 +1834,22 @@
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if(fleetNum >= 1 && fleetNum <= 4) {
+					let tips = fleetNum > 1
+						? ""
+						: KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
-						tips += (!tips ? "" : "\n")
-							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.aa, fstats.as, fstats.ls,
-								Math.qckInt("floor", fstatsImp.fp , 1),
-								Math.qckInt("floor", fstatsImp.aa , 1),
-								Math.qckInt("floor", fstatsImp.as , 1),
-								Math.qckInt("floor", fstatsImp.ls , 1)
-							);
+						const formatStatTip = (term, rawStat, impStat) => String(term).padEnd(5, ' ') + String(rawStat).padStart(6, ' ') + String(Math.qckInt("floor", impStat, 0)).padStart(6, ' ');
+						tips += !tips ? "" : "\n"
+						tips += "{0}:   -\u2605    +\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
+						tips += [
+							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
+							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
+							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
+							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
+							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
+						].join('\n')
 					}
 					return tips;
 				})(selectedFleet)).lazyInitTooltip();

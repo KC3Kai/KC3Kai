@@ -4261,6 +4261,9 @@ ABYSS FLEET
 .ui-tooltip img {
 	object-fit: cover;
 }
+.ui-tooltip-content {
+	font-family: Consolas, 'Courier New', Courier, monospace;
+}
 .ui-tooltip-content hr {
 	margin:3px 0px 3px 0px;
 }
