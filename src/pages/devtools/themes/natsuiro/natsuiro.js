@@ -1835,15 +1835,19 @@
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1
-						? ""
-						: KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					let tips = fleetNum > 1 ? "" :
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
 					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
-						const formatStatTip = (term, rawStat, impStat) => String(term).padEnd(5, ' ') + String(rawStat).padStart(6, ' ') + String(Math.qckInt("floor", impStat, 0)).padStart(6, ' ');
-						tips += !tips ? "" : "\n";
-						tips += "{0}:   -\u2605    +\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
+						// Align with special space char 0xa0 and force to monospaced font
+						const formatStatTip = (term, rawStat, impStat) => (
+							term.padEnd(5, '\u00a0') +
+							String(rawStat).padStart(6, '\u00a0') +
+							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
+						);
+						tips += (!tips ? "" : "\n") + '<span class="monofont">';
+						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
 						tips += [
 							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
 							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
@@ -1852,7 +1856,7 @@
 							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
 						].join('\n');
 					}
-					return tips;
+					return tips + "</span>";
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
@@ -4142,7 +4146,7 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			const shipFlagship = fleetObj.ship()[0] || {};
+			const shipFlagship = fleetObj.ship(0);
 			var sparkledCount = fleetObj.ship().filter(s => s.morale >= 50).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
@@ -4178,7 +4182,7 @@
 					// A2 -> 101
 					// 41 -> 41
 					if ([101, 41].includes(selectedExpedition)) {
-						const level = shipFlagship.level;
+						const level = shipFlagship.level || 1;
 						estSuccessRate = 16 + 15 * sparkledCount + Math.floor(Math.sqrt(level) + level / 10);
 					} else {
 						// keep -1 for unknown
