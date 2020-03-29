@@ -208,18 +208,38 @@ Uses KC3Quest objects to play around with
 					}
 				},
 			},
-			// Uncertained?: Add Feb suffix in case that other reset timings will be implemented later rather than 1st Feb
+			// Reset on 1st February every year
 			yearlyFeb: {
 				type: 'yearlyFeb',
 				key: 'timeToResetYearlyFebQuests',
 				resetMonth: FEBRUARY,
 				questIds: [434, 904, 905],
-				resetQuests: function () { KC3QuestManager.resetYearlies(); },
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
+				},
 				calculateNextReset: function (serverTime) {
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFebruary = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1, FEBRUARY));
-					return nextYearFebruary.getTime() - (4 * MS_PER_HOUR);
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st March every year?
+			yearlyMar: {
+				type: 'yearlyMar',
+				key: 'timeToResetYearlyMarQuests',
+				resetMonth: MARCH,
+				questIds: [436, 912, 914],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMar.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
 		},
@@ -237,11 +257,13 @@ Uses KC3Quest objects to play around with
 			return !!repeatable ? repeatable.questIds.concat() : [];
 		},
 
-		/* DEFINE PAGE
-		When a user loads a quest page, we use its data to update our list
+		/** DEFINE PAGE
+		 * When a user loads a quest page, we use its data to update our list
+		 * Since 2020-03-27, quest page in API no longer exists (in-game UI paginated still), list includes all available items in specified tab ID
 		------------------------------------------*/
-		definePage :function( questList, questPage ){
-			// For each element in quest List
+		definePage :function( questList, questPage, questTabId ){
+			// TODO it's now possible to clean quests non-open-nor-active in-game for some reason,
+			// Update quests for those `api_no` not in current quest list as long as questTabId is 0 (All)
 			var untranslated = [];
 			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
 			for(var ctr in questList){
@@ -370,6 +392,8 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('weekly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('monthly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('quarterly').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -452,11 +476,10 @@ Uses KC3Quest objects to play around with
 			this.save();
 		},
 		
-		resetYearlies :function(){
+		resetYearlies :function(typeId){
 			this.load();
-			console.log("Resetting yearlies in February");
-			this.resetLoop(this.getRepeatableIds('yearlyFeb'));
-			// may add more yearly types (months) here
+			console.log("Resetting yearlies", typeId);
+			this.resetLoop(this.getRepeatableIds(typeId));
 			this.save();
 		},
 		
@@ -651,6 +674,16 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(1) >= 3 && fleet.countShips() <= 5;
+					},
+				"912": // By3 Sortie Akashi as flagship, 3 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.ship(0).master().api_stype === 19 && fleet.countShipType(2) >= 3;
+					},
+				"914": // By4 Sortie 3 CA, 1 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

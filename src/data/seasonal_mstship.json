@@ -3467,5 +3467,21 @@
 		"api_stype": 8,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5433": {
+		"api_id": 5433,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5434": {
+		"api_id": 5434,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
