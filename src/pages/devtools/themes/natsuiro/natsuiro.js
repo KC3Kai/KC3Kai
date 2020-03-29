@@ -123,7 +123,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..45, 100..103, 110..113, 131..132
+		// * expedNum: 1..45, 100..103, 110..114, 131..132, 141
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -142,7 +142,7 @@
 			}
 			data.expedConf = {};
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 45));
-			fillExpedConfDefaultGreatSuccess(100, 101, 102, 103, 110, 111, 112, 113, 131, 132);
+			fillExpedConfDefaultGreatSuccess(100, 101, 102, 103, 110, 111, 112, 113, 114, 131, 132, 141);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -151,6 +151,7 @@
 			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
 			// * extended since 2019-07-18: A4, B3, B4 and World 7. Monthly.
 			// * extended since 2020-02-07: 45, D1, D2
+			// * extended since 2020-03-27: B5, E1 for World 5
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -1834,26 +1835,28 @@
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text( FleetSummary.lv )
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if(fleetNum >= 1 && fleetNum <= 4) {
+					let tips = fleetNum > 1 ? "" :
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
-						tips += (!tips ? "" : "\n")
-							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.aa, fstats.as, fstats.ls,
-								Math.qckInt("floor", fstatsImp.fp , 1),
-								Math.qckInt("floor", fstatsImp.aa , 1),
-								Math.qckInt("floor", fstatsImp.as , 1),
-								Math.qckInt("floor", fstatsImp.ls , 1)
-							);
+						// Align with special space char 0xa0 and force to monospaced font
+						const formatStatTip = (term, rawStat, impStat) => (
+							term.padEnd(5, '\u00a0') +
+							String(rawStat).padStart(6, '\u00a0') +
+							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
+						);
+						tips += (!tips ? "" : "\n") + '<span class="monofont">';
+						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
+						tips += [
+							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
+							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
+							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
+							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
+							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
+						].join('\n');
 					}
-					return tips;
+					return tips + "</span>";
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
@@ -4043,16 +4046,20 @@
 				var drumCount = ship.countDrums();
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
+				var los = ship.ls[0],
+					aa = ship.aa[0],
+					fp = ship.fp[0],
+					tp = ship.tp[0];
 				// TODO asw stats from aircraft seem be quite different for expeditions
 				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
 				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
-				if(includeImprove) {
+				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
+					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4064,7 +4071,8 @@
 					asw : asw,
 					los : los,
 					aa : aa,
-					fp : fp
+					fp : fp,
+					tp : tp
 				};
 			});
 
@@ -4138,7 +4146,8 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
+			const shipFlagship = fleetObj.ship(0);
+			var sparkledCount = fleetObj.ship().filter(s => s.morale >= 50).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
@@ -4169,7 +4178,15 @@
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
 				} else if (condIsGsWithoutSparkle) {
-					// keep -1 for unknown
+					// https://kancolle.fandom.com/wiki/Great_Success
+					// A2 -> 101
+					// 41 -> 41
+					if ([101, 41].includes(selectedExpedition)) {
+						const level = shipFlagship.level || 1;
+						estSuccessRate = 16 + 15 * sparkledCount + Math.floor(Math.sqrt(level) + level / 10);
+					} else {
+						// keep -1 for unknown
+					}
 				} else {
 					estSuccessRate = 0;
 				}
@@ -4321,6 +4338,15 @@
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
 				.toggle(ExpdReqPack.totalFp !== null);
+
+			setupJQObject(
+				ExpdReqPack.totalTorp,
+				ExpdCheckerResult.totalTorp,
+				Math.floor(fleet.map(f => f.tp).sumValues()),
+				$(".module.activity .activity_expeditionPlanner .totalTorp")
+			);
+			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
+				.toggle(ExpdReqPack.totalTorp !== null);
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,
