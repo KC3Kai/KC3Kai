@@ -1539,10 +1539,12 @@ Previously known as "Reactor"
 		"api_get_member/questlist":function(params, response, headers){
 			KC3QuestManager.load();
 			
-			// Update quest data for this page
+			// API changed since 2020-03-27, `api_disp_page` removed, all items will be returned based on `api_tab_id`
+			// Update quest data for ~this page~ this type of peroid tab
 			KC3QuestManager.definePage(
 				response.api_data.api_list,
-				response.api_data.api_disp_page
+				response.api_data.api_disp_page,
+				Number(params.api_tab_id)
 			);
 			
 			// Tell service to pass a message to gamescreen on inspected window to show overlays
@@ -1862,13 +1864,21 @@ Previously known as "Reactor"
 					KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
 					
 					switch(Number(expedNum)){
+					case 1:
+						KC3QuestManager.get(436).increment(0); // D33: Yearly, index 0
+						break;
+					case 2:
+						KC3QuestManager.get(436).increment(1); // D33: Yearly, index 1
+						break;
 					case 3:
 						KC3QuestManager.get(426).increment(0); // D24: Quarterly, index 0
 						KC3QuestManager.get(434).increment(0); // D32: Yearly, index 0
+						KC3QuestManager.get(436).increment(2); // D33: Yearly, index 2
 						break;
 					case 4:
 						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
 						KC3QuestManager.get(428).increment(0); // D26: Quarterly, index 0
+						KC3QuestManager.get(436).increment(3); // D33: Yearly, index 3
 						break;
 					case 5:
 						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
@@ -1880,6 +1890,7 @@ Previously known as "Reactor"
 						break;
 					case 10:
 						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
+						KC3QuestManager.get(436).increment(4); // D33: Yearly, index 4
 						break;
 					case 37:
 					case 38:
@@ -2461,9 +2472,9 @@ Previously known as "Reactor"
 				case 13: // exchange 1 present box with 1 irako
 					//if(itemId === 60) PlayerManager.consumables.presents -= 1;
 				break;
-				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200] (guessed)
+				case 21: // exchange 1 hishimochi with resources [600, 0, 0, 200]
 				case 22: // exchange 1 hishimochi with materials [0, 2, 0, 1]
-				case 23: // exchange 1 hishimochi with 1 irako (guessed)
+				case 23: // exchange 1 hishimochi with 1 irako
 					//if(itemId === 62) PlayerManager.consumables.hishimochi -= 1;
 				break;
 				case 31: // exchange 3 saury (sashimi) with resources [0, 300, 150, 0]

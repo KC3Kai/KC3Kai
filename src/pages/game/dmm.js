@@ -369,7 +369,7 @@ var interactions = {
 		KC3QuestManager.load();
 		$.each(request.questlist, function( index, QuestRaw ){
 			// console.log("showing quest",QuestRaw);
-			if( QuestRaw !=- 1 ){
+			if( QuestRaw !=- 1 && index < 5 ){
 				var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
 				
 				// Get quest data
