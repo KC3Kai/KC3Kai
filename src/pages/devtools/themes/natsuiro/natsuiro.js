@@ -1263,6 +1263,12 @@
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
+
+			if (ConfigManager.info_quest_activity) {
+				$('#atab_quest').show();
+			} else {
+				$('#atab_quest').hide();
+			}
 		},
 
 		Consumables: function(data){
@@ -1447,9 +1453,13 @@
 
 		// Trigger when enter quest screen
 		QuestList: function (data) {
+			$('.quest_filter_button').off('click');
+			if (!ConfigManager.info_quest_activity) {
+				return
+			}
+
 			$("#atab_quest").trigger("click");
 
-			$('.quest_filter_button').off('click');
 			$('.quest_filter_button').click(function (ev) {
 				const target = $(ev.target)
 				const isActive = target.hasClass('active');

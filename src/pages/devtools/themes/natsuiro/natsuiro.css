@@ -1265,6 +1265,7 @@ ABYSS FLEET
   height: 25px;
   opacity: 0.2;
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .module.activity .activity_quest .quest_filter_button.active {
