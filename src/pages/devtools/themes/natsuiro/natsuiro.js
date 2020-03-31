@@ -46,6 +46,9 @@
 	// Panel Reload Reminder Timer
 	var reloadReminderHandler = 0;
 
+	// QuestList
+	const questCacheResult = [];
+
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
@@ -1444,6 +1447,97 @@
 
 		// Trigger when enter quest screen
 		QuestList: function (data) {
+			$("#atab_quest").trigger("click");
+
+			$('.quest_filter_button').off('click');
+			$('.quest_filter_button').click(function (ev) {
+				const target = $(ev.target)
+				const isActive = target.hasClass('active');
+				$('.quest_filter_button').removeClass('active');
+				if (!isActive) {
+					target.addClass('active');
+				}
+				exec();
+			})
+
+			questCacheResult.splice(0, questCacheResult.length);
+
+			if (data && data.length) {
+				questCacheResult.push(...data);
+			}
+
+			exec();
+
+			function exec() {
+				const activeFilter = getActiveFilter();
+				const allowCategories = getAllowCategories(activeFilter);
+				const quests = getFilterQuests(allowCategories)
+				loadQuests(quests);
+			}
+
+			function getActiveFilter() {
+				return Number($('.quest_filter_button.active').attr('filter')) || -1;
+			}
+
+			function getAllowCategories(filter) {
+				switch (filter) {
+					case 1: return [2, 8, 9]
+					case 2: return [3]
+					case 3: return [4]
+					case 4: return [6]
+					case 5: return [1, 5, 7]
+				}
+				return [];
+			}
+
+			function getFilterQuests(categories) {
+				if (!categories.length) {
+					return questCacheResult;
+				}
+				return questCacheResult.filter(v => categories.includes(v.api_category));
+			}
+
+			function loadQuests(quests) {
+				const questList = $(".activity_quest .quest_list");
+				questList.empty();
+
+				quests.forEach((apiQuest, index) => {
+					const quest = KC3QuestManager.get(apiQuest.api_no);
+					if (!quest) { return }
+
+					if (index % 5 === 0) {
+						$('<div>')
+							.addClass('quest_page')
+							.text(Math.floor(index / 5) + 1)
+							.appendTo(questList);
+					}
+
+					const questListItem = $("#factory .quest").clone().appendTo(questList);
+
+					// Quest color box
+					$(".quest_color", questListItem)
+						.css("background", quest.getColor())
+						.addClass("hover")
+						.data("id", quest.id)
+
+					// Quest title
+					if (quest.meta) {
+						$(".quest_text", questListItem)
+							.text(quest.meta().name)
+							.attr("titlealt", KC3QuestManager.buildHtmlTooltip(quest.id, quest.meta(), false, false))
+							.lazyInitTooltip();
+					} else {
+						$(".quest_text", questListItem)
+							.text(KC3Meta.term("UntranslatedQuest"))
+							.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
+							.lazyInitTooltip();
+					}
+
+					// Quest track
+					$(".quest_track", questListItem).remove();
+				})
+			}
+
 		},
 
 		/* QUESTS

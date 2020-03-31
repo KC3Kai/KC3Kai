@@ -313,23 +313,27 @@ html,body {
 	height:255px;
 }
 .module.activity .activity_tabs {
-	width:190px;
-	height:20px;
-	padding:0px 0px 0px 8px;
+  width: 190px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .module.activity .activity_tab {
-	width:43px;
-	height:20px;
-	line-height:20px;
-	font-size:11px;
-	margin:0px 2px 0px 0px;
-	color:#fff;
-	float:left;
-	text-align:center;
-	border-radius:5px 5px 0px 0px;
-	filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
-	-webkit-filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
-	background:rgba(100, 100, 100, 0.618);
+  width: calc(190px / 5);
+  height: 20px;
+  background: rgba(100, 100, 100, 0.618);
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  font-size: 11px;
+  border-radius: 5px 5px 0px 0px;
+  filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+  -webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+}
+
+.module.activity .activity_tab+.activity_tab {
+  margin-left: 2px;
 }
 #atab_activity {
 	cursor:default;
@@ -1243,6 +1247,90 @@ ABYSS FLEET
 	background:#FFF;
 	border:1px solid #CCC;
 	text-shadow:none;
+}
+
+/*------- ACTIVITY: QUEST -------*/
+.module.activity .activity_quest {
+  color: #FFF;
+}
+
+.module.activity .activity_quest .quest_filters {
+  display: flex;
+  justify-content: center;
+}
+
+.module.activity .activity_quest .quest_filter_button {
+  overflow: hidden;
+  width: calc(180px / 5);
+  height: 25px;
+  opacity: 0.2;
+  transition: 0.2s;
+}
+
+.module.activity .activity_quest .quest_filter_button.active {
+  opacity: 1;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="1"] {
+  background: #d75048;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="2"] {
+  background: #98e75f;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="3"] {
+  background: #aaccee;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="4"] {
+  background: #996600;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="5"] {
+  background: #ae76fa;
+}
+
+.module.activity .activity_quest .quest_list {
+  display: flex;
+  flex-direction: column;
+  height: 195px;
+  overflow-y: auto;
+  margin-top: 5px;
+}
+
+.module.activity .activity_quest .quest_list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.module.activity .activity_quest .quest_list .quest_page {
+  position: sticky;
+  top: 0px;
+  padding: 1px;
+  background: #444;
+  text-align: center;
+  font-size: 11px;
+}
+
+.module.activity .activity_quest .quest_list .quest {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.module.activity .activity_quest .quest_list .quest .quest_color {
+  width: 14px;
+  height: 14px;
+  margin: 2px;
+}
+
+.module.activity .activity_quest .quest_list .quest .quest_text {
+  width: 165px;
+  height: 14px;
+  overflow: hidden;
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /*------- ACTIVITY: CRAFTING -------*/
