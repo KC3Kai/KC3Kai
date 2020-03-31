@@ -1455,20 +1455,20 @@
 		QuestList: function (data) {
 			$('.quest_filter_button').off('click');
 			if (!ConfigManager.info_quest_activity) {
-				return
+				return;
 			}
 
 			$("#atab_quest").trigger("click");
 
 			$('.quest_filter_button').click(function (ev) {
-				const target = $(ev.target)
+				const target = $(ev.target);
 				const isActive = target.hasClass('active');
 				$('.quest_filter_button').removeClass('active');
 				if (!isActive) {
 					target.addClass('active');
 				}
 				exec();
-			})
+			});
 
 			questCacheResult.splice(0, questCacheResult.length);
 
@@ -1481,7 +1481,7 @@
 			function exec() {
 				const activeFilter = getActiveFilter();
 				const allowCategories = getAllowCategories(activeFilter);
-				const quests = getFilterQuests(allowCategories)
+				const quests = getFilterQuests(allowCategories);
 				loadQuests(quests);
 			}
 
@@ -1491,11 +1491,11 @@
 
 			function getAllowCategories(filter) {
 				switch (filter) {
-					case 1: return [2, 8, 9]
-					case 2: return [3]
-					case 3: return [4]
-					case 4: return [6]
-					case 5: return [1, 5, 7]
+					case 1: return [2, 8, 9];
+					case 2: return [3];
+					case 3: return [4];
+					case 4: return [6];
+					case 5: return [1, 5, 7];
 				}
 				return [];
 			}
@@ -1513,7 +1513,7 @@
 
 				quests.forEach((apiQuest, index) => {
 					const quest = KC3QuestManager.get(apiQuest.api_no);
-					if (!quest) { return }
+					if (!quest) { return; }
 
 					if (index % 5 === 0) {
 						$('<div>')
@@ -1528,7 +1528,7 @@
 					$(".quest_color", questListItem)
 						.css("background", quest.getColor())
 						.addClass("hover")
-						.data("id", quest.id)
+						.data("id", quest.id);
 
 					// Quest title
 					if (quest.meta) {
@@ -1545,7 +1545,7 @@
 
 					// Quest track
 					$(".quest_track", questListItem).remove();
-				})
+				});
 			}
 
 		},
