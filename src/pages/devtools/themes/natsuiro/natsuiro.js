@@ -1442,6 +1442,10 @@
 			$(".activity_basic .timers").createChildrenTooltips();
 		},
 
+		// Trigger when enter quest screen
+		QuestList: function (data) {
+		},
+
 		/* QUESTS
 		Triggered when quest list is updated
 		---------------------------------------------*/
