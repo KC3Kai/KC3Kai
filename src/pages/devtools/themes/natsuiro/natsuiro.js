@@ -1265,8 +1265,10 @@
 			updateHQEXPGained($(".admiral_lvnext"));
 
 			if (ConfigManager.info_quest_activity) {
+				$('.activity_tabs .activity_tab').addClass('tab_count_5')
 				$('#atab_quest').show();
 			} else {
+				$('.activity_tabs .activity_tab').removeClass('tab_count_5')
 				$('#atab_quest').hide();
 			}
 		},

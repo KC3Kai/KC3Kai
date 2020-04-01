@@ -320,7 +320,7 @@ html,body {
 }
 
 .module.activity .activity_tab {
-  width: calc(190px / 5);
+  width: calc(190px / 4);
   height: 20px;
   background: rgba(100, 100, 100, 0.618);
   color: #fff;
@@ -330,6 +330,10 @@ html,body {
   border-radius: 5px 5px 0px 0px;
   filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
   -webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+}
+
+.module.activity .activity_tab.tab_count_5 {
+	width: calc(190px / 5);
 }
 
 .module.activity .activity_tab+.activity_tab {
