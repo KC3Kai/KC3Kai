@@ -7629,6 +7629,22 @@ var PS = {};
                   )
               )
       }
+      if (v === 141) {
+          return addGroup(fslAndSc(1)(6))
+              (addGroup(fsty(KanColle_Generated_SType.CA.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(450))
+                                  (addGroup(aaTotal(366))
+                                      (aswTotal(330))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              )
+      };
       return [  ];
   };
   var fromRawShip = function (s) {
