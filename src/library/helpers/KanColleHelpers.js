@@ -7585,6 +7585,22 @@ var PS = {};
       if (v === 113) {
           return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(390))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280))))))));
       };
+      if (v === 114) {
+          return addGroup(fslAndSc(65)(6))
+              (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                      (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(510))
+                              (addGroup(aaTotal(400))
+                                  (addGroup(aswTotal(285))
+                                      (losTotal(385))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              )
+      };
       if (v === 131) {
           return addGroup(fslAndSc(50)(5))
               (addGroup(lvlCnt(240))
@@ -7617,6 +7633,26 @@ var PS = {};
                   )
               )
       }
+      if (v === 141) {
+          return addGroup(fslAndSc(57)(6))
+              (addGroup(lvlCnt(350))
+                  (addGroup(fsty(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
+                          (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                              (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                                  (addGroup(fpTotal(450))
+                                      (addGroup(aaTotal(350))
+                                          (addGroup(aswTotal(330))
+                                              (losTotal(250))
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              )
+      };
       return [  ];
   };
   var fromRawShip = function (s) {
