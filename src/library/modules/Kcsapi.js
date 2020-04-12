@@ -1551,6 +1551,7 @@ Previously known as "Reactor"
 			})).execute();
 			
 			// Trigger quest listeners
+			KC3Network.trigger("QuestList", response.api_data.api_list);
 			KC3Network.trigger("Quests");
 		},
 		
