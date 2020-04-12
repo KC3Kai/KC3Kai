@@ -1524,7 +1524,10 @@
 							.appendTo(questList);
 					}
 
-					const questListItem = $("#factory .quest").clone().appendTo(questList);
+					const questListItem = $("#factory .quest")
+						.clone()
+						.toggleClass('completed', quest.status === 3)
+						.appendTo(questList);
 
 					// Quest color box
 					$(".quest_color", questListItem)

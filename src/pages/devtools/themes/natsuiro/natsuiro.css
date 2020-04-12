@@ -1323,10 +1323,19 @@ ABYSS FLEET
   width: auto;
 }
 
+.module.activity .activity_quest .quest_list .quest.completed {
+  background: #00ff0040;
+}
+
 .module.activity .activity_quest .quest_list .quest .quest_color {
   width: 14px;
   height: 14px;
   margin: 2px;
+  border: 2px solid transparent;
+}
+
+.module.activity .activity_quest .quest_list .quest.completed .quest_color {
+  border-color: #0f0;
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_text {
