@@ -1551,6 +1551,7 @@ Previously known as "Reactor"
 			})).execute();
 			
 			// Trigger quest listeners
+			KC3Network.trigger("QuestList", response.api_data.api_list);
 			KC3Network.trigger("Quests");
 		},
 		
@@ -2828,6 +2829,14 @@ Previously known as "Reactor"
 					[905,1,[1,2], true, true], // By2: 2nd requirement: [W1-2] A-rank+ the boss node
 					[905,2,[1,3], true, true], // By2: 3rd requirement: [W1-3] A-rank+ the boss node
 					[905,3,[1,5], true, true], // By2: 4th requirement: [W1-5] A-rank+ the boss node
+					[912,0,[1,3], true, true], // By3: 1st requirement: [W1-3] A-rank+ the boss node
+					[912,1,[2,1], true, true], // By3: 2nd requirement: [W2-1] A-rank+ the boss node
+					[912,2,[2,2], true, true], // By3: 3rd requirement: [W2-2] A-rank+ the boss node
+					[912,3,[2,3], true, true], // By3: 4th requirement: [W2-3] A-rank+ the boss node
+					[914,0,[4,1], true, true], // By4: 1st requirement: [W4-1] A-rank+ the boss node
+					[914,1,[4,2], true, true], // By4: 2nd requirement: [W4-2] A-rank+ the boss node
+					[914,2,[4,3], true, true], // By4: 3rd requirement: [W4-3] A-rank+ the boss node
+					[914,3,[4,4], true, true], // By4: 4th requirement: [W4-4] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)

@@ -107,7 +107,7 @@ Executes processing and relies on KC3Network for the triggers
 			if(typeof responseBody === "string"){
 				try {
 					// Strip `svdata=` from response body if exists then parse JSON
-					var json = responseBody.replace(/[\s\S]*svdata=/, "");
+					var json = responseBody.replace(/^[\s\S]*?svdata=/, "");
 					self.response = JSON.parse(json);
 					self.gameStatus = self.response.api_result;
 				} catch (e) {

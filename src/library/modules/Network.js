@@ -24,6 +24,7 @@ Listens to network history and triggers callback if game events happen
 			ShipSlots: [],
 			GearSlots: [],
 			Timers: [],
+			QuestList: [],
 			Quests: [],
 			Fleet: [],
 			Lbas: [],
