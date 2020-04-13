@@ -52,6 +52,7 @@ Retrieves when needed to apply on components
 				PushAlerts_enabled   : 0,
 				PushAlerts_key       : '',
 
+				info_quest_activity  : true,
 				info_face            : true,
 				info_drop            : true,
 				info_craft           : true,
