@@ -3210,6 +3210,26 @@ KC3改 Equipment Object
 		return modifier * stars;
 	};
 
+	/**
+	 * Get improvement bonus of ASW stat.
+	 */
+	KC3Gear.prototype.aswStatImprovementBonus = function (type) {
+		if (this.isDummy()) { return 0; }
+		const type2 = this.master().api_type[2];
+		const stars = this.stars || 0;
+		let modifier = 0;
+		if (type === 'exped') {
+			switch (type2) {
+				case 14: // Sonar
+				case 15: // Depth Charge
+				case 40: // Large Sonar
+					return Math.sqrt(stars);
+			}
+			return 0;
+		}
+		return 0;
+	}
+
 	/* FIGHTER POWER
 	Get fighter power of this equipment on a slot
 	--------------------------------------------------------------*/
