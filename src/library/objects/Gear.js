@@ -3141,12 +3141,20 @@ KC3改 Equipment Object
 	 * LoS improvement applied to eLoS (Formula 33), air contact, etc.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#k9b5bd32
 	 */
-	KC3Gear.prototype.losStatImprovementBonus = function() {
-		if(this.isDummy()) { return 0; }
+	KC3Gear.prototype.losStatImprovementBonus = function (type) {
+		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		let modifier = 0;
-		switch(type2) {
+		if (type === 'exped') {
+			switch (type2) {
+				case 12: // Small radar
+				case 13: // Large radar
+					return Math.sqrt(stars);
+			}
+			return 0;
+		}
+		switch (type2) {
 			case 12: // Small radar
 				modifier = 1.25; break;
 			case 13: // Large radar
