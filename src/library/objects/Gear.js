@@ -3039,32 +3039,16 @@ KC3改 Equipment Object
 			case "exped":
 				// Fire power bonus for some combat expeditions, such as 43, B4
 				// https://twitter.com/syoukuretin/status/1156734476870811648
-				switch(type2) {
-					case 1: // Small Cal. Main
-						modifier = 0.5; break;
-					case 2: // Medium Cal. Main
-					case 18: // Type 3 Shell
-					case 19: // AP Shell
-					case 21: // AA Machine Gun
-					case 29: // Searchlight
-					case 42: // Large Searchlight
-					case 36: // AA Fire Director
-					case 37: // Anti-Ground Rocket
-					case 3: // Large Cal. Main
-						modifier = 1; break;
-					case 4: // Secondary
-						// 0.2 per star for green HA guns,
-						// 0.3 per star for yellow guns,
-						modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
-						return modifier * stars;
-					case 8: // Torpedo Bomber
-					case 58: // Jet Torpedo Bomber
-						return 0.2 * stars;
-					case 14: // Sonar
-					case 40: // Large Sonar
-						modifier = 0.75; break;
-					case 15: // Depth Charge (Projector)
-						modifier = this.isDepthCharge() ? 0 : 0.75;
+				switch (type2) {
+					case 1: // Small main gun
+						modifier = 0.5;
+						break;
+					case 2: // Medium main gun
+					case 3: // Large main gun
+						modifier = 1;
+						break;
+					case 4: // Secondary gun
+						modifier = 0.3;
 						break;
 				}
 				break;
