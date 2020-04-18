@@ -3228,7 +3228,7 @@ KC3改 Equipment Object
 			return 0;
 		}
 		return 0;
-	}
+	};
 
 	/* FIGHTER POWER
 	Get fighter power of this equipment on a slot
