@@ -3184,16 +3184,16 @@ KC3改 Equipment Object
 			switch (type2) {
 				case 1: // Small main gun
 				case 2: // Med main gun
-					const type3 = this.master().api_type[3]
+					const type3 = this.master().api_type[3];
 					// 16 => HA gun
 					if ([16].includes(type3)) {
-						return 0.3 * stars
+						return 0.3 * stars;
 					}
-					return 0
+					return 0;
 				case 21: // Machine gun
-					return Math.sqrt(stars)
+					return Math.sqrt(stars);
 			}
-			return 0
+			return 0;
 		}
 		switch (type2) {
 			case 6: // carrier-based fighter
