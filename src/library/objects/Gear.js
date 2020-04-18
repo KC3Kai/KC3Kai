@@ -3175,12 +3175,27 @@ KC3改 Equipment Object
 	 * Get improvement bonus of anti-air fighters.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
-	KC3Gear.prototype.aaStatImprovementBonus = function() {
-		if(this.isDummy()) { return 0; }
+	KC3Gear.prototype.aaStatImprovementBonus = function (type) {
+		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		let modifier = 0;
-		switch(type2) {
+		if (type === 'exped') {
+			switch (type2) {
+				case 1: // Small main gun
+				case 2: // Med main gun
+					const type3 = this.master().api_type[3]
+					// 16 => HA gun
+					if ([16].includes(type3)) {
+						return 0.3 * stars
+					}
+					return 0
+				case 21: // Machine gun
+					return Math.sqrt(stars)
+			}
+			return 0
+		}
+		switch (type2) {
 			case 6: // carrier-based fighter
 				modifier = 0.2; break;
 			case 7: // fighter bomber (dive bomber with AA stat)
