@@ -119,6 +119,12 @@
 		"help" : "",
 		"contents" : [
 			{
+				"id" : "info_quest_activity",
+				"name" : "SettingsQuestListActivity",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_face",
 				"name" : "SettingsConstructionFaces",
 				"type" : "check",
