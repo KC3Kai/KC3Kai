@@ -1323,8 +1323,12 @@ ABYSS FLEET
   width: auto;
 }
 
+.module.activity .activity_quest .quest_list .quest.activated {
+  background: #FF993344;
+}
+
 .module.activity .activity_quest .quest_list .quest.completed {
-  background: #00ff0040;
+  background: #00FF0040;
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_color {
@@ -1334,8 +1338,12 @@ ABYSS FLEET
   border: 2px solid transparent;
 }
 
+.module.activity .activity_quest .quest_list .quest.activated .quest_color {
+  border-color: #F93;
+}
+
 .module.activity .activity_quest .quest_list .quest.completed .quest_color {
-  border-color: #0f0;
+  border-color: #0F0;
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_text {
