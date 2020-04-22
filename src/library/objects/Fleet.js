@@ -271,23 +271,26 @@ Contains summary information about a fleet and its ships
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else {
+			} else if (includeImproveType !== "exped") {
 				// asw with equipment is a special case, only some equip types counted
 				ss.as = ship.nakedAsw()
 					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
-			if(includeImproveType) {
+			if (includeImproveType) {
 				// TODO use accurate types
-				ship.equipment(true).forEach(gear => {
-					ss.fp += gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire");
-					ss.tp += gear.attackPowerImprovementBonus("torpedo");
-					ss.aa += gear.aaStatImprovementBonus();
-					//ss.ar += gear.armorStatImprovementBonus();
-					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
-					ss.ls += gear.losStatImprovementBonus();
-					ss.ht += gear.accStatImprovementBonus(includeImproveType);
+				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
+					const bonus = {
+						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
+						tp: gear.attackPowerImprovementBonus("torpedo"),
+						aa: gear.aaStatImprovementBonus(includeImproveType),
+						as: gear.aswStatImprovementBonus(includeImproveType),
+						ev: gear.evaStatImprovementBonus(includeImproveType),
+						ls: gear.losStatImprovementBonus(includeImproveType),
+						ht: gear.accStatImprovementBonus(includeImproveType),
+					};
+					Object.keys(bonus).forEach(key => ss[key] += bonus[key]);
 				});
 			}
 			Object.keys(stats).forEach(stat => {
