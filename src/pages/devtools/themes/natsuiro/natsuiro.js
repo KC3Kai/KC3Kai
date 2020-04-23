@@ -1527,6 +1527,7 @@
 
 					const questListItem = $("#factory .quest")
 						.clone()
+						.toggleClass('activated', quest.status === 2)
 						.toggleClass('completed', quest.status === 3)
 						.appendTo(questList);
 
