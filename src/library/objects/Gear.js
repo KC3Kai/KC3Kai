@@ -945,6 +945,80 @@ KC3改 Equipment Object
 					"72": "62",
 				},
 			},
+			// Swordfish (Seaplane Model)
+			"367": {
+				count: 0,
+				byClass: {
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 1, "tais": 1, "houk": 1, "saku": 1 },
+					},
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 2, "tais": 1, "houk": 1, "saku": 1 },
+					},
+					// Mizuho Class
+					"62": {
+						multiple: { "houg": 1, "houk": 1, "saku": 1 },
+					},
+					// Kamoi Class
+					"72": "62",
+				},
+			},
+			// Swordfish Mk.III Kai (Seaplane Model)
+			"368": {
+				count: 0,
+				byClass: {
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 2, "tais": 3, "houk": 1, "saku": 2 },
+					},
+					// Gotland Class
+					"89": [
+						{
+							multiple: { "houg": 4, "tais": 3, "houk": 2, "saku": 3 },
+						},
+						{
+							// Gotland andra FP +2, TP +2, EV +1, LoS +1
+							remodel: 2,	
+							multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 1 },
+						},
+					],
+					// Mizuho Class
+					"62": {
+						multiple: { "houg": 1, "raig": 2, "houk": 1, "saku": 2 },
+					},
+					// Kamoi Class
+					"72": "62",
+				},
+			},
+			// Swordfish Mk.III Kai (Seaplane Model/Skilled)
+			"369": {
+				count: 0,
+				byClass: {
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 3, "tais": 3, "houk": 2, "saku": 3 },
+					},
+					// Gotland Class
+					"89": [
+						{
+							multiple: { "houg": 5, "tais": 4, "houk": 4, "saku": 3 },
+						},
+						{
+							// Gotland andra FP +3, TP +3, EV +2, LoS +?
+							remodel: 2,	
+							multiple: { "houg": 3, "raig": 3, "houk": 2 },
+						},
+					],
+					// Mizuho Class
+					"62": {
+						multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 2 },
+					},
+					// Kamoi Class
+					"72": "62",
+				},
+			},
 			// S9 Osprey
 			"304": {
 				count: 0,
@@ -965,6 +1039,74 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// Swordfish Mk.II Kai (Recon Seaplane Model)
+			"370": {
+				count: 0,
+				byClass: {
+					// Gotland Class
+					"89": [
+						{
+							multiple: { "houg": 1, "tais": 3, "houk": 1, "saku": 1 },
+						},
+						{
+							// Gotland andra LoS +1
+							remodel: 2,	
+							multiple: { "saku": 1 },
+						},
+					],
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 1, "tais": 3, "houk": 1, "saku": 1 },
+					},
+					// Mizuho Class
+					"62": {
+						multiple: { "houg": 1, "tais": 2, "houk": 1, "saku": 1 },
+					},
+					// Kamoi Class
+					"72": "62",
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 6, "tais": 3, "houk": 3, "saku": 3 },
+					},
+					// Nelson Class
+					"88": {
+						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+					},				
+				},
+			},
+			// Fairey Seafox Kai
+			"371": {
+				count: 0,
+				byClass: {
+					// Gotland Class
+					"89": [
+						{
+							multiple: { "houg": 4, "tais": 2, "houk": 3, "saku": 6 },
+						},
+						{
+							// Gotland andra FP +2, EV +2, LoS +3
+							remodel: 2,	
+							multiple: { "houg": 2, "houk": 2, "saku": 3 },
+						},
+					],
+					// Commandant Teste Class
+					"70": {
+						multiple: { "houg": 2, "tais": 1, "houk": 2, "saku": 4 },
+					},
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houk": 1, "saku": 3 },
+					},
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
+					},
+					// Nelson Class
+					"88": {
+						multiple: { "houg": 6, "tais": 1, "houk": 4, "saku": 5 },
+					},				
+				},
+			},			
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -1103,7 +1245,7 @@ KC3改 Equipment Object
 							remodel: 1,
 							multiple: { "houg": 1, "houk": 1 },
 						},
-						// extra +1 fp, +1 tp for Kongou Kai Ni C
+						// extra +1 fp, +1 tp for Kongou Class Kai Ni C
 						{
 							remodel: 3,
 							multiple: { "houg": 1, "raig": 1 },
@@ -1136,7 +1278,7 @@ KC3改 Equipment Object
 							remodel: 2,
 							multiple: { "houg": 1, "tyku": 1 },
 						},
-						// extra +1 fp, +2 tp for Kongou Kai Ni C
+						// extra +1 fp, +2 tp for Kongou Class Kai Ni C
 						{
 							remodel: 3,
 							multiple: { "houg": 1, "raig": 2 },
@@ -1492,22 +1634,22 @@ KC3改 Equipment Object
 					{
 						// Hiei, Kirishima, Choukai, Akatsuki
 						ids: [86, 150, 210, 85, 152, 212, 69, 272, 427, 34, 234, 437],
-						single: { "houg": 2, "houk": -1 },
+						single: { "houg": 4, "houk": -1 },
 					},
 					{
 						// Jintsuu
 						ids: [55, 159, 223],
-						single: { "houg": 2, "raig": 2, "houk": -1 },
+						single: { "houg": 8, "raig": 6, "houk": -1 },
 					},
 					{
 						// Akigumo
 						ids: [132, 301],
-						multiple: { "houg": 1 },
+						multiple: { "houg": 2 },
 					},
 					{
 						// Yukikaze
 						ids: [20, 228],
-						multiple: { "tyku": 1 },
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 				],
 			},
@@ -1518,12 +1660,21 @@ KC3改 Equipment Object
 					{
 						// Hiei, Kirishima
 						ids: [86, 150, 210, 85, 152, 212],
-						single: { "houg": 3, "houk": -2 },
+						single: { "houg": 6, "houk": -2 },
+					},
+					{
+						// Hiei Kai Ni C
+						id: [592],
+						multiple: { "houg": 9, "raig": 3, "houk": -2 },
+						synergy: {
+							flags: [ "kamikazeTwinTorpedo" ],
+							single: { "raig": 5 },
+						}
 					},
 					{
 						// Yamato, Musashi
 						ids: [131, 136, 143, 148, 546],
-						single: { "houg": 2, "houk": -1 },
+						single: { "houg": 4, "houk": -1 },
 					},
 				],
 			},
@@ -2628,7 +2779,17 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Kongou Class Kai+
-					"6": "2",
+					"6": [
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+						{
+							// Extra +2 fp for Kongou Class Kai Ni C
+							remodel: 3,
+							multiple: { "houg": 2 },
+						},
+					],
 					// Nagato Class
 					"19": [
 						{
@@ -2654,15 +2815,18 @@ KC3改 Equipment Object
 						},
 					],
 				},
-				byShip: {
-					// Kongou K2C
-					ids: [591],
-					single: { "houg": 2 },
-				}
 			},
 			// Type 3 Shell
 			"35": {
 				count: 0,
+				byClass: {
+					"6": 					
+						{
+							// Kongou Class Kai Ni C
+							remodel: 3,
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+				},
 				byShip: [
 					{
 						// Kongou K2 +1 fp, +1 aa
@@ -2690,10 +2854,16 @@ KC3改 Equipment Object
 			"317": {
 				count: 0,
 				byClass: {
-					// Kongou Class +1 fp, +1 aa
-					"6": {
-						single: { "houg": 1, "tyku": 1 },
-					},
+					"6": [
+						{
+							// Kongou Class +1 fp, +1 aa
+							single: { "houg": 1, "tyku": 1 },
+						},
+						{
+							// Kongou Class K2C totally +3 fp, +3 aa
+							single: { "houg": 2, "tyku": 2 },
+						},
+					],
 					// Nagato Class Kai Ni +1 fp, +2 aa
 					"19": {
 						remodel: 2,
@@ -2820,6 +2990,121 @@ KC3改 Equipment Object
 					single: { "souk": 2, "houk": 7 },
 				},
 			},
+			// New Kanhon Design Anti-torpedo Bulge (Large)
+			"204": {
+				count: 0,
+				byClass: {
+					// Kongou Class Kai Ni C
+					"6": [
+						{
+							remodel: 3,
+							multiple: { "raig": 1, "souk": 1 },
+						},
+						{
+							remodel: 3,
+							minstars: 7,
+							multiple: { "souk": 1 },
+						},
+						{
+							remodel: 3,
+							minstars: 10,
+							multiple: { "raig": 1 },
+						},
+					]
+				}
+			},
+			// New Model High Temperature High Pressure Boiler
+			"87": {
+				count: 0,
+				byClass: {
+					// Kongou Class Kai Ni C
+					"6": [
+						{
+							remodel: 3,
+							multiple: { "raig": 1, "houk": 1 },
+						},
+						{
+							remodel: 3,
+							minstars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							remodel: 3,
+							minstars: 8,
+							multiple: { "raig": 1 },
+						},
+						{
+							remodel: 3,
+							minstars: 10,
+							multiple: { "houg": 1 },
+						},
+					]
+				}
+			},
+			"129": {
+				count: 0,
+				byClass: {
+					// All IJN DD fp +1, tp +2, asw +2, ev +2, los +1
+					// Ayanami Class
+					"1": {
+						multiple: { "houg": 1, "raig": 2, "tais": 2, "houk": 2, "saku": 1 },
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Yuugumo Class
+					"38": "1",
+					// Akizuki Class
+					"54": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Kuma Class
+					"4": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
+					},
+					// All IJN CL fp +1, tp +2, ev +2, los +3
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Tenryuu Class
+					"21": "4",
+					// Yuubari Class
+					"34": "4",
+					// Agano Class
+					"41": "4",
+					// Ooyodo Class
+					"52": "4",
+					// All IJN CA fp +1, ev +2, los +3
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
+					},
+					// Takao Class
+					"8": "7",
+					// Mogami Class
+					"9": "7",
+					// Aoba Class
+					"13": "7",
+					// Myoukou Class
+					"29": "7",
+					// Tone Class
+					"31": "7"
+				}
+			}
 		};
 	};
 
