@@ -313,31 +313,31 @@ html,body {
 	height:255px;
 }
 .module.activity .activity_tabs {
-  width: 190px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	width: 190px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .module.activity .activity_tab {
-  width: calc(190px / 4);
-  height: 20px;
-  background: rgba(100, 100, 100, 0.618);
-  color: #fff;
-  text-align: center;
-  line-height: 20px;
-  font-size: 11px;
-  border-radius: 5px 5px 0px 0px;
-  filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
-  -webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+	width: calc(180px / 4);
+	height: 20px;
+	background: rgba(100, 100, 100, 0.618);
+	color: #fff;
+	text-align: center;
+	line-height: 20px;
+	font-size: 11px;
+	border-radius: 5px 5px 0px 0px;
+	filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+	-webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
 }
 
 .module.activity .activity_tab.tab_count_5 {
-	width: calc(190px / 5);
+	width: calc(180px / 5);
 }
 
 .module.activity .activity_tab+.activity_tab {
-  margin-left: 2px;
+	margin-left: 1px;
 }
 #atab_activity {
 	cursor:default;
@@ -1260,14 +1260,14 @@ ABYSS FLEET
 
 .module.activity .activity_quest .quest_filters {
   display: flex;
+  height: 25px;
   justify-content: center;
 }
 
 .module.activity .activity_quest .quest_filter_button {
   overflow: hidden;
   width: calc(180px / 5);
-  height: 25px;
-  opacity: 0.2;
+  opacity: 0.3;
   transition: 0.2s;
   cursor: pointer;
 }
@@ -1297,8 +1297,8 @@ ABYSS FLEET
 }
 
 .module.activity .activity_quest .quest_list {
-  display: flex;
-  flex-direction: column;
+  display: block;
+/*  flex-direction: column; */
   height: 195px;
   overflow-y: auto;
   margin-top: 5px;

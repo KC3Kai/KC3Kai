@@ -512,6 +512,7 @@
 				}
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
+				updateQuestActivityTab();
 			}
 		});
 
@@ -1013,6 +1014,7 @@
 			}else{
 				overrideFocus = false;
 			}
+			updateQuestActivityTab(true);
 
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
@@ -1263,14 +1265,6 @@
 			$(".admiral_lvval").text( PlayerManager.hq.level );
 			$(".admiral_lvbar").css({width: Math.round(PlayerManager.hq.exp[0]*58)+"px"});
 			updateHQEXPGained($(".admiral_lvnext"));
-
-			if (ConfigManager.info_quest_activity) {
-				$('.activity_tabs .activity_tab').addClass('tab_count_5');
-				$('#atab_quest').show();
-			} else {
-				$('.activity_tabs .activity_tab').removeClass('tab_count_5');
-				$('#atab_quest').hide();
-			}
 		},
 
 		Consumables: function(data){
@@ -1456,10 +1450,10 @@
 		// Trigger when enter quest screen
 		QuestList: function (data) {
 			$('.quest_filter_button').off('click');
+			updateQuestActivityTab();
 			if (!ConfigManager.info_quest_activity) {
 				return;
 			}
-
 			$("#atab_quest").trigger("click");
 
 			$('.quest_filter_button').click(function (ev) {
@@ -1472,8 +1466,7 @@
 				exec();
 			});
 
-			questCacheResult.splice(0, questCacheResult.length);
-
+			questCacheResult.length = 0;
 			if (data && data.length) {
 				questCacheResult.push(...data);
 			}
@@ -4776,6 +4769,22 @@
 			}
 		} catch (e) {
 			console.warn("Failed to open battle simulator", e);
+		}
+	}
+
+	function updateQuestActivityTab(isGoHome) {
+		if (ConfigManager.info_quest_activity) {
+			$(".activity_tabs .activity_tab").addClass("tab_count_5");
+			$("#atab_quest").show();
+			if (!!isGoHome && $("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
+		} else {
+			$(".activity_tabs .activity_tab").removeClass("tab_count_5");
+			$("#atab_quest").hide();
+			if ($("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
 		}
 	}
 
