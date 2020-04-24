@@ -115,10 +115,12 @@ Provides access to data on built-in JSON files
 		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
+			150, // Hiei K2 -> K2C
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2
 			293, // Yuubari Kai -> K2
+			579, // Gotland Kai -> andra
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 601, 1496],
