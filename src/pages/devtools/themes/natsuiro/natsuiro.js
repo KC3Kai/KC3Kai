@@ -46,7 +46,7 @@
 	// Panel Reload Reminder Timer
 	var reloadReminderHandler = 0;
 
-	// QuestList
+	// QuestList api result cache
 	const questCacheResult = [];
 
 	// A jquery-ui tooltip options like native one
@@ -1522,6 +1522,8 @@
 						.clone()
 						.toggleClass('activated', quest.status === 2)
 						.toggleClass('completed', quest.status === 3)
+						.toggleClass('percent50', quest.progress === 1)
+						.toggleClass('percent80', quest.progress === 2)
 						.appendTo(questList);
 
 					// Quest color box

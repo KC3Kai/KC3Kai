@@ -1324,11 +1324,16 @@ ABYSS FLEET
 }
 
 .module.activity .activity_quest .quest_list .quest.activated {
-  background: #FF993344;
+  background: rgba(255,153,51,0.2);
 }
-
+.module.activity .activity_quest .quest_list .quest.percent50 {
+  background: rgba(51,255,255,0.2);
+}
+.module.activity .activity_quest .quest_list .quest.percent80 {
+  background: rgba(233,255,51,0.2);
+}
 .module.activity .activity_quest .quest_list .quest.completed {
-  background: #00FF0040;
+  background: rgba(0,255,0,0.2);
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_color {
@@ -1341,7 +1346,6 @@ ABYSS FLEET
 .module.activity .activity_quest .quest_list .quest.activated .quest_color {
   border-color: #F93;
 }
-
 .module.activity .activity_quest .quest_list .quest.completed .quest_color {
   border-color: #0F0;
 }
