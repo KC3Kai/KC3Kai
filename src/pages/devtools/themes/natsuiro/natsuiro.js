@@ -1529,7 +1529,6 @@
 					// Quest color box
 					$(".quest_color", questListItem)
 						.css("background", quest.getColor())
-						.addClass("hover")
 						.data("id", quest.id);
 
 					// Quest title

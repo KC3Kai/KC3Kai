@@ -1941,7 +1941,7 @@ KC3改 Equipment Object
 					"66": {
 						multiple: { "raig": 1, "houk": 2 },
 					},
-					// Kongou Kai Ni C
+					// Kongou Class Kai Ni C
 					"6": {
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
