@@ -8073,11 +8073,17 @@ var PS = {};
       if (eId === 113) {
           return income(0)(0)(1200)(650);
       };
+      if (eId === 114) {
+          return income(500)(500)(1000)(750);
+      };
       if (eId === 131) {
           return income(0)(20)(20)(100);
       };
       if (eId === 132) {
           return income(0)(0)(400)(800);
+      };
+      if (eId === 141) {
+          return income(0)(600)(600)(1000);
       };
       return Data_Monoid.mempty(incomeMonoid);
   };
