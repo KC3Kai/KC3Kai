@@ -3041,6 +3041,7 @@ KC3改 Equipment Object
 					]
 				}
 			},
+			// Skilled Lookouts
 			"129": {
 				count: 0,
 				byClass: {
@@ -3104,6 +3105,21 @@ KC3改 Equipment Object
 					// Tone Class
 					"31": "7"
 				}
+			},
+			// All Radars
+			"t3_11": {
+				count: 0,
+				byShip: [
+					{
+						// Okinami K2 with Air Radar fp +1, aa +2, ev +3
+						// btw, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
+						ids: [569],
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "houg": 1, "tyku": 2, "houk": 3 },
+						},
+					}
+				]
 			}
 		};
 	};
@@ -3773,12 +3789,14 @@ KC3改 Equipment Object
 
 	KC3Gear.prototype.isAirRadar = function(){
 		return this.exists() &&
-			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			// BTW, type 93 is the special Large Radar that not existed in master data without special converation
+			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tyku > 1;
 	};
 
 	KC3Gear.prototype.isSurfaceRadar = function(){
-		// currently uses high LoS definition instead of high accuracy one
+		// According main.js codes, has confirmed that Surface Radar is `api_saku >= 5`, Air Radar is `api_tyku >= 2`,
+		// so uses high LoS definition instead of high accuracy one
 		return this.isHighLineOfSightRadar();
 	};
 
@@ -3788,7 +3806,7 @@ KC3改 Equipment Object
 		   which the only difference is including '[278] SK Radar' large radar.
 		   sample: DD Kasumi K2 + SK Radar + Model C gun gets synergy bonus. */
 		return this.exists() &&
-			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_saku > 4;
 	};
 
@@ -3799,7 +3817,7 @@ KC3改 Equipment Object
 		 but they have forgotten there are Air Radars with accuracy > 2 in Large Radar category,
 		 and there is a Destroyer (Kasumi K2) who can equip Large Radar... */
 		return this.exists() &&
-			[12, 13].indexOf(this.master().api_type[2]) > -1 &&
+			[12, 13, 93].indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_houm > 2;
 	};
 
