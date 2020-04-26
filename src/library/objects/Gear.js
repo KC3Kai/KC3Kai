@@ -2993,6 +2993,7 @@ KC3改 Equipment Object
 			// New Kanhon Design Anti-torpedo Bulge (Large)
 			"204": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Kongou Class Kai Ni C
 					"6": [
@@ -3002,12 +3003,12 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 3,
-							minstars: 7,
+							minStars: 7,
 							multiple: { "souk": 1 },
 						},
 						{
 							remodel: 3,
-							minstars: 10,
+							minStars: 10,
 							multiple: { "raig": 1 },
 						},
 					]
@@ -3016,6 +3017,7 @@ KC3改 Equipment Object
 			// New Model High Temperature High Pressure Boiler
 			"87": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Kongou Class Kai Ni C
 					"6": [
@@ -3025,17 +3027,17 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 3,
-							minstars: 6,
+							minStars: 6,
 							multiple: { "houk": 1 },
 						},
 						{
 							remodel: 3,
-							minstars: 8,
+							minStars: 8,
 							multiple: { "raig": 1 },
 						},
 						{
 							remodel: 3,
-							minstars: 10,
+							minStars: 10,
 							multiple: { "houg": 1 },
 						},
 					]
