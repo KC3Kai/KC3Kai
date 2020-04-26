@@ -3444,12 +3444,12 @@ KC3改 Equipment Object
 	 * LoS improvement applied to eLoS (Formula 33), air contact, etc.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#k9b5bd32
 	 */
-	KC3Gear.prototype.losStatImprovementBonus = function (type) {
+	KC3Gear.prototype.losStatImprovementBonus = function(type = "fire") {
 		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		let modifier = 0;
-		if (type === 'exped') {
+		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 12: // Small radar
 				case 13: // Large radar
@@ -3478,12 +3478,12 @@ KC3改 Equipment Object
 	 * Get improvement bonus of anti-air fighters.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
-	KC3Gear.prototype.aaStatImprovementBonus = function (type) {
+	KC3Gear.prototype.aaStatImprovementBonus = function(type = "fire") {
 		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		let modifier = 0;
-		if (type === 'exped') {
+		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 1: // Small main gun
 				case 2: // Med main gun
@@ -3516,12 +3516,12 @@ KC3改 Equipment Object
 	/**
 	 * Get improvement bonus of ASW stat.
 	 */
-	KC3Gear.prototype.aswStatImprovementBonus = function (type) {
+	KC3Gear.prototype.aswStatImprovementBonus = function(type = "asw") {
 		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
 		let modifier = 0;
-		if (type === 'exped') {
+		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 14: // Sonar
 				case 15: // Depth Charge
@@ -3530,7 +3530,7 @@ KC3改 Equipment Object
 			}
 			return 0;
 		}
-		return 0;
+		return modifier * stars;
 	};
 
 	/* FIGHTER POWER
