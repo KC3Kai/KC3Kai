@@ -28,6 +28,11 @@
 						$("a.more", sectionBox).hide();
 					}
 					
+					// Add line through style like <del> tag if deprecated
+					if(response[sctr].deprecated){
+						$(".title a", sectionBox).css("text-decoration", "line-through");
+					}
+					
 					// Add settings boxes under this section
 					for(const cctr in response[sctr].contents){
 						// hide "private/deprecated" settings
