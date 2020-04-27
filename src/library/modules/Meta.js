@@ -115,18 +115,21 @@ Provides access to data on built-in JSON files
 		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
+			150, // Hiei K2 -> K2C
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2
 			293, // Yuubari Kai -> K2
+			579, // Gotland Kai -> andra
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 601, 1496],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496],
+		kongouCutinShips: [591, 592],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -317,6 +320,23 @@ Provides access to data on built-in JSON files
 				this._type2IconMap = iconMap;
 			}
 			return this._type2IconMap[type2Id] || [];
+		},
+		
+		itemTypesByType3 :function(type3Id){
+			if(!this._type3TypeMap){
+				// Build type3 id to type2 id map from master data
+				const typeMap = {};
+				$.each(KC3Master.all_slotitems(), (_, g) => {
+					if(KC3Master.isAbyssalGear(g.api_id)) return false;
+					// some items are belonged to XXX (II) type (38, 93, 94)
+					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
+					const iconId = g.api_type[3];
+					typeMap[iconId] = typeMap[iconId] || [];
+					if(!typeMap[iconId].includes(t2Id)) typeMap[iconId].push(t2Id);
+				});
+				this._type3TypeMap = typeMap;
+			}
+			return this._type3TypeMap[type3Id] || [];
 		},
 		
 		shipNameAffix :function(affix){

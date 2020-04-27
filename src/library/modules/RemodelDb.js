@@ -58,6 +58,8 @@
                     return 181;
                 case 149: // Kongou K2
                     return 300;
+                case 150: // Hiei K2
+                    return 330;
                 case 277: // Akagi Kai
                     return 100;
                 case 594: // Akagi Kai Ni
@@ -101,6 +103,8 @@
                 case 623: // Yuubari Kai Ni Toku
                 case 624: // Yuubari Kai Ni D
                     return 30;
+                case 579: // Gotland Kai
+                    return 55;
                 default:
                     return (steel < 4500) ? 0
                          : (steel < 5500) ? 10
@@ -114,7 +118,7 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 &&
-            	![82, 88, 149, 225, 226, 227, 277, 293, 359, 503, 504, 520, 594, 599].includes(ship_id_from);
+            	![82, 88, 149, 150, 225, 226, 227, 277, 293, 359, 503, 504, 520, 579, 594, 599].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -156,6 +160,8 @@
                 case 623: // Yuubari Kai Ni Toku
                 case 624: // Yuubari Kai Ni D
                     return 30;
+                case 579: // Gotland Kai
+                    return 35;
                 default:
                     return 0;
             }

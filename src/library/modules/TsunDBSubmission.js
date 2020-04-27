@@ -1017,7 +1017,8 @@
 					100: [2, 4],
 					101: [1],
 					102: [1],
-					103: [1, 2]
+					103: [1, 2],
+					104: [1]
 				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
@@ -1048,7 +1049,7 @@
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102, 103];
+					const specialCutinIds = [100, 101, 102, 103, 104];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||

@@ -919,12 +919,16 @@
 					return true;
 				};
 				const checkByShipBonusDef = (bonusDef, shipId, stype, gearType2) => (
-					KC3Master.equip_type(stype, shipId).includes(gearType2) &&
-					((bonusDef.ids && bonusDef.ids.includes(shipId)) ||
-					(bonusDef.stypes && bonusDef.stypes.includes(stype)) ||
-					(bonusDef.excludes && !bonusDef.excludes.includes(shipId)) ||
-					(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)) ||
-					(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes))
+					(Array.isArray(gearType2) ?
+						gearType2.some(id => KC3Master.equip_type(stype, shipId).includes(id)) :
+						KC3Master.equip_type(stype, shipId).includes(gearType2)
+					) && (
+						(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+						(bonusDef.stypes && bonusDef.stypes.includes(stype)) ||
+						(bonusDef.excludes && !bonusDef.excludes.includes(shipId)) ||
+						(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)) ||
+						(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes)
+					)
 				);
 				const checkByShipBonusRequirements = (byShip, shipId, stype, gearType2) =>
 					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, stype, gearType2));
@@ -954,7 +958,8 @@
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
-					const gearType2 = mstId.startsWith("t2_") ?
+					const gearType2 = mstId.startsWith("t3_") ?
+						KC3Meta.itemTypesByType3(Number(mstId.substr(3))) : mstId.startsWith("t2_") ?
 						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?
 						KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
@@ -1003,7 +1008,8 @@
 						}
 						// Ship bonuses
 						if (gear.byShip) {
-							const gearType2 = gear.id.startsWith("t2_") ?
+							const gearType2 = gear.id.startsWith("t3_") ?
+								KC3Meta.itemTypesByType3(Number(gear.id.substr(3))) : gear.id.startsWith("t2_") ?
 								Number(gear.id.substr(3)) : Number.isInteger(Number(gear.id)) ?
 								KC3Master.slotitem(gear.id).api_type[2] : 0;
 							const list = ensureArray(gear.byShip).filter(bonusDef =>
@@ -1042,6 +1048,16 @@
 								const allGears = KC3Master.all_slotitems();
 								const matchedGearNames = Object.keys(allGears).filter(
 									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[2] == typeId
+								).map(id => KC3Meta.gearName(allGears[id].api_name)).join("\n");
+								$(".gearName", gearBox).text(typeName).attr("title", matchedGearNames);
+							} else if (gear.id.startsWith("t3_")) {
+								const iconId = gear.id.substr(3);
+								const typeName = KC3Meta.gearTypeName(3, iconId);
+								$(".gearId", gearBox).text(`[I${iconId}]`);
+								$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconId));
+								const allGears = KC3Master.all_slotitems();
+								const matchedGearNames = Object.keys(allGears).filter(
+									id => !KC3Master.isAbyssalGear(id) && allGears[id].api_type[3] == iconId
 								).map(id => KC3Meta.gearName(allGears[id].api_name)).join("\n");
 								$(".gearName", gearBox).text(typeName).attr("title", matchedGearNames);
 							} else {
