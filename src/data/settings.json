@@ -1076,13 +1076,15 @@
 	},
 	{
 		"section": "SettingsOpenDBSubmission",
-		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
+		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2973",
+		"deprecated" : 1,
 		"contents" :[
 			{
 				"id" : "OpenDBSubmission_enabled",
 				"name" : "SettingsEnableOpenDBSubmission",
 				"type" : "check",
-				"options" : {}
+				"options" : {},
+				"hide" : 0
 			}
 		]
 	},
