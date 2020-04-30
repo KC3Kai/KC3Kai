@@ -388,6 +388,172 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Tenzan Model 12A Kai (with Type 6 Airborne Radar)
+			"373": {
+				count: 0,
+				byClass: {
+					// Shouhou Class
+					"11": [
+						// Base
+						{
+							multiple: { "tais": 1 }
+						},
+						// Kai
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},						
+					],
+					// Chitose Class
+					"15": [
+						// CVL base
+						{
+							remodel: 3,
+							multiple: { "houg": 1 },
+						},
+						// CVL Kai
+						{
+							remodel: 4,
+							multiple: { "raig": 1 },
+						},
+						// CVL Kai Ni
+						{
+							remodel: 5,
+							multiple: { "houk": 1 },
+						},						
+					],
+					// Hiyou Class
+					"24": {
+						multiple: { "houg": 1, "raig": 1, "houk": 1 },
+					},
+					// Shoukaku Class
+					"33": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Taihou Class
+					"43": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Taigei Class
+					"50": [
+						// Ryuuhou
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1, "tais": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},						
+					],
+				},
+				byShip: [
+					{
+						// Shoukaku, extra +1 fp
+						ids: [110, 288, 461, 466],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuikaku, extra +1 ev
+						ids: [111, 112, 462, 467],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+				]
+			},
+			// Tenzan Model 12A Kai (Skilled / with Type 6 Airborne Radar)
+			"374": {
+				count: 0,
+				byClass: {
+					// Shouhou Class
+					"11": [
+						// Base
+						{
+							multiple: { "houg": 1, "tais": 1 }
+						},
+						// Kai
+						{
+							remodel: 1,
+							multiple: { "raig": 1, "tais": 1, "houk": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},						
+					],
+					// Chitose Class
+					"15": [
+						// CVL base
+						{
+							remodel: 3,
+							multiple: { "houg": 1, "raig": 1  },
+						},
+						// CVL Kai
+						{
+							remodel: 4,
+							multiple: { "tais": 1 },
+						},
+						// CVL Kai Ni
+						{
+							remodel: 5,
+							multiple: { "houk": 1 },
+						},						
+					],
+					// Hiyou Class
+					"24": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Shoukaku Class
+					"33": {
+						multiple: { "houg": 2, "raig": 3, "houk": 3 },
+					},
+					// Taihou Class
+					"43": {
+						multiple: { "houg": 2, "raig": 3, "houk": 2 },
+					},
+					// Taigei Class
+					"50": [
+						// Ryuuhou
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1, "tais": 2, "houk": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},						
+					],
+				},
+				byShip: [
+					{
+						// Shoukaku, extra +1 fp
+						ids: [110, 288, 461, 466],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuikaku, extra +1 ev
+						ids: [111, 112, 462, 467],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						multiple: { "houg": 1, "raig": 2, "tais": 2, "houk": 3 },
+					},
+				]
+			},
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
 				count: 0,
@@ -756,6 +922,25 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// XF5U
+			"375": {
+				count: 0,
+				byClass: {
+					// Lexington Class
+					"69": {
+						multiple: { "houg": 3, "tyku": 3, "tais": 3, "houk": 3 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Kaga Class
+					"3": {
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
+				},
+			},
+
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
 			"t2_9": {
