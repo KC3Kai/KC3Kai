@@ -407,7 +407,7 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "tais": 1, "houk": 1 },
-						},						
+						},
 					],
 					// Chitose Class
 					"15": [
@@ -425,7 +425,7 @@ KC3改 Equipment Object
 						{
 							remodel: 5,
 							multiple: { "houk": 1 },
-						},						
+						},
 					],
 					// Hiyou Class
 					"24": {
@@ -450,7 +450,7 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "tais": 1, "houk": 1 },
-						},						
+						},
 					],
 				},
 				byShip: [
@@ -490,7 +490,7 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "tais": 1, "houk": 1 },
-						},						
+						},
 					],
 					// Chitose Class
 					"15": [
@@ -508,7 +508,7 @@ KC3改 Equipment Object
 						{
 							remodel: 5,
 							multiple: { "houk": 1 },
-						},						
+						},
 					],
 					// Hiyou Class
 					"24": {
@@ -533,7 +533,7 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "tais": 1, "houk": 1 },
-						},						
+						},
 					],
 				},
 				byShip: [
@@ -940,7 +940,6 @@ KC3改 Equipment Object
 					},
 				},
 			},
-
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
 			"t2_9": {
@@ -1165,7 +1164,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +2, TP +2, EV +1, LoS +1
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 1 },
 						},
 					],
@@ -1192,7 +1191,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +3, TP +3, EV +2, LoS +?
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 3, "raig": 3, "houk": 2 },
 						},
 					],
@@ -1235,7 +1234,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra LoS +1
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "saku": 1 },
 						},
 					],
@@ -1256,7 +1255,7 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-					},				
+					},
 				},
 			},
 			// Fairey Seafox Kai
@@ -1270,7 +1269,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +2, EV +2, LoS +3
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 2, "houk": 2, "saku": 3 },
 						},
 					],
@@ -1289,9 +1288,9 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 6, "tais": 1, "houk": 4, "saku": 5 },
-					},				
+					},
 				},
-			},			
+			},
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -1999,7 +1998,7 @@ KC3改 Equipment Object
 					// Atlanta Class
 					"99": {
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
-					}, 
+					},
 					// Colorado Class
 					"93": {
 						multiple: { "tyku": 1, "houk": 1 }
@@ -2043,7 +2042,7 @@ KC3改 Equipment Object
 					// Atlanta Class
 					"99": {
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
-					}, 
+					},
 					// Colorado Class
 					"93": {
 						multiple: { "tyku": 1, "houk": 1 }
@@ -2920,7 +2919,7 @@ KC3改 Equipment Object
 					// Essex Class
 					"84": "65",
 					// Colorado Class
-					"93": "65",					
+					"93": "65",
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
@@ -3005,7 +3004,7 @@ KC3改 Equipment Object
 			"35": {
 				count: 0,
 				byClass: {
-					"6": 					
+					"6":
 						{
 							// Kongou Class Kai Ni C
 							remodel: 3,
@@ -3164,7 +3163,6 @@ KC3改 Equipment Object
 					},
 				],
 			},
-			
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 			"268": {
