@@ -2623,6 +2623,48 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Most conditions are the same with Nelson Touch, except:
+	 * Flagship is Kongou-class Kai Ni C, Line Ahead formation selected, night battle only.
+	 * 2nd ship is one of the following:
+	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
+	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
+	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
+	 *
+	 * The additional ammo consumption occurs, see:
+	 *   * https://twitter.com/myteaGuard/status/1254040809365618690
+	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
+	 *
+	 * @return true if this ship (Kongou-class K2C) can do special cut-in attack.
+	 * @see https://kancolle.fandom.com/wiki/Game_Updates/2020/April_23rd
+	 * @see https://wikiwiki.jp/kancolle/%E6%AF%94%E5%8F%A1%E6%94%B9%E4%BA%8C%E4%B8%99
+	 */
+	KC3Ship.prototype.canDoKongouCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship Kongou-class K2C
+		if(KC3Meta.kongouCutinShips.includes(this.masterId)) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isLineAhead = [1, 14].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd ship is valid partener
+					validCombinedShips = ({
+						// Kongou K2C: Hiei K2C, Haruna K2, Warspite (Kai only?)
+						"591": [592, 151, 439, 364],
+						// Hiei K2C: Kongou K2C, Kirishima K2
+						"592": [591, 152],
+					}[this.masterId] || []).includes(fleetObj.ship(1).masterId),
+					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
+					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
+				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -2927,6 +2969,7 @@ KC3改 Ship Object
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
+			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3045,6 +3088,12 @@ KC3改 Ship Object
 				// special Colorado Cutin since 2019-05-25
 				if(this.canDoColoradoCutin()) {
 					return KC3Ship.specialAttackTypeNight(103, null, this.estimateColoradoCutinModifier());
+				}
+				// special Kongou-class K2C Cutin since 2020-04-23
+				if(this.canDoKongouCutin()) {
+					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
+					const engagementMod = [1, 1, 1, 1.25, 0.75][this.collectBattleConditions().engagementId] || 1.0;
+					return KC3Ship.specialAttackTypeNight(104, null, 1.9 * engagementMod);
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
