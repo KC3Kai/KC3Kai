@@ -3849,6 +3849,7 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			// Visible bonus no effect
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
 			power += this.attackPowerImprovementBonus("airstrike");
 			power *= Math.sqrt(capacity);

@@ -1374,7 +1374,8 @@ KC3改 Ship Object
 					KC3GearManager.antiLandDiveBomberIds));
 			} else {
 				// Should limit to TP power from equippable aircraft?
-				shellingPower += this.equipmentTotalStats("raig");
+				// Visible bonus from Torpedo Bombers no effect
+				shellingPower += this.equipmentTotalStats("raig", true, false);
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
 			}
 			shellingPower += combinedFleetFactor;
@@ -1530,13 +1531,14 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
 		if(this.isDummy() || ![1, 2, 3, 4, 5, 6].includes(installationType)) { return 0; }
-		// 5 types of Daihatsu Landing Craft with known bonus:
+		// 6 types of Daihatsu Landing Craft with known bonus:
 		//  * 167: Special Type 2 Amphibious Tank
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 193: Toku Daihatsu Landing Craft (most bonuses unknown)
-		const landingCraftIds = [167, 166, 68, 230, 193];
+		//  * 355: M4A1 DD
+		const landingCraftIds = [167, 166, 68, 230, 193, 355];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, forImp = false) => (
@@ -1592,15 +1594,16 @@ KC3改 Ship Object
 	 * @param targetShipMasterId - target land installation master ID.
 	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
 	 * @param warfareType - to indicate if use different modifiers for phases other than day shelling.
-	 * @see http://kancolle.wikia.com/wiki/Installation_Type
-	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 * @see https://kancolle.fandom.com/wiki/Combat/Installation_Type
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonus
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
 	 * @see https://twitter.com/KennethWWKK/status/1045315639127109634
 	 * @see https://yy406myon.hatenablog.jp/entry/2018/09/14/213114
 	 * @see https://cdn.discordapp.com/attachments/425302689887289344/614879250419417132/ECrra66VUAAzYMc.jpg_orig.jpg
+	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
-	 * @return {Array} of [additive damage boost, multiplicative damage boost]
+	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap tank additive, precap m4a1dd multiplicative]
 	 */
 	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling"){
 		if(this.isDummy()) { return [0, 1]; }
@@ -1623,7 +1626,10 @@ KC3改 Ship Object
 		let airstrikeBomberBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType);
-		const shikonBonus = this.hasEquipment(230) ? 25 : 0;
+		const shikonCount = this.countEquipment(230);
+		const m4a1ddCount = this.countEquipment(355);
+		const shikonBonus = 25 * (shikonCount + m4a1ddCount);
+		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1641,8 +1647,9 @@ KC3改 Ship Object
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
 					
-					return [rocketsAdditive + shikonBonus + submarineBonus,
-						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
+					return [rocketsAdditive,
+						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
+						submarineBonus, shikonBonus, m4a1ddModifier];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1657,9 +1664,10 @@ KC3改 Ship Object
 					apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
 					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive + shikonBonus +  submarineBonus,
+					return [rocketsAdditive,
 						seaplaneBonus * alDiveBomberBonus * lightShipBonus
-							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
+							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
+						submarineBonus, shikonBonus, m4a1ddModifier];
 				
 				case 3: // Isolated Island Princess
 					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
@@ -1670,7 +1678,8 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
-						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
+						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
+						0, shikonBonus, m4a1ddModifier];
 				
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
@@ -1683,7 +1692,8 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
-						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus];
+						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
+						0, shikonBonus, m4a1ddModifier];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -1691,24 +1701,24 @@ KC3改 Ship Object
 					// Dive Bomber, Seaplane Bomber, LBAA, Jet Bomber on airstrike phase
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
-					return [0, airstrikeBomberBonus];
+					return [0, airstrikeBomberBonus, 0, 0, 1];
 				
 				case 3: // Isolated Island Princess
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.7 : 1;
-					return [0, airstrikeBomberBonus];
+					return [0, airstrikeBomberBonus, 0, 0, 1];
 				
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
-					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus];
+					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus, 0, 0, 1];
 				
 				case 6: // Summer Supply Depot Princess (shikon bonus only)
-					return [0, landingBonus];
+					return [0, landingBonus, 0, 0, 1];
 			}
 		}
-		return [0, 1];
+		return [0, 1, 0, 0, 1];
 	};
 
 	/**
@@ -1794,6 +1804,7 @@ KC3改 Ship Object
 				}
 			}
 		});
+		// No effect for both visible fp and tp bonus
 		let shellingPower = this.estimateNakedStats("fp");
 		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
 		shellingPower += equipTotals.slotBonus;
@@ -1871,13 +1882,13 @@ KC3改 Ship Object
 		
 		// Anti-installation modifiers
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
-		let antiLandAdditive = 0, antiLandModifier = 1;
+		let antiLandAdditive = 0, antiLandModifier = 1, subAntiLandAdditive = 0, tankAdditive = 0, tankModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
+			[antiLandAdditive, antiLandModifier, subAntiLandAdditive, tankAdditive, tankModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
 		}
 		
 		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
-		let result = (basicPower * antiLandModifier + antiLandAdditive)
+		let result = (((basicPower + subAntiLandAdditive) * antiLandModifier + tankAdditive) * tankModifier + antiLandAdditive)
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
@@ -2695,6 +2706,7 @@ KC3改 Ship Object
 			return 0;
 		}
 		if(isTargetLandable) {
+			// M4A1 DD
 			if(this.hasEquipment(355)) return 6;
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
