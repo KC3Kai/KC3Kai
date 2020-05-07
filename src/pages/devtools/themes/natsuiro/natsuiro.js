@@ -17,6 +17,7 @@
 	var plannerIsGreatSuccess = false;
 	var showCombinedFleetBars = true;
 	var isTakingScreenshot = false;
+	var isActiveTabInvoked = false;
 	var overrideFocus = false;
 	
 	// a flag used by Fleet & ExpeditionStart to indicate
@@ -601,17 +602,47 @@
 		$(".module.controls .btn_ss1").on("click", function(){
 			if (isTakingScreenshot) return;
 			isTakingScreenshot = true;
-			
 			$(this).addClass("active");
 
-			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
-			(new RMsg("service", "screenshot", {
-				tabId: chrome.devtools.inspectedWindow.tabId,
-				playerName: PlayerManager.hq.name
-			}, function(response){
-				$(".module.controls .btn_ss1").removeClass("active");
-				isTakingScreenshot = false;
-			})).execute();
+			const tabId = chrome.devtools.inspectedWindow.tabId;
+			const doScreenshot = function() {
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					$(".module.controls .btn_ss1").removeClass("active");
+					isTakingScreenshot = false;
+				})).execute();
+			};
+			// Check if permission has been granted first
+			if(!isActiveTabInvoked){
+				chrome.tabs.get(tabId, function(tabInfo){
+					chrome.tabs.captureVisibleTab(tabInfo.windowId, {}, function(imgData){
+						if(chrome.runtime.lastError){
+							const errorMsg = chrome.runtime.lastError.message || "";
+							if(errorMsg.includes("'activeTab' permission")){
+								NatsuiroListeners.ModalBox({
+									title: KC3Meta.term("PanelPermissionTitle"),
+									message: KC3Meta.term("PanelPermissionMessage"),
+								});
+								isActiveTabInvoked = false;
+								$(".module.controls .btn_ss1").removeClass("active");
+								isTakingScreenshot = false;
+							} else {
+								console.warn("Unchecked runtime.lastError:", errorMsg);
+								// other unknown error, still go ahead
+								doScreenshot();
+							}
+						} else {
+							isActiveTabInvoked = true;
+							doScreenshot();
+						}
+					});
+				});
+			} else {
+				doScreenshot();
+			}
 		});
 
 		// Export button
