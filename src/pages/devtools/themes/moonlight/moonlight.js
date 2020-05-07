@@ -681,29 +681,22 @@
 			};
 			// Check if permission has been granted first
 			if(!isActiveTabInvoked){
-				chrome.tabs.get(tabId, function(tabInfo){
-					chrome.tabs.captureVisibleTab(tabInfo.windowId, {}, function(imgData){
-						if(chrome.runtime.lastError){
-							const errorMsg = chrome.runtime.lastError.message || "";
-							if(errorMsg.includes("'activeTab' permission")){
-								NatsuiroListeners.ModalBox({
-									title: KC3Meta.term("PanelPermissionTitle"),
-									message: KC3Meta.term("PanelPermissionMessage"),
-								});
-								isActiveTabInvoked = false;
-								$(".module.controls .btn_ss1").removeClass("active");
-								isTakingScreenshot = false;
-							} else {
-								console.warn("Unchecked runtime.lastError:", errorMsg);
-								// other unknown error, still go ahead
-								doScreenshot();
-							}
-						} else {
-							isActiveTabInvoked = true;
-							doScreenshot();
-						}
-					});
-				});
+				(new RMsg("service", "checkPermission", {
+					tabId: tabId
+				}, function(response){
+					if(response && response.value){
+						isActiveTabInvoked = true;
+						doScreenshot();
+					} else {
+						NatsuiroListeners.ModalBox({
+							title: KC3Meta.term("PanelPermissionTitle"),
+							message: KC3Meta.term("PanelPermissionMessage"),
+						});
+						isActiveTabInvoked = false;
+						$(".module.controls .btn_ss1").removeClass("active");
+						isTakingScreenshot = false;
+					}
+				})).execute();
 			} else {
 				doScreenshot();
 			}
