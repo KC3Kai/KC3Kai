@@ -1972,7 +1972,9 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
 					},
 					// De Ryuter Class
-					"98": "89"
+					"98": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+					}
 				}
 			},
 			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Kai + Single Rapid Fire Gun Mount Mk.10 Kai Model 1938
@@ -1988,7 +1990,9 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
 					},
 					// De Ryuter Class
-					"98": "89"
+					"98": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+					}
 				}
 			},
 			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)

@@ -45,6 +45,7 @@ KCScreenshot.prototype.prepare = function(){
 	this.canvas.width = 1200 * this.scale;
 	this.canvas.height = 720 * this.scale;
 	this.context = this.canvas.getContext("2d");
+	this.context.imageSmoothingEnabled = false;
 	
 	// Initialize Image Tag
 	this.domImg = new Image();

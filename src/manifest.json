@@ -26,6 +26,7 @@
 		"activeTab",
 		"https://raw.githubusercontent.com/*",
 		"https://api.imgur.com/*",
+		"https://api.pushbullet.com/*",
 		"https://tsundb.kc3.moe/*",
 		"http://poi.0u0.moe/*",
 		"*://*.dmm.com/*",
