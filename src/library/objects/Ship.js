@@ -2635,13 +2635,13 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is Kongou-class Kai Ni C, Line Ahead formation selected, night battle only.
-	 * 2nd ship is one of the following:
+	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead formation selected, night battle only.
+	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
 	 *
-	 * The additional ammo consumption occurs, see:
+	 * The additional 30% ammo consumption, see:
 	 *   * https://twitter.com/myteaGuard/status/1254040809365618690
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
 	 *
@@ -2651,8 +2651,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoKongouCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Kongou-class K2C
-		if(KC3Meta.kongouCutinShips.includes(this.masterId)) {
+		// is this ship Kongou-class K2C and not even Chuuha
+		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -2660,13 +2660,14 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd ship is valid partener
+					// 2nd ship is valid partener and not even Chuuha
 					validCombinedShips = ({
-						// Kongou K2C: Hiei K2C, Haruna K2, Warspite (Kai only?)
+						// Kongou K2C: Hiei K2C, Haruna K2, Warspite
 						"591": [592, 151, 439, 364],
 						// Hiei K2C: Kongou K2C, Kirishima K2
 						"592": [591, 152],
-					}[this.masterId] || []).includes(fleetObj.ship(1).masterId),
+					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
+						&& !fleetObj.ship(1).isStriped(),
 					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
 				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
