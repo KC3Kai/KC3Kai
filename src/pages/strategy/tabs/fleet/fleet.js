@@ -485,6 +485,17 @@
 			chrome.tabs.getZoom(undefined, scale => {
 				if(scale !== 1 || dpr !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale * dpr; });
 				chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
+					if(chrome.runtime.lastError) {
+						console.log("Failed to screenshot fleet", chrome.runtime.lastError);
+						const errMsg = chrome.runtime.lastError.message || "";
+						if(errMsg.includes("'activeTab' permission")) {
+							alert("Click KC3\u6539 icon on browser toolbar to grant screenshot permission");
+						} else {
+							alert("Failed to capture fleet screenshot");
+						}
+						$(".ss_button", fleetBox).show();
+						return;
+					}
 					const canvas = document.createElement("canvas"), img = new Image();
 					img.onload = (e) => {
 						canvas.width = coords.w;
