@@ -876,7 +876,7 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprove = false, forExped = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprovedAttack = false, forExped = false){
 		// When calculating asw relevant thing,
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
@@ -898,8 +898,9 @@ KC3改 Ship Object
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
-				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 :
-					g.master().api_tais + (!!includeImprove && g.attackPowerImprovementBonus("asw"))
+				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
+					+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
+					+ (!!forExped && this.equipmentTotalStats("tais", true, true, true, [6, 8]))
 			).sumValues();
 		return equipmentTotalAsw;
 	};

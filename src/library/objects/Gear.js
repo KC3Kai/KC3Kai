@@ -3702,9 +3702,9 @@ KC3改 Equipment Object
 	};
 
 	/**
-	 * Get improvement bonus of ASW stat.
+	 * Get improvement bonus of ASW stat. Expeditions only for now.
 	 */
-	KC3Gear.prototype.aswStatImprovementBonus = function(type = "asw") {
+	KC3Gear.prototype.aswStatImprovementBonus = function(type = "exped") {
 		if (this.isDummy()) { return 0; }
 		const type2 = this.master().api_type[2];
 		const stars = this.stars || 0;
@@ -3714,11 +3714,11 @@ KC3改 Equipment Object
 				case 14: // Sonar
 				case 15: // Depth Charge
 				case 40: // Large Sonar
-					return Math.sqrt(stars);
+					modifier = 1;
+					break;
 			}
-			return 0;
 		}
-		return modifier * stars;
+		return modifier * Math.sqrt(stars);
 	};
 
 	/* FIGHTER POWER

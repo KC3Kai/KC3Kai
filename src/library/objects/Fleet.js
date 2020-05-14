@@ -271,15 +271,14 @@ Contains summary information about a fleet and its ships
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else if (includeImproveType !== "exped") {
-				// asw with equipment is a special case, only some equip types counted
+			} else {
+				// asw with equipment is a special case, only some equip types counted. The types see:
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, includeImproveType === "exped");
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
 			if (includeImproveType) {
-				// TODO use accurate types
 				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
 					const bonus = {
 						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
