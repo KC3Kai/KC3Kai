@@ -4323,7 +4323,7 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 131].includes(selectedExpedition);
+			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
 			// can GS if:

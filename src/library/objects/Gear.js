@@ -3301,7 +3301,8 @@ KC3改 Equipment Object
 				byShip: [
 					{
 						// Okinami K2 with Air Radar fp +1, aa +2, ev +3
-						// btw, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
+						// btw1, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
+						// btw2, main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
 						ids: [569],
 						synergy: {
 							flags: [ "airRadar" ],
