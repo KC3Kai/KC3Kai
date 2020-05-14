@@ -388,6 +388,172 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Tenzan Model 12A Kai (with Type 6 Airborne Radar)
+			"373": {
+				count: 0,
+				byClass: {
+					// Shouhou Class
+					"11": [
+						// Base
+						{
+							multiple: { "tais": 1 }
+						},
+						// Kai
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},
+					],
+					// Chitose Class
+					"15": [
+						// CVL base
+						{
+							remodel: 3,
+							multiple: { "houg": 1 },
+						},
+						// CVL Kai
+						{
+							remodel: 4,
+							multiple: { "raig": 1 },
+						},
+						// CVL Kai Ni
+						{
+							remodel: 5,
+							multiple: { "houk": 1 },
+						},
+					],
+					// Hiyou Class
+					"24": {
+						multiple: { "houg": 1, "raig": 1, "houk": 1 },
+					},
+					// Shoukaku Class
+					"33": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Taihou Class
+					"43": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Taigei Class
+					"50": [
+						// Ryuuhou
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1, "tais": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Shoukaku, extra +1 fp
+						ids: [110, 288, 461, 466],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuikaku, extra +1 ev
+						ids: [111, 112, 462, 467],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+				]
+			},
+			// Tenzan Model 12A Kai (Skilled / with Type 6 Airborne Radar)
+			"374": {
+				count: 0,
+				byClass: {
+					// Shouhou Class
+					"11": [
+						// Base
+						{
+							multiple: { "houg": 1, "tais": 1 }
+						},
+						// Kai
+						{
+							remodel: 1,
+							multiple: { "raig": 1, "tais": 1, "houk": 1 },
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},
+					],
+					// Chitose Class
+					"15": [
+						// CVL base
+						{
+							remodel: 3,
+							multiple: { "houg": 1, "raig": 1  },
+						},
+						// CVL Kai
+						{
+							remodel: 4,
+							multiple: { "tais": 1 },
+						},
+						// CVL Kai Ni
+						{
+							remodel: 5,
+							multiple: { "houk": 1 },
+						},
+					],
+					// Hiyou Class
+					"24": {
+						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+					},
+					// Shoukaku Class
+					"33": {
+						multiple: { "houg": 2, "raig": 3, "houk": 3 },
+					},
+					// Taihou Class
+					"43": {
+						multiple: { "houg": 2, "raig": 3, "houk": 2 },
+					},
+					// Taigei Class
+					"50": [
+						// Ryuuhou
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1, "tais": 2, "houk": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "tais": 1, "houk": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Shoukaku, extra +1 fp
+						ids: [110, 288, 461, 466],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuikaku, extra +1 ev
+						ids: [111, 112, 462, 467],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						multiple: { "houg": 1, "raig": 2, "tais": 2, "houk": 3 },
+					},
+				]
+			},
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
 				count: 0,
@@ -756,6 +922,24 @@ KC3改 Equipment Object
 					},
 				},
 			},
+			// XF5U
+			"375": {
+				count: 0,
+				byClass: {
+					// Lexington Class
+					"69": {
+						multiple: { "houg": 3, "tyku": 3, "tais": 3, "houk": 3 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Kaga Class
+					"3": {
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
+					},
+				},
+			},
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
 			"t2_9": {
@@ -980,7 +1164,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +2, TP +2, EV +1, LoS +1
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 1 },
 						},
 					],
@@ -1007,7 +1191,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +3, TP +3, EV +2, LoS +?
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 3, "raig": 3, "houk": 2 },
 						},
 					],
@@ -1050,7 +1234,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra LoS +1
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "saku": 1 },
 						},
 					],
@@ -1071,7 +1255,7 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
-					},				
+					},
 				},
 			},
 			// Fairey Seafox Kai
@@ -1085,7 +1269,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Gotland andra FP +2, EV +2, LoS +3
-							remodel: 2,	
+							remodel: 2,
 							multiple: { "houg": 2, "houk": 2, "saku": 3 },
 						},
 					],
@@ -1104,9 +1288,9 @@ KC3改 Equipment Object
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 6, "tais": 1, "houk": 4, "saku": 5 },
-					},				
+					},
 				},
-			},			
+			},
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -1788,7 +1972,9 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
 					},
 					// De Ryuter Class
-					"98": "89"
+					"98": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+					}
 				}
 			},
 			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Kai + Single Rapid Fire Gun Mount Mk.10 Kai Model 1938
@@ -1804,7 +1990,9 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
 					},
 					// De Ryuter Class
-					"98": "89"
+					"98": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+					}
 				}
 			},
 			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
@@ -1814,7 +2002,7 @@ KC3改 Equipment Object
 					// Atlanta Class
 					"99": {
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
-					}, 
+					},
 					// Colorado Class
 					"93": {
 						multiple: { "tyku": 1, "houk": 1 }
@@ -1858,7 +2046,7 @@ KC3改 Equipment Object
 					// Atlanta Class
 					"99": {
 						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
-					}, 
+					},
 					// Colorado Class
 					"93": {
 						multiple: { "tyku": 1, "houk": 1 }
@@ -2735,7 +2923,7 @@ KC3改 Equipment Object
 					// Essex Class
 					"84": "65",
 					// Colorado Class
-					"93": "65",					
+					"93": "65",
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
@@ -2820,7 +3008,7 @@ KC3改 Equipment Object
 			"35": {
 				count: 0,
 				byClass: {
-					"6": 					
+					"6":
 						{
 							// Kongou Class Kai Ni C
 							remodel: 3,
@@ -2979,7 +3167,6 @@ KC3改 Equipment Object
 					},
 				],
 			},
-			
 			// Arctic Camouflage
 			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 			"268": {
@@ -3666,6 +3853,7 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
+			// Visible bonus no effect
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
 			power += this.attackPowerImprovementBonus("airstrike");
 			power *= Math.sqrt(capacity);

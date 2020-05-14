@@ -287,14 +287,7 @@ $(document).on("keydown", function(event){
 			
 		// F9: Screenshot
 		case(120):
-			if (isTakingScreenshot) return;
-			isTakingScreenshot = true;
-			
-			(new KCScreenshot())
-				.setCallback(function(){
-					isTakingScreenshot = false;
-				})
-				.start("Auto", $(".box-wrap"));
+			interactions.screenshot({playerName: "Auto"}, {}, function(){});
 			return false;
 		
 		// F10: Clear overlays
@@ -500,8 +493,6 @@ var interactions = {
 	screenshot :function(request, sender, response){
 		if (isTakingScreenshot) return;
 		isTakingScreenshot = true;
-		
-		// ~Please rewrite the screenshot script
 		(new KCScreenshot())
 			.setCallback(function(){
 				response({success:true});

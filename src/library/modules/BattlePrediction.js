@@ -775,7 +775,7 @@
     };
   };
 
-  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou) may attack 3 different targets,
+  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou) may attack different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
   Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseDefender, parseInfo, isRealAttack,
@@ -815,7 +815,7 @@
   //   ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0);
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
-  // For Kongou, NOT confirmed: 3 attacks assigned to 1st flagship once, 2nd ship twice?
+  // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
   Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag }) => ({
     side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
     position: attackerPos[index] || 0,
