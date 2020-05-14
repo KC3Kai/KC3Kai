@@ -23,7 +23,8 @@
 		"tabs",
 		"notifications",
 		"cookies",
-		"<all_urls>"
+		"activeTab",
+		"*://*.dmm.com/*"
 	],
 	"background": {
 		"scripts": [

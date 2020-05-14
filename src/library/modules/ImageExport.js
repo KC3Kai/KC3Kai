@@ -166,6 +166,7 @@
     return new Promise((resolve) => {
       chrome.downloads.download({
         url,
+        // since some chromium version (m72?), downloading the blob url will ignore filename?
         filename: path,
         conflictAction: 'uniquify',
       }, (downloadId) => {
@@ -330,6 +331,7 @@
   };
   KC3ImageExport.drawOnCanvas = function (image, canvas) {
     const context = canvas.getContext('2d');
+    context.imageSmoothingEnabled = false;
     context.drawImage(image, 0, 0, image.width, image.height, 0, 0, image.width, image.height);
     return canvas;
   };

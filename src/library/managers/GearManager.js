@@ -21,7 +21,7 @@ Saves and loads list to and from localStorage
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://twitter.com/muu_1106/status/1124658313428213760
-		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323],
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323,374],
 		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
@@ -47,37 +47,37 @@ Saves and loads list to and from localStorage
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
 
 		// Daihatsu landing craft anti-installation power modifiers per types and improvements
-		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus]
+		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus]
 		landingCraftModifiers: {
 			// Soft-skinned
 			0: {
-				modifier: [1.5,1.5,1,1.8,1.15],
-				improvement: [0.03,0,0,0,0]
+				modifier: [1.5,1.5,1,1.8,1.15,1.1],
+				improvement: [0.03,0,0,0,0,0]
 			},
 			// Artillery Imp
 			1: {
-				modifier: [2.4,2.15,1.8,2.2,2.05],
-				improvement: [0.08,0.043,0.0036,0,0],
+				modifier: [2.4,2.15,1.8,2.2,2.05,2],
+				improvement: [0.08,0.043,0.0036,0,0,0],
 			},
 			// Isolated Island Princess
 			2: {
-				modifier: [2.4,2.15,1.8,3.5,1],
-				improvement: [0.08,0.043,0.0036,0,0],
+				modifier: [2.4,2.15,1.8,3.5,1,1.8],
+				improvement: [0.08,0.043,0.0036,0,0,0],
 			},
 			// Supply Depot Princess (no info on Daihatsu improvement)
 			3: {
-				modifier: [1.9,2.15,1.65,1.7,1],
-				improvement: [0.051,0.026,0,0,0],
+				modifier: [1.9,2.15,1.65,1.7,1,1.2],
+				improvement: [0.051,0.026,0,0,0,0],
 			},
 			// Summer Harbor Princess (no info on Shikon 11th tank)
 			4: {
-				modifier: [2.8,3.7,1.8,1,1],
-				improvement: [0.093,0.074,0.036,0,0],
+				modifier: [2.8,3.7,1.8,1,1,2],
+				improvement: [0.093,0.074,0.036,0,0,0],
 			},
 			// Summer Supply Deport Princess (currently only Shikon 11th tank)
 			5: {
-				modifier: [1,1,1,2.2,1],
-				improvement: [0,0,0,0,0],
+				modifier: [1,1,1,2.2,1,1.2],
+				improvement: [0,0,0,0,0,0],
 			},
 		},
 

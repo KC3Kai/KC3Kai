@@ -166,6 +166,39 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* CHECK PERMISSION
+		Check if permission `activeTab` is granted
+		------------------------------------------*/
+		"checkPermission" :function(request, sender, response){
+			var senderUrl = sender.url || sender.tab.url || "";
+			function checkActiveTabEffect(tabId, response) {
+				chrome.tabs.get(tabId, function(tabDetails){
+					// should use another faster method to check activeTab?
+					chrome.tabs.captureVisibleTab(tabDetails.windowId, {}, function(imgData) {
+						if(chrome.runtime.lastError) {
+							var errorMsg = chrome.runtime.lastError.message || "";
+							if(errorMsg.indexOf("'activeTab' permission") > -1) {
+								response({ value: false });
+							} else {
+								console.warn("Unchecked runtime.lastError:", errorMsg);
+								response({ value: true });
+							}
+						} else {
+							response({ value: true });
+						}
+					});
+				});
+			}
+			if (isDevtools(senderUrl)) {
+				checkActiveTabEffect(request.tabId, response);
+			} else if (sender.tab && sender.tab.id) {
+				checkActiveTabEffect(sender.tab.id, response);
+			} else {
+				response({ value: false });
+			}
+			return true;
+		},
+		
 		/* FOCUS ON GAME TAB
 		Force browser to switch and focus on current game tab.
 		------------------------------------------*/
