@@ -890,18 +890,21 @@ KC3改 Ship Object
 			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
 			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
 			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
-			// autogyro on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
 			if(isAirAntiSubStype) {
 				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
 				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
+			} else if(!!forExped) {
+				// rotorcraft on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
+				noCountEquipType2Ids.push(...[7, 8, 11, 26, 57, 58]);
 			}
 		}
 		const equipmentTotalAsw = this.equipment(true)
 			.map(g => g.exists() && g.master().api_tais > 0 &&
 				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
 					+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
-					+ (!!forExped && this.equipmentTotalStats("tais", true, true, true, [6, 8]))
-			).sumValues();
+			).sumValues()
+			// to be confirmed: all visible bonus from aircraft counted? or just like OASW, only fighters and torpedo bombers
+			+ (!!forExped && this.equipmentTotalStats("tais", true, true, true/*, [6, 8]*/));
 		return equipmentTotalAsw;
 	};
 

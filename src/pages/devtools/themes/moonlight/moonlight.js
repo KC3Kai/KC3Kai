@@ -814,6 +814,7 @@
 			var conf = ExpedTabValidateConfig(selectedExpedition);
 			plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 			ExpedTabUpdateConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -824,8 +825,8 @@
 			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
-			NatsuiroListeners.Fleet();
 			ExpedTabApplyConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -1991,8 +1992,8 @@
 					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
 						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
 					if(fleetNum >= 1 && fleetNum <= 4) {
-						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
+						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
+						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
 						tips += (!tips ? "" : "\n")
 							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
 							+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
@@ -4211,18 +4212,24 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = ship.level;
 				var drumCount = ship.countDrums();
+				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
-				// TODO asw stats from aircraft seem be quite different for expeditions
-				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
+				var los = ship.ls[0],
+					aa = ship.aa[0],
+					fp = ship.fp[0],
+					tp = ship.tp[0];
+				var asw = [101, 102, 110].includes(selectedExpedition) ?
+					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :
+					ship.as[0];
 				if(includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
-					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
-					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
+					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
+					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
+					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
+					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 				}
 				return {
 					ammo : 0,

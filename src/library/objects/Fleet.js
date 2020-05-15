@@ -251,7 +251,7 @@ Contains summary information about a fleet and its ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
-	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false){
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = true){
 		const stats = {
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
@@ -266,15 +266,18 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
+			// new expeds count all stats from aircraft, some still not
+			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#Expedition
+			const isNotFullStatExped = forExped && [101, 102, 110].includes(forExped);
 			if(!includeEquip) {
 				// no accuracy if excludes equipment
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else {
+			} else if(isNotFullStatExped) {
 				// asw with equipment is a special case, only some equip types counted. The types see:
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, includeImproveType === "exped");
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
