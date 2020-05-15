@@ -4315,10 +4315,12 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
+			var shipFlagshipLevel = fleetObj.ship(0).level || 1;
 			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
-			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
+			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
+			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCountTable = {
 				21: 3+1,
 				37: 4+1,
@@ -4330,23 +4332,33 @@
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141].includes(selectedExpedition);
+			var condIsGsWithoutSparkle = [
+				// almost all new added expeds, except A1(100), B1(110), B2(111)
+				32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
+			var condIsFlagshipLevel = [
+				// related to sparkle ships and flagship level: 41, A2(101) confirmed, others are to be verified
+				41, 101, 43, 44, 45, 102, 103, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
 			// can GS if:
 			// - expedition requirements are satisfied
 			// - either drum expedition, or regular expedition with all ships sparkled
-			// - or new added expeditions such as: A2, A3 (but rate formula unknown)
+			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
 				if (!condIsUnsparkledShip || condIsDrumExpedition) {
-					// based on the decompiled vita formula,
-					// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
 				} else if (condIsGsWithoutSparkle) {
-					// keep -1 for unknown
+					if (condIsFlagshipLevel) {
+						estSuccessRate = 16 + 15 * sparkledCount
+							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
+					} else {
+						// keep -1 for unknown
+					}
 				} else {
 					estSuccessRate = 0;
 				}
@@ -4380,6 +4392,9 @@
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
 					return KC3Meta.term('ExpedGSRateExplainNoOverdrum').format(fleetDrumCount, gsDrumCount);
+				}
+				if (condIsFlagshipLevel) {
+					return KC3Meta.term('ExpedGSRateExplainSparkleAndFlagship').format(sparkledCount, shipFlagshipLevel);
 				}
 				return KC3Meta.term('ExpedGSRateExplainSparkle').format(sparkledCount);
 			})();
