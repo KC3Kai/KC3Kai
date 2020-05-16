@@ -251,7 +251,7 @@ Contains summary information about a fleet and its ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
-	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false){
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = true){
 		const stats = {
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
@@ -266,20 +266,22 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
+			// new expeds count all stats from aircraft, some still not
+			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#Expedition
+			const isNotFullStatExped = forExped && [101, 102, 110].includes(forExped);
 			if(!includeEquip) {
 				// no accuracy if excludes equipment
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else if (includeImproveType !== "exped") {
-				// asw with equipment is a special case, only some equip types counted
+			} else if(isNotFullStatExped) {
+				// asw with equipment is a special case, only some equip types counted. The types see:
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
 			if (includeImproveType) {
-				// TODO use accurate types
 				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
 					const bonus = {
 						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
@@ -1102,8 +1104,9 @@ Contains summary information about a fleet and its ships
 		availableShips.forEach(ship => {
 			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
 			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
-			// explicit LoS bonus from Late 298B and improved Type 2 Recon added to ship part
-			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 11]) || 0;
+			//             and https://twitter.com/CC_jabberwock/status/1261345028099596289
+			// visible LoS bonus from Carrier Recon, Seaplane Recon and Seaplane Bomber should be added to ship part
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 10, 11]) || 0;
 			// sum ship's naked LoS
 			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS
