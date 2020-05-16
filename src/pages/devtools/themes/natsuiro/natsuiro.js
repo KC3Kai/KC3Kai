@@ -4295,19 +4295,22 @@
 				37: 4+1,
 				38: 8+2,
 				24: 0+4,
-				40: 0+4 };
+				40: 0+4,
+				44: 6+2,
+			};
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
 
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
 			var condIsGsWithoutSparkle = [
-				// almost all new added expeds, except A1(100), B1(110), B2(111)
-				32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141
+				// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
+				32, 41, 43, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 			var condIsFlagshipLevel = [
 				// related to sparkle ships and flagship level: 41, A2(101) confirmed, others are to be verified
-				41, 101, 43, 44, 45, 102, 103, 112, 113, 114, 131, 132, 141
+				// https://twitter.com/jo_swaf/status/1261241711952445440
+				41, 101, 43, 45, 102, 103, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
