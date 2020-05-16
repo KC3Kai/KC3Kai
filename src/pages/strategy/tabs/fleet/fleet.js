@@ -415,8 +415,8 @@
 			if(maxSlots > 6) $(".fleet_ships", fleetBox).addClass("max_slot6");
 
 			// Show fleet info
-			const fstats = kcFleet.totalStats(true);
-			const fstatsImp = kcFleet.totalStats(true, "exped");
+			const fstats = kcFleet.totalStats(true, false, true);
+			const fstatsImp = kcFleet.totalStats(true, "exped", true);
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
 				.attr("title", "{0}: -\u2605\t+\u2605\n{1}: {6}\t{11}\n{2}: {7}\t{12}\n{3}: {8}\t{13}\n{4}: {9}\t{14}\n{5}: {10}\t{15}".format(
 					KC3Meta.term("ExpedTotalImp"),

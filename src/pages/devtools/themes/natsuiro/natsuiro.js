@@ -733,6 +733,7 @@
 			var conf = ExpedTabValidateConfig(selectedExpedition);
 			plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 			ExpedTabUpdateConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -743,8 +744,8 @@
 			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
-			NatsuiroListeners.Fleet();
 			ExpedTabApplyConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -1971,8 +1972,8 @@
 					let tips = fleetNum > 1 ? "" :
 						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
 					if (fleetNum >= 1 && fleetNum <= 4) {
-						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
+						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
+						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
 						// Align with special space char 0xa0 and force to monospaced font
 						const formatStatTip = (term, rawStat, impStat) => (
 							term.padEnd(5, '\u00a0') +
@@ -4177,6 +4178,7 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = ship.level;
 				var drumCount = ship.countDrums();
+				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
 				var los = ship.ls[0],
@@ -4185,14 +4187,17 @@
 					tp = ship.tp[0];
 				// TODO asw stats from aircraft seem be quite different for expeditions
 				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
+				var asw = [101, 102, 110].includes(selectedExpedition) ?
+					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :
+					ship.as[0];
 				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
-					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
-					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
+					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
+					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
 					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
+					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4279,29 +4284,40 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			const shipFlagship = fleetObj.ship(0);
+			var shipFlagshipLevel = fleetObj.ship(0).level || 1;
 			var sparkledCount = fleetObj.ship().filter(s => s.morale >= 50).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
-			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
+			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
+			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCountTable = {
 				21: 3+1,
 				37: 4+1,
 				38: 8+2,
 				24: 0+4,
-				40: 0+4 };
+				40: 0+4,
+				44: 6+2,
+			};
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
 
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 45, 101, 102, 103, 112, 113, 131].includes(selectedExpedition);
+			var condIsGsWithoutSparkle = [
+				// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
+				32, 41, 43, 45, 101, 102, 103, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
+			var condIsFlagshipLevel = [
+				// related to sparkle ships and flagship level: 41, A2(101) confirmed, others are to be verified
+				// https://twitter.com/jo_swaf/status/1261241711952445440
+				41, 101, 43, 45, 102, 103, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
 			// can GS if:
 			// - expedition requirements are satisfied
 			// - either drum expedition, or regular expedition with all ships sparkled
-			// - or new added expeditions such as: A2, A3 (but rate formula unknown)
+			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
 				if (!condIsUnsparkledShip || condIsDrumExpedition) {
 					// based on the decompiled vita formula,
@@ -4311,12 +4327,11 @@
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
 				} else if (condIsGsWithoutSparkle) {
-					// https://kancolle.fandom.com/wiki/Great_Success
-					// A2 -> 101
-					// 41 -> 41
-					if ([101, 41].includes(selectedExpedition)) {
-						const level = shipFlagship.level || 1;
-						estSuccessRate = 16 + 15 * sparkledCount + Math.floor(Math.sqrt(level) + level / 10);
+					if (condIsFlagshipLevel) {
+						// https://twitter.com/jo_swaf/status/1145297004995596288
+						// https://tonahazana.com/blog-entry-577.html
+						estSuccessRate = 16 + 15 * sparkledCount
+							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
 					} else {
 						// keep -1 for unknown
 					}
@@ -4353,6 +4368,9 @@
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
 					return KC3Meta.term('ExpedGSRateExplainNoOverdrum').format(fleetDrumCount, gsDrumCount);
+				}
+				if (condIsFlagshipLevel) {
+					return KC3Meta.term('ExpedGSRateExplainSparkleAndFlagship').format(sparkledCount, shipFlagshipLevel);
 				}
 				return KC3Meta.term('ExpedGSRateExplainSparkle').format(sparkledCount);
 			})();
