@@ -1104,8 +1104,9 @@ Contains summary information about a fleet and its ships
 		availableShips.forEach(ship => {
 			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
 			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
-			// explicit LoS bonus from Late 298B and improved Type 2 Recon added to ship part
-			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 11]) || 0;
+			//             and https://twitter.com/CC_jabberwock/status/1261345028099596289
+			// visible LoS bonus from Carrier Recon, Seaplane Recon and Seaplane Bomber should be added to ship part
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 10, 11]) || 0;
 			// sum ship's naked LoS
 			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS

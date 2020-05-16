@@ -1147,6 +1147,13 @@ KC3改 Equipment Object
 					},
 					// Kamoi Class
 					"72": "62",
+					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
+					"67": {
+						multiple: { "houg": 2, "houk": 2, "saku": 2 },
+					},
+					"78": "67",
+					"82": "67",
+					"88": "67", */
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model)
@@ -1165,7 +1172,7 @@ KC3改 Equipment Object
 						{
 							// Gotland andra FP +2, TP +2, EV +1, LoS +1
 							remodel: 2,
-							multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 1 },
+							single: { "houg": 2, "raig": 2, "houk": 1, "saku": 1 },
 						},
 					],
 					// Mizuho Class
@@ -1174,6 +1181,13 @@ KC3改 Equipment Object
 					},
 					// Kamoi Class
 					"72": "62",
+					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
+					"67": {
+						multiple: { "houg": 2, "raig": 2, "houk": 2, "saku": 2 },
+					},
+					"78": "67",
+					"82": "67",
+					"88": "67", */
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model/Skilled)
@@ -1192,7 +1206,7 @@ KC3改 Equipment Object
 						{
 							// Gotland andra FP +3, TP +3, EV +2, LoS +?
 							remodel: 2,
-							multiple: { "houg": 3, "raig": 3, "houk": 2 },
+							single: { "houg": 3, "raig": 3, "houk": 2 },
 						},
 					],
 					// Mizuho Class
@@ -1201,6 +1215,13 @@ KC3改 Equipment Object
 					},
 					// Kamoi Class
 					"72": "62",
+					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
+					"67": {
+						multiple: { "houg": 2, "raig": 2, "houk": 2, "saku": 2 },
+					},
+					"78": "67",
+					"82": "67",
+					"88": "67", */
 				},
 			},
 			// S9 Osprey
@@ -1230,13 +1251,8 @@ KC3改 Equipment Object
 					// Gotland Class
 					"89": [
 						{
-							multiple: { "houg": 1, "tais": 3, "houk": 1, "saku": 1 },
-						},
-						{
-							// Gotland andra LoS +1
-							remodel: 2,
-							multiple: { "saku": 1 },
-						},
+							multiple: { "houg": 1, "tais": 3, "houk": 1, "saku": 2 },
+						}
 					],
 					// Commandant Teste Class
 					"70": {
@@ -1249,13 +1265,22 @@ KC3改 Equipment Object
 					// Kamoi Class
 					"72": "62",
 					// Queen Elizabeth Class
-					"67": {
-						multiple: { "houg": 6, "tais": 3, "houk": 3, "saku": 3 },
-					},
+					"67": [
+						{
+							multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
+						},
+						// Warspite only
+						{
+							single: { "houg": 4, "houk": 1, "saku": 1 },
+						}
+					],
 					// Nelson Class
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
 					},
+					/*  Ark Royal Class and J Class, but they can not equip
+					"78": 88,
+					"82": 88, */
 				},
 			},
 			// Fairey Seafox Kai
@@ -1270,7 +1295,7 @@ KC3改 Equipment Object
 						{
 							// Gotland andra FP +2, EV +2, LoS +3
 							remodel: 2,
-							multiple: { "houg": 2, "houk": 2, "saku": 3 },
+							single: { "houg": 2, "houk": 2, "saku": 3 },
 						},
 					],
 					// Commandant Teste Class
@@ -1285,10 +1310,18 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
 					},
+					/*  Ark Royal Class and J Class, but they can not equip
+					"78": 67,
+					"82": 67, */
 					// Nelson Class
-					"88": {
-						multiple: { "houg": 6, "tais": 1, "houk": 4, "saku": 5 },
-					},
+					"88": [
+						{
+							multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
+						},
+						{
+							single: { "houg": 3, "houk": 2, "saku": 2 },
+						}
+					],
 				},
 			},
 			// O Type Observation Autogyro Kai
