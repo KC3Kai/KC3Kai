@@ -24,6 +24,7 @@
 		"notifications",
 		"cookies",
 		"activeTab",
+		"file:///*",
 		"*://*.dmm.com/*"
 	],
 	"background": {
