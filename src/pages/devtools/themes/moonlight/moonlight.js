@@ -4219,9 +4219,7 @@
 					aa = ship.aa[0],
 					fp = ship.fp[0],
 					tp = ship.tp[0];
-				var asw = [101, 102, 110].includes(selectedExpedition) ?
-					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :
-					ship.as[0];
+				var asw = ship.as[0];
 				if(includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
@@ -4537,7 +4535,10 @@
 						}
 						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
-							shipReqBox.attr("title", "CVL:1 + CL:1 + DD/DE:4").lazyInitTooltip();
+							shipReqBox.attr("title",
+								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
+								KC3Meta.term("ExpedEscortTip")
+							).lazyInitTooltip();
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );

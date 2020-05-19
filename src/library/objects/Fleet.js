@@ -266,18 +266,15 @@ Contains summary information about a fleet and its ships
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
-			// new expeds count all stats from aircraft, some still not
-			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#Expedition
-			const isNotFullStatExped = forExped && [101, 102, 110].includes(forExped);
 			if(!includeEquip) {
 				// no accuracy if excludes equipment
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else if(isNotFullStatExped) {
+			} else if(!forExped) {
 				// asw with equipment is a special case, only some equip types counted. The types see:
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, false);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;

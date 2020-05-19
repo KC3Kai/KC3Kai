@@ -4187,8 +4187,8 @@
 					tp = ship.tp[0];
 				// TODO asw stats from aircraft seem be quite different for expeditions
 				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
-				var asw = [101, 102, 110].includes(selectedExpedition) ?
-					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :
+				var asw = /*[101, 102, 110].includes(selectedExpedition) ?
+					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :*/
 					ship.as[0];
 				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
@@ -4520,7 +4520,10 @@
 						}
 						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
-							shipReqBox.attr("title", "CVL:1 + CL:1 + DD/DE:4").lazyInitTooltip();
+							shipReqBox.attr("title",
+								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
+								KC3Meta.term("ExpedEscortTip")
+							).lazyInitTooltip();
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
