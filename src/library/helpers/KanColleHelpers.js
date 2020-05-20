@@ -7647,6 +7647,12 @@ var PS = {};
                   )
               );
       };
+      if (v === 104) {
+          // TODO
+      }
+      if (v === 105) {
+          // TODO
+      }
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))
               (addGroup(lvlCnt(150))
@@ -8005,10 +8011,11 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(45);
-  allExpeditionIds.push(...Data_Array.range(100)(103));
+  var allExpeditionIds = Data_Array.range(1)(48);
+  allExpeditionIds.push(...Data_Array.range(100)(105));
   allExpeditionIds.push(...Data_Array.range(110)(113));
   allExpeditionIds.push(...Data_Array.range(131)(132));
+  allExpeditionIds.push(...Data_Array.range(141)(141));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -8198,6 +8205,12 @@ var PS = {};
       };
       if (eId === 103) {
           return income(80)(120)(0)(100);
+      };
+      if (eId === 104) {
+          //return income(0)(0)(0)(0);
+      };
+      if (eId === 105) {
+          //return income(0)(0)(0)(0);
       };
       if (eId === 110) {
           return income(0)(0)(10)(30);
@@ -8413,6 +8426,12 @@ var PS = {};
       };
       if (eId === 103) {
           return c(7.5)(6)(hm(1)(50));
+      };
+      if (eId === 104) {
+          return c(8)(7.5)(hr(3));
+      };
+      if (eId === 105) {
+          return c(9)(9.5)(hm(3)(30));
       };
       if (eId === 110) {
           return c(4.5)(1.5)((35));
@@ -10396,6 +10415,30 @@ var PS = {};
               "api_use_bull":0.6,
               "api_win_item1":[1,2],
               "api_win_item2":[2,2]
+          },
+          {
+              "api_id":104,
+              "api_disp_no":"A5",
+              "api_deck_num":5,
+              "api_time":180,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.8,
+              "api_use_bull":0.75,
+              "api_win_item1":[3,4],
+              "api_win_item2":[1,3]
+          },
+          {
+              "api_id":105,
+              "api_disp_no":"A6",
+              "api_deck_num":6,
+              "api_time":210,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.95,
+              "api_win_item1":[3,5],
+              "api_win_item2":[4,1]
           },
           {
               "api_id":110,

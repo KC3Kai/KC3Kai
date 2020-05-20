@@ -639,7 +639,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			}
 			
 			var nextYear = new Date();
-			nextYear.setFullYear(newDate.getFullYear() + 1);
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
 			// CKCY force 1
 			if( changeInfo.cookie.name == "ckcy" ){
 				// console.log("CKCY=", changeInfo.cookie.value, changeInfo);

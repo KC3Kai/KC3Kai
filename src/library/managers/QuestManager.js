@@ -238,7 +238,24 @@ Uses KC3Quest objects to play around with
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
 					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+						KC3QuestManager.repeatableTypes.yearlyMar.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st May every year?
+			yearlyMay: {
+				type: 'yearlyMay',
+				key: 'timeToResetYearlyMayQuests',
+				resetMonth: MAY,
+				questIds: [437],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyMay.resetMonth));
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
@@ -394,6 +411,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('quarterly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -479,7 +497,15 @@ Uses KC3Quest objects to play around with
 		resetYearlies :function(typeId){
 			this.load();
 			console.log("Resetting yearlies", typeId);
-			this.resetLoop(this.getRepeatableIds(typeId));
+			if(!typeId || typeId === 'all') {
+				KC3QuestManager.getRepeatableTypes().forEach(({ type }) => {
+					if(type.startsWith('yearly')) {
+						this.resetLoop(this.getRepeatableIds(type));
+					}
+				});
+			} else {
+				this.resetLoop(this.getRepeatableIds(typeId));
+			}
 			this.save();
 		},
 		

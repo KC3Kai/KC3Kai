@@ -119,7 +119,7 @@
 			
 			$(".resetYearlies").on("click", function(){
 				if(confirm("Are you sure?")){
-					KC3QuestManager.resetYearlies();
+					KC3QuestManager.resetYearlies("all");
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});
