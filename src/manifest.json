@@ -98,6 +98,7 @@
 		},
 		{
 			"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+			"include_globs": ["*://203.104.209.*/*", "*://125.6.184.*/*", "*://125.6.189.*/*"],
 			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",
