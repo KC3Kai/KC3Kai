@@ -554,6 +554,62 @@ KC3改 Equipment Object
 					},
 				]
 			},
+			// Tenzan Model 12A
+			"372": {
+				count: 0,
+				byClass: {
+					// Shouhou Class
+					"11": [
+						// Base
+						{
+							multiple: { "tais": 1 }
+						},
+						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "raig": 1 },
+						},
+					],
+					// Chitose Class
+					"15": [
+						// CVL
+						{
+							remodel: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Hiyou Class
+					"24": {
+						multiple: { "houg": 1 },
+					},
+					// Shoukaku Class
+					"33": {
+						multiple: { "houg": 1, "raig": 1 },
+					},
+					// Taihou Class
+					"43": "33",
+					// Taigei Class
+					"50": [
+						// Ryuuhou
+						{
+							remodel: 1,
+							multiple: { "tais": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "raig": 1 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						multiple: { "houg": 1 },
+					},
+				]
+			},
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
 				count: 0,
@@ -1324,6 +1380,29 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// OS2U
+			"171": {
+				count: 0,
+				byClass: {
+					// Following Americans: Northampton Class
+					"95": [
+						{
+							minStars: 5,
+							multiple: { "houk": 1 }
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 }
+						}
+					],
+					// Iowa Class
+					"65": "95",
+					// Colorado Class
+					"93": "95",
+					// Atlanta Class
+					"99": "95"
+				}
+			},			
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -2116,6 +2195,58 @@ KC3改 Equipment Object
 					"34" : "21"
 				}
 			},
+			// SK Radar
+			"278": {
+				count: 0,
+				byClass: {
+					// Following American: Northampton Class
+					"95": {
+						multiple: { "tyku": 1, "houk": 3, "saku": 1 }
+					},
+					// Iowa Class
+					"65": "95",
+					// Colorado Class
+					"93": "95",
+					// Atlanta Class
+					"99": "95",
+					// Following British: Queen Elizabeth Class
+					"67": {
+						multiple: { "tyku": 1, "houk": 2 }
+					},
+					// Nelson Class
+					"88": "67",
+					// Perth Class
+					"96": {
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				}
+			},			
+			// SK + SG Radar
+			"279": {
+				count: 0,
+				byClass: {
+					// Following American: Northampton Class
+					"95": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 3, "saku": 2 }
+					},
+					// Iowa Class
+					"65": "95",
+					// Colorado Class
+					"93": "95",
+					// Atlanta Class
+					"99": "95",
+					// Following British: Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 }
+					},
+					// Nelson Class
+					"88": "67",
+					// Perth Class
+					"96": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+				}
+			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
 				count: 0,
@@ -2331,6 +2462,28 @@ KC3改 Equipment Object
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
+			},
+			// 533mm Quintuple Torpedo Mount (Late Model)
+			"376": {
+				count: 0,
+				byClass: {
+					// Following Americans: John C. Butler Class
+					"87": {
+						multiple: { "houg": 2, "raig": 4 },
+					},
+					// Fletcher Class
+					"91": "87",
+					// Atlanta Class
+					"99": "87",
+					// Jervis Class
+					"82": {
+						multiple: { "houg": 1, "raig": 2 },
+					},
+					// Perth Class
+					"96": {
+						multiple: { "houg": 1, "raig": 1 },
+					},
+				},
 			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
@@ -3158,18 +3311,18 @@ KC3改 Equipment Object
 					{
 						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2
 						ids: [622, 623,  141,      160,     488],
-						multiple: { "houk": 3, "tais": 1 },
+						single: { "houk": 3, "tais": 1 },
 					},
 					{
 						// Yuubari K2D
 						ids: [624],
-						multiple: { "houk": 5, "tais": 3 },
+						single: { "houk": 5, "tais": 3 },
 					},
 				],
 				byClass: {
 					// Akizuki Class
 					"54": {
-						multiple: { "houk": 2, "tais": 1 },
+						single: { "houk": 2, "tais": 1 },
 					},
 				}
 			},
@@ -3197,6 +3350,62 @@ KC3改 Equipment Object
 						// Yuubari K2D
 						ids: [624],
 						multiple: { "houk": 2, "tais": 3 },
+					},
+				],
+			},
+			// RUR-4A Weapon Alpha Kai
+			"377": {
+				count: 0,
+				byClass: {
+					// Following Americans: John C. Butler Class
+					"87": {
+						single: { "houk": 2, "tais": 2 },
+					},
+					// Fletcher Class
+					"91": "87",
+					// Atlanta Class
+					"99": "87",
+					// Jervis Class
+					"82": {
+						single: { "houk": 1, "tais": 1 },
+					},
+					// Perth Class
+					"96": "87"
+				},
+				byShip: [
+					{
+						// Fletcher Mk.II, extra +1 ASW, +1 EV
+						ids: [629],
+						single: { "houk": 1, "tais": 1 },
+					},
+				],
+			},
+			// ASW Lightweight Torpedo (Prototype Initial Model)
+			"378": {
+				count: 0,
+				byClass: {
+					// Following Americans: John C. Butler Class
+					"87": {
+						single: { "houk": 3, "tais": 1 },
+					},
+					// Fletcher Class
+					"91": "87",
+					// Atlanta Class
+					"99": "87",
+					// Jervis Class
+					"82": {
+						single: { "houk": 2, "tais": 1 },
+					},
+					// Perth Class
+					"96": {
+						single: { "houk": 1, "tais": 1 },
+					},
+				},
+				byShip: [
+					{
+						// Fletcher Mk.II, extra +1 ASW, +1 EV
+						ids: [629],
+						single: { "houk": 1, "tais": 1 },
 					},
 				],
 			},
