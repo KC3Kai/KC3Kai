@@ -8207,10 +8207,10 @@ var PS = {};
           return income(80)(120)(0)(100);
       };
       if (eId === 104) {
-          //return income(0)(0)(0)(0);
+          return income(0)(300)(0)(100);
       };
       if (eId === 105) {
-          //return income(0)(0)(0)(0);
+          return income(100)(500)(100)(200);
       };
       if (eId === 110) {
           return income(0)(0)(10)(30);

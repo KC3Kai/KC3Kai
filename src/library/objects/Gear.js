@@ -1389,11 +1389,11 @@ KC3改 Equipment Object
 					"95": [
 						{
 							minStars: 5,
-							multiple: { "houk": 1 },
+							single: { "houk": 1 },
 						},
 						{
 							minStars: 10,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 					],
 					// Iowa Class
@@ -3381,7 +3381,7 @@ KC3改 Equipment Object
 					},
 				],
 			},
-			// ASW Lightweight Torpedo (Experimental Initial Model)
+			// Lightweight ASW Torpedo (Initial Test Model)
 			"378": {
 				count: 0,
 				byClass: {
@@ -3429,17 +3429,17 @@ KC3改 Equipment Object
 					"6": [
 						{
 							remodel: 3,
-							multiple: { "raig": 1, "souk": 1 },
+							single: { "raig": 1, "souk": 1 },
 						},
 						{
 							remodel: 3,
 							minStars: 7,
-							multiple: { "souk": 1 },
+							single: { "souk": 1 },
 						},
 						{
 							remodel: 3,
 							minStars: 10,
-							multiple: { "raig": 1 },
+							single: { "raig": 1 },
 						},
 					],
 				},
@@ -3453,22 +3453,22 @@ KC3改 Equipment Object
 					"6": [
 						{
 							remodel: 3,
-							multiple: { "raig": 1, "houk": 1 },
+							single: { "raig": 1, "houk": 1 },
 						},
 						{
 							remodel: 3,
 							minStars: 6,
-							multiple: { "houk": 1 },
+							single: { "houk": 1 },
 						},
 						{
 							remodel: 3,
 							minStars: 8,
-							multiple: { "raig": 1 },
+							single: { "raig": 1 },
 						},
 						{
 							remodel: 3,
 							minStars: 10,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 					],
 				},
