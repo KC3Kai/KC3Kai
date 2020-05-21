@@ -396,7 +396,7 @@ KC3改 Equipment Object
 					"11": [
 						// Base
 						{
-							multiple: { "tais": 1 }
+							multiple: { "tais": 1 },
 						},
 						// Kai
 						{
@@ -469,7 +469,7 @@ KC3改 Equipment Object
 						ids: [508, 509],
 						multiple: { "houg": 1, "raig": 2, "houk": 2 },
 					},
-				]
+				],
 			},
 			// Tenzan Model 12A Kai (Skilled / with Type 6 Airborne Radar)
 			"374": {
@@ -479,7 +479,7 @@ KC3改 Equipment Object
 					"11": [
 						// Base
 						{
-							multiple: { "houg": 1, "tais": 1 }
+							multiple: { "houg": 1, "tais": 1 },
 						},
 						// Kai
 						{
@@ -552,7 +552,7 @@ KC3改 Equipment Object
 						ids: [508, 509],
 						multiple: { "houg": 1, "raig": 2, "tais": 2, "houk": 3 },
 					},
-				]
+				],
 			},
 			// Tenzan Model 12A
 			"372": {
@@ -562,7 +562,7 @@ KC3改 Equipment Object
 					"11": [
 						// Base
 						{
-							multiple: { "tais": 1 }
+							multiple: { "tais": 1 },
 						},
 						// Kai Ni
 						{
@@ -608,7 +608,7 @@ KC3改 Equipment Object
 						ids: [508, 509],
 						multiple: { "houg": 1 },
 					},
-				]
+				],
 			},
 			// Ju 87C Kai Ni (w/ KMX)
 			"305": {
@@ -1308,7 +1308,7 @@ KC3改 Equipment Object
 					"89": [
 						{
 							multiple: { "houg": 1, "tais": 3, "houk": 1, "saku": 2 },
-						}
+						},
 					],
 					// Commandant Teste Class
 					"70": {
@@ -1328,7 +1328,7 @@ KC3改 Equipment Object
 						// Warspite only
 						{
 							single: { "houg": 4, "houk": 1, "saku": 1 },
-						}
+						},
 					],
 					// Nelson Class
 					"88": {
@@ -1376,24 +1376,25 @@ KC3改 Equipment Object
 						},
 						{
 							single: { "houg": 3, "houk": 2, "saku": 2 },
-						}
+						},
 					],
 				},
 			},
 			// OS2U
 			"171": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Following Americans: Northampton Class
 					"95": [
 						{
 							minStars: 5,
-							multiple: { "houk": 1 }
+							multiple: { "houk": 1 },
 						},
 						{
 							minStars: 10,
-							multiple: { "houg": 1 }
-						}
+							multiple: { "houg": 1 },
+						},
 					],
 					// Iowa Class
 					"65": "95",
@@ -1401,8 +1402,8 @@ KC3改 Equipment Object
 					"93": "95",
 					// Atlanta Class
 					"99": "95"
-				}
-			},			
+				},
+			},
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -1858,7 +1859,7 @@ KC3改 Equipment Object
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 3, "raig": 2, "houk": 2 },
 							},
-						}
+						},
 					],
 					// Katori Class
 					"56": {
@@ -1965,7 +1966,7 @@ KC3改 Equipment Object
 						synergy: {
 							flags: [ "kamikazeTwinTorpedo" ],
 							single: { "raig": 5 },
-						}
+						},
 					},
 					{
 						// Yamato, Musashi
@@ -2000,13 +2001,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Mogami Class
 					"9": {
-						multiple: { "houg": 1 }
+						multiple: { "houg": 1 },
 					},
 					// Northampton Class
 					"95": {
-						multiple: { "houg": 2 }
-					}
-				}
+						multiple: { "houg": 2 },
+					},
+				},
 			},
 			// 8inch Triple Gun Mount Mk.9 mod.2
 			"357": {
@@ -2014,13 +2015,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Mogami Class
 					"9": {
-						multiple: { "houg": 1 }
+						multiple: { "houg": 1 },
 					},
 					// Northampton Class
 					"95": {
-						multiple: { "houg": 2 }
-					}
-				}
+						multiple: { "houg": 2 },
+					},
+				},
 			},
 			// 5inch Single High-angle Gun Mount Battery
 			"358": {
@@ -2028,11 +2029,11 @@ KC3改 Equipment Object
 				byClass: {
 					// Northampton Class
 					"95": {
-						multiple: { "houg": 2, "tyku": 3, "houk": 3 }
+						multiple: { "houg": 2, "tyku": 3, "houk": 3 },
 					},
 					// Following British and Americans: Queen Elizabeth Class
 					"67": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 }
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					// Ark Royal Class
 					"78": "67",
@@ -2048,7 +2049,7 @@ KC3改 Equipment Object
 					"84": "67",
 					// Colorado Class
 					"93": "67"
-				}
+				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
 			"359": {
@@ -2056,7 +2057,7 @@ KC3改 Equipment Object
 				byClass: {
 					// Perth Class
 					"96": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 					},
 					// Yuubari Class
 					"34": [
@@ -2067,9 +2068,9 @@ KC3改 Equipment Object
 						{
 							remodel: 2,
 							multiple: { "houg": 1, "tyku": 1 },
-						}
+						},
 					],
-				}
+				},
 			},
 			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Model 1938
 			"360": {
@@ -2077,17 +2078,17 @@ KC3改 Equipment Object
 				byClass: {
 					// Agano Class
 					"41": {
-						multiple: { "houg": 1, "tyku": 1 }
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					// Gotland Class
 					"89": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
 					},
 					// De Ryuter Class
 					"98": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
-					}
-				}
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+					},
+				},
 			},
 			// Bofors 15cm Twin Rapid Fire Gun Mount Mk.9 Kai + Single Rapid Fire Gun Mount Mk.10 Kai Model 1938
 			"361": {
@@ -2095,17 +2096,17 @@ KC3改 Equipment Object
 				byClass: {
 					// Agano Class
 					"41": {
-						multiple: { "houg": 1, "tyku": 1 }
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					// Gotland Class
 					"89": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 1 }
+						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
 					},
 					// De Ryuter Class
 					"98": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 1 }
-					}
-				}
+						multiple: { "houg": 2, "tyku": 2, "houk": 1 },
+					},
+				},
 			},
 			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 			"362": {
@@ -2113,17 +2114,17 @@ KC3改 Equipment Object
 				byClass: {
 					// Atlanta Class
 					"99": {
-						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
 					},
 					// Colorado Class
 					"93": {
-						multiple: { "tyku": 1, "houk": 1 }
+						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
 					"95": "99",
 					// Agano Class
 					"41": {
-						multiple: { "tyku": -1, "houk": -2 }
+						multiple: { "tyku": -1, "houk": -2 },
 					},
 					// Ooyodo Class
 					"52": "41",
@@ -2131,13 +2132,13 @@ KC3改 Equipment Object
 					"98": "41",
 					// Katori Class
 					"56": {
-						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 },
 					},
 					// Gotland Class
 					"89": "56",
 					// Kuma Class
 					"4": {
-						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 },
 					},
 					// Nagara Class
 					"20": "4",
@@ -2145,11 +2146,11 @@ KC3改 Equipment Object
 					"16": "4",
 					// Tenryuu Class
 					"21": {
-						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 },
 					},
 					// Yuubari Class
 					"34" : "21"
-				}
+				},
 			},
 			// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 			"363": {
@@ -2157,17 +2158,17 @@ KC3改 Equipment Object
 				byClass: {
 					// Atlanta Class
 					"99": {
-						multiple: { "houg": 1, "tyku": 3, "houk": 2 }
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
 					},
 					// Colorado Class
 					"93": {
-						multiple: { "tyku": 1, "houk": 1 }
+						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
 					"95": "99",
 					// Agano Class
 					"41": {
-						multiple: { "tyku": -1, "houk": -2 }
+						multiple: { "tyku": -1, "houk": -2 },
 					},
 					// Ooyodo Class
 					"52": "41",
@@ -2175,13 +2176,13 @@ KC3改 Equipment Object
 					"98": "41",
 					// Katori Class
 					"56": {
-						multiple: { "houg": -2, "tyku": -1, "houk": -4 }
+						multiple: { "houg": -2, "tyku": -1, "houk": -4 },
 					},
 					// Gotland Class
 					"89": "56",
 					// Kuma Class
 					"4": {
-						multiple: { "houg": -3, "tyku": -2, "houk": -6 }
+						multiple: { "houg": -3, "tyku": -2, "houk": -6 },
 					},
 					// Nagara Class
 					"20": "4",
@@ -2189,11 +2190,11 @@ KC3改 Equipment Object
 					"16": "4",
 					// Tenryuu Class
 					"21": {
-						multiple: { "houg": -3, "tyku": -3, "houk": -8 }
+						multiple: { "houg": -3, "tyku": -3, "houk": -8 },
 					},
 					// Yuubari Class
 					"34" : "21"
-				}
+				},
 			},
 			// SK Radar
 			"278": {
@@ -2201,7 +2202,7 @@ KC3改 Equipment Object
 				byClass: {
 					// Following American: Northampton Class
 					"95": {
-						multiple: { "tyku": 1, "houk": 3, "saku": 1 }
+						single: { "tyku": 1, "houk": 3, "saku": 1 },
 					},
 					// Iowa Class
 					"65": "95",
@@ -2211,23 +2212,23 @@ KC3改 Equipment Object
 					"99": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
-						multiple: { "tyku": 1, "houk": 2 }
+						single: { "tyku": 1, "houk": 2 },
 					},
 					// Nelson Class
 					"88": "67",
 					// Perth Class
 					"96": {
-						multiple: { "tyku": 1, "houk": 1 },
+						single: { "tyku": 1, "houk": 1 },
 					},
-				}
-			},			
+				},
+			},
 			// SK + SG Radar
 			"279": {
 				count: 0,
 				byClass: {
 					// Following American: Northampton Class
 					"95": {
-						multiple: { "houg": 2, "tyku": 2, "houk": 3, "saku": 2 }
+						single: { "houg": 2, "tyku": 2, "houk": 3, "saku": 2 },
 					},
 					// Iowa Class
 					"65": "95",
@@ -2237,15 +2238,15 @@ KC3改 Equipment Object
 					"99": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 }
+						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
 					},
 					// Nelson Class
 					"88": "67",
 					// Perth Class
 					"96": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						single: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
-				}
+				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount
 			"15": {
@@ -2302,7 +2303,7 @@ KC3改 Equipment Object
 					"34": {
 						remodel: 2,
 						multiple: { "houg": 2, "raig": 4, "houk": 4 },
-					}
+					},
 				},
 			},
 			// 53cm Bow (Oxygen) Torpedo Mount
@@ -2803,7 +2804,7 @@ KC3改 Equipment Object
 					"22": [
 						// One-time +3 AA
 						{
-							single: { "tyku": 3 }
+							single: { "tyku": 3 },
 						},
 						{
 							multiple: { "houg": 2, "houk": 1 },
@@ -2840,7 +2841,7 @@ KC3改 Equipment Object
 								{
 									flags: [ "airRadar" ],
 									single: { "houg": 1, "tyku": 5, "houk": 2 },
-								}
+								},
 							],
 						},
 						{
@@ -3029,7 +3030,7 @@ KC3改 Equipment Object
 						// Shikinami K2
 						ids: [627],
 						multiple: { "houg": 2, "raig": 1},
-					}
+					},
 				],
 			},
 			// 5inch Single Gun Mount Mk.30 Kai
@@ -3324,7 +3325,7 @@ KC3改 Equipment Object
 					"54": {
 						single: { "houk": 2, "tais": 1 },
 					},
-				}
+				},
 			},
 			// Type 3 Depth Charge Projector (Concentrated Deployment)
 			"287": {
@@ -3359,7 +3360,7 @@ KC3改 Equipment Object
 				byClass: {
 					// Following Americans: John C. Butler Class
 					"87": {
-						single: { "houk": 2, "tais": 2 },
+						single: { "houk": 1, "tais": 2 },
 					},
 					// Fletcher Class
 					"91": "87",
@@ -3376,17 +3377,17 @@ KC3改 Equipment Object
 					{
 						// Fletcher Mk.II, extra +1 ASW, +1 EV
 						ids: [629],
-						single: { "houk": 1, "tais": 1 },
+						single: { "houk": 2, "tais": 1 },
 					},
 				],
 			},
-			// ASW Lightweight Torpedo (Prototype Initial Model)
+			// ASW Lightweight Torpedo (Experimental Initial Model)
 			"378": {
 				count: 0,
 				byClass: {
 					// Following Americans: John C. Butler Class
 					"87": {
-						single: { "houk": 3, "tais": 1 },
+						single: { "houk": 1, "tais": 3 },
 					},
 					// Fletcher Class
 					"91": "87",
@@ -3394,7 +3395,7 @@ KC3改 Equipment Object
 					"99": "87",
 					// Jervis Class
 					"82": {
-						single: { "houk": 2, "tais": 1 },
+						single: { "houk": 1, "tais": 2 },
 					},
 					// Perth Class
 					"96": {
@@ -3440,8 +3441,8 @@ KC3改 Equipment Object
 							minStars: 10,
 							multiple: { "raig": 1 },
 						},
-					]
-				}
+					],
+				},
 			},
 			// New Model High Temperature High Pressure Boiler
 			"87": {
@@ -3469,8 +3470,8 @@ KC3改 Equipment Object
 							minStars: 10,
 							multiple: { "houg": 1 },
 						},
-					]
-				}
+					],
+				},
 			},
 			// Skilled Lookouts
 			"129": {
@@ -3535,7 +3536,7 @@ KC3改 Equipment Object
 					"29": "7",
 					// Tone Class
 					"31": "7"
-				}
+				},
 			},
 			// All Radars
 			"t3_11": {
@@ -3550,9 +3551,9 @@ KC3改 Equipment Object
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
 						},
-					}
-				]
-			}
+					},
+				],
+			},
 		};
 	};
 
