@@ -1752,10 +1752,11 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner {
 	text-align:center;
 	white-space:nowrap;
-	overflow: auto;
+	overflow-x:hidden;
+	overflow-y:overlay;
 }
 .module.activity .activity_expeditionPlanner::-webkit-scrollbar {
-	width: 0px;
+	width: 5px;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
 	color:#006600;
@@ -1806,7 +1807,7 @@ ABYSS FLEET
 	padding: 0;
 	width: 50%;
 	font-size: 13px;
-	line-height: 14px;
+	line-height: 17px;
 }
 
 .module.activity .activity_expeditionPlanner li ui li {
@@ -1823,6 +1824,7 @@ ABYSS FLEET
 	left:100%;
 	cursor:pointer;
 	width:100%;
+	line-height: 13px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
