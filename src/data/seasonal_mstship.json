@@ -3166,7 +3166,7 @@
 	},
 	"5395": {
 		"api_id": 5395,
-		"api_name": "記念日夕雲",
+		"api_name": "記念日夕雲改二",
 		"api_yomi": "ゆうぐも",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -3470,14 +3470,54 @@
 	},
 	"5433": {
 		"api_id": 5433,
+		"api_name": "買い物平戸",
+		"api_yomi": "ひらと",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5434": {
+		"api_id": 5434,
+		"api_name": "買い物御蔵",
+		"api_yomi": "みくら",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5435": {
+		"api_id": 5435,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"5434": {
-		"api_id": 5434,
+	"5436": {
+		"api_id": 5436,
+		"api_name": "記念日朧改",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5437": {
+		"api_id": 5437,
+		"api_name": "記念日曙改",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5438": {
+		"api_id": 5438,
+		"api_name": "記念日択捉改",
+		"api_yomi": "えとろふ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5439": {
+		"api_id": 5439,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,

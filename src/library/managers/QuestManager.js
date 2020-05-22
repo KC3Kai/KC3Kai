@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 339, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
+				questIds: [284, 330, 337, 339, 342, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -225,7 +225,7 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
-			// Reset on 1st March every year?
+			// Reset on 1st March every year
 			yearlyMar: {
 				type: 'yearlyMar',
 				key: 'timeToResetYearlyMarQuests',
@@ -238,7 +238,24 @@ Uses KC3Quest objects to play around with
 					const nextDailyReset = new Date(
 						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
 					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+						KC3QuestManager.repeatableTypes.yearlyMar.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st May every year
+			yearlyMay: {
+				type: 'yearlyMay',
+				key: 'timeToResetYearlyMayQuests',
+				resetMonth: MAY,
+				questIds: [437],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyMay.resetMonth));
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
@@ -394,6 +411,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('quarterly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -445,8 +463,8 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C38, C42
-			this.resetCounterLoop([330, 337, 339], false);
+			// Quarterly PvP C29, C38, C42, C44
+			this.resetCounterLoop([330, 337, 339, 342], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -479,7 +497,15 @@ Uses KC3Quest objects to play around with
 		resetYearlies :function(typeId){
 			this.load();
 			console.log("Resetting yearlies", typeId);
-			this.resetLoop(this.getRepeatableIds(typeId));
+			if(!typeId || typeId === 'all') {
+				KC3QuestManager.getRepeatableTypes().forEach(({ type }) => {
+					if(type.startsWith('yearly')) {
+						this.resetLoop(this.getRepeatableIds(type));
+					}
+				});
+			} else {
+				this.resetLoop(this.getRepeatableIds(typeId));
+			}
 			this.save();
 		},
 		
@@ -577,6 +603,15 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(13)  + // Ayanami any remodel
 							fleet.countShip(14)    // Shikinami any remodel
 						) >= 4;
+					},
+				"342": // C44 PvP with 3 DD/DE and 1 more DD/DE/CL(T)/CT
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShipType([1, 2]) >= 4 ||
+							fleet.countShipType([1, 2]) >= 3 &&
+							fleet.hasShipType([3, 4, 21])
+						);
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

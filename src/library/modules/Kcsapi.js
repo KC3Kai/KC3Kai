@@ -1876,6 +1876,7 @@ Previously known as "Reactor"
 						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
 						KC3QuestManager.get(428).increment(0); // D26: Quarterly, index 0
 						KC3QuestManager.get(436).increment(3); // D33: Yearly, index 3
+						KC3QuestManager.get(437).increment(0); // D34: Yearly, index 0
 						break;
 					case 5:
 						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
@@ -1903,6 +1904,15 @@ Previously known as "Reactor"
 						break;
 					case 102: // A3
 						KC3QuestManager.get(428).increment(2); // D26: Quarterly, index 2
+						break;
+					case 104: // A5
+						KC3QuestManager.get(437).increment(1); // D34: Yearly, index 1
+						break;
+					case 105: // A6
+						KC3QuestManager.get(437).increment(2); // D34: Yearly, index 2
+						break;
+					case 110: // B1
+						KC3QuestManager.get(437).increment(3); // D34: Yearly, index 3
 						break;
 					}
 					KC3Network.trigger("Quests");
@@ -2908,6 +2918,10 @@ Previously known as "Reactor"
 					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(330))
 					KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises 1
+			}
+			if(rankPt >= 4) { // A-Rank+
+				if(KC3QuestManager.isPrerequisiteFulfilled(342))
+					KC3QuestManager.get(342).increment(); // C44: Quarterly Exercises 4
 			}
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
