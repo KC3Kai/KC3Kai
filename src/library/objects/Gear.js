@@ -51,7 +51,7 @@ KC3改 Equipment Object
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20200521 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20200520 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -257,7 +257,6 @@ KC3改 Equipment Object
 				},
 			},
 			// Type 97 Torpedo Bomber (Murata Squadron)
-			// https://wikiwiki.jp/kancolle/%E5%A4%A9%E5%B1%B1%28%E6%9D%91%E7%94%B0%E9%9A%8A%29
 			"143": {
 				count: 0,
 				byClass: {
@@ -343,7 +342,6 @@ KC3改 Equipment Object
 				],
 			},
 			// Tenzan Model 12 (Murata Squadron)
-			// https://wikiwiki.jp/kancolle/%E5%A4%A9%E5%B1%B1%28%E6%9D%91%E7%94%B0%E9%9A%8A%29
 			"144": {
 				count: 0,
 				byClass: {
@@ -690,7 +688,6 @@ KC3改 Equipment Object
 				},
 			},
 			// Type 99 Dive Bomber (Egusa Squadron)
-			// https://wikiwiki.jp/kancolle/%E4%B9%9D%E4%B9%9D%E5%BC%8F%E8%89%A6%E7%88%86%28%E6%B1%9F%E8%8D%89%E9%9A%8A%29
 			"99": {
 				count: 0,
 				byClass: {
@@ -728,7 +725,6 @@ KC3改 Equipment Object
 				},
 			},
 			// Suisei Model 22 (634 Air Group)
-			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%29
 			"291": {
 				count: 0,
 				byClass: {
@@ -747,7 +743,6 @@ KC3改 Equipment Object
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
-			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%BA%8C%E4%BA%8C%E5%9E%8B%28%E5%85%AD%E4%B8%89%E5%9B%9B%E7%A9%BA%EF%BC%8F%E7%86%9F%E7%B7%B4%29
 			"292": {
 				count: 0,
 				byClass: {
@@ -777,7 +772,6 @@ KC3改 Equipment Object
 				},
 			},
 			// Suisei Model 12 (w/Type 31 Photoelectric Fuze Bombs)
-			// https://wikiwiki.jp/kancolle/%E5%BD%97%E6%98%9F%E4%B8%80%E4%BA%8C%E5%9E%8B%28%E4%B8%89%E4%B8%80%E5%8F%B7%E5%85%89%E9%9B%BB%E7%AE%A1%E7%88%86%E5%BC%BE%E6%90%AD%E8%BC%89%E6%A9%9F%29
 			"320": {
 				count: 0,
 				byShip: [
@@ -1498,7 +1492,6 @@ KC3改 Equipment Object
 				],
 			},
 			// 35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
-			// https://wikiwiki.jp/kancolle/35.6cm%E4%B8%89%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9%28%E3%83%80%E3%82%BA%E3%83%AB%E8%BF%B7%E5%BD%A9%E4%BB%95%E6%A7%98%29
 			"289": {
 				count: 0,
 				byShip: [
@@ -1733,7 +1726,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 16inch Mk.I Twin Gun Mount
-			// https://wikiwiki.jp/kancolle/16inch%20Mk.I%E9%80%A3%E8%A3%85%E7%A0%B2
 			"330": {
 				count: 0,
 				byClass: {
@@ -1792,7 +1784,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 16inch Mk.VIII Twin Gun Mount Kai
-			// https://wikiwiki.jp/kancolle/16inch%20Mk.VIII%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9
 			"332": {
 				count: 0,
 				byClass: {
@@ -1825,7 +1816,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 14cm Twin Gun Mount
-			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2
 			"119": {
 				count: 0,
 				byClass: {
@@ -1842,7 +1832,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 14cm Twin Gun Mount Kai
-			// https://wikiwiki.jp/kancolle/14cm%E9%80%A3%E8%A3%85%E7%A0%B2%E6%94%B9
 			"310": {
 				count: 0,
 				byClass: {
@@ -2262,7 +2251,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 61cm Quintuple (Oxygen) Torpedo Mount
-			// https://wikiwiki.jp/kancolle/61cm%E4%BA%94%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7
 			"58": {
 				count: 0,
 				byClass: {
@@ -2286,7 +2274,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 53cm Twin Torpedo Mount
-			// https://wikiwiki.jp/kancolle/53cm%E9%80%A3%E8%A3%85%E9%AD%9A%E9%9B%B7
 			"174": {
 				count: 0,
 				byClass: {
@@ -2307,7 +2294,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 53cm Bow (Oxygen) Torpedo Mount
-			// https://wikiwiki.jp/kancolle/53cm%E8%89%A6%E9%A6%96%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7
 			"67": {
 				count: 0,
 				byShip: {
@@ -2341,7 +2327,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
-			// https://wikiwiki.jp/kancolle/61cm%E4%B8%89%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"285": {
 				count: 0,
 				starsDist: [],
@@ -2370,7 +2355,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount Late Model
-			// https://wikiwiki.jp/kancolle/61cm%E5%9B%9B%E9%80%A3%E8%A3%85%28%E9%85%B8%E7%B4%A0%29%E9%AD%9A%E9%9B%B7%E5%BE%8C%E6%9C%9F%E5%9E%8B
 			"286": {
 				count: 0,
 				starsDist: [],
@@ -2523,7 +2507,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 12.7cm Single High-angle Gun Mount (Late Model)
-			// https://wikiwiki.jp/kancolle/12.7cm%E5%8D%98%E8%A3%85%E9%AB%98%E8%A7%92%E7%A0%B2%28%E5%BE%8C%E6%9C%9F%E5%9E%8B%29
 			"229": {
 				count: 0,
 				starsDist: [],
@@ -2878,7 +2861,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
-			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2A%E5%9E%8B%E6%94%B9%E4%B8%89%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE
 			"295": {
 				count: 0,
 				byClass: {
@@ -2924,7 +2906,6 @@ KC3改 Equipment Object
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
-			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2B%E5%9E%8B%E6%94%B9%E5%9B%9B%28%E6%88%A6%E6%99%82%E6%94%B9%E4%BF%AE%29%EF%BC%8B%E9%AB%98%E5%B0%84%E8%A3%85%E7%BD%AE
 			"296": {
 				count: 0,
 				byClass: {
