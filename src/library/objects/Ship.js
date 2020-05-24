@@ -1429,10 +1429,8 @@ KC3改 Ship Object
 		let synergyModifier = 1;
 		// new DC + DCP synergy (x1.1 / x1.25)
 		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
-		// T3DCP CD, 15cm9t ASW Rocket and Type2 12cm Mortar Kais are not counted yet,
-		// so `isDepthChargeProjectorEquipped` not used
-		//const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
-		if(isNewDepthChargeEquipped && this.hasEquipment([44, 45])) {
+		const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
+		if(isNewDepthChargeEquipped && isDepthChargeProjectorEquipped) {
 			// Large Sonar, like T0 Sonar, not counted here
 			const isSonarEquipped = this.hasEquipmentType(2, 14);
 			synergyModifier = isSonarEquipped ? 1.25 : 1.1;

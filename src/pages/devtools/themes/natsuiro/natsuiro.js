@@ -4311,9 +4311,9 @@
 				32, 41, 43, 45, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 			var condIsFlagshipLevel = [
-				// related to sparkle ships and flagship level: 41, A2(101) confirmed, others are to be verified
+				// related to sparkle ships and flagship level: 41, A2(101), A3(102) confirmed, others are to be verified
 				// https://twitter.com/jo_swaf/status/1261241711952445440
-				41, 101, 43, 45, 102, 103, 112, 113, 114, 131, 132, 141
+				41, 101, 102, 43, 45, 103, 104, 105, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;

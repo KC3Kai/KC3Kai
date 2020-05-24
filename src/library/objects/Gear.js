@@ -4258,11 +4258,14 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
+		// Current implemented in type[2]:
+		//   [44] Type94 DCP, [45] Type3 DCP, [287] Type3 DCP CD, [288] 15cm9t ASW Rocket,
+		//   [346][347] Type2 12cm Mortar Kai & CD, [377] RUR-4A WA Kai, [378] Lightweight ASW Torpedo
 		return this.exists() && this.master().api_type[2] === 15 &&
-			// Current implemented: Type94 DCP, Type3 DCP, Type3 DCP CD, 15cm9t ASW Rocket
-			//[44, 45].indexOf(this.masterId) > -1;
-			// To maintenance fewer lists
-			!this.isDepthCharge();
+			// Current counted as projector: Type94 DCP, Type3 DCP
+			[44, 45].indexOf(this.masterId) > -1;
+			// To maintenance fewer lists, but devs failed us
+			//!this.isDepthCharge();
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {

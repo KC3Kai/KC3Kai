@@ -7648,10 +7648,36 @@ var PS = {};
               );
       };
       if (v === 104) {
-          // TODO
+          // under verifications
+          return addGroup(fslAndSc(50)(5))
+              (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                  (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                      (addGroup(ddde(4))
+                          (addGroup(fpTotal(280))
+                              (addGroup(aaTotal(250))
+                                  (addGroup(aswTotal(250))
+                                      (losTotal(150))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 105) {
-          // TODO
+          // under verifications
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                  (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                      (addGroup(fpTotal(330))
+                          (addGroup(aaTotal(338))
+                              (addGroup(aswTotal(317))
+                                  (losTotal(211))
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 110) {
           return addGroup(fslAndSc(40)(6))
