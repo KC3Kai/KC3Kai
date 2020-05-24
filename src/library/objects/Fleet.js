@@ -1117,6 +1117,56 @@ Contains summary information about a fleet and its ships
 		return total;
 	};
 	
+	/**
+	 * Calculate LoS score of Air Reconnaissance (aka Aviation Detection) for World 6-3 Node G and H.
+	 * @return {number} current score of this fleet. Detection success judgements:
+	 *         Node G: 12 <= success < 12*1.6 <= random < 12*2.2 <= great success
+	 *         Node H: 16 <- success < 16*1.6 <= random < 16*2.2 <= great success
+	 * @see https://wikiwiki.jp/kancolle/%E4%B8%AD%E9%83%A8%E6%B5%B7%E5%9F%9F#area3
+	 */
+	KC3Fleet.prototype.airReconnScore = function(){
+		return this.shipsUnescaped().reduce((pre, ship) => {
+			// no aircraft and slot size on ex-slot for now
+			return pre + ship.equipment(false).reduce((pre, gear, idx) => {
+				let value = 0;
+				const mst = gear.exists() && gear.master();
+				// Seaplane Reconn/Bomber
+				if(mst && [10, 11].includes(mst.api_type[2])) {
+					// no any visible/improvement bonus confirmed
+					value = mst.api_saku * Math.sqrt(Math.sqrt(ship.slotSize(idx)));
+				// Large Flying Boat
+				} else if(mst && [41].includes(mst.api_type[2])) {
+					value = mst.api_saku * Math.sqrt(ship.slotSize(idx));
+				}
+				return pre + value;
+			}, 0);
+		}, 0);
+	};
+	
+	/**
+	 * Try to check: for implemented aviation detection nodes, will current score result a success or great success?
+	 * @see #airReconnScore
+	 */
+	KC3Fleet.prototype.estimateAirReconnResult = function(score = this.airReconnScore()){
+		// Data from KC Kai, https://kancolle.fandom.com/ja/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:1899
+		const airReconnNodes = {
+			"W63G": { "world": 6, "map": 3, "node": "G", "edges": [7], "reqS": 12 },
+			"W63H": { "world": 6, "map": 3, "node": "H", "edges": [8, 12], "reqS": 16 },
+		};
+		Object.entries(airReconnNodes).forEach(([key, node]) => {
+			node.score = score;
+			node.reqGS = node.reqS * 1.2;
+			node.reqGGS = node.reqS * 2.2;
+			node.result = (
+				score >= node.reqGGS ? "GreatSuccess" :
+				node.reqGS <= score && score < node.reqGGS ? "RandomSorGS" :
+				node.reqS  <= score && score < node.reqGS ? "Success" :
+				"Failure"
+			);
+		});
+		return airReconnNodes;
+	};
+	
 	/*--------------------------------------------------------*/
 	/*--------------[ OTHER MECHANISM INFERENCE ]-------------*/
 	/*--------------------------------------------------------*/
