@@ -2261,13 +2261,10 @@ KC3改 Equipment Object
 					},
 					// Shimakaze Class
 					"22": {
-						remodel: 1,
 						multiple: { "raig": 1 },
 					},
 					// Akizuki Class
-					"54": {
-						multiple: { "raig": 1 },
-					},
+					"54": "22",
 				},
 			},
 			// 53cm Twin Torpedo Mount
@@ -2317,10 +2314,31 @@ KC3改 Equipment Object
 					// John C. Butler Class
 					"87": {
 						multiple: { "houg": 1, "raig": 3 },
-						countCap: 2,
 					},
 					// Fletcher Class
 					"91": "87",
+				},
+			},
+			// 533mm Quintuple Torpedo Mount (Late Model)
+			"376": {
+				count: 0,
+				byClass: {
+					// Following Americans: John C. Butler Class
+					"87": {
+						multiple: { "houg": 2, "raig": 4 },
+					},
+					// Fletcher Class
+					"91": "87",
+					// Atlanta Class
+					"99": "87",
+					// Jervis Class
+					"82": {
+						multiple: { "houg": 1, "raig": 2 },
+					},
+					// Perth Class
+					"96": {
+						multiple: { "houg": 1, "raig": 1 },
+					},
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
@@ -2444,28 +2462,6 @@ KC3改 Equipment Object
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
-			},
-			// 533mm Quintuple Torpedo Mount (Late Model)
-			"376": {
-				count: 0,
-				byClass: {
-					// Following Americans: John C. Butler Class
-					"87": {
-						multiple: { "houg": 2, "raig": 4 },
-					},
-					// Fletcher Class
-					"91": "87",
-					// Atlanta Class
-					"99": "87",
-					// Jervis Class
-					"82": {
-						multiple: { "houg": 1, "raig": 2 },
-					},
-					// Perth Class
-					"96": {
-						multiple: { "houg": 1, "raig": 1 },
-					},
-				},
 			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
