@@ -33,10 +33,12 @@
 			this.flowchartIds = [];
 			this.seedBranch( rootQuestTree, 201 ); // Bd1
 			this.seedBranch( rootQuestTree, 303 ); // Cd2
+			this.seedBranch( rootQuestTree, 342 ); // C44
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
 			this.seedBranch( rootQuestTree, 434 ); // D32
+			this.seedBranch( rootQuestTree, 437 ); // D34
 			this.seedBranch( rootQuestTree, 503 ); // Ed3
 			this.seedBranch( rootQuestTree, 605 ); // Fd1
 			this.seedBranch( rootQuestTree, 702 ); // Gd2
@@ -119,7 +121,7 @@
 			
 			$(".resetYearlies").on("click", function(){
 				if(confirm("Are you sure?")){
-					KC3QuestManager.resetYearlies();
+					KC3QuestManager.resetYearlies("all");
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});

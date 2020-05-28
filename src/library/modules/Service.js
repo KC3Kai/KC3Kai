@@ -645,6 +645,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				if(!ConfigManager.dmm_forcecookies){ return true; }
 			}
 			
+			var nextYear = new Date();
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
 			// CKCY force 1
 			if( changeInfo.cookie.name == "ckcy" ){
 				// console.log("CKCY=", changeInfo.cookie.value, changeInfo);
@@ -653,7 +655,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					name: "ckcy",
 					value: "1",
 					domain: ".dmm.com",
-					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					expirationDate: Math.ceil(nextYear.getTime()/1000),
 					path: changeInfo.cookie.path,
 				}, function(cookie){
 					// console.log("ckcy cookie re-hacked", cookie);
@@ -668,7 +670,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					name: "cklg",
 					value: "welcome",
 					domain: ".dmm.com",
-					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					expirationDate: Math.ceil(nextYear.getTime()/1000),
 					path: changeInfo.cookie.path,
 				}, function(cookie){
 					// console.log("cklg cookie re-hacked", cookie);

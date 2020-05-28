@@ -7534,16 +7534,64 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))(fsty(KanColle_Generated_SType.CL.value))))));
       };
       if (v === 41) {
-          return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))(addGroup(fpTotal(60))(addGroup(aaTotal(80))(aswTotal(210))))));
+          return addGroup(fslAndSc(30)(3))
+              (addGroup(lvlCnt(100))
+                  (addGroup(ddde(3))
+                      (addGroup(fpTotal(60))
+                          (addGroup(aaTotal(80))
+                              (aswTotal(210))
+                          )
+                      )
+                  )
+              );
       };
       if (v === 42) {
-          return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(ddde(3)))));
+          return addGroup(fslAndSc(45)(4))
+              (addGroup(lvlCnt(200))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(1)(KanColle_Generated_SType.DD.value))
+                          (ddde(3))
+                      )
+                  )
+              );
       };
       if (v === 43) {
-          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(300))(addGroup(sty(1)(KanColle_Generated_SType.CVE.value))(addGroup(ddde(2))(addGroup(fsty([ KanColle_Generated_SType.CVE.value ]))(addGroup(fpTotal(500))(aswTotal(280)))))));
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(300))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CVE.value))
+                      (addGroup(ddde(2))
+                          (addGroup(fsty([ KanColle_Generated_SType.CVE.value ]))
+                              (addGroup(fpTotal(500))
+                                  (addGroup(aaTotal(280))
+                                      (addGroup(aswTotal(280))
+                                          (losTotal(179))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 44) {
-          return addGroup(fslAndSc(35)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ]))))));
+          return addGroup(fslAndSc(35)(6))
+              (addGroup(lvlCnt(210))
+                  (addGroup(carrier(3))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                          (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                              (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                                  (addGroup(aaTotal(200))
+                                      (addGroup(aswTotal(200))
+                                          (addGroup(losTotal(150))
+                                              ([ new FleetShipWithDrum(3), new FleetDrum(6) ])
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 45) {
           return addGroup(fslAndSc(50)(5))
@@ -7559,55 +7607,147 @@ var PS = {};
                           )
                       )
                   )
-              )
-      }
+              );
+      };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
       };
       if (v === 101) {
-          return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(aswTotal(180))(addGroup(aaTotal(70))(losTotal(73)))));
+          return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(fpTotal(50))(addGroup(aaTotal(70))(addGroup(aswTotal(180))(losTotal(73))))));
       };
       if (v === 102) {
-          return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(addGroup(ddde(3))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60))))))));
-      };
-      if (v === 103) {
-          return addGroup(fslAndSc(40)(5))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(addGroup(fpTotal(300))(aswTotal(200))))));
-      };
-      if (v === 110) {
-          return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
-      };
-      if (v === 111) {
-          return addGroup(fslAndSc(45)(6))(addGroup(lvlCnt(290))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(3)(KanColle_Generated_SType.DD.value))(fpTotal(360))))));
-      };
-      if (v === 112) {
-          return addGroup(fslAndSc(50)(6))(addGroup(lvlCnt(350))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(220))))))));
-      };
-      if (v === 113) {
-          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(390))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280))))))));
-      };
-      if (v === 114) {
-          return addGroup(fslAndSc(65)(6))
-              (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
-                  (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
-                      (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
-                          (addGroup(fpTotal(510))
-                              (addGroup(aaTotal(400))
-                                  (addGroup(aswTotal(285))
-                                      (losTotal(385))
+          return addGroup(fslAndSc(35)(5))
+              (addGroup(lvlCnt(185))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(1)(KanColle_Generated_SType.DD.value))
+                          (addGroup(ddde(3))
+                              (addGroup(aaTotal(162))
+                                  (addGroup(aswTotal(280))
+                                      (losTotal(60))
                                   )
                               )
                           )
                       )
                   )
-              )
+              );
+      };
+      if (v === 103) {
+          return addGroup(fslAndSc(40)(5))
+              (addGroup(lvlCnt(200))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(4)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(300))
+                              (addGroup(aaTotal(200))
+                                  (addGroup(aswTotal(200))
+                                      (losTotal(120))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 104) {
+          // TODO
+      };
+      if (v === 105) {
+          // TODO
+      };
+      if (v === 110) {
+          return addGroup(fslAndSc(40)(6))
+              (addGroup(lvlCnt(150))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(ddde(2))
+                              (addGroup(aaTotal(200))
+                                  (addGroup(aswTotal(200))
+                                      (losTotal(140))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 111) {
+          return addGroup(fslAndSc(45)(6))
+              (addGroup(lvlCnt(220))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(360))
+                                  (addGroup(aaTotal(160))
+                                      (addGroup(aaTotal(160))
+                                          (losTotal(140))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 112) {
+          return addGroup(fslAndSc(50)(6))
+              (addGroup(lvlCnt(250))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(ddde(4))
+                                  (addGroup(fpTotal(400))
+                                      (addGroup(aaTotal(220))
+                                          (addGroup(aswTotal(220))
+                                              (losTotal(190))
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 113) {
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(340))
+                  (addGroup(sty(2)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(submarine(1))
+                                  (addGroup(fpTotal(500))
+                                      (aswTotal(280))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 114) {
+          return addGroup(fslAndSc(60)(6))
+              (addGroup(lvlCnt(350))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(510))
+                                  (addGroup(aaTotal(400))
+                                      (addGroup(aswTotal(285))
+                                          (losTotal(385))
+                                      )
+                                   )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 131) {
           return addGroup(fslAndSc(50)(5))
-              (addGroup(lvlCnt(240))
+              (addGroup(lvlCnt(200))
                   (addGroup(fsty(KanColle_Generated_SType.AV.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
-                          (addGroup(sty(4)(KanColle_Generated_SType.DD.value))
-                              (addGroup(aaTotal(250))
+                          (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                              (addGroup(aaTotal(240))
                                   (addGroup(aswTotal(240))
                                       (losTotal(300))
                                   )
@@ -7615,27 +7755,31 @@ var PS = {};
                           )
                       )
                   )
-              )
-      }
+              );
+      };
       if (v === 132) {
-          return addGroup(fslAndSc(55)(6))
-              (addGroup(fsty(KanColle_Generated_SType.AS.value))
-                  (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
-                      (addGroup(submarine(3))
-                          (addGroup(torpTotal(390))
-                              (addGroup(aaTotal(110))
-                                  (addGroup(aswTotal(55))
-                                      (losTotal(260))
+          return addGroup(fslAndSc(55)(5))
+              (addGroup(lvlCnt(270))
+                  (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                          (addGroup(submarine(3))
+                              (addGroup(fpTotal(60))
+                                  (addGroup(torpTotal(390))
+                                      (addGroup(aaTotal(110))
+                                          (addGroup(aswTotal(55))
+                                              (losTotal(260))
+                                          )
+                                      )
                                   )
                               )
                           )
                       )
                   )
-              )
-      }
+              );
+      };
       if (v === 141) {
-          return addGroup(fslAndSc(57)(6))
-              (addGroup(lvlCnt(350))
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(300))
                   (addGroup(fsty(KanColle_Generated_SType.CA.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
                           (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
@@ -7651,7 +7795,7 @@ var PS = {};
                           )
                       )
                   )
-              )
+              );
       };
       return [  ];
   };
@@ -7867,10 +8011,11 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(45);
-  allExpeditionIds.push(...Data_Array.range(100)(103));
+  var allExpeditionIds = Data_Array.range(1)(48);
+  allExpeditionIds.push(...Data_Array.range(100)(105));
   allExpeditionIds.push(...Data_Array.range(110)(113));
   allExpeditionIds.push(...Data_Array.range(131)(132));
+  allExpeditionIds.push(...Data_Array.range(141)(141));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -8060,6 +8205,12 @@ var PS = {};
       };
       if (eId === 103) {
           return income(80)(120)(0)(100);
+      };
+      if (eId === 104) {
+          return income(0)(300)(0)(100);
+      };
+      if (eId === 105) {
+          return income(100)(500)(100)(200);
       };
       if (eId === 110) {
           return income(0)(0)(10)(30);
@@ -8275,6 +8426,12 @@ var PS = {};
       };
       if (eId === 103) {
           return c(7.5)(6)(hm(1)(50));
+      };
+      if (eId === 104) {
+          return c(8)(7.5)(hr(3));
+      };
+      if (eId === 105) {
+          return c(9)(9.5)(hm(3)(30));
       };
       if (eId === 110) {
           return c(4.5)(1.5)((35));
@@ -10258,6 +10415,30 @@ var PS = {};
               "api_use_bull":0.6,
               "api_win_item1":[1,2],
               "api_win_item2":[2,2]
+          },
+          {
+              "api_id":104,
+              "api_disp_no":"A5",
+              "api_deck_num":5,
+              "api_time":180,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.8,
+              "api_use_bull":0.75,
+              "api_win_item1":[3,4],
+              "api_win_item2":[1,3]
+          },
+          {
+              "api_id":105,
+              "api_disp_no":"A6",
+              "api_deck_num":6,
+              "api_time":210,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.95,
+              "api_win_item1":[3,5],
+              "api_win_item2":[4,1]
           },
           {
               "api_id":110,

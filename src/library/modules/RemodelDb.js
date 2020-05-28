@@ -94,6 +94,12 @@
                 case 562: // Johnston
                 case 596: // Fletcher
                     return 80;
+                case 692: // Fletcher Kai
+                    return 120;
+                case 628: // Fletcher Kai Mod.2
+                    return 180;
+                case 629: // Fletcher Mk.II
+                    return 20;
                 case 520: // Janus
                     return 90;
                 case 597: // Atlanta
@@ -118,7 +124,7 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 &&
-            	![82, 88, 149, 150, 225, 226, 227, 277, 293, 359, 503, 504, 520, 579, 594, 599].includes(ship_id_from);
+            	![82, 88, 149, 150, 225, 226, 227, 277, 293, 359, 503, 504, 520, 579, 594, 599, 692].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -150,6 +156,11 @@
                 case 596: // Fletcher
                 case 520: // Janus
                     return 10;
+                case 692: // Fletcher Kai
+                case 628: // Fletcher Kai Mod.2
+                    return 30;
+                case 629: // Fletcher Mk.II
+                    return 20;
                 case 597: // Atlanta
                     return 20;
                 case 594: // Akagi Kai Ni
