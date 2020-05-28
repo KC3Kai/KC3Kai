@@ -4514,8 +4514,9 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3:
-						if([4, 5, 9, 42, 102].includes(selectedExpedition)) {
+						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
+						// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
+						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")

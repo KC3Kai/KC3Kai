@@ -4048,8 +4048,8 @@ KC3改 Ship Object
 		} else {
 			$(".dayAswPower", tooltipBox).html("-");
 		}
-		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
-			|| (canAsw && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
+		const isAswPowerShown = canAsw && (canOasw && !shipObj.isOaswShip()
+			|| shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
 		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
 		if(isAswPowerShown){
 			$(".dayAttack", tooltipBox).parent().parent().hide();
