@@ -1027,7 +1027,7 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni, range +1 too, can be extreme long
 					"2": {
 						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
+						single: { "houg": 3, "souk": 1, "houk": 2, "houm": 5, "leng": 1 },
 					},
 					"17": [
 						{
@@ -1041,9 +1041,9 @@ KC3改 Equipment Object
 							single: { "houg": 1, "saku": 1 },
 						},
 						{
-							// Souryuu Kai Ni range +1
+							// Souryuu Kai Ni acc+5, range +1
 							remodel: 2,
-							single: { "leng": 1 },
+							single: { "houm": 5, "leng": 1 },
 						},
 					],
 					"25": [
@@ -1053,9 +1053,9 @@ KC3改 Equipment Object
 							single: { "houg": 2, "saku": 2 },
 						},
 						{
-							// Hiryuu Kai Ni range +1
+							// Hiryuu Kai Ni acc+5, range +1
 							remodel: 2,
-							single: { "leng": 1 },
+							single: { "houm": 5, "leng": 1 },
 						},
 					],
 				},
@@ -1528,12 +1528,12 @@ KC3改 Equipment Object
 					"6": [
 						// Kongou Class
 						{
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "houk": 1 },
 						},
-						// extra +1 fp, +1 ev for Kongou Class Kai+
+						// extra +1 fp for Kongou Class Kai+
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "houk": 1 },
+							multiple: { "houg": 1 },
 						},
 						// extra +1 fp, +1 tp for Kongou Class Kai Ni C
 						{
@@ -1597,10 +1597,10 @@ KC3改 Equipment Object
 								distinct: { "tyku": 2, "houk": 3 },
 							},
 						},
-						// extra +1 fp for Ise Class Kai Ni
+						// extra +1 fp, +3 acc for Ise Class Kai Ni
 						{
 							remodel: 2,
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "houm": 3 },
 						},
 					],
 					// Fusou Class Kai Ni
@@ -1621,31 +1621,35 @@ KC3改 Equipment Object
 				count: 0,
 				byClass: {
 					// Ise Class Kai+ +2 fp, +2 aa, +2 ev
-					"2": {
-						remodel: 1,
-						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-						synergy: [
-							// `distinct` means only 1 set takes effect at the same time,
-							// not stackable with 41cm Triple K2's air radar synergy
-							// see https://twitter.com/KennethWWKK/status/1098960971865894913
-							{
+					"2": [
+						{
+							remodel: 1,
+							multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+							synergy: {
+								// `distinct` means only 1 set takes effect at the same time,
+								// not stackable with 41cm Triple K2's air radar synergy
+								// see https://twitter.com/KennethWWKK/status/1098960971865894913
 								flags: [ "airRadar" ],
-								distinct: { "tyku": 2, "houk": 3 },
+								distinct: { "tyku": 2, "houk": 3, "houm": 1 },
 							},
-							// Synergy with `41cm Triple Gun Mount Kai Ni`
-							{
+						},
+						{
+							// Kai Ni +3 acc and synergy with `41cm Triple Gun Mount Kai Ni`
+							remodel: 2,
+							multiple: { "houm": 3 },
+							synergy: {
 								flags: [ "tripleLargeGunMountK2" ],
 								single: { "souk": 1, "houk": 2 },
 							},
-						],
-					},
+						},
+					],
 					// Nagato Class Kai Ni +3 fp, +2 aa, +1 ev
 					"19": {
 						remodel: 2,
 						multiple: { "houg": 3, "tyku": 2, "houk": 1 },
 						synergy: {
 							flags: [ "tripleLargeGunMountK2" ],
-							single: { "houg": 2, "souk": 1, "houk": 2 },
+							single: { "houg": 2, "souk": 1, "houk": 2, "houm": 1 },
 						},
 					},
 					// Fusou Class Kai Ni
