@@ -680,7 +680,7 @@ KC3改 Ship Object
 			"tyku": "aa",
 			"tais": "as",
 			"saku": "ls",
-			//"houm": "ht",
+			"houm": "ht",
 		};
 		for(const apiName in statApiNames) {
 			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
@@ -741,13 +741,15 @@ KC3改 Ship Object
 		masterIdList.push(...masterIdList);
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
+		const originId = RemodelDb.originOf(shipId);
 		const ctype = String(this.master().api_ctype);
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, stype, ctype) =>
+		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
+			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
 			(byShip.classes || []).includes(Number(ctype)) ||
-			(!byShip.ids && !byShip.stypes && !byShip.classes);
+			(!byShip.ids && !byShip.origins && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -774,12 +776,12 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, stype, ctype)) {
+							if (checkByShip(gear[type][i], shipId, originId, stype, ctype)) {
 								gear.path = gear.path || [];
 								gear.path.push(gear[type][i]);
 							}
 						}
-					} else if (checkByShip(gear[type], shipId, stype, ctype)) {
+					} else if (checkByShip(gear[type], shipId, originId, stype, ctype)) {
 						gear.path = gear[type];
 					}
 				}
@@ -791,11 +793,14 @@ KC3改 Ship Object
 					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
 						const check = gear.path[pathIdx];
 						if (check.excludes && check.excludes.includes(shipId)) { continue; }
+						if (check.excludeOrigins && check.excludeOrigins.includes(originId)) { continue; }
 						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.remodelCap && RemodelDb.remodelGroup(shipId).indexOf(shipId) > check.remodelCap) { continue; }
+						if (check.origins && !check.origins.includes(originId)) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
+						if (check.classes && !check.classes.includes(ctype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						flag = true;

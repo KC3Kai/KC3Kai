@@ -809,7 +809,7 @@ KC3改 Equipment Object
 				},
 				byShip: {
 					// All CVL +1 aa, +1 ev
-					stype: [7],
+					stypes: [7],
 					multiple: { "tyku": 1, "houk": 1 },
 				},
 			},
@@ -830,7 +830,7 @@ KC3改 Equipment Object
 				},
 				byShip: {
 					// All CVL +1 aa, +1 ev, +2 asw
-					stype: [7],
+					stypes: [7],
 					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
 				},
 			},
@@ -1949,23 +1949,23 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Hiei, Kirishima, Choukai, Akatsuki
-						ids: [86, 150, 210, 85, 152, 212, 69, 272, 427, 34, 234, 437],
+						// All remodels of: Akatsuki, Choukai, Kirishima, Hiei
+						origins: [34, 69, 85, 86],
 						single: { "houg": 4, "houk": -1 },
 					},
 					{
 						// Jintsuu
-						ids: [55, 159, 223],
+						origins: [55],
 						single: { "houg": 8, "raig": 6, "houk": -1 },
 					},
 					{
 						// Akigumo
-						ids: [132, 301],
+						origins: [132],
 						multiple: { "houg": 2 },
 					},
 					{
 						// Yukikaze
-						ids: [20, 228],
+						origins: [20],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 				],
@@ -1975,14 +1975,14 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Hiei, Kirishima
-						ids: [86, 150, 210, 85, 152, 212],
+						// All remodels of: Kirishima, Hiei
+						origins: [85, 86],
 						single: { "houg": 6, "houk": -2 },
 					},
 					{
 						// Hiei Kai Ni C
-						id: [592],
-						multiple: { "houg": 9, "raig": 3, "houk": -2 },
+						ids: [592],
+						single: { "houg": 3, "raig": 3 },
 						synergy: {
 							flags: [ "kamikazeTwinTorpedo" ],
 							single: { "raig": 5 },
@@ -1990,7 +1990,7 @@ KC3改 Equipment Object
 					},
 					{
 						// Yamato, Musashi
-						ids: [131, 136, 143, 148, 546],
+						origins: [131, 143],
 						single: { "houg": 4, "houk": -1 },
 					},
 				],
