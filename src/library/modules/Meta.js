@@ -756,7 +756,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		

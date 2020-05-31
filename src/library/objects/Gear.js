@@ -1865,7 +1865,7 @@ KC3改 Equipment Object
 						{
 							multiple: { "houg": 2, "tyku": 1, "houk": 1 },
 						},
-						// Yuubari K2 (all forms)
+						// Yuubari Kai Ni+
 						{
 							remodel: 2,
 							multiple: { "houg": 2, "tais": 1, "houk": 1 },
@@ -1874,7 +1874,7 @@ KC3改 Equipment Object
 								single: { "houg": 3, "raig": 2, "houk": 2 },
 							},
 						},
-						// Yuubari K2 (all forms) with stars >= 7
+						// Yuubari Kai Ni+ with stars >= 7
 						{
 							remodel: 2,
 							minStars: 7,
@@ -1896,7 +1896,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Radar synergy with following ships
+						// Radar synergy with following ships:
+						// Kinugasa K2, Aoba Kai, Furutaka K2, Kako K2
 						ids: [142, 264, 416, 417],
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -2084,7 +2085,7 @@ KC3改 Equipment Object
 						{
 							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
-						// Yuubari K2 (all forms)
+						// Yuubari Kai Ni+
 						{
 							remodel: 2,
 							multiple: { "houg": 1, "tyku": 1 },
@@ -2311,7 +2312,7 @@ KC3改 Equipment Object
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
 					},
-					// Yuubari K2 (all forms)
+					// Yuubari Kai Ni+
 					"34": {
 						remodel: 2,
 						multiple: { "houg": 2, "raig": 4, "houk": 4 },
@@ -2560,6 +2561,21 @@ KC3改 Equipment Object
 					"77": "74",
 					// Hiburi Class
 					"85": "74",
+					// Yuubari Kai Ni+
+					"34": {
+						remodel: 2,
+						multiple: { "houg": 1, "tyku": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
 				},
 				byShip: [
 					{
@@ -2581,21 +2597,6 @@ KC3改 Equipment Object
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "houk": 2 },
 						},
-					},
-					{
-						// Yuubari Kai Ni (all forms)
-						ids: [622, 623, 624],
-						multiple: { "houg": 1, "tyku": 1 },
-						synergy: [
-							{
-								flags: [ "surfaceRadar" ],
-								single: { "houg": 1, "houk": 1 },
-							},
-							{
-								flags: [ "airRadar" ],
-								single: { "tyku": 2, "houk": 2 },
-							},
-						],
 					},
 				],
 			},
@@ -3709,6 +3710,8 @@ KC3改 Equipment Object
 					"41": "4",
 					// Ooyodo Class
 					"52": "4",
+					// Katori Class
+					"56": "4",
 					// All IJN CA fp +1, ev +2, los +3
 					// Furutaka Class
 					"7": {
