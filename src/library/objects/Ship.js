@@ -886,9 +886,11 @@ KC3改 Ship Object
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
 		// For damage: PSVita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby
-		// But for expeditions, some types might be counted
+		// But for expeditions, some types might be counted?
 		// https://twitter.com/syoukuretin/status/1156734476870811648
-		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
+		// For expeditions, asw from aircraft affected by slot size and proficiency,
+		// carrier-based and seaplane looked the same, rotorcraft in different category:
+		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
 		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
@@ -1643,7 +1645,7 @@ KC3改 Ship Object
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
 			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170][type4RocketCdCount] || 170;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
-			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCount] || 150;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCdCount] || 150;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
