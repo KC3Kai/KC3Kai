@@ -698,17 +698,25 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
-		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null, limitEquipIds = null){
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false,
+		includeEquipTypes = null, includeEquipIds = null,
+		excludeEquipTypes = null, excludeEquipIds = null){
 		var total = 0;
 		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
-				const gearMst = equip.master();
-				if(Array.isArray(limitEquipTypes) &&
-					!limitEquipTypes.includes(gearMst.api_type[2]) ||
-					Array.isArray(limitEquipIds) &&
-					!limitEquipIds.includes(gearMst.api_id)
+				const gearMst = equip.master(),
+					mstId = gearMst.api_id,
+					type2 = gearMst.api_type[2];
+				if(Array.isArray(includeEquipTypes) &&
+					!includeEquipTypes.includes(type2) ||
+					Array.isArray(includeEquipIds) &&
+					!includeEquipIds.includes(mstId) ||
+					Array.isArray(excludeEquipTypes) &&
+					excludeEquipTypes.includes(type2) ||
+					Array.isArray(excludeEquipIds) &&
+					excludeEquipIds.includes(mstId)
 				) { return; }
 				total += gearMst["api_" + apiName] || 0;
 				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);

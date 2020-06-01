@@ -499,8 +499,8 @@ AntiAir: anti-air related calculations
 				82, // Jervis Class
 				88, // Nelson Class
 			].indexOf( mst.api_ctype ) !== -1 ||
-			// Kongou Class Kai Ni, Kongou K2C
-			[149, 150, 151, 152, 591].indexOf( mst.api_id ) !== -1;
+			// Kongou Class Kai Ni, K2C
+			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {

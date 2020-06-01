@@ -1099,11 +1099,11 @@ Contains summary information about a fleet and its ships
 			emptyShipSlot = fullShipSlots - availableShips.length;
 		let total = 0;
 		availableShips.forEach(ship => {
-			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
-			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
-			//             and https://twitter.com/CC_jabberwock/status/1261345028099596289
-			// visible LoS bonus from Carrier Recon, Seaplane Recon and Seaplane Bomber should be added to ship part
-			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 10, 11]) || 0;
+			// According tests, visible LoS bonus from equipment should be added to ship part,
+			// except these pieces for now: SG Radar (Initial Model)
+			// Untested yet: Swordfish Mk.III Kai (Seaplane Model / Skilled)
+			// https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#equipment_bonus
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, null, null, null, [315]) || 0;
 			// sum ship's naked LoS
 			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS
