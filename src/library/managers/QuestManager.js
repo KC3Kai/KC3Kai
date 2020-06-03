@@ -661,7 +661,7 @@ Uses KC3Quest objects to play around with
 						return fleet.hasShip([543]) // Naganami K2
 							&& fleet.hasShip([
 								345, // Takanami Kai
-								359, // Okinami Kai
+								359, 569, // Okinami Kai/K2
 								344, 578, // Asashimo Kai/K2
 							]);
 					},

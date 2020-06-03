@@ -51,7 +51,7 @@ KC3改 Equipment Object
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20200520 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20200529 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -67,7 +67,7 @@ KC3改 Equipment Object
 				airRadar: 0,
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
 				tripleTorpedo: 0,
-				tripleTorpedoIds: [13, 125],
+				tripleTorpedoIds: [13, 125, 285],
 				tripleTorpedoLateModel: 0,
 				tripleTorpedoLateModelIds: [285],
 				tripleTorpedoOxygenLateModel: 0,
@@ -809,7 +809,7 @@ KC3改 Equipment Object
 				},
 				byShip: {
 					// All CVL +1 aa, +1 ev
-					stype: [7],
+					stypes: [7],
 					multiple: { "tyku": 1, "houk": 1 },
 				},
 			},
@@ -830,7 +830,7 @@ KC3改 Equipment Object
 				},
 				byShip: {
 					// All CVL +1 aa, +1 ev, +2 asw
-					stype: [7],
+					stypes: [7],
 					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
 				},
 			},
@@ -843,7 +843,7 @@ KC3改 Equipment Object
 						remodel: 1,
 						multiple: { "tyku": 1, "houk": 1 },
 					},
-					// Akagi Class Kai+?
+					// Akagi Class Kai+
 					"14": [
 						{
 							remodel: 1,
@@ -865,7 +865,7 @@ KC3改 Equipment Object
 						remodel: 1,
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
-					// Akagi Class Kai+?
+					// Akagi Class Kai+
 					"14": [
 						{
 							remodel: 1,
@@ -1027,7 +1027,7 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni, range +1 too, can be extreme long
 					"2": {
 						remodel: 2,
-						single: { "houg": 3, "souk": 1, "houk": 2, "leng": 1 },
+						single: { "houg": 3, "souk": 1, "houk": 2, "houm": 5, "leng": 1 },
 					},
 					"17": [
 						{
@@ -1041,9 +1041,9 @@ KC3改 Equipment Object
 							single: { "houg": 1, "saku": 1 },
 						},
 						{
-							// Souryuu Kai Ni range +1
+							// Souryuu Kai Ni acc+5, range +1
 							remodel: 2,
-							single: { "leng": 1 },
+							single: { "houm": 5, "leng": 1 },
 						},
 					],
 					"25": [
@@ -1053,9 +1053,9 @@ KC3改 Equipment Object
 							single: { "houg": 2, "saku": 2 },
 						},
 						{
-							// Hiryuu Kai Ni range +1
+							// Hiryuu Kai Ni acc+5, range +1
 							remodel: 2,
-							single: { "leng": 1 },
+							single: { "houm": 5, "leng": 1 },
 						},
 					],
 				},
@@ -1227,13 +1227,13 @@ KC3改 Equipment Object
 					],
 					// Mizuho Class
 					"62": {
-						multiple: { "houg": 1, "raig": 2, "houk": 1, "saku": 2 },
+						multiple: { "houg": 1, "tais": 2, "houk": 1, "saku": 2 },
 					},
 					// Kamoi Class
 					"72": "62",
 					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
 					"67": {
-						multiple: { "houg": 2, "raig": 2, "houk": 2, "saku": 2 },
+						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
 					},
 					"78": "67",
 					"82": "67",
@@ -1254,20 +1254,20 @@ KC3改 Equipment Object
 							multiple: { "houg": 5, "tais": 4, "houk": 4, "saku": 3 },
 						},
 						{
-							// Gotland andra FP +3, TP +3, EV +2, LoS +?
+							// Gotland andra FP +3, TP +3, EV +2, LoS +2
 							remodel: 2,
-							single: { "houg": 3, "raig": 3, "houk": 2 },
+							single: { "houg": 3, "raig": 3, "houk": 2, "saku": 2 },
 						},
 					],
 					// Mizuho Class
 					"62": {
-						multiple: { "houg": 2, "raig": 2, "houk": 1, "saku": 2 },
+						multiple: { "houg": 2, "tais": 2, "houk": 1, "saku": 2 },
 					},
 					// Kamoi Class
 					"72": "62",
 					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
 					"67": {
-						multiple: { "houg": 2, "raig": 2, "houk": 2, "saku": 2 },
+						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
 					},
 					"78": "67",
 					"82": "67",
@@ -1528,12 +1528,12 @@ KC3改 Equipment Object
 					"6": [
 						// Kongou Class
 						{
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "houk": 1 },
 						},
-						// extra +1 fp, +1 ev for Kongou Class Kai+
+						// extra +1 fp for Kongou Class Kai+
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "houk": 1 },
+							multiple: { "houg": 1 },
 						},
 						// extra +1 fp, +1 tp for Kongou Class Kai Ni C
 						{
@@ -1556,12 +1556,12 @@ KC3改 Equipment Object
 					"6": [
 						// Kongou Class
 						{
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "houk": 1 },
 						},
-						// extra +1 fp, +1 ev for Kongou Class Kai+
+						// extra +1 fp for Kongou Class Kai+
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "houk": 1 },
+							multiple: { "houg": 1 },
 						},
 						// extra +1 fp, +1 aa for Kongou Class Kai Ni+
 						{
@@ -1597,10 +1597,10 @@ KC3改 Equipment Object
 								distinct: { "tyku": 2, "houk": 3 },
 							},
 						},
-						// extra +1 fp for Ise Class Kai Ni
+						// extra +1 fp, +3 acc for Ise Class Kai Ni
 						{
 							remodel: 2,
-							multiple: { "houg": 1 },
+							multiple: { "houg": 1, "houm": 3 },
 						},
 					],
 					// Fusou Class Kai Ni
@@ -1621,31 +1621,35 @@ KC3改 Equipment Object
 				count: 0,
 				byClass: {
 					// Ise Class Kai+ +2 fp, +2 aa, +2 ev
-					"2": {
-						remodel: 1,
-						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-						synergy: [
-							// `distinct` means only 1 set takes effect at the same time,
-							// not stackable with 41cm Triple K2's air radar synergy
-							// see https://twitter.com/KennethWWKK/status/1098960971865894913
-							{
+					"2": [
+						{
+							remodel: 1,
+							multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+							synergy: {
+								// `distinct` means only 1 set takes effect at the same time,
+								// not stackable with 41cm Triple K2's air radar synergy
+								// see https://twitter.com/KennethWWKK/status/1098960971865894913
 								flags: [ "airRadar" ],
-								distinct: { "tyku": 2, "houk": 3 },
+								distinct: { "tyku": 2, "houk": 3, "houm": 1 },
 							},
-							// Synergy with `41cm Triple Gun Mount Kai Ni`
-							{
+						},
+						{
+							// Kai Ni +3 acc and synergy with `41cm Triple Gun Mount Kai Ni`
+							remodel: 2,
+							multiple: { "houm": 3 },
+							synergy: {
 								flags: [ "tripleLargeGunMountK2" ],
 								single: { "souk": 1, "houk": 2 },
 							},
-						],
-					},
+						},
+					],
 					// Nagato Class Kai Ni +3 fp, +2 aa, +1 ev
 					"19": {
 						remodel: 2,
 						multiple: { "houg": 3, "tyku": 2, "houk": 1 },
 						synergy: {
 							flags: [ "tripleLargeGunMountK2" ],
-							single: { "houg": 2, "souk": 1, "houk": 2 },
+							single: { "houg": 2, "souk": 1, "houk": 2, "houm": 1 },
 						},
 					},
 					// Fusou Class Kai Ni
@@ -1815,6 +1819,26 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// 16inch Triple Gun Mount Mk.6
+			"381": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Large Main Gun:
+					// Iowa
+					"65": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Colorado
+					"93": "65",
+				},
+			},
 			// 14cm Twin Gun Mount
 			"119": {
 				count: 0,
@@ -1834,13 +1858,14 @@ KC3改 Equipment Object
 			// 14cm Twin Gun Mount Kai
 			"310": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Yuubari Class
 					"34": [
 						{
 							multiple: { "houg": 2, "tyku": 1, "houk": 1 },
 						},
-						// Yuubari K2 (all forms)
+						// Yuubari Kai Ni+
 						{
 							remodel: 2,
 							multiple: { "houg": 2, "tais": 1, "houk": 1 },
@@ -1848,6 +1873,12 @@ KC3改 Equipment Object
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 3, "raig": 2, "houk": 2 },
 							},
+						},
+						// Yuubari Kai Ni+ with stars >= 7
+						{
+							remodel: 2,
+							minStars: 7,
+							multiple: { "houg": 1, "raig": 1 },
 						},
 					],
 					// Katori Class
@@ -1865,7 +1896,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Radar synergy with following ships
+						// Radar synergy with following ships:
+						// Kinugasa K2, Aoba Kai, Furutaka K2, Kako K2
 						ids: [142, 264, 416, 417],
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -1918,23 +1950,23 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Hiei, Kirishima, Choukai, Akatsuki
-						ids: [86, 150, 210, 85, 152, 212, 69, 272, 427, 34, 234, 437],
+						// All remodels of: Akatsuki, Choukai, Kirishima, Hiei
+						origins: [34, 69, 85, 86],
 						single: { "houg": 4, "houk": -1 },
 					},
 					{
 						// Jintsuu
-						ids: [55, 159, 223],
+						origins: [55],
 						single: { "houg": 8, "raig": 6, "houk": -1 },
 					},
 					{
 						// Akigumo
-						ids: [132, 301],
+						origins: [132],
 						multiple: { "houg": 2 },
 					},
 					{
 						// Yukikaze
-						ids: [20, 228],
+						origins: [20],
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 				],
@@ -1944,14 +1976,14 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Hiei, Kirishima
-						ids: [86, 150, 210, 85, 152, 212],
+						// All remodels of: Kirishima, Hiei
+						origins: [85, 86],
 						single: { "houg": 6, "houk": -2 },
 					},
 					{
 						// Hiei Kai Ni C
-						id: [592],
-						multiple: { "houg": 9, "raig": 3, "houk": -2 },
+						ids: [592],
+						single: { "houg": 3, "raig": 3 },
 						synergy: {
 							flags: [ "kamikazeTwinTorpedo" ],
 							single: { "raig": 5 },
@@ -1959,7 +1991,7 @@ KC3改 Equipment Object
 					},
 					{
 						// Yamato, Musashi
-						ids: [131, 136, 143, 148, 546],
+						origins: [131, 143],
 						single: { "houg": 4, "houk": -1 },
 					},
 				],
@@ -2053,7 +2085,7 @@ KC3改 Equipment Object
 						{
 							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
-						// Yuubari K2 (all forms)
+						// Yuubari Kai Ni+
 						{
 							remodel: 2,
 							multiple: { "houg": 1, "tyku": 1 },
@@ -2258,19 +2290,13 @@ KC3改 Equipment Object
 					"4": {
 						stypes: [4],
 						multiple: { "raig": 1 },
-						countCap: 2,
 					},
-					// Shimakaze (Kai only?)
+					// Shimakaze Class
 					"22": {
-						remodel: 1,
 						multiple: { "raig": 1 },
-						countCap: 2,
 					},
-					// Akizuki Class (not only Kai?)
-					"54": {
-						multiple: { "raig": 1 },
-						countCap: 2,
-					},
+					// Akizuki Class
+					"54": "22",
 				},
 			},
 			// 53cm Twin Torpedo Mount
@@ -2286,7 +2312,7 @@ KC3改 Equipment Object
 						remodel: 3,
 						multiple: { "raig": 6, "houk": 3 },
 					},
-					// Yuubari K2 (all forms)
+					// Yuubari Kai Ni+
 					"34": {
 						remodel: 2,
 						multiple: { "houg": 2, "raig": 4, "houk": 4 },
@@ -2320,10 +2346,31 @@ KC3改 Equipment Object
 					// John C. Butler Class
 					"87": {
 						multiple: { "houg": 1, "raig": 3 },
-						countCap: 2,
 					},
 					// Fletcher Class
 					"91": "87",
+				},
+			},
+			// 533mm Quintuple Torpedo Mount (Late Model)
+			"376": {
+				count: 0,
+				byClass: {
+					// Following Americans: John C. Butler Class
+					"87": {
+						multiple: { "houg": 2, "raig": 4 },
+					},
+					// Fletcher Class
+					"91": "87",
+					// Atlanta Class
+					"99": "87",
+					// Jervis Class
+					"82": {
+						multiple: { "houg": 1, "raig": 2 },
+					},
+					// Perth Class
+					"96": {
+						multiple: { "houg": 1, "raig": 1 },
+					},
 				},
 			},
 			// 61cm Triple (Oxygen) Torpedo Mount Late Model
@@ -2448,28 +2495,6 @@ KC3改 Equipment Object
 					},
 				],
 			},
-			// 533mm Quintuple Torpedo Mount (Late Model)
-			"376": {
-				count: 0,
-				byClass: {
-					// Following Americans: John C. Butler Class
-					"87": {
-						multiple: { "houg": 2, "raig": 4 },
-					},
-					// Fletcher Class
-					"91": "87",
-					// Atlanta Class
-					"99": "87",
-					// Jervis Class
-					"82": {
-						multiple: { "houg": 1, "raig": 2 },
-					},
-					// Perth Class
-					"96": {
-						multiple: { "houg": 1, "raig": 1 },
-					},
-				},
-			},
 			// 12cm Single Gun Mount Kai Ni
 			"293": {
 				count: 0,
@@ -2488,6 +2513,7 @@ KC3改 Equipment Object
 									gear: "kamikazeTwinTorpedo",
 									"1": { "houg": 2, "raig": 4 },
 									"2": { "houg": 3, "raig": 7 },
+									"3": { "houg": 3, "raig": 7 },
 								},
 							},
 						],
@@ -2535,6 +2561,21 @@ KC3改 Equipment Object
 					"77": "74",
 					// Hiburi Class
 					"85": "74",
+					// Yuubari Kai Ni+
+					"34": {
+						remodel: 2,
+						multiple: { "houg": 1, "tyku": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
 				},
 				byShip: [
 					{
@@ -2557,20 +2598,198 @@ KC3改 Equipment Object
 							single: { "houg": 3, "houk": 2 },
 						},
 					},
+				],
+			},
+			// 12.7cm Single High-angle Gun Mount Kai Ni
+			"379": {
+				count: 0,
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						multiple: { "houg": 1, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 3 },
+						},
+					},
+					// Kamikaze Class
+					"66": "28",
+					// Tenyuu Class
+					"21": {
+						multiple: { "houg": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 3 },
+						},
+					},
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 1, "tais": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 3 },
+						},
+					},
+				},
+				byShip: [
 					{
-						// Yuubari Kai Ni (all forms)
-						ids: [622, 623, 624],
+						// All DE
+						stypes: [1],
+						multiple: { "houg": 1, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 4 },
+						},
+					},
+					{
+						// All AV/CT
+						stypes: [16, 21],
 						multiple: { "houg": 1, "tyku": 1 },
-						synergy: [
-							{
-								flags: [ "surfaceRadar" ],
-								single: { "houg": 1, "houk": 1 },
-							},
-							{
-								flags: [ "airRadar" ],
-								single: { "tyku": 2, "houk": 2 },
-							},
-						],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 2 },
+						},
+					},
+					{
+						// Synergy only for all CL/CLT
+						stypes: [3, 4],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 2 },
+						},
+					},
+					{
+						// All remodels of: Isuzu, Yura, Naka, Kinu
+						origins: [22, 23, 56, 113],
+						multiple: { "houg": 2, "tais": 1 },
+					},
+					{
+						// All remodels of: Ooi, Kitakami
+						origins: [24, 25],
+						multiple: { "houg": 2, "tais": 2 },
+					},
+					{
+						// Yura base, Isuzu base,Kai, Naka base,Kai, Kinu base,Kai extra +2 aa
+						ids: [23,     22, 219,        56, 224,       113, 289],
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Yura Kai, Isuzu K2, Naka K2, Kinu K2 extra +3 aa
+						ids: [220,   141,      160,     487],
+						multiple: { "tyku": 3 },
+					},
+					{
+						// Yura Kai Ni extra +4 aa and synergy
+						ids: [488],
+						multiple: { "tyku": 4 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 2 },
+						},
+					},
+					{
+						// Ooi K2,Kitakami K2, Isuzu K2, Naka K2, Kinu K2 extra synergy
+						ids: [118, 119,        141,      160,     487],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 1 },
+						},
+					},
+					{
+						// Yura K2, Isuzu K2, Naka K2, Kinu K2 extra +1 asw
+						ids: [488,  141,      160,     487],
+						multiple: { "tais": 1 },
+					},
+					{
+						// Tenryuu K2, Tatsuta K2, Yuubari K2D extra +2 asw
+						ids: [477,     478,        624],
+						multiple: { "tais": 2 },
+					},
+					{
+						// Tenryuu K2, Tatsuta K2, Yuubari K2,K2D extra +2 aa
+						ids: [477,     478,        622, 624],
+						multiple: { "tyku": 2 },
+					},
+				],
+			},
+			// 12.7cm Twin High-angle Gun Mount Kai Ni
+			"380": {
+				count: 0,
+				byClass: {
+					// Tenyuu Class
+					"21": {
+						multiple: { "houg": 1 },
+					},
+					// Yuubari Class
+					"34": {
+						multiple: { "houg": 1, "tais": 1 },
+					},
+				},
+				byShip: [
+					{
+						// All AV/CT
+						stypes: [16, 21],
+						multiple: { "houg": 1, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 1 },
+						},
+					},
+					{
+						// Synergy only for all CL/CLT
+						stypes: [3, 4],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 1 },
+						},
+					},
+					{
+						// All remodels of: Isuzu, Yura, Naka, Kinu
+						origins: [22, 23, 56, 113],
+						multiple: { "houg": 2, "tais": 1 },
+					},
+					{
+						// All remodels of: Ooi, Kitakami
+						origins: [24, 25],
+						multiple: { "houg": 3, "tyku": 2 },
+					},
+					{
+						// Yura base, Isuzu base,Kai, Naka base,Kai, Kinu base,Kai extra +2 aa
+						ids: [23,     22, 219,        56, 224,       113, 289],
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Yura Kai, Isuzu K2, Naka K2, Kinu K2 extra +3 aa
+						ids: [220,   141,      160,     487],
+						multiple: { "tyku": 3 },
+					},
+					{
+						// Yura Kai Ni extra +4 aa
+						ids: [488],
+						multiple: { "tyku": 4 },
+					},
+					{
+						// Ooi K2,Kitakami K2, Isuzu K2, Naka K2, Kinu K2, Yura K2 extra synergy
+						ids: [118, 119,        141,      160,     487,     488],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 2 },
+						},
+					},
+					{
+						// Yura K2, Isuzu K2, Naka K2, Kinu K2 extra +1 asw
+						ids: [488,  141,      160,     487],
+						multiple: { "tais": 1 },
+					},
+					{
+						// Tenryuu K2, Tatsuta K2, Yuubari K2D extra +2 asw
+						ids: [477,     478,        624],
+						multiple: { "tais": 2 },
+					},
+					{
+						// Tenryuu K2, Tatsuta K2, Yuubari K2,K2D extra +2 aa
+						ids: [477,     478,        622, 624],
+						multiple: { "tyku": 2 },
 					},
 				],
 			},
@@ -2621,20 +2840,16 @@ KC3改 Equipment Object
 							},
 							{
 								flags: [ "tripleTorpedo" ],
-								// Not sure how more torpedoes will go?
 								byCount: {
 									gear: "tripleTorpedo",
 									"1": { "houg": 1, "raig": 3 },
 									"2": { "houg": 2, "raig": 5 },
+									"3": { "houg": 2, "raig": 5 },
 								},
 							},
 							{
 								flags: [ "tripleTorpedoLateModel" ],
-								byCount: {
-									gear: "tripleTorpedoLateModel",
-									"1": { "houg": 1, "raig": 4 },
-									"2": { "houg": 2, "raig": 6 },
-								},
+								single: { "raig": 1 },
 							},
 						],
 					},
@@ -2727,7 +2942,7 @@ KC3改 Equipment Object
 				},
 			},
 			// 12.7cm Twin Gun Mount Model D Kai Ni
-			// http://wikiwiki.jp/kancolle/?12.7cm%CF%A2%C1%F5%CB%A4D%B7%BF%B2%FE%C6%F3
+			// https://wikiwiki.jp/kancolle/12.7cm%E9%80%A3%E8%A3%85%E7%A0%B2D%E5%9E%8B%E6%94%B9%E4%BA%8C
 			"267": {
 				count: 0,
 				byClass: {
@@ -2785,10 +3000,6 @@ KC3改 Equipment Object
 				byClass: {
 					// Shimakaze Class
 					"22": [
-						// One-time +3 AA
-						{
-							single: { "tyku": 3 },
-						},
 						{
 							multiple: { "houg": 2, "houk": 1 },
 						},
@@ -2805,6 +3016,17 @@ KC3改 Equipment Object
 									single: { "houg": 1, "tyku": 5, "houk": 2 },
 								},
 							],
+						},
+						{
+							// Shimakaze Kai, one-time +3 AA
+							remodel: 1,
+							single: { "tyku": 3 },
+						},
+						{
+							// Shimakaze Kai, one-time +5 AA for 2 guns
+							remodel: 2,
+							single: { "tyku": 2 },
+							minCount: 2,
 						},
 					],
 					// Yuugumo Class
@@ -2833,8 +3055,8 @@ KC3改 Equipment Object
 							single: { "tyku": 3 },
 						},
 						{
-							remodel: 2,
 							// Yuugumo Class K2, one-time +5 AA for 2 guns
+							remodel: 2,
 							single: { "tyku": 2 },
 							minCount: 2,
 						},
@@ -2845,17 +3067,11 @@ KC3改 Equipment Object
 							multiple: { "houg": 1, "houk": 1 },
 						},
 						{
-							// Kagerou Class K2, one-time +1 FP, +2 AA for one gun
+							// Kagerou Class K2, +1 FP, +2 AA for one or two gun(s)
 							remodel: 2,
 							excludes: [556, 557, 558, 559],
-							single: { "houg": 1, "tyku": 2 },
-						},
-						{
-							// Kagerou Class K2, one-time +2 FP, +4 AA for two guns
-							remodel: 2,
-							excludes: [556, 557, 558, 559],
-							single: { "houg": 1, "tyku": 2 },
-							minCount: 2,
+							multiple: { "houg": 1, "tyku": 2 },
+							countCap: 2,
 						},
 					],
 				},
@@ -2882,20 +3098,12 @@ KC3改 Equipment Object
 									gear: "tripleTorpedo",
 									"1": { "houg": 1, "raig": 3 },
 									"2": { "houg": 2, "raig": 5 },
+									"3": { "houg": 2, "raig": 5 },
 								},
 							},
 							{
 								flags: [ "tripleTorpedoLateModel" ],
-								byCount: {
-									gear: "tripleTorpedoLateModel",
-									"1": { "houg": 1, "raig": 4 },
-									"2": { "houg": 2, "raig": 6 },
-								},
-							},
-							{
-								// fp +2, tp +6 if equips both LM and non-LM at the same time
-								flags: [ "tripleTorpedo", "tripleTorpedoLateModel" ],
-								single: { "raig": -1 },
+								single: { "raig": 1 },
 							},
 						],
 					},
@@ -2912,7 +3120,6 @@ KC3改 Equipment Object
 					// Ayanami Class
 					"1": {
 						multiple: { "houg": 1 },
-						// Not sure how multiple synergies will go?
 						synergy: [
 							{
 								flags: [ "airRadar" ],
@@ -2932,15 +3139,15 @@ KC3改 Equipment Object
 					"5": "1",
 					// Shiratsuyu Class
 					"23": {
-						multiple: { "houg": 1 },
+						multiple: { "houg": 1, "houk": 1 },
 						synergy: [
 							{
 								flags: [ "airRadar" ],
-								single: { "tyku": 5 },
+								single: { "tyku": 6 },
 							},
 							{
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 1, "raig": 2, "houk": 2 },
+								single: { "houg": 1, "raig": 3, "houk": 2 },
 							},
 							{
 								flags: [ "quadrupleTorpedoOxygenLateModel" ],
@@ -2968,20 +3175,6 @@ KC3改 Equipment Object
 					},
 				},
 				byShip: [
-					{
-						// extra synergies for Yuudachi/Shigure/Kawakaze/Shiratsuyu/Murasame/Umikaze K2
-						ids: [144, 145, 469, 497, 498, 587],
-						synergy: [
-							{
-								flags: [ "airRadar" ],
-								single: { "tyku": 1 },
-							},
-							{
-								flags: [ "surfaceRadar" ],
-								single: { "raig": 1 },
-							},
-						],
-					},
 					{
 						// Shiratsuyu K2
 						ids: [497],
@@ -3114,13 +3307,21 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
+						/*
 						// Isokaze,          Hamakaze,      Asashimo, Kasumi,            Yukikaze, Suzutsuki, Yahagi
 						ids: [167, 320, 557, 170, 312, 558, 425, 344, 49, 253, 464, 470, 20, 228,  532, 537,  139, 307],
+						*/
+						// All remodels of: Isokaze, Hamakaze, Asashimo, Kasumi, Yukikaze, Suzutsuki, Yahagi
+						origins: [167, 170, 425, 49, 20, 532, 139],
 						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
 					},
 					{
+						/*
 						// Hibiki,          Ooyodo,   Kashima
 						ids: [35, 235, 147, 183, 321, 465, 356],
+						*/
+						// All remodels of: Hibiki, Ooyodo, Kashima
+						origins: [35, 183, 465],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
 					},
 				],
@@ -3275,13 +3476,21 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
+						/*
 						// Kamikaze,    Harukaze, Shigure,      Yamakaze, Maikaze,  Asashimo
 						ids: [471, 476, 473, 363, 43, 243, 145, 457, 369, 122, 294, 425, 344],
+						*/
+						// All remodels of: Kamikaze, Harukaze, Shigure, Yamakaze, Maikaze, Asashimo
+						origins: [471, 473, 43, 457, 122, 425],
 						multiple: { "houg": 1, "houk": 2, "tais": 3 },
 					},
 					{
+						/*
 						// Ushio,           Ikazuchi,Yamagumo, Isokaze,       Hamakaze,      Kishinami
 						ids: [16, 233, 407, 36, 236, 414, 328, 167, 320, 557, 170, 312, 558, 527, 686],
+						*/
+						// All remodels of: Ushio, Ikazuchi, Yamagumo, Isokaze, Hamakaze, Kishinami
+						origins: [16, 36, 414, 167, 170, 527],
 						multiple: { "houk": 2, "tais": 2 },
 					},
 				],
@@ -3392,7 +3601,6 @@ KC3改 Equipment Object
 				],
 			},
 			// Arctic Camouflage
-			// http://wikiwiki.jp/kancolle/?%CB%CC%CA%FD%CC%C2%BA%CC%28%A1%DC%CB%CC%CA%FD%C1%F5%C8%F7%29
 			"268": {
 				count: 0,
 				byShip: {
@@ -3502,6 +3710,8 @@ KC3改 Equipment Object
 					"41": "4",
 					// Ooyodo Class
 					"52": "4",
+					// Katori Class
+					"56": "4",
 					// All IJN CA fp +1, ev +2, los +3
 					// Furutaka Class
 					"7": {
@@ -3578,6 +3788,7 @@ KC3改 Equipment Object
 	KC3Gear.equipmentTotalStatsOnShipBonus = function(bonusGears, ship, apiName){
 		var total = 0;
 		const shipMasterId = ship.masterId;
+		const shipOriginId = RemodelDb.originOf(shipMasterId);
 		const shipClassId = ship.master().api_ctype;
 		const shipTypeId = ship.master().api_stype;
 		const synergyGears = bonusGears.synergyGears || {};
@@ -3585,6 +3796,8 @@ KC3改 Equipment Object
 			// Conditional filters, combinations are logic AND, all filters existed have to be passed
 			if(Array.isArray(bonusDef.ids) && !bonusDef.ids.includes(shipMasterId)) { return; }
 			if(Array.isArray(bonusDef.excludes) && bonusDef.excludes.includes(shipMasterId)) { return; }
+			if(Array.isArray(bonusDef.origins) && !bonusDef.origins.includes(shipOriginId)) { return; }
+			if(Array.isArray(bonusDef.excludeOrigins) && bonusDef.excludeOrigins.includes(shipOriginId)) { return; }
 			if(Array.isArray(bonusDef.classes) && !bonusDef.classes.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
@@ -3752,8 +3965,8 @@ KC3改 Equipment Object
 				// No any improvement bonus found for support fleet for now
 				break;
 			case "exped":
-				// Fire power bonus for some combat expeditions, such as 43, B4
-				// https://twitter.com/syoukuretin/status/1156734476870811648
+				// Fire power bonus for combat expeditions, such as 43, B4
+				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
 				switch (type2) {
 					case 1: // Small main gun
 						modifier = 0.5;
@@ -3764,6 +3977,11 @@ KC3改 Equipment Object
 						break;
 					case 4: // Secondary gun
 						modifier = 0.3;
+						//return 0.15 * stars;
+						break;
+					case 19: // AP Shell
+					case 21: // AA Machine Gun
+						modifier = 0.5;
 						break;
 				}
 				break;
@@ -3866,6 +4084,9 @@ KC3改 Equipment Object
 				case 12: // Small radar
 				case 13: // Large radar
 					return Math.sqrt(stars);
+					// return 0.95 * Math.sqrt(stars); for Large radar?
+				case 10: // Seaplane recon
+					return 0.95 * Math.sqrt(stars);
 			}
 			return 0;
 		}
@@ -4258,11 +4479,14 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
+		// Current implemented in type[2]:
+		//   [44] Type94 DCP, [45] Type3 DCP, [287] Type3 DCP CD, [288] 15cm9t ASW Rocket,
+		//   [346][347] Type2 12cm Mortar Kai & CD, [377] RUR-4A WA Kai, [378] Lightweight ASW Torpedo
 		return this.exists() && this.master().api_type[2] === 15 &&
-			// Current implemented: Type94 DCP, Type3 DCP, Type3 DCP CD, 15cm9t ASW Rocket
-			//[44, 45].indexOf(this.masterId) > -1;
-			// To maintenance fewer lists
-			!this.isDepthCharge();
+			// Current counted as projector: Type94 DCP, Type3 DCP
+			[44, 45].indexOf(this.masterId) > -1;
+			// To maintenance fewer lists, but devs failed us
+			//!this.isDepthCharge();
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {

@@ -201,6 +201,11 @@ AntiAir: anti-air related calculations
 	var is5inchSingleMountKaiWithGfcs = masterIdEq(308);
 	// 5inch Single Gun Mount Mk.30 Kai
 	var is5inchSingleMountKai = masterIdEq(313);
+	// 5inch Single Gun Mount Mk.30 or +Kai
+	function is5inchSingleMountOrKai(mst) {
+		return [284, 313].indexOf(mst.api_id) !== -1;
+	}
+
 	// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 	var is5inchTwinDualMountCD = masterIdEq(362);
 	// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
@@ -494,8 +499,8 @@ AntiAir: anti-air related calculations
 				82, // Jervis Class
 				88, // Nelson Class
 			].indexOf( mst.api_ctype ) !== -1 ||
-			// Kongou Class Kai Ni, Kongou K2C
-			[149, 150, 151, 152, 591].indexOf( mst.api_id ) !== -1;
+			// Kongou Class Kai Ni, K2C
+			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;
 	}
 
 	function masterIdEq( n ) {
@@ -996,7 +1001,7 @@ AntiAir: anti-air related calculations
 			predAnyOf(
 				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
 				predAllOf(
-					hasSome( is5inchSingleMountKai ),
+					hasSome( is5inchSingleMountOrKai ),
 					hasSome( is5inchSingleMountKaiWithGfcs ))
 			)
 		)
@@ -1009,10 +1014,10 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				predAnyOf(
-					hasAtLeast( is5inchSingleMountKai, 2 ),
+					hasAtLeast( is5inchSingleMountOrKai, 2 ),
 					hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
 					predAllOf(
-						hasSome( is5inchSingleMountKai ),
+						hasSome( is5inchSingleMountOrKai ),
 						hasSome( is5inchSingleMountKaiWithGfcs ))
 				),
 				hasSome( isGfcsRadar ))

@@ -4311,9 +4311,9 @@
 				32, 41, 43, 45, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 			var condIsFlagshipLevel = [
-				// related to sparkle ships and flagship level: 41, A2(101) confirmed, others are to be verified
+				// related to sparkle ships and flagship level: 41, A2(101), A3(102) confirmed, others are to be verified
 				// https://twitter.com/jo_swaf/status/1261241711952445440
-				41, 101, 43, 45, 102, 103, 112, 113, 114, 131, 132, 141
+				41, 101, 102, 43, 45, 103, 104, 105, 112, 113, 114, 131, 132, 141
 			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
@@ -4514,8 +4514,9 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3:
-						if([4, 5, 9, 42, 102].includes(selectedExpedition)) {
+						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
+						// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
+						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")

@@ -680,7 +680,7 @@ KC3改 Ship Object
 			"tyku": "aa",
 			"tais": "as",
 			"saku": "ls",
-			//"houm": "ht",
+			"houm": "ht",
 		};
 		for(const apiName in statApiNames) {
 			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
@@ -698,17 +698,25 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
-		isOnShipBonusIncluded = true, isOnShipBonusOnly = false, limitEquipTypes = null, limitEquipIds = null){
+		isOnShipBonusIncluded = true, isOnShipBonusOnly = false,
+		includeEquipTypes = null, includeEquipIds = null,
+		excludeEquipTypes = null, excludeEquipIds = null){
 		var total = 0;
 		const bonusDefs = isOnShipBonusIncluded || isOnShipBonusOnly ? KC3Gear.explicitStatsBonusGears() : false;
 		// Accumulates displayed stats from equipment, and count for special equipment
 		this.equipment(isExslotIncluded).forEach(equip => {
 			if(equip.exists()) {
-				const gearMst = equip.master();
-				if(Array.isArray(limitEquipTypes) &&
-					!limitEquipTypes.includes(gearMst.api_type[2]) ||
-					Array.isArray(limitEquipIds) &&
-					!limitEquipIds.includes(gearMst.api_id)
+				const gearMst = equip.master(),
+					mstId = gearMst.api_id,
+					type2 = gearMst.api_type[2];
+				if(Array.isArray(includeEquipTypes) &&
+					!includeEquipTypes.includes(type2) ||
+					Array.isArray(includeEquipIds) &&
+					!includeEquipIds.includes(mstId) ||
+					Array.isArray(excludeEquipTypes) &&
+					excludeEquipTypes.includes(type2) ||
+					Array.isArray(excludeEquipIds) &&
+					excludeEquipIds.includes(mstId)
 				) { return; }
 				total += gearMst["api_" + apiName] || 0;
 				if(bonusDefs) KC3Gear.accumulateShipBonusGear(bonusDefs, equip);
@@ -741,13 +749,15 @@ KC3改 Ship Object
 		masterIdList.push(...masterIdList);
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
+		const originId = RemodelDb.originOf(shipId);
 		const ctype = String(this.master().api_ctype);
 		const stype = this.master().api_stype;
-		const checkByShip = (byShip, shipId, stype, ctype) =>
+		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
+			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
 			(byShip.classes || []).includes(Number(ctype)) ||
-			(!byShip.ids && !byShip.stypes && !byShip.classes);
+			(!byShip.ids && !byShip.origins && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
 		bonusGears = bonusGears.filter((gear, idx) => {
@@ -774,12 +784,12 @@ KC3改 Ship Object
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
-							if (checkByShip(gear[type][i], shipId, stype, ctype)) {
+							if (checkByShip(gear[type][i], shipId, originId, stype, ctype)) {
 								gear.path = gear.path || [];
 								gear.path.push(gear[type][i]);
 							}
 						}
-					} else if (checkByShip(gear[type], shipId, stype, ctype)) {
+					} else if (checkByShip(gear[type], shipId, originId, stype, ctype)) {
 						gear.path = gear[type];
 					}
 				}
@@ -791,11 +801,14 @@ KC3改 Ship Object
 					for (let pathIdx = 0; pathIdx < gear.path.length; pathIdx++) {
 						const check = gear.path[pathIdx];
 						if (check.excludes && check.excludes.includes(shipId)) { continue; }
+						if (check.excludeOrigins && check.excludeOrigins.includes(originId)) { continue; }
 						if (check.excludeClasses && check.excludeClasses.includes(ctype)) { continue; }
 						if (check.excludeStypes && check.excludeStypes.includes(stype)) { continue; }
 						if (check.remodel && RemodelDb.remodelGroup(shipId).indexOf(shipId) < check.remodel) { continue; }
 						if (check.remodelCap && RemodelDb.remodelGroup(shipId).indexOf(shipId) > check.remodelCap) { continue; }
+						if (check.origins && !check.origins.includes(originId)) { continue; }
 						if (check.stypes && !check.stypes.includes(stype)) { continue; }
+						if (check.classes && !check.classes.includes(ctype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
 						flag = true;
@@ -881,9 +894,11 @@ KC3改 Ship Object
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
 		// For damage: PSVita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby
-		// But for expeditions, some types might be counted
+		// But for expeditions, some types might be counted?
 		// https://twitter.com/syoukuretin/status/1156734476870811648
-		// to be confirmed: high asw recon seaplane (>=7?) like Type 0 Recon Model 11 seems be counted?
+		// For expeditions, asw from aircraft affected by slot size and proficiency,
+		// carrier-based and seaplane looked the same, rotorcraft in different category:
+		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
 		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
@@ -1429,10 +1444,8 @@ KC3改 Ship Object
 		let synergyModifier = 1;
 		// new DC + DCP synergy (x1.1 / x1.25)
 		const isNewDepthChargeEquipped = this.equipment(true).some(g => g.isDepthCharge());
-		// T3DCP CD, 15cm9t ASW Rocket and Type2 12cm Mortar Kais are not counted yet,
-		// so `isDepthChargeProjectorEquipped` not used
-		//const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
-		if(isNewDepthChargeEquipped && this.hasEquipment([44, 45])) {
+		const isDepthChargeProjectorEquipped = this.equipment(true).some(g => g.isDepthChargeProjector());
+		if(isNewDepthChargeEquipped && isDepthChargeProjectorEquipped) {
 			// Large Sonar, like T0 Sonar, not counted here
 			const isSonarEquipped = this.hasEquipmentType(2, 14);
 			synergyModifier = isSonarEquipped ? 1.25 : 1.1;
@@ -1640,7 +1653,7 @@ KC3改 Ship Object
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
 			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170][type4RocketCdCount] || 170;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
-			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCount] || 150;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCdCount] || 150;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -3124,10 +3137,14 @@ KC3改 Ship Object
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
 					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
 					// https://twitter.com/ayanamist_m2/status/944176834551222272
-					const modelDSmallGunCnt = this.countEquipment([267, 366]);
+					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
+					const modelDK2SmallGunCnt = this.countEquipment(267),
+					      modelDK3SmallGunCnt = this.countEquipment(366);
 					// Possible to equip 2 D guns for 4 slots Tashkent
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
-					const modelDSmallGunModifier = [1, 1.25, 1.4][modelDSmallGunCnt] || 1;
+					const modelDSmallGunModifier =
+						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
+							* (1 + modelDK3SmallGunCnt * 0.05);
 					if(hasCapableRadar && smallMainGunCnt >= 1)
 						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookout)
@@ -4046,8 +4063,8 @@ KC3改 Ship Object
 		} else {
 			$(".dayAswPower", tooltipBox).html("-");
 		}
-		const isAswPowerShown = (canOasw && !shipObj.isOaswShip())
-			|| (canAsw && shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
+		const isAswPowerShown = canAsw && (canOasw && !shipObj.isOaswShip()
+			|| shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]));
 		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped
 		if(isAswPowerShown){
 			$(".dayAttack", tooltipBox).parent().parent().hide();

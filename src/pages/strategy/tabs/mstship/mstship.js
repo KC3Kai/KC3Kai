@@ -606,6 +606,8 @@
 				
 				var stockEquipments = WhoCallsTheFleetDb.getStockEquipment( ship_id );
 				var remodelInfo = RemodelDb.remodelInfo( ship_id ) || {};
+				var shipOriginId = RemodelDb.originOf(ship_id);
+
 				
 				// EQUIPMENT
 				$(".tab_mstship .equipments .equipment").each(function(index){
@@ -906,8 +908,9 @@
 				const synergyList = bonusDefs.synergyGears;
 				
 				const ensureArray = array => Array.isArray(array) ? array : [array];
-				const checkBonusExtraRequirements = (bonusDef, shipId, ctype, stype) => {
+				const checkBonusExtraRequirements = (bonusDef, shipId, originId, ctype, stype) => {
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
+					if (bonusDef.excludeOrigins && bonusDef.excludeOrigins.includes(originId)) { return false; }
 					if (bonusDef.excludeClasses && bonusDef.excludeClasses.includes(ctype)) { return false; }
 					if (bonusDef.excludeStypes && bonusDef.excludeStypes.includes(stype)) { return false; }
 					if (bonusDef.remodel || bonusDef.remodelCap) {
@@ -916,22 +919,29 @@
 						if(remodelGroup.indexOf(shipId) > bonusDef.remodelCap) { return false; }
 					}
 					if (bonusDef.stypes && !bonusDef.stypes.includes(stype)) { return false; }
+					if (bonusDef.origins && !bonusDef.origins.includes(originId)) { return false; }
+					if (bonusDef.ids && !bonusDef.ids.includes(shipId)) { return false; }
 					return true;
 				};
-				const checkByShipBonusDef = (bonusDef, shipId, stype, gearType2) => (
+				const checkByShipBonusDef = (bonusDef, shipId, originId, stype, ctype, gearType2) => (
 					(Array.isArray(gearType2) ?
 						gearType2.some(id => KC3Master.equip_type(stype, shipId).includes(id)) :
 						KC3Master.equip_type(stype, shipId).includes(gearType2)
 					) && (
 						(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
+						(bonusDef.origins && bonusDef.origins.includes(originId)) ||
 						(bonusDef.stypes && bonusDef.stypes.includes(stype)) ||
+						(bonusDef.classes && bonusDef.classes.includes(ctype)) ||
 						(bonusDef.excludes && !bonusDef.excludes.includes(shipId)) ||
+						(bonusDef.excludeOrigins && !bonusDef.excludeOrigins.includes(originId)) ||
 						(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)) ||
-						(!bonusDef.ids && !bonusDef.stypes && !bonusDef.excludes && !bonusDef.excludeStypes)
+						(bonusDef.excludeClasses && !bonusDef.excludeClasses.includes(ctype)) ||
+						(!bonusDef.ids && !bonusDef.origins && !bonusDef.stypes && !bonusDef.classes
+							&& !bonusDef.excludes && !bonusDef.excludeOrigins && !bonusDef.excludeStypes && !bonusDef.excludeClasses)
 					)
 				);
-				const checkByShipBonusRequirements = (byShip, shipId, stype, gearType2) =>
-					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, stype, gearType2));
+				const checkByShipBonusRequirements = (byShip, shipId, originId, stype, ctype, gearType2) =>
+					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, originId, stype, ctype, gearType2));
 				const addObjects = (obj1, obj2) => {
 					for (const key in obj2) {
 						obj1[key] = obj1[key] ? obj1[key] + obj2[key] : obj2[key];
@@ -964,7 +974,7 @@
 						KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
 						bonus = Object.assign(bonus, def);
-					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipData.api_stype, gearType2)) {
+					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2)) {
 						bonus = Object.assign(bonus, def);
 					}
 					if (Object.keys(bonus).length) {
@@ -983,7 +993,7 @@
 							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
 							classBonus = ensureArray(classBonus);
 							classBonus.forEach(bonus => {
-								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
+								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
 									found = true;
 									if (!bonus.minStars) {
 										bonusStats = bonus.single || bonus.multiple;
@@ -1013,7 +1023,7 @@
 								Number(gear.id.substr(3)) : Number.isInteger(Number(gear.id)) ?
 								KC3Master.slotitem(gear.id).api_type[2] : 0;
 							const list = ensureArray(gear.byShip).filter(bonusDef =>
-								checkByShipBonusDef(bonusDef, shipData.api_id, shipData.api_stype, gearType2));
+								checkByShipBonusDef(bonusDef, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2));
 							list.forEach(shipBonus => {
 								found = true;
 								if (!shipBonus.minStars) {
