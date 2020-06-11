@@ -650,7 +650,7 @@ html,body {
 	letter-spacing:-1px;
 }
 .module.activity .sortie_node.special_cutin {
-	box-shadow:0px 0px 3px 1px #a08;
+	box-shadow:0px 0px 1px 2px #d0b;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -3418,6 +3418,24 @@ ABYSS FLEET
 	border:1px solid #000;
 	background:#555;
 	position:relative;
+}
+.module.fleet .ship_hp_bar.metrics {
+	background-image: linear-gradient(to right,
+		rgba(0,0,0,0) 0%,
+		rgba(0,0,0,0) 24%,
+			rgba(0,0,0,0.3) 24%,
+			rgba(255,255,255,0.3) 25%,
+			rgba(255,255,255,0) 26%,
+		rgba(0,0,0,0) 49%,
+			rgba(0,0,0,0.3) 49.5%,
+			rgba(255,255,255,0.3) 50.5%,
+			rgba(255,255,255,0) 51%,
+		rgba(0,0,0,0) 74%,
+			rgba(0,0,0,0.3) 74%,
+			rgba(255,255,255,0.3) 75%,
+			rgba(255,255,255,0) 76%,
+		rgba(0,0,0,0) 100%
+	);
 }
 .module.fleet .ship_hp_bar.hp_normal {
 	background-color:#0f0;
