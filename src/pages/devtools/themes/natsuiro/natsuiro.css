@@ -3419,7 +3419,34 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
-.module.fleet .ship_hp_bar.metrics {
+.module.fleet .ship_hp_bar.hp_normal,
+.module.fleet .ship_hp_prediction.hp_normal {
+	background-color:#0f0;
+}
+.module.fleet .ship_hp_bar.hp_shouha,
+.module.fleet .ship_hp_prediction.hp_shouha {
+	background-color:#ff0;
+}
+.module.fleet .ship_hp_bar.hp_chuuha,
+.module.fleet .ship_hp_prediction.hp_chuuha {
+	background-color:#f90;
+}
+.module.fleet .ship_hp_bar.hp_taiha,
+.module.fleet .ship_hp_prediction.hp_taiha {
+	background-color:#f00;
+}
+.module.fleet .ship_hp_bar.hp_repairing {
+	background-color:#aaccee;
+}
+.module.fleet .ship_hp_bar.hp_fcf {
+	background-color:#fff;
+}
+.module.fleet .ship_hp_bar.hp_sunk {
+	background-color:#ccc;
+}
+.module.fleet .ship_hp_bar_metrics {
+	height:5px;
+	float:left;
 	background-image: linear-gradient(to right,
 		rgba(0,0,0,0) 0%,
 		rgba(0,0,0,0) 24%,
@@ -3437,27 +3464,6 @@ ABYSS FLEET
 		rgba(0,0,0,0) 100%
 	);
 }
-.module.fleet .ship_hp_bar.hp_normal {
-	background-color:#0f0;
-}
-.module.fleet .ship_hp_bar.hp_shouha {
-	background-color:#ff0;
-}
-.module.fleet .ship_hp_bar.hp_chuuha {
-	background-color:#f90;
-}
-.module.fleet .ship_hp_bar.hp_taiha {
-	background-color:#f00;
-}
-.module.fleet .ship_hp_bar.hp_repairing {
-	background-color:#aaccee;
-}
-.module.fleet .ship_hp_bar.hp_fcf {
-	background-color:#fff;
-}
-.module.fleet .ship_hp_bar.hp_sunk {
-	background-color:#ccc;
-}
 .module.fleet .lship .ship_hp_bar {
 	height:9px;
 }
@@ -3472,6 +3478,9 @@ ABYSS FLEET
 }
 .module.fleet .lship.seven .ship_hp_prediction {
 	height:7px;
+}
+.module.fleet .lship.seven .ship_hp_bar_metrics {
+	height:4px;
 }
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
@@ -3905,6 +3914,9 @@ ABYSS FLEET
 }
 .module.fleet .sship .ship_hp_prediction {
 	height:6px;
+}
+.module.fleet .sship .ship_hp_bar_metrics {
+	height:4px;
 }
 .module.fleet .sship .ship_morale {
 	width:20px;
