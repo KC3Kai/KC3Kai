@@ -48,7 +48,7 @@
 	var reloadReminderHandler = 0;
 
 	// QuestList api result cache
-	const questCacheResult = [];
+	var questCacheResult = [];
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {

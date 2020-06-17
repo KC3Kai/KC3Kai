@@ -331,11 +331,9 @@ html,body {
 	filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
 	-webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
 }
-
 .module.activity .activity_tab.tab_count_5 {
 	width: calc(180px / 5);
 }
-
 .module.activity .activity_tab+.activity_tab {
 	margin-left: 1px;
 }
@@ -1255,108 +1253,108 @@ ABYSS FLEET
 
 /*------- ACTIVITY: QUEST -------*/
 .module.activity .activity_quest {
-  color: #FFF;
+	color: #FFF;
 }
 
 .module.activity .activity_quest .quest_filters {
-  display: flex;
-  height: 25px;
-  justify-content: center;
+	display: flex;
+	height: 25px;
+	justify-content: center;
 }
 
 .module.activity .activity_quest .quest_filter_button {
-  overflow: hidden;
-  width: calc(180px / 5);
-  opacity: 0.3;
-  transition: 0.2s;
-  cursor: pointer;
+	overflow: hidden;
+	width: calc(180px / 5);
+	opacity: 0.3;
+	transition: 0.2s;
+	cursor: pointer;
 }
 
 .module.activity .activity_quest .quest_filter_button.active {
-  opacity: 1;
+	opacity: 1;
 }
 
 .module.activity .activity_quest .quest_filter_button[filter="1"] {
-  background: #d75048;
+	background: #d75048;
 }
 
 .module.activity .activity_quest .quest_filter_button[filter="2"] {
-  background: #98e75f;
+	background: #98e75f;
 }
 
 .module.activity .activity_quest .quest_filter_button[filter="3"] {
-  background: #aaccee;
+	background: #aaccee;
 }
 
 .module.activity .activity_quest .quest_filter_button[filter="4"] {
-  background: #996600;
+	background: #996600;
 }
 
 .module.activity .activity_quest .quest_filter_button[filter="5"] {
-  background: #ae76fa;
+	background: #ae76fa;
 }
 
 .module.activity .activity_quest .quest_list {
-  display: block;
+	display: block;
 /*  flex-direction: column; */
-  height: 195px;
-  overflow-y: auto;
-  margin-top: 5px;
+	height: 195px;
+	overflow-y: auto;
+	margin-top: 5px;
 }
 
 .module.activity .activity_quest .quest_list::-webkit-scrollbar {
-  width: 5px;
+	width: 5px;
 }
 
 .module.activity .activity_quest .quest_list .quest_page {
-  position: sticky;
-  top: 0px;
-  padding: 1px;
-  background: #444;
-  text-align: center;
-  font-size: 11px;
+	position: sticky;
+	top: 0px;
+	padding: 1px;
+	background: #444;
+	text-align: center;
+	font-size: 11px;
 }
 
 .module.activity .activity_quest .quest_list .quest {
-  display: flex;
-  align-items: center;
-  width: auto;
+	display: flex;
+	align-items: center;
+	width: auto;
 }
 
 .module.activity .activity_quest .quest_list .quest.activated {
-  background: rgba(255,153,51,0.2);
+	background: rgba(255,153,51,0.2);
 }
 .module.activity .activity_quest .quest_list .quest.percent50 {
-  background: rgba(51,255,255,0.2);
+	background: rgba(51,255,255,0.2);
 }
 .module.activity .activity_quest .quest_list .quest.percent80 {
-  background: rgba(233,255,51,0.2);
+	background: rgba(233,255,51,0.2);
 }
 .module.activity .activity_quest .quest_list .quest.completed {
-  background: rgba(0,255,0,0.2);
+	background: rgba(0,255,0,0.2);
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_color {
-  width: 14px;
-  height: 14px;
-  margin: 2px;
-  border: 2px solid transparent;
+	width: 14px;
+	height: 14px;
+	margin: 2px;
+	border: 2px solid transparent;
 }
 
 .module.activity .activity_quest .quest_list .quest.activated .quest_color {
-  border-color: #F93;
+	border-color: #F93;
 }
 .module.activity .activity_quest .quest_list .quest.completed .quest_color {
-  border-color: #0F0;
+	border-color: #0F0;
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_text {
-  width: 165px;
-  height: 14px;
-  overflow: hidden;
-  font-size: 11px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+	width: 165px;
+	height: 14px;
+	overflow: hidden;
+	font-size: 11px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 /*------- ACTIVITY: CRAFTING -------*/
