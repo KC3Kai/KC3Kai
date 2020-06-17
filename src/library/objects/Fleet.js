@@ -1045,19 +1045,24 @@ Contains summary information about a fleet and its ships
 	
 	/**
 	 * (UNUSED) The modifier by maps should be applied to equipment eLoS since game phase 2.
-	 * @return 1 by default. Other values are still investigating, missing summarized data.
-	 * @see https://docs.google.com/spreadsheets/d/1KC-hAbxkExKy2RJ1uf32BCJI8hNyNc3Cz4QidGkZ4TQ
+	 * @return 1 by default, just like it used by 2-5.
+	 * @see https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#coefficient_node
 	 */
 	KC3Fleet.nodeDivaricatedFactorByMap = function(world, map){
 		const mapKey = map === undefined ? String(world) : [world, map].join("");
 		return ({
 			"16": 3,
+			"25": 1,
 			"35": 4,
+			"45": 2,
 			"52": 2,
+			"54": 2,
+			"55": 2,
 			"61": 4,
 			"62": 3,
 			"63": 3,
 			"65": 3,
+			"72": 4,
 		})[mapKey] || 1;
 	};
 	
@@ -1065,6 +1070,7 @@ Contains summary information about a fleet and its ships
 	 * (UNUSED) The modifier by maps should be applied to HQ level adjustment since game phase 2.
 	 * @return 0.4 by default. Other values are still investigating, missing summarized data.
 	 * @see #nodeDivaricatedFactorByMap
+	 * @see https://docs.google.com/spreadsheets/d/1KC-hAbxkExKy2RJ1uf32BCJI8hNyNc3Cz4QidGkZ4TQ
 	 */
 	KC3Fleet.hqModifierByMap = function(world, map){
 		const mapKey = map === undefined ? String(world) : [world, map].join("");
@@ -1125,9 +1131,9 @@ Contains summary information about a fleet and its ships
 	 * @see https://wikiwiki.jp/kancolle/%E4%B8%AD%E9%83%A8%E6%B5%B7%E5%9F%9F#area3
 	 */
 	KC3Fleet.prototype.airReconnScore = function(){
-		return this.shipsUnescaped().reduce((pre, ship) => {
+		return this.shipsUnescaped().reduce((totalScore, ship) => {
 			// no aircraft and slot size on ex-slot for now
-			return pre + ship.equipment(false).reduce((pre, gear, idx) => {
+			return totalScore + ship.equipment(false).reduce((total, gear, idx) => {
 				let value = 0;
 				const mst = gear.exists() && gear.master();
 				// Seaplane Reconn/Bomber
@@ -1138,7 +1144,7 @@ Contains summary information about a fleet and its ships
 				} else if(mst && [41].includes(mst.api_type[2])) {
 					value = mst.api_saku * Math.sqrt(ship.slotSize(idx));
 				}
-				return pre + value;
+				return total + value;
 			}, 0);
 		}, 0);
 	};

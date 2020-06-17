@@ -47,6 +47,9 @@
 	// Panel Reload Reminder Timer
 	var reloadReminderHandler = 0;
 
+	// QuestList api result cache
+	var questCacheResult = [];
+
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
 		position: { my: "left top", at: "left+25 bottom", collision: "flipfit" },
@@ -549,6 +552,8 @@
 				if($(".ship_face_tooltip").data("statsIconset") != ConfigManager.info_stats_iconset){
 					updateShipTooltipStatsIconset();
 				}
+
+				updateQuestActivityTab();
 			}
 		});
 
@@ -1149,6 +1154,7 @@
 			}else{
 				overrideFocus = false;
 			}
+			updateQuestActivityTab(true);
 
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
@@ -1594,6 +1600,110 @@
 			$(".timers").createChildrenTooltips();
 		},
 
+		// Trigger when enter quest screen
+		QuestList: function (data) {
+			$('.quest_filter_button').off('click');
+			updateQuestActivityTab();
+			if (!ConfigManager.info_quest_activity) {
+				return;
+			}
+			$("#atab_quest").trigger("click");
+
+			$('.quest_filter_button').click(function (ev) {
+				const target = $(ev.target);
+				const isActive = target.hasClass('active');
+				$('.quest_filter_button').removeClass('active');
+				if (!isActive) {
+					target.addClass('active');
+				}
+				exec();
+			});
+
+			questCacheResult.length = 0;
+			if (data && data.length) {
+				questCacheResult.push(...data);
+			}
+
+			exec();
+
+			function exec() {
+				const activeFilter = getActiveFilter();
+				const allowCategories = getAllowCategories(activeFilter);
+				const quests = getFilterQuests(allowCategories);
+				loadQuests(quests);
+			}
+
+			function getActiveFilter() {
+				return Number($('.quest_filter_button.active').attr('filter')) || -1;
+			}
+
+			function getAllowCategories(filter) {
+				switch (filter) {
+					case 1: return [2, 8, 9];
+					case 2: return [3];
+					case 3: return [4];
+					case 4: return [6];
+					case 5: return [1, 5, 7];
+				}
+				return [];
+			}
+
+			function getFilterQuests(categories) {
+				if (!categories.length) {
+					return questCacheResult;
+				}
+				return questCacheResult.filter(v => categories.includes(v.api_category));
+			}
+
+			function loadQuests(quests) {
+				const questList = $(".activity_quest .quest_list");
+				questList.empty();
+				questList.scrollTop();
+
+				quests.forEach((apiQuest, index) => {
+					const quest = KC3QuestManager.get(apiQuest.api_no);
+					if (!quest) { return; }
+
+					if (index % 5 === 0) {
+						$('<div>')
+							.addClass('quest_page')
+							.text(Math.floor(index / 5) + 1)
+							.appendTo(questList);
+					}
+
+					const questListItem = $("#factory .quest")
+						.clone()
+						.toggleClass('activated', quest.status === 2)
+						.toggleClass('completed', quest.status === 3)
+						.toggleClass('percent50', quest.progress === 1)
+						.toggleClass('percent80', quest.progress === 2)
+						.appendTo(questList);
+
+					// Quest color box
+					$(".quest_color", questListItem)
+						.css("background", quest.getColor())
+						.data("id", quest.id);
+
+					// Quest title
+					if (quest.meta) {
+						$(".quest_text", questListItem)
+							.text(quest.meta().name)
+							.attr("titlealt", KC3QuestManager.buildHtmlTooltip(quest.id, quest.meta(), false, false))
+							.lazyInitTooltip();
+					} else {
+						$(".quest_text", questListItem)
+							.text(KC3Meta.term("UntranslatedQuest"))
+							.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
+							.lazyInitTooltip();
+					}
+
+					// Quest track
+					$(".quest_track", questListItem).remove();
+				});
+			}
+
+		},
+
 		/* QUESTS
 		Triggered when quest list is updated
 		---------------------------------------------*/
@@ -1999,13 +2109,15 @@
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
 						tips += (!tips ? "" : "\n")
 							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
+							+ "{0}: {5}\t{10}\n{1}: {6}\t{11}\n{2}: {7}\t{12}\n{3}: {8}\t{13}\n{4}: {9}\t{14}".format(
 								KC3Meta.term("ExpedTotalFp"),
+								KC3Meta.term("ExpedTotalTorp"),
 								KC3Meta.term("ExpedTotalAa"),
 								KC3Meta.term("ExpedTotalAsw"),
 								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.aa, fstats.as, fstats.ls,
+								fstats.fp, fstats.tp, fstats.aa, fstats.as, fstats.ls,
 								Math.qckInt("floor", fstatsImp.fp , 1),
+								Math.qckInt("floor", fstatsImp.tp , 1),
 								Math.qckInt("floor", fstatsImp.aa , 1),
 								Math.qckInt("floor", fstatsImp.as , 1),
 								Math.qckInt("floor", fstatsImp.ls , 1)
@@ -4833,6 +4945,22 @@
 			}
 		} catch (e) {
 			console.warn("Failed to open battle simulator", e);
+		}
+	}
+
+	function updateQuestActivityTab(isGoHome) {
+		if (ConfigManager.info_quest_activity) {
+			$(".activity_tabs .activity_tab").addClass("tab_count_5");
+			$("#atab_quest").show();
+			if (!!isGoHome && $("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
+		} else {
+			$(".activity_tabs .activity_tab").removeClass("tab_count_5");
+			$("#atab_quest").hide();
+			if ($("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
 		}
 	}
 
