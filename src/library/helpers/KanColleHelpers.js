@@ -7669,7 +7669,7 @@ var PS = {};
       };
       if (v === 105) {
           return addGroup(fslAndSc(55)(6))
-              (addGroup(lvlCnt(310))
+              (addGroup(lvlCnt(290))
                   (addGroup(cvecl(1))
                       (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
                           (addGroup(fpTotal(330))

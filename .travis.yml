@@ -1,4 +1,4 @@
-sudo: false
+os: linux
 dist: trusty
 language: node_js
 node_js:

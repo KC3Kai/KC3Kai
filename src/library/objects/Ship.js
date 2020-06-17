@@ -2663,7 +2663,7 @@ KC3改 Ship Object
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
 	 *
 	 * @return true if this ship (Kongou-class K2C) can do special cut-in attack.
-	 * @see https://kancolle.fandom.com/wiki/Game_Updates/2020/April_23rd
+	 * @see https://kancolle.fandom.com/wiki/Kongou/Special_Cut-In
 	 * @see https://wikiwiki.jp/kancolle/%E6%AF%94%E5%8F%A1%E6%94%B9%E4%BA%8C%E4%B8%99
 	 */
 	KC3Ship.prototype.canDoKongouCutin = function() {

@@ -48,7 +48,7 @@
 	var reloadReminderHandler = 0;
 
 	// QuestList api result cache
-	const questCacheResult = [];
+	var questCacheResult = [];
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
@@ -471,8 +471,23 @@
 		$(".ship_img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border);
 
 		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
-		$(".module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
-		$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
+		const shadowDirStr = (
+			  "-1px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", 0px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", -1px 0px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px 0px 1px "+ConfigManager.pan_drop_shadow
+			+", -1px 1px 1px "+ConfigManager.pan_drop_shadow
+			+", 0px 1px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px 1px 1px "+ConfigManager.pan_drop_shadow
+		);
+		$(".module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type"
+			+",.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot")
+			.css("text-shadow", shadowDirStr);
+		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
+			.css("box-shadow", shadowDirStr);
+		// Either share moonlight config key for HP bar metrics
+		$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro");
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -516,6 +531,9 @@
 				}
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
+				$(".ship_hp_box .ship_hp_bar_metrics").toggle(
+					ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro"
+				);
 				updateQuestActivityTab();
 			}
 		});
@@ -1970,7 +1988,7 @@
 			console.debug("Current fleet summary", FleetSummary);
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
-			$(".summary-level .summary_text").text( FleetSummary.lv )
+			$(".summary-level .summary_text").text(FleetSummary.lv)
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" :
 						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
@@ -1997,10 +2015,10 @@
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
-			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
+			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
-			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
-			$(".summary-airfp .summary_text").text( FleetSummary.air )
+			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
+			$(".summary-airfp .summary_text").text(FleetSummary.air)
 				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
 					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
@@ -2008,11 +2026,13 @@
 					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
-				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
-			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
-				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
+				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation))
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) + KC3Meta.term("PanelFormationTip"))
 				.lazyInitTooltip();
-			$(".summary-speed .summary_text").text( FleetSummary.speed );
+			$(".summary-antiair .summary_text").text(FleetSummary.antiAir)
+				.attr("title", KC3Meta.term("PanelFleetAATip"))
+				.lazyInitTooltip();
+			$(".summary-speed .summary_text").text(FleetSummary.speed);
 			if(ConfigManager.elosFormula > 1){
 				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){

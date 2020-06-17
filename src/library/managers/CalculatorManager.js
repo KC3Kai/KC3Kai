@@ -109,8 +109,12 @@
                 const p = contact.planes[idx];
                 planeListHtml += "#{0}\u2003"
                     .format(1 + idx);
-                planeListHtml += $("<img />").attr("src", KC3Meta.shipIcon(p.shipMasterId))
-                    .css(iconStyles).css("image-rendering", "auto").prop("outerHTML");
+                planeListHtml += $("<img />")
+                    .attr("src", KC3Meta.shipIcon(p.shipMasterId))
+                    .css(iconStyles)
+                    .css("image-rendering", "auto")
+                    .css("object-fit", "cover")
+                    .prop("outerHTML");
                 planeListHtml += $("<img />").attr("src", KC3Meta.itemIcon(p.icon))
                     .css(iconStyles).prop("outerHTML");
                 planeListHtml += '<span style="color:#45a9a5">\u2605{0}</span>\u2003'
