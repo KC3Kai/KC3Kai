@@ -441,8 +441,13 @@
 				const f33CnHq3 = Array.numbers(1, 5).map(cn =>
 					Math.qckInt("floor", kcFleet.eLos4(cn, 0.35), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
 				));
+				const airReconnScore = Math.qckInt("floor", kcFleet.airReconnScore(), 1)
+					.toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false));
+				const airReconnResult = kcFleet.estimateAirReconnResult();
 				$(".detail_los .detail_value", fleetBox).attr("title",
 					"HLv: x0.4\tx0.35\nCn1: {0}\t{5}\nCn2: {1}\t{6}\nCn3: {2}\t{7}\nCn4: {3}\t{8}\nCn5: {4}\t{9}".format(f33CnHq4.concat(f33CnHq3))
+					+ "\nW6-3: {0}".format(airReconnScore)
+					+ (airReconnScore > 0 ? "\n&emsp;G: {0}\n&emsp;H: {1}".format(airReconnResult.W63G.result, airReconnResult.W63H.result) : "")
 				);
 			} else {
 				$(".detail_los .detail_value").attr("title", "");

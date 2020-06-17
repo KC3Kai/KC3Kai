@@ -756,7 +756,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
@@ -1146,17 +1146,20 @@ Provides access to data on built-in JSON files
 			var worldTerm = "Unknown";
 			if(this.isEventWorld(worldId)) {
 				const eventMapDefs = {
-					seasons : ["Winter", "Spring", "Summer", "Fall"],
-					fromId : 21,
-					fromYear : 2013,
-					skippedFrom : [42, 2],
-				}, period = eventMapDefs.seasons.length,
-				worldIndex = worldId >= eventMapDefs.skippedFrom[0] ?
-					worldId - eventMapDefs.fromId + eventMapDefs.skippedFrom[1] :
-					worldId - eventMapDefs.fromId,
-				season = eventMapDefs.seasons[worldIndex % period],
-				year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
-				worldTerm = ["MapNameEventWorld", "MapNameEventSeason" + season, year];
+						seasons : ["Winter", "Spring", "Summer", "Fall"],
+						fromId : 21,
+						fromYear : 2013,
+						skippedSeasons : [[42, 2], [48, 3]],
+					},
+					period = eventMapDefs.seasons.length,
+					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (
+						worldId >= skipFrom ?
+						worldId - eventMapDefs.fromId + skipAccumulated :
+						(index < 0 ? worldId - eventMapDefs.fromId : index)
+					), -1),
+					season = eventMapDefs.seasons[worldIndex % period] || "BeforeBigBang",
+					year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
+					worldTerm = ["MapNameEventWorld", "MapNameEventSeason" + season, year];
 				return !returnTerm ? KC3Meta.term(worldTerm[0])
 					.format(KC3Meta.term(worldTerm[1]), worldTerm[2]) : worldTerm;
 			} else {
