@@ -1186,54 +1186,15 @@
 					$(".tab_mstship .shipInfo .encounter").toggle(!!enemyDbStats);
 					if(enemyDbStats || abyssDb){
 						$(".tab_mstship .shipInfo .stats").empty();
-						$.each([
-							["hp", "taik", "ShipHp"],
-							["fp", "houg", "ShipFire"],
-							["ar", "souk", "ShipArmor"],
-							["tp", "raig", "ShipTorpedo"],
-							["aa", "tyku", "ShipAntiAir"],
-							["sp", "soku", "ShipSpeed"],
-							["if", "airpow"],
-						], function(index, stat){
-							statBox = $(".tab_mstship .factory .ship_stat").clone();
-							$("img", statBox).attr("src", KC3Meta.statIcon(stat[0]));
-							$(".ship_stat_name", statBox).text(stat[1])
-								.attr("title", KC3Meta.term(stat[2]) || "")
-								.lazyInitTooltip();
-							if(stat[0]=="sp"){
-								var speedEnNameMap = {"0":"Land","5":"Slow","10":"Fast","15":"Fast+","20":"Fastest"};
-								$(".ship_stat_text", statBox).text(speedEnNameMap[shipData.api_soku]);
-								$(".ship_stat_text", statBox).show();
-								$(".ship_stat_value", statBox).hide();
-							} else if(stat[0]=="if"){
-								// Compute fighter air power based on known slots
-								$(".ship_stat_min", statBox).text(
-									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
-								);
-								$(".ship_stat_max", statBox).hide();
-							} else {
-								$(".ship_stat_min", statBox).text(
-									// Priority to show stats recorded via encounter
-									enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]]
-								);
-								$(".ship_stat_max", statBox).hide();
-								// Check diff for updating `abyssal_stats.json`
-								if(enemyDbStats && (!abyssDb ||
-									typeof abyssDb["api_" + stat[1]] === "undefined" ||
-									enemyDbStats[stat[0]] != abyssDb["api_" + stat[1]])){
-									// Different color to indicate stats attribute to be updated
-									$(".ship_stat_min", statBox).html(
-										$("<span style='color:orangered'></span>").text($(".ship_stat_min", statBox).text())
-									).attr("title",
-										"{0} => {1}".format(abyssDb["api_" + stat[1]], enemyDbStats[stat[0]])
-									);
-								}
-							}
-							statBox.appendTo(".tab_mstship .shipInfo .stats");
-						});
-						
-						// ENEMY EQUIPMENT
 						$(".tab_mstship .shipInfo .stats").css("width", "220px");
+						// ENEMY EQUIPMENT
+						const equipMasters = [];
+						const sumEquipTotalStat = statName => equipMasters.reduce((total, mst) => (
+							total + (mst && mst.api_id > 0 ? mst[`api_${statName}`] || 0 : 0)
+						), 0);
+						const maxEquipStat = statName => Math.max(...equipMasters.map(mst => (
+							mst && mst.api_id > 0 ? mst[`api_${statName}`] || 0 : 0
+						)));
 						$(".tab_mstship .equipments .equipment").each(function(index){
 							$(this).show();
 							let maxeq;
@@ -1246,9 +1207,10 @@
 							// Priority to show equipment recorded via encounter
 							const equipId = enemyDbStats ? enemyDbStats["eq"+(index+1)] : (abyssMaster.kc3_slots || [])[index];
 							if (equipId > 0) {
-								const equipment = KC3Master.slotitem( equipId );
+								const equipment = KC3Master.slotitem(equipId);
+								equipMasters.push(equipment);
 								const fakeGear = new KC3Gear({ itemId: 2, masterId: equipId });
-								$(".slotitem", this).text(KC3Meta.gearName( equipment.api_name ) )
+								$(".slotitem", this).text(KC3Meta.gearName(equipment.api_name))
 									.attr("title", fakeGear.htmlTooltip(maxeq))
 									.lazyInitTooltip();
 								$(".sloticon img", this)
@@ -1270,6 +1232,76 @@
 								$(".sloticon img", this).hide().off("click");
 								$(".sloticon", this).removeClass("hover");
 							}
+						});
+						
+						// ENEMY STATS
+						$.each([
+							["hp", "taik", "ShipHp"],
+							["fp", "houg", "ShipFire"],
+							["ar", "souk", "ShipArmor"],
+							["tp", "raig", "ShipTorpedo"],
+							["aa", "tyku", "ShipAntiAir"],
+							["sp", "soku", "ShipSpeed"],
+							["rn", "leng", "ShipLength"],
+							["if", "airpow"],
+						], function(index, stat){
+							statBox = $(".tab_mstship .factory .ship_stat").clone();
+							$("img", statBox).attr("src", KC3Meta.statIcon(stat[0]));
+							$(".ship_stat_name", statBox).text(stat[1])
+								.attr("title", KC3Meta.term(stat[2]) || "")
+								.lazyInitTooltip();
+							if(stat[0] === "sp"){
+								const speedEnNameMap = {"0":"Land","5":"Slow","10":"Fast","15":"Fast+","20":"Fastest"};
+								$(".ship_stat_text", statBox).text(
+									speedEnNameMap[abyssMaster.api_soku] || abyssMaster.api_soku
+								).attr("title", abyssMaster.api_soku);
+								$(".ship_stat_text", statBox).show();
+								$(".ship_stat_value", statBox).hide();
+							} else if(stat[0] === "rn"){
+								const rangeEnNames = ["","Short","Medium","Long","V.Long","V.Long+"];
+								const masterLeng = abyssMaster.api_leng,
+									maxLengFromEquips = !equipMasters.length ? 0 : maxEquipStat("leng"),
+									maxLeng = Math.max(masterLeng, maxLengFromEquips);
+								$(".ship_stat_text", statBox).text(
+									rangeEnNames[maxLeng] || "n/a"
+								).attr("title", maxLeng);
+								$(".ship_stat_text", statBox).show();
+								$(".ship_stat_value", statBox).hide();
+								$(".ship_stat_min", statBox).text(masterLeng);
+								$(".ship_stat_max span", statBox).text(maxLengFromEquips);
+								// Different color to indicate mismatched values between internal and max of equipment
+								if(maxLengFromEquips > 0 && masterLeng !== maxLengFromEquips){
+									$(".ship_stat_text", statBox).css("color", "orange")
+										.attr("title", "{0} => {1}".format(masterLeng, maxLengFromEquips));
+								}
+							} else if(stat[0] === "if"){
+								// Compute fighter air power based on known slots
+								$(".ship_stat_min", statBox).text(
+									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
+								);
+								$(".ship_stat_max", statBox).hide();
+							} else {
+								// Priority to show master stats recorded by encounters db
+								const masterStat = enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]];
+								$(".ship_stat_min", statBox).text(masterStat);
+								if(!equipMasters.length || stat[0] === "hp"){
+									$(".ship_stat_max", statBox).hide();
+								} else {
+									$(".ship_stat_max span", statBox).text(masterStat + sumEquipTotalStat(stat[1]));
+								}
+								// Check diff for updating internal db: `abyssal_stats.json`
+								if(enemyDbStats && (!abyssDb ||
+									typeof abyssDb["api_" + stat[1]] === "undefined" ||
+									enemyDbStats[stat[0]] != abyssDb["api_" + stat[1]])){
+									// Different color to indicate stats attribute to be updated
+									$(".ship_stat_min", statBox).html(
+										$("<span style='color:orangered'></span>").text($(".ship_stat_min", statBox).text())
+									).attr("title",
+										"{0} => {1}".format(abyssDb["api_" + stat[1]], enemyDbStats[stat[0]])
+									);
+								}
+							}
+							statBox.appendTo(".tab_mstship .shipInfo .stats");
 						});
 						
 						$(".tab_mstship .shipInfo .stats").show();
