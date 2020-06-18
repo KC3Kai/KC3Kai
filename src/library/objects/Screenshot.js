@@ -3,6 +3,7 @@ var enableShelfTimer = false;
 
 function KCScreenshot(){
 	ConfigManager.load();
+	this.autoDpi = !ConfigManager.ss_dppx;
 	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
@@ -15,6 +16,7 @@ function KCScreenshot(){
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
 	this.quality = ConfigManager.ss_quality;
+	this.imageSmoothing = !!ConfigManager.ss_smooth;
 	this.callback = function(){};
 }
 
@@ -45,7 +47,7 @@ KCScreenshot.prototype.prepare = function(){
 	this.canvas.width = 1200 * this.scale;
 	this.canvas.height = 720 * this.scale;
 	this.context = this.canvas.getContext("2d");
-	this.context.imageSmoothingEnabled = false;
+	this.context.imageSmoothingEnabled = this.imageSmoothing;
 	
 	// Initialize Image Tag
 	this.domImg = new Image();
@@ -136,12 +138,14 @@ KCScreenshot.prototype.crop = function(offset){
 	
 	// Get zoom factor
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
+		// Since page zoom factor has been taken into account by window.devicePixelRatio already
+		var realScale = self.autoDpi ? self.scale : zoomFactor * self.scale;
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 1200 * zoomFactor * self.scale,
-			realHeight: 720 * zoomFactor * self.scale,
-			offTop: offset.top * zoomFactor * self.scale,
-			offLeft: offset.left * zoomFactor * self.scale,
+			realWidth: 1200 * realScale,
+			realHeight: 720 * realScale,
+			offTop: offset.top * realScale,
+			offLeft: offset.left * realScale,
 		};
 		
 		// Actual Cropping
