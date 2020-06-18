@@ -108,7 +108,7 @@ KCScreenshot.prototype.remoteCapture = function(){
 			quality: self.quality || 100
 		}, function(base64img){
 			self.handleLastError(chrome.runtime.lastError, "Remote captureVisibleTab", "take screenshot");
-			self.domImg.onload = self.crop(self.offset);
+			self.domImg.onload = self.crop(self.offset, true);
 			self.domImg.src = base64img;
 		});
 	});
@@ -119,7 +119,7 @@ KCScreenshot.prototype.startCapture = function(){
 	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.handleLastError(chrome.runtime.lastError, "Inpage captureVisibleTab", "take screenshot");
 		self.domImg.src = base64img;
-		self.domImg.onload = self.crop(self.gamebox.offset());
+		self.domImg.onload = self.crop(self.gamebox.offset(), false);
 	});
 };
 
@@ -133,13 +133,14 @@ KCScreenshot.prototype.handleLastError = function(lastError, apiDesc, funcName){
 	}
 };
 
-KCScreenshot.prototype.crop = function(offset){
+KCScreenshot.prototype.crop = function(offset, isRemote){
 	var self = this;
 	
 	// Get zoom factor
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
-		// Since page zoom factor has been taken into account by window.devicePixelRatio already
-		var realScale = self.autoDpi ? self.scale : zoomFactor * self.scale;
+		// Viewing page zoom factor has been taken into account by window.devicePixelRatio,
+		// if image not captured from remote background page
+		var realScale = self.autoDpi && !isRemote ? self.scale : zoomFactor * self.scale;
 		// Get gamebox dimensions and position
 		var params = {
 			realWidth: 1200 * realScale,

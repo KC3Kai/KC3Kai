@@ -92,7 +92,7 @@ Retrieves when needed to apply on components
 				ss_quality   : 90,
 				ss_directory : 'KanColle',
 				ss_dppx      : 1,
-				ss_smooth    : false,
+				ss_smooth    : true,
 
 				alert_diff         : 59,
 				alert_morale_notif : true,
