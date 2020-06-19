@@ -90,13 +90,14 @@
 			console.debug("Viewing gearData", gearData);
 			self.currentGearId = gearId;
 			const gearHost = `http://${this.server_ip}/kcs2/resources`;
+			const appendRscVer = (url) => (url && gearData.api_version ? url + `?version=${gearData.api_version}` : url);
 			
 			$(".tab_mstgear .gearInfo .gearAsset img").attr("src", "");
 			if(!KC3Master.isAbyssalGear(gearId)) {
-				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", gearHost + KC3Master.png_file(gearId, "card", "slot"));
-				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_character", "slot"));
-				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_up", "slot"));
-				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", gearHost + KC3Master.png_file(gearId, "item_on", "slot"));
+				$(".tab_mstgear .gearInfo .ga_1 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "card", "slot")));
+				$(".tab_mstgear .gearInfo .ga_2 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_character", "slot")));
+				$(".tab_mstgear .gearInfo .ga_3 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_up", "slot")));
+				$(".tab_mstgear .gearInfo .ga_4 img").attr("src", appendRscVer(gearHost + KC3Master.png_file(gearId, "item_on", "slot")));
 				$(".tab_mstgear .gearInfo .gearAssets").show();
 			} else {
 				// Map a abyssal gear to player gear for itemup image,
@@ -107,7 +108,7 @@
 				// itemup is used on cut-in scene, so items never shown may not be mapped correctly
 				if(replacedId || (mappedGear.api_type && mappedGear.api_type[0] === gearData.api_type[0])) {
 					$(".tab_mstgear .gearInfo .ga_1 img").attr("src",
-						gearHost + KC3Master.png_file(replacedId || mappedId, "item_up", "slot"));
+						appendRscVer(gearHost + KC3Master.png_file(replacedId || mappedId, "item_up", "slot")));
 					$(".tab_mstgear .gearInfo .gearAssets").show();
 				} else {
 					$(".tab_mstgear .gearInfo .gearAssets").hide();
