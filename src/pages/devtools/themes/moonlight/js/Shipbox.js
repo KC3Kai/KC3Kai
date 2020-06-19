@@ -280,7 +280,9 @@
 			return KC3Meta.term(curHp > taihaHp ? "PanelTaihaHpLeft" : "PanelTaihaHp")
 				.format(taihaHp, curHp - taihaHp)
 				+ "\n" + KC3Meta.term(curHp > chuuhaHp ? "PanelChuuhaHpLeft" : "PanelChuuhaHp")
-				.format(chuuhaHp, curHp - chuuhaHp);
+				.format(chuuhaHp, curHp - chuuhaHp)
+				+ "\n" + KC3Meta.term("PanelOverkillTaihaRate")
+				.format(this.shipData.overkillTaihaRate());
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes
