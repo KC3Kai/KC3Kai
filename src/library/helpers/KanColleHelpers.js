@@ -7651,7 +7651,7 @@ var PS = {};
       };
       if (v === 104) {
           return addGroup(fslAndSc(45)(5))
-              (addGroup(lvlCnt(260))
+              (addGroup(lvlCnt(230))
                   (addGroup(cvecl(1))
                       (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                           (addGroup(ddde(4))

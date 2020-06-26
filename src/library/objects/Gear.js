@@ -2793,6 +2793,70 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 12cm Single High-angle Gun Mount Model E
+			"382": {
+				count: 0,
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						multiple: { "tyku": 2, "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+					// Kamikaze Class
+					"66": "28",
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tais": 1, "tyku": 2, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+						],
+					},
+					{
+						// All remodels of: Yura, Naka, Kinu
+						origins: [23, 56, 113],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yura Kai, Naka Kai, Kinu Kai
+						ids: [220, 224, 289],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Yura Kai Ni, Naka Kai Ni, Kinu Kai Ni
+						ids: [488, 160, 487],
+						multiple: { "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+				],
+			},
 			// 130mm B-13 Twin Gun Mount
 			"282": {
 				count: 0,
