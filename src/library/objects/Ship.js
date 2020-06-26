@@ -266,7 +266,7 @@ KC3改 Ship Object
 			) : (
 			this.morale > 52 ? valuesArray[4] :
 			this.morale > 32 ? valuesArray[3] :
-			this.morale > 19 ? valuesArray[2] :
+			this.morale > 22 ? valuesArray[2] :
 			this.morale >= 0 ? valuesArray[1] :
 			valuesArray[0]);
 	};
@@ -3364,6 +3364,32 @@ KC3改 Ship Object
 		const {baseValue} = this.nightSpAttackBaseRate();
 		const formatPercent = num => Math.floor(num * 1000) / 10;
 		return formatPercent((Math.floor(baseValue) / typeFactor) || 0);
+	};
+
+	/**
+	 * Calculate ship's Taiha rate when taken an overkill damage.
+	 * This is related to the '4n+3 is better than 4n' theory,
+	 * '4n+x' only refer to the rounded Taiha HP threshold, rate is also affected by current HP in fact.
+	 * @param {number} currentHp - expected current hp value, use ship's real current hp by default.
+	 * @param {number} maxHp - expected full hp value, use ship's real max hp by default.
+	 * @return {number} Taiha percentage, 100% for already Taiha or red morale or dummy ship.
+	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#eb18c7e5
+	 */
+	KC3Ship.prototype.overkillTaihaRate = function(currentHp = this.hp[0], maxHp = this.hp[1]) {
+		if (this.isDummy()) { return 100; }
+		const taihaHp = Math.max(1, Math.floor(0.25 * maxHp));
+		const battleConds = this.collectBattleConditions();
+		// already taiha (should get rid of fasly or negative hp value)
+		// or red morale (hit red morale hp will be left fixed 1)
+		if (currentHp <= taihaHp || this.moraleEffectLevel([1, 1, 0, 0, 0], battleConds.isOnBattle)) {
+			return 100;
+		}
+		// sum all random cases of taiha
+		const taihaCases = Array.numbers(0, currentHp - 1).map(rndint => (
+			(currentHp - Math.floor(currentHp * 0.5 + rndint * 0.3)) <= taihaHp ? 1 : 0
+		)).sumValues();
+		// percentage with 2 decimal
+		return Math.round(taihaCases / currentHp * 10000) / 100;
 	};
 
 	/**
