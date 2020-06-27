@@ -2391,7 +2391,10 @@ KC3改 Ship Object
 		if(!this.masterId || !targetShip) { return 0; }
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
-		if([1653, 1654, 1655, 1656, 1657, 1658, 1921, 1922, 1923, 1924, 1925, 1926].includes(targetShipMasterId)) {
+		if([1653, 1654, 1655, 1656, 1657, 1658,
+			1921, 1922, 1923, 1924, 1925, 1926, // B
+			1933, 1934, 1935, 1936, 1937, 1938  // B Summer-Landing Mode
+			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
 		}
@@ -2713,8 +2716,10 @@ KC3改 Ship Object
 				1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
 				// but why Summer Supply Depot Princess not counted?
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
+				1921, 1922, 1923, 1924, 1925, 1926, // Supply Depot Princess B
+				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer-Landing Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
-				1556, 1631, 1632, 1633, 1650, 1651, 1652, // Airfield Princess
+				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
 			].includes(targetShipMasterId);
 		// T2 Tank
 		if(this.hasEquipment(167)) {
