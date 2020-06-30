@@ -2766,14 +2766,19 @@ KC3改 Equipment Object
 						},
 					},
 					// Matsu Class
-					"101": {
-						single: { "houg": 2, "tyku": 2 },
-						multiple: { "houg": 1, "tyku": 2 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 4, "houk": 3 },
+					"101": [
+						{
+							single: { "houg": 2, "tyku": 2 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 4, "houk": 3 },
+							},
 						},
-					},
+						// Make another object in order to compatible with mstship's `.single || .multiple` handling
+						{
+							multiple: { "houg": 1, "tyku": 2 },
+						},
+					]
 				},
 				byShip: [
 					{
@@ -2869,14 +2874,19 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "tais": 1 },
 					},
 					// Matsu Class
-					"101": {
-						single: { "houg": 2, "tyku": 2 },
-						multiple: { "houg": 1, "tyku": 2 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 4, "houk": 3 },
+					"101": [
+						{
+							single: { "houg": 2, "tyku": 2 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 4, "houk": 3 },
+							},
 						},
-					},
+						// Make another object in order to compatible with mstship's `.single || .multiple` handling
+						{
+							multiple: { "houg": 1, "tyku": 2 },
+						},
+					],
 				},
 				byShip: [
 					{

@@ -996,6 +996,7 @@
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
 									found = true;
 									if (!bonus.minStars) {
+						// TODO: for all following `.single || .multiple`, should merge them instead of OR, and show a 'one-time' indicator
 										bonusStats = bonus.single || bonus.multiple;
 										totalStats = addObjects(totalStats, bonusStats);
 										if (bonus.synergy) { synergyGear.push(bonus.synergy); }
