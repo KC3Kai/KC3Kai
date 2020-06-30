@@ -51,7 +51,7 @@ KC3改 Equipment Object
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20200529 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20200630 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -74,6 +74,8 @@ KC3改 Equipment Object
 				tripleTorpedoOxygenLateModelIds: [125, 285],
 				quadrupleTorpedoOxygenLateModel: 0,
 				quadrupleTorpedoOxygenLateModelIds: [15, 286],
+				submarineTorpedoLateModel: 0,
+				submarineTorpedoLateModelIds: [213, 214, 383],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 				tripleLargeGunMountK2: 0,
@@ -1395,7 +1397,9 @@ KC3改 Equipment Object
 					// Colorado Class
 					"93": "95",
 					// Atlanta Class
-					"99": "95"
+					"99": "95",
+					// South Dakota Class
+					"102": "95",
 				},
 			},
 			// O Type Observation Autogyro Kai
@@ -1837,6 +1841,71 @@ KC3改 Equipment Object
 					],
 					// Colorado
 					"93": "65",
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
+			// 16inch Triple Gun Mount Mk.6 mod.2
+			"385": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Large Main Gun:
+					// Iowa
+					"65": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Any FBB
+					stypes: [8],
+					multiple: { "houg": 1 },
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -2069,7 +2138,9 @@ KC3改 Equipment Object
 					// Essex Class
 					"84": "67",
 					// Colorado Class
-					"93": "67"
+					"93": "67",
+					// South Dakota Class
+					"102": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -2143,6 +2214,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
+					// South Dakota Class
+					"102": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2187,6 +2260,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
+					// South Dakota Class
+					"102": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2231,6 +2306,8 @@ KC3改 Equipment Object
 					"93": "95",
 					// Atlanta Class
 					"99": "95",
+					// South Dakota Class
+					"102": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
@@ -2257,6 +2334,8 @@ KC3改 Equipment Object
 					"93": "95",
 					// Atlanta Class
 					"99": "95",
+					// South Dakota Class
+					"102": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
@@ -2468,6 +2547,62 @@ KC3改 Equipment Object
 					multiple: { "houg": 1, "raig": 3, "souk": 1 },
 				},
 			},
+			// Late Model 53cm Bow Torpedo Mount (8 tubes)
+			"383": {
+				count: 0,
+				byClass: {
+					// I-58 Class
+					"36": {
+						multiple: { "raig": 1 },
+					},
+					// I-400 Class
+					"44": {
+						multiple: { "raig": 2 },
+					},
+					// I-47 Class
+					"103": {
+						multiple: { "raig": 3 },
+					},
+				},
+				byShip: {
+					// I-47 Kai
+					ids: [607],
+					multiple: { "raig": 1 },
+				},
+			},
+			// Late Model Submarine Radar & Passive Radiolocator
+			"384": {
+				count: 0,
+				byClass: {
+					// I-58 Class
+					"36": {
+						multiple: { "houk": 2 },
+					},
+					// I-400 Class
+					"44": {
+						multiple: { "houk": 3 },
+					},
+					// I-47 Class
+					"103": {
+						multiple: { "houk": 3 },
+					},
+				},
+				byShip: [
+					{
+						// I-47 Kai
+						ids: [607],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Any ship who can equip it will get synergy +3 tp, +2 ev
+						stypes: [13, 14],
+						synergy: {
+							flags: [ "submarineTorpedoLateModel" ],
+							single: { "raig": 3, "houk": 2 },
+						},
+					},
+				],
+			},
 			// Type D Kai Kouhyouteki
 			"364": {
 				count: 0,
@@ -2630,6 +2765,15 @@ KC3改 Equipment Object
 							single: { "houg": 2, "houk": 3 },
 						},
 					},
+					// Matsu Class
+					"101": {
+						single: { "houg": 2, "tyku": 2 },
+						multiple: { "houg": 1, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 4, "houk": 3 },
+						},
+					},
 				},
 				byShip: [
 					{
@@ -2724,6 +2868,15 @@ KC3改 Equipment Object
 					"34": {
 						multiple: { "houg": 1, "tais": 1 },
 					},
+					// Matsu Class
+					"101": {
+						single: { "houg": 2, "tyku": 2 },
+						multiple: { "houg": 1, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 4, "houk": 3 },
+						},
+					},
 				},
 				byShip: [
 					{
@@ -2813,6 +2966,8 @@ KC3改 Equipment Object
 					},
 					// Kamikaze Class
 					"66": "28",
+					// Matsu Class
+					"101": "28",
 				},
 				byShip: [
 					{
@@ -3293,6 +3448,8 @@ KC3改 Equipment Object
 					},
 					// Fletcher Class
 					"91": "87",
+					// South Dakota Class
+					"102": "87",
 				},
 				byShip: [
 					{
@@ -3330,7 +3487,9 @@ KC3改 Equipment Object
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
-					"99": "65"
+					"99": "65",
+					// South Dakota Class
+					"102": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -3353,6 +3512,8 @@ KC3改 Equipment Object
 					"95": "65",
 					// Atlanta Class
 					"99": "65",
+					// South Dakota Class
+					"102": "65",
 					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
@@ -3819,6 +3980,7 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
 			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
+			if(synergyGears.submarineTorpedoLateModelIds.includes(gear.masterId)) synergyGears.submarineTorpedoLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
 			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) synergyGears.tripleLargeGunMountK2 += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;

@@ -8675,7 +8675,7 @@ var SHIPDATA = {
 		EQUIPS: [604, 604, 541, 531],
 	},
 	1933: {
-		name: 'Supply Depot Princess B Summer-Landing Mode 1',
+		name: 'Supply Depot Princess B Summer Landing Mode 1',
 		nameJP: '集積地棲姫II 夏季上陸mode',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8692,7 +8692,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1934: {
-		name: 'Supply Depot Princess B Summer-Landing Mode 2',
+		name: 'Supply Depot Princess B Summer Landing Mode 2',
 		nameJP: '集積地棲姫II 夏季上陸mode',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8709,7 +8709,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1935: {
-		name: 'Supply Depot Princess B Summer-Landing Mode 3',
+		name: 'Supply Depot Princess B Summer Landing Mode 3',
 		nameJP: '集積地棲姫II 夏季上陸mode',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8726,7 +8726,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1936: {
-		name: 'Supply Depot Princess B Summer-Landing Mode - Damaged 1',
+		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 1',
 		nameJP: '集積地棲姫II 夏季上陸mode-壊',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8743,7 +8743,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1937: {
-		name: 'Supply Depot Princess B Summer-Landing Mode - Damaged 2',
+		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 2',
 		nameJP: '集積地棲姫II 夏季上陸mode-壊',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8760,7 +8760,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1938: {
-		name: 'Supply Depot Princess B Summer-Landing Mode - Damaged 3',
+		name: 'Supply Depot Princess B Summer Landing Mode - Damaged 3',
 		nameJP: '集積地棲姫II 夏季上陸mode-壊',
 		image: 'SArchH.jpg',
 		type: 'Installation',
@@ -8777,7 +8777,7 @@ var SHIPDATA = {
 		EQUIPS: [565, 565, 562, 541],
 	},
 	1939: {
-		name: 'Goto Islands Seafloor Princess 1',
+		name: 'Gotou Islands Seabed Princess 1',
 		nameJP: '五島沖海底姫',
 		image: 'S1939.jpg',
 		type: 'SS',
@@ -8794,7 +8794,7 @@ var SHIPDATA = {
 		EQUIPS: [593, 593, 541, 605],
 	},
 	1940: {
-		name: 'Goto Islands Seafloor Princess 2',
+		name: 'Gotou Islands Seabed Princess 2',
 		nameJP: '五島沖海底姫',
 		image: 'S1939.jpg',
 		type: 'SS',
@@ -8811,7 +8811,7 @@ var SHIPDATA = {
 		EQUIPS: [593, 593, 541, 605],
 	},
 	1941: {
-		name: 'Goto Islands Seafloor Princess 3',
+		name: 'Gotou Islands Seabed Princess 3',
 		nameJP: '五島沖海底姫',
 		image: 'S1939.jpg',
 		type: 'SS',
@@ -8828,7 +8828,7 @@ var SHIPDATA = {
 		EQUIPS: [593, 593, 541, 605],
 	},
 	1942: {
-		name: 'Goto Islands Seafloor Princess - Damaged 1',
+		name: 'Gotou Islands Seabed Princess - Damaged 1',
 		nameJP: '五島沖海底姫-壊',
 		image: 'S1942.jpg',
 		type: 'SS',
@@ -8845,7 +8845,7 @@ var SHIPDATA = {
 		EQUIPS: [593, 593, 541, 605],
 	},
 	1943: {
-		name: 'Goto Islands Seafloor Princess - Damaged 2',
+		name: 'Gotou Islands Seabed Princess - Damaged 2',
 		nameJP: '五島沖海底姫-壊',
 		image: 'S1942.jpg',
 		type: 'SS',
@@ -8862,7 +8862,7 @@ var SHIPDATA = {
 		EQUIPS: [593, 593, 541, 605],
 	},
 	1944: {
-		name: 'Goto Islands Seafloor Princess - Damaged 3',
+		name: 'Gotou Islands Seabed Princess - Damaged 3',
 		nameJP: '五島沖海底姫-壊',
 		image: 'S1942.jpg',
 		type: 'SS',

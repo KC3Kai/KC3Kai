@@ -1109,7 +1109,10 @@
 										const synergyName = (idList && idList.length === 1) ?
 											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
 											KC3Meta.term(flag.toCamelCase(true));
-										$(".synergyType", synergyFlag).html(synergyName);
+										const synergyNameList = idList.map(id =>
+											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`);
+										$(".synergyType", synergyFlag).html(synergyName)
+											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);
 									});
 									
@@ -1263,16 +1266,18 @@
 									maxLengFromEquips = !equipMasters.length ? 0 : maxEquipStat("leng"),
 									maxLeng = Math.max(masterLeng, maxLengFromEquips);
 								$(".ship_stat_text", statBox).text(
-									rangeEnNames[maxLeng] || "n/a"
-								).attr("title", maxLeng);
+									rangeEnNames[maxLeng] || "None"
+								).attr("title", "{0} = max({1}, {2})"
+									.format(maxLeng, masterLeng, maxLengFromEquips)
+								);
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
 								$(".ship_stat_min", statBox).text(masterLeng);
 								$(".ship_stat_max span", statBox).text(maxLengFromEquips);
 								// Different color to indicate mismatched values between internal and max of equipment
 								if(maxLengFromEquips > 0 && masterLeng !== maxLengFromEquips){
-									$(".ship_stat_text", statBox).css("color", "orange")
-										.attr("title", "{0} => {1}".format(masterLeng, maxLengFromEquips));
+									$(".ship_stat_text", statBox).css("color",
+										masterLeng > maxLengFromEquips ? "blue" : "orangered");
 								}
 							} else if(stat[0] === "if"){
 								// Compute fighter air power based on known slots
