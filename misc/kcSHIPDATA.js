@@ -4774,7 +4774,7 @@ var SHIPDATA = {
 		LOS: 0,
 		LUK: 1,
 		unknownstats: true,
-		RNG: 1,
+		RNG: 4,
 		SPD: 0,
 		SLOTS: [0, 0, 0, 64],
 		EQUIPS: [565, 565, 567, 575]
@@ -8686,7 +8686,7 @@ var SHIPDATA = {
 		AA: 60,
 		AR: 30,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 48, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8703,7 +8703,7 @@ var SHIPDATA = {
 		AA: 70,
 		AR: 120,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 64, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8720,7 +8720,7 @@ var SHIPDATA = {
 		AA: 80,
 		AR: 170,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 88, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8737,7 +8737,7 @@ var SHIPDATA = {
 		AA: 70,
 		AR: 60,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 64, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8754,7 +8754,7 @@ var SHIPDATA = {
 		AA: 80,
 		AR: 160,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 88, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8771,7 +8771,7 @@ var SHIPDATA = {
 		AA: 90,
 		AR: 230,
 		unknownstats: true,
-		RNG: 2,
+		RNG: 3,
 		SPD: 0,
 		SLOTS: [0, 0, 98, 0],
 		EQUIPS: [565, 565, 562, 541],
@@ -8994,26 +8994,6 @@ var SHIPDATA = {
 		SLOTS: [0, 0, 0, 0],
 		EQUIPS: [591, 591, 541, 603],
 	},
-	1952: {
-		name: 'DD Na-Class Late Model II Flagship',
-		nameJP: '駆逐ナ級後期型II',
-		image: 'S1952.jpg',
-		type: 'DD',
-		HP: 69,
-		FP: 89,
-		TP: 123,
-		AA: 96,
-		AR: 1,
-		EV: 0,
-		ASW: 0,
-		LOS: 0,
-		LUK: 1,
-		unknownstats: true,
-		RNG: 2,
-		SPD: 10,
-		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [591, 591, 541, 603],
-	},
 
 };
 
@@ -9035,9 +9015,10 @@ for(const s in SHIPDATA) {
 		as.api_luck  = SHIPDATA[s].LUK || 0;
 		as.api_leng  = SHIPDATA[s].RNG;
 		as.api_soku  = SHIPDATA[s].SPD;
-		as.kc3_evas  = SHIPDATA[s].EV  || 0;
+		as.kc3_evas  = SHIPDATA[s].EV  || 0;172
 		as.kc3_asw   = SHIPDATA[s].ASW || 0;
 		as.kc3_los   = SHIPDATA[s].LOS || 0;
+		as.kc3_tacc  = SHIPDATA[s].TACC || 0;
 		as.api_maxeq = SHIPDATA[s].SLOTS;
 		as.kc3_slots = SHIPDATA[s].EQUIPS;
 		aby[s] = as;

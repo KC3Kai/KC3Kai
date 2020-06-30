@@ -1245,6 +1245,10 @@
 							["ar", "souk", "ShipArmor"],
 							["tp", "raig", "ShipTorpedo"],
 							["aa", "tyku", "ShipAntiAir"],
+							["as", "tais", "ShipAsw"/*, "kc3_asw"*/],
+							["ev", "houk", "ShipEvasion"/*, "kc3_evas"*/],
+							["ht", "houm", "ShipAccuracy"/*, "kc3_tacc"*/],
+							["ls", "saku", "ShipLos"/*, "kc3_los"*/],
 							["sp", "soku", "ShipSpeed"],
 							["rn", "leng", "ShipLength"],
 							["if", "airpow"],
@@ -1288,15 +1292,27 @@
 								$(".ship_stat_max", statBox).hide();
 							} else {
 								// Priority to show master stats recorded by encounters db
-								const masterStat = enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]];
-								$(".ship_stat_min", statBox).text(masterStat);
+								let masterStat = enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]];
+								// Show those hidden stats in db partially, but not included in master data
+								let isUnknownStat = false;
+								if(masterStat === undefined && !!stat[3]) {
+									masterStat = abyssMaster[stat[3]] || undefined;
+									isUnknownStat = true;
+								}
+								if(masterStat === undefined){
+									$(".ship_stat_min", statBox).text("-");
+									masterStat = 0
+									isUnknownStat = true;
+								} else {
+									$(".ship_stat_min", statBox).text(masterStat);
+								}
 								if(!equipMasters.length || stat[0] === "hp"){
 									$(".ship_stat_max", statBox).hide();
 								} else {
 									$(".ship_stat_max span", statBox).text(masterStat + sumEquipTotalStat(stat[1]));
 								}
 								// Check diff for updating internal db: `abyssal_stats.json`
-								if(enemyDbStats && (!abyssDb ||
+								if(!isUnknownStat && enemyDbStats && (!abyssDb ||
 									typeof abyssDb["api_" + stat[1]] === "undefined" ||
 									enemyDbStats[stat[0]] != abyssDb["api_" + stat[1]])){
 									// Different color to indicate stats attribute to be updated
