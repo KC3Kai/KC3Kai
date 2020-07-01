@@ -1301,7 +1301,7 @@
 								}
 								if(masterStat === undefined){
 									$(".ship_stat_min", statBox).text("-");
-									masterStat = 0
+									masterStat = 0;
 									isUnknownStat = true;
 								} else {
 									$(".ship_stat_min", statBox).text(masterStat);
