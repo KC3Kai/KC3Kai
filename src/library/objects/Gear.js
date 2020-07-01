@@ -3928,6 +3928,8 @@ KC3改 Equipment Object
 					"54": "1",
 					// Kamikaze Class
 					"66": "1",
+					// Matsu Class
+					"101": "1",
 					// Kuma Class
 					"4": {
 						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
