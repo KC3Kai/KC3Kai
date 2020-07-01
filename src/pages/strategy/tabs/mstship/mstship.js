@@ -996,6 +996,7 @@
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
 									found = true;
 									if (!bonus.minStars) {
+						// TODO: for all following `.single || .multiple`, should merge them instead of OR, and show a 'one-time' indicator
 										bonusStats = bonus.single || bonus.multiple;
 										totalStats = addObjects(totalStats, bonusStats);
 										if (bonus.synergy) { synergyGear.push(bonus.synergy); }
@@ -1109,7 +1110,10 @@
 										const synergyName = (idList && idList.length === 1) ?
 											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
 											KC3Meta.term(flag.toCamelCase(true));
-										$(".synergyType", synergyFlag).html(synergyName);
+										const synergyNameList = idList.map(id =>
+											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`);
+										$(".synergyType", synergyFlag).html(synergyName)
+											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);
 									});
 									
@@ -1241,6 +1245,10 @@
 							["ar", "souk", "ShipArmor"],
 							["tp", "raig", "ShipTorpedo"],
 							["aa", "tyku", "ShipAntiAir"],
+							["as", "tais", "ShipAsw"/*, "kc3_asw"*/],
+							["ev", "houk", "ShipEvasion"/*, "kc3_evas"*/],
+							["ht", "houm", "ShipAccuracy"/*, "kc3_tacc"*/],
+							["ls", "saku", "ShipLos"/*, "kc3_los"*/],
 							["sp", "soku", "ShipSpeed"],
 							["rn", "leng", "ShipLength"],
 							["if", "airpow"],
@@ -1263,16 +1271,18 @@
 									maxLengFromEquips = !equipMasters.length ? 0 : maxEquipStat("leng"),
 									maxLeng = Math.max(masterLeng, maxLengFromEquips);
 								$(".ship_stat_text", statBox).text(
-									rangeEnNames[maxLeng] || "n/a"
-								).attr("title", maxLeng);
+									rangeEnNames[maxLeng] || "None"
+								).attr("title", "{0} = max({1}, {2})"
+									.format(maxLeng, masterLeng, maxLengFromEquips)
+								);
 								$(".ship_stat_text", statBox).show();
 								$(".ship_stat_value", statBox).hide();
 								$(".ship_stat_min", statBox).text(masterLeng);
 								$(".ship_stat_max span", statBox).text(maxLengFromEquips);
 								// Different color to indicate mismatched values between internal and max of equipment
 								if(maxLengFromEquips > 0 && masterLeng !== maxLengFromEquips){
-									$(".ship_stat_text", statBox).css("color", "orange")
-										.attr("title", "{0} => {1}".format(masterLeng, maxLengFromEquips));
+									$(".ship_stat_text", statBox).css("color",
+										masterLeng > maxLengFromEquips ? "blue" : "orangered");
 								}
 							} else if(stat[0] === "if"){
 								// Compute fighter air power based on known slots
@@ -1282,15 +1292,27 @@
 								$(".ship_stat_max", statBox).hide();
 							} else {
 								// Priority to show master stats recorded by encounters db
-								const masterStat = enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]];
-								$(".ship_stat_min", statBox).text(masterStat);
+								let masterStat = enemyDbStats ? enemyDbStats[stat[0]] : abyssMaster["api_" + stat[1]];
+								// Show those hidden stats in db partially, but not included in master data
+								let isUnknownStat = false;
+								if(masterStat === undefined && !!stat[3]) {
+									masterStat = abyssMaster[stat[3]] || undefined;
+									isUnknownStat = true;
+								}
+								if(masterStat === undefined){
+									$(".ship_stat_min", statBox).text("-");
+									masterStat = 0;
+									isUnknownStat = true;
+								} else {
+									$(".ship_stat_min", statBox).text(masterStat);
+								}
 								if(!equipMasters.length || stat[0] === "hp"){
 									$(".ship_stat_max", statBox).hide();
 								} else {
 									$(".ship_stat_max span", statBox).text(masterStat + sumEquipTotalStat(stat[1]));
 								}
 								// Check diff for updating internal db: `abyssal_stats.json`
-								if(enemyDbStats && (!abyssDb ||
+								if(!isUnknownStat && enemyDbStats && (!abyssDb ||
 									typeof abyssDb["api_" + stat[1]] === "undefined" ||
 									enemyDbStats[stat[0]] != abyssDb["api_" + stat[1]])){
 									// Different color to indicate stats attribute to be updated
