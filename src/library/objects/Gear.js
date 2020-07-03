@@ -800,13 +800,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Taiyou Class
 					"76": {
-						multiple: { "houg": 1, "tais": 2 },
+						multiple: { "houg": 2, "tais": 3 },
 					},
 					// Kasugamaru Class
 					"75": "76",
 					// Houshou Class
 					"27": {
-						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 2, "tais": 2, "houk": 2 },
 					},
 				},
 				byShip: {
@@ -821,13 +821,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Taiyou Class
 					"76": {
-						multiple: { "houg": 1, "tyku": 1, "tais": 2, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 1, "tais": 5, "houk": 1 },
 					},
 					// Kasugamaru Class
 					"75": "76",
 					// Houshou Class
 					"27": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						multiple: { "houg": 3, "tyku": 3, "tais": 4, "houk": 4 },
 					},
 				},
 				byShip: {
