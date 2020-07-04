@@ -4113,6 +4113,47 @@ ABYSS FLEET
 	height:20px;
 	vertical-align:top;
 }
+.module.fleet .lship .locktag,
+.module.fleet .sship .locktag {
+	width:13px;
+	height:13px;
+	line-height:10px;
+	float:left;
+	position:absolute;
+	left:66px;
+	top: 41px;
+	z-index:1;
+	overflow:hidden;
+	border-radius:50%;
+	border:1px #fff solid;
+	color:#fff;
+	background:#aaa;
+	opacity:0.8;
+	font-size:10px;
+	text-align:center;
+	pointer-events:none;
+	display:none;
+}
+.module.fleet .sship .locktag {
+	left:74px;
+	top: 16px;
+}
+.v .module.fleet .lship .locktag {
+	left:40px;
+	top: 2px;
+}
+.c .module.fleet .lship .locktag {
+	left:40px;
+	top: 36px;
+}
+.v .module.fleet .sship .locktag {
+	left:74px;
+	top: 21px;
+}
+.c .module.fleet .sship .locktag {
+	left:35px;
+	top: 21px;
+}
 .module.fleet .lship .ship_col1 {
 	width:120px;
 	height:41px;

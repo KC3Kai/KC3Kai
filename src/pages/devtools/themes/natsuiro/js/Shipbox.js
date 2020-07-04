@@ -19,6 +19,9 @@
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
 		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
+		
+		this.eventLockPlans = JSON.parse(localStorage.lock_plan || "[]");
+		this.lockTagColors = KC3Meta.eventLockingTagColors("legacy");
 	};
 	
 	/* SET SHIP
@@ -120,6 +123,25 @@
 			$(".mvp_icon", this.element).hide();
 		}
 		
+		// Event locking color tags
+		var tagColorId = this.shipData.sally || 0;
+		if(!tagColorId){
+			// Using the same 'find last occurence' logic with Strategy Room locking page
+			this.eventLockPlans.forEach((tagPlan, tagId) => {
+				if(Array.isArray(tagPlan) && tagPlan.includes(this.shipData.rosterId)){
+					tagColorId = tagId + 1;
+				}
+			});
+		}
+		if(tagColorId > 0){
+			$(".locktag .solid", this.element).text(this.shipData.sally || "");
+			$(".locktag", this.element).show()
+				.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")
+				.css("border-color", ConfigManager.pan_ship_icon_border);
+		} else {
+			$(".locktag", this.element).hide();
+		}
+		
 		return this;
 	};
 	
@@ -218,6 +240,7 @@
 		Array.numbers(0, Math.max(this.shipData.slotnum - 1, 3)).forEach(slot => {
 			this.showEquipment(slot);
 		});
+		
 		
 		return this.element;
 	};
