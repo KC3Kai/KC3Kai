@@ -4135,8 +4135,8 @@ ABYSS FLEET
 	display:none;
 }
 .module.fleet .sship .locktag {
-	left:74px;
-	top: 16px;
+	left:34px;
+	top: 28px;
 }
 .v .module.fleet .lship .locktag {
 	left:40px;
@@ -4147,8 +4147,8 @@ ABYSS FLEET
 	top: 36px;
 }
 .v .module.fleet .sship .locktag {
-	left:74px;
-	top: 21px;
+	left:33px;
+	top: 35px;
 }
 .c .module.fleet .sship .locktag {
 	left:35px;

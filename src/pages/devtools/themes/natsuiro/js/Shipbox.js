@@ -241,7 +241,6 @@
 			this.showEquipment(slot);
 		});
 		
-		
 		return this.element;
 	};
 	
