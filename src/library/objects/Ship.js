@@ -826,7 +826,9 @@ KC3改 Ship Object
 								const flagList = synergyCheck[checkIdx].flags;
 								for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
 									const equipFlag = flagList[flagIdx];
-									if (synergyGears[equipFlag] > 0) {
+									if (equipFlag.endsWith("Nonexist")) {
+										if (!synergyGears[equipFlag]) { break; }
+									} else if (synergyGears[equipFlag] > 0) {
 										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
 										synergyFlags.push(equipFlag);
 										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
@@ -860,6 +862,7 @@ KC3改 Ship Object
 				if (flag.includes("Radar")) { return 11; }
 				else if (flag.includes("Torpedo")) { return 5; }
 				else if (flag.includes("LargeGunMount")) { return 3; }
+				else if (flag.includes("MediumGunMount")) { return 2; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
@@ -2393,7 +2396,7 @@ KC3改 Ship Object
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658,
 			1921, 1922, 1923, 1924, 1925, 1926, // B
-			1933, 1934, 1935, 1936, 1937, 1938  // B Summer-Landing Mode
+			1933, 1934, 1935, 1936, 1937, 1938  // B Summer Landing Mode
 			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
@@ -2717,7 +2720,7 @@ KC3改 Ship Object
 				// but why Summer Supply Depot Princess not counted?
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
 				1921, 1922, 1923, 1924, 1925, 1926, // Supply Depot Princess B
-				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer-Landing Mode
+				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
 				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
 			].includes(targetShipMasterId);
@@ -3156,7 +3159,7 @@ KC3改 Ship Object
 						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
 				}
 				// special torpedo cut-in for late model submarine torpedo
-				const lateTorpedoCnt = this.countEquipment([213, 214]);
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
 					return KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75);
