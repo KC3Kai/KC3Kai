@@ -962,6 +962,7 @@
 					if (flag.includes("Radar")) { return 11; }
 					else if (flag.includes("Torpedo")) { return 5; }
 					else if (flag.includes("LargeGunMount")) { return 3; }
+					else if (flag.includes("MediumGunMount")) { return 2; }
 					return 0;
 				};
 				
@@ -1106,12 +1107,16 @@
 									syn.flags.map((flag) => {
 										const synergyFlag = $(".tab_mstship .factory .synergyFlag").clone();
 										$(".synergyIcon img", synergyFlag).attr("src", KC3Meta.itemIcon(synergyIcon(flag)));
-										const idList = synergyList[flag + "Ids"];
+										let idList = synergyList[flag + "Ids"];
+										if (flag.endsWith("Nonexist")) {
+											idList = synergyList[flag.replace(/Nonexist$/, "Ids")];
+											$(".synergyIcon span", synergyFlag).html("&nbsp;-");
+										}
 										const synergyName = (idList && idList.length === 1) ?
 											KC3Meta.gearName(KC3Master.slotitem(idList[0]).api_name) :
 											KC3Meta.term(flag.toCamelCase(true));
-										const synergyNameList = idList.map(id =>
-											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`);
+										const synergyNameList = Array.isArray(idList) ? idList.map(id =>
+											`[${id}] ${KC3Meta.gearName(KC3Master.slotitem(id).api_name)}`) : [];
 										$(".synergyType", synergyFlag).html(synergyName)
 											.attr("title", synergyNameList.join("\n"));
 										$(".synergyFlags", synergyBox).append(synergyFlag);
@@ -1123,7 +1128,7 @@
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
 											$(".synergyType", synergyBox).append(
-												$("<span>*</span>").attr("title", "Bonus with * mark effected only once")
+												$("<span>*</span>").attr("title", "Not effect at the same time with synergy of this combination")
 											);
 										}
 										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);
