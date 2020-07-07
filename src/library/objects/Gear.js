@@ -79,7 +79,11 @@ KC3改 Equipment Object
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 				tripleLargeGunMountK2: 0,
+				tripleLargeGunMountK2Nonexist: 1,
 				tripleLargeGunMountK2Ids: [290],
+				twin203MediumGunMountNo2: 0,
+				twin203MediumGunMountNo2Nonexist: 1,
+				twin203MediumGunMountNo2Ids: [90],
 			},
 			// Ryuusei
 			"18": {
@@ -1598,7 +1602,7 @@ KC3改 Equipment Object
 							multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 							synergy: {
 								flags: [ "airRadar" ],
-								distinct: { "tyku": 2, "houk": 3 },
+								single: { "tyku": 2, "houk": 3 },
 							},
 						},
 						// extra +1 fp, +3 acc for Ise Class Kai Ni
@@ -1633,7 +1637,7 @@ KC3改 Equipment Object
 								// `distinct` means only 1 set takes effect at the same time,
 								// not stackable with 41cm Triple K2's air radar synergy
 								// see https://twitter.com/KennethWWKK/status/1098960971865894913
-								flags: [ "airRadar" ],
+								flags: [ "tripleLargeGunMountK2Nonexist", "airRadar" ],
 								distinct: { "tyku": 2, "houk": 3, "houm": 1 },
 							},
 						},
@@ -1963,24 +1967,41 @@ KC3改 Equipment Object
 			// 20.3cm (No.2) Twin Gun Mount
 			"90": {
 				count: 0,
-				byShip: [
-					{
-						// Radar synergy with following ships:
-						// Kinugasa K2, Aoba Kai, Furutaka K2, Kako K2
-						ids: [142, 264, 416, 417],
+				byClass: {
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "raig": 2, "houk": 2 },
 						},
 					},
+					// Aoba Class
+					"13": "7",
+					// Takao Class
+					"8": {
+						multiple: { "houg": 1 },
+					},
+					// Mogami Class
+					"9": "8",
+					// Myoukou Class
+					"29": "8",
+					// Tone Class
+					"31": "8",
+				},
+				byShip: [
 					{
-						// Aoba Kai, extra Air Radar synergy
-						ids: [264],
-						multiple: { "houg": 1, "tyku": 1 },
+						// Aoba all remodels extra Air Radar synergy
+						origins: [61],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "tyku": 5, "houk": 2 },
 						},
+					},
+					{
+						// Aoba Kai, extra +1 fp, +1 aa
+						ids: [264],
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Kinugasa Kai Ni
@@ -1988,11 +2009,54 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "houk": 1 },
 					},
 					{
-						// Furutaka Kai Ni, Kako Kai Ni
-						ids: [416, 417],
+						// Kinukasa Kai, Furutaka Kai Ni, Kako Kai Ni
+						ids: [295, 416, 417],
 						multiple: { "houg": 1 },
 					},
 				],
+			},
+			// 20.3cm (No.3) Twin Gun Mount
+			"50": {
+				count: 0,
+				byClass: {
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1 },
+						synergy: {
+							// not stackable with No.2 gun's surface radar synergy
+							flags: [ "twin203MediumGunMountNo2Nonexist", "surfaceRadar" ],
+							distinct: { "houg": 1, "raig": 1, "houk": 1 },
+						},
+					},
+					// Aoba Class
+					"13": "7",
+					// Takao Class
+					"8": {
+						multiple: { "houg": 2, "houk": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "raig": 2, "houk": 2 },
+						},
+					},
+					// Myoukou Class
+					"29": "8",
+					// Mogami Class
+					"9": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 2, "houk": 2 },
+							},
+						},
+						{
+							multiple: { "houg": 1 },
+							minCount: 2,
+						},
+					],
+					// Tone Class
+					"31": "9",
+				},
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount
 			"340": {
@@ -3253,7 +3317,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Shimakaze Kai, one-time +5 AA for 2 guns
-							remodel: 2,
+							remodel: 1,
 							single: { "tyku": 2 },
 							minCount: 2,
 						},
@@ -3994,7 +4058,14 @@ KC3改 Equipment Object
 			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
 			if(synergyGears.submarineTorpedoLateModelIds.includes(gear.masterId)) synergyGears.submarineTorpedoLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
-			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) synergyGears.tripleLargeGunMountK2 += 1;
+			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) {
+				synergyGears.tripleLargeGunMountK2 += 1;
+				synergyGears.tripleLargeGunMountK2Nonexist = 0;
+			}
+			if(synergyGears.twin203MediumGunMountNo2Ids.includes(gear.masterId)) {
+				synergyGears.twin203MediumGunMountNo2 += 1;
+				synergyGears.twin203MediumGunMountNo2Nonexist = 0;
+			}
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}

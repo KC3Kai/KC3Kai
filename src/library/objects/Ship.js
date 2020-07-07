@@ -826,7 +826,9 @@ KC3改 Ship Object
 								const flagList = synergyCheck[checkIdx].flags;
 								for (let flagIdx = 0; flagIdx < flagList.length; flagIdx++) {
 									const equipFlag = flagList[flagIdx];
-									if (synergyGears[equipFlag] > 0) {
+									if (equipFlag.endsWith("Nonexist")) {
+										if (!synergyGears[equipFlag]) { break; }
+									} else if (synergyGears[equipFlag] > 0) {
 										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
 										synergyFlags.push(equipFlag);
 										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
@@ -860,6 +862,7 @@ KC3改 Ship Object
 				if (flag.includes("Radar")) { return 11; }
 				else if (flag.includes("Torpedo")) { return 5; }
 				else if (flag.includes("LargeGunMount")) { return 3; }
+				else if (flag.includes("MediumGunMount")) { return 2; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
