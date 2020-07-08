@@ -51,7 +51,7 @@ KC3改 Equipment Object
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20200529 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20200630 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -74,10 +74,16 @@ KC3改 Equipment Object
 				tripleTorpedoOxygenLateModelIds: [125, 285],
 				quadrupleTorpedoOxygenLateModel: 0,
 				quadrupleTorpedoOxygenLateModelIds: [15, 286],
+				submarineTorpedoLateModel: 0,
+				submarineTorpedoLateModelIds: [213, 214, 383],
 				kamikazeTwinTorpedo: 0,
 				kamikazeTwinTorpedoIds: [174],
 				tripleLargeGunMountK2: 0,
+				tripleLargeGunMountK2Nonexist: 1,
 				tripleLargeGunMountK2Ids: [290],
+				twin203MediumGunMountNo2: 0,
+				twin203MediumGunMountNo2Nonexist: 1,
+				twin203MediumGunMountNo2Ids: [90],
 			},
 			// Ryuusei
 			"18": {
@@ -798,13 +804,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Taiyou Class
 					"76": {
-						multiple: { "houg": 1, "tais": 2 },
+						multiple: { "houg": 2, "tais": 3 },
 					},
 					// Kasugamaru Class
 					"75": "76",
 					// Houshou Class
 					"27": {
-						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 2, "tais": 2, "houk": 2 },
 					},
 				},
 				byShip: {
@@ -819,13 +825,13 @@ KC3改 Equipment Object
 				byClass: {
 					// Taiyou Class
 					"76": {
-						multiple: { "houg": 1, "tyku": 1, "tais": 2, "houk": 1 },
+						multiple: { "houg": 2, "tyku": 1, "tais": 5, "houk": 1 },
 					},
 					// Kasugamaru Class
 					"75": "76",
 					// Houshou Class
 					"27": {
-						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						multiple: { "houg": 3, "tyku": 3, "tais": 4, "houk": 4 },
 					},
 				},
 				byShip: {
@@ -1395,7 +1401,9 @@ KC3改 Equipment Object
 					// Colorado Class
 					"93": "95",
 					// Atlanta Class
-					"99": "95"
+					"99": "95",
+					// South Dakota Class
+					"102": "95",
 				},
 			},
 			// O Type Observation Autogyro Kai
@@ -1594,7 +1602,7 @@ KC3改 Equipment Object
 							multiple: { "houg": 2, "tyku": 2, "houk": 1 },
 							synergy: {
 								flags: [ "airRadar" ],
-								distinct: { "tyku": 2, "houk": 3 },
+								single: { "tyku": 2, "houk": 3 },
 							},
 						},
 						// extra +1 fp, +3 acc for Ise Class Kai Ni
@@ -1629,7 +1637,7 @@ KC3改 Equipment Object
 								// `distinct` means only 1 set takes effect at the same time,
 								// not stackable with 41cm Triple K2's air radar synergy
 								// see https://twitter.com/KennethWWKK/status/1098960971865894913
-								flags: [ "airRadar" ],
+								flags: [ "tripleLargeGunMountK2Nonexist", "airRadar" ],
 								distinct: { "tyku": 2, "houk": 3, "houm": 1 },
 							},
 						},
@@ -1837,6 +1845,71 @@ KC3改 Equipment Object
 					],
 					// Colorado
 					"93": "65",
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+			},
+			// 16inch Triple Gun Mount Mk.6 mod.2
+			"385": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Large Main Gun:
+					// Iowa
+					"65": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Any FBB
+					stypes: [8],
+					multiple: { "houg": 1 },
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -1894,24 +1967,41 @@ KC3改 Equipment Object
 			// 20.3cm (No.2) Twin Gun Mount
 			"90": {
 				count: 0,
-				byShip: [
-					{
-						// Radar synergy with following ships:
-						// Kinugasa K2, Aoba Kai, Furutaka K2, Kako K2
-						ids: [142, 264, 416, 417],
+				byClass: {
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "raig": 2, "houk": 2 },
 						},
 					},
+					// Aoba Class
+					"13": "7",
+					// Takao Class
+					"8": {
+						multiple: { "houg": 1 },
+					},
+					// Mogami Class
+					"9": "8",
+					// Myoukou Class
+					"29": "8",
+					// Tone Class
+					"31": "8",
+				},
+				byShip: [
 					{
-						// Aoba Kai, extra Air Radar synergy
-						ids: [264],
-						multiple: { "houg": 1, "tyku": 1 },
+						// Aoba all remodels extra Air Radar synergy
+						origins: [61],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "tyku": 5, "houk": 2 },
 						},
+					},
+					{
+						// Aoba Kai, extra +1 fp, +1 aa
+						ids: [264],
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Kinugasa Kai Ni
@@ -1919,11 +2009,54 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "houk": 1 },
 					},
 					{
-						// Furutaka Kai Ni, Kako Kai Ni
-						ids: [416, 417],
+						// Kinukasa Kai, Furutaka Kai Ni, Kako Kai Ni
+						ids: [295, 416, 417],
 						multiple: { "houg": 1 },
 					},
 				],
+			},
+			// 20.3cm (No.3) Twin Gun Mount
+			"50": {
+				count: 0,
+				byClass: {
+					// Furutaka Class
+					"7": {
+						multiple: { "houg": 1 },
+						synergy: {
+							// not stackable with No.2 gun's surface radar synergy
+							flags: [ "twin203MediumGunMountNo2Nonexist", "surfaceRadar" ],
+							distinct: { "houg": 1, "raig": 1, "houk": 1 },
+						},
+					},
+					// Aoba Class
+					"13": "7",
+					// Takao Class
+					"8": {
+						multiple: { "houg": 2, "houk": 1 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "raig": 2, "houk": 2 },
+						},
+					},
+					// Myoukou Class
+					"29": "8",
+					// Mogami Class
+					"9": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 2, "houk": 2 },
+							},
+						},
+						{
+							multiple: { "houg": 1 },
+							minCount: 2,
+						},
+					],
+					// Tone Class
+					"31": "9",
+				},
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount
 			"340": {
@@ -2069,7 +2202,9 @@ KC3改 Equipment Object
 					// Essex Class
 					"84": "67",
 					// Colorado Class
-					"93": "67"
+					"93": "67",
+					// South Dakota Class
+					"102": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -2143,6 +2278,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
+					// South Dakota Class
+					"102": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2187,6 +2324,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
+					// South Dakota Class
+					"102": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2231,6 +2370,8 @@ KC3改 Equipment Object
 					"93": "95",
 					// Atlanta Class
 					"99": "95",
+					// South Dakota Class
+					"102": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
@@ -2257,6 +2398,8 @@ KC3改 Equipment Object
 					"93": "95",
 					// Atlanta Class
 					"99": "95",
+					// South Dakota Class
+					"102": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
@@ -2468,6 +2611,62 @@ KC3改 Equipment Object
 					multiple: { "houg": 1, "raig": 3, "souk": 1 },
 				},
 			},
+			// Late Model 53cm Bow Torpedo Mount (8 tubes)
+			"383": {
+				count: 0,
+				byClass: {
+					// I-58 Class
+					"36": {
+						multiple: { "raig": 1 },
+					},
+					// I-400 Class
+					"44": {
+						multiple: { "raig": 2 },
+					},
+					// I-47 Class
+					"103": {
+						multiple: { "raig": 3 },
+					},
+				},
+				byShip: {
+					// I-47 Kai
+					ids: [607],
+					multiple: { "raig": 1 },
+				},
+			},
+			// Late Model Submarine Radar & Passive Radiolocator
+			"384": {
+				count: 0,
+				byClass: {
+					// I-58 Class
+					"36": {
+						multiple: { "houk": 2 },
+					},
+					// I-400 Class
+					"44": {
+						multiple: { "houk": 3 },
+					},
+					// I-47 Class
+					"103": {
+						multiple: { "houk": 3 },
+					},
+				},
+				byShip: [
+					{
+						// I-47 Kai
+						ids: [607],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Any ship who can equip it will get synergy +3 tp, +2 ev
+						stypes: [13, 14],
+						synergy: {
+							flags: [ "submarineTorpedoLateModel" ],
+							single: { "raig": 3, "houk": 2 },
+						},
+					},
+				],
+			},
 			// Type D Kai Kouhyouteki
 			"364": {
 				count: 0,
@@ -2630,6 +2829,20 @@ KC3改 Equipment Object
 							single: { "houg": 2, "houk": 3 },
 						},
 					},
+					// Matsu Class
+					"101": [
+						{
+							single: { "houg": 2, "tyku": 2 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 4, "houk": 3 },
+							},
+						},
+						// Make another object in order to compatible with mstship's `.single || .multiple` handling
+						{
+							multiple: { "houg": 1, "tyku": 2 },
+						},
+					]
 				},
 				byShip: [
 					{
@@ -2724,6 +2937,20 @@ KC3改 Equipment Object
 					"34": {
 						multiple: { "houg": 1, "tais": 1 },
 					},
+					// Matsu Class
+					"101": [
+						{
+							single: { "houg": 2, "tyku": 2 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 4, "houk": 3 },
+							},
+						},
+						// Make another object in order to compatible with mstship's `.single || .multiple` handling
+						{
+							multiple: { "houg": 1, "tyku": 2 },
+						},
+					],
 				},
 				byShip: [
 					{
@@ -2790,6 +3017,72 @@ KC3改 Equipment Object
 						// Tenryuu K2, Tatsuta K2, Yuubari K2,K2D extra +2 aa
 						ids: [477,     478,        622, 624],
 						multiple: { "tyku": 2 },
+					},
+				],
+			},
+			// 12cm Single High-angle Gun Mount Model E
+			"382": {
+				count: 0,
+				byClass: {
+					// Mutsuki Class
+					"28": {
+						multiple: { "tyku": 2, "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+					// Kamikaze Class
+					"66": "28",
+					// Matsu Class
+					"101": "28",
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tais": 1, "tyku": 2, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 3 },
+							},
+						],
+					},
+					{
+						// All remodels of: Yura, Naka, Kinu
+						origins: [23, 56, 113],
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Yura Kai, Naka Kai, Kinu Kai
+						ids: [220, 224, 289],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Yura Kai Ni, Naka Kai Ni, Kinu Kai Ni
+						ids: [488, 160, 487],
+						multiple: { "houk": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
 					},
 				],
 			},
@@ -3024,7 +3317,7 @@ KC3改 Equipment Object
 						},
 						{
 							// Shimakaze Kai, one-time +5 AA for 2 guns
-							remodel: 2,
+							remodel: 1,
 							single: { "tyku": 2 },
 							minCount: 2,
 						},
@@ -3229,6 +3522,8 @@ KC3改 Equipment Object
 					},
 					// Fletcher Class
 					"91": "87",
+					// South Dakota Class
+					"102": "87",
 				},
 				byShip: [
 					{
@@ -3266,7 +3561,9 @@ KC3改 Equipment Object
 					// Northampton Class
 					"95": "65",
 					// Atlanta Class
-					"99": "65"
+					"99": "65",
+					// South Dakota Class
+					"102": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -3289,6 +3586,8 @@ KC3改 Equipment Object
 					"95": "65",
 					// Atlanta Class
 					"99": "65",
+					// South Dakota Class
+					"102": "65",
 					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
@@ -3693,6 +3992,8 @@ KC3改 Equipment Object
 					"54": "1",
 					// Kamikaze Class
 					"66": "1",
+					// Matsu Class
+					"101": "1",
 					// Kuma Class
 					"4": {
 						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
@@ -3755,8 +4056,16 @@ KC3改 Equipment Object
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
 			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
+			if(synergyGears.submarineTorpedoLateModelIds.includes(gear.masterId)) synergyGears.submarineTorpedoLateModel += 1;
 			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
-			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) synergyGears.tripleLargeGunMountK2 += 1;
+			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) {
+				synergyGears.tripleLargeGunMountK2 += 1;
+				synergyGears.tripleLargeGunMountK2Nonexist = 0;
+			}
+			if(synergyGears.twin203MediumGunMountNo2Ids.includes(gear.masterId)) {
+				synergyGears.twin203MediumGunMountNo2 += 1;
+				synergyGears.twin203MediumGunMountNo2Nonexist = 0;
+			}
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}

@@ -184,6 +184,7 @@
                 case 148: // Musashi K2
                     return 3;
                 case 149: // Kongou K2C
+                case 150: // Hiei K2C
                     return 2;
                 default: return 0;
             }

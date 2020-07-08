@@ -468,7 +468,7 @@
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor);
 		$(".module.fleet").css("background", ConfigManager.pan_shiplist_bg);
 		$(".ship_img,.timer-img img").css("background", ConfigManager.pan_ship_icon_bg);
-		$(".ship_img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border);
+		$(".ship_img,.timer-img img").css("border", "1px solid " + ConfigManager.pan_ship_icon_border);
 
 		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
 		const shadowDirStr = (

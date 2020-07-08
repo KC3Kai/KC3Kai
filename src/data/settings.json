@@ -468,6 +468,12 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "ss_smooth",
+				"name" : "SettingsSSSmoothing",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "ss_directory",
 				"name" : "SettingsSSDirectory",
 				"type" : "long_text",
