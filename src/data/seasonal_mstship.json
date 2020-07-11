@@ -3518,11 +3518,11 @@
 	},
 	"5439": {
 		"api_id": 5439,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "記念日金剛改二丙",
+		"api_yomi": "こんごう",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5440": {
 		"api_id": 5440,
@@ -3542,31 +3542,32 @@
 	},
 	"5442": {
 		"api_id": 5442,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い朧",
+		"api_yomi": "おぼろ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5443": {
 		"api_id": 5443,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い曙",
+		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5444": {
 		"api_id": 5444,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い漣",
+		"api_yomi": "さざなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
-	},		"5445": {
+	},
+	"5445": {
 		"api_id": 5445,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い潮",
+		"api_yomi": "うしお",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2

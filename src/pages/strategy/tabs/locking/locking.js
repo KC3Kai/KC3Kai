@@ -12,7 +12,7 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
-            this.lockLimit = 6;
+            this.lockLimit = 9;
             this.heartLockMode = 2;
             this.showShipLevel = true;
         }
@@ -109,8 +109,8 @@
                 this.setStyleVar(`--lockColor${i + 1}`, color);
             });
             // try to auto adjust lock mode box width and margin
-            this.setStyleVar(`--lockModeWidth`, ([0, 0, 0, 0, 160, 130, 100][this.lockLimit] || 160) + "px");
-            this.setStyleVar(`--lockMarginRight`, ([0, 0, 0, 0, 10, 6, 15][this.lockLimit] || 10) + "px");
+            this.setStyleVar(`--lockModeWidth`, ([0, 0, 0, 0, 160, 130, 100, 90, 70, 70][this.lockLimit] || 70) + "px");
+            this.setStyleVar(`--lockMarginRight`, ([0, 0, 0, 0, 10, 6, 15, 8, 16, 6][this.lockLimit] || 6) + "px");
         }
 
         adjustHeight() {

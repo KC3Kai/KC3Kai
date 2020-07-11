@@ -62,6 +62,15 @@
 .tab_locking .lock_mode_6 {
 	background: var(--lockColor6) !important;
 }
+.tab_locking .lock_mode_7 {
+	background: var(--lockColor7) !important;
+}
+.tab_locking .lock_mode_8 {
+	background: var(--lockColor8) !important;
+}
+.tab_locking .lock_mode_9 {
+	background: var(--lockColor9) !important;
+}
 
 .tab_locking .map_area {
 	width:100%;
@@ -139,6 +148,7 @@
 	text-align:center;
 	color:#fff;
 	cursor:default;
+	overflow:hidden;
 }
 
 .tab_locking .shiplist_box {
