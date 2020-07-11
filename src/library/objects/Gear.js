@@ -990,6 +990,8 @@ KC3改 Equipment Object
 					"83": "69",
 					// Essex Class
 					"84": "69",
+					// Yorktown Class
+					"105": "69",
 					// Kaga Class
 					"3": {
 						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
@@ -1404,6 +1406,8 @@ KC3改 Equipment Object
 					"99": "95",
 					// South Dakota Class
 					"102": "95",
+					// St. Louis Class
+					"106": "95",
 				},
 			},
 			// O Type Observation Autogyro Kai
@@ -1894,7 +1898,7 @@ KC3改 Equipment Object
 					// South Dakota
 					"102": [
 						{
-							multiple: { "houg": 2, "houk": 1 },
+							multiple: { "houg": 2, "souk": 1 },
 						},
 						{
 							minStars: 6,
@@ -1910,6 +1914,62 @@ KC3改 Equipment Object
 					// Any FBB
 					stypes: [8],
 					multiple: { "houg": 1 },
+				},
+			},
+			// 16inch Triple Rapid Fire Gun Mount Mk.16
+			"386": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Medium Main Gun:
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Northampton
+					"95": "93",
+					// Atlanta
+					"99": "93",
+					// St. Louis
+					"106": "93",
+				},
+			},
+			// 16inch Triple Rapid Fire Gun Mount Mk.16 mod.2
+			"387": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Medium Main Gun:
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Northampton
+					"95": "93",
+					// Atlanta
+					"99": "93",
+					// St. Louis
+					"106": "93",
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -2205,6 +2265,10 @@ KC3改 Equipment Object
 					"93": "67",
 					// South Dakota Class
 					"102": "67",
+					// Yorktown Class
+					"105": "67",
+					// St. Louis Class
+					"106": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -2278,8 +2342,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
-					// South Dakota Class
-					"102": "99",
+					// St. Louis Class
+					"106": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2324,8 +2388,8 @@ KC3改 Equipment Object
 					},
 					// Northampton Class
 					"95": "99",
-					// South Dakota Class
-					"102": "99",
+					// St. Louis Class
+					"106": "99",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2372,6 +2436,10 @@ KC3改 Equipment Object
 					"99": "95",
 					// South Dakota Class
 					"102": "95",
+					// Yorktown Class
+					"105": "95",
+					// St. Louis Class
+					"106": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
@@ -2400,6 +2468,10 @@ KC3改 Equipment Object
 					"99": "95",
 					// South Dakota Class
 					"102": "95",
+					// Yorktown Class
+					"105": "95",
+					// St. Louis Class
+					"106": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
@@ -3522,8 +3594,8 @@ KC3改 Equipment Object
 					},
 					// Fletcher Class
 					"91": "87",
-					// South Dakota Class
-					"102": "87",
+					// St. Louis Class
+					"106": "87",
 				},
 				byShip: [
 					{
@@ -3564,6 +3636,10 @@ KC3改 Equipment Object
 					"99": "65",
 					// South Dakota Class
 					"102": "65",
+					// Yorktown Class
+					"105": "65",
+					// St. Louis Class
+					"106": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -3588,6 +3664,10 @@ KC3改 Equipment Object
 					"99": "65",
 					// South Dakota Class
 					"102": "65",
+					// Yorktown Class
+					"105": "65",
+					// St. Louis Class
+					"106": "65",
 					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
@@ -3855,6 +3935,8 @@ KC3改 Equipment Object
 					"91": "87",
 					// Atlanta Class
 					"99": "87",
+					// St. Louis Class
+					"106": "87",
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 1 },
@@ -3882,6 +3964,8 @@ KC3改 Equipment Object
 					"91": "87",
 					// Atlanta Class
 					"99": "87",
+					// St. Louis Class
+					"106": "87",
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 2 },
