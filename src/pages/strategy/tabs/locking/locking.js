@@ -34,14 +34,13 @@
         Places data onto the interface from scratch.
         ---------------------------------*/
         execute() {
+            this.tab = $(".tab_locking");
             this.addLockBoxes();
             this.loadLockModeColors();
             $(".map_area, .ships_area", $(".lock_modes")).empty();
             this.fillLockBoxes();
             this.setDroppable();
             this.switchToLockTab(this.currentTab);
-            
-            this.tab = $(".tab_locking");
             $(".selectTab", this.tab).on("click", (e) => {
                 const newTab = $(e.currentTarget).data("tab");
                 if (!!newTab && newTab !== this.currentTab) {
@@ -85,38 +84,39 @@
         }
 
         addLockBoxes() {
-            let currentTab = $('<div class="tabs tab_mo">').appendTo(".tab_locking .lock_modes");
+            const lockModesDiv = $(".lock_modes", this.tab);
+            let currentTab = $('<div class="tabs tab_mo"></div>').appendTo(lockModesDiv);
             for (let i = 0; i < this.lockLimit; i++) {
                 if (i + 1 === this.extraOpsStartFrom) {
-                    currentTab = $('<div class="tabs tab_eo">').appendTo(".tab_locking .lock_modes");
+                    currentTab = $('<div class="tabs tab_eo"></div>').appendTo(lockModesDiv);
                 }
-                const cElm = $(".factory .lock_mode", this.tab).clone()
+                const elm = $(".factory .lock_mode", this.tab).clone()
                     .appendTo(currentTab);
-                cElm.addClass("lock_mode_" + (i + 1));
-                $(".drop_area", cElm).attr("data-boxId", i);
+                elm.addClass("lock_mode_" + (i + 1));
+                $(".drop_area", elm).attr("data-boxId", i);
             }
             if (this.extraOpsStartFrom < 2 || this.extraOpsStartFrom > this.lockLimit) {
                 // No tabbed boxes needed, hide all control buttons
                 this.currentTab = "all";
-                $(".controls .selectTab.tab_all").hide();
-                $(".controls .selectTab.tab_mo").hide();
-                $(".controls .selectTab.tab_eo").hide();
+                $(".selectTab.tab_all", this.tab).hide();
+                $(".selectTab.tab_mo", this.tab).hide();
+                $(".selectTab.tab_eo", this.tab).hide();
             } else {
                 // Give up to auto fit buttons' name, because nobody can guarantee devs will not add 2 more tags to one MO map
-                //$(".controls .selectTab.tab_mo").text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
-                //$(".controls .selectTab.tab_eo").text("EO");
+                //$(".selectTab.tab_mo", this.tab).text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
+                //$(".selectTab.tab_eo", this.tab).text("EO");
             }
         }
 
         switchToLockTab(newTab) {
             this.currentTab = newTab;
-            $(".controls .selectTab").addClass("bscolor3");
-            $(".controls .selectTab.tab_" + this.currentTab).removeClass("bscolor3").addClass("bscolor1");
+            $(".selectTab", this.tab).addClass("bscolor3");
+            $(".selectTab.tab_" + this.currentTab, this.tab).removeClass("bscolor3").addClass("bscolor1");
             if (this.currentTab === "all") {
-                $(".tab_locking .lock_modes .tabs").show();
+                $(".lock_modes .tabs", this.tab).show();
             } else {
-                $(".tab_locking .lock_modes .tabs").hide();
-                $(".tab_locking .lock_modes .tab_" + this.currentTab).show();
+                $(".lock_modes .tabs", this.tab).hide();
+                $(".lock_modes .tab_" + this.currentTab, this.tab).show();
             }
             this.loadLockModeColors();
             this.adjustHeight();
