@@ -986,11 +986,11 @@
 				let bonusFound = false;
 				if (bonusList.length > 0) {
 					$.each(bonusList, function (idx, gear) {
-						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {};
+						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {}, classBonus = [];
 						
 						// Class bonuses
 						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
-							let classBonus = gear.byClass[shipData.api_ctype];
+							classBonus = gear.byClass[shipData.api_ctype];
 							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
 							classBonus = ensureArray(classBonus);
 							classBonus.forEach(bonus => {
@@ -1039,6 +1039,15 @@
 							if (list.length) {
 								for (const minStar in starBonus) {
 									starBonus[minStar] = Object.assign({}, totalStats);
+									// redo star bonuses from class if any, due to overwritten by new total stats of previous line
+									if (classBonus.length) {
+										for (const bonusDef of classBonus) {
+											if (bonusDef.minStars <= minStar) {
+												bonusStats = bonusDef.single || bonusDef.multiple;
+												starBonus[minStar] = addObjects(starBonus[minStar], bonusStats);
+											}
+										}
+									}
 									for (const bonusDef of list) {
 										if (bonusDef.minStars <= minStar) {
 											bonusStats = bonusDef.single || bonusDef.multiple;
