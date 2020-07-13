@@ -18,17 +18,30 @@
 	height:20px;
 	line-height:20px;
 	padding:0 10px;
-	float:right;
 	border-radius:5px;
 	font-size:12px;
 	font-weight:bold;
 	margin-left:10px;
+}
+.tab_locking .controls .left {
+	float:left;
+}
+.tab_locking .controls .right {
+	float:right;
 }
 
 /* LOCKING MODES
 ------------------------------*/
 .tab_locking .lock_modes {
 	width:680px;
+}
+.tab_locking .lock_modes .tabs {
+	width:100%;
+	height:auto;
+}
+.tab_locking .lock_modes .tab_mo {
+}
+.tab_locking .lock_modes .tab_eo {
 }
 .tab_locking .lock_mode {
 	width: var(--lockModeWidth);
@@ -38,10 +51,10 @@
 	margin-right: var(--lockMarginRight);
 }
 .tab_locking .lock_mode:first-child {
-	margin-left: 8px;
+	margin-left: var(--lockMarginRight);
 }
 .tab_locking .lock_mode:last-child {
-	margin-right: -8px;
+	margin-right: 0px;
 }
 
 .tab_locking .lock_mode_1 {

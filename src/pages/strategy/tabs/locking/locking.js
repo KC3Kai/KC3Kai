@@ -13,8 +13,10 @@
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
             this.lockLimit = 9;
+            this.extraOpsStartFrom = 5;
             this.heartLockMode = 2;
             this.showShipLevel = true;
+            this.currentTab = "all";
         }
 
         /* RELOAD
@@ -32,13 +34,20 @@
         Places data onto the interface from scratch.
         ---------------------------------*/
         execute() {
-            this.loadLockModeColors();
             this.addLockBoxes();
+            this.loadLockModeColors();
             $(".map_area, .ships_area", $(".lock_modes")).empty();
             this.fillLockBoxes();
             this.setDroppable();
+            this.switchToLockTab(this.currentTab);
             
             this.tab = $(".tab_locking");
+            $(".selectTab", this.tab).on("click", (e) => {
+                const newTab = $(e.currentTarget).data("tab");
+                if (!!newTab && newTab !== this.currentTab) {
+                    this.switchToLockTab(newTab);
+                }
+            });
             $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
             $(".toggleShipLevel", this.tab).on("click", (e) => {
                 this.showShipLevel = !this.showShipLevel;
@@ -76,12 +85,41 @@
         }
 
         addLockBoxes() {
+            let currentTab = $('<div class="tabs tab_mo">').appendTo(".tab_locking .lock_modes");
             for (let i = 0; i < this.lockLimit; i++) {
+                if (i + 1 === this.extraOpsStartFrom) {
+                    currentTab = $('<div class="tabs tab_eo">').appendTo(".tab_locking .lock_modes");
+                }
                 const cElm = $(".factory .lock_mode", this.tab).clone()
-                    .appendTo(".tab_locking .lock_modes");
+                    .appendTo(currentTab);
                 cElm.addClass("lock_mode_" + (i + 1));
                 $(".drop_area", cElm).attr("data-boxId", i);
             }
+            if (this.extraOpsStartFrom < 2 || this.extraOpsStartFrom > this.lockLimit) {
+                // No tabbed boxes needed, hide all control buttons
+                this.currentTab = "all";
+                $(".controls .selectTab.tab_all").hide();
+                $(".controls .selectTab.tab_mo").hide();
+                $(".controls .selectTab.tab_eo").hide();
+            } else {
+                // Give up to auto fit buttons' name, because nobody can guarantee devs will not add 2 more tags to one MO map
+                //$(".controls .selectTab.tab_mo").text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
+                //$(".controls .selectTab.tab_eo").text("EO");
+            }
+        }
+
+        switchToLockTab(newTab) {
+            this.currentTab = newTab;
+            $(".controls .selectTab").addClass("bscolor3");
+            $(".controls .selectTab.tab_" + this.currentTab).removeClass("bscolor3").addClass("bscolor1");
+            if (this.currentTab === "all") {
+                $(".tab_locking .lock_modes .tabs").show();
+            } else {
+                $(".tab_locking .lock_modes .tabs").hide();
+                $(".tab_locking .lock_modes .tab_" + this.currentTab).show();
+            }
+            this.loadLockModeColors();
+            this.adjustHeight();
         }
 
         clearAllPlannedLocks() {
@@ -109,8 +147,10 @@
                 this.setStyleVar(`--lockColor${i + 1}`, color);
             });
             // try to auto adjust lock mode box width and margin
-            this.setStyleVar(`--lockModeWidth`, ([0, 0, 0, 0, 160, 130, 100, 90, 70, 70][this.lockLimit] || 70) + "px");
-            this.setStyleVar(`--lockMarginRight`, ([0, 0, 0, 0, 10, 6, 15, 8, 16, 6][this.lockLimit] || 6) + "px");
+            const tabLockCount = this.currentTab === "all" ? this.lockLimit :
+                $(".tab_locking .lock_modes .tab_" + this.currentTab).children().length;
+            this.setStyleVar(`--lockModeWidth`, ([670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70) + "px");
+            this.setStyleVar(`--lockMarginRight`, ([5, 5, 20, 6, 10, 6, 13, 7, 15, 5][tabLockCount] || 5) + "px");
         }
 
         adjustHeight() {
