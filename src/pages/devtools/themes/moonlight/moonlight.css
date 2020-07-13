@@ -1458,6 +1458,7 @@ ABYSS FLEET
 	font-size: 11px;
 	height:14px;
 	line-height:10px;
+	z-index:2;
 }
 .module.activity .activity_quest .quest_list .quest {
 	display: flex;
