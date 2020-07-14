@@ -4354,7 +4354,8 @@
 					asw : asw,
 					los : los,
 					aa : aa,
-					fp : fp
+					fp : fp,
+					tp : tp
 				};
 			});
 
@@ -4628,6 +4629,15 @@
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
 				.toggle(ExpdReqPack.totalFp !== null);
+
+			setupJQObject(
+				ExpdReqPack.totalTorp,
+				ExpdCheckerResult.totalTorp,
+				Math.floor(fleet.map(f => f.tp).sumValues()),
+				$(".module.activity .activity_expeditionPlanner .totalTorp")
+			);
+			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
+				.toggle(ExpdReqPack.totalTorp !== null);
 
 			setupJQObject(
 				ExpdReqPack.fleetSType,

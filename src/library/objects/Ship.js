@@ -811,9 +811,8 @@ KC3改 Ship Object
 						if (check.classes && !check.classes.includes(ctype)) { continue; }
 						// Known issue: exact corresponding stars will not be found since identical equipment merged
 						if (check.minStars && allGears.find(matchGearByMstId).stars < check.minStars) { continue; }
-						flag = true;
-						if (check.single) { gear.count = 1; }
-						if (check.multiple) { gear.count = count; }
+						if (check.single) { gear.count = 1; flag = true; }
+						if (check.multiple) { gear.count = count; flag = true; }
 						// countCap/minCount take priority
 						if (check.countCap) { gear.count = Math.min(check.countCap, count); }
 						if (check.minCount) { gear.count = count; }
@@ -835,6 +834,7 @@ KC3改 Ship Object
 									}
 								}
 							}
+							flag |= synergyFlags.length > 0;
 						}
 					}
 				}
