@@ -490,15 +490,13 @@
 		mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind");
 		mode_flashbang.push(            "skin_flashbang","tip_natsuiro", "ep_colorblind");
 		
-		var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang]
+		var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang];
 		var mode_selection = mode_select[ConfigManager.pan_moon_skin];
 		var select_this;
 		
 		function style_select(array_no,css_element,select_this,custom_selection,css_type) {
 			select_this = select_this == "auto" ? mode_selection[array_no] : select_this;
-			select_this == "custom" ? 
-				$(css_element).css(css_type, custom_selection) :
-				$(css_element).addClass(select_this);
+			select_this == "custom" ? $(css_element).css(css_type, custom_selection) : $(css_element).addClass(select_this);
 		}
 
 		// ================= //
@@ -4444,10 +4442,6 @@
 				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0],
-					aa = ship.aa[0],
-					fp = ship.fp[0],
-					tp = ship.tp[0];
 				var los = ship.ls[0],
 					aa = ship.aa[0],
 					fp = ship.fp[0],
