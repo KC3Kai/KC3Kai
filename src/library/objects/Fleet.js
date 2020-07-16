@@ -251,7 +251,7 @@ Contains summary information about a fleet and its ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
-	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false){
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = true){
 		const stats = {
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
@@ -271,23 +271,25 @@ Contains summary information about a fleet and its ships
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else {
-				// asw with equipment is a special case, only some equip types counted
+			} else if(!forExped) {
+				// asw with equipment is a special case, only some equip types counted. The types see:
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), !!includeImproveType, includeImproveType === "exped");
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, false);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
-			if(includeImproveType) {
-				// TODO use accurate types
-				ship.equipment(true).forEach(gear => {
-					ss.fp += gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire");
-					ss.tp += gear.attackPowerImprovementBonus("torpedo");
-					ss.aa += gear.aaStatImprovementBonus();
-					//ss.ar += gear.armorStatImprovementBonus();
-					ss.ev += gear.evaStatImprovementBonus(includeImproveType);
-					ss.ls += gear.losStatImprovementBonus();
-					ss.ht += gear.accStatImprovementBonus(includeImproveType);
+			if (includeImproveType) {
+				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
+					const bonus = {
+						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
+						tp: gear.attackPowerImprovementBonus("torpedo"),
+						aa: gear.aaStatImprovementBonus(includeImproveType),
+						as: gear.aswStatImprovementBonus(includeImproveType),
+						ev: gear.evaStatImprovementBonus(includeImproveType),
+						ls: gear.losStatImprovementBonus(includeImproveType),
+						ht: gear.accStatImprovementBonus(includeImproveType),
+					};
+					Object.keys(bonus).forEach(key => ss[key] += bonus[key]);
 				});
 			}
 			Object.keys(stats).forEach(stat => {
@@ -1043,19 +1045,24 @@ Contains summary information about a fleet and its ships
 	
 	/**
 	 * (UNUSED) The modifier by maps should be applied to equipment eLoS since game phase 2.
-	 * @return 1 by default. Other values are still investigating, missing summarized data.
-	 * @see https://docs.google.com/spreadsheets/d/1KC-hAbxkExKy2RJ1uf32BCJI8hNyNc3Cz4QidGkZ4TQ
+	 * @return 1 by default, just like it used by 2-5.
+	 * @see https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#coefficient_node
 	 */
 	KC3Fleet.nodeDivaricatedFactorByMap = function(world, map){
 		const mapKey = map === undefined ? String(world) : [world, map].join("");
 		return ({
 			"16": 3,
+			"25": 1,
 			"35": 4,
+			"45": 2,
 			"52": 2,
+			"54": 2,
+			"55": 2,
 			"61": 4,
 			"62": 3,
 			"63": 3,
 			"65": 3,
+			"72": 4,
 		})[mapKey] || 1;
 	};
 	
@@ -1063,6 +1070,7 @@ Contains summary information about a fleet and its ships
 	 * (UNUSED) The modifier by maps should be applied to HQ level adjustment since game phase 2.
 	 * @return 0.4 by default. Other values are still investigating, missing summarized data.
 	 * @see #nodeDivaricatedFactorByMap
+	 * @see https://docs.google.com/spreadsheets/d/1KC-hAbxkExKy2RJ1uf32BCJI8hNyNc3Cz4QidGkZ4TQ
 	 */
 	KC3Fleet.hqModifierByMap = function(world, map){
 		const mapKey = map === undefined ? String(world) : [world, map].join("");
@@ -1097,10 +1105,11 @@ Contains summary information about a fleet and its ships
 			emptyShipSlot = fullShipSlots - availableShips.length;
 		let total = 0;
 		availableShips.forEach(ship => {
-			// According tests https://twitter.com/CC_jabberwock/status/1096846605167161344
-			//             and https://twitter.com/CC_jabberwock/status/1147091191864975360
-			// explicit LoS bonus from Late 298B and improved Type 2 Recon added to ship part
-			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, [9, 11]) || 0;
+			// According tests, visible LoS bonus from equipment should be added to ship part,
+			// except these pieces for now: SG Radar (Initial Model)
+			// Untested yet: Swordfish Mk.III Kai (Seaplane Model / Skilled)
+			// https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#equipment_bonus
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, null, null, null, [315]) || 0;
 			// sum ship's naked LoS
 			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS
@@ -1112,6 +1121,56 @@ Contains summary information about a fleet and its ships
 		// empty ship slot adjustment
 		total += 2 * emptyShipSlot;
 		return total;
+	};
+	
+	/**
+	 * Calculate LoS score of Air Reconnaissance (aka Aviation Detection) for World 6-3 Node G and H.
+	 * @return {number} current score of this fleet. Detection success judgements:
+	 *         Node G: 12 <= success < 12*1.6 <= random < 12*2.2 <= great success
+	 *         Node H: 16 <- success < 16*1.6 <= random < 16*2.2 <= great success
+	 * @see https://wikiwiki.jp/kancolle/%E4%B8%AD%E9%83%A8%E6%B5%B7%E5%9F%9F#area3
+	 */
+	KC3Fleet.prototype.airReconnScore = function(){
+		return this.shipsUnescaped().reduce((totalScore, ship) => {
+			// no aircraft and slot size on ex-slot for now
+			return totalScore + ship.equipment(false).reduce((total, gear, idx) => {
+				let value = 0;
+				const mst = gear.exists() && gear.master();
+				// Seaplane Reconn/Bomber
+				if(mst && [10, 11].includes(mst.api_type[2])) {
+					// no any visible/improvement bonus confirmed
+					value = mst.api_saku * Math.sqrt(Math.sqrt(ship.slotSize(idx)));
+				// Large Flying Boat
+				} else if(mst && [41].includes(mst.api_type[2])) {
+					value = mst.api_saku * Math.sqrt(ship.slotSize(idx));
+				}
+				return total + value;
+			}, 0);
+		}, 0);
+	};
+	
+	/**
+	 * Try to check: for implemented aviation detection nodes, will current score result a success or great success?
+	 * @see #airReconnScore
+	 */
+	KC3Fleet.prototype.estimateAirReconnResult = function(score = this.airReconnScore()){
+		// Data from KC Kai, https://kancolle.fandom.com/ja/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:1899
+		const airReconnNodes = {
+			"W63G": { "world": 6, "map": 3, "node": "G", "edges": [7], "reqS": 12 },
+			"W63H": { "world": 6, "map": 3, "node": "H", "edges": [8, 12], "reqS": 16 },
+		};
+		Object.entries(airReconnNodes).forEach(([key, node]) => {
+			node.score = score;
+			node.reqGS = node.reqS * 1.2;
+			node.reqGGS = node.reqS * 2.2;
+			node.result = (
+				score >= node.reqGGS ? "GreatSuccess" :
+				node.reqGS <= score && score < node.reqGGS ? "RandomSorGS" :
+				node.reqS  <= score && score < node.reqGS ? "Success" :
+				"Failure"
+			);
+		});
+		return airReconnNodes;
 	};
 	
 	/*--------------------------------------------------------*/

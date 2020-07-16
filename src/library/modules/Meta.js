@@ -115,17 +115,22 @@ Provides access to data on built-in JSON files
 		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
+			150, // Hiei K2 -> K2C
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2
+			293, // Yuubari Kai -> K2
+			579, // Gotland Kai -> andra
+			628, // Fletcher Kai Mod.2 -> Mk.II
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 601, 1496],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496],
+		kongouCutinShips: [591, 592],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -141,7 +146,8 @@ Provides access to data on built-in JSON files
 			587: 298, 588: 266, 589: 310, 590: 309, 591: 284,
 			592: 332, 593: 314, 594: 594, 595: 595, 596: 340,
 			597: 597, 598: 598, 599: 280, 600: 50,  601: 356,
-			602: 362, 603: 278,
+			602: 362, 603: 278, 604: 294, 605: 384, 606: 379,
+			607: 380, 608: 279, 609: 381
 		},
 		
 		/* Initialization
@@ -316,6 +322,23 @@ Provides access to data on built-in JSON files
 				this._type2IconMap = iconMap;
 			}
 			return this._type2IconMap[type2Id] || [];
+		},
+		
+		itemTypesByType3 :function(type3Id){
+			if(!this._type3TypeMap){
+				// Build type3 id to type2 id map from master data
+				const typeMap = {};
+				$.each(KC3Master.all_slotitems(), (_, g) => {
+					if(KC3Master.isAbyssalGear(g.api_id)) return false;
+					// some items are belonged to XXX (II) type (38, 93, 94)
+					const t2Id = KC3Master.equip_type_sp(g.api_id, g.api_type[2]);
+					const iconId = g.api_type[3];
+					typeMap[iconId] = typeMap[iconId] || [];
+					if(!typeMap[iconId].includes(t2Id)) typeMap[iconId].push(t2Id);
+				});
+				this._type3TypeMap = typeMap;
+			}
+			return this._type3TypeMap[type3Id] || [];
 		},
 		
 		shipNameAffix :function(affix){
@@ -734,7 +757,7 @@ Provides access to data on built-in JSON files
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
-				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
+				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
 				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
 		},
 		
@@ -1124,17 +1147,20 @@ Provides access to data on built-in JSON files
 			var worldTerm = "Unknown";
 			if(this.isEventWorld(worldId)) {
 				const eventMapDefs = {
-					seasons : ["Winter", "Spring", "Summer", "Fall"],
-					fromId : 21,
-					fromYear : 2013,
-					skippedFrom : [42, 2],
-				}, period = eventMapDefs.seasons.length,
-				worldIndex = worldId >= eventMapDefs.skippedFrom[0] ?
-					worldId - eventMapDefs.fromId + eventMapDefs.skippedFrom[1] :
-					worldId - eventMapDefs.fromId,
-				season = eventMapDefs.seasons[worldIndex % period],
-				year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
-				worldTerm = ["MapNameEventWorld", "MapNameEventSeason" + season, year];
+						seasons : ["Winter", "Spring", "Summer", "Fall"],
+						fromId : 21,
+						fromYear : 2013,
+						skippedSeasons : [[42, 2], [48, 3]],
+					},
+					period = eventMapDefs.seasons.length,
+					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (
+						worldId >= skipFrom ?
+						worldId - eventMapDefs.fromId + skipAccumulated :
+						(index < 0 ? worldId - eventMapDefs.fromId : index)
+					), -1),
+					season = eventMapDefs.seasons[worldIndex % period] || "BeforeBigBang",
+					year = eventMapDefs.fromYear + Math.floor(worldIndex / period);
+					worldTerm = ["MapNameEventWorld", "MapNameEventSeason" + season, year];
 				return !returnTerm ? KC3Meta.term(worldTerm[0])
 					.format(KC3Meta.term(worldTerm[1]), worldTerm[2]) : worldTerm;
 			} else {

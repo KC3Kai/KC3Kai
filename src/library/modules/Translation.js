@@ -266,6 +266,8 @@
 			"Friend45(2)" : 245,
 			"Friend46(1)" : 146,
 			"Friend46(2)" : 246,
+			"Friend47(1)" : 147,
+			"Friend47(2)" : 247,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -314,7 +316,7 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado Cutin) key
+			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou Cutin) key
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
 			// add special cut-in voice keys for Nagato class combination
@@ -335,7 +337,7 @@
 
 			// add known friend support keys (last 2 digits seem be event world id)
 			if (includeFriend)
-				sortedVoiceNums.push(...[141, 241, 142, 242, 342, 143, 243, 343, 144, 244, 344, 145, 245, 146, 246]);
+				sortedVoiceNums.push(...[141, 241, 142, 242, 342, 143, 243, 343, 144, 244, 344, 145, 245, 146, 246, 147, 247]);
 
 			return sortedVoiceNums;
 		},

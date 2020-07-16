@@ -236,28 +236,32 @@
 				const holder = this._holders["s"+ThisItem.itemId];
 				const item = ThisType["s"+MasterItem.api_id];
 
-				// Add this item to the instances
+				// Add this item to the instances if being held by someone
 				if(typeof holder != "undefined"){
-					// Someone is holding it
-					item.held.push({
+					var itemSimple = {
 						id: ThisItem.itemId,
 						level: ThisItem.stars,
 						locked: ThisItem.lock,
 						holder: holder,
-					});
+					};
+					item.held.push(itemSimple);
 
 					if( !item.arranged[ThisItem.stars] )
 						item.arranged[ThisItem.stars] = {
+							held: [],
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
 						};
+					item.arranged[ThisItem.stars].held.push(itemSimple);
 
 					if( !item.arranged[ThisItem.stars].holder[holder.rosterId] )
 						item.arranged[ThisItem.stars].holder[holder.rosterId] = {
+							held: [],
 							holder: holder,
 							count: 0
 						};
+					item.arranged[ThisItem.stars].holder[holder.rosterId].held.push(itemSimple);
 
 					item.arranged[ThisItem.stars].holder[holder.rosterId].count++;
 					item.arranged[ThisItem.stars].heldCount++;
@@ -271,6 +275,7 @@
 
 					if( !item.arranged[ThisItem.stars] )
 						item.arranged[ThisItem.stars] = {
+							held: [],
 							holder: {},
 							extraCount: 0,
 							heldCount: 0
@@ -462,6 +467,10 @@
 				$(".tab_gears .sortControl").removeClass("active");
 				$(".tab_gears .sortControl.{0}".format(compareMethod)).addClass("active");
 			}
+			// Build details of gear instances. Notes: 'locked' emojis have to be UTF16 escaped for compatibility of old browser
+			const getItemList = (held = [], extras = []) => held.concat(extras).sort((a, b) => a.id - b.id)
+				.map(i => `#${i.id}\t\u2605+${i.level}`
+					+ `\t${!i.locked ? (!i.holder ? "\uD83D\uDD13" : "\uD83D\uDD11") : (!i.holder ? "\uD83D\uDD12" : "\uD83D\uDD10")}`);
 
 			function showEqList(i,arranged){
 				if( !arranged[i].heldCount ) return null;
@@ -476,6 +485,8 @@
 								<span>#${item.holder.rid}</span>
 								<span>x${item.count}</span>`
 						});
+						$("img", holderDiv)
+							.attr("title", getItemList(arranged[i].held).join("\n"));
 					} else {
 						const masterId = item.holder.masterId;
 						holderDiv = $('<div/>', {
@@ -487,9 +498,10 @@
 								<span>x${item.count}</span>`
 						});
 						$("img", holderDiv).addClass("hover")
-							.attr("title", `[${masterId}]`)
+							.attr("title", `[${masterId}]\n${getItemList(item.held).join("\n")}`)
 							.attr("alt", masterId)
 							.on("click", self.shipClickFunc);
+						$("font", holderDiv).attr("title", `#${rosterId} ${item.holder.name()}${!item.holder.lock ? " \uD83D\uDD13" : ""}`);
 					}
 					div = div.add(holderDiv);
 				});
@@ -519,7 +531,7 @@
 					.attr("src", KC3Meta.itemIcon(ThisSlotitem.type_id))
 					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
 				$(".icon img", ItemElem)
-					.attr("title", `[${ThisSlotitem.id}]`)
+					.attr("title", `[${ThisSlotitem.id}]\n${getItemList(ThisSlotitem.held, ThisSlotitem.extras).join("\n")}`)
 					.attr("alt", ThisSlotitem.id)
 					.on("click", self.gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);

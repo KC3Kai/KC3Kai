@@ -166,6 +166,7 @@
     return new Promise((resolve) => {
       chrome.downloads.download({
         url,
+        // since some chromium version (m72?), downloading the blob url will ignore filename?
         filename: path,
         conflictAction: 'uniquify',
       }, (downloadId) => {

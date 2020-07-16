@@ -3,6 +3,7 @@ var enableShelfTimer = false;
 
 function KCScreenshot(){
 	ConfigManager.load();
+	this.autoDpi = !ConfigManager.ss_dppx;
 	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
@@ -15,6 +16,7 @@ function KCScreenshot(){
 		?["jpeg", "jpg", "image/jpeg"]
 		:["png", "png", "image/png"];
 	this.quality = ConfigManager.ss_quality;
+	this.imageSmoothing = !!ConfigManager.ss_smooth;
 	this.callback = function(){};
 }
 
@@ -45,6 +47,7 @@ KCScreenshot.prototype.prepare = function(){
 	this.canvas.width = 1200 * this.scale;
 	this.canvas.height = 720 * this.scale;
 	this.context = this.canvas.getContext("2d");
+	this.context.imageSmoothingEnabled = this.imageSmoothing;
 	
 	// Initialize Image Tag
 	this.domImg = new Image();
@@ -104,7 +107,8 @@ KCScreenshot.prototype.remoteCapture = function(){
 			format: self.format[0],
 			quality: self.quality || 100
 		}, function(base64img){
-			self.domImg.onload = self.crop(self.offset);
+			self.handleLastError(chrome.runtime.lastError, "Remote captureVisibleTab", "take screenshot");
+			self.domImg.onload = self.crop(self.offset, true);
 			self.domImg.src = base64img;
 		});
 	});
@@ -113,22 +117,36 @@ KCScreenshot.prototype.remoteCapture = function(){
 KCScreenshot.prototype.startCapture = function(){
 	var self = this;
 	chromeCapture(this.format[0], this.quality, function(base64img){
+		self.handleLastError(chrome.runtime.lastError, "Inpage captureVisibleTab", "take screenshot");
 		self.domImg.src = base64img;
-		self.domImg.onload = self.crop(self.gamebox.offset());
+		self.domImg.onload = self.crop(self.gamebox.offset(), false);
 	});
 };
 
-KCScreenshot.prototype.crop = function(offset){
+KCScreenshot.prototype.handleLastError = function(lastError, apiDesc, funcName){
+	if(lastError) {
+		var errMsg = lastError.message || "unknown reason";
+		console.warn((apiDesc || "Chrome API") + " invoking error", errMsg);
+		// Invoke cleanup callback first even exception thrown
+		this.callback(errMsg);
+		throw new Error("Failed to " + (funcName || "operate") + " due to: " + errMsg);
+	}
+};
+
+KCScreenshot.prototype.crop = function(offset, isRemote){
 	var self = this;
 	
 	// Get zoom factor
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
+		// Viewing page zoom factor has been taken into account by window.devicePixelRatio,
+		// if image not captured from remote background page
+		var realScale = self.autoDpi && !isRemote ? self.scale : zoomFactor * self.scale;
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 1200 * zoomFactor * self.scale,
-			realHeight: 720 * zoomFactor * self.scale,
-			offTop: offset.top * zoomFactor * self.scale,
-			offLeft: offset.left * zoomFactor * self.scale,
+			realWidth: 1200 * realScale,
+			realHeight: 720 * realScale,
+			offTop: offset.top * realScale,
+			offLeft: offset.left * realScale,
 		};
 		
 		// Actual Cropping

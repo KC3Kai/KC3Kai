@@ -1017,7 +1017,8 @@
 					100: [2, 4],
 					101: [1],
 					102: [1],
-					103: [1, 2]
+					103: [1, 2],
+					104: [1]
 				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
@@ -1048,7 +1049,7 @@
 					if (cutinType[1] === 0) { break; }
 					const cutin = attack.cutin || attack.ncutin || 0;
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102, 103];
+					const specialCutinIds = [100, 101, 102, 103, 104];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||
@@ -1185,6 +1186,9 @@
 						lvl: ship.level,
 						morale: ship.morale,
 						stats: ship.nakedStats(),
+						// Caution: `fromEntries` supported since Chromium m73. Alternative:
+						//   (() => { let o = {}; ["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].forEach(s => o[s] = ship[s][0]); return o; })()
+						visibleStats: Object.fromEntries(["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),

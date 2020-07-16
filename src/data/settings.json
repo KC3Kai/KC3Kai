@@ -119,6 +119,12 @@
 		"help" : "",
 		"contents" : [
 			{
+				"id" : "info_quest_activity",
+				"name" : "SettingsQuestListActivity",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_face",
 				"name" : "SettingsConstructionFaces",
 				"type" : "check",
@@ -460,6 +466,12 @@
 					"type": "Integer"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "ss_smooth",
+				"name" : "SettingsSSSmoothing",
+				"type" : "check",
+				"options" : {}
 			},
 			{
 				"id" : "ss_directory",
@@ -1083,13 +1095,15 @@
 	},
 	{
 		"section": "SettingsOpenDBSubmission",
-		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Privacy-Policy",
+		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2973",
+		"deprecated" : 1,
 		"contents" :[
 			{
 				"id" : "OpenDBSubmission_enabled",
 				"name" : "SettingsEnableOpenDBSubmission",
 				"type" : "check",
-				"options" : {}
+				"options" : {},
+				"hide" : 0
 			}
 		]
 	},

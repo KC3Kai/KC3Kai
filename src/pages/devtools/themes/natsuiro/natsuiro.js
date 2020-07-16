@@ -17,6 +17,7 @@
 	var plannerIsGreatSuccess = false;
 	var showCombinedFleetBars = true;
 	var isTakingScreenshot = false;
+	var isActiveTabInvoked = false;
 	var overrideFocus = false;
 	
 	// a flag used by Fleet & ExpeditionStart to indicate
@@ -45,6 +46,9 @@
 
 	// Panel Reload Reminder Timer
 	var reloadReminderHandler = 0;
+
+	// QuestList api result cache
+	var questCacheResult = [];
 
 	// A jquery-ui tooltip options like native one
 	var nativeTooltipOptions = {
@@ -123,7 +127,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..44, 100..103, 110..113
+		// * expedNum: 1..45, 100..105, 110..114, 131..132, 141
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -141,8 +145,10 @@
 				data.fleetConf[i] = { expedition: 1 };
 			}
 			data.expedConf = {};
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 44));
-			fillExpedConfDefaultGreatSuccess(100, 101, 102, 103, 110, 111, 112, 113);
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 45));
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
+			fillExpedConfDefaultGreatSuccess(131, 132, 141);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -150,6 +156,9 @@
 			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
 			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
 			// * extended since 2019-07-18: A4, B3, B4 and World 7. Monthly.
+			// * extended since 2020-02-07: 45, D1, D2
+			// * extended since 2020-03-27: B5, E1 for World 5
+			// * extended since 2020-05-20: A5, A6
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -459,11 +468,26 @@
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor);
 		$(".module.fleet").css("background", ConfigManager.pan_shiplist_bg);
 		$(".ship_img,.timer-img img").css("background", ConfigManager.pan_ship_icon_bg);
-		$(".ship_img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border);
+		$(".ship_img,.timer-img img").css("border", "1px solid " + ConfigManager.pan_ship_icon_border);
 
 		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
-		$(".module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
-		$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow+", 0px -1px 1px "+ConfigManager.pan_drop_shadow+", 1px -1px 1px "+ConfigManager.pan_drop_shadow+", -1px 0px 1px "+ConfigManager.pan_drop_shadow+", 1px 0px 1px "+ConfigManager.pan_drop_shadow+", -1px 1px 1px "+ConfigManager.pan_drop_shadow+", 0px 1px 1px "+ConfigManager.pan_drop_shadow+", 1px 1px 1px "+ConfigManager.pan_drop_shadow);
+		const shadowDirStr = (
+			  "-1px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", 0px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px -1px 1px "+ConfigManager.pan_drop_shadow
+			+", -1px 0px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px 0px 1px "+ConfigManager.pan_drop_shadow
+			+", -1px 1px 1px "+ConfigManager.pan_drop_shadow
+			+", 0px 1px 1px "+ConfigManager.pan_drop_shadow
+			+", 1px 1px 1px "+ConfigManager.pan_drop_shadow
+		);
+		$(".module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type"
+			+",.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot")
+			.css("text-shadow", shadowDirStr);
+		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
+			.css("box-shadow", shadowDirStr);
+		// Either share moonlight config key for HP bar metrics
+		$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro");
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -505,6 +529,12 @@
 				if($(".ship_face_tooltip").data("statsIconset") != ConfigManager.info_stats_iconset){
 					updateShipTooltipStatsIconset();
 				}
+				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
+					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
+				$(".ship_hp_box .ship_hp_bar_metrics").toggle(
+					ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro"
+				);
+				updateQuestActivityTab();
 			}
 		});
 
@@ -593,17 +623,40 @@
 		$(".module.controls .btn_ss1").on("click", function(){
 			if (isTakingScreenshot) return;
 			isTakingScreenshot = true;
-			
 			$(this).addClass("active");
 
-			// Tell service to pass a message to gamescreen on inspected window to get a screenshot
-			(new RMsg("service", "screenshot", {
-				tabId: chrome.devtools.inspectedWindow.tabId,
-				playerName: PlayerManager.hq.name
-			}, function(response){
-				$(".module.controls .btn_ss1").removeClass("active");
-				isTakingScreenshot = false;
-			})).execute();
+			const tabId = chrome.devtools.inspectedWindow.tabId;
+			const doScreenshot = function() {
+				// Tell service to pass a message to gamescreen on inspected window to get a screenshot
+				(new RMsg("service", "screenshot", {
+					tabId: tabId,
+					playerName: PlayerManager.hq.name
+				}, function(response){
+					$(".module.controls .btn_ss1").removeClass("active");
+					isTakingScreenshot = false;
+				})).execute();
+			};
+			// Check if permission has been granted first
+			if(!isActiveTabInvoked){
+				(new RMsg("service", "checkPermission", {
+					tabId: tabId
+				}, function(response){
+					if(response && response.value){
+						isActiveTabInvoked = true;
+						doScreenshot();
+					} else {
+						NatsuiroListeners.ModalBox({
+							title: KC3Meta.term("PanelPermissionTitle"),
+							message: KC3Meta.term("PanelPermissionMessage"),
+						});
+						isActiveTabInvoked = false;
+						$(".module.controls .btn_ss1").removeClass("active");
+						isTakingScreenshot = false;
+					}
+				})).execute();
+			} else {
+				doScreenshot();
+			}
 		});
 
 		// Export button
@@ -701,6 +754,7 @@
 			var conf = ExpedTabValidateConfig(selectedExpedition);
 			plannerIsGreatSuccess = (conf.expedConf[selectedExpedition] || {}).greatSuccess || false;
 			ExpedTabUpdateConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -711,8 +765,8 @@
 			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
-			NatsuiroListeners.Fleet();
 			ExpedTabApplyConfig();
+			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
 		});
 
@@ -780,17 +834,15 @@
 			})).execute();
 		});
 
-		if (!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound) {
-			$(".module.controls .btn_alert_toggle").hide();
-		}
-
-		$(".module.controls .btn_alert_toggle").on("click", function () {
-			if (critSound.paused) {
+		// Taiha Alert toggle button
+		$(".module.controls .btn_alert_toggle").on("click", function (){
+			if(critSound.paused) {
+				if($(this).hasClass("disabled")) return;
 				NatsuiroListeners.Fleet();
-			} else if (ConfigManager.alert_taiha_sound) {
+			} else {
 				critSound.pause();
 			}
-		});
+		}).toggleClass("disabled", !ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 
 		// Reload subtitle quotes
 		$(".module.controls .btn_reload_quotes").on("click", function(){
@@ -1008,6 +1060,7 @@
 			}else{
 				overrideFocus = false;
 			}
+			updateQuestActivityTab(true);
 
 			checkAndRestartMoraleTimer();
 			checkAndRestartUiTimer();
@@ -1321,44 +1374,59 @@
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
-			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js, or `PlayerManager.getConsumableById()`
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
 				PlayerManager.consumables.sardine ? 93 :
-				PlayerManager.consumables.setsubunBeans ? 90 : 61;
-			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
+				PlayerManager.consumables.setsubunBeans ? 90 :
+				PlayerManager.consumables.hishimochi ? 62 : 60;
+			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
-			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(57) );
-			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
-				.prev().attr("title", KC3Meta.useItemName(58) );
-			$(".count_newGunMats").text( PlayerManager.consumables.newArtilleryMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(75) );
-			$(".count_newAvMats").text( PlayerManager.consumables.newAviationMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(77) );
-			$(".count_actionReportOrSkilledCrew").text(
-					PlayerManager.consumables.actionReport || PlayerManager.consumables.skilledCrew || 0 )
-				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.actionReport ? 78 : 70) )
-				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.actionReport ? 78 : 70}.png`);
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
-				.prev().attr("title", KC3Meta.useItemName(64) );
-			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
-				.prev().attr("title", KC3Meta.useItemName(52) );
-			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				                   + (PlayerManager.consumables.irako || 0)
-			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			// Count all consumable slotitems via GearManager
+			const consumableSlotitemMap = {
+				"50": { "slotitem":  42 }, // repairTeam
+				"51": { "slotitem":  43 }, // repairGoddess
+				"66": { "slotitem": 145 }, // ration
+				"67": { "slotitem": 146 }, // resupplier
+				"69": { "slotitem": 150 }, // mackerelCan
+				"76": { "slotitem": 241 }, // rationSpecial
+			};
+			Object.keys(consumableSlotitemMap).forEach(useitemId => {
+				const item = consumableSlotitemMap[useitemId];
+				item.attrName = PlayerManager.getConsumableById(useitemId, true);
+				item.amount = KC3GearManager.count(g => g.masterId === item.slotitem) || 0;
+			});
+			// Update simple amount of single useitem (or slotitem) by ID and name (matching with CSS class: `count_` + name)
+			const updateCountByUseitemId = (useitemId) => {
+				const attrName = PlayerManager.getConsumableById(useitemId, true);
+				let amount = PlayerManager.getConsumableById(useitemId) || 0;
+				const slotitem = consumableSlotitemMap[useitemId];
+				if(slotitem) amount = slotitem.amount;
+				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
+			};
+			// Total items of 1 page should be 3 x 3 for current page layout and styles
+			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
+			// Update amounts of combined counting
+			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
+					consumableSlotitemMap[51].amount, KC3Meta.useItemName(51)
+				));
+			$(".count_supply").text([66, 67, 69, 76].map(id => consumableSlotitemMap[id].amount).sumValues())
+				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5} +\nx{6} {7}".format(
+					consumableSlotitemMap[67].amount, KC3Meta.useItemName(67),
+					consumableSlotitemMap[66].amount, KC3Meta.useItemName(66),
+					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
+					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
+				));
+			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+				));
+			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
-				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
-				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
-					const attrName = PlayerManager.getConsumableById(id, true);
-					let amount = PlayerManager.getConsumableById(id) || 0;
-					// slotitem like rations should be counted via GearManager
-					const slotitemMstId = slotitemIdMap[id];
-					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
-					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
-				});
+				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
 			}
@@ -1423,6 +1491,110 @@
 
 			$(".activity_basic .expeditions").createChildrenTooltips();
 			$(".activity_basic .timers").createChildrenTooltips();
+		},
+
+		// Trigger when enter quest screen
+		QuestList: function (data) {
+			$('.quest_filter_button').off('click');
+			updateQuestActivityTab();
+			if (!ConfigManager.info_quest_activity) {
+				return;
+			}
+			$("#atab_quest").trigger("click");
+
+			$('.quest_filter_button').click(function (ev) {
+				const target = $(ev.target);
+				const isActive = target.hasClass('active');
+				$('.quest_filter_button').removeClass('active');
+				if (!isActive) {
+					target.addClass('active');
+				}
+				exec();
+			});
+
+			questCacheResult.length = 0;
+			if (data && data.length) {
+				questCacheResult.push(...data);
+			}
+
+			exec();
+
+			function exec() {
+				const activeFilter = getActiveFilter();
+				const allowCategories = getAllowCategories(activeFilter);
+				const quests = getFilterQuests(allowCategories);
+				loadQuests(quests);
+			}
+
+			function getActiveFilter() {
+				return Number($('.quest_filter_button.active').attr('filter')) || -1;
+			}
+
+			function getAllowCategories(filter) {
+				switch (filter) {
+					case 1: return [2, 8, 9];
+					case 2: return [3];
+					case 3: return [4];
+					case 4: return [6];
+					case 5: return [1, 5, 7];
+				}
+				return [];
+			}
+
+			function getFilterQuests(categories) {
+				if (!categories.length) {
+					return questCacheResult;
+				}
+				return questCacheResult.filter(v => categories.includes(v.api_category));
+			}
+
+			function loadQuests(quests) {
+				const questList = $(".activity_quest .quest_list");
+				questList.empty();
+				questList.scrollTop();
+
+				quests.forEach((apiQuest, index) => {
+					const quest = KC3QuestManager.get(apiQuest.api_no);
+					if (!quest) { return; }
+
+					if (index % 5 === 0) {
+						$('<div>')
+							.addClass('quest_page')
+							.text(Math.floor(index / 5) + 1)
+							.appendTo(questList);
+					}
+
+					const questListItem = $("#factory .quest")
+						.clone()
+						.toggleClass('activated', quest.status === 2)
+						.toggleClass('completed', quest.status === 3)
+						.toggleClass('percent50', quest.progress === 1)
+						.toggleClass('percent80', quest.progress === 2)
+						.appendTo(questList);
+
+					// Quest color box
+					$(".quest_color", questListItem)
+						.css("background", quest.getColor())
+						.data("id", quest.id);
+
+					// Quest title
+					if (quest.meta) {
+						$(".quest_text", questListItem)
+							.text(quest.meta().name)
+							.attr("titlealt", KC3QuestManager.buildHtmlTooltip(quest.id, quest.meta(), false, false))
+							.lazyInitTooltip();
+					} else {
+						$(".quest_text", questListItem)
+							.text(KC3Meta.term("UntranslatedQuest"))
+							.attr("titlealt", KC3Meta.term("UntranslatedQuest"))
+							.lazyInitTooltip();
+					}
+
+					// Quest track
+					$(".quest_track", questListItem).remove();
+				});
+			}
+
 		},
 
 		/* QUESTS
@@ -1816,35 +1988,37 @@
 			console.debug("Current fleet summary", FleetSummary);
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
-			$(".summary-level .summary_text").text( FleetSummary.lv )
+			$(".summary-level .summary_text").text(FleetSummary.lv)
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if(fleetNum >= 1 && fleetNum <= 4) {
-						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true);
-						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped");
-						tips += (!tips ? "" : "\n")
-							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {4}\t{8}\n{1}: {5}\t{9}\n{2}: {6}\t{10}\n{3}: {7}\t{11}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.aa, fstats.as, fstats.ls,
-								Math.qckInt("floor", fstatsImp.fp , 1),
-								Math.qckInt("floor", fstatsImp.aa , 1),
-								Math.qckInt("floor", fstatsImp.as , 1),
-								Math.qckInt("floor", fstatsImp.ls , 1)
-							);
+					let tips = fleetNum > 1 ? "" :
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					if (fleetNum >= 1 && fleetNum <= 4) {
+						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
+						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
+						// Align with special space char 0xa0 and force to monospaced font
+						const formatStatTip = (term, rawStat, impStat) => (
+							term.padEnd(5, '\u00a0') +
+							String(rawStat).padStart(6, '\u00a0') +
+							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
+						);
+						tips += (!tips ? "" : "\n") + '<span class="monofont">';
+						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
+						tips += [
+							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
+							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
+							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
+							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
+							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
+						].join('\n');
 					}
-					return tips;
+					return tips + "</span>";
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
-			$(".summary-eqlos .summary_text").text( FleetSummary.elos );
+			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
-			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
-			$(".summary-airfp .summary_text").text( FleetSummary.air )
+			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
+			$(".summary-airfp .summary_text").text(FleetSummary.air)
 				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
 					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
@@ -1852,11 +2026,13 @@
 					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
-				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation));
-			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
-				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) )
+				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation))
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) + KC3Meta.term("PanelFormationTip"))
 				.lazyInitTooltip();
-			$(".summary-speed .summary_text").text( FleetSummary.speed );
+			$(".summary-antiair .summary_text").text(FleetSummary.antiAir)
+				.attr("title", KC3Meta.term("PanelFleetAATip"))
+				.lazyInitTooltip();
+			$(".summary-speed .summary_text").text(FleetSummary.speed);
 			if(ConfigManager.elosFormula > 1){
 				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){
@@ -4025,18 +4201,26 @@
 				var stype = ST.showSType(ST.fromInt(stypeId));
 				var level = ship.level;
 				var drumCount = ship.countDrums();
+				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0], aa = ship.aa[0], fp = ship.fp[0];
+				var los = ship.ls[0],
+					aa = ship.aa[0],
+					fp = ship.fp[0],
+					tp = ship.tp[0];
 				// TODO asw stats from aircraft seem be quite different for expeditions
 				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), includeImprove, includeImprove);
-				if(includeImprove) {
+				var asw = /*[101, 102, 110].includes(selectedExpedition) ?
+					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :*/
+					ship.as[0];
+				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
-					los += ship.equipment(true).map(g => g.losStatImprovementBonus()).sumValues();
-					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus()).sumValues();
+					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
+					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
+					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
+					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4048,7 +4232,8 @@
 					asw : asw,
 					los : los,
 					aa : aa,
-					fp : fp
+					fp : fp,
+					tp : tp
 				};
 			});
 
@@ -4122,28 +4307,40 @@
 
 			var jqGSRate = $(".module.activity .activity_expeditionPlanner .row_gsrate .gsrate_content");
 
-			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
+			var shipFlagshipLevel = fleetObj.ship(0).level || 1;
+			var sparkledCount = fleetObj.ship().filter(s => s.morale >= 50).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
-			// reference: http://wikiwiki.jp/kancolle/?%B1%F3%C0%AC
+			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
+			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCountTable = {
 				21: 3+1,
 				37: 4+1,
 				38: 8+2,
 				24: 0+4,
-				40: 0+4 };
+				40: 0+4,
+				44: 6+2,
+			};
 			var gsDrumCount = gsDrumCountTable[selectedExpedition];
 
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [32, 41, 42, 43, 44, 101, 102, 103, 112, 113].includes(selectedExpedition);
+			var condIsGsWithoutSparkle = [
+				// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
+				32, 41, 43, 45, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
+			var condIsFlagshipLevel = [
+				// related to sparkle ships and flagship level: 41, A2(101), A3(102) confirmed, others are to be verified
+				// https://twitter.com/jo_swaf/status/1261241711952445440
+				41, 101, 102, 43, 45, 103, 104, 105, 112, 113, 114, 131, 132, 141
+			].includes(selectedExpedition);
 
 			var estSuccessRate = -1;
 			// can GS if:
 			// - expedition requirements are satisfied
 			// - either drum expedition, or regular expedition with all ships sparkled
-			// - or new added expeditions such as: A2, A3 (but rate formula unknown)
+			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
 				if (!condIsUnsparkledShip || condIsDrumExpedition) {
 					// based on the decompiled vita formula,
@@ -4153,7 +4350,14 @@
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
 				} else if (condIsGsWithoutSparkle) {
-					// keep -1 for unknown
+					if (condIsFlagshipLevel) {
+						// https://twitter.com/jo_swaf/status/1145297004995596288
+						// https://tonahazana.com/blog-entry-577.html
+						estSuccessRate = 16 + 15 * sparkledCount
+							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
+					} else {
+						// keep -1 for unknown
+					}
 				} else {
 					estSuccessRate = 0;
 				}
@@ -4187,6 +4391,9 @@
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
 					return KC3Meta.term('ExpedGSRateExplainNoOverdrum').format(fleetDrumCount, gsDrumCount);
+				}
+				if (condIsFlagshipLevel) {
+					return KC3Meta.term('ExpedGSRateExplainSparkleAndFlagship').format(sparkledCount, shipFlagshipLevel);
 				}
 				return KC3Meta.term('ExpedGSRateExplainSparkle').format(sparkledCount);
 			})();
@@ -4307,6 +4514,15 @@
 				.toggle(ExpdReqPack.totalFp !== null);
 
 			setupJQObject(
+				ExpdReqPack.totalTorp,
+				ExpdCheckerResult.totalTorp,
+				Math.floor(fleet.map(f => f.tp).sumValues()),
+				$(".module.activity .activity_expeditionPlanner .totalTorp")
+			);
+			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
+				.toggle(ExpdReqPack.totalTorp !== null);
+
+			setupJQObject(
 				ExpdReqPack.fleetSType,
 				ExpdCheckerResult.fleetSType,
 				null,
@@ -4318,8 +4534,9 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
-						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3:
-						if([4, 5, 9, 42, 102].includes(selectedExpedition)) {
+						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
+						// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
+						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
@@ -4327,7 +4544,10 @@
 						}
 						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
-							shipReqBox.attr("title", "CVL:1 + CL:1 + DD/DE:4").lazyInitTooltip();
+							shipReqBox.attr("title",
+								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
+								KC3Meta.term("ExpedEscortTip")
+							).lazyInitTooltip();
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
@@ -4619,6 +4839,22 @@
 			}
 		} catch (e) {
 			console.warn("Failed to open battle simulator", e);
+		}
+	}
+
+	function updateQuestActivityTab(isGoHome) {
+		if (ConfigManager.info_quest_activity) {
+			$(".activity_tabs .activity_tab").addClass("tab_count_5");
+			$("#atab_quest").show();
+			if (!!isGoHome && $("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
+		} else {
+			$(".activity_tabs .activity_tab").removeClass("tab_count_5");
+			$("#atab_quest").hide();
+			if ($("#atab_quest").hasClass("active")) {
+				$("#atab_basic").trigger("click");
+			}
 		}
 	}
 

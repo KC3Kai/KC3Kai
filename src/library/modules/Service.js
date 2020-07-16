@@ -166,6 +166,39 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			return true;
 		},
 		
+		/* CHECK PERMISSION
+		Check if permission `activeTab` is granted
+		------------------------------------------*/
+		"checkPermission" :function(request, sender, response){
+			var senderUrl = sender.url || sender.tab.url || "";
+			function checkActiveTabEffect(tabId, response) {
+				chrome.tabs.get(tabId, function(tabDetails){
+					// should use another faster method to check activeTab?
+					chrome.tabs.captureVisibleTab(tabDetails.windowId, {}, function(imgData) {
+						if(chrome.runtime.lastError) {
+							var errorMsg = chrome.runtime.lastError.message || "";
+							if(errorMsg.indexOf("'activeTab' permission") > -1) {
+								response({ value: false });
+							} else {
+								console.warn("Unchecked runtime.lastError:", errorMsg);
+								response({ value: true });
+							}
+						} else {
+							response({ value: true });
+						}
+					});
+				});
+			}
+			if (isDevtools(senderUrl)) {
+				checkActiveTabEffect(request.tabId, response);
+			} else if (sender.tab && sender.tab.id) {
+				checkActiveTabEffect(sender.tab.id, response);
+			} else {
+				response({ value: false });
+			}
+			return true;
+		},
+		
 		/* FOCUS ON GAME TAB
 		Force browser to switch and focus on current game tab.
 		------------------------------------------*/
@@ -612,6 +645,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				if(!ConfigManager.dmm_forcecookies){ return true; }
 			}
 			
+			var nextYear = new Date();
+			nextYear.setFullYear(nextYear.getFullYear() + 1);
 			// CKCY force 1
 			if( changeInfo.cookie.name == "ckcy" ){
 				// console.log("CKCY=", changeInfo.cookie.value, changeInfo);
@@ -620,7 +655,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					name: "ckcy",
 					value: "1",
 					domain: ".dmm.com",
-					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					expirationDate: Math.ceil(nextYear.getTime()/1000),
 					path: changeInfo.cookie.path,
 				}, function(cookie){
 					// console.log("ckcy cookie re-hacked", cookie);
@@ -635,7 +670,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					name: "cklg",
 					value: "welcome",
 					domain: ".dmm.com",
-					expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+					expirationDate: Math.ceil(nextYear.getTime()/1000),
 					path: changeInfo.cookie.path,
 				}, function(cookie){
 					// console.log("cklg cookie re-hacked", cookie);

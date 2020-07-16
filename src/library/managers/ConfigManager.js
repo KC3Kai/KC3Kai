@@ -52,6 +52,7 @@ Retrieves when needed to apply on components
 				PushAlerts_enabled   : 0,
 				PushAlerts_key       : '',
 
+				info_quest_activity  : true,
 				info_face            : true,
 				info_drop            : true,
 				info_craft           : true,
@@ -91,6 +92,7 @@ Retrieves when needed to apply on components
 				ss_quality   : 90,
 				ss_directory : 'KanColle',
 				ss_dppx      : 1,
+				ss_smooth    : true,
 
 				alert_diff         : 59,
 				alert_morale_notif : true,
@@ -313,7 +315,7 @@ Retrieves when needed to apply on components
 		
 		// Current maximum pages of HQ info
 		getMaxHqInfoPage :function(){
-			return 3;
+			return 4;
 		},
 		
 		// Toggle HQ Info Page

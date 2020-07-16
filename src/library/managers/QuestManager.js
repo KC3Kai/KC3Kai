@@ -168,7 +168,7 @@ Uses KC3Quest objects to play around with
 			quarterly: {
 				type: 'quarterly',
 				key: 'timeToResetQuarterlyQuests',
-				questIds: [284, 330, 337, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894],
+				questIds: [284, 330, 337, 339, 342, 426, 428, 637, 643, 653, 663, 675, 678, 680, 686, 688, 822, 845, 854, 861, 862, 872, 873, 875, 888, 893, 894, 903],
 				resetQuests: function () { KC3QuestManager.resetQuarterlies(); },
 				calculateNextReset: function (serverTime) {
 					const nextMonthlyReset = new Date(
@@ -208,6 +208,57 @@ Uses KC3Quest objects to play around with
 					}
 				},
 			},
+			// Reset on 1st February every year
+			yearlyFeb: {
+				type: 'yearlyFeb',
+				key: 'timeToResetYearlyFebQuests',
+				resetMonth: FEBRUARY,
+				questIds: [434, 904, 905],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st March every year
+			yearlyMar: {
+				type: 'yearlyMar',
+				key: 'timeToResetYearlyMarQuests',
+				resetMonth: MARCH,
+				questIds: [436, 912, 914],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMar.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyMar.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st May every year
+			yearlyMay: {
+				type: 'yearlyMay',
+				key: 'timeToResetYearlyMayQuests',
+				resetMonth: MAY,
+				questIds: [437],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyMay.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -223,11 +274,13 @@ Uses KC3Quest objects to play around with
 			return !!repeatable ? repeatable.questIds.concat() : [];
 		},
 
-		/* DEFINE PAGE
-		When a user loads a quest page, we use its data to update our list
+		/** DEFINE PAGE
+		 * When a user loads a quest page, we use its data to update our list
+		 * Since 2020-03-27, quest page in API no longer exists (in-game UI paginated still), list includes all available items in specified tab ID
 		------------------------------------------*/
-		definePage :function( questList, questPage ){
-			// For each element in quest List
+		definePage :function( questList, questPage, questTabId ){
+			// TODO it's now possible to clean quests non-open-nor-active in-game for some reason,
+			// Update quests for those `api_no` not in current quest list as long as questTabId is 0 (All)
 			var untranslated = [];
 			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
 			for(var ctr in questList){
@@ -356,6 +409,9 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('weekly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('monthly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('quarterly').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -407,8 +463,8 @@ Uses KC3Quest objects to play around with
 			this.resetCounterLoop([311], true);
 			
 			// Progress counter reset to 0 only if progress not completed in a day:
-			// Quarterly PvP C29, C38
-			this.resetCounterLoop([330, 337], false);
+			// Quarterly PvP C29, C38, C42, C44
+			this.resetCounterLoop([330, 337, 339, 342], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -435,6 +491,21 @@ Uses KC3Quest objects to play around with
 			this.load();
 			console.log("Resetting quarterlies");
 			this.resetLoop(this.getRepeatableIds('quarterly'));
+			this.save();
+		},
+		
+		resetYearlies :function(typeId){
+			this.load();
+			console.log("Resetting yearlies", typeId);
+			if(!typeId || typeId === 'all') {
+				KC3QuestManager.getRepeatableTypes().forEach(({ type }) => {
+					if(type.startsWith('yearly')) {
+						this.resetLoop(this.getRepeatableIds(type));
+					}
+				});
+			} else {
+				this.resetLoop(this.getRepeatableIds(typeId));
+			}
 			this.save();
 		},
 		
@@ -490,13 +561,13 @@ Uses KC3Quest objects to play around with
 				"280": // Bm8 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([3, 4, 7, 21]) >= 1
+						return fleet.hasShipType([3, 4, 7, 21])
 							&& fleet.countShipType([1, 2]) >= 3;
 					},
 				"284": // Bq11 Sortie 1 CVL/CL(T)/CT and 3 DD/DE
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([3, 4, 7, 21]) >= 1
+						return fleet.hasShipType([3, 4, 7, 21])
 							&& fleet.countShipType([1, 2]) >= 3;
 					},
 				"318": // C16 PvP with 2 more CLs in 1st fleet
@@ -522,6 +593,25 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(48) + // Arare any remodel
 							fleet.countShip(49)   // Kasumi any remodel
 						) >= 4;
+					},
+				"339": // C42 PvP with Isonami, Uranami, Ayanami, Shikinami
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(12)  + // Isonami any remodel
+							fleet.countShip(486) + // Uranami any remodel
+							fleet.countShip(13)  + // Ayanami any remodel
+							fleet.countShip(14)    // Shikinami any remodel
+						) >= 4;
+					},
+				"342": // C44 PvP with 3 DD/DE and 1 more DD/DE/CL(T)/CT
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShipType([1, 2]) >= 4 ||
+							fleet.countShipType([1, 2]) >= 3 &&
+							fleet.hasShipType([3, 4, 21])
+						);
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
@@ -555,7 +645,7 @@ Uses KC3Quest objects to play around with
 				"862": // Bq4 Sortie 1 AV, 2 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(16) >= 1
+						return fleet.hasShipType(16)
 							&& fleet.countShipType(3) >= 2;
 					},
 				"872": // Bq10 Sortie 1st fleet
@@ -563,17 +653,17 @@ Uses KC3Quest objects to play around with
 				"873": // Bq5 Sortie 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType(3) >= 1;
+						return fleet.hasShipType(3);
 					},
 				"875": // Bq6 Sortie DesDiv 31
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShip(543) >= 1 && // Naganami K2
-							fleet.countShip([
+						return fleet.hasShip([543]) // Naganami K2
+							&& fleet.hasShip([
 								345, // Takanami Kai
-								359, // Okinami Kai
+								359, 569, // Okinami Kai/K2
 								344, 578, // Asashimo Kai/K2
-							]) >= 1;
+							]);
 					},
 				"888": // Bq7 Sortie New Mikawa Fleet
 					({fleetSent = KC3SortieManager.fleetSent}) => {
@@ -590,7 +680,45 @@ Uses KC3Quest objects to play around with
 				"894": // Bq9 Sortie 1 CV(L/B)
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.countShipType([7, 11, 18]) >= 1;
+						return fleet.hasShipType([7, 11, 18]);
+					},
+				"903": // Bq13 Sortie Yuubari K2+ as flagship, 2 of 6th Torpedo Squad, or Yura K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						// Yuubari Kai Ni any variant as flagship
+						return RemodelDb.remodelGroup(115).indexOf(fleet.ship(0).masterId) >= 2 && ((
+							fleet.countShip(1)   + // Mutsuki any remodel
+							fleet.countShip(2)   + // Kisaragi any remodel
+							fleet.countShip(30)  + // Kikuzuki any remodel
+							fleet.countShip(31)  + // Mochizuki any remodel
+							fleet.countShip(164) + // Yayoi any remodel
+							fleet.countShip(165)   // Uzuki any remodel
+						) >= 2 || (
+							fleet.hasShip([488])   // Yura K2
+						));
+					},
+				"904": // By1 Sortie Ayanami K2, Shikinami K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip([
+							195, // Ayanami K2
+							627, // Shikinami K2
+						]);
+					},
+				"905": // By2 Sortie 3 DE, up to 5 ships
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(1) >= 3 && fleet.countShips() <= 5;
+					},
+				"912": // By3 Sortie Akashi as flagship, 3 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.ship(0).master().api_stype === 19 && fleet.countShipType(2) >= 3;
+					},
+				"914": // By4 Sortie 3 CA, 1 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

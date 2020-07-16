@@ -3,7 +3,7 @@
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
-	"version": "34.2.4",
+	"version": "34.7.2",
 	"devtools_page": "pages/devtools/init.html",
 	"options_page": "pages/settings/settings.html",
 	"icons": {
@@ -21,12 +21,11 @@
 		"downloads",
 		"downloads.shelf",
 		"tabs",
-		"activeTab",
 		"notifications",
 		"cookies",
-		"webRequest",
-		"webRequestBlocking",
-		"<all_urls>"
+		"activeTab",
+		"file:///*",
+		"*://*.dmm.com/*"
 	],
 	"background": {
 		"scripts": [
@@ -99,6 +98,7 @@
 		},
 		{
 			"matches": ["*://*/kcs2/index.php?api_root=/kcsapi*"],
+			"include_globs": ["*://203.104.209.*/*", "*://125.6.184.*/*", "*://125.6.189.*/*"],
 			"js": [
 				"assets/js/jquery.min.js",
 				"library/objects/Messengers.js",

@@ -33,9 +33,12 @@
 			this.flowchartIds = [];
 			this.seedBranch( rootQuestTree, 201 ); // Bd1
 			this.seedBranch( rootQuestTree, 303 ); // Cd2
+			this.seedBranch( rootQuestTree, 342 ); // C44
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
+			this.seedBranch( rootQuestTree, 434 ); // D32
+			this.seedBranch( rootQuestTree, 437 ); // D34
 			this.seedBranch( rootQuestTree, 503 ); // Ed3
 			this.seedBranch( rootQuestTree, 605 ); // Fd1
 			this.seedBranch( rootQuestTree, 702 ); // Gd2
@@ -46,6 +49,9 @@
 			this.seedBranch( rootQuestTree, 873 ); // Bq5
 			this.seedBranch( rootQuestTree, 888 ); // Bq7
 			this.seedBranch( rootQuestTree, 894 ); // Bq9
+			this.seedBranch( rootQuestTree, 904 ); // By1
+			this.seedBranch( rootQuestTree, 905 ); // By2
+			this.seedBranch( rootQuestTree, 912 ); // By3
 			
 			// Other non-flowchart quests
 			const rootQuestList = $(".tab_flowchart .extralist ul.questList");
@@ -109,6 +115,13 @@
 			$(".resetQuarterlies").on("click", function(){
 				if(confirm("Are you sure?")){
 					KC3QuestManager.resetQuarterlies();
+					KC3StrategyTabs.reloadTab(undefined, true);
+				}
+			});
+			
+			$(".resetYearlies").on("click", function(){
+				if(confirm("Are you sure?")){
+					KC3QuestManager.resetYearlies("all");
 					KC3StrategyTabs.reloadTab(undefined, true);
 				}
 			});

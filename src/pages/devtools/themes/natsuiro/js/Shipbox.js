@@ -19,6 +19,9 @@
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
 		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
+		
+		this.eventLockPlans = JSON.parse(localStorage.lock_plan || "[]");
+		this.lockTagColors = KC3Meta.eventLockingTagColors("legacy");
 	};
 	
 	/* SET SHIP
@@ -118,6 +121,25 @@
 			}
 		} else {
 			$(".mvp_icon", this.element).hide();
+		}
+		
+		// Event locking color tags
+		var tagColorId = this.shipData.sally || 0;
+		if(!tagColorId){
+			// Using the same 'find last occurence' logic with Strategy Room locking page
+			this.eventLockPlans.forEach((tagPlan, tagId) => {
+				if(Array.isArray(tagPlan) && tagPlan.includes(this.shipData.rosterId)){
+					tagColorId = tagId + 1;
+				}
+			});
+		}
+		if(tagColorId > 0){
+			$(".locktag .solid", this.element).text(this.shipData.sally || "");
+			$(".locktag", this.element).show()
+				.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")
+				.css("border-color", ConfigManager.pan_ship_icon_border);
+		} else {
+			$(".locktag", this.element).hide();
 		}
 		
 		return this;
@@ -235,6 +257,7 @@
 		// HP bar
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
+		$(".ship_hp_bar_metrics", this.element).css("width", this.hpBarLength+"px");
 		
 		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
@@ -243,7 +266,9 @@
 			return KC3Meta.term(curHp > taihaHp ? "PanelTaihaHpLeft" : "PanelTaihaHp")
 				.format(taihaHp, curHp - taihaHp)
 				+ "\n" + KC3Meta.term(curHp > chuuhaHp ? "PanelChuuhaHpLeft" : "PanelChuuhaHp")
-				.format(chuuhaHp, curHp - chuuhaHp);
+				.format(chuuhaHp, curHp - chuuhaHp)
+				+ "\n" + KC3Meta.term("PanelOverkillTaihaRate")
+				.format(this.shipData.overkillTaihaRate());
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes
@@ -353,13 +378,13 @@
 				$(this.element).addClass("ship-stamp");
 				$(this.element).attr("title", KC3Meta.term( KC3SortieManager.isPvP() ? "PredictionStampPvP" : "PredictionStampSortie") );
 			} else if(afterHpPercent <= 0.25){
-				$(".ship_hp_prediction", this.element).css("background", "#FF0000");
+				$(".ship_hp_prediction", this.element).addClass("hp_taiha");
 			} else if(afterHpPercent <= 0.50){
-				$(".ship_hp_prediction", this.element).css("background", "#FF9900");
+				$(".ship_hp_prediction", this.element).addClass("hp_chuuha");
 			} else if(afterHpPercent <= 0.75){
-				$(".ship_hp_prediction", this.element).css("background", "#FFFF00");
+				$(".ship_hp_prediction", this.element).addClass("hp_shouha");
 			} else{
-				$(".ship_hp_prediction", this.element).css("background", "#00FF00");
+				$(".ship_hp_prediction", this.element).addClass("hp_normal");
 			}
 			
 			// Change to damaged ship icon if worse than 'chuuha'

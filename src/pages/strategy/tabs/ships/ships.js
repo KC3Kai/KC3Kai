@@ -54,7 +54,8 @@
 			this.shipCache = [];
 			for(const key in KC3ShipManager.list){
 				const shipData = KC3ShipManager.list[key];
-				if (!KC3Master.ship(shipData.masterId)) {
+				// Exclude ship(s) that not exist in master to avoid render error
+				if(!KC3Master.ship(shipData.masterId)) {
 					continue;
 				}
 				const preparedData = this.prepareShipData(shipData);

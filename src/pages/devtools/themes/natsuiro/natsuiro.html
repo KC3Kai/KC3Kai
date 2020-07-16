@@ -33,10 +33,11 @@
 			<!-- Module: Activity Box -->
 			<div class="module activity">
 				<div class="activity_tabs">
-					<div id="atab_basic" class="activity_tab hover active i18n" data-target="basic">NatsuiroBasic</div>
-					<div id="atab_battle" class="activity_tab hover i18n" data-target="battle">NatsuiroBattle</div>
-					<div id="atab_expeditionPlanner" class="activity_tab hover i18n" data-target="expeditionPlanner">NatsuiroExped</div>
-					<div id="atab_activity" class="activity_tab i18n" data-target="">NatsuiroActivity</div>
+					<div id="atab_basic" class="activity_tab hover active i18n tab_count_5" data-target="basic">NatsuiroBasic</div>
+					<div id="atab_battle" class="activity_tab hover i18n tab_count_5" data-target="battle">NatsuiroBattle</div>
+					<div id="atab_quest" class="activity_tab hover i18n tab_count_5" data-target="quest">NatsuiroQuest</div>
+					<div id="atab_expeditionPlanner" class="activity_tab hover i18n tab_count_5" data-target="expeditionPlanner">NatsuiroExped</div>
+					<div id="atab_activity" class="activity_tab i18n tab_count_5" data-target="">NatsuiroActivity</div>
 				</div>
 				<div class="activity_body">
 					<div class="activity_box activity_expeditionPlanner">
@@ -58,6 +59,8 @@
 											<li class="expedition_entry" data-exp-id="101">A2</li>
 											<li class="expedition_entry" data-exp-id="102">A3</li>
 											<li class="expedition_entry" data-exp-id="103">A4</li>
+											<li class="expedition_entry" data-exp-id="104">A5</li>
+											<li class="expedition_entry" data-exp-id="105">A6</li>
 										</ul>
 									</li>
 									<li><span class="i18n">MapNameWorld2</span>
@@ -74,6 +77,7 @@
 											<li class="expedition_entry" data-exp-id="111">B2</li>
 											<li class="expedition_entry" data-exp-id="112">B3</li>
 											<li class="expedition_entry" data-exp-id="113">B4</li>
+											<li class="expedition_entry" data-exp-id="114">B5</li>
 										</ul>
 									</li>
 									<li><span class="i18n">MapNameWorld3</span>
@@ -94,6 +98,7 @@
 											<li class="expedition_entry" data-exp-id="42">42</li>
 											<li class="expedition_entry" data-exp-id="43">43</li>
 											<li class="expedition_entry" data-exp-id="44">44</li>
+											<li class="expedition_entry" data-exp-id="45">45</li>
 										</ul>
 									</li>
 									<li><span class="i18n">MapNameWorld4</span>
@@ -106,6 +111,8 @@
 											<li class="expedition_entry" data-exp-id="30">30</li>
 											<li class="expedition_entry" data-exp-id="31">31</li>
 											<li class="expedition_entry" data-exp-id="32">32</li>
+											<li class="expedition_entry" data-exp-id="131">D1</li>
+											<li class="expedition_entry" data-exp-id="132">D2</li>
 										</ul>
 									</li>
 									<li><span class="i18n">MapNameWorld5</span>
@@ -118,6 +125,7 @@
 											<li class="expedition_entry" data-exp-id="38">38</li>
 											<li class="expedition_entry" data-exp-id="39">39</li>
 											<li class="expedition_entry" data-exp-id="40">40</li>
+											<li class="expedition_entry" data-exp-id="141">E1</li>
 										</ul>
 									</li>
 								</ul>
@@ -171,16 +179,30 @@
 								</div>
 							</div>
 							<div class="expPlanner_checker_criterias">
-								<div class="requirements_textbox expPlanner_text i18n hasTotalLv">ExpedTotalLv</div>
-								<div class="requirements_textbox expPlanner_text_passed fleetLv hasTotalLv">?</div>
-								<div class="requirements_textbox expPlanner_text i18n hasTotalAsw">ExpedTotalAsw</div>
-								<div class="requirements_textbox expPlanner_text_passed totalAsw hasTotalAsw">?</div>
-								<div class="requirements_textbox expPlanner_text i18n hasTotalAa">ExpedTotalAa</div>
-								<div class="requirements_textbox expPlanner_text_passed totalAa hasTotalAa">?</div>
-								<div class="requirements_textbox expPlanner_text i18n hasTotalLos">ExpedTotalLos</div>
-								<div class="requirements_textbox expPlanner_text_passed totalLos hasTotalLos">?</div>
-								<div class="requirements_textbox expPlanner_text i18n hasTotalFp">ExpedTotalFp</div>
-								<div class="requirements_textbox expPlanner_text_passed totalFp hasTotalFp">?</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalLv">ExpedTotalLv</div>
+									<div class="requirements_textbox expPlanner_text_passed fleetLv hasTotalLv">?</div>
+								</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalFp">ExpedTotalFp</div>
+									<div class="requirements_textbox expPlanner_text_passed totalFp hasTotalFp">?</div>
+								</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalTorp">ExpedTotalTorp</div>
+									<div class="requirements_textbox expPlanner_text_passed totalTorp hasTotalTorp">?</div>
+								</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalAa">ExpedTotalAa</div>
+									<div class="requirements_textbox expPlanner_text_passed totalAa hasTotalAa">?</div>
+								</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalAsw">ExpedTotalAsw</div>
+									<div class="requirements_textbox expPlanner_text_passed totalAsw hasTotalAsw">?</div>
+								</div>
+								<div class="requirements">
+									<div class="requirements_textbox expPlanner_text i18n hasTotalLos">ExpedTotalLos</div>
+									<div class="requirements_textbox expPlanner_text_passed totalLos hasTotalLos">?</div>
+								</div>
 								<div class="expPlanner_req_fleetComposition">
 									<div class="requirements_textbox expPlanner_text_passed">?</div>
 								</div>
@@ -262,94 +284,139 @@
 								<div class="consumable_ltext count_bauxite">300000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
+							<div class="consumable page3 itemPage">
 								<div class="consumable_icon"><img src="../../../../assets/img/useitems/61.png" /></div>
-								<div class="consumable_ltext count_1classMedalsOrEvent">99</div>
+								<div class="consumable_ltext count_eventItemOrPresent">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
+							<div class="consumable page3 itemPage">
 								<div class="consumable_icon"><img src="../../../../assets/img/useitems/57.png" /></div>
 								<div class="consumable_ltext count_medals">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/58.png" /></div>
-								<div class="consumable_ltext count_blueprints">99</div>
+							<div class="consumable page3 itemPage">
+								<div class="consumable_icon"><img src="../../../../assets/img/useitems/61.png" /></div>
+								<div class="consumable_ltext count_firstClassMedals">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/75.png" /></div>
-								<div class="consumable_ltext count_newGunMats">99</div>
+							<div class="consumable page3 itemPage">
+								<div class="consumable_icon"><img src="../../../../assets/img/useitems/50.png" /></div>
+								<div class="consumable_ltext count_repair">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/77.png" /></div>
-								<div class="consumable_ltext count_newAvMats">99</div>
+							<div class="consumable page3 itemPage">
+								<div class="consumable_icon"><img src="../../../../assets/img/useitems/91.png" /></div>
+								<div class="consumable_ltext count_emergencyRepair">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/78.png" /></div>
-								<div class="consumable_ltext count_actionReportOrSkilledCrew">99</div>
+							<div class="consumable page3 itemPage">
+								<div class="consumable_icon"><img src="../../../../assets/img/useitems/67.png" /></div>
+								<div class="consumable_ltext count_supply">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
+							<div class="consumable page3 itemPage">
 								<div class="consumable_icon"><img src="../../../../assets/img/useitems/64.png" /></div>
-								<div class="consumable_ltext count_reinforcement">99</div>
+								<div class="consumable_ltext count_reinforceExpansion">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
+							<div class="consumable page3 itemPage">
 								<div class="consumable_icon"><img src="../../../../assets/img/useitems/52.png" /></div>
-								<div class="consumable_ltext count_fairy">99</div>
+								<div class="consumable_ltext count_furnitureFairy">99</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page3">
+							<div class="consumable page3 itemPage">
 								<div class="consumable_icon"><img src="../../../../assets/img/useitems/54.png" /></div>
 								<div class="consumable_ltext count_morale">198</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/70.png" /></div>
+								<div class="consumable_ltext count_skilledCrew">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/65.png" /></div>
+								<div class="consumable_ltext count_protoCatapult">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/71.png" /></div>
+								<div class="consumable_ltext count_nEngine">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/75.png" /></div>
+								<div class="consumable_ltext count_newArtilleryMaterial">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/77.png" /></div>
+								<div class="consumable_ltext count_newAviationMaterial">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/92.png" /></div>
+								<div class="consumable_ltext count_newRocketDevMaterial">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/74.png" /></div>
+								<div class="consumable_ltext count_newAircraftBlueprint">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/78.png" /></div>
+								<div class="consumable_ltext count_actionReport">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page4 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/58.png" /></div>
+								<div class="consumable_ltext count_blueprints">0</div>
+								<div class="clear"></div>
+							</div>
+							<div class="consumable page5 itemPage">
 								<div class="consumable_icon"><img src="/assets/img/useitems/85.png" /></div>
 								<div class="consumable_ltext count_rice">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
+							<div class="consumable page5 itemPage">
 								<div class="consumable_icon"><img src="/assets/img/useitems/86.png" /></div>
 								<div class="consumable_ltext count_umeboshi">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
+							<div class="consumable page5 itemPage">
 								<div class="consumable_icon"><img src="/assets/img/useitems/87.png" /></div>
 								<div class="consumable_ltext count_nori">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
+							<div class="consumable page5 itemPage">
 								<div class="consumable_icon"><img src="/assets/img/useitems/88.png" /></div>
 								<div class="consumable_ltext count_tea">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
+							<div class="consumable page5 itemPage">
 								<div class="consumable_icon"><img src="/assets/img/useitems/89.png" /></div>
 								<div class="consumable_ltext count_dinnerTicket">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/69.png" /></div>
-								<div class="consumable_ltext count_mackerelCan">0</div>
+							<div class="consumable page5 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/62.png" /></div>
+								<div class="consumable_ltext count_hishimochi">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/66.png" /></div>
-								<div class="consumable_ltext count_ration">0</div>
+							<div class="consumable page5 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/68.png" /></div>
+								<div class="consumable_ltext count_mackerel">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/76.png" /></div>
-								<div class="consumable_ltext count_rationSpecial">0</div>
+							<div class="consumable page5 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/93.png" /></div>
+								<div class="consumable_ltext count_sardine">0</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/65.png" /></div>
-								<div class="consumable_ltext count_protoCatapult">0</div>
+							<div class="consumable page5 itemPage">
+								<div class="consumable_icon"><img src="/assets/img/useitems/90.png" /></div>
+								<div class="consumable_ltext count_setsubunBeans">0</div>
 								<div class="clear"></div>
 							</div>
 							<div class="clear"></div>
@@ -653,6 +720,28 @@
 						</div>
 						<div class="node_types node_type_text">
 
+						</div>
+					</div>
+					<!-- QUEST -->
+					<div class="activity_box activity_quest">
+						<div class="quest_filters">
+							<div class="quest_filter_button i18n_title" filter="1" title="QuestFilterSortie">
+								<div></div>
+							</div>
+							<div class="quest_filter_button i18n_title" filter="2" title="QuestFilterPvP">
+								<div></div>
+							</div>
+							<div class="quest_filter_button i18n_title" filter="3" title="QuestFilterExped">
+								<div></div>
+							</div>
+							<div class="quest_filter_button i18n_title" filter="4" title="QuestFilterArsenal">
+								<div></div>
+							</div>
+							<div class="quest_filter_button i18n_title" filter="5" title="QuestFilterOthers">
+								<div></div>
+							</div>
+						</div>
+						<div class="quest_list">
 						</div>
 					</div>
 					<!-- CRAFTING: New item result details -->
@@ -1010,7 +1099,7 @@
 				<div class="control hover fleet_lbas"><img src="../../../../assets/img/items/33.png" /></div>
 
 				<div class="control hover scroll_btn scroll_left disabled"></div>
-				<div class="control scrollable">
+				<div class="control control_btns scrollable">
 					<div class="control hover control_btn btn_mute i18n_title" title="PanelToggleSounds"><img src="../../../../assets/img/ui/mute.png" /></div>
 					<div class="control hover control_btn btn_alert_toggle i18n_title" title="PanelToggleAlert"><img src="../../../../assets/img/ui/alert.png" /></div>
 					<div class="control hover control_btn btn_ss1 i18n_title" title="Screenshot"><img src="../../../../assets/img/ui/cam1.png" /></div>
@@ -1168,6 +1257,7 @@
 					<div class="gear_icon"><img/></div>
 				</div>
 				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
+				<div class="locktag"><span class="solid"></span></div>
 				<div class="ship_img"><img/></div>
 				<div class="ship_col1">
 					<div class="ship_name"></div>
@@ -1179,6 +1269,7 @@
 					</div>
 					<div class="ship_hp_box">
 						<div class="ship_hp_bar">
+							<div class="ship_hp_bar_metrics"></div>
 							<div class="ship_hp_prediction"></div>
 							<div class="ship_hp_pred_value">
 								<span class="ship_hp_diff"></span>
@@ -1256,6 +1347,7 @@
 			<div class="sship">
 				<div class="ship_img"><img/></div>
 				<div class="mvp_icon"><img src="/assets/img/ui/mvp.png" /></div>
+				<div class="locktag"><span class="solid"></span></div>
 				<div class="ex_item">
 					<div class="gear_star"></div>
 					<div class="gear_icon"><img/></div>
@@ -1270,6 +1362,7 @@
 						</div>
 						<div class="ship_hp_box">
 							<div class="ship_hp_bar">
+								<div class="ship_hp_bar_metrics"></div>
 								<div class="ship_hp_prediction"></div>
 							</div>
 						</div>

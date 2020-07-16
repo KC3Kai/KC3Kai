@@ -7304,6 +7304,15 @@ var PS = {};
       };
       return FleetTotalFp;
   })();
+  var FleetTotalTorp = (function () {
+      function FleetTotalTorp(value0) {
+          this.value0 = value0;
+      };
+      FleetTotalTorp.create = function (value0) {
+          return new FleetTotalTorp(value0);
+      };
+      return FleetTotalTorp;
+  })();
   var FleetDrum = (function () {
       function FleetDrum(value0) {
           this.value0 = value0;
@@ -7386,6 +7395,9 @@ var PS = {};
       };
       var fpTotal = function (n) {
           return [ new FleetTotalFp(n) ];
+      };
+      var torpTotal = function (n) {
+          return [ new FleetTotalTorp(n) ];
       };
       var fslAndSc = function (fsl) {
           return function (sc) {
@@ -7522,40 +7534,298 @@ var PS = {};
           return Data_Semigroup.append(Data_Semigroup.semigroupArray)(fslAndSc(25)(6))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(lvlCnt(150))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(1)(KanColle_Generated_SType.CL.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.AV.value))(Data_Semigroup.append(Data_Semigroup.semigroupArray)(sty(2)(KanColle_Generated_SType.DD.value))(fsty(KanColle_Generated_SType.CL.value))))));
       };
       if (v === 41) {
-          return addGroup(fslAndSc(30)(3))(addGroup(lvlCnt(115))(addGroup(ddde(3))(addGroup(fpTotal(60))(addGroup(aaTotal(80))(aswTotal(210))))));
+          return addGroup(fslAndSc(30)(3))
+              (addGroup(lvlCnt(100))
+                  (addGroup(ddde(3))
+                      (addGroup(fpTotal(60))
+                          (addGroup(aaTotal(80))
+                              (aswTotal(210))
+                          )
+                      )
+                  )
+              );
       };
       if (v === 42) {
-          return addGroup(fslAndSc(45)(4))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(ddde(3)))));
+          return addGroup(fslAndSc(45)(4))
+              (addGroup(lvlCnt(200))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(1)(KanColle_Generated_SType.DD.value))
+                          (ddde(3))
+                      )
+                  )
+              );
       };
       if (v === 43) {
-          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(300))(addGroup(sty(1)(KanColle_Generated_SType.CVE.value))(addGroup(ddde(2))(addGroup(fsty([ KanColle_Generated_SType.CVE.value ]))(addGroup(fpTotal(500))(aswTotal(280)))))));
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(300))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CVE.value))
+                      (addGroup(ddde(2))
+                          (addGroup(fsty([ KanColle_Generated_SType.CVE.value ]))
+                              (addGroup(fpTotal(500))
+                                  (addGroup(aaTotal(280))
+                                      (addGroup(aswTotal(280))
+                                          (losTotal(179))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 44) {
-          return addGroup(fslAndSc(35)(6))(addGroup(carrier(3))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(aswTotal(200))([ new FleetShipWithDrum(3), new FleetDrum(6) ]))))));
+          return addGroup(fslAndSc(35)(6))
+              (addGroup(lvlCnt(210))
+                  (addGroup(carrier(3))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                          (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                              (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                                  (addGroup(aaTotal(200))
+                                      (addGroup(aswTotal(200))
+                                          (addGroup(losTotal(150))
+                                              ([ new FleetShipWithDrum(3), new FleetDrum(6) ])
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 45) {
+          return addGroup(fslAndSc(50)(5))
+              (addGroup(lvlCnt(240))
+                  (addGroup(fsty(KanColle_Generated_SType.CVE.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CVE.value))
+                          (addGroup(ddde(4))
+                              (addGroup(aaTotal(240))
+                                  (addGroup(aswTotal(300))
+                                      (losTotal(180))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
       };
       if (v === 101) {
-          return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(aswTotal(180))(addGroup(aaTotal(70))(losTotal(73)))));
+          return addGroup(fslAndSc(20)(4))(addGroup(ddde(4))(addGroup(fpTotal(50))(addGroup(aaTotal(70))(addGroup(aswTotal(180))(losTotal(73))))));
       };
       if (v === 102) {
-          return addGroup(fslAndSc(35)(5))(addGroup(lvlCnt(185))(addGroup(cvecl(1))(addGroup(sty(1)(KanColle_Generated_SType.DD.value))(addGroup(ddde(3))(addGroup(aswTotal(280))(addGroup(aaTotal(162))(losTotal(60))))))));
+          return addGroup(fslAndSc(35)(5))
+              (addGroup(lvlCnt(185))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(1)(KanColle_Generated_SType.DD.value))
+                          (addGroup(ddde(3))
+                              (addGroup(aaTotal(160))
+                                  (addGroup(aswTotal(280))
+                                      (losTotal(60))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 103) {
-          return addGroup(fslAndSc(40)(5))(addGroup(lvlCnt(200))(addGroup(cvecl(1))(addGroup(sty(4)(KanColle_Generated_SType.DD.value))(addGroup(fpTotal(300))(aswTotal(200))))));
+          return addGroup(fslAndSc(40)(5))
+              (addGroup(lvlCnt(200))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                          (addGroup(ddde(4))
+                              (addGroup(fpTotal(300))
+                                  (addGroup(aaTotal(200))
+                                      (addGroup(aswTotal(200))
+                                          (losTotal(120))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 104) {
+          return addGroup(fslAndSc(45)(5))
+              (addGroup(lvlCnt(230))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                          (addGroup(ddde(4))
+                              (addGroup(fpTotal(280))
+                                  (addGroup(aaTotal(220))
+                                      (addGroup(aswTotal(240))
+                                          (losTotal(150))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 105) {
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(290))
+                  (addGroup(cvecl(1))
+                      (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(330))
+                              (addGroup(aaTotal(300))
+                                  (addGroup(aswTotal(270))
+                                      (losTotal(180))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 110) {
-          return addGroup(fslAndSc(40)(6))(addGroup(lvlCnt(150))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(ddde(2))(addGroup(aswTotal(200))(addGroup(aaTotal(200))(losTotal(140))))))));
+          return addGroup(fslAndSc(40)(6))
+              (addGroup(lvlCnt(150))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(ddde(2))
+                              (addGroup(aaTotal(200))
+                                  (addGroup(aswTotal(200))
+                                      (losTotal(140))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 111) {
-          return addGroup(fslAndSc(45)(6))(addGroup(lvlCnt(290))(addGroup(sty(1)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(3)(KanColle_Generated_SType.DD.value))(fpTotal(360))))));
+          return addGroup(fslAndSc(45)(6))
+              (addGroup(lvlCnt(220))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(360))
+                                  (addGroup(aaTotal(160))
+                                      (addGroup(aaTotal(160))
+                                          (losTotal(140))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 112) {
-          return addGroup(fslAndSc(50)(6))(addGroup(lvlCnt(350))(addGroup(sty(1)(KanColle_Generated_SType.AV.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(ddde(4))(addGroup(fpTotal(400))(aswTotal(220))))))));
+          return addGroup(fslAndSc(50)(6))
+              (addGroup(lvlCnt(250))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(ddde(4))
+                                  (addGroup(fpTotal(400))
+                                      (addGroup(aaTotal(220))
+                                          (addGroup(aswTotal(220))
+                                              (losTotal(190))
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 113) {
-          return addGroup(fslAndSc(55)(6))(addGroup(lvlCnt(390))(addGroup(sty(2)(KanColle_Generated_SType.CA.value))(addGroup(sty(1)(KanColle_Generated_SType.CL.value))(addGroup(sty(2)(KanColle_Generated_SType.DD.value))(addGroup(submarine(1))(addGroup(fpTotal(500))(aswTotal(280))))))));
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(340))
+                  (addGroup(sty(2)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(submarine(1))
+                                  (addGroup(fpTotal(500))
+                                      (aswTotal(280))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 114) {
+          return addGroup(fslAndSc(60)(6))
+              (addGroup(lvlCnt(350))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(510))
+                                  (addGroup(aaTotal(400))
+                                      (addGroup(aswTotal(285))
+                                          (losTotal(385))
+                                      )
+                                   )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 131) {
+          return addGroup(fslAndSc(50)(5))
+              (addGroup(lvlCnt(200))
+                  (addGroup(fsty(KanColle_Generated_SType.AV.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
+                          (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                              (addGroup(aaTotal(240))
+                                  (addGroup(aswTotal(240))
+                                      (losTotal(300))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 132) {
+          return addGroup(fslAndSc(55)(5))
+              (addGroup(lvlCnt(270))
+                  (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                          (addGroup(submarine(3))
+                              (addGroup(fpTotal(60))
+                                  (addGroup(torpTotal(390))
+                                      (addGroup(aaTotal(110))
+                                          (addGroup(aswTotal(55))
+                                              (losTotal(260))
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
+      };
+      if (v === 141) {
+          return addGroup(fslAndSc(55)(6))
+              (addGroup(lvlCnt(300))
+                  (addGroup(fsty(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
+                          (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                              (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
+                                  (addGroup(fpTotal(450))
+                                      (addGroup(aaTotal(350))
+                                          (addGroup(aswTotal(330))
+                                              (losTotal(250))
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       return [  ];
   };
@@ -7597,6 +7867,9 @@ var PS = {};
       };
       if (v instanceof FleetTotalFp) {
           return "fleet fire-power stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
+      };
+      if (v instanceof FleetTotalTorp) {
+          return "fleet torpedo stat sum should be at least " + Data_Show.show(Data_Show.showInt)(v.value0);
       };
       if (v instanceof FleetDrum) {
           return "fleet should have at least " + (Data_Show.show(Data_Show.showInt)(v.value0) + " drum(s)");
@@ -7666,6 +7939,11 @@ var PS = {};
                       return x.fp;
                   })(fleet)) >= req.value0;
               };
+              if (req instanceof FleetTotalTorp) {
+                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                      return x.tp;
+                  })(fleet)) >= req.value0;
+              };
               if (req instanceof FleetDrum) {
                   return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.drumCount;
@@ -7711,6 +7989,7 @@ var PS = {};
   exports["FleetTotalLos"] = FleetTotalLos;
   exports["FleetTotalAa"] = FleetTotalAa;
   exports["FleetTotalFp"] = FleetTotalFp;
+  exports["FleetTotalTorp"] = FleetTotalTorp;
   exports["FleetDrum"] = FleetDrum;
   exports["FleetShipWithDrum"] = FleetShipWithDrum;
   exports["FleetSTypeCount"] = FleetSTypeCount;
@@ -7762,9 +8041,11 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(44);
-  allExpeditionIds.push(...Data_Array.range(100)(103));
+  var allExpeditionIds = Data_Array.range(1)(48);
+  allExpeditionIds.push(...Data_Array.range(100)(105));
   allExpeditionIds.push(...Data_Array.range(110)(113));
+  allExpeditionIds.push(...Data_Array.range(131)(132));
+  allExpeditionIds.push(...Data_Array.range(141)(141));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -7940,6 +8221,9 @@ var PS = {};
       if (eId === 44) {
           return income(0)(200)(0)(800);
       };
+      if (eId === 45) {
+          return income(40)(0)(0)(220);
+      };
       if (eId === 100) {
           return income(45)(45)(0)(0);
       };
@@ -7952,6 +8236,12 @@ var PS = {};
       if (eId === 103) {
           return income(80)(120)(0)(100);
       };
+      if (eId === 104) {
+          return income(0)(300)(0)(100);
+      };
+      if (eId === 105) {
+          return income(100)(500)(100)(200);
+      };
       if (eId === 110) {
           return income(0)(0)(10)(30);
       };
@@ -7963,6 +8253,18 @@ var PS = {};
       };
       if (eId === 113) {
           return income(0)(0)(1200)(650);
+      };
+      if (eId === 114) {
+          return income(500)(500)(1000)(750);
+      };
+      if (eId === 131) {
+          return income(0)(20)(20)(100);
+      };
+      if (eId === 132) {
+          return income(0)(0)(400)(800);
+      };
+      if (eId === 141) {
+          return income(0)(600)(600)(1000);
       };
       return Data_Monoid.mempty(incomeMonoid);
   };
@@ -8140,6 +8442,9 @@ var PS = {};
       if (eId === 44) {
           return c(8)(4)(hr(10));
       };
+      if (eId === 45) {
+          return c(6)(4)(hm(3)(20));
+      };
       if (eId === 100) {
           return c(3.5)(0)(25);
       };
@@ -8152,6 +8457,12 @@ var PS = {};
       if (eId === 103) {
           return c(7.5)(6)(hm(1)(50));
       };
+      if (eId === 104) {
+          return c(8)(7.5)(hr(3));
+      };
+      if (eId === 105) {
+          return c(9)(9.5)(hm(3)(30));
+      };
       if (eId === 110) {
           return c(4.5)(1.5)((35));
       };
@@ -8163,6 +8474,18 @@ var PS = {};
       };
       if (eId === 113) {
           return c(8.5)(8.5)(hm(7)(30));
+      };
+      if (eId === 114) {
+          return c(9)(9.5)(hm(6)(30));
+      };
+      if (eId === 131) {
+          return c(7.5)(5)(hr(2));
+      };
+      if (eId === 132) {
+          return c(9)(9)(hr(10));
+      };
+      if (eId === 141) {
+          return c(9.5)(8.5)(hm(7)(30));
       };
       return noCost;
   };
@@ -8195,6 +8518,9 @@ var PS = {};
   var getExpeditionDisplayName = function (eId) {
       return eId >= 100 && eId < 110 ? "A" + (eId - 99)
         : eId >= 110 && eId < 120 ? "B" + (eId - 109)
+        : eId >= 121 && eId < 130 ? "C" + (eId - 120)
+        : eId >= 131 && eId < 140 ? "D" + (eId - 130)
+        : eId >= 141 && eId < 150 ? "E" + (eId - 140)
         : eId < 10 ? "0" + eId : eId;
   };
   var getExpeditionWorld = function (eId) {
@@ -9283,7 +9609,7 @@ var PS = {};
                   return v[i - 1];
               });
           };
-          if (1 <= 100 && i <= 120) {
+          if (1 <= 100 && i <= 150) {
               return Partial_Unsafe.unsafePartial(function (dictPartial) {
                   return v[i - 60];
               });
@@ -10071,6 +10397,15 @@ var PS = {};
               "api_win_item2":[12,2]
           },
           {
+              "api_id":45,
+              "api_time":200,
+              "api_deck_num":5,
+              "api_use_fuel":0.6,
+              "api_use_bull":0.4,
+              "api_win_item1":[11,1],
+              "api_win_item2":[0,0]
+          },
+          {
               "api_id":100,
               "api_disp_no":"A1",
               "api_deck_num":4,
@@ -10110,6 +10445,30 @@ var PS = {};
               "api_use_bull":0.6,
               "api_win_item1":[1,2],
               "api_win_item2":[2,2]
+          },
+          {
+              "api_id":104,
+              "api_disp_no":"A5",
+              "api_deck_num":5,
+              "api_time":180,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.8,
+              "api_use_bull":0.75,
+              "api_win_item1":[3,4],
+              "api_win_item2":[1,3]
+          },
+          {
+              "api_id":105,
+              "api_disp_no":"A6",
+              "api_deck_num":6,
+              "api_time":210,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.95,
+              "api_win_item1":[3,5],
+              "api_win_item2":[4,1]
           },
           {
               "api_id":110,
@@ -10153,6 +10512,52 @@ var PS = {};
               "api_use_fuel":0.85,
               "api_use_bull":0.85,
               "api_win_item1":[3,4],
+              "api_win_item2":[4,1]
+          },
+          {
+              "api_id":114,
+              "api_disp_no":"B5",
+              "api_deck_num":6,
+              "api_time":390,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.95,
+              "api_win_item1":[1,4],
+              "api_win_item2":[4,1]
+          },
+          {
+              "api_id":131,
+              "api_disp_no":"D1",
+              "api_deck_num":5,
+              "api_time":120,
+              "api_use_fuel":0.75,
+              "api_use_bull":0.5,
+              "api_win_item1":[1,1],
+              "api_win_item2":[0,0]
+          },
+          {
+              "api_id":132,
+              "api_disp_no":"D2",
+              "api_deck_num":5,
+              "api_time":600,
+              "api_reset_type":1,
+              "api_damage_type":1,
+              "api_use_fuel":0.9,
+              "api_use_bull":0.9,
+              "api_win_item1":[59,1],
+              "api_win_item2":[12,1]
+          },
+          {
+              "api_id":141,
+              "api_disp_no":"E1",
+              "api_deck_num":6,
+              "api_time":450,
+              "api_reset_type":1,
+              "api_damage_type":2,
+              "api_use_fuel":0.95,
+              "api_use_bull":0.85,
+              "api_win_item1":[12,2],
               "api_win_item2":[4,1]
           }
       ];
@@ -10504,6 +10909,7 @@ var PS = {};
       $2.totalLos = Data_Nullable.toNullable(rp.totalLos);
       $2.totalAa = Data_Nullable.toNullable(rp.totalAa);
       $2.totalFp = Data_Nullable.toNullable(rp.totalFp);
+      $2.totalTorp = Data_Nullable.toNullable(rp.totalTorp);
       $2.drumCount = Data_Nullable.toNullable(rp.drumCount);
       $2.drumCarrierCount = Data_Nullable.toNullable(rp.drumCarrierCount);
       return $2;
@@ -10524,6 +10930,7 @@ var PS = {};
           totalLos: Data_Nullable.toNullable(rp.totalLos),
           totalAa: Data_Nullable.toNullable(rp.totalAa),
           totalFp: Data_Nullable.toNullable(rp.totalFp),
+          totalTorp: Data_Nullable.toNullable(rp.totalTorp),
           drumCount: Data_Nullable.toNullable(rp.drumCount),
           drumCarrierCount: Data_Nullable.toNullable(rp.drumCarrierCount),
           fleetSType: Data_Functor.map(Data_Functor.functorArray)(cov)(rp.fleetSType)
@@ -10538,6 +10945,7 @@ var PS = {};
       totalLos: Data_Maybe.Nothing.value,
       totalAa: Data_Maybe.Nothing.value,
       totalFp: Data_Maybe.Nothing.value,
+      totalTorp: Data_Maybe.Nothing.value,
       drumCount: Data_Maybe.Nothing.value,
       drumCarrierCount: Data_Maybe.Nothing.value,
       fleetSType: [  ]
@@ -10617,6 +11025,16 @@ var PS = {};
                   };
                   $183.totalFp = new Data_Maybe.Just(fleetReq.value0);
                   return $183;
+              };
+              if (fleetReq instanceof KanColle_Expedition_Requirement.FleetTotalTorp) {
+                  var $184 = {};
+                  for (var $194 in p) {
+                      if ({}.hasOwnProperty.call(p, $194)) {
+                          $184[$194] = p[$194];
+                      };
+                  };
+                  $184.totalTorp = new Data_Maybe.Just(fleetReq.value0);
+                  return $184;
               };
               if (fleetReq instanceof KanColle_Expedition_Requirement.FleetDrum) {
                   var $20 = {};
@@ -10724,6 +11142,11 @@ var PS = {};
                           return s.fp;
                       })(fleet)) >= tfp;
                   })(req.totalFp),
+                  totalTorp: Data_Functor.map(Data_Maybe.functorMaybe)(function (ttp) {
+                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                          return s.tp;
+                      })(fleet)) >= ttp;
+                  })(req.totalTorp),
                   drumCount: Data_Functor.map(Data_Maybe.functorMaybe)(function (dc) {
                       return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.drumCount;
@@ -10754,6 +11177,7 @@ var PS = {};
                   totalLos: toFalseF(Data_Maybe.functorMaybe)(req.totalLos),
                   totalAa: toFalseF(Data_Maybe.functorMaybe)(req.totalAa),
                   totalFp: toFalseF(Data_Maybe.functorMaybe)(req.totalFp),
+                  totalTorp: toFalseF(Data_Maybe.functorMaybe)(req.totalTorp),
                   drumCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCount),
                   drumCarrierCount: toFalseF(Data_Maybe.functorMaybe)(req.drumCarrierCount),
                   fleetSType: toFalseF(Data_Functor.functorArray)(req.fleetSType)

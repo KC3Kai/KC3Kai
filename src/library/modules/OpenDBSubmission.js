@@ -4,6 +4,7 @@
  * Submits equip dev, ship constructions, ship drops and equipment improvements to OpenDB:
  * http://opendb.swaytwig.com/
  *
+ * @deprecated since 2020-04-03 - https://github.com/KC3Kai/KC3Kai/issues/2973
  * @see PoiDBSubmission.js - copied and edited from
  */
 (function(){

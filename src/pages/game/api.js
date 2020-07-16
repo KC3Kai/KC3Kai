@@ -308,14 +308,7 @@ $(document).on("keydown", function(event){
 			
 		// F9: Screenshot
 		case(120):
-			if (isTakingScreenshot) return;
-			isTakingScreenshot = true;
-			
-			(new KCScreenshot())
-				.setCallback(function(){
-					isTakingScreenshot = false;
-				})
-				.start("Auto", $(".box-wrap"));
+			interactions.screenshot({playerName: "Auto"}, {}, function(){});
 			return false;
 		
 		// F10: Clear overlays
@@ -390,7 +383,7 @@ var interactions = {
 		KC3QuestManager.load();
 		$.each(request.questlist, function( index, QuestRaw ){
 			// console.log("showing quest",QuestRaw);
-			if( QuestRaw !=- 1 ){
+			if( QuestRaw !=- 1 && index < 5 ){
 				var QuestBox = $("#factory .ol_quest_exist").clone().appendTo(".overlay_quests");
 				
 				// Get quest data
@@ -520,14 +513,10 @@ var interactions = {
 	screenshot :function(request, sender, response){
 		if (isTakingScreenshot) return;
 		isTakingScreenshot = true;
-		
-		// ~Please rewrite the screenshot script
-		(new KCScreenshot())
-			.setCallback(function(){
-				response({success:true});
-				isTakingScreenshot = false;
-			})
-			.start(request.playerName, $(".box-wrap"));
+		(new KCScreenshot()).setCallback(function(){
+			response({success:true});
+			isTakingScreenshot = false;
+		}).start(request.playerName, $(".box-wrap"));
 		return true;
 	},
 	

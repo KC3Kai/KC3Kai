@@ -10,7 +10,7 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
-			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.7/pixi.min.js";
+			this.pixiJsUrl = "https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.8/pixi.min.js";
 			this.serverIp = (new KC3Server()).setNum(PlayerManager.hq.server).ip;
 			this.jsonMaxLength = 60;
 			this.world = 0;
@@ -148,26 +148,26 @@
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
 					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
-					case -99: return 'map_common_83';
+					case -99: return 'map_main_18';
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
-					case 0: return 'map_common_159';
-					case 1: return 'map_common_152';
+					case 0: return 'map_main_50';
+					case 1: return 'map_main_43';
 					case 2:
-					case 6: return 'map_common_155';
-					case 3: return 'map_common_157';
-					case 4: return 'map_common_158';
-					case 5: return 'map_common_146';
-					case 7: return 'map_common_108';
-					case 8: return 'map_common_145';
-					case 9: return 'map_common_156';
-					case 10: return 'map_common_101';
-					case 11: return 'map_common_160';
-					case 12: return 'map_common_161';
-					case 13: return 'map_common_82';
-					case -2: return 'map_common_154';
-					case -3: return 'map_common_151';
-					case 14: return 'map_common_152';
+					case 6: return 'map_main_46';
+					case 3: return 'map_main_48';
+					case 4: return 'map_main_49';
+					case 5: return 'map_main_37';
+					case 7: return 'map_main_35';
+					case 8: return 'map_main_36';
+					case 9: return 'map_main_47';
+					case 10: return 'map_main_34';
+					case 11: return 'map_main_51';
+					case 12: return 'map_main_52';
+					case 13: return 'map_main_17';
+					case -2: return 'map_main_45';
+					case -3: return 'map_main_42';
+					case 14: return 'map_main_43';
 				}
 			};
 			this.isLoading = true;
@@ -333,7 +333,7 @@
 				$(".loading").css("visibility", "hidden");
 			});
 			loader.add(this.mapImgMetaUrl)
-			.add(`http://${this.serverIp}/kcs2/img/map/map_common.json`)
+			.add(`http://${this.serverIp}/kcs2/img/map/map_main.json`)
 			.load((thisLoader, res) => {
 				if(!this.isLoading) {
 					clearStage();

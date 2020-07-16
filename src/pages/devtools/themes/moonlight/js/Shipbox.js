@@ -22,6 +22,9 @@
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
 		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
+		
+		this.eventLockPlans = JSON.parse(localStorage.lock_plan || "[]");
+		this.lockTagColors = KC3Meta.eventLockingTagColors(ConfigManager.sr_theme);
 	};
 
 	/* SET SHIP
@@ -155,6 +158,24 @@
 			$(".mvp_icon", this.element).hide();
 		}
 		
+		// Event locking color tags
+		var tagColorId = this.shipData.sally || 0;
+		if(!tagColorId){
+			this.eventLockPlans.forEach((tagPlan, tagId) => {
+				if(Array.isArray(tagPlan) && tagPlan.includes(this.shipData.rosterId)){
+					tagColorId = tagId + 1;
+				}
+			});
+		}
+		if(tagColorId > 0){
+			$(".locktag .solid", this.element).text(this.shipData.sally || "");
+			$(".locktag", this.element).show()
+				.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")
+				.css("border-color", ConfigManager.pan_ship_icon_border_moon);
+		} else {
+			$(".locktag", this.element).hide();
+		}
+		
 		return this;
 	};
 	
@@ -280,7 +301,9 @@
 			return KC3Meta.term(curHp > taihaHp ? "PanelTaihaHpLeft" : "PanelTaihaHp")
 				.format(taihaHp, curHp - taihaHp)
 				+ "\n" + KC3Meta.term(curHp > chuuhaHp ? "PanelChuuhaHpLeft" : "PanelChuuhaHp")
-				.format(chuuhaHp, curHp - chuuhaHp);
+				.format(chuuhaHp, curHp - chuuhaHp)
+				+ "\n" + KC3Meta.term("PanelOverkillTaihaRate")
+				.format(this.shipData.overkillTaihaRate());
 		})(this.shipData.hp[0])).lazyInitTooltip();
 		
 		// Clear box & hp bar color classes

@@ -313,23 +313,29 @@ html,body {
 	height:255px;
 }
 .module.activity .activity_tabs {
-	width:190px;
-	height:20px;
-	padding:0px 0px 0px 8px;
+	width: 190px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
+
 .module.activity .activity_tab {
-	width:43px;
-	height:20px;
-	line-height:20px;
-	font-size:11px;
-	margin:0px 2px 0px 0px;
-	color:#fff;
-	float:left;
-	text-align:center;
-	border-radius:5px 5px 0px 0px;
-	filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
-	-webkit-filter:brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
-	background:rgba(100, 100, 100, 0.618);
+	width: calc(180px / 4);
+	height: 20px;
+	background: rgba(100, 100, 100, 0.618);
+	color: #fff;
+	text-align: center;
+	line-height: 20px;
+	font-size: 11px;
+	border-radius: 5px 5px 0px 0px;
+	filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+	-webkit-filter: brightness(0.7) drop-shadow(1px 0px 0px black) opacity(0.62);
+}
+.module.activity .activity_tab.tab_count_5 {
+	width: calc(180px / 5);
+}
+.module.activity .activity_tab+.activity_tab {
+	margin-left: 1px;
 }
 #atab_activity {
 	cursor:default;
@@ -428,13 +434,11 @@ html,body {
 .module.activity .consumables .consumable.page2 {
 	display:none;
 }
-.module.activity .consumables .consumable.page3,
-.module.activity .consumables .consumable.page4 {
+.module.activity .consumables .consumable.itemPage {
 	display:none;
 	width:60px;
 }
-.module.activity .consumables .consumable.page3 .consumable_ltext,
-.module.activity .consumables .consumable.page4 .consumable_ltext {
+.module.activity .consumables .consumable.itemPage .consumable_ltext {
 	width:40px;
 }
 
@@ -644,7 +648,7 @@ html,body {
 	letter-spacing:-1px;
 }
 .module.activity .sortie_node.special_cutin {
-	box-shadow:0px 0px 3px 1px #a08;
+	box-shadow:0px 0px 1px 2px #d0b;
 }
 .module.activity .sortie_nodes .boss_node {
 	float:left;
@@ -1247,6 +1251,112 @@ ABYSS FLEET
 	text-shadow:none;
 }
 
+/*------- ACTIVITY: QUEST -------*/
+.module.activity .activity_quest {
+	color: #FFF;
+}
+
+.module.activity .activity_quest .quest_filters {
+	display: flex;
+	height: 25px;
+	justify-content: center;
+}
+
+.module.activity .activity_quest .quest_filter_button {
+	overflow: hidden;
+	width: calc(180px / 5);
+	opacity: 0.3;
+	transition: 0.2s;
+	cursor: pointer;
+}
+
+.module.activity .activity_quest .quest_filter_button.active {
+	opacity: 1;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="1"] {
+	background: #d75048;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="2"] {
+	background: #98e75f;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="3"] {
+	background: #aaccee;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="4"] {
+	background: #996600;
+}
+
+.module.activity .activity_quest .quest_filter_button[filter="5"] {
+	background: #ae76fa;
+}
+
+.module.activity .activity_quest .quest_list {
+	display: block;
+/*  flex-direction: column; */
+	height: 195px;
+	overflow-y: auto;
+	margin-top: 5px;
+}
+
+.module.activity .activity_quest .quest_list::-webkit-scrollbar {
+	width: 5px;
+}
+
+.module.activity .activity_quest .quest_list .quest_page {
+	position: sticky;
+	top: 0px;
+	padding: 1px;
+	background: #444;
+	text-align: center;
+	font-size: 11px;
+}
+
+.module.activity .activity_quest .quest_list .quest {
+	display: flex;
+	align-items: center;
+	width: auto;
+}
+
+.module.activity .activity_quest .quest_list .quest.activated {
+	background: rgba(255,153,51,0.2);
+}
+.module.activity .activity_quest .quest_list .quest.percent50 {
+	background: rgba(51,255,255,0.2);
+}
+.module.activity .activity_quest .quest_list .quest.percent80 {
+	background: rgba(233,255,51,0.2);
+}
+.module.activity .activity_quest .quest_list .quest.completed {
+	background: rgba(0,255,0,0.2);
+}
+
+.module.activity .activity_quest .quest_list .quest .quest_color {
+	width: 14px;
+	height: 14px;
+	margin: 2px;
+	border: 2px solid transparent;
+}
+
+.module.activity .activity_quest .quest_list .quest.activated .quest_color {
+	border-color: #F93;
+}
+.module.activity .activity_quest .quest_list .quest.completed .quest_color {
+	border-color: #0F0;
+}
+
+.module.activity .activity_quest .quest_list .quest .quest_text {
+	width: 165px;
+	height: 14px;
+	overflow: hidden;
+	font-size: 11px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 /*------- ACTIVITY: CRAFTING -------*/
 .module.activity .activity_crafting {
 	padding:10px;
@@ -1640,6 +1750,11 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner {
 	text-align:center;
 	white-space:nowrap;
+	overflow-x:hidden;
+	overflow-y:overlay;
+}
+.module.activity .activity_expeditionPlanner::-webkit-scrollbar {
+	width: 5px;
 }
 .module.activity .activity_expeditionPlanner .dropdown_title.expPlanner_text_passed{
 	color:#006600;
@@ -1690,7 +1805,7 @@ ABYSS FLEET
 	padding: 0;
 	width: 50%;
 	font-size: 13px;
-	line-height: 15px;
+	line-height: 17px;
 }
 
 .module.activity .activity_expeditionPlanner li ui li {
@@ -1707,6 +1822,7 @@ ABYSS FLEET
 	left:100%;
 	cursor:pointer;
 	width:100%;
+	line-height: 13px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_topEntry {
@@ -1732,7 +1848,7 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .estimated_time {
 	float: right;
 	text-align: right;
-	width: 67px;
+	min-width: 67px;
 }
 
 .module.activity .activity_expeditionPlanner .expPlanner_resos_title {
@@ -3002,6 +3118,9 @@ ABYSS FLEET
 	display:inline-block;
 	float:initial;
 }
+.module.controls .control_btn.disabled {
+	background:#333333;
+}
 .module.controls .control_btn img {
 	width:34px;
 	height:24px;
@@ -3232,6 +3351,29 @@ ABYSS FLEET
 	vertical-align:top;
 }
 
+.module.fleet .lship .locktag,
+.module.fleet .sship .locktag {
+	width:15px;
+	height:15px;
+	line-height:12px;
+	float:left;
+	position:absolute;
+	left:28px;
+	top: 0px;
+	z-index:1;
+	overflow:hidden;
+	border-radius:50%;
+	border:1px #fff solid;
+	color:#fff;
+	background:#aaa;
+	opacity:0.8;
+	font-size:10px;
+	text-align:center;
+	text-shadow:none;
+	pointer-events:none;
+	display:none;
+}
+
 .module.fleet .lship .ship_col1 {
 	width:120px;
 	height:41px;
@@ -3298,16 +3440,20 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
-.module.fleet .ship_hp_bar.hp_normal {
+.module.fleet .ship_hp_bar.hp_normal,
+.module.fleet .ship_hp_prediction.hp_normal {
 	background-color:#0f0;
 }
-.module.fleet .ship_hp_bar.hp_shouha {
+.module.fleet .ship_hp_bar.hp_shouha,
+.module.fleet .ship_hp_prediction.hp_shouha {
 	background-color:#ff0;
 }
-.module.fleet .ship_hp_bar.hp_chuuha {
+.module.fleet .ship_hp_bar.hp_chuuha,
+.module.fleet .ship_hp_prediction.hp_chuuha {
 	background-color:#f90;
 }
-.module.fleet .ship_hp_bar.hp_taiha {
+.module.fleet .ship_hp_bar.hp_taiha,
+.module.fleet .ship_hp_prediction.hp_taiha {
 	background-color:#f00;
 }
 .module.fleet .ship_hp_bar.hp_repairing {
@@ -3318,6 +3464,26 @@ ABYSS FLEET
 }
 .module.fleet .ship_hp_bar.hp_sunk {
 	background-color:#ccc;
+}
+.module.fleet .ship_hp_bar_metrics {
+	height:5px;
+	float:left;
+	background-image: linear-gradient(to right,
+		rgba(0,0,0,0) 0%,
+		rgba(0,0,0,0) 24%,
+			rgba(0,0,0,0.3) 24%,
+			rgba(255,255,255,0.3) 25%,
+			rgba(255,255,255,0) 26%,
+		rgba(0,0,0,0) 49%,
+			rgba(0,0,0,0.3) 49.5%,
+			rgba(255,255,255,0.3) 50.5%,
+			rgba(255,255,255,0) 51%,
+		rgba(0,0,0,0) 74%,
+			rgba(0,0,0,0.3) 74%,
+			rgba(255,255,255,0.3) 75%,
+			rgba(255,255,255,0) 76%,
+		rgba(0,0,0,0) 100%
+	);
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;
@@ -3333,6 +3499,9 @@ ABYSS FLEET
 }
 .module.fleet .lship.seven .ship_hp_prediction {
 	height:7px;
+}
+.module.fleet .lship.seven .ship_hp_bar_metrics {
+	height:4px;
 }
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
@@ -3767,6 +3936,9 @@ ABYSS FLEET
 .module.fleet .sship .ship_hp_prediction {
 	height:6px;
 }
+.module.fleet .sship .ship_hp_bar_metrics {
+	height:4px;
+}
 .module.fleet .sship .ship_morale {
 	width:20px;
 	height:20px;
@@ -4145,10 +4317,6 @@ ABYSS FLEET
 	width:26px;
 	height:20px;
 }
-.h .module.controls .control_btn.btn_alert_toggle img {
-	width:26px;
-	height:26px;
-}
 .h .module.controls .control_btn.btn_reload_quotes img,
 .h .module.controls .control_btn.btn_reload_quests img {
 	width:22px;
@@ -4269,6 +4437,9 @@ ABYSS FLEET
 }
 .ui-tooltip-content p {
 	margin:0px;
+}
+.ui-tooltip-content .monofont {
+	font-family: Consolas, 'Courier New', Courier, monospace;
 }
 .ui-tooltip-content .power_capped {
 	color:#a08;
