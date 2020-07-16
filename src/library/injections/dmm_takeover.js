@@ -33,6 +33,7 @@
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
 			chrome.runtime.onMessage.addListener(this.idleTimer());
+			chrome.runtime.onMessage.addListener(this.nextBlockShow());
 		},
 
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -102,6 +103,11 @@
 
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
 				.appendTo("#factory");
+
+			$("<div>").addClass("overlay_next notranslate")
+				.append($("<div>").addClass("nextButtonBlock"))
+				.append($("<span>").html(KC3Meta.term("NextButtonBlockOverlay")))
+				.appendTo("#area-game");
 		},
 
 		/* DMM PAGE LAYOUT
@@ -534,6 +540,27 @@
 			};
 		},
 
+		/* NEXT BUTTON BLOCK CHECKER
+		Displays blocking overlay over area where next button is supposed to apear
+		--------------------------------------*/
+		nextBlockShow: function () {
+			return function (request, sender, response) {
+				if (request.action != "nextBlockShow") return true;
+				if (request.fairy) {
+					const fid = Math.floor(Math.random() * 6);
+					$(".nextButtonBlock").css("background", `url(${chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`)}) no-repeat`);
+					$(".nextButtonBlock").css("background-position", "center");
+					$(".nextButtonBlock").addClass("bg-grey");
+					$(".overlay_next").show();
+				} else {
+					$(".nextButtonBlock").css("background", "");
+					$(".nextButtonBlock").removeClass("bg-grey");
+					$(".overlay_next").show();
+				}
+				response({success: true});
+			};
+		},
+
 		/* CLEAR OVERLAYS
 		Empties or hides current shown or filled overlays
 		--------------------------------------*/
@@ -553,6 +580,7 @@
 				$(".overlay_quests").empty();
 				$(".overlay_markers").empty();
 				$(".overlay_subtitles span").empty();
+				$(".overlay_next").hide();
 				response({success:true});
 			};
 		},
