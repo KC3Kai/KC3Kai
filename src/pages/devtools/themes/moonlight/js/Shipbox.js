@@ -1,6 +1,3 @@
-//var partnerlvl = 1;
-//var partnerID = 50;
-
 /**
  * Shipbox.js
  * KC3改 Ship Box for the Moonlight theme
@@ -22,7 +19,7 @@
 		this.expPercent = this.shipData.exp[2] / 100;
 		this.fuelPercent = this.shipData.fuel / this.shipData.master().api_fuel_max;
 		this.ammoPercent = this.shipData.ammo / this.shipData.master().api_bull_max;
-		
+
 		this.eventLockPlans = JSON.parse(localStorage.lock_plan || "[]");
 		this.lockTagColors = KC3Meta.eventLockingTagColors(ConfigManager.sr_theme);
 	};
@@ -168,10 +165,14 @@
 			});
 		}
 		if(tagColorId > 0){
-			$(".locktag .solid", this.element).text(this.shipData.sally || "");
+			if (this.shipData.sally > 0) {
+				$(".locktag .solid", this.element).text(this.shipData.sally);
+			}
 			$(".locktag", this.element).show()
-				.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")
-				.css("border-color", ConfigManager.pan_ship_icon_border_moon);
+				/*.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")*/
+				.css("border-color", "transparent " + this.lockTagColors[tagColorId - 1] || "#aaa" + " transparent transparent");
+			$(".ship_img", this.element).show()
+				.css("background-color", this.lockTagColors[tagColorId - 1]);
 		} else {
 			$(".locktag", this.element).hide();
 		}

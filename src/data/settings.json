@@ -1184,18 +1184,6 @@
 				}
 			},
 			{
-				"id" : "pan_opacity",
-				"name" : "SettingsPanelOpacity",
-				"type" : "small_text",
-				"bound" : {
-					"min" :   0.0,
-					"max" : 100.0,
-					"length_min" : 1,
-					"type": "Number"
-				},
-				"options" : { "label" : "%" }
-			},
-			{
 				"id" : "pan_pvp_friends",
 				"name" : "SettingsPanelPvPFriends",
 				"type" : "textarea",
@@ -1208,6 +1196,18 @@
 	{
 		"section": "Natsuiro",
 		"contents" : [
+			{
+				"id" : "pan_opacity",
+				"name" : "SettingsPanelOpacity",
+				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"length_min" : 1,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
+			},
 			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
@@ -1267,11 +1267,54 @@
 		"section": "Moonlight",
 		"contents" : [
 			{
+				"id" : "pan_moon_skin",
+				"name" : "SettingsPanelMoonSkin",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "0", "Moonlight" ],
+						[ "1", "Natsuiro (40%) - some elements currently broken" ],
+						[ "2", "Edgelord" ],
+						[ "3", "Dark (1%)" ],
+						[ "4", "Flashbang (0%)" ],
+						[ "5", "Mild Transparency Skin (0%)" ],
+						[ "6", "Moderate Transparency Skin (0%)" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_wrapper_bg",
+				"name" : "SettingsPanelMoonWrapperBG",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "yasen_img", "Yasen" ],
+						[ "bg_black_pearl", "Black Pearl" ],
+						[ "bg_dark", "Dark" ],
+						[ "bg_white", "White" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_opacity",
+				"name" : "SettingsPanelOpacity",
+				"type" : "small_text",
+				"bound" : {
+					"min" :   0.0,
+					"max" : 100.0,
+					"length_min" : 1,
+					"type": "Number"
+				},
+				"options" : { "label" : "%" }
+			},
+			{
 				"id" : "pan_moon_element_shape",
 				"name" : "SettingsPanelElementShape",
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
 						[ "shape_rect", "SettingsPanelBarRect" ],
 						[ "shape_round", "SettingsPanelBarRound" ],
 						[ "shape_rounder", "SettingsPanelBarRounder" ]
@@ -1284,6 +1327,7 @@
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
 						[ "fluid", "SettingsPanelBarFluid" ],
 						[ "flats", "SettingsPanelBarFlats" ],
 						[ "natsuiro", "Natsuiro" ],
@@ -1297,6 +1341,7 @@
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
 						[ "shape_rect", "SettingsPanelBarRect" ],
 						[ "shape_round", "SettingsPanelBarRound" ],
 						[ "shape_rounder", "SettingsPanelBarRounder" ]
@@ -1309,9 +1354,29 @@
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
 						[ "clrmoonlight", "Moonlight" ],
 						[ "clrnatsuiro", "Natsuiro" ],
 						[ "clrdim", "SettingsPanelBarDim" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_bar_indicators",
+				"name" : "SettingsPanelBarIndicators",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "pan_moon_conbut_scheme",
+				"name" : "SettingsPanelConButScheme",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "conbut_moonlight", "Moonlight" ],
+						[ "conbut_natsuiro", "Natsuiro" ],
+						[ "conbut_moonless", "Edgelord" ]
 					]
 				}
 			},
@@ -1334,8 +1399,23 @@
 				"options" : {}
 			},
 			{
-				"id" : "pan_box_bcolor_moon",
+				"id" : "pan_box_bcolor_moon_preset",
 				"name" : "SettingsPanelBoxBackColor",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrmoonlight", "Moonlight" ],
+						[ "clrnatsuiro", "Natsuiro" ],
+						[ "clrlicoriceblue", "Licorice Blue" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_box_bcolor_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsBGColorDesc",
@@ -1343,8 +1423,22 @@
 				}
 			},
 			{
-				"id" : "pan_shiplist_bg_moon",
+				"id" : "pan_shiplist_bg_moon_preset",
 				"name" : "SettingsShipListBG",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrmoonlight", "Moonlight" ],
+						[ "clrlicoriceblue", "Licorice Blue" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_shiplist_bg_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsShipListBG",
@@ -1352,8 +1446,22 @@
 				}
 			},
 			{
-				"id" : "pan_misc_bg_moon",
+				"id" : "pan_misc_bg_moon_preset",
 				"name" : "SettingsMiscBG",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrmoonlight", "Moonlight" ],
+						[ "clrlicoriceblue", "Licorice Blue" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_misc_bg_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsMiscBG",
@@ -1361,8 +1469,21 @@
 				}
 			},
 			{
-				"id" : "pan_drop_shadow_moon",
+				"id" : "pan_drop_shadow_moon_preset",
 				"name" : "SettingsPanelDropShadow",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "rgba(24, 45, 85, 1)", "Moonlight" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_drop_shadow_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsPanelDropShadow",
@@ -1370,8 +1491,22 @@
 				}
 			},
 			{
-				"id" : "pan_ship_icon_bg_moon",
+				"id" : "pan_ship_icon_bg_moon_preset",
 				"name" : "SettingsShipIconBG",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrblackpearl", "Black Pearl" ],
+						[ "clrblue", "Blue" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_ship_icon_bg_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsShipIconBG",
@@ -1379,8 +1514,25 @@
 				}
 			},
 			{
-				"id" : "pan_ship_icon_border_moon",
+				"id" : "pan_ship_icon_border_moon_preset",
 				"name" : "SettingsShipIconBorder",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrdarkblue", "Dark Blue" ],
+						[ "clrblack", "Black" ],
+						[ "clrgold", "Gold" ],
+						[ "clrsilver", "Silver" ],
+						[ "clrwhite", "White" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_ship_icon_border_moon",
+				"name" : "--Custom--",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsShipIconBorder",
@@ -1388,8 +1540,39 @@
 				}
 			},
 			{
-				"id" : "pan_outline_moon",
+				"id" : "pan_misc_icon_bg",
+				"name" : "SettingsPanelMiscIconBG",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "icon_moonlight", "Moonlight" ],
+						[ "icon_natsuiro", "Natsuiro" ],
+						[ "icon_moonless", "Edgelord" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_outline_moon_preset",
 				"name" : "SettingsPanelOutline",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "clrnone", "None" ],
+						[ "clrdarkblue", "Dark Blue" ],
+						[ "clrblack", "Black" ],
+						[ "clrgold", "Gold" ],
+						[ "clrhalfteal", "Half Teal" ],
+						[ "clrsilver", "Silver" ],
+						[ "clrwhite", "White" ],
+						[ "custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_outline_moon",
+				"name" : "---Custom---",
 				"type" : "long_text",
 				"options" : {
 					"placeholder" : "SettingsPanelOutline",
@@ -1406,10 +1589,55 @@
 				}
 			},
 			{
-				"id" : "moon_small_font",
+				"id" : "pan_quest_scheme_moon",
+				"name" : "SettingsPanelQuestScheme",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "schmoonlight", "Moonlight" ],
+						[ "schnatsuiro", "Natsuiro" ],
+						[ "schmoonless", "Edgelord" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_tooltip_scheme_moon",
+				"name" : "SettingsPanelTooltipScheme",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "tip_moonlight", "Moonlight" ],
+						[ "tip_natsuiro", "Natsuiro" ],
+						[ "tip_moonless", "Edgelord" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_exped_planner_moon",
+				"name" : "SettingsPanelExpedPlanner",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "ep_colorblind", "Moonlight" ],
+						[ "ep_natsuiro", "Natsuiro" ],
+						[ "ep_moonless", "Edgelord" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_font_size",
 				"name" : "SettingsMoonSmallFont",
-				"type" : "check",
-				"options" : {}
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "0", "0" ],
+						[ "1", "+1" ],
+						[ "2", "+2" ]
+					]
+				}
 			},
 			{
 				"id" : "moon_lighting_effect",

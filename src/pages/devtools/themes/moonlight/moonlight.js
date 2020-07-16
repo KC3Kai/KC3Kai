@@ -462,41 +462,139 @@
 			});
 		}
 
-		// Panel customizations: panel opacity
-		$(".wrapper_bg").css("opacity", ConfigManager.pan_opacity / 100);
+		// ================================================= //
+		// ============== Panel Customization ============== //
+		// ================================================= //
+		// Many of these will check if the user has the default "auto" turned on for each option.
+		// If "auto" is on, it will automatically pick the color scheme based on whichever 'pan_moon_skin' option the user has selected
+		// If not, it sets the specific preset the user has selected
+		
+		// pan_moon_skin presets       bar_style[0],bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],      shiplist_bg[6],     misc_bg[7]
+		var mode_moonlight =         ["fluid",     "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
+		var mode_natsuiro =          ["natsuiro",  "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "clrnatsuiro",      "clrnone",          "clrnone"];
+		var mode_dark_blue =         ["flats",     "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "clrlicoriceblue",  "clrlicoriceblue",  "clrlicoriceblue"];
+		var mode_dark =              ["flats",     "clrdim",      "shape_rect",   "shape_rect",    "bg_dark",        "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
+		var mode_flashbang =         ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
+		
+		//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],  ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
+		mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "clrnone",         "clrnone",             "clrhalfteal",     "rgba(24, 45, 85, 1)",  "schmoonlight");
+		mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "clrblue",         "clrdarkblue",         "clrnone",         "clrnone",              "schnatsuiro");
+		mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "clrblackpearl",   "clrnone",             "clrnone",         "clrnone",              "schmoonless");
+		mode_dark.push(                 "conbut_moonless",    "icon_moonless",  "clrnone",         "clrnone",             "clrgold",         "clrnone",              "schmoonless");
+		mode_flashbang.push(            "conbut_moonlight",   "icon_moonlight", "clrblue",         "clrsilver",           "clrsilver",       "clrnone",              "schmoonlight");
+
+		//                               skin[15],        tooltips[16],   exped planner[17]
+		mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind");
+		mode_natsuiro.push(             "skin_natsuiro", "tip_natsuiro", "ep_natsuiro");
+		mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless");
+		mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind");
+		mode_flashbang.push(            "skin_flashbang","tip_natsuiro", "ep_colorblind");
+		
+		var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang]
+		var mode_selection = mode_select[ConfigManager.pan_moon_skin];
+		var select_this;
+		
+		function style_select(array_no,css_element,select_this,custom_selection,css_type) {
+			select_this = select_this == "auto" ? mode_selection[array_no] : select_this;
+			select_this == "custom" ? 
+				$(css_element).css(css_type, custom_selection) :
+				$(css_element).addClass(select_this);
+		}
+
+		// ================= //
+		// ==== General ==== //
+		// ================= //
+		// skin-specific presets. These are assigned to the skin itself because they don't really seem worth making a separate option for.
+		// it's possible they could be split from the skin if there is a demand to do so
+		//style_select(15,".skin_misc",ConfigManager.pan_moon_skin);
+		$(".skin_misc").addClass(mode_select[ConfigManager.pan_moon_skin][15]);
+		
+		// wrapper background image or color
+		style_select(4,".wrapper_bg",ConfigManager.pan_moon_wrapper_bg);
+		
+		// wrapper background opacity
+		$(".wrapper_bg").css("opacity", ConfigManager.pan_moon_opacity / 100);
+		
 		// general element corner shape presets
-		$(".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055").addClass(ConfigManager.pan_moon_element_shape);
-		// bar style presets
-		$(".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_style);
+		style_select(3,".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055",ConfigManager.pan_moon_element_shape);
+		
+		// ========================= //
+		// ==== Bar Stylization ==== //
+		// ========================= //
+		style_select(0,".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp",ConfigManager.pan_moon_bar_style);
+		
 		// bar corner shape presets
-		$(".bar_border_radius4,.bar_border_radius3").addClass(ConfigManager.pan_moon_bar_shape);
+		style_select(2,".bar_border_radius4,.bar_border_radius3",ConfigManager.pan_moon_bar_shape);
+		
 		// bar color presets
-		$(".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_colors);
+		style_select(1,".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp",ConfigManager.pan_moon_bar_colors);
+		
+		// hp bar state indicators
+		if(ConfigManager.pan_moon_bar_indicators == true) {
+			$(".ship_hp_bar_cover").addClass("indicator_on");
+		}
+
+		// ============================ //
+		// ==== Module Stylization ==== //
+		// ============================ //
+		style_select(5,".module.activity .activity_body",ConfigManager.pan_box_bcolor_moon_preset,ConfigManager.pan_box_bcolor_moon,"background");
+		style_select(6,".shiplist_bg_color",ConfigManager.pan_shiplist_bg_moon_preset,ConfigManager.pan_shiplist_bg_moon,"background");
+		style_select(7,".module_bg_color",ConfigManager.pan_misc_bg_moon_preset,ConfigManager.pan_misc_bg_moon,"background");
+
+		// ============================ //
+		// ==== Quest Stylization ==== //
+		// ============================ //
+		style_select(14,".quest,.activity_quest",ConfigManager.pan_quest_scheme_moon);
+			
+		// ==================================== //
+		// ==== Control Button Stylization ==== //		
+		// ==================================== //
+		// skin-based control button scheme
+		style_select(8,".module.controls,.activity_tab,.rotarZairo",ConfigManager.pan_moon_conbut_scheme);
+		
 		// control button corner shape presets
 		$(".conbut_radius_5,.conbut_radius_5500").addClass(ConfigManager.pan_moon_conbut_shape);		
+
 		// control button skew or tilt. images are usually untilted because of image quality issues
 		if(ConfigManager.pan_moon_conbut_skew == true) {
 			$(".skew_me,.unskew_me").addClass("skew_it");
 		}
 		
-		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
-		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
-		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
-		$(".ship_img,.expeditions .timer-img img").css("background", ConfigManager.pan_ship_icon_bg_moon);
-		$(".ship_img img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border_moon);
-		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
-		/*$(".module.activity .activity_expeditionPlanner .expPlan_dropdown_title").css("border-color", ConfigManager.pan_outline_moon);*/
-		$(".pvpFleetShip,.module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
+		// ========================== //
+		// ==== Icon Stylization ==== //
+		// ========================== //
+		style_select(9,".misc_icons,.timer-img,.ex_item,.ship_gear",ConfigManager.pan_misc_icon_bg);
+		style_select(10,".ship_icon_bg_color",ConfigManager.pan_ship_icon_bg_moon_preset,ConfigManager.pan_ship_icon_bg_moon,"background");
+		style_select(11,".ship_icon_bg_border",ConfigManager.pan_ship_icon_border_moon_preset,"1px solid "+ ConfigManager.pan_ship_icon_border_moon,"border");
 
-		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
-		$(".rotation,.rotation2,.module.activity,.airbase,.base_plane_col,.module.admiral,.status_text,.summary_box,.quest,.ship_name,.ship_type,.lship .ship_level,.sship .ship_level,.ship_hp_text,.ship_exp_label,.lship .ship_exp_next,.sship .ship_exp_next,.ship_gear_slot,.fleet_num").css("text-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 1px 1px "+ConfigManager.pan_drop_shadow_moon);
-		$(".quest_color,.ship_exp_bar,.ship_gear_icon").css("box-shadow", "-1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px -1px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 0px 1px "+ConfigManager.pan_drop_shadow_moon+", -1px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 0px 1px 1px "+ConfigManager.pan_drop_shadow_moon+", 1px 1px 1px "+ConfigManager.pan_drop_shadow_moon);
+		// =============== //
+		// ==== Other ==== //
+		// =============== //
+		//the main border outline used throughout the skin
+		style_select(12,".outline1",ConfigManager.pan_outline_moon_preset,"1px solid "+ ConfigManager.pan_outline_moon,"border");
 
-		if(ConfigManager.moon_small_font == true) {
-			$(".base_plane_count,.airbase .base_action,.airbase .base_name,.airbase .base_stats .base_stat_value,.sship .ship_type,.sship .ship_name,.fit_gear_name, .admiral_lvnext, .base_plane_name, .ship_face_tooltip .ship_exp_next, .ship_face_tooltip .ship_morale, .ship_face_tooltip .stat_value, .ship_face_tooltip .aa_col, .ship_face_tooltip .stat_name, .ship_full_name span.ship_yomi, .ship_full_name span.ship_masterId").css("font-size", 11);
-			$(".admiral_lvtxt,.admiral_points").css("font-size", 12);
-			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
-		}
+		//a secondary border. to be deprecated?
+		$(".module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
+
+		// drops a shadow for enhanced visibility with various background colors
+		select_this = ConfigManager.pan_drop_shadow_moon_preset == "auto" ? mode_selection[13] : ConfigManager.pan_drop_shadow_moon_preset;
+		if (select_this == "custom") {select_this = ConfigManager.pan_drop_shadow_moon;	}
+
+		$(".text_shadow").css("text-shadow", "-1px -1px 1px "+select_this+", 0px -1px 1px "+select_this+", 1px -1px 1px "+select_this+", -1px 0px 1px "+select_this+", 1px 0px 1px "+select_this+", -1px 1px 1px "+select_this+", 0px 1px 1px "+select_this+", 1px 1px 1px "+select_this);
+			
+		$(".box_shadow").css("box-shadow", "-1px -1px 1px "+select_this+", 0px -1px 1px "+select_this+", 1px -1px 1px "+select_this+", -1px 0px 1px "+select_this+", 1px 0px 1px "+select_this+", -1px 1px 1px "+select_this+", 0px 1px 1px "+select_this+", 1px 1px 1px "+select_this);
+		
+		//tooltip color scheme
+		style_select(16,".ship_face_tooltip",ConfigManager.pan_tooltip_scheme_moon);
+		
+		//expedition planner
+		style_select(17,".activity_expeditionPlanner",ConfigManager.pan_exped_planner_moon);
+
+		//adjustable font size. several specific elements won't display properly on some displays, so this option exists to increase their font size
+		$(".font_size8").css("font-size", "calc(8px + "+ConfigManager.pan_moon_font_size+"px)");
+		$(".font_size9").css("font-size", "calc(9px + "+ConfigManager.pan_moon_font_size+"px)");
+		$(".font_size10").css("font-size", "calc(10px + "+ConfigManager.pan_moon_font_size+"px)");
+
 		if(ConfigManager.moon_lighting_effect == false) {
 			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts").css("background-image", "none", "important");
 		}
@@ -552,7 +650,6 @@
 				if($(".ship_face_tooltip").data("statsIconset") != ConfigManager.info_stats_iconset){
 					updateShipTooltipStatsIconset();
 				}
-
 				updateQuestActivityTab();
 			}
 		});
@@ -1461,43 +1558,58 @@
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
-			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js, or `PlayerManager.getConsumableById()`
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
-				PlayerManager.consumables.setsubunBeans ? 90 : 61;
-			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
+				PlayerManager.consumables.setsubunBeans ? 90 :
+				PlayerManager.consumables.hishimochi ? 62 : 60;
+			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
-			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(57) );
-			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
-				.prev().attr("title", KC3Meta.useItemName(58) );
-			$(".count_newGunMats").text( PlayerManager.consumables.newArtilleryMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(75) );
-			$(".count_newAvMats").text( PlayerManager.consumables.newAviationMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(77) );
-			$(".count_actionReportOrSkilledCrew").text(
-					PlayerManager.consumables.actionReport || PlayerManager.consumables.skilledCrew || 0 )
-				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.actionReport ? 78 : 70) )
-				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.actionReport ? 78 : 70}.png`);
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
-				.prev().attr("title", KC3Meta.useItemName(64) );
-			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
-				.prev().attr("title", KC3Meta.useItemName(52) );
-			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				                   + (PlayerManager.consumables.irako || 0)
-			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			// Count all consumable slotitems via GearManager
+			const consumableSlotitemMap = {
+				"50": { "slotitem":  42 }, // repairTeam
+				"51": { "slotitem":  43 }, // repairGoddess
+				"66": { "slotitem": 145 }, // ration
+				"67": { "slotitem": 146 }, // resupplier
+				"69": { "slotitem": 150 }, // mackerelCan
+				"76": { "slotitem": 241 }, // rationSpecial
+			};
+			Object.keys(consumableSlotitemMap).forEach(useitemId => {
+				const item = consumableSlotitemMap[useitemId];
+				item.attrName = PlayerManager.getConsumableById(useitemId, true);
+				item.amount = KC3GearManager.count(g => g.masterId === item.slotitem) || 0;
+			});
+			// Update simple amount of single useitem (or slotitem) by ID and name (matching with CSS class: `count_` + name)
+			const updateCountByUseitemId = (useitemId) => {
+				const attrName = PlayerManager.getConsumableById(useitemId, true);
+				let amount = PlayerManager.getConsumableById(useitemId) || 0;
+				const slotitem = consumableSlotitemMap[useitemId];
+				if(slotitem) amount = slotitem.amount;
+				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
+			};
+			// Total items of 1 page should be 3 x 3 for current page layout and styles
+			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
+			// Update amounts of combined counting
+			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
+					consumableSlotitemMap[51].amount, KC3Meta.useItemName(51)
+				));
+			$(".count_supply").text([66, 67, 69, 76].map(id => consumableSlotitemMap[id].amount).sumValues())
+				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5} +\nx{6} {7}".format(
+					consumableSlotitemMap[67].amount, KC3Meta.useItemName(67),
+					consumableSlotitemMap[66].amount, KC3Meta.useItemName(66),
+					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
+					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
+				));
+			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+				));
+			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
-				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
-				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
-					const attrName = PlayerManager.getConsumableById(id, true);
-					let amount = PlayerManager.getConsumableById(id) || 0;
-					// slotitem like rations should be counted via GearManager
-					const slotitemMstId = slotitemIdMap[id];
-					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
-					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
-				});
+				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
 			}
@@ -1599,7 +1711,7 @@
 			$(".expeditions").createChildrenTooltips();
 			$(".timers").createChildrenTooltips();
 		},
-
+		
 		// Trigger when enter quest screen
 		QuestList: function (data) {
 			$('.quest_filter_button').off('click');
@@ -2102,28 +2214,30 @@
 			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if(fleetNum >= 1 && fleetNum <= 4) {
+					let tips = fleetNum > 1 ? "" :
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
-						tips += (!tips ? "" : "\n")
-							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {5}\t{10}\n{1}: {6}\t{11}\n{2}: {7}\t{12}\n{3}: {8}\t{13}\n{4}: {9}\t{14}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalTorp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.tp, fstats.aa, fstats.as, fstats.ls,
-								Math.qckInt("floor", fstatsImp.fp , 1),
-								Math.qckInt("floor", fstatsImp.tp , 1),
-								Math.qckInt("floor", fstatsImp.aa , 1),
-								Math.qckInt("floor", fstatsImp.as , 1),
-								Math.qckInt("floor", fstatsImp.ls , 1)
-							);
+						// Align with special space char 0xa0 and force to monospaced font
+						const formatStatTip = (term, rawStat, impStat) => (
+							term.padEnd(5, '\u00a0') +
+							String(rawStat).padStart(6, '\u00a0') +
+							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
+						);
+						tips += (!tips ? "" : "\n") + '<span class="monofont">';
+						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
+						tips += [
+							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
+							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
+							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
+							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
+							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
+						].join('\n');
 						$(".summary-sumfp .summed").text(fstats.fp);
 						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsImp.fp , 1));
+						$(".summary-sumtp .summed").text(fstats.tp);
+						$(".summary-sumtp .summed_imp").text(Math.qckInt("floor", fstatsImp.tp , 1));
 						$(".summary-sumaa .summed").text(fstats.aa);
 						$(".summary-sumaa .summed_imp").text(Math.qckInt("floor", fstatsImp.aa , 1));
 						$(".summary-sumasw .summed").text(fstats.as);
@@ -2131,7 +2245,7 @@
 						$(".summary-sumlos .summed").text(fstats.ls);
 						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsImp.ls , 1));
 					}
-					return tips;
+					return tips + "</span>";
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-transport").attr("title",
 				KC3Meta.term("PanelTransportPoints").format(
@@ -4334,8 +4448,12 @@
 					aa = ship.aa[0],
 					fp = ship.fp[0],
 					tp = ship.tp[0];
+				var los = ship.ls[0],
+					aa = ship.aa[0],
+					fp = ship.fp[0],
+					tp = ship.tp[0];
 				var asw = ship.as[0];
-				if(includeImprove) {
+				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
@@ -4470,6 +4588,8 @@
 					}
 				} else if (condIsGsWithoutSparkle) {
 					if (condIsFlagshipLevel) {
+						// https://twitter.com/jo_swaf/status/1145297004995596288
+						// https://tonahazana.com/blog-entry-577.html
 						estSuccessRate = 16 + 15 * sparkledCount
 							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
 					} else {
@@ -4731,17 +4851,16 @@
 			if(data.gearObj && data.gearObj.exists()){
 				$(".activity_gunfit .fit_gear_pic img").attr("src",
 					KC3Meta.itemIcon(data.gearObj.master().api_type[3]));
-				$(".activity_gunfit .fit_gear_name").text(data.gearObj.name());
 				if (data.gearObj.stars > 0) {
-					$(".activity_gunfit .fit_gear_level span").text(data.gearObj.stars);
-					$(".activity_gunfit .fit_gear_level").show();
-				} else {
-					$(".activity_gunfit .fit_gear_level").hide();
+					$(".activity_gunfit .fit_gear_name").prepend("(");
+					$(".activity_gunfit .fit_gear_name").text("(+"+data.gearObj.stars + ") " + data.gearObj.name());
+				} else{
+					$(".activity_gunfit .fit_gear_name").text(data.gearObj.name());
 				}
+				
 			} else {
 				$(".activity_gunfit .fit_gear_pic img").attr("src", "/assets/img/ui/empty.png");
 				$(".activity_gunfit .fit_gear_name").text("");
-				$(".activity_gunfit .fit_gear_level").hide();
 			}
 			
 			const gunfitBox = $(".activity_gunfit .fit_value");
