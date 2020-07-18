@@ -467,7 +467,9 @@
 		$(".module.activity .activity_tab").css("background", ConfigManager.pan_box_bcolor);
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor);
 		$(".module.fleet").css("background", ConfigManager.pan_shiplist_bg);
-		$(".ship_img,.timer-img img").css("background", ConfigManager.pan_ship_icon_bg);
+		$(".ship_img,.timer-img img,.shipIcon img,.pvp_fleet_ship_icon img,.pvp_enemy_pic img"
+			+",.mod_ship_pic img,.expres_ship_img img,.fit_ship_pic img,.assistant_ship img")
+			.css("background", ConfigManager.pan_ship_icon_bg);
 		$(".ship_img,.timer-img img").css("border", "1px solid " + ConfigManager.pan_ship_icon_border);
 
 		// Some text or other elements aren't desirable to drop a shadow from, so these were selected manually.
