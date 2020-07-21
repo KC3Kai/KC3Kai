@@ -1809,7 +1809,7 @@
 								!PlayerManager.combinedFleet && KC3SortieManager.fleetSent == 1;
 							noAirBombingDamage = KC3SortieManager.fleetSent == 1 &&
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index);
-							spCutinUsed = !!sortieSpecialCutins[index] && KC3SortieManager.fleetSent == 1;
+							spCutinUsed = sortieSpecialCutins[index] == 1 && KC3SortieManager.fleetSent == 1;
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()
@@ -1841,7 +1841,8 @@
 							starShellUsed = is2ndFleetUsed && (flarePos === index + 1);
 							noAirBombingDamage = is2ndFleetUsed &&
 								KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, KC3SortieManager.isCombinedSortie());
-							spCutinUsed = !!sortieSpecialCutins[index] && KC3SortieManager.fleetSent == 2;
+							spCutinUsed = (sortieSpecialCutins[index] == 1 && KC3SortieManager.fleetSent == 2) ||
+								(sortieSpecialCutins[index] == 2 && KC3SortieManager.isCombinedSortie());
 						}
 						(new KC3NatsuiroShipbox(".sship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements(true)
@@ -1936,7 +1937,8 @@
 								(isSelectedSortiedFleet || isSelected2ndFleetOnCombined);
 							noAirBombingDamage = isSelectedSortiedFleet && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index) ||
 								isSelected2ndFleetOnCombined && KC3SortieManager.isPlayerNotTakenAirBombingDamage(thisNode, index, true);
-							spCutinUsed = !!sortieSpecialCutins[index] && isSelectedSortiedFleet;
+							spCutinUsed = (sortieSpecialCutins[index] == 1 && isSelectedSortiedFleet) ||
+								(sortieSpecialCutins[index] == 2 && isSelected2ndFleetOnCombined);
 						}
 						(new KC3NatsuiroShipbox(".lship", rosterId, index, showCombinedFleetBars, dameConConsumed, starShellUsed, noAirBombingDamage))
 							.commonElements()

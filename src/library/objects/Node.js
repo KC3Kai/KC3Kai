@@ -293,16 +293,20 @@ Used by SortieManager
 	/**
 	 * Check for any one-time special cutin from player main fleet.
 	 * @param predictedFleets - result of predicted fleets.
+	 * @param isNight - indicates battle during night.
+	 * @param isCombined - indicates player combined fleet battle.
 	 */
-	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
+	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets, isNight = false, isCombined = false){
 		const checkSortieSpecialAttack = attacks => attacks.some(
 			// special attacks ID ranged in [100, 200), >= 200 used by multi-angle attacks
 			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
 		);
-		const playerMain = predictedFleets.playerMain,
-			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
+		const fleetNum = isNight && isCombined ? 2 : 1;
+		const playerFleet = fleetNum === 2 ? predictedFleets.playerEscort : predictedFleets.playerMain,
+			flagshipSpecialAttack = checkSortieSpecialAttack(playerFleet[0].attacks);
 		if (flagshipSpecialAttack) {
-			this.sortieSpecialCutins = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+			this.sortieSpecialCutins = playerFleet.map(ship => checkSortieSpecialAttack(ship.attacks))
+				.map(v => v && fleetNum);
 		}
 	};
 	
@@ -974,7 +978,7 @@ Used by SortieManager
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
 
-			this.checkSortieSpecialAttacks(result.fleets);
+			this.checkSortieSpecialAttacks(result.fleets, true, isPlayerCombined);
 		}
 		
 		if(this.gaugeDamage > -1
