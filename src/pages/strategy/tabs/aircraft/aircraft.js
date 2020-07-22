@@ -122,6 +122,7 @@
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
 							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
+							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) && 1,
 						},
 						instances: []
 					};
@@ -242,6 +243,7 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem, "rn");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "rk");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "hk");
 				
 				ThisSlotitem.instances.forEach(ThisPlane => {
 					const rosterId = ThisPlane.itemId;
@@ -327,6 +329,8 @@
 		slotitem_stat :function(ItemElem, SlotItem, statName){
 			if(statName === "rk") {
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
+			} else if(statName === "hk") {
+				$(".stats .item_hk", ItemElem).toggle(!!SlotItem.stats.hk);
 			} else if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && KC3GearManager.landBasedAircraftType3Ids.indexOf(SlotItem.type_id)>-1)
 			)){

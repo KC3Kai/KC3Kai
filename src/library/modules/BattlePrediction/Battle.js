@@ -35,7 +35,7 @@
   };
 
   battle.getBattleType = () => {
-    return battle.battleType;
+    return battle.battleType || {};
   };
 
   /*--------------------------------------------------------*/

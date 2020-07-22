@@ -291,7 +291,7 @@ Used by SortieManager
 	};
 	
 	/**
-	 * Check for any one-time special cutin from player main fleet.
+	 * Check for any one-time special cutin from player fleet.
 	 * @param predictedFleets - result of predicted fleets.
 	 * @param isNight - indicates battle during night.
 	 * @param isCombined - indicates player combined fleet battle.

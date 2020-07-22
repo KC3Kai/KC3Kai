@@ -276,7 +276,7 @@
   };
 
   battle.getBattleType = () => {
-    return battle.battleType;
+    return battle.battleType || {};
   };
 
   /*--------------------------------------------------------*/
@@ -833,7 +833,8 @@
     const { getBattleType } = KC3BattlePrediction.battle;
     // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.
     // This will cause Kongou Class cutin in CF gives wrong damage dealers and can't tell difference with day time cutin (if any).
-    const combinedFleetPosDiff = (api_sp_list && getBattleType().player !== KC3BattlePrediction.Player.SINGLE) ? COMBINED_FLEET_MAIN_ALIGN : 0;
+    const combinedFleetPosDiff = (api_sp_list && !isAllySideFriend && getBattleType().player
+      && getBattleType().player !== KC3BattlePrediction.Player.SINGLE) ? COMBINED_FLEET_MAIN_ALIGN : 0;
     return {
       side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
       position: (attackerPos[index] || 0) + combinedFleetPosDiff,
