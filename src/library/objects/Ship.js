@@ -2664,6 +2664,10 @@ KC3改 Ship Object
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
 	 *
+	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
+	 * And it's impossible to be triggered after any other daytime big-7 special cutin,
+	 * because all ship-combined spcutins (zuiun ones excluded) only trigger 1-time per sortie?
+	 *
 	 * The additional 30% ammo consumption, see:
 	 *   * https://twitter.com/myteaGuard/status/1254040809365618690
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
@@ -2678,7 +2682,7 @@ KC3改 Ship Object
 		if(KC3Meta.kongouCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
-				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				&& (!PlayerManager.combinedFleet || fleetNum === 2)) {
 				const isLineAhead = [1, 14].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
