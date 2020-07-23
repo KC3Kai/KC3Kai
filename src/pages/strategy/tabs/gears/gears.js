@@ -10,7 +10,7 @@
 		_holders: {},
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","rk"],
+		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","rk","hk"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -226,6 +226,7 @@
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
 							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
+							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) && 1,
 						},
 						held: [],
 						extras: [],
@@ -446,7 +447,7 @@
 			if (type_id === "all") {
 				$(q).removeClass("hide");
 				// there are too many sorters
-				$(".tab_gears .itemSorters .sortControl.rk").addClass("hide");
+				$(".tab_gears .itemSorters .sortControl.rk, .tab_gears .itemSorters .sortControl.hk").addClass("hide");
 			} else {
 				$(q).addClass("hide");
 			}
@@ -594,6 +595,8 @@
 		slotitem_stat :function(ItemElem, SlotItem, statName){
 			if(statName === "rk") {
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
+			} else if(statName === "hk") {
+				$(".stats .item_hk", ItemElem).toggle(!!SlotItem.stats.hk);
 			} else if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
 			)){

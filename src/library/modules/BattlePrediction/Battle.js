@@ -8,6 +8,7 @@
   battle.simulateBattle = (battleData, initalFleets, battleType) => {
     const { battle: { getPhases }, fleets: { simulateAttack } } = KC3BattlePrediction;
 
+    battle.battleType = battleType;
     return pipe(
       juxt(getPhases(battleType)),
       flatten,
@@ -19,11 +20,22 @@
     const { fleets: { simulateAttack } } = KC3BattlePrediction;
     const { getPhaseParser } = KC3BattlePrediction.battle;
 
+    // User-defined phases only used by SupportFleet/LBAS analyzing for now, build a pseudo battleType here
+    battle.battleType = {
+      player: KC3BattlePrediction.Player.SINGLE,
+      enemy: KC3BattlePrediction.Enemy.SINGLE,
+      time: KC3BattlePrediction.Time.DAY,
+      phases: battlePhases
+    };
     return pipe(
       juxt(battlePhases.map(getPhaseParser)),
       flatten,
       reduce(simulateAttack, initalFleets)
     )(battleData);
+  };
+
+  battle.getBattleType = () => {
+    return battle.battleType || {};
   };
 
   /*--------------------------------------------------------*/

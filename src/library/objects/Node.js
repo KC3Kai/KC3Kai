@@ -291,18 +291,22 @@ Used by SortieManager
 	};
 	
 	/**
-	 * Check for any one-time special cutin from player main fleet.
+	 * Check for any one-time special cutin from player fleet.
 	 * @param predictedFleets - result of predicted fleets.
+	 * @param isNight - indicates battle during night.
+	 * @param isCombined - indicates player combined fleet battle.
 	 */
-	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets){
+	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets, isNight = false, isCombined = false){
 		const checkSortieSpecialAttack = attacks => attacks.some(
 			// special attacks ID ranged in [100, 200), >= 200 used by multi-angle attacks
 			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
 		);
-		const playerMain = predictedFleets.playerMain,
-			flagshipSpecialAttack = checkSortieSpecialAttack(playerMain[0].attacks);
+		const fleetNum = isNight && isCombined ? 2 : 1;
+		const playerFleet = fleetNum === 2 ? predictedFleets.playerEscort : predictedFleets.playerMain,
+			flagshipSpecialAttack = checkSortieSpecialAttack(playerFleet[0].attacks);
 		if (flagshipSpecialAttack) {
-			this.sortieSpecialCutins = playerMain.map(ship => checkSortieSpecialAttack(ship.attacks));
+			this.sortieSpecialCutins = playerFleet.map(ship => checkSortieSpecialAttack(ship.attacks))
+				.map(v => v && fleetNum);
 		}
 	};
 	
@@ -974,7 +978,7 @@ Used by SortieManager
 				1, nightData.api_formation[0], nightData.api_formation[2], isRealBattle)
 			);
 
-			this.checkSortieSpecialAttacks(result.fleets);
+			this.checkSortieSpecialAttacks(result.fleets, true, isPlayerCombined);
 		}
 		
 		if(this.gaugeDamage > -1
@@ -1746,16 +1750,33 @@ Used by SortieManager
 			'<tr class="contact_row"><td>Contact</td><td class="ally_contact"></td><td class="enemy_contact"></td></tr>' +
 			'<tr class="airbattle_row"><td>Result</td><td colspan="2" class="airbattle"></td></tr>' +
 			'<tr><td>Stage1</td><td class="ally_fighter"></td><td class="enemy_fighter"></td></tr>' + 
-			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>');
+			'<tr><td>Stage2</td><td class="ally_bomber"></td><td class="enemy_bomber"></td></tr></table>'
+		);
+		const stage3Template = $('<table class="stage3"><tr><td colspan="18">Stage3</td></tr>' +
+			'<tr class="ally_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'<tr class="ally_escort"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'<tr class="enemy_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'<tr class="enemy_escort"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'</table>'
+		);
 		const tooltip = $("<div></div>");
-		const fillAirBattleData = function(typeName, koukuApiData){
-			const table = template.clone();
+		const enemyMainShipIds = this.battleDay.api_ship_ke || [],
+			enemyEscortShipIds = this.battleDay.api_ship_ke_combined || [];
+		const fillAirBattleData = function(typeName, koukuApiData, ignoreStage3){
+			const tables = $("<div></div>");
+			const table = template.clone().appendTo(tables);
+			const planeFrom = koukuApiData.api_plane_from;
 			const stage1 = koukuApiData.api_stage1 || {
 					api_f_count:0,api_f_lostcount:0,
 					api_e_count:0,api_e_lostcount:0
 				},
-				stage2 = koukuApiData.api_stage2;
-			table.css("font-size", "11px");
+				stage2 = koukuApiData.api_stage2,
+				stage3 = koukuApiData.api_stage3,
+				stage3cf = koukuApiData.api_stage3_combined;
 			$(".type", table).html(typeName + "&nbsp;");
 			if(stage1.api_touch_plane){
 				$(".ally_contact", table).text(stage1.api_touch_plane[0] <= 0 ? "No" : "[{0}]".format(stage1.api_touch_plane[0]));
@@ -1780,18 +1801,83 @@ Used by SortieManager
 				$(".ally_bomber", table).text("---");
 				$(".enemy_bomber", table).text("---");
 			}
-			return table;
+			const fillAirstrikeData = (stage3Api, table, className, enemyIds) => {
+				// planeFrom[0] = ally fleet plane(s) engaged. it's always null for LBAS and support fleet
+				if(planeFrom && (!planeFrom[0] || planeFrom[0].length) && Array.isArray(stage3Api.api_edam)){
+					stage3Api.api_edam.forEach((dmg, i) => {
+						const sid = enemyIds[i];
+						if(sid > 0){
+							const shipIcon = $("<img/>").width(14).height(14)
+								.css("margin-top", "-3px").css("margin-right", "3px")
+								.css("object-fit", "cover")
+								// can be regular ship icon for PvP battle
+								.attr("src", KC3Meta.abyssIcon(sid));
+							$(`.enemy_${className} .s_${i+1}`, table).append(shipIcon);
+							// targeted by dive bomber squadron(s)
+							if(stage3Api.api_ebak_flag[i]){
+								const diveBomber = $("<img/>").width(8).height(8)
+									.css({"float": "left", "margin-left": "-5px", "margin-top": "0px"})
+									.attr("src", KC3Meta.itemIcon(7));
+								$(`.enemy_${className} .f_${i+1}`, table).append(diveBomber);
+							}
+							// targeted by torpedo bomber squadron(s)
+							if(stage3Api.api_erai_flag[i]){
+								const torpedoBomber = $("<img/>").width(8).height(8)
+									.css({"float": "left", "margin-left": stage3Api.api_ebak_flag[i] ? "-8px" : "-5px", "margin-top": "7px"})
+									.attr("src", KC3Meta.itemIcon(8));
+								$(`.enemy_${className} .f_${i+1}`, table).append(torpedoBomber);
+							}
+							// 0.1 exists as flagship protection
+							$(`.enemy_${className} .dmg_${i+1}`, table).text("-" + Math.floor(dmg)).css("padding-right", "5px");
+							// purple = critical hit, golden = sunk (not implemented)
+							if(stage3Api.api_ecl_flag[i]) $(`.enemy_${className} .dmg_${i+1}`, table).css("color", "mediumpurple");
+						}
+					});
+				}
+				// planeFrom[1] = enemy fleet plane(s) engaged
+				if(planeFrom && planeFrom[1] && planeFrom[1].length && Array.isArray(stage3Api.api_fdam)){
+					stage3Api.api_fdam.forEach((dmg, i) => {
+						// Cannot get player's ship ID from single battle api or this node data, so only #number
+						$(`.ally_${className} .s_${i+1}`, table)
+							.text("#" + (i + (className === "escort" ? 7 : 1)))
+							.css("color", "silver")
+							.css("margin-right", "3px");
+						if(stage3Api.api_fbak_flag[i]){
+							const diveBomber = $("<img/>").width(8).height(8)
+								.css({"float": "left", "margin-left": "-5px", "margin-top": "0px"})
+								.attr("src", KC3Meta.itemIcon(7));
+							$(`.ally_${className} .f_${i+1}`, table).append(diveBomber);
+						}
+						if(stage3Api.api_frai_flag[i]){
+							const torpedoBomber = $("<img/>").width(8).height(8)
+								.css({"float": "left", "margin-left": stage3Api.api_fbak_flag[i] ? "-8px" : "-5px", "margin-top": "7px"})
+								.attr("src", KC3Meta.itemIcon(8));
+							$(`.ally_${className} .f_${i+1}`, table).append(torpedoBomber);
+						}
+						$(`.ally_${className} .dmg_${i+1}`, table).text("-" + Math.floor(dmg)).css("padding-right", "5px");
+						if(stage3Api.api_fcl_flag[i]) $(`.ally_${className} .dmg_${i+1}`, table).css("color", "mediumpurple");
+					});
+				}
+			};
+			// Ignore stage3 for LBAS because might be too many items, and summary report already showed
+			if(!ignoreStage3 && (stage3 || stage3cf)){
+				const stage3Table = stage3Template.clone().appendTo(tables);
+				if(stage3) fillAirstrikeData(stage3, stage3Table, "main", enemyMainShipIds);
+				if(stage3cf) fillAirstrikeData(stage3cf, stage3Table, "escort", enemyEscortShipIds);
+			}
+			$("table", tables).css("font-size", "11px");
+			return tables.children();
 		};
 		// Land-Base Jet Assault
 		if(this.battleDay.api_air_base_injection)
-			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection).appendTo(tooltip);
+			fillAirBattleData("LBAS Jets", this.battleDay.api_air_base_injection, true).appendTo(tooltip);
 		// Carrier Jet Assault
 		if(this.battleDay.api_injection_kouku)
 			fillAirBattleData("Jet Assult", this.battleDay.api_injection_kouku).appendTo(tooltip);
 		// Land-Base Aerial Support(s)
 		if(this.battleDay.api_air_base_attack){
 			$.each(this.battleDay.api_air_base_attack, function(i, lb){
-				fillAirBattleData("LBAS #{0}".format(i + 1), lb).appendTo(tooltip);
+				fillAirBattleData("LBAS #{0}".format(i + 1), lb, true).appendTo(tooltip);
 			});
 		}
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
