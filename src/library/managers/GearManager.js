@@ -20,8 +20,8 @@ Saves and loads list to and from localStorage
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,56,57],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
-		// https://twitter.com/muu_1106/status/1124658313428213760
-		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,322,323,374],
+		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,237,319,320,322,323,374],
 		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
