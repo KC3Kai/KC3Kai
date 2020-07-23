@@ -1,6 +1,7 @@
 (function () {
   const Hougeki = {};
   const { pipe, map, juxt, flatten, Side } = KC3BattlePrediction;
+  const COMBINED_FLEET_MAIN_ALIGN = 6;
 
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
@@ -93,14 +94,21 @@
   Hougeki.isKongouCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 104;
 
   // According MVP result, Nelson Touch attackers might be set to corresponding
-  //   ship position (1st Nelson, 3th, 5th), not fixed to Nelson (api_at_list: 0);
+  //   ship position (1st Nelson, 3th, 5th), not fixed to main fleet flagship Nelson (api_at_list: 0);
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
-  Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag }) => ({
-    side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
-    position: attackerPos[index] || 0,
-  });
+  Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag, api_sp_list }) => {
+    const { getBattleType } = KC3BattlePrediction.battle;
+    // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.
+    // This will cause Kongou Class cutin in CF gives wrong damage dealers and can't tell difference with day time cutin (if any).
+    const combinedFleetPosDiff = (api_sp_list && !isAllySideFriend && getBattleType().player
+      && getBattleType().player !== KC3BattlePrediction.Player.SINGLE) ? COMBINED_FLEET_MAIN_ALIGN : 0;
+    return {
+      side: api_at_eflag === 1 ? Side.ENEMY : isAllySideFriend ? Side.FRIEND : Side.PLAYER,
+      position: (attackerPos[index] || 0) + combinedFleetPosDiff,
+    };
+  };
 
   Hougeki.parseDamage = ({ api_damage }) =>
     api_damage.reduce((result, n) => result + Math.max(0, n), 0);
