@@ -63,7 +63,7 @@ Does not include Ships and Gears which are managed by other Managers
 			// Update player with new data
 			this.hq.update( data );
 			this.hq.save();
-			
+
 			// Update related managers with new data if exists
 			Object.assignIfDefined(PlayerManager.consumables, "fcoin", data.fcoin);
 			PlayerManager.fleetCount = data.fleetCount;
@@ -578,6 +578,7 @@ Does not include Ships and Gears which are managed by other Managers
 
 		checkTaihaShips: function () {
 			// TODO cases like 1-6, where end node is next node and it safe to continue
+			ConfigManager.loadIfNecessary();
 			let hasTaihaShip = false;
 			let autoretreat = false;
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetNum) => {
@@ -590,13 +591,16 @@ Does not include Ships and Gears which are managed by other Managers
 					if (fleetNum === 0 && slotId === 0) {
 						autoretreat = true;
 					}
+					if (fleetNum === 1 && slotId === 0 && ConfigManager.next_blocker_2_fs === false) {
+						return;
+					}
 					hasTaihaShip = true;
 				});
 			});
 
 			return hasTaihaShip && !autoretreat;
 		}
-		
+
 	};
 
 })();
