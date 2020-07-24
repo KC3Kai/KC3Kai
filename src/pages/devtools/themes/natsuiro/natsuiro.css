@@ -2276,6 +2276,7 @@ ABYSS FLEET
 .module.activity .activity_gunfit .landing .shipIcon img {
 	width:18px;
 	height:18px;
+	border-radius:50%;
 	margin-top:1px;
 	vertical-align:top;
 }

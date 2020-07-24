@@ -1266,7 +1266,9 @@
 				self.refreshInputFilter();
 				self.toggleTableScrollbar(self.scrollList);
 				self.isLoading = false;
-				console.debug("Showing ship list took", Date.now() - self.startTime, "milliseconds");
+				const elapsed = Date.now() - self.startTime;
+				if(self.scrollList) setTimeout(self.toggleTableScrollbar.bind(self, self.scrollList), elapsed);
+				console.debug("Showing ship list took", elapsed, "milliseconds");
 			}, 0);
 		},
 
