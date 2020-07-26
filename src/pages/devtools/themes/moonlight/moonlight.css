@@ -3384,7 +3384,7 @@ ABYSS FLEET
 	position:relative;
 	left:0px;
 }
-.v .quest_text {
+.v .module.quests .quest_text {
 	white-space:normal;
 	height:26px;
 	line-height:13px;

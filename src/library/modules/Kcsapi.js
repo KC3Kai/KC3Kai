@@ -2903,7 +2903,11 @@ Previously known as "Reactor"
 				.filter(function(x){
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
-						(!x[3] || KC3SortieManager.currentNode().isBoss())                  && /* Is on boss node */
+						(!x[3] || (!x[2] && KC3Meta.isEventWorld(KC3SortieManager.getSortieMap()[0]) ?
+							// Bw1 seems not take boss nodes of pre-final boss for a multi-boss event map into account,
+							// but it counts both 2 boss nodes for map 7-2, because 7-2 is defeat type, not HP gauge, perhaps?
+							KC3SortieManager.currentNode().isValidBoss() :
+							KC3SortieManager.currentNode().isBoss()))                       && /* Is on boss node */
 						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
 						(!x[5] || x[5].includes(KC3SortieManager.currentNode().id))         && /* Is on specified boss node */
 						true

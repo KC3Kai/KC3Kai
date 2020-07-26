@@ -4078,11 +4078,11 @@ KC3改 Equipment Object
 					"66": "1",
 					// Matsu Class
 					"101": "1",
+					// All IJN CL fp +1, tp +2, ev +2, los +3
 					// Kuma Class
 					"4": {
 						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
 					},
-					// All IJN CL fp +1, tp +2, ev +2, los +3
 					// Sendai Class
 					"16": "4",
 					// Nagara Class
@@ -4273,7 +4273,7 @@ KC3改 Equipment Object
 	 * Modifiers might be broken into a JSON for better maintenance.
 	 * 
 	 * @param {string} type - attack type identifier, allow values for now:
-	 *                        `fire`, `torpedo`, `yasen`, `asw`, `support`, `exped`
+	 *                        `fire`, `torpedo`, `yasen`, `asw`, `airstrike`, `lbas`, `support`, `exped`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
 	 * @see accStatImprovementBonus for accuracy improvement bonus
 	 * @see losStatImprovementBonus for LoS improvement bonus
@@ -4353,6 +4353,10 @@ KC3改 Equipment Object
 			case "airstrike":
 				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
 				if([8, 11, 58].includes(type2)) return 0.2 * stars;
+				break;
+			case "lbas":
+				// land-base attacker, unconfirmed yet since no plane improved by akashi
+				if([47].includes(type2)) modifier = 0.7;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
@@ -4533,6 +4537,8 @@ KC3改 Equipment Object
 			case 45: // seaplane fighter
 				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 				modifier = 0.2; break;
+			case 47: // LB attacker
+				return 0.5 * Math.sqrt(stars);
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
 		}
@@ -4733,6 +4739,7 @@ KC3改 Equipment Object
 					stat = this.master().api_baku;
 				}
 			}
+			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
 			result += Math.sqrt(1.8 * capacity) * stat;
 			result *= typeModifier;
@@ -4935,6 +4942,7 @@ KC3改 Equipment Object
 			["rn", "leng"],
 			["or", "distance"],
 			["rk", "baku"],
+			["hk", "distance"],
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
@@ -4943,12 +4951,14 @@ KC3改 Equipment Object
 					KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3]))
 			) && (
 				sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
+			) && (
+				sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
 			)) {
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
-				} else if(sdata[0] === "rk") {
+				} else if(["rk", "hk"].includes(sdata[0])) {
 					$(".value", statBox).text("");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);

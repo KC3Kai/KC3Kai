@@ -268,6 +268,8 @@
 			"Friend46(2)" : 246,
 			"Friend47(1)" : 147,
 			"Friend47(2)" : 247,
+			"Friend48(1)" : 148,
+			"Friend48(2)" : 248,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -337,7 +339,7 @@
 
 			// add known friend support keys (last 2 digits seem be event world id)
 			if (includeFriend)
-				sortedVoiceNums.push(...[141, 241, 142, 242, 342, 143, 243, 343, 144, 244, 344, 145, 245, 146, 246, 147, 247]);
+				sortedVoiceNums.push(...[141, 241, 142, 242, 342, 143, 243, 343, 144, 244, 344, 145, 245, 146, 246, 147, 247, 148, 248]);
 
 			return sortedVoiceNums;
 		},

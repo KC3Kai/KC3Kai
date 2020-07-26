@@ -2276,6 +2276,7 @@ ABYSS FLEET
 .module.activity .activity_gunfit .landing .shipIcon img {
 	width:18px;
 	height:18px;
+	border-radius:50%;
 	margin-top:1px;
 	vertical-align:top;
 }
@@ -3503,16 +3504,19 @@ ABYSS FLEET
 .module.fleet .lship.seven .ship_hp_bar_metrics {
 	height:4px;
 }
-.module.fleet .lship .ship_hp_pred_value {
+.module.fleet .lship .ship_hp_pred_value,
+.module.fleet .sship .ship_hp_pred_value {
 	position:absolute;
 	top:0px;
 	left:0px;
 	width:100%;
 	line-height:7px;
 	text-align:center;
+	pointer-events:none;
 	display:none;
 }
-.module.fleet .lship .ship_hp_pred_value .ship_hp_diff {
+.module.fleet .lship .ship_hp_pred_value .ship_hp_diff,
+.module.fleet .sship .ship_hp_pred_value .ship_hp_diff {
 	color:#ff6565;
 	font-size:11px;
 	text-shadow:
@@ -3935,6 +3939,10 @@ ABYSS FLEET
 }
 .module.fleet .sship .ship_hp_prediction {
 	height:6px;
+}
+.module.fleet .sship .ship_hp_pred_value {
+	top:-13px;
+	left:-11px;
 }
 .module.fleet .sship .ship_hp_bar_metrics {
 	height:4px;
