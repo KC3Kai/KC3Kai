@@ -4273,7 +4273,7 @@ KC3改 Equipment Object
 	 * Modifiers might be broken into a JSON for better maintenance.
 	 * 
 	 * @param {string} type - attack type identifier, allow values for now:
-	 *                        `fire`, `torpedo`, `yasen`, `asw`, `support`, `exped`
+	 *                        `fire`, `torpedo`, `yasen`, `asw`, `airstrike`, `lbas`, `support`, `exped`
 	 * @return {number} computed bonus = modifier * sqrt(stars)
 	 * @see accStatImprovementBonus for accuracy improvement bonus
 	 * @see losStatImprovementBonus for LoS improvement bonus
@@ -4353,6 +4353,10 @@ KC3改 Equipment Object
 			case "airstrike":
 				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
 				if([8, 11, 58].includes(type2)) return 0.2 * stars;
+				break;
+			case "lbas":
+				// land-base attacker, unconfirmed yet since no plane improved by akashi
+				if([47].includes(type2)) modifier = 0.7;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
@@ -4533,6 +4537,8 @@ KC3改 Equipment Object
 			case 45: // seaplane fighter
 				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 				modifier = 0.2; break;
+			case 47: // LB attacker
+				return 0.5 * Math.sqrt(stars);
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
 		}
@@ -4733,6 +4739,7 @@ KC3改 Equipment Object
 					stat = this.master().api_baku;
 				}
 			}
+			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
 			result += Math.sqrt(1.8 * capacity) * stat;
 			result *= typeModifier;
