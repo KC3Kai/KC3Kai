@@ -4078,11 +4078,11 @@ KC3改 Equipment Object
 					"66": "1",
 					// Matsu Class
 					"101": "1",
+					// All IJN CL fp +1, tp +2, ev +2, los +3
 					// Kuma Class
 					"4": {
 						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
 					},
-					// All IJN CL fp +1, tp +2, ev +2, los +3
 					// Sendai Class
 					"16": "4",
 					// Nagara Class

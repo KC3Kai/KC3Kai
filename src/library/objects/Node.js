@@ -2026,6 +2026,16 @@ Used by SortieManager
 		return !isInvalidBoss;
 	};
 
+	KC3Node.prototype.isEventMapBoss = function(){
+		if(!this.isBoss()) return false;
+		const thisMap = KC3SortieManager.getCurrentMapData(),
+			eventMapGauges = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join('')),
+			finalGaugeKey = Object.keys(eventMapGauges).pop(),
+			finalGauge = eventMapGauges[finalGaugeKey],
+			isInvalidBoss = finalGauge && Array.isArray(finalGauge.boss) && !finalGauge.boss.includes(this.id);
+		return !isInvalidBoss;
+	};
+
 	KC3Node.prototype.isMvpPredictionCapable = function(){
 		// Rule unknown: ship nearest to flagship does not get MVP when same damage dealt
 		const battleRank = this.predictedRankNight || this.predictedRank;
