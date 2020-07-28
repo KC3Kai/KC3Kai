@@ -171,8 +171,6 @@
 			$(".locktag", this.element).show()
 				/*.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")*/
 				.css("border-color", "transparent " + this.lockTagColors[tagColorId - 1] || "#aaa" + " transparent transparent");
-			$(".ship_img", this.element).show()
-				.css("background-color", this.lockTagColors[tagColorId - 1]);
 		} else {
 			$(".locktag", this.element).hide();
 		}

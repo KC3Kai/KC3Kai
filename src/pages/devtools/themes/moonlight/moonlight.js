@@ -496,7 +496,10 @@
 		
 		function style_select(array_no,css_element,select_this,custom_selection,css_type) {
 			select_this = select_this == "auto" ? mode_selection[array_no] : select_this;
-			select_this == "custom" ? $(css_element).css(css_type, custom_selection) : $(css_element).addClass(select_this);
+			if(select_this == "custom") {
+				return $(css_element).css(css_type, custom_selection);
+			}
+			return $(css_element).addClass(select_this);
 		}
 
 		// ================= //
@@ -504,7 +507,6 @@
 		// ================= //
 		// skin-specific presets. These are assigned to the skin itself because they don't really seem worth making a separate option for.
 		// it's possible they could be split from the skin if there is a demand to do so
-		//style_select(15,".skin_misc",ConfigManager.pan_moon_skin);
 		$(".skin_misc").addClass(mode_select[ConfigManager.pan_moon_skin][15]);
 		
 		// wrapper background image or color
@@ -4849,7 +4851,7 @@
 					KC3Meta.itemIcon(data.gearObj.master().api_type[3]));
 				if (data.gearObj.stars > 0) {
 					$(".activity_gunfit .fit_gear_name").prepend("(");
-					$(".activity_gunfit .fit_gear_name").text("(+"+data.gearObj.stars + ") " + data.gearObj.name());
+					$(".activity_gunfit .fit_gear_name").text("+"+data.gearObj.stars + " " + data.gearObj.name());
 				} else{
 					$(".activity_gunfit .fit_gear_name").text(data.gearObj.name());
 				}
