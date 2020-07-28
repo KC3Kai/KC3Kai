@@ -18,7 +18,7 @@
 	display:none;
 }
 
-/* OVERLAY: NEXT BUTTON BLOCK 
+/* OVERLAY: NEXT BUTTON BLOCK
 --------------------------*/
 .kc3 .overlay_next {
 	font-family: "Helvetica Neue", Tahoma, Helvetica, Arial, sans-serif;
@@ -29,9 +29,9 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-	overflow: hidden;
+	overflow: visible;
 	color: #df0020;
-	
+
 	z-index: 1000;
 	display: none;
 	pointer-events:none;
@@ -41,7 +41,9 @@
 	position: absolute;
 	bottom: 0;
 	left: 5px;
-	pointer-events:none;
+	pointer-events: all;
+	white-space: nowrap;
+	cursor: pointer;
 }
 
 .kc3 .overlay_next .nextButtonBlock {

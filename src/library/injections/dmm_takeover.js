@@ -104,10 +104,19 @@
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
 				.appendTo("#factory");
 
+			var self = this;
 			$("<div>").addClass("overlay_next notranslate")
 				.append($("<div>").addClass("nextButtonBlock"))
-				.append($("<span>").html(KC3Meta.term("NextButtonBlockOverlay")))
+				.append(
+					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay"))
+						.click(function () {
+							if (confirm(KC3Meta('NextButtonBlockOverlayConfirmRemove'))) {
+								self.clearOverlays()({action: 'clearOverlays'}, {}, function () {});
+							}
+						})
+				)
 				.appendTo("#area-game");
+
 		},
 
 		/* DMM PAGE LAYOUT
