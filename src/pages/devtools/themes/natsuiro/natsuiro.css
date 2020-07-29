@@ -3370,7 +3370,7 @@ ABYSS FLEET
 	opacity:0.8;
 	font-size:10px;
 	text-align:center;
-	text-shadow:none;
+	text-shadow:1px 1px 1px #224169;
 	pointer-events:none;
 	display:none;
 }

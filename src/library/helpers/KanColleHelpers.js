@@ -7564,7 +7564,7 @@ var PS = {};
                               (addGroup(fpTotal(500))
                                   (addGroup(aaTotal(280))
                                       (addGroup(aswTotal(280))
-                                          (losTotal(179))
+                                          (losTotal(170))
                                       )
                                   )
                               )
@@ -7739,13 +7739,17 @@ var PS = {};
       };
       if (v === 113) {
           return addGroup(fslAndSc(55)(6))
-              (addGroup(lvlCnt(340))
+              (addGroup(lvlCnt(300))
                   (addGroup(sty(2)(KanColle_Generated_SType.CA.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                               (addGroup(submarine(1))
                                   (addGroup(fpTotal(500))
-                                      (aswTotal(280))
+                                      (addGroup(aaTotal(280))
+                                          (addGroup(aswTotal(280))
+                                              (losTotal(170))
+                                          )
+                                      )
                                   )
                               )
                           )
@@ -7755,7 +7759,7 @@ var PS = {};
       };
       if (v === 114) {
           return addGroup(fslAndSc(60)(6))
-              (addGroup(lvlCnt(350))
+              (addGroup(lvlCnt(330))
                   (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
@@ -7795,8 +7799,8 @@ var PS = {};
                           (addGroup(submarine(3))
                               (addGroup(fpTotal(60))
                                   (addGroup(torpTotal(390))
-                                      (addGroup(aaTotal(110))
-                                          (addGroup(aswTotal(55))
+                                      (addGroup(aaTotal(80))
+                                          (addGroup(aswTotal(50))
                                               (losTotal(260))
                                           )
                                       )
@@ -7809,7 +7813,7 @@ var PS = {};
       };
       if (v === 141) {
           return addGroup(fslAndSc(55)(6))
-              (addGroup(lvlCnt(300))
+              (addGroup(lvlCnt(290))
                   (addGroup(fsty(KanColle_Generated_SType.CA.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.CA.value))
                           (addGroup(sty(1)(KanColle_Generated_SType.CL.value))

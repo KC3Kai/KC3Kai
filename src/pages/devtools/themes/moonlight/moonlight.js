@@ -4336,10 +4336,8 @@
 					aa = ship.aa[0],
 					fp = ship.fp[0],
 					tp = ship.tp[0];
-				var asw = ship.as[0];
+				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
 				if(includeImprove) {
-					// Should be floored after summing up all ships' stats
-					// https://twitter.com/CainRavenK/status/1157636860933337089
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();

@@ -4212,11 +4212,9 @@
 					aa = ship.aa[0],
 					fp = ship.fp[0],
 					tp = ship.tp[0];
-				// TODO asw stats from aircraft seem be quite different for expeditions
-				// https://docs.google.com/spreadsheets/d/1X0ouomAJ02OwHMN7tQRRbMrISkF3RVf4RfZ1Kalhprg/htmlview
-				var asw = /*[101, 102, 110].includes(selectedExpedition) ?
-					ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true) :*/
-					ship.as[0];
+				// TODO asw stats from aircraft seem be quite complex for expeditions, no proficiency level counted for now
+				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
+				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
 				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089

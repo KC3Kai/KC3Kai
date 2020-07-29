@@ -1669,7 +1669,7 @@ Used by SortieManager
 				const leftHp = chp - friendlyFleetDamages[idx];
 				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
-					.css("margin-top", "-3px")
+					.css("margin-top", "-3px").css("object-fit", "cover")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
 				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
