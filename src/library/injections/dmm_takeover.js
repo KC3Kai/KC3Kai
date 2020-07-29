@@ -110,7 +110,7 @@
 				.append(
 					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay"))
 						.click(function () {
-							if (confirm(KC3Meta('NextButtonBlockOverlayConfirmRemove'))) {
+							if (confirm(KC3Meta.term('NextButtonBlockOverlayConfirmRemove'))) {
 								self.clearOverlays()({action: 'clearOverlays'}, {}, function () {});
 							}
 						})
