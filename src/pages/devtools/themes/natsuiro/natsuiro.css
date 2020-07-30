@@ -1912,16 +1912,6 @@ ABYSS FLEET
 	text-align:left;
 }
 
-.module.activity .activity_expeditionPlanner .expPlanner_requirements {
-	margin-bottom:4px;
-}
-.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
-	margin-bottom:1px;
-	white-space:initial;
-}
-.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
-	font-size:13px !important;
-}
 .module.activity .activity_expeditionPlanner .expPlanner_shipReqBox {
 	margin-right:10px;
 }
@@ -1948,12 +1938,20 @@ ABYSS FLEET
 .module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content[data-gsState="guaranteed"] {
 	color:#00CC00;
 }
+.module.activity .activity_expeditionPlanner .expPlanner_requirements {
+	margin-bottom:4px;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias {
+	margin-bottom:1px;
+	white-space:initial;
+}
+.module.activity .activity_expeditionPlanner .expPlanner_checker_criterias div {
+	font-size:13px;
+}
 .module.activity .activity_expeditionPlanner .expPlanner_text_passed {
-	font-size: 14px;
 	color:#00CC00;
 }
 .module.activity .activity_expeditionPlanner .expPlanner_text_failed {
-	font-size: 14px;
 	color:#FF5555;
 }
 .module.activity .activity_expeditionPlanner .expedition_entry.cond_passed {

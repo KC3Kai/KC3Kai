@@ -4536,6 +4536,7 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
+						// Multiple compo patterns allowed expeds, give tips and mark failure with different color
 						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
 						// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
 						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
@@ -4543,6 +4544,7 @@
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
+							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
@@ -4550,6 +4552,7 @@
 								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
+							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );
