@@ -41,6 +41,7 @@
             this.fillLockBoxes();
             this.setDroppable();
             this.switchToLockTab(this.currentTab);
+            let startTime = Date.now();
             $(".selectTab", this.tab).on("click", (e) => {
                 const newTab = $(e.currentTarget).data("tab");
                 if (!!newTab && newTab !== this.currentTab) {
@@ -57,10 +58,13 @@
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {
                 $(".filters input").each((_, elem) => { elem.disabled = true; });
+                startTime = Date.now();
             });
             this.shipListDiv.on("postShow", ()=> {
                 $(".filters input").each((_, elem) => { elem.disabled = false; });
                 this.adjustHeight();
+                // Defer another adjustment because at this timing new version chrome still hide dom (fail to get element's size and offset)
+                setTimeout(this.adjustHeight.bind(this), Date.now() - startTime);
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();
