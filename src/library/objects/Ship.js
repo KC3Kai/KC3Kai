@@ -2179,6 +2179,11 @@ KC3改 Ship Object
 		return powerBonus;
 	};
 
+	 // Check if specified equipment (or equip type) can be equipped on current ship.
+	KC3Ship.prototype.canEquip = function(gearMstId, gearType2) {
+		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
+	};
+
 	// check if this ship is capable of equipping Daihatsu (landing craft, amphibious tank not counted)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		if(this.isDummy()) { return false; }

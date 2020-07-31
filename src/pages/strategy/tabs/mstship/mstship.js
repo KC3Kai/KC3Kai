@@ -969,6 +969,8 @@
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
+					// Skip equipment cannot be equipped by current ship
+					if(!KC3Master.equip_on_ship(shipData.api_id, mstId)) continue;
 					const gearType2 = mstId.startsWith("t3_") ?
 						KC3Meta.itemTypesByType3(Number(mstId.substr(3))) : mstId.startsWith("t2_") ?
 						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?

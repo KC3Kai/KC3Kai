@@ -2341,9 +2341,9 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
-					"95": "99",
+					"95": "93",
 					// St. Louis Class
-					"106": "99",
+					"106": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2387,9 +2387,9 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
-					"95": "99",
+					"95": "93",
 					// St. Louis Class
-					"106": "99",
+					"106": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
