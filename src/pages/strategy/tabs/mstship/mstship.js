@@ -969,12 +969,15 @@
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
+					const isMstIdDigits = Number.isInteger(Number(mstId));
 					// Skip equipment cannot be equipped by current ship
-					if(!KC3Master.equip_on_ship(shipData.api_id, mstId)) continue;
+					if(isMstIdDigits && !KC3Master.equip_on_ship(shipData.api_id, mstId)) continue;
 					const gearType2 = mstId.startsWith("t3_") ?
-						KC3Meta.itemTypesByType3(Number(mstId.substr(3))) : mstId.startsWith("t2_") ?
-						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?
-						KC3Master.slotitem(mstId).api_type[2] : 0;
+							KC3Meta.itemTypesByType3(Number(mstId.substr(3))) :
+						mstId.startsWith("t2_") ?
+							Number(mstId.substr(3)) :
+						isMstIdDigits ?
+							KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
 						bonus = Object.assign(bonus, def);
 					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2)) {
