@@ -794,19 +794,39 @@
 	width: 35px;
 }
 
+.tab_mstship .shipInfo .bonusList .gearType span.stacked {
+	content: "*";
+	vertical-align: top;
+	color: #ff5151;
+	font-weight: bold;
+	font-size: large;
+	margin-left: -2px;
+	cursor: default;
+}
+.tab_mstship .shipInfo .bonusList .gearType span.one-time {
+	content: "1";
+	vertical-align: top;
+	color: #ff5151;
+	font-weight: bold;
+	font-size: smaller;
+	margin-left: -5px;
+	cursor: default;
+}
+
 .tab_mstship .shipInfo .bonusList .synergy .synergyFlag span {
 	font-size: 20px;
 	line-height: 30px;
 	vertical-align: middle;	
 }
 
-.tab_mstship .shipInfo .bonusList .synergy .synergyFlag .synergyType span {
+.tab_mstship .shipInfo .bonusList .synergy .synergyFlag .synergyType span.distinct {
 	content: "*";
 	vertical-align: top;
 	color: #ff5151;
 	font-weight: 700;
 	font-size: 20px;
-	margin-left:4px;
+	margin-left: 4px;
+	cursor: default;
 }
 
 .tab_mstship .shipInfo .bonusList .synergyFlags {
