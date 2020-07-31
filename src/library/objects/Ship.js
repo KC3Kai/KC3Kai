@@ -893,36 +893,45 @@ KC3改 Ship Object
 	};
 
 	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprovedAttack = false, forExped = false){
-		// When calculating asw relevant thing,
-		// asw stat from these known types of equipment not taken into account:
-		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
-		// For damage: PSVita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby
-		// But for expeditions, some types might be counted?
-		// https://twitter.com/syoukuretin/status/1156734476870811648
-		// For expeditions, asw from aircraft affected by slot size and proficiency,
-		// carrier-based and seaplane looked the same, rotorcraft in different category:
-		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
-		const noCountEquipType2Ids = !!forExped ? [2, 3, 10, 41, 45, 47] : [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
-		if(!canAirAttack) {
-			const stype = this.master().api_stype;
-			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
-			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
-			if(isAirAntiSubStype) {
-				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
-				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
-			} else if(!!forExped) {
-				// rotorcraft on CL Tatsuta K2 is counted at least, not sure applied to other types or not?
-				noCountEquipType2Ids.push(...[7, 8, 11, 26, 57, 58]);
+		var equipmentTotalAsw = 0;
+		if(!forExped) {
+			// When calculating asw warefare relevant thing,
+			// asw stat from these known types of equipment not taken into account:
+			// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
+			// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
+			// All visible bonuses from equipment not counted towards asw attacks for now.
+			const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
+			if(!canAirAttack) {
+				const stype = this.master().api_stype;
+				const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+				// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+				const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+				if(isAirAntiSubStype) {
+					// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
+					noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
+				}
 			}
+			equipmentTotalAsw = this.equipment(true)
+				.map(g => g.exists() && g.master().api_tais > 0 &&
+					noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
+						+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
+				).sumValues();
+		} else {
+			// For expeditions, asw from aircraft affected by proficiency and equipped slot size:
+			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
+			// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
+			equipmentTotalAsw = this.equipment(true)
+				.map((g, i) => g.exists() && g.master().api_tais > 0 &&
+					// non-aircraft counts its actual asw value, land base plane cannot be used by expedition anyway
+					!KC3GearManager.carrierBasedAircraftType3Ids.includes(g.master().api_type[3]) ? g.master().api_tais :
+					// aircraft in 0-size slot take no effect, and
+					// current formula for 0 proficiency aircraft only,
+					// max level may give additional asw up to +2
+					(!this.slotSize(i) ? 0 : Math.floor(g.master().api_tais * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))))
+				).sumValues()
+				// unconfirmed: all visible bonuses counted? or just like OASW, only some types counted? or none counted?
+				+ this.equipmentTotalStats("tais", true, true, true/*, null, null, [1, 6, 8]*/);
 		}
-		const equipmentTotalAsw = this.equipment(true)
-			.map(g => g.exists() && g.master().api_tais > 0 &&
-				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
-					+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
-			).sumValues()
-			// to be confirmed: all visible bonus from aircraft counted? or just like OASW, only fighters and torpedo bombers
-			+ (!!forExped && this.equipmentTotalStats("tais", true, true, true/*, [6, 8]*/));
 		return equipmentTotalAsw;
 	};
 
@@ -2170,6 +2179,11 @@ KC3改 Ship Object
 		return powerBonus;
 	};
 
+	 // Check if specified equipment (or equip type) can be equipped on current ship.
+	KC3Ship.prototype.canEquip = function(gearMstId, gearType2) {
+		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
+	};
+
 	// check if this ship is capable of equipping Daihatsu (landing craft, amphibious tank not counted)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		if(this.isDummy()) { return false; }
@@ -2271,7 +2285,9 @@ KC3改 Ship Object
 		// 2019-08-09: https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AD%E5%BC%8F%E8%89%A6%E6%88%A6%E6%94%B9
 		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
 		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
-			- this.equipmentTotalStats("tais", true, true, true, [6, 8]);
+		// green (any small?) gun (DE +1asw from 12cm Single High-angle Gun Mount Model E) not counted,
+		// confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
+			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;

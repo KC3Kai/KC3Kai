@@ -4336,10 +4336,8 @@
 					aa = ship.aa[0],
 					fp = ship.fp[0],
 					tp = ship.tp[0];
-				var asw = ship.as[0];
+				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
 				if(includeImprove) {
-					// Should be floored after summing up all ships' stats
-					// https://twitter.com/CainRavenK/status/1157636860933337089
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
@@ -4653,12 +4651,14 @@
 							.clone().appendTo(jq);
 						shipReqBox.text("{0}:{1}"
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
+						// Multiple compo patterns allowed expeds, give tips and mark failure with different color
 						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
 						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
+							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						// alternative compo with CVL + CL for exped 43
 						else if([43].includes(selectedExpedition)) {
@@ -4666,6 +4666,7 @@
 								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
 							).lazyInitTooltip();
+							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						if (dataResult[index] === false) {
 							markFailed( shipReqBox );

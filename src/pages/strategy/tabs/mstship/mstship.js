@@ -969,10 +969,15 @@
 				for (const mstId in bonusDefs) {
 					const def = bonusDefs[mstId];
 					let bonus = {};
+					const isMstIdDigits = Number.isInteger(Number(mstId));
+					// Skip equipment cannot be equipped by current ship
+					if(isMstIdDigits && !KC3Master.equip_on_ship(shipData.api_id, mstId)) continue;
 					const gearType2 = mstId.startsWith("t3_") ?
-						KC3Meta.itemTypesByType3(Number(mstId.substr(3))) : mstId.startsWith("t2_") ?
-						Number(mstId.substr(3)) : Number.isInteger(Number(mstId)) ?
-						KC3Master.slotitem(mstId).api_type[2] : 0;
+							KC3Meta.itemTypesByType3(Number(mstId.substr(3))) :
+						mstId.startsWith("t2_") ?
+							Number(mstId.substr(3)) :
+						isMstIdDigits ?
+							KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
 						bonus = Object.assign(bonus, def);
 					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2)) {
@@ -986,7 +991,7 @@
 				let bonusFound = false;
 				if (bonusList.length > 0) {
 					$.each(bonusList, function (idx, gear) {
-						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {}, classBonus = [];
+						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {}, classBonus = [], countBonus = [];
 						
 						// Class bonuses
 						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
@@ -994,15 +999,19 @@
 							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
 							classBonus = ensureArray(classBonus);
 							classBonus.forEach(bonus => {
-								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype) && !bonus.minCount) {
+								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype)) {
 									found = true;
-									if (!bonus.minStars) {
+									if (bonus.minCount) {
+										countBonus.push(bonus);
+									} else {
+										if (!bonus.minStars) {
 						// TODO: for all following `.single || .multiple`, should merge them instead of OR, and show a 'one-time' indicator
-										bonusStats = bonus.single || bonus.multiple;
-										totalStats = addObjects(totalStats, bonusStats);
-										if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+											bonusStats = bonus.single || bonus.multiple;
+											totalStats = addObjects(totalStats, bonusStats);
+											if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+										}
+										else { starBonus[bonus.minStars] = {}; }
 									}
-									else { starBonus[bonus.minStars] = {}; }
 								}
 							});
 							// Improvement bonuses
@@ -1098,6 +1107,27 @@
 								$(".leveledBonusStatsList", gearBox).append(levelBox);
 							}
 							
+							if (countBonus.length > 0) {
+								countBonus.forEach(bonus => {
+									const levelBox = $(".tab_mstship .factory .synergyBonusRow").clone();
+									addStatsToBox(bonus.single || bonus.multiple, levelBox);
+									$(".gearCount", levelBox).text(`x${bonus.minCount}~`);
+									$(".gearType", levelBox).append($(".gearIcon img", gearBox).clone());
+									if (bonus.single) {
+										$(".gearType", levelBox).append(
+											$("<span>1</span>").addClass("one-time")
+												.attr("title", "Stack only one-time onto total bonus above")
+										);
+									} else if (bonus.multiple) {
+										$(".gearType", levelBox).append(
+											$("<span>+</span>").addClass("stacked")
+												.attr("title", "Stack onto total bonus above for each piece equipped")
+										);
+									}
+									$(".leveledBonusStatsList", gearBox).append(levelBox);
+								});
+							}
+							
 							Object.keys(starBonus).forEach(function (level) {
 								const levelBox = $(".tab_mstship .factory .gearLevelBonus").clone();
 								$(".gearLevel", levelBox).html("&#9733;{0}".format(
@@ -1137,7 +1167,8 @@
 										addStatsToBox(bonus, synergyBonusBox);
 										if (syn.distinct) {
 											$(".synergyType", synergyBox).append(
-												$("<span>*</span>").attr("title", "Not effect at the same time with synergy of this combination")
+												$("<span>*</span>").addClass("distinct")
+													.attr("title", "Not effect at the same time with synergy of this combination")
 											);
 										}
 										$(".synergyBonusRows", synergyBox).append(synergyBonusBox);

@@ -1669,7 +1669,7 @@ Used by SortieManager
 				const leftHp = chp - friendlyFleetDamages[idx];
 				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
-					.css("margin-top", "-3px")
+					.css("margin-top", "-3px").css("object-fit", "cover")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
 				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
@@ -2023,6 +2023,16 @@ Used by SortieManager
 			eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1),
 			isInvalidBoss = eventMapGauge && Array.isArray(eventMapGauge.boss) &&
 				eventMapGauge.boss.indexOf(this.id) === -1;
+		return !isInvalidBoss;
+	};
+
+	KC3Node.prototype.isEventMapBoss = function(){
+		if(!this.isBoss()) return false;
+		const thisMap = KC3SortieManager.getCurrentMapData(),
+			eventMapGauges = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join('')),
+			finalGaugeKey = Object.keys(eventMapGauges).pop(),
+			finalGauge = eventMapGauges[finalGaugeKey],
+			isInvalidBoss = finalGauge && Array.isArray(finalGauge.boss) && !finalGauge.boss.includes(this.id);
 		return !isInvalidBoss;
 	};
 
