@@ -795,7 +795,7 @@
 }
 
 .tab_mstship .shipInfo .bonusList .gearType span.stacked {
-	content: "*";
+	content: "+";
 	vertical-align: top;
 	color: #ff5151;
 	font-weight: bold;

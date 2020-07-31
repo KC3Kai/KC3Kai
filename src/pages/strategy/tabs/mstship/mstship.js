@@ -1117,7 +1117,7 @@
 										);
 									} else if (bonus.multiple) {
 										$(".gearType", levelBox).append(
-											$("<span>*</span>").addClass("stacked")
+											$("<span>+</span>").addClass("stacked")
 												.attr("title", "Stack onto total bonus above for each piece equipped")
 										);
 									}
