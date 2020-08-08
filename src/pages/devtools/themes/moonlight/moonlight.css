@@ -377,7 +377,9 @@ html,body {
 	left: 0;
 	right: 0;
 	text-align: center;
-	text-shadow: 0px 0px 2px black;
+}
+.module.admiral.clrnatsuiro .admiral_lvnext:after {
+	color: red;
 }
 .module.admiral .admiral_rank {
 	width:130px;
@@ -585,6 +587,19 @@ html,body {
 	margin:2px;
 	image-rendering: auto;
 }
+.skin_natsuiro .expeditions .timer-img {
+	width:29px;
+	height:29px;
+	margin:0px 0px 3px 15px;
+	border-radius:15px;
+}
+.skin_natsuiro .expeditions .timer-img img {
+	width:25px;
+	height:25px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
+}
 .expeditions .timer-img.locked {
 	background-image:url(../../../../assets/img/ui/lock.png);
 	background-size:19px;
@@ -636,6 +651,19 @@ html,body {
 	height:22px;
 	display:none;
 	image-rendering: auto;
+}
+.skin_natsuiro .timer_box .timer-img {
+	width:24px;
+	height:24px;
+	margin:1px 4px 0px 0px;
+	border-radius:13px;
+}
+.skin_natsuiro .timer_box .timer-img img {
+	width:20px;
+	height:20px;
+	margin:2px;
+	object-fit: cover;
+	border-radius: 50%;
 }
 .timer_box .timer-time {
 	width:53px;
@@ -1138,7 +1166,6 @@ ABYSS FLEET
 }
 .module.activity .abyss_single .abyss_hp_bar {
 	height:4px;
-	background:#0f0;
 }
 
 /* Abyss combined fleet */
@@ -1205,7 +1232,6 @@ ABYSS FLEET
 }
 .module.activity .abyss_combined .abyss_hp_bar {
 	height:15px;
-	background:#0f0;
 }
 
 .module.activity .abyss_combined .abyss_ship {
@@ -1225,6 +1251,54 @@ ABYSS FLEET
 	position:relative;
 	vertical-align:top;
 	object-fit: cover;
+}
+
+/* Abyss HP Bars */
+.module.activity .abyss_single.clrmoonlight .hp_normal,
+.module.activity .abyss_combined.clrmoonlight .hp_normal {
+	background:#00bb44;
+}
+.module.activity .abyss_single.clrnatsuiro .hp_normal,
+.module.activity .abyss_combined.clrnatsuiro .hp_normal {
+	background:#0f0;
+}
+.module.activity .abyss_single.clrdim .hp_normal,
+.module.activity .abyss_combined.clrdim .hp_normal {
+	background:#3A9B70;
+}
+.module.activity .abyss_single.clrmoonlight .hp_shouha,
+.module.activity .abyss_combined.clrmoonlight .hp_shouha {
+	background:#ffff00;
+}
+.module.activity .abyss_single.clrnatsuiro .hp_shouha,
+.module.activity .abyss_combined.clrnatsuiro .hp_shouha {
+	background:#ff0;
+}
+.module.activity .abyss_single.clrdim .hp_shouha,
+.module.activity .abyss_combined.clrdim .hp_shouha {
+	background:#caca00;
+}
+.module.activity .abyss_single.clrmoonlight .hp_chuuha,
+.module.activity .abyss_combined.clrmoonlight .hp_chuuha {
+	background:#ff9900;
+}
+.module.activity .abyss_single.clrnatsuiro .hp_chuuha,
+.module.activity .abyss_combined.clrnatsuiro .hp_chuuha {
+	background:#f90;
+}
+.module.activity .abyss_single.clrdim .hp_chuuha,
+.module.activity .abyss_combined.clrdim .hp_chuuha {
+	background:#ba7000;
+}
+.module.activity .abyss_single.clrmoonlight .hp_taiha,
+.module.activity .abyss_combined.clrmoonlight .hp_taiha,
+.module.activity .abyss_single.clrnatsuiro .hp_taiha,
+.module.activity .abyss_combined.clrnatsuiro .hp_taiha {
+	background:#f00;
+}
+.module.activity .abyss_single.clrdim .hp_taiha,
+.module.activity .abyss_combined.clrdim .hp_taiha {
+	background:#ba0000;
 }
 
 /* Battle Flags */
@@ -1406,7 +1480,10 @@ ABYSS FLEET
 	margin:0px 5px 0px 0px;
 	float:left;
 	border-radius:7px;
-	background:rgba(34,48,49,1);
+	background:#223031;
+}
+.module.activity.icon_natsuiro .plane_icon {
+	background:#fff;
 }
 .module.activity .plane_icon img {
 	width:15px;
@@ -1627,6 +1704,10 @@ ABYSS FLEET
 	background: rgba(68,102,119,0.6);
 	border:1px solid #888;
 	line-height:10px;
+	
+}
+.module.activity .activity_quest.schnatsuiro .quest_list .quest_page {
+	background: #444;
 }
 .module.activity .activity_quest.schmoonless .quest_list .quest_page {
 	background: #365;
@@ -1640,8 +1721,11 @@ ABYSS FLEET
 	margin:1px 0px 0px 0px;
 	height:16px;
 }
-.module.activity .activity_quest .quest_list .quest.activated {
+.module.activity .activity_quest.schmoonlight .quest_list .quest.activated {
 	background: #364;
+}
+.module.activity .activity_quest.schnatsuiro .quest_list .quest.activated {
+	background: rgba(255,153,51,0.2);
 }
 .module.activity .activity_quest.schmoonless .quest_list .quest.activated {
 	background: #16202A;
@@ -1666,12 +1750,18 @@ ABYSS FLEET
 	linear-gradient(135deg, #c0c0c0 50%, transparent 50.1%) 0 0 no-repeat,
 	#333 !important;
 }
+.module.activity .activity_quest.schnatsuiro .quest_list .quest.activated .quest_color {
+	border-color: #F93;
+}
 .module.activity .activity_quest.schmoonlight .quest_list .quest.completed .quest_color,
 .module.activity .activity_quest.schmoonless .quest_list .quest.completed .quest_color {
 	height:16px;
 	width:16px;
 	margin: 0px 0px 0px 1px;
 	border:3px outset #999;
+}
+.module.activity .activity_quest.schnatsuiro .quest_list .quest.completed .quest_color {
+	border-color: #0F0;
 }
 .module.activity .activity_quest .quest_list .quest .quest_text {
 	width: 165px;
@@ -2115,6 +2205,7 @@ ABYSS FLEET
 }
 .module.activity .activity_expeditionPlanner .dropdown_title {
 }
+/* the main header for the dropdown menu */
 .module.activity .activity_expeditionPlanner.ep_colorblind .dropdown_title.expPlanner_text_passed {
 	color:#00cc55;
 	background:rgba(170,169,173,0.9);
@@ -2144,6 +2235,7 @@ ABYSS FLEET
 	width: 100%;
 	height: 28px;
 }
+/* the border of the main header */
 .module.activity .activity_expeditionPlanner .expPlan_dropdown_title {
 	width: 100%;
 	list-style: none;
@@ -2169,13 +2261,19 @@ ABYSS FLEET
 	border-style: solid;
 	border-width: 1px;
 }
+/* the background color the all dropdown lists */
+.module.activity .activity_expeditionPlanner.ep_moonless li {
+	background: #16202A;
+}
 .module.activity .activity_expeditionPlanner.ep_natsuiro li {
 	background: #dddddd;
 }
+/* the color that appears when hovering over elements in the list */
 .module.activity .activity_expeditionPlanner.ep_colorblind li:hover {
 	background: rgba(200,200,200,0.6);
 }
-.module.activity .activity_expeditionPlanner.ep_moonless li:hover {
+.module.activity .activity_expeditionPlanner.ep_moonless li:hover,
+.module.activity .activity_expeditionPlanner.ep_moonless .expedition_entry.cond_passed:hover {
 	background: rgba(200,200,200,0.4);
 }
 .module.activity .activity_expeditionPlanner.ep_natsuiro li:hover {
@@ -2192,6 +2290,7 @@ ABYSS FLEET
 	font-size: 13px;
 	line-height: 17px;
 }
+/* color settings specifically for the world list within the dropdown list */
 .module.activity .activity_expeditionPlanner.ep_colorblind li ul {
 	background: rgba(28,40,50,0.7);
 	color:#ABABBC;
@@ -2460,7 +2559,8 @@ ABYSS FLEET
 	border:0px none;
 	border-radius:20px;
 }
-.module.activity.icon_moonlight .activity_gunfit .fit_gear_pic {
+.module.activity.icon_moonlight .activity_gunfit .fit_gear_pic,
+.module.activity.icon_natsuiro .activity_gunfit .fit_gear_pic {
 	background:#333;
 }
 .module.activity.icon_moonless .activity_gunfit .fit_gear_pic {
@@ -3040,6 +3140,10 @@ ABYSS FLEET
 .module.activity.skin_moonlight .activity_pvp .pvpFleetShip {
 	border:1px solid rgba(0, 190, 190, 0.5);
 }
+.module.activity.skin_natsuiro .activity_pvp .pvpFleetShip {
+	border: 1px solid #faa;
+	background-color: rgba(85,85,85,0.7);
+}
 .module.activity.skin_moonless .activity_pvp .pvpFleetShip {
 	background-color: #16202A;
 	border:1px solid #667;
@@ -3415,6 +3519,9 @@ ABYSS FLEET
 .quest.complete {
 	background: rgba(0,150,150,0.75);
 }
+.quest.schnatsuiro.complete {
+	background:rgba(0,255,0,0.25);
+}
 .quest.schmoonless.complete {
 	background: #006E6E;
 }
@@ -3451,6 +3558,11 @@ ABYSS FLEET
 .t .quest.complete .quest_color {
 	width:15px;
 	margin:1px 1px 0px 0px;
+}
+.quest.complete.schnatsuiro .quest_color {
+	background:#555;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .quest_text {
@@ -3496,6 +3608,10 @@ ABYSS FLEET
 	width:34px;
 	height:13px;
 	line-height:13px;
+}
+.quest_track.schnatsuiro {
+	background:rgba(60,60,60,0.7);
+	color:#eee;
 }
 .untracked .quest_track {
 	display:none;
@@ -3832,7 +3948,7 @@ ABYSS FLEET
 }
 .h .module.controls .control_btn img {
 	width:25px;
-	margin:-7px 0px 0px -1px;
+	margin:-7px 0px 0px -0.5px;
 }
 .h .module.controls .control_btn.btn_export img {
 	width:25px;
@@ -4274,7 +4390,7 @@ ABYSS FLEET
 	background-color:rgba(100, 255, 100, 0.3);
 }
 .module.fleet .skin_misc.skin_moonless .hp_repairing {
-	background: #457589 !important;
+	background: #355579 !important;
 }
 .module.fleet .skin_misc.skin_moonlight .hp_fcf {
 	background-image: radial-gradient(rgba(255,255,255, 0.07) 20%, rgba(255,255,255, 0.4) 75%, rgba(255,255,255, 0.6) 99%) !important;
@@ -4630,11 +4746,13 @@ ABYSS FLEET
 .v .module.fleet .lship .ship_exp_label .expNotice {
 	top:1px;
 	left:66px;
+	text-shadow:-1px -1px 1px #222, 0px -1px 1px #222, 1px -1px 1px #222, -1px 0px 1px #222, 1px 0px 1px #222, -1px 1px 1px #222, 0px 1px 1px #222, 1px 1px 1px #222;
 }
 .c .module.fleet .lship .ship_exp_label .expNotice {
-	top:43px;
+	top:-11px;
 	left:33px;
 	font-size:11px;
+	line-height:12px;
 }
 .module.fleet .lship .ship_exp_next {
 	width:40px;
@@ -5010,7 +5128,7 @@ ABYSS FLEET
 	margin:0px 0px 2px 0px;
 	top:5px;
 	left:317px;
-	/*box-shadow:-3px 4px 7px rgba(255,255,255,0.4) inset, 0px 10px 7px rgba(0,0,0,0.15) inset;*/
+	box-shadow:-3px 4px 7px rgba(255,255,255,0.4) inset, 0px 10px 7px rgba(0,0,0,0.15) inset;
 }
 .module.fleet .sship .ship_morale {
 	width:20px;
@@ -5152,7 +5270,7 @@ ABYSS FLEET
 .module.fleet .sship .ship_gears {
 	width:150px;
 	height:20px;
-	top:41px;
+	top:42px;
 	left: 3px;
 }
 .v .module.fleet .sship .ship_gears {
@@ -5162,7 +5280,7 @@ ABYSS FLEET
 	left:140px;
 }
 .c .module.fleet .sship .ship_gears {
-	top:34px;
+	top:36px;
 	left: 3px;
 }
 .module.fleet .lship .ship_gear {

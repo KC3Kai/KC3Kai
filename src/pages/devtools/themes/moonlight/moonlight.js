@@ -478,7 +478,7 @@
 
 		//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],  ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
 		mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "clrnone",         "clrnone",             "clrhalfteal",     "rgba(24, 45, 85, 1)",  "schmoonlight");
-		mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "clrblue",         "clrdarkblue",         "clrnone",         "clrnone",              "schnatsuiro");
+		mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "clrnone",         "clrnone",             "clrnone",         "clrnone",              "schnatsuiro");
 		mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "clrblackpearl",   "clrnone",             "clrnone",         "clrnone",              "schmoonless");
 		mode_dark.push(                 "conbut_moonless",    "icon_moonless",  "clrnone",         "clrnone",             "clrgold",         "clrnone",              "schmoonless");
 		mode_flashbang.push(            "conbut_moonlight",   "icon_moonlight", "clrblue",         "clrsilver",           "clrsilver",       "clrnone",              "schmoonlight");
@@ -527,7 +527,7 @@
 		style_select(2,".bar_border_radius4,.bar_border_radius3",ConfigManager.pan_moon_bar_shape);
 
 		// bar color presets
-		style_select(1,".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp",ConfigManager.pan_moon_bar_colors);
+		style_select(1,".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.module.admiral,.map_gauge,.curhp,.nowhp,.abyss_combined,.abyss_single",ConfigManager.pan_moon_bar_colors);
 
 		// hp bar state indicators
 		if(ConfigManager.pan_moon_bar_indicators == true) {
@@ -5096,16 +5096,17 @@
 		if(maxWidth > 0) {
 			$(hpBarSelector).css("width", maxWidth * hpPercent);
 		}
+		$(hpBarSelector).removeClass("hp_taiha").removeClass("hp_chuuha").removeClass("hp_shouha").removeClass("hp_normal");
 		if(hpPercent === undefined || isNaN(hpPercent)) {
 			$(hpBarSelector).css("background", "#999999");
 		} else if(hpPercent <= 0.25) {
-			$(hpBarSelector).css("background", "#bb0000");
+			$(hpBarSelector).addClass("hp_taiha");
 		} else if(hpPercent <= 0.50) {
-			$(hpBarSelector).css("background", "#FF9900");
+			$(hpBarSelector).addClass("hp_chuuha");
 		} else if(hpPercent <= 0.75) {
-			$(hpBarSelector).css("background", "#FFFF00");
+			$(hpBarSelector).addClass("hp_shouha");
 		} else {
-			$(hpBarSelector).css("background", "#00dd44");
+			$(hpBarSelector).addClass("hp_normal");
 		}
 		$(hpBarSelector).parent().toggleClass("sunk", hpPercent <= 0);
 	}

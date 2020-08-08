@@ -169,7 +169,6 @@
 				$(".locktag .solid", this.element).text(this.shipData.sally);
 			}
 			$(".locktag", this.element).show()
-				/*.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")*/
 				.css("border-color", "transparent " + this.lockTagColors[tagColorId - 1] || "#aaa" + " transparent transparent");
 		} else {
 			$(".locktag", this.element).hide();
