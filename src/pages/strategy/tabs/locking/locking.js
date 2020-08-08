@@ -190,7 +190,8 @@
                 slotMaxSize: shipMaster.api_maxeq,
                 exSlot: shipObj.ex_item,
 
-                canEquipDaihatsu: shipObj.canEquipDaihatsu()
+                canEquipDaihatsu: shipObj.canEquipDaihatsu(),
+                canEquipTank: shipObj.canEquipTank()
             });
 
             this.lockPlans.forEach((tagPlan, tagId) => {
@@ -289,17 +290,16 @@
                 }
             });
 
-            [0,1,2,3].forEach(i => {
+            [0,1,2,3,4].forEach(i => {
                 this.showEquipSlot(shipRow, i + 1, ship.slotCount,
                     ship.slotMaxSize[i], ship.slots[i], ship.equip[i]);
             });
             // for ex-slot, although it's hidden
-            this.showEquipSlot(shipRow, 5, ship.exSlot ? 5 : ship.slotCount,
-                0, 0, ship.exSlot);
+            this.showEquipSlot(shipRow, 6, ship.slotCount, 0, 0, ship.exSlot);
         }
 
         showEquipSlot(rowElem, index, slotCount, slotMaxSize, slotCurrentSize, equipId) {
-            const element = $(".ship_equip_" + (index > 4 ? "ex" : index), rowElem);
+            const element = $(".ship_equip_" + (index > 5 ? "ex" : index), rowElem);
             const isShowCurrent = !!this.filterValues.equipIcons;
             if(equipId > 0 && isShowCurrent) {
                 const gear = KC3GearManager.get(equipId);
@@ -322,10 +322,10 @@
                 const slotSize = isShowCurrent ? slotCurrentSize : slotMaxSize;
                 $("span", element).text(slotSize).toggle(slotMaxSize > 0);
                 element.toggleClass("slot_open", index <= slotCount);
-                // hide ex-slot elements
-                if(index > 4 && slotCount < 5)
-                    element.hide();
             }
+            if(slotCount > 4) element.parent().addClass("slot5");
+            // hide ex-slot or closed-slot elements
+            if(index > slotCount) element.hide();
         }
 
         addFilterUI() {
@@ -353,8 +353,8 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
-            // Daihatsu
-            ["---", "Capable", "Incapable"].forEach((val, i) => {
+            // Daihatsu/Amphibious Tank
+            ["---", "Daihatsu", "Tank", "Both", "Either", "Neither"].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -415,7 +415,10 @@
                 (filterDef, ship) => {
                     return (this.filterValues.daihatsu === 0)
                         || (this.filterValues.daihatsu === 1 && ship.canEquipDaihatsu)
-                        || (this.filterValues.daihatsu === 2 && !ship.canEquipDaihatsu);
+                        || (this.filterValues.daihatsu === 2 && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 4 && (ship.canEquipDaihatsu || ship.canEquipTank))
+                        || (this.filterValues.daihatsu === 5 && !ship.canEquipDaihatsu && !ship.canEquipTank);
                 }
             );
             this.defineSimpleFilter("tagLocked", [], 0,

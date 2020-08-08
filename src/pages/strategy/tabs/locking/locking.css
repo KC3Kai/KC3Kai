@@ -343,6 +343,11 @@
 	justify-content: center;
 }
 
+.tab_locking .ship_item .ship_equip.slot5 .ship_equip_icon,
+.tab_locking .ship_item .ship_equip.slot5 img {
+	width: 14px;
+}
+
 .tab_locking .ship_list .ship_item .ship_equip .slot_open {
 	border-radius: 50%;
 }
