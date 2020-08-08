@@ -2341,9 +2341,9 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
-					"95": "99",
+					"95": "93",
 					// St. Louis Class
-					"106": "99",
+					"106": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -2387,9 +2387,9 @@ KC3改 Equipment Object
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					// Northampton Class
-					"95": "99",
+					"95": "93",
 					// St. Louis Class
-					"106": "99",
+					"106": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -4363,7 +4363,7 @@ KC3改 Equipment Object
 				break;
 			case "exped":
 				// Fire power bonus for combat expeditions, such as 43, B4
-				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#escortninmu
+				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
 				switch (type2) {
 					case 1: // Small main gun
 						modifier = 0.5;
@@ -4373,7 +4373,9 @@ KC3改 Equipment Object
 						modifier = 1;
 						break;
 					case 4: // Secondary gun
+						// wikia
 						modifier = 0.3;
+						// wikiwiki
 						//return 0.15 * stars;
 						break;
 					case 19: // AP Shell
@@ -4479,9 +4481,8 @@ KC3改 Equipment Object
 		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 12: // Small radar
-				case 13: // Large radar
 					return Math.sqrt(stars);
-					// return 0.95 * Math.sqrt(stars); for Large radar?
+				case 13: // Large radar
 				case 10: // Seaplane recon
 					return 0.95 * Math.sqrt(stars);
 			}
@@ -4516,13 +4517,14 @@ KC3改 Equipment Object
 		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 1: // Small main gun
-				case 2: // Med main gun
+				case 2: // Medium main gun
+				case 4: // Secondary gun
 					const type3 = this.master().api_type[3];
 					// 16 => HA gun
 					if ([16].includes(type3)) {
 						return 0.3 * stars;
 					}
-					return 0;
+					break;
 				case 21: // Machine gun
 					return Math.sqrt(stars);
 			}

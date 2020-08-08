@@ -383,8 +383,10 @@
 
 			// Update enemycomp with leftover slots from air battle
 			if (this.delayedABSubmission && this.enemyComp.airBattle) {
-				this.delayedABSubmission = null;				
-				const base = http.response.api_data.api_air_base.find(base => base.api_area_id === this.currentMap[0] && base.api_rid === this.enemyComp.airBattle.enemyShotdown.baseId);
+				this.delayedABSubmission = null;
+				const base = http.response.api_data.api_air_base.find(base =>
+					base.api_area_id === this.currentMap[0] && base.api_rid === this.enemyComp.airBattle.enemyShotdown.baseId
+				);
 				this.enemyComp.airBattle.enemyShotdown.finalSlots = base.api_plane_info.map(slot => slot.api_count);
 
 				this.sendData(this.enemyComp, 'enemy-comp');
