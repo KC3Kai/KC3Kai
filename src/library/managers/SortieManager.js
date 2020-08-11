@@ -807,19 +807,29 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				&& KC3Meta.isEventWorld(this.map_world) && this.map_num > 0){
 				const eventObject = portApiData.api_event_object;
 				const thisMap = this.getCurrentMapData(this.map_world, this.map_num);
+				let updated = false;
 				if(eventObject.api_m_flag){
+					if(thisMap.debuffFlag != eventObject.api_m_flag){
+						console.info("Map gimmick flag updated", thisMap.debuffFlag, eventObject);
+					}
 					thisMap.debuffFlag = eventObject.api_m_flag;
+					updated = true;
 				}
 				if(eventObject.api_m_flag2){
 					thisMap.debuffSound = (thisMap.debuffSound || 0) + 1;
+					updated = true;
+					console.info("Map gimmick flag sound", thisMap.debuffSound, eventObject);
 				}
 				// first found at event Winter 2018
 				/*
 				if(eventObject.api_m_flag3){
 					thisMap.selectedOperation = eventObject.api_m_flag3;
+					updated = true;
 				}
 				*/
-				this.setCurrentMapData(thisMap, this.map_world, this.map_num);
+				if(updated){
+					this.setCurrentMapData(thisMap, this.map_world, this.map_num);
+				}
 			}
 			
 			// Reset sortie statistics

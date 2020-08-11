@@ -1870,6 +1870,7 @@ KC3改 Ship Object
 			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
+		// TODO Any side Echelon vs Combined Fleet, shelling mod is 0.6?
 		// Modifier of vanguard formation depends on the position in the fleet
 		if(formationId === 6) {
 			const [shipPos, shipCnt] = this.fleetPosition();
@@ -2179,12 +2180,18 @@ KC3改 Ship Object
 		return powerBonus;
 	};
 
-	 // Check if specified equipment (or equip type) can be equipped on current ship.
+	 // Check if specified equipment (or equip type) can be equipped on this ship.
 	KC3Ship.prototype.canEquip = function(gearMstId, gearType2) {
 		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
 	};
 
-	// check if this ship is capable of equipping Daihatsu (landing craft, amphibious tank not counted)
+	// check if this ship is capable of equipping Amphibious Tank (Ka-Mi tank only for now, no landing craft variants)
+	KC3Ship.prototype.canEquipTank = function() {
+		if(this.isDummy()) { return false; }
+		return KC3Master.equip_type(this.master().api_stype, this.masterId).includes(46);
+	};
+
+	// check if this ship is capable of equipping Daihatsu (landing craft variants, amphibious tank not counted)
 	KC3Ship.prototype.canEquipDaihatsu = function() {
 		if(this.isDummy()) { return false; }
 		const master = this.master();

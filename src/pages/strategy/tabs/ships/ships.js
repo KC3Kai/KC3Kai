@@ -605,7 +605,8 @@
 				master: MasterShip,
 				// Check whether remodel is max
 				remodel: RemodelDb.isFinalForm(ship.masterId),
-				canEquipDaihatsu: ThisShip.canEquipDaihatsu()
+				canEquipDaihatsu: ThisShip.canEquipDaihatsu(),
+				canEquipTank: ThisShip.canEquipTank()
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -819,11 +820,13 @@
 			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
-				["all", "yes","no"],
+				["all", "yes1","yes2", "both", "no"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
-						|| (curVal === 2 && !ship.canEquipDaihatsu);
+						|| (curVal === 2 && ship.canEquipTank)
+						|| (curVal === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
+						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank);
 				});
 
 			self.defineShipFilter(
