@@ -69,6 +69,7 @@
                     return 24;
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
+                case 632: // Ariake
                     return 15;
                 case 344: // Asashimo
                 case 350: // Umikaze
@@ -138,6 +139,7 @@
                 case 312: // Hamakaze
                 case 317: // Urakaze
                 case 320: // Isokaze
+                case 632: // Ariake
                     return 10;
                 case 313: // Tanikaze
                     return 20;

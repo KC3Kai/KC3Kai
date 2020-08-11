@@ -640,6 +640,7 @@
 								.lazyInitTooltip();
 							$(".sloticon img", this)
 								.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
+								.attr("title", `[${equipId}]`)
 								.attr("alt", equipId).off("click")
 								.click(gearClickFunc).show();
 							$(".sloticon", this).addClass("hover");
@@ -1264,6 +1265,7 @@
 									.lazyInitTooltip();
 								$(".sloticon img", this)
 									.attr("src", KC3Meta.itemIcon(equipment.api_type[3]))
+									.attr("title", `[${equipId}]`)
 									.attr("alt", equipId).off("click").click(gearClickFunc).show();
 								$(".sloticon", this).addClass("hover");
 								// Check diff for updating `abyssal_stats.json`

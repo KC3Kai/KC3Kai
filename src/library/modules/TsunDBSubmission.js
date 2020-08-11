@@ -344,8 +344,8 @@
 				// Development related
 				'api_req_kousyou/createitem': this.processDevelopment,
 
-				// Debuff gimmick check
-				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener],
+				// Port checks
+				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitFriendlyFleet],
 
 				// Equipment list
 				'api_get_member/picture_book': this.processPictureBook,
@@ -562,11 +562,9 @@
 				equip: friendlyInfo.api_Slot,
 				requestType: PlayerManager.friendlySettings.api_request_type,
 				voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
-				fleet1: (this.data.fleet1 || []).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b),
-				fleet2: (this.data.fleet2 || []).map(e => RemodelDb.originOf(e.id)).sort((a, b) => a - b),
 			};
-			this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
-			this.sendData(this.friendlyFleet, 'friendlyfleet');
+			this.delayedFFSubmission = true;
+			this.torchCount = PlayerManager.consumables.torch;
 		},
 		
 		processEnemy: function(http, airRaidData) {
@@ -988,6 +986,25 @@
 				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
 			}
 			this.sendData(this.gimmick, 'gimmick');
+		},
+
+		/**
+		* Check if flamethrowers are used and submit friendlyfleet if submission is delayed
+		*/
+		submitFriendlyFleet: function(http){
+			if (!this.delayedFFSubmission) return;
+
+			const apiData = http.response.api_data;
+			this.delayedFFSubmission = false;
+
+			// In the event that user has less than 6 torch, all will be consumed
+			// Ignore case when user has zero torch
+			if (!!apiData.api_material && this.torchCount > 0) {
+				const currentTorch = apiData.api_material[4].api_value;
+				this.friendlyFleet.fleet.torchUsed = currentTorch < this.torchCount;
+				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				this.sendData(this.friendlyFleet, 'friendlyfleet');
+			}
 		},
 
 		processSpAttack: function() {
@@ -1472,6 +1489,8 @@
 			};
 			this.sortieSpecialAttack = null;
 			this.delayedABSubmission = null;
+			this.delayedFFSubmission = null;
+			this.torchCount = 0;
 			this.resupplyUsed = false;
 		},
 		
