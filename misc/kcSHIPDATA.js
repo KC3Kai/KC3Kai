@@ -9634,7 +9634,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 10,
-		SLOTS: [45, 45, 44, 44],
+		SLOTS: [56, 48, 48, 26],
 		EQUIPS: [556, 557, 557, 558],
 	},
 	1962: {
@@ -9654,7 +9654,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 10,
-		SLOTS: [47, 47, 47, 47],
+		SLOTS: [58, 50, 52, 28],
 		EQUIPS: [556, 557, 557, 558],
 	},
 	1963: {
@@ -9674,7 +9674,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 10,
-		SLOTS: [],
+		SLOTS: [60, 52, 56, 30],
 		EQUIPS: [556, 557, 557, 558],
 	},
 	1964: {
