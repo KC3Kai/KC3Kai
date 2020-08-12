@@ -588,7 +588,7 @@
 							rosterId: rosterId,
 							shipDesc:
 							  ThisShip.name() + " Lv." + ThisShip.level +
-								" (" + rosterId + ")"
+								" (#" + rosterId + ")"
 						}  );
 				});
 
@@ -648,7 +648,7 @@
 
 					var resp = confirm(
 						"Would you like to change your leveling goal for " +
-						ThisShip.name() + " (" + ShipRosterId + ") to level " +
+						ThisShip.name() + " (#" + ShipRosterId + ") to level " +
 						nextLevel + "?");
 					if (resp) {
 						self.goals["s"+ ShipRosterId][0] = nextLevel;
@@ -703,7 +703,7 @@
 				$(".ship_icon img", goalBox).attr("src", KC3Meta.shipIcon(ThisShip.masterId) );
 				$(".ship_icon img", goalBox).attr("alt", ThisShip.masterId );
 				$(".ship_icon img", goalBox).click(shipClickFunc);
-				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (' + ThisShip.rosterId + ')' );
+				$(".ship_icon img", goalBox).attr("title", ThisShip.name() + ' (#' + ThisShip.rosterId + ')' );
 				$(".ship_name", goalBox).text( ThisShip.name() );
 				$(".ship_type", goalBox).text( ThisShip.stype() );
 				$(".ship_lv .ship_value", goalBox).text( ThisShip.level );
