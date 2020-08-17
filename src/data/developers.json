@@ -1092,16 +1092,5 @@
 			"desc": ["AboutCompleteMapNodes"],
 			"link": "https://github.com/yukixz/kcmap"
 		}
-	],
-	
-	"AboutDonators": [
-		["y7h65", ""],
-		["Rexlent", ""],
-		["Tempest 101", "$2"],
-		["mikenzb", "$15"],
-		["Lychwee", "$2.30"],
-		["Ingarson", "$8"],
-		["Meter55", "$4.02"],
-		["jerryjiahaha", "$10"]
 	]
 }

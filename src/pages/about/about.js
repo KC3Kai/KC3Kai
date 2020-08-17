@@ -50,12 +50,6 @@
 						}
 						$(".list", sectionBox).append($("<div/>").addClass("clear"));
 						break;
-					case "AboutDonators":
-						for (devCtr in response.AboutDonators) {
-							addDonator( response.AboutDonators[devCtr], $(".list", sectionBox) );
-						}
-						$(".list", sectionBox).append($("<div/>").addClass("clear"));
-						break;
 					default: break;
 				}
 			}
@@ -64,6 +58,13 @@
 		// Load license file
 		$.get("https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/LICENSE", function(response){
 			$(".license_box").html("").append($("<pre>").text(response));
+		});
+
+		// Load donator list
+		$.get("https://tsundb.kc3.moe/api/patrons", function(response){
+			for (var donator of response) {
+				addDonator( donator );
+			}
 		});
 	});
 	
@@ -153,11 +154,14 @@
 	}
 	
 	// Show a donator box
-	function addDonator(data, targetBox){
+	function addDonator(data){
 		var donatorBox = $("#factory .donatorBox").clone();
-		$(".donatorName", donatorBox).text(data[0]);
-		$(".donatorAmount", donatorBox).text(data[1]);
-		targetBox.append(donatorBox);
+		$(".donatorName", donatorBox).text(data.user);
+		$(".donatorAmount", donatorBox).text(data.amount);
+		if(data.sponsor) {
+			donatorBox.addClass("sponsor");
+		}
+		$("#donatorWrapper").append(donatorBox);
 	}
 	
 })();
