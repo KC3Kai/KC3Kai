@@ -346,12 +346,13 @@ body {
 	overflow:hidden;
 	text-align:center;
 }
-
 .donatorBox.sponsor {
 	background:#f7f3bf;
 }
-
 .donatorBox.sponsor .donatorName {
 	background: #eee9aa;
 	border-right:1px solid #f0d74b;
+}
+.donatorBox.legacy {
+	opacity:0.7;
 }
