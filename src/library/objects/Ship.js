@@ -930,7 +930,7 @@ KC3改 Ship Object
 					(!this.slotSize(i) ? 0 : Math.floor(g.master().api_tais * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))))
 				).sumValues()
 				// unconfirmed: all visible bonuses counted? or just like OASW, only some types counted? or none counted?
-				+ this.equipmentTotalStats("tais", true, true, true/*, null, null, [1, 6, 8]*/);
+				+ this.equipmentTotalStats("tais", true, true, true/*, null, null, [1, 6, 7, 8]*/);
 		}
 		return equipmentTotalAsw;
 	};
@@ -2266,10 +2266,11 @@ KC3改 Ship Object
 
 		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
+		const isLightCarrier = stype === 7;
 		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
 		// is ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
-		//   but unconfirmed for CVL, AO and Hayasui Kai
+		//   but unconfirmed for AO and Hayasui Kai
 		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
@@ -2287,33 +2288,34 @@ KC3改 Ship Object
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from Sonars taken into account confirmed.
 		const shipAsw = this.as[0] + aswDiff
-		// explicit asw bonus from Fighters and Torpedo Bombers still not counted,
-		// confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
-		// 2019-08-09: https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AD%E5%BC%8F%E8%89%A6%E6%88%A6%E6%94%B9
-		// but bonus from other aircraft like Dive Bomber, Rotorcraft not (able to be) confirmed,
-		// perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
-		// green (any small?) gun (DE +1asw from 12cm Single High-angle Gun Mount Model E) not counted,
-		// confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
-			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 8]);
+		// Visible asw bonus from Fighters, Dive Bombers and Torpedo Bombers still not counted,
+		//   confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
+		//   2019-08-08: https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#trigger_conditions
+		//   but bonus from other aircraft like Rotorcraft not (able to be) confirmed,
+		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
+		// Green (any small?) gun (DE +1 asw from 12cm Single High-angle Gun Mount Model E) not counted,
+		//   confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
+			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
 
-		// is Taiyou-Class?
-		// initial asw stat of Taiyou Class is high enough to reach 50 / 65,
+		// For CVL Taiyou-Class/Shinyou-Class, initial asw stat is high enough to reach 50 / 65,
 		// but for Kasugamaru, since not possible to reach high asw for now, tests are not done.
 		// for Taiyou Class Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but CVE can still OASW. only Sonar equipped can do neither.
-		const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
-			|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
-		if (isTaiyouKaiAfter) {
-			return this.equipment(true).some(gear => gear.isAswAircraft(false));
-		} else if (isEscortLightCarrier) {
-			return this.equipment(true).some(gear => gear.isHighAswBomber(false));
+		// Other CVL possible but hard to reach 100 asw and do OASW with sonar and any asw aircraft.
+		if(isLightCarrier) {
+			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
+				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
+			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
+			return (isTaiyouKaiAfter && hasAswAircraft)
+				|| (isEscortLightCarrier && this.equipment(true).some(gear => gear.isHighAswBomber(false)))
+				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);
 		}
 
-		// Escort can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		if(isEscort) {
 			if(hasSonar) return true;
 			const equipAswSum = this.equipmentTotalStats("tais");
