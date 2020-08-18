@@ -2277,7 +2277,7 @@ KC3改 Ship Object
 		const isHyuugaKaiNi = this.masterId === 554;
 
 		// lower condition for DE and CVE, even lower if equips Sonar
-		const aswThreshold = isEscortLightCarrier && hasSonar ? 50
+		const aswThreshold = isLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
@@ -2305,13 +2305,13 @@ KC3改 Ship Object
 		// for Taiyou Class Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but CVE can still OASW. only Sonar equipped can do neither.
-		// Other CVL possible but hard to reach 100 asw and do OASW with sonar and any asw aircraft.
+		// Other CVL (Zuihou K2) possible but hard to reach 50 asw and do OASW with Sonar and ASW aircraft.
 		if(isLightCarrier) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
 			return (isTaiyouKaiAfter && hasAswAircraft)
-				|| (isEscortLightCarrier && this.equipment(true).some(gear => gear.isHighAswBomber(false)))
+				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))
 				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);
 		}
 
