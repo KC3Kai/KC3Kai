@@ -4531,18 +4531,18 @@ KC3改 Equipment Object
 			return 0;
 		}
 		switch (type2) {
-			case 6: // carrier-based fighter
-				modifier = 0.2; break;
-			case 7: // fighter bomber (dive bomber with AA stat)
-			case 57: // jet bomber
-				modifier = 0.25; break;
-			case 45: // seaplane fighter
-				// seaplane bomber no AA bonus found yet, but found DV & LoS bonus
-				modifier = 0.2; break;
-			case 47: // LB attacker
-				return 0.5 * Math.sqrt(stars);
+			case 6: // Carrier-based fighter
+			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
+			case 7: // Fighter bomber (dive bomber with AA stat)
+			case 49: // LB recon, uncertain?
+			case 57: // Jet bomber
+				modifier = 0.25; break;
+			case 41: // Large Flying Boat, uncertain?
+				return 0.25 * Math.sqrt(stars);
+			case 47: // LB attacker
+				return 0.5 * Math.sqrt(stars);
 		}
 		return modifier * stars;
 	};

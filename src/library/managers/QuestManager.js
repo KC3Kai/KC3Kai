@@ -279,46 +279,59 @@ Uses KC3Quest objects to play around with
 		 * Since 2020-03-27, quest page in API no longer exists (in-game UI paginated still), list includes all available items in specified tab ID
 		------------------------------------------*/
 		definePage :function( questList, questPage, questTabId ){
-			// TODO it's now possible to clean quests non-open-nor-active in-game for some reason,
-			// Update quests for those `api_no` not in current quest list as long as questTabId is 0 (All)
-			var untranslated = [];
-			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
+			const untranslated = [], existedAllIds = [];
+			const reportedQuests = JSON.parse(localStorage.reportedQuests || "[]");
 			for(var ctr in questList){
-				if(questList[ctr]===-1) continue;
+				if(!questList[ctr] || questList[ctr] === -1) continue;
 				
-				var questId = questList[ctr].api_no;
-				var oldQuest = this.get( questId );
-				oldQuest.defineRaw( questList[ctr] );
-				oldQuest.autoAdjustCounter();
+				const questRaw = questList[ctr];
+				const questId = questRaw.api_no;
+				const questObj = this.get(questId);
+				questObj.defineRaw(questRaw);
+				questObj.autoAdjustCounter();
+				if(questTabId === 0){
+					existedAllIds.push(questId);
+				}
 				
 				// Check for untranslated quests
-				if( typeof oldQuest.meta().available == "undefined" ){
+				if(typeof questObj.meta().available == "undefined"){
 					if(reportedQuests.indexOf(questId) === -1){
-						untranslated.push(questList[ctr]);
+						untranslated.push(questRaw);
 						// remember reported quest so wont send data twice
 						reportedQuests.push(questId);
 					}
 				}
 				
-				// Add to actives or opens depending on status
-				switch( questList[ctr].api_state ){
-					case 1:	// Unselected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, false );
+				// Add to actives or opens depending on its state
+				switch(questRaw.api_state){
+					case 1: // Unselected
+						this.isOpen(questId,   true);
+						this.isActive(questId, false);
 						break;
-					case 2:	// Selected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, true );
+					case 2: // Selected
+						this.isOpen(questId,   true);
+						this.isActive(questId, true);
 						break;
-					case 3:	// Completed
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+					case 3: // Completed
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 					default:
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 				}
+			}
+			// Data submitting of untranslated quests no longer available for now
+			if(untranslated.length){
+				console.info("Untranslated quest detected", reportedQuests, untranslated);
+			}
+			
+			// It's now possible to clean quests non-open-nor-active in-game for API change reason,
+			// Close quests for those `api_no` not in current quest list, as long as questTabId is 0 (All quests available).
+			if(existedAllIds.length){
+				this.open.filter(id   => !existedAllIds.includes(id)).forEach(id => { this.isOpen(id,   false); });
+				this.active.filter(id => !existedAllIds.includes(id)).forEach(id => { this.isActive(id, false); });
 			}
 			
 			this.save();
