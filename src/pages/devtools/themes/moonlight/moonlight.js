@@ -1106,7 +1106,7 @@
 		$(".module.activity .abyss_single").show();
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide().removeClass("sunk");
-		$(".module.activity .sink_icons .sunk").removeClass("shown safe");
+		$(".module.activity .sink_icons .sunk").removeClass("shown safe debuff");
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
 		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
@@ -3087,8 +3087,11 @@
 						if (thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined) {
 							newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
 							
-							if(index === 0 && ['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+							if(index === 0) {
+								if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
+									updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+								}
+								$(enemyFleetBoxSelector+" .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
 							}
 							
 							$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).toggleClass("sunk", newEnemyHP === 0);
@@ -3328,8 +3331,13 @@
 							}
 						}
 						
-						if(index === 0 && ['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)){
-							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+						if(index === 0) {
+							if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
+								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+							}
+							if(!thisNode.enemyCombined || thisNode.activatedEnemyFleet === 1) {
+								$(".module.activity .abyss_single .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
+							}
 						}
 						
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).toggleClass("sunk", newEnemyHP === 0);

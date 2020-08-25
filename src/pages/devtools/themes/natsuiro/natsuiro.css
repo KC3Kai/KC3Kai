@@ -789,6 +789,13 @@ ABYSS FLEET
 	filter:grayscale(100%);
 	-webkit-filter:grayscale(100%);
 }
+.module.activity .abyss_single .sink_icons .debuff img {
+	display:inline;
+	box-sizing:border-box;
+	padding-left:16px;
+	background:url(../../../../assets/img/client/chuuha_land.png);
+	background-size:cover;
+}
 .module.activity .abyss_single .abyss_ships {
 	width:180px;
 	height:26px;
@@ -898,6 +905,13 @@ ABYSS FLEET
 .module.activity .abyss_combined .sink_icons .safe img {
 	filter:grayscale(100%);
 	-webkit-filter:grayscale(100%);
+}
+.module.activity .abyss_combined .sink_icons .debuff img {
+	display:inline;
+	box-sizing:border-box;
+	padding-left:10px;
+	background:url(../../../../assets/img/client/chuuha_land.png);
+	background-size:cover;
 }
 .module.activity .abyss_combined .abyss_ships {
 	width:180px;

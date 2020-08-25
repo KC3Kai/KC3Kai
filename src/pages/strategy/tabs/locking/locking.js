@@ -475,7 +475,7 @@
             shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
-            shipBox.attr("title", "{1:name} {2:stype} Lv.{3:level} ({0:id})"
+            shipBox.attr("title", "{1:name} {2:stype} Lv.{3:level} (#{0:id})"
                 .format(ship.id, ship.name, KC3Meta.stype(ship.stype), ship.level)
             ).lazyInitTooltip();
             if(ship.sally) {
