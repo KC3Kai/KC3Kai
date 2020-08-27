@@ -84,6 +84,10 @@ KC3改 Equipment Object
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
+				rotorcraft: 0,
+				rotorcraftIds: [69, 324, 325, 326, 327],
+				helicopter: 0,
+				helicopterIds: [326, 327],
 			},
 			// Ryuusei
 			"18": {
@@ -315,8 +319,8 @@ KC3改 Equipment Object
 						single: { "houg": 2, "tais": 1 },
 					},
 					{
-						// Akagi Kai Ni E
-						ids: [599],
+						// Akagi Kai Ni E / Kaga Kai Ni E
+						ids: [599, 610],
 						single: { "houg": 3 },
 					},
 				],
@@ -341,9 +345,52 @@ KC3改 Equipment Object
 						single: { "houg": 3, "tais": 1, "houk": 1 },
 					},
 					{
-						// Akagi Kai Ni E
-						ids: [599],
+						// Akagi Kai Ni E / Kaga Kai Ni E
+						ids: [599, 610],
 						single: { "houg": 3, "houk": 1 },
+					},
+				],
+			},
+			// TBM-3W+3S
+			"389": {
+				count: 0,
+				byClass: {
+					// Lexington Class
+					"69": {
+						multiple: { "houg": 2, "tais": 3, "houk": 1 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+				},
+				byShip: [
+					{
+						// Akagi Kai Ni / K2E
+						ids: [594, 599],
+						multiple: { "houg": 2, "houk": 2 },
+					},
+					{
+						// Kaga Kai Ni / K2E
+						ids: [698, 610],
+						multiple: { "houg": 3, "houk": 2 },
+					},
+					{
+						// Kaga Kai Ni Go
+						ids: [646],
+						multiple: { "houg": 4, "tais": 4, "houk": 3 },
+						synergy: [
+							{
+								flags: [ "rotorcraft" ],
+								single: { "houg": 3, "tais": 6 },
+							},
+							{
+								flags: [ "helicopter" ],
+								single: { "houg": 5, "tais": 4 },
+							},
+						],
 					},
 				],
 			},
@@ -844,13 +891,8 @@ KC3改 Equipment Object
 			"335": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
-					"3": {
-						remodel: 1,
-						multiple: { "tyku": 1, "houk": 1 },
-					},
-					// Akagi Class Kai+
-					"14": [
+					// Kaga Class Kai+
+					"3": [
 						{
 							remodel: 1,
 							multiple: { "tyku": 1, "houk": 1 },
@@ -860,19 +902,16 @@ KC3改 Equipment Object
 							multiple: { "tyku": 1 },
 						},
 					],
+					// Akagi Class Kai+
+					"14": "3",
 				},
 			},
 			// Reppuu Kai Ni
 			"336": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
-					"3": {
-						remodel: 1,
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
-					},
-					// Akagi Class Kai+
-					"14": [
+					// Kaga Class Kai+
+					"3": [
 						{
 							remodel: 1,
 							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
@@ -882,19 +921,35 @@ KC3改 Equipment Object
 							multiple: { "tyku": 1 },
 						},
 					],
+					// Akagi Class Kai+
+					"14": "3",
+				},
+			},
+			// Reppuu Kai Ni (CarDiv 1 / Skilled)
+			"337": {
+				count: 0,
+				byClass: {
+					// Kaga Class Kai+
+					"3": [
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+						{
+							remodel: 2,
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+					],
+					// Akagi Class Kai+
+					"14": "3",
 				},
 			},
 			// Reppuu Kai Ni Model E
 			"338": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
-					"3": {
-						remodel: 1,
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
-					},
-					// Akagi Class Kai+
-					"14": [
+					// Kaga Class Kai+
+					"3": [
 						{
 							remodel: 1,
 							multiple: { "houg": 1, "tyku": 1, "houk": 2 },
@@ -907,20 +962,22 @@ KC3改 Equipment Object
 							remodel: 3,
 							multiple: { "houg": 3, "tyku": 1, "houk": 1 },
 						},
+						{
+							// Kaga Kai Ni Go using Kai Ni's bonus
+							remodel: 4,
+							multiple: { "houg": -3, "tyku": -1, "houk": -1 },
+						},
 					],
+					// Akagi Class Kai+
+					"14": "3",
 				},
 			},
 			// Reppuu Kai Ni Model E (CarDiv 1 / Skilled)
 			"339": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
-					"3": {
-						remodel: 1,
-						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
-					},
-					// Akagi Class Kai+
-					"14": [
+					// Kaga Class Kai+
+					"3": [
 						{
 							remodel: 1,
 							multiple: { "houg": 1, "tyku": 2, "houk": 2 },
@@ -933,7 +990,14 @@ KC3改 Equipment Object
 							remodel: 3,
 							multiple: { "houg": 5, "tyku": 1, "houk": 1 },
 						},
+						{
+							// Kaga Kai Ni Go using Kai Ni's bonus
+							remodel: 4,
+							multiple: { "houg": -5, "tyku": -1, "houk": -1 },
+						},
 					],
+					// Akagi Class Kai+
+					"14": "3",
 				},
 			},
 			// Re.2001 OR Kai
@@ -1410,6 +1474,22 @@ KC3改 Equipment Object
 					"106": "95",
 				},
 			},
+			// Ka Type Observation Autogyro
+			"69": {
+				count: 0,
+				byShip: [
+					{
+						// Ise Kai Ni
+						ids: [553],
+						multiple: { "houg": 1, "tais": 1 },
+					},
+					{
+						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						ids: [554, 646],
+						multiple: { "houg": 1, "tais": 2 },
+					},
+				],
+			},
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
@@ -1417,14 +1497,14 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "tais": 1, "houk": 1 },
+						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni, extra +1 as
-						ids: [554],
-						multiple: { "tais": 1 },
+						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						ids: [554, 646],
+						multiple: { "houg": 1, "tais": 1 },
 					},
 				],
 			},
@@ -1435,14 +1515,14 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "tais": 1, "houk": 1 },
+						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni, extra +1 as
-						ids: [554],
-						multiple: { "tais": 1 },
+						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						ids: [554, 646],
+						multiple: { "houg": 1, "tais": 1 },
 					},
 				],
 			},
@@ -1453,14 +1533,19 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "tais": 2, "houk": 1 },
+						multiple: { "houg": 1, "tais": 3, "houk": 1 },
 					},
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni, extra +1 as, +1 ev
+						// Hyuuga Kai Ni
 						ids: [554],
-						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 2, "tais": 1, "houk": 1 },
+					},
+					{
+						// Kaga Kai Ni Go
+						ids: [646],
+						multiple: { "houg": 2, "tais": 2, "houk": 2 },
 					},
 				],
 			},
@@ -1471,14 +1556,19 @@ KC3改 Equipment Object
 					// Ise Class Kai Ni
 					"2": {
 						remodel: 2,
-						multiple: { "houg": 1, "tais": 3, "houk": 1 },
+						multiple: { "houg": 2, "tais": 4, "houk": 1 },
 					},
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni, extra +1 fp, +1 as, +1 ev
+						// Hyuuga Kai Ni
 						ids: [554],
-						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+						multiple: { "houg": 2, "tais": 1, "houk": 1 },
+					},
+					{
+						// Kaga Kai Ni Go
+						ids: [646],
+						multiple: { "houg": 3, "tais": 2, "houk": 3 },
 					},
 				],
 			},
@@ -4150,6 +4240,8 @@ KC3改 Equipment Object
 				synergyGears.twin203MediumGunMountNo2 += 1;
 				synergyGears.twin203MediumGunMountNo2Nonexist = 0;
 			}
+			if(synergyGears.rotorcraftIds.includes(gear.masterId)) synergyGears.rotorcraft += 1;
+			if(synergyGears.helicopterIds.includes(gear.masterId)) synergyGears.helicopter += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
@@ -4802,7 +4894,7 @@ KC3改 Equipment Object
 		// and official has announced high ASW ability aircraft is ASW stat >= 7.
 		// Carrier-based or Land-base bombers for now;
 		// Torpedo bombers current implemented:
-		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D, Ryuusei Kai(CD1/Sk), PT97Kai (Skilled)
+		//   T97 / Tenzan (931 Air Group) variants, Swordfish Mk.III (Skilled), TBM-3D/3W+3S, Ryuusei Kai(CD1/Sk), PT97Kai (Skilled)
 		// LB attackers current implemented:
 		//   Toukai variants
 		// Dive bombers still NOT capable for OASW, unknown for LBAS:
