@@ -4330,6 +4330,7 @@
 			var KEC = PS["KanColle.Expedition.Cost"];
 			var KERO = PS["KanColle.Expedition.RequirementObject"];
 			var ST = PS["KanColle.Generated.SType"];
+			var KENI = PS["KanColle.Expedition.New.Info"];
 
 			var allShipsForLib = allShips.map(function(ship, idx) {
 				var shipMst = ship.master();
@@ -4381,6 +4382,10 @@
 			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
 			//console.debug(`Exped #${selectedExpedition} checks`, JSON.stringify(ExpdCheckerResult));
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
+
+			var ExpedRawInfo = KENI.findRawInfo(selectedExpedition);
+			//console.debug(`Exped #${selectedExpedition} raw info`, ExpedRawInfo);
+
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
@@ -4401,6 +4406,12 @@
 					)).plusCurrentTime(true);
 					resetTimeTips.push("{0}: {1}".format(
 						KC3Meta.term("MenuMonthlyExpedReset"), monthlyResetPoint
+					));
+				}
+				if(ExpedRawInfo.kc3_unlocked_by) {
+					resetTimeTips.push("{0} -> {1}".format(
+						ExpedRawInfo.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","),
+						ExpedRawInfo.api_disp_no
 					));
 				}
 				$(".module.activity .activity_expeditionPlanner .estimated_time")
@@ -4443,27 +4454,13 @@
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
 			// https://kancolle.fandom.com/wiki/Great_Success
-			var gsDrumCountTable = {
-				21: 3+1,
-				37: 4+1,
-				38: 8+2,
-				24: 0+4,
-				40: 0+4,
-				44: 6+2,
-			};
-			var gsDrumCount = gsDrumCountTable[selectedExpedition];
+			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
 
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [
-				// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
-				32, 41, 43, 45, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
-			].includes(selectedExpedition);
-			var condIsFlagshipLevel = [
-				// related to sparkle ships and flagship level: 41, A2(101), A3(102) confirmed, others are to be verified
-				41, 101, 102, 43, 45, 103, 104, 105, 112, 113, 114, 131, 132, 141
-			].includes(selectedExpedition);
+			var condIsGsWithoutSparkle = KENI.gsByFlagshipLevelList.includes(selectedExpedition);
+			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
 			var estSuccessRate = -1;
 			// can GS if:
@@ -4661,7 +4658,7 @@
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
 						// Multiple compo patterns allowed expeds, give tips and mark failure with different color
 						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
-						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
+						if(ExpedRawInfo.kc3_alternative_type === "CVEDE") {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
@@ -4669,7 +4666,7 @@
 							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						// alternative compo with CVL + CL for exped 43
-						else if([43].includes(selectedExpedition)) {
+						else if(ExpedRawInfo.kc3_alternative_type === "CVLCL") {
 							shipReqBox.attr("title",
 								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")

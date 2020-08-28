@@ -2348,13 +2348,13 @@ KC3改 Ship Object
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-		// CV Kaga Kai Ni Gou implemented since 2020-08-27, can do ASW under some conditions (verifying)
-		// Currently any CV (converted back from K2Go) may ASW if ship's asw modded > 0, unexpected bug?
-		// see https://twitter.com/Synobicort_SC/status/1298998245893394432
 		const isKagaK2Go = this.master === 646;
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
-		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
-		if(isAirAntiSubStype || isKagaK2Go) {
+		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go
+		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
+		if(isAirAntiSubStype) {
+			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertained conditions (using CVL's currently),
+			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
+			// see https://twitter.com/Synobicort_SC/status/1298998245893394432
 			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
 			// At night, most ship types cannot do ASW,
 			// only CVL can ASW with depth charge if naked asw is not 0 and not taiha,
