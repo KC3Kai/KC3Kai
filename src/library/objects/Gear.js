@@ -51,7 +51,7 @@ KC3改 Equipment Object
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20200630 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20200827 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
 	 *  * [20180816 ALL] http://furukore.com/archives/13793
@@ -93,7 +93,7 @@ KC3改 Equipment Object
 			"18": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
+					// Kaga Class Kai+
 					"3": {
 						remodel: 1,
 						multiple: { "houg": 1 },
@@ -105,13 +105,13 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra +1 ev for Akagi Kai Ni
-						ids: [594],
+						// extra +1 ev for Akagi Kai Ni, Kaga K2, K2Go
+						ids: [594, 646, 698],
 						multiple: { "houk": 1 },
 					},
 					{
-						// extra +1 fp, +1 ev for Akagi Kai Ni E
-						ids: [599],
+						// extra +1 fp, +1 ev for Akagi Kai Ni E, Kaga K2E
+						ids: [599, 610],
 						multiple: { "houg": 1, "houk": 1 },
 					},
 				],
@@ -120,7 +120,7 @@ KC3改 Equipment Object
 			"52": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
+					// Kaga Class Kai+
 					"3": {
 						remodel: 1,
 						multiple: { "houg": 1 },
@@ -132,13 +132,13 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra +1 ev for Akagi Kai Ni
-						ids: [594],
+						// extra +1 ev for Akagi Kai Ni, Kaga K2, K2Go
+						ids: [594, 646, 698],
 						multiple: { "houk": 1 },
 					},
 					{
-						// extra +1 fp, +1 ev for Akagi Kai Ni E
-						ids: [599],
+						// extra +1 fp, +1 ev for Akagi Kai Ni E, Kaga K2E
+						ids: [599, 610],
 						multiple: { "houg": 1, "houk": 1 },
 					},
 				],
@@ -147,7 +147,7 @@ KC3改 Equipment Object
 			"342": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
+					// Kaga Class Kai+
 					"3": {
 						remodel: 1,
 						multiple: { "houg": 1 },
@@ -162,13 +162,13 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra +1 fp, +1 aa, +1 ev for Akagi Kai Ni
-						ids: [594],
+						// extra +1 fp, +1 aa, +1 ev for Akagi Kai Ni, Kaga K2, K2Go
+						ids: [594, 646, 698],
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					{
-						// extra +2 fp, +2 aa, +2 ev for Akagi Kai Ni E
-						ids: [599],
+						// extra +2 fp, +2 aa, +2 ev for Akagi Kai Ni E, Kaga K2E
+						ids: [599, 610],
 						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
 					},
 				],
@@ -177,7 +177,7 @@ KC3改 Equipment Object
 			"343": {
 				count: 0,
 				byClass: {
-					// Kaga Class Kai
+					// Kaga Class Kai+
 					"3": {
 						remodel: 1,
 						multiple: { "houg": 2 },
@@ -192,13 +192,13 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// extra +1 fp, +2 aa, +1 ev for Akagi Kai Ni
-						ids: [594],
+						// extra +1 fp, +2 aa, +1 ev for Akagi Kai Ni, Kaga K2, K2Go
+						ids: [594, 646, 698],
 						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
 					},
 					{
-						// extra +3 fp, +3 aa, +3 ev for Akagi Kai Ni E
-						ids: [599],
+						// extra +3 fp, +3 aa, +3 ev for Akagi Kai Ni E, Kaga K2E
+						ids: [599, 610],
 						multiple: { "houg": 3, "tyku": 3, "houk": 3 },
 					},
 				],
@@ -270,19 +270,16 @@ KC3改 Equipment Object
 			"143": {
 				count: 0,
 				byClass: {
-					// Kaga Kai
+					// Kaga Class
 					"3": {
-						remodel: 1,
 						single: { "houg": 2 },
 					},
-					// Akagi Kai
+					// Akagi Class
 					"14": {
-						remodel: 1,
 						single: { "houg": 3 },
 					},
-					// Ryuujou Kai Ni
+					// Ryuujou Class
 					"32": {
-						remodel: 2,
 						single: { "houg": 1 },
 					},
 					// Shoukaku Class
@@ -291,10 +288,52 @@ KC3改 Equipment Object
 					},
 				},
 				byShip: [
-					// extra +1 fp for Shoukaku
+					// extra +1 fp for Shoukaku all remodels
 					{
-						ids: [110, 288, 461, 466],
+						origins: [110],
 						single: { "houg": 1 },
+					},
+				],
+			},
+			// Tenzan Model 12 (Murata Squadron)
+			"144": {
+				count: 0,
+				byClass: {
+					// Kaga Class
+					"3": {
+						single: { "houg": 2 },
+					},
+					// Akagi Class
+					"14": {
+						single: { "houg": 3 },
+					},
+					// Ryuujou Class
+					"32": {
+						single: { "houg": 1 },
+					},
+					// Shoukaku Class
+					"33": [
+						// Base and Kai
+						{
+							single: { "houg": 1 },
+						},
+						// Kai Ni+
+						{
+							remodel: 2,
+							single: { "houg": 1 },
+						},
+					],
+				},
+				byShip: [
+					// extra +1 fp for Shoukaku base and Kai
+					{
+						ids: [110, 288],
+						single: { "houg": 1 },
+					},
+					// extra +2 fp for Shoukaku K2 and K2A
+					{
+						ids: [461, 466],
+						single: { "houg": 2 },
 					},
 				],
 			},
@@ -319,7 +358,7 @@ KC3改 Equipment Object
 						single: { "houg": 2, "tais": 1 },
 					},
 					{
-						// Akagi Kai Ni E / Kaga Kai Ni E
+						// Akagi Kai Ni E, Kaga Kai Ni E
 						ids: [599, 610],
 						single: { "houg": 3 },
 					},
@@ -345,7 +384,7 @@ KC3改 Equipment Object
 						single: { "houg": 3, "tais": 1, "houk": 1 },
 					},
 					{
-						// Akagi Kai Ni E / Kaga Kai Ni E
+						// Akagi Kai Ni E, Kaga Kai Ni E
 						ids: [599, 610],
 						single: { "houg": 3, "houk": 1 },
 					},
@@ -368,12 +407,12 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Akagi Kai Ni / K2E
+						// Akagi Kai Ni, K2E
 						ids: [594, 599],
 						multiple: { "houg": 2, "houk": 2 },
 					},
 					{
-						// Kaga Kai Ni / K2E
+						// Kaga Kai Ni, K2E
 						ids: [698, 610],
 						multiple: { "houg": 3, "houk": 2 },
 					},
@@ -391,51 +430,6 @@ KC3改 Equipment Object
 								single: { "houg": 5, "tais": 4 },
 							},
 						],
-					},
-				],
-			},
-			// Tenzan Model 12 (Murata Squadron)
-			"144": {
-				count: 0,
-				byClass: {
-					// Kaga Kai
-					"3": {
-						remodel: 1,
-						single: { "houg": 2 },
-					},
-					// Akagi Kai
-					"14": {
-						remodel: 1,
-						single: { "houg": 3 },
-					},
-					// Ryuujou Kai Ni
-					"32": {
-						remodel: 2,
-						single: { "houg": 1 },
-					},
-					// Shoukaku Class
-					"33": [
-						// Base and Kai
-						{
-							single: { "houg": 1 },
-						},
-						// Kai Ni A
-						{
-							remodel: 2,
-							single: { "houg": 1 },
-						},
-					],
-				},
-				byShip: [
-					// extra +1 fp for Shoukaku base and Kai
-					{
-						ids: [110, 288],
-						single: { "houg": 1 },
-					},
-					// extra +2 fp for Shoukaku K2 and K2A
-					{
-						ids: [461, 466],
-						single: { "houg": 2 },
 					},
 				],
 			},
@@ -958,18 +952,15 @@ KC3改 Equipment Object
 							remodel: 2,
 							multiple: { "tyku": 1, "houk": 1 },
 						},
-						{
-							remodel: 3,
-							multiple: { "houg": 3, "tyku": 1, "houk": 1 },
-						},
-						{
-							// Kaga Kai Ni Go using Kai Ni's bonus
-							remodel: 4,
-							multiple: { "houg": -3, "tyku": -1, "houk": -1 },
-						},
 					],
 					// Akagi Class Kai+
 					"14": "3",
+				},
+				byShip: {
+					// Akagi K2E, Kaga K2E +4 fp, +3 aa, +4 ev totally
+					// Kaga Kai Ni Go's bonus the same with Kai Ni's
+					ids: [599, 610],
+					multiple: { "houg": 3, "tyku": 1, "houk": 1 },
 				},
 			},
 			// Reppuu Kai Ni Model E (CarDiv 1 / Skilled)
@@ -986,18 +977,15 @@ KC3改 Equipment Object
 							remodel: 2,
 							multiple: { "tyku": 1, "houk": 2 },
 						},
-						{
-							remodel: 3,
-							multiple: { "houg": 5, "tyku": 1, "houk": 1 },
-						},
-						{
-							// Kaga Kai Ni Go using Kai Ni's bonus
-							remodel: 4,
-							multiple: { "houg": -5, "tyku": -1, "houk": -1 },
-						},
 					],
 					// Akagi Class Kai+
 					"14": "3",
+				},
+				byShip: {
+					// Akagi K2E, Kaga K2E +6 fp, +4 aa, +5 ev totally
+					// Kaga Kai Ni Go's bonus the same with Kai Ni's
+					ids: [599, 610],
+					multiple: { "houg": 5, "tyku": 1, "houk": 1 },
 				},
 			},
 			// Re.2001 OR Kai
@@ -1484,7 +1472,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 1, "tais": 1 },
 					},
 					{
-						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
 						multiple: { "houg": 1, "tais": 2 },
 					},
@@ -1502,7 +1490,7 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
 						multiple: { "houg": 1, "tais": 1 },
 					},
@@ -1520,7 +1508,7 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Hyuuga Kai Ni / Kaga Kai Ni Go
+						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
 						multiple: { "houg": 1, "tais": 1 },
 					},
