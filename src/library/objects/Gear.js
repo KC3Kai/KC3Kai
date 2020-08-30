@@ -4212,6 +4212,7 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.accumulateShipBonusGear = function(bonusGears, gear){
+		const gearTypes = gear.master().api_type || [];
 		const synergyGears = bonusGears.synergyGears;
 		if(synergyGears) {
 			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
@@ -4228,7 +4229,7 @@ KC3改 Equipment Object
 				synergyGears.twin203MediumGunMountNo2 += 1;
 				synergyGears.twin203MediumGunMountNo2Nonexist = 0;
 			}
-			if(synergyGears.rotorcraftIds.includes(gear.masterId)) synergyGears.rotorcraft += 1;
+			if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
 			if(synergyGears.helicopterIds.includes(gear.masterId)) synergyGears.helicopter += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
@@ -4243,9 +4244,8 @@ KC3改 Equipment Object
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;
 			addupStarsDistribution(bonusDefs);
 		}
-		const gearTypes = gear.master().api_type || [],
-			type2Key = "t2_" + gearTypes[2],
-			type3Key = "t3_" + gearTypes[3];
+		const type2Key = "t2_" + gearTypes[2];
+		const type3Key = "t3_" + gearTypes[3];
 		if(gearTypes.length && bonusGears[type2Key]) {
 			const bonusDefs = bonusGears[type2Key];
 			if(bonusDefs.count >= 0) bonusDefs.count += 1;
