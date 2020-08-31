@@ -1710,33 +1710,22 @@ KC3改 Equipment Object
 			"318": {
 				count: 0,
 				byClass: {
-					// Ise Class Kai+ +2 fp, +2 aa, +2 ev
-					"2": [
-						{
-							remodel: 1,
-							multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-							synergy: {
-								// `distinct` means only 1 set takes effect at the same time,
-								// not stackable with 41cm Triple K2's air radar synergy
-								// see https://twitter.com/KennethWWKK/status/1098960971865894913
-								flags: [ "tripleLargeGunMountK2Nonexist", "airRadar" ],
-								distinct: { "tyku": 2, "houk": 3, "houm": 1 },
-							},
+					// Ise Class Kai+
+					"2": {
+						remodel: 1,
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+						synergy: {
+							// `distinct` means only 1 set takes effect at the same time,
+							// not stackable with 41cm Triple K2's air radar synergy
+							// see https://twitter.com/KennethWWKK/status/1098960971865894913
+							flags: [ "tripleLargeGunMountK2Nonexist", "airRadar" ],
+							distinct: { "tyku": 2, "houk": 3, "houm": 1 },
 						},
-						{
-							// Kai Ni +3 acc and synergy with `41cm Triple Gun Mount Kai Ni`
-							remodel: 2,
-							multiple: { "houm": 3 },
-							synergy: {
-								flags: [ "tripleLargeGunMountK2" ],
-								single: { "souk": 1, "houk": 2 },
-							},
-						},
-					],
-					// Nagato Class Kai Ni +3 fp, +2 aa, +1 ev
+					},
+					// Nagato Class Kai Ni
 					"19": {
 						remodel: 2,
-						multiple: { "houg": 3, "tyku": 2, "houk": 1 },
+						multiple: { "houg": 3, "tyku": 2, "houk": 1, "houm": 2 },
 						synergy: {
 							flags: [ "tripleLargeGunMountK2" ],
 							single: { "houg": 2, "souk": 1, "houk": 2, "houm": 1 },
@@ -1748,16 +1737,28 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 				},
-				byShip: {
-					// extra +1 fp for Hyuuga Kai Ni
-					ids: [554],
-					multiple: { "houg": 1 },
-					// extra +1 fp when synergy with `41cm Triple Gun Mount Kai Ni`
-					synergy: {
-						flags: [ "tripleLargeGunMountK2" ],
-						single: { "houg": 1 },
+				byShip: [
+					{
+						// extra +3 acc for Ise Kai Ni
+						ids: [553],
+						multiple: { "houm": 3 },
+						// extra +1 ar, +2 ev when synergy with `41cm Triple Gun Mount Kai Ni`
+						synergy: {
+							flags: [ "tripleLargeGunMountK2" ],
+							single: { "souk": 1, "houk": 2 },
+						},
 					},
-				},
+					{
+						// extra +1 fp, +3 acc for Hyuuga Kai Ni
+						ids: [554],
+						multiple: { "houg": 1, "houm": 3 },
+						// extra +1 fp, +1 ar, +2 ev when synergy with `41cm Triple Gun Mount Kai Ni`
+						synergy: {
+							flags: [ "tripleLargeGunMountK2" ],
+							single: { "houg": 1, "souk": 1, "houk": 2 },
+						},
+					},
+				],
 			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
