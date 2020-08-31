@@ -863,6 +863,7 @@ KC3改 Ship Object
 				else if (flag.includes("Torpedo")) { return 5; }
 				else if (flag.includes("LargeGunMount")) { return 3; }
 				else if (flag.includes("MediumGunMount")) { return 2; }
+				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
 				return 0; // Unknown synergy type
 			});
 			return obj;
@@ -2269,12 +2270,13 @@ KC3改 Ship Object
 		const isLightCarrier = stype === 7;
 		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
-		// is ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
+		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, CV, AV, LHA)
 		//   but unconfirmed for AO and Hayasui Kai
-		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
+		const isAirAntiSubStype = [6, 10, 11, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
+		const isKagaK2Go = this.masterId === 646;
 
 		// lower condition for DE and CVE, even lower if equips Sonar
 		const aswThreshold = isLightCarrier && hasSonar ? 50
@@ -2330,7 +2332,7 @@ KC3改 Ship Object
 		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
-			return (isHyuugaKaiNi || hasSonar) &&
+			return (isHyuugaKaiNi || isKagaK2Go || hasSonar) &&
 				(this.countEquipmentType(1, 15) >= 2 ||
 				this.countEquipmentType(1, 44) >= 1);
 		}
@@ -2346,10 +2348,14 @@ KC3改 Ship Object
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
-		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+		const isKagaK2Go = this.master === 646;
+		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go
+		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
 		if(isAirAntiSubStype) {
-			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber;
+			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertained conditions (using CVL's currently),
+			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
+			// see https://twitter.com/Synobicort_SC/status/1298998245893394432
+			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
 			// At night, most ship types cannot do ASW,
 			// only CVL can ASW with depth charge if naked asw is not 0 and not taiha,
 			// even no plane equipped or survived, such as Taiyou Kai Ni, Hayasui Kai.
@@ -2973,7 +2979,7 @@ KC3改 Ship Object
 		const initYasen = this.master().api_houg[0] + this.master().api_raig[0];
 		const isThisCarrier = this.isCarrier();
 		// even carrier can do shelling or air attack if her yasen power > 0 (no matter chuuha)
-		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni
+		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
 		if(isThisCarrier && initYasen > 0) return true;
 		// carriers without yasen power can do air attack under some conditions:
 		if(isThisCarrier) {
@@ -3001,13 +3007,13 @@ KC3改 Ship Object
 		if(this.isCarrier()) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
-			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E
-			const isThisNightCarrier = [545, 599].includes(this.masterId);
+			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E
+			const isThisNightCarrier = [545, 599, 610].includes(this.masterId);
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
 			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E)
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E)
 			return hasNightAircraft && (hasNightAvPersonnel || isThisNightCarrier);
 		}
 		return false;
@@ -3078,7 +3084,7 @@ KC3改 Ship Object
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
 			
-			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E needed
+			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E needed
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6

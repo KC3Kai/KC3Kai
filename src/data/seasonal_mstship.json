@@ -3526,19 +3526,19 @@
 	},
 	"5440": {
 		"api_id": 5440,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日Johnston",
+		"api_yomi": "ジョンストン",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5441": {
 		"api_id": 5441,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日海風改二",
+		"api_yomi": "うみかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5442": {
 		"api_id": 5442,
@@ -3574,8 +3574,176 @@
 	},
 	"5446": {
 		"api_id": 5446,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着伊47改",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5447": {
+		"api_id": 5447,
+		"api_name": "水着白露改二",
+		"api_yomi": "しらつゆ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5448": {
+		"api_id": 5448,
+		"api_name": "水着風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5449": {
+		"api_id": 5449,
+		"api_name": "水着沖波改二",
+		"api_yomi": "おきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5450": {
+		"api_id": 5450,
+		"api_name": "水着巻雲改二",
+		"api_yomi": "まきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5451": {
+		"api_id": 5451,
+		"api_name": "水着有明改",
+		"api_yomi": "ありあけ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5452": {
+		"api_id": 5452,
+		"api_name": "水着Houston",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5453": {
+		"api_id": 5453,
+		"api_name": "水着Houston改",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5454": {
+		"api_id": 5454,
+		"api_name": "水着秋津洲",
+		"api_yomi": "あきつしま",
+		"api_stype": 16,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5455": {
+		"api_id": 5455,
+		"api_name": "水着Fletcher",
+		"api_yomi": "フレッチャー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5456": {
+		"api_id": 5456,
+		"api_name": "水着Fletcher改",
+		"api_yomi": "フレッチャー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5457": {
+		"api_id": 5457,
+		"api_name": "水着Fletcher改 Mod.2",
+		"api_yomi": "フレッチャー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5458": {
+		"api_id": 5458,
+		"api_name": "水着Fletcher Mk.II",
+		"api_yomi": "フレッチャー",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5459": {
+		"api_id": 5459,
+		"api_name": "水着Maestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5460": {
+		"api_id": 5460,
+		"api_name": "水着Maestrale改",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5461": {
+		"api_id": 5461,
+		"api_name": "水着夕張改二",
+		"api_yomi": "ゆうばり",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5462": {
+		"api_id": 5462,
+		"api_name": "水着夕張改二特",
+		"api_yomi": "ゆうばり",
+		"api_stype": 3,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5463": {
+		"api_id": 5463,
+		"api_name": "水着夕張改二丁",
+		"api_yomi": "ゆうばり",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5464": {
+		"api_id": 5464,
+		"api_name": "水着Richelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5465": {
+		"api_id": 5465,
+		"api_name": "水着Gotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5466": {
+		"api_id": 5466,
+		"api_name": "水着Gotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5467": {
+		"api_id": 5467,
+		"api_name": "水着Grecale",
+		"api_yomi": "グレカーレ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
