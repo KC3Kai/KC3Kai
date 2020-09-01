@@ -2270,9 +2270,9 @@ KC3改 Ship Object
 		const isLightCarrier = stype === 7;
 		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
-		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, CV, AV, LHA)
+		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
 		//   but unconfirmed for AO and Hayasui Kai
-		const isAirAntiSubStype = [6, 10, 11, 16, 17].includes(stype);
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
@@ -2282,6 +2282,8 @@ KC3改 Ship Object
 		const aswThreshold = isLightCarrier && hasSonar ? 50
 			: isEscort ? 60
 			: isEscortLightCarrier ? 65
+			// Kaga Kai Ni Go asw starts from 82 on Lv84, let her pass just like Hyuuga K2
+			: isKagaK2Go ? 80
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
 			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
 			: isHyuugaKaiNi ? 90
@@ -2307,12 +2309,14 @@ KC3改 Ship Object
 		// for Taiyou Class Kai or Kai Ni, any equippable aircraft with asw should work,
 		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
 		// but CVE can still OASW. only Sonar equipped can do neither.
-		// Other CVL (Zuihou K2) possible but hard to reach 50 asw and do OASW with Sonar and ASW aircraft.
-		if(isLightCarrier) {
+		// Other CVL (like Zuihou K2) possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
+		// Kaga K2Go can OASW with any asw aircraft:
+		//   https://twitter.com/noobcyan/status/1299886834919510017
+		if(isLightCarrier || isKagaK2Go) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
-			return (isTaiyouKaiAfter && hasAswAircraft)
+			return ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)
 				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))
 				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);
 		}
@@ -2332,7 +2336,7 @@ KC3改 Ship Object
 		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
-			return (isHyuugaKaiNi || isKagaK2Go || hasSonar) &&
+			return (isHyuugaKaiNi || hasSonar) &&
 				(this.countEquipmentType(1, 15) >= 2 ||
 				this.countEquipmentType(1, 44) >= 1);
 		}
