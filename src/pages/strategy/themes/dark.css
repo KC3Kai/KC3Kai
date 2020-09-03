@@ -1572,18 +1572,24 @@ button, input, select, textarea {
 	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
-	width:110px;
-	height:20px !important;
-	line-height:20px !important;
+	width:40px;
+	height:18px !important;
+	line-height:18px !important;
 	text-align:left !important;
-	margin:0px 0px 0px 0px;
-	padding:0px 0px 0px 10px;
+	font-size:14px !important;
+	font-weight:normal !important;
+	margin:70px 0px 0px 0px;
+	padding:0px 0px 0px 2px;
 	color:#fff;
 	pointer-events:none;
 	z-index:1;
-	text-shadow:2px 2px 5px #000,
-	-2px -2px 5px #000,
-	2px 2px 5px #000;
+	background: linear-gradient(
+		235deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.2) 15%,
+		rgba(0,0,0,0.3) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_pic {
 	width:108px;
@@ -1599,44 +1605,47 @@ button, input, select, textarea {
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	height:140%;
-	margin:-16px 0px 0px -32px
+	height:120%;
+	margin:-14px 0px 0px -24px;
 }
 .tab_fleet .fleet_ship .ship_tiny_stats {
 	pointer-events:none;
 }
 .tab_fleet .fleet_ship .ship_lv {
-	width:110px;
-	height:20px;
+	width:51px;
+	height:18px;
 	z-index:1;
 	position:relative;
-	padding:0px 0px 0px 50px;
-	margin:-20px 0px 0px 0px;
+	margin:-18px 0px 0px 57px;
 	text-align:right;
+	background: linear-gradient(
+		125deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.2) 15%,
+		rgba(0,0,0,0.3) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
 	width:20px;
-	height:20px;
-	line-height:20px;
+	height:18px;
+	line-height:18px;
 	font-size:12px;
 	color:#cccccc;
-	text-shadow:1px 1px 3px #000,
-		-1px -1px 3px #000,
-		1px 1px 3px #000;
+	padding:0px 0px 0px 7px;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
-	height:20px;
-	line-height:20px;
+	height:18px;
+	line-height:18px;
 	color:#fff;
-	text-shadow:2px 2px 5px #000,
-		-2px -2px 5px #000,
-		2px 2px 5px #000;
+	font-size:14px !important;
+	font-weight:normal !important;
 }
 .tab_fleet .fleet_ship .ship_luck {
 	width:45px;
 	height:15px;
 	float:left;
-	margin:68px 0px 0px 16px;
+	margin:0px 0px 0px 2px;
 }
 .tab_fleet .fleet_ship .ship_lk_icon {
 	width:15px;
@@ -1654,22 +1663,22 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_lk_val {
 	width:28px;
-	line-height:15px;
+	line-height:13px;
 	font-size:12px;
 	float:left;
 }
 .tab_fleet .fleet_ship .ship_morale {
 	width:45px;
 	height:15px;
-	float:left;
-	margin:68px 0px 0px 2px;
+	float:right;
+	margin:1px -5px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_cond_icon {
 	width:15px;
 	height:15px;
 	line-height:15px;
 	float:left;
-	margin:0px 2px 0px 0px;
+	margin:-1px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_cond_icon img {
 	width:13px;
@@ -1678,31 +1687,33 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_cond_val {
 	width:28px;
-	line-height:15px;
+	line-height:13px;
 	font-size:12px;
 	float:left;
+	margin:-1px 0px 0px -8px;
+	text-align:right;
 }
-
 .tab_fleet .fleet_ship .ship_name {
 	width:110px;
-	height:20px;
-	line-height:20px;
+	height:18px !important;
+	line-height:18px !important;
 	margin:0px 0px 2px 0px;
 	text-align:center;
 	position:absolute;
-	top:69px;
-	font-size:12px;
-	font-weight:bold;
+	top:0px;
 	color:#fff;
-	text-shadow:2px 2px 5px #000,
-		-2px -2px 5px #000,
-		2px 2px 5px #000;
+	background: linear-gradient(
+		75deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.1) 15%,
+		rgba(0,0,0,0.2) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_gear {
 	width:110px;
 	height:17px;
 	line-height:17px;
-	margin:0px 0px 1px 0px;
 	font-size:10px;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
