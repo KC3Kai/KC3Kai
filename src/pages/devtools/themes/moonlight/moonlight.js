@@ -481,10 +481,10 @@
 		
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
 		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
-		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2").css("background", ConfigManager.pan_misc_bg_moon);
+		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2,.sumstats,.layouts").css("background", ConfigManager.pan_misc_bg_moon);
 		$(".ship_img,.expeditions .timer-img img").css("background", ConfigManager.pan_ship_icon_bg_moon);
 		$(".ship_img img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border_moon);
-		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
+		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts,.module.sumstats").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
 		/*$(".module.activity .activity_expeditionPlanner .expPlan_dropdown_title").css("border-color", ConfigManager.pan_outline_moon);*/
 		$(".pvpFleetShip,.module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
 
@@ -498,10 +498,10 @@
 			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
 		}
 		if(ConfigManager.moon_lighting_effect == false) {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts").css("background-image", "none", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts,.sumstats").css("background-image", "none", "important");
 		}
 		else {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts,.sumstats").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
 			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.03) 80%, rgba(200, 200, 255, 0.12) 98%)", "important");
 		}
 
@@ -1461,43 +1461,58 @@
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
-			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js
+			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js, or `PlayerManager.getConsumableById()`
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
-				PlayerManager.consumables.setsubunBeans ? 90 : 61;
-			$(".count_1classMedalsOrEvent").text(PlayerManager.getConsumableById(firstItemId) || 0)
+				PlayerManager.consumables.setsubunBeans ? 90 :
+				PlayerManager.consumables.hishimochi ? 62 : 60;
+			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
-			$(".count_medals").text( PlayerManager.consumables.medals || 0 )
-				.prev().attr("title", KC3Meta.useItemName(57) );
-			$(".count_blueprints").text( PlayerManager.consumables.blueprints || 0 )
-				.prev().attr("title", KC3Meta.useItemName(58) );
-			$(".count_newGunMats").text( PlayerManager.consumables.newArtilleryMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(75) );
-			$(".count_newAvMats").text( PlayerManager.consumables.newAviationMaterial || 0 )
-				.prev().attr("title", KC3Meta.useItemName(77) );
-			$(".count_actionReportOrSkilledCrew").text(
-					PlayerManager.consumables.actionReport || PlayerManager.consumables.skilledCrew || 0 )
-				.prev().attr("title", KC3Meta.useItemName(PlayerManager.consumables.actionReport ? 78 : 70) )
-				.children("img").attr("src", `/assets/img/useitems/${PlayerManager.consumables.actionReport ? 78 : 70}.png`);
-			$(".count_reinforcement").text( PlayerManager.consumables.reinforceExpansion || 0 )
-				.prev().attr("title", KC3Meta.useItemName(64) );
-			$(".count_fairy").text( PlayerManager.consumables.furnitureFairy || 0 )
-				.prev().attr("title", KC3Meta.useItemName(52) );
-			$(".count_morale").text( (PlayerManager.consumables.mamiya || 0)
-				                   + (PlayerManager.consumables.irako || 0)
-			).prev().attr("title", "{1} x{0} + {3} x{2}"
-				.format(PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-						PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)) );
+			// Count all consumable slotitems via GearManager
+			const consumableSlotitemMap = {
+				"50": { "slotitem":  42 }, // repairTeam
+				"51": { "slotitem":  43 }, // repairGoddess
+				"66": { "slotitem": 145 }, // ration
+				"67": { "slotitem": 146 }, // resupplier
+				"69": { "slotitem": 150 }, // mackerelCan
+				"76": { "slotitem": 241 }, // rationSpecial
+			};
+			Object.keys(consumableSlotitemMap).forEach(useitemId => {
+				const item = consumableSlotitemMap[useitemId];
+				item.attrName = PlayerManager.getConsumableById(useitemId, true);
+				item.amount = KC3GearManager.count(g => g.masterId === item.slotitem) || 0;
+			});
+			// Update simple amount of single useitem (or slotitem) by ID and name (matching with CSS class: `count_` + name)
+			const updateCountByUseitemId = (useitemId) => {
+				const attrName = PlayerManager.getConsumableById(useitemId, true);
+				let amount = PlayerManager.getConsumableById(useitemId) || 0;
+				const slotitem = consumableSlotitemMap[useitemId];
+				if(slotitem) amount = slotitem.amount;
+				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
+			};
+			// Total items of 1 page should be 3 x 3 for current page layout and styles
+			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
+			// Update amounts of combined counting
+			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
+					consumableSlotitemMap[51].amount, KC3Meta.useItemName(51)
+				));
+			$(".count_supply").text([66, 67, 69, 76].map(id => consumableSlotitemMap[id].amount).sumValues())
+				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5} +\nx{6} {7}".format(
+					consumableSlotitemMap[67].amount, KC3Meta.useItemName(67),
+					consumableSlotitemMap[66].amount, KC3Meta.useItemName(66),
+					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
+					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
+				));
+			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
+					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+				));
+			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
-				const slotitemIdMap = { "66": 145, "69": 150, "76": 241 };
-				[85, 86, 87, 88, 89, 69, 66, 76, 65].forEach(id => {
-					const attrName = PlayerManager.getConsumableById(id, true);
-					let amount = PlayerManager.getConsumableById(id) || 0;
-					// slotitem like rations should be counted via GearManager
-					const slotitemMstId = slotitemIdMap[id];
-					if(slotitemMstId > 0) amount = KC3GearManager.count(g => g.masterId === slotitemMstId);
-					$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(id));
-				});
+				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
 			}
@@ -2104,28 +2119,30 @@
 			$(".summary-level .summary_text").text( FleetSummary.lv );
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
-						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if(fleetNum >= 1 && fleetNum <= 4) {
+					let tips = fleetNum > 1 ? "" :
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
 						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
-						tips += (!tips ? "" : "\n")
-							+ "{0}: -\u2605\t+\u2605\n".format(KC3Meta.term("ExpedTotalImp"))
-							+ "{0}: {5}\t{10}\n{1}: {6}\t{11}\n{2}: {7}\t{12}\n{3}: {8}\t{13}\n{4}: {9}\t{14}".format(
-								KC3Meta.term("ExpedTotalFp"),
-								KC3Meta.term("ExpedTotalTorp"),
-								KC3Meta.term("ExpedTotalAa"),
-								KC3Meta.term("ExpedTotalAsw"),
-								KC3Meta.term("ExpedTotalLos"),
-								fstats.fp, fstats.tp, fstats.aa, fstats.as, fstats.ls,
-								Math.qckInt("floor", fstatsImp.fp , 1),
-								Math.qckInt("floor", fstatsImp.tp , 1),
-								Math.qckInt("floor", fstatsImp.aa , 1),
-								Math.qckInt("floor", fstatsImp.as , 1),
-								Math.qckInt("floor", fstatsImp.ls , 1)
-							);
+						// Align with special space char 0xa0 and force to monospaced font
+						const formatStatTip = (term, rawStat, impStat) => (
+							term.padEnd(5, '\u00a0') +
+							String(rawStat).padStart(6, '\u00a0') +
+							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
+						);
+						tips += (!tips ? "" : "\n") + '<span class="monofont">';
+						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
+						tips += [
+							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
+							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
+							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
+							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
+							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
+						].join('\n');
 						$(".summary-sumfp .summed").text(fstats.fp);
 						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsImp.fp , 1));
+						$(".summary-sumtp .summed").text(fstats.tp);
+						$(".summary-sumtp .summed_imp").text(Math.qckInt("floor", fstatsImp.tp , 1));
 						$(".summary-sumaa .summed").text(fstats.aa);
 						$(".summary-sumaa .summed_imp").text(Math.qckInt("floor", fstatsImp.aa , 1));
 						$(".summary-sumasw .summed").text(fstats.as);
@@ -2133,7 +2150,7 @@
 						$(".summary-sumlos .summed").text(fstats.ls);
 						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsImp.ls , 1));
 					}
-					return tips;
+					return tips + "</span>";
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-transport").attr("title",
 				KC3Meta.term("PanelTransportPoints").format(
