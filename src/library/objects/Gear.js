@@ -1492,7 +1492,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
-						multiple: { "houg": 1, "tais": 1 },
+						multiple: { "houg": 2, "tais": 3, "houk": 1 },
 					},
 				],
 			},
@@ -1510,7 +1510,7 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
-						multiple: { "houg": 1, "tais": 1 },
+						multiple: { "houg": 2, "tais": 3, "houk": 1 },
 					},
 				],
 			},
@@ -1528,12 +1528,12 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni
 						ids: [554],
-						multiple: { "houg": 2, "tais": 1, "houk": 1 },
+						multiple: { "houg": 3, "tais": 4, "houk": 2 },
 					},
 					{
 						// Kaga Kai Ni Go
 						ids: [646],
-						multiple: { "houg": 2, "tais": 2, "houk": 2 },
+						multiple: { "houg": 3, "tais": 5, "houk": 3 },
 					},
 				],
 			},
@@ -1551,12 +1551,12 @@ KC3改 Equipment Object
 					{
 						// Hyuuga Kai Ni
 						ids: [554],
-						multiple: { "houg": 2, "tais": 1, "houk": 1 },
+						multiple: { "houg": 4, "tais": 5, "houk": 2 },
 					},
 					{
 						// Kaga Kai Ni Go
 						ids: [646],
-						multiple: { "houg": 3, "tais": 2, "houk": 3 },
+						multiple: { "houg": 5, "tais": 6, "houk": 4 },
 					},
 				],
 			},
