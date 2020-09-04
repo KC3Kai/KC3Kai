@@ -4576,6 +4576,7 @@ KC3改 Equipment Object
 				modifier = 1.4; break;
 			case 9: // Recon plane
 			case 10: // Seaplane recon
+			case 41: // Large Flying Boat
 			case 49: // LB Recon
 			case 59: // Jet Recon
 			case 94: // Recon (II)
