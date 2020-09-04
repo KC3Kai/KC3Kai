@@ -1572,7 +1572,7 @@ button, input, select, textarea {
 	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
-	width:40px;
+	width:60px;
 	height:18px !important;
 	line-height:18px !important;
 	text-align:left !important;
@@ -1610,13 +1610,14 @@ button, input, select, textarea {
 }
 .tab_fleet .fleet_ship .ship_tiny_stats {
 	pointer-events:none;
+	height:33px;
 }
 .tab_fleet .fleet_ship .ship_lv {
-	width:51px;
+	width:52px;
 	height:18px;
 	z-index:1;
 	position:relative;
-	margin:-18px 0px 0px 57px;
+	margin:-18px 0px 0px 58px;
 	text-align:right;
 	background: linear-gradient(
 		125deg,
@@ -1632,7 +1633,7 @@ button, input, select, textarea {
 	line-height:18px;
 	font-size:12px;
 	color:#cccccc;
-	padding:0px 0px 0px 7px;
+	padding:0px 0px 0px 11px;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
 	height:18px;
@@ -1642,15 +1643,15 @@ button, input, select, textarea {
 	font-weight:normal !important;
 }
 .tab_fleet .fleet_ship .ship_luck {
-	width:45px;
+	width:50px;
 	height:15px;
 	float:left;
 	margin:0px 0px 0px 2px;
 }
 .tab_fleet .fleet_ship .ship_lk_icon {
-	width:15px;
-	height:15px;
-	line-height:15px;
+	width:13px;
+	height:13px;
+	line-height:13px;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
@@ -1666,19 +1667,20 @@ button, input, select, textarea {
 	line-height:13px;
 	font-size:12px;
 	float:left;
+	margin:1px 0px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_morale {
 	width:45px;
 	height:15px;
 	float:right;
-	margin:1px -5px 0px 0px;
+	margin:0px -8px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_cond_icon {
-	width:15px;
-	height:15px;
-	line-height:15px;
+	width:13px;
+	height:13px;
+	line-height:13px;
 	float:left;
-	margin:-1px 2px 0px 0px;
+	margin:0px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_cond_icon img {
 	width:13px;
@@ -1686,11 +1688,11 @@ button, input, select, textarea {
 	vertical-align:text-top;
 }
 .tab_fleet .fleet_ship .ship_cond_val {
-	width:28px;
+	width:24px;
 	line-height:13px;
 	font-size:12px;
 	float:left;
-	margin:-1px 0px 0px -8px;
+	margin:1px 0px 0px -4px;
 	text-align:right;
 }
 .tab_fleet .fleet_ship .ship_name {
