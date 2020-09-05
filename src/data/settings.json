@@ -1196,6 +1196,12 @@
 		"section": "Natsuiro",
 		"contents" : [
 			{
+				"id" : "pan_hp_bar_metrics",
+				"name" : "SettingsPanelBarIndicators",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
@@ -1301,6 +1307,12 @@
 						[ "clrdim", "SettingsPanelBarDim" ]
 					]
 				}
+			},
+			{
+				"id" : "pan_moon_bar_indicators",
+				"name" : "SettingsPanelBarIndicators",
+				"type" : "check",
+				"options" : {}
 			},
 			{
 				"id" : "pan_moon_conbut_shape",

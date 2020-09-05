@@ -489,7 +489,7 @@
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
 		// Either share moonlight config key for HP bar metrics
-		$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro");
+		$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -533,9 +533,7 @@
 				}
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
-				$(".ship_hp_box .ship_hp_bar_metrics").toggle(
-					ConfigManager.pan_moon_bar_style !== "flats" && ConfigManager.pan_moon_bar_style !== "natsuiro"
-				);
+				$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
 				updateQuestActivityTab();
 			}
 		});
@@ -4337,12 +4335,10 @@
 			// https://kancolle.fandom.com/wiki/Great_Success
 			// Caution: expedition ID data moved into KanColleHelpers["KanColle.Expedition.New.Info"].gsDrumCountTable
 			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
-
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
 			// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
-			var condIsGsWithoutSparkle = KENI.gsByFlagshipLevelList.includes(selectedExpedition);
 			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
 			var estSuccessRate = -1;
@@ -4351,21 +4347,17 @@
 			// - either drum expedition, or regular expedition with all ships sparkled
 			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (!condIsUnsparkledShip || condIsDrumExpedition) {
+				if (condIsFlagshipLevel) {
+					// https://twitter.com/jo_swaf/status/1145297004995596288
+					// https://tonahazana.com/blog-entry-577.html
+					estSuccessRate = 16 + 15 * sparkledCount
+						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
+				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
 					// based on the decompiled vita formula,
 					// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
-					}
-				} else if (condIsGsWithoutSparkle) {
-					if (condIsFlagshipLevel) {
-						// https://twitter.com/jo_swaf/status/1145297004995596288
-						// https://tonahazana.com/blog-entry-577.html
-						estSuccessRate = 16 + 15 * sparkledCount
-							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-					} else {
-						// keep -1 for unknown
 					}
 				} else {
 					estSuccessRate = 0;
@@ -4395,7 +4387,7 @@
 
 			var tooltipText = (function () {
 				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
-				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsGsWithoutSparkle) {
+				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsFlagshipLevel) {
 					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {

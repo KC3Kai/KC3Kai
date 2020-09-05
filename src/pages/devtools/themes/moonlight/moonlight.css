@@ -355,28 +355,23 @@ html,body {
 	height:255px;
 }
 .module.activity .activity_tabs {
-	width: 190px;
+	width:190px;
+	height:18px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 .module.activity .activity_tab {
-	width: calc(180px / 4);
-	height: 16px;
-	line-height:14px;
+	width:43px;
+	height:16px;
 	font-size:11px;
+	line-height:15px;
 	margin:2px 0px 0px 0px;
 	color:#a0a0a0;
 	float:left;
 	text-align:center;
 	background:rgba(50,50,50,0.4);
 	border-bottom:0px solid #000 !important;
-}
-.module.activity .activity_tab.tab_count_5 {
-	width: calc(180px / 5);
-}
-.module.activity .activity_tab+.activity_tab {
-  margin-left: 1px;
 }
 #atab_activity {
 	cursor:default;
@@ -3465,14 +3460,16 @@ ABYSS FLEET
 	-webkit-filter:brightness(0.5);
 	pointer-events:none;
 }
-.module.summary .summary_box {
+.module.summary .summary_box,
+.module.sumstats .summary_box {
 	width:61px;
 	height:20px;
 	float:left;
 	line-height:20px;
 	margin:0px 2px 3px;
 }
-.module.summary .summary_icon {
+.module.summary .summary_icon,
+.module.sumstats .summary_icon {
 	width:20px;
 	height:20px;
 	float:left;
@@ -3480,7 +3477,8 @@ ABYSS FLEET
 	background:#224;
 	border-radius:10px;
 }
-.module.summary .summary_icon img {
+.module.summary .summary_icon img,
+.module.sumstats .summary_icon img {
 	width:16px;
 	height:16px;
 	margin:2px;
@@ -3489,7 +3487,8 @@ ABYSS FLEET
 	-webkit-filter:invert(35%);
 	image-rendering: auto;
 }
-.module.summary .summary_text {
+.module.summary .summary_text,
+.module.sumstats .summary_text {
 	width:72px;
 	height:20px;
 	float:left;
@@ -3675,73 +3674,77 @@ ABYSS FLEET
 	pointer-events:none;
 	display:none;
 }
-.module.summary .summed {
+.module.sumstats .summed {
 	width:40px;
 	height:40px;
 	position:relative;
 	top:-20px;
 	left:25px;
-	color:#99b;
 }
-.module.summary .summed_imp {
+.module.sumstats .summed_imp {
 	width:40px;
 	height:40px;
 	position:relative;
 	top:-60px;
 	left:55px;
 }
-.module.summary .summary-level {
+.module.sumstats .summary-level {
 	position:absolute;
-	top:30px;
-	left:105px;
+	top:39px;
+	left:109px;
 }
-.module.summary .summary-level .summary_text {
+.module.sumstats .summary-level .summary_text {
 	position:relative;
 	top:-20px;
-	left:25px;
+	left:29px;
 }
-.module.summary .summary-sumfp {
+.module.sumstats .summary-sumfp {
 	position:absolute;
-	top:30px;
-	left:10px;
+	top:39px;
+	left:14px;
 }
-.module.summary .summary-sumaa {
+.module.sumstats .summary-sumtp {
 	position:absolute;
-	top:50px;
-	left:10px;
+	top:62px;
+	left:14px;
 }
-.module.summary .summary-sumasw {
+.module.sumstats .summary-sumaa {
 	position:absolute;
-	top:70px;
-	left:10px;
+	top:85px;
+	left:14px;
 }
-.module.summary .summary-sumlos {
+.module.sumstats .summary-sumasw {
 	position:absolute;
-	top:90px;
-	left:10px;
+	top:108px;
+	left:14px;
 }
-.module.summary .improvement_icon img {
+.module.sumstats .summary-sumlos {
+	position:absolute;
+	top:131px;
+	left:14px;
+}
+.module.sumstats .improvement_icon img {
 	height:25px;
 	width:25px;
 	object-fit: cover;
 	image-rendering: auto;
 }
-.module.summary .imp_rejected_icon img {
+.module.sumstats .imp_rejected_icon img {
 	opacity:0.65;
 }
-.module.summary .summary_icon_uimp {
+.module.sumstats .summary_icon_uimp {
 	position:absolute;
-	top:5px;
-	left:33px;
+	top:9px;
+	left:37px;
 }
-.module.summary .uimp_icon img {
+.module.sumstats .uimp_icon img {
 	-webkit-filter: grayscale(100%);
 }
 
-.module.summary .summary_icon_imp {
+.module.sumstats .summary_icon_imp {
 	position:absolute;
-	top:5px;
-	left:64px;
+	top:9px;
+	left:68px;
 }
 
 /*------- FLEET -------*/
@@ -5253,23 +5256,44 @@ ABYSS FLEET
 .module.activity .map_gauge .nowhp.fluid {
 	background: linear-gradient(to top, #000, #400);
 }
-.module.fleet .ship_hp_bar_cover.fluid {
+.module.fleet .ship_hp_bar_cover.indicator_on.fluid,
+.module.fleet .ship_hp_bar_cover.indicator_on.flats {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,
 			rgba(0,0,0,0) 24%,
-		  rgba(0,0,0,.35) 24.5%,
-		  rgba(175,175,175,.3) 25.5%,
+			rgba(0,0,0,.55) 24.5%,
+			rgba(175,175,175,.2) 25.5%,
 			rgba(255,255,255,0) 26%,
 			rgba(0,0,0,0) 49%,
-		  rgba(0,0,0,.35) 49.5%,
-		  rgba(175,175,175,.3) 50.5%,
+			rgba(0,0,0,.55) 49.5%,
+			rgba(175,175,175,.2) 50.5%,
 			rgba(255,255,255,0) 51%,
 			rgba(0,0,0,0) 74%,
-		  rgba(0,0,0,.35) 74.5%,
-		  rgba(175,175,175,.3) 75.5%,
+			rgba(0,0,0,.55) 74.5%,
+			rgba(175,175,175,.2) 75.5%,
 			rgba(255,255,255,0) 76%,
 			rgba(0,0,0,0) 100%);
+}
+.module.fleet .ship_hp_bar_cover.indicator_on.natsuiro {
+	height:5px;
+	float:left;
+	background-image: linear-gradient(to right,
+		rgba(0,0,0,0) 0%,
+		rgba(0,0,0,0) 24%,
+			rgba(0,0,0,0.3) 24%,
+			rgba(255,255,255,0.3) 25%,
+			rgba(255,255,255,0) 26%,
+		rgba(0,0,0,0) 49%,
+			rgba(0,0,0,0.3) 49.5%,
+			rgba(255,255,255,0.3) 50.5%,
+			rgba(255,255,255,0) 51%,
+		rgba(0,0,0,0) 74%,
+			rgba(0,0,0,0.3) 74%,
+			rgba(255,255,255,0.3) 75%,
+			rgba(255,255,255,0) 76%,
+		rgba(0,0,0,0) 100%
+	);
 }
 
 /* ========================= */
@@ -5287,7 +5311,7 @@ ABYSS FLEET
 			rgba(247,247,247,.3) 0%,rgba(231,231,231,.4) 49%,
 			rgba(208,208,208,.15) 50%,rgba(241,241,241,.2) 100%);
 }
-.module.fleet .ship_hp_bar_cover.glassy {
+.module.fleet .ship_hp_bar_cover.indicator_on.glassy {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,
@@ -5878,6 +5902,11 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
+.h .module.sumstats {
+	left:5px; top:2px;
+	height:162px;
+	width:190px;
+}
 .h .module.fleet {
 	left:200px; top:41px;
 }
@@ -5917,6 +5946,11 @@ ABYSS FLEET
 .v .module.summary {
 	left:688px; top:76px;
 	height:119px;
+	width:190px;
+}
+.v .module.sumstats {
+	left:688px; top:33px;
+	height:162px;
 	width:190px;
 }
 .v .module.activity {
@@ -5985,6 +6019,11 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
+.c .module.sumstats {
+	left:551px; top:33px;
+	height:162px;
+	width:190px;
+}
 .c .module.activity {
 	left:4px; top:2px;
 }
@@ -6044,6 +6083,11 @@ ABYSS FLEET
 .t .module.summary {
 	left:195px; top:172px;
 	height:119px;
+	width:182px;
+}
+.t .module.sumstats {
+	left:195px; top:129px;
+	height:162px;
 	width:182px;
 }
 .t .module.expeditions3 {

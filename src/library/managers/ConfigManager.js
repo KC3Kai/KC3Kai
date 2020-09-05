@@ -182,6 +182,8 @@ Retrieves when needed to apply on components
 				pan_moon_bar_style: "fluid",
 				pan_moon_bar_shape: "shape_round",
 				pan_moon_bar_colors: "clrdim",
+				pan_hp_bar_metrics: true,
+				pan_moon_bar_indicators: true,
 				pan_moon_conbut_shape: "shape_round",
 				pan_moon_conbut_skew: true,
 				pan_custom_css  : "",
