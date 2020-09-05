@@ -4476,11 +4476,9 @@
 			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
 			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
-
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = KENI.gsByFlagshipLevelList.includes(selectedExpedition);
 			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
 			var estSuccessRate = -1;
@@ -4489,17 +4487,13 @@
 			// - either drum expedition, or regular expedition with all ships sparkled
 			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (!condIsUnsparkledShip || condIsDrumExpedition) {
+				if (condIsFlagshipLevel) {
+					estSuccessRate = 16 + 15 * sparkledCount
+						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
+				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
-					}
-				} else if (condIsGsWithoutSparkle) {
-					if (condIsFlagshipLevel) {
-						estSuccessRate = 16 + 15 * sparkledCount
-							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-					} else {
-						// keep -1 for unknown
 					}
 				} else {
 					estSuccessRate = 0;
@@ -4529,7 +4523,7 @@
 
 			var tooltipText = (function () {
 				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
-				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsGsWithoutSparkle) {
+				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsFlagshipLevel) {
 					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
