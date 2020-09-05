@@ -1399,7 +1399,7 @@ KC3改 Ship Object
 				// https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#od036af3
 				// https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCV
 				// TP from all Torpedo Bombers not taken into account, DV power counted,
-				//   currentTB with DV power: TBM-3W+3S
+				//   current TB with DV power: TBM-3W+3S
 				// Regular Dive Bombers make carrier cannot attack against land-installation,
 				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -1802,9 +1802,10 @@ KC3改 Ship Object
 	 * Get pre-cap carrier night aerial attack power of this ship.
 	 * This formula is the same with the one above besides slot bonus part and filtered equipment stats.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
-	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#nightAS
+	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#nightAS
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCVN
 	 */
-	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
+	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		const equipTotals = {
 			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
@@ -1827,7 +1828,7 @@ KC3改 Ship Object
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
-					equipTotals.tp += master.api_raig || 0;
+					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
 					equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
