@@ -472,6 +472,10 @@
 		$(".bar_border_radius4,.bar_border_radius3").addClass(ConfigManager.pan_moon_bar_shape);
 		// bar color presets
 		$(".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.map_gauge,.curhp,.nowhp").addClass(ConfigManager.pan_moon_bar_colors);
+		// hp bar state indicators
+		if(ConfigManager.pan_moon_bar_indicators == true) {
+			$(".ship_hp_bar_cover").addClass("indicator_on");
+		}
 		// control button corner shape presets
 		$(".conbut_radius_5,.conbut_radius_5500").addClass(ConfigManager.pan_moon_conbut_shape);		
 		// control button skew or tilt. images are usually untilted because of image quality issues

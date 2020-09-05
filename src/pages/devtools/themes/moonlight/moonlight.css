@@ -5256,8 +5256,8 @@ ABYSS FLEET
 .module.activity .map_gauge .nowhp.fluid {
 	background: linear-gradient(to top, #000, #400);
 }
-.module.fleet .ship_hp_bar_cover.fluid,
-.module.fleet .ship_hp_bar_cover.flats {
+.module.fleet .ship_hp_bar_cover.indicator_on.fluid,
+.module.fleet .ship_hp_bar_cover.indicator_on.flats {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,
@@ -5275,7 +5275,7 @@ ABYSS FLEET
 			rgba(255,255,255,0) 76%,
 			rgba(0,0,0,0) 100%);
 }
-.module.fleet .ship_hp_bar_cover.natsuiro {
+.module.fleet .ship_hp_bar_cover.indicator_on.natsuiro {
 	height:5px;
 	float:left;
 	background-image: linear-gradient(to right,
@@ -5311,7 +5311,7 @@ ABYSS FLEET
 			rgba(247,247,247,.3) 0%,rgba(231,231,231,.4) 49%,
 			rgba(208,208,208,.15) 50%,rgba(241,241,241,.2) 100%);
 }
-.module.fleet .ship_hp_bar_cover.glassy {
+.module.fleet .ship_hp_bar_cover.indicator_on.glassy {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,

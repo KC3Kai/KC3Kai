@@ -489,7 +489,7 @@
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
 		// Either share moonlight config key for HP bar metrics
-		$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_moon_bar_style !== "flats");
+		$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_hp_bar_metrics !== false);
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -533,7 +533,7 @@
 				}
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
-				$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_moon_bar_style !== "flats");
+				$(".ship_hp_box .ship_hp_bar_metrics").toggle(ConfigManager.pan_hp_bar_metrics !== false);
 				updateQuestActivityTab();
 			}
 		});
