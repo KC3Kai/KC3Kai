@@ -168,6 +168,8 @@
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_box {
 	float:left;

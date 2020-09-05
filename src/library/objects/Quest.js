@@ -303,36 +303,30 @@ known IDs see QuestManager
 		// so only need to deal with one tracking data, let's give it a name
 		const trackingData = this.tracking[0];
 
-		let currentCount = trackingData[0];
-		let maxCount = parseFloat(trackingData[1]);
+		const currentCount = trackingData[0],
+			maxCount = parseFloat(trackingData[1]);
 
-		// no adjustment for F66, F7 and F8:
-		// these quests have a weird behavior that 1/3 is marked as being 50% completed
-		// so our auto-adjustment won't work for them.
-		// EO74 marks them as '(internal counter) starts from 1/4', so +1 50%, +2 80%.
-		if([607, 608, 674].indexOf(this.id) > -1
-			&& currentCount > 0 && currentCount < maxCount)
-			return;
 		// single tracking counter and client-side progress judgement for these:
 		//   C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		//   F25, F39, F90: 50%/80% if 1st flagship or inventory holds insufficient required items
-		// about all client-side progress conditions, see `main.js#DutyModel_`,
-		// these quests also affected by `api_completed_kind` and `api_c_list`
+		//   F25, F39, F90: 50%/80% if secretary or inventory holds insufficient required items
+		// about all client-side progress conditions, see `main.js#DutyModel_`.
+		// quest F90 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
+		//   and it may get non-zero progress even 14cm gun scrapping not enough, so counter no touch.
 		if([318, 628, 643, 653].indexOf(this.id) > -1) {
-			if (currentCount < maxCount && this.progress > 0)
+			if (currentCount < maxCount && this.progress > 0 && this.id !== 653) {
 				trackingData[0] = maxCount;
+			}
 			return;
 		}
 
-		// pFlag: short for Progress Flag,
-		// for uncompleted quests:
+		// pFlag: short for Progress Flag, for uncompleted quests:
 		// pFlag = 2: 80% <= progress percentage < 100%
 		// pFlag = 1: 50% <= progress percentage < 80%
 		// pFlag = 0:        progress percentage < 50%
-		let actualPFlag = this.progress;
+		const actualPFlag = this.progress;
 		console.assert([0,1,2].indexOf( actualPFlag ) !== -1);
-		let progress =
-			actualPFlag === 0 ? 0.0
+		const progress =
+			  actualPFlag === 0 ? 0.0
 			: actualPFlag === 1 ? 0.5
 			: actualPFlag === 2 ? 0.8
 			: NaN /* unreachable */;
@@ -341,29 +335,38 @@ known IDs see QuestManager
 		// to see if they are consistent,
 		// by doing so we not only correct counter falling-behind problems,
 		// but also overshooting ones.
-		let trackedPFlag =
-			/* cur/max >= 4/5 (80%) */
-			5*currentCount >= 4*maxCount ? 2
-			/* cur/max >= 1/2 (50%) */
-			: 2*currentCount >= maxCount ? 1
+		const trackedPFlag =
+			  /* cur/max >= 4/5 (80%) */
+			  5*currentCount >= 4*maxCount ? 2
+			  /* cur/max >= 1/2 (50%) */
+			: 2*currentCount >=   maxCount ? 1
 			: 0;
 
 		// does the actual correction and announce it
-		let announcedCorrection = newCurrentCount => {
+		const announcedCorrection = newCurrentCount => {
 			console.log("Adjusting quest", this.id, "tracking", currentCount,
 						"to", newCurrentCount , "=", progress * 100 + "%",
 						"of", maxCount);
 			trackingData[0] = newCurrentCount;
 		};
 
+		// Special 3-times maxCount adjustment for quest C42, F7, F8, F66:
+		//   these quests have different behavior that 1/3 is marked as being 50% completed,
+		//   so our auto-adjustment for max < 5 won't work for them.
+		// EO74 marks them as '(internal counter) starts from 1/4', so +1 50%, +2 80%.
+		if (maxCount === 3 && [339, 607, 608, 674].indexOf(this.id) > -1) {
+			if (currentCount !== actualPFlag)
+				announcedCorrection(actualPFlag);
+			return;
+		}
+
 		// it's good if pFlag is consistent
 		// but something is definitely wrong if cur >= max
-		if (trackedPFlag === actualPFlag &&
-			currentCount < maxCount)
+		if (trackedPFlag === actualPFlag && currentCount < maxCount)
 			return;
 
 		if (maxCount >= 5) {
-			announcedCorrection( Math.ceil(maxCount*progress) );
+			announcedCorrection(Math.ceil(maxCount*progress));
 		} else {
 			// things special about maxCount < 5 quests is that
 			// it is possible for:
@@ -374,12 +377,12 @@ known IDs see QuestManager
 			// we must minus 1 from it to prevent it from completion
 			let potentialCount = Math.ceil(maxCount * progress);
 			if (potentialCount === maxCount)
-				potentialCount = maxCount-1;
+				potentialCount = maxCount - 1;
 			// if what we have figured out is the same as current counter
 			// then it's still fine.
 			if (potentialCount === currentCount)
 				return;
-			announcedCorrection( potentialCount );
+			announcedCorrection(potentialCount);
 		}
 	};
 

@@ -1396,19 +1396,24 @@ KC3改 Ship Object
 		let shellingPower = this.fp[0];
 		if(isCarrierShelling) {
 			if(isTargetLand) {
-				// Still count TP from Torpedo Bombers?
-				shellingPower += this.equipmentTotalStats("raig", true, true, false, [8, 58]);
-				// Regular Dive Bombers make carrier cannot attack land-installation,
+				// https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#od036af3
+				// https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCV
+				// TP from all Torpedo Bombers not taken into account, DV power counted,
+				//   current TB with DV power: TBM-3W+3S
+				// Regular Dive Bombers make carrier cannot attack against land-installation,
 				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
-					KC3GearManager.antiLandDiveBomberIds));
+				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58]);
+				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57],
+					KC3GearManager.antiLandDiveBomberIds);
+				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
 			} else {
-				// Should limit to TP power from equippable aircraft?
-				// Visible bonus from Torpedo Bombers no effect
+				// Should limit to TP from equippable aircraft?
+				// TP visible bonus from Torpedo Bombers no effect.
+				// DV visible bonus not implemented yet, unknown.
 				shellingPower += this.equipmentTotalStats("raig", true, false);
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, false);
 			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
@@ -1797,14 +1802,15 @@ KC3改 Ship Object
 	 * Get pre-cap carrier night aerial attack power of this ship.
 	 * This formula is the same with the one above besides slot bonus part and filtered equipment stats.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
-	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#nightAS
+	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#nightAS
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCVN
 	 */
-	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false){
+	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		const equipTotals = {
 			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
 		};
-		// Generally, only fp + tp from night capable aircraft will be taken into account.
+		// Generally, power from only night capable aircraft will be taken into account.
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
@@ -1822,7 +1828,7 @@ KC3改 Ship Object
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
-					equipTotals.tp += master.api_raig || 0;
+					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
 					equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
@@ -2258,9 +2264,11 @@ KC3改 Ship Object
 		// Isuzu K2, Tatsuta K2, Jervis Kai, Janus Kai, Samuel B.Roberts Kai, Fletcher-Class, Yuubari K2D
 		return [141, 478, 394, 893, 681, 562, 689, 596, 624, 628, 629, 692].includes(this.masterId);
 	};
-	// test to see if this ship (with equipment) is capable of opening ASW
-	// reference: http://kancolle.wikia.com/wiki/Partials/Opening_ASW as of Feb 3, 2017
-	// http://wikiwiki.jp/kancolle/?%C2%D0%C0%F8%C0%E8%C0%A9%C7%FA%CD%EB%B9%B6%B7%E2#o377cad0
+	/**
+	 * Test to see if this ship (with equipment) is capable of opening ASW. References:
+	 * @see https://kancolle.fandom.com/wiki/Partials/Opening_ASW
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#oasw
+	 */
 	KC3Ship.prototype.canDoOASW = function (aswDiff = 0) {
 		if(this.isDummy()) { return false; }
 		if(this.isOaswShip()) { return true; }
@@ -2268,20 +2276,23 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
 		const isLightCarrier = stype === 7;
-		// is CVE? (Taiyou series, Gambier Bay series, Zuihou K2B)
+		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
-		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, CV, AV, LHA)
+		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
 		//   but unconfirmed for AO and Hayasui Kai
-		const isAirAntiSubStype = [6, 10, 11, 16, 17].includes(stype);
+		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
 		const isHyuugaKaiNi = this.masterId === 554;
 		const isKagaK2Go = this.masterId === 646;
 
-		// lower condition for DE and CVE, even lower if equips Sonar
+		// lower condition for DE and CVL, even lower if equips Sonar
 		const aswThreshold = isLightCarrier && hasSonar ? 50
 			: isEscort ? 60
+			// May apply to CVL, but only CVE can reach 65 for now (Zuihou K2 modded asw +9 +13x4 = 61)
 			: isEscortLightCarrier ? 65
+			// Kaga Kai Ni Go asw starts from 82 on Lv84, let her pass just like Hyuuga K2
+			: isKagaK2Go ? 80
 			// Hyuuga Kai Ni can OASW even asw < 100, but lower threshold unknown,
 			// guessed from her Lv90 naked asw 79 + 12 (1x helicopter, without bonus and mod)
 			: isHyuugaKaiNi ? 90
@@ -2302,19 +2313,21 @@ KC3改 Ship Object
 		if (shipAsw < aswThreshold)
 			return false;
 
-		// For CVL Taiyou-Class/Shinyou-Class, initial asw stat is high enough to reach 50 / 65,
-		// but for Kasugamaru, since not possible to reach high asw for now, tests are not done.
-		// for Taiyou Class Kai or Kai Ni, any equippable aircraft with asw should work,
-		// only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
-		// but CVE can still OASW. only Sonar equipped can do neither.
-		// Other CVL (Zuihou K2) possible but hard to reach 50 asw and do OASW with Sonar and ASW aircraft.
-		if(isLightCarrier) {
+		// For CVE like Taiyou-class, initial asw stat is high enough to reach 50 / 65,
+		//   but for Kasugamaru, since not possible to reach high asw for now, tests are not done.
+		// For Taiyou-class Kai/Kai Ni, any equippable aircraft with asw should work.
+		//   only Autogyro or PBY equipped will not let CVL anti-sub in day shelling phase,
+		//   but OASW still can be performed. only Sonar equipped can do neither.
+		// For other CVL possible but hard to reach 50 asw and do OASW with Sonar and high ASW aircraft.
+		// For CV Kaga K2Go, can perform OASW with any asw aircraft like Taiyou-class Kai+:
+		//   https://twitter.com/noobcyan/status/1299886834919510017
+		if(isLightCarrier || isKagaK2Go) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
-			return (isTaiyouKaiAfter && hasAswAircraft)
-				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))
-				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);
+			return ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)           // ship visible asw irrelevant
+				|| this.equipment(true).some(gear => gear.isHighAswBomber(false)) // mainly asw 50/65, dive bomber not work
+				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);                // almost impossible for pre-marriage
 		}
 
 		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
@@ -2332,7 +2345,7 @@ KC3改 Ship Object
 		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
 		//   at least 1 slot of ASW capable aircraft needed.
 		if(isAirAntiSubStype) {
-			return (isHyuugaKaiNi || isKagaK2Go || hasSonar) &&
+			return (isHyuugaKaiNi || hasSonar) &&
 				(this.countEquipmentType(1, 15) >= 2 ||
 				this.countEquipmentType(1, 44) >= 1);
 		}
@@ -2348,7 +2361,7 @@ KC3改 Ship Object
 		if(this.isDummy() || this.isAbsent()) { return false; }
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-		const isKagaK2Go = this.master === 646;
+		const isKagaK2Go = this.masterId === 646;
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go
 		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
 		if(isAirAntiSubStype) {
@@ -3076,6 +3089,7 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isThisLightCarrier = stype === 7;
 		const isThisDestroyer = stype === 2;
+		const isThisKagaK2Go = this.masterId === 646;
 		
 		const torpedoCnt = this.countEquipmentType(2, [5, 32]);
 		// simulate server-side night air attack flag: `api_n_mother_list`
@@ -3231,7 +3245,7 @@ KC3改 Ship Object
 		if(isCarrierNightAirAttack) {
 			return ["AirAttack", 1, true];
 		}
-		if(targetShipType.isSubmarine && isThisLightCarrier) {
+		if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
 			return ["DepthCharge", 2];
 		}
 		if(isThisCarrier) {
