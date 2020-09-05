@@ -1396,19 +1396,24 @@ KC3改 Ship Object
 		let shellingPower = this.fp[0];
 		if(isCarrierShelling) {
 			if(isTargetLand) {
-				// Still count TP from Torpedo Bombers?
-				shellingPower += this.equipmentTotalStats("raig", true, true, false, [8, 58]);
-				// Regular Dive Bombers make carrier cannot attack land-installation,
+				// https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#od036af3
+				// https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCV
+				// TP from all Torpedo Bombers not taken into account, DV power counted,
+				//   currentTB with DV power: TBM-3W+3S
+				// Regular Dive Bombers make carrier cannot attack against land-installation,
 				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku", true, true, false, [7, 57],
-					KC3GearManager.antiLandDiveBomberIds));
+				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58]);
+				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57],
+					KC3GearManager.antiLandDiveBomberIds);
+				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
 			} else {
-				// Should limit to TP power from equippable aircraft?
-				// Visible bonus from Torpedo Bombers no effect
+				// Should limit to TP from equippable aircraft?
+				// TP visible bonus from Torpedo Bombers no effect.
+				// DV visible bonus not implemented yet, unknown.
 				shellingPower += this.equipmentTotalStats("raig", true, false);
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"));
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, false);
 			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
@@ -1804,7 +1809,7 @@ KC3改 Ship Object
 		const equipTotals = {
 			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
 		};
-		// Generally, only fp + tp from night capable aircraft will be taken into account.
+		// Generally, power from only night capable aircraft will be taken into account.
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
