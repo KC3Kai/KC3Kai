@@ -7596,8 +7596,8 @@ var PS = {};
       if (v === 45) {
           return addGroup(fslAndSc(50)(5))
               (addGroup(lvlCnt(240))
-                  (addGroup(fsty(KanColle_Generated_SType.CVE.value))
-                      (addGroup(sty(1)(KanColle_Generated_SType.CVE.value))
+                  (addGroup(fsty(KanColle_Generated_SType.CVL.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CVL.value))
                           (addGroup(ddde(4))
                               (addGroup(aaTotal(240))
                                   (addGroup(aswTotal(300))
