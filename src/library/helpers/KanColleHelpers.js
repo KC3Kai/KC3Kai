@@ -7576,10 +7576,10 @@ var PS = {};
       if (v === 44) {
           return addGroup(fslAndSc(35)(6))
               (addGroup(lvlCnt(210))
-                  (addGroup(carrier(3))
+                  (addGroup(carrier(2))
                       (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
                           (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
-                              (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(ddde(2))
                                   (addGroup(aaTotal(200))
                                       (addGroup(aswTotal(200))
                                           (addGroup(losTotal(150))
