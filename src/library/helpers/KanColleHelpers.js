@@ -7232,6 +7232,7 @@ var PS = {};
   var Data_Eq = PS["Data.Eq"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
   var Data_Semiring = PS["Data.Semiring"];
+  var Data_Int = PS["Data.Int"];
   var ShipLevel = (function () {
       function ShipLevel(value0) {
           this.value0 = value0;
@@ -7922,29 +7923,29 @@ var PS = {};
                   })(fleet)) >= req.value0;
               };
               if (req instanceof FleetTotalAsw) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.asw;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalLos) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.los;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalAa) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.aa;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalFp) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.fp;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalTorp) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.tp;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetDrum) {
                   return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
@@ -11374,6 +11375,7 @@ var PS = {};
   var Data_HeytingAlgebra = PS["Data.HeytingAlgebra"];
   var Data_Eq = PS["Data.Eq"];
   var Data_Ord = PS["Data.Ord"];
+  var Data_Int = PS["Data.Int"];
   var Data_Semiring = PS["Data.Semiring"];
   var Data_Function = PS["Data.Function"];
   var resultPackToObject = function (rp) {
@@ -11603,29 +11605,29 @@ var PS = {};
                       })(fleet)) >= lc;
                   })(req.levelCount),
                   totalAsw: Data_Functor.map(Data_Maybe.functorMaybe)(function (tas) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.asw;
-                      })(fleet)) >= tas;
+                      })(fleet))) >= tas;
                   })(req.totalAsw),
                   totalLos: Data_Functor.map(Data_Maybe.functorMaybe)(function (tls) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.los;
-                      })(fleet)) >= tls;
+                      })(fleet))) >= tls;
                   })(req.totalLos),
                   totalAa: Data_Functor.map(Data_Maybe.functorMaybe)(function (taa) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.aa;
-                      })(fleet)) >= taa;
+                      })(fleet))) >= taa;
                   })(req.totalAa),
                   totalFp: Data_Functor.map(Data_Maybe.functorMaybe)(function (tfp) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.fp;
-                      })(fleet)) >= tfp;
+                      })(fleet))) >= tfp;
                   })(req.totalFp),
                   totalTorp: Data_Functor.map(Data_Maybe.functorMaybe)(function (ttp) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.tp;
-                      })(fleet)) >= ttp;
+                      })(fleet))) >= ttp;
                   })(req.totalTorp),
                   drumCount: Data_Functor.map(Data_Maybe.functorMaybe)(function (dc) {
                       return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
