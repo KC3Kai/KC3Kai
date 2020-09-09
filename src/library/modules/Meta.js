@@ -663,6 +663,11 @@ Provides access to data on built-in JSON files
 			return this.allMapsExp()[[world, map].join('-')] || 0;
 		},
 		
+		maelstromLoss :function(mapId, edgeId){
+			var mapDef = this._dataColle.maelstromLoss["m" + mapId] || {};
+			return mapDef[edgeId] || [];
+		},
+		
 		airPowerAverageBonus :function(ace){
 			// Use default known simple bonus constants if json data lost
 			var bonuses = this._dataColle.airPowerAverageBonuses || [0, 1, 1, 2, 2, 2, 3, 3];
