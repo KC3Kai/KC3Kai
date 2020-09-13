@@ -221,7 +221,7 @@ Used by SortieManager
 		
 		const [defRscType, defLossCap, defLossRate, defLossRateHigh] = lossDef;
 		const isReducedByRadar = !!nodeData.api_happening.api_dentan;
-		const radarReduceRate = isReducedByRadar ? [0, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6][radarShips] || 0 : 0;
+		const radarReduceRate = radarShips && isReducedByRadar ? [0, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6][Math.min(6, radarShips)] : 0;
 		const definedCappedLoss = defLossCap || actualMaxLoss;
 		let lossRate = 0, expectedMaxLoss = 0;
 		if(defLossRate === defLossRateHigh) {
@@ -267,7 +267,7 @@ Used by SortieManager
 			"({0} / {1}){2}{3}".format(
 				actualMaxLoss, maxRemainingRsc,
 				(isCappedByNode ? " (capped from {0})".format(expectedMaxLoss) : ""),
-				(isReducedByRadar ? " (reduced by {0} radar)".format(radarShips) : "")
+				(isReducedByRadar ? " (reduced by {0} radars)".format(radarShips) : "")
 			)
 		);
 	};
