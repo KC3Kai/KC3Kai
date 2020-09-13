@@ -3564,8 +3564,10 @@ KC3改 Ship Object
 					case 3: // Diamond
 						modifier = 1.1;
 						break;
-					case 4: // Echelon, enhanced by Double Line / Echelon unknown
-						modifier = 1.2;
+					case 4: // Echelon
+						// enhanced by Double Line / Echelon?
+						// mods: https://twitter.com/Xe_UCH/status/1304783506275409920
+						modifier = enemyFormationId === 2 ? 1.45 : 1.4;
 						break;
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
