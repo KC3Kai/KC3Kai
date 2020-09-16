@@ -2597,19 +2597,21 @@ KC3改 Ship Object
 			(modifierFor2ndShip ? {
 				"573": 1.4,  // Mutsu Kai Ni
 				"276": 1.35, // Mutsu Kai, base form unverified?
-				"576": 1.25, // Nelson Kai
+				"576": 1.25, // Nelson Kai, base form unverified?
 			} : {
 				"573": 1.2,  // Mutsu Kai Ni
 				"276": 1.15, // Mutsu Kai, base form unverified?
-				"576": 1.1,  // Nelson Kai
+				"576": 1.1,  // Nelson Kai, base form unverified?
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
 			(modifierFor2ndShip ? {
 				"541": 1.4,  // Nagato Kai Ni
-				"275": 1.4,  // Nagato Kai
+				"275": 1.35, // Nagato Kai
+				"576": 1.25, // Nelson Kai
 			} : {
 				"541": 1.2,  // Nagato Kai Ni
-				"275": 1.2,  // Nagato Kai
+				"275": 1.15, // Nagato Kai
+				"576": 1.1,  // Nelson Kai
 			}) : {};
 		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
@@ -2673,15 +2675,17 @@ KC3改 Ship Object
 		const combinedModifierMaps = [
 			// No more mods for flagship?
 			{},
-			// x1.1 for 2nd ship Big 7 Kai/Kai Ni?
-			// no verified datasource for base form and Nagato-class Kai
+			// x1.1 for Big-7 2nd ship
 			{
-				"541": 1.1, "573": 1.1, "576": 1.1,
+				"80": 1.1, "275": 1.1, "541": 1.1, // Nagato
+				"81": 1.1, "276": 1.1, "573": 1.1, // Mutsu
+				"571": 1.1, "576": 1.1,            // Nelson
 			},
-			// x1.15 for 3rd ship Big 7 Kai/Kai Ni?
-			// no verified datasource for base form and Nagato-class Kai
+			// x1.15 for Big-7 3rd ship
 			{
-				"541": 1.15, "573": 1.15, "576": 1.15,
+				"80": 1.15, "275": 1.15, "541": 1.15,
+				"81": 1.15, "276": 1.15, "573": 1.15,
+				"571": 1.15, "576": 1.15,
 			},
 		];
 
@@ -2690,6 +2694,7 @@ KC3改 Ship Object
 		const targetShip = locatedFleet.ship(forShipPos),
 			targetShipMstId = targetShip.masterId,
 			targetShipModifier = combinedModifierMaps[forShipPos][targetShipMstId] || 1;
+		// Bug 'mods of 2nd ship's apshell/radar and on-5th-slot-empty-exslot spread to 3rd ship' not applied here
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 
@@ -2709,8 +2714,8 @@ KC3改 Ship Object
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
-	 * And it's impossible to be triggered after any other daytime big-7 special cutin,
-	 * because all ship-combined spcutins (zuiun ones excluded) only trigger 1-time per sortie?
+	 * And it's impossible to be triggered after any other daytime Big-7 special cutin,
+	 * because all ship-combined spcutins only trigger 1-time per sortie?
 	 *
 	 * The additional 30% ammo consumption, see:
 	 *   * https://twitter.com/myteaGuard/status/1254040809365618690
@@ -3559,8 +3564,10 @@ KC3改 Ship Object
 					case 3: // Diamond
 						modifier = 1.1;
 						break;
-					case 4: // Echelon, enhanced by Double Line / Echelon unknown
-						modifier = 1.2;
+					case 4: // Echelon
+						// enhanced by Double Line / Echelon?
+						// mods: https://twitter.com/Xe_UCH/status/1304783506275409920
+						modifier = enemyFormationId === 2 ? 1.45 : 1.4;
 						break;
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
