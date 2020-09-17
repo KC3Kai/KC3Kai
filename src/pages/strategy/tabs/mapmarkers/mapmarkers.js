@@ -354,7 +354,10 @@
 							$.getJSON(additionalUrl, addingInfo => {
 								if(addingInfo.bg) info.bg.push(...addingInfo.bg);
 								if(addingInfo.spots) info.spots.push(...addingInfo.spots);
-								if(addingInfo.enemies) info.enemies.push(...addingInfo.enemies);
+								if(addingInfo.enemies) {
+									info.enemies = info.enemies || [];
+									info.enemies.push(...addingInfo.enemies);
+								}
 								if(addingInfo.labels) {
 									info.labels = info.labels || [];
 									info.labels.push(...addingInfo.labels);

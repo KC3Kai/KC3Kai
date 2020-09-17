@@ -276,6 +276,23 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st September every year
+			yearlySep: {
+				type: 'yearlySep',
+				key: 'timeToResetYearlySepQuests',
+				resetMonth: SEPTEMBER,
+				questIds: [439, 657],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlySep.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -443,6 +460,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			return !!period;
 		},
 		
