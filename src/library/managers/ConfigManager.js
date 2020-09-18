@@ -175,6 +175,7 @@ Retrieves when needed to apply on components
 				pan_shiplist_bg_moon_preset : "auto",
 				pan_misc_bg_moon  : "rgba(25, 50, 100, 0.2)",
 				pan_misc_bg_moon_preset  : "auto",
+				pan_moon_text_colors : "auto",
 				pan_drop_shadow : "rgba(65, 0, 103, 0)",
 				pan_drop_shadow_moon_preset : "auto",
 				pan_drop_shadow_moon : "rgba(24, 45, 85, 1)",
@@ -201,8 +202,8 @@ Retrieves when needed to apply on components
 				pan_moon_bar_colors: "auto",
 				pan_moon_bar_indicators: true,
 				pan_moon_conbut_scheme: "auto",
-				pan_moon_conbut_shape: "shape_round",
-				pan_moon_conbut_skew: true,
+				pan_moon_conbut_shape: "auto",
+				pan_moon_conbut_skew: "auto",
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 

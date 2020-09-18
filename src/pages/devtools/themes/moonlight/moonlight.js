@@ -398,6 +398,56 @@
 			uiTimerHandler = setInterval(runUpdatingUiTimer, 1000);
 		}
 	}
+	
+	// pan_moon_skin presets       bar_style[0],bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],             shiplist_bg[6],             misc_bg[7]
+	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
+	var mode_moonlight =         ["fluid",     "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
+	var mode_natsuiro =          ["natsuiro",  "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrnatsuiro",      "slistbg_clrnone",          "miscbg_clrnone"];
+	var mode_dark_blue =         ["flats",     "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
+	var mode_dark =              ["flats",     "clrdim",      "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
+	var mode_flashbang =         ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_transparency1 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_transparency2 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_lightblue =         ["flats",     "clrblue",     "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
+
+	//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],         ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
+	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
+	mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrhalfteal",  "rgba(24, 45, 85, 1)",  "qsch_moonlight");
+	mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_natsuiro");
+	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
+	mode_dark.push(                 "conbut_moonless",    "icon_moonless",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrgold",      "clrnone",              "qsch_moonless");
+	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
+	mode_transparency1.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
+	mode_transparency2.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
+	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrblue",      "clrnone",              "qsch_moonlight");
+
+	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors);
+	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "skew_it",        "text_white_blue");
+	mode_natsuiro.push(             "skin_natsuiro", "tip_natsuiro", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro");
+	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey");
+	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
+	mode_flashbang.push(            "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_transparency1.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_transparency2.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_lightblue.push(            "skin_lightblue","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+
+	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_transparency1,mode_transparency2,mode_lightblue];
+	var mode_selection = mode_select[ConfigManager.pan_moon_skin];
+	var select_this;
+	
+	function style_select(array_no,css_element,custom_selection,css_type) {
+		select_this = user_setting_ID[array_no] == "auto" ? mode_selection[array_no] : user_setting_ID[array_no];
+		if(select_this == "custom") {
+			return $(css_element).css(css_type, custom_selection);
+		}
+		return $(css_element).addClass(select_this);
+	}
+
+	function get_style_select(array_no) {
+		select_this = user_setting_ID[array_no] == "auto" ? mode_selection[array_no] : user_setting_ID[array_no];
+		return select_this;
+	}
 
 	$(document).on("ready", function(){
 		// Check localStorage
@@ -461,46 +511,13 @@
 				}
 			});
 		}
-
+		
 		// ================================================= //
 		// ============== Panel Customization ============== //
 		// ================================================= //
 		// Many of these will check if the user has the default "auto" turned on for each option.
 		// If "auto" is on, it will automatically pick the color scheme based on whichever 'pan_moon_skin' option the user has selected
 		// If not, it sets the specific preset the user has selected
-
-		// pan_moon_skin presets       bar_style[0],bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],      shiplist_bg[6],     misc_bg[7]
-		var mode_moonlight =         ["fluid",     "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
-		var mode_natsuiro =          ["natsuiro",  "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "clrnatsuiro",      "clrnone",          "clrnone"];
-		var mode_dark_blue =         ["flats",     "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "clrlicoriceblue",  "clrlicoriceblue",  "clrlicoriceblue"];
-		var mode_dark =              ["flats",     "clrdim",      "shape_rect",   "shape_rect",    "bg_dark",        "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
-		var mode_flashbang =         ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "clrmoonlight",     "clrmoonlight",     "clrmoonlight"];
-
-		//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],  ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
-		mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "clrnone",         "clrnone",             "clrhalfteal",     "rgba(24, 45, 85, 1)",  "schmoonlight");
-		mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "clrnone",         "clrnone",             "clrnone",         "clrnone",              "schnatsuiro");
-		mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "clrblackpearl",   "clrnone",             "clrnone",         "clrnone",              "schmoonless");
-		mode_dark.push(                 "conbut_moonless",    "icon_moonless",  "clrnone",         "clrnone",             "clrgold",         "clrnone",              "schmoonless");
-		mode_flashbang.push(            "conbut_moonlight",   "icon_moonlight", "clrblue",         "clrsilver",           "clrsilver",       "clrnone",              "schmoonlight");
-
-		//                               skin[15],        tooltips[16],   exped planner[17]
-		mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind");
-		mode_natsuiro.push(             "skin_natsuiro", "tip_natsuiro", "ep_natsuiro");
-		mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless");
-		mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind");
-		mode_flashbang.push(            "skin_flashbang","tip_natsuiro", "ep_colorblind");
-
-		var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang];
-		var mode_selection = mode_select[ConfigManager.pan_moon_skin];
-		var select_this;
-
-		function style_select(array_no,css_element,select_this,custom_selection,css_type) {
-			select_this = select_this == "auto" ? mode_selection[array_no] : select_this;
-			if(select_this == "custom") {
-				return $(css_element).css(css_type, custom_selection);
-			}
-			return $(css_element).addClass(select_this);
-		}
 
 		// ================= //
 		// ==== General ==== //
@@ -510,24 +527,24 @@
 		$(".skin_misc").addClass(mode_select[ConfigManager.pan_moon_skin][15]);
 
 		// wrapper background image or color
-		style_select(4,".wrapper_bg",ConfigManager.pan_moon_wrapper_bg);
+		style_select(4,".wrapper_bg");
 
 		// wrapper background opacity
 		$(".wrapper_bg").css("opacity", ConfigManager.pan_moon_opacity / 100);
 
 		// general element corner shape presets
-		style_select(3,".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055",ConfigManager.pan_moon_element_shape);
+		style_select(3,".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055,.border_radius_5500");
 
 		// ========================= //
 		// ==== Bar Stylization ==== //
 		// ========================= //
-		style_select(0,".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp",ConfigManager.pan_moon_bar_style);
+		style_select(0,".ship_hp_bar,.ship_hp_prediction,.ship_hp_bar_cover,.ship_hp_box,.ship_morale,.ship_supply,.ship_supply_bar,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.map_gauge,.curhp,.nowhp");
 
 		// bar corner shape presets
-		style_select(2,".bar_border_radius4,.bar_border_radius3",ConfigManager.pan_moon_bar_shape);
+		style_select(2,".bar_border_radius4,.bar_border_radius3");
 
 		// bar color presets
-		style_select(1,".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.module.admiral,.map_gauge,.curhp,.nowhp,.abyss_combined,.abyss_single",ConfigManager.pan_moon_bar_colors);
+		style_select(1,".ship_hp_box,.ship_hp_bar,.ship_hp_prediction,.ship_supply_bar,.ship_supply,.ship_supply_text,.admiral_lvbar,.admiral_lvbox,.module.admiral,.map_gauge,.curhp,.nowhp,.abyss_combined,.abyss_single");
 
 		// hp bar state indicators
 		if(ConfigManager.pan_moon_bar_indicators == true) {
@@ -537,41 +554,44 @@
 		// ============================ //
 		// ==== Module Stylization ==== //
 		// ============================ //
-		style_select(5,".module.activity .activity_body",ConfigManager.pan_box_bcolor_moon_preset,ConfigManager.pan_box_bcolor_moon,"background");
-		style_select(6,".shiplist_bg_color",ConfigManager.pan_shiplist_bg_moon_preset,ConfigManager.pan_shiplist_bg_moon,"background");
-		style_select(7,".module_bg_color",ConfigManager.pan_misc_bg_moon_preset,ConfigManager.pan_misc_bg_moon,"background");
+		style_select(5,".module.activity .activity_body",ConfigManager.pan_box_bcolor_moon,"background");
+		style_select(6,".shiplist_bg_color",ConfigManager.pan_shiplist_bg_moon,"background");
+		style_select(7,".module_bg_color",ConfigManager.pan_misc_bg_moon,"background");
 
 		// ============================ //
 		// ==== Quest Stylization ==== //
 		// ============================ //
-		style_select(14,".quest,.activity_quest",ConfigManager.pan_quest_scheme_moon);
+		style_select(14,".quest,.activity_quest");
 
 		// ==================================== //
 		// ==== Control Button Stylization ==== //
 		// ==================================== //
 		// skin-based control button scheme
-		style_select(8,".module.controls,.activity_tab,.rotarZairo",ConfigManager.pan_moon_conbut_scheme);
+		style_select(8,".module.controls,.activity_tab,.rotarZairo");
 
 		// control button corner shape presets
-		$(".conbut_radius_5,.conbut_radius_5500").addClass(ConfigManager.pan_moon_conbut_shape);
+		style_select(18,".conbut_radius_5,.conbut_radius_5500");
 
 		// control button skew or tilt. images are usually untilted because of image quality issues
-		if(ConfigManager.pan_moon_conbut_skew == true) {
-			$(".skew_me,.unskew_me").addClass("skew_it");
-		}
+		style_select(19,".skew_me,.unskew_me");
 
 		// ========================== //
 		// ==== Icon Stylization ==== //
 		// ========================== //
-		style_select(9,".misc_icons,.timer-img,.ex_item,.ship_gear",ConfigManager.pan_misc_icon_bg);
-		style_select(10,".ship_icon_bg_color",ConfigManager.pan_ship_icon_bg_moon_preset,ConfigManager.pan_ship_icon_bg_moon,"background");
-		style_select(11,".ship_icon_bg_border",ConfigManager.pan_ship_icon_border_moon_preset,"1px solid "+ ConfigManager.pan_ship_icon_border_moon,"border");
+		style_select(9,".misc_icons,.timer-img,.ex_item,.ship_gear");
+		style_select(10,".ship_icon_bg_color",ConfigManager.pan_ship_icon_bg_moon,"background");
+		style_select(11,".ship_icon_bg_border","1px solid "+ ConfigManager.pan_ship_icon_border_moon,"border");
+
+		// ========================== //
+		// ==== Text Stylization ==== //
+		// ========================== //
+		style_select(20,".primary_text,.secondary_text,.offwhite_text,.green_text,.grey_text,.yellow_text,.red_text",ConfigManager.pan_moon_text_colors);
 
 		// =============== //
 		// ==== Other ==== //
 		// =============== //
 		//the main border outline used throughout the skin
-		style_select(12,".outline1",ConfigManager.pan_outline_moon_preset,"1px solid "+ ConfigManager.pan_outline_moon,"border");
+		style_select(12,".outline1","1px solid "+ ConfigManager.pan_outline_moon,"border");
 
 		//a secondary border. to be deprecated?
 		$(".module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
@@ -585,10 +605,10 @@
 		$(".box_shadow").css("box-shadow", "-1px -1px 1px "+select_this+", 0px -1px 1px "+select_this+", 1px -1px 1px "+select_this+", -1px 0px 1px "+select_this+", 1px 0px 1px "+select_this+", -1px 1px 1px "+select_this+", 0px 1px 1px "+select_this+", 1px 1px 1px "+select_this);
 
 		//tooltip color scheme
-		style_select(16,".ship_face_tooltip",ConfigManager.pan_tooltip_scheme_moon);
+		style_select(16,".ship_face_tooltip");
 
 		//expedition planner
-		style_select(17,".activity_expeditionPlanner",ConfigManager.pan_exped_planner_moon);
+		style_select(17,".activity_expeditionPlanner");
 
 		//adjustable font size. several specific elements won't display properly on some displays, so this option exists to increase their font size
 		$(".font_size8").css("font-size", "calc(8px + "+ConfigManager.pan_moon_font_size+"px)");
@@ -4078,6 +4098,7 @@
 			$(".remodel_header .recipe_title", remodelListBox).html(
 				KC3Meta.term("RemodelItemListTitle").format(weekdayName)
 			);
+			$(".remodel_header .recipe_title span").addClass("secondary_text " + get_style_select(20));
 			$(".remodel_header .assistant_ship img", remodelListBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
@@ -4125,7 +4146,7 @@
 			const improveItemBox = $("#factory .remodelSlotItem").clone();
 			fillRemodelSlotItemBox(this, improveItemBox, recipeDetail, data.rosterId);
 			$(".remodel_to_improve", remodelDetailBox).empty().append(improveItemBox);
-
+			
 			if(recipeDetail.api_req_slot_id || recipeDetail.api_req_useitem_id) {
 				const consumeList = $(".remodel_consume_items", remodelDetailBox);
 				$(".remodel_consume_item.useitem", consumeList).remove();
@@ -4152,13 +4173,13 @@
 						- (isToConsumeSameGear & 1);
 					$(".owned_star0_item .value", remodelDetailBox)
 						.text("x{0}".format(totalAmount))
-						.toggleClass("red", totalAmount < recipeDetail.api_req_slot_num);
+						.toggleClass("red_text " + get_style_select(20), totalAmount < recipeDetail.api_req_slot_num);
 					$(".owned_star0_item", remodelDetailBox).show();
 					const freeAmount = KC3GearManager.countFree(masterId, true, true)
 						- (isToConsumeSameGear & 1);
 					$(".owned_free_item .value", remodelDetailBox)
 						.text("x{0}".format(freeAmount))
-						.toggleClass("red", freeAmount < recipeDetail.api_req_slot_num);
+						.toggleClass("red_text " + get_style_select(20), freeAmount < recipeDetail.api_req_slot_num);
 					$(".owned_free_item", remodelDetailBox).show();
 				} else {
 					$(".remodel_consume_item", consumeList).hide();
@@ -4182,7 +4203,7 @@
 					$("img", ownedUseitemBox).attr("src", `/assets/img/useitems/${useitemId}.png`);
 					$(".value", ownedUseitemBox)
 						.text("x{0}".format(useitemAmount))
-						.toggleClass("red", useitemAmount < useitemNum);
+						.toggleClass("red_text " + get_style_select(20), useitemAmount < useitemNum);
 					ownedUseitemBox.show();
 				};
 				// If consumes some useitems
@@ -4240,7 +4261,7 @@
 			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
 			$(".remodel_header .result_title", remodelResultBox).html(KC3Meta.term(
 				!result.api_remodel_flag ? "RemodelItemResultFailure" : "RemodelItemResultSuccess"
-			)).toggleClass("failure", !result.api_remodel_flag);
+			)).toggleClass("red_text", !result.api_remodel_flag);
 			$(".remodel_header .assistant_ship img", remodelResultBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
@@ -5139,8 +5160,11 @@
 			stars = KC3GearManager.get(rosterId).stars;
 		}
 		if(stars !== undefined) {
-			$(".remodel_slot_star span", itemBox).text(stars);
-			$(".remodel_slot_star", itemBox).show();
+			$(".remodel_slot_name", itemBox)
+				.text("+" + stars + " " + KC3Meta.gearName(gearMst.api_name))
+				.attr("title", KC3Meta.gearName(gearMst.api_name));
+			/*$(".remodel_slot_star span", itemBox).text(stars);
+			$(".remodel_slot_star", itemBox).show();*/
 			itemBox.addClass("withStar");
 		}
 		if(!recipe.noReqs) {

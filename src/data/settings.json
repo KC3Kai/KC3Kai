@@ -1283,7 +1283,7 @@
 						[ "0", "Moonlight" ],
 						[ "1", "Natsuiro (60%)"],
 						[ "2", "Edgelord" ],
-						[ "3", "Dark (1%)" ],
+						[ "3", "Dark (0%)" ],
 						[ "4", "Flashbang (0%)" ],
 						[ "5", "Mild Transparency Skin (0%)" ],
 						[ "6", "Moderate Transparency Skin (0%)" ]
@@ -1298,6 +1298,7 @@
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
 						[ "yasen_img", "Yasen" ],
+						[ "hex_img", "Hex Grid" ],
 						[ "bg_black_pearl", "Black Pearl" ],
 						[ "bg_dark", "Dark" ],
 						[ "bg_white", "White" ]
@@ -1337,6 +1338,7 @@
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
 						[ "fluid", "SettingsPanelBarFluid" ],
+						[ "fluid_ver2", "Fluid (Harsh)" ],
 						[ "flats", "SettingsPanelBarFlats" ],
 						[ "natsuiro", "Natsuiro" ],
 						[ "glassy", "SettingsPanelBarGlassy" ]
@@ -1365,7 +1367,8 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "clrmoonlight", "Moonlight" ],
 						[ "clrnatsuiro", "Natsuiro" ],
-						[ "clrdim", "SettingsPanelBarDim" ]
+						[ "clrdim", "SettingsPanelBarDim" ],
+						[ "clrblue", "Blue" ]
 					]
 				}
 			},
@@ -1384,7 +1387,9 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "conbut_moonlight", "Moonlight" ],
 						[ "conbut_natsuiro", "Natsuiro" ],
-						[ "conbut_moonless", "Edgelord" ]
+						[ "conbut_moonless", "Edgelord" ],
+						[ "conbut_flashbang", "Flashbang" ],
+						[ "conbut_lightblue", "Light Blue" ]
 					]
 				}
 			},
@@ -1394,6 +1399,7 @@
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
 						[ "shape_rect", "SettingsPanelBarRect" ],
 						[ "shape_round", "SettingsPanelBarRound" ],
 						[ "shape_rounder", "SettingsPanelBarRounder" ]
@@ -1403,8 +1409,14 @@
 			{
 				"id" : "pan_moon_conbut_skew",
 				"name" : "SettingsPanelConButSkew",
-				"type" : "check",
-				"options" : {}
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "skew_it", "Enabled" ],
+						[ "no_skew", "Disabled" ]
+					]
+				}
 			},
 			{
 				"id" : "pan_box_bcolor_moon_preset",
@@ -1413,10 +1425,12 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrmoonlight", "Moonlight" ],
-						[ "clrnatsuiro", "Natsuiro" ],
-						[ "clrlicoriceblue", "Licorice Blue" ],
+						[ "actvbg_clrnone", "None" ],
+						[ "actvbg_clrmoonlight", "Moonlight" ],
+						[ "actvbg_clrnatsuiro", "Natsuiro" ],
+						[ "actvbg_clrlicoriceblue", "Licorice Blue" ],
+						[ "actvbg_clrflashbang", "Flashbang" ],
+						[ "actvbg_clrlightblue", "Light Blue Skin" ],
 						[ "custom", "Custom" ]
 					]
 				}
@@ -1437,10 +1451,12 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrmoonlight", "Moonlight" ],
-						[ "clrlicoriceblue", "Licorice Blue" ],
-						[ "custom", "Custom" ]
+						[ "slistbg_clrnone", "None" ],
+						[ "slistbg_clrmoonlight", "Moonlight" ],
+						[ "slistbg_clrlicoriceblue", "Licorice Blue" ],
+						[ "slistbg_clrflashbang", "Flashbang" ],
+						[ "slistbg_clrlightblue", "Light Blue Skin" ],
+						[ "slistbg_custom", "Custom" ]
 					]
 				}
 			},
@@ -1460,9 +1476,11 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrmoonlight", "Moonlight" ],
-						[ "clrlicoriceblue", "Licorice Blue" ],
+						[ "miscbg_clrnone", "None" ],
+						[ "miscbg_clrmoonlight", "Moonlight" ],
+						[ "miscbg_clrlicoriceblue", "Licorice Blue" ],
+						[ "miscbg_clrflashbang", "Flashbang - Testing" ],
+						[ "miscbg_clrlightblue", "Light Blue Skin" ],
 						[ "custom", "Custom" ]
 					]
 				}
@@ -1474,6 +1492,21 @@
 				"options" : {
 					"placeholder" : "SettingsMiscBG",
 					"tooltip" : "SettingsPanelColorTip"
+				}
+			},
+			{
+				"id" : "pan_moon_text_colors",
+				"name" : "Text Color Pack",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "text_white_blue", "White & Blue" ],
+						[ "text_white_orange", "White & Orange" ],
+						[ "text_black_blue", "Black & Blue" ],
+						[ "text_white_grey", "White & Grey" ],
+						[ "text_natsuiro", "Natsuiro" ]
+					]
 				}
 			},
 			{
@@ -1505,9 +1538,11 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrblackpearl", "Black Pearl" ],
-						[ "clrblue", "Blue" ],
+						[ "siconbg_clrnone", "None" ],
+						[ "siconbg_clrblackpearl", "Black Pearl" ],
+						[ "siconbg_clrblue", "Blue" ],
+						[ "siconbg_clrwhite", "White" ],
+						[ "siconbg_clrlightblue", "Light Blue" ],
 						[ "custom", "Custom" ]
 					]
 				}
@@ -1528,12 +1563,12 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrdarkblue", "Dark Blue" ],
-						[ "clrblack", "Black" ],
-						[ "clrgold", "Gold" ],
-						[ "clrsilver", "Silver" ],
-						[ "clrwhite", "White" ],
+						[ "siconbrd_clrnone", "None" ],
+						[ "siconbrd_clrdarkblue", "Dark Blue" ],
+						[ "siconbrd_clrblack", "Black" ],
+						[ "siconbrd_clrgold", "Gold" ],
+						[ "siconbrd_clrsilver", "Silver" ],
+						[ "siconbrd_clrwhite", "White" ],
 						[ "custom", "Custom" ]
 					]
 				}
@@ -1556,7 +1591,9 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "icon_moonlight", "Moonlight" ],
 						[ "icon_natsuiro", "Natsuiro" ],
-						[ "icon_moonless", "Edgelord" ]
+						[ "icon_moonless", "Edgelord" ],
+						[ "icon_flashbang", "Flashbang" ],
+						[ "icon_lightblue", "LightBlue" ]
 					]
 				}
 			},
@@ -1567,13 +1604,14 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "clrnone", "None" ],
-						[ "clrdarkblue", "Dark Blue" ],
-						[ "clrblack", "Black" ],
-						[ "clrgold", "Gold" ],
-						[ "clrhalfteal", "Half Teal" ],
-						[ "clrsilver", "Silver" ],
-						[ "clrwhite", "White" ],
+						[ "ol_clrnone", "None" ],
+						[ "ol_clrdarkblue", "Dark Blue" ],
+						[ "ol_clrblack", "Black" ],
+						[ "ol_clrblue", "Blue" ],
+						[ "ol_clrgold", "Gold" ],
+						[ "ol_clrhalfteal", "50% Teal" ],
+						[ "ol_clrsilver", "Silver" ],
+						[ "ol_clrwhite", "White" ],
 						[ "custom", "Custom" ]
 					]
 				}
@@ -1603,9 +1641,9 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "schmoonlight", "Moonlight" ],
-						[ "schnatsuiro", "Natsuiro" ],
-						[ "schmoonless", "Edgelord" ]
+						[ "qsch_moonlight", "Moonlight" ],
+						[ "qsch_natsuiro", "Natsuiro" ],
+						[ "qsch_moonless", "Edgelord" ]
 					]
 				}
 			},

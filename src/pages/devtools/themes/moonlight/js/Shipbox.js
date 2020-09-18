@@ -4,7 +4,17 @@
  */
 (function(){
 	"use strict";
-	
+
+	/*function to automatically select whether to assign a text color*/
+	function getContrastYIQ(hexcolor,darkcolor,lightcolor){
+		hexcolor = hexcolor.replace("#", "");
+		var r = parseInt(hexcolor.substr(0,2),16);
+		var g = parseInt(hexcolor.substr(2,2),16);
+		var b = parseInt(hexcolor.substr(4,2),16);
+		var yiq = ((r*299)+(g*587)+(b*114))/1000;
+		return (yiq >= 140) ? darkcolor : lightcolor;
+	}
+
 	window.KC3NatsuiroShipbox = function( base, rosterId, position,
 		showCombinedFleetBars, dameConConsumed, isStarShellUsed, noAirBombingDamage ){
 		this.element = $("#factory "+base).clone();
@@ -164,14 +174,17 @@
 				}
 			});
 		}
-		if(tagColorId > 0){
-			if (this.shipData.sally > 0) {
-				$(".locktag .solid", this.element).text(this.shipData.sally);
+		if(tagColorId){
+			$(".locktag .solid", this.element).css("color",(getContrastYIQ(this.lockTagColors[tagColorId - 1],'black','white')));
+			if(tagColorId > 0){
+				if (this.shipData.sally > 0) {
+					$(".locktag .solid", this.element).text(this.shipData.sally);
+				}
+				$(".locktag", this.element).show()
+					.css("border-color", "transparent " + this.lockTagColors[tagColorId - 1] || "#aaa" + " transparent transparent");
+			} else {
+				$(".locktag", this.element).hide();
 			}
-			$(".locktag", this.element).show()
-				.css("border-color", "transparent " + this.lockTagColors[tagColorId - 1] || "#aaa" + " transparent transparent");
-		} else {
-			$(".locktag", this.element).hide();
 		}
 		
 		return this;
