@@ -122,6 +122,9 @@ Provides access to data on built-in JSON files
 			293, // Yuubari Kai -> K2
 			579, // Gotland Kai -> andra
 			628, // Fletcher Kai Mod.2 -> Mk.II
+			278, // Kaga Kai -> K2
+			698, // Kaga K2 -> K2E
+			610, // Kaga K2E -> K2Go
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
@@ -658,6 +661,11 @@ Provides access to data on built-in JSON files
 		
 		mapExp :function(world, map){
 			return this.allMapsExp()[[world, map].join('-')] || 0;
+		},
+		
+		maelstromLoss :function(mapId, edgeId){
+			var mapDef = this._dataColle.maelstromLoss["m" + mapId] || {};
+			return mapDef[edgeId] || [];
 		},
 		
 		airPowerAverageBonus :function(ace){

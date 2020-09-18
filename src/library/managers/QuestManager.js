@@ -259,6 +259,40 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st August every year
+			yearlyAug: {
+				type: 'yearlyAug',
+				key: 'timeToResetYearlyAugQuests',
+				resetMonth: AUGUST,
+				questIds: [438],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyAug.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyAug.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st September every year
+			yearlySep: {
+				type: 'yearlySep',
+				key: 'timeToResetYearlySepQuests',
+				resetMonth: SEPTEMBER,
+				questIds: [439, 440, 657, 928],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlySep.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -279,46 +313,59 @@ Uses KC3Quest objects to play around with
 		 * Since 2020-03-27, quest page in API no longer exists (in-game UI paginated still), list includes all available items in specified tab ID
 		------------------------------------------*/
 		definePage :function( questList, questPage, questTabId ){
-			// TODO it's now possible to clean quests non-open-nor-active in-game for some reason,
-			// Update quests for those `api_no` not in current quest list as long as questTabId is 0 (All)
-			var untranslated = [];
-			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
+			const untranslated = [], existedAllIds = [];
+			const reportedQuests = JSON.parse(localStorage.reportedQuests || "[]");
 			for(var ctr in questList){
-				if(questList[ctr]===-1) continue;
+				if(!questList[ctr] || questList[ctr] === -1) continue;
 				
-				var questId = questList[ctr].api_no;
-				var oldQuest = this.get( questId );
-				oldQuest.defineRaw( questList[ctr] );
-				oldQuest.autoAdjustCounter();
+				const questRaw = questList[ctr];
+				const questId = questRaw.api_no;
+				const questObj = this.get(questId);
+				questObj.defineRaw(questRaw);
+				questObj.autoAdjustCounter();
+				if(questTabId === 0){
+					existedAllIds.push(questId);
+				}
 				
 				// Check for untranslated quests
-				if( typeof oldQuest.meta().available == "undefined" ){
+				if(typeof questObj.meta().available == "undefined"){
 					if(reportedQuests.indexOf(questId) === -1){
-						untranslated.push(questList[ctr]);
+						untranslated.push(questRaw);
 						// remember reported quest so wont send data twice
 						reportedQuests.push(questId);
 					}
 				}
 				
-				// Add to actives or opens depending on status
-				switch( questList[ctr].api_state ){
-					case 1:	// Unselected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, false );
+				// Add to actives or opens depending on its state
+				switch(questRaw.api_state){
+					case 1: // Unselected
+						this.isOpen(questId,   true);
+						this.isActive(questId, false);
 						break;
-					case 2:	// Selected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, true );
+					case 2: // Selected
+						this.isOpen(questId,   true);
+						this.isActive(questId, true);
 						break;
-					case 3:	// Completed
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+					case 3: // Completed
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 					default:
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 				}
+			}
+			// Data submitting of untranslated quests no longer available for now
+			if(untranslated.length){
+				console.info("Untranslated quest detected", reportedQuests, untranslated);
+			}
+			
+			// It's now possible to clean quests non-open-nor-active in-game for API change reason,
+			// Close quests for those `api_no` not in current quest list, as long as questTabId is 0 (All quests available).
+			if(existedAllIds.length){
+				this.open.filter(id   => !existedAllIds.includes(id)).forEach(id => { this.isOpen(id,   false); });
+				this.active.filter(id => !existedAllIds.includes(id)).forEach(id => { this.isActive(id, false); });
 			}
 			
 			this.save();
@@ -412,6 +459,8 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -719,6 +768,17 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
+					},
+				"928": // By5 Sortie 2 of Haguro/Ashigara/Myoukou/Takao/Kamikaze
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return (
+							fleet.countShip(65)   + // Haguro any remodel
+							fleet.countShip(64)   + // Ashigara any remodel
+							fleet.countShip(62)   + // Myoukou any remodel
+							fleet.countShip(66)   + // Takao any remodel
+							fleet.countShip(471)    // Kamikaze any remodel
+						) >= 2;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

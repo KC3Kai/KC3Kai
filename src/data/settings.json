@@ -1217,6 +1217,12 @@
 				"options" : { "label" : "%" }
 			},
 			{
+				"id" : "pan_hp_bar_metrics",
+				"name" : "SettingsPanelBarIndicators",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",

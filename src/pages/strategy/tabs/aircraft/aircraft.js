@@ -253,7 +253,7 @@
 					$(".instances", ItemElem).append(PlaneBox);
 					
 					$(".instance_icon img", PlaneBox).attr("src", KC3Meta.itemIcon(type_id))
-						.attr("title", "#" + rosterId);
+						.attr("title", `[${masterId}] #${rosterId}`);
 					$(".instance_lock", PlaneBox).toggle(!ThisPlane.lock);
 					
 					if(ThisPlane.stars > 0){
@@ -275,29 +275,30 @@
 					}
 					
 					if(ThisPlane.MyHolder()){
-						if(ThisPlane.MyHolder() instanceof KC3LandBase){
+						const holder = ThisPlane.MyHolder();
+						if(holder instanceof KC3LandBase){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
-							$(".holder_name", PlaneBox).text("LBAS World "+ThisPlane.MyHolder().map);
-							$(".holder_level", PlaneBox).text("#"+ThisPlane.MyHolder().rid);
-							ThisCapacity = (ThisPlane.MyHolder().planes
+							$(".holder_name", PlaneBox).text("LBAS World "+holder.map);
+							$(".holder_level", PlaneBox).text("#"+holder.rid);
+							ThisCapacity = (holder.planes
 								.find(s => s.api_slotid === rosterId) || {}).api_max_count || "?";
-						} else if(ThisPlane.MyHolder() === "LbasMoving"){
+						} else if(holder === "LbasMoving"){
 							$(".holder_pic img", PlaneBox).attr("src", KC3Meta.itemIcon(33));
 							$(".holder_name", PlaneBox).text("LBAS Moving");
 							$(".holder_level", PlaneBox).text("");
 							ThisCapacity = "";
 						} else {
 							$(".holder_pic img", PlaneBox)
-								.attr("src", KC3Meta.shipIcon(ThisPlane.MyHolder().masterId))
+								.attr("src", KC3Meta.shipIcon(holder.masterId))
+								.attr("title", `[${holder.masterId}] #${holder.rosterId}`)
 								.addClass("hover")
-								.attr("alt", ThisPlane.MyHolder().masterId)
+								.attr("alt", holder.masterId)
 								.click(function(e){
 									KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 								});
-							$(".holder_name", PlaneBox).text(ThisPlane.MyHolder().name())
-								.attr("title", "#"+ThisPlane.MyHolder().rosterId+" "+ThisPlane.MyHolder().name());
-							$(".holder_level", PlaneBox).text("Lv"+ThisPlane.MyHolder().level);
-							ThisCapacity = ThisPlane.MyHolder().slotSize( this._slotNums["s"+rosterId]);
+							$(".holder_name", PlaneBox).text(holder.name());
+							$(".holder_level", PlaneBox).text("Lv"+holder.level);
+							ThisCapacity = holder.slotSize( this._slotNums["s"+rosterId]);
 						}
 						if(ThisCapacity > 0){
 							// Compute for ace fighter air power

@@ -7232,6 +7232,7 @@ var PS = {};
   var Data_Eq = PS["Data.Eq"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
   var Data_Semiring = PS["Data.Semiring"];
+  var Data_Int = PS["Data.Int"];
   var ShipLevel = (function () {
       function ShipLevel(value0) {
           this.value0 = value0;
@@ -7576,10 +7577,10 @@ var PS = {};
       if (v === 44) {
           return addGroup(fslAndSc(35)(6))
               (addGroup(lvlCnt(210))
-                  (addGroup(carrier(3))
+                  (addGroup(carrier(2))
                       (addGroup(sty(1)(KanColle_Generated_SType.AV.value))
                           (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
-                              (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(ddde(2))
                                   (addGroup(aaTotal(200))
                                       (addGroup(aswTotal(200))
                                           (addGroup(losTotal(150))
@@ -7596,8 +7597,8 @@ var PS = {};
       if (v === 45) {
           return addGroup(fslAndSc(50)(5))
               (addGroup(lvlCnt(240))
-                  (addGroup(fsty(KanColle_Generated_SType.CVE.value))
-                      (addGroup(sty(1)(KanColle_Generated_SType.CVE.value))
+                  (addGroup(fsty(KanColle_Generated_SType.CVL.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CVL.value))
                           (addGroup(ddde(4))
                               (addGroup(aaTotal(240))
                                   (addGroup(aswTotal(300))
@@ -7608,6 +7609,9 @@ var PS = {};
                       )
                   )
               );
+      };
+      if (v === 46) {
+          // TODO
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
@@ -7829,6 +7833,9 @@ var PS = {};
                   )
               );
       };
+      if (v === 142) {
+          // TODO
+      };
       return [  ];
   };
   var fromRawShip = function (s) {
@@ -7922,29 +7929,29 @@ var PS = {};
                   })(fleet)) >= req.value0;
               };
               if (req instanceof FleetTotalAsw) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.asw;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalLos) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.los;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalAa) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.aa;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalFp) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.fp;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetTotalTorp) {
-                  return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
+                  return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
                       return x.tp;
-                  })(fleet)) >= req.value0;
+                  })(fleet))) >= req.value0;
               };
               if (req instanceof FleetDrum) {
                   return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (x) {
@@ -8047,7 +8054,7 @@ var PS = {};
   allExpeditionIds.push(...Data_Array.range(100)(105));
   allExpeditionIds.push(...Data_Array.range(110)(113));
   allExpeditionIds.push(...Data_Array.range(131)(132));
-  allExpeditionIds.push(...Data_Array.range(141)(141));
+  allExpeditionIds.push(...Data_Array.range(141)(142));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
   exports["resourceRowsFill"] = resourceRowsFill;
@@ -8226,6 +8233,9 @@ var PS = {};
       if (eId === 45) {
           return income(40)(0)(0)(220);
       };
+      if (eId === 46) {
+          return income(300)(0)(150)(380);
+      };
       if (eId === 100) {
           return income(45)(45)(0)(0);
       };
@@ -8267,6 +8277,9 @@ var PS = {};
       };
       if (eId === 141) {
           return income(0)(600)(600)(1000);
+      };
+      if (eId === 142) {
+          return income(0)(480)(0)(0);
       };
       return Data_Monoid.mempty(incomeMonoid);
   };
@@ -8447,6 +8460,9 @@ var PS = {};
       if (eId === 45) {
           return c(6)(4)(hm(3)(20));
       };
+      if (eId === 46) {
+          return c(7.5)(9.5)(hm(3)(30));
+      };
       if (eId === 100) {
           return c(3.5)(0)(25);
       };
@@ -8488,6 +8504,9 @@ var PS = {};
       };
       if (eId === 141) {
           return c(9.5)(8.5)(hm(7)(30));
+      };
+      if (eId === 142) {
+          return c(9)(9.5)(hm(3)(5));
       };
       return noCost;
   };
@@ -10035,534 +10054,1016 @@ var PS = {};
     "use strict";
 
   // module KanColle.Expedition.New.Info
+  // To build from raw master data:
+  // copy(JSON.stringify(Object.entries(KC3Master._raw.mission).map(arr => arr[1]).map(({api_name, api_details, ...sel}) => (sel))))
 
   exports.kcExpeditionRaw =
-      [
-          {
-              "api_id":1,
-              "api_time":15,
-              "api_use_fuel":0.3,
-              "api_use_bull":0,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":2,
-              "api_time":30,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[1,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":3,
-              "api_time":20,
-              "api_use_fuel":0.3,
-              "api_use_bull":0.2,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":4,
-              "api_time":50,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[1,1],
-              "api_win_item2":[10,1]
-          },
-          {
-              "api_id":5,
-              "api_time":90,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":6,
-              "api_time":40,
-              "api_use_fuel":0.3,
-              "api_use_bull":0.2,
-              "api_win_item1":[10,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":7,
-              "api_time":60,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[2,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":8,
-              "api_time":180,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.2,
-              "api_win_item1":[2,2],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":9,
-              "api_time":240,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[10,1],
-              "api_win_item2":[1,2]
-          },
-          {
-              "api_id":10,
-              "api_time":90,
-              "api_use_fuel":0.3,
-              "api_use_bull":0,
-              "api_win_item1":[1,1],
-              "api_win_item2":[2,1]
-          },
-          {
-              "api_id":11,
-              "api_time":300,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[10,1],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":12,
-              "api_time":480,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[11,1],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":13,
-              "api_time":240,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.4,
-              "api_win_item1":[1,2],
-              "api_win_item2":[10,1]
-          },
-          {
-              "api_id":14,
-              "api_time":360,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[1,1],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":15,
-              "api_time":720,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.4,
-              "api_win_item1":[12,1],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":16,
-              "api_time":900,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.4,
-              "api_win_item1":[2,2],
-              "api_win_item2":[3,2]
-          },
-          {
-              "api_id":17,
-              "api_time":45,
-              "api_use_fuel":0.3,
-              "api_use_bull":0.4,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":18,
-              "api_time":300,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.2,
-              "api_win_item1":[1,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":19,
-              "api_time":360,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.4,
-              "api_win_item1":[10,1],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":20,
-              "api_time":120,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.4,
-              "api_win_item1":[3,1],
-              "api_win_item2":[10,1]
-          },
-          {
-              "api_id":21,
-              "api_time":140,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.7,
-              "api_win_item1":[10,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":22,
-              "api_time":180,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.7,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":23,
-              "api_time":240,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":24,
-              "api_time":500,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.6,
-              "api_win_item1":[3,2],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":25,
-              "api_time":2400,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.8,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":26,
-              "api_time":4800,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[1,3],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":27,
-              "api_time":1200,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[3,1],
-              "api_win_item2":[10,2]
-          },
-          {
-              "api_id":28,
-              "api_time":1500,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[3,2],
-              "api_win_item2":[11,2]
-          },
-          {
-              "api_id":29,
-              "api_time":1440,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.4,
-              "api_win_item1":[3,1],
-              "api_win_item2":[10,1]
-          },
-          {
-              "api_id":30,
-              "api_time":2880,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.7,
-              "api_win_item1":[3,3],
-              "api_win_item2":[12,1]
-          },
-          {
-              "api_id":31,
-              "api_time":120,
-              "api_use_fuel":0.5,
-              "api_use_bull":0,
-              "api_win_item1":[10,1],
-              "api_win_item2":[0,0],
-          },
-          {
-              "api_id":32,
-              "api_time":1440,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.3,
-              "api_win_item1":[12,1],
-              "api_win_item2":[3,3]
-          },
-          {
-              "api_id":33,
-              "api_time":15,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.8,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":34,
-              "api_time":30,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.8,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":35,
-              "api_time":420,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[10,2],
-              "api_win_item2":[3,1]
-          },
-          {
-              "api_id":36,
-              "api_time":540,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[11,2],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":37,
-              "api_time":165,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[10,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":38,
-              "api_time":175,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.8,
-              "api_win_item1":[10,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":39,
-              "api_time":1800,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.9,
-              "api_win_item1":[1,2],
-              "api_win_item2":[11,1]
-          },
-          {
-              "api_id":40,
-              "api_time":410,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.7,
-              "api_win_item1":[10,3],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":41,
-              "api_deck_num":3,
-              "api_time":60,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.5,
-              "api_win_item1":[3,1],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":42,
-              "api_deck_num":4,
-              "api_time":480,
-              "api_reset_type":1,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.65,
-              "api_win_item1":[12,1],
-              "api_win_item2":[2,3]
-          },
-          {
-              "api_id":43,
-              "api_time":720,
-              "api_deck_num":6,
-              "api_reset_type":1,
-              "api_damage_type":1,
-              "api_use_fuel":0.85,
-              "api_use_bull":0.9,
-              "api_win_item1":[3,4],
-              "api_win_item2":[4,1]
-          },
-          {
-              "api_id":44,
-              "api_time":600,
-              "api_deck_num":6,
-              "api_reset_type":1,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.4,
-              "api_win_item1":[3,4],
-              "api_win_item2":[12,2]
-          },
-          {
-              "api_id":45,
-              "api_time":200,
-              "api_deck_num":5,
-              "api_use_fuel":0.6,
-              "api_use_bull":0.4,
-              "api_win_item1":[11,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":100,
-              "api_disp_no":"A1",
-              "api_deck_num":4,
-              "api_time":25,
-              "api_use_fuel":0.35,
-              "api_use_bull":0,
-              "api_win_item1":[0,0],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":101,
-              "api_disp_no":"A2",
-              "api_deck_num":4,
-              "api_time":55,
-              "api_use_fuel":0.5,
-              "api_use_bull":0.2,
-              "api_win_item1":[3,1],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":102,
-              "api_disp_no":"A3",
-              "api_deck_num":5,
-              "api_time":135,
-              "api_use_fuel":0.65,
-              "api_use_bull":0.35,
-              "api_win_item1":[1,1],
-              "api_win_item2":[3,2]
-          },
-          {
-              "api_id":103,
-              "api_disp_no":"A4",
-              "api_deck_num":5,
-              "api_time":110,
-              "api_reset_type":1,
-              "api_use_fuel":0.75,
-              "api_use_bull":0.6,
-              "api_win_item1":[1,2],
-              "api_win_item2":[2,2]
-          },
-          {
-              "api_id":104,
-              "api_disp_no":"A5",
-              "api_deck_num":5,
-              "api_time":180,
-              "api_reset_type":1,
-              "api_damage_type":1,
-              "api_use_fuel":0.8,
-              "api_use_bull":0.75,
-              "api_win_item1":[3,4],
-              "api_win_item2":[1,3]
-          },
-          {
-              "api_id":105,
-              "api_disp_no":"A6",
-              "api_deck_num":6,
-              "api_time":210,
-              "api_reset_type":1,
-              "api_damage_type":2,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.95,
-              "api_win_item1":[3,5],
-              "api_win_item2":[4,1]
-          },
-          {
-              "api_id":110,
-              "api_disp_no":"B1",
-              "api_deck_num":6,
-              "api_time":35,
-              "api_use_fuel":0.15,
-              "api_use_bull":0.45,
-              "api_win_item1":[10,1],
-              "api_win_item2":[1,1]
-          },
-          {
-              "api_id":111,
-              "api_disp_no":"B2",
-              "api_deck_num":6,
-              "api_time":520,
-              "api_reset_type":1,
-              "api_use_fuel":0.65,
-              "api_use_bull":0.8,
-              "api_win_item1":[3,2],
-              "api_win_item2":[1,2]
-          },
-          {
-              "api_id":112,
-              "api_disp_no":"B3",
-              "api_deck_num":6,
-              "api_time":170,
-              "api_reset_type":1,
-              "api_use_fuel":0.65,
-              "api_use_bull":0.8,
-              "api_win_item1":[12,1],
-              "api_win_item2":[1,2]
-          },
-          {
-              "api_id":113,
-              "api_disp_no":"B4",
-              "api_deck_num":6,
-              "api_time":450,
-              "api_reset_type":1,
-              "api_damage_type":1,
-              "api_use_fuel":0.85,
-              "api_use_bull":0.85,
-              "api_win_item1":[3,4],
-              "api_win_item2":[4,1]
-          },
-          {
-              "api_id":114,
-              "api_disp_no":"B5",
-              "api_deck_num":6,
-              "api_time":390,
-              "api_reset_type":1,
-              "api_damage_type":2,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.95,
-              "api_win_item1":[1,4],
-              "api_win_item2":[4,1]
-          },
-          {
-              "api_id":131,
-              "api_disp_no":"D1",
-              "api_deck_num":5,
-              "api_time":120,
-              "api_use_fuel":0.75,
-              "api_use_bull":0.5,
-              "api_win_item1":[1,1],
-              "api_win_item2":[0,0]
-          },
-          {
-              "api_id":132,
-              "api_disp_no":"D2",
-              "api_deck_num":5,
-              "api_time":600,
-              "api_reset_type":1,
-              "api_damage_type":1,
-              "api_use_fuel":0.9,
-              "api_use_bull":0.9,
-              "api_win_item1":[59,1],
-              "api_win_item2":[12,1]
-          },
-          {
-              "api_id":141,
-              "api_disp_no":"E1",
-              "api_deck_num":6,
-              "api_time":450,
-              "api_reset_type":1,
-              "api_damage_type":2,
-              "api_use_fuel":0.95,
-              "api_use_bull":0.85,
-              "api_win_item1":[12,2],
-              "api_win_item2":[4,1]
-          }
-      ];
+    [{
+        "api_id": 1,
+        "api_disp_no": "01",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 15,
+        "api_deck_num": 2,
+        "api_difficulty": 1,
+        "api_use_fuel": 0.3,
+        "api_use_bull": 0,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 0, 0, 0, 0]
+    }, {
+        "api_id": 2,
+        "api_disp_no": "02",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 30,
+        "api_deck_num": 4,
+        "api_difficulty": 1,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 2, 2, 0, 0]
+    }, {
+        "api_id": 3,
+        "api_disp_no": "03",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 20,
+        "api_deck_num": 3,
+        "api_difficulty": 2,
+        "api_use_fuel": 0.3,
+        "api_use_bull": 0.2,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [1, 1, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [1, 1, 1, 0, 0, 0]
+    }, {
+        "api_id": 4,
+        "api_disp_no": "04",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 50,
+        "api_deck_num": 3,
+        "api_difficulty": 2,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [10, 1],
+        "api_win_mat_level": [0, 1, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 0, 0, 0]
+    }, {
+        "api_id": 5,
+        "api_disp_no": "05",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 90,
+        "api_deck_num": 4,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [1, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 0, 0]
+    }, {
+        "api_id": 6,
+        "api_disp_no": "06",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 40,
+        "api_deck_num": 4,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.3,
+        "api_use_bull": 0.2,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 0, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 2, 2, 0, 0]
+    }, {
+        "api_id": 7,
+        "api_disp_no": "07",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 60,
+        "api_deck_num": 6,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [2, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 0, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [8, 11, 5, 3, 2, 2]
+    }, {
+        "api_id": 8,
+        "api_disp_no": "08",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 180,
+        "api_deck_num": 6,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.2,
+        "api_win_item1": [2, 2],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [1, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [8, 11, 5, 3, 2, 2]
+    }, {
+        "api_id": 9,
+        "api_disp_no": "09",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 240,
+        "api_deck_num": 4,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [1, 2],
+        "api_win_mat_level": [2, 0, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 1, 1, 1, 0, 0]
+    }, {
+        "api_id": 10,
+        "api_disp_no": "10",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 90,
+        "api_deck_num": 3,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.3,
+        "api_use_bull": 0,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [2, 1],
+        "api_win_mat_level": [0, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 3, 2, 0, 0, 0]
+    }, {
+        "api_id": 11,
+        "api_disp_no": "11",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 300,
+        "api_deck_num": 4,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [0, 0, 0, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 1, 1, 0, 0]
+    }, {
+        "api_id": 12,
+        "api_disp_no": "12",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 480,
+        "api_deck_num": 4,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [11, 1],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [1, 2, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 1, 1, 0, 0]
+    }, {
+        "api_id": 13,
+        "api_disp_no": "13",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 240,
+        "api_deck_num": 6,
+        "api_difficulty": 5,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.4,
+        "api_win_item1": [1, 2],
+        "api_win_item2": [10, 1],
+        "api_win_mat_level": [1, 2, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
+        "api_id": 14,
+        "api_disp_no": "14",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 360,
+        "api_deck_num": 6,
+        "api_difficulty": 5,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [0, 2, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
+        "api_id": 15,
+        "api_disp_no": "15",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 720,
+        "api_deck_num": 6,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.4,
+        "api_win_item1": [12, 1],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [0, 0, 2, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [11, 11, 2, 2, 2, 2]
+    }, {
+        "api_id": 16,
+        "api_disp_no": "16",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 900,
+        "api_deck_num": 6,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.4,
+        "api_win_item1": [2, 2],
+        "api_win_item2": [3, 2],
+        "api_win_mat_level": [3, 3, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 5, 3, 2, 2, 2]
+    }, {
+        "api_id": 17,
+        "api_disp_no": "17",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 45,
+        "api_deck_num": 6,
+        "api_difficulty": 5,
+        "api_use_fuel": 0.3,
+        "api_use_bull": 0.4,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [1, 1, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
+        "api_id": 18,
+        "api_disp_no": "18",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 300,
+        "api_deck_num": 6,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.2,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 0, 2, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [11, 11, 11, 3, 2, 2]
+    }, {
+        "api_id": 19,
+        "api_disp_no": "19",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 360,
+        "api_deck_num": 6,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.4,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [2, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [10, 10, 2, 2, 2, 2]
+    }, {
+        "api_id": 20,
+        "api_disp_no": "20",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 120,
+        "api_deck_num": 2,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.4,
+        "api_win_item1": [3, 1],
+        "api_win_item2": [11, 1],
+        "api_win_mat_level": [0, 0, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 13, 13, 0, 0, 0]
+    }, {
+        "api_id": 21,
+        "api_disp_no": "21",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 140,
+        "api_deck_num": 5,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.7,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [2, 2, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 0]
+    }, {
+        "api_id": 22,
+        "api_disp_no": "22",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 180,
+        "api_deck_num": 6,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.7,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 3, 2, 2, 2, 2]
+    }, {
+        "api_id": 23,
+        "api_disp_no": "23",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 240,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [11, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [10, 10, 2, 2, 2, 2]
+    }, {
+        "api_id": 24,
+        "api_disp_no": "24",
+        "api_maparea_id": 3,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 500,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.6,
+        "api_win_item1": [3, 2],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [3, 0, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 3, 2, 2, 1, 1]
+    }, {
+        "api_id": 25,
+        "api_disp_no": "25",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 2400,
+        "api_deck_num": 4,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.8,
+        "api_win_item1": [11, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [4, 0, 3, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 5, 2, 2, 0, 0]
+    }, {
+        "api_id": 26,
+        "api_disp_no": "26",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 4800,
+        "api_deck_num": 4,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [1, 3],
+        "api_win_item2": [12, 1],
+        "api_win_mat_level": [0, 0, 0, 4],
+        "api_return_flag": 1,
+        "api_sample_fleet": [11, 3, 2, 2, 0, 0]
+    }, {
+        "api_id": 27,
+        "api_disp_no": "27",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 1200,
+        "api_deck_num": 2,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [3, 2],
+        "api_win_item2": [10, 2],
+        "api_win_mat_level": [0, 0, 4, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [13, 13, 0, 0, 0, 0]
+    }, {
+        "api_id": 28,
+        "api_disp_no": "28",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 1500,
+        "api_deck_num": 3,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [3, 3],
+        "api_win_item2": [11, 2],
+        "api_win_mat_level": [0, 0, 4, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [13, 13, 13, 0, 0, 0]
+    }, {
+        "api_id": 29,
+        "api_disp_no": "29",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 1440,
+        "api_deck_num": 3,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.4,
+        "api_win_item1": [3, 1],
+        "api_win_item2": [11, 1],
+        "api_win_mat_level": [0, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [13, 13, 13, 0, 0, 0]
+    }, {
+        "api_id": 30,
+        "api_disp_no": "30",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 2880,
+        "api_deck_num": 4,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.7,
+        "api_win_item1": [3, 3],
+        "api_win_item2": [12, 1],
+        "api_win_mat_level": [0, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [13, 13, 13, 13, 0, 0]
+    }, {
+        "api_id": 31,
+        "api_disp_no": "31",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 120,
+        "api_deck_num": 4,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [13, 13, 13, 13, 0, 0]
+    }, {
+        "api_id": 32,
+        "api_disp_no": "32",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 1440,
+        "api_deck_num": 3,
+        "api_difficulty": 2,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.3,
+        "api_win_item1": [12, 1],
+        "api_win_item2": [3, 3],
+        "api_win_mat_level": [1, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [21, 2, 2, 0, 0, 0]
+    }, {
+        "api_id": 33,
+        "api_disp_no": "33",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 15,
+        "api_deck_num": 2,
+        "api_difficulty": 1,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.8,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 0, 0, 0],
+        "api_return_flag": 0,
+        "api_sample_fleet": [8, 8, 2, 2, 0, 0]
+    }, {
+        "api_id": 34,
+        "api_disp_no": "34",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 30,
+        "api_deck_num": 2,
+        "api_difficulty": 1,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.8,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 0, 0, 0],
+        "api_return_flag": 0,
+        "api_sample_fleet": [8, 8, 8, 7, 2, 2]
+    }, {
+        "api_id": 35,
+        "api_disp_no": "35",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 420,
+        "api_deck_num": 6,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [10, 2],
+        "api_win_item2": [3, 1],
+        "api_win_mat_level": [0, 0, 1, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [11, 11, 5, 3, 2, 2]
+    }, {
+        "api_id": 36,
+        "api_disp_no": "36",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 540,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [11, 2],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [2, 0, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 16, 16, 2, 2, 2]
+    }, {
+        "api_id": 37,
+        "api_disp_no": "37",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 165,
+        "api_deck_num": 6,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 2, 2, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
+        "api_id": 38,
+        "api_disp_no": "38",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 175,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.8,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [2, 0, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 2, 2, 2, 2]
+    }, {
+        "api_id": 39,
+        "api_disp_no": "39",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 1800,
+        "api_deck_num": 5,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.9,
+        "api_win_item1": [1, 2],
+        "api_win_item2": [12, 1],
+        "api_win_mat_level": [0, 1, 2, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [20, 13, 13, 13, 13, 0]
+    }, {
+        "api_id": 40,
+        "api_disp_no": "40",
+        "api_maparea_id": 5,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 410,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.7,
+        "api_win_item1": [10, 3],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [2, 2, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 16, 16, 2, 2, 2]
+    }, {
+        "api_id": 41,
+        "api_disp_no": "41",
+        "api_maparea_id": 7,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 60,
+        "api_deck_num": 3,
+        "api_difficulty": 5,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.5,
+        "api_win_item1": [3, 1],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [1, 0, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 1, 1, 0, 0, 0]
+    }, {
+        "api_id": 42,
+        "api_disp_no": "42",
+        "api_maparea_id": 7,
+        "api_reset_type": 1,
+        "api_damage_type": 0,
+        "api_time": 480,
+        "api_deck_num": 4,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.65,
+        "api_win_item1": [12, 1],
+        "api_win_item2": [2, 3],
+        "api_win_mat_level": [4, 0, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 2, 1, 1, 0, 0]
+    }, {
+        "api_id": 43,
+        "api_disp_no": "43",
+        "api_maparea_id": 7,
+        "api_reset_type": 1,
+        "api_damage_type": 1,
+        "api_time": 720,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.85,
+        "api_use_bull": 0.9,
+        "api_win_item1": [3, 4],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [4, 0, 0, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 2, 2, 2, 1, 1]
+    }, {
+        "api_id": 44,
+        "api_disp_no": "44",
+        "api_maparea_id": 7,
+        "api_reset_type": 1,
+        "api_damage_type": 0,
+        "api_time": 600,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.4,
+        "api_win_item1": [3, 4],
+        "api_win_item2": [12, 2],
+        "api_win_mat_level": [0, 1, 0, 4],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 7, 16, 3, 2, 2]
+    }, {
+        "api_id": 45,
+        "api_disp_no": "45",
+        "api_maparea_id": 7,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 200,
+        "api_deck_num": 5,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.6,
+        "api_use_bull": 0.4,
+        "api_win_item1": [11, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [1, 0, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 2, 1, 1, 1, 0]
+    }, {
+        "api_id": 46,
+        "api_disp_no": "46",
+        "api_maparea_id": 7,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 210,
+        "api_deck_num": 5,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.75,
+        "api_use_bull": 0.95,
+        "api_win_item1": [3, 3],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [2, 0, 1, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 5, 3, 2, 2, 0]
+    }, {
+        "api_id": 100,
+        "api_disp_no": "A1",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 25,
+        "api_deck_num": 4,
+        "api_difficulty": 2,
+        "api_use_fuel": 0.35,
+        "api_use_bull": 0,
+        "api_win_item1": [0, 0],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [1, 1, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 1, 1, 1, 0, 0]
+    }, {
+        "api_id": 101,
+        "api_disp_no": "A2",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 55,
+        "api_deck_num": 4,
+        "api_difficulty": 3,
+        "api_use_fuel": 0.5,
+        "api_use_bull": 0.2,
+        "api_win_item1": [3, 1],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [1, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [1, 1, 1, 1, 0, 0]
+    }, {
+        "api_id": 102,
+        "api_disp_no": "A3",
+        "api_maparea_id": 1,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 135,
+        "api_deck_num": 5,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.65,
+        "api_use_bull": 0.35,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [3, 2],
+        "api_win_mat_level": [1, 0, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 1, 1, 1, 1, 0]
+    }, {
+        "api_id": 103,
+        "api_disp_no": "A4",
+        "api_maparea_id": 1,
+        "api_reset_type": 1,
+        "api_damage_type": 0,
+        "api_time": 110,
+        "api_deck_num": 5,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.75,
+        "api_use_bull": 0.6,
+        "api_win_item1": [1, 2],
+        "api_win_item2": [2, 2],
+        "api_win_mat_level": [1, 1, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 2, 2, 2, 2, 0]
+    }, {
+        "api_id": 104,
+        "api_disp_no": "A5",
+        "api_maparea_id": 1,
+        "api_reset_type": 1,
+        "api_damage_type": 1,
+        "api_time": 180,
+        "api_deck_num": 5,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.75,
+        "api_win_item1": [3, 4],
+        "api_win_item2": [1, 3],
+        "api_win_mat_level": [0, 2, 0, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 1, 1, 0]
+    }, {
+        "api_id": 105,
+        "api_disp_no": "A6",
+        "api_maparea_id": 1,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 210,
+        "api_deck_num": 6,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.95,
+        "api_win_item1": [3, 5],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [1, 3, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [7, 3, 2, 2, 1, 1]
+    }, {
+        "api_id": 110,
+        "api_disp_no": "B1",
+        "api_maparea_id": 2,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 35,
+        "api_deck_num": 6,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.45,
+        "api_use_bull": 0.15,
+        "api_win_item1": [10, 1],
+        "api_win_item2": [1, 1],
+        "api_win_mat_level": [0, 0, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 16, 2, 2, 2, 2]
+    }, {
+        "api_id": 111,
+        "api_disp_no": "B2",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 0,
+        "api_time": 520,
+        "api_deck_num": 6,
+        "api_difficulty": 4,
+        "api_use_fuel": 0.8,
+        "api_use_bull": 0.65,
+        "api_win_item1": [3, 2],
+        "api_win_item2": [1, 2],
+        "api_win_mat_level": [2, 1, 1, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 3, 2, 2, 2, 2]
+    }, {
+        "api_id": 112,
+        "api_disp_no": "B3",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 0,
+        "api_time": 170,
+        "api_deck_num": 6,
+        "api_difficulty": 7,
+        "api_use_fuel": 0.65,
+        "api_use_bull": 0.8,
+        "api_win_item1": [12, 1],
+        "api_win_item2": [1, 2],
+        "api_win_mat_level": [0, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [16, 3, 2, 2, 1, 1]
+    }, {
+        "api_id": 113,
+        "api_disp_no": "B4",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 1,
+        "api_time": 450,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.85,
+        "api_use_bull": 0.85,
+        "api_win_item1": [3, 4],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [0, 0, 4, 3],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 5, 3, 2, 2, 13]
+    }, {
+        "api_id": 114,
+        "api_disp_no": "B5",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 390,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.95,
+        "api_win_item1": [1, 4],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [3, 3, 4, 4],
+        "api_return_flag": 1,
+        "api_sample_fleet": [11, 8, 16, 3, 2, 2]
+    }, {
+        "api_id": 131,
+        "api_disp_no": "D1",
+        "api_maparea_id": 4,
+        "api_reset_type": 0,
+        "api_damage_type": 0,
+        "api_time": 120,
+        "api_deck_num": 5,
+        "api_difficulty": 6,
+        "api_use_fuel": 0.75,
+        "api_use_bull": 0.5,
+        "api_win_item1": [1, 1],
+        "api_win_item2": [0, 0],
+        "api_win_mat_level": [0, 1, 1, 1],
+        "api_return_flag": 1,
+        "api_sample_fleet": [16, 2, 2, 2, 2, 0]
+    }, {
+        "api_id": 132,
+        "api_disp_no": "D2",
+        "api_maparea_id": 4,
+        "api_reset_type": 1,
+        "api_damage_type": 1,
+        "api_time": 600,
+        "api_deck_num": 5,
+        "api_difficulty": 8,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.9,
+        "api_win_item1": [59, 1],
+        "api_win_item2": [12, 1],
+        "api_win_mat_level": [0, 0, 2, 4],
+        "api_return_flag": 1,
+        "api_sample_fleet": [20, 2, 13, 13, 13, 0]
+    }, {
+        "api_id": 141,
+        "api_disp_no": "E1",
+        "api_maparea_id": 5,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 450,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.95,
+        "api_use_bull": 0.85,
+        "api_win_item1": [12, 2],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [0, 3, 3, 4],
+        "api_return_flag": 1,
+        "api_sample_fleet": [5, 5, 3, 2, 2, 2]
+    }, {
+        "api_id": 142,
+        "api_disp_no": "E2",
+        "api_maparea_id": 5,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 185,
+        "api_deck_num": 5,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.95,
+        "api_win_item1": [1, 2],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [0, 2, 0, 0],
+        "api_return_flag": 1,
+        "api_sample_fleet": [2, 2, 2, 2, 2, 0]
+    }];
+
+    exports.gsDrumCountTable = {
+        21: 3+1,
+        37: 4+1,
+        38: 8+2,
+        24: 0+4,
+        40: 0+4,
+        44: 6+2
+    };
+
+    exports.gsByFlagshipLevelList = [
+        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141, 142
+    ];
+
+    exports.monthlyUnlockTable = {
+        43: [42],
+        44: [103],
+        104: [103, 112],
+        105: [104, 113],
+        112: [111],
+        113: [112],
+        114: [113]
+    };
+
+    exports.alternativeCompoTable = {
+        "CVEDE": [4, 5, 9, 42, 102, 103, 104, 105],
+        "CVLCL": [43]
+    };
+
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});
 (function(exports) {
   // Generated by psc version 0.10.5
@@ -10606,8 +11107,34 @@ var PS = {};
   };
   var expedInfoTable = KanColle_Expedition_New_EArray.mkEA(Data_Functor.map(Data_Functor.functorArray)(convertRawInfo)($foreign.kcExpeditionRaw));
   var getInformation = KanColle_Expedition_New_EArray.indEA(expedInfoTable);
+  var findRawInfo = function (id) {
+      var e = $foreign.kcExpeditionRaw.find(function(e) { return e.api_id == id; });
+      if (e) {
+          var eid = e.api_id;
+          if ($foreign.gsDrumCountTable[eid]) {
+              e.kc3_gs_drum_count = $foreign.gsDrumCountTable[eid];
+          }
+          if ($foreign.gsByFlagshipLevelList.indexOf(eid) > -1) {
+              e.kc3_gs_flagship_level = true;
+          } else if (e.api_return_flag) {
+              e.kc3_gs_all_sparkle = true;
+          }
+          if ($foreign.monthlyUnlockTable[eid]) {
+              e.kc3_unlocked_by = $foreign.monthlyUnlockTable[eid];
+          }
+          Object.keys($foreign.alternativeCompoTable).find(function(key) {
+              if ($foreign.alternativeCompoTable[key].indexOf(eid) > -1) {
+                  e.kc3_alternative_type = key;
+                  return true;
+              }
+          });
+          return e;
+      }
+      return {};
+  };
   exports["expedInfoTable"] = expedInfoTable;
   exports["getInformation"] = getInformation;
+  exports["findRawInfo"] = findRawInfo;
 })(PS["KanColle.Expedition.New.Info"] = PS["KanColle.Expedition.New.Info"] || {});
 (function(exports) {
   // Generated by psc version 0.10.5
@@ -10896,6 +11423,7 @@ var PS = {};
   var Data_HeytingAlgebra = PS["Data.HeytingAlgebra"];
   var Data_Eq = PS["Data.Eq"];
   var Data_Ord = PS["Data.Ord"];
+  var Data_Int = PS["Data.Int"];
   var Data_Semiring = PS["Data.Semiring"];
   var Data_Function = PS["Data.Function"];
   var resultPackToObject = function (rp) {
@@ -11125,29 +11653,29 @@ var PS = {};
                       })(fleet)) >= lc;
                   })(req.levelCount),
                   totalAsw: Data_Functor.map(Data_Maybe.functorMaybe)(function (tas) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.asw;
-                      })(fleet)) >= tas;
+                      })(fleet))) >= tas;
                   })(req.totalAsw),
                   totalLos: Data_Functor.map(Data_Maybe.functorMaybe)(function (tls) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.los;
-                      })(fleet)) >= tls;
+                      })(fleet))) >= tls;
                   })(req.totalLos),
                   totalAa: Data_Functor.map(Data_Maybe.functorMaybe)(function (taa) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.aa;
-                      })(fleet)) >= taa;
+                      })(fleet))) >= taa;
                   })(req.totalAa),
                   totalFp: Data_Functor.map(Data_Maybe.functorMaybe)(function (tfp) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.fp;
-                      })(fleet)) >= tfp;
+                      })(fleet))) >= tfp;
                   })(req.totalFp),
                   totalTorp: Data_Functor.map(Data_Maybe.functorMaybe)(function (ttp) {
-                      return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
+                      return Data_Int.floor(Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringNumber)(Data_Functor.map(Data_Functor.functorArray)(function (s) {
                           return s.tp;
-                      })(fleet)) >= ttp;
+                      })(fleet))) >= ttp;
                   })(req.totalTorp),
                   drumCount: Data_Functor.map(Data_Maybe.functorMaybe)(function (dc) {
                       return Data_Foldable.sum(Data_Foldable.foldableArray)(Data_Semiring.semiringInt)(Data_Functor.map(Data_Functor.functorArray)(function (s) {

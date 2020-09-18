@@ -127,7 +127,6 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..45, 100..105, 110..114, 131..132, 141
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -145,20 +144,14 @@
 				data.fleetConf[i] = { expedition: 1 };
 			}
 			data.expedConf = {};
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 45));
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
-			fillExpedConfDefaultGreatSuccess(131, 132, 141);
+			fillExpedConfDefaultGreatSuccess(131, 132, 141, 142);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
 			// add default GS config for new added expeditions
-			// * extended since 2017-10-18: 100~102 display name A1~A3 for World 1
-			// * extended since 2017-10-25: 110~111 B1~B2 for World 2
-			// * extended since 2019-07-18: A4, B3, B4 and World 7. Monthly.
-			// * extended since 2020-02-07: 45, D1, D2
-			// * extended since 2020-03-27: B5, E1 for World 5
-			// * extended since 2020-05-20: A5, A6
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -616,10 +609,10 @@
 		$(".font_size10").css("font-size", "calc(10px + "+ConfigManager.pan_moon_font_size+"px)");
 
 		if(ConfigManager.moon_lighting_effect == false) {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts").css("background-image", "none", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts,.sumstats").css("background-image", "none", "important");
 		}
 		else {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts,.sumstats").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
 			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.03) 80%, rgba(200, 200, 255, 0.12) 98%)", "important");
 		}
 
@@ -1223,7 +1216,7 @@
 		$(".module.activity .abyss_single").show();
 		$(".module.activity .abyss_ship").hide();
 		$(".module.activity .abyss_hp").hide().removeClass("sunk");
-		$(".module.activity .sink_icons .sunk").removeClass("shown safe");
+		$(".module.activity .sink_icons .sunk").removeClass("shown safe debuff");
 		$(".module.activity .battle_eformation img").attr("src", "../../../../assets/img/ui/empty.png");
 		$(".module.activity .battle_eformation").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_eformation").css("-webkit-transform", "rotate(0deg)");
@@ -3220,9 +3213,11 @@
 					if(eshipId > -1){
 						if (thisNode.enemyHP[index] && thisNode.enemyHP[index].hp !== undefined) {
 							newEnemyHP = Math.max(0, thisNode.enemyHP[index].hp);
-
-							if(index === 0 && ['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+							if(index === 0) {
+								if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
+									updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+								}
+								$(enemyFleetBoxSelector+" .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
 							}
 
 							$(enemyFleetBoxSelector+" .abyss_ship_"+(index+1)).toggleClass("sunk", newEnemyHP === 0);
@@ -3461,9 +3456,14 @@
 									.attr("src", KC3Ship.shipIcon(eshipId, thisNode.maxHPs.enemy[index], newEnemyHP));
 							}
 						}
-
-						if(index === 0 && ['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)){
-							updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+						
+						if(index === 0) {
+							if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
+								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+							}
+							if(!thisNode.enemyCombined || thisNode.activatedEnemyFleet === 1) {
+								$(".module.activity .abyss_single .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
+							}
 						}
 
 						$(".module.activity .abyss_single .abyss_ship_"+(index+1)).toggleClass("sunk", newEnemyHP === 0);
@@ -4457,6 +4457,7 @@
 			var KEC = PS["KanColle.Expedition.Cost"];
 			var KERO = PS["KanColle.Expedition.RequirementObject"];
 			var ST = PS["KanColle.Generated.SType"];
+			var KENI = PS["KanColle.Expedition.New.Info"];
 
 			var allShipsForLib = allShips.map(function(ship, idx) {
 				var shipMst = ship.master();
@@ -4508,6 +4509,10 @@
 			var ExpdCheckerResult = KERO.resultPackToObject(KERO.checkWithRequirementPack(rawExpdReqPack)(fleet));
 			//console.debug(`Exped #${selectedExpedition} checks`, JSON.stringify(ExpdCheckerResult));
 			var ExpdCost = KEC.getExpeditionCost(selectedExpedition);
+
+			var ExpedRawInfo = KENI.findRawInfo(selectedExpedition);
+			//console.debug(`Exped #${selectedExpedition} raw info`, ExpedRawInfo);
+
 			var KEIB = PS["KanColle.Expedition.IncomeBase"];
 			var ExpdIncome = KEIB.getExpeditionIncomeBase(selectedExpedition);
 			var ExpdFleetCost = fleetObj.calcExpeditionCost(selectedExpedition);
@@ -4528,6 +4533,12 @@
 					)).plusCurrentTime(true);
 					resetTimeTips.push("{0}: {1}".format(
 						KC3Meta.term("MenuMonthlyExpedReset"), monthlyResetPoint
+					));
+				}
+				if(ExpedRawInfo.kc3_unlocked_by) {
+					resetTimeTips.push("{0} -> {1}".format(
+						ExpedRawInfo.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","),
+						ExpedRawInfo.api_disp_no
 					));
 				}
 				$(".module.activity .activity_expeditionPlanner .estimated_time")
@@ -4570,27 +4581,11 @@
 			var fleetDrumCount = fleetObj.countDrums();
 			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
 			// https://kancolle.fandom.com/wiki/Great_Success
-			var gsDrumCountTable = {
-				21: 3+1,
-				37: 4+1,
-				38: 8+2,
-				24: 0+4,
-				40: 0+4,
-				44: 6+2,
-			};
-			var gsDrumCount = gsDrumCountTable[selectedExpedition];
-
+			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
-			var condIsGsWithoutSparkle = [
-				// almost all new added expeds, except 42, A1(100), B1(110), B2(111)
-				32, 41, 43, 45, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
-			].includes(selectedExpedition);
-			var condIsFlagshipLevel = [
-				// related to sparkle ships and flagship level: 41, A2(101), A3(102) confirmed, others are to be verified
-				41, 101, 102, 43, 45, 103, 104, 105, 112, 113, 114, 131, 132, 141
-			].includes(selectedExpedition);
+			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
 			var estSuccessRate = -1;
 			// can GS if:
@@ -4598,19 +4593,13 @@
 			// - either drum expedition, or regular expedition with all ships sparkled
 			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (!condIsUnsparkledShip || condIsDrumExpedition) {
+				if (condIsFlagshipLevel) {
+					estSuccessRate = 16 + 15 * sparkledCount
+						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
+				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
-					}
-				} else if (condIsGsWithoutSparkle) {
-					if (condIsFlagshipLevel) {
-						// https://twitter.com/jo_swaf/status/1145297004995596288
-						// https://tonahazana.com/blog-entry-577.html
-						estSuccessRate = 16 + 15 * sparkledCount
-							+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-					} else {
-						// keep -1 for unknown
 					}
 				} else {
 					estSuccessRate = 0;
@@ -4640,7 +4629,7 @@
 
 			var tooltipText = (function () {
 				if (!condCheckWithoutResupply) { return KC3Meta.term('ExpedGSRateExplainCondUnmet'); }
-				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsGsWithoutSparkle) {
+				if (condIsUnsparkledShip && !condIsDrumExpedition && !condIsFlagshipLevel) {
 					return KC3Meta.term('ExpedGSRateExplainMissingSparkle');
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
@@ -4790,7 +4779,7 @@
 							.format(dataReq[index].stypeOneOf.join("/"), dataReq[index].stypeReqCount));
 						// Multiple compo patterns allowed expeds, give tips and mark failure with different color
 						// alternative DE/CVE/CT patterns for exped 4, 5, 9, 42, A3, A4, A5, A6:
-						if([4, 5, 9, 42, 102, 103, 104, 105].includes(selectedExpedition)) {
+						if(ExpedRawInfo.kc3_alternative_type === "CVEDE") {
 							shipReqBox.attr("title",
 								"(CT:1 + DE:2) / (DD:1 + DE:3) / (CVE:1 + DD:2/DE:2) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")
@@ -4798,7 +4787,7 @@
 							if(dataResult[index] === false) shipReqBox.css("color", "lightpink");
 						}
 						// alternative compo with CVL + CL for exped 43
-						else if([43].includes(selectedExpedition)) {
+						else if(ExpedRawInfo.kc3_alternative_type === "CVLCL") {
 							shipReqBox.attr("title",
 								"(CVE:1 + DD:2/DE:2) / (CVL:1 + CL/CT/DD:1 + DD/DE:2~4) + ??\n" +
 								KC3Meta.term("ExpedEscortTip")

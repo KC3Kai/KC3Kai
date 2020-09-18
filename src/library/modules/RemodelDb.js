@@ -65,6 +65,14 @@
                 case 594: // Akagi Kai Ni
                 case 599: // Akagi Kai Ni E
                     return 80;
+                case 278: // Kaga Kai
+                    return 120;
+                case 610: // Kaga Kai Ni E
+                    return 84;
+                case 646: // Kaga Kai Ni Go
+                    return 60;
+                case 698: // Kaga Kai Ni
+                    return 88;
                 case 213: // Tenryuu
                     return 24;
                 case 214: // Tatsuta
@@ -125,7 +133,7 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 &&
-            	![82, 88, 149, 150, 225, 226, 227, 277, 293, 359, 503, 504, 520, 579, 594, 599, 692].includes(ship_id_from);
+                ![82, 88, 149, 150, 225, 226, 227, 277, 278, 293, 359, 503, 504, 520, 579, 594, 599, 610, 646, 698, 692].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -167,7 +175,11 @@
                     return 20;
                 case 594: // Akagi Kai Ni
                 case 599: // Akagi Kai Ni E
+                case 698: // Kaga Kai Ni
+                case 646: // Kaga Kai Ni Go
                     return 30;
+                case 610: // Kaga Kai Ni E
+                    return 84;
                 case 293: // Yuubari Kai
                 case 622: // Yuubari Kai Ni
                 case 623: // Yuubari Kai Ni Toku

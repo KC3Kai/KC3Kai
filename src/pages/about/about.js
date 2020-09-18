@@ -16,7 +16,7 @@
 		
 		// Load and show developer list
 		$.getJSON("../../data/developers.json", function(response){
-			var sectionBox, sectionName, devTypeCode, devCtr, devCatBox, devName;
+			var sectionBox, sectionName, devTypeCode, devCtr, devCatBox, devName, donator;
 			
 			console.log("response", response);
 			
@@ -52,7 +52,8 @@
 						break;
 					case "AboutDonators":
 						for (devCtr in response.AboutDonators) {
-							addDonator( response.AboutDonators[devCtr], $(".list", sectionBox) );
+							donator = response.AboutDonators[devCtr];
+							addDonator({ user: donator[0], amount: donator[1], legacy: true }, $(".list", sectionBox));
 						}
 						$(".list", sectionBox).append($("<div/>").addClass("clear"));
 						break;
@@ -64,6 +65,15 @@
 		// Load license file
 		$.get("https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/LICENSE", function(response){
 			$(".license_box").html("").append($("<pre>").text(response));
+		});
+		
+		// Load patreon donator list
+		$("#patreonDonators").text("Loading...");
+		$.get("https://tsundb.kc3.moe/api/patrons", function(response){
+			$("#patreonDonators").empty();
+			for (var donatorCtr in response) {
+				addDonator(response[donatorCtr], $("#patreonDonators"));
+			}
 		});
 	});
 	
@@ -155,8 +165,10 @@
 	// Show a donator box
 	function addDonator(data, targetBox){
 		var donatorBox = $("#factory .donatorBox").clone();
-		$(".donatorName", donatorBox).text(data[0]);
-		$(".donatorAmount", donatorBox).text(data[1]);
+		$(".donatorName", donatorBox).text(data.user);
+		$(".donatorAmount", donatorBox).text(data.amount);
+		donatorBox.toggleClass("sponsor", !!data.sponsor)
+			.toggleClass("legacy", !!data.legacy);
 		targetBox.append(donatorBox);
 	}
 	

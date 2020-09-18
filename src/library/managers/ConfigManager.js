@@ -199,6 +199,7 @@ Retrieves when needed to apply on components
 				pan_moon_element_shape: "shape_round",
 				pan_moon_bar_style: "auto",
 				pan_moon_bar_shape: "shape_round",
+				pan_hp_bar_metrics: true,
 				pan_moon_bar_colors: "auto",
 				pan_moon_bar_indicators: true,
 				pan_moon_conbut_scheme: "auto",
