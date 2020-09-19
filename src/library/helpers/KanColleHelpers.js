@@ -7611,7 +7611,20 @@ var PS = {};
               );
       };
       if (v === 46) {
-          // TODO
+          return addGroup(fslAndSc(65)(5))
+              (addGroup(sty(2)(KanColle_Generated_SType.CA.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                      (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(350))
+                              (addGroup(aaTotal(330))
+                                  (addGroup(aswTotal(220))
+                                      (losTotal(220))
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
@@ -7834,7 +7847,18 @@ var PS = {};
               );
       };
       if (v === 142) {
-          // TODO
+          return addGroup(fslAndSc(75)(5))
+              (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
+                  (addGroup(fpTotal(280))
+                      (addGroup(aaTotal(298))
+                          (addGroup(aswTotal(350))
+                              (addGroup(losTotal(199))
+                                  ([ new FleetShipWithDrum(3), new FleetDrum(6) ])
+                              )
+                          )
+                      )
+                  )
+              );
       };
       return [  ];
   };
