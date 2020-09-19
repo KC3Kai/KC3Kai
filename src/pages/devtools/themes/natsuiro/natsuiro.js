@@ -1406,8 +1406,17 @@
 				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
 			};
 			// Total items of 1 page should be 3 x 3 for current page layout and styles
-			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
+			[52, 57, 64, 65, 70, 71, 75, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
 			// Update amounts of combined counting
+			$(".count_eventMedals").text(PlayerManager.consumables.firstClassMedals || 0)
+				.parent().attr("title", "x{0} {1}\nx{2} {3}\nx{4} {5}".format(
+					PlayerManager.consumables.firstClassMedals || 0, KC3Meta.useItemName(61),
+					PlayerManager.consumables.straitMedal || 0, KC3Meta.useItemName(79),
+					(PlayerManager.consumables.shogoMedalHard ||
+						PlayerManager.consumables.shogoMedalNormal ||
+						PlayerManager.consumables.shogoMedalEasy ||
+						PlayerManager.consumables.shogoMedalCasual || 0), KC3Meta.useItemName(81)
+				));
 			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
