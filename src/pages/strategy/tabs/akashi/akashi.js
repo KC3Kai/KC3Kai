@@ -257,7 +257,9 @@
 				}
 				// Array represents the id and name of useitem (not slotitem)
 				if(Array.isArray(consumedItem)){
-					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container).hide();
+					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container)
+						.attr("src", KC3Meta.useitemIcon(consumedItem[0]))
+						.parent().removeClass("hover").addClass("useitem");
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 						.text( consumedItem[1] );
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)

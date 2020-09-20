@@ -1382,7 +1382,7 @@
 				PlayerManager.consumables.hishimochi ? 62 : 60;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
-				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
+				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));
 			// Count all consumable slotitems via GearManager
 			const consumableSlotitemMap = {
 				"50": { "slotitem":  42 }, // repairTeam
@@ -3277,7 +3277,7 @@
 				// Keep old style icon shown if drop spoiler is disabled
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_fish img")
-						.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
+						.attr("src", KC3Meta.useitemIcon(thisNode.dropUseitem, 1)).addClass("rounded")
 						.error(function() {
 							$(this).off("error").removeClass("rounded")
 								.attr("src", "/assets/img/ui/map_drop.png");
@@ -3952,7 +3952,7 @@
 					const consumeUseItemBox = $(".remodel_consume_item:not(.useitem)", consumeList).clone();
 					consumeUseItemBox.addClass("useitem").show().appendTo(consumeList);
 					$(".remodel_slot_icon img", consumeUseItemBox)
-						.attr("src", `/assets/img/useitems/${useitemId}.png`);
+						.attr("src", KC3Meta.useitemIcon(useitemId, 1));
 					$(".remodel_slot_name", consumeUseItemBox)
 						.text(KC3Meta.useItemName(useitemId))
 						.attr("title", KC3Meta.useItemName(useitemId));
@@ -3962,7 +3962,7 @@
 					const ownedUseitemBox = $(".owned_use_items.first", remodelDetailBox).clone()
 						.removeClass("first")
 						.appendTo($(".remodel_consumptions", remodelDetailBox));
-					$("img", ownedUseitemBox).attr("src", `/assets/img/useitems/${useitemId}.png`);
+					$("img", ownedUseitemBox).attr("src", KC3Meta.useitemIcon(useitemId, 1));
 					$(".value", ownedUseitemBox)
 						.text("x{0}".format(useitemAmount))
 						.toggleClass("red", useitemAmount < useitemNum);
