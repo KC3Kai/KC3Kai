@@ -330,15 +330,7 @@
 					.removeAttr("title");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
-					let isNotEnoughUseItem = function(id, amount){
-						switch(id){
-						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
-						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
-						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
-						}
-						return false;
-					};
-					if(isNotEnoughUseItem(consumedItem[0], amount)){
+					if((PlayerManager.getConsumableById(consumedItem[0] || 0) || 0) < amount){
 						$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
 						$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 					}
