@@ -23,10 +23,6 @@
 		const id2NameMap = PlayerManager.getConsumableById(),
 			name2IdMap = Object.swapMapKeyValue(id2NameMap, true);
 		//console.debug("Player current consumables", PlayerManager.consumables);
-		// For those known item IDs not given an icon by game, eg: Strait/Sho-go medal
-		const noIconIds = [5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-			25, 26, 27, 28, 29, 30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48,
-			79, 81, 82, 83, 84];
 		$(".item_list").empty();
 		if(typeof PlayerManager.consumables === "object"
 			&& Object.keys(PlayerManager.consumables).length) {
@@ -36,9 +32,7 @@
 					itemValue = PlayerManager.consumables[attrName] || 0;
 				// Show frequently used item even its amount is 0
 				if(itemId && (itemId < 49 || itemValue > 0)) {
-					const iconSrc = noIconIds.includes(itemId) ?
-						"/assets/img/ui/empty.png" :
-						`/assets/img/useitems/${itemId}.png`;
+					const iconSrc = KC3Meta.useitemIcon(itemId);
 					const itemName = KC3Meta.useItemName(itemId) || KC3Meta.term("Unknown");
 					// Template factory not used for this simple element
 					const itemBox = $("<div class='item'></div>").appendTo(".item_list");

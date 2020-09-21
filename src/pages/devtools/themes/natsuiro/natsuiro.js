@@ -127,7 +127,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..45, 100..105, 110..114, 131..132, 141
+		// * expedNum: 1..46, 100..105, 110..114, 131..132, 141..142
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -145,10 +145,10 @@
 				data.fleetConf[i] = { expedition: 1 };
 			}
 			data.expedConf = {};
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 45));
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
-			fillExpedConfDefaultGreatSuccess(131, 132, 141);
+			fillExpedConfDefaultGreatSuccess(131, 132, 141, 142);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -159,6 +159,7 @@
 			// * extended since 2020-02-07: 45, D1, D2
 			// * extended since 2020-03-27: B5, E1 for World 5
 			// * extended since 2020-05-20: A5, A6
+			// * extended since 2020-09-17: 46, E2
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -1381,7 +1382,7 @@
 				PlayerManager.consumables.hishimochi ? 62 : 60;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
-				.children("img").attr("src", `/assets/img/useitems/${firstItemId}.png`);
+				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));
 			// Count all consumable slotitems via GearManager
 			const consumableSlotitemMap = {
 				"50": { "slotitem":  42 }, // repairTeam
@@ -1405,8 +1406,17 @@
 				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
 			};
 			// Total items of 1 page should be 3 x 3 for current page layout and styles
-			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
+			[52, 57, 64, 65, 70, 71, 75, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
 			// Update amounts of combined counting
+			$(".count_eventMedals").text(PlayerManager.consumables.firstClassMedals || 0)
+				.parent().attr("title", "x{0} {1}\nx{2} {3}\nx{4} {5}".format(
+					PlayerManager.consumables.firstClassMedals || 0, KC3Meta.useItemName(61),
+					PlayerManager.consumables.straitMedal || 0, KC3Meta.useItemName(79),
+					(PlayerManager.consumables.shogoMedalHard ||
+						PlayerManager.consumables.shogoMedalNormal ||
+						PlayerManager.consumables.shogoMedalEasy ||
+						PlayerManager.consumables.shogoMedalCasual || 0), KC3Meta.useItemName(81)
+				));
 			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
@@ -1423,6 +1433,11 @@
 				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
 					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
 					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
+				));
+			$(".count_allBlueprints").text((PlayerManager.consumables.blueprints || 0) + (PlayerManager.consumables.newAircraftBlueprint || 0))
+				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
+					PlayerManager.consumables.blueprints || 0, KC3Meta.useItemName(58),
+					PlayerManager.consumables.newAircraftBlueprint || 0, KC3Meta.useItemName(74)
 				));
 			// Update 1 more page for food(or any item?) collecting event
 			if(KC3Meta.isDuringFoodEvent()){
@@ -3262,7 +3277,7 @@
 				// Keep old style icon shown if drop spoiler is disabled
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_fish img")
-						.attr("src", `/assets/img/useitems/${thisNode.dropUseitem}.png`).addClass("rounded")
+						.attr("src", KC3Meta.useitemIcon(thisNode.dropUseitem, 1)).addClass("rounded")
 						.error(function() {
 							$(this).off("error").removeClass("rounded")
 								.attr("src", "/assets/img/ui/map_drop.png");
@@ -3937,7 +3952,7 @@
 					const consumeUseItemBox = $(".remodel_consume_item:not(.useitem)", consumeList).clone();
 					consumeUseItemBox.addClass("useitem").show().appendTo(consumeList);
 					$(".remodel_slot_icon img", consumeUseItemBox)
-						.attr("src", `/assets/img/useitems/${useitemId}.png`);
+						.attr("src", KC3Meta.useitemIcon(useitemId, 1));
 					$(".remodel_slot_name", consumeUseItemBox)
 						.text(KC3Meta.useItemName(useitemId))
 						.attr("title", KC3Meta.useItemName(useitemId));
@@ -3947,7 +3962,7 @@
 					const ownedUseitemBox = $(".owned_use_items.first", remodelDetailBox).clone()
 						.removeClass("first")
 						.appendTo($(".remodel_consumptions", remodelDetailBox));
-					$("img", ownedUseitemBox).attr("src", `/assets/img/useitems/${useitemId}.png`);
+					$("img", ownedUseitemBox).attr("src", KC3Meta.useitemIcon(useitemId, 1));
 					$(".value", ownedUseitemBox)
 						.text("x{0}".format(useitemAmount))
 						.toggleClass("red", useitemAmount < useitemNum);
