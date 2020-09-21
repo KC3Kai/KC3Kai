@@ -276,6 +276,23 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st September every year
+			yearlySep: {
+				type: 'yearlySep',
+				key: 'timeToResetYearlySepQuests',
+				resetMonth: SEPTEMBER,
+				questIds: [439, 440, 657, 928],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlySep.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -443,6 +460,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -750,6 +768,17 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
+					},
+				"928": // By5 Sortie 2 of Haguro/Ashigara/Myoukou/Takao/Kamikaze
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return (
+							fleet.countShip(65)   + // Haguro any remodel
+							fleet.countShip(64)   + // Ashigara any remodel
+							fleet.countShip(62)   + // Myoukou any remodel
+							fleet.countShip(66)   + // Takao any remodel
+							fleet.countShip(471)    // Kamikaze any remodel
+						) >= 2;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

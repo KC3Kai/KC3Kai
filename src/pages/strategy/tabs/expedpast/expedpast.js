@@ -118,7 +118,12 @@
 				});
 			
 			// Expedition Number Filter
-			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(){
+			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(e){
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .expedNum input'
+					+',.tab_expedpast .expedNumBox .expedWhole input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const
 					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
 					worldNum     = $(this).attr("world"),
@@ -131,7 +136,12 @@
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
 				self.refreshList();
-			}).on("click", ".expedWhole input", function() {
+			}).on("click", ".expedWhole input", function(e) {
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .expedNum input'
+					+',.tab_expedpast .expedNumBox .expedWhole input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const
 					worldNum = $(this).val(),
 					state    = $(this).prop("checked"),
@@ -154,7 +164,11 @@
 			});
 			
 			// Fleet Number Filter
-			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(){
+			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(e){
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .fleetRadio input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
 				self.fleet_filters = [];
 				filterFleets.each( function() {
