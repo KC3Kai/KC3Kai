@@ -404,6 +404,7 @@
 					.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
 				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
+				var dbSecShips = [];
 				if(Array.isArray(imps) && imps.length > 0){
 					improveList = [];
 					$.each(imps, function(_, imp){
@@ -412,9 +413,19 @@
 							// DOW check
 							dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
 							// Yet another has ship check on reqArr[1]
+							if(reqArr[0][dayIdx] && Array.isArray(reqArr[1]))
+								dbSecShips.push(...reqArr[1]);
 						});
 						if(dowReq) improveList.push(imp);
 					});
+					if(dbSecShips.length){
+						$(".eq_ships", ThisBox).attr("title", "[{0}]".format(dbSecShips.join(",")));
+						// Check inconsistent part of required ships
+						if(shipList.length !== dbSecShips.length || dbSecShips.some(id => !shipList.includes(id)))
+							$(".eq_ships", ThisBox).css("background-color", "aquamarine");
+						if(shipList.some(id => !dbSecShips.includes(id)))
+							$(".eq_ships", ThisBox).css("background-color", "aliceblue");
+					}
 					$.each(improveList, function(_, imp){
 						ResBox = $(".tab_akashi .factory .eq_res").clone();
 						var resArr = imp.resource || [[]];
@@ -422,16 +433,16 @@
 						// Add some precondition ship icons as not check them yet
 						if(improveList.length > 1){
 							var shipIcons = $(".eq_res_label.material", ResBox);
+							shipIcons.empty();
 							imp.req.forEach(function(reqArr){
 								if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
-									shipIcons.empty();
 									reqArr[1].forEach(function(reqShipId){
 										var remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
 										if(!remodel || !remodel.prev
 											|| reqArr[1].indexOf(remodel.prev) < 0){
 											shipIcons.append(
 												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
-												.width("16px").height("16px")
+												.width("16px").height("16px").attr("title", "[{0}]".format(reqShipId))
 											);
 										}
 									});
