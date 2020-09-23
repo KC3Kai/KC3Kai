@@ -7617,9 +7617,9 @@ var PS = {};
                       (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                               (addGroup(fpTotal(350))
-                                  (addGroup(aaTotal(320))
-                                      (addGroup(aswTotal(220))
-                                          (losTotal(220))
+                                  (addGroup(aaTotal(300))
+                                      (addGroup(aswTotal(210))
+                                          (losTotal(210))
                                       )
                                   )
                               )
@@ -11070,11 +11070,12 @@ var PS = {};
         38: 8+2,
         24: 0+4,
         40: 0+4,
-        44: 6+2
+        44: 6+2,
+        142: 5+4,
     };
 
     exports.gsByFlagshipLevelList = [
-        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141, 142
+        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
     ];
 
     exports.monthlyUnlockTable = {
