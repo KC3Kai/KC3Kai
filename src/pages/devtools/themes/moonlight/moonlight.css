@@ -657,7 +657,6 @@ html,body {
 	width:180px;
 	height:60px;
 	margin:0px 0px 5px 0px;
-	color:#ccc;
 }
 .module.activity .consumable {
 	width:90px;
@@ -689,27 +688,27 @@ html,body {
 	white-space:nowrap;
 }
 .consumable_ltext.regenCap {
-	color:#aaa !important;
+	color:#faa;
 }
-.module.activity.text_natsuiro .consumable_ltext.regenCap {
+.text_natsuiro .consumable_ltext.regenCap {
 	color:#EAF918;
 }
-.module.activity .consumable_ltext.hardCap {
+.consumable_ltext.hardCap {
 	color:#779;
 }
-.module.activity.text_natsuiro .consumable_ltext.hardCap {
+.text_natsuiro .consumable_ltext.hardCap {
 	color:#FF7979;
 }
-.module.activity .consumable_text.danger {
+.consumable_text.danger {
 	color:#779;
 }
-.module.activity.text_natsuiro .consumable_text.danger {
+.text_natsuiro .consumable_ltext.hardCap {
 	color:#EAF918;
 }
-.module.activity .consumable_text.fulled {
+.consumable_text.fulled {
 	color:#f55;
 }
-.module.activity.text_natsuiro .consumable_text.fulled {
+.text_natsuiro .consumable_text.fulled {
 	color:#FF7979;
 }
 .module.activity .consumable_max {
@@ -722,7 +721,6 @@ html,body {
 .module.consumableList {
 	overflow:hidden;
 	white-space:normal;
-	color:#ccc;
 }
 .module.consumableList .consumable_display {
 	position:absolute;
@@ -741,9 +739,13 @@ html,body {
 	vertical-align: top;
 	filter:brightness(110%);
 }
-.module.consumableList .consumable_toggles {
+.module.consumableList.skin_moonlight .consumable_toggles {
 	border:1px solid #707070;
 	background-color:rgba(95,95,179,0.3);
+}
+.module.consumableList.skin_moonless .consumable_toggles {
+	background-color:#16202A;
+	border:1px solid #505050;
 }
 .module.consumableList .consumable_toggle.disabled {
 	filter:grayscale(100%) brightness(80%);
@@ -752,7 +754,7 @@ html,body {
 	width:auto;
 	height:auto;
 	display:inline-block;
-	margin:0px 0px -4px 2px;
+	margin:0px 0px -4px 1px;
 	overflow:hidden;
 }
 .module.consumableList .consumables.disabled {
@@ -764,9 +766,13 @@ html,body {
 	float:left;
 	margin:0px;
 }
-.module.consumableList .consumable {
+.module.consumableList.skin_moonlight .consumable {
 	border:1px solid #707070;
 	background-color:rgba(0,40,30,0.3);
+}
+.module.consumableList.skin_moonless .consumable {
+	border:1px solid #505050;
+	background-color:#16202A;
 }
 .module.consumableList .consumable_icon {
 	width:20px;
@@ -4944,7 +4950,7 @@ ABYSS FLEET
 }
 .c .module.fleet .lship .ship_name {
 	top:1px;
-	left:51px;
+	left:50px;
 }
 .module.fleet .sship .ship_name {
 	width:94px;
@@ -4980,7 +4986,7 @@ ABYSS FLEET
 	font-size:11px;
 	width:30px;
 	top:13px;
-	left:55px;
+	left:53px;
 }
 .module.fleet .sship .ship_type {
 	width:30px;
@@ -5017,7 +5023,7 @@ ABYSS FLEET
 }
 .c .module.fleet .lship .ship_level {
 	top:36px;
-	left:2px;
+	left:0px;
 	font-size:11px;
 	text-align:left;
 }
@@ -6855,7 +6861,7 @@ ABYSS FLEET
 }
 .h .module.expeditions2,
 .h .module.consumableList {
-	width:345px;
+	width:347px;
 	height:124px;
 	left:202px; top:421px;
 }
