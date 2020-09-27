@@ -186,7 +186,7 @@ Retrieves when needed to apply on components
 				pan_moon_bar_indicators: true,
 				pan_moon_conbut_shape: "shape_round",
 				pan_moon_conbut_skew: true,
-				pan_moon_consumables : [,,true,,true,true,,,],
+				pan_moon_consumables : [false,false,true,false,true,true,false,false,false],
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 

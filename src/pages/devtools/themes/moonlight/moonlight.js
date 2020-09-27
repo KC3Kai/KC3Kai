@@ -626,24 +626,24 @@
 				if (ConfigManager.pan_moon_consumables[i] !== true) {
 					ConfigManager.pan_moon_consumables[i] = false;
 					$(consumable_elements[i]).addClass("disabled");
-				};
-			};
+				}
+			}
 			return;
-		};
+		}
 		$(".consumable_all_toggle").on("click",function(){
 			var i;
 			for (i = 0; i < consumable_elements.length; i++) {
 				if (ConfigManager.pan_moon_consumables[i] == true) {
 					ConfigManager.setConsumables(i);
 					$(consumable_elements[i]).addClass("disabled");
-				};
-			};
+				}
+			}
 			return;
 		});
 		function toggle_consumable_display(consumable_type) {
 			ConfigManager.setConsumables(consumable_type);
 			$(consumable_elements[consumable_type]).toggleClass("disabled");
-		};
+		}
 		load_consumable_display();
 		$(".consumable_rsc_toggle").on("click",function() {toggle_consumable_display(0);});
 		$(".consumable_basics_toggle").on("click",function() {toggle_consumable_display(1);});
