@@ -2925,6 +2925,9 @@ Previously known as "Reactor"
 					[904,1,[3,4], true, true], // By1: 2nd requirement: [W3-4] S-rank the boss node
 					[904,2,[4,5], true, true], // By1: 3rd requirement: [W4-5] S-rank the boss node
 					[904,3,[5,3], true, true], // By1: 4th requirement: [W5-3] S-rank the boss node
+					[928,0,[7,3], true, true, [18,23,24,25]], // By5: 1st requirement: [W7-3-P] S-rank 2nd boss node twice
+					[928,1,[7,2], true, true, [15]], // By5: 2nd requirement: [W7-2-M] S-rank 2nd boss node twice
+					[928,2,[4,2], true, true], // By5: 3rd requirement: [W4-2] S-rank the boss node twice
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

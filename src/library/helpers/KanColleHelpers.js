@@ -7611,7 +7611,22 @@ var PS = {};
               );
       };
       if (v === 46) {
-          // TODO
+          return addGroup(fslAndSc(65)(5))
+              (addGroup(lvlCnt(300))
+                  (addGroup(sty(2)(KanColle_Generated_SType.CA.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                          (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
+                              (addGroup(fpTotal(350))
+                                  (addGroup(aaTotal(300))
+                                      (addGroup(aswTotal(220))
+                                          (losTotal(220))
+                                      )
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       if (v === 100) {
           return addGroup(fslAndSc(5)(4))(addGroup(lvlCnt(10))(ddde(3)));
@@ -7834,7 +7849,20 @@ var PS = {};
               );
       };
       if (v === 142) {
-          // TODO
+          return addGroup(fslAndSc(70)(5))
+              (addGroup(lvlCnt(348))
+                  (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
+                      (addGroup(fpTotal(280))
+                          (addGroup(aaTotal(250))
+                              (addGroup(aswTotal(220))
+                                  (addGroup(losTotal(170))
+                                      ([ new FleetShipWithDrum(3), new FleetDrum(4) ])
+                                  )
+                              )
+                          )
+                      )
+                  )
+              );
       };
       return [  ];
   };
@@ -11042,11 +11070,12 @@ var PS = {};
         38: 8+2,
         24: 0+4,
         40: 0+4,
-        44: 6+2
+        44: 6+2,
+        142: 4+4,
     };
 
     exports.gsByFlagshipLevelList = [
-        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141, 142
+        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
     ];
 
     exports.monthlyUnlockTable = {

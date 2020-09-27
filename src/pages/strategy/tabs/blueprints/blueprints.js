@@ -230,7 +230,7 @@
 					.addClass("ship_field icon")
 					.toggleClass("limited", this.viewType === "all");
 				$("<img />")
-					.attr("src", "/assets/img/useitems/" + material.icon + ".png")
+					.attr("src", KC3Meta.useitemIcon(material.icon))
 					.appendTo(iconDiv);
 				$("<span></span>")
 					.text(KC3Meta.useItemName(material.icon))
@@ -307,7 +307,7 @@
 			for(const icon in materialCount) {
 				const totalItemDiv = $("<div />").addClass("summary_item").appendTo(totalDiv);
 				const iconImg = $("<img />")
-					.attr("src", "/assets/img/useitems/" + icon + ".png")
+					.attr("src", KC3Meta.useitemIcon(icon))
 					.attr("title", KC3Meta.useItemName(icon))
 					.appendTo(totalItemDiv);
 				$("<span></span>")
@@ -318,7 +318,7 @@
 				switch(Number(icon)) {
 					case 58:
 						const medalIcon = iconImg.clone()
-							.attr("src", "/assets/img/useitems/57.png")
+							.attr("src", KC3Meta.useitemIcon(57))
 							.attr("title", KC3Meta.useItemName(57));
 						appendOwnedItem(medalIcon, PlayerManager.consumables.medals);
 						appendOwnedItem(iconImg, PlayerManager.consumables.blueprints);
@@ -396,7 +396,7 @@
 			line = $("<div />");
 			if(remodelInfo.blueprint) {
 				$("<img />")
-					.attr("src", "/assets/img/useitems/58.png")
+					.attr("src", KC3Meta.useitemIcon(58))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);
@@ -406,7 +406,7 @@
 			}
 			if(remodelInfo.catapult) {
 				$("<img />")
-					.attr("src", "/assets/img/useitems/65.png")
+					.attr("src", KC3Meta.useitemIcon(65))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);
@@ -416,7 +416,7 @@
 			}
 			if(remodelInfo.report) {
 				$("<img />")
-					.attr("src", "/assets/img/useitems/78.png")
+					.attr("src", KC3Meta.useitemIcon(78))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);
@@ -426,7 +426,7 @@
 			}
 			if(remodelInfo.gunmat) {
 				$("<img />")
-					.attr("src", "/assets/img/useitems/75.png")
+					.attr("src", KC3Meta.useitemIcon(75))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);
@@ -436,7 +436,7 @@
 			}
 			if(remodelInfo.airmat) {
 				$("<img />")
-					.attr("src", "/assets/img/useitems/77.png")
+					.attr("src", KC3Meta.useitemIcon(77))
 					.width(15).height(15).css("margin-right", 2)
 					.css("vertical-align", "top")
 					.appendTo(line);

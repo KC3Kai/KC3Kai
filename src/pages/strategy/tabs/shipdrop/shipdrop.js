@@ -174,7 +174,7 @@
 					$.each(useitemIds, (_, useitem) => {
 						const useitemId = Number(useitem.slice(2));
 						const shipBox = $(".ship", factory).clone().appendTo($(".useitems", nodeDrop));
-						$("img", shipBox).attr("src", `/assets/img/useitems/${useitemId}.png`)
+						$("img", shipBox).attr("src", KC3Meta.useitemIcon(useitemId))
 							.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
 							.attr("title", KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"));
 						const dropCount = allNodes[node][useitem];

@@ -205,6 +205,7 @@ Retrieves when needed to apply on components
 				pan_moon_conbut_scheme: "auto",
 				pan_moon_conbut_shape: "auto",
 				pan_moon_conbut_skew: "auto",
+				pan_moon_consumables : [false,false,true,false,true,true,false,false,false],
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
@@ -364,6 +365,13 @@ Retrieves when needed to apply on components
 		setLayout :function(layoutType){
 			this.loadIfNecessary();
 			this.pan_layout = layoutType;
+			this.save();
+		},
+
+		// Toggles whether consumable categories are displayed in Moonlight
+		setConsumables :function(consumable_type){
+			this.loadIfNecessary();
+			this.pan_moon_consumables[consumable_type] = !this.pan_moon_consumables[consumable_type];
 			this.save();
 		},
 
