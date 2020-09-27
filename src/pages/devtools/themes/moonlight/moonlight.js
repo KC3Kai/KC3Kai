@@ -478,10 +478,10 @@
 		
 		$(".module.activity .activity_body").css("background", ConfigManager.pan_box_bcolor_moon);
 		$(".sship_background,.lship_background").css("background", ConfigManager.pan_shiplist_bg_moon);
-		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2,.sumstats,.layouts").css("background", ConfigManager.pan_misc_bg_moon);
+		$(".module.summary,.module.admiral,.module.status,.expeditions3,.expeditions2,.sumstats,.layouts,.consumableList").css("background", ConfigManager.pan_misc_bg_moon);
 		$(".ship_img,.expeditions .timer-img img").css("background", ConfigManager.pan_ship_icon_bg_moon);
 		$(".ship_img img,.timer-img img").css("border", "1px solid "+ ConfigManager.pan_ship_icon_border_moon);
-		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts,.module.sumstats").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
+		$(".module.admiral .admiral_lvbox,.pvp_enemy_comment,.module.activity .map_gauge,.module.admiral,.module.activity .activity_tab,.module.status,.sship,.lship,.module.summary,.module.controls .control_btn,.module.controls .fleet_lbas,.module.controls .fleet_rengo,.module.controls .fleet_num,.module.activity .activity_pvp .pvp_fleet_name,.module.activity .activity_pvp .pvp_admiral .pvp_admiral_comment,.module.expeditions2,.module.expeditions3,.module.activity .activity_body,.module.layouts,.module.sumstats,.module.consumableList").css("border", "1px solid "+ ConfigManager.pan_outline_moon);
 		/*$(".module.activity .activity_expeditionPlanner .expPlan_dropdown_title").css("border-color", ConfigManager.pan_outline_moon);*/
 		$(".pvpFleetShip,.module.activity .sortie_node").css("border", "1px solid "+ ConfigManager.pan_outline_bright_moon);
 
@@ -495,10 +495,10 @@
 			$(".sship .ship_supply_text,.sship .ship_morale").css("font-size", 10);
 		}
 		if(ConfigManager.moon_lighting_effect == false) {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts,.sumstats").css("background-image", "none", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts,.sumstats,.consumableList").css("background-image", "none", "important");
 		}
 		else {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts,.sumstats").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
+			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts,.sumstats,.consumableList").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
 			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.03) 80%, rgba(200, 200, 255, 0.12) 98%)", "important");
 		}
 
@@ -585,52 +585,75 @@
 		//	NatsuiroListeners.HQ();
 		//});
 
-		// HQ Info Toggle
-		$(".consumables .rotarZairo").on("click",function(){
-			ConfigManager.scrollHqInfoPage();
-			NatsuiroListeners.Consumables();
-		});
-
 		// top left page toggles
-		$(".rotation .rotarBack").on("click",function(){
-			ConfigManager.scrollSpecificPage(1);
+		function setRotation(page) {
+			ConfigManager.scrollSpecificPage(page);
 			NatsuiroListeners.Rotation();
-		});
-		$(".rotation .rotarExpedition").on("click",function(){
-			ConfigManager.scrollSpecificPage(2);
-			NatsuiroListeners.Rotation();
-		});
-		$(".rotation .rotarQuests").on("click",function(){
-			ConfigManager.scrollSpecificPage(3);
-			NatsuiroListeners.Rotation();
-		});
-		$(".rotation .rotarHidden").on("click",function(){
-			ConfigManager.scrollSpecificPage(4);
-			NatsuiroListeners.Rotation();
-		});
-		$(".rotation .rotarSumStats").on("click",function(){
-			ConfigManager.scrollSpecificPage(5);
-			NatsuiroListeners.Rotation();
-		});
-        
+		}
+		$(".rotation .rotarBack").on("click",function() {setRotation(1);});
+		$(".rotation .rotarExpedition").on("click",function() {setRotation(2);});
+		$(".rotation .rotarQuests").on("click",function() {setRotation(3);});
+		$(".rotation .rotarHidden").on("click",function() {setRotation(4);});
+		$(".rotation .rotarSumStats").on("click",function() {setRotation(5);});
+
 		// bottom right page toggles
-		$(".rotation2 .rotarBack").on("click",function(){
-			ConfigManager.scrollSpecific2Page(1);
+		function setRotation2(page) {
+			ConfigManager.scrollSpecific2Page(page);
 			NatsuiroListeners.Rotation2();
-		});
-		$(".rotation2 .rotarExpedition").on("click",function(){
-			ConfigManager.scrollSpecific2Page(2);
-			NatsuiroListeners.Rotation2();
-		});
-		$(".rotation2 .rotarHidden").on("click",function(){
-			ConfigManager.scrollSpecific2Page(3);
-			NatsuiroListeners.Rotation2();
-		});
-		$(".rotation2 .rotarLayout").on("click",function(){
-			ConfigManager.scrollSpecific2Page(4);
-			NatsuiroListeners.Rotation2();
-		});
+		}
+		$(".rotation2 .rotarBack").on("click",function() {setRotation2(1);});
+		$(".rotation2 .rotarExpedition").on("click",function() {setRotation2(2);});
+		$(".rotation2 .rotarHidden").on("click",function() {setRotation2(3);});
+		$(".rotation2 .rotarLayout").on("click",function() {setRotation2(4);});
+		$(".rotation2 .rotarConsumables").on("click",function() {setRotation2(5);});
 		$(".layout_header").text( KC3Meta.term("PanelLayoutSelection") );
+
+		//consumable display
+		var consumable_elements = [
+							".consumable_rsc_toggle,.consumable_rsc",
+							".consumable_basics_toggle,.consumable_basics",
+							".consumable_remodel_toggle,.consumable_remodel",
+							".consumable_special_toggle,.consumable_special",
+							".consumable_ex_slot_toggle,.consumable_ex_slot",
+							".consumable_furniture_toggle,.consumable_furniture",
+							".consumable_screws_toggle,.consumable_screws",
+							".consumable_catalysts_toggle,.consumable_catalysts",
+							".consumable_event_toggle,.consumable_event"];
+
+		function load_consumable_display() {
+			var i;
+			for (i = 0; i < consumable_elements.length; i++) {
+				if (ConfigManager.pan_moon_consumables[i] !== true) {
+					ConfigManager.pan_moon_consumables[i] = false;
+					$(consumable_elements[i]).addClass("disabled");
+				}
+			}
+			return;
+		}
+		$(".consumable_all_toggle").on("click",function(){
+			var i;
+			for (i = 0; i < consumable_elements.length; i++) {
+				if (ConfigManager.pan_moon_consumables[i] == true) {
+					ConfigManager.setConsumables(i);
+					$(consumable_elements[i]).addClass("disabled");
+				}
+			}
+			return;
+		});
+		function toggle_consumable_display(consumable_type) {
+			ConfigManager.setConsumables(consumable_type);
+			$(consumable_elements[consumable_type]).toggleClass("disabled");
+		}
+		load_consumable_display();
+		$(".consumable_rsc_toggle").on("click",function() {toggle_consumable_display(0);});
+		$(".consumable_basics_toggle").on("click",function() {toggle_consumable_display(1);});
+		$(".consumable_remodel_toggle").on("click",function() {toggle_consumable_display(2);});
+		$(".consumable_special_toggle").on("click",function() {toggle_consumable_display(3);});
+		$(".consumable_ex_slot_toggle").on("click",function() {toggle_consumable_display(4);});
+		$(".consumable_furniture_toggle").on("click",function() {toggle_consumable_display(5);});
+		$(".consumable_screws_toggle").on("click",function() {toggle_consumable_display(6);});
+		$(".consumable_catalysts_toggle").on("click",function() {toggle_consumable_display(7);});
+		$(".consumable_event_toggle").on("click",function() {toggle_consumable_display(8);});
 
 		// eLoS Toggle
 		/*$(".summary-eqlos").on("click",function(){
@@ -1407,14 +1430,14 @@
 			$(".count_fcoin")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
-				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(...[fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
-					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0)].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
+				.parent().attr("title", KC3Meta.useItemName(44));
+			$(".count_sumFCoin")
+				.text( KC3Meta.formatNumber(fcboxestot+PlayerManager.consumables.fcoin || 0) )
+				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
+				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
-			$(".count_screws")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.screws || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1458,13 +1481,8 @@
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 			}
-			// More pages could be added, see `api_get_member/useitem` in Kcsapi.js, or `PlayerManager.getConsumableById()`
-			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
-				PlayerManager.consumables.setsubunBeans ? 90 :
-				PlayerManager.consumables.hishimochi ? 62 : 60;
-			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
-				.prev().attr("title", KC3Meta.useItemName(firstItemId))
-				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId));
+			$(".activity_box .count_screws")
+				.text( KC3Meta.formatNumber(PlayerManager.consumables.screws || 0) );
 			// Count all consumable slotitems via GearManager
 			const consumableSlotitemMap = {
 				"50": { "slotitem":  42 }, // repairTeam
@@ -1485,37 +1503,19 @@
 				let amount = PlayerManager.getConsumableById(useitemId) || 0;
 				const slotitem = consumableSlotitemMap[useitemId];
 				if(slotitem) amount = slotitem.amount;
-				$(`.count_${attrName}`).text(amount).prev().attr("title", KC3Meta.useItemName(useitemId));
+				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
 			// Total items of 1 page should be 3 x 3 for current page layout and styles
-			[52, 57, 58, 61, 64, 65, 70, 71, 74, 75, 77, 78, 91, 92].forEach(updateCountByUseitemId);
-			// Update amounts of combined counting
-			$(".count_repair").text(consumableSlotitemMap[50].amount + consumableSlotitemMap[51].amount)
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
-					consumableSlotitemMap[50].amount, KC3Meta.useItemName(50),
-					consumableSlotitemMap[51].amount, KC3Meta.useItemName(51)
-				));
-			$(".count_supply").text([66, 67, 69, 76].map(id => consumableSlotitemMap[id].amount).sumValues())
-				.parent().attr("title", "x{0} {1} +\nx{2} {3} +\nx{4} {5} +\nx{6} {7}".format(
-					consumableSlotitemMap[67].amount, KC3Meta.useItemName(67),
-					consumableSlotitemMap[66].amount, KC3Meta.useItemName(66),
-					consumableSlotitemMap[76].amount, KC3Meta.useItemName(76),
-					consumableSlotitemMap[69].amount, KC3Meta.useItemName(69)
-				));
-			$(".count_morale").text((PlayerManager.consumables.mamiya || 0) + (PlayerManager.consumables.irako || 0))
-				.parent().attr("title", "x{0} {1} +\nx{2} {3}".format(
-					PlayerManager.consumables.mamiya || 0, KC3Meta.useItemName(54),
-					PlayerManager.consumables.irako || 0, KC3Meta.useItemName(59)
-				));
+			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
+			$(".count_sumScrews").text(PlayerManager.getConsumableById(60)+PlayerManager.getConsumableById(4)+PlayerManager.getConsumableById(57)*4 || 0)
+				.parent().attr("title", KC3Meta.useItemName(4));
 			// Update 1 more page for food(or any item?) collecting event
-			if(KC3Meta.isDuringFoodEvent()){
+			/*if(KC3Meta.isDuringFoodEvent()){
 				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
-			}
-			$(".consumables").hideChildrenTooltips();
-			$(".consumables .consumable").hide();
-			$(`.consumables .consumable.page${ConfigManager.hqInfoPage || 1}`).show();
+			}*/
+			$(`.consumables .consumable`).show();
 			$(".consumables").createChildrenTooltips();
 		},
         

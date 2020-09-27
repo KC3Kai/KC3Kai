@@ -407,16 +407,11 @@ html,body {
 .module.activity .activity_basic {
 }
 /* Consumables */
-.module.activity .consumables .rotarBack {
-	position:absolute;
-	left:173px;
-	top:70px;
-	z-index:1;
-}
 .module.activity .consumables {
 	width:180px;
 	height:60px;
 	margin:0px 0px 5px 0px;
+	color:#ccc;
 }
 .module.activity .consumable {
 	width:90px;
@@ -439,49 +434,117 @@ html,body {
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#ccc;
 }
 .module.activity .consumable_ltext {
 	width:70px;
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#ccc;
 	white-space:nowrap;
 }
-.module.activity .consumable_ltext.regenCap {
-	color:#aaa;
+.consumable_ltext.regenCap {
+	color:#aaa !important;
 }
-.module.activity .consumable_ltext.hardCap {
-	color:#779;
+.consumable_ltext.hardCap {
+	color:#779 !important;
 }
-.module.activity .consumable_text.danger {
-	color:#779;
+.consumable_text.danger {
+	color:#779 !important;
 }
-.module.activity .consumable_text.fulled {
-	color:#f55;
+.consumable_text.fulled {
+	color:#f55 !important;
 }
 .module.activity .consumable_max {
 	width:34px;
 	font-size:11px;
 	float:left;
 	line-height:20px;
-	color:#aaa;
 }
-.module.activity .consumables .consumable.page1 {
-	display:block;
+/*------- full consumable display module -------*/
+.module.consumableList {
+	overflow:hidden;
+	white-space:normal;
+	color:#ccc;
 }
-.module.activity .consumables .consumable.page2 {
+.module.consumableList .consumable_display {
+	position:absolute;
+	top:0px;
+	left:42px;
+	height:103px;
+	overflow-x:hidden;
+ 	overflow-y:auto;
+}
+.t .module.consumableList .consumable_display {
+	height:100px;
+}
+.module.consumableList .consumable_toggles {
+	width:42px;
+	height:100px;
+	vertical-align: top;
+	filter:brightness(110%);
+}
+.module.consumableList .consumable_toggles {
+	border:1px solid #707070;
+	background-color:rgba(95,95,179,0.3);
+}
+.module.consumableList .consumable_toggle.disabled {
+	filter:grayscale(100%) brightness(80%);
+}
+.module.consumableList .consumables {
+	width:auto;
+	height:auto;
+	display:inline-block;
+	margin:0px 0px -4px 2px;
+	overflow:hidden;
+}
+.module.consumableList .consumables.disabled {
 	display:none;
 }
-.module.activity .consumables .consumable.page3,
-.module.activity .consumables .consumable.page4 {
-	display:none;
-	width:60px;
+.module.consumableList .consumable {
+	width:70px;
+	height:20px;
+	float:left;
+	margin:0px;
 }
-.module.activity .consumables .consumable.page3 .consumable_ltext,
-.module.activity .consumables .consumable.page4 .consumable_ltext {
-	width:40px;
+.module.consumableList .consumable {
+	border:1px solid #707070;
+	background-color:rgba(0,40,30,0.3);
+}
+.module.consumableList .consumable_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	text-align:center;
+}
+.module.consumableList .consumable_icon img {
+	width:16px;
+	height:16px;
+	margin:1px 2px 2px 2px;
+	vertical-align:top;
+}
+.module.consumableList .consumable_toggles .consumable_icon img {
+	margin:1px 2px 2px 2px;
+}
+.module.consumableList .consumable_ltext {
+	width:48px;
+	font-size:12px;
+	line-height:18px;
+	float:left;
+	white-space:nowrap;
+	text-align:center;
+}
+.module.consumableList .consumable_max {
+	width:34px;
+	font-size:11px;
+	float:left;
+	line-height:20px;
+}
+.module.consumableList .consumables .consumable.itemPage {
+	display:none;
+	width:48px;
+}
+.module.consumableList .consumables .consumable.itemPage .consumable_ltext {
+	width:26px;
 }
 
 /* Expedition */
@@ -621,7 +684,7 @@ html,body {
 	width:100px;
 	height:84px;
 	position:absolute;
-	top:1px;
+	top:0px;
 	left:5px;
 }
 .module.expeditions2 .expeditions .expedition {
@@ -672,7 +735,7 @@ html,body {
 	width:224px;
 	height:108px;
 	position:absolute;
-	top:3px;
+	top:2px;
 	left:123px;
 }
 .t .module.expeditions2 .timers {
@@ -5915,7 +5978,8 @@ ABYSS FLEET
 	height:70px;
 	left:202px; top:475px;
 }
-.h .module.expeditions2 {
+.h .module.expeditions2,
+.h .module.consumableList {
 	width:345px;
 	height:124px;
 	left:202px; top:421px;
@@ -5969,7 +6033,8 @@ ABYSS FLEET
 	width:345px;
 	height:70px;
 }
-.v .module.expeditions2 {
+.v .module.expeditions2,
+.v .module.consumableList {
 	width:345px;
 	height:124px;
 	left:688px; top:198px;
@@ -6040,7 +6105,8 @@ ABYSS FLEET
 	width:245px;
 	height:87px;
 }
-.c .module.expeditions2 {
+.c .module.expeditions2,
+.c .module.consumableList {
 	width:245px;
 	height:124px;
 	left:551px; top:198px;
@@ -6126,7 +6192,8 @@ ABYSS FLEET
 	height:65px;
 	left:3px; top:671px;
 }
-.t .module.expeditions2 {
+.t .module.expeditions2,
+.t .module.consumableList {
 	width:347px;
 	height:102px;
 	left:3px; top:671px;
