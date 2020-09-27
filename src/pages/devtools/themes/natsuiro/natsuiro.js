@@ -1317,21 +1317,28 @@
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			const getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
-			const fc200 = PlayerManager.consumables.furniture200 || 0,
+			const fcoin = PlayerManager.consumables.fcoin || 0,
+				fc200 = PlayerManager.consumables.furniture200 || 0,
 				fc400 = PlayerManager.consumables.furniture400 || 0,
 				fc700 = PlayerManager.consumables.furniture700 || 0,
 				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
+			const screws = PlayerManager.consumables.screws || 0,
+				medals = PlayerManager.consumables.medals || 0,
+				presents = PlayerManager.consumables.presents || 0,
+				exchgscrewstot = presents + medals * 4;
 			$(".count_fcoin")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
+				.text( KC3Meta.formatNumber(fcoin) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(...[fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
-					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0)].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
+					fcboxestot, fcboxestot + fcoin].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_screws")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.screws || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable));
+				.text( KC3Meta.formatNumber(screws) )
+				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable))
+				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format(...[medals, medals * 4, presents, presents,
+					exchgscrewstot, exchgscrewstot + screws].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1379,7 +1386,7 @@
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
 				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 :
-				PlayerManager.consumables.hishimochi ? 62 : 60;
+				PlayerManager.consumables.hishimochi ? 62 : 56;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));

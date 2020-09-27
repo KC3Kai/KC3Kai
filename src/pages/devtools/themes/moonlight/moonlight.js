@@ -1423,16 +1423,17 @@
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			const getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
-			const fc200 = PlayerManager.consumables.furniture200 || 0,
+			const fcoin = PlayerManager.consumables.fcoin || 0,
+				fc200 = PlayerManager.consumables.furniture200 || 0,
 				fc400 = PlayerManager.consumables.furniture400 || 0,
 				fc700 = PlayerManager.consumables.furniture700 || 0,
-				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
+				boxfcInTotal = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			$(".count_fcoin")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
+				.text( KC3Meta.formatNumber(fcoin) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_sumFCoin")
-				.text( KC3Meta.formatNumber(fcboxestot+PlayerManager.consumables.fcoin || 0) )
+				.text( KC3Meta.formatNumber(fcoin + boxfcInTotal) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_buckets")
@@ -1505,12 +1506,15 @@
 				if(slotitem) amount = slotitem.amount;
 				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
-			// Total items of 1 page should be 3 x 3 for current page layout and styles
 			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
-			$(".count_sumScrews").text(PlayerManager.getConsumableById(60)+PlayerManager.getConsumableById(4)+PlayerManager.getConsumableById(57)*4 || 0)
-				.parent().attr("title", KC3Meta.useItemName(4));
+			$(".count_sumScrews").text(
+				(PlayerManager.getConsumableById(4) || 0) +    // screws
+				(PlayerManager.getConsumableById(60) || 0) +   // 1 present box => 1 screw
+				(PlayerManager.getConsumableById(57) || 0) * 4 // 1 medal => 4 screws
+			).parent().attr("title", KC3Meta.useItemName(4));
 			// Update 1 more page for food(or any item?) collecting event
-			/*if(KC3Meta.isDuringFoodEvent()){
+			/*
+			if(KC3Meta.isDuringFoodEvent()){
 				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
 			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
 				ConfigManager.scrollHqInfoPage();
