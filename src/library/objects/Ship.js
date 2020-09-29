@@ -3379,11 +3379,14 @@ KC3改 Ship Object
 	/**
 	 * Calculate ship day time artillery spotting process rate based on known type factors.
 	 * @param {number} atType - based on api_at_type value of artillery spotting type.
+	 * @param {string} cutinSubType - sub type of cut-in like CVCI.
 	 * @return {number} artillery spotting percentage, false if unable to arty spot or unknown special attack.
 	 * @see daySpAttackBaseRate
 	 * @see estimateDayAttackType
+	 * @see Type factors: https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#Observation
+	 * @see Type factors for multi-angle cutin: https://wikiwiki.jp/kancolle/%E4%BC%8A%E5%8B%A2%E6%94%B9%E4%BA%8C
 	 */
-	KC3Ship.prototype.artillerySpottingRate = function(atType = 0) {
+	KC3Ship.prototype.artillerySpottingRate = function(atType = 0, cutinSubType = "") {
 		// type 1 laser attack has gone forever, ship not on fleet cannot be evaluated
 		if (atType < 2 || this.isDummy() || !this.onFleet()) { return false; }
 		const formatPercent = num => Math.floor(num * 1000) / 10;
@@ -3397,7 +3400,14 @@ KC3改 Ship Object
 			4: 130,
 			5: 130,
 			6: 140,
-			200: 120
+			7: ({
+				"CutinFDBTB" : 125,
+				"CutinDBDBTB": 140,
+				"CutinDBTB"  : 155,
+			   })[cutinSubType],
+			// 100~103 might use different formula, see #nelsonTouchRate
+			200: 120,
+			201: undefined,
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
@@ -3407,20 +3417,24 @@ KC3改 Ship Object
 	/**
 	 * Calculate ship night battle special attack (cut-in and double attack) process rate based on known type factors.
 	 * @param {number} spType - based on api_sp_list value of night special attack type.
+	 * @param {string} cutinSubType - sub type of cut-in like CVNCI, submarine cut-in.
 	 * @return {number} special attack percentage, false if unable to perform or unknown special attack.
 	 * @see nightSpAttackBaseRate
 	 * @see estimateNightAttackType
+	 * @see Type factors: https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
 	 */
-	KC3Ship.prototype.nightCutinRate = function(spType = 0) {
+	KC3Ship.prototype.nightCutinRate = function(spType = 0, cutinSubType = "") {
 		if (spType < 1 || this.isDummy()) { return false; }
 		// not sure: DA success rate almost 99%
 		if (spType === 1) { return 99; }
 		const typeFactor = {
-			2: 130,
-			3: 122,
+			2: 115,
+			3: 122, // factor for submarine cutin different?
 			4: 130,
 			5: 140,
+			6: undefined, // CVNCI factors unknown
 			7: 130,
+			8: undefined, // CutinTorpRadarLookout unknown
 		}[spType];
 		if (!typeFactor) { return false; }
 		const {baseValue} = this.nightSpAttackBaseRate();
@@ -4180,7 +4194,7 @@ KC3改 Ship Object
 		const canOpeningTorp = shipObj.canDoOpeningTorpedo();
 		const canClosingTorp = shipObj.canDoClosingTorpedo();
 		const spAttackType = shipObj.estimateDayAttackType(undefined, true, battleConds.airBattleId);
-		const dayCutinRate = shipObj.artillerySpottingRate(spAttackType[1]);
+		const dayCutinRate = shipObj.artillerySpottingRate(spAttackType[1], spAttackType[2]);
 		// Apply power cap by configured level
 		if(ConfigManager.powerCapApplyLevel >= 1) {
 			({power} = shipObj.applyPrecapModifiers(power, warfareTypeDay,
@@ -4260,7 +4274,7 @@ KC3改 Ship Object
 			let criticalPower = false;
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
-			const nightCutinRate = shipObj.nightCutinRate(spAttackType[1]);
+			const nightCutinRate = shipObj.nightCutinRate(spAttackType[1], spAttackType[2]);
 			// Apply power cap by configured level
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				({power} = shipObj.applyPrecapModifiers(power, warfareTypeNight,
