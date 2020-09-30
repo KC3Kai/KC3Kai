@@ -3429,12 +3429,36 @@ KC3改 Ship Object
 		if (spType === 1) { return 99; }
 		const typeFactor = {
 			2: 115,
-			3: 122, // factor for submarine cutin different?
+			3: ({ // submarine late torp cutin should be different?
+				"CutinLateTorpRadar": undefined,
+				"CutinLateTorpTorp": undefined,
+			   })[cutinSubType] || 122, // regular CutinTorpTorpTorp
 			4: 130,
 			5: 140,
-			6: undefined, // CVNCI factors unknown
+			6: ({ // CVNCI factors unknown, placeholders
+				"CutinNFNFNTB": undefined,  // should be 3 types, for mod 1.25
+				"CutinNFNTB" : undefined,   // 2 planes for mod 1.2
+				"CutinNFNDB" : undefined,
+				"CutinNTBNDB": undefined,
+				"CutinNFNFNF"  : undefined, // 3 planes for mod 1.18
+				"CutinNFNTBNTB": undefined,
+				"CutinNFNFFBI" : undefined,
+				"CutinNFNFSF"  : undefined,
+				"CutinNFFBIFBI": undefined,
+				"CutinNFSFSF"  : undefined,
+				"CutinNFFBISF" : undefined,
+				"CutinNFNTBFBI": undefined,
+				"CutinNFNTBSF" : undefined,
+				"CutinNFNFNDB" : undefined,
+				"CutinNFNDBNDB": undefined,
+				"CutinNFNTBNDB": undefined,
+				"CutinNFNDBFBI": undefined,
+				"CutinNFNDBSF" : undefined,
+			   })[cutinSubType],
+			// This two DD cutins can be rolled after regular cutin, more chance to be processed
 			7: 130,
 			8: undefined, // CutinTorpRadarLookout unknown
+			// 100~104 might be different, even with day one
 		}[spType];
 		if (!typeFactor) { return false; }
 		const {baseValue} = this.nightSpAttackBaseRate();
@@ -4245,6 +4269,7 @@ KC3改 Ship Object
 			let criticalPower = false;
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
+			const nightCutinRate = shipObj.nightCutinRate(spAttackType[1], spAttackType[2]);
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				({power} = shipObj.applyPrecapModifiers(power, "Shelling",
 					battleConds.engagementId, battleConds.formationId, spAttackType,
@@ -4265,7 +4290,7 @@ KC3改 Ship Object
 					KC3Meta.term("ShipWarfareShelling"),
 					joinPowerAndCritical(power, criticalPower, isCapped),
 					spAttackType[0] === "Cutin" ?
-						KC3Meta.cutinTypeNight(spAttackType[1]) :
+						KC3Meta.cutinTypeNight(spAttackType[1]) + (nightCutinRate ? " {0}%".format(nightCutinRate) : "") :
 						KC3Meta.term("ShipAttackType" + spAttackType[0])
 				)
 			);
