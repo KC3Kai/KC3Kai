@@ -1995,6 +1995,73 @@ KC3改 Equipment Object
 					multiple: { "houg": 1 },
 				},
 			},
+			// 16inch Triple Gun Mount Mk.6 + GFCS
+			"390": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Large Main Gun:
+					// Iowa
+					"65": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2, "souk": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Any FBB
+					stypes: [8],
+					multiple: { "houg": 1 },
+				},
+			},
 			// 16inch Triple Rapid Fire Gun Mount Mk.16
 			"386": {
 				count: 0,
