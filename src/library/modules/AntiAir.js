@@ -261,10 +261,12 @@ AntiAir: anti-air related calculations
 		return 0;
 	}
 
-	// updated data: http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#anti-aircraft
+	// updated data: https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB
 	// another implementation might give the latest verified data:
 	// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
 	function getShipImprovementModifier(mst) {
+		if (isCDMG(mst))
+			return 6;
 		if (isMachineGun(mst))
 			return 4;
 		if (isBuiltinHighAngleMount(mst))
