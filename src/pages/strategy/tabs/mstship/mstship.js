@@ -1010,10 +1010,11 @@
 						// TODO: for all following `.single || .multiple`, should merge them instead of OR, and show a 'one-time' indicator
 											bonusStats = bonus.single || bonus.multiple;
 											totalStats = addObjects(totalStats, bonusStats);
-											if (bonus.synergy) { synergyGear.push(bonus.synergy); }
+										} else {
+											starBonus[bonus.minStars] = {};
 										}
-										else { starBonus[bonus.minStars] = {}; }
 									}
+									if (bonus.synergy) { synergyGear.push(bonus.synergy); }
 								}
 							});
 							// Improvement bonuses
@@ -1042,9 +1043,10 @@
 								if (!shipBonus.minStars) {
 									bonusStats = shipBonus.single || shipBonus.multiple;
 									totalStats = addObjects(totalStats, bonusStats);
-									if (shipBonus.synergy) { synergyGear.push(shipBonus.synergy); }
+								} else {
+									starBonus[shipBonus.minStars] = {};
 								}
-								else { starBonus[shipBonus.minStars] = {}; }
+								if (shipBonus.synergy) { synergyGear.push(shipBonus.synergy); }
 							});
 							// Improvement bonuses
 							if (list.length) {
