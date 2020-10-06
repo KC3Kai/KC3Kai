@@ -554,11 +554,55 @@
 			}
 		});
 
-		// Disable Tab key to prevent it scrolling any window
+		// Handle keyboard events passed to panel for hotkeys
 		$(document).on("keydown", function(e){
+			// Disable Tab key to prevent it scrolling any window
 			if(e.which === 9) {
 				e.stopPropagation();
 				e.preventDefault();
+			}
+			switch(e.keyCode) {
+				case 49: // 1 key switch to fleet #1 view
+					$(".module.controls .fleet_num:contains('1')").trigger("click");
+					break;
+				case 50: // 2 key switch to fleet #2 view
+					$(".module.controls .fleet_num:contains('2')").trigger("click");
+					break;
+				case 51: // 3 key switch to fleet #3 view
+					$(".module.controls .fleet_num:contains('3')").trigger("click");
+					break;
+				case 52: // 4 key switch to fleet #4 view
+					$(".module.controls .fleet_num:contains('4')").trigger("click");
+					break;
+				case 53: // 5 key switch to combined fleet view
+					$(".module.controls .fleet_rengo").trigger("click");
+					break;
+				case 54: // 6 key switch to LBAS view
+					$(".module.controls .fleet_lbas").trigger("click");
+					break;
+				case 81: // Q key switch to basic tab
+					$(".module.activity #atab_basic").trigger("click");
+					break;
+				case 87: // W key switch to battle tab
+					$(".module.activity #atab_battle").trigger("click");
+					break;
+				case 69: // E key switch to quest tab
+					if(ConfigManager.info_quest_activity)
+						$(".module.activity #atab_quest").trigger("click");
+					break;
+				case 82: // R key switch to exped planner tab
+					$(".module.activity #atab_expeditionPlanner").trigger("click");
+					break;
+				case 119: // F8 mute toggle OR Shift+F8 alert sound toggle
+					if(e.shiftKey) {
+						$(".module.controls .btn_alert_toggle").trigger("click");
+					} else {
+						$(".module.controls .btn_mute").trigger("click");
+					}
+					break;
+				case 120: // F9 screenshot
+					$(".module.controls .btn_ss1").trigger("click");
+					break;
 			}
 		});
 
