@@ -158,15 +158,25 @@
     const { disableDownloadBar, writeFile, enableDownloadBar } = KC3ImageExport;
     return Promise.resolve()
       .then(disableDownloadBar)
-      .then(writeFile.bind(null, path, urlSpec))
-      .then(enableDownloadBar);
+      .then(writeFile.bind(null, path, urlSpec));
+      // re-enable after filename determined, see codes below
+      //.then(enableDownloadBar);
   };
 
   KC3ImageExport.writeFile = function (path, { url, cleanup }) {
+    const { enableDownloadBar } = KC3ImageExport;
+    // since Chromium version m72, downloading the blob url will ignore filename
+    const filenameSuggester = function(item, suggest) {
+      if (item.byExtensionId === chrome.runtime.id) {
+        suggest({filename: path, conflictAction: 'uniquify'});
+        chrome.downloads.onDeterminingFilename.removeListener(filenameSuggester);
+        enableDownloadBar();
+      }
+    };
     return new Promise((resolve) => {
+      chrome.downloads.onDeterminingFilename.addListener(filenameSuggester);
       chrome.downloads.download({
         url,
-        // since some chromium version (m72?), downloading the blob url will ignore filename?
         filename: path,
         conflictAction: 'uniquify',
       }, (downloadId) => {

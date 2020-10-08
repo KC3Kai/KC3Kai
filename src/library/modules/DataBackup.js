@@ -38,15 +38,25 @@
 					if(ekex)$(elementkey).append("<div>Downloading zip....(4/4)<div/>");
 					console.info("Downloading file to", ConfigManager.ss_directory + "/Backup/");
 
+					const zipFilename = (
+						ConfigManager.ss_directory.toSafeFilename(undefined, true) +
+						'/Backup/' +
+						("[" + PlayerManager.hq.name + "] " +
+							dateFormat("yyyy-mm-dd")).toSafeFilename() +
+						".kc3data"
+					);
+					// Since Chromium version m72, expected filename must be suggested on later phase,
+					// and extention name is forced by MINE, `.kc3data` will be ingored.
+					const filenameSuggester = function(item, suggest) {
+						if(item.byExtensionId === chrome.runtime.id) {
+							suggest({filename: zipFilename, conflictAction: 'uniquify'});
+							chrome.downloads.onDeterminingFilename.removeListener(filenameSuggester);
+						}
+					};
+					chrome.downloads.onDeterminingFilename.addListener(filenameSuggester);
 					chrome.downloads.download({
 						url: objurl,
-						filename: (
-							ConfigManager.ss_directory.toSafeFilename(undefined, true) +
-							'/Backup/' +
-							("[" + PlayerManager.hq.name + "] " +
-								dateFormat("yyyy-mm-dd")).toSafeFilename() +
-							".kc3data"
-						),
+						filename: zipFilename,
 						conflictAction: "uniquify"
 					}, function(downloadId){
 					});
