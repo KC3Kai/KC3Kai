@@ -47,18 +47,21 @@
 					);
 					// Since Chromium version m72, expected filename must be suggested on later phase,
 					// and extention name is forced by MINE, `.kc3data` will be ingored.
-					const filenameSuggester = function(item, suggest) {
-						if(item.byExtensionId === chrome.runtime.id) {
-							suggest({filename: zipFilename, conflictAction: 'uniquify'});
-							chrome.downloads.onDeterminingFilename.removeListener(filenameSuggester);
+					var downloadItemId = null;
+					const onetimeFilenameSuggester = function(item, suggest) {
+						if(item.byExtensionId === chrome.runtime.id && item.id === downloadItemId) {
+							suggest({filename: zipFilename, conflictAction: "uniquify"});
+							chrome.downloads.onDeterminingFilename.removeListener(onetimeFilenameSuggester);
 						}
 					};
-					chrome.downloads.onDeterminingFilename.addListener(filenameSuggester);
+					chrome.downloads.onDeterminingFilename.removeListener(onetimeFilenameSuggester);
+					chrome.downloads.onDeterminingFilename.addListener(onetimeFilenameSuggester);
 					chrome.downloads.download({
 						url: objurl,
 						filename: zipFilename,
 						conflictAction: "uniquify"
 					}, function(downloadId){
+						downloadItemId = downloadId;
 					});
 					callback();
 				});//transaction
