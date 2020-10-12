@@ -960,17 +960,46 @@
 			tabId: chrome.devtools.inspectedWindow.tabId
 		}, function(tabInfo){
 			errorReport.gameTabUrl = tabInfo.url;
-			// if inspected tab is muted, update the mute icon
 			try {
+				// if inspected tab is muted, update the mute icon
 				if(tabInfo.mutedInfo.muted){
 					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
 				} else if(ConfigManager.mute_game_tab) {
-					(new RMsg("service", "toggleSounds", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					}, function(isMuted){
-						$(".module.controls .btn_mute img")
-							.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
-					})).execute();
+					// if not and mute on start setting enabled, try to mute it
+					const toggleTabSounds = function(expected) {
+						(new RMsg("service", "toggleSounds", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(isMuted){
+							$(".module.controls .btn_mute img")
+								.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
+							if(typeof expected === "boolean" && isMuted !== expected)
+								toggleTabSounds();
+						})).execute();
+					};
+					// since Chromium m76?, muted tab but no audio actually played yet will still make sounds later,
+					// so polling tab info for audible state, mute the tab when the game actually begins to play audio.
+					// current polling timeout is 70 seconds, since will no audio played until game loaded, or if in-game music/SE is off.
+					const tabMutePollingTimeout = 70;
+					let tabMuteHandler = 0, tabMuteTimeout = 0;
+					const tabAudibleChecker = function() {
+						tabMuteTimeout += 1;
+						console.debug("Checking game tab audible for", tabMuteTimeout, "sec(s)");
+						(new RMsg("service", "getTabInfo", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(tab){
+							if(tab.audible) {
+								toggleTabSounds(true);
+								clearInterval(tabMuteHandler);
+							} else if(tabMuteTimeout >= tabMutePollingTimeout) {
+								clearInterval(tabMuteHandler);
+							}
+						})).execute();
+					};
+					if(navigator.chromeVersion >= 76 && !tabInfo.audible) {
+						tabMuteHandler = setInterval(tabAudibleChecker, 1000);
+					} else {
+						toggleTabSounds(true);
+					}
 				}
 			} catch(e) {}
 		})).execute();
