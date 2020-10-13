@@ -539,11 +539,55 @@
 			}
 		});
 
-		// Disable Tab key to prevent it scrolling any window
+		// Handle keyboard events passed to panel for hotkeys
 		$(document).on("keydown", function(e){
+			// Disable Tab key to prevent it scrolling any window
 			if(e.which === 9) {
 				e.stopPropagation();
 				e.preventDefault();
+			}
+			switch(e.keyCode) {
+				case 49: // 1 key switch to fleet #1 view
+					$(".module.controls .fleet_num:contains('1')").trigger("click");
+					break;
+				case 50: // 2 key switch to fleet #2 view
+					$(".module.controls .fleet_num:contains('2')").trigger("click");
+					break;
+				case 51: // 3 key switch to fleet #3 view
+					$(".module.controls .fleet_num:contains('3')").trigger("click");
+					break;
+				case 52: // 4 key switch to fleet #4 view
+					$(".module.controls .fleet_num:contains('4')").trigger("click");
+					break;
+				case 53: // 5 key switch to combined fleet view
+					$(".module.controls .fleet_rengo").trigger("click");
+					break;
+				case 54: // 6 key switch to LBAS view
+					$(".module.controls .fleet_lbas").trigger("click");
+					break;
+				case 81: // Q key switch to basic tab
+					$(".module.activity #atab_basic").trigger("click");
+					break;
+				case 87: // W key switch to battle tab
+					$(".module.activity #atab_battle").trigger("click");
+					break;
+				case 69: // E key switch to quest tab
+					if(ConfigManager.info_quest_activity)
+						$(".module.activity #atab_quest").trigger("click");
+					break;
+				case 82: // R key switch to exped planner tab
+					$(".module.activity #atab_expeditionPlanner").trigger("click");
+					break;
+				case 119: // F8 mute toggle OR Shift+F8 alert sound toggle
+					if(e.shiftKey) {
+						$(".module.controls .btn_alert_toggle").trigger("click");
+					} else {
+						$(".module.controls .btn_mute").trigger("click");
+					}
+					break;
+				case 120: // F9 screenshot
+					$(".module.controls .btn_ss1").trigger("click");
+					break;
 			}
 		});
 
@@ -916,17 +960,46 @@
 			tabId: chrome.devtools.inspectedWindow.tabId
 		}, function(tabInfo){
 			errorReport.gameTabUrl = tabInfo.url;
-			// if inspected tab is muted, update the mute icon
 			try {
+				// if inspected tab is muted, update the mute icon
 				if(tabInfo.mutedInfo.muted){
 					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
 				} else if(ConfigManager.mute_game_tab) {
-					(new RMsg("service", "toggleSounds", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					}, function(isMuted){
-						$(".module.controls .btn_mute img")
-							.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
-					})).execute();
+					// if not and mute on start setting enabled, try to mute it
+					const toggleTabSounds = function(expected) {
+						(new RMsg("service", "toggleSounds", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(isMuted){
+							$(".module.controls .btn_mute img")
+								.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
+							if(typeof expected === "boolean" && isMuted !== expected)
+								toggleTabSounds();
+						})).execute();
+					};
+					// since Chromium m76?, muted tab but no audio actually played yet will still make sounds later,
+					// so polling tab info for audible state, mute the tab when the game actually begins to play audio.
+					// current polling timeout is 70 seconds, since will no audio played until game loaded, or if in-game music/SE is off.
+					const tabMutePollingTimeout = 70;
+					let tabMuteHandler = 0, tabMuteTimeout = 0;
+					const tabAudibleChecker = function() {
+						tabMuteTimeout += 1;
+						console.debug("Checking game tab audible for", tabMuteTimeout, "sec(s)");
+						(new RMsg("service", "getTabInfo", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(tab){
+							if(tab.audible) {
+								toggleTabSounds(true);
+								clearInterval(tabMuteHandler);
+							} else if(tabMuteTimeout >= tabMutePollingTimeout) {
+								clearInterval(tabMuteHandler);
+							}
+						})).execute();
+					};
+					if(navigator.chromeVersion >= 76 && !tabInfo.audible) {
+						tabMuteHandler = setInterval(tabAudibleChecker, 1000);
+					} else {
+						toggleTabSounds(true);
+					}
 				}
 			} catch(e) {}
 		})).execute();

@@ -350,13 +350,15 @@ known IDs see QuestManager
 			trackingData[0] = newCurrentCount;
 		};
 
-		// Special 3-times maxCount adjustment for quest C42, F7, F8, F66:
+		// Special 3-times maxCount adjustment for quest C38, C42, F7, F8, F66:
 		//   these quests have different behavior that 1/3 is marked as being 50% completed,
 		//   so our auto-adjustment for max < 5 won't work for them.
 		// EO74 marks them as '(internal counter) starts from 1/4', so +1 50%, +2 80%.
-		if (maxCount === 3 && [339, 607, 608, 674].indexOf(this.id) > -1) {
-			if (currentCount !== actualPFlag)
+		if (maxCount === 3 && [337, 339, 607, 608, 674].indexOf(this.id) > -1) {
+			// but F7/F8 still 50%, not 80% mark at 2/3, so no adjustment
+			if (currentCount !== actualPFlag && [607, 608].indexOf(this.id) == -1) {
 				announcedCorrection(actualPFlag);
+			}
 			return;
 		}
 
