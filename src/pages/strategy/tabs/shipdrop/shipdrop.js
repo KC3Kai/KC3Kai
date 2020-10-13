@@ -62,6 +62,8 @@
 			this.dropTable = {};
 			const allPromises = [];
 			$(".tab_shipdrop .content_root").empty();
+			$(".control_panel .selectors select").prop("disabled", true);
+			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
 			KC3Database.con.sortie.where("world").equals(world).and(
 				data => data.mapnum === map && data.hq === hqId
@@ -82,16 +84,22 @@
 				Promise.all(allPromises).then(this.filterShipDrop.bind(this)).catch(e => {
 					console.error("Loading battle data failed", e);
 					$(".loading").hide();
+				$(".control_panel .selectors select").prop("disabled", false);
+				$(".control_panel .time_range input").prop("disabled", false);
 				});
 			}).catch(e => {
 				console.error("Loading sortie data failed", e);
 				$(".loading").hide();
+				$(".control_panel .selectors select").prop("disabled", false);
+				$(".control_panel .time_range input").prop("disabled", false);
 			});
 		},
 
 		filterShipDrop: function() {
 			const self = this;
 			$(".loading").hide();
+			$(".control_panel .selectors select").prop("disabled", false);
+			$(".control_panel .time_range input").prop("disabled", false);
 			const contentRoot = $(".tab_shipdrop .content_root");
 			contentRoot.empty();
 			const factory = $(".tab_shipdrop .factory");

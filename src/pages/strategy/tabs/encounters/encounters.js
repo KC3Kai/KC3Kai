@@ -155,6 +155,7 @@
 			const isLbasMap = this.isLbasSortieMap(world, map);
 
 			$(".encounter_list").html("").hide();
+			$(".map_switcher select").prop("disabled", true);
 			$(".loading").show();
 			KC3Database.con.encounters.filter(node =>
 				node.world === world && node.map === map
@@ -290,9 +291,11 @@
 				});
 				
 				$(".loading").hide();
+				$(".map_switcher select").prop("disabled", false);
 				$(".encounter_list").createChildrenTooltips().show();
 			}).catch(error => {
 				$(".loading").hide();
+				$(".map_switcher select").prop("disabled", false);
 				$(".encounter_list").show();
 				console.error("Loading encounters failed", [world, map, diff], error);
 			});
