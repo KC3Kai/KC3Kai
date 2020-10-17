@@ -4594,7 +4594,9 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 7: // Dive Bomber
 					case 8: // Torpedo Bomber
+					case 57: // Jet Fighter Bomber
 					case 58: // Jet Torpedo Bomber
 						return 0.2 * stars;
 					case 14: // Sonar
@@ -4619,8 +4621,8 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
-				if([8, 58].includes(type2))
+				// Dive/Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
+				if([7, 8, 57, 58].includes(type2))
 					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
@@ -4628,8 +4630,8 @@ KC3改 Equipment Object
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
-				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
-				if([8, 11, 58].includes(type2)) return 0.2 * stars;
+				// for normal opening airstrike, dive/torpedo/seaplane bomber bonus confirmed
+				if([7, 8, 11, 57, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "lbas":
 				// land-base attacker, unconfirmed yet since no plane improved by akashi
@@ -4813,10 +4815,11 @@ KC3改 Equipment Object
 			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
-			case 7: // Fighter bomber (dive bomber with AA stat)
+			case 7: // Fighter bomber (dive bomber with >2 AA stat?)
 			case 49: // LB recon, uncertain?
 			case 57: // Jet bomber
-				modifier = 0.25; break;
+				if(this.master().api_tyku > 2) modifier = 0.25;
+				break;
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
 			case 47: // LB attacker
