@@ -19,6 +19,7 @@ known IDs see QuestManager
 	window.KC3Quest = function(){
 		this.id = 0;
 		this.type = 0;
+		this.label = 0;
 		this.status = 0;
 		this.hash = 0;
 		this.progress = 0;
@@ -33,6 +34,7 @@ known IDs see QuestManager
 		this.id = data.id;
 		this.status = data.status;
 		this.type = data.type;
+		this.label = data.label;
 		this.hash = data.hash;
 		if (data.progress) {
 			this.progress = data.progress;
@@ -53,10 +55,20 @@ known IDs see QuestManager
 	------------------------------------------*/
 	KC3Quest.prototype.defineRaw = function( data ){
 		// Attach temporary raw data for quick reference
+		// Possible useful for us, but not persistent yet:
+		//   api_category: 1=Compo, 2/8/9=Sortie, 3=PvP, 4=Exped, 5=Supply/Dock, 6=Arsenal, 7=Modern
+		//   api_lost_badges: medal will be consumed
+		//   api_bonus_flag: 1 = regular, 2 = shipgirl
+		//   api_select_rewards: ID object array of selectable rewrads
+		//   api_voice_id: voice will be played on completed, stored at /sound/kc9999/
+		//   api_invalid_flag: 1 = the gear will be converted is locked
 		this.raw = function(){ return data; };
 		this.id = data.api_no;
 		this.status = data.api_state;
 		this.type = data.api_type;
+		// similar to api_type, indicate the icon label for:
+		//   1=One-time, 2=Daily, 3=Weekly, 6=Monthly, 7=Other(incl.Quarterly), 102=Yearly Feb, 103=Yearly Mar,..., 110=Year Oct, ...
+		this.label = data.api_label_type;
 		// for simplicity, only use string simple hash on `api_title`,
 		// for accurate identitifer, might add more properties or use less collision hash.
 		// but notice: text not exactly the same will raise issue,
@@ -257,6 +269,10 @@ known IDs see QuestManager
 
 	KC3Quest.prototype.isQuarterly = function(){
 		return KC3QuestManager.getRepeatableIds('quarterly').indexOf(this.id) > -1;
+	};
+
+	KC3Quest.prototype.isYearly = function(){
+		return this.label > 100 && this.label <= 112;	// Yearly Quest from Jan to Dec
 	};
 
 	KC3Quest.prototype.isUnselected = function(){
