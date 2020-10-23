@@ -1623,8 +1623,6 @@
 				.toggleClass("orange_text", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_sumFCoin")
-				.text( KC3Meta.formatNumber(fcboxestot+PlayerManager.consumables.fcoin || 0) )
-				.toggleClass("orange_text", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.text( KC3Meta.formatNumber(fcoin) )
 				.toggleClass("orange_text", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
