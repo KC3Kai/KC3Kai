@@ -1573,6 +1573,7 @@
 						[ "siconbrd_clrdarkblue", "Dark Blue" ],
 						[ "siconbrd_clrblack", "Black" ],
 						[ "siconbrd_clrgold", "Gold" ],
+						[ "siconbrd_clrseaweed", "Metallic Seaweed" ],
 						[ "siconbrd_clrsilver", "Silver" ],
 						[ "siconbrd_clrwhite", "White" ],
 						[ "custom", "Custom" ]
@@ -1615,6 +1616,7 @@
 						[ "ol_clrblack", "Black" ],
 						[ "ol_clrblue", "Blue" ],
 						[ "ol_clrgold", "Gold" ],
+						[ "ol_clrseaweed", "Metallic Seaweed" ],
 						[ "ol_clrhalfteal", "50% Teal" ],
 						[ "ol_clrsilver", "Silver" ],
 						[ "ol_clrwhite", "White" ],
@@ -1649,7 +1651,8 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "qsch_moonlight", "Moonlight" ],
 						[ "qsch_natsuiro", "Natsuiro" ],
-						[ "qsch_moonless", "Edgelord" ]
+						[ "qsch_moonless", "Edgelord" ],
+						[ "qsch_lightblue", "Light Blue" ]
 					]
 				}
 			},

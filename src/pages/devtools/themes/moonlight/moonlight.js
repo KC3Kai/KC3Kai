@@ -357,28 +357,32 @@
 			scopedFleetIds.length > 1 ? ['main','escort'] : ['single']
 			: [];
 		baseElement.forEach(function(baseKey, index){
-			const baseContainer = $([".shiplist",baseKey].join('_'));
+			if(!KC3SortieManager.isOnSortie() && !KC3SortieManager.isPvP()) {
+				const baseContainer = $([".shiplist",baseKey].join('_'));
+				$(".lship", baseContainer).each(function(index, shipBox){
+					const repairBox = $('.ship_repair_data',shipBox);
+					const shipData = KC3ShipManager.get(repairBox.data('sid')),
+						hpLost = shipData.hp[1] - shipData.hp[0],
+						dockTime = shipData.repair[0],
+						repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
 
-			$(".sship,.lship", baseContainer).each(function(index, shipBox){
-				const repairBox = $('.ship_repair_data',shipBox);
-				const shipData = KC3ShipManager.get(repairBox.data('sid')),
-					hpLost = shipData.hp[1] - shipData.hp[0],
-					dockTime = shipData.repair[0],
-					repairProgress = PlayerManager.akashiRepair.getProgress(dockTime, hpLost);
-
-				$('.ship_repair_tick', shipBox).attr('data-tick',
-					Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
-				$('.ship_repair_timer', shipBox).text(
-					(function (t) {
-						if (t === 0) {
-							return '--:--:--';
-						} else if (!t || Number.isNaN(parseInt(t))) {
-							return '??:??:??';
-						}
-						return Math.ceil(t / 1000).toString().toHHMMSS();
-					})(repairProgress.timeToNextRepair)
-				);
-			});
+					$('.ship_repair_tick', shipBox).attr('data-tick',
+						Number.isInteger(repairProgress.repairedHp) ? repairProgress.repairedHp : '?');
+					$('.ship_repair_timer', shipBox).text(
+						(function (t) {
+							if (t === 0) {
+								return '--:--:--';
+							} else if (!t || Number.isNaN(parseInt(t))) {
+								return '??:??:??';
+							}
+							return Math.ceil(t / 1000).toString().toHHMMSS();
+						})(repairProgress.timeToNextRepair)
+					);
+				});
+				$(".ship_repair_data").css("display", "block");
+			} else {
+				$(".ship_repair_data").css("display", "none");
+			};
 		});
 	}
 
@@ -393,7 +397,6 @@
 	}
 	
 	// pan_moon_skin presets       bar_style[0],bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],             shiplist_bg[6],             misc_bg[7]
-	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
 	var mode_moonlight =         ["fluid",     "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
 	var mode_natsuiro =          ["natsuiro",  "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrnatsuiro",      "slistbg_clrnone",          "miscbg_clrnone"];
 	var mode_dark_blue =         ["flats",     "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
@@ -402,9 +405,9 @@
 	var mode_transparency1 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
 	var mode_transparency2 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
 	var mode_lightblue =         ["flats",     "clrblue",     "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
+	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
 
 	//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],         ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
-	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
 	mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrhalfteal",  "rgba(24, 45, 85, 1)",  "qsch_moonlight");
 	mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_natsuiro");
 	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
@@ -412,11 +415,11 @@
 	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
 	mode_transparency1.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
 	mode_transparency2.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
-	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrblue",      "clrnone",              "qsch_moonlight");
+	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrseaweed",   "clrnone",              "qsch_lightblue");
+	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
 
 	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]
-	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors);
-	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "skew_it",        "text_white_blue");
+	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
 	mode_natsuiro.push(             "skin_natsuiro", "tip_natsuiro", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro");
 	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey");
 	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
@@ -424,6 +427,7 @@
 	mode_transparency1.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
 	mode_transparency2.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
 	mode_lightblue.push(            "skin_lightblue","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors);
 
 	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_transparency1,mode_transparency2,mode_lightblue];
 	var mode_selection = mode_select[ConfigManager.pan_moon_skin];
@@ -578,7 +582,7 @@
 		// ========================== //
 		// ==== Text Stylization ==== //
 		// ========================== //
-		style_select(20,".primary_text,.secondary_text,.offwhite_text,.green_text,.grey_text,.yellow_text,.red_text",ConfigManager.pan_moon_text_colors);
+		style_select(20,".primary_text,.secondary_text,.offwhite_text,.green_text,.grey_text,.yellow_text,.red_text,.ship_gear_slot,.status_text,.consumable_ltext,.count_ships,.count_gear",ConfigManager.pan_moon_text_colors);
 
 		// =============== //
 		// ==== Other ==== //
@@ -1173,7 +1177,7 @@
 			currentLayout = "horizontal";
 			// Accommodate Korean's very large text without redoing the layout for everyone else
 			if(ConfigManager.language == "kr") {
-				$(".lship .ship_level").css("left", "65px");
+				$(".lship .ship_level").css("left", "63px");
 				$(".lship .ship_exp_label").css("text-align", "right");
 			}
 		$(".module.controls .scrollable").scrollLeft(0);
@@ -1542,21 +1546,21 @@
 				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			$(".count_fcoin")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
+				.toggleClass("orange_text", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_sumFCoin")
 				.text( KC3Meta.formatNumber(fcboxestot+PlayerManager.consumables.fcoin || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
+				.toggleClass("orange_text", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("orange_text", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("orange_text", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_devmats")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.devmats || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("orange_text", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
 			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
 				const roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));
@@ -1567,29 +1571,29 @@
 					bauxite = PlayerManager.hq.lastMaterial[3];
 				$(".count_fuel")
 					.text( KC3Meta.formatNumber(fuel) )
-					.toggleClass("regenCap", fuel >= regenCap)
-					.toggleClass("hardCap", fuel >= getWarnRscCap(PlayerManager.maxResource))
+					.toggleClass("grey_text", fuel >= regenCap)
+					.toggleClass("green_text", fuel >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", fuel >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - fuel).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_steel")
 					.text( KC3Meta.formatNumber(steel) )
-					.toggleClass("regenCap", steel >= regenCap)
-					.toggleClass("hardCap", steel >= getWarnRscCap(PlayerManager.maxResource))
+					.toggleClass("grey_text", steel >= regenCap)
+					.toggleClass("green_text", steel >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", steel >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - steel).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_ammo")
 					.text( KC3Meta.formatNumber(ammo) )
-					.toggleClass("regenCap", ammo >= regenCap)
-					.toggleClass("hardCap", ammo >= getWarnRscCap(PlayerManager.maxResource))
+					.toggleClass("grey_text", ammo >= regenCap)
+					.toggleClass("green_text", ammo >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", ammo >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
 						"{0} \u27A4{1}".format(roundUpTo3Mins(regenCap - ammo).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
 				$(".count_bauxite")
 					.text( KC3Meta.formatNumber(bauxite) )
-					.toggleClass("regenCap", bauxite >= regenCap)
-					.toggleClass("hardCap", bauxite >= getWarnRscCap(PlayerManager.maxResource))
+					.toggleClass("grey_text", bauxite >= regenCap)
+					.toggleClass("green_text", bauxite >= getWarnRscCap(PlayerManager.maxResource))
 					.attr("title", bauxite >= regenCap ? "\u27A4" + KC3Meta.formatNumber(regenCap) :
 						"{0} \u27A4{1}".format(String(180 * (regenCap - bauxite)).toHHMMSS(), KC3Meta.formatNumber(regenCap)))
 					.lazyInitTooltip();
@@ -1655,8 +1659,8 @@
 
 			$(".count_ships")
 				.text( shipCount )
-				.toggleClass( "danger", (KC3ShipManager.max - shipCount) < 5)
-				.toggleClass( "fulled", (KC3ShipManager.max - shipCount) <= 0)
+				.toggleClass( "orange_text", (KC3ShipManager.max - shipCount) < 5)
+				.toggleClass( "red_text", (KC3ShipManager.max - shipCount) <= 0)
 				.attr("title", "\u2764 " + lockedShipCount)
 				.lazyInitTooltip();
 
@@ -1670,8 +1674,8 @@
 
 			$(".count_gear")
 				.text( gearCount )
-				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
-				.toggleClass("fulled", (KC3GearManager.max - gearCount) <= 3)
+				.toggleClass("orange_text", (KC3GearManager.max - gearCount) < 20)
+				.toggleClass("red_text", (KC3GearManager.max - gearCount) <= 3)
 				.attr("title", "\u2764 " + lockedGearCount)
 				.lazyInitTooltip();
 
@@ -2317,7 +2321,7 @@
 
 
 			// Clear status reminder coloring
-			$(".module.status .status_text").removeClass("good bad slotsWarn");
+			$(".module.status .status_text").removeClass("green_text red_text slotsWarn");
 			$(".module.status").hideChildrenTooltips();
 
 			// If fleet status summary is enabled on settings
@@ -2336,11 +2340,11 @@
 				){
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
-					$(".module.status .status_supply .status_text").addClass("good");
+					$(".module.status .status_supply .status_text").addClass("green_text");
 					// If selected fleet view not on sortie, and some aircraft slots not full
 					if(FleetSummary.badState[4] &&
 						!(KC3SortieManager.isOnSortie() && isSortieFleetsSelected)){
-						$(".module.status .status_supply .status_text").removeClass("good").addClass("slotsWarn");
+						$(".module.status .status_supply .status_text").removeClass("green_text").addClass("slotsWarn");
 					}
 				}else{
 					$(".module.status .status_supply .status_text").text(KC3Meta.term(
@@ -2348,7 +2352,7 @@
 							(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
 						));
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
-					$(".module.status .status_supply .status_text").addClass("bad");
+					$(".module.status .status_supply .status_text").addClass("red_text");
 				}
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
@@ -2369,18 +2373,18 @@
 				// STATUS: MORALE
 				if( FleetSummary.lowestMorale > 52 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
-					$(".module.status .status_morale .status_text").addClass("good");
+					$(".module.status .status_morale .status_text").addClass("green_text");
 					moraleClockValue = 100;
 					moraleClockEnd = 0;
 				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
-					$(".module.status .status_morale .status_text").addClass("good");
+					$(".module.status .status_morale .status_text").addClass("green_text");
 					moraleClockValue = 100;
 					moraleClockEnd = 0;
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 					var MoraleTime = Math.hrdInt('ceil',MissingMorale,LOG3)*60;
-					$(".module.status .status_morale .status_text").addClass("bad");
+					$(".module.status .status_morale .status_text").addClass("red_text");
 
 					if(FleetSummary.lowestMorale != moraleClockValue){
 						// console.debug("New morale time", FleetSummary.lowestMorale, MoraleTime);
@@ -2412,7 +2416,7 @@
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
 					);
 					$(".module.status .status_repair .status_text")
-						.attr("titlealt", "").addClass("bad");
+						.attr("titlealt", "").addClass("red_text");
 					const fcfInfo = KC3SortieManager.getCurrentFCF();
 					// Show some strategy hints if FCF retreating is possible
 					if(!FleetSummary.badState[2] && fcfInfo.isAvailable){
@@ -2485,7 +2489,7 @@
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
 						.lazyInitTooltip()
-						.addClass("bad");
+						.addClass("red_text");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "estat_bossmodrt.png")
 					);
@@ -2494,7 +2498,7 @@
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
 						.attr("titlealt", "")
-						.addClass("good");
+						.addClass("green_text");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
 				}
 
@@ -2748,7 +2752,7 @@
 				$(".module.status").hideChildrenTooltips();
 				$(".module.status .status_supply .status_text").text(KC3Meta.term(
 					lbasIsSupplied ? "PanelSupplied" : "PanelNotSupplied"
-				)).toggleClass("good", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
+				)).toggleClass("green_text", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
 				$(".module.status .status_supply img").attr("src",
 					"/assets/img/ui/" + (lbasIsSupplied ? "check.png" : "sunk.png"));
 				const lbasSupplyCost = KC3Calc.getLandBasesResupplyCost();
@@ -2766,7 +2770,7 @@
 					"/assets/img/client/morale/" + (["","3","2","1"][lbasWorstCond]) + ".png");
 				$(".module.status .status_morale .status_text")
 					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"))
-					.toggleClass("bad", lbasCondBad).toggleClass("good", !lbasCondBad);
+					.toggleClass("red_text", lbasCondBad).toggleClass("green_text", !lbasCondBad);
 				// no morale timer
 				moraleClockValue = 100;
 				moraleClockEnd = 0;
@@ -2775,7 +2779,7 @@
 				$(".module.status .status_repair .status_text")
 					.text( KC3Meta.term("Placeholder") )
 					.attr("title", "")
-					.removeClass("bad").addClass("good");
+					.removeClass("red_text").addClass("green_text");
 				UpdateRepairTimerDisplays(0, 0);
 				// show 'combined fleet' type as 'LBAS'
 				$(".module.status .status_butai .status_text")
@@ -3117,10 +3121,10 @@
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
 				if(thisNode.lostKind == 4){
-					$(".module.activity .battle_engagement").removeClass("bad");
+					$(".module.activity .battle_engagement").removeClass("red_text");
 					$(".module.activity .battle_engagement").attr("title", "");
 				} else {
-					$(".module.activity .battle_engagement").addClass("bad");
+					$(".module.activity .battle_engagement").addClass("red_text");
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
 						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
@@ -3594,8 +3598,8 @@
 					// if no goal defined or the ship has reached the goal, skip it
 					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
 					console.log("Ship exp goal", shipData.name(), grindGoal);
-					$("<div />").addClass("expNotice").text(grindGoal.battlesLeft )
-						.appendTo("#ShipBox" + rosterId + " .ship_exp_label");
+					$("<div />").text(grindGoal.battlesLeft )
+						.appendTo("#ShipBox" + rosterId + " .ship_level_goal");;
 				});
 			}
 
@@ -4620,11 +4624,31 @@
 
 			// colour GS text based on GS chance
 			jqGSRate.attr('data-gsState', function (rate) {
-				if (rate <= 0) { return "impossible"; }
-				if (condIsDrumExpedition && !condIsOverdrum) { return "no-overdrum"; }
+				if (rate <= 0) { 
+					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
+						.addClass("red_text " + get_style_select(20))
+						.removeClass("orange_text offwhite_text yellow_text");
+					return "impossible";
+				}
+				if (condIsDrumExpedition && !condIsOverdrum) {
+					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
+						.addClass("orange_text " + get_style_select(20))
+						.removeClass("red_text offwhite_text yellow_text");
+					return "no-overdrum"; 
+				}
 				if (rate < 80) { return ""; } // no colour
-				if (rate < 100 ) { return "likely"; }
-				if (rate >= 100) { return "guaranteed"; }
+				if (rate < 100 ) {
+					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
+						.addClass("orange_text " + get_style_select(20))
+						.removeClass("red_text offwhite_text yellow_text");
+					return "likely"; 
+				}
+				if (rate >= 100) {
+					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
+						.addClass("yellow_text " + get_style_select(20))
+						.removeClass("red_text offwhite_text orange_text");
+					return "guaranteed";
+				}
 			}(estSuccessRate));
 
 			var tooltipText = (function () {
@@ -4648,11 +4672,11 @@
 				.toggle(plannerIsGreatSuccess);
 
 			var markFailed = function (jq) {
-				jq.addClass("expPlanner_text_failed").removeClass("expPlanner_text_passed");
+				jq.addClass("expPlanner_text_failed red_text " + get_style_select(20)).removeClass("expPlanner_text_passed green_text");
 				return jq;
 			};
 			var markPassed = function (jq) {
-				jq.removeClass("expPlanner_text_failed").addClass("expPlanner_text_passed");
+				jq.removeClass("expPlanner_text_failed red_text").addClass("expPlanner_text_passed green_text " + get_style_select(20));
 				return jq;
 			};
 
@@ -5320,7 +5344,7 @@
 		koskElm.data("tick", akashiTick);
 		[dockElm, koskElm].forEach(function(elm){
 			var title = "";
-			elm.removeClass("good bad");
+			elm.removeClass("green_text red_text");
 			switch (ConfigManager.timerDisplayType) {
 			case 1:
 				elm.text(String(elm.data("value")).toHHMMSS());
@@ -5328,13 +5352,13 @@
 			case 2:
 				elm.text(String(elm.data("value") || NaN).plusCurrentTime());
 				if((elm.data("value") || 0) > 86400) {
-					elm.addClass("bad");
+					elm.addClass("red_text");
 					title = KC3Meta.term("PanelRepairMoreDays");
 				}
 				break;
 			}
 			if((elm.data("tick") || [false]).every(x => x)) {
-				elm.removeClass('bad').addClass("good");
+				elm.removeClass('red_text').addClass("green_text");
 				title = KC3Meta.term("PanelRepairing");
 			}
 			if(elm === koskElm && !title) {

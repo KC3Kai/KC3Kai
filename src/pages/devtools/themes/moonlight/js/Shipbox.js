@@ -260,7 +260,7 @@
 				return title;
 			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( KC3Meta.formatNumber(this.shipData.exp[1]) );
-		$(".ship_exp_bar", this.element).css("width", (183*this.expPercent)+"px");
+		$(".ship_exp_bar", this.element).css("width", (182*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
@@ -333,16 +333,16 @@
 		var repairCost = this.shipData.calcRepairCost(isAfterHpUsed ? this.shipData.afterHp[0] : 0);
 		
 		if(repairTimes.docking > 0){
-			$(".ship_hp_box", this.element).attr("title", [
+			$(".ship_repair_data", this.element).attr("title", [
 				KC3Meta.term("PanelDocking") + ": " + String(repairTimes.docking).toHHMMSS(),
 				KC3Meta.term("PanelAkashi")  + ": " + (
 					repairTimes.akashi > 0 ? String(repairTimes.akashi).toHHMMSS() : KC3Meta.term("PanelCantRepair")
 				),
 				KC3Meta.term("PanelRepairCost").format(repairCost.fuel, repairCost.steel)
-			].join("\n")).lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
+			].join("\n")).lazyInitTooltip();
 		}else{
-			$(".ship_hp_box", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
-				.lazyInitTooltip({ position: { at: "left+25 bottom+5" } });
+			$(".ship_repair_data", this.element).attr("title", KC3Meta.term("PanelNoRepair"))
+				.lazyInitTooltip();
 		}
 		
 		// If ship is being repaired
@@ -511,7 +511,7 @@
 					// Is a plane with proficiency level
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace", this.element).show();
 					$(".ship_gear_"+(slot+1)+" .ship_gear_ace img", this.element)
-						.attr("src", "/assets/img/client/achev/"+thisGear.ace+".png");
+						.attr("src", "/assets/img/client/achev_hd/"+thisGear.ace+".png");
 				}
 				if (thisGear.stars > 0){
 					// Is a normal equipment that can be upgraded
@@ -538,6 +538,7 @@
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_icon img", this.element).hide();
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
+				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("grey_text");
 			}
 			
 			if(this.shipData.slots[ slot ] > 0 ||
@@ -554,13 +555,13 @@
 				}
 				var slotPercent = slotCurr / (slotMax || 1);
 				if(slotPercent <= 0){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#999");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("grey_text");
 				} else if(slotPercent <= 0.25){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f00");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("red_text");
 				} else if(slotPercent <= 0.50){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f90");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("orange_text");
 				} else if(slotPercent <= 0.75){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#ff0");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("yellow_text");
 				} else {
 					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
 				}
