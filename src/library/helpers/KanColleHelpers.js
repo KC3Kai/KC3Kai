@@ -7617,9 +7617,9 @@ var PS = {};
                       (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                               (addGroup(fpTotal(350))
-                                  (addGroup(aaTotal(300))
+                                  (addGroup(aaTotal(290))
                                       (addGroup(aswTotal(220))
-                                          (losTotal(220))
+                                          (losTotal(200))
                                       )
                                   )
                               )
@@ -7850,12 +7850,12 @@ var PS = {};
       };
       if (v === 142) {
           return addGroup(fslAndSc(70)(5))
-              (addGroup(lvlCnt(348))
+              (addGroup(lvlCnt(320))
                   (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
                       (addGroup(fpTotal(280))
-                          (addGroup(aaTotal(250))
+                          (addGroup(aaTotal(240))
                               (addGroup(aswTotal(220))
-                                  (addGroup(losTotal(170))
+                                  (addGroup(losTotal(160))
                                       ([ new FleetShipWithDrum(3), new FleetDrum(4) ])
                                   )
                               )
@@ -11071,7 +11071,7 @@ var PS = {};
         24: 0+4,
         40: 0+4,
         44: 6+2,
-        142: 4+4,
+        142: 4+1,
     };
 
     exports.gsByFlagshipLevelList = [

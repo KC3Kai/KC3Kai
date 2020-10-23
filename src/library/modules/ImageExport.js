@@ -150,30 +150,54 @@
 
   /* ---------------------[ DOWNLOAD ]--------------------- */
 
+  const downloadIdPathMap = {};
+
   KC3ImageExport.composeDownloadPath = function (dir, filename, format) {
     return `${dir ? `${dir}/` : ''}${filename}.${format}`;
   };
 
   KC3ImageExport.download = function (path, urlSpec) {
-    const { disableDownloadBar, writeFile, enableDownloadBar } = KC3ImageExport;
+    const { disableDownloadBar, writeFile, registerDeterminingFilenameListener } = KC3ImageExport;
     return Promise.resolve()
       .then(disableDownloadBar)
-      .then(writeFile.bind(null, path, urlSpec))
-      .then(enableDownloadBar);
+      .then(registerDeterminingFilenameListener)
+      .then(writeFile.bind(null, path, urlSpec));
   };
 
   KC3ImageExport.writeFile = function (path, { url, cleanup }) {
     return new Promise((resolve) => {
       chrome.downloads.download({
         url,
-        // since some chromium version (m72?), downloading the blob url will ignore filename?
         filename: path,
         conflictAction: 'uniquify',
       }, (downloadId) => {
+        downloadIdPathMap[downloadId] = path;
         cleanup();
         resolve({ downloadId, filename: path });
       });
     });
+  };
+
+  // since Chromium version m72, downloading files will ignore given filename,
+  // so filename must be suggested on this determining filename callback phase.
+  KC3ImageExport.filenameSuggester = function (downloadItem, suggest) {
+    const { enableDownloadBar } = KC3ImageExport;
+    const path = downloadIdPathMap[downloadItem.id];
+    // only handle the item downloaded by this extension and this module
+    if (downloadItem.byExtensionId === chrome.runtime.id && !!path) {
+      suggest({filename: path, conflictAction: 'uniquify'});
+      // clean up completed filename
+      delete downloadIdPathMap[downloadItem.id];
+      // re-enable download shelf bar
+      enableDownloadBar();
+    }
+  };
+
+  KC3ImageExport.registerDeterminingFilenameListener = function () {
+    const { filenameSuggester } = KC3ImageExport;
+    if (!chrome.downloads.onDeterminingFilename.hasListener(filenameSuggester)) {
+      chrome.downloads.onDeterminingFilename.addListener(filenameSuggester);
+    }
   };
 
   let disableTimer = null;

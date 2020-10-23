@@ -293,6 +293,23 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st October every year
+			yearlyOct: {
+				type: 'yearlyOct',
+				key: 'timeToResetYearlyOctQuests',
+				resetMonth: OCTOBER,
+				questIds: [345, 346, 654],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyOct.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyOct.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -461,6 +478,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyOct').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -662,6 +680,26 @@ Uses KC3Quest objects to play around with
 							fleet.hasShipType([3, 4, 21])
 						);
 					},
+				"345": // C49 PvP with 4 of Warspite, Kongou, Ark Royal, Nelson, J-Class DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(439)   + // Warspite any remodel
+							fleet.countShip(78)    + // Kongou any remodel
+							fleet.countShip(515)   + // Ark Royal any remodel
+							fleet.countShip(571)   + // Nelson any remodel
+							fleet.countShipClass(82) // J-Class any remodel
+						) >= 4;
+					},
+				"346": // C50 PvP with Yuugumo K2, Makigumo K2, Kazagumo K2, Akigumo K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(542)  // Yuugumo K2
+							&& fleet.hasShip(563)  // Makigumo K2
+							&& fleet.hasShip(564)  // Kazagumo K2
+							&& fleet.hasShip(648); // Akigumo K2
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -681,6 +719,17 @@ Uses KC3Quest objects to play around with
 						&& KC3GearManager.countFree(75) >= 2
 						&& KC3GearManager.countFree(36) >= 1
 					),
+				"654": // F93 Have 1 Skilled Crew Member, 1500 ammo, 1500 bauxite. Ary Royal as secretary, equip her 1st slot with a maxed star Swordfish
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						const firstSlotGear = firstFleet.ship(0).equipment(0);
+						const isMaxSwordfishEquipped = firstSlotGear.masterId === 242 && firstSlotGear.stars === 10;
+						return PlayerManager.hq.lastMaterial[1] >= 1500
+							&& PlayerManager.hq.lastMaterial[4] >= 1500
+							&& PlayerManager.consumables.skilledCrew >= 1
+							&& firstFleet.hasShip(515, 0)
+							&& isMaxSwordfishEquipped;
+					},
 				"663": // F55 Have 18000 steel (scrapping not counted here)
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)

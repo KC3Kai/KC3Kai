@@ -453,7 +453,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				};
 				// Prevent Chrome auto discard the game tab
 				// autoDiscardable since Chrome 54
-				if(parseChromeVersion() >= 54) {
+				if(navigator.chromeVersion >= 54) {
 					props.autoDiscardable = false;
 				}
 				// DMM CUSTOMIZATION
@@ -582,7 +582,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		"getVersion" :function(request, sender, response){
 			// May be more, such as OS arch, version
 			response({
-				chrome: parseChromeVersion(),
+				chrome: navigator.chromeVersion,
 				manifest: chrome.runtime.getManifest(),
 				kc3version: chrome.runtime.getManifest().version
 			});
@@ -769,11 +769,6 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					.remoteStart(tabId, offset);
 			})).execute();
 		}
-	}
-	
-	function parseChromeVersion() {
-		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
-		return raw ? parseInt(raw[2], 10) : 0;
 	}
 	
 	function detectFlashVersionString() {

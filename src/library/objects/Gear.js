@@ -88,6 +88,13 @@ KC3改 Equipment Object
 				rotorcraftIds: [69, 324, 325, 326, 327],
 				helicopter: 0,
 				helicopterIds: [326, 327],
+				twin127SmallGunMountModelDK2: 0,
+				twin127SmallGunMountModelDK2Nonexist: 1,
+				twin127SmallGunMountModelDK2Ids: [267],
+				skilledLookouts: 0,
+				skilledLookoutsIds: [129],
+				searchlightSmall: 0,
+				searchlightSmallIds: [74],
 			},
 			// Ryuusei
 			"18": {
@@ -836,6 +843,58 @@ KC3改 Equipment Object
 						// Suzuya/Kumano CVL, Hyuuga Kai Ni +4 fp
 						ids: [508, 509, 554],
 						multiple: { "houg": 4 },
+					},
+				],
+			},
+			// Type 99 Dive Bomber Model 22
+			"391": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Shoukaku, Zuikaku
+						origins: [75, 92, 110, 111],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou, Ryuuhou, Shouhou Kai
+						ids: [116, 185, 282],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou Kai, Zuihou K2, Zuihou K2B, Ryuuhou Kai
+						ids: [117, 555, 560, 318],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// Type 99 Dive Bomber Model 22 (Skilled)
+			"392": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou
+						origins: [75, 92],
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					{
+						// Shoukaku, Zuikaku
+						origins: [110, 111],
+						multiple: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Zuihou, Ryuuhou, Shouhou Kai
+						ids: [116, 185, 282],
+						multiple: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Zuihou Kai, Ryuuhou Kai
+						ids: [117, 318],
+						multiple: { "houg": 2, "houk": 2 },
+					},
+					{
+						// Zuihou K2, Zuihou K2B
+						ids: [555, 560],
+						multiple: { "houg": 3, "houk": 2 },
 					},
 				],
 			},
@@ -1982,6 +2041,73 @@ KC3改 Equipment Object
 						{
 							minStars: 6,
 							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
+				byShip: {
+					// Any FBB
+					stypes: [8],
+					multiple: { "houg": 1 },
+				},
+			},
+			// 16inch Triple Gun Mount Mk.6 + GFCS
+			"390": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American can equip Large Main Gun:
+					// Iowa
+					"65": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// Colorado
+					"93": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// South Dakota
+					"102": [
+						{
+							multiple: { "houg": 2, "souk": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
 						},
 						{
 							minStars: 10,
@@ -3410,7 +3536,7 @@ KC3改 Equipment Object
 							multiple: { "houg": 2, "houk": 1 },
 							synergy: {
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 2, "raig": 3, "houk": 1 },
+								single: { "houg": 2, "raig": 1, "houk": 1 },
 							},
 						},
 						{
@@ -3420,23 +3546,49 @@ KC3改 Equipment Object
 							// total +6 fp, +4 tp, +4 ev
 							synergy: {
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 1, "raig": 1, "houk": 2 },
+								single: { "houg": 1, "raig": 3, "houk": 2 },
 							},
 						},
 					],
 					// Kagerou Class
-					"30": [
-						{
-							multiple: { "houg": 1, "houk": 1 },
-						},
-						{
-							// Kagerou Class K2, total +2 for 1st gun
-							remodel: 2,
-							excludes: [556, 557, 558, 559],
-							single: { "houg": 1 },
-						},
-					],
+					"30": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
 				},
+				byShip: [
+					{
+						// Kagerou K2, Shiranui K2, Kuroshio K2, one-time +1 fp
+						ids: [566, 567, 568],
+						single: { "houg": 1 },
+					},
+					{
+						// Okinami Kai Ni, Akigumo Kai Ni
+						ids: [569, 648],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "raig": 2 },
+						},
+					},
+					{
+						// Akigumo Kai Ni
+						ids: [648],
+						multiple: { "houg": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 4, "houk": 3 },
+							},
+							{
+								flags: [ "skilledLookouts" ],
+								single: { "houg": 2, "tyku": 2, "houk": 3 },
+							},
+							{
+								flags: [ "searchlightSmall" ],
+								single: { "houg": 3, "houk": -3 },
+							},
+						],
+					},
+				]
 			},
 			// 12.7cm Twin Gun Mount Model D Kai 3
 			"366": {
@@ -3506,19 +3658,57 @@ KC3改 Equipment Object
 						},
 					],
 					// Kagerou Class
-					"30": [
-						{
-							multiple: { "houg": 1, "houk": 1 },
-						},
-						{
-							// Kagerou Class K2, +1 FP, +2 AA for one or two gun(s)
-							remodel: 2,
-							excludes: [556, 557, 558, 559],
-							multiple: { "houg": 1, "tyku": 2 },
-							countCap: 2,
-						},
-					],
+					"30": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
 				},
+				byShip: [
+					{
+						// Kagerou K2, Shiranui K2, Kuroshio K2, +1 fp, +2 aa for one or two gun(s)
+						ids: [566, 567, 568],
+						multiple: { "houg": 1, "tyku": 2 },
+						countCap: 2,
+					},
+					{
+						// Okinami Kai Ni, Akigumo Kai Ni
+						ids: [569, 648],
+						single: { "houg": 1, "tyku": 2 },
+					},
+					{
+						// Akigumo Kai Ni, one-time +3 AA
+						ids: [648],
+						single: { "tyku": 3 },
+					},
+					{
+						// Akigumo Kai Ni, one-time +5 AA for 2 guns
+						ids: [648],
+						single: { "tyku": 2 },
+						minCount: 2,
+					},
+					{
+						// Akigumo Kai Ni
+						ids: [648],
+						multiple: { "houg": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 4, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "houg": 1, "tyku": 5, "houk": 2 },
+							},
+							{
+								flags: [ "twin127SmallGunMountModelDK2Nonexist", "skilledLookouts" ],
+								single: { "houg": 2, "tyku": 2, "houk": 3 },
+							},
+							{
+								flags: [ "twin127SmallGunMountModelDK2Nonexist", "searchlightSmall" ],
+								single: { "houg": 3, "houk": -3 },
+							},
+						],
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model A Kai 3 + AAFD
 			"295": {
@@ -4198,10 +4388,10 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Okinami K2 with Air Radar fp +1, aa +2, ev +3
+						// Okinami K2, Akigumo K2 with Air Radar fp +1, aa +2, ev +3
 						// btw1, main.js also counted Surface Radar for her at the same time, but no bouns assigned at all.
 						// btw2, main.js's function `get_type3_nums` refers `api_type[2]` in fact, not our 't3'(`api_type[3]`), so it uses `12 || 13` for all radars.
-						ids: [569],
+						ids: [569, 648],
 						synergy: {
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
@@ -4232,6 +4422,12 @@ KC3改 Equipment Object
 			}
 			if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
 			if(synergyGears.helicopterIds.includes(gear.masterId)) synergyGears.helicopter += 1;
+			if(synergyGears.twin127SmallGunMountModelDK2Ids.includes(gear.masterId)) {
+				synergyGears.twin127SmallGunMountModelDK2 += 1;
+				synergyGears.twin127SmallGunMountModelDK2Nonexist = 0;
+			}
+			if(synergyGears.skilledLookoutsIds.includes(gear.masterId)) synergyGears.skilledLookouts += 1;
+			if(synergyGears.searchlightSmallIds.includes(gear.masterId)) synergyGears.searchlightSmall += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
 			if(gear.isAirRadar()) synergyGears.airRadar += 1;
 		}
@@ -4398,7 +4594,9 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 7: // Dive Bomber
 					case 8: // Torpedo Bomber
+					case 57: // Jet Fighter Bomber
 					case 58: // Jet Torpedo Bomber
 						return 0.2 * stars;
 					case 14: // Sonar
@@ -4423,8 +4621,8 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
-				if([8, 58].includes(type2))
+				// Dive/Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
+				if([7, 8, 57, 58].includes(type2))
 					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
@@ -4432,8 +4630,8 @@ KC3改 Equipment Object
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
-				// for normal opening airstrike, torpedo/seaplane bomber bonus confirmed
-				if([8, 11, 58].includes(type2)) return 0.2 * stars;
+				// for normal opening airstrike, dive/torpedo/seaplane bomber bonus confirmed
+				if([7, 8, 11, 57, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "lbas":
 				// land-base attacker, unconfirmed yet since no plane improved by akashi
@@ -4617,10 +4815,11 @@ KC3改 Equipment Object
 			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
-			case 7: // Fighter bomber (dive bomber with AA stat)
+			case 7: // Fighter bomber (dive bomber with >2 AA stat?)
 			case 49: // LB recon, uncertain?
 			case 57: // Jet bomber
-				modifier = 0.25; break;
+				if(this.master().api_tyku > 2) modifier = 0.25;
+				break;
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
 			case 47: // LB attacker

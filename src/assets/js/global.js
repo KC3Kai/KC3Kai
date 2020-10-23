@@ -17,6 +17,15 @@ if (!window.NO_GA) {
 	_gaq.push = function() {};
 }
 
+// Convenient method and attribute to get browser's version number
+if (!!navigator) {
+	navigator.parseChromeVersion = function() {
+		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
+		return raw ? parseInt(raw[2], 10) : 0;
+	};
+	navigator.chromeVersion = navigator.parseChromeVersion();
+}
+
 /*
  * Date Format 1.2.3
  * (c) 2007-2009 Steven Levithan <stevenlevithan.com>

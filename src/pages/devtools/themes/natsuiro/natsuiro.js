@@ -539,11 +539,55 @@
 			}
 		});
 
-		// Disable Tab key to prevent it scrolling any window
+		// Handle keyboard events passed to panel for hotkeys
 		$(document).on("keydown", function(e){
+			// Disable Tab key to prevent it scrolling any window
 			if(e.which === 9) {
 				e.stopPropagation();
 				e.preventDefault();
+			}
+			switch(e.keyCode) {
+				case 49: // 1 key switch to fleet #1 view
+					$(".module.controls .fleet_num:contains('1')").trigger("click");
+					break;
+				case 50: // 2 key switch to fleet #2 view
+					$(".module.controls .fleet_num:contains('2')").trigger("click");
+					break;
+				case 51: // 3 key switch to fleet #3 view
+					$(".module.controls .fleet_num:contains('3')").trigger("click");
+					break;
+				case 52: // 4 key switch to fleet #4 view
+					$(".module.controls .fleet_num:contains('4')").trigger("click");
+					break;
+				case 53: // 5 key switch to combined fleet view
+					$(".module.controls .fleet_rengo").trigger("click");
+					break;
+				case 54: // 6 key switch to LBAS view
+					$(".module.controls .fleet_lbas").trigger("click");
+					break;
+				case 81: // Q key switch to basic tab
+					$(".module.activity #atab_basic").trigger("click");
+					break;
+				case 87: // W key switch to battle tab
+					$(".module.activity #atab_battle").trigger("click");
+					break;
+				case 69: // E key switch to quest tab
+					if(ConfigManager.info_quest_activity)
+						$(".module.activity #atab_quest").trigger("click");
+					break;
+				case 82: // R key switch to exped planner tab
+					$(".module.activity #atab_expeditionPlanner").trigger("click");
+					break;
+				case 119: // F8 mute toggle OR Shift+F8 alert sound toggle
+					if(e.shiftKey) {
+						$(".module.controls .btn_alert_toggle").trigger("click");
+					} else {
+						$(".module.controls .btn_mute").trigger("click");
+					}
+					break;
+				case 120: // F9 screenshot
+					$(".module.controls .btn_ss1").trigger("click");
+					break;
 			}
 		});
 
@@ -916,17 +960,46 @@
 			tabId: chrome.devtools.inspectedWindow.tabId
 		}, function(tabInfo){
 			errorReport.gameTabUrl = tabInfo.url;
-			// if inspected tab is muted, update the mute icon
 			try {
+				// if inspected tab is muted, update the mute icon
 				if(tabInfo.mutedInfo.muted){
 					$(".module.controls .btn_mute img").attr("src", "../../../../assets/img/ui/mute-x.png");
 				} else if(ConfigManager.mute_game_tab) {
-					(new RMsg("service", "toggleSounds", {
-						tabId: chrome.devtools.inspectedWindow.tabId
-					}, function(isMuted){
-						$(".module.controls .btn_mute img")
-							.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
-					})).execute();
+					// if not and mute on start setting enabled, try to mute it
+					const toggleTabSounds = function(expected) {
+						(new RMsg("service", "toggleSounds", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(isMuted){
+							$(".module.controls .btn_mute img")
+								.attr("src", "../../../../assets/img/ui/mute{0}.png".format(isMuted ? "-x" : ""));
+							if(typeof expected === "boolean" && isMuted !== expected)
+								toggleTabSounds();
+						})).execute();
+					};
+					// since Chromium m76?, muted tab but no audio actually played yet will still make sounds later,
+					// so polling tab info for audible state, mute the tab when the game actually begins to play audio.
+					// current polling timeout is 70 seconds, since will no audio played until game loaded, or if in-game music/SE is off.
+					const tabMutePollingTimeout = 70;
+					let tabMuteHandler = 0, tabMuteTimeout = 0;
+					const tabAudibleChecker = function() {
+						tabMuteTimeout += 1;
+						console.debug("Checking game tab audible for", tabMuteTimeout, "sec(s)");
+						(new RMsg("service", "getTabInfo", {
+							tabId: chrome.devtools.inspectedWindow.tabId
+						}, function(tab){
+							if(tab.audible) {
+								toggleTabSounds(true);
+								clearInterval(tabMuteHandler);
+							} else if(tabMuteTimeout >= tabMutePollingTimeout) {
+								clearInterval(tabMuteHandler);
+							}
+						})).execute();
+					};
+					if(navigator.chromeVersion >= 76 && !tabInfo.audible) {
+						tabMuteHandler = setInterval(tabAudibleChecker, 1000);
+					} else {
+						toggleTabSounds(true);
+					}
 				}
 			} catch(e) {}
 		})).execute();
@@ -1317,21 +1390,28 @@
 		Consumables: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
 			const getWarnRscCap = max => Math.floor(max * (ConfigManager.alert_rsc_cap / 100)) || Infinity;
-			const fc200 = PlayerManager.consumables.furniture200 || 0,
+			const fcoin = PlayerManager.consumables.fcoin || 0,
+				fc200 = PlayerManager.consumables.furniture200 || 0,
 				fc400 = PlayerManager.consumables.furniture400 || 0,
 				fc700 = PlayerManager.consumables.furniture700 || 0,
 				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
+			const screws = PlayerManager.consumables.screws || 0,
+				medals = PlayerManager.consumables.medals || 0,
+				presents = PlayerManager.consumables.presents || 0,
+				exchgscrewstot = presents + medals * 4;
 			$(".count_fcoin")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.fcoin || 0) )
+				.text( KC3Meta.formatNumber(fcoin) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
 				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(...[fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
-					fcboxestot, fcboxestot + (PlayerManager.consumables.fcoin || 0)].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
+					fcboxestot, fcboxestot + fcoin].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_screws")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.screws || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable));
+				.text( KC3Meta.formatNumber(screws) )
+				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable))
+				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format(...[medals, medals * 4, presents, presents,
+					exchgscrewstot, exchgscrewstot + screws].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
@@ -1379,7 +1459,7 @@
 			const firstItemId = PlayerManager.consumables.mackerel ? 68 :
 				PlayerManager.consumables.sardine ? 93 :
 				PlayerManager.consumables.setsubunBeans ? 90 :
-				PlayerManager.consumables.hishimochi ? 62 : 60;
+				PlayerManager.consumables.hishimochi ? 62 : 56;
 			$(".count_eventItemOrPresent").text(PlayerManager.getConsumableById(firstItemId) || 0)
 				.prev().attr("title", KC3Meta.useItemName(firstItemId))
 				.children("img").attr("src", KC3Meta.useitemIcon(firstItemId, 1));
@@ -4948,6 +5028,9 @@
 						.text(`(${certainValue})`).css("display", certainValue > 0 ? "inline" : "none");
 				}
 			});
+		}
+		if(recipe.api_sp_type) {
+			itemBox.addClass("sptype" + recipe.api_sp_type);
 		}
 		return itemBox;
 	}

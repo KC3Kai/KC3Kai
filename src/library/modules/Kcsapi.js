@@ -2250,6 +2250,12 @@ Previously known as "Reactor"
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
 							break;
+						case 242: // Swordfish
+							KC3QuestManager.get(654).increment(0); // F93 yearly index 0
+							break;
+						case 249: // Fulmar
+							KC3QuestManager.get(654).increment(1); // F93 yearly index 1
+							break;
 					}
 				}
 				KC3GearManager.remove(itemId);
@@ -2962,12 +2968,16 @@ Previously known as "Reactor"
 			if(rankPt >= 4) { // A-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(342))
 					KC3QuestManager.get(342).increment(); // C44: Quarterly Exercises 4
+				if(KC3QuestManager.isPrerequisiteFulfilled(345))
+					KC3QuestManager.get(345).increment(); // C49: Yearly Exercises 1
 			}
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
 					KC3QuestManager.get(337).increment(); // C38: Quarterly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(339))
 					KC3QuestManager.get(339).increment(); // C42: Quarterly Exercises 3
+				if(KC3QuestManager.isPrerequisiteFulfilled(346))
+					KC3QuestManager.get(346).increment(); // C50: Yearly Exercises 2
 			}
 		}
 	}
