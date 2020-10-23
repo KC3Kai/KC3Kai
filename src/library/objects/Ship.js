@@ -863,6 +863,9 @@ KC3改 Ship Object
 				else if (flag.includes("Torpedo")) { return 5; }
 				else if (flag.includes("LargeGunMount")) { return 3; }
 				else if (flag.includes("MediumGunMount")) { return 2; }
+				else if (flag.includes("SmallGunMount")) { return 1; }
+				else if (flag.includes("skilledLookouts")) { return 32; }
+				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
 				return 0; // Unknown synergy type
 			});

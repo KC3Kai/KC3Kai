@@ -93,6 +93,7 @@
                 case 225: // Kagerou
                 case 226: // Shiranui
                 case 227: // Kuroshio
+                case 301: // Akigumo
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
@@ -133,7 +134,7 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 &&
-                ![82, 88, 149, 150, 225, 226, 227, 277, 278, 293, 359, 503, 504, 520, 579, 594, 599, 610, 646, 698, 692].includes(ship_id_from);
+                ![82, 88, 149, 150, 225, 226, 227, 277, 278, 293, 301, 359, 503, 504, 520, 579, 594, 599, 610, 646, 698, 692].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
