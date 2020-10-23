@@ -382,7 +382,7 @@
 				$(".ship_repair_data").css("display", "block");
 			} else {
 				$(".ship_repair_data").css("display", "none");
-			};
+			}
 		});
 	}
 
@@ -3599,7 +3599,7 @@
 					if(grindGoal.targetLevel === undefined || grindGoal.expLeft < 0) return;
 					console.log("Ship exp goal", shipData.name(), grindGoal);
 					$("<div />").text(grindGoal.battlesLeft )
-						.appendTo("#ShipBox" + rosterId + " .ship_level_goal");;
+						.appendTo("#ShipBox" + rosterId + " .ship_level_goal");
 				});
 			}
 
