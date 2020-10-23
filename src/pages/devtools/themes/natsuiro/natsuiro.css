@@ -2773,6 +2773,12 @@ ABYSS FLEET
 	padding: 1px 1px 1px 1px;
 	overflow: hidden;
 }
+.module.activity .activity_remodel .remodelSlotItem.sptype1 {
+	box-shadow: 0px 0px 7px 0px #6b8;
+}
+.module.activity .activity_remodel .remodelSlotItem.sptype2 {
+	box-shadow: 0px 0px 5px 0px #1e4;
+}
 .module.activity .activity_remodel .remodelSlotItem.withStar {
 	height: 69px;
 }
