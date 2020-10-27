@@ -171,9 +171,9 @@
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:215px;
+	width:250px;
 	height:20px;
-	margin:5px 5px -5px 475px;
+	margin:5px 5px -5px 440px;
 	background:none;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {
@@ -601,6 +601,10 @@
 	border-radius:12px;
 	font-size:12px;
 	font-weight:bold;
+}
+.tab_maps .sortie_list .day_to_night {
+	-webkit-filter: brightness(0.75);
+	filter: brightness(0.75);
 }
 .tab_maps .sortie_list .special_cutin {
 	box-shadow: 0px 0px 2px 2px #a08;
