@@ -3363,6 +3363,51 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// 120mm Twin Gun Mount
+			"147": {
+				count: 0,
+				byClass: {
+					// Maestrale Class
+					"61": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+				},
+			},
+			// 120mm/50 Twin Gun Mount mod.1936
+			"393": {
+				count: 0,
+				byClass: {
+					// Maestrale Class
+					"61": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							multiple: { "houg": 1, "tyku": 1 },
+						},
+					],
+				},
+			},
+			// 120mm/50 Twin Gun Mount Kai A.mod.1937
+			"394": {
+				count: 0,
+				byClass: {
+					// Maestrale Class
+					"61": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						},
+					],
+				},
+				byShip: {
+					// extra +1 ev for Grecale all remodels
+					origins: [614],
+					multiple: { "houk": 1 },
+				},
+			},
 			// 130mm B-13 Twin Gun Mount
 			"282": {
 				count: 0,

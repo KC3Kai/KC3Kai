@@ -1481,8 +1481,7 @@ Previously known as "Reactor"
 			// Record material consuming. Yes, set plane use your bauxite :)
 			// Known formula:
 			//var landSlot = api_plane_info.api_max_count;
-			//    or KC3GearManager.landBaseReconnType2Ids.indexOf(planeMaster.api_type[2])>-1 ?
-			//       KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+			//    or KC3GearManager.getLandBaseSlotSize(planeMaster.api_type[2]);
 			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			// But we use player bauxite - after bauxite for two reasons:
 			// not need to compute multi-plane set,
