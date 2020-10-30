@@ -660,7 +660,8 @@ KC3改 Ship Object
 			"houg": "fp",
 			"saku": "ls",
 			"raig": "tp",
-			"houm": "ht"
+			"houm": "ht",
+			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
@@ -681,6 +682,7 @@ KC3改 Ship Object
 			"tais": "as",
 			"saku": "ls",
 			"houm": "ht",
+			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {
 			stats[statApiNames[apiName]] = this.equipmentTotalStats(apiName, true, true, true);
@@ -867,6 +869,7 @@ KC3改 Ship Object
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+				else if (flag.includes("Boiler")) { return 19; }
 				return 0; // Unknown synergy type
 			});
 			return obj;

@@ -66,6 +66,10 @@ KC3改 Equipment Object
 				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
 				airRadar: 0,
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
+				enhancedBoiler: 0,
+				enhancedBoilerIds: [34],
+				newModelBoiler: 0,
+				newModelBoilerIds: [87],
 				tripleTorpedo: 0,
 				tripleTorpedoIds: [13, 125, 285],
 				tripleTorpedoLateModel: 0,
@@ -2274,7 +2278,7 @@ KC3改 Equipment Object
 						multiple: { "houg": 2, "houk": 1 },
 					},
 					{
-						// Kinukasa Kai, Furutaka Kai Ni, Kako Kai Ni
+						// Kinugasa Kai, Furutaka Kai Ni, Kako Kai Ni
 						ids: [295, 416, 417],
 						multiple: { "houg": 1 },
 					},
@@ -4444,6 +4448,244 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Improved Kanhon Type Turbine, speed boost synergy with boilers
+			// https://wikiwiki.jp/kancolle/%E9%80%9F%E5%8A%9B#da6be20e
+			"33": {
+				count: 0,
+				byShip: [
+					{
+						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								single: { "soku": 10 },
+							},
+						],
+					},
+					{
+						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa
+						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								single: { "soku": 10 },
+							},
+						],
+					},
+					{
+						// Fast Group B2: Yuubari Kai Ni/K2D
+						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Aquila?, Graf Zeppelin?, Saratoga?, Hornet?
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota
+						//   All fast DD: mass... except Samuel
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena
+						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston
+						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou
+						origins: [115, 441, 442, 171, 492, 602, 83, 332, 549, 444, 432, 433, 603,
+								1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+									93, 94, 95, 96, 97, 98, 122, 132, 133, 134, 135, 164, 165, 167, 168, 169, 170, 174, 175, 186, 190,
+									405, 409, 410, 413, 414, 415, 421, 422, 423, 424, 425, 443, 452, 453, 454, 455, 456, 457, 458, 459,
+									471, 472, 473, 474, 475, 479, 480, 481, 484, 485, 486, 519, 520, 527, 528, 532,
+									562, 575, 583, 596, 614, 625, 631, 632, 641,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615,
+								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595,
+								74, 76, 116, 102, 103
+							],
+						excludes: [115, 293, 623, 102, 103, 104, 105, 106, 107],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 5 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": -5 },
+								},
+							},
+						],
+					},
+					{
+						// Fast Group C: Yuubari/Yuubari Kai, Kaga, fast AV: Chitose, Chiyoda, Nisshin
+						origins: [115, 84, 102, 103, 581],
+						excludes: [622, 623, 624, 108, 109, 291, 292, 296, 297],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								single: { "soku": -5 },
+							},
+						],
+					},
+					{
+						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni
+						origins: [131, 143, 80, 81],
+						excludes: [80, 275, 81, 276],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 15 },
+									"4": { "soku": 15 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"2": { "soku": 5 },
+									"3": { "soku": 5 },
+								},
+							},
+						],
+					},
+					{
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima
+						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut?
+						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
+						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
+						origins: [184, 634, 162, 154, 465,
+								26, 27, 77, 87, 80, 81, 439, 571, 601, 511,
+								75, 89, 92, 521, 534, 544,
+								445, 451, 491
+							],
+						excludes: [541, 573],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 5 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": -5 },
+									"3": { "soku": -5 },
+								},
+							},
+							{
+								flags: [ "enhancedBoiler", "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"2": { "soku": -5 },
+									"3": { "soku": -5 },
+								},
+							},
+						],
+					},
+					{
+						// Slow Group B special: Yuubari Kai Ni Toku, Samuel B.Roberts
+						ids: [623, 561, 681],
+						single: { "soku": 5 },
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"3": { "soku": 5 },
+									"4": { "soku": 5 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"2": { "soku": 5 },
+									"3": { "soku": 5 },
+									"4": { "soku": 5 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"2": { "soku": 5 },
+								},
+							},
+						],
+					},
+					{
+						// Slow Group C: Akashi, Hayasui, Akitsumaru, Shinshumaru?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-47, U-511, UIT-25, Maruyu, I-400, I-401, I-13, I-14
+						origins: [182, 460, 161, 621,  126, 127, 128, 191, 483, 636, 431, 539, 163, 493, 155, 494, 495],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								single: { "soku": 5 },
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								single: { "soku": -5 },
+							},
+						],
+					},
+				],
+			},
 		};
 	};
 
@@ -4451,6 +4693,8 @@ KC3改 Equipment Object
 		const gearTypes = gear.master().api_type || [];
 		const synergyGears = bonusGears.synergyGears;
 		if(synergyGears) {
+			if(synergyGears.enhancedBoilerIds.includes(gear.masterId)) synergyGears.enhancedBoiler += 1;
+			if(synergyGears.newModelBoilerIds.includes(gear.masterId)) synergyGears.newModelBoiler += 1;
 			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
 			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
 			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;

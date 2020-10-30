@@ -924,23 +924,23 @@
 					if (bonusDef.ids && !bonusDef.ids.includes(shipId)) { return false; }
 					return true;
 				};
-				const checkByShipBonusDef = (bonusDef, shipId, originId, stype, ctype, gearType2) => (
-					(Array.isArray(gearType2) ?
-						gearType2.some(id => KC3Master.equip_type(stype, shipId).includes(id)) :
-						KC3Master.equip_type(stype, shipId).includes(gearType2)
-					) && (
-						(bonusDef.ids && bonusDef.ids.includes(shipId)) ||
-						(bonusDef.origins && bonusDef.origins.includes(originId)) ||
-						(bonusDef.stypes && bonusDef.stypes.includes(stype)) ||
-						(bonusDef.classes && bonusDef.classes.includes(ctype)) ||
-						(bonusDef.excludes && !bonusDef.excludes.includes(shipId)) ||
-						(bonusDef.excludeOrigins && !bonusDef.excludeOrigins.includes(originId)) ||
-						(bonusDef.excludeStypes && !bonusDef.excludeStypes.includes(stype)) ||
-						(bonusDef.excludeClasses && !bonusDef.excludeClasses.includes(ctype)) ||
-						(!bonusDef.ids && !bonusDef.origins && !bonusDef.stypes && !bonusDef.classes
-							&& !bonusDef.excludes && !bonusDef.excludeOrigins && !bonusDef.excludeStypes && !bonusDef.excludeClasses)
-					)
-				);
+				const checkByShipBonusDef = (bonusDef, shipId, originId, stype, ctype, gearType2) => {
+					if (Array.isArray(gearType2) ?
+							gearType2.some(id => KC3Master.equip_type(stype, shipId).includes(id)) :
+							KC3Master.equip_type(stype, shipId).includes(gearType2)
+						) {
+						if (bonusDef.ids && !bonusDef.ids.includes(shipId)) { return false; }
+						if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
+						if (bonusDef.origins && !bonusDef.origins.includes(originId)) { return false; }
+						if (bonusDef.excludeOrigins && bonusDef.excludeOrigins.includes(originId)) { return false; }
+						if (bonusDef.stypes && !bonusDef.stypes.includes(stype)) { return false; }
+						if (bonusDef.excludeStypes && bonusDef.excludeStypes.includes(stype)) { return false; }
+						if (bonusDef.classes && !bonusDef.classes.includes(ctype)) { return false; }
+						if (bonusDef.excludeClasses && bonusDef.excludeClasses.includes(ctype)) { return false; }
+						return true;
+					}
+					return false;
+				};
 				const checkByShipBonusRequirements = (byShip, shipId, originId, stype, ctype, gearType2) =>
 					ensureArray(byShip).some(bonusDef => checkByShipBonusDef(bonusDef, shipId, originId, stype, ctype, gearType2));
 				const addObjects = (obj1, obj2) => {
@@ -968,6 +968,7 @@
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+					else if (flag.includes("Boiler")) { return 19; }
 					return 0;
 				};
 				
