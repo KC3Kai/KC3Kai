@@ -4489,23 +4489,56 @@ KC3改 Equipment Object
 					},
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D
-						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Aquila?, Graf Zeppelin?, Saratoga?, Hornet?
+						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal?, Aquila?, Graf Zeppelin?, Saratoga?, Hornet?
 						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota
-						//   All fast DD: mass... except Samuel
+						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou
-						origins: [115, 441, 442, 171, 492, 602, 83, 332, 549, 444, 432, 433, 603,
-								1, 2, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-									93, 94, 95, 96, 97, 98, 122, 132, 133, 134, 135, 164, 165, 167, 168, 169, 170, 174, 175, 186, 190,
-									405, 409, 410, 413, 414, 415, 421, 422, 423, 424, 425, 443, 452, 453, 454, 455, 456, 457, 458, 459,
-									471, 472, 473, 474, 475, 479, 480, 481, 484, 485, 486, 519, 520, 527, 528, 532,
-									562, 575, 583, 596, 614, 625, 631, 632, 641,
+						origins: [115, 441, 442, 171, 492, 602, 83, 332, 549, 515, 444, 432, 433, 603,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595,
 								74, 76, 116, 102, 103
 							],
 						excludes: [115, 293, 623, 102, 103, 104, 105, 106, 107],
+						synergy: [
+							{
+								flags: [ "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 5 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+									"5": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler" ],
+								byCount: {
+									gear: "newModelBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+									"5": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": -5 },
+								},
+							},
+						],
+					},
+					{
+						// Fast Group B2 for all fast DDs
+						stypes: [2],
+						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
+						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze
+						excludes: [561, 681, 50, 229, 516, 395, 181, 316],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -4604,6 +4637,7 @@ KC3改 Equipment Object
 									"2": { "soku": 5 },
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
+									"5": { "soku": 10 },
 								},
 							},
 							{
@@ -4614,6 +4648,7 @@ KC3改 Equipment Object
 									"2": { "soku": 10 },
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
+									"5": { "soku": 10 },
 								},
 							},
 							{
@@ -4622,6 +4657,7 @@ KC3改 Equipment Object
 									gear: "enhancedBoiler",
 									"1": { "soku": -5 },
 									"3": { "soku": -5 },
+									"4": { "soku": -5 },
 								},
 							},
 							{
@@ -4630,6 +4666,7 @@ KC3改 Equipment Object
 									gear: "newModelBoiler",
 									"2": { "soku": -5 },
 									"3": { "soku": -5 },
+									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -4645,6 +4682,7 @@ KC3改 Equipment Object
 									gear: "enhancedBoiler",
 									"3": { "soku": 5 },
 									"4": { "soku": 5 },
+									"5": { "soku": 5 },
 								},
 							},
 							{
@@ -4654,6 +4692,7 @@ KC3改 Equipment Object
 									"2": { "soku": 5 },
 									"3": { "soku": 5 },
 									"4": { "soku": 5 },
+									"5": { "soku": 5 },
 								},
 							},
 							{
