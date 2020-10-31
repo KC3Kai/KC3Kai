@@ -661,6 +661,7 @@ KC3改 Ship Object
 			"saku": "ls",
 			"raig": "tp",
 			"houm": "ht",
+			"leng": "rn",
 			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {
@@ -682,6 +683,7 @@ KC3改 Ship Object
 			"tais": "as",
 			"saku": "ls",
 			"houm": "ht",
+			"leng": "rn",
 			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {
