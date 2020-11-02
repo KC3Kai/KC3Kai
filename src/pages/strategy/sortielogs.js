@@ -1042,7 +1042,9 @@
 									}
 								}
 							}
-							if(ConfigManager.sr_show_yasen_shipstate && typeof battle.yasen.api_deck_id != "undefined"){
+							if(ConfigManager.sr_show_yasen_shipstate &&
+								typeof battle.yasen.api_deck_id != "undefined" &&
+								!(battleType & (BATTLE_NIGHT | BATTLE_NIGHT2DAY))){
 								$(".node_id", nodeBox).addClass("day_to_night");
 								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("day_to_night");
 							}
