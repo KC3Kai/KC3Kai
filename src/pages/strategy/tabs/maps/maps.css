@@ -640,6 +640,8 @@
 	height:20px;
 	vertical-align:top;
 	object-fit: cover;
+}
+.tab_maps .sortie_list .node_result_box.node_drop img {
 	border-radius: 50%;
 	image-rendering: auto;
 }
