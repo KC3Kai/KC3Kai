@@ -3394,6 +3394,9 @@
 				$(".module.activity .node_type_battle").show();
 			}
 			this.Fleet();
+
+			// Reset border radius for non-drop images that go in the drop element
+			$(".module.activity .battle_drop img").css("border-radius", "0%");
 		},
 
 		BattleNight: function(data){
@@ -3521,7 +3524,8 @@
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
-						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false))
+						.css("border-radius", "50%");
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -3537,7 +3541,9 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
+					.attr("src", ConfigManager.info_troll ?
+						"/assets/img/ui/jervaited.png" :
+						"/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction

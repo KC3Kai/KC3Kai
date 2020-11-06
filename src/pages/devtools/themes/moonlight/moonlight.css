@@ -1299,7 +1299,6 @@ ABYSS FLEET
 }
 .module.activity .battle_drop img {
 	object-fit:cover;
-	border-radius:50%;
 }
 .module.activity .battle_drop.new_ship {
 	filter:drop-shadow(0px 0px 3px #1f1);
