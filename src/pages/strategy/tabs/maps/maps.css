@@ -171,9 +171,9 @@
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:215px;
+	width:250px;
 	height:20px;
-	margin:5px 5px -5px 475px;
+	margin:5px 5px -5px 440px;
 	background:none;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {
@@ -364,7 +364,7 @@
 	font-size:11px;
 }
 .tab_maps .sortie_list .sortie_edge.edge_battle {
-	background:#700000;
+	background:#755555;
 }
 .tab_maps .sortie_list .sortie_edge.active {
 	background:#B50000;
@@ -602,6 +602,10 @@
 	font-size:12px;
 	font-weight:bold;
 }
+.tab_maps .sortie_list .day_to_night {
+	-webkit-filter: brightness(0.75);
+	filter: brightness(0.75);
+}
 .tab_maps .sortie_list .special_cutin {
 	box-shadow: 0px 0px 2px 2px #a08;
 }
@@ -636,6 +640,8 @@
 	height:20px;
 	vertical-align:top;
 	object-fit: cover;
+}
+.tab_maps .sortie_list .node_result_box.node_drop img {
 	border-radius: 50%;
 	image-rendering: auto;
 }

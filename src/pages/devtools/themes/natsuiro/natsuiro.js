@@ -489,7 +489,6 @@
 			.css("text-shadow", shadowDirStr);
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
-		// Either share moonlight config key for HP bar metrics
 		$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
 
 		// Panel customizations: bg image
@@ -3340,6 +3339,9 @@
 			}
 
 			this.Fleet();
+
+			// Reset border radius for non-drop images that go in the drop element
+			$(".module.activity .battle_drop img").css("border-radius", "0%");
 		},
 
 		BattleResult: function(data){
@@ -3393,7 +3395,8 @@
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
-						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false))
+						.css("border-radius", "50%");
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -4841,22 +4844,13 @@
 				});
 				const stats = equipBonus.stats;
 				const statsBox = $("<div></div>").addClass("statsBox");
-				const statsTermKeyMap = {
-					"fp": "ShipFire",
-					"tp": "ShipTorpedo",
-					"aa": "ShipAntiAir",
-					"ar": "ShipArmor",
-					"ev": "ShipEvasion",
-					"as": "ShipAsw",
-					"ls": "ShipLos",
-				};
 				for (const key in stats) {
 					if (stats[key] !== 0) {
 						$("<div></div>").appendTo(statsBox)
 							.append($("<img/>").attr("src", KC3Meta.statIcon(key)))
 							.append($("<span></span>")
 								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "", stats[key])))
-							.attr("title", KC3Meta.term(statsTermKeyMap[key]) || key)
+							.attr("title", KC3Meta.statNameTerm(key) || key)
 							.lazyInitTooltip();
 					}
 				}
