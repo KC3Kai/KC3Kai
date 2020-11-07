@@ -1971,7 +1971,11 @@ button, input, select, textarea {
 	background:#222;
 	color:#aaa;
 }
-
+.tab_event .sortie_list .day_to_night,
+.tab_maps .sortie_list .day_to_night {
+	-webkit-filter: brightness(0.6) !important;
+	filter: brightness(0.6) !important;
+}
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
 	filter: invert(100%);
