@@ -396,22 +396,22 @@
 		}
 	}
 	
-	// pan_moon_skin presets       bar_style[0],bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],             shiplist_bg[6],             misc_bg[7]
-	var mode_moonlight =         ["fluid",     "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
-	var mode_natsuiro =          ["natsuiro",  "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrnatsuiro",      "slistbg_clrnone",          "miscbg_clrnone"];
-	var mode_dark_blue =         ["flats",     "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
-	var mode_dark =              ["flats",     "clrdim",      "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
-	var mode_flashbang =         ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_transparency1 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_transparency2 =     ["glassy",    "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_lightblue =         ["flats",     "clrblue",     "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
+	// pan_moon_skin presets       bar_style[0],  bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],             shiplist_bg[6],             misc_bg[7]
+	var mode_moonlight =         ["fluid",       "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
+	var mode_natsuiro =          ["natsuiro",    "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrnatsuiro",      "slistbg_clrnone",          "miscbg_clrnone"];
+	var mode_dark_blue =         ["flats",       "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
+	var mode_dark =              ["flats_dark",  "clrdark",     "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
+	var mode_flashbang =         ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_transparency1 =     ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_transparency2 =     ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "bg_iceberg",     "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
 	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
 
 	//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],         ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
 	mode_moonlight.push(            "conbut_moonlight",   "icon_moonlight", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrhalfteal",  "rgba(24, 45, 85, 1)",  "qsch_moonlight");
 	mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_natsuiro");
 	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
-	mode_dark.push(                 "conbut_moonless",    "icon_moonless",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrgold",      "clrnone",              "qsch_moonless");
+	mode_dark.push(                 "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_dark");
 	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
 	mode_transparency1.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
 	mode_transparency2.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
@@ -420,13 +420,13 @@
 
 	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]
 	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
-	mode_natsuiro.push(             "skin_natsuiro", "tip_natsuiro", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro");
+	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro");
 	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey");
-	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
-	mode_flashbang.push(            "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_transparency1.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_transparency2.push(        "skin_flashbang","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_lightblue.push(            "skin_lightblue","tip_natsuiro", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey");
+	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_transparency1.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_transparency2.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
+	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
 	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors);
 
 	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_transparency1,mode_transparency2,mode_lightblue];
@@ -2782,14 +2782,14 @@
 
 									if (planeInfo.api_count < planeInfo.api_max_count) {
 										let cost = baseInfo.calcResupplyCost();
-										$(".base_plane_count", planeBox).addClass("unsupplied");
+										$(".base_plane_count", planeBox).addClass("unsupplied red_text").removeClass("offwhite_text");
 										$(".base_plane_count", planeBox).attr("title",
 											KC3Meta.term("PanelResupplyCosts").format(
 												cost.fuel, cost.ammo, cost.bauxite, ""
 											)
 										).lazyInitTooltip();
 									} else {
-										$(".base_plane_count", planeBox).removeClass("unsupplied");
+										$(".base_plane_count", planeBox).removeClass("unsupplied red_text").addClass("offwhite_text");
 										$(".base_plane_count", planeBox).attr("title", "");
 									}
 
@@ -4717,7 +4717,7 @@
 						.removeClass("red_text offwhite_text yellow_text");
 					return "no-overdrum"; 
 				}
-				if (rate < 80) { return ""; } // no colour
+				/*if (rate < 80) { return ""; } // no colour*/
 				if (rate < 100 ) {
 					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
 						.addClass("orange_text " + get_style_select(20))
@@ -4993,12 +4993,19 @@
 					$(".fit_current .fit_night span", gunfitBox)
 						.text(signedNumber(fitNight))
 						.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
+					$(".fit_penalty").addClass("red_text").removeClass("green_text");
+					$(".fit_bonus").addClass("green_text").removeClass("red_text");
 					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).show();
 					$(".fit_current .fit_unknown", gunfitBox).hide();
 				}
 				const totalFit = data.shipObj.shellingGunFitAccuracy();
 				$(".fit_total .value", gunfitBox)
 					.text(signedNumber(Math.qckInt("floor", totalFit, 1)));
+				totalFit < 0 ? 
+					$(".fit_total .value", gunfitBox).addClass("red_text").removeClass("green_text") :
+					totalFit > 0 ? 
+						$(".fit_total .value", gunfitBox).addClass("green_text").removeClass("red_text") :
+						$(".fit_total .value", gunfitBox).removeClass("red_text green_text");
 				gunfitBox.off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)

@@ -1286,11 +1286,12 @@
 				"type" : "dropdown",
 				"options" : {
 					"choices" : [
-						[ "0", "Moonlight" ],
-						[ "1", "Natsuiro (60%)"],
-						[ "2", "Edgelord" ],
-						[ "3", "Dark (0%)" ],
+						[ "3", "Dark (playable)" ],
+						[ "2", "Dark Blue (playable)" ],
 						[ "4", "Flashbang (0%)" ],
+						[ "7", "Light Blue (needs reevaluation)" ],
+						[ "0", "Moonlight (playable)" ],
+						[ "1", "Natsuiro (not there yet)"],
 						[ "5", "Mild Transparency Skin (0%)" ],
 						[ "6", "Moderate Transparency Skin (0%)" ]
 					]
@@ -1307,6 +1308,7 @@
 						[ "hex_img", "Hex Grid" ],
 						[ "bg_black_pearl", "Black Pearl" ],
 						[ "bg_dark", "Dark" ],
+						[ "bg_iceberg", "Iceberg" ],
 						[ "bg_white", "White" ]
 					]
 				}
@@ -1346,6 +1348,8 @@
 						[ "fluid", "SettingsPanelBarFluid" ],
 						[ "fluid_ver2", "Fluid (Harsh)" ],
 						[ "flats", "SettingsPanelBarFlats" ],
+						[ "flats_dark", "Flat Color (Dark)" ],
+						[ "flats_light", "Flat Color (Light)"],
 						[ "natsuiro", "Natsuiro" ],
 						[ "glassy", "SettingsPanelBarGlassy" ]
 					]
@@ -1374,6 +1378,7 @@
 						[ "clrmoonlight", "Moonlight" ],
 						[ "clrnatsuiro", "Natsuiro" ],
 						[ "clrdim", "SettingsPanelBarDim" ],
+						[ "clrdark", "Dark" ],
 						[ "clrblue", "Blue" ]
 					]
 				}
@@ -1393,6 +1398,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "conbut_moonlight", "Moonlight" ],
 						[ "conbut_natsuiro", "Natsuiro" ],
+						[ "conbut_dark", "Dark" ],
 						[ "conbut_moonless", "Edgelord" ],
 						[ "conbut_flashbang", "Flashbang" ],
 						[ "conbut_lightblue", "Light Blue" ]
@@ -1435,6 +1441,7 @@
 						[ "actvbg_clrmoonlight", "Moonlight" ],
 						[ "actvbg_clrnatsuiro", "Natsuiro" ],
 						[ "actvbg_clrlicoriceblue", "Licorice Blue" ],
+						[ "actvbg_clrjet", "Jet" ],
 						[ "actvbg_clrflashbang", "Flashbang" ],
 						[ "actvbg_clrlightblue", "Light Blue Skin" ],
 						[ "custom", "Custom" ]
@@ -1460,6 +1467,9 @@
 						[ "slistbg_clrnone", "None" ],
 						[ "slistbg_clrmoonlight", "Moonlight" ],
 						[ "slistbg_clrlicoriceblue", "Licorice Blue" ],
+						[ "slistbg_clrblack", "Black" ],
+						[ "slistbg_clrdark", "Dark" ],
+						[ "slistbg_clrjet", "Jet" ],
 						[ "slistbg_clrflashbang", "Flashbang" ],
 						[ "slistbg_clrlightblue", "Light Blue Skin" ],
 						[ "slistbg_custom", "Custom" ]
@@ -1484,6 +1494,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "miscbg_clrnone", "None" ],
 						[ "miscbg_clrmoonlight", "Moonlight" ],
+						[ "miscbg_clrjet", "Jet" ],
 						[ "miscbg_clrlicoriceblue", "Licorice Blue" ],
 						[ "miscbg_clrflashbang", "Flashbang - Testing" ],
 						[ "miscbg_clrlightblue", "Light Blue Skin" ],
@@ -1546,6 +1557,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "siconbg_clrnone", "None" ],
 						[ "siconbg_clrblackpearl", "Black Pearl" ],
+						[ "siconbg_clrblack", "Black" ],
 						[ "siconbg_clrblue", "Blue" ],
 						[ "siconbg_clrwhite", "White" ],
 						[ "siconbg_clrlightblue", "Light Blue" ],
@@ -1599,6 +1611,7 @@
 						[ "icon_moonlight", "Moonlight" ],
 						[ "icon_natsuiro", "Natsuiro" ],
 						[ "icon_moonless", "Edgelord" ],
+						[ "icon_dark", "Dark" ],
 						[ "icon_flashbang", "Flashbang" ],
 						[ "icon_lightblue", "LightBlue" ]
 					]
@@ -1652,6 +1665,7 @@
 						[ "qsch_moonlight", "Moonlight" ],
 						[ "qsch_natsuiro", "Natsuiro" ],
 						[ "qsch_moonless", "Edgelord" ],
+						[ "qsch_dark", "Dark" ],
 						[ "qsch_lightblue", "Light Blue" ]
 					]
 				}
@@ -1678,6 +1692,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "ep_colorblind", "Moonlight" ],
 						[ "ep_natsuiro", "Natsuiro" ],
+						[ "ep_dark", "Dark" ],
 						[ "ep_moonless", "Edgelord" ]
 					]
 				}
