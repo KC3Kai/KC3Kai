@@ -1084,8 +1084,11 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .module.activity .battle_drop img {
-	object-fit: cover;
-	image-rendering: auto;
+	object-fit:cover;
+	image-rendering:auto;
+}
+.module.activity .battle_drop img.rounded {
+	border-radius:50%;
 }
 .module.activity .battle_drop.new_ship {
 	filter:drop-shadow(0px 0px 3px #1f1);

@@ -1102,7 +1102,7 @@
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
-		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
 		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
@@ -3339,9 +3339,6 @@
 			}
 
 			this.Fleet();
-
-			// Reset border radius for non-drop images that go in the drop element
-			$(".module.activity .battle_drop img").css("border-radius", "0%");
 		},
 
 		BattleResult: function(data){
@@ -3395,8 +3392,8 @@
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
-						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false))
-						.css("border-radius", "50%");
+						.addClass("rounded")
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -3412,6 +3409,7 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
+					.removeClass("rounded")
 					.attr("src", ConfigManager.info_troll ?
 						"/assets/img/ui/jervaited.png" :
 						"/assets/img/ui/dark_shipdrop-x.png");
