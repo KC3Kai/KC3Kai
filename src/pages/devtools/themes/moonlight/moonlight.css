@@ -3982,14 +3982,17 @@ ABYSS FLEET
 	width:11px;
 	height:11px;
 }
+.qsch_dark .quest_color {
+	border:1px solid #131313;
+}
 .qsch_lightblue .quest_color {
 	border:1px solid #008080;
 }
 .quest.complete .quest_color {
-	width:16px;
-	height:16px;
+	width:14px;
+	height:14px;
+	margin:2px 2px 0px 0px;
 	font-size:11px;
-	margin:1px 1px 0px -1px;
 	background:#555;
 	float:left;
 	line-height:normal;
@@ -4005,23 +4008,22 @@ ABYSS FLEET
 	width:15px;
 	margin:1px 1px 0px 0px;
 }
-.quest.complete.qsch_natsuiro .quest_color {
-	background:#555;
-	border:2px solid #0f0;
-	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
-}
-.quest.complete.qsch_dark .quest_color,
-.quest.complete.qsch_lightblue .quest_color {
-	width:14px;
-	height:14px;
-	margin:2px 2px 0px 0px;
-	border:none;
-}
 .v .module.quests .quest.complete.qsch_lightblue .quest_color,
 .v .module.quests .quest.complete.qsch_dark .quest_color {
 	margin:2px 0px 0px 2px;
 	width:11px;
 	height:11px;
+	border:none;
+}
+.quest.complete.qsch_natsuiro .quest_color {
+	background:#555;
+	border:2px solid #0f0;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
+}
+.quest.complete.qsch_dark .quest_color {
+	border:1px solid #131313;
+}
+.quest.complete.qsch_lightblue .quest_color {
 	border:none;
 }
 .quest_text {
@@ -4076,7 +4078,7 @@ ABYSS FLEET
 	background:#BACBD4;
 }
 .quest.qsch_dark.complete .quest_track {
-	background:#555;
+	background:#414141;
 }
 .quest.qsch_lightblue.complete .quest_track {
 	background:#324B64;
@@ -7113,15 +7115,6 @@ ABYSS FLEET
 	user-select: none;
 	-webkit-user-select: none;
 }
-.module.status .status_text.bad {
-	color:#faa;
-}
-.module.status .status_text.good {
-	color:#afa;
-}
-.module.status .status_text.slotsWarn {
-	color:#ffa;
-}
 .module.status .status_support {
 	display:none;
 }
@@ -7359,9 +7352,6 @@ ABYSS FLEET
 	top:-13px;
 	left:62px;
 }
-/*.base_plane_count.unsupplied {
-	color:#f55;
-}*/
 .base_plane_cond {
 	width:16px;
 	padding:4px 0px;

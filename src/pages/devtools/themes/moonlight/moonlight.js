@@ -446,6 +446,11 @@
 		return select_this;
 	}
 
+	function set_text_color(text_color,target,selection) {
+		$(target,selection).removeClass("primary_text secondary_text offwhite_text grey_text green_text yellow_text orange_text red_text");
+		return $(target,selection).addClass(text_color);
+	}
+
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -1740,10 +1745,11 @@
 
 			$(".count_ships")
 				.text( shipCount )
-				.toggleClass( "orange_text", (KC3ShipManager.max - shipCount) < 5)
-				.toggleClass( "red_text", (KC3ShipManager.max - shipCount) <= 0)
 				.attr("title", "\u2764 " + lockedShipCount)
 				.lazyInitTooltip();
+			if ((KC3ShipManager.max - shipCount) <= 0) {set_text_color("red_text",".count_ships");}
+			else if ((KC3ShipManager.max - shipCount) < 5) {set_text_color("orange_text",".count_ships");}
+			else {set_text_color("",".count_ships");}
 
 			$(".max_ships").text( "/"+ KC3ShipManager.max );
 		},
@@ -1755,10 +1761,11 @@
 
 			$(".count_gear")
 				.text( gearCount )
-				.toggleClass("orange_text", (KC3GearManager.max - gearCount) < 20)
-				.toggleClass("red_text", (KC3GearManager.max - gearCount) <= 3)
 				.attr("title", "\u2764 " + lockedGearCount)
 				.lazyInitTooltip();
+			if ((KC3GearManager.max - gearCount) <= 3) {set_text_color("red_text",".count_gear");}
+			else if ((KC3GearManager.max - gearCount) < 20) {set_text_color("orange_text",".count_gear");}
+			else {set_text_color("",".count_gear");}
 
 			$(".max_gear").text( "/"+ KC3GearManager.max );
 		},
@@ -2402,7 +2409,7 @@
 
 
 			// Clear status reminder coloring
-			$(".module.status .status_text").removeClass("green_text red_text slotsWarn");
+			set_text_color("",".module.status .status_text");
 			$(".module.status").hideChildrenTooltips();
 
 			// If fleet status summary is enabled on settings
@@ -2421,11 +2428,11 @@
 				){
 					$(".module.status .status_supply .status_text").text( KC3Meta.term("PanelSupplied") );
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/check.png");
-					$(".module.status .status_supply .status_text").addClass("green_text");
+					set_text_color("green_text",".module.status .status_supply .status_text");
 					// If selected fleet view not on sortie, and some aircraft slots not full
 					if(FleetSummary.badState[4] &&
 						!(KC3SortieManager.isOnSortie() && isSortieFleetsSelected)){
-						$(".module.status .status_supply .status_text").removeClass("green_text").addClass("slotsWarn");
+						set_text_color("orange_text",".module.status .status_supply .status_text");
 					}
 				}else{
 					$(".module.status .status_supply .status_text").text(KC3Meta.term(
@@ -2433,7 +2440,7 @@
 							(FleetSummary.badState[0] ? "PanelUnderSupplied" : "PanelNotSupplied")
 						));
 					$(".module.status .status_supply img").attr("src", "../../../../assets/img/ui/sunk.png");
-					$(".module.status .status_supply .status_text").addClass("red_text");
+					set_text_color("red_text",".module.status .status_supply .status_text");
 				}
 				$(".module.status .status_supply").attr("title",
 					KC3Meta.term("PanelResupplyCosts").format(
@@ -2454,18 +2461,18 @@
 				// STATUS: MORALE
 				if( FleetSummary.lowestMorale > 52 ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGreatMorale") );
-					$(".module.status .status_morale .status_text").addClass("green_text");
+					set_text_color("green_text",".module.status .status_morale .status_text");
 					moraleClockValue = 100;
 					moraleClockEnd = 0;
 				}else if( FleetSummary.lowestMorale >= ConfigManager.alert_morale_value ){
 					$(".module.status .status_morale .status_text").text( KC3Meta.term("PanelGoodMorale") );
-					$(".module.status .status_morale .status_text").addClass("green_text");
+					set_text_color("green_text",".module.status .status_morale .status_text");
 					moraleClockValue = 100;
 					moraleClockEnd = 0;
 				}else{
 					var MissingMorale = ConfigManager.alert_morale_value - FleetSummary.lowestMorale;
 					var MoraleTime = Math.hrdInt('ceil',MissingMorale,LOG3)*60;
-					$(".module.status .status_morale .status_text").addClass("red_text");
+					set_text_color("orange_text",".module.status .status_morale .status_text");
 
 					if(FleetSummary.lowestMorale != moraleClockValue){
 						// console.debug("New morale time", FleetSummary.lowestMorale, MoraleTime);
@@ -2496,8 +2503,7 @@
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "sunk.png")
 					);
-					$(".module.status .status_repair .status_text")
-						.attr("titlealt", "").addClass("red_text");
+					set_text_color("red_text",".module.status .status_repair .status_text");
 					const fcfInfo = KC3SortieManager.getCurrentFCF();
 					// Show some strategy hints if FCF retreating is possible
 					if(!FleetSummary.badState[2] && fcfInfo.isAvailable){
@@ -2569,8 +2575,8 @@
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelCombinedFSChuuha") )
 						.attr("titlealt", KC3Meta.term("PanelCombinedFSChuuhaTip"))
-						.lazyInitTooltip()
-						.addClass("red_text");
+						.lazyInitTooltip();
+					set_text_color("orange_text",".module.status .status_repair .status_text");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/" +
 						(FleetSummary.badState[2] ? "estat_bossheavy.png" : "estat_bossmodrt.png")
 					);
@@ -2578,8 +2584,8 @@
 				}else{
 					$(".module.status .status_repair .status_text")
 						.text( KC3Meta.term("PanelNoTaiha") )
-						.attr("titlealt", "")
-						.addClass("green_text");
+						.attr("titlealt", "");
+					set_text_color("green_text",".module.status .status_repair .status_text");
 					$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
 				}
 
@@ -2782,14 +2788,14 @@
 
 									if (planeInfo.api_count < planeInfo.api_max_count) {
 										let cost = baseInfo.calcResupplyCost();
-										$(".base_plane_count", planeBox).addClass("unsupplied red_text").removeClass("offwhite_text");
+										set_text_color("red_text",".base_plane_count", planeBox);
 										$(".base_plane_count", planeBox).attr("title",
 											KC3Meta.term("PanelResupplyCosts").format(
 												cost.fuel, cost.ammo, cost.bauxite, ""
 											)
 										).lazyInitTooltip();
 									} else {
-										$(".base_plane_count", planeBox).removeClass("unsupplied red_text").addClass("offwhite_text");
+										set_text_color("offwhite_text",".base_plane_count", planeBox);
 										$(".base_plane_count", planeBox).attr("title", "");
 									}
 
@@ -2833,7 +2839,8 @@
 				$(".module.status").hideChildrenTooltips();
 				$(".module.status .status_supply .status_text").text(KC3Meta.term(
 					lbasIsSupplied ? "PanelSupplied" : "PanelNotSupplied"
-				)).toggleClass("green_text", lbasIsSupplied).toggleClass("bad", !lbasIsSupplied);
+				));
+				set_text_color(lbasIsSupplied ? "green_text" : "red_text",".module.status .status_supply .status_text");
 				$(".module.status .status_supply img").attr("src",
 					"/assets/img/ui/" + (lbasIsSupplied ? "check.png" : "sunk.png"));
 				const lbasSupplyCost = KC3Calc.getLandBasesResupplyCost();
@@ -2850,8 +2857,8 @@
 				$(".module.status .status_morale img").attr("src",
 					"/assets/img/client/morale/" + (["","3","2","1"][lbasWorstCond]) + ".png");
 				$(".module.status .status_morale .status_text")
-					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"))
-					.toggleClass("red_text", lbasCondBad).toggleClass("green_text", !lbasCondBad);
+					.text(KC3Meta.term(lbasCondBad ? "PanelLbasCondBad" : "PanelGoodMorale"));
+				set_text_color((lbasCondBad ? "red_text" : "green_text"),".module.status .status_morale .status_text");
 				// no morale timer
 				moraleClockValue = 100;
 				moraleClockEnd = 0;
@@ -2859,8 +2866,8 @@
 				$(".module.status .status_repair img").attr("src", "/assets/img/ui/check.png");
 				$(".module.status .status_repair .status_text")
 					.text( KC3Meta.term("Placeholder") )
-					.attr("title", "")
-					.removeClass("red_text").addClass("green_text");
+					.attr("title", "");
+				set_text_color("grey_text",".module.status .status_repair .status_text");
 				UpdateRepairTimerDisplays(0, 0);
 				// show 'combined fleet' type as 'LBAS'
 				$(".module.status .status_butai .status_text")
@@ -3202,10 +3209,10 @@
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
 				if(thisNode.lostKind == 4){
-					$(".module.activity .battle_engagement").removeClass("red_text");
+					set_text_color("",".module.activity .battle_engagement");
 					$(".module.activity .battle_engagement").attr("title", "");
 				} else {
-					$(".module.activity .battle_engagement").addClass("red_text");
+					set_text_color("red_text",".module.activity .battle_engagement");
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
 						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
@@ -4189,7 +4196,7 @@
 			$(".remodel_header .recipe_title", remodelListBox).html(
 				KC3Meta.term("RemodelItemListTitle").format(weekdayName)
 			);
-			$(".remodel_header .recipe_title span").addClass("secondary_text " + get_style_select(20));
+			set_text_color("secondary_text " + get_style_select(20),".remodel_header .recipe_title span");
 			$(".remodel_header .assistant_ship img", remodelListBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
@@ -4712,28 +4719,20 @@
 			// colour GS text based on GS chance
 			jqGSRate.attr('data-gsState', function (rate) {
 				if (rate <= 0) { 
-					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
-						.addClass("red_text " + get_style_select(20))
-						.removeClass("orange_text offwhite_text yellow_text");
+					set_text_color("red_text " + get_style_select(20),".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content");
 					return "impossible";
 				}
 				if (condIsDrumExpedition && !condIsOverdrum) {
-					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
-						.addClass("orange_text " + get_style_select(20))
-						.removeClass("red_text offwhite_text yellow_text");
+					set_text_color("orange_text " + get_style_select(20),".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content");
 					return "no-overdrum"; 
 				}
 				/*if (rate < 80) { return ""; } // no colour*/
 				if (rate < 100 ) {
-					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
-						.addClass("orange_text " + get_style_select(20))
-						.removeClass("red_text offwhite_text yellow_text");
+					set_text_color("orange_text " + get_style_select(20),".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content");
 					return "likely"; 
 				}
 				if (rate >= 100) {
-					$(".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content")
-						.addClass("yellow_text " + get_style_select(20))
-						.removeClass("red_text offwhite_text orange_text");
+					set_text_color("yellow_text " + get_style_select(20),".module.activity .activity_expeditionPlanner .expPlanner_text.gsrate_content");
 					return "guaranteed";
 				}
 			}(estSuccessRate));
@@ -4999,19 +4998,21 @@
 					$(".fit_current .fit_night span", gunfitBox)
 						.text(signedNumber(fitNight))
 						.addClass(fitNight < 0 ? "fit_penalty" : fitNight > 0 ? "fit_bonus" : "");
-					$(".fit_penalty").addClass("red_text").removeClass("green_text");
-					$(".fit_bonus").addClass("green_text").removeClass("red_text");
+					set_text_color("red_text",".fit_penalty");
+					set_text_color("green_text",".fit_bonus");
 					$(".fit_current .fit_day,.fit_current .fit_night", gunfitBox).show();
 					$(".fit_current .fit_unknown", gunfitBox).hide();
 				}
 				const totalFit = data.shipObj.shellingGunFitAccuracy();
 				$(".fit_total .value", gunfitBox)
 					.text(signedNumber(Math.qckInt("floor", totalFit, 1)));
-				totalFit < 0 ? 
-					$(".fit_total .value", gunfitBox).addClass("red_text").removeClass("green_text") :
-					totalFit > 0 ? 
-						$(".fit_total .value", gunfitBox).addClass("green_text").removeClass("red_text") :
-						$(".fit_total .value", gunfitBox).removeClass("red_text green_text");
+				if(totalFit < 0) {
+					set_text_color("red_text",".fit_total .value", gunfitBox);
+				} else if(totalFit > 0) {
+					set_text_color("green_text",".fit_total .value", gunfitBox);
+				} else {
+					set_text_color("",".fit_total .value", gunfitBox);
+				}
 				gunfitBox.off("click").on("click", function(e){
 					(new RMsg("service", "strategyRoomPage", {
 						tabPath: "mstship-{0}-gunfit".format(data.shipObj.masterId)
