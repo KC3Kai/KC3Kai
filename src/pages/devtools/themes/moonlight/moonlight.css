@@ -5938,9 +5938,10 @@ ABYSS FLEET
 }
 .h .module.quests {
 	width:196px;
-	height:150px;
+	height:128px;
 	left:6px; top:421px;
-	/*overflow:scroll;*/
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 ::-webkit-scrollbar-corner {
   background: rgba(0,0,0,0);
@@ -6047,9 +6048,11 @@ ABYSS FLEET
 	left:688px; top:198px;
 }
 .v .module.quests {
-	width:151px;
-	height:120px;
+	width:154px;
+	height:193px;
 	left:881px; top:2px;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .v .module.quests .quest {
 	width:151px;
@@ -6123,8 +6126,10 @@ ABYSS FLEET
 }
 .c .module.quests2 {
 	width:222px;
-	height:150px;
+	height:161px;
 	left:553px; top:36px;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .c .module.quests2 .quest {
 	width:222px;
@@ -6167,10 +6172,11 @@ ABYSS FLEET
 	left:3px; top:38px;
 }
 .t .module.quests {
-	width:186px;
+	width:183px;
 	height:125px;
 	left:197px; top:2px;
-	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .t .module.quests .quest {
 	width:179px;
