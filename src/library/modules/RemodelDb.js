@@ -88,7 +88,10 @@
                 case 381: // Shinyou Kai
                     return 40;
                 case 313: // Tanikaze
+                case 228: // Yukikaze Kai
                     return 50;
+                case 651: // Tan Yang
+                    return 60;
                 case 208: // Shikinami
                 case 225: // Kagerou
                 case 226: // Shiranui
@@ -134,7 +137,7 @@
         // Phase 2 see: main.js#ShipUpgradeModelHolder._USE_DEVKIT_GROUP_
         isIgnoreDevMat: function(blueprint_count, ship_id_from) {
             return blueprint_count > 0 &&
-                ![82, 88, 149, 150, 225, 226, 227, 277, 278, 293, 301, 359, 503, 504, 520, 579, 594, 599, 610, 646, 698, 692].includes(ship_id_from);
+                ![82, 88, 149, 150, 225, 226, 227, 228, 277, 278, 293, 301, 359, 503, 504, 520, 579, 594, 599, 610, 646, 651, 698, 692].includes(ship_id_from);
         },
         // some convert remodeling also consumes torches,
         // see also: https://github.com/andanteyk/ElectronicObserver/blob/3d3286c15ddb587eb9d95146b855d1c0964ef064/ElectronicObserver/Other/Information/kcmemo.md#%E9%AB%98%E9%80%9F%E5%BB%BA%E9%80%A0%E6%9D%90
@@ -152,6 +155,8 @@
                     return 10;
                 case 313: // Tanikaze
                     return 20;
+                case 651: // Tan Yang
+                    return 30;
                 case 503: // Suzuya K2
                 case 504: // Kumano K2
                 case 508: // Suzuya Kou K2
@@ -219,6 +224,7 @@
                  , report: Int
                  , gunmat: Int
                  , airmat: Int
+                 , armmat: Int
                  , devmat: Int
                  , torch: Int
                  }
@@ -252,6 +258,7 @@
                       report: 0,
                       gunmat: 0,
                       airmat: 0,
+                      armmat: 0,
                       devmat: 0,
                       torch: 0
                     };
@@ -278,6 +285,7 @@
                 remodel.blueprint = x.api_drawing_count;
                 remodel.report = x.api_report_count;
                 remodel.airmat = x.api_aviation_mat_count;
+                remodel.armmat = x.api_arms_mat_count;
                 if(self.isIgnoreDevMat(remodel.blueprint, remodel.ship_id_from))
                     remodel.devmat = 0;
             });
