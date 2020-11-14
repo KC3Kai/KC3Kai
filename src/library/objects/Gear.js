@@ -3012,6 +3012,132 @@ KC3改 Equipment Object
 					"77": "74",
 				},
 			},
+			// 12.7cm Single Gun Mount
+			"78": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Z1 Class
+					"48": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "raig": 2, "houk": 2 },
+							},
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
+			},
+			// 10cm Twin High-angle Gun Mount + Anti-Aircraft Fire Director
+			"122": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						minStars: 4,
+						multiple: { "houg": 5, "tyku": 3, "houk": 2 },
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 4, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 4, "houk": 3 },
+							},
+						],
+					},
+				]
+			},
+			// Locally Modified 12.7cm Twin High-angle Gun Mount
+			"397": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Tan Yang
+						ids: [651],
+						multiple: { "houg": 5, "tyku": 2, "houk": 1 },
+					},
+					{
+						// Tan Yang
+						ids: [651],
+						minStars: 4,
+						multiple: { "houg": 4, "houk": 1 },
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "houg": 3, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Tan Yang/Yukikaze Kai Ni
+						ids: [651, 656],
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 3, "houk": 3 },
+						},
+					},
+				]
+			},
+			// Locally Modified 10cm Twin High-angle Gun Mount
+			"398": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Tan Yang
+						ids: [651],
+						multiple: { "houg": 4, "tyku": 4, "houk": 2 },
+					},
+					{
+						// Tan Yang
+						ids: [651],
+						minStars: 4,
+						multiple: { "houg": 3, "houk": 2 },
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "houg": 3, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						minStars: 4,
+						multiple: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Tan Yang/Yukikaze Kai Ni
+						ids: [651, 656],
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "houk": 3 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 3 },
+							},
+						],
+					},
+				]
+			},
 			// 12.7cm Single High-angle Gun Mount (Late Model)
 			"229": {
 				count: 0,
@@ -3077,6 +3203,21 @@ KC3改 Equipment Object
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "houk": 2 },
 						},
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "houg": 2, "tyku": 3, "tais": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 2 },
+							},
+						],
 					},
 				],
 			},
@@ -3204,6 +3345,30 @@ KC3改 Equipment Object
 						ids: [477,     478,        622, 624],
 						multiple: { "tyku": 2 },
 					},
+					{
+						// Tan Yang
+						ids: [651],
+						multiple: { "houg": 3, "tyku": 3 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 2, "houk": 2 },
+						},
+					},
+					{
+						// Yukikaze K2
+						ids: [656],
+						multiple: { "houg": 3, "tyku": 3, "tais": 2, "houk": 3 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 2 },
+							},
+						],
+					},
 				],
 			},
 			// 12.7cm Twin High-angle Gun Mount Kai Ni
@@ -3277,8 +3442,8 @@ KC3改 Equipment Object
 						multiple: { "tyku": 4 },
 					},
 					{
-						// Ooi K2,Kitakami K2, Isuzu K2, Naka K2, Kinu K2, Yura K2 extra synergy
-						ids: [118, 119,        141,      160,     487,     488],
+						// Ooi K2,Kitakami K2, Isuzu K2, Naka K2, Kinu K2, Yura K2, Tan Yang, Yukikaze K2 extra synergy
+						ids: [118, 119,        141,      160,     487,     488,     651,      656],
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 1, "houk": 2 },
@@ -3298,6 +3463,11 @@ KC3改 Equipment Object
 						// Tenryuu K2, Tatsuta K2, Yuubari K2,K2D extra +2 aa
 						ids: [477,     478,        622, 624],
 						multiple: { "tyku": 2 },
+					},
+					{
+						// Tan Yang/Yukikaze K2
+						ids: [651, 656],
+						multiple: { "houg": 3, "tyku": 3 },
 					},
 				],
 			},
@@ -3362,6 +3532,21 @@ KC3改 Equipment Object
 							{
 								flags: [ "airRadar" ],
 								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+					{
+						// Yukikaze Kai Ni
+						ids: [656],
+						multiple: { "tyku": 3, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 3, "houk": 2 },
 							},
 						],
 					},
@@ -3539,14 +3724,14 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559],
+							excludes: [556, 557, 558, 559, 651],
 							// Kagerou Class K2 total +2 fp til 2 guns
 							multiple: { "houg": 1 },
 							countCap: 2,
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559],
+							excludes: [556, 557, 558, 559, 651],
 							// Kagerou Class K2 total +5 instead of +4 if guns = 2
 							// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
 							single: { "houg": 1 },
@@ -3555,8 +3740,8 @@ KC3改 Equipment Object
 					],
 				},
 				byShip: {
-					// Yukikaze Kai, Shigure K2, Isokaze B Kai, extra +1 ev
-					ids: [145, 228, 557],
+					// Yukikaze, Shigure, Isokaze, extra +1 ev
+					origins: [20, 43, 167],
 					multiple: { "houk": 1 },
 				},
 			},
@@ -3606,8 +3791,8 @@ KC3改 Equipment Object
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, one-time +1 fp
-						ids: [566, 567, 568],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, one-time +1 fp
+						ids: [566, 567, 568, 656],
 						single: { "houg": 1 },
 					},
 					{
@@ -3901,6 +4086,11 @@ KC3改 Equipment Object
 					// Fletcher Class
 					"91": "87",
 				},
+				byShip: {
+					// Tan Yang/Yukikaze K2
+					ids: [651, 656],
+					multiple: { "houg": 2, "tyku": 2, "souk": 1, "houk": 1 },
+				},
 			},
 			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
 			"308": {
@@ -3925,6 +4115,11 @@ KC3改 Equipment Object
 						// All DD
 						stypes: [2],
 						multiple: { "houg": 1 },
+					},
+					{
+						// Tan Yang/Yukikaze K2
+						ids: [651, 656],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				],
 			},
@@ -3992,6 +4187,11 @@ KC3改 Equipment Object
 					},
 					// Fletcher Class
 					"91": "87",
+				},
+				byShip: {
+					// Tan Yang/Yukikaze K2
+					ids: [651, 656],
+					single: { "houg": 2, "houk": 2, "saku": 3, "leng": 1 },
 				},
 			},
 			// Type 13 Air Radar Kai
@@ -4197,8 +4397,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2
-						ids: [622, 623,  141,      160,     488],
+						// Yuubari K2/T, Isuzu K2, Naka K2, Yura K2, Yukikaze K2
+						ids: [622, 623,  141,      160,     488,     656],
 						single: { "houk": 3, "tais": 1 },
 					},
 					{
@@ -4219,8 +4419,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Yuubari K2D, Isuzu K2, Naka K2, Yura K2
-						ids: [624,      141,      160,     488],
+						// Yuubari K2D, Isuzu K2, Naka K2, Yura K2, Yukikaze K2
+						ids: [624,      141,      160,     488,     656],
 						multiple: { "houk": 1, "tais": 1 },
 					},
 				],
@@ -4230,8 +4430,8 @@ KC3改 Equipment Object
 				count: 0,
 				byShip: [
 					{
-						// Isuzu K2, Naka K2, Yura K2
-						ids: [141,   160,     488],
+						// Isuzu K2, Naka K2, Yura K2, Yukikaze K2
+						ids: [141,   160,     488,     656],
 						multiple: { "houk": 1, "tais": 2 },
 					},
 					{
@@ -4268,6 +4468,11 @@ KC3改 Equipment Object
 						ids: [629],
 						single: { "houk": 2, "tais": 1 },
 					},
+					{
+						// Tan Yang/Yukikaze K2
+						ids: [651, 656],
+						single: { "houk": 2, "tais": 1 },
+					},
 				],
 			},
 			// Lightweight ASW Torpedo (Initial Test Model)
@@ -4297,6 +4502,11 @@ KC3改 Equipment Object
 					{
 						// Fletcher Mk.II, extra +1 ASW, +1 EV
 						ids: [629],
+						single: { "houk": 1, "tais": 1 },
+					},
+					{
+						// Tan Yang/Yukikaze K2
+						ids: [651, 656],
 						single: { "houk": 1, "tais": 1 },
 					},
 				],
