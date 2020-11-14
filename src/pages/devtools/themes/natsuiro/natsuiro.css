@@ -1084,8 +1084,11 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .module.activity .battle_drop img {
-	object-fit: cover;
-	image-rendering: auto;
+	object-fit:cover;
+	image-rendering:auto;
+}
+.module.activity .battle_drop img.rounded {
+	border-radius:50%;
 }
 .module.activity .battle_drop.new_ship {
 	filter:drop-shadow(0px 0px 3px #1f1);
@@ -4317,6 +4320,8 @@ ABYSS FLEET
 	width:190px;
 	height:126px;
 	left:5px; top:322px;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .h .module.quests .quest {
 	width:190px;
@@ -4416,6 +4421,8 @@ ABYSS FLEET
 	width:240px;
 	height:126px;
 	left:555px; top:196px;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .v .module.quests .quest {
 	width:240px;
