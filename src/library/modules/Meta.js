@@ -125,7 +125,7 @@ Provides access to data on built-in JSON files
 			278, // Kaga Kai -> K2
 			698, // Kaga K2 -> K2E
 			610, // Kaga K2E -> K2Go
-			228, // Yukikaze -> Tan Yang
+			228, // Yukikaze Kai -> Tan Yang
 			651, // Tan Yang -> Yukikaze K2
 		],
 		// all ships for special cut-in attacks
