@@ -490,6 +490,7 @@
 		$(".quest_color,.ship_exp_bar,.ship_gear_icon")
 			.css("box-shadow", shadowDirStr);
 		$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
+		$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests);
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -534,6 +535,7 @@
 				$(".module.controls .btn_alert_toggle").toggleClass("disabled",
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 				$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
+				$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests);
 				updateQuestActivityTab();
 			}
 		});
