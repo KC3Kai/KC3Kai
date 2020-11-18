@@ -2985,15 +2985,15 @@ ABYSS FLEET
 	width:14px;
 	height:14px;
 	margin:2px;
+	line-height:12px;
+	font-size:11px;
+	text-align:center;
+	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 	background:#555;
 	float:left;
 }
 .module.quests .quest.complete .quest_color {
-	line-height:12px;
-	font-size:10px;
-	text-align:center;
 	border:2px solid #0f0;
-	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 }
 
 .module.quests .quest_text {
@@ -3030,27 +3030,31 @@ ABYSS FLEET
 .module.quests.compact .quest {
 	display:flex;
 	height:auto;
+	line-height:unset;
 	align-items:center;
 	min-height:12px;
 	max-height:18px;
-	line-height:unset;
 }
 .module.quests.compact .quest_color {
 	width:12px;
-	height:calc(100% - 2px);
+	height:auto;
+	line-height:calc(100% - 4px);
 	min-height:11px;
+	max-height:14px;
 	float:unset;
+	border:2px solid rgba(0,0,0,0);
 }
 .module.quests.compact .quest .quest_text {
 	flex:1;
 	height:auto;
+	line-height:12px;
 	float:unset;
-	line-height:11px;
 }
 .module.quests.compact .quest_track {
 	height:auto;
 	line-height:12px;
 	float:unset;
+	margin-right:3px;
 }
 
 /*------- CONTROLS -------*/
