@@ -392,6 +392,14 @@
 		}
 	}
 
+	//increases space allotted for the quest list by decreasing space allocated to another element
+	function quest_extender(state) {
+		ConfigManager.isQuestExtended(state);
+		ConfigManager.pan_moon_quest_extend ?
+			$(".quest_extendable").addClass("squish") : 
+			$(".quest_extendable").removeClass("squish");
+	}
+
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -633,6 +641,7 @@
 		function setRotation(page) {
 			ConfigManager.scrollSpecificPage(page);
 			NatsuiroListeners.Rotation();
+			quest_extender(false);
 		}
 		$(".rotation .rotarBack").on("click",function() {setRotation(1);});
 		$(".rotation .rotarExpedition").on("click",function() {setRotation(2);});
@@ -644,6 +653,7 @@
 		function setRotation2(page) {
 			ConfigManager.scrollSpecific2Page(page);
 			NatsuiroListeners.Rotation2();
+			quest_extender(false);
 		}
 		$(".rotation2 .rotarBack").on("click",function() {setRotation2(1);});
 		$(".rotation2 .rotarExpedition").on("click",function() {setRotation2(2);});
@@ -651,6 +661,17 @@
 		$(".rotation2 .rotarLayout").on("click",function() {setRotation2(4);});
 		$(".rotation2 .rotarConsumables").on("click",function() {setRotation2(5);});
 		$(".layout_header").text( KC3Meta.term("PanelLayoutSelection") );
+
+		// adjust elements so that the quest list can display more quests
+		$(".rotarSquish").on("click",function() {
+			if(ConfigManager.pan_layout <= 2) {
+				setRotation2(1);
+			}
+			else if(ConfigManager.pan_layout == 4) {
+				setRotation(1);
+			}
+			quest_extender(true);
+		});
 
 		//consumable display
 		var consumable_elements = [
@@ -781,22 +802,15 @@
 				)));
 		});
 
-		$(".module.layouts .btn_change_layout").on("click", function(){
-			ConfigManager.setLayout(1);
+		function changeLayout(type) {
+			ConfigManager.setLayout(type);
 			Orientation();
-		});
-		$(".module.layouts .btn_change_layout2").on("click", function(){
-			ConfigManager.setLayout(2);
-			Orientation();
-		});
-		$(".module.layouts .btn_change_layout3").on("click", function(){
-			ConfigManager.setLayout(3);
-			Orientation();
-		});
-		$(".module.layouts .btn_change_layout4").on("click", function(){
-			ConfigManager.setLayout(4);
-			Orientation();
-		});
+			quest_extender(false);
+		}
+		$(".module.layouts .btn_change_layout").on("click", function(){changeLayout(1);});
+		$(".module.layouts .btn_change_layout2").on("click", function(){changeLayout(2);});
+		$(".module.layouts .btn_change_layout3").on("click", function(){changeLayout(3);});
+		$(".module.layouts .btn_change_layout4").on("click", function(){changeLayout(4);});
 
 		const prepareBattleLogsData = function(){
 			// Don't pop up if a battle has not started yet
@@ -1164,6 +1178,7 @@
 		NatsuiroListeners.Rotation();
 		ConfigManager.scrollSpecific2Page(ConfigManager.Rotation2Page);
 		NatsuiroListeners.Rotation2();
+		quest_extender(ConfigManager.pan_moon_quest_extend);
 	}
 
 	function clearSortieData(){
