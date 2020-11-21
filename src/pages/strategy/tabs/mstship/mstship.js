@@ -661,7 +661,7 @@
 					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
 						// show blueprint icon for all these special materials
 						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
-							|| remodelInfo.gunmat || remodelInfo.airmat)
+							|| remodelInfo.gunmat || remodelInfo.airmat || remodelInfo.armmat)
 					);
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{

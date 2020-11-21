@@ -505,6 +505,9 @@ Previously known as "Reactor"
 			if(remodel.airmat > 0){
 				PlayerManager.consumables.newAviationMaterial -= remodel.airmat;
 			}
+			if(remodel.armmat > 0){
+				PlayerManager.consumables.newArmamentMaterial -= remodel.armmat;
+			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
 			KC3Network.trigger("Consumables");
@@ -2182,14 +2185,17 @@ Previously known as "Reactor"
 						case 1: // Small Caliber Main Gun
 							KC3QuestManager.get(673).increment(); // F65 daily
 							KC3QuestManager.get(657).increment(0); // F92 yearly index 0
+							KC3QuestManager.get(655).increment(0); // F94 yearly index 0
 							break;
 						case 2: // Medium Caliber Main Gun
 							KC3QuestManager.get(676).increment(0); // F68 weekly index 0
 							KC3QuestManager.get(657).increment(1); // F92 yearly index 1
+							KC3QuestManager.get(655).increment(1); // F94 yearly index 1
 							break;
 						case 3: // Large Caliber Main Gun
 							KC3QuestManager.get(663).increment(); // F55 quarterly
 							KC3QuestManager.get(677).increment(0); // F69 weekly index 0
+							KC3QuestManager.get(655).increment(2); // F94 yearly index 2
 							break;
 						case 4: // Secondary Gun
 							KC3QuestManager.get(676).increment(1); // F68 weekly index 1
@@ -2208,10 +2214,12 @@ Previously known as "Reactor"
 							break;
 						case 8: // Torpedo Bomber
 							KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
+							KC3QuestManager.get(655).increment(4); // F94 yearly index 4
 							break;
 						case 10: // Recon Seaplane
 							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
 							KC3QuestManager.get(688).increment(3); // F79 quarterly index 3
+							KC3QuestManager.get(655).increment(3); // F94 yearly index 3
 							break;
 						case 12: // Small Radar
 						case 13: // Large Radar
@@ -2469,19 +2477,29 @@ Previously known as "Reactor"
 				consumedMasterLevels: consumedShips.map(s => s.level)
 			});
 			
+			// Check if successful modernization
+			if(response.api_data.api_powerup_flag == 1){
+				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
+				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
+				// G6: Yearly modernizate any DD with 3 or more DDs
+				if(MasterShip.api_stype === 2 && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => stype === 2).length >= 3) {
+					KC3QuestManager.get(714).increment();
+				}
+				// G7: Yearly modernizate any DD with 3 or more CLs
+				if(MasterShip.api_stype === 2 && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => stype === 3).length >= 3) {
+					KC3QuestManager.get(715).increment();
+				}
+				KC3Network.trigger("Quests");
+			}
+			
 			// Remove consumed ships and (optional) their equipment
 			$.each(consumedShipIds, function(_, rosterId){
 				KC3ShipManager.remove(rosterId, !scrapGearFlag);
 				KC3Network.trigger("ShipSlots");
 				KC3Network.trigger("GearSlots");
 			});
-			
-			// Check if successful modernization
-			if(response.api_data.api_powerup_flag == 1){
-				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
-				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
-				KC3Network.trigger("Quests");
-			}
 			
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();

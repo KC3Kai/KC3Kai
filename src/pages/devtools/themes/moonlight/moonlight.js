@@ -460,6 +460,15 @@
 		return $(".quest_extendable").removeClass("squish");
 	}
 
+	// Increases space allotted for the quest list by decreasing space allocated to another element
+	function quest_extender(state) {
+		ConfigManager.isQuestExtended(state);
+		if (ConfigManager.pan_moon_quest_extend == true) {
+			return $(".quest_extendable").addClass("squish");
+		}
+		return $(".quest_extendable").removeClass("squish");
+	}
+
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -796,7 +805,7 @@
 			quest_extender(true);
 		});
 
-		//consumable display
+		// consumable display
 		var consumable_elements = [
 							".consumable_rsc_toggle,.consumable_rsc",
 							".consumable_basics_toggle,.consumable_basics",
@@ -1354,7 +1363,7 @@
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
-		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
 		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
@@ -3537,9 +3546,6 @@
 				$(".module.activity .node_type_battle").show();
 			}
 			this.Fleet();
-
-			// Reset border radius for non-drop images that go in the drop element
-			$(".module.activity .battle_drop img").css("border-radius", "0%");
 		},
 
 		BattleNight: function(data){
@@ -3667,8 +3673,8 @@
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
-						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false))
-						.css("border-radius", "50%");
+						.addClass("rounded")
+						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
@@ -3684,6 +3690,7 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
+					.removeClass("rounded")
 					.attr("src", ConfigManager.info_troll ?
 						"/assets/img/ui/jervaited.png" :
 						"/assets/img/ui/dark_shipdrop-x.png");
