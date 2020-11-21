@@ -13,11 +13,9 @@ Listens to network history and triggers callback if game events happen
 	// this flag prevents blocking until result data actually recieved
 	let battle_result_recieved = false;
 
-	// Whether the game is muted in-game
-	let is_muted = true; // Assume muted until we know for sure
-
 	window.KC3Network = {
 		hasOverlay: false,
+		nextBlockerNetworkFallback: true,
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -204,7 +202,7 @@ Listens to network history and triggers callback if game events happen
 					// result data wasn't recieved. it must be yasen switch. show translation divs?
 					// }
 				} else {
-					if (ConfigManager.next_blocker === 2 || KC3Network.is_muted) {
+					if (ConfigManager.next_blocker === 2 || KC3Network.nextBlockerNetworkFallback) {
 						// not from SE check and player selected api check
 						// start showing block now
 						show = true;
@@ -232,11 +230,18 @@ Listens to network history and triggers callback if game events happen
 		to determine whether to switch to Network mode for next-blocker
 		-------------------------------------------------------*/
 		inGameSEMuteCheck: function() {
-			if (!chrome.cookies) return; // API not supported in this browser; fall back to Network
-			chrome.cookies.get({url: 'http://www.dmm.com', name: 'kcs_options'}, function(cookie) {
-				if (!cookie) return; // Assume not present or invalid
-				let match = decodeURIComponent(cookie.value).match('(^|;)\\s*vol_se\\s*=\\s*([^;]+)');
-				KC3Network.is_muted = !match || match.pop() === "0";
+			if (!chrome.cookies || !chrome.tabs || !chrome.devtools) {
+				return; // Relevant APIs are not supported in this browser; fall back to Network
+			}
+			chrome.tabs.get(chrome.devtools.inspectedWindow.tabId, function(tabDetails) {
+				if (tabDetails.url.endsWith("/pages/game/api.html")) {
+					return; // Data not available in API Link mode
+				}
+				chrome.cookies.get({url: 'http://www.dmm.com', name: 'kcs_options'}, function(cookie) {
+					if (!cookie) return; // Assume not present or invalid
+					let match = decodeURIComponent(cookie.value).match('(^|;)\\s*vol_se\\s*=\\s*([^;]+)');
+					KC3Network.nextBlockerNetworkFallback = !match || match.pop() === "0";
+				});
 			});
 		},
 
