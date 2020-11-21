@@ -232,6 +232,7 @@ Listens to network history and triggers callback if game events happen
 		to determine whether to switch to Network mode for next-blocker
 		-------------------------------------------------------*/
 		inGameSEMuteCheck: function() {
+			if (!chrome.cookies) return; // API not supported in this browser; fall back to Network
 			chrome.cookies.get({url: 'http://www.dmm.com', name: 'kcs_options'}, function(cookie) {
 				if (!cookie) return; // Assume not present or invalid
 				let match = decodeURIComponent(cookie.value).match('(^|;)\\s*vol_se\\s*=\\s*([^;]+)');
