@@ -392,7 +392,7 @@
 		}
 	}
 
-	//increases space allotted for the quest list by decreasing space allocated to another element
+	// Increases space allotted for the quest list by decreasing space allocated to another element
 	function quest_extender(state) {
 		ConfigManager.isQuestExtended(state);
 		if (ConfigManager.pan_moon_quest_extend == true) {
@@ -674,7 +674,7 @@
 			quest_extender(true);
 		});
 
-		//consumable display
+		// consumable display
 		var consumable_elements = [
 							".consumable_rsc_toggle,.consumable_rsc",
 							".consumable_basics_toggle,.consumable_basics",
