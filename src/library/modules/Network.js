@@ -247,13 +247,15 @@ Listens to network history and triggers callback if game events happen
 		------------------------------------------*/
 		received : function(har){
 			const requestUrl = har.request.url;
-			
-			// Check whether the game is muted
-			KC3Network.inGameSEMuteCheck();
 
 			// If request is an API Call
 			if(requestUrl.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = requestUrl;
+				
+				// Check whether the game is muted when a sortie begins
+				if (requestUrl.endsWith("/api_req_map/start")) {
+					KC3Network.inGameSEMuteCheck();
+				}
 				
 				// Clear overlays before processing this new API call
 				KC3Network.clearOverlays();
