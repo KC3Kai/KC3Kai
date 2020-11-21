@@ -451,15 +451,6 @@
 		return $(target,selection).addClass(text_color);
 	}
 	
-	//increases space allotted for the quest list by decreasing space allocated to another element
-	function quest_extender(state) {
-		ConfigManager.isQuestExtended(state);
-		if (ConfigManager.pan_moon_quest_extend == true) {
-			return $(".quest_extendable").addClass("squish");
-		}
-		return $(".quest_extendable").removeClass("squish");
-	}
-
 	// Increases space allotted for the quest list by decreasing space allocated to another element
 	function quest_extender(state) {
 		ConfigManager.isQuestExtended(state);
