@@ -187,10 +187,12 @@ Retrieves when needed to apply on components
 				pan_moon_conbut_shape: "shape_round",
 				pan_moon_conbut_skew: true,
 				pan_moon_consumables : [false,false,true,false,true,true,false,false,false],
+				pan_compact_quests: false,
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
 				pan_layout           : 1,
+				pan_moon_quest_extend: false,
 				RotationPage         : 1,
 				Rotation2Page        : 4,
 
@@ -347,6 +349,13 @@ Retrieves when needed to apply on components
 		setLayout :function(layoutType){
 			this.loadIfNecessary();
 			this.pan_layout = layoutType;
+			this.save();
+		},
+
+		// Toggle quest extension in Moonlight
+		isQuestExtended :function(trigger){
+			this.loadIfNecessary();
+			this.pan_moon_quest_extend = trigger;
 			this.save();
 		},
 
