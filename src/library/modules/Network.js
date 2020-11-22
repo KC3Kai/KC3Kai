@@ -225,26 +225,6 @@ Listens to network history and triggers callback if game events happen
 			}
 		},
 
-		/* GAME MUTE CHECK
-		Checks cookies for the game's current in-game SE level
-		to determine whether to switch to Network mode for next-blocker
-		-------------------------------------------------------*/
-		inGameSEMuteCheck: function() {
-			if (!chrome.cookies || !chrome.tabs || !chrome.devtools) {
-				return; // Relevant APIs are not supported in this browser; fall back to Network
-			}
-			chrome.tabs.get(chrome.devtools.inspectedWindow.tabId, function(tabDetails) {
-				if (tabDetails.url.endsWith("/pages/game/api.html")) {
-					return; // Data not available in API Link mode
-				}
-				chrome.cookies.get({url: 'http://www.dmm.com', name: 'kcs_options'}, function(cookie) {
-					if (!cookie) return; // Assume not present or invalid
-					let match = decodeURIComponent(cookie.value).match('(^|;)\\s*vol_se\\s*=\\s*([^;]+)');
-					KC3Network.nextBlockerNetworkFallback = !match || match.pop() === "0";
-				});
-			});
-		},
-
 		/* RECEIVED
 		Fired when we receive network entry
 		Inside, use "KC3Network" instead of "this"
@@ -258,9 +238,9 @@ Listens to network history and triggers callback if game events happen
 			if(requestUrl.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = requestUrl;
 				
-				// Check whether the game is muted when a sortie begins
+				// When a sortie begins, assume fallback until we know SE isn't muted
 				if (requestUrl.endsWith("/api_req_map/start")) {
-					KC3Network.inGameSEMuteCheck();
+					KC3Network.nextBlockerNetworkFallback = true;
 				}
 				
 				// Clear overlays before processing this new API call
@@ -328,6 +308,11 @@ Listens to network history and triggers callback if game events happen
 			// If it's switching to NextNode or Yasen screen (might be others?)
 			if(requestUrl.includes("/kcs2/resources/se/217.mp3")){
 				KC3Network.nextBlockTrigger(true);
+			}
+			// Node 'sonar ping' sound should always be heard before a battle if SE is on;
+			// Will allow us to determine whether SE is muted for the next blocker
+			if(requestUrl.includes("/kcs2/resources/se/252.mp3")) {
+				KC3Network.nextBlockerNetworkFallback = false;
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
