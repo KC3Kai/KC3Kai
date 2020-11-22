@@ -10,7 +10,7 @@
 					"fb" :"https://www.facebook.com/dragonjetmkii",
 					"tw" :"https://twitter.com/dragonjetmkii",
 					"th" :"http://www.twitch.tv/jetrico",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Dragonjet",
+					"wk" :"http://kancolle.fandom.com/wiki/User:Dragonjet",
 					"gh" :"https://github.com/dragonjet"
 				}
 			},
@@ -110,13 +110,13 @@
 				}
 			},
 			{
-				"name": "Tibo442",
+				"name": "Tibi",
 				"avatar": "https://avatars2.githubusercontent.com/u/5676386?v=4&s=88",
 				"desc": "AboutDeveloper",
 				"active": 1,
 				"links": {
-					"gh" : "https://github.com/Tibo442",
-					"wk" : "http://kancolle.wikia.com/wiki/User:Tibo442",
+					"gh" : "https://github.com/Tibowl",
+					"wk" : "http://kancolle.fandom.com/wiki/User:Tibo442",
 					"tw" : "http://twitter.com/FlatIsNice",
 					"wb" : "http://flatisjustice.moe"
 				}
@@ -128,7 +128,7 @@
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/Tsubakura",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Tsubakura"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Tsubakura"
 				}
 			},
 			{
@@ -150,11 +150,21 @@
 				}
 			},
 			{
+				"name": "Chami",
+				"avatar" : "https://avatars3.githubusercontent.com/u/1724041?s=60&v=4",
+				"desc" : "AboutDeveloper",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/planetarian",
+					"wb" :"https://kc.piro.moe"
+				}
+			},
+			{
 				"name": "bamboo3250",
 				"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
 				"desc": ["AboutDeveloper", "Tiếng Việt"],
 				"links": {
-					"wk" :"http://kancolle.wikia.com/wiki/User:bamboo3250",
+					"wk" :"http://kancolle.fandom.com/wiki/User:bamboo3250",
 					"gh" : "https://github.com/bamboo3250",
 					"tw" :"https://twitter.com/bamboo3250",
 					"px" : "http://www.pixiv.net/member.php?id=3875741",
@@ -167,7 +177,7 @@
 				"desc": "AboutDeveloper",
 				"links": {
 					"gh" :"https://github.com/McDohl",
-					"wk" :"http://kancolle.wikia.com/wiki/User:McDohlJr",
+					"wk" :"http://kancolle.fandom.com/wiki/User:McDohlJr",
 					"fb" :"https://www.facebook.com/endruhugen"
 				}
 			},
@@ -179,7 +189,7 @@
 					"gh" :"https://github.com/nicky008",
 					"tw" : "https://twitter.com/nicky_008",
 					"fb" : "https://www.facebook.com/jamesnicky008",
-					"wk" : "http://kancolle.wikia.com/wiki/User:Nicky008"
+					"wk" : "http://kancolle.fandom.com/wiki/User:Nicky008"
 				}
 			},
 			{
@@ -217,7 +227,7 @@
 				"desc" : ["AboutDeveloper", "한국어"],
 				"links" : {
 					"gh" :"https://github.com/YukiNyaa",
-					"wk" : "http://kancolle.wikia.com/wiki/User:YukiNyaa",
+					"wk" : "http://kancolle.fandom.com/wiki/User:YukiNyaa",
 					"fb" : "https://www.facebook.com/iTwilly.HJW"
 				}
 			}
@@ -239,7 +249,7 @@
 				"desc": [ "AboutModerator", "AboutDeveloper" ],
 				"active": 1,
 				"links": {
-					"wk" :"http://kancolle.wikia.com/wiki/User:Crazy_teitoku"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Crazy_teitoku"
 				}
 			},
 			{
@@ -249,7 +259,7 @@
 				"active": 1,
 				"links": {
 					"gh" :"https://github.com/LostLogia4",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Ar-cen-ciel",
+					"wk" :"http://kancolle.fandom.com/wiki/User:Ar-cen-ciel",
 					"hm" :"http://www.himeuta.net/members/7572-lostlogia4",
 					"tw" :"https://twitter.com/LostLogia4" 
 				}
@@ -261,7 +271,7 @@
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/ethrundr",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Ethrundr",
+					"wk" :"http://kancolle.fandom.com/wiki/User:Ethrundr",
 					"fb" :"https://www.facebook.com/ethrundr",
 					"hm" :"http://www.himeuta.net/members/1056-ethrundr/"
 				}
@@ -276,7 +286,7 @@
 				"links" : {
 					"gh" : "https://github.com/arialypse",
 					"fb" : "https://www.facebook.com/Arialypse",
-					"wk" : "http://kancolle.wikia.com/wiki/User:Arialypse",
+					"wk" : "http://kancolle.fandom.com/wiki/User:Arialypse",
 					"yt" : "https://www.youtube.com/Arialypse",
 					"wb" : "http://www.zeitvier.com/"
 				}
@@ -289,7 +299,7 @@
 				"links" : {
 					"gh" :"https://github.com/kololz",
 					"fb" :"https://www.facebook.com/kololz",
-					"wk" :"https://kancolle.wikia.com/wiki/User:Kololz"
+					"wk" :"https://kancolle.fandom.com/wiki/User:Kololz"
 				}
 			},
 			{
@@ -312,7 +322,7 @@
 				"links" : {
 					"fb" :"https://www.facebook.com/freezebear17",
 					"tw" :"https://twitter.com/freezebear17",
-					"wk" :"kancolle.wikia.com/wiki/User:Freezebear"
+					"wk" :"kancolle.fandom.com/wiki/User:Freezebear"
 				}
 			},
 			{
@@ -322,7 +332,7 @@
 				"active": 0,
 				"links" : {
 					"fb" :"https://www.facebook.com/arifLV2",
-					"wk" :"kancolle.wikia.com/wiki/User:hufuhufu"
+					"wk" :"kancolle.fandom.com/wiki/User:hufuhufu"
 				}
 			},
 			{
@@ -342,7 +352,7 @@
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/Admiral-Mikado",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Admiral_Mikado"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Admiral_Mikado"
 				}
 			},
 			{
@@ -380,7 +390,7 @@
 				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/Syntax7error",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Syntax_Terror"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Syntax_Terror"
 				}
 			},
 			{
@@ -391,7 +401,7 @@
 				"links" : {
 					"gh" :"https://github.com/Arkayda963",
 					"fb" :"https://www.facebook.com/ryu.nagakawa",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Arkayda"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Arkayda"
 				}
 			},
 			{
@@ -410,7 +420,7 @@
 				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/RanFoxRun",
-					"wk" :"http://kancolle.wikia.com/wiki/User:RanFoxRun"
+					"wk" :"http://kancolle.fandom.com/wiki/User:RanFoxRun"
 				}
 			},  
 			{
@@ -420,7 +430,7 @@
 				"active": 1,
 				"links" : {
 					"gh" :"https://github.com/rephira",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Rephira"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Rephira"
 				}
 			},
 			{
@@ -439,7 +449,7 @@
 				"active": 0,
 				"links" : {
 					"fb" :"https://www.facebook.com/Raigun.da.soldier",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Yuedasoldier"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Yuedasoldier"
 				}
 			},
 			{
@@ -448,7 +458,7 @@
 				"desc" : "Português",
 				"active": 0,
 				"links" : {
-					"wk" :"http://kancolle.wikia.com/wiki/User:Mizarox",
+					"wk" :"http://kancolle.fandom.com/wiki/User:Mizarox",
 					"fb" :"https://www.facebook.com/mizael.fer"
 				}
 			},
@@ -489,7 +499,7 @@
 				"active": 0,
 				"links" : {
 					"gh" : "https://github.com/Kvazikvark",
-					"wk" : "http://kancolle.wikia.com/wiki/User:Kvazikvark",
+					"wk" : "http://kancolle.fandom.com/wiki/User:Kvazikvark",
 					"ma" : "http://myanimelist.net/profile/Kvazikvark",
 					"sk" : "skype:wesker487?chat"
 				}
@@ -500,7 +510,7 @@
 				"desc" : "Русский",
 				"active": 0,
 				"links" : {
-					"wk" : "http://kancolle.wikia.com/wiki/User:Konstantillo"
+					"wk" : "http://kancolle.fandom.com/wiki/User:Konstantillo"
 				}
 			},
 			{
@@ -509,7 +519,7 @@
 				"desc" : "Español",
 				"active": 0,
 				"links" : {
-					"wk" : "http://kancolle.wikia.com/wiki/User:ForteBX",
+					"wk" : "http://kancolle.fandom.com/wiki/User:ForteBX",
 					"fb" : "https://www.facebook.com/ForteBXBassBX",
 					"tw" : "https://twitter.com/ForteBX"
 				}
@@ -521,7 +531,7 @@
 				"active": 1,
 				"links" : {
 					"fb": "https://www.facebook.com/angel84326",
-					"wk": "http://zh.kancolle.wikia.com/wiki/User:Angel84326",
+					"wk": "http://zh.kancolle.fandom.com/wiki/User:Angel84326",
 					"wb": "https://www.flickr.com/photos/angel84326/albums",
 					"px": "http://www.pixiv.net/member.php?id=3311248",
 					"wb2": "http://home.gamer.com.tw/homeindex.php?owner=wut84326"
@@ -637,7 +647,7 @@
 				"active": 0,
 				"links": {
 					"gh" : "https://github.com/nevrending",
-					"wk" :"http://kancolle.wikia.com/wiki/User:NevREnding",
+					"wk" :"http://kancolle.fandom.com/wiki/User:NevREnding",
 					"fb" :"https://www.facebook.com/y458m",
 					"tw" :"https://twitter.com/yefta458",
 					"wb" : "https://yefta.com"
@@ -770,7 +780,7 @@
 				"desc": "AboutDevTester",
 				"active": 0,
 				"links": {
-					"wk" :"http://kancolle.wikia.com/wiki/User:Erupi",
+					"wk" :"http://kancolle.fandom.com/wiki/User:Erupi",
 					"gh" :"https://github.com/Erupi"
 				}
 			},
@@ -790,7 +800,7 @@
 				"active": 0,
 				"links": {
 					"gh" :"https://github.com/madobe",
-					"wk" :"http://kancolle.wikia.com/wiki/User:Nanamin"
+					"wk" :"http://kancolle.fandom.com/wiki/User:Nanamin"
 				}
 			},
 			{
@@ -802,7 +812,7 @@
 					"gh" :"https://github.com/NicolaosGreene",
 					"st" :"http://steamcommunity.com/profiles/76561198023180048/",
 					"hm" :"http://www.himeuta.net/members/8927-nicolaos/",
-					"wk" :"http://kancolle.wikia.com/wiki/User:NicolaosGreene"
+					"wk" :"http://kancolle.fandom.com/wiki/User:NicolaosGreene"
 				}
 			},
 			{
@@ -821,7 +831,7 @@
 				"active": 0,
 				"links": {
 					"gh" :"https://github.com/SerialConvort",
-					"wk" :"http://kancolle.wikia.com/wiki/User:SerialConvort"
+					"wk" :"http://kancolle.fandom.com/wiki/User:SerialConvort"
 				 }
 			 },
 			 {
@@ -868,7 +878,7 @@
 				"active": 0,
 	 			"links" : {
 	 				"gh" :"https://github.com/BWinkKeyShellDinkInc",
-	 				"wk" :"http://kancolle.wikia.com/wiki/User:BWinkKeyShellDinkInc"
+	 				"wk" :"http://kancolle.fandom.com/wiki/User:BWinkKeyShellDinkInc"
 	 			}
 	 		},
 	 		{
@@ -878,7 +888,7 @@
 				"active": 0,
 	 			"links" : {
 	 				"gh" :"https://github.com/dustfan",
-	 				"wk" :"http://kancolle.wikia.com/wiki/User:DustFan"
+	 				"wk" :"http://kancolle.fandom.com/wiki/User:DustFan"
 	 			}
 	 		},
 	 		{
@@ -930,7 +940,7 @@
 				"active": 1,
 				"links": {
 					"gh" :"https://github.com/gakada",
-					"wk" :"http://kancolle.wikia.com/wiki/User:%E3%81%8C%E3%81%8B",
+					"wk" :"http://kancolle.fandom.com/wiki/User:%E3%81%8C%E3%81%8B",
 					"wb" :"https://github.com/gakada/KanColleViewer"
 				}
 			},
