@@ -5134,6 +5134,7 @@ KC3改 Equipment Object
 						break;
 					case 7: // Dive Bomber
 					case 57: // Jet Fighter Bomber
+						// only applied if not a fighter bomber, btw fighter bomber get AA bonus instead
 						// 0.5 used by Nishisonic/UnexpectedDamage, old one is 0.2 * stars
 						modifier = this.isFighterBomber() ? 0 : 0.5;
 						break;
@@ -5162,7 +5163,7 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Dive Bomber, 0.2 per star (if not fighter bomber)
+				// Dive Bomber, 0.2 per star
 				if([7, 57].includes(type2) && !this.isFighterBomber())
 					return 0.2 * stars;
 				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
@@ -5175,7 +5176,8 @@ KC3改 Equipment Object
 				break;
 			case "airstrike":
 				// for normal opening airstrike, dive/torpedo/seaplane bomber bonus confirmed
-				if([7, 8, 11, 57, 58].includes(type2)) return 0.2 * stars;
+				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
+				if([8, 11, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "lbas":
 				// land-base attacker, unconfirmed yet since no plane improved by akashi
@@ -5359,10 +5361,12 @@ KC3改 Equipment Object
 			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
-			case 7: // Fighter bomber (dive bomber with >2 AA stat?)
-			case 49: // LB recon, uncertain?
-			case 57: // Jet bomber
-				if(this.master().api_tyku > 2) modifier = 0.25;
+			case 7: // Fighter bomber
+			case 57: // Jet fighter bomber
+				if(this.isFighterBomber()) modifier = 0.25;
+				break;
+			case 49: // LB recon, uncertain: all? or AA > 2 like fighter bomber?
+				modifier = 0.25;
 				break;
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
@@ -5643,10 +5647,12 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isFighterBomber = function(){
-		const type2Ids = [5, 57];
+		// 'Fighter Bomber' in dive bomber category is based on AA stat > 3 (or 2?),
+		// depends on tests of Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) or other new AA 3 dive bomer.
+		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
-			this.master().api_tyku > 2;
+			this.master().api_tyku > 3;
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
