@@ -5133,8 +5133,11 @@ KC3改 Equipment Object
 						}
 						break;
 					case 7: // Dive Bomber
-					case 8: // Torpedo Bomber
 					case 57: // Jet Fighter Bomber
+						// 0.5 used by Nishisonic/UnexpectedDamage, old one is 0.2 * stars
+						modifier = this.isFighterBomber() ? 0 : 0.5;
+						break;
+					case 8: // Torpedo Bomber
 					case 58: // Jet Torpedo Bomber
 						return 0.2 * stars;
 					case 14: // Sonar
@@ -5159,8 +5162,11 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Dive/Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
-				if([7, 8, 57, 58].includes(type2))
+				// Dive Bomber, 0.2 per star (if not fighter bomber)
+				if([7, 57].includes(type2) && !this.isFighterBomber())
+					return 0.2 * stars;
+				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
+				if([8, 58].includes(type2))
 					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
@@ -5634,6 +5640,13 @@ KC3改 Equipment Object
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
+	};
+
+	KC3Gear.prototype.isFighterBomber = function(){
+		const type2Ids = [5, 57];
+		return this.exists() &&
+			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tyku > 2;
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
