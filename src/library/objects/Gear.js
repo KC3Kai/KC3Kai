@@ -1354,13 +1354,6 @@ KC3改 Equipment Object
 					},
 					// Kamoi Class
 					"72": "62",
-					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
-					"67": {
-						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
-					},
-					"78": "67",
-					"82": "67",
-					"88": "67", */
 				},
 			},
 			// Swordfish Mk.III Kai (Seaplane Model/Skilled)
@@ -1388,13 +1381,6 @@ KC3改 Equipment Object
 					},
 					// Kamoi Class
 					"72": "62",
-					/* Queen Elizabeth Class, Ark Royal Class, J Class and Nelson Class (but they can not equip)
-					"67": {
-						multiple: { "houg": 2, "tais": 2, "houk": 2, "saku": 2 },
-					},
-					"78": "67",
-					"82": "67",
-					"88": "67", */
 				},
 			},
 			// S9 Osprey
@@ -1451,9 +1437,8 @@ KC3改 Equipment Object
 					"88": {
 						multiple: { "houg": 2, "tais": 3, "houk": 2, "saku": 2 },
 					},
-					/*  Ark Royal Class and J Class, but they can not equip
-					"78": 88,
-					"82": 88, */
+					// Town Class
+					"108": "88",
 				},
 			},
 			// Fairey Seafox Kai
@@ -1483,9 +1468,8 @@ KC3改 Equipment Object
 					"67": {
 						multiple: { "houg": 3, "tais": 1, "houk": 2, "saku": 3 },
 					},
-					/*  Ark Royal Class and J Class, but they can not equip
-					"78": 67,
-					"82": 67, */
+					// Town Class
+					"108": "67",
 					// Nelson Class
 					"88": [
 						{
@@ -1523,6 +1507,8 @@ KC3改 Equipment Object
 					"102": "95",
 					// St. Louis Class
 					"106": "95",
+					// North Carolina Class
+					"107": "95",
 				},
 			},
 			// Ka Type Observation Autogyro
@@ -1991,6 +1977,8 @@ KC3改 Equipment Object
 					],
 					// Colorado
 					"93": "65",
+					// North Carolina Class
+					"107": "65",
 					// South Dakota
 					"102": [
 						{
@@ -2051,6 +2039,8 @@ KC3改 Equipment Object
 							multiple: { "souk": 1 },
 						},
 					],
+					// North Carolina Class
+					"107": "102",
 				},
 				byShip: {
 					// Any FBB
@@ -2118,6 +2108,8 @@ KC3改 Equipment Object
 							multiple: { "souk": 1 },
 						},
 					],
+					// North Carolina Class
+					"107": "102",
 				},
 				byShip: {
 					// Any FBB
@@ -2179,6 +2171,27 @@ KC3改 Equipment Object
 					"99": "93",
 					// St. Louis
 					"106": "93",
+				},
+			},
+			// 6inch Mk.XXIII Triple Gun Mount
+			"399": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Town Class
+					"108": [
+						{
+							multiple: { "houg": 1, "houk": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
 				},
 			},
 			// 14cm Twin Gun Mount
@@ -2478,6 +2491,10 @@ KC3改 Equipment Object
 					"105": "67",
 					// St. Louis Class
 					"106": "67",
+					// North Carolina Class
+					"107": "67",
+					// Town Class
+					"108": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -2649,12 +2666,16 @@ KC3改 Equipment Object
 					"105": "95",
 					// St. Louis Class
 					"106": "95",
+					// North Carolina Class
+					"107": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
 					},
 					// Nelson Class
 					"88": "67",
+					// Town Class
+					"108": "67",
 					// Perth Class
 					"96": {
 						single: { "tyku": 1, "houk": 1 },
@@ -2681,12 +2702,16 @@ KC3改 Equipment Object
 					"105": "95",
 					// St. Louis Class
 					"106": "95",
+					// North Carolina Class
+					"107": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
 					},
 					// Nelson Class
 					"88": "67",
+					// Town Class
+					"108": "67",
 					// Perth Class
 					"96": {
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
@@ -2791,6 +2816,8 @@ KC3改 Equipment Object
 					"82": {
 						multiple: { "houg": 1, "raig": 2 },
 					},
+					// Town Class
+					"108": "82",
 					// Perth Class
 					"96": {
 						multiple: { "houg": 1, "raig": 1 },
@@ -4153,6 +4180,8 @@ KC3改 Equipment Object
 					"105": "65",
 					// St. Louis Class
 					"106": "65",
+					// North Carolina Class
+					"107": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -4181,6 +4210,8 @@ KC3改 Equipment Object
 					"105": "65",
 					// St. Louis Class
 					"106": "65",
+					// North Carolina Class
+					"107": "65",
 					// John C. Butler Class, range from medium to long
 					"87": {
 						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
@@ -4366,6 +4397,8 @@ KC3改 Equipment Object
 					"82": "67",
 					// Nelson Class
 					"88": "67",
+					// Town Class
+					"108": "67",
 				},
 			},
 			// Type 3 Active Sonar
@@ -4460,7 +4493,9 @@ KC3改 Equipment Object
 						single: { "houk": 1, "tais": 1 },
 					},
 					// Perth Class
-					"96": "87"
+					"96": "82",
+					// Town Class
+					"108": "82",
 				},
 				byShip: [
 					{
@@ -4493,6 +4528,8 @@ KC3改 Equipment Object
 					"82": {
 						single: { "houk": 1, "tais": 2 },
 					},
+					// Town Class
+					"108": "82",
 					// Perth Class
 					"96": {
 						single: { "houk": 1, "tais": 1 },
@@ -4700,13 +4737,13 @@ KC3改 Equipment Object
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D
 						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal?, Aquila?, Graf Zeppelin?, Saratoga?, Hornet?
-						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota, Washington?
 						//   All fast DD: not here, see next item
-						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou
-						origins: [115, 441, 442, 171, 492, 602, 83, 332, 549, 515, 444, 432, 433, 603,
-								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615,
+						origins: [115, 441, 442, 171, 492, 602, 654, 83, 332, 549, 515, 444, 432, 433, 603,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595,
 								74, 76, 116, 102, 103
 							],
@@ -5133,8 +5170,12 @@ KC3改 Equipment Object
 						}
 						break;
 					case 7: // Dive Bomber
-					case 8: // Torpedo Bomber
 					case 57: // Jet Fighter Bomber
+						// only applied if not a fighter bomber, btw fighter bomber get AA bonus instead
+						// 0.5 used by Nishisonic/UnexpectedDamage, old one is 0.2 * stars
+						modifier = this.isFighterBomber() ? 0 : 0.5;
+						break;
+					case 8: // Torpedo Bomber
 					case 58: // Jet Torpedo Bomber
 						return 0.2 * stars;
 					case 14: // Sonar
@@ -5159,8 +5200,11 @@ KC3改 Equipment Object
 				// Depth Charge or Sonar
 				if([14, 15, 40].includes(type2))
 					modifier = 1;
-				// Dive/Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
-				if([7, 8, 57, 58].includes(type2))
+				// Dive Bomber, 0.2 per star
+				if([7, 57].includes(type2) && !this.isFighterBomber())
+					return 0.2 * stars;
+				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
+				if([8, 58].includes(type2))
 					return 0.2 * stars;
 				// Autogyro or Helicopter
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
@@ -5169,7 +5213,8 @@ KC3改 Equipment Object
 				break;
 			case "airstrike":
 				// for normal opening airstrike, dive/torpedo/seaplane bomber bonus confirmed
-				if([7, 8, 11, 57, 58].includes(type2)) return 0.2 * stars;
+				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
+				if([8, 11, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "lbas":
 				// land-base attacker, unconfirmed yet since no plane improved by akashi
@@ -5353,10 +5398,12 @@ KC3改 Equipment Object
 			case 45: // Seaplane fighter. Seaplane bomber no AA bonus found yet, but found DV & LoS bonus
 			case 48: // LB fighter or LB interceptor
 				modifier = 0.2; break;
-			case 7: // Fighter bomber (dive bomber with >2 AA stat?)
-			case 49: // LB recon, uncertain?
-			case 57: // Jet bomber
-				if(this.master().api_tyku > 2) modifier = 0.25;
+			case 7: // Fighter bomber
+			case 57: // Jet fighter bomber
+				if(this.isFighterBomber()) modifier = 0.25;
+				break;
+			case 49: // LB recon, uncertain: all? or AA > 2 like fighter bomber?
+				modifier = 0.25;
 				break;
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
@@ -5634,6 +5681,17 @@ KC3改 Equipment Object
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
 			this.master().api_tais > 6;
+	};
+
+	KC3Gear.prototype.isFighterBomber = function(){
+		// 'Fighter Bomber' in dive bomber category is based on AA stat (> 2 or 3?) and DV stat?
+		//   depends on tests of Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) or other new AA 3 dive bomer.
+		// Re.2001 CB Kai (AA 4 DV 6) is not fighter bomber: https://twitter.com/myteaGuard/status/1330856406363193345
+		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
+		const type2Ids = [7, 57];
+		return this.exists() &&
+			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
+			this.master().api_tyku > 2 && this.master().api_baku < 6;
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
