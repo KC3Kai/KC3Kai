@@ -1186,6 +1186,7 @@
 		(new RMsg("service", "getTabInfo", {
 			tabId: chrome.devtools.inspectedWindow.tabId
 		}, function(tabInfo){
+			localStorage.gameTabUrl = tabInfo.url;
 			errorReport.gameTabUrl = tabInfo.url;
 			try {
 				// if inspected tab is muted, update the mute icon

@@ -287,11 +287,8 @@
 	<div class="section_body management">
 		<strong class="fcolor1">Export</strong>
 		<ul class="fcolor2">
-			<li><a class="hover import_data fscolor3">Validate a KC3 file</a>
-				<input type="file" class="import_file" id="import_data_input" accept=".kc3" /></li>
-			<li><a class="hover export_data fscolor3">Export basic profile</a> (<em>player info, fleets, ships, equipment, config</em>)</li>
-			<li><a class="hover export_config fscolor3">Export</a> your settings only. Or <a class="hover import_config fscolor3">import</a> them shared by others to overwrite yours</li>
-				<input type="file" class="import_file" id="import_config_input" accept=".json" />
+			<li><a class="hover export_data fscolor3">Export basic profile to KC3 file</a> (<em>player info, fleets, ships, equipment, settings, etc</em>)</li>
+			<li><a class="hover export_config fscolor3">Export settings part of profile to JSON</li>
 			<!-- <li><a class="hover export_csv_sortie">Export sortie history to CSV</a></li> -->
 			<li><a class="hover export_csv_exped fscolor3">Export expedition history to CSV</a> / <a class="hover export_csv_exped_asw fscolor3">Only A1~ new expeditions</a></li>
 			<li><a class="hover export_csv_build fscolor3">Export construction history to CSV</a></li>
@@ -301,6 +298,14 @@
 			<li><a class="hover export_csv_equipment fscolor3">Export implemented Equipment data to CSV</a></li>
 			<li><a class="hover export_csv_abyssal fscolor3">Export encountered Abyssal ship data to CSV</a></li>
 			<li><a class="hover export_json_logs fscolor3">Export error logs to JSON</a></li>
+		</ul>
+		
+		<strong class="fcolor1">Import</strong> (<em>Use files from untrusted sources at your own risk</em>)
+		<ul class="fcolor2">
+			<li><a class="hover import_data fscolor3">Validate and import a KC3 file</a></li>
+				<input type="file" class="import_file" id="import_data_input" accept=".kc3" />
+			<li><a class="hover import_config fscolor3">Import a settings JSON file</a></li>
+				<input type="file" class="import_file" id="import_config_input" accept=".json" />
 		</ul>
 		
 		<strong class="fcolor1">Clear Data</strong>
