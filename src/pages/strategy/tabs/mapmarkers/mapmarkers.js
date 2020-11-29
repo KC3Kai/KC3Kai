@@ -224,11 +224,17 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(!spot.route && !spot.line && isAddingRouteStart) {
-							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
-							const sprite = new this.pixi.Sprite(frame);
-							sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
-							stage.addChild(sprite);
+						if(spot.no && !spot.route && !spot.line) {
+							if(isAddingRouteStart) {
+								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
+								const sprite = new this.pixi.Sprite(frame);
+								sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
+								stage.addChild(sprite);
+							} else {
+								// Except adding a hidden start point, no line no route spot found (nothing to be drawn) since Fall 2020 E-3
+								// btw an orphan boss node (not linked with any other node) has existed since Rainy 2020 E-3
+								console.debug("Unknown invisible spot:", spot);
+							}
 						}
 						if(!spot.line) continue;
 						const isAddingRoute = !!spot.route;
