@@ -15,6 +15,7 @@ Listens to network history and triggers callback if game events happen
 
 	window.KC3Network = {
 		hasOverlay: false,
+		nextBlockerNetworkFallback: true,
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -201,7 +202,7 @@ Listens to network history and triggers callback if game events happen
 					// result data wasn't recieved. it must be yasen switch. show translation divs?
 					// }
 				} else {
-					if (ConfigManager.next_blocker === 2) {
+					if (ConfigManager.next_blocker === 2 || KC3Network.nextBlockerNetworkFallback) {
 						// not from SE check and player selected api check
 						// start showing block now
 						show = true;
@@ -232,9 +233,15 @@ Listens to network history and triggers callback if game events happen
 		------------------------------------------*/
 		received : function(har){
 			const requestUrl = har.request.url;
+
 			// If request is an API Call
 			if(requestUrl.indexOf("/kcsapi/") > -1){
 				KC3Network.lastUrl = requestUrl;
+				
+				// When a sortie begins, assume fallback until we know SE isn't muted
+				if (requestUrl.endsWith("/api_req_map/start")) {
+					KC3Network.nextBlockerNetworkFallback = true;
+				}
 				
 				// Clear overlays before processing this new API call
 				KC3Network.clearOverlays();
@@ -301,6 +308,11 @@ Listens to network history and triggers callback if game events happen
 			// If it's switching to NextNode or Yasen screen (might be others?)
 			if(requestUrl.includes("/kcs2/resources/se/217.mp3")){
 				KC3Network.nextBlockTrigger(true);
+			}
+			// Node 'sonar ping' sound should always be heard before a battle if SE is on;
+			// Will allow us to determine whether SE is muted for the next blocker
+			if(requestUrl.includes("/kcs2/resources/se/252.mp3")) {
+				KC3Network.nextBlockerNetworkFallback = false;
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
