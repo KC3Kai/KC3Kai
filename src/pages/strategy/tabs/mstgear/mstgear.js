@@ -199,8 +199,7 @@
 							KC3Meta.gearRange(gearData["api_"+sdata[1]])
 						);
 					} else if(sdata[0] === "kk") { // For bauxite cost when deploy to LBAS
-						const landSlot = KC3GearManager.landBaseReconnType2Ids.includes(gearData.api_type[2]) ?
-							KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+						const landSlot = KC3GearManager.getLandBaseSlotSize(gearData.api_type[2]);
 						const deployCost = gearData["api_"+sdata[1]] * landSlot;
 						$(".stat_value", statBox).text(
 							"{0}(={1}x{2})".format(deployCost, gearData["api_"+sdata[1]], landSlot)

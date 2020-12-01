@@ -74,7 +74,7 @@
 	background:url(../../../../assets/img/ui/trunk.png);
 }
 .tab_flowchart .questFlowItem .questIcon {
-	width:38px;
+	width:42px;
 	margin:1px 5px 0px 1px;
 	text-align:center;
 	font-size:10px;
@@ -94,9 +94,17 @@
 	background-image:url(../../../../assets/img/ui/quest_check.png);
 	background-repeat:no-repeat;
 	background-size:16px 16px;
-	background-position-x:25px;
+	background-position-x:28px;
 	background-position-y:4px;
 	background-blend-mode:normal;
+}
+.tab_flowchart .questFlowItem .questIcon.ticked.label_daily,
+.tab_flowchart .questFlowItem .questIcon.ticked.label_weekly,
+.tab_flowchart .questFlowItem .questIcon.ticked.label_monthly,
+.tab_flowchart .questFlowItem .questIcon.ticked.label_quarterly,
+.tab_flowchart .questFlowItem .questIcon.ticked.label_yearly,
+.tab_flowchart .questFlowItem .questIcon.ticked.label_other {
+	background-position-x:22px;
 }
 .tab_flowchart .questFlowItem .questDesc {
 	max-width:64%;
@@ -232,18 +240,17 @@
 	font-size:12px;
 }
 .tab_flowchart .questExtraItem .questIcon {
-	width:38px;
-	height:20px;
+	width:49px;
+	height:18px;
 	margin:1px 5px 0px 1px;
 	text-align:center;
 	font-size:10px;
 	font-weight:bold;
-	height:18px;
 	line-height:18px;
 	float:left;
 }
 .tab_flowchart .questExtraItem .questDesc {
-	width:610px;
+	width:600px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -268,7 +275,32 @@
 	background-image:url(../../../../assets/img/ui/quest_check.png);
 	background-repeat:no-repeat;
 	background-size:16px 16px;
-	background-position-x:25px;
+	background-position-x:36px;
 	background-position-y:4px;
 	background-blend-mode:normal;
+}
+
+.tab_flowchart .questIcon.label_daily {
+	border-left:4px solid transparent;
+	border-right:4px solid #6bf;
+}
+.tab_flowchart .questIcon.label_weekly {
+	border-left:4px solid transparent;
+	border-right:4px solid #9ef;
+}
+.tab_flowchart .questIcon.label_monthly {
+	border-left:4px solid transparent;
+	border-right:4px solid #be7;
+}
+.tab_flowchart .questIcon.label_quarterly {
+	border-left:4px solid transparent;
+	border-right:4px solid #ea6;
+}
+.tab_flowchart .questIcon.label_yearly {
+	border-left:4px solid transparent;
+	border-right:4px solid #59f;
+}
+.tab_flowchart .questIcon.label_other {
+	border-left:4px solid transparent;
+	border-right:4px solid #fe6;
 }

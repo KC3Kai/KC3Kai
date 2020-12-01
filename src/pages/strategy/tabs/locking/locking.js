@@ -12,8 +12,8 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
-            this.lockLimit = 9;
-            this.extraOpsStartFrom = 5;
+            this.lockLimit = 4;
+            this.extraOpsStartFrom = 4;
             this.heartLockMode = 2;
             this.showShipLevel = true;
             this.currentTab = "all";
@@ -41,6 +41,7 @@
             this.fillLockBoxes();
             this.setDroppable();
             this.switchToLockTab(this.currentTab);
+            let startTime = Date.now();
             $(".selectTab", this.tab).on("click", (e) => {
                 const newTab = $(e.currentTarget).data("tab");
                 if (!!newTab && newTab !== this.currentTab) {
@@ -57,10 +58,13 @@
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {
                 $(".filters input").each((_, elem) => { elem.disabled = true; });
+                startTime = Date.now();
             });
             this.shipListDiv.on("postShow", ()=> {
                 $(".filters input").each((_, elem) => { elem.disabled = false; });
                 this.adjustHeight();
+                // Defer another adjustment because at this timing new version chrome still hide dom (fail to get element's size and offset)
+                setTimeout(this.adjustHeight.bind(this), Date.now() - startTime);
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();
@@ -186,7 +190,9 @@
                 slotMaxSize: shipMaster.api_maxeq,
                 exSlot: shipObj.ex_item,
 
-                canEquipDaihatsu: shipObj.canEquipDaihatsu()
+                canEquipDaihatsu: shipObj.canEquipDaihatsu(),
+                canEquipTank: shipObj.canEquipTank(),
+                canEquipFCF: shipObj.canEquipFCF()
             });
 
             this.lockPlans.forEach((tagPlan, tagId) => {
@@ -285,17 +291,16 @@
                 }
             });
 
-            [0,1,2,3].forEach(i => {
+            [0,1,2,3,4].forEach(i => {
                 this.showEquipSlot(shipRow, i + 1, ship.slotCount,
                     ship.slotMaxSize[i], ship.slots[i], ship.equip[i]);
             });
             // for ex-slot, although it's hidden
-            this.showEquipSlot(shipRow, 5, ship.exSlot ? 5 : ship.slotCount,
-                0, 0, ship.exSlot);
+            this.showEquipSlot(shipRow, 6, ship.slotCount, 0, 0, ship.exSlot);
         }
 
         showEquipSlot(rowElem, index, slotCount, slotMaxSize, slotCurrentSize, equipId) {
-            const element = $(".ship_equip_" + (index > 4 ? "ex" : index), rowElem);
+            const element = $(".ship_equip_" + (index > 5 ? "ex" : index), rowElem);
             const isShowCurrent = !!this.filterValues.equipIcons;
             if(equipId > 0 && isShowCurrent) {
                 const gear = KC3GearManager.get(equipId);
@@ -318,10 +323,10 @@
                 const slotSize = isShowCurrent ? slotCurrentSize : slotMaxSize;
                 $("span", element).text(slotSize).toggle(slotMaxSize > 0);
                 element.toggleClass("slot_open", index <= slotCount);
-                // hide ex-slot elements
-                if(index > 4 && slotCount < 5)
-                    element.hide();
             }
+            if(slotCount > 4) element.parent().addClass("slot5");
+            // hide ex-slot or closed-slot elements
+            if(index > slotCount) element.hide();
         }
 
         addFilterUI() {
@@ -349,8 +354,8 @@
                 if(i === 0) $("input[type='radio']", elm)[0].checked = true;
             });
 
-            // Daihatsu
-            ["---", "Capable", "Incapable"].forEach((val, i) => {
+            // Daihatsu/Amphibious Tank
+            ["---", "Daihatsu", "Tank", "Both", "Either", "Neither", "FCF"].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -411,7 +416,11 @@
                 (filterDef, ship) => {
                     return (this.filterValues.daihatsu === 0)
                         || (this.filterValues.daihatsu === 1 && ship.canEquipDaihatsu)
-                        || (this.filterValues.daihatsu === 2 && !ship.canEquipDaihatsu);
+                        || (this.filterValues.daihatsu === 2 && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 4 && (ship.canEquipDaihatsu || ship.canEquipTank))
+                        || (this.filterValues.daihatsu === 5 && !ship.canEquipDaihatsu && !ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 6 && ship.canEquipFCF);
                 }
             );
             this.defineSimpleFilter("tagLocked", [], 0,
@@ -466,7 +475,7 @@
             shipBox.data("ship_id", ship.id);
             shipBox.attr("data-rosterid", ship.id );
             shipBox.attr("data-boxcolorid", boxIndex);
-            shipBox.attr("title", "{1:name} {2:stype} Lv.{3:level} ({0:id})"
+            shipBox.attr("title", "{1:name} {2:stype} Lv.{3:level} (#{0:id})"
                 .format(ship.id, ship.name, KC3Meta.stype(ship.stype), ship.level)
             ).lazyInitTooltip();
             if(ship.sally) {

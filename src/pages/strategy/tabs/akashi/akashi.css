@@ -207,6 +207,14 @@
 	width:20px;
 	height:20px;
 }
+.tab_akashi .eq_res .eq_res_icon.useitem {
+	text-align:center;
+}
+.tab_akashi .eq_res .eq_res_icon.useitem img {
+	width:18px;
+	height:18px;
+	vertical-align:text-top;
+}
 .tab_akashi .eq_res .eq_res_value.consumed_name {
 	width:120px;
 }

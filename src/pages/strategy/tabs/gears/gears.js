@@ -499,7 +499,7 @@
 								<span>x${item.count}</span>`
 						});
 						$("img", holderDiv).addClass("hover")
-							.attr("title", `[${masterId}]\n${getItemList(item.held).join("\n")}`)
+							.attr("title", `[${masterId}] ${item.holder.name()} #${item.holder.rosterId}\n${getItemList(item.held).join("\n")}`)
 							.attr("alt", masterId)
 							.on("click", self.shipClickFunc);
 						$("font", holderDiv).attr("title", `#${rosterId} ${item.holder.name()}${!item.holder.lock ? " \uD83D\uDD13" : ""}`);

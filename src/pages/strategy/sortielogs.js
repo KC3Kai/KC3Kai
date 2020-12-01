@@ -157,6 +157,15 @@
 				self.showMap();
 			}).toggleClass("active", ConfigManager.sr_show_new_shipstate);
 			
+			// Toggle between using predictions to get yasen states
+			$(".tab_"+tabCode+" .sortie_batch_toggles .show_yasen_shipstate_toggle").on("click", function(){
+				ConfigManager.load();
+				ConfigManager.sr_show_yasen_shipstate = !ConfigManager.sr_show_yasen_shipstate;
+				ConfigManager.save();
+				$(this).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
+				self.showMap();
+			}).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
+			
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.switchWorld(KC3StrategyTabs.pageParams[1],
 					KC3StrategyTabs.pageParams[2]);
@@ -938,9 +947,8 @@
 							// Useitem Drop
 							if(battle.useitem > 0){
 								$(".node_drop img", nodeBox)
-									.attr("src", `/assets/img/useitems/${battle.useitem}.png`)
+									.attr("src", KC3Meta.useitemIcon(battle.useitem))
 									.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
-									.css("border-radius", "50%")
 									.attr("title", [$(".node_drop img", nodeBox).attr("title"),
 										KC3Meta.useItemName(battle.useitem)].filter(v => !!v).join(" + "));
 							}
@@ -970,19 +978,21 @@
 							try {
 								if(typeof battle.data.api_dock_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
-									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									if(typeof battle.yasen.api_deck_id != "undefined" &&
+										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
 										thisNode.night( battle.yasen );
 									}
 								}else if(typeof battle.data.api_deck_id != "undefined"){
 									thisNode.engage( battleData, sortie.fleetnum );
-									if(KC3Node.debugPrediction() && typeof battle.yasen.api_deck_id != "undefined"){
+									if(typeof battle.yasen.api_deck_id != "undefined" &&
+										(ConfigManager.sr_show_yasen_shipstate || KC3Node.debugPrediction())){
 										thisNode.night( battle.yasen );
 									}
 								}else if(typeof battle.yasen.api_deck_id != "undefined"){
 									thisNode.engageNight( battleData, sortie.fleetnum );
 								}
 							} catch(e) {
-								if(ConfigManager.sr_show_new_shipstate) {
+								if(ConfigManager.sr_show_new_shipstate || ConfigManager.sr_show_yasen_shipstate) {
 									console.error("Predicting battle ship state", e);
 								} else {
 									throw e;
@@ -1030,6 +1040,12 @@
 											.append(`<div class="shipstate"><img src="/assets/img/ui/estat_boss${["destr", "heavy", "modrt"][level]}.png"></img></div>`);
 									}
 								}
+							}
+							if(ConfigManager.sr_show_yasen_shipstate &&
+								typeof battle.yasen.api_deck_id != "undefined" &&
+								!(battleType & (BATTLE_NIGHT | BATTLE_NIGHT2DAY))){
+								$(".node_id", nodeBox).addClass("day_to_night");
+								$(".sortie_edge_"+(edgeIndex+1), sortieBox).addClass("day_to_night");
 							}
 							if(KC3Node.debugPrediction()){
 								// Known issue 1: if `api_name` not saved into battle data for old history,

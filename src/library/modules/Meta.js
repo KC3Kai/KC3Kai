@@ -122,6 +122,11 @@ Provides access to data on built-in JSON files
 			293, // Yuubari Kai -> K2
 			579, // Gotland Kai -> andra
 			628, // Fletcher Kai Mod.2 -> Mk.II
+			278, // Kaga Kai -> K2
+			698, // Kaga K2 -> K2E
+			610, // Kaga K2E -> K2Go
+			228, // Yukikaze Kai -> Tan Yang
+			651, // Tan Yang -> Yukikaze K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
@@ -258,6 +263,16 @@ Provides access to data on built-in JSON files
 			// current auto using phase 1
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
 			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
+		},
+		useitemIcon :function(useitemId, iconSetId = ConfigManager.info_items_iconset){
+			// for those known item IDs not given an icon by game, eg: Strait/Sho-go medal
+			const noIconIds = [5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
+				25, 26, 27, 28, 29, 30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48,
+				79, 81, 82, 83, 84];
+			const filename = noIconIds.includes(Number(useitemId)) ? 0 : useitemId;
+			// current auto using phase 2
+			const path = "useitems" + (["_p2", "", "_p2"][iconSetId || 0] || "");
+			return chrome.extension.getURL(`/assets/img/${path}/${filename}.png`);
 		},
 		
 		statApiNameMap :function(){
@@ -658,6 +673,11 @@ Provides access to data on built-in JSON files
 		
 		mapExp :function(world, map){
 			return this.allMapsExp()[[world, map].join('-')] || 0;
+		},
+		
+		maelstromLoss :function(mapId, edgeId){
+			var mapDef = this._dataColle.maelstromLoss["m" + mapId] || {};
+			return mapDef[edgeId] || [];
 		},
 		
 		airPowerAverageBonus :function(ace){

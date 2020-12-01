@@ -259,6 +259,74 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st August every year
+			yearlyAug: {
+				type: 'yearlyAug',
+				key: 'timeToResetYearlyAugQuests',
+				resetMonth: AUGUST,
+				questIds: [438],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyAug.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyAug.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st September every year
+			yearlySep: {
+				type: 'yearlySep',
+				key: 'timeToResetYearlySepQuests',
+				resetMonth: SEPTEMBER,
+				questIds: [439, 440, 657, 928],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlySep.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st October every year
+			yearlyOct: {
+				type: 'yearlyOct',
+				key: 'timeToResetYearlyOctQuests',
+				resetMonth: OCTOBER,
+				questIds: [345, 346, 654],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyOct.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyOct.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
+			// Reset on 1st November every year
+			yearlyNov: {
+				type: 'yearlyNov',
+				key: 'timeToResetYearlyNovQuests',
+				resetMonth: NOVEMBER,
+				questIds: [655, 714, 715],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyNov.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyNov.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -279,46 +347,59 @@ Uses KC3Quest objects to play around with
 		 * Since 2020-03-27, quest page in API no longer exists (in-game UI paginated still), list includes all available items in specified tab ID
 		------------------------------------------*/
 		definePage :function( questList, questPage, questTabId ){
-			// TODO it's now possible to clean quests non-open-nor-active in-game for some reason,
-			// Update quests for those `api_no` not in current quest list as long as questTabId is 0 (All)
-			var untranslated = [];
-			var reportedQuests = JSON.parse(localStorage.reportedQuests||"[]");
+			const untranslated = [], existedAllIds = [];
+			const reportedQuests = JSON.parse(localStorage.reportedQuests || "[]");
 			for(var ctr in questList){
-				if(questList[ctr]===-1) continue;
+				if(!questList[ctr] || questList[ctr] === -1) continue;
 				
-				var questId = questList[ctr].api_no;
-				var oldQuest = this.get( questId );
-				oldQuest.defineRaw( questList[ctr] );
-				oldQuest.autoAdjustCounter();
+				const questRaw = questList[ctr];
+				const questId = questRaw.api_no;
+				const questObj = this.get(questId);
+				questObj.defineRaw(questRaw);
+				questObj.autoAdjustCounter();
+				if(questTabId === 0){
+					existedAllIds.push(questId);
+				}
 				
 				// Check for untranslated quests
-				if( typeof oldQuest.meta().available == "undefined" ){
+				if(typeof questObj.meta().available == "undefined"){
 					if(reportedQuests.indexOf(questId) === -1){
-						untranslated.push(questList[ctr]);
+						untranslated.push(questRaw);
 						// remember reported quest so wont send data twice
 						reportedQuests.push(questId);
 					}
 				}
 				
-				// Add to actives or opens depending on status
-				switch( questList[ctr].api_state ){
-					case 1:	// Unselected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, false );
+				// Add to actives or opens depending on its state
+				switch(questRaw.api_state){
+					case 1: // Unselected
+						this.isOpen(questId,   true);
+						this.isActive(questId, false);
 						break;
-					case 2:	// Selected
-						this.isOpen( questList[ctr].api_no, true );
-						this.isActive( questList[ctr].api_no, true );
+					case 2: // Selected
+						this.isOpen(questId,   true);
+						this.isActive(questId, true);
 						break;
-					case 3:	// Completed
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+					case 3: // Completed
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 					default:
-						this.isOpen( questList[ctr].api_no, false );
-						this.isActive( questList[ctr].api_no, false );
+						this.isOpen(questId,   false);
+						this.isActive(questId, false);
 						break;
 				}
+			}
+			// Data submitting of untranslated quests no longer available for now
+			if(untranslated.length){
+				console.info("Untranslated quest detected", reportedQuests, untranslated);
+			}
+			
+			// It's now possible to clean quests non-open-nor-active in-game for API change reason,
+			// Close (mark as completed) quests for those `api_no` not in current quest list, as long as questTabId is 0 (All quests available).
+			if(existedAllIds.length){
+				this.open.filter(id   => !existedAllIds.includes(id)).forEach(id => { this.isOpen(id,   false); this.get(id).status = 3; });
+				this.active.filter(id => !existedAllIds.includes(id)).forEach(id => { this.isActive(id, false); this.get(id).status = 3; });
 			}
 			
 			this.save();
@@ -412,6 +493,10 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyOct').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyNov').indexOf(questId)>-1;
 			return !!period;
 		},
 		
@@ -613,6 +698,26 @@ Uses KC3Quest objects to play around with
 							fleet.hasShipType([3, 4, 21])
 						);
 					},
+				"345": // C49 PvP with 4 of Warspite, Kongou, Ark Royal, Nelson, J-Class DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() && (
+							fleet.countShip(439)   + // Warspite any remodel
+							fleet.countShip(78)    + // Kongou any remodel
+							fleet.countShip(515)   + // Ark Royal any remodel
+							fleet.countShip(571)   + // Nelson any remodel
+							fleet.countShipClass(82) // J-Class any remodel
+						) >= 4;
+					},
+				"346": // C50 PvP with Yuugumo K2, Makigumo K2, Kazagumo K2, Akigumo K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(542)  // Yuugumo K2
+							&& fleet.hasShip(563)  // Makigumo K2
+							&& fleet.hasShip(564)  // Kazagumo K2
+							&& fleet.hasShip(648); // Akigumo K2
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -632,6 +737,17 @@ Uses KC3Quest objects to play around with
 						&& KC3GearManager.countFree(75) >= 2
 						&& KC3GearManager.countFree(36) >= 1
 					),
+				"654": // F93 Have 1 Skilled Crew Member, 1500 ammo, 1500 bauxite. Ary Royal as secretary, equip her 1st slot with a maxed star Swordfish
+					() => {
+						const firstFleet = PlayerManager.fleets[0];
+						const firstSlotGear = firstFleet.ship(0).equipment(0);
+						const isMaxSwordfishEquipped = firstSlotGear.masterId === 242 && firstSlotGear.stars === 10;
+						return PlayerManager.hq.lastMaterial[1] >= 1500
+							&& PlayerManager.hq.lastMaterial[4] >= 1500
+							&& PlayerManager.consumables.skilledCrew >= 1
+							&& firstFleet.hasShip(515, 0)
+							&& isMaxSwordfishEquipped;
+					},
 				"663": // F55 Have 18000 steel (scrapping not counted here)
 					() => PlayerManager.hq.lastMaterial[2] >= 18000,
 				"854": // Bq2 Sortie 1st fleet (sortie maps and battle ranks not counted here)
@@ -719,6 +835,17 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(5) >= 3 && fleet.countShipType(2) >= 1;
+					},
+				"928": // By5 Sortie 2 of Haguro/Ashigara/Myoukou/Takao/Kamikaze
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return (
+							fleet.countShip(65)   + // Haguro any remodel
+							fleet.countShip(64)   + // Ashigara any remodel
+							fleet.countShip(62)   + // Myoukou any remodel
+							fleet.countShip(66)   + // Takao any remodel
+							fleet.countShip(471)    // Kamikaze any remodel
+						) >= 2;
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

@@ -17,6 +17,7 @@
 			<div class="wrapper_bg"></div>
 			<div class="rotation">
 				<div class="rotarButtons">
+					<div class="rotarZairo rotarSquish border_radius_5 quest_extendable"><img src="../../../../assets/img/ui/arrow.png" /></div>
 					<div class="rotarZairo rotarSumStats border_radius_5"><img src="../../../../assets/img/ui/sumicon.png" /></div>
 					<div class="rotarZairo rotarQuests border_radius_5"><img src="../../../../assets/img/ui/wall_of_text.png" /></div>
 					<div class="rotarZairo rotarExpedition border_radius_5"><img src="../../../../assets/img/ui/timer2.png" /></div>
@@ -25,7 +26,7 @@
 				</div>
 				<div class="rotated page1">
 					<!-- Module: Admiral Info -->
-					<div class="module admiral border_radius_5">
+					<div class="module admiral border_radius_5 quest_extendable">
 						<div class="admiral_level">
 							<div class="admiral_lvtxt"><span class="i18n">HQAdmiralLv</span> <span class="admiral_lvval"></span></div>
 							<div class="admiral_lvbox bar_border_radius4">
@@ -149,18 +150,7 @@
 				</div>
 				<div class="rotated page4"></div>
 				<div class="rotated page5">
-					<div class="module admiral">
-						<div class="admiral_level">
-							<div class="admiral_lvtxt"><span class="i18n">HQAdmiralLv</span> <span class="admiral_lvval"></span></div>
-							<div class="admiral_lvbox bar_border_radius4">
-								<div class="admiral_lvbar bar_border_radius3"></div>
-							</div>
-							<div class="admiral_lvnext hover"></div>
-						</div>
-						<div class="admiral_rank hover"></div>
-						<div class="admiral_points hover"></div>
-					</div>
-					<div class="module summary border_radius_5">
+					<div class="module sumstats border_radius_5">
 						<div class="summary_box summary-level">
 							<div class="summary_icon"><img src="../../../../assets/img/stats_p2/lv.png" /></div>
 							<div class="summary_text">000</div>
@@ -174,6 +164,12 @@
 						</div>
 						<div class="summary_box summary-sumfp">
 							<div class="summary_icon"><img src="../../../../assets/img/stats_p2/fp.png" /></div>
+							<div class="summary_text summed">000</div>
+							<div class="summary_text summed_imp">000</div>
+							<div class="clear"></div>
+						</div>
+						<div class="summary_box summary-sumtp">
+							<div class="summary_icon"><img src="../../../../assets/img/stats_p2/tp.png" /></div>
 							<div class="summary_text summed">000</div>
 							<div class="summary_text summed_imp">000</div>
 							<div class="clear"></div>
@@ -208,7 +204,7 @@
 					<div id="atab_battle" class="activity_tab hover i18n conbut_radius_5500 skew_me tab_count_5" data-target="battle">NatsuiroBattle</div>
 					<div id="atab_quest" class="activity_tab hover i18n conbut_radius_5500 skew_me tab_count_5" data-target="quest">NatsuiroQuest</div>
 					<div id="atab_expeditionPlanner" class="activity_tab hover i18n conbut_radius_5500 skew_me tab_count_5" data-target="expeditionPlanner">NatsuiroExped</div>
-					<div id="atab_activity" class="activity_tab i18n conbut_radius_5500 skew_me tab_count_5" data-target="">NatsuiroActivity</div>
+					<!--<div id="atab_activity" class="activity_tab i18n conbut_radius_5500 skew_me tab_count_5" data-target="">NatsuiroActivity</div>-->
 				</div>
 				<div class="activity_body border_radius_5">
 					<div class="activity_box activity_expeditionPlanner">
@@ -270,6 +266,7 @@
 											<li class="expedition_entry border_radius_3" data-exp-id="43">43</li>
 											<li class="expedition_entry border_radius_3" data-exp-id="44">44</li>
 											<li class="expedition_entry border_radius_3" data-exp-id="45">45</li>
+											<li class="expedition_entry border_radius_3" data-exp-id="46">46</li>
 										</ul>
 									</li>
 									<li><span class="i18n">MapNameWorld4</span>
@@ -297,6 +294,7 @@
 											<li class="expedition_entry border_radius_3" data-exp-id="39">39</li>
 											<li class="expedition_entry border_radius_3" data-exp-id="40">40</li>
 											<li class="expedition_entry border_radius_3" data-exp-id="141">E1</li>
+											<li class="expedition_entry border_radius_3" data-exp-id="142">E2</li>
 										</ul>
 									</li>
 								</ul>
@@ -393,157 +391,36 @@
 					<!-- BASIC: Consumables and Timers -->
 					<div class="activity_box activity_basic">
 						<div class="consumables">
-							<div class="rotarZairo rotarBack border_radius_5"><img src="../../../../assets/img/ui/export.png" /></div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/bucket.png" /></div>
 								<div class="consumable_ltext count_buckets">3000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/ship.png" /></div>
 								<div class="consumable_text count_ships">000</div>
 								<div class="consumable_max max_ships">/000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/ibuild.png" /></div>
 								<div class="consumable_ltext count_torch">0000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/gear.png" /></div>
 								<div class="consumable_text count_gear">0000</div>
 								<div class="consumable_max max_gear">/0000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/screws.png" /></div>
 								<div class="consumable_ltext count_screws">3000</div>
 								<div class="clear"></div>
 							</div>
-							<div class="consumable page1">
+							<div class="consumable">
 								<div class="consumable_icon"><img src="../../../../assets/img/client/coin.png" /></div>
 								<div class="consumable_ltext count_fcoin">000000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/bucket.png" /></div>
-								<div class="consumable_ltext count_buckets">3000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/devmat.png" /></div>
-								<div class="consumable_ltext count_devmats">3000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
-								<div class="consumable_ltext count_fuel">300000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/steel.png" /></div>
-								<div class="consumable_ltext count_steel">300000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
-								<div class="consumable_ltext count_ammo">300000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page2">
-								<div class="consumable_icon"><img src="../../../../assets/img/client/bauxite.png" /></div>
-								<div class="consumable_ltext count_bauxite">300000</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/61.png" /></div>
-								<div class="consumable_ltext count_1classMedalsOrEvent">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/57.png" /></div>
-								<div class="consumable_ltext count_medals">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/58.png" /></div>
-								<div class="consumable_ltext count_blueprints">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/75.png" /></div>
-								<div class="consumable_ltext count_newGunMats">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/77.png" /></div>
-								<div class="consumable_ltext count_newAvMats">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/78.png" /></div>
-								<div class="consumable_ltext count_actionReportOrSkilledCrew">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/64.png" /></div>
-								<div class="consumable_ltext count_reinforcement">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/52.png" /></div>
-								<div class="consumable_ltext count_fairy">99</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page3">
-								<div class="consumable_icon"><img src="../../../../assets/img/useitems/54.png" /></div>
-								<div class="consumable_ltext count_morale">198</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/85.png" /></div>
-								<div class="consumable_ltext count_rice">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/86.png" /></div>
-								<div class="consumable_ltext count_umeboshi">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/87.png" /></div>
-								<div class="consumable_ltext count_nori">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/88.png" /></div>
-								<div class="consumable_ltext count_tea">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/89.png" /></div>
-								<div class="consumable_ltext count_dinnerTicket">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/69.png" /></div>
-								<div class="consumable_ltext count_mackerelCan">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/66.png" /></div>
-								<div class="consumable_ltext count_ration">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/76.png" /></div>
-								<div class="consumable_ltext count_rationSpecial">0</div>
-								<div class="clear"></div>
-							</div>
-							<div class="consumable page4">
-								<div class="consumable_icon"><img src="/assets/img/useitems/65.png" /></div>
-								<div class="consumable_ltext count_protoCatapult">0</div>
 								<div class="clear"></div>
 							</div>
 							<div class="clear"></div>
@@ -1217,7 +1094,7 @@
 				</div>
 			</div>
 			<!-- Module: Quests -->
-			<div class="module quests">
+			<div class="module quests quest_extendable">
 				
 			</div>
 			
@@ -1266,58 +1143,60 @@
 
 			<div class="rotation2">	
 				<div class="rotarButtons">
+					<div class="rotarZairo rotarSquish border_radius_5 quest_extendable"><img src="../../../../assets/img/ui/arrow.png" /></div>
 					<div class="rotarZairo rotarLayout border_radius_5"><img src="../../../../assets/img/ui/layout.png" /></div>
 					<div class="rotarZairo rotarExpedition border_radius_5"><img src="../../../../assets/img/ui/timer2.png" /></div>
+					<div class="rotarZairo rotarConsumables border_radius_5"><img src="../../../../assets/img/ui/cog.png" /></div>
 					<div class="rotarZairo rotarBack border_radius_5"><img src="../../../../assets/img/ui/export.png" /></div>
 					<div class="rotarZairo rotarHidden border_radius_5"><img src="../../../../assets/img/ui/sunkblack.png" /></div>
 				</div>
 				<div class="rotated2 page1">
 					<!-- Module: Status Reminders -->
-					<div class="module status border_radius_5">
+					<div class="module status border_radius_5 quest_extendable">
 						<!-- Resupply Status -->
-						<div class="status_box status_supply hover">
+						<div class="status_box status_supply hover border_radius_5">
 							<div class="status_icon"><img/></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Morale Status -->
-						<div class="status_box status_morale hover">
+						<div class="status_box status_morale hover border_radius_5">
 							<div class="status_icon"><img/></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Repair Status -->
-						<div class="status_box status_repair hover">
+						<div class="status_box status_repair hover border_radius_5">
 							<div class="status_icon"><img/></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Combine Capability -->
-						<div class="status_box status_butai hover">
+						<div class="status_box status_butai hover border_radius_5">
 							<div class="status_icon"><img src="../../../../assets/img/ui/fleet_single2.png" /></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Support Power -->
-						<div class="status_box status_support hover">
+						<div class="status_box status_support hover border_radius_5">
 							<div class="status_icon enclose"><img src="../../../../assets/img/stats/dv.png" /></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Docking Time -->
-						<div class="status_box status_docking hover">
+						<div class="status_box status_docking hover border_radius_5">
 							<div class="status_icon"><img src="../../../../assets/img/ui/timer.png" /></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Akashi Time -->
-						<div class="status_box status_akashi hover">
+						<div class="status_box status_akashi hover border_radius_5">
 							<div class="status_icon enclose"><img src="../../../../assets/img/items/26.png" /></div>
 							<div class="status_text"></div>
 							<div class="clear"></div>
 						</div>
 						<!-- Fleet Speed -->
-						<div class="status_box status-speed">
+						<div class="status_box status-speed border_radius_5">
 							<div class="status_icon enclose"><img src="../../../../assets/img/stats_p2/sp.png" /></div>
 							<div class="status_text">Fast</div>
 							<div class="clear"></div>
@@ -1395,6 +1274,305 @@
 						<div class="layout_btn btn_change_layout2"><img src="../../../../assets/img/ui/layout_wide.png"  class="border_radius_5"/></div>
 						<div class="layout_btn btn_change_layout3"><img src="../../../../assets/img/ui/layout_compact.png"  class="border_radius_5"/></div>
 						<div class="layout_btn btn_change_layout4"><img src="../../../../assets/img/ui/layout_tall.png"  class="border_radius_5"/></div>
+					</div>
+				</div>
+				<div class="rotated2 page5">
+					<!-- BASIC: Consumables and Timers -->
+					<div class="module consumableList border_radius_5">
+						<div class="consumable_toggles border_radius_3">
+							<div class="consumable_icon disabled consumable_toggle consumable_all_toggle"><img src="../../../../assets/img/ui/useitem_x.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_rsc_toggle"><img src="../../../../assets/img/useitems/31.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_basics_toggle"><img src="../../../../assets/img/useitems/1.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_remodel_toggle"><img src="../../../../assets/img/useitems/58.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_screws_toggle"><img src="../../../../assets/img/useitems/4.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_catalysts_toggle"><img src="../../../../assets/img/useitems/77.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_ex_slot_toggle"><img src="../../../../assets/img/useitems/64.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_special_toggle"><img src="../../../../assets/img/useitems/54.png" /></div>
+							<div class="consumable_icon consumable_toggle consumable_furniture_toggle"><img src="../../../../assets/img/useitems/10.png" /></div>
+							<!--<div class="consumable_icon consumable_toggle consumable_event_toggle"><img src="../../../../assets/img/useitems/68.png" /></div>-->
+							<div class="clear"></div>
+						</div>
+						<div class="consumable_display">
+							<div class="consumables consumable_rsc border_radius_3">
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/fuel.png" /></div>
+									<div class="consumable_ltext count_fuel">300000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/steel.png" /></div>
+									<div class="consumable_ltext count_steel">300000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/ammo.png" /></div>
+									<div class="consumable_ltext count_ammo">300000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/bauxite.png" /></div>
+									<div class="consumable_ltext count_bauxite">300000</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_basics border_radius_3">
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/bucket.png" /></div>
+									<div class="consumable_ltext count_buckets">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/ibuild.png" /></div>
+									<div class="consumable_ltext count_torch">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/devmat.png" /></div>
+									<div class="consumable_ltext count_devmats">0000</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_remodel border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/57.png" /></div>
+									<div class="consumable_ltext count_medals">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/58.png" /></div>
+									<div class="consumable_ltext count_blueprints">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/78.png" /></div>
+									<div class="consumable_ltext count_actionReport">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/65.png" /></div>
+									<div class="consumable_ltext count_protoCatapult">0</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_screws border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/4.png" /></div>
+									<div class="consumable_ltext count_screws">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/57.png" /></div>
+									<div class="consumable_ltext count_medals">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/60.png" /></div>
+									<div class="consumable_ltext count_presents">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon">=</div>
+									<div class="consumable_ltext count_sumScrews">0000</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_catalysts border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/94.png" /></div>
+									<div class="consumable_ltext count_newArmamentMaterial">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/75.png" /></div>
+									<div class="consumable_ltext count_newArtilleryMaterial">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/77.png" /></div>
+									<div class="consumable_ltext count_newAviationMaterial">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/92.png" /></div>
+									<div class="consumable_ltext count_newRocketDevMaterial">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/70.png" /></div>
+									<div class="consumable_ltext count_skilledCrew">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/78.png" /></div>
+									<div class="consumable_ltext count_actionReport">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/74.png" /></div>
+									<div class="consumable_ltext count_newAircraftBlueprint">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/71.png" /></div>
+									<div class="consumable_ltext count_nEngine">0</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_ex_slot border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/64.png" /></div>
+									<div class="consumable_ltext count_reinforceExpansion">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/50.png" /></div>
+									<div class="consumable_ltext count_repairTeam">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/51.png" /></div>
+									<div class="consumable_ltext count_repairGoddess">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/66.png" /></div>
+									<div class="consumable_ltext count_ration">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/76.png" /></div>
+									<div class="consumable_ltext count_rationSpecial">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/69.png" /></div>
+									<div class="consumable_ltext count_mackerelCan">99</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_special border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/54.png" /></div>
+									<div class="consumable_ltext count_mamiya">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/59.png" /></div>
+									<div class="consumable_ltext count_irako">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/60.png" /></div>
+									<div class="consumable_ltext count_presents">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/67.png" /></div>
+									<div class="consumable_ltext count_resupplier">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/91.png" /></div>
+									<div class="consumable_ltext count_emergencyRepair">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/61.png" /></div>
+									<div class="consumable_ltext count_firstClassMedals">99</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+							<div class="consumables consumable_furniture border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/52.png" /></div>
+									<div class="consumable_ltext count_furnitureFairy">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/10.png" /></div>
+									<div class="consumable_ltext count_furniture200">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/11.png" /></div>
+									<div class="consumable_ltext count_furniture400">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/12.png" /></div>
+									<div class="consumable_ltext count_furniture700">0000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon"><img src="../../../../assets/img/client/coin.png" /></div>
+									<div class="consumable_ltext count_fcoin">000000</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable">
+									<div class="consumable_icon">=</div>
+									<div class="consumable_ltext count_sumFCoin">000000</div>
+									<div class="clear"></div>
+								</div>								
+							</div>
+							<!--<div class="consumables consumable_event border_radius_3">
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/56.png" /></div>
+									<div class="consumable_ltext count_chocolate">00</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="../../../../assets/img/useitems/69.png" /></div>
+									<div class="consumable_ltext count_mackerelCan">99</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/85.png" /></div>
+									<div class="consumable_ltext count_rice">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/86.png" /></div>
+									<div class="consumable_ltext count_umeboshi">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/87.png" /></div>
+									<div class="consumable_ltext count_nori">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/88.png" /></div>
+									<div class="consumable_ltext count_tea">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/89.png" /></div>
+									<div class="consumable_ltext count_dinnerTicket">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/62.png" /></div>
+									<div class="consumable_ltext count_hishimochi">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/68.png" /></div>
+									<div class="consumable_ltext count_mackerel">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/93.png" /></div>
+									<div class="consumable_ltext count_sardine">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="consumable itemPage">
+									<div class="consumable_icon"><img src="/assets/img/useitems/90.png" /></div>
+									<div class="consumable_ltext count_setsubunBeans">0</div>
+									<div class="clear"></div>
+								</div>
+								<div class="clear"></div>
+							</div>-->
+						</div>
 					</div>
 				</div>
 			</div>

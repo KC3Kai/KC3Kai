@@ -22,10 +22,12 @@
 		---------------------------------*/
 		execute :function(){
 			const self = this;
+			const KENI = PS["KanColle.Expedition.New.Info"];
 			
 			// Build more details from expedition master data
-			const buildExpedTooltip = (m) => (
-				["[{0}] ".format(m.api_id) + m.api_name,
+			const buildExpedTooltip = (m) => {
+				const info = KENI.findRawInfo(m.api_id);
+				return (["[{0}] ".format(m.api_id) + m.api_name,
 					m.api_details,
 					"Difficulty: {0}".format(m.api_difficulty),
 					"Reset type: {0}".format(m.api_reset_type),
@@ -38,9 +40,15 @@
 						+ (m.api_win_item2[0] > 0 ?
 							[", ", PlayerManager.getConsumableById(m.api_win_item2[0], true), ": ", m.api_win_item2[1]].join("") : ""),
 					String(m.api_deck_num) + " ships fleet: "
-						+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", ")
-				].join("\n")
-			);
+						+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", "),
+					(info.kc3_gs_all_sparkle ? "GS needs all ships sparkled" : ""),
+					(info.kc3_gs_drum_count ? "GS rate higher for drums >= {0}".format(info.kc3_gs_drum_count) : ""),
+					(info.kc3_gs_flagship_level ? "GS rate affected by sparkles & flagship level" : ""),
+					(m.api_reset_type && Array.isArray(info.kc3_unlocked_by) ?
+						"Unlocked by: {0}".format(info.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","))
+						: ""),
+				].filter(v => !!v).join("\n"));
+			};
 			// Add all expedition numbers on the filter list
 			self.exped_filters = [];
 			$('.tab_expedpast .expedNumbers').empty();
@@ -110,7 +118,12 @@
 				});
 			
 			// Expedition Number Filter
-			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(){
+			$(".tab_expedpast .expedNumBox").on("click", '.expedNum input', function(e){
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .expedNum input'
+					+',.tab_expedpast .expedNumBox .expedWhole input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const
 					filterExpeds = $('.tab_expedpast .expedNumBox .expedNum input:checked'),
 					worldNum     = $(this).attr("world"),
@@ -123,7 +136,12 @@
 					self.exped_filters.push( parseInt( $(this).attr("value"),10) );
 				});
 				self.refreshList();
-			}).on("click", ".expedWhole input", function() {
+			}).on("click", ".expedWhole input", function(e) {
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .expedNum input'
+					+',.tab_expedpast .expedNumBox .expedWhole input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const
 					worldNum = $(this).val(),
 					state    = $(this).prop("checked"),
@@ -146,7 +164,11 @@
 			});
 			
 			// Fleet Number Filter
-			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(){
+			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(e){
+				if(e.altKey) {
+					$('.tab_expedpast .expedNumBox .fleetRadio input').prop("checked", false);
+					$(this).prop("checked", true);
+				}
 				const filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
 				self.fleet_filters = [];
 				filterFleets.each( function() {

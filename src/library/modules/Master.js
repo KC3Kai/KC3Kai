@@ -339,6 +339,7 @@ Saves and loads significant data for future use
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
+			gearId = Number(gearId);
 			if(!type2Id && gearId > 0) {
 				const slotitem = this.slotitem(gearId);
 				if(!slotitem) return false;
@@ -384,6 +385,39 @@ Saves and loads significant data for future use
 				exslot: isCapableToExslot,
 				exslotIncludes: exslotCapableShips,
 			};
+		},
+
+		/**
+		 * Check if specified equipment (or equip type) can be equipped on specified ship.
+		 * @param {number} shipId - the master ID of ship to be checked.
+		 * @param {number} gearId - the master ID of a gear to be checked. if omitted, will be checked by equip type.
+		 * @param {number} gearType2 - the equip type ID of api_type[2] value, optional, but cannot be omitted at the same time with gearId.
+		 * @return 1 indicates can be equipped on (some) regular slots, 2: ex-slot, 3: both, 0: cannot equip. false on exception.
+		 * @see #equip_on
+		 */
+		equip_on_ship :function(shipId, gearId, gearType2) {
+			if(!this.available) return false;
+			if(!shipId) return false;
+			const gearMstId = Number(gearId),
+				shipMstId = Number(shipId),
+				shipMst = this.ship(shipMstId);
+			if(!shipMst) return false;
+			const stype = shipMst.api_stype;
+			const equipOn = this.equip_on(gearMstId, gearType2);
+			if(!equipOn || !equipOn.stypes.length) return false;
+			var result = 0;
+			if(Array.isArray(equipOn.excludes) && !equipOn.excludes.includes(shipMstId)) {
+				if(equipOn.stypes.includes(stype)) result |= 1;
+				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
+			}
+			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
+			const isTurbine = gearMstId === 33;
+			if(equipOn.exslot || isTurbine) {
+				if(result) result |= 2;
+			} else if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) {
+				result |= 2;
+			}
+			return result;
 		},
 
 		useitem :function(id){

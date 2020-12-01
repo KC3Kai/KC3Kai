@@ -161,7 +161,7 @@
 				// * use (300000 + 10) so that there are fewer significant digits
 				//   in floating parts
 				let currentResourcesWeighted = currentResources
-					.map( x => 300010 /(x + 10) );
+					.map( x => (PlayerManager.maxResource + 10) /(x + 10) );
 				let maxVal = Math.max.apply(undefined, currentResourcesWeighted);
 				let scaledRate = currentResourcesWeighted.map( x => saturate(Math.round( x*20/maxVal ),0,20) );
 

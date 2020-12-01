@@ -259,6 +259,23 @@ html,body {
 	-webkit-filter:invert(80%);
 	image-rendering: auto;
 }
+.rotarSquish img {
+	width:9px;
+	height:9px;
+	margin:2px;
+	filter:grayscale(100%) brightness(2);
+	-webkit-filter:grayscale(100%) brightness(2);
+}
+.h .rotarSquish img,
+.v .rotarSquish img {
+	transform: scaleX(-1);
+}
+.rotation .rotarSquish,
+.c .rotarSquish,
+.rotarSquish.squish,
+.t .rotation2 .rotarSquish {
+	display:none;
+}
 
 /*------- HQ INFO -------*/
 .module.admiral {
@@ -355,28 +372,23 @@ html,body {
 	height:255px;
 }
 .module.activity .activity_tabs {
-	width: 190px;
+	width:190px;
+	height:18px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 .module.activity .activity_tab {
-	width: calc(180px / 4);
-	height: 16px;
-	line-height:14px;
+	width:43px;
+	height:16px;
 	font-size:11px;
+	line-height:15px;
 	margin:2px 0px 0px 0px;
 	color:#a0a0a0;
 	float:left;
 	text-align:center;
 	background:rgba(50,50,50,0.4);
 	border-bottom:0px solid #000 !important;
-}
-.module.activity .activity_tab.tab_count_5 {
-	width: calc(180px / 5);
-}
-.module.activity .activity_tab+.activity_tab {
-  margin-left: 1px;
 }
 #atab_activity {
 	cursor:default;
@@ -412,16 +424,11 @@ html,body {
 .module.activity .activity_basic {
 }
 /* Consumables */
-.module.activity .consumables .rotarBack {
-	position:absolute;
-	left:173px;
-	top:70px;
-	z-index:1;
-}
 .module.activity .consumables {
 	width:180px;
 	height:60px;
 	margin:0px 0px 5px 0px;
+	color:#ccc;
 }
 .module.activity .consumable {
 	width:90px;
@@ -444,49 +451,117 @@ html,body {
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#ccc;
 }
 .module.activity .consumable_ltext {
 	width:70px;
 	font-size:14px;
 	line-height:20px;
 	float:left;
-	color:#ccc;
 	white-space:nowrap;
 }
-.module.activity .consumable_ltext.regenCap {
-	color:#aaa;
+.consumable_ltext.regenCap {
+	color:#aaa !important;
 }
-.module.activity .consumable_ltext.hardCap {
-	color:#779;
+.consumable_ltext.hardCap {
+	color:#779 !important;
 }
-.module.activity .consumable_text.danger {
-	color:#779;
+.consumable_text.danger {
+	color:#779 !important;
 }
-.module.activity .consumable_text.fulled {
-	color:#f55;
+.consumable_text.fulled {
+	color:#f55 !important;
 }
 .module.activity .consumable_max {
 	width:34px;
 	font-size:11px;
 	float:left;
 	line-height:20px;
-	color:#aaa;
 }
-.module.activity .consumables .consumable.page1 {
-	display:block;
+/*------- full consumable display module -------*/
+.module.consumableList {
+	overflow:hidden;
+	white-space:normal;
+	color:#ccc;
 }
-.module.activity .consumables .consumable.page2 {
+.module.consumableList .consumable_display {
+	position:absolute;
+	top:0px;
+	left:42px;
+	height:103px;
+	overflow-x:hidden;
+ 	overflow-y:auto;
+}
+.t .module.consumableList .consumable_display {
+	height:100px;
+}
+.module.consumableList .consumable_toggles {
+	width:42px;
+	height:100px;
+	vertical-align: top;
+	filter:brightness(110%);
+}
+.module.consumableList .consumable_toggles {
+	border:1px solid #707070;
+	background-color:rgba(95,95,179,0.3);
+}
+.module.consumableList .consumable_toggle.disabled {
+	filter:grayscale(100%) brightness(80%);
+}
+.module.consumableList .consumables {
+	width:auto;
+	height:auto;
+	display:inline-block;
+	margin:0px 0px -4px 2px;
+	overflow:hidden;
+}
+.module.consumableList .consumables.disabled {
 	display:none;
 }
-.module.activity .consumables .consumable.page3,
-.module.activity .consumables .consumable.page4 {
-	display:none;
-	width:60px;
+.module.consumableList .consumable {
+	width:70px;
+	height:20px;
+	float:left;
+	margin:0px;
 }
-.module.activity .consumables .consumable.page3 .consumable_ltext,
-.module.activity .consumables .consumable.page4 .consumable_ltext {
-	width:40px;
+.module.consumableList .consumable {
+	border:1px solid #707070;
+	background-color:rgba(0,40,30,0.3);
+}
+.module.consumableList .consumable_icon {
+	width:20px;
+	height:20px;
+	float:left;
+	text-align:center;
+}
+.module.consumableList .consumable_icon img {
+	width:16px;
+	height:16px;
+	margin:1px 2px 2px 2px;
+	vertical-align:top;
+}
+.module.consumableList .consumable_toggles .consumable_icon img {
+	margin:1px 2px 2px 2px;
+}
+.module.consumableList .consumable_ltext {
+	width:48px;
+	font-size:12px;
+	line-height:18px;
+	float:left;
+	white-space:nowrap;
+	text-align:center;
+}
+.module.consumableList .consumable_max {
+	width:34px;
+	font-size:11px;
+	float:left;
+	line-height:20px;
+}
+.module.consumableList .consumables .consumable.itemPage {
+	display:none;
+	width:48px;
+}
+.module.consumableList .consumables .consumable.itemPage .consumable_ltext {
+	width:26px;
 }
 
 /* Expedition */
@@ -626,7 +701,7 @@ html,body {
 	width:100px;
 	height:84px;
 	position:absolute;
-	top:1px;
+	top:0px;
 	left:5px;
 }
 .module.expeditions2 .expeditions .expedition {
@@ -677,7 +752,7 @@ html,body {
 	width:224px;
 	height:108px;
 	position:absolute;
-	top:3px;
+	top:2px;
 	left:123px;
 }
 .t .module.expeditions2 .timers {
@@ -944,6 +1019,13 @@ ABYSS FLEET
 	filter:grayscale(100%);
 	-webkit-filter:grayscale(100%);
 }
+.module.activity .abyss_single .sink_icons .debuff img {
+	display:inline;
+	box-sizing:border-box;
+	padding-left:16px;
+	background:url(../../../../assets/img/client/chuuha_land.png);
+	background-size:cover;
+}
 .module.activity .abyss_single .abyss_ships {
 	width:180px;
 	height:26px;
@@ -1051,6 +1133,13 @@ ABYSS FLEET
 .module.activity .abyss_combined .sink_icons .safe img {
 	filter:grayscale(100%);
 	-webkit-filter:grayscale(100%);
+}
+.module.activity .abyss_combined .sink_icons .debuff img {
+	display:inline;
+	box-sizing:border-box;
+	padding-left:10px;
+	background:url(../../../../assets/img/client/chuuha_land.png);
+	background-size:cover;
 }
 .module.activity .abyss_combined .abyss_ships {
 	width:180px;
@@ -1227,6 +1316,8 @@ ABYSS FLEET
 }
 .module.activity .battle_drop img {
 	object-fit:cover;
+}
+.module.activity .battle_drop img.rounded {
 	border-radius:50%;
 }
 .module.activity .battle_drop.new_ship {
@@ -1468,14 +1559,14 @@ ABYSS FLEET
 	height:16px;
 }
 .module.activity .activity_quest .quest_list .quest.activated {
-	background: #364;
+	background: #354;
 }
 .module.activity .activity_quest .quest_list .quest.percent50 {
 }
 .module.activity .activity_quest .quest_list .quest.percent80 {
 }
 .module.activity .activity_quest .quest_list .quest.completed {
-	background: #557;
+	background: rgba(0,150,150,0.75);
 }
 .module.activity .activity_quest .quest_list .quest .quest_color {
 	width: 14px;
@@ -1494,7 +1585,7 @@ ABYSS FLEET
 	height: 14px;
 	overflow: hidden;
 	font-size: 11px;
-	line-height:15px;
+	line-height:14px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
@@ -3069,13 +3160,19 @@ ABYSS FLEET
 .quest {
 	height:18px;
 	line-height:18px;
+	padding-left:2px;
 }
 .v .quest {
 	height:27px;
 	line-height:13px;
+	padding-left:0px;
 }
 .quest.complete {
 	background: rgba(0,150,150,0.75);
+	padding-left:2px;
+}
+.v .quest.complete {
+	padding-left:0px;
 }
 .quest_color {
 	width:14px;
@@ -3092,10 +3189,10 @@ ABYSS FLEET
 	height:11px;
 }
 .quest.complete .quest_color {
-	width:16px;
-	height:16px;
+	width:14px;
+	height:14px;
+	margin:2px 2px 0px 0px;
 	font-size:11px;
-	margin:1px 1px 0px -1px;
 	background:#555;
 	float:left;
 	line-height:normal;
@@ -3123,7 +3220,6 @@ ABYSS FLEET
 	overflow:hidden;
 	text-overflow: ellipsis;
 	color:#cdd;
-	float:left;
 	position:relative;
 	left:0px;
 }
@@ -3141,20 +3237,22 @@ ABYSS FLEET
 .quest_track {
 	width:36px;
 	height:14px;
-	margin:1px 0px;
 	background:rgba(70,70,90,0.8);
 	line-height:14px;
 	font-size:11px;
-	float:right;
 	text-align:center;
 	color:#eee;
 	overflow:hidden;
-	margin:2px 2px 0px 0px;
+	position:relative;
+	top:2px;
+	left:2px;
 }
 .v .quest_track {
 	width:34px;
 	height:13px;
 	line-height:13px;
+	top:7px;
+	left:100px;
 }
 .untracked .quest_track {
 	display:none;
@@ -3446,19 +3544,26 @@ ABYSS FLEET
 	top:128px;
 	left:360px;
 }
+.t .rotation .rotarSquish {
+	display:block;
+	transform: rotate(90deg);
+}
+
 .module.summary.disabled {
 	filter:brightness(0.5);
 	-webkit-filter:brightness(0.5);
 	pointer-events:none;
 }
-.module.summary .summary_box {
+.module.summary .summary_box,
+.module.sumstats .summary_box {
 	width:61px;
 	height:20px;
 	float:left;
 	line-height:20px;
 	margin:0px 2px 3px;
 }
-.module.summary .summary_icon {
+.module.summary .summary_icon,
+.module.sumstats .summary_icon {
 	width:20px;
 	height:20px;
 	float:left;
@@ -3466,7 +3571,8 @@ ABYSS FLEET
 	background:#224;
 	border-radius:10px;
 }
-.module.summary .summary_icon img {
+.module.summary .summary_icon img,
+.module.sumstats .summary_icon img {
 	width:16px;
 	height:16px;
 	margin:2px;
@@ -3475,7 +3581,8 @@ ABYSS FLEET
 	-webkit-filter:invert(35%);
 	image-rendering: auto;
 }
-.module.summary .summary_text {
+.module.summary .summary_text,
+.module.sumstats .summary_text {
 	width:72px;
 	height:20px;
 	float:left;
@@ -3661,73 +3768,77 @@ ABYSS FLEET
 	pointer-events:none;
 	display:none;
 }
-.module.summary .summed {
+.module.sumstats .summed {
 	width:40px;
 	height:40px;
 	position:relative;
 	top:-20px;
 	left:25px;
-	color:#99b;
 }
-.module.summary .summed_imp {
+.module.sumstats .summed_imp {
 	width:40px;
 	height:40px;
 	position:relative;
 	top:-60px;
 	left:55px;
 }
-.module.summary .summary-level {
+.module.sumstats .summary-level {
 	position:absolute;
-	top:30px;
-	left:105px;
+	top:39px;
+	left:109px;
 }
-.module.summary .summary-level .summary_text {
+.module.sumstats .summary-level .summary_text {
 	position:relative;
 	top:-20px;
-	left:25px;
+	left:29px;
 }
-.module.summary .summary-sumfp {
+.module.sumstats .summary-sumfp {
 	position:absolute;
-	top:30px;
-	left:10px;
+	top:39px;
+	left:14px;
 }
-.module.summary .summary-sumaa {
+.module.sumstats .summary-sumtp {
 	position:absolute;
-	top:50px;
-	left:10px;
+	top:62px;
+	left:14px;
 }
-.module.summary .summary-sumasw {
+.module.sumstats .summary-sumaa {
 	position:absolute;
-	top:70px;
-	left:10px;
+	top:85px;
+	left:14px;
 }
-.module.summary .summary-sumlos {
+.module.sumstats .summary-sumasw {
 	position:absolute;
-	top:90px;
-	left:10px;
+	top:108px;
+	left:14px;
 }
-.module.summary .improvement_icon img {
+.module.sumstats .summary-sumlos {
+	position:absolute;
+	top:131px;
+	left:14px;
+}
+.module.sumstats .improvement_icon img {
 	height:25px;
 	width:25px;
 	object-fit: cover;
 	image-rendering: auto;
 }
-.module.summary .imp_rejected_icon img {
+.module.sumstats .imp_rejected_icon img {
 	opacity:0.65;
 }
-.module.summary .summary_icon_uimp {
+.module.sumstats .summary_icon_uimp {
 	position:absolute;
-	top:5px;
-	left:33px;
+	top:9px;
+	left:37px;
 }
-.module.summary .uimp_icon img {
+.module.sumstats .uimp_icon img {
 	-webkit-filter: grayscale(100%);
 }
 
-.module.summary .summary_icon_imp {
+.module.sumstats .summary_icon_imp {
 	position:absolute;
-	top:5px;
-	left:64px;
+	top:9px;
+	left:68px;
 }
 
 /*------- FLEET -------*/
@@ -5239,23 +5350,44 @@ ABYSS FLEET
 .module.activity .map_gauge .nowhp.fluid {
 	background: linear-gradient(to top, #000, #400);
 }
-.module.fleet .ship_hp_bar_cover.fluid {
+.module.fleet .ship_hp_bar_cover.indicator_on.fluid,
+.module.fleet .ship_hp_bar_cover.indicator_on.flats {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,
 			rgba(0,0,0,0) 24%,
-		  rgba(0,0,0,.35) 24.5%,
-		  rgba(175,175,175,.3) 25.5%,
+			rgba(0,0,0,.55) 24.5%,
+			rgba(175,175,175,.2) 25.5%,
 			rgba(255,255,255,0) 26%,
 			rgba(0,0,0,0) 49%,
-		  rgba(0,0,0,.35) 49.5%,
-		  rgba(175,175,175,.3) 50.5%,
+			rgba(0,0,0,.55) 49.5%,
+			rgba(175,175,175,.2) 50.5%,
 			rgba(255,255,255,0) 51%,
 			rgba(0,0,0,0) 74%,
-		  rgba(0,0,0,.35) 74.5%,
-		  rgba(175,175,175,.3) 75.5%,
+			rgba(0,0,0,.55) 74.5%,
+			rgba(175,175,175,.2) 75.5%,
 			rgba(255,255,255,0) 76%,
 			rgba(0,0,0,0) 100%);
+}
+.module.fleet .ship_hp_bar_cover.indicator_on.natsuiro {
+	height:5px;
+	float:left;
+	background-image: linear-gradient(to right,
+		rgba(0,0,0,0) 0%,
+		rgba(0,0,0,0) 24%,
+			rgba(0,0,0,0.3) 24%,
+			rgba(255,255,255,0.3) 25%,
+			rgba(255,255,255,0) 26%,
+		rgba(0,0,0,0) 49%,
+			rgba(0,0,0,0.3) 49.5%,
+			rgba(255,255,255,0.3) 50.5%,
+			rgba(255,255,255,0) 51%,
+		rgba(0,0,0,0) 74%,
+			rgba(0,0,0,0.3) 74%,
+			rgba(255,255,255,0.3) 75%,
+			rgba(255,255,255,0) 76%,
+		rgba(0,0,0,0) 100%
+	);
 }
 
 /* ========================= */
@@ -5273,7 +5405,7 @@ ABYSS FLEET
 			rgba(247,247,247,.3) 0%,rgba(231,231,231,.4) 49%,
 			rgba(208,208,208,.15) 50%,rgba(241,241,241,.2) 100%);
 }
-.module.fleet .ship_hp_bar_cover.glassy {
+.module.fleet .ship_hp_bar_cover.indicator_on.glassy {
 	background:
 		linear-gradient(to right,
 			rgba(0,0,0,0) 0%,
@@ -5496,36 +5628,57 @@ ABYSS FLEET
 .rotation2 .rotated2.page4 {
 	display:none;
 }
+.h .rotation2 .rotarSquish {
+	position:absolute;
+	left:0px;
+	top:0px;
+}
+.v .rotation2 .rotarSquish {
+	position:absolute;
+	left:0px;
+	top:0px;
+}
 .module.status .status_box {
 	width:110px;
 	height:20px;
 	line-height:20px;
 	float:left;
-	margin:0px 3px 0px 0px;
+	margin-left:2px;
+	margin-top:1px;
+	border:1px solid #70707099;
+	background-color:rgba(0,40,30,0.3);
+}
+.h .module.status.squish .status_box {
+	margin-left:20px;
+	margin-top:3px;
+}
+.v .module.status.squish .status_box {
+	margin-left:38px;
+	margin-top:3px;
 }
 .module.status .status_icon {
-	width:20px;
-	height:20px;
+	width:18px;
+	height:18px;
 	float:left;
-	margin:0px 4px 0px 1px;
 }
 .module.status .status_icon.enclose {
 	background:rgba(34,48,49,1);
 	border-radius:10px;
 }
 .module.status .status_icon img {
-	width:20px;
-	height:20px;
+	width:16px;
+	height:16px;
+	margin:1px;
 	vertical-align:top;
 }
 .module.status .status_text {
 	width:85px;
 	height:20px;
 	float:left;
-	/*background:#cfc;*/
 	color:#fff;
 	text-shadow:0px 0px 5px #000;
-	font-size:12px;
+	font-size:11px;
+	line-height:18px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow: ellipsis;
@@ -5547,16 +5700,19 @@ ABYSS FLEET
 .module.status .status_support img {
 	width:14px;
 	height:14px;
-	margin:3px;
+	margin:2px;
+	filter:invert(60%);
+	-webkit-filter:invert(60%);
 }
 .module.status .status-speed img {
-	width:16px;
-	height:16px;
-	margin:2px;
-	vertical-align:top;
 	filter:invert(35%);
 	-webkit-filter:invert(35%);
-	image-rendering: auto;
+}
+.h .module.status.squish .status_akashi,
+.v .module.status.squish .status_akashi,
+.h .module.status.squish .status_docking,
+.v .module.status.squish .status_docking {
+	display:none;
 }
 
 /* AIR BASES
@@ -5835,9 +5991,18 @@ ABYSS FLEET
 }
 .h .module.quests {
 	width:196px;
-	height:150px;
+	height:128px;
 	left:6px; top:421px;
-	/*overflow:scroll;*/
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.h .module.quests.squish {
+	width:388px;
+	height:124px;
+	left:162px;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
 }
 ::-webkit-scrollbar-corner {
   background: rgba(0,0,0,0);
@@ -5864,15 +6029,26 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
+.h .module.sumstats {
+	left:5px; top:2px;
+	height:162px;
+	width:190px;
+}
 .h .module.fleet {
 	left:200px; top:41px;
 }
 .h .module.status {
 	width:345px;
-	height:70px;
-	left:202px; top:475px;
+	height:85px;
+	left:202px; top:460px;
 }
-.h .module.expeditions2 {
+.h .module.status.squish {
+	width:150px;
+	height:124px;
+	left:5px; top:421px;
+}
+.h .module.expeditions2,
+.h .module.consumableList {
 	width:345px;
 	height:124px;
 	left:202px; top:421px;
@@ -5905,6 +6081,11 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
+.v .module.sumstats {
+	left:688px; top:33px;
+	height:162px;
+	width:190px;
+}
 .v .module.activity {
 	left:5px; top:2px;
 }
@@ -5921,7 +6102,12 @@ ABYSS FLEET
 	width:345px;
 	height:70px;
 }
-.v .module.expeditions2 {
+.v .module.status.squish {
+	width:190px;
+	height:124px;
+}
+.v .module.expeditions2,
+.v .module.consumableList {
 	width:345px;
 	height:124px;
 	left:688px; top:198px;
@@ -5932,9 +6118,14 @@ ABYSS FLEET
 	left:688px; top:198px;
 }
 .v .module.quests {
-	width:151px;
-	height:120px;
+	width:154px;
+	height:193px;
 	left:881px; top:2px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.v .module.quests.squish {
+	height:300px;
 }
 .v .module.quests .quest {
 	width:151px;
@@ -5971,6 +6162,11 @@ ABYSS FLEET
 	height:119px;
 	width:190px;
 }
+.c .module.sumstats {
+	left:551px; top:33px;
+	height:162px;
+	width:190px;
+}
 .c .module.activity {
 	left:4px; top:2px;
 }
@@ -5987,7 +6183,8 @@ ABYSS FLEET
 	width:245px;
 	height:87px;
 }
-.c .module.expeditions2 {
+.c .module.expeditions2,
+.c .module.consumableList {
 	width:245px;
 	height:124px;
 	left:551px; top:198px;
@@ -6002,8 +6199,10 @@ ABYSS FLEET
 }
 .c .module.quests2 {
 	width:222px;
-	height:150px;
+	height:161px;
 	left:553px; top:36px;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 .c .module.quests2 .quest {
 	width:222px;
@@ -6027,9 +6226,17 @@ ABYSS FLEET
 .t .module.admiral {
 	left:195px; top:129px;
 }
+.t .module.admiral.squish {
+	display:none;
+}
 .t .module.summary {
 	left:195px; top:172px;
 	height:119px;
+	width:182px;
+}
+.t .module.sumstats {
+	left:195px; top:129px;
+	height:162px;
 	width:182px;
 }
 .t .module.expeditions3 {
@@ -6043,8 +6250,12 @@ ABYSS FLEET
 .t .module.quests {
 	width:186px;
 	height:125px;
-	left:197px; top:2px;
-	overflow:hidden;
+	left:194px; top:2px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+.t .module.quests.squish {
+	height:165px;
 }
 .t .module.quests .quest {
 	width:179px;
@@ -6068,7 +6279,8 @@ ABYSS FLEET
 	height:65px;
 	left:3px; top:671px;
 }
-.t .module.expeditions2 {
+.t .module.expeditions2,
+.t .module.consumableList {
 	width:347px;
 	height:102px;
 	left:3px; top:671px;

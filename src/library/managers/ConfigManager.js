@@ -184,12 +184,17 @@ Retrieves when needed to apply on components
 				pan_moon_bar_style: "fluid",
 				pan_moon_bar_shape: "shape_round",
 				pan_moon_bar_colors: "clrdim",
+				pan_hp_bar_metrics: true,
+				pan_moon_bar_indicators: true,
 				pan_moon_conbut_shape: "shape_round",
 				pan_moon_conbut_skew: true,
+				pan_moon_consumables : [false,false,true,false,true,true,false,false,false],
+				pan_compact_quests: false,
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 
 				pan_layout           : 1,
+				pan_moon_quest_extend: false,
 				RotationPage         : 1,
 				Rotation2Page        : 4,
 
@@ -201,6 +206,7 @@ Retrieves when needed to apply on components
 				sr_theme               : "legacy",
 				sr_show_non_battle     : true,
 				sr_show_new_shipstate  : true,
+				sr_show_yasen_shipstate: false,
 				sr_custom_css          : "",
 
 				idbSaveSortie          : true,
@@ -345,6 +351,20 @@ Retrieves when needed to apply on components
 		setLayout :function(layoutType){
 			this.loadIfNecessary();
 			this.pan_layout = layoutType;
+			this.save();
+		},
+
+		// Toggle quest extension in Moonlight
+		isQuestExtended :function(trigger){
+			this.loadIfNecessary();
+			this.pan_moon_quest_extend = trigger;
+			this.save();
+		},
+
+		// Toggles whether consumable categories are displayed in Moonlight
+		setConsumables :function(consumable_type){
+			this.loadIfNecessary();
+			this.pan_moon_consumables[consumable_type] = !this.pan_moon_consumables[consumable_type];
 			this.save();
 		},
 

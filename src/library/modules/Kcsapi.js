@@ -354,6 +354,7 @@ Previously known as "Reactor"
 					case 91: PlayerManager.consumables.emergencyRepair = thisItem.api_count; break;
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
+					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -503,6 +504,9 @@ Previously known as "Reactor"
 			}
 			if(remodel.airmat > 0){
 				PlayerManager.consumables.newAviationMaterial -= remodel.airmat;
+			}
+			if(remodel.armmat > 0){
+				PlayerManager.consumables.newArmamentMaterial -= remodel.armmat;
 			}
 			PlayerManager.setResources(utcHour * 3600, null, material.slice(0, 4));
 			PlayerManager.setConsumables(utcHour * 3600, null, material.slice(4, 8));
@@ -1472,8 +1476,7 @@ Previously known as "Reactor"
 			// Record material consuming. Yes, set plane use your bauxite :)
 			// Known formula:
 			//var landSlot = api_plane_info.api_max_count;
-			//    or KC3GearManager.landBaseReconnType2Ids.indexOf(planeMaster.api_type[2])>-1 ?
-			//       KC3GearManager.landBaseReconnMaxSlot : KC3GearManager.landBaseOtherMaxSlot;
+			//    or KC3GearManager.getLandBaseSlotSize(planeMaster.api_type[2]);
 			//var deployBauxiteCost = planeMaster.api_cost * landSlot;
 			// But we use player bauxite - after bauxite for two reasons:
 			// not need to compute multi-plane set,
@@ -1869,26 +1872,44 @@ Previously known as "Reactor"
 						KC3QuestManager.get(428).increment(0); // D26: Quarterly, index 0
 						KC3QuestManager.get(436).increment(3); // D33: Yearly, index 3
 						KC3QuestManager.get(437).increment(0); // D34: Yearly, index 0
+						KC3QuestManager.get(438).increment(1); // D35: Yearly, index 1
 						break;
 					case 5:
 						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
 						KC3QuestManager.get(426).increment(2); // D24: Quarterly, index 2
 						KC3QuestManager.get(434).increment(1); // D32: Yearly, index 1
+						KC3QuestManager.get(439).increment(0); // D36: Yearly, index 0
+						KC3QuestManager.get(440).increment(1); // D37: Yearly, index 1
 						break;
 					case 9:
 						KC3QuestManager.get(434).increment(4); // D32: Yearly, index 4
+						KC3QuestManager.get(438).increment(2); // D35: Yearly, index 2
 						break;
 					case 10:
 						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
 						KC3QuestManager.get(436).increment(4); // D33: Yearly, index 4
+						break;
+					case 11:
+						KC3QuestManager.get(439).increment(2); // D36: Yearly, index 2
 						break;
 					case 37:
 					case 38:
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
 						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
 						break;
+					case 40:
+						KC3QuestManager.get(440).increment(2); // D37: Yearly, index 2
+						break;
+					case 41:
+						KC3QuestManager.get(440).increment(0); // D37: Yearly, index 0
+						break;
+					case 46:
+						KC3QuestManager.get(440).increment(4); // D37: Yearly, index 4
+						break;
 					case 100: // A1
 						KC3QuestManager.get(434).increment(2); // D32: Yearly, index 2
+						KC3QuestManager.get(438).increment(0); // D35: Yearly, index 0
+						KC3QuestManager.get(439).increment(1); // D36: Yearly, index 1
 						break;
 					case 101: // A2
 						KC3QuestManager.get(428).increment(1); // D26: Quarterly, index 1
@@ -1905,6 +1926,13 @@ Previously known as "Reactor"
 						break;
 					case 110: // B1
 						KC3QuestManager.get(437).increment(3); // D34: Yearly, index 3
+						KC3QuestManager.get(439).increment(3); // D36: Yearly, index 3
+						break;
+					case 114: // B5
+						KC3QuestManager.get(438).increment(3); // D35: Yearly, index 3
+						break;
+					case 142: // E2
+						KC3QuestManager.get(440).increment(3); // D37: Yearly, index 3
 						break;
 					}
 					KC3Network.trigger("Quests");
@@ -2144,13 +2172,18 @@ Previously known as "Reactor"
 					switch(gearMaster.api_type[2]){
 						case 1: // Small Caliber Main Gun
 							KC3QuestManager.get(673).increment(); // F65 daily
+							KC3QuestManager.get(657).increment(0); // F92 yearly index 0
+							KC3QuestManager.get(655).increment(0); // F94 yearly index 0
 							break;
 						case 2: // Medium Caliber Main Gun
 							KC3QuestManager.get(676).increment(0); // F68 weekly index 0
+							KC3QuestManager.get(657).increment(1); // F92 yearly index 1
+							KC3QuestManager.get(655).increment(1); // F94 yearly index 1
 							break;
 						case 3: // Large Caliber Main Gun
 							KC3QuestManager.get(663).increment(); // F55 quarterly
 							KC3QuestManager.get(677).increment(0); // F69 weekly index 0
+							KC3QuestManager.get(655).increment(2); // F94 yearly index 2
 							break;
 						case 4: // Secondary Gun
 							KC3QuestManager.get(676).increment(1); // F68 weekly index 1
@@ -2158,6 +2191,7 @@ Previously known as "Reactor"
 						case 5: // Torpedo
 						case 32: // Submarine Torpedo
 							KC3QuestManager.get(677).increment(2); // F69 weekly index 2
+							KC3QuestManager.get(657).increment(2); // F92 yearly index 2
 							break;
 						case 6: // Fighter
 							KC3QuestManager.get(675).increment(0); // F67 quarterly index 0
@@ -2168,10 +2202,12 @@ Previously known as "Reactor"
 							break;
 						case 8: // Torpedo Bomber
 							KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
+							KC3QuestManager.get(655).increment(4); // F94 yearly index 4
 							break;
 						case 10: // Recon Seaplane
 							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
 							KC3QuestManager.get(688).increment(3); // F79 quarterly index 3
+							KC3QuestManager.get(655).increment(3); // F94 yearly index 3
 							break;
 						case 12: // Small Radar
 						case 13: // Large Radar
@@ -2208,6 +2244,12 @@ Previously known as "Reactor"
 							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+							break;
+						case 242: // Swordfish
+							KC3QuestManager.get(654).increment(0); // F93 yearly index 0
+							break;
+						case 249: // Fulmar
+							KC3QuestManager.get(654).increment(1); // F93 yearly index 1
 							break;
 					}
 				}
@@ -2423,19 +2465,29 @@ Previously known as "Reactor"
 				consumedMasterLevels: consumedShips.map(s => s.level)
 			});
 			
+			// Check if successful modernization
+			if(response.api_data.api_powerup_flag == 1){
+				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
+				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
+				// G6: Yearly modernizate any DD with 3 or more DDs
+				if(MasterShip.api_stype === 2 && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => stype === 2).length >= 3) {
+					KC3QuestManager.get(714).increment();
+				}
+				// G7: Yearly modernizate any DD with 3 or more CLs
+				if(MasterShip.api_stype === 2 && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => stype === 3).length >= 3) {
+					KC3QuestManager.get(715).increment();
+				}
+				KC3Network.trigger("Quests");
+			}
+			
 			// Remove consumed ships and (optional) their equipment
 			$.each(consumedShipIds, function(_, rosterId){
 				KC3ShipManager.remove(rosterId, !scrapGearFlag);
 				KC3Network.trigger("ShipSlots");
 				KC3Network.trigger("GearSlots");
 			});
-			
-			// Check if successful modernization
-			if(response.api_data.api_powerup_flag == 1){
-				KC3QuestManager.get(702).increment(); // G2: Daily Modernization
-				KC3QuestManager.get(703).increment(); // G3: Weekly Modernization
-				KC3Network.trigger("Quests");
-			}
 			
 			KC3ShipManager.set([NewShipRaw]);
 			KC3ShipManager.save();
@@ -2884,6 +2936,9 @@ Previously known as "Reactor"
 					[904,1,[3,4], true, true], // By1: 2nd requirement: [W3-4] S-rank the boss node
 					[904,2,[4,5], true, true], // By1: 3rd requirement: [W4-5] S-rank the boss node
 					[904,3,[5,3], true, true], // By1: 4th requirement: [W5-3] S-rank the boss node
+					[928,0,[7,3], true, true, [18,23,24,25]], // By5: 1st requirement: [W7-3-P] S-rank 2nd boss node twice
+					[928,1,[7,2], true, true, [15]], // By5: 2nd requirement: [W7-2-M] S-rank 2nd boss node twice
+					[928,2,[4,2], true, true], // By5: 3rd requirement: [W4-2] S-rank the boss node twice
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
@@ -2891,7 +2946,11 @@ Previously known as "Reactor"
 				.filter(function(x){
 					return (
 						(!x[2] || KC3SortieManager.isSortieAt.apply(KC3SortieManager,x[2])) && /* Is sortie at */
-						(!x[3] || KC3SortieManager.currentNode().isValidBoss())             && /* Is on boss node */
+						(!x[3] || (!x[2] && KC3Meta.isEventWorld(KC3SortieManager.getSortieMap()[0]) ?
+							// Bw1 seems not take boss nodes of pre-final boss for a multi-boss event map into account,
+							// but it counts both 2 boss nodes for map 7-2, because 7-2 is defeat type, not HP gauge, perhaps?
+							KC3SortieManager.currentNode().isValidBoss() :
+							KC3SortieManager.currentNode().isBoss()))                       && /* Is on boss node */
 						(!x[4] || KC3QuestManager.isPrerequisiteFulfilled(x[0]) !== false)  && /* Is fleet composition matched */
 						(!x[5] || x[5].includes(KC3SortieManager.currentNode().id))         && /* Is on specified boss node */
 						true
@@ -2914,12 +2973,16 @@ Previously known as "Reactor"
 			if(rankPt >= 4) { // A-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(342))
 					KC3QuestManager.get(342).increment(); // C44: Quarterly Exercises 4
+				if(KC3QuestManager.isPrerequisiteFulfilled(345))
+					KC3QuestManager.get(345).increment(); // C49: Yearly Exercises 1
 			}
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
 					KC3QuestManager.get(337).increment(); // C38: Quarterly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(339))
 					KC3QuestManager.get(339).increment(); // C42: Quarterly Exercises 3
+				if(KC3QuestManager.isPrerequisiteFulfilled(346))
+					KC3QuestManager.get(346).increment(); // C50: Yearly Exercises 2
 			}
 		}
 	}

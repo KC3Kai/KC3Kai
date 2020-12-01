@@ -38,17 +38,30 @@
 					if(ekex)$(elementkey).append("<div>Downloading zip....(4/4)<div/>");
 					console.info("Downloading file to", ConfigManager.ss_directory + "/Backup/");
 
+					const zipFilename = (
+						ConfigManager.ss_directory.toSafeFilename(undefined, true) +
+						'/Backup/' +
+						("[" + PlayerManager.hq.name + "] " +
+							dateFormat("yyyy-mm-dd")).toSafeFilename() +
+						".kc3data"
+					);
+					// Since Chromium version m72, expected filename must be suggested on later phase,
+					// and extention name is forced by MINE, `.kc3data` will be ingored.
+					var downloadItemId = null;
+					const onetimeFilenameSuggester = function(item, suggest) {
+						if(item.byExtensionId === chrome.runtime.id && item.id === downloadItemId) {
+							suggest({filename: zipFilename, conflictAction: "uniquify"});
+							chrome.downloads.onDeterminingFilename.removeListener(onetimeFilenameSuggester);
+						}
+					};
+					chrome.downloads.onDeterminingFilename.removeListener(onetimeFilenameSuggester);
+					chrome.downloads.onDeterminingFilename.addListener(onetimeFilenameSuggester);
 					chrome.downloads.download({
 						url: objurl,
-						filename: (
-							ConfigManager.ss_directory.toSafeFilename(undefined, true) +
-							'/Backup/' +
-							("[" + PlayerManager.hq.name + "] " +
-								dateFormat("yyyy-mm-dd")).toSafeFilename() +
-							".kc3data"
-						),
+						filename: zipFilename,
 						conflictAction: "uniquify"
 					}, function(downloadId){
+						downloadItemId = downloadId;
 					});
 					callback();
 				});//transaction

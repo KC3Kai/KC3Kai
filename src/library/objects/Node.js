@@ -178,31 +178,78 @@ Used by SortieManager
 		};
 		this.nodeDesc = this.buildItemNodeDesc( [nodeData.api_happening] );
 		this.amount = nodeData.api_happening.api_count;
-		const reduceFleetRscIfNecessary = (nodeData) => {
-			const itemId = nodeData.api_happening.api_mst_id;
-			const rscType = ["", "fuel", "ammo"][itemId] || "";
-			// Do nothing if not fuel or ammo lost
-			if(!rscType) return;
-			let maxRemainingRsc = 0, radarShips = 0;
-			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
-				fleet.shipsUnescaped().forEach(ship => {
-					maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
-					radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 3);
-				});
+		this.reduceFleetRscOnMaelstrom(nodeData);
+		return this;
+	};
+	
+	KC3Node.prototype.reduceFleetRscOnMaelstrom = function(nodeData) {
+		if(!nodeData || !nodeData.api_happening) return;
+		const itemId = nodeData.api_happening.api_mst_id;
+		const rscType = ["", "fuel", "ammo"][itemId] || "";
+		// Do nothing if not fuel or ammo lost
+		if(!rscType) return;
+		let maxRemainingRsc = 0, radarShips = 0;
+		KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
+			fleet.shipsUnescaped().forEach(ship => {
+				maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
+				radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 3);
 			});
-			const actualMaxLoss = nodeData.api_happening.api_count;
-			// Nothing to lose?
-			if(!actualMaxLoss || maxRemainingRsc === 0) return;
-			// Server-side might use `min(nodeMaxLoss, floor(nowRsc * 0.4 * [1, 0.75, 0.6, 0.5][radarShips]))`,
-			// reduce it from remaining rsc of all activated ships and return the max value as `api_count`.
-			// `radarShips` = amount of ships equipped any type of radar,
-			// `nodeMaxLoss` is the map cell property which unknown by client-side,
-			// can be get from `api_count` if computed one bigger than it.
-			const isReducedByRadar = !!nodeData.api_happening.api_dentan;
-			const lossRate = 0.4 * (isReducedByRadar ? [1.0, 0.75, 0.6, 0.5][radarShips] || 1 : 1);
-			const expectedMaxLoss = Math.floor(maxRemainingRsc * lossRate);
-			const isCappedByMap = actualMaxLoss < expectedMaxLoss;
-			let totalLost = 0;
+		});
+		const actualMaxLoss = nodeData.api_happening.api_count;
+		// Nothing to lose?
+		if(!actualMaxLoss || maxRemainingRsc === 0) return;
+		
+		// For phase 1:
+		// Server-side might use `min(nodeMaxLoss, floor(nowRsc * 0.4 * [1, 0.75, 0.6, 0.5][radarShips]))`,
+		// reduce it from remaining rsc of all activated ships and return the max value as `api_count`.
+		// `radarShips` = amount of ships equipped any type of radar,
+		// `nodeMaxLoss` is the map cell property which unknown by client-side,
+		// can be get from `api_count` if computed one bigger than it.
+		
+		// For phase 2: https://wikiwiki.jp/kancolle/%E8%B3%87%E6%9D%90#b7c2f0c7
+		// Definitions of loss rate, max loss, etc no longer fixed by maps, can be various by maps & nodes,
+		// and random chance to suffer high loss for some nodes implemented.
+		// Partially verified definitions see `fud_weekly.json#maelstromLoss` property.
+		const lossDef = KC3Meta.maelstromLoss([KC3SortieManager.map_world, KC3SortieManager.map_num].join(""), this.id);
+		// Do nothing if loss defintion for this node unknown
+		if(!lossDef || !lossDef[2]) {
+			console.log("{0} loss at maelstrom node {1} undefined, max loss: {2}/{3}, radar: {4}".format(
+				rscType, this.letter, actualMaxLoss, maxRemainingRsc, radarShips),
+				lossDef);
+			return;
+		}
+		
+		const [defRscType, defLossCap, defLossRate, defLossRateHigh] = lossDef;
+		const isReducedByRadar = !!nodeData.api_happening.api_dentan;
+		const radarReduceRate = radarShips && isReducedByRadar ? [0, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6][Math.min(6, radarShips)] : 0;
+		const definedCappedLoss = defLossCap || actualMaxLoss;
+		let lossRate = 0, expectedMaxLoss = 0;
+		if(defLossRate === defLossRateHigh) {
+			// Not a strong maelstrom node
+			lossRate = defLossRate * (1 - radarReduceRate);
+			expectedMaxLoss = Math.floor(maxRemainingRsc * lossRate);
+		} else {
+			// Strong maelstrom node can cause random high loss (fixed 150% for now)
+			const lossRateLow = defLossRate * (1 - radarReduceRate),
+				lossRateHigh = defLossRateHigh * (1 - radarReduceRate);
+			const expectedMaxLossLow = Math.floor(maxRemainingRsc * lossRateLow),
+				expectedMaxLossHigh = Math.floor(maxRemainingRsc * lossRateHigh);
+			// here guesses which loss rate is rolled
+			if((actualMaxLoss >= expectedMaxLossHigh)
+				|| (definedCappedLoss > expectedMaxLossLow && actualMaxLoss > expectedMaxLossLow && actualMaxLoss < expectedMaxLossHigh)
+				|| (definedCappedLoss <= expectedMaxLossLow && actualMaxLoss > definedCappedLoss)
+			) {
+				lossRate = lossRateHigh;
+				expectedMaxLoss = expectedMaxLossHigh;
+			} else {
+				lossRate = lossRateLow;
+				expectedMaxLoss = expectedMaxLossLow;
+			}
+		}
+		const isCappedByNode = (actualMaxLoss === definedCappedLoss) && actualMaxLoss < expectedMaxLoss;
+		
+		let totalLost = 0;
+		if(lossRate > 0) {
 			KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 				fleet.shipsUnescaped().forEach(ship => {
 					// cap reduction to map node max loss value
@@ -213,18 +260,16 @@ Used by SortieManager
 					totalLost += loss;
 				});
 			});
-			console.log("Fleet(s) will lose {0} {1} in total at maelstrom".format(rscType, totalLost),
-				Math.qckInt("floor", lossRate, 2), "({0} / {1}){2}{3}".format(
-					actualMaxLoss, maxRemainingRsc,
-					(isCappedByMap ? " (capped from {0})".format(expectedMaxLoss) : ""),
-					(isReducedByRadar ? " (reduced by radar)" : "")
-				)
-			);
-		};
-		// It seems server-side has changed losses of the same node to random values,
-		// stop inaccurate simulation for now
-		//reduceFleetRscIfNecessary(nodeData);
-		return this;
+		}
+		console.log("Fleet(s) will lose {0} {1} in total at maelstrom node {2}".format(rscType, totalLost, this.letter),
+			lossDef,
+			"inferred loss rate {0}".format(Math.qckInt("floor", lossRate, 2)),
+			"({0} / {1}){2}{3}".format(
+				actualMaxLoss, maxRemainingRsc,
+				(isCappedByNode ? " (capped from {0})".format(expectedMaxLoss) : ""),
+				(isReducedByRadar ? " (reduced by {0} radars)".format(radarShips) : "")
+			)
+		);
 	};
 	
 	KC3Node.prototype.defineAsSelector = function( nodeData ){
@@ -1669,7 +1714,7 @@ Used by SortieManager
 				const leftHp = chp - friendlyFleetDamages[idx];
 				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
-					.css("margin-top", "-3px")
+					.css("margin-top", "-3px").css("object-fit", "cover")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
 				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
@@ -2023,6 +2068,16 @@ Used by SortieManager
 			eventMapGauge = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join(''), thisMap.gaugeNum || 1),
 			isInvalidBoss = eventMapGauge && Array.isArray(eventMapGauge.boss) &&
 				eventMapGauge.boss.indexOf(this.id) === -1;
+		return !isInvalidBoss;
+	};
+
+	KC3Node.prototype.isEventMapBoss = function(){
+		if(!this.isBoss()) return false;
+		const thisMap = KC3SortieManager.getCurrentMapData(),
+			eventMapGauges = KC3Meta.eventGauge(KC3SortieManager.getSortieMap().join('')),
+			finalGaugeKey = Object.keys(eventMapGauges).pop(),
+			finalGauge = eventMapGauges[finalGaugeKey],
+			isInvalidBoss = finalGauge && Array.isArray(finalGauge.boss) && !finalGauge.boss.includes(this.id);
 		return !isInvalidBoss;
 	};
 

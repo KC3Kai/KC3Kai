@@ -155,6 +155,7 @@
 			const isLbasMap = this.isLbasSortieMap(world, map);
 
 			$(".encounter_list").html("").hide();
+			$(".map_switcher select").prop("disabled", true);
 			$(".loading").show();
 			KC3Database.con.encounters.filter(node =>
 				node.world === world && node.map === map
@@ -268,6 +269,22 @@
 							.format(KC3Calc.fighterPowerIntervals(lbasAp));
 					}
 					$(".encounter_formation", curBox).attr("title", tooltip);
+					if(Number(curNodeHead.data("totalCount"))) {
+						// Have to update all nodes since total count not finally confirmed before all encounters iterated
+						$(".encounter_formation", curNodeBody).each(function(idx, elm) {
+							const countCurrentTotal = Number(curNodeHead.data("totalCount")),
+								countThisPtn = Number($(elm).parent().data("count")),
+								countPercent = Math.qckInt("round", countThisPtn / countCurrentTotal * 100, 1);
+							const extraCountTip = " (/{1} = {2}%)".format(countThisPtn, countCurrentTotal, countPercent);
+							// Update first line of existed tooltip
+							const tooltipLines = $(elm).attr("title").split("\n");
+							if(tooltipLines.length) {
+								if(tooltipLines[0].substr(-1) !== ")") tooltipLines[0] += extraCountTip;
+									else tooltipLines[0] = tooltipLines[0].replace(/ \(.+\)$/, extraCountTip);
+								$(elm).attr("title", tooltipLines.join("\n"));
+							}
+						});
+					}
 					const baseExpSum = Number(curNodeHead.data("sumBaseExp"));
 					const baseExpCount = Number(curNodeHead.data("sumExpCount"));
 					if(baseExpCount) {
@@ -290,9 +307,11 @@
 				});
 				
 				$(".loading").hide();
+				$(".map_switcher select").prop("disabled", false);
 				$(".encounter_list").createChildrenTooltips().show();
 			}).catch(error => {
 				$(".loading").hide();
+				$(".map_switcher select").prop("disabled", false);
 				$(".encounter_list").show();
 				console.error("Loading encounters failed", [world, map, diff], error);
 			});

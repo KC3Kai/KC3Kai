@@ -271,10 +271,10 @@ Contains summary information about a fleet and its ships
 				ss.ht = 0;
 				// still includes modded/married luck
 				ss.lk = ship.lk[0];
-			} else if(!forExped) {
-				// asw with equipment is a special case, only some equip types counted. The types see:
+			} else {
 				ss.as = ship.nakedAsw()
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, false);
+					// asw with equipment is a special case, only some equip types counted. details see:
+					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, !!forExped);
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;

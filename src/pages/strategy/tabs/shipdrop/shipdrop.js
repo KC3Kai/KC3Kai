@@ -62,6 +62,8 @@
 			this.dropTable = {};
 			const allPromises = [];
 			$(".tab_shipdrop .content_root").empty();
+			$(".control_panel .selectors select").prop("disabled", true);
+			$(".control_panel .time_range input").prop("disabled", true);
 			$(".loading").show();
 			KC3Database.con.sortie.where("world").equals(world).and(
 				data => data.mapnum === map && data.hq === hqId
@@ -82,16 +84,22 @@
 				Promise.all(allPromises).then(this.filterShipDrop.bind(this)).catch(e => {
 					console.error("Loading battle data failed", e);
 					$(".loading").hide();
+				$(".control_panel .selectors select").prop("disabled", false);
+				$(".control_panel .time_range input").prop("disabled", false);
 				});
 			}).catch(e => {
 				console.error("Loading sortie data failed", e);
 				$(".loading").hide();
+				$(".control_panel .selectors select").prop("disabled", false);
+				$(".control_panel .time_range input").prop("disabled", false);
 			});
 		},
 
 		filterShipDrop: function() {
 			const self = this;
 			$(".loading").hide();
+			$(".control_panel .selectors select").prop("disabled", false);
+			$(".control_panel .time_range input").prop("disabled", false);
 			const contentRoot = $(".tab_shipdrop .content_root");
 			contentRoot.empty();
 			const factory = $(".tab_shipdrop .factory");
@@ -174,7 +182,7 @@
 					$.each(useitemIds, (_, useitem) => {
 						const useitemId = Number(useitem.slice(2));
 						const shipBox = $(".ship", factory).clone().appendTo($(".useitems", nodeDrop));
-						$("img", shipBox).attr("src", `/assets/img/useitems/${useitemId}.png`)
+						$("img", shipBox).attr("src", KC3Meta.useitemIcon(useitemId))
 							.error(function(){$(this).off("error").attr("src", "/assets/img/ui/map_drop.png");})
 							.attr("title", KC3Meta.useItemName(useitemId) || KC3Meta.term("Unknown"));
 						const dropCount = allNodes[node][useitem];

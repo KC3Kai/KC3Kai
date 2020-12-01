@@ -23,7 +23,7 @@ Does not include Ships and Gears which are managed by other Managers
 		friendlySettings: {},
 		extraSupply: [0, 0],
 		statistics: {},
-		maxResource: 300000,
+		maxResource: 350000,
 		maxConsumable: 3000,
 		maxCoin: 200000,
 
@@ -275,7 +275,8 @@ Does not include Ships and Gears which are managed by other Managers
 				this.hq.lastMaterial[1] += deltaData[1] || 0;
 				this.hq.lastMaterial[2] += deltaData[2] || 0;
 				this.hq.lastMaterial[3] += deltaData[3] || 0;
-				// Limit resource values between [0, 300000]
+				// Limit resource values between [0, 350000]
+				// hardcap was 300000 before 2020-11-13
 				this.hq.lastMaterial.map((v, i) => {
 					this.hq.lastMaterial[i] = v.valueBetween(0, this.maxResource);
 				});
@@ -544,6 +545,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"91": "emergencyRepair",
 				"92": "newRocketDevMaterial",
 				"93": "sardine",
+				"94": "newArmamentMaterial",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

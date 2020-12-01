@@ -1558,7 +1558,7 @@ button, input, select, textarea {
 /* SHIP BOX
 --------------------------------*/
 .tab_fleet .fleet_ship {
-	height:88px;
+	height:105px;
 	margin:2px 2px 0px 0px;
 	background:#131313;
 	border:1px solid #444444;
@@ -1572,20 +1572,31 @@ button, input, select, textarea {
 	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {
-	width:110px;
-	margin:0px;
+	width:60px;
+	height:18px !important;
+	line-height:18px !important;
+	text-align:left !important;
+	font-size:14px !important;
+	font-weight:normal !important;
+	margin:70px 0px 0px 0px;
+	padding:0px 0px 0px 2px;
 	color:#fff;
+	pointer-events:none;
 	z-index:1;
-	text-shadow:2px 2px 5px #000,
-	-2px -2px 5px #000,
-	2px 2px 5px #000;
+	background: linear-gradient(
+		235deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.2) 15%,
+		rgba(0,0,0,0.3) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_pic {
 	width:108px;
 	height:85px;
 	-webkit-mask-image: -webkit-linear-gradient(top, 
 		rgba(34,34,34,0) 0%,
-		rgba(34,34,34,1) 30%,
+		rgba(34,34,34,1) 25%,
 		rgba(34,34,34,0) 100%
 	);
 	position:absolute;
@@ -1594,61 +1605,117 @@ button, input, select, textarea {
 	overflow:hidden;
 }
 .tab_fleet .fleet_ship .ship_pic img {
-	width:210px;
-	height:140px;
-	margin:-32px 0px 0px -48px
+	height:120%;
+	margin:-14px 0px 0px -24px;
 }
-
+.tab_fleet .fleet_ship .ship_tiny_stats {
+	pointer-events:none;
+	height:33px;
+}
 .tab_fleet .fleet_ship .ship_lv {
-	width:108px;
-	height:20px;
+	width:52px;
+	height:18px;
 	z-index:1;
 	position:relative;
-	padding:0px 29px;
-	margin:20px 0px 0px 0px;
+	margin:-18px 0px 0px 58px;
+	text-align:right;
+	background: linear-gradient(
+		125deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.2) 15%,
+		rgba(0,0,0,0.3) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_lv_lbl {
 	width:20px;
-	height:20px;
-	line-height:20px;
+	height:18px;
+	line-height:18px;
 	font-size:12px;
 	color:#cccccc;
-	text-shadow:1px 1px 3px #000,
-		-1px -1px 3px #000,
-		1px 1px 3px #000;
+	padding:0px 0px 0px 11px;
 }
 .tab_fleet .fleet_ship .ship_lv_val {
-	height:20px;
-	line-height:20px;
+	height:18px;
+	line-height:18px;
 	color:#fff;
-	text-shadow:2px 2px 5px #000,
-		-2px -2px 5px #000,
-		2px 2px 5px #000;
+	font-size:14px !important;
+	font-weight:normal !important;
 }
 .tab_fleet .fleet_ship .ship_luck {
-	display:none !important;
+	width:50px;
+	height:15px;
+	float:left;
+	margin:0px 0px 0px 2px;
+}
+.tab_fleet .fleet_ship .ship_lk_icon {
+	width:13px;
+	height:13px;
+	line-height:13px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_lk_icon img {
+	width:13px;
+	height:13px;
+	vertical-align:text-top;
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
+}
+.tab_fleet .fleet_ship .ship_lk_val {
+	width:28px;
+	line-height:13px;
+	font-size:12px;
+	float:left;
+	margin:1px 0px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_morale {
-	display:none !important;
+	width:45px;
+	height:15px;
+	float:right;
+	margin:0px -8px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_cond_icon {
+	width:13px;
+	height:13px;
+	line-height:13px;
+	float:left;
+	margin:0px 2px 0px 0px;
+}
+.tab_fleet .fleet_ship .ship_cond_icon img {
+	width:13px;
+	height:13px;
+	vertical-align:text-top;
+}
+.tab_fleet .fleet_ship .ship_cond_val {
+	width:24px;
+	line-height:13px;
+	font-size:12px;
+	float:left;
+	margin:1px 0px 0px -4px;
+	text-align:right;
 }
 .tab_fleet .fleet_ship .ship_name {
 	width:110px;
-	height:20px;
-	line-height:20px;
+	height:18px !important;
+	line-height:18px !important;
 	margin:0px 0px 2px 0px;
 	text-align:center;
-	font-size:12px;
-	font-weight:bold;
+	position:absolute;
+	top:0px;
 	color:#fff;
-	text-shadow:2px 2px 5px #000,
-		-2px -2px 5px #000,
-		2px 2px 5px #000;
+	background: linear-gradient(
+		75deg,
+		rgba(0,0,0,0),
+		rgba(0,0,0,0.1) 15%,
+		rgba(0,0,0,0.2) 30%,
+		rgba(0,0,0,0.4)
+	);
 }
 .tab_fleet .fleet_ship .ship_gear {
 	width:110px;
 	height:17px;
 	line-height:17px;
-	margin:0px 0px 1px 0px;
 	font-size:10px;
 }
 .tab_fleet .fleet_ship .slot_capacity.shouha {
@@ -1904,7 +1971,11 @@ button, input, select, textarea {
 	background:#222;
 	color:#aaa;
 }
-
+.tab_event .sortie_list .day_to_night,
+.tab_maps .sortie_list .day_to_night {
+	-webkit-filter: brightness(0.6) !important;
+	filter: brightness(0.6) !important;
+}
 .tab_event .sortie_list .node_formation img,
 .tab_maps .sortie_list .node_formation img {
 	filter: invert(100%);

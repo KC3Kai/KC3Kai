@@ -257,7 +257,9 @@
 				}
 				// Array represents the id and name of useitem (not slotitem)
 				if(Array.isArray(consumedItem)){
-					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container).hide();
+					$(".eq_res_icon.consumed_icon.plus{0} img".format(stars), container)
+						.attr("src", KC3Meta.useitemIcon(consumedItem[0]))
+						.parent().removeClass("hover").addClass("useitem");
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 						.text( consumedItem[1] );
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
@@ -328,15 +330,7 @@
 					.removeAttr("title");
 				// Check useitem instead of slotitem
 				if(Array.isArray(consumedItem)){
-					let isNotEnoughUseItem = function(id, amount){
-						switch(id){
-						case 70: return (PlayerManager.consumables.skilledCrew || 0) < amount;
-						case 71: return (PlayerManager.consumables.nEngine || 0) < amount;
-						case 75: return (PlayerManager.consumables.newArtilleryMaterial || 0) < amount;
-						}
-						return false;
-					};
-					if(isNotEnoughUseItem(consumedItem[0], amount)){
+					if((PlayerManager.getConsumableById(consumedItem[0] || 0) || 0) < amount){
 						$(".eq_res_line.plus{0}".format(stars), container).addClass("insufficient");
 						$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container).addClass("insufficient");
 					}
@@ -410,6 +404,7 @@
 					.toggleClass("equipped", hasGear && hasShip && !self.instances[itemId].unequipped);
 				
 				var imps = WhoCallsTheFleetDb.getItemImprovement(MasterItem.api_id);
+				var dbSecShips = [];
 				if(Array.isArray(imps) && imps.length > 0){
 					improveList = [];
 					$.each(imps, function(_, imp){
@@ -418,9 +413,21 @@
 							// DOW check
 							dowReq |= !Array.isArray(reqArr[0]) || reqArr[0][dayIdx];
 							// Yet another has ship check on reqArr[1]
+							if(reqArr[0][dayIdx] && Array.isArray(reqArr[1]))
+								dbSecShips.push(...reqArr[1]);
 						});
 						if(dowReq) improveList.push(imp);
 					});
+					if(dbSecShips.length){
+						$(".eq_ships", ThisBox).attr("title", "[{0}]".format(dbSecShips.join(",")));
+						// Check inconsistent part of required ships for developers
+						if(ConfigManager.devOnlyPages){
+							if(shipList.length !== dbSecShips.length || dbSecShips.some(id => !shipList.includes(id)))
+								$(".eq_ships", ThisBox).css("background-color", "aquamarine");
+							if(shipList.some(id => !dbSecShips.includes(id)))
+								$(".eq_ships", ThisBox).css("background-color", "aliceblue");
+						}
+					}
 					$.each(improveList, function(_, imp){
 						ResBox = $(".tab_akashi .factory .eq_res").clone();
 						var resArr = imp.resource || [[]];
@@ -428,16 +435,16 @@
 						// Add some precondition ship icons as not check them yet
 						if(improveList.length > 1){
 							var shipIcons = $(".eq_res_label.material", ResBox);
+							shipIcons.empty();
 							imp.req.forEach(function(reqArr){
 								if(reqArr[0][dayIdx] && reqArr[1] && reqArr[1].length){
-									shipIcons.empty();
 									reqArr[1].forEach(function(reqShipId){
 										var remodel = WhoCallsTheFleetDb.getShipRemodel(reqShipId);
 										if(!remodel || !remodel.prev
 											|| reqArr[1].indexOf(remodel.prev) < 0){
 											shipIcons.append(
 												$("<img/>").attr("src", KC3Meta.shipIcon(reqShipId, undefined, false))
-												.width("16px").height("16px")
+												.width("16px").height("16px").attr("title", "[{0}]".format(reqShipId))
 											);
 										}
 									});

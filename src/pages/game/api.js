@@ -77,6 +77,16 @@ function ActivateGame(){
 	if(ConfigManager.alert_idle_counter) {
 		$(".game-idle-timer").trigger("refresh-tick");
 	}
+	// Send OPTION_LOAD message to activate game without osapi.dmm.com parent,
+	// settings might be changed only via this?
+	var postData = "vol_bgm=30;vol_se=40;vol_voice=60;v_be_left=1;v_duty=1";
+	var gadgetOrigin = (localStorage.absoluteswf.match("^http:\/\/[0-9.]+\/") || [])[0].slice(0, -1);
+	$(".box-game iframe").on("load", function(loaded) {
+		setTimeout(function() {
+			console.debug("Sending option message to", gadgetOrigin);
+			loaded.target.contentWindow.postMessage(postData, gadgetOrigin);
+		}, 100);
+	});
 	return true;
 }
 
