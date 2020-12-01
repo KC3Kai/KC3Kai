@@ -532,6 +532,39 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
+		applyShipsAfterHp :function(){
+			PlayerManager.fleets.forEach(fleet => {
+				fleet.ship((rosterId, slotId, shipData) => {
+					shipData.hp[0] = shipData.afterHp[0];
+				});
+			});
+		},
+		
+		checkTaihaShips :function(){
+			// To check Taiha correctly on battle result screen, have to apply predicted afterHp first (invoke `#applyShipsAfterHp`)
+			let hasTaihaShip = false;
+			let isForcedToRetreat = false;
+			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
+				const fleet = PlayerManager.fleets[fleetId];
+				fleet.ship().forEach((ship, slotIdx) => {
+					// skip ships: not taiha, already escaped/sunk, damecon still equipped
+					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0) {
+						return;
+					}
+					// flagship of first fleet in taiha with no damecon
+					if (fleetIdx === 0 && slotIdx === 0) {
+						isForcedToRetreat = true;
+					}
+					// ignore taiha state of combined escort fleet flagship if setting demands
+					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) {
+						return;
+					}
+					hasTaihaShip = true;
+				});
+			});
+			return hasTaihaShip && !isForcedToRetreat;
+		},
+		
 		checkFCF :function(escapeData){
 			if (escapeData) {
 				const getRetreatableShipId = (escapeIdx) => {

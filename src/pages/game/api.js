@@ -251,6 +251,11 @@ $(document).on("ready", function(){
 		}
 	});
 	
+	// Dismiss next button blocker
+	$(".overlay_next span").on("click", function(){
+		interactions.clearOverlays({}, {}, function(){});
+	});
+	
 	// Configure Idle Timer
 	/*
 	  unsafe-tick  : remove the safe marker of API idle time
@@ -516,6 +521,7 @@ var interactions = {
 		$(".overlay_quests").empty();
 		$(".overlay_markers").empty();
 		$(".overlay_record").hide();
+		$(".overlay_next").hide();
 		response({success:true});
 	},
 	
@@ -606,6 +612,23 @@ var interactions = {
 			self.taihaAlertStart({}, {}, {});
 			suspendedTaiha = false;
 		}, 2000);
+	},
+	
+	// Update next button blocker overlay
+	nextBlockShow :function(request, sender, response){
+		if(request.fairy){
+			const fid = Math.floor(Math.random() * 6);
+			const furl = chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
+			$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
+			$(".nextButtonBlock").css("background-position", "center");
+			$(".nextButtonBlock").addClass("bg-grey");
+			$(".overlay_next").show();
+		} else {
+			$(".nextButtonBlock").css("background", "");
+			$(".nextButtonBlock").removeClass("bg-grey");
+			$(".overlay_next").show();
+		}
+		response({success:true});
 	},
 	
 	// Show subtitles

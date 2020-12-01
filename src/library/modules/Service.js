@@ -250,10 +250,10 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			})).execute();
 		},
 		
-		/* NEXT BLOCK SHOW
-		Request from devTools to display "next node" button blocker.  
+		/* SHOW NEXT BLOCK
+		Request from devTools to display blocker on "Advance next node" button.
 		------------------------------------------*/
-		"nextBlockShow": function (request, sender, response) {
+		"showNextBlock": function (request, sender, response) {
 			(new TMsg(request.tabId, "gamescreen", "nextBlockShow", {fairy: request.fairy})).execute();
 		},
 		

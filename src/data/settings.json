@@ -771,7 +771,7 @@
 				"options" : {
 					"tooltip": "SettingsNextBlockerTip",
 					"choices" : [
-						[ 0, "SettingsNextBlockerDisabled" ],
+						[ 0, "Disabled" ],
 						[ 1, "SettingsNextBlockerSE" ],
 						[ 2, "SettingsNextBlockerNetwork" ]
 					]
@@ -780,10 +780,7 @@
 			{
 				"id" : "next_blocker_2_fs",
 				"name" : "SettingsNextBlockerSecondFS",
-				"type" : "check",
-				"options" : {
-					"tooltip": "SettingsNextBlockerSecondFSTip"
-				}
+				"type" : "check"
 			}
 		]
 	},

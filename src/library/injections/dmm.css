@@ -19,11 +19,10 @@
 }
 
 /* OVERLAY: NEXT BUTTON BLOCK
---------------------------*/
+-----------------------------*/
 .kc3 .overlay_next {
-	font-family: "Helvetica Neue", Tahoma, Helvetica, Arial, sans-serif;
-	font-size: 16px;
-	font-weight: 800;
+	font-size: 20px;
+	font-weight: bold;
 	width: 633px;
 	height: 720px;
 	position: absolute;
@@ -31,7 +30,6 @@
 	left: 0;
 	overflow: visible;
 	color: #df0020;
-
 	z-index: 1000;
 	display: none;
 	pointer-events:none;
@@ -39,11 +37,13 @@
 
 .kc3 .overlay_next span {
 	position: absolute;
-	bottom: 0;
+	bottom: 0px;
 	left: 5px;
-	pointer-events: all;
+	pointer-events: auto;
 	white-space: nowrap;
 	cursor: pointer;
+	text-shadow: 1px 1px 1px #555;
+	background: rgba(0,0,0,0.2);
 }
 
 .kc3 .overlay_next .nextButtonBlock {
