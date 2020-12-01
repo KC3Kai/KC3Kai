@@ -169,7 +169,7 @@ Previously known as "Reactor"
 			if(response.api_data.api_event_object){
 				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
 			}
-			// to automaticly remove "next blocker" once in port
+			// To forcibly remove "next blocker" once in port
 			KC3Network.disarmNextBlock();
 		},
 		
@@ -1336,16 +1336,11 @@ Previously known as "Reactor"
 			resultScreenQuestFulfillment(response.api_data);
 			
 			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.applyShipsAfterHp();
 			
-			if(!ConfigManager.info_delta)
-				KC3Network.trigger("HQ");
-			
-			PlayerManager.fleets.forEach(function(fleet){
-				fleet.ship(function(rosterId,slotId,shipData){
-					shipData.hp[0] = shipData.afterHp[0];
-				});
-			});
 			KC3Network.setBattleEvent(false, "result", "battleresult");
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(), false);
+			if(!ConfigManager.info_delta) KC3Network.trigger("HQ");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
@@ -1354,28 +1349,21 @@ Previously known as "Reactor"
 			if(response.api_data.api_m2 > 0) {
 				KC3Network.trigger("DebuffNotify", response.api_data);
 			}
-			KC3Network.nextBlockCheck();
 		},
 		"api_req_combined_battle/battleresult":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data);
 			
 			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.applyShipsAfterHp();
 			
-			if(!ConfigManager.info_delta)
-				KC3Network.trigger("HQ");
-			
-			PlayerManager.fleets.forEach(function(fleet){
-				fleet.ship(function(rosterId,slotId,shipData){
-					shipData.hp[0] = shipData.afterHp[0];
-				});
-			});
 			KC3Network.setBattleEvent(false, "result", "cf_battleresult");
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(), false);
+			if(!ConfigManager.info_delta) KC3Network.trigger("HQ");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
 			
 			KC3Network.delay(1,"Fleet","GearSlots");
-			KC3Network.nextBlockCheck();
 		},
 		
 		/* FCF TRIGGER

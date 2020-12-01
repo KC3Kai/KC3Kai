@@ -71,6 +71,8 @@
 		Looking at ReactJS for KC3KaiNi
 		--------------------------------------*/
 		attachHTML: function(){
+			const self = this;
+
 			// Overlay screens
 			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game");
 
@@ -88,6 +90,18 @@
 				.append($("<span>"));
 			overlays.append(overlay_idle);
 
+			var overlay_nextBlock = $("<div>").addClass("overlay_next notranslate")
+				.append($("<div>").addClass("nextButtonBlock"))
+				.append(
+					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay")).click(function() {
+						// Equivalent to F10 key, no confirm dialogue for now
+						//if (confirm(KC3Meta.term("NextButtonBlockOverlayConfirmRemove"))) {
+							self.clearOverlays()({action: "clearOverlays"}, {}, function() {});
+						//}
+					})
+				)
+				.appendTo("#area-game");
+
 			// Clonable Factory
 			var factory = $("<div>").attr("id", "factory").appendTo("body");
 
@@ -103,20 +117,6 @@
 
 			var ol_quest_empty = $("<div>").addClass("overlay ol_quest ol_quest_empty")
 				.appendTo("#factory");
-
-			var self = this;
-			$("<div>").addClass("overlay_next notranslate")
-				.append($("<div>").addClass("nextButtonBlock"))
-				.append(
-					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay"))
-						.click(function () {
-							if (confirm(KC3Meta.term('NextButtonBlockOverlayConfirmRemove'))) {
-								self.clearOverlays()({action: 'clearOverlays'}, {}, function () {});
-							}
-						})
-				)
-				.appendTo("#area-game");
-
 		},
 
 		/* DMM PAGE LAYOUT
@@ -138,6 +138,8 @@
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
+			var altFontFamily = KC3Translation.applyHTML(true);
+			if(altFontFamily) $("#area-game").css("font-family", altFontFamily);
 			$("#game_frame").css({
 				width: 1200,
 				height: 720
@@ -557,7 +559,8 @@
 				if (request.action != "nextBlockShow") return true;
 				if (request.fairy) {
 					const fid = Math.floor(Math.random() * 6);
-					$(".nextButtonBlock").css("background", `url(${chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`)}) no-repeat`);
+					const furl = chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
+					$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
 					$(".nextButtonBlock").css("background-position", "center");
 					$(".nextButtonBlock").addClass("bg-grey");
 					$(".overlay_next").show();
