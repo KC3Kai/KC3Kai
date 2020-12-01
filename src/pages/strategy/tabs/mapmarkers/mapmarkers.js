@@ -224,7 +224,7 @@
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
 						// Draw additional start point
-						if(spot.no && !spot.route && !spot.line) {
+						if(edge && !spot.route && !spot.line) {
 							if(isAddingRouteStart) {
 								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 								const sprite = new this.pixi.Sprite(frame);
