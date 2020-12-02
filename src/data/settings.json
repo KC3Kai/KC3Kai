@@ -780,7 +780,10 @@
 			{
 				"id" : "next_blocker_2_fs",
 				"name" : "SettingsNextBlockerSecondFS",
-				"type" : "check"
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsNextBlockerSecondFSTip"
+				}
 			}
 		]
 	},
