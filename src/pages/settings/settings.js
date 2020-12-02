@@ -41,7 +41,13 @@
 					}
 				}
 				// Init jquery-ui tooltips
-				$(".settings").tooltip();
+				$(".settings").tooltip({
+					content: function(){
+						return ($(this).attr("title") || "")
+							.replace(/\n/g, "<br/>")
+							.replace(/\t/g, "&emsp;&emsp;");
+					}
+				});
 				// Jump to specified section if necessary
 				if(document.location.hash)
 					document.location.replace(document.location.href);
