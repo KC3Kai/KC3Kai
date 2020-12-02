@@ -546,6 +546,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// To check Taiha correctly on battle result screen, have to apply predicted afterHp first (invoke `#applyShipsAfterHp`)
 			let hasTaihaShip = false;
 			let isForcedToRetreat = false;
+			let isSafeToAdvance = false;
+			// No Taiha blocker needed if current battle node is an end point of the map, such as boss
+			const nextEdgesAmount = this.currentNode().nodeData.api_next;
+			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
+			// To check FCF correctly on battle result screen, have to first invoke `#checkFCF` (in another word `#resultScreen`)
+			//const fcfInfo = this.getCurrentFCF();
+			// TODO get FCF info and find a method to delay blocker after denying FCF decision screen
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
@@ -564,7 +571,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					hasTaihaShip = true;
 				});
 			});
-			return hasTaihaShip && !isForcedToRetreat;
+			return hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance;
 		},
 		
 		checkFCF :function(escapeData){
