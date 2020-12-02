@@ -3751,14 +3751,14 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559, 651],
+							excludes: [556, 557, 558, 559, 648, 651],
 							// Kagerou Class K2 total +2 fp til 2 guns
 							multiple: { "houg": 1 },
 							countCap: 2,
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559, 651],
+							excludes: [556, 557, 558, 559, 648, 651],
 							// Kagerou Class K2 total +5 instead of +4 if guns = 2
 							// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
 							single: { "houg": 1 },

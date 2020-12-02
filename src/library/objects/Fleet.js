@@ -1085,7 +1085,7 @@ Contains summary information about a fleet and its ships
 	 * Implementation of effective LoS : "Formula 33".
 	 * @see http://kancolle.wikia.com/wiki/Line_of_Sight
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
-	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default.
+	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default. wikia names it with `Cn` (Coefficient node)
 	 * @see #nodeDivaricatedFactorByMap - Known:
 	 *    For phase 1: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 	 *    For phase 2: 2-5(H,I):x1, 5-2(F):x2, 1-6(M)/6-2(E,H,I)/6-3(H)/6-5(G):x3, 3-5(G)/6-1(G,H):x4
