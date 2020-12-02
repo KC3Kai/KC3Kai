@@ -1769,7 +1769,7 @@ Previously known as "Reactor"
 			}
 		},
 		
-		/* PVP Start
+		/* PVP Start Night
 		-------------------------------------------------------*/
 		"api_req_practice/midnight_battle":function(params, response, headers){
 			KC3SortieManager.engageNight(response.api_data);
