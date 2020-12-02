@@ -433,13 +433,14 @@ Listens to network history and triggers callback if game events happen
 		signals to game tab that next button blocking overlay needs to be shown
 		triggered either by network request to results or SE network request
 		-------------------------------------------------------*/
-		triggerNextBlock: function(taihaShipFound, bySE = false) {
-			if(typeof taihaShipFound === "boolean") {
+		triggerNextBlock: function(effectiveTaihaFlag, bySE = false) {
+			if(typeof effectiveTaihaFlag === "boolean") {
 				/* For every time it checks HP predictions.
 				 * If any ship predicted to be in Taiha, it arms locker in game page preventing player from advancing into next node.
 				 * TODO cases like 1-6, where next node is end node without battle and it is safe to advance.
+				 * TODO get FCF info and find a method to delay blocker after denying FCF decision screen.
 				 */
-				this.isNextBlockerArmed = taihaShipFound;
+				this.isNextBlockerArmed = effectiveTaihaFlag;
 			}
 			let toShowNextBlock = false;
 			if (ConfigManager.next_blocker > 0 && this.isNextBlockerArmed) {

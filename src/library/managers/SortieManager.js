@@ -552,7 +552,6 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
 			// To check FCF correctly on battle result screen, have to first invoke `#checkFCF` (in another word `#resultScreen`)
 			//const fcfInfo = this.getCurrentFCF();
-			// TODO get FCF info and find a method to delay blocker after denying FCF decision screen
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
@@ -571,6 +570,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					hasTaihaShip = true;
 				});
 			});
+			console.debug("Taiha ship in fleets found?", hasTaihaShip, "flagship?", isForcedToRetreat, "safe to next?", isSafeToAdvance);
 			return hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance;
 		},
 		
