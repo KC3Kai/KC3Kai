@@ -5457,8 +5457,7 @@ KC3改 Equipment Object
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return 0; }
 
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
 			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
@@ -5469,7 +5468,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 			return Math.floor( Math.sqrt(capacity) * aaStat + averageBonus );
@@ -5487,8 +5486,7 @@ KC3改 Equipment Object
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return [0, 0]; }
 
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane,
 		// Also take recon planes into account because they participate in LBAS battle.
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
@@ -5504,7 +5502,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 
@@ -5527,10 +5525,9 @@ KC3改 Equipment Object
 	KC3Gear.prototype.interceptionPower = function(capacity = 0){
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return 0; }
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a interceptor plane or not
-		if(KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1) {
+		if(KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1) {
 			var interceptPower = (
 				// Base anti-air power
 				this.master().api_tyku +
