@@ -158,7 +158,7 @@
 			"2": { "type": "hp", "boss": [24, 26] }
 		},
 		"493": {
-			"1": { "type": "tp", "boss": [17], "landing": [13] },
+			"1": { "type": "tp", "boss": [17, 23], "landing": [13] },
 			"2": { "type": "tp", "boss": [30], "landing": [27] },
 			"3": { "type": "hp", "boss": [40, 41] }
 		}
