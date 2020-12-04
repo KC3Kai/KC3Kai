@@ -715,6 +715,7 @@ Provides access to data on built-in JSON files
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,
+				interceptorsType2Ids: d.interceptorsType2Ids,
 				jetAircraftType2Ids: d.jetAircraftType2Ids,
 				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
 			};

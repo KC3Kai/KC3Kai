@@ -3751,14 +3751,14 @@ KC3改 Equipment Object
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559, 651],
+							excludes: [556, 557, 558, 559, 648, 651],
 							// Kagerou Class K2 total +2 fp til 2 guns
 							multiple: { "houg": 1 },
 							countCap: 2,
 						},
 						{
 							remodel: 2,
-							excludes: [556, 557, 558, 559, 651],
+							excludes: [556, 557, 558, 559, 648, 651],
 							// Kagerou Class K2 total +5 instead of +4 if guns = 2
 							// https://wikiwiki.jp/kancolle/%E9%99%BD%E7%82%8E%E6%94%B9%E4%BA%8C
 							single: { "houg": 1 },
@@ -3791,30 +3791,42 @@ KC3改 Equipment Object
 							},
 						},
 					],
+					// Kagerou Class
+					"30": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
 					// Yuugumo Class
 					"38": [
 						{
 							multiple: { "houg": 2, "houk": 1 },
 							synergy: {
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 2, "raig": 1, "houk": 1 },
+								single: { "houg": 2, "raig": 3, "houk": 1 },
 							},
 						},
+						// A code typo suspected in both sides, which supposed to give non-K2 ships +2 tp, instead of giving all,
+						// see https://github.com/Tibowl/KCBugTracker/issues/42
+						// here should follow server-side's value, so +2 tp has been added to previous line, and Akigumo K2's synergy
+						/*
 						{
-							// Yuugumo Class K2, total +3 for each gun
+							// remodels except all of Yuugumo Class K2
+							excludes: [542, 543, 563, 564, 569, 578],
+							synergy: {
+								flags: [ "surfaceRadar" ],
+								single: { "raig": 2 },
+							},
+						},
+						*/
+						{
+							// Yuugumo Class K2
 							remodel: 2,
 							multiple: { "houg": 1 },
-							// total +6 fp, +4 tp, +4 ev
 							synergy: {
 								flags: [ "surfaceRadar" ],
 								single: { "houg": 1, "raig": 3, "houk": 2 },
 							},
 						},
 					],
-					// Kagerou Class
-					"30": {
-						multiple: { "houg": 1, "houk": 1 },
-					},
 				},
 				byShip: [
 					{
@@ -3823,21 +3835,13 @@ KC3改 Equipment Object
 						single: { "houg": 1 },
 					},
 					{
-						// Okinami Kai Ni, Akigumo Kai Ni
-						ids: [569, 648],
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "raig": 2 },
-						},
-					},
-					{
 						// Akigumo Kai Ni
 						ids: [648],
 						multiple: { "houg": 2 },
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
-								single: { "houg": 3, "raig": 4, "houk": 3 },
+								single: { "houg": 3, "raig": 6, "houk": 3 },
 							},
 							{
 								flags: [ "skilledLookouts" ],
@@ -3886,6 +3890,10 @@ KC3改 Equipment Object
 							minCount: 2,
 						},
 					],
+					// Kagerou Class
+					"30": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
 					// Yuugumo Class
 					"38": [
 						{
@@ -3918,10 +3926,6 @@ KC3改 Equipment Object
 							minCount: 2,
 						},
 					],
-					// Kagerou Class
-					"30": {
-						multiple: { "houg": 1, "houk": 1 },
-					},
 				},
 				byShip: [
 					{
@@ -5457,8 +5461,7 @@ KC3改 Equipment Object
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return 0; }
 
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
 			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
@@ -5469,7 +5472,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 			return Math.floor( Math.sqrt(capacity) * aaStat + averageBonus );
@@ -5487,8 +5490,7 @@ KC3改 Equipment Object
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return [0, 0]; }
 
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane,
 		// Also take recon planes into account because they participate in LBAS battle.
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
@@ -5504,7 +5506,7 @@ KC3改 Equipment Object
 			var aaStat = this.master().api_tyku;
 			aaStat += this.aaStatImprovementBonus();
 			// Interceptor use evasion as interception stat against fighter
-			var intStat = KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1 ?
+			var intStat = KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1 ?
 				this.master().api_houk : 0;
 			aaStat += intStat * 1.5;
 
@@ -5527,10 +5529,9 @@ KC3改 Equipment Object
 	KC3Gear.prototype.interceptionPower = function(capacity = 0){
 		// Empty item or slot means no fighter power
 		if(this.isDummy() || capacity <= 0) { return 0; }
-		var type2 = this.master().api_type[2],
-			type3 = this.master().api_type[3];
+		var type2 = this.master().api_type[2];
 		// Check if this object is a interceptor plane or not
-		if(KC3GearManager.interceptorsType3Ids.indexOf(type3) > -1) {
+		if(KC3GearManager.interceptorsType2Ids.indexOf(type2) > -1) {
 			var interceptPower = (
 				// Base anti-air power
 				this.master().api_tyku +

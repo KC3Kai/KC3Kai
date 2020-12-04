@@ -185,7 +185,7 @@
 				) && (
 					sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
 				)) {
-					const isLandFighter = gearData.api_type[2] === 48;
+					const isLandFighter = KC3GearManager.interceptorsType2Ids.includes(gearData.api_type[2]);
 					const statBox = $(".tab_mstgear .factory .stat").clone()
 						.appendTo(".tab_mstgear .gearInfo .stats");
 					$("img", statBox)

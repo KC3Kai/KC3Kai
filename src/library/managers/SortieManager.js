@@ -338,6 +338,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Dud";
 			}
 			// Resource Node (CellTaskItem)
+			// since event fall 2020 (E49-1 U), the anchor icon (api_color_no = 8) is also used instead of green dot (api_color_no = 2)
 			// api_event_id = 2
 			else if (typeof nodeData.api_itemget !== "undefined") {
 				nodeKind = "Resource";
@@ -360,6 +361,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Bounty";
 			}
 			// Transport Node (CellTaskLanding), event only for now
+			// since event fall 2020 (E49-3 M/U), the anchor icon (api_color_no = 8, used by previous type) is used instead of green dot (api_color_no = 6)
 			// api_event_id = 9
 			else if (nodeData.api_event_id === 9) {
 				nodeKind = "Transport";

@@ -26,6 +26,7 @@ Saves and loads list to and from localStorage
 		airStrikeBomberType2Ids: [7,8,11,41,47,53,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
 		interceptorsType3Ids: [38,44],
+		interceptorsType2Ids: [48],
 		nightAircraftType3Ids: [45,46],
 
 		carrierSupplyBauxiteCostPerSlot: 5,

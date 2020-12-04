@@ -2517,7 +2517,7 @@
 									.on("dblclick", self.gearDoubleClickFunction);
 								
 								if (itemObj.stars > 0) {
-									$(".base_plane_star", planeBox).text(itemObj.stars);
+									$(".base_plane_star", planeBox).text(itemObj.stars >= 10 ? "\u2605" : itemObj.stars);
 									$(".base_plane_star", planeBox).show();
 								}
 								
