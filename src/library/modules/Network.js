@@ -11,7 +11,6 @@ Listens to network history and triggers callback if game events happen
 		hasOverlay: false,
 		isNextBlockerArmed: false,
 		isNextBlockerNetworkFallback: false,
-		isBattleResultRecieved: false,
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -60,6 +59,7 @@ Listens to network history and triggers callback if game events happen
 			entered: false,
 			time: undefined,
 			identifier: undefined,
+			resultRecieved: false,
 		},
 		submissionModuleNames: ["PoiDBSubmission", "TsunDBSubmission"],
 		submissionConfigs: {},
@@ -286,10 +286,11 @@ Listens to network history and triggers callback if game events happen
 		/**
 		 * Set some state attributes for tracking events of game battle.
 		 */
-		setBattleEvent :function(isEntered = false, time = undefined, identifier = undefined){
+		setBattleEvent :function(isEntered = false, time = undefined, identifier = undefined, isResultReceived = false){
 			this.battleEvent.entered = isEntered;
 			this.battleEvent.time = time;
 			this.battleEvent.identifier = identifier;
+			this.battleEvent.resultRecieved = isResultReceived;
 		},
 
 		/**
@@ -445,7 +446,7 @@ Listens to network history and triggers callback if game events happen
 			let toShowNextBlock = false;
 			if (ConfigManager.next_blocker > 0 && this.isNextBlockerArmed) {
 				if (bySE) {
-					if (KC3Network.isBattleResultRecieved) {
+					if (this.battleEvent.resultRecieved) {
 						toShowNextBlock = true;
 					} else {
 						// battle result wasn't recieved, it must be yasen switch? do nothing.
@@ -453,20 +454,18 @@ Listens to network history and triggers callback if game events happen
 				} else {
 					if (ConfigManager.next_blocker === 2 || this.isNextBlockerNetworkFallback) {
 						// not from SE check or setting selected api check,
-						// start showing block from fleets result and drop screen
+						// start showing block from fleets result and drop screen.
 						toShowNextBlock = true;
 					} else {
 						// se/217.mp3 might fire twice. once for yasen and once for next node,
 						// this flag prevents blocking until result data actually recieved.
-						// if player wants it through sound warnings we must signal that we got result
-						// to distinguish it from yasen switch
-						this.isBattleResultRecieved = true;
+						// if player wants it through sound warnings we must signal that we got result to distinguish it from yasen switch.
+						// this flag has been already set by #setBattleEvent, here just a duplication.
+						this.battleEvent.resultRecieved = true;
 					}
 				}
 			}
 			if (toShowNextBlock) {
-				// reset flag, so if player choose to risk, it wouldn't interfere on next node
-				this.isBattleResultRecieved = false;
 				this.hasOverlay = true;
 				(new RMsg("service", "showNextBlock", {
 					tabId: chrome.devtools.inspectedWindow.tabId,
@@ -478,7 +477,7 @@ Listens to network history and triggers callback if game events happen
 		/* Disarms Next Node Blocker */
 		disarmNextBlock :function(){
 			this.isNextBlockerArmed = false;
-			this.isBattleResultRecieved = false;
+			this.setBattleEvent(false);
 			this.clearOverlays();
 		},
 
