@@ -95,6 +95,8 @@ KC3改 Equipment Object
 				twin127SmallGunMountModelDK2: 0,
 				twin127SmallGunMountModelDK2Nonexist: 1,
 				twin127SmallGunMountModelDK2Ids: [267],
+				ru130mmB13SmallGunMount: 0,
+				ru130mmB13SmallGunMountIds: [282],
 				skilledLookouts: 0,
 				skilledLookoutsIds: [129],
 				searchlightSmall: 0,
@@ -2730,6 +2732,11 @@ KC3改 Equipment Object
 						countCap: 2,
 					},
 				},
+				byShip: {
+					// All remodels of Matsu Class Take
+					origins: [642],
+					single: { "raig": 5, "houk": 1 },
+				},
 			},
 			// 61cm Quintuple (Oxygen) Torpedo Mount
 			"58": {
@@ -2903,6 +2910,25 @@ KC3改 Equipment Object
 						},
 					],
 				},
+				byShip: [
+					{
+						// All remodels of Matsu Class Take
+						origins: [642],
+						single: { "raig": 7, "houk": 2 },
+					},
+					{
+						// extra +2 tp if stars >= +7
+						origins: [642],
+						minStars: 7,
+						single: { "raig": 2 },
+					},
+					{
+						// extra +2 tp if stars +max
+						origins: [642],
+						minStars: 10,
+						single: { "raig": 2 },
+					},
+				],
 			},
 			// 533mm Triple Torpedo Mount
 			"283": {
@@ -2917,6 +2943,29 @@ KC3改 Equipment Object
 					// Hibiki K2 (Bep)
 					ids: [147],
 					multiple: { "houg": 1, "raig": 3, "souk": 1 },
+				},
+			},
+			// 533mm Triple Torpedo Mount (Model 53-39)
+			"400": {
+				count: 0,
+				byClass: {
+					// Tashkent Class
+					"81": {
+						multiple: { "houg": 1, "raig": 5, "souk": 1, "houk": 2 },
+						synergy: {
+							flags: [ "ru130mmB13SmallGunMount" ],
+							single: { "houg": 2 },
+						},
+					},
+				},
+				byShip:{
+					// Hibiki K2 (Bep)
+					ids: [147],
+					multiple: { "houg": 1, "raig": 5, "souk": 1, "houk": 2 },
+					synergy: {
+						flags: [ "ru130mmB13SmallGunMount" ],
+						single: { "houg": 2 },
+					},
 				},
 			},
 			// Late Model 53cm Bow Torpedo Mount (8 tubes)
@@ -5005,6 +5054,7 @@ KC3改 Equipment Object
 				synergyGears.twin127SmallGunMountModelDK2 += 1;
 				synergyGears.twin127SmallGunMountModelDK2Nonexist = 0;
 			}
+			if(synergyGears.ru130mmB13SmallGunMountIds.includes(gear.masterId)) synergyGears.ru130mmB13SmallGunMount += 1;
 			if(synergyGears.skilledLookoutsIds.includes(gear.masterId)) synergyGears.skilledLookouts += 1;
 			if(synergyGears.searchlightSmallIds.includes(gear.masterId)) synergyGears.searchlightSmall += 1;
 			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
