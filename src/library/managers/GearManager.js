@@ -16,16 +16,17 @@ Saves and loads list to and from localStorage
 		// These IDs can be updated at `fud_weekly.json`
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,49],
 		antiAirFighterType2Ids: [6,7,8,11,45,47,48,56,57],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
 		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,224,237,319,320,322,323,343,374,388],
 		highAltitudeInterceptorIds: [350,351,352],
-		airStrikeBomberType2Ids: [7,8,11,41,47,57,58],
+		airStrikeBomberType2Ids: [7,8,11,41,47,53,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
 		interceptorsType3Ids: [38,44],
+		interceptorsType2Ids: [48],
 		nightAircraftType3Ids: [45,46],
 
 		carrierSupplyBauxiteCostPerSlot: 5,
@@ -41,10 +42,21 @@ Saves and loads list to and from localStorage
 		landBaseReconnMaxSlot: 4,
 		landBaseOtherMaxSlot: 18,
 		landBaseReconnType2Ids: [9,10,41,49],
+		// Newly implemented heavy bomber different max slot
+		landBaseHeavyBomberMaxSlot: 9,
+		landBaseHeavyBomberType2Ids: [53],
 		// Jet aircraft mechanism still in progress
 		jetAircraftType2Ids: [56,57,58,59],
 		jetBomberSteelCostRatioPerSlot: 0.2,
 		// steel_consumption = floor(api_cost * current_slot * 0.2)
+
+		getLandBaseSlotSize :function(type2Id) {
+			if(KC3GearManager.landBaseReconnType2Ids.includes(type2Id))
+				return KC3GearManager.landBaseReconnMaxSlot;
+			else if(KC3GearManager.landBaseHeavyBomberType2Ids.includes(type2Id))
+				return KC3GearManager.landBaseHeavyBomberMaxSlot;
+			else return KC3GearManager.landBaseOtherMaxSlot;
+		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types and improvements
 		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus]

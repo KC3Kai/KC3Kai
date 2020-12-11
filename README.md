@@ -4,7 +4,8 @@
 
 KC3改 is a feature-rich Chrome extension that helps you play [Kantai Collection](http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/), and view/analyze information not displayed in-game.
 
-![Downloads](https://img.shields.io/chrome-web-store/d/hkgmldnainaglpjngpajnnjfhpdjkohh.svg) 
+![Version](https://img.shields.io/chrome-web-store/v/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
+![Downloads](https://img.shields.io/chrome-web-store/d/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Rating](https://img.shields.io/chrome-web-store/stars/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Score](https://img.shields.io/chrome-web-store/rating/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Reviews](https://img.shields.io/chrome-web-store/rating-count/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)

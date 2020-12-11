@@ -4,16 +4,20 @@
 	localStorage.extract_api = false;
 	localStorage.dmmplay = true;
 	
-	// Redirect to DMM play page when activated
-	function ActivateGame(){
+	function getInfExpirationDate(){
 		var infinityExpire = new Date();
 		infinityExpire.setYear(infinityExpire.getUTCFullYear()+1);
+		return Math.ceil(infinityExpire.getTime() / 1000);
+	}
+	
+	// Redirect to DMM play page when activated
+	function ActivateGame(){
 		chrome.cookies.set({
 			url: "http://www.dmm.com",
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
-			expirationDate: Math.ceil(infinityExpire.getTime()/1000),
+			expirationDate: getInfExpirationDate(),
 			path: '/netgame/',
 		}, function(cookie){
 			window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
@@ -157,7 +161,7 @@
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
-			expirationDate: Math.ceil((new Date("Sun, 09 Feb 2019 09:00:09 GMT")).getTime()/1000),
+			expirationDate: getInfExpirationDate(),
 			path: '/netgame/',
 		}, function(cookie){
 			window.location.href = htmlLink;

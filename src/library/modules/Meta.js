@@ -125,6 +125,8 @@ Provides access to data on built-in JSON files
 			278, // Kaga Kai -> K2
 			698, // Kaga K2 -> K2E
 			610, // Kaga K2E -> K2Go
+			228, // Yukikaze Kai -> Tan Yang
+			651, // Tan Yang -> Yukikaze K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
@@ -713,6 +715,7 @@ Provides access to data on built-in JSON files
 				aswAircraftType2Ids: d.aswAircraftType2Ids,
 				nightAircraftType3Ids: d.nightAircraftType3Ids,
 				interceptorsType3Ids: d.interceptorsType3Ids,
+				interceptorsType2Ids: d.interceptorsType2Ids,
 				jetAircraftType2Ids: d.jetAircraftType2Ids,
 				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
 			};

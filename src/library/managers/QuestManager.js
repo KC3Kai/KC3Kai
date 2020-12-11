@@ -310,6 +310,23 @@ Uses KC3Quest objects to play around with
 					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
 				},
 			},
+			// Reset on 1st November every year
+			yearlyNov: {
+				type: 'yearlyNov',
+				key: 'timeToResetYearlyNovQuests',
+				resetMonth: NOVEMBER,
+				questIds: [655, 714, 715],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyNov.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyNov.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 		},
 
 		getRepeatableTypes: function () {
@@ -379,10 +396,10 @@ Uses KC3Quest objects to play around with
 			}
 			
 			// It's now possible to clean quests non-open-nor-active in-game for API change reason,
-			// Close quests for those `api_no` not in current quest list, as long as questTabId is 0 (All quests available).
+			// Close (mark as completed) quests for those `api_no` not in current quest list, as long as questTabId is 0 (All quests available).
 			if(existedAllIds.length){
-				this.open.filter(id   => !existedAllIds.includes(id)).forEach(id => { this.isOpen(id,   false); });
-				this.active.filter(id => !existedAllIds.includes(id)).forEach(id => { this.isActive(id, false); });
+				this.open.filter(id   => !existedAllIds.includes(id)).forEach(id => { this.isOpen(id,   false); this.get(id).status = 3; });
+				this.active.filter(id => !existedAllIds.includes(id)).forEach(id => { this.isActive(id, false); this.get(id).status = 3; });
 			}
 			
 			this.save();
@@ -479,6 +496,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyOct').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyNov').indexOf(questId)>-1;
 			return !!period;
 		},
 		

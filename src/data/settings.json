@@ -1202,6 +1202,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "pan_compact_quests",
+				"name" : "SettingsPanelCompactQuests",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",

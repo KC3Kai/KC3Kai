@@ -1,6 +1,6 @@
 (function(){
 	"use strict";
-	_gaq.push(['_trackEvent', "Panel: Natsuiro Theme", 'clicked']);
+	_gaq.push(['_trackEvent', "Panel: Moonlight Theme", 'clicked']);
 
 	// Mathematical Constants
 	var LOG3 = Math.log10(3);
@@ -392,6 +392,15 @@
 		}
 	}
 
+	// Increases space allotted for the quest list by decreasing space allocated to another element
+	function quest_extender(state) {
+		ConfigManager.isQuestExtended(state);
+		if (ConfigManager.pan_moon_quest_extend == true) {
+			return $(".quest_extendable").addClass("squish");
+		}
+		return $(".quest_extendable").removeClass("squish");
+	}
+
 	$(document).on("ready", function(){
 		// Check localStorage
 		if(!window.localStorage){
@@ -633,6 +642,7 @@
 		function setRotation(page) {
 			ConfigManager.scrollSpecificPage(page);
 			NatsuiroListeners.Rotation();
+			quest_extender(false);
 		}
 		$(".rotation .rotarBack").on("click",function() {setRotation(1);});
 		$(".rotation .rotarExpedition").on("click",function() {setRotation(2);});
@@ -644,6 +654,7 @@
 		function setRotation2(page) {
 			ConfigManager.scrollSpecific2Page(page);
 			NatsuiroListeners.Rotation2();
+			quest_extender(false);
 		}
 		$(".rotation2 .rotarBack").on("click",function() {setRotation2(1);});
 		$(".rotation2 .rotarExpedition").on("click",function() {setRotation2(2);});
@@ -652,7 +663,18 @@
 		$(".rotation2 .rotarConsumables").on("click",function() {setRotation2(5);});
 		$(".layout_header").text( KC3Meta.term("PanelLayoutSelection") );
 
-		//consumable display
+		// adjust elements so that the quest list can display more quests
+		$(".rotarSquish").on("click",function() {
+			if(ConfigManager.pan_layout <= 2) {
+				setRotation2(1);
+			}
+			else if(ConfigManager.pan_layout == 4) {
+				setRotation(1);
+			}
+			quest_extender(true);
+		});
+
+		// consumable display
 		var consumable_elements = [
 							".consumable_rsc_toggle,.consumable_rsc",
 							".consumable_basics_toggle,.consumable_basics",
@@ -781,22 +803,15 @@
 				)));
 		});
 
-		$(".module.layouts .btn_change_layout").on("click", function(){
-			ConfigManager.setLayout(1);
+		function changeLayout(type) {
+			ConfigManager.setLayout(type);
 			Orientation();
-		});
-		$(".module.layouts .btn_change_layout2").on("click", function(){
-			ConfigManager.setLayout(2);
-			Orientation();
-		});
-		$(".module.layouts .btn_change_layout3").on("click", function(){
-			ConfigManager.setLayout(3);
-			Orientation();
-		});
-		$(".module.layouts .btn_change_layout4").on("click", function(){
-			ConfigManager.setLayout(4);
-			Orientation();
-		});
+			quest_extender(false);
+		}
+		$(".module.layouts .btn_change_layout").on("click", function(){changeLayout(1);});
+		$(".module.layouts .btn_change_layout2").on("click", function(){changeLayout(2);});
+		$(".module.layouts .btn_change_layout3").on("click", function(){changeLayout(3);});
+		$(".module.layouts .btn_change_layout4").on("click", function(){changeLayout(4);});
 
 		const prepareBattleLogsData = function(){
 			// Don't pop up if a battle has not started yet
@@ -1049,6 +1064,7 @@
 		(new RMsg("service", "getTabInfo", {
 			tabId: chrome.devtools.inspectedWindow.tabId
 		}, function(tabInfo){
+			localStorage.gameTabUrl = tabInfo.url;
 			errorReport.gameTabUrl = tabInfo.url;
 			try {
 				// if inspected tab is muted, update the mute icon
@@ -1164,6 +1180,7 @@
 		NatsuiroListeners.Rotation();
 		ConfigManager.scrollSpecific2Page(ConfigManager.Rotation2Page);
 		NatsuiroListeners.Rotation2();
+		quest_extender(ConfigManager.pan_moon_quest_extend);
 	}
 
 	function clearSortieData(){
@@ -1216,7 +1233,7 @@
 		$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleNightNeeded")).lazyInitTooltip();
 		$(".module.activity .battle_rating img").attr("src", "../../../../assets/img/ui/dark_rating.png").css("opacity", "");
 		$(".module.activity .battle_rating").attr("title", KC3Meta.term("BattleRating")).lazyInitTooltip();
-		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png");
+		$(".module.activity .battle_drop img").attr("src", "../../../../assets/img/ui/dark_shipdrop.png").removeClass("rounded");
 		$(".module.activity .battle_drop").removeData("masterId").off("dblclick").removeClass("new_ship");
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
@@ -3521,6 +3538,7 @@
 				// If drop spoiler is enabled on settings
 				if(ConfigManager.info_drop) {
 					$(".module.activity .battle_drop img")
+						.addClass("rounded")
 						.attr("src", KC3Meta.shipIcon(thisNode.drop, undefined, false));
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
@@ -3537,7 +3555,10 @@
 				this.GearSlots({});
 			} else {
 				$(".module.activity .battle_drop img")
-					.attr("src", "/assets/img/ui/dark_shipdrop-x.png");
+					.removeClass("rounded")
+					.attr("src", ConfigManager.info_troll ?
+						"/assets/img/ui/jervaited.png" :
+						"/assets/img/ui/dark_shipdrop-x.png");
 			}
 
 			// Show TP deduction
@@ -4951,22 +4972,13 @@
 				});
 				const stats = equipBonus.stats;
 				const statsBox = $("<div></div>").addClass("statsBox border_radius_5").addClass(ConfigManager.pan_moon_element_shape);
-				const statsTermKeyMap = {
-					"fp": "ShipFire",
-					"tp": "ShipTorpedo",
-					"aa": "ShipAntiAir",
-					"ar": "ShipArmor",
-					"ev": "ShipEvasion",
-					"as": "ShipAsw",
-					"ls": "ShipLos",
-				};
 				for (const key in stats) {
 					if (stats[key] !== 0) {
 						$("<div></div>").appendTo(statsBox)
 							.append($("<img/>").attr("src", KC3Meta.statIcon(key)))
 							.append($("<span></span>")
 								.text("{0}{1}".format(stats[key] >= 0 ? "+" : "", stats[key])))
-							.attr("title", KC3Meta.term(statsTermKeyMap[key]) || key)
+							.attr("title", KC3Meta.statNameTerm(key) || key)
 							.lazyInitTooltip();
 					}
 				}

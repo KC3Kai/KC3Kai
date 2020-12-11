@@ -332,6 +332,8 @@ Saves and loads significant data for future use
 		 *     either hard-coded the exception conndition in following codes.
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
+		 *   * [166] AkitsuMaru Kai can equip aviation personnel [402] Arctic Gear & Deck Personnel only,
+		 *     the same hard-code method with Richelieu's one
 		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
@@ -377,6 +379,11 @@ Saves and loads significant data for future use
 			if(type2Id === 11 && gearId !== 194) {
 				const richelieuKaiPos = capableShips.indexOf(392);
 				if(richelieuKaiPos >= 0) capableShips.splice(richelieuKaiPos, 1);
+			}
+			// Remove AkitsuMaru Kai from Aviation Personnel type list except Arctic Gear & Deck Personnel
+			if(type2Id === 35 && gearId !== 402) {
+				const akitsumaruKaiPos = capableShips.indexOf(166);
+				if(akitsumaruKaiPos >= 0) capableShips.splice(akitsumaruKaiPos, 1);
 			}
 			return {
 				stypes: capableStypes,

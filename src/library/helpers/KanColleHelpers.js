@@ -7817,9 +7817,7 @@ var PS = {};
                               (addGroup(fpTotal(60))
                                   (addGroup(torpTotal(390))
                                       (addGroup(aaTotal(80))
-                                          (addGroup(aswTotal(50))
-                                              (losTotal(260))
-                                          )
+                                          (aswTotal(50))
                                       )
                                   )
                               )
@@ -8080,7 +8078,7 @@ var PS = {};
   };
   var allExpeditionIds = Data_Array.range(1)(48);
   allExpeditionIds.push(...Data_Array.range(100)(105));
-  allExpeditionIds.push(...Data_Array.range(110)(113));
+  allExpeditionIds.push(...Data_Array.range(110)(114));
   allExpeditionIds.push(...Data_Array.range(131)(132));
   allExpeditionIds.push(...Data_Array.range(141)(142));
   exports["allExpeditionIds"] = allExpeditionIds;

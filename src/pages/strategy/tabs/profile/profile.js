@@ -146,7 +146,7 @@
 			const usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
 			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
 			
-			// Export all data
+			// Export all profile data
 			$(".tab_profile .export_data").on("click", function(){
 				const keysToExport = [
 					// KC3 configurations
@@ -169,26 +169,49 @@
 				self.saveFile(filename, exportString, "application/json");
 			});
 			
-			// Import data file open dialog
-			$(".tab_profile .import_data").on("click", function(){
-				$(".tab_profile .import_file").trigger("click");
+			// Export settings data in profile only
+			$(".tab_profile .export_config").on("click", function(){
+				// no settings in other keys, only `config` for now
+				const keysToExport = [ "config" ];
+				const exportObject = {};
+				keysToExport.forEach(key => {
+					exportObject[key] = JSON.parse(localStorage[key] || "{}");
+				});
+				// keys related to private will be excluded
+				const keysToExclude = [
+					"PushAlerts_enabled", "PushAlerts_key", "DBSubmission_key",
+					"pan_pvp_friends", "info_salt", "info_troll",
+					"salt_list", "wish_list", "lock_list", "lock_prep",
+				];
+				keysToExclude.forEach(key => {
+					delete exportObject.config[key];
+				});
+				let exportString = JSON.stringify(exportObject);
+				exportObject.hash = exportString.hashCode();
+				exportString = JSON.stringify(exportObject);
+				
+				const filename = self.makeFilename("Settings", "json");
+				self.saveFile(filename, exportString, "application/json");
 			});
 			
-			// On-data has been read
-			var reader = new FileReader();
-			reader.onload = function(theFile){
+			// On data file has been read
+			var profileReader = new FileReader();
+			profileReader.onload = function(theFile){
 				const importedData = JSON.parse(this.result);
 				const hash = importedData.hash;
 				delete importedData.hash;
 				if( JSON.stringify(importedData).hashCode() !== hash ) {
 					alert("Invalid KC3 File. Might have been edited, or from an old KC3 version.");
+					window.location.reload();
 					return;
 				}
 				if(PlayerManager.hq.id && importedData.player.id !== PlayerManager.hq.id &&
 					! confirm("You are going to import a profile from different player, are you sure?")) {
+					window.location.reload();
 					return;
 				}
 				if( ! confirm("Are you sure to overwrite all your current profile data?")) {
+					window.location.reload();
 					return;
 				}
 				for(const key in importedData) {
@@ -198,11 +221,56 @@
 				window.location.reload();
 			};
 			
+			// Import profile data file open dialog
+			$(".tab_profile .import_data").on("click", function(){
+				$(".tab_profile #import_data_input").trigger("click");
+			});
+			
 			// On-selected file to import
-			$(".tab_profile .import_file").on("change", function(event){
+			$(".tab_profile #import_data_input").on("change", function(event){
 				if( event.target.files.length > 0 ){
 					if(window.File && window.FileReader && window.FileList && window.Blob){
-						reader.readAsText( event.target.files[0] );
+						profileReader.readAsText( event.target.files[0] );
+					}else{
+						alert("Unfortunately, file reading is not available on your browser.");
+					}
+				}
+			});
+			
+			var configReader = new FileReader();
+			configReader.onload = function(theFile){
+				const importedData = JSON.parse(this.result);
+				const hash = importedData.hash;
+				delete importedData.hash;
+				// ignore hash verifying here, allow json modification
+				if(!importedData.config || ConfigManager.version < importedData.config.version) {
+					alert("Invalid settings. Might be wrong file, or from a newer KC3 version.");
+					window.location.reload();
+					return;
+				}
+				if(JSON.stringify(importedData).hashCode() !== hash) {
+					console.debug("Settings to be imported hash values different:", JSON.stringify(importedData).hashCode(), hash);
+				}
+				if(!confirm("Are you sure to overwrite all your current settings?")) {
+					window.location.reload();
+					return;
+				}
+				for(const key in importedData) {
+					localStorage[key] = JSON.stringify(importedData[key]);
+				}
+				alert("Settings have been imported, please reload all your KC3 pages!");
+				window.location.reload();
+			};
+			
+			// Trigger import settings file open dialog
+			$(".tab_profile .import_config").on("click", function(){
+				$(".tab_profile #import_config_input").trigger("click");
+			});
+			
+			$(".tab_profile #import_config_input").on("change", function(event){
+				if( event.target.files.length > 0 ){
+					if(window.File && window.FileReader && window.FileList && window.Blob){
+						configReader.readAsText( event.target.files[0] );
 					}else{
 						alert("Unfortunately, file reading is not available on your browser.");
 					}

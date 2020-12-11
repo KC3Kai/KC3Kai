@@ -414,7 +414,7 @@ known IDs see QuestManager
 		} else if(this.isCompleted()){
 			console.log("Re-select quest again:", this.id);
 			this.status = 2;
-			// Reset counter, but do not touch multi-counter (Bw1 for now)
+			// Reset counter, but do not touch multi-counter (Bw1 for example)
 			if(Array.isArray(this.tracking) && this.tracking.length === 1){
 				this.tracking[0][0] = 0;
 			}
