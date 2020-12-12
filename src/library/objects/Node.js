@@ -2135,6 +2135,12 @@ Used by SortieManager
 		const unexpectedList = [];
 		let sunkenShips = 0;
 		let shipCount = PlayerManager.fleets[fleetnum].ships.filter(id => id > 0).length;
+		let shipsOnSortie = [];
+		if (this.playerCombined) {
+			shipsOnSortie = [0, 1].map(fleetId => PlayerManager.fleets[fleetId].ships.filter(id => id > 0));
+		} else {
+			shipsOnSortie = [PlayerManager.fleets[fleetnum].ships.filter(id => id > 0)];
+		}
 		predictedFleet.forEach(({ attacks }, position) => {
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
 
@@ -2385,6 +2391,7 @@ Used by SortieManager
 								position: position,
 								shipCount: shipCount,
 								formation: formation,
+								shipsOnSortie: shipsOnSortie,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
 								combinedFleet: combinedFleetType,
 								rAmmoMod: remainingAmmoModifier,
