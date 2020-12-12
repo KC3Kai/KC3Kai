@@ -18,6 +18,55 @@
 	display:none;
 }
 
+/* OVERLAY: NEXT BUTTON BLOCK
+-----------------------------*/
+.kc3 .overlay_next {
+	font-size: 20px;
+	font-weight: bold;
+	width: 633px;
+	height: 720px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: visible;
+	color: #df0020;
+	z-index: 1000;
+	display: none;
+	pointer-events:none;
+}
+
+.kc3 .overlay_next span {
+	position: absolute;
+	bottom: 0px;
+	left: 5px;
+	pointer-events: auto;
+	white-space: nowrap;
+	cursor: pointer;
+	text-shadow: 1px 1px 1px #555;
+	background: rgba(0,0,0,0.2);
+}
+
+.kc3 .overlay_next .nextButtonBlock {
+	position: absolute;
+	top: 196px;
+	left: 274px;
+	width: 320px;
+	height: 320px;
+	pointer-events: auto;
+	background-position: center;
+}
+.kc3 .overlay_next .nextButtonBlock.bg-grey:after {
+	content: " ";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: block;
+	background: rgba(0,0,0,0.2);
+	border-radius: 15px;
+}
+
 /* OVERLAY: QUEST
 --------------------------*/
 .kc3 .overlays {

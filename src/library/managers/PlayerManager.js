@@ -63,7 +63,7 @@ Does not include Ships and Gears which are managed by other Managers
 			// Update player with new data
 			this.hq.update( data );
 			this.hq.save();
-			
+
 			// Update related managers with new data if exists
 			Object.assignIfDefined(PlayerManager.consumables, "fcoin", data.fcoin);
 			PlayerManager.fleetCount = data.fleetCount;
@@ -577,7 +577,7 @@ Does not include Ships and Gears which are managed by other Managers
 				});
 			});
 		}
-		
+
 	};
 
 })();

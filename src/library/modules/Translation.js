@@ -57,7 +57,7 @@
 		/* APPLY HTML
 		Specialized Language HTML adjustments
 		-----------------------------------------*/
-		applyHTML :function(){
+		applyHTML :function(returnFontFamily){
 			// Apply specialized global fonts
 			var fontFamily = false;
 			switch(ConfigManager.language){
@@ -69,7 +69,10 @@
 				default: break;
 			}
 			if(fontFamily){
+				if(returnFontFamily) return fontFamily;
 				$("body").css("font-family", fontFamily);
+			} else {
+				if(returnFontFamily) return;
 			}
 			
 			// Apply HTML language code, here needs ISO 639-1 abbr code

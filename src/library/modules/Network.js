@@ -9,6 +9,8 @@ Listens to network history and triggers callback if game events happen
 
 	window.KC3Network = {
 		hasOverlay: false,
+		isNextBlockerArmed: false,
+		isNextBlockerNetworkFallback: false,
 		lastUrl: "",
 		eventTypes : {
 			GameStart: [],
@@ -57,6 +59,7 @@ Listens to network history and triggers callback if game events happen
 			entered: false,
 			time: undefined,
 			identifier: undefined,
+			resultRecieved: false,
 		},
 		submissionModuleNames: ["PoiDBSubmission", "TsunDBSubmission"],
 		submissionConfigs: {},
@@ -161,6 +164,8 @@ Listens to network history and triggers callback if game events happen
 							}
 						}
 					});
+					// Do not need to reload here, because it has been already listened and updated in theme scripts
+					//ConfigManager.load();
 				}
 			};
 			// Do not try to call this multiple times, otherwise this is needed:
@@ -235,6 +240,11 @@ Listens to network history and triggers callback if game events happen
 					message.api_result = har.response.statusText;
 					(new RMsg("service", "gameScreenChg", message)).execute();
 				}
+				
+				// When a sortie begins, assume fallback until we know SE isn't muted
+				if(requestUrl.endsWith("/api_req_map/start")){
+					KC3Network.isNextBlockerNetworkFallback = true;
+				}
 			}
 			
 			// If request is a furniture asset
@@ -242,6 +252,15 @@ Listens to network history and triggers callback if game events happen
 				// Clear overlays upon entering furniture menu,
 				// not work everytime since Phase 2 caches assets
 				KC3Network.clearOverlays();
+			}
+			// Node 'sonar ping' sound should always be heard before a battle if SE is on;
+			// Will allow us to determine whether SE is muted for the next blocker
+			if(requestUrl.includes("/resources/se/252.")) {
+				KC3Network.isNextBlockerNetworkFallback = false;
+			}
+			// If it's switching to NextNode or Yasen screen (might be others?)
+			if(requestUrl.includes("/resources/se/217.")){
+				KC3Network.triggerNextBlock(undefined, true);
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,
 			// to activiate and focus on game tab before battle result API call,
@@ -267,10 +286,11 @@ Listens to network history and triggers callback if game events happen
 		/**
 		 * Set some state attributes for tracking events of game battle.
 		 */
-		setBattleEvent :function(isEntered = false, time = undefined, identifier = undefined){
+		setBattleEvent :function(isEntered = false, time = undefined, identifier = undefined, isResultReceived = false){
 			this.battleEvent.entered = isEntered;
 			this.battleEvent.time = time;
 			this.battleEvent.identifier = identifier;
+			this.battleEvent.resultRecieved = isResultReceived;
 		},
 
 		/**
@@ -408,6 +428,57 @@ Listens to network history and triggers callback if game events happen
 					tabId: chrome.devtools.inspectedWindow.tabId
 				})).execute();
 			}
+		},
+
+		/* NEXT BLOCK TRIGGER
+		signals to game tab that next button blocking overlay needs to be shown
+		triggered either by network request to results or SE network request
+		-------------------------------------------------------*/
+		triggerNextBlock: function(effectiveTaihaFlag, bySE = false) {
+			if(typeof effectiveTaihaFlag === "boolean") {
+				/* For every time it checks HP predictions.
+				 * If any ship predicted to be in Taiha, it arms locker in game page preventing player from advancing into next node.
+				 * TODO cases like 1-6, where next node is end node without battle and it is safe to advance.
+				 * TODO get FCF info and find a method to delay blocker after denying FCF decision screen.
+				 */
+				this.isNextBlockerArmed = effectiveTaihaFlag;
+			}
+			let toShowNextBlock = false;
+			if (ConfigManager.next_blocker > 0 && this.isNextBlockerArmed) {
+				if (bySE) {
+					if (this.battleEvent.resultRecieved) {
+						toShowNextBlock = true;
+					} else {
+						// battle result wasn't recieved, it must be yasen switch? do nothing.
+					}
+				} else {
+					if (ConfigManager.next_blocker === 2 || this.isNextBlockerNetworkFallback) {
+						// not from SE check or setting selected api check,
+						// start showing block from fleets result and drop screen.
+						toShowNextBlock = true;
+					} else {
+						// se/217.mp3 might fire twice. once for yasen and once for next node,
+						// this flag prevents blocking until result data actually recieved.
+						// if player wants it through sound warnings we must signal that we got result to distinguish it from yasen switch.
+						// this flag has been already set by #setBattleEvent, here just a duplication.
+						this.battleEvent.resultRecieved = true;
+					}
+				}
+			}
+			if (toShowNextBlock) {
+				this.hasOverlay = true;
+				(new RMsg("service", "showNextBlock", {
+					tabId: chrome.devtools.inspectedWindow.tabId,
+					fairy: bySE
+				})).execute();
+			}
+		},
+
+		/* Disarms Next Node Blocker */
+		disarmNextBlock :function(){
+			this.isNextBlockerArmed = false;
+			this.setBattleEvent(false);
+			this.clearOverlays();
 		},
 
 		/* CLEAR OVERLAYS
