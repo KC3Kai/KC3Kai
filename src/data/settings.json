@@ -778,6 +778,14 @@
 				}
 			},
 			{
+				"id" : "next_blocker_unlocked",
+				"name" : "SettingsNextBlockerUnlocked",
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsNextBlockerUnlockedTip"
+				}
+			},
+			{
 				"id" : "next_blocker_2_fs",
 				"name" : "SettingsNextBlockerSecondFS",
 				"type" : "check",
