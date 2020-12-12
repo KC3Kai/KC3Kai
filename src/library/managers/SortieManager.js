@@ -551,7 +551,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const nextEdgesAmount = this.currentNode().nodeData.api_next;
 			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
 			// To check FCF correctly on battle result screen, have to first invoke `#checkFCF` (in another word `#resultScreen`)
+			// for now ignoring FCF decision screen, still show next blocker
 			//const fcfInfo = this.getCurrentFCF();
+			//if(fcfInfo.isAvailable && KC3Network.battleEvent.identifier !== "goback_port") isSafeToAdvance = true;
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
@@ -595,6 +597,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getCurrentFCF :function(){
+			// About FCF usages and mechanism, see:
+			// https://wikiwiki.jp/kancolle/%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8%E6%96%BD%E8%A8%AD
+			// https://kancolle.fandom.com/wiki/Fleet_Command_Facility
 			// For now only to event map, can sortie with CF and SF
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);

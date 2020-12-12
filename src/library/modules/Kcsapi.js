@@ -1374,6 +1374,12 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/goback_port":function(params, response, headers){
 			KC3SortieManager.sendFCFHome();
+			// Since battle event flags reset to null for every API calls,
+			// assuming this call always following a battleresult call,
+			// have to set flags again, re-check and show next blocker if still needed
+			KC3Network.setBattleEvent(false, "result", "goback_port", true);
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(),
+				ConfigManager.next_blocker === 1 && !KC3Network.isNextBlockerNetworkFallback);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
