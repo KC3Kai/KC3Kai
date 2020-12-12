@@ -1197,6 +1197,7 @@
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
+			const starshellActivated = !!thisNode.flarePos;
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }
@@ -1215,6 +1216,10 @@
 					let target = attack.target[0];
 					let enemy = enemyList[target];
 					const time = attack.cutin >= 0 ? "day" : "yasen";
+					if (time == "yasen") {
+						shipInfo.starshellActivated = starshellActivated;
+						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
+					}
 					this.eventAccuracy = Object.assign({}, template, {
 						enemy, time,
 						ship: shipInfo,
