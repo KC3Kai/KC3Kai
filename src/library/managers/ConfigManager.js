@@ -7,11 +7,11 @@ Retrieves when needed to apply on components
 */
 (function(){
 	"use strict";
-	
+
 	const CONFIG_KEY_NAME = "config";
-	
+
 	window.ConfigManager = {
-		
+
 		// Default values. As a function to not include on JSON string
 		defaults : function(){
 			return {
@@ -125,6 +125,8 @@ Retrieves when needed to apply on components
 				alert_taiha_damecon  : false,
 				alert_taiha_unlock   : false,
 				alert_taiha_noanim   : false,
+				next_blocker         : 0,
+				next_blocker_2_fs    : false,
 
 				api_translation   : true,
 				api_tracking      : true,
@@ -218,11 +220,11 @@ Retrieves when needed to apply on components
 				hoursToKeepErrors      : 168,
 			};
 		},
-		
+
 		keyName : function(){
 			return CONFIG_KEY_NAME;
 		},
-		
+
 		// Reset value of a specific key to the current default value
 		resetValueOf : function(key){
 			ConfigManager.loadIfNecessary();
@@ -230,7 +232,7 @@ Retrieves when needed to apply on components
 			console.log("Reset config key", key, "to default:", JSON.stringify(this[key]) );
 			this.save();
 		},
-		
+
 		// Reset to default values
 		clear : function(){
 			$.extend(this, this.defaults());
@@ -243,12 +245,12 @@ Retrieves when needed to apply on components
 			var self = this;
 			// Get old config or create dummy if none
 			var oldConfig = JSON.parse(localStorage[CONFIG_KEY_NAME] || "{}");
-			
+
 			['salt','wish','lock'].forEach(function(shipListType){
 				var k = [shipListType,'list'].join('_');
 				oldConfig[k] = self.defaults()[k].concat(oldConfig[k] || []);
 			});
-			
+
 			// Check if old config has versioning and if its lower version
 			if( !oldConfig.version || (oldConfig.version < this.defaults().version) ){
 				// Old config is an old version, clear it, set defaults, and save on storage
@@ -259,31 +261,31 @@ Retrieves when needed to apply on components
 				// Merge defaults, then old config values to ConfigManager
 				$.extend(this, this.defaults(), oldConfig);
 			}
-			
+
 			/* Force Revert */
 			if(this.language == "troll")
 				this.resetValueOf('language');
 		},
-		
+
 		loadIfNecessary : function(){
 			var currentConfig = JSON.stringify(this);
 			if(currentConfig !== localStorage[CONFIG_KEY_NAME]){
 				this.load();
 			}
 		},
-		
+
 		// Save current config onto localStorage
 		save : function(){
 			localStorage[CONFIG_KEY_NAME] = JSON.stringify(this);
 		},
-		
+
 		isNotToSaveSortie : function(world, map){
 			const mapId = Number([world, map].join('')) || "ShouldNotMatch";
 			return !this.idbSaveSortie ||
 				(Array.isArray(this.idbSaveExcludeMaps) &&
 				this.idbSaveExcludeMaps.indexOf(mapId) > -1);
 		},
-		
+
 		// Return the corresponding language code supported by now, see Translation.js#getLocale
 		detectBrowserLanguage : function(browserLangTag){
 			// Dummy for environment without `navigator` and `chrome.i18n` api
@@ -317,12 +319,12 @@ Retrieves when needed to apply on components
 			// Fall-back to `en` for unsupported language
 			return result || "en";
 		},
-		
+
 		// Current maximum pages of HQ info
 		getMaxHqInfoPage :function(){
 			return 4;
 		},
-		
+
 		// Toggle HQ Info Page
 		scrollHqInfoPage :function(){
 			this.loadIfNecessary();
@@ -386,7 +388,7 @@ Retrieves when needed to apply on components
 			this.air_formula = (this.air_formula % 3) + 1;
 			this.save();
 		},
-		
+
 		// Toggle Player Formation Type (former AntiAir Formation)
 		// Loop between all formations, according combined fleet state:
 		// Line Ahead / Double Line / Diamond / Echelon / Line Abreast, or
@@ -402,38 +404,38 @@ Retrieves when needed to apply on components
 			}
 			this.save();
 		},
-		
+
 		// Toggle HQ Exp Information
 		scrollHQExpInfo :function(){
 			this.loadIfNecessary();
 			this.hqExpDetail = (this.hqExpDetail % 3) + 1;
 			this.save();
 		},
-		
+
 		// Toggle Rank Title vs Rank Points
 		scrollRankPtsMode :function(){
 			this.loadIfNecessary();
 			this.rankPtsMode = (this.rankPtsMode % 2) + 1;
 			this.save();
 		},
-		
+
 		// Toggle repair timer type
 		scrollTimerType :function(){
 			this.loadIfNecessary();
 			this.timerDisplayType = (this.timerDisplayType % 2) + 1;
 			this.save();
 		}
-		
+
 	};
-	
+
 	var
 		IntFilterArray = function(filterFun){
 			function LocalArray(){}
 			LocalArray.prototype = [];
-			
+
 			// http://stackoverflow.com/questions/1960473/unique-values-in-an-array
 			function arrayUniquefy(x,i,a){ return a.indexOf(x) === i; }
-			
+
 			// http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/
 			function KC3ShipList(){
 				if(this instanceof KC3ShipList){
@@ -446,10 +448,10 @@ Retrieves when needed to apply on components
 					throw new Error("Cannot invoke constructor without `new` keyword");
 				}
 			}
-			
+
 			KC3ShipList.prototype = new LocalArray();
 			KC3ShipList.prototype.constructor = KC3ShipList;
-			
+
 			Object.defineProperties(KC3ShipList.prototype,{
 				push:{value:function push(){
 					var _push,_args,nAry,nLen;
@@ -469,7 +471,7 @@ Retrieves when needed to apply on components
 					_ushf(nAry);
 					return nLen;
 				}},
-				
+
 				concat:{value:function concat(){
 					var _slic,_args;
 					_slic = Function.prototype.apply.bind(Array.prototype.slice);
@@ -485,7 +487,7 @@ Retrieves when needed to apply on components
 					ary   = _slic(this,_args);
 					return new (KC3ShipList.bind.apply(KC3ShipList,[null].concat(ary)))();
 				}},
-				
+
 				exists:{value:function exists(){
 					var _slic,_args,self;
 					_slic = Function.prototype.apply.bind(Array.prototype.slice);
@@ -495,7 +497,7 @@ Retrieves when needed to apply on components
 						return self.indexOf(requestInt)>=0;
 					});
 				}},
-				
+
 				toJSON:{value:function toJSON(){return [].slice.apply(this);}},
 			});
 			return KC3ShipList;
@@ -508,5 +510,5 @@ Retrieves when needed to apply on components
 			var ret = !isNaN(x) && isFinite(x) && typeof x === 'number' && !this.exists(x);
 			try { ret &= KC3ShipManager.get(x).rosterId == x; } catch (e) {} finally { return ret; }
 		});
-	
+
 })();

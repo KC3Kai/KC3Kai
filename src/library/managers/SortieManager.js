@@ -534,6 +534,48 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			});
 		},
 		
+		applyShipsAfterHp :function(){
+			PlayerManager.fleets.forEach(fleet => {
+				fleet.ship((rosterId, slotId, shipData) => {
+					shipData.hp[0] = shipData.afterHp[0];
+				});
+			});
+		},
+		
+		checkTaihaShips :function(){
+			// To check Taiha correctly on battle result screen, have to apply predicted afterHp first (invoke `#applyShipsAfterHp`)
+			let hasTaihaShip = false;
+			let isForcedToRetreat = false;
+			let isSafeToAdvance = false;
+			// No Taiha blocker needed if current battle node is an end point of the map, such as boss
+			const nextEdgesAmount = this.currentNode().nodeData.api_next;
+			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
+			// To check FCF correctly on battle result screen, have to first invoke `#checkFCF` (in another word `#resultScreen`)
+			// for now ignoring FCF decision screen, still show next blocker
+			//const fcfInfo = this.getCurrentFCF();
+			//if(fcfInfo.isAvailable && KC3Network.battleEvent.identifier !== "goback_port") isSafeToAdvance = true;
+			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
+				const fleet = PlayerManager.fleets[fleetId];
+				fleet.ship().forEach((ship, slotIdx) => {
+					// skip ships: not taiha, already escaped/sunk, damecon still equipped
+					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0) {
+						return;
+					}
+					// flagship of first fleet in taiha with no damecon
+					if (fleetIdx === 0 && slotIdx === 0) {
+						isForcedToRetreat = true;
+					}
+					// ignore taiha state of combined escort fleet flagship if setting demands
+					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) {
+						return;
+					}
+					hasTaihaShip = true;
+				});
+			});
+			console.debug("Taiha ship in fleets found?", hasTaihaShip, "flagship?", isForcedToRetreat, "safe to next?", isSafeToAdvance);
+			return hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance;
+		},
+		
 		checkFCF :function(escapeData){
 			if (escapeData) {
 				const getRetreatableShipId = (escapeIdx) => {
@@ -555,6 +597,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getCurrentFCF :function(){
+			// About FCF usages and mechanism, see:
+			// https://wikiwiki.jp/kancolle/%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8%E6%96%BD%E8%A8%AD
+			// https://kancolle.fandom.com/wiki/Fleet_Command_Facility
 			// For now only to event map, can sortie with CF and SF
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);

@@ -33,6 +33,7 @@
 			chrome.runtime.onMessage.addListener(this.getWindowSize());
 			chrome.runtime.onMessage.addListener(this.getGamescreenOffset());
 			chrome.runtime.onMessage.addListener(this.idleTimer());
+			chrome.runtime.onMessage.addListener(this.nextBlockShow());
 		},
 
 		/* WINDOW KEEP FOCUS, NOT FLASH
@@ -70,6 +71,8 @@
 		Looking at ReactJS for KC3KaiNi
 		--------------------------------------*/
 		attachHTML: function(){
+			const self = this;
+
 			// Overlay screens
 			var overlays = $("<div>").addClass("overlays notranslate").appendTo("#area-game");
 
@@ -86,6 +89,18 @@
 			var overlay_idle = $("<div>").addClass("overlay_box overlay_idle")
 				.append($("<span>"));
 			overlays.append(overlay_idle);
+
+			var overlay_nextBlock = $("<div>").addClass("overlay_next notranslate")
+				.append($("<div>").addClass("nextButtonBlock"))
+				.append(
+					$("<span>").html(KC3Meta.term("NextButtonBlockOverlay")).click(function() {
+						// Equivalent to F10 key, no confirm dialogue for now
+						//if (confirm(KC3Meta.term("NextButtonBlockOverlayConfirmRemove"))) {
+							self.clearOverlays()({action: "clearOverlays"}, {}, function() {});
+						//}
+					})
+				)
+				.appendTo("#area-game");
 
 			// Clonable Factory
 			var factory = $("<div>").attr("id", "factory").appendTo("body");
@@ -123,6 +138,8 @@
 				position: 'relative',
 				zoom: this.gameZoomScale
 			});
+			var altFontFamily = KC3Translation.applyHTML(true);
+			if(altFontFamily) $("#area-game").css("font-family", altFontFamily);
 			$("#game_frame").css({
 				width: 1200,
 				height: 720
@@ -534,6 +551,28 @@
 			};
 		},
 
+		/* NEXT BUTTON BLOCK CHECKER
+		Displays blocking overlay over area where next button is supposed to apear
+		--------------------------------------*/
+		nextBlockShow: function () {
+			return function (request, sender, response) {
+				if (request.action != "nextBlockShow") return true;
+				if (request.fairy) {
+					const fid = Math.floor(Math.random() * 6);
+					const furl = chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
+					$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
+					$(".nextButtonBlock").css("background-position", "center");
+					$(".nextButtonBlock").addClass("bg-grey");
+					$(".overlay_next").show();
+				} else {
+					$(".nextButtonBlock").css("background", "");
+					$(".nextButtonBlock").removeClass("bg-grey");
+					$(".overlay_next").show();
+				}
+				response({success: true});
+			};
+		},
+
 		/* CLEAR OVERLAYS
 		Empties or hides current shown or filled overlays
 		--------------------------------------*/
@@ -553,6 +592,7 @@
 				$(".overlay_quests").empty();
 				$(".overlay_markers").empty();
 				$(".overlay_subtitles span").empty();
+				$(".overlay_next").hide();
 				response({success:true});
 			};
 		},

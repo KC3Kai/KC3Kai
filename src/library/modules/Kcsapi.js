@@ -169,6 +169,8 @@ Previously known as "Reactor"
 			if(response.api_data.api_event_object){
 				KC3Network.trigger("DebuffNotify", response.api_data.api_event_object);
 			}
+			// To forcibly remove "next blocker" once in port
+			KC3Network.disarmNextBlock();
 		},
 		
 		/*-------------------------------------------------------*/
@@ -1338,16 +1340,11 @@ Previously known as "Reactor"
 			resultScreenQuestFulfillment(response.api_data);
 			
 			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.applyShipsAfterHp();
 			
-			if(!ConfigManager.info_delta)
-				KC3Network.trigger("HQ");
-			
-			PlayerManager.fleets.forEach(function(fleet){
-				fleet.ship(function(rosterId,slotId,shipData){
-					shipData.hp[0] = shipData.afterHp[0];
-				});
-			});
-			KC3Network.setBattleEvent(false, "result", "battleresult");
+			KC3Network.setBattleEvent(false, "result", "battleresult", true);
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(), false);
+			if(!ConfigManager.info_delta) KC3Network.trigger("HQ");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
@@ -1361,16 +1358,11 @@ Previously known as "Reactor"
 			resultScreenQuestFulfillment(response.api_data);
 			
 			KC3SortieManager.resultScreen( response.api_data );
+			KC3SortieManager.applyShipsAfterHp();
 			
-			if(!ConfigManager.info_delta)
-				KC3Network.trigger("HQ");
-			
-			PlayerManager.fleets.forEach(function(fleet){
-				fleet.ship(function(rosterId,slotId,shipData){
-					shipData.hp[0] = shipData.afterHp[0];
-				});
-			});
-			KC3Network.setBattleEvent(false, "result", "cf_battleresult");
+			KC3Network.setBattleEvent(false, "result", "cf_battleresult", true);
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(), false);
+			if(!ConfigManager.info_delta) KC3Network.trigger("HQ");
 			KC3Network.trigger("Fleet");
 			KC3Network.trigger("BattleResult", response.api_data);
 			KC3Network.trigger("Quests");
@@ -1382,6 +1374,12 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		"api_req_combined_battle/goback_port":function(params, response, headers){
 			KC3SortieManager.sendFCFHome();
+			// Since battle event flags reset to null for every API calls,
+			// assuming this call always following a battleresult call,
+			// have to set flags again, re-check and show next blocker if still needed
+			KC3Network.setBattleEvent(false, "result", "goback_port", true);
+			KC3Network.triggerNextBlock(KC3SortieManager.checkTaihaShips(),
+				ConfigManager.next_blocker === 1 && !KC3Network.isNextBlockerNetworkFallback);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},
@@ -1782,7 +1780,7 @@ Previously known as "Reactor"
 		"api_req_practice/battle_result":function(params, response, headers){
 			resultScreenQuestFulfillment(response.api_data,true);
 			KC3SortieManager.resultScreen(response.api_data);
-			KC3Network.setBattleEvent(false, "result", "p_battle_result");
+			KC3Network.setBattleEvent(false, "result", "p_battle_result", true);
 			KC3Network.trigger("PvPEnd", { result: response.api_data });
 			KC3Network.trigger("Quests");
 		},
