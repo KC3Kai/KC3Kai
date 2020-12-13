@@ -555,14 +555,14 @@ body {
 	color: #df0020;
 	z-index: 1000;
 	display: none;
-	pointer-events:none;
+	pointer-events: none;
 }
 
 .overlay_next span {
 	position: absolute;
 	bottom: 0px;
 	left: 5px;
-	pointer-events: auto;
+	pointer-events: all;
 	white-space: nowrap;
 	cursor: pointer;
 	text-shadow: 1px 1px 1px #555;
@@ -575,7 +575,7 @@ body {
 	left: 274px;
 	width: 320px;
 	height: 320px;
-	pointer-events: auto;
+	pointer-events: all;
 	background-position: center;
 }
 .overlay_next .nextButtonBlock.bg-grey:after {

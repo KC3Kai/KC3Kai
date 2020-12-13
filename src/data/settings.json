@@ -720,7 +720,9 @@
 				"id" : "alert_taiha_unlock",
 				"name" : "SettingsDisableUnlockShips",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsDisableUnlockShipsTip"
+				}
 			},
 			{
 				"id" : "alert_taiha_blur",
@@ -775,14 +777,6 @@
 						[ 1, "SettingsNextBlockerSE" ],
 						[ 2, "SettingsNextBlockerNetwork" ]
 					]
-				}
-			},
-			{
-				"id" : "next_blocker_unlocked",
-				"name" : "SettingsNextBlockerUnlocked",
-				"type" : "check",
-				"options" : {
-					"tooltip": "SettingsNextBlockerUnlockedTip"
 				}
 			},
 			{

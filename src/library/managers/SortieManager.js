@@ -558,18 +558,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
 					// skip ships: not taiha, already escaped/sunk, damecon still equipped
-					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0
-						|| (!ConfigManager.next_blocker_unlocked && !ship.lock)) {
+					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0) {
 						return;
 					}
 					// flagship of first fleet in taiha with no damecon
 					if (fleetIdx === 0 && slotIdx === 0) {
 						isForcedToRetreat = true;
 					}
+					// ignore taiha state of non-heart-locked ships if setting demands
+					if (ConfigManager.alert_taiha_unlock && !ship.lock) { return; }
 					// ignore taiha state of combined escort fleet flagship if setting demands
-					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) {
-						return;
-					}
+					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) { return; }
 					hasTaihaShip = true;
 				});
 			});
