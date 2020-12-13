@@ -1,0 +1,104 @@
+name: Node.js CI
+
+on: [push, pull_request]
+
+jobs:
+# TEST TO BUILD
+  test:
+    name: Test to build
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node-version: [6.x]
+        os: [ubuntu-16.04]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Use npm test
+      timeout-minutes: 10
+      run: |
+        npm install -g grunt-cli
+        npm install
+        npm test
+
+# BUILD PACKAGE AND DEPLOY
+  build:
+    name: Build and deploy
+    runs-on: ${{ matrix.os }}
+    needs: [test]
+    # only runs when push to webstore branch
+    if: endsWith(github.ref, '/webstore') && github.event_name == 'push'
+
+    strategy:
+      matrix:
+        node-version: [6.x]
+        os: [ubuntu-16.04]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      timeout-minutes: 10
+      run: |
+        npm install -g grunt-cli
+        npm install
+        patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch
+        npm install
+    - name: Get package version
+      # https://github.com/nyaayaya/package-version
+      uses: nyaayaya/package-version@v1
+    - name: Build release
+      timeout-minutes: 10
+      run: |
+        grunt build
+        echo KC3Kai $PACKAGE_VERSION package build/release.zip will be built
+    # DEPLOY TO CHROME WEBSTORE
+    - name: Publish to webstore
+      timeout-minutes: 10
+      env:
+        WEBSTORE_CLIENT_ID: ${{ secrets.WEBSTORE_CLIENT_ID }}
+        WEBSTORE_CLIENT_SECRET: ${{ secrets.WEBSTORE_CLIENT_SECRET }}
+        WEBSTORE_REFRESH_TOKEN: ${{ secrets.WEBSTORE_REFRESH_TOKEN }}
+      run: grunt webstore
+    # DEPLOY TO GITHUB RELEASES
+    - name: Push git tag
+      timeout-minutes: 10
+      env:
+        KC3_VERSION: ${{ env.PACKAGE_VERSION }}
+        GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
+      run: |
+        git config --global user.email "dragonjet@kc3.moe"
+        git config --global user.name "dragonjet"
+        git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
+        git push -q https://dragonjet:$GITHUB_TOKEN@github.com/KC3Kai/KC3Kai --tags
+    - name: Create release
+      id: create_release
+      # https://github.com/actions/create-release
+      uses: actions/create-release@v1
+      env:
+        KC3_VERSION: ${{ env.PACKAGE_VERSION }}
+        GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
+      with:
+        tag_name: ${{ env.KC3_VERSION }}
+        release_name: ${{ env.KC3_VERSION }}
+        draft: false
+        prerelease: false
+    - name: Upload release asset
+      # https://github.com/actions/upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        KC3_VERSION: ${{ env.PACKAGE_VERSION }}
+        GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/release.zip
+        asset_name: kc3kai-${{ env.KC3_VERSION }}.zip
+        asset_content_type: application/zip
