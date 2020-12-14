@@ -1,38 +1,15 @@
-name: Node.js CI
+# BUILD AND DEPLOY PACKAGE ON WEBSTORE PUSH
+name: CI Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - webstore
 
 jobs:
-# TEST TO BUILD
-  test:
-    name: Test to build
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        node-version: [6.x]
-        os: [ubuntu-16.04]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Use npm test
-      timeout-minutes: 10
-      run: |
-        npm install -g grunt-cli
-        npm install
-        npm test
-
-# BUILD PACKAGE AND DEPLOY
   build:
     name: Build and deploy
     runs-on: ${{ matrix.os }}
-    needs: [test]
-    # only runs when push to webstore branch
-    if: endsWith(github.ref, '/webstore') && github.event_name == 'push'
 
     strategy:
       matrix:
@@ -40,6 +17,7 @@ jobs:
         os: [ubuntu-16.04]
 
     steps:
+    # PREPARE SOURCE CODES AND DEPENDENCIES
     - uses: actions/checkout@v2
     - name: Use node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -52,6 +30,11 @@ jobs:
         npm install
         patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch
         npm install
+    # ENSURE CODES TESTED SINCE JOBS RUN IN PARALLEL
+    - name: Unit tests
+      timeout-minutes: 10
+      run: npm test
+    # BUILD CODES TO RELEASE
     - name: Get package version
       # https://github.com/nyaayaya/package-version
       uses: nyaayaya/package-version@v1
@@ -60,7 +43,7 @@ jobs:
       run: |
         grunt build
         echo KC3Kai $PACKAGE_VERSION package build/release.zip will be built
-    # DEPLOY TO CHROME WEBSTORE
+    # PACKAGE AND DEPLOY TO CHROME WEBSTORE
     - name: Publish to webstore
       timeout-minutes: 10
       env:
