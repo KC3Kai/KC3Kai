@@ -59,7 +59,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_API_KEY }}
       run: |
         git config --global user.email "dragonjet@kc3.moe"
-        git config --global user.name "dragonjet"
+        git config --global user.name "Github Actions"
         git tag $KC3_VERSION -a -m "Automated GitHub release for $KC3_VERSION"
         git push -q https://dragonjet:$GITHUB_TOKEN@github.com/KC3Kai/KC3Kai --tags
     - name: Create release
