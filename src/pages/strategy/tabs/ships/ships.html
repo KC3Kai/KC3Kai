@@ -5,8 +5,8 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">Where is the heartlock, speed or marry column?</div>
-	<div class="help_a">They are currently disabled or hidden by the limitation of page width.</div>
+	<div class="help_q">Where is the heartlock, fuel, ammo, speed or marry column?</div>
+	<div class="help_a">They are currently merged or hidden by the limitation of page width.</div>
 	<div class="help_q">Where are the ship types of XBB and AP?</div>
 	<div class="help_a">They are not used by our shipgirls (AP taken by abyssal).</div>
 	<div class="help_q">Can I filter or sort by current HP or repair time of my shipgirls?</div>
@@ -160,6 +160,9 @@
 		<div class="level_end_label">to</div>
 		<input type="text" class="level_end_input" />
 	</div>
+	<div class="input_filter control_buttons">
+		<div class="show_hidden_columns hover">&emsp;&emsp;</div>
+	</div>
 	<div class="clear"></div>
 
 	<div class="fleet_stats_label hover">Statistics of filtered ships:
@@ -237,6 +240,10 @@
 
 			<div class="ship_field hover ship_stat ship_fuel i18n_title not_stat hidden" title="ShipFuel" data-type="fuel"><img src="/assets/img/client/fuel.png" /></div>
 			<div class="ship_field hover ship_stat ship_ammo i18n_title not_stat hidden" title="ShipAmmo" data-type="ammo"><img src="/assets/img/client/ammo.png" /></div>
+			<div class="ship_field hover ship_stat ship_cost i18n_title not_stat hidden" title="ShipCost" data-type="cost"><img src="/assets/img/ui/dark_day.png" /></div>
+			<div class="ship_field hover ship_stat ship_sp i18n_title hidden" title="ShipSpeed" data-type="sp"><img src="/assets/img/stats/sp.png" /></div>
+			<div class="ship_field hover ship_stat ship_rn i18n_title hidden" title="ShipLength" data-type="rn"><img src="/assets/img/stats/rn.png" /></div>
+			<div class="ship_field hover ship_stat ship_ac i18n_title hidden" title="ShipCarry" data-type="ac"><img src="/assets/img/stats/ac.png" /></div>
 
 			<div class="ship_field ship_equip">Equipment</div>
 			<div class="clear"></div>
@@ -274,6 +281,10 @@
 
 			<div class="ship_field ship_stat ship_fuel hidden"></div>
 			<div class="ship_field ship_stat ship_ammo hidden"></div>
+			<div class="ship_field ship_stat ship_cost hidden"></div>
+			<div class="ship_field ship_stat ship_sp hidden"></div>
+			<div class="ship_field ship_stat ship_rn hidden"></div>
+			<div class="ship_field ship_stat ship_ac hidden"></div>
 
 			<div class="ship_field ship_equip">
 				<div class="ship_equip_icon ship_equip_1 hover"><img/><span></span></div>

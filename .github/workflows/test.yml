@@ -1,0 +1,27 @@
+# TEST ON ALL BRANCHES AND EVENTS
+name: CI Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Unit tests
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node-version: [6.x]
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Use npm test
+      timeout-minutes: 10
+      run: |
+        npm install -g grunt-cli
+        npm install
+        npm test

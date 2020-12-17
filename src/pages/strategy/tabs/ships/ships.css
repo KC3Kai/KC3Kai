@@ -240,6 +240,9 @@
 	line-height:18px;
 	padding:0px 4px 0px 4px;
 }
+.tab_ships .control_buttons .show_hidden_columns {
+	height:18px;
+}
 
 .tab_ships .advanced_sorter .filter_box {
 	width:10px;

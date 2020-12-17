@@ -453,7 +453,9 @@
 			this.cleanOnStart();
 			const apiData = http.response.api_data;
 			this.data.sortiedFleet = Number(http.params.api_deck_id);
-			this.data.fleetType = PlayerManager.combinedFleet;
+
+			// Includes a sanity check, just in case someone sets a CF and sorties 3rd or 4th fleet instead.
+			this.data.fleetType = (this.data.sortiedFleet > 1) ? 0 : PlayerManager.combinedFleet;
 			
 			// Sets amount of nodes value in NodeInfo
 			this.data.nodeInfo.amountOfNodes = apiData.api_cell_data.length;
