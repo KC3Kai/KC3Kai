@@ -647,6 +647,8 @@ KC3改 Ship Object
 			lk: (this.master().api_luck || [])[0] || this.lk[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
+			rn: this.master().api_leng,
+			sp: this.master().api_soku,
 			// Accuracy not shown in-game, so naked value might be plus-minus 0
 			ht: 0
 		};
@@ -660,8 +662,7 @@ KC3改 Ship Object
 			"houg": "fp",
 			"saku": "ls",
 			"raig": "tp",
-			"houm": "ht",
-			"leng": "rn",
+			"houm": "ht", // will be negative (0 - accuracy from gears)
 			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {
@@ -1302,9 +1303,7 @@ KC3改 Ship Object
 			if(forLbas && type2 === 49){
 				const los = gear.master().api_saku;
 				reconModifier = Math.max(reconModifier,
-					(los <= 7) ? 1.15 : // unknown
-					(los >= 9) ? 1.18 :
-					1.15
+					los >= 9 ? 1.18 : 1.15
 				);
 			}
 		});
@@ -1327,13 +1326,13 @@ KC3改 Ship Object
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.2 :
 						(los >= 9) ? 1.3 :
-						1 // unknown
+						1.2 // unknown
 					);
 				// LB Recon Aircraft
 				} else if(type2 === 49){
 					reconModifier = Math.max(reconModifier,
 						(los <= 7) ? 1.18 : // unknown
-						(los >= 9) ? 1.24 :
+						(los >= 9) ? 1.23 :
 						1.18
 					);
 				// Recon Seaplane, Flying Boat, etc

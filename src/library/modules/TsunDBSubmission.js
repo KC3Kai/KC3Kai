@@ -453,7 +453,9 @@
 			this.cleanOnStart();
 			const apiData = http.response.api_data;
 			this.data.sortiedFleet = Number(http.params.api_deck_id);
-			this.data.fleetType = PlayerManager.combinedFleet;
+
+			// Includes a sanity check, just in case someone sets a CF and sorties 3rd or 4th fleet instead.
+			this.data.fleetType = (this.data.sortiedFleet > 1) ? 0 : PlayerManager.combinedFleet;
 			
 			// Sets amount of nodes value in NodeInfo
 			this.data.nodeInfo.amountOfNodes = apiData.api_cell_data.length;
@@ -1197,6 +1199,7 @@
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
+			const starshellActivated = !!thisNode.flarePos;
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }
@@ -1215,6 +1218,10 @@
 					let target = attack.target[0];
 					let enemy = enemyList[target];
 					const time = attack.cutin >= 0 ? "day" : "yasen";
+					if (time == "yasen") {
+						shipInfo.starshellActivated = starshellActivated;
+						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
+					}
 					this.eventAccuracy = Object.assign({}, template, {
 						enemy, time,
 						ship: shipInfo,

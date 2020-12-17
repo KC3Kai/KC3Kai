@@ -338,6 +338,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Dud";
 			}
 			// Resource Node (CellTaskItem)
+			// since event fall 2020 (E49-1 U), the anchor icon (api_color_no = 8) is also used instead of green dot (api_color_no = 2)
 			// api_event_id = 2
 			else if (typeof nodeData.api_itemget !== "undefined") {
 				nodeKind = "Resource";
@@ -360,6 +361,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				nodeKind = "Bounty";
 			}
 			// Transport Node (CellTaskLanding), event only for now
+			// since event fall 2020 (E49-3 M/U), the anchor icon (api_color_no = 8, used by previous type) is used instead of green dot (api_color_no = 6)
 			// api_event_id = 9
 			else if (nodeData.api_event_id === 9) {
 				nodeKind = "Transport";
@@ -544,6 +546,14 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// To check Taiha correctly on battle result screen, have to apply predicted afterHp first (invoke `#applyShipsAfterHp`)
 			let hasTaihaShip = false;
 			let isForcedToRetreat = false;
+			let isSafeToAdvance = false;
+			// No Taiha blocker needed if current battle node is an end point of the map, such as boss
+			const nextEdgesAmount = this.currentNode().nodeData.api_next;
+			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
+			// To check FCF correctly on battle result screen, have to first invoke `#checkFCF` (in another word `#resultScreen`)
+			// for now ignoring FCF decision screen, still show next blocker
+			//const fcfInfo = this.getCurrentFCF();
+			//if(fcfInfo.isAvailable && KC3Network.battleEvent.identifier !== "goback_port") isSafeToAdvance = true;
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
@@ -555,14 +565,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					if (fleetIdx === 0 && slotIdx === 0) {
 						isForcedToRetreat = true;
 					}
+					// ignore taiha state of non-heart-locked ships if setting demands
+					if (ConfigManager.alert_taiha_unlock && !ship.lock) { return; }
 					// ignore taiha state of combined escort fleet flagship if setting demands
-					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) {
-						return;
-					}
+					if (fleetIdx === 1 && slotIdx === 0 && !ConfigManager.next_blocker_2_fs) { return; }
 					hasTaihaShip = true;
 				});
 			});
-			return hasTaihaShip && !isForcedToRetreat;
+			console.debug("Taiha ship in fleets found?", hasTaihaShip, "flagship?", isForcedToRetreat, "safe to next?", isSafeToAdvance);
+			return hasTaihaShip && !isForcedToRetreat && !isSafeToAdvance;
 		},
 		
 		checkFCF :function(escapeData){
@@ -586,6 +597,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		},
 		
 		getCurrentFCF :function(){
+			// About FCF usages and mechanism, see:
+			// https://wikiwiki.jp/kancolle/%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8%E6%96%BD%E8%A8%AD
+			// https://kancolle.fandom.com/wiki/Fleet_Command_Facility
 			// For now only to event map, can sortie with CF and SF
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);

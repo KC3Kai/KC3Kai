@@ -720,7 +720,9 @@
 				"id" : "alert_taiha_unlock",
 				"name" : "SettingsDisableUnlockShips",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsDisableUnlockShipsTip"
+				}
 			},
 			{
 				"id" : "alert_taiha_blur",
@@ -780,7 +782,10 @@
 			{
 				"id" : "next_blocker_2_fs",
 				"name" : "SettingsNextBlockerSecondFS",
-				"type" : "check"
+				"type" : "check",
+				"options" : {
+					"tooltip": "SettingsNextBlockerSecondFSTip"
+				}
 			}
 		]
 	},

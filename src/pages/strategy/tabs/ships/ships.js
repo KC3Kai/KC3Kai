@@ -248,6 +248,9 @@
 				delete localStorage.srShiplist;
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
+			$(".control_buttons .show_hidden_columns").on("click", function(){
+				$(".hidden").removeClass("hidden");
+			});
 			// Binding click event ends
 
 			// Update ship stats header icon set
@@ -593,6 +596,7 @@
 				lk: [ThisShip.lk[0], ThisShip.lk[1], MasterShip.api_luck[0]],
 				fuel: [MasterShip.api_fuel_max, ThisShip.fuel],
 				ammo: [MasterShip.api_bull_max, ThisShip.ammo],
+				cost: MasterShip.api_fuel_max + MasterShip.api_bull_max,
 				sp: ThisShip.speed,
 				isp: MasterShip.api_soku,
 				range: ThisShip.range,
@@ -600,6 +604,7 @@
 				slots: ThisShip.slots,
 				exSlot: ThisShip.ex_item,
 				slotNum: ThisShip.slotnum,
+				carry: ThisShip.carrySlots(),
 				fleet: ThisShip.onFleet(),
 				ship: ThisShip,
 				master: MasterShip,
@@ -1094,6 +1099,14 @@
 				   function(x) { return x.fuel[1]; });
 			define("ammo", "Ammo",
 				   function(x) { return x.ammo[1]; });
+			define("cost", "Cost",
+				   function(x) { return x.cost; });
+			define("sp", "Speed",
+				   function(x) { return x.sp; });
+			define("rn", "Range",
+				   function(x) { return x.range; });
+			define("ac", "Carry",
+				   function(x) { return x.carry; });
 			define("ctype", "Class",
 				   function(x) { return x.ctype; });
 			define("bid", "Master-ID",
@@ -1223,6 +1236,10 @@
 							$(".ship_hp", this).attr("data-equip-mode", self.equipMode);
 							$(".ship_fuel", this).text( thisShip.fuel[1] );
 							$(".ship_ammo", this).text( thisShip.ammo[1] );
+							$(".ship_cost", this).text( thisShip.cost );
+							$(".ship_sp", this).text( thisShip.sp );
+							$(".ship_rn", this).text( thisShip.range );
+							$(".ship_ac", this).text( thisShip.carry );
 						}
 						// Reset heart-lock icon
 						if((self.heartLockMode === 1 && thisShip.locked)

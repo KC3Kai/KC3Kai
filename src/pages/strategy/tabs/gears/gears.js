@@ -602,13 +602,13 @@
 			)){
 				// accuray icon -> anti-bomber
 				if(statName === "ht" &&
-					KC3GearManager.interceptorsType3Ids.includes(Number(SlotItem.type_id))){
+					KC3GearManager.interceptorsType2Ids.includes(Number(SlotItem.category))){
 					$(".stats .item_ht", ItemElem).attr("title", KC3Meta.term("ShipAccAntiBomber"));
 					$(".stats .item_ht img", ItemElem).attr("src", KC3Meta.statIcon("ib"));
 				}
 				// evasion icon -> interception
 				if(statName === "ev" &&
-					KC3GearManager.interceptorsType3Ids.includes(Number(SlotItem.type_id))){
+					KC3GearManager.interceptorsType2Ids.includes(Number(SlotItem.category))){
 					$(".stats .item_ev", ItemElem).attr("title", KC3Meta.term("ShipEvaInterception"));
 					$(".stats .item_ev img", ItemElem).attr("src", KC3Meta.statIcon("if"));
 				}
