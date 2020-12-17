@@ -19,6 +19,8 @@ jobs:
     steps:
     # PREPARE SOURCE CODES AND DEPENDENCIES
     - uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Use node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
