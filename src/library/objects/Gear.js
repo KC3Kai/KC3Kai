@@ -4760,7 +4760,7 @@ KC3改 Equipment Object
 							{
 								flags: [ "enhancedBoiler" ],
 								byCount: {
-									gear: "newModelBoiler",
+									gear: "enhancedBoiler",
 									"1": { "soku": 5 },
 									"2": { "soku": 10 },
 									"3": { "soku": 10 },

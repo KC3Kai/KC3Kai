@@ -647,6 +647,8 @@ KC3改 Ship Object
 			lk: (this.master().api_luck || [])[0] || this.lk[0],
 			ls: this.ls[0],
 			tp: this.tp[0],
+			rn: this.master().api_leng,
+			sp: this.master().api_soku,
 			// Accuracy not shown in-game, so naked value might be plus-minus 0
 			ht: 0
 		};
@@ -660,8 +662,7 @@ KC3改 Ship Object
 			"houg": "fp",
 			"saku": "ls",
 			"raig": "tp",
-			"houm": "ht",
-			"leng": "rn",
+			"houm": "ht", // will be negative (0 - accuracy from gears)
 			"soku": "sp",
 		};
 		for(const apiName in statApiNames) {

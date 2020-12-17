@@ -720,7 +720,9 @@
 				"id" : "alert_taiha_unlock",
 				"name" : "SettingsDisableUnlockShips",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsDisableUnlockShipsTip"
+				}
 			},
 			{
 				"id" : "alert_taiha_blur",
