@@ -4215,6 +4215,7 @@
 					10:"box1",
 					11:"box2",
 					12:"box3",
+					59:"irako",
 				};
 
 			$(".module.activity .activity_expedition .expres_noget").hide();

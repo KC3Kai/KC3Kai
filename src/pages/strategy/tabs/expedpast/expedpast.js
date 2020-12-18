@@ -312,6 +312,7 @@
 						10:"box1",  // master id
 						11:"box2",  // master id
 						12:"box3",  // master id
+						59:"irako", // master id
 					};
 					// Reward item1 and item2
 					for(const fctr in ThisExped.data.api_useitem_flag) {
