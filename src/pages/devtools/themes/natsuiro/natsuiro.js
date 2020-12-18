@@ -4204,10 +4204,9 @@
 				$(".expres_amt", element).text( data.response.api_get_material[i] );
 			});
 
-			// Extra item get
-			var
-				gotItem = false,
-				useItemMap = { // guess useitem map
+			// Extra item get, `main.js#ExpeditionResultModel.prototype._createItemModel`
+			var gotItem = false,
+				useItemSmallIconMap = {
 					 1:"bucket",
 					 2:"ibuild",
 					 3:"devmat",
@@ -4216,18 +4215,21 @@
 					10:"box1",
 					11:"box2",
 					12:"box3",
-				}; // for item array
+				};
 
 			$(".module.activity .activity_expedition .expres_noget").hide();
 			$(".activity_expedition .expres_item").each(function(i,element){
-				var
-					useCons = data.response.api_useitem_flag[i],
+				var useCons = data.response.api_useitem_flag[i],
 					useItem = data.response["api_get_item"+(i+1)];
 				if(!!useCons && !!useItem) {
 					gotItem |= true;
 					$(element).show();
-					$("img", element).attr("src", "../../../../assets/img/client/"+useItemMap[useCons === 4 ? useItem.api_useitem_id : useCons]+".png");
-					$(".expres_item_text", element).text( useItem.api_useitem_count );
+					var useitemId = useCons === 4 ? useItem.api_useitem_id : useCons,
+						iconFile = useItemSmallIconMap[useitemId] ?
+								"/assets/img/client/"+ useItemSmallIconMap[useitemId] +".png" :
+								KC3Meta.useitemIcon(useitemId);
+					$("img", element).attr("src", iconFile);
+					$(".expres_item_text", element).text(useItem.api_useitem_count);
 				}else{
 					$(element).hide();
 				}

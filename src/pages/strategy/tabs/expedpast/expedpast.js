@@ -303,7 +303,7 @@
 						+".png");
 
 					// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
-					const useItemMap = {
+					const useItemSmallIconMap = {
 						1:"bucket", // flag value
 						2:"ibuild", // flag value
 						3:"devmat", // flag value
@@ -322,9 +322,10 @@
 							const getItem = ThisExped.data["api_get_item" + itemIndex];
 							const useitemId = flag === 4 ? getItem.api_useitem_id : flag;
 							const useitemCount = getItem.api_useitem_count;
-							$("img", itemDiv).attr("src",
-								`/assets/img/client/${useItemMap[useitemId]}.png`
-							).attr("title",
+							const iconFile = useItemSmallIconMap[useitemId] ?
+								`/assets/img/client/${useItemSmallIconMap[useitemId]}.png` :
+								KC3Meta.useitemIcon(useitemId);
+							$("img", itemDiv).attr("src", iconFile).attr("title",
 								KC3Meta.useItemName(useitemId === 5 ? 44 : useitemId)
 							);
 							$("span", itemDiv).text(useitemCount > 1 ? useitemCount : "");
