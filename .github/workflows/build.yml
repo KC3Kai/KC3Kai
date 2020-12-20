@@ -40,6 +40,8 @@ jobs:
     - name: Get package version
       # https://github.com/nyaayaya/package-version
       uses: nyaayaya/package-version@v1
+      with:
+        path: 'package.json'
     - name: Build release
       timeout-minutes: 10
       run: |
