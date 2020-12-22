@@ -580,7 +580,7 @@
 				equip: ThisShip.items,
 				locked: ThisShip.lock,
 
-				hp: [ThisShip.hp[1], ThisShip.maxHp(true), MasterShip.api_taik[0] ],
+				hp: [ThisShip.hp[1], ThisShip.maxHp(true), MasterShip.api_taik[0] , ThisShip.maxHp(false) ],
 				fp: [MasterShip.api_houg[1], MasterShip.api_houg[0] + ThisShip.mod[0], ThisShip.fp[0] ],
 				tp: [MasterShip.api_raig[1], MasterShip.api_raig[0] + ThisShip.mod[1], ThisShip.tp[0] ],
 				yasen: [
@@ -623,6 +623,14 @@
 				ThisShipData.statmax = 1;
 			else
 				ThisShipData.statmax = 0;
+			// Check whether exists special modernization of hp/luck/asw
+			if( ThisShipData.hp[0] > ThisShipData.hp[3]
+				|| ThisShipData.lk[0] > ThisShipData.lk[2]
+				|| ThisShipData.as[0] > ThisShipData.as[2]
+			  )
+				ThisShipData.statspmod = 1;
+			else
+				ThisShipData.statspmod = 0;
 			return cached;
 		},
 
@@ -773,11 +781,12 @@
 			self.defineShipFilter(
 				"modernization",
 				savedFilterValues.modernization || 0,
-				["all","max","nomax"],
+				["all","max","nomax", "extra"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.statmax)
-						|| (curVal === 2 && !ship.statmax);
+						|| (curVal === 2 && !ship.statmax)
+						|| (curVal === 3 && ship.statspmod);
 				});
 
 			self.defineShipFilter(
