@@ -100,18 +100,18 @@
 			if(p.api_slotid > 0 && p.api_state === 1){
 				const planeType2 = KC3GearManager.get(p.api_slotid).master().api_type[2];
 				const planeCost = KC3GearManager.get(p.api_slotid).master().api_cost;
-				const fuelCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
-					KC3GearManager.landBaseReconnSortieFuelCostPerSlot : planeType2 === 47 ?
+				const fuelCostPerSlot = KC3GearManager.landBaseHeavyBomberType2Ids.indexOf(planeType2) > -1 ?
+					KC3GearManager.landBaseHeavyBomberSortieFuelCostPerSlot : planeType2 === 47 ?
 					KC3GearManager.landBaseBomberSortieFuelCostPerSlot :
 					KC3GearManager.landBaseOtherSortieFuelCostPerSlot;
-				const ammoCostPerSlot = KC3GearManager.landBaseReconnType2Ids.indexOf(planeType2) > -1 ?
-					KC3GearManager.landBaseReconnSortieAmmoCostPerSlot : planeType2 === 47 ?
+				const ammoCostPerSlot = KC3GearManager.landBaseHeavyBomberType2Ids.indexOf(planeType2) > -1 ?
+					KC3GearManager.landBaseHeavyBomberSortieAmmoCostPerSlot : planeType2 === 47 ?
 					KC3GearManager.landBaseBomberSortieAmmoCostPerSlot :
 					KC3GearManager.landBaseOtherSortieAmmoCostPerSlot;
 				// After testing, should use api_count, not api_max_count
 				// but the accuracy depend on costPerSlot series constants
-				totalCost.fuel += Math.round(p.api_count * fuelCostPerSlot);
-				totalCost.ammo += Math.round(p.api_count * ammoCostPerSlot);
+				totalCost.fuel += Math.ceil(p.api_count * fuelCostPerSlot);
+				totalCost.ammo += Math.ceil(p.api_count * ammoCostPerSlot);
 				// Jets consume steel per battle
 				totalCost.steel += ((
 					KC3GearManager.jetAircraftType2Ids.indexOf(planeType2) > -1 ?
