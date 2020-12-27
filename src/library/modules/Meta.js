@@ -267,8 +267,7 @@ Provides access to data on built-in JSON files
 		useitemIcon :function(useitemId, iconSetId = ConfigManager.info_items_iconset){
 			// for those known item IDs not given an icon by game, eg: Strait/Sho-go medal
 			const noIconIds = [5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24,
-				25, 26, 27, 28, 29, 30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48,
-				79, 81, 82, 83, 84];
+				25, 26, 27, 28, 29, 30, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45, 46, 47, 48];
 			const filename = noIconIds.includes(Number(useitemId)) ? 0 : useitemId;
 			// current auto using phase 2
 			const path = "useitems" + (["_p2", "", "_p2"][iconSetId || 0] || "");
