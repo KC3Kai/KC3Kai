@@ -1085,6 +1085,11 @@
 										.addClass(KC3Meta.abyssShipBorderClass(eship))
 										.attr("title", thisNode.buildEnemyStatsMessage(index))
 										.show();
+									if(thisNode.debuffed && index === 0){
+										//console.debug("Boss node " + thisNode.letter + " was debuffed", battle.sortie_id, thisNode);
+										$(`.node_eship.${mainEscort}.node_eship_${index+1}`, nodeBox)
+											.addClass("debuffed");
+									}
 								}
 							});
 							
