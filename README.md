@@ -4,14 +4,20 @@
 
 KC3改 is a feature-rich Chrome extension that helps you play [Kantai Collection](http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/), and view/analyze information not displayed in-game.
 
-![Version](https://img.shields.io/chrome-web-store/v/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
+### [Add to your Chrome -> ](https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh)
+
+[![Version](https://img.shields.io/chrome-web-store/v/hkgmldnainaglpjngpajnnjfhpdjkohh.svg?logo=Google%20Chrome)
 ![Downloads](https://img.shields.io/chrome-web-store/d/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Rating](https://img.shields.io/chrome-web-store/stars/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Score](https://img.shields.io/chrome-web-store/rating/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
 ![Reviews](https://img.shields.io/chrome-web-store/rating-count/hkgmldnainaglpjngpajnnjfhpdjkohh.svg)
+](https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh)
 
-### [Add to your Chrome -> ](https://chrome.google.com/webstore/detail/kancolle-command-center-%E6%94%B9/hkgmldnainaglpjngpajnnjfhpdjkohh)
-
+[![Github Release Version](https://img.shields.io/github/v/release/KC3Kai/KC3Kai?logo=Github)
+![Github Release Date](https://img.shields.io/github/release-date/KC3Kai/KC3Kai)
+![GitHub Downloads Latest Release](https://img.shields.io/github/downloads/KC3Kai/KC3Kai/latest/total)
+![GitHub Downloads All Releases](https://img.shields.io/github/downloads/KC3Kai/KC3Kai/total?label=total%20downloads)
+](https://github.com/KC3Kai/KC3Kai/releases)
 
 ## Why choose KC3改?
 * **SAFE**. Made with your account safety in mind by people studying game code since the game's early days.
@@ -78,9 +84,9 @@ Please visit the [GitHub wiki for Development Documentation](https://github.com/
 
 ## Community
 #### Chat
-We'd love to hear your thoughts about the app, comments and suggestions, join us in a discord channel
-* [Join KanColle Channel](http://discord.kc3.moe/)
-* [KC3改Sub Channel `#general-talk`](https://discordapp.com/channels/334799201428832257/334800276848640013)
+We'd love to hear your thoughts about the app, comments and suggestions, join us in a discord channel.
+* [Join ![KC3 Server](https://img.shields.io/discord/334799201428832257?label=KC3%20Server&logo=Discord)](http://discord.kc3.moe/)
+* [KC3 Server Sub Channel `#general-talk`](https://discordapp.com/channels/334799201428832257/334800276848640013)
 * If you have a GitHub account, [join us on Gitter](https://gitter.im/KC3Kai/Public)
 
 #### Social Media
