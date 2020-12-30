@@ -3851,5 +3851,93 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5481": {
+		"api_id": 5481,
+		"api_name": "Xmas第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5482": {
+		"api_id": 5482,
+		"api_name": "Xmas大鯨",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5483": {
+		"api_id": 5483,
+		"api_name": "Xmas龍鳳",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5484": {
+		"api_id": 5484,
+		"api_name": "Xmas龍鳳改",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5485": {
+		"api_id": 5485,
+		"api_name": "Xmas速吸",
+		"api_yomi": "はやすい",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5486": {
+		"api_id": 5486,
+		"api_name": "Xmas潮",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5487": {
+		"api_id": 5487,
+		"api_name": "Xmas潮改二",
+		"api_yomi": "うしお",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5488": {
+		"api_id": 5488,
+		"api_name": "Xmas迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5489": {
+		"api_id": 5489,
+		"api_name": "Xmas迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5490": {
+		"api_id": 5490,
+		"api_name": "Xmas伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5491": {
+		"api_id": 5491,
+		"api_name": "Xmas如月",
+		"api_yomi": "きさらぎ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

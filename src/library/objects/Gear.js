@@ -5271,8 +5271,9 @@ KC3改 Equipment Object
 				if([8, 11, 58].includes(type2)) return 0.2 * stars;
 				break;
 			case "lbas":
-				// land-base attacker, unconfirmed yet since no plane improved by akashi
-				if([47].includes(type2)) modifier = 0.7;
+				// land-base attacker/heavybomber
+				// unconfirmed yet since no plane improved by akashi
+				if([47, 53].includes(type2)) modifier = 0.7;
 				break;
 			case "support":
 				// No any improvement bonus found for support fleet for now
@@ -5462,6 +5463,7 @@ KC3改 Equipment Object
 			case 41: // Large Flying Boat, uncertain?
 				return 0.25 * Math.sqrt(stars);
 			case 47: // LB attacker
+			case 53: // LB heavy bomber
 				return 0.5 * Math.sqrt(stars);
 		}
 		return modifier * stars;
@@ -5646,13 +5648,14 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isDiveBomber = [7, 11, 57].includes(type2);
 			const isLandBaseAttacker = [47].includes(type2);
+			const isLandBaseHeavyBomber = [53].includes(type2);
 			const isJet = [57, 58].includes(type2);
 			result += 25;
-			let stat = isTorpedoBomber || isLandBaseAttacker ?
+			let stat = isTorpedoBomber || isLandBaseAttacker || isLandBaseHeavyBomber ?
 				this.master().api_raig : this.master().api_baku;
 			let typeModifier = 1;
-			if(isLandBaseAttacker) {
-				typeModifier = 0.8;
+			if(isLandBaseAttacker || isLandBaseHeavyBomber) {
+				if(isLandBaseAttacker) typeModifier = 0.8;
 				// use DV stat if LandBase Attack Aircraft against land installation
 				if(targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
 					stat = this.master().api_baku;
@@ -5660,7 +5663,10 @@ KC3改 Equipment Object
 			}
 			stat += this.attackPowerImprovementBonus("lbas");
 			if(isJet) typeModifier = 1 / Math.sqrt(2);
-			result += Math.sqrt(1.8 * capacity) * stat;
+			// even no 1.8 found on Shinzan Kai, see
+			// https://twitter.com/yukicacoon/status/1341747923109875715
+			let capModifier = isLandBaseHeavyBomber ? 1.0 : 1.8;
+			result += Math.sqrt(capacity * capModifier) * stat;
 			result *= typeModifier;
 		}
 		return result;

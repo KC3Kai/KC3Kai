@@ -19,6 +19,8 @@ jobs:
     steps:
     # PREPARE SOURCE CODES AND DEPENDENCIES
     - uses: actions/checkout@v2
+      with:
+        submodules: true
     - name: Use node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
@@ -38,6 +40,8 @@ jobs:
     - name: Get package version
       # https://github.com/nyaayaya/package-version
       uses: nyaayaya/package-version@v1
+      with:
+        path: 'package.json'
     - name: Build release
       timeout-minutes: 10
       run: |

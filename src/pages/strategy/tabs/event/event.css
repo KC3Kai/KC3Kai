@@ -817,6 +817,9 @@
 .tab_event .sortie_list .node_enemy .elite {
 	box-shadow:0px 0px 1px 1px #f33;
 }
+.tab_event .sortie_list .node_enemy .boss.debuffed {
+	box-shadow:0px 0px 1px 2px #e0c;
+}
 
 .tab_event .sortie_list .node_details {
 	width:120px;
