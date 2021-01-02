@@ -363,6 +363,37 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 		},
 		
+		/* Basically we would not like to touch any thing on payment,
+		   but devs put payitem repair goddess as rewards since Fall 2020 event,
+		   so here specially count them toward useitem which has not existed.
+		-------------------------------------------------------*/
+		"api_get_member/payitem":function(params, response, headers){
+			// Clean counters first because items become to 0 will not appear in API array at all
+			Object.keys(PlayerManager.consumables).forEach(key => {
+				if(["repairTeam", "repairGoddess", "portExpansion"].includes(key) && PlayerManager.consumables[key])
+					PlayerManager.consumables[key] = 0;
+			});
+			if(Array.isArray(response.api_data)){
+				for(let idx in response.api_data){
+					const thisItem = response.api_data[idx],
+						payitemId = Number(thisItem.api_payitem_id);
+					// Maps payitems to those useitems not exist in useitem API result,
+					// fix me if devs make them to be a thing again
+					switch(payitemId){
+						// 11 <--> 50
+						case 11: PlayerManager.consumables.repairTeam = thisItem.api_count; break;
+						// 14 <--> 51
+						case 14: PlayerManager.consumables.repairGoddess = thisItem.api_count; break;
+						// 16 <--> 53
+						case 16: PlayerManager.consumables.portExpansion = thisItem.api_count; break;
+					}
+				}
+				console.log("Update some useitems by payitems", response.api_data);
+			}
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
+		},
+		
 		/* Set friendly support fleet since 2019-05-31.
 		   This settings might disappear after event, so not persistent,
 			and default to {}
