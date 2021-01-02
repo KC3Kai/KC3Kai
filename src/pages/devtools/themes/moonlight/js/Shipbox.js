@@ -260,7 +260,7 @@
 				return title;
 			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( KC3Meta.formatNumber(this.shipData.exp[1]) );
-		$(".ship_exp_bar", this.element).css("width", (182*this.expPercent)+"px");
+		$(".ship_exp_bar", this.element).css("width", (183*this.expPercent)+"px");
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");

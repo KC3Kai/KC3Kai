@@ -1300,8 +1300,8 @@
 						[ "7", "Light Blue (needs reevaluation)" ],
 						[ "0", "Moonlight (playable)" ],
 						[ "1", "Natsuiro (not there yet)"],
-						[ "5", "Mild Transparency Skin (0%)" ],
-						[ "6", "Moderate Transparency Skin (0%)" ]
+						[ "5", "Weak Transparency Skin (0%)" ],
+						[ "6", "Strong Transparency Skin (0%)" ]
 					]
 				}
 			},
@@ -1312,6 +1312,7 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
+						[ "bg_none", "None" ],
 						[ "yasen_img", "Yasen" ],
 						[ "hex_img", "Hex Grid" ],
 						[ "bg_black_pearl", "Black Pearl" ],
@@ -1322,8 +1323,19 @@
 				}
 			},
 			{
-				"id" : "pan_moon_opacity",
+				"id" : "pan_moon_opacity_preset",
 				"name" : "SettingsPanelOpacity",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "slistbg_custom", "Custom" ]
+					]
+				}
+			},
+			{
+				"id" : "pan_moon_opacity",
+				"name" : "--Custom--",
 				"type" : "small_text",
 				"bound" : {
 					"min" :   0.0,

@@ -402,9 +402,9 @@
 	var mode_dark_blue =         ["flats",       "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
 	var mode_dark =              ["flats_dark",  "clrdark",     "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
 	var mode_flashbang =         ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_transparency1 =     ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_transparency2 =     ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "hex_img",        "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "bg_iceberg",     "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
+	var mode_transparency1 =     ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none"   ,        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
+	var mode_transparency2 =     ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none",           "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
+	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "none",           "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
 	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
 
 	//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],         ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
@@ -413,21 +413,21 @@
 	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
 	mode_dark.push(                 "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_dark");
 	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
-	mode_transparency1.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
-	mode_transparency2.push(        "conbut_lightblue",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
+	mode_transparency1.push(        "conbut_moonlight",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
+	mode_transparency2.push(        "conbut_moonlight",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
 	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrseaweed",   "clrnone",              "qsch_lightblue");
 	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
 
-	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]
-	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue");
-	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro");
-	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey");
-	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey");
-	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_transparency1.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_transparency2.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue");
-	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors);
+	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]     opacity[21]
+	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue",  0.5);
+	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro",    1);
+	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1);
+	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1);
+	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue",  1);
+	mode_transparency1.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_grey",  0.6);
+	mode_transparency2.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_grey",  0.3);
+	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue",  0.6);
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset);
 
 	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_transparency1,mode_transparency2,mode_lightblue];
 	var mode_selection = mode_select[ConfigManager.pan_moon_skin];
@@ -541,7 +541,17 @@
 		style_select(4,".wrapper_bg");
 
 		// wrapper background opacity
-		$(".wrapper_bg").css("opacity", ConfigManager.pan_moon_opacity / 100);
+		/*$(".wrapper_bg").css("opacity", ConfigManager.pan_moon_opacity / 100);*/
+		var opacity_level;
+		if(ConfigManager.pan_moon_opacity_preset == "auto") {
+			opacity_level = mode_selection[21];
+		}
+		else {
+			opacity_level = ConfigManager.pan_moon_opacity / 100;
+		}
+		document.documentElement.style.setProperty("--main-bg-opacity-light", opacity_level);
+		document.documentElement.style.setProperty("--main-bg-opacity-moderate", (((1 - opacity_level) / 2) + opacity_level));
+		document.documentElement.style.setProperty("--main-bg-opacity-heavy", (((1 - opacity_level) / 1.5) + opacity_level));
 
 		// general element corner shape presets
 		style_select(3,".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055,.border_radius_5500");
@@ -572,7 +582,7 @@
 		// ============================ //
 		// ==== Quest Stylization ==== //
 		// ============================ //
-		style_select(14,".quest,.activity_quest");
+		style_select(14,".quest,.quests,.activity_quest");
 
 		// ==================================== //
 		// ==== Control Button Stylization ==== //
@@ -764,7 +774,9 @@
 		function setRotation(page) {
 			ConfigManager.scrollSpecificPage(page);
 			NatsuiroListeners.Rotation();
-			quest_extender(false);
+			if(ConfigManager.pan_layout == 4) {
+				quest_extender(false);
+			}
 		}
 		$(".rotation .rotarBack").on("click",function() {setRotation(1);});
 		$(".rotation .rotarExpedition").on("click",function() {setRotation(2);});
@@ -776,7 +788,9 @@
 		function setRotation2(page) {
 			ConfigManager.scrollSpecific2Page(page);
 			NatsuiroListeners.Rotation2();
-			quest_extender(false);
+			if(ConfigManager.pan_layout <= 2) {
+				quest_extender(false);
+			}
 		}
 		$(".rotation2 .rotarBack").on("click",function() {setRotation2(1);});
 		$(".rotation2 .rotarExpedition").on("click",function() {setRotation2(2);});
@@ -1360,6 +1374,7 @@
 		$(".module.activity .battle_drop").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_cond_value").text("");
 		$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleEngangement"));
+		set_text_color("",".module.activity .battle_engagement");
 		$(".module.activity .battle_engagement").removeClass(KC3Meta.battleSeverityClass(KC3Meta.engagement()));
 		$(".module.activity .battle_engagement").attr("title", "").lazyInitTooltip();
 		$(".module.activity .battle_detection").prev().text(KC3Meta.term("BattleDetection"));
@@ -2791,7 +2806,7 @@
 									.on("dblclick", self.gearDoubleClickFunction);
 
 								if (itemObj.ace > -1) {
-									const eqChevSrc = "/assets/img/client/achev/"+itemObj.ace+".png";
+									const eqChevSrc = "/assets/img/client/achev_hd/"+itemObj.ace+".png";
 									$(".base_plane_chevs img", planeBox).attr("src", eqChevSrc);
 								} else {
 									$(".base_plane_chevs img", planeBox).remove();
