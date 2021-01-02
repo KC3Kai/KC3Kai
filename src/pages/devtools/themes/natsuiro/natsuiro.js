@@ -1478,6 +1478,9 @@
 				const item = consumableSlotitemMap[useitemId];
 				item.attrName = PlayerManager.getConsumableById(useitemId, true);
 				item.amount = KC3GearManager.count(g => g.masterId === item.slotitem) || 0;
+				// useitem 50/51 should be undefined, but devs reward payitem repair goddess since Fall 2020,
+				// so we map that to useitem, and add its amount additionally
+				if(["50", "51"].includes(useitemId)) item.amount += PlayerManager.getConsumableById(useitemId) || 0;
 			});
 			// Update simple amount of single useitem (or slotitem) by ID and name (matching with CSS class: `count_` + name)
 			const updateCountByUseitemId = (useitemId) => {
