@@ -83,11 +83,14 @@
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px"
         };
-        let contact = viewFleet.contactChanceInfo();
+        // here always AS+ air battle assumed, to get real time battle value:
+        //const airBattleId = collectBattleConditions().airBattleId;
+        const airBattleId = 1;
+        let contact = viewFleet.contactChanceInfo(airBattleId);
         if(isCombined && ConfigManager.air_combined) {
             // combine contact info from two fleets
             const main = contact;
-            const escort = escortFleet.contactChanceInfo();
+            const escort = escortFleet.contactChanceInfo(airBattleId);
             // only trigger rate can be summed
             const combined = {
                 trigger: main.trigger + escort.trigger,
@@ -128,12 +131,16 @@
                 .format(planeSelectionTopN, planeListHtml);
         }
         let text = KC3Meta.term("PanelAirContactTip").format(
-            KC3Meta.airbattle(1)[2] || "",
+            KC3Meta.airbattle(airBattleId)[2] || "",
             Math.qckInt("floor", contact.success * 100, 1),
             Math.qckInt("floor", contact.trigger * 100, 1),
             Math.qckInt("ceil", contact.cancelled * 100, 1),
             planeListHtml
         );
+        // add night contact rate if night recon found
+        const nightContactSuccess = viewFleet.nightContactSuccessChance(airBattleId);
+        if(nightContactSuccess >= 0) text += "\n" + KC3Meta.term("PanelNightContactTip")
+            .format(Math.qckInt("floor", nightContactSuccess * 100, 1));
         return $("<p></p>")
             .css("font-size", "11px")
             .html(text)
