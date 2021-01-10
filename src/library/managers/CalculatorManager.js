@@ -83,9 +83,9 @@
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px"
         };
-        // here always AS+ air battle assumed, to get real time battle value:
-        //const airBattleId = collectBattleConditions().airBattleId;
-        const airBattleId = 1;
+        const battleConds = collectBattleConditions();
+        // AS+ by default for unknown value (night start node) or not a real battle
+        const airBattleId = battleConds.airBattleId || 1;
         let contact = viewFleet.contactChanceInfo(airBattleId);
         if(isCombined && ConfigManager.air_combined) {
             // combine contact info from two fleets
