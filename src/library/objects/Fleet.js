@@ -587,12 +587,29 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
-	 * Night recon contact chance, under verifying.
-	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
+	 * Rolls for every night recon planes equipped by all ships in fleet, get final success rate by total failure rate.
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return final night contact change for this fleet, regardless of CF main fleet. undefined for fleet without any night recon.
+	 */
+	KC3Fleet.prototype.nightContactSuccessChance = function(dispSeiku = 1){
+		// dispSeiku not affect rate value itself, but for AP and AI day start battle, it can not be triggered at all.
+		// it can be triggered for night start battle. it can be triggered under AP for PvP battle.
+		const airControlModifiers = [(KC3SortieManager.isPvP() ? 1 : 0), 1, 1, 1, 0];
+		const nightContactPlanes = this.nightContactSelectionChanceTable();
+		if(nightContactPlanes.length) {
+			const failRate = nightContactPlanes.map(p => p.rate * airControlModifiers[dispSeiku]).reduce((acc, v) => acc * (1 - v), 1);
+			return 1 - failRate;
+		} else return;
+	};
+
+	/**
+	 * Night recon contact chance for every night recon planes in this fleet.
+	 * @see https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29#u4bb049a
 	 */
 	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
 		const contactPlaneList = [];
-		this.shipsUnescaped().forEach((ship, shipIdx) => {
+		// Tests confirmed: escaped ships still can be rolled on CF escort fleet, sunk ships unknown, but PvP sunk can
+		this.ship().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
 				if(gear.itemId && gear.masterId === 102) {
 					const gearMaster = gear.master();
@@ -605,9 +622,9 @@ Contains summary information about a fleet and its ships
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
-						// https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29
-						// larger slot size can increase rate near but not reach to 100%
-						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku * ship.level)) * 4 / 100 : 0
+						// Unknown if slot size affects, no LoS proficiency/improvement/visible bonus found,
+						// and this PSVita KCKai formula slightly different with wiki's.
+						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku) * Math.sqrt(ship.level)) / 25 : 0
 					});
 				}
 			});

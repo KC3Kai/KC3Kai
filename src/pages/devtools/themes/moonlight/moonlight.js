@@ -1765,7 +1765,6 @@
 			function loadQuests(quests) {
 				const questList = $(".activity_quest .quest_list");
 				questList.empty();
-				questList.scrollTop();
 
 				quests.forEach((apiQuest, index) => {
 					const quest = KC3QuestManager.get(apiQuest.api_no);

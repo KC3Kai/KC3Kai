@@ -190,6 +190,8 @@
       delete downloadIdPathMap[downloadItem.id];
       // re-enable download shelf bar
       enableDownloadBar();
+    } else {
+      return true;
     }
   };
 
