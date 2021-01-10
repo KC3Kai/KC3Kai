@@ -3308,8 +3308,9 @@ KC3改 Ship Object
 		// might exclude equipment on ship LoS bonus for now,
 		// to include LoS bonus, use `this.equipmentTotalLoS()` instead
 		const equipLoS = this.equipmentTotalStats("saku", true, false);
+		const battleConds = this.collectBattleConditions();
 		// assume to best condition AS+ by default (for non-battle)
-		const airBattleId = this.collectBattleConditions().airBattleId || 1;
+		const airBattleId = battleConds.airBattleId == undefined ? 1 : battleConds.airBattleId;
 		const baseValue = airBattleId === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 :
 			airBattleId === 2 ? adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
 		return {

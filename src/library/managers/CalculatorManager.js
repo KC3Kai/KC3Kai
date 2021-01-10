@@ -84,8 +84,9 @@
             "margin-top":"-3px", "margin-right":"2px"
         };
         const battleConds = collectBattleConditions();
-        // AS+ by default for unknown value (night start node) or not a real battle
-        const airBattleId = battleConds.airBattleId || 1;
+        // AS+ by default for unknown value (night start node) or non-battle
+        // note: AP is falsy value 0, so cannot use `||` operator, use `== undefined` in case of `null` value
+        const airBattleId = battleConds.airBattleId == undefined ? 1 : battleConds.airBattleId;
         let contact = viewFleet.contactChanceInfo(airBattleId);
         if(isCombined && ConfigManager.air_combined) {
             // combine contact info from two fleets
