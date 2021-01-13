@@ -2236,10 +2236,12 @@ Previously known as "Reactor"
 							break;
 						case 7: // Dive Bomber
 							KC3QuestManager.get(688).increment(1); // F79 quarterly index 1
+							KC3QuestManager.get(681).increment(0); // F95 yearly index 0
 							break;
 						case 8: // Torpedo Bomber
 							KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
 							KC3QuestManager.get(655).increment(4); // F94 yearly index 4
+							KC3QuestManager.get(681).increment(1); // F95 yearly index 1
 							break;
 						case 10: // Recon Seaplane
 							KC3QuestManager.get(677).increment(1); // F69 weekly index 1
@@ -2649,13 +2651,16 @@ Previously known as "Reactor"
 				break;
 				case 82: // exchange 4 beans with a setsubun furniture in 2019
 					// 10 beans with a Action Report in 2020 (once)
+					// 7 beans with a Medal in 2021
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
+					// 20 beans + 40 devmats with a Ginga in 2021 (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
-				case 84: // exchange 20 beans + 40 devmats with a Ginga (once)
+				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
+					// exchange 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
