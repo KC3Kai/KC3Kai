@@ -456,7 +456,8 @@
 				.attr("title", KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
 					+ KC3Calc.buildFleetsContactChanceText(kcFleet));
 			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
-				.attr("title", "{0}: {3}\n{1}: {4}\n{2}: {5}".format(
+				.attr("title", "{0}\n{1}: {4}\n{2}: {5}\n{3}: {6}".format(
+						KC3Meta.formationText(ConfigManager.aaFormation),
 						KC3Meta.formationText(1), KC3Meta.formationText(2), KC3Meta.formationText(3),
 						kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)
 					)
