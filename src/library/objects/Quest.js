@@ -222,6 +222,9 @@ known IDs see QuestManager
 				// If tracking is empty and Meta is defined
 				if(this.tracking === false && Array.isArray(questMeta.tracking)) {
 					this.tracking = questMeta.tracking;
+				// If tracking not empty but Meta is undefined
+				} else if(questMeta.tracking === undefined && Array.isArray(this.tracking)) {
+					this.tracking = false;
 				}
 			} else if(this.meta === undefined) {
 				this.meta = noMeta;

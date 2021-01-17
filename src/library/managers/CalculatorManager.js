@@ -404,10 +404,10 @@
      */
     const fighterPowerIntervals = (basicPower = false) => {
         return [basicPower,
-            Math.round(basicPower / 3),
-            Math.round(2 * basicPower / 3),
-            Math.round(3 * basicPower / 2),
-            3 * basicPower
+            Math.floor(basicPower / 3),
+            Math.floor(basicPower / 1.5),
+            Math.ceil(basicPower * 1.5),
+            Math.ceil(basicPower * 3)
         ];
     };
 

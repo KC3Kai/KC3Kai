@@ -530,9 +530,11 @@ Contains summary information about a fleet and its ships
 	/**
 	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
 	 * @return contact start chance at trigger phase.
+	 * @see https://wikiwiki.jp/kancolle/%E8%88%AA%E7%A9%BA%E6%88%A6#s1d9a838
 	 */
 	KC3Fleet.prototype.contactTriggerRate = function(dispSeiku = 1){
-		const airControlModifiers = [0, 1, 0.6, 0.55 /* guessed, unknown value */, 0];
+		// slightly different values with wiki inferred from KCKai algorithm: 1/(70 - (4-dispSeiku) * 15)/0.04
+		const airControlModifiers = [0, 1, 25/40, 25/55, 0];
 		var rate = 0;
 		this.shipsUnescaped().forEach(ship => {
 			rate += ship.equipment().map(
@@ -555,10 +557,11 @@ Contains summary information about a fleet and its ships
 	/**
 	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
 	 * @return contact selection table of every possible aircraft.
-	 * @see http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#s1d9a838
+	 * @see https://wikiwiki.jp/kancolle/%E8%88%AA%E7%A9%BA%E6%88%A6#s1d9a838
 	 */
 	KC3Fleet.prototype.contactSelectionChanceTable = function(dispSeiku = 1){
-		const airControlModifiers = [0, 0.07, 0.06, 0.055, 0];
+		// slightly different values with wiki inferred from KCKai algorithm: 1/(20 - (4-dispSeiku) * 2)
+		const airControlModifiers = [0, 1/14, 1/16, 1/18, 0];
 		const contactPlaneList = [];
 		this.shipsUnescaped().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
@@ -592,12 +595,13 @@ Contains summary information about a fleet and its ships
 	 * @return final night contact change for this fleet, regardless of CF main fleet. undefined for fleet without any night recon.
 	 */
 	KC3Fleet.prototype.nightContactSuccessChance = function(dispSeiku = 1){
-		// dispSeiku not affect rate value itself, but for AP and AI day start battle, it can not be triggered at all.
+		// dispSeiku not affect rate value, but for AP and AI day start battle, cannot be triggered at all, the same with day contact.
 		// it can be triggered for night start battle. it can be triggered under AP for PvP battle.
 		const airControlModifiers = [(KC3SortieManager.isPvP() ? 1 : 0), 1, 1, 1, 0];
 		const nightContactPlanes = this.nightContactSelectionChanceTable();
 		if(nightContactPlanes.length) {
-			const failRate = nightContactPlanes.map(p => p.rate * airControlModifiers[dispSeiku]).reduce((acc, v) => acc * (1 - v), 1);
+			const failRate = nightContactPlanes.map(p => p.rate * (airControlModifiers[dispSeiku] || 0))
+				.reduce((acc, v) => acc * (1 - v), 1);
 			return 1 - failRate;
 		} else return;
 	};
