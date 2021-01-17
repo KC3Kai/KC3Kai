@@ -3882,7 +3882,7 @@
 		"api_yomi": "たいげい・りゅうほう",
 		"api_stype": 7,
 		"api_soku": 5,
-		"api_slot_num": 3
+		"api_slot_num": 4
 	},
 	"5485": {
 		"api_id": 5485,
@@ -3939,5 +3939,85 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5492": {
+		"api_id": 5492,
+		"api_name": "正月比叡改二丙",
+		"api_yomi": "ひえい",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5493": {
+		"api_id": 5493,
+		"api_name": "正月衣笠",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5494": {
+		"api_id": 5494,
+		"api_name": "正月衣笠改二",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5495": {
+		"api_id": 5495,
+		"api_name": "正月Gambier Bay",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5496": {
+		"api_id": 5496,
+		"api_name": "正月神鷹",
+		"api_yomi": "しんよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5497": {
+		"api_id": 5497,
+		"api_name": "正月睦月",
+		"api_yomi": "むつき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5498": {
+		"api_id": 5498,
+		"api_name": "正月Houston",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5499": {
+		"api_id": 5499,
+		"api_name": "正月龍鳳",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5500": {
+		"api_id": 5500,
+		"api_name": "正月龍鳳改",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5501": {
+		"api_id": 5501,
+		"api_name": "正月川内改二",
+		"api_yomi": "せんだい",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

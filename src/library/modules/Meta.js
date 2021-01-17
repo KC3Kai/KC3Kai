@@ -116,6 +116,7 @@ Provides access to data on built-in JSON files
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
 			150, // Hiei K2 -> K2C
+			215, // Kuma Kai -> K2
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2

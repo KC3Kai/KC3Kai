@@ -3039,14 +3039,14 @@ KC3改 Equipment Object
 						multiple: { "raig": 2, "houk": -2 },
 					},
 					{
-						// Ooi K2, Nisshin A
-						ids: [118, 586],
+						// Ooi K2, Nisshin A, Kuma K2D
+						ids: [118, 586, 657],
 						multiple: { "raig": 1, "houk": -2 },
 					},
 					{
 						// All other ships who can equip it
 						stypes: [4, 13, 14, 16],
-						excludes: [118, 119, 586, 623],
+						excludes: [118, 119, 586, 623, 657],
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
@@ -3422,6 +3422,15 @@ KC3改 Equipment Object
 						multiple: { "tyku": 2 },
 					},
 					{
+						// Kiso K2, Tama K2, Kuma K2,K2D
+						ids: [146,  547,     652, 657],
+						single: { "houg": 2, "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 1 },
+						},
+					},
+					{
 						// Tan Yang
 						ids: [651],
 						multiple: { "houg": 3, "tyku": 3 },
@@ -3539,6 +3548,20 @@ KC3改 Equipment Object
 						// Tenryuu K2, Tatsuta K2, Yuubari K2,K2D extra +2 aa
 						ids: [477,     478,        622, 624],
 						multiple: { "tyku": 2 },
+					},
+					{
+						// Kuma K2,K2D
+						ids: [652, 657],
+						multiple: { "houg": 3 },
+					},
+					{
+						// Kiso K2, Tama K2, Kuma K2,K2D
+						ids: [146,  547,     652, 657],
+						single: { "tyku": 2 },
+						synergy: {
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 3 },
+						},
 					},
 					{
 						// Tan Yang/Yukikaze K2
@@ -5032,33 +5055,27 @@ KC3改 Equipment Object
 		const gearTypes = gear.master().api_type || [];
 		const synergyGears = bonusGears.synergyGears;
 		if(synergyGears) {
-			if(synergyGears.enhancedBoilerIds.includes(gear.masterId)) synergyGears.enhancedBoiler += 1;
-			if(synergyGears.newModelBoilerIds.includes(gear.masterId)) synergyGears.newModelBoiler += 1;
-			if(synergyGears.tripleTorpedoIds.includes(gear.masterId)) synergyGears.tripleTorpedo += 1;
-			if(synergyGears.tripleTorpedoLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoLateModel += 1;
-			if(synergyGears.tripleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.tripleTorpedoOxygenLateModel += 1;
-			if(synergyGears.quadrupleTorpedoOxygenLateModelIds.includes(gear.masterId)) synergyGears.quadrupleTorpedoOxygenLateModel += 1;
-			if(synergyGears.submarineTorpedoLateModelIds.includes(gear.masterId)) synergyGears.submarineTorpedoLateModel += 1;
-			if(synergyGears.kamikazeTwinTorpedoIds.includes(gear.masterId)) synergyGears.kamikazeTwinTorpedo += 1;
-			if(synergyGears.tripleLargeGunMountK2Ids.includes(gear.masterId)) {
-				synergyGears.tripleLargeGunMountK2 += 1;
-				synergyGears.tripleLargeGunMountK2Nonexist = 0;
-			}
-			if(synergyGears.twin203MediumGunMountNo2Ids.includes(gear.masterId)) {
-				synergyGears.twin203MediumGunMountNo2 += 1;
-				synergyGears.twin203MediumGunMountNo2Nonexist = 0;
-			}
-			if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
-			if(synergyGears.helicopterIds.includes(gear.masterId)) synergyGears.helicopter += 1;
-			if(synergyGears.twin127SmallGunMountModelDK2Ids.includes(gear.masterId)) {
-				synergyGears.twin127SmallGunMountModelDK2 += 1;
-				synergyGears.twin127SmallGunMountModelDK2Nonexist = 0;
-			}
-			if(synergyGears.ru130mmB13SmallGunMountIds.includes(gear.masterId)) synergyGears.ru130mmB13SmallGunMount += 1;
-			if(synergyGears.skilledLookoutsIds.includes(gear.masterId)) synergyGears.skilledLookouts += 1;
-			if(synergyGears.searchlightSmallIds.includes(gear.masterId)) synergyGears.searchlightSmall += 1;
-			if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
-			if(gear.isAirRadar()) synergyGears.airRadar += 1;
+			Object.keys(synergyGears).forEach(key => {
+				if(key.endsWith("Ids") && Array.isArray(synergyGears[key])) {
+					switch(key) {
+						case "surfaceRadarIds":
+							if(gear.isSurfaceRadar()) synergyGears.surfaceRadar += 1;
+						break;
+						case "airRadarIds":
+							if(gear.isAirRadar()) synergyGears.airRadar += 1;
+						break;
+						case "rotorcraftIds":
+							if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
+						break;
+						default:
+							const baseKey = key.slice(0, -3);
+							if(synergyGears[key].includes(gear.masterId)) {
+								synergyGears[baseKey] += 1;
+								if(synergyGears[baseKey + "Nonexist"]) synergyGears[baseKey + "Nonexist"] = 0;
+							}
+					}
+				}
+			});
 		}
 		const addupStarsDistribution = (bonusDefs) => {
 			if(Array.isArray(bonusDefs.starsDist)) {

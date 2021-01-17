@@ -191,7 +191,7 @@
       // re-enable download shelf bar
       enableDownloadBar();
     } else {
-      return true;
+      suggest();
     }
   };
 
