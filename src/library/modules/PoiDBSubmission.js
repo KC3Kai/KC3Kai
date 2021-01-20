@@ -29,9 +29,9 @@
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
-		reportServer: "http://poi.0u0.moe",
+		reportServer: "https://api.poi.moe",
 		reportApiBaseUrl: "/api/report/v2/",
-		reportOrigin: "KC3Kai",
+		reportOrigin: `KC3Kai/${chrome.runtime.getManifest().version}`,
 
 		// *INTERNAL USE ONLY*
 		// because when building this dictionary
@@ -97,7 +97,7 @@
 				teitokuLv: PlayerManager.hq.level,
 				teitokuId: PlayerManager.hq.nameId,
 				mapareaId: mapId,
-				rank: rank 
+				rank: rank
 			};
 			this.sendData("select_rank", selectRankData);
 		},
@@ -413,9 +413,13 @@
 			$.ajax({
 				url: url,
 				method: "POST",
-				data: {
-					'data': JSON.stringify( payload )
-				},
+				contentType: 'application/json',
+				data: JSON.stringify({
+					data: payload
+				}),
+				headers: {
+					'X-Reporter': this.reportOrigin,
+				}
 			}).done( function() {
 				console.log(`Poi DB Submission to ${target} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
