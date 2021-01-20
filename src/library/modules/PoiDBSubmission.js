@@ -82,8 +82,6 @@
 				'api_req_sortie/battleresult': this.processBattleResult,
 				'api_req_combined_battle/battleresult': this.processBattleResult,
 			};
-
-			this.reportOrigin = "KC3Kai " + chrome.runtime.getManifest().version;
 		},
 		processSelectEventMapRank: function (requestObj) {
 			var params = requestObj.params;
@@ -234,11 +232,10 @@
 			}
 			data.key = `r${data.recipeId}-i${data.itemId}-s${data.stage}-d${data.day}-s${data.secretary}`;
 
-			// Besides well-known recipes,
-			// failed or duplicated improvement seems be noisy for recipe recording
-			// see https://github.com/poooi/plugin-report/blob/master/reporters/remodel-recipe.es#L113
+			// Besides default recipes and failed improvement, duplicated recipes can be handled by server-side now
+			// see https://github.com/KC3Kai/KC3Kai/pull/3079
 			if (!isSuccess || [101, 201, 301].includes(data.recipeId)) {
-				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
+				console.log("Ignored to report remodel recipe for failed improvement", data);
 			} else {
 				this.sendData("remodel_recipe", data);
 			}
@@ -390,12 +387,12 @@
 			$.ajax({
 				url: url,
 				method: "POST",
-				contentType: 'application/json',
+				contentType: "application/json",
 				data: JSON.stringify({
 					data: payload
 				}),
 				headers: {
-					'X-Reporter': this.reportOrigin,
+					"X-Reporter": this.reportOrigin,
 				}
 			}).done( function() {
 				console.log(`Poi DB Submission to ${target} done.`);
