@@ -22,16 +22,14 @@
 		dropShipData: null,
 		remodelRecipeList: null,
 		remodelRecipeData: null,
-		remodelKnownRecipes: [],
-		remodelKnownRecipesLastUpdated: 0,
 
 		// api handler
 		handlers: {},
 		// <map id> => <event rank>
 		mapInfo: {},
-		reportServer: "http://poi.0u0.moe",
+		reportServer: "https://api.poi.moe",
 		reportApiBaseUrl: "/api/report/v2/",
-		reportOrigin: "KC3Kai",
+		reportOrigin: `KC3Kai/${chrome.runtime.getManifest().version}`,
 
 		// *INTERNAL USE ONLY*
 		// because when building this dictionary
@@ -97,7 +95,7 @@
 				teitokuLv: PlayerManager.hq.level,
 				teitokuId: PlayerManager.hq.nameId,
 				mapareaId: mapId,
-				rank: rank 
+				rank: rank
 			};
 			this.sendData("select_rank", selectRankData);
 		},
@@ -156,7 +154,6 @@
 			if (this.state === 'remodel_slotdetail') this.state = null;
 			this.cleanup();
 			this.remodelRecipeList = requestObj.response.api_data;
-			this.lazyInitKnownRecipes();
 		},
 		processRemodelRecipeDetail: function( requestObj ) {
 			// Player may just click cancel after viewing details, no state to be checked
@@ -240,35 +237,15 @@
 			// Besides well-known recipes,
 			// failed or duplicated improvement seems be noisy for recipe recording
 			// see https://github.com/poooi/plugin-report/blob/master/reporters/remodel-recipe.es#L113
-			if (!isSuccess || !this.remodelKnownRecipes.length
-				|| this.remodelKnownRecipes.includes(data.key)
-				|| [101, 201, 301].includes(data.recipeId)) {
+			if (!isSuccess || [101, 201, 301].includes(data.recipeId)) {
 				console.log("Ignored to report remodel recipe for failed or duplicated improvement", data);
 			} else {
-				this.remodelKnownRecipes.push(data.key);
 				this.sendData("remodel_recipe", data);
 			}
 
 			// Go back to improvement list like it does in-game, not clean all up
 			this.state = null;
 			this.remodelRecipeData = null;
-		},
-		lazyInitKnownRecipes: function() {
-			// Update known recipes if not initialized or data older than 30 mins
-			if (!this.remodelKnownRecipes.length
-				|| (Date.now() - this.remodelKnownRecipesLastUpdated) > 30 * 60 * 1000) {
-				$.ajax({
-					url: this.reportServer + this.reportApiBaseUrl + "known_recipes",
-					method: "GET",
-					dataType: "json",
-					success: (json) => {
-						if (Array.isArray(json.recipes)) {
-							this.remodelKnownRecipes = json.recipes;
-							this.remodelKnownRecipesLastUpdated = Date.now();
-						}
-					}
-				});
-			}
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
@@ -413,9 +390,13 @@
 			$.ajax({
 				url: url,
 				method: "POST",
-				data: {
-					'data': JSON.stringify( payload )
-				},
+				contentType: 'application/json',
+				data: JSON.stringify({
+					data: payload
+				}),
+				headers: {
+					'X-Reporter': this.reportOrigin,
+				}
 			}).done( function() {
 				console.log(`Poi DB Submission to ${target} done.`);
 			}).fail( function(jqXHR, textStatus, errorThrown) {
