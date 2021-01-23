@@ -154,6 +154,8 @@ Retrieves when needed to apply on components
 				focus_game_tab    : false,
 				fix_game_code     : false,
 				dmm_forcecookies  : false,
+				dmm_redirgadget   : false,
+				dmm_gadgetcache   : "",
 				dmm_customize     : false,
 				dmm_custom_css    : "",
 

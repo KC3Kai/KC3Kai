@@ -988,8 +988,8 @@
 		]
 	},
 	{
-		"section": "SettingsDMMGameplay",
-		"help" : "",
+		"section": "SettingsDMMAreaErrors",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Startup-problems",
 		"contents" : [
 			{
 				"id" : "dmm_forcecookies",
@@ -998,10 +998,32 @@
 				"options" : {}
 			},
 			{
+				"id" : "dmm_redirgadget",
+				"name" : "SettingsDMMRedirectGadget",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsDMMRedirectGadgetTip"
+				}
+			},
+			{
+				"id" : "dmm_gadgetcache",
+				"name" : "SettingsDMMGadgetCacheUrl",
+				"type" : "long_text",
+				"options" : {
+					"tooltip" : "SettingsDMMGadgetCacheUrlTip",
+					"placeholder" : "https://kcwiki.github.io/cache/"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsDMMGameplay",
+		"help" : "",
+		"contents" : [
+			{
 				"id" : "dmm_customize",
 				"name" : "SettingsDMMCustomize",
 				"type" : "check",
-				"hide" : 1,
 				"options" : {}
 			},
 			{
