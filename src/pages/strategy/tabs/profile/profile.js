@@ -679,6 +679,7 @@
 				delete ConfigManager.air_bounds;
 				delete ConfigManager.DBSubmission_enabled;
 				delete ConfigManager.DBSubmission_key;
+				delete ConfigManager.OpenDBSubmission_enabled;
 				ConfigManager.save();
 				// Give a response instead of alert
 				window.location.reload();
