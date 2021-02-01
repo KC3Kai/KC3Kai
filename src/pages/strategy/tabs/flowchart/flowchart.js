@@ -56,7 +56,6 @@
 			this.seedBranch( rootQuestTree, 888 ); // Bq7
 			this.seedBranch( rootQuestTree, 894 ); // Bq9
 			this.seedBranch( rootQuestTree, 904 ); // By1
-			this.seedBranch( rootQuestTree, 905 ); // By2
 			this.seedBranch( rootQuestTree, 912 ); // By3
 			this.seedBranch( rootQuestTree, 928 ); // By5
 			
