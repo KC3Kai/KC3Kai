@@ -4467,7 +4467,7 @@ KC3改 Ship Object
 		return true;
 	};
 
-	KC3Ship.prototype.deckbuilder = function() {
+	KC3Ship.prototype.deckbuilder = function(forImgBuilder) {
 		var itemsInfo = {};
 		var result = {
 			id: this.masterId,
@@ -4477,6 +4477,15 @@ KC3改 Ship Object
 			asw : this.nakedAsw(),
 			items: itemsInfo
 		};
+		if(!!forImgBuilder) {
+			result.fp = this.fp[0];
+			result.tp = this.tp[0];
+			result.aa = this.aa[0];
+			result.ar = this.ar[0];
+			result.asw = this.as[0];
+			result.ev = this.ev[0];
+			result.los = this.ls[0];
+		}
 
 		var gearInfo;
 		for(var i=0; i<5; ++i) {
