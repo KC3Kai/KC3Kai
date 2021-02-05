@@ -116,7 +116,6 @@ Provides access to data on built-in JSON files
 		specialRemodelFromIds: [
 			149, // Kongou K2 -> K2C
 			150, // Hiei K2 -> K2C
-			215, // Kuma Kai -> K2
 			277, // Akagi Kai -> K2
 			594, // Akagi K2 -> K2E
 			350, // Umikaze Kai -> K2
@@ -128,6 +127,8 @@ Provides access to data on built-in JSON files
 			610, // Kaga K2E -> K2Go
 			228, // Yukikaze Kai -> Tan Yang
 			651, // Tan Yang -> Yukikaze K2
+			215, // Kuma Kai -> K2
+			306, // Noshiro Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],

@@ -146,8 +146,8 @@
 			data.expedConf = {};
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
-			fillExpedConfDefaultGreatSuccess(131, 132, 141, 142);
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 115));
+			fillExpedConfDefaultGreatSuccess(131, 132, 133, 141, 142);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );

@@ -125,6 +125,8 @@
                 case 215: // Kuma
                 case 579: // Gotland Kai
                     return 55;
+                case 306: // Noshiro
+                    return 80;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -198,6 +200,8 @@
                     return 30;
                 case 579: // Gotland Kai
                     return 35;
+                case 306: // Noshiro
+                    return 77;
                 default:
                     return 0;
             }

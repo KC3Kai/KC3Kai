@@ -36,6 +36,7 @@
 			this.seedBranch( rootQuestTree, 342 ); // C44
 			this.seedBranch( rootQuestTree, 345 ); // C49
 			this.seedBranch( rootQuestTree, 346 ); // C50
+			this.seedBranch( rootQuestTree, 348 ); // C53
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
@@ -43,11 +44,13 @@
 			this.seedBranch( rootQuestTree, 437 ); // D34
 			this.seedBranch( rootQuestTree, 438 ); // D35
 			this.seedBranch( rootQuestTree, 439 ); // D36
+			this.seedBranch( rootQuestTree, 442 ); // D38
 			this.seedBranch( rootQuestTree, 503 ); // Ed3
 			this.seedBranch( rootQuestTree, 605 ); // Fd1
 			this.seedBranch( rootQuestTree, 655 ); // F94
 			this.seedBranch( rootQuestTree, 681 ); // F95
 			this.seedBranch( rootQuestTree, 702 ); // Gd2
+			this.seedBranch( rootQuestTree, 716 ); // G8
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
 			this.seedBranch( rootQuestTree, 256 ); // Bm2
 			this.seedBranch( rootQuestTree, 259 ); // Bm4

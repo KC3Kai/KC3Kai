@@ -7792,6 +7792,9 @@ var PS = {};
                   )
               );
       };
+      if (v === 115) {
+          // TODO
+      }
       if (v === 131) {
           return addGroup(fslAndSc(50)(5))
               (addGroup(lvlCnt(200))
@@ -7826,6 +7829,9 @@ var PS = {};
                   )
               );
       };
+      if (v === 133) {
+          // TODO
+      }
       if (v === 141) {
           return addGroup(fslAndSc(55)(6))
               (addGroup(lvlCnt(290))
@@ -8076,10 +8082,10 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(48);
+  var allExpeditionIds = Data_Array.range(1)(50);
   allExpeditionIds.push(...Data_Array.range(100)(105));
-  allExpeditionIds.push(...Data_Array.range(110)(114));
-  allExpeditionIds.push(...Data_Array.range(131)(132));
+  allExpeditionIds.push(...Data_Array.range(110)(115));
+  allExpeditionIds.push(...Data_Array.range(131)(133));
   allExpeditionIds.push(...Data_Array.range(141)(142));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
@@ -8295,11 +8301,19 @@ var PS = {};
       if (eId === 114) {
           return income(500)(500)(1000)(750);
       };
+      if (eId === 115) {
+          // TODO
+          return income(0)(0)(0)(0);
+      };
       if (eId === 131) {
           return income(0)(20)(20)(100);
       };
       if (eId === 132) {
           return income(0)(0)(400)(800);
+      };
+      if (eId === 133) {
+          // TODO
+          return income(0)(0)(0)(0);
       };
       if (eId === 141) {
           return income(0)(600)(600)(1000);
@@ -8522,11 +8536,17 @@ var PS = {};
       if (eId === 114) {
           return c(9)(9.5)(hm(6)(30));
       };
+      if (eId === 115) {
+          return c(9.5)(9.5)(hm(5)(50));
+      };
       if (eId === 131) {
           return c(7.5)(5)(hr(2));
       };
       if (eId === 132) {
           return c(9)(9)(hr(10));
+      };
+      if (eId === 133) {
+          return c(9)(9.5)(hr(12));
       };
       if (eId === 141) {
           return c(9.5)(8.5)(hm(7)(30));
@@ -10997,6 +11017,22 @@ var PS = {};
         "api_return_flag": 1,
         "api_sample_fleet": [11, 8, 16, 3, 2, 2]
     }, {
+        "api_id": 115,
+        "api_disp_no": "B6",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 350,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.95,
+        "api_use_bull": 0.95,
+        "api_win_item1": [3, 5],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [3, 4, 3, 3],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
         "api_id": 131,
         "api_disp_no": "D1",
         "api_maparea_id": 4,
@@ -11028,6 +11064,22 @@ var PS = {};
         "api_win_mat_level": [0, 0, 2, 4],
         "api_return_flag": 1,
         "api_sample_fleet": [20, 2, 13, 13, 13, 0]
+    }, {
+        "api_id": 133,
+        "api_disp_no": "D3",
+        "api_maparea_id": 4,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 720,
+        "api_deck_num": 5,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.95,
+        "api_win_item1": [1, 3],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [0, 4, 3, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [20, 3, 13, 13, 13, 13]
     }, {
         "api_id": 141,
         "api_disp_no": "E1",
@@ -11073,7 +11125,7 @@ var PS = {};
     };
 
     exports.gsByFlagshipLevelList = [
-        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
+        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 115, 131, 132, 133, 141
     ];
 
     exports.monthlyUnlockTable = {
@@ -11083,7 +11135,9 @@ var PS = {};
         105: [104, 113],
         112: [111],
         113: [112],
-        114: [113]
+        114: [113],
+        115: [114],
+        133: [132]
     };
 
     exports.alternativeCompoTable = {

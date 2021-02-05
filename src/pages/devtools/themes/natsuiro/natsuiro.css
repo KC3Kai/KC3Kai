@@ -436,10 +436,26 @@ html,body {
 }
 .module.activity .consumables .consumable.itemPage {
 	display:none;
+}
+.module.activity .consumables .consumable.itemPage,
+.module.activity .consumables .consumable.column3 {
 	width:60px;
 }
-.module.activity .consumables .consumable.itemPage .consumable_ltext {
+.module.activity .consumables .consumable.itemPage .consumable_ltext,
+.module.activity .consumables .consumable.column3 .consumable_ltext {
 	width:40px;
+}
+.module.activity .consumables .consumable.column3.narrower {
+	width:55px;
+}
+.module.activity .consumables .consumable.column3.narrower .consumable_ltext {
+	width:35px;
+}
+.module.activity .consumables .consumable.column3.wider {
+	width:70px;
+}
+.module.activity .consumables .consumable.column3.wider .consumable_ltext {
+	width:50px;
 }
 
 /* Expedition */
