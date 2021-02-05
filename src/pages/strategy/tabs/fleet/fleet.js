@@ -46,16 +46,18 @@
 				hqlv: PlayerManager.hq.level
 			};
 			if(isImgBuilder) {
-				dBuilder.theme = ConfigManager.sr_theme;
-				if(["kr", "jp", "en", "scn", "tcn"].includes(ConfigManager.language)) {
-					dBuilder.lang = ConfigManager.language;
-				}
+				dBuilder.theme = {
+					"legacy": "official",
+					"dark": "dark",
+				}[ConfigManager.sr_theme] || "dark";
+				dBuilder.lang = ["kr", "jp", "scn", "tcn"].includes(ConfigManager.language) ?
+					ConfigManager.language : "en";
 			}
 
 			fleetsObj
 				.map( self.createKCFleetObject )
 				.map( function(x,i) {
-					dBuilder["f" + (i+1)] = x.deckbuilder();
+					dBuilder["f" + (i+1)] = x.deckbuilder(isImgBuilder);
 				});
 			return dBuilder;
 		},
@@ -164,7 +166,7 @@
 			$("button#control_export_imgkcbuilder").on("click", function() {
 				var converted = self.fleetsObjToDeckBuilder( self.currentFleetsObj, true );
 				console.log( "JSON to be exported", JSON.stringify( converted ) );
-				window.open("https://www.nishikuma.net/ImgKCbuilder/?predeck="+
+				window.open("https://kancolleimgbuilder.web.app/builder?deck="+
 							encodeURI( JSON.stringify( converted )));
 			});
 

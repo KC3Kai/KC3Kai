@@ -680,6 +680,31 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		}
 	});
 	
+	/* To bypass gadget server access restriction outside of jp area.
+	Listen to webRequest.onBeforeRequest and redirect all requests sent to gadget server,
+	to a public cache server, which now hosted on Github Pages.
+	------------------------------------------*/
+	if(chrome.webRequest) {
+		// Note: gadget server IP address also configured in permissions of mainifest.json
+		const gadgetServerHost = "203.104.209.7/";
+		const gadgetRequestListener = function(details) {
+			if(ConfigManager.dmm_redirgadget) {
+				const cacheServerBaseUrl = ConfigManager.dmm_gadgetcache || "https://kcwiki.github.io/cache/";
+				const path = details.url.split(gadgetServerHost)[1] || "";
+				// console.debug("Redirecting gadget " + details.type + " request:", details.url, "to:", cacheServerBaseUrl);
+				return {
+					redirectUrl: [cacheServerBaseUrl, (cacheServerBaseUrl.endsWith("/") ? "" : "/"), path].join("")
+				};
+			} else {
+				return {};
+			}
+		};
+		chrome.webRequest.onBeforeRequest.addListener(gadgetRequestListener, {
+			urls: ["*://" + gadgetServerHost + "*"],
+			types: ["main_frame", "sub_frame", "font", "image", "script", "stylesheet"],
+		}, ["blocking"]);
+	}
+	
 	/* On Web Storage (localStorage here) Changed
 	Reload our ConfigManager as soon as possible on the key `config` changed,
 	Instead of explicitly invoking `load` method everywhere.

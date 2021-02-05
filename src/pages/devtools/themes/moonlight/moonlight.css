@@ -528,10 +528,10 @@ html,body {
 	background-color:rgba(0,40,30,0.3);
 }
 .module.consumableList .consumable_icon {
-	width:20px;
-	height:20px;
-	float:left;
+	width:12px;
+	height:12px;
 	text-align:center;
+	display:inline-block;
 }
 .module.consumableList .consumable_icon img {
 	width:16px;
@@ -539,16 +539,21 @@ html,body {
 	margin:1px 2px 2px 2px;
 	vertical-align:top;
 }
+.module.consumableList .consumable_toggles .consumable_icon {
+	margin-left:2px;
+	margin-right:2px;
+}
 .module.consumableList .consumable_toggles .consumable_icon img {
-	margin:1px 2px 2px 2px;
+	margin:0px;
+	margin-top:1px;
 }
 .module.consumableList .consumable_ltext {
-	width:48px;
+	width:86px;
 	font-size:12px;
-	line-height:18px;
-	float:left;
+	line-height:12px;
 	white-space:nowrap;
 	text-align:center;
+	margin-top:-16.5px;
 }
 .module.consumableList .consumable_max {
 	width:34px;
@@ -561,7 +566,7 @@ html,body {
 	width:48px;
 }
 .module.consumableList .consumables .consumable.itemPage .consumable_ltext {
-	width:26px;
+	width:64px;
 }
 
 /* Expedition */

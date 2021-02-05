@@ -338,6 +338,10 @@ Saves and loads significant data for future use
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
+		 *   * [662] Noshiro Kai Ni can NOT equip torpedo [5] on slot 4,
+		 *     nothing needed to be handled for now, since we haven't added slot index condition.
+		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
 		 */
 		equip_on :function(gearId, type2Id){
 			if(!this.available) return false;
