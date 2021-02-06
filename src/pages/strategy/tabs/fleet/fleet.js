@@ -7,6 +7,7 @@
 		tabSelf: KC3StrategyTabs.fleet,
 		horizontal: false,
 
+		viewType: "",
 		currentFleetsObj: null,
 		suggestedName: "",
 
@@ -93,8 +94,9 @@
 				self.setupUIByViewType( this.value );
 			});
 
-			$("button#control_view").on("click", function() {
+			$("button#control_view").on("click", function () {
 				var viewType = $("input[type=radio][name=view_type]:checked").val();
+				self.updateViewType(viewType);
 				self.executeView(viewType);
 			});
 
@@ -151,6 +153,10 @@
 			});
 
 			$("button#control_export_imgkcbuilder").on("click", function () {
+				if (self.viewType === 'current') {
+					KC3ImageBuilder.exportCurrentFleets();
+					return;
+				}
 				var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);
 				KC3ImageBuilder.open(converted);
 			});
@@ -170,11 +176,17 @@
 			updateHorizontal();
 
 			this.refreshSavedFleets();
-			if(!!KC3StrategyTabs.pageParams[1]){
+			if (!!KC3StrategyTabs.pageParams[1]) {
+				this.updateViewType(KC3StrategyTabs.pageParams[1]);
 				this.executeView(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2] || false);
-			}else{
+			} else {
+				this.updateViewType('current');
 				this.executeView("current");
 			}
+		},
+
+		updateViewType(value) {
+			this.viewType = value;
 		},
 
 		ifFleetsObjExists: function(name) {
