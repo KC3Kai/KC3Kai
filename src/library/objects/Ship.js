@@ -1930,7 +1930,7 @@ KC3改 Ship Object
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
 		if(isThisLightCruiser && warfareType !== "Antisub") {
-			// 14cm, 15.2cm
+			// 14cm, 15.2cm, except [310] 14cm K, [407] 15.2cm K2
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
