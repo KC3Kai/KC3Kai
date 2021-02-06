@@ -525,6 +525,11 @@
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
+			const exportImageBuilder = function () {
+				const id = $(this).data('id');
+				if (!id) return;
+				KC3ImageBuilder.exportSortie(id);
+			};
 			const parseAirRaidFunc = function(airRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
 				if(airRaid.api_air_base_attack) {
@@ -654,6 +659,9 @@
 					showSortieLedger(sortie.id, sortieBox, sortie.world);
 					$(".button_tomanager", sortieBox).data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
+					$(".export_img_builder", sortieBox)
+						.data("id", sortie.id)
+						.on("click", exportImageBuilder);
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
