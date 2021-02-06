@@ -48,7 +48,7 @@
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas);
       open(deckBuilder);
-    })
+    });
   }
 
   function getFleetsFromSortie(sortie) {
@@ -106,9 +106,9 @@
           mas: plane.ace,
         };
         lbasObj.items['i' + (i + 1)] = planeObj;
-      })
+      });
       deckBuilder['a' + (i + 1)] = lbasObj;
-    })
+    });
   }
 
   function checkLbasBuilderInput(deckBuilder, lbas) {
