@@ -1468,6 +1468,8 @@ Contains summary information about a fleet and its ships
 
 	KC3Fleet.prototype.deckbuilder = function(forImgBuilder) {
 		const result = {};
+		// seems gkcoi will be buggy for some fleet names
+		//if(forImgBuilder) result.name = this.name;
 		this.ship().forEach((ship, index) => {
 			result[`s${index + 1}`] = ship.deckbuilder(forImgBuilder);
 		});

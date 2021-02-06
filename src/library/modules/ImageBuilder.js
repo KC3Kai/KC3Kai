@@ -1,76 +1,91 @@
+/**
+ * Exactly, this module is a data builder of online website Image Builder,
+ * which generates the fleets composition image on a canvas, instead of building an image by itself.
+ *
+ * Currently, supports to export data to the web Image Builder hosted by:
+ *   https://github.com/HitomaruKonpaku/KanColleImgBuilder
+ * which depends on GKCOI (Generate KanColle Organization Image) originally created by:
+ *   https://github.com/Nishisonic/gkcoi
+ * which supports data format originally created by DeckBuilder:
+ *   http://www.kancolle-calc.net/deckbuilder.html
+ */
 (function () {
   'use strict';
 
-  const exportUrl = 'https://kancolleimgbuilder.web.app/builder?deck=';
-  // const exportUrl = 'http://localhost:4200/builder?deck=';
+  const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder?deck=';
   const defaultLang = 'en';
-  const supportedLangs = ['jp', 'kr', 'scn'];
+  const supportedLangs = {
+    'jp': 'jp',
+    'kr': 'kr',
+    'scn': 'scn',
+    // gkcoi does not support tcn, map them to jp
+    'tcn': 'jp',
+    'tcn-yue': 'jp',
+  };
   const defaultTheme = 'dark';
   const supportedThemes = {
     'dark': 'dark',
-    'legacy': 'official',
+    // gkcoi does not show LBAS for other theme, so map all to dark
+    'legacy': 'dark',
   };
 
   window.KC3ImageBuilder = {
-    open,
+    openWebsite,
     exportCurrentFleets,
     exportSortie,
-    getBaseDeckBuilder,
-    getFleetsFromSortie,
-    convertFleet,
-    createKCFleetObject,
+    createDeckBuilderHeader,
+    createFleetsFromSortie,
+    convertSortiedFleet,
+    createKC3FleetObject,
   };
 
-  function open(deckBuilder) {
-    const json = JSON.stringify(deckBuilder);
-    // console.debug(json);
-    const url = exportUrl + encodeURI(json);
-    console.debug(url);
+  function openWebsite(deckBuilderData) {
+    const json = JSON.stringify(deckBuilderData);
+    const url = exportBaseUrl + encodeURI(json);
+    //console.log("JSON to be exported", json);
+    //console.debug("Site to be exported", url);
     window.open(url);
   }
 
   function exportCurrentFleets() {
-    PlayerManager.loadFleets();
-    PlayerManager.loadBases();
+    // Not reload storage here to keep WYSIWYG in Strategy Room Fleet Manager,
+    // and not necessary to refresh for devtools panel page.
+    //PlayerManager.loadFleets();
+    //PlayerManager.loadBases();
     const fleets = PlayerManager.fleets;
     const lbas = PlayerManager.bases;
-    const deckBuilder = getBaseDeckBuilder(true);
+    const deckBuilder = createDeckBuilderHeader(true);
     buildFleets(deckBuilder, fleets);
     buildLbasFromPlayerManager(deckBuilder, lbas);
-    open(deckBuilder);
+    openWebsite(deckBuilder);
   }
 
   function exportSortie(sortieId) {
     KC3Database.get_sortie(sortieId, sortie => {
-      const fleets = getFleetsFromSortie(sortie);
+      const fleets = createFleetsFromSortie(sortie);
       const lbas = sortie.lbas;
-      const deckBuilder = getBaseDeckBuilder(true);
+      const deckBuilder = createDeckBuilderHeader(true);
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas);
-      open(deckBuilder);
+      openWebsite(deckBuilder);
     });
   }
 
-  function getFleetsFromSortie(sortie) {
+  function createFleetsFromSortie(sortie) {
     const fleets = [];
-    fleets.push(convertFleet(sortie.fleet1, 1));
-    fleets.push(convertFleet(sortie.fleet2, 2));
-    fleets.push(convertFleet(sortie.fleet3, 3));
-    fleets.push(convertFleet(sortie.fleet4, 4));
-    return fleets.map(v => createKCFleetObject(v));
+    fleets.push(convertSortiedFleet(sortie.fleet1, 1));
+    fleets.push(convertSortiedFleet(sortie.fleet2, 2));
+    fleets.push(convertSortiedFleet(sortie.fleet3, 3));
+    fleets.push(convertSortiedFleet(sortie.fleet4, 4));
+    return fleets.map(v => createKC3FleetObject(v));
   }
 
-  function getBaseDeckBuilder(isImgBuilder = false) {
+  function createDeckBuilderHeader(forImgBuilder = false) {
     const obj = {
       hqlv: PlayerManager.hq.level,
     };
-    if (isImgBuilder) {
-      const language = ConfigManager.language;
-      obj.lang = supportedLangs.includes(language)
-        ? language
-        : language === 'tcn'
-          ? 'jp'
-          : defaultLang;
+    if (forImgBuilder) {
+      obj.lang = supportedLangs[ConfigManager.language] || defaultLang;
       obj.theme = supportedThemes[ConfigManager.sr_theme] || defaultTheme;
     } else {
       obj.version = 4;
@@ -148,7 +163,7 @@
     return shipObj;
   }
 
-  function convertFleet(fleetData, fleetNum) {
+  function convertSortiedFleet(fleetData, fleetNum) {
     var fleetObj = {};
     fleetObj.name = 'Fleet #' + fleetNum;
     fleetObj.ships = [];
@@ -158,7 +173,7 @@
     return fleetObj;
   }
 
-  function createKCFleetObject(fleetObj) {
+  function createKC3FleetObject(fleetObj) {
     var fleet = new KC3Fleet();
     if (!fleetObj) return fleet;
     fleet.name = fleetObj.name;

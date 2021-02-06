@@ -526,8 +526,8 @@
 				}
 			};
 			const exportImageBuilder = function () {
-				const id = $(this).data('id');
-				if (!id) return;
+				const id = $(this).data("id");
+				if(!id) return;
 				KC3ImageBuilder.exportSortie(id);
 			};
 			const parseAirRaidFunc = function(airRaid) {

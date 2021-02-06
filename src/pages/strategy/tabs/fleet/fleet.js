@@ -41,13 +41,13 @@
 		 */
 
 		fleetsObjToDeckBuilder: function(fleetsObj, isImgBuilder = false) {
-			var dBuilder = KC3ImageBuilder.getBaseDeckBuilder(isImgBuilder);
+			var dBuilderData = KC3ImageBuilder.createDeckBuilderHeader(isImgBuilder);
 			fleetsObj
-				.map(KC3ImageBuilder.createKCFleetObject)
+				.map(KC3ImageBuilder.createKC3FleetObject)
 				.map( function(x,i) {
-					dBuilder["f" + (i+1)] = x.deckbuilder(isImgBuilder);
+					dBuilderData["f" + (i+1)] = x.deckbuilder(isImgBuilder);
 				});
-			return dBuilder;
+			return dBuilderData;
 		},
 
 		/* INIT
@@ -70,6 +70,7 @@
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			PlayerManager.loadFleets();
+			PlayerManager.loadBases();
 		},
 
 		/* EXECUTE
@@ -96,7 +97,6 @@
 
 			$("button#control_view").on("click", function () {
 				var viewType = $("input[type=radio][name=view_type]:checked").val();
-				self.updateViewType(viewType);
 				self.executeView(viewType);
 			});
 
@@ -152,13 +152,13 @@
 							encodeURI( JSON.stringify( converted )));
 			});
 
-			$("button#control_export_imgkcbuilder").on("click", function () {
-				if (self.viewType === 'current') {
+			$("button#control_export_imgkcbuilder").on("click", function() {
+				if (self.viewType === "current") {
 					KC3ImageBuilder.exportCurrentFleets();
-					return;
+				} else {
+					var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);
+					KC3ImageBuilder.openWebsite(converted);
 				}
-				var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);
-				KC3ImageBuilder.open(converted);
 			});
 
 			const updateHorizontal = () => {
@@ -177,16 +177,10 @@
 
 			this.refreshSavedFleets();
 			if (!!KC3StrategyTabs.pageParams[1]) {
-				this.updateViewType(KC3StrategyTabs.pageParams[1]);
 				this.executeView(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2] || false);
 			} else {
-				this.updateViewType('current');
 				this.executeView("current");
 			}
-		},
-
-		updateViewType(value) {
-			this.viewType = value;
 		},
 
 		ifFleetsObjExists: function(name) {
@@ -243,6 +237,7 @@
 
 		executeView: function(viewType, viewName) {
 			$(".fleet_error_msg").text("").hide();
+			this.viewType = viewType;
 			if (viewType === "current") {
 				this.showCurrentFleets();
 			} else if (viewType === "saved") {
@@ -304,7 +299,7 @@
 			}
 
 			var kcFleets = fleetsObj.map( function( fleetObj ) {
-				return KC3ImageBuilder.createKCFleetObject(fleetObj);
+				return KC3ImageBuilder.createKC3FleetObject(fleetObj);
 			});
 
 			self.showAllKCFleets( kcFleets );
@@ -324,13 +319,13 @@
 				}
 
 				var fleetsObj = [];
-				fleetsObj.push(KC3ImageBuilder.convertFleet(sortieData.fleet1, 1));
-				fleetsObj.push(KC3ImageBuilder.convertFleet(sortieData.fleet2, 2));
-				fleetsObj.push(KC3ImageBuilder.convertFleet(sortieData.fleet3, 3));
-				fleetsObj.push(KC3ImageBuilder.convertFleet(sortieData.fleet4, 4));
+				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet1, 1));
+				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet2, 2));
+				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet3, 3));
+				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet4, 4));
 
 				var kcFleets = fleetsObj.map(function (fleetObj) {
-					return KC3ImageBuilder.createKCFleetObject(fleetObj);
+					return KC3ImageBuilder.createKC3FleetObject(fleetObj);
 				});
 
 				self.currentFleetsObj = fleetsObj;
