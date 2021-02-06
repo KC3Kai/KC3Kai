@@ -4969,7 +4969,7 @@ KC3改 Equipment Object
 					{
 						// Jintsuu
 						origins: [55],
-						single: { "houg": 4, "raig": 8 },
+						single: { "houg": 8, "raig": 8, "houk": -1 },
 					},
 					{
 						// Akigumo

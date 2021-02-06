@@ -7794,6 +7794,10 @@ var PS = {};
       };
       if (v === 115) {
           // TODO
+          return addGroup(fslAndSc(70)(6))
+              (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                  (sty(5)(KanColle_Generated_SType.DD.value))
+              );
       }
       if (v === 131) {
           return addGroup(fslAndSc(50)(5))
@@ -7831,6 +7835,12 @@ var PS = {};
       };
       if (v === 133) {
           // TODO
+          return addGroup(fslAndSc(60)(5))
+              (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                      (submarine(3))
+                  )
+              );
       }
       if (v === 141) {
           return addGroup(fslAndSc(55)(6))
@@ -8302,8 +8312,7 @@ var PS = {};
           return income(500)(500)(1000)(750);
       };
       if (eId === 115) {
-          // TODO
-          return income(0)(0)(0)(0);
+          return income(600)(1000)(600)(600);
       };
       if (eId === 131) {
           return income(0)(20)(20)(100);

@@ -2535,6 +2535,11 @@ Previously known as "Reactor"
 					.filter(stype => [3, 4, 21].includes(stype)).length >= 3) {
 					KC3QuestManager.get(716).increment();
 				}
+				// G9: Yearly modernizate any CL(T)/CT with 3 or more CA(V)
+				if([3, 4, 21].includes(MasterShip.api_stype) && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => [5, 6].includes(stype)).length >= 3) {
+					KC3QuestManager.get(717).increment();
+				}
 				KC3Network.trigger("Quests");
 			}
 			
