@@ -797,10 +797,14 @@
 		});
 
 		// Export button
-		$(".module.controls .btn_export").on("click", function(){
-			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify(PlayerManager.prepareDeckbuilder())
+		$(".module.controls .btn_export").on("click", function(e){
+			if(e.altKey && window.KC3ImageBuilder) {
+				KC3ImageBuilder.exportCurrentFleets();
+			} else {
+				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+					JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
+			}
 		});
 
 		function changeLayout(type) {
