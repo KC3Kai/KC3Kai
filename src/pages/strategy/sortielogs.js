@@ -525,12 +525,10 @@
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
 				}
 			};
-			const exportImageBuilder = async function () {
-				const id = $(this).data("id");
+			const exportImageBuilder = function () {
+				const id = $(this).data('id');
 				if (!id) return;
-				const imgBuilder = new KC3ImageBuilder();
-				imgBuilder.exportCurrentFleets();
-				imgBuilder.exportSortie(id);
+				KC3ImageBuilder.exportSortie(id);
 			};
 			const parseAirRaidFunc = function(airRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};

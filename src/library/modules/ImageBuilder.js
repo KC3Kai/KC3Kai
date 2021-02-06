@@ -1,94 +1,119 @@
 (function () {
   'use strict';
 
-  window.KC3ImageBuilder = function () {
-    this.exportUrl = 'https://kancolleimgbuilder.web.app/builder?deck=';
-    // this.exportUrl = 'http://localhost:4200/builder?deck=';
+  const exportUrl = 'https://kancolleimgbuilder.web.app/builder?deck=';
+  // const exportUrl = 'http://localhost:4200/builder?deck=';
+  const defaultLang = 'en';
+  const supportedLangs = ['jp', 'kr', 'scn'];
+  const defaultTheme = 'dark';
+  const supportedThemes = {
+    'dark': 'dark',
+    'legacy': 'official',
   };
 
-  KC3ImageBuilder.prototype.exportCurrentFleets = function () {
+  window.KC3ImageBuilder = {
+    open,
+    exportCurrentFleets,
+    exportSortie,
+    getBaseDeckBuilder,
+    getFleetsFromSortie,
+    convertFleet,
+    createKCFleetObject,
+  };
+
+  function open(deckBuilder) {
+    const json = JSON.stringify(deckBuilder);
+    // console.debug(json);
+    const url = exportUrl + encodeURI(json);
+    console.debug(url);
+    window.open(url);
+  }
+
+  function exportCurrentFleets() {
     PlayerManager.loadFleets();
     PlayerManager.loadBases();
     const fleets = PlayerManager.fleets;
     const lbas = PlayerManager.bases;
-    const url = this.exportUrl + encodeURI(JSON.stringify(genDeckBuilder(fleets, lbas)));
-    console.debug(url);
+    const deckBuilder = getBaseDeckBuilder(true);
+    buildFleets(deckBuilder, fleets);
+    buildLbasFromPlayerManager(deckBuilder, lbas);
+    open(deckBuilder);
   }
 
-  KC3ImageBuilder.prototype.exportSortie = function (sortieId) {
+  function exportSortie(sortieId) {
     KC3Database.get_sortie(sortieId, sortie => {
-      console.debug(sortie)
-      const fleets = [];
-      fleets.push(convertFleet(sortie.fleet1, 1));
-      fleets.push(convertFleet(sortie.fleet2, 2));
-      fleets.push(convertFleet(sortie.fleet3, 3));
-      fleets.push(convertFleet(sortie.fleet4, 4));
-      const deck = genDeckBuilder(fleets.map(v => createKCFleetObject(v)));
-      if (sortie.lbas) {
-        sortie.lbas.forEach((lb, i) => {
-          const result = {
-            mode: lb.action,
-            items: {},
-          };
-          lb.planes.forEach((v, i) => {
-            const item = {
-              id: v.mst_id,
-              rf: v.stars,
-              mas: v.ace,
-            };
-            result.items['i' + (i + 1)] = item;
-          });
-          deck['a' + (i + 1)] = result
-        })
-      }
-      console.debug(deck)
-      const url = this.exportUrl + encodeURI(JSON.stringify(deck));
-      console.debug(url);
-    });
+      const fleets = getFleetsFromSortie(sortie);
+      const lbas = sortie.lbas;
+      const deckBuilder = getBaseDeckBuilder(true);
+      buildFleets(deckBuilder, fleets);
+      buildLbasFromSortie(deckBuilder, lbas);
+      open(deckBuilder);
+    })
   }
 
-  /**
-   * Gen DeckBuilder
-   * @param {*} fleets Array of KC3Fleet
-   * @param {*} lbas Array of KC3LandBase
-   * @see https://github.com/Nishisonic/gkcoi#deckbuilder
-   */
-  function genDeckBuilder(fleets, lbas) {
-    const deckBuilder = {
-      version: 4,
-      hqlv: PlayerManager.hq.level
+  function getFleetsFromSortie(sortie) {
+    const fleets = [];
+    fleets.push(convertFleet(sortie.fleet1, 1));
+    fleets.push(convertFleet(sortie.fleet2, 2));
+    fleets.push(convertFleet(sortie.fleet3, 3));
+    fleets.push(convertFleet(sortie.fleet4, 4));
+    return fleets.map(v => createKCFleetObject(v));
+  }
+
+  function getBaseDeckBuilder(isImgBuilder = false) {
+    const obj = {
+      hqlv: PlayerManager.hq.level,
     };
+    if (isImgBuilder) {
+      obj.lang = supportedLangs.includes(ConfigManager.language)
+        ? ConfigManager.language
+        : defaultLang;
+      obj.theme = supportedThemes[ConfigManager.sr_theme] || defaultTheme;
+    } else {
+      obj.version = 4;
+    }
+    return obj;
+  }
 
-    deckBuilder.lang = ['jp', 'kr', 'scn', 'tcn'].includes(ConfigManager.language)
-      ? ConfigManager.language
-      : 'en';
-
-    deckBuilder.theme = {
-      'dark': 'dark',
-      'legacy': 'official',
-    }[ConfigManager.sr_theme] || 'dark';
-
+  function buildFleets(deckBuilder, fleets) {
     fleets.forEach((v, i) => {
       deckBuilder['f' + (i + 1)] = v.deckbuilder(true);
     });
-
-    if (lbas) {
-      lbas.forEach((v, i) => {
-        deckBuilder['a' + (i + 1)] = v.deckbuilder();
-      });
-    }
-
-    return deckBuilder;
   }
 
-  function convertFleet(fleetData, fleetNum) {
-    var fleetObj = {};
-    fleetObj.name = 'Fleet #' + fleetNum;
-    fleetObj.ships = [];
-    $.each(fleetData, function (ind, ship) {
-      fleetObj.ships.push(convertShip(ship));
+  function buildLbasFromPlayerManager(deckBuilder, lbas) {
+    if (!checkLbasBuilderInput(deckBuilder, lbas)) {
+      return;
+    }
+    lbas.forEach((lb, i) => {
+      deckBuilder['a' + (i + 1)] = lb.deckbuilder();
     });
-    return fleetObj;
+  }
+
+  function buildLbasFromSortie(deckBuilder, lbas) {
+    if (!checkLbasBuilderInput(deckBuilder, lbas)) {
+      return;
+    }
+    lbas.forEach((lb, i) => {
+      const lbasObj = {
+        mode: lb.action,
+        items: {},
+      };
+      lb.planes.forEach((plane, i) => {
+        const planeObj = {
+          id: plane.mst_id,
+          rf: plane.stars,
+          mas: plane.ace,
+        };
+        lbasObj.items['i' + (i + 1)] = planeObj;
+      })
+      deckBuilder['a' + (i + 1)] = lbasObj;
+    })
+  }
+
+  function checkLbasBuilderInput(deckBuilder, lbas) {
+    const isValid = deckBuilder && typeof deckBuilder === 'object' && Array.isArray(lbas);
+    return isValid;
   }
 
   function convertShip(shipData) {
@@ -118,6 +143,16 @@
       shipObj.equipments.push(null);
 
     return shipObj;
+  }
+
+  function convertFleet(fleetData, fleetNum) {
+    var fleetObj = {};
+    fleetObj.name = 'Fleet #' + fleetNum;
+    fleetObj.ships = [];
+    $.each(fleetData, function (ind, ship) {
+      fleetObj.ships.push(convertShip(ship));
+    });
+    return fleetObj;
   }
 
   function createKCFleetObject(fleetObj) {
