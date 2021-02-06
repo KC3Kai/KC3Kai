@@ -65,9 +65,12 @@
       hqlv: PlayerManager.hq.level,
     };
     if (isImgBuilder) {
-      obj.lang = supportedLangs.includes(ConfigManager.language)
-        ? ConfigManager.language
-        : defaultLang;
+      const language = ConfigManager.language;
+      obj.lang = supportedLangs.includes(language)
+        ? language
+        : language === 'tcn'
+          ? 'jp'
+          : defaultLang;
       obj.theme = supportedThemes[ConfigManager.sr_theme] || defaultTheme;
     } else {
       obj.version = 4;
