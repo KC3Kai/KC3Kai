@@ -4711,7 +4711,7 @@ KC3改 Equipment Object
 					{
 						// Noshiro K2
 						ids: [662],
-						multiple: { "tais": 2, "houk": 4 },
+						single: { "tais": 2, "houk": 4 },
 					},
 				],
 			},
@@ -4984,7 +4984,7 @@ KC3改 Equipment Object
 					{
 						// Noshiro Kai Ni
 						ids: [662],
-						multiple: { "houg": 4, "raig": 2 },
+						single: { "houg": 4, "raig": 2 },
 					},
 				],
 			},
