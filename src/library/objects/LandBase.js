@@ -222,4 +222,21 @@
 		return returnObj;
 	};
 
+	KC3LandBase.prototype.deckbuilder = function () {
+		const result = {
+			mode: this.action,
+			items: {},
+		};
+		this.planes.forEach((v, i) => {
+			const gear = KC3GearManager.get(v.api_slotid);
+			const item = {
+				id: gear.masterId,
+				rf: gear.stars,
+				mas: gear.ace,
+			};
+			result.items['i' + (i + 1)] = item;
+		});
+		return result;
+	};
+
 })();

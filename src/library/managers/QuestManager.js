@@ -230,7 +230,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyFeb',
 				key: 'timeToResetYearlyFebQuests',
 				resetMonth: FEBRUARY,
-				questIds: [348, 434, 442, 716, 904, 905],
+				questIds: [348, 434, 442, 716, 717, 904, 905],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
 				},

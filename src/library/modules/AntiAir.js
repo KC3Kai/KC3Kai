@@ -500,8 +500,9 @@ AntiAir: anti-air related calculations
 				78, // Ark Royal Class
 				82, // Jervis Class
 				88, // Nelson Class
-				// No sample found from Shelffield for now
-				//108, // Town Class
+				// Shelffield not been capable until 2021-2-5 fix
+				// https://twitter.com/KanColle_STAFF/status/1357645300895080449
+				108, // Town Class
 			].indexOf( mst.api_ctype ) !== -1 ||
 			// Kongou Class Kai Ni, K2C
 			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;

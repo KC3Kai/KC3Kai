@@ -644,6 +644,13 @@
 	margin:5px 5px 5px 5px;
 }
 
+.tab_event .sortie_list .export_img_builder {
+	width:auto;
+	float:none;
+	padding:0px 5px 0px 5px;
+	margin:5px 5px 5px 5px;
+}
+
 /* Sortie Nodes */
 .tab_event .sortie_list .sortie_nodes {
 	width:675px;
