@@ -1466,10 +1466,12 @@ Contains summary information about a fleet and its ships
 		return shipsArray;
 	};
 
-	KC3Fleet.prototype.deckbuilder = function() {
+	KC3Fleet.prototype.deckbuilder = function(forImgBuilder) {
 		const result = {};
+		// seems gkcoi will be buggy for some fleet names
+		//if(forImgBuilder) result.name = this.name;
 		this.ship().forEach((ship, index) => {
-			result[`s${index + 1}`] = ship.deckbuilder();
+			result[`s${index + 1}`] = ship.deckbuilder(forImgBuilder);
 		});
 		return result;
 	};

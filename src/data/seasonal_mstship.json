@@ -4019,5 +4019,45 @@
 		"api_stype": 3,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5502": {
+		"api_id": 5502,
+		"api_name": "節分朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5503": {
+		"api_id": 5503,
+		"api_name": "節分迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5504": {
+		"api_id": 5504,
+		"api_name": "節分鳳翔",
+		"api_yomi": "ほうしょう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5505": {
+		"api_id": 5505,
+		"api_name": "節分伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5506": {
+		"api_id": 5506,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

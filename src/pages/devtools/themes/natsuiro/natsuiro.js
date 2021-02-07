@@ -127,7 +127,7 @@
 		// data.fleetConf[fleetNum].expedition: a number
 		// data.expedConf: an object
 		// data.expedConf[expedNum]:
-		// * expedNum: 1..46, 100..105, 110..114, 131..132, 141..142
+		// * expedNum: 1..46, 100..105, 110..115, 131..133, 141..142
 		// * expedNum is number or string, just like fleetNum
 		// data.expedConf[expedNum].greatSuccess: boolean
 
@@ -147,8 +147,8 @@
 			data.expedConf = {};
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
-			fillExpedConfDefaultGreatSuccess(131, 132, 141, 142);
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 115));
+			fillExpedConfDefaultGreatSuccess(131, 132, 133, 141, 142);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -160,6 +160,7 @@
 			// * extended since 2020-03-27: B5, E1 for World 5
 			// * extended since 2020-05-20: A5, A6
 			// * extended since 2020-09-17: 46, E2
+			// * extended since 2021-02-05: B6, D3
 			if(idToValid > 0 && data.expedConf[idToValid] === undefined) {
 				fillExpedConfDefaultGreatSuccess(idToValid);
 			}
@@ -706,10 +707,14 @@
 		});
 
 		// Export button
-		$(".module.controls .btn_export").on("click", function(){
-			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify(PlayerManager.prepareDeckbuilder())
+		$(".module.controls .btn_export").on("click", function(e){
+			if(e.altKey && window.KC3ImageBuilder) {
+				KC3ImageBuilder.exportCurrentFleets();
+			} else {
+				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+					JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
+			}
 		});
 
 		const prepareBattleLogsData = function(){
@@ -1396,30 +1401,35 @@
 				fc200 = PlayerManager.consumables.furniture200 || 0,
 				fc400 = PlayerManager.consumables.furniture400 || 0,
 				fc700 = PlayerManager.consumables.furniture700 || 0,
-				fcboxestot = fc200 * 200 + fc400 * 400 + fc700 * 700;
+				fcboxesTotal = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			const screws = PlayerManager.consumables.screws || 0,
+				devmats =PlayerManager.consumables.devmats || 0,
+				hardMedals = PlayerManager.firstClassMedals || 0,
 				medals = PlayerManager.consumables.medals || 0,
 				presents = PlayerManager.consumables.presents || 0,
-				exchgscrewstot = presents + medals * 4;
+				exchgscrewsTotal = presents + medals * 4 + hardMedals * 10,
+				exchgdevmatTotal = presents * 3 + hardMedals * 10;
 			$(".count_fcoin")
 				.text( KC3Meta.formatNumber(fcoin) )
 				.toggleClass("hardCap", PlayerManager.consumables.fcoin >= getWarnRscCap(PlayerManager.maxCoin))
-				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format(...[fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
-					fcboxestot, fcboxestot + fcoin].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
+				.attr("title", KC3Meta.term("ConsumablesFCoinBoxes").format( [fc200, fc200 * 200, fc400, fc400 * 400, fc700, fc700 * 700,
+					fcboxesTotal, fcboxesTotal + fcoin].map((n) => KC3Meta.formatNumber(n)) )).lazyInitTooltip();
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_screws")
 				.text( KC3Meta.formatNumber(screws) )
 				.toggleClass("hardCap", PlayerManager.consumables.screws >= getWarnRscCap(PlayerManager.maxConsumable))
-				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format(...[medals, medals * 4, presents, presents,
-					exchgscrewstot, exchgscrewstot + screws].map((n) => KC3Meta.formatNumber(n)))).lazyInitTooltip();
+				.attr("title", KC3Meta.term("ConsumablesScrewExchanges").format( [hardMedals, hardMedals * 10, medals, medals * 4, presents, presents,
+					exchgscrewsTotal, exchgscrewsTotal + screws].map((n) => KC3Meta.formatNumber(n)) )).lazyInitTooltip();
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
 				.toggleClass("hardCap", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_devmats")
-				.text( KC3Meta.formatNumber(PlayerManager.consumables.devmats || 0) )
-				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
+				.text( KC3Meta.formatNumber(devmats) )
+				.toggleClass("hardCap", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable))
+				.attr("title", KC3Meta.term("ConsumablesDevmatExchanges").format( [hardMedals, hardMedals * 10, presents, presents * 3,
+					exchgdevmatTotal, exchgdevmatTotal + devmats].map((n) => KC3Meta.formatNumber(n)) )).lazyInitTooltip();
 			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
 				const roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));

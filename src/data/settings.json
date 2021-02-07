@@ -65,7 +65,7 @@
 			{
 				"id": "forceDMMLogin",
 				"name": "SettingsForceDMMLogin",
-				"hide" : 1,
+				"hide": 1,
 				"type": "check"
 			},
 			{
@@ -992,16 +992,9 @@
 		"help" : "",
 		"contents" : [
 			{
-				"id" : "dmm_forcecookies",
-				"name" : "SettingsDMMForceCookies",
-				"type" : "check",
-				"options" : {}
-			},
-			{
 				"id" : "dmm_customize",
 				"name" : "SettingsDMMCustomize",
 				"type" : "check",
-				"hide" : 1,
 				"options" : {}
 			},
 			{
@@ -1010,6 +1003,35 @@
 				"type" : "textarea",
 				"options" : {
 					"tooltip" : "SettingsDMMCustomCSSTip"
+				}
+			}
+		]
+	},
+	{
+		"section": "SettingsDMMAreaErrors",
+		"help" : "https://github.com/KC3Kai/KC3Kai/wiki/Startup-problems",
+		"contents" : [
+			{
+				"id" : "dmm_forcecookies",
+				"name" : "SettingsDMMForceCookies",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "dmm_redirgadget",
+				"name" : "SettingsDMMRedirectGadget",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsDMMRedirectGadgetTip"
+				}
+			},
+			{
+				"id" : "dmm_gadgetcache",
+				"name" : "SettingsDMMGadgetCacheUrl",
+				"type" : "long_text",
+				"options" : {
+					"tooltip" : "SettingsDMMGadgetCacheUrlTip",
+					"placeholder" : "https://kcwiki.github.io/cache/"
 				}
 			}
 		]
@@ -1107,13 +1129,13 @@
 		"section": "SettingsOpenDBSubmission",
 		"help" : "https://github.com/KC3Kai/KC3Kai/issues/2973",
 		"deprecated" : 1,
+		"hide" : 1,
 		"contents" :[
 			{
 				"id" : "OpenDBSubmission_enabled",
 				"name" : "SettingsEnableOpenDBSubmission",
 				"type" : "check",
-				"options" : {},
-				"hide" : 0
+				"options" : {}
 			}
 		]
 	},

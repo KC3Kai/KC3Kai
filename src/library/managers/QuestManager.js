@@ -230,7 +230,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyFeb',
 				key: 'timeToResetYearlyFebQuests',
 				resetMonth: FEBRUARY,
-				questIds: [434, 904, 905],
+				questIds: [348, 434, 442, 716, 717, 904, 905],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
 				},
@@ -568,6 +568,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
+			// Yearly PvP C49, C50, C53
+			this.resetCounterLoop([345, 346, 348], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -735,6 +737,14 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip(563)  // Makigumo K2
 							&& fleet.hasShip(564)  // Kazagumo K2
 							&& fleet.hasShip(648); // Akigumo K2
+					},
+				"348": // C53 PvP with CL/CT as flagship, 2 more CL(T)/CT, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipType([3, 21], 0) &&
+							fleet.countShipType([3, 4, 21]) >= 3 &&
+							fleet.countShipType(2) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

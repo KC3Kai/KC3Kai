@@ -20,6 +20,7 @@
 		"KC3DataBackup": true,
 		"KC3Database": true,
 		"Expedition": true,
+		"KC3ImageBuilder": true,
 		"KC3ImageExport": true,
 		"Kcsapi": true,
 		"KC3Master": true,

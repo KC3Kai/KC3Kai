@@ -146,8 +146,8 @@
 			data.expedConf = {};
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(1, 46));
 			fillExpedConfDefaultGreatSuccess(...Array.numbers(100, 105));
-			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 114));
-			fillExpedConfDefaultGreatSuccess(131, 132, 141, 142);
+			fillExpedConfDefaultGreatSuccess(...Array.numbers(110, 115));
+			fillExpedConfDefaultGreatSuccess(131, 132, 133, 141, 142);
 			localStorage.expedTab = JSON.stringify( data );
 		} else {
 			data = JSON.parse( localStorage.expedTab );
@@ -797,10 +797,14 @@
 		});
 
 		// Export button
-		$(".module.controls .btn_export").on("click", function(){
-			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-				JSON.stringify(PlayerManager.prepareDeckbuilder())
+		$(".module.controls .btn_export").on("click", function(e){
+			if(e.altKey && window.KC3ImageBuilder) {
+				KC3ImageBuilder.exportCurrentFleets();
+			} else {
+				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+					JSON.stringify(PlayerManager.prepareDeckbuilder())
 				)));
+			}
 		});
 
 		function changeLayout(type) {

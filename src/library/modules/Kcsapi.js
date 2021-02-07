@@ -1929,6 +1929,12 @@ Previously known as "Reactor"
 					case 11:
 						KC3QuestManager.get(439).increment(2); // D36: Yearly, index 2
 						break;
+					case 29:
+						KC3QuestManager.get(442).increment(1); // D38: Yearly, index 1
+						break;
+					case 30:
+						KC3QuestManager.get(442).increment(2); // D38: Yearly, index 2
+						break;
 					case 37:
 					case 38:
 						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
@@ -1967,6 +1973,12 @@ Previously known as "Reactor"
 						break;
 					case 114: // B5
 						KC3QuestManager.get(438).increment(3); // D35: Yearly, index 3
+						break;
+					case 131: // D1
+						KC3QuestManager.get(442).increment(0); // D38: Yearly, index 0
+						break;
+					case 133: // D3
+						KC3QuestManager.get(442).increment(3); // D38: Yearly, index 3
 						break;
 					case 142: // E2
 						KC3QuestManager.get(440).increment(3); // D37: Yearly, index 3
@@ -2518,6 +2530,16 @@ Previously known as "Reactor"
 					.filter(stype => stype === 3).length >= 3) {
 					KC3QuestManager.get(715).increment();
 				}
+				// G8: Yearly modernizate any CL(T)/CT with 3 or more CL(T)/CT
+				if([3, 4, 21].includes(MasterShip.api_stype) && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => [3, 4, 21].includes(stype)).length >= 3) {
+					KC3QuestManager.get(716).increment();
+				}
+				// G9: Yearly modernizate any CL(T)/CT with 3 or more CA(V)
+				if([3, 4, 21].includes(MasterShip.api_stype) && consumedShips.map(s => s.master().api_stype)
+					.filter(stype => [5, 6].includes(stype)).length >= 3) {
+					KC3QuestManager.get(717).increment();
+				}
 				KC3Network.trigger("Quests");
 			}
 			
@@ -3017,6 +3039,8 @@ Previously known as "Reactor"
 					KC3QuestManager.get(342).increment(); // C44: Quarterly Exercises 4
 				if(KC3QuestManager.isPrerequisiteFulfilled(345))
 					KC3QuestManager.get(345).increment(); // C49: Yearly Exercises 1
+				if(KC3QuestManager.isPrerequisiteFulfilled(348))
+					KC3QuestManager.get(348).increment(); // C53: Yearly Exercises 3
 			}
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))
