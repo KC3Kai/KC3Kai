@@ -398,13 +398,14 @@
 	
 	// pan_moon_skin presets       bar_style[0],  bar_colors[1],  bar_shape[2],  element_shape[3], wrapper[4],       box_bcolor[5],             shiplist_bg[6],             misc_bg[7]
 	var mode_moonlight =         ["fluid",       "clrdim",      "shape_round",  "shape_round",   "yasen_img",      "actvbg_clrmoonlight",     "slistbg_clrmoonlight",     "miscbg_clrmoonlight"];
-	var mode_natsuiro =          ["natsuiro",    "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrnatsuiro",      "slistbg_clrnone",          "miscbg_clrnone"];
+	var mode_natsuiro =          ["natsuiro",    "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrgrey",          "slistbg_clrnone",          "miscbg_clrgrey"];
 	var mode_dark_blue =         ["flats",       "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
 	var mode_dark =              ["flats_dark",  "clrdark",     "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
-	var mode_flashbang =         ["glassy",      "clrnatsuiro", "shape_rounder","shape_rounder", "bg_white",       "actvbg_clrflashbang",     "slistbg_clrflashbang",     "miscbg_clrflashbang"];
-	var mode_transparency1 =     ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none"   ,        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
-	var mode_transparency2 =     ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none",           "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
-	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "none",           "actvbg_clrlightblue",     "slistbg_clrlightblue",     "miscbg_clrlightblue"];
+	var mode_flashbang =         ["flats_light", "clrdim",      "shape_rect",   "shape_rect",    "bg_white",       "actvbg_clrwhite",         "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_shaded =            ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none"   ,        "actvbg_clrjet",           "slistbg_clrjet",           "miscbg_clrjet"];
+	var mode_blurry =            ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none",           "actvbg_clrjet",           "slistbg_clrjet",           "miscbg_clrjet"];
+	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "none",           "actvbg_clrwhite",         "slistbg_clrwhite",         "miscbg_clrwhite"];
+	var mode_dark_TS =           ["flats_dark",  "clrdark",     "shape_rect",   "shape_rect",    "none",           "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
 	var user_setting_ID =        [ConfigManager.pan_moon_bar_style, ConfigManager.pan_moon_bar_colors, ConfigManager.pan_moon_bar_shape, ConfigManager.pan_moon_element_shape, ConfigManager.pan_moon_wrapper_bg, ConfigManager.pan_box_bcolor_moon_preset, ConfigManager.pan_shiplist_bg_moon_preset, ConfigManager.pan_misc_bg_moon_preset];
 
 	//                               conbut_scheme[8],     misc_icon_bg[9],  ship_icon_bg[10],         ship_icon_border[11],  pan_outline1[12],  drop_shadow[13],        quest_scheme[14]
@@ -412,24 +413,27 @@
 	mode_natsuiro.push(             "conbut_natsuiro",    "icon_natsuiro",  "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_natsuiro");
 	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
 	mode_dark.push(                 "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_dark");
-	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonlight");
-	mode_transparency1.push(        "conbut_moonlight",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
-	mode_transparency2.push(        "conbut_moonlight",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
+	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrgrey",      "clrnone",              "qsch_moonlight");
+	mode_shaded.push(               "conbut_shaded",      "icon_flashbang", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
+	mode_blurry.push(               "conbut_moonlight",   "icon_flashbang", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
 	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrseaweed",   "clrnone",              "qsch_lightblue");
+	mode_dark_TS.push(              "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_dark");
 	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
 
-	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]     opacity[21]
-	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_blue",  0.5);
-	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro",    1);
-	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1);
-	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1);
-	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue",  1);
-	mode_transparency1.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_grey",  0.6);
-	mode_transparency2.push(        "skin_flashbang","tip_moonless", "ep_colorblind",    "shape_round",      "no_skew",        "text_white_grey",  0.3);
-	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_colorblind",    "shape_rounder",    "no_skew",        "text_black_blue",  0.6);
-	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset);
+	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]     opacity[21], bg_effect[22]
+	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_blue",  0.6,         "effect_lighting");
+	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro",    0.6,         "effect_none");
+	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1,           "effect_none");
+	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1,           "effect_none");
+	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_moonlight",     "shape_rect",       "no_skew",        "text_black_blue",  1,           "effect_none");
+	mode_shaded.push(               "skin_shaded",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.4,         "effect_none");
+	mode_blurry.push(               "skin_blurry",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.3,         "effect_blur_soft");
+	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_moonlight",     "shape_rounder",    "no_skew",        "text_black_blue",  0.6,         "effect_none");
+	mode_dark_TS.push(              "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  0.6,         "effect_none");
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset,ConfigManager.pan_moon_bg_effect);
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset,ConfigManager.pan_moon_bg_effect);
 
-	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_transparency1,mode_transparency2,mode_lightblue];
+	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_shaded,mode_blurry,mode_lightblue,mode_dark_TS];
 	var mode_selection = mode_select[ConfigManager.pan_moon_skin];
 	var select_this;
 	
@@ -556,6 +560,9 @@
 		// general element corner shape presets
 		style_select(3,".border_radius_3,.border_radius_5,.border_radius_8,.border_radius_0055,.border_radius_5500");
 
+		//applies a background effect such as a blur for most major elements
+		style_select(22,".bg_effect,.bg_effect_large");
+
 		// ========================= //
 		// ==== Bar Stylization ==== //
 		// ========================= //
@@ -635,14 +642,6 @@
 		$(".font_size8").css("font-size", "calc(8px + "+ConfigManager.pan_moon_font_size+"px)");
 		$(".font_size9").css("font-size", "calc(9px + "+ConfigManager.pan_moon_font_size+"px)");
 		$(".font_size10").css("font-size", "calc(10px + "+ConfigManager.pan_moon_font_size+"px)");
-
-		if(ConfigManager.moon_lighting_effect == false) {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.lship,.sship,.activity_body,.layouts,.sumstats,.consumableList").css("background-image", "none", "important");
-		}
-		else {
-			$(".admiral,.expeditions3,.expeditions2,.summary,.status,.layouts,.sumstats,.consumableList").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%)", "important");
-			$(".activity_body").css("background-image", "radial-gradient(rgba(200, 200, 255, 0.07) 60%, rgba(200, 200, 255, 0.03) 80%, rgba(200, 200, 255, 0.12) 98%)", "important");
-		}
 
 		// Accommodate Korean's very large text without redoing the layout for everyone else
 		if(ConfigManager.language == "kr") {
@@ -1669,13 +1668,13 @@
 				.parent().attr("title", KC3Meta.useItemName(44));
 			$(".count_buckets")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.buckets || 0) )
-				.toggleClass("orange_text", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("green_text", PlayerManager.consumables.buckets >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_torch")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.torch || 0) )
-				.toggleClass("orange_text", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("green_text", PlayerManager.consumables.torch >= getWarnRscCap(PlayerManager.maxConsumable));
 			$(".count_devmats")
 				.text( KC3Meta.formatNumber(PlayerManager.consumables.devmats || 0) )
-				.toggleClass("orange_text", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
+				.toggleClass("green_text", PlayerManager.consumables.devmats >= getWarnRscCap(PlayerManager.maxConsumable));
 			if(Array.isArray(PlayerManager.hq.lastMaterial)){
 				// Regen for fuel, ammo, steel: +3 every 3 minutes. bauxite +1 / 3mins
 				const roundUpTo3Mins = m => String(60 * (m + (m % 3 ? 3 - m % 3 : 0)));
@@ -1738,19 +1737,16 @@
 				if(slotitem) amount = slotitem.amount;
 				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
-			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 91, 92, 94].forEach(updateCountByUseitemId);
+			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94].forEach(updateCountByUseitemId);
 			$(".count_sumScrews").text(
 				(PlayerManager.getConsumableById(4) || 0) +    // screws
 				(PlayerManager.getConsumableById(60) || 0) +   // 1 present box => 1 screw
 				(PlayerManager.getConsumableById(57) || 0) * 4 // 1 medal => 4 screws
 			).parent().attr("title", KC3Meta.useItemName(4));
 			// Update 1 more page for food(or any item?) collecting event
-			/*
 			if(KC3Meta.isDuringFoodEvent()){
 				[85, 86, 87, 88, 89, 68, 93, 90, 62].forEach(updateCountByUseitemId);
-			} else if(ConfigManager.hqInfoPage > ConfigManager.getMaxHqInfoPage()){
-				ConfigManager.scrollHqInfoPage();
-			}*/
+			}
 			$(`.consumables .consumable`).show();
 			$(".consumables").createChildrenTooltips();
 		},
@@ -1908,7 +1904,6 @@
 			function loadQuests(quests) {
 				const questList = $(".activity_quest .quest_list");
 				questList.empty();
-				questList.scrollTop();
 
 				quests.forEach((apiQuest, index) => {
 					const quest = KC3QuestManager.get(apiQuest.api_no);

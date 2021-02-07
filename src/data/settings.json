@@ -1296,12 +1296,13 @@
 					"choices" : [
 						[ "3", "Dark (playable)" ],
 						[ "2", "Dark Blue (playable)" ],
-						[ "4", "Flashbang (0%)" ],
-						[ "7", "Light Blue (needs reevaluation)" ],
+						[ "4", "Flashbang (<10%)" ],
 						[ "0", "Moonlight (playable)" ],
 						[ "1", "Natsuiro (not there yet)"],
-						[ "5", "Weak Transparency Skin (0%)" ],
-						[ "6", "Strong Transparency Skin (0%)" ]
+						[ "5", "Shaded Transparency Skin (<10%)" ],
+						[ "6", "Blurry Transparency Skin (<10%)" ],
+						[ "7", "Light Blue Transparency Skin (needs reevaluation)" ],
+						[ "8", "Dark Transparency Skin (playable)" ]
 					]
 				}
 			},
@@ -1419,8 +1420,9 @@
 						[ "conbut_moonlight", "Moonlight" ],
 						[ "conbut_natsuiro", "Natsuiro" ],
 						[ "conbut_dark", "Dark" ],
-						[ "conbut_moonless", "Edgelord" ],
+						[ "conbut_moonless", "Dark Blue" ],
 						[ "conbut_flashbang", "Flashbang" ],
+						[ "conbut_shaded", "Shaded Transparency Skin" ],
 						[ "conbut_lightblue", "Light Blue" ]
 					]
 				}
@@ -1459,10 +1461,10 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "actvbg_clrnone", "None" ],
 						[ "actvbg_clrmoonlight", "Moonlight" ],
-						[ "actvbg_clrnatsuiro", "Natsuiro" ],
+						[ "actvbg_clrgrey", "Grey" ],
 						[ "actvbg_clrlicoriceblue", "Licorice Blue" ],
 						[ "actvbg_clrjet", "Jet" ],
-						[ "actvbg_clrflashbang", "Flashbang" ],
+						[ "actvbg_clrwhite", "White" ],
 						[ "actvbg_clrlightblue", "Light Blue Skin" ],
 						[ "custom", "Custom" ]
 					]
@@ -1486,6 +1488,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "slistbg_clrnone", "None" ],
 						[ "slistbg_clrmoonlight", "Moonlight" ],
+						[ "slistbg_clrgrey", "Grey" ],
 						[ "slistbg_clrlicoriceblue", "Licorice Blue" ],
 						[ "slistbg_clrblack", "Black" ],
 						[ "slistbg_clrdark", "Dark" ],
@@ -1514,6 +1517,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "miscbg_clrnone", "None" ],
 						[ "miscbg_clrmoonlight", "Moonlight" ],
+						[ "miscbg_clrgrey", "Grey" ],
 						[ "miscbg_clrjet", "Jet" ],
 						[ "miscbg_clrlicoriceblue", "Licorice Blue" ],
 						[ "miscbg_clrflashbang", "Flashbang - Testing" ],
@@ -1554,6 +1558,7 @@
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
 						[ "clrnone", "None" ],
+						[ "rgba(34, 34, 34, .5)", "Soft Black" ],
 						[ "rgba(24, 45, 85, 1)", "Moonlight" ],
 						[ "custom", "Custom" ]
 					]
@@ -1630,7 +1635,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "icon_moonlight", "Moonlight" ],
 						[ "icon_natsuiro", "Natsuiro" ],
-						[ "icon_moonless", "Edgelord" ],
+						[ "icon_moonless", "Dark Blue" ],
 						[ "icon_dark", "Dark" ],
 						[ "icon_flashbang", "Flashbang" ],
 						[ "icon_lightblue", "LightBlue" ]
@@ -1647,6 +1652,7 @@
 						[ "ol_clrnone", "None" ],
 						[ "ol_clrdarkblue", "Dark Blue" ],
 						[ "ol_clrblack", "Black" ],
+						[ "ol_clrgrey", "Grey" ],
 						[ "ol_clrblue", "Blue" ],
 						[ "ol_clrgold", "Gold" ],
 						[ "ol_clrseaweed", "Metallic Seaweed" ],
@@ -1684,7 +1690,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "qsch_moonlight", "Moonlight" ],
 						[ "qsch_natsuiro", "Natsuiro" ],
-						[ "qsch_moonless", "Edgelord" ],
+						[ "qsch_moonless", "Dark Blue" ],
 						[ "qsch_dark", "Dark" ],
 						[ "qsch_lightblue", "Light Blue" ]
 					]
@@ -1699,7 +1705,7 @@
 						[ "auto", "SettingsPanelAuto" ],
 						[ "tip_moonlight", "Moonlight" ],
 						[ "tip_natsuiro", "Natsuiro" ],
-						[ "tip_moonless", "Edgelord" ]
+						[ "tip_moonless", "Dark Blue" ]
 					]
 				}
 			},
@@ -1710,10 +1716,10 @@
 				"options" : {
 					"choices" : [
 						[ "auto", "SettingsPanelAuto" ],
-						[ "ep_colorblind", "Moonlight" ],
+						[ "ep_moonlight", "Moonlight" ],
 						[ "ep_natsuiro", "Natsuiro" ],
 						[ "ep_dark", "Dark" ],
-						[ "ep_moonless", "Edgelord" ]
+						[ "ep_moonless", "Dark Blue" ]
 					]
 				}
 			},
@@ -1730,10 +1736,18 @@
 				}
 			},
 			{
-				"id" : "moon_lighting_effect",
-				"name" : "SettingsMoonLightingEffect",
-				"type" : "check",
-				"options" : {}
+				"id" : "pan_moon_bg_effect",
+				"name" : "Background Effect",
+				"type" : "dropdown",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "effect_none", "None" ],
+						[ "effect_lighting", "Lighting" ],
+						[ "effect_blur_soft", "Soft Blur" ],
+						[ "effect_blur_strong", "Strong Blur" ]
+					]
+				}
 			},
 			{
 				"id" : "pan_custom_css_moon",
