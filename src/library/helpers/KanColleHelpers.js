@@ -7793,11 +7793,13 @@ var PS = {};
               );
       };
       if (v === 115) {
-          return addGroup(fslAndSc(70)(6))
-              (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
-                  (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
-                      (addGroup(fpTotal(410))
-                          (losTotal(350))
+          return addGroup(fslAndSc(80)(6))
+              (addGroup(fsty(KanColle_Generated_SType.CL.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                      (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(410))
+                              (losTotal(350))
+                          )
                       )
                   )
               );
@@ -7841,9 +7843,9 @@ var PS = {};
               (addGroup(fsty(KanColle_Generated_SType.AS.value))
                   (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
                       (addGroup(submarine(3))
-                          (addGroup(fpTotal(140))
+                          (addGroup(fpTotal(130))
                               (addGroup(aswTotal(90))
-                                  (losTotal(250))
+                                  (losTotal(200))
                               )
                           )
                       )
