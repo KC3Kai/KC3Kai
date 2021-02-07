@@ -127,6 +127,8 @@ Provides access to data on built-in JSON files
 			610, // Kaga K2E -> K2Go
 			228, // Yukikaze Kai -> Tan Yang
 			651, // Tan Yang -> Yukikaze K2
+			215, // Kuma Kai -> K2
+			306, // Noshiro Kai -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],

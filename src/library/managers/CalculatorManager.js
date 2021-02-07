@@ -83,11 +83,17 @@
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px"
         };
-        let contact = viewFleet.contactChanceInfo();
+        const battleConds = collectBattleConditions();
+        // AS+ by default for unknown value (night start node) or non-battle,
+        // but contact triggered only for abyssal side for air raid defensive battle.
+        // note: AP is falsy value 0, so cannot use `||` operator, use `== undefined` in case of `null` value
+        const isAirRaidBattle = battleConds.eventIdKind[1] === 7;
+        const airBattleId = isAirRaidBattle ? 0 : battleConds.airBattleId == undefined ? 1 : battleConds.airBattleId;
+        let contact = viewFleet.contactChanceInfo(airBattleId);
         if(isCombined && ConfigManager.air_combined) {
             // combine contact info from two fleets
             const main = contact;
-            const escort = escortFleet.contactChanceInfo();
+            const escort = escortFleet.contactChanceInfo(airBattleId);
             // only trigger rate can be summed
             const combined = {
                 trigger: main.trigger + escort.trigger,
@@ -128,12 +134,16 @@
                 .format(planeSelectionTopN, planeListHtml);
         }
         let text = KC3Meta.term("PanelAirContactTip").format(
-            KC3Meta.airbattle(1)[2] || "",
+            isAirRaidBattle ? KC3Meta.term("BattleKindAirDefendOnly") : KC3Meta.airbattle(airBattleId)[2] || "",
             Math.qckInt("floor", contact.success * 100, 1),
             Math.qckInt("floor", contact.trigger * 100, 1),
             Math.qckInt("ceil", contact.cancelled * 100, 1),
             planeListHtml
         );
+        // add night contact rate if night recon found
+        const nightContactSuccess = viewFleet.nightContactSuccessChance(airBattleId);
+        if(nightContactSuccess >= 0) text += "\n" + KC3Meta.term("PanelNightContactTip")
+            .format(Math.qckInt("floor", nightContactSuccess * 100, 1));
         return $("<p></p>")
             .css("font-size", "11px")
             .html(text)
@@ -206,6 +216,7 @@
         const currentNode = KC3SortieManager.isOnSortie() || KC3SortieManager.isPvP() ?
                 KC3SortieManager.currentNode() : {};
         const isOnBattle = !!currentNode.stime;
+        const eventIdKind = [currentNode.eventId, currentNode.eventKind];
         const playerCombinedFleetType = PlayerManager.combinedFleet;
         const isEnemyCombined = currentNode.enemyCombined;
         const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
@@ -221,6 +232,7 @@
         const enemyFlarePos = currentNode.eFlarePos;
         return {
             isOnBattle,
+            eventIdKind,
             engagementId,
             formationId,
             enemyFormationId,
@@ -396,10 +408,10 @@
      */
     const fighterPowerIntervals = (basicPower = false) => {
         return [basicPower,
-            Math.round(basicPower / 3),
-            Math.round(2 * basicPower / 3),
-            Math.round(3 * basicPower / 2),
-            3 * basicPower
+            Math.floor(basicPower / 3),
+            Math.floor(basicPower / 1.5),
+            Math.ceil(basicPower * 1.5),
+            Math.ceil(basicPower * 3)
         ];
     };
 

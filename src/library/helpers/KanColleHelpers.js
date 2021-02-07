@@ -7618,8 +7618,8 @@ var PS = {};
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                               (addGroup(fpTotal(350))
                                   (addGroup(aaTotal(290))
-                                      (addGroup(aswTotal(220))
-                                          (losTotal(200))
+                                      (addGroup(aswTotal(225))
+                                          (losTotal(195))
                                       )
                                   )
                               )
@@ -7674,8 +7674,8 @@ var PS = {};
                           (addGroup(ddde(4))
                               (addGroup(fpTotal(280))
                                   (addGroup(aaTotal(220))
-                                      (addGroup(aswTotal(240))
-                                          (losTotal(150))
+                                      (addGroup(aswTotal(245))
+                                          (losTotal(155))
                                       )
                                   )
                               )
@@ -7691,8 +7691,8 @@ var PS = {};
                       (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
                           (addGroup(fpTotal(330))
                               (addGroup(aaTotal(300))
-                                  (addGroup(aswTotal(270))
-                                      (losTotal(180))
+                                  (addGroup(aswTotal(275))
+                                      (losTotal(185))
                                   )
                               )
                           )
@@ -7724,7 +7724,7 @@ var PS = {};
                           (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
                               (addGroup(fpTotal(360))
                                   (addGroup(aaTotal(160))
-                                      (addGroup(aaTotal(160))
+                                      (addGroup(aswTotal(160))
                                           (losTotal(140))
                                       )
                                   )
@@ -7763,8 +7763,8 @@ var PS = {};
                               (addGroup(submarine(1))
                                   (addGroup(fpTotal(500))
                                       (addGroup(aaTotal(280))
-                                          (addGroup(aswTotal(280))
-                                              (losTotal(170))
+                                          (addGroup(aswTotal(285))
+                                              (losTotal(175))
                                           )
                                       )
                                   )
@@ -7782,8 +7782,8 @@ var PS = {};
                           (addGroup(sty(2)(KanColle_Generated_SType.DD.value))
                               (addGroup(fpTotal(510))
                                   (addGroup(aaTotal(400))
-                                      (addGroup(aswTotal(285))
-                                          (losTotal(385))
+                                      (addGroup(aswTotal(290))
+                                          (losTotal(390))
                                       )
                                    )
                               )
@@ -7792,6 +7792,18 @@ var PS = {};
                   )
               );
       };
+      if (v === 115) {
+          return addGroup(fslAndSc(80)(6))
+              (addGroup(fsty(KanColle_Generated_SType.CL.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
+                      (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
+                          (addGroup(fpTotal(410))
+                              (losTotal(350))
+                          )
+                      )
+                  )
+              );
+      }
       if (v === 131) {
           return addGroup(fslAndSc(50)(5))
               (addGroup(lvlCnt(200))
@@ -7817,7 +7829,7 @@ var PS = {};
                               (addGroup(fpTotal(60))
                                   (addGroup(torpTotal(390))
                                       (addGroup(aaTotal(80))
-                                          (aswTotal(50))
+                                          (aswTotal(55))
                                       )
                                   )
                               )
@@ -7826,6 +7838,20 @@ var PS = {};
                   )
               );
       };
+      if (v === 133) {
+          return addGroup(fslAndSc(65)(5))
+              (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                  (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                      (addGroup(submarine(3))
+                          (addGroup(fpTotal(130))
+                              (addGroup(aswTotal(90))
+                                  (losTotal(200))
+                              )
+                          )
+                      )
+                  )
+              );
+      }
       if (v === 141) {
           return addGroup(fslAndSc(55)(6))
               (addGroup(lvlCnt(290))
@@ -7835,8 +7861,8 @@ var PS = {};
                               (addGroup(sty(3)(KanColle_Generated_SType.DD.value))
                                   (addGroup(fpTotal(450))
                                       (addGroup(aaTotal(350))
-                                          (addGroup(aswTotal(330))
-                                              (losTotal(250))
+                                          (addGroup(aswTotal(340))
+                                              (losTotal(260))
                                           )
                                       )
                                   )
@@ -7852,8 +7878,8 @@ var PS = {};
                   (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
                       (addGroup(fpTotal(280))
                           (addGroup(aaTotal(240))
-                              (addGroup(aswTotal(220))
-                                  (addGroup(losTotal(160))
+                              (addGroup(aswTotal(210))
+                                  (addGroup(losTotal(170))
                                       ([ new FleetShipWithDrum(3), new FleetDrum(4) ])
                                   )
                               )
@@ -8076,10 +8102,10 @@ var PS = {};
           };
       };
   };
-  var allExpeditionIds = Data_Array.range(1)(48);
+  var allExpeditionIds = Data_Array.range(1)(50);
   allExpeditionIds.push(...Data_Array.range(100)(105));
-  allExpeditionIds.push(...Data_Array.range(110)(114));
-  allExpeditionIds.push(...Data_Array.range(131)(132));
+  allExpeditionIds.push(...Data_Array.range(110)(115));
+  allExpeditionIds.push(...Data_Array.range(131)(133));
   allExpeditionIds.push(...Data_Array.range(141)(142));
   exports["allExpeditionIds"] = allExpeditionIds;
   exports["mapResourceRows"] = mapResourceRows;
@@ -8295,11 +8321,17 @@ var PS = {};
       if (eId === 114) {
           return income(500)(500)(1000)(750);
       };
+      if (eId === 115) {
+          return income(600)(1000)(600)(600);
+      };
       if (eId === 131) {
           return income(0)(20)(20)(100);
       };
       if (eId === 132) {
           return income(0)(0)(400)(800);
+      };
+      if (eId === 133) {
+          return income(0)(800)(500)(400);
       };
       if (eId === 141) {
           return income(0)(600)(600)(1000);
@@ -8522,11 +8554,17 @@ var PS = {};
       if (eId === 114) {
           return c(9)(9.5)(hm(6)(30));
       };
+      if (eId === 115) {
+          return c(9.5)(9.5)(hm(5)(50));
+      };
       if (eId === 131) {
           return c(7.5)(5)(hr(2));
       };
       if (eId === 132) {
           return c(9)(9)(hr(10));
+      };
+      if (eId === 133) {
+          return c(9)(9.5)(hr(12));
       };
       if (eId === 141) {
           return c(9.5)(8.5)(hm(7)(30));
@@ -10997,6 +11035,22 @@ var PS = {};
         "api_return_flag": 1,
         "api_sample_fleet": [11, 8, 16, 3, 2, 2]
     }, {
+        "api_id": 115,
+        "api_disp_no": "B6",
+        "api_maparea_id": 2,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 350,
+        "api_deck_num": 6,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.95,
+        "api_use_bull": 0.95,
+        "api_win_item1": [3, 5],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [3, 4, 3, 3],
+        "api_return_flag": 1,
+        "api_sample_fleet": [3, 2, 2, 2, 2, 2]
+    }, {
         "api_id": 131,
         "api_disp_no": "D1",
         "api_maparea_id": 4,
@@ -11028,6 +11082,22 @@ var PS = {};
         "api_win_mat_level": [0, 0, 2, 4],
         "api_return_flag": 1,
         "api_sample_fleet": [20, 2, 13, 13, 13, 0]
+    }, {
+        "api_id": 133,
+        "api_disp_no": "D3",
+        "api_maparea_id": 4,
+        "api_reset_type": 1,
+        "api_damage_type": 2,
+        "api_time": 720,
+        "api_deck_num": 5,
+        "api_difficulty": 9,
+        "api_use_fuel": 0.9,
+        "api_use_bull": 0.95,
+        "api_win_item1": [1, 3],
+        "api_win_item2": [4, 1],
+        "api_win_mat_level": [0, 4, 3, 2],
+        "api_return_flag": 1,
+        "api_sample_fleet": [20, 3, 13, 13, 13, 13]
     }, {
         "api_id": 141,
         "api_disp_no": "E1",
@@ -11073,7 +11143,7 @@ var PS = {};
     };
 
     exports.gsByFlagshipLevelList = [
-        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 131, 132, 141
+        32, 41, 43, 45, 46, 101, 102, 103, 104, 105, 112, 113, 114, 115, 131, 132, 133, 141
     ];
 
     exports.monthlyUnlockTable = {
@@ -11083,7 +11153,9 @@ var PS = {};
         105: [104, 113],
         112: [111],
         113: [112],
-        114: [113]
+        114: [113],
+        115: [114],
+        133: [132]
     };
 
     exports.alternativeCompoTable = {

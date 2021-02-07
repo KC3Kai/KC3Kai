@@ -208,12 +208,29 @@ Uses KC3Quest objects to play around with
 					}
 				},
 			},
+			// Reset on 1st January every year
+			yearlyJan: {
+				type: 'yearlyJan',
+				key: 'timeToResetYearlyJanQuests',
+				resetMonth: JANUARY,
+				questIds: [681],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJan.type);
+				},
+				calculateNextReset: function (serverTime) {
+					const nextDailyReset = new Date(
+						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
+					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
+						KC3QuestManager.repeatableTypes.yearlyJan.resetMonth));
+					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+				},
+			},
 			// Reset on 1st February every year
 			yearlyFeb: {
 				type: 'yearlyFeb',
 				key: 'timeToResetYearlyFebQuests',
 				resetMonth: FEBRUARY,
-				questIds: [434, 904, 905],
+				questIds: [348, 434, 442, 716, 717, 904, 905],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
 				},
@@ -490,6 +507,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('weekly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('monthly').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('quarterly').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyJan').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
@@ -550,6 +568,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
+			// Yearly PvP C49, C50, C53
+			this.resetCounterLoop([345, 346, 348], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -717,6 +737,14 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip(563)  // Makigumo K2
 							&& fleet.hasShip(564)  // Kazagumo K2
 							&& fleet.hasShip(648); // Akigumo K2
+					},
+				"348": // C53 PvP with CL/CT as flagship, 2 more CL(T)/CT, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP() &&
+							fleet.hasShipType([3, 21], 0) &&
+							fleet.countShipType([3, 4, 21]) >= 3 &&
+							fleet.countShipType(2) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

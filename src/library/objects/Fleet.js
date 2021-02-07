@@ -530,9 +530,11 @@ Contains summary information about a fleet and its ships
 	/**
 	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
 	 * @return contact start chance at trigger phase.
+	 * @see https://wikiwiki.jp/kancolle/%E8%88%AA%E7%A9%BA%E6%88%A6#s1d9a838
 	 */
 	KC3Fleet.prototype.contactTriggerRate = function(dispSeiku = 1){
-		const airControlModifiers = [0, 1, 0.6, 0.55 /* guessed, unknown value */, 0];
+		// slightly different values with wiki inferred from KCKai algorithm: 1/(70 - (4-dispSeiku) * 15)/0.04
+		const airControlModifiers = [0, 1, 25/40, 25/55, 0];
 		var rate = 0;
 		this.shipsUnescaped().forEach(ship => {
 			rate += ship.equipment().map(
@@ -555,10 +557,11 @@ Contains summary information about a fleet and its ships
 	/**
 	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
 	 * @return contact selection table of every possible aircraft.
-	 * @see http://wikiwiki.jp/kancolle/?%B9%D2%B6%F5%C0%EF#s1d9a838
+	 * @see https://wikiwiki.jp/kancolle/%E8%88%AA%E7%A9%BA%E6%88%A6#s1d9a838
 	 */
 	KC3Fleet.prototype.contactSelectionChanceTable = function(dispSeiku = 1){
-		const airControlModifiers = [0, 0.07, 0.06, 0.055, 0];
+		// slightly different values with wiki inferred from KCKai algorithm: 1/(20 - (4-dispSeiku) * 2)
+		const airControlModifiers = [0, 1/14, 1/16, 1/18, 0];
 		const contactPlaneList = [];
 		this.shipsUnescaped().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
@@ -587,12 +590,30 @@ Contains summary information about a fleet and its ships
 	};
 
 	/**
-	 * Night recon contact chance, under verifying.
-	 * @see http://wikiwiki.jp/kancolle/?%B6%E5%C8%AC%BC%B0%BF%E5%BE%E5%C4%E5%BB%A1%B5%A1%28%CC%EB%C4%E5%29
+	 * Rolls for every night recon planes equipped by all ships in fleet, get final success rate by total failure rate.
+	 * @param dispSeiku - from `api_disp_seiku`, default is 1 AS+.
+	 * @return final night contact change for this fleet, regardless of CF main fleet. undefined for fleet without any night recon.
+	 */
+	KC3Fleet.prototype.nightContactSuccessChance = function(dispSeiku = 1){
+		// dispSeiku not affect rate value, but for AP and AI day start battle, cannot be triggered at all, the same with day contact.
+		// it can be triggered for night start battle. it can be triggered under AP for PvP battle.
+		const airControlModifiers = [(KC3SortieManager.isPvP() ? 1 : 0), 1, 1, 1, 0];
+		const nightContactPlanes = this.nightContactSelectionChanceTable();
+		if(nightContactPlanes.length) {
+			const failRate = nightContactPlanes.map(p => p.rate * (airControlModifiers[dispSeiku] || 0))
+				.reduce((acc, v) => acc * (1 - v), 1);
+			return 1 - failRate;
+		} else return;
+	};
+
+	/**
+	 * Night recon contact chance for every night recon planes in this fleet.
+	 * @see https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29#u4bb049a
 	 */
 	KC3Fleet.prototype.nightContactSelectionChanceTable = function(){
 		const contactPlaneList = [];
-		this.shipsUnescaped().forEach((ship, shipIdx) => {
+		// Tests confirmed: escaped ships still can be rolled on CF escort fleet, sunk ships unknown, but PvP sunk can
+		this.ship().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
 				if(gear.itemId && gear.masterId === 102) {
 					const gearMaster = gear.master();
@@ -605,9 +626,9 @@ Contains summary information about a fleet and its ships
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
-						// https://wikiwiki.jp/kancolle/%E4%B9%9D%E5%85%AB%E5%BC%8F%E6%B0%B4%E4%B8%8A%E5%81%B5%E5%AF%9F%E6%A9%9F%28%E5%A4%9C%E5%81%B5%29
-						// larger slot size can increase rate near but not reach to 100%
-						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku * ship.level)) * 4 / 100 : 0
+						// Unknown if slot size affects, no LoS proficiency/improvement/visible bonus found,
+						// and this PSVita KCKai formula slightly different with wiki's.
+						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku) * Math.sqrt(ship.level)) / 25 : 0
 					});
 				}
 			});
@@ -1445,10 +1466,12 @@ Contains summary information about a fleet and its ships
 		return shipsArray;
 	};
 
-	KC3Fleet.prototype.deckbuilder = function() {
+	KC3Fleet.prototype.deckbuilder = function(forImgBuilder) {
 		const result = {};
+		// seems gkcoi will be buggy for some fleet names
+		//if(forImgBuilder) result.name = this.name;
 		this.ship().forEach((ship, index) => {
-			result[`s${index + 1}`] = ship.deckbuilder();
+			result[`s${index + 1}`] = ship.deckbuilder(forImgBuilder);
 		});
 		return result;
 	};

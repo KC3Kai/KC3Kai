@@ -1501,11 +1501,11 @@ KC3改 Ship Object
 		const hasLandingCraft = this.hasEquipmentType(2, [24, 46]);
 		// WG42 variants/landing craft-type eligible for all
 		if (hasAntiLandRocket || hasLandingCraft){
-			possibleTypes = [1, 2, 3, 4, 5, 6];
+			possibleTypes = [1, 2, 3, 4, 5];
 		}
 		// T3 Shell eligible for all except Pillbox
 		else if(hasT3Shell){
-			possibleTypes = [1, 3, 4, 5, 6];
+			possibleTypes = [1, 3, 4, 5];
 		}
 		// Return empty if no anti-installation weapon found
 		else {
@@ -1514,8 +1514,7 @@ KC3改 Ship Object
 		// Dummy target enemy IDs, also used for abyssal icons
 		// 1573: Harbor Princess, 1665: Artillery Imp, 1668: Isolated Island Princess
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
-		// 1753: Summer Supply Depot Princess
-		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699, 1753];
+		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
 		const basicPower = this.shellingFirePower();
 		const resultList = [];
 		// Fill damage lists for each enemy type
@@ -1569,66 +1568,59 @@ KC3改 Ship Object
 	 * @return {number} multiplier of landing craft
 	 * @see estimateInstallationEnemyType
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
-	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#antiground
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
-		if(this.isDummy() || ![1, 2, 3, 4, 5, 6].includes(installationType)) { return 0; }
+		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
 		// 6 types of Daihatsu Landing Craft with known bonus:
-		//  * 167: Special Type 2 Amphibious Tank
+		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
-		//  * 193: Toku Daihatsu Landing Craft (most bonuses unknown)
+		//  * 193: Toku Daihatsu Landing Craft
 		//  * 355: M4A1 DD
 		const landingCraftIds = [167, 166, 68, 230, 193, 355];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
-		const getModifier = (type, forImp = false) => (
-			(landingModifiers[forImp ? "improvement" : "modifier"] || [])[type] || (forImp ? 0 : 1)
+		const getModifier = (type, modName = "base") => (
+			(landingModifiers[modName] || [])[type] || 1
 		);
-		let tankBonus = 1;
-		const landingBonus = [1], landingImprovementBonus = [0];
-		
-		/**
-		 * Highest landing craft modifier is selected
-		 * (Speculative) Then, highest landing craft improvement modifier is selected
-		 * If two or more of the same equipment present, take average improvement level
-		 *
-		 * Then, multiply total landing modifier with tank modifier
-		 * There are some enemies with recorded modifiers for two or more of same equipment,
-		 * those will take priority
-		 */
-		
-		// Arrange equipment in terms of priority
+		let landingBaseBonus = 1, oneGearBonus = 1, moreGearBonus = 1;
+		let improvementBonus = 1;
+		let landingGroupStars = 0, tankGroupStars = 0;
+		let landingGroupCount = 0, tankGroupCount = 0;
+		let hasType89LandingForce = false;
 		landingCraftCounts.forEach((count, type) => {
-			let improvement = 0;
-			this.equipment().forEach((g, i) => {
-				if(g.exists() && g.masterId === landingCraftIds[type]) {
-					improvement += g.stars;
+			if(count > 0) {
+				if(type > 0) {
+					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
+					landingGroupCount += count;
+					if(type === 1) hasType89LandingForce = true;
+				} else {
+					// T2 Tank base bonus fixed to 1.0
+					tankGroupCount += count;
 				}
-			});
-			// Two (or more) Type 2 Tank bonus (Currently only for Supply Depot and Pillbox)
-			if(count > 1 && type === 0 && [2, 4].includes(installationType)) {
-				tankBonus = installationType === 2 ? 3.2 : 2.5;
-				tankBonus *= 1 + improvement / count / 30;
-			}
-			// Type 2 Tank bonus
-			else if(count > 0 && type === 0) {
-				tankBonus = getModifier(type) + getModifier(type, true) * improvement / count;
-			}
-			// Bonus for two Type 89 Tank (Pillbox, Supply Depot and Isolated Island)
-			else if(count > 1 && type === 1 && [2, 3, 4].includes(installationType)) {
-				landingBonus.push(installationType === 4 ? 2.08 : 3 );
-				landingImprovementBonus.push((installationType === 4 ? 0.0416 : 0.06) * improvement / count);
-			}
-			// Otherwise, match modifier and improvement
-			else if(count > 0) {
-				landingBonus.push(getModifier(type));
-				landingImprovementBonus.push(getModifier(type, true) * improvement / count);
+				this.equipment().forEach((g, i) => {
+					if(g.exists() && g.masterId === landingCraftIds[type]) {
+						if(type > 0) {
+							landingGroupStars += g.stars;
+						} else {
+							tankGroupStars += g.stars;
+						}
+					}
+				});
+				oneGearBonus *= getModifier(type, "count1");
+				if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
 			}
 		});
+		if(landingGroupCount > 0) improvementBonus *= Math.pow(
+			landingGroupStars / landingGroupCount / 50 + 1,
+			// When T89 Tank equipped, Supply Depot Princess's postcap improvement bonus ^2
+			installationType === 4 && hasType89LandingForce ? 2 : 1
+		);
+		if(tankGroupCount > 0) improvementBonus *= tankGroupStars / tankGroupCount / 30 + 1;
 		// Multiply modifiers
-		return tankBonus * (Math.max(...landingBonus) + Math.max(...landingImprovementBonus));
+		return landingBaseBonus * oneGearBonus * moreGearBonus * improvementBonus;
 	};
 
 	/**
@@ -1755,9 +1747,6 @@ KC3改 Ship Object
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
 					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus, 0, 0, 1];
-				
-				case 6: // Summer Supply Depot Princess (shikon bonus only)
-					return [0, landingBonus, 0, 0, 1];
 			}
 		}
 		return [0, 1, 0, 0, 1];
@@ -1941,7 +1930,7 @@ KC3改 Ship Object
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
 		if(isThisLightCruiser && warfareType !== "Antisub") {
-			// 14cm, 15.2cm
+			// 14cm, 15.2cm, except [310] 14cm K, [407] 15.2cm K2
 			const singleMountCnt = this.countEquipment([4, 11]);
 			const twinMountCnt = this.countEquipment([65, 119, 139]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
@@ -2435,7 +2424,6 @@ KC3改 Ship Object
 	 *   Type 3: Isolated Island Princess
 	 *   Type 4: Supply Depot Princess
 	 *   Type 5: Summer Harbor Princess
-	 *   Type 6: Summer Supply Depot Princess
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
@@ -2447,15 +2435,11 @@ KC3改 Ship Object
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658,
 			1921, 1922, 1923, 1924, 1925, 1926, // B
-			1933, 1934, 1935, 1936, 1937, 1938  // B Summer Landing Mode
+			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
+			1753, 1754 // Summer Supply Depot Princess
 			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
-		}
-		// Summer Supply Depot Princess
-		if([1753, 1754].includes(targetShipMasterId)) {
-			// Same unique case as above
-			return precap ? 1 : 6;
 		}
 		const abyssalIdTypeMap = {
 			// Summer Harbor Princess
@@ -3308,8 +3292,9 @@ KC3改 Ship Object
 		// might exclude equipment on ship LoS bonus for now,
 		// to include LoS bonus, use `this.equipmentTotalLoS()` instead
 		const equipLoS = this.equipmentTotalStats("saku", true, false);
+		const battleConds = this.collectBattleConditions();
 		// assume to best condition AS+ by default (for non-battle)
-		const airBattleId = this.collectBattleConditions().airBattleId || 1;
+		const airBattleId = battleConds.airBattleId == undefined ? 1 : battleConds.airBattleId;
 		const baseValue = airBattleId === 1 ? adjLuck + 0.7 * (adjFleetLoS + 1.6 * equipLoS) + 10 :
 			airBattleId === 2 ? adjLuck + 0.6 * (adjFleetLoS + 1.2 * equipLoS) : 0;
 		return {
@@ -4482,7 +4467,7 @@ KC3改 Ship Object
 		return true;
 	};
 
-	KC3Ship.prototype.deckbuilder = function() {
+	KC3Ship.prototype.deckbuilder = function(forImgBuilder) {
 		var itemsInfo = {};
 		var result = {
 			id: this.masterId,
@@ -4492,6 +4477,15 @@ KC3改 Ship Object
 			asw : this.nakedAsw(),
 			items: itemsInfo
 		};
+		if(!!forImgBuilder) {
+			result.fp = this.fp[0];
+			result.tp = this.tp[0];
+			result.aa = this.aa[0];
+			result.ar = this.ar[0];
+			result.asw = this.as[0];
+			result.ev = this.ev[0];
+			result.los = this.ls[0];
+		}
 
 		var gearInfo;
 		for(var i=0; i<5; ++i) {

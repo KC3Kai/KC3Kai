@@ -14,6 +14,9 @@
 			url: "/data/settings.json",
 			success: function(response){
 				for(const sctr in response){
+					// Hide "private/deprecated" section
+					if(!!response[sctr].hide) continue;
+					
 					// Add linkable section header
 					const sectionBox = $("#factory .section").clone().appendTo("#wrapper .settings");
 					const anchorId = response[sctr].section.replace(/^Settings/, '').toLowerCase();
@@ -35,8 +38,8 @@
 					
 					// Add settings boxes under this section
 					for(const cctr in response[sctr].contents){
-						// hide "private/deprecated" settings
-						if ((parseInt(response[sctr].contents[cctr].hide) || 0) === 0)
+						// Hide "private/deprecated" settings
+						if(!response[sctr].contents[cctr].hide)
 							new SettingsBox( response[sctr].contents[cctr] );
 					}
 				}

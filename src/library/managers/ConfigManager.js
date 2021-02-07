@@ -46,7 +46,6 @@ Retrieves when needed to apply on components
 
 				PoiDBSubmission_enabled : false,
 				KC3DBSubmission_enabled : false,
-				OpenDBSubmission_enabled : false,
 				TsunDBSubmission_enabled : false,
 				TsunDBSubmissionExtra_enabled : false,
 				PushAlerts_enabled   : 0,
@@ -155,6 +154,8 @@ Retrieves when needed to apply on components
 				focus_game_tab    : false,
 				fix_game_code     : false,
 				dmm_forcecookies  : false,
+				dmm_redirgadget   : false,
+				dmm_gadgetcache   : "",
 				dmm_customize     : false,
 				dmm_custom_css    : "",
 
