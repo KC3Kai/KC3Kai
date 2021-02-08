@@ -7798,7 +7798,11 @@ var PS = {};
                   (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                       (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
                           (addGroup(fpTotal(410))
-                              (losTotal(350))
+                              (addGroup(aaTotal(400))
+                                  (addGroup(aswTotal(420))
+                                      (losTotal(350))
+                                  )
+                              )
                           )
                       )
                   )
@@ -7840,12 +7844,16 @@ var PS = {};
       };
       if (v === 133) {
           return addGroup(fslAndSc(65)(5))
-              (addGroup(fsty(KanColle_Generated_SType.AS.value))
-                  (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
-                      (addGroup(submarine(3))
-                          (addGroup(fpTotal(130))
-                              (addGroup(aswTotal(90))
-                                  (losTotal(200))
+              (addGroup(lvlCnt(370))
+                  (addGroup(fsty(KanColle_Generated_SType.AS.value))
+                      (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
+                          (addGroup(submarine(3))
+                              (addGroup(fpTotal(120))
+                                  (addGroup(aaTotal(120))
+                                      (addGroup(aswTotal(80))
+                                          (losTotal(150))
+                                      )
+                                  )
                               )
                           )
                       )
@@ -11154,7 +11162,7 @@ var PS = {};
         112: [111],
         113: [112],
         114: [113],
-        115: [114],
+        115: [103, 114],
         133: [132]
     };
 
