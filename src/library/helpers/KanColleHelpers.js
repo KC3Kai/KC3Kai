@@ -7793,12 +7793,12 @@ var PS = {};
               );
       };
       if (v === 115) {
-          return addGroup(fslAndSc(80)(6))
+          return addGroup(fslAndSc(75)(6))
               (addGroup(fsty(KanColle_Generated_SType.CL.value))
                   (addGroup(sty(1)(KanColle_Generated_SType.CL.value))
                       (addGroup(sty(5)(KanColle_Generated_SType.DD.value))
                           (addGroup(fpTotal(410))
-                              (addGroup(aaTotal(400))
+                              (addGroup(aaTotal(390))
                                   (addGroup(aswTotal(420))
                                       (losTotal(350))
                                   )
@@ -7844,7 +7844,7 @@ var PS = {};
       };
       if (v === 133) {
           return addGroup(fslAndSc(65)(5))
-              (addGroup(lvlCnt(370))
+              (addGroup(lvlCnt(365))
                   (addGroup(fsty(KanColle_Generated_SType.AS.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
                           (addGroup(submarine(3))

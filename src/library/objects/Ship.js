@@ -2052,17 +2052,21 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += 0.1;
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
 			} else {
-				// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
-				const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
-				this.equipment().forEach((g, i) => {
-					if(g.isAirstrikeAircraft()) {
-						const aceLevel = g.ace || 0;
-						const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-						let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
-						if(i > 0) mod /= 2;
-						proficiencyCriticalModifier += mod;
-					}
-				});
+				// CV(B) antisub (Kaga K2E for now) gets no proficiency critical modifier
+				// https://twitter.com/myteaGuard/status/1358823102419927049
+				if( !(warfareType === "Antisub" && [11, 18].includes(this.master().api_stype)) ) {
+					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
+					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
+					this.equipment().forEach((g, i) => {
+						if(g.isAirstrikeAircraft()) {
+							const aceLevel = g.ace || 0;
+							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+							let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+							if(i > 0) mod /= 2;
+							proficiencyCriticalModifier += mod;
+						}
+					});
+				}
 			}
 		}
 		
@@ -2301,7 +2305,8 @@ KC3改 Ship Object
 		//   confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
 		//   2019-08-08: https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#trigger_conditions
 		//   but bonus from other aircraft like Rotorcraft not (able to be) confirmed,
-		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
+		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw.
+		//   reconfirmed since 2021-02-29, not counted towards asw 50/65 threshold.
 		// Green (any small?) gun (DE +1 asw from 12cm Single High-angle Gun Mount Model E) not counted,
 		//   confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
 			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
@@ -2321,9 +2326,14 @@ KC3改 Ship Object
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
-			return ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)           // ship visible asw irrelevant
-				|| this.equipment(true).some(gear => gear.isHighAswBomber(false)) // mainly asw 50/65, dive bomber not work
-				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);                // almost impossible for pre-marriage
+			if( ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)                  // ship visible asw irrelevant
+				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))     // mainly asw 50/65, dive bomber not work
+			) return true;
+			// Visible bonus from Torpedo Bombers confirmed counted towards asw 100 threshold since 2021-02-09:
+			// https://twitter.com/panmodoki10/status/1359036399618412545
+			// perhaps only asw 100 threshold is using ship visible asw value
+			const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
+			return (shipAsw + aswAircraftBonus) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
 		}
 
 		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
