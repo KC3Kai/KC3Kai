@@ -6001,9 +6001,21 @@ KC3改 Equipment Object
 		// TODO uncertain modifier for LBAA against some enemies,
 		// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
 		// https://twitter.com/muu_1106/status/850875064106889218
-		// TODO should be more modifiers again abyssal ships on Do 217 variants since 2021-01-29
+		// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
 		let lbaaAbyssalModifier = 1;
 		if(targetShipId > 0) {
+			const targetMst = KC3Master.ship(targetShipId);
+			const isLand = targetMst.api_soku === 0;
+			// Do 217 E-5 + Hs293 Initial Model targeting DD/CL?
+			if(this.masterId === 405 && !isLand && [2, 3].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.1;
+			// Do 217 K-2 + Fritz-X targeting:
+			if(this.masterId === 406 && !isLand) {
+				// CA, CAV, CV, CVB
+				if([5, 6, 11, 18].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.15;
+				// FBB, BB, BBV
+				if([8, 9, 10].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.38;
+			}
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264
