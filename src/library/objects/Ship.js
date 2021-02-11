@@ -2052,9 +2052,9 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += 0.1;
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
 			} else {
-				// CV(B) antisub (Kaga K2E for now) gets no proficiency critical modifier
+				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
-				if( !(warfareType === "Antisub" && [11, 18].includes(this.master().api_stype)) ) {
+				if( !(warfareType === "Antisub" && [11, 18, 22].includes(this.master().api_stype)) ) {
 					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
 					this.equipment().forEach((g, i) => {
