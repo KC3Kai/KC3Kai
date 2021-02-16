@@ -5555,9 +5555,24 @@ KC3改 Equipment Object
 					modifier = 1.2;
 				break;
 			case "yasen":
-				// See equiptype for api_type[2]
-				if([1, 2, 3, 4, 5, 19, 22, 24, 29, 36, 42, 46].includes(type2))
+				// Known standard sqrt(stars), see equiptype for api_type[2]
+				if([1, 2, 3, 5, 19, 22, 24, 29, 32, 36, 37, 38, 42, 46].includes(type2))
 					modifier = 1;
+				else switch(type2) {
+					case 4: // Secondary guns, same values with day shelling fire
+						if([11, 134, 135].includes(this.masterId)) {
+							modifier = 1;
+						} else {
+							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
+							return modifier * stars;
+						}
+						break;
+					case 8: // Torpedo Bomber
+					case 58: // Jet Torpedo Bomber
+						// Uncertained, suspected sqrt(stars) by: https://twitter.com/myteaGuard/status/1360886212274216963
+						//modifier = 1;
+						break;
+				}
 				break;
 			case "asw":
 				// Depth Charge or Sonar
