@@ -2259,13 +2259,23 @@ KC3改 Ship Object
 		*/
 	};
 
-	// is this ship able to do OASW unconditionally
-	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai, Janus Kai, Samuel B.Roberts Kai, Fletcher-Class, Yuubari K2D
-		return [141, 478, 394, 893, 681, 562, 689, 596, 624, 628, 629, 692].includes(this.masterId);
-	};
 	/**
-	 * Test to see if this ship (with equipment) is capable of opening ASW. References:
+	 * @return true if this ship able to do OASW unconditionally.
+	 */
+	KC3Ship.prototype.isOaswShip = function() {
+		return [
+				141, // Isuzu Kai Ni
+				478, // Tatsuta Kai Ni
+				394, // Jervis Kai
+				893, // Janus Kai
+				681, // Samuel B.Roberts Kai
+				562, 689, 596, 692, 628, 629, // all remodels of Fletcher-class
+				624, // Yuubari Kai Ni D
+			].includes(this.masterId);
+	};
+
+	/**
+	 * @return true if this ship (with equipment) is capable of opening ASW.
 	 * @see https://kancolle.fandom.com/wiki/Partials/Opening_ASW
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#oasw
 	 */
