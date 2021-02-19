@@ -7852,11 +7852,11 @@ var PS = {};
               (addGroup(lvlCnt(350))
                   (addGroup(fsty(KanColle_Generated_SType.AS.value))
                       (addGroup(sty(1)(KanColle_Generated_SType.AS.value))
-                          (addGroup(submarine(3))
+                          (addGroup(submarine(4))
                               (addGroup(fpTotal(115))
-                                  (addGroup(aaTotal(100))
+                                  (addGroup(aaTotal(90))
                                       (addGroup(aswTotal(75))
-                                          (losTotal(125))
+                                          (losTotal(100))
                                       )
                                   )
                               )
@@ -11167,7 +11167,7 @@ var PS = {};
         112: [111],
         113: [112],
         114: [113],
-        115: [103, 114],
+        115: [103, 113],
         133: [132]
     };
 
