@@ -5614,10 +5614,7 @@ KC3改 Equipment Object
 						modifier = 1;
 						break;
 					case 4: // Secondary gun
-						// wikia
-						modifier = 0.3;
-						// wikiwiki
-						//return 0.15 * stars;
+						return 0.15 * stars;
 						break;
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
