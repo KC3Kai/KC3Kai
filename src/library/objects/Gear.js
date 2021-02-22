@@ -5615,7 +5615,6 @@ KC3改 Equipment Object
 						break;
 					case 4: // Secondary gun
 						return 0.15 * stars;
-						break;
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
 						modifier = 0.5;
