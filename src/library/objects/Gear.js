@@ -6009,18 +6009,24 @@ KC3改 Equipment Object
 		}
 		const isEnemyCombined = KC3Calc.collectBattleConditions().isEnemyCombined || false;
 		const enemyCombinedModifier = isEnemyCombined ? 1.1 : 1;
-		// TODO uncertain modifier for LBAA against some enemies,
-		// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
-		// https://twitter.com/muu_1106/status/850875064106889218
-		// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
+		// TODO modifier unused, since no invoker pass targetShipId yet
 		let lbaaAbyssalModifier = 1;
 		if(targetShipId > 0) {
 			const targetMst = KC3Master.ship(targetShipId);
 			const isLand = targetMst.api_soku === 0;
+			// LBAA targeting 6-5 Abyssal Carrier Princess, ranged in (3.11, 3.45)?
+			// https://twitter.com/muu_1106/status/850875064106889218
+			if(isLbaa && [1586, 1620, 1781, 1782].includes(targetShipId))
+				lbaaAbyssalModifier = 3.2;
+			// Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron) targeting DD?, 2.21?
+			// https://twitter.com/syusui_200/status/1364056148605685761
+			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 2.2;
+			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
 			// Do 217 E-5 + Hs293 Initial Model targeting DD/CL?
 			if(this.masterId === 405 && !isLand && [2, 3].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
-			// Do 217 K-2 + Fritz-X targeting:
+			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
 				if([5, 6, 11, 18].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.15;
