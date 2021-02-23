@@ -3066,7 +3066,7 @@
 							
 							if(index === 0) {
 								if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-									updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+									updateMapGauge(thisNode.gaugeDamage, thisNode.bossKilled);
 								}
 								$(enemyFleetBoxSelector+" .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
 							}
@@ -3310,7 +3310,7 @@
 						
 						if(index === 0) {
 							if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-								updateMapGauge(KC3SortieManager.currentNode().gaugeDamage, !newEnemyHP);
+								updateMapGauge(thisNode.gaugeDamage, thisNode.bossKilled);
 							}
 							if(!thisNode.enemyCombined || thisNode.activatedEnemyFleet === 1) {
 								$(".module.activity .abyss_single .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
@@ -5092,10 +5092,10 @@
 			thisMap   = KC3SortieManager.getCurrentMapData(),
 			mapHP     = 0,
 			onBoss    = KC3SortieManager.currentNode().isValidBoss(),
-			depleteOK = onBoss || !!noBoss;
+			depleteOK = onBoss || !!noBoss,
+			mainFsKill= !!fsKill;
 
 		// Normalize Parameters
-		fsKill = !!fsKill;
 		gaugeDmg = (gaugeDmg || 0) * (depleteOK);
 
 		if(Object.keys(thisMap).length > 0){
@@ -5112,7 +5112,7 @@
 					// Reduce current map HP with known gauge damage given
 					mapHP = thisMap.curhp - gaugeDmg;
 					// Normalize the gauge until flagship sinking flag
-					mapHP = Math.max(mapHP,!fsKill);
+					mapHP = Math.max(mapHP, mainFsKill ? 0 : 1);
 
 					var rate = [mapHP,thisMap.curhp].sort(function(a,b){
 						return b-a;
@@ -5134,7 +5134,7 @@
 					console.debug("Map " + thisMapId + " total kills:", totalKills);
 					var
 						killsLeft  = totalKills - thisMap.kills + (!onBoss && !!noBoss),
-						postBounty = killsLeft - (depleteOK && fsKill);
+						postBounty = killsLeft - (depleteOK && mainFsKill);
 					if(totalKills){
 						$(".module.activity .map_hp")
 							.text( killsLeft + " / " + totalKills + KC3Meta.term("BattleMapKills"));

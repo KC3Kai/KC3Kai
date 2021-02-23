@@ -758,6 +758,7 @@ Used by SortieManager
 
 		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
+			this.bossKilled = this.enemyHP[0].hp <= 0;
 			
 			(function(sortieData){
 				if(this.isValidBoss()) {
@@ -1034,6 +1035,7 @@ Used by SortieManager
 			if(bossCurrentHp + this.gaugeDamage < nightData.api_e_maxhps[0])
 				bossCurrentHp = nightData.api_e_maxhps[0] - this.gaugeDamage;
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
+			this.bossKilled = this.enemyHP[0].hp <= 0;
 		}
 		
 		// Record encounters only if on sortie and starts from night
@@ -1098,6 +1100,7 @@ Used by SortieManager
 				// also check if destroyed flagship is from main fleet (the boss)
 				const mainFlagshipKilled = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
 					resultData.api_destsf : 0;
+				this.bossKilled = !!mainFlagshipKilled;
 				switch(maps[ckey].kind) {
 					case 'single':   /* Single Victory */
 						break;
