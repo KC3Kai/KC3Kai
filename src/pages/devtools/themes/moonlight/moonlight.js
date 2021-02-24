@@ -3201,7 +3201,7 @@
 							
 							if(index === 0) {
 								if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-									updateMapGauge(thisNode.gaugeDamage, thisNode.bossKilled);
+									updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
 								}
 								$(enemyFleetBoxSelector+" .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
 							}
@@ -3445,7 +3445,7 @@
 						
 						if(index === 0) {
 							if(['multiple', 'gauge-hp'].includes(KC3SortieManager.getCurrentMapData().kind)) {
-								updateMapGauge(thisNode.gaugeDamage, thisNode.bossKilled);
+								updateMapGauge(thisNode.gaugeDamage, thisNode.mainFlagshipKilled);
 							}
 							if(!thisNode.enemyCombined || thisNode.activatedEnemyFleet === 1) {
 								$(".module.activity .abyss_single .sunk_"+(index+1)).toggleClass("debuff", newEnemyHP > 0 && !!thisNode.debuffed);
