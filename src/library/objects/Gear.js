@@ -5567,10 +5567,14 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 7: // Dive Bomber
+					case 57: // Jet Fighter Bomber
+						// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron) gets power bonus either?
 					case 8: // Torpedo Bomber
 					case 58: // Jet Torpedo Bomber
-						// Uncertained, suspected sqrt(stars) by: https://twitter.com/myteaGuard/status/1360886212274216963
-						//modifier = 1;
+						// Uncertained, sqrt(stars) suspected?
+						// https://twitter.com/myteaGuard/status/1360886212274216963
+						modifier = 1;
 						break;
 				}
 				break;
@@ -5596,7 +5600,6 @@ KC3改 Equipment Object
 				break;
 			case "lbas":
 				// land-base attacker/heavybomber
-				// unconfirmed yet since no plane improved by akashi
 				if([47, 53].includes(type2)) modifier = 0.7;
 				break;
 			case "support":
@@ -6020,6 +6023,9 @@ KC3改 Equipment Object
 				lbaaAbyssalModifier = 3.2;
 			// Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron) targeting DD?, 2.21?
 			// https://twitter.com/syusui_200/status/1364056148605685761
+			// but, since there is no visible TP stat for the plane, and slot size affects final power,
+			// so instead of modifier, hidden power like TP against DD should be added to base power?
+			// https://twitter.com/juu_kanoya/status/1364361975061430274
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
