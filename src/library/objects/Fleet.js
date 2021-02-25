@@ -998,7 +998,8 @@ Contains summary information about a fleet and its ships
 	------------------------------------*/
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: return this.eLos1();
+			case 0: return this.eLos1();
+			case 2: return this.eLos4(2);
 			case 3: return this.eLos4(3);
 			case 4: return this.eLos4(4);
 			default: return this.eLos4();
@@ -1128,7 +1129,6 @@ Contains summary information about a fleet and its ships
 		availableShips.forEach(ship => {
 			// According tests, visible LoS bonus from equipment should be added to ship part,
 			// except these pieces for now: SG Radar (Initial Model)
-			// Untested yet: Swordfish Mk.III Kai (Seaplane Model / Skilled)
 			// https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#equipment_bonus
 			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, null, null, null, [315]) || 0;
 			// sum ship's naked LoS

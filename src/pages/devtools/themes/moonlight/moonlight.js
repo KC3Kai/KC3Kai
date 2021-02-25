@@ -2285,7 +2285,6 @@
 				$(".summary-eqlos .summary_textf332").text( "x2: {1}".format(f33Cn) );
 				$(".summary-eqlos .summary_textf333").text( "x3: {2}".format(f33Cn) );
 				$(".summary-eqlos .summary_textf334").text( "x4: {3}".format(f33Cn) );
-			// No reference values for combined fleet yet, only show computed values
 			} else if(selectedFleet === 5){
 				const mainFleet = PlayerManager.fleets[0],
 					escortFleet = PlayerManager.fleets[1],

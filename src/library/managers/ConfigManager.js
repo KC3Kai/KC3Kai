@@ -18,7 +18,7 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
-				elosFormula          : 2,
+				elosFormula          : 1,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
 				imaginaryEnemyArmor  : 0,

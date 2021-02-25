@@ -102,6 +102,8 @@
 			"t46": "tp",
 			// ASW land base bomber
 			"t47": "as",
+			// land base heavy bomber
+			"t49": "dv",
 			// all types
 			"tall": "type",
 		},

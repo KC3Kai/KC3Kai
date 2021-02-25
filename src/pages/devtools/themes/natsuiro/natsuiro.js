@@ -2144,7 +2144,7 @@
 				.attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text(FleetSummary.speed);
-			if(ConfigManager.elosFormula > 1){
+			if(ConfigManager.elosFormula > 0){
 				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){
 					const f33Cn = Array.numbers(1, 4)
@@ -2153,7 +2153,6 @@
 						"x1={0}\nx2={1}\nx3={2}\nx4={3}"
 						.format(f33Cn)
 					).lazyInitTooltip();
-				// No reference values for combined fleet yet, only show computed values
 				} else if(selectedFleet === 5){
 					const mainFleet = PlayerManager.fleets[0],
 						escortFleet = PlayerManager.fleets[1],
