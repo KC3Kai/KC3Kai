@@ -314,7 +314,7 @@ Contains summary information about a fleet and its ships
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
 	// as of Dec 23th, 2016
 	KC3Fleet.prototype.calcLandingCraftInfo = function() {
-		var self = this;
+		const self = this;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
 		function addImprove(stars) {
@@ -323,53 +323,67 @@ Contains summary information about a fleet and its ships
 			improveCount += stars;
 		}
 
+		// amount of bonus equipment
 		var normalCount = 0;
 		var t89Count = 0;
 		var t2Count = 0;
 		var tokuCount = 0;
-		this.ship( function( shipRid, shipInd, shipObj ) {
-			shipObj.equipment( function(itemId,eInd,eObj ) {
-				if (itemId <= 0)
-					return;
-				if (eObj.masterId === 68) {
-					// normal landing craft
-					normalCount += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 166) {
-					// T89
-					t89Count += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 167) {
-					// T2
-					t2Count += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 193) {
-					// toku landing craft (230: +11th tank no count)
-					tokuCount += 1;
-					addImprove( eObj.stars );
+		var abCount = 0;
+		var armedCount =0;
+		// amount of bonus ships 
+		var bonusShipCount = 0;
+		this.ship((shipRid, shipIdx, shipObj) => {
+			// for now this can only be applied to Kinu Kai Ni (master id 487)
+			if (shipObj.masterId === 487) bonusShipCount += 1;
+			// AB daihatsu on ex-slot counted either
+			shipObj.equipment(true).forEach(gearObj => {
+				if (gearObj.isDummy()) return;
+				switch (gearObj.masterId) {
+					case 68: // normal landing craft
+						normalCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 166: // T89 force
+						t89Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 167: // T2 tank
+						t2Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 193: // Toku landing craft
+						tokuCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					// [230] toku +11th tank not counted
+					// [355] M4A1 DD not counted
+					case 408: // Soukoutei (Armored Boat Class)
+						abCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 409: // Armed Daihatsu
+						armedCount += 1;
+						addImprove(gearObj.stars);
+					break;
 				}
 			});
 		});
-		// count number of bonus ships 
-		var bonusShipCount = 0;
-		this.ship( function(rosterId, ind, shipObj) {
-			// for now this can only be applied to Kinu Kai Ni (master id 487)
-			if (shipObj.masterId === 487)
-				bonusShipCount += 1;
-		});
-
 		// without cap
-		var basicBonus = (normalCount+tokuCount+bonusShipCount)*0.05 + t89Count*0.02 + t2Count*0.01;
+		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
+						+ 0.02 * t89Count
+						+ 0.02 * abCount
+						+ 0.03 * armedCount
+						+ 0.01 * t2Count;
 		// cap at 20%
 		// "B1" in the formula (see comment link of this function)
-		var cappedBasicBonus = Math.min(0.2, basicBonus);
+		const cappedBasicBonus = Math.min(0.2, basicBonus);
 		// "B2" in the formula
 		// 5% for <= 3 toku and 5.4% for > 3 toku
-		var tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
-		var tokuBonus = Math.min(tokuCap, 0.02*tokuCount);
-		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
+		const tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
+		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount;
 		// "B3" in the formula
-		var improveBonus = landingCraftCount > 0
+		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
 			: 0.0;
 
