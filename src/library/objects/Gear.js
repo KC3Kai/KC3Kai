@@ -4859,6 +4859,43 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// Soukoutei (Armored Boat Class)
+			"408": {
+				count: 0,
+				byShip: [
+					{
+						// Shinshuumaru
+						origins: [621],
+						multiple: { "houg": 2, "saku": 2, "houk": 2 },
+					},
+					{
+						// Akitsumaru
+						origins: [161],
+						multiple: { "houg": 1, "tais": 1, "saku": 1, "houk": 1 },
+					},
+					{
+						// All DD (if can equip Daihatsu ofc)
+						stypes: [2],
+						multiple: { "houg": 1, "saku": 1, "houk": -5 },
+					},
+				],
+			},
+			// Armed Daihatsu
+			"409": {
+				count: 0,
+				byShip: [
+					{
+						// Shinshuumaru
+						origins: [621],
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+					{
+						// Akitsumaru
+						origins: [161],
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 2 },
+					},
+				],
+			},
 			// New Model High Temperature High Pressure Boiler
 			"87": {
 				count: 0,

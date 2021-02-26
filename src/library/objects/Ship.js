@@ -1572,14 +1572,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 6 types of Daihatsu Landing Craft with known bonus:
+		// 6 types of Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 193: Toku Daihatsu Landing Craft
 		//  * 355: M4A1 DD
-		const landingCraftIds = [167, 166, 68, 230, 193, 355];
+		//  * 408: Soukoutei (Armored Boat Class)
+		//  * 409: Armed Daihatsu
+		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2771,10 +2773,15 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
-		const isLand = targetShip.api_soku <= 0;
-		// new equipment: M4A1 DD
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		const isLand = targetShipType.isLand;
+		// M4A1 DD
 		if(this.hasEquipment(355) && isLand) return 6;
-		// higher priority: Toku Daihatsu + 11th Tank
+		// Soukoutei (Armored Boat Class)
+		if(this.hasEquipment(408) && (isLand || targetShipType.isPtImp)) return 7;
+		// Armed Daihatsu
+		if(this.hasEquipment(409) && (isLand || targetShipType.isPtImp)) return 8;
+		// Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
 		// Abyssal hard land installation could be landing attacked
 		const isTargetLandable =
@@ -2798,6 +2805,10 @@ KC3改 Ship Object
 		if(isTargetLandable) {
 			// M4A1 DD
 			if(this.hasEquipment(355)) return 6;
+			// Armoured Boat (AB Class)
+			if(this.hasEquipment(408)) return 7;
+			// Armed Daihatsu
+			if(this.hasEquipment(409)) return 8;
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu
