@@ -1066,26 +1066,12 @@ Contains summary information about a fleet and its ships
 	};
 	
 	/**
-	 * (UNUSED) The modifier by maps should be applied to equipment eLoS since game phase 2.
+	 * The weight modifier by maps should be applied to equipment eLoS since game phase 2.
 	 * @return 1 by default, just like it used by 2-5.
 	 * @see https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#coefficient_node
 	 */
 	KC3Fleet.nodeDivaricatedFactorByMap = function(world, map){
-		const mapKey = map === undefined ? String(world) : [world, map].join("");
-		return ({
-			"16": 3,
-			"25": 1,
-			"35": 4,
-			"45": 2,
-			"52": 2,
-			"54": 2,
-			"55": 2,
-			"61": 4,
-			"62": 3,
-			"63": 3,
-			"65": 3,
-			"72": 4,
-		})[mapKey] || 1;
+		return KC3Meta.eLosNodeFactor([world, map].join("")) || 1;
 	};
 	
 	/**
@@ -1107,10 +1093,10 @@ Contains summary information about a fleet and its ships
 	 * Implementation of effective LoS : "Formula 33".
 	 * @see http://kancolle.wikia.com/wiki/Line_of_Sight
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
-	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default. wikia names it with `Cn` (Coefficient node)
+	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default. en wiki names it with `Cn` (Coefficient node)
 	 * @see #nodeDivaricatedFactorByMap - Known:
 	 *    For phase 1: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-	 *    For phase 2: 2-5(H,I):x1, 5-2(F):x2, 1-6(M)/6-2(E,H,I)/6-3(H)/6-5(G):x3, 3-5(G)/6-1(G,H):x4
+	 *    For phase 2: see definitions in `fud_weekly.json`
 	 * @param {number} hqModifier - the weight applied to HQ level adjustment, 0.4 by default.
 	 * @see #hqModifierByMap - Known exception is 0.35 used by 3-5, 5-2, 6-3.
 	 * @param {number} hqLevel - the expected level of player HQ to compute old history value,
