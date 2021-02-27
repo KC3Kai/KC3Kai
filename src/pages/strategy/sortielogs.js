@@ -139,6 +139,15 @@
 				self.showMap();
 			}).val(self.itemsPerPage);
 			
+			// Toggle between boss node arrival only and with all nodes
+			$(".tab_"+tabCode+" .sortie_batch_toggles .boss_node_toggle").on("click", function(){
+				ConfigManager.load();
+				ConfigManager.sr_show_boss_node = !ConfigManager.sr_show_boss_node;
+				ConfigManager.save();
+				$(this).toggleClass("active", ConfigManager.sr_show_boss_node);
+				self.showMap();
+			}).toggleClass("active", ConfigManager.sr_show_boss_node);
+			
 			// Toggle between battle nodes only and with non-battle nodes
 			$(".tab_"+tabCode+" .sortie_batch_toggles .non_battle_toggle").on("click", function(){
 				ConfigManager.load();
@@ -376,6 +385,16 @@
 			self.showMap();
 		};
 		
+		/* A callback function to add more filtering conditions to database query.
+		---------------------------------*/
+		this.sortieFilter = function(sortie){
+			return !ConfigManager.sr_show_boss_node ||
+				// here judges by node event_id: 5 just like in-game and Node.js does,
+				// although there is `.boss` property in battle records, but lower performance by doing more table query
+				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
+				(Array.isArray(sortie.nodes) && sortie.nodes.some(node => node.eventId == 5));
+		};
+		
 		/* SHOW MAP
 		A map has been selected
 		---------------------------------*/
@@ -393,8 +412,8 @@
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
-				KC3Database.count_normal_sorties(function(countSorties){
-					console.debug("Count of All", countSorties);
+				KC3Database.count_normal_sorties(this.sortieFilter, function(countSorties){
+					console.debug("Count of All", ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
 					if(expectedEnterCount === self.enterCount)
 						self.showPagination(countSorties);
 				});
@@ -403,16 +422,18 @@
 			}else{
 				// Show all on this world
 				if(this.selectedMap === 0){
-					KC3Database.count_world(this.selectedWorld, function(countSorties){
-						console.debug("Count of World", self.selectedWorld, countSorties);
+					KC3Database.count_world(this.selectedWorld, this.sortieFilter,
+					function(countSorties){
+						console.debug("Count of World", self.selectedWorld, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
 						if(expectedEnterCount === self.enterCount)
 							self.showPagination(countSorties);
 					});
 					
 				// Selected specific map
 				}else{
-					KC3Database.count_map(this.selectedWorld, this.selectedMap, function(countSorties){
-						console.debug("Count of Map", self.selectedWorld, self.selectedMap, countSorties);
+					KC3Database.count_map(this.selectedWorld, this.selectedMap, this.sortieFilter,
+					function(countSorties){
+						console.debug("Count of Map", self.selectedWorld, self.selectedMap, ConfigManager.sr_show_boss_node ? "Boss:" : ":", countSorties);
 						if(expectedEnterCount === self.enterCount)
 							self.showPagination(countSorties);
 					});
@@ -468,7 +489,7 @@
 			
 			// Show all sorties
 			if(this.selectedWorld === 0){
-				KC3Database.get_normal_sorties(this.pageNum, this.itemsPerPage, function( sortieList ){
+				KC3Database.get_normal_sorties(this.sortieFilter, this.pageNum, this.itemsPerPage, function( sortieList ){
 					self.showList( sortieList );
 					postShowList();
 				});
@@ -477,14 +498,16 @@
 			}else{
 				// Show all on this world
 				if(this.selectedMap === 0){
-					KC3Database.get_world(this.selectedWorld, this.pageNum, this.itemsPerPage, function( sortieList ){
+					KC3Database.get_world(this.selectedWorld, this.sortieFilter, this.pageNum, this.itemsPerPage,
+					function( sortieList ){
 						self.showList( sortieList );
 						postShowList();
 					});
 					
 				// Selected specific map
 				}else{
-					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.pageNum, this.itemsPerPage, function( sortieList ){
+					KC3Database.get_map(this.selectedWorld, this.selectedMap, this.sortieFilter, this.pageNum, this.itemsPerPage,
+					function( sortieList ){
 						self.showList( sortieList );
 						postShowList();
 					});

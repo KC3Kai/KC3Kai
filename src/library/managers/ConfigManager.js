@@ -18,7 +18,7 @@ Retrieves when needed to apply on components
 				version              : 8,
 				language             : this.detectBrowserLanguage(),
 				hqInfoPage           : 1,
-				elosFormula          : 2,
+				elosFormula          : 1,
 				aaFormation          : 1,
 				imaginaryEnemyType   : 0,
 				imaginaryEnemyArmor  : 0,
@@ -205,6 +205,7 @@ Retrieves when needed to apply on components
 
 				dismissed_hints        : {},
 				sr_theme               : "legacy",
+				sr_show_boss_node      : false,
 				sr_show_non_battle     : true,
 				sr_show_new_shipstate  : true,
 				sr_show_yasen_shipstate: false,

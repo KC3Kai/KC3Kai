@@ -4859,6 +4859,43 @@ KC3改 Equipment Object
 					],
 				},
 			},
+			// Soukoutei (Armored Boat Class)
+			"408": {
+				count: 0,
+				byShip: [
+					{
+						// Shinshuumaru
+						origins: [621],
+						multiple: { "houg": 2, "saku": 2, "houk": 2 },
+					},
+					{
+						// Akitsumaru
+						origins: [161],
+						multiple: { "houg": 1, "tais": 1, "saku": 1, "houk": 1 },
+					},
+					{
+						// All DD (if can equip Daihatsu ofc)
+						stypes: [2],
+						multiple: { "houg": 1, "saku": 1, "houk": -5 },
+					},
+				],
+			},
+			// Armed Daihatsu
+			"409": {
+				count: 0,
+				byShip: [
+					{
+						// Shinshuumaru
+						origins: [621],
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+					{
+						// Akitsumaru
+						origins: [161],
+						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 2 },
+					},
+				],
+			},
 			// New Model High Temperature High Pressure Boiler
 			"87": {
 				count: 0,
@@ -5567,10 +5604,14 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 7: // Dive Bomber
+					case 57: // Jet Fighter Bomber
+						// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron) gets power bonus either?
 					case 8: // Torpedo Bomber
 					case 58: // Jet Torpedo Bomber
-						// Uncertained, suspected sqrt(stars) by: https://twitter.com/myteaGuard/status/1360886212274216963
-						//modifier = 1;
+						// Uncertained, sqrt(stars) suspected?
+						// https://twitter.com/myteaGuard/status/1360886212274216963
+						modifier = 1;
 						break;
 				}
 				break;
@@ -5596,7 +5637,6 @@ KC3改 Equipment Object
 				break;
 			case "lbas":
 				// land-base attacker/heavybomber
-				// unconfirmed yet since no plane improved by akashi
 				if([47, 53].includes(type2)) modifier = 0.7;
 				break;
 			case "support":
@@ -5614,11 +5654,7 @@ KC3改 Equipment Object
 						modifier = 1;
 						break;
 					case 4: // Secondary gun
-						// wikia
-						modifier = 0.3;
-						// wikiwiki
-						//return 0.15 * stars;
-						break;
+						return 0.15 * stars;
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
 						modifier = 0.5;
@@ -6013,18 +6049,27 @@ KC3改 Equipment Object
 		}
 		const isEnemyCombined = KC3Calc.collectBattleConditions().isEnemyCombined || false;
 		const enemyCombinedModifier = isEnemyCombined ? 1.1 : 1;
-		// TODO uncertain modifier for LBAA against some enemies,
-		// seems be (3.1, 3.5) for 6-5 Abyssal Carrier Princess
-		// https://twitter.com/muu_1106/status/850875064106889218
-		// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
+		// TODO modifier unused, since no invoker pass targetShipId yet
 		let lbaaAbyssalModifier = 1;
 		if(targetShipId > 0) {
 			const targetMst = KC3Master.ship(targetShipId);
 			const isLand = targetMst.api_soku === 0;
+			// LBAA targeting 6-5 Abyssal Carrier Princess, ranged in (3.11, 3.45)?
+			// https://twitter.com/muu_1106/status/850875064106889218
+			if(isLbaa && [1586, 1620, 1781, 1782].includes(targetShipId))
+				lbaaAbyssalModifier = 3.2;
+			// Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron) targeting DD?, 2.21?
+			// https://twitter.com/syusui_200/status/1364056148605685761
+			// but, since there is no visible TP stat for the plane, and slot size affects final power,
+			// so instead of modifier, hidden power like TP against DD should be added to base power?
+			// https://twitter.com/juu_kanoya/status/1364361975061430274
+			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 2.2;
+			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
 			// Do 217 E-5 + Hs293 Initial Model targeting DD/CL?
 			if(this.masterId === 405 && !isLand && [2, 3].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
-			// Do 217 K-2 + Fritz-X targeting:
+			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
 				if([5, 6, 11, 18].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.15;

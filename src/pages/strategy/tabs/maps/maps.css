@@ -171,9 +171,9 @@
 /* SORTIE TOGGLES
 ---------------------------------*/
 .tab_maps .sortie_batch_toggles {
-	width:250px;
+	width:280px;
 	height:20px;
-	margin:5px 5px -5px 440px;
+	margin:5px 5px -5px 410px;
 	background:none;
 }
 .tab_maps .sortie_batch_toggles .sortie_toggles {

@@ -66,6 +66,8 @@ Used by SortieManager
 			if(typeof nodeData.pvp_opponents !== "undefined"){
 				this.eships = nodeData.pvp_opponents;
 				this.gaugeDamage = -1;
+			} else {
+				this.mainFlagshipKilled = false;
 			}
 		}
 		this.enemySunk = [false, false, false, false, false, false];
@@ -758,6 +760,7 @@ Used by SortieManager
 
 		if(this.gaugeDamage > -1) {
 			this.gaugeDamage = Math.min(this.enemyFlagshipHp, this.enemyFlagshipHp - this.enemyHP[0].hp);
+			this.mainFlagshipKilled = this.enemyHP[0].hp <= 0;
 			
 			(function(sortieData){
 				if(this.isValidBoss()) {
@@ -1034,6 +1037,7 @@ Used by SortieManager
 			if(bossCurrentHp + this.gaugeDamage < nightData.api_e_maxhps[0])
 				bossCurrentHp = nightData.api_e_maxhps[0] - this.gaugeDamage;
 			this.gaugeDamage += Math.min(bossCurrentHp, bossCurrentHp - this.enemyHP[0].hp);
+			this.mainFlagshipKilled = this.enemyHP[0].hp <= 0;
 		}
 		
 		// Record encounters only if on sortie and starts from night
@@ -1096,15 +1100,16 @@ Used by SortieManager
 				/* FLAGSHIP ATTACKING ==> */
 				console.log("Damaged Flagship", this.gaugeDamage, "/", maps[ckey].curhp || 0, "pts");
 				// also check if destroyed flagship is from main fleet (the boss)
-				const mainFlagshipKilled = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
+				const mainFlagshipDestFlag = (!this.activatedEnemyFleet || this.activatedEnemyFleet == 1) ?
 					resultData.api_destsf : 0;
+				this.mainFlagshipKilled = !!mainFlagshipDestFlag;
 				switch(maps[ckey].kind) {
 					case 'single':   /* Single Victory */
 						break;
 					case 'multiple': /* Kill-based */
 						const totalKills = maps[ckey].killsRequired || KC3Meta.gauge(ckey.replace("m",""));
 						if(totalKills - (maps[ckey].kills || 0) > 0)
-							maps[ckey].kills += mainFlagshipKilled;
+							maps[ckey].kills += mainFlagshipDestFlag;
 						break;
 					case 'gauge-hp': /* HP-Gauge */
 						if(this.gaugeDamage >= 0 && (maps[ckey].curhp || 0) > 0) {
@@ -1112,7 +1117,7 @@ Used by SortieManager
 							// if last kill, check whether flagship is killed or not
 							// flagship killed = gauge clear, not map clear if there are multi-gauges
 							if(maps[ckey].curhp <= 0)
-								maps[ckey].curhp = 1 - (mainFlagshipKilled & 1);
+								maps[ckey].curhp = 1 - (mainFlagshipDestFlag & 1);
 						}
 						break;
 					case 'gauge-tp': /* TP-Gauge */

@@ -314,7 +314,7 @@ Contains summary information about a fleet and its ships
 	// http://kancolle.wikia.com/wiki/Expedition/Introduction#Extra_bonuses_to_expedition_incomes
 	// as of Dec 23th, 2016
 	KC3Fleet.prototype.calcLandingCraftInfo = function() {
-		var self = this;
+		const self = this;
 		// use addImprove() to update this value instead of modifying it directly
 		var improveCount = 0;
 		function addImprove(stars) {
@@ -323,53 +323,67 @@ Contains summary information about a fleet and its ships
 			improveCount += stars;
 		}
 
+		// amount of bonus equipment
 		var normalCount = 0;
 		var t89Count = 0;
 		var t2Count = 0;
 		var tokuCount = 0;
-		this.ship( function( shipRid, shipInd, shipObj ) {
-			shipObj.equipment( function(itemId,eInd,eObj ) {
-				if (itemId <= 0)
-					return;
-				if (eObj.masterId === 68) {
-					// normal landing craft
-					normalCount += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 166) {
-					// T89
-					t89Count += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 167) {
-					// T2
-					t2Count += 1;
-					addImprove( eObj.stars );
-				} else if (eObj.masterId === 193) {
-					// toku landing craft (230: +11th tank no count)
-					tokuCount += 1;
-					addImprove( eObj.stars );
+		var abCount = 0;
+		var armedCount =0;
+		// amount of bonus ships 
+		var bonusShipCount = 0;
+		this.ship((shipRid, shipIdx, shipObj) => {
+			// for now this can only be applied to Kinu Kai Ni (master id 487)
+			if (shipObj.masterId === 487) bonusShipCount += 1;
+			// AB daihatsu on ex-slot counted either
+			shipObj.equipment(true).forEach(gearObj => {
+				if (gearObj.isDummy()) return;
+				switch (gearObj.masterId) {
+					case 68: // normal landing craft
+						normalCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 166: // T89 force
+						t89Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 167: // T2 tank
+						t2Count += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 193: // Toku landing craft
+						tokuCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					// [230] toku +11th tank not counted
+					// [355] M4A1 DD not counted
+					case 408: // Soukoutei (Armored Boat Class)
+						abCount += 1;
+						addImprove(gearObj.stars);
+					break;
+					case 409: // Armed Daihatsu
+						armedCount += 1;
+						addImprove(gearObj.stars);
+					break;
 				}
 			});
 		});
-		// count number of bonus ships 
-		var bonusShipCount = 0;
-		this.ship( function(rosterId, ind, shipObj) {
-			// for now this can only be applied to Kinu Kai Ni (master id 487)
-			if (shipObj.masterId === 487)
-				bonusShipCount += 1;
-		});
-
 		// without cap
-		var basicBonus = (normalCount+tokuCount+bonusShipCount)*0.05 + t89Count*0.02 + t2Count*0.01;
+		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
+						+ 0.02 * t89Count
+						+ 0.02 * abCount
+						+ 0.03 * armedCount
+						+ 0.01 * t2Count;
 		// cap at 20%
 		// "B1" in the formula (see comment link of this function)
-		var cappedBasicBonus = Math.min(0.2, basicBonus);
+		const cappedBasicBonus = Math.min(0.2, basicBonus);
 		// "B2" in the formula
 		// 5% for <= 3 toku and 5.4% for > 3 toku
-		var tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
-		var tokuBonus = Math.min(tokuCap, 0.02*tokuCount);
-		var landingCraftCount = normalCount + t89Count + t2Count + tokuCount;
+		const tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
+		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount;
 		// "B3" in the formula
-		var improveBonus = landingCraftCount > 0
+		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
 			: 0.0;
 
@@ -998,7 +1012,8 @@ Contains summary information about a fleet and its ships
 	------------------------------------*/
 	KC3Fleet.prototype.eLoS = function(){
 		switch(ConfigManager.elosFormula){
-			case 1: return this.eLos1();
+			case 0: return this.eLos1();
+			case 2: return this.eLos4(2);
 			case 3: return this.eLos4(3);
 			case 4: return this.eLos4(4);
 			default: return this.eLos4();
@@ -1065,26 +1080,12 @@ Contains summary information about a fleet and its ships
 	};
 	
 	/**
-	 * (UNUSED) The modifier by maps should be applied to equipment eLoS since game phase 2.
+	 * The weight modifier by maps should be applied to equipment eLoS since game phase 2.
 	 * @return 1 by default, just like it used by 2-5.
 	 * @see https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#coefficient_node
 	 */
 	KC3Fleet.nodeDivaricatedFactorByMap = function(world, map){
-		const mapKey = map === undefined ? String(world) : [world, map].join("");
-		return ({
-			"16": 3,
-			"25": 1,
-			"35": 4,
-			"45": 2,
-			"52": 2,
-			"54": 2,
-			"55": 2,
-			"61": 4,
-			"62": 3,
-			"63": 3,
-			"65": 3,
-			"72": 4,
-		})[mapKey] || 1;
+		return KC3Meta.eLosNodeFactor([world, map].join("")) || 1;
 	};
 	
 	/**
@@ -1106,10 +1107,10 @@ Contains summary information about a fleet and its ships
 	 * Implementation of effective LoS : "Formula 33".
 	 * @see http://kancolle.wikia.com/wiki/Line_of_Sight
 	 * @see http://ja.kancolle.wikia.com/wiki/%E3%83%9E%E3%83%83%E3%83%97%E7%B4%A2%E6%95%B5
-	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default. wikia names it with `Cn` (Coefficient node)
+	 * @param {number} nodeDivaricatedFactor - the weight of the equipment sum part, 1 by default. en wiki names it with `Cn` (Coefficient node)
 	 * @see #nodeDivaricatedFactorByMap - Known:
 	 *    For phase 1: 2-5(H,I):x1, 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-	 *    For phase 2: 2-5(H,I):x1, 5-2(F):x2, 1-6(M)/6-2(E,H,I)/6-3(H)/6-5(G):x3, 3-5(G)/6-1(G,H):x4
+	 *    For phase 2: see definitions in `fud_weekly.json`
 	 * @param {number} hqModifier - the weight applied to HQ level adjustment, 0.4 by default.
 	 * @see #hqModifierByMap - Known exception is 0.35 used by 3-5, 5-2, 6-3.
 	 * @param {number} hqLevel - the expected level of player HQ to compute old history value,
@@ -1128,7 +1129,6 @@ Contains summary information about a fleet and its ships
 		availableShips.forEach(ship => {
 			// According tests, visible LoS bonus from equipment should be added to ship part,
 			// except these pieces for now: SG Radar (Initial Model)
-			// Untested yet: Swordfish Mk.III Kai (Seaplane Model / Skilled)
 			// https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#equipment_bonus
 			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, null, null, null, [315]) || 0;
 			// sum ship's naked LoS
