@@ -147,7 +147,7 @@
 			};
 			self._comparator.type = function(a,b) {
 				return a.type_id - b.type_id
-					|| self._comparator[self._defaultCompareMethod["t" + a.type_id]](a, b)
+					|| self._comparator[self._defaultCompareMethod["t" + a.type_id] || "overall"](a, b)
 					|| a.id - b.id;
 			};
 			self._comparator.total = function(a,b) {

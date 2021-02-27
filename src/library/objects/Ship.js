@@ -2073,19 +2073,35 @@ KC3改 Ship Object
 		}
 		
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
-		// Against PT Imp modifier
-		let antiPtImpModifier = 1;
-		if(targetShipType.isPtImp) {
-			const lightGunBonus = this.countEquipmentType(2, 1) >= 2 ? 1.2 : 1;
-			const aaGunBonus = this.countEquipmentType(2, 21) >= 2 ? 1.1 : 1;
-			const secondaryGunBonus = this.countEquipmentType(2, 4) >= 2 ? 1.2 : 1;
-			const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
-			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
-		}
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
+		} else if(targetShipStype.isPtImp) {
+		// Against PT Imp fixed modifier constants, put into antiLand part in formula
+			antiLandModifier = 0.35;
+			antiLandAdditive = 15;
+		}
+		// Against PT Imp modifier from equipment
+		let antiPtImpModifier = 1;
+		if(targetShipType.isPtImp) {
+			const smallGunBonus = this.hasEquipmentType(2, 1) ? 1.5 * 1.4 : 1;
+			antiPtImpModifier *= smallGunBonus;
+			const aaGunBonus = this.hasEquipmentType(2, 21) ? 1.2 * 1.2 : 1;
+			antiPtImpModifier *= aaGunBonus;
+			const secondaryGunBonus = this.hasEquipmentType(2, 4) ? 1.3 : 1;
+			antiPtImpModifier *= secondaryGunBonus;
+			const diveBomberBonus = this.hasEquipmentType(2, [7, 57]) ? 1.4 * 1.3 : 1;
+			antiPtImpModifier *= diveBomberBonus;
+			const seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+			antiPtImpModifier *= seaplaneBonus;
+			const skilledLookoutBonus = this.hasEquipmentType(2, 39) ? 1.1 : 1;
+			antiPtImpModifier *= skilledLookoutBonus;
+			// Type 3 Shell bonus disappeared?
+			//const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
+			// under verifications: https://twitter.com/yukicacoon/status/1365525774866939905
+			const abDaihatsuBonus = this.hasEquipment([408, 409]) ? 1.2 : 1;
+			antiPtImpModifier *= abDaihatsuBonus * (this.hasEquipment(408) && this.hasEquipment(409) ? 1.1 : 1);
 		}
 		
 		// About rounding and position of anti-land modifier:
