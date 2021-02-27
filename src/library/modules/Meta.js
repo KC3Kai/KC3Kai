@@ -681,6 +681,17 @@ Provides access to data on built-in JSON files
 			return mapDef[edgeId] || [];
 		},
 		
+		eLosNodeFactor :function(mapId, srcNodeKey){
+			var mapDef = this._dataColle.elosNodeFactors["m" + mapId] || {};
+			var nodeDef = mapDef[srcNodeKey || Object.keys(mapDef)[0]] || {};
+			return nodeDef.factor;
+		},
+		
+		eLosNodeFactorBranches :function(mapId, srcNodeKey){
+			var mapDef = this._dataColle.elosNodeFactors["m" + mapId] || {};
+			return (typeof srcNodeKey === "undefined") ? mapDef : mapDef[srcNodeKey];
+		},
+		
 		airPowerAverageBonus :function(ace){
 			// Use default known simple bonus constants if json data lost
 			var bonuses = this._dataColle.airPowerAverageBonuses || [0, 1, 1, 2, 2, 2, 3, 3];
@@ -697,6 +708,12 @@ Provides access to data on built-in JSON files
 			var exp = this._dataColle.airPowerInternalProficiency
 				|| [0, 10, 25, 40, 55, 70, 85, 100, 121];
 			return [exp[ace] || 0, (exp[ace + 1] || 1) - 1];
+		},
+		
+		antiAirResistMods :function(planeMstId){
+			var antiAirResistDef = this._dataColle.antiAirResist || {};
+			var planeLevel = (antiAirResistDef.planesLevel || {})[planeMstId];
+			return (antiAirResistDef.modifiers || {})["level" + planeLevel] || [1, 1];
 		},
 		
 		updateAircraftTypeIds :function(){
