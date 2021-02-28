@@ -6061,8 +6061,8 @@ KC3改 Equipment Object
 			// Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron) targeting DD?, 2.21?
 			// https://twitter.com/syusui_200/status/1364056148605685761
 			// but, since there is no visible TP stat for the plane, and slot size affects final power,
-			// so instead of modifier, hidden power like TP against DD should be added to base power?
-			// https://twitter.com/juu_kanoya/status/1364361975061430274
+			// so instead of modifier, hidden power like TP (probably 25) against DD should be added to base power?
+			// https://twitter.com/yukicacoon/status/1364852802103640064
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
