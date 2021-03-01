@@ -218,11 +218,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJan.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyJan.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyJan.resetMonth);
 				},
 			},
 			// Reset on 1st February every year
@@ -235,11 +231,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyFeb.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyFeb.resetMonth);
 				},
 			},
 			// Reset on 1st March every year
@@ -252,11 +244,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMar.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyMar.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyMar.resetMonth);
 				},
 			},
 			// Reset on 1st May every year
@@ -269,11 +257,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyMay.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyMay.resetMonth);
 				},
 			},
 			// Reset on 1st August every year
@@ -286,11 +270,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyAug.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyAug.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyAug.resetMonth);
 				},
 			},
 			// Reset on 1st September every year
@@ -303,11 +283,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlySep.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlySep.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlySep.resetMonth);
 				},
 			},
 			// Reset on 1st October every year
@@ -320,11 +296,7 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyOct.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyOct.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyOct.resetMonth);
 				},
 			},
 			// Reset on 1st November every year
@@ -337,13 +309,17 @@ Uses KC3Quest objects to play around with
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyNov.type);
 				},
 				calculateNextReset: function (serverTime) {
-					const nextDailyReset = new Date(
-						KC3QuestManager.repeatableTypes.daily.calculateNextReset(serverTime));
-					const nextYearFirstDay = new Date(Date.UTC(nextDailyReset.getUTCFullYear() + 1,
-						KC3QuestManager.repeatableTypes.yearlyNov.resetMonth));
-					return nextYearFirstDay.getTime() - (4 * MS_PER_HOUR);
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyNov.resetMonth);
 				},
 			},
+		},
+
+		calculateNextYearlyReset: function (serverTime, resetMonth) {
+			const nextMonthlyReset = new Date(KC3QuestManager.repeatableTypes.monthly.calculateNextReset(serverTime));
+			const nextUTCMonth = nextMonthlyReset.getUTCMonth();
+			// UTCMonth will be always previous month of JST month on 1st day 5:00, so >= used here
+			const nextYearlyReset = new Date(Date.UTC(nextMonthlyReset.getUTCFullYear() + (1 & (nextUTCMonth >= resetMonth)), resetMonth));
+			return nextYearlyReset.getTime() - (4 * MS_PER_HOUR);
 		},
 
 		getRepeatableTypes: function () {
@@ -601,13 +577,22 @@ Uses KC3Quest objects to play around with
 		
 		resetYearlies :function(typeId){
 			this.load();
-			console.log("Resetting yearlies", typeId);
+			console.log("Resetting yearlies", typeId || "auto");
 			if(!typeId || typeId === 'all') {
-				KC3QuestManager.getRepeatableTypes().forEach(({ type }) => {
-					if(type.startsWith('yearly')) {
-						this.resetLoop(this.getRepeatableIds(type));
-					}
-				});
+				if(typeId === 'all') {
+					KC3QuestManager.getRepeatableTypes().forEach(({ type }) => {
+						if(type.startsWith('yearly')) {
+							this.resetLoop(this.getRepeatableIds(type));
+						}
+					});
+				} else {
+					const thisMonth = Date.getJstDate().getMonth();
+					// keep empty for umimplemented months
+					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "", "", "Aug", "Sep", "Oct", "Nov", ""][thisMonth];
+					const type = monthAbbr ? "yearly" + monthAbbr : false;
+					console.log("Auto found yearlies", type);
+					if(type) this.resetLoop(this.getRepeatableIds(type));
+				}
 			} else {
 				this.resetLoop(this.getRepeatableIds(typeId));
 			}

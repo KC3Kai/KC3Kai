@@ -129,9 +129,16 @@
 			});
 			
 			$(".resetYearlies").on("click", function(){
-				if(confirm("Are you sure?")){
-					KC3QuestManager.resetYearlies("all");
-					KC3StrategyTabs.reloadTab(undefined, true);
+				if(confirm("Which option would you like to choose?\nOK: Reset all yearly quests\nCancel: Reset yearly quests of this month if any")){
+					if(confirm("Are you sure?")){
+						KC3QuestManager.resetYearlies("all");
+						KC3StrategyTabs.reloadTab(undefined, true);
+					}
+				} else {
+					if(confirm("Are you sure?")){
+						KC3QuestManager.resetYearlies();
+						KC3StrategyTabs.reloadTab(undefined, true);
+					}
 				}
 			});
 			
