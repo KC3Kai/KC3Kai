@@ -315,8 +315,16 @@ known IDs see QuestManager
 
 		// no adjustment for multi-counter quests
 		// an example of this Bw1 (questId = 214)
-		if (this.tracking.length > 1)
+		if (this.tracking.length > 1) {
+			// fix counters to 0 for yearly quests completed previously not reset correctly in time
+			if(this.isYearly() && this.progress == 0
+				&& this.tracking.every(td => td[0] > 0 && td[0] === td[1])) {
+				this.tracking.forEach(td => { td[0] = 0; });
+				console.log("Adjusting quest", this.id, "tracking multi-counter",
+							"to 0 since completed state not reset.");
+			}
 			return;
+		}
 
 		// at this point we can confirm this is a singleton array
 		// so only need to deal with one tracking data, let's give it a name
