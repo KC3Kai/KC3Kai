@@ -869,6 +869,7 @@ KC3改 Ship Object
 				else if (flag.includes("LargeGunMount")) { return 3; }
 				else if (flag.includes("MediumGunMount")) { return 2; }
 				else if (flag.includes("SmallGunMount")) { return 1; }
+				else if (flag.includes("MachineGun")) { return 15; }
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
@@ -1975,12 +1976,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPowerCap = function(precapPower,
 			time = "Day", warfareType = "Shelling"){
-		const cap = time === "Night" ? 300 :
+			// increased from 300 to 360 since 2021-03-01
+		const cap = time === "Night" ? 360 :
 			// increased from 150 to 180 since 2017-03-18
-			warfareType === "Shelling" ? 180 :
+			// increased from 180 to 220 since 2021-03-01
+			warfareType === "Shelling" ? 220 :
+			// increased from 150 to 180 since 2021-03-01
+			warfareType === "Torpedo" ? 180 :
 			// increased from 100 to 150 since 2017-11-10
-			warfareType === "Antisub" ? 150 :
-			150; // default cap for other phases
+			// increased from 150 to 170 since 2021-03-01
+			170; // default cap for other phases: Antisub, Aerial, Support, ...
 		const isCapped = precapPower > cap;
 		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
 		return {

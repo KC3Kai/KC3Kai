@@ -37,6 +37,7 @@
 			this.seedBranch( rootQuestTree, 345 ); // C49
 			this.seedBranch( rootQuestTree, 346 ); // C50
 			this.seedBranch( rootQuestTree, 348 ); // C53
+			this.seedBranch( rootQuestTree, 350 ); // C55
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9

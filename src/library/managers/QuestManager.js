@@ -239,7 +239,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyMar',
 				key: 'timeToResetYearlyMarQuests',
 				resetMonth: MARCH,
-				questIds: [436, 912, 914],
+				questIds: [350, 436, 912, 914],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMar.type);
 				},
@@ -677,22 +677,20 @@ Uses KC3Quest objects to play around with
 				"337": // C38 PvP with Arare, Kagerou, Kasumi, Shiranui
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return KC3SortieManager.isPvP() && (
-							fleet.countShip(17) + // Kagerou any remodel
-							fleet.countShip(18) + // Shiranui any remodel
-							fleet.countShip(48) + // Arare any remodel
-							fleet.countShip(49)   // Kasumi any remodel
-						) >= 4;
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(17)  // Kagerou any remodel
+							&& fleet.hasShip(18)  // Shiranui any remodel
+							&& fleet.hasShip(48)  // Arare any remodel
+							&& fleet.hasShip(49); // Kasumi any remodel
 					},
 				"339": // C42 PvP with Isonami, Uranami, Ayanami, Shikinami
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return KC3SortieManager.isPvP() && (
-							fleet.countShip(12)  + // Isonami any remodel
-							fleet.countShip(486) + // Uranami any remodel
-							fleet.countShip(13)  + // Ayanami any remodel
-							fleet.countShip(14)    // Shikinami any remodel
-						) >= 4;
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(12)   // Isonami any remodel
+							&& fleet.hasShip(13)   // Ayanami any remodel
+							&& fleet.hasShip(14)   // Shikinami any remodel
+							&& fleet.hasShip(486); // Uranami any remodel
 					},
 				"342": // C44 PvP with 3 DD/DE and 1 more DD/DE/CL(T)/CT
 					({fleetSent = KC3SortieManager.fleetSent}) => {
@@ -718,18 +716,27 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return KC3SortieManager.isPvP()
-							&& fleet.hasShip(542)  // Yuugumo K2
-							&& fleet.hasShip(563)  // Makigumo K2
-							&& fleet.hasShip(564)  // Kazagumo K2
-							&& fleet.hasShip(648); // Akigumo K2
+							&& fleet.hasShip([542])  // Yuugumo K2
+							&& fleet.hasShip([563])  // Makigumo K2
+							&& fleet.hasShip([564])  // Kazagumo K2
+							&& fleet.hasShip([648]); // Akigumo K2
 					},
 				"348": // C53 PvP with CL/CT as flagship, 2 more CL(T)/CT, 2 DD
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return KC3SortieManager.isPvP() &&
-							fleet.hasShipType([3, 21], 0) &&
-							fleet.countShipType([3, 4, 21]) >= 3 &&
-							fleet.countShipType(2) >= 2;
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShipType([3, 21], 0)
+							&& fleet.countShipType([3, 4, 21]) >= 3
+							&& fleet.countShipType(2) >= 2;
+					},
+				"350": // C55 PvP with Oboro, Akebono, Sazanami, Ushio
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(15)  // Akebono any remodel
+							&& fleet.hasShip(16)  // Ushio any remodel
+							&& fleet.hasShip(93)  // Oboro any remodel
+							&& fleet.hasShip(94); // Sazanami any remodel
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {

@@ -66,6 +66,8 @@ KC3改 Equipment Object
 				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
 				airRadar: 0,
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
+				aaMachineGun: 0,
+				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				enhancedBoiler: 0,
 				enhancedBoilerIds: [34],
 				newModelBoiler: 0,
@@ -1626,6 +1628,42 @@ KC3改 Equipment Object
 					"107": "95",
 				},
 			},
+			// Ar196 Kai
+			"115": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Bismarck Class
+					"47": [
+						{
+							multiple: { "houg": 2, "houk": 1, "saku": 2 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houk": 1 },
+						},
+					],
+					// Admiral Hipper Class
+					"55": "47",
+				},
+			},
+			// Shiun
+			"118": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Ooyodo Class
+					"52": [
+						{
+							multiple: { "houg": 1, "houk": 2, "saku": 2 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 2, "saku": 1 },
+						},
+					],
+				},
+			},
 			// Ka Type Observation Autogyro
 			"69": {
 				count: 0,
@@ -2335,6 +2373,10 @@ KC3改 Equipment Object
 						{
 							multiple: { "houg": 2, "tyku": 1, "houk": 1 },
 						},
+						{
+							minStars: 10,
+							multiple: { "houg": 2 },
+						},
 						// Yuubari Kai Ni+
 						{
 							remodel: 2,
@@ -2352,13 +2394,25 @@ KC3改 Equipment Object
 						},
 					],
 					// Katori Class
-					"56": {
-						multiple: { "houg": 2, "houk": 1 },
-					},
+					"56": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 2 },
+						},
+					],
 					// Nisshin Class
-					"90": {
-						multiple: { "houg": 3, "raig": 2, "tyku": 1, "houk": 1 },
-					},
+					"90": [
+						{
+							multiple: { "houg": 3, "raig": 2, "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "raig": 1 },
+						},
+					],
 				},
 			},
 			// 15.5cm Triple Gun Mount
@@ -2965,7 +3019,7 @@ KC3改 Equipment Object
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Ayanami Class K2: Ayanami K2, Ushio K2
+					// Ayanami Class K2: Ayanami K2, Ushio K2, Akebono K2
 					"1": [
 						{
 							remodel: 2,
@@ -3705,6 +3759,26 @@ KC3改 Equipment Object
 						// Tan Yang/Yukikaze K2
 						ids: [651, 656],
 						multiple: { "houg": 3, "tyku": 3 },
+					},
+					{
+						// Ushio/Akebono K2
+						ids: [407, 665],
+						multiple: { "houg": 2, "tyku": 2 },
+					},
+					{
+						// Ushio/Akebono K2
+						ids: [407, 665],
+						single: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 2, "houk": 1 },
+							},
+							{
+								flags: [ "aaMachineGun" ],
+								single: { "houg": 1, "tyku": 2, "houk": 1 },
+							},
+						],
 					},
 				],
 			},
@@ -4484,6 +4558,16 @@ KC3改 Equipment Object
 			// 25mm Twin Autocannon Mount
 			"39": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
 				byShip: {
 					// Noshiro Kai Ni
 					ids: [662],
@@ -4493,6 +4577,16 @@ KC3改 Equipment Object
 			// 25mm Triple Autocannon Mount
 			"40": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
 				byShip: {
 					// Noshiro Kai Ni
 					ids: [662],
@@ -4502,6 +4596,16 @@ KC3改 Equipment Object
 			// 25mm Single Autocannon Mount
 			"49": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
 				byShip: {
 					// Noshiro Kai Ni
 					ids: [662],
@@ -4511,6 +4615,16 @@ KC3改 Equipment Object
 			// 25mm Triple Autocannon Mount (Concentrated Deployment)
 			"131": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
+				},
 				byShip: {
 					// Noshiro Kai Ni
 					ids: [662],
@@ -4664,9 +4778,25 @@ KC3改 Equipment Object
 					"108": "67",
 				},
 			},
+			// Type 93 Passive Sonar
+			"46": {
+				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						single: { "houk": 3, "tais": 2 },
+					},
+				},
+			},
 			// Type 3 Active Sonar
 			"47": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						single: { "houk": 3, "tais": 2 },
+					},
+				},
 				byShip: [
 					{
 						/*
@@ -4688,6 +4818,16 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Type 0 Passive Sonar
+			"132": {
+				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						single: { "houk": 3, "tais": 2 },
+					},
+				},
+			},
 			// Type 4 Passive Sonar
 			"149": {
 				count: 0,
@@ -4695,6 +4835,10 @@ KC3改 Equipment Object
 					// Akizuki Class
 					"54": {
 						single: { "houk": 2, "tais": 1 },
+					},
+					// Katori Class
+					"56": {
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 				byShip: [
@@ -4715,9 +4859,35 @@ KC3改 Equipment Object
 					},
 				],
 			},
+			// Type 94 Depth Charge Projector
+			"44": {
+				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houk": 2, "tais": 3 },
+					},
+				},
+			},
+			// Type 3 Depth Charge Projector
+			"45": {
+				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houk": 2, "tais": 3 },
+					},
+				},
+			},
 			// Type 3 Depth Charge Projector (Concentrated Deployment)
 			"287": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houk": 2, "tais": 3 },
+					},
+				},
 				byShip: [
 					{
 						// Yuubari K2D, Isuzu K2, Naka K2, Yura K2, Yukikaze K2
@@ -4734,6 +4904,12 @@ KC3改 Equipment Object
 			// Prototype 15cm 9-tube ASW Rocket Launcher
 			"288": {
 				count: 0,
+				byClass: {
+					// Katori Class
+					"56": {
+						multiple: { "houk": 2, "tais": 3 },
+					},
+				},
 				byShip: [
 					{
 						// Isuzu K2, Naka K2, Yura K2, Yukikaze K2
@@ -5396,6 +5572,9 @@ KC3改 Equipment Object
 						case "rotorcraftIds":
 							if(gearTypes[2] === 25) synergyGears.rotorcraft += 1;
 						break;
+						case "aaMachineGunIds":
+							if(gearTypes[2] === 21) synergyGears.aaMachineGun += 1;
+						break;
 						default:
 							const baseKey = key.slice(0, -3);
 							if(synergyGears[key].includes(gear.masterId)) {
@@ -6033,10 +6212,26 @@ KC3改 Equipment Object
 	};
 
 	/**
+	 * @return the same structure with Ship.js#applyPowerCap
+	 */
+	KC3Gear.prototype.applyLandbasePowerCap = function(precapPower){
+		// increased from 150 to 170 since 2021-03-01
+		const cap = 170;
+		const isCapped = precapPower > cap;
+		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
+		return {
+			power,
+			cap,
+			isCapped
+		};
+	};
+
+	/**
 	 * Get post-modified support airstrike power from this land-based aircraft.
 	 * @return tuple of [normal power, critical power]
 	 */
 	KC3Gear.prototype.applyLandbasePowerModifiers = function(basicPower, landBaseObj, targetShipId = 0){
+		const cappedPower = this.applyLandbasePowerCap(basicPower).power;
 		const type2 = this.master().api_type[2];
 		const isLbaa = [47].includes(type2);
 		const lbAttackerModifier = isLbaa ? 1.8 : 1;
@@ -6087,7 +6282,7 @@ KC3改 Equipment Object
 			lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
 				lbfpReconModifier === 1.18 ? 1.15 : 1;
 		}
-		const onNormal = Math.floor(basicPower
+		const onNormal = Math.floor(cappedPower
 			* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 		// Proficiency critical modifier has been applied sometime since 2017-12-11?
 		// Modifier calculation is the same, but different from carrier-based,
@@ -6097,7 +6292,7 @@ KC3改 Equipment Object
 		const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
 		const proficiencyCriticalModifier = 1 + (Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100);
 		const criticalModifier = 1.5;
-		const onCritical = Math.floor(Math.floor(basicPower * criticalModifier * proficiencyCriticalModifier)
+		const onCritical = Math.floor(Math.floor(cappedPower * criticalModifier * proficiencyCriticalModifier)
 			* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);
 		return [onNormal, onCritical];
 	};
