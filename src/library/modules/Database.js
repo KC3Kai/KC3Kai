@@ -509,20 +509,22 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		count_normal_sorties: function(callback){
+		count_normal_sorties: function(filterFunc, callback){
 			this.con.sortie
 				.where("hq").equals(this.index)
 				.and(function(sortie){ return sortie.world < 10; })
+				.and(filterFunc)
 				.count(callback);
 		},
 		
-		get_normal_sorties :function(pageNumber, itemsPerPage, callback){
+		get_normal_sorties :function(filterFunc, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
 			this.con.sortie
 				.where("hq").equals(this.index)
 				.and(function(sortie){ return sortie.world < 10; })
+				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(function(sortieList){
@@ -571,20 +573,22 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		count_world :function(world, callback){
+		count_world :function(world, filterFunc, callback){
 			this.con.sortie
 				.where("hq").equals(this.index)
 				.and(function(sortie){ return sortie.world == world; })
+				.and(filterFunc)
 				.count(callback);
 		},
 		
-		get_world :function(world, pageNumber, itemsPerPage, callback){
+		get_world :function(world, filterFunc, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
 			this.con.sortie
 				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world==world; })
+				.and(function(sortie){ return sortie.world == world; })
+				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(function(sortieList){
@@ -611,20 +615,22 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
-		count_map :function(world, map, callback){
+		count_map :function(world, map, filterFunc, callback){
 			this.con.sortie
 				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world == world && sortie.mapnum==map; })
+				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+				.and(filterFunc)
 				.count(callback);
 		},
 		
-		get_map :function(world, map, pageNumber, itemsPerPage, callback){
+		get_map :function(world, map, filterFunc, pageNumber, itemsPerPage, callback){
 			var self = this;
 			var sortieIds = [], bctr, sortieIndexed = {};
 			
 			this.con.sortie
 				.where("hq").equals(this.index)
-				.and(function(sortie){ return sortie.world==world && sortie.mapnum==map; })
+				.and(function(sortie){ return sortie.world == world && sortie.mapnum == map; })
+				.and(filterFunc)
 				.reverse()
 				.offset( (pageNumber-1)*itemsPerPage ).limit( itemsPerPage )
 				.toArray(function(sortieList){

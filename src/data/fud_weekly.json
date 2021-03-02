@@ -20,6 +20,26 @@
 		"45": [0, 0, 2, 5, 9, 14, 14, 22],
 		"48": [0, 0, 2, 5, 9, 14, 14, 22]
 	},
+	"antiAirResist": {
+		"modifiers": {
+			"level0": [1.0, 1.0],
+			"level1": [0.6, 1.0],
+			"level2": [0.6, 0.7],
+			"level3": [0.5, 0.7],
+			"level4": [0.5, 0.5]
+		},
+		"planesLevel": {
+			"79": 1, "80": 1, "81": 2, "237": 2, "322": 3, "323": 4,
+			"93": 1, "94": 1,
+			"99": 1, "100": 2,
+			"143": 1, "144": 1,
+			"154": 2,
+			"319": 1, "320": 1,
+			"343": 1, "374": 1,
+			"199": 3, "200": 4,
+			"170": 1, "224": 2, "388": 1, "404": 1, "405": 1, "406": 1
+		}
+	},
 	"gauges": {
 		"m15": 4,
 		"m16": 7,
@@ -119,6 +139,57 @@
 		"m73": {
 			"13": [1],
 			"14": [1]
+		}
+	},
+	"elosNodeFactors": {
+		"m16": {
+			"M": { "factor": 3, "lower": [28, "L"], "upper": [30, "J"] }
+		},
+		"m25": {
+			"G": { "factor": 1, "lower": [37, "K"], "upper": [41, "L"], "note": "?" },
+			"I": { "factor": 1, "lower": [31, "H"], "upper": [34, "O"] },
+			"J": { "factor": 1, "lower": [42, "H"], "upper": [49, "O"], "note": "?" }
+		},
+		"m35": {
+			"G": { "factor": 4, "lower": [23, "I"], "upper": [28, "K"] },
+			"H": { "factor": 4, "lower": [35, "J"], "upper": [40, "K"], "note": "?" }
+		},
+		"m45": {
+			"K": { "factor": 2, "lower": [63, "L"], "upper": [70, "T"], "note": "?" },
+			"Q": { "factor": 2, "lower": [55, "P"], "upper": [59, "N/O"], "note": "?" }
+		},
+		"m52": {
+			"F": { "factor": 2, "lower": [63, "H"], "upper": [70, "I/O"] },
+			"L": { "factor": 2, "lower": [60, "M"], "upper": [62, "K"] }
+		},
+		"m54": {
+			"L": { "factor": 2, "lower": [56, "N"], "upper": [60, "P"], "note": "?" },
+			"M": { "factor": 2, "lower": [41, "O"], "upper": [45, "P"] }
+		},
+		"m55": {
+			"O": { "factor": 2, "lower": [63, "R"], "upper": [66, "S"] },
+			"P": { "factor": 2, "lower": [73, "Q"], "upper": [80, "S"], "note": "?" }
+		},
+		"m61": {
+			"G": { "factor": 4, "lower": [12, "I"], "upper": [16, "H"] },
+			"Has": { "factor": 4, "lower": [20, "E"], "upper": [25, "K"], "node": "H", "note": "+AS" },
+			"H": { "factor": 4, "lower": [20, "E"], "upper": [36, "J/K"], "node": "H", "note": "-AS" }
+		},
+		"m62": {
+			"E": { "factor": 3, "lower": [43, "I"], "upper": [50, "J"] },
+			"H": { "factor": 3, "lower": [ 0, "G"], "upper": [43, "K"], "note": "?" },
+			"I": { "factor": 3, "lower": [35, "G"], "upper": [40, "K"] }
+		},
+		"m63": {
+			"H": { "factor": 3, "lower": [36, "I"], "upper": [38, "J"] }
+		},
+		"m65": {
+			"G": { "factor": 3, "lower": [ 0, "K"], "upper": [50, "M"], "note": "?" },
+			"J": { "factor": 3, "lower": [ 0, "L"], "upper": [35, "M"], "note": "?" }
+		},
+		"m72": {
+			"E": { "factor": 4, "lower": [ 0, "F"], "upper": [46, "G"], "note": "?" },
+			"I": { "factor": 4, "lower": [63, "L"], "upper": [69, "M"] }
 		}
 	},
 	"specialQuotesSizes": {

@@ -869,6 +869,7 @@ KC3改 Ship Object
 				else if (flag.includes("LargeGunMount")) { return 3; }
 				else if (flag.includes("MediumGunMount")) { return 2; }
 				else if (flag.includes("SmallGunMount")) { return 1; }
+				else if (flag.includes("MachineGun")) { return 15; }
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
@@ -1572,14 +1573,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 6 types of Daihatsu Landing Craft with known bonus:
+		// 6 types of Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 193: Toku Daihatsu Landing Craft
 		//  * 355: M4A1 DD
-		const landingCraftIds = [167, 166, 68, 230, 193, 355];
+		//  * 408: Soukoutei (Armored Boat Class)
+		//  * 409: Armed Daihatsu
+		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1973,12 +1976,16 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.applyPowerCap = function(precapPower,
 			time = "Day", warfareType = "Shelling"){
-		const cap = time === "Night" ? 300 :
+			// increased from 300 to 360 since 2021-03-01
+		const cap = time === "Night" ? 360 :
 			// increased from 150 to 180 since 2017-03-18
-			warfareType === "Shelling" ? 180 :
+			// increased from 180 to 220 since 2021-03-01
+			warfareType === "Shelling" ? 220 :
+			// increased from 150 to 180 since 2021-03-01
+			warfareType === "Torpedo" ? 180 :
 			// increased from 100 to 150 since 2017-11-10
-			warfareType === "Antisub" ? 150 :
-			150; // default cap for other phases
+			// increased from 150 to 170 since 2021-03-01
+			170; // default cap for other phases: Antisub, Aerial, Support, ...
 		const isCapped = precapPower > cap;
 		const power = Math.floor(isCapped ? cap + Math.sqrt(precapPower - cap) : precapPower);
 		return {
@@ -2052,34 +2059,54 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += 0.1;
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
 			} else {
-				// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
-				const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
-				this.equipment().forEach((g, i) => {
-					if(g.isAirstrikeAircraft()) {
-						const aceLevel = g.ace || 0;
-						const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-						let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
-						if(i > 0) mod /= 2;
-						proficiencyCriticalModifier += mod;
-					}
-				});
+				// CV(B), AO antisub gets no proficiency critical modifier
+				// https://twitter.com/myteaGuard/status/1358823102419927049
+				if( !(warfareType === "Antisub" && [11, 18, 22].includes(this.master().api_stype)) ) {
+					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
+					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
+					this.equipment().forEach((g, i) => {
+						if(g.isAirstrikeAircraft()) {
+							const aceLevel = g.ace || 0;
+							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+							let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+							if(i > 0) mod /= 2;
+							proficiencyCriticalModifier += mod;
+						}
+					});
+				}
 			}
 		}
 		
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
-		// Against PT Imp modifier
-		let antiPtImpModifier = 1;
-		if(targetShipType.isPtImp) {
-			const lightGunBonus = this.countEquipmentType(2, 1) >= 2 ? 1.2 : 1;
-			const aaGunBonus = this.countEquipmentType(2, 21) >= 2 ? 1.1 : 1;
-			const secondaryGunBonus = this.countEquipmentType(2, 4) >= 2 ? 1.2 : 1;
-			const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
-			antiPtImpModifier = lightGunBonus * aaGunBonus * secondaryGunBonus * t3Bonus;
-		}
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
+		} else if(targetShipStype.isPtImp) {
+		// Against PT Imp fixed modifier constants, put into antiLand part in formula
+			antiLandModifier = 0.35;
+			antiLandAdditive = 15;
+		}
+		// Against PT Imp modifier from equipment
+		let antiPtImpModifier = 1;
+		if(targetShipType.isPtImp) {
+			const smallGunBonus = this.hasEquipmentType(2, 1) ? 1.5 * 1.4 : 1;
+			antiPtImpModifier *= smallGunBonus;
+			const aaGunBonus = this.hasEquipmentType(2, 21) ? 1.2 * 1.2 : 1;
+			antiPtImpModifier *= aaGunBonus;
+			const secondaryGunBonus = this.hasEquipmentType(2, 4) ? 1.3 : 1;
+			antiPtImpModifier *= secondaryGunBonus;
+			const diveBomberBonus = this.hasEquipmentType(2, [7, 57]) ? 1.4 * 1.3 : 1;
+			antiPtImpModifier *= diveBomberBonus;
+			const seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+			antiPtImpModifier *= seaplaneBonus;
+			const skilledLookoutBonus = this.hasEquipmentType(2, 39) ? 1.1 : 1;
+			antiPtImpModifier *= skilledLookoutBonus;
+			// Type 3 Shell bonus disappeared?
+			//const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
+			// under verifications: https://twitter.com/yukicacoon/status/1365525774866939905
+			const abDaihatsuBonus = this.hasEquipment([408, 409]) ? 1.2 : 1;
+			antiPtImpModifier *= abDaihatsuBonus * (this.hasEquipment(408) && this.hasEquipment(409) ? 1.1 : 1);
 		}
 		
 		// About rounding and position of anti-land modifier:
@@ -2255,13 +2282,23 @@ KC3改 Ship Object
 		*/
 	};
 
-	// is this ship able to do OASW unconditionally
-	KC3Ship.prototype.isOaswShip = function() {
-		// Isuzu K2, Tatsuta K2, Jervis Kai, Janus Kai, Samuel B.Roberts Kai, Fletcher-Class, Yuubari K2D
-		return [141, 478, 394, 893, 681, 562, 689, 596, 624, 628, 629, 692].includes(this.masterId);
-	};
 	/**
-	 * Test to see if this ship (with equipment) is capable of opening ASW. References:
+	 * @return true if this ship able to do OASW unconditionally.
+	 */
+	KC3Ship.prototype.isOaswShip = function() {
+		return [
+				141, // Isuzu Kai Ni
+				478, // Tatsuta Kai Ni
+				394, // Jervis Kai
+				893, // Janus Kai
+				681, // Samuel B.Roberts Kai
+				562, 689, 596, 692, 628, 629, // all remodels of Fletcher-class
+				624, // Yuubari Kai Ni D
+			].includes(this.masterId);
+	};
+
+	/**
+	 * @return true if this ship (with equipment) is capable of opening ASW.
 	 * @see https://kancolle.fandom.com/wiki/Partials/Opening_ASW
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#oasw
 	 */
@@ -2301,7 +2338,8 @@ KC3改 Ship Object
 		//   confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
 		//   2019-08-08: https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#trigger_conditions
 		//   but bonus from other aircraft like Rotorcraft not (able to be) confirmed,
-		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw
+		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw.
+		//   reconfirmed since 2021-02-29, not counted towards asw 50/65 threshold.
 		// Green (any small?) gun (DE +1 asw from 12cm Single High-angle Gun Mount Model E) not counted,
 		//   confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
 			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
@@ -2321,9 +2359,14 @@ KC3改 Ship Object
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
-			return ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)           // ship visible asw irrelevant
-				|| this.equipment(true).some(gear => gear.isHighAswBomber(false)) // mainly asw 50/65, dive bomber not work
-				|| (shipAsw >= 100 && hasSonar && hasAswAircraft);                // almost impossible for pre-marriage
+			if( ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)                  // ship visible asw irrelevant
+				|| this.equipment(true).some(gear => gear.isHighAswBomber(false))     // mainly asw 50/65, dive bomber not work
+			) return true;
+			// Visible bonus from Torpedo Bombers confirmed counted towards asw 100 threshold since 2021-02-09:
+			// https://twitter.com/panmodoki10/status/1359036399618412545
+			// perhaps only asw 100 threshold is using ship visible asw value
+			const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
+			return (shipAsw + aswAircraftBonus) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
 		}
 
 		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
@@ -2751,10 +2794,15 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateLandingAttackType = function(targetShipMasterId = 0) {
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
-		const isLand = targetShip.api_soku <= 0;
-		// new equipment: M4A1 DD
+		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		const isLand = targetShipType.isLand;
+		// M4A1 DD
 		if(this.hasEquipment(355) && isLand) return 6;
-		// higher priority: Toku Daihatsu + 11th Tank
+		// Soukoutei (Armored Boat Class)
+		if(this.hasEquipment(408) && (isLand || targetShipType.isPtImp)) return 7;
+		// Armed Daihatsu
+		if(this.hasEquipment(409) && (isLand || targetShipType.isPtImp)) return 8;
+		// Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
 		// Abyssal hard land installation could be landing attacked
 		const isTargetLandable =
@@ -2778,6 +2826,10 @@ KC3改 Ship Object
 		if(isTargetLandable) {
 			// M4A1 DD
 			if(this.hasEquipment(355)) return 6;
+			// Armoured Boat (AB Class)
+			if(this.hasEquipment(408)) return 7;
+			// Armed Daihatsu
+			if(this.hasEquipment(409)) return 8;
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu

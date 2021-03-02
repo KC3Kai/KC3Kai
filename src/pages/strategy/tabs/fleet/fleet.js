@@ -10,6 +10,7 @@
 		viewType: "",
 		currentFleetsObj: null,
 		suggestedName: "",
+		sortiedMap: "",
 
 		/*
 		  "fleets" object format:
@@ -285,6 +286,7 @@
 			$("#fleet_description").text("Current Fleets");
 			this.currentFleetsObj = this.getCurrentFleetsObj();
 			this.suggestedName = "Fleets (" + new Date().format("yyyy-mm-dd HH:MM:ss") + ")";
+			this.sortiedMap = "";
 		},
 
 		showSavedFleets: function(name) {
@@ -306,6 +308,7 @@
 			$("#fleet_description").text("Saved Fleets '" + name + "'");
 			this.currentFleetsObj = fleetsObj;
 			this.suggestedName = name;
+			this.sortiedMap = "";
 		},
 
 		showFleetFromSortieId: function(sortieId) {
@@ -329,9 +332,14 @@
 				});
 
 				self.currentFleetsObj = fleetsObj;
-				self.suggestedName = "Sortie #" + sortieId;
+				self.sortiedMap = [sortieData.world, sortieData.mapnum].join("");
+				self.suggestedName = "Sortie #{0} {1}{2}-{3}".format(
+					sortieId, KC3Meta.isEventWorld(sortieData.world) ? "E" : "W", sortieData.world, sortieData.mapnum
+				);
 				self.showAllKCFleets( kcFleets );
-				$("#fleet_description").text("Sortie #" + sortieId + " Fleets");
+				$("#fleet_description").text("{0}{1} Fleets".format(
+					self.suggestedName, sortieData.combined ? " Combined" : ""
+				));
 			});
 		},
 
@@ -391,7 +399,7 @@
 				));
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
-			if(ConfigManager.elosFormula > 1) {
+			if(ConfigManager.elosFormula > 0) {
 				const f33CnHq4 = Array.numbers(1, 5).map(cn =>
 					Math.qckInt("floor", kcFleet.eLos4(cn), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
 				));
