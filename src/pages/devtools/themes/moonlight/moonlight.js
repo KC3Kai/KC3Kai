@@ -401,7 +401,7 @@
 	var mode_natsuiro =          ["natsuiro",    "clrnatsuiro", "shape_rect",   "shape_round",   "yasen_img",      "actvbg_clrgrey",          "slistbg_clrnone",          "miscbg_clrgrey"];
 	var mode_dark_blue =         ["flats",       "clrdim",      "shape_rect",   "shape_round",   "bg_black_pearl", "actvbg_clrlicoriceblue",  "slistbg_clrlicoriceblue",  "miscbg_clrlicoriceblue"];
 	var mode_dark =              ["flats_dark",  "clrdark",     "shape_rect",   "shape_rect",    "bg_dark",        "actvbg_clrjet",           "slistbg_clrdark",          "miscbg_clrjet"];
-	var mode_flashbang =         ["flats_light", "clrdim",      "shape_rect",   "shape_rect",    "bg_white",       "actvbg_clrwhite",         "slistbg_clrflashbang",     "miscbg_clrflashbang"];
+	var mode_flashbang =         ["flats_light", "clrdim",      "shape_rect",   "shape_rect",    "bg_white",       "actvbg_clrwhite",         "slistbg_clrwhite",         "miscbg_clrwhite"];
 	var mode_shaded =            ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none"   ,        "actvbg_clrjet",           "slistbg_clrjet",           "miscbg_clrjet"];
 	var mode_blurry =            ["glassy",      "clrdim",      "shape_round",  "shape_round",   "none",           "actvbg_clrjet",           "slistbg_clrjet",           "miscbg_clrjet"];
 	var mode_lightblue =         ["flats_light", "clrblue",     "shape_rounder","shape_rounder", "none",           "actvbg_clrwhite",         "slistbg_clrwhite",         "miscbg_clrwhite"];
@@ -414,8 +414,8 @@
 	mode_dark_blue.push(            "conbut_moonless",    "icon_moonless",  "siconbg_clrblackpearl",  "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_moonless");
 	mode_dark.push(                 "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "clrnone",              "qsch_dark");
 	mode_flashbang.push(            "conbut_flashbang",   "icon_flashbang", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrgrey",      "clrnone",              "qsch_moonlight");
-	mode_shaded.push(               "conbut_shaded",      "icon_flashbang", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
-	mode_blurry.push(               "conbut_moonlight",   "icon_flashbang", "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
+	mode_shaded.push(               "conbut_shaded",      "icon_shaded",    "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
+	mode_blurry.push(               "conbut_blurry",      "icon_blurry",    "siconbg_clrnone",        "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_moonlight");
 	mode_lightblue.push(            "conbut_lightblue",   "icon_lightblue", "siconbg_clrwhite",       "siconbrd_clrnone",    "ol_clrseaweed",   "clrnone",              "qsch_lightblue");
 	mode_dark_TS.push(              "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_dark");
 	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
@@ -426,7 +426,7 @@
 	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1,           "effect_none");
 	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1,           "effect_none");
 	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_moonlight",     "shape_rect",       "no_skew",        "text_black_blue",  1,           "effect_none");
-	mode_shaded.push(               "skin_shaded",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.4,         "effect_none");
+	mode_shaded.push(               "skin_shaded",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.5,         "effect_none");
 	mode_blurry.push(               "skin_blurry",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.3,         "effect_blur_soft");
 	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_moonlight",     "shape_rounder",    "no_skew",        "text_black_blue",  0.6,         "effect_none");
 	mode_dark_TS.push(              "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  0.6,         "effect_none");

@@ -283,6 +283,10 @@ html,body {
 	border: 1px solid rgba(0,0,0,0);
 	background-color: rgba(50,50,50,var(--main-bg-opacity-heavy));
 }
+.rotarZairo.conbut_blurry {
+	border: 1px solid rgba(0,0,0,0);
+	background-color: rgba(50,50,50,var(--main-bg-opacity-moderate));
+}
 .rotarZairo img {
 	width:12px;
 	height:12px;
@@ -308,6 +312,10 @@ html,body {
 .rotarZairo.conbut_flashbang img{
 	filter:invert(0%);
 	-webkit-filter:invert(0%);
+}
+.rotarZairo.conbut_blurry img{
+	filter:invert(100%);
+	-webkit-filter:invert(100%);
 }
 .rotarHidden img {
 	width:10px;
@@ -347,6 +355,10 @@ html,body {
 .rotarSquish.conbut_shaded img {
 	filter:grayscale(100%) brightness(120%);
 	-webkit-filter:grayscale(100%) brightness(120%);
+}
+.rotarSquish.conbut_blurry img {
+	filter:grayscale(100%) brightness(150%);
+	-webkit-filter:grayscale(100%) brightness(150%);
 }
 .rotarSquish.conbut_lightblue img,
 .rotarSquish.conbut_flashbang img{
@@ -681,6 +693,12 @@ html,body {
 	background: rgba(50,50,50,var(--main-bg-opacity-heavy));
 	border: 1px solid #303030;
 }
+.module.activity .activity_tab.conbut_blurry {
+	color:#bbb;
+	background: rgba(75,75,75,var(--main-bg-opacity-heavy));
+	backdrop-filter: blur(1px);
+	border: 1px solid #444;
+}
 #atab_activity {
 	cursor:default;
 }
@@ -704,7 +722,7 @@ html,body {
 }
 .module.activity .activity_tab.conbut_lightblue.active {
 	color:#000;
-	background: rgba(186,203,212,var(--main-bg-opacity-heavy));
+	background: rgba(255,255,255,var(--main-bg-opacity-light));
 }
 .module.activity .activity_tab.conbut_flashbang.active {
 	color:#000;
@@ -714,6 +732,12 @@ html,body {
 	color:#fff;
 	background: rgba(48,48,48,var(--main-bg-opacity-light));
 	border: 1px solid #0000;
+}
+.module.activity .activity_tab.conbut_blurry.active {
+	color:#fff;
+	background: rgba(48,48,48,var(--main-bg-opacity-light));
+	backdrop-filter: blur(1px);
+	border: 1px solid #444;
 }
 .module.activity .activity_body {
 	width:190px;
@@ -1033,34 +1057,50 @@ html,body {
 }
 .repairs {}
 .repairs .timer-img.icon_moonlight {
-	background:#53789D;
+	background-color: rgba(83,120,157,var(--main-bg-opacity-moderate));
 }
 .repairs .timer-img.icon_moonless {
-	background:#557;
+	background-color: rgba(85,85,119,var(--main-bg-opacity-moderate));
 }
 .repairs .timer-img.icon_natsuiro {
-	background:#EDD286;
+	background-color: rgba(237,210,134,var(--main-bg-opacity-moderate));
 }
 .repairs .timer-img.icon_dark {
-	background:#555;
+	background-color: rgba(85,85,85,var(--main-bg-opacity-moderate));
 }
 .repairs .timer-img.icon_lightblue {
-	background:#7ad;
+	background-color: rgba(119,170,221,var(--main-bg-opacity-moderate));
+}
+.repairs .timer-img.icon_flashbang,
+.repairs .timer-img.icon_shaded {
+	background-color: rgba(187,213,237,var(--main-bg-opacity-moderate));
+}
+.repairs .timer-img.icon_blurry {
+	background-color: rgba(157,183,237,var(--main-bg-opacity-moderate));
 }
 
 .builds {}
 .builds .timer-img.icon_moonlight,
 .builds .timer-img.icon_moonless {
-	background:#007164;
+	background-color: rgba(0,113,100,var(--main-bg-opacity-moderate));
 }
 .builds .timer-img.icon_natsuiro {
-	background:#996600;
+	background-color: rgba(153,102,0,var(--main-bg-opacity-moderate));
 }
 .builds .timer-img.icon_dark {
-	background:#222;
+	background-color: rgba(34,34,34,var(--main-bg-opacity-moderate));
+}
+.builds .timer-img.icon_flashbang {
+	background-color: rgba(241,224,217,var(--main-bg-opacity-moderate));
 }
 .builds .timer-img.icon_lightblue {
-	background:#1EA8AA;
+	background-color: rgba(30,168,170,var(--main-bg-opacity-moderate));
+}
+.builds .timer-img.icon_shaded {
+	background-color: rgba(150,150,150,var(--main-bg-opacity-heavy));
+}
+.builds .timer-img.icon_blurry {
+	background-color: rgba(75,75,75,var(--main-bg-opacity-heavy));
 }
 
 .repairs .timer-img.locked,
@@ -1072,7 +1112,7 @@ html,body {
 }
 
 .builds .timer-img.lsc {
-	background:#b70100;
+	background-color: rgba(183,1,0,var(--main-bg-opacity-moderate));
 }
 .builds .timer-img.new_ship {
 	filter:drop-shadow(0px 0px 2px #1f1);
@@ -4342,7 +4382,8 @@ ABYSS FLEET
 .module.controls.conbut_natsuiro .control,
 .module.controls.conbut_moonless .control,
 .module.controls.conbut_dark .control,
-.module.controls.conbut_shaded .control {
+.module.controls.conbut_shaded .control,
+.module.controls.conbut_blurry .control {
 	color:#ccc;
 }
 .module.controls.conbut_lightblue .control {
@@ -4372,7 +4413,7 @@ ABYSS FLEET
 }
 .module.controls.conbut_lightblue .control.active {
 	color:#000;
-	background: rgba(186,203,212,var(--main-bg-opacity-heavy));
+	background: rgba(255,255,255,var(--main-bg-opacity-moderate));
 	border: 1px solid #008299;
 }
 .module.controls.conbut_flashbang .control.active {
@@ -4384,6 +4425,12 @@ ABYSS FLEET
 	color:#fff;
 	background: rgba(55,55,55,var(--main-bg-opacity-heavy));
 	border: 1px solid #333;
+}
+.module.controls.conbut_blurry .control.active {
+	color:#fff;
+	background: rgba(50,50,50,var(--main-bg-opacity-moderate));
+	backdrop-filter: blur(1px);
+	border: 1px solid #444;
 }
 .module.controls .fleet_num {
 	width:20px;
@@ -4414,7 +4461,7 @@ ABYSS FLEET
 }
 .module.controls.conbut_lightblue .fleet_num {
 	border: 1px solid #008299;
-	background: rgba(0,70,100,var(--main-bg-opacity-heavy));
+	background: rgba(150,150,175,var(--main-bg-opacity-heavy));
 }
 .module.controls.conbut_flashbang .fleet_num {
 	border: 1px solid #888;
@@ -4423,6 +4470,11 @@ ABYSS FLEET
 .module.controls.conbut_shaded .fleet_num {
 	border: 1px solid #333;
 	background: rgba(100,100,100,var(--main-bg-opacity-heavy));
+}
+.module.controls.conbut_blurry .fleet_num {
+	border: 1px solid #444;
+	background: rgba(100,100,100,var(--main-bg-opacity-light));
+	backdrop-filter: blur(1px);
 }
 .module.controls.conbut_moonlight .fleet_num.onExped {
 	background: rgba(0,70,100,var(--main-bg-opacity-heavy));
@@ -4442,11 +4494,17 @@ ABYSS FLEET
 	background: rgba(119,170,221,var(--main-bg-opacity-heavy));
 }
 .module.controls.conbut_flashbang .fleet_num.onExped {
-	background: rgba(175,225,255,var(--main-bg-opacity-heavy));
+	background: rgba(48,144,199,var(--main-bg-opacity-heavy));
+	color:#fff;
 }
 .module.controls.conbut_shaded .fleet_num.onExped {
 	background: rgba(125,150,175,var(--main-bg-opacity-heavy));
 	border: 1px solid #222;
+}
+.module.controls.conbut_blurry .fleet_num.onExped {
+	background: rgba(125,150,175,var(--main-bg-opacity-heavy));
+	border: 1px solid #444;
+	backdrop-filter: blur(1px);
 }
 .module.controls.conbut_moonlight .fleet_num.needsSupply {
 	background: rgba(255,200,0,var(--main-bg-opacity-heavy));
@@ -4469,6 +4527,11 @@ ABYSS FLEET
 .module.controls.conbut_flashbang .fleet_num.needsSupply{
 	background: rgba(255,165,0,var(--main-bg-opacity-heavy));
 }
+.module.controls.conbut_blurry .fleet_num.needsSupply {
+	background: rgba(148,118,0,var(--main-bg-opacity-heavy));
+	color:#eee;
+	backdrop-filter: blur(1px);
+}
 .module.controls.conbut_moonlight .fleet_num.hasTaiha,
 .module.controls.conbut_moonless .fleet_num.hasTaiha {
 	background:rgba(155,0,0,1);
@@ -4485,6 +4548,10 @@ ABYSS FLEET
 .module.controls.conbut_flashbang .fleet_num.hasTaiha,
 .module.controls.conbut_shaded .fleet_num.hasTaiha {
 	background:#f00;
+}
+.module.controls.conbut_blurry .fleet_num.hasTaiha {
+	background:#f00;
+	backdrop-filter: blur(1px);
 }
 .module.controls .fleet_rengo {
 	width:38px;
@@ -4514,7 +4581,7 @@ ABYSS FLEET
 }
 .module.controls.conbut_lightblue .fleet_rengo {
 	border: 1px solid #008299;
-	background: rgba(119,170,221,var(--main-bg-opacity-heavy));
+	background: rgba(150,150,175,var(--main-bg-opacity-heavy));
 }
 .module.controls.conbut_flashbang .fleet_rengo {
 	border: 1px solid #888;
@@ -4523,6 +4590,11 @@ ABYSS FLEET
 .module.controls.conbut_shaded .fleet_rengo {
 	border: 1px solid #222;
 	background: rgba(100,100,100,var(--main-bg-opacity-heavy));
+}
+.module.controls.conbut_blurry .fleet_rengo {
+	border: 1px solid #444;
+	background: rgba(100,100,100,var(--main-bg-opacity-light));
+	backdrop-filter: blur(1px);
 }
 .module.controls .fleet_rengo img {
 	width:30px;
@@ -4562,7 +4634,7 @@ ABYSS FLEET
 	border: 1px solid #222;
 }
 .module.controls.conbut_lightblue .fleet_lbas {
-	background: rgba(119,170,221,var(--main-bg-opacity-heavy));
+	background: rgba(150,150,175,var(--main-bg-opacity-heavy));
 	border: 1px solid #008299;
 }
 .module.controls.conbut_flashbang .fleet_lbas {
@@ -4572,6 +4644,11 @@ ABYSS FLEET
 .module.controls.conbut_shaded .fleet_lbas {
 	border: 1px solid #222;
 	background: rgba(100,100,100,var(--main-bg-opacity-heavy));
+}
+.module.controls.conbut_blurry .fleet_lbas {
+	border: 1px solid #444;
+	background: rgba(100,100,100,var(--main-bg-opacity-light));
+	backdrop-filter: blur(1px);
 }
 .module.controls .fleet_lbas img {
 	width:20px;
@@ -4623,6 +4700,14 @@ ABYSS FLEET
 }
 .module.controls.conbut_shaded .fleet_lbas.needsSupply {
 	background: rgba(154,118,0,var(--main-bg-opacity-heavy));
+}
+.module.controls.conbut_blurry .fleet_lbas.badMorale{
+	background: rgba(225,145,145,var(--main-bg-opacity-heavy));
+	backdrop-filter: blur(1px);
+}
+.module.controls.conbut_blurry .fleet_lbas.needsSupply {
+	background: rgba(154,118,0,var(--main-bg-opacity-heavy));
+	backdrop-filter: blur(1px);
 }
 .module.controls .fleet_lbas.badMorale img,
 .module.controls .fleet_lbas.needsSupply img {
@@ -4709,7 +4794,8 @@ ABYSS FLEET
 	border-right:12px solid #2C3949;
 }
 .module.controls.conbut_dark .scroll_left,
-.module.controls.conbut_shaded .scroll_left {
+.module.controls.conbut_shaded .scroll_left,
+.module.controls.conbut_blurry .scroll_left {
 	border-right:12px solid #555555;
 }
 .module.controls.conbut_lightblue .scroll_left {
@@ -4745,7 +4831,8 @@ ABYSS FLEET
 	border-left:12px solid #2C3949;
 }
 .module.controls.conbut_dark .scroll_right,
-.module.controls.conbut_shaded .scroll_right{
+.module.controls.conbut_shaded .scroll_right,
+.module.controls.conbut_blurry .scroll_right {
 	border-left:12px solid #555555;
 }
 .module.controls.conbut_lightblue .scroll_right {
@@ -4804,6 +4891,11 @@ ABYSS FLEET
 .module.controls.conbut_shaded .control_btn {
 	background: rgba(85,85,85,var(--main-bg-opacity-heavy));
 	border: 1px solid #222222;
+}
+.module.controls.conbut_blurry .control_btn {
+	background: rgba(85,85,85,var(--main-bg-opacity-light));
+	border: 1px solid #444;
+	backdrop-filter: blur(1px);
 }
 .module.controls .control_btn img {
 	width:26px;

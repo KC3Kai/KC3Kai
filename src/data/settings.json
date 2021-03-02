@@ -1445,6 +1445,7 @@
 						[ "conbut_moonless", "Dark Blue" ],
 						[ "conbut_flashbang", "Flashbang" ],
 						[ "conbut_shaded", "Shaded Transparency Skin" ],
+						[ "conbut_blurry", "Blurry Transparency Skin" ],
 						[ "conbut_lightblue", "Light Blue" ]
 					]
 				}
@@ -1660,6 +1661,8 @@
 						[ "icon_moonless", "Dark Blue" ],
 						[ "icon_dark", "Dark" ],
 						[ "icon_flashbang", "Flashbang" ],
+						[ "icon_blurry", "Blurry" ],
+						[ "icon_shaded", "Shaded" ],
 						[ "icon_lightblue", "LightBlue" ]
 					]
 				}
