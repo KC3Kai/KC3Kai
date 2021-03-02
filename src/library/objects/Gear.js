@@ -4561,10 +4561,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4580,10 +4580,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4599,10 +4599,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4618,10 +4618,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
