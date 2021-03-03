@@ -3041,6 +3041,8 @@ Previously known as "Reactor"
 					KC3QuestManager.get(345).increment(); // C49: Yearly Exercises 1
 				if(KC3QuestManager.isPrerequisiteFulfilled(348))
 					KC3QuestManager.get(348).increment(); // C53: Yearly Exercises 3
+				if(KC3QuestManager.isPrerequisiteFulfilled(350))
+					KC3QuestManager.get(350).increment(); // C55: Yearly Exercises 4
 			}
 			if(rankPt >= 5) { // S-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(337))

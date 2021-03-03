@@ -77,6 +77,7 @@
                 case 242: // Shiratsuyu
                 case 632: // Ariake
                     return 15;
+                case 231: // Akebono
                 case 344: // Asashimo
                 case 350: // Umikaze
                     return 30;
@@ -160,6 +161,8 @@
                 case 320: // Isokaze
                 case 632: // Ariake
                     return 10;
+                case 231: // Akebono
+                    return 15;
                 case 313: // Tanikaze
                     return 20;
                 case 651: // Tan Yang

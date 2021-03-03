@@ -706,6 +706,21 @@
 				alert("Done! Cache data will be available again after you restart the game.");
 			});
 			
+			// Clear next reset time of quests and trigger a reset check at once
+			$(".tab_profile .clear_questreset").on("click", function(event){
+				if(!confirm("Have you synced your computer clock?\nThis fix won't work if your time doesn't match with game server's."
+						+ "\nThis fix will also reset your daily quests if it hasn't done today."))
+					return false;
+				// Only re-calc yearlies for now
+				Object.keys(localStorage).forEach(key => {
+					if(key.startsWith("timeToResetYearly")) {
+						delete localStorage[key];
+					}
+				});
+				KC3QuestManager.checkAndResetQuests(Date.now());
+				alert("Done!");
+			});
+			
 			// Clear transient properties
 			$(".tab_profile .clear_fcf").on("click", function(event){
 				if(!confirm("Have you closed the game?\nThis fix won't work if you haven't closed the game."))

@@ -965,6 +965,7 @@
 					else if (flag.includes("LargeGunMount")) { return 3; }
 					else if (flag.includes("MediumGunMount")) { return 2; }
 					else if (flag.includes("SmallGunMount")) { return 1; }
+					else if (flag.includes("MachineGun")) { return 15; }
 					else if (flag.includes("skilledLookouts")) { return 32; }
 					else if (flag.includes("searchlight")) { return 24; }
 					else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }

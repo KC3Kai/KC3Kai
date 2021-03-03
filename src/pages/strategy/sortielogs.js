@@ -392,7 +392,11 @@
 				// here judges by node event_id: 5 just like in-game and Node.js does,
 				// although there is `.boss` property in battle records, but lower performance by doing more table query
 				// known behavior: sorties which reached boss but no battle result recorded (eg: catbomb or F5) will hit still
-				(Array.isArray(sortie.nodes) && sortie.nodes.some(node => node.eventId == 5));
+				(Array.isArray(sortie.nodes) && sortie.nodes.some(
+					node => node.eventId == 5
+					// treat W1-6-N node as boss
+					|| (node.eventId == 8 && sortie.world == 1 && sortie.mapnum == 6)
+				));
 		};
 		
 		/* SHOW MAP

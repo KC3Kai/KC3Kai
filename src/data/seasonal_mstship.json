@@ -4059,5 +4059,69 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5507": {
+		"api_id": 5507,
+		"api_name": "バレンタイン迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5508": {
+		"api_id": 5508,
+		"api_name": "バレンタイン明石",
+		"api_yomi": "あかし",
+		"api_stype": 19,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5509": {
+		"api_id": 5509,
+		"api_name": "バレンタインPerth",
+		"api_yomi": "パース",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5510": {
+		"api_id": 5510,
+		"api_name": "バレンタインJohnston",
+		"api_yomi": "ジョンストン",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5511": {
+		"api_id": 5511,
+		"api_name": "バレンタインScirocco",
+		"api_yomi": "シロッコ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5512": {
+		"api_id": 5512,
+		"api_name": "バレンタインMaestrale",
+		"api_yomi": "マエストラーレ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5513": {
+		"api_id": 5513,
+		"api_name": "バレンタインLibeccio",
+		"api_yomi": "リベッチオ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5514": {
+		"api_id": 5514,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
