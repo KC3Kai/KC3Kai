@@ -6261,8 +6261,8 @@ KC3改 Equipment Object
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
-			// Do 217 E-5 + Hs293 Initial Model targeting DD/CL?
-			if(this.masterId === 405 && !isLand && [2, 3].includes(targetMst.api_stype))
+			// Do 217 E-5 + Hs293 Initial Model targeting DD
+			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
