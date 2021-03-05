@@ -1741,7 +1741,7 @@
 				if(slotitem) amount = slotitem.amount;
 				$(`.consumable_display .count_${attrName}`).text(amount).parent().attr("title", KC3Meta.useItemName(useitemId));
 			};
-			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94].forEach(updateCountByUseitemId);
+			[4, 10, 11, 12, 50, 51, 52, 54, 56, 59, 57, 58, 60, 61, 62, 64, 65, 66, 67, 69, 70, 71, 74, 75, 76, 77, 78, 90, 91, 92, 94].forEach(updateCountByUseitemId);
 			$(".count_sumScrews").text(
 				(PlayerManager.getConsumableById(4) || 0) +    // screws
 				(PlayerManager.getConsumableById(60) || 0) +   // 1 present box => 1 screw

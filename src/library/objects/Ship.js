@@ -1523,11 +1523,13 @@ KC3改 Ship Object
 			const obj = {};
 			const dummyEnemy = dummyEnemyList[installationType - 1];
 			// Modifiers from special attacks, battle conditions are not counted for now
-			const fixedPreConds = ["Shelling", 1, undefined, [], false, false, dummyEnemy],
-				fixedPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
-			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedPreConds);
+			const fixedDayPreConds = ["Shelling", 1, undefined, undefined, false, false, dummyEnemy],
+				fixedNightPreConds = ["Shelling", 1, undefined, ["SingleAttack", 0], false, false, dummyEnemy],
+				fixedDayPostConds = ["Shelling", undefined, 0, false, false, 0, false, dummyEnemy],
+				fixedNightPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
+			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds);
 			let {power} = this.applyPowerCap(precap, "Day", "Shelling");
-			const postcapInfo = this.applyPostcapModifiers(power, ...fixedPostConds);
+			const postcapInfo = this.applyPostcapModifiers(power, ...fixedNightPostConds);
 			power = postcapInfo.power;
 			
 			obj.enemy = dummyEnemy;
@@ -1539,23 +1541,24 @@ KC3改 Ship Object
 			};
 			obj.dayPower = Math.floor(power);
 			
-			// Still use day time pre-cap shelling power, without TP value.
 			// Power constant +5 included, if assumes night contact is triggered.
-			power = precap;
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.nightPower = Math.floor(power);
 			
 			// Get Chuuha day attack power (in case of nuke setups)
-			fixedPreConds.push("chuuha");
-			const {power: damagedPrecap} = this.applyPrecapModifiers(basicPower, ...fixedPreConds);
-			({power} = this.applyPowerCap(damagedPrecap, "Day", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			fixedDayPreConds.push("chuuha");
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds));
+			({power} = this.applyPowerCap(power, "Day", "Shelling"));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers = [Math.floor(power)];
 			
 			// Get Chuuha night power
-			({power} = this.applyPowerCap(damagedPrecap, "Night", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			fixedNightPreConds.push("chuuha");
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPowerCap(power, "Night", "Shelling"));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers.push(Math.floor(power));
 			
 			resultList.push(obj);
@@ -1566,12 +1569,13 @@ KC3改 Ship Object
 	/**
 	 * Calculate landing craft pre-cap/post-cap bonus depending on installation type.
 	 * @param installationType - kc3-unique installation types
+	 * @param isNight - is something special for night battle
 	 * @return {number} multiplier of landing craft
 	 * @see estimateInstallationEnemyType
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83
 	 */
-	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
+	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
 		// 6 types of Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
@@ -1612,8 +1616,11 @@ KC3改 Ship Object
 						}
 					}
 				});
-				oneGearBonus *= getModifier(type, "count1");
-				if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+				// no bonus except base one on yasen for 408, 409
+				if(type < 6 || !isNight) {
+					oneGearBonus *= getModifier(type, "count1");
+					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+				}
 			}
 		});
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
@@ -1631,6 +1638,7 @@ KC3改 Ship Object
 	 * @param targetShipMasterId - target land installation master ID.
 	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
 	 * @param warfareType - to indicate if use different modifiers for phases other than day shelling.
+	 * @param isNight - to indicate if use different modifiers for night battle.
 	 * @see https://kancolle.fandom.com/wiki/Combat/Installation_Type
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonus
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
@@ -1642,7 +1650,7 @@ KC3改 Ship Object
 	 * @see calcLandingCraftBonus
 	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap tank additive, precap m4a1dd multiplicative]
 	 */
-	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling"){
+	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
 		if(this.isDummy()) { return [0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
@@ -1662,11 +1670,13 @@ KC3改 Ship Object
 		let alDiveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
-		const landingBonus = this.calcLandingCraftBonus(installationType);
+		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
-		const shikonBonus = 25 * (shikonCount + m4a1ddCount);
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount);
 		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
+		const armedModifier = this.hasEquipment(409) && this.hasEquipment([68, 166, 167, 193, 230]) ? 1.25 : 1;
+		const specialTankModifier = m4a1ddModifier * armedModifier;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1686,7 +1696,7 @@ KC3改 Ship Object
 					
 					return [rocketsAdditive,
 						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
-						submarineBonus, shikonBonus, m4a1ddModifier];
+						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1704,7 +1714,7 @@ KC3改 Ship Object
 					return [rocketsAdditive,
 						seaplaneBonus * alDiveBomberBonus * lightShipBonus
 							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
-						submarineBonus, shikonBonus, m4a1ddModifier];
+						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 3: // Isolated Island Princess
 					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
@@ -1716,7 +1726,7 @@ KC3改 Ship Object
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
-						0, shikonBonus, m4a1ddModifier];
+						0, specialTankBonus, specialTankModifier];
 				
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
@@ -1730,7 +1740,7 @@ KC3改 Ship Object
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
-						0, shikonBonus, m4a1ddModifier];
+						0, specialTankBonus, specialTankModifier];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -1920,7 +1930,8 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		let antiLandAdditive = 0, antiLandModifier = 1, subAntiLandAdditive = 0, tankAdditive = 0, tankModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier, subAntiLandAdditive, tankAdditive, tankModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
+			[antiLandAdditive, antiLandModifier, subAntiLandAdditive, tankAdditive, tankModifier] =
+				this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle);
 		}
 		
 		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
@@ -2003,7 +2014,7 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, isAirAttack = false,
+			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false, isAirAttack = false,
 			targetShipStype = 0, isDefenderArmorCounted = false, targetShipMasterId = 0){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
@@ -2081,7 +2092,7 @@ KC3改 Ship Object
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
 		} else if(targetShipStype.isPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
@@ -4356,9 +4367,9 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, warfareTypeNight, undefined, undefined, true).power;
+						power, warfareTypeNight, [], undefined, true).power;
 				}
-				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight));
+				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight, []));
 			}
 			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?

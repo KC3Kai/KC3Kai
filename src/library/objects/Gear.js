@@ -358,7 +358,6 @@ KC3改 Equipment Object
 				byShip: [
 					{
 						// Ryuuhou Kai
-						// Note: Taigei ctype is 50, but her remodel group index is 0 in Ryuuhou
 						ids: [318],
 						single: { "houg": 4, "tais": 1 },
 					},
@@ -461,9 +460,30 @@ KC3改 Equipment Object
 						// Kai
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "raig": 1 },
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							single: { "raig": 1 },
 						},
 						// Kai Ni
+						{
+							remodel: 2,
+							multiple: { "tais": 1 },
+						},
+						{
+							remodel: 2,
+							single: { "houk": 1 },
+						},
+					],
+					// Ryuuhou Class
+					"51": [
+						// Ryuuhou Base (Taigei ctype 50, remodel index 0)
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "raig": 1, "tais": 1 },
+						},
+						// Ryuuhou Kai
 						{
 							remodel: 2,
 							multiple: { "tais": 1, "houk": 1 },
@@ -479,55 +499,62 @@ KC3改 Equipment Object
 						// CVL Kai
 						{
 							remodel: 4,
-							multiple: { "raig": 1 },
+							single: { "raig": 1 },
 						},
 						// CVL Kai Ni
 						{
 							remodel: 5,
-							multiple: { "houk": 1 },
+							single: { "houk": 1 },
 						},
 					],
 					// Hiyou Class
-					"24": {
-						multiple: { "houg": 1, "raig": 1, "houk": 1 },
-					},
-					// Shoukaku Class
-					"33": {
-						multiple: { "houg": 1, "raig": 2, "houk": 2 },
-					},
-					// Taihou Class
-					"43": {
-						multiple: { "houg": 1, "raig": 2, "houk": 2 },
-					},
-					// Taigei Class
-					"50": [
-						// Ryuuhou
+					"24": [
 						{
-							remodel: 1,
-							multiple: { "houg": 1, "raig": 1, "tais": 1 },
+							multiple: { "houg": 1 },
 						},
-						// Ryuuhou Kai
 						{
-							remodel: 2,
-							multiple: { "tais": 1, "houk": 1 },
+							single: { "raig": 1, "houk": 1 },
+						},
+					],
+					// Shoukaku Class
+					"33": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							single: { "raig": 2, "houk": 2 },
+						},
+					],
+					// Taihou Class
+					"43": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							single: { "raig": 2, "houk": 2 },
 						},
 					],
 				},
 				byShip: [
 					{
 						// Shoukaku, extra +1 fp
-						ids: [110, 288, 461, 466],
+						origins: [110],
 						multiple: { "houg": 1 },
 					},
 					{
 						// Zuikaku, extra +1 ev
-						ids: [111, 112, 462, 467],
-						multiple: { "houk": 1 },
+						origins: [111],
+						single: { "houk": 1 },
 					},
 					{
 						// Suzuya/Kumano CVL
 						ids: [508, 509],
-						multiple: { "houg": 1, "raig": 2, "houk": 2 },
+						multiple: { "houg": 1 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						single: { "raig": 2, "houk": 2 },
 					},
 				],
 			},
@@ -544,12 +571,41 @@ KC3改 Equipment Object
 						// Kai
 						{
 							remodel: 1,
-							multiple: { "raig": 1, "tais": 1, "houk": 1 },
+							multiple: { "tais": 1 },
+						},
+						{
+							remodel: 1,
+							single: { "raig": 1, "houk": 1 },
 						},
 						// Kai Ni
 						{
 							remodel: 2,
-							multiple: { "tais": 1, "houk": 1 },
+							multiple: { "tais": 1 },
+						},
+						{
+							remodel: 2,
+							single: { "houk": 1 },
+						},
+					],
+					// Ryuuhou Class
+					"51": [
+						// Ryuuhou Base
+						{
+							remodel: 1,
+							multiple: { "houg": 1, "tais": 2 },
+						},
+						{
+							remodel: 1,
+							single: { "raig": 1, "houk": 1 },
+						},
+						// Ryuuhou Kai
+						{
+							remodel: 2,
+							multiple: { "tais": 1 },
+						},
+						{
+							remodel: 2,
+							single: { "houk": 1 },
 						},
 					],
 					// Chitose Class
@@ -557,7 +613,11 @@ KC3改 Equipment Object
 						// CVL base
 						{
 							remodel: 3,
-							multiple: { "houg": 1, "raig": 1  },
+							multiple: { "houg": 1  },
+						},
+						{
+							remodel: 3,
+							single: { "raig": 1  },
 						},
 						// CVL Kai
 						{
@@ -567,50 +627,57 @@ KC3改 Equipment Object
 						// CVL Kai Ni
 						{
 							remodel: 5,
-							multiple: { "houk": 1 },
+							single: { "houk": 1 },
 						},
 					],
 					// Hiyou Class
-					"24": {
-						multiple: { "houg": 1, "raig": 2, "houk": 2 },
-					},
-					// Shoukaku Class
-					"33": {
-						multiple: { "houg": 2, "raig": 3, "houk": 3 },
-					},
-					// Taihou Class
-					"43": {
-						multiple: { "houg": 2, "raig": 3, "houk": 2 },
-					},
-					// Taigei Class
-					"50": [
-						// Ryuuhou
+					"24": [
 						{
-							remodel: 1,
-							multiple: { "houg": 1, "raig": 1, "tais": 2, "houk": 1 },
+							multiple: { "houg": 1 },
 						},
-						// Ryuuhou Kai
 						{
-							remodel: 2,
-							multiple: { "tais": 1, "houk": 1 },
+							single: { "raig": 2, "houk": 2 },
+						},
+					],
+					// Shoukaku Class
+					"33": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							single: { "raig": 3, "houk": 3 },
+						},
+					],
+					// Taihou Class
+					"43": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							single: { "raig": 3, "houk": 2 },
 						},
 					],
 				},
 				byShip: [
 					{
 						// Shoukaku, extra +1 fp
-						ids: [110, 288, 461, 466],
+						origins: [110],
 						multiple: { "houg": 1 },
 					},
 					{
 						// Zuikaku, extra +1 ev
-						ids: [111, 112, 462, 467],
-						multiple: { "houk": 1 },
+						origins: [111],
+						single: { "houk": 1 },
 					},
 					{
 						// Suzuya/Kumano CVL
 						ids: [508, 509],
-						multiple: { "houg": 1, "raig": 2, "tais": 2, "houk": 3 },
+						multiple: { "houg": 1, "tais": 2 },
+					},
+					{
+						// Suzuya/Kumano CVL
+						ids: [508, 509],
+						single: { "raig": 2, "houk": 3 },
 					},
 				],
 			},
@@ -627,7 +694,7 @@ KC3改 Equipment Object
 						// Kai Ni
 						{
 							remodel: 2,
-							multiple: { "raig": 1 },
+							single: { "raig": 1 },
 						},
 					],
 					// Chitose Class
@@ -643,14 +710,19 @@ KC3改 Equipment Object
 						multiple: { "houg": 1 },
 					},
 					// Shoukaku Class
-					"33": {
-						multiple: { "houg": 1, "raig": 1 },
-					},
+					"33": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							single: { "raig": 1 },
+						},
+					],
 					// Taihou Class
 					"43": "33",
-					// Taigei Class
-					"50": [
-						// Ryuuhou
+					// Ryuuhou Class
+					"51": [
+						// Ryuuhou Base
 						{
 							remodel: 1,
 							multiple: { "tais": 1 },
@@ -658,7 +730,7 @@ KC3改 Equipment Object
 						// Ryuuhou Kai
 						{
 							remodel: 2,
-							multiple: { "raig": 1 },
+							single: { "raig": 1 },
 						},
 					],
 				},
@@ -4561,10 +4633,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4580,10 +4652,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4599,10 +4671,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -4618,10 +4690,10 @@ KC3改 Equipment Object
 				byClass: {
 					// Katori Class
 					"56": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 						synergy: {
 							flags: [ "airRadar" ],
-							single: { "tyku": 2, "houk": 2 },
+							distinct: { "tyku": 2, "houk": 2 },
 						},
 					},
 				},
@@ -6261,8 +6333,8 @@ KC3改 Equipment Object
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
-			// Do 217 E-5 + Hs293 Initial Model targeting DD/CL?
-			if(this.masterId === 405 && !isLand && [2, 3].includes(targetMst.api_stype))
+			// Do 217 E-5 + Hs293 Initial Model targeting DD
+			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
@@ -6366,14 +6438,17 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isFighterBomber = function(){
-		// 'Fighter Bomber' in dive bomber category is based on AA stat (> 2 or 3?) and DV stat?
+		// 'Fighter Bomber' in dive bomber category is based on AA stat and DV stat?
 		//   depends on tests of Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) or other new AA 3 dive bomer.
 		// Re.2001 CB Kai (AA 4 DV 6) is not fighter bomber: https://twitter.com/myteaGuard/status/1330856406363193345
+		// FM-2 (AA 6 DV 2) is not fighter bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
-			this.master().api_tyku > 2 && this.master().api_baku < 6;
+			// Using ID list for now since data insufficient
+			[60, 154, 219].indexOf(this.masterId) > -1;
+			//this.master().api_tyku > 2 && this.master().api_baku < 6;
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){

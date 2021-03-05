@@ -94,7 +94,7 @@ known IDs see QuestManager
 				if(!Array.isArray(this.tracking[key])) continue;
 				textToShow = this.tracking[key].join("/");
 				trackingText.push(
-					(this.meta().trackingDesc ? this.meta().trackingDesc[key] : "{0}")
+					(this.meta().trackingDesc ? this.meta().trackingDesc[key] || "{0}" : "{0}")
 						.format(textToShow)
 				);
 				if(!showAll) {

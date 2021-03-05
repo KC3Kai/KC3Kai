@@ -1547,7 +1547,7 @@ Used by SortieManager
 	/**
 		Build a tooltip about computed enemy air power for researching air battle
 	*/
-	KC3Node.prototype.buildAirPowerMessage = function(forLbas = false){
+	KC3Node.prototype.buildAirPowerMessage = function(forLbas = false, isPvP = this.isPvP){
 		var tooltip = this.airbattle[2] || "";
 		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot, undefined, forLbas);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
@@ -1555,6 +1555,9 @@ Used by SortieManager
 		if(!!ap){
 			tooltip += "\n" + KC3Meta.term("InferredFighterPower")
 				.format(KC3Calc.fighterPowerIntervals(ap));
+			if(!!isPvP){
+				tooltip += "\n" + KC3Meta.term("InferredPvPDisclaimer");
+			}
 		}
 		const enemyTotalPlanes = this.planeFighters.abyssal[0];
 		if(!!enemyTotalPlanes){
