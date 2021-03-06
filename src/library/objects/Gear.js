@@ -52,7 +52,7 @@ KC3改 Equipment Object
 	};
 
 	/**
-	 * Accmulate bonus from 1 piece of equipment to a existed bonus definition table.
+	 * Accmulate bonus from 1 piece of equipment to an existed bonus definition table.
 	 * @param {Object} bonusGears - the bonus definition table to be accmulated.
 	 * @param {Object} gear - the gear object instance equipped by the ship.
 	 * @see KC3Ship.prototype.equipmentTotalStats
@@ -318,11 +318,10 @@ KC3改 Equipment Object
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
-				// for normal opening airstrike, dive/torpedo/seaplane bomber bonus confirmed
-				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
-				if([8, 11, 58].includes(type2)) return 0.2 * stars;
-				break;
 			case "lbas":
+				// for normal opening airstrike and lbas, dive/torpedo/seaplane bomber bonus confirmed
+				if([7, 57].includes(type2) && !this.isFighterBomber()) return 0.2 * stars;
+				if([8, 58, 11].includes(type2)) return 0.2 * stars;
 				// land-base attacker/heavybomber
 				if([47, 53].includes(type2)) modifier = 0.7;
 				break;

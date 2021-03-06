@@ -66,9 +66,9 @@ Saves and loads list to and from localStorage
 		landingCraftModifiers: {
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {
-				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4,  1.4],
-				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.15, 1.1],
-				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.0,  1.1],
+				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4, 1.4],
+				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1],
+				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.0, 1.1],
 			},
 			// Artillery Imp
 			1: {

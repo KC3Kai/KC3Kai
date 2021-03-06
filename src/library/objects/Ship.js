@@ -741,7 +741,7 @@ KC3改 Ship Object
 	/**
 	 * Check all possible visible bonuses from current equipment and newly equipped one.
 	 * @return {Object} a summary data about visible bonus stats and value.
-	 * @see when updating this part, also update visible bonus part of mstship.js
+	 * @see when modifying this part, please also update visible bonus part of mstship.js
 	 */
 	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
 		const newGearMstId = (newGearObj || {}).masterId;
@@ -1656,7 +1656,7 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
-	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap tank additive, precap m4a1dd multiplicative]
+	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap sptank additive, precap sptank multiplicative]
 	 */
 	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
 		if(this.isDummy()) { return [0, 1]; }
@@ -1681,6 +1681,7 @@ KC3改 Ship Object
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
 		const specialTankBonus = 25 * (shikonCount + m4a1ddCount);
 		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
 		const armedModifier = this.hasEquipment(409) && this.hasEquipment([68, 166, 167, 193, 230]) ? 1.25 : 1;
