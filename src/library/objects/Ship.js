@@ -702,6 +702,9 @@ KC3改 Ship Object
 		});
 	};
 
+	/**
+	 * Sum and return total value of specified stat given by equipment.
+	 */
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
 		isOnShipBonusIncluded = true, isOnShipBonusOnly = false,
 		includeEquipTypes = null, includeEquipIds = null,
@@ -735,6 +738,11 @@ KC3改 Ship Object
 		return total;
 	};
 
+	/**
+	 * Check all possible visible bonuses from current equipment and newly equipped one.
+	 * @return {Object} a summary data about visible bonus stats and value.
+	 * @see when updating this part, also update visible bonus part of mstship.js
+	 */
 	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
 		const newGearMstId = (newGearObj || {}).masterId;
 		let gearFlag = false;

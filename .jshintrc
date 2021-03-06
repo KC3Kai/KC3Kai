@@ -38,6 +38,7 @@
 		"KC3AkashiRepair": true,
 		"KC3Fleet": true,
 		"KC3Gear": true,
+		"KC3GearBonus": true,
 		"KC3LandBase": true,
 		"RMsg": true,
 		"TMsg": true,
