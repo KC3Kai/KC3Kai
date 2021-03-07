@@ -1681,11 +1681,15 @@ KC3改 Ship Object
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
-		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
-		const specialTankBonus = 25 * (shikonCount + m4a1ddCount);
+		const abCount = this.countEquipment(408);
+		const armedCount = this.countEquipment(409);
+		const armedSynergy = (abCount + armedCount) > 0 && this.hasEquipment([68, 166, 167, 193, 230]);
 		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
-		const armedModifier = this.hasEquipment(409) && this.hasEquipment([68, 166, 167, 193, 230]) ? 1.25 : 1;
+		const armedModifier = armedSynergy ? 1.2 : 1;
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
 		const specialTankModifier = m4a1ddModifier * armedModifier;
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount) + (armedSynergy ? 10 : 0);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
