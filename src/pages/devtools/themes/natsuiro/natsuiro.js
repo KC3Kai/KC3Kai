@@ -1684,6 +1684,7 @@
 					// Quest color box
 					$(".quest_color", questListItem)
 						.css("background", quest.getColor())
+						.addClass(quest.getLabelClass())
 						.data("id", quest.id);
 
 					// Quest title
@@ -1726,9 +1727,10 @@
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
-				$(".quest_color", questBox).css("background", quest.getColor() )
+				$(".quest_color", questBox).css("background", quest.getColor())
+					.addClass(quest.getLabelClass())
 					.addClass("hover")
-					.attr("title", KC3Meta.term("PanelToggleQuestComplete") )
+					.attr("title", KC3Meta.term("PanelToggleQuestComplete"))
 					.data("id", quest.id)
 					.click(toggleQuestFunc);
 				if(quest.isComplete()){

@@ -226,7 +226,7 @@ All your quest data will be cleared, including 1-time quests you have done. Lost
 			// If we have player data about the quest, not just meta data from json
 			if(KC3QuestManager.exists(quest_id)){
 				var questRecord = KC3QuestManager.get(quest_id);
-				$(".questIcon", thisBox).addClass(this.getLabelClass(questRecord));
+				$(".questIcon", thisBox).addClass(questRecord.getLabelClass());
 				
 				if(!questRecord.tracking){
 					$(".questTrack", thisBox).hide();
@@ -282,17 +282,6 @@ All your quest data will be cleared, including 1-time quests you have done. Lost
 			}
 		},
 		
-		getLabelClass :function(quest) {
-			if(quest && quest.label > 0) switch(quest.label){
-				case 2: return "label_daily";
-				case 3: return "label_weekly";
-				case 6: return "label_monthly";
-				case 7: return quest.isQuarterly() ? "label_quarterly" : "label_other";
-				default: if(quest.isYearly()) return "label_yearly";
-			}
-			return "";
-		},
-		
 		/* Add quest row to normal list
 		--------------------------------------------*/
 		addOtherQuest :function( thisQuest ){
@@ -301,7 +290,7 @@ All your quest data will be cleared, including 1-time quests you have done. Lost
 				.clone().appendTo(".tab_flowchart .extralist");
 			$(".questIcon", thisBox).text( questMeta.code || thisQuest.id );
 			$(".questIcon", thisBox).addClass("type" + (String(thisQuest.id).substring(0,1)))
-				.addClass(this.getLabelClass(thisQuest));
+				.addClass(thisQuest.getLabelClass());
 			$(".questIcon", thisBox).on("mouseover", function(){
 				$(this).next().tooltip("open");
 			});
