@@ -130,7 +130,9 @@
 	width:16px;
 	height:16px;
 	float:left;
-	border-radius:8px;
+	padding-left:1px;
+	font:bold larger arial,sans-serif;
+	border-radius:50%;
 	color:#fff;
 	text-align:center;
 	-webkit-user-select:none;
@@ -153,7 +155,8 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 4px;
-	border-radius:8px;
+	border-radius:50%;
+	-webkit-user-select:none;
 }
 .tab_flowchart .questFlowItem .questToggle img {
 	width:12px;
@@ -166,7 +169,8 @@
 	height:16px;
 	float:left;
 	margin:0px 0px 0px 3px;
-	border-radius:8px;
+	border-radius:50%;
+	-webkit-user-select:none;
 }
 .tab_flowchart .questFlowItem .questRemove img {
 	width:12px;
@@ -264,6 +268,7 @@
 	float:left;
 	margin:0px 0px 0px 9px;
 	border-radius:8px;
+	-webkit-user-select:none;
 }
 .tab_flowchart .questExtraItem .questRemove img {
 	width:12px;
@@ -282,23 +287,23 @@
 
 .tab_flowchart .questIcon.label_daily {
 	border-left:4px solid transparent;
-	border-right:4px solid #6bf;
+	border-right:4px solid #6af;
 }
 .tab_flowchart .questIcon.label_weekly {
 	border-left:4px solid transparent;
-	border-right:4px solid #9ef;
+	border-right:4px solid #8ff;
 }
 .tab_flowchart .questIcon.label_monthly {
 	border-left:4px solid transparent;
-	border-right:4px solid #be7;
+	border-right:4px solid #3f6;
 }
 .tab_flowchart .questIcon.label_quarterly {
 	border-left:4px solid transparent;
-	border-right:4px solid #ea6;
+	border-right:4px solid #f95;
 }
 .tab_flowchart .questIcon.label_yearly {
 	border-left:4px solid transparent;
-	border-right:4px solid #59f;
+	border-right:4px solid #84f;
 }
 .tab_flowchart .questIcon.label_other {
 	border-left:4px solid transparent;

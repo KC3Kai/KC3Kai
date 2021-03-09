@@ -1380,19 +1380,19 @@ ABYSS FLEET
 /*	border-left: 2px solid #0f0; */
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_daily {
-	border-right: 2px solid #6bf;
+	border-right: 2px solid #6af;
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_weekly {
-	border-right: 2px solid #9ef;
+	border-right: 2px solid #8ff;
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_monthly {
-	border-right: 2px solid #be7;
+	border-right: 2px solid #3f6;
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_quarterly {
-	border-right: 2px solid #ea6;
+	border-right: 2px solid #f95;
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_yearly {
-	border-right: 2px solid #59f;
+	border-right: 2px solid #84f;
 }
 .module.activity .activity_quest .quest_list .quest .quest_color.label_other {
 	border-right: 2px solid #fe6;
@@ -3046,22 +3046,22 @@ ABYSS FLEET
 	border-left:2px solid #0f0;
 }
 .module.quests .quest .quest_color.label_daily {
-	border-right: 2px solid #6bf;
+	border-right:2px solid #6af;
 }
 .module.quests .quest .quest_color.label_weekly {
-	border-right: 2px solid #9ef;
+	border-right:2px solid #8ff;
 }
 .module.quests .quest .quest_color.label_monthly {
-	border-right: 2px solid #be7;
+	border-right:2px solid #3f6;
 }
 .module.quests .quest .quest_color.label_quarterly {
-	border-right: 2px solid #ea6;
+	border-right:2px solid #f95;
 }
 .module.quests .quest .quest_color.label_yearly {
-	border-right: 2px solid #59f;
+	border-right:2px solid #94f;
 }
 .module.quests .quest .quest_color.label_other {
-	border-right: 2px solid #fe6;
+	border-right:2px solid #fe6;
 }
 
 .module.quests .quest_text {
