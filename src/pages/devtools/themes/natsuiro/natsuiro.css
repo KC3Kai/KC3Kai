@@ -1356,12 +1356,6 @@ ABYSS FLEET
 .module.activity .activity_quest .quest_list .quest.activated {
 	background: rgba(255,153,51,0.2);
 }
-.module.activity .activity_quest .quest_list .quest.percent50 {
-/*	background: rgba(51,255,255,0.2); */
-}
-.module.activity .activity_quest .quest_list .quest.percent80 {
-/*	background: rgba(233,255,51,0.2); */
-}
 .module.activity .activity_quest .quest_list .quest.completed {
 	background: rgba(0,255,0,0.2);
 }
@@ -1372,9 +1366,14 @@ ABYSS FLEET
 	margin: 2px;
 	border: 2px solid transparent;
 }
-
 .module.activity .activity_quest .quest_list .quest.activated .quest_color {
 /*	border-left: 2px solid #f93; */
+}
+.module.activity .activity_quest .quest_list .quest.percent50 .quest_color {
+/*	border-left: 2px solid #39a; */
+}
+.module.activity .activity_quest .quest_list .quest.percent80 .quest_color {
+/*	border-left: 2px solid #6cd; */
 }
 .module.activity .activity_quest .quest_list .quest.completed .quest_color {
 /*	border-left: 2px solid #0f0; */
@@ -3041,6 +3040,12 @@ ABYSS FLEET
 	background:#555;
 	border:2px solid transparent;
 	float:left;
+}
+.module.quests .quest.percent50 .quest_color {
+	border-left:2px solid #39a;
+}
+.module.quests .quest.percent80 .quest_color {
+	border-left:2px solid #6cd;
 }
 .module.quests .quest.complete .quest_color {
 	border-left:2px solid #0f0;
