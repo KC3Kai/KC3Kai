@@ -208,6 +208,61 @@
     };
 
     /**
+     * Build fleet speed tooltip text of every ships in (single or combined) fleet.
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
+     * @return built html string.
+     */
+    const buildFleetSpeedText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined) => {
+        const shipIconStyles = {
+            "width":"13px", "height":"13px",
+            "margin-top":"-3px", "margin-right":"2px",
+            "image-rendering":"auto", "object-fit":"conver",
+        };
+        let text = "";
+        const minSpeed = escortFleet ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
+        const maxSpeed = Math.max(...viewFleet.shipsUnescaped().map(ship => ship.getSpeed())
+            .concat(escortFleet ? escortFleet.shipsUnescaped().map(ship => ship.getSpeed()) : []));
+        const maxShipCount = Math.max(viewFleet.countShips(true), escortFleet ? escortFleet.countShips(true) : 0);
+        const placeholder = "\u2003\u2003";
+        for(let idx = 0; idx < maxShipCount; idx ++) {
+            const ship = viewFleet.ship(idx);
+            const spd = ship.getSpeed();
+            const ospd = ship.master().api_soku;
+            text += "#{0}&nbsp;".format(1 + idx);
+            text += $("<img />")
+                .attr("src", KC3Meta.shipIcon(ship.masterId))
+                .css(shipIconStyles)
+                .prop("outerHTML");
+            const styles = ship.isAbsent() || ship.isDummy() ? "color:#aaa" :
+                spd === minSpeed && spd < maxSpeed ? "color:#ee39bf" :
+                spd > ospd ? "color:#7aabb8" : "";
+            text += '&nbsp;<span style="{1}">{0}</span>'
+                .format(ship.exists() ? ship.speedName() : placeholder, styles);
+            if(escortFleet) {
+                const ship = escortFleet.ship(idx);
+                const spd = ship.getSpeed();
+                const ospd = ship.master().api_soku;
+                text += "\t";
+                text += $("<img />")
+                    .attr("src", KC3Meta.shipIcon(ship.masterId))
+                    .css(shipIconStyles)
+                    .prop("outerHTML");
+                const styles = ship.isAbsent() || ship.isDummy()  ? "color:#aaa" :
+                    spd === minSpeed && spd < maxSpeed ? "color:#ee39bf" :
+                    spd > ospd ? "color:#7aabb8" : "";
+                text += '&nbsp;<span style="{1}">{0}</span>'
+                    .format(ship.exists() ? ship.speedName() : placeholder, styles);
+            }
+            text += "\n";
+        }
+        return $("<p></p>")
+            .css("font-size", "11px")
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
      * Collect battle conditions from current battle node if available.
      * Do not fall-back to default value here if not available, leave it to appliers.
      * @return an object contains battle properties we concern at.
@@ -534,6 +589,7 @@
         getFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
+        buildFleetSpeedText,
         collectBattleConditions,
         
         getLandBasesResupplyCost,
