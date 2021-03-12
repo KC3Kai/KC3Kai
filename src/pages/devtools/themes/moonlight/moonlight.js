@@ -2373,6 +2373,7 @@
 							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
 							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
 						].join('\n');
+						tips += "</span>";
 						$(".summary-sumfp .summed").text(fstats.fp);
 						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsImp.fp , 1));
 						$(".summary-sumtp .summed").text(fstats.tp);
@@ -2384,7 +2385,7 @@
 						$(".summary-sumlos .summed").text(fstats.ls);
 						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsImp.ls , 1));
 					}
-					return tips + "</span>";
+					return tips;
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-transport").attr("title",
 				KC3Meta.term("PanelTransportPoints").format(
@@ -2416,7 +2417,11 @@
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
 				.parent().attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
-			$(".status-speed .status_text").text( FleetSummary.speed );
+			$(".status-speed .status_text").text(FleetSummary.speed)
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(selectedFleet === 5 ?
+					PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1], selectedFleet === 5 ?
+					PlayerManager.fleets[1] : undefined))
+				.lazyInitTooltip();
 			if(selectedFleet < 5){
 				const f33Cn = Array.numbers(1, 4)
 					.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));

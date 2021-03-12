@@ -1684,6 +1684,7 @@
 					// Quest color box
 					$(".quest_color", questListItem)
 						.css("background", quest.getColor())
+						.addClass(quest.getLabelClass())
 						.data("id", quest.id);
 
 					// Quest title
@@ -1726,14 +1727,15 @@
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
-				$(".quest_color", questBox).css("background", quest.getColor() )
+				questBox.toggleClass("complete", quest.isComplete())
+					.toggleClass("percent50", quest.progress === 1)
+					.toggleClass("percent80", quest.progress === 2);
+				$(".quest_color", questBox).css("background", quest.getColor())
+					.addClass(quest.getLabelClass())
 					.addClass("hover")
-					.attr("title", KC3Meta.term("PanelToggleQuestComplete") )
+					.attr("title", KC3Meta.term("PanelToggleQuestComplete"))
 					.data("id", quest.id)
 					.click(toggleQuestFunc);
-				if(quest.isComplete()){
-					questBox.addClass("complete");
-				}
 				if(quest.meta){
 					$(".quest_text", questBox).text(quest.meta().name)
 						.attr("titlealt", KC3QuestManager
@@ -2121,8 +2123,9 @@
 							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
 							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
 						].join('\n');
+						tips += "</span>";
 					}
-					return tips + "</span>";
+					return tips;
 				})(selectedFleet)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
@@ -2143,7 +2146,11 @@
 			$(".summary-antiair .summary_text").text(FleetSummary.antiAir)
 				.attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
-			$(".summary-speed .summary_text").text(FleetSummary.speed);
+			$(".summary-speed .summary_text").text(FleetSummary.speed)
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(selectedFleet === 5 ?
+					PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1], selectedFleet === 5 ?
+					PlayerManager.fleets[1] : undefined))
+				.lazyInitTooltip();
 			if(ConfigManager.elosFormula > 0){
 				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){

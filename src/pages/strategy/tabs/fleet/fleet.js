@@ -427,7 +427,8 @@
 						kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)
 					)
 				);
-			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
+			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() )
+				.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet));
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);

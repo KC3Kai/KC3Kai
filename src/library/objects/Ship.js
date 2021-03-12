@@ -702,6 +702,9 @@ KC3改 Ship Object
 		});
 	};
 
+	/**
+	 * Sum and return total value of specified stat given by equipment.
+	 */
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
 		isOnShipBonusIncluded = true, isOnShipBonusOnly = false,
 		includeEquipTypes = null, includeEquipIds = null,
@@ -735,6 +738,11 @@ KC3改 Ship Object
 		return total;
 	};
 
+	/**
+	 * Check all possible visible bonuses from current equipment and newly equipped one.
+	 * @return {Object} a summary data about visible bonus stats and value.
+	 * @see when modifying this part, please also update visible bonus part of mstship.js
+	 */
 	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
 		const newGearMstId = (newGearObj || {}).masterId;
 		let gearFlag = false;
@@ -1648,7 +1656,7 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
-	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap tank additive, precap m4a1dd multiplicative]
+	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap sptank additive, precap sptank multiplicative]
 	 */
 	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
 		if(this.isDummy()) { return [0, 1]; }
@@ -1673,10 +1681,16 @@ KC3改 Ship Object
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
-		const specialTankBonus = 25 * (shikonCount + m4a1ddCount);
+		const abCount = this.countEquipment(408);
+		const armedCount = this.countEquipment(409);
+		const armedSynergy = (abCount + armedCount) > 0 && armedCount < 2 && this.hasEquipment([68, 166, 167, 193, 230]);
 		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
-		const armedModifier = this.hasEquipment(409) && this.hasEquipment([68, 166, 167, 193, 230]) ? 1.25 : 1;
+		const armedModifier = armedSynergy ? 1.2 : 1;
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
+		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug 
 		const specialTankModifier = m4a1ddModifier * armedModifier;
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount) + (armedSynergy ? 10 : 0);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
