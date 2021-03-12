@@ -217,7 +217,7 @@
         const shipIconStyles = {
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px",
-            "image-rendering":"auto", "object-fit":"conver",
+            "image-rendering":"auto", "object-fit":"cover"
         };
         let text = "";
         const minSpeed = escortFleet ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
