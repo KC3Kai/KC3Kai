@@ -2279,7 +2279,7 @@
 				.parent().attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
 			$(".status-speed .status_text").text(FleetSummary.speed)
-				.attr("titlealt", KC3Calc.buildFleetSpeedText(selectedFleet === 5 ?
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(selectedFleet === 5 ?
 					PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1], selectedFleet === 5 ?
 					PlayerManager.fleets[1] : undefined))
 				.lazyInitTooltip();

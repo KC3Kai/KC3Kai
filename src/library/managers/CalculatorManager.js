@@ -213,17 +213,18 @@
      * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
      * @return built html string.
      */
-    const buildFleetSpeedText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined) => {
+    const buildFleetsSpeedText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined) => {
         const shipIconStyles = {
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px",
             "image-rendering":"auto", "object-fit":"cover"
         };
         let text = "";
-        const minSpeed = escortFleet ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
+        const isCombined = escortFleet instanceof KC3Fleet;
+        const minSpeed = isCombined ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
         const maxSpeed = Math.max(...viewFleet.shipsUnescaped().map(ship => ship.getSpeed())
-            .concat(escortFleet ? escortFleet.shipsUnescaped().map(ship => ship.getSpeed()) : []));
-        const maxShipCount = Math.max(viewFleet.countShips(true), escortFleet ? escortFleet.countShips(true) : 0);
+            .concat(isCombined ? escortFleet.shipsUnescaped().map(ship => ship.getSpeed()) : []));
+        const maxShipCount = Math.max(viewFleet.countShips(true), isCombined ? escortFleet.countShips(true) : 0);
         const placeholder = "\u2003\u2003";
         for(let idx = 0; idx < maxShipCount; idx ++) {
             const ship = viewFleet.ship(idx);
@@ -239,7 +240,7 @@
                 spd > ospd ? "color:#7aabb8" : "";
             text += '&nbsp;<span style="{1}">{0}</span>'
                 .format(ship.exists() ? ship.speedName() : placeholder, styles);
-            if(escortFleet) {
+            if(isCombined) {
                 const ship = escortFleet.ship(idx);
                 const spd = ship.getSpeed();
                 const ospd = ship.master().api_soku;
@@ -589,7 +590,7 @@
         getFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
-        buildFleetSpeedText,
+        buildFleetsSpeedText,
         collectBattleConditions,
         
         getLandBasesResupplyCost,

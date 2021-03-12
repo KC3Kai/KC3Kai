@@ -428,7 +428,7 @@
 					)
 				);
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() )
-				.attr("title", KC3Calc.buildFleetSpeedText(kcFleet));
+				.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet));
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
