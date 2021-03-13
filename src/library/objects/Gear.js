@@ -339,11 +339,15 @@ KC3改 Equipment Object
 					case 3: // Large main gun
 						modifier = 1;
 						break;
-					case 13: // Large Radar, https://twitter.com/jo_swaf/status/1370544125703979008
-						modifier = 1;
-						break;
 					case 4: // Secondary gun
 						return 0.15 * stars;
+					case 12: // Small radar
+						// https://twitter.com/jo_swaf/status/1370544125703979008
+						modifier = 0.5;
+						break;
+					case 13: // Large radar
+						modifier = 1;
+						break;
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
 						modifier = 0.5;
