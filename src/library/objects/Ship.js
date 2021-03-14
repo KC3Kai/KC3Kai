@@ -2044,6 +2044,7 @@ KC3改 Ship Object
 		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
+		targetShipStype = targetShipStype || (targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId).api_stype || 0 : 0);
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
 		if(isTargetShipTypeMatched && !isNightBattle) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
@@ -2107,7 +2108,7 @@ KC3改 Ship Object
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
-		} else if(targetShipStype.isPtImp) {
+		} else if(targetShipType.isPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
 			antiLandAdditive = 15;
