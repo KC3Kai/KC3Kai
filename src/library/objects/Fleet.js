@@ -287,7 +287,7 @@ Contains summary information about a fleet and its ships
 			ss.level = ship.level;
 			ss.morale = ship.morale;
 			if (includeImproveType) {
-				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
+				ship.equipment(true).filter(g => g.exists()).forEach(gear => {
 					const bonus = {
 						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
 						tp: includeImproveType === "exped" ? 0 : gear.attackPowerImprovementBonus("torpedo"),
