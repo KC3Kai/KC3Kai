@@ -251,30 +251,38 @@ Contains summary information about a fleet and its ships
 			.reduce(function(x,y){return x+y;},0);
 	};
 	
-	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = true){
+	KC3Fleet.prototype.totalStats = function(includeEquip = true, includeImproveType = false, forExped = false, forRadarchart = false){
 		const stats = {
 			level: 0, morale: 0, hp: 0,
 			fp: 0, tp: 0, aa: 0, ar: 0,
 			ev: 0, as: 0, ls: 0, lk: 0,
 			ht: 0
 		};
-		this.ship((rid, idx, ship) =>{
+		this.ship((rid, idx, ship) => {
 			// always includes modded/marriage bonus values
-			const ss = includeEquip ? {
+			const ss = includeEquip && !forExped ? {
 				hp: ship.hp[1],
 				fp: ship.fp[0], tp: ship.tp[0], aa: ship.aa[0], ar: ship.ar[0],
 				ev: ship.ev[0], as: ship.as[0], ls: ship.ls[0], lk: ship.lk[0],
 				ht: ship.equipmentTotalStats("houm")
 			} : ship.nakedStats();
-			if(!includeEquip) {
+			if (!includeEquip) {
 				// no accuracy if excludes equipment
 				ss.ht = 0;
-				// still includes modded/married luck
+				// still includes modded/married hp & luck
+				ss.hp = ship.hp[1];
 				ss.lk = ship.lk[0];
-			} else {
-				ss.as = ship.nakedAsw()
-					// asw with equipment is a special case, only some equip types counted. details see:
-					+ ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, !!forExped);
+			} else if (!!forExped) {
+				// expeds with aircraft count partial stats, details see:
+				ss.fp += ship.expedEquipmentTotalStats("houg");
+				ss.tp += ship.expedEquipmentTotalStats("raig");
+				ss.aa += ship.expedEquipmentTotalStats("tyku");
+				ss.ar += ship.expedEquipmentTotalStats("souk");
+				ss.ev += ship.expedEquipmentTotalStats("houk");
+				ss.as += ship.expedEquipmentTotalStats("tais");
+				ss.ls += ship.expedEquipmentTotalStats("saku");
+				ss.hp = ship.hp[1];
+				ss.lk = ship.lk[0];
 			}
 			ss.level = ship.level;
 			ss.morale = ship.morale;
@@ -282,7 +290,7 @@ Contains summary information about a fleet and its ships
 				ship.equipment(true).filter(v => !!v.masterId).forEach(gear => {
 					const bonus = {
 						fp: gear.attackPowerImprovementBonus(includeImproveType === "exped" ? "exped" : "fire"),
-						tp: gear.attackPowerImprovementBonus("torpedo"),
+						tp: includeImproveType === "exped" ? 0 : gear.attackPowerImprovementBonus("torpedo"),
 						aa: gear.aaStatImprovementBonus(includeImproveType),
 						as: gear.aswStatImprovementBonus(includeImproveType),
 						ev: gear.evaStatImprovementBonus(includeImproveType),
@@ -296,6 +304,20 @@ Contains summary information about a fleet and its ships
 				stats[stat] += ss[stat] || 0;
 			});
 		});
+		if (!!forRadarchart) {
+			// see main.js#Rader._model.prototype._getParam
+			const ingameGetParam = function (statsTotal, shipAmount) {
+				if (shipAmount <= 0) return 0;
+				var avg1 = Math.round(statsTotal / shipAmount);
+				if (1 == shipAmount) return avg1;
+				var avg2 = Math.sqrt(shipAmount - 1);
+				return avg2 *= avg1, avg1 + Math.round(avg2);
+			};
+			const shipAmount = this.countShips();
+			Object.keys(stats).forEach(stat => {
+				stats[stat] = Math.min(350, ingameGetParam(stats[stat], shipAmount));
+			});
+		}
 		return stats;
 	};
 	

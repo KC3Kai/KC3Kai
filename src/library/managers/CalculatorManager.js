@@ -208,6 +208,54 @@
     };
 
     /**
+     * Build total stats tooltip text for single or combined fleet.
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
+     * @param {string} improvementType - Fleet total stats are mainly used by expeditions, so `exped` by default.
+     * @return built html string.
+     */
+    const buildFleetsTotalStatsText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined, improvementType = "exped") => {
+        const isCombined = escortFleet instanceof KC3Fleet;
+        const containerStyles = {
+            "font-size":"11px",
+            "display":"grid",
+            "grid-template-columns":"auto auto auto auto auto",
+            "column-gap":"10px", "grid-column-gap":"10px",
+            "white-space":"nowrap",
+        };
+        const rnd = v => Math.qckInt("floor", v, 1);
+        const accumulateStatsTo = (statsTo, statsFrom) => {
+            Object.keys(statsTo).forEach(stat => {
+                statsTo[stat] += statsFrom[stat] || 0;
+            });
+        };
+        const statsVisible = viewFleet.totalStats(true, false, false);
+        const statsImprove = viewFleet.totalStats(true, improvementType, false);
+        const statsExped   = viewFleet.totalStats(true, "exped", true);
+        const statsRadar   = viewFleet.totalStats(true, false, false, true);
+        if(isCombined) {
+            accumulateStatsTo(statsVisible, escortFleet.totalStats(true, false, false));
+            accumulateStatsTo(statsImprove, escortFleet.totalStats(true, improvementType, false));
+            accumulateStatsTo(statsExped,   escortFleet.totalStats(true, "exped", true));
+            accumulateStatsTo(statsRadar,   escortFleet.totalStats(true, false, false, true));
+        }
+        const rowTemplate = "<div>{0}</div><div>{1}</div><div>{2}</div><div>{3}</div><div>{4}</div>";
+        let text = rowTemplate.format(
+            KC3Meta.term("ExpedTotalHeader"), KC3Meta.term("ExpedTotalNone"),
+            KC3Meta.term("ExpedTotalImp"), KC3Meta.term("ExpedTotalExped"), KC3Meta.term("ExpedTotalRadar")
+        );
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalFp")  , statsVisible.fp, rnd(statsImprove.fp), rnd(statsExped.fp), statsRadar.fp);
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalTorp"), statsVisible.tp, rnd(statsImprove.tp), rnd(statsExped.tp), statsRadar.tp);
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalAa")  , statsVisible.aa, rnd(statsImprove.aa), rnd(statsExped.aa), statsRadar.aa);
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalAsw") , statsVisible.as, rnd(statsImprove.as), rnd(statsExped.as), statsRadar.as);
+        text += rowTemplate.format(KC3Meta.term("ExpedTotalLos") , statsVisible.ls, rnd(statsImprove.ls), rnd(statsExped.ls), statsRadar.ls);
+        return $("<div></div>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
      * Build fleet speed tooltip text of every ships in (single or combined) fleet.
      * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
      * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
@@ -595,6 +643,7 @@
         getFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
+        buildFleetsTotalStatsText,
         buildFleetsSpeedText,
         collectBattleConditions,
         

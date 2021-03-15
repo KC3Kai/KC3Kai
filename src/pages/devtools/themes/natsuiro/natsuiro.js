@@ -2102,31 +2102,14 @@
 			// Fleet Summary Stats
 			$(".module.summary").hideChildrenTooltips();
 			$(".summary-level .summary_text").text(FleetSummary.lv)
-				.attr("title", (fleetNum => {
-					let tips = fleetNum > 1 ? "" :
-						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
-					if (fleetNum >= 1 && fleetNum <= 4) {
-						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
-						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
-						// Align with special space char 0xa0 and force to monospaced font
-						const formatStatTip = (term, rawStat, impStat) => (
-							term.padEnd(5, '\u00a0') +
-							String(rawStat).padStart(6, '\u00a0') +
-							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
-						);
-						tips += (!tips ? "" : "\n") + '<span class="monofont">';
-						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
-						tips += [
-							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
-							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
-							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
-							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
-							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
-						].join('\n');
-						tips += "</span>";
-					}
-					return tips;
-				})(selectedFleet)).lazyInitTooltip();
+				.attr("titlealt", "{0}{1}".format(
+					selectedFleet > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
+						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n",
+					KC3Calc.buildFleetsTotalStatsText(
+						selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
+						selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
+					)
+				)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
@@ -2147,10 +2130,10 @@
 				.attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
 			$(".summary-speed .summary_text").text(FleetSummary.speed)
-				.attr("titlealt", KC3Calc.buildFleetsSpeedText(selectedFleet === 5 ?
-					PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1], selectedFleet === 5 ?
-					PlayerManager.fleets[1] : undefined))
-				.lazyInitTooltip();
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(
+					selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
+					selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
+				)).lazyInitTooltip();
 			if(ConfigManager.elosFormula > 0){
 				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
 				if(selectedFleet < 5){
@@ -4335,21 +4318,23 @@
 				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0],
-					aa = ship.aa[0],
-					fp = ship.fp[0],
-					tp = ship.tp[0];
-				// TODO asw stats from aircraft seem be quite complex for expeditions, no proficiency level counted for now
+				// TODO stats from aircraft seem be quite complex for expeditions, no proficiency level counted for now
 				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
+				var ns = ship.nakedStats();
+				var fp = ns.fp + ship.expedEquipmentTotalStats("houg"),
+					tp = ns.tp + ship.expedEquipmentTotalStats("raig"),
+					aa = ns.aa + ship.expedEquipmentTotalStats("tyku"),
+					los = ns.ls + ship.expedEquipmentTotalStats("saku"),
+					asw = ns.as + ship.expedEquipmentTotalStats("tais");
 				if (includeImprove) {
 					// Should be floored after summing up all ships' stats
 					// https://twitter.com/CainRavenK/status/1157636860933337089
+					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
-					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
-					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
+					// no torpedo power bonus for expedition found yet
+					//tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
 				}
 				return {
 					ammo : 0,
