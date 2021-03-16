@@ -939,6 +939,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.expedEquipmentTotalStats = function(apiName, isExslotIncluded = true, isOnShipBonusIncluded = true){
 		// For expeditions, stats like asw from aircraft affected by proficiency and equipped slot size:
 		// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
+		// https://wikiwiki.jp/kancolle/%E7%B7%B4%E7%BF%92%E3%83%9A%E3%83%BC%E3%82%B8/35
 		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
 		var total = this.equipment(isExslotIncluded).map((g, i) => {
 			if(!g.exists()) return 0;
@@ -951,8 +952,8 @@ KC3改 Ship Object
 				(!this.slotSize(i) ? 0 : Math.floor(mstValue * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))));
 		}).sumValues();
 		if(isOnShipBonusIncluded){
-			// unconfirmed: all visible bonuses counted? or just like OASW, only some types counted? or none counted?
-			total += this.equipmentTotalStats(apiName, true, true, true /*, null, null, [1, 6, 7, 8]*/);
+			// unconfirmed: all visible bonuses counted?
+			total += this.equipmentTotalStats(apiName, true, true, true);
 		}
 		return total;
 	};

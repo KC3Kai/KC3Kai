@@ -315,7 +315,7 @@ Contains summary information about a fleet and its ships
 			};
 			const shipAmount = this.countShips();
 			Object.keys(stats).forEach(stat => {
-				stats[stat] = Math.min(350, ingameGetParam(stats[stat], shipAmount));
+				stats[stat] = ingameGetParam(stats[stat], shipAmount);
 			});
 		}
 		return stats;
