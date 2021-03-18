@@ -4527,20 +4527,27 @@
 			//		 <other values>: no effect
 			// dataActual: like dataResult, actual fleet value
 			// jq: the jq object
-			// postActions: (optional) call postActions(dataReq,dataResult,jq, dataActual)
+			// postActions: (optional) call postActions(dataReq,dataResult,jq,dataActual)
 			//				perform actions after jq object is properly set.
 			//				note that postActions is only called if the requirement is not null.
+			//				will mark actual near requirement if this is boolean true.
 			var setupJQObject = function(dataReq, dataResult, dataActual, jq, postActions) {
 				if (dataReq === null) {
 					jq.hide();
 				} else {
 					jq.show();
+					jq.css("color", "");
 					if (dataResult === false) {
 						// when this condition is not met
 						markFailed( jq );
 					} else if (dataResult === true) {
 						// when this condition is met
 						markPassed( jq );
+						// when actual value near requirement
+						if (typeof(postActions) === "boolean" &&
+							postActions && dataActual <= dataReq + 1) {
+							jq.css("color", "lightpink");
+						}
 					}
 					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();
 					if (typeof(postActions) === "function")
@@ -4587,7 +4594,8 @@
 				ExpdReqPack.totalAsw,
 				ExpdCheckerResult.totalAsw,
 				Math.floor(fleet.map(f => f.asw).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalAsw")
+				$(".module.activity .activity_expeditionPlanner .totalAsw"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAsw")
 				.toggle(ExpdReqPack.totalAsw !== null);
@@ -4596,7 +4604,8 @@
 				ExpdReqPack.totalAa,
 				ExpdCheckerResult.totalAa,
 				Math.floor(fleet.map(f => f.aa).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalAa")
+				$(".module.activity .activity_expeditionPlanner .totalAa"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAa")
 				.toggle(ExpdReqPack.totalAa !== null);
@@ -4605,7 +4614,8 @@
 				ExpdReqPack.totalLos,
 				ExpdCheckerResult.totalLos,
 				Math.floor(fleet.map(f => f.los).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalLos")
+				$(".module.activity .activity_expeditionPlanner .totalLos"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalLos")
 				.toggle(ExpdReqPack.totalLos !== null);
@@ -4614,7 +4624,8 @@
 				ExpdReqPack.totalFp,
 				ExpdCheckerResult.totalFp,
 				Math.floor(fleet.map(f => f.fp).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalFp")
+				$(".module.activity .activity_expeditionPlanner .totalFp"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
 				.toggle(ExpdReqPack.totalFp !== null);
@@ -4623,7 +4634,8 @@
 				ExpdReqPack.totalTorp,
 				ExpdCheckerResult.totalTorp,
 				Math.floor(fleet.map(f => f.tp).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalTorp")
+				$(".module.activity .activity_expeditionPlanner .totalTorp"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
 				.toggle(ExpdReqPack.totalTorp !== null);
