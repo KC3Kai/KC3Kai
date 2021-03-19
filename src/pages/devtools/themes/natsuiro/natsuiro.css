@@ -1356,12 +1356,6 @@ ABYSS FLEET
 .module.activity .activity_quest .quest_list .quest.activated {
 	background: rgba(255,153,51,0.2);
 }
-.module.activity .activity_quest .quest_list .quest.percent50 {
-	background: rgba(51,255,255,0.2);
-}
-.module.activity .activity_quest .quest_list .quest.percent80 {
-	background: rgba(233,255,51,0.2);
-}
 .module.activity .activity_quest .quest_list .quest.completed {
 	background: rgba(0,255,0,0.2);
 }
@@ -1372,12 +1366,35 @@ ABYSS FLEET
 	margin: 2px;
 	border: 2px solid transparent;
 }
-
 .module.activity .activity_quest .quest_list .quest.activated .quest_color {
-	border-color: #F93;
+/*	border-left: 2px solid #f93; */
+}
+.module.activity .activity_quest .quest_list .quest.percent50 .quest_color {
+/*	border-left: 2px solid #39a; */
+}
+.module.activity .activity_quest .quest_list .quest.percent80 .quest_color {
+/*	border-left: 2px solid #6cd; */
 }
 .module.activity .activity_quest .quest_list .quest.completed .quest_color {
-	border-color: #0F0;
+/*	border-left: 2px solid #0f0; */
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_daily {
+	border-right: 2px solid #6af;
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_weekly {
+	border-right: 2px solid #8ff;
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_monthly {
+	border-right: 2px solid #3f6;
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_quarterly {
+	border-right: 2px solid #f95;
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_yearly {
+	border-right: 2px solid #84f;
+}
+.module.activity .activity_quest .quest_list .quest .quest_color.label_other {
+	border-right: 2px solid #fe6;
 }
 
 .module.activity .activity_quest .quest_list .quest .quest_text {
@@ -1387,6 +1404,21 @@ ABYSS FLEET
 	font-size: 11px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.module.activity .activity_quest .quest_list .quest.percent50 .quest_text:before {
+	content: "50%";
+	float: right;
+	font-size: 10px;
+	color: #5cc;
+	text-shadow: -1px 1px 0px #333;
+}
+.module.activity .activity_quest .quest_list .quest.percent80 .quest_text:before {
+	content: "80%";
+	float: right;
+	font-size: 10px;
+	color: #5cc;
+	text-shadow: -1px 1px 0px #333;
 }
 
 /*------- ACTIVITY: CRAFTING -------*/
@@ -3006,10 +3038,35 @@ ABYSS FLEET
 	text-align:center;
 	text-shadow:0px 0px 2px #fff, 0px 0px 2px #fff, 0px 0px 2px #fff;
 	background:#555;
+	border:2px solid transparent;
 	float:left;
 }
+.module.quests .quest.percent50 .quest_color {
+	border-left:2px solid #39a;
+}
+.module.quests .quest.percent80 .quest_color {
+	border-left:2px solid #6cd;
+}
 .module.quests .quest.complete .quest_color {
-	border:2px solid #0f0;
+	border-left:2px solid #0f0;
+}
+.module.quests .quest .quest_color.label_daily {
+	border-right:2px solid #6af;
+}
+.module.quests .quest .quest_color.label_weekly {
+	border-right:2px solid #8ff;
+}
+.module.quests .quest .quest_color.label_monthly {
+	border-right:2px solid #3f6;
+}
+.module.quests .quest .quest_color.label_quarterly {
+	border-right:2px solid #f95;
+}
+.module.quests .quest .quest_color.label_yearly {
+	border-right:2px solid #94f;
+}
+.module.quests .quest .quest_color.label_other {
+	border-right:2px solid #fe6;
 }
 
 .module.quests .quest_text {
@@ -3058,7 +3115,6 @@ ABYSS FLEET
 	min-height:11px;
 	max-height:14px;
 	float:unset;
-	border:2px solid rgba(0,0,0,0);
 }
 .module.quests.compact .quest .quest_text {
 	flex:1;

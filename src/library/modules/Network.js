@@ -259,7 +259,7 @@ Listens to network history and triggers callback if game events happen
 				KC3Network.isNextBlockerNetworkFallback = false;
 			}
 			// If it's switching to NextNode or Yasen screen (might be others?)
-			if(requestUrl.includes("/resources/se/217.")){
+			if(requestUrl.includes("/resources/se/217.") && ConfigManager.next_blocker === 1){
 				KC3Network.triggerNextBlock(undefined, true);
 			}
 			// If request is a sound effect of closing shutter animation on battle ended,

@@ -702,6 +702,9 @@ KC3改 Ship Object
 		});
 	};
 
+	/**
+	 * Sum and return total value of specified stat given by equipment.
+	 */
 	KC3Ship.prototype.equipmentTotalStats = function(apiName, isExslotIncluded = true,
 		isOnShipBonusIncluded = true, isOnShipBonusOnly = false,
 		includeEquipTypes = null, includeEquipIds = null,
@@ -735,6 +738,11 @@ KC3改 Ship Object
 		return total;
 	};
 
+	/**
+	 * Check all possible visible bonuses from current equipment and newly equipped one.
+	 * @return {Object} a summary data about visible bonus stats and value.
+	 * @see when modifying this part, please also update visible bonus part of mstship.js
+	 */
 	KC3Ship.prototype.equipmentBonusGearAndStats = function(newGearObj){
 		const newGearMstId = (newGearObj || {}).masterId;
 		let gearFlag = false;
@@ -903,47 +911,51 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprovedAttack = false, forExped = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
 		var equipmentTotalAsw = 0;
-		if(!forExped) {
-			// When calculating asw warefare relevant thing,
-			// asw stat from these known types of equipment not taken into account:
-			// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
-			// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
-			// All visible bonuses from equipment not counted towards asw attacks for now.
-			const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
-			if(!canAirAttack) {
-				const stype = this.master().api_stype;
-				const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-				// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
-				const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
-				if(isAirAntiSubStype) {
-					// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
-					noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
-				}
+		// When calculating asw warefare relevant thing,
+		// asw stat from these known types of equipment not taken into account:
+		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
+		// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
+		// All visible bonuses from equipment not counted towards asw attacks for now.
+		const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
+		if(!canAirAttack) {
+			const stype = this.master().api_stype;
+			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+			if(isAirAntiSubStype) {
+				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
 			}
-			equipmentTotalAsw = this.equipment(true)
-				.map(g => g.exists() && g.master().api_tais > 0 &&
-					noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
-						+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
-				).sumValues();
-		} else {
-			// For expeditions, asw from aircraft affected by proficiency and equipped slot size:
-			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
-			// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
-			equipmentTotalAsw = this.equipment(true)
-				.map((g, i) => g.exists() && g.master().api_tais > 0 &&
-					// non-aircraft counts its actual asw value, land base plane cannot be used by expedition anyway
-					!KC3GearManager.carrierBasedAircraftType3Ids.includes(g.master().api_type[3]) ? g.master().api_tais :
-					// aircraft in 0-size slot take no effect, and
-					// current formula for 0 proficiency aircraft only,
-					// max level may give additional asw up to +2
-					(!this.slotSize(i) ? 0 : Math.floor(g.master().api_tais * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))))
-				).sumValues()
-				// unconfirmed: all visible bonuses counted? or just like OASW, only some types counted? or none counted?
-				+ this.equipmentTotalStats("tais", true, true, true/*, null, null, [1, 6, 7, 8]*/);
 		}
+		equipmentTotalAsw = this.equipment(true)
+			.map(g => g.exists() && !!g.master().api_tais &&
+				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
+			).sumValues();
 		return equipmentTotalAsw;
+	};
+
+	KC3Ship.prototype.expedEquipmentTotalStats = function(apiName, isExslotIncluded = true, isOnShipBonusIncluded = true){
+		// For expeditions, stats like asw from aircraft affected by proficiency and equipped slot size:
+		// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
+		// https://wikiwiki.jp/kancolle/%E7%B7%B4%E7%BF%92%E3%83%9A%E3%83%BC%E3%82%B8/35
+		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
+		var total = this.equipment(isExslotIncluded).map((g, i) => {
+			if(!g.exists()) return 0;
+			const mstGear = g.master(), mstValue = mstGear["api_" + apiName] || 0;
+			// non-aircraft counts its actual stats value, land base plane cannot be used by expedition anyway
+			return !KC3GearManager.carrierBasedAircraftType3Ids.includes(mstGear.api_type[3]) ? mstValue :
+				// aircraft in 0-size slot take no effect, and
+				// current formula for 0 proficiency aircraft only,
+				// max level may give additional stats up to +2
+				(!this.slotSize(i) ? 0 : Math.floor(mstValue * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))));
+		}).sumValues();
+		if(isOnShipBonusIncluded){
+			// unconfirmed: all visible bonuses counted?
+			total += this.equipmentTotalStats(apiName, true, true, true);
+		}
+		return total;
 	};
 
 	// estimated basic stats without equipments based on master data and modernization
@@ -1523,11 +1535,13 @@ KC3改 Ship Object
 			const obj = {};
 			const dummyEnemy = dummyEnemyList[installationType - 1];
 			// Modifiers from special attacks, battle conditions are not counted for now
-			const fixedPreConds = ["Shelling", 1, undefined, [], false, false, dummyEnemy],
-				fixedPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
-			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedPreConds);
+			const fixedDayPreConds = ["Shelling", 1, undefined, undefined, false, false, dummyEnemy],
+				fixedNightPreConds = ["Shelling", 1, undefined, ["SingleAttack", 0], false, false, dummyEnemy],
+				fixedDayPostConds = ["Shelling", undefined, 0, false, false, 0, false, dummyEnemy],
+				fixedNightPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
+			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds);
 			let {power} = this.applyPowerCap(precap, "Day", "Shelling");
-			const postcapInfo = this.applyPostcapModifiers(power, ...fixedPostConds);
+			const postcapInfo = this.applyPostcapModifiers(power, ...fixedNightPostConds);
 			power = postcapInfo.power;
 			
 			obj.enemy = dummyEnemy;
@@ -1539,23 +1553,24 @@ KC3改 Ship Object
 			};
 			obj.dayPower = Math.floor(power);
 			
-			// Still use day time pre-cap shelling power, without TP value.
 			// Power constant +5 included, if assumes night contact is triggered.
-			power = precap;
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.nightPower = Math.floor(power);
 			
 			// Get Chuuha day attack power (in case of nuke setups)
-			fixedPreConds.push("chuuha");
-			const {power: damagedPrecap} = this.applyPrecapModifiers(basicPower, ...fixedPreConds);
-			({power} = this.applyPowerCap(damagedPrecap, "Day", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			fixedDayPreConds.push("chuuha");
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds));
+			({power} = this.applyPowerCap(power, "Day", "Shelling"));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers = [Math.floor(power)];
 			
 			// Get Chuuha night power
-			({power} = this.applyPowerCap(damagedPrecap, "Night", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedPostConds));
+			fixedNightPreConds.push("chuuha");
+			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPowerCap(power, "Night", "Shelling"));
+			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers.push(Math.floor(power));
 			
 			resultList.push(obj);
@@ -1566,12 +1581,13 @@ KC3改 Ship Object
 	/**
 	 * Calculate landing craft pre-cap/post-cap bonus depending on installation type.
 	 * @param installationType - kc3-unique installation types
+	 * @param isNight - is something special for night battle
 	 * @return {number} multiplier of landing craft
 	 * @see estimateInstallationEnemyType
 	 * @see http://kancolle.wikia.com/wiki/Partials/Anti-Installation_Weapons
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83
 	 */
-	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0){
+	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
 		// 6 types of Daihatsu Landing Craft with known bonus, 2 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
@@ -1612,8 +1628,11 @@ KC3改 Ship Object
 						}
 					}
 				});
-				oneGearBonus *= getModifier(type, "count1");
-				if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+				// no bonus except base one on yasen for 408, 409
+				if(type < 6 || !isNight) {
+					oneGearBonus *= getModifier(type, "count1");
+					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
+				}
 			}
 		});
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
@@ -1631,6 +1650,7 @@ KC3改 Ship Object
 	 * @param targetShipMasterId - target land installation master ID.
 	 * @param precap - type of bonus, false for post-cap, pre-cap by default.
 	 * @param warfareType - to indicate if use different modifiers for phases other than day shelling.
+	 * @param isNight - to indicate if use different modifiers for night battle.
 	 * @see https://kancolle.fandom.com/wiki/Combat/Installation_Type
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonus
 	 * @see https://twitter.com/T3_1206/status/994258061081505792
@@ -1640,9 +1660,9 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
-	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap tank additive, precap m4a1dd multiplicative]
+	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap sptank additive, precap sptank multiplicative]
 	 */
-	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling"){
+	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
 		if(this.isDummy()) { return [0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1]; }
@@ -1662,11 +1682,23 @@ KC3改 Ship Object
 		let alDiveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
-		const landingBonus = this.calcLandingCraftBonus(installationType);
+		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
-		const shikonBonus = 25 * (shikonCount + m4a1ddCount);
-		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
+		const abCount = this.countEquipment(408);
+		const armedCount = this.countEquipment(409);
+		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
+		const synergyCraftIds = [68, 166, 167, 193, 230];
+		const abSynergy = abCount === 1 && this.hasEquipment(synergyCraftIds);
+		const armedSynergy = armedCount === 1 && this.hasEquipment(synergyCraftIds);
+		const specialTankModifier = (m4a1ddCount ? 1.4 : 1)
+			* (abSynergy || armedSynergy ? 1.2 : 1)
+			* (abSynergy && armedSynergy ? 1.125 : 1);
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount)
+			+ (abSynergy || armedSynergy ? 10 : 0)
+			+ (abSynergy && armedSynergy ? 5 : 0);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1686,7 +1718,7 @@ KC3改 Ship Object
 					
 					return [rocketsAdditive,
 						t3Bonus * seaplaneBonus * wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
-						submarineBonus, shikonBonus, m4a1ddModifier];
+						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
@@ -1704,7 +1736,7 @@ KC3改 Ship Object
 					return [rocketsAdditive,
 						seaplaneBonus * alDiveBomberBonus * lightShipBonus
 							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
-						submarineBonus, shikonBonus, m4a1ddModifier];
+						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 3: // Isolated Island Princess
 					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
@@ -1716,7 +1748,7 @@ KC3改 Ship Object
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
-						0, shikonBonus, m4a1ddModifier];
+						0, specialTankBonus, specialTankModifier];
 				
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
@@ -1730,7 +1762,7 @@ KC3改 Ship Object
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
-						0, shikonBonus, m4a1ddModifier];
+						0, specialTankBonus, specialTankModifier];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
@@ -1920,7 +1952,8 @@ KC3改 Ship Object
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		let antiLandAdditive = 0, antiLandModifier = 1, subAntiLandAdditive = 0, tankAdditive = 0, tankModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier, subAntiLandAdditive, tankAdditive, tankModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType);
+			[antiLandAdditive, antiLandModifier, subAntiLandAdditive, tankAdditive, tankModifier] =
+				this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle);
 		}
 		
 		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
@@ -2003,7 +2036,7 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = [], contactPlaneId = 0, isCritical = false, isAirAttack = false,
+			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false, isAirAttack = false,
 			targetShipStype = 0, isDefenderArmorCounted = false, targetShipMasterId = 0){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
@@ -2019,6 +2052,7 @@ KC3改 Ship Object
 		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
+		targetShipStype = targetShipStype || (targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId).api_stype || 0 : 0);
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
 		if(isTargetShipTypeMatched && !isNightBattle) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
@@ -2081,8 +2115,8 @@ KC3改 Ship Object
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
-			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType);
-		} else if(targetShipStype.isPtImp) {
+			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
+		} else if(targetShipType.isPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
 			antiLandAdditive = 15;
@@ -3701,7 +3735,7 @@ KC3改 Ship Object
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
 				const isOoyodoClass = ctype === 52;
-				result = -2; // only fit bonus, but -2 fixed (might disappeared?)
+				result = 0; // only fit bonus part (fixed -2 disappeared?)
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
 				// for twin mount on Agano class / Ooyodo class / general CLs
@@ -3713,6 +3747,11 @@ KC3改 Ship Object
 				// for 12.7cm single HA late model on Yura K2
 				result += (this.masterId === 488 ? 10 : 0) *
 					Math.sqrt(this.countEquipment(singleHighAngleMountId));
+				// to be confirmed for penalties:
+				// https://twitter.com/yukicacoon/status/1301508712780111872
+				// for 8inch triple gun mount Mk.9 variants on Yuubari/CLT, -10?
+				// for 203mm/53 twin gun mount on CL, -3 per gun?
+				// for 152mm/55 triple rapid fire on CL, x -2 per gun?
 				break;
 			case 5:
 			case 6: // for Heavy Cruisers
@@ -3761,8 +3800,23 @@ KC3改 Ship Object
 				});
 				break;
 			case 16: // for Seaplane Tender
-				// Medium cal. guns for partial AVs, no formula summarized
-				// https://docs.google.com/spreadsheets/d/1wl9v3NqPuRawSuFadokgYh1R1R1W82H51JNC66DH2q8/htmlview
+				// Medium cal. main guns penalties on Nisshin, Commandant Teste, Kamoi Kai
+				// https://docs.google.com/spreadsheets/d/1HR1sZdWCFEWXD5bJ851dsIwvEt1mHcAvn21VwdTBLdQ/htmlview
+				// Secondary guns no penalty
+				const isTargetAv = [581, 690, 586, 491, 372, 499].includes(this.masterId);
+				if(isTargetAv) {
+					// Can't clarify all guns belong to which category exactly via tweets and spreadsheets,
+					// and newly implemented guns may not verified, eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2
+					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
+					result -= 6 * count14cm15cmMainGunVars;
+					// also includes: Italian 203mm/53, 152mm/55 rapid fire
+					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341]);
+					result -= 10 * count203MainGunVars;
+					if(count203MainGunVars) {
+						// two categories not mixed, extra -8
+						result -= count14cm15cmMainGunVars ? 0 : 8;
+					}
+				}
 				break;
 			default:
 				// not found for other ships
@@ -4356,9 +4410,9 @@ KC3改 Ship Object
 			if(ConfigManager.powerCapApplyLevel >= 3) {
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
-						power, warfareTypeNight, undefined, undefined, true).power;
+						power, warfareTypeNight, [], undefined, true).power;
 				}
-				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight));
+				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight, []));
 			}
 			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?

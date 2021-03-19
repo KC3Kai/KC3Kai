@@ -383,20 +383,7 @@
 			const fstats = kcFleet.totalStats(true, false, true);
 			const fstatsImp = kcFleet.totalStats(true, "exped", true);
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
-				.attr("title", "{0}: -\u2605\t+\u2605\n{1}: {6}\t{11}\n{2}: {7}\t{12}\n{3}: {8}\t{13}\n{4}: {9}\t{14}\n{5}: {10}\t{15}".format(
-					KC3Meta.term("ExpedTotalImp"),
-					KC3Meta.term("ExpedTotalFp"),
-					KC3Meta.term("ExpedTotalTorp"),
-					KC3Meta.term("ExpedTotalAa"),
-					KC3Meta.term("ExpedTotalAsw"),
-					KC3Meta.term("ExpedTotalLos"),
-					fstats.fp, fstats.tp, fstats.aa, fstats.as, fstats.ls,
-					Math.qckInt("floor", fstatsImp.fp , 1),
-					Math.qckInt("floor", fstatsImp.tp , 1),
-					Math.qckInt("floor", fstatsImp.aa , 1),
-					Math.qckInt("floor", fstatsImp.as , 1),
-					Math.qckInt("floor", fstatsImp.ls , 1)
-				));
+				.attr("title", KC3Calc.buildFleetsTotalStatsText(kcFleet));
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
 			if(ConfigManager.elosFormula > 0) {
@@ -427,7 +414,8 @@
 						kcFleet.adjustedAntiAir(1), kcFleet.adjustedAntiAir(2), kcFleet.adjustedAntiAir(3)
 					)
 				);
-			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() );
+			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() )
+				.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet));
 			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
