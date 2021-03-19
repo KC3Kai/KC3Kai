@@ -451,4 +451,15 @@ known IDs see QuestManager
 		][(this.id+"").substring(0,1)];
 	};
 
+	KC3Quest.prototype.getLabelClass = function(){
+		if(this.label > 0) switch(this.label){
+			case 2: return "label_daily";
+			case 3: return "label_weekly";
+			case 6: return "label_monthly";
+			case 7: return this.isQuarterly() ? "label_quarterly" : "label_other";
+			default: if(this.isYearly()) return "label_yearly";
+		}
+		return "";
+	};
+
 })();
