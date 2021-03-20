@@ -3726,7 +3726,7 @@ KC3改 Ship Object
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
 				const isOoyodoClass = ctype === 52;
-				result = -2; // only fit bonus, but -2 fixed (might disappeared?)
+				result = 0; // only fit bonus part (fixed -2 disappeared?)
 				// for all CLs
 				result += 4 * Math.sqrt(this.countEquipment(singleMountIds));
 				// for twin mount on Agano class / Ooyodo class / general CLs
@@ -3738,6 +3738,11 @@ KC3改 Ship Object
 				// for 12.7cm single HA late model on Yura K2
 				result += (this.masterId === 488 ? 10 : 0) *
 					Math.sqrt(this.countEquipment(singleHighAngleMountId));
+				// to be confirmed for penalties:
+				// https://twitter.com/yukicacoon/status/1301508712780111872
+				// for 8inch triple gun mount Mk.9 variants on Yuubari/CLT, -10?
+				// for 203mm/53 twin gun mount on CL, -3 per gun?
+				// for 152mm/55 triple rapid fire on CL, x -2 per gun?
 				break;
 			case 5:
 			case 6: // for Heavy Cruisers
@@ -3786,8 +3791,23 @@ KC3改 Ship Object
 				});
 				break;
 			case 16: // for Seaplane Tender
-				// Medium cal. guns for partial AVs, no formula summarized
-				// https://docs.google.com/spreadsheets/d/1wl9v3NqPuRawSuFadokgYh1R1R1W82H51JNC66DH2q8/htmlview
+				// Medium cal. main guns penalties on Nisshin, Commandant Teste, Kamoi Kai
+				// https://docs.google.com/spreadsheets/d/1HR1sZdWCFEWXD5bJ851dsIwvEt1mHcAvn21VwdTBLdQ/htmlview
+				// Secondary guns no penalty
+				const isTargetAv = [581, 690, 586, 491, 372, 499].includes(this.masterId);
+				if(isTargetAv) {
+					// Can't clarify all guns belong to which category exactly via tweets and spreadsheets,
+					// and newly implemented guns may not verified, eg: [303] Bofors 15.2cm, [407] 15.2cm Twin Kai2
+					const count14cm15cmMainGunVars = this.countEquipment([4, 119, 310, 11, 65, 139, 247]);
+					result -= 6 * count14cm15cmMainGunVars;
+					// also includes: Italian 203mm/53, 152mm/55 rapid fire
+					const count203MainGunVars = this.countEquipment([6, 50, 90, 162, 340, 341]);
+					result -= 10 * count203MainGunVars;
+					if(count203MainGunVars) {
+						// two categories not mixed, extra -8
+						result -= count14cm15cmMainGunVars ? 0 : 8;
+					}
+				}
 				break;
 			default:
 				// not found for other ships

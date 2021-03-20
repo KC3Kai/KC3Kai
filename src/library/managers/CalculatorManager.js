@@ -214,23 +214,29 @@
      * @return built html string.
      */
     const buildFleetsSpeedText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined) => {
+        const isCombined = escortFleet instanceof KC3Fleet;
+        const minSpeed = isCombined ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
+        const maxSpeed = Math.max(...viewFleet.shipsUnescaped().map(ship => ship.getSpeed())
+            .concat(isCombined ? escortFleet.shipsUnescaped().map(ship => ship.getSpeed()) : []));
+        const maxShipCount = Math.max(viewFleet.countShips(), isCombined ? escortFleet.countShips() : 0);
+        const containerStyles = {
+            "font-size":"11px",
+            "display":"grid",
+            "grid-template-columns":(isCombined ? "auto auto" : "auto"),
+            "column-gap":"16px", "grid-column-gap":"16px",
+            "white-space":"nowrap",
+        };
         const shipIconStyles = {
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px",
             "image-rendering":"auto", "object-fit":"cover"
         };
         let text = "";
-        const isCombined = escortFleet instanceof KC3Fleet;
-        const minSpeed = isCombined ? Math.min(viewFleet.minSpeed, escortFleet.minSpeed) : viewFleet.minSpeed;
-        const maxSpeed = Math.max(...viewFleet.shipsUnescaped().map(ship => ship.getSpeed())
-            .concat(isCombined ? escortFleet.shipsUnescaped().map(ship => ship.getSpeed()) : []));
-        const maxShipCount = Math.max(viewFleet.countShips(true), isCombined ? escortFleet.countShips(true) : 0);
-        const placeholder = "\u2003\u2003";
-        for(let idx = 0; idx < maxShipCount; idx ++) {
+        for(let idx = 0; idx < maxShipCount; idx++) {
             const ship = viewFleet.ship(idx);
             const spd = ship.getSpeed();
             const ospd = ship.master().api_soku;
-            text += "#{0}&nbsp;".format(1 + idx);
+            text += "<div>#{0}&nbsp;".format(1 + idx);
             text += $("<img />")
                 .attr("src", KC3Meta.shipIcon(ship.masterId))
                 .css(shipIconStyles)
@@ -238,13 +244,13 @@
             const styles = ship.isAbsent() || ship.isDummy() ? "color:#aaa" :
                 spd === minSpeed && spd < maxSpeed ? "color:#ee39bf" :
                 spd > ospd ? "color:#7aabb8" : "";
-            text += '&nbsp;<span style="{1}">{0}</span>'
-                .format(ship.exists() ? ship.speedName() : placeholder, styles);
+            text += '&nbsp;<span style="{1}">{0}</span></div>'
+                .format(ship.exists() ? ship.speedName() : "-", styles);
             if(isCombined) {
                 const ship = escortFleet.ship(idx);
                 const spd = ship.getSpeed();
                 const ospd = ship.master().api_soku;
-                text += "\t";
+                text += "<div>";
                 text += $("<img />")
                     .attr("src", KC3Meta.shipIcon(ship.masterId))
                     .css(shipIconStyles)
@@ -252,13 +258,12 @@
                 const styles = ship.isAbsent() || ship.isDummy()  ? "color:#aaa" :
                     spd === minSpeed && spd < maxSpeed ? "color:#ee39bf" :
                     spd > ospd ? "color:#7aabb8" : "";
-                text += '&nbsp;<span style="{1}">{0}</span>'
-                    .format(ship.exists() ? ship.speedName() : placeholder, styles);
+                text += '&nbsp;<span style="{1}">{0}</span></div>'
+                    .format(ship.exists() ? ship.speedName() : "-", styles);
             }
-            text += "\n";
         }
-        return $("<p></p>")
-            .css("font-size", "11px")
+        return $("<div></div>")
+            .css(containerStyles)
             .html(text)
             .prop("outerHTML");
     };
