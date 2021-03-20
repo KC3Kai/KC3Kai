@@ -33,17 +33,17 @@ Instantiate-able class to represent one player
 		}
 	};
 	
-	KC3Player.prototype.update = function( data ){
+	KC3Player.prototype.update = function(data){
 		this.id = data.mid;
 		this.name = data.name;
 		this.nameId = data.nameId;
 		KC3Database.index = this.id;
 		
-		var MyServer = (new KC3Server()).setUrl( KC3Network.lastUrl );
+		var MyServer = (new KC3Server()).setUrl(KC3Network.lastUrl);
 		this.server = MyServer.num;
 		
 		this.desc = data.desc;
-		this.rank = KC3Meta.rank( data.rank );
+		this.rank = KC3Meta.rank(data.rank);
 		
 		this.fleetSlots = data.fleetCount;
 		this.repairSlots = data.repairSlots;
@@ -56,7 +56,7 @@ Instantiate-able class to represent one player
 		this.checkRankPoints();
 	};
 	
-	KC3Player.prototype.updateLevel = function( level, exp ){
+	KC3Player.prototype.updateLevel = function(level, exp){
 		this.level = level;
 		
 		// Computer level and experience values
@@ -73,44 +73,63 @@ Instantiate-able class to represent one player
 	};
 	
 	KC3Player.prototype.checkRankPoints = function(){
-		var PvPReset = (new Date());
-		PvPReset.setUTCMinutes(0);
-		PvPReset.setUTCSeconds(0);
-		PvPReset.setUTCMilliseconds(0);
+		var now = Date.now();
+		var cutoffToday = new Date(now);
+		cutoffToday.setUTCMinutes(0);
+		cutoffToday.setUTCSeconds(0);
+		cutoffToday.setUTCMilliseconds(0);
 		
 		// Get last date of this month
-		var lastDay = new Date(Date.UTC(PvPReset.getUTCFullYear(), PvPReset.getUTCMonth()+1, 0));
-		
+		var lastDay = new Date(Date.UTC(
+			cutoffToday.getUTCFullYear(),
+			cutoffToday.getUTCMonth() + 1,
+			0
+		));
+		var didCutoff = false;
 		// If this is the last day of the month
-		if(PvPReset.getUTCDate() == lastDay.getUTCDate()) {
+		if(cutoffToday.getUTCDate() == lastDay.getUTCDate()) {
 			// At morning, check 0500 UTC = 1400 JST
 			// At night, check 1300 UTC = 2200 JST: Montly points reset
 			// At night, check 1700 UTC = 0200 JST: First cycle end, start second cycle
-			this.checkRankCutOff(PvPReset, 5);
-			this.checkRankCutOff(PvPReset, 13);
-			this.checkRankCutOff(PvPReset, 17);
-		}else {
-			// Not last day of the month..
+			didCutoff |= this.checkRankCutOff(cutoffToday, 5, now);
+			didCutoff |= this.checkRankCutOff(cutoffToday, 13, now);
+			didCutoff |= this.checkRankCutOff(cutoffToday, 17, now);
+		} else {
 			// At morning, check 0500 UTC = 1400 JST
 			// At night, check 1700 UTC = 0200 JST
-			this.checkRankCutOff(PvPReset, 5);
-			this.checkRankCutOff(PvPReset, 17);
+			didCutoff |= this.checkRankCutOff(cutoffToday, 5, now);
+			didCutoff |= this.checkRankCutOff(cutoffToday, 17, now);
+		}
+		// If today all cutoff skipped, check if has not been cutoff for 12 hours since last
+		if(!didCutoff) {
+			didCutoff |= this.checkRankCutOff(false, 0, now);
 		}
 		
-		this.rankPtLastCheck = Date.now();
+		this.rankPtLastCheck = now;
+		return didCutoff;
 	};
 	
-	KC3Player.prototype.checkRankCutOff = function(dateObj, hr){
-		dateObj.setUTCHours(hr);
-		var PvPResetTime = dateObj.getTime();
-		if(this.rankPtLastCheck < PvPResetTime && PvPResetTime < Date.now()){
-			this.rankCutOff();
+	KC3Player.prototype.checkRankCutOff = function(dateToday, hr, now = Date.now()){
+		if(!dateToday || hr == undefined){
+			// 12 hours + 1 minute to avoid bounds conflict
+			if((now - this.rankPtLastTimestamp) > (1000 * 60 * 60 * 12 + 60000)) {
+				this.rankCutOff(now);
+				return true;
+			}
+			return false;
 		}
+		dateToday.setUTCHours(hr);
+		var cutoffTimestamp = dateToday.getTime();
+		if(this.rankPtLastCheck < cutoffTimestamp && cutoffTimestamp < now){
+			this.rankCutOff(now);
+			return true;
+		}
+		return false;
 	};
 	
-	KC3Player.prototype.rankCutOff = function(){
+	KC3Player.prototype.rankCutOff = function(now = Date.now()){
 		this.rankPtLastCount = this.getRankPoints();
-		this.rankPtLastTimestamp = Date.now();
+		this.rankPtLastTimestamp = now;
 		this.rankPtCutoff = this.exp[3];
 	};
 	

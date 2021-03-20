@@ -911,47 +911,51 @@ KC3改 Ship Object
 		return this.equipmentTotalStats("saku");
 	};
 
-	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false, includeImprovedAttack = false, forExped = false){
+	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
 		var equipmentTotalAsw = 0;
-		if(!forExped) {
-			// When calculating asw warefare relevant thing,
-			// asw stat from these known types of equipment not taken into account:
-			// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
-			// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
-			// All visible bonuses from equipment not counted towards asw attacks for now.
-			const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
-			if(!canAirAttack) {
-				const stype = this.master().api_stype;
-				const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
-				// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
-				const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
-				if(isAirAntiSubStype) {
-					// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
-					noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
-				}
+		// When calculating asw warefare relevant thing,
+		// asw stat from these known types of equipment not taken into account:
+		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
+		// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
+		// All visible bonuses from equipment not counted towards asw attacks for now.
+		const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
+		if(!canAirAttack) {
+			const stype = this.master().api_stype;
+			const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
+			// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai
+			const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber;
+			if(isAirAntiSubStype) {
+				// exclude carrier bomber, seaplane bomber, rotorcraft, as-pby too if not able to air attack
+				noCountEquipType2Ids.push(...[7, 8, 11, 25, 26, 57, 58]);
 			}
-			equipmentTotalAsw = this.equipment(true)
-				.map(g => g.exists() && g.master().api_tais > 0 &&
-					noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
-						+ (!!includeImprovedAttack && g.attackPowerImprovementBonus("asw"))
-				).sumValues();
-		} else {
-			// For expeditions, asw from aircraft affected by proficiency and equipped slot size:
-			// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
-			// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
-			equipmentTotalAsw = this.equipment(true)
-				.map((g, i) => g.exists() && g.master().api_tais > 0 &&
-					// non-aircraft counts its actual asw value, land base plane cannot be used by expedition anyway
-					!KC3GearManager.carrierBasedAircraftType3Ids.includes(g.master().api_type[3]) ? g.master().api_tais :
-					// aircraft in 0-size slot take no effect, and
-					// current formula for 0 proficiency aircraft only,
-					// max level may give additional asw up to +2
-					(!this.slotSize(i) ? 0 : Math.floor(g.master().api_tais * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))))
-				).sumValues()
-				// unconfirmed: all visible bonuses counted? or just like OASW, only some types counted? or none counted?
-				+ this.equipmentTotalStats("tais", true, true, true/*, null, null, [1, 6, 7, 8]*/);
 		}
+		equipmentTotalAsw = this.equipment(true)
+			.map(g => g.exists() && !!g.master().api_tais &&
+				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
+			).sumValues();
 		return equipmentTotalAsw;
+	};
+
+	KC3Ship.prototype.expedEquipmentTotalStats = function(apiName, isExslotIncluded = true, isOnShipBonusIncluded = true){
+		// For expeditions, stats like asw from aircraft affected by proficiency and equipped slot size:
+		// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
+		// https://wikiwiki.jp/kancolle/%E7%B7%B4%E7%BF%92%E3%83%9A%E3%83%BC%E3%82%B8/35
+		// https://docs.google.com/spreadsheets/d/1o-_-I8GXuJDkSGH0Dhjo7mVYx9Kpay2N2h9H3HMyO_E/htmlview
+		var total = this.equipment(isExslotIncluded).map((g, i) => {
+			if(!g.exists()) return 0;
+			const mstGear = g.master(), mstValue = mstGear["api_" + apiName] || 0;
+			// non-aircraft counts its actual stats value, land base plane cannot be used by expedition anyway
+			return !KC3GearManager.carrierBasedAircraftType3Ids.includes(mstGear.api_type[3]) ? mstValue :
+				// aircraft in 0-size slot take no effect, and
+				// current formula for 0 proficiency aircraft only,
+				// max level may give additional stats up to +2
+				(!this.slotSize(i) ? 0 : Math.floor(mstValue * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))));
+		}).sumValues();
+		if(isOnShipBonusIncluded){
+			// unconfirmed: all visible bonuses counted?
+			total += this.equipmentTotalStats(apiName, true, true, true);
+		}
+		return total;
 	};
 
 	// estimated basic stats without equipments based on master data and modernization
@@ -1683,14 +1687,18 @@ KC3改 Ship Object
 		const m4a1ddCount = this.countEquipment(355);
 		const abCount = this.countEquipment(408);
 		const armedCount = this.countEquipment(409);
-		const armedSynergy = (abCount + armedCount) > 0 && armedCount < 2 && this.hasEquipment([68, 166, 167, 193, 230]);
-		const m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
-		const armedModifier = armedSynergy ? 1.2 : 1;
-		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
 		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
-		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug 
-		const specialTankModifier = m4a1ddModifier * armedModifier;
-		const specialTankBonus = 25 * (shikonCount + m4a1ddCount) + (armedSynergy ? 10 : 0);
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
+		const synergyCraftIds = [68, 166, 167, 193, 230];
+		const abSynergy = abCount === 1 && this.hasEquipment(synergyCraftIds);
+		const armedSynergy = armedCount === 1 && this.hasEquipment(synergyCraftIds);
+		const specialTankModifier = (m4a1ddCount ? 1.4 : 1)
+			* (abSynergy || armedSynergy ? 1.2 : 1)
+			* (abSynergy && armedSynergy ? 1.125 : 1);
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount)
+			+ (abSynergy || armedSynergy ? 10 : 0)
+			+ (abSynergy && armedSynergy ? 5 : 0);
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -2044,6 +2052,7 @@ KC3改 Ship Object
 		let apshellModifier = 1;
 		// AP Shell modifier applied to specific target ship types:
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
+		targetShipStype = targetShipStype || (targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId).api_stype || 0 : 0);
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
 		if(isTargetShipTypeMatched && !isNightBattle) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
@@ -2107,7 +2116,7 @@ KC3改 Ship Object
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
 			[antiLandAdditive, antiLandModifier] = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
-		} else if(targetShipStype.isPtImp) {
+		} else if(targetShipType.isPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
 			antiLandAdditive = 15;

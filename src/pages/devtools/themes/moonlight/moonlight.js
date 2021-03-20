@@ -2354,36 +2354,24 @@
 			$(".module.admiral .admiral_rank")
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" :
-						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s);
+						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n";
+					tips += KC3Calc.buildFleetsTotalStatsText(
+						selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
+						selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
+					);
 					if (fleetNum >= 1 && fleetNum <= 4) {
-						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, selectedExpedition);
-						const fstatsImp = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", selectedExpedition);
-						// Align with special space char 0xa0 and force to monospaced font
-						const formatStatTip = (term, rawStat, impStat) => (
-							term.padEnd(5, '\u00a0') +
-							String(rawStat).padStart(6, '\u00a0') +
-							String(Math.qckInt("floor", impStat, 0)).padStart(6, '\u00a0')
-						);
-						tips += (!tips ? "" : "\n") + '<span class="monofont">';
-						tips += "{0}\u00a0\u00a0\u00a0\u00a0\u00a0-\u2605\u00a0\u00a0\u00a0+\u2605\n".format(KC3Meta.term("ExpedTotalImp"));
-						tips += [
-							formatStatTip(KC3Meta.term("ExpedTotalFp"), fstats.fp, fstatsImp.fp),
-							formatStatTip(KC3Meta.term("ExpedTotalTorp"), fstats.tp, fstatsImp.tp),
-							formatStatTip(KC3Meta.term("ExpedTotalAa"), fstats.aa, fstatsImp.aa),
-							formatStatTip(KC3Meta.term("ExpedTotalAsw"), fstats.as, fstatsImp.as),
-							formatStatTip(KC3Meta.term("ExpedTotalLos"), fstats.ls, fstatsImp.ls)
-						].join('\n');
-						tips += "</span>";
+						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, false);
+						const fstatsExped = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", true);
 						$(".summary-sumfp .summed").text(fstats.fp);
-						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsImp.fp , 1));
+						$(".summary-sumfp .summed_imp").text(Math.qckInt("floor", fstatsExped.fp, 1));
 						$(".summary-sumtp .summed").text(fstats.tp);
-						$(".summary-sumtp .summed_imp").text(Math.qckInt("floor", fstatsImp.tp , 1));
+						$(".summary-sumtp .summed_imp").text(Math.qckInt("floor", fstatsExped.tp, 1));
 						$(".summary-sumaa .summed").text(fstats.aa);
-						$(".summary-sumaa .summed_imp").text(Math.qckInt("floor", fstatsImp.aa , 1));
+						$(".summary-sumaa .summed_imp").text(Math.qckInt("floor", fstatsExped.aa, 1));
 						$(".summary-sumasw .summed").text(fstats.as);
-						$(".summary-sumasw .summed_imp").text(Math.qckInt("floor", fstatsImp.as , 1));
+						$(".summary-sumasw .summed_imp").text(Math.qckInt("floor", fstatsExped.as, 1));
 						$(".summary-sumlos .summed").text(fstats.ls);
-						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsImp.ls , 1));
+						$(".summary-sumlos .summed_imp").text(Math.qckInt("floor", fstatsExped.ls, 1));
 					}
 					return tips;
 				})(selectedFleet)).lazyInitTooltip();
@@ -2418,10 +2406,10 @@
 				.parent().attr("title", KC3Meta.term("PanelFleetAATip"))
 				.lazyInitTooltip();
 			$(".status-speed .status_text").text(FleetSummary.speed)
-				.attr("titlealt", KC3Calc.buildFleetsSpeedText(selectedFleet === 5 ?
-					PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1], selectedFleet === 5 ?
-					PlayerManager.fleets[1] : undefined))
-				.lazyInitTooltip();
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(
+					selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
+					selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
+				)).lazyInitTooltip();
 			if(selectedFleet < 5){
 				const f33Cn = Array.numbers(1, 4)
 					.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
@@ -4603,17 +4591,17 @@
 				// Total stats from all ships in fleet, see also `Fleet.js#totalStats`
 				// Improvement bonuses should be counted for all expeds, but modifiers are different with sortie's
 				var includeImprove = selectedExpedition > 40;
-				var los = ship.ls[0],
-					aa = ship.aa[0],
-					fp = ship.fp[0],
-					tp = ship.tp[0];
-				var asw = ship.nakedAsw() + ship.effectiveEquipmentTotalAsw(ship.isAswAirAttack(), false, true);
+				var ns = ship.nakedStats();
+				var fp = ns.fp + ship.expedEquipmentTotalStats("houg"),
+					tp = ns.tp + ship.expedEquipmentTotalStats("raig"),
+					aa = ns.aa + ship.expedEquipmentTotalStats("tyku"),
+					los = ns.ls + ship.expedEquipmentTotalStats("saku"),
+					asw = ns.as + ship.expedEquipmentTotalStats("tais");
 				if(includeImprove) {
+					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 					los += ship.equipment(true).map(g => g.losStatImprovementBonus("exped")).sumValues();
 					aa += ship.equipment(true).map(g => g.aaStatImprovementBonus("exped")).sumValues();
 					fp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("exped")).sumValues();
-					tp += ship.equipment(true).map(g => g.attackPowerImprovementBonus("torpedo")).sumValues();
-					asw += ship.equipment(true).map(g => g.aswStatImprovementBonus("exped")).sumValues();
 				}
 				return {
 					ammo : 0,
@@ -4811,20 +4799,27 @@
 			//		 <other values>: no effect
 			// dataActual: like dataResult, actual fleet value
 			// jq: the jq object
-			// postActions: (optional) call postActions(dataReq,dataResult,jq, dataActual)
+			// postActions: (optional) call postActions(dataReq,dataResult,jq,dataActual)
 			//				perform actions after jq object is properly set.
 			//				note that postActions is only called if the requirement is not null.
+			//				will mark actual near requirement if this is boolean true.
 			var setupJQObject = function(dataReq, dataResult, dataActual, jq, postActions) {
 				if (dataReq === null) {
 					jq.hide();
 				} else {
 					jq.show();
+					jq.css("color", "");
 					if (dataResult === false) {
 						// when this condition is not met
 						markFailed( jq );
 					} else if (dataResult === true) {
 						// when this condition is met
 						markPassed( jq );
+						// when actual value near requirement
+						if (typeof(postActions) === "boolean" &&
+							postActions && dataActual <= dataReq + 1) {
+							jq.css("color", "lightpink");
+						}
 					}
 					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();
 					if (typeof(postActions) === "function")
@@ -4871,7 +4866,8 @@
 				ExpdReqPack.totalAsw,
 				ExpdCheckerResult.totalAsw,
 				Math.floor(fleet.map(f => f.asw).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalAsw")
+				$(".module.activity .activity_expeditionPlanner .totalAsw"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAsw")
 				.toggle(ExpdReqPack.totalAsw !== null);
@@ -4880,7 +4876,8 @@
 				ExpdReqPack.totalAa,
 				ExpdCheckerResult.totalAa,
 				Math.floor(fleet.map(f => f.aa).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalAa")
+				$(".module.activity .activity_expeditionPlanner .totalAa"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalAa")
 				.toggle(ExpdReqPack.totalAa !== null);
@@ -4889,7 +4886,8 @@
 				ExpdReqPack.totalLos,
 				ExpdCheckerResult.totalLos,
 				Math.floor(fleet.map(f => f.los).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalLos")
+				$(".module.activity .activity_expeditionPlanner .totalLos"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalLos")
 				.toggle(ExpdReqPack.totalLos !== null);
@@ -4898,7 +4896,8 @@
 				ExpdReqPack.totalFp,
 				ExpdCheckerResult.totalFp,
 				Math.floor(fleet.map(f => f.fp).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalFp")
+				$(".module.activity .activity_expeditionPlanner .totalFp"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalFp")
 				.toggle(ExpdReqPack.totalFp !== null);
@@ -4907,7 +4906,8 @@
 				ExpdReqPack.totalTorp,
 				ExpdCheckerResult.totalTorp,
 				Math.floor(fleet.map(f => f.tp).sumValues()),
-				$(".module.activity .activity_expeditionPlanner .totalTorp")
+				$(".module.activity .activity_expeditionPlanner .totalTorp"),
+				true
 			);
 			$(".module.activity .activity_expeditionPlanner .hasTotalTorp")
 				.toggle(ExpdReqPack.totalTorp !== null);
