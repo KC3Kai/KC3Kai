@@ -128,8 +128,8 @@ Retrieves when needed to apply on components
 				next_blocker         : 0,
 				next_blocker_2_fs    : false,
 
-				api_translation   : true,
-				api_tracking      : true,
+				api_translation   : false,
+				api_tracking      : false,
 				api_mustPanel     : true,
 				api_askExit       : true,
 				api_directRefresh : false,

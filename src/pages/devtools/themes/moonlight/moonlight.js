@@ -1931,6 +1931,7 @@
 					// Quest color box
 					$(".quest_color", questListItem)
 						.css("background", quest.getColor())
+						.addClass(quest.getLabelClass())
 						.data("id", quest.id);
 
 					// Quest title
@@ -1973,14 +1974,15 @@
 			$.each(KC3QuestManager.getActives(), function(index, quest){
 				questBox = $("#factory .quest").clone().appendTo(".module.quests,.module.quests2");
 				if(!quest.tracking){ questBox.addClass("untracked"); }
-				$(".quest_color", questBox).css("background", quest.getColor() )
+				questBox.toggleClass("complete", quest.isComplete())
+					.toggleClass("percent50", quest.progress === 1)
+					.toggleClass("percent80", quest.progress === 2);
+				$(".quest_color", questBox).css("background", quest.getColor())
+					.addClass(quest.getLabelClass())
 					.addClass("hover")
-					.attr("title", KC3Meta.term("PanelToggleQuestComplete") )
+					.attr("title", KC3Meta.term("PanelToggleQuestComplete"))
 					.data("id", quest.id)
 					.click(toggleQuestFunc);
-				if(quest.isComplete()){
-					questBox.addClass("complete");
-				}
 				if(quest.meta){
 					$(".quest_text", questBox).text(quest.meta().name)
 						.attr("titlealt", KC3QuestManager

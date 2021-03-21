@@ -158,7 +158,8 @@ Executes processing and relies on KC3Network for the triggers
 			if(this.call == "api_port/port" && !!this.gameStatus){
 				// Check if user's clock is correct
 				var computerClock = new Date().getTime();
-				var serverClock = new Date( this.headers.Date ).getTime();
+				// Will be NaN if headers.Date not parse-able
+				var serverClock = new Date(this.headers.Date).getTime();
 				
 				// If clock difference is greater than 5 minutes
 				var timeDiff = Math.abs(computerClock - serverClock);
@@ -168,7 +169,7 @@ Executes processing and relies on KC3Network for the triggers
 						message: KC3Meta.term("CatBombWrongComputerClockMsg").format(Math.ceil(timeDiff/60000))
 					});
 				
-				// Something else other than clock is wrong
+				// Something else other than clock is wrong, or parsing headers.Date failed
 				} else {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),

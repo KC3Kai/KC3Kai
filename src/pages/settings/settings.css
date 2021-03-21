@@ -291,3 +291,83 @@ body {
 	color: red;
 	background:#f68383;
 }
+
+/* NAVIGATOR MENU
+--------------------------*/
+#left {
+	float:left;
+	top:20px;
+	height:0;
+	margin-left:10px;
+	position:sticky;
+	z-index:99;
+}
+#left .navigator {
+	width:auto;
+	max-height:95vh;
+	overflow-y:overlay;
+}
+#left .expandButton {
+	border-radius:10px 10px 0 0;
+	background:#fff;
+	display:none;
+}
+#left .expandButton img {
+	width:17px;
+	height:14px;
+	margin-top:5px;
+}
+#left .menu {
+	display:flex;
+	flex-direction:column;
+	max-width:214px;
+	padding:10px;
+	border-radius:10px;
+	background:#fff;
+}
+#left .menu-item {
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	margin-bottom:5px;
+}
+#left .menu-item a {
+	text-decoration:none;
+}
+
+@media screen and (max-width:1275px) {
+#left {
+	width:20px;
+}
+#left .navigator {
+	overflow-y:hidden;
+}
+#left .expandButton {
+	width:20px;
+	height:25px;
+	display:block;
+	position:relative;
+	text-align:center;
+}
+#left .menu {
+	border-radius:0 0 10px 10px;
+}
+#left:hover {
+	width:unset;
+}
+#left:hover .navigator {
+	overflow-y:overlay;
+}
+#left:hover .expandButton {
+	display:none;
+}
+#left:hover .menu {
+	display:flex;
+	border-radius:10px;
+}
+}
+@media screen and (max-width:875px) {
+#left .expandButton {
+	background:#ffffcc;
+}
+}
