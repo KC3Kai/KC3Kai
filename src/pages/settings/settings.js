@@ -23,7 +23,10 @@
 					sectionBox.attr("id", anchorId);
 					$(".title a", sectionBox).text( KC3Meta.term( response[sctr].section ) )
 						.attr("href", "#" + anchorId );
-					
+					// Navigator menu
+					const menuItem = $("#factory .menu-item").clone().appendTo("#left .menu");
+					$("a", menuItem).attr("href", "#" + anchorId);
+					$("a span", menuItem).text(KC3Meta.term(response[sctr].section));
 					// Learn more button
 					if(response[sctr].help){
 						$("a.more", sectionBox).attr("href", response[sctr].help );
