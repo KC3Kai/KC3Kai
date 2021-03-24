@@ -691,13 +691,16 @@ Contains summary information about a fleet and its ships
 	};
 
 	KC3Fleet.prototype.supportPower = function(isCritical = false){
+		const battleConds = KC3Calc.collectBattleConditions();
 		return this.ship().map(s => {
-			const precap = s.supportShellingPower();
+			const power = s.supportShellingPower();
+			const precap = s.applyPrecapModifiers(power, "SupportShelling",
+				battleConds.engagementId, battleConds.formationId).power;
 			const capped = s.applyPowerCap(precap, "Day", "Support").power;
 			return s.applyPostcapModifiers(capped, "SupportShelling", undefined, 0, isCritical).power;
 		}).sumValues();
 	};
-	
+
 	KC3Fleet.prototype.supportAirstrikePower = function(isCritical = false){
 		const totalPower = [0, 0, false];
 		this.ship().forEach(s => {
@@ -708,7 +711,7 @@ Contains summary information about a fleet and its ships
 		});
 		return totalPower;
 	};
-	
+
 	KC3Fleet.prototype.supportAntisubPower = function(isCritical = false){
 		const totalPower = [0, 0, 0];
 		this.ship().forEach(s => {
@@ -719,7 +722,7 @@ Contains summary information about a fleet and its ships
 		});
 		return totalPower;
 	};
-	
+
 	KC3Fleet.prototype.speed = function(){
 		this.minSpeed = Math.min(...this.shipsUnescaped().map(ship => ship.getSpeed()));
 		this.fastFleet = this.minSpeed >= 10;

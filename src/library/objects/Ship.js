@@ -1954,11 +1954,13 @@ KC3改 Ship Object
 		// 0 are placeholders for non-exists ID
 		let formationModifier = (
 			warfareType === "Antisub" ?
-			[0, 0.6, 0.8, 1.2, 1.1 , 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1  , 0.7] :
+			[0, 0.6, 0.8, 1.2, 1.1 , 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1.0, 0.7] :
 			warfareType === "Shelling" ?
-			[0, 1  , 0.8, 0.7, 0.75, 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			[0, 1.0, 0.8, 0.7, 0.75, 0.6, 1, 0, 0, 0, 0, 0.8, 1.0, 0.7, 1.1] :
 			warfareType === "Torpedo" ?
-			[0, 1  , 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			[0, 1.0, 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1.0, 0.7, 1.1] :
+			warfareType === "SupportShelling" ?
+			[0, 1.0, 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0] :
 			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
@@ -1970,10 +1972,10 @@ KC3改 Ship Object
 			if(shipCnt >= 4) {
 				// Guardian ships counted from 3rd or 4th ship
 				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
-				if(warfareType === "Shelling") {
-					formationModifier = isGuardian ? 1 : 0.5;
+				if(warfareType === "Shelling" || warfareType === "SupportShelling") {
+					formationModifier = isGuardian ? 1.0 : 0.5;
 				} else if(warfareType === "Antisub") {
-					formationModifier = isGuardian ? 0.6 : 1;
+					formationModifier = isGuardian ? 0.6 : 1.0;
 				}
 			}
 		}
