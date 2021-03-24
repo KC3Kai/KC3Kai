@@ -385,25 +385,8 @@
 			$(".detail_level .detail_value", fleetBox).text( kcFleet.totalLevel() )
 				.attr("title", KC3Calc.buildFleetsTotalStatsText(kcFleet));
 			$(".detail_los .detail_icon img", fleetBox).attr("src", "/assets/img/stats/los"+ConfigManager.elosFormula+".png" );
-			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) );
-			if(ConfigManager.elosFormula > 0) {
-				const f33CnHq4 = Array.numbers(1, 5).map(cn =>
-					Math.qckInt("floor", kcFleet.eLos4(cn), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
-				));
-				const f33CnHq3 = Array.numbers(1, 5).map(cn =>
-					Math.qckInt("floor", kcFleet.eLos4(cn, 0.35), 1).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)
-				));
-				const airReconnScore = Math.qckInt("floor", kcFleet.airReconnScore(), 1)
-					.toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false));
-				const airReconnResult = kcFleet.estimateAirReconnResult();
-				$(".detail_los .detail_value", fleetBox).attr("title",
-					"HLv: x0.4\tx0.35\nCn1: {0}\t{5}\nCn2: {1}\t{6}\nCn3: {2}\t{7}\nCn4: {3}\t{8}\nCn5: {4}\t{9}".format(f33CnHq4.concat(f33CnHq3))
-					+ "\nW6-3: {0}".format(airReconnScore)
-					+ (airReconnScore > 0 ? "\n&emsp;G: {0}\n&emsp;H: {1}".format(airReconnResult.W63G.result, airReconnResult.W63H.result) : "")
-				);
-			} else {
-				$(".detail_los .detail_value").attr("title", "");
-			}
+			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) )
+				.attr("title", KC3Calc.buildFleetsElosText(kcFleet, 5));
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() )
 				.attr("title", KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
 					+ KC3Calc.buildFleetsContactChanceText(kcFleet));
@@ -416,7 +399,8 @@
 				);
 			$(".detail_speed .detail_value", fleetBox).text( kcFleet.speed() )
 				.attr("title", KC3Calc.buildFleetsSpeedText(kcFleet));
-			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() );
+			$(".detail_support .detail_value", fleetBox).text( kcFleet.supportPower() )
+				.attr("title", KC3Calc.buildFleetExpedSupportText(kcFleet));
 			$(".ss_button", fleetBox).on("click", function(e) {
 				const thisButton = $(this);
 				const thisFleetBox = thisButton.parent(), fleetBoxNative = thisFleetBox.get(0);

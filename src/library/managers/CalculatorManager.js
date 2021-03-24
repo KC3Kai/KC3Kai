@@ -213,6 +213,7 @@
      * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
      * @param {string} improvementType - Fleet total stats are mainly used by expeditions, so `exped` by default.
      * @return built html string.
+     * @see Fleet.totalStats
      */
     const buildFleetsTotalStatsText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined, improvementType = "exped") => {
         const isCombined = escortFleet instanceof KC3Fleet;
@@ -249,6 +250,65 @@
         text += rowTemplate.format(KC3Meta.term("ExpedTotalAa")  , statsVisible.aa, rnd(statsImprove.aa), rnd(statsExped.aa), statsRadar.aa);
         text += rowTemplate.format(KC3Meta.term("ExpedTotalAsw") , statsVisible.as, rnd(statsImprove.as), rnd(statsExped.as), statsRadar.as);
         text += rowTemplate.format(KC3Meta.term("ExpedTotalLos") , statsVisible.ls, rnd(statsImprove.ls), rnd(statsExped.ls), statsRadar.ls);
+        return $("<div></div>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
+     * Build effective LoS tooltip text for single or combined fleet.
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
+     * @param {number} maxCn - max amount of node factors to be listed, 4 by default.
+     * @param {number} altHqMod - alternative HQ level modifier, 0.35 by default.
+     * @return built html string.
+     * @see Fleet.eLos4
+     */
+    const buildFleetsElosText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined, maxCn = 4, altHqMod = 0.35) => {
+        const isCombined = escortFleet instanceof KC3Fleet;
+        const containerStyles = {
+            "font-size":"11px",
+            "display":"grid",
+            "grid-template-columns":"auto auto auto",
+            "column-gap":"10px", "grid-column-gap":"10px",
+            "white-space":"nowrap",
+        };
+        const rnd = v => Math.qckInt("floor", v, 1);
+        const accumulateValuesTo = (arrTo, arrFrom) => {
+            Object.keys(arrTo).forEach(idx => {
+                arrTo[idx] += arrFrom[idx] || 0;
+            });
+        };
+        const f33CnVals = Array.numbers(1, maxCn).map(cn => viewFleet.eLos4(cn));
+        const f33CnAltHq = Array.numbers(1, maxCn).map(cn => viewFleet.eLos4(cn, altHqMod));
+        if(isCombined) {
+            const escortF33CnVals = Array.numbers(1, maxCn).map(cn => escortFleet.eLos4(cn));
+            const escortF33CnAltHq = Array.numbers(1, maxCn).map(cn => escortFleet.eLos4(cn, altHqMod));
+            accumulateValuesTo(f33CnVals, escortF33CnVals);
+            accumulateValuesTo(f33CnAltHq, escortF33CnAltHq);
+        }
+        const rowTemplate = "<div>{0}</div><div>{1}</div><div>{2}</div>";
+        let text = rowTemplate.format(
+            KC3Meta.term("PanelElosHqModifier"), "x0.4", altHqMod ? "x{0}".format(altHqMod) : ""
+        );
+        Array.numbers(1, maxCn).forEach((cn, idx) => {
+           text += rowTemplate.format(KC3Meta.term("PanelElosNodeFactor").format(cn),
+               rnd(f33CnVals[idx]).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)),
+               altHqMod ? rnd(f33CnAltHq[idx]).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false)) : "");
+        });
+        if(!isCombined) {
+            const airReconnScore = rnd(viewFleet.airReconnScore()).toLocaleString(undefined, KC3Meta.formatDecimalOptions(1, false));
+            const airReconnResult = viewFleet.estimateAirReconnResult();
+            text += rowTemplate.format(KC3Meta.term("PanelAirReconnScore"), airReconnScore, "");
+            if(airReconnScore > 0) {
+                text += rowTemplate.format(
+                    KC3Meta.term("PanelAirReconnNodes"),
+                    KC3Meta.term("PanelAirReconn" + airReconnResult.W63G.result),
+                    KC3Meta.term("PanelAirReconn" + airReconnResult.W63H.result)
+                );
+            }
+        }
         return $("<div></div>")
             .css(containerStyles)
             .html(text)
@@ -311,6 +371,47 @@
             }
         }
         return $("<div></div>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
+    };
+
+    /**
+     * Build expedition support fleet tooltip text.
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 2nd fleet, since 1st cannot be used on expedition.
+     * @return built html string.
+     * @see Fleet.calcSupportExpeditionCost
+     * @see Fleet.supportPower
+     * @see Fleet.supportAirstrikePower
+     * @see Fleet.supportAntisubPower
+     * @see Fleet.estimateSupportShowRate
+     */
+    const buildFleetExpedSupportText = (viewFleet = PlayerManager.fleets[1]) => {
+        const containerStyles = {
+            "font-size":"11px",
+        };
+        const supportInfo = viewFleet.calcSupportExpeditionCost();
+        let text = "";
+        text += KC3Meta.term("PanelSupportExpCosts").format(
+            KC3Meta.support(supportInfo.supportFlag) || KC3Meta.term("None"),
+            supportInfo.fuel || "?",
+            supportInfo.ammo || "?"
+        );
+        const shellingPower = viewFleet.supportPower();
+        text += "\n{0}: {1}".format(KC3Meta.term("PanelSupportPower"), shellingPower);
+        if(supportInfo.supportFlag) {
+            // add airstrike & antisub power, no matter which support type
+            // torpedo support so useless that no formula found
+            const airstrikePower = viewFleet.supportAirstrikePower();
+            text += ("\n{0}: " + (airstrikePower[2] ? "{1}~{2}" : "{1}"))
+                .format(KC3Meta.term("PanelSupportAerialPower"), ...airstrikePower);
+            const antisubPower = viewFleet.supportAntisubPower();
+            text += "\n{0}: {1}/{2}/{3}".format(KC3Meta.term("PanelSupportAntisubPower"), ...antisubPower);
+            const prebossRate = viewFleet.estimateSupportShowRate(false);
+            const bossRate = viewFleet.estimateSupportShowRate(true);
+            text += "\n" + KC3Meta.term("PanelSupportShowRate").format(prebossRate, bossRate);
+        }
+        return $("<p></p>")
             .css(containerStyles)
             .html(text)
             .prop("outerHTML");
@@ -645,6 +746,8 @@
         buildFleetsAirstrikePowerText,
         buildFleetsTotalStatsText,
         buildFleetsSpeedText,
+        buildFleetsElosText,
+        buildFleetExpedSupportText,
         collectBattleConditions,
         
         getLandBasesResupplyCost,

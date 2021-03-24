@@ -2012,7 +2012,6 @@
 						(MainFleet.lowestMorale() < EscortFleet.lowestMorale())
 						? MainFleet.lowestMorale() : EscortFleet.lowestMorale(),
 					supportPower: 0,
-					supportCost: {},
 					tpValueSum: MainFleet.calcTpObtain(MainFleet, EscortFleet)
 				};
 
@@ -2092,7 +2091,6 @@
 					],
 					lowestMorale: CurrentFleet.lowestMorale(),
 					supportPower: CurrentFleet.supportPower(),
-					supportCost: CurrentFleet.calcSupportExpeditionCost(),
 					tpValueSum: CurrentFleet.calcTpObtain()
 				};
 
@@ -2113,6 +2111,15 @@
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
+			if(selectedFleet < 5){
+				$(".summary-eqlos").attr("titlealt",
+					KC3Calc.buildFleetsElosText(PlayerManager.fleets[selectedFleet-1])).lazyInitTooltip();
+			} else if(selectedFleet === 5){
+				$(".summary-eqlos").attr("titlealt",
+					KC3Calc.buildFleetsElosText(PlayerManager.fleets[0], PlayerManager.fleets[1], 5)).lazyInitTooltip();
+			} else {
+				$(".summary-eqlos").attr("titlealt", "");
+			}
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
 			$(".summary-airfp .summary_text").text(FleetSummary.air)
@@ -2134,27 +2141,6 @@
 					selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
 					selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
 				)).lazyInitTooltip();
-			if(ConfigManager.elosFormula > 0){
-				// F33 different factors for Phase 1: 6-2(F,H)/6-3(H):x3, 3-5(G)/6-1(E,F):x4
-				if(selectedFleet < 5){
-					const f33Cn = Array.numbers(1, 4)
-						.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
-					$(".summary-eqlos").attr("title",
-						"x1={0}\nx2={1}\nx3={2}\nx4={3}"
-						.format(f33Cn)
-					).lazyInitTooltip();
-				} else if(selectedFleet === 5){
-					const mainFleet = PlayerManager.fleets[0],
-						escortFleet = PlayerManager.fleets[1],
-						f33Cn = Array.numbers(1, 5)
-							.map(cn => Math.qckInt("floor", mainFleet.eLos4(cn) + escortFleet.eLos4(cn), 1));
-					$(".summary-eqlos").attr("title",
-						"x1={0}\nx2={1}\nx3={2}\nx4={3}\nx5={4}".format(f33Cn)
-					).lazyInitTooltip();
-				}
-			} else {
-				$(".summary-eqlos").attr("title", "");
-			}
 
 			// Clear status reminder coloring
 			$(".module.status .status_text").removeClass("good bad slotsWarn");
@@ -2374,17 +2360,12 @@
 				}else{
 					// STATUS: SUPPORT
 					$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
-					$(".module.status .status_support .status_text").attr("title",
+					$(".module.status .status_support .status_text").attr("titlealt",
 						KC3Meta.term("PanelTransportPoints").format(
 							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
 							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
 						)
-						+ "\n" +
-						KC3Meta.term("PanelSupportExpCosts").format(
-							KC3Meta.support(FleetSummary.supportCost.supportFlag) || KC3Meta.term("None"),
-							FleetSummary.supportCost.fuel || "?",
-							FleetSummary.supportCost.ammo || "?"
-						)
+						+ "\n" + KC3Calc.buildFleetExpedSupportText(PlayerManager.fleets[selectedFleet-1])
 					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
 					$(".module.status .status_support").show();

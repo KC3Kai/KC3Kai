@@ -665,7 +665,7 @@ KC3改 Equipment Object
 	 * Get pre-cap opening airstrike power of this carrier-based aircraft.
 	 * @return tuple of [low power, high power, isRange]
 	 */
-	KC3Gear.prototype.airstrikePower = function(capacity = 0, combinedFleetFactor = 0, isJetAssault = false){
+	KC3Gear.prototype.airstrikePower = function(capacity = 0, combinedFleetFactor = 0, isJetAssault = false, isExpedSupport = false){
 		if(this.isDummy()) { return [0, 0, false]; }
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
@@ -674,10 +674,10 @@ KC3改 Equipment Object
 			const isJet = [57, 58].includes(type2);
 			// Visible bonus no effect
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
-			power += this.attackPowerImprovementBonus("airstrike");
+			power += this.attackPowerImprovementBonus(isExpedSupport ? "support" : "airstrike");
 			power *= Math.sqrt(capacity);
-			power += 25;
-			power += combinedFleetFactor;
+			power += isExpedSupport ? 3 : 25;
+			power += isExpedSupport ? 0 : combinedFleetFactor;
 			if(isTorpedoBomber) {
 				// 80% or 150% random modifier (both 50% chance) for torpedo bomber
 				// modifier for unimplemented jet torpedo bomber unknown
