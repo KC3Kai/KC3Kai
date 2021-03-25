@@ -390,17 +390,20 @@
         const containerStyles = {
             "font-size":"11px",
         };
-        const supportInfo = viewFleet.calcSupportExpeditionCost();
+        const supportCost = viewFleet.calcSupportExpeditionCost();
         let text = "";
         text += KC3Meta.term("PanelSupportExpCosts").format(
-            KC3Meta.support(supportInfo.supportFlag) || KC3Meta.term("None"),
-            supportInfo.fuel || "?",
-            supportInfo.ammo || "?"
+            KC3Meta.support(supportCost.supportFlag) || KC3Meta.term("None"),
+            supportCost.fuel || "?",
+            supportCost.ammo || "?"
         );
+        if([1, 4].includes(supportCost.supportFlag) && supportCost.steel > 0) {
+            text += "\n" + KC3Meta.term("PanelConsumedSteel").format(supportCost.steel);
+        }
         const shellingPower = viewFleet.supportPower();
         text += "\n{0}: {1}".format(KC3Meta.term("PanelSupportPower"), shellingPower);
         if(ConfigManager.powerCritical) { text += "({0})".format(viewFleet.supportPower(true)); }
-        if(supportInfo.supportFlag) {
+        if(supportCost.supportFlag) {
             // add airstrike & antisub power, no matter which support type
             // torpedo support so useless that no formula found
             const airstrikePower = viewFleet.supportAirstrikePower();
