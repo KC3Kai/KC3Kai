@@ -721,13 +721,6 @@
 		$(".consumable_catalysts_toggle").on("click",function() {toggle_consumable_display(7);});
 		$(".consumable_event_toggle").on("click",function() {toggle_consumable_display(8);});
 
-		// eLoS Toggle
-		/*$(".summary-eqlos").on("click",function(){
-			if(selectedFleet === 6) return;
-			ConfigManager.scrollElosMode();
-			NatsuiroListeners.Fleet();
-		}).addClass("hover");*/
-
 		// Fighter Power Toggle
 		$(".summary-airfp .summary_icon").on("click",function(){
 			if(selectedFleet !== 5) return;
@@ -1997,7 +1990,7 @@
 			}
 
 			NatsuiroListeners.UpdateExpeditionPlanner();
-			var FleetSummary, MainRepairs;
+			var FleetSummary, MainRepairs, MainFleet, EscortFleet;
 			$(".shiplist_single").empty();
 			$(".shiplist_single").hide();
 			$(".shiplist_combined_fleet").empty();
@@ -2012,8 +2005,8 @@
 
 			// COMBINED
 			if(selectedFleet == 5){
-				const MainFleet = PlayerManager.fleets[0],
-					EscortFleet = PlayerManager.fleets[1];
+				MainFleet = PlayerManager.fleets[0];
+				EscortFleet = PlayerManager.fleets[1];
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
@@ -2130,6 +2123,8 @@
 			// SINGLE
 			} else {
 				const CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				MainFleet = CurrentFleet;
+				EscortFleet = undefined;
 				$(".module.controls .fleet_num.active").attr("title", CurrentFleet.name || "");
 
 				// Calculate Highest Repair Times for status indicators
@@ -2216,10 +2211,7 @@
 				.attr("title", (fleetNum => {
 					let tips = fleetNum > 1 ? "" :
 						KC3Meta.term("FirstFleetLevelTip").format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n";
-					tips += KC3Calc.buildFleetsTotalStatsText(
-						selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
-						selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
-					);
+					tips += KC3Calc.buildFleetsTotalStatsText(MainFleet, EscortFleet);
 					if (fleetNum >= 1 && fleetNum <= 4) {
 						const fstats = PlayerManager.fleets[fleetNum - 1].totalStats(true, false, false);
 						const fstatsExped = PlayerManager.fleets[fleetNum - 1].totalStats(true, "exped", true);
@@ -2246,13 +2238,13 @@
 			$(".summary-sardines .summary_text").text( PlayerManager.consumables.sardine );
 			$(".summary-eqlos .summary_text").text(KC3Meta.term("ShipLos"));
 			if(selectedFleet < 5){
-				$(".summary-eqlos").attr("titlealt",
-					KC3Calc.buildFleetsElosText(PlayerManager.fleets[selectedFleet-1])).lazyInitTooltip();
+				$(".summary-eqlos .summary_text").attr("titlealt",
+					KC3Calc.buildFleetsElosText(MainFleet)).lazyInitTooltip();
 			} else if(selectedFleet === 5){
-				$(".summary-eqlos").attr("titlealt",
-					KC3Calc.buildFleetsElosText(PlayerManager.fleets[0], PlayerManager.fleets[1], 5)).lazyInitTooltip();
+				$(".summary-eqlos .summary_text").attr("titlealt",
+					KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5)).lazyInitTooltip();
 			} else {
-				$(".summary-eqlos").attr("titlealt", "");
+				$(".summary-eqlos .summary_text").attr("titlealt", "");
 			}
 			$(".summary-transport .summary_text").text(KC3Meta.term("PanelTransportPointsAbbr"));
 			$(".summary-transport .summary_textS").text("S: " + (isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum));
@@ -2262,41 +2254,29 @@
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
 				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
-					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
+					MainFleet, undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
-					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
+					MainFleet, undefined, selectedFleet === 5,
 					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-formation .summary_icon img")
 				.attr("src", KC3Meta.formationIcon(ConfigManager.aaFormation))
-				.parent().attr("title", (KC3Meta.formationText(ConfigManager.aaFormation) + KC3Meta.term("PanelFormationTip") ))
+				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) + KC3Meta.term("PanelFormationTip"))
 				.lazyInitTooltip();
 			$(".summary-formation .summary_text").text(KC3Meta.formationText(ConfigManager.aaFormation));
 			$(".summary-antiair .summary_text").text( FleetSummary.antiAir )
-				.parent().attr("title", KC3Meta.term("PanelFleetAATip"))
-				.lazyInitTooltip();
+				.parent().attr("title", KC3Meta.term("PanelFleetAATip")
+					+ "\n" + KC3Calc.buildFleetsAdjustedAntiAirText(MainFleet, EscortFleet)
+				).lazyInitTooltip();
 			$(".status-speed .status_text").text(FleetSummary.speed)
-				.attr("titlealt", KC3Calc.buildFleetsSpeedText(
-					selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
-					selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
-				)).lazyInitTooltip();
-			if(selectedFleet < 5){
-				const f33Cn = Array.numbers(1, 4)
-					.map(cn => Math.qckInt("floor", PlayerManager.fleets[selectedFleet-1].eLos4(cn), 1));
-				$(".summary-eqlos .summary_textf331").text( "x1: {0}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf332").text( "x2: {1}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf333").text( "x3: {2}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf334").text( "x4: {3}".format(f33Cn) );
-			} else if(selectedFleet === 5){
-				const mainFleet = PlayerManager.fleets[0],
-					escortFleet = PlayerManager.fleets[1],
-					f33Cn = Array.numbers(1, 4)
-						.map(cn => Math.qckInt("floor", mainFleet.eLos4(cn) + escortFleet.eLos4(cn), 1));
-				$(".summary-eqlos .summary_textf331").text( "x1: {0}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf332").text( "x2: {1}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf333").text( "x3: {2}".format(f33Cn) );
-				$(".summary-eqlos .summary_textf334").text( "x4: {3}".format(f33Cn) );
-			}
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(MainFleet, EscortFleet))
+				.lazyInitTooltip();
+			const f33Cn = Array.numbers(1, 4)
+				.map(cn => Math.qckInt("floor", MainFleet.eLos4(cn) + (EscortFleet ? EscortFleet.eLos4(cn) : 0), 1));
+			$(".summary-eqlos .summary_textf331").text( "x1: {0}".format(f33Cn) );
+			$(".summary-eqlos .summary_textf332").text( "x2: {1}".format(f33Cn) );
+			$(".summary-eqlos .summary_textf333").text( "x3: {2}".format(f33Cn) );
+			$(".summary-eqlos .summary_textf334").text( "x4: {3}".format(f33Cn) );
 
 
 			// Clear status reminder coloring
@@ -2506,23 +2486,13 @@
 							$(".module.controls .fleet_rengo img").attr("src", "/assets/img/ui/fleet_single2.png");
 							break;
 					}
-					$(".module.status .status_butai .status_text").attr("title",
-						KC3Meta.term("PanelTransportPoints").format(
-							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-						)
-					).lazyInitTooltip();
 					$(".module.status .status_butai").show();
 					$(".module.status .status_support").hide();
 				}else{
 					// STATUS: SUPPORT
 					$(".module.status .status_support .status_text").text( FleetSummary.supportPower );
 					$(".module.status .status_support .status_text").attr("title",
-						KC3Meta.term("PanelTransportPoints").format(
-							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
-							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-						)
-						+ "\n" + KC3Calc.buildFleetExpedSupportText(PlayerManager.fleets[selectedFleet-1])
+						KC3Calc.buildFleetExpedSupportText(MainFleet)
 					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
 					$(".module.status .status_support").show();

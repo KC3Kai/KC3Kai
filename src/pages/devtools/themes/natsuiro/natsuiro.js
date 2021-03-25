@@ -632,7 +632,7 @@
 		});
 
 		// eLoS Toggle
-		$(".summary-eqlos").on("click",function(){
+		$(".summary-eqlos .summary_icon").on("click",function(){
 			if(selectedFleet === 6) return;
 			ConfigManager.scrollElosMode();
 			NatsuiroListeners.Fleet();
@@ -640,20 +640,19 @@
 
 		// Fighter Power Toggle
 		$(".summary-airfp .summary_icon").on("click",function(){
-			if(selectedFleet !== 5) return;
-			ConfigManager.loadIfNecessary();
-			ConfigManager.air_combined = !ConfigManager.air_combined;
-			ConfigManager.save();
-			NatsuiroListeners.Fleet();
-		}).addClass("hover");
-		$(".summary-airfp .summary_text").on("click",function(){
 			if(selectedFleet === 6) return;
-			ConfigManager.scrollFighterPowerMode();
+			if(selectedFleet === 5) {
+				ConfigManager.loadIfNecessary();
+				ConfigManager.air_combined = !ConfigManager.air_combined;
+				ConfigManager.save();
+			} else {
+				ConfigManager.scrollFighterPowerMode();
+			}
 			NatsuiroListeners.Fleet();
 		}).addClass("hover");
 
 		// AntiAir Formation Toggle
-		$(".summary-antiair").on("click",function(){
+		$(".summary-antiair .summary_icon").on("click",function(){
 			if(selectedFleet === 6) return;
 			ConfigManager.scrollAntiAirFormation(selectedFleet === 5);
 			NatsuiroListeners.Fleet();
@@ -1404,7 +1403,7 @@
 				fcboxesTotal = fc200 * 200 + fc400 * 400 + fc700 * 700;
 			const screws = PlayerManager.consumables.screws || 0,
 				devmats =PlayerManager.consumables.devmats || 0,
-				hardMedals = PlayerManager.firstClassMedals || 0,
+				hardMedals = PlayerManager.consumables.firstClassMedals || 0,
 				medals = PlayerManager.consumables.medals || 0,
 				presents = PlayerManager.consumables.presents || 0,
 				exchgscrewsTotal = presents + medals * 4 + hardMedals * 10,
@@ -1885,7 +1884,7 @@
 			}
 
 			NatsuiroListeners.UpdateExpeditionPlanner();
-			var FleetSummary, MainRepairs;
+			var FleetSummary, MainRepairs, MainFleet, EscortFleet;
 			$(".shiplist_single").empty();
 			$(".shiplist_single").hide();
 			$(".shiplist_combined_fleet").empty();
@@ -1900,8 +1899,8 @@
 
 			// COMBINED
 			if(selectedFleet == 5){
-				const MainFleet = PlayerManager.fleets[0],
-					EscortFleet = PlayerManager.fleets[1];
+				MainFleet = PlayerManager.fleets[0];
+				EscortFleet = PlayerManager.fleets[1];
 
 				// Show ships on main fleet
 				$.each(MainFleet.ships, function(index, rosterId){
@@ -2018,6 +2017,8 @@
 			// SINGLE
 			} else {
 				const CurrentFleet = PlayerManager.fleets[selectedFleet-1];
+				MainFleet = CurrentFleet;
+				EscortFleet = undefined;
 				$(".module.controls .fleet_num.active").attr("title", CurrentFleet.name || "");
 
 				// Calculate Highest Repair Times for status indicators
@@ -2103,30 +2104,27 @@
 				.attr("titlealt", "{0}{1}".format(
 					selectedFleet > 1 ? "" : KC3Meta.term("FirstFleetLevelTip")
 						.format(FleetSummary.baseExp.base, FleetSummary.baseExp.s) + "\n",
-					KC3Calc.buildFleetsTotalStatsText(
-						selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
-						selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
-					)
+					KC3Calc.buildFleetsTotalStatsText(MainFleet, EscortFleet)
 				)).lazyInitTooltip();
 			$(".summary-eqlos .summary_icon img").attr("src",
 				"../../../../assets/img/stats/los" + ConfigManager.elosFormula + ".png");
 			$(".summary-eqlos .summary_text").text(FleetSummary.elos);
 			if(selectedFleet < 5){
-				$(".summary-eqlos").attr("titlealt",
-					KC3Calc.buildFleetsElosText(PlayerManager.fleets[selectedFleet-1])).lazyInitTooltip();
+				$(".summary-eqlos .summary_text").attr("titlealt",
+					KC3Calc.buildFleetsElosText(MainFleet)).lazyInitTooltip();
 			} else if(selectedFleet === 5){
-				$(".summary-eqlos").attr("titlealt",
-					KC3Calc.buildFleetsElosText(PlayerManager.fleets[0], PlayerManager.fleets[1], 5)).lazyInitTooltip();
+				$(".summary-eqlos .summary_text").attr("titlealt",
+					KC3Calc.buildFleetsElosText(MainFleet, EscortFleet, 5)).lazyInitTooltip();
 			} else {
-				$(".summary-eqlos").attr("titlealt", "");
+				$(".summary-eqlos .summary_text").attr("titlealt", "");
 			}
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
 			$(".summary-airfp .summary_text").text(FleetSummary.air)
 				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
-					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5
+					MainFleet, undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
-					PlayerManager.fleets[selectedFleet-1], undefined, selectedFleet === 5,
+					MainFleet, undefined, selectedFleet === 5,
 					isCombinedAirView ? 6 : 4
 				)).lazyInitTooltip();
 			$(".summary-antiair .summary_icon img")
@@ -2134,13 +2132,12 @@
 				.parent().attr("title", KC3Meta.formationText(ConfigManager.aaFormation) + KC3Meta.term("PanelFormationTip"))
 				.lazyInitTooltip();
 			$(".summary-antiair .summary_text").text(FleetSummary.antiAir)
-				.attr("title", KC3Meta.term("PanelFleetAATip"))
-				.lazyInitTooltip();
+				.attr("title", KC3Meta.term("PanelFleetAATip")
+					+ "\n" + KC3Calc.buildFleetsAdjustedAntiAirText(MainFleet, EscortFleet)
+				).lazyInitTooltip();
 			$(".summary-speed .summary_text").text(FleetSummary.speed)
-				.attr("titlealt", KC3Calc.buildFleetsSpeedText(
-					selectedFleet === 5 ? PlayerManager.fleets[0] : PlayerManager.fleets[selectedFleet-1],
-					selectedFleet === 5 ? PlayerManager.fleets[1] : undefined
-				)).lazyInitTooltip();
+				.attr("titlealt", KC3Calc.buildFleetsSpeedText(MainFleet, EscortFleet))
+				.lazyInitTooltip();
 
 			// Clear status reminder coloring
 			$(".module.status .status_text").removeClass("good bad slotsWarn");
@@ -2364,8 +2361,7 @@
 						KC3Meta.term("PanelTransportPoints").format(
 							isNaN(FleetSummary.tpValueSum)? "?" : Math.floor(0.7 * FleetSummary.tpValueSum),
 							isNaN(FleetSummary.tpValueSum)? "?" : FleetSummary.tpValueSum
-						)
-						+ "\n" + KC3Calc.buildFleetExpedSupportText(PlayerManager.fleets[selectedFleet-1])
+						) + "\n" + KC3Calc.buildFleetExpedSupportText(MainFleet)
 					).lazyInitTooltip();
 					$(".module.status .status_butai").hide();
 					$(".module.status .status_support").show();

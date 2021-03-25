@@ -316,6 +316,44 @@
     };
 
     /**
+     * Build fleet adjusted anti-air tooltip text for single or combined fleet.
+     * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
+     * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
+     * @return built html string.
+     * @see Fleet.adjustedAntiAir
+     * @see AntiAir.getFormationModifiers
+     * @see AntiAir.fleetCombinedAdjustedAntiAir
+     */
+    const buildFleetsAdjustedAntiAirText = (viewFleet = PlayerManager.fleets[0], escortFleet = undefined) => {
+        const isCombined = escortFleet instanceof KC3Fleet;
+        const containerStyles = {
+            "font-size":"11px",
+        };
+        const combinedFleetAdjustedAA = (formationId) => (
+            Math.floor(AntiAir.fleetCombinedAdjustedAntiAir(
+                viewFleet, escortFleet,
+                AntiAir.getFormationModifiers(formationId)
+            ))
+        );
+        let text = "";
+        if(isCombined) {
+            text += "{0}: {3}\n{1}: {4}\n{2}: {5}".format(
+                KC3Meta.formationText(11), KC3Meta.formationText(14), KC3Meta.formationText(13),
+                combinedFleetAdjustedAA(11), combinedFleetAdjustedAA(14), combinedFleetAdjustedAA(13)
+            );
+        } else {
+            text += "{0}: {4}\n{1}: {5}\n{2}: {6}\n{3}: {7}".format(
+                KC3Meta.formationText(1), KC3Meta.formationText(2), KC3Meta.formationText(3), KC3Meta.formationText(6),
+                viewFleet.adjustedAntiAir(1), viewFleet.adjustedAntiAir(2), viewFleet.adjustedAntiAir(3), viewFleet.adjustedAntiAir(6)
+            );
+        }
+        return $("<p></p>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
+  };
+
+    /**
      * Build fleet speed tooltip text of every ships in (single or combined) fleet.
      * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
      * @param {Object} escortFleet - Fleet object of escort for Combined Fleet, keep undefined for single fleet.
@@ -754,6 +792,7 @@
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
         buildFleetsTotalStatsText,
+        buildFleetsAdjustedAntiAirText,
         buildFleetsSpeedText,
         buildFleetsElosText,
         buildFleetExpedSupportText,
