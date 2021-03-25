@@ -1427,8 +1427,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get support expedition airstrike power of this ship (with cap and post-cap modifiers).
-	 * @see KC3Gear.prototype.airstrikePower
+	 * Get support expedition aerial anti-sub power of this ship (with cap and post-cap modifiers).
 	 * @see https://wikiwiki.jp/kancolle/%E6%94%AF%E6%8F%B4%E8%89%A6%E9%9A%8A#i0093bc7
 	 */
 	KC3Ship.prototype.supportAntisubPower = function(isCritical = false){

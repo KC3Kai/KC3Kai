@@ -692,19 +692,27 @@ Contains summary information about a fleet and its ships
 
 	KC3Fleet.prototype.supportPower = function(isCritical = false){
 		const battleConds = KC3Calc.collectBattleConditions();
-		return this.ship().map(s => {
-			const power = s.supportShellingPower();
-			const precap = s.applyPrecapModifiers(power, "SupportShelling",
-				battleConds.engagementId, battleConds.formationId).power;
-			const capped = s.applyPowerCap(precap, "Day", "Support").power;
-			return s.applyPostcapModifiers(capped, "SupportShelling", undefined, 0, isCritical).power;
+		return this.ship().map(ship => {
+			let power = ship.supportShellingPower();
+			if(ConfigManager.powerCapApplyLevel >= 1) {
+				({power} = ship.applyPrecapModifiers(power, "SupportShelling",
+					battleConds.engagementId, battleConds.formationId));
+			}
+			if(ConfigManager.powerCapApplyLevel >= 2) {
+				({power} = ship.applyPowerCap(power, "Day", "Support"));
+			}
+			if(ConfigManager.powerCapApplyLevel >= 3) {
+				({power} = ship.applyPostcapModifiers(power, "SupportShelling",
+					undefined, 0, isCritical));
+			}
+			return Math.floor(power);
 		}).sumValues();
 	};
 
 	KC3Fleet.prototype.supportAirstrikePower = function(isCritical = false){
 		const totalPower = [0, 0, false];
-		this.ship().forEach(s => {
-			const shipPower = s.supportAirstrikePower(isCritical);
+		this.ship().forEach(ship => {
+			const shipPower = ship.supportAirstrikePower(isCritical);
 			totalPower[0] += shipPower[0];
 			totalPower[1] += shipPower[1];
 			totalPower[2] = totalPower[2] || shipPower[2];
@@ -714,8 +722,8 @@ Contains summary information about a fleet and its ships
 
 	KC3Fleet.prototype.supportAntisubPower = function(isCritical = false){
 		const totalPower = [0, 0, 0];
-		this.ship().forEach(s => {
-			const shipPower = s.supportAntisubPower(isCritical);
+		this.ship().forEach(ship => {
+			const shipPower = ship.supportAntisubPower(isCritical);
 			totalPower.forEach((v, i) => {
 				totalPower[i] = v + (shipPower[i] || 0);
 			});

@@ -399,14 +399,20 @@
         );
         const shellingPower = viewFleet.supportPower();
         text += "\n{0}: {1}".format(KC3Meta.term("PanelSupportPower"), shellingPower);
+        if(ConfigManager.powerCritical) { text += "({0})".format(viewFleet.supportPower(true)); }
         if(supportInfo.supportFlag) {
             // add airstrike & antisub power, no matter which support type
             // torpedo support so useless that no formula found
             const airstrikePower = viewFleet.supportAirstrikePower();
-            text += ("\n{0}: " + (airstrikePower[2] ? "{1}~{2}" : "{1}"))
-                .format(KC3Meta.term("PanelSupportAerialPower"), ...airstrikePower);
+            const airstrikeCritical = viewFleet.supportAirstrikePower(true);
+            text += ("\n{0}: " + (airstrikePower[2] ?
+                    ConfigManager.powerCritical ? "{1}({4})~{2}({5})" : "{1}~{2}" :
+                    ConfigManager.powerCritical ? "{1}({4})" : "{1}"
+                )).format(KC3Meta.term("PanelSupportAerialPower"), ...airstrikePower, ...airstrikeCritical);
             const antisubPower = viewFleet.supportAntisubPower();
-            text += "\n{0}: {1}/{2}/{3}".format(KC3Meta.term("PanelSupportAntisubPower"), ...antisubPower);
+            const antisubCritical = viewFleet.supportAntisubPower(true);
+            text += ("\n{0}: " + (ConfigManager.powerCritical ? "{1}({4})/ {2}({5})/ {3}({6})" : "{1}/ {2}/ {3}")
+                ).format(KC3Meta.term("PanelSupportAntisubPower"), ...antisubPower, ...antisubCritical);
             const prebossRate = viewFleet.estimateSupportShowRate(false);
             const bossRate = viewFleet.estimateSupportShowRate(true);
             text += "\n" + KC3Meta.term("PanelSupportShowRate").format(prebossRate, bossRate);
