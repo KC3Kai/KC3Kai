@@ -1971,11 +1971,15 @@ KC3改 Ship Object
 			if(shipCnt >= 4) {
 				// Guardian ships counted from 3rd or 4th ship
 				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
-				if(warfareType === "Shelling" || warfareType === "SupportShelling") {
+				if(warfareType === "Shelling") {
 					formationModifier = isGuardian ? 1.0 : 0.5;
 				} else if(warfareType === "Antisub") {
 					formationModifier = isGuardian ? 0.6 : 1.0;
 				}
+			}
+			// All ships get 0.5 for Expedition Support Shelling
+			if(warfareType === "SupportShelling") {
+				formationModifier = 0.5;
 			}
 		}
 		// Non-empty attack type tuple means this supposed to be night battle
@@ -1998,6 +2002,7 @@ KC3改 Ship Object
 			"chuuha": 0.7,
 			"taiha": 0.4
 		} : // Aerial Opening Airstrike not affected
+		// Expedition Support Shelling unknown
 		{})[damageStatus] || 1;
 		// Night special attack modifier, should not x2 although some types attack 2 times
 		const nightCutinModifier = nightSpecialAttackType[0] === "Cutin" &&
