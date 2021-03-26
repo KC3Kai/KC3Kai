@@ -3630,7 +3630,7 @@ KC3改 Ship Object
 		const taihaCases = Array.numbers(0, currentHp - 1).map(rndint => (
 			(currentHp - Math.floor(currentHp * 0.5 + rndint * 0.3)) <= taihaHp ? 1 : 0
 		)).sumValues();
-		// percentage with 2 decimal
+		// percentage with 2 decimals
 		return Math.round(taihaCases / currentHp * 10000) / 100;
 	};
 

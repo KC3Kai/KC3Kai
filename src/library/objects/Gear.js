@@ -329,31 +329,28 @@ KC3改 Equipment Object
 				// No any improvement bonus found for support fleet for now
 				break;
 			case "exped":
-				// Fire power bonus for combat expeditions, such as 43, B4
+				// Fire power bonus for monthly/combat expeditions
 				// https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#about_stat
 				switch (type2) {
 					case 1: // Small main gun
-						modifier = 0.5;
-						break;
+						modifier = 0.5; break;
 					case 2: // Medium main gun
 					case 3: // Large main gun
-						modifier = 1;
-						break;
+						modifier = 1; break;
 					case 4: // Secondary gun
 						return 0.15 * stars;
 					case 12: // Small radar
 						// https://twitter.com/jo_swaf/status/1370544125703979008
-						modifier = 0.5;
-						break;
+						modifier = 0.5; break;
 					case 13: // Large radar
-						modifier = 1;
-						break;
+						modifier = 1; break;
 					case 19: // AP Shell
 					case 21: // AA Machine Gun
-						modifier = 0.5;
-						break;
+						modifier = 0.5; break;
 				}
-				break;
+				// Test only return 1 decimal for expeditions
+				// https://twitter.com/myteaGuard/status/1375386223217238017
+				return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 			default:
 				console.warn("Unknown attack type:", type);
 		}
@@ -451,12 +448,12 @@ KC3改 Equipment Object
 		if (type.toLowerCase() === "exped") {
 			switch (type2) {
 				case 12: // Small radar
-					return Math.sqrt(stars);
+					modifier = 1; break;
 				case 13: // Large radar
 				case 10: // Seaplane recon
-					return 0.95 * Math.sqrt(stars);
+					modifier = 0.95; break;
 			}
-			return 0;
+			return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 		}
 		switch (type2) {
 			case 12: // Small radar
@@ -493,13 +490,13 @@ KC3改 Equipment Object
 					const type3 = this.master().api_type[3];
 					// 16 => HA gun
 					if ([16].includes(type3)) {
-						return 0.3 * stars;
+						return Math.qckInt("floor", 0.3 * stars, 1);
 					}
 					break;
 				case 21: // Machine gun
-					return Math.sqrt(stars);
+					modifier = 1; break;
 			}
-			return 0;
+			return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 		}
 		switch (type2) {
 			case 6: // Carrier-based fighter
@@ -535,9 +532,9 @@ KC3改 Equipment Object
 				case 14: // Sonar
 				case 15: // Depth Charge
 				case 40: // Large Sonar
-					modifier = 1;
-					break;
+					modifier = 1; break;
 			}
+			return Math.qckInt("floor", modifier * Math.sqrt(stars), 1);
 		}
 		return modifier * Math.sqrt(stars);
 	};
