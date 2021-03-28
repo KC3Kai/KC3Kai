@@ -228,9 +228,14 @@
 				const shipClickFunc = function(e) {
 					KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 				};
+				const orderByRemodel = (a, b) => (
+					RemodelDb.originOf(a) - RemodelDb.originOf(b)
+					|| RemodelDb.remodelGroup(a).indexOf(a) - RemodelDb.remodelGroup(b).indexOf(b)
+					|| a - b
+				);
 				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
 					if(!Array.isArray(shipIdArr)) return;
-					shipIdArr.forEach(shipId => {
+					shipIdArr.sort(orderByRemodel).forEach(shipId => {
 						const shipBox = $("<div><img/></div>").appendTo(appendTo);
 						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
 						const shipMst = KC3Master.ship(shipId);
