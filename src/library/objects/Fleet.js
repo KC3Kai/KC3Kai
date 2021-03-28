@@ -690,15 +690,47 @@ Contains summary information about a fleet and its ships
 		return totalPower;
 	};
 
-	KC3Fleet.prototype.supportPower = function(){
-		return this.ship(0).supportPower()
-			+this.ship(1).supportPower()
-			+this.ship(2).supportPower()
-			+this.ship(3).supportPower()
-			+this.ship(4).supportPower()
-			+this.ship(5).supportPower();
+	KC3Fleet.prototype.supportPower = function(isCritical = false){
+		const battleConds = KC3Calc.collectBattleConditions();
+		return this.ship().map(ship => {
+			let power = ship.supportShellingPower();
+			if(ConfigManager.powerCapApplyLevel >= 1) {
+				({power} = ship.applyPrecapModifiers(power, "SupportShelling",
+					battleConds.engagementId, battleConds.formationId));
+			}
+			if(ConfigManager.powerCapApplyLevel >= 2) {
+				({power} = ship.applyPowerCap(power, "Day", "Support"));
+			}
+			if(ConfigManager.powerCapApplyLevel >= 3) {
+				({power} = ship.applyPostcapModifiers(power, "SupportShelling",
+					undefined, 0, isCritical));
+			}
+			return Math.floor(power);
+		}).sumValues();
 	};
-	
+
+	KC3Fleet.prototype.supportAirstrikePower = function(isCritical = false){
+		const totalPower = [0, 0, false];
+		this.ship().forEach(ship => {
+			const shipPower = ship.supportAirstrikePower(isCritical);
+			totalPower[0] += shipPower[0];
+			totalPower[1] += shipPower[1];
+			totalPower[2] = totalPower[2] || shipPower[2];
+		});
+		return totalPower;
+	};
+
+	KC3Fleet.prototype.supportAntisubPower = function(isCritical = false){
+		const totalPower = [0, 0, 0];
+		this.ship().forEach(ship => {
+			const shipPower = ship.supportAntisubPower(isCritical);
+			totalPower.forEach((v, i) => {
+				totalPower[i] = v + (shipPower[i] || 0);
+			});
+		});
+		return totalPower;
+	};
+
 	KC3Fleet.prototype.speed = function(){
 		this.minSpeed = Math.min(...this.shipsUnescaped().map(ship => ship.getSpeed()));
 		this.fastFleet = this.minSpeed >= 10;
@@ -711,9 +743,8 @@ Contains summary information about a fleet and its ships
 		);
 	};
 
-	/* Calculate expedition cost of a fleet
-	   -------------------------------------
-	   1 <= expeditionId <= 40, 100 ~ 111
+	/**
+	 * Calculate expedition cost of this fleet.
 	 */ 
 	KC3Fleet.prototype.calcExpeditionCost = function(expeditionId) {
 		var KEC = PS["KanColle.Expedition.Cost"];
@@ -739,6 +770,7 @@ Contains summary information about a fleet and its ships
 		const totalCost = {
 			fuel: 0,
 			ammo: 0,
+			steel: 0,
 			supportFlag: 0
 		};
 		totalCost.supportFlag = this.estimateSupportType();
@@ -747,12 +779,15 @@ Contains summary information about a fleet and its ships
 				fuel: [0, 0.5, 0.5, 0.5, 0.5][totalCost.supportFlag] || 0,
 				ammo: [0, 0.4, 0.8, 0.8, 0.4][totalCost.supportFlag] || 0
 			};
+			// for Aerial Support 0.4 ammo, a bug behaivor: old condition still used (CV/CVL/AV >= 3),
+			// so if those ship types < 3 and CVB added for Aerial Support, ammo consumption will be 0.8
 			$.each(this.ships, (i, shipId) => {
 				if (shipId > 0) {
 					const shipObj = this.ship(i);
-					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo, false, false, 0.5);
+					const cost = shipObj.calcResupplyCost(costPercent.fuel, costPercent.ammo, false, true, 0.5);
 					totalCost.fuel += cost.fuel;
 					totalCost.ammo += cost.ammo;
+					totalCost.steel += cost.steel;
 				}
 			});
 		}
@@ -1386,6 +1421,17 @@ Contains summary information about a fleet and its ships
 		}
 		// If no criteria is met, remaining should be Aerial Support
 		return 1;
+	};
+
+	/**
+	 * Estimate expedition support fleet trigger change.
+	 * @return percentage of support fleet show rate.
+	 * @see https://wikiwiki.jp/kancolle/%E6%94%AF%E6%8F%B4%E8%89%A6%E9%9A%8A#ldf45a21
+	 */
+	KC3Fleet.prototype.estimateSupportShowRate = function(isBossSupport = false) {
+		const isFlagshipSparkle = this.ship(0).morale >= 50;
+		const sparkledEscortCount = this.ship().map((s, i) => i > 0 && s.exists() && s.morale >= 50 ? 1 : 0).sumValues();
+		return 1 + 50 + (isBossSupport ? 35 : 0) + (isFlagshipSparkle ? 15 : 0) + sparkledEscortCount * 5;
 	};
 
 	/**

@@ -630,6 +630,17 @@ Used by SortieManager
 				console.log("Jets consumed steel", consumedSteel);
 			}
 		}
+		// Aerial support type fleet triggered, check if Jet planes consume steels,
+		// no check for anti-sub support for now, since there is no asw on current implemented Jet plane
+		if(battleData.api_support_flag == 1 && KC3SortieManager.isOnSortie() &&
+			!!battleData.api_support_info && !!battleData.api_support_info.api_support_airatack){
+			const fleetId = battleData.api_support_info.api_support_airatack.api_deck_id - 1;
+			let consumedSteel = PlayerManager.fleets[fleetId]
+				.calcJetsSteelCost(KC3SortieManager.sortieName(2));
+			if(consumedSteel > 0){
+				console.log("Jets on support fleet consumed steel", consumedSteel);
+			}
+		}
 		
 		// Boss Debuffed, see `BattleCommonModel.prototype.isBossDamaged`
 		this.debuffed = 1 == (battleData.api_boss_damaged || battleData.api_xal01);
