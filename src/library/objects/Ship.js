@@ -2016,7 +2016,7 @@ KC3改 Ship Object
 				this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle);
 		}
 		
-		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
+		// Apply modifiers, flooring unknown, anti-land modifiers get in first
 		let result = (((basicPower + subAntiLandAdditive) * antiLandModifier + tankAdditive) * tankModifier + antiLandAdditive)
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
@@ -2026,9 +2026,9 @@ KC3改 Ship Object
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
 		if(isThisLightCruiser && warfareType !== "Antisub") {
-			// 14cm, 15.2cm, except [310] 14cm K, [407] 15.2cm K2
+			// 14cm, 15.2cm
 			const singleMountCnt = this.countEquipment([4, 11]);
-			const twinMountCnt = this.countEquipment([65, 119, 139]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 310, 407]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -3793,8 +3793,9 @@ KC3改 Ship Object
 			case 4:
 			case 21: // for Light Cruisers
 				// overhaul implemented in-game since 2017-06-23, not fully verified
+				// 14cm, 15.2cm
 				const singleMountIds = [4, 11];
-				const twinMountIds = [65, 119, 139];
+				const twinMountIds = [65, 119, 139, 310, 407];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;

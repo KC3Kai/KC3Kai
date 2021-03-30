@@ -126,8 +126,20 @@
                 case 215: // Kuma
                 case 579: // Gotland Kai
                     return 55;
-                case 306: // Noshiro
+                case 306: // Noshiro Kai
                     return 80;
+                case 307: // Yahagi Kai
+                    return 88;
+                case 663: // Yahagi Kai Ni
+                    return 45;
+                case 668: // Yahagi K2B
+                    return 15;
+                case 73: // Mogami Kai
+                    return 60;
+                case 501: // Mogami Kai Ni
+                    return 45;
+                case 506: // Mogami Kai Ni Toku
+                    return 15;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -203,8 +215,18 @@
                     return 30;
                 case 579: // Gotland Kai
                     return 35;
-                case 306: // Noshiro
+                case 306: // Noshiro Kai
                     return 77;
+                case 307: // Yahagi Kai
+                    return 88;
+                case 663: // Yahagi Kai Ni
+                    return 30;
+                case 668: // Yahagi K2B
+                    return 20;
+                case 501: // Mogami Kai Ni
+                    return 60;
+                case 506: // Mogami Kai Ni Toku
+                    return 40;
                 default:
                     return 0;
             }
