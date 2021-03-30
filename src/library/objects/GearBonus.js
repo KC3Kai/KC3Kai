@@ -1645,22 +1645,6 @@
 					"72": "62",
 				},
 			},
-			// Type 0 Reconnaissance Seaplane
-			"25": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro Kai Ni
-						ids: [662],
-						single: { "tais": 4, "houk": 1 },
-					},
-					{
-						// Yahagi Kai Ni+
-						ids: [663, 668],
-						single: { "tais": 3, "houk": 1 },
-					},
-				],
-			},
 			// Type 0 Observation Seaplane
 			"59": {
 				count: 0,
@@ -2668,22 +2652,6 @@
 						},
 					],
 				},
-			},
-			// 15.2cm Single Gun Mount
-			"11": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
-						ids: [662, 663, 668],
-						single: { "houg": 1, "tais": 1, "houk": 1 },
-					},
-					{
-						// Mogami K2+
-						ids: [501, 506],
-						single: { "houg": 1, "houk": 1 },
-					},
-				],
 			},
 			// 15.2cm Twin Gun Mount Kai
 			"139": {
@@ -3906,22 +3874,6 @@
 								single: { "tyku": 3, "houk": 2 },
 							},
 						],
-					},
-				],
-			},
-			// 12.7cm Twin High-angle Gun Mount
-			"10": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
-						ids: [662, 663, 668],
-						single: { "houg": 2, "tais": 3, "houk": 1 },
-					},
-					{
-						// Mogami K2+
-						ids: [501, 506],
-						single: { "houg": 2 },
 					},
 				],
 			},
@@ -5563,6 +5515,54 @@
 					"31": "7"
 				},
 			},
+			// All Seaplane Reconnaissances
+			"t2_10": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
+						single: { "houg": 2, "tais": 3, "houk": 1 },
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						single: { "houg": 2 },
+					},
+				],
+			},
+			// All Seaplane Bombers
+			"t2_11": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
+						single: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						single: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// All Rotorcraft
+			"t2_25": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "tais": 4, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+
+						ids: [663, 668],
+						single: { "tais": 3, "houk": 1 },
+					},
+				],
+			},
 			// All Small Searchlights
 			"t2_29": {
 				count: 0,
@@ -5632,39 +5632,6 @@
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
 						},
-					},
-				],
-			},
-			// All Seaplane Reconnaissances
-			"t2_10": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "houg": 2, "tais": 3, "houk": 1 },
-					},
-				],
-			},
-			// All Seaplane Bombers
-			"t2_11": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "houg": 1, "tais": 1, "houk": 1 },
-					},
-				],
-			},
-			// All Rotorcraft
-			"t2_25": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "tais": 4, "houk": 1 },
 					},
 				],
 			},
