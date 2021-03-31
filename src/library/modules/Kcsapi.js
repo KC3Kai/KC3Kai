@@ -548,15 +548,16 @@ Previously known as "Reactor"
 		-------------------------------------------------------*/
 		// List Presets
 		"api_get_member/preset_deck":function(params, response, headers){
-			console.log("List Presets", response.api_data.api_deck);
+			const maxSlots = response.api_data.api_max_num;
+			console.log("List Presets", maxSlots, response.api_data.api_deck);
 		},
 		
-		// Register preset
+		// Register a Preset
 		"api_req_hensei/preset_register":function(params, response, headers){
-			console.log("Registered Preset", response.api_data.api_preset_no, response.api_data);
+			console.log("Registered Preset", params.api_preset_no, params.api_deck_id, response.api_data);
 		},
 		
-		// Remove Preset from list
+		// Remove a Preset
 		"api_req_hensei/preset_delete":function(params, response, headers){
 			console.log("Deleted Preset", params.api_preset_no);
 		},
@@ -567,7 +568,61 @@ Previously known as "Reactor"
 			PlayerManager.akashiRepair.onPresetSelect(PlayerManager.fleets[deckId-1]);
 			PlayerManager.fleets[deckId-1].update( response.api_data );
 			PlayerManager.saveFleets();
+			console.log("Applied Preset", params.api_preset_no, "to fleet", deckId, response.api_data);
 			KC3Network.trigger("Fleet", { switchTo: deckId });
+		},
+		
+		/* Equipment Presets
+		-------------------------------------------------------*/
+		// List Presets
+		"api_get_member/preset_slot":function(params, response, headers){
+			const maxSlots = response.api_data.api_max_num;
+			console.log("List Gear Presets", maxSlots, response.api_data.api_preset_items);
+		},
+		
+		// Register a Preset
+		"api_req_kaisou/preset_slot_register":function(params, response, headers){
+			console.log("Registered Gear Preset", params.api_preset_id, params.api_ship_id);
+		},
+		
+		// Update name of a Preset
+		"api_req_kaisou/preset_slot_update_name":function(params, response, headers){
+			console.log("Rename Gear Preset", params.api_preset_id, decodeURIComponent(params.api_name));
+		},
+		
+		// Update lock of a Preset
+		"api_req_kaisou/preset_slot_update_lock":function(params, response, headers){
+			console.log("Lock/unlock Gear Preset", params.api_preset_id);
+		},
+		
+		// Remove a Preset
+		"api_req_kaisou/preset_slot_delete":function(params, response, headers){
+			console.log("Deleted Gear Preset", params.api_preset_id);
+		},
+		
+		// Use a Preset
+		"api_req_kaisou/preset_slot_select":function(params, response, headers){
+			const presetId = parseInt(params.api_preset_id, 10);
+			const shipRosterId = parseInt(params.api_ship_id, 10);
+			// 1: mode A, 2: mode B
+			const equipMode = parseInt(params.api_equip_mode, 10);
+			const shipData = KC3ShipManager.get(shipRosterId);
+			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipData.name(), "mode" + equipMode);
+			// Bauxite might be refunded by changing regular plane to large flying boat
+			const utcHour = Date.toUTChours(headers.Date),
+				afterBauxite = response.api_data.api_bauxite;
+			if(afterBauxite) {
+				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
+				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
+				KC3Network.trigger("Consumables");
+			}
+			// response.api_data is null, and /ship3 call is followed, no other data can be updated here
+			const fleetNum = KC3ShipManager.locateOnFleet(shipRosterId);
+			if(fleetNum > -1) {
+				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
+			} else {
+				KC3Network.trigger("Fleet");
+			}
 		},
 		
 		/* Equipment list
@@ -1917,10 +1972,12 @@ Previously known as "Reactor"
 						KC3QuestManager.get(434).increment(1); // D32: Yearly, index 1
 						KC3QuestManager.get(439).increment(0); // D36: Yearly, index 0
 						KC3QuestManager.get(440).increment(1); // D37: Yearly, index 1
+						KC3QuestManager.get(444).increment(0); // D40: Yearly, index 0
 						break;
 					case 9:
 						KC3QuestManager.get(434).increment(4); // D32: Yearly, index 4
 						KC3QuestManager.get(438).increment(2); // D35: Yearly, index 2
+						KC3QuestManager.get(444).increment(2); // D40: Yearly, index 2
 						break;
 					case 10:
 						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
@@ -1928,6 +1985,10 @@ Previously known as "Reactor"
 						break;
 					case 11:
 						KC3QuestManager.get(439).increment(2); // D36: Yearly, index 2
+						KC3QuestManager.get(444).increment(4); // D40: Yearly, index 4
+						break;
+					case 12:
+						KC3QuestManager.get(444).increment(1); // D40: Yearly, index 1
 						break;
 					case 29:
 						KC3QuestManager.get(442).increment(1); // D38: Yearly, index 1
@@ -1970,6 +2031,7 @@ Previously known as "Reactor"
 					case 110: // B1
 						KC3QuestManager.get(437).increment(3); // D34: Yearly, index 3
 						KC3QuestManager.get(439).increment(3); // D36: Yearly, index 3
+						KC3QuestManager.get(444).increment(3); // D40: Yearly, index 3
 						break;
 					case 114: // B5
 						KC3QuestManager.get(438).increment(3); // D35: Yearly, index 3

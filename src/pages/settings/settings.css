@@ -320,8 +320,8 @@ body {
 #left .menu {
 	display:flex;
 	flex-direction:column;
-	max-width:214px;
-	padding:10px;
+	max-width:210px;
+	padding:5px;
 	border-radius:10px;
 	background:#fff;
 }
@@ -335,7 +335,7 @@ body {
 	text-decoration:none;
 }
 
-@media screen and (max-width:1275px) {
+@media screen and (max-width:1250px) {
 #left {
 	width:20px;
 }

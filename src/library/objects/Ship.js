@@ -1365,11 +1365,11 @@ KC3改 Ship Object
 	};
 
 	/* SUPPORT POWER
-	 * Get support expedition shelling power of this ship
+	 * Get basic pre-cap support expedition shelling power of this ship.
 	 * http://kancolle.wikia.com/wiki/Expedition/Support_Expedition
 	 * http://wikiwiki.jp/kancolle/?%BB%D9%B1%E7%B4%CF%C2%E2
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.supportPower = function(){
+	KC3Ship.prototype.supportShellingPower = function(){
 		if(this.isDummy()){ return 0; }
 		const fixedFP = this.estimateNakedStats("fp") - 1;
 		var supportPower = 0;
@@ -1395,6 +1395,59 @@ KC3改 Ship Object
 			//supportPower = 5 + fixedFP + this.equipmentTotalStats("houg");
 		}
 		return supportPower;
+	};
+
+	/**
+	 * Get support expedition airstrike power of this ship (with cap and post-cap modifiers).
+	 * @see KC3Gear.prototype.airstrikePower
+	 * @see https://wikiwiki.jp/kancolle/%E6%94%AF%E6%8F%B4%E8%89%A6%E9%9A%8A#kfb57034
+	 */
+	KC3Ship.prototype.supportAirstrikePower = function(isCritical = false){
+		const totalPower = [0, 0, false];
+		if(this.isDummy()) { return totalPower; }
+		// no ex-slot by default since no plane can be equipped on ex-slot for now
+		this.equipment().forEach((gear, i) => {
+			if(this.slots[i] > 0 && gear.isAirstrikeAircraft()) {
+				const power = gear.airstrikePower(this.slots[i], 0, false, true);
+				const isRange = !!power[2];
+				const capped = [
+					this.applyPowerCap(power[0], "Day", "Support").power,
+					isRange ? this.applyPowerCap(power[1], "Day", "Support").power : 0
+				];
+				const postCapped = [
+					Math.floor(this.applyPostcapModifiers(capped[0], "SupportAerial", undefined, 0, isCritical).power),
+					isRange ? Math.floor(this.applyPostcapModifiers(capped[1], "SupportAerial", undefined, 0, isCritical).power) : 0
+				];
+				totalPower[0] += postCapped[0];
+				totalPower[1] += isRange ? postCapped[1] : postCapped[0];
+				totalPower[2] = totalPower[2] || isRange;
+			}
+		});
+		return totalPower;
+	};
+
+	/**
+	 * Get support expedition aerial anti-sub power of this ship (with cap and post-cap modifiers).
+	 * @see https://wikiwiki.jp/kancolle/%E6%94%AF%E6%8F%B4%E8%89%A6%E9%9A%8A#i0093bc7
+	 */
+	KC3Ship.prototype.supportAntisubPower = function(isCritical = false){
+		var randomPower = [0, 0, 0];
+		if(this.isDummy()) { return aswPower; }
+		var aswPower = 0;
+		// no ex-slot by default since no plane can be equipped on ex-slot for now
+		this.equipment().forEach((gear, i) => {
+			if(this.slots[i] > 0 && gear.isAswAircraft(false, true)) {
+				const asw = gear.master().api_tais || 0;
+				const power = 3 + asw * 0.6 * Math.sqrt(this.slots[i]);
+				const capped = this.applyPowerCap(power, "Day", "Support").power;
+				aswPower += this.applyPostcapModifiers(capped, "SupportAntisub", undefined, 0, isCritical).power;
+			}
+		});
+		// 3 random post-cap modifiers
+		[1.2, 1.5, 2.0].map(mod => Math.floor(aswPower * mod)).forEach((v, i) => {
+			randomPower[i] += v;
+		});
+		return randomPower;
 	};
 
 	/**
@@ -1900,11 +1953,13 @@ KC3改 Ship Object
 		// 0 are placeholders for non-exists ID
 		let formationModifier = (
 			warfareType === "Antisub" ?
-			[0, 0.6, 0.8, 1.2, 1.1 , 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1  , 0.7] :
+			[0, 0.6, 0.8, 1.2, 1.1 , 1.3, 1, 0, 0, 0, 0, 1.3, 1.1, 1.0, 0.7] :
 			warfareType === "Shelling" ?
-			[0, 1  , 0.8, 0.7, 0.75, 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			[0, 1.0, 0.8, 0.7, 0.75, 0.6, 1, 0, 0, 0, 0, 0.8, 1.0, 0.7, 1.1] :
 			warfareType === "Torpedo" ?
-			[0, 1  , 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1  , 0.7, 1.1] :
+			[0, 1.0, 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 0.8, 1.0, 0.7, 1.1] :
+			warfareType === "SupportShelling" ?
+			[0, 1.0, 0.8, 0.7, 0.6 , 0.6, 1, 0, 0, 0, 0, 1.0, 1.0, 1.0, 1.0] :
 			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
@@ -1917,10 +1972,14 @@ KC3改 Ship Object
 				// Guardian ships counted from 3rd or 4th ship
 				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
 				if(warfareType === "Shelling") {
-					formationModifier = isGuardian ? 1 : 0.5;
+					formationModifier = isGuardian ? 1.0 : 0.5;
 				} else if(warfareType === "Antisub") {
-					formationModifier = isGuardian ? 0.6 : 1;
+					formationModifier = isGuardian ? 0.6 : 1.0;
 				}
+			}
+			// All ships get 0.5 for Expedition Support Shelling
+			if(warfareType === "SupportShelling") {
+				formationModifier = 0.5;
 			}
 		}
 		// Non-empty attack type tuple means this supposed to be night battle
@@ -1943,6 +2002,7 @@ KC3改 Ship Object
 			"chuuha": 0.7,
 			"taiha": 0.4
 		} : // Aerial Opening Airstrike not affected
+		// Expedition Support Shelling unknown
 		{})[damageStatus] || 1;
 		// Night special attack modifier, should not x2 although some types attack 2 times
 		const nightCutinModifier = nightSpecialAttackType[0] === "Cutin" &&
@@ -1956,7 +2016,7 @@ KC3改 Ship Object
 				this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle);
 		}
 		
-		// Apply modifiers, flooring unknown, multiply and add anti-land modifiers first
+		// Apply modifiers, flooring unknown, anti-land modifiers get in first
 		let result = (((basicPower + subAntiLandAdditive) * antiLandModifier + tankAdditive) * tankModifier + antiLandAdditive)
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
@@ -1966,9 +2026,10 @@ KC3改 Ship Object
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
 		if(isThisLightCruiser && warfareType !== "Antisub") {
-			// 14cm, 15.2cm, except [310] 14cm K, [407] 15.2cm K2
+			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
+			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
 			const singleMountCnt = this.countEquipment([4, 11]);
-			const twinMountCnt = this.countEquipment([65, 119, 139]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -2142,6 +2203,10 @@ KC3改 Ship Object
 			const abDaihatsuBonus = this.hasEquipment([408, 409]) ? 1.2 : 1;
 			antiPtImpModifier *= abDaihatsuBonus * (this.hasEquipment(408) && this.hasEquipment(409) ? 1.1 : 1);
 		}
+		// Fixed modifier for aerial type exped support
+		const aerialSupportModifier = warfareType === "SupportAerial" ? 1.35 : 1;
+		// Fixed modifier for antisub type exped support
+		const antisubSupportModifier = warfareType === "SupportAntisub" ? 1.75 : 1;
 		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
@@ -2149,7 +2214,7 @@ KC3改 Ship Object
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
 			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier;
+			* antiPtImpModifier * aerialSupportModifier * antisubSupportModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -3566,7 +3631,7 @@ KC3改 Ship Object
 		const taihaCases = Array.numbers(0, currentHp - 1).map(rndint => (
 			(currentHp - Math.floor(currentHp * 0.5 + rndint * 0.3)) <= taihaHp ? 1 : 0
 		)).sumValues();
-		// percentage with 2 decimal
+		// percentage with 2 decimals
 		return Math.round(taihaCases / currentHp * 10000) / 100;
 	};
 
@@ -3729,8 +3794,9 @@ KC3改 Ship Object
 			case 4:
 			case 21: // for Light Cruisers
 				// overhaul implemented in-game since 2017-06-23, not fully verified
+				// 14cm, 15.2cm single/twin/triple
 				const singleMountIds = [4, 11];
-				const twinMountIds = [65, 119, 139];
+				const twinMountIds = [65, 119, 139, 303, 310, 359, 360, 361, 407];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;

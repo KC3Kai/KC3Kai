@@ -4054,11 +4054,11 @@
 	},
 	"5506": {
 		"api_id": 5506,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "晩秋の私服酒匂",
+		"api_yomi": "さかわ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5507": {
 		"api_id": 5507,
@@ -4118,6 +4118,46 @@
 	},
 	"5514": {
 		"api_id": 5514,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5515": {
+		"api_id": 5515,
+		"api_name": "桃節句佐渡",
+		"api_yomi": "さど",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5516": {
+		"api_id": 5516,
+		"api_name": "桃節句松輪",
+		"api_yomi": "まつわ",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5517": {
+		"api_id": 5517,
+		"api_name": "桃節句夕雲",
+		"api_yomi": "ゆうぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5518": {
+		"api_id": 5518,
+		"api_name": "桃節句第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5519": {
+		"api_id": 5519,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
