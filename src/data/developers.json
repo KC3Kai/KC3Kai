@@ -609,6 +609,16 @@
 				"links" : {
 					"gh" : "https://github.com/ShinHKPDes"
 				}
+			},
+			{
+				"name": "Jurrunio",
+				"avatar" : "https://avatars.githubusercontent.com/u/59234041?s=88&v=4",
+				"desc" : "繁體中文",
+				"active": 1,
+				"links" : {
+					"gh" : "https://github.com/Jurrunio",
+					"tw" : "https://twitter.com/Jurrunio"
+				}
 			}
 		],
 		"AboutForkContributors": [
