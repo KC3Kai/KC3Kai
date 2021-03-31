@@ -2026,9 +2026,10 @@ KC3改 Ship Object
 		const isThisLightCruiser = [2, 3, 21].includes(stype);
 		let lightCruiserBonus = 0;
 		if(isThisLightCruiser && warfareType !== "Antisub") {
-			// 14cm, 15.2cm
+			// 14cm, 15.2cm single/twin and foreign guns: https://twitter.com/KanColle_STAFF/status/1377090899151216640
+			// no bonus: triple main guns, secondary guns, 5inch, 155mm/55
 			const singleMountCnt = this.countEquipment([4, 11]);
-			const twinMountCnt = this.countEquipment([65, 119, 139, 310, 407]);
+			const twinMountCnt = this.countEquipment([65, 119, 139, 303, 310, 359, 360, 361, 407]);
 			lightCruiserBonus = Math.sqrt(singleMountCnt) + 2 * Math.sqrt(twinMountCnt);
 			result += lightCruiserBonus;
 		}
@@ -3793,9 +3794,9 @@ KC3改 Ship Object
 			case 4:
 			case 21: // for Light Cruisers
 				// overhaul implemented in-game since 2017-06-23, not fully verified
-				// 14cm, 15.2cm
+				// 14cm, 15.2cm single/twin/triple
 				const singleMountIds = [4, 11];
-				const twinMountIds = [65, 119, 139, 310, 407];
+				const twinMountIds = [65, 119, 139, 303, 310, 359, 360, 361, 407];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
