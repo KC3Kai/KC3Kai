@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				enhancedBoiler: 0,
@@ -4753,6 +4753,55 @@
 					ids: [73, 501, 506],
 					single: { "houg": 1, "souk": 1, "tyku": 5, "houk": 4, "saku": 2 },
 				},
+			},
+			// Type 42 Air Radar Kai Ni
+			"411": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All DD
+						stypes: [2],
+						multiple: { "houk": -9 },
+					},
+					{
+						// All CL/CLT
+						stypes: [3, 4],
+						multiple: { "houk": -7 },
+					},
+					{
+						// All CT
+						stypes: [21],
+						multiple: { "houk": -6 },
+					},
+					{
+						// All CA/CAV
+						stypes: [5, 6],
+						multiple: { "houk": -5 },
+					},
+					{
+						// stars >= +4 on members below
+						ids: [151, 411, 412, 541, 573, 553, 554],
+						minStars: 4,
+						single: { "houg": 1, "tyku": 1 },
+					},
+					{
+						// stars +10 on members below
+						ids: [151, 411, 412, 541, 573, 553, 554],
+						minStars: 10,
+						single: { "houg": 1, "tyku": 1 },
+					},
+					{
+						// Haurna K2, Fusou K2, Yamashiro K2
+						ids: [151, 411, 412],
+						single: { "houg": 3, "tyku": 4 },
+					},
+					{
+						// Nagato K2, Mutsu K2, Ise K2, Hyuuga K2
+						ids: [541, 573, 553, 554],
+						single: { "houg": 2, "tyku": 2 },
+					},
+				],
 			},
 			// GFCS Mk.37
 			"307": {
