@@ -4905,6 +4905,16 @@
 						origins: [35, 183, 465],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
 					},
+					{
+						// Yahagi K2+
+						ids: [663, 668],
+						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
+					},
+					{
+						// Yahagi K2B
+						ids: [668],
+						single: { "tyku": 1, "houk": 1 },
+					},
 				],
 			},
 			// 25mm Twin Autocannon Mount
