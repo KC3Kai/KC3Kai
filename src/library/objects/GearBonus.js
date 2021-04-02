@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				enhancedBoiler: 0,
@@ -1285,19 +1285,45 @@
 			},
 			// Zuiun
 			"26": {
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 2, "houk": 1 },
-				},
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Prototype Seiran
 			"62": {
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 2, "houk": 1 },
-				},
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Zuiun (634 Air Group)
 			"79": {
@@ -1325,15 +1351,38 @@
 						ids: [662],
 						single: { "houg": 2, "houk": 1 },
 					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
 				],
 			},
 			// Zuiun Model 12
 			"80": {
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 2, "houk": 1 },
-				},
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Zuiun Model 12 (634 Air Group)
 			"81": {
@@ -1361,23 +1410,59 @@
 						ids: [662],
 						single: { "houg": 2, "houk": 1 },
 					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
 				],
 			},
 			// Zuiun (631 Air Group)
 			"207": {
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 2, "houk": 1 },
-				},
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Seiran (631 Air Group)
 			"208": {
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 2, "houk": 1 },
-				},
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						single: { "houg": 2 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				],
 			},
 			// Zuiun (634 Air Group / Skilled)
 			"237": {
@@ -1405,6 +1490,11 @@
 						ids: [662],
 						single: { "houg": 3, "houk": 1 },
 					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
 				],
 			},
 			// Zuiun Kai Ni (634 Air Group)
@@ -1417,11 +1507,18 @@
 						multiple: { "houg": 5, "tyku": 2, "tais": 1, "houk": 2 },
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 3, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 3, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+				],
 			},
 			// Zuiun Kai Ni (634 Air Group / Skilled)
 			"323": {
@@ -1433,11 +1530,18 @@
 						multiple: { "houg": 6, "tyku": 3, "tais": 2, "houk": 3 },
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					single: { "houg": 3, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "houg": 3, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+, Mogami Kai Ni+
+						ids: [663, 668, 501, 506],
+						multiple: { "houg": 3, "tyku": 1, "houk": 2 },
+					},
+				],
 			},
 			// Laté 298B
 			"194": {
@@ -1539,6 +1643,15 @@
 					},
 					// Kamoi Class
 					"72": "62",
+				},
+			},
+			// Type 0 Observation Seaplane
+			"59": {
+				count: 0,
+				byShip: {
+					// Mogami Kai Ni+
+					ids: [501, 506],
+					single: { "tyku": 1, "houk": 1 },
 				},
 			},
 			// S9 Osprey
@@ -1703,6 +1816,51 @@
 							multiple: { "houg": 2, "saku": 1 },
 						},
 					],
+				},
+			},
+			// Type 2 Seaplane Fighter Kai
+			"165": {
+				count: 0,
+				byShip: {
+					// Mogami K2+
+					ids: [501, 506],
+					single: { "tyku": 2, "houk": 2 },
+				},
+			},
+			// Type 2 Seaplane Fighter Kai (Skilled)
+			"216": {
+				count: 0,
+				byShip: {
+					// Mogami K2+
+					ids: [501, 506],
+					single: { "tyku": 2, "houk": 2 },
+				},
+			},
+			// Type 0 Reconnaissance Seaplane Model 11B
+			"238": {
+				count: 0,
+				byShip: {
+					// Mogami K2+
+					ids: [501, 506],
+					single: { "raig": 1, "houk": 1 },
+				},
+			},
+			// Type 0 Reconnaissance Seaplane Model 11B (Skilled)
+			"239": {
+				count: 0,
+				byShip: {
+					// Mogami K2+
+					ids: [501, 506],
+					single: { "raig": 1, "houk": 1 },
+				},
+			},
+			// Kyoufuu Kai
+			"217": {
+				count: 0,
+				byShip: {
+					// Mogami K2+
+					ids: [501, 506],
+					multiple: { "houg": 1, "tyku": 5, "houk": 3 },
 				},
 			},
 			// Ka Type Observation Autogyro
@@ -2499,8 +2657,8 @@
 			"139": {
 				count: 0,
 				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
+					// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+					ids: [662, 663, 668],
 					multiple: { "houg": 2, "tyku": 1 },
 				},
 			},
@@ -2508,8 +2666,8 @@
 			"407": {
 				count: 0,
 				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
+					// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+					ids: [662, 663, 668],
 					multiple: { "houg": 4, "tyku": 2, "houk": 1 },
 					synergy: [
 						{
@@ -2572,6 +2730,11 @@
 						ids: [295, 416, 417],
 						multiple: { "houg": 1 },
 					},
+					{
+						// Mogami Kai Ni+
+						ids: [501, 506],
+						multiple: { "houg": 1 },
+					},
 				],
 			},
 			// 20.3cm (No.3) Twin Gun Mount
@@ -2615,6 +2778,15 @@
 					],
 					// Tone Class
 					"31": "9",
+				},
+				byShip: {
+					// Mogami Kai Ni+
+					ids: [501, 506],
+					multiple: { "houg": 1 },
+					synergy: {
+						flags: [ "surfaceRadar" ],
+						single: { "houg": 1, "houk": 1 },
+					},
 				},
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount
@@ -3153,8 +3325,8 @@
 						single: { "raig": 2 },
 					},
 					{
-						// Noshiro Kai Ni
-						ids: [662],
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
 						multiple: { "raig": 2 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
@@ -3279,7 +3451,7 @@
 					{
 						// All other ships who can equip it
 						stypes: [4, 13, 14, 16],
-						excludes: [118, 119, 586, 623, 657],
+						excludes: [118, 119, 506, 586, 623, 657, 668],
 						multiple: { "houg": -1, "houk": -7 },
 					},
 				],
@@ -3346,10 +3518,26 @@
 					],
 				},
 			},
+			// 10cm Twin High-angle Gun Mount
+			"3": {
+				count: 0,
+				byClass: {
+					// Akizuki Class
+					"54": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+				},
+			},
 			// 10cm Twin High-angle Gun Mount + Anti-Aircraft Fire Director
 			"122": {
 				count: 0,
 				starsDist: [],
+				byClass: {
+					// Akizuki Class
+					"54": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
+					},
+				},
 				byShip: [
 					{
 						// Yukikaze Kai Ni
@@ -4479,18 +4667,141 @@
 					},
 				],
 			},
+			// 8cm High-angle Gun
+			"66": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro K2, Yahagi K2+
+						ids: [662, 663, 668],
+						multiple: { "tyku": 2, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 1, "houk": 2 },
+						},
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 1, "houk": 2 },
+						},
+					},
+				],
+			},
 			// 8cm High-angle Gun Kai + Extra Machine Guns
 			"220": {
 				count: 0,
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					multiple: { "houg": 1, "tyku": 3, "houk": 2 },
-					synergy: {
-						flags: [ "airRadar" ],
-						single: { "tyku": 3, "houk": 3 },
+				byShip: [
+					{
+						// Noshiro K2, Yahagi K2+, Mogami K2+
+						ids: [662, 663, 668, 501, 506],
+						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 3, "houk": 3 },
+						},
+					},
+					{
+						// Noshiro K2, Yahagi K2+
+						ids: [662, 663, 668],
+						multiple: { "tyku": 2, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 1, "houk": 2 },
+						},
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 1, "houk": 2 },
+						},
+					},
+				]
+			},
+			// Type 21 Air Radar
+			"30": {
+				count: 0,
+				byClass: {
+					// Akizuki Class
+					"54": {
+						single: { "tyku": 3, "houk": 2, "saku": 2 },
 					},
 				},
+				byShip: {
+					// Mogami Kai+
+					ids: [73, 501, 506],
+					single: { "tyku": 3, "houk": 2, "saku": 2 },
+				},
+			},
+			// Type 21 Air Radar Kai Ni
+			"410": {
+				count: 0,
+				byClass: {
+					// Akizuki Class
+					"54": {
+						single: { "houg": 1, "souk": 1, "tyku": 5, "houk": 4, "saku": 2 },
+					},
+				},
+				byShip: {
+					// Mogami Kai+
+					ids: [73, 501, 506],
+					single: { "houg": 1, "souk": 1, "tyku": 5, "houk": 4, "saku": 2 },
+				},
+			},
+			// Type 42 Air Radar Kai Ni
+			"411": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// All DD
+						stypes: [2],
+						multiple: { "houk": -9 },
+					},
+					{
+						// All CL/CLT
+						stypes: [3, 4],
+						multiple: { "houk": -7 },
+					},
+					{
+						// All CT
+						stypes: [21],
+						multiple: { "houk": -6 },
+					},
+					{
+						// All CA/CAV
+						stypes: [5, 6],
+						multiple: { "houk": -5 },
+					},
+					{
+						// stars >= +4 on members below
+						ids: [151, 411, 412, 541, 573, 553, 554],
+						minStars: 4,
+						single: { "houg": 1, "tyku": 1 },
+					},
+					{
+						// stars +10 on members below
+						ids: [151, 411, 412, 541, 573, 553, 554],
+						minStars: 10,
+						single: { "houg": 1, "tyku": 1 },
+					},
+					{
+						// Haurna K2, Fusou K2, Yamashiro K2
+						ids: [151, 411, 412],
+						single: { "houg": 3, "tyku": 4 },
+					},
+					{
+						// Nagato K2, Mutsu K2, Ise K2, Hyuuga K2
+						ids: [541, 573, 553, 554],
+						single: { "houg": 2, "tyku": 2 },
+					},
+				],
 			},
 			// GFCS Mk.37
 			"307": {
@@ -4594,6 +4905,16 @@
 						origins: [35, 183, 465],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
 					},
+					{
+						// Yahagi K2+
+						ids: [663, 668],
+						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
+					},
+					{
+						// Yahagi K2B
+						ids: [668],
+						single: { "tyku": 1, "houk": 1 },
+					},
 				],
 			},
 			// 25mm Twin Autocannon Mount
@@ -4609,11 +4930,18 @@
 						},
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					multiple: { "tyku": 2, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
 			},
 			// 25mm Triple Autocannon Mount
 			"40": {
@@ -4628,11 +4956,18 @@
 						},
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					multiple: { "tyku": 2, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
 			},
 			// 25mm Single Autocannon Mount
 			"49": {
@@ -4647,11 +4982,18 @@
 						},
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					multiple: { "tyku": 2, "houk": 1 },
-				},
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
 			},
 			// 25mm Triple Autocannon Mount (Concentrated Deployment)
 			"131": {
@@ -4666,10 +5008,31 @@
 						},
 					},
 				},
-				byShip: {
-					// Noshiro Kai Ni
-					ids: [662],
-					multiple: { "tyku": 2, "houk": 1 },
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni
+						ids: [662, 663],
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni B
+						ids: [668],
+						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
+			},
+			// Type 94 Anti-Aircraft Fire Director
+			"121": {
+				count: 0,
+				byClass: {
+					// Akizuki Class
+					"54": {
+						single: { "tyku": 4, "houk": 2 },
+						synergy: {
+							flags: [ "airRadar" ],
+							single: { "tyku": 2, "houk": 2 },
+						},
+					},
 				},
 			},
 			// Type 1 Armor-Piercing Shell Kai
@@ -5211,6 +5574,54 @@
 					"31": "7"
 				},
 			},
+			// All Seaplane Reconnaissances
+			"t2_10": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
+						single: { "houg": 2, "tais": 3, "houk": 1 },
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						single: { "houg": 2 },
+					},
+				],
+			},
+			// All Seaplane Bombers
+			"t2_11": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
+						single: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					{
+						// Mogami K2+
+						ids: [501, 506],
+						single: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// All Rotorcraft
+			"t2_25": {
+				count: 0,
+				byShip: [
+					{
+						// Noshiro Kai Ni
+						ids: [662],
+						single: { "tais": 4, "houk": 1 },
+					},
+					{
+						// Yahagi Kai Ni+
+						ids: [663, 668],
+						single: { "tais": 3, "houk": 1 },
+					},
+				],
+			},
 			// All Small Searchlights
 			"t2_29": {
 				count: 0,
@@ -5236,8 +5647,8 @@
 						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
-						// Noshiro Kai Ni
-						ids: [662],
+						// Noshiro Kai Ni, Yahagi Kai Ni/K2B
+						ids: [662, 663, 668],
 						single: { "houg": 4, "raig": 2 },
 					},
 				],
@@ -5280,39 +5691,6 @@
 							flags: [ "airRadar" ],
 							single: { "houg": 1, "tyku": 2, "houk": 3 },
 						},
-					},
-				],
-			},
-			// All Seaplane Reconnaissances
-			"t2_10": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "houg": 2, "tais": 3, "houk": 1 },
-					},
-				],
-			},
-			// All Seaplane Bombers
-			"t2_11": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "houg": 1, "tais": 1, "houk": 1 },
-					},
-				],
-			},
-			// All Rotorcraft
-			"t2_25": {
-				count: 0,
-				byShip: [
-					{
-						// Noshiro K2
-						ids: [662],
-						single: { "tais": 4, "houk": 1 },
 					},
 				],
 			},

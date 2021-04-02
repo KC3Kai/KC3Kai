@@ -326,7 +326,7 @@ Saves and loads significant data for future use
 		 * Special cases hard-coded at client-side:
 		 *   * [553/554] Ise-class Kai Ni can equip main gun on first 2 slots only,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#RemodelUtil.excludeEquipList`
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
 		 *   * [392] Richelieu Kai can equip seaplane bomber [194] Laté 298B only,
 		 *     either hard-coded the exception conndition in following codes.
@@ -336,11 +336,11 @@ Saves and loads significant data for future use
 		 *     the same hard-code method with Richelieu's one
 		 *   * [622/623/624] Yuubari Kai Ni+ can NOT equip main gun/torpedo [1, 2, 5, 22] on slot 4, can only equip [12, 21, 43] on slot 5,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#RemodelUtil.excludeEquipList`
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
-		 *   * [662] Noshiro Kai Ni can NOT equip torpedo [5] on slot 4,
+		 *   * [662/663/668] Noshiro/Yahagi Kai Ni+ can NOT equip torpedo [5] on slot 4,
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
-		 *     * see `main.js#TaskChoiceSlotItem.prototype._excludeEquipList`
+		 *     * see `main.js#RemodelUtil.excludeEquipList`
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
 		 */
 		equip_on :function(gearId, type2Id){

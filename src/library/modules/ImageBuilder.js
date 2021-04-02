@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder?deck=';
+  const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
   const defaultLang = 'en';
   const supportedLangs = {
     'jp': 'jp',
