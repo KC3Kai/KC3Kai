@@ -549,7 +549,7 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_deck":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
-			console.log("List Presets", maxSlots, response.api_data.api_deck);
+			console.log("Listed Presets", maxSlots, response.api_data.api_deck);
 		},
 		
 		// Register a Preset
@@ -577,7 +577,7 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_slot":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
-			console.log("List Gear Presets", maxSlots, response.api_data.api_preset_items);
+			console.log("Listed Gear Presets", maxSlots, response.api_data.api_preset_items);
 		},
 		
 		// Register a Preset
@@ -587,12 +587,12 @@ Previously known as "Reactor"
 		
 		// Update name of a Preset
 		"api_req_kaisou/preset_slot_update_name":function(params, response, headers){
-			console.log("Rename Gear Preset", params.api_preset_id, decodeURIComponent(params.api_name));
+			console.log("Renamed Gear Preset", params.api_preset_id, decodeURIComponent(params.api_name));
 		},
 		
 		// Update lock of a Preset
 		"api_req_kaisou/preset_slot_update_lock":function(params, response, headers){
-			console.log("Lock/unlock Gear Preset", params.api_preset_id);
+			console.log("Locked/unlock Gear Preset", params.api_preset_id);
 		},
 		
 		// Remove a Preset
@@ -608,20 +608,19 @@ Previously known as "Reactor"
 			const equipMode = parseInt(params.api_equip_mode, 10);
 			const shipData = KC3ShipManager.get(shipRosterId);
 			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipData.name(), "mode" + equipMode);
-			// Bauxite might be refunded by changing regular plane to large flying boat
+			// Bauxite might be refunded by changing regular plane to large flying boat,
+			// response.api_data is null if no bauxite will be refunded,
+			// and /ship3 call is followed, no other data needed to be updated here
 			const utcHour = Date.toUTChours(headers.Date),
-				afterBauxite = response.api_data.api_bauxite;
+				afterBauxite = response.api_data ? response.api_data.api_bauxite : undefined;
 			if(afterBauxite) {
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
 				KC3Network.trigger("Consumables");
 			}
-			// response.api_data is null, and /ship3 call is followed, no other data can be updated here
 			const fleetNum = KC3ShipManager.locateOnFleet(shipRosterId);
 			if(fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
-			} else {
-				KC3Network.trigger("Fleet");
 			}
 		},
 		
