@@ -321,7 +321,7 @@ body {
 	display:flex;
 	flex-direction:column;
 	max-width:210px;
-	padding:10px;
+	padding:5px;
 	border-radius:10px;
 	background:#fff;
 }
