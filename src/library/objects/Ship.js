@@ -1716,9 +1716,9 @@ KC3改 Ship Object
 	 * @return {Array} of [additive damage boost, multiplicative damage boost, precap submarine additive, precap sptank additive, precap sptank multiplicative]
 	 */
 	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
-		if(this.isDummy()) { return [0, 1]; }
+		if(this.isDummy()) { return [0, 1, 0, 0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
-		if(!installationType) { return [0, 1]; }
+		if(!installationType) { return [0, 1, 0, 0, 1]; }
 		const wg42Count = this.countEquipment(126);
 		const mortarCount = this.countEquipment(346);
 		const mortarCdCount = this.countEquipment(347);
@@ -3459,19 +3459,30 @@ KC3改 Ship Object
 
 	/**
 	 * Calculates base value used in night battle cut-in process chance.
+	 * @param {number} spType - based on api_sp_list value of night special attack type.
 	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
 	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
 	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
 	 * @see KC3Fleet.prototype.estimateUsableSearchlight
 	 */
-	KC3Ship.prototype.nightSpAttackBaseRate = function(currentHp) {
+	KC3Ship.prototype.nightSpAttackBaseRate = function(spType = 0, currentHp = this.hp[0]) {
 		if (this.isDummy()) { return {}; }
 		let baseValue = 0;
+		// Cap luck on 50
 		if (this.lk[0] < 50) {
-			baseValue += 15 + this.lk[0] + 0.75 * Math.sqrt(this.level);
+			baseValue += 15 + this.lk[0];
 		} else {
-			baseValue += 65 + Math.sqrt(this.lk[0] - 50) + 0.8 * Math.sqrt(this.level);
+			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
+		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
+		// Late model submarine torpedo cut-in
+		// https://twitter.com/Divinity__123/status/1377666014834479104
+		if (spType === 3 && this.hasEquipment([213, 214, 383])) {
+			levelModifier *= 2;
+			// Late model submarine radar bonus
+			if (this.hasEquipment([384])) { baseValue += 5; }
+		}
+		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		// Flagship bonus
 		const isFlagship = shipPos === 0;
@@ -3484,6 +3495,7 @@ KC3改 Ship Object
 		// Searchlight bonus, large SL unknown for now
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (fleetSearchlight) { baseValue += 7; }
+		// Enemy searchlight -5, not implemented, rarely used by abyssal
 		// Starshell bonus/penalty
 		const battleConds = this.collectBattleConditions();
 		const playerStarshell = battleConds.playerFlarePos > 0;
@@ -3492,6 +3504,7 @@ KC3改 Ship Object
 		if (enemyStarshell) { baseValue += -10; }
 		return {
 			baseValue,
+			levelModifier,
 			isFlagship,
 			isChuuhaOrWorse,
 			fleetSearchlight,
@@ -3504,7 +3517,7 @@ KC3改 Ship Object
 	 * Calculate Nelson Touch process rate, currently only known in day
 	 * @param {boolean} isNight - Nelson Touch has lower modifier at night?
 	 * @return {number} special attack rate
-	 * @see https://twitter.com/Xe_UCH/status/1180283907284979713
+	 * @see https://twitter.com/Xe_UCH/status/1181509685863518209
 	 */
 	KC3Ship.prototype.nelsonTouchRate = function(isNight) {
 		if (this.isDummy() || isNight) { return false; }
@@ -3514,9 +3527,13 @@ KC3改 Ship Object
 		if (shipPos !== 0 || shipCnt < 6 || !fleetNum) { return false; }
 		const fleetObj = PlayerManager.fleets[fleetNum - 1];
 		const combinedShips = [2, 4].map(pos => fleetObj.ship(pos));
-		const combinedShipsLevel = combinedShips.reduce((acc, ship) => acc + ship.level, 0);
-		const combinedShipsPenalty = combinedShips.some(ship => [2, 16].includes(ship.master().api_stype)) ? 10 : 0; // estimate
-		return (0.08 * this.level + 0.04 * combinedShipsLevel + 0.24 * this.lk[0] + 36 - combinedShipsPenalty) / 100;
+		const totalRootedLevel = Math.sqrt(this.level) + combinedShips.map(ship => Math.sqrt(ship.level)).sumValues();
+		// Cap luck on 50 to avoid misleading people luckmod too much XD
+		// Luck from combined ships may get in, but modifier unknown
+		const cappedLuck = this.lk[0] < 50 ? this.lk[0] : 50 + Math.sqrt(this.lk[0] - 50);
+		return (1.1 * totalRootedLevel + 2.6 * Math.sqrt(cappedLuck) + 16) / 100;
+		// old version: https://twitter.com/Xe_UCH/status/1180283907284979713
+		//return (0.08 * this.level + 0.04 * combinedShips.map(ship => ship.level).sumValues() + 0.24 * this.lk[0] + 36) / 100;
 	};
 
 	/**
@@ -3572,8 +3589,8 @@ KC3改 Ship Object
 		if (spType === 1) { return 99; }
 		const typeFactor = {
 			2: 115,
-			3: ({ // submarine late torp cutin should be different?
-				"CutinLateTorpRadar": undefined,
+			3: ({ // submarine late torp cutin
+				"CutinLateTorpRadar": 122,
 				"CutinLateTorpTorp": undefined,
 			   })[cutinSubType] || 122, // regular CutinTorpTorpTorp
 			4: 130,
@@ -3604,7 +3621,7 @@ KC3改 Ship Object
 			// 100~104 might be different, even with day one
 		}[spType];
 		if (!typeFactor) { return false; }
-		const {baseValue} = this.nightSpAttackBaseRate();
+		const {baseValue} = this.nightSpAttackBaseRate(spType);
 		const formatPercent = num => Math.floor(num * 1000) / 10;
 		return formatPercent((Math.floor(baseValue) / typeFactor) || 0);
 	};

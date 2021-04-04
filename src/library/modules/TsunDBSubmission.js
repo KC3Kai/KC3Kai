@@ -1152,7 +1152,7 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate();
+						misc = ship.nightSpAttackBaseRate(cutin);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					misc.formation = [thisNode.fformation, thisNode.eformation];
