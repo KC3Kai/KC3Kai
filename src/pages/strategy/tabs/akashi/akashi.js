@@ -29,7 +29,7 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			var self = this;
+			const self = this;
 			PlayerManager.hq.load();
 			PlayerManager.loadConsumables();
 			PlayerManager.loadBases();
@@ -93,43 +93,37 @@
 		execute :function(){
 			const self = this;
 			self.hideNotImprovable = false;
+			$(".loading").show();
 			this.reload();
-			
+
 			$(".tab_akashi .weekday").each(function(){
 				$(this).text(Date.getDayName($(this).prop("id").substr(8)).toUpperCase());
 			});
 			$(".tab_akashi .weekday").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
 			});
-			
+
 			$("#disabled_toggle").on("click", function(){
 				self.hideNotImprovable = !self.hideNotImprovable;
-				var equipList = $(".equipment_list");
-				if(self.hideNotImprovable){
-					$(".equipment.disabled," +
-					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
-					  ".equipment.insufficient",
-						equipList).slideUp(300);
-				} else {
-					$(".equipment.disabled," +
-					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
-					  ".equipment.insufficient",
-						equipList).slideDown();
-				}
+				const equipList = $(".equipment_list");
+				const toggleClasses = ".equipment.disabled,"
+					+ (self.showEquippedLocked ? "" : ".equipment.equipped,")
+					+ ".equipment.insufficient";
+				$(toggleClasses, equipList).toggle(!self.hideNotImprovable);
 			});
-			
+
 			$("#equipped_checkbox").on("change", function(){
 				self.showEquippedLocked = this.checked;
-				$(".equipment.disabled," +
-					".equipment.equipped," +
-					".equipment.insufficient",
-					$(".equipment_list")).slideDown(400);
+				$(".loading").show();
+				$(this).prop("disabled", true);
+				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient",
+					$(".equipment_list")).show();
 				// To recheck consumable items if locked
 				setTimeout(function(){
 					KC3StrategyTabs.reloadTab(undefined, false);
 				}, 400);
 			}).prop("checked", this.showEquippedLocked);
-			
+
 			// Link to weekday specified by hash parameter
 			if(!!KC3StrategyTabs.pageParams[1]){
 				this.showDay(KC3StrategyTabs.pageParams[1]);
@@ -190,6 +184,7 @@
 				self.savePriorities();
 				next.after(ThisBox);
 			});
+			$(".loading").fadeOut();
 		},
 		
 		showDay :function(dayName){

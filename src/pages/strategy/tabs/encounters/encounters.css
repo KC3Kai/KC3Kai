@@ -37,7 +37,6 @@
 .tab_encounters .loading {
 	margin:8px 5px;
 	display:none;
-	
 }
 .tab_encounters .loading img {
 	content:url(/assets/img/ui/indicator.svg);
