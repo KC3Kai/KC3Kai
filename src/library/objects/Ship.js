@@ -1594,7 +1594,7 @@ KC3改 Ship Object
 				fixedNightPostConds = ["Shelling", [], 0, false, false, 0, false, dummyEnemy];
 			const {power: precap, antiLandModifier, antiLandAdditive} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds);
 			let {power} = this.applyPowerCap(precap, "Day", "Shelling");
-			const postcapInfo = this.applyPostcapModifiers(power, ...fixedNightPostConds);
+			const postcapInfo = this.applyPostcapModifiers(power, ...fixedDayPostConds);
 			power = postcapInfo.power;
 			
 			obj.enemy = dummyEnemy;
@@ -1616,7 +1616,7 @@ KC3改 Ship Object
 			fixedDayPreConds.push("chuuha");
 			({power} = this.applyPrecapModifiers(basicPower, ...fixedDayPreConds));
 			({power} = this.applyPowerCap(power, "Day", "Shelling"));
-			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
+			({power} = this.applyPostcapModifiers(power, ...fixedDayPostConds));
 			obj.damagedPowers = [Math.floor(power)];
 			
 			// Get Chuuha night power
@@ -1682,7 +1682,7 @@ KC3改 Ship Object
 					}
 				});
 				// no bonus except base one on yasen for 408, 409
-				if(type < 6 || !isNight) {
+				if(type < 6 || !isNight || installationType === 4) {
 					oneGearBonus *= getModifier(type, "count1");
 					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
 				}

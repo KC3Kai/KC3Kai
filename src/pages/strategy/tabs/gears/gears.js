@@ -547,7 +547,7 @@
 								self.upgrades[day][ThisSlotitem.id].map(shipId =>
 									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
 								).join(", ")
-							).attr("href", `#akashi-${day}`)
+							).attr("href", `#akashi-${day}-${ThisSlotitem.id}`)
 							.toggleClass("sel", dayIndex === dayOfWeek)
 							.appendTo($(".upgradeDays", ItemElem));
 					}
