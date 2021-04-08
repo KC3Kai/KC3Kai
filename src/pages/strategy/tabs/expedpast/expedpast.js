@@ -7,7 +7,7 @@
 		tabSelf: KC3StrategyTabs.expedpast,
 		
 		exped_filters: [],
-		fleet_filters: [2,3,4],
+		fleet_filters: [],
 		
 		/* INIT
 		Prepares all data needed
@@ -164,13 +164,14 @@
 			});
 			
 			// Fleet Number Filter
+			this.fleet_filters = [2, 3, 4];
 			$(".tab_expedpast .expedNumBox").on("click", '.fleetRadio input', function(e){
 				if(e.altKey) {
 					$('.tab_expedpast .expedNumBox .fleetRadio input').prop("checked", false);
 					$(this).prop("checked", true);
 				}
 				const filterFleets = $('.tab_expedpast .expedNumBox .fleetRadio input:checked');
-				self.fleet_filters = [];
+				self.fleet_filters.length = 0;
 				filterFleets.each( function() {
 					self.fleet_filters.push( parseInt( $(this).attr("value"),10) );
 				});
@@ -231,6 +232,16 @@
 		
 		showPage :function(pageNumber){
 			const self = this;
+			const viewFleetAtManagerFunc = function(e) {
+				const id = $(this).closest(".exped_item").data("id");
+				if(!id) return;
+				if(e.metaKey || e.ctrlKey) {
+					const url = chrome.extension.getURL("/pages/strategy/strategy.html") + `#fleet-exped-${id}`;
+					chrome.tabs.create({ url, active: true });
+				} else {
+					KC3StrategyTabs.gotoTab("fleet", "exped", id);
+				}
+			};
 			
 			const typeSelect = parseInt($(".tab_expedpast .typeSelect select").val(), 10);
 			const target = parseInt($(".tab_expedpast .fleetDropdown input").val(), 10);
@@ -256,11 +267,15 @@
 					const ExpedBox = $(".tab_expedpast .factory .exped_item").clone()
 						.appendTo(".tab_expedpast .exped_list");
 					
+					ExpedBox.data("id", ThisExped.id);
 					// Expedition date
 					const expedDate = new Date(ThisExped.time * 1000);
 					$(".exped_date", ExpedBox).text( expedDate.format("mmm dd", false, self.locale) );
 					$(".exped_time", ExpedBox).text( expedDate.format("hh:MM tt") );
-					$(".exped_info", ExpedBox).attr("title", expedDate.format("yyyy-mm-dd HH:MM:ss"));
+					$(".exped_info", ExpedBox).attr("title", "#{0}\n{1}".format(
+						ThisExped.id,
+						expedDate.format("yyyy-mm-dd HH:MM:ss")
+					));
 					
 					// Number and HQ exp
 					$(".exped_number", ExpedBox).text( KC3Master.missionDispNo(ThisExped.mission) );
@@ -280,6 +295,7 @@
 								++drumCount;
 						}
 					}
+					$(".exped_ships", ExpedBox).addClass("hover").on("click", viewFleetAtManagerFunc);
 
 					// Drum count
 					$(".exped_drums", ExpedBox).text( drumCount );

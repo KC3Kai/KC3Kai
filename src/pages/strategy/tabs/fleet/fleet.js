@@ -84,7 +84,7 @@
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
 			});
 
-			$("input#hist_query").on("keydown", function(e) {
+			$("input#hist_query,input#exped_query").on("keydown", function(e) {
 				if (e.which === 13) {
 					$("button#control_view").click();
 					e.preventDefault();
@@ -259,13 +259,27 @@
 					}
 					$("input#hist_query").val(viewName);
 				}
-				var q = $("input#hist_query").val();
-				var sortieId = parseInt(q,10);
+				const val = $("input#hist_query").val();
+				const sortieId = parseInt(val, 10);
 				if (!sortieId) {
-					$(".fleet_error_msg").text("Invalid sortie id: " + q).show();
+					$(".fleet_error_msg").text("Invalid sortie Id: " + val).show();
 					return;
 				}
 				this.showFleetFromSortieId(sortieId);
+			} else if (viewType === "exped") {
+				if (viewName !== undefined) {
+					if (!$("#exped").prop("checked")) {
+						$("#exped").trigger("click");
+					}
+					$("input#exped_query").val(viewName);
+				}
+				const val = $("input#exped_query").val();
+				const expedId = parseInt(val, 10);
+				if (!expedId) {
+					$(".fleet_error_msg").text("Invalid exped Id: " + val).show();
+					return;
+				}
+				this.showFleetFromExpedId(expedId);
 			} else {
 				console.warn("Unknown view type:", viewType);
 				this.showCurrentFleets();
@@ -275,6 +289,7 @@
 		setupUIByViewType: function(viewType) {
 			$("select.control_input").prop("disabled", viewType !== "saved");
 			$("input#hist_query").prop("disabled", viewType !== "history");
+			$("input#exped_query").prop("disabled", viewType !== "exped");
 			$("button#control_save").prop("disabled", viewType === "saved");
 
 			$("button#control_saved_rename").prop("disabled", viewType !== "saved");
@@ -326,7 +341,6 @@
 				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet2, 2));
 				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet3, 3));
 				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(sortieData.fleet4, 4));
-
 				var kcFleets = fleetsObj.map(function (fleetObj) {
 					return KC3ImageBuilder.createKC3FleetObject(fleetObj);
 				});
@@ -340,6 +354,32 @@
 				$("#fleet_description").text("{0}{1} Fleets".format(
 					self.suggestedName, sortieData.combined ? " Combined" : ""
 				));
+			});
+		},
+
+		showFleetFromExpedId: function(expedId) {
+			var self = this;
+			KC3Database.get_exped(expedId, function(expedData) {
+				if (! expedData) {
+					$(".fleet_error_msg")
+						.text("Cannot find data with expedition Id " + expedId)
+						.show();
+					return;
+				}
+				var fleetsObj = [];
+				fleetsObj.push(KC3ImageBuilder.convertSortiedFleet(expedData.fleet, expedData.fleetN));
+				var kcFleets = fleetsObj.map(function (fleetObj) {
+					return KC3ImageBuilder.createKC3FleetObject(fleetObj);
+				});
+				self.currentFleetsObj = fleetsObj;
+				self.sortiedMap = "";
+				self.suggestedName = "Exped {1} ({2}) #{0} ".format(
+					expedId,
+					KC3Master.missionDispNo(expedData.mission),
+					["F", "S", "GS"][expedData.data.api_clear_result] || "?"
+				);
+				self.showAllKCFleets( kcFleets );
+				$("#fleet_description").text("{0} Fleet".format(self.suggestedName));
 			});
 		},
 

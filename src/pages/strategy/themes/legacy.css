@@ -1122,18 +1122,7 @@ body {
 /* Fleet */
 .tab_fleet .fleet_control {
 	background:#def;
-	margin: 10px 0px 5px 0px;
 	border-radius:12px;
-	padding: 10px;
-}
-.tab_fleet .fleet_control .fleet_type_field {
-	margin: 0px 0px 5px 0px;
-}
-.tab_fleet .fleet_control .fleet_type_field label {
-	width: 150px;
-}
-.tab_fleet .fleet_control .fleet_type_field .control_input {
-	width: 200px;
 }
 .tab_fleet .fleet_control .fleet_error_msg {
 	font-weight: bold;
