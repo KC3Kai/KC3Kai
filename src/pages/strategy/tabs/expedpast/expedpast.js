@@ -314,9 +314,11 @@
 
 					// Result image
 					$(".exped_result img", ExpedBox).attr("src",
-						"../../../../assets/img/client/exped_"+
-						(["fail","fail","success","gs"][ThisExped.data.api_clear_result+1])
-						+".png");
+						"../../../../assets/img/client/exped_"
+						+ (["fail","fail","success","gs"][ThisExped.data.api_clear_result+1])
+						+ ".png").parent().attr("title",
+							KC3Meta.term("MissionActivity{0}".format(ThisExped.data.api_clear_result+1))
+						);
 
 					// see private function used by `main.js#ExpeditionResultModel.prototype._createItemModel`
 					const useItemSmallIconMap = {

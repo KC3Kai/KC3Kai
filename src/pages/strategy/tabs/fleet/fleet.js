@@ -373,10 +373,10 @@
 				});
 				self.currentFleetsObj = fleetsObj;
 				self.sortiedMap = "";
-				self.suggestedName = "Exped {1} ({2}) #{0} ".format(
+				self.suggestedName = "Exped #{0} ({1} {2})".format(
 					expedId,
 					KC3Master.missionDispNo(expedData.mission),
-					["F", "S", "GS"][expedData.data.api_clear_result] || "?"
+					KC3Meta.term("MissionActivity{0}".format(expedData.data.api_clear_result + 1))
 				);
 				self.showAllKCFleets( kcFleets );
 				$("#fleet_description").text("{0} Fleet".format(self.suggestedName));
