@@ -39,6 +39,20 @@
 	float:left;
 }
 
+.tab_akashi .loading {
+	float:right;
+	margin:5px 5px;
+	display:none;
+}
+.tab_akashi .loading img {
+	content:url(/assets/img/ui/indicator.svg);
+	width:17px;
+	height:17px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
 /* WEEKDAYS
 --------------------------------*/
 .tab_akashi .weekdays {

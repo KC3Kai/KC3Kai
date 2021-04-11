@@ -459,13 +459,14 @@ KC3改 Equipment Object
 			case 12: // Small radar
 				modifier = 1.25; break;
 			case 13: // Large radar
+			case 93: // Large radar (II)
 				modifier = 1.4; break;
 			case 9: // Recon plane
+			case 94: // Recon (II)
 			case 10: // Seaplane recon
 			case 41: // Large Flying Boat
 			case 49: // LB Recon
 			case 59: // Jet Recon
-			case 94: // Recon (II)
 				modifier = 1.2; break;
 			case 11: // Seaplane bomber
 				modifier = 1.15; break;

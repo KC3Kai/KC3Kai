@@ -39,7 +39,7 @@
 		<button type="button" id="control_saved_delete">Delete ...</button>
 		<div class="clear"></div>
 	</div>
-	<div class="fleet_type_field">
+	<div class="fleet_type_field half">
 		<input type="radio" name="view_type" id="history" value="history">
 		<label for="history">From Sortie History</label>
 		<input type="text" name="hist_query" id="hist_query"
@@ -47,7 +47,16 @@
 			placeholder="Input Sortie Id"
 			value="">
 	</div>
+	<div class="fleet_type_field half">
+		<input type="radio" name="view_type" id="exped" value="exped">
+		<label for="exped">From Exped History</label>
+		<input type="text" name="exped_query" id="exped_query"
+			class="control_input"
+			placeholder="Input Exped Id"
+			value="">
+	</div>
 	</form>
+	<div class="clear"></div>
 	<div class="fleet_error_msg">Error Message</div>
 	<button type="button" id="control_view">View</button>
 </div>

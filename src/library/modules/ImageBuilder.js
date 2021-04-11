@@ -205,7 +205,8 @@
       ship.morale = shipObj.morale;
 
       ship.items = [-1, -1, -1, -1, -1];
-      ship.slots = masterData.api_maxeq;
+      // slot sizes are not saved for now, use the copy of master data
+      ship.slots = masterData.api_maxeq.slice(0);
       ship.ex_item = 0;
       ship.slotnum = slotnum;
       ship.GearManager = {
@@ -226,13 +227,18 @@
           gear.itemId = ship.items[ind];
         }
         gear.masterId = equipment.id;
+        // fix slot size from max to 1 if Large Flying Boat equipped
+        // for now, it only affects Nisshin, all slot sizes are 1 on other ships can equip LFB
+        if (gear.masterId > 0 && KC3Master.slotitem(gear.masterId).api_type[2] == 41) {
+          ship.slots[ind] = 1;
+        }
         gear.stars = Number(equipment.improve) || 0;
         gear.ace = Number(equipment.ace) || 0;
       });
 
       // estimate ship's stats from known facts as possible as we can
       var mod = shipObj.mod || [];
-      var noMasterStats = shipObj.stats || {};
+      var nonMasterStats = shipObj.stats || {};
       ship.hp[0] = ship.hp[1] = ship.maxHp() + (mod[5] || 0);
 
       // read saved values first, then fall back to calculate master + mod + equip total
@@ -243,12 +249,12 @@
       ship.lk[0] = shipObj.luck || (masterData.api_luck[0] + (mod[4] || 0));
 
       // no value in master data, fall back to calculated naked + equip total
-      ship.ls[0] = shipObj.ls || ((noMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
-      ship.ev[0] = shipObj.ev || ((noMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats('houk'));
-      ship.as[0] = shipObj.as || ((noMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats('tais') + (mod[6] || 0));
+      ship.ls[0] = shipObj.ls || ((nonMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
+      ship.ev[0] = shipObj.ev || ((nonMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats('houk'));
+      ship.as[0] = shipObj.as || ((nonMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats('tais') + (mod[6] || 0));
 
-      // just fall back to master data, to avoid recompute ship speed by updating a table about speed up ship classes
-      ship.speed = shipObj.sp || noMasterStats.sp || masterData.api_soku;
+      // fall back to master data + equip synergy bonus
+      ship.speed = shipObj.sp || (nonMasterStats.sp || masterData.api_soku + ship.equipmentTotalStats('soku'));
     });
 
     return fleet;

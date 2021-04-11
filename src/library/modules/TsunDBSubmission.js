@@ -1152,7 +1152,7 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate();
+						misc = ship.nightSpAttackBaseRate(cutin);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					misc.formation = [thisNode.fformation, thisNode.eformation];
@@ -1200,6 +1200,7 @@
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = !!thisNode.flarePos;
+			const ncontact = thisNode.fcontactId === 102;
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }
@@ -1221,6 +1222,7 @@
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
+						shipInfo.ncontact = ncontact;
 					}
 					this.eventAccuracy = Object.assign({}, template, {
 						enemy, time,

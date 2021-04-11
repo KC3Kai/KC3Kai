@@ -29,7 +29,7 @@
 		Prepares latest player data
 		---------------------------------*/
 		reload :function(){
-			var self = this;
+			const self = this;
 			PlayerManager.hq.load();
 			PlayerManager.loadConsumables();
 			PlayerManager.loadBases();
@@ -93,46 +93,45 @@
 		execute :function(){
 			const self = this;
 			self.hideNotImprovable = false;
+			$(".loading").show();
 			this.reload();
-			
+
 			$(".tab_akashi .weekday").each(function(){
 				$(this).text(Date.getDayName($(this).prop("id").substr(8)).toUpperCase());
 			});
-			$(".tab_akashi .weekday").on("click", function(){
-				KC3StrategyTabs.gotoTab(null, $(this).data("value"));
-			});
-			
-			$("#disabled_toggle").on("click", function(){
-				self.hideNotImprovable = !self.hideNotImprovable;
-				var equipList = $(".equipment_list");
-				if(self.hideNotImprovable){
-					$(".equipment.disabled," +
-					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
-					  ".equipment.insufficient",
-						equipList).slideUp(300);
+			$(".tab_akashi .weekday").on("click", function(e){
+				if(e.altKey) {
+					KC3StrategyTabs.gotoTab(null, $(this).data("value"));
 				} else {
-					$(".equipment.disabled," +
-					  (self.showEquippedLocked ? "" : ".equipment.equipped,") +
-					  ".equipment.insufficient",
-						equipList).slideDown();
+					KC3StrategyTabs.gotoTab(null,
+						[$(this).data("value"), KC3StrategyTabs.pageParams[2]].filter(v => !!v));
 				}
 			});
-			
+
+			$("#disabled_toggle").on("click", function(){
+				self.hideNotImprovable = !self.hideNotImprovable;
+				const equipList = $(".equipment_list");
+				const toggleClasses = ".equipment.disabled,"
+					+ (self.showEquippedLocked ? "" : ".equipment.equipped,")
+					+ ".equipment.insufficient";
+				$(toggleClasses, equipList).toggle(!self.hideNotImprovable);
+			});
+
 			$("#equipped_checkbox").on("change", function(){
 				self.showEquippedLocked = this.checked;
-				$(".equipment.disabled," +
-					".equipment.equipped," +
-					".equipment.insufficient",
-					$(".equipment_list")).slideDown(400);
+				$(".loading").show();
+				$(this).prop("disabled", true);
+				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient",
+					$(".equipment_list")).show();
 				// To recheck consumable items if locked
 				setTimeout(function(){
 					KC3StrategyTabs.reloadTab(undefined, false);
-				}, 400);
+				}, 0);
 			}).prop("checked", this.showEquippedLocked);
-			
+
 			// Link to weekday specified by hash parameter
 			if(!!KC3StrategyTabs.pageParams[1]){
-				this.showDay(KC3StrategyTabs.pageParams[1]);
+				this.showDay(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2]);
 			}else{
 				// Select today
 				this.showDay();
@@ -190,9 +189,10 @@
 				self.savePriorities();
 				next.after(ThisBox);
 			});
+			$(".loading").fadeOut();
 		},
 		
-		showDay :function(dayName){
+		showDay :function(dayName, viewMasterId){
 			var self = this;
 			var todayDow = Date.getJstDate().getDay();
 			dayName = (dayName || $("#weekday-{0}".format(todayDow)).data("value")).toLowerCase();
@@ -224,7 +224,11 @@
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
 			};
 			var gearClickFunc = function(e){
-				KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				if(e.altKey) {
+					KC3StrategyTabs.gotoTab(null, dayName, $(this).attr("alt"));
+				} else {
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				}
 			};
 			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
@@ -360,7 +364,7 @@
 				ItemName = KC3Meta.gearName( MasterItem.api_name );
 				
 				ThisBox = $(".tab_akashi .factory .equipment").clone().appendTo(".equipment_list");
-				ThisBox.data("item_id",itemId);
+				ThisBox.data("item_id",itemId).attr("id", "akashi-{0}-{1}".format(dayName, itemId));
 				$(".eq_priority--toggle", ThisBox).toggleClass("on", self.priorities.indexOf(itemId) !== -1);
 				$(".eq_priority--up,.eq_priority--down", ThisBox).toggleClass("off", self.priorities.indexOf(itemId) === -1);
 
@@ -507,7 +511,13 @@
 					$(".eq_resources", ThisBox).hide();
 				}
 			});
-			
+			if(!!viewMasterId) {
+				// Ensure scroll window to specified anchor
+				setTimeout(function(){
+					const target = $("#akashi-{0}-{1}".format(dayName, viewMasterId));
+					if(target.length) target.get(0).scrollIntoView();
+				}, 0);
+			}
 		},
 		
 		getPriorities: function() {
