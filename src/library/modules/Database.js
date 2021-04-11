@@ -509,6 +509,12 @@ Uses Dexie.js third-party plugin on the assets directory
 				});
 		},
 		
+		get_exped :function(exped_id, callback){
+			this.con.expedition
+				.get(Number(exped_id))
+				.then(callback);
+		},
+		
 		count_normal_sorties: function(filterFunc, callback){
 			this.con.sortie
 				.where("hq").equals(this.index)

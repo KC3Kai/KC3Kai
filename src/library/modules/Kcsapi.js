@@ -2905,16 +2905,18 @@ Previously known as "Reactor"
 			});
 			// Update equipment or consumables on local data
 			console.log("Improvement consumed slot or use item",
-				result.api_use_slot_id || "none",
-				result.api_use_useitem_id || "none",
-				result.api_use_useitem_id2 || "none"
+				result.api_use_slot_id || "no gear",
+				result.api_use_useitem_id || "no item1",
+				result.api_use_useitem_id2 || "no item2"
 			);
 			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);
+			else if(result.api_use_slot_id) KC3GearManager.save();
 			
 			PlayerManager.setResources(hour * 3600, result.api_after_material.slice(0, 4));
 			PlayerManager.consumables.devmats = result.api_after_material[6];
 			PlayerManager.consumables.screws = result.api_after_material[7];
+			// TODO update useitems if no /useitem call followed
 			PlayerManager.setConsumables();
 			KC3QuestManager.get(619).increment();
 			

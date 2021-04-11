@@ -83,6 +83,7 @@
 	float:left;
 	margin:0px 2px 2px 0px;
 	font-size:12px;
+	white-space:nowrap;
 }
 .tab_gears .slotitem .info .item_stat img {
 	max-width:19px;

@@ -28,7 +28,7 @@ jobs:
     - name: Install dependencies
       timeout-minutes: 10
       run: |
-        npm install -g grunt-cli
+        npm install -g grunt-cli@1.3
         npm install
         patch -N -d node_modules/grunt-contrib-uglify -p2 < misc/uglify-harmony.patch
         npm install
