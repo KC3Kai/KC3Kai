@@ -1740,18 +1740,24 @@ KC3改 Ship Object
 		const m4a1ddCount = this.countEquipment(355);
 		const abCount = this.countEquipment(408);
 		const armedCount = this.countEquipment(409);
-		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
-		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// Normal, T89, Toku
+		const dlcGroup1Count = this.countEquipment([68, 166, 193]);
+		// T2 tank, T11 shikon
+		const dlcGroup2Count = this.countEquipment([167, 230]);
+		// WiP verifications:
+		//   https://twitter.com/yukicacoon/status/1368513654111408137
+		//   https://twitter.com/yukicacoon/status/1381551763401043977
 		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
-		const synergyCraftIds = [68, 166, 167, 193, 230];
-		const abSynergy = abCount === 1 && this.hasEquipment(synergyCraftIds);
-		const armedSynergy = armedCount === 1 && this.hasEquipment(synergyCraftIds);
-		const specialTankModifier = (m4a1ddCount ? 1.4 : 1)
-			* (abSynergy || armedSynergy ? 1.2 : 1)
-			* (abSynergy && armedSynergy ? 1.125 : 1);
-		const specialTankBonus = 25 * (shikonCount + m4a1ddCount)
-			+ (abSynergy || armedSynergy ? 10 : 0)
-			+ (abSynergy && armedSynergy ? 5 : 0);
+		const singleSynergyFlag = abCount === 1 || armedCount === 1;
+		const doubleSynergyFlag = abCount === 1 && armedCount === 1;
+		const singleSynergyModifier = singleSynergyFlag && (dlcGroup1Count + dlcGroup2Count) >= 1 ? 1.2 : 1;
+		const doubleSynergyModifier = doubleSynergyFlag && (dlcGroup1Count + dlcGroup2Count) >= 2 ? 1.1 * 1.2 :
+			doubleSynergyFlag && dlcGroup2Count >= 1 ? 1.2 :
+			doubleSynergyFlag && dlcGroup1Count >= 1 ? 1.1 : 1;
+		const abArmedSynergyAdditive = singleSynergyFlag && (dlcGroup1Count + dlcGroup2Count) >= 1 ? 10 : 0;
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		const specialTankModifier = (m4a1ddCount ? 1.4 : 1) * singleSynergyModifier * doubleSynergyModifier;
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount) + abArmedSynergyAdditive;
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
