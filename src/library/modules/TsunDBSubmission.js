@@ -1200,7 +1200,7 @@
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = !!thisNode.flarePos;
-			const ncontact = thisNode.fcontactId === 102;
+			const ncontact = thisNode.fcontactId == 102;
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }

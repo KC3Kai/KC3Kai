@@ -2191,13 +2191,18 @@ KC3改 Ship Object
 		// Against PT Imp modifier from equipment
 		let antiPtImpModifier = 1;
 		if(targetShipType.isPtImp) {
-			const smallGunBonus = this.hasEquipmentType(2, 1) ? 1.5 * 1.4 : 1;
+			const smallGunCount = this.countEquipmentType(2, 1);
+			const smallGunBonus = smallGunCount > 0 ? 1.5 * (smallGunCount > 1 ? 1.4 : 1) : 1;
 			antiPtImpModifier *= smallGunBonus;
-			const aaGunBonus = this.hasEquipmentType(2, 21) ? 1.2 * 1.2 : 1;
+			const aaGunCount = this.countEquipmentType(2, 21);
+			const aaGunBonus = aaGunCount > 0 ? 1.2 * (aaGunCount > 1 ? 1.2 : 1) : 1;
 			antiPtImpModifier *= aaGunBonus;
 			const secondaryGunBonus = this.hasEquipmentType(2, 4) ? 1.3 : 1;
 			antiPtImpModifier *= secondaryGunBonus;
-			const diveBomberBonus = this.hasEquipmentType(2, [7, 57]) ? 1.4 * 1.3 : 1;
+			const diveBomberCount = this.countEquipmentType(2, 7),
+				jetDiveBomberCount = this.countEquipmentType(2, 57);
+			const diveBomberBonus = diveBomberCount + jetDiveBomberCount > 0 ?
+				1.4 * (diveBomberCount > 1 || jetDiveBomberCount > 1 ? 1.3 : 1) : 1;
 			antiPtImpModifier *= diveBomberBonus;
 			const seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
 			antiPtImpModifier *= seaplaneBonus;
@@ -2205,9 +2210,10 @@ KC3改 Ship Object
 			antiPtImpModifier *= skilledLookoutBonus;
 			// Type 3 Shell bonus disappeared?
 			//const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
-			// under verifications: https://twitter.com/yukicacoon/status/1365525774866939905
-			const abDaihatsuBonus = this.hasEquipment([408, 409]) ? 1.2 : 1;
-			antiPtImpModifier *= abDaihatsuBonus * (this.hasEquipment(408) && this.hasEquipment(409) ? 1.1 : 1);
+			// https://twitter.com/yukicacoon/status/1381987133766836225
+			const abDaihatsuCount = this.countEquipment([408, 409]);
+			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
+			antiPtImpModifier *= abDaihatsuBonus;
 		}
 		// Fixed modifier for aerial type exped support
 		const aerialSupportModifier = warfareType === "SupportAerial" ? 1.35 : 1;

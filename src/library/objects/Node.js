@@ -2262,9 +2262,6 @@ Used by SortieManager
 					ciequip = attack.equip,
 					time = attack.cutin >= 0 ? 'Day' : 'Night';
 
-				let nightSpecialAttackType = [],
-					daySpecialAttackType = [];
-
 				// ENEMY STATS
 				const combinedFleetIndexAlign = 6;
 				const isAgainstEnemyEscort = this.enemyCombined &&
@@ -2304,6 +2301,7 @@ Used by SortieManager
 				*/
 
 				let { isSubmarine, isLand } = ship.estimateTargetShipType(target);
+				let nightSpecialAttackType, daySpecialAttackType;
 				// PLAYER SPECIAL ATTACKS
 				/*
 				 * CVCI/CVNCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
@@ -2316,6 +2314,7 @@ Used by SortieManager
 					if (nightSpecialAttackType[1] !== cutin) {
 						nightSpecialAttackType = KC3Ship.specialAttackTypeNight(cutin);
 					}
+					daySpecialAttackType = [];
 				} else {
 					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
 					if (daySpecialAttackType[1] !== cutin) {
@@ -2361,7 +2360,9 @@ Used by SortieManager
 					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
 
 						const damageInstance = {};
-						const isNightContacted = this.fcontactId === 102;
+						// Use == for auto-casting since `api_touch_plane` api value might be a string
+						const isNightContacted = this.fcontactId == 102;
+						const isCritical = acc[i] === 2;
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
@@ -2382,7 +2383,7 @@ Used by SortieManager
 
 						// Simplify aerial attack check to just carrier check, unlikely that need to check for edge cases like Hayasui/old CV night attacks
 						({power, newDepthChargeBonus, remainingAmmoModifier} = ship.applyPostcapModifiers(power, warfareType,
-							daySpecialAttackType, 0, acc[i] === 2, ship.isCarrier(), enemyShip.api_stype, false, target));
+							daySpecialAttackType, 0, isCritical, ship.isCarrier(), enemyShip.api_stype, false, target));
 						const postcapPower = power;
 						armor -= newDepthChargeBonus;
 
@@ -2394,7 +2395,7 @@ Used by SortieManager
 						if (unexpectedDamage || unexpectedFlag) {
 							// TsunDB formatting
 							damageInstance.actualDamage = damage[i];
-							damageInstance.isCritical = acc[i] === 2;
+							damageInstance.isCritical = isCritical;
 							damageInstance.expectedDamage = [minDam, maxDam];
 							result.damageInstance = damageInstance;
 
