@@ -140,6 +140,8 @@
                     return 45;
                 case 506: // Mogami Kai Ni Toku
                     return 15;
+                case 318: // Ryuuhou Kai
+                    return 20;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -222,6 +224,8 @@
                 case 663: // Yahagi Kai Ni
                     return 30;
                 case 668: // Yahagi K2B
+                case 883: // Ryuuhou K2E
+                case 888: // Ryuuhou K2
                     return 20;
                 case 501: // Mogami Kai Ni
                     return 60;

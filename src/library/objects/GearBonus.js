@@ -331,6 +331,16 @@
 						single: { "houg": 4, "tais": 1 },
 					},
 					{
+						// Ryuuhou K2
+						ids: [888],
+						single: { "houg": 4, "tais": 2 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						single: { "houg": 5, "tais": 2 },
+					},
+					{
 						// Zuihou Kai Ni+
 						ids: [555, 560],
 						single: { "houg": 2, "tais": 2 },
@@ -355,6 +365,16 @@
 						// Ryuuhou Kai
 						ids: [318],
 						single: { "houg": 5, "tais": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2
+						ids: [888],
+						single: { "houg": 4, "tais": 2, "houk": 2 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						single: { "houg": 5, "tais": 2, "houk": 3 },
 					},
 					{
 						// Zuihou Kai Ni+
@@ -450,12 +470,20 @@
 						// Ryuuhou Base (Taigei ctype 50, remodel index 0)
 						{
 							remodel: 1,
-							multiple: { "houg": 1, "raig": 1, "tais": 1 },
+							multiple: { "houg": 1, "tais": 1 },
+						},
+						{
+							remodel: 1,
+							single: { "raig": 1 },
 						},
 						// Ryuuhou Kai
 						{
 							remodel: 2,
-							multiple: { "tais": 1, "houk": 1 },
+							multiple: { "tais": 1 },
+						},
+						{
+							remodel: 2,
+							single: { "houk": 1 },
 						},
 					],
 					// Chitose Class
@@ -524,6 +552,21 @@
 						// Suzuya/Kumano CVL
 						ids: [508, 509],
 						single: { "raig": 2, "houk": 2 },
+					},
+					{
+						// Ryuuhou K2
+						ids: [888],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Ryuuhou K2
+						ids: [888],
+						single: { "raig": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						single: { "raig": 2, "houk": 3 },
 					},
 				],
 			},
@@ -648,6 +691,26 @@
 						ids: [508, 509],
 						single: { "raig": 2, "houk": 3 },
 					},
+					{
+						// Ryuuhou K2
+						ids: [888],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Ryuuhou K2
+						ids: [888],
+						single: { "raig": 2, "houk": 3 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						multiple: { "houg": 2 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						single: { "raig": 1, "houk": 1 },
+					},
 				],
 			},
 			// Tenzan Model 12A
@@ -699,6 +762,16 @@
 						// Ryuuhou Kai
 						{
 							remodel: 2,
+							single: { "raig": 1 },
+						},
+						// Ryuuhou K2+
+						{
+							remodel: 3,
+							multiple: { "houg": 2 },
+						},
+						// Ryuuhou K2+
+						{
+							remodel: 3,
 							single: { "raig": 1 },
 						},
 					],
@@ -952,8 +1025,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Zuihou Kai, Zuihou K2, Zuihou K2B, Ryuuhou Kai
-						ids: [117, 555, 560, 318],
+						// Zuihou Kai, Zuihou K2, Zuihou K2B, Ryuuhou Kai+
+						ids: [117, 555, 560, 318, 883, 888],
 						multiple: { "houg": 1, "houk": 1 },
 					},
 				],
@@ -978,14 +1051,77 @@
 						multiple: { "houg": 2, "houk": 1 },
 					},
 					{
-						// Zuihou Kai, Ryuuhou Kai
-						ids: [117, 318],
+						// Zuihou Kai, Ryuuhou Kai+
+						ids: [117, 318, 883, 888],
 						multiple: { "houg": 2, "houk": 2 },
 					},
 					{
 						// Zuihou K2, Zuihou K2B
 						ids: [555, 560],
 						multiple: { "houg": 3, "houk": 2 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 62 (Fighter-bomber)
+			"60": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Chitose, Chiyoda, Zuihou
+						origins: [75, 92, 102, 103, 116],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou, Ryuuhou Kai, Shouhou Kai
+						ids: [185, 318, 282],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, K2
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// Zero Fighter Model 62 (Fighter-bomber / Iwai Squadron)
+			"154": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Chitose, Chiyoda, Zuihou
+						origins: [75, 92, 102, 103, 116],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou, Ryuuhou Kai, Shouhou Kai
+						ids: [185, 318, 282],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, K2
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+				],
+			},
+			// Type 0 Fighter Model 63 (Fighter-bomber)
+			"219": {
+				count: 0,
+				byShip: [
+					{
+						// Hiyou, Junyou, Chitose, Chiyoda, Zuihou
+						origins: [75, 92, 102, 103, 116],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou, Ryuuhou Kai, Shouhou Kai
+						ids: [185, 318, 282],
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E, K2
+						ids: [883, 888],
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
 					},
 				],
 			},

@@ -3188,13 +3188,13 @@ KC3改 Ship Object
 		if(this.isCarrier()) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
-			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E
-			const isThisNightCarrier = [545, 599, 610].includes(this.masterId);
+			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId);
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
 			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E)
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E/Ryuuhou K2E)
 			return hasNightAircraft && (hasNightAvPersonnel || isThisNightCarrier);
 		}
 		return false;
@@ -3266,7 +3266,7 @@ KC3改 Ship Object
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
 			
-			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E needed
+			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E/Ryuuhou K2E needed
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6

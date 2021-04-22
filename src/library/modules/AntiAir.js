@@ -359,6 +359,7 @@ AntiAir: anti-air related calculations
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
 		var combinedModifier = getCombinedFleetModifier(onCombinedFleetNum);
 		return floor(adjustedAA) / 400 * combinedModifier;
+		// according KC vita calculations, `/ 400` should be `* 0.02 * 0.25 / 2`
 	}
 
 	function shipProportionalShotdown(shipObj, num, onCombinedFleetNum) {
@@ -390,6 +391,7 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
+		// according KC vita calculations, 1.3 is vita ver constant, 2 is browser ver modifier
 		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
 	}
 
@@ -420,6 +422,7 @@ AntiAir: anti-air related calculations
 				Array.isArray(fleetObj) ? fleetCombinedAdjustedAntiAir(fleetObj.main, fleetObj.escort, formationModifier) :
 					fleetAdjustedAntiAir(fleetObj, formationModifier) )
 			) * K / 10 * getCombinedFleetModifier(onCombinedFleetNum)
+			// according KC vita calculations, `/ 10` should be `* 0.25 * 0.8 / 2`, abyssal uses 0.75 instead of 0.8
 		);
 	}
 

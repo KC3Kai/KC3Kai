@@ -4163,5 +4163,53 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5520": {
+		"api_id": 5520,
+		"api_name": "お祝い曙改二",
+		"api_yomi": "あけぼの",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5521": {
+		"api_id": 5521,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5522": {
+		"api_id": 5522,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5523": {
+		"api_id": 5523,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5524": {
+		"api_id": 5524,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5525": {
+		"api_id": 5525,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }
