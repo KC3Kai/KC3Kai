@@ -747,7 +747,8 @@
 							planes: waveData.api_squadron_plane.map(plane => plane.api_mst_id || -1),
 							initialSlots: shipObj.slots,
 							initialCount: waveData.api_stage2.api_f_count,
-							totalLoss: waveData.api_stage2.api_f_lostcount
+							totalLoss: waveData.api_stage2.api_f_lostcount,
+							rescueType: apiData.api_air_base_rescue_type || 0
 						};
 					}
 				}
