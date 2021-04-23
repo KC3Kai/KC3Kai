@@ -577,6 +577,9 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_slot":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
+			// `api_selected_mode` used by `api_equip_mode` of /preset_slot_select
+			// `api_lock_flag` set by /preset_slot_update_lock
+			// `api_slot_ex_flag` set by /preset_slot_update_exslot_flag
 			console.log("Listed Gear Presets", maxSlots, response.api_data.api_preset_items);
 		},
 		
@@ -593,6 +596,11 @@ Previously known as "Reactor"
 		// Update lock of a Preset
 		"api_req_kaisou/preset_slot_update_lock":function(params, response, headers){
 			console.log("Locked/unlock Gear Preset", params.api_preset_id);
+		},
+		
+		// Update exslot flag of a Preset
+		"api_req_kaisou/preset_slot_update_exslot_flag":function(params, response, headers){
+			console.log("Used/unused exslot Gear Preset", params.api_preset_id);
 		},
 		
 		// Remove a Preset

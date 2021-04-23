@@ -1433,6 +1433,11 @@ Used by SortieManager
 				if(!!lbasTips) { lbasTips += "\n"; }
 				lbasTips += KC3Meta.term("BattleLbasSupportTips").format(planes, baseId, shotdown, damage, lost, airBattle);
 			});
+			// PBY-5A Catalina rescue system implemented since 2021-04-22
+			const rescueType = (thisNode.battleDay || {}).api_air_base_rescue_type;
+			if(!!lbasTips && rescueType > 0) {
+				lbasTips += "\n" + KC3Meta.term("BattleLbasRescueTip").format(rescueType);
+			}
 			if(!!supportTips && !!lbasTips) { supportTips += "\n"; }
 		}
 		const tipLogs = supportTips + lbasTips;
