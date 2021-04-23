@@ -2549,7 +2549,7 @@ Previously known as "Reactor"
 
 					let flag = false;
 					for (let idx = 0; idx < ship.slotnum; idx++) {
-						const eq = ship.equipment(idx)
+						const eq = ship.equipment(idx);
 						if (eq.itemId == 0) { flag = true; }
 					}
 					if (ship.ex_item === -1) { flag = true; }
