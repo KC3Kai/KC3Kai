@@ -691,6 +691,12 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_pre_sortie",
+				"name" : "SettingsPreSortieAlert",
+				"type" : "check",
+				"options" : {}
 			}
 		]
 	},

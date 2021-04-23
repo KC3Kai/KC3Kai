@@ -2533,6 +2533,43 @@ Previously known as "Reactor"
 			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
 			}
+
+			// If pre sortie warning enabled, check for shiplocks and equip slots
+			if(ConfigManager.alert_pre_sortie) {
+				const missingLockShips = [];
+				const missingEquipShips = [];
+				// Assume that usual player sorties with fleet 1 (which is not true for all players)
+				const ships = PlayerManager.fleets[0].ship();
+				if (PlayerManager.combinedFleet > 0) {
+					ships.push(...[PlayerManager.fleets[1].ship()]);
+				}
+
+				for (const ship of ships) {
+					if (ship.sally == 0) { missingLockShips.push(ship); }
+
+					let flag = false;
+					for (let idx = 0; idx < ship.slotnum; idx++) {
+						const eq = ship.equipment(idx)
+						if (eq.itemId == 0) { flag = true; }
+					}
+					if (ship.ex_item === -1) { flag = true; }
+					if (flag) { missingEquipShips.push(ship); }
+				}
+				if (missingEquipShips.length > 0) {
+					const eqstr = missingEquipShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle"),
+						message: KC3Meta.term("AlertPreSortieEquip").format(eqstr),
+					});
+				}
+				else if (missingLockShips.length !== ships.length) {
+					const lockstr = missingLockShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle"),
+						message: KC3Meta.term("AlertPreSortieLock").format(lockstr),
+					});
+				}
+			}
 		},
 		
 		/* Ship Modernize
