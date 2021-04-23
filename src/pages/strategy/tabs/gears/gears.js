@@ -228,7 +228,8 @@
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
 							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
-							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) && 1,
+							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) ?
+								Math.max(0, 2 - KC3Meta.antiAirResistMods(ThisItem.masterId).sumValues()) : 0,
 						},
 						held: [],
 						extras: [],
@@ -547,7 +548,7 @@
 								self.upgrades[day][ThisSlotitem.id].map(shipId =>
 									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
 								).join(", ")
-							).attr("href", `#akashi-${day}`)
+							).attr("href", `#akashi-${day}-${ThisSlotitem.id}`)
 							.toggleClass("sel", dayIndex === dayOfWeek)
 							.appendTo($(".upgradeDays", ItemElem));
 					}
@@ -598,7 +599,14 @@
 			if(statName === "rk") {
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
 			} else if(statName === "hk") {
-				$(".stats .item_hk", ItemElem).toggle(!!SlotItem.stats.hk);
+				if(SlotItem.stats.hk > 0) {
+					$(".stats .item_hk", ItemElem).width(70).show();
+					$(".stats .item_hk span", ItemElem).text(
+						"x{0}/x{1}".format(KC3Meta.antiAirResistMods(SlotItem.id))
+					);
+				} else {
+					$(".stats .item_hk", ItemElem).hide();
+				}
 			} else if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && this._landPlaneTypes.indexOf(SlotItem.type_id)>-1)
 			)){

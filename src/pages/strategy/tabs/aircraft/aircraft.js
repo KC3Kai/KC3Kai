@@ -332,6 +332,11 @@
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
 			} else if(statName === "hk") {
 				$(".stats .item_hk", ItemElem).toggle(!!SlotItem.stats.hk);
+				if(!!SlotItem.stats.hk) {
+					$(".stats .item_hk span", ItemElem).text(
+						"x{0}/x{1}".format(KC3Meta.antiAirResistMods(SlotItem.id))
+					).parent().width(70);
+				}
 			} else if(SlotItem.stats[statName] !== 0 && (statName !== "or" ||
 				(statName === "or" && KC3GearManager.landBasedAircraftType3Ids.indexOf(SlotItem.type_id)>-1)
 			)){

@@ -549,7 +549,7 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_deck":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
-			console.log("List Presets", maxSlots, response.api_data.api_deck);
+			console.log("Listed Presets", maxSlots, response.api_data.api_deck);
 		},
 		
 		// Register a Preset
@@ -577,7 +577,10 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_slot":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
-			console.log("List Gear Presets", maxSlots, response.api_data.api_preset_items);
+			// `api_selected_mode` used by `api_equip_mode` of /preset_slot_select
+			// `api_lock_flag` set by /preset_slot_update_lock
+			// `api_slot_ex_flag` set by /preset_slot_update_exslot_flag
+			console.log("Listed Gear Presets", maxSlots, response.api_data.api_preset_items);
 		},
 		
 		// Register a Preset
@@ -587,12 +590,17 @@ Previously known as "Reactor"
 		
 		// Update name of a Preset
 		"api_req_kaisou/preset_slot_update_name":function(params, response, headers){
-			console.log("Rename Gear Preset", params.api_preset_id, decodeURIComponent(params.api_name));
+			console.log("Renamed Gear Preset", params.api_preset_id, decodeURIComponent(params.api_name));
 		},
 		
 		// Update lock of a Preset
 		"api_req_kaisou/preset_slot_update_lock":function(params, response, headers){
-			console.log("Lock/unlock Gear Preset", params.api_preset_id);
+			console.log("Locked/unlock Gear Preset", params.api_preset_id);
+		},
+		
+		// Update exslot flag of a Preset
+		"api_req_kaisou/preset_slot_update_exslot_flag":function(params, response, headers){
+			console.log("Used/unused exslot Gear Preset", params.api_preset_id);
 		},
 		
 		// Remove a Preset
@@ -608,20 +616,19 @@ Previously known as "Reactor"
 			const equipMode = parseInt(params.api_equip_mode, 10);
 			const shipData = KC3ShipManager.get(shipRosterId);
 			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipData.name(), "mode" + equipMode);
-			// Bauxite might be refunded by changing regular plane to large flying boat
+			// Bauxite might be refunded by changing regular plane to large flying boat,
+			// response.api_data is null if no bauxite will be refunded,
+			// and /ship3 call is followed, no other data needed to be updated here
 			const utcHour = Date.toUTChours(headers.Date),
-				afterBauxite = response.api_data.api_bauxite;
+				afterBauxite = response.api_data ? response.api_data.api_bauxite : undefined;
 			if(afterBauxite) {
 				const refundedBauxite = afterBauxite - PlayerManager.hq.lastMaterial[3];
 				PlayerManager.setResources(utcHour * 3600, null, [0, 0, 0, refundedBauxite]);
 				KC3Network.trigger("Consumables");
 			}
-			// response.api_data is null, and /ship3 call is followed, no other data can be updated here
 			const fleetNum = KC3ShipManager.locateOnFleet(shipRosterId);
 			if(fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
-			} else {
-				KC3Network.trigger("Fleet");
 			}
 		},
 		
@@ -2906,16 +2913,18 @@ Previously known as "Reactor"
 			});
 			// Update equipment or consumables on local data
 			console.log("Improvement consumed slot or use item",
-				result.api_use_slot_id || "none",
-				result.api_use_useitem_id || "none",
-				result.api_use_useitem_id2 || "none"
+				result.api_use_slot_id || "no gear",
+				result.api_use_useitem_id || "no item1",
+				result.api_use_useitem_id2 || "no item2"
 			);
 			(result.api_use_slot_id || []).forEach(function(gearId){ KC3GearManager.remove(gearId); });
 			if(result.api_after_slot) KC3GearManager.set([ result.api_after_slot ]);
+			else if(result.api_use_slot_id) KC3GearManager.save();
 			
 			PlayerManager.setResources(hour * 3600, result.api_after_material.slice(0, 4));
 			PlayerManager.consumables.devmats = result.api_after_material[6];
 			PlayerManager.consumables.screws = result.api_after_material[7];
+			// TODO update useitems if no /useitem call followed
 			PlayerManager.setConsumables();
 			KC3QuestManager.get(619).increment();
 			

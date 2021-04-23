@@ -1501,6 +1501,9 @@ button, input, select, textarea {
 .tab_fleet button:disabled {
 	color:#444444;
 }
+.tab_fleet input {
+	border-width:1px;
+}
 .tab_fleet input:disabled::-webkit-input-placeholder,
 .tab_fleet select:disabled {
 	color:#444444;

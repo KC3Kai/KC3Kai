@@ -953,6 +953,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				numSims: 10000,
 				fleetF: fleetF,
 				nodes: nodes,
+				didSpecial: this.nodes.some(node => Array.isArray(node.sortieSpecialCutins))
 			};
 			// If real battle, we can ignore stuff like lbas/support fleets since we are only interested in yasen prediction
 			if (realBattle) {

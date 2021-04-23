@@ -28,6 +28,14 @@
 .tab_fleet .fleet_control .fleet_type_field .control_input {
 	width: 200px;
 }
+.tab_fleet .fleet_control .fleet_type_field.half {
+	float: left;
+	margin-right: 20px;
+}
+.tab_fleet .fleet_control .fleet_type_field.half .control_input {
+	width: 130px;
+}
+
 .tab_fleet .fleet_control .fleet_error_msg {
 	font-weight: bold;
 	color: red;

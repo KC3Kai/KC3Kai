@@ -747,7 +747,8 @@
 							planes: waveData.api_squadron_plane.map(plane => plane.api_mst_id || -1),
 							initialSlots: shipObj.slots,
 							initialCount: waveData.api_stage2.api_f_count,
-							totalLoss: waveData.api_stage2.api_f_lostcount
+							totalLoss: waveData.api_stage2.api_f_lostcount,
+							rescueType: apiData.api_air_base_rescue_type || 0
 						};
 					}
 				}
@@ -1152,7 +1153,7 @@
 							else { misc.fleetEscortLoS = PlayerManager.fleets[1].artillerySpottingLineOfSight(); }
 						}
 					} else {
-						misc = ship.nightSpAttackBaseRate();
+						misc = ship.nightSpAttackBaseRate(cutin);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
 					misc.formation = [thisNode.fformation, thisNode.eformation];
@@ -1200,6 +1201,7 @@
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = !!thisNode.flarePos;
+			const ncontact = thisNode.fcontactId == 102;
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }
@@ -1221,6 +1223,7 @@
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
+						shipInfo.ncontact = ncontact;
 					}
 					this.eventAccuracy = Object.assign({}, template, {
 						enemy, time,
