@@ -691,6 +691,23 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_pre_sortie",
+				"name" : "SettingsPreSortieAlert",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "alert_pre_sortie_fleet",
+				"name" : "SettingsPreSortieAlertFleet",
+				"type" : "small_text",
+				"bound" : {
+					"min" :   1,
+					"max" :   4,
+					"type": "Integer"
+				},
+				"options" : {}
 			}
 		]
 	},
