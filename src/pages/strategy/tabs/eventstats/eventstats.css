@@ -1,0 +1,21 @@
+.tab_eventstats {
+	width:680px;
+}
+
+.tab_eventstats .map_switcher {
+	margin: 0px 0px 10px 0px;
+	height: 45px;
+}
+
+.tab_eventstats .loading img {
+	content:url(/assets/img/ui/indicator.svg);
+	width:24px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+	display:block;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
