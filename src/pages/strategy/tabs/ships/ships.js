@@ -850,20 +850,28 @@
 				});
 
 			self.defineShipFilter(
-				"spgear",
-				savedFilterValues.spgear || 0,
-				["all", "dlc","tank", "both", "neither", "fcf", "spf", "spb", "lfb", "exgun"],
+				"daihatsu",
+				savedFilterValues.daihatsu || 0,
+				["all", "dlc","tank", "both", "neither"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && ship.canEquipTank)
 						|| (curVal === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
-						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank)
-						|| (curVal === 5 && ship.canEquipFCF)
-						|| (curVal === 6 && ship.canEquipSPF)
-						|| (curVal === 7 && ship.canEquipSPB)
-						|| (curVal === 8 && ship.canEquipLFB)
-						|| (curVal === 9 && ship.canExslotEquipSecGun);
+						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank);
+				});
+
+			self.defineShipFilter(
+				"spgear",
+				savedFilterValues.spgear || 0,
+				["all", "fcf", "spf", "spb", "lfb", "exgun"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canEquipFCF)
+						|| (curVal === 2 && ship.canEquipSPF)
+						|| (curVal === 3 && ship.canEquipSPB)
+						|| (curVal === 4 && ship.canEquipLFB)
+						|| (curVal === 5 && ship.canExslotEquipSecGun);
 				});
 
 			self.defineShipFilter(
