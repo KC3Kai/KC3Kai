@@ -2331,7 +2331,7 @@ KC3改 Ship Object
 	};
 
 	// Check if specified equipment (or equip type) can be equipped on this ship.
-	KC3Ship.prototype.canEquip = function(gearMstId, gearType2) {
+	KC3Ship.prototype.canEquip = function(gearType2, gearMstId) {
 		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
 	};
 

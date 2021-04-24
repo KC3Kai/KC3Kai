@@ -552,13 +552,15 @@
 	position:relative;
 }
 .tab_ships .ship_item .slot5 .ship_equip_icon {
-	transform:scaleX(0.8);
 	width:14px;
 }
 .tab_ships .ship_item .ship_equip img {
 	width:17px;
 	height:18px;
 	vertical-align:top;
+}
+.tab_ships .ship_item .ship_equip.slot5 img {
+	width:14px;
 }
 .tab_ships .ship_item .ship_equip span {
 	position:absolute;
