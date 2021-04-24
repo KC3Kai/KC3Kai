@@ -2534,18 +2534,18 @@ Previously known as "Reactor"
 				KC3Network.trigger("Lbas");
 			}
 
-			// If pre sortie warning enabled, check for shiplocks and equip slots
+			// If pre sortie warning enabled, check for empty equip slots on heartlocked ships
 			if(ConfigManager.alert_pre_sortie) {
-				const missingLockShips = [];
 				const missingEquipShips = [];
-				// Assume that usual player sorties with fleet 1 (which is not true for all players)
-				const ships = PlayerManager.fleets[0].ship();
+
+				let ships = PlayerManager.fleets[ConfigManager.alert_pre_sortie_fleet - 1].ship();
 				if (PlayerManager.combinedFleet > 0) {
-					ships.push(...[PlayerManager.fleets[1].ship()]);
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
 				}
 
 				for (const ship of ships) {
-					if (ship.sally == 0) { missingLockShips.push(ship); }
+					if (ship.lock === 0) { continue; }
 
 					let flag = false;
 					for (let idx = 0; idx < ship.slotnum; idx++) {
@@ -2562,7 +2562,27 @@ Previously known as "Reactor"
 						message: KC3Meta.term("AlertPreSortieEquip").format(eqstr),
 					});
 				}
-				else if (missingLockShips.length !== ships.length) {
+			}
+		},
+
+		/* Pre-sortie check for win percentage for event maps
+		-------------------------------------------------------*/
+		"api_get_member/sortie_conditions":function(params, response, headers){
+			// If pre sortie warning enabled, check for ship tag/locks on heartlocked ships
+			if(ConfigManager.alert_pre_sortie) {
+				const missingLockShips = [];
+				let ships = PlayerManager.fleets[ConfigManager.alert_pre_sortie_fleet - 1].ship();
+				if (PlayerManager.combinedFleet > 0) {
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
+				}
+
+				for (const ship of ships) {
+					if (ship.lock === 0) { continue; }
+					if (ship.sally === 0) { missingLockShips.push(ship); }
+				}
+
+				if (missingLockShips.length > 0) {
 					const lockstr = missingLockShips.map(ship => ship.name()).join(", ");
 					KC3Network.trigger("ModalBox", {
 						title: KC3Meta.term("AlertPreSortieTitle"),

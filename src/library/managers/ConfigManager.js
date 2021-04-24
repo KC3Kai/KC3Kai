@@ -113,6 +113,7 @@ Retrieves when needed to apply on components
 				alert_idle_start   : 0,
 				alert_rsc_cap      : 95,
 				alert_pre_sortie   : false,
+				alert_pre_sortie_fleet : 1,
 
 				alert_taiha          : false,
 				alert_taiha_blur     : false,
