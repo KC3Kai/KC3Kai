@@ -2533,20 +2533,19 @@ Previously known as "Reactor"
 			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
 			}
-
+			
 			// If pre sortie warning enabled, check for empty equip slots on heartlocked ships
-			if(ConfigManager.alert_pre_sortie) {
+			if(ConfigManager.alert_pre_sortie > 0) {
 				const missingEquipShips = [];
-
-				let ships = PlayerManager.fleets[ConfigManager.alert_pre_sortie_fleet - 1].ship();
-				if (PlayerManager.combinedFleet > 0) {
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
 					ships = PlayerManager.fleets[0].ship();
 					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
 				}
-
 				for (const ship of ships) {
-					if (ship.lock === 0) { continue; }
-
+					if (!ship.lock) { continue; }
 					let flag = false;
 					for (let idx = 0; idx < ship.slotnum; idx++) {
 						const eq = ship.equipment(idx);
@@ -2556,37 +2555,37 @@ Previously known as "Reactor"
 					if (flag) { missingEquipShips.push(ship); }
 				}
 				if (missingEquipShips.length > 0) {
-					const eqstr = missingEquipShips.map(ship => ship.name()).join(", ");
+					const shipNames = missingEquipShips.map(ship => ship.name()).join(", ");
 					KC3Network.trigger("ModalBox", {
-						title: KC3Meta.term("AlertPreSortieTitle"),
-						message: KC3Meta.term("AlertPreSortieEquip").format(eqstr),
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieEquip").format(shipNames),
 					});
 				}
 			}
 		},
-
+		
 		/* Pre-sortie check for win percentage for event maps
 		-------------------------------------------------------*/
 		"api_get_member/sortie_conditions":function(params, response, headers){
 			// If pre sortie warning enabled, check for ship tag/locks on heartlocked ships
-			if(ConfigManager.alert_pre_sortie) {
+			if(ConfigManager.alert_pre_sortie > 0) {
 				const missingLockShips = [];
-				let ships = PlayerManager.fleets[ConfigManager.alert_pre_sortie_fleet - 1].ship();
-				if (PlayerManager.combinedFleet > 0) {
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
 					ships = PlayerManager.fleets[0].ship();
 					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
 				}
-
 				for (const ship of ships) {
-					if (ship.lock === 0) { continue; }
+					if (!ship.lock) { continue; }
 					if (ship.sally === 0) { missingLockShips.push(ship); }
 				}
-
 				if (missingLockShips.length > 0) {
-					const lockstr = missingLockShips.map(ship => ship.name()).join(", ");
+					const shipNames = missingLockShips.map(ship => ship.name()).join(", ");
 					KC3Network.trigger("ModalBox", {
-						title: KC3Meta.term("AlertPreSortieTitle"),
-						message: KC3Meta.term("AlertPreSortieLock").format(lockstr),
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieLock").format(shipNames),
 					});
 				}
 			}
