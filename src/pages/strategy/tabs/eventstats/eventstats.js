@@ -53,7 +53,7 @@
 		execute: function() {
 			$(".loading").hide();
 			this.world = Number(KC3StrategyTabs.pageParams[1] || 0);
-			this.updateMapSwitcher()
+			this.updateMapSwitcher();
 			$(".map_switcher .world_list").on("change", e => {
 				const value = $(e.target).val();
 				if(value) this.world = Number(value);
@@ -101,8 +101,8 @@
 			if (this.world < 10) { return; }
 			$(".loading").show();
 			$(".t5").hide();
-			$(".cons").hide();
-			$(".map_list").html("").hide()
+			$(".lbcons").hide();
+			$(".map_list").html("").hide();
 			const allPromises = [];
 			const hqId = PlayerManager.hq.id;
 			this.stats = {
@@ -137,16 +137,16 @@
 							this.stats.lastHits[mapnum] = {
 								ship: shipId,
 								damage: damage
-							}
+							};
 						}
 					}
 					if(Array.isArray(attack.damage)) {
-						attack.damage.forEach(dam => this.stats.maxHit[shipId] = Math.max(dam, this.stats.maxHit[shipId] || 0))
+						attack.damage.forEach(dam => this.stats.maxHit[shipId] = Math.max(dam, this.stats.maxHit[shipId] || 0));
 					} else {
 						this.stats.maxHit[shipId] = Math.max(damage, this.stats.maxHit[shipId] || 0);
 					}
 				});
-			}
+			};
 
 			// Shortern fleet length if needed for kuso
 			const checkShipLength = (ships, maxHps) => {
@@ -179,7 +179,7 @@
 				if (!cleared) this.stats.clearCount[mapnum]++;
 				this.stats.sortieCount[mapnum]++;
 				let isClearSortie = false;
-				const mapname = `m${this.world}${mapnum}`
+				const mapname = `m${this.world}${mapnum}`;
 				if (!cleared && hpbar && this.maps[mapname] && this.maps[mapname].stat) {
 					const killid = this.maps[mapname].stat.onClear;
 					if (killid == sortie.id) isClearSortie = true;
@@ -279,7 +279,7 @@
 						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					this.displayEventStatistics();
-				})
+				});
 			});
 		},
 
@@ -290,7 +290,7 @@
 				  }, foo);
 				  props.sort(function(p1, p2) { return p2.value - p1.value; });
 				  return forDrop ? props.slice(1,6) : props.slice(0, 5);
-			  }
+			};
 
 			const map = {
 				"shipDamageDealt": "Total Damage Dealt",
@@ -301,11 +301,11 @@
 
 			const keys = Object.keys(map);
 			for (const key of keys) {
-				let str = "<tr>" + "<td>" + map[key] + "</td>"
+				let str = "<tr>" + "<td>" + map[key] + "</td>";
 				const vals = this.stats[key];
 				const topFive = getTopFive(vals);
 				for (let i = 0; i < 5; i++) {
-					str += "<td><img src=" + KC3Meta.getIcon(topFive[i]["key"]) + " width=30px height=30px></img>" + topFive[i]["value"] + "</td>"
+					str += "<td><img src=" + KC3Meta.getIcon(topFive[i]["key"]) + " width=30px height=30px></img>" + topFive[i]["value"] + "</td>";
 				}
 				str += "</tr>"
 				$("#t5").append(str);
@@ -331,7 +331,7 @@
 			}
 
 
-			const difficutlies = ["Casual", "Easy", "Normal", "Hard"]
+			const difficutlies = ["Casual", "Easy", "Normal", "Hard"];
 
 			for (let i = 1; i <= 7; i++) {
 				if ((this.stats.sortieCount[i] || 0) < 1 && (this.stats.clearCount[i] || 0) < 1) {continue;}
@@ -339,7 +339,7 @@
 				const mapname = `m${this.world}${mapnum}`;
 				const mapdata = this.maps[mapname];
 				const difficulty = mapdata.difficulty;
-				const mapTitle = `E${mapnum}${KC3Meta.term(`EventRank${difficutlies[difficulty - 1]}Abbr`)}`
+				const mapTitle = `E${mapnum}${KC3Meta.term(`EventRank${difficutlies[difficulty - 1]}Abbr`)}`;
 				const curBox = $(".tab_eventstats .factory .map_box").clone();
 				curBox.attr("id", "e-" + mapnum);
 
@@ -356,7 +356,7 @@
 			$(".lbcons").append("Land Base Consumption: " + buildLBMessage(this.stats.lbConsumption));
 			$(".loading").hide();
 			$(".t5").show();
-			$(".cons").show();
+			$(".lbcons").show();
 			$(".map_list").show();
 
 		},
