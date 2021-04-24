@@ -136,7 +136,10 @@
 						if (checkForLastHit && attack.target[0] === 0) {
 							this.stats.lastHits[mapnum] = {
 								ship: shipId,
-								damage: damage
+								damage: damage,
+								cutin: attack.cutin || attack.ncutin,
+								time: !!attack.ncutin ? "yasen" : "day",
+								overkill: damage - attack.ehp
 							};
 						}
 					}
@@ -297,7 +300,7 @@
 				"maxHit": "Max Damage Dealt",
 				"shipKills": "Ship Kills",
 				"taihaMagnets": "Taiha Magnets",
-			}
+			};
 
 			const keys = Object.keys(map);
 			for (const key of keys) {
@@ -305,9 +308,9 @@
 				const vals = this.stats[key];
 				const topFive = getTopFive(vals);
 				for (let i = 0; i < 5; i++) {
-					str += "<td><img src=" + KC3Meta.getIcon(topFive[i]["key"]) + " width=30px height=30px></img>" + topFive[i]["value"] + "</td>";
+					str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + " width=30px height=30px></img>" + topFive[i].value + "</td>";
 				}
-				str += "</tr>"
+				str += "</tr>";
 				$("#t5").append(str);
 			}
 
@@ -319,7 +322,7 @@
 					).width(13).height(13).css("margin", "-3px 2px 0 0");
 					return i < 4 ? $("<div/>").append(icon).append(v).html() : "";
 				}).join(" ");
-			}
+			};
 			const buildConsMessage = consumption => {
 				return consumption.map((v, i) => {
 					const icon = $("<img />").attr("src", "/assets/img/client/" +
@@ -328,7 +331,7 @@
 					).width(13).height(13).css("margin", "-3px 2px 0 0");
 					return i < 6 ? $("<div/>").append(icon).append(v).html() : "";
 				}).join(" ");
-			}
+			};
 
 
 			const difficutlies = ["Casual", "Easy", "Normal", "Hard"];
@@ -348,7 +351,15 @@
 					$(".clear_runs", curBox).text("Number of Runs to Clear: " + this.stats.clearCount[i]);
 					$(".clear_cost", curBox).append("Clear Expenditure: " + buildConsMessage(this.stats.clearConsumption[i]));
 				}
-
+				if (this.stats.lastHits[i]) {
+					const result = this.stats.lastHits[i];
+					let str = "{0} finished off the boss with {1} damage".format(
+						KC3Meta.shipName(KC3Master.ship(result.ship).api_name), result.damage
+					);
+					if (result.overkill > 0) { str += ` (${result.overkill} overkill)`; }
+					else { str += " exactly"; }
+					$(".clear_attack", curBox).append(str);
+				}
 				$(".total_runs", curBox).text("Total Number of Runs: " + this.stats.sortieCount[i]);
 				$(".total_cost", curBox).append("Total Expenditure: " + buildConsMessage(this.stats.sortieConsumption[i]));
 				curBox.appendTo(".map_list");
