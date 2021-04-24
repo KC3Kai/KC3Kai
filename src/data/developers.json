@@ -414,6 +414,15 @@
 				}
 			},
 			{
+				"name": "Oradimi",
+				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
+				"desc" : "Français,English",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Oradimi"
+				}
+			},
+			{
 				"name": "RanFoxRun",
 				"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
 				"desc" : "Italiano",
@@ -427,7 +436,7 @@
 				"name": "rephira",
 				"avatar" : "https://avatars3.githubusercontent.com/u/13478649?v=3&s=40",
 				"desc" : "한국어",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/rephira",
 					"wk" :"http://kancolle.fandom.com/wiki/User:Rephira"
@@ -746,15 +755,6 @@
 				}
 			},
 			{
-				"name": "Oradimi",
-				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
-				"desc" : "Français",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/Oradimi"
-				}
-			},
-			{
 				"name": "Trần Quốc Hưng",
 				"avatar" : "https://avatars3.githubusercontent.com/u/23023212?s=460&v=4",
 				"desc" : "Tiếng Việt",
@@ -1016,6 +1016,23 @@
 			"image": "https://graph.facebook.com/KC.TH.Translators/picture",
 			"links": [
 				"https://www.facebook.com/KC.TH.Translators"
+			]
+		},
+		{
+			"name": "AboutPartnerKCNavName",
+			"desc": "AboutPartnerKCNavDesc",
+			"image": "https://kc.piro.moe/favicon.ico",
+			"links": [
+				"https://kc.piro.moe/"
+			]
+		},
+		{
+			"name": "AboutPartnerKCImgBuilderName",
+			"desc": "AboutPartnerKCImgBuilderDesc",
+			"image": "https://kancolleimgbuilder.web.app/favicon.ico",
+			"links": [
+				"https://github.com/HitomaruKonpaku/KanColleImgBuilder",
+				"https://github.com/Nishisonic/gkcoi"
 			]
 		}
 	],

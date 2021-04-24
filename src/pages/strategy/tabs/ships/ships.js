@@ -610,8 +610,15 @@
 				master: MasterShip,
 				// Check whether remodel is max
 				remodel: RemodelDb.isFinalForm(ship.masterId),
+				canOTorp: ThisShip.canDoOpeningTorpedo(),
+				canOAsw: ThisShip.canDoOASW(),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu(),
-				canEquipTank: ThisShip.canEquipTank()
+				canEquipTank: ThisShip.canEquipTank(),
+				canEquipFCF: ThisShip.canEquipFCF(),
+				canEquipSPF: ThisShip.canEquip(undefined, 45),
+				canEquipSPB: ThisShip.canEquip(undefined, 11),
+				canEquipLFB: ThisShip.canEquip(undefined, 41),
+				canExslotEquipSecGun: ThisShip.canEquip(66) >= 2 || ThisShip.canEquip(220) >= 2,
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -832,15 +839,31 @@
 				});
 
 			self.defineShipFilter(
-				"daihatsu",
-				savedFilterValues.daihatsu || 0,
-				["all", "yes1","yes2", "both", "no"],
+				"opatk",
+				savedFilterValues.opatk || 0,
+				["all", "yes1","yes2", "both"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canOAsw)
+						|| (curVal === 2 && ship.canOTorp)
+						|| (curVal === 3 && ship.canOAsw && ship.canOTorp);
+				});
+
+			self.defineShipFilter(
+				"spgear",
+				savedFilterValues.spgear || 0,
+				["all", "dlc","tank", "both", "neither", "fcf", "spf", "spb", "lfb", "exgun"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && ship.canEquipTank)
 						|| (curVal === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
-						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank);
+						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank)
+						|| (curVal === 5 && ship.canEquipFCF)
+						|| (curVal === 6 && ship.canEquipSPF)
+						|| (curVal === 7 && ship.canEquipSPB)
+						|| (curVal === 8 && ship.canEquipLFB)
+						|| (curVal === 9 && ship.canExslotEquipSecGun);
 				});
 
 			self.defineShipFilter(

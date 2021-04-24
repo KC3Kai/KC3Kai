@@ -846,7 +846,13 @@ button, input, select, textarea {
 	border-radius:0px !important;
 }
 .tab_ships .massSelect dl {
-	width: 215px !important;
+	width: 32.576% !important;
+}
+.tab_ships .massSelect dl.halfwide {
+	width: 49.15% !important;
+}
+.tab_ships .massSelect dl.fullwide {
+	width: 98.8% !important;
 }
 .tab_ships .ship_list.scroll_fix::-webkit-scrollbar-track {
 	background: #303030 !important;
