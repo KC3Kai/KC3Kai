@@ -1096,19 +1096,20 @@ KC3改 Equipment Object
 		} else if(shipOrLb instanceof KC3Ship) {
 			const powerRange = gearObj.airstrikePower(slotSize);
 			const isRange = !!powerRange[2];
-			const isOverCap = [powerRange[0] > 150, powerRange[1] > 150];
-			const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
-			const afterCap = [
-				shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial").power,
-				isRange ? shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial").power : 0
+			const appliedCapInfo = [
+				shipOrLb.applyPowerCap(powerRange[0], "Day", "Aerial"),
+				shipOrLb.applyPowerCap(powerRange[1], "Day", "Aerial")
 			];
+			const postCap = appliedCapInfo.map(o => o.power);
+			const isOverCap = appliedCapInfo.map(o => o.isCapped);
+			const contactPlaneId = shipOrLb.collectBattleConditions().contactPlaneId;
 			const onNormal = [
-				Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, false).power),
-				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, false).power) : 0
+				Math.floor(shipOrLb.applyPostcapModifiers(postCap[0], "Aerial", undefined, contactPlaneId, false).power),
+				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(postCap[1], "Aerial", undefined, contactPlaneId, false).power) : 0
 			];
 			const onCritical = [
-				Math.floor(shipOrLb.applyPostcapModifiers(afterCap[0], "Aerial", undefined, contactPlaneId, true).power),
-				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(afterCap[1], "Aerial", undefined, contactPlaneId, true).power) : 0
+				Math.floor(shipOrLb.applyPostcapModifiers(postCap[0], "Aerial", undefined, contactPlaneId, true).power),
+				isRange ? Math.floor(shipOrLb.applyPostcapModifiers(postCap[1], "Aerial", undefined, contactPlaneId, true).power) : 0
 			];
 			const powBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			powBox.css("font-size", "11px");
