@@ -705,7 +705,7 @@
 				"bound" : {
 					"min" :   1,
 					"max" :   4,
-					"type": "Number"
+					"type": "Integer"
 				},
 				"options" : {}
 			}
