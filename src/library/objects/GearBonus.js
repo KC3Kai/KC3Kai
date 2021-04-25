@@ -5872,18 +5872,18 @@
 					},
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D, Noshiro K2
-						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal?, Aquila?, Graf Zeppelin?, Saratoga?, Hornet?
-						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota, Washington?
+						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota, Washington
 						//   All fast DD: not here, see next item
-						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield?
+						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston
-						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou
+						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2
 						origins: [115, 138, 441, 442, 171, 492, 602, 654, 83, 332, 549, 515, 444, 432, 433, 603,
 								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595,
-								74, 76, 116, 102, 103
+								74, 76, 116, 102, 103, 184
 							],
-						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107],
+						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -6001,16 +6001,16 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima
-						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut?
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima, Shinshumaru
+						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut
 						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						origins: [184, 634, 162, 154, 465,
+						origins: [184, 634, 162, 154, 465, 621,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511,
 								75, 89, 92, 521, 534, 544,
 								445, 451, 491
 							],
-						excludes: [541, 573],
+						excludes: [541, 573, 888],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -6088,9 +6088,9 @@
 						],
 					},
 					{
-						// Slow Group C: Akashi, Hayasui, Akitsumaru, Shinshumaru?
+						// Slow Group C: Akashi, Hayasui, Akitsumaru
 						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-47, U-511, UIT-25, Maruyu, I-400, I-401, I-13, I-14
-						origins: [182, 460, 161, 621,  126, 127, 128, 191, 483, 636, 431, 539, 163, 493, 155, 494, 495],
+						origins: [182, 460, 161,  126, 127, 128, 191, 483, 636, 431, 539, 163, 493, 155, 494, 495],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
