@@ -2289,7 +2289,7 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%CF%A2%B9%E7%B4%CF%C2%E2#offense
 	 */
 	KC3Ship.prototype.combinedFleetPowerBonus = function(playerCombined, enemyCombined,
-			warfareType = "Shelling"){
+		warfareType = "Shelling", isTargetEscort = false){
 		const powerBonus = {
 			main: 0, escort: 0
 		};
@@ -2320,17 +2320,20 @@ KC3改 Ship Object
 				break;
 			case "Aerial":
 				if(!playerCombined && enemyCombined) {
-					// differentiated by target enemy fleet, targeting main:
-					powerBonus.main = -10; powerBonus.escort = -10;
-					// targeting escort:
-					//powerBonus.main = -20; powerBonus.escort = -20;
+					// differentiated by target enemy fleet
+					if(isTargetEscort) {
+						powerBonus.main = -20; powerBonus.escort = -20;
+					} else {
+						powerBonus.main = -10; powerBonus.escort = -10;
+					}
 				}
 				break;
 		}
 		return powerBonus;
 	};
 
-	// Check if specified equipment (or equip type) can be equipped on this ship.
+	// check if specified equipment (or equip type) can be equipped on this ship.
+	// equipment defined by ID in master data (like 8cm HA gun in exslot) cannot be hit by type.
 	KC3Ship.prototype.canEquip = function(gearType2, gearMstId) {
 		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
 	};
