@@ -1916,8 +1916,10 @@ KC3改 Ship Object
 		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
+				const type2 = master.api_type[2];
+				const type3 = master.api_type[3];
 				const slot = this.slots[idx];
-				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
+				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(type3);
 				// Swordfish variants as special torpedo bombers
 				const isSwordfish = [242, 243, 244].includes(gear.masterId);
 				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
@@ -1928,7 +1930,7 @@ KC3改 Ship Object
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
 					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
-					equipTotals.dv += master.api_baku || 0;
+					if([7, 57].includes(type2)) equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);

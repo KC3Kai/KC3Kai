@@ -46,7 +46,7 @@
 						".kc3data"
 					);
 					// Since Chromium version m72, expected filename must be suggested on later phase,
-					// and extention name is forced by MIME type, `.kc3data` will be ingored.
+					// Since Chromium version m78, extention name is forced by MIME type, `.kc3data` will be ingored.
 					var downloadItemId = null;
 					const onetimeFilenameSuggester = function(item, suggest) {
 						if(item.byExtensionId === chrome.runtime.id && item.id === downloadItemId) {
