@@ -811,7 +811,9 @@
 				"id" : "api_translation",
 				"name" : "SettingsQuestOverlay",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsBrokenTip"
+				}
 			},
 			{
 				"id" : "google_translate",
@@ -823,7 +825,9 @@
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsBrokenTip"
+				}
 			},
 			{
 				"id" : "map_markers",
