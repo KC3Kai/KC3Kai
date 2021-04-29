@@ -691,6 +691,20 @@
 					"type": "Number"
 				},
 				"options" : { "label" : "%" }
+			},
+			{
+				"id" : "alert_pre_sortie",
+				"name" : "SettingsPreSortieAlert",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ 0, "None"],
+						[ 1, "#1"],
+						[ 2, "#2"],
+						[ 3, "#3"],
+						[ 4, "#4"]
+					]
+				}
 			}
 		]
 	},
@@ -797,7 +811,9 @@
 				"id" : "api_translation",
 				"name" : "SettingsQuestOverlay",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsBrokenTip"
+				}
 			},
 			{
 				"id" : "google_translate",
@@ -809,7 +825,9 @@
 				"id" : "api_tracking",
 				"name" : "SettingsQuestTracking",
 				"type" : "check",
-				"options" : {}
+				"options" : {
+					"tooltip": "SettingsBrokenTip"
+				}
 			},
 			{
 				"id" : "map_markers",
@@ -1249,6 +1267,12 @@
 			{
 				"id" : "pan_compact_quests",
 				"name" : "SettingsPanelCompactQuests",
+				"type" : "check",
+				"options" : {}
+			},
+			{
+				"id" : "pan_wider_lbas",
+				"name" : "SettingsPanelWideLbasView",
 				"type" : "check",
 				"options" : {}
 			},

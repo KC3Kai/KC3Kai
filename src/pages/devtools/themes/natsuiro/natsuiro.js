@@ -492,6 +492,7 @@
 			.css("box-shadow", shadowDirStr);
 		$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
 		$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests);
+		$(".module.fleet .airbase_list").toggleClass("wide_column", !!ConfigManager.pan_wider_lbas);
 
 		// Panel customizations: bg image
 		if(ConfigManager.pan_bg_image === ""){
@@ -537,6 +538,7 @@
 					!ConfigManager.alert_taiha || !ConfigManager.alert_taiha_sound);
 				$(".ship_hp_box .ship_hp_bar_metrics").toggle(!!ConfigManager.pan_hp_bar_metrics);
 				$(".module.quests").toggleClass("compact", !!ConfigManager.pan_compact_quests);
+				$(".module.fleet .airbase_list").toggleClass("wide_column", !!ConfigManager.pan_wider_lbas);
 				updateQuestActivityTab();
 			}
 		});
@@ -2390,8 +2392,7 @@
 				$(".airbase_list").show();
 				
 				const togglePlaneName = function(e){
-					$(".module.fleet .airbase_list .base_plane_name").toggle();
-					$(".module.fleet .airbase_list .name_toggle_group").toggle();
+					$(".module.fleet .airbase_list").toggleClass("long_name");
 				};
 				// Land-bases ordered by world ID desc, base ID asc
 				const sortedBases = PlayerManager.bases.sort(
@@ -2447,7 +2448,6 @@
 						
 						$(".airbase_infos", baseBox).on("click", togglePlaneName);
 
-						let planeNames = "";
 						$.each(baseInfo.planes, function(i, planeInfo){
 							const planeBox = $("#factory .airbase_plane").clone();
 							
@@ -2462,7 +2462,6 @@
 								
 								$(".base_plane_name", planeBox).text(itemObj.name())
 									.attr("title", itemObj.name()).lazyInitTooltip();
-								planeNames += itemObj.name() + "\n";
 
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
@@ -2539,8 +2538,6 @@
 							
 							$(".base_planes", baseBox).append(planeBox);
 						});
-						$(".base_name", baseBox).attr("title", planeNames
-						).lazyInitTooltip();
 						
 						$(".module.fleet .airbase_list").append(baseBox);
 					}

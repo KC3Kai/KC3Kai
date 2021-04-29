@@ -610,8 +610,17 @@
 				master: MasterShip,
 				// Check whether remodel is max
 				remodel: RemodelDb.isFinalForm(ship.masterId),
+				canOTorp: ThisShip.canDoOpeningTorpedo(),
+				canOAsw: ThisShip.canDoOASW(),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu(),
-				canEquipTank: ThisShip.canEquipTank()
+				canEquipTank: ThisShip.canEquipTank(),
+				canEquipFCF: ThisShip.canEquipFCF(),
+				canEquipSPF: ThisShip.canEquip(45),
+				canEquipSPB: ThisShip.canEquip(11),
+				canEquipLFB: ThisShip.canEquip(41),
+				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
+				canExslotEquip8cmGun: ThisShip.canEquip(undefined, 66) >= 2
+					|| ThisShip.canEquip(undefined, 220) >= 2,
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -832,15 +841,40 @@
 				});
 
 			self.defineShipFilter(
+				"opatk",
+				savedFilterValues.opatk || 0,
+				["all", "yes1","yes2", "both"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canOAsw)
+						|| (curVal === 2 && ship.canOTorp)
+						|| (curVal === 3 && ship.canOAsw && ship.canOTorp);
+				});
+
+			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
-				["all", "yes1","yes2", "both", "no"],
+				["all", "dlc","tank", "both", "neither"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && ship.canEquipTank)
 						|| (curVal === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
 						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank);
+				});
+
+			self.defineShipFilter(
+				"spgear",
+				savedFilterValues.spgear || 0,
+				["all", "fcf", "spf", "spb", "lfb", "bulge", "exgun"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canEquipFCF)
+						|| (curVal === 2 && ship.canEquipSPF)
+						|| (curVal === 3 && ship.canEquipSPB)
+						|| (curVal === 4 && ship.canEquipLFB)
+						|| (curVal === 5 && ship.canEquipBulge)
+						|| (curVal === 6 && ship.canExslotEquip8cmGun);
 				});
 
 			self.defineShipFilter(

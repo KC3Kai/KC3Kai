@@ -43,12 +43,18 @@
 	margin:0px 0px 5px 0px;
 	font-size:12px;
 }
-.tab_ships .massSelect dl{
+.tab_ships .massSelect dl {
 	width: 220px;
 	display: inline-block;
 	vertical-align: top;
 	margin: 0px 0px 5px 0px;
 	overflow: hidden;
+}
+.tab_ships .massSelect dl.halfwide {
+	width: 332px;
+}
+.tab_ships .massSelect dl.fullwide {
+	width: 667px;
 }
 .tab_ships .massSelect dl dt,
 .tab_ships .massSelect dl dd{
@@ -546,13 +552,15 @@
 	position:relative;
 }
 .tab_ships .ship_item .slot5 .ship_equip_icon {
-	transform:scaleX(0.8);
 	width:14px;
 }
 .tab_ships .ship_item .ship_equip img {
 	width:17px;
 	height:18px;
 	vertical-align:top;
+}
+.tab_ships .ship_item .ship_equip.slot5 img {
+	width:14px;
 }
 .tab_ships .ship_item .ship_equip span {
 	position:absolute;

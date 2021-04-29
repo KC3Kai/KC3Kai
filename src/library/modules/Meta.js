@@ -133,6 +133,8 @@ Provides access to data on built-in JSON files
 			501, // Mogami K2 -> K2T
 			307, // Yahagi Kai -> K2
 			663, // Yahagi K2 -> K2B
+			318, // Ryuuhou Kai -> K2E
+			883, // Ryuuhou K2E -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
@@ -1193,7 +1195,7 @@ Provides access to data on built-in JSON files
 						seasons : ["Winter", "Spring", "Summer", "Fall"],
 						fromId : 21,
 						fromYear : 2013,
-						skippedSeasons : [[42, 2], [48, 3]],
+						skippedSeasons : [[42, 2], [48, 3], [50, 4]],
 					},
 					period = eventMapDefs.seasons.length,
 					worldIndex = eventMapDefs.skippedSeasons.reduce((index, [skipFrom, skipAccumulated]) => (

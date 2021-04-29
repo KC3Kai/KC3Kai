@@ -359,6 +359,7 @@ AntiAir: anti-air related calculations
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
 		var combinedModifier = getCombinedFleetModifier(onCombinedFleetNum);
 		return floor(adjustedAA) / 400 * combinedModifier;
+		// according KC vita calculations, `/ 400` should be `* 0.02 * 0.25 / 2`
 	}
 
 	function shipProportionalShotdown(shipObj, num, onCombinedFleetNum) {
@@ -390,6 +391,7 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
+		// according KC vita calculations, 1.3 is vita ver constant, 2 is browser ver modifier
 		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
 	}
 
@@ -420,6 +422,7 @@ AntiAir: anti-air related calculations
 				Array.isArray(fleetObj) ? fleetCombinedAdjustedAntiAir(fleetObj.main, fleetObj.escort, formationModifier) :
 					fleetAdjustedAntiAir(fleetObj, formationModifier) )
 			) * K / 10 * getCombinedFleetModifier(onCombinedFleetNum)
+			// according KC vita calculations, `/ 10` should be `* 0.25 * 0.8 / 2`, abyssal uses 0.75 instead of 0.8
 		);
 	}
 
@@ -1003,12 +1006,9 @@ AntiAir: anti-air related calculations
 		[fletcherIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAnyOf(
-				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-				predAllOf(
-					hasSome( is5inchSingleMountOrKai ),
-					hasSome( is5inchSingleMountKaiWithGfcs ))
-			)
+			predAllOf(
+				hasSome( is5inchSingleMountOrKai ),
+				hasSome( is5inchSingleMountKaiWithGfcs ))
 		)
 	);
 	declareAACI(
@@ -1018,13 +1018,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
-				predAnyOf(
-					hasAtLeast( is5inchSingleMountOrKai, 2 ),
-					hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-					predAllOf(
-						hasSome( is5inchSingleMountOrKai ),
-						hasSome( is5inchSingleMountKaiWithGfcs ))
-				),
+				hasAtLeast( is5inchSingleMountOrKai, 2 ),
 				hasSome( isGfcsRadar ))
 		)
 	);
@@ -1033,13 +1027,8 @@ AntiAir: anti-air related calculations
 		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAnyOf(
-				hasAtLeast( is5inchSingleMountKai, 2 ),
-				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-				predAllOf(
-					hasSome( is5inchSingleMountKai ),
-					hasSome( is5inchSingleMountKaiWithGfcs ))
-			)
+			predAllOf(
+				hasAtLeast( is5inchSingleMountKai, 2 ))
 		)
 	);
 
