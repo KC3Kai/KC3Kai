@@ -298,6 +298,8 @@
 	line-height:15px;
 	font-size:11px;
 	margin:0px 0px 0px 0px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 
 .tab_pvp .node_cond_label {

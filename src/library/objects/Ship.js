@@ -1719,13 +1719,7 @@ KC3改 Ship Object
 		if(this.isDummy()) { return [0, 1, 0, 0, 1]; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
 		if(!installationType) { return [0, 1, 0, 0, 1]; }
-		const wg42Count = this.countEquipment(126);
-		const mortarCount = this.countEquipment(346);
-		const mortarCdCount = this.countEquipment(347);
-		const type4RocketCount = this.countEquipment(348);
-		const type4RocketCdCount = this.countEquipment(349);
-		const hasT3Shell = this.hasEquipmentType(2, 18);
-		const alDiveBomberCount = this.countEquipment(KC3GearManager.antiLandDiveBomberIds);
+		
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
 		let mortarBonus = 1;
@@ -1734,24 +1728,45 @@ KC3改 Ship Object
 		let seaplaneBonus = 1;
 		let alDiveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
-		const submarineBonus = this.isSubmarine() ? 30 : 0;
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
+		const submarineBonus = this.isSubmarine() ? 30 : 0;
+		const wg42Count = this.countEquipment(126);
+		const mortarCount = this.countEquipment(346);
+		const mortarCdCount = this.countEquipment(347);
+		const type4RocketCount = this.countEquipment(348);
+		const type4RocketCdCount = this.countEquipment(349);
+		const hasT3Shell = this.hasEquipmentType(2, 18);
+		const alDiveBomberCount = this.countEquipment(KC3GearManager.antiLandDiveBomberIds);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
+		
+		// Following synergy bonuses from Armored Boat and Armed Daihatsu:
+		//   https://twitter.com/yukicacoon/status/1368513654111408137
+		//   https://twitter.com/yukicacoon/status/1383313261089542152
 		const abCount = this.countEquipment(408);
 		const armedCount = this.countEquipment(409);
-		// WiP verifications: https://twitter.com/yukicacoon/status/1368513654111408137
-		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		// Normal, T89, Toku
+		const dlcGroup1Count = this.countEquipment([68, 166, 193]);
+		// T2 tank, T11 shikon
+		const dlcGroup2Count = this.countEquipment([167, 230]);
 		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
-		const synergyCraftIds = [68, 166, 167, 193, 230];
-		const abSynergy = abCount === 1 && this.hasEquipment(synergyCraftIds);
-		const armedSynergy = armedCount === 1 && this.hasEquipment(synergyCraftIds);
-		const specialTankModifier = (m4a1ddCount ? 1.4 : 1)
-			* (abSynergy || armedSynergy ? 1.2 : 1)
-			* (abSynergy && armedSynergy ? 1.125 : 1);
-		const specialTankBonus = 25 * (shikonCount + m4a1ddCount)
-			+ (abSynergy || armedSynergy ? 10 : 0)
-			+ (abSynergy && armedSynergy ? 5 : 0);
+		const singleSynergyFlag = abCount === 1 || armedCount === 1;
+		const doubleSynergyFlag = abCount === 1 && armedCount === 1;
+		const dlcGroupLevel1Flag = dlcGroup1Count + dlcGroup2Count >= 1;
+		const dlcGroupLevel2Flag = dlcGroup1Count + dlcGroup2Count >= 2;
+		const singleSynergyModifier = singleSynergyFlag && dlcGroupLevel1Flag ? 1.2 : 1;
+		const doubleSynergyModifier = doubleSynergyFlag && dlcGroupLevel2Flag ? 1.3 :
+			doubleSynergyFlag && dlcGroup2Count >= 1 ? 1.2 :
+			doubleSynergyFlag && dlcGroup1Count >= 1 ? 1.1 : 1;
+		const singleSynergyAdditive = singleSynergyFlag && dlcGroupLevel1Flag ? 10 : 0;
+		const doubleSynergyAdditive = doubleSynergyFlag && dlcGroupLevel2Flag ? 5 :
+			doubleSynergyFlag && dlcGroup2Count >= 1 ? 3 :
+			doubleSynergyFlag && dlcGroup1Count >= 1 ? 2 : 0;
+		
+		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
+		const specialTankModifier = (m4a1ddCount ? 1.4 : 1) * singleSynergyModifier * doubleSynergyModifier;
+		const specialTankBonus = 25 * (shikonCount + m4a1ddCount) + singleSynergyAdditive + doubleSynergyAdditive;
+		
 		if(precap) {
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
@@ -1901,8 +1916,10 @@ KC3改 Ship Object
 		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
+				const type2 = master.api_type[2];
+				const type3 = master.api_type[3];
 				const slot = this.slots[idx];
-				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(master.api_type[3]);
+				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(type3);
 				// Swordfish variants as special torpedo bombers
 				const isSwordfish = [242, 243, 244].includes(gear.masterId);
 				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
@@ -1913,7 +1930,7 @@ KC3改 Ship Object
 				if(isNightPlane && slot > 0) {
 					equipTotals.fp += master.api_houg || 0;
 					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
-					equipTotals.dv += master.api_baku || 0;
+					if([7, 57].includes(type2)) equipTotals.dv += master.api_baku || 0;
 					if(!isLegacyArkRoyal) {
 						// Bonus from night aircraft slot which also takes bombing and asw stats into account
 						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
@@ -2185,13 +2202,18 @@ KC3改 Ship Object
 		// Against PT Imp modifier from equipment
 		let antiPtImpModifier = 1;
 		if(targetShipType.isPtImp) {
-			const smallGunBonus = this.hasEquipmentType(2, 1) ? 1.5 * 1.4 : 1;
+			const smallGunCount = this.countEquipmentType(2, 1);
+			const smallGunBonus = smallGunCount > 0 ? 1.5 * (smallGunCount > 1 ? 1.4 : 1) : 1;
 			antiPtImpModifier *= smallGunBonus;
-			const aaGunBonus = this.hasEquipmentType(2, 21) ? 1.2 * 1.2 : 1;
+			const aaGunCount = this.countEquipmentType(2, 21);
+			const aaGunBonus = aaGunCount > 0 ? 1.2 * (aaGunCount > 1 ? 1.2 : 1) : 1;
 			antiPtImpModifier *= aaGunBonus;
 			const secondaryGunBonus = this.hasEquipmentType(2, 4) ? 1.3 : 1;
 			antiPtImpModifier *= secondaryGunBonus;
-			const diveBomberBonus = this.hasEquipmentType(2, [7, 57]) ? 1.4 * 1.3 : 1;
+			const diveBomberCount = this.countEquipmentType(2, 7),
+				jetDiveBomberCount = this.countEquipmentType(2, 57);
+			const diveBomberBonus = diveBomberCount + jetDiveBomberCount > 0 ?
+				1.4 * (diveBomberCount > 1 || jetDiveBomberCount > 1 ? 1.3 : 1) : 1;
 			antiPtImpModifier *= diveBomberBonus;
 			const seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
 			antiPtImpModifier *= seaplaneBonus;
@@ -2199,9 +2221,10 @@ KC3改 Ship Object
 			antiPtImpModifier *= skilledLookoutBonus;
 			// Type 3 Shell bonus disappeared?
 			//const t3Bonus = this.hasEquipmentType(2, 18) ? 1.3 : 1;
-			// under verifications: https://twitter.com/yukicacoon/status/1365525774866939905
-			const abDaihatsuBonus = this.hasEquipment([408, 409]) ? 1.2 : 1;
-			antiPtImpModifier *= abDaihatsuBonus * (this.hasEquipment(408) && this.hasEquipment(409) ? 1.1 : 1);
+			// https://twitter.com/yukicacoon/status/1381987133766836225
+			const abDaihatsuCount = this.countEquipment([408, 409]);
+			const abDaihatsuBonus = abDaihatsuCount > 0 ? 1.2 * (abDaihatsuCount > 1 ? 1.1 : 1) : 1;
+			antiPtImpModifier *= abDaihatsuBonus;
 		}
 		// Fixed modifier for aerial type exped support
 		const aerialSupportModifier = warfareType === "SupportAerial" ? 1.35 : 1;
@@ -2268,7 +2291,7 @@ KC3改 Ship Object
 	 * @see http://wikiwiki.jp/kancolle/?%CF%A2%B9%E7%B4%CF%C2%E2#offense
 	 */
 	KC3Ship.prototype.combinedFleetPowerBonus = function(playerCombined, enemyCombined,
-			warfareType = "Shelling"){
+		warfareType = "Shelling", isTargetEscort = false){
 		const powerBonus = {
 			main: 0, escort: 0
 		};
@@ -2299,18 +2322,21 @@ KC3改 Ship Object
 				break;
 			case "Aerial":
 				if(!playerCombined && enemyCombined) {
-					// differentiated by target enemy fleet, targeting main:
-					powerBonus.main = -10; powerBonus.escort = -10;
-					// targeting escort:
-					//powerBonus.main = -20; powerBonus.escort = -20;
+					// differentiated by target enemy fleet
+					if(isTargetEscort) {
+						powerBonus.main = -20; powerBonus.escort = -20;
+					} else {
+						powerBonus.main = -10; powerBonus.escort = -10;
+					}
 				}
 				break;
 		}
 		return powerBonus;
 	};
 
-	 // Check if specified equipment (or equip type) can be equipped on this ship.
-	KC3Ship.prototype.canEquip = function(gearMstId, gearType2) {
+	// check if specified equipment (or equip type) can be equipped on this ship.
+	// equipment defined by ID in master data (like 8cm HA gun in exslot) cannot be hit by type.
+	KC3Ship.prototype.canEquip = function(gearType2, gearMstId) {
 		return KC3Master.equip_on_ship(this.masterId, gearMstId, gearType2);
 	};
 
@@ -3167,13 +3193,13 @@ KC3改 Ship Object
 		if(this.isCarrier()) {
 			const hasNightAircraft = this.hasEquipmentType(3, KC3GearManager.nightAircraftType3Ids);
 			const hasNightAvPersonnel = this.hasEquipment([258, 259]);
-			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E
-			const isThisNightCarrier = [545, 599, 610].includes(this.masterId);
+			// night battle capable carriers: Saratoga Mk.II, Akagi Kai Ni E/Kaga Kai Ni E, Ryuuhou Kai Ni E
+			const isThisNightCarrier = [545, 599, 610, 883].includes(this.masterId);
 			// ~~Swordfish variants are counted as night aircraft for Ark Royal + NOAP~~
 			// Ark Royal + Swordfish variants + NOAP - night aircraft will not get `api_n_mother_list: 1`
 			//const isThisArkRoyal = [515, 393].includes(this.masterId);
 			//const isSwordfishArkRoyal = isThisArkRoyal && this.hasEquipment([242, 243, 244]);
-			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E)
+			// if night aircraft + (NOAP equipped / on Saratoga Mk.2/Akagi K2E/Kaga K2E/Ryuuhou K2E)
 			return hasNightAircraft && (hasNightAvPersonnel || isThisNightCarrier);
 		}
 		return false;
@@ -3245,7 +3271,7 @@ KC3改 Ship Object
 			// to estimate night special attacks, which should be given by server API result.
 			// will not trigger if this ship is taiha or targeting submarine.
 			
-			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E needed
+			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E/Ryuuhou K2E needed
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6

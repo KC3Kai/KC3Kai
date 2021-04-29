@@ -180,6 +180,9 @@ body {
 	white-space:nowrap;
 	text-overflow:ellipsis;
 }
+.customization.deprecated .customizationText {
+	text-decoration:line-through;
+}
 
 /* HOTKEYS
 --------------------------*/

@@ -577,6 +577,9 @@ Previously known as "Reactor"
 		// List Presets
 		"api_get_member/preset_slot":function(params, response, headers){
 			const maxSlots = response.api_data.api_max_num;
+			// `api_selected_mode` used by `api_equip_mode` of /preset_slot_select
+			// `api_lock_flag` set by /preset_slot_update_lock
+			// `api_slot_ex_flag` set by /preset_slot_update_exslot_flag
 			console.log("Listed Gear Presets", maxSlots, response.api_data.api_preset_items);
 		},
 		
@@ -593,6 +596,11 @@ Previously known as "Reactor"
 		// Update lock of a Preset
 		"api_req_kaisou/preset_slot_update_lock":function(params, response, headers){
 			console.log("Locked/unlock Gear Preset", params.api_preset_id);
+		},
+		
+		// Update exslot flag of a Preset
+		"api_req_kaisou/preset_slot_update_exslot_flag":function(params, response, headers){
+			console.log("Used/unused exslot Gear Preset", params.api_preset_id);
 		},
 		
 		// Remove a Preset
@@ -2524,6 +2532,62 @@ Previously known as "Reactor"
 			// If LBAS info updated, trigger updating view
 			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
+			}
+			
+			// If pre sortie warning enabled, check for empty equip slots on heartlocked ships
+			if(ConfigManager.alert_pre_sortie > 0) {
+				const missingEquipShips = [];
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
+				}
+				for (const ship of ships) {
+					if (!ship.lock) { continue; }
+					let flag = false;
+					for (let idx = 0; idx < ship.slotnum; idx++) {
+						const eq = ship.equipment(idx);
+						if (eq.itemId == 0) { flag = true; }
+					}
+					if (ship.ex_item === -1) { flag = true; }
+					if (flag) { missingEquipShips.push(ship); }
+				}
+				if (missingEquipShips.length > 0) {
+					const shipNames = missingEquipShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieEquip").format(shipNames),
+					});
+				}
+			}
+		},
+		
+		/* Pre-sortie check for win percentage for event maps
+		-------------------------------------------------------*/
+		"api_get_member/sortie_conditions":function(params, response, headers){
+			// If pre sortie warning enabled, check for ship tag/locks on heartlocked ships
+			if(ConfigManager.alert_pre_sortie > 0) {
+				const missingLockShips = [];
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
+				}
+				for (const ship of ships) {
+					if (!ship.lock) { continue; }
+					if (ship.sally === 0) { missingLockShips.push(ship); }
+				}
+				if (missingLockShips.length > 0) {
+					const shipNames = missingLockShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieLock").format(shipNames),
+					});
+				}
 			}
 		},
 		
