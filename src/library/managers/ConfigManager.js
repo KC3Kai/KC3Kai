@@ -192,6 +192,7 @@ Retrieves when needed to apply on components
 				pan_moon_conbut_skew: true,
 				pan_moon_consumables : [false,false,true,false,true,true,false,false,false],
 				pan_compact_quests: false,
+				pan_wider_lbas: false,
 				pan_custom_css  : "",
 				pan_custom_css_moon  : "",
 

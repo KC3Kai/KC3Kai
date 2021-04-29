@@ -1271,6 +1271,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "pan_wider_lbas",
+				"name" : "SettingsPanelWideLbasView",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "pan_box_bcolor",
 				"name" : "SettingsPanelBoxBackColor",
 				"type" : "long_text",
