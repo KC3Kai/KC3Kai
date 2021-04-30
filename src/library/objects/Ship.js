@@ -4357,11 +4357,12 @@ KC3改 Ship Object
 	KC3Ship.fillShipTooltipWideStats = function(shipObj, tooltipBox, canOasw = false) {
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalModifier = (m, showX1) => (showX1 || m !== 1 ? 'x' + m : '');
+		const floorToDecimal = (v, d) => (Math.qckInt("floor", v, d));
 		// show possible critical power and mark capped power with different color
 		const joinPowerAndCritical = (p, cp, cap) => (cap ? '<span class="power_capped">{0}</span>' : "{0}")
-			.format(String(Math.qckInt("floor", p, 0))) + (!cp ? "" :
+			.format(String(floorToDecimal(p, 0))) + (!cp ? "" :
 				(cap ? '(<span class="power_capped">{0}</span>)' : "({0})")
-					.format(Math.qckInt("floor", cp, 0))
+					.format(floorToDecimal(cp, 0))
 			);
 		const shipMst = shipObj.master();
 		const onFleetNum = shipObj.onFleet();
@@ -4461,7 +4462,9 @@ KC3改 Ship Object
 		}
 		let attackTypeIndicators = !canShellingAttack ? KC3Meta.term("ShipAttackTypeNone") :
 			spAttackType[0] === "Cutin" ?
-				KC3Meta.cutinTypeDay(spAttackType[1]) + (dayCutinRate ? " {0}%".format(dayCutinRate) : "") :
+				KC3Meta.cutinTypeDay(spAttackType[1])
+					+ (spAttackType[3] > 1 ? " x{0}".format(floorToDecimal(spAttackType[3], 2)) : "")
+					+ (dayCutinRate ? " {0}%".format(dayCutinRate) : "") :
 				KC3Meta.term("ShipAttackType" + attackTypeDay[0]);
 		if(canOpeningTorp) attackTypeIndicators += ", {0}"
 			.format(KC3Meta.term("ShipExtraPhaseOpeningTorpedo"));
@@ -4513,7 +4516,9 @@ KC3改 Ship Object
 					KC3Meta.term("ShipWarfareShelling"),
 					joinPowerAndCritical(power, criticalPower, isCapped),
 					spAttackType[0] === "Cutin" ?
-						KC3Meta.cutinTypeNight(spAttackType[1]) + (nightCutinRate ? " {0}%".format(nightCutinRate) : "") :
+						KC3Meta.cutinTypeNight(spAttackType[1])
+							+ (spAttackType[3] > 1 ? " x{0}".format(floorToDecimal(spAttackType[3], 2)) : "")
+							+ (nightCutinRate ? " {0}%".format(nightCutinRate) : "") :
 						KC3Meta.term("ShipAttackType" + spAttackType[0])
 				)
 			);
@@ -4539,10 +4544,14 @@ KC3改 Ship Object
 				}
 				({power} = shipObj.applyPostcapModifiers(power, warfareTypeNight, []));
 			}
+			const originCutinType = KC3Ship.specialAttackTypeNight(spAttackType[1]);
 			let attackTypeIndicators = !canNightAttack ? KC3Meta.term("ShipAttackTypeNone") :
 				spAttackType[0] === "Cutin" ?
-					KC3Meta.cutinTypeNight(spAttackType[1]) + (nightCutinRate ? " {0}%".format(nightCutinRate) : "") :
-					KC3Meta.term("ShipAttackType" + spAttackType[0]);
+					KC3Meta.cutinTypeNight(spAttackType[1])
+						+ (spAttackType[2] !== originCutinType[2] ? " /{0}".format(KC3Meta.term(spAttackType[2])) : "")
+						+ (spAttackType[3] > 1 ? " x{0}".format(floorToDecimal(spAttackType[3], 2)) : "")
+						+ (nightCutinRate ? " {0}%".format(nightCutinRate) : "")
+					: KC3Meta.term("ShipAttackType" + spAttackType[0]);
 			$(".nightAttack", tooltipBox).html(
 				KC3Meta.term("ShipNightAttack").format(
 					KC3Meta.term("ShipWarfare" + warfareTypeNight),
@@ -4558,10 +4567,10 @@ KC3改 Ship Object
 		);
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(
-				Math.qckInt("floor", shellingAccuracy.accuracy, 1),
+				floorToDecimal(shellingAccuracy.accuracy, 1),
 				signedNumber(shellingAccuracy.equipmentStats),
-				signedNumber(Math.qckInt("floor", shellingAccuracy.equipImprovement, 1)),
-				signedNumber(Math.qckInt("floor", shellingAccuracy.equipGunFit, 1)),
+				signedNumber(floorToDecimal(shellingAccuracy.equipImprovement, 1)),
+				signedNumber(floorToDecimal(shellingAccuracy.equipGunFit, 1)),
 				optionalModifier(shellingAccuracy.moraleModifier, true),
 				optionalModifier(shellingAccuracy.artillerySpottingModifier),
 				optionalModifier(shellingAccuracy.apShellModifier)
@@ -4572,9 +4581,9 @@ KC3改 Ship Object
 		);
 		$(".shellingEvasion", tooltipBox).text(
 			KC3Meta.term("ShipEvaShelling").format(
-				Math.qckInt("floor", shellingEvasion.evasion, 1),
+				floorToDecimal(shellingEvasion.evasion, 1),
 				signedNumber(shellingEvasion.equipmentStats),
-				signedNumber(Math.qckInt("floor", shellingEvasion.equipImprovement, 1)),
+				signedNumber(floorToDecimal(shellingEvasion.equipImprovement, 1)),
 				signedNumber(-shellingEvasion.fuelPenalty),
 				optionalModifier(shellingEvasion.moraleModifier, true)
 			)
@@ -4603,7 +4612,7 @@ KC3改 Ship Object
 		);
 		$(".propShotdownRate", tooltipBox).text(
 				KC3Meta.term("ShipAAShotdownRate").format(
-					Math.qckInt("floor", shipObj.proportionalShotdownRate() * 100, 1)
+					floorToDecimal(shipObj.proportionalShotdownRate() * 100, 1)
 				)
 			);
 		const maxAaciParams = shipObj.maxAaciShotdownBonuses();
