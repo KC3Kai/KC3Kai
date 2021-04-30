@@ -69,7 +69,7 @@
 				ru130mmB13SmallGunMount: 0,
 				ru130mmB13SmallGunMountIds: [282],
 				skilledLookouts: 0,
-				skilledLookoutsIds: [129],
+				skilledLookoutsIds: [129, 412],
 				searchlightSmall: 0,
 				searchlightSmallIds: [74],
 			},
@@ -1893,7 +1893,35 @@
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Following Americans: Northampton Class
+					// Iowa Class
+					"65": [
+						{
+							single: { "houg": 1, "saku": 1 },
+						},
+						{
+							minStars: 3,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
+					// North Carolina Class
+					"107": "65",
+					// Northampton Class
 					"95": [
 						{
 							minStars: 5,
@@ -1904,18 +1932,60 @@
 							single: { "houg": 1 },
 						},
 					],
-					// Iowa Class
-					"65": "95",
-					// Colorado Class
-					"93": "95",
 					// Atlanta Class
 					"99": "95",
-					// South Dakota Class
-					"102": "95",
 					// St. Louis Class
 					"106": "95",
+				},
+			},
+			// SOC Seagull
+			"414": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following Americans:
+					// Iowa Class
+					"65": [
+						{
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
 					// North Carolina Class
-					"107": "95",
+					"107": "65",
+					// Northampton Class
+					"95": [
+						{
+							single: { "houg": 1, "saku": 2 },
+						},
+						{
+							minStars: 3,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// Atlanta Class
+					"99": "95",
+					// St. Louis Class
+					"106": "95",
 				},
 			},
 			// Ar196 Kai
@@ -5698,6 +5768,107 @@
 					"7": {
 						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
 					},
+					// Takao Class
+					"8": "7",
+					// Mogami Class
+					"9": "7",
+					// Aoba Class
+					"13": "7",
+					// Myoukou Class
+					"29": "7",
+					// Tone Class
+					"31": "7"
+				},
+			},
+			// Torpedo Squadron Skilled Lookouts
+			"412": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// All IJN DD
+					// Ayanami Class
+					"1": [
+						{
+							single: { "houg": 2, "raig": 4, "tais": 2 },
+						},
+						{
+							multiple: { "houk": 3, "saku": 1 },
+						},
+						{
+							minStars: 4,
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+					],
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Yuugumo Class
+					"38": "1",
+					// Akizuki Class
+					"54": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Matsu Class
+					"101": "1",
+					// All IJN CL
+					// Kuma Class
+					"4": [
+						{
+							single: { "houg": 3, "raig": 3 },
+						},
+						{
+							multiple: { "houk": 2, "saku": 3 },
+						},
+						{
+							minStars: 4,
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+					],
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Tenryuu Class
+					"21": "4",
+					// Yuubari Class
+					"34": "4",
+					// Agano Class
+					"41": "4",
+					// Ooyodo Class
+					"52": "4",
+					// Katori Class
+					"56": "4",
+					// All IJN CA
+					// Furutaka Class
+					"7": [
+						{
+							single: { "houg": 1 },
+						},
+						{
+							multiple: { "houk": 1, "saku": 1 },
+						},
+					],
 					// Takao Class
 					"8": "7",
 					// Mogami Class

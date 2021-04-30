@@ -3363,7 +3363,7 @@ KC3改 Ship Object
 					// https://twitter.com/nicolai_2501/status/923172168141123584
 					// https://twitter.com/nicolai_2501/status/923175256092581888
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
-					const hasSkilledLookout = this.hasEquipmentType(2, 39);
+					const hasSkilledLookouts = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
 					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
 					// https://twitter.com/ayanamist_m2/status/944176834551222272
@@ -3377,8 +3377,17 @@ KC3改 Ship Object
 							* (1 + modelDK3SmallGunCnt * 0.05);
 					if(hasCapableRadar && smallMainGunCnt >= 1)
 						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
-					if(hasCapableRadar && hasSkilledLookout)
+					if(hasCapableRadar && hasSkilledLookouts)
 						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
+					// Under verification for Torpedo Squadron SLO,
+					// known things: lower priority, base mods, no D gun mod
+					// https://twitter.com/yukicacoon/status/1388100262938562563
+					const hasTsSkilledLookouts = this.hasEquipment(412);
+					const hasDrumCanister = this.hasEquipmentType(2, 30);
+					if(torpedoCnt >= 2 && hasTsSkilledLookouts)
+						return KC3Ship.specialAttackTypeNight(8, "CutinTorpLookoutTorp", 1.5);
+					if(hasDrumCanister && hasTsSkilledLookouts)
+						return KC3Ship.specialAttackTypeNight(8, "CutinTorpLookoutDrum", 1.3);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
