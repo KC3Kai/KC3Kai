@@ -4091,8 +4091,9 @@ KC3改 Ship Object
 	 * @param {Object} newGearObj - the equipment just equipped, pseudo empty object if unequipped.
 	 * @param {Object} oldGearObj - the equipment before changed, pseudo empty object if there was empty.
 	 * @param {Object} oldShipObj - the cloned old ship instance with stats and item IDs before equipment changed.
+	 * @param {Object} recheckNewShip - flag to notify later event: latest ship object needs to be retrieved and reinvoked this.
 	 */
-	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}, oldShipObj = this) {
+	KC3Ship.prototype.equipmentChangedEffects = function(newGearObj = {}, oldGearObj = {}, oldShipObj = this, recheckNewShip = false) {
 		if(!this.masterId) return {isShow: false};
 		const gunFit = newGearObj.masterId ? KC3Meta.gunfit(this.masterId, newGearObj.masterId) : false;
 		let isShow = gunFit !== false;
@@ -4101,16 +4102,19 @@ KC3改 Ship Object
 		// NOTE: shipObj here to be returned will be the 'old' ship instance,
 		// whose stats, like fp, tp, asw, are the values before equipment change.
 		// but its items array (including ex item) are post-change values.
+		// When `recheckNewShip` is a ship object, it means shipObj is already the latest rechecked one.
 		const shipObj = this;
 		// To get the 'latest' ship stats, should defer `GunFit` event after `api_get_member/ship3` call,
 		// and retrieve latest ship instance via KC3ShipManager.get method like this:
 		//   const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
 		// It can not be latest ship at the timing of this equipmentChangedEffects invoked,
 		// because the api call above not executed, KC3ShipManager data not updated yet.
+		// Pass true to `recheckNewShip` will tell event handler to do so later.
 		// Or you can compute the simple stat difference manually like this:
 		const oldEquipAsw = oldGearObj.masterId > 0 ? oldGearObj.master().api_tais : 0;
 		const newEquipAsw = newGearObj.masterId > 0 ? newGearObj.master().api_tais : 0;
-		const aswDiff = newEquipAsw - oldEquipAsw
+		const aswDiff = recheckNewShip === shipObj ? 0 :
+			newEquipAsw - oldEquipAsw
 			// explicit asw bonus from new equipment
 			+ shipObj.equipmentTotalStats("tais", true, true, true)
 			// explicit asw bonus from old equipment
@@ -4130,10 +4134,13 @@ KC3改 Ship Object
 			isShow,
 			shipObj,
 			shipOld: oldShipObj,
+			isShipObjInvalid: recheckNewShip,
 			gearObj: newGearObj.masterId ? newGearObj : false,
+			oldGearObj,
 			gunFit,
 			shipAacis,
 			oaswPower,
+			aswDiff,
 			antiLandPowers: antiLandPowers.length > 0,
 			equipBonus,
 		};
