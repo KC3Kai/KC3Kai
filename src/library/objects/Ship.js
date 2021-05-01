@@ -3379,8 +3379,8 @@ KC3改 Ship Object
 						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookouts)
 						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
-					// Under verification for Torpedo Squadron SLO,
-					// known things: lower priority, base mods, no D gun mod
+					// special sub-types of SLO cutin for Torpedo Squadron SLO since 2021-04-30
+					// lower priority than previous 2 main-types, no D gun modifier
 					// https://twitter.com/yukicacoon/status/1388100262938562563
 					const hasTsSkilledLookouts = this.hasEquipment(412);
 					const hasDrumCanister = this.hasEquipmentType(2, 30);
@@ -3627,7 +3627,7 @@ KC3改 Ship Object
 			3: ({ // submarine late torp cutin
 				"CutinLateTorpRadar": 122,
 				"CutinLateTorpTorp": undefined,
-			   })[cutinSubType] || 122, // regular CutinTorpTorpTorp
+			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
 			5: 140,
 			6: ({ // CVNCI factors unknown, placeholders
@@ -3650,9 +3650,12 @@ KC3改 Ship Object
 				"CutinNFNDBFBI": undefined,
 				"CutinNFNDBSF" : undefined,
 			   })[cutinSubType],
-			// This two DD cutins can be rolled after regular cutin, more chance to be processed
+			// This two DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 130,
-			8: undefined, // CutinTorpRadarLookout unknown
+			8: ({ // TS SLO cutin
+				"CutinTorpLookoutTorp": undefined,
+				"CutinTorpLookoutDrum": undefined,
+			   })[cutinSubType] || 150, // default CutinTorpRadarLookout
 			// 100~104 might be different, even with day one
 		}[spType];
 		if (!typeFactor) { return false; }
@@ -3848,7 +3851,9 @@ KC3改 Ship Object
 				// overhaul implemented in-game since 2017-06-23, not fully verified
 				// 14cm, 15.2cm single/twin/triple
 				const singleMountIds = [4, 11];
-				const twinMountIds = [65, 119, 139, 303, 310, 359, 360, 361, 407];
+				const twinMountIds = [65, 119, 139];
+				// these gun added to firepower bonus, but not sure if got accuracy either
+				const twinMountIds2 = [303, 310, 359, 360, 361, 407];
 				const tripleMainMountIds = [5, 235];
 				const singleHighAngleMountId = 229;
 				const isAganoClass = ctype === 41;
@@ -3859,6 +3864,11 @@ KC3改 Ship Object
 				// for twin mount on Agano class / Ooyodo class / general CLs
 				result += (isAganoClass ? 8 : isOoyodoClass ? 5 : 3) *
 					Math.sqrt(this.countEquipment(twinMountIds));
+				// insufficient data for later twin mount,
+				// 15.2cm K2 on Agano class for now
+				// https://twitter.com/skm_00/status/1388479099094536197
+				result += (isAganoClass ? 7 : 0) *
+					Math.sqrt(this.countEquipment(twinMountIds2));
 				// for 15.5cm triple main mount on Ooyodo class
 				result += (isOoyodoClass ? 7 : 0) *
 					Math.sqrt(this.countEquipment(tripleMainMountIds));
@@ -3866,10 +3876,12 @@ KC3改 Ship Object
 				result += (this.masterId === 488 ? 10 : 0) *
 					Math.sqrt(this.countEquipment(singleHighAngleMountId));
 				// to be confirmed for penalties:
-				// https://twitter.com/yukicacoon/status/1301508712780111872
-				// for 8inch triple gun mount Mk.9 variants on Yuubari/CLT, -10?
-				// for 203mm/53 twin gun mount on CL, -3 per gun?
-				// for 152mm/55 triple rapid fire on CL, x -2 per gun?
+				// https://twitter.com/yukicacoon/status/1388489455292485632
+				// for 8inch triple gun mount Mk.9 variants on Agano-class, -25/2?
+				//   on Yuubari/CLT, -10? / -20/2?
+				// for 203mm/53 twin gun mount on CL, -3*n?
+				//   on Agano-class -4*n?
+				// for 152mm/55 triple rapid fire on CL, -2*n?
 				break;
 			case 5:
 			case 6: // for Heavy Cruisers
