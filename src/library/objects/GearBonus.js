@@ -212,20 +212,13 @@
 			"93": {
 				count: 0,
 				byClass: {
-					// Souryuu Kai Ni
+					// Souryuu
 					"17": {
-						remodel: 2,
 						single: { "houg": 1 },
 					},
-					// Hiryuu Kai Ni
+					// Hiryuu
 					"25": {
-						remodel: 2,
 						single: { "houg": 3 },
-					},
-					// Ryuujou Kai Ni
-					"32": {
-						remodel: 2,
-						single: { "houg": 1 },
 					},
 				},
 			},
@@ -242,11 +235,6 @@
 					"25": {
 						remodel: 2,
 						single: { "houg": 7 },
-					},
-					// Ryuujou Kai Ni
-					"32": {
-						remodel: 2,
-						single: { "houg": 1 },
 					},
 				},
 			},
@@ -909,14 +897,12 @@
 			"99": {
 				count: 0,
 				byClass: {
-					// Souryuu Kai Ni
+					// Souryuu
 					"17": {
-						remodel: 2,
 						single: { "houg": 4 },
 					},
-					// Hiryuu Kai Ni
+					// Hiryuu
 					"25": {
-						remodel: 2,
 						single: { "houg": 1 },
 					},
 				},
