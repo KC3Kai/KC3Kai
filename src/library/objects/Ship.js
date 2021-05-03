@@ -2153,7 +2153,9 @@ KC3改 Ship Object
 			if(daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[1] === 7) {
 				// special proficiency critical modifier for CVCI
 				// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
-				const firstSlotType = (cutinType => {
+				// same modifier with regualr air attack for CVNCI
+				const allowedSlotType = (cutinType => {
+					// uncertained: jets counted? not counted since #estimateDayAttackType neither
 					switch(cutinType) {
 						case "CutinFDBTB": return [6, 7, 8];
 						case "CutinDBDBTB":
@@ -2166,10 +2168,26 @@ KC3改 Ship Object
 					return this.slots[0] > 0 && firstGear.exists() &&
 						type2Ids.includes(firstGear.master().api_type[2]);
 				};
-				// detail modifier affected by (internal) proficiency under verification
-				// might be an average value from participants, simply use max modifier (+0.1 / +0.25) here
-				proficiencyCriticalModifier += 0.1;
-				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(firstSlotType) ? 0.15 : 0;
+				// actual modifier affected by (internal) proficiency and bonus under verification,
+				// https://docs.google.com/spreadsheets/d/1DCSQpzGeStmkkDpHAfEfUHdsUlULmg2IGrNLpwFfW34/html
+				// might be an average value from participants internal proficiency experience,
+				// all max 120 exp should be 0.106022, but here we use low exp 100 like regular below, so modifier is still 0.1
+				const getAverageProficiencyCriticalModifier = (type2Ids) => {
+					const expBonus = [0, 0, 0, 0, -3, -2, 2, 10, 10.25];
+					let modSum = 0, modCnt = 0;
+					this.equipment().forEach((g, i) => {
+						if(this.slots[i] > 0 && g.exists() && type2Ids.includes(g.master().api_type[2])) {
+							const aceLevel = g.ace || 0;
+							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
+							const mod = aceLevel < 4 ? 0 : Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 200;
+							modSum += mod;
+							modCnt += 1;
+						}
+					});
+					return modCnt > 0 ? modSum / modCnt : 0;
+				};
+				proficiencyCriticalModifier += getAverageProficiencyCriticalModifier(allowedSlotType);
+				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(allowedSlotType) ? 0.15 : 0;
 			} else {
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
