@@ -4710,6 +4710,17 @@ KC3改 Ship Object
 			shipTooltipStyle.removeProperty(name);
 			shipTooltipStyle.setProperty(name, value);
 		};
+		// show day shelling power instead of ASW power (if any) on holding Alt key
+		if(event.altKey && $(".dayAswPower", ui.tooltip).is(":visible")) {
+			$(".dayAswPower", ui.tooltip).parent().parent().hide();
+			$(".dayAttack", ui.tooltip).parent().parent().show();
+		}
+		// show day ASW power instead of shelling power if can ASW on holding Ctrl/Meta key
+		if((event.ctrlKey || event.metaKey) && !$(".dayAswPower", ui.tooltip).is(":visible")
+			&& $(".dayAswPower", ui.tooltip).text() !== "-") {
+			$(".dayAswPower", ui.tooltip).parent().parent().show();
+			$(".dayAttack", ui.tooltip).parent().parent().hide();
+		}
 		// find which width of wide rows overflow, add slide animation to them
 		// but animation might cost 10% more or less CPU even accelerated with GPU
 		let maxOverflow = 0;
@@ -4723,17 +4734,6 @@ KC3改 Ship Object
 			if(over < -8) { $(this).addClass("use-gpu slide"); }
 		});
 		setStyleVar("--maxOverflow", maxOverflow + "px");
-		// show day shelling power instead of ASW power (if any) on holding Alt key
-		if(event.altKey && $(".dayAswPower", ui.tooltip).is(":visible")) {
-			$(".dayAswPower", ui.tooltip).parent().parent().hide();
-			$(".dayAttack", ui.tooltip).parent().parent().show();
-		}
-		// show day ASW power instead of shelling power if can ASW on holding Ctrl/Meta key
-		if((event.ctrlKey || event.metaKey) && !$(".dayAswPower", ui.tooltip).is(":visible")
-			&& $(".dayAswPower", ui.tooltip).text() !== "-") {
-			$(".dayAswPower", ui.tooltip).parent().parent().show();
-			$(".dayAttack", ui.tooltip).parent().parent().hide();
-		}
 		return true;
 	};
 
