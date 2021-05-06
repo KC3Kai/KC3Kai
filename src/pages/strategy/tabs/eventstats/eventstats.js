@@ -398,7 +398,7 @@
 				}
 				//$(".boss_runs", curBox).text("Boss Reaches: " + this.stats.bossCount[i]);
 				$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
-												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100})%`);
+												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
 				$(".total_cost", curBox).append("Total Cost: " + buildConsMessage(this.stats.sortieConsumption[i]));
 				curBox.appendTo(".map_list");
 			}
