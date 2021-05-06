@@ -15,9 +15,12 @@
 			lbConsumption: [],
 			sortieConsumption: {},
 			clearConsumption: {},
+			lastDanceConsumption: {},
 			lastHits: {},
 			sortieCount: {},
-			clearCount: {}
+			bossCount: {},
+			clearCount: {},
+			ldCount: {},
 		},
 
 		/* INIT: mandatory
@@ -114,9 +117,12 @@
 				lbConsumption: [],
 				sortieConsumption: {},
 				clearConsumption: {},
+				lastDanceConsumption: {},
 				lastHits: {},
 				sortieCount: {},
-				clearCount: {}
+				bossCount: {},
+				clearCount: {},
+				ldCount: {},
 			};
 
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -176,10 +182,23 @@
 				let hpbar = false;
 				if (sortie.eventmap.api_gauge_type == 2) hpbar = true;
 				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
+				if (!this.stats.bossCount[mapnum]) this.stats.bossCount[mapnum] = 0;
 				if (!this.stats.clearCount[mapnum]) this.stats.clearCount[mapnum] = 0;
+				if (!this.stats.ldCount[mapnum]) this.stats.ldCount[mapnum] = 0;
 				let cleared = false;
+				let lastDance = false;
 				if (sortie.eventmap.api_cleared) cleared = true;
-				if (!cleared) this.stats.clearCount[mapnum]++;
+				if (!cleared) { 
+					this.stats.clearCount[mapnum]++;
+					const mapname = `${this.world}${mapnum}`;
+					const mapdata = this.maps["m" + mapname];
+					const gauges = Object.keys(KC3Meta.eventGauge(mapname));
+					if (sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
+						lastDance = true;
+						this.stats.ldCount[mapnum]++;
+					}
+
+				}
 				this.stats.sortieCount[mapnum]++;
 				let isClearSortie = false;
 				const mapname = `m${this.world}${mapnum}`;
@@ -194,6 +213,8 @@
 					const drop = battle.drop;
 					this.stats.dropList[mapnum] = this.stats.dropList[mapnum] || {};
 					this.stats.dropList[mapnum][drop] = (this.stats.dropList[mapnum][drop] || 0) + 1;
+
+					if (battle.boss) { this.stats.bossCount[mapnum]++; }
 			
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
@@ -264,11 +285,16 @@
 
 				// Get sortie consumption
 				allPromises.push(KC3Database.con.navaloverall.where("type").equals("sortie" + sortie.id).toArray(arr => {
+					const consArray = buildConsumptionArray(arr);
 					this.stats.sortieConsumption[mapnum] = this.stats.sortieConsumption[mapnum] || [];
-					this.stats.sortieConsumption[mapnum].push(buildConsumptionArray(arr));
+					this.stats.sortieConsumption[mapnum].push(consArray);
 					if (!cleared) {
 						this.stats.clearConsumption[mapnum] = this.stats.clearConsumption[mapnum] || [];
-						this.stats.clearConsumption[mapnum].push(buildConsumptionArray(arr));
+						this.stats.clearConsumption[mapnum].push(consArray);
+					}
+					if (lastDance) {
+						this.stats.lastDanceConsumption[mapnum] = this.stats.lastDanceConsumption[mapnum] || [];
+						this.stats.lastDanceConsumption[mapnum].push(consArray);
 					}
 				  }));
 			}).then(() => {
@@ -279,6 +305,10 @@
 					}
 					for (let key in this.stats.clearConsumption) {
 						this.stats.clearConsumption[key] = this.stats.clearConsumption[key].reduce((acc, o) =>
+						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
+					}
+					for (let key in this.stats.lastDanceConsumption) {
+						this.stats.lastDanceConsumption[key] = this.stats.lastDanceConsumption[key].reduce((acc, o) =>
 						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					this.displayEventStatistics();
@@ -348,9 +378,15 @@
 
 				$(".map_title", curBox).text(mapTitle);
 				if (this.stats.clearConsumption[i]) {
-					$(".clear_runs", curBox).text("Number of Runs to Clear: " + this.stats.clearCount[i]);
-					$(".clear_cost", curBox).append("Clear Expenditure: " + buildConsMessage(this.stats.clearConsumption[i]));
+					$(".clear_runs", curBox).append("Clear Runs: " + this.stats.clearCount[i] + ", Cost: " + buildConsMessage(this.stats.clearConsumption[i]));
+					//$(".clear_cost", curBox).append("Clear Expenditure: " + buildConsMessage(this.stats.clearConsumption[i]));
 				}
+
+				if (this.stats.lastDanceConsumption[i]) {
+					$(".ld_runs", curBox).append("LD Runs: " + this.stats.ldCount[i] + ", Cost: " + buildConsMessage(this.stats.lastDanceConsumption[i]));
+					//$(".ld_cost", curBox).append("LD Expenditure: " + buildConsMessage(this.stats.lastDanceConsumption[i]));
+				}
+
 				if (this.stats.lastHits[i]) {
 					const result = this.stats.lastHits[i];
 					let str = "{0} finished off the boss with {1} damage".format(
@@ -360,8 +396,10 @@
 					else { str += " exactly"; }
 					$(".clear_attack", curBox).append(str);
 				}
-				$(".total_runs", curBox).text("Total Number of Runs: " + this.stats.sortieCount[i]);
-				$(".total_cost", curBox).append("Total Expenditure: " + buildConsMessage(this.stats.sortieConsumption[i]));
+				//$(".boss_runs", curBox).text("Boss Reaches: " + this.stats.bossCount[i]);
+				$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
+												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100})%`);
+				$(".total_cost", curBox).append("Total Cost: " + buildConsMessage(this.stats.sortieConsumption[i]));
 				curBox.appendTo(".map_list");
 			}
 			$(".lbcons").append("Land Base Consumption: " + buildLBMessage(this.stats.lbConsumption));
