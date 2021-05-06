@@ -4198,6 +4198,9 @@ ABYSS FLEET
 	height:75px;
 	margin:0px 0px 3px 0px;
 }
+.wide_column .airbase {
+	height:128px;
+}
 
 .airbase .airbase_infos {
 	width:340px;
@@ -4303,6 +4306,9 @@ ABYSS FLEET
 	float:left;
 	overflow:hidden;
 }
+.wide_column .airbase .base_planes {
+	height:106px;
+}
 
 /* PLANES */
 .airbase_plane {
@@ -4314,6 +4320,9 @@ ABYSS FLEET
 	border-radius:6px;
 	overflow:hidden;
 	white-space:nowrap;
+}
+.wide_column .airbase_plane {
+	width:334px;
 }
 .airbase_plane.moving {
 	background:rgba(255,200,0,0.2);
@@ -4383,7 +4392,17 @@ ABYSS FLEET
 	white-space:nowrap;
 	text-overflow:ellipsis;
 }
+.wide_column .base_plane_name {
+	display:inline-block !important;
+	width:165px;
+	margin-right:2px;
+}
+.wide_column.long_name .base_plane_name {
+	width:287px;
+}
+
 .base_plane_count {
+	max-width:38px;
 	line-height:24px;
 	font-size:11px;
 	text-shadow:2px 2px 4px #333,
@@ -4405,6 +4424,15 @@ ABYSS FLEET
 	width:16px;
 	height:16px;
 	vertical-align:top;
+}
+.wide_column .base_plane_cond {
+	margin-right:3px;
+}
+.long_name .name_toggle_group {
+	display:none;
+}
+.long_name .base_plane_name {
+	display:inline-block;
 }
 
 /* HORIZONTAL LAYOUT

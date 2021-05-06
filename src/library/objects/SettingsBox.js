@@ -41,9 +41,9 @@ To be dynamically used on the settings page
 			$(".options", self.element).empty();
 			self[info.type]( info.options );
 		});
-		if(parseInt(info.chui) || 0 === 1){
-			$(this.element).addClass("dangerous");
-		}
+		$(this.element)
+			.toggleClass("deprecated", !!info.deprecated)
+			.toggleClass("dangerous", !!info.chui);
 	};
 
 	SettingsBox.prototype.check = function( options ){

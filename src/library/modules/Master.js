@@ -415,7 +415,7 @@ Saves and loads significant data for future use
 			if(!shipMst) return false;
 			const stype = shipMst.api_stype;
 			const equipOn = this.equip_on(gearMstId, gearType2);
-			if(!equipOn || !equipOn.stypes.length) return false;
+			if(!equipOn || (!equipOn.stypes.length && !equipOn.includes.length)) return false;
 			var result = 0;
 			if(Array.isArray(equipOn.excludes) && !equipOn.excludes.includes(shipMstId)) {
 				if(equipOn.stypes.includes(stype)) result |= 1;

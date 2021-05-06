@@ -160,6 +160,16 @@
 				}
 			},
 			{
+				"name": "HitomaruKonpaku",
+				"avatar": "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
+				"desc": "AboutDeveloper",
+				"active": 1,
+				"links": {
+					"gh": "https://github.com/HitomaruKonpaku",
+					"tw": "https://twitter.com/HitomaruKonpaku"
+				}
+			},
+			{
 				"name": "bamboo3250",
 				"avatar": "https://avatars3.githubusercontent.com/u/8078323?v=3&s=40",
 				"desc": ["AboutDeveloper", "Tiếng Việt"],
@@ -247,7 +257,6 @@
 				"name": "CrazyTeitoku",
 				"avatar": "https://avatars3.githubusercontent.com/u/12234182?v=3&s=40",
 				"desc": [ "AboutModerator", "AboutDeveloper" ],
-				"active": 1,
 				"links": {
 					"wk" :"http://kancolle.fandom.com/wiki/User:Crazy_teitoku"
 				}
@@ -318,8 +327,9 @@
 				"name": "freezebear",
 				"avatar" : "https://avatars2.githubusercontent.com/u/12047229?v=3&s=40",
 				"desc" : "Indonesian",
-				"active": 1,
+				"active": 0,
 				"links" : {
+					"gh" :"https://github.com/freezebear",
 					"fb" :"https://www.facebook.com/freezebear17",
 					"tw" :"https://twitter.com/freezebear17",
 					"wk" :"kancolle.fandom.com/wiki/User:Freezebear"
@@ -414,6 +424,15 @@
 				}
 			},
 			{
+				"name": "Oradimi",
+				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
+				"desc" : "Français,English",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/Oradimi"
+				}
+			},
+			{
 				"name": "RanFoxRun",
 				"avatar" : "https://avatars1.githubusercontent.com/u/13418956?v=3&s=40",
 				"desc" : "Italiano",
@@ -427,7 +446,7 @@
 				"name": "rephira",
 				"avatar" : "https://avatars3.githubusercontent.com/u/13478649?v=3&s=40",
 				"desc" : "한국어",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh" :"https://github.com/rephira",
 					"wk" :"http://kancolle.fandom.com/wiki/User:Rephira"
@@ -528,7 +547,7 @@
 				"name": "angel84326",
 				"avatar" : "https://avatars3.githubusercontent.com/u/15860898?v=3&s=40",
 				"desc" : "繁體中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"fb": "https://www.facebook.com/angel84326",
 					"wk": "http://zh.kancolle.fandom.com/wiki/User:Angel84326",
@@ -569,7 +588,7 @@
 				"name": "Rys3t",
 				"avatar" : "https://avatars2.githubusercontent.com/u/25607118?v=3&s=40",
 				"desc" : "繁體中文",
-				"active": 1,
+				"active": 0,
 				"links" : {
 					"gh": "https://github.com/Rys3t"
 				}
@@ -611,6 +630,15 @@
 				}
 			},
 			{
+				"name": "魁の光",
+				"avatar" : "https://avatars.githubusercontent.com/u/17513773?v=4",
+				"desc" : "Tiếng Việt",
+				"active": 1,
+				"links" : {
+					"gh" :"https://github.com/haidang10897"
+				}
+			},
+			{
 				"name": "Jurrunio",
 				"avatar" : "https://avatars.githubusercontent.com/u/59234041?s=88&v=4",
 				"desc" : "繁體中文",
@@ -622,16 +650,6 @@
 			}
 		],
 		"AboutForkContributors": [
-			{
-				"name": "HitomaruKonpaku",
-				"avatar": "https://avatars3.githubusercontent.com/u/9608105?v=4&s=460",
-				"desc": "AboutDeveloper",
-				"active": 1,
-				"links": {
-					"gh": "https://github.com/HitomaruKonpaku",
-					"tw": "https://twitter.com/HitomaruKonpaku"
-				}
-			},
 			{
 				"name": "kyoushuu",
 				"avatar": "https://avatars2.githubusercontent.com/u/2142097?v=3&s=40",
@@ -743,15 +761,6 @@
 				"active": 1,
 				"links" : {
 					"gh": "https://github.com/flixwito"
-				}
-			},
-			{
-				"name": "Oradimi",
-				"avatar" : "https://avatars3.githubusercontent.com/u/41118330?s=460&v=4",
-				"desc" : "Français",
-				"active": 1,
-				"links" : {
-					"gh" :"https://github.com/Oradimi"
 				}
 			},
 			{
@@ -1016,6 +1025,23 @@
 			"image": "https://graph.facebook.com/KC.TH.Translators/picture",
 			"links": [
 				"https://www.facebook.com/KC.TH.Translators"
+			]
+		},
+		{
+			"name": "AboutPartnerKCNavName",
+			"desc": "AboutPartnerKCNavDesc",
+			"image": "https://kc.piro.moe/favicon.ico",
+			"links": [
+				"https://kc.piro.moe/"
+			]
+		},
+		{
+			"name": "AboutPartnerKCImgBuilderName",
+			"desc": "AboutPartnerKCImgBuilderDesc",
+			"image": "https://kancolleimgbuilder.web.app/favicon.ico",
+			"links": [
+				"https://github.com/HitomaruKonpaku/KanColleImgBuilder",
+				"https://github.com/Nishisonic/gkcoi"
 			]
 		}
 	],

@@ -57,7 +57,6 @@ body {
 	font-size:22px;
 	font-weight:bold;
 }
-
 /* SETTINGS
 --------------------------*/
 .settings {
@@ -287,8 +286,11 @@ body {
 	color:#f99;
 }
 
+.settingBox.deprecated .title {
+	text-decoration:line-through;
+}
 .settingBox.dangerous {
-	color: red;
+	color:red;
 	background:#f68383;
 }
 
