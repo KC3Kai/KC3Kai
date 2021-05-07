@@ -2427,6 +2427,7 @@ Used by SortieManager
 								precapPower: precapPower,
 								postcapPower: postcapPower,
 								time: time,
+								isNightContacted: isNightContacted,
 							};
 
 							result.enemy = {
