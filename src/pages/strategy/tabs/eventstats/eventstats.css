@@ -7,6 +7,13 @@
 	height: 45px;
 }
 
+.tab_eventstats .map_switcher .world_list {
+	min-width:150px;
+	height:22px;
+	margin:10px 0px 0px 10px;
+	float:left;
+}
+
 .tab_eventstats .loading img {
 	content:url(/assets/img/ui/indicator.svg);
 	width:24px;
@@ -16,6 +23,27 @@
 	display:block;
 }
 
-table, th, td {
+.tab_eventstats .table5 {
+	width:100%;
+}
+
+.tab_eventstats .table5,
+.tab_eventstats .table5 tr,
+.tab_eventstats .table5 td {
 	border: 1px solid black;
+}
+
+.tab_eventstats .table5 td {
+	padding:3px;
+	white-space:nowrap;
+}
+
+.tab_eventstats .table5 img {
+	width:30px;
+	height:30px;
+	object-fit:cover;
+	image-rendering:auto;
+}
+.tab_eventstats .table5 span {
+	margin:0 5px 0 5px;
 }

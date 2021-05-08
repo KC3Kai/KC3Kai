@@ -27,7 +27,6 @@
 		Prepares initial static data needed.
 		---------------------------------*/
 		init: function() {
-			// TODO codes stub, remove this if nothing to do
 		},
 
 		/* RELOAD: optional
@@ -63,7 +62,6 @@
 				KC3StrategyTabs.gotoTab(null, this.world);
 			});
 			$(".map_switcher .world_list").val(this.world || 0);
-			// TODO codes stub, remove this if nothing to do
 			this.loadEventStatistics();
 		},
 
@@ -78,10 +76,6 @@
 		update: function(pageParams) {
 			// Use `pageParams` for latest page hash values,
 			// KC3StrategyTabs.pageParams keeps the old values for states tracking
-			
-
-			// TODO codes stub, remove this if nothing to do
-
 			// Returning `true` means updating has been handled.
 			return false;
 		},
@@ -103,7 +97,7 @@
 		loadEventStatistics: function() {
 			if (this.world < 10) { return; }
 			$(".loading").show();
-			$(".t5").hide();
+			$(".table5").hide();
 			$(".lbcons").hide();
 			$(".map_list").html("").hide();
 			const allPromises = [];
@@ -317,6 +311,11 @@
 		},
 
 		displayEventStatistics: function() {
+			if (!Object.keys(this.stats.sortieCount).length) {
+				$(".loading").hide();
+				$(".map_list").text("No data available for this event").show();
+				return;
+			}
 			const getTopFive = (foo, forDrop=false) => {
 				var props = Object.keys(foo).map(function(key) {
 				  return { key: key, value: this[key] };
@@ -337,11 +336,11 @@
 				let str = "<tr>" + "<td>" + map[key] + "</td>";
 				const vals = this.stats[key];
 				const topFive = getTopFive(vals);
-				for (let i = 0; i < 5; i++) {
-					str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + " width=30px height=30px></img>" + topFive[i].value + "</td>";
+				for (let i = 0; i < Math.min(5, topFive.length); i++) {
+					str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
 				}
 				str += "</tr>";
-				$("#t5").append(str);
+				$(".table5").append(str);
 			}
 
 			const buildLBMessage = consumption => {
@@ -404,7 +403,7 @@
 			}
 			$(".lbcons").append("Land Base Consumption: " + buildLBMessage(this.stats.lbConsumption));
 			$(".loading").hide();
-			$(".t5").show();
+			$(".table5").show();
 			$(".lbcons").show();
 			$(".map_list").show();
 
