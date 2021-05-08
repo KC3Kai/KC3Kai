@@ -941,6 +941,7 @@
 						remodel: 2,
 						multiple: { "houg": 6, "houk": 1 },
 					},
+					/*
 					// Souryuu Kai Ni range +2
 					"17": {
 						remodel: 2,
@@ -948,6 +949,7 @@
 					},
 					// Hiryuu Kai Ni range +2
 					"25": "17",
+					*/
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -959,6 +961,7 @@
 						remodel: 2,
 						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
 					},
+					/*
 					// Souryuu Kai Ni range +2
 					"17": {
 						remodel: 2,
@@ -966,6 +969,7 @@
 					},
 					// Hiryuu Kai Ni range +2
 					"25": "17",
+					*/
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -3713,13 +3717,8 @@
 						multiple: { "raig": 1, "houk": -2 },
 					},
 					{
-						// Other CL who can equip it
-						ids: [200, 488],
-						multiple: { "houg": -1, "houk": -7 },
-					},
-					{
 						// All other ships who can equip it
-						stypes: [4, 13, 14, 16],
+						stypes: [3, 4, 13, 14, 16],
 						excludes: [118, 119, 506, 586, 623, 657, 668],
 						multiple: { "houg": -1, "houk": -7 },
 					},
@@ -4246,7 +4245,7 @@
 						multiple: { "houg": 3 },
 					},
 					{
-						//Kiso K2, Tama K2
+						// Kiso K2, Tama K2
 						ids: [146, 547],
 						single: { "houg": 2 },
 					},
