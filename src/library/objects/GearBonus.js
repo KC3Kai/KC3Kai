@@ -69,9 +69,13 @@
 				ru130mmB13SmallGunMount: 0,
 				ru130mmB13SmallGunMountIds: [282],
 				skilledLookouts: 0,
-				skilledLookoutsIds: [129],
+				skilledLookoutsIds: [129, 412],
 				searchlightSmall: 0,
 				searchlightSmallIds: [74],
+				type21AirRadar: 0,
+				type21AirRadarIds: [30, 410],
+				type21AirRadarK2: 0,
+				type21AirRadarK2Ids: [410],
 			},
 			// Ryuusei
 			"18": {
@@ -139,7 +143,7 @@
 					// Akagi Class Kai+
 					"14": "3",
 					// Shoukaku Class Kai Ni+
-					"43": {
+					"33": {
 						remodel: 2,
 						multiple: { "houg": 1 },
 					},
@@ -169,7 +173,7 @@
 					// Akagi Class Kai+
 					"14": "3",
 					// Shoukaku Class Kai Ni+
-					"43": {
+					"33": {
 						remodel: 2,
 						multiple: { "houg": 1 },
 					},
@@ -212,20 +216,13 @@
 			"93": {
 				count: 0,
 				byClass: {
-					// Souryuu Kai Ni
+					// Souryuu
 					"17": {
-						remodel: 2,
 						single: { "houg": 1 },
 					},
-					// Hiryuu Kai Ni
+					// Hiryuu
 					"25": {
-						remodel: 2,
 						single: { "houg": 3 },
-					},
-					// Ryuujou Kai Ni
-					"32": {
-						remodel: 2,
-						single: { "houg": 1 },
 					},
 				},
 			},
@@ -242,11 +239,6 @@
 					"25": {
 						remodel: 2,
 						single: { "houg": 7 },
-					},
-					// Ryuujou Kai Ni
-					"32": {
-						remodel: 2,
-						single: { "houg": 1 },
 					},
 				},
 			},
@@ -328,32 +320,32 @@
 					{
 						// Ryuuhou Kai
 						ids: [318],
-						single: { "houg": 4, "tais": 1 },
+						multiple: { "houg": 4, "tais": 1 },
 					},
 					{
 						// Ryuuhou K2
 						ids: [888],
-						single: { "houg": 4, "tais": 2 },
+						multiple: { "houg": 4, "tais": 2 },
 					},
 					{
 						// Ryuuhou K2E
 						ids: [883],
-						single: { "houg": 5, "tais": 2 },
+						multiple: { "houg": 5, "tais": 2 },
 					},
 					{
 						// Zuihou Kai Ni+
 						ids: [555, 560],
-						single: { "houg": 2, "tais": 2 },
+						multiple: { "houg": 2, "tais": 2 },
 					},
 					{
 						// Shouhou Kai
 						ids: [282],
-						single: { "houg": 2, "tais": 1 },
+						multiple: { "houg": 2, "tais": 1 },
 					},
 					{
 						// Akagi Kai Ni E, Kaga Kai Ni E
 						ids: [599, 610],
-						single: { "houg": 3 },
+						multiple: { "houg": 3 },
 					},
 				],
 			},
@@ -364,32 +356,32 @@
 					{
 						// Ryuuhou Kai
 						ids: [318],
-						single: { "houg": 5, "tais": 1, "houk": 1 },
+						multiple: { "houg": 5, "tais": 1, "houk": 2 },
 					},
 					{
 						// Ryuuhou K2
 						ids: [888],
-						single: { "houg": 4, "tais": 2, "houk": 2 },
+						multiple: { "houg": 4, "tais": 2, "houk": 2 },
 					},
 					{
 						// Ryuuhou K2E
 						ids: [883],
-						single: { "houg": 5, "tais": 2, "houk": 3 },
+						multiple: { "houg": 5, "tais": 2, "houk": 3 },
 					},
 					{
 						// Zuihou Kai Ni+
 						ids: [555, 560],
-						single: { "houg": 3, "tais": 2, "houk": 2 },
+						multiple: { "houg": 3, "tais": 2, "houk": 2 },
 					},
 					{
 						// Shouhou Kai
 						ids: [282],
-						single: { "houg": 3, "tais": 1, "houk": 1 },
+						multiple: { "houg": 3, "tais": 1, "houk": 1 },
 					},
 					{
 						// Akagi Kai Ni E, Kaga Kai Ni E
 						ids: [599, 610],
-						single: { "houg": 3, "houk": 1 },
+						multiple: { "houg": 3, "houk": 1 },
 					},
 				],
 			},
@@ -694,22 +686,22 @@
 					{
 						// Ryuuhou K2
 						ids: [888],
-						multiple: { "houg": 1 },
+						multiple: { "houg": 2 },
 					},
 					{
 						// Ryuuhou K2
 						ids: [888],
-						single: { "raig": 2, "houk": 3 },
-					},
-					{
-						// Ryuuhou K2E
-						ids: [883],
-						multiple: { "houg": 2 },
-					},
-					{
-						// Ryuuhou K2E
-						ids: [883],
 						single: { "raig": 1, "houk": 1 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Ryuuhou K2E
+						ids: [883],
+						single: { "raig": 2, "houk": 3 },
 					},
 				],
 			},
@@ -909,14 +901,12 @@
 			"99": {
 				count: 0,
 				byClass: {
-					// Souryuu Kai Ni
+					// Souryuu
 					"17": {
-						remodel: 2,
 						single: { "houg": 4 },
 					},
-					// Hiryuu Kai Ni
+					// Hiryuu
 					"25": {
-						remodel: 2,
 						single: { "houg": 1 },
 					},
 				},
@@ -933,12 +923,12 @@
 					// Souryuu Kai Ni
 					"17": {
 						remodel: 2,
-						multiple: { "houg": 6 },
+						single: { "houg": 6 },
 					},
 					// Hiryuu Kai Ni
 					"25": {
 						remodel: 2,
-						multiple: { "houg": 3 },
+						single: { "houg": 3 },
 					},
 				},
 			},
@@ -951,13 +941,6 @@
 						remodel: 2,
 						multiple: { "houg": 6, "houk": 1 },
 					},
-					// Souryuu Kai Ni range +2
-					"17": {
-						remodel: 2,
-						single: { "leng": 1 },
-					},
-					// Hiryuu Kai Ni range +2
-					"25": "17",
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -969,13 +952,6 @@
 						remodel: 2,
 						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
 					},
-					// Souryuu Kai Ni range +2
-					"17": {
-						remodel: 2,
-						single: { "leng": 1 },
-					},
-					// Hiryuu Kai Ni range +2
-					"25": "17",
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -1025,8 +1001,18 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Zuihou Kai, Zuihou K2, Zuihou K2B, Ryuuhou Kai+
-						ids: [117, 555, 560, 318, 883, 888],
+						// Zuihou Kai, Ryuuhou Kai+
+						ids: [117, 318, 883, 888],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Zuihou Kai, Ryuuhou Kai+
+						ids: [117, 318, 883, 888],
+						single: { "houk": 1 },
+					},
+					{
+						// Zuihou K2, Zuihou K2B
+						ids: [555, 560],
 						multiple: { "houg": 1, "houk": 1 },
 					},
 				],
@@ -1382,8 +1368,9 @@
 							single: { "houg": 3, "saku": 3 },
 						},
 						{
-							// Souryuu stars+8 totally +5 fp, +6 los
+							// Souryuu K2 stars+8 totally +5 fp, +6 los
 							minStars: 8,
+							remodel: 2,
 							single: { "houg": 1, "saku": 1 },
 						},
 						{
@@ -1893,7 +1880,35 @@
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Following Americans: Northampton Class
+					// Iowa Class
+					"65": [
+						{
+							single: { "houg": 1, "saku": 1 },
+						},
+						{
+							minStars: 3,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
+					// North Carolina Class
+					"107": "65",
+					// Northampton Class
 					"95": [
 						{
 							minStars: 5,
@@ -1904,18 +1919,102 @@
 							single: { "houg": 1 },
 						},
 					],
-					// Iowa Class
-					"65": "95",
-					// Colorado Class
-					"93": "95",
 					// Atlanta Class
 					"99": "95",
-					// South Dakota Class
-					"102": "95",
 					// St. Louis Class
 					"106": "95",
+				},
+			},
+			// SOC Seagull
+			"414": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following Americans:
+					// Iowa Class
+					"65": [
+						{
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
 					// North Carolina Class
-					"107": "95",
+					"107": "65",
+					// Northampton Class
+					"95": [
+						{
+							single: { "houg": 1, "saku": 2 },
+						},
+						{
+							minStars: 3,
+							single: { "saku": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// Atlanta Class
+					"99": "95",
+					// St. Louis Class
+					"106": "95",
+				},
+			},
+			// SO3C Seamew Kai
+			"415": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following Americans:
+					// Iowa Class
+					"65": [
+						{
+							single: { "saku": 1, "tais": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
+					// North Carolina Class
+					"107": "65",
+					// Northampton Class
+					"95": [
+						{
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "houg": 1 },
+						},
+					],
+					// Atlanta Class
+					"99": "95",
+					// St. Louis Class
+					"106": "95",
 				},
 			},
 			// Ar196 Kai
@@ -2018,14 +2117,12 @@
 			// O Type Observation Autogyro Kai
 			"324": {
 				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
+				byShip: [
+					{
+						// Ise Kai Ni
+						ids: [553],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
-				},
-				byShip: [
 					{
 						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
@@ -2036,14 +2133,12 @@
 			// O Type Observation Autogyro Kai Ni
 			"325": {
 				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
+				byShip: [
+					{
+						// Ise Kai Ni
+						ids: [553],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
-				},
-				byShip: [
 					{
 						// Hyuuga Kai Ni, Kaga Kai Ni Go
 						ids: [554, 646],
@@ -2054,14 +2149,12 @@
 			// S-51J
 			"326": {
 				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
+				byShip: [
+					{
+						// Ise Kai Ni
+						ids: [553],
 						multiple: { "houg": 1, "tais": 3, "houk": 1 },
 					},
-				},
-				byShip: [
 					{
 						// Hyuuga Kai Ni
 						ids: [554],
@@ -2077,14 +2170,12 @@
 			// S-51J Kai
 			"327": {
 				count: 0,
-				byClass: {
-					// Ise Class Kai Ni
-					"2": {
-						remodel: 2,
+				byShip: [
+					{
+						// Ise Kai Ni
+						ids: [553],
 						multiple: { "houg": 2, "tais": 4, "houk": 1 },
 					},
-				},
-				byShip: [
 					{
 						// Hyuuga Kai Ni
 						ids: [554],
@@ -2162,11 +2253,6 @@
 							remodel: 1,
 							multiple: { "houg": 1 },
 						},
-						// extra +1 fp, +1 tp for Kongou Class Kai Ni C
-						{
-							remodel: 3,
-							multiple: { "houg": 1, "raig": 1 },
-						},
 					],
 					// Ise Class
 					"2": {
@@ -2175,6 +2261,18 @@
 					// Fusou Class
 					"26": "2",
 				},
+				byShip: [
+					// extra +1 fp, +1 tp for Kongou Kai Ni C
+					{
+						ids: [591],
+						multiple: { "houg": 1, "raig": 1 },
+					},
+					// extra +1 fp, +1 aa for Hiei Kai Ni C
+					{
+						ids: [592],
+						multiple: { "houg": 1, "tyku": 1 },
+					},
+				],
 			},
 			// 35.6cm Twin Gun Mount Kai Ni
 			"329": {
@@ -2289,10 +2387,10 @@
 						// extra +1 fp, +3 acc for Hyuuga Kai Ni
 						ids: [554],
 						multiple: { "houg": 1, "houm": 3 },
-						// extra +1 fp, +1 ar, +2 ev when synergy with `41cm Triple Gun Mount Kai Ni`
+						// extra +1 fp, +1 ar, +2 ev, +1 acc when synergy with `41cm Triple Gun Mount Kai Ni`
 						synergy: {
 							flags: [ "tripleLargeGunMountK2" ],
-							single: { "houg": 1, "souk": 1, "houk": 2 },
+							single: { "houg": 1, "souk": 1, "houk": 2, "houm": 1 },
 						},
 					},
 				],
@@ -2365,11 +2463,16 @@
 					"93": {
 						multiple: { "houg": 1 },
 					},
-					// Nelson Kai
-					"88": {
-						remodel: 1,
-						multiple: { "houg": 2 },
-					},
+					// Nelson Class
+					"88": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Nagato Class
 					"19": [
 						{
@@ -2397,11 +2500,16 @@
 							multiple: { "houg": 1, "houk": 1 },
 						},
 					],
-					// Nelson Kai
-					"88": {
-						remodel: 1,
-						multiple: { "houg": 2 },
-					},
+					// Nelson Class
+					"88": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Nagato Class
 					"19": [
 						{
@@ -2429,11 +2537,16 @@
 							multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 						},
 					],
-					// Nelson Kai
-					"88": {
-						remodel: 1,
-						multiple: { "houg": 2 },
-					},
+					// Nelson Class
+					"88": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							remodel: 1,
+							multiple: { "houg": 1 },
+						},
+					],
 					// Nagato Class
 					"19": [
 						{
@@ -2735,7 +2848,7 @@
 						},
 						{
 							minStars: 10,
-							multiple: { "houk": 2 },
+							multiple: { "houg": 2, "houk": 2 },
 						},
 					],
 					// Nisshin Class
@@ -2919,10 +3032,20 @@
 					// Mogami Kai Ni+
 					ids: [501, 506],
 					multiple: { "houg": 1 },
-					synergy: {
-						flags: [ "surfaceRadar" ],
-						single: { "houg": 1, "houk": 1 },
-					},
+					synergy: [
+						{
+							flags: [ "surfaceRadar" ],
+							single: { "houg": 1, "houk": 1 },
+						},
+						{
+							flags: [ "type21AirRadar" ],
+							single: { "houg": 1, "tyku": 3, "houk": 2 },
+						},
+						{
+							flags: [ "type21AirRadarK2" ],
+							single: { "houg": 2 },
+						},
+					],
 				},
 			},
 			// 152mm/55 Triple Rapid Fire Gun Mount
@@ -2942,6 +3065,10 @@
 					// Duca degli Abruzzi Class
 					"92": {
 						multiple: { "houg": 2, "tyku": 1, "houk": 1 },
+					},
+					// Gotland Class
+					"89": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				},
 			},
@@ -3019,6 +3146,8 @@
 					"84": "67",
 					// Colorado Class
 					"93": "67",
+					// Atlanta Class
+					"99": "67",
 					// South Dakota Class
 					"102": "67",
 					// Yorktown Class
@@ -3190,6 +3319,12 @@
 					},
 					// Iowa Class
 					"65": "95",
+					// Lexington Class
+					"69": "95",
+					// Casablanca Class
+					"83": "95",
+					// Essex Class
+					"84": "95",
 					// Colorado Class
 					"93": "95",
 					// Atlanta Class
@@ -3206,6 +3341,8 @@
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
 					},
+					// Ark Royal Class
+					"78": "67",
 					// Nelson Class
 					"88": "67",
 					// Town Class
@@ -3226,6 +3363,12 @@
 					},
 					// Iowa Class
 					"65": "95",
+					// Lexington Class
+					"69": "95",
+					// Casablanca Class
+					"83": "95",
+					// Essex Class
+					"84": "95",
 					// Colorado Class
 					"93": "95",
 					// Atlanta Class
@@ -3242,6 +3385,8 @@
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
 					},
+					// Ark Royal Class
+					"78": "67",
 					// Nelson Class
 					"88": "67",
 					// Town Class
@@ -3306,6 +3451,13 @@
 						multiple: { "houg": 2, "raig": 4, "houk": 4 },
 					},
 				},
+				byShip: [
+					{
+						// Yura Kai Ni
+						ids: [488],
+						multiple: { "houg": 2, "raig": 4, "houk": 4 },
+					},
+				],
 			},
 			// 53cm Bow (Oxygen) Torpedo Mount
 			"67": {
@@ -3349,8 +3501,12 @@
 					},
 					// Fletcher Class
 					"91": "87",
+					// Northampton Class
+					"95": "87",
 					// Atlanta Class
 					"99": "87",
+					// St. Louis Class
+					"106": "87",
 					// Jervis Class
 					"82": {
 						multiple: { "houg": 1, "raig": 2 },
@@ -3580,13 +3736,13 @@
 						multiple: { "raig": 2, "houk": -2 },
 					},
 					{
-						// Ooi K2, Nisshin A, Kuma K2D
-						ids: [118, 586, 657],
+						// Ooi K2, Nisshin A, Kuma K2D, Mogami K2T, Yahagi K2B
+						ids: [118, 586, 657, 506, 668],
 						multiple: { "raig": 1, "houk": -2 },
 					},
 					{
 						// All other ships who can equip it
-						stypes: [4, 13, 14, 16],
+						stypes: [3, 4, 13, 14, 16],
 						excludes: [118, 119, 506, 586, 623, 657, 668],
 						multiple: { "houg": -1, "houk": -7 },
 					},
@@ -3680,10 +3836,6 @@
 						ids: [656],
 						minStars: 4,
 						multiple: { "houg": 5, "tyku": 3, "houk": 2 },
-					},
-					{
-						// Yukikaze Kai Ni
-						ids: [656],
 						synergy: [
 							{
 								flags: [ "surfaceRadar" ],
@@ -3787,19 +3939,6 @@
 					},
 					// Kamikaze Class
 					"66": "28",
-					// Shimushu Class
-					"74": {
-						minStars: 7,
-						multiple: { "houg": 1, "tyku": 1 },
-						synergy: {
-							flags: [ "surfaceRadar" ],
-							single: { "houg": 1, "houk": 4 },
-						},
-					},
-					// Etorofu Class
-					"77": "74",
-					// Hiburi Class
-					"85": "74",
 					// Yuubari Kai Ni+
 					"34": {
 						remodel: 2,
@@ -3818,20 +3957,38 @@
 				},
 				byShip: [
 					{
-						// Kinu Kai Ni
-						ids: [487],
+						// All DE
+						stypes: [1],
 						minStars: 7,
-						multiple: { "houg": 2, "tyku": 2 },
+						multiple: { "houg": 1, "tyku": 1 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
-							single: { "houg": 3, "houk": 2 },
+							single: { "houg": 1, "houk": 4 },
 						},
 					},
 					{
-						// Yura Kai Ni
-						ids: [488],
+						// All remodels of: Naka, Kinu
+						origins: [56, 113],
 						minStars: 7,
-						multiple: { "houg": 2, "tyku": 3 },
+						multiple: { "houg": 2 },
+					},
+					{
+						// All remodels of: Yura
+						origins: [23],
+						minStars: 7,
+						multiple: { "houg": 2, "tyku": 1 },
+					},
+					{
+						// Yura Kai, Naka Kai, Kinu Kai
+						ids: [220, 224, 289],
+						minStars: 7,
+						multiple: { "tyku": 1 },
+					},
+					{
+						// Naka Kai Ni, Kinu Kai Ni, Yura Kai Ni
+						ids: [160, 487, 488],
+						minStars: 7,
+						multiple: { "tyku": 2 },
 						synergy: {
 							flags: [ "surfaceRadar" ],
 							single: { "houg": 3, "houk": 2 },
@@ -3934,7 +4091,7 @@
 					{
 						// All remodels of: Ooi, Kitakami
 						origins: [24, 25],
-						multiple: { "houg": 2, "tais": 2 },
+						multiple: { "houg": 2, "tyku": 2 },
 					},
 					{
 						// Yura base, Isuzu base,Kai, Naka base,Kai, Kinu base,Kai extra +2 aa
@@ -4110,6 +4267,11 @@
 						// Kuma K2,K2D
 						ids: [652, 657],
 						multiple: { "houg": 3 },
+					},
+					{
+						// Kiso K2, Tama K2
+						ids: [146, 547],
+						single: { "houg": 2 },
 					},
 					{
 						// Kiso K2, Tama K2, Kuma K2,K2D
@@ -4354,9 +4516,14 @@
 				},
 				byShip: [
 					{
+						// All remodels of Yuudachi
+						origins: [45],
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+					},
+					{
 						// Yuudachi K2
 						ids: [144],
-						multiple: { "houg": 1, "raig": 1, "tyku": 1, "houk": 2 },
+						multiple: { "raig": 1 },
 					},
 					{
 						// Shigure K2, Shikinami K2
@@ -4364,8 +4531,8 @@
 						multiple: { "houg": 1 },
 					},
 					{
-						// Shiratsuyu Kai+, Murasame K2
-						ids: [242, 497, 498],
+						// Shiratsuyu Kai+, Murasame Kai+
+						ids: [242, 497, 244, 498],
 						multiple: { "houk": 1 },
 					},
 					{
@@ -4578,8 +4745,8 @@
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, +1 fp, +2 aa for one or two gun(s)
-						ids: [566, 567, 568],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2 +1 fp, +2 aa for one or two gun(s)
+						ids: [566, 567, 568, 656],
 						multiple: { "houg": 1, "tyku": 2 },
 						countCap: 2,
 					},
@@ -4726,27 +4893,27 @@
 					{
 						// Shiratsuyu K2
 						ids: [497],
-						multiple: { "houg": 1, "houk": 2 },
+						multiple: { "houg": 1, "houk": 1 },
 					},
 					{
 						// Yuudachi K2
 						ids: [144],
-						multiple: { "houg": 1, "raig": 1, "houk": 1 },
+						multiple: { "houg": 1, "raig": 1 },
 					},
 					{
 						// Shigure K2
 						ids: [145],
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// Murasame K2
 						ids: [498],
-						multiple: { "tyku": 1, "houk": 2 },
+						multiple: { "tyku": 1, "houk": 1 },
 					},
 					{
-						// Kawakaze/Umikaze K2
-						ids: [469, 587],
-						multiple: { "houk": 2 },
+						// Kawakaze/Umikaze K2, Shiratsuyu/Murasame Kai
+						ids: [469, 587, 242, 244],
+						multiple: { "houk": 1 },
 					},
 					{
 						// Shikinami K2
@@ -4782,6 +4949,8 @@
 					},
 					// Fletcher Class
 					"91": "87",
+					// Atlanta Class
+					"99": "87",
 					// St. Louis Class
 					"106": "87",
 				},
@@ -4945,7 +5114,7 @@
 				byClass: {
 					// Following Americans: Iowa Class
 					"65": {
-						single: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 					// Lexington Class
 					"69": "65",
@@ -4979,7 +5148,7 @@
 				byClass: {
 					// Following Americans: Iowa Class
 					"65": {
-						single: { "houg": 2, "houk": 3, "saku": 4 },
+						multiple: { "houg": 2, "houk": 3, "saku": 4 },
 					},
 					// Lexington Class
 					"69": "65",
@@ -5002,9 +5171,14 @@
 					// North Carolina Class
 					"107": "65",
 					// John C. Butler Class, range from medium to long
-					"87": {
-						single: { "houg": 3, "houk": 3, "saku": 4, "leng": 1 },
-					},
+					"87": [
+						{
+							multiple: { "houg": 3, "houk": 3, "saku": 4 },
+						},
+						{
+							single: { "leng": 1 },
+						},
+					],
 					// Fletcher Class
 					"91": "87",
 				},
@@ -5024,19 +5198,11 @@
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
-						/*
-						// Isokaze,          Hamakaze,      Asashimo, Kasumi,            Yukikaze, Suzutsuki, Yahagi
-						ids: [167, 320, 557, 170, 312, 558, 425, 344, 49, 253, 464, 470, 20, 228,  532, 537,  139, 307],
-						*/
 						// All remodels of: Isokaze, Hamakaze, Asashimo, Kasumi, Yukikaze, Suzutsuki, Yahagi
 						origins: [167, 170, 425, 49, 20, 532, 139],
 						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
 					},
 					{
-						/*
-						// Hibiki,          Ooyodo,   Kashima
-						ids: [35, 235, 147, 183, 321, 465, 356],
-						*/
 						// All remodels of: Hibiki, Ooyodo, Kashima
 						origins: [35, 183, 465],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
@@ -5175,45 +5341,43 @@
 			"365": {
 				count: 0,
 				byClass: {
-					// Ise Class Kai+
+					// Ise Class
 					"2": {
-						remodel: 1,
-						multiple: { "houg": 1 },
+						single: { "houg": 1 },
 					},
-					// Kongou Class Kai+
+					// Kongou Class
 					"6": [
 						{
-							remodel: 1,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 						{
 							// Extra +2 fp for Kongou Class Kai Ni C
 							remodel: 3,
-							multiple: { "houg": 2 },
+							single: { "houg": 2 },
 						},
 					],
 					// Nagato Class
 					"19": [
 						{
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 						{
 							remodel: 2,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 					],
 					// Fusou Class
 					"26": {
-						multiple: { "houg": 1 },
+						single: { "houg": 1 },
 					},
 					// Yamato Class
 					"37": [
 						{
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 						{
 							remodel: 1,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 					],
 				},
@@ -5226,7 +5390,7 @@
 						{
 							// Kongou Class Kai Ni C
 							remodel: 3,
-							multiple: { "houg": 1, "tyku": 1 },
+							single: { "houg": 1, "tyku": 1 },
 						},
 				},
 				byShip: [
@@ -5263,6 +5427,7 @@
 						},
 						{
 							// Kongou Class K2C totally +3 fp, +3 aa
+							remodel: 3,
 							single: { "houg": 2, "tyku": 2 },
 						},
 					],
@@ -5339,19 +5504,11 @@
 				},
 				byShip: [
 					{
-						/*
-						// Kamikaze,    Harukaze, Shigure,      Yamakaze, Maikaze,  Asashimo
-						ids: [471, 476, 473, 363, 43, 243, 145, 457, 369, 122, 294, 425, 344],
-						*/
 						// All remodels of: Kamikaze, Harukaze, Shigure, Yamakaze, Maikaze, Asashimo
 						origins: [471, 473, 43, 457, 122, 425],
 						multiple: { "houg": 1, "houk": 2, "tais": 3 },
 					},
 					{
-						/*
-						// Ushio,           Ikazuchi,Yamagumo, Isokaze,       Hamakaze,      Kishinami
-						ids: [16, 233, 407, 36, 236, 414, 328, 167, 320, 557, 170, 312, 558, 527, 686],
-						*/
 						// All remodels of: Ushio, Ikazuchi, Yamagumo, Isokaze, Hamakaze, Kishinami
 						origins: [16, 36, 414, 167, 170, 527],
 						multiple: { "houk": 2, "tais": 2 },
@@ -5459,7 +5616,7 @@
 					{
 						// Yuubari K2D
 						ids: [624],
-						multiple: { "houk": 2, "tais": 3 },
+						multiple: { "houg": 1, "houk": 2, "tais": 3 },
 					},
 					{
 						// Noshiro K2
@@ -5621,7 +5778,7 @@
 					"6": [
 						{
 							remodel: 3,
-							single: { "raig": 1, "houk": 1 },
+							single: { "raig": 1, "houk": 2 },
 						},
 						{
 							remodel: 3,
@@ -5696,7 +5853,7 @@
 					// All IJN CA fp +1, ev +2, los +3
 					// Furutaka Class
 					"7": {
-						multiple: { "houg": 1, "raig": 2, "houk": 2, "saku": 3 },
+						multiple: { "houg": 1, "houk": 2, "saku": 3 },
 					},
 					// Takao Class
 					"8": "7",
@@ -5707,8 +5864,190 @@
 					// Myoukou Class
 					"29": "7",
 					// Tone Class
-					"31": "7"
+					"31": "7",
 				},
+			},
+			// Torpedo Squadron Skilled Lookouts
+			"412": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// All IJN DD
+					// Ayanami Class
+					"1": [
+						{
+							single: { "houg": 2, "raig": 4, "tais": 2 },
+						},
+						{
+							multiple: { "houk": 3, "saku": 1 },
+						},
+						{
+							minStars: 4,
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+					],
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Yuugumo Class
+					"38": "1",
+					// Akizuki Class
+					"54": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Matsu Class
+					"101": "1",
+					// All IJN CL
+					// Kuma Class
+					"4": [
+						{
+							single: { "houg": 3, "raig": 3 },
+						},
+						{
+							multiple: { "houk": 2, "saku": 3 },
+						},
+						{
+							minStars: 4,
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 8,
+							single: { "raig": 1 },
+						},
+					],
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Tenryuu Class
+					"21": "4",
+					// Yuubari Class
+					"34": "4",
+					// Agano Class
+					"41": "4",
+					// Ooyodo Class
+					"52": "4",
+					// Katori Class
+					"56": "4",
+					// All IJN CA
+					// Furutaka Class
+					"7": [
+						{
+							single: { "houg": 1 },
+						},
+						{
+							multiple: { "houk": 1, "saku": 1 },
+						},
+					],
+					// Takao Class
+					"8": "7",
+					// Mogami Class
+					"9": "7",
+					// Aoba Class
+					"13": "7",
+					// Myoukou Class
+					"29": "7",
+					// Tone Class
+					"31": "7",
+				},
+			},
+			// Elite Torpedo Squadron Command Facility
+			"413": {
+				count: 0,
+				byClass: {
+					// Ignore if specific ships can equip or not
+					// Ayanami Class
+					"1":{
+						single: { "houg": 2, "raig": 2, "houk": 4 },
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Matsu Class
+					"101": "1",
+					// Yuugumo Class extra +2 fp, +3 tp, +3 ev
+					"38": {
+						single: { "houg": 4, "raig": 5, "houk": 7 },
+					},
+					// Akizuki Class
+					"54": "38",
+					// Katori Class
+					"56": {
+						single: { "houg": 4, "raig": 2, "houk": 2 },
+					},
+					// Tenryuu Class extra +2 aa, +1 tp, +1 ev
+					"21": {
+						single: { "houg": 4, "raig": 3, "tyku": 2, "houk": 3 },
+					},
+					// Yuubari Class
+					"34": "21",
+					// Kuma Class extra +1 fp, +2 tp, +3 ev
+					"4": {
+						single: { "houg": 5, "raig": 4, "houk": 5 },
+					},
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Agano Class
+					"41": "4",
+					// Ooyodo Class
+					"52": "4",
+				},
+				byShip: [
+					{
+						// Naka, Yura, Yahagi, Noshiro, Hamanami, Shimakaze, Kiyoshimo, Hatsushimo
+						origins: [56, 23, 139, 138, 484, 50, 41],
+						single: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Jintsuu, Sendai, Naganami, Hatsushimo, Teruzuki
+						origins: [55, 54, 135, 41, 422],
+						single: { "houg": 1, "raig": 1 },
+					},
+					{
+						// Jintsuu Kai Ni
+						ids: [159],
+						single: { "houg": 2 },
+					},
+					{
+						// Naganami Kai Ni
+						ids: [543],
+						single: { "houg": 1, "houk": 1 },
+					},
+				],
 			},
 			// All Seaplane Reconnaissances
 			"t2_10": {

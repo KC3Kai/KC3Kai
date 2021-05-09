@@ -137,13 +137,14 @@ Provides access to data on built-in JSON files
 			883, // Ryuuhou K2E -> K2
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 639],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
 		coloradoCutinShips: [601, 1496],
 		kongouCutinShips: [591, 592],
+		subFleetCutinShips: [184, 634, 639],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517,
@@ -160,7 +161,7 @@ Provides access to data on built-in JSON files
 			592: 332, 593: 314, 594: 594, 595: 595, 596: 340,
 			597: 597, 598: 598, 599: 280, 600: 50,  601: 356,
 			602: 362, 603: 278, 604: 294, 605: 384, 606: 379,
-			607: 380, 608: 279, 609: 381
+			607: 380, 608: 279, 609: 381, 610: 610,
 		},
 		
 		/* Initialization
@@ -797,13 +798,15 @@ Provides access to data on built-in JSON files
 			return (typeof index === "undefined") ? this._battle.cutinDay :
 				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
-				this._battle.cutinDay[index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
+				// move Submarine Fleet Cutin index 300 to 40
+				this._battle.cutinDay[index >= 300 ? index - 260 : index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
 				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
-				this._battle.cutinNight[index >= 100 ? index - 80 : index] || "";
+				// move Submarine Fleet Cutin index 300 to 30
+				this._battle.cutinNight[index >= 300 ? index - 270 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		aacitype :function(index){

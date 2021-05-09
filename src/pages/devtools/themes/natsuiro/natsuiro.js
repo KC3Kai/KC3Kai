@@ -4697,6 +4697,14 @@
 			// not only the fit weight bonus / over weight penalty, AACI things.
 			// FIXME refactoring to rename all `gunfit` identifiers and names.
 			console.debug("Equipment special effects", data);
+			if(data.isShipObjInvalid) {
+				const newShipObj = KC3ShipManager.get(data.shipObj.rosterId);
+				if(newShipObj.exists()) {
+					const newGearObj = newShipObj.equipment(0);
+					data = newShipObj.equipmentChangedEffects(newGearObj, data.oldGearObj, data.shipOld, newShipObj);
+					console.debug("Rechecked special effects", data);
+				}
+			}
 			if(!data.isShow){
 				if($("#atab_activity").hasClass("active")) $("#atab_basic").trigger("click");
 				return;

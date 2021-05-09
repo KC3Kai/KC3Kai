@@ -271,12 +271,12 @@ $(document).on("ready", function(){
 	};
 	
 	setInterval(function(){
-		if(autoFocus===0){
+		if(autoFocus <= 0){
 			window.focus();
 			$(".focus_regain").hide();
 		}else{
 			$(".focus_regain").show();
-			$(".focus_val").css("width", (800*(autoFocus/20))+"px");
+			$(".focus_val").css("width", (1200 * (autoFocus/20))+"px");
 			autoFocus--;
 		}
 	}, 1000);
