@@ -345,8 +345,10 @@ Used by SortieManager
 	 */
 	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets, isNight = false, isCombined = false){
 		const checkSortieSpecialAttack = attacks => attacks.some(
-			// special attacks ID ranged in [100, 200), >= 200 used by multi-angle attacks
+			// special attacks ID ranged in [100, 200), [200, 201] used by multi-angle attacks
+			// [300, 302] used by submarine fleet attacks since 2021-05-08
 			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
+				|| Number(attack.cutin || attack.ncutin).inside(300, 399)
 		);
 		const fleetNum = isNight && isCombined ? 2 : 1;
 		const playerFleet = fleetNum === 2 ? predictedFleets.playerEscort : predictedFleets.playerMain,

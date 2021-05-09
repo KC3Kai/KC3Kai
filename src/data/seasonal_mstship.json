@@ -4066,7 +4066,7 @@
 		"api_yomi": "じんげい",
 		"api_stype": 20,
 		"api_soku": 5,
-		"api_slot_num": 3
+		"api_slot_num": 2
 	},
 	"5508": {
 		"api_id": 5508,
@@ -4198,14 +4198,102 @@
 	},
 	"5524": {
 		"api_id": 5524,
+		"api_name": "桜迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5525": {
+		"api_id": 5525,
+		"api_name": "桜迅鯨改",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5526": {
+		"api_id": 5526,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"5525": {
-		"api_id": 5525,
+	"5527": {
+		"api_id": 5527,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5528": {
+		"api_id": 5528,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5529": {
+		"api_id": 5529,
+		"api_name": "記念日伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5530": {
+		"api_id": 5530,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5531": {
+		"api_id": 5531,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5532": {
+		"api_id": 5532,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5533": {
+		"api_id": 5533,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5534": {
+		"api_id": 5534,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5535": {
+		"api_id": 5535,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5536": {
+		"api_id": 5536,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,

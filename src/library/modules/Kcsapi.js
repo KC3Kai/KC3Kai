@@ -355,6 +355,7 @@ Previously known as "Reactor"
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
+					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}

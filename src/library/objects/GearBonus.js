@@ -941,15 +941,6 @@
 						remodel: 2,
 						multiple: { "houg": 6, "houk": 1 },
 					},
-					/*
-					// Souryuu Kai Ni range +2
-					"17": {
-						remodel: 2,
-						single: { "leng": 1 },
-					},
-					// Hiryuu Kai Ni range +2
-					"25": "17",
-					*/
 				},
 			},
 			// Suisei Model 22 (634 Air Group / Skilled)
@@ -961,15 +952,6 @@
 						remodel: 2,
 						multiple: { "houg": 8, "tyku": 1, "houk": 2 },
 					},
-					/*
-					// Souryuu Kai Ni range +2
-					"17": {
-						remodel: 2,
-						single: { "leng": 1 },
-					},
-					// Hiryuu Kai Ni range +2
-					"25": "17",
-					*/
 				},
 			},
 			// Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
@@ -1984,6 +1966,48 @@
 						},
 						{
 							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+					// Atlanta Class
+					"99": "95",
+					// St. Louis Class
+					"106": "95",
+				},
+			},
+			// SO3C Seamew Kai
+			"415": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following Americans:
+					// Iowa Class
+					"65": [
+						{
+							single: { "saku": 1, "tais": 1 },
+						},
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+					],
+					// Colorado Class
+					"93": "65",
+					// South Dakota Class
+					"102": "65",
+					// North Carolina Class
+					"107": "65",
+					// Northampton Class
+					"95": [
+						{
+							single: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 8,
 							single: { "houg": 1 },
 						},
 					],
@@ -5174,19 +5198,11 @@
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
-						/*
-						// Isokaze,          Hamakaze,      Asashimo, Kasumi,            Yukikaze, Suzutsuki, Yahagi
-						ids: [167, 320, 557, 170, 312, 558, 425, 344, 49, 253, 464, 470, 20, 228,  532, 537,  139, 307],
-						*/
 						// All remodels of: Isokaze, Hamakaze, Asashimo, Kasumi, Yukikaze, Suzutsuki, Yahagi
 						origins: [167, 170, 425, 49, 20, 532, 139],
 						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
 					},
 					{
-						/*
-						// Hibiki,          Ooyodo,   Kashima
-						ids: [35, 235, 147, 183, 321, 465, 356],
-						*/
 						// All remodels of: Hibiki, Ooyodo, Kashima
 						origins: [35, 183, 465],
 						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
@@ -5488,19 +5504,11 @@
 				},
 				byShip: [
 					{
-						/*
-						// Kamikaze,    Harukaze, Shigure,      Yamakaze, Maikaze,  Asashimo
-						ids: [471, 476, 473, 363, 43, 243, 145, 457, 369, 122, 294, 425, 344],
-						*/
 						// All remodels of: Kamikaze, Harukaze, Shigure, Yamakaze, Maikaze, Asashimo
 						origins: [471, 473, 43, 457, 122, 425],
 						multiple: { "houg": 1, "houk": 2, "tais": 3 },
 					},
 					{
-						/*
-						// Ushio,           Ikazuchi,Yamagumo, Isokaze,       Hamakaze,      Kishinami
-						ids: [16, 233, 407, 36, 236, 414, 328, 167, 320, 557, 170, 312, 558, 527, 686],
-						*/
 						// All remodels of: Ushio, Ikazuchi, Yamagumo, Isokaze, Hamakaze, Kishinami
 						origins: [16, 36, 414, 167, 170, 527],
 						multiple: { "houk": 2, "tais": 2 },
@@ -5856,7 +5864,7 @@
 					// Myoukou Class
 					"29": "7",
 					// Tone Class
-					"31": "7"
+					"31": "7",
 				},
 			},
 			// Torpedo Squadron Skilled Lookouts
@@ -5957,8 +5965,89 @@
 					// Myoukou Class
 					"29": "7",
 					// Tone Class
-					"31": "7"
+					"31": "7",
 				},
+			},
+			// Elite Torpedo Squadron Command Facility
+			"413": {
+				count: 0,
+				byClass: {
+					// Ignore if specific ships can equip or not
+					// Ayanami Class
+					"1":{
+						single: { "houg": 2, "raig": 2, "houk": 4 },
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Matsu Class
+					"101": "1",
+					// Yuugumo Class extra +2 fp, +3 tp, +3 ev
+					"38": {
+						single: { "houg": 4, "raig": 5, "houk": 7 },
+					},
+					// Akizuki Class
+					"54": "38",
+					// Katori Class
+					"56": {
+						single: { "houg": 4, "raig": 2, "houk": 2 },
+					},
+					// Tenryuu Class extra +2 aa, +1 tp, +1 ev
+					"21": {
+						single: { "houg": 4, "raig": 3, "tyku": 2, "houk": 3 },
+					},
+					// Yuubari Class
+					"34": "21",
+					// Kuma Class extra +1 fp, +2 tp, +3 ev
+					"4": {
+						single: { "houg": 5, "raig": 4, "houk": 5 },
+					},
+					// Sendai Class
+					"16": "4",
+					// Nagara Class
+					"20": "4",
+					// Agano Class
+					"41": "4",
+					// Ooyodo Class
+					"52": "4",
+				},
+				byShip: [
+					{
+						// Naka, Yura, Yahagi, Noshiro, Hamanami, Shimakaze, Kiyoshimo, Hatsushimo
+						origins: [56, 23, 139, 138, 484, 50, 41],
+						single: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// Jintsuu, Sendai, Naganami, Hatsushimo, Teruzuki
+						origins: [55, 54, 135, 41, 422],
+						single: { "houg": 1, "raig": 1 },
+					},
+					{
+						// Jintsuu Kai Ni
+						ids: [159],
+						single: { "houg": 2 },
+					},
+					{
+						// Naganami Kai Ni
+						ids: [543],
+						single: { "houg": 1, "houk": 1 },
+					},
+				],
 			},
 			// All Seaplane Reconnaissances
 			"t2_10": {

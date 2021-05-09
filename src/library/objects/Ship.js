@@ -3007,6 +3007,9 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 2.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 2.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3242,11 +3245,20 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinCVNCI", 1.25],
 			7: ["Cutin", 7, "CutinMainTorpRadar", 1.3],
 			8: ["Cutin", 8, "CutinTorpRadarLookout", 1.2],
+			9: ["Cutin", 9, "CutinTorpLookoutTorp", 1.5],
+			10: ["Cutin", 10, "CutinTorpLookoutDrum", 1.3],
+			11: ["Cutin", 11, "CutinMainTorpRadarDouble", 1.3],
+			12: ["Cutin", 12, "CutinTorpRadarLookoutDouble", 1.2],
+			13: ["Cutin", 13, "CutinTorpLookoutTorpDouble", 1.5],
+			14: ["Cutin", 14, "CutinTorpLookoutDrumDouble", 1.3],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 2.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 2.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3397,15 +3409,18 @@ KC3改 Ship Object
 						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookouts)
 						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
-					// special sub-types of SLO cutin for Torpedo Squadron SLO since 2021-04-30
-					// lower priority than previous 2 main-types, no D gun modifier
+					// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
+					// lower priority than regual cutins below, no D gun modifier
 					// https://twitter.com/yukicacoon/status/1388100262938562563
 					const hasTsSkilledLookouts = this.hasEquipment(412);
 					const hasDrumCanister = this.hasEquipmentType(2, 30);
+					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
+					// https://twitter.com/CC_jabberwock/status/1391058345990127618
+					// here not apply any double-hit ID (+4) yet since setups are the same
 					if(torpedoCnt >= 2 && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(8, "CutinTorpLookoutTorp", 1.5);
+						return KC3Ship.specialAttackTypeNight(9);
 					if(hasDrumCanister && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(8, "CutinTorpLookoutDrum", 1.3);
+						return KC3Ship.specialAttackTypeNight(10);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
@@ -3621,6 +3636,7 @@ KC3改 Ship Object
 			// 100~103 might use different formula, see #nelsonTouchRate
 			200: 120,
 			201: undefined,
+			// 300~302 unknown
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
@@ -3668,13 +3684,18 @@ KC3改 Ship Object
 				"CutinNFNDBFBI": undefined,
 				"CutinNFNDBSF" : undefined,
 			   })[cutinSubType],
-			// This two DD cutins can be rolled before regular cutin, more chance to be processed
+			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 130,
-			8: ({ // TS SLO cutin
-				"CutinTorpLookoutTorp": undefined,
-				"CutinTorpLookoutDrum": undefined,
-			   })[cutinSubType] || 150, // default CutinTorpRadarLookout
+			8: 150,
+			9: 150,
+			10: 150,
+			// Doubled hits versions
+			11: 130,
+			12: 150,
+			13: 150,
+			14: 150,
 			// 100~104 might be different, even with day one
+			// 300~302 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
 		const {baseValue} = this.nightSpAttackBaseRate(spType);
