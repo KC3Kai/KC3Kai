@@ -333,6 +333,9 @@
 			// when Mutsu cutin,  902 for combined with Kai Ni, 901 for base remodel and Kai, no 903
 			if (KC3Meta.mutsuCutinShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(901, 902);
+			// when Submarine Tender cutin, 901 for her damaged state
+			if (KC3Meta.subFleetCutinShips.indexOf(masterId) > -1)
+				sortedVoiceNums.push(901);
 
 			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))
 				sortedVoiceNums = sortedVoiceNums.concat(hourlyNums);
