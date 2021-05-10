@@ -364,6 +364,9 @@
 
 
 			const difficutlies = ["Casual", "Easy", "Normal", "Hard"];
+			let totalCost = this.stats.lbConsumption;
+			if (totalCost.length == 0) { totalCost = [0, 0, 0, 0, 0, 0, 0, 0]; }
+			const adder = ((arr1, arr2) => arr1.map((num, idx) => num + arr2[idx]));
 
 			for (let i = 1; i <= 7; i++) {
 				if ((this.stats.sortieCount[i] || 0) < 1 && (this.stats.clearCount[i] || 0) < 1) {continue;}
@@ -399,9 +402,11 @@
 				$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
 												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
 				$(".total_cost", curBox).append("Total Cost: " + buildConsMessage(this.stats.sortieConsumption[i]));
+				totalCost = adder(totalCost, this.stats.sortieConsumption[i]);
 				curBox.appendTo(".map_list");
 			}
-			$(".lbcons").append("Land Base Consumption: " + buildLBMessage(this.stats.lbConsumption));
+			$(".lbcons").append("Land Base Cost: " + buildLBMessage(this.stats.lbConsumption));
+			$(".totalcons").append("Total Event Cost: " + buildConsMessage(totalCost));
 			$(".loading").hide();
 			$(".table5").show();
 			$(".lbcons").show();

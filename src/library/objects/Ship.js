@@ -2826,7 +2826,7 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd and 3rd ship are (F)BB(V) only, not even Chuuha?
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.some(ship => !ship.isAbsent() && !ship.isStriped()
+						.every(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
 					// submarine in any position of the fleet?
 					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
@@ -2930,6 +2930,44 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Most conditions are the same with Nelson Touch, except:
+	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
+	 * 2nd, 3rd ship is healthy SS(V) for type 300.
+	 * 4th SS(V) might be counted for proc type 301/302.
+	 * Unknown in combined fleet.
+	 *
+	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
+	 */
+	KC3Ship.prototype.canDoSubFleetCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship Taigei/Jingei and not Taiha
+		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isEchelonOrLineAbreast = [4, 5, 11, 12].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd and 3rd ship are SS(V) only, not even Chuuha
+					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
+						.every(ship => !ship.isAbsent() && !ship.isStriped()
+							&& [13, 14].includes(ship.master().api_stype)),
+					valid4thShip = [fleetObj.ship(3)]
+						.every(ship => !ship.isAbsent() && !ship.isStriped()
+							&& [13, 14].includes(ship.master().api_stype)),
+					// have Submarine Supply Material (useitem) remaining
+					hasSubSupply = PlayerManager.consumables.submarineSupplyMaterial > 0;
+				if(isEchelonOrLineAbreast && validCombinedShips && hasSubSupply) {
+					// cant tell difference for 301 and 302, use 302 in first
+					return valid4thShip ? 302 : 300;
+				}
+			}
+		}
+		return false;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -3007,9 +3045,9 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 2.2],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 2.2],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3074,6 +3112,10 @@ KC3改 Ship Object
 			// Colorado cutin since 2019-05-25
 			if(this.canDoColoradoCutin()) {
 				return KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier());
+			}
+			// Sub Fleet cutin since 2021-05-08
+			if(this.canDoSubFleetCutin()) {
+				return KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin());
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -3256,9 +3298,9 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 2.2],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 2.2],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3384,6 +3426,10 @@ KC3改 Ship Object
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 					const engagementMod = [1, 1, 1, 1.25, 0.75][this.collectBattleConditions().engagementId] || 1.0;
 					return KC3Ship.specialAttackTypeNight(104, null, 1.9 * engagementMod);
+				}
+				// special Sub Fleet Cutin since 2021-05-08
+				if(this.canDoSubFleetCutin()) {
+					return KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin());
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
