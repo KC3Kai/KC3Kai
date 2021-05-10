@@ -355,6 +355,7 @@ Previously known as "Reactor"
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
+					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -614,11 +615,11 @@ Previously known as "Reactor"
 			const shipRosterId = parseInt(params.api_ship_id, 10);
 			// 1: mode A, 2: mode B
 			const equipMode = parseInt(params.api_equip_mode, 10);
-			const shipData = KC3ShipManager.get(shipRosterId);
-			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipData.name(), "mode" + equipMode);
+			const shipObj = KC3ShipManager.get(shipRosterId);
+			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipObj.name(), "mode" + equipMode);
 			// Bauxite might be refunded by changing regular plane to large flying boat,
 			// response.api_data is null if no bauxite will be refunded,
-			// and /ship3 call is followed, no other data needed to be updated here
+			// and api_get_member//ship3 call is followed, no other data needed to be updated here
 			const utcHour = Date.toUTChours(headers.Date),
 				afterBauxite = response.api_data ? response.api_data.api_bauxite : undefined;
 			if(afterBauxite) {
@@ -630,6 +631,9 @@ Previously known as "Reactor"
 			if(fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			}
+			// Treat 1st slot as pseudo old gear since there should be 1 gear at least in a preset
+			const oldGearObj = shipObj.equipment(0);
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(undefined, oldGearObj, shipObj, true));
 		},
 		
 		/* Equipment list

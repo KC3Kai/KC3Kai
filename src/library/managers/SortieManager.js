@@ -612,13 +612,17 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const isNextNodeFound = !!this.currentNode().nodeData.api_next;
 			const canUseFCF = !isCombinedSortie ?
 				// is Striking Force (fleet #3) sortied (both check)
-				this.fleetSent === 3 && sortiedFleets[0].ships[6] > 0
-				// And flagship has SF-FCF (FCF incapable) (client check)
-				&& flagship.hasEquipment(272)
-				// And not flagship Taiha (supposed server-side checked already)
-				//&& taihaShip.fleetPosition()[0] > 0
-				// And current battle is not the final node (client check)
-				&& isNextNodeFound
+				this.fleetSent === 3 && sortiedFleets[0].ships[6] > 0 ?
+					// And flagship has SF-FCF (FCF incapable) (client check)
+					flagship.hasEquipment(272)
+					// And not flagship Taiha (supposed server-side checked already)
+					//&& taihaShip.fleetPosition()[0] > 0
+					// And current battle is not the final node (client check)
+					&& isNextNodeFound
+					// not Striking Force, check if has ETS-CF (client check)
+					: flagship.hasEquipment(413)
+					// And current battle is not the final node (client check)
+					&& isNextNodeFound
 				:
 				// Main fleet flagship has FCF (client check)
 				flagship.hasEquipment(107)

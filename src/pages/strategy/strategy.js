@@ -59,6 +59,15 @@
 			$("#menu .submenu.dev-only").show();
 			$("#content").addClass("dev-only");
 		}
+		// auto adjust min-height of content div to fit all tabs
+		const baseHeight = {
+			"legacy": 270,
+			"dark": 210,
+		}[themeName] || 210;
+		$("#content").css("min-height", baseHeight
+			+ (ConfigManager.devOnlyPages ? 190 : 0)
+			+ 25 * $("#menu ul li").length
+		);
 		
 		// Click a menu item
 		$("#menu .submenu ul.menulist li").on("click", function(){

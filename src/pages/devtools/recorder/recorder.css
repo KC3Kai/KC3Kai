@@ -3,21 +3,21 @@ body {
 }
 
 #wrapper {
-	width:700px;
+	width:720px;
 	background:#f3f3f3;
-	min-height:400px;
-	margin:5px auto 10px;
+	min-height:325px;
+	margin:0px auto 0px;
 }
 
 #controls {
-	width:700px;
-	height:31px;
-	padding:3px;
+	width:720px;
+	height:28px;
+	padding:2px;
 	border-bottom:1px solid #ccc;
 }
 #controls .button {
 	width:80px;
-	height:24px;
+	height:23px;
 	line-height:22px;
 	background:#def;
 	float:left;
@@ -34,29 +34,48 @@ body {
 
 #apilist {
 	width:200px;
-	height:500px;
+	height:297px;
 	float:left;
 	border-right:1px solid #ccc;
-	overflow:hidden;
+	overflow-x:hidden;
+	overflow-y:auto;
 }
 #apilist .apiitem {
-	width:200px;
+	width:100%;
 	height:20px;
 	line-height:20px;
 	border-bottom:1px solid #ccc;
 	font-size:11px;
+	font-family:monospace;
 	padding:0px 0px 0px 5px;
+	white-space:nowrap;
 	overflow:hidden;
+	text-overflow:ellipsis;
+}
+#apilist .apiitem.selected {
+	background:#def;
 }
 
-#contents {
+.apivalue {
 	background:#fff;
-	width:500px;
-	height:500px;
+	width:520px;
 	float:left;
+	overflow:hidden;
+}
+.apivalue textarea {
+	width:100%;
+	height:100%;
 	font-size:10px;
-	font-family: monospace;
+	font-family:monospace;
+	border:0;
+	resize:none;
+}
+#contents {
+	height:277px;
+}
+#contents textarea {
 	padding:5px;
-	overflow-y:scroll;
-	word-wrap: break-word;
+}
+#params {
+	height:20px;
 }
