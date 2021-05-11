@@ -85,7 +85,7 @@
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				const world = String(mapId).slice(0, -1);
-				if (world < 10) { return; }
+				if (world < 10 || world == "undefine") { return; } // Modern battle API from Fall 17 onwards
 				if($(`option[value=${world}]`, listElem).length === 0) {
 					listElem.append(
 						$("<option />").attr("value", world).text(KC3Meta.worldToDesc(world))
@@ -174,20 +174,20 @@
 			KC3Database.con.sortie.where("world").equals(this.world).and(data => data.hq === hqId).each(sortie => {
 				const mapnum = sortie.mapnum;
 				let hpbar = false;
-				if (sortie.eventmap.api_gauge_type == 2) hpbar = true;
+				if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
 				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
 				if (!this.stats.bossCount[mapnum]) this.stats.bossCount[mapnum] = 0;
 				if (!this.stats.clearCount[mapnum]) this.stats.clearCount[mapnum] = 0;
 				if (!this.stats.ldCount[mapnum]) this.stats.ldCount[mapnum] = 0;
 				let cleared = false;
 				let lastDance = false;
-				if (sortie.eventmap.api_cleared) cleared = true;
+				if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
 				if (!cleared) { 
 					this.stats.clearCount[mapnum]++;
 					const mapname = `${this.world}${mapnum}`;
 					const mapdata = this.maps["m" + mapname];
 					const gauges = Object.keys(KC3Meta.eventGauge(mapname));
-					if (sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
+					if (sortie.eventmap && sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
 						lastDance = true;
 						this.stats.ldCount[mapnum]++;
 					}
@@ -209,6 +209,7 @@
 					this.stats.dropList[mapnum][drop] = (this.stats.dropList[mapnum][drop] || 0) + 1;
 
 					if (battle.boss) { this.stats.bossCount[mapnum]++; }
+					if (this.world < 40) { return; } // Battle API changed from Fall 2017 onwards, skip battle simulation
 			
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
@@ -217,6 +218,7 @@
 					const nodeKind = nodeData.eventKind;
 					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
 					let battleData = time !== "night" ? battle.data : battle.yasen;
+					if (Object.keys(battleData).length == 0) { return; } // missing battle data, F5?
 					const battleType = {
 						player: { 0: "single", 1: "ctf", 2: "stf", 3: "ctf" }[sortie.combined],
 						enemy: !battleData.api_ship_ke_combined ? "single" : "combined",
@@ -253,6 +255,9 @@
 					checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					if (Object.keys(battle.yasen).length > 0 && time === "day") {
 						battleType.time = "night";
+						if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
+							battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
+						}
 						result = KC3BattlePrediction.analyzeBattle(battle.yasen, [], battleType);
 						player = result.fleets.playerMain.concat(result.fleets.playerEscort);
 						player.forEach((ship, index) => {
@@ -330,17 +335,18 @@
 				"shipKills": "Ship Kills",
 				"taihaMagnets": "Taiha Magnets",
 			};
-
-			const keys = Object.keys(map);
-			for (const key of keys) {
-				let str = "<tr>" + "<td>" + map[key] + "</td>";
-				const vals = this.stats[key];
-				const topFive = getTopFive(vals);
-				for (let i = 0; i < Math.min(5, topFive.length); i++) {
-					str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
+			if (this.world > 39) {
+				const keys = Object.keys(map);
+				for (const key of keys) {
+					let str = "<tr>" + "<td>" + map[key] + "</td>";
+					const vals = this.stats[key];
+					const topFive = getTopFive(vals);
+					for (let i = 0; i < Math.min(5, topFive.length); i++) {
+						str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
+					}
+					str += "</tr>";
+					$(".table5").append(str);
 				}
-				str += "</tr>";
-				$(".table5").append(str);
 			}
 
 			const buildLBMessage = consumption => {
@@ -373,13 +379,14 @@
 				const mapnum = i;
 				const mapname = `m${this.world}${mapnum}`;
 				const mapdata = this.maps[mapname];
-				const difficulty = mapdata.difficulty;
+				let difficulty = mapdata.difficulty;
+				if (this.world < 41) { difficulty += 1; } // Casual offset implemented from Winter 2018 onwards
 				const mapTitle = `E${mapnum}${KC3Meta.term(`EventRank${difficutlies[difficulty - 1]}Abbr`)}`;
 				const curBox = $(".tab_eventstats .factory .map_box").clone();
 				curBox.attr("id", "e-" + mapnum);
 
 				$(".map_title", curBox).text(mapTitle);
-				if (this.stats.clearConsumption[i]) {
+				if (this.stats.clearConsumption[i] && this.world > 38) {
 					$(".clear_runs", curBox).append("Clear Runs: " + this.stats.clearCount[i] + ", Cost: " + buildConsMessage(this.stats.clearConsumption[i]));
 					//$(".clear_cost", curBox).append("Clear Expenditure: " + buildConsMessage(this.stats.clearConsumption[i]));
 				}
@@ -399,8 +406,12 @@
 					$(".clear_attack", curBox).append(str);
 				}
 				//$(".boss_runs", curBox).text("Boss Reaches: " + this.stats.bossCount[i]);
-				$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
-												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
+				if (this.world < 39) { // eventmap not saved yet
+					$(".total_runs", curBox).append("Total Runs: " + `${this.stats.sortieCount[i]}`);
+				} else {
+					$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
+						+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
+				}
 				$(".total_cost", curBox).append("Total Cost: " + buildConsMessage(this.stats.sortieConsumption[i]));
 				totalCost = adder(totalCost, this.stats.sortieConsumption[i]);
 				curBox.appendTo(".map_list");
