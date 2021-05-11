@@ -546,6 +546,7 @@ Does not include Ships and Gears which are managed by other Managers
 				"92": "newRocketDevMaterial",
 				"93": "sardine",
 				"94": "newArmamentMaterial",
+				"95": "submarineSupplyMaterial",
 			};
 			// You may need to `loadConsumables` first for Strategy Room
 			return useitemId === undefined ? attrNameMap :

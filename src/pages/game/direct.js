@@ -46,17 +46,31 @@
 		// Toggle-able settings
 		toggleSetting("dmm_customize", "#background");
 		toggleSetting("api_subtitles", "#subtitles");
-		toggleSetting("api_translation", "#questtl");
 		toggleSetting("map_markers", "#mapmarkers");
+		toggleSetting("api_translation", "#questtl");
+		toggleSetting("api_tracking", "#questtrack");
+		toggleSetting("info_quest_activity", "#questtab");
 		toggleSetting("api_askExit", "#exitconfirm");
 		toggleSetting("mute_game_tab", "#mutegametab");
+		toggleSetting("alert_taiha", "#taihaalert");
+		toggleSetting("focus_game_tab", "#focusgame");
 		toggleSetting("TsunDBSubmission_enabled", "#tsundbsubmission");
 		toggleSetting("PoiDBSubmission_enabled", "#poidbsubmission");
-		toggleSetting("OpenDBSubmission_enabled", "#opendbsubmission");
-		toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
+		//toggleSetting("OpenDBSubmission_enabled", "#opendbsubmission");
+		//toggleSetting("checkLiveQuests", "#tl_autocheck_switch");
 		
 		$("#background").on("change", customizationConsequence);
 		customizationConsequence();
+		
+		// Init jquery-ui tooltips
+		$("div[title]").tooltip({
+			position: { my: "left top+5" },
+			content: function(){
+				return ($(this).attr("title") || "")
+					.replace(/\n/g, "<br/>")
+					.replace(/\t/g, "&emsp;&emsp;");
+			}
+		});
 		
 		// Game modes
 		$(".altGameModes .modePlay").on("click", function(){

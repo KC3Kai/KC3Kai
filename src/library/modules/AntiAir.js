@@ -1006,12 +1006,9 @@ AntiAir: anti-air related calculations
 		[fletcherIcon, haMountKaiRadar, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAnyOf(
-				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-				predAllOf(
-					hasSome( is5inchSingleMountOrKai ),
-					hasSome( is5inchSingleMountKaiWithGfcs ))
-			)
+			predAllOf(
+				hasSome( is5inchSingleMountOrKai ),
+				hasSome( is5inchSingleMountKaiWithGfcs ))
 		)
 	);
 	declareAACI(
@@ -1021,13 +1018,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isFletcherClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
 			predAllOf(
-				predAnyOf(
-					hasAtLeast( is5inchSingleMountOrKai, 2 ),
-					hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-					predAllOf(
-						hasSome( is5inchSingleMountOrKai ),
-						hasSome( is5inchSingleMountKaiWithGfcs ))
-				),
+				hasAtLeast( is5inchSingleMountOrKai, 2 ),
 				hasSome( isGfcsRadar ))
 		)
 	);
@@ -1036,13 +1027,8 @@ AntiAir: anti-air related calculations
 		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
-			predAnyOf(
-				hasAtLeast( is5inchSingleMountKai, 2 ),
-				hasAtLeast( is5inchSingleMountKaiWithGfcs, 2 ),
-				predAllOf(
-					hasSome( is5inchSingleMountKai ),
-					hasSome( is5inchSingleMountKaiWithGfcs ))
-			)
+			predAllOf(
+				hasAtLeast( is5inchSingleMountKai, 2 ))
 		)
 	);
 

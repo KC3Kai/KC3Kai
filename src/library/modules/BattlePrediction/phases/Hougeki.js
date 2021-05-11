@@ -43,12 +43,16 @@
   Hougeki.parseJson = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend, parseDefenderFriend,
       parseInfo, isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
+      isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3,
       parseSpecialCutin } = KC3BattlePrediction.battle.phases.hougeki;
 
     const isSpecialCutin = isNelsonTouch(attackJson) ||
       isNagatoCutin(attackJson) || isMutsuCutin(attackJson) ||
       isColoradoCutin(attackJson) ||
-      isKongouCutin(attackJson);
+      isKongouCutin(attackJson) ||
+      isSubmarineCutin1(attackJson) ||
+      isSubmarineCutin2(attackJson) ||
+      isSubmarineCutin3(attackJson);
     return isSpecialCutin ? parseSpecialCutin(isAllySideFriend, attackJson) : {
       damage: parseDamage(attackJson),
       attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
@@ -57,12 +61,13 @@
     };
   };
 
-  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou) may attack different targets,
+  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou / SubFleet) may attack different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
   Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseDefender, parseInfo, isRealAttack,
       parseAttacker, parseAttackerFriend, parseAttackerSpecial,
-      isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin } = KC3BattlePrediction.battle.phases.hougeki;
+      isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
+      isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3 } = KC3BattlePrediction.battle.phases.hougeki;
 
     const { api_df_list: defenders, api_damage: damages } = attackJson;
     return defenders.map((defender, index) => ({
@@ -77,6 +82,12 @@
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2], isAllySideFriend, index})) :
         isKongouCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 1], isAllySideFriend, index})) :
+        isSubmarineCutin1(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [1, 1, 2], isAllySideFriend, index})) :
+        isSubmarineCutin2(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [2, 2, 3, 3], isAllySideFriend, index})) :
+        isSubmarineCutin3(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [1, 1, 2, 3], isAllySideFriend, index})) :
         // Unreachable exception
         (isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson)),
       // Assume abyssal enemy and PvP cannot trigger it yet
@@ -92,12 +103,16 @@
   Hougeki.isMutsuCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 102;
   Hougeki.isColoradoCutin = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 103;
   Hougeki.isKongouCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 104;
+  Hougeki.isSubmarineCutin1 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 300;
+  Hougeki.isSubmarineCutin2 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 301;
+  Hougeki.isSubmarineCutin3 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 302;
 
   // According MVP result, Nelson Touch attackers might be set to corresponding
   //   ship position (1st Nelson, 3th, 5th), not fixed to main fleet flagship Nelson (api_at_list: 0);
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
+  // For Submarine Fleet, 3~4 attacks assigned to 2nd~4th SS members, 1st flagship not attack;
   Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag, api_sp_list }) => {
     const { getBattleType } = KC3BattlePrediction.battle;
     // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.

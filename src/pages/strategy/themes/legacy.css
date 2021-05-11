@@ -367,7 +367,7 @@ body {
 -------------------------------*/
 #content {
 	width:700px;
-	min-height:1320px;
+	min-height:960px;
 	float:left;
 	background:#fff;
 	border-radius:10px;
@@ -377,7 +377,7 @@ body {
 	margin:0px 0px 60px 0px;
 }
 #content.dev-only {
-	min-height:1515px;
+	min-height:calc(460px + 25px * 43);
 }
 #contentHtml {
 	width:700px;

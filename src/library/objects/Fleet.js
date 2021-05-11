@@ -1239,7 +1239,7 @@ Contains summary information about a fleet and its ships
 		};
 		Object.entries(airReconnNodes).forEach(([key, node]) => {
 			node.score = score;
-			node.reqGS = node.reqS * 1.2;
+			node.reqGS = node.reqS * 1.6;
 			node.reqGGS = node.reqS * 2.2;
 			node.result = (
 				score >= node.reqGGS ? "GreatSuccess" :

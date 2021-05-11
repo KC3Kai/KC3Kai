@@ -355,6 +355,7 @@ Previously known as "Reactor"
 					case 92: PlayerManager.consumables.newRocketDevMaterial = thisItem.api_count; break;
 					case 93: PlayerManager.consumables.sardine = thisItem.api_count; break;
 					case 94: PlayerManager.consumables.newArmamentMaterial = thisItem.api_count; break;
+					case 95: PlayerManager.consumables.submarineSupplyMaterial = thisItem.api_count; break;
 					default: break;
 				}
 			}
@@ -614,11 +615,11 @@ Previously known as "Reactor"
 			const shipRosterId = parseInt(params.api_ship_id, 10);
 			// 1: mode A, 2: mode B
 			const equipMode = parseInt(params.api_equip_mode, 10);
-			const shipData = KC3ShipManager.get(shipRosterId);
-			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipData.name(), "mode" + equipMode);
+			const shipObj = KC3ShipManager.get(shipRosterId);
+			console.log("Applied Gear Preset", presetId, "to ship", shipRosterId, shipObj.name(), "mode" + equipMode);
 			// Bauxite might be refunded by changing regular plane to large flying boat,
 			// response.api_data is null if no bauxite will be refunded,
-			// and /ship3 call is followed, no other data needed to be updated here
+			// and api_get_member//ship3 call is followed, no other data needed to be updated here
 			const utcHour = Date.toUTChours(headers.Date),
 				afterBauxite = response.api_data ? response.api_data.api_bauxite : undefined;
 			if(afterBauxite) {
@@ -630,6 +631,9 @@ Previously known as "Reactor"
 			if(fleetNum > -1) {
 				KC3Network.trigger("Fleet", { switchTo: fleetNum+1 });
 			}
+			// Treat 1st slot as pseudo old gear since there should be 1 gear at least in a preset
+			const oldGearObj = shipObj.equipment(0);
+			KC3Network.deferTrigger(1, "GunFit", shipObj.equipmentChangedEffects(undefined, oldGearObj, shipObj, true));
 		},
 		
 		/* Equipment list
@@ -2532,6 +2536,62 @@ Previously known as "Reactor"
 			// If LBAS info updated, trigger updating view
 			if(PlayerManager.setBasesOnWorldMap(response.api_data)) {
 				KC3Network.trigger("Lbas");
+			}
+			
+			// If pre sortie warning enabled, check for empty equip slots on heartlocked ships
+			if(ConfigManager.alert_pre_sortie > 0) {
+				const missingEquipShips = [];
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
+				}
+				for (const ship of ships) {
+					if (!ship.lock) { continue; }
+					let flag = false;
+					for (let idx = 0; idx < ship.slotnum; idx++) {
+						const eq = ship.equipment(idx);
+						if (eq.itemId == 0) { flag = true; }
+					}
+					if (ship.ex_item === -1) { flag = true; }
+					if (flag) { missingEquipShips.push(ship); }
+				}
+				if (missingEquipShips.length > 0) {
+					const shipNames = missingEquipShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieEquip").format(shipNames),
+					});
+				}
+			}
+		},
+		
+		/* Pre-sortie check for win percentage for event maps
+		-------------------------------------------------------*/
+		"api_get_member/sortie_conditions":function(params, response, headers){
+			// If pre sortie warning enabled, check for ship tag/locks on heartlocked ships
+			if(ConfigManager.alert_pre_sortie > 0) {
+				const missingLockShips = [];
+				let fleetNo = ConfigManager.alert_pre_sortie;
+				let ships = PlayerManager.fleets[fleetNo - 1].ship();
+				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
+					ships = PlayerManager.fleets[0].ship();
+					ships.push(...PlayerManager.fleets[1].ship());
+					fleetNo = "1+2";
+				}
+				for (const ship of ships) {
+					if (!ship.lock) { continue; }
+					if (ship.sally === 0) { missingLockShips.push(ship); }
+				}
+				if (missingLockShips.length > 0) {
+					const shipNames = missingLockShips.map(ship => ship.name()).join(", ");
+					KC3Network.trigger("ModalBox", {
+						title: KC3Meta.term("AlertPreSortieTitle").format(fleetNo),
+						message: KC3Meta.term("AlertPreSortieLock").format(shipNames),
+					});
+				}
 			}
 		},
 		

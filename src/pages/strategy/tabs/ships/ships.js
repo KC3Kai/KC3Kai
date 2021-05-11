@@ -260,6 +260,17 @@
 			$(".ship_tooltip .stat_icon img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
 			});
+			
+			// Add gear name/type tooltip for shorten filter names
+			$(".massSelect dd[type2id]").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(2, $(elm).attr("type2id")));
+			});
+			$(".massSelect dd[type3id]").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearTypeName(3, $(elm).attr("type3id")));
+			});
+			$(".massSelect dd[gearid]").each((_, elm) => {
+				$(elm).attr("title", KC3Meta.gearName(KC3Master.slotitem($(elm).attr("gearid")).api_name));
+			});
 
 			// Add filter elements of ship types before `prepareFilters` executed
 			$.each(KC3Meta.sortedStypes(), (idx, stype) => {
@@ -610,8 +621,18 @@
 				master: MasterShip,
 				// Check whether remodel is max
 				remodel: RemodelDb.isFinalForm(ship.masterId),
+				canOTorp: ThisShip.canDoOpeningTorpedo(),
+				canOAsw: ThisShip.canDoOASW(),
 				canEquipDaihatsu: ThisShip.canEquipDaihatsu(),
-				canEquipTank: ThisShip.canEquipTank()
+				canEquipTank: ThisShip.canEquipTank(),
+				canEquipFCF: ThisShip.canEquipFCF(),
+				canEquipSPF: ThisShip.canEquip(45),
+				canEquipSPB: ThisShip.canEquip(11),
+				canEquipLFB: ThisShip.canEquip(41),
+				canEquipBulge: ThisShip.canEquip(27) || ThisShip.canEquip(28),
+				canEquipMinisub: ThisShip.canEquip(22),
+				canExslotEquip8cmGun: ThisShip.canEquip(undefined, 66) >= 2
+					|| ThisShip.canEquip(undefined, 220) >= 2,
 			};
 			const ThisShipData = cached;
 			// Check whether modernization is max
@@ -832,15 +853,41 @@
 				});
 
 			self.defineShipFilter(
+				"opatk",
+				savedFilterValues.opatk || 0,
+				["all", "yes1","yes2", "both"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canOAsw)
+						|| (curVal === 2 && ship.canOTorp)
+						|| (curVal === 3 && ship.canOAsw && ship.canOTorp);
+				});
+
+			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
-				["all", "yes1","yes2", "both", "no"],
+				["all", "dlc","tank", "both", "neither"],
 				function(curVal, ship) {
 					return (curVal === 0)
 						|| (curVal === 1 && ship.canEquipDaihatsu)
 						|| (curVal === 2 && ship.canEquipTank)
 						|| (curVal === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
 						|| (curVal === 4 && !ship.canEquipDaihatsu && !ship.canEquipTank);
+				});
+
+			self.defineShipFilter(
+				"spgear",
+				savedFilterValues.spgear || 0,
+				["all", "fcf", "spf", "spb", "lfb", "bulge", "minisub", "exgun"],
+				function(curVal, ship) {
+					return (curVal === 0)
+						|| (curVal === 1 && ship.canEquipFCF)
+						|| (curVal === 2 && ship.canEquipSPF)
+						|| (curVal === 3 && ship.canEquipSPB)
+						|| (curVal === 4 && ship.canEquipLFB)
+						|| (curVal === 5 && ship.canEquipBulge)
+						|| (curVal === 6 && ship.canEquipMinisub)
+						|| (curVal === 7 && ship.canExslotEquip8cmGun);
 				});
 
 			self.defineShipFilter(

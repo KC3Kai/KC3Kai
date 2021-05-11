@@ -20,6 +20,18 @@ body {
 	pointer-events: none;
 }
 
+.ui-tooltip {
+	max-width:500px;
+	padding:2px 5px 3px 6px;
+	border-width:1px !important;
+	border:1px solid #222;
+	box-shadow:0 0 5px 1px #888;
+	color:#575757;
+	background:#fff;
+	font-family:inherit;
+	font-size:12px;
+}
+
 /* HEADER
 --------------------------*/
 .headBox {
@@ -179,6 +191,9 @@ body {
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
+}
+.customization.deprecated .customizationText {
+	text-decoration:line-through;
 }
 
 /* HOTKEYS

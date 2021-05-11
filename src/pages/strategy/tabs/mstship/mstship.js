@@ -466,8 +466,14 @@
 						'supply_character', 'supply_character_dmg',
 						'album_status'
 					];
-				// Special cut-in (Nelson Touch, Nagato/Mutsu Cutin) special type
-				if(KC3Meta.specialCutinIds.includes(ship_id)) availableTypes.push("special");
+				// Special cut-in (Nelson Touch, Nagato/Mutsu, Colorado Cutin) special type
+				if(KC3Meta.specialCutinIds.includes(ship_id) && !KC3Meta.kongouCutinShips.includes(ship_id)) {
+					availableTypes.push("special");
+				}
+				// Special cut-in (Sub Fleet flagship Taigei/Jingei) get damaged type either
+				if(KC3Meta.subFleetCutinShips.includes(ship_id)) {
+					availableTypes.push("special_dmg");
+				}
 				const imageErrorHandler = function(e) {
 					$(this).unbind("error");
 					// Hide optional debuffed abyssal boss alt lines,

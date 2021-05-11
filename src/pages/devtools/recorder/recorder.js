@@ -1,14 +1,11 @@
 (function(){
 	"use strict";
 	var list = [];
-	var reqObj = {};
-	var saveObj = {};
 	var recording = false;
 	
 	$(document).on("ready", function(){
-		$("#record").on("click", function(){
+		$("#record").on("click", function(e) {
 			recording = !recording;
-			
 			if (recording) {
 				$(this).text("Recording!").addClass("recording");
 			} else {
@@ -16,68 +13,61 @@
 			}
 		});
 		
-		$("#export").on("click", function(){
-			var profileData = [
+		$("#export").on("click", function(e) {
+			const profileData = [
 				{
 					group: "Recorded KCSAPI",
 					calls: list
 				}
 			];
-			
-			var profileJSON = JSON.stringify(profileData, null, '\t');
-			
-			var blob = new Blob([profileJSON], {type: "application/json;charset=utf-8"});
+			const profileJSON = JSON.stringify(profileData, null, '\t');
+			const blob = new Blob([profileJSON], {type: "application/json;charset=utf-8"});
 			saveAs(blob, "recorded_kcsapi.json");
 		});
 		
-		$("#clear").on("click", function(){
-			list = [];
-			recording = false;
+		$("#clear").on("click", function(e) {
+			list.length = 0;
 			$("#apilist").html("");
-			$("#contents").html("");
+			$(".apivalue textarea").text("");
 		});
 		
-		$("#apilist").on("click", ".apiitem", function(){
-			var selectedApi = list[$(this).data("index")];
-			$("#contents").html(selectedApi.response);
+		$("#apilist").on("click", ".apiitem", function(e) {
+			const selectedApi = list[$(this).data("index")];
+			$("#contents textarea").text(selectedApi.response).select();
+			$("#params textarea").text(JSON.stringify(selectedApi.params));
+			$("#apilist div").removeClass("selected");
+			$(this).addClass("selected");
 		});
 	});
 	
 	chrome.devtools.network.onRequestFinished.addListener(function(request){
-		if(request.request.url.indexOf("/kcsapi/") > -1){
-			var KcsApiIndex = request.request.url.indexOf("/kcsapi/");
-			var KcsApiResource = request.request.url.substring( KcsApiIndex+8 );
-			var RscNameSplit = KcsApiResource.split("/");
-			var RscShortName = RscNameSplit.pop();
+		if (request.request.url.indexOf("/kcsapi/") > -1) {
+			const kcsApiIndex = request.request.url.indexOf("/kcsapi/");
+			const kcsApiResource = request.request.url.substring(kcsApiIndex + 8);
+			const rscNameSplit = kcsApiResource.split("/");
+			const rscShortName = rscNameSplit.pop();
 			
-			reqObj = new KC3Request(request);
-			if(reqObj.validateHeaders()){
-				request.getContent(function( responseBody ){
-					censorParam(reqObj.params, "api_token");
-					censorParam(reqObj.params, "api_verno");
-					censorParam(reqObj.params, "api_port");
-					
-					/*saveObj = {
-						url: KcsApiResource,
-						params: reqObj.params,
-						headers: reqObj.headers,
-						response: responseBody,
-					};*/
-					
-					saveObj = {
-						name: RscShortName,
-						url: KcsApiResource,
-						params: reqObj.params,
-						response: responseBody
-					};
-					
+			const reqObj = new KC3Request(request);
+			if (reqObj.validateHeaders()) {
+				request.getContent(function(responseBody) {
 					if (recording) {
-						list.push(saveObj);
+						const params = Object.assign({}, reqObj.params);
+						censorParam(params, "api_token");
+						censorParam(params, "api_verno");
+						censorParam(params, "api_port");
 						
+						const saveObj = {
+							name: rscShortName,
+							url: kcsApiResource,
+							params: params,
+							response: responseBody
+						};
+					
+						list.push(saveObj);
 						$("#apilist").append($("<div>")
-							.text(KcsApiResource)
+							.text(kcsApiResource)
 							.addClass("apiitem")
-							.data("index", list.length-1)
+							.data("index", list.length - 1)
 						);
 					}
 				});
