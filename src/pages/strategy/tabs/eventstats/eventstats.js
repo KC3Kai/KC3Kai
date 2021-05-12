@@ -21,6 +21,7 @@
 			bossCount: {},
 			clearCount: {},
 			ldCount: {},
+			kuso: {}
 		},
 
 		/* INIT: mandatory
@@ -117,6 +118,7 @@
 				bossCount: {},
 				clearCount: {},
 				ldCount: {},
+				kuso: {}
 			};
 
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -152,17 +154,15 @@
 			};
 
 			// Shortern fleet length if needed for kuso
-			const checkShipLength = (ships, maxHps) => {
-				while (maxHps.length !== ships.length) {
-					for (let i = 0; i < ships.length; i++) {
-						const master = KC3Master.ship(ships[i]);
-						const hpRange = master.api_taik;
-						if (maxHps[i] < hpRange[0] || maxHps[i] > hpRange[1]) {
-							ships.splice(i, 1);
-						}
+			const checkShipLength = (ships, maxHps, sortieKuso) => {
+				if (ships.length == maxHps.length || sortieKuso.length == 0) { return ships; }
+				let result = [];
+				for (let ship of ships) {
+					if (!sortieKuso.includes(ship)) {
+						result.push(ship);
 					}
 				}
-				return ships;
+				return result;
 			};
 
 			// Get LB Consumption first
@@ -230,12 +230,20 @@
 					let ships = sortie["fleet" + fleetSent].map(ship => ship.mst_id);
 					let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
 					if (!maxHps) return;
+					const sortieKuso = this.stats.kuso[sortie.id] || [];
+					ships = checkShipLength(ships, maxHps, sortieKuso);
+					if (ships.length != maxHps.length) {
+						return;
+					}
 					ships = checkShipLength(ships, maxHps);
 					if (sortie.combined > 0) {
 						let fleet2 = sortie.fleet2.map(ship => ship.mst_id);
 						const maxHps2 = battleData.api_f_maxhps_combined;
 						if (!maxHps2) return;
-						fleet2 = checkShipLength(fleet2, maxHps2);
+						fleet2 = checkShipLength(fleet2, maxHps2, sortieKuso);
+						if (fleet2.length != maxHps2.length) {
+							return;
+						}
 						ships = ships.concat(fleet2);
 						maxHps = maxHps.concat(maxHps2);
 						initialHps = initialHps.concat(battleData.api_f_nowhps_combined);
@@ -273,9 +281,15 @@
 							const taihaHp = maxHps[shipIdx] / 4;
 							if (initialHps[shipIdx] < taihaHp) continue;
 							const resultHp = player[shipIdx].hp;
-							// No kuso here	
-							if (resultHp < taihaHp && resultHp > 0) {
-								this.stats.taihaMagnets[ships[shipIdx]] = (this.stats.taihaMagnets[ships[shipIdx]] || 0) + 1;
+							
+							// Handle pre-boss taiha
+							if (resultHp < taihaHp) {
+								if (resultHp > 0) {
+									this.stats.taihaMagnets[ships[shipIdx]] = (this.stats.taihaMagnets[ships[shipIdx]] || 0) + 1;
+								} else {
+									if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
+									this.stats.kuso[sortie.id].push(ships[shipIdx]);
+								}
 							}
 
 						}
