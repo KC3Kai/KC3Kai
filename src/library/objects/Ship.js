@@ -3045,9 +3045,9 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3115,6 +3115,8 @@ KC3改 Ship Object
 			}
 			// Sub Fleet cutin since 2021-05-08
 			if(this.canDoSubFleetCutin()) {
+				// Damage calculation is quite different:
+				// based on torpedo attack, not affected by formation/engagement, affected by level of SS attacker
 				return KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin());
 			}
 		}
@@ -3298,9 +3300,9 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3810,12 +3812,13 @@ KC3改 Ship Object
 						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
 						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
 						// modifier for 7 (CVCI) still unknown
-						// modifiers for [100, 201] (special cutins) still unknown
+						// modifiers for [100, 302] (special cutins) still unknown
 					})[type[1]] || 1;
 				}
 				return 1;
 			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
 		}
+		// TODO accuracy bonus from aircraft proficiency
 		const apShellModifier = (() => {
 			// AP Shell combined with Large cal. main gun only mainly for battleships
 			const hasApShellAndMainGun = this.hasEquipmentType(2, 19) && this.hasEquipmentType(2, 3);
