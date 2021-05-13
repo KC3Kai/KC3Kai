@@ -2163,9 +2163,9 @@ Used by SortieManager
 		let shipCount = PlayerManager.fleets[fleetnum].ships.filter(id => id > 0).length;
 		let shipsOnSortie = [];
 		if (this.playerCombined) {
-			shipsOnSortie = [0, 1].map(fleetId => PlayerManager.fleets[fleetId].ships.filter(id => id > 0));
+			shipsOnSortie = [0, 1].map(fleetId => PlayerManager.fleets[fleetId].ship().map(ship => ship.masterId));
 		} else {
-			shipsOnSortie = [PlayerManager.fleets[fleetnum].ships.filter(id => id > 0)];
+			shipsOnSortie = [PlayerManager.fleets[fleetnum].ship().map(ship => ship.masterId)];
 		}
 		predictedFleet.forEach(({ attacks }, position) => {
 			let ship = PlayerManager.fleets[fleetnum].ship(position);
@@ -2418,7 +2418,7 @@ Used by SortieManager
 								position: position,
 								shipCount: shipCount,
 								formation: formation,
-								shipsOnSortie: shipsOnSortie,
+								shipsOnSortie: shipsOnSortie.map,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
 								combinedFleet: combinedFleetType,
 								rAmmoMod: remainingAmmoModifier,
