@@ -3453,22 +3453,24 @@ KC3改 Ship Object
 					const modelDSmallGunModifier =
 						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
 							* (1 + modelDK3SmallGunCnt * 0.05);
+					// Since 2021-05-08, all 4 types get indiviual ID, and get double hits version
+					// https://twitter.com/CC_jabberwock/status/1391058345990127618
+					// setups of double-hit ID (+4) are the same, but threshold seems be level 80
+					// https://twitter.com/CC_jabberwock/status/1392587817524502529
+					const doubleHitDiff = this.level >= 80 ? 4 : 0;
 					if(hasCapableRadar && smallMainGunCnt >= 1)
-						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
+						return KC3Ship.specialAttackTypeNight(7 + doubleHitDiff, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
+						return KC3Ship.specialAttackTypeNight(8 + doubleHitDiff, null, 1.2 * modelDSmallGunModifier);
 					// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
 					// lower priority than regual cutins below, no D gun modifier
 					// https://twitter.com/yukicacoon/status/1388100262938562563
 					const hasTsSkilledLookouts = this.hasEquipment(412);
 					const hasDrumCanister = this.hasEquipmentType(2, 30);
-					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
-					// https://twitter.com/CC_jabberwock/status/1391058345990127618
-					// here not apply any double-hit ID (+4) yet since setups are the same
 					if(torpedoCnt >= 2 && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(9);
+						return KC3Ship.specialAttackTypeNight(9 + doubleHitDiff);
 					if(hasDrumCanister && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(10);
+						return KC3Ship.specialAttackTypeNight(10 + doubleHitDiff);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
