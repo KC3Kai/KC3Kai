@@ -2418,7 +2418,7 @@ Used by SortieManager
 								position: position,
 								shipCount: shipCount,
 								formation: formation,
-								shipsOnSortie: shipsOnSortie.map,
+								shipsOnSortie: shipsOnSortie,
 								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
 								combinedFleet: combinedFleetType,
 								rAmmoMod: remainingAmmoModifier,
