@@ -9535,7 +9535,7 @@ var SHIPDATA_ = {
 		RNG: 2,
 		SPD: 10,
 		SLOTS: [0, 0, 0, 0],
-		EQUIPS: [600, 600, 593, 603],
+		EQUIPS: [600, 600, 541, 603],
 	},
 	1957: {
 		name: 'Light Cruiser Princess B 1',
