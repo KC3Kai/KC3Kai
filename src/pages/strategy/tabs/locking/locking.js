@@ -12,6 +12,9 @@
         init() {
             this.defineSorters();
             this.showListRowCallback = this.showShipLockingRow;
+            // Amount of locking tags depends on MO/EO settings of each event,
+            // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
+            // and please update `lockingTagColors` by themes in `fud_quarterly.json` file.
             this.lockLimit = 8;
             this.extraOpsStartFrom = 7;
             this.heartLockMode = 2;

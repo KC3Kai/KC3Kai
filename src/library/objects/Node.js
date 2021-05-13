@@ -344,18 +344,28 @@ Used by SortieManager
 	 * @param isCombined - indicates player combined fleet battle.
 	 */
 	KC3Node.prototype.checkSortieSpecialAttacks = function(predictedFleets, isNight = false, isCombined = false){
-		const checkSortieSpecialAttack = attacks => attacks.some(
+		const checkSortieSpecialAttack = attacks => attacks.some(attack => {
+			const spApiId = Number(attack.cutin || attack.ncutin);
 			// special attacks ID ranged in [100, 200), [200, 201] used by multi-angle attacks
+			if (spApiId.inside(100, 199)) return true;
 			// [300, 302] used by submarine fleet attacks since 2021-05-08
-			attack => Number(attack.cutin || attack.ncutin).inside(100, 199)
-				|| Number(attack.cutin || attack.ncutin).inside(300, 399)
-		);
+			if (spApiId.inside(300, 302)) {
+				// it's not one-time per sortie, may be multiple times as long as resupply materials remained,
+				// to remember all its day and night time triggering.
+				this.sortieSpecialSubFleetDayNight = this.sortieSpecialSubFleetDayNight || [0, 0];
+				this.sortieSpecialSubFleetDayNight[isNight ? 1 : 0] = 1;
+				return true;
+			}
+			return false;
+		});
 		const fleetNum = isNight && isCombined ? 2 : 1;
-		const playerFleet = fleetNum === 2 ? predictedFleets.playerEscort : predictedFleets.playerMain,
-			flagshipSpecialAttack = checkSortieSpecialAttack(playerFleet[0].attacks);
-		if (flagshipSpecialAttack) {
-			this.sortieSpecialCutins = playerFleet.map(ship => checkSortieSpecialAttack(ship.attacks))
+		const playerFleet = fleetNum === 2 ? predictedFleets.playerEscort : predictedFleets.playerMain;
+		// to hit result of sub fleet attack, have to check all ships instead of only flagship
+		const cutinShipsInFleetNum = playerFleet
+				.map(ship => checkSortieSpecialAttack(ship.attacks))
 				.map(v => v && fleetNum);
+		if (cutinShipsInFleetNum.some(v => v > 0)) {
+			this.sortieSpecialCutins = cutinShipsInFleetNum;
 		}
 	};
 	
@@ -1293,6 +1303,15 @@ Used by SortieManager
 			const isAnyDameconConsumed = (this.dameConConsumed || []).some(v => !!v) ||
 				(this.dameConConsumedEscort || []).some(v => !!v);
 			KC3SortieManager.setSlotitemConsumed(isAnyDameconConsumed);
+			
+			// Consumed 'Submarine Supply Materials' if Sub Fleet Special Cutin triggered
+			if(Array.isArray(this.sortieSpecialSubFleetDayNight) && PlayerManager.consumables.submarineSupplyMaterial) {
+				const matsHeld = PlayerManager.consumables.submarineSupplyMaterial;
+				const matsUsed = this.sortieSpecialSubFleetDayNight.sumValues();
+				console.info("SubFleetCI affected submarineSupplyMaterial", matsHeld, -matsUsed);
+				PlayerManager.consumables.submarineSupplyMaterial = Math.max(0, matsHeld - matsUsed);
+				PlayerManager.setConsumables();
+			}
 			
 			var sunkApCnt = 0;
 			for(var i = 0; i < this.eships.length; i++) {
