@@ -48,6 +48,7 @@
 		---------------------------------*/
 		reload :function(){
 			PlayerManager.loadFleets();
+			PlayerManager.loadConsumables();
 			KC3ShipManager.load();
 			KC3GearManager.load();
 			// Cache pre-processed ship info

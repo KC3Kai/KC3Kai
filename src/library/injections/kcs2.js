@@ -29,6 +29,14 @@
 				// Scale edit box to right position too
 				editArea.css("zoom", scale);
 				$("body").css("overflow", "hidden");
+				// Prevent Tab key scrolling, and F7 mode
+				$(document).on("keydown", function(e){
+					if(e.which === 9 || e.which === 118) {
+						$(document).scrollTop(0);
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				});
 			}
 		}
 		// Experimental function: improve 3rd-party components used by game
