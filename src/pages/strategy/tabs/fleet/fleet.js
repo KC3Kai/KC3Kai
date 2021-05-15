@@ -72,6 +72,7 @@
 			KC3GearManager.load();
 			PlayerManager.loadFleets();
 			PlayerManager.loadBases();
+			PlayerManager.loadConsumables();
 		},
 
 		/* EXECUTE

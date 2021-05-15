@@ -2933,7 +2933,8 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
-	 * 4th SS(V) might be counted for proc type 301/302.
+	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
+	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
 	 * Unknown in combined fleet.
 	 *
 	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
@@ -2949,18 +2950,19 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are SS(V) only, not even Chuuha
-					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
-							&& [13, 14].includes(ship.master().api_stype)),
-					valid4thShip = [fleetObj.ship(3)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
-							&& [13, 14].includes(ship.master().api_stype)),
-					// have Submarine Supply Material (useitem) remaining
+					ship2nd = fleetObj.ship(1), ship3rd = fleetObj.ship(2),
+					// 2nd and 3rd ship are SS(V) at least
+					validMinCombinedShips = [ship2nd, ship3rd].every(ship => !ship.isAbsent() && ship.isSubmarine()),
+					// have useitem Submarine Supply Materials remaining
 					hasSubSupply = PlayerManager.consumables.submarineSupplyMaterial > 0;
-				if(isEchelonOrLineAbreast && validCombinedShips && hasSubSupply) {
-					// cant tell difference for 301 and 302, use 302 in first
-					return valid4thShip ? 302 : 300;
+				if(isEchelonOrLineAbreast && validMinCombinedShips && hasSubSupply) {
+					const valid4thShip = [fleetObj.ship(3)].every(s => !s.isAbsent() && !s.isStriped() && s.isSubmarine());
+					// 4th ship is healthy SS(V) and 2nd is healthy (3rd no matter state)
+					if(valid4thShip && !ship2nd.isStriped()) return 302;
+					// 3rd and 4th ship is healthy SS(V) and 2nd is chuuha or worse
+					if(valid4thShip && !ship3rd.isStriped() && ship2nd.isStriped()) return 301;
+					// 2nd and 3rd ship is healthy (4th no matter state, even stype)
+					if(!ship2nd.isStriped() && !ship3rd.isStriped()) return 300;
 				}
 			}
 		}
