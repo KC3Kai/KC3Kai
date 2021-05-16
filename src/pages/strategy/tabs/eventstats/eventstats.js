@@ -21,6 +21,7 @@
 			bossCount: {},
 			clearCount: {},
 			ldCount: {},
+			kuso: {}
 		},
 
 		/* INIT: mandatory
@@ -36,12 +37,12 @@
 			const maps = localStorage.getObject("maps") || {};
 			this.maps = {};
 			Object.keys(maps)
+				 // Modern battle API from Fall 17 (World 40) onwards
+				.filter(id => Number(id.slice(1, -1)) >= 10)
 				.sort((id1, id2) => {
 					const m1 = id1.slice(-1), m2 = id2.slice(-1);
 					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
-					if(w1 === "7") w1 = "3.5";
-					if(w2 === "7") w2 = "3.5";
-					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
+					return Number(w2) - Number(w1) || Number(m1) - Number(m2);
 				}).forEach(id => {
 					this.maps[id] = maps[id];
 				});
@@ -85,7 +86,6 @@
 			$.each(this.maps, (_, map) => {
 				const mapId = map.id;
 				const world = String(mapId).slice(0, -1);
-				if (world < 10) { return; }
 				if($(`option[value=${world}]`, listElem).length === 0) {
 					listElem.append(
 						$("<option />").attr("value", world).text(KC3Meta.worldToDesc(world))
@@ -117,6 +117,7 @@
 				bossCount: {},
 				clearCount: {},
 				ldCount: {},
+				kuso: {}
 			};
 
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -152,46 +153,48 @@
 			};
 
 			// Shortern fleet length if needed for kuso
-			const checkShipLength = (ships, maxHps) => {
-				while (maxHps.length !== ships.length) {
-					for (let i = 0; i < ships.length; i++) {
-						const master = KC3Master.ship(ships[i]);
-						const hpRange = master.api_taik;
-						if (maxHps[i] < hpRange[0] || maxHps[i] > hpRange[1]) {
-							ships.splice(i, 1);
-						}
+			const checkShipLength = (ships, maxHps, sortieKuso) => {
+				if (ships.length == maxHps.length || sortieKuso.length == 0) { return ships; }
+				let result = [];
+				for (let ship of ships) {
+					if (!sortieKuso.includes(ship)) {
+						result.push(ship);
 					}
 				}
-				return ships;
+				return result;
+			};
+
+			const errorHandler = (e) => {
+				console.warn("Unexpected error on retrieving event data", e);
+				$(".loading").hide();
+				$(".map_list").text("Failed to retrieve event data due to unexpected error").show();
 			};
 
 			// Get LB Consumption first
-			allPromises.push(KC3Database.con.navaloverall.where("type").equals("lbas" + this.world)
-    		.toArray(lbArr => {
+			allPromises.push(KC3Database.con.navaloverall.where("type").equals("lbas" + this.world).toArray(lbArr => {
 				this.stats.lbConsumption = buildConsumptionArray(lbArr);
-    		}));
+			}));
 
 			KC3Database.con.sortie.where("world").equals(this.world).and(data => data.hq === hqId).each(sortie => {
 				const mapnum = sortie.mapnum;
 				let hpbar = false;
-				if (sortie.eventmap.api_gauge_type == 2) hpbar = true;
+				if (sortie.eventmap && sortie.eventmap.api_gauge_type == 2) hpbar = true;
 				if (!this.stats.sortieCount[mapnum]) this.stats.sortieCount[mapnum] = 0;
 				if (!this.stats.bossCount[mapnum]) this.stats.bossCount[mapnum] = 0;
 				if (!this.stats.clearCount[mapnum]) this.stats.clearCount[mapnum] = 0;
 				if (!this.stats.ldCount[mapnum]) this.stats.ldCount[mapnum] = 0;
 				let cleared = false;
 				let lastDance = false;
-				if (sortie.eventmap.api_cleared) cleared = true;
-				if (!cleared) { 
+				if (sortie.eventmap && sortie.eventmap.api_cleared) cleared = true;
+				if (!cleared) {
 					this.stats.clearCount[mapnum]++;
 					const mapname = `${this.world}${mapnum}`;
 					const mapdata = this.maps["m" + mapname];
 					const gauges = Object.keys(KC3Meta.eventGauge(mapname));
-					if (sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
+					if (sortie.eventmap && sortie.eventmap.api_now_maphp <= mapdata.baseHp && sortie.eventmap.api_gauge_num == gauges.length) {
 						lastDance = true;
 						this.stats.ldCount[mapnum]++;
 					}
-
 				}
 				this.stats.sortieCount[mapnum]++;
 				let isClearSortie = false;
@@ -209,7 +212,9 @@
 					this.stats.dropList[mapnum][drop] = (this.stats.dropList[mapnum][drop] || 0) + 1;
 
 					if (battle.boss) { this.stats.bossCount[mapnum]++; }
-			
+					// Battle API changed from Fall 2017 onwards, skip battle simulation
+					if (this.world < 40) { return; }
+
 					// Battle analysis
 					const checkForLastHit = battle.boss && isClearSortie;
 					const nodeData = sortie.nodes.find(node => node.id === battle.node);
@@ -217,34 +222,43 @@
 					const nodeKind = nodeData.eventKind;
 					const time = nodeKind === 2 ? "night" : (nodeKind === 7 ? "night_to_day" : "day");
 					let battleData = time !== "night" ? battle.data : battle.yasen;
+					// missing battle data, F5?
+					if (!Object.keys(battleData).length) { return; }
 					const battleType = {
 						player: { 0: "single", 1: "ctf", 2: "stf", 3: "ctf" }[sortie.combined],
 						enemy: !battleData.api_ship_ke_combined ? "single" : "combined",
 						time: time
 					};
-					
+
 					let result = KC3BattlePrediction.analyzeBattle(battleData, [], battleType);
 					const fleetSent = battleData.api_deck_id;
 					let ships = sortie["fleet" + fleetSent].map(ship => ship.mst_id);
 					let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
 					if (!maxHps) return;
+					const sortieKuso = this.stats.kuso[sortie.id] || [];
+					ships = checkShipLength(ships, maxHps, sortieKuso);
+					if (ships.length != maxHps.length) {
+						return;
+					}
 					ships = checkShipLength(ships, maxHps);
 					if (sortie.combined > 0) {
 						let fleet2 = sortie.fleet2.map(ship => ship.mst_id);
 						const maxHps2 = battleData.api_f_maxhps_combined;
 						if (!maxHps2) return;
-						fleet2 = checkShipLength(fleet2, maxHps2);
+						fleet2 = checkShipLength(fleet2, maxHps2, sortieKuso);
+						if (fleet2.length != maxHps2.length) {
+							return;
+						}
 						ships = ships.concat(fleet2);
 						maxHps = maxHps.concat(maxHps2);
 						initialHps = initialHps.concat(battleData.api_f_nowhps_combined);
 					}
-			
+
 					let eships = battleData.api_ship_ke;
 					if (battleData.api_ship_ke_combined) {
 						eships = eships.concat(battleData.api_ship_ke_combined);
 					}
 
-			
 					let player = result.fleets.playerMain.concat(result.fleets.playerEscort);
 					let enemy = result.fleets.enemyMain.concat(result.fleets.enemyEscort);
 					player.forEach((ship, index) => {
@@ -253,6 +267,9 @@
 					checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					if (Object.keys(battle.yasen).length > 0 && time === "day") {
 						battleType.time = "night";
+						if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
+							battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
+						}
 						result = KC3BattlePrediction.analyzeBattle(battle.yasen, [], battleType);
 						player = result.fleets.playerMain.concat(result.fleets.playerEscort);
 						player.forEach((ship, index) => {
@@ -260,7 +277,7 @@
 						});
 						checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					}
-			
+
 					// Assign taiha magnets
 					if (!battle.boss) {
 						for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
@@ -268,9 +285,15 @@
 							const taihaHp = maxHps[shipIdx] / 4;
 							if (initialHps[shipIdx] < taihaHp) continue;
 							const resultHp = player[shipIdx].hp;
-							// No kuso here	
-							if (resultHp < taihaHp && resultHp > 0) {
-								this.stats.taihaMagnets[ships[shipIdx]] = (this.stats.taihaMagnets[ships[shipIdx]] || 0) + 1;
+
+							// Handle pre-boss taiha
+							if (resultHp < taihaHp) {
+								if (resultHp > 0) {
+									this.stats.taihaMagnets[ships[shipIdx]] = (this.stats.taihaMagnets[ships[shipIdx]] || 0) + 1;
+								} else {
+									if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
+									this.stats.kuso[sortie.id].push(ships[shipIdx]);
+								}
 							}
 
 						}
@@ -306,8 +329,8 @@
 						acc.map((v, i) => acc[i] + (o[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 					}
 					this.displayEventStatistics();
-				});
-			});
+				}).catch(errorHandler);
+			}).catch(errorHandler);
 		},
 
 		displayEventStatistics: function() {
@@ -330,17 +353,18 @@
 				"shipKills": "Ship Kills",
 				"taihaMagnets": "Taiha Magnets",
 			};
-
-			const keys = Object.keys(map);
-			for (const key of keys) {
-				let str = "<tr>" + "<td>" + map[key] + "</td>";
-				const vals = this.stats[key];
-				const topFive = getTopFive(vals);
-				for (let i = 0; i < Math.min(5, topFive.length); i++) {
-					str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
+			if (this.world > 39) {
+				const keys = Object.keys(map);
+				for (const key of keys) {
+					let str = "<tr>" + "<td>" + map[key] + "</td>";
+					const vals = this.stats[key];
+					const topFive = getTopFive(vals);
+					for (let i = 0; i < Math.min(5, topFive.length); i++) {
+						str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
+					}
+					str += "</tr>";
+					$(".table5").append(str);
 				}
-				str += "</tr>";
-				$(".table5").append(str);
 			}
 
 			const buildLBMessage = consumption => {
@@ -362,7 +386,6 @@
 				}).join(" ");
 			};
 
-
 			const difficutlies = ["Casual", "Easy", "Normal", "Hard"];
 			let totalCost = this.stats.lbConsumption;
 			if (totalCost.length == 0) { totalCost = [0, 0, 0, 0, 0, 0, 0, 0]; }
@@ -373,13 +396,15 @@
 				const mapnum = i;
 				const mapname = `m${this.world}${mapnum}`;
 				const mapdata = this.maps[mapname];
-				const difficulty = mapdata.difficulty;
+				let difficulty = mapdata.difficulty;
+				// Casual offset implemented from Winter 2018 onwards
+				if (this.world < 41) { difficulty += 1; }
 				const mapTitle = `E${mapnum}${KC3Meta.term(`EventRank${difficutlies[difficulty - 1]}Abbr`)}`;
 				const curBox = $(".tab_eventstats .factory .map_box").clone();
 				curBox.attr("id", "e-" + mapnum);
 
 				$(".map_title", curBox).text(mapTitle);
-				if (this.stats.clearConsumption[i]) {
+				if (this.stats.clearConsumption[i] && this.world > 38) {
 					$(".clear_runs", curBox).append("Clear Runs: " + this.stats.clearCount[i] + ", Cost: " + buildConsMessage(this.stats.clearConsumption[i]));
 					//$(".clear_cost", curBox).append("Clear Expenditure: " + buildConsMessage(this.stats.clearConsumption[i]));
 				}
@@ -399,8 +424,12 @@
 					$(".clear_attack", curBox).append(str);
 				}
 				//$(".boss_runs", curBox).text("Boss Reaches: " + this.stats.bossCount[i]);
-				$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
-												+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
+				if (this.world < 39) { // eventmap not saved yet
+					$(".total_runs", curBox).append("Total Runs: " + `${this.stats.sortieCount[i]}`);
+				} else {
+					$(".total_runs", curBox).append("Boss Reaches / Total Runs: " + `${this.stats.bossCount[i]} / ${this.stats.sortieCount[i]}`
+						+ ` (${Math.floor(this.stats.bossCount[i] / this.stats.sortieCount[i] * 10000) / 100}%)`);
+				}
 				$(".total_cost", curBox).append("Total Cost: " + buildConsMessage(this.stats.sortieConsumption[i]));
 				totalCost = adder(totalCost, this.stats.sortieConsumption[i]);
 				curBox.appendTo(".map_list");
