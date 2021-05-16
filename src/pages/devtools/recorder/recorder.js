@@ -46,6 +46,13 @@
 			const kcsApiResource = request.request.url.substring(kcsApiIndex + 8);
 			const rscNameSplit = kcsApiResource.split("/");
 			const rscShortName = rscNameSplit.pop();
+			// Following responses are too large and not so valuable to be recorded & reported
+			const ignoreLargeBody = [
+				"api_start2/getData",
+				"api_get_member/require_info",
+				"api_port/port"
+			].includes(kcsApiResource);
+			const bodyReplacement = "Data is too large to be kept.\nView it in Network tab instead.";
 			
 			const reqObj = new KC3Request(request);
 			if (reqObj.validateHeaders()) {
@@ -55,14 +62,15 @@
 						censorParam(params, "api_token");
 						censorParam(params, "api_verno");
 						censorParam(params, "api_port");
+						const response = ignoreLargeBody ? bodyReplacement : responseBody;
 						
 						const saveObj = {
 							name: rscShortName,
 							url: kcsApiResource,
 							params: params,
-							response: responseBody
+							response: response
 						};
-					
+						
 						list.push(saveObj);
 						$("#apilist").append($("<div>")
 							.text(kcsApiResource)

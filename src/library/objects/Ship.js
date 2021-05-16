@@ -2933,7 +2933,8 @@ KC3改 Ship Object
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
-	 * 4th SS(V) might be counted for proc type 301/302.
+	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
+	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
 	 * Unknown in combined fleet.
 	 *
 	 * @return API ID (300~302) if this ship can do special cut-in attack, otherwise false.
@@ -2949,18 +2950,19 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are SS(V) only, not even Chuuha
-					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
-							&& [13, 14].includes(ship.master().api_stype)),
-					valid4thShip = [fleetObj.ship(3)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
-							&& [13, 14].includes(ship.master().api_stype)),
-					// have Submarine Supply Material (useitem) remaining
+					ship2nd = fleetObj.ship(1), ship3rd = fleetObj.ship(2),
+					// 2nd and 3rd ship are SS(V) at least
+					validMinCombinedShips = [ship2nd, ship3rd].every(ship => !ship.isAbsent() && ship.isSubmarine()),
+					// have useitem Submarine Supply Materials remaining
 					hasSubSupply = PlayerManager.consumables.submarineSupplyMaterial > 0;
-				if(isEchelonOrLineAbreast && validCombinedShips && hasSubSupply) {
-					// cant tell difference for 301 and 302, use 302 in first
-					return valid4thShip ? 302 : 300;
+				if(isEchelonOrLineAbreast && validMinCombinedShips && hasSubSupply) {
+					const valid4thShip = [fleetObj.ship(3)].every(s => !s.isAbsent() && !s.isStriped() && s.isSubmarine());
+					// 4th ship is healthy SS(V) and 2nd is healthy (3rd no matter state)
+					if(valid4thShip && !ship2nd.isStriped()) return 302;
+					// 3rd and 4th ship is healthy SS(V) and 2nd is chuuha or worse
+					if(valid4thShip && !ship3rd.isStriped() && ship2nd.isStriped()) return 301;
+					// 2nd and 3rd ship is healthy (4th no matter state, even stype)
+					if(!ship2nd.isStriped() && !ship3rd.isStriped()) return 300;
 				}
 			}
 		}
@@ -3045,9 +3047,9 @@ KC3改 Ship Object
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3115,6 +3117,8 @@ KC3改 Ship Object
 			}
 			// Sub Fleet cutin since 2021-05-08
 			if(this.canDoSubFleetCutin()) {
+				// Damage calculation is quite different:
+				// based on torpedo attack, not affected by formation/engagement, affected by level of SS attacker
 				return KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin());
 			}
 		}
@@ -3298,9 +3302,9 @@ KC3改 Ship Object
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
 			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
-			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.0],
-			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.0],
-			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.0],
+			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
+			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
+			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3451,22 +3455,24 @@ KC3改 Ship Object
 					const modelDSmallGunModifier =
 						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
 							* (1 + modelDK3SmallGunCnt * 0.05);
+					// Since 2021-05-08, all 4 types get indiviual ID, and get double hits version
+					// https://twitter.com/CC_jabberwock/status/1391058345990127618
+					// setups of double-hit ID (+4) are the same, but threshold seems be level 80
+					// https://twitter.com/CC_jabberwock/status/1392587817524502529
+					const doubleHitDiff = this.level >= 80 ? 4 : 0;
 					if(hasCapableRadar && smallMainGunCnt >= 1)
-						return KC3Ship.specialAttackTypeNight(7, null, 1.3 * modelDSmallGunModifier);
+						return KC3Ship.specialAttackTypeNight(7 + doubleHitDiff, null, 1.3 * modelDSmallGunModifier);
 					if(hasCapableRadar && hasSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(8, null, 1.2 * modelDSmallGunModifier);
+						return KC3Ship.specialAttackTypeNight(8 + doubleHitDiff, null, 1.2 * modelDSmallGunModifier);
 					// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
 					// lower priority than regual cutins below, no D gun modifier
 					// https://twitter.com/yukicacoon/status/1388100262938562563
 					const hasTsSkilledLookouts = this.hasEquipment(412);
 					const hasDrumCanister = this.hasEquipmentType(2, 30);
-					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
-					// https://twitter.com/CC_jabberwock/status/1391058345990127618
-					// here not apply any double-hit ID (+4) yet since setups are the same
 					if(torpedoCnt >= 2 && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(9);
+						return KC3Ship.specialAttackTypeNight(9 + doubleHitDiff);
 					if(hasDrumCanister && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(10);
+						return KC3Ship.specialAttackTypeNight(10 + doubleHitDiff);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
@@ -3810,12 +3816,13 @@ KC3改 Ship Object
 						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
 						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
 						// modifier for 7 (CVCI) still unknown
-						// modifiers for [100, 201] (special cutins) still unknown
+						// modifiers for [100, 302] (special cutins) still unknown
 					})[type[1]] || 1;
 				}
 				return 1;
 			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
 		}
+		// TODO accuracy bonus from aircraft proficiency
 		const apShellModifier = (() => {
 			// AP Shell combined with Large cal. main gun only mainly for battleships
 			const hasApShellAndMainGun = this.hasEquipmentType(2, 19) && this.hasEquipmentType(2, 3);

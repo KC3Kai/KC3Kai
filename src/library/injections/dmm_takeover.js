@@ -49,6 +49,7 @@
 					window.focus();
 				}else{
 					self.nonFocusSeconds--;
+					console.debug("No focus countdown", self.nonFocusSeconds);
 				}
 			}, 1000);
 
@@ -56,6 +57,8 @@
 			$(document).on("keydown", function(event){
 				if (event.which === 118) {
 					self.nonFocusSeconds = 20;
+					event.stopPropagation();
+					event.preventDefault();
 				}
 				// Press Tab to show special HUD
 				if (event.which === 9) {
@@ -167,7 +170,7 @@
 		},
 		// Resize game frame to 1200x720
 		resizeGameFrame: function(){
-			console.log("Resizing game frame to 1200x720");
+			console.debug("Resizing game frame to 1200x720");
 			$("#game_frame").css({
 				width: 1200,
 				height: 720
