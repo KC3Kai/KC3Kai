@@ -123,12 +123,6 @@
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
 				acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 
-			const checkFleetAttacks = (fleet, ships, checkForLastHit, mapnum) => {
-				for (let i = 0; i < fleet.length; i++) {
-					checkShipKill(fleet[i].attacks, ships[i], checkForLastHit, mapnum);
-				}
-			};
-
 			const checkShipKill = (attacks, shipId, checkForLastHit, mapnum) => {
 				attacks.forEach(attack => {
 					const damage = Array.isArray(attack.damage) ? attack.damage.sumValues() : attack.damage;
@@ -150,6 +144,12 @@
 						this.stats.maxHit[shipId] = Math.max(damage, this.stats.maxHit[shipId] || 0);
 					}
 				});
+			};
+
+			const checkFleetAttacks = (fleet, ships, checkForLastHit, mapnum) => {
+				for (let i = 0; i < fleet.length; i++) {
+					checkShipKill(fleet[i].attacks, ships[i], checkForLastHit, mapnum);
+				}
 			};
 
 			// Shortern fleet length if needed for kuso
