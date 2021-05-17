@@ -156,16 +156,17 @@
 			const checkShipLength = (ships, maxHps, sortieKuso) => {
 				if (ships.length == maxHps.length || sortieKuso.length == 0) { return ships; }
 				let result = [];
-				for (let ship of ships) {
+				ships.forEach(ship => {
 					if (!sortieKuso.includes(ship)) {
 						result.push(ship);
 					}
-				}
+				});
 				return result;
 			};
 
 			const errorHandler = (e) => {
-				console.warn("Unexpected error on retrieving event data", e);
+				console.warn("Unexpected error on retrieving event data", this.world, e);
+				console.debug(`Eventstats for E-${this.world}`, e);/*RemoveLogging:skip*/
 				$(".loading").hide();
 				$(".map_list").text("Failed to retrieve event data due to unexpected error").show();
 			};
@@ -354,8 +355,7 @@
 				"taihaMagnets": "Taiha Magnets",
 			};
 			if (this.world > 39) {
-				const keys = Object.keys(map);
-				for (const key of keys) {
+				Object.keys(map).forEach(key => {
 					let str = "<tr>" + "<td>" + map[key] + "</td>";
 					const vals = this.stats[key];
 					const topFive = getTopFive(vals);
@@ -364,7 +364,7 @@
 					}
 					str += "</tr>";
 					$(".table5").append(str);
-				}
+				});
 			}
 
 			const buildLBMessage = consumption => {
