@@ -3069,6 +3069,7 @@ KC3改 Ship Object
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
 	 * @param {number} airBattleId - air battle result id, to indicate if special attacks can be triggered,
 	 *        special attacks require AS / AS +, default is AS+.
+	 * @param {boolean} returnFirstOnly - specify false if want all possible attack types instead of most possible.
 	 * @return {Array} day time attack type constants tuple:
 	 *         [name, regular attack id / cutin id / landing id, cutin name, modifier].
 	 *         cutin id is from `api_hougeki?.api_at_type` which indicates the special attacks.
@@ -3088,8 +3089,9 @@ KC3改 Ship Object
 	 * @see canDoClosingTorpedo
 	 */
 	KC3Ship.prototype.estimateDayAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false,
-			airBattleId = 1) {
-		if(this.isDummy()) { return []; }
+			airBattleId = 1, returnFirstOnly = true) {
+		const results = [];
+		if(this.isDummy()) { return results; }
 		// if attack target known, will give different attack according target ship
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		const isThisCarrier = this.isCarrier();
@@ -3100,26 +3102,26 @@ KC3改 Ship Object
 			// Nelson Touch since 2018-09-15
 			if(this.canDoNelsonTouch()) {
 				const isRedT = this.collectBattleConditions().engagementId === 4;
-				return KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0);
+				results.push(KC3Ship.specialAttackTypeDay(100, null, isRedT ? 2.5 : 2.0));
 			}
 			// Nagato cutin since 2018-11-16
 			if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
 				// To clarify: here only indicates the modifier of flagship's first 2 attacks
-				return KC3Ship.specialAttackTypeDay(101, null, this.estimateNagatoClassCutinModifier());
+				results.push(KC3Ship.specialAttackTypeDay(101, null, this.estimateNagatoClassCutinModifier()));
 			}
 			// Mutsu cutin since 2019-02-27
 			if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
-				return KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier());
+				results.push(KC3Ship.specialAttackTypeDay(102, null, this.estimateNagatoClassCutinModifier()));
 			}
 			// Colorado cutin since 2019-05-25
 			if(this.canDoColoradoCutin()) {
-				return KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier());
+				results.push(KC3Ship.specialAttackTypeDay(103, null, this.estimateColoradoCutinModifier()));
 			}
 			// Sub Fleet cutin since 2021-05-08
 			if(this.canDoSubFleetCutin()) {
 				// Damage calculation is quite different:
 				// based on torpedo attack, not affected by formation/engagement, affected by level of SS attacker
-				return KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin());
+				results.push(KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin()));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -3134,13 +3136,13 @@ KC3改 Ship Object
 					[26, 79, 80, 81, 207, 237, 322, 323]
 				);
 				// Zuiun priority to Air/Sea Attack when they are both equipped
-				if(spZuiunCnt > 1) return KC3Ship.specialAttackTypeDay(200);
+				if(spZuiunCnt > 1) results.push(KC3Ship.specialAttackTypeDay(200));
 				// Ise-class Kai Ni Air/Sea Multi-Angle Attack since 2019-03-27
 				const spSuiseiCnt = this.countNonZeroSlotEquipment(
 					// Only Suisei named 634th Air Group capable?
 					[291, 292, 319]
 				);
-				if(spSuiseiCnt > 1) return KC3Ship.specialAttackTypeDay(201);
+				if(spSuiseiCnt > 1) results.push(KC3Ship.specialAttackTypeDay(201));
 			}
 		}
 		const hasRecon = this.hasNonZeroSlotEquipmentType(2, [10, 11]);
@@ -3150,19 +3152,19 @@ KC3改 Ship Object
 			 * In game, special attack types are judged and given by server API result.
 			 * By equip compos, multiply types are possible to be selected to trigger, such as
 			 * CutinMainMain + Double, CutinMainAPShell + CutinMainRadar + CutinMainSecond.
-			 * Here just check by strictness & modifier desc order and return one of them.
+			 * Here just check by strictness & modifier desc order and return one of them by default.
 			 */
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 			const apShellCnt = this.countEquipmentType(2, 19);
-			if(mainGunCnt >= 2 && apShellCnt >= 1) return KC3Ship.specialAttackTypeDay(6);
+			if(mainGunCnt >= 2 && apShellCnt >= 1) results.push(KC3Ship.specialAttackTypeDay(6));
 			const secondaryCnt = this.countEquipmentType(2, 4);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && apShellCnt >= 1)
-				return KC3Ship.specialAttackTypeDay(5);
+				results.push(KC3Ship.specialAttackTypeDay(5));
 			const radarCnt = this.countEquipmentType(2, [12, 13]);
 			if(mainGunCnt >= 1 && secondaryCnt >= 1 && radarCnt >= 1)
-				return KC3Ship.specialAttackTypeDay(4);
-			if(mainGunCnt >= 1 && secondaryCnt >= 1) return KC3Ship.specialAttackTypeDay(3);
-			if(mainGunCnt >= 2) return KC3Ship.specialAttackTypeDay(2);
+				results.push(KC3Ship.specialAttackTypeDay(4));
+			if(mainGunCnt >= 1 && secondaryCnt >= 1) results.push(KC3Ship.specialAttackTypeDay(3));
+			if(mainGunCnt >= 2) results.push(KC3Ship.specialAttackTypeDay(2));
 		} else if(trySpTypeFirst && isThisCarrier && isAirSuperiorityBetter) {
 			// day time carrier shelling cut-in
 			// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
@@ -3172,53 +3174,52 @@ KC3改 Ship Object
 			const diveBomberCnt = this.countNonZeroSlotEquipmentType(2, 7);
 			const torpedoBomberCnt = this.countNonZeroSlotEquipmentType(2, 8);
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1 && fighterCnt >= 1)
-				return KC3Ship.specialAttackTypeDay(7, "CutinFDBTB", 1.25);
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinFDBTB", 1.25));
 			if(diveBomberCnt >= 2 && torpedoBomberCnt >= 1)
-				return KC3Ship.specialAttackTypeDay(7, "CutinDBDBTB", 1.2);
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinDBDBTB", 1.2));
 			if(diveBomberCnt >= 1 && torpedoBomberCnt >= 1)
-				return KC3Ship.specialAttackTypeDay(7, "CutinDBTB", 1.15);
+				results.push(KC3Ship.specialAttackTypeDay(7, "CutinDBTB", 1.15));
 		}
 		
 		// is target a land installation
 		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
-				return ["LandingAttack", landingAttackType];
+				results.push(["LandingAttack", landingAttackType]);
 			}
 			// see `main.js#PhaseHougeki.prototype._hasRocketEffect` or same method of `PhaseHougekiBase`,
 			// and if base attack method is NOT air attack
 			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// no such ID -1, just mean higher priority
-			if(hasRocketLauncher) return ["Rocket", -1];
+			if(hasRocketLauncher) results.push(["Rocket", -1]);
 		}
 		// is this ship Hayasui Kai
-		if(this.masterId === 352) {
+		else if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
 				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
-				return aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2];
+				results.push(aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2]);
 			}
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
 			if(this.hasEquipmentType(2, 8))
-				return ["AirAttack", 1];
+				results.push(["AirAttack", 1]);
 			else
-				return ["SingleAttack", 0];
-		}
-		if(isThisCarrier) {
-			return ["AirAttack", 1];
+				results.push(["SingleAttack", 0]);
+		} else if(isThisCarrier) {
+			results.push(["AirAttack", 1]);
 		}
 		// only torpedo attack possible if this ship is submarine (but not shelling phase)
-		if(isThisSubmarine) {
-			return ["Torpedo", 3];
-		}
-		if(targetShipType.isSubmarine) {
+		else if(isThisSubmarine) {
+			results.push(["Torpedo", 3]);
+		} else if(targetShipType.isSubmarine) {
 			const stype = this.master().api_stype;
 			// CAV, BBV, AV, LHA can only air attack against submarine
-			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2];
+			results.push( ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2] );
+		} else {
+			// default single shelling fire attack
+			results.push(["SingleAttack", 0]);
 		}
-		
-		// default single shelling fire attack
-		return ["SingleAttack", 0];
+		return returnFirstOnly ? results[0] : results;
 	};
 
 	/**
@@ -3321,6 +3322,7 @@ KC3改 Ship Object
 	 * or that ship can be targeted or not, etc.
 	 * @param {number} targetShipMasterId - a Master ID of being attacked ship.
 	 * @param {boolean} trySpTypeFirst - specify true if want to estimate special attack type.
+	 * @param {boolean} returnFirstOnly - specify false if want all possible attack types instead of most possible.
 	 * @return {Array} night battle attack type constants tuple: [name, cutin id, cutin name, modifier].
 	 *         cutin id is partially from `api_hougeki.api_sp_list` which indicates the special attacks.
 	 * @see BattleMain.swf#battle.models.attack.AttackData#setOptionsAtNight - client side codes of night attack type.
@@ -3330,8 +3332,10 @@ KC3改 Ship Object
 	 * @see estimateDayAttackType
 	 * @see canDoNightAttack
 	 */
-	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false) {
-		if(this.isDummy()) { return []; }
+	KC3Ship.prototype.estimateNightAttackType = function(targetShipMasterId = 0, trySpTypeFirst = false,
+			returnFirstOnly = true) {
+		const results = [];
+		if(this.isDummy()) { return results; }
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
 		const isThisCarrier = this.isCarrier();
 		const isThisSubmarine = this.isSubmarine();
@@ -3370,82 +3374,83 @@ KC3改 Ship Object
 				})();
 				// first place thank to its highest mod 1.25
 				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25));
 				// 3 planes mod 1.18
 				if(nightFighterCnt >= 3)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier));
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNTB", ncvciModifier));
 				if(nightFighterCnt >= 2 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFFBI", ncvciModifier));
 				if(nightFighterCnt >= 2 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFSF", ncvciModifier));
 				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBIFBI", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFFBIFBI", ncvciModifier));
 				if(nightFighterCnt >= 1 && swordfishTBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFSFSF", ncvciModifier));
 				if(nightFighterCnt >= 1 && iwaiDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFFBISF", ncvciModifier));
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBFBI", ncvciModifier));
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBSF", ncvciModifier));
 				if(nightFighterCnt >= 2 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNFNDB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNDB", ncvciModifier));
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBNDB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBNDB", ncvciModifier));
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNDB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTBNDB", ncvciModifier));
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && iwaiDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier));
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier));
 				// 2 planes mod 1.2, put here not to mask previous patterns, tho proc rate might be higher
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2));
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
 				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(6, "CutinNTBNDB", ncvciModifier);
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNTBNDB", 1.2));
 			} else {
 				// special Nelson Touch since 2018-09-15
 				if(this.canDoNelsonTouch()) {
 					const isRedT = this.collectBattleConditions().engagementId === 4;
-					return KC3Ship.specialAttackTypeNight(100, null, isRedT ? 2.5 : 2.0);
+					results.push(KC3Ship.specialAttackTypeNight(100, null, isRedT ? 2.5 : 2.0));
 				}
 				// special Nagato Cutin since 2018-11-16
 				if(this.canDoNagatoClassCutin(KC3Meta.nagatoCutinShips)) {
-					return KC3Ship.specialAttackTypeNight(101, null, this.estimateNagatoClassCutinModifier());
+					results.push(KC3Ship.specialAttackTypeNight(101, null, this.estimateNagatoClassCutinModifier()));
 				}
 				// special Mutsu Cutin since 2019-02-27
 				if(this.canDoNagatoClassCutin(KC3Meta.mutsuCutinShips)) {
-					return KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier());
+					results.push(KC3Ship.specialAttackTypeNight(102, null, this.estimateNagatoClassCutinModifier()));
 				}
 				// special Colorado Cutin since 2019-05-25
 				if(this.canDoColoradoCutin()) {
-					return KC3Ship.specialAttackTypeNight(103, null, this.estimateColoradoCutinModifier());
+					results.push(KC3Ship.specialAttackTypeNight(103, null, this.estimateColoradoCutinModifier()));
 				}
 				// special Kongou-class K2C Cutin since 2020-04-23
 				if(this.canDoKongouCutin()) {
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 					const engagementMod = [1, 1, 1, 1.25, 0.75][this.collectBattleConditions().engagementId] || 1.0;
-					return KC3Ship.specialAttackTypeNight(104, null, 1.9 * engagementMod);
+					results.push(KC3Ship.specialAttackTypeNight(104, null, 1.9 * engagementMod));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {
-					return KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin());
+					results.push(KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin()));
 				}
 				// special torpedo radar cut-in for destroyers since 2017-10-25
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
-					// according tests, any radar with accuracy stat >= 3 capable,
-					// even large radars (Kasumi K2 can equip), air radars okay too, see:
-					// https://twitter.com/nicolai_2501/status/923172168141123584
-					// https://twitter.com/nicolai_2501/status/923175256092581888
+					// according tests, only surface radar capable
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
+					// general ship personnel
 					const hasSkilledLookouts = this.hasEquipmentType(2, 39);
 					const smallMainGunCnt = this.countEquipmentType(2, 1);
-					// Extra bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
+					// specific ship personnel: torpedo squadron skilled lookouts
+					const hasTsSkilledLookouts = this.hasEquipment(412);
+					const hasDrumCanister = this.hasEquipmentType(2, 30);
+					// Extra power bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
 					// https://twitter.com/ayanamist_m2/status/944176834551222272
 					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
 					const modelDK2SmallGunCnt = this.countEquipment(267),
@@ -3455,67 +3460,66 @@ KC3改 Ship Object
 					const modelDSmallGunModifier =
 						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
 							* (1 + modelDK3SmallGunCnt * 0.05);
+					const addDestroyerSpAttacksToId = (diff) => {
+						if(hasCapableRadar && smallMainGunCnt >= 1)
+							results.push(KC3Ship.specialAttackTypeNight(7 + diff, null, 1.3 * modelDSmallGunModifier));
+						if(hasCapableRadar && hasSkilledLookouts)
+							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
+						// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
+						// lower priority than regual cutins below, no D gun modifier
+						// https://twitter.com/yukicacoon/status/1388100262938562563
+						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
+							results.push(KC3Ship.specialAttackTypeNight(9 + diff));
+						if(hasDrumCanister && hasTsSkilledLookouts)
+							results.push(KC3Ship.specialAttackTypeNight(10 + diff));
+					};
 					// Since 2021-05-08, all 4 types get indiviual ID, and get double hits version
 					// https://twitter.com/CC_jabberwock/status/1391058345990127618
 					// setups of double-hit ID (+4) are the same, but threshold seems be level 80
 					// https://twitter.com/CC_jabberwock/status/1392587817524502529
-					const doubleHitDiff = this.level >= 80 ? 4 : 0;
-					if(hasCapableRadar && smallMainGunCnt >= 1)
-						return KC3Ship.specialAttackTypeNight(7 + doubleHitDiff, null, 1.3 * modelDSmallGunModifier);
-					if(hasCapableRadar && hasSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(8 + doubleHitDiff, null, 1.2 * modelDSmallGunModifier);
-					// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
-					// lower priority than regual cutins below, no D gun modifier
-					// https://twitter.com/yukicacoon/status/1388100262938562563
-					const hasTsSkilledLookouts = this.hasEquipment(412);
-					const hasDrumCanister = this.hasEquipmentType(2, 30);
-					if(torpedoCnt >= 2 && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(9 + doubleHitDiff);
-					if(hasDrumCanister && hasTsSkilledLookouts)
-						return KC3Ship.specialAttackTypeNight(10 + doubleHitDiff);
+					if(this.level >= 80) addDestroyerSpAttacksToId(4);
+					addDestroyerSpAttacksToId(0);
 				}
 				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75);
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
 				if(lateTorpedoCnt >= 2)
-					return KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6);
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
 				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
 				// will not mutex if 5 slots ships can equip torpedo
-				if(torpedoCnt >= 2) return KC3Ship.specialAttackTypeNight(3);
+				if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
-				if(mainGunCnt >= 3) return KC3Ship.specialAttackTypeNight(5);
+				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
 				const secondaryCnt = this.countEquipmentType(2, 4);
 				if(mainGunCnt === 2 && secondaryCnt >= 1)
-					return KC3Ship.specialAttackTypeNight(4);
+					results.push(KC3Ship.specialAttackTypeNight(4));
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
 					(mainGunCnt === 1 && torpedoCnt === 1))
-					return KC3Ship.specialAttackTypeNight(2);
+					results.push(KC3Ship.specialAttackTypeNight(2));
 				// double attack can be torpedo attack animation if topmost slot is torpedo
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
 					(mainGunCnt === 1 && secondaryCnt >= 1) ||
 					(secondaryCnt >= 2 && torpedoCnt <= 1))
-					return KC3Ship.specialAttackTypeNight(1);
+					results.push(KC3Ship.specialAttackTypeNight(1));
 			}
 		}
 		
 		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
-				return ["LandingAttack", landingAttackType];
+				results.push(["LandingAttack", landingAttackType]);
 			}
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
-			if(hasRocketLauncher) return ["Rocket", -1];
+			if(hasRocketLauncher) results.push(["Rocket", -1]);
 		}
 		// priority to use server flag
-		if(isCarrierNightAirAttack) {
-			return ["AirAttack", 1, true];
-		}
-		if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
-			return ["DepthCharge", 2];
-		}
-		if(isThisCarrier) {
+		else if(isCarrierNightAirAttack) {
+			results.push(["AirAttack", 1, true]);
+		} else if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
+			results.push(["DepthCharge", 2]);
+		} else if(isThisCarrier) {
 			// these abyssal ships can only be shelling attacked,
 			// see `main.js#PhaseHougekiBase.prototype._getNormalAttackType`
 			const isSpecialAbyssal = [
@@ -3526,24 +3530,23 @@ KC3改 Ship Object
 				432, 353, // Graf & Graf Kai
 				433 // Saratoga (base form)
 				].includes(this.masterId);
-			if(isSpecialCarrier || isSpecialAbyssal) return ["SingleAttack", 0];
+			if(isSpecialCarrier || isSpecialAbyssal) results.push(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
-			return ["AirAttack", 1];
-		}
-		if(isThisSubmarine) {
-			return ["Torpedo", 3];
-		}
-		if(targetShipType.isSubmarine) {
+			else results.push(["AirAttack", 1]);
+		} else if(isThisSubmarine) {
+			results.push(["Torpedo", 3]);
+		} else if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA
-			return ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2];
+			results.push( ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2] );
+		} else {
+			// torpedo attack if any torpedo equipped at top most, otherwise single shelling fire
+			const topGear = this.equipment().find(gear => gear.exists() &&
+				[1, 2, 3].includes(gear.master().api_type[1]));
+			results.push( topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0] );
 		}
-		
-		// torpedo attack if any torpedo equipped at top most, otherwise single shelling fire
-		const topGear = this.equipment().find(gear => gear.exists() &&
-			[1, 2, 3].includes(gear.master().api_type[1]));
-		return topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0];
+		return returnFirstOnly ? results[0] : results;
 	};
 
 	/**
