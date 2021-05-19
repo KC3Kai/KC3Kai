@@ -814,11 +814,11 @@
         isKongouCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 1], isAllySideFriend, index})) :
         isSubmarineCutin1(attackJson) ?
-          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [1, 1, 2, 2], isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [1, 2] : [1, 1, 2, 2]), isAllySideFriend, index})) :
         isSubmarineCutin2(attackJson) ?
-          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [2, 2, 3, 3], isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [2, 3] : [2, 2, 3, 3]), isAllySideFriend, index})) :
         isSubmarineCutin3(attackJson) ?
-          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [1, 1, 3, 3], isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [1, 3] : [1, 1, 3, 3]), isAllySideFriend, index})) :
         // Unreachable exception
         (isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson)),
       // Assume abyssal enemy and PvP cannot trigger it yet
@@ -843,7 +843,8 @@
   // For Nagato/Mutsu, 3 attacks assigned to 1st flagship twice, 2nd ship once;
   // For Colorado, 3 attacks assigned to first 3 ships;
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
-  // For Submarine Fleet, 2~4 attacks assigned to 2nd~4th SS members, 1st flagship not attack;
+  // For Submarine Fleet, 2~4 torpedo attacks assigned to 2 of 2nd~4th SS members, 1st flagship not attack;
+  //   Known issue: no proper way to predict 3 hits torpedo attacks have merged 2 hits from which submarine for now;
   Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag, api_sp_list }) => {
     const { getBattleType } = KC3BattlePrediction.battle;
     // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.
