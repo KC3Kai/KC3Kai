@@ -3458,7 +3458,7 @@ KC3改 Ship Object
 					// Possible to equip 2 D guns for 4 slots Tashkent
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					const modelDSmallGunModifier =
-						([1, 1.25, 1.4][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.4)
+						([1, 1.25, 1.25 * 1.125][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.40625)
 							* (1 + modelDK3SmallGunCnt * 0.05);
 					const addDestroyerSpAttacksToId = (diff) => {
 						if(hasCapableRadar && smallMainGunCnt >= 1)

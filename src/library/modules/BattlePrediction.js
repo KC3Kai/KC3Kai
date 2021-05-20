@@ -812,7 +812,7 @@
         isColoradoCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2], isAllySideFriend, index})) :
         isKongouCutin(attackJson) ?
-          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 1], isAllySideFriend, index})) :
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1], isAllySideFriend, index})) :
         isSubmarineCutin1(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [1, 2] : [1, 1, 2, 2]), isAllySideFriend, index})) :
         isSubmarineCutin2(attackJson) ?
