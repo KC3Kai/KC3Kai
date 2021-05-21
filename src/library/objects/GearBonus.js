@@ -1923,6 +1923,8 @@
 					"99": "95",
 					// St. Louis Class
 					"106": "95",
+					// Brooklyn Class
+					"110": "95",
 				},
 			},
 			// SOC Seagull
@@ -1973,6 +1975,8 @@
 					"99": "95",
 					// St. Louis Class
 					"106": "95",
+					// Brooklyn Class
+					"110": "95",
 				},
 			},
 			// SO3C Seamew Kai
@@ -2015,6 +2019,8 @@
 					"99": "95",
 					// St. Louis Class
 					"106": "95",
+					// Brooklyn Class
+					"110": "95",
 				},
 			},
 			// Ar196 Kai
@@ -2744,6 +2750,8 @@
 					"99": "93",
 					// St. Louis
 					"106": "93",
+					// Brooklyn Class
+					"110": "93",
 				},
 			},
 			// 16inch Triple Rapid Fire Gun Mount Mk.16 mod.2
@@ -2772,6 +2780,8 @@
 					"99": "93",
 					// St. Louis
 					"106": "93",
+					// Brooklyn Class
+					"110": "93",
 				},
 			},
 			// 6inch Mk.XXIII Triple Gun Mount
@@ -3158,6 +3168,8 @@
 					"107": "67",
 					// Town Class
 					"108": "67",
+					// Brooklyn Class
+					"110": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -3233,6 +3245,8 @@
 					"95": "93",
 					// St. Louis Class
 					"106": "93",
+					// Brooklyn Class
+					"110": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -3279,6 +3293,8 @@
 					"95": "93",
 					// St. Louis Class
 					"106": "93",
+					// Brooklyn Class
+					"110": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -3337,6 +3353,8 @@
 					"106": "95",
 					// North Carolina Class
 					"107": "95",
+					// Brooklyn Class
+					"110": "95",
 					// Following British: Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
@@ -3379,6 +3397,8 @@
 					"105": "95",
 					// St. Louis Class
 					"106": "95",
+					// Brooklyn Class
+					"110": "95",
 					// North Carolina Class
 					"107": "95",
 					// Following British: Queen Elizabeth Class
@@ -3507,6 +3527,8 @@
 					"99": "87",
 					// St. Louis Class
 					"106": "87",
+					// Brooklyn Class
+					"110": "87",
 					// Jervis Class
 					"82": {
 						multiple: { "houg": 1, "raig": 2 },
@@ -4953,6 +4975,8 @@
 					"99": "87",
 					// St. Louis Class
 					"106": "87",
+					// Brooklyn Class
+					"110": "87",
 				},
 				byShip: [
 					{
@@ -5140,6 +5164,8 @@
 					"106": "65",
 					// North Carolina Class
 					"107": "65",
+					// Brooklyn Class
+					"110": "65",
 				},
 			},
 			// SG Radar (Initial Model)
@@ -5170,6 +5196,8 @@
 					"106": "65",
 					// North Carolina Class
 					"107": "65",
+					// Brooklyn Class
+					"110": "65",
 					// John C. Butler Class, range from medium to long
 					"87": [
 						{
@@ -5639,6 +5667,8 @@
 					"99": "87",
 					// St. Louis Class
 					"106": "87",
+					// Brooklyn Class
+					"110": "87",
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 1 },
@@ -5675,6 +5705,8 @@
 					"99": "87",
 					// St. Louis Class
 					"106": "87",
+					// Brooklyn Class
+					"110": "87",
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 2 },

@@ -659,7 +659,7 @@
 				
 				// MORE INFO
 				if(shipData.api_aftershipid > 0){
-					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(KC3Master.ship(shipData.api_aftershipid).api_name) );
+					$(".tab_mstship .shipInfo .remodel_name a").text( KC3Meta.shipName(shipData.api_aftershipid) );
 					$(".tab_mstship .shipInfo .remodel_name a").data("sid", shipData.api_aftershipid);
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
 					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterbull );
@@ -687,7 +687,7 @@
 					$.each(otherFormIds, function(i,x) {
 						$("<a/>")
 							.addClass("hover")
-							.text( KC3Meta.shipName(self.mergedMasterShips[x].api_name) )
+							.text( KC3Meta.shipName(x) )
 							.data("sid",x)
 							.appendTo( ".tab_mstship .shipInfo .more .other_forms .other_forms_list" );
 					});

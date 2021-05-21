@@ -166,7 +166,7 @@
 						} else {
 							$("img", shipBox).attr("src", KC3Meta.getIcon(shipId, undefined, false))
 								.attr("alt", shipId).addClass("hover").click(shipClickFunc)
-								.attr("title", KC3Meta.shipName(shipMst.api_name));
+								.attr("title", KC3Meta.shipName(shipMst.api_id));
 						}
 						const dropCount = allNodes[node][ship];
 						$(".drop_times", shipBox).text("x{0}".format(dropCount))

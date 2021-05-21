@@ -417,7 +417,7 @@
 				if (this.stats.lastHits[i]) {
 					const result = this.stats.lastHits[i];
 					let str = "{0} finished off the boss with {1} damage".format(
-						KC3Meta.shipName(KC3Master.ship(result.ship).api_name), result.damage
+						KC3Meta.shipName(result.ship), result.damage
 					);
 					if (result.overkill > 0) { str += ` (${result.overkill} overkill)`; }
 					else { str += " exactly"; }

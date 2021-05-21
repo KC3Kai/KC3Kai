@@ -162,7 +162,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.exists = function(){ return this.rosterId > 0 && this.masterId > 0; };
 	KC3Ship.prototype.isDummy = function(){ return ! this.exists(); };
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
-	KC3Ship.prototype.name = function(){ return KC3Meta.shipName( this.master().api_name ); };
+	KC3Ship.prototype.name = function(){ return KC3Meta.shipNameById( this.masterId ); };
 	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {
@@ -3186,15 +3186,14 @@ KC3改 Ship Object
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
 				results.push(["LandingAttack", landingAttackType]);
+			} else {
+				// see `main.js#PhaseHougeki.prototype._hasRocketEffect` or same method of `PhaseHougekiBase`,
+				// and if base attack method is NOT air attack
+				const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
+				// no such ID -1, just mean higher priority
+				if(hasRocketLauncher) results.push(["Rocket", -1]);
+				else results.push(["SingleAttack", 0]);
 			}
-			// see `main.js#PhaseHougeki.prototype._hasRocketEffect` or same method of `PhaseHougekiBase`,
-			// and if base attack method is NOT air attack
-			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
-			// no such ID -1, just mean higher priority
-			if(hasRocketLauncher) results.push(["Rocket", -1]);
-
-			// default single shelling fire attack
-			if (results.length == 0) results.push(["SingleAttack", 0]);
 		}
 		// is this ship Hayasui Kai
 		else if(this.masterId === 352) {
@@ -3513,12 +3512,11 @@ KC3改 Ship Object
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
 			if(landingAttackType > 0) {
 				results.push(["LandingAttack", landingAttackType]);
+			} else {
+				const hasRocketLauncher = this.hasEquipmentType(2, 37);
+				if(hasRocketLauncher) results.push(["Rocket", -1]);
+				else results.push(["SingleAttack", 0]);
 			}
-			const hasRocketLauncher = this.hasEquipmentType(2, 37);
-			if(hasRocketLauncher) results.push(["Rocket", -1]);
-
-			// default single shelling fire attack
-			if (results.length == 0) results.push(["SingleAttack", 0]);
 		}
 		// priority to use server flag
 		else if(isCarrierNightAirAttack) {

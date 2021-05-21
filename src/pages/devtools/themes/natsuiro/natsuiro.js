@@ -3375,7 +3375,7 @@
 					$(".module.activity .battle_drop")
 						.data("masterId", thisNode.drop)
 						.on("dblclick", this.shipDoubleClickFunction)
-						.attr("title", KC3Meta.shipName( KC3Master.ship(thisNode.drop).api_name ))
+						.attr("title", KC3Meta.shipName(thisNode.drop))
 						.toggleClass("new_ship", ConfigManager.info_dex_owned_ship ?
 							// Not own this shipgirl of any remodel form, judged by picture book history or current ships
 							! PictureBook.isEverOwnedShip(thisNode.drop) :
@@ -3592,7 +3592,7 @@
 				enemyBox.toggleClass("friend", pvpFriends.includes(enemy.api_enemy_name));
 				$(".pvp_enemy_pic img", enemyBox).attr("src", KC3Meta.shipIcon(enemy.api_enemy_flag_ship));
 				$(".pvp_enemy_pic", enemyBox)
-					.attr("title", KC3Meta.shipName(KC3Master.ship(enemy.api_enemy_flag_ship).api_name))
+					.attr("title", KC3Meta.shipName(enemy.api_enemy_flag_ship))
 					.lazyInitTooltip()
 					.click(pvpFriendToggleFunc);
 				$(".pvp_enemy_name", enemyBox)
@@ -3658,7 +3658,7 @@
 			$.each(data.api_deck.api_ships, function(idx, ship){
 				if(ship.api_id > 0){
 					var shipMaster = KC3Master.ship(ship.api_ship_id);
-					var shipName = KC3Meta.shipName(shipMaster.api_name);
+					var shipName = KC3Meta.shipName(shipMaster.api_id);
 					if(idx === 0) levelFlagship = ship.api_level;
 					if(idx === 1) level2ndShip = ship.api_level;
 					var shipBox = $("#factory .pvpFleetShip").clone();
@@ -3922,7 +3922,7 @@
 			);
 			$(".remodel_header .assistant_ship img", remodelListBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
-				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+				.attr("title", KC3Meta.shipName(shipId));
 			$(".remodel_header", remodelListBox).addClass("hover").off("click")
 				.on("click", function(e) {
 					(new RMsg("service", "strategyRoomPage", {
@@ -3954,7 +3954,7 @@
 			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
 			$(".remodel_header .assistant_ship img", remodelDetailBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
-				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+				.attr("title", KC3Meta.shipName(shipId));
 			$(".remodel_header", remodelDetailBox).addClass("hover").off("click")
 				.on("click", function(e) {
 					(new RMsg("service", "strategyRoomPage", {
@@ -4085,7 +4085,7 @@
 			)).toggleClass("failure", !result.api_remodel_flag);
 			$(".remodel_header .assistant_ship img", remodelResultBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
-				.attr("title", KC3Meta.shipName(KC3Master.ship(shipId).api_name));
+				.attr("title", KC3Meta.shipName(shipId));
 			$(".remodel_header", remodelResultBox).addClass("hover").off("click")
 				.on("click", function(e) {
 					(new RMsg("service", "strategyRoomPage", {

@@ -192,7 +192,7 @@
 
 					$(".build_id", buildBox).text( thisBuild.id );
 					const secretaryShip = KC3Master.ship(thisBuild.flag);
-					const shipName = KC3Meta.shipName(secretaryShip.api_name);
+					const shipName = KC3Meta.shipName(secretaryShip.api_id);
 					$(".build_ficon img", buildBox)
 						.attr("src", KC3Meta.shipIcon(secretaryShip.api_id, undefined, false))
 						.attr("alt", secretaryShip.api_id)

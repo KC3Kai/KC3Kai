@@ -53,7 +53,7 @@
 			const generateTestItem = (test, testItem) => {
 				// Generate ship info
 				const shipId = test.shipId;
-				const shipName = KC3Meta.shipName(KC3Master.ship(shipId).api_name);
+				const shipName = KC3Meta.shipName(shipId);
 				const ownedShips = KC3ShipManager.find((a) => a.masterId == shipId);
 
 				$(".shipinfo .generalship .ship_icon img", testItem)
