@@ -3192,6 +3192,9 @@ KC3改 Ship Object
 			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
 			// no such ID -1, just mean higher priority
 			if(hasRocketLauncher) results.push(["Rocket", -1]);
+
+			// default single shelling fire attack
+			if (results.length == 0) results.push(["SingleAttack", 0]);
 		}
 		// is this ship Hayasui Kai
 		else if(this.masterId === 352) {
