@@ -3516,6 +3516,9 @@ KC3改 Ship Object
 			}
 			const hasRocketLauncher = this.hasEquipmentType(2, 37);
 			if(hasRocketLauncher) results.push(["Rocket", -1]);
+
+			// default single shelling fire attack
+			if (results.length == 0) results.push(["SingleAttack", 0]);
 		}
 		// priority to use server flag
 		else if(isCarrierNightAirAttack) {
