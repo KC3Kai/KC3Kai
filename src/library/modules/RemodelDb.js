@@ -142,6 +142,10 @@
                     return 15;
                 case 318: // Ryuuhou Kai
                     return 20;
+                case 699: // Souya (AGS)
+                    return 5;
+                case 645: // Souya (AGL)
+                    return 20;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -231,6 +235,11 @@
                     return 60;
                 case 506: // Mogami Kai Ni Toku
                     return 40;
+                case 699: // Souya (AGS)
+                case 650: // Souya (AGB)
+                    return 5;
+                case 645: // Souya (AGL)
+                    return 10;
                 default:
                     return 0;
             }
@@ -265,6 +274,7 @@
                  , armmat: Int
                  , devmat: Int
                  , torch: Int
+                 , remodel_level: Int
                  }
              */
             var remodelInfo = {};
@@ -309,9 +319,20 @@
             });
 
             function id2name(id) {
-                return KC3Meta.shipName( KC3Master.ship(id).api_name );
+                return KC3Meta.shipNameById(id);
             }
 
+            // step 2: get all original ship ids
+            // an original ship can only remodel into other ships
+            // but is never a remodel target
+            // known exception: Souya (AGS) -> (AGL) -> (AGB) -> (AGS) -> ...
+            var originalShipIds = [];
+            $.each( shipIds, function(i,x) {
+                if (!shipDstIds[x])
+                    originalShipIds.push(x);
+            });
+
+            // walk through master shipupgrade data for more accurate info rather than master ships only
             $.each(isRaw ? masterData.shipupgrade : masterData.api_mst_shipupgrade, function(i,x) {
                 if (x.api_current_ship_id === 0)
                     return;
@@ -326,15 +347,10 @@
                 remodel.armmat = x.api_arms_mat_count;
                 // recalc devmat according blueprint
                 remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from, remodel.blueprint);
-            });
-
-            // step 2: get all original ship ids
-            // an original ship can only remodel into other ships
-            // but is never a remodel target
-            var originalShipIds = [];
-            $.each( shipIds, function(i,x) {
-                if (!shipDstIds[x])
-                    originalShipIds.push(x);
+                // add loop converted remodel if original ship is also remodel target
+                if(!originalShipIds.includes(x.api_original_ship_id))
+                    originalShipIds.push(x.api_original_ship_id);
+                remodel.remodel_level = x.api_upgrade_level;
             });
 
             /*

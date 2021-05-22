@@ -790,9 +790,9 @@
 								.addClass("hover")
 								.click(shipNameEquipSwitchFunc);
 							$(".rfleet_name", rshipBox).text(
-								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+								KC3Meta.shipNameById(ship.mst_id)
 							).attr("title",
-								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+								KC3Meta.shipNameById(ship.mst_id)
 							);
 							$(".rfleet_level", rshipBox).text(
 								KC3Meta.term("LevelText") + " " + ship.level
@@ -970,7 +970,7 @@
 							// Kanmusu Drop
 							if(battle.drop > 0){
 								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
-									.attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop).api_name ) )
+									.attr("title", KC3Meta.shipName(battle.drop))
 									.attr("alt", battle.drop)
 									.click(shipClickFunc);
 								$(".node_drop", nodeBox).addClass("hover");

@@ -397,8 +397,8 @@
 					$(".eq_ship_icon img", ShipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false) );
 					$(".eq_ship_icon img", ShipBox).attr("alt", shipId );
 					$(".eq_ship_icon img", ShipBox).click(shipClickFunc);
-					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName( KC3Master.ship(shipId).api_name ) );
-					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName( KC3Master.ship(shipId).api_name )) );
+					$(".eq_ship_name", ShipBox).text( KC3Meta.shipName(shipId) );
+					$(".eq_ship_name", ShipBox).attr("title", "[{0}] {1}".format(shipId, KC3Meta.shipName(shipId)) );
 					$(".eq_ships", ThisBox).append(ShipBox);
 				}
 				
