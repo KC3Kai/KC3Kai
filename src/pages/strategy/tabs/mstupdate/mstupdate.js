@@ -118,7 +118,7 @@
 				} else {
 					$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
 				}
-				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_id ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)
@@ -235,7 +235,7 @@
 					$(".ship_cg", shipBox).addClass("hover").click(toggleImageFunc)
 						.attr("data-full", fullUrl)
 						.attr("data-char", charUrl);
-					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_name));
+					const shipName = "[{0}] {1}".format(shipData.api_id, KC3Meta.shipName(shipData.api_id));
 					$(".ship_name", shipBox).text(shipName)
 						.data("tab", "mstship")
 						.data("api_id", shipData.api_id)

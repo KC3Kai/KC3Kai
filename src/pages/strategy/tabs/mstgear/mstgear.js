@@ -247,7 +247,7 @@
 						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId))
 							.attr("alt", shipId).addClass("hover").click(shipClickFunc)
 							.attr("title", "[{0}] {1} {2}".format(shipId,
-								KC3Meta.shipName(shipMst.api_name),
+								KC3Meta.shipName(shipMst.api_id),
 								KC3Meta.stype(shipMst.api_stype)
 							)).lazyInitTooltip();
 					});

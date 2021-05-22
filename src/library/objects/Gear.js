@@ -40,7 +40,7 @@ KC3改 Equipment Object
 	KC3Gear.prototype.exists = function(){ return this.itemId > 0 && this.masterId > 0 && this.master() !== false; };
 	KC3Gear.prototype.isDummy = function(){ return ! this.exists(); };
 	KC3Gear.prototype.master = function(){ return KC3Master.slotitem( this.masterId ); };
-	KC3Gear.prototype.name = function(){ return KC3Meta.gearName( this.master().api_name ); };
+	KC3Gear.prototype.name = function(){ return KC3Meta.gearNameById( this.masterId ); };
 
 	/**
 	 * @return {Object} a bonus definition table with new counters.
