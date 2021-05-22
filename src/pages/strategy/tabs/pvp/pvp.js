@@ -182,7 +182,7 @@
 			};
 			const shipBox = $(".tab_pvp .factory .pvp_details_ship").clone();
 			
-			const shipName = KC3Meta.shipName(KC3Master.ship(data.mst_id).api_name);
+			const shipName = KC3Meta.shipName(data.mst_id);
 			$(".pvp_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(data.mst_id))
 				.attr("alt", data.mst_id).click(shipClickFunc);
 			$(".pvp_ship_icon", shipBox).addClass("simg-"+data.mst_id);

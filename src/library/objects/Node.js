@@ -1659,7 +1659,7 @@ Used by SortieManager
 			const abyssMaster = KC3Master.abyssalShip(masterId, true);
 			const isCurrentHpShown = ConfigManager.info_battle && this.enemyHP && Object.keys(this.enemyHP[index] || {}).length > 0;
 			tooltip += "{0}: {1}\n".format(masterId,
-				isPvP ? KC3Meta.shipName(shipMaster.api_name) : KC3Meta.abyssShipName(masterId));
+				isPvP ? KC3Meta.shipName(masterId) : KC3Meta.abyssShipName(masterId));
 			tooltip += "{0} Lv {1} HP {2}\n".format(
 				KC3Meta.stype(shipMaster.api_stype),
 				level || "?",
@@ -1762,7 +1762,7 @@ Used by SortieManager
 					.css("margin-top", "-3px").css("object-fit", "cover")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
-				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_name)).css("padding-right", 2);
+				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_id)).css("padding-right", 2);
 				$(".voice", tRow).append(friendlyFleet.api_voice_p_no[idx] > 0 ?
 					$("<img/>").width(11).height(8).css("margin-top", "-2px")
 						.attr("src", "/assets/img/ui/sound.png") :

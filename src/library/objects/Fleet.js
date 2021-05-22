@@ -399,22 +399,21 @@ Contains summary information about a fleet and its ships
 		// cap at 20%
 		// "B1" in the formula (see comment link of this function)
 		const cappedBasicBonus = Math.min(0.2, basicBonus);
-		// "B2" in the formula
-		// 5% for <= 3 toku and 5.4% for > 3 toku
-		const tokuCap = tokuCount <= 3 ? 0.05 : 0.054;
+		// "B2" in the formula, newer data on toku cap and synergy with normal
+		// https://wikiwiki.jp/kancolle/%E7%89%B9%E5%A4%A7%E7%99%BA%E5%8B%95%E8%89%87
+		const tokuCap = tokuCount > 3 ?
+			[0.054, 0.056, 0.058, 0.059][normalCount] || 0.06 :
+			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
 		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount;
-		// "B3" in the formula
+		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
 			: 0.0;
 
-		// note that this formula is a bit inaccurate because
-		// the floor is taken *after* summing these factors up.
-		// however, because this function is meant to calculate a factor
-		// that can be applied to a base resource,
-		// we can do no better than this without rewriting some other parts of the code.
-
+		// note that result might be inaccurate if the floor is taken *after* summing these factors up.
+		// flooring should be taken before summing, on each part:
+		//   Math.floor(baseRsc * GSmod) + Math.floor(baseRsc * GSmod * basicBonus) + Math.floor(baseRsc * GSmod * tokuBonus)
 		return {
 			basicBonus: cappedBasicBonus + improveBonus,
 			tokuBonus: tokuBonus,

@@ -3909,14 +3909,26 @@ ABYSS FLEET
 	position:relative;
 	background-image: radial-gradient(rgba(200, 200, 255, 0.03) 75%, rgba(200, 200, 255, 0.12) 98%);
 }
+.module.fleet .lship.seven {
+	height:52px;
+	margin-bottom:2px;
+}
 .v .module.fleet .lship {
 	width:467px;
 	height:50px;
 	margin:0px 0px 3px 9px;
 }
+.v .module.fleet .lship.seven {
+	height:45px;
+	margin-bottom:0px;
+}
 .c .module.fleet .lship {
 	height:50px;
 	margin:0px 0px 3px 0px;
+}
+.c .module.fleet .lship.seven {
+	height:45px;
+	margin-bottom:0px;
 }
 .module.fleet .lship_background {
 	width:345px;
@@ -3932,10 +3944,6 @@ ABYSS FLEET
 	width:465px;
 	height:50px;
 	margin:-1px 0px 1px 0px;
-}
-.module.fleet .lship.seven {
-	height:52px;
-	margin-bottom:0px;
 }
 .module.fleet .lship.ship-stamp:after {
 	content: attr(title);
@@ -3969,9 +3977,15 @@ ABYSS FLEET
 	top:26px;
 	left:343px;
 }
+.v .module.fleet .lship.seven .ex_item {
+	top:22px;
+}
 .c .module.fleet .lship .ex_item {
 	top:24px;
 	left:265px;
+}
+.c .module.fleet .lship.seven .ex_item {
+	top:22px;
 }
 .module.fleet .lship .ex_item .gear_star {
 	width:12px;
@@ -3989,7 +4003,7 @@ ABYSS FLEET
 	display:none;
 }
 .c .module.fleet .lship .ex_item .gear_star {
-	margin:8px 0px 0px -5px;
+	margin:9px 0px 0px -5px;
 }
 .module.fleet .lship .ex_item.empty {
 	background:rgba(68, 68, 68, 0.7);
@@ -4029,15 +4043,26 @@ ABYSS FLEET
 	top:1px;
 	left:2px;
 }
+.module.fleet .lship.seven .ship_img {
+	height:39px;
+}
 .v .module.fleet .lship .ship_img {
 	height:46px;
 	top:1px;
 	left:54px;
 }
+.v .module.fleet .lship.seven .ship_img {
+	height:43px;
+	top:0px;
+}
 .c .module.fleet .lship .ship_img {
 	height:37px;
 	width:50px;
 	float:left;
+}
+.c .module.fleet .lship.seven .ship_img {
+	height:32px;
+	top:0px;
 }
 .module.fleet .lship .ship_img img {
 	width:60px;
@@ -4053,6 +4078,15 @@ ABYSS FLEET
 	height:37px;
 	width:50px;
 }
+.module.fleet .lship.seven .ship_img img {
+	height:39px;
+}
+.v .module.fleet .lship.seven .ship_img img {
+	height:43px;
+}
+.c .module.fleet .lship.seven .ship_img img {
+	height:32px;
+}
 .module.fleet .lship .ship_type {
 	width:26px;
 	height:15px;
@@ -4066,15 +4100,24 @@ ABYSS FLEET
 	left:2px;
 	z-index: 1;
 }
+.module.fleet .lship.seven .ship_type {
+	top:38px;
+}
 .v .module.fleet .lship .ship_type {
 	top:0px;
 	left:2px;
+}
+.v .module.fleet .lship.seven .ship_type {
+	top:-2px;
 }
 .c .module.fleet .lship .ship_type {
 	font-size:11px;
 	width:30px;
 	top:13px;
 	left:55px;
+}
+.c .module.fleet .lship.seven .ship_type {
+	top:10px;
 }
 .module.fleet .lship .ship_level {
 	width:35px;
@@ -4090,9 +4133,16 @@ ABYSS FLEET
 	left:27px;
 	z-index: 1;
 }
+.module.fleet .lship.seven .ship_level {
+	top:38px;
+}
 .v .module.fleet .lship .ship_level {
 	top:11px;
 	left:2px;
+	text-align:left;
+}
+.v .module.fleet .lship.seven .ship_level {
+	top:9px;
 	text-align:left;
 }
 .c .module.fleet .lship .ship_level {
@@ -4100,6 +4150,9 @@ ABYSS FLEET
 	left:2px;
 	font-size:11px;
 	text-align:left;
+}
+.c .module.fleet .lship.seven .ship_level {
+	top:30px;
 }
 .module.fleet .lship .ship_level .value.goaled {
 	filter:drop-shadow(0px 0px 2px #fff);
@@ -4117,15 +4170,25 @@ ABYSS FLEET
 	left:98px;
 	z-index: 1;
 }
+.module.fleet .lship.seven .ship_exp_label {
+	top:40px;
+}
 .v .module.fleet .lship .ship_exp_label {
 	top:25px;
 	left:2px;
+	text-align:left;
+}
+.v .module.fleet .lship.seven .ship_exp_label {
+	top:22px;
 	text-align:left;
 }
 .c .module.fleet .lship .ship_exp_label {
 	top:37px;
 	left:51px;
 	font-size:11px;
+}
+.c .module.fleet .lship.seven .ship_exp_label {
+	top:32px;
 }
 .module.fleet .lship .ship_exp_label .expNotice {
 	width:45px;
@@ -4148,6 +4211,9 @@ ABYSS FLEET
 	left:33px;
 	font-size:11px;
 }
+.module.fleet .lship.seven .ship_exp_label .expNotice {
+	display:none;
+}
 .module.fleet .lship .ship_exp_next {
 	width:40px;
 	height:11px;
@@ -4160,16 +4226,25 @@ ABYSS FLEET
 	left:145px;
 	z-index: 1;
 }
+.module.fleet .lship.seven .ship_exp_next {
+	top:40px;
+}
 .v .module.fleet .lship .ship_exp_next {
 	top:36px;
 	left:2px;
 	text-align:right;
 	width:50px;
 }
+.v .module.fleet .lship.seven .ship_exp_next {
+	top:32px;
+}
 .c .module.fleet .lship .ship_exp_next {
 	top:37px;
 	left:133px;
 	font-size:11px;
+}
+.c .module.fleet .lship.seven .ship_exp_next {
+	top:32px;
 }
 .module.fleet .lship .ship_exp_box {
 	width:183px;
@@ -4209,9 +4284,16 @@ ABYSS FLEET
 	left:114px;
 	z-index:2;
 }
+.v .module.fleet .lship.seven .mvp_icon {
+	top:13px;
+}
 .c .module.fleet .lship .mvp_icon {
 	left:-5px;
 	top:18px;
+}
+.c .module.fleet .lship.seven .mvp_icon {
+	left:-6px;
+	top:14px;
 }
 .module.fleet .lship .mvp_icon img {
 	width:20px;
@@ -4259,6 +4341,15 @@ ABYSS FLEET
 	left:35px;
 	top: 21px;
 }
+.module.fleet .lship.seven .locktag {
+	top: 39px;
+}
+.v .module.fleet .lship.seven .locktag {
+	top: 2px;
+}
+.c .module.fleet .lship.seven .locktag {
+	top: 32px;
+}
 .module.fleet .lship .ship_col1 {
 	width:120px;
 	height:41px;
@@ -4284,8 +4375,16 @@ ABYSS FLEET
 	top:2px;
 	left:117px;
 }
+.v .module.fleet .lship.seven .ship_name {
+	top:0px;
+}
 .c .module.fleet .lship .ship_name {
 	left:-8px;
+}
+.c .module.fleet .lship.seven .ship_name {
+	position:absolute;
+	top:-1px;
+	left:55px;
 }
 .module.fleet .lship .ship_hp_text {
 	width:55px;
@@ -4303,9 +4402,15 @@ ABYSS FLEET
 	top:19px;
 	left:180px;
 }
+.v .module.fleet .lship.seven .ship_hp_text {
+	top:18px;
+}
 .c .module.fleet .lship .ship_hp_text {
 	top:12px;
-	left:119px;
+	left:118px;
+}
+.c .module.fleet .lship.seven .ship_hp_text {
+	top:9px;
 }
 .module.fleet .lship .ship_hp_cur {
 	color:#00dd44;
@@ -4334,9 +4439,19 @@ ABYSS FLEET
 	top:34px;
 	left:116px;
 }
+.v .module.fleet .lship.seven .ship_hp_box {
+	top:33px;
+}
 .c .module.fleet .lship .ship_hp_box {
 	top:26px;
 	left:54px;
+}
+.c .module.fleet .lship.seven .ship_hp_box {
+	top:23px;
+	left:54px;
+}
+.module.fleet .lship.seven .ship_hp_bar_cover {
+	height:7px;
 }
 .module.fleet .lship .ship_hp_bar {
 	height:9px;
@@ -4373,9 +4488,6 @@ ABYSS FLEET
 		-1px 0px 1px #3d1414, 1px 0px 1px #3d1414,
 		-1px 1px 1px #3d1414, 0px 1px 1px #3d1414, 1px 1px 1px #3d1414;
 	opacity:1;
-}
-.module.fleet .lship.seven .ship_hp_pred_value {
-	top:-1px;
 }
 
 /* ==> Akashi Timer <== */
@@ -4441,6 +4553,11 @@ ABYSS FLEET
 	top:1px;
 	left:317px;
 }
+.module.fleet .lship.seven .ship_morale {
+	height:12px;
+	line-height:12px;
+	top:2px;
+}
 .module.fleet .lship .ship_morale.glowing {
 	box-shadow:0px 0px 10px 1px rgba(255,255,0,0.9), -3px 3px 16px rgba(255,255,0,0.7) inset,  0px 8px 6px rgba(0,0,0,0.3) inset;
 }
@@ -4459,6 +4576,10 @@ ABYSS FLEET
 	left:251px;
 	height:20px;
 }
+.v .module.fleet .lship.seven .ship_gears {
+	top:0px;
+	height:19px;
+}
 .c .module.fleet .lship .ship_gears {
 	left:181px;
 }
@@ -4471,8 +4592,14 @@ ABYSS FLEET
 	width:46px;
 	height:23px;
 }
+.v .module.fleet .lship.seven .ship_gear {
+	height:21px;
+}
 .c .module.fleet .lship .ship_gear {
 	height:22px;
+}
+.c .module.fleet .lship.seven .ship_gear {
+	height:20px;
 }
 .module.fleet .lship .ship_gear.ship_gear_5 {
 	display:none;
@@ -4590,6 +4717,12 @@ ABYSS FLEET
 .c .module.fleet .lship .ship_supplies {
 	top:15px;
 }
+.module.fleet .lship.seven .ship_supplies {
+	top:14px;
+}
+.v .module.fleet .lship.seven .ship_supplies {
+	top:-1px;
+}
 .module.fleet .lship .ship_supply {
 	width:32px;
 	height:16px;
@@ -4600,6 +4733,9 @@ ABYSS FLEET
 }
 .c .module.fleet .lship .ship_supply {
 	margin:0px;
+}
+.c .module.fleet .lship.seven .ship_supply {
+	height:14px;
 }
 .module.fleet .lship .ship_supply_text {
 	width:30px;
@@ -4615,6 +4751,10 @@ ABYSS FLEET
 .c .module.fleet .lship .ship_supply_text {
 	font-size:10px;
 }
+.c .module.fleet .lship.seven .ship_supply_text {
+	font-size:10px;
+	line-height:12px;
+}
 .module.fleet .lship .ship_supply_bar {
 	width:15px;
 	height:14px;
@@ -4622,6 +4762,10 @@ ABYSS FLEET
 .module.fleet .lship .ship_supply_bar {
 	width:15px;
 	height:14px;
+}
+.c .module.fleet .lship.seven .ship_supply_bar {
+	width:15px;
+	height:12px;
 }
 /* Short Ship */
 .module.fleet .sship {

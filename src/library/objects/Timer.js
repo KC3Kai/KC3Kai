@@ -63,7 +63,7 @@ Has functions for TimerManager to use
 				KC3ShipManager.get(this.rosterId).shipIcon() :
 				KC3Meta.shipIcon(this.faceId, "/assets/img/ui/empty.png"));
 			$(".timer-img", this.element).attr("title",
-				KC3Meta.shipName( KC3Master.ship(this.faceId).api_name )
+				KC3Meta.shipName(this.faceId)
 			);
 			$(".timer-img", this.element).data("masterId", this.faceId).off("dblclick")
 				.on("dblclick", function(e){
@@ -158,7 +158,7 @@ Has functions for TimerManager to use
 				shipRef.applyRepair();
 				break;
 			case 2:
-				shipName = KC3Meta.shipName( KC3Master.ship( this.faceId ).api_name );
+				shipName = KC3Meta.shipName(this.faceId);
 				notifData.title = KC3Meta.term("DesktopNotifyConstrCompleteTitle");
 				if(ConfigManager.info_face){
 					notifData.message = KC3Meta.term("DesktopNotifyConstrCompleteMessageFaced").format(shipName);

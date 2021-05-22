@@ -142,7 +142,7 @@
 						ctype: shipMaster.api_ctype,
 						sortno: shipMaster.api_sortno,
 						sortId: shipMaster.api_sort_id,
-						name: KC3Meta.shipName(shipMaster.api_name),
+						name: KC3Meta.shipName(shipMaster.api_id),
 						level: remodelInfo.level,
 						levelClass: "",
 						locked: 1
@@ -259,9 +259,8 @@
 					.addClass("hover")
 					.appendTo(shipDiv);
 				$("<span></span>")
-					.text(KC3Meta.shipName(
-						KC3Master.ship(firstMaterial.info.ship_id_to).api_name
-					)).appendTo(shipDiv);
+					.text(KC3Meta.shipName(firstMaterial.info.ship_id_to))
+					.appendTo(shipDiv);
 				$(".need_materials", shipRow).append(shipDiv);
 			}
 		}
@@ -364,7 +363,7 @@
 				.css("object-fit", "cover")
 				.appendTo(line);
 			$("<span></span>").text(
-				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_from).api_name)
+				KC3Meta.shipName(remodelInfo.ship_id_from)
 			).appendTo(line);
 			$("<img />").attr("src", "/assets/img/ui/arrow.png")
 				.css("vertical-align", "text-top")
@@ -377,7 +376,7 @@
 				.css("object-fit", "cover")
 				.appendTo(line);
 			$("<span></span>").text(
-				KC3Meta.shipName(KC3Master.ship(remodelInfo.ship_id_to).api_name)
+				KC3Meta.shipName(remodelInfo.ship_id_to)
 			).appendTo(line);
 			title.append(line);
 			

@@ -60,8 +60,8 @@
 			updateFiltersValues();
 			KC3Database.uniquekeys_lscs("flag", keys => {
 				this.sortedSecretaryIds = keys.filter(key => key > 0).sort((id1, id2) => (
-					(KC3Meta.shipName(KC3Master.ship(id1).api_name) || "").localeCompare(
-						KC3Meta.shipName(KC3Master.ship(id2).api_name),
+					(KC3Meta.shipName(id1) || "").localeCompare(
+						KC3Meta.shipName(id2),
 					this.locale) || id1 - id2
 				));
 				this.sortedSecretaryIds.forEach(key => {
@@ -73,13 +73,13 @@
 			});
 			KC3Database.uniquekeys_lscs("result", keys => {
 				this.sortedResultShipIds = keys.filter(key => key > 0).sort((id1, id2) => (
-					(KC3Meta.shipName(KC3Master.ship(id1).api_name) || "").localeCompare(
-						KC3Meta.shipName(KC3Master.ship(id2).api_name),
+					(KC3Meta.shipName(id1) || "").localeCompare(
+						KC3Meta.shipName(id2),
 					this.locale) || id1 - id2
 				));
 				this.sortedResultShipIds.forEach(key => {
 					$('<option />').val(key).text(
-						KC3Meta.shipName(KC3Master.ship(key).api_name)
+						KC3Meta.shipName(key)
 					).appendTo($(".filters .build_result"));
 				});
 				updateFiltersValues();
@@ -192,7 +192,7 @@
 					const buildBox = $(".factory .build_item").clone()
 						.appendTo(".build_list");
 					
-					const secretaryShipName = KC3Meta.shipName(KC3Master.ship(thisBuild.flag).api_name);
+					const secretaryShipName = KC3Meta.shipName(thisBuild.flag);
 					$(".build_id", buildBox).text(thisBuild.id);
 					$(".build_ficon img", buildBox)
 						.attr("src", KC3Meta.shipIcon(thisBuild.flag, undefined, false))
@@ -207,7 +207,7 @@
 					$(".build_rsc4", buildBox).text(thisBuild.rsc4);
 					$(".build_devmat", buildBox).text(thisBuild.devmat);
 					
-					const resultShipName = KC3Meta.shipName(KC3Master.ship(thisBuild.result).api_name);
+					const resultShipName = KC3Meta.shipName(thisBuild.result);
 					$(".build_ricon img", buildBox)
 						.attr("src", KC3Meta.shipIcon(thisBuild.result, undefined, false))
 						.attr("alt", thisBuild.result)

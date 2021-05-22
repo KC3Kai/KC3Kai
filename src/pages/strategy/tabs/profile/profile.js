@@ -303,9 +303,9 @@
 						result.forEach(function(buildInfo){
 							console.log(buildInfo);
 							exportData += [
-								KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name),
+								KC3Meta.shipNameById(buildInfo.flag),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
-								KC3Meta.gearName(KC3Master.slotitem(buildInfo.result).api_name) || "Junk",
+								KC3Meta.gearNameById(buildInfo.result) || "Junk",
 								"\""+(new Date(buildInfo.time*1000)).format("mmm dd, yyyy hh:MM tt")+"\"",
 							].join(",")+CSV_LINE_BREAKS;
 						});
@@ -388,7 +388,7 @@
 								fleetStats.asw += stats.asw + stats.aswEquip;
 								return csvQuoteIfNecessary([
 									// Give up using String.format for better performance
-									KC3Meta.shipName(KC3Master.ship(ship.mst_id).api_name),
+									KC3Meta.shipNameById(ship.mst_id),
 									"Lv:" + ship.level,
 									"Exp:" + expedInfo.shipXP[idx] || "?",
 									"Morale:" + ship.morale,
@@ -457,9 +457,9 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
+								csvQuoteIfNecessary(KC3Meta.shipNameById(buildInfo.flag)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
-								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name)),
+								csvQuoteIfNecessary(KC3Meta.shipNameById(buildInfo.result)),
 								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
 							].join(",")+CSV_LINE_BREAKS;
 						});
@@ -484,9 +484,9 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
+								csvQuoteIfNecessary(KC3Meta.shipNameById(buildInfo.flag)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
-								csvQuoteIfNecessary(KC3Meta.gearName(KC3Master.slotitem(buildInfo.result).api_name) || "Junk"),
+								csvQuoteIfNecessary(KC3Meta.gearNameById(buildInfo.result) || "Junk"),
 								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
 							].join(",")+CSV_LINE_BREAKS;
 						});
@@ -511,10 +511,10 @@
 						result.forEach(function(buildInfo){
 							//console.log(buildInfo);
 							exportData += [
-								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.flag).api_name)),
+								csvQuoteIfNecessary(KC3Meta.shipNameById(buildInfo.flag)),
 								buildInfo.rsc1, buildInfo.rsc2, buildInfo.rsc3, buildInfo.rsc4,
 								buildInfo.devmat,
-								csvQuoteIfNecessary(KC3Meta.shipName(KC3Master.ship(buildInfo.result).api_name)),
+								csvQuoteIfNecessary(KC3Meta.shipNameById(buildInfo.result)),
 								csvQuoteIfNecessary(new Date(buildInfo.time*1000).format("mmm dd, yyyy hh:MM tt")),
 							].join(",")+CSV_LINE_BREAKS;
 						});
@@ -535,7 +535,7 @@
 					if((!event.altKey && KC3Master.isRegularShip(s.api_id)) || (event.altKey && isAb)) {
 						exportData += [
 							s.api_id,
-							csvQuoteIfNecessary(isAb ? KC3Meta.abyssShipName(s.api_id) : KC3Meta.shipName(s.api_name)),
+							csvQuoteIfNecessary(isAb ? KC3Meta.abyssShipName(s.api_id) : KC3Meta.shipName(s.api_id)),
 							csvQuoteIfNecessary(s.api_yomi),
 							isAb ? "-" : csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
 							csvQuoteIfNecessary([s.api_stype, KC3Meta.stype(s.api_stype)].join('/')),
@@ -613,10 +613,10 @@
 								ab.tp,
 								ab.aa,
 								csvQuoteIfNecessary(KC3Meta.shipSpeed(KC3Master.ship(ab.id).api_soku)),
-								csvQuoteIfNecessary("[" + ab.eq1 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq1).api_name || "")),
-								csvQuoteIfNecessary("[" + ab.eq2 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq2).api_name || "")),
-								csvQuoteIfNecessary("[" + ab.eq3 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq3).api_name || "")),
-								csvQuoteIfNecessary("[" + ab.eq4 + "] " + KC3Meta.gearName(KC3Master.slotitem(ab.eq4).api_name || ""))
+								csvQuoteIfNecessary("[" + ab.eq1 + "] " + (KC3Meta.gearNameById(ab.eq1) || "")),
+								csvQuoteIfNecessary("[" + ab.eq2 + "] " + (KC3Meta.gearNameById(ab.eq2) || "")),
+								csvQuoteIfNecessary("[" + ab.eq3 + "] " + (KC3Meta.gearNameById(ab.eq3) || "")),
+								csvQuoteIfNecessary("[" + ab.eq4 + "] " + (KC3Meta.gearNameById(ab.eq4) || ""))
 							].join(",")+CSV_LINE_BREAKS;
 						});
 						

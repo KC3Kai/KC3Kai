@@ -790,9 +790,9 @@
 								.addClass("hover")
 								.click(shipNameEquipSwitchFunc);
 							$(".rfleet_name", rshipBox).text(
-								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+								KC3Meta.shipNameById(ship.mst_id)
 							).attr("title",
-								KC3Meta.shipName( KC3Master.ship(ship.mst_id).api_name )
+								KC3Meta.shipNameById(ship.mst_id)
 							);
 							$(".rfleet_level", rshipBox).text(
 								KC3Meta.term("LevelText") + " " + ship.level
@@ -970,7 +970,7 @@
 							// Kanmusu Drop
 							if(battle.drop > 0){
 								$(".node_drop img", nodeBox).attr("src", KC3Meta.shipIcon( battle.drop ) )
-									.attr("title", KC3Meta.shipName( KC3Master.ship(battle.drop).api_name ) )
+									.attr("title", KC3Meta.shipName(battle.drop))
 									.attr("alt", battle.drop)
 									.click(shipClickFunc);
 								$(".node_drop", nodeBox).addClass("hover");
@@ -1392,7 +1392,7 @@
 					rcontext.fillText(PlayerManager.hq.name, 100 * scale, 210 * scale);
 					
 					var fleetUsed = sortieData["fleet"+sortieData.fleetnum];
-					if(sortieData.combined) {
+					if(sortieData.combined && sortieData.fleetnum == 1) {
 						$.each(fleetUsed, function(shipIndex, ShipData) {
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.save();
@@ -1421,11 +1421,18 @@
 							var shipIconImage = $(".simg-"+ShipData.mst_id+" img")[0];
 							rcontext.save();
 							rcontext.beginPath();
-							rcontext.arc((shipImageSize + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (83 - shipImageSize)) * scale,25*scale,0,2*Math.PI);
+							rcontext.arc(
+								(shipImageSize + ((shipImageSize+10) * shipIndex)) * scale,
+								(225 + (65-shipImageSize)/2 + (shipImageSize/2)) * scale,
+								(shipImageSize/2) * scale,0,2*Math.PI
+							);
 							rcontext.closePath();
 							rcontext.clip();
-							rcontext.drawImage(shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
-								((shipImageSize / 2) + ((shipImageSize + 10) * shipIndex)) * scale, (225 + (65 - shipImageSize) / 2) * scale, shipImageSize * scale, shipImageSize * scale);
+							rcontext.drawImage(
+								shipIconImage, (shipIconImage.naturalWidth*0.17), 0, (shipIconImage.naturalWidth*0.67), shipIconImage.naturalHeight,
+								((shipImageSize/2) + ((shipImageSize+10) * shipIndex)) * scale,
+								(225 + (65-shipImageSize)/2) * scale, shipImageSize * scale, shipImageSize * scale
+							);
 							rcontext.restore();
 						});
 					}

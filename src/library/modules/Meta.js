@@ -154,7 +154,7 @@ Provides access to data on built-in JSON files
 			577: 245, 578: 190, 579: 7,   580: 58,  581: 581, 582: 582, 583: 583, 584: 7,   585: 161, 586: 574,
 			587: 298, 588: 266, 589: 310, 590: 309, 591: 284, 592: 332, 593: 314, 594: 594, 595: 595, 596: 340,
 			597: 597, 598: 598, 599: 280, 600: 50,  601: 356, 602: 362, 603: 278, 604: 294, 605: 384, 606: 379,
-			607: 380, 608: 279, 609: 381, 610: 610
+			607: 380, 608: 279, 609: 381, 610: 610, 611: 611, 612: 387
 		},
 		
 		/* Initialization
@@ -363,8 +363,10 @@ Provides access to data on built-in JSON files
 			return this._shipAffix[affix] || {};
 		},
 		
-		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes"){
+		shipName :function(jpName, suffixKey = "suffixes", prefixKey = "prefixes", allowId = true){
 			if(this.isAF() && jpName === this.getAF(5)) jpName = this.getAF(6);
+			// Fall-over to byId method if jpName is an integer of ship's master ID
+			if(Number.isInteger(Number(jpName)) && allowId) return this.shipNameById(jpName);
 			// No translation needed for empty ship.json like JP
 			if(Object.keys(this._ship).length === 0){ return jpName; }
 			// If translation and combination done once, use the cache instantly
@@ -435,6 +437,15 @@ Provides access to data on built-in JSON files
 			return this.shipNameAffix("yomi")[jpYomi] || this.shipName(jpYomi);
 		},
 		
+		shipNameById :function(mstId){
+			const byIdMap = this.shipNameAffix("byId");
+			if(byIdMap && mstId > 0 && typeof byIdMap[mstId] === "string"){
+				return byIdMap[mstId];
+			} else {
+				return this.shipName(KC3Master.ship(mstId).api_name, undefined, undefined, false);
+			}
+		},
+		
 		distinctNameDelimiter :function(combinedName = ""){
 			const result = [];
 			// To avoid frequently used bracket `()`, current tag: `{...}?`
@@ -463,6 +474,10 @@ Provides access to data on built-in JSON files
 				return this._slotitem[jpName];
 			}
 			return jpName;
+		},
+		
+		gearNameById :function(mstId){
+			return this.gearName(KC3Master.slotitem(mstId).api_name);
 		},
 		
 		gearTypeName :function(categoryType, categoryId){

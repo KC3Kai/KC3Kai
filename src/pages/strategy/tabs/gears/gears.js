@@ -545,9 +545,7 @@
 					if (self.upgrades[day] && Array.isArray(self.upgrades[day][ThisSlotitem.id])) {
 						$("<a></a>").text(Date.getDayName(dayIndex))
 							.attr("title",
-								self.upgrades[day][ThisSlotitem.id].map(shipId =>
-									KC3Meta.shipName(KC3Master.ship(shipId).api_name)
-								).join(", ")
+								self.upgrades[day][ThisSlotitem.id].map(shipId => KC3Meta.shipName(shipId)).join(", ")
 							).attr("href", `#akashi-${day}-${ThisSlotitem.id}`)
 							.toggleClass("sel", dayIndex === dayOfWeek)
 							.appendTo($(".upgradeDays", ItemElem));

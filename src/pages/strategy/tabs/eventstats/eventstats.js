@@ -123,12 +123,6 @@
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
 				acc.map((v, i) => acc[i] + (o.data[i] || 0)), [0, 0, 0, 0, 0, 0, 0, 0]);
 
-			const checkFleetAttacks = (fleet, ships, checkForLastHit, mapnum) => {
-				for (let i = 0; i < fleet.length; i++) {
-					checkShipKill(fleet[i].attacks, ships[i], checkForLastHit, mapnum);
-				}
-			};
-
 			const checkShipKill = (attacks, shipId, checkForLastHit, mapnum) => {
 				attacks.forEach(attack => {
 					const damage = Array.isArray(attack.damage) ? attack.damage.sumValues() : attack.damage;
@@ -152,20 +146,27 @@
 				});
 			};
 
+			const checkFleetAttacks = (fleet, ships, checkForLastHit, mapnum) => {
+				for (let i = 0; i < fleet.length; i++) {
+					checkShipKill(fleet[i].attacks, ships[i], checkForLastHit, mapnum);
+				}
+			};
+
 			// Shortern fleet length if needed for kuso
 			const checkShipLength = (ships, maxHps, sortieKuso) => {
 				if (ships.length == maxHps.length || sortieKuso.length == 0) { return ships; }
 				let result = [];
-				for (let ship of ships) {
+				ships.forEach(ship => {
 					if (!sortieKuso.includes(ship)) {
 						result.push(ship);
 					}
-				}
+				});
 				return result;
 			};
 
 			const errorHandler = (e) => {
-				console.warn("Unexpected error on retrieving event data", e);
+				console.warn("Unexpected error on retrieving event data", this.world, e);
+				console.debug(`Eventstats for E-${this.world}`, e);/*RemoveLogging:skip*/
 				$(".loading").hide();
 				$(".map_list").text("Failed to retrieve event data due to unexpected error").show();
 			};
@@ -354,8 +355,7 @@
 				"taihaMagnets": "Taiha Magnets",
 			};
 			if (this.world > 39) {
-				const keys = Object.keys(map);
-				for (const key of keys) {
+				Object.keys(map).forEach(key => {
 					let str = "<tr>" + "<td>" + map[key] + "</td>";
 					const vals = this.stats[key];
 					const topFive = getTopFive(vals);
@@ -364,7 +364,7 @@
 					}
 					str += "</tr>";
 					$(".table5").append(str);
-				}
+				});
 			}
 
 			const buildLBMessage = consumption => {
@@ -417,7 +417,7 @@
 				if (this.stats.lastHits[i]) {
 					const result = this.stats.lastHits[i];
 					let str = "{0} finished off the boss with {1} damage".format(
-						KC3Meta.shipName(KC3Master.ship(result.ship).api_name), result.damage
+						KC3Meta.shipName(result.ship), result.damage
 					);
 					if (result.overkill > 0) { str += ` (${result.overkill} overkill)`; }
 					else { str += " exactly"; }
