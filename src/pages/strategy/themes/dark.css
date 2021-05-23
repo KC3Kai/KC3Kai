@@ -853,6 +853,9 @@ button, input, select, textarea {
 .tab_ships .massSelect dl.fullwide {
 	width: 98.8% !important;
 }
+.tab_ships .massSelect dl.halfwide .hover.on {
+	padding: 0 2px;
+}
 .tab_ships .ship_list.scroll_fix::-webkit-scrollbar-track {
 	background: #303030 !important;
 }
