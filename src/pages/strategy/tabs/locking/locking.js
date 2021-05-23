@@ -67,7 +67,10 @@
                 $(".filters input").each((_, elem) => { elem.disabled = false; });
                 this.adjustHeight();
                 // Defer another adjustment because at this timing new version chrome still hide dom (fail to get element's size and offset)
-                setTimeout(this.adjustHeight.bind(this), Date.now() - startTime);
+                setTimeout(() => {
+                    this.switchToLockTab(this.currentTab);
+                    this.adjustHeight();
+                }, Date.now() - startTime);
             });
             this.shipRowTemplateDiv = $(".factory .ship_item", this.tab);
             this.addFilterUI();
@@ -156,8 +159,12 @@
             // try to auto adjust lock mode box width and margin
             const tabLockCount = this.currentTab === "all" ? this.lockLimit :
                 $(".tab_locking .lock_modes .tab_" + this.currentTab).children().length;
-            this.setStyleVar(`--lockModeWidth`, ([670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70) + "px");
-            this.setStyleVar(`--lockMarginRight`, ([5, 5, 20, 6, 10, 6, 13, 7, 15, 5][tabLockCount] || 5) + "px");
+            const tabLockContainerWidth = $(".tab_locking .lock_modes").width();
+            const tabLockFixedWidth = [670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70;
+            const tabLockMargin = [5, 5, 20, 6, 10, 6, 13, 7, 15, 5][tabLockCount] || 5;
+            const tabLockAutoWidth = Math.floor(tabLockContainerWidth / tabLockCount) - tabLockMargin;
+            this.setStyleVar(`--lockModeWidth`, (tabLockContainerWidth > 800 ? tabLockAutoWidth : tabLockFixedWidth) + "px");
+            this.setStyleVar(`--lockMarginRight`, tabLockMargin + "px");
         }
 
         adjustHeight() {
