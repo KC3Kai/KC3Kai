@@ -20,6 +20,8 @@
             this.heartLockMode = 2;
             this.showShipLevel = true;
             this.currentTab = "all";
+            this.moLocks = [0, 1, 2, 3, 4, 5];
+            this.eoLocks = [2, 3, 5, 6, 7, 8];
         }
 
         /* RELOAD
@@ -57,7 +59,7 @@
                 $(".ships_area .lship .level").toggle(this.showShipLevel);
             });
             $(".ships_area .lship .level").toggle(this.showShipLevel);
-            
+
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {
                 $(".filters input").each((_, elem) => { elem.disabled = true; });
@@ -95,27 +97,47 @@
 
         addLockBoxes() {
             const lockModesDiv = $(".lock_modes", this.tab);
-            let currentTab = $('<div class="tabs tab_mo"></div>').appendTo(lockModesDiv);
+            let currentTab = $('<div class="tabs"></div>').appendTo(lockModesDiv);
             for (let i = 0; i < this.lockLimit; i++) {
-                if (i + 1 === this.extraOpsStartFrom) {
-                    currentTab = $('<div class="tabs tab_eo"></div>').appendTo(lockModesDiv);
+                const lockBox = $(".factory .lock_mode", this.tab).clone();
+                lockBox.addClass("lock_mode_" + (i + 1));
+                $(".drop_area", lockBox).attr("data-boxId", i);
+                lockBox.appendTo(currentTab);
+
+                const isMoLock = this.moLocks.includes(i);
+                if (isMoLock) {
+                    lockBox.addClass('lock_mo');
                 }
-                const elm = $(".factory .lock_mode", this.tab).clone()
-                    .appendTo(currentTab);
-                elm.addClass("lock_mode_" + (i + 1));
-                $(".drop_area", elm).attr("data-boxId", i);
+
+                const isEoLock = this.eoLocks.includes(i);
+                if (isEoLock) {
+                    lockBox.addClass('lock_eo');
+                }
             }
-            if (this.extraOpsStartFrom < 2 || this.extraOpsStartFrom > this.lockLimit) {
-                // No tabbed boxes needed, hide all control buttons
-                this.currentTab = "all";
-                $(".selectTab.tab_all", this.tab).hide();
-                $(".selectTab.tab_mo", this.tab).hide();
-                $(".selectTab.tab_eo", this.tab).hide();
-            } else {
-                // Give up to auto fit buttons' name, because nobody can guarantee devs will not add 2 more tags to one MO map
-                //$(".selectTab.tab_mo", this.tab).text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
-                //$(".selectTab.tab_eo", this.tab).text("EO");
-            }
+            this.currentTab = "all";
+
+            // const lockModesDiv = $(".lock_modes", this.tab);
+            // let currentTab = $('<div class="tabs tab_mo"></div>').appendTo(lockModesDiv);
+            // for (let i = 0; i < this.lockLimit; i++) {
+            //     if (i + 1 === this.extraOpsStartFrom) {
+            //         currentTab = $('<div class="tabs tab_eo"></div>').appendTo(lockModesDiv);
+            //     }
+            //     const elm = $(".factory .lock_mode", this.tab).clone()
+            //         .appendTo(currentTab);
+            //     elm.addClass("lock_mode_" + (i + 1));
+            //     $(".drop_area", elm).attr("data-boxId", i);
+            // }
+            // if (this.extraOpsStartFrom < 2 || this.extraOpsStartFrom > this.lockLimit) {
+            //     // No tabbed boxes needed, hide all control buttons
+            //     this.currentTab = "all";
+            //     $(".selectTab.tab_all", this.tab).hide();
+            //     $(".selectTab.tab_mo", this.tab).hide();
+            //     $(".selectTab.tab_eo", this.tab).hide();
+            // } else {
+            //     // Give up to auto fit buttons' name, because nobody can guarantee devs will not add 2 more tags to one MO map
+            //     //$(".selectTab.tab_mo", this.tab).text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
+            //     //$(".selectTab.tab_eo", this.tab).text("EO");
+            // }
         }
 
         switchToLockTab(newTab) {
@@ -123,10 +145,11 @@
             $(".selectTab", this.tab).addClass("bscolor3");
             $(".selectTab.tab_" + this.currentTab, this.tab).removeClass("bscolor3").addClass("bscolor1");
             if (this.currentTab === "all") {
-                $(".lock_modes .tabs", this.tab).show();
+                $('.lock_mode', this.tab).show();
             } else {
-                $(".lock_modes .tabs", this.tab).hide();
-                $(".lock_modes .tab_" + this.currentTab, this.tab).show();
+                const lockTypeClass = 'lock_' + this.currentTab;
+                $('.lock_mode', this.tab).hide();
+                $(`.lock_mode.${lockTypeClass}`, this.tab).show();
             }
             this.loadLockModeColors();
             this.adjustHeight();
@@ -157,14 +180,14 @@
                 this.setStyleVar(`--lockColor${i + 1}`, color);
             });
             // try to auto adjust lock mode box width and margin
-            const tabLockCount = this.currentTab === "all" ? this.lockLimit :
-                $(".tab_locking .lock_modes .tab_" + this.currentTab).children().length;
+            const lockTypeClass = 'lock_' + this.currentTab;
+            const tabLockCount = this.currentTab === "all"
+                ? this.lockLimit
+                : $(".tab_locking .lock_modes .tabs" + ` .${lockTypeClass}`).length;
             const tabLockContainerWidth = $(".tab_locking .lock_modes").width();
             const tabLockFixedWidth = [670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70;
-            const tabLockMargin = [5, 5, 20, 6, 10, 6, 13, 7, 15, 5][tabLockCount] || 5;
-            const tabLockAutoWidth = Math.floor(tabLockContainerWidth / tabLockCount) - tabLockMargin;
+            const tabLockAutoWidth = Math.floor(tabLockContainerWidth / tabLockCount);
             this.setStyleVar(`--lockModeWidth`, (tabLockContainerWidth > 800 ? tabLockAutoWidth : tabLockFixedWidth) + "px");
-            this.setStyleVar(`--lockMarginRight`, tabLockMargin + "px");
         }
 
         adjustHeight() {
