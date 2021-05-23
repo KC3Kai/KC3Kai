@@ -1780,7 +1780,7 @@ KC3改 Ship Object
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					wg42Bonus = [1, 1.3, 1.82][wg42Count] || 1.82;
+					wg42Bonus = [1, 1.3, 1.3 * 1.4][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
 					
@@ -1795,7 +1795,7 @@ KC3改 Ship Object
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
-					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
+					wg42Bonus = [1, 1.6, 1.6 * 1.7][wg42Count] || 2.72;
 					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount + type4RocketCdCount] || 2.7;
 					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
 					apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
@@ -1809,7 +1809,7 @@ KC3改 Ship Object
 				case 3: // Isolated Island Princess
 					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
-					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					
@@ -1821,7 +1821,7 @@ KC3改 Ship Object
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
 					alDiveBomberBonus = [1, 1.3, 1.3 * 1.2][alDiveBomberCount] || 1.56;
-					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
 					mortarBonus = [1, 1.1, 1.1 * 1.15][mortarCount + mortarCdCount] || 1.265;
@@ -1846,7 +1846,7 @@ KC3改 Ship Object
 					return [0, airstrikeBomberBonus, 0, 0, 1];
 				
 				case 4: // Supply Depot Princess
-					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
+					wg42Bonus = [1, 1.25, 1.25 * 1.3][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
 					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus, 0, 0, 1];
