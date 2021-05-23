@@ -14,14 +14,14 @@
             this.showListRowCallback = this.showShipLockingRow;
             // Amount of locking tags depends on MO/EO settings of each event,
             // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
-            // and please update `lockingTagColors` by themes in `fud_quarterly.json` file.
-            this.lockLimit = 9;
-            this.extraOpsStartFrom = 7;
+            // and please update `lockingTagConfigs` and `lockingTagColors` by themes in `fud_quarterly.json` file.
+            const configs = KC3Meta.eventLockingTagConfigs();
+            this.lockLimit = configs.maxTagAmount || 2;
+            this.moLocks = configs.moTagIds || [];
+            this.eoLocks = configs.eoTagIds || [];
             this.heartLockMode = 2;
             this.showShipLevel = true;
             this.currentTab = "all";
-            this.moLocks = [0, 1, 2, 3, 4, 5];
-            this.eoLocks = [2, 3, 5, 6, 7, 8];
         }
 
         /* RELOAD
@@ -103,41 +103,21 @@
                 lockBox.addClass("lock_mode_" + (i + 1));
                 $(".drop_area", lockBox).attr("data-boxId", i);
                 lockBox.appendTo(currentTab);
-
-                const isMoLock = this.moLocks.includes(i);
-                if (isMoLock) {
-                    lockBox.addClass('lock_mo');
+                if (this.moLocks.includes(i) || !this.eoLocks.length) {
+                    lockBox.addClass("lock_mo");
                 }
-
-                const isEoLock = this.eoLocks.includes(i);
-                if (isEoLock) {
-                    lockBox.addClass('lock_eo');
+                if (this.eoLocks.includes(i) || !this.moLocks.length) {
+                    lockBox.addClass("lock_eo");
                 }
             }
             this.currentTab = "all";
-
-            // const lockModesDiv = $(".lock_modes", this.tab);
-            // let currentTab = $('<div class="tabs tab_mo"></div>').appendTo(lockModesDiv);
-            // for (let i = 0; i < this.lockLimit; i++) {
-            //     if (i + 1 === this.extraOpsStartFrom) {
-            //         currentTab = $('<div class="tabs tab_eo"></div>').appendTo(lockModesDiv);
-            //     }
-            //     const elm = $(".factory .lock_mode", this.tab).clone()
-            //         .appendTo(currentTab);
-            //     elm.addClass("lock_mode_" + (i + 1));
-            //     $(".drop_area", elm).attr("data-boxId", i);
-            // }
-            // if (this.extraOpsStartFrom < 2 || this.extraOpsStartFrom > this.lockLimit) {
-            //     // No tabbed boxes needed, hide all control buttons
-            //     this.currentTab = "all";
-            //     $(".selectTab.tab_all", this.tab).hide();
-            //     $(".selectTab.tab_mo", this.tab).hide();
-            //     $(".selectTab.tab_eo", this.tab).hide();
-            // } else {
-            //     // Give up to auto fit buttons' name, because nobody can guarantee devs will not add 2 more tags to one MO map
-            //     //$(".selectTab.tab_mo", this.tab).text(this.extraOpsStartFrom === 2 ? "MO" : `E1~E${this.extraOpsStartFrom-1}`);
-            //     //$(".selectTab.tab_eo", this.tab).text("EO");
-            // }
+            // No tabbed boxes needed, hide all control buttons
+            if (!this.moLocks.length || !this.eoLocks.length) {
+                this.currentTab = "all";
+                $(".selectTab.tab_all", this.tab).hide();
+                $(".selectTab.tab_mo", this.tab).hide();
+                $(".selectTab.tab_eo", this.tab).hide();
+            }
         }
 
         switchToLockTab(newTab) {
@@ -186,7 +166,7 @@
                 : $(".tab_locking .lock_modes .tabs" + ` .${lockTypeClass}`).length;
             const tabLockContainerWidth = $(".tab_locking .lock_modes").width();
             const tabLockFixedWidth = [670, 670, 310, 220, 160, 130, 100, 90, 70, 70][tabLockCount] || 70;
-            const tabLockAutoWidth = Math.floor(tabLockContainerWidth / tabLockCount);
+            const tabLockAutoWidth = Math.max(70, Math.floor(tabLockContainerWidth / tabLockCount) - 5);
             this.setStyleVar(`--lockModeWidth`, (tabLockContainerWidth > 800 ? tabLockAutoWidth : tabLockFixedWidth) + "px");
         }
 

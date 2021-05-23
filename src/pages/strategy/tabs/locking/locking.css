@@ -39,6 +39,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+	flex-wrap: wrap;
 	width: 100%;
 	height: auto;
 }
@@ -81,6 +82,27 @@
 }
 .tab_locking .lock_mode_9 {
 	background: var(--lockColor9) !important;
+}
+.tab_locking .lock_mode_10 {
+	background: var(--lockColor10) !important;
+}
+.tab_locking .lock_mode_11 {
+	background: var(--lockColor11) !important;
+}
+.tab_locking .lock_mode_12 {
+	background: var(--lockColor12) !important;
+}
+.tab_locking .lock_mode_13 {
+	background: var(--lockColor13) !important;
+}
+.tab_locking .lock_mode_14 {
+	background: var(--lockColor14) !important;
+}
+.tab_locking .lock_mode_15 {
+	background: var(--lockColor15) !important;
+}
+.tab_locking .lock_mode_16 {
+	background: var(--lockColor16) !important;
 }
 
 .tab_locking .map_area {
