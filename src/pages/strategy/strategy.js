@@ -41,6 +41,7 @@
 		themeCSS.type = "text/css";
 		themeCSS.href = "./themes/"+themeName+".css";
 		$("head").append(themeCSS);
+		$("body").addClass(themeName);
 
 		if(ConfigManager.sr_custom_css !== ""){
 			var customCSS = document.createElement("style");
