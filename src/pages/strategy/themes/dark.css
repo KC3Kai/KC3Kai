@@ -1911,9 +1911,7 @@ button, input, select, textarea {
 	background:#7c0606;
 }
 .tab_event .sortie_list .sortie_box,
-.tab_maps .sortie_list .sortie_box,
-.tab_event .sortie_batch_toggles,
-.tab_maps .sortie_batch_toggles {
+.tab_maps .sortie_list .sortie_box {
 	background:#303030;
 	margin:0px 0px 2px 0px;
 }
