@@ -37,6 +37,7 @@
 		
 		themeName = ConfigManager.sr_theme || "dark";
 		var themeCSS = document.createElement("link");
+		themeCSS.id = "themeCSS";
 		themeCSS.rel = "stylesheet";
 		themeCSS.type = "text/css";
 		themeCSS.href = "./themes/"+themeName+".css";
@@ -45,6 +46,7 @@
 
 		if(ConfigManager.sr_custom_css !== ""){
 			var customCSS = document.createElement("style");
+			customCSS.id = "customCSS";
 			customCSS.type = "text/css";
 			customCSS.innerHTML = ConfigManager.sr_custom_css;
 			$("head").append(customCSS);
