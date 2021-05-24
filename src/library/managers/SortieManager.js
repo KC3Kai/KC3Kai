@@ -599,6 +599,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		getCurrentFCF :function(){
 			// About FCF usages and mechanism, see:
 			// https://wikiwiki.jp/kancolle/%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8%E6%96%BD%E8%A8%AD
+			// https://wikiwiki.jp/kancolle/%E9%81%8A%E6%92%83%E9%83%A8%E9%9A%8A%20%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8#process
+			// https://wikiwiki.jp/kancolle/%E7%B2%BE%E9%8B%AD%E6%B0%B4%E9%9B%B7%E6%88%A6%E9%9A%8A%20%E5%8F%B8%E4%BB%A4%E9%83%A8#process
 			// https://kancolle.fandom.com/wiki/Fleet_Command_Facility
 			// For now only to event map, can sortie with CF and SF
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
@@ -621,6 +623,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					&& isNextNodeFound
 					// not Striking Force, check if has ETS-CF (client check)
 					: flagship.hasEquipment(413)
+					// And flagship not Taiha, fleet compo is Torpedo Squadron (server-side check?)
+					//   TS conds: FS is CL/DD, others are DD/CLT
 					// And current battle is not the final node (client check)
 					&& isNextNodeFound
 				:

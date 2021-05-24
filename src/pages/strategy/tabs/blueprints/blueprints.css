@@ -25,6 +25,7 @@
 	margin:0px 0px 0px 0px;
 }
 .tab_blueprints .ship_header .ship_item {
+	display:flex;
 	width:680px;
 	height:20px;
 	line-height:20px;
@@ -41,6 +42,7 @@
 	margin:0px 0px 5px 0px;
 }
 .tab_blueprints .ship_list .ship_item {
+	display:flex;
 	width:680px;
 	height:20px;
 	line-height:20px;
@@ -165,11 +167,17 @@
 }
 .tab_blueprints .ship_item .need_materials .icon span.used {
 }
+.tab_blueprints .ship_item .ship_lock {
+	width: 0px;
+	pointer-events: none;
+	overflow: visible;
+	position: absolute;
+	left: 56px;
+	top: 3px;
+}
 .tab_blueprints .ship_item .ship_lock img {
-	width:13px;
-	height:13px;
-	margin:-35px 0px 0px 39px;
-	position:relative;
+	width: 13px;
+	height: 13px;
 }
 
 .tab_blueprints .summary {
