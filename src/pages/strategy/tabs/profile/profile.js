@@ -145,6 +145,9 @@
 			const kiloChars = Math.floor(usedChars / 1024);
 			const usedPercent = Math.floor(usedChars / localStorage.quotaLength * 1000) / 10;
 			$(".management .used").text("Used {0}K, {1}%".format(kiloChars, usedPercent));
+			if(usedPercent > 75){
+				$(".management .used").css("color", "orangered");
+			}
 			
 			// Export all profile data
 			$(".tab_profile .export_data").on("click", function(){

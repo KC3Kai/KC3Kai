@@ -47,7 +47,7 @@
     window.open(url);
   }
 
-  function exportCurrentFleets() {
+  function exportCurrentFleets(lbWorldId) {
     // Not reload storage here to keep WYSIWYG in Strategy Room Fleet Manager,
     // and not necessary to refresh for devtools panel page.
     //PlayerManager.loadFleets();
@@ -56,7 +56,9 @@
     const lbas = PlayerManager.bases;
     const deckBuilder = createDeckBuilderHeader(true);
     buildFleets(deckBuilder, fleets);
-    buildLbasFromPlayerManager(deckBuilder, lbas);
+    const availWorlds = lbas.map(lb => lb.map).sort();
+    buildLbasFromPlayerManager(deckBuilder, lbas,
+      lbWorldId > 0 ? lbWorldId : availWorlds[0]);
     openWebsite(deckBuilder);
   }
 
@@ -99,11 +101,11 @@
     });
   }
 
-  function buildLbasFromPlayerManager(deckBuilder, lbas) {
+  function buildLbasFromPlayerManager(deckBuilder, lbas, mapId) {
     if (!checkLbasBuilderInput(deckBuilder, lbas)) {
       return;
     }
-    lbas.forEach((lb, i) => {
+    lbas.filter(lb => !mapId || lb.map === mapId).forEach((lb, i) => {
       deckBuilder['a' + (i + 1)] = lb.deckbuilder();
     });
   }
