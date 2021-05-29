@@ -205,6 +205,7 @@ Retrieves when needed to apply on components
 				pan_hp_bar_metrics: true,
 				pan_moon_bar_colors: "auto",
 				pan_moon_bar_indicators: true,
+				pan_moon_equip_display: "auto",
 				pan_moon_conbut_scheme: "auto",
 				pan_moon_conbut_shape: "auto",
 				pan_moon_conbut_skew: "auto",

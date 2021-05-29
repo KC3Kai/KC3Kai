@@ -420,18 +420,17 @@
 	mode_dark_TS.push(              "conbut_dark",        "icon_dark",      "siconbg_clrblack",       "siconbrd_clrnone",    "ol_clrnone",      "rgba(34,34,34,.5)",    "qsch_dark");
 	user_setting_ID.push(           ConfigManager.pan_moon_conbut_scheme, ConfigManager.pan_misc_icon_bg, ConfigManager.pan_ship_icon_bg_moon_preset, ConfigManager.pan_ship_icon_border_moon_preset, ConfigManager.pan_outline_moon_preset, ConfigManager.pan_drop_shadow_moon_preset, ConfigManager.pan_quest_scheme_moon);
 
-	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]     opacity[21], bg_effect[22]
-	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_blue",  0.6,         "effect_lighting");
-	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro",    0.6,         "effect_none");
-	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1,           "effect_none");
-	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1,           "effect_none");
-	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_moonlight",     "shape_rect",       "no_skew",        "text_black_blue",  1,           "effect_none");
-	mode_shaded.push(               "skin_shaded",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.5,         "effect_none");
-	mode_blurry.push(               "skin_blurry",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.3,         "effect_blur_soft");
-	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_moonlight",     "shape_rounder",    "no_skew",        "text_black_blue",  0.6,         "effect_none");
-	mode_dark_TS.push(              "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  0.6,         "effect_none");
-	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset,ConfigManager.pan_moon_bg_effect);
-	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset,ConfigManager.pan_moon_bg_effect);
+	//                               skin[15],        tooltips[16],   exped planner[17],  conbut_shape[18],   conbut_skew[19],  text_colors[20]     opacity[21], bg_effect[22]      equip_display[23]
+	mode_moonlight.push(            "skin_moonlight","tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_blue",  0.6,         "effect_lighting", "typeA");
+	mode_natsuiro.push(             "skin_natsuiro", "tip_moonless", "ep_natsuiro",      "shape_round",      "no_skew",        "text_natsuiro",    0.6,         "effect_none",     "typeA");
+	mode_dark_blue.push(            "skin_moonless", "tip_moonless", "ep_moonless",      "shape_round",      "no_skew",        "text_white_grey",  1,           "effect_none",     "typeB");
+	mode_dark.push(                 "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  1,           "effect_none",     "typeB");
+	mode_flashbang.push(            "skin_flashbang","tip_moonless", "ep_moonlight",     "shape_rect",       "no_skew",        "text_black_blue",  1,           "effect_none",     "typeB");
+	mode_shaded.push(               "skin_shaded",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.5,         "effect_none",     "typeB");
+	mode_blurry.push(               "skin_blurry",   "tip_moonless", "ep_moonlight",     "shape_round",      "no_skew",        "text_white_grey",  0.3,         "effect_blur_soft","typeB");
+	mode_lightblue.push(            "skin_lightblue","tip_moonless", "ep_moonlight",     "shape_rounder",    "no_skew",        "text_black_blue",  0.6,         "effect_none",     "typeC");
+	mode_dark_TS.push(              "skin_dark",     "tip_moonless", "ep_dark",          "shape_rect",       "no_skew",        "text_white_grey",  0.6,         "effect_none",     "typeB");
+	user_setting_ID.push(           ConfigManager.pan_moon_skin, ConfigManager.pan_tooltip_scheme_moon, ConfigManager.pan_exped_planner_moon, ConfigManager.pan_moon_conbut_shape, ConfigManager.pan_moon_conbut_skew, ConfigManager.pan_moon_text_colors,ConfigManager.pan_moon_opacity_preset,ConfigManager.pan_moon_bg_effect,ConfigManager.pan_moon_equip_display);
 
 	var mode_select = [mode_moonlight,mode_natsuiro,mode_dark_blue,mode_dark,mode_flashbang,mode_shaded,mode_blurry,mode_lightblue,mode_dark_TS];
 	var mode_selection = mode_select[ConfigManager.pan_moon_skin];
@@ -609,6 +608,7 @@
 		style_select(9,".misc_icons,.timer-img,.ex_item,.ship_gear");
 		style_select(10,".ship_icon_bg_color",ConfigManager.pan_ship_icon_bg_moon,"background");
 		style_select(11,".ship_icon_bg_border","1px solid "+ ConfigManager.pan_ship_icon_border_moon,"border");
+		style_select(23,".ship_gears,.ex_item");
 
 		// ========================== //
 		// ==== Text Stylization ==== //

@@ -1457,6 +1457,19 @@
 				"options" : {}
 			},
 			{
+				"id" : "pan_moon_equip_display",
+				"name" : "SettingsPanelEquipDisplay",
+				"type" : "radio",
+				"options" : {
+					"choices" : [
+						[ "auto", "SettingsPanelAuto" ],
+						[ "typeA", "Type A" ],
+						[ "typeB", "Type B" ],
+						[ "typeC", "Type C" ]
+					]
+				}
+			},			
+			{
 				"id" : "pan_moon_conbut_scheme",
 				"name" : "SettingsPanelConButScheme",
 				"type" : "dropdown",
