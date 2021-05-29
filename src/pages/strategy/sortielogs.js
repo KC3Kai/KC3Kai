@@ -1166,8 +1166,12 @@
 							if((battleType & BATTLE_NIGHT) === 0){
 								// No detection, aerial and LBAS combat if Night2Day battle not go into day
 								if(thisNode.detection[0]){
-									$(".node_detect", nodeBox).text( thisNode.detection[0] );
-									$(".node_detect", nodeBox).addClass( thisNode.detection[1] );
+									$(".node_detect", nodeBox).text( thisNode.detection[0] )
+										.addClass( thisNode.detection[1] )
+										.attr("title", "{0} vs {1}".format(
+											thisNode.detection[0],
+											KC3Meta.detection(thisNode.battleDay.api_search[1])[0]
+										));
 								}
 								
 								$(".node_airbattle", nodeBox).text( thisNode.airbattle[0] );
