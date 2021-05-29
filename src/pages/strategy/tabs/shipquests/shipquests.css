@@ -121,6 +121,7 @@
 }
 /* Icons */
 .tab_shipquests .ship_header .ship_item {
+	display:flex;
 	width:680px;
 	height:20px;
 	line-height:20px;
@@ -138,6 +139,7 @@
 }
 /* Row */
 .tab_shipquests .ship_list .ship_item {
+	display:flex;
 	width:680px;
 	height:auto;
 	min-height:20px;

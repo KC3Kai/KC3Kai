@@ -773,6 +773,11 @@ Provides access to data on built-in JSON files
 				: "";
 		},
 		
+		eventLockingTagConfigs :function(attrName){
+			const configs = this._eventColle.lockingTagConfigs || {};
+			return attrName ? configs[attrName] : configs;
+		},
+		
 		eventLockingTagColors :function(theme = "dark"){
 			return (this._eventColle.lockingTagColors || {})[theme] || [];
 		},

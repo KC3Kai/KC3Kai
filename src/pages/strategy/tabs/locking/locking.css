@@ -36,8 +36,12 @@
 	width:680px;
 }
 .tab_locking .lock_modes .tabs {
-	width:100%;
-	height:auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	width: 100%;
+	height: auto;
 }
 .tab_locking .lock_modes .tab_mo {
 }
@@ -46,12 +50,7 @@
 .tab_locking .lock_mode {
 	width: var(--lockModeWidth);
 	float: left;
-	margin: 0 10px 5px 0;
 	padding: 5px;
-	margin-right: var(--lockMarginRight);
-}
-.tab_locking .lock_mode:first-child {
-	margin-left: var(--lockMarginRight);
 }
 .tab_locking .lock_mode:last-child {
 	margin-right: 0px;
@@ -83,6 +82,27 @@
 }
 .tab_locking .lock_mode_9 {
 	background: var(--lockColor9) !important;
+}
+.tab_locking .lock_mode_10 {
+	background: var(--lockColor10) !important;
+}
+.tab_locking .lock_mode_11 {
+	background: var(--lockColor11) !important;
+}
+.tab_locking .lock_mode_12 {
+	background: var(--lockColor12) !important;
+}
+.tab_locking .lock_mode_13 {
+	background: var(--lockColor13) !important;
+}
+.tab_locking .lock_mode_14 {
+	background: var(--lockColor14) !important;
+}
+.tab_locking .lock_mode_15 {
+	background: var(--lockColor15) !important;
+}
+.tab_locking .lock_mode_16 {
+	background: var(--lockColor16) !important;
 }
 
 .tab_locking .map_area {
@@ -180,6 +200,7 @@
 }
 
 .tab_locking .ship_header .ship_item {
+	display:flex;
 	width: 614px;
 	height: 20px;
 	line-height: 20px;
@@ -212,6 +233,7 @@
 
 /* Row */
 .tab_locking .ship_list .ship_item {
+	display:flex;
 	width: 597px;
 	height: 20px;
 	line-height: 20px;
@@ -362,11 +384,17 @@
 	width: 25px;
 }
 
+.tab_locking .ship_item .ship_lock {
+	width: 0px;
+	pointer-events: none;
+	overflow: visible;
+	position: absolute;
+	left: 10px;
+	top: 3px;
+}
 .tab_locking .ship_item .ship_lock img {
 	width: 13px;
 	height: 13px;
-	margin: -35px 0px 0px 10px;
-	position: relative;
 }
 
 /* FILTERS

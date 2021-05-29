@@ -19,7 +19,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		boss: {},
 		focusedFleet: [],
 		supportFleet: [],
-		fcfCheck: [],
+		fcfCheck: {},
 		escapedList: [],
 		materialBefore: false,
 		materialGain: Array.apply(null, {length:8}).map(v => 0),
@@ -591,7 +591,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 				};
 				const taihadShip = getRetreatableShipId(escapeData.api_escape_idx);
 				const escortShip = getRetreatableShipId(escapeData.api_tow_idx);
-				this.fcfCheck = [taihadShip, escortShip].filter(rosterId => rosterId > 0);
+				// SF-FCF: 1, ETS-CF: 2, 0 stands for none texture, not used by combined regular FCF
+				const singleEscapeType = escapeData.api_escape_type || 0;
+				this.fcfCheck.type = singleEscapeType;
+				this.fcfCheck.ships = [taihadShip, escortShip].filter(rosterId => rosterId > 0);
 				console.log("FCF escape-able ships have set to", this.fcfCheck);
 			}
 		},
@@ -605,12 +608,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// For now only to event map, can sortie with CF and SF
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);
-			if(!isSortieAtEvent || !sortiedFleets.length || !this.fcfCheck.length)
+			if(!isSortieAtEvent || !sortiedFleets.length || !this.fcfCheck.ships || !this.fcfCheck.ships.length)
 				return { isAvailable: false };
 			const isCombinedSortie = sortiedFleets.length >= 2;
+			const singleSortieType = this.fcfCheck.type;
 			const flagship = sortiedFleets[0].ship(0);
-			const taihaShip = KC3ShipManager.get(this.fcfCheck[0]);
-			const escortShip = isCombinedSortie && KC3ShipManager.get(this.fcfCheck[1]);
+			const taihaShip = KC3ShipManager.get(this.fcfCheck.ships[0]);
+			const escortShip = isCombinedSortie && KC3ShipManager.get(this.fcfCheck.ships[1]);
 			const isNextNodeFound = !!this.currentNode().nodeData.api_next;
 			const canUseFCF = !isCombinedSortie ?
 				// is Striking Force (fleet #3) sortied (both check)
@@ -642,19 +646,20 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			return {
 				isAvailable: canUseFCF,
 				isCombined: isCombinedSortie,
+				fcfType: singleSortieType,
 				shipToRetreat: taihaShip,
 				shipToEscort: escortShip,
 				sortiedFleets: sortiedFleets,
-				shipIdsToBeAbsent: this.fcfCheck.slice(0)
+				shipIdsToBeAbsent: this.fcfCheck.ships.slice(0)
 			};
 		},
 		
 		sendFCFHome :function(){
-			console.debug("FCF escape-able ships", this.fcfCheck);
-			this.fcfCheck.forEach(function(fcfShip) {
+			console.debug("FCF escape-able ships", this.fcfCheck.ships);
+			this.fcfCheck.ships.forEach(function(fcfShip) {
 				KC3ShipManager.get(fcfShip).didFlee = true;
 			});
-			[].push.apply(this.escapedList, this.fcfCheck.splice(0));
+			[].push.apply(this.escapedList, this.fcfCheck.ships.splice(0));
 			console.log("Have escaped ships", this.escapedList);
 		},
 		
@@ -910,7 +915,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			
 			this.focusedFleet = [];
 			this.supportFleet = [];
-			this.fcfCheck = [];
+			this.fcfCheck = {};
 			this.escapedList = [];
 			this.initialMorale = [];
 			this.materialBefore = false;

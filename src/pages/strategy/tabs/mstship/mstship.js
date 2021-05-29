@@ -450,8 +450,8 @@
 					KC3Meta.abyssShipBorderClass(shipData) === "boss" ? [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg',
-						'banner_d', 'full_d'
-						// also exists: 'banner_g_d', 'full_dmg_d'...
+						'banner_d', 'banner_g_dmg_d', 'full_d'
+						// some exists: 'full_dmg_d'
 					] : [
 						'banner', 'banner_dmg', 'banner_g_dmg',
 						'full', 'full_dmg'

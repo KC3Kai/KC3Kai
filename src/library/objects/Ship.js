@@ -1780,7 +1780,7 @@ KC3改 Ship Object
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
-					wg42Bonus = [1, 1.3, 1.82][wg42Count] || 1.82;
+					wg42Bonus = [1, 1.3, 1.3 * 1.4][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
 					
@@ -1795,7 +1795,7 @@ KC3改 Ship Object
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
-					wg42Bonus = [1, 1.6, 2.72][wg42Count] || 2.72;
+					wg42Bonus = [1, 1.6, 1.6 * 1.7][wg42Count] || 2.72;
 					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount + type4RocketCdCount] || 2.7;
 					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
 					apShellBonus = this.hasEquipmentType(2, 19) ? 1.85 : 1;
@@ -1809,7 +1809,7 @@ KC3改 Ship Object
 				case 3: // Isolated Island Princess
 					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
-					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					
@@ -1821,7 +1821,7 @@ KC3改 Ship Object
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
 					alDiveBomberBonus = [1, 1.3, 1.3 * 1.2][alDiveBomberCount] || 1.56;
-					wg42Bonus = [1, 1.4, 2.1][wg42Count] || 2.1;
+					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
 					mortarBonus = [1, 1.1, 1.1 * 1.15][mortarCount + mortarCdCount] || 1.265;
@@ -1846,7 +1846,7 @@ KC3改 Ship Object
 					return [0, airstrikeBomberBonus, 0, 0, 1];
 				
 				case 4: // Supply Depot Princess
-					wg42Bonus = [1, 1.45, 1.625][wg42Count] || 1.625;
+					wg42Bonus = [1, 1.25, 1.25 * 1.3][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
 					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus, 0, 0, 1];
@@ -2620,7 +2620,7 @@ KC3改 Ship Object
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658,
-			1921, 1922, 1923, 1924, 1925, 1926, // B
+			1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // B
 			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
 			1753, 1754 // Summer Supply Depot Princess
 			].includes(targetShipMasterId)) {
@@ -2987,14 +2987,14 @@ KC3改 Ship Object
 		if(this.hasEquipment(409) && (isLand || targetShipType.isPtImp)) return 8;
 		// Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
-		// Abyssal hard land installation could be landing attacked
+		// Abyssal hard land installation could be landing attacked, see `SPECIAL_ENTRY`
 		const isTargetLandable =
 			[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
 				1665, 1666, 1667, // Artillery Imp
 				1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
 				// but why Summer Supply Depot Princess not counted?
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
-				1921, 1922, 1923, 1924, 1925, 1926, // Supply Depot Princess B
+				1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // Supply Depot Princess B
 				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
 				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
