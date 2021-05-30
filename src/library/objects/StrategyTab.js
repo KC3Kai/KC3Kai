@@ -27,7 +27,10 @@
 			myCSS.rel = "stylesheet";
 			myCSS.type = "text/css";
 			myCSS.href = "tabs/"+this.name+"/"+this.name+".css";
-			$("head").append(myCSS);
+			// Ensure css of rightside page is loaded before theme and custom styles,
+			// in order to reduce amount of !important
+			//$("head").append(myCSS);
+			$("head #themeCSS").before(myCSS);
 		}
 		
 		// Attempt to load HTML

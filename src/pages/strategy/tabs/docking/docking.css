@@ -10,6 +10,7 @@
 	margin:0px 0px 0px 0px;
 }
 .tab_docking .ship_header .ship_item {
+	display:flex;
 	width:680px;
 	height:20px;
 	line-height:20px;
@@ -27,6 +28,7 @@
 }
 /* Row */
 .tab_docking .ship_list .ship_item {
+	display:flex;
 	width:680px;
 	height:20px;
 	line-height:20px;

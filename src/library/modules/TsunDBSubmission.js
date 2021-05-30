@@ -1100,7 +1100,10 @@
 					101: [1],
 					102: [1],
 					103: [1, 2],
-					104: [1]
+					104: [1],
+					300: [0, 1, 2],
+					301: [0, 2, 3],
+					302: [0, 1, 3]
 				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
@@ -1126,18 +1129,26 @@
 					const {isLand, isSubmarine} = ship.estimateTargetShipType(enemy);
 					if (isSubmarine) { continue; }
 					const time = attack.cutin >= 0 ? "day" : "yasen";
-					const cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
-						: ship.estimateNightAttackType(enemy, true);
-					if (cutinType[1] === 0) { break; }
+					const submarineCutinIds = [300, 301, 302];
 					const cutin = attack.cutin || attack.ncutin || 0;
+					let cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+						: ship.estimateNightAttackType(enemy, true);
+					if (submarineCutinIds.includes(cutin)) {
+						const fs = fleet.ship(0);
+						cutinType = time === "day" ? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+							: fs.estimateNightAttackType(enemy, true);
+					}
+					if (cutinType[1] === 0) { break; }
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102, 103, 104];
+					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||
 							specialCutinIds.includes(cutin)
 						)
 					) { continue; }
+					// Technically Sub Fleet CI can trigger multiple times in one sortie
+					// but we still use this flag to avoid dummy entries in a single battle (also unlikely for player to do so)
 					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
 					}

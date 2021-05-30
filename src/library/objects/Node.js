@@ -2330,34 +2330,50 @@ Used by SortieManager
 				let nightSpecialAttackType, daySpecialAttackType;
 				// PLAYER SPECIAL ATTACKS
 				/*
-				 * CVCI/CVNCI/new DD cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
+				 * CVCI/CVNCI/SS LateModel cut-ins have varying damage modifier, but for now just take the highest one and see if actual exceeds it
 				 * Technically possible to guess exact cut-in from api_si_list (included per attack)
 				 * Since multiple cutins are possible per ship, reassignment to match cutin number from estimation is required
 				 */
 				if (time === "Night") {
-					nightSpecialAttackType = ship.estimateNightAttackType(target, true);
-					// In case of re-roll attacks like 7/8
-					if (nightSpecialAttackType[1] !== cutin) {
+					const possibleAttackTypes = ship.estimateNightAttackType(target, true, false);
+					nightSpecialAttackType = possibleAttackTypes.find(t => t[0] === "Cutin" && t[1] === cutin);
+					if (!nightSpecialAttackType) {
+						// Fail-safe to default known sp attack
 						nightSpecialAttackType = KC3Ship.specialAttackTypeNight(cutin);
 					}
 					daySpecialAttackType = [];
+					// CVNCI modifier correction for cutin type by equip setup
+					if (cutin === 6) {
+						if (ciequip.length === 2) { nightSpecialAttackType[3] = 1.2; }
+						else {
+							let nightFighterCnt = 0, nightTorpedoBomberCnt = 0;
+							ciequip.forEach(slotitem => {
+								const master = KC3Master.slotitem(slotitem);
+								if (!master) { return; }
+								if (master.api_type[3] === 45) { nightFighterCnt++; }
+								if (master.api_type[3] === 46) { nightTorpedoBomberCnt++; }
+							});
+							if (nightFighterCnt === 2 && nightTorpedoBomberCnt === 1) { nightSpecialAttackType[3] = 1.25; }
+							else { nightSpecialAttackType[3] = 1.18; }
+						}
+					}
 				} else {
-					daySpecialAttackType = ship.estimateDayAttackType(target, true, 1);
-					if (daySpecialAttackType[1] !== cutin) {
-						// Artillery spotting will keep re-rolling sp attacks
+					const possibleAttackTypes = ship.estimateDayAttackType(target, true, 1, false);
+					daySpecialAttackType = possibleAttackTypes.find(t => t[0] === "Cutin" && t[1] === cutin);
+					if (!daySpecialAttackType) {
+						// Fail-safe to default known artillery spotting attack
 						daySpecialAttackType = KC3Ship.specialAttackTypeDay(cutin);
 					}
-					// CVCI modifier correction for cutin type
+					// CVCI modifier correction for cutin type by equip setup
 					if (cutin === 7) {
 						if (ciequip.length === 2) { daySpecialAttackType[3] = 1.15; }
 						else {
-							let torpedoBomberCnt = 0, 
-								diveBomberCnt = 0;
+							let torpedoBomberCnt = 0, diveBomberCnt = 0;
 							ciequip.forEach(slotitem => {
 								const master = KC3Master.slotitem(slotitem);
 								if (!master) { return; }
 								if (master.api_type[2] === 7) { diveBomberCnt++; }
-								else if (master.api_type[2] === 8) { torpedoBomberCnt++; }
+								if (master.api_type[2] === 8) { torpedoBomberCnt++; }
 							});
 							if (torpedoBomberCnt === 1 && diveBomberCnt === 2) { daySpecialAttackType[3] = 1.2; }
 						}
