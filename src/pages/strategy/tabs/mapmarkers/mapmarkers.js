@@ -149,8 +149,10 @@
 			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
-					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
+					// -99 undefined in `_getTexture`, used by land base at `AirBaseLayer.prototype.create`
 					case -99: return 'map_main_18';
+					// -100 undefined either, used by landing flag at `LandingFlag.prototype._getTexture_no`
+					case -100: return 'map_main_38';
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
 					case 0: return 'map_main_55';
@@ -258,6 +260,14 @@
 						if(spot.line.x < 0) fromSpot.x += spot.line.x;
 						if(spot.line.y < 0) fromSpot.y += spot.line.y;
 						const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
+						// Show Landing flag icon beside transport point if exists
+						if(spot.landing) {
+							const flagInfo = spot.landing;
+							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-100));
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(spot.x + flagInfo.x, spot.y + flagInfo.y - frame.height);
+							stage.addChild(sprite);
+						}
 						// Draw an arrow to indicate the edge direction
 						if(this.isShowArrows) {
 							const grp = new this.pixi.Graphics();
@@ -318,7 +328,7 @@
 					stage.addChild(edgesContainer);
 					stage.addChild(labelsContainer);
 				}
-				// Show Land-Base 'AB' icon if exists
+				// Show Land base 'AB' icon if exists
 				if(this.mapInfoMeta.airbase) {
 					const airbase = this.mapInfoMeta.airbase;
 					const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-99));
