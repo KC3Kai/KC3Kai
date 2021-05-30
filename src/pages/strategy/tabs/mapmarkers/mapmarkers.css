@@ -8,7 +8,7 @@
 
 .tab_mapmarkers label {
 	font-weight:normal;
-	margin-right:10px;
+	margin-right:5px;
 }
 
 .tab_mapmarkers ol,
@@ -17,7 +17,7 @@
 }
 
 .tab_mapmarkers .scrollable {
-	max-width: 680px;
+	max-width: 100%;
 	max-height: 720px;
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -72,8 +72,8 @@
 .tab_mapmarkers .map_params,
 .tab_mapmarkers .controls {
 	width:100%;
-	padding-left:10px;
-	padding-right:10px;
+	padding-left:5px;
+	padding-right:5px;
 	margin-top:5px;
 	margin-bottom:5px;
 	text-align:center;

@@ -19,6 +19,8 @@
 			this.isShowEdges = true;
 			this.isShowEnemies = false;
 			this.isShowArrows = true;
+			this.isShowEdgeIds = true;
+			this.isShowRedBg = true;
 			this.isShowMarkers = true;
 			this.isLoading = false;
 			this.digEventSpots = false;
@@ -82,10 +84,7 @@
 				this.zoom = Number($(e.target).val());
 				$(".zoom").val(this.zoom).trigger("change");
 			});
-			$(".show_edges").on("change", e => {
-				this.loadMapAssets();
-			});
-			$(".show_enemies").on("change", e => {
+			$(".show_edges, .show_edge_ids, .show_arrows, .show_enemies, .show_red_bg").on("change", e => {
 				this.loadMapAssets();
 			});
 			$(".show_markers").on("change", e => {
@@ -128,7 +127,10 @@
 			$(".zoom").val(this.zoom);
 			$(".zoomSlider").val(this.zoom);
 			$(".show_edges").prop("checked", this.isShowEdges);
+			$(".show_edge_ids").prop("checked", this.isShowEdgeIds);
+			$(".show_arrows").prop("checked", this.isShowArrows);
 			$(".show_enemies").prop("checked", this.isShowEnemies);
+			$(".show_red_bg").prop("checked", this.isShowRedBg);
 			$(".show_markers").prop("checked", this.isShowMarkers);
 			$(".map_url").val(this.mapInfoMetaUrl || "");
 		},
@@ -173,7 +175,10 @@
 			this.isLoading = true;
 			$(".loading").css("visibility", "visible");
 			this.isShowEdges = $(".show_edges").prop("checked");
+			this.isShowEdgeIds = $(".show_edge_ids").prop("checked");
+			this.isShowArrows = $(".show_arrows").prop("checked");
 			this.isShowEnemies = $(".show_enemies").prop("checked");
+			this.isShowRedBg = $(".show_red_bg").prop("checked");
 			this.mapImgMetaUrl = getMapRscUrl(this.world, this.map, "image.json");
 			this.mapInfoMetaUrl = getMapRscUrl(this.world, this.map, "info.json");
 			this.updateParams();
@@ -206,6 +211,9 @@
 					const textureName = typeof bg === "string" ? bg : bg.img ? bg.img : false;
 					if(textureName === false) {
 						console.debug("Unknown BG texture:", bg);
+						continue;
+					}
+					if(!this.isShowRedBg && bg.name === "red") {
 						continue;
 					}
 					const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
@@ -269,13 +277,15 @@
 							stage.addChild(grp);
 						}
 						// Show edge numbers
-						const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
-						edgeText.anchor.set(
-							1.5 * (Math.abs(angle) / Math.PI),
-							Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
-						);
-						edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-						edgesContainer.addChild(edgeText);
+						if(this.isShowEdgeIds) {
+							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
+							edgeText.anchor.set(
+								1.5 * (Math.abs(angle) / Math.PI),
+								Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
+							);
+							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+							edgesContainer.addChild(edgeText);
+						}
 					}
 					// Fill labels of additional nodes
 					if(Array.isArray(this.mapInfoMeta.labels)) {
