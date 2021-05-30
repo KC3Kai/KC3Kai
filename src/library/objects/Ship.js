@@ -3663,6 +3663,10 @@ KC3改 Ship Object
 		return (1.1 * totalRootedLevel + 2.6 * Math.sqrt(cappedLuck) + 16) / 100;
 		// old version: https://twitter.com/Xe_UCH/status/1180283907284979713
 		//return (0.08 * this.level + 0.04 * combinedShips.map(ship => ship.level).sumValues() + 0.24 * this.lk[0] + 36) / 100;
+		// new version: https://twitter.com/Xe_UCH/status/1398930917184270337
+		// return (2 * Math.sqrt(this.level) + Math.sqrt(this.lk[0])
+		//	+ combinedShips.map(ship => Math.sqrt(ship.level)).sumValues()
+		//	+ combinedShips.map(ship => 0.5 * Math.sqrt(ship.lk[0])).sumValues() + 12) / 100;
 	};
 
 	/**

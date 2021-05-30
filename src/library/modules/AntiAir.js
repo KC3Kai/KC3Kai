@@ -942,7 +942,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tenryuu K2, Gotland Kai
+	// Tenryuu K2, Gotland Kai+
 	declareAACI(
 		30, 3, 1.3,
 		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
