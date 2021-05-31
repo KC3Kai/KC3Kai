@@ -1111,6 +1111,49 @@
 					},
 				],
 			},
+			// SBD
+			"195": {
+				count: 0,
+				byClass: {
+					// Following American carriers: Lexington Class
+					"69": {
+						multiple: { "houg": 1 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+				},
+			},
+			// SBD-5
+			"419": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American carriers: Lexington Class
+					"69": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+				},
+			},
 			// Type 96 Fighter
 			"19": {
 				count: 0,
