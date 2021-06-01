@@ -1509,10 +1509,11 @@ ABYSS FLEET
 .module.activity .activity_quest .quest_filters {
 	display: flex;
 	height: 18px;
+	max-width:173px;
 }
 .module.activity .activity_quest .quest_filter_button {
 	overflow: hidden;
-	width: 30px;
+	width: 25px;
 	transition: 0.2s;
 	cursor: pointer;
 	margin: 4px 0px 0px 5px;
@@ -1534,6 +1535,12 @@ ABYSS FLEET
 }
 .module.activity .activity_quest .quest_filter_button[filter="5"] {
 	background: #ae76fa;
+}
+.module.activity .activity_quest .quest_scrolltop_button {
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 14px solid #888;
+	width:10px;
 }
 .module.activity .activity_quest .quest_list {
 	display: block;

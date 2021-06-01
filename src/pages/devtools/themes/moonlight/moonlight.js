@@ -1722,6 +1722,9 @@
 				}
 				exec();
 			});
+			$('.quest_scrolltop_button').off('click').click(function(ev) {
+				$('.activity_quest .quest_list').scrollTop(0);
+			});
 
 			questCacheResult.length = 0;
 			if (data && data.length) {
