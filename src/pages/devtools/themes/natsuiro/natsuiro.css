@@ -1325,7 +1325,6 @@ ABYSS FLEET
 .module.activity .activity_quest .quest_filter_button[filter="5"] {
 	background: #ae76fa;
 }
-
 .module.activity .activity_quest .quest_list {
 	display: block;
 /*  flex-direction: column; */
@@ -1335,7 +1334,23 @@ ABYSS FLEET
 }
 
 .module.activity .activity_quest .quest_list::-webkit-scrollbar {
-	width: 5px;
+	width: 6px;
+}
+.module.activity .activity_quest .quest_scrolltop_button {
+	position: relative;
+	float: right;
+	z-index: 1;
+	top: -199px;
+	right: 0;
+	width: 6px;
+	height: 5px;
+	border-left: 3px solid transparent;
+	border-right: 3px solid transparent;
+	border-bottom: 5px solid rgba(158,158,158,0.6);
+	background-color: transparent;
+}
+.module.activity .activity_quest .quest_scrolltop_button:hover {
+	border-bottom-color: rgba(197,197,197,1);
 }
 
 .module.activity .activity_quest .quest_list .quest_page {
