@@ -164,6 +164,7 @@
 	margin:0px 2px 0px 0px;
 	vertical-align:top;
 	object-fit:cover;
+	image-rendering:auto;
 }
 .tab_blueprints .ship_item .need_materials .icon span.used {
 }
