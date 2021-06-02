@@ -4734,6 +4734,11 @@
 							},
 						],
 					},
+					{
+						// Takanami K2
+						ids: [649],
+						multiple: { "houg": 1 },
+					},
 				]
 			},
 			// 12.7cm Twin Gun Mount Model D Kai 3
@@ -4853,6 +4858,11 @@
 								single: { "houg": 3, "houk": -3 },
 							},
 						],
+					},
+					{
+						// Takanami K2
+						ids: [649],
+						multiple: { "houg": 1 },
 					},
 				],
 			},
