@@ -2380,7 +2380,7 @@ Used by SortieManager
 					}
 				}
 				
-				const combinedFleetType = this.playerCombinedType || PlayerManager.combinedFleet || 0;
+				const combinedFleetType = this.playerCombined ? this.playerCombinedType || PlayerManager.combinedFleet : 0;
 				const warfareType = !isSubmarine ? 'Shelling' : 'Antisub',
 					powerBonus = ship.combinedFleetPowerBonus(combinedFleetType, this.enemyCombined, warfareType),
 					combinedFleetFactor = !this.playerCombined ? powerBonus.main : fleetnum === 0 ? powerBonus.main : powerBonus.escort,
@@ -2454,7 +2454,7 @@ Used by SortieManager
 								shipCount: shipCount,
 								formation: formation,
 								shipsOnSortie: shipsOnSortie,
-								isMainFleet: !this.playerCombined ? true : fleetnum == 0,
+								isMainFleet: !this.playerCombined ? null : fleetnum === 0,
 								combinedFleet: combinedFleetType,
 								rAmmoMod: remainingAmmoModifier,
 								spAttackType: cutin,
@@ -2473,7 +2473,7 @@ Used by SortieManager
 								formation: this.eformation,
 								position: targetIndex,
 								armor: armor,
-								isMainFleet: !this.enemyCombined ? true : attack.target[i] < combinedFleetIndexAlign,
+								isMainFleet: !this.enemyCombined ? null : attack.target[i] < combinedFleetIndexAlign,
 								hp: eHp,
 							};
 

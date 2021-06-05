@@ -15,10 +15,11 @@
             // Amount of locking tags depends on MO/EO settings of each event,
             // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
             // and please update `lockingTagConfigs` and `lockingTagColors` by themes in `fud_quarterly.json` file.
+            // NOTE: texture ID and our color ID is 0-based index, but API property `sally` is 1-based.
             const configs = KC3Meta.eventLockingTagConfigs();
-            this.lockLimit = configs.maxTagAmount || 2;
-            this.moLocks = configs.moTagIds || [];
-            this.eoLocks = configs.eoTagIds || [];
+            this.lockLimit = ConfigManager.sr_locktag_max || configs.maxTagAmount || 2;
+            this.moLocks = ConfigManager.sr_locktag_mo || configs.moTagIds || [];
+            this.eoLocks = ConfigManager.sr_locktag_eo || configs.eoTagIds || [];
             this.heartLockMode = 2;
             this.showShipLevel = true;
             this.currentTab = "all";

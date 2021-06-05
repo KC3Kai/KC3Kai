@@ -361,6 +361,7 @@
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
 				.css("object-fit", "cover")
+				.css("image-rendering", "auto")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(remodelInfo.ship_id_from)
@@ -374,6 +375,7 @@
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
 				.css("object-fit", "cover")
+				.css("image-rendering", "auto")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(remodelInfo.ship_id_to)

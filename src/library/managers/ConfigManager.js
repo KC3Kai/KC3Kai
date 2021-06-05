@@ -212,6 +212,7 @@ Retrieves when needed to apply on components
 				sr_show_new_shipstate  : true,
 				sr_show_yasen_shipstate: false,
 				sr_custom_css          : "",
+				sr_locktag_max         : 0,
 
 				idbSaveSortie          : true,
 				idbSaveExcludeMaps     : [],

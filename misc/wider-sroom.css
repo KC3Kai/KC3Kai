@@ -1,0 +1,58 @@
+@media screen and (min-width:1240px) {
+/* width can be adjusted */
+#wrapper { width: 1200px; }
+.tab_mstship .shipRecords { width: 480px; }
+.tab_mstgear .gearRecords { width: 580px; }
+.tab_mstgear .gearRecord { width: 100%; }
+.tab_mstgear .gearRecord .gearName { width: calc(100% - 20px); }
+
+/* width to be overridden for auto-fit */
+#wrapper { min-width: 800px; }
+#body, #error, #contentHtml, .page_title, .page_padding { width: 100%; }
+#content { width: calc(100% - 100px); }
+.page_help { width: 100%; }
+.dark .page_help { width: calc(100% - 40px); }
+.page_panel { width: 100% !important; }
+.dark .page_panel { width: calc(100% - 20px); }
+.tab_ships .filters .ship_types, .tab_ships .ship_header, .tab_ships .ship_list { width: calc(100% - 10px); }
+.tab_ships .filters .ship_types { height: auto; min-height: 20px; }
+.tab_ships .ship_list.scroll_fix { width: calc(100% - 5px); }
+.tab_ships .ship_header .ship_item, .tab_ships .ship_list .ship_item { width: 100%; }
+.tab_ships .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
+.tab_locking .controls, .tab_locking .lock_modes { width: calc(100% - 10px); }
+.tab_locking .shiplist_box { width: calc(100% - 88px); }
+.tab_locking .ship_header, .tab_locking .ship_header .ship_item, .tab_locking .ship_list, .tab_locking .ship_list .ship_item { width: 100%; }
+.tab_locking .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
+.tab_flowchart .flowchart, .tab_flowchart .questExtraItem { width: 100%; }
+.tab_flowchart .questFlowItem .questDesc { max-width: 80%; }
+.tab_flowchart .questExtraItem .questDesc { width: 92%; }
+.tab_docking .ship_header, .tab_docking .ship_list { width: 100%; }
+.tab_docking .ship_header .ship_item, .tab_docking .ship_list .ship_item { width: 100%; }
+.tab_docking .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
+.tab_blueprints .ship_list, .tab_blueprints .view_types { width: 100%; }
+.tab_blueprints .ship_list .ship_item { width: 100%; }
+.tab_blueprints .ship_item .need_materials { width: auto; min-width: 430px; flex-grow: 1; }
+.tab_shipquests .ship_list { width: 100%; }
+.tab_shipquests .ship_list .ship_item { width: 100%; }
+.tab_shipquests .ship_item .ship_quests { width: auto; min-width: 430px; flex-grow: 1; }
+.tab_gears .item_list { width: 100%; }
+.tab_fleet .fleet_control, .tab_fleet .fleet_list, .tab_fleet .fleet_box, .tab_fleet .fleet_info { width: 100%; }
+.tab_fleet .fleet_ships { width: calc(100% - 8px); }
+.tab_fleet .fleet_ship { width: calc(50% - 4px); }
+.tab_fleet .fleet_ship .ship_gear { width: calc(100% - 110px); }
+.tab_fleet .fleet_ship .gear_name { width: calc(100% - 12px - 17px - 30px); }
+.tab_fleet .fleet_ship.horizontal, .tab_fleet .fleet_ship.horizontal .ship_gear { width: 110px; }
+.tab_maps .map_list, .tab_maps .sortie_list { width: 100%; }
+.tab_event .map_list, .tab_event .sortie_list { width: 100%; }
+.tab_pvp .page_list, .tab_pvp .toggles { width: 100%; }
+.tab_showcase .controls { width: 100%; }
+.tab_shipdrop .filters .ship_types { width: calc(100% - 20px); height: auto; min-height: 20px; }
+}
+
+@media screen and (min-width:1640px) {
+#wrapper { width: 1600px; }
+}
+
+@media screen and (min-width:1940px) {
+#wrapper { width: 1900px; }
+}

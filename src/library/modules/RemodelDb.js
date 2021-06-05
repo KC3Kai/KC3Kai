@@ -96,6 +96,7 @@
                 case 226: // Shiranui
                 case 227: // Kuroshio
                 case 301: // Akigumo
+                case 345: // Takanami
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
