@@ -2682,8 +2682,8 @@ KC3改 Ship Object
 	/**
 	 * Conditions under verification, known for now:
 	 * Flagship is healthy Nelson, Double Line variants formation selected.
-	 * Min 6 ships fleet needed, main fleet only for Combined Fleet.
-	 * 3rd, 5th ship not carrier, no any submarine in fleet.
+	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
+	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
 	 *
 	 * No PvP sample found for now.
@@ -2885,7 +2885,7 @@ KC3改 Ship Object
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
-	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
+	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
 	 * And it's impossible to be triggered after any other daytime Big-7 special cutin,
@@ -2918,7 +2918,7 @@ KC3改 Ship Object
 						"592": [591, 152],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
-					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
+					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
 				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
 			}
