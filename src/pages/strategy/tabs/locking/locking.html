@@ -24,6 +24,22 @@
 		Otherwise try clicking inside cell. It should cycle through tags of that ship.
 	</div>
 
+	<div class="help_q">What could I do if tags are less than in-game current event's?</div>
+	<div class="help_a">Please wait for a KC3 update for tag amount and colors after event information confirmed.
+		Or you can temporarily set a greater value in settings page, then reload Strategy Room to apply the change.
+	</div>
+
+	<div class="help_q">How to change tag colors via Custom CSS?</div>
+	<div class="help_a"><p>To customize Strategy Room Locking Planner's colors, repeat <code>--lockColor<b>N</b>:</code> line and use your favorite color codes:</p>
+	<pre style="padding:5px 10px 5px 10px;"><code>.tab_locking .planner_area {
+	--lockColor1: #555555 !important;
+	--lockColor2: #aaaaaa !important;
+}</code></pre>
+	<p>To customize devtools info panel's colors, repeat <code>.color-<b>N</b></code> line and set the bgcolors:</p>
+	<pre style="padding:5px 10px 5px 10px;"><code>.module.fleet .locktag.color-1 { background-color: #555555 !important; }
+.module.fleet .locktag.color-2 { background-color: #aaaaaa !important; }</code></pre>
+	</div>
+
 	<div class="help_more">
 		<a href="https://github.com/KC3Kai/KC3Kai/wiki/Strategy-Room%3A-Locking">Learn more</a>
 	</div>

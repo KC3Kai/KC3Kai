@@ -1642,7 +1642,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 6 types of Daihatsu Landing Craft with known bonus, 2 unknown:
+		// 8 types of Daihatsu Landing Craft with known bonus:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
@@ -3452,12 +3452,12 @@ KC3改 Ship Object
 					// specific ship personnel: torpedo squadron skilled lookouts
 					const hasTsSkilledLookouts = this.hasEquipment(412);
 					const hasDrumCanister = this.hasEquipmentType(2, 30);
-					// Extra power bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
+					// extra power bonus if small main gun is 12.7cm Twin Gun Mount Model D Kai Ni/3
 					// https://twitter.com/ayanamist_m2/status/944176834551222272
 					// https://docs.google.com/spreadsheets/d/1_e0M6asJUbu9EEW4PrGCu9hOxZnY7OQEDHH2DUAzjN8/htmlview
 					const modelDK2SmallGunCnt = this.countEquipment(267),
 					      modelDK3SmallGunCnt = this.countEquipment(366);
-					// Possible to equip 2 D guns for 4 slots Tashkent
+					// possible to equip 2 D guns for 4 slots Tashkent
 					// https://twitter.com/Xe_UCH/status/1011398540654809088
 					const modelDSmallGunModifier =
 						([1, 1.25, 1.25 * 1.125][modelDK2SmallGunCnt + modelDK3SmallGunCnt] || 1.40625)
@@ -3467,7 +3467,7 @@ KC3改 Ship Object
 							results.push(KC3Ship.specialAttackTypeNight(7 + diff, null, 1.3 * modelDSmallGunModifier));
 						if(hasCapableRadar && hasSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
-						// ~~special sub-types of~~ SLO cutin for Torpedo Squadron SLO since 2021-04-30
+						// special cutins for Torpedo Squadron SLO since 2021-04-30
 						// lower priority than regual cutins below, no D gun modifier
 						// https://twitter.com/yukicacoon/status/1388100262938562563
 						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
@@ -3475,7 +3475,7 @@ KC3改 Ship Object
 						if(hasDrumCanister && hasTsSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(10 + diff));
 					};
-					// Since 2021-05-08, all 4 types get indiviual ID, and get double hits version
+					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
 					// https://twitter.com/CC_jabberwock/status/1391058345990127618
 					// setups of double-hit ID (+4) are the same, but threshold seems be level 80
 					// https://twitter.com/CC_jabberwock/status/1392587817524502529
@@ -3619,7 +3619,7 @@ KC3改 Ship Object
 		if (isChuuhaOrWorse) { baseValue += 18; }
 		// Ship Personnel bonus
 		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
-		// Torpedo Squadron Skilled Lookouts +10 in total
+		// Torpedo Squadron Skilled Lookouts +10 in total?
 		if (this.hasEquipment(412)) { baseValue += 5; }
 		// Searchlight bonus, large SL unknown for now
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
@@ -3663,6 +3663,10 @@ KC3改 Ship Object
 		return (1.1 * totalRootedLevel + 2.6 * Math.sqrt(cappedLuck) + 16) / 100;
 		// old version: https://twitter.com/Xe_UCH/status/1180283907284979713
 		//return (0.08 * this.level + 0.04 * combinedShips.map(ship => ship.level).sumValues() + 0.24 * this.lk[0] + 36) / 100;
+		// new version: https://twitter.com/Xe_UCH/status/1398930917184270337
+		// return (2 * Math.sqrt(this.level) + Math.sqrt(this.lk[0])
+		//	+ combinedShips.map(ship => Math.sqrt(ship.level)).sumValues()
+		//	+ combinedShips.map(ship => 0.5 * Math.sqrt(ship.lk[0])).sumValues() + 12) / 100;
 	};
 
 	/**

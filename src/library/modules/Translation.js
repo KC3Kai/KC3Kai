@@ -254,27 +254,17 @@
 			"SpCCutin(1)" : 901,
 			"SpCCutin(2)" : 902,
 			"SpCCutin(3)" : 903,
-			"Friend41(1)" : 141,
-			"Friend41(2)" : 241,
-			"Friend42(1)" : 142,
-			"Friend42(2)" : 242,
-			"Friend42(3)" : 342,
-			"Friend43(1)" : 143,
-			"Friend43(2)" : 243,
-			"Friend43(3)" : 343,
-			"Friend44(1)" : 144,
-			"Friend44(2)" : 244,
-			"Friend44(3)" : 344,
-			"Friend45(1)" : 145,
-			"Friend45(2)" : 245,
-			"Friend46(1)" : 146,
-			"Friend46(2)" : 246,
-			"Friend47(1)" : 147,
-			"Friend47(2)" : 247,
-			"Friend48(1)" : 148,
-			"Friend48(2)" : 248,
-			"Friend49(1)" : 149,
-			"Friend49(2)" : 249,
+
+			"Friend41(1)": 141, "Friend41(2)": 241,
+			"Friend42(1)": 142, "Friend42(2)": 242, "Friend42(3)": 342,
+			"Friend43(1)": 143, "Friend43(2)": 243, "Friend43(3)": 343,
+			"Friend44(1)": 144, "Friend44(2)": 244, "Friend44(3)": 344,
+			"Friend45(1)": 145, "Friend45(2)": 245,
+			"Friend46(1)": 146, "Friend46(2)": 246,
+			"Friend47(1)": 147, "Friend47(2)": 247,
+			"Friend48(1)": 148, "Friend48(2)": 248,
+			"Friend49(1)": 149, "Friend49(2)": 249,
+			"Friend50(1)": 150, "Friend50(2)": 250, "Friend50(3)": 350,
 
 			"H0000":30, "H0100":31, "H0200":32, "H0300":33,
 			"H0400":34, "H0500":35, "H0600":36, "H0700":37,
@@ -346,9 +336,11 @@
 			}
 
 			// add known friend support keys (last 2 digits seem be event world id)
-			if (includeFriend)
-				sortedVoiceNums.push(...[141, 241, 142, 242, 342, 143, 243, 343, 144, 244, 344, 145, 245,
-					 146, 246, 147, 247, 148, 248, 149, 249]);
+			if (includeFriend){
+				sortedVoiceNums.push(
+					...Object.keys(this._descToId).filter(k => k.startsWith("Friend")).map(k => this.voiceDescToNum(k))
+				);
+			}
 
 			return sortedVoiceNums;
 		},

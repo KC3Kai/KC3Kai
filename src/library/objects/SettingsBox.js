@@ -272,7 +272,11 @@ To be dynamically used on the settings page
 				.prop("disabled", this.disabled)
 				.on("change", function(){
 					ConfigManager.loadIfNecessary();
-					ConfigManager[ self.config ] = $(this).val();
+					if(typeof (options || {}).casting == "string"){
+						ConfigManager[ self.config ] = window[options.casting]( $(this).val() );
+					} else {
+						ConfigManager[ self.config ] = $(this).val();
+					}
 					ConfigManager.save();
 					elementControl($(this).parent().siblings(".note"), '', KC3Meta.term("SettingsErrorNG"));
 				})

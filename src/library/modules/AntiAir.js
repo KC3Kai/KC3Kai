@@ -579,6 +579,7 @@ AntiAir: anti-air related calculations
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
+	var isGotlandAndra = masterIdEq( 630 );
 	var isFletcherClass = ctypeIdEq( 91 );
 	var isAtlantaClass = ctypeIdEq( 99 );
 	var isYuubariK2 = masterIdEq( 622 );
@@ -941,11 +942,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Tenryuu K2, Gotland Kai
+	// Tenryuu K2, Gotland Kai+
 	declareAACI(
 		30, 3, 1.3,
 		[tenryuuK2Icon, haMountIcon, haMountIcon, haMountIcon],
-		predAnyOf(isTenryuuK2, isGotlandKai),
+		predAnyOf(isTenryuuK2, isGotlandKai, isGotlandAndra),
 		withEquipmentMsts(
 			predAllOf(
 				hasAtLeast( isHighAngleMount, 3 ))
@@ -979,11 +980,11 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Gotland Kai
+	// Gotland Kai/andra
 	declareAACI(
 		33, 3, 1.35,
 		[gotlandKaiIcon, haMountIcon, aaGunIcon],
-		predAllOf(isGotlandKai),
+		predAnyOf(isGotlandKai, isGotlandAndra),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),

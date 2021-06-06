@@ -654,6 +654,7 @@ body {
 	font-family:"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
 	font-size:28px;
 	font-weight:bold;
+	color:#333;
 	text-shadow:1px 1px 2px #f5f5f5, 0px 0px 2px #f5f5f5;
 	pointer-events:none;
 }

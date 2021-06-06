@@ -627,8 +627,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					&& isNextNodeFound
 					// not Striking Force, check if has ETS-CF (client check)
 					: flagship.hasEquipment(413)
-					// And flagship not Taiha, fleet compo is Torpedo Squadron (server-side check?)
-					//   TS conds: FS is CL/DD, others are DD/CLT
+					// And flagship not Taiha, fleet compo is Torpedo Squadron (server-side check)
+					//   TS conds: FS is CL/DD, others are DD/CLT (1<=DD<=7, CL<=1, CLT<=3)
 					// And current battle is not the final node (client check)
 					&& isNextNodeFound
 				:

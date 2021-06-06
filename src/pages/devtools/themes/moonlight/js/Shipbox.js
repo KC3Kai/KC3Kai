@@ -170,6 +170,8 @@
 		if(tagColorId > 0){
 			$(".locktag .solid", this.element).text(this.shipData.sally || "");
 			$(".locktag", this.element).show()
+				.toggleClass("locked", this.shipData.sally > 0)
+				.addClass("color-{0}".format(tagColorId))
 				.css("background-color", this.lockTagColors[tagColorId - 1] || "#aaa")
 				.css("border-color", ConfigManager.pan_ship_icon_border_moon);
 		} else {

@@ -19,6 +19,8 @@
 			this.isShowEdges = true;
 			this.isShowEnemies = false;
 			this.isShowArrows = true;
+			this.isShowEdgeIds = true;
+			this.isShowRedBg = true;
 			this.isShowMarkers = true;
 			this.isLoading = false;
 			this.digEventSpots = false;
@@ -82,10 +84,7 @@
 				this.zoom = Number($(e.target).val());
 				$(".zoom").val(this.zoom).trigger("change");
 			});
-			$(".show_edges").on("change", e => {
-				this.loadMapAssets();
-			});
-			$(".show_enemies").on("change", e => {
+			$(".show_edges, .show_edge_ids, .show_arrows, .show_enemies, .show_red_bg").on("change", e => {
 				this.loadMapAssets();
 			});
 			$(".show_markers").on("change", e => {
@@ -128,7 +127,10 @@
 			$(".zoom").val(this.zoom);
 			$(".zoomSlider").val(this.zoom);
 			$(".show_edges").prop("checked", this.isShowEdges);
+			$(".show_edge_ids").prop("checked", this.isShowEdgeIds);
+			$(".show_arrows").prop("checked", this.isShowArrows);
 			$(".show_enemies").prop("checked", this.isShowEnemies);
+			$(".show_red_bg").prop("checked", this.isShowRedBg);
 			$(".show_markers").prop("checked", this.isShowMarkers);
 			$(".map_url").val(this.mapInfoMetaUrl || "");
 		},
@@ -147,8 +149,10 @@
 			// api_color_no to common image texture, see `SpotPointImage.prototype._getTexture`
 			const getTextureByColorNo = colorNo => {
 				switch(colorNo) {
-					// -99 undefined in `_getTexture`, used by land-base at `AirBaseLayer.prototype.create`
+					// -99 undefined in `_getTexture`, used by land base at `AirBaseLayer.prototype.create`
 					case -99: return 'map_main_18';
+					// -100 undefined either, used by landing flag at `LandingFlag.prototype._getTexture_no`
+					case -100: return 'map_main_38';
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
 					case 0: return 'map_main_55';
@@ -173,7 +177,10 @@
 			this.isLoading = true;
 			$(".loading").css("visibility", "visible");
 			this.isShowEdges = $(".show_edges").prop("checked");
+			this.isShowEdgeIds = $(".show_edge_ids").prop("checked");
+			this.isShowArrows = $(".show_arrows").prop("checked");
 			this.isShowEnemies = $(".show_enemies").prop("checked");
+			this.isShowRedBg = $(".show_red_bg").prop("checked");
 			this.mapImgMetaUrl = getMapRscUrl(this.world, this.map, "image.json");
 			this.mapInfoMetaUrl = getMapRscUrl(this.world, this.map, "info.json");
 			this.updateParams();
@@ -208,6 +215,9 @@
 						console.debug("Unknown BG texture:", bg);
 						continue;
 					}
+					if(!this.isShowRedBg && bg.name === "red") {
+						continue;
+					}
 					const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
 					bgContainer.addChild(new this.pixi.Sprite(frame));
 				}
@@ -230,7 +240,7 @@
 								const sprite = new this.pixi.Sprite(frame);
 								sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
 								stage.addChild(sprite);
-							} else {
+							} else if(KC3Meta.isEventWorld(this.world)) {
 								// Except adding a hidden start point, no line no route spot found (nothing to be drawn) since Fall 2020 E-3
 								// btw an orphan boss node (not linked with any other node) has existed since Rainy 2020 E-3
 								console.debug("Unknown invisible spot:", spot);
@@ -250,6 +260,14 @@
 						if(spot.line.x < 0) fromSpot.x += spot.line.x;
 						if(spot.line.y < 0) fromSpot.y += spot.line.y;
 						const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
+						// Show Landing flag icon beside transport point if exists
+						if(spot.landing) {
+							const flagInfo = spot.landing;
+							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-100));
+							const sprite = new this.pixi.Sprite(frame);
+							sprite.position.set(spot.x + flagInfo.x, spot.y + flagInfo.y - frame.height);
+							stage.addChild(sprite);
+						}
 						// Draw an arrow to indicate the edge direction
 						if(this.isShowArrows) {
 							const grp = new this.pixi.Graphics();
@@ -269,13 +287,15 @@
 							stage.addChild(grp);
 						}
 						// Show edge numbers
-						const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
-						edgeText.anchor.set(
-							1.5 * (Math.abs(angle) / Math.PI),
-							Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
-						);
-						edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-						edgesContainer.addChild(edgeText);
+						if(this.isShowEdgeIds) {
+							const edgeText = new this.pixi.Text(edge, this.pixiTextStyle);
+							edgeText.anchor.set(
+								1.5 * (Math.abs(angle) / Math.PI),
+								Math.abs(spot.y - fromSpot.y) < 100 ? 0.5 : 0.5 - 0.5 * Math.sign(spot.y - fromSpot.y)
+							);
+							edgeText.position.set(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+							edgesContainer.addChild(edgeText);
+						}
 					}
 					// Fill labels of additional nodes
 					if(Array.isArray(this.mapInfoMeta.labels)) {
@@ -308,7 +328,7 @@
 					stage.addChild(edgesContainer);
 					stage.addChild(labelsContainer);
 				}
-				// Show Land-Base 'AB' icon if exists
+				// Show Land base 'AB' icon if exists
 				if(this.mapInfoMeta.airbase) {
 					const airbase = this.mapInfoMeta.airbase;
 					const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-99));

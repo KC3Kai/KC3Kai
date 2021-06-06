@@ -4174,19 +4174,19 @@
 	},
 	"5521": {
 		"api_id": 5521,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日沖波改二",
+		"api_yomi": "おきなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5522": {
 		"api_id": 5522,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "記念日風雲改二",
+		"api_yomi": "かざぐも",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5523": {
 		"api_id": 5523,
@@ -4230,11 +4230,11 @@
 	},
 	"5528": {
 		"api_id": 5528,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "お出掛けSouth Dakota",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5529": {
 		"api_id": 5529,
