@@ -2699,7 +2699,8 @@ KC3改 Ship Object
 		// still okay even 3th and 5th ship are Taiha
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			// Nelson is flagship of a fleet, which min 6 ships needed
+			// Nelson is flagship of a fleet, which min 6 surface ships needed
+			// https://twitter.com/kurosg/status/1401491454732607492
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				// not in any escort fleet of Combined Fleet
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -2708,14 +2709,12 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 3th and 5th ship are not carrier or absent?
+					// 3th and 5th ship are not carrier/submarine or absent?
 					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
-						.some(ship => ship.isAbsent() || ship.isCarrier()),
-					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					// no ship(s) sunk or retreated in mid-sortie?
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isDoubleLine && !invalidCombinedShips && !hasSubmarine && hasSixShips;
+						.some(s => s.isAbsent() || s.isCarrier() || s.isSubmarine()),
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isDoubleLine && !invalidCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -2749,9 +2748,9 @@ KC3改 Ship Object
 					invalidCombinedShips = [fleetObj.ship(1)].some(ship =>
 						ship.isAbsent() || ship.isTaiha() ||
 						![8, 9, 10].includes(ship.master().api_stype)),
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isEchelon && !invalidCombinedShips && !hasSubmarine && hasSixShips;
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isEchelon && !invalidCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -2828,11 +2827,9 @@ KC3改 Ship Object
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
 						.every(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
-					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isEchelon && validCombinedShips && !hasSubmarine && hasSixShips;
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isEchelon && validCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
