@@ -1,3 +1,7 @@
+@media screen and (min-width:1040px) {
+#wrapper { width: 1000px; }
+}
+
 @media screen and (min-width:1240px) {
 /* width can be adjusted */
 #wrapper { width: 1200px; }
@@ -7,22 +11,6 @@
 .tab_mstgear .gearRecord .gearName { width: calc(100% - 20px); }
 
 /* width to be overridden for auto-fit */
-#wrapper { min-width: 800px; }
-#body, #error, #contentHtml, .page_title, .page_padding { width: 100%; }
-#content { width: calc(100% - 100px); }
-.page_help { width: 100%; }
-.dark .page_help { width: calc(100% - 40px); }
-.page_panel { width: 100% !important; }
-.dark .page_panel { width: calc(100% - 20px); }
-.tab_ships .filters .ship_types, .tab_ships .ship_header, .tab_ships .ship_list { width: calc(100% - 10px); }
-.tab_ships .filters .ship_types { height: auto; min-height: 20px; }
-.tab_ships .ship_list.scroll_fix { width: calc(100% - 5px); }
-.tab_ships .ship_header .ship_item, .tab_ships .ship_list .ship_item { width: 100%; }
-.tab_ships .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
-.tab_locking .controls, .tab_locking .lock_modes { width: calc(100% - 10px); }
-.tab_locking .shiplist_box { width: calc(100% - 88px); }
-.tab_locking .ship_header, .tab_locking .ship_header .ship_item, .tab_locking .ship_list, .tab_locking .ship_list .ship_item { width: 100%; }
-.tab_locking .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
 .tab_flowchart .flowchart, .tab_flowchart .questExtraItem { width: 100%; }
 .tab_flowchart .questFlowItem .questDesc { max-width: 80%; }
 .tab_flowchart .questExtraItem .questDesc { width: 92%; }
@@ -49,10 +37,18 @@
 .tab_shipdrop .filters .ship_types { width: calc(100% - 20px); height: auto; min-height: 20px; }
 }
 
+@media screen and (min-width:1440px) {
+#wrapper { width: 1400px; }
+}
+
 @media screen and (min-width:1640px) {
 #wrapper { width: 1600px; }
 }
 
 @media screen and (min-width:1940px) {
 #wrapper { width: 1900px; }
+}
+
+@media screen and (min-width:2240px) {
+#wrapper { width: 2200px; }
 }

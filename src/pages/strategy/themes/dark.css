@@ -5,14 +5,15 @@ body {
 }
 #wrapper {
 	width:800px;
+	min-width:800px;
 	margin:0px auto;
 }
 #error {
-	width:800px;
+	width:100%;
 	margin:10px 0px 20px 0px;
 }
 #body {
-	width:800px;
+	width:100%;
 	margin:10px 0px 10px 0px;
 }
 .factory {
@@ -386,7 +387,7 @@ button, input, select, textarea {
 /* CONTENT
 -------------------------------*/
 #content {
-	width:700px;
+	width:calc(100% - 100px);
 	float:left;
 	background:#222222;
 	overflow:hidden;
@@ -396,13 +397,13 @@ button, input, select, textarea {
 	min-height:calc(400px + 25px * 43);
 }
 #contentHtml {
-	width:700px;
+	width:calc(100% + 2px);
 }
 
 /* COMMONS: TITLE
 -------------------------------*/
 .page_title {
-	width:700px;
+	width:100%;
 	font-size:20px;
 	height:34px;
 	line-height:34px;
@@ -443,7 +444,7 @@ button, input, select, textarea {
 /* COMMONS: HELP BOX
 -------------------------------*/
 .page_help {
-	width:660px;
+	width:calc(100% - 40px);
 	min-height:200px;
 	background:#333;
 	background-position:bottom right;
@@ -481,7 +482,7 @@ button, input, select, textarea {
 /* COMMONS: HELP
 -------------------------------*/
 .page_panel {
-	width:680px;
+	width:calc(100% - 20px);
 	min-height:30px;
 	background:#131313;
 	padding:8px 10px 5px 10px;
@@ -504,7 +505,7 @@ button, input, select, textarea {
 	color:#ffcc00;
 }
 .page_padding {
-	width:700px;
+	width:100%;
 	padding:0px 10px 0px;
 }
 /* COMMONS: SECTIONS
@@ -845,16 +846,19 @@ button, input, select, textarea {
 	border-radius:0px;
 }
 .tab_ships .massSelect dl {
-	width: 32.576%;
+	width: calc(33% - 2px);
 }
 .tab_ships .massSelect dl.halfwide {
-	width: 49.15%;
+	width: calc(50% - 4px);
 }
 .tab_ships .massSelect dl.fullwide {
-	width: 98.8%;
+	width: calc(100% - 4px);
 }
 .tab_ships .massSelect dl.halfwide .hover.on {
 	padding: 0 2px;
+}
+.tab_ships .filters .ship_types {
+	width: calc(100% + 18px);
 }
 .tab_ships .ship_list.scroll_fix::-webkit-scrollbar-track {
 	background: #303030;
@@ -2207,7 +2211,7 @@ button, input, select, textarea {
 /* EXPEDITION SCORER
 --------------------------------*/
 .tab_expedscorer .page_panel {
-	width: 700px;
+	width: 100%;
 }
 .tab_expedscorer .control_box {
 	background: #666666;
@@ -2251,7 +2255,7 @@ button, input, select, textarea {
 /* EXPEDITION HISTORY
 --------------------------------*/
 .tab_expedpast .page_panel {
-	width: 700px;
+	width: 100%;
 }
 
 .tab_expedpast .expedNumBox {

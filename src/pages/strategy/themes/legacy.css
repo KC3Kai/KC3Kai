@@ -5,14 +5,15 @@ body {
 
 #wrapper {
 	width:800px;
+	min-width:800px;
 	margin:0px auto;
 }
 #error {
-	width:800px;
+	width:100%;
 	margin:10px 0px 20px 0px;
 }
 #body {
-	width:800px;
+	width:100%;
 	margin:10px 0px 10px 0px;
 }
 .factory {
@@ -366,7 +367,7 @@ body {
 /* CONTENT
 -------------------------------*/
 #content {
-	width:700px;
+	width:calc(100% - 100px);
 	min-height:960px;
 	float:left;
 	background:#fff;
@@ -380,13 +381,13 @@ body {
 	min-height:calc(460px + 25px * 43);
 }
 #contentHtml {
-	width:700px;
+	width:calc(100% + 2px);
 }
 
 /* COMMONS
 -------------------------------*/
 .page_title {
-	width:700px;
+	width:100%;
 	font-size:18px;
 	height:30px;
 	line-height:30px;
@@ -428,7 +429,7 @@ body {
 /* COMMONS: HELP BOX
 -------------------------------*/
 .page_help {
-	width:700px;
+	width:100%;
 	min-height:200px;
 	background:url(../../../assets/img/ui/fairy.png) #e6ffe6;
 	background-position:bottom right;
@@ -464,14 +465,14 @@ body {
 /* COMMONS: HELP
 -------------------------------*/
 .page_panel {
-	width:700px;
+	width:100%;
 	background:#f0f5ff;
 	padding:5px 10px;
 	border-bottom:1px solid #369;
 }
 
 .page_padding {
-	width:700px;
+	width:100%;
 	padding:0px 10px 0px;
 }
 /* COMMONS: SECTIONS
