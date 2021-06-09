@@ -74,7 +74,7 @@
 }
 .tab_ships .filters .ship_types {
 	display:flex;
-	flex-wrap:wrap;
+	flex-flow:row wrap;
 	width:100%;
 	min-height:20px;
 	margin:0px 0px 5px 0px;
@@ -302,13 +302,13 @@
 }
 /* Icons */
 .tab_ships .ship_header .ship_item {
+	display:flex;
 	width:100%;
 	height:20px;
 	line-height:20px;
 	font-size:12px;
 	font-weight:bold;
 	margin:0px 0px 3px 0px;
-	display:flex;
 }
 .tab_ships .ship_header .ship_item .ship_id {
 	text-align:center;
@@ -333,13 +333,15 @@
 /* SHIP LIST
 ------------------------------*/
 .tab_ships .ship_list {
+	display:block;
+	display:flow-root;
 	width:100%;
+	height:auto;
 	min-height:50px;
 	margin:0px 0px 5px 0px;
-	display:flex;
-	flex-wrap:wrap;
 }
 .tab_ships .scroll_fix .ship_list {
+	height:calc(100vh - var(--shipListOffsetTop) - 5px);
 	overflow-x:hidden;
 	overflow-y:scroll;
 }

@@ -1361,7 +1361,9 @@
 			$(".ship_list").toggleClass("scroll_fix", isFixed);
 			$(".page_padding").toggleClass("scroll_fix", isFixed);
 			if(isFixed){
-				$(".ship_list").height(window.innerHeight - $(".ship_list").offset().top - 5);
+				//$(".ship_list").height(window.innerHeight - $(".ship_list").offset().top - 5);
+				$(".page_padding").get(0).style
+					.setProperty("--shipListOffsetTop", $(".ship_list").offset().top + "px");
 			}
 		},
 
