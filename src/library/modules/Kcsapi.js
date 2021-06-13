@@ -844,6 +844,12 @@ Previously known as "Reactor"
 						PlayerManager.akashiRepair.onChange(PlayerManager.fleets[oldFleetIndex]);
 						PlayerManager.fleets[oldFleetIndex].updateAkashiRepairDisplay();
 					}
+					// If the same fleet, target ship might be dragged to an empty slot after another empty slot
+					else {
+						// Sort all empty slots (value -1) to array trailing, keep ship slots order unchanged
+						PlayerManager.fleets[oldFleetIndex].ships.sort((a, b) =>
+							a > -1 && b > -1 ? 0 : a == -1 ? 1 : b == -1 ? -1 : 0);
+					}
 				}
 			} else { // Remove ship
 				PlayerManager.fleets[fleetIndex].ships.splice(changedIndex, 1);
