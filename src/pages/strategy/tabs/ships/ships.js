@@ -250,7 +250,10 @@
 				KC3StrategyTabs.reloadTab(undefined, true);
 			});
 			$(".control_buttons .show_hidden_columns").on("click", function(){
-				$(".hidden").removeClass("hidden");
+				$(".page_padding").toggleClass("more_columns");
+				const hiddenColumns = $(".factory .ship_item .ship_field.hidden"),
+					totalWidth = (hiddenColumns.width() + 1) * hiddenColumns.length;
+				self.setStyleVar("--hiddenColumnsWidth", totalWidth + "px");
 			});
 			// Binding click event ends
 
@@ -1361,10 +1364,15 @@
 			$(".ship_list").toggleClass("scroll_fix", isFixed);
 			$(".page_padding").toggleClass("scroll_fix", isFixed);
 			if(isFixed){
-				//$(".ship_list").height(window.innerHeight - $(".ship_list").offset().top - 5);
-				$(".page_padding").get(0).style
-					.setProperty("--shipListOffsetTop", $(".ship_list").offset().top + "px");
+				this.setStyleVar("--shipListOffsetTop", $(".ship_list").offset().top + "px");
 			}
+		},
+
+		setStyleVar(name, value, jqElm = $(".page_padding")){
+			if(!jqElm || !jqElm.length) return;
+			const nativeStyle = jqElm.get(0).style;
+			nativeStyle.removeProperty(name);
+			if(typeof value !== "undefined") nativeStyle.setProperty(name, value);
 		},
 
 		/* Compute Derived Stats without Equipment

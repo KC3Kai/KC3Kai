@@ -271,6 +271,7 @@
 .tab_locking .ship_item .ship_img {
 	position: relative;
 	width: 20px;
+	min-width: 20px;
 }
 
 .tab_locking .ship_item .ship_img img.ship_icon {
@@ -292,28 +293,31 @@
 
 .tab_locking .ship_item .ship_type {
 	width: 30px;
+	min-width: 30px;
 	text-align: center;
 }
 
 .tab_locking .ship_item .ship_lv {
-	width: 50px;
 	text-align: center;
 	position: relative;
 }
 
 .tab_locking .ship_item .ship_status {
 	width: 70px;
+	min-width: 70px;
 	text-align: center;
 	position: relative;
 }
 
 .tab_locking .ship_item .ship_bar {
 	width: 106px;
+	min-width: 106px;
 	position: relative;
 }
 
 .tab_locking .ship_item .ship_sally {
 	width: 20px;
+	min-width: 20px;
 	text-align: center;
 	position: relative;
 	font-weight: bold;
@@ -321,11 +325,13 @@
 
 .tab_locking .ship_item .ship_stat {
 	width: 25px;
+	min-width: 25px;
 	text-align: center;
 }
 
 .tab_locking .ship_item .ship_stat_mod {
 	width: 35px;
+	min-width: 35px;
 	text-align: center;
 }
 
@@ -336,6 +342,7 @@
 /* Fields: Equips */
 .tab_locking .ship_item .ship_equip {
 	width: 80px;
+	min-width: 80px;
 	margin-right: 0;
 }
 
@@ -384,6 +391,7 @@
 .tab_locking .ship_header .ship_lv,
 .tab_locking .ship_list .ship_item .ship_lv {
 	width: 25px;
+	min-width: 25px;
 }
 
 .tab_locking .ship_item .ship_lock {
