@@ -115,14 +115,14 @@
 /* HEADER
 ------------------------------*/
 .tab_shipquests .ship_header {
-	width:680px;
+	width:100%;
 	height:22px;
 	margin:0px 0px 0px 0px;
 }
 /* Icons */
 .tab_shipquests .ship_header .ship_item {
 	display:flex;
-	width:680px;
+	width:100%;
 	height:20px;
 	line-height:20px;
 	font-size:12px;
@@ -133,14 +133,14 @@
 /* SHIP LIST
 ------------------------------*/
 .tab_shipquests .ship_list {
-	width:680px;
+	width:100%;
 	min-height:50px;
 	margin:0px 0px 5px 0px;
 }
 /* Row */
 .tab_shipquests .ship_list .ship_item {
 	display:flex;
-	width:680px;
+	width:100%;
 	height:auto;
 	min-height:20px;
 	line-height:20px;
@@ -156,7 +156,7 @@
 	margin:0px 2px 0px 0px;
 }
 .tab_shipquests .ingame_page {
-	width:680px;
+	width:100%;
 	line-height:14px;
 	font-size:14px;
 	margin:0px 0px 2px 0px;
@@ -241,6 +241,7 @@
 .tab_shipquests .ship_item .ship_quests {
 	width:auto;
 	min-width:430px;
+	flex-grow:1;
 	height:auto;
 	min-height:20px;
 	overflow:initial;
