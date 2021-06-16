@@ -796,7 +796,7 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShip([543]) // Naganami K2
 							&& fleet.hasShip([
-								345, // Takanami Kai
+								345, 649, // Takanami Kai/K2
 								359, 569, // Okinami Kai/K2
 								344, 578, // Asashimo Kai/K2
 							]);
