@@ -3616,8 +3616,8 @@ KC3改 Ship Object
 		if (isChuuhaOrWorse) { baseValue += 18; }
 		// Ship Personnel bonus
 		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
-		// Torpedo Squadron Skilled Lookouts +10 in total?
-		if (this.hasEquipment(412)) { baseValue += 5; }
+		// Torpedo Squadron Skilled Lookouts +9 in total?
+		if (this.hasEquipment(412)) { baseValue += 4; }
 		// Searchlight bonus, large SL unknown for now
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (fleetSearchlight) { baseValue += 7; }
@@ -3747,12 +3747,12 @@ KC3改 Ship Object
 				"CutinNFNDBSF" : undefined,
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
-			7: 130,
+			7: 115,
 			8: 150,
 			9: 122,
 			10: 150, // unknown, inherit from 8
 			// Doubled hits versions
-			11: 130,
+			11: 115,
 			12: 150,
 			13: 122,
 			14: 150,
