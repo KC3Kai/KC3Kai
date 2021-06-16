@@ -2682,8 +2682,8 @@ KC3改 Ship Object
 	/**
 	 * Conditions under verification, known for now:
 	 * Flagship is healthy Nelson, Double Line variants formation selected.
-	 * Min 6 ships fleet needed, main fleet only for Combined Fleet.
-	 * 3rd, 5th ship not carrier, no any submarine in fleet.
+	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
+	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
 	 *
 	 * No PvP sample found for now.
@@ -2699,7 +2699,8 @@ KC3改 Ship Object
 		// still okay even 3th and 5th ship are Taiha
 		if(KC3Meta.nelsonTouchShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
-			// Nelson is flagship of a fleet, which min 6 ships needed
+			// Nelson is flagship of a fleet, which min 6 surface ships needed
+			// https://twitter.com/kurosg/status/1401491454732607492
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
 				// not in any escort fleet of Combined Fleet
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -2708,14 +2709,12 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 3th and 5th ship are not carrier or absent?
+					// 3th and 5th ship are not carrier/submarine or absent?
 					invalidCombinedShips = [fleetObj.ship(2), fleetObj.ship(4)]
-						.some(ship => ship.isAbsent() || ship.isCarrier()),
-					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					// no ship(s) sunk or retreated in mid-sortie?
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isDoubleLine && !invalidCombinedShips && !hasSubmarine && hasSixShips;
+						.some(s => s.isAbsent() || s.isCarrier() || s.isSubmarine()),
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isDoubleLine && !invalidCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -2749,9 +2748,9 @@ KC3改 Ship Object
 					invalidCombinedShips = [fleetObj.ship(1)].some(ship =>
 						ship.isAbsent() || ship.isTaiha() ||
 						![8, 9, 10].includes(ship.master().api_stype)),
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isEchelon && !invalidCombinedShips && !hasSubmarine && hasSixShips;
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isEchelon && !invalidCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -2828,11 +2827,9 @@ KC3改 Ship Object
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
 						.every(ship => !ship.isAbsent() && !ship.isStriped()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
-					// submarine in any position of the fleet?
-					hasSubmarine = fleetObj.ship().some(s => s.isSubmarine()),
-					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
-					hasSixShips = fleetObj.countShips(true) >= 6;
-				return isEchelon && validCombinedShips && !hasSubmarine && hasSixShips;
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				return isEchelon && validCombinedShips && hasSixSurfaceShips;
 			}
 		}
 		return false;
@@ -2888,7 +2885,7 @@ KC3改 Ship Object
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
-	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet)
+	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
 	 * And it's impossible to be triggered after any other daytime Big-7 special cutin,
@@ -2921,7 +2918,7 @@ KC3改 Ship Object
 						"592": [591, 152],
 					}[this.masterId] || []).includes(fleetObj.ship(1).masterId)
 						&& !fleetObj.ship(1).isStriped(),
-					// uncertain: ship(s) sunk or retreated in mid-sortie can prevent proc?
+					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
 				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
 			}
@@ -3619,8 +3616,8 @@ KC3改 Ship Object
 		if (isChuuhaOrWorse) { baseValue += 18; }
 		// Ship Personnel bonus
 		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
-		// Torpedo Squadron Skilled Lookouts +10 in total?
-		if (this.hasEquipment(412)) { baseValue += 5; }
+		// Torpedo Squadron Skilled Lookouts +9 in total?
+		if (this.hasEquipment(412)) { baseValue += 4; }
 		// Searchlight bonus, large SL unknown for now
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (fleetSearchlight) { baseValue += 7; }
@@ -3750,12 +3747,12 @@ KC3改 Ship Object
 				"CutinNFNDBSF" : undefined,
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
-			7: 130,
+			7: 115,
 			8: 150,
 			9: 122,
 			10: 150, // unknown, inherit from 8
 			// Doubled hits versions
-			11: 130,
+			11: 115,
 			12: 150,
 			13: 122,
 			14: 150,

@@ -652,7 +652,8 @@
 				if(request.action != "getGamescreenOffset") return true;
 				response({
 					top: $("#area-game").offset().top,
-					left: $("#area-game").offset().left
+					left: $("#area-game").offset().left,
+					devicePixelRatio: window.devicePixelRatio
 				});
 			};
 		},

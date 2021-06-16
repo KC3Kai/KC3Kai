@@ -169,7 +169,7 @@
 			}
 
 			// List up equipment 4 slots (ex-slot not included)
-			[1, 2, 3, 4].forEach(num => {
+			[1, 2, 3, 4, 5].forEach(num => {
 				this.showEquipIcon(shipRow, num, ship.slots[num - 1], ship.equip[num - 1]);
 			});
 		}

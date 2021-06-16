@@ -24,7 +24,7 @@
 				this.jpQuotes = KC3Translation.getQuotes(this.repo_loc, false, "jp", false, false);
 		},
 		buildShipName: function(masterId, shipData) {
-			return "[{0}] {1}".format(masterId, KC3Meta.shipName((shipData||KC3Master.ship(masterId)).api_name) );
+			return "[{0}] {1}".format(masterId, shipData ? KC3Meta.shipName(shipData.api_name) : KC3Meta.shipNameById(masterId));
 		},
 		showVoiceDetail: function(masterId) {
 			var self = this;
@@ -36,7 +36,7 @@
 			var shipLines = quotes[masterId];
 			var shipData = KC3Master.ship(masterId);
 			$(".voice_list").html("");
-			$(".ship_info .ship_name").text( this.buildShipName(masterId, shipData) );
+			$(".ship_info .ship_name").text(this.buildShipName(masterId));
 			$(".ship_info .ship_name").data("id", masterId);
 			$(".ship_info .ship_name").addClass("hover").off("click").click(function(){
 				KC3StrategyTabs.gotoTab("mstship", $(this).data("id") );
