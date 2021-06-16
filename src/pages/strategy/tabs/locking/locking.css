@@ -457,13 +457,13 @@
 	height: calc(100vh - var(--shipListOffsetTop) - 5px);
 }
 
-.tab_locking .scroll_fix::-webkit-scrollbar {
+.tab_locking .vscroll::-webkit-scrollbar {
 	width: 5px;
 }
-.tab_locking .scroll_fix::-webkit-scrollbar-track {
+.tab_locking .vscroll::-webkit-scrollbar-track {
 	background: #ddd;
 }
-.tab_locking .scroll_fix::-webkit-scrollbar-thumb {
+.tab_locking .vscroll::-webkit-scrollbar-thumb {
 	background: #666;
 }
 

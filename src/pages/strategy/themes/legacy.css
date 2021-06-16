@@ -528,6 +528,9 @@ body {
 /* COMMONS: SHIP LIST
 -------------------------------*/
 
+.ship_header .ship_item:hover .ship_field {
+	background:#ffffcc;
+}
 .ship_header .ship_item .ship_field.sorted {
 	background:#c4c4c4;
 }
@@ -715,9 +718,6 @@ body {
 .tab_ships .ship_filter_type .filter_check {
 	background:#000;
 }
-.tab_ships .ship_item .ship_field.sorted {
-	background:#c4c4c4;
-}
 .tab_ships .ship_item.odd .ship_field {
 	background:#efefef;
 }
@@ -726,6 +726,9 @@ body {
 }
 .tab_ships .ship_item:hover .ship_field {
 	background:#ffffcc;
+}
+.tab_ships .ship_item .ship_field.sorted {
+	background:#c4c4c4;
 }
 .tab_ships .ship_onfleet-color1 {background: #90D4ED !important;}
 .tab_ships .ship_onfleet-color2 {background: #BBDDBA !important;}

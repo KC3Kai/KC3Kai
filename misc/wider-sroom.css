@@ -17,11 +17,11 @@
 .tab_docking .ship_header, .tab_docking .ship_list { width: 100%; }
 .tab_docking .ship_header .ship_item, .tab_docking .ship_list .ship_item { width: 100%; }
 .tab_docking .ship_item .ship_name { width: auto; min-width: 92px; flex-grow: 1; }
-.tab_blueprints .ship_list, .tab_blueprints .view_types { width: 100%; }
-.tab_blueprints .ship_list .ship_item { width: 100%; }
+.tab_blueprints .ship_list, .tab_blueprints .ship_header, .tab_blueprints .view_types { width: 100%; }
+.tab_blueprints .ship_list .ship_item, .tab_blueprints .ship_header .ship_item { width: 100%; }
 .tab_blueprints .ship_item .need_materials { width: auto; min-width: 430px; flex-grow: 1; }
-.tab_shipquests .ship_list { width: 100%; }
-.tab_shipquests .ship_list .ship_item { width: 100%; }
+.tab_shipquests .ship_list, .tab_shipquests .ship_header { width: 100%; }
+.tab_shipquests .ship_list .ship_item, .tab_shipquests .ship_header .ship_item { width: 100%; }
 .tab_shipquests .ship_item .ship_quests { width: auto; min-width: 430px; flex-grow: 1; }
 .tab_gears .item_list { width: 100%; }
 .tab_fleet .fleet_control, .tab_fleet .fleet_list, .tab_fleet .fleet_box, .tab_fleet .fleet_info { width: 100%; }

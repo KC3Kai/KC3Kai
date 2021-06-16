@@ -174,11 +174,13 @@
 }
 .tab_shipquests .ship_item .ship_id {
 	width:44px;
+	min-width:44px;
 	text-align:center;
 }
 .tab_shipquests .ship_item .ship_img {
 	position:relative;
 	width:20px;
+	min-width:20px;
 }
 .tab_shipquests .ship_item .ship_img img.ship_icon {
 	width:20px;
@@ -216,6 +218,7 @@
 }
 .tab_shipquests .ship_item .ship_name {
 	width:92px;
+	min-width:92px;
 	overflow:hidden;
 	white-space:nowrap;
 	position:relative;
@@ -224,17 +227,20 @@
 }
 .tab_shipquests .ship_item .ship_type {
 	width:30px;
+	min-width:30px;
 	text-align:center;
 }
 .tab_shipquests .ship_item .ship_lv {
 	width:50px;
+	min-width:50px;
 	text-align:center;
 	position:relative;
 	overflow:hidden;
 	white-space:nowrap;
 }
 .tab_shipquests .ship_item .ship_quests {
-	width:430px;
+	width:auto;
+	min-width:430px;
 	height:auto;
 	min-height:20px;
 	overflow:initial;
@@ -242,6 +248,7 @@
 }
 .tab_shipquests .ship_item .ship_stat {
 	width:35px;
+	min-width:35px;
 	text-align:center;
 }
 .tab_shipquests .ship_item .ship_stat span {
