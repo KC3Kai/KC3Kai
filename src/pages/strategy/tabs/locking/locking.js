@@ -22,6 +22,7 @@
             this.eoLocks = ConfigManager.sr_locktag_eo || configs.eoTagIds || [];
             this.heartLockMode = 2;
             this.showShipLevel = true;
+            this.scrollFixed = true;
             this.currentTab = "all";
         }
 
@@ -57,9 +58,15 @@
             $(".clearAllPlans", this.tab).on("click", this.clearAllPlannedLocks.bind(this));
             $(".toggleShipLevel", this.tab).on("click", (e) => {
                 this.showShipLevel = !this.showShipLevel;
-                $(".ships_area .lship .level").toggle(this.showShipLevel);
+                $(".ships_area .lship .level", this.tab).toggle(this.showShipLevel);
             });
-            $(".ships_area .lship .level").toggle(this.showShipLevel);
+            $(".ships_area .lship .level", this.tab).toggle(this.showShipLevel);
+            $(".toggleFixedScroll", this.tab).on("click", (e) => {
+                this.scrollFixed = !this.scrollFixed;
+                $(".vscroll", this.tab).toggleClass("scroll_fix", this.scrollFixed);
+                if (this.scrollFixed) this.adjustHeight();
+            });
+            $(".vscroll", this.tab).toggleClass("scroll_fix", this.scrollFixed);
 
             this.shipListDiv = $(".ship_list", this.tab);
             this.shipListDiv.on("preShow", () => {

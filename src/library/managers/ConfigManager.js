@@ -90,7 +90,7 @@ Retrieves when needed to apply on components
 				ss_type      : 'PNG',
 				ss_quality   : 90,
 				ss_directory : 'KanColle',
-				ss_dppx      : 1,
+				ss_dppx      : 0,
 				ss_smooth    : true,
 
 				alert_diff         : 59,

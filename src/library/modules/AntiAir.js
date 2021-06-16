@@ -626,8 +626,11 @@ AntiAir: anti-air related calculations
 	// might be able to trigger as long as ship can equip corresponding equipment.
 	// but kind 5,7,8,9 (contains HA mount) seems never trigger on Akizuki-class,
 	// reason might be: https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
+	// Besides, there are 3 elements in KC vita `antifireParam` (see `Server_Controllers.BattleLogic/Exec_AirBattle.cs`)
+	//   fixed bonus [0] default to 1 for player, 0 for enemy, [1] another part of fixed bonus, [2] is modifier.
+	//   however wikiwiki have assumed all fixed bonus +1, so values here are [0] + [1] - 1
 	declareAACI(
-		5, 4, 1.5,
+		5, 4, 1.5, // vita value: [2, 3, 1.55]
 		[surfaceShipIcon, biHaMountIcon, biHaMountIcon, radarIcon],
 		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -638,7 +641,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		8, 4, 1.4,
+		8, 4, 1.4, // vita value: [2, 3, 1.45]
 		[surfaceShipIcon, biHaMountIcon, radarIcon],
 		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -649,7 +652,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		7, 3, 1.35,
+		7, 3, 1.35, // vita value: [2, 2, 1.35]
 		[surfaceShipIcon, haMountIcon, aaFdIcon, radarIcon],
 		// 8cm HA variants can be equipped on ex-slot for some ships, min slots can be 2
 		// but for now, these ships are all not 2-slot DD
@@ -663,7 +666,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		9, 2, 1.3,
+		9, 2, 1.3, // vita value: [1, 2, 1.3]
 		[surfaceShipIcon, haMountIcon, aaFdIcon],
 		predAllOf(isNotSubmarine, predNot(isAkizukiClass), slotNumAtLeast(1)),
 		withEquipmentMsts(
@@ -674,7 +677,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		12, 3, 1.25,
+		12, 3, 1.25, // vita value: [1, 3, 1.25]
 		[surfaceShipIcon, cdmgIcon, aaGunIcon, radarIcon],
 		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -689,7 +692,7 @@ AntiAir: anti-air related calculations
 
 	// battleship special AACIs
 	declareAACI(
-		4, 6, 1.5,
+		4, 6, 1.5, // vita value: [5, 2, 1.5]
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon, radarIcon],
 		predAllOf(isBattleship, slotNumAtLeast(4)),
 		withEquipmentMsts(
@@ -702,7 +705,7 @@ AntiAir: anti-air related calculations
 	);
 
 	declareAACI(
-		6, 4, 1.45,
+		6, 4, 1.45, // vita value: [4, 1, 1.5]
 		[battleShipIcon, lcMainGunIcon, type3ShellIcon, aaFdIcon],
 		predAllOf(isBattleship, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -754,7 +757,7 @@ AntiAir: anti-air related calculations
 
 	// Akizuki-class AACIs
 	declareAACI(
-		1, 7, 1.7,
+		1, 7, 1.7, // vita value: [3, 5, 1.75]
 		[akizukiIcon, haMountIcon, haMountIcon, radarIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(3)),
 		withEquipmentMsts(
@@ -764,7 +767,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		2, 6, 1.7,
+		2, 6, 1.7, // vita value: [3, 4, 1.7]
 		[akizukiIcon, haMountIcon, radarIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -774,7 +777,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		3, 4, 1.6,
+		3, 4, 1.6, // vita value: [2, 3, 1.6]
 		[akizukiIcon, haMountIcon, haMountIcon],
 		predAllOf(isAkizukiClass, slotNumAtLeast(2)),
 		withEquipmentMsts(
@@ -784,7 +787,7 @@ AntiAir: anti-air related calculations
 
 	// Maya K2
 	declareAACI(
-		10, 8, 1.65,
+		10, 8, 1.65, // vita value: [3, 6, 1.65]
 		[mayaK2Icon, haMountIcon, cdmgIcon, radarIcon],
 		// Omitted slot num for specified ship, same below
 		predAllOf(isMayaK2),
@@ -796,7 +799,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		11, 6, 1.5,
+		11, 6, 1.5, // vita value: [2, 5, 1.5]
 		[mayaK2Icon, haMountIcon, cdmgIcon],
 		predAllOf(isMayaK2),
 		withEquipmentMsts(
@@ -807,6 +810,7 @@ AntiAir: anti-air related calculations
 	);
 	// api_kind 13 deprecated by devs
 	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
+	// vita value: [1, 4, 1.35]
 
 	// Isuzu K2
 	declareAACI(

@@ -4,7 +4,6 @@ var enableShelfTimer = false;
 function KCScreenshot(){
 	ConfigManager.load();
 	this.autoDpi = !ConfigManager.ss_dppx;
-	this.scale = ((ConfigManager.api_gameScale || 100) / 100) * (ConfigManager.ss_dppx || window.devicePixelRatio || 1);
 	this.gamebox = {};
 	this.canvas = {};
 	this.context = {};
@@ -25,6 +24,11 @@ KCScreenshot.prototype.setCallback = function(callback){
 	return this;
 };
 
+KCScreenshot.prototype.getCurrentScale = function(gameWindowDpr){
+	return ((ConfigManager.api_gameScale || 100) / 100)
+		* (ConfigManager.ss_dppx || gameWindowDpr || window.devicePixelRatio || 1);
+};
+
 KCScreenshot.prototype.start = function(playerName, element){
 	this.playerName = playerName;
 	this.gamebox = element;
@@ -37,15 +41,17 @@ KCScreenshot.prototype.remoteStart = function(tabId, offset){
 	this.tabId = tabId;
 	this.offset = offset;
 	this.generateScreenshotFilename(false);
-	this.prepare();
+	this.prepare(offset.devicePixelRatio);
 	this.remoteCapture();
 };
 
-KCScreenshot.prototype.prepare = function(){
+KCScreenshot.prototype.prepare = function(gameWindowDpr){
+	var scale = this.getCurrentScale(gameWindowDpr);
+	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 1200 * this.scale;
-	this.canvas.height = 720 * this.scale;
+	this.canvas.width = 1200 * scale;
+	this.canvas.height = 720 * scale;
 	this.context = this.canvas.getContext("2d");
 	this.context.imageSmoothingEnabled = this.imageSmoothing;
 	
@@ -135,12 +141,13 @@ KCScreenshot.prototype.handleLastError = function(lastError, apiDesc, funcName){
 
 KCScreenshot.prototype.crop = function(offset, isRemote){
 	var self = this;
+	var scale = this.getCurrentScale(offset.devicePixelRatio);
 	
 	// Get zoom factor
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
 		// Viewing page zoom factor has been taken into account by window.devicePixelRatio,
 		// if image not captured from remote background page
-		var realScale = self.autoDpi && !isRemote ? self.scale : zoomFactor * self.scale;
+		var realScale = self.autoDpi && !isRemote ? scale : zoomFactor * scale;
 		// Get gamebox dimensions and position
 		var params = {
 			realWidth: 1200 * realScale,
@@ -158,8 +165,8 @@ KCScreenshot.prototype.crop = function(offset, isRemote){
 			params.realHeight,
 			0,
 			0,
-			1200 * self.scale,
-			720 * self.scale
+			1200 * scale,
+			720 * scale
 		);
 		
 		self.output();

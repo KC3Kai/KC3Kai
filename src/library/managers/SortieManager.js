@@ -605,9 +605,10 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			// https://wikiwiki.jp/kancolle/%E9%81%8A%E6%92%83%E9%83%A8%E9%9A%8A%20%E8%89%A6%E9%9A%8A%E5%8F%B8%E4%BB%A4%E9%83%A8#process
 			// https://wikiwiki.jp/kancolle/%E7%B2%BE%E9%8B%AD%E6%B0%B4%E9%9B%B7%E6%88%A6%E9%9A%8A%20%E5%8F%B8%E4%BB%A4%E9%83%A8#process
 			// https://kancolle.fandom.com/wiki/Fleet_Command_Facility
-			// For now only to event map, can sortie with CF and SF
+			// For now only to event map, can sortie with CF or SF or DesRon
 			const isSortieAtEvent = KC3Meta.isEventWorld(this.map_world);
 			const sortiedFleets = this.focusedFleet.map(id => PlayerManager.fleets[id]);
+			// Will return false at once if server-side checks failed
 			if(!isSortieAtEvent || !sortiedFleets.length || !this.fcfCheck.ships || !this.fcfCheck.ships.length)
 				return { isAvailable: false };
 			const isCombinedSortie = sortiedFleets.length >= 2;
@@ -615,36 +616,32 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			const flagship = sortiedFleets[0].ship(0);
 			const taihaShip = KC3ShipManager.get(this.fcfCheck.ships[0]);
 			const escortShip = isCombinedSortie && KC3ShipManager.get(this.fcfCheck.ships[1]);
+			// Current battle is not a final node of the map
 			const isNextNodeFound = !!this.currentNode().nodeData.api_next;
 			const canUseFCF = !isCombinedSortie ?
 				// is Striking Force (fleet #3) sortied (both check)
 				this.fleetSent === 3 && sortiedFleets[0].ships[6] > 0 ?
-					// And flagship has SF-FCF (FCF incapable) (client check)
-					flagship.hasEquipment(272)
-					// And not flagship Taiha (supposed server-side checked already)
+					// And flagship has SF-FCF (FCF incapable) (both check)
+					// ETS-CF capable for Torpedo Squadron only (server-side check)
+					flagship.hasEquipment([272, 413])
+					// And not flagship Taiha (server-side check)
 					//&& taihaShip.fleetPosition()[0] > 0
-					// And current battle is not the final node (client check)
-					&& isNextNodeFound
-					// not Striking Force, check if has ETS-CF (client check)
+					// not Striking Force, check if has ETS-CF (both check)
 					: flagship.hasEquipment(413)
 					// And flagship not Taiha, fleet compo is Torpedo Squadron (server-side check)
 					//   TS conds: FS is CL/DD, others are DD/CLT (1<=DD<=7, CL<=1, CLT<=3)
-					// And current battle is not the final node (client check)
-					&& isNextNodeFound
 				:
-				// Main fleet flagship has FCF (client check)
+				// Main fleet flagship has FCF (both check)
 				flagship.hasEquipment(107)
-				// And Taiha ship not flagship of main and escort (server check)
+				// And Taiha ship not flagship of main and escort (server-side check)
 				//&& taihaShip.fleetPosition()[0] > 0
-				// And escort-able DD available (flagship DD incapable) (server check)
+				// And escort-able DD available (flagship DD incapable) (server-side check)
 				//&& !!escortShip && !escortShip.isDummy() && !escortShip.isAbsent()
 				//&& escortShip.fleetPosition()[0] > 0
 				//&& !escortShip.isTaiha()
-				// And current battle is not the final node (client check)
-				&& isNextNodeFound
 				;
 			return {
-				isAvailable: canUseFCF,
+				isAvailable: canUseFCF && isNextNodeFound,
 				isCombined: isCombinedSortie,
 				fcfType: singleSortieType,
 				shipToRetreat: taihaShip,
