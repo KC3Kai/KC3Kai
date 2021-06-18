@@ -3465,7 +3465,7 @@ KC3改 Ship Object
 						if(hasCapableRadar && hasSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
 						// special cutins for Torpedo Squadron SLO since 2021-04-30
-						// lower priority than regual cutins below, no D gun modifier
+						// lower priority than regular cutins below, no D gun modifier
 						// https://twitter.com/yukicacoon/status/1388100262938562563
 						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(9 + diff));
@@ -3486,17 +3486,21 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
 				if(lateTorpedoCnt >= 2)
 					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
-				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
-				// will not mutex if 5 slots ships can equip torpedo
+				// although modifier & type factor not top CI, but seems be more frequently used, top priority here
+				// KC Vita rolls order: MainMainMain(/140) -> MainMainSecond(/130) -> TorpTorp(/122) -> TorpMain(/115) -> Renzoku(/110)
+				// KC Vita power/accuracy modifiers: 1.75/1.5, 1.5/1.65, 1.3/1.5, 1.2/1.1, 2.0/2.0
 				if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
 				const secondaryCnt = this.countEquipmentType(2, 4);
 				if(mainGunCnt === 2 && secondaryCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(4));
+				// here uses mutex conditions although it can be trigger as long as mainGunCnt >= 1 && torpedoCnt >= 1
+				// will not mutex if 5 slots ships can equip torpedo
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
 					(mainGunCnt === 1 && torpedoCnt === 1))
 					results.push(KC3Ship.specialAttackTypeNight(2));
+				// KC Vita 'Renzoku' condition: main+sec+torp >= 2
 				// double attack can be torpedo attack animation if topmost slot is torpedo
 				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
 					(mainGunCnt === 1 && secondaryCnt >= 1) ||
@@ -3748,14 +3752,14 @@ KC3改 Ship Object
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
-			8: 150,
+			8: 140,
 			9: 122,
-			10: 150, // unknown, inherit from 8
+			10: 122, // or 124?
 			// Doubled hits versions
 			11: 115,
-			12: 150,
+			12: 140,
 			13: 122,
-			14: 150,
+			14: 122,
 			// 100~104 might be different, even with day one
 			// 300~302 unknown
 		}[spType];
@@ -3792,7 +3796,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get current shelling attack accuracy related info of this ship.
+	 * Get current day shelling attack accuracy related info of this ship.
 	 * NOTE: Only attacker accuracy part, not take defender evasion part into account at all, not final hit/critical rate.
 	 * @param {number} formationModifier - see #estimateShellingFormationModifier.
 	 * @param {boolean} applySpAttackModifiers - if special equipment and attack modifiers should be applied.
