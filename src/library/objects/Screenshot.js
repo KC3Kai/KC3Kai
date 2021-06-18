@@ -147,7 +147,7 @@ KCScreenshot.prototype.crop = function(offset, isRemote){
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
 		// Viewing page zoom factor has been taken into account by window.devicePixelRatio,
 		// if image not captured from remote background page
-		var realScale = self.autoDpi && !isRemote ? scale : zoomFactor * scale;
+		var realScale = self.autoDpi ? scale : zoomFactor * scale;
 		// Get gamebox dimensions and position
 		var params = {
 			realWidth: 1200 * realScale,
