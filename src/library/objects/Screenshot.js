@@ -9,11 +9,10 @@ function KCScreenshot(){
 	this.context = {};
 	this.domImg = {};
 	this.base64img = "";
-	this.playerIndex = "";
 	this.screenshotFilename = "";
-	this.format = (ConfigManager.ss_type=="JPG")
-		?["jpeg", "jpg", "image/jpeg"]
-		:["png", "png", "image/png"];
+	this.format = (ConfigManager.ss_type == "JPG")
+		? ["jpeg", "jpg", "image/jpeg"]
+		: ["png",  "png", "image/png"];
 	this.quality = ConfigManager.ss_quality;
 	this.imageSmoothing = !!ConfigManager.ss_smooth;
 	this.callback = function(){};
@@ -41,17 +40,17 @@ KCScreenshot.prototype.remoteStart = function(tabId, offset){
 	this.tabId = tabId;
 	this.offset = offset;
 	this.generateScreenshotFilename(false);
-	this.prepare(offset.devicePixelRatio);
+	this.prepare(offset);
 	this.remoteCapture();
 };
 
-KCScreenshot.prototype.prepare = function(gameWindowDpr){
-	var scale = this.getCurrentScale(gameWindowDpr);
+KCScreenshot.prototype.prepare = function(offset = {}){
+	var scale = this.getCurrentScale(offset.devicePixelRatio);
 	
 	// Initialize HTML5 Canvas
 	this.canvas = document.createElement("canvas");
-	this.canvas.width = 1200 * scale;
-	this.canvas.height = 720 * scale;
+	this.canvas.width = (offset.width || 1200) * scale;
+	this.canvas.height = (offset.height || 720) * scale;
 	this.context = this.canvas.getContext("2d");
 	this.context.imageSmoothingEnabled = this.imageSmoothing;
 	
@@ -95,9 +94,8 @@ function getRandomInt(min, max) {
 
 KCScreenshot.prototype.capture = function(){
 	var self = this;
-	
 	// If taiha alert appear on screenshot is off, hide taiha alert in the mean time
-	if(!ConfigManager.alert_taiha_ss && interactions) {
+	if(!ConfigManager.alert_taiha_ss && typeof interactions != "undefined") {
 		interactions.suspendTaiha(function(){
 			self.startCapture();
 		});
@@ -116,6 +114,7 @@ KCScreenshot.prototype.remoteCapture = function(){
 			self.handleLastError(chrome.runtime.lastError, "Remote captureVisibleTab", "take screenshot");
 			self.domImg.onload = self.crop(self.offset, true);
 			self.domImg.src = base64img;
+			self.base64img = base64img;
 		});
 	});
 };
@@ -125,6 +124,7 @@ KCScreenshot.prototype.startCapture = function(){
 	chromeCapture(this.format[0], this.quality, function(base64img){
 		self.handleLastError(chrome.runtime.lastError, "Inpage captureVisibleTab", "take screenshot");
 		self.domImg.src = base64img;
+		self.base64img = base64img;
 		self.domImg.onload = self.crop(self.gamebox.offset(), false);
 	});
 };
@@ -143,15 +143,14 @@ KCScreenshot.prototype.crop = function(offset, isRemote){
 	var self = this;
 	var scale = this.getCurrentScale(offset.devicePixelRatio);
 	
-	// Get zoom factor
+	// Get zoom factor of viewing page
 	chrome.tabs.getZoom(this.tabId, function(zoomFactor){
-		// Viewing page zoom factor has been taken into account by window.devicePixelRatio,
-		// if image not captured from remote background page
+		// Viewing page zoom factor has been taken into account by window.devicePixelRatio (since chromium 25),
 		var realScale = self.autoDpi ? scale : zoomFactor * scale;
 		// Get gamebox dimensions and position
 		var params = {
-			realWidth: 1200 * realScale,
-			realHeight: 720 * realScale,
+			realWidth: (offset.width || 1200) * realScale,
+			realHeight: (offset.height || 720) * realScale,
 			offTop: offset.top * realScale,
 			offLeft: offset.left * realScale,
 		};
@@ -165,8 +164,8 @@ KCScreenshot.prototype.crop = function(offset, isRemote){
 			params.realHeight,
 			0,
 			0,
-			1200 * scale,
-			720 * scale
+			(offset.width || 1200) * scale,
+			(offset.height || 720) * scale
 		);
 		
 		self.output();
