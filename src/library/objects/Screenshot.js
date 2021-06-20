@@ -28,6 +28,7 @@ KCScreenshot.prototype.getCurrentScale = function(gameWindowDpr){
 		* (ConfigManager.ss_dppx || gameWindowDpr || window.devicePixelRatio || 1);
 };
 
+/** Running in page/content script scope */
 KCScreenshot.prototype.start = function(playerName, element){
 	this.playerName = playerName;
 	this.gamebox = element;
@@ -36,6 +37,7 @@ KCScreenshot.prototype.start = function(playerName, element){
 	this.capture();
 };
 
+/** Running in background script scope */
 KCScreenshot.prototype.remoteStart = function(tabId, offset){
 	this.tabId = tabId;
 	this.offset = offset;

@@ -454,15 +454,19 @@
 		 */
 		captureFleetBox: function(fleetBox) {
 			const fleetNum = $(fleetBox).data("fleet") || 1;
+			// Added for touch device viewport zoom level since Chrome 61
+			const vvp = window.visualViewport || {};
 			const coords = {
-				x: $(fleetBox).offset().left,
-				y: $(fleetBox).offset().top,
+				x: $(fleetBox).offset().left - (vvp.offsetLeft || 0),
+				y: $(fleetBox).offset().top - (vvp.offsetTop || 0),
 				w: $(fleetBox).width(),
 				h: $(fleetBox).height(),
 				t: $(document).scrollTop(),
 			};
+			// Also included page zoom level since Chrome 25
 			const scale = window.devicePixelRatio || 1;
-			if(scale !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale; });
+			const vvpScale = vvp.scale || 1;
+			if(scale !== 1 || vvpScale !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale * vvpScale; });
 			chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
 				if(chrome.runtime.lastError) {
 					console.log("Failed to screenshot fleet", chrome.runtime.lastError);
