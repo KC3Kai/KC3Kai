@@ -23,6 +23,7 @@
 					this.updateMapSwitcher.call(this);
 					$(".map_switcher .world_list").val(this.world).trigger("change");
 					$(".map_switcher .map_list").val(this.map);
+					$(".map_switcher .clear_state").val(this.cleared);
 					$(".map_switcher .difficulty").val(this.diff);
 				});
 			} else {
@@ -36,7 +37,8 @@
 		execute: function() {
 			this.world = Number(KC3StrategyTabs.pageParams[1] || 0);
 			this.map = Number(KC3StrategyTabs.pageParams[2] || 0);
-			this.diff = Number(KC3StrategyTabs.pageParams[3] || 0);
+			this.cleared = Number(KC3StrategyTabs.pageParams[3] || 0);
+			this.diff = Number(KC3StrategyTabs.pageParams[4] || 0);
 			
 			this.updateMapSwitcher();
 			$(".map_switcher .world_list").on("change", e => {
@@ -47,14 +49,19 @@
 			$(".map_switcher .map_list").on("change", e => {
 				const value = $(e.target).val();
 				if(value) this.map = Number(value);
-				KC3StrategyTabs.gotoTab(null, this.world, this.map, this.diff);
+				KC3StrategyTabs.gotoTab(null, this.world, this.map, this.cleared, this.diff);
 			}).val(this.map);
+			$(".map_switcher .clear_state").on("change", e => {
+				const value = $(e.target).val();
+				if(value) this.cleared = Number(value);
+				KC3StrategyTabs.gotoTab(null, this.world, this.map, this.cleared, this.diff);
+			}).val(this.cleared);
 			$(".map_switcher .difficulty").on("change", e => {
 				this.diff = Number($(e.target).val()) || 0;
-				KC3StrategyTabs.gotoTab(null, this.world, this.map, this.diff);
+				KC3StrategyTabs.gotoTab(null, this.world, this.map, this.cleared, this.diff);
 			}).val(this.diff);
 			
-			this.showMapEncounters(this.world, this.map, this.diff);
+			this.showMapEncounters(this.world, this.map, this.cleared, this.diff);
 		},
 		
 		updateMapSwitcher: function(worldId) {
@@ -129,7 +136,7 @@
 				KC3Meta.isEventWorld(world);
 		},
 		
-		showMapEncounters: function(world, map, diff) {
+		showMapEncounters: function(world, map, cleared, diff) {
 			const self = this;
 			const shipClickFunc = function(e) {
 				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
@@ -160,6 +167,7 @@
 			KC3Database.con.encounters.filter(node =>
 				node.world === world && node.map === map
 				&& (world < 10 || !diff || node.diff === diff)
+				&& (!cleared || node.clear === cleared)
 			).toArray(function(encounters) {
 				$.each(encounters, function(index, encounter) {
 					// Data before enemy ship ID 1000 shifting not counted as bad
@@ -256,6 +264,14 @@
 						tooltip += "\n{0}: {1}".format(KC3Meta.term("PvpBaseExp"), encounter.exp);
 						curNodeHead.data("sumBaseExp", encounter.exp + curNodeHead.data("sumBaseExp"));
 						curNodeHead.data("sumExpCount", 1 + curNodeHead.data("sumExpCount"));
+					}
+					if(curBox.data("clearStates") || encounter.clear !== undefined) {
+						const state = Number(curBox.data("clearStates")) | (encounter.clear || 0);
+						curBox.data("clearStates", state);
+						tooltip += "\n{0}: {1}".format(KC3Meta.term("BattleMapCleared"),
+							// 3 known states: not cleared, cleared, both
+							["?", "\u2610", "\u2713", "\u2611"][state & 3]
+						);
 					}
 					const fpArr = KC3Calc.enemyFighterPower(shipList);
 					const ap = fpArr[0], recons = fpArr[3];
