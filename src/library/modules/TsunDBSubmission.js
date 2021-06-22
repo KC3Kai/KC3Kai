@@ -545,6 +545,13 @@
 				
 				this.sendData(this.data, 'eventrouting');
 			} else {
+				if(mapData.api_required_defeat_count) {
+					this.data.maxMapHP = mapData.api_required_defeat_count;
+					this.data.currentMapHP = this.data.maxMapHP - mapData.api_defeat_count;
+				}
+				if(mapData.api_gauge_num) this.data.gaugeNum = mapData.api_gauge_num;
+				if(mapData.api_gauge_type) this.data.gaugeType = mapData.api_gauge_type;
+				
 				this.sendData(this.data, 'routing');
 			}
 			
@@ -648,13 +655,12 @@
 				equip: apiData.api_eSlot,
 				formation: apiData.api_formation[1]
 			};
-			if(KC3Meta.isEventWorld(this.currentMap[0])) {
-				this.enemyComp.enemyComp.mapStats = {
-					gaugeNum: this.data.gaugeNum,
-					currentHP: this.data.currentMapHP,
-					maxHP: this.data.maxMapHP
-				};
-			}
+			this.enemyComp.enemyComp.mapStats = {
+				cleared: this.data.cleared,
+				gaugeNum: this.data.gaugeNum,
+				currentHP: this.data.currentMapHP,
+				maxHP: this.data.maxMapHP
+			};
 			if(apiData.api_ship_ke_combined) {
 				this.enemyComp.enemyComp.shipEscort = apiData.api_ship_ke_combined;
 				this.enemyComp.enemyComp.lvlEscort = apiData.api_ship_lv_combined;
