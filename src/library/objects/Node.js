@@ -165,6 +165,10 @@ Used by SortieManager
 			if(KC3QuestManager.isPrerequisiteFulfilled(912)){
 				KC3QuestManager.get(912).increment(4);
 			}
+			// By7: 3rd requirement: reach [W1-6] node N twice
+			if(KC3QuestManager.isPrerequisiteFulfilled(945)){
+				KC3QuestManager.get(945).increment(2);
+			}
 		}
 		return this;
 	};

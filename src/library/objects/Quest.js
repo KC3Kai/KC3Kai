@@ -56,7 +56,7 @@ known IDs see QuestManager
 	KC3Quest.prototype.defineRaw = function( data ){
 		// Attach temporary raw data for quick reference
 		// Possible useful for us, but not persistent yet:
-		//   api_category: 1=Compo, 2/8/9=Sortie, 3=PvP, 4=Exped, 5=Supply/Dock, 6/11=Arsenal, 7=Modern
+		//   api_category: 1=Compo, 2/8/9/10=Sortie, 3=PvP, 4=Exped, 5=Supply/Dock, 6/11=Arsenal, 7=Modern
 		//   api_lost_badges: medal will be consumed
 		//   api_bonus_flag: 1 = regular, 2 = shipgirl
 		//   api_select_rewards: ID object array of selectable rewrads
@@ -453,7 +453,7 @@ known IDs see QuestManager
 			"#AE76FA", //7
 			"#D75048", //8
 			"#D75048", //9
-			"",        //10
+			"#D75048", //10
 			"#996600", //11
 		][KC3Quest.getIdHigh(this.id)] || "#555555";
 	};

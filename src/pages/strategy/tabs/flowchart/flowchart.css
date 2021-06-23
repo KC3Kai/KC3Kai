@@ -186,7 +186,8 @@
 }
 .tab_flowchart .questIcon.type2,
 .tab_flowchart .questIcon.type8,
-.tab_flowchart .questIcon.type9 {
+.tab_flowchart .questIcon.type9,
+.tab_flowchart .questIcon.type10 {
 	background:#D75048;
 	color:#fff;
 }
