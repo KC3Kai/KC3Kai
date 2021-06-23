@@ -752,6 +752,14 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip(93)  // Oboro any remodel
 							&& fleet.hasShip(94); // Sazanami any remodel
 					},
+				"353": // C58 PvP with CA(V) as flagship, 3 more CA(V), 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShipType([5, 6], 0)
+							&& fleet.countShipType([5, 6]) >= 4
+							&& fleet.countShipType(2) >= 2;
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
