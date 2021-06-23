@@ -56,7 +56,7 @@ known IDs see QuestManager
 	KC3Quest.prototype.defineRaw = function( data ){
 		// Attach temporary raw data for quick reference
 		// Possible useful for us, but not persistent yet:
-		//   api_category: 1=Compo, 2/8/9=Sortie, 3=PvP, 4=Exped, 5=Supply/Dock, 6=Arsenal, 7=Modern
+		//   api_category: 1=Compo, 2/8/9=Sortie, 3=PvP, 4=Exped, 5=Supply/Dock, 6/11=Arsenal, 7=Modern
 		//   api_lost_badges: medal will be consumed
 		//   api_bonus_flag: 1 = regular, 2 = shipgirl
 		//   api_select_rewards: ID object array of selectable rewrads
@@ -435,10 +435,15 @@ known IDs see QuestManager
 		}
 	};
 
+	/** Get rid of ID lower 2 digits */
+	KC3Quest.getIdHigh = function(id){
+		// ID always starts from 101, better memory usage than string slice
+		return Math.floor((Number(id) || 0) / 100);
+	};
+
 	KC3Quest.prototype.getColor = function(){
-		// can also use api_category
 		return [
-			"#555555", //0
+			"",        //0
 			"#33A459", //1
 			"#D75048", //2
 			"#98E75F", //3
@@ -448,7 +453,18 @@ known IDs see QuestManager
 			"#AE76FA", //7
 			"#D75048", //8
 			"#D75048", //9
-		][(this.id+"").substring(0,1)];
+			"",        //10
+			"#996600", //11
+		][KC3Quest.getIdHigh(this.id)] || "#555555";
+	};
+
+	/** Static method for scenes that only ID available without quest API data */
+	KC3Quest.getIconClass = function(id){
+		return "type" + KC3Quest.getIdHigh(id);
+	};
+
+	KC3Quest.prototype.getIconClass = function(){
+		return KC3Quest.getIconClass(this.id);
 	};
 
 	KC3Quest.prototype.getLabelClass = function(){

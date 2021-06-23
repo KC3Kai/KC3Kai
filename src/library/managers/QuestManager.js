@@ -260,6 +260,19 @@ Uses KC3Quest objects to play around with
 					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyMay.resetMonth);
 				},
 			},
+			// Reset on 1st June every year
+			yearlyJun: {
+				type: 'yearlyJun',
+				key: 'timeToResetYearlyJunQuests',
+				resetMonth: JUNE,
+				questIds: [353, 944, 945, 946, 947, 948, 1103, 1104],
+				resetQuests: function () {
+					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJun.type);
+				},
+				calculateNextReset: function (serverTime) {
+					return KC3QuestManager.calculateNextYearlyReset(serverTime, KC3QuestManager.repeatableTypes.yearlyJun.resetMonth);
+				},
+			},
 			// Reset on 1st August every year
 			yearlyAug: {
 				type: 'yearlyAug',
@@ -487,6 +500,7 @@ Uses KC3Quest objects to play around with
 			period |= this.getRepeatableIds('yearlyFeb').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMar').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyMay').indexOf(questId)>-1;
+			period |= this.getRepeatableIds('yearlyJun').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyAug').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlySep').indexOf(questId)>-1;
 			period |= this.getRepeatableIds('yearlyOct').indexOf(questId)>-1;
@@ -588,7 +602,7 @@ Uses KC3Quest objects to play around with
 				} else {
 					const thisMonth = Date.getJstDate().getMonth();
 					// keep empty for umimplemented months
-					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "", "", "Aug", "Sep", "Oct", "Nov", ""][thisMonth];
+					const monthAbbr = ["Jan", "Feb", "Mar", "", "May", "Jun", "", "Aug", "Sep", "Oct", "Nov", ""][thisMonth];
 					const type = monthAbbr ? "yearly" + monthAbbr : false;
 					console.log("Auto found yearlies", type);
 					if(type) this.resetLoop(this.getRepeatableIds(type));
@@ -849,7 +863,7 @@ Uses KC3Quest objects to play around with
 				"912": // By3 Sortie Akashi as flagship, 3 DD
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.ship(0).master().api_stype === 19 && fleet.countShipType(2) >= 3;
+						return fleet.hasShipType(19, 0) && fleet.countShipType(2) >= 3;
 					},
 				"914": // By4 Sortie 3 CA, 1 DD
 					({fleetSent = KC3SortieManager.fleetSent}) => {
@@ -866,6 +880,38 @@ Uses KC3Quest objects to play around with
 							fleet.countShip(66)   + // Takao any remodel
 							fleet.countShip(471)    // Kamikaze any remodel
 						) >= 2;
+					},
+				"944": // By6 Sortie CA/DD as flagship, 3 DD/DE (excluding flagship DD)
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType([2, 5], 0)
+							&& (fleet.hasShipType(2, 0) ?
+								fleet.countShipType(1) + (fleet.countShipType(2) - 1) >= 3 :
+								fleet.countShipType([1, 2]) >= 3);
+					},
+				"945": // By7 Sortie CL/CT/DD as flagship, 3 DD/DE (excluding flagship DD)
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType([2, 3, 21], 0)
+							&& (fleet.hasShipType(2, 0) ?
+								fleet.countShipType(1) + (fleet.countShipType(2) - 1) >= 3 :
+								fleet.countShipType([1, 2]) >= 3);
+					},
+				"946": // By8 Sortie CV(L/B) as flagship, 2 CA(V)
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType([7, 11, 18], 0)
+							&& fleet.countShipType([5, 6]) >= 2;
+					},
+				"947": // By9 Sortie 2 CVL
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType(7) >= 2;
+					},
+				"948": // By10 Sortie CV(L/B) as flagship
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShipType([7, 11, 18], 0);
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

@@ -184,7 +184,9 @@
 	background:#33A459;
 	color:#fff;
 }
-.tab_flowchart .questIcon.type2 {
+.tab_flowchart .questIcon.type2,
+.tab_flowchart .questIcon.type8,
+.tab_flowchart .questIcon.type9 {
 	background:#D75048;
 	color:#fff;
 }
@@ -197,17 +199,13 @@
 .tab_flowchart .questIcon.type5 {
 	background:#EDD286;
 }
-.tab_flowchart .questIcon.type6 {
+.tab_flowchart .questIcon.type6,
+.tab_flowchart .questIcon.type11 {
 	background:#996600;
 	color:#fff;
 }
 .tab_flowchart .questIcon.type7 {
 	background:#AE76FA;
-}
-.tab_flowchart .questIcon.type8,
-.tab_flowchart .questIcon.type9 {
-	background:#D75048;
-	color:#fff;
 }
 
 /* Statuses */

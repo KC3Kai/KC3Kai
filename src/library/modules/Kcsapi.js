@@ -2372,8 +2372,14 @@ Previously known as "Reactor"
 						case 21: // Type 0 Fighter Model 52
 							KC3QuestManager.get(628).increment(); // F25 monthly
 							break;
+						case 106: // Type 13 Air Radar Kai
+							KC3QuestManager.get(1104).increment(); // F99 yearly
+							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+							break;
+						case 125: // 61cm Triple (Oxygen) Torpedo Mount
+							KC3QuestManager.get(1103).increment(); // F98 yearly
 							break;
 						case 242: // Swordfish
 							KC3QuestManager.get(654).increment(0); // F93 yearly index 0
