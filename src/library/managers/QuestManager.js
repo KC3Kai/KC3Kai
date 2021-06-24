@@ -914,7 +914,7 @@ Uses KC3Quest objects to play around with
 				"947": // By9 Sortie 2 CVL
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.hasShipType(7) >= 2;
+						return fleet.countShipType(7) >= 2;
 					},
 				"948": // By10 Sortie CV(L/B) as flagship
 					({fleetSent = KC3SortieManager.fleetSent}) => {
