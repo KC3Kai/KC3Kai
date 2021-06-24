@@ -3438,7 +3438,8 @@ KC3改 Ship Object
 				if(this.canDoSubFleetCutin()) {
 					results.push(KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin()));
 				}
-				// special torpedo radar cut-in for destroyers since 2017-10-25
+				// special torpedo related cut-in for destroyers since 2017-10-25,
+				// these types can be rolled for every setup requirements met, beofore regular cutins below
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
 				if(isThisDestroyer && torpedoCnt >= 1) {
 					// according tests, only surface radar capable
@@ -3465,8 +3466,7 @@ KC3改 Ship Object
 						if(hasCapableRadar && hasSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
 						// special cutins for Torpedo Squadron SLO since 2021-04-30
-						// lower priority than regular cutins below, no D gun modifier
-						// https://twitter.com/yukicacoon/status/1388100262938562563
+						// no D gun modifier: https://twitter.com/yukicacoon/status/1388100262938562563
 						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
 							results.push(KC3Ship.specialAttackTypeNight(9 + diff));
 						if(hasDrumCanister && hasTsSkilledLookouts)
@@ -3479,32 +3479,26 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
-				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
-				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
-				if(lateTorpedoCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
-				// although modifier & type factor not top CI, but seems be more frequently used, top priority here
+				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
+				const secondaryCnt = this.countEquipmentType(2, 4);
 				// KC Vita rolls order: MainMainMain(/140) -> MainMainSecond(/130) -> TorpTorp(/122) -> TorpMain(/115) -> Renzoku(/110)
 				// KC Vita power/accuracy modifiers: 1.75/1.5, 1.5/1.65, 1.3/1.5, 1.2/1.1, 2.0/2.0
-				if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
-				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
+				// KC Browser confirmed that only 1 setup in this ordrer will be picked up and roll once,
+				//            lower priority setups also met will not be rolled at all, unlike vita.
 				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
-				const secondaryCnt = this.countEquipmentType(2, 4);
-				if(mainGunCnt === 2 && secondaryCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(4));
-				// here uses mutex conditions although it can be trigger as long as mainGunCnt >= 1 && torpedoCnt >= 1
-				// will not mutex if 5 slots ships can equip torpedo
-				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
-					(mainGunCnt === 1 && torpedoCnt === 1))
-					results.push(KC3Ship.specialAttackTypeNight(2));
+				else if(mainGunCnt >= 2 && secondaryCnt >= 1) results.push(KC3Ship.specialAttackTypeNight(4));
+				// special torpedo cut-in for late model submarine torpedo
+				else if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
+				else if(lateTorpedoCnt >= 2)
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
+				else if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
+				else if(mainGunCnt >= 1 && torpedoCnt >= 1) results.push(KC3Ship.specialAttackTypeNight(2));
 				// KC Vita 'Renzoku' condition: main+sec+torp >= 2
 				// double attack can be torpedo attack animation if topmost slot is torpedo
-				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
-					(mainGunCnt === 1 && secondaryCnt >= 1) ||
-					(secondaryCnt >= 2 && torpedoCnt <= 1))
+				else if(mainGunCnt + secondaryCnt >= 2)
 					results.push(KC3Ship.specialAttackTypeNight(1));
 			}
 		}
