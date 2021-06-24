@@ -3353,6 +3353,7 @@ KC3改 Ship Object
 			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E/Ryuuhou K2E needed
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
+				// https://en.kancollewiki.net/Combat/Night_Battle
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
@@ -3441,6 +3442,7 @@ KC3改 Ship Object
 				// special torpedo related cut-in for destroyers since 2017-10-25,
 				// these types can be rolled for every setup requirements met, beofore regular cutins below
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
+				// see also `PhaseHougeki.prototype._kuchiku_special`
 				if(isThisDestroyer && torpedoCnt >= 1) {
 					// according tests, only surface radar capable
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
@@ -3496,8 +3498,9 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
 				else if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
 				else if(mainGunCnt >= 1 && torpedoCnt >= 1) results.push(KC3Ship.specialAttackTypeNight(2));
-				// KC Vita 'Renzoku' condition: main+sec+torp >= 2
-				// double attack can be torpedo attack animation if topmost slot is torpedo
+				// double attack can be torpedo attack animation if a slot in `api_si_list` is torpedo
+				//   see `PhaseAttackDouble.prototype._completePreload`
+				// KC Vita 'Renzoku' condition different: main+sec+torp >= 2
 				else if(mainGunCnt + secondaryCnt >= 2)
 					results.push(KC3Ship.specialAttackTypeNight(1));
 			}
