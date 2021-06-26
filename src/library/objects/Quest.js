@@ -335,12 +335,14 @@ known IDs see QuestManager
 
 		// single tracking counter and client-side progress judgement for these:
 		//   C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		//   F25, F39, F90: 50%/80% if secretary or inventory holds insufficient required items
+		//   F25, F39, F90, F98, F99: 50%/80% if secretary or inventory holds insufficient required items
 		// about all client-side progress conditions, see `main.js#DutyModel_`.
-		// quest F90 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
-		//   and it may get non-zero progress even 14cm gun scrapping not enough, so counter no touch.
-		if([318, 628, 643, 653].indexOf(this.id) > -1) {
-			if (currentCount < maxCount && this.progress > 0 && this.id !== 653) {
+		// quest F90, F98, F99 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
+		//   and it may get non-zero progress even slotitem scrapping not enough, so counter no touch.
+		//   anyway they might treat holding conditions + scrapping amount as couner max.
+		if([318, 628, 643, 653, 1103, 1104].indexOf(this.id) > -1) {
+			if (currentCount < maxCount && this.progress > 0
+				&& [653, 1103, 1104].indexOf(this.id) === 0) {
 				trackingData[0] = maxCount;
 			}
 			return;
