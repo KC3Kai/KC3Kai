@@ -556,6 +556,7 @@ body {
 	z-index: 1000;
 	display: none;
 	pointer-events: none;
+	user-select: none;
 }
 
 .overlay_next span {
@@ -657,6 +658,7 @@ body {
 	color:#333;
 	text-shadow:1px 1px 2px #f5f5f5, 0px 0px 2px #f5f5f5;
 	pointer-events:none;
+	user-select:none;
 }
 .overlay_markers .icon {
 	position:absolute;
@@ -664,4 +666,5 @@ body {
 	padding:0;
 	float:left;
 	pointer-events:none;
+	user-select:none;
 }

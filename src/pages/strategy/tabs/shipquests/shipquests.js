@@ -70,7 +70,7 @@
 				const questMeta = KC3Meta.quest(questId);
 				const questDiv = $("<div />")
 					.addClass("ship_field ship_stat questIcon")
-					.addClass("type" + String(questId).substr(0, 1));
+					.addClass(KC3Quest.getIconClass(questId));
 
 				// If we have player data about the quest
 				if(KC3QuestManager.exists(questId)) {

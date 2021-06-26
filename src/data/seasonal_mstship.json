@@ -4158,15 +4158,15 @@
 	},
 	"5519": {
 		"api_id": 5519,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お出掛け天津風",
+		"api_yomi": "あまつかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5520": {
 		"api_id": 5520,
-		"api_name": "お祝い曙改二",
+		"api_name": "記念日曙改二",
 		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
@@ -4190,11 +4190,11 @@
 	},
 	"5523": {
 		"api_id": 5523,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "記念日Helena",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5524": {
 		"api_id": 5524,
@@ -4270,11 +4270,11 @@
 	},
 	"5533": {
 		"api_id": 5533,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い曙改二",
+		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5534": {
 		"api_id": 5534,
@@ -4286,11 +4286,11 @@
 	},
 	"5535": {
 		"api_id": 5535,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝い潮改二",
+		"api_yomi": "うしお",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5536": {
 		"api_id": 5536,
@@ -4299,5 +4299,37 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5537": {
+		"api_id": 5537,
+		"api_name": "夏制服風雲改二",
+		"api_yomi": "かざぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5538": {
+		"api_id": 5538,
+		"api_name": "夏制服巻雲改二",
+		"api_yomi": "まきぐも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5539": {
+		"api_id": 5539,
+		"api_name": "夏制服沖波改二",
+		"api_yomi": "おきなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5540": {
+		"api_id": 5540,
+		"api_name": "夏制服朝霜改二",
+		"api_yomi": "あさしも",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }

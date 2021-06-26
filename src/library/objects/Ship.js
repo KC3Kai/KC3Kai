@@ -3353,6 +3353,7 @@ KC3改 Ship Object
 			// carrier night cut-in, NOAP or Saratoga Mk.II/Akagi K2E/Kaga K2E/Ryuuhou K2E needed
 			if(isCarrierNightAirAttack) {
 				// https://kancolle.fandom.com/wiki/Combat#Setups_and_Attack_Types
+				// https://en.kancollewiki.net/Combat/Night_Battle
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#x397cac6
 				const nightFighterCnt = this.countNonZeroSlotEquipmentType(3, 45);
 				const nightTBomberCnt = this.countNonZeroSlotEquipmentType(3, 46);
@@ -3438,8 +3439,10 @@ KC3改 Ship Object
 				if(this.canDoSubFleetCutin()) {
 					results.push(KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin()));
 				}
-				// special torpedo radar cut-in for destroyers since 2017-10-25
+				// special torpedo related cut-in for destroyers since 2017-10-25,
+				// these types can be rolled for every setup requirements met, beofore regular cutins below
 				// http://wikiwiki.jp/kancolle/?%CC%EB%C0%EF#dfcb6e1f
+				// see also `PhaseHougeki.prototype._kuchiku_special`
 				if(isThisDestroyer && torpedoCnt >= 1) {
 					// according tests, only surface radar capable
 					const hasCapableRadar = this.equipment(true).some(gear => gear.isSurfaceRadar());
@@ -3462,14 +3465,13 @@ KC3改 Ship Object
 					const addDestroyerSpAttacksToId = (diff) => {
 						if(hasCapableRadar && smallMainGunCnt >= 1)
 							results.push(KC3Ship.specialAttackTypeNight(7 + diff, null, 1.3 * modelDSmallGunModifier));
-						if(hasCapableRadar && hasSkilledLookouts)
+						if(hasCapableRadar && hasSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
 						// special cutins for Torpedo Squadron SLO since 2021-04-30
-						// lower priority than regual cutins below, no D gun modifier
-						// https://twitter.com/yukicacoon/status/1388100262938562563
-						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
+						// no D gun modifier: https://twitter.com/yukicacoon/status/1388100262938562563
+						if(torpedoCnt >= 2 && hasTsSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(9 + diff));
-						if(hasDrumCanister && hasTsSkilledLookouts)
+						if(hasDrumCanister && hasTsSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(10 + diff));
 					};
 					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
@@ -3479,28 +3481,30 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
-				// special torpedo cut-in for late model submarine torpedo
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
-				if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
-				if(lateTorpedoCnt >= 2)
-					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
-				// although modifier lower than Main CI / Mix CI, but seems be more frequently used
-				// will not mutex if 5 slots ships can equip torpedo
-				if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
-				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
 				const secondaryCnt = this.countEquipmentType(2, 4);
-				if(mainGunCnt === 2 && secondaryCnt >= 1)
+				// KC Vita rolls order: MainMainMain(/140) -> MainMainSecond(/130) -> TorpTorp(/122) -> TorpMain(/115) -> Renzoku(/110)
+				// KC Vita power/accuracy modifiers: 1.75/1.5, 1.5/1.65, 1.3/1.5, 1.2/1.1, 2.0/2.0
+				// KC Browser confirmed that only 1 setup in this ordrer will be picked up and roll once,
+				//            lower priority setups also met will not be rolled at all, unlike vita.
+				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
+				else if(mainGunCnt >= 2 && secondaryCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(4));
-				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 1) ||
-					(mainGunCnt === 1 && torpedoCnt === 1))
+				// special torpedo cut-in for late model submarine torpedo
+				else if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1 && !targetShipType.isLand)
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
+				else if(lateTorpedoCnt >= 2 && !targetShipType.isLand)
+					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
+				else if(torpedoCnt >= 2 && !targetShipType.isLand)
+					results.push(KC3Ship.specialAttackTypeNight(3));
+				else if(mainGunCnt >= 1 && torpedoCnt >= 1 && !targetShipType.isLand)
 					results.push(KC3Ship.specialAttackTypeNight(2));
-				// double attack can be torpedo attack animation if topmost slot is torpedo
-				if((mainGunCnt === 2 && secondaryCnt === 0 && torpedoCnt === 0) ||
-					(mainGunCnt === 1 && secondaryCnt >= 1) ||
-					(secondaryCnt >= 2 && torpedoCnt <= 1))
+				// double attack can be torpedo attack animation if a slot in `api_si_list` is torpedo
+				//   see `PhaseAttackDouble.prototype._completePreload`
+				// KC Vita 'Renzoku' condition different: main+sec+torp >= 2
+				else if(mainGunCnt + secondaryCnt >= 2)
 					results.push(KC3Ship.specialAttackTypeNight(1));
 			}
 		}
@@ -3748,14 +3752,14 @@ KC3改 Ship Object
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
-			8: 150,
+			8: 140,
 			9: 122,
-			10: 150, // unknown, inherit from 8
+			10: 122, // or 124?
 			// Doubled hits versions
 			11: 115,
-			12: 150,
+			12: 140,
 			13: 122,
-			14: 150,
+			14: 122,
 			// 100~104 might be different, even with day one
 			// 300~302 unknown
 		}[spType];
@@ -3792,7 +3796,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * Get current shelling attack accuracy related info of this ship.
+	 * Get current day shelling attack accuracy related info of this ship.
 	 * NOTE: Only attacker accuracy part, not take defender evasion part into account at all, not final hit/critical rate.
 	 * @param {number} formationModifier - see #estimateShellingFormationModifier.
 	 * @param {boolean} applySpAttackModifiers - if special equipment and attack modifiers should be applied.

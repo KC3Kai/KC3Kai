@@ -2011,14 +2011,14 @@ button, input, select, textarea {
 .tab_encounters .map_switcher {
 	height: 30px;
 }
-.tab_encounters .world_list {
-	margin: 5px 10px 5px 20px;
-}
-.tab_encounters .map_list {
-	margin: 5px 10px 5px 10px;
-}
+.tab_encounters .world_list,
+.tab_encounters .map_list,
+.tab_encounters .clear_state,
 .tab_encounters .difficulty {
 	margin: 5px 10px 5px 10px;
+}
+.tab_encounters .world_list {
+	margin-left: 20px;
 }
 .tab_encounters .encounter_record {
 	background:#414141;

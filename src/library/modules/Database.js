@@ -393,7 +393,7 @@ Uses Dexie.js third-party plugin on the assets directory
 			this.con.enemy.put(data).then(callback);
 		},
 		
-		Encounter :function(data, isIncCount, callback){
+		Encounter :function(data, isIncCount, isRawClear, callback){
 			var self = this;
 			this.con.encounters.get(data.uniqid, function(oldData){
 				if(!!oldData){
@@ -406,6 +406,9 @@ Uses Dexie.js third-party plugin on the assets directory
 					if(!data.exp && !!oldData.exp){
 						data.exp = oldData.exp;
 					}
+				}
+				if(!!isRawClear && data.clear !== undefined){
+					data.clear = ((oldData || {}).clear || 0) | (1 << data.clear);
 				}
 				self.con.encounters.put(data).then(callback);
 			});

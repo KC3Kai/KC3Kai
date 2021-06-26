@@ -165,6 +165,10 @@ Used by SortieManager
 			if(KC3QuestManager.isPrerequisiteFulfilled(912)){
 				KC3QuestManager.get(912).increment(4);
 			}
+			// By7: 3rd requirement: reach [W1-6] node N twice
+			if(KC3QuestManager.isPrerequisiteFulfilled(945)){
+				KC3QuestManager.get(945).increment(2);
+			}
 		}
 		return this;
 	};
@@ -2550,13 +2554,14 @@ Used by SortieManager
 			world: KC3SortieManager.map_world,
 			map: KC3SortieManager.map_num,
 			diff: KC3SortieManager.map_difficulty,
+			clear: KC3SortieManager.getCurrentMapData().clear,
 			node: isAirBaseRaid ? KC3Meta.getAirBaseFakeEdge() : this.id,
 			form: this.eformation,
 			// eships is padded array
 			ke: JSON.stringify(this.eships)
 		};
 		ed.uniqid = [ed.world,ed.map,ed.diff,ed.node,ed.form,ed.ke].filter(v => !!v).join("/");
-		KC3Database.Encounter(ed, true);
+		KC3Database.Encounter(ed, true, true);
 		// Do not continue to save abyssal stats, thank to missing `api_eParam` on Land-Base Air Raid
 		if(!!isAirBaseRaid) { return true; }
 		this.enemyEncounter = ed;

@@ -454,54 +454,56 @@
 		 */
 		captureFleetBox: function(fleetBox) {
 			const fleetNum = $(fleetBox).data("fleet") || 1;
+			// Added for touch device viewport zoom level since Chrome 61
+			const vvp = window.visualViewport || {};
 			const coords = {
-				x: $(fleetBox).offset().left,
-				y: $(fleetBox).offset().top,
+				x: $(fleetBox).offset().left - (vvp.offsetLeft || 0),
+				y: $(fleetBox).offset().top - (vvp.offsetTop || 0),
 				w: $(fleetBox).width(),
 				h: $(fleetBox).height(),
 				t: $(document).scrollTop(),
 			};
-			const dpr = window.devicePixelRatio || 1;
-			chrome.tabs.getZoom(undefined, scale => {
-				if(scale !== 1 || dpr !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale * dpr; });
-				chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
-					if(chrome.runtime.lastError) {
-						console.log("Failed to screenshot fleet", chrome.runtime.lastError);
-						const errMsg = chrome.runtime.lastError.message || "";
-						if(errMsg.includes("'activeTab' permission")) {
-							alert("Click KC3\u6539 icon on browser toolbar to grant screenshot permission");
-						} else {
-							alert("Failed to capture fleet screenshot");
+			// Also included page zoom level since Chrome 25
+			const scale = window.devicePixelRatio || 1;
+			const vvpScale = vvp.scale || 1;
+			if(scale !== 1 || vvpScale !== 1) Object.keys(coords).forEach(p => { coords[p] *= scale * vvpScale; });
+			chrome.tabs.captureVisibleTab(undefined, {format: "png"}, (dataUrl) => {
+				if(chrome.runtime.lastError) {
+					console.log("Failed to screenshot fleet", chrome.runtime.lastError);
+					const errMsg = chrome.runtime.lastError.message || "";
+					if(errMsg.includes("'activeTab' permission")) {
+						alert("Click KC3\u6539 icon on browser toolbar to grant screenshot permission");
+					} else {
+						alert("Failed to capture fleet screenshot");
+					}
+					$(".ss_button", fleetBox).show();
+					return;
+				}
+				const canvas = document.createElement("canvas"), img = new Image();
+				img.onload = (e) => {
+					canvas.width = coords.w;
+					canvas.height = coords.h;
+					const ctx = canvas.getContext("2d");
+					ctx.imageSmoothingEnabled = false;
+					ctx.drawImage(img,
+						coords.x, coords.y - coords.t, coords.w, coords.h,
+						0, 0, coords.w, coords.h);
+					new KC3ImageExport(canvas, {
+						filename: "{0} #{1} ({2})".format(
+							$("#fleet_description").text(),
+							fleetNum, dateFormat("yyyy-mm-dd HHMM")
+						),
+					}).export((error, result) => {
+						if(error) {
+							console.error("Failed to screenshot fleet", error);
+							alert("Failed to generate fleet screenshot");
+						} else if(result && result.filename) {
+							alert("Saved to {0}".format(result.filename));
 						}
 						$(".ss_button", fleetBox).show();
-						return;
-					}
-					const canvas = document.createElement("canvas"), img = new Image();
-					img.onload = (e) => {
-						canvas.width = coords.w;
-						canvas.height = coords.h;
-						const ctx = canvas.getContext("2d");
-						ctx.imageSmoothingEnabled = false;
-						ctx.drawImage(img,
-							coords.x, coords.y - coords.t, coords.w, coords.h,
-							0, 0, coords.w, coords.h);
-						new KC3ImageExport(canvas, {
-							filename: "{0} #{1} ({2})".format(
-								$("#fleet_description").text(),
-								fleetNum, dateFormat("yyyy-mm-dd HHMM")
-							),
-						}).export((error, result) => {
-							if(error) {
-								console.error("Failed to screenshot fleet", error);
-								alert("Failed to generate fleet screenshot");
-							} else if(result && result.filename) {
-								alert("Saved to {0}".format(result.filename));
-							}
-							$(".ss_button", fleetBox).show();
-						});
-					};
-					img.src = dataUrl;
-				});
+					});
+				};
+				img.src = dataUrl;
 			});
 		},
 

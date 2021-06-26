@@ -582,6 +582,9 @@
 				case 82: // R key switch to exped planner tab
 					$(".module.activity #atab_expeditionPlanner").trigger("click");
 					break;
+				case 118: // F7 take panel's screenshot
+					// TODO captureVisibleTab not work since no way to grant activeTab permission
+					break;
 				case 119: // F8 mute toggle OR Shift+F8 alert sound toggle
 					if(e.shiftKey) {
 						$(".module.controls .btn_alert_toggle").trigger("click");

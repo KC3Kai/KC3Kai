@@ -65,6 +65,8 @@
 		// Load license file
 		$.get("https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/LICENSE", function(response){
 			$(".license_box").html("").append($("<pre>").text(response));
+		}).fail(function(xhr){
+			$(".license_box").text(xhr.responseText || (xhr.statusText + xhr.status));
 		});
 		
 		// Load patreon donator list
@@ -74,6 +76,8 @@
 			for (var donatorCtr in response) {
 				addDonator(response[donatorCtr], $("#patreonDonators"));
 			}
+		}).fail(function(xhr){
+			$("#patreonDonators").text(xhr.responseText || (xhr.statusText + xhr.status));
 		});
 	});
 	
