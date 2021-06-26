@@ -3465,13 +3465,13 @@ KC3改 Ship Object
 					const addDestroyerSpAttacksToId = (diff) => {
 						if(hasCapableRadar && smallMainGunCnt >= 1)
 							results.push(KC3Ship.specialAttackTypeNight(7 + diff, null, 1.3 * modelDSmallGunModifier));
-						if(hasCapableRadar && hasSkilledLookouts)
+						if(hasCapableRadar && hasSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(8 + diff, null, 1.2 * modelDSmallGunModifier));
 						// special cutins for Torpedo Squadron SLO since 2021-04-30
 						// no D gun modifier: https://twitter.com/yukicacoon/status/1388100262938562563
-						if(torpedoCnt >= 2 && hasTsSkilledLookouts)
+						if(torpedoCnt >= 2 && hasTsSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(9 + diff));
-						if(hasDrumCanister && hasTsSkilledLookouts)
+						if(hasDrumCanister && hasTsSkilledLookouts && (!targetShipType.isLand || smallMainGunCnt >= 1))
 							results.push(KC3Ship.specialAttackTypeNight(10 + diff));
 					};
 					// since 2021-05-08, all 4 types get indiviual ID, and get double hits version
@@ -3490,14 +3490,17 @@ KC3改 Ship Object
 				// KC Browser confirmed that only 1 setup in this ordrer will be picked up and roll once,
 				//            lower priority setups also met will not be rolled at all, unlike vita.
 				if(mainGunCnt >= 3) results.push(KC3Ship.specialAttackTypeNight(5));
-				else if(mainGunCnt >= 2 && secondaryCnt >= 1) results.push(KC3Ship.specialAttackTypeNight(4));
+				else if(mainGunCnt >= 2 && secondaryCnt >= 1)
+					results.push(KC3Ship.specialAttackTypeNight(4));
 				// special torpedo cut-in for late model submarine torpedo
-				else if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1)
+				else if(lateTorpedoCnt >= 1 && submarineRadarCnt >= 1 && !targetShipType.isLand)
 					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpRadar", 1.75));
-				else if(lateTorpedoCnt >= 2)
+				else if(lateTorpedoCnt >= 2 && !targetShipType.isLand)
 					results.push(KC3Ship.specialAttackTypeNight(3, "CutinLateTorpTorp", 1.6));
-				else if(torpedoCnt >= 2) results.push(KC3Ship.specialAttackTypeNight(3));
-				else if(mainGunCnt >= 1 && torpedoCnt >= 1) results.push(KC3Ship.specialAttackTypeNight(2));
+				else if(torpedoCnt >= 2 && !targetShipType.isLand)
+					results.push(KC3Ship.specialAttackTypeNight(3));
+				else if(mainGunCnt >= 1 && torpedoCnt >= 1 && !targetShipType.isLand)
+					results.push(KC3Ship.specialAttackTypeNight(2));
 				// double attack can be torpedo attack animation if a slot in `api_si_list` is torpedo
 				//   see `PhaseAttackDouble.prototype._completePreload`
 				// KC Vita 'Renzoku' condition different: main+sec+torp >= 2
