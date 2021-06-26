@@ -168,7 +168,7 @@
 				shipPng += !shipVersion ? "" : "?version=" + shipVersion;
 				
 				$(".ship_cg img", shipBox).attr("src", `http://${self.myServerIp}/kcs2/resources${shipPng}`);
-				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_name ) )
+				$(".ship_name", shipBox).text( KC3Meta.shipName( shipData.api_id ) )
 					.data("tab", "mstship")
 					.data("api_id", shipData.api_id)
 					.attr("data-mst-id", shipData.api_id)

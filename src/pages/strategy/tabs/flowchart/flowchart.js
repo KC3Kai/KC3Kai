@@ -38,6 +38,7 @@
 			this.seedBranch( rootQuestTree, 346 ); // C50
 			this.seedBranch( rootQuestTree, 348 ); // C53
 			this.seedBranch( rootQuestTree, 350 ); // C55
+			this.seedBranch( rootQuestTree, 353 ); // C58
 			this.seedBranch( rootQuestTree, 402 ); // Dd2
 			this.seedBranch( rootQuestTree, 404 ); // Dw4
 			this.seedBranch( rootQuestTree, 410 ); // Dw9
@@ -51,6 +52,7 @@
 			this.seedBranch( rootQuestTree, 605 ); // Fd1
 			this.seedBranch( rootQuestTree, 655 ); // F94
 			this.seedBranch( rootQuestTree, 681 ); // F95
+			this.seedBranch( rootQuestTree, 1103); // F98
 			this.seedBranch( rootQuestTree, 702 ); // Gd2
 			this.seedBranch( rootQuestTree, 716 ); // G8
 			this.seedBranch( rootQuestTree, 249 ); // Bm1
@@ -63,6 +65,7 @@
 			this.seedBranch( rootQuestTree, 904 ); // By1
 			this.seedBranch( rootQuestTree, 912 ); // By3
 			this.seedBranch( rootQuestTree, 928 ); // By5
+			this.seedBranch( rootQuestTree, 944 ); // By6
 			
 			// Other non-flowchart quests
 			const rootQuestList = $(".tab_flowchart .extralist ul.questList");
@@ -208,8 +211,8 @@ All your quest data will be cleared, including 1-time quests you have done. Lost
 			// Create quest HTML box and fill initial data
 			const thisBox = $(".tab_flowchart .factory .questFlowItem")
 				.clone().appendTo("#"+parentElement.attr("id"));
-			$(".questIcon", thisBox).text( thisQuest.code );
-			$(".questIcon", thisBox).addClass("type" + (String(quest_id).substring(0,1)));
+			$(".questIcon", thisBox).text(thisQuest.code);
+			$(".questIcon", thisBox).addClass(KC3Quest.getIconClass(quest_id));
 			$(".questIcon", thisBox).on("mouseover", function(){
 				$(this).next().tooltip("open");
 			});
@@ -289,8 +292,8 @@ All your quest data will be cleared, including 1-time quests you have done. Lost
 			const questMeta = KC3Meta.quest( thisQuest.id );
 			const thisBox = $(".tab_flowchart .factory .questExtraItem")
 				.clone().appendTo(".tab_flowchart .extralist");
-			$(".questIcon", thisBox).text( questMeta.code || thisQuest.id );
-			$(".questIcon", thisBox).addClass("type" + (String(thisQuest.id).substring(0,1)))
+			$(".questIcon", thisBox).text(questMeta.code || thisQuest.id);
+			$(".questIcon", thisBox).addClass(thisQuest.getIconClass())
 				.addClass(thisQuest.getLabelClass());
 			$(".questIcon", thisBox).on("mouseover", function(){
 				$(this).next().tooltip("open");

@@ -6425,11 +6425,11 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima, Shinshumaru
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut
 						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						origins: [184, 634, 162, 154, 465, 621,
+						origins: [184, 634, 162, 154, 465, 621, 699,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511,
 								75, 89, 92, 521, 534, 544,
 								445, 451, 491
@@ -6512,9 +6512,9 @@
 						],
 					},
 					{
-						// Slow Group C: Akashi, Hayasui, Akitsumaru, Souya?
+						// Slow Group C: Akashi, Hayasui, Akitsumaru
 						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-203?
-						origins: [182, 460, 161, 699,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 882],
+						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 882],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],

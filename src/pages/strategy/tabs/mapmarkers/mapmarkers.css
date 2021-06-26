@@ -37,6 +37,7 @@
 	top:-720px;
 	overflow:hidden;
 	pointer-events:none;
+	user-select:none;
 	z-index:1;
 }
 

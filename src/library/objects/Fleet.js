@@ -894,9 +894,9 @@ Contains summary information about a fleet and its ships
 	/*-----------------[ STATUS INDICATORS ]------------------*/
 	/*--------------------------------------------------------*/
 	
-	KC3Fleet.prototype.hasShip = function(expected, pos, isExcludeEscaped = false){
+	KC3Fleet.prototype.hasShip = function(expected, pos, isExcludeEscaped = true){
 		return this.ship().some((ship, index) => {
-			if(isExcludeEscaped && ship.didFlee) {
+			if(isExcludeEscaped && ship.isAbsent()) {
 				return false;
 			}
 			if(pos === undefined || pos === index) {
@@ -914,7 +914,7 @@ Contains summary information about a fleet and its ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShip = function(expected, isExclude = false, isExcludeEscaped = false){
+	KC3Fleet.prototype.countShip = function(expected, isExclude = false, isExcludeEscaped = true){
 		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
 		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
@@ -926,9 +926,9 @@ Contains summary information about a fleet and its ships
 		}, 0);
 	};
 	
-	KC3Fleet.prototype.hasShipType = function(expected, pos, isExcludeEscaped = false){
+	KC3Fleet.prototype.hasShipType = function(expected, pos, isExcludeEscaped = true){
 		return this.ship().some((ship, index) => {
-			if(isExcludeEscaped && ship.didFlee) {
+			if(isExcludeEscaped && ship.isAbsent()) {
 				return false;
 			}
 			if(pos === undefined || pos === index) {
@@ -943,7 +943,7 @@ Contains summary information about a fleet and its ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShipType = function(expected, isExclude = false, isExcludeEscaped = false){
+	KC3Fleet.prototype.countShipType = function(expected, isExclude = false, isExcludeEscaped = true){
 		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
 		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {
@@ -955,9 +955,9 @@ Contains summary information about a fleet and its ships
 		}, 0);
 	};
 	
-	KC3Fleet.prototype.hasShipClass = function(expected, pos, isExcludeEscaped = false){
+	KC3Fleet.prototype.hasShipClass = function(expected, pos, isExcludeEscaped = true){
 		return this.ship().some((ship, index) => {
-			if(isExcludeEscaped && ship.didFlee) {
+			if(isExcludeEscaped && ship.isAbsent()) {
 				return false;
 			}
 			if(pos === undefined || pos === index) {
@@ -972,7 +972,7 @@ Contains summary information about a fleet and its ships
 		});
 	};
 	
-	KC3Fleet.prototype.countShipClass = function(expected, isExclude = false, isExcludeEscaped = false){
+	KC3Fleet.prototype.countShipClass = function(expected, isExclude = false, isExcludeEscaped = true){
 		const ships = isExcludeEscaped ? this.shipsUnescaped() : this.ship();
 		return ships.reduce((count, ship) => {
 			if(Array.isArray(expected)) {

@@ -2372,8 +2372,14 @@ Previously known as "Reactor"
 						case 21: // Type 0 Fighter Model 52
 							KC3QuestManager.get(628).increment(); // F25 monthly
 							break;
+						case 106: // Type 13 Air Radar Kai
+							KC3QuestManager.get(1104).increment(); // F99 yearly
+							break;
 						case 121: // Type 94 Anti-Aircraft Fire Director
 							KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+							break;
+						case 125: // 61cm Triple (Oxygen) Torpedo Mount
+							KC3QuestManager.get(1103).increment(); // F98 yearly
 							break;
 						case 242: // Swordfish
 							KC3QuestManager.get(654).increment(0); // F93 yearly index 0
@@ -3092,6 +3098,12 @@ Previously known as "Reactor"
 					[914,1,[4,2], true, true], // By4: 2nd requirement: [W4-2] A-rank+ the boss node
 					[914,2,[4,3], true, true], // By4: 3rd requirement: [W4-3] A-rank+ the boss node
 					[914,3,[4,4], true, true], // By4: 4th requirement: [W4-4] A-rank+ the boss node
+					[944,0,[1,2], true, true], // By6: 1st requirement: [W1-2] A-rank+ the boss node
+					[944,1,[1,3], true, true], // By6: 2nd requirement: [W1-3] A-rank+ the boss node
+					[944,2,[1,4], true, true], // By6: 3rd requirement: [W1-4] A-rank+ the boss node
+					[945,0,[1,5], true, true], // By7: 1st requirement: [W1-2] A-rank+ the boss node
+					[945,1,[2,1], true, true], // By7: 2nd requirement: [W1-3] A-rank+ the boss node
+					[948,3,[6,4], true, true], // By10: 4th requirement: [W6-4] A-rank+ the boss node twice
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -3140,6 +3152,16 @@ Previously known as "Reactor"
 					[928,0,[7,3], true, true, [18,23,24,25]], // By5: 1st requirement: [W7-3-P] S-rank 2nd boss node twice
 					[928,1,[7,2], true, true, [15]], // By5: 2nd requirement: [W7-2-M] S-rank 2nd boss node twice
 					[928,2,[4,2], true, true], // By5: 3rd requirement: [W4-2] S-rank the boss node twice
+					[946,0,[2,2], true, true], // By8: 1st requirement: [W2-2] S-rank the boss node
+					[946,1,[2,3], true, true], // By8: 2nd requirement: [W2-3] S-rank the boss node
+					[946,2,[2,4], true, true], // By8: 3rd requirement: [W2-4] S-rank the boss node
+					[947,0,[3,1], true, true], // By9: 1st requirement: [W3-1] S-rank the boss node
+					[947,1,[3,3], true, true], // By9: 2nd requirement: [W3-3] S-rank the boss node
+					[947,2,[3,4], true, true], // By9: 3rd requirement: [W3-4] S-rank the boss node
+					[947,3,[3,5], true, true], // By9: 4th requirement: [W3-5] S-rank the boss node
+					[948,0,[5,2], true, true], // By10: 1st requirement: [W5-2] S-rank the boss node twice
+					[948,1,[5,5], true, true], // By10: 2nd requirement: [W5-5] S-rank the boss node twice
+					[948,2,[6,5], true, true], // By10: 3rd requirement: [W6-5] S-rank the boss node twice
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)
@@ -3170,6 +3192,8 @@ Previously known as "Reactor"
 					KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
 				if(KC3QuestManager.isPrerequisiteFulfilled(330))
 					KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises 1
+				if(KC3QuestManager.isPrerequisiteFulfilled(353))
+					KC3QuestManager.get(353).increment(); // C58: Yearly Exercises 5
 			}
 			if(rankPt >= 4) { // A-Rank+
 				if(KC3QuestManager.isPrerequisiteFulfilled(342))

@@ -22,6 +22,11 @@
 	margin: 10px 10px 10px 10px;
 	float: left;
 }
+.tab_encounters .clear_state {
+	height: 22px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+}
 .tab_encounters .difficulty {
 	min-width: 105px;
 	height: 22px;
