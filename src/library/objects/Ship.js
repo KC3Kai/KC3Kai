@@ -3559,6 +3559,7 @@ KC3改 Ship Object
 	 * Likely to be revamped as formula comes from PSVita and does not include CVCI,
 	 * uncertain about Combined Fleet interaction.
 	 * @see https://kancolle.wikia.com/wiki/User_blog:Shadow27X/Artillery_Spotting_Rate_Formula
+	 * @see https://en.kancollewiki.net/Combat/Artillery_Spotting#Trigger_Rates
 	 * @see KC3Fleet.prototype.artillerySpottingLineOfSight
 	 */
 	KC3Ship.prototype.daySpAttackBaseRate = function() {
@@ -3590,6 +3591,7 @@ KC3改 Ship Object
 	 * @param {number} spType - based on api_sp_list value of night special attack type.
 	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
 	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
+	 * @see https://en.kancollewiki.net/Combat/Night_Battle#Trigger_Rates
 	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
 	 * @see KC3Fleet.prototype.estimateUsableSearchlight
 	 */
@@ -3603,13 +3605,15 @@ KC3改 Ship Object
 			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
-		// Late model submarine torpedo cut-in
+		// Special mods to match 122 type factor for late model submarine torpedo cut-in
 		// https://twitter.com/Divinity__123/status/1377666014834479104
+		/*
 		if (spType === 3 && this.hasEquipment([213, 214, 383])) {
 			levelModifier *= 2;
 			// Late model submarine radar bonus
 			if (this.hasEquipment([384])) { baseValue += 5; }
 		}
+		*/
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		// Flagship bonus
@@ -3725,7 +3729,7 @@ KC3改 Ship Object
 		const typeFactor = {
 			2: 115,
 			3: ({ // submarine late torp cutin
-				"CutinLateTorpRadar": 122, // or 105 without special base rate mods?
+				"CutinLateTorpRadar": 105, // or 122 with special mods for base rate?
 				"CutinLateTorpTorp": 110,
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
