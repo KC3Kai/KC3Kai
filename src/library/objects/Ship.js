@@ -3725,8 +3725,8 @@ KC3改 Ship Object
 		const typeFactor = {
 			2: 115,
 			3: ({ // submarine late torp cutin
-				"CutinLateTorpRadar": 122,
-				"CutinLateTorpTorp": undefined,
+				"CutinLateTorpRadar": 122, // or 105 without special base rate mods?
+				"CutinLateTorpTorp": 110,
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
 			5: 140,
