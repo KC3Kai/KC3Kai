@@ -1954,8 +1954,8 @@ KC3改 Ship Object
 	 * Apply known pre-cap modifiers to attack power.
 	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
+	 * @see https://en.kancollewiki.net/Damage_Calculations#Pre-cap_Modifiers
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
-	 * @see https://twitter.com/Nishisonic/status/893030749913227264
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
@@ -1980,7 +1980,14 @@ KC3改 Ship Object
 			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
-		// TODO Any side Echelon vs Combined Fleet, shelling mod is 0.6?
+		// Echelon (any side) vs Combined Fleet OR support on battle node starting from night
+		if(formationId === 4) {
+			const battleConds = this.collectBattleConditions();
+			if((warfareType === "SupportShelling" && battleConds.eventIdKind[1] === 2)
+				|| battleConds.isEnemyCombined) {
+				formationModifier = 0.6;
+			}
+		}
 		// Modifier of vanguard formation depends on the position in the fleet
 		if(formationId === 6) {
 			const [shipPos, shipCnt] = this.fleetPosition();
@@ -1994,9 +2001,9 @@ KC3改 Ship Object
 					formationModifier = isGuardian ? 0.6 : 1.0;
 				}
 			}
-			// All ships get 0.5 for Expedition Support Shelling
+			// All ships get 0.5 for Expedition Support Shelling (but 1.0 when vs Combined Fleet)
 			if(warfareType === "SupportShelling") {
-				formationModifier = 0.5;
+				formationModifier = this.collectBattleConditions().isEnemyCombined ? 1.0 : 0.5;
 			}
 		}
 		// Non-empty attack type tuple means this supposed to be night battle
