@@ -3744,11 +3744,11 @@ KC3改 Ship Object
 			4: 130,
 			5: 140,
 			6: ({ // CVNCI factors unknown, placeholders
-				"CutinNFNFNTB": undefined,  // should be 3 types, for mod 1.25
-				"CutinNFNTB" : undefined,   // 2 planes for mod 1.2
+				"CutinNFNFNTB": undefined,  // 105?, 3 planes for mod 1.25
+				"CutinNFNTB" : undefined,   // 115?, 2 planes for mod 1.2
 				"CutinNFNDB" : undefined,
 				"CutinNTBNDB": undefined,
-				"CutinNFNFNF"  : undefined, // 3 planes for mod 1.18
+				"CutinNFNFNF"  : undefined, // 125?, 3 planes for mod 1.18
 				"CutinNFNTBNTB": undefined,
 				"CutinNFNFFBI" : undefined,
 				"CutinNFNFSF"  : undefined,
@@ -3766,12 +3766,12 @@ KC3改 Ship Object
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
 			8: 140,
-			9: 122,
-			10: 122, // or 124?
+			9: 124, // or still 122?
+			10: 122,
 			// Doubled hits versions
 			11: 115,
 			12: 140,
-			13: 122,
+			13: 124,
 			14: 122,
 			// 100~104 might be different, even with day one
 			// 300~302 unknown
