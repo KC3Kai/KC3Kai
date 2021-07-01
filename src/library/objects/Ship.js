@@ -667,6 +667,8 @@ KC3改 Ship Object
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
+			// known issue: since stats value cannot be negative (lower cap at 0, except unknown accuracy),
+			// will get incorrect stats in cases like actual naked 0 with negative stats from equip.
 			stats[statApiNames[apiName]] -= equipStats;
 		}
 		return !statAttr ? stats : stats[statAttr];
@@ -4393,7 +4395,7 @@ KC3改 Ship Object
 			  equipDiffStats = {},
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
-		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
+		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[0])[0];});
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;

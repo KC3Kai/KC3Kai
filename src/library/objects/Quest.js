@@ -469,6 +469,25 @@ known IDs see QuestManager
 		return KC3Quest.getIconClass(this.id);
 	};
 
+	/** @return array of accepted api_category values when filtered by types.
+		api_category not persistent since it's still just a number without api_id lower 2 digits */
+	KC3Quest.getCategoriesByFilter = function(filterId){
+		// filter IDs and matched categories see `main.js#DutyUtil.filterByCategory`
+		switch(filterId){
+			// Sortie
+			case 1: return [2, 8, 9, 10];
+			// PvP
+			case 2: return [3];
+			// Exped
+			case 3: return [4];
+			// Arsenal
+			case 4: return [6, 11];
+			// Others
+			case 5: return [1, 5, 7];
+		}
+		return [];
+	};
+
 	KC3Quest.prototype.getLabelClass = function(){
 		if(this.label > 0) switch(this.label){
 			case 2: return "label_daily";

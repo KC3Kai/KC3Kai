@@ -610,34 +610,43 @@ Provides access to data on built-in JSON files
 			};
 		},
 		
-		// ship category defined by in-game client, see `main.js#ShipCategory`
 		shipCategory :function(stype){
+			/* UNUSED, in-game used by ship type filter.
+			 - String ship category defined by in-game client, see ~~`main.js#ShipCategory~~` (old version, EN only, removed).
+			 - Integer category (not texture ID, saved via parameter `api_oss_items[]`, load from `api_oss_setting`.
+			    texture IDs defined by `main.js#ShipChoiceView.setFilterText` (JP/EN by `api_language_type`),
+			    stype IDs by categories defined by `main.js#ShipUtil.filterByShipFilterType`
+			*/
 			return ((t) => {
 				switch(t) {
-					case 1: return "DE";
-					case 2: return "DD";
-					case 3: // CL + CLT
-					case 4: return "CL";
-					case 5: // CA + CAV
-					case 6: return "CA";
+					case 1: return 5; // string "DE";
+					case 2: return 4; // string "DD";
+					case 3: // CL
+					case 4: // CLT
+					case 21: // return string "CLT"; // should be CT
+						return 3; // string "CL";
+					case 5: // CA
+					case 6: // CAV
+						return 2; // string "CA";
 					case 7: // CVL
-					case 11: // CV + CVB
-					case 18: return "CV_CVL";
-					case 8: // BC = FBB
+					case 11: // CV
+					case 18: // CVB
+						return 1; // string "CV_CVL";
+					case 8: // FBB
 					case 9: // BB
+					case 10: // return string "BBV";
 					case 12: // unused XBB
-						return "BB_BC";
-					case 10: return "BBV";
-					case 13: // SS + SSV
-					case 14: return "SS";
+						return 0; // string "BB_BC";
+					case 13: // SS
+					case 14: // SSV
+						return 6; // string "SS";
 					case 15: // unused AP
 					case 16: // AV
 					case 17: // LHA
 					case 19: // AR
 					case 20: // AS
 					case 22: // AO
-						return "AV_AO_AS";
-					case 21: return "CLT"; // should be CT
+						return 7; // string "AV_AO_AS";
 					default: return "Unsupport type";
 				}
 			})(stype);
