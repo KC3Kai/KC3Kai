@@ -3743,8 +3743,8 @@ KC3改 Ship Object
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
 			5: 140,
-			6: ({ // CVNCI factors unknown, placeholders
-				"CutinNFNFNTB": undefined,  // 105?, 3 planes for mod 1.25
+			6: ({ // CVNCI factors not fully tested yet
+				"CutinNFNFNTB": 105,  // 3 planes for mod 1.25
 				"CutinNFNTB" : undefined,   // 115?, 2 planes for mod 1.2
 				"CutinNFNDB" : undefined,
 				"CutinNTBNDB": undefined,
