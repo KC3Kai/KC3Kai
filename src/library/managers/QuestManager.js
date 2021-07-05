@@ -916,10 +916,10 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(7) >= 2;
 					},
-				"948": // By10 Sortie CV(L/B) as flagship
+				"948": // By10 Sortie 1st fleet with CV(L/B) as flagship
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.hasShipType([7, 11, 18], 0);
+						return fleetSent == 1 && fleet.hasShipType([7, 11, 18], 0);
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
