@@ -4733,8 +4733,8 @@ KC3改 Ship Object
 					 */
 					aaEffectTypeId > 0 ?
 						" ({0})".format(
-							aaEffectTypeId === 4 ?
-								// Show a trigger chance for RosaK2 Defense, still unknown if with Type3 Shell
+							[4, 6].includes(aaEffectTypeId) ?
+								// Show a trigger chance for RosaK2 AA Rocket Barrage, extra effect still unknown if with Type3 Shell
 								"{0}:{1}%".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm), shipObj.calcAntiAirEffectChance()) :
 								KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)
 						) : ""
