@@ -592,8 +592,12 @@
 			$(".gear_icon img", gearBox).attr("src", KC3Meta.itemIcon(masterData.api_type[3]))
 				.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); })
 				.attr("alt", masterData.api_id)
-				.click(function(){
-					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				.click(function(e){
+					if(e.altKey) {
+						KC3StrategyTabs.gotoTab("gears", masterData.api_type[3], $(this).attr("alt"));
+					} else {
+						KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+					}
 				});
 			$(".gear_name", gearBox).text(kcGear.name()).attr("title",
 				kcGear.htmlTooltip(capacity, kcShip)).lazyInitTooltip();
