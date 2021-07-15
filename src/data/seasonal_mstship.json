@@ -4331,5 +4331,101 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5541": {
+		"api_id": 5541,
+		"api_name": "梅雨朧",
+		"api_yomi": "おぼろ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5542": {
+		"api_id": 5542,
+		"api_name": "梅雨榛名",
+		"api_yomi": "はるな",
+		"api_stype": 8,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5543": {
+		"api_id": 5543,
+		"api_name": "梅雨加古",
+		"api_yomi": "かこ",
+		"api_stype": 5,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5544": {
+		"api_id": 5544,
+		"api_name": "梅雨Libeccio",
+		"api_yomi": "リベッチオ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5545": {
+		"api_id": 5545,
+		"api_name": "梅雨Scirocco",
+		"api_yomi": "シロッコ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5546": {
+		"api_id": 5546,
+		"api_name": "梅雨水無月",
+		"api_yomi": "みなづき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5547": {
+		"api_id": 5547,
+		"api_name": "梅雨宗谷(特務艦)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5548": {
+		"api_id": 5548,
+		"api_name": "梅雨宗谷(灯台補給船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5549": {
+		"api_id": 5549,
+		"api_name": "梅雨宗谷(南極観測船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5550": {
+		"api_id": 5550,
+		"api_name": "春の私服伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5551": {
+		"api_id": 5551,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5552": {
+		"api_id": 5552,
+		"api_name": "お祝い八丈",
+		"api_yomi": "はちじょう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
 	}
 }

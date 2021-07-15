@@ -4240,7 +4240,7 @@ ABYSS FLEET
 	overflow:hidden;
 }
 .airbase .base_name {
-	width:95px;
+	width:65px;
 	height:20px;
 	float:left;
 	color:#cccccc;
@@ -4254,7 +4254,7 @@ ABYSS FLEET
 }
 
 .airbase .base_stats {
-	width:170px;
+	width:200px;
 	height:20px;
 	float:left;
 	overflow:hidden;
@@ -4292,11 +4292,17 @@ ABYSS FLEET
 	color:#cccccc;
 	font-size:11px;
 }
+.airbase .base_stats .base_stat.base_level {
+	width:35px;
+}
+.airbase .base_stats .base_stat.base_level .base_stat_value {
+	width:15px;
+}
 .airbase .base_stats .base_stat.base_range {
-	width:40px;
+	width:35px;
 }
 .airbase .base_stats .base_stat.base_range .base_stat_value {
-	width:20px;
+	width:15px;
 }
 .airbase .base_stats .base_stat.base_afp {
 	width:75px;

@@ -2398,7 +2398,9 @@
 						console.debug("LandBase", i, baseInfo);
 						const baseBox = $("#factory .airbase").clone();
 						$(".base_map", baseBox).text(baseInfo.map);
-						$(".base_name", baseBox).text(baseInfo.name);
+						$(".base_name", baseBox).text(baseInfo.name)
+							.attr("title", baseInfo.name).lazyInitTooltip();
+						$(".base_level .base_stat_value", baseBox).text(baseInfo.level || 0);
 						$(".base_range .base_stat_value", baseBox).text(baseInfo.range);
 						$(".base_range", baseBox).attr("title",
 							"{0} + {1}".format(baseInfo.rangeBase, baseInfo.rangeBonus)

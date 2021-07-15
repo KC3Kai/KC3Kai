@@ -1530,6 +1530,12 @@ Previously known as "Reactor"
 			}
 		},
 		
+		/* Expand maintenance level on construction corps used too
+		-------------------------------------------------------*/
+		"api_req_air_corps/expand_maintenance_level":function(params, response, headers){
+			// TODO
+		},
+		
 		/* Change base name
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_name":function(params, response, headers){
@@ -1558,7 +1564,7 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
-		/* Get bases info
+		/* Set base squadron, or swap squadrons within the same base
 		-------------------------------------------------------*/
 		"api_req_air_corps/set_plane":function(params, response, headers){
 			$.each(PlayerManager.bases, function(i, base){
@@ -1604,6 +1610,39 @@ Previously known as "Reactor"
 			KC3Network.trigger("Lbas");
 		},
 		
+		/* Swap squadrons among 2 bases (in the same world?)
+		-------------------------------------------------------*/
+		"api_req_air_corps/change_deployment_base":function(params, response, headers){
+			// assuming api_base_items result and matched api_rid must be existed
+			const squadrons = response.api_data.api_base_items;
+			$.each(PlayerManager.bases, function(i, base){
+				// set swap target
+				if(base.map == params.api_area_id && base.rid == params.api_base_id){
+					const squadron = squadrons.find(s => s.api_rid == base.rid);
+					const distance = squadron.api_distance;
+					base.rangeBase = distance.api_base;
+					base.rangeBonus = distance.api_bonus;
+					base.range = base.rangeBase + base.rangeBonus;
+					$.each(squadron.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
+					});
+				}
+				// set swap source
+				if(base.map == params.api_area_id && base.rid == params.api_base_id_src){
+					const squadron = squadrons.find(s => s.api_rid == base.rid);
+					const distance = squadron.api_distance;
+					base.rangeBase = distance.api_base;
+					base.rangeBonus = distance.api_bonus;
+					base.range = base.rangeBase + base.rangeBonus;
+					$.each(squadron.api_plane_info, function(_, p){
+						base.planes[p.api_squadron_id-1] = p;
+					});
+				}
+			});
+			PlayerManager.saveBases();
+			KC3Network.trigger("Lbas");
+		},
+		
 		/* Supply base squadrons
 		-------------------------------------------------------*/
 		"api_req_air_corps/supply":function(params, response, headers){
@@ -1628,7 +1667,6 @@ Previously known as "Reactor"
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("Lbas");
 		},
-		
 		
 		/*-------------------------------------------------------*/
 		/*----------------------[ QUESTS ]-----------------------*/

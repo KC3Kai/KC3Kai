@@ -7,6 +7,7 @@
 		this.name = "";
 		this.range = -1;
 		this.action = -1;
+		this.level = 0;
 		this.planes = [];
 		this.strikePoints = undefined;
 		
@@ -39,10 +40,21 @@
 			this.rangeBase = data.rangeBase;
 			this.rangeBonus = data.rangeBonus;
 			this.action = data.action;
+			this.level = data.level;
 			this.planes = data.planes;
 			this.strikePoints = data.strikePoints;
 		}
 		return this;
+	};
+	
+	KC3LandBase.prototype.setExpandedInfo = function(data){
+		if (Array.isArray(data)) {
+			data.forEach(info => {
+				if (info.api_area_id == this.map) {
+					this.level = info.api_maintenance_level;
+				}
+			});
+		}
 	};
 	
 	KC3LandBase.actionEnum = function(key){
@@ -199,6 +211,7 @@
 			returnObj.rid = this.rid;
 			returnObj.range = this.range;
 			returnObj.action = this.action;
+			returnObj.level = this.level;
 			if(this.strikePoints){
 				returnObj.edges = this.strikePoints;
 			}

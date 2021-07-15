@@ -1111,6 +1111,26 @@
 					},
 				],
 			},
+			// FM-2
+			"277": {
+				count: 0,
+				byClass: {
+					// Following carriers: Lexington Class
+					"69": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+					// Ark Royal Class
+					"78": "69",
+					// Casablanca Class
+					"83": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+				},
+			},
 			// SBD
 			"195": {
 				count: 0,
@@ -1450,6 +1470,35 @@
 					"3": {
 						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
 					},
+				},
+			},
+			// FR-1 Fireball
+			"422": {
+				count: 0,
+				byClass: {
+					// Following carriers: Lexington Class
+					"69": {
+						multiple: { "houg": 1, "houk": 1 },
+					},
+					// Yorktown Class
+					"105": "69",
+					// Ark Royal Class
+					"78": "69",
+					// Essex Class
+					"84": {
+						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+					},
+					// Casablanca Class
+					"83": [
+						{
+							multiple: { "houg": 1, "houk": 1 },
+						},
+						{
+							// Gambier Bay Mk.II
+							remodel: 2,
+							multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+						},
+					],
 				},
 			},
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
@@ -5968,6 +6017,10 @@
 							single: { "houg": 1 },
 						},
 					],
+					// I-203 Class, 1 boiler without Turbine: Slow -> Fast 
+					"109": {
+						single: { "soku": 5, },
+					},
 				},
 			},
 			// Skilled Lookouts
