@@ -482,7 +482,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		 *      for now excluding LBAS battle (no damage can be taken), jet assaults (PvP ignored).
 		 * @see main.js#TaskAircraftFlightBase.prototype._antiAircraft
 		 * @see main.js#TaskAirWarAntiAircraft.prototype._start
-		 *      in-game `12cm 30tube Rocket Launcher Kai Ni` animation will show the banner if damage <= 0.
+		 *      in-game `12cm 30tube Rocket Launcher Kai Ni` animation will show the text banner if damage <= 0.
+		 * @see main.js#TaskAirWarDamageNumber.prototype._createParallel
+		 *      in-game damage number (the text 'miss' on 0 damage) will not be shown if RosaK2 anim conditions true and damage <= 0. Therefore, conditions of AARB actually triggering are at least: be targeted (fbak/frai flag 1) and no damage shown. neither the text banner nor AA-related animations.
 		 */
 		isPlayerNotTakenAirBombingDamage :function(node, position, isOnEscortFleet){
 			const thisNode = node || this.currentNode();

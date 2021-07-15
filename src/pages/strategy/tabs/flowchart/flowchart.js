@@ -65,7 +65,6 @@
 			this.seedBranch( rootQuestTree, 904 ); // By1
 			this.seedBranch( rootQuestTree, 912 ); // By3
 			this.seedBranch( rootQuestTree, 928 ); // By5
-			this.seedBranch( rootQuestTree, 944 ); // By6
 			
 			// Other non-flowchart quests
 			const rootQuestList = $(".tab_flowchart .extralist ul.questList");

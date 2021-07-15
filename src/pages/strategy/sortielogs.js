@@ -1192,6 +1192,7 @@
 								});
 								$(".node_planes", nodeBox).attr("title", thisNode.buildAirBattleLossMessage());
 							}
+							//console.debug(`${thisNode.sortie} ${thisNode.letter}`, thisNode);
 							
 							// Node EXP
 							[["base","nodal"],["hq","hq"]].forEach(function(x){

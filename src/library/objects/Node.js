@@ -423,6 +423,7 @@ Used by SortieManager
 		// might use api_f_maxhps_combined instead
 		var isPlayerCombined = battleData.api_fParam_combined !== undefined;
 		this.playerCombined = isPlayerCombined;
+		this.playerStriking = this.fleetSent === 3 && battleData.api_f_maxhps.length === 7;
 		
 		this.supportFlag = battleData.api_support_flag > 0;
 		if(this.supportFlag) {
@@ -869,6 +870,7 @@ Used by SortieManager
 		
 		var isPlayerCombined = nightData.api_fParam_combined !== undefined;
 		this.playerCombined = isPlayerCombined;
+		this.playerStriking = this.fleetSent === 3 && nightData.api_f_maxhps.length === 7;
 		
 		this.fformation = (nightData.api_formation || [])[0] || this.fformation;
 		this.eformation = (nightData.api_formation || [])[1] || this.eformation;

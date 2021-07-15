@@ -474,6 +474,8 @@
                 KC3SortieManager.currentNode() : {};
         const isOnBattle = !!currentNode.stime;
         const eventIdKind = [currentNode.eventId, currentNode.eventKind];
+        const isPlayerStriking = currentNode.playerStriking;
+        const isPlayerCombined = currentNode.playerCombined;
         const playerCombinedFleetType = PlayerManager.combinedFleet;
         const isEnemyCombined = currentNode.enemyCombined;
         const rawApiData = currentNode.battleNight || currentNode.battleDay || {};
@@ -495,6 +497,8 @@
             enemyFormationId,
             airBattleId,
             contactPlaneId,
+            isPlayerStriking,
+            isPlayerCombined,
             playerCombinedFleetType,
             isEnemyCombined,
             isStartFromNight,

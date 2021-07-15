@@ -335,12 +335,14 @@ known IDs see QuestManager
 
 		// single tracking counter and client-side progress judgement for these:
 		//   C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		//   F25, F39, F90: 50%/80% if secretary or inventory holds insufficient required items
+		//   F25, F39, F90, F98, F99: 50%/80% if secretary or inventory holds insufficient required items
 		// about all client-side progress conditions, see `main.js#DutyModel_`.
-		// quest F90 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
-		//   and it may get non-zero progress even 14cm gun scrapping not enough, so counter no touch.
-		if([318, 628, 643, 653].indexOf(this.id) > -1) {
-			if (currentCount < maxCount && this.progress > 0 && this.id !== 653) {
+		// quest F90, F98, F99 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
+		//   and it may get non-zero progress even slotitem scrapping not enough, so counter no touch.
+		//   anyway they might treat holding conditions + scrapping amount as couner max.
+		if([318, 628, 643, 653, 1103, 1104].indexOf(this.id) > -1) {
+			if (currentCount < maxCount && this.progress > 0
+				&& [653, 1103, 1104].indexOf(this.id) === 0) {
 				trackingData[0] = maxCount;
 			}
 			return;
@@ -465,6 +467,25 @@ known IDs see QuestManager
 
 	KC3Quest.prototype.getIconClass = function(){
 		return KC3Quest.getIconClass(this.id);
+	};
+
+	/** @return array of accepted api_category values when filtered by types.
+		api_category not persistent since it's still just a number without api_id lower 2 digits */
+	KC3Quest.getCategoriesByFilter = function(filterId){
+		// filter IDs and matched categories see `main.js#DutyUtil.filterByCategory`
+		switch(filterId){
+			// Sortie
+			case 1: return [2, 8, 9, 10];
+			// PvP
+			case 2: return [3];
+			// Exped
+			case 3: return [4];
+			// Arsenal
+			case 4: return [6, 11];
+			// Others
+			case 5: return [1, 5, 7];
+		}
+		return [];
 	};
 
 	KC3Quest.prototype.getLabelClass = function(){

@@ -667,6 +667,8 @@ KC3改 Ship Object
 		};
 		for(const apiName in statApiNames) {
 			const equipStats = this.equipmentTotalStats(apiName);
+			// known issue: since stats value cannot be negative (lower cap at 0, except unknown accuracy),
+			// will get incorrect stats in cases like actual naked 0 with negative stats from equip.
 			stats[statApiNames[apiName]] -= equipStats;
 		}
 		return !statAttr ? stats : stats[statAttr];
@@ -1954,8 +1956,8 @@ KC3改 Ship Object
 	 * Apply known pre-cap modifiers to attack power.
 	 * @return {Object} capped power and applied modifiers.
 	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
+	 * @see https://en.kancollewiki.net/Damage_Calculations#Pre-cap_Modifiers
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#beforecap
-	 * @see https://twitter.com/Nishisonic/status/893030749913227264
 	 */
 	KC3Ship.prototype.applyPrecapModifiers = function(basicPower, warfareType = "Shelling",
 			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
@@ -1980,7 +1982,14 @@ KC3改 Ship Object
 			// other warefare types like Aerial Opening Airstrike not affected
 			[]
 		)[formationId] || 1;
-		// TODO Any side Echelon vs Combined Fleet, shelling mod is 0.6?
+		// Echelon (any side) vs Combined Fleet OR support on battle node starting from night
+		if(formationId === 4) {
+			const battleConds = this.collectBattleConditions();
+			if((warfareType === "SupportShelling" && battleConds.eventIdKind[1] === 2)
+				|| battleConds.isEnemyCombined) {
+				formationModifier = 0.6;
+			}
+		}
 		// Modifier of vanguard formation depends on the position in the fleet
 		if(formationId === 6) {
 			const [shipPos, shipCnt] = this.fleetPosition();
@@ -1994,9 +2003,9 @@ KC3改 Ship Object
 					formationModifier = isGuardian ? 0.6 : 1.0;
 				}
 			}
-			// All ships get 0.5 for Expedition Support Shelling
+			// All ships get 0.5 for Expedition Support Shelling (but 1.0 when vs Combined Fleet)
 			if(warfareType === "SupportShelling") {
-				formationModifier = 0.5;
+				formationModifier = this.collectBattleConditions().isEnemyCombined ? 1.0 : 0.5;
 			}
 		}
 		// Non-empty attack type tuple means this supposed to be night battle
@@ -3559,6 +3568,7 @@ KC3改 Ship Object
 	 * Likely to be revamped as formula comes from PSVita and does not include CVCI,
 	 * uncertain about Combined Fleet interaction.
 	 * @see https://kancolle.wikia.com/wiki/User_blog:Shadow27X/Artillery_Spotting_Rate_Formula
+	 * @see https://en.kancollewiki.net/Combat/Artillery_Spotting#Trigger_Rates
 	 * @see KC3Fleet.prototype.artillerySpottingLineOfSight
 	 */
 	KC3Ship.prototype.daySpAttackBaseRate = function() {
@@ -3590,6 +3600,7 @@ KC3改 Ship Object
 	 * @param {number} spType - based on api_sp_list value of night special attack type.
 	 * @param {number} currentHp - used by simulating from battle prediction or getting different HP value.
 	 * @see https://kancolle.wikia.com/wiki/Combat/Night_Battle#Night_Cut-In_Chance
+	 * @see https://en.kancollewiki.net/Combat/Night_Battle#Trigger_Rates
 	 * @see https://wikiwiki.jp/kancolle/%E5%A4%9C%E6%88%A6#nightcutin1
 	 * @see KC3Fleet.prototype.estimateUsableSearchlight
 	 */
@@ -3603,13 +3614,15 @@ KC3改 Ship Object
 			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
-		// Late model submarine torpedo cut-in
+		// Special mods to match 122 type factor for late model submarine torpedo cut-in
 		// https://twitter.com/Divinity__123/status/1377666014834479104
+		/*
 		if (spType === 3 && this.hasEquipment([213, 214, 383])) {
 			levelModifier *= 2;
 			// Late model submarine radar bonus
 			if (this.hasEquipment([384])) { baseValue += 5; }
 		}
+		*/
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		// Flagship bonus
@@ -3725,17 +3738,17 @@ KC3改 Ship Object
 		const typeFactor = {
 			2: 115,
 			3: ({ // submarine late torp cutin
-				"CutinLateTorpRadar": 122,
-				"CutinLateTorpTorp": undefined,
+				"CutinLateTorpRadar": 105, // or 122 with special mods for base rate?
+				"CutinLateTorpTorp": 110,
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
 			5: 140,
-			6: ({ // CVNCI factors unknown, placeholders
-				"CutinNFNFNTB": undefined,  // should be 3 types, for mod 1.25
-				"CutinNFNTB" : undefined,   // 2 planes for mod 1.2
+			6: ({ // CVNCI factors not fully tested yet
+				"CutinNFNFNTB": 105,  // 3 planes for mod 1.25
+				"CutinNFNTB" : undefined,   // 115?, 2 planes for mod 1.2
 				"CutinNFNDB" : undefined,
 				"CutinNTBNDB": undefined,
-				"CutinNFNFNF"  : undefined, // 3 planes for mod 1.18
+				"CutinNFNFNF"  : undefined, // 125?, 3 planes for mod 1.18
 				"CutinNFNTBNTB": undefined,
 				"CutinNFNFFBI" : undefined,
 				"CutinNFNFSF"  : undefined,
@@ -3753,12 +3766,12 @@ KC3改 Ship Object
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
 			8: 140,
-			9: 122,
-			10: 122, // or 124?
+			9: 124, // or still 122?
+			10: 122,
 			// Doubled hits versions
 			11: 115,
 			12: 140,
-			13: 122,
+			13: 124,
 			14: 122,
 			// 100~104 might be different, even with day one
 			// 300~302 unknown
@@ -4382,7 +4395,7 @@ KC3改 Ship Object
 			  equipDiffStats = {},
 			  modLeftStats = shipObj.modernizeLeftStats();
 		Object.keys(maxedStats).map(s => {maxDiffStats[s] = maxedStats[s] - nakedStats[s];});
-		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[])[0];});
+		Object.keys(nakedStats).map(s => {equipDiffStats[s] = nakedStats[s] - (shipObj[s]||[0])[0];});
 		const signedNumber = n => (n > 0 ? '+' : n === 0 ? '\u00b1' : '') + n;
 		const optionalNumber = (n, pre = '\u21d1', show0 = false) => !n && (!show0 || n !== 0) ? '' : pre + n;
 		const replaceFilename = (file, newName) => file.slice(0, file.lastIndexOf("/") + 1) + newName;
@@ -4720,8 +4733,8 @@ KC3改 Ship Object
 					 */
 					aaEffectTypeId > 0 ?
 						" ({0})".format(
-							aaEffectTypeId === 4 ?
-								// Show a trigger chance for RosaK2 Defense, still unknown if with Type3 Shell
+							[4, 6].includes(aaEffectTypeId) ?
+								// Show a trigger chance for RosaK2 AA Rocket Barrage, extra effect still unknown if with Type3 Shell
 								"{0}:{1}%".format(KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm), shipObj.calcAntiAirEffectChance()) :
 								KC3Meta.term("ShipAAEffect" + aaEffectTypeTerm)
 						) : ""
