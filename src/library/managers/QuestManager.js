@@ -441,7 +441,7 @@ Uses KC3Quest objects to play around with
 			if(!!questMeta.memo){
 				title += $("<p></p>")
 					.css("font-size", "11px")
-					.css("color", "#69a").text(questMeta.memo)
+					.css("color", "#69a").html(questMeta.memo)
 					.prop("outerHTML");
 			}
 			if(isShowUnlocks && Array.isArray(questMeta.unlock)){
@@ -558,8 +558,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53
-			this.resetCounterLoop([345, 346, 348], false);
+			// Yearly PvP C49, C50, C53, C58
+			this.resetCounterLoop([345, 346, 348, 353], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -916,10 +916,10 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.countShipType(7) >= 2;
 					},
-				"948": // By10 Sortie CV(L/B) as flagship
+				"948": // By10 Sortie 1st fleet with CV(L/B) as flagship
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.hasShipType([7, 11, 18], 0);
+						return fleetSent == 1 && fleet.hasShipType([7, 11, 18], 0);
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

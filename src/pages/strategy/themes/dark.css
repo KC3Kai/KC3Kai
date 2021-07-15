@@ -1486,7 +1486,7 @@ button, input, select, textarea {
 	border-radius:0px;
 }
 .tab_akashi .eq_res .insufficient {
-	color:#f10;
+	color:#f10 !important;
 }
 .tab_akashi .equipment {
 	color:#9e9e9e;

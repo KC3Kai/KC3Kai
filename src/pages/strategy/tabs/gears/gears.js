@@ -10,6 +10,7 @@
 		_holders: {},
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
+		_currentItemId: 0, // keep track of item id to be focused
 		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","rk","hk"],
 		_defaultCompareMethod: {
 			// main guns
@@ -339,27 +340,31 @@
 			sortControls.push( "ingame" );
 			sortControls.forEach( function(property,i) {
 				$(".tab_gears .itemSorters .sortControl." + property).on("click", function() {
-					KC3StrategyTabs.gotoTab(null, self._currentTypeId, property);
+					KC3StrategyTabs.gotoTab(null, self._currentTypeId, self._currentItemId, property);
 				});
 				
 			});
 
 			if(!!KC3StrategyTabs.pageParams[1]){
-				if(!!KC3StrategyTabs.pageParams[2]){
-					this.switchTypeAndSort(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2]);
-				} else {
-					this.switchTypeAndSort(KC3StrategyTabs.pageParams[1]);
-				}
+				this.switchTypeAndSort(...KC3StrategyTabs.pageParams.slice(1));
 			} else {
 				this.switchTypeAndSort($(".tab_gears .item_type").first().data("type"));
 			}
 		},
 
-		switchTypeAndSort: function(typeId, sortMethod) {
+		switchTypeAndSort: function(typeId, itemId, sortMethod) {
 			const compareMethod = sortMethod || this._defaultCompareMethod["t"+typeId] || "overall";
 			this.updateSorters(typeId);
 			this._currentTypeId = typeId;
+			this._currentItemId = itemId || 0;
 			this.showType(typeId, compareMethod);
+			if(itemId > 0) {
+				// Ensure scroll window to specified anchor
+				setTimeout(function(){
+					const target = $("#gears-{0}-{1}".format(typeId, itemId));
+					if(target.length) target.get(0).scrollIntoView();
+				}, 0);
+			}
 		},
 
 		/*
@@ -464,6 +469,16 @@
 			$(".tab_gears .item_type[data-type={0}]".format(type_id)).addClass("active");
 			$(".tab_gears .item_list").html("");
 
+			const shipClickFunc = function(e){
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
+			const gearClickFunc = function(e){
+				if(e.altKey) {
+					KC3StrategyTabs.gotoTab(null, self._currentTypeId, $(this).attr("alt"));
+				} else {
+					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
+				}
+			};
 			const comparator = this._comparator[compareMethod];
 			if (typeof comparator == "undefined") {
 				console.warn("Missing comparator for:", compareMethod);
@@ -504,7 +519,7 @@
 						$("img", holderDiv).addClass("hover")
 							.attr("title", `[${masterId}] ${item.holder.name()} #${item.holder.rosterId}\n${getItemList(item.held).join("\n")}`)
 							.attr("alt", masterId)
-							.on("click", self.shipClickFunc);
+							.on("click", shipClickFunc);
 						$("font", holderDiv).attr("title", `#${rosterId} ${item.holder.name()}${!item.holder.lock ? " \uD83D\uDD13" : ""}`);
 					}
 					div = div.add(holderDiv);
@@ -531,13 +546,14 @@
 			const allProperties = this._allProperties;
 			$.each(SlotItems, function(index, ThisSlotitem) {
 				const ItemElem = $(".tab_gears .factory .slotitem").clone().appendTo(".tab_gears .item_list");
+				ItemElem.attr("id", "gears-{0}-{1}".format(ThisSlotitem.type_id, ThisSlotitem.id));
 				$(".icon img", ItemElem)
 					.attr("src", KC3Meta.itemIcon(ThisSlotitem.type_id))
 					.error(function() { $(this).unbind("error").attr("src", "/assets/img/ui/empty.png"); });
 				$(".icon img", ItemElem)
 					.attr("title", `[${ThisSlotitem.id}]\n${getItemList(ThisSlotitem.held, ThisSlotitem.extras).join("\n")}`)
 					.attr("alt", ThisSlotitem.id)
-					.on("click", self.gearClickFunc);
+					.on("click", gearClickFunc);
 				$(".english", ItemElem).text(ThisSlotitem.english);
 				$(".japanese", ItemElem).text(ThisSlotitem.japanese);
 
@@ -581,14 +597,6 @@
 				) ).appendTo( ItemElem.children('.holders') );
 			});
 
-		},
-
-		shipClickFunc: function(e){
-			KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
-		},
-
-		gearClickFunc: function(e){
-			KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 		},
 
 		/* Determine if an item has a specific stat

@@ -214,7 +214,7 @@
 			
 			$(".equipment_list").html("");
 			
-			var ThisBox, MasterItem, ItemName;
+			var ThisBox, MasterItem;
 			var hasShip, hasGear, ctr;
 			var ShipBox, shipId;
 			var ResBox, improveList;
@@ -229,6 +229,9 @@
 				} else {
 					KC3StrategyTabs.gotoTab("mstgear", $(this).attr("alt"));
 				}
+			};
+			var gearNameClickFunc = function(e){
+					KC3StrategyTabs.gotoTab("gears", $(this).data("item_type3"), $(this).data("item_id"));
 			};
 			var toAmountStr = function(v){
 				return typeof v === "undefined" || v < 0  ? "?" : String(v);
@@ -267,6 +270,7 @@
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 						.text( consumedItem[1] );
 					$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+						.removeClass("hover")
 						.attr("title", "[{0}] {1}".format(consumedItem[0], consumedItem[1]) );
 					$(".eq_res_value.consumed_name.plus{0} .cnt".format(stars), container)
 						.text( "x{0}".format(toAmountStr(amount)) );
@@ -279,6 +283,9 @@
 				$(".eq_res_icon.consumed_icon.plus{0}".format(stars), container)
 					.click(gearClickFunc);
 				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
+					.data("item_id", consumedItem.api_id)
+					.data("item_type3", consumedItem.api_type[3])
+					.addClass("hover").click(gearNameClickFunc)
 					.text( KC3Meta.gearName(consumedItem.api_name) );
 				$(".eq_res_value.consumed_name.plus{0} .val".format(stars), container)
 					.attr("title", "[{0}] {1}".format(consumedItem.api_id, KC3Meta.gearName(consumedItem.api_name)) );
@@ -361,10 +368,10 @@
 			$.each(this.todaySortedIds, function(_, itemId){
 				var shipList = self.today[itemId];
 				MasterItem = KC3Master.slotitem(itemId);
-				ItemName = KC3Meta.gearName( MasterItem.api_name );
+				var itemName = KC3Meta.gearNameById(MasterItem.api_id);
 				
 				ThisBox = $(".tab_akashi .factory .equipment").clone().appendTo(".equipment_list");
-				ThisBox.data("item_id",itemId).attr("id", "akashi-{0}-{1}".format(dayName, itemId));
+				ThisBox.data("item_id", itemId).attr("id", "akashi-{0}-{1}".format(dayName, itemId));
 				$(".eq_priority--toggle", ThisBox).toggleClass("on", self.priorities.indexOf(itemId) !== -1);
 				$(".eq_priority--up,.eq_priority--down", ThisBox).toggleClass("off", self.priorities.indexOf(itemId) === -1);
 
@@ -372,8 +379,10 @@
 				$(".eq_icon img", ThisBox).attr("alt", MasterItem.api_id);
 				$(".eq_icon img", ThisBox).click(gearClickFunc);
 				
-				$(".eq_name", ThisBox).text( ItemName );
-				$(".eq_name", ThisBox).attr("title", "[{0}] {1}".format(itemId, ItemName) );
+				$(".eq_name", ThisBox).text(itemName)
+					.attr("title", "[{0}] {1}".format(itemId, itemName))
+					.data("item_id", itemId).data("item_type3", MasterItem.api_type[3])
+					.click(gearNameClickFunc);
 				
 				hasShip = false;
 				// If shipList not empty means all ships can upgrade this item
@@ -482,7 +491,10 @@
 							$(".eq_next .eq_res_icon img", ResBox).attr("src", KC3Meta.itemIcon(upgradedItem.api_type[3]));
 							$(".eq_next .eq_res_icon", ResBox).attr("alt", upgradedItem.api_id);
 							$(".eq_next .eq_res_icon", ResBox).click(gearClickFunc);
-							$(".eq_next .eq_res_name .name_val", ResBox).text( KC3Meta.gearName(upgradedItem.api_name) );
+							$(".eq_next .eq_res_name .name_val", ResBox)
+								.text(KC3Meta.gearName(upgradedItem.api_name))
+								.data("item_id", upgradedItem.api_id).data("item_type3", upgradedItem.api_type[3])
+								.click(gearNameClickFunc);
 							if(imp.upgrade[1]){
 								$(".eq_next .eq_res_name .stars_val", ResBox).text(
 									imp.upgrade[1] >= 10 ? "max" : "+"+imp.upgrade[1]

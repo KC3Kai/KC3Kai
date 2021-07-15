@@ -1154,6 +1154,93 @@
 					"105": "69",
 				},
 			},
+			// SB2C-3
+			"420": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American carriers: Lexington Class
+					"69": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Casablanca Class
+					"83": "69",
+					// Yorktown Class
+					"105": "69",
+					// Essex Class
+					"84": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Ark Royal Class
+					"78": {
+						minStars: 3,
+						multiple: { "houg": 1 },
+					},
+				},
+				byShip: {
+					// All CVL -2 fp, -1 ev, -2 ar
+					stypes: [7],
+					multiple: { "houg": -2, "houk": -1, "souk": -2 },
+				},
+			},
+			// SB2C-5
+			"421": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Following American carriers: Lexington Class
+					"69": [
+						{
+							multiple: { "houg": 2 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Casablanca Class
+					"83": "69",
+					// Yorktown Class
+					"105": "69",
+					// Essex Class
+					"84": [
+						{
+							multiple: { "houg": 3 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Ark Royal Class
+					"78": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 5,
+							multiple: { "houg": 1 },
+						},
+					],
+				},
+				byShip: {
+					// All CVL -2 fp, -1 ev, -2 ar
+					stypes: [7],
+					multiple: { "houg": -2, "houk": -1, "souk": -2 },
+				},
+			},
 			// Type 96 Fighter
 			"19": {
 				count: 0,

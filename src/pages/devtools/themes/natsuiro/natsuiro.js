@@ -1638,24 +1638,13 @@
 
 			function exec() {
 				const activeFilter = getActiveFilter();
-				const allowCategories = getAllowCategories(activeFilter);
+				const allowCategories = KC3Quest.getCategoriesByFilter(activeFilter);
 				const quests = getFilterQuests(allowCategories);
 				loadQuests(quests);
 			}
 
 			function getActiveFilter() {
 				return Number($('.quest_filter_button.active').attr('filter')) || -1;
-			}
-
-			function getAllowCategories(filter) {
-				switch (filter) {
-					case 1: return [2, 8, 9];
-					case 2: return [3];
-					case 3: return [4];
-					case 4: return [6];
-					case 5: return [1, 5, 7];
-				}
-				return [];
 			}
 
 			function getFilterQuests(categories) {
