@@ -572,8 +572,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58
-			this.resetCounterLoop([345, 346, 348, 353], false);
+			// Yearly PvP C49, C50, C53, C58, C60
+			this.resetCounterLoop([345, 346, 348, 353, 354], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -773,6 +773,13 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShipType([5, 6], 0)
 							&& fleet.countShipType([5, 6]) >= 4
 							&& fleet.countShipType(2) >= 2;
+					},
+				"354": // C60 PvP with Gambier Bay Mk.II as flagship, 2 Fletcher-class, John C.Butler-class DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(707, 0)
+							&& fleet.countShipClass([87, 91]) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
