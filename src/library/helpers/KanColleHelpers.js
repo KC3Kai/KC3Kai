@@ -11152,7 +11152,7 @@ var PS = {};
         24: 0+4,
         40: 0+4,
         44: 6+2,
-        142: 4+1,
+        142: 4+2,
     };
 
     exports.gsByFlagshipLevelList = [

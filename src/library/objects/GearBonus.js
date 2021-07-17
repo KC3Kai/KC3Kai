@@ -6653,7 +6653,7 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-203?
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-203
 						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 882],
 						synergy: [
 							{
