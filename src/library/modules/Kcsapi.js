@@ -1525,16 +1525,33 @@ Previously known as "Reactor"
 						bases.splice(count - 1, 1);
 					}
 				}
-				// TODO maintenance level might be added to api data
 				PlayerManager.saveBases();
 				KC3Network.trigger("Lbas");
 			}
+			PlayerManager.consumables.constCorps -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Expand maintenance level on construction corps used too
 		-------------------------------------------------------*/
 		"api_req_air_corps/expand_maintenance_level":function(params, response, headers){
-			// TODO api result data unknown
+			// nothing in response.api_data, just update level and useitem
+			var foundLevelup = false;
+			$.each(PlayerManager.bases, function(i, base){
+				if(base.map == params.api_area_id){
+					base.level += 1;
+					foundLevelup = true;
+				}
+			});
+			// might be expanding event world, so no current base will be updated if not during event
+			if(foundLevelup){
+				PlayerManager.saveBases();
+				KC3Network.trigger("Lbas");
+			}
+			PlayerManager.consumables.constCorps -= 1;
+			PlayerManager.setConsumables();
+			KC3Network.trigger("Consumables");
 		},
 		
 		/* Change base name
