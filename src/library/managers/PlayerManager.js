@@ -25,7 +25,7 @@ Does not include Ships and Gears which are managed by other Managers
 		statistics: {},
 		maxResource: 350000,
 		maxConsumable: 3000,
-		maxCoin: 200000,
+		maxCoin: 350000,
 
 		init :function(){
 			this.hq = new KC3Player();
@@ -96,22 +96,24 @@ Does not include Ships and Gears which are managed by other Managers
 			return this;
 		},
 
-		setBases :function( data ){
-			var self = this;
-			Array.numbers(0, data.length < 4 ? 3 : data.length - 1)
-				.forEach(function(i){
-				self.bases[i] = new KC3LandBase(data[i]);
-				});
-			if(self.bases.length > 4 && data.length < self.bases.length){
-				self.bases.splice(data.length < 4 ? 4 : data.length);
+		setBases :function( data, expandedInfo ){
+			Array.numbers(0, data.length < 4 ? 3 : data.length - 1).forEach(i => {
+				this.bases[i] = new KC3LandBase(data[i]);
+				if(!!expandedInfo){
+					this.bases[i].setExpandedInfo(expandedInfo);
+				}
+			});
+			if(this.bases.length > 4 && data.length < this.bases.length){
+				this.bases.splice(data.length < 4 ? 4 : data.length);
 			}
 			this.saveBases();
-			localStorage.setObject("baseConvertingSlots", self.baseConvertingSlots);
+			localStorage.setObject("baseConvertingSlots", this.baseConvertingSlots);
 			return this;
 		},
 
 		setBasesOnWorldMap :function( data ){
 			var airBase = data.api_air_base,
+				expandedInfo = data.api_air_base_expanded_info,
 				mapInfo = data.api_map_info;
 			if(typeof airBase !== "undefined") {
 				// Map and keep World IDs only
@@ -121,7 +123,7 @@ Does not include Ships and Gears which are managed by other Managers
 				openedWorldIds = [...new Set(openedWorldIds)];
 				// Filter unset land bases after event if event world API data still exist
 				var openedBases = airBase.filter(ab => openedWorldIds.indexOf(String(ab.api_area_id)) > -1);
-				this.setBases(openedBases);
+				this.setBases(openedBases, expandedInfo);
 				return true;
 			} else if(this.bases[0].map > 0) {
 				// Clean land bases after event if World 6 not opened

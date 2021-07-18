@@ -171,6 +171,248 @@ known IDs see QuestManager
 		}
 	};
 
+	/** Batch increasing tracking progress counter for known period quests (with specific conditions) */
+	KC3Quest.incrementBatch = function(type = 0, context = {}){
+		switch(type) {
+			case 3: // Cxx type, PvP win
+				KC3QuestManager.get(303).increment(); // C2: Daily Exercises 1
+				if(context.rankPt >= 3) { // B-Rank+
+					KC3QuestManager.get(304).increment(); // C3: Daily Exercises 2
+					KC3QuestManager.get(302).increment(); // C4: Weekly Exercises
+					KC3QuestManager.get(311).increment(); // C8: Monthly Exercises 1
+					if(KC3QuestManager.isPrerequisiteFulfilled(318))
+						KC3QuestManager.get(318).increment(); // C16: Monthly Exercises 2
+					if(KC3QuestManager.isPrerequisiteFulfilled(330))
+						KC3QuestManager.get(330).increment(); // C29: Quarterly Exercises 1
+					if(KC3QuestManager.isPrerequisiteFulfilled(353))
+						KC3QuestManager.get(353).increment(); // C58: Yearly Exercises 5
+				}
+				if(context.rankPt >= 4) { // A-Rank+
+					if(KC3QuestManager.isPrerequisiteFulfilled(342))
+						KC3QuestManager.get(342).increment(); // C44: Quarterly Exercises 4
+					if(KC3QuestManager.isPrerequisiteFulfilled(345))
+						KC3QuestManager.get(345).increment(); // C49: Yearly Exercises 1
+					if(KC3QuestManager.isPrerequisiteFulfilled(348))
+						KC3QuestManager.get(348).increment(); // C53: Yearly Exercises 3
+					if(KC3QuestManager.isPrerequisiteFulfilled(350))
+						KC3QuestManager.get(350).increment(); // C55: Yearly Exercises 4
+				}
+				if(context.rankPt >= 5) { // S-Rank+
+					if(KC3QuestManager.isPrerequisiteFulfilled(337))
+						KC3QuestManager.get(337).increment(); // C38: Quarterly Exercises 2
+					if(KC3QuestManager.isPrerequisiteFulfilled(339))
+						KC3QuestManager.get(339).increment(); // C42: Quarterly Exercises 3
+					if(KC3QuestManager.isPrerequisiteFulfilled(346))
+						KC3QuestManager.get(346).increment(); // C50: Yearly Exercises 2
+					if(KC3QuestManager.isPrerequisiteFulfilled(354))
+						KC3QuestManager.get(354).increment(); // C60: Yearly Exercises 6
+				}
+				break;
+			case 4: // Dxx type, expedition success
+				KC3QuestManager.get(402).increment(); // D2: Daily Expeditions 1
+				KC3QuestManager.get(403).increment(); // D3: Daily Expeditions 2
+				KC3QuestManager.get(404).increment(); // D4: Weekly Expeditions
+				switch(context.expedId) {
+					case 1:
+						KC3QuestManager.get(436).increment(0); // D33: Yearly, index 0
+						break;
+					case 2:
+						KC3QuestManager.get(436).increment(1); // D33: Yearly, index 1
+						break;
+					case 3:
+						KC3QuestManager.get(426).increment(0); // D24: Quarterly, index 0
+						KC3QuestManager.get(434).increment(0); // D32: Yearly, index 0
+						KC3QuestManager.get(436).increment(2); // D33: Yearly, index 2
+						break;
+					case 4:
+						KC3QuestManager.get(426).increment(1); // D24: Quarterly, index 1
+						KC3QuestManager.get(428).increment(0); // D26: Quarterly, index 0
+						KC3QuestManager.get(436).increment(3); // D33: Yearly, index 3
+						KC3QuestManager.get(437).increment(0); // D34: Yearly, index 0
+						KC3QuestManager.get(438).increment(1); // D35: Yearly, index 1
+						break;
+					case 5:
+						KC3QuestManager.get(424).increment();  // D22: Monthly Expeditions
+						KC3QuestManager.get(426).increment(2); // D24: Quarterly, index 2
+						KC3QuestManager.get(434).increment(1); // D32: Yearly, index 1
+						KC3QuestManager.get(439).increment(0); // D36: Yearly, index 0
+						KC3QuestManager.get(440).increment(1); // D37: Yearly, index 1
+						KC3QuestManager.get(444).increment(0); // D40: Yearly, index 0
+						break;
+					case 9:
+						KC3QuestManager.get(434).increment(4); // D32: Yearly, index 4
+						KC3QuestManager.get(438).increment(2); // D35: Yearly, index 2
+						KC3QuestManager.get(444).increment(2); // D40: Yearly, index 2
+						break;
+					case 10:
+						KC3QuestManager.get(426).increment(3); // D24: Quarterly, index 3
+						KC3QuestManager.get(436).increment(4); // D33: Yearly, index 4
+						break;
+					case 11:
+						KC3QuestManager.get(439).increment(2); // D36: Yearly, index 2
+						KC3QuestManager.get(444).increment(4); // D40: Yearly, index 4
+						break;
+					case 12:
+						KC3QuestManager.get(444).increment(1); // D40: Yearly, index 1
+						break;
+					case 29:
+						KC3QuestManager.get(442).increment(1); // D38: Yearly, index 1
+						break;
+					case 30:
+						KC3QuestManager.get(442).increment(2); // D38: Yearly, index 2
+						break;
+					case 37:
+					case 38:
+						KC3QuestManager.get(410).increment(); // D9: Weekly Expedition 2
+						KC3QuestManager.get(411).increment(); // D11: Weekly Expedition 3
+						break;
+					case 40:
+						KC3QuestManager.get(440).increment(2); // D37: Yearly, index 2
+						break;
+					case 41:
+						KC3QuestManager.get(440).increment(0); // D37: Yearly, index 0
+						break;
+					case 46:
+						KC3QuestManager.get(440).increment(4); // D37: Yearly, index 4
+						break;
+					case 100: // A1
+						KC3QuestManager.get(434).increment(2); // D32: Yearly, index 2
+						KC3QuestManager.get(438).increment(0); // D35: Yearly, index 0
+						KC3QuestManager.get(439).increment(1); // D36: Yearly, index 1
+						break;
+					case 101: // A2
+						KC3QuestManager.get(428).increment(1); // D26: Quarterly, index 1
+						KC3QuestManager.get(434).increment(3); // D32: Yearly, index 3
+						break;
+					case 102: // A3
+						KC3QuestManager.get(428).increment(2); // D26: Quarterly, index 2
+						break;
+					case 104: // A5
+						KC3QuestManager.get(437).increment(1); // D34: Yearly, index 1
+						break;
+					case 105: // A6
+						KC3QuestManager.get(437).increment(2); // D34: Yearly, index 2
+						break;
+					case 110: // B1
+						KC3QuestManager.get(437).increment(3); // D34: Yearly, index 3
+						KC3QuestManager.get(439).increment(3); // D36: Yearly, index 3
+						KC3QuestManager.get(444).increment(3); // D40: Yearly, index 3
+						break;
+					case 114: // B5
+						KC3QuestManager.get(438).increment(3); // D35: Yearly, index 3
+						break;
+					case 131: // D1
+						KC3QuestManager.get(442).increment(0); // D38: Yearly, index 0
+						break;
+					case 133: // D3
+						KC3QuestManager.get(442).increment(3); // D38: Yearly, index 3
+						break;
+					case 142: // E2
+						KC3QuestManager.get(440).increment(3); // D37: Yearly, index 3
+						break;
+				}
+				break;
+			case 6: // Fxx type, scrapping slotitem
+				switch(context.gearMaster.api_type[2]) {
+					case 1: // Small Caliber Main Gun
+						KC3QuestManager.get(673).increment(); // F65 daily
+						KC3QuestManager.get(657).increment(0); // F92 yearly index 0
+						KC3QuestManager.get(655).increment(0); // F94 yearly index 0
+						break;
+					case 2: // Medium Caliber Main Gun
+						KC3QuestManager.get(676).increment(0); // F68 weekly index 0
+						KC3QuestManager.get(657).increment(1); // F92 yearly index 1
+						KC3QuestManager.get(655).increment(1); // F94 yearly index 1
+						break;
+					case 3: // Large Caliber Main Gun
+						KC3QuestManager.get(663).increment(); // F55 quarterly
+						KC3QuestManager.get(677).increment(0); // F69 weekly index 0
+						KC3QuestManager.get(655).increment(2); // F94 yearly index 2
+						break;
+					case 4: // Secondary Gun
+						KC3QuestManager.get(676).increment(1); // F68 weekly index 1
+						break;
+					case 5: // Torpedo
+					case 32: // Submarine Torpedo
+						KC3QuestManager.get(677).increment(2); // F69 weekly index 2
+						KC3QuestManager.get(657).increment(2); // F92 yearly index 2
+						break;
+					case 6: // Fighter
+						KC3QuestManager.get(675).increment(0); // F67 quarterly index 0
+						KC3QuestManager.get(688).increment(0); // F79 quarterly index 0
+						break;
+					case 7: // Dive Bomber
+						KC3QuestManager.get(688).increment(1); // F79 quarterly index 1
+						KC3QuestManager.get(681).increment(0); // F95 yearly index 0
+						break;
+					case 8: // Torpedo Bomber
+						KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
+						KC3QuestManager.get(655).increment(4); // F94 yearly index 4
+						KC3QuestManager.get(681).increment(1); // F95 yearly index 1
+						break;
+					case 10: // Recon Seaplane
+						KC3QuestManager.get(677).increment(1); // F69 weekly index 1
+						KC3QuestManager.get(688).increment(3); // F79 quarterly index 3
+						KC3QuestManager.get(655).increment(3); // F94 yearly index 3
+						break;
+					case 12: // Small Radar
+					case 13: // Large Radar
+						KC3QuestManager.get(680).increment(1); // F72 quarterly index 1
+						break;
+					case 21: // Anti-Air Machine Gun
+						KC3QuestManager.get(638).increment(); // F34 weekly
+						KC3QuestManager.get(674).increment(); // F66 daily
+						KC3QuestManager.get(675).increment(1); // F67 quarterly index 1
+						KC3QuestManager.get(680).increment(0); // F72 quarterly index 0
+						break;
+					case 30: // Supply Container
+						KC3QuestManager.get(676).increment(2); // F68 weekly index 2
+						break;
+					case 47: // LB Attacker Aircraft
+						KC3QuestManager.get(1105).increment(); // F100 yearly
+						break;
+				}
+				switch(context.gearMaster.api_id) {
+					case 3: // 10cm Twin High-angle Gun Mount
+						KC3QuestManager.get(686).increment(0); // F77 quarterly index 0
+						break;
+					case 4: // 14cm Single Gun Mount
+						KC3QuestManager.get(653).increment(); // F90 quarterly
+						break;
+					case 19: // Type 96 Fighter
+						KC3QuestManager.get(626).increment(1); // F22 monthly index 1
+						KC3QuestManager.get(678).increment(0); // F70 quarterly index 0
+						break;
+					case 20: // Type 0 Fighter Model 21
+						KC3QuestManager.get(626).increment(0); // F22 monthly index 0
+						KC3QuestManager.get(643).increment(); // F39 quarterly
+						KC3QuestManager.get(678).increment(1); // F70 quarterly index 1
+						break;
+					case 21: // Type 0 Fighter Model 52
+						KC3QuestManager.get(628).increment(); // F25 monthly
+						break;
+					case 106: // Type 13 Air Radar Kai
+						KC3QuestManager.get(1104).increment(); // F99 yearly
+						break;
+					case 121: // Type 94 Anti-Aircraft Fire Director
+						KC3QuestManager.get(686).increment(1); // F77 quarterly index 1
+						break;
+					case 125: // 61cm Triple (Oxygen) Torpedo Mount
+						KC3QuestManager.get(1103).increment(); // F98 yearly
+						break;
+					case 242: // Swordfish
+						KC3QuestManager.get(654).increment(0); // F93 yearly index 0
+						break;
+					case 249: // Fulmar
+						KC3QuestManager.get(654).increment(1); // F93 yearly index 1
+						break;
+				}
+				break;
+			default:
+				console.warn("Unknown quest type: " + type, context);
+		}
+	};
+
 	/* IS COMPLETE
 	Return true iff all of the counters are complete
 	------------------------------------------*/
@@ -335,14 +577,14 @@ known IDs see QuestManager
 
 		// single tracking counter and client-side progress judgement for these:
 		//   C16: no progress by PvP victories, 50% if 1st flagship equip 1 ration
-		//   F25, F39, F90, F98, F99: 50%/80% if secretary or inventory holds insufficient required items
+		//   F25, F39, F90, F98, F99, F100: 50%/80% if secretary or inventory holds insufficient required items
 		// about all client-side progress conditions, see `main.js#DutyModel_`.
-		// quest F90, F98, F99 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
+		// quest F90, F98, F99, F100 also affected by `api_c_flag` in `api_c_list` array, which outside of `api_list`,
 		//   and it may get non-zero progress even slotitem scrapping not enough, so counter no touch.
 		//   anyway they might treat holding conditions + scrapping amount as couner max.
-		if([318, 628, 643, 653, 1103, 1104].indexOf(this.id) > -1) {
+		if([318, 628, 643, 653, 1103, 1104, 1105].indexOf(this.id) > -1) {
 			if (currentCount < maxCount && this.progress > 0
-				&& [653, 1103, 1104].indexOf(this.id) === 0) {
+				&& [653, 1103, 1104, 1105].indexOf(this.id) === 0) {
 				trackingData[0] = maxCount;
 			}
 			return;

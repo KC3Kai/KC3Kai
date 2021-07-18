@@ -135,6 +135,7 @@ Provides access to data on built-in JSON files
 			663, // Yahagi K2 -> K2B
 			318, // Ryuuhou Kai -> K2E
 			883, // Ryuuhou K2E -> K2
+			396, // Gambier Bay Kai -> Mk.II
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 639],
@@ -1209,7 +1210,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		isEventWorld :function(worldId) {
-			return Number(worldId) >= 10;
+			// proved by main.js#AirBaseModelHolderEdit.EVENT_AREA_ID_THRESHOLD
+			return Number(worldId) > 20;
 		},
 		
 		worldToDesc :function(worldId, mapId, returnTerm) {
