@@ -147,6 +147,8 @@
                     return 5;
                 case 645: // Souya (AGL)
                     return 20;
+                case 396: // Gambier Bay Kai
+                    return 60;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -241,6 +243,8 @@
                     return 5;
                 case 645: // Souya (AGL)
                     return 10;
+                case 396: // Gambier Bay Kai
+                    return 73;
                 default:
                     return 0;
             }

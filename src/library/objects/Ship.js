@@ -3190,42 +3190,49 @@ KC3改 Ship Object
 		// is target a land installation
 		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
-			if(landingAttackType > 0) {
-				results.push(["LandingAttack", landingAttackType]);
-			} else {
-				// see `main.js#PhaseHougeki.prototype._hasRocketEffect` or same method of `PhaseHougekiBase`,
-				// and if base attack method is NOT air attack
-				const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
-				// no such ID -1, just mean higher priority
-				if(hasRocketLauncher) results.push(["Rocket", -1]);
-				else results.push(["SingleAttack", 0]);
-			}
+			// Landing craft anti-installation animation has now become an optional effect of other base attack methods even Rocket,
+			// day time only CVCI of special attacks can be coupling with landing effects,
+			// see `PhaseAttackBase.prototype.setOptionalEffects`, and eg:
+			//   Gambier Bay Mk.II doing air attack + DLC landing at the same time https://twitter.com/noobcyan/status/1415679788983873537
+			// here we still count it as priority exclusive base attack method
+			if(landingAttackType > 0) results.push(["LandingAttack", landingAttackType]);
 		}
+		const pushRocketAttackIfNecessary = (normalAttack) => {
+			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
+			// is target installation, Rocket equipped and base not AirAttack,
+			// see `main.js#PhaseHougeki.prototype._hasRocketEffect`
+			if(targetShipType.isLand && hasRocketLauncher && normalAttack[1] !== 1) {
+				// no such ID -1, just mean higher priority
+				results.push(["Rocket", -1]);
+			} else {
+				results.push(normalAttack);
+			}
+		};
 		// is this ship Hayasui Kai
-		else if(this.masterId === 352) {
+		if(this.masterId === 352) {
 			if(targetShipType.isSubmarine) {
 				// air attack if asw aircraft equipped
 				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
 				results.push(aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2]);
-			}
+			} else
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
 			if(this.hasEquipmentType(2, 8))
 				results.push(["AirAttack", 1]);
 			else
-				results.push(["SingleAttack", 0]);
+				pushRocketAttackIfNecessary(["SingleAttack", 0]);
 		} else if(isThisCarrier) {
 			results.push(["AirAttack", 1]);
 		}
 		// only torpedo attack possible if this ship is submarine (but not shelling phase)
 		else if(isThisSubmarine) {
-			results.push(["Torpedo", 3]);
+			pushRocketAttackIfNecessary(["Torpedo", 3]);
 		} else if(targetShipType.isSubmarine) {
 			const stype = this.master().api_stype;
 			// CAV, BBV, AV, LHA can only air attack against submarine
 			results.push( ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2] );
 		} else {
 			// default single shelling fire attack
-			results.push(["SingleAttack", 0]);
+			pushRocketAttackIfNecessary(["SingleAttack", 0]);
 		}
 		return returnFirstOnly ? results[0] : results;
 	};
@@ -3520,16 +3527,20 @@ KC3改 Ship Object
 		
 		if(targetShipType.isLand) {
 			const landingAttackType = this.estimateLandingAttackType(targetShipMasterId);
-			if(landingAttackType > 0) {
-				results.push(["LandingAttack", landingAttackType]);
-			} else {
-				const hasRocketLauncher = this.hasEquipmentType(2, 37);
-				if(hasRocketLauncher) results.push(["Rocket", -1]);
-				else results.push(["SingleAttack", 0]);
-			}
+			// the same with day shelling, landing craft animation now optional effects added to other attack methods
+			if(landingAttackType > 0) results.push(["LandingAttack", landingAttackType]);
 		}
+		const pushRocketAttackIfNecessary = (normalAttack) => {
+			const hasRocketLauncher = this.hasEquipmentType(2, 37) || this.hasEquipment([346, 347]);
+			// see `main.js#PhaseHougekiBase.prototype._hasRocketEffect`
+			if(targetShipType.isLand && hasRocketLauncher && normalAttack[1] !== 1) {
+				results.push(["Rocket", -1]);
+			} else {
+				results.push(normalAttack);
+			}
+		};
 		// priority to use server flag
-		else if(isCarrierNightAirAttack) {
+		if(isCarrierNightAirAttack) {
 			results.push(["AirAttack", 1, true]);
 		} else if(targetShipType.isSubmarine && (isThisLightCarrier || isThisKagaK2Go)) {
 			results.push(["DepthCharge", 2]);
@@ -3544,13 +3555,13 @@ KC3改 Ship Object
 				432, 353, // Graf & Graf Kai
 				433 // Saratoga (base form)
 				].includes(this.masterId);
-			if(isSpecialCarrier || isSpecialAbyssal) results.push(["SingleAttack", 0]);
+			if(isSpecialCarrier || isSpecialAbyssal) pushRocketAttackIfNecessary(["SingleAttack", 0]);
 			// here just indicates 'attack type', not 'can attack or not', see #canDoNightAttack
 			// Taiyou Kai Ni fell back to shelling attack if no bomber equipped, but ninja changed by devs.
 			// now she will air attack against surface ships, but no plane appears if no aircraft equipped.
 			else results.push(["AirAttack", 1]);
 		} else if(isThisSubmarine) {
-			results.push(["Torpedo", 3]);
+			pushRocketAttackIfNecessary(["Torpedo", 3]);
 		} else if(targetShipType.isSubmarine) {
 			// CAV, BBV, AV, LHA
 			results.push( ([6, 10, 16, 17].includes(stype)) ? ["AirAttack", 1] : ["DepthCharge", 2] );
@@ -3558,7 +3569,7 @@ KC3改 Ship Object
 			// torpedo attack if any torpedo equipped at top most, otherwise single shelling fire
 			const topGear = this.equipment().find(gear => gear.exists() &&
 				[1, 2, 3].includes(gear.master().api_type[1]));
-			results.push( topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0] );
+			pushRocketAttackIfNecessary( topGear && topGear.master().api_type[1] === 3 ? ["Torpedo", 3] : ["SingleAttack", 0] );
 		}
 		return returnFirstOnly ? results[0] : results;
 	};
