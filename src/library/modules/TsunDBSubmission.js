@@ -1335,7 +1335,7 @@
 				console.log(`[TsunDB] Cancelling submissions, unknown expedition ID for deck ${deck}`);
 				return;
 			}
-			
+
 			const exped = {
 				deck,
 				fleet: PlayerManager.fleets[deck - 1].ship().map(ship => {
@@ -1352,7 +1352,7 @@
 						improvements: ship.equipment(true).map(g => g.stars || -1),
 						proficiency: ship.equipment(true).map(g => g.ace || -1),
 						slots: ship.slots,
-								
+
 						fuel: [ship.fuel, ship.master().api_fuel_max],
 						ammo: [ship.ammo, ship.master().api_bull_max]
 					};

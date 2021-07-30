@@ -41,5 +41,5 @@
 }
 
 @media screen and (min-width:2240px) {
-#wrapper { width: 2200px; }
+#wrapper { width: calc(100% - 40px); }
 }
