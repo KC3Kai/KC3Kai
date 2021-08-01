@@ -367,13 +367,15 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Port checks
-				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitFriendlyFleet],
+				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitFriendlyFleet, this.submitExped],
 
 				// Equipment list
 				'api_get_member/picture_book': this.processPictureBook,
 
+				// Expedition
 				'api_req_mission/result': this.processExped,
 
+				// KC3 Network listeners
 				'Modernize': this.processModernizeEvent
 			};
 			this.manifest = chrome.runtime.getManifest() || {};
@@ -1324,6 +1326,10 @@
 		},
 
 		processExped: function(http) {
+			// Expedition data filling before new ship status update
+			// API order is /result (exped results, this) -> /port (ship data update) -> /useitem (consumable update)
+			this.exped = null;
+
 			const request = http.params;
 			const response = http.response.api_data;
 
@@ -1346,13 +1352,14 @@
 						stats: ship.nakedStats(),
 						// Caution: `fromEntries` supported since Chromium m73. Alternative:
 						//   (() => { let o = {}; ["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].forEach(s => o[s] = ship[s][0]); return o; })()
-						visibleStats: Object.fromEntries(["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
+						visibleStats: Object.fromEntries(["fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
+						prevHP: ship["hp"][0],
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),
 						proficiency: ship.equipment(true).map(g => g.ace || -1),
 						slots: ship.slots,
-
+						// Fuel/ammo before expedition return
 						fuel: [ship.fuel, ship.master().api_fuel_max],
 						ammo: [ship.ammo, ship.master().api_bull_max]
 					};
@@ -1372,8 +1379,22 @@
 				resources: (!response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
 				expedID
 			};
+			// Delay submission to /port for ship data update
+			this.delayedExpedSubmission = true;
+			this.exped = exped;
+		},
 
-			this.sendData(exped, "expeds");
+		submitExped: function() {
+			if (!this.exped || !this.delayedExpedSubmission) { return; }
+
+			const fleet = PlayerManager.fleets[this.exped.deck - 1];
+			fleet.ship().forEach((ship, idx) => {
+				this.exped.fleet[idx].afterHP = ship["hp"][0];
+			});
+
+			this.sendData(this.exped, "expeds");
+			this.exped = null;
+			this.delayedExpedSubmission = false;
 		},
 
 		/**
