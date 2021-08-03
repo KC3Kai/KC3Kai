@@ -374,6 +374,7 @@
 
 				// Expedition
 				'api_req_mission/result': this.processExped,
+				'api_get_member/useitem': this.submitExped,
 
 				// KC3 Network listeners
 				'Modernize': this.processModernizeEvent
@@ -1328,8 +1329,6 @@
 		processExped: function(http) {
 			// Expedition data filling before new ship status update
 			// API order is /result (exped results, this) -> /port (ship data update) -> /useitem (consumable update)
-			this.exped = null;
-
 			const request = http.params;
 			const response = http.response.api_data;
 
@@ -1342,7 +1341,7 @@
 				return;
 			}
 
-			const exped = {
+			this.exped = {
 				deck,
 				fleet: PlayerManager.fleets[deck - 1].ship().map(ship => {
 					return {
@@ -1353,7 +1352,8 @@
 						// Caution: `fromEntries` supported since Chromium m73. Alternative:
 						//   (() => { let o = {}; ["hp", "fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].forEach(s => o[s] = ship[s][0]); return o; })()
 						visibleStats: Object.fromEntries(["fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
-						prevHP: ship.hp[0],
+						// Possibly changed stats before expedition return
+						prevStats: Object.fromEntries(["hp", "morale"].map((stat) => [stat, Array.isArray(ship[stat]) ? ship[stat][0] : ship[stat]])),
 						kyouka: ship.mod,
 						equips: ship.equipment(true).map(g => g.masterId || -1), 
 						improvements: ship.equipment(true).map(g => g.stars || -1),
@@ -1379,22 +1379,26 @@
 				resources: (!response.hasOwnProperty("api_get_material") || response.api_get_material === -1) ? [0, 0, 0, 0] : response.api_get_material,
 				expedID
 			};
-			// Delay submission to /port for ship data update
+			// Delay submission to /useitem for ensuring /port ship data update finished
 			this.delayedExpedSubmission = true;
-			this.exped = exped;
 		},
 
 		submitExped: function() {
-			if (!this.exped || !this.delayedExpedSubmission) { return; }
-
+			// prevent unexpected entering
+			if (!this.exped || this.delayedExpedSubmission === undefined) { return; }
+			// enter here on /port
+			if (this.delayedExpedSubmission) {
+				this.delayedExpedSubmission = false;
+				return;
+			}
+			// enter here on /useitem
 			const fleet = PlayerManager.fleets[this.exped.deck - 1];
 			fleet.ship().forEach((ship, idx) => {
-				this.exped.fleet[idx].afterHP = ship.hp[0];
+				this.exped.fleet[idx].afterStats = Object.fromEntries(["hp", "morale", "fuel", "ammo"].map((stat) => [stat, Array.isArray(ship[stat]) ? ship[stat][0] : ship[stat]]));
 			});
-
 			this.sendData(this.exped, "expeds");
 			this.exped = null;
-			this.delayedExpedSubmission = false;
+			this.delayedExpedSubmission = undefined;
 		},
 
 		/**
@@ -1669,6 +1673,7 @@
 			this.delayedFFSubmission = null;
 			this.torchCount = 0;
 			this.resupplyUsed = false;
+			this.exped = null;
 		},
 		
 		/**
