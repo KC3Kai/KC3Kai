@@ -673,7 +673,7 @@ KC3改 Equipment Object
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
-			// Visible bonus no effect
+			// ~~Visible bonus no effect~~ Added since 2021-08-04, counted in ship class later since it's total stats bonus.
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
 			if(isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
 				power = 0;
