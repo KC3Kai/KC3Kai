@@ -1486,8 +1486,9 @@ KC3改 Ship Object
 			} else {
 				// Should limit to TP from equippable aircraft?
 				// ~~TP visible bonus from Torpedo Bombers no effect.~~ Added since 2021-08-04
-				// DV visible bonus not implemented yet, unknown.
+				// but calculation is strange for 2 or more bonus planes: https://twitter.com/myteaGuard/status/1423010128349913092
 				shellingPower += this.equipmentTotalStats("raig", true, true);
+				// DV visible bonus not implemented yet, unknown
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
 			}
 			shellingPower += combinedFleetFactor;
@@ -1871,13 +1872,13 @@ KC3改 Ship Object
 			if(this.slots[i] > 0 && gear.isAirstrikeAircraft()) {
 				const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
 				const isRange = !!power[2];
-				// TP bonus added since 2021-08-04, even counted from seaplane bombers,
-				// and only counted once (for topmost slot?): https://twitter.com/myteaGuard/status/1422913155429134337
-				// FIXME: not implemented latter yet, all slots with the same plane will benefit for now
+				// TP bonus added since 2021-08-04, even counted from seaplane bombers, so many weird facts:
+				// https://twitter.com/myteaGuard/status/1423010128349913092
+				// https://twitter.com/yukicacoon/status/1423133193096503296
+				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
 				const tpBonus = this.equipmentTotalStats("raig", true, true, true, null, [gear.masterId]);
-				if(tpBonus > 0) {
+				if(tpBonus > 0 && !isJetAssaultPhase) {
 					const capaSqrt = Math.sqrt(this.slots[i]);
-					// Unknown if Jets factor applied or not
 					const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
 					power[0] += tpBonus * capaSqrt * typeFactor[0];
 					power[1] += tpBonus * capaSqrt * typeFactor[1];
@@ -1958,7 +1959,8 @@ KC3改 Ship Object
 		});
 		let shellingPower = this.estimateNakedStats("fp");
 		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
-		// No effect for visible fp bonus, tp bonus added since 2021-08-04
+		// No effect for visible FP bonus
+		// TP bonus added since 2021-08-04, not affect slotBonus part, weird multi-planes calc unimplemented
 		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
