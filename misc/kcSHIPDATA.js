@@ -10103,7 +10103,7 @@ var SHIPDATA_ = {
 		image: 'S1985.jpg',
 		type: 'SS',
 		HP: 109,
-		FP: 49,
+		FP: 59,
 		TP: 159,
 		AA: 0,
 		AR: 19,
