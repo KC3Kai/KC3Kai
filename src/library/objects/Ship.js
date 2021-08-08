@@ -1485,10 +1485,11 @@ KC3改 Ship Object
 				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
 			} else {
 				// Should limit to TP from equippable aircraft?
-				// TP visible bonus from Torpedo Bombers no effect.
-				// DV visible bonus not implemented yet, unknown.
-				shellingPower += this.equipmentTotalStats("raig", true, false);
-				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, false);
+				// ~~TP visible bonus from Torpedo Bombers no effect.~~ Added since 2021-08-04
+				// but calculation is strange for 2 or more bonus planes: https://twitter.com/myteaGuard/status/1423010128349913092
+				shellingPower += this.equipmentTotalStats("raig", true, true);
+				// DV visible bonus not implemented yet, unknown
+				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
 			}
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("airattack");
@@ -1871,6 +1872,17 @@ KC3改 Ship Object
 			if(this.slots[i] > 0 && gear.isAirstrikeAircraft()) {
 				const power = gear.airstrikePower(this.slots[i], combinedFleetFactor, isJetAssaultPhase);
 				const isRange = !!power[2];
+				// TP bonus added since 2021-08-04, even counted from seaplane bombers, so many weird facts:
+				// https://twitter.com/myteaGuard/status/1423010128349913092
+				// https://twitter.com/yukicacoon/status/1423133193096503296
+				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
+				const tpBonus = this.equipmentTotalStats("raig", true, true, true, null, [gear.masterId]);
+				if(tpBonus > 0 && !isJetAssaultPhase) {
+					const capaSqrt = Math.sqrt(this.slots[i]);
+					const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
+					power[0] += tpBonus * capaSqrt * typeFactor[0];
+					power[1] += tpBonus * capaSqrt * typeFactor[1];
+				}
 				const capped = [
 					this.applyPowerCap(power[0], "Day", "Aerial").power,
 					isRange ? this.applyPowerCap(power[1], "Day", "Aerial").power : 0
@@ -1915,6 +1927,7 @@ KC3改 Ship Object
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
+		const nightPlaneMstIds = [];
 		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
@@ -1930,6 +1943,7 @@ KC3改 Ship Object
 				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
 					isNightAircraftType || isSwordfish || isSpecialNightPlane;
 				if(isNightPlane && slot > 0) {
+					nightPlaneMstIds.push(master.api_id);
 					equipTotals.fp += master.api_houg || 0;
 					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
 					if([7, 57].includes(type2)) equipTotals.dv += master.api_baku || 0;
@@ -1943,9 +1957,11 @@ KC3改 Ship Object
 				}
 			}
 		});
-		// No effect for both visible fp and tp bonus
 		let shellingPower = this.estimateNakedStats("fp");
 		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
+		// No effect for visible FP bonus
+		// TP bonus added since 2021-08-04, not affect slotBonus part, weird multi-planes calc unimplemented
+		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
 		shellingPower += isNightContacted ? 5 : 0;
@@ -2897,12 +2913,17 @@ KC3改 Ship Object
 	 * Surface ships in fleet >= 5 (that means 1 submarine is okay for single fleet, 2 for SF)
 	 *
 	 * Since it's a night battle only cutin, have to be escort fleet of any Combined Fleet.
-	 * And it's impossible to be triggered after any other daytime Big-7 special cutin,
-	 * because all ship-combined spcutins only trigger 1-time per sortie?
+	 * ~~And it's impossible to be triggered after any other daytime Big-7 special cutin,
+	 * because all ship-combined spcutins only trigger 1-time per sortie?~~
+	 * It's possible to be triggered after other daytime special cutins since 2021-08-04 update,
+	 * and it's allowed to be triggered twice per sortie, unlike other ones only once.
+	 * Triggering counters & conditions of this one are separated from other cutins.
 	 *
 	 * The additional 30% ammo consumption, see:
 	 *   * https://twitter.com/myteaGuard/status/1254040809365618690
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
+	 * Ammo consumption reduced to 20% since 2021-08-04:
+	 *   * https://twitter.com/yukicacoon/status/1422899332219502596
 	 *
 	 * @return true if this ship (Kongou-class K2C) can do special cut-in attack.
 	 * @see https://kancolle.fandom.com/wiki/Kongou/Special_Cut-In
