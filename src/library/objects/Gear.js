@@ -452,6 +452,7 @@ KC3改 Equipment Object
 				case 12: // Small radar
 					modifier = 1; break;
 				case 13: // Large radar
+				case 93: // Large radar (II)
 				case 10: // Seaplane recon
 					modifier = 0.95; break;
 			}
@@ -493,7 +494,7 @@ KC3改 Equipment Object
 					const type3 = this.master().api_type[3];
 					// 16 => HA gun
 					if ([16].includes(type3)) {
-						return Math.qckInt("floor", 0.3 * stars, 1);
+						modifier = 1; break;
 					}
 					break;
 				case 21: // Machine gun
@@ -665,15 +666,18 @@ KC3改 Equipment Object
 	 * Get pre-cap opening airstrike power of this carrier-based aircraft.
 	 * @return tuple of [low power, high power, isRange]
 	 */
-	KC3Gear.prototype.airstrikePower = function(capacity = 0, combinedFleetFactor = 0, isJetAssault = false, isExpedSupport = false){
+	KC3Gear.prototype.airstrikePower = function(capacity = 0, combinedFleetFactor = 0, isJetAssault = false, isExpedSupport = false, targetShipId = 0){
 		if(this.isDummy()) { return [0, 0, false]; }
 		if(this.isAirstrikeAircraft()) {
 			const type2 = this.master().api_type[2];
 			const isTorpedoBomber = [8, 58].includes(type2);
 			const isOtherBomber = [7, 11, 57].includes(type2);
 			const isJet = [57, 58].includes(type2);
-			// Visible bonus no effect
+			// ~~Visible bonus no effect~~ Added since 2021-08-04, counted in ship class later since it's total stats bonus.
 			let power = isTorpedoBomber ? this.master().api_raig : this.master().api_baku;
+			if(isTorpedoBomber && targetShipId > 0 && KC3Master.ship(targetShipId).api_soku === 0) {
+				power = 0;
+			}
 			power += this.attackPowerImprovementBonus(isExpedSupport ? "support" : "airstrike");
 			power *= Math.sqrt(capacity);
 			power += isExpedSupport ? 3 : 25;

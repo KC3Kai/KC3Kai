@@ -1631,7 +1631,8 @@ Previously known as "Reactor"
 		/* Swap squadrons among 2 bases (in the same world?)
 		-------------------------------------------------------*/
 		"api_req_air_corps/change_deployment_base":function(params, response, headers){
-			// assuming api_base_items result and matched api_rid must be existed
+			// assuming api_base_items result and matched api_rid must be existed,
+			// known inconsistent design: can't swap a squardron to an empty slot
 			const squadrons = response.api_data.api_base_items;
 			const findSquadronToUpdateBase = (base) => {
 				const squadron = squadrons.find(s => s.api_rid == base.rid);
