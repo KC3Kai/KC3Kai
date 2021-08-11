@@ -1729,7 +1729,7 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		let apShellBonus = 1;
 		let seaplaneBonus = 1;
-		let alDiveBomberBonus = 1;
+		let diveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
@@ -1739,7 +1739,8 @@ KC3改 Ship Object
 		const type4RocketCount = this.countEquipment(348);
 		const type4RocketCdCount = this.countEquipment(349);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
-		const alDiveBomberCount = this.countEquipment(KC3GearManager.antiLandDiveBomberIds);
+		const hasSeaplane = this.hasEquipmentType(2, [11, 45]);
+		const diveBomberCount = this.countEquipmentType(2, [7, 57]);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
 		
@@ -1782,7 +1783,7 @@ KC3改 Ship Object
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+					seaplaneBonus = hasSeaplane ? 1.2 : 1;
 					wg42Bonus = [1, 1.3, 1.3 * 1.4][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
@@ -1793,8 +1794,8 @@ KC3改 Ship Object
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
-					alDiveBomberBonus = [1, 1.5, 1.5 * 2.0][alDiveBomberCount] || 3;
+					seaplaneBonus = hasSeaplane ? 1.5 : 1;
+					diveBomberBonus = [1, 1.5, 1.5 * 2.0][diveBomberCount] || 3;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
@@ -1805,25 +1806,25 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive,
-						seaplaneBonus * alDiveBomberBonus * lightShipBonus
+						seaplaneBonus * diveBomberBonus * lightShipBonus
 							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
 						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 3: // Isolated Island Princess
-					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
+					diveBomberBonus = [1, 1.4, 1.4 * 1.75][diveBomberCount] || 2.45;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
+					return [rocketsAdditive, diveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
 						0, specialTankBonus, specialTankModifier];
 				
 				case 5: // Summer Harbor Princess
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
-					alDiveBomberBonus = [1, 1.3, 1.3 * 1.2][alDiveBomberCount] || 1.56;
+					seaplaneBonus = hasSeaplane ? 1.3 : 1;
+					diveBomberBonus = [1, 1.3, 1.3 * 1.2][diveBomberCount] || 1.56;
 					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
@@ -1831,14 +1832,14 @@ KC3改 Ship Object
 					apShellBonus = this.hasEquipmentType(2, 19) ? 1.3 : 1;
 					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
+					return [rocketsAdditive, seaplaneBonus * diveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
 						0, specialTankBonus, specialTankModifier];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
 				case 2: // Pillbox, Artillery Imp
-					// Dive Bomber, Seaplane Bomber, LBAA, Jet Bomber on airstrike phase
+					// Dive Bomber, Seaplane Bomber, LBAA, Jet Dive Bomber on airstrike phase
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
 					return [0, airstrikeBomberBonus, 0, 0, 1];
