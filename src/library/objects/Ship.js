@@ -2478,10 +2478,10 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
 		const isLightCarrier = stype === 7;
-		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B)
+		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B, Ryuuhou K2+)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
 		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
-		//   but unconfirmed for AO and Hayasui Kai
+		//   AO uses the same conditions with depth charge types, but Hyasui Kai unconfirmed
 		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
@@ -2545,17 +2545,19 @@ KC3改 Ship Object
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
-		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
-		//   but her initial naked asw too high to verify the lower threshold.
 		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
 		//   https://twitter.com/cat_lost/status/1146075888636710912
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW with Depth Charge.
-		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
-		//   at least 1 slot of ASW capable aircraft needed.
+		// Shinshumaru can OASW with at least 1 slot of Autogyro/Seaplane Bomber + Sonar and asw >= 100.
+		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		if(isAirAntiSubStype) {
-			return (isHyuugaKaiNi || hasSonar) &&
-				(this.countEquipmentType(1, 15) >= 2 ||
-				this.countEquipmentType(1, 44) >= 1);
+			// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter, without Sonar,
+			//   but her initial naked asw too high to verify the lower threshold.
+			if(isHyuugaKaiNi) {
+				return this.countEquipmentType(1, 15) >= 2 || this.countEquipmentType(1, 44) >= 1;
+			}
+			// To be consistent with ASW attack condition, any ASW capable aircraft might be supported.
+			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
+			return hasSonar && hasAswAircraft;
 		}
 
 		// for other ship types who can do ASW with Depth Charge
