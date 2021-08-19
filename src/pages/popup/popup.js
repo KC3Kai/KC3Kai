@@ -22,7 +22,7 @@
 		$.ajax({
 			dataType: "json",
 			async: true,
-			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/master/update?v="+(Date.now()),
+			url: "https://raw.githubusercontent.com/KC3Kai/KC3Kai/develop/update?v="+(Date.now()),
 			success: function(data, textStatus, request){
 				// Check for available extension updates
 				if (typeof localStorage.updateAvailable != "undefined" && localStorage.updateAvailable != myVersion) {
