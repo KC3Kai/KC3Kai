@@ -1729,7 +1729,7 @@ KC3改 Ship Object
 		let t3Bonus = 1;
 		let apShellBonus = 1;
 		let seaplaneBonus = 1;
-		let alDiveBomberBonus = 1;
+		let diveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
 		const submarineBonus = this.isSubmarine() ? 30 : 0;
@@ -1739,7 +1739,8 @@ KC3改 Ship Object
 		const type4RocketCount = this.countEquipment(348);
 		const type4RocketCdCount = this.countEquipment(349);
 		const hasT3Shell = this.hasEquipmentType(2, 18);
-		const alDiveBomberCount = this.countEquipment(KC3GearManager.antiLandDiveBomberIds);
+		const hasSeaplane = this.hasEquipmentType(2, [11, 45]);
+		const diveBomberCount = this.countEquipmentType(2, [7, 57]);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
 		
@@ -1782,7 +1783,7 @@ KC3改 Ship Object
 				case 1: // Soft-skinned, general type of land installation
 					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.2 : 1;
+					seaplaneBonus = hasSeaplane ? 1.2 : 1;
 					wg42Bonus = [1, 1.3, 1.3 * 1.4][wg42Count] || 1.82;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.5][type4RocketCount + type4RocketCdCount] || 1.875;
 					mortarBonus = [1, 1.2, 1.2 * 1.3][mortarCount + mortarCdCount] || 1.56;
@@ -1793,8 +1794,8 @@ KC3改 Ship Object
 				
 				case 2: // Pillbox, Artillery Imp
 					// Works even if slot is zeroed
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.5 : 1;
-					alDiveBomberBonus = [1, 1.5, 1.5 * 2.0][alDiveBomberCount] || 3;
+					seaplaneBonus = hasSeaplane ? 1.5 : 1;
+					diveBomberBonus = [1, 1.5, 1.5 * 2.0][diveBomberCount] || 3;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
 					// Multiplicative WG42 bonus
@@ -1805,25 +1806,25 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					return [rocketsAdditive,
-						seaplaneBonus * alDiveBomberBonus * lightShipBonus
+						seaplaneBonus * diveBomberBonus * lightShipBonus
 							* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
 						submarineBonus, specialTankBonus, specialTankModifier];
 				
 				case 3: // Isolated Island Princess
-					alDiveBomberBonus = [1, 1.4, 1.4 * 1.75][alDiveBomberCount] || 2.45;
+					diveBomberBonus = [1, 1.4, 1.4 * 1.75][diveBomberCount] || 2.45;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					type4RocketBonus = [1, 1.3, 1.3 * 1.65][type4RocketCount + type4RocketCdCount] || 2.145;
 					mortarBonus = [1, 1.2, 1.2 * 1.4][mortarCount + mortarCdCount] || 1.68;
 					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, alDiveBomberBonus * t3Bonus
+					return [rocketsAdditive, diveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * landingBonus,
 						0, specialTankBonus, specialTankModifier];
 				
 				case 5: // Summer Harbor Princess
-					seaplaneBonus = this.hasEquipmentType(2, [11, 45]) ? 1.3 : 1;
-					alDiveBomberBonus = [1, 1.3, 1.3 * 1.2][alDiveBomberCount] || 1.56;
+					seaplaneBonus = hasSeaplane ? 1.3 : 1;
+					diveBomberBonus = [1, 1.3, 1.3 * 1.2][diveBomberCount] || 1.56;
 					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
@@ -1831,14 +1832,14 @@ KC3改 Ship Object
 					apShellBonus = this.hasEquipmentType(2, 19) ? 1.3 : 1;
 					
 					// Set additive modifier, multiply multiplicative modifiers
-					return [rocketsAdditive, seaplaneBonus * alDiveBomberBonus * t3Bonus
+					return [rocketsAdditive, seaplaneBonus * diveBomberBonus * t3Bonus
 						* wg42Bonus * type4RocketBonus * mortarBonus * apShellBonus * landingBonus,
 						0, specialTankBonus, specialTankModifier];
 			}
 		} else { // Post-cap types
 			switch(installationType) {
 				case 2: // Pillbox, Artillery Imp
-					// Dive Bomber, Seaplane Bomber, LBAA, Jet Bomber on airstrike phase
+					// Dive Bomber, Seaplane Bomber, LBAA, Jet Dive Bomber on airstrike phase
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
 					return [0, airstrikeBomberBonus, 0, 0, 1];
@@ -2477,10 +2478,10 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isEscort = stype === 1;
 		const isLightCarrier = stype === 7;
-		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B)
+		// is CVE? (Taiyou-class series, Gambier Bay series, Zuihou K2B, Ryuuhou K2+)
 		const isEscortLightCarrier = this.isEscortLightCarrier();
 		// is regular ASW method not supposed to depth charge attack? (CAV, BBV, AV, LHA)
-		//   but unconfirmed for AO and Hayasui Kai
+		//   AO uses the same conditions with depth charge types, but Hyasui Kai unconfirmed
 		const isAirAntiSubStype = [6, 10, 16, 17].includes(stype);
 		// is Sonar equipped? also counted large one: Type 0 Sonar
 		const hasSonar = this.hasEquipmentType(1, 10);
@@ -2544,17 +2545,19 @@ KC3改 Ship Object
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
-		// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter,
-		//   but her initial naked asw too high to verify the lower threshold.
 		// Fusou-class Kai Ni can OASW with at least 1 Helicopter + Sonar and asw >= 100.
 		//   https://twitter.com/cat_lost/status/1146075888636710912
-		// Hyuuga Kai Ni cannot OASW with Sonar only, just like BBV cannot ASW with Depth Charge.
-		//   perhaps all AirAntiSubStype doesn't even they can equip Sonar and asw >= 100?
-		//   at least 1 slot of ASW capable aircraft needed.
+		// Shinshumaru can OASW with at least 1 slot of Autogyro/Seaplane Bomber + Sonar and asw >= 100.
+		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		if(isAirAntiSubStype) {
-			return (isHyuugaKaiNi || hasSonar) &&
-				(this.countEquipmentType(1, 15) >= 2 ||
-				this.countEquipmentType(1, 44) >= 1);
+			// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter, without Sonar,
+			//   but her initial naked asw too high to verify the lower threshold.
+			if(isHyuugaKaiNi) {
+				return this.countEquipmentType(1, 15) >= 2 || this.countEquipmentType(1, 44) >= 1;
+			}
+			// To be consistent with ASW attack condition, any ASW capable aircraft might be supported.
+			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
+			return hasSonar && hasAswAircraft;
 		}
 
 		// for other ship types who can do ASW with Depth Charge
@@ -3270,7 +3273,8 @@ KC3改 Ship Object
 		const isThisCarrier = this.isCarrier();
 		// even carrier can do shelling or air attack if her yasen power > 0 (no matter chuuha)
 		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
-		if(isThisCarrier && initYasen > 0) return true;
+		// but Gambier Bay Mk.II is an exception, she don't move if NOAP flag not met although fp is 3.
+		if(isThisCarrier && initYasen > 0 && this.masterId !== 707) return true;
 		// carriers without yasen power can do air attack under some conditions:
 		if(isThisCarrier) {
 			// only CVB can air attack on chuuha (taiha already excluded)

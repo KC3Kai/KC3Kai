@@ -57,16 +57,17 @@
 			this.enterCount = 0;
 			this.itemsPerPage = ConfigManager.sr_items_per_page || 20;
 		};
-		
+
 		/* EXECUTE
 		Places data onto the interface
 		---------------------------------*/
 		this.execute = function(){
 			const self = this;
 			this.scrollVars[tabCode] = this.scrollVars[tabCode] || {};
+			this.loadWorldsFromStorage();
 			
 			// On-click world menus
-			$(".tab_"+tabCode+" .world_box").on("click", function(){
+			$(".tab_"+tabCode+" .world_list .world_box").on("click", function(){
 				if(!$(".world_text",this).text().length) { return false; }
 				KC3StrategyTabs.gotoTab(null, $(this).data("world_num"));
 			});
@@ -176,12 +177,50 @@
 			}).toggleClass("active", ConfigManager.sr_show_yasen_shipstate);
 			
 			if(!!KC3StrategyTabs.pageParams[1]){
-				this.switchWorld(KC3StrategyTabs.pageParams[1],
-					KC3StrategyTabs.pageParams[2]);
+				this.switchWorld(KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2]);
 			} else {
 				// Select default opened world
-				this.switchWorld($(".tab_"+tabCode+" .world_box.active").data("world_num"));
+				this.switchWorld($(".tab_"+tabCode+" .world_list .world_box.active").data("world_num"));
 			}
+		};
+
+		/**
+		 * Load missing world info from localStorage if any.
+		 */
+		this.loadWorldsFromStorage = function(){
+			var missingWorldCount = 0;
+			var lastWorldId = 0;
+			Object.keys(this.maps).sort((id1, id2) => {
+					const m1 = id1.slice(-1), m2 = id2.slice(-1);
+					let w1 = id1.slice(1, -1), w2 = id2.slice(1, -1);
+					if(w1 === "7") w1 = "3.5";
+					if(w2 === "7") w2 = "3.5";
+					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
+				}).map(id => Number(id.slice(1,-1))).filter((w, idx, arr) =>
+					idx > 0 ? w !== arr[idx - 1] : true
+				).filter(w => 
+					KC3Meta.isEventWorld(w) == (tabCode === "event")
+				).forEach(id => {
+					lastWorldId = id;
+					const worldBox = $(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, id));
+					if(!worldBox.length) {
+						missingWorldCount += 1;
+						const newWorldBox = $(".tab_{0} .factory .world_box".format(tabCode)).clone();
+						newWorldBox.attr("data-world_num", id);
+						// Only World ID here, no l10n since text might be too long
+						$(".world_text", newWorldBox).text("World-" + id);
+						$(".tab_{0} .world_list .clear".format(tabCode)).before(newWorldBox);
+					}
+				});
+			// Auto active latest event world if active is old
+			if(tabCode === "event") {
+				const oldActive = $(".tab_{0} .world_list .world_box.active".format(tabCode)).data("world_num");
+				if(!oldActive || lastWorldId > Number(oldActive)) {
+					$(".tab_{0} .world_list .world_box".format(tabCode)).removeClass("active");
+					$(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, lastWorldId)).addClass("active");
+				}
+			}
+			return missingWorldCount;
 		};
 
 		// Common sortie toggling method
@@ -225,16 +264,16 @@
 		this.switchWorld = function(worldNum, mapNum){
 			const self = this;
 			self.selectedWorld = Number(worldNum);
-			$(".tab_"+tabCode+" .world_box").removeClass("active");
-			$(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
+			$(".tab_"+tabCode+" .world_list .world_box").removeClass("active");
+			$(".tab_"+tabCode+" .world_list .world_box[data-world_num={0}]".format(self.selectedWorld)).addClass("active");
 
 			$(".tab_"+tabCode+" .map_list").empty().css("width","").css("margin-left","");
 			$(".tab_"+tabCode+" .page_list").empty();
 			$(".tab_"+tabCode+" .sortie_list").empty();
-			var countWorlds = $(".tab_"+tabCode+" .world_box").length;
+			var countWorlds = $(".tab_"+tabCode+" .world_list .world_box").length;
 			var maxDispWorlds = 6 + (tabCode === "maps" ? 2 : 0);
 			var worldOffset = self.scrollVars[tabCode].world_off;
-			var selectOffset = $(".tab_"+tabCode+" .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
+			var selectOffset = $(".tab_"+tabCode+" .world_list .world_box[data-world_num={0}]".format(self.selectedWorld)).index();
 			if(worldOffset === undefined){
 				self.scrollVars[tabCode].world_off = Math.min(selectOffset, countWorlds - maxDispWorlds);
 			} else if(selectOffset < worldOffset){
