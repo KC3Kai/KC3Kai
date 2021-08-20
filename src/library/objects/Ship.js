@@ -2909,7 +2909,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead formation selected, night battle only.
+	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead / Echelon formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
@@ -2939,7 +2939,7 @@ KC3改 Ship Object
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
 				&& (!PlayerManager.combinedFleet || fleetNum === 2)) {
-				const isLineAhead = [1, 14].includes(
+				const isFormationAllowed = [1, 4, 12, 14].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -2953,7 +2953,7 @@ KC3改 Ship Object
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
-				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
+				return isFormationAllowed && validCombinedShips && hasFiveSurfaceShips;
 			}
 		}
 		return false;
