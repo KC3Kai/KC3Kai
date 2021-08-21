@@ -2648,9 +2648,12 @@ KC3改 Ship Object
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658,
+			// No bonus for Summer SDP: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+			// 1753, 1754, // Summer Supply Depot Princess
+			1809, 1810, 1811, 1812, 1813, 1814, // Vacation Mode
 			1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // B
 			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
-			1753, 1754 // Summer Supply Depot Princess
+			2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // B Vacation Mode
 			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
@@ -3026,6 +3029,7 @@ KC3改 Ship Object
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
 				1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // Supply Depot Princess B
 				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
+				2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // Supply Depot Princess B Vacation Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
 				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
 			].includes(targetShipMasterId);

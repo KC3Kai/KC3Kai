@@ -208,6 +208,11 @@
 			"1": { "type": "hp", "boss": [11] },
 			"2": { "type": "tp", "boss": [19], "landing": [21] },
 			"3": { "type": "hp", "boss": [31] }
+		},
+		"512": {
+			"1": { "type": "tp", "boss": [11], "landing": [8, 14, 15] },
+			"2": { "type": "hp", "boss": [34, 37] },
+			"3": { "type": "hp", "boss": [39, 41] }
 		}
 	},
 	"abyssKaiShipIds": [
