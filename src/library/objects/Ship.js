@@ -2965,6 +2965,7 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
+	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
 	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
@@ -2974,8 +2975,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoSubFleetCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Taigei/Jingei and not Taiha
-		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha()) {
+		// is this ship Lv30+ Taigei/Jingei-class and not Taiha
+		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha() && this.level >= 30) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {

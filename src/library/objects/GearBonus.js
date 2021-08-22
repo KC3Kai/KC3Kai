@@ -3069,7 +3069,7 @@
 					// Conte di Cavour Class
 					"113": [
 						{
-							multiple: { "houg": 2, "houk": 1 },
+							multiple: { "houg": 3, "houk": 1 },
 							synergy: {
 								flags: [ "triple305mm46LargeGunMount" ],
 								single: { "houg": 1, "houk": 1 },
@@ -3110,7 +3110,7 @@
 				byClass: {
 					// Conte di Cavour Class
 					"113": {
-						multiple: { "houg": 1 },
+						multiple: { "houg": 2 },
 					},
 					// Gangut Class
 					"73": {
@@ -3125,7 +3125,7 @@
 					// Conte di Cavour Class
 					"113": [
 						{
-							multiple: { "houg": 2, "houk": 1 },
+							multiple: { "houg": 3, "houk": 1 },
 							synergy: {
 								flags: [ "triple320mm44LargeGunMount" ],
 								single: { "houg": 2, "houk": 1 },
@@ -3184,7 +3184,7 @@
 				byClass: {
 					// Conte di Cavour Class
 					"113": {
-						multiple: { "houg": 1 },
+						multiple: { "houg": 2 },
 					},
 					// Gangut Class
 					"73": {
