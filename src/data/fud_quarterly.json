@@ -230,9 +230,9 @@
 		1999, 2012, 2013, 2014
 	],
 	"lockingTagConfigs": {
-		"maxTagAmount": 4,
-		"moTagIds": [1, 2, 3, 4],
-		"eoTagIds": []
+		"maxTagAmount": 6,
+		"moTagIds": [0, 1, 2, 3],
+		"eoTagIds": [4, 5]
 	},
 	"lockingTagColors": {
 		"legacy": [
