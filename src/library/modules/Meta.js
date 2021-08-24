@@ -138,7 +138,7 @@ Provides access to data on built-in JSON files
 			396, // Gambier Bay Kai -> Mk.II
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 639],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 635, 639, 640],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
