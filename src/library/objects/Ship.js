@@ -2648,9 +2648,12 @@ KC3改 Ship Object
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
 		// Supply Depot Princess
 		if([1653, 1654, 1655, 1656, 1657, 1658,
+			// No bonus for Summer SDP: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+			// 1753, 1754, // Summer Supply Depot Princess
+			1809, 1810, 1811, 1812, 1813, 1814, // Vacation Mode
 			1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // B
 			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
-			1753, 1754 // Summer Supply Depot Princess
+			2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // B Vacation Mode
 			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
@@ -2909,7 +2912,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead formation selected, night battle only.
+	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead / Echelon formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
@@ -2939,7 +2942,7 @@ KC3改 Ship Object
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 5
 				&& (!PlayerManager.combinedFleet || fleetNum === 2)) {
-				const isLineAhead = [1, 14].includes(
+				const isFormationAllowed = [1, 4, 12, 14].includes(
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
@@ -2953,7 +2956,7 @@ KC3改 Ship Object
 						&& !fleetObj.ship(1).isStriped(),
 					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasFiveSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 5;
-				return isLineAhead && validCombinedShips && hasFiveSurfaceShips;
+				return isFormationAllowed && validCombinedShips && hasFiveSurfaceShips;
 			}
 		}
 		return false;
@@ -2962,6 +2965,7 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
+	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
 	 * 2nd, 4th ship is healthy SS(V) for type 302. 3rd ship is SS(V).
@@ -2971,8 +2975,8 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.canDoSubFleetCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Taigei/Jingei and not Taiha
-		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha()) {
+		// is this ship Lv30+ Taigei/Jingei-class and not Taiha
+		if(KC3Meta.subFleetCutinShips.includes(this.masterId) && !this.isTaiha() && this.level >= 30) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 3
 				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
@@ -3026,6 +3030,7 @@ KC3改 Ship Object
 				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
 				1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // Supply Depot Princess B
 				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
+				2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // Supply Depot Princess B Vacation Mode
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
 				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
 			].includes(targetShipMasterId);
