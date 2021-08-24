@@ -153,6 +153,7 @@
 					case -99: return 'map_main_18';
 					// -100 undefined either, used by landing flag at `LandingFlag.prototype._getTexture_no`
 					case -100: return 'map_main_38';
+					// -1 indicates uncommon icon nodes like night battle, air raid, rsc finish line, etc
 					case -1:
 					// 0 undefined in `_getTexture`, just treat it as -1 default white dot
 					case 0: return 'map_main_55';
@@ -169,7 +170,9 @@
 					case 11: return 'map_main_56';
 					case 12: return 'map_main_57';
 					case 13: return 'map_main_17';
+					// -2 indicates boss node red dot before actually entering map
 					case -2: return 'map_main_50';
+					// -3 indicates extra start point before actually entering map
 					case -3: return 'map_main_47';
 					case 14: return 'map_main_48';
 				}
@@ -233,13 +236,16 @@
 						edges[spotCoord] = edges[spotCoord] || [];
 						edges[spotCoord].push(spot);
 						const edge = spot.no;
-						// Draw additional start point
+						// Check if there is unknown spot element
 						if(edge && !spot.route && !spot.line) {
-							if(isAddingRouteStart) {
+							if(isAddingRouteStart || spot.color === -3) {
+								// Will draw additional start point later by node color -3
+								/*
 								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
 								const sprite = new this.pixi.Sprite(frame);
 								sprite.position.set(spot.x - sprite.width / 2, spot.y - sprite.height / 2);
 								stage.addChild(sprite);
+								*/
 							} else if(KC3Meta.isEventWorld(this.world)) {
 								// Except adding a hidden start point, no line no route spot found (nothing to be drawn) since Fall 2020 E-3
 								// btw an orphan boss node (not linked with any other node) has existed since Rainy 2020 E-3
@@ -247,7 +253,7 @@
 							}
 						}
 						if(!spot.line) continue;
-						const isAddingRoute = !!spot.route;
+						const isAddingRoute = !!spot.route || spot.no >= this.mapInfoMeta.initSpotCnt;
 						isAddingRouteStart |= isAddingRoute;
 						const textureName = spot.line.img || (isAddingRoute && spot.route.img) || "route_" + edge;
 						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${textureName}`);
@@ -260,7 +266,7 @@
 						if(spot.line.x < 0) fromSpot.x += spot.line.x;
 						if(spot.line.y < 0) fromSpot.y += spot.line.y;
 						const angle = Math.atan2(spot.y - fromSpot.y, spot.x - fromSpot.x);
-						// Show Landing flag icon beside transport point if exists
+						// Show Landing flag icon beside transport point if any
 						if(spot.landing) {
 							const flagInfo = spot.landing;
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-100));
@@ -310,8 +316,15 @@
 					for(const edgeKey of Object.keys(edges)) {
 						const edge = edges[edgeKey];
 						const node = edge[0];
-						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no;
-						if(node.no && (node.color || node.route || node.line)) {
+						node.color = KC3Master.mapCell(this.world, this.map, node.no).api_color_no || node.color;
+						// Replace -1 with air raid icon 10 if indicated by airraids definition
+						if(node.color === -1 && Array.isArray(this.mapInfoMeta.airraids)
+							&& this.mapInfoMeta.airraids.map(ar => ar.no).includes(node.no)) {
+							node.color = 10;
+						}
+						if(node.no && (node.color || node.route || node.line)
+							// To keep red dot for both initial (undefined) and added (-2) boss node
+							&& (node.color || node.no >= this.mapInfoMeta.initSpotCnt)) {
 							const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(node.color || 0));
 							const sprite = new this.pixi.Sprite(frame);
 							let offsetX = 0, offsetY = 0;
@@ -372,6 +385,9 @@
 					const initSpotCnt = this.mapInfoMeta.spots.length;
 					let currentSpotCnt = initSpotCnt, addedSpotCnt = 0;
 					const knownTotalSpotCnt = Object.keys(KC3Master.mapCell(this.world, this.map)).length;
+					info.initSpotCnt = initSpotCnt;
+					info.knownTotalSpotCnt = knownTotalSpotCnt;
+					info.totalSpotCnt = currentSpotCnt;
 					// Confirmed condition if nodes amount at first not reach expected one
 					if((this.digEventSpots || knownTotalSpotCnt > currentSpotCnt) && this.isShowEdges) {
 						// Additional info (hidden nodes), see `TaskCreateMap.prototype._loadAddingInfo`
@@ -384,6 +400,10 @@
 									info.enemies = info.enemies || [];
 									info.enemies.push(...addingInfo.enemies);
 								}
+								if(addingInfo.airraids) {
+									info.airraids = info.airraids || [];
+									info.airraids.push(...addingInfo.airraids);
+								}
 								if(addingInfo.labels) {
 									info.labels = info.labels || [];
 									info.labels.push(...addingInfo.labels);
@@ -395,6 +415,7 @@
 									this.mapInfoMeta);
 								loader.add(getMapRscUrl(this.world, this.map, `image${currentSpotCnt}.json`));
 								currentSpotCnt += foundSpotCnt;
+								info.totalSpotCnt = currentSpotCnt;
 								if(this.digEventSpots || !knownTotalSpotCnt || currentSpotCnt < knownTotalSpotCnt) {
 									loadAdditonalInfo();
 								} else if(currentSpotCnt >= knownTotalSpotCnt) {

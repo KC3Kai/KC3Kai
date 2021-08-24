@@ -149,6 +149,10 @@
                     return 20;
                 case 396: // Gambier Bay Kai
                     return 60;
+                case 877: // Conte di Cavour
+                    return 30;
+                case 878: // Conte di Cavour Kai
+                    return 50;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
                         || (steel < 4500) ? 0
@@ -245,6 +249,10 @@
                     return 10;
                 case 396: // Gambier Bay Kai
                     return 73;
+                case 877: // Conte di Cavour
+                    return 10;
+                case 878: // Conte di Cavour Kai
+                    return 20;
                 default:
                     return 0;
             }

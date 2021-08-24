@@ -196,11 +196,10 @@
 					if(w1 === "7") w1 = "3.5";
 					if(w2 === "7") w2 = "3.5";
 					return Number(w1) - Number(w2) || Number(m1) - Number(m2);
-				}).map(id => Number(id.slice(1,-1))).filter((w, idx, arr) =>
-					idx > 0 ? w !== arr[idx - 1] : true
-				).filter(w => 
-					KC3Meta.isEventWorld(w) == (tabCode === "event")
-				).forEach(id => {
+				}).map(id => (Number(id.slice(1,-1))
+				)).filter((w, idx, arr) => (idx > 0 ? w !== arr[idx - 1] : true
+				)).filter(w => (KC3Meta.isEventWorld(w) == (tabCode === "event")
+				)).forEach(id => {
 					lastWorldId = id;
 					const worldBox = $(".tab_{0} .world_list .world_box[data-world_num={1}]".format(tabCode, id));
 					if(!worldBox.length) {

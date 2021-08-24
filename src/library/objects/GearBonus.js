@@ -56,6 +56,10 @@
 				tripleLargeGunMountK2: 0,
 				tripleLargeGunMountK2Nonexist: 1,
 				tripleLargeGunMountK2Ids: [290],
+				triple305mm46LargeGunMount: 0,
+				triple305mm46LargeGunMountIds: [427],
+				triple320mm44LargeGunMount: 0,
+				triple320mm44LargeGunMountIds: [429],
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
@@ -3058,6 +3062,136 @@
 					],
 				},
 			},
+			// 305mm/46 Twin Gun Mount
+			"426": {
+				count: 0,
+				byClass: {
+					// Conte di Cavour Class
+					"113": [
+						{
+							multiple: { "houg": 3, "houk": 1 },
+							synergy: {
+								flags: [ "triple305mm46LargeGunMount" ],
+								single: { "houg": 1, "houk": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 1, "houk": 1 },
+							synergy: {
+								flags: [ "triple305mm46LargeGunMount" ],
+								single: { "houg": -1, "houk": -1 },
+							},
+						},
+					],
+					// Gangut Class
+					"73": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "triple305mm46LargeGunMount" ],
+								single: { "houg": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 1 },
+							synergy: {
+								flags: [ "triple305mm46LargeGunMount" ],
+								single: { "houg": -1 },
+							},
+						},
+					],
+				},
+			},
+			// 305mm/46 Triple Gun Mount
+			"427": {
+				count: 0,
+				byClass: {
+					// Conte di Cavour Class
+					"113": {
+						multiple: { "houg": 2 },
+					},
+					// Gangut Class
+					"73": {
+						multiple: { "houg": 1 },
+					},
+				},
+			},
+			// 320mm/44 Twin Gun Mount
+			"428": {
+				count: 0,
+				byClass: {
+					// Conte di Cavour Class
+					"113": [
+						{
+							multiple: { "houg": 3, "houk": 1 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": 2, "houk": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": -2, "houk": -1 },
+							},
+						},
+					],
+					// Gangut Class
+					"73": [
+						{
+							multiple: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 1 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": -1 },
+							},
+						},
+					],
+					// V.Veneto Class
+					"58": [
+						{
+							multiple: { "houg": 1, "houk": 2 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": 2, "houk": 1 },
+							},
+						},
+						{
+							minCount: 2,
+							single: { "houg": 2, "houk": 1 },
+							synergy: {
+								flags: [ "triple320mm44LargeGunMount" ],
+								single: { "houg": -2, "houk": -1 },
+							},
+						},
+					],
+				},
+			},
+			// 320mm/44 Triple Gun Mount
+			"429": {
+				count: 0,
+				byClass: {
+					// Conte di Cavour Class
+					"113": {
+						multiple: { "houg": 2 },
+					},
+					// Gangut Class
+					"73": {
+						multiple: { "houg": 1 },
+					},
+				},
+			},
 			// 14cm Twin Gun Mount
 			"119": {
 				count: 0,
@@ -3333,6 +3467,63 @@
 					"89": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
+				},
+			},
+			// 65mm/64 Single Rapid Fire Gun Mount Kai
+			"430": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Conte di Cavour Class
+					"113": [
+						{
+							multiple: { "tyku": 3, "houk": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tyku": 1 },
+						},
+					],
+					// V.Veneto Class
+					"58": [
+						{
+							multiple: { "tyku": 2, "houk": 1 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 7,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tyku": 1 },
+						},
+					],
+					// Zara Class
+					"64": "58",
+					// Aquila Class
+					"68": "58",
+					// L.d.S.D.d.Abruzzi Class
+					"92": "58",
 				},
 			},
 			// Bofors 15.2cm Twin Gun Mount Model 1930
@@ -6639,11 +6830,11 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei?, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut
 						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						origins: [184, 634, 162, 154, 465, 621, 699,
+						origins: [184, 634, 635, 162, 154, 465, 621, 699,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511,
 								75, 89, 92, 521, 534, 544,
 								445, 451, 491
