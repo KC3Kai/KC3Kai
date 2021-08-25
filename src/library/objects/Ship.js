@@ -2661,6 +2661,8 @@ KC3改 Ship Object
 		const abyssalIdTypeMap = {
 			// Summer Harbor Princess
 			"1699": 5, "1700": 5, "1701": 5, "1702": 5, "1703": 5, "1704": 5,
+			// Summer Harbor Princess B
+			"2023": 5, "2024": 5, "2025": 6, "2026": 5, "2027": 5, "2028": 5,
 			// Isolated Island Princess
 			"1668": 3, "1669": 3, "1670": 3, "1671": 3, "1672": 3,
 			// Artillery Imp
