@@ -47,6 +47,10 @@
 		return this;
 	};
 	
+	/**
+	 * Expanded info implemented since 2021-07-15.
+	 * @see https://wikiwiki.jp/kancolle/%E5%9F%BA%E5%9C%B0%E8%88%AA%E7%A9%BA%E9%9A%8A#Maintenance - effects of maint level
+	 */
 	KC3LandBase.prototype.setExpandedInfo = function(data){
 		if (Array.isArray(data)) {
 			data.forEach(info => {

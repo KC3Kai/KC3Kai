@@ -1513,6 +1513,9 @@ Previously known as "Reactor"
 			if(worldFirstBase > -1){
 				var pos = worldFirstBase + rawBase.api_rid - 1,
 					base = new KC3LandBase(rawBase);
+				// copy maintenance level value from old base,
+				// since this api result unchanged and no info about the level
+				base.level = bases[worldFirstBase].level || 0;
 				// replace expanded base position if it is unused
 				if(bases[pos] && bases[pos].rid === -1){
 					bases[pos] = base;
