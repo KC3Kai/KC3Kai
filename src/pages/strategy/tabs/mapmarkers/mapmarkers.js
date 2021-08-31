@@ -238,7 +238,7 @@
 						const edge = spot.no;
 						// Check if there is unknown spot element
 						if(edge && !spot.route && !spot.line) {
-							if(isAddingRouteStart || spot.color === -3) {
+							if(isAddingRouteStart || [-3, 8].includes(spot.color)) {
 								// Will draw additional start point later by node color -3
 								/*
 								const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-3));
@@ -249,7 +249,9 @@
 							} else if(KC3Meta.isEventWorld(this.world)) {
 								// Except adding a hidden start point, no line no route spot found (nothing to be drawn) since Fall 2020 E-3
 								// btw an orphan boss node (not linked with any other node) has existed since Rainy 2020 E-3
-								console.debug("Unknown invisible spot:", spot);
+								// an orphan finish line node (color 8) visible from phase 1, linked in later phases, since Summer 2021 E-3
+								console.debug("Unknown invisible spot:", spot, this.mapInfoMeta.spots);
+								spot.unknown = true;
 							}
 						}
 						if(!spot.line) continue;
@@ -336,6 +338,13 @@
 							sprite.anchor.set(0.5, 0.5);
 							sprite.position.set(node.x + offsetX, node.y + offsetY);
 							stage.addChild(sprite);
+							// Mark unknown node with yellow box
+							if(node.unknown) {
+								const grp = new this.pixi.Graphics();
+								grp.lineStyle(2, 0xffff00, 1);
+								grp.drawRect(node.x, node.y, 20, 20);
+								stage.addChild(grp);
+							}
 						}
 					}
 					stage.addChild(edgesContainer);

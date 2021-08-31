@@ -1129,6 +1129,8 @@
 					"105": "69",
 					// Ark Royal Class
 					"78": "69",
+					// Illustrious Class
+					"112": "69",
 					// Casablanca Class
 					"83": {
 						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
@@ -1197,6 +1199,8 @@
 					"83": "69",
 					// Yorktown Class
 					"105": "69",
+					// Illustrious Class
+					"112": "69",
 					// Essex Class
 					"84": [
 						{
@@ -1238,6 +1242,8 @@
 					"83": "69",
 					// Yorktown Class
 					"105": "69",
+					// Illustrious Class
+					"112": "69",
 					// Essex Class
 					"84": [
 						{
@@ -1488,6 +1494,8 @@
 					"105": "69",
 					// Ark Royal Class
 					"78": "69",
+					// Illustrious Class
+					"112": "69",
 					// Essex Class
 					"84": {
 						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
@@ -1504,6 +1512,80 @@
 						},
 					],
 				},
+			},
+			// Corsair Mk.II
+			"434": {
+				count: 0,
+				byClass: {
+					// Illustrious Class
+					"112": {
+						multiple: { "houg": 2, "tyku": 3, "houk": 5 },
+					},
+					// Ark Royal Class
+					"78": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+					// Lexington Class
+					"69": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+				},
+			},
+			// Corsair Mk.II (Ace)
+			"435": {
+				count: 0,
+				byClass: {
+					// Illustrious Class
+					"112": {
+						multiple: { "houg": 2, "tyku": 3, "houk": 5 },
+					},
+					// Ark Royal Class
+					"78": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
+					},
+					// Lexington Class
+					"69": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+					},
+					// Casablanca Class
+					"83": "69",
+					// Essex Class
+					"84": "69",
+					// Yorktown Class
+					"105": "69",
+				},
+			},
+			// Prototype Jinpu
+			"437": {
+				count: 0,
+				byShip: [
+					{
+						// Hiryuu/Souryuu Kai Ni
+						ids: [196, 197],
+						multiple: { "houg": 2, "tyku": 2, "houk": 3 },
+					},
+					{
+						// Houshou Kai
+						ids: [285],
+						multiple: { "houg": 3, "tyku": 3, "houk": 4 },
+					},
+					{
+						// Suzuya/Kumano-Kou Kai Ni, Kaga Kai Ni Go
+						ids: [508, 509, 646],
+						multiple: { "houg": 2, "tyku": 2, "houk": 2 },
+					},
+					{
+						// Ise/Hyuuga Kai Ni, Ryuuhou Kai Ni+,
+						ids: [553, 554, 883, 888],
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
+					},
+				],
 			},
 			// All carrier-based improved recon planes on all ships can equip, current implemented:
 			// Saiun, Type 2 Reconnaissance Aircraft, Prototype Keiun (Carrier-based Reconnaissance Model)
@@ -1597,6 +1679,8 @@
 					"78": {
 						multiple: { "houg": 4, "tyku": 4, "houk": 4, "saku": 4 },
 					},
+					// Illustrious Class
+					"112": "78",
 					// Lexington Class
 					"69": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1, "saku": 1 },
@@ -1628,6 +1712,8 @@
 							multiple: { "houg": 1 },
 						},
 					],
+					// Illustrious Class
+					"112": "78",
 				},
 			},
 			// Barracuda Mk.III
@@ -1661,6 +1747,8 @@
 							multiple: { "tais": 1 },
 						},
 					],
+					// Illustrious Class
+					"112": "78",
 				},
 			},
 			// Zuiun
@@ -3614,6 +3702,8 @@
 					"108": "67",
 					// Brooklyn Class
 					"110": "67",
+					// Illustrious Class
+					"112": "67",
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -3809,6 +3899,8 @@
 					"88": "67",
 					// Town Class
 					"108": "67",
+					// Illustrious Class
+					"112": "67",
 					// Perth Class
 					"96": {
 						single: { "tyku": 1, "houk": 1 },
@@ -3855,6 +3947,8 @@
 					"88": "67",
 					// Town Class
 					"108": "67",
+					// Illustrious Class
+					"112": "67",
 					// Perth Class
 					"96": {
 						single: { "houg": 1, "tyku": 1, "houk": 1 },
@@ -5963,6 +6057,8 @@
 					"88": "67",
 					// Town Class
 					"108": "67",
+					// Illustrious Class
+					"112": "67",
 				},
 			},
 			// Type 93 Passive Sonar
