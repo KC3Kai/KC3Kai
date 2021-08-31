@@ -238,7 +238,7 @@
 	"lockingTagConfigs": {
 		"maxTagAmount": 7,
 		"moTagIds": [0, 1, 2, 3],
-		"eoTagIds": [4, 5, 6]
+		"eoTagIds": [3, 4, 5, 6]
 	},
 	"lockingTagColors": {
 		"legacy": [

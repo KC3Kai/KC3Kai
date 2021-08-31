@@ -1561,7 +1561,7 @@
 					"105": "69",
 				},
 			},
-			// Prototype Jinpu
+			// Prototype Jinpuu
 			"437": {
 				count: 0,
 				byShip: [
