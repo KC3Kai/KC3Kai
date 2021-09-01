@@ -11256,6 +11256,26 @@ var SHIPDATA_ = {
 		SLOTS: [14, 14, 12, 9],
 		EQUIPS: [617, 618, 619, 619],
 	},
+	2047: {
+		name: 'Airfield Princess 14',
+		nameJP: '飛行場姫',
+		image: 'SAirH.jpg',
+		type: 'Installation',
+		HP: 480,
+		FP: 50,
+		TP: 0,
+		AA: 120,
+		AR: 120,
+		EV: 1,
+		ASW: 0,
+		LOS: 90,
+		LUK: 10,
+		unknownstats: true,
+		RNG: 4,
+		SPD: 0,
+		SLOTS: [16, 16, 12, 4],
+		EQUIPS: [574, 574, 617, 571],
+	},
 
 };
 
