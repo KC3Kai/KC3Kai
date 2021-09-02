@@ -6761,8 +6761,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma
-						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72],
+						// Fast Group A: Shimakaze, Tashkent, Taihou, Shoukaku, Zuikaku, Mogami, Mikuma, Suzuya, Kumano, Tone, Chikuma, Victorious?
+						origins: [50, 516, 153, 110, 111, 70, 120, 124, 125, 71, 72, 885],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
