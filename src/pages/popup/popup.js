@@ -57,13 +57,14 @@
 				if (data.maintenance_start) {
 					var nextMtDate = new Date(data.maintenance_start);
 					var remaining = nextMtDate - new Date();
+					$(".timeServerMaintenance").removeClass("maintTime");
 					if (remaining >= 0) {
-						$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
+						$(".timeServerMaintenance").text(String(remaining/1000).toHHMMSS(true));
 					}  else {
 						var MtEnd = new Date(data.maintenance_end);
 						remaining = MtEnd - new Date();
 						if (remaining >= 0) {
-							$(".timeServerMaintenance").text( String(remaining/1000).toHHMMSS() );
+							$(".timeServerMaintenance").addClass("maintTime").text(String(remaining/1000).toHHMMSS());
 						} else {
 							$(".timeServerMaintenance").text(KC3Meta.term("MaintenanceComplete"));
 						}

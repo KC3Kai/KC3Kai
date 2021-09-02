@@ -1103,7 +1103,10 @@ Previously known as "Reactor"
 				map = parseInt(params.api_map_no, 10),
 				apiData = response.api_data;
 			const thisMap = KC3SortieManager.getCurrentMapData(world, map);
-			const oldRank = thisMap.difficulty;
+			const oldRank = thisMap.difficulty,
+				oldMaxhp = thisMap.maxhp,
+				oldGaugeNum = thisMap.gaugeNum,
+				oldGaugeType = thisMap.gaugeType;
 			thisMap.difficulty = parseInt(params.api_rank, 10);
 			if(apiData && apiData.api_max_maphp){
 				// if API gives new HP data only for some old event maps
@@ -1128,9 +1131,18 @@ Previously known as "Reactor"
 			// clear old progress of this map,
 			// to lower difficulty known facts: unlocked map gimmick not reset and
 			// current gauge num not reset, but add 25% of lower rank's max maphp to now maphp
-			if(apiData && apiData.api_maphp && oldRank && oldRank < thisMap.difficulty){
+			if(apiData && apiData.api_maphp && oldRank && oldRank > thisMap.difficulty){
 				// only forget the boss HP of higher difficulty if there is one
 				delete thisMap.baseHp;
+				// record new gauge type and maxhp if new ones different
+				if(thisMap.gaugeNum !== oldGaugeNum || thisMap.gaugeType !== oldGaugeType){
+					thisMap.kinds = thisMap.kinds || [];
+					thisMap.kinds.push(thisMap.gaugeType);
+				}
+				if(thisMap.gaugeNum !== oldGaugeNum || thisMap.maxhp !== oldMaxhp){
+					thisMap.maxhps = thisMap.maxhps || [];
+					thisMap.maxhps.push(thisMap.maxhp);
+				}
 			} else {
 				delete thisMap.kinds;
 				delete thisMap.maxhps;
@@ -1513,6 +1525,9 @@ Previously known as "Reactor"
 			if(worldFirstBase > -1){
 				var pos = worldFirstBase + rawBase.api_rid - 1,
 					base = new KC3LandBase(rawBase);
+				// copy maintenance level value from old base,
+				// since this api result unchanged and no info about the level
+				base.level = bases[worldFirstBase].level || 0;
 				// replace expanded base position if it is unused
 				if(bases[pos] && bases[pos].rid === -1){
 					bases[pos] = base;

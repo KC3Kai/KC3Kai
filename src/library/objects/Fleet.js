@@ -386,6 +386,7 @@ Contains summary information about a fleet and its ships
 					case 409: // Armed Daihatsu
 						armedCount += 1;
 						addImprove(gearObj.stars);
+					// [436] DLC Panzer II unknown
 					break;
 				}
 			});
