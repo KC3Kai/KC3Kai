@@ -1645,7 +1645,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of Daihatsu Landing Craft with known bonus:
+		// 8 types of Daihatsu Landing Craft with known bonus, 1 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
@@ -1654,6 +1654,7 @@ KC3改 Ship Object
 		//  * 355: M4A1 DD
 		//  * 408: Soukoutei (Armored Boat Class)
 		//  * 409: Armed Daihatsu
+		//  * 436: Daihatsu Landing Craft (Panzer II / North African Specification)
 		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
@@ -2661,6 +2662,8 @@ KC3改 Ship Object
 		const abyssalIdTypeMap = {
 			// Summer Harbor Princess
 			"1699": 5, "1700": 5, "1701": 5, "1702": 5, "1703": 5, "1704": 5,
+			// Summer Harbor Princess B
+			"2023": 5, "2024": 5, "2025": 6, "2026": 5, "2027": 5, "2028": 5,
 			// Isolated Island Princess
 			"1668": 3, "1669": 3, "1670": 3, "1671": 3, "1672": 3,
 			// Artillery Imp
