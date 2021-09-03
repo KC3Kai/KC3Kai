@@ -11264,8 +11264,8 @@ var SHIPDATA_ = {
 		HP: 1080,
 		FP: 240,
 		TP: 0,
-		AA: 170,
-		AR: 279,
+		AA: 180,
+		AR: 284,
 		EV: 0,
 		ASW: 0,
 		LOS: 0,
@@ -11273,7 +11273,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [18, 18, 19, 2],
+		SLOTS: [17, 17, 12, 9],
 		EQUIPS: [617, 618, 619, 619],
 	},
 	2043: {
@@ -11293,7 +11293,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [20, 20, 25, 2],
+		SLOTS: [20, 20, 18, 9],
 		EQUIPS: [617, 618, 619, 619],
 	},
 	2044: {
@@ -11333,7 +11333,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [20, 20, 20, 2],
+		SLOTS: [19, 19, 15, 9],
 		EQUIPS: [617, 618, 619, 619],
 	},
 	2046: {
@@ -11353,7 +11353,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 2,
 		SPD: 10,
-		SLOTS: [23, 23, 33, 2],
+		SLOTS: [23, 23, 26, 9],
 		EQUIPS: [617, 618, 619, 619],
 	},
 	2047: {
