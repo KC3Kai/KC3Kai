@@ -87,6 +87,13 @@
 					break;
 			}
 		});
+		// Foldable game modes
+		$(".altGameModes .selected").on("click", function(){
+			$(".altGameModes .deprecated").toggle(300);
+			const mark = $(".altGameModes .selected .moreButton").text();
+			$(".altGameModes .selected .moreButton").text(mark === "+" ? "-" : "+");
+		});
+		$(".altGameModes .deprecated").hide();
 		
 		// Auto-check live translations
 		$(".tl_checknow").on("click", function(){
