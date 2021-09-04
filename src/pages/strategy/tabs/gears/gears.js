@@ -82,7 +82,7 @@
 			// land tank
 			"t36": "overall",
 			// land base bomber
-			"t37": "dv",
+			"t37": "overall",
 			// interceptor
 			"t38": "ht",
 			// jet bomber (keiun)
