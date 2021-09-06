@@ -156,7 +156,7 @@ Retrieves when needed to apply on components
 				dmm_forcecookies  : false,
 				dmm_redirgadget   : false,
 				dmm_gadgetcache   : "",
-				dmm_customize     : false,
+				dmm_customize     : true,
 				dmm_custom_css    : "",
 
 				pan_theme       : "natsuiro",

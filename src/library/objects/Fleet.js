@@ -246,6 +246,16 @@ Contains summary information about a fleet and its ships
 			(this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
+	KC3Fleet.prototype.isStrikingForce = function(){
+		// currently Striking Force can be only indicated by 7th ship, and only fleet #3 implemented in-game.
+		return this.countShips(false) > 6;
+	};
+	
+	KC3Fleet.prototype.isStrikingForceOpened = function(){
+		// if Striking Force is enabled by fleet #3, `api_ship` will be a 7-elements array.
+		return this.ships.length > 6;
+	};
+	
 	KC3Fleet.prototype.totalLevel = function(){
 		return this.ship().map(function(x){return x.level;})
 			.reduce(function(x,y){return x+y;},0);

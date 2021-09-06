@@ -3292,6 +3292,15 @@ ABYSS FLEET
 	-webkit-transform: none;
 	-webkit-backface-visibility: none;
 }
+.module.controls .fleet_num.preSortieCheck {
+	background:repeating-linear-gradient(
+		-45deg,
+		rgba(255, 170, 34, 0.5),
+		rgba(255, 170, 34, 0.5) 2px,
+		rgba(17, 17, 17, 0.5) 2px,
+		rgba(17, 17, 17, 0.5) 4px
+	);
+}
 .module.controls .fleet_num.onExped {
 	background:rgba(0,70,100,0.9);
 }

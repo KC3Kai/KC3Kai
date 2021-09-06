@@ -559,6 +559,7 @@
 					updateShipTooltipStatsIconset();
 				}
 
+				NatsuiroListeners.Fleet({ quickStatus: true });
 				updateQuestActivityTab();
 			}
 		});
@@ -903,12 +904,17 @@
 		});
 
 		// Fleet selection
-		$(".module.controls .fleet_num").on("click", function(){
+		$(".module.controls .fleet_num").on("click", function(e){
 			$(".module.controls .fleet_num").removeClass("active");
 			$(".module.controls .fleet_rengo").removeClass("active");
 			$(".module.controls .fleet_lbas").removeClass("active");
 			$(this).addClass("active");
 			selectedFleet = parseInt( $(this).text(), 10);
+			if(e.altKey && ConfigManager.alert_pre_sortie != selectedFleet){
+				ConfigManager.loadIfNecessary();
+				ConfigManager.alert_pre_sortie = selectedFleet;
+				ConfigManager.save();
+			}
 			ExpedTabApplyConfig();
 			NatsuiroListeners.Fleet();
 			NatsuiroListeners.UpdateExpeditionPlanner();
@@ -1948,9 +1954,9 @@
 			// Close opened tooltips to avoid buggy double popup
 			$(".module.status").hideChildrenTooltips();
 
-			// FLEET BUTTONS RESUPPLY STATUSES
+			// Resupply/other statuses of Fleet number buttons
 			$(".module.controls .fleet_num").each(function(i, element){
-				$(element).removeClass("onExped needsSupply hasTaiha");
+				$(element).removeClass("onExped needsSupply hasTaiha preSortieCheck");
 				if(!$(element).hasClass("active")){
 					if(PlayerManager.fleets[i].isOnExped()){
 						$(element).addClass("onExped");
@@ -1963,6 +1969,10 @@
 					}
 				}
 			});
+			if(ConfigManager.alert_pre_sortie) {
+				const fleetNoToCheck = PlayerManager.fleets[2].isStrikingForce() ? 3 : ConfigManager.alert_pre_sortie;
+				$(".module.controls .fleet_num:contains('{0}')".format(fleetNoToCheck)).addClass("preSortieCheck");
+			}
 
 			// LBAS button resupply indicator and statuses
 			this.LbasStatus();
@@ -1978,6 +1988,11 @@
 
 			// If LBAS is selected, do not respond to rest fleet update
 			if (selectedFleet == 6){
+				return false;
+			}
+
+			// If only status refresh damended, return quickly
+			if (typeof data == "object" && data.quickStatus){
 				return false;
 			}
 
