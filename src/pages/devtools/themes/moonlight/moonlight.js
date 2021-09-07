@@ -1969,8 +1969,9 @@
 					}
 				}
 			});
-			if(ConfigManager.alert_pre_sortie) {
-				const fleetNoToCheck = PlayerManager.fleets[2].isStrikingForce() ? 3 : ConfigManager.alert_pre_sortie;
+			if(ConfigManager.alert_pre_sortie > 0) {
+				const fleetNoToCheck = ConfigManager.alert_pre_sortie <= 2 && PlayerManager.fleets[2].isStrikingForce() ?
+					3 : ConfigManager.alert_pre_sortie;
 				$(".module.controls .fleet_num:contains('{0}')".format(fleetNoToCheck)).addClass("preSortieCheck");
 			}
 

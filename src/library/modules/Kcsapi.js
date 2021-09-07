@@ -2430,7 +2430,7 @@ Previously known as "Reactor"
 			if(ConfigManager.alert_pre_sortie > 0) {
 				const missingEquipShips = [];
 				let fleetNo = ConfigManager.alert_pre_sortie;
-				if (PlayerManager.fleets[2].isStrikingForce() && fleetNo <= 2) fleetNo = 3;
+				if (fleetNo <= 2 && PlayerManager.fleets[2].isStrikingForce()) fleetNo = 3;
 				let ships = PlayerManager.fleets[fleetNo - 1].ship();
 				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
 					ships = PlayerManager.fleets[0].ship();
@@ -2464,7 +2464,7 @@ Previously known as "Reactor"
 			if(ConfigManager.alert_pre_sortie > 0) {
 				const missingLockShips = [];
 				let fleetNo = ConfigManager.alert_pre_sortie;
-				if (PlayerManager.fleets[2].isStrikingForce() && fleetNo <= 2) fleetNo = 3;
+				if (fleetNo <= 2 && PlayerManager.fleets[2].isStrikingForce()) fleetNo = 3;
 				let ships = PlayerManager.fleets[fleetNo - 1].ship();
 				if (PlayerManager.combinedFleet > 0 && fleetNo <= 2) {
 					ships = PlayerManager.fleets[0].ship();
