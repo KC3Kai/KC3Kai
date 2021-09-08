@@ -1655,7 +1655,7 @@ KC3改 Ship Object
 		//  * 408: Soukoutei (Armored Boat Class)
 		//  * 409: Armed Daihatsu
 		//  * 436: Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409];
+		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409, 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1686,7 +1686,7 @@ KC3改 Ship Object
 					}
 				});
 				// no bonus except base one on yasen for 408, 409
-				if(type < 6 || !isNight || installationType === 4) {
+				if(type < 6 || type > 7 || !isNight || installationType === 4) {
 					oneGearBonus *= getModifier(type, "count1");
 					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
 				}
