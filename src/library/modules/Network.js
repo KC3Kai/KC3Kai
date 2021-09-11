@@ -278,6 +278,16 @@ Listens to network history and triggers callback if game events happen
 				})).execute();
 				// console.debug("Battle end SE detected, focus on game tab requested");
 			}
+			// Try to detect gadget server HTTP 403 error
+			if(requestUrl.includes("/203.104.209.7/gadget_html5/js/") && har.response.status == 403){
+				console.warn("Gadget server block detected", har.serverIPAddress, har.request, har.response);
+				// Ensure panel display activiated from waiting homeport
+				KC3Network.trigger("GameStart");
+				KC3Network.trigger("CatBomb", {
+					title: KC3Meta.term("CatBombRegionalBlockTitle"),
+					message: KC3Meta.term("CatBombRegionalBlockMsg"),
+				});
+			}
 			
 			// Overlay subtitles
 			KC3Network.showSubtitle(har);

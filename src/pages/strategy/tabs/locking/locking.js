@@ -144,6 +144,7 @@
         }
 
         clearAllPlannedLocks() {
+            if (!confirm("Are you sure?")) return;
             localStorage.removeItem("lock_plan");
             $(".ships_area .plannedlock", this.tab).remove();
             this.shipList.forEach(ship => {
@@ -401,6 +402,11 @@
                 .appendTo(".tab_locking .filters .ship_filter_equipicons");
             $("input[type='checkbox']", elm).attr("id", "equipicons");
             $(".filter_name label", elm).attr("for", "equipicons").text("Icons");
+            // Ex-slot opened
+            elm = $(".factory .ship_filter_checkbox", this.tab).clone()
+                .appendTo(".tab_locking .filters .ship_filter_exslotopen");
+            $("input[type='checkbox']", elm).attr("id", "exslotopen");
+            $(".filter_name label", elm).attr("for", "exslotopen").text("Exslot");
 
             this.updateFilters();
 
@@ -419,6 +425,8 @@
                 equipStats : $(".filters .ship_filter_equipstats input[type='checkbox']", this.tab)
                     .prop("checked"),
                 equipIcons : $(".filters .ship_filter_equipicons input[type='checkbox']", this.tab)
+                    .prop("checked"),
+                exslotOpen : $(".filters .ship_filter_exslotopen input[type='checkbox']", this.tab)
                     .prop("checked"),
                 stypes : $(".filters .ship_types input[type='checkbox']:checked", this.tab)
                     .toArray().map( el => Number($(el).data("typeId")) )
@@ -448,6 +456,12 @@
                 (filterDef, ship) => {
                     return (!this.filterValues.tagLocked)
                         || (this.filterValues.tagLocked && !ship.sally);
+                }
+            );
+            this.defineSimpleFilter("exslotOpen", [], 0,
+                (filterDef, ship) => {
+                    return (this.filterValues.exslotOpen && (ship.exSlot > 0 || ship.exSlot === -1))
+                        || (!this.filterValues.exslotOpen);
                 }
             );
 

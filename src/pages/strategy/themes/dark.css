@@ -1562,13 +1562,16 @@ button, input, select, textarea {
 }
 
 .tab_fleet .fleet_ships {
-	height:90px;
+	height:107px;
 }
 .tab_fleet .fleet_ships.horizontal {
-	height:175px;
+	height:179px;
 }
-.tab_fleet .fleet_ships.max_slot6 {
-	height:107px;
+.tab_fleet .fleet_ships.horizontal.max_slot5 {
+	height:196px;
+}
+.tab_fleet .fleet_ships.horizontal.max_slot6 {
+	height:213px;
 }
 
 /* SHIP BOX
@@ -1581,10 +1584,11 @@ button, input, select, textarea {
 	overflow:hidden;
 }
 .tab_fleet .max_slot6 .fleet_ship {
-	height:105px;
+	height:auto;
+	min-height:105px;
 }
 .tab_fleet .fleet_ship.horizontal {
-	min-height:171px;
+	min-height:174px;
 	margin:5px 2px 0px 0px;
 }
 .tab_fleet .fleet_ship .ship_type {

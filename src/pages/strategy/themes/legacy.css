@@ -1218,7 +1218,10 @@ body {
 	margin:0px 4px;
 }
 .tab_fleet .fleet_ships.max_slot6 {
-	height:114px;
+	height:115px;
+}
+.tab_fleet .fleet_ships.max_slot6.horizontal {
+	height:201px;
 }
 .tab_fleet .fleet_ship {
 	height:87px;
@@ -1228,6 +1231,9 @@ body {
 }
 .tab_fleet .max_slot6 .fleet_ship {
 	height:103px;
+}
+.tab_fleet .max_slot6 .fleet_ship.horizontal {
+	height:auto;
 }
 .tab_fleet .fleet_ship .ship_hover {
 	height:53px;
