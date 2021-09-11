@@ -135,7 +135,7 @@
 	position:relative;
 	width:30px;
 	height:30px;
-	margin-top:-19px;
+	margin-top:-20px;
 	margin-right:2px;
 	opacity:0.05;
 }
@@ -154,7 +154,7 @@
 	margin:0px 4px;
 }
 .tab_fleet .fleet_ships.horizontal {
-	height:182px;
+	height:184px;
 }
 
 /* SHIP BOX

@@ -56,55 +56,6 @@
 	margin-right: 0px;
 }
 
-.tab_locking .lock_mode_1 {
-	background: var(--lockColor1) !important;
-}
-.tab_locking .lock_mode_2 {
-	background: var(--lockColor2) !important;
-}
-.tab_locking .lock_mode_3 {
-	background: var(--lockColor3) !important;
-}
-.tab_locking .lock_mode_4 {
-	background: var(--lockColor4) !important;
-}
-.tab_locking .lock_mode_5 {
-	background: var(--lockColor5) !important;
-}
-.tab_locking .lock_mode_6 {
-	background: var(--lockColor6) !important;
-}
-.tab_locking .lock_mode_7 {
-	background: var(--lockColor7) !important;
-}
-.tab_locking .lock_mode_8 {
-	background: var(--lockColor8) !important;
-}
-.tab_locking .lock_mode_9 {
-	background: var(--lockColor9) !important;
-}
-.tab_locking .lock_mode_10 {
-	background: var(--lockColor10) !important;
-}
-.tab_locking .lock_mode_11 {
-	background: var(--lockColor11) !important;
-}
-.tab_locking .lock_mode_12 {
-	background: var(--lockColor12) !important;
-}
-.tab_locking .lock_mode_13 {
-	background: var(--lockColor13) !important;
-}
-.tab_locking .lock_mode_14 {
-	background: var(--lockColor14) !important;
-}
-.tab_locking .lock_mode_15 {
-	background: var(--lockColor15) !important;
-}
-.tab_locking .lock_mode_16 {
-	background: var(--lockColor16) !important;
-}
-
 .tab_locking .map_area {
 	width:100%;
 	margin:0;
@@ -171,15 +122,18 @@
 }
 
 .tab_locking .lock_mode .drop_area {
-	background:rgba(255,255,255,0.2);
+	background-color:rgba(255,255,255,0.2);
+	background-repeat: no-repeat;
+	background-position: -2px -8px;
 	width:100%;
 	height:50px;
 	line-height:20px;
 	margin:5px 0 0 0;
 	padding-top:6px;
+	padding-right:3px;
 	font-size:12px;
-	text-align:center;
-	color:#fff;
+	text-align:right;
+	color:rgba(0,0,0,0.8);
 	cursor:default;
 	overflow:hidden;
 }
@@ -189,6 +143,104 @@
 	float: left;
 	margin: 5px 0 0 0;
 	padding: 0;
+}
+
+.tab_locking .lock_mode_1 {
+	background: var(--lockColor1);
+}
+.tab_locking .lock_mode_2 {
+	background: var(--lockColor2);
+}
+.tab_locking .lock_mode_3 {
+	background: var(--lockColor3);
+}
+.tab_locking .lock_mode_4 {
+	background: var(--lockColor4);
+}
+.tab_locking .lock_mode_5 {
+	background: var(--lockColor5);
+}
+.tab_locking .lock_mode_6 {
+	background: var(--lockColor6);
+}
+.tab_locking .lock_mode_7 {
+	background: var(--lockColor7);
+}
+.tab_locking .lock_mode_8 {
+	background: var(--lockColor8);
+}
+.tab_locking .lock_mode_9 {
+	background: var(--lockColor9);
+}
+.tab_locking .lock_mode_10 {
+	background: var(--lockColor10);
+}
+.tab_locking .lock_mode_11 {
+	background: var(--lockColor11);
+}
+.tab_locking .lock_mode_12 {
+	background: var(--lockColor12);
+}
+.tab_locking .lock_mode_13 {
+	background: var(--lockColor13);
+}
+.tab_locking .lock_mode_14 {
+	background: var(--lockColor14);
+}
+.tab_locking .lock_mode_15 {
+	background: var(--lockColor15);
+}
+.tab_locking .lock_mode_16 {
+	background: var(--lockColor16);
+}
+
+.tab_locking .lock_mode_1 .drop_area {
+	background-image: url('/assets/img/client/tags/sally1.png');
+}
+.tab_locking .lock_mode_2 .drop_area {
+	background-image: url('/assets/img/client/tags/sally2.png');
+}
+.tab_locking .lock_mode_3 .drop_area {
+	background-image: url('/assets/img/client/tags/sally3.png');
+}
+.tab_locking .lock_mode_4 .drop_area {
+	background-image: url('/assets/img/client/tags/sally4.png');
+}
+.tab_locking .lock_mode_5 .drop_area {
+	background-image: url('/assets/img/client/tags/sally5.png');
+}
+.tab_locking .lock_mode_6 .drop_area {
+	background-image: url('/assets/img/client/tags/sally6.png');
+}
+.tab_locking .lock_mode_7 .drop_area {
+	background-image: url('/assets/img/client/tags/sally7.png');
+}
+.tab_locking .lock_mode_8 .drop_area {
+	background-image: url('/assets/img/client/tags/sally8.png');
+}
+.tab_locking .lock_mode_9 .drop_area {
+	background-image: url('/assets/img/client/tags/sally9.png');
+}
+.tab_locking .lock_mode_10 .drop_area {
+	background-image: url('/assets/img/client/tags/sally10.png');
+}
+.tab_locking .lock_mode_11 .drop_area {
+	background-image: url('/assets/img/client/tags/sally11.png');
+}
+.tab_locking .lock_mode_12 .drop_area {
+	background-image: url('/assets/img/client/tags/sally12.png');
+}
+.tab_locking .lock_mode_13 .drop_area {
+	background-image: url('/assets/img/client/tags/sally13.png');
+}
+.tab_locking .lock_mode_14 .drop_area {
+	background-image: url('/assets/img/client/tags/sally14.png');
+}
+.tab_locking .lock_mode_15 .drop_area {
+	background-image: url('/assets/img/client/tags/sally15.png');
+}
+.tab_locking .lock_mode_16 .drop_area {
+	background-image: url('/assets/img/client/tags/sally16.png');
 }
 
 /* SHIP LIST - HEADER

@@ -3165,6 +3165,11 @@ ABYSS FLEET
 	text-align:center;
 	/*border:1px solid #ccc;*/
 }
+.module.controls .fleet_num.preSortieCheck {
+	border: 2px solid #ffaa22;
+	border-style: dotted;
+	line-height:26px;
+}
 .module.controls .fleet_num.onExped {
 	border:2px solid #a69de6;
 	line-height:26px;
@@ -4517,6 +4522,9 @@ ABYSS FLEET
 	line-height:30px;
 	border-radius:5px;
 	margin:0px 2px 3px 0px;
+}
+.h .module.controls .fleet_num.preSortieCheck {
+	line-height:26px;
 }
 .h .module.controls .fleet_num.onExped {
 	line-height:26px;

@@ -246,6 +246,16 @@ Contains summary information about a fleet and its ships
 			(this.ships.indexOf(-1) + 1 || (this.ships.length + 1)) - 1;
 	};
 	
+	KC3Fleet.prototype.isStrikingForce = function(){
+		// currently Striking Force can be only indicated by 7th ship, and only fleet #3 implemented in-game.
+		return this.countShips(false) > 6;
+	};
+	
+	KC3Fleet.prototype.isStrikingForceOpened = function(){
+		// if Striking Force is enabled by fleet #3, `api_ship` will be a 7-elements array.
+		return this.ships.length > 6;
+	};
+	
 	KC3Fleet.prototype.totalLevel = function(){
 		return this.ship().map(function(x){return x.level;})
 			.reduce(function(x,y){return x+y;},0);
@@ -351,7 +361,8 @@ Contains summary information about a fleet and its ships
 		var t2Count = 0;
 		var tokuCount = 0;
 		var abCount = 0;
-		var armedCount =0;
+		var armedCount = 0;
+		var panzerCount = 0;
 		// amount of bonus ships 
 		var bonusShipCount = 0;
 		this.ship((shipRid, shipIdx, shipObj) => {
@@ -386,15 +397,17 @@ Contains summary information about a fleet and its ships
 					case 409: // Armed Daihatsu
 						armedCount += 1;
 						addImprove(gearObj.stars);
-					// [436] DLC Panzer II unknown
+					break;
+					case 436: // Panzer II/North African Spec
+						panzerCount += 1;
+						addImprove(gearObj.stars);
 					break;
 				}
 			});
 		});
 		// without cap
 		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
-						+ 0.02 * t89Count
-						+ 0.02 * abCount
+						+ 0.02 * (t89Count + abCount + panzerCount)
 						+ 0.03 * armedCount
 						+ 0.01 * t2Count;
 		// cap at 20%
@@ -406,7 +419,7 @@ Contains summary information about a fleet and its ships
 			[0.054, 0.056, 0.058, 0.059][normalCount] || 0.06 :
 			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
-		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount;
+		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount + panzerCount;
 		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
