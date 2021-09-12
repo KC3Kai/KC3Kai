@@ -2349,7 +2349,7 @@
 					// Northampton Class
 					"95": [
 						{
-							single: { "houg": 1 },
+							single: { "houg": 1, "saku": 1, "tais": 1 },
 						},
 						{
 							minStars: 3,
