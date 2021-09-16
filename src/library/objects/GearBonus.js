@@ -1671,7 +1671,7 @@
 					},
 				],
 			},
-			// Fulmar (Combat Reconnaissance / Skilled)
+			// Fulmar (Reconnaissance Fighter / Skilled)
 			"423": {
 				count: 0,
 				byClass: {
