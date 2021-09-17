@@ -1618,6 +1618,16 @@ Used by SortieManager
 					.format(airBaseEnemyTotalPlanes, apTuple[3],
 						airBaseEnemyTotalPlanes - apTuple[1] - apTuple[2] - apTuple[3]);
 			}
+			// also try to infer unknown count by looking through friend fleet aerial support
+			let friendEnemyTotalPlanes = 0;
+			if(Object.getSafePath(this.battleDay, "api_friendly_kouku.api_stage1")){
+				friendEnemyTotalPlanes = this.battleDay.api_friendly_kouku.api_stage1.api_e_count;
+			}
+			if(friendEnemyTotalPlanes){
+				tooltip += "\n" + KC3Meta.term("InferredSupportPlanes")
+					.format(friendEnemyTotalPlanes,
+						apTuple[1] + apTuple[2] - friendEnemyTotalPlanes);
+			}
 			// also try to infer something from exped fleet aerial support
 			let airSupportEnemyTotalPlanes = 0;
 			if(Object.getSafePath(this.battleDay, "api_support_info.api_support_airatack.api_stage1")){
@@ -1626,7 +1636,7 @@ Used by SortieManager
 			if(airSupportEnemyTotalPlanes){
 				tooltip += "\n" + KC3Meta.term("InferredSupportPlanes")
 					.format(airSupportEnemyTotalPlanes,
-						airSupportEnemyTotalPlanes - apTuple[1] - apTuple[2]);
+						apTuple[1] + apTuple[2] - airSupportEnemyTotalPlanes);
 			}
 			// also may try to infer something from jet assault phase, if abyssal has one
 		}
@@ -1710,7 +1720,7 @@ Used by SortieManager
 	/**
 	 * Build HTML tooltip for friendly fleet info and battle result.
 	 */
-	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight, sortieTime = this.stime * 1000){
+	KC3Node.prototype.buildFriendlyBattleMessage = function(battleData = this.battleNight, sortieTime = this.stime * 1000, battleType = ""){
 		//console.debug("Friendly battle", battleData, this.battleDay);
 		const friendlyTable = $('<table>' +
 			'<tr class="header"><th class="type" colspan="3">&nbsp;</th><th class="level">Lv</th><th class="hp">HP</th><th class="stats"></th><th class="equip">&nbsp;</th></tr>' +
@@ -1729,7 +1739,7 @@ Used by SortieManager
 				'<td class="s_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="dmg_6"></td></tr>' +
 			'</table>');
 		const tooltip = $("<div></div>");
-		// Summaries ship damage for one side made by another side (night shelling only for now)
+		// Summaries ship damage for one side made by another side for night shelling
 		const sumFriendlyBattleDamages = (friendlyBattle, defenderFleetCount, attackerSide = 0) => {
 			const damages = new Array(defenderFleetCount).fill(0);
 			const hougeki = friendlyBattle.api_hougeki;
@@ -1744,19 +1754,56 @@ Used by SortieManager
 			});
 			return damages;
 		};
-		const friendlyFleet = (battleData || {}).api_friendly_info,
-			friendlyBattle = (battleData || {}).api_friendly_battle;
+		// Summaries ship damages from day aerial support (added since 2021-09-17)
+		const sumFriendlyKoukuDamages = (friendlyKouku, defenderFleetCount, attackerSide = 0) => {
+			const damages = new Array(defenderFleetCount).fill(0);
+			let mainFleetCount = 6;
+			if(friendlyKouku.api_stage3) {
+				const dmgArr = attackerSide === 0 ? friendlyKouku.api_stage3.api_edam : friendlyKouku.api_stage3.api_fdam;
+				mainFleetCount = dmgArr.legnth;
+				(dmgArr || []).forEach((dmg, idx) => {
+					damages[idx] += sumSupportDamageArray([dmg || 0]);
+				});
+			}
+			if(friendlyKouku.api_stage3_combined) {
+				const dmgArrCombined = attackerSide === 0 ? friendlyKouku.api_stage3_combined.api_edam : friendlyKouku.api_stage3_combined.api_fdam;
+				(dmgArrCombined || []).forEach((dmg, idx) => {
+					damages[idx + mainFleetCount] += sumSupportDamageArray([dmg || 0]);
+				});
+			}
+			return damages;
+		};
+		battleData = battleData || {};
+		const friendlyFleet = battleData.api_friendly_info;
+		if(!battleType && battleData.api_friendly_kouku) battleType = "kouku";
+		if(!battleType && battleData.api_friendly_battle) battleType = "battle";
+		const friendlyBattle = battleData[`api_friendly_${battleType}`];
 		if(!friendlyFleet || !friendlyBattle) return tooltip.html();
+		const isAirSupport = battleType === "kouku";
+		const sumFriendlyDamageFunc = isAirSupport ? sumFriendlyKoukuDamages : sumFriendlyBattleDamages;
+		
 		// Fill up table of friendly fleet info
 		friendlyTable.css("font-size", "11px");
 		$(".header .hp", friendlyTable).css("text-align", "center");
 		const yasenIcon = $("<img/>").width(10).height(10)
 			.css("margin-top", "-2px")
 			.attr("src", KC3Meta.statIcon("yasen"));
-		$(".header .stats", friendlyTable).append(yasenIcon);
+		const aaIcon = $("<img/>").width(10).height(10)
+			.css("margin-top", "-2px")
+			.attr("src", KC3Meta.statIcon("aa"));
+		$(".header .stats", friendlyTable).append(isAirSupport ? aaIcon : yasenIcon);
 		$(".type", friendlyTable).text("#{0}".format(friendlyFleet.api_production_type));
-		const friendlyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
+		const friendlyFleetDamages = sumFriendlyDamageFunc(friendlyBattle,
 			friendlyFleet.api_ship_id.length, 1);
+		const aaciInfo = {};
+		if(isAirSupport && friendlyBattle.api_stage2 && Array.isArray(friendlyBattle.api_stage2.api_air_fire)) {
+			friendlyBattle.api_stage2.api_air_fire.forEach(airfire => {
+				aaciInfo[airfire.api_idx] = {
+					kind: airfire.api_kind,
+					items: airfire.api_use_items.map(v => Number(v))
+				};
+			});
+		}
 		friendlyFleet.api_ship_id.forEach((sid, idx) => {
 			const tRow = $(`.ship_${idx+1}`, friendlyTable);
 			if(sid > 0) {
@@ -1780,14 +1827,25 @@ Used by SortieManager
 					)
 				).css("padding-right", 5);
 				if(isTaiha) $(".hp", tRow).css("color", "red");
-				// Show yasen (fp + tp) power only, ship current power / possible max power
-				$(".stats", tRow).append(
-					"{0} /{1}".format(
-						friendlyFleet.api_Param[idx][0] + friendlyFleet.api_Param[idx][1],
-						shipMaster.api_houg[1] + shipMaster.api_raig[1]
-					)
-				).css("padding-right", 3);
+				if(isAirSupport) {
+					// Show anti-air power only
+					$(".stats", tRow).append(
+						"{0} /{1}".format(
+							friendlyFleet.api_Param[idx][2],
+							shipMaster.api_tyku[1]
+						)
+					).css("padding-right", 3);
+				} else {
+					// Show yasen (fp + tp) power only, ship current power / possible max power
+					$(".stats", tRow).append(
+						"{0} /{1}".format(
+							friendlyFleet.api_Param[idx][0] + friendlyFleet.api_Param[idx][1],
+							shipMaster.api_houg[1] + shipMaster.api_raig[1]
+						)
+					).css("padding-right", 3);
+				}
 				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
+				const isAaciTriggered = isAirSupport && aaciInfo[idx];
 				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
 					if(gid > 0) {
 						const gearMaster = KC3Master.slotitem(gid);
@@ -1798,9 +1856,22 @@ Used by SortieManager
 							gearIcon.css("filter", "drop-shadow(0px 0px 2px #ff3399)")
 								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");
 						}
+						if(isAaciTriggered && aaciInfo[idx].items.includes(gearMaster.api_id)) {
+							gearIcon.css("filter", "drop-shadow(0px 0px 2px #33ff99)")
+								.css("-webkit-filter", "drop-shadow(0px 0px 2px #33ff99)");
+						}
 						$(".equip", tRow).append(gearIcon).css("margin-right", 2);
 					}
 				});
+				if(Array.isArray(friendlyFleet.api_slot_ex) && friendlyFleet.api_slot_ex[idx] > 0) {
+					const gearMaster = KC3Master.slotitem(friendlyFleet.api_slot_ex[idx]);
+					const gearIcon = $("<img/>").width(13).height(13)
+						.css("vertical-align", "text-bottom")
+						.css("border-radius", "50%")
+						.css("background-color", "rgba(192,192,192,0.5)")
+						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+					$(".equip", tRow).append(gearIcon).css("margin-right", 2);
+				}
 			}
 		});
 		// Fill up table of damage made to abyssal ships
@@ -1812,7 +1883,7 @@ Used by SortieManager
 			enemyShips.push(...battleData.api_ship_ke_combined);
 			enemyShipBeforeHps.push(...battleData.api_e_nowhps_combined);
 		}
-		const enemyFleetDamages = sumFriendlyBattleDamages(friendlyBattle,
+		const enemyFleetDamages = sumFriendlyDamageFunc(friendlyBattle,
 			enemyShips.length, 0);
 		enemyShips.forEach((sid, idx) => {
 			const tRow = $(idx > mainFleetCount - 1 ? ".escort" : ".main", enemyTable);
@@ -1833,7 +1904,19 @@ Used by SortieManager
 		// Join up messages and tables
 		tooltip.append(KC3Meta.term("BattleFriendlyArrived") + "<br/>");
 		tooltip.append(friendlyTable);
-		tooltip.append(KC3Meta.term("BattleFriendlyBattle") + "<br/>");
+		if(isAirSupport) {
+			const stage1 = friendlyBattle.api_stage1 || {},
+				stage2 = friendlyBattle.api_stage2 || {};
+			const etotal = (stage1.api_e_count || 0);
+			const elost = (stage1.api_e_lostcount || 0) + (stage2.api_e_lostcount || 0);
+			const planeInfo = "{0} / {1}".format(elost, etotal);
+			const airBattle = KC3Meta.airbattle(stage1.api_disp_seiku)[2];
+			const aaciKinds = Object.keys(aaciInfo).map(pos => aaciInfo[pos].kind);
+			const airBattleInfo = aaciKinds.length ? "{0} (AACI: {1})".format(airBattle, aaciKinds.join(",")) : airBattle;
+			tooltip.append(KC3Meta.term("BattleFriendlyKouku").format(planeInfo, airBattleInfo) + "<br/>");
+		} else {
+			tooltip.append(KC3Meta.term("BattleFriendlyBattle") + "<br/>");
+		}
 		tooltip.append(enemyTable);
 		return tooltip.html();
 	};
@@ -1975,6 +2058,10 @@ Used by SortieManager
 			$.each(this.battleDay.api_air_base_attack, function(i, lb){
 				fillAirBattleData("LBAS #{0}".format(i + 1), lb, true).appendTo(tooltip);
 			});
+		}
+		// Friend Fleet Aerial Support
+		if(this.battleDay.api_friendly_kouku){
+			fillAirBattleData("Friend Fleet", this.battleDay.api_friendly_kouku).appendTo(tooltip);
 		}
 		// Carrier Aerial Combat / (Long Distance) Aerial Raid
 		if(this.battleDay.api_kouku)

@@ -8,6 +8,7 @@
     injectionKouku: ({ parseKouku }) => ({ api_injection_kouku }) => parseKouku(api_injection_kouku),
     airBaseAttack: ({ parseKouku }) => ({ api_air_base_attack = [] }) =>
       api_air_base_attack.reduce((result, wave) => result.concat(parseKouku(wave)), []),
+    friendlyKouku: ({ parseFriendlyKouku }) => ({ api_friendly_kouku }) => parseFriendlyKouku(api_friendly_kouku),
     kouku: ({ parseKouku }) => ({ api_kouku }) => parseKouku(api_kouku),
     kouku2: ({ parseKouku }) => ({ api_kouku2 }) => parseKouku(api_kouku2),
     support: ({ parseSupport }) => ({ api_support_info }) => parseSupport(api_support_info),
@@ -33,6 +34,7 @@
       hougeki: { parseHougeki },
       raigeki: { parseRaigeki },
       friendly: { parseFriendly },
+      friendly: { parseFriendlyKouku },
     } = KC3BattlePrediction.battle.phases;
 
     return {
@@ -41,6 +43,7 @@
       parseHougeki: wrapParser(parseHougeki),
       parseRaigeki: wrapParser(parseRaigeki),
       parseFriendly: wrapParser(parseFriendly),
+      parseFriendlyKouku: wrapParser(parseFriendlyKouku),
     };
   };
 
