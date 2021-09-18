@@ -1796,13 +1796,12 @@ Used by SortieManager
 		const friendlyFleetDamages = sumFriendlyDamageFunc(friendlyBattle,
 			friendlyFleet.api_ship_id.length, 1);
 		const aaciInfo = {};
-		if(isAirSupport && friendlyBattle.api_stage2 && Array.isArray(friendlyBattle.api_stage2.api_air_fire)) {
-			friendlyBattle.api_stage2.api_air_fire.forEach(airfire => {
-				aaciInfo[airfire.api_idx] = {
-					kind: airfire.api_kind,
-					items: airfire.api_use_items.map(v => Number(v))
-				};
-			});
+		if(isAirSupport && friendlyBattle.api_stage2 && friendlyBattle.api_stage2.api_air_fire) {
+			const airfire = friendlyBattle.api_stage2.api_air_fire;
+			aaciInfo[airfire.api_idx] = {
+				kind: airfire.api_kind,
+				items: (airfire.api_use_items || []).map(v => Number(v))
+			};
 		}
 		friendlyFleet.api_ship_id.forEach((sid, idx) => {
 			const tRow = $(`.ship_${idx+1}`, friendlyTable);
@@ -1845,7 +1844,7 @@ Used by SortieManager
 					).css("padding-right", 3);
 				}
 				const isStarShellUser = friendlyBattle.api_flare_pos && friendlyBattle.api_flare_pos[0] === idx;
-				const isAaciTriggered = isAirSupport && aaciInfo[idx];
+				const isAaciTriggered = isAirSupport && aaciInfo[idx] && aaciInfo[idx].kind > 0;
 				friendlyFleet.api_Slot[idx].forEach((gid, slot) => {
 					if(gid > 0) {
 						const gearMaster = KC3Master.slotitem(gid);
@@ -1857,8 +1856,8 @@ Used by SortieManager
 								.css("-webkit-filter", "drop-shadow(0px 0px 2px #ff3399)");
 						}
 						if(isAaciTriggered && aaciInfo[idx].items.includes(gearMaster.api_id)) {
-							gearIcon.css("filter", "drop-shadow(0px 0px 2px #33ff99)")
-								.css("-webkit-filter", "drop-shadow(0px 0px 2px #33ff99)");
+							gearIcon.css("filter", "drop-shadow(0px 0px 2px #119911)")
+								.css("-webkit-filter", "drop-shadow(0px 0px 2px #119911)");
 						}
 						$(".equip", tRow).append(gearIcon).css("margin-right", 2);
 					}
@@ -1911,7 +1910,7 @@ Used by SortieManager
 			const elost = (stage1.api_e_lostcount || 0) + (stage2.api_e_lostcount || 0);
 			const planeInfo = "{0} / {1}".format(elost, etotal);
 			const airBattle = KC3Meta.airbattle(stage1.api_disp_seiku)[2];
-			const aaciKinds = Object.keys(aaciInfo).map(pos => aaciInfo[pos].kind);
+			const aaciKinds = Object.keys(aaciInfo).map(pos => aaciInfo[pos].kind).filter(v => v > 0);
 			const airBattleInfo = aaciKinds.length ? "{0} (AACI: {1})".format(airBattle, aaciKinds.join(",")) : airBattle;
 			tooltip.append(KC3Meta.term("BattleFriendlyKouku").format(planeInfo, airBattleInfo) + "<br/>");
 		} else {

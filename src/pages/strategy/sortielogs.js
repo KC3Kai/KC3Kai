@@ -1251,6 +1251,10 @@
 							
 							// Add box to UI
 							$(".sortie_nodes", sortieBox).append( nodeBox );
+							
+							// Filter and do whatever, such as dump API data with friend fleet
+							if(typeof window.dumpBattleNode === "function")
+								window.dumpBattleNode.call(self, battle, thisNode, sortie);
 						});
 						
 					}
