@@ -6772,6 +6772,7 @@
 									"2": { "soku": 10 },
 									"3": { "soku": 10 },
 									"4": { "soku": 10 },
+									"5": { "soku": 10 },
 								},
 							},
 							{
@@ -6791,24 +6792,40 @@
 							},
 							{
 								flags: [ "newModelBoiler" ],
-								single: { "soku": 10 },
+								byCount: {
+									gear: "enhancedBoiler",
+									"1": { "soku": 5 },
+									"2": { "soku": 10 },
+									"3": { "soku": 10 },
+									"4": { "soku": 10 },
+									"5": { "soku": 10 },
+								},
+							},
+							{
+								flags: [ "newModelBoiler", "enhancedBoiler" ],
+								byCount: {
+									gear: "enhancedBoiler",
+									"2": { "soku": -5 },
+									"3": { "soku": -5 },
+									"4": { "soku": -5 },
+								},
 							},
 						],
 					},
 					{
 						// Fast Group B2: Yuubari Kai Ni/K2D, Noshiro K2
 						//   Almost fast CV: Akagi, Katsuragi, Intrepid, Ark Royal, Aquila, Graf Zeppelin, Saratoga, Hornet
-						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota, Washington
+						//   Almost FBB: Littorio, Roma, Bismarck, Richelieu, South Dakota, Washington, Conte di Cavour Kai+
 						//   All fast DD: not here, see next item
 						//   All fast CL/CLT: Nagara, Isuzu, Yura, Ooi, Kitakami, Tenryuu, Tatsuta, Natori, Sendai, Jintsuu, Naka, Kuma, Tama, Kiso, Kinu, Abukuma, Ooyodo, Gotland, Abruzzi, Garibaldi, Atlanta, De Ruyter, Perth, Helena, Sheffield, Honolulu?
 						//   All fast CA(V): Furutaka, Kako, Aoba, Myoukou, Nachi, Ashigara, Haguro, Takao, Atago, Maya, Choukai, Kinugasa, Prinz Eugen, Zara, Pola, Houston, Northampton
 						//   All fast CVL: Shouhou, Ryuujou, Zuihou, Chitose-Kou, Chiyoda-Kou, Ryuuhou K2
 						origins: [115, 138, 441, 442, 171, 492, 602, 654, 83, 332, 549, 515, 444, 432, 433, 603,
-								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598,
+								21, 22, 23, 24, 25, 51, 52, 53, 54, 55, 56, 99, 100, 101, 113, 114, 183, 574, 589, 590, 597, 604, 613, 615, 514, 598, 877,
 								59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 123, 176, 448, 449, 595, 655,
 								74, 76, 116, 102, 103, 184
 							],
-						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883],
+						excludes: [115, 293, 623, 138, 306, 102, 103, 104, 105, 106, 107, 184, 185, 318, 883, 877],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -6837,6 +6854,9 @@
 								byCount: {
 									gear: "enhancedBoiler",
 									"1": { "soku": -5 },
+									"2": { "soku": -5 },
+									"3": { "soku": -5 },
+									"4": { "soku": -5 },
 								},
 							},
 						],
@@ -6873,6 +6893,8 @@
 								byCount: {
 									gear: "enhancedBoiler",
 									"1": { "soku": -5 },
+									"2": { "soku": -5 },
+									"3": { "soku": -5 },
 								},
 							},
 						],
@@ -6913,6 +6935,7 @@
 									"2": { "soku": 10 },
 									"3": { "soku": 15 },
 									"4": { "soku": 15 },
+									"5": { "soku": 15 },
 								},
 							},
 							{
@@ -6921,6 +6944,7 @@
 									gear: "enhancedBoiler",
 									"2": { "soku": 5 },
 									"3": { "soku": 5 },
+									"4": { "soku": 5 },
 								},
 							},
 						],

@@ -11373,7 +11373,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 0,
-		SLOTS: [12, 12, 12, 12],
+		SLOTS: [13, 13, 12, 10],
 		EQUIPS: [574, 574, 617, 571],
 	},
 	2048: {
