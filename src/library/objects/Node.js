@@ -1775,8 +1775,14 @@ Used by SortieManager
 		};
 		battleData = battleData || {};
 		const friendlyFleet = battleData.api_friendly_info;
-		if(!battleType && battleData.api_friendly_kouku) battleType = "kouku";
-		if(!battleType && battleData.api_friendly_battle) battleType = "battle";
+		// Try to auto recognize battle type if not specified
+		if(!battleType) {
+			if(battleData.api_friendly_kouku) battleType = "kouku";
+			if(battleData.api_friendly_battle) battleType = "battle";
+			if(!battleType || (battleData.api_friendly_kouku && battleData.api_friendly_battle)) {
+				console.warn("Unrecognized or unsupported friend fleet battle type", battleData);
+			}
+		}
 		const friendlyBattle = battleData[`api_friendly_${battleType}`];
 		if(!friendlyFleet || !friendlyBattle) return tooltip.html();
 		const isAirSupport = battleType === "kouku";
@@ -1869,6 +1875,10 @@ Used by SortieManager
 						.css("border-radius", "50%")
 						.css("background-color", "rgba(192,192,192,0.5)")
 						.attr("src", KC3Meta.itemIcon(gearMaster.api_type[3]));
+					if(isAaciTriggered && aaciInfo[idx].items.includes(gearMaster.api_id)) {
+						gearIcon.css("filter", "drop-shadow(0px 0px 2px #119911)")
+							.css("-webkit-filter", "drop-shadow(0px 0px 2px #119911)");
+					}
 					$(".equip", tRow).append(gearIcon).css("margin-right", 2);
 				}
 			}
