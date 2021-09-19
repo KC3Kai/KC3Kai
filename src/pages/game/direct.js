@@ -1,8 +1,7 @@
 (function(){
 	"use strict";
-	var source = 'https://raw.githubusercontent.com/KC3Kai/kc3-translations/dev-autotl/data';
-	localStorage.extract_api = false;
-	localStorage.dmmplay = true;
+	const source = "https://raw.githubusercontent.com/KC3Kai/kc3-translations/dev-autotl/data";
+	const isNotDmmplayPrev = localStorage.dmmplay == "false";
 	
 	function getInfExpirationDate(){
 		var infinityExpire = new Date();
@@ -11,16 +10,21 @@
 	}
 	
 	// Redirect to DMM play page when activated
-	function ActivateGame(){
+	function activateDmmPlay(){
+		localStorage.extract_api = false;
+		localStorage.dmmplay = true;
+		applyCookiesAndRedirect();
+	}
+	function applyCookiesAndRedirect(htmlLink){
 		chrome.cookies.set({
 			url: "http://www.dmm.com",
 			name: "ckcy",
 			value: "1",
 			domain: ".dmm.com",
 			expirationDate: getInfExpirationDate(),
-			path: '/netgame/',
+			path: "/netgame/",
 		}, function(cookie){
-			window.location = "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
+			window.location.href = htmlLink || "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/";
 		});
 	}
 	
@@ -31,8 +35,8 @@
 		KC3Translation.execute();
 		KC3Database.init();
 		
-		// Quick Play
-		$("#startAnyway").on('click', ActivateGame);
+		// Start play without devtools panel
+		$("#startAnyway").on("click", activateDmmPlay);
 		
 		// Show instructions by OS
 		chrome.runtime.getPlatformInfo(function(platformInfo){
@@ -79,12 +83,12 @@
 					localStorage.extract_api = false;
 					localStorage.dmmplay = false;
 					applyCookiesAndRedirect("dmm.html");
-					break;
+				break;
 				case "api":
 					localStorage.extract_api = true;
 					localStorage.dmmplay = false;
-					applyCookiesAndRedirect("http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/");
-					break;
+					applyCookiesAndRedirect();
+				break;
 			}
 		});
 		// Foldable game modes
@@ -93,7 +97,11 @@
 			const mark = $(".altGameModes .selected .moreButton").text();
 			$(".altGameModes .selected .moreButton").text(mark === "+" ? "-" : "+");
 		});
-		$(".altGameModes .deprecated").hide();
+		if (isNotDmmplayPrev) {
+			$(".altGameModes .selected .moreButton").text("-");
+		} else {
+			$(".altGameModes .deprecated").hide();
+		}
 		
 		// Auto-check live translations
 		$(".tl_checknow").on("click", function(){
@@ -176,24 +184,11 @@
 		}
 	}
 	
-	function applyCookiesAndRedirect(htmlLink){
-		chrome.cookies.set({
-			url: "http://www.dmm.com",
-			name: "ckcy",
-			value: "1",
-			domain: ".dmm.com",
-			expirationDate: getInfExpirationDate(),
-			path: '/netgame/',
-		}, function(cookie){
-			window.location.href = htmlLink;
-		});
-	}
-	
 	// Extension Interaction
 	chrome.runtime.onMessage.addListener(function(request, sender, response) {
 		if (request.identifier != "kc3_gamescreen") return true;
 		if (request.action != "activateGame") return true;
-		ActivateGame();
+		activateDmmPlay();
 	});
 	
 })();

@@ -307,6 +307,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -321,6 +322,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -335,6 +337,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -351,6 +354,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -365,6 +369,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -379,6 +384,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'kouku2',
       'support',
@@ -399,6 +405,7 @@
       'airBaseInjection',
       'injectionKouku',
       'airBaseAttack',
+      'friendlyKouku',
       'kouku',
       'support',
       'openingTaisen',
@@ -660,6 +667,7 @@
     injectionKouku: ({ parseKouku }) => ({ api_injection_kouku }) => parseKouku(api_injection_kouku),
     airBaseAttack: ({ parseKouku }) => ({ api_air_base_attack = [] }) =>
       api_air_base_attack.reduce((result, wave) => result.concat(parseKouku(wave)), []),
+    friendlyKouku: ({ parseFriendlyKouku }) => ({ api_friendly_kouku }) => parseFriendlyKouku(api_friendly_kouku),
     kouku: ({ parseKouku }) => ({ api_kouku }) => parseKouku(api_kouku),
     kouku2: ({ parseKouku }) => ({ api_kouku2 }) => parseKouku(api_kouku2),
     support: ({ parseSupport }) => ({ api_support_info }) => parseSupport(api_support_info),
@@ -685,6 +693,7 @@
       hougeki: { parseHougeki },
       raigeki: { parseRaigeki },
       friendly: { parseFriendly },
+      friendly: { parseFriendlyKouku },
     } = KC3BattlePrediction.battle.phases;
 
     return {
@@ -693,6 +702,7 @@
       parseHougeki: wrapParser(parseHougeki),
       parseRaigeki: wrapParser(parseRaigeki),
       parseFriendly: wrapParser(parseFriendly),
+      parseFriendlyKouku: wrapParser(parseFriendlyKouku),
     };
   };
 
@@ -720,6 +730,14 @@
     } = KC3BattlePrediction.battle.phases;
 
     return parseHougekiFriend(api_hougeki);
+  };
+
+  Friendly.parseFriendlyKouku = (api_friendly_kouku) => {
+    const {
+      kouku: { parseKoukuFriend },
+    } = KC3BattlePrediction.battle.phases;
+
+    return parseKoukuFriend(api_friendly_kouku);
   };
 
   /*--------------------------------------------------------*/
@@ -905,27 +923,37 @@
   /*--------------------------------------------------------*/
 
   Kouku.parseKouku = (battleData) => {
-    const { createAttack } = KC3BattlePrediction.battle;
-    const {
-      normalizeFleetDamageArrays,
-      parsePlayerJson,
-      parseEnemyJson,
-      isDamagingAttack,
-    } = KC3BattlePrediction.battle.phases.kouku;
+    const { parseKoukuInternal } = KC3BattlePrediction.battle.phases.kouku;
+    return parseKoukuInternal(battleData, false);
+  };
 
-    return pipe(
-      normalizeFleetDamageArrays,
-      juxt([parsePlayerJson, parseEnemyJson]),
-      flatten,
-      filter(isDamagingAttack),
-      map(createAttack)
-    )(battleData);
+  Kouku.parseKoukuFriend = (battleData) => {
+    const { parseKoukuInternal } = KC3BattlePrediction.battle.phases.kouku;
+    return parseKoukuInternal(battleData, true);
   };
 
   /*--------------------------------------------------------*/
   /* ---------------------[ INTERNAL ]--------------------- */
   /*--------------------------------------------------------*/
 
+  Kouku.parseKoukuInternal = (battleData, isAllySideFriend = false) => {
+    const { createAttack } = KC3BattlePrediction.battle;
+    const {
+      normalizeFleetDamageArrays,
+      parsePlayerJson,
+      parsePlayerJsonFriend,
+      parseEnemyJson,
+      isDamagingAttack,
+    } = KC3BattlePrediction.battle.phases.kouku;
+
+    return pipe(
+      normalizeFleetDamageArrays,
+      juxt([(isAllySideFriend ? parsePlayerJsonFriend : parsePlayerJson), parseEnemyJson]),
+      flatten,
+      filter(isDamagingAttack),
+      map(createAttack)
+    )(battleData);
+  };
 
   Kouku.normalizeFleetDamageArrays = (battleData) => {
     const { extractDamageArray, padDamageArray } = KC3BattlePrediction.battle.phases.kouku;
@@ -955,6 +983,9 @@
 
   Kouku.parsePlayerJson = ({ api_fdam }) => api_fdam.map(
     (damage, position) => ({ damage, defender: { side: Side.PLAYER, position } })
+  );
+  Kouku.parsePlayerJsonFriend = ({ api_fdam }) => api_fdam.map(
+    (damage, position) => ({ damage, defender: { side: Side.FRIEND, position } })
   );
   Kouku.parseEnemyJson = ({ api_edam }) => api_edam.map(
     (damage, position) => ({ damage, defender: { side: Side.ENEMY, position } })

@@ -13,6 +13,14 @@
     return parseHougekiFriend(api_hougeki);
   };
 
+  Friendly.parseFriendlyKouku = (api_friendly_kouku) => {
+    const {
+      kouku: { parseKoukuFriend },
+    } = KC3BattlePrediction.battle.phases;
+
+    return parseKoukuFriend(api_friendly_kouku);
+  };
+
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
   /*--------------------------------------------------------*/

@@ -1185,11 +1185,19 @@
 								$(".node_support img", nodeBox).attr("src", "../../assets/img/ui/support-x.png");
 							}
 							
+							// Day Friendly Fleet aerial support triggered, or
 							// Night battle Friendly Fleet support triggered
-							if(battle.yasen.api_friendly_info){
+							if(battle.data.api_friendly_info || battle.yasen.api_friendly_info){
 								$(".node_result", nodeBox).addClass("icon5");
 								$(".node_friend img", nodeBox).attr("src", "../../assets/img/ui/friendly.png");
-								$(".node_friend", nodeBox).attr("title", thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime));
+								if(battle.data.api_friendly_kouku){
+									const msg = thisNode.buildFriendlyBattleMessage(battle.data, sortieTime, "kouku");
+									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+								}
+								if(battle.yasen.api_friendly_battle){
+									const msg = thisNode.buildFriendlyBattleMessage(battle.yasen, sortieTime, "battle");
+									$(".node_friend", nodeBox).attr("title", [$(".node_friend", nodeBox).attr("title"), msg].filter(v => !!v).join("\n"));
+								}
 							}else{
 								$(".node_result", nodeBox).removeClass("icon5");
 								$(".node_friend", nodeBox).hide();
@@ -1243,6 +1251,10 @@
 							
 							// Add box to UI
 							$(".sortie_nodes", sortieBox).append( nodeBox );
+							
+							// Filter and do whatever, such as dump API data with friend fleet
+							if(typeof window.dumpBattleNode === "function")
+								window.dumpBattleNode.call(self, battle, thisNode, sortie);
 						});
 						
 					}

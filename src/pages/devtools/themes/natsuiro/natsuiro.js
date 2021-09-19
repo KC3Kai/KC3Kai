@@ -3150,11 +3150,11 @@
 				if(thisNode.isNightToDay){
 					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_day"+["-x",""][thisNode.toDawnFlag&1]+".png");
 					$(".module.activity .battle_night").attr("title", KC3Meta.term("BattleDayNeeded"));
-					// Indicate potential friendly fleet support for night to day battle
-					if(thisNode.friendlySupportFlag){
-						$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_friendly.png");
-						$(".module.activity .battle_night").attr("title", thisNode.buildFriendlyBattleMessage(thisNode.battleDay));
-					}
+				}
+				// Indicate potential friendly fleet support for night to day battle or daytime aerial battle
+				if(thisNode.friendlySupportFlag){
+					$(".module.activity .battle_night img").attr("src", "/assets/img/ui/dark_friendly.png");
+					$(".module.activity .battle_night").attr("title", thisNode.buildFriendlyBattleMessage(thisNode.battleDay));
 				}
 
 				// Battle conditions
