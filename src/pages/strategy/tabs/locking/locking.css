@@ -146,52 +146,52 @@
 }
 
 .tab_locking .lock_mode_1 {
-	background: var(--lockColor1);
+	background: var(--lockColor1) !important;
 }
 .tab_locking .lock_mode_2 {
-	background: var(--lockColor2);
+	background: var(--lockColor2) !important;
 }
 .tab_locking .lock_mode_3 {
-	background: var(--lockColor3);
+	background: var(--lockColor3) !important;
 }
 .tab_locking .lock_mode_4 {
-	background: var(--lockColor4);
+	background: var(--lockColor4) !important;
 }
 .tab_locking .lock_mode_5 {
-	background: var(--lockColor5);
+	background: var(--lockColor5) !important;
 }
 .tab_locking .lock_mode_6 {
-	background: var(--lockColor6);
+	background: var(--lockColor6) !important;
 }
 .tab_locking .lock_mode_7 {
-	background: var(--lockColor7);
+	background: var(--lockColor7) !important;
 }
 .tab_locking .lock_mode_8 {
-	background: var(--lockColor8);
+	background: var(--lockColor8) !important;
 }
 .tab_locking .lock_mode_9 {
-	background: var(--lockColor9);
+	background: var(--lockColor9) !important;
 }
 .tab_locking .lock_mode_10 {
-	background: var(--lockColor10);
+	background: var(--lockColor10) !important;
 }
 .tab_locking .lock_mode_11 {
-	background: var(--lockColor11);
+	background: var(--lockColor11) !important;
 }
 .tab_locking .lock_mode_12 {
-	background: var(--lockColor12);
+	background: var(--lockColor12) !important;
 }
 .tab_locking .lock_mode_13 {
-	background: var(--lockColor13);
+	background: var(--lockColor13) !important;
 }
 .tab_locking .lock_mode_14 {
-	background: var(--lockColor14);
+	background: var(--lockColor14) !important;
 }
 .tab_locking .lock_mode_15 {
-	background: var(--lockColor15);
+	background: var(--lockColor15) !important;
 }
 .tab_locking .lock_mode_16 {
-	background: var(--lockColor16);
+	background: var(--lockColor16) !important;
 }
 
 .tab_locking .lock_mode_1 .drop_area {

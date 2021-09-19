@@ -332,7 +332,7 @@
 				'api_req_map/start': this.processStart,
 				'api_req_map/next': this.processNext,
 				
-				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit, this.processSpAttack, this.processEventAccuracy],
+				'api_req_sortie/battle': [this.processEnemy, this.processAACI, this.processGunfit, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
 				'api_req_sortie/airbattle': this.processEnemy,
 				'api_req_sortie/night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy],
 				'api_req_sortie/ld_airbattle': this.processEnemy,
@@ -340,16 +340,16 @@
 				// Night only: `sp_midnight`, Night starts as 1st part then day part: `night_to_day`
 				'api_req_battle_midnight/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy],
 				'api_req_combined_battle/airbattle': this.processEnemy,
-				'api_req_combined_battle/battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy],
+				'api_req_combined_battle/battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
 				'api_req_combined_battle/sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy],
-				'api_req_combined_battle/battle_water': [this.processEnemy, this.processSpAttack, this.processEventAccuracy],
+				'api_req_combined_battle/battle_water': [this.processEnemy, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
 				'api_req_combined_battle/ld_airbattle': this.processEnemy,
 				'api_req_combined_battle/ld_shooting': this.processEnemy,
-				'api_req_combined_battle/ec_battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy],
-				'api_req_combined_battle/each_battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy],
+				'api_req_combined_battle/ec_battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
+				'api_req_combined_battle/each_battle': [this.processEnemy, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
 				'api_req_combined_battle/each_airbattle': this.processEnemy,
-				'api_req_combined_battle/each_sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy],
-				'api_req_combined_battle/each_battle_water': [this.processEnemy, this.processSpAttack, this.processEventAccuracy],
+				'api_req_combined_battle/each_sp_midnight': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
+				'api_req_combined_battle/each_battle_water': [this.processEnemy, this.processSpAttack, this.processEventAccuracy, this.processFriendlyFleet],
 				'api_req_combined_battle/ec_night_to_day': [this.processEnemy, this.processFriendlyFleet, this.processSpAttack, this.processEventAccuracy],
 				'api_req_combined_battle/each_ld_airbattle': this.processEnemy,
 				'api_req_combined_battle/each_ld_shooting': this.processEnemy,
@@ -367,7 +367,7 @@
 				'api_req_kousyou/createitem': this.processDevelopment,
 
 				// Port checks
-				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitFriendlyFleet, this.submitExped],
+				'api_port/port': [this.processGimmick, this.lazyInitNetworkListener, this.submitExped],
 
 				// Equipment list
 				'api_get_member/picture_book': this.processPictureBook,
@@ -618,10 +618,12 @@
 					nowhp: friendlyInfo.api_nowhps,
 					stats: friendlyInfo.api_Param,
 					equip: friendlyInfo.api_Slot,
+					exslot: friendlyInfo.api_slot_ex,
 					requestType: PlayerManager.friendlySettings.api_request_type,
 					voice: [friendlyInfo.api_voice_id, friendlyInfo.api_voice_p_no],
 				};
-				this.delayedFFSubmission = true;
+				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
+				this.sendData(this.friendlyFleet, 'friendlyfleet');
 				
 				this.friendlyFleetCount.friendlyfleet = friendlyInfo.api_ship_id;
 				this.sendData(this.friendlyFleetCount, 'friendlyfleetcount');
@@ -679,6 +681,7 @@
 			// Process airbattle (if any)
 			if(apiData.api_kouku || apiData.api_air_base_attack) {
 				const isLandBase = !!apiData.api_air_base_attack;
+				const isFriendlyFleet = !!apiData.api_friendly_info;
 				const buildAirBattleData = (koukuApi) => {
 					const obj = {
 						total: koukuApi.api_stage1.api_e_count,
@@ -702,7 +705,8 @@
 					return obj;
 				};
 				
-				const koukuApi = !isLandBase ? apiData.api_kouku : !airRaidData ? apiData.api_air_base_attack[0] : airRaidData.api_air_base_attack;
+				// Land Base > Friendly Airbattle > Airbattle for player fleet battles
+				const koukuApi = !isLandBase ? !isFriendlyFleet ? apiData.api_kouku : apiData.api_friendly_kouku : !airRaidData ? apiData.api_air_base_attack[0] : airRaidData.api_air_base_attack;
 				const airBattle = buildAirBattleData(koukuApi);
 				airBattle.landBase = isLandBase;
 				airBattle.jetPhase = !!(apiData.api_air_base_injection || apiData.api_injection_kouku);
@@ -731,6 +735,7 @@
 						airBattle.improvements.push(improvements);
 						fp += shipObj.interceptionPower();
 					});
+					airBattle.fighterPower = fp;
 					if(koukuApi.api_stage3) {
 						airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag || [];
 						airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag || [];
@@ -745,7 +750,7 @@
 					const squadronPlanes = koukuApi.api_squadron_plane || [];
 					const shipObj = buildShipFromBase(baseInfo, squadronPlanes);
 					// fp will be an Array[2]
-					fp = shipObj.fighterBounds(true);
+					airBattle.fighterPower = shipObj.fighterBounds(true);
 					// Prepare enemy shootdown submission, only use last nodes to prevent all submissions from being delayed
 					// Also enforce that both strikepoints are on same node and wave is not fighter sweep
 					if(KC3SortieManager.currentNode().isBoss() && (baseInfo.strikePoints[0] === baseInfo.strikePoints[1]) && !!apiData.api_air_base_attack[1].api_stage2) {
@@ -763,7 +768,7 @@
 				}
 				
 				// Get fighter power of sortied fleet(s)
-				else {
+				else if (!isFriendlyFleet) {
 					// fp will be an Array[2]
 					fp = PlayerManager.fleets[this.data.sortiedFleet - 1].fighterBounds();
 					// Sum fighter power from escort fleet if abyssal combined too
@@ -771,9 +776,12 @@
 						const escortFp = PlayerManager.fleets[1].fighterBounds();
 						fp.forEach((val, idx) => { fp[idx] = val + escortFp[idx]; });
 					}
+					airBattle.fighterPower = fp;
+				}
+				else if (isFriendlyFleet) {
+					airBattle.isFriendlyFleet = true;
 				}
 				
-				airBattle.fighterPower = fp;
 				this.enemyComp.airBattle = airBattle;
 			}
 			
@@ -1058,25 +1066,6 @@
 				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
 			}
 			this.sendData(this.gimmick, 'gimmick');
-		},
-
-		/**
-		* Check if flamethrowers are used and submit friendlyfleet if submission is delayed
-		*/
-		submitFriendlyFleet: function(http){
-			if (!this.delayedFFSubmission) return;
-
-			const apiData = http.response.api_data;
-			this.delayedFFSubmission = false;
-
-			// In the event that user has less than 6 torch, all will be consumed
-			// Ignore case when user has zero torch
-			if (!!apiData.api_material && this.torchCount > 0) {
-				const currentTorch = apiData.api_material[4].api_value;
-				this.friendlyFleet.fleet.torchUsed = currentTorch < this.torchCount;
-				this.friendlyFleet.uniquekey = crc32c(JSON.stringify(this.friendlyFleet.fleet));
-				this.sendData(this.friendlyFleet, 'friendlyfleet');
-			}
 		},
 
 		processSpAttack: function() {
@@ -1670,7 +1659,6 @@
 			};
 			this.sortieSpecialAttack = null;
 			this.delayedABSubmission = null;
-			this.delayedFFSubmission = null;
 			this.torchCount = 0;
 			this.resupplyUsed = false;
 			this.exped = null;

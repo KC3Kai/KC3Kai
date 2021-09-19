@@ -78,8 +78,6 @@
 		
 		// Play DMM Website
 		$("#play_dmm").on('click', function(){
-			localStorage.extract_api = false;
-			localStorage.dmmplay = true;
 			window.open("../game/direct.html", "kc3kai_game");
 		});
 		

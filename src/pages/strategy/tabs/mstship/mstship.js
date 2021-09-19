@@ -664,11 +664,42 @@
 					$(".tab_mstship .shipInfo .remodel_level span").text( shipData.api_afterlv );
 					$(".tab_mstship .shipInfo .remodel_ammo .rsc_value").text( shipData.api_afterbull );
 					$(".tab_mstship .shipInfo .remodel_steel .rsc_value").text( shipData.api_afterfuel );
-					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(
-						// show blueprint icon for all these special materials
-						!!(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
-							|| remodelInfo.gunmat || remodelInfo.airmat || remodelInfo.armmat)
+					// show blueprint icon for any special material except these attributes in RemodelDb.js
+					const specialMatKeys = Object.keys(remodelInfo)
+						.filter(k => !["ship_id_from", "ship_id_to", "level", "remodel_level", "steel", "ammo"].includes(k));
+					$(".tab_mstship .shipInfo .remodel_blueprint").toggle(specialMatKeys.some(k => remodelInfo[k] > 0));
+					$(".tab_mstship .shipInfo .remodel_blueprint .rsc_icon img").attr("src",
+						["blueprint", "report"].some(k => remodelInfo[k] > 0) ?
+							KC3Meta.useitemIcon(58) : "/assets/img/client/devmat.png"
 					);
+					$(".tab_mstship .shipInfo .remodel_blueprint .rsc_icon").attr("title",
+						((keys) => {
+							const tips = $("<div><p>Required materials:</p></div>");
+							// update blueprint.js either if new material implemented in-game
+							const mapKeyToIconSrc = {
+								"blueprint": KC3Meta.useitemIcon(58),
+								"catapult": KC3Meta.useitemIcon(65),
+								"report": KC3Meta.useitemIcon(78),
+								"gunmat": KC3Meta.useitemIcon(75),
+								"airmat": KC3Meta.useitemIcon(77),
+								"armmat": KC3Meta.useitemIcon(94),
+								"devmat": "/assets/img/client/devmat.png",
+								"torch": "/assets/img/client/ibuild.png",
+							};
+							keys.forEach(key => {
+								if(remodelInfo[key] > 0) {
+									$("<img />").attr("src", mapKeyToIconSrc[key] || KC3Meta.useitemIcon(0))
+										.width(15).height(15).css("margin-right", 2)
+										.css("vertical-align", "top")
+										.appendTo(tips);
+									$("<span></span>").css("margin-right", 10)
+										.text(remodelInfo[key])
+										.appendTo(tips);
+								}
+							});
+							return tips.prop("outerHTML");
+						})(specialMatKeys)
+					).lazyInitTooltip();
 					$(".tab_mstship .shipInfo .remodel").show();
 				}else{
 					$(".tab_mstship .shipInfo .remodel").hide();

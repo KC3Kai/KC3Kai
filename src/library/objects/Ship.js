@@ -1826,7 +1826,7 @@ KC3改 Ship Object
 				case 5: // Summer Harbor Princess
 					seaplaneBonus = hasSeaplane ? 1.3 : 1;
 					diveBomberBonus = [1, 1.3, 1.3 * 1.2][diveBomberCount] || 1.56;
-					wg42Bonus = [1, 1.4, 1.4 * 1.5][wg42Count] || 2.1;
+					wg42Bonus = [1, 1.4, 1.4 * 1.2][wg42Count] || 1.68;
 					t3Bonus = hasT3Shell ? 1.75 : 1;
 					type4RocketBonus = [1, 1.25, 1.25 * 1.4][type4RocketCount + type4RocketCdCount] || 1.75;
 					mortarBonus = [1, 1.1, 1.1 * 1.15][mortarCount + mortarCdCount] || 1.265;
