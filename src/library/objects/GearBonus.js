@@ -19,7 +19,7 @@
 	 * @see https://kancolle.fandom.com/wiki/Equipment_Bonuses - summary tables and named: visible bonuses
 	 * @see `main.js#SlotItemEffectUtil` - since 2020-03-03, devs implemented client-side bonuses display, which hard-coded these logics and wrapped results with `SlotItemEffectModel`
 	 * @see URLs some other summary tables:
-	 *  * [20210302 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
+	 *  * [20210916 ALL] https://docs.google.com/spreadsheets/d/1bInH11S_xKdaKP754bB7SYh-di9gGzcXkiQPvGuzCpg/htmlview
 	 *  * [20210301 ALL] https://www.npmjs.com/package/equipment-bonus
 	 *  * [20190208 ALL] https://docs.google.com/spreadsheets/d/1_peG-B4ijt7HOvDtkd8dPZ8vA7ZMLx-YuwsuGoEm6wY/htmlview
 	 *  * [20180904 ALL] https://github.com/andanteyk/ElectronicObserver/blob/develop/ElectronicObserver/Other/Information/kcmemo.md#%E7%89%B9%E6%AE%8A%E8%A3%85%E5%82%99%E3%81%AB%E3%82%88%E3%82%8B%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E8%A3%9C%E6%AD%A3
@@ -37,6 +37,8 @@
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
+				domesticSonar: 0,
+				domesticSonarIds: [46, 47, 132, 149, 438],
 				enhancedBoiler: 0,
 				enhancedBoilerIds: [34],
 				newModelBoiler: 0,
@@ -1312,6 +1314,37 @@
 					stypes: [7],
 					multiple: { "tyku": 1, "tais": 2, "houk": 1 },
 				},
+			},
+			// Shiden Kai 4
+			"271": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					{
+						// Suzuya/Kumano-Kou Kai Ni, Ryuuhou Kai Ni+
+						ids: [508, 509, 883, 888],
+						minStars: 4,
+						multiple: { "houg": 1 },
+					},
+					{
+						// Suzuya/Kumano-Kou Kai Ni, Ryuuhou Kai Ni+
+						ids: [508, 509, 883, 888],
+						minStars: 6,
+						multiple: { "tyku": 2 },
+					},
+					{
+						// Suzuya/Kumano-Kou Kai Ni, Ryuuhou Kai Ni+
+						ids: [508, 509, 883, 888],
+						minStars: 8,
+						multiple: { "houk": 2 },
+					},
+					{
+						// Suzuya/Kumano-Kou Kai Ni, Ryuuhou Kai Ni+
+						ids: [508, 509, 883, 888],
+						minStars: 10,
+						multiple: { "houg": 1 },
+					},
+				],
 			},
 			// Reppuu Kai (Prototype Carrier-based Model)
 			"335": {
@@ -6067,17 +6100,24 @@
 				byClass: {
 					// Katori Class
 					"56": {
-						single: { "houk": 3, "tais": 2 },
+						synergy: {
+							flags: [ "domesticSonar" ],
+							distinct: { "houk": 3, "tais": 2 },
+						},
 					},
 				},
 			},
 			// Type 3 Active Sonar
 			"47": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
-						single: { "houk": 3, "tais": 2 },
+						synergy: {
+							flags: [ "domesticSonar" ],
+							distinct: { "houk": 3, "tais": 2 },
+						},
 					},
 				},
 				byShip: [
@@ -6093,13 +6133,108 @@
 					},
 				],
 			},
+			// Type 3 Active Sonar Kai
+			"438": {
+				count: 0,
+				byClass: {
+					// Ayanami Class
+					"1": {
+						single: { "houk": 1, "tais": 1 },
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Hatsuharu Class
+					"10": "1",
+					// Fubuki Class
+					"12": "1",
+					// Asashio Class
+					"18": "1",
+					// Shimakaze Class
+					"22": "1",
+					// Shiratsuyu Class
+					"23": "1",
+					// Mutsuki Class
+					"28": "1",
+					// Kagerou Class
+					"30": "1",
+					// Yuugumo Class
+					"38": "1",
+					// Akizuki Class
+					"54": "1",
+					// Kamikaze Class
+					"66": "1",
+					// Matsu Class
+					"101": "1",
+					// Katori Class
+					"56": {
+						synergy: {
+							flags: [ "domesticSonar" ],
+							distinct: { "houk": 3, "tais": 2 },
+						},
+					},
+				},
+				byShip: [
+					{
+						// All remodels of: Kamikaze, Harukaze, Shigure, Yamakaze, Maikaze, Asashimo
+						origins: [471, 473, 43, 457, 122, 425],
+						multiple: { "houg": 1, "houk": 2, "tais": 3 },
+					},
+					{
+						// All remodels of: Ushio, Ikazuchi, Yamagumo, Isokaze, Hamakaze, Kishinami
+						origins: [16, 36, 414, 167, 170, 527],
+						multiple: { "houk": 2, "tais": 2 },
+					},
+					{
+						// All remodels of: Ushio, Maikaze, Isokaze, Hamakaze, Ikazuchi, Yamagumo, Umikaze, Kawakaze, Suzukaze
+						origins: [16, 122, 167, 170, 36, 414, 458, 459, 47],
+						single: { "tais": 1 },
+					},
+					{
+						// All remodels of: Shigure, Yamakaze, Kamikaze, Harukaze, Mikura, Ishigaki
+						origins: [43, 457, 473, 611, 585],
+						single: { "houk": 1, "tais": 1 },
+					},
+					{
+						// Naka K2, Yura K2, Isuzu K2
+						ids: [160, 488, 141],
+						single: { "houk": 1, "tais": 1 },
+					},
+					{
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
+						ids: [145, 363, 476, 578, 588, 667],
+						minStars: 4,
+						single: { "tais": 1 },
+					},
+					{
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
+						ids: [145, 363, 476, 578, 588, 667],
+						minStars: 6,
+						single: { "houk": 1 },
+					},
+					{
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
+						ids: [145, 363, 476, 578, 588, 667],
+						minStars: 8,
+						single: { "tais": 1 },
+					},
+					{
+						// Shigure K2, Harukaze Kai, Kamikaze Kai, Asashimo K2, Yamakaze K2+
+						ids: [145, 363, 476, 578, 588, 667],
+						minStars: 10,
+						single: { "houk": 1 },
+					},
+				],
+			},
 			// Type 0 Passive Sonar
 			"132": {
 				count: 0,
 				byClass: {
 					// Katori Class
 					"56": {
-						single: { "houk": 3, "tais": 2 },
+						synergy: {
+							flags: [ "domesticSonar" ],
+							distinct: { "houk": 3, "tais": 2 },
+						},
 					},
 				},
 			},
@@ -6113,7 +6248,10 @@
 					},
 					// Katori Class
 					"56": {
-						single: { "houk": 3, "tais": 2 },
+						synergy: {
+							flags: [ "domesticSonar" ],
+							distinct: { "houk": 3, "tais": 2 },
+						},
 					},
 				},
 				byShip: [
@@ -6382,6 +6520,40 @@
 					"109": {
 						single: { "soku": 5, },
 					},
+				},
+			},
+			// Pugliese Underwater Protection Bulkhead
+			"136": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Italian large ships: V.Veneto Class
+					"58": [
+						{
+							single: { "souk": 2, "houk": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "souk": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "souk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+					// Aquila Class
+					"68": "58",
+					// Conte di Cavour Class
+					"113": "58",
+				},
+				byShip: {
+						// Conte di Cavour Nuovo
+						ids: [879],
+						single: { "souk": 1, "houk": 1 },
 				},
 			},
 			// Skilled Lookouts
