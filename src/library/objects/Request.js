@@ -12,6 +12,7 @@ Executes processing and relies on KC3Network for the triggers
 		// Deep clone for avoiding direct references to HAR object members
 		if(har){
 			this.url = String(har.request.url);
+			this.remoteIp = String(har.serverIPAddress);
 			this.headers = $.extend(true, [], har.response.headers);
 			this.statusCode = har.response.status;
 			this.params = $.extend(true, [], (har.request.postData || {}).params);
@@ -48,7 +49,7 @@ Executes processing and relies on KC3Network for the triggers
 				return result;
 			};
 			this.params = decodeFormUrlencoded(request.postData.text);
-			console.warn("Request post data reparsed:", this.params, $.extend(true, {}, request.postData));
+			console.info("Request post data reparsed:", this.params, $.extend(true, {}, request.postData));
 		}
 	};
 	
@@ -65,7 +66,7 @@ Executes processing and relies on KC3Network for the triggers
 				// Known issue: for some browsers, next redirected request might lose some headers,
 				// and cause post data can not be parsed as `x-www-form-urlencoded` properly,
 				// see #parsePostDataTextIfNecessary.
-				console.warn("Response temporary redirect:", this.statusCode, this.url, this.headers, this.params);
+				console.info("Response temporary redirect:", this.statusCode, this.url, this.headers);
 				return false;
 			}
 			console.warn("Response status invalid:", this.statusCode, this.url, this.headers);
@@ -189,6 +190,10 @@ Executes processing and relies on KC3Network for the triggers
 		} else {
 			// Check availability of the headers.Date
 			if(!this.headers.Date) {
+				// Ignore header check if local proxy found
+				if(this.remoteIp === "127.0.0.1" || this.remoteIp === "::1") {
+					KC3Request.headerReminder = true;
+				}
 				if(!KC3Request.headerReminder) {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombMissingServerTimeTitle"),
@@ -196,6 +201,7 @@ Executes processing and relies on KC3Network for the triggers
 					});
 					KC3Request.headerReminder = true;
 				}
+				console.log("Response without Date header detected:", this.url, this.headers);
 				// Fallback to use local machine time
 				this.headers.Date = new Date().toUTCString();
 			}

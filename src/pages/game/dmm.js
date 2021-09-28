@@ -344,7 +344,7 @@ var interactions = {
 	
 	// Request OK Marker
 	goodResponses :function(request, sender, response){
-		if(request.tcp_status === 200 && request.api_status === 1) {
+		if(request.tcp_status >= 200 && request.tcp_status < 400 && request.api_status === 1) {
 			localStorage.longestIdleTime = Math.max(localStorage.longestIdleTime,Date.now() - lastRequestMark);
 			lastRequestMark = Date.now();
 			$(".game-idle-timer").trigger("refresh-tick");
