@@ -5514,8 +5514,8 @@
 						multiple: { "tyku": 1, "houk": 1 },
 					},
 					{
-						// Kawakaze/Umikaze K2, Shiratsuyu/Murasame Kai
-						ids: [469, 587, 242, 244],
+						// Kawakaze/Umikaze K2, Shiratsuyu/Murasame Kai, Yamakaze K2+
+						ids: [469, 587, 242, 244, 588, 667],
 						multiple: { "houk": 1 },
 					},
 					{
