@@ -209,7 +209,9 @@ AntiAir: anti-air related calculations
 	// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 	var is5inchTwinDualMountCD = masterIdEq(362);
 	// GFCS Mk.37 + 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
-	var is5inchTwinDualMountCDWithGfcs = masterIdEq(363);
+	var is5inchTwinDualMountCDwithGfcs = masterIdEq(363);
+	// any of previous two guns
+	var is5inchTwinDualMountCdOrWithGfcs = predAnyOf(is5inchTwinDualMountCD, is5inchTwinDualMountCDwithGfcs);
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -1039,12 +1041,21 @@ AntiAir: anti-air related calculations
 
 	// Atlanta-class
 	declareAACI(
+		38, 10, 1.85,
+		[atlantaIcon, haMountKaiRadar, haMountKaiRadar],
+		predAllOf(isAtlantaClass),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCDwithGfcs, 2 ))
+		)
+	);
+	declareAACI(
 		39, 10, 1.7,
 		[atlantaIcon, haMountKaiRadar, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
-				hasSome( is5inchTwinDualMountCDWithGfcs ),
+				hasSome( is5inchTwinDualMountCDwithGfcs ),
 				hasSome( is5inchTwinDualMountCD ))
 		)
 	);
@@ -1054,12 +1065,7 @@ AntiAir: anti-air related calculations
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
 			predAllOf(
-				predAnyOf(
-					hasAtLeast( is5inchTwinDualMountCD, 2 ),
-					predAllOf(
-						hasSome( is5inchTwinDualMountCD ),
-						hasSome( is5inchTwinDualMountCDWithGfcs ))
-				),
+				hasAtLeast( is5inchTwinDualMountCdOrWithGfcs, 2 ),
 				hasSome( isGfcsRadar ))
 		)
 	);
@@ -1068,12 +1074,8 @@ AntiAir: anti-air related calculations
 		[atlantaIcon, haMountCdIcon, haMountCdIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
-			predAnyOf(
-				hasAtLeast( is5inchTwinDualMountCD, 2 ),
-				predAllOf(
-					hasSome( is5inchTwinDualMountCD ),
-					hasSome( is5inchTwinDualMountCDWithGfcs ))
-			)
+			predAllOf(
+				hasAtLeast( is5inchTwinDualMountCdOrWithGfcs, 2 ))
 		)
 	);
 
