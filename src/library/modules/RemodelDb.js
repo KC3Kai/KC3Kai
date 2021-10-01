@@ -100,6 +100,9 @@
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
+                case 588: // Yamakaze K2
+                case 667: // Yamakaze K2D
+                    return 10;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
                     return 5;
@@ -206,6 +209,8 @@
                 case 562: // Johnston
                 case 596: // Fletcher
                 case 520: // Janus
+                case 588: // Yamakaze K2
+                case 667: // Yamakaze K2D
                     return 10;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2

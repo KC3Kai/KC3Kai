@@ -340,6 +340,7 @@ known IDs see QuestManager
 					case 6: // Fighter
 						KC3QuestManager.get(675).increment(0); // F67 quarterly index 0
 						KC3QuestManager.get(688).increment(0); // F79 quarterly index 0
+						KC3QuestManager.get(1107).increment(0); // F102 yearly index 0
 						break;
 					case 7: // Dive Bomber
 						KC3QuestManager.get(688).increment(1); // F79 quarterly index 1
@@ -349,6 +350,7 @@ known IDs see QuestManager
 						KC3QuestManager.get(688).increment(2); // F79 quarterly index 2
 						KC3QuestManager.get(655).increment(4); // F94 yearly index 4
 						KC3QuestManager.get(681).increment(1); // F95 yearly index 1
+						KC3QuestManager.get(1107).increment(1); // F102 yearly index 1
 						break;
 					case 10: // Recon Seaplane
 						KC3QuestManager.get(677).increment(1); // F69 weekly index 1
