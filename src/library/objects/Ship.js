@@ -2507,7 +2507,7 @@ KC3改 Ship Object
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from Sonars taken into account confirmed.
-		const shipAsw = this.as[0] + aswDiff
+		const shipAsw = this.as[0] + aswDiff;
 		// Visible asw bonus from Fighters, Dive Bombers and Torpedo Bombers still not counted,
 		//   confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
 		//   2019-08-08: https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#trigger_conditions
@@ -2517,7 +2517,10 @@ KC3改 Ship Object
 		//   reconfirmed since 2021-09-28, counted towards 65: https://twitter.com/myteaGuard/status/1442842481696014346
 		// Green (any small?) gun (DE +1 asw from 12cm Single High-angle Gun Mount Model E) not counted,
 		//   confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
-			- this.equipmentTotalStats("tais", true, true, true, [1]);
+		//   reconfirmed since 2021-09-28, counted towards 60/75:
+		//     https://twitter.com/agosdufovj/status/1443674443218227237
+		//     https://twitter.com/agosdufovj/status/1442827344142483456
+		//	- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2547,7 +2550,8 @@ KC3改 Ship Object
 		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		if(isEscort) {
 			if(hasSonar) return true;
-			const equipAswSum = this.equipmentTotalStats("tais");
+			// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
+			const equipAswSum = this.equipmentTotalStats("tais", true, false);
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 
