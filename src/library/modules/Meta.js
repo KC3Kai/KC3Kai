@@ -136,6 +136,8 @@ Provides access to data on built-in JSON files
 			318, // Ryuuhou Kai -> K2E
 			883, // Ryuuhou K2E -> K2
 			396, // Gambier Bay Kai -> Mk.II
+			588, // Yamakaze K2 -> K2D
+			667, // Yamakaze K2D -> K2
 		],
 		// all ships for special cut-in attacks
 		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 635, 639, 640],

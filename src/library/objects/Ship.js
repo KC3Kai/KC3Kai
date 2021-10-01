@@ -883,6 +883,7 @@ KC3改 Ship Object
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
+				else if (flag.includes("Sonar")) { return 18; }
 				else if (flag.includes("Boiler")) { return 19; }
 				return 0; // Unknown synergy type
 			});
@@ -919,7 +920,7 @@ KC3改 Ship Object
 		// asw stat from these known types of equipment not taken into account:
 		// main gun, recon seaplane, seaplane/carrier fighter, radar, large flying boat, LBAA
 		// KC Vita counts only carrier bomber, seaplane bomber, sonar (both), depth charges, rotorcraft and as-pby.
-		// All visible bonuses from equipment not counted towards asw attacks for now.
+		// ~~All visible bonuses from equipment not counted towards asw attacks.~~
 		const noCountEquipType2Ids = [1, 2, 3, 6, 10, 12, 13, 41, 45, 47];
 		if(!canAirAttack) {
 			const stype = this.master().api_stype;
@@ -935,6 +936,9 @@ KC3改 Ship Object
 			.map(g => g.exists() && !!g.master().api_tais &&
 				noCountEquipType2Ids.includes(g.master().api_type[2]) ? 0 : g.master().api_tais
 			).sumValues();
+		// ASW visible bonus counted towards equipment since 2021-09-28,
+		// under verification if there are some exceptions for specified equipment.
+		equipmentTotalAsw += this.equipmentTotalStats("tais", true, true, true);
 		return equipmentTotalAsw;
 	};
 
@@ -1776,9 +1780,9 @@ KC3改 Ship Object
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
-			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170][type4RocketCdCount] || 170;
+			const type4RocketCdAdditive = !type4RocketCdCount ? 0 : [0, 80, 170, 230][type4RocketCdCount] || 230;
 			const mortarAdditive = !mortarCount ? 0 : [0, 30, 55, 75, 90][mortarCount] || 90;
-			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150][mortarCdCount] || 150;
+			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150, 180][mortarCdCount] || 180;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -2503,16 +2507,20 @@ KC3改 Ship Object
 
 		// ship stats not updated in time when equipment changed, so take the diff if necessary,
 		// and explicit asw bonus from Sonars taken into account confirmed.
-		const shipAsw = this.as[0] + aswDiff
+		const shipAsw = this.as[0] + aswDiff;
 		// Visible asw bonus from Fighters, Dive Bombers and Torpedo Bombers still not counted,
 		//   confirmed since 2019-06-29: https://twitter.com/trollkin_ball/status/1144714377024532480
 		//   2019-08-08: https://wikiwiki.jp/kancolle/%E5%AF%BE%E6%BD%9C%E6%94%BB%E6%92%83#trigger_conditions
 		//   but bonus from other aircraft like Rotorcraft not (able to be) confirmed,
 		//   perhaps a similar logic to exclude some types of equipment, see #effectiveEquipmentTotalAsw.
 		//   reconfirmed since 2021-02-29, not counted towards asw 50/65 threshold.
+		//   reconfirmed since 2021-09-28, counted towards 65: https://twitter.com/myteaGuard/status/1442842481696014346
 		// Green (any small?) gun (DE +1 asw from 12cm Single High-angle Gun Mount Model E) not counted,
 		//   confirmed since 2020-06-19: https://twitter.com/99_999999999/status/1273937773225893888
-			- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
+		//   reconfirmed since 2021-09-28, counted towards 60/75:
+		//     https://twitter.com/agosdufovj/status/1443674443218227237
+		//     https://twitter.com/agosdufovj/status/1442827344142483456
+		//	- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2535,14 +2543,15 @@ KC3改 Ship Object
 			// Visible bonus from Torpedo Bombers confirmed counted towards asw 100 threshold since 2021-02-09:
 			// https://twitter.com/panmodoki10/status/1359036399618412545
 			// perhaps only asw 100 threshold is using ship visible asw value
-			const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
-			return (shipAsw + aswAircraftBonus) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
+			//const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
+			return (shipAsw/* + aswAircraftBonus*/) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
 		}
 
 		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
 		if(isEscort) {
 			if(hasSonar) return true;
-			const equipAswSum = this.equipmentTotalStats("tais");
+			// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
+			const equipAswSum = this.equipmentTotalStats("tais", true, false);
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
 

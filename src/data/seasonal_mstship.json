@@ -4430,43 +4430,43 @@
 	},
 	"5553": {
 		"api_id": 5553,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着曙改二",
+		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5554": {
 		"api_id": 5554,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "夏龍鳳改二",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5555": {
 		"api_id": 5555,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "夏龍鳳改二戊",
+		"api_yomi": "たいげい・りゅうほう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"5556": {
 		"api_id": 5556,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏海風改二",
+		"api_yomi": "うみかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5557": {
 		"api_id": 5557,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "夏2021Gotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5558": {
 		"api_id": 5558,
@@ -4478,147 +4478,147 @@
 	},
 	"5559": {
 		"api_id": 5559,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着涼波",
+		"api_yomi": "すずなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5560": {
 		"api_id": 5560,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Perth",
+		"api_yomi": "パース",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5561": {
 		"api_id": 5561,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着竹",
+		"api_yomi": "たけ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5562": {
 		"api_id": 5562,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "夏の私服宗谷(特務艦)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5563": {
 		"api_id": 5563,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "夏の私服宗谷(灯台補給船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5564": {
 		"api_id": 5564,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "夏の私服宗谷(南極観測船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5565": {
 		"api_id": 5565,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Honolulu ",
+		"api_yomi": "ホノルル",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5566": {
 		"api_id": 5566,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "睡眠加古",
+		"api_yomi": "かこ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5567": {
 		"api_id": 5567,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "夏の私服伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5568": {
 		"api_id": 5568,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着高波改二",
+		"api_yomi": "たかなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5569": {
 		"api_id": 5569,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Washington",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5570": {
 		"api_id": 5570,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Washington改",
+		"api_yomi": "ワシントン",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5571": {
 		"api_id": 5571,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着South Dakota",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5572": {
 		"api_id": 5572,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着South Dakota改",
+		"api_yomi": "サウスダコタ",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5573": {
 		"api_id": 5573,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着由良改二",
+		"api_yomi": "ゆら",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5574": {
 		"api_id": 5574,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "欧州遠征迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5575": {
 		"api_id": 5575,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏のお嬢さん丹陽",
+		"api_yomi": "ゆきかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5576": {
 		"api_id": 5576,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "夏のお嬢さん雪風改二",
+		"api_yomi": "ゆきかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5577": {
 		"api_id": 5577,
@@ -4627,5 +4627,13 @@
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
+	},
+	"5578": {
+		"api_id": 5578,
+		"api_name": "夏制服高波改二",
+		"api_yomi": "たかなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 3
 	}
 }
