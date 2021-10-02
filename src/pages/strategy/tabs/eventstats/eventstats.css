@@ -66,26 +66,10 @@
 }
 
 .tab_eventstats .memorial .memorial_shipicon {
-	opacity:0.6;
-	display: grid;
-}
-.tab_eventstats .memorial .memorial_shipicon .sink_icon {
-	grid-column: 1;
-  	grid-row: 1;
-	width:10px;
-	height:10px;
-	line-height:10px;
-	float:left;
-	margin:4px 0px 0px 17px;
-}
-.tab_eventstats .memorial .memorial_shipicon .sink_icon img {
-	width:10px;
-	height:10px;
-	vertical-align:top;
+	filter:grayscale(100%);
+    -webkit-filter:grayscale(100%);
 }
 .tab_eventstats .memorial .memorial_shipicon .icon {
-	grid-column: 1;
-  	grid-row: 1;
 	width:26px;
 	height:26px;
 	float:left;
