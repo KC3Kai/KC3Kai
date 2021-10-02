@@ -285,23 +285,20 @@
 					for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
 						if (!ships[shipIdx]) continue;
 						const taihaHp = maxHps[shipIdx] / 4;
-						if (initialHps[shipIdx] < taihaHp) continue;
 						const resultHp = player[shipIdx].hp;
 
 						// Handle pre-boss taiha
-						if (resultHp < taihaHp) {
-							if (resultHp > 0) {
+						if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp) {
 								this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
-							} else {
-								if (ships[shipIdx].equip.includes(42) || ships[shipIdx].equip.includes(43)) {
-									this.stats.dameconCount += 1;
-								} else if (!battle.boss) {
-									if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
-									this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
-								}
+						}
+						if (resultHp <= 0) {
+							if (ships[shipIdx].equip.includes(42) || ships[shipIdx].equip.includes(43)) {
+								this.stats.dameconCount += 1;
+							} else if (!battle.boss) {
+								if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
+								this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
 							}
 						}
-
 					}
 				}));
 

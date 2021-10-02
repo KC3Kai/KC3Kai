@@ -55,8 +55,14 @@
 	margin:0px 0px 20px 0px;
 }
 
+.tab_eventstats .memorial {
+	display:none;
+	text-align: center;
+}
+
 .tab_eventstats .memorial .shiplist {
 	display:flex;
+	justify-content:center;
 }
 
 .tab_eventstats .memorial .memorial_shipicon {
