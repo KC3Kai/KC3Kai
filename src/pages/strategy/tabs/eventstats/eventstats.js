@@ -288,13 +288,14 @@
 						const resultHp = player[shipIdx].hp;
 
 						// Handle pre-boss taiha
-						if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp) {
+						if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp && !battle.boss) {
 								this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
 						}
+						// Handle sunk ships
 						if (resultHp <= 0) {
 							if (ships[shipIdx].equip.includes(42) || ships[shipIdx].equip.includes(43)) {
 								this.stats.dameconCount += 1;
-							} else if (!battle.boss) {
+							} else {
 								if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
 								this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
 							}
