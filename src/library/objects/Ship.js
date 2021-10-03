@@ -2521,6 +2521,7 @@ KC3改 Ship Object
 		//     https://twitter.com/agosdufovj/status/1443674443218227237
 		//     https://twitter.com/agosdufovj/status/1442827344142483456
 		//	- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
+
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2544,13 +2545,13 @@ KC3改 Ship Object
 			// https://twitter.com/panmodoki10/status/1359036399618412545
 			// perhaps only asw 100 threshold is using ship visible asw value
 			//const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
-			return (shipAsw/* + aswAircraftBonus*/) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
+			return shipAsw >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
 		}
 
-		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// DE can OASW without Sonar, needs displayed asw >= 75 and total asw from equipment >= 4
+		// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
 		if(isEscort) {
 			if(hasSonar) return true;
-			// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
 			const equipAswSum = this.equipmentTotalStats("tais", true, false);
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
@@ -2561,7 +2562,7 @@ KC3改 Ship Object
 		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		if(isAirAntiSubStype) {
 			// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter, without Sonar,
-			//   but her initial naked asw too high to verify the lower threshold.
+			//   but not OASW with Sonar + ASW aircraft even asw >= 100 like others.
 			if(isHyuugaKaiNi) {
 				return this.countEquipmentType(1, 15) >= 2 || this.countEquipmentType(1, 44) >= 1;
 			}

@@ -437,11 +437,14 @@
 				curBox.appendTo(".map_list");
 			}
 
-			Object.keys(this.stats.kuso).forEach(sortieid => {
-				this.stats.kuso[sortieid].forEach(shipId => {
-					const icon = $(".tab_eventstats .factory .memorial_shipicon").clone();
-					$(".icon", icon).append("<img src=" + KC3Meta.getIcon(shipId) + "></img>");
-					icon.appendTo(".memorial .shiplist");
+			Object.keys(this.stats.kuso).forEach(sortieId => {
+				// Currently sunk ship icons are ordered in raw sortie/battle/finding order,
+				// order them by master ID or base form ID if icons of the same ship gonna to be grouped together?
+				this.stats.kuso[sortieId]/*.slice(0).sort((a, b) => (a - b))*/.forEach(shipId => {
+					const icon = $(".tab_eventstats .factory .memorial_shipicon").clone().appendTo(".memorial .shiplist");
+					$(".icon img", icon).attr("src", KC3Meta.getIcon(shipId))
+						.attr("title", KC3Meta.shipNameById(shipId))
+						.lazyInitTooltip();
 				});
 			});
 
@@ -452,7 +455,7 @@
 			$(".table5").show();
 			$(".lbcons").show();
 			$(".map_list").show();
-			if (Object.keys(this.stats.kuso).length > 0) { $(".memorial").show(); }
+			$(".memorial").toggle(Object.keys(this.stats.kuso).length > 0);
 		},
 	};
 

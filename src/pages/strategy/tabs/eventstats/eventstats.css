@@ -48,16 +48,13 @@
 	margin:0 5px 0 5px;
 }
 
-.tab_eventstats .page_padding {
-	border-radius:0px;
-	border-bottom:1px solid #555555;
-	padding:0px 0px 20px 0px;
-	margin:0px 0px 20px 0px;
-}
-
 .tab_eventstats .memorial {
 	display:none;
-	text-align: center;
+	text-align:center;
+}
+
+.tab_eventstats .memorial hr {
+	border-top:1px solid #555555;
 }
 
 .tab_eventstats .memorial .shiplist {
@@ -67,7 +64,7 @@
 
 .tab_eventstats .memorial .memorial_shipicon {
 	filter:grayscale(100%);
-    -webkit-filter:grayscale(100%);
+	-webkit-filter:grayscale(100%);
 }
 .tab_eventstats .memorial .memorial_shipicon .icon {
 	width:26px;
@@ -86,7 +83,7 @@
 	position:relative;
 	top:-1px;
 	left:-1px;
-	object-fit: cover;
-	border-radius: 50%;
-	image-rendering: auto;
+	object-fit:cover;
+	border-radius:50%;
+	image-rendering:auto;
 }
