@@ -47,3 +47,46 @@
 .tab_eventstats .table5 span {
 	margin:0 5px 0 5px;
 }
+
+.tab_eventstats .page_padding {
+	border-radius:0px;
+	border-bottom:1px solid #555555;
+	padding:0px 0px 20px 0px;
+	margin:0px 0px 20px 0px;
+}
+
+.tab_eventstats .memorial {
+	display:none;
+	text-align: center;
+}
+
+.tab_eventstats .memorial .shiplist {
+	display:flex;
+	justify-content:center;
+}
+
+.tab_eventstats .memorial .memorial_shipicon {
+	filter:grayscale(100%);
+    -webkit-filter:grayscale(100%);
+}
+.tab_eventstats .memorial .memorial_shipicon .icon {
+	width:26px;
+	height:26px;
+	float:left;
+	margin:0px 2px;
+	border-radius:13px;
+	border:1px solid #000;
+	overflow:hidden;
+	background:#888;
+	position:relative;
+}
+.tab_eventstats .memorial .memorial_shipicon .icon img {
+	width:26px;
+	height:26px;
+	position:relative;
+	top:-1px;
+	left:-1px;
+	object-fit: cover;
+	border-radius: 50%;
+	image-rendering: auto;
+}
