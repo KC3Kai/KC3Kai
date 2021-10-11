@@ -4091,7 +4091,7 @@
 			//console.debug("Remodel detail", data);
 			const remodelDetailBox = $(".activity_remodel .remodelDetail");
 			const akashiMstId = PlayerManager.fleets[0].ship(0).masterId;
-			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
+			const shipId = data.shipId || akashiMstId;
 			$(".remodel_header .assistant_ship img", remodelDetailBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 				.attr("title", KC3Meta.shipName(shipId));
