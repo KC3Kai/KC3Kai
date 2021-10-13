@@ -198,7 +198,7 @@ Used by SortieManager
 		KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 			fleet.shipsUnescaped().forEach(ship => {
 				maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
-				radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 6);
+				radarShips += (ship.hasEquipmentType(2, [12, 13]) & 1);
 			});
 		});
 		const actualMaxLoss = nodeData.api_happening.api_count;
@@ -210,7 +210,7 @@ Used by SortieManager
 		// reduce it from remaining rsc of all activated ships and return the max value as `api_count`.
 		// `radarShips` = amount of ships equipped any type of radar,
 		// `nodeMaxLoss` is the map cell property which unknown by client-side,
-		// can be get from `api_count` if computed one bigger than it.
+		// can be get from `api_count` if computed one greater than it.
 		
 		// For phase 2: https://wikiwiki.jp/kancolle/%E8%B3%87%E6%9D%90#b7c2f0c7
 		// Definitions of loss rate, max loss, etc no longer fixed by maps, can be various by maps & nodes,
@@ -227,6 +227,8 @@ Used by SortieManager
 		
 		const [defRscType, defLossCap, defLossRate, defLossRateHigh] = lossDef;
 		const isReducedByRadar = !!nodeData.api_happening.api_dentan;
+		// Uncertain: radarShips capped at 6, even for CF and Striking Force? will not handle them though because we don't have event map defined.
+		// For phase 1 combined fleet: radarShips only contribute to their own single fleet
 		const radarReduceRate = radarShips && isReducedByRadar ? [0, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6][Math.min(6, radarShips)] : 0;
 		const definedCappedLoss = defLossCap || actualMaxLoss;
 		let lossRate = 0, expectedMaxLoss = 0;

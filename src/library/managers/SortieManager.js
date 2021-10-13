@@ -1110,9 +1110,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 					return equip;
 				});
-				// `cond` is unmodified api_cond value
+				// `cond` is unmodified api_cond value during battle
 				let morale = ship.cond;
-				if (!ship.cond) {
+				if (!morale) {
 					morale = ship.morale;
 					// Undo KC3 morale decrement in Node.js, ignore case for -9 and align morale to sim cutoffs
 					if (realBattle) {
