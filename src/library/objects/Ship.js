@@ -3870,12 +3870,17 @@ KC3改 Ship Object
 	 * NOTE: Only attacker accuracy part, not take defender evasion part into account at all, not final hit/critical rate.
 	 * @param {number} formationModifier - see #estimateShellingFormationModifier.
 	 * @param {boolean} applySpAttackModifiers - if special equipment and attack modifiers should be applied.
+	 * @param {number} playerCombinedFleetType - 0=single, 1=CTF, 2=STF, 3=TCF.
+	 * @param {boolean} isPlayerMainFleet - if attacker ship is in CF main fleet or escort.
+	 * @param {boolean} isEnemyCombined - if defender side is combined fleet.
 	 * @return {Object} accuracy factors of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	 * @see https://en.kancollewiki.net/Accuracy,_Evasion_and_Criticals
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
 	 * @see https://twitter.com/Nishisonic/status/890202416112480256
 	 */
-	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
+	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true,
+		playerCombinedFleetType = 0, isPlayerMainFleet = true, isEnemyCombined = false) {
 		if(this.isDummy()) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level);
 		// formula from PSVita is sqrt(1.5 * lk) anyway,
@@ -3889,7 +3894,20 @@ KC3改 Ship Object
 		const byGunfit = this.shellingGunFitAccuracy();
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
-		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
+		// Base accuracy value by fleet types of player & enemy
+		// https://docs.google.com/spreadsheets/d/1sABE9Cc-QXTWaiqIdpYt19dFTWKUi0SDAtaWSWyyAXg/htmlview
+		const byFleetType = (({
+			"0" : [90, 80], // single
+			"1M": [78, 77], // CTF floor(90*0.875), floor(90*0.86)
+			"1E": [45, 67], // CTF 90*0.5, 90*0.75
+			"2M": [45, 77], // STF
+			"2E": [67, 67], // STF 90*0.75
+			"3M": [54, 54], // TCF 90*0.6
+			"3E": [45, 67], // TCF 67?
+		})[playerCombinedFleetType > 0 ? [playerCombinedFleetType, (isPlayerMainFleet ? "M" : "E")].join("") : 0] || [])
+			[isEnemyCombined & 1] || 90;
+		const combinedFleetPenalty = 90 - byFleetType;
+		const basic = byFleetType + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
 		let artillerySpottingModifier = 1;
 		// there is trigger chance rate for Artillery Spotting itself, see #artillerySpottingRate
@@ -3920,7 +3938,6 @@ KC3改 Ship Object
 			}
 			return 1;
 		})();
-		// penalty for combined fleets under verification
 		const accuracy = Math.floor(beforeSpModifier * artillerySpottingModifier * apShellModifier);
 		return {
 			accuracy,
@@ -3929,6 +3946,7 @@ KC3改 Ship Object
 			equipmentStats: byEquip,
 			equipImprovement: byImprove,
 			equipGunFit: byGunfit,
+			combinedFleetPenalty,
 			moraleModifier,
 			formationModifier,
 			artillerySpottingModifier,
@@ -4751,7 +4769,10 @@ KC3改 Ship Object
 		// TODO implement other types of accuracy
 		const shellingAccuracy = shipObj.shellingAccuracy(
 			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId),
-			true
+			true,
+			onFleetNum <= 2 ? battleConds.playerCombinedFleetType : 0,
+			onFleetNum === 1,
+			battleConds.isEnemyCombined
 		);
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(
