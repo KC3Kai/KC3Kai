@@ -47,6 +47,7 @@ KC3改 Ship Object
 		this.repair = [0,0,0];
 		this.stars = 0;
 		this.morale = 0;
+		this.cond = 0;
 		this.lock = 0;
 		this.sally = 0;
 		this.akashiMark = false;
@@ -135,6 +136,7 @@ KC3改 Ship Object
 				this.repair = [data.api_ndock_time].concat(data.api_ndock_item);
 				this.stars = data.api_srate;
 				this.morale = data.api_cond;
+				this.cond = data.api_cond;
 				this.lock = data.api_locked;
 			// Initialized with formatted data, deep clone if demanded
 			} else {
@@ -387,6 +389,7 @@ KC3改 Ship Object
 		// also keep afterHp consistent
 		this.resetAfterHp();
 		this.morale = Math.max(40, this.morale);
+		this.cond = this.morale;
 		this.repair.fill(0);
 	};
 

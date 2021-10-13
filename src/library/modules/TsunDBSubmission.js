@@ -1084,7 +1084,7 @@
 			const fillShipInfo = ship => ({
 				id: ship.masterId,
 				lvl: ship.level,
-				morale: ship.morale,
+				morale: ship.cond || ship.morale,
 				stats: ship.estimateNakedStats(),
 				equips: ship.equipment(true).map(g => g.masterId || -1), 
 				improvements: ship.equipment(true).map(g => g.stars || -1),
@@ -1199,7 +1199,7 @@
 			const fillShipInfo = ship => ({
 				id: ship.masterId,
 				lvl: ship.level,
-				morale: ship.morale,
+				morale: ship.cond || ship.morale,
 				luck: ship.lk[0],
 				equips: ship.equipment(true).map(g => g.masterId || -1), 
 				improvements: ship.equipment(true).map(g => g.stars || -1),
