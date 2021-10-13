@@ -749,7 +749,7 @@ Provides access to data on built-in JSON files
 			// Success rate data from KC Vita, supposed to be unchanged
 			// https://wikiwiki.jp/kancolle/%E6%94%B9%E4%BF%AE%E5%B7%A5%E5%BB%A0#notice
 			var akashiSuccessDef = this._dataColle.akashiRemodelSuccess || {};
-			return (akashiSuccessDef[akashiMstId] || {})[gearCurrentStars] || 0;
+			return (akashiSuccessDef[akashiMstId] || akashiSuccessDef[182] || {})[gearCurrentStars] || 0;
 		},
 		
 		updateAircraftTypeIds :function(){

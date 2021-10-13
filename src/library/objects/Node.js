@@ -198,7 +198,7 @@ Used by SortieManager
 		KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 			fleet.shipsUnescaped().forEach(ship => {
 				maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
-				radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 3);
+				radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 6);
 			});
 		});
 		const actualMaxLoss = nodeData.api_happening.api_count;
@@ -740,6 +740,7 @@ Used by SortieManager
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
 					if(!ship.isAbsent()) {
+						// For anyside CF battle, cond values decreased on battle result like KCVita?
 						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
 						ship.afterHp[0] = hp;
 						ship.afterHp[1] = ship.hp[1];

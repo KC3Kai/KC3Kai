@@ -5017,9 +5017,9 @@
 			$(".remodel_slot_star", itemBox).show();
 			itemBox.addClass("withStar");
 			if(akashiMstId) {
-				const rate = KC3Meta.akashiRemodelSuccessRate(akashiMstId, stars);
-				if(rate) {
-					$(".remodel_slot_success span", itemBox).text(Math.floor(rate * 100));
+				const percent = KC3Meta.akashiRemodelSuccessRate(akashiMstId, stars);
+				if(percent) {
+					$(".remodel_slot_success span", itemBox).text(percent);
 					$(".remodel_slot_success", itemBox).show();
 				}
 			}
