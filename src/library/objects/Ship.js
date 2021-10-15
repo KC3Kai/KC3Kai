@@ -2848,7 +2848,8 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Colorado, Echelon formation selected.
-	 * 2nd and 3rd ships are healthy battleship, neither Taiha nor Chuuha.
+	 * 2nd and 3rd ships are healthy battleship, not Taiha ~~nor Chuuha~~,
+	 *   Chuuha allowed since 2021-10-15.
 	 *
 	 * The same additional ammo consumption like Nagato/Mutsu cutin for top 3 battleships.
 	 *
@@ -2872,7 +2873,7 @@ KC3改 Ship Object
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
 					// 2nd and 3rd ship are (F)BB(V) only, not even Chuuha?
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
+						.every(ship => !ship.isAbsent() && !ship.isTaiha()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
 					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;

@@ -5239,8 +5239,8 @@
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, one-time +1 fp
-						ids: [566, 567, 568, 656],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2
+						ids: [566, 567, 568, 656, 670],
 						single: { "houg": 1 },
 					},
 					{
@@ -5343,8 +5343,8 @@
 				},
 				byShip: [
 					{
-						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2 +1 fp, +2 aa for one or two gun(s)
-						ids: [566, 567, 568, 656],
+						// Kagerou K2, Shiranui K2, Kuroshio K2, Yukikaze K2, Oyashio K2 +1 fp, +2 aa for one or two gun(s)
+						ids: [566, 567, 568, 656, 670],
 						multiple: { "houg": 1, "tyku": 2 },
 						countCap: 2,
 					},

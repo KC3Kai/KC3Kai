@@ -317,7 +317,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyOct',
 				key: 'timeToResetYearlyOctQuests',
 				resetMonth: OCTOBER,
-				questIds: [345, 346, 654],
+				questIds: [345, 346, 355, 654],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyOct.type);
 				},
@@ -780,6 +780,13 @@ Uses KC3Quest objects to play around with
 						return KC3SortieManager.isPvP()
 							&& fleet.hasShip(707, 0)
 							&& fleet.countShipClass([87, 91]) >= 2;
+					},
+				"355": // C62 PvP with Kuroshio K2/Oyashio K2 as flagship, another ship as 2nd ship
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip([568, 670], 0)
+							&& fleet.hasShip([670, 568], 1);
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
