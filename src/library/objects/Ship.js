@@ -1652,7 +1652,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of Daihatsu Landing Craft with known bonus, 1 unknown:
+		// 9 types of Daihatsu Landing Craft with known bonus:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
@@ -2871,7 +2871,7 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are (F)BB(V) only, not even Chuuha?
+					// 2nd and 3rd ship are (F)BB(V) only, not Taiha?
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
 						.every(ship => !ship.isAbsent() && !ship.isTaiha()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
