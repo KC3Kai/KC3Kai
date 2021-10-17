@@ -144,6 +144,7 @@
     shipObj.id = shipData.mst_id;
     shipObj.level = shipData.level;
     shipObj.morale = shipData.morale;
+    shipObj.cond = shipData.morale;
     shipObj.mod = shipData.kyouka;
     shipObj.stats = shipData.stats;
     shipObj.equipments = [];
@@ -205,6 +206,7 @@
       ship.masterId = shipObj.id;
       ship.level = shipObj.level;
       ship.morale = shipObj.morale;
+      ship.cond = shipObj.morale;
 
       ship.items = [-1, -1, -1, -1, -1];
       // slot sizes are not saved for now, use the copy of master data

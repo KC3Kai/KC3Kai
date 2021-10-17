@@ -2911,6 +2911,16 @@ ABYSS FLEET
 	height: 12px;
 	margin-top: -2px;
 }
+.module.activity .activity_remodel .remodelSlotItem .remodel_slot_success {
+	float: left;
+	font-size: 11px;
+	min-width: 38px;
+	height: 13px;
+	line-height: 13px;
+	margin: 0px 0px 0px 2px;
+	color: #8ae9e4;
+	display: none;
+}
 .module.activity .activity_remodel .remodelSlotItem .remodel_slot_reqs {
 	float: left;
 	width: 127px;

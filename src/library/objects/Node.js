@@ -198,7 +198,7 @@ Used by SortieManager
 		KC3SortieManager.getSortieFleet().map(id => PlayerManager.fleets[id]).forEach(fleet => {
 			fleet.shipsUnescaped().forEach(ship => {
 				maxRemainingRsc = Math.max(maxRemainingRsc, ship[rscType] || 0);
-				radarShips = Math.min(radarShips + (ship.hasEquipmentType(2, [12, 13]) & 1), 3);
+				radarShips += (ship.hasEquipmentType(2, [12, 13]) & 1);
 			});
 		});
 		const actualMaxLoss = nodeData.api_happening.api_count;
@@ -210,7 +210,7 @@ Used by SortieManager
 		// reduce it from remaining rsc of all activated ships and return the max value as `api_count`.
 		// `radarShips` = amount of ships equipped any type of radar,
 		// `nodeMaxLoss` is the map cell property which unknown by client-side,
-		// can be get from `api_count` if computed one bigger than it.
+		// can be get from `api_count` if computed one greater than it.
 		
 		// For phase 2: https://wikiwiki.jp/kancolle/%E8%B3%87%E6%9D%90#b7c2f0c7
 		// Definitions of loss rate, max loss, etc no longer fixed by maps, can be various by maps & nodes,
@@ -227,6 +227,8 @@ Used by SortieManager
 		
 		const [defRscType, defLossCap, defLossRate, defLossRateHigh] = lossDef;
 		const isReducedByRadar = !!nodeData.api_happening.api_dentan;
+		// Uncertain: radarShips capped at 6, even for CF and Striking Force? will not handle them though because we don't have event map defined.
+		// For phase 1 combined fleet: radarShips only contribute to their own single fleet
 		const radarReduceRate = radarShips && isReducedByRadar ? [0, 0.25, 0.4, 0.5, 0.55, 0.58, 0.6][Math.min(6, radarShips)] : 0;
 		const definedCappedLoss = defLossCap || actualMaxLoss;
 		let lossRate = 0, expectedMaxLoss = 0;
@@ -740,7 +742,10 @@ Used by SortieManager
 				result.fleets.playerMain.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[fleetId].ship(position);
 					if(!ship.isAbsent()) {
-						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						// For anyside CF battle, cond values decreased on battle result like KCVita?
+						if(!isPlayerCombined && !isEnemyCombined) {
+							ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						}
 						ship.afterHp[0] = hp;
 						ship.afterHp[1] = ship.hp[1];
 						this.dameConConsumed[position] = dameConConsumed ? ship.findDameCon() : false;
@@ -754,7 +759,9 @@ Used by SortieManager
 				result.fleets.playerEscort.forEach(({ hp, dameConConsumed }, position) => {
 					const ship = PlayerManager.fleets[1].ship(position);
 					if(!ship.isAbsent()) {
-						ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						if(!isPlayerCombined && !isEnemyCombined) {
+							ship.morale = Math.max(0, Math.min(100, ship.morale + (ship.morale < 30 ? -9 : -3)));
+						}
 						ship.afterHp[0] = hp;
 						ship.afterHp[1] = ship.hp[1];
 						this.dameConConsumedEscort[position] = dameConConsumed ? ship.findDameCon() : false;
@@ -1025,7 +1032,9 @@ Used by SortieManager
 					const ship = playerFleet.ship(position);
 					if(!ship.isAbsent()) {
 						ship.hp = [ship.afterHp[0], ship.afterHp[1]];
-						ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
+						if(!isPlayerCombined && !isEnemyCombined) {
+							ship.morale = Math.max(0, Math.min(100, ship.morale + (this.startsFromNight ? -2 : -2)));
+						}
 						ship.afterHp[0] = hp;
 						ship.afterHp[1] = ship.hp[1];
 						if(isPlayerCombined) {

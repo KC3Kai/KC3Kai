@@ -372,13 +372,13 @@ KC3改 Equipment Object
 		switch(type.toLowerCase()) {
 			case "exped":
 			case "fire":
-				// Main gun/Secondary gun/AP shell/AAFD/Searchlight
+				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/DLC/T2Tank
 				// wikia says Sonar gives shelling acc bonus?
-				if([1, 2, 3, 4, 19, 29, 36, 42].includes(type2))
+				if([1, 2, 3, 4, 19, 24, 29, 36, 42, 46].includes(type2))
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
-					modifier = this.isSurfaceRadar() ? 1.7 : 1;
+					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
 				// Depth Charge Projector
 				if([15].includes(type2))
 					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown

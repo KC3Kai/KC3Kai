@@ -11228,7 +11228,7 @@ var PS = {};
           }
           if ($foreign.gsByFlagshipLevelList.indexOf(eid) > -1) {
               e.kc3_gs_flagship_level = true;
-          } else if (e.api_return_flag) {
+          } else if (e.api_return_flag && !e.kc3_gs_drum_count) {
               e.kc3_gs_all_sparkle = true;
           }
           if ($foreign.monthlyUnlockTable[eid]) {
