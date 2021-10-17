@@ -206,6 +206,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(346).increment(); // C50: Yearly Exercises 2
 					if(KC3QuestManager.isPrerequisiteFulfilled(354))
 						KC3QuestManager.get(354).increment(); // C60: Yearly Exercises 6
+					if(KC3QuestManager.isPrerequisiteFulfilled(355))
+						KC3QuestManager.get(355).increment(); // C62: Yearly Exercises 7
 				}
 				break;
 			case 4: // Dxx type, expedition success

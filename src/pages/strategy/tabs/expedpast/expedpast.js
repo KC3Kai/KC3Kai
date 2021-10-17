@@ -42,7 +42,7 @@
 					String(m.api_deck_num) + " ships fleet: "
 						+ m.api_sample_fleet.filter(t => !!t).map(t => KC3Meta.stype(t)).join(", "),
 					(info.kc3_gs_all_sparkle ? "GS needs all ships sparkled" : ""),
-					(info.kc3_gs_drum_count ? "GS rate higher for drums >= {0}".format(info.kc3_gs_drum_count) : ""),
+					(info.kc3_gs_drum_count ? "GS rate affected by sparkles & higher for drums >= {0}".format(info.kc3_gs_drum_count) : ""),
 					(info.kc3_gs_flagship_level ? "GS rate affected by sparkles & flagship level" : ""),
 					(m.api_reset_type && Array.isArray(info.kc3_unlocked_by) ?
 						"Unlocked by: {0}".format(info.kc3_unlocked_by.map(id => KC3Master.missionDispNo(id)).join(","))

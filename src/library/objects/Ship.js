@@ -47,6 +47,7 @@ KC3改 Ship Object
 		this.repair = [0,0,0];
 		this.stars = 0;
 		this.morale = 0;
+		this.cond = 0;
 		this.lock = 0;
 		this.sally = 0;
 		this.akashiMark = false;
@@ -135,6 +136,7 @@ KC3改 Ship Object
 				this.repair = [data.api_ndock_time].concat(data.api_ndock_item);
 				this.stars = data.api_srate;
 				this.morale = data.api_cond;
+				this.cond = data.api_cond;
 				this.lock = data.api_locked;
 			// Initialized with formatted data, deep clone if demanded
 			} else {
@@ -387,6 +389,7 @@ KC3改 Ship Object
 		// also keep afterHp consistent
 		this.resetAfterHp();
 		this.morale = Math.max(40, this.morale);
+		this.cond = this.morale;
 		this.repair.fill(0);
 	};
 
@@ -1649,7 +1652,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of Daihatsu Landing Craft with known bonus, 1 unknown:
+		// 9 types of Daihatsu Landing Craft with known bonus:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
 		//  * 68 : Daihatsu Landing Craft
@@ -2521,6 +2524,7 @@ KC3改 Ship Object
 		//     https://twitter.com/agosdufovj/status/1443674443218227237
 		//     https://twitter.com/agosdufovj/status/1442827344142483456
 		//	- this.equipmentTotalStats("tais", true, true, true, [1, 6, 7, 8]);
+
 		// shortcut on the stricter condition first
 		if (shipAsw < aswThreshold)
 			return false;
@@ -2544,13 +2548,13 @@ KC3改 Ship Object
 			// https://twitter.com/panmodoki10/status/1359036399618412545
 			// perhaps only asw 100 threshold is using ship visible asw value
 			//const aswAircraftBonus = this.equipmentTotalStats("tais", true, true, true, [6, 7, 8]);
-			return (shipAsw/* + aswAircraftBonus*/) >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
+			return shipAsw >= 100 && hasSonar && hasAswAircraft; // almost impossible for pre-marriage
 		}
 
-		// DE can OASW without Sonar, but total asw >= 75 and equipped total plus asw >= 4
+		// DE can OASW without Sonar, needs displayed asw >= 75 and total asw from equipment >= 4
+		// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
 		if(isEscort) {
 			if(hasSonar) return true;
-			// but visible bonus not counted towards 4: https://twitter.com/agosdufovj/status/1443178825987227652
 			const equipAswSum = this.equipmentTotalStats("tais", true, false);
 			return shipAsw >= 75 && equipAswSum >= 4;
 		}
@@ -2561,7 +2565,7 @@ KC3改 Ship Object
 		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
 		if(isAirAntiSubStype) {
 			// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter, without Sonar,
-			//   but her initial naked asw too high to verify the lower threshold.
+			//   but not OASW with Sonar + ASW aircraft even asw >= 100 like others.
 			if(isHyuugaKaiNi) {
 				return this.countEquipmentType(1, 15) >= 2 || this.countEquipmentType(1, 44) >= 1;
 			}
@@ -2844,7 +2848,8 @@ KC3改 Ship Object
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
 	 * Flagship is healthy Colorado, Echelon formation selected.
-	 * 2nd and 3rd ships are healthy battleship, neither Taiha nor Chuuha.
+	 * 2nd and 3rd ships are healthy battleship, not Taiha ~~nor Chuuha~~,
+	 *   Chuuha allowed since 2021-10-15.
 	 *
 	 * The same additional ammo consumption like Nagato/Mutsu cutin for top 3 battleships.
 	 *
@@ -2866,9 +2871,9 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd and 3rd ship are (F)BB(V) only, not even Chuuha?
+					// 2nd and 3rd ship are (F)BB(V) only, not Taiha?
 					validCombinedShips = [fleetObj.ship(1), fleetObj.ship(2)]
-						.every(ship => !ship.isAbsent() && !ship.isStriped()
+						.every(ship => !ship.isAbsent() && !ship.isTaiha()
 							&& [8, 9, 10].includes(ship.master().api_stype)),
 					// no surface ship(s) sunk or retreated in mid-sortie?
 					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
@@ -3866,12 +3871,17 @@ KC3改 Ship Object
 	 * NOTE: Only attacker accuracy part, not take defender evasion part into account at all, not final hit/critical rate.
 	 * @param {number} formationModifier - see #estimateShellingFormationModifier.
 	 * @param {boolean} applySpAttackModifiers - if special equipment and attack modifiers should be applied.
+	 * @param {number} playerCombinedFleetType - 0=single, 1=CTF, 2=STF, 3=TCF.
+	 * @param {boolean} isPlayerMainFleet - if attacker ship is in CF main fleet or escort.
+	 * @param {boolean} isEnemyCombined - if defender side is combined fleet.
 	 * @return {Object} accuracy factors of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
+	 * @see https://en.kancollewiki.net/Accuracy,_Evasion_and_Criticals
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6
 	 * @see https://twitter.com/Nishisonic/status/890202416112480256
 	 */
-	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true) {
+	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true,
+		playerCombinedFleetType = 0, isPlayerMainFleet = true, isEnemyCombined = false) {
 		if(this.isDummy()) { return {}; }
 		const byLevel = 2 * Math.sqrt(this.level);
 		// formula from PSVita is sqrt(1.5 * lk) anyway,
@@ -3885,7 +3895,20 @@ KC3改 Ship Object
 		const byGunfit = this.shellingGunFitAccuracy();
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
-		const basic = 90 + byLevel + byLuck + byEquip + byImprove;
+		// Base accuracy value by fleet types of player & enemy
+		// https://docs.google.com/spreadsheets/d/1sABE9Cc-QXTWaiqIdpYt19dFTWKUi0SDAtaWSWyyAXg/htmlview
+		const byFleetType = (({
+			"0" : [90, 80], // single
+			"1M": [78, 77], // CTF floor(90*0.875), floor(90*0.86)
+			"1E": [45, 67], // CTF 90*0.5, 90*0.75
+			"2M": [45, 77], // STF
+			"2E": [67, 67], // STF 90*0.75
+			"3M": [54, 54], // TCF 90*0.6
+			"3E": [45, 67], // TCF 67?
+		})[playerCombinedFleetType > 0 ? [playerCombinedFleetType, (isPlayerMainFleet ? "M" : "E")].join("") : 0] || [])
+			[isEnemyCombined & 1] || 90;
+		const combinedFleetPenalty = 90 - byFleetType;
+		const basic = byFleetType + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
 		let artillerySpottingModifier = 1;
 		// there is trigger chance rate for Artillery Spotting itself, see #artillerySpottingRate
@@ -3916,7 +3939,6 @@ KC3改 Ship Object
 			}
 			return 1;
 		})();
-		// penalty for combined fleets under verification
 		const accuracy = Math.floor(beforeSpModifier * artillerySpottingModifier * apShellModifier);
 		return {
 			accuracy,
@@ -3925,6 +3947,7 @@ KC3改 Ship Object
 			equipmentStats: byEquip,
 			equipImprovement: byImprove,
 			equipGunFit: byGunfit,
+			combinedFleetPenalty,
 			moraleModifier,
 			formationModifier,
 			artillerySpottingModifier,
@@ -4747,7 +4770,10 @@ KC3改 Ship Object
 		// TODO implement other types of accuracy
 		const shellingAccuracy = shipObj.shellingAccuracy(
 			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId),
-			true
+			true,
+			onFleetNum <= 2 ? battleConds.playerCombinedFleetType : 0,
+			onFleetNum === 1,
+			battleConds.isEnemyCombined
 		);
 		$(".shellingAccuracy", tooltipBox).text(
 			KC3Meta.term("ShipAccShelling").format(

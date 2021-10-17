@@ -4090,7 +4090,8 @@
 		GearRemodelDetail: function(data){
 			//console.debug("Remodel detail", data);
 			const remodelDetailBox = $(".activity_remodel .remodelDetail");
-			const shipId = data.shipId || PlayerManager.fleets[0].ship(0).masterId;
+			const akashiMstId = PlayerManager.fleets[0].ship(0).masterId;
+			const shipId = data.shipId || akashiMstId;
 			$(".remodel_header .assistant_ship img", remodelDetailBox)
 				.attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 				.attr("title", KC3Meta.shipName(shipId));
@@ -4104,7 +4105,7 @@
 			$(".remodel_footer .owned_screws span", remodelDetailBox).text(PlayerManager.consumables.screws);
 			const recipeDetail = data.cachedRecipes[data.recipeId];
 			const improveItemBox = $("#factory .remodelSlotItem").clone();
-			fillRemodelSlotItemBox(this, improveItemBox, recipeDetail, data.rosterId);
+			fillRemodelSlotItemBox(this, improveItemBox, recipeDetail, data.rosterId, undefined, akashiMstId);
 			$(".remodel_to_improve", remodelDetailBox).empty().append(improveItemBox);
 			
 			if(recipeDetail.api_req_slot_id || recipeDetail.api_req_useitem_id) {
@@ -5095,7 +5096,7 @@
 		$(hpBarSelector).parent().toggleClass("sunk", hpPercent <= 0);
 	}
 
-	function fillRemodelSlotItemBox(self, itemBox, recipe, rosterId, stars) {
+	function fillRemodelSlotItemBox(self, itemBox, recipe, rosterId, stars, akashiMstId) {
 		if(!recipe.api_slot_id) return itemBox;
 		const gearMst = KC3Master.slotitem(recipe.api_slot_id);
 		const gearPng = KC3Master.png_file(gearMst.api_id, "item_on", "slot");
@@ -5126,6 +5127,13 @@
 			$(".remodel_slot_star span", itemBox).text(stars);
 			$(".remodel_slot_star", itemBox).show();
 			itemBox.addClass("withStar");
+			if(akashiMstId) {
+				const percent = KC3Meta.akashiRemodelSuccessRate(akashiMstId, stars);
+				if(percent) {
+					$(".remodel_slot_success span", itemBox).text(percent);
+					$(".remodel_slot_success", itemBox).show();
+				}
+			}
 		}
 		if(!recipe.noReqs) {
 			["fuel", "ammo", "steel", "bauxite", "devmats", "screws"].forEach((key, i) => {

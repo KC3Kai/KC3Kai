@@ -100,6 +100,7 @@
 			$(".table5").hide();
 			$(".lbcons").hide();
 			$(".map_list").html("").hide();
+			$(".memorial").hide();
 			const allPromises = [];
 			const hqId = PlayerManager.hq.id;
 			this.stats = {
@@ -117,7 +118,8 @@
 				bossCount: {},
 				clearCount: {},
 				ldCount: {},
-				kuso: {}
+				kuso: {},
+				dameconCount: 0
 			};
 
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -148,7 +150,7 @@
 
 			const checkFleetAttacks = (fleet, ships, checkForLastHit, mapnum) => {
 				for (let i = 0; i < fleet.length; i++) {
-					checkShipKill(fleet[i].attacks, ships[i], checkForLastHit, mapnum);
+					checkShipKill(fleet[i].attacks, ships[i].mst_id, checkForLastHit, mapnum);
 				}
 			};
 
@@ -157,7 +159,7 @@
 				if (ships.length == maxHps.length || sortieKuso.length == 0) { return ships; }
 				let result = [];
 				ships.forEach(ship => {
-					if (!sortieKuso.includes(ship)) {
+					if (!sortieKuso.includes(ship.mst_id)) {
 						result.push(ship);
 					}
 				});
@@ -233,7 +235,7 @@
 
 					let result = KC3BattlePrediction.analyzeBattle(battleData, [], battleType);
 					const fleetSent = battleData.api_deck_id;
-					let ships = sortie["fleet" + fleetSent].map(ship => ship.mst_id);
+					let ships = sortie["fleet" + fleetSent];
 					let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
 					if (!maxHps) return;
 					const sortieKuso = this.stats.kuso[sortie.id] || [];
@@ -243,7 +245,7 @@
 					}
 					ships = checkShipLength(ships, maxHps);
 					if (sortie.combined > 0) {
-						let fleet2 = sortie.fleet2.map(ship => ship.mst_id);
+						let fleet2 = sortie.fleet2;
 						const maxHps2 = battleData.api_f_maxhps_combined;
 						if (!maxHps2) return;
 						fleet2 = checkShipLength(fleet2, maxHps2, sortieKuso);
@@ -263,7 +265,7 @@
 					let player = result.fleets.playerMain.concat(result.fleets.playerEscort);
 					let enemy = result.fleets.enemyMain.concat(result.fleets.enemyEscort);
 					player.forEach((ship, index) => {
-						this.stats.shipDamageDealt[ships[index]] = (this.stats.shipDamageDealt[ships[index]] || 0) + ship.damageDealt;
+						this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 					});
 					checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					if (Object.keys(battle.yasen).length > 0 && time === "day") {
@@ -274,29 +276,29 @@
 						result = KC3BattlePrediction.analyzeBattle(battle.yasen, [], battleType);
 						player = result.fleets.playerMain.concat(result.fleets.playerEscort);
 						player.forEach((ship, index) => {
-							this.stats.shipDamageDealt[ships[index]] = (this.stats.shipDamageDealt[ships[index]] || 0) + ship.damageDealt;
+							this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 						});
 						checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					}
 
 					// Assign taiha magnets
-					if (!battle.boss) {
-						for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
-							if (!ships[shipIdx]) continue;
-							const taihaHp = maxHps[shipIdx] / 4;
-							if (initialHps[shipIdx] < taihaHp) continue;
-							const resultHp = player[shipIdx].hp;
+					for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
+						if (!ships[shipIdx]) continue;
+						const taihaHp = maxHps[shipIdx] / 4;
+						const resultHp = player[shipIdx].hp;
 
-							// Handle pre-boss taiha
-							if (resultHp < taihaHp) {
-								if (resultHp > 0) {
-									this.stats.taihaMagnets[ships[shipIdx]] = (this.stats.taihaMagnets[ships[shipIdx]] || 0) + 1;
-								} else {
-									if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
-									this.stats.kuso[sortie.id].push(ships[shipIdx]);
-								}
+						// Handle pre-boss taiha
+						if (resultHp < taihaHp && resultHp > 0 && initialHps[shipIdx] > taihaHp && !battle.boss) {
+								this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
+						}
+						// Handle sunk ships
+						if (resultHp <= 0) {
+							if (ships[shipIdx].equip.includes(42) || ships[shipIdx].equip.includes(43)) {
+								this.stats.dameconCount += 1;
+							} else {
+								if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
+								this.stats.kuso[sortie.id].push(ships[shipIdx].mst_id);
 							}
-
 						}
 					}
 				}));
@@ -434,13 +436,26 @@
 				totalCost = adder(totalCost, this.stats.sortieConsumption[i]);
 				curBox.appendTo(".map_list");
 			}
+
+			Object.keys(this.stats.kuso).forEach(sortieId => {
+				// Currently sunk ship icons are ordered in raw sortie/battle/finding order,
+				// order them by master ID or base form ID if icons of the same ship gonna to be grouped together?
+				this.stats.kuso[sortieId]/*.slice(0).sort((a, b) => (a - b))*/.forEach(shipId => {
+					const icon = $(".tab_eventstats .factory .memorial_shipicon").clone().appendTo(".memorial .shiplist");
+					$(".icon img", icon).attr("src", KC3Meta.getIcon(shipId))
+						.attr("title", KC3Meta.shipNameById(shipId))
+						.lazyInitTooltip();
+				});
+			});
+
 			$(".lbcons").append("Land Base Cost: " + buildLBMessage(this.stats.lbConsumption));
 			$(".totalcons").append("Total Event Cost: " + buildConsMessage(totalCost));
+			$(".damecons").append("Damage Control Consumed: " + this.stats.dameconCount);
 			$(".loading").hide();
 			$(".table5").show();
 			$(".lbcons").show();
 			$(".map_list").show();
-
+			$(".memorial").toggle(Object.keys(this.stats.kuso).length > 0);
 		},
 	};
 

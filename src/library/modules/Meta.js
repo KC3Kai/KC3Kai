@@ -739,9 +739,17 @@ Provides access to data on built-in JSON files
 		},
 		
 		antiAirResistMods :function(planeMstId){
+			// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
 			var antiAirResistDef = this._dataColle.antiAirResist || {};
 			var planeLevel = (antiAirResistDef.planesLevel || {})[planeMstId];
 			return (antiAirResistDef.modifiers || {})["level" + planeLevel] || [1, 1];
+		},
+		
+		akashiRemodelSuccessRate :function(akashiMstId, gearCurrentStars){
+			// Success rate data from KC Vita, supposed to be unchanged
+			// https://wikiwiki.jp/kancolle/%E6%94%B9%E4%BF%AE%E5%B7%A5%E5%BB%A0#notice
+			var akashiSuccessDef = this._dataColle.akashiRemodelSuccess || {};
+			return (akashiSuccessDef[akashiMstId] || akashiSuccessDef[182] || {})[gearCurrentStars] || 0;
 		},
 		
 		updateAircraftTypeIds :function(){
