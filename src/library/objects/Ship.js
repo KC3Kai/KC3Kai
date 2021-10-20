@@ -2916,14 +2916,11 @@ KC3改 Ship Object
 		const targetShip = locatedFleet.ship(forShipPos),
 			targetShipMstId = targetShip.masterId,
 			targetShipModifier = combinedModifierMaps[forShipPos][targetShipMstId] || 1;
-		// Bug 'mods of 2nd ship's apshell/radar and on-5th-slot-empty-exslot spread to 3rd ship' not applied here
+		// Bug 'mods of 2nd ship's apshell/radar and on-5th-slot-empty-exslot spread to 3rd ship' not applied here, fixed since 2021-10-15
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 
-		const ship2ndMstId = locatedFleet.ship(1).masterId,
-			ship2ndModifier = combinedModifierMaps[1][ship2ndMstId] || 1;
 		return baseModifier * targetShipModifier
-			* (forShipPos === 2 && targetShipModifier > 1 ? ship2ndModifier : 1)
 			* apShellModifier * surfaceRadarModifier;
 	};
 
