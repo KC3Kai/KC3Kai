@@ -2818,29 +2818,25 @@ KC3改 Ship Object
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(modifierFor2ndShip ? {
-				"573": 1.4,  // Mutsu Kai Ni
-				"276": 1.35, // Mutsu Kai, base form unverified?
-				"576": 1.25, // Nelson Kai, base form unverified?
+				"573": 1.4,               // Mutsu Kai Ni
+				"276": 1.35, "81": 1.35,  // Mutsu
+				"576": 1.25, "571": 1.25, // Nelson
 			} : {
-				"573": 1.2,  // Mutsu Kai Ni
-				"276": 1.15, // Mutsu Kai, base form unverified?
-				"576": 1.1,  // Nelson Kai, base form unverified?
+				"573": 1.2,               // Mutsu Kai Ni
+				"276": 1.15, "81": 1.15,  // Mutsu
+				"576": 1.1, "571": 1.1,   // Nelson
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
 			(modifierFor2ndShip ? {
-				"541": 1.4,  // Nagato Kai Ni
-				"275": 1.35, // Nagato Kai
-				"576": 1.25, // Nelson Kai
+				"541": 1.4,              // Nagato Kai Ni
+				"275": 1.35, "80": 1.35, // Nagato
 			} : {
-				"541": 1.2,  // Nagato Kai Ni
-				"275": 1.15, // Nagato Kai
-				"576": 1.1,  // Nelson Kai
+				"541": 1.2,              // Nagato Kai Ni
+				"275": 1.15, "80": 1.15, // Nagato
 			}) : {};
 		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
 		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
-		// Surface Radar modifier not always limited to post-cap and AP Shell synergy now,
-		// can be applied to night battle (pre-cap) independently?
 		const surfaceRadarModifier = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 		return baseModifier * partnerModifier * apShellModifier * surfaceRadarModifier;
 	};
