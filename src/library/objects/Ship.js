@@ -1551,6 +1551,12 @@ KC3改 Ship Object
 			const isSonarEquipped = this.hasEquipmentType(2, 14);
 			synergyModifier = isSonarEquipped ? 1.25 : 1.1;
 		}
+		// TODO https://twitter.com/KanColle_STAFF/status/1454037548209037315
+		// Hedgehog (Initial Model) synergy
+		if(this.hasEquipment(439)) {
+			const isHighAswDcEquipped = this.equipment(true).some(g => g.isHighAswDepthCharge());
+			synergyModifier *= isHighAswDcEquipped ? 1.0 : 1;
+		}
 		// legacy all types of sonar + all DC(P) synergy (x1.15)
 		synergyModifier *= this.hasEquipmentType(3, 18) && this.hasEquipmentType(3, 17) ? 1.15 : 1;
 		aswPower *= synergyModifier;

@@ -971,6 +971,13 @@ KC3改 Equipment Object
 			//!this.isDepthCharge();
 	};
 
+	KC3Gear.prototype.isHighAswDepthCharge = function(){
+		// Synergy with [439] Hedgehog (Initial Model):
+		//   [288] Prototype 15cm 9-tube ASW Rocket Launcher
+		//   [377] RUR-4A Weapon Alpha Kai [378] Lightweight ASW Torpedo (Initial Test Model)
+		return this.exists() && [288, 377, 378].indexOf(this.masterId) > -1;
+	};
+
 	KC3Gear.prototype.aaDefense = function(forFleet) {
 		if (this.isDummy()) { return 0; }
 		// permissive on "this.stars" in case the improvement level is not yet available.
