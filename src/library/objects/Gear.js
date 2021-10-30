@@ -956,19 +956,26 @@ KC3改 Equipment Object
 		 but their type in category or icon is the same with Depth Charge Projector.
 		 To differentiate them, the only method for now is a white-list of IDs. */
 		return this.exists() && this.master().api_type[2] === 15 &&
-		// Current implemented: Type95 DC, Type2 DC
-			[226, 227].indexOf(this.masterId) > -1;
+		// Currently counted as DC:
+		//   [225] Type95 DC, [227] Type2 DC
+		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
+		//   [378] Lightweight ASW Torpedo
+		//   [439] Hedgehog (Initial Model)
+		// No armor penetration effect found for newly added ones
+			[226, 227, 378, 439].indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
-		// Current implemented in type[2]:
-		//   [44] Type94 DCP, [45] Type3 DCP, [287] Type3 DCP CD, [288] 15cm9t ASW Rocket,
-		//   [346][347] Type2 12cm Mortar Kai & CD, [377] RUR-4A WA Kai, [378] Lightweight ASW Torpedo
+		// Currently counted as DC projector:
+		//   [44] Type94 DCP, [45] Type3 DCP
+		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
+		//   [287] T3 DCP (Concentrated Deployment)
+		//   [288] 15cm9t ASW Rocket Launcher
+		//   [377] RUR-4A WA Kai
+		// Not counted by either:
+		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
-			// Current counted as projector: Type94 DCP, Type3 DCP
-			[44, 45].indexOf(this.masterId) > -1;
-			// To maintenance fewer lists, but devs failed us
-			//!this.isDepthCharge();
+			[44, 45, 287, 288, 377].indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {
