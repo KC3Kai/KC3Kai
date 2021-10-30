@@ -418,7 +418,7 @@ known IDs see QuestManager
 	};
 
 	/* IS COMPLETE
-	Return true iff all of the counters are complete
+	Return true if all of the counters are complete
 	------------------------------------------*/
 	KC3Quest.prototype.isComplete = function() {
 		if (this.tracking) {

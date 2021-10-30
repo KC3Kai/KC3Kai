@@ -4678,11 +4678,11 @@
 	},
 	"5584": {
 		"api_id": 5584,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Victorious",
+		"api_yomi": "ヴィクトリアス",
+		"api_stype": 18,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5585": {
 		"api_id": 5585,
@@ -4694,6 +4694,102 @@
 	},
 	"5586": {
 		"api_id": 5586,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5587": {
+		"api_id": 5587,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5588": {
+		"api_id": 5588,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5589": {
+		"api_id": 5589,
+		"api_name": "ハロウィン第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5590": {
+		"api_id": 5590,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5591": {
+		"api_id": 5591,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5592": {
+		"api_id": 5592,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5593": {
+		"api_id": 5593,
+		"api_name": "ハロウィン多摩",
+		"api_yomi": "たま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5594": {
+		"api_id": 5594,
+		"api_name": "ハロウィン多摩改二",
+		"api_yomi": "たま",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5595": {
+		"api_id": 5595,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5596": {
+		"api_id": 5596,
+		"api_name": "オクトーバーフェストGotland",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5597": {
+		"api_id": 5597,
+		"api_name": "オクトーバーフェストGotland andra",
+		"api_yomi": "ゴトランド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5598": {
+		"api_id": 5598,
 		"api_name": "【保留】",
 		"api_yomi": "n/a",
 		"api_stype": 2,
