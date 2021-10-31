@@ -1188,7 +1188,6 @@
 		},
 
 		processEventAccuracy: function() {
-			if (!KC3Meta.isEventWorld(this.currentMap[0])) { return; }
 			const thisNode = KC3SortieManager.currentNode();
 			
 			const cond_event = KC3Meta.isEventWorld(this.currentMap[0]);
