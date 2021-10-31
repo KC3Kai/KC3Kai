@@ -1030,6 +1030,7 @@
 					
 					for (var i = 0; i < shipLog.length; i++) {
 						const attack = shipLog[i];
+						if (attack.phase !== "hougeki") { continue; }
 						for (var j = 0; j < attack.acc.length; j++) {
 							this.gunfit = Object.assign({}, template2, { apiCl: attack.acc[j], enemy: thisNode.eships[attack.target[j]], 
 								spAttackType: attack.cutin >= 0 ? attack.cutin : attack.ncutin, time : attack.cutin >= 0 ? 'day' : 'yasen' });
@@ -1121,6 +1122,7 @@
 				const template2 = Object.assign({}, template, {ship: shipInfo});
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
+					if (attack.phase !== "hougeki") { continue; }
 					let target = attack.target;
 					if (Array.isArray(target)) { target = target[0]; }
 					let enemy = enemyList[target];
@@ -1226,6 +1228,7 @@
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
 					if ((attack.cutin || attack.ncutin || 0) !== 0) { continue; }
+					if (attack.phase !== "hougeki") { continue; }
 					let target = attack.target[0];
 					let enemy = enemyList[target];
 					const time = attack.cutin >= 0 ? "day" : "yasen";

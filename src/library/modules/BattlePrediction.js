@@ -1013,12 +1013,12 @@
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
-  Raigeki.parseRaigeki = (battleData) => {
+  Raigeki.parseRaigeki = battleData => {
     const { parseRaigekiInternal } = KC3BattlePrediction.battle.phases.raigeki;
     return parseRaigekiInternal(battleData, false);
   };
 
-  Raigeki.parseOpeningRaigeki = (battleData) => {
+  Raigeki.parseOpeningRaigeki = battleData => {
     const { parseRaigekiInternal } = KC3BattlePrediction.battle.phases.raigeki;
     return parseRaigekiInternal(battleData, true);
   };
@@ -1064,7 +1064,7 @@
   });
   Raigeki.parseEnemyJson = opening => ({ api_erai, api_eydam, api_ecl }, index) => ({
     damage: api_eydam,
-    defender: { side: Side.PLAYER, position: api_erai, api_ecl },
+    defender: { side: Side.PLAYER, position: api_erai },
     attacker: { side: Side.ENEMY, position: index },
     info: { damage: api_eydam, acc: api_ecl, target: api_erai, phase: "raigeki", opening }
   });
