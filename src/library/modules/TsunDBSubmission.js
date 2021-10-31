@@ -1190,11 +1190,18 @@
 		processEventAccuracy: function() {
 			if (!KC3Meta.isEventWorld(this.currentMap[0])) { return; }
 			const thisNode = KC3SortieManager.currentNode();
+			
+			const cond_event = KC3Meta.isEventWorld(this.currentMap[0]);
+			const cond_65    = (this.currentMap[0] == 6 && this.currentMap[1] == 5 && (thisNode.id == 13 || thisNode.id == 18));
+			const cond_vang  = thisNode.fformation == 6;
+			
+			if (!cond_event && !cond_65 && !cond_vang) { return; } // Added 6-5-M and vanguard in normal nodes
+			
 			const template = {
 				map: this.data.map,
 				node: thisNode.id,
 				debuffed: !!thisNode.debuffed,
-				formation: [thisNode.fformation, thisNode.eformation],
+				formation: (thisNode.battleDay !== undefined) ? thisNode.battleDay.api_formation: thisNode.battleNight.api_formation, //updated formation field to include engagement
 				amountofnodes:  this.data.nodeInfo.amountOfNodes
 			};
 			const enemyList = thisNode.eships, isCombined = KC3SortieManager.isCombinedSortie();
@@ -1210,9 +1217,12 @@
 			});
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
+			const enemyShips = (result.enemyMain || []).concat(result.enemyEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = !!thisNode.flarePos;
 			const ncontact = thisNode.fcontactId == 102;
+			
+			// Player attacks
 			for (let idx = 0; idx < playerShips.length; idx++) {
 				const attacks = (playerShips[idx] || {}).attacks || [];
 				if (attacks.length === 0) { continue; }
@@ -1221,26 +1231,87 @@
 				const fleet = PlayerManager.fleets[!isEscort ? fleetSent - 1 : 1];
 				const ship = fleet.ship(shipPos);
 				const shipInfo = fillShipInfo(ship);
-				shipInfo.isEscort = isEscort;
-				shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length];
+				//shipInfo.isEscort = isEscort;
+				//shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length];
 				shipInfo.fleetType = this.data.fleetType;
 
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
-					if ((attack.cutin || attack.ncutin || 0) !== 0) { continue; }
-					if (attack.phase !== "hougeki") { continue; }
-					let target = attack.target[0];
+					if ((attack.cutin || attack.ncutin || 0) !== 0 && attack.ncutin !== 1) { continue; } // Includes NB DA for a larger dataset
+					let time = "day";
+					if (attack.phase !== undefined && attack.phase == "raigeki") { 
+						if (attack.opening) { continue; }
+						time = "raigeki";
+					}
+					let target = time !== "raigeki" ? attack.target[0] : attack.target;
 					let enemy = enemyList[target];
-					const time = attack.cutin >= 0 ? "day" : "yasen";
+					
+					shipInfo.isEscort = [isEscort, target > 5]; // Include enemy isEscort
+					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (target > 5) ? target - 6: target]; // Include enemy position
+					shipInfo.isAttacker = true;
+					
+					//const time = attack.cutin >= 0 ? "day" : "yasen";
+					// New code to figure out the attack kind
+					if (attack.cutin == undefined) { time = "yasen"; }
+					
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
 						shipInfo.ncontact = ncontact;
+						shipInfo.cutin = attack.ncutin;
 					}
 					this.eventAccuracy = Object.assign({}, template, {
 						enemy, time,
 						ship: shipInfo,
-						attack: attack.acc[0]
+						attack: time !== "raigeki" ? attack.acc : [attack.acc]
+					});
+					this.sendData(this.eventAccuracy, 'eventaccuracy');
+				}
+			}
+			
+			
+			// Enemy attacks
+			for (let idx = 0; idx < enemyShips.length; idx++) {
+				const attacks = (enemyShips[idx] || {}).attacks || [];
+				if (attacks.length === 0) { continue; }
+				let enemy = enemyList[idx];
+
+				for (let num = 0; num < attacks.length; num++) {
+					const attack = attacks[num];
+					if ((attack.cutin || attack.ncutin || 0) !== 0 && attack.ncutin !== 1) { continue; } // Includes NB DA for a larger dataset
+					let time = "day";
+					if (attack.phase !== undefined && attack.phase == "raigeki") { 
+						if (attack.opening) { continue; }
+						time = "raigeki";
+					}
+					let target = time !== "raigeki" ? attack.target[0] : attack.target;
+					
+					const fleet = PlayerManager.fleets[((isCombined && target < 6) || !isCombined) ? fleetSent - 1 : 1];
+					const isEscort = isCombined && target > 5;
+					const shipPos = ((isCombined && target < 6) || !isCombined) ? target: target - 6; // Question: is this how KC3 index friendly defenders?
+					const ship = fleet.ship(shipPos);
+					const shipInfo = fillShipInfo(ship);
+					shipInfo.eva = ship.ev[0]; // Adding an evasion field in case of friendly defender
+					shipInfo.fleetType = this.data.fleetType;
+					
+					shipInfo.isEscort = [isEscort, idx > 5]; // Include enemy isEscort
+					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (idx > 5) ? idx - 6: idx]; // Include enemy position
+					shipInfo.isAttacker = false;
+					
+					//const time = attack.cutin >= 0 ? "day" : "yasen";
+					// New code to figure out the attack kind
+					
+					if (attack.cutin == undefined) { time = "yasen"; }
+					if (time == "yasen") {
+						shipInfo.starshellActivated = starshellActivated;
+						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
+						shipInfo.ncontact = ncontact;
+						shipInfo.cutin = attack.ncutin; // Include CI type in NB
+					}
+					this.eventAccuracy = Object.assign({}, template, {
+						enemy, time,
+						ship: shipInfo,
+						attack: time !== "raigeki" ? attack.acc : [attack.acc]
 					});
 					this.sendData(this.eventAccuracy, 'eventaccuracy');
 				}
