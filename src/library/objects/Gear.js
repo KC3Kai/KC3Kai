@@ -959,9 +959,9 @@ KC3改 Equipment Object
 		 To differentiate them, the only method for now is a list of IDs. */
 		return this.exists() && this.master().api_type[2] === 15 &&
 		// Currently counted as DC:
-		//   [225] Type95 DC, [227] Type2 DC
+		//   [226] Type95 DC, [227] Type2 DC
 		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
-		//   [378] Lightweight ASW Torpedo
+		//   [378] Lightweight ASW Torpedo (Initial Test Model)
 		//   [439] Hedgehog (Initial Model)
 		// No armor penetration effect found for newly added ones
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
@@ -972,9 +972,9 @@ KC3改 Equipment Object
 		// Currently counted as DC projector:
 		//   [44] Type94 DCP, [45] Type3 DCP
 		// Added since 2021-10-29: https://twitter.com/myteaGuard/status/1454141304737185795
-		//   [287] T3 DCP (Concentrated Deployment)
-		//   [288] 15cm9t ASW Rocket Launcher
-		//   [377] RUR-4A WA Kai
+		//   [287] Type3 DCP (Concentrated Deployment)
+		//   [288] Prototype 15cm 9-tube ASW Rocket Launcher
+		//   [377] RUR-4A Weapon Alpha Kai
 		// Not counted by either:
 		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
