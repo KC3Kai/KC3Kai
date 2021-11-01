@@ -51,13 +51,13 @@
     )(battleData);
   };
 
-  Raigeki.parsePlayerJson = opening => ({ api_frai, api_fydam, api_fcl }, index) => ({
+  Raigeki.parsePlayerJson = (opening) => ({ api_frai, api_fydam, api_fcl }, index) => ({
     damage: api_fydam,
     defender: { side: Side.ENEMY, position: api_frai },
     attacker: { side: Side.PLAYER, position: index },
     info: { damage: api_fydam, acc: api_fcl, target: api_frai, phase: "raigeki", opening }
   });
-  Raigeki.parseEnemyJson = opening => ({ api_erai, api_eydam, api_ecl }, index) => ({
+  Raigeki.parseEnemyJson = (opening) => ({ api_erai, api_eydam, api_ecl }, index) => ({
     damage: api_eydam,
     defender: { side: Side.PLAYER, position: api_erai },
     attacker: { side: Side.ENEMY, position: index },
