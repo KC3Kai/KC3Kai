@@ -2397,7 +2397,10 @@ Used by SortieManager
 					acc = attack.acc,
 					hp = attack.hp,
 					ciequip = attack.equip,
-					time = attack.cutin >= 0 ? 'Day' : 'Night';
+					time = attack.cutin >= 0 ? 'Day' : 'Night',
+					phase = attack.phase;
+
+				if (phase !== "hougeki") { return; }
 
 				// ENEMY STATS
 				const combinedFleetIndexAlign = 6;
