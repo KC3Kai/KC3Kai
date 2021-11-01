@@ -1200,7 +1200,7 @@
 				map: this.data.map,
 				node: thisNode.id,
 				debuffed: !!thisNode.debuffed,
-				// Uses raw api array to include engagement
+				// Uses raw api array instead to include engagement
 				formation: (thisNode.battleDay !== undefined) ? thisNode.battleDay.api_formation: thisNode.battleNight.api_formation,
 				amountofnodes:  this.data.nodeInfo.amountOfNodes
 			};
@@ -1231,9 +1231,6 @@
 				const fleet = PlayerManager.fleets[!isEscort ? fleetSent - 1 : 1];
 				const ship = fleet.ship(shipPos);
 				const shipInfo = fillShipInfo(ship);
-				// Moved into for loop below
-				//shipInfo.isEscort = isEscort;
-				//shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length];
 				shipInfo.fleetType = this.data.fleetType;
 				
 				for (let num = 0; num < attacks.length; num++) {
@@ -1251,7 +1248,7 @@
 					// To include enemy isEscort
 					shipInfo.isEscort = [isEscort, target > 5];
 					// To include enemy position
-					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (target > 5) ? target - 6: target];
+					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (target > 5 ? target - 6 : target)];
 					shipInfo.isAttacker = true;
 					
 					//const time = attack.cutin >= 0 ? "day" : "yasen";
@@ -1296,11 +1293,12 @@
 					const ship = fleet.ship(shipPos);
 					const shipInfo = fillShipInfo(ship);
 					// Adds evasion field in case of friendly defender
+					// Sad news: friendly fleet not kept by PlayerManager, have to retrieve ship stats from raw api data, but there is no evasion
 					shipInfo.eva = ship.ev[0];
 					shipInfo.fleetType = this.data.fleetType;
 					
 					shipInfo.isEscort = [isEscort, idx > 5];
-					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (idx > 5) ? idx - 6: idx];
+					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (idx > 5 ? idx - 6 : idx)];
 					shipInfo.isAttacker = false;
 					
 					if (attack.cutin == undefined) { time = "yasen"; }
