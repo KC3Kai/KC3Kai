@@ -1292,8 +1292,7 @@
 					const shipPos = ((isCombined && target < 6) || !isCombined) ? target: target - 6;
 					const ship = fleet.ship(shipPos);
 					const shipInfo = fillShipInfo(ship);
-					// Adds evasion field in case of friendly defender
-					// Sad news: friendly fleet not kept by PlayerManager, have to retrieve ship stats from raw api data, but there is no evasion
+					// Adds defender's evasion field for enemy hit rate
 					shipInfo.eva = ship.ev[0];
 					shipInfo.fleetType = this.data.fleetType;
 					
