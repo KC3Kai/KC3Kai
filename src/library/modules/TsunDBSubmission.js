@@ -1294,6 +1294,7 @@
 					const shipInfo = fillShipInfo(ship);
 					// Adds defender's evasion field for enemy hit rate
 					shipInfo.eva = ship.ev[0];
+					shipInfo.fuel = ship.fuel;
 					shipInfo.fleetType = this.data.fleetType;
 					
 					shipInfo.isEscort = [isEscort, idx > 5];
