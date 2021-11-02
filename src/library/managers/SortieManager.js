@@ -549,6 +549,8 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			let hasTaihaShip = false;
 			let isForcedToRetreat = false;
 			let isSafeToAdvance = false;
+			// To check if damecon already consumed during battle
+			const dameConConsumed = this.currentNode().dameConConsumed || [];
 			// No Taiha blocker needed if current battle node is an end point of the map, such as boss
 			const nextEdgesAmount = this.currentNode().nodeData.api_next;
 			if(nextEdgesAmount !== undefined && !nextEdgesAmount) isSafeToAdvance = true;
@@ -559,8 +561,11 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			KC3SortieManager.getSortieFleet().forEach((fleetId, fleetIdx) => {
 				const fleet = PlayerManager.fleets[fleetId];
 				fleet.ship().forEach((ship, slotIdx) => {
-					// skip ships: not taiha, already escaped/sunk, damecon still equipped
-					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || ship.findDameCon().pos >= 0) {
+					const firstDameconPos = ship.findDameCon().pos, totalDameconCount = ship.countEquipment([42, 43]);
+					const isDameconRemainedPostBattle = firstDameconPos >= 0
+						&& (firstDameconPos !== (dameConConsumed[slotIdx] || {}).pos || totalDameconCount > 1);
+					// skip ships: not taiha, already escaped/sunk, unused damecon still equipped
+					if (isForcedToRetreat || ship.isAbsent() || !ship.isTaiha() || isDameconRemainedPostBattle) {
 						return;
 					}
 					// flagship of first fleet in taiha with no damecon
