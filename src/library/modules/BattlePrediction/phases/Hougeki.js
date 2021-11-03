@@ -156,6 +156,7 @@
     cutin: api_at_type,
     ncutin: api_sp_list,
     target: (index === -1 ? api_df_list : [api_df_list[index]]),
+    phase: "hougeki"
   });
 
   /*--------------------------------------------------------*/
