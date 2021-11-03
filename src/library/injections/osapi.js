@@ -46,7 +46,7 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 	// Start timer to check if API link exists every half-second
 	intervalChecker = setInterval(checkAgain, 500);
 	
-	(new RMsg("service", "getConfig", {
+	var applyConfigMsg = (new RMsg("service", "getConfig", {
 		id: ["api_gameScale", "dmm_customize"],
 		attr: ["dmmplay", "extract_api"]
 	}, function(response){
@@ -63,8 +63,10 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 			}
 			// For dmm site play mode
 			if(response.value[1] && response.storage[0] == "true"){
+				console.log("Applying customized styles...");
 				// Hide spacing top
-				document.getElementById("spacing_top").style = "height:0px;display:none;";
+				var spacingTop = document.querySelector("#spacing_top");
+				if(spacingTop) spacingTop.style.display = "none";
 				// Prevent Tab key scrolling
 				$(document).on("keydown", function(e){
 					if(e.which === 9) {
@@ -75,6 +77,9 @@ Bad side, if it saving on background service failed, no fallback plans but to re
 				});
 			}
 		}
-	})).execute();
+	}));
+	
+	// Apply customizations according configured settings
+	setTimeout(function() { applyConfigMsg.execute(); }, 500);
 	
 })();
