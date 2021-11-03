@@ -672,7 +672,7 @@
     kouku2: ({ parseKouku }) => ({ api_kouku2 }) => parseKouku(api_kouku2),
     support: ({ parseSupport }) => ({ api_support_info }) => parseSupport(api_support_info),
     openingTaisen: ({ parseHougeki }) => ({ api_opening_taisen }) => parseHougeki(api_opening_taisen),
-    openingAtack: ({ parseRaigeki }) => ({ api_opening_atack }) => parseRaigeki(api_opening_atack),
+    openingAtack: ({ parseOpeningRaigeki }) => ({ api_opening_atack }) => parseOpeningRaigeki(api_opening_atack),
     hougeki1: ({ parseHougeki }) => ({ api_hougeki1 }) => parseHougeki(api_hougeki1),
     hougeki2: ({ parseHougeki }) => ({ api_hougeki2 }) => parseHougeki(api_hougeki2),
     hougeki3: ({ parseHougeki }) => ({ api_hougeki3 }) => parseHougeki(api_hougeki3),
@@ -692,6 +692,7 @@
       support: { parseSupport },
       hougeki: { parseHougeki },
       raigeki: { parseRaigeki },
+      raigeki: { parseOpeningRaigeki },
       friendly: { parseFriendly },
       friendly: { parseFriendlyKouku },
     } = KC3BattlePrediction.battle.phases;
@@ -700,6 +701,7 @@
       parseKouku: wrapParser(parseKouku),
       parseSupport: wrapParser(parseSupport),
       parseHougeki: wrapParser(parseHougeki),
+      parseOpeningRaigeki: wrapParser(parseOpeningRaigeki),
       parseRaigeki: wrapParser(parseRaigeki),
       parseFriendly: wrapParser(parseFriendly),
       parseFriendlyKouku: wrapParser(parseFriendlyKouku),
@@ -905,6 +907,7 @@
     cutin: api_at_type,
     ncutin: api_sp_list,
     target: (index === -1 ? api_df_list : [api_df_list[index]]),
+    phase: "hougeki"
   });
 
   /*--------------------------------------------------------*/
@@ -1003,14 +1006,24 @@
 (function () {
   const Raigeki = {};
   const { pipe, juxt, flatten, map, filter, Side } = KC3BattlePrediction;
-  const RAIGEKI_PLAYER = ['api_frai', 'api_fydam'];
-  const RAIGEKI_ENEMY = ['api_erai', 'api_eydam'];
+  const RAIGEKI_PLAYER = ['api_frai', 'api_fydam', 'api_fcl'];
+  const RAIGEKI_ENEMY = ['api_erai', 'api_eydam', 'api_ecl'];
 
   /*--------------------------------------------------------*/
   /* --------------------[ PUBLIC API ]-------------------- */
   /*--------------------------------------------------------*/
 
   Raigeki.parseRaigeki = battleData => {
+    const { parseRaigekiInternal } = KC3BattlePrediction.battle.phases.raigeki;
+    return parseRaigekiInternal(battleData, false);
+  };
+
+  Raigeki.parseOpeningRaigeki = battleData => {
+    const { parseRaigekiInternal } = KC3BattlePrediction.battle.phases.raigeki;
+    return parseRaigekiInternal(battleData, true);
+  };
+
+  Raigeki.parseRaigekiInternal = (battleData, opening = false) => {
     const { createAttack } = KC3BattlePrediction.battle;
     const {
       parseSide,
@@ -1021,8 +1034,8 @@
 
     return pipe(
       juxt([
-        parseSide(RAIGEKI_PLAYER, parsePlayerJson),
-        parseSide(RAIGEKI_ENEMY, parseEnemyJson),
+        parseSide(RAIGEKI_PLAYER, parsePlayerJson(opening)),
+        parseSide(RAIGEKI_ENEMY, parseEnemyJson(opening)),
       ]),
       flatten,
       filter(isRealAttack),
@@ -1043,15 +1056,17 @@
     )(battleData);
   };
 
-  Raigeki.parsePlayerJson = ({ api_frai, api_fydam }, index) => ({
+  Raigeki.parsePlayerJson = (opening) => ({ api_frai, api_fydam, api_fcl }, index) => ({
     damage: api_fydam,
     defender: { side: Side.ENEMY, position: api_frai },
     attacker: { side: Side.PLAYER, position: index },
+    info: { damage: api_fydam, acc: api_fcl, target: api_frai, phase: "raigeki", opening }
   });
-  Raigeki.parseEnemyJson = ({ api_erai, api_eydam }, index) => ({
+  Raigeki.parseEnemyJson = (opening) => ({ api_erai, api_eydam, api_ecl }, index) => ({
     damage: api_eydam,
     defender: { side: Side.PLAYER, position: api_erai },
     attacker: { side: Side.ENEMY, position: index },
+    info: { damage: api_eydam, acc: api_ecl, target: api_erai, phase: "raigeki", opening }
   });
 
   Raigeki.isRealAttack = ({ defender }) => defender.position !== -1;
