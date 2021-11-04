@@ -1219,7 +1219,7 @@
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const enemyShips = (result.enemyMain || []).concat(result.enemyEscort || []);
 			const fleetSent = this.data.sortiedFleet;
-			const starshellActivated = !!thisNode.flarePos;
+			const starshellActivated = thisNode.flarePos >= 0;
 			const ncontact = thisNode.fcontactId == 102;
 			
 			// Player attacks
@@ -1232,7 +1232,7 @@
 				const ship = fleet.ship(shipPos);
 				const shipInfo = fillShipInfo(ship);
 				shipInfo.fleetType = this.data.fleetType;
-				
+
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
 					// Includes NB DA for a larger dataset
@@ -1240,36 +1240,49 @@
 					let time = "day";
 					if (attack.phase !== undefined && attack.phase == "raigeki") { 
 						if (attack.opening) { continue; }
-						time = "raigeki";
+						time = "torp";
 					}
-					let target = time !== "raigeki" ? attack.target[0] : attack.target;
+					if (attack.ncutin >= 0) { time = "yasen"; }
+					let target = time !== "torp" ? attack.target[0] : attack.target;
 					let enemy = enemyList[target];
-					
+
 					// To include enemy isEscort
 					shipInfo.isEscort = [isEscort, target > 5];
 					// To include enemy position
 					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (target > 5 ? target - 6 : target)];
 					shipInfo.isAttacker = true;
-					
+
 					//const time = attack.cutin >= 0 ? "day" : "yasen";
-					// New code to figure out the attack kind
-					if (attack.cutin == undefined) { time = "yasen"; }
-					
+
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
 						shipInfo.ncontact = ncontact;
 						shipInfo.cutin = attack.ncutin;
+						shipInfo.defenderHP = attack.ehp;
+
+						for (let idx = 0; idx < attack.damage.length; idx++) {
+							const dmg = attack.damage[idx];
+							shipInfo.damage = dmg;
+							this.eventAccuracy = Object.assign({}, template, {
+								enemy, time,
+								ship: shipInfo,
+								attack: attack.acc[idx]
+							});
+							this.sendData(this.eventAccuracy, 'eventaccuracy');
+							shipInfo.defenderHP -= dmg;
+						}
+					} else {
+						this.eventAccuracy = Object.assign({}, template, {
+							enemy, time,
+							ship: shipInfo,
+							attack: time === "torp" ? attack.acc : attack.acc[0]
+						});
+						this.sendData(this.eventAccuracy, 'eventaccuracy');
 					}
-					this.eventAccuracy = Object.assign({}, template, {
-						enemy, time,
-						ship: shipInfo,
-						attack: time !== "raigeki" ? attack.acc : [attack.acc]
-					});
-					this.sendData(this.eventAccuracy, 'eventaccuracy');
 				}
 			}
-			
+
 			// Enemy attacks
 			for (let idx = 0; idx < enemyShips.length; idx++) {
 				const attacks = (enemyShips[idx] || {}).attacks || [];
@@ -1283,10 +1296,11 @@
 					let time = "day";
 					if (attack.phase !== undefined && attack.phase == "raigeki") { 
 						if (attack.opening) { continue; }
-						time = "raigeki";
+						time = "torp";
 					}
-					let target = time !== "raigeki" ? attack.target[0] : attack.target;
-					
+					if (attack.ncutin >= 0) { time = "yasen"; }
+					let target = time !== "torp" ? attack.target[0] : attack.target;
+
 					const fleet = PlayerManager.fleets[((isCombined && target < 6) || !isCombined) ? fleetSent - 1 : 1];
 					const isEscort = isCombined && target > 5;
 					const shipPos = ((isCombined && target < 6) || !isCombined) ? target: target - 6;
@@ -1296,24 +1310,36 @@
 					shipInfo.eva = ship.ev[0];
 					shipInfo.fuel = ship.fuel;
 					shipInfo.fleetType = this.data.fleetType;
-					
 					shipInfo.isEscort = [isEscort, idx > 5];
 					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (idx > 5 ? idx - 6 : idx)];
 					shipInfo.isAttacker = false;
-					
-					if (attack.cutin == undefined) { time = "yasen"; }
+
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
 						shipInfo.ncontact = ncontact;
 						shipInfo.cutin = attack.ncutin;
+						shipInfo.defenderHP = attack.ehp;
+
+						for (let idx = 0; idx < attack.damage.length; idx++) {
+							const dmg = attack.damage[idx];
+							shipInfo.damage = dmg;
+							this.eventAccuracy = Object.assign({}, template, {
+								enemy, time,
+								ship: shipInfo,
+								attack: attack.acc[idx]
+							});
+							this.sendData(this.eventAccuracy, 'eventaccuracy');
+							shipInfo.defenderHP -= dmg;
+						}
+					} else {
+						this.eventAccuracy = Object.assign({}, template, {
+							enemy, time,
+							ship: shipInfo,
+							attack: time === "torp" ? attack.acc : attack.acc[0]
+						});
+						this.sendData(this.eventAccuracy, 'eventaccuracy');
 					}
-					this.eventAccuracy = Object.assign({}, template, {
-						enemy, time,
-						ship: shipInfo,
-						attack: time !== "raigeki" ? attack.acc : [attack.acc]
-					});
-					this.sendData(this.eventAccuracy, 'eventaccuracy');
 				}
 			}
 		},
