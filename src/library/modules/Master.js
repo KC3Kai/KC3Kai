@@ -275,6 +275,18 @@ Saves and loads significant data for future use
 			delete this._raw.newItems[id];
 		},
 
+		all_slotitem_icontypes :function(){
+			if(!this._allIconTypes || !this._allIconTypes.length){
+				if(!Array.isArray(this._allIconTypes)) this._allIconTypes = [];
+				$.each(this.all_slotitems(), (_, g) => {
+					const iconType = g.api_type[3];
+					if(!this._allIconTypes.includes(iconType)) this._allIconTypes.push(iconType);
+				});
+				this._allIconTypes.sort((a, b) => a - b);
+			}
+			return this._allIconTypes;
+		},
+
 		stype :function(id){
 			return !this.available ? false : this._raw.stype[id] || false;
 		},
