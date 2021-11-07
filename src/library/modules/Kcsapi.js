@@ -1831,9 +1831,12 @@ Previously known as "Reactor"
 				shipData   = KC3ShipManager.get(shipId);
 			
 			PlayerManager.setResources(utcSeconds, null, [-shipData.repair[1], 0, -shipData.repair[2], 0]);
-			if(bucket == 1){
-				PlayerManager.consumables.buckets -= 1;
-				PlayerManager.setConsumables();
+			// Repair will end immediately if bucket used or `api_ndock_time` <= 60 secs (defined by MINIMUM_TIME in main.js)
+			if(bucket == 1 || shipData.repair[0] <= 60000){
+				if(bucket == 1){
+					PlayerManager.consumables.buckets -= 1;
+					PlayerManager.setConsumables();
+				}
 				
 				// If ship is still is the list being repaired, mark her repaired
 				var herRepairIndex = PlayerManager.repairShips.indexOf(shipId);

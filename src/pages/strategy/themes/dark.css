@@ -1331,8 +1331,9 @@ button, input, select, textarea {
 	background:#333333;
 }
 /* Equipment */
-.tab_gears .item_types .item_type {
-	
+.tab_gears .item_types {
+	width:calc(100% + 10px);
+	margin-left:-5px;
 }
 .tab_gears .item_types .item_type.active {
 	background:#555555;
