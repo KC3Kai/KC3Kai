@@ -3,7 +3,6 @@
 }
 .tab_gears .item_types {
 	width:100%;
-	display:table;
 }
 
 .tab_gears .item_types .item_type {
@@ -13,8 +12,8 @@
 	margin:0px 2px 5px 2px;
 }
 .tab_gears .item_types .item_type.text {
-	text-align: center;
-	line-height: 24px;
+	text-align:center;
+	line-height:24px;
 }
 .tab_gears .item_types .item_type.text.active {
 }
@@ -34,8 +33,8 @@
 	width:680px;
 }
 .tab_gears .slotitem {
-	position: relative;
-	overflow: idden;
+	position:relative;
+	overflow:hidden;
 }
 
 .tab_gears .slotitem .info {
