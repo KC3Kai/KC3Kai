@@ -2,32 +2,39 @@
 	display:none;
 }
 .tab_gears .item_types {
-	
+	width:100%;
 }
 
 .tab_gears .item_types .item_type {
 	width:24px;
 	height:24px;
 	float:left;
-	margin:0px 3px 5px 3px;
+	margin:0px 2px 5px 2px;
 }
 .tab_gears .item_types .item_type.text {
-	text-align: center;
-	line-height: 24px;
+	text-align:center;
+	line-height:24px;
 }
 .tab_gears .item_types .item_type.text.active {
-	
 }
 .tab_gears .item_types .item_type img {
 	width:24px;
 	height:24px;
 }
+.tab_gears .group_bytype_label {
+	float:right;
+	font-size:12px;
+	margin-bottom:0;
+}
+.tab_gears .group_bytype_label span {
+	vertical-align:text-bottom;
+}
 .tab_gears .item_list {
 	width:680px;
 }
 .tab_gears .slotitem {
-	position:	relative;
-	overflow:	hidden;
+	position:relative;
+	overflow:hidden;
 }
 
 .tab_gears .slotitem .info {

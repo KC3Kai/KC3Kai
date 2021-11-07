@@ -168,6 +168,7 @@
 		Prepares static data needed
 		---------------------------------*/
 		init :function(){
+			this.groupIconsByType = false;
 			const akashiData = $.ajax('../../data/akashi.json', { async: false }).responseText;
 			this.upgrades = JSON.parse(akashiData);
 			this.initComparator();
@@ -319,6 +320,17 @@
 		execute :function(){
 			const self = this;
 
+			const addIconsForAllMasterItemTypes = () => {
+				KC3Master.all_slotitem_icontypes().forEach(type => {
+					// skip Saiun (Disassembled for Transport)
+					if(type !== 41) $(".tab_gears .item_types.netural_order .text").before(
+						$("<div><img /></div>")
+							.addClass("item_type hover")
+							.attr("data-type", type)
+					);
+				});
+			};
+			addIconsForAllMasterItemTypes();
 			$(".tab_gears .item_stat img, .tab_gears .sortControl img").each((_, img) => {
 				$(img).attr("src", KC3Meta.statIcon($(img).parent().data("stat")));
 			});
@@ -330,6 +342,17 @@
 			});
 			$(".tab_gears .item_type").on("click", function(){
 				KC3StrategyTabs.gotoTab(null, $(this).data("type"));
+			});
+
+			const toggleItemTypes = () => {
+				$(".tab_gears .item_types.grouped_bytype").toggle(this.groupIconsByType);
+				$(".tab_gears .item_types.netural_order").toggle(!this.groupIconsByType);
+				$(".tab_gears input[type=checkbox][name=group_bytype_box]").prop("checked", this.groupIconsByType);
+			};
+			toggleItemTypes();
+			$(".tab_gears input[type=checkbox][name=group_bytype_box]").on("change", (e) => {
+				this.groupIconsByType = !!$(".tab_gears input[type=checkbox][name=group_bytype_box]:checked").val();
+				toggleItemTypes();
 			});
 
 			// setup sort methods
