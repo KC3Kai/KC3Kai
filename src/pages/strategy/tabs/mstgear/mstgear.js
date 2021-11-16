@@ -244,7 +244,7 @@
 						const shipBox = $("<div><img/></div>").appendTo(appendTo);
 						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
 						const shipMst = KC3Master.ship(shipId);
-						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId))
+						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false))
 							.attr("alt", shipId).addClass("hover").click(shipClickFunc)
 							.attr("title", "[{0}] {1} {2}".format(shipId,
 								KC3Meta.shipName(shipMst.api_id),
