@@ -4638,43 +4638,43 @@
 	},
 	"5579": {
 		"api_id": 5579,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "浴衣長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5580": {
 		"api_id": 5580,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Northampton",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5581": {
 		"api_id": 5581,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Northampton改",
+		"api_yomi": "ノーザンプトン",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5582": {
 		"api_id": 5582,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "浴衣Conte di Cavour",
+		"api_yomi": "カブール",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"5583": {
 		"api_id": 5583,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Conte di Cavour nuovo",
+		"api_yomi": "カブール",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5584": {
 		"api_id": 5584,
@@ -4686,34 +4686,34 @@
 	},
 	"5585": {
 		"api_id": 5585,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣Honolulu ",
+		"api_yomi": "ホノルル",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5586": {
 		"api_id": 5586,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "浴衣伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5587": {
 		"api_id": 5587,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "買い物Richelieu",
+		"api_yomi": "リシュリュー",
+		"api_stype": 8,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5588": {
 		"api_id": 5588,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "ハロウィン第三〇号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5589": {
@@ -4726,27 +4726,27 @@
 	},
 	"5590": {
 		"api_id": 5590,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "ハロウィン浜波",
+		"api_yomi": "はまなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5591": {
 		"api_id": 5591,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "ハロウィンScirocco",
+		"api_yomi": "シロッコ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5592": {
 		"api_id": 5592,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "ハロウィン伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 1
 	},
 	"5593": {
 		"api_id": 5593,
@@ -4766,8 +4766,8 @@
 	},
 	"5595": {
 		"api_id": 5595,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "ハロウィンJohnston",
+		"api_yomi": "ジョンストン",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
@@ -4790,10 +4790,34 @@
 	},
 	"5598": {
 		"api_id": 5598,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "オクトーバーフェスト神鷹",
+		"api_yomi": "しんよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5599": {
+		"api_id": 5599,
+		"api_name": "ガチF作業曙改二",
+		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5600": {
+		"api_id": 5600,
+		"api_name": "秋の味覚第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
+	},
+	"5601": {
+		"api_id": 5601,
+		"api_name": "秋刀魚Victorious",
+		"api_yomi": "ヴィクトリアス",
+		"api_stype": 18,
+		"api_soku": 10,
+		"api_slot_num": 4
 	}
 }
