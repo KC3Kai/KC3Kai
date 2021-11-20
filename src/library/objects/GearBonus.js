@@ -4100,6 +4100,8 @@
 					"106": "87",
 					// Brooklyn Class
 					"110": "87",
+					// Gato Class
+					"114": "87",
 					// Jervis Class
 					"82": {
 						multiple: { "houg": 1, "raig": 2 },
@@ -4279,6 +4281,46 @@
 					// I-47 Kai
 					ids: [607],
 					multiple: { "raig": 1 },
+				},
+			},
+			// 21inch Bow Torpedo Launcher (6 tubes / Initial Model)
+			"440": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						single: { "raig": 2 },
+					},
+				},
+			},
+			// 21inch Bow Torpedo Launcher (6 tubes / Late Model)
+			"441": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						single: { "raig": 2 },
+					},
+				},
+			},
+			// Submarine Stern Torpedo Launcher (4 tubes / Initial Model)
+			"442": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						single: { "raig": 2 },
+					},
+				},
+			},
+			// Submarine Stern Torpedo Launcher (4 tubes / Late Model)
+			"443": {
+				count: 0,
+				byClass: {
+					// Gato Class
+					"114": {
+						single: { "raig": 2 },
+					},
 				},
 			},
 			// Late Model Submarine Radar & Passive Radiolocator
@@ -6441,6 +6483,8 @@
 					"108": "82",
 					// Brooklyn Class
 					"110": "82",
+					// Gato Class
+					"114": "82",
 					// Matsu Class
 					"101": {
 						single: { "tais": 1 },
