@@ -4283,7 +4283,7 @@
 					multiple: { "raig": 1 },
 				},
 			},
-			// 21inch Bow Torpedo Launcher (6 tubes / Initial Model)
+			// 21inch 6-tube Bow Torpedo Launcher (Initial Model)
 			"440": {
 				count: 0,
 				byClass: {
@@ -4293,7 +4293,7 @@
 					},
 				},
 			},
-			// 21inch Bow Torpedo Launcher (6 tubes / Late Model)
+			// 21inch 6-tube Bow Torpedo Launcher (Late Model)
 			"441": {
 				count: 0,
 				byClass: {
@@ -4303,7 +4303,7 @@
 					},
 				},
 			},
-			// Submarine Stern Torpedo Launcher (4 tubes / Initial Model)
+			// Submarine 4-tube Stern Torpedo Launcher (Initial Model)
 			"442": {
 				count: 0,
 				byClass: {
@@ -4313,7 +4313,7 @@
 					},
 				},
 			},
-			// Submarine Stern Torpedo Launcher (4 tubes / Late Model)
+			// Submarine 4-tube Stern Torpedo Launcher (Late Model)
 			"443": {
 				count: 0,
 				byClass: {
