@@ -1216,7 +1216,8 @@
 				slots: ship.slots,
 				tp: ship.tp[0],
 				fp: ship.fp[0],
-				maxhp: ship.hp[1]
+				maxhp: ship.hp[1],
+				ammo: ship.ammo
 			});
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
