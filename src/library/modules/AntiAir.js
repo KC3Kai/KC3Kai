@@ -125,6 +125,12 @@ AntiAir: anti-air related calculations
 		return mst.api_tyku >= 3;
 	});
 
+	// High AA HA/machine guns/AAFD for modifier conditions.
+	// api_tyku threshold from KC Vita Exec_AirBattle.cs#getA1Plus
+	var isHighAAGear = function(mst) {
+		return mst.api_tyku > 7;
+	};
+
 	var isRedGun = predAnyOf(
 		iconEq(1),
 		iconEq(2),
@@ -263,20 +269,14 @@ AntiAir: anti-air related calculations
 		return 0;
 	}
 
-	// updated data: https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB
-	// another implementation might give the latest verified data:
-	// https://github.com/Nishisonic/anti_aircraft/blob/gh-pages/js/util.js
+	// Updated data: https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB
 	function getShipImprovementModifier(mst) {
-		if (isCDMG(mst))
-			return 6;
 		if (isMachineGun(mst))
-			return 4;
-		if (isBuiltinHighAngleMount(mst))
-			return 3;
+			return isHighAAGear(mst) ? 6 : 4;
 		if (isHighAngleMount(mst))
-			return 2;
+			return isHighAAGear(mst) ? 3 : 2;
 		if (isAAFD(mst))
-			return 2;
+			return isHighAAGear(mst) ? 3 : 2;
 		if (isAARadar(mst))
 			return 0;
 		// no default value for unverified equipment
@@ -284,12 +284,10 @@ AntiAir: anti-air related calculations
 	}
 
 	function getFleetImprovementModifier(mst) {
-		if (isBuiltinHighAngleMount(mst))
-			return 3;
 		if (isHighAngleMount(mst))
-			return 2;
+			return isHighAAGear(mst) ? 3 : 2;
 		if (isAAFD(mst))
-			return 2;
+			return isHighAAGear(mst) ? 3 : 2;
 		if (isAARadar(mst))
 			return 1.5;
 		if (isMachineGun(mst))

@@ -435,7 +435,9 @@ Saves and loads significant data for future use
 			}
 			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
 			const isTurbine = gearMstId === 33;
-			if(equipOn.exslot || isTurbine) {
+			// Submarine Stern Torpedo Launchers can be equpped on exslot, added since 2021-11-19
+			const isSternSubTorp = [442, 443].includes(gearMstId);
+			if(equipOn.exslot || isTurbine || isSternSubTorp) {
 				if(result) result |= 2;
 			} else if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) {
 				result |= 2;
