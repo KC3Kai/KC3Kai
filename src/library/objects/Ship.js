@@ -958,10 +958,11 @@ KC3改 Ship Object
 				// aircraft in 0-size slot take no effect, and
 				// current formula for 0 proficiency aircraft only,
 				// max level may give additional stats up to +2
+				// under verifications for improvement bonus and proficiency: https://twitter.com/myteaGuard/status/1459541432050466816
 				(!this.slotSize(i) ? 0 : Math.floor(mstValue * (0.65 + 0.1 * Math.sqrt(Math.max(0, this.slotSize(i) - 2)))));
 		}).sumValues();
 		if(isOnShipBonusIncluded){
-			// unconfirmed: all visible bonuses counted?
+			// unconfirmed: visible bonuses from all equipment types counted?
 			total += this.equipmentTotalStats(apiName, true, true, true);
 		}
 		return total;
@@ -3537,7 +3538,7 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
-				const lateTorpedoCnt = this.countEquipment([213, 214, 383]);
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				const secondaryCnt = this.countEquipmentType(2, 4);

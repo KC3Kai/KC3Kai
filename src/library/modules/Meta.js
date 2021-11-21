@@ -380,13 +380,18 @@ Provides access to data on built-in JSON files
 				this._cache[jpName] = this._ship[jpName];
 				return this._cache[jpName];
 			}
+			const escapeRegexChars = (s) => (s
+				.replace(/\(/g, "\\(")
+				.replace(/\)/g, "\\)")
+				.replace(/\|/g, "\\|")
+			);
 			var root = jpName,
 				combinedPrefixes = [],
 				prefixesMap = this.shipNameAffix(prefixKey),
-				prefixesList = Object.keys(prefixesMap),
+				prefixesList = Object.keys(prefixesMap).map(s => escapeRegexChars(s)),
 				combinedSuffixes = [],
 				suffixesMap = this.shipNameAffix(suffixKey),
-				suffixesList = Object.keys(suffixesMap),
+				suffixesList = Object.keys(suffixesMap).map(s => escapeRegexChars(s)),
 				occurs = [],
 				replaced = false;
 			/**********************************************
@@ -401,7 +406,7 @@ Provides access to data on built-in JSON files
 			if(prefixesList.length > 0){
 				while( !!(occurs = (new RegExp(`^(?:${prefixesList.join("|")})`, "i")).exec(root)) ){
 					const firstOccur = occurs[0];
-					root = root.replace(new RegExp(`^${firstOccur}`, "i"), "");
+					root = root.replace(new RegExp(`^${escapeRegexChars(firstOccur)}`, "i"), "");
 					if(prefixesMap[occurs[0]].slice(-1) === "$"){
 						combinedSuffixes.unshift(prefixesMap[firstOccur].slice(0, -1));
 					} else {
@@ -414,7 +419,7 @@ Provides access to data on built-in JSON files
 			if(suffixesList.length > 0){
 				while( !!(occurs = (new RegExp(`(?:${suffixesList.join("|")})$`,"i")).exec(root)) ){
 					const firstOccur = occurs[0];
-					root = root.replace(new RegExp(`${firstOccur}$`, "i"), "");
+					root = root.replace(new RegExp(`${escapeRegexChars(firstOccur)}$`, "i"), "");
 					if(suffixesMap[firstOccur].slice(0, 1) === "^"){
 						combinedPrefixes.unshift(suffixesMap[firstOccur].slice(1));
 					} else {

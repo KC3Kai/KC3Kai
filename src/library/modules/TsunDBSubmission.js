@@ -1213,7 +1213,11 @@
 				equips: ship.equipment(true).map(g => g.masterId || -1), 
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
-				slots: ship.slots
+				slots: ship.slots,
+				tp: ship.tp[0],
+				fp: ship.fp[0],
+				maxhp: ship.hp[1],
+				ammo: ship.ammo
 			});
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
@@ -1260,6 +1264,7 @@
 						shipInfo.ncontact = ncontact;
 						shipInfo.cutin = attack.ncutin;
 						shipInfo.defenderHP = attack.ehp;
+						shipInfo.attackerHP = attack.hp;
 
 						for (let idx = 0; idx < attack.damage.length; idx++) {
 							const dmg = attack.damage[idx];
@@ -1320,6 +1325,7 @@
 						shipInfo.ncontact = ncontact;
 						shipInfo.cutin = attack.ncutin;
 						shipInfo.defenderHP = attack.ehp;
+						shipInfo.attackerHP = attack.hp;
 
 						for (let idx = 0; idx < attack.damage.length; idx++) {
 							const dmg = attack.damage[idx];

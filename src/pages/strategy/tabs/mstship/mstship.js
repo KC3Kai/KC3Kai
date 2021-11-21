@@ -834,6 +834,11 @@
 					if (equipTypes.includes(17) && !exslotItems.includes(33)) {
 						exslotItems.push(33);
 					}
+					// Similarly Submarine Stern Torpedo added since 2021-11-19
+					if (equipTypes.includes(32)) {
+						if (!exslotItems.includes(442)) exslotItems.push(442);
+						if (!exslotItems.includes(443)) exslotItems.push(443);
+					}
 					if (exslotItems.length > 0) {
 						exslotItems.forEach(item => {
 							const gearMst = KC3Master.slotitem(item);
