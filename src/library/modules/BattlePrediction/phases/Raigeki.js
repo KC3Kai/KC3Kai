@@ -64,7 +64,9 @@
     info: { damage: api_eydam, acc: api_ecl, target: api_erai, phase: "raigeki", opening }
   });
 
-  Raigeki.isRealAttack = ({ defender }) => defender.position !== -1;
+  // Game server may be bugged for some cases to return [null] and broken api_edam: https://github.com/andanteyk/ElectronicObserver/issues/294
+  // Client codes treat `null` element the same with value -1
+  Raigeki.isRealAttack = ({ defender }) => defender.position !== -1 && defender.position != null;
 
   /*--------------------------------------------------------*/
   /* ---------------------[ EXPORTS ]---------------------- */
