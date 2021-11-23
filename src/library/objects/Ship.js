@@ -4286,7 +4286,8 @@ KC3改 Ship Object
 		if(rosaCount === 0) return 0;
 		// Not tested yet on more than 3 Rosa K2, capped to 3 just in case of exceptions
 		rosaCount = rosaCount > 3 ? 3 : rosaCount;
-		const rosaAdjustedAntiAir = 48;
+		// 48, irrelevant to improvement stars
+		const rosaAdjustedAntiAir = KC3Gear.aaDefense(KC3Master.slotitem(274), 0, false);
 		// 70 for Ise-class, 0 otherwise
 		const classBonus = this.master().api_ctype === 2 ? 70 : 0;
 		// Rounding to x%

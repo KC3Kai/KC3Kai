@@ -1349,7 +1349,12 @@
 							["ls", "saku", "ShipLos"/*, "kc3_los"*/],
 							["sp", "soku", "ShipSpeed"],
 							["rn", "leng", "ShipLength"],
-							["if", "airpow"],
+							["if", "airpow", "ShipAirPower"],
+							["aa", "adjaa", "ShipAdjustedAntiAir"],
+							["hm", "aaci", "ShipAntiAirCutin"],
+							["rm", "otorp", "ShipExtraPhaseOpeningTorpedo"],
+							["as", "oasw", "ShipExtraPhaseOpeningASW"],
+							["yasen", "cvnb"],
 						], function(index, stat){
 							statBox = $(".tab_mstship .factory .ship_stat").clone();
 							$("img", statBox).attr("src", KC3Meta.statIcon(stat[0]));
@@ -1382,11 +1387,40 @@
 									$(".ship_stat_text", statBox).css("color",
 										masterLeng > maxLengFromEquips ? "blue" : "orangered");
 								}
-							} else if(stat[0] === "if"){
+							} else if(stat[1] === "airpow"){
 								// Compute fighter air power based on known slots
 								$(".ship_stat_min", statBox).text(
 									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
 								);
+								$(".ship_stat_max", statBox).hide();
+							} else if(stat[1] === "adjaa"){
+								// Compute adjusted anti-air power based on known slots
+								const adjShip = AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id);
+								const adjFleet = AntiAir.abyssalShipFleetAdjustedAntiAir(abyssMaster.api_id);
+								$(".ship_stat_min", statBox).text(adjShip === undefined ? "?" : adjShip);
+								$(".ship_stat_max span", statBox).text(adjFleet === undefined ? "?" : adjFleet);
+							} else if(stat[1] === "aaci"){
+								$(".ship_stat_min", statBox).text(abyssMaster.kc3_aaci || "-");
+								$(".ship_stat_max", statBox).hide();
+							} else if(stat[1] === "otorp"){
+								const canOtorp = (
+									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).includes(541)
+								) || (
+									[13, 14].includes(abyssMaster.api_stype) && abyssMaster.api_yomi != ""
+								);
+								$(".ship_stat_min", statBox).text(canOtorp);
+								$(".ship_stat_max", statBox).hide();
+							} else if(stat[1] === "oasw"){
+								$(".ship_stat_min", statBox).text(abyssMaster.kc3_oasw === undefined ? "?" : abyssMaster.kc3_oasw);
+								$(".ship_stat_max", statBox).hide();
+							} else if(stat[1] === "cvnb"){
+								const cvnbType = !abyssMaster.kc3_cvnb ? "-" : {
+									"1": "AirAttack",
+									"2": "Shelling",
+									"3": "OnSearchLight",
+									"6": "NCVCI",
+								}[abyssMaster.kc3_cvnb] || "?";
+								$(".ship_stat_min", statBox).text(cvnbType);
 								$(".ship_stat_max", statBox).hide();
 							} else {
 								// Priority to show master stats recorded by encounters db
