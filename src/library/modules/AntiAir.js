@@ -367,7 +367,7 @@ AntiAir: anti-air related calculations
 		if (!shipMst || (shipMst.api_tyku === undefined && altTyku === undefined)
 			|| (!Array.isArray(shipMst.kc3_slots) && !Array.isArray(altSlots))) return;
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#enemy_AAfire
-		var shipAA = altTyku || shipMst.api_tyku;
+		var shipAA = altTyku || shipMst.api_tyku || 0;
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipBaseAA = allItems.reduce((sum, item) => sum + (item.api_tyku || 0), 0);
 		var totalEquipAADefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, false), 0);
