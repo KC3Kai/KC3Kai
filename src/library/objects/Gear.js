@@ -784,6 +784,11 @@ KC3改 Equipment Object
 			// Do 217 E-5 + Hs293 Initial Model targeting DD
 			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
+			// Type 4 Heavy Bomber Hiryuu + I-go Model 1A Guided Missile since 2021-11-30
+			// and there are 3 types of missiles defined in `main.js#TaskAirWarMissileOne.prototype._getMissileType`
+			// https://twitter.com/oxke_admiral/status/1465639932970430469
+			if(this.masterId === 444 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.15;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
