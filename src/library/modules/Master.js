@@ -192,6 +192,11 @@ Saves and loads significant data for future use
 			return this._seasonalShips[id] || false;
 		},
 
+		abyssal_ship :function(id){
+			var as = $.extend(true, {}, this._abyssalShips[id]);
+			return $.extend(as, this.ship(id));
+		},
+
 		new_ships :function(){
 			return this._raw.newShips || {};
 		},

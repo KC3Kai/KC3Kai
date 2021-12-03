@@ -28,7 +28,7 @@
 
 	 */
 	function loadUserSelections() {
-		if (typeof localStorage.srExpedscorer !== "undefined") {
+		if (!!localStorage.srExpedscorer && localStorage.srExpedscorer !== "{}") {
 			return JSON.parse( localStorage.srExpedscorer );
 		}
 

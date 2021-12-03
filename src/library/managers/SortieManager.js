@@ -752,6 +752,21 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.setAllMapData(allMapData);
 		},
 		
+		getLatestEventMapData: function(){
+			const allMapData = this.getAllMapData();
+			const latest = { key: "", id: 0, clear: 1 };
+			$.each(allMapData, (key, mapInfo) => {
+				if(KC3Meta.isEventWorld(key.slice(1, -1)) && mapInfo.id > latest.id) {
+					if(mapInfo.clear === 1 || latest.clear === 1) {
+						latest.key = key;
+						latest.id = mapInfo.id;
+						latest.clear = mapInfo.clear;
+					}
+				}
+			});
+			return allMapData[latest.key];
+		},
+		
 		load :function(){
 			if(localStorage.sortie) {
 				$.extend(this, localStorage.getObject("sortie"));

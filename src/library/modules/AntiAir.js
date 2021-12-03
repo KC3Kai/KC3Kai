@@ -354,6 +354,46 @@ AntiAir: anti-air related calculations
 		return shipObj.estimateNakedStats("aa") + shipEquipmentAntiAir(shipObj, false);
 	}
 
+	function abyssalEquipmentAntiAir(gearMst, forFleet) {
+		if (typeof gearMst === "number" && KC3Master.isAbyssalGear(gearMst))
+			gearMst = KC3Master.slotitem(gearMst);
+		return calcEquipmentAADefense(gearMst, 0, forFleet);
+	}
+
+	function abyssalShipAdjustedAntiAir(shipMst, altTyku, altSlots) {
+		if (typeof shipMst === "number" && KC3Master.isAbyssalShip(shipMst))
+			shipMst = KC3Master.abyssal_ship(shipMst);
+		// return undefined if required parameters not ready
+		if (!shipMst || (shipMst.api_tyku === undefined && altTyku === undefined)
+			|| (!Array.isArray(shipMst.kc3_slots) && !Array.isArray(altSlots))) return;
+		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#enemy_AAfire
+		var shipAA = altTyku || shipMst.api_tyku || 0;
+		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
+		var totalEquipBaseAA = allItems.reduce((sum, item) => sum + (item.api_tyku || 0), 0);
+		var totalEquipAADefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, false), 0);
+		return 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
+	}
+
+	function abyssalShipFleetAdjustedAntiAir(shipMst, altSlots, formationModifier = 1) {
+		if (typeof shipMst === "number" && KC3Master.isAbyssalShip(shipMst))
+			shipMst = KC3Master.abyssal_ship(shipMst);
+		// return undefined if required parameters not ready
+		if (!shipMst || (!Array.isArray(shipMst.kc3_slots) && !Array.isArray(altSlots))) return;
+		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
+		var totalEquipFleetDefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
+		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+	}
+
+	function abyssalFleetAdjustedAntiAir(fleetArr, formationModifier = 1) {
+		if (!Array.isArray(fleetArr)) return;
+		var allShips = fleetArr.map(id => KC3Master.abyssal_ship(id));
+		var totalEquipFleetDefense = allShips.reduce((total, shipMst) => {
+			var allItems = (shipMst.kc3_slots || []).map(id => KC3Master.slotitem(id));
+			return allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
+		}, 0);
+		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+	}
+
 	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
 		var floor = specialFloor(shipObj);
 		var adjustedAA = shipAdjustedAntiAir(shipObj);
@@ -1206,6 +1246,10 @@ AntiAir: anti-air related calculations
 		shipEquipmentAntiAir: shipEquipmentAntiAir,
 		shipAdjustedAntiAir: shipAdjustedAntiAir,
 		specialFloor: specialFloor,
+
+		abyssalShipAdjustedAntiAir: abyssalShipAdjustedAntiAir,
+		abyssalShipFleetAdjustedAntiAir: abyssalShipFleetAdjustedAntiAir,
+		abyssalFleetAdjustedAntiAir: abyssalFleetAdjustedAntiAir,
 
 		shipProportionalShotdown: shipProportionalShotdown,
 		shipProportionalShotdownRate: shipProportionalShotdownRate,

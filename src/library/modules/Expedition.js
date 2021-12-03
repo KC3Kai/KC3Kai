@@ -322,7 +322,7 @@ Expedition: Expedition information, income estimation, scoring and utils for Exp
 	}
 
 	function loadExpedConfig(requireDefault=false) {
-		if (typeof localStorage.expedConfig === "undefined")
+		if (!localStorage.expedConfig || localStorage.expedConfig === "{}")
 			return requireDefault ? generateNormalConfig() : false;
 		try {
 			return JSON.parse( localStorage.expedConfig );

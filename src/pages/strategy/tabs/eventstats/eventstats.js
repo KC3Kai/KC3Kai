@@ -127,7 +127,7 @@
 
 			const checkShipKill = (attacks, shipId, checkForLastHit, mapnum) => {
 				attacks.forEach(attack => {
-					const damage = Array.isArray(attack.damage) ? attack.damage.sumValues() : attack.damage;
+					const damage = Array.isArray(attack.damage) ? attack.damage.map(v => Math.floor(v)).sumValues() : Math.floor(attack.damage);
 					if (damage >= attack.ehp) {
 						this.stats.shipKills[shipId] = (this.stats.shipKills[shipId] || 0) + 1;
 						if (checkForLastHit && attack.target[0] === 0) {
@@ -141,7 +141,7 @@
 						}
 					}
 					if(Array.isArray(attack.damage)) {
-						attack.damage.forEach(dam => this.stats.maxHit[shipId] = Math.max(dam, this.stats.maxHit[shipId] || 0));
+						attack.damage.forEach(dam => this.stats.maxHit[shipId] = Math.max(Math.floor(dam), this.stats.maxHit[shipId] || 0));
 					} else {
 						this.stats.maxHit[shipId] = Math.max(damage, this.stats.maxHit[shipId] || 0);
 					}
