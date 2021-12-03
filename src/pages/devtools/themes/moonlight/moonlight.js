@@ -2578,9 +2578,12 @@
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
 						if (!!ifp) {
-							const haifp = Math.floor(ifp * KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map));
+							const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
+							const hamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff);
+							const haifp = Math.floor(ifp * hamod);
+							const haifpTip = "{0} (x{1})".format(haifp, hamod);
 							$(".base_ifp .base_stat_value", baseBox).attr("title",
-								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifp)
+								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifpTip)
 							).lazyInitTooltip();
 						}
 						//$(".airbase_infos", baseBox).on("click", togglePlaneName);
