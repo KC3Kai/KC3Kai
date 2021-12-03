@@ -38,7 +38,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.notifications.clear("kc3kai_update");
 				chrome.notifications.create("kc3kai_update", {
 					type: "basic",
-					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					iconUrl: chrome.runtime.getURL("assets/img/logo/128.png"),
 					title: KC3Meta.term("InstalledTitle"),
 					message: KC3Meta.term("InstalledText"),
 				});
@@ -47,7 +47,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 					chrome.notifications.clear("kc3kai_update");
 					chrome.notifications.create("kc3kai_update", {
 						type: "basic",
-						iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+						iconUrl: chrome.runtime.getURL("assets/img/logo/128.png"),
 						title: KC3Meta.term("UpdatedTitle"),
 						message: KC3Meta.term("UpdatedText"),
 					});
@@ -78,7 +78,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.tabs.remove([sender.tab.id], function(){});
 				// To avoid cross-domain warning of chrome
 				//window.open("../pages/game/api.html", "kc3kai_game");
-				chrome.tabs.create({ url: chrome.extension.getURL("../pages/game/api.html") });
+				chrome.tabs.create({ url: chrome.runtime.getURL("../pages/game/api.html") });
 			}
 		},
 		
@@ -400,7 +400,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 		------------------------------------------*/
 		"openExtensionPage" :function(request, sender, response){
 			chrome.tabs.create({
-				url: chrome.extension.getURL(request.path)
+				url: chrome.runtime.getURL(request.path)
 			});
 		},
 		
@@ -414,13 +414,13 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			var tabId = 0;
 			// Find first existed SRoom page tab
 			chrome.tabs.query({
-				url: chrome.extension.getURL(sroomUrlPrefix)
+				url: chrome.runtime.getURL(sroomUrlPrefix)
 			}, function(tabs){
 				if(!!tabs[0]){
 					tabId = tabs[0].id;
 					// Found existed tab, update url and activate it
 					chrome.tabs.update(tabId, {
-						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath),
+						url: chrome.runtime.getURL(sroomUrlPrefix + "#" + request.tabPath),
 						active: true
 					}, function(tab) {
 						tabId = tab.id;
@@ -428,7 +428,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				} else {
 					// No existed tab, create new
 					chrome.tabs.create({
-						url: chrome.extension.getURL(sroomUrlPrefix + "#" + request.tabPath)
+						url: chrome.runtime.getURL(sroomUrlPrefix + "#" + request.tabPath)
 					}, function(tab){
 						tabId = tab.id;
 					});
@@ -731,7 +731,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.windows.getCurrent(null, function(cwindow){
 					chrome.tabs.create({
 						windowId: cwindow.id,
-						url: chrome.extension.getURL("pages/update/update.html"),
+						url: chrome.runtime.getURL("pages/update/update.html"),
 						active: false
 					});
 				});
@@ -740,7 +740,7 @@ See Manifest File [manifest.json] under "background" > "scripts"
 				chrome.notifications.clear("kc3kai_update");
 				chrome.notifications.create("kc3kai_update", {
 					type: "basic",
-					iconUrl: chrome.extension.getURL("assets/img/logo/128.png"),
+					iconUrl: chrome.runtime.getURL("assets/img/logo/128.png"),
 					title: KC3Meta.term("UpdateNotifTitle").format(details.version),
 					message: KC3Meta.term("UpdateNotifText"),
 					buttons: [

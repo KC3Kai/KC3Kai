@@ -142,7 +142,7 @@
       type: 'basic',
       title: KC3Meta.term('DesktopNotifyQuestsSyncTitle'),
       message: KC3Meta.term('DesktopNotifyQuestsSyncMessage').format(dt),
-      iconUrl: chrome.extension.getURL('assets/img/quests/sortie.jpg'),
+      iconUrl: chrome.runtime.getURL('assets/img/quests/sortie.jpg'),
     };
   };
 

@@ -236,7 +236,7 @@
 				const id = $(this).closest(".exped_item").data("id");
 				if(!id) return;
 				if(e.metaKey || e.ctrlKey) {
-					const url = chrome.extension.getURL("/pages/strategy/strategy.html") + `#fleet-exped-${id}`;
+					const url = chrome.runtime.getURL("/pages/strategy/strategy.html") + `#fleet-exped-${id}`;
 					chrome.tabs.create({ url, active: true });
 				} else {
 					KC3StrategyTabs.gotoTab("fleet", "exped", id);
