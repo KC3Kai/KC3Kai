@@ -3,7 +3,7 @@
 \*******************************/
 /* GOOGLE ANALYTICS
 -------------------------------*/
-if (!window.NO_GA) {
+if (!window.NO_GA && typeof document != "undefined") {
 	var _gaq = _gaq || [];
 	_gaq.push(['_setAccount', 'UA-9789944-12']);
 	(function() {
@@ -18,7 +18,7 @@ if (!window.NO_GA) {
 }
 
 // Convenient method and attribute to get browser's version number
-if (!!navigator) {
+if (typeof navigator != "undefined") {
 	navigator.parseChromeVersion = function() {
 		if (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands)) {
 			var brand = navigator.userAgentData.brands.find(function(o) {
@@ -1116,6 +1116,7 @@ Math.fixed = function(val, decimal){
 /*******************************\
 |*** Storage                    |
 \*******************************/
+if(typeof Storage != "undefined") {
 /*
 	Storage JSON Conversion
 	http://stackoverflow.com/questions/2010892/storing-objects-in-html5-localstorage/2010994
@@ -1157,10 +1158,12 @@ Storage.prototype.usedSpace = function() {
 Storage.prototype.remainingSpace = function() {
 	return this.quotaLength - this.usedSpace();
 };
+}
 
 /*******************************\
 |*** Element                    |
 \*******************************/
+if(typeof Element != "undefined") {
 (function(){
 	/*jshint: validthis true*/
 	Object.defineProperties(this.prototype,{
@@ -1180,6 +1183,7 @@ Storage.prototype.remainingSpace = function() {
 		},
 	});
 }).call(Element);
+}
 
 /* USER-DEFINED CLASS */
 /*******************************\

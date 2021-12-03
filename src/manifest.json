@@ -1,5 +1,5 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "KC3改 Development",
 	"short_name": "KC3改",
 	"description": "Kantai Collection Game Viewer and Helper",
@@ -11,7 +11,7 @@
 		"48": "assets/img/logo/48.png",
 		"128": "assets/img/logo/128.png"
 	},
-	"browser_action": {
+	"action": {
 		"default_icon": "assets/img/logo/dev.png",
 		"default_popup": "pages/popup/popup.html"
 	},
@@ -24,37 +24,17 @@
 		"notifications",
 		"cookies",
 		"activeTab",
-		"webRequest",
-		"webRequestBlocking",
+		"declarativeNetRequest",
+		"declarativeNetRequestWithHostAccess"
+	],
+	"host_permissions": [
 		"file:///*",
 		"*://*.dmm.com/*",
 		"*://*.kan-colle.com/*",
 		"*://203.104.209.7/*"
 	],
 	"background": {
-		"scripts": [
-			"assets/js/global.js",
-			"assets/js/jquery.min.js",
-			"assets/js/Dexie.min.js",
-			"library/objects/Messengers.js",
-			"library/objects/Quest.js",
-			"library/objects/Screenshot.js",
-			"library/managers/ConfigManager.js",
-			"library/managers/QuestManager.js",
-			"library/modules/ChromeSync.js",
-			"library/modules/QuestSync/Background.js",
-			"library/modules/QuestSync/Sync.js",
-			"library/modules/Database.js",
-			"library/modules/Log/Log.js",
-			"library/modules/Log/Background.js",
-			"library/modules/ImageExport.js",
-			"library/modules/Master.js",
-			"library/modules/RemodelDb.js",
-			"library/modules/Meta.js",
-			"library/modules/Translation.js",
-			"library/modules/Service.js"
-		],
-		"persistent": true
+		"service_worker": "background.js"
 	},
 	"content_scripts": [
 		{
@@ -113,10 +93,19 @@
 			"all_frames": true
 		}
 	],
-	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://cdnjs.cloudflare.com 'unsafe-eval'; object-src 'self'",
-	"web_accessible_resources": [
-		"assets/img/*",
-		"library/injections/dmm_injectable.js",
-		"library/injections/kcs2_injectable.js"
-	]
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'"
+	},
+	"web_accessible_resources": [{
+		"resources": [
+			"assets/img/*",
+			"library/injections/dmm_injectable.js",
+			"library/injections/kcs2_injectable.js"
+		],
+		"matches": [
+			"*://www.dmm.com/*",
+			"*://osapi.dmm.com/*",
+			"*://203.104.209.71/*"
+		]
+	}]
 }
