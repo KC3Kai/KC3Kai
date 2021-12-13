@@ -3459,7 +3459,7 @@ ABYSS FLEET
 .module.fleet .lship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,
 		0px 0px 4px #ff0,
-		0px 0px 4px #ff0;
+		0px 0px 4px #ff0 !important;
 }
 .module.fleet .lship .ex_item .gear_icon {
 	overflow:hidden;
@@ -3841,7 +3841,7 @@ ABYSS FLEET
 .module.fleet .lship .ship_gear_icon.goddess {
 	box-shadow:0px 0px 4px #ff0,
 		0px 0px 4px #ff0,
-		0px 0px 4px #ff0;
+		0px 0px 4px #ff0 !important;
 }
 .module.fleet .lship .ship_gear_icon img {
 	width:16px;
@@ -3987,7 +3987,7 @@ ABYSS FLEET
 .module.fleet .sship .ex_item.goddess {
 	box-shadow:0px 0px 4px #ff0,
 		0px 0px 4px #ff0,
-		0px 0px 4px #ff0;
+		0px 0px 4px #ff0 !important;
 }
 .module.fleet .sship .ex_item .gear_icon {
 	overflow:hidden;
