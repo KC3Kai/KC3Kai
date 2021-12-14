@@ -20,6 +20,12 @@ if (!window.NO_GA) {
 // Convenient method and attribute to get browser's version number
 if (!!navigator) {
 	navigator.parseChromeVersion = function() {
+		if (navigator.userAgentData && Array.isArray(navigator.userAgentData.brands)) {
+			var brand = navigator.userAgentData.brands.find(function(o) {
+				return ["Chromium", "Google Chrome"].indexOf(o.brand) >= 0;
+			});
+			if (brand && brand.version) return parseInt(brand.version, 10);
+		}
 		var raw = navigator.appVersion.match(/Chrom(e|ium)\/([0-9]+)\./);
 		return raw ? parseInt(raw[2], 10) : 0;
 	};

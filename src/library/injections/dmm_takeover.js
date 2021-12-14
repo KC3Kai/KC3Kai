@@ -562,7 +562,7 @@
 				if (request.action != "nextBlockShow") return true;
 				if (request.fairy) {
 					const fid = Math.floor(Math.random() * 6);
-					const furl = chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
+					const furl = chrome.runtime.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
 					$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
 					$(".nextButtonBlock").css("background-position", "center");
 					$(".nextButtonBlock").addClass("bg-grey");
@@ -699,7 +699,7 @@
 						for(let i in icons){
 							var obj = icons[i];
 							var iconImg = $('<img />')
-								.attr("src", chrome.extension.getURL("assets/img/"+ obj.img))
+								.attr("src", chrome.runtime.getURL("assets/img/"+ obj.img))
 								.attr("width", obj.size[0])
 								.attr("height", obj.size[1]);
 							var iconDiv = $('<div class="icon"></div>')
@@ -786,7 +786,7 @@
 			let body = document.getElementsByTagName('body')[0];
 			let script = document.createElement('script');
 			script.setAttribute('type', 'text/javascript');
-			script.setAttribute('src', chrome.extension.getURL('library/injections/dmm_injectable.js'));
+			script.setAttribute('src', chrome.runtime.getURL('library/injections/dmm_injectable.js'));
 			body.appendChild(script);
 		}
 	};

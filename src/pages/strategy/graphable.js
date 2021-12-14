@@ -94,7 +94,7 @@
 		
 		// Get data via worker using specified filters
 		collectData(filters){
-			const DataCollector = new Worker(chrome.extension.getURL('library/workers/graph-data.js'));
+			const DataCollector = new Worker(chrome.runtime.getURL('library/workers/graph-data.js'));
 			DataCollector.onmessage = (response) => {
 				if (response.data) {
 					this.refreshGraph(response.data);
@@ -107,7 +107,7 @@
 				DataCollector.terminate();
 			};
 			DataCollector.postMessage(Object.assign({
-				url: chrome.extension.getURL(""),
+				url: chrome.runtime.getURL(""),
 				playerId: PlayerManager.hq.id
 			}, filters));
 		}

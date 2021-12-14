@@ -2541,10 +2541,11 @@ Used by SortieManager
 						({power, newDepthChargeBonus, remainingAmmoModifier} = ship.applyPostcapModifiers(power, warfareType,
 							daySpecialAttackType, 0, isCritical, ship.isCarrier(), enemyShip.api_stype, false, target));
 						const postcapPower = power;
-						armor -= newDepthChargeBonus;
+						if (newDepthChargeBonus)
+							armor = Math.max(1, armor - newDepthChargeBonus);
 
-						const maxDam = Math.floor((power - armor * 0.7) * remainingAmmoModifier);
-						const minDam = Math.floor((power - armor * 0.7 - (armor - 1) * 0.6) * remainingAmmoModifier);
+						const maxDam = Math.floor((power - Math.max(0, armor) * 0.7) * remainingAmmoModifier);
+						const minDam = Math.floor((power - Math.max(0, armor) * 0.7 - Math.max(0, armor - 1) * 0.6) * remainingAmmoModifier);
 						if (damage[i] > maxDam) {
 							unexpectedDamage = damage[i] > scratchDamage;
 						}

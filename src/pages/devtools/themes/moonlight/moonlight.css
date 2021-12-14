@@ -4041,7 +4041,7 @@ ABYSS FLEET
 	background:#226;
 	box-shadow:0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb,
-		0px 0px 8px #9999bb;
+		0px 0px 8px #9999bb !important;
 }
 .module.fleet .lship .ex_item .gear_icon {
 	overflow:hidden;
@@ -4702,7 +4702,7 @@ ABYSS FLEET
 	background:#226;
 	box-shadow:0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb,
-		0px 0px 8px #9999bb;
+		0px 0px 8px #9999bb !important;
 }
 .module.fleet .lship .ship_gear_icon img {
 	width:18px;
@@ -5203,7 +5203,7 @@ ABYSS FLEET
 	background:#226;
 	box-shadow:0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb,
-		0px 0px 8px #9999bb;
+		0px 0px 8px #9999bb !important;
 }
 .module.fleet .sship .ship_gear_icon img {
 	width:16px;
@@ -5286,7 +5286,7 @@ ABYSS FLEET
 	background:#226;
 	box-shadow:0px 0px 8px #9999bb,
 		0px 0px 8px #9999bb,
-		0px 0px 8px #9999bb;
+		0px 0px 8px #9999bb !important;
 }
 .module.fleet .sship .ex_item .gear_icon {
 	overflow:hidden;

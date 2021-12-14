@@ -44,7 +44,7 @@
 			const body = $("body")[0];
 			const script = document.createElement("script");
 			script.setAttribute("type", "text/javascript");
-			script.setAttribute("src", chrome.extension.getURL("library/injections/kcs2_injectable.js"));
+			script.setAttribute("src", chrome.runtime.getURL("library/injections/kcs2_injectable.js"));
 			body.appendChild(script);
 		}
 	})).execute();
