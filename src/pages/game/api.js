@@ -618,7 +618,7 @@ var interactions = {
 	nextBlockShow :function(request, sender, response){
 		if(request.fairy){
 			const fid = Math.floor(Math.random() * 6);
-			const furl = chrome.extension.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
+			const furl = chrome.runtime.getURL(`assets/img/ui/fairy_compass_${fid}.png`);
 			$(".nextButtonBlock").css("background", `url(${furl}) no-repeat`);
 			$(".nextButtonBlock").css("background-position", "center");
 			$(".nextButtonBlock").addClass("bg-grey");

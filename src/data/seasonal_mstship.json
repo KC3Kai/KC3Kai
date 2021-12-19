@@ -4819,5 +4819,45 @@
 		"api_stype": 18,
 		"api_soku": 10,
 		"api_slot_num": 4
+	},
+	"5602": {
+		"api_id": 5602,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5603": {
+		"api_id": 5603,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5604": {
+		"api_id": 5604,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5605": {
+		"api_id": 5605,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5606": {
+		"api_id": 5606,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

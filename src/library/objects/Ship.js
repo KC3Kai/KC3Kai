@@ -2777,7 +2777,7 @@ KC3改 Ship Object
 	 *   + Math.floor(or ceil?)(total ammo cost of this battle (yasen may included) / 2)
 	 *
 	 * @return true if this ship (Nagato/Mutsu Kai Ni) can do special cut-in attack.
-	 * @see http://kancolle.wikia.com/wiki/Nagato
+	 * @see https://en.kancollewiki.net/Nagato
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 * @see http://kancolle.wikia.com/wiki/Mutsu
 	 * @see https://wikiwiki.jp/kancolle/%E9%99%B8%E5%A5%A5%E6%94%B9%E4%BA%8C

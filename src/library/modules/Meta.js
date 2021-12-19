@@ -240,7 +240,7 @@ Provides access to data on built-in JSON files
 				if(this.isAF() && [this.getAF(4), String(this.getAF(4)) + "_d"].includes(id))
 					return this.getAF(3).format(id);
 				// Here assume image file must be existed already (even for '_d.png')
-				return chrome.extension.getURL("/assets/img/" + path + id + ".png");
+				return chrome.runtime.getURL("/assets/img/" + path + id + ".png");
 			}
 			if(empty === undefined){
 				return this._defaultIcon;
@@ -262,13 +262,13 @@ Provides access to data on built-in JSON files
 		itemIcon :function(type3Id, iconSetId = ConfigManager.info_items_iconset){
 			// current auto using phase 2
 			const path = "items" + (["_p2", "", "_p2"][iconSetId || 0] || "");
-			return chrome.extension.getURL(`/assets/img/${path}/${type3Id}.png`);
+			return chrome.runtime.getURL(`/assets/img/${path}/${type3Id}.png`);
 		},
 		
 		statIcon :function(statName, iconSetId = ConfigManager.info_stats_iconset){
 			// current auto using phase 1
 			const path = "stats" + (["", "", "_p2"][iconSetId || 0] || "");
-			return chrome.extension.getURL(`/assets/img/${path}/${statName}.png`);
+			return chrome.runtime.getURL(`/assets/img/${path}/${statName}.png`);
 		},
 		useitemIcon :function(useitemId, iconSetId = ConfigManager.info_items_iconset){
 			// for those known item IDs not given an icon by game, eg: Strait/Sho-go medal
@@ -277,7 +277,7 @@ Provides access to data on built-in JSON files
 			const filename = noIconIds.includes(Number(useitemId)) ? 0 : useitemId;
 			// current auto using phase 2
 			const path = "useitems" + (["_p2", "", "_p2"][iconSetId || 0] || "");
-			return chrome.extension.getURL(`/assets/img/${path}/${filename}.png`);
+			return chrome.runtime.getURL(`/assets/img/${path}/${filename}.png`);
 		},
 		
 		statApiNameMap :function(){

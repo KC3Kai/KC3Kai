@@ -569,8 +569,8 @@
     const getLandBaseHighAltitudeModifier = (world, diff = 4) => {
         const modMapByDifficulty = {
             "1": [1.0, 1.0, 1.1, 1.2], // Casual
-            "2": [0.8, 1.0, 1.1, 1.2], // Easy
-            "3": [0.8, 0.8, 1.1, 1.2], // Normal
+            "2": [1.0, 1.0, 1.1, 1.2], // Easy
+            "3": [0.5, 0.8, 1.1, 1.2], // Normal
             "4": [0.5, 0.8, 1.1, 1.2], // Hard
         };
         const mods = modMapByDifficulty[diff] || [0.5, 0.8, 1.1, 1.2];

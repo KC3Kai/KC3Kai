@@ -593,9 +593,8 @@
 						}
 						if(realName==="carry"){
 							$(".ship_stat_max", statBox).hide();
-							if(statFromDb[realName] === undefined){
-								$(".ship_stat_min", statBox).text(KC3Ship.getCarrySlots(ship_id));
-							}
+							// WCTFDB may out of date, accurate carry summed from slots instead
+							$(".ship_stat_min", statBox).text(KC3Ship.getCarrySlots(ship_id));
 						} else {
 							$(".ship_stat_max span", statBox).text(
 								statFromDb[realName+"_max"] < 0 || statFromDb[realName+"_max"] === ""

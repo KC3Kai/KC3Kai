@@ -584,7 +584,7 @@
 				const id = $(this).data("id");
 				if(!id) return;
 				if(e.metaKey || e.ctrlKey) {
-					const url = chrome.extension.getURL("/pages/strategy/strategy.html") + `#fleet-history-${id}`;
+					const url = chrome.runtime.getURL("/pages/strategy/strategy.html") + `#fleet-history-${id}`;
 					chrome.tabs.create({ url, active: true });
 				} else {
 					KC3StrategyTabs.gotoTab("fleet", "history", id);
