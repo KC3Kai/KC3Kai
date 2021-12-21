@@ -2205,16 +2205,15 @@ KC3改 Ship Object
 				};
 				// actual modifier affected by (internal) proficiency and bonus under verification,
 				// https://docs.google.com/spreadsheets/d/1DCSQpzGeStmkkDpHAfEfUHdsUlULmg2IGrNLpwFfW34/html
-				// might be an average value from participants internal proficiency experience,
-				// all max 120 exp should be 0.106022, but here we use low exp 100 like regular below, so modifier is still 0.1
+				// might be an average value from participants internal proficiency experience
 				const getAverageProficiencyCriticalModifier = (type2Ids) => {
 					const expBonus = [0, 0, 0, 0, -3, -2, 2, 10, 10.25];
 					let modSum = 0, modCnt = 0;
 					this.equipment().forEach((g, i) => {
 						if(this.slots[i] > 0 && g.exists() && type2Ids.includes(g.master().api_type[2])) {
 							const aceLevel = g.ace || 0;
-							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-							const mod = aceLevel < 4 ? 0 : Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 200;
+							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
+							const mod = aceLevel < 4 ? 0 : Math.floor(Math.sqrt(internalExpHigh) + (expBonus[aceLevel] || 0)) / 200;
 							modSum += mod;
 							modCnt += 1;
 						}
@@ -2232,8 +2231,8 @@ KC3改 Ship Object
 					this.equipment().forEach((g, i) => {
 						if(g.isAirstrikeAircraft()) {
 							const aceLevel = g.ace || 0;
-							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-							let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
+							let mod = Math.floor(Math.sqrt(internalExpHigh) + (expBonus[aceLevel] || 0)) / 100;
 							if(i > 0) mod /= 2;
 							proficiencyCriticalModifier += mod;
 						}
