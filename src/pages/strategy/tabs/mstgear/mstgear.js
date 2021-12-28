@@ -175,6 +175,7 @@
 				["kk", "cost", "ShipDeployCost"],
 				["hk", "distance", "ShipGearEvadeAAFire"], // fake `distance` for almost planes
 				["rk", "baku", "ShipGearAntiLand"],        // fake `baku` for all dive bombers
+				["rm", "houm", "ShipGearHighAltitude"],    // fake `houm` for LB interceptors
 			], (index, sdata) => {
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
@@ -183,6 +184,8 @@
 					)
 				) && (
 					sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
+				) && (
+					sdata[0] !== "rm" || KC3GearManager.highAltitudeInterceptorIds.includes(gearData.api_id)
 				) && (
 					sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
 				)) {
@@ -212,6 +215,8 @@
 						);
 						$(statBox).css("width", "100px");
 					} else if(sdata[0] === "rk") { // For dive bomber who can anti-land
+						$(".stat_value", statBox).text("");
+					} else if(sdata[0] === "rm") { // For LB interceptors who can intercept High Altitude air-raid
 						$(".stat_value", statBox).text("");
 					} else {
 						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);

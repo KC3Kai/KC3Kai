@@ -1039,6 +1039,7 @@ KC3改 Equipment Object
 			["rn", "leng"],
 			["or", "distance"],
 			["rk", "baku"],
+			["rm", "houm"],
 			["hk", "distance"],
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
@@ -1049,13 +1050,15 @@ KC3改 Equipment Object
 			) && (
 				sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 			) && (
+				sdata[0] !== "rm" || KC3GearManager.highAltitudeInterceptorIds.includes(gearData.api_id)
+			) && (
 				sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
 			)) {
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
-				} else if(["rk", "hk"].includes(sdata[0])) {
+				} else if(["rk", "rm", "hk"].includes(sdata[0])) {
 					$(".value", statBox).text("");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);
