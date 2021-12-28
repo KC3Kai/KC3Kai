@@ -4711,7 +4711,7 @@
 	"5588": {
 		"api_id": 5588,
 		"api_name": "ハロウィン第三〇号海防艦",
-		"api_yomi": "だいよんごう",
+		"api_yomi": "だいさんじゅうごう",
 		"api_stype": 1,
 		"api_soku": 5,
 		"api_slot_num": 2
@@ -4822,42 +4822,58 @@
 	},
 	"5602": {
 		"api_id": 5602,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "修羅場C99秋雲",
+		"api_yomi": "あきぐも",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5603": {
 		"api_id": 5603,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "クリスマス第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5604": {
 		"api_id": 5604,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "クリスマス巻波",
+		"api_yomi": "まきなみ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5605": {
 		"api_id": 5605,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "クリスマス伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5606": {
+		"api_id": 5606,
+		"api_name": "クリスマスSheffield",
+		"api_yomi": "シェフィールド",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5607": {
+		"api_id": 5607,
+		"api_name": "クリスマス朧",
+		"api_yomi": "おぼろ",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
-	"5606": {
-		"api_id": 5606,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+	"5608": {
+		"api_id": 5608,
+		"api_name": "クリスマスHouston",
+		"api_yomi": "ヒューストン",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	}
 }

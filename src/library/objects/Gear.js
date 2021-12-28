@@ -1025,6 +1025,8 @@ KC3改 Equipment Object
 		$(".name", title).text(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
 		const planeStats = ["or", "kk"];
+		// Some stats not defined in API data, these flags maintained by us manually.
+		const nonMasterFlags = ["rk", "rm", "hk"];
 		$.each([
 			["hp", "taik"],
 			["fp", "houg"],
@@ -1058,7 +1060,7 @@ KC3改 Equipment Object
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
-				} else if(["rk", "rm", "hk"].includes(sdata[0])) {
+				} else if(nonMasterFlags.includes(sdata[0])) {
 					$(".value", statBox).text("");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);

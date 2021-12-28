@@ -870,6 +870,28 @@
 					},
 				],
 			},
+			// Type 0 Fighter Model 64 (Two-seat w/ KMX)
+			"447": {
+				count: 0,
+				byClass: {
+					// Taiyou Class
+					"76": {
+						multiple: { "houg": 1, "tais": 1, "houk": 2 },
+					},
+				},
+				byShip: [
+					// Yawatamaru/Unyou
+					{
+						origins: [522],
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					// Houshou, Taigei/Ryuuhou
+					{
+						origins: [89, 184],
+						multiple: { "houg": 1, "tais": 2, "houk": 1 },
+					},
+				],
+			},
 			// Suisei
 			"24": {
 				count: 0,
