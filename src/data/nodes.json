@@ -1317,18 +1317,13 @@
 		"markers": [
 			{
 				"img": "client/fuel.png",
-				"pos": [1030, 375],
+				"pos": [1010, 360],
 				"size": [27, 27]
 			},
 			{
 				"img": "client/bauxite.png",
-				"pos": [1000, 375],
+				"pos": [1037, 372],
 				"size": [27, 27]
-			},
-			{
-				"img": "client/bounty.png",
-				"pos": [1004, 397],
-				"size": [41, 41]
 			},
 			{
 				"img": "abyss/534.png",
