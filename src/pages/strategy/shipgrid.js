@@ -77,7 +77,7 @@
 					$(".ship_name", shipRow).text(ship.name)
 						.toggleClass("ship_kekkon-color", ship.level >= 100);
 					$(".ship_type", shipRow).text(
-						KC3Meta.stype(ship.stype + (ConfigManager.info_stype_cve && ship.isCve ? 100 : 0))
+						KC3Meta.stype(ship.stype, ConfigManager.info_stype_cve && ship.isCve)
 					);
 					$(".ship_lv .value", shipRow).text(ship.level)
 						.addClass(ship.levelClass);

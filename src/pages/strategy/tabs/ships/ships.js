@@ -1245,7 +1245,7 @@
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
 					$(".ship_type", cElm).text(
-						KC3Meta.stype(cShip.stype + (ConfigManager.info_stype_cve && cShip.isCve ? 100 : 0))
+						KC3Meta.stype(cShip.stype, ConfigManager.info_stype_cve && cShip.isCve)
 					);
 					$(".ship_lv .value", cElm).text(shipLevel)
 						.addClass(cShip.levelClass);

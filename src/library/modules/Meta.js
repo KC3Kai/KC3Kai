@@ -573,9 +573,11 @@ Provides access to data on built-in JSON files
 			return this._ranks[id] || "Unknown Rank";
 		},
 		
-		stype :function(id){
-			// map index 101 to 24, CVE: CVL 7 + 100 = 107 mapped to 30
-			if(id > 100) return this._stype[id - 77] || "??";
+		stype :function(id, isAlt, altIdx){
+			// in order to map to 2 or more names, have to manage more index ranges here?
+			altIdx = altIdx || 23;
+			// add in-game max index+1 for alternative names, eg: CVE: CVL 7 + 23 mapped to 30
+			if(isAlt && this._stype[id + altIdx]) return this._stype[id + altIdx];
 			return this._stype[id] || "??";
 		},
 		
