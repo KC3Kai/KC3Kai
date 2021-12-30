@@ -139,6 +139,7 @@
 						id: remodelInfo.ship_id_from,
 						masterId: remodelInfo.ship_id_from,
 						stype: shipMaster.api_stype,
+						isCve: shipMaster.api_stype === 7 && (shipMaster.api_tais || [])[0] > 0,
 						ctype: shipMaster.api_ctype,
 						sortno: shipMaster.api_sortno,
 						sortId: shipMaster.api_sort_id,

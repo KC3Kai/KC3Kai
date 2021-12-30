@@ -574,6 +574,8 @@ Provides access to data on built-in JSON files
 		},
 		
 		stype :function(id){
+			// map index 101 to 24, CVE: CVL 7 + 100 = 107 mapped to 30
+			if(id > 100) return this._stype[id - 77] || "??";
 			return this._stype[id] || "??";
 		},
 		

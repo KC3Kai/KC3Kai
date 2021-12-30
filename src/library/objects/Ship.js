@@ -165,7 +165,12 @@ KC3改 Ship Object
 	KC3Ship.prototype.isDummy = function(){ return ! this.exists(); };
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipNameById( this.masterId ); };
-	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
+	KC3Ship.prototype.stype = function(){
+		var stype = this.master().api_stype;
+		if(ConfigManager.info_stype_cve &&
+			stype === 7 && this.isEscortLightCarrier()) stype += 100;
+		return KC3Meta.stype(stype);
+	};
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {
 			case 'number':

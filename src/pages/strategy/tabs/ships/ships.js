@@ -580,6 +580,7 @@
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
+				isCve: ThisShip.isEscortLightCarrier(),
 				ctype: MasterShip.api_ctype,
 				sortno: MasterShip.api_sort_id,
 				name: ThisShip.name(),
@@ -1243,7 +1244,9 @@
 					if(cShip.fleet > 0) {
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
-					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
+					$(".ship_type", cElm).text(
+						KC3Meta.stype(cShip.stype + (ConfigManager.info_stype_cve && cShip.isCve ? 100 : 0))
+					);
 					$(".ship_lv .value", cElm).text(shipLevel)
 						.addClass(cShip.levelClass);
 					$(".ship_lv", cElm).attr("data-level", shipLevel);

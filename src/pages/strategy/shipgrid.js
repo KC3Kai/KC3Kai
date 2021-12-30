@@ -76,7 +76,9 @@
 						.click(this.shipClickFunc);
 					$(".ship_name", shipRow).text(ship.name)
 						.toggleClass("ship_kekkon-color", ship.level >= 100);
-					$(".ship_type", shipRow).text(KC3Meta.stype(ship.stype));
+					$(".ship_type", shipRow).text(
+						KC3Meta.stype(ship.stype + (ConfigManager.info_stype_cve && ship.isCve ? 100 : 0))
+					);
 					$(".ship_lv .value", shipRow).text(ship.level)
 						.addClass(ship.levelClass);
 					$(".ship_lock img", shipRow).attr("src",
@@ -150,6 +152,7 @@
 				id: shipObj.rosterId,
 				masterId: shipObj.masterId,
 				stype: shipMaster.api_stype,
+				isCve: shipObj.isEscortLightCarrier(),
 				ctype: shipMaster.api_ctype,
 				sortno: shipMaster.api_sortno,
 				sortId: shipMaster.api_sort_id,

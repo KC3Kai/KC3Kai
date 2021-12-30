@@ -70,6 +70,7 @@ Retrieves when needed to apply on components
 				info_pvp_info        : true,
 				info_stats_diff      : 3,
 				info_eng_stype       : false,
+				info_stype_cve       : false,
 				info_force_ship_lang : "",
 				info_ship_class_name : false,
 				info_dex_owned_ship  : true,
