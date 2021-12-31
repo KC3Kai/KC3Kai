@@ -873,11 +873,34 @@
 			// Type 0 Fighter Model 64 (Two-seat w/ KMX)
 			"447": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Taiyou Class
-					"76": {
-						multiple: { "houg": 1, "tais": 1, "houk": 2 },
-					},
+					"76": [
+						{
+							multiple: { "houg": 1, "tais": 1, "houk": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tais": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tais": 1 },
+						},
+					],
 				},
 				byShip: [
 					// Yawatamaru/Unyou
@@ -889,6 +912,31 @@
 					{
 						origins: [89, 184],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 10,
+						multiple: { "tais": 1 },
 					},
 				],
 			},

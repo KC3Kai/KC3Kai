@@ -574,15 +574,24 @@ Provides access to data on built-in JSON files
 		},
 		
 		stype :function(id, isAlt, altIdx){
-			// in order to map to 2 or more names, have to manage more index ranges here?
-			altIdx = altIdx || 23;
 			// add in-game max index+1 for alternative names, eg: CVE: CVL 7 + 23 mapped to 30
-			if(isAlt && this._stype[id + altIdx]) return this._stype[id + altIdx];
+			// in order to map to 2 or more names, have to manage more index ranges here?
+			var idx = !altIdx ? id + KC3Master.maxStypeCount + 1 : altIdx;
+			if(isAlt && this._stype[idx]) return this._stype[idx];
 			return this._stype[id] || "??";
 		},
 		
-		allStypes :function(){
-			return $.extend(true, {}, this._stype);
+		allStypes :function(withAltNames){
+			if(!withAltNames){
+				const stypes = {};
+				for(let i in this._stype){
+					if(i > KC3Master.maxStypeCount) break;
+					stypes[i] = this._stype[i];
+				}
+				return stypes;
+			} else {
+				return $.extend(true, {}, this._stype);
+			}
 		},
 		
 		sortedStypes :function(){

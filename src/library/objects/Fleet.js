@@ -390,6 +390,7 @@ Contains summary information about a fleet and its ships
 					break;
 					// [230] toku +11th tank not counted
 					// [355] M4A1 DD not counted
+					// [449] toku +T1 gun tank unknown
 					case 408: // Soukoutei (Armored Boat Class)
 						abCount += 1;
 						addImprove(gearObj.stars);
