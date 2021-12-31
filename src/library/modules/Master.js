@@ -21,7 +21,7 @@ Saves and loads significant data for future use
 		//seasonalCgIdTo: 1400,
 		// Clear new updates data after 1 week
 		newUpdatesExpiredAfter: 7 * 24 * 60 * 60 * 1000,
-		maxStypeCount: 22,
+		maxStypeCount: 0,
 
 		_raw: {},
 		_abyssalShips: {},
@@ -53,7 +53,6 @@ Saves and loads significant data for future use
 			this._raw.newItems = this._raw.newItems || {};
 			this._raw.newGraphs = this._raw.newGraphs || {};
 			this._raw.changedGraphs = this._raw.changedGraphs || {};
-			this.maxStypeCount = Object.keys(this._raw.stype).length || 22;
 
 			var self = this,
 				diff = {"ship":"newShips", "slotitem":"newItems", "shipgraph":"newGraphs"},
@@ -296,6 +295,11 @@ Saves and loads significant data for future use
 
 		stype :function(id){
 			return !this.available ? false : this._raw.stype[id] || false;
+		},
+
+		stype_count :function(){
+			this.maxStypeCount = this.maxStypeCount || (!this.available ? 22 : Object.keys(this._raw.stype).length || 22);
+			return this.maxStypeCount;
 		},
 
 		slotitem_equiptype :function(id){

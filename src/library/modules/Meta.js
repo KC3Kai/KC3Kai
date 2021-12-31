@@ -576,7 +576,7 @@ Provides access to data on built-in JSON files
 		stype :function(id, isAlt, altIdx){
 			// add in-game max index+1 for alternative names, eg: CVE: CVL 7 + 23 mapped to 30
 			// in order to map to 2 or more names, have to manage more index ranges here?
-			var idx = !altIdx ? id + KC3Master.maxStypeCount + 1 : altIdx;
+			var idx = !altIdx ? id + KC3Master.stype_count() + 1 : altIdx;
 			if(isAlt && this._stype[idx]) return this._stype[idx];
 			return this._stype[id] || "??";
 		},
@@ -585,7 +585,7 @@ Provides access to data on built-in JSON files
 			if(!withAltNames){
 				const stypes = {};
 				for(let i in this._stype){
-					if(i > KC3Master.maxStypeCount) break;
+					if(i > KC3Master.stype_count()) break;
 					stypes[i] = this._stype[i];
 				}
 				return stypes;
