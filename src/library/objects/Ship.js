@@ -1597,6 +1597,7 @@ KC3改 Ship Object
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
 		const basicPower = this.shellingFirePower();
+		const basicPowerNight = this.nightBattlePower() - this.tp[0];
 		const resultList = [];
 		// Fill damage lists for each enemy type
 		possibleTypes.forEach(installationType => {
@@ -1621,8 +1622,7 @@ KC3改 Ship Object
 			};
 			obj.dayPower = Math.floor(power);
 			
-			// Power constant +5 included, if assumes night contact is triggered.
-			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPrecapModifiers(basicPowerNight, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.nightPower = Math.floor(power);
@@ -1636,7 +1636,7 @@ KC3改 Ship Object
 			
 			// Get Chuuha night power
 			fixedNightPreConds.push("chuuha");
-			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPrecapModifiers(basicPowerNight, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers.push(Math.floor(power));
