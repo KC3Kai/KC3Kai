@@ -168,7 +168,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.stype = function(){
 		var stype = this.master().api_stype;
 		var useAlt = ConfigManager.info_stype_cve && stype === 7 && this.isEscortLightCarrier();
-		return KC3Meta.stype(stype, useAlt);
+		return KC3Meta.shipTypeNameSp(this.masterId, stype, useAlt);
 	};
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {

@@ -582,7 +582,7 @@ Provides access to data on built-in JSON files
 		
 		shipTypeNameSp :function(mstId, stype, isAlt){
 			// defined by game client (and card/banner images), see `main.js#ShipMstModel.prototype.shipTypeName`
-			// in order to map to 2 or more names, index + doubled 23, unused yet
+			// in order to map to 2 or more names, index + doubled 23 for now
 			const stypeAltNameMap = {
 				"553": 47, // Ise K2: 改装航空戦艦
 				"554": 47, // Hyuuga K2: 改装航空戦艦
