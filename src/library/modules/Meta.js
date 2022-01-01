@@ -575,10 +575,32 @@ Provides access to data on built-in JSON files
 		
 		stype :function(id, isAlt, altIdx){
 			// add in-game max index+1 for alternative names, eg: CVE: CVL 7 + 23 mapped to 30
-			// in order to map to 2 or more names, have to manage more index ranges here?
 			var idx = !altIdx ? id + KC3Master.stype_count() + 1 : altIdx;
 			if(isAlt && this._stype[idx]) return this._stype[idx];
 			return this._stype[id] || "??";
+		},
+		
+		shipTypeNameSp :function(mstId, stype, isAlt){
+			// defined by game client (and card/banner images), see `main.js#ShipMstModel.prototype.shipTypeName`
+			// in order to map to 2 or more names, index + doubled 23, unused yet
+			const stypeAltNameMap = {
+				"553": 47, // Ise K2: 改装航空戦艦
+				"554": 47, // Hyuuga K2: 改装航空戦艦
+				"574": 48, // Gotland: 軽(航空)巡洋艦
+				"630": 48, // Gotland andra: 軽(航空)巡洋艦
+				"597": 49, // Atlanta: 防空巡洋艦
+				"696": 49, // Atlanta K: 防空巡洋艦
+				"622": 50, // Yuubari K2: 兵装実験軽巡
+				"623": 50, // Yuubari K2T: 兵装実験軽巡
+				"624": 50, // Yuubari K2D: 兵装実験軽巡
+				"506": 51, // Mogami K2T: 改装航空巡洋艦
+				"699": 52, // Souya AGS: 特務艦
+				"645": 53, // Souya AGL: 灯台補給船
+				"650": 54, // Souya AGB: 南極観測船
+			};
+			const altIdx = stypeAltNameMap[mstId];
+			if(altIdx) return this.stype(stype, true, altIdx);
+			return this.stype(stype, isAlt);
 		},
 		
 		allStypes :function(withAltNames){
