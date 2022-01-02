@@ -363,6 +363,7 @@ Contains summary information about a fleet and its ships
 		var abCount = 0;
 		var armedCount = 0;
 		var panzerCount = 0;
+		var tokuHoni1Count = 0;
 		// amount of bonus ships 
 		var bonusShipCount = 0;
 		this.ship((shipRid, shipIdx, shipObj) => {
@@ -388,9 +389,8 @@ Contains summary information about a fleet and its ships
 						tokuCount += 1;
 						addImprove(gearObj.stars);
 					break;
-					// [230] toku +11th tank not counted
+					// [230] Toku +11th tank not counted
 					// [355] M4A1 DD not counted
-					// [449] toku +T1 gun tank unknown
 					case 408: // Soukoutei (Armored Boat Class)
 						abCount += 1;
 						addImprove(gearObj.stars);
@@ -403,12 +403,16 @@ Contains summary information about a fleet and its ships
 						panzerCount += 1;
 						addImprove(gearObj.stars);
 					break;
+					case 449: // Toku DLC + Type 1 Gun Tank
+						tokuHoni1Count += 1;
+						// improvement unknown
+					break;
 				}
 			});
 		});
 		// without cap
 		const basicBonus= 0.05 * (normalCount + tokuCount + bonusShipCount)
-						+ 0.02 * (t89Count + abCount + panzerCount)
+						+ 0.02 * (t89Count + abCount + panzerCount + tokuHoni1Count)
 						+ 0.03 * armedCount
 						+ 0.01 * t2Count;
 		// cap at 20%

@@ -7278,11 +7278,11 @@
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut, Conte di Cavour (base remodel)
-						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
+						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511, 877,
-								75, 89, 92, 521, 534, 544,
+								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
 						excludes: [541, 573, 888, 878, 879],
