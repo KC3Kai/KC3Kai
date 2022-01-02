@@ -580,6 +580,7 @@
 				id: ThisShip.rosterId,
 				bid : ThisShip.masterId,
 				stype: MasterShip.api_stype,
+				isCve: ThisShip.isEscortLightCarrier(),
 				ctype: MasterShip.api_ctype,
 				sortno: MasterShip.api_sort_id,
 				name: ThisShip.name(),
@@ -762,8 +763,9 @@
 				});
 				console.assert(
 					thisOption.view.length === 1,
-					"expecting exactly one result of getView on "
-						+ filterName  + "," + optionName );
+					"expecting exactly one result of findView on "
+						+ filterName  + "," + optionName,
+					"but " + thisOption.view.length + " found");
 				newOptions.push( thisOption );
 			});
 
@@ -1243,7 +1245,9 @@
 					if(cShip.fleet > 0) {
 						$(".ship_name", cElm).addClass("ship_onfleet-color" + cShip.fleet);
 					}
-					$(".ship_type", cElm).text( KC3Meta.stype(cShip.stype) );
+					$(".ship_type", cElm).text(
+						KC3Meta.stype(cShip.stype, ConfigManager.info_stype_cve && cShip.isCve)
+					);
 					$(".ship_lv .value", cElm).text(shipLevel)
 						.addClass(cShip.levelClass);
 					$(".ship_lv", cElm).attr("data-level", shipLevel);
