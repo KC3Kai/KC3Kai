@@ -228,6 +228,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "info_stype_cve",
+				"name" : "SettingsAltCveShipType",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "info_force_ship_lang",
 				"name" : "SettingsShipNamesLang",
 				"type" : "radio",

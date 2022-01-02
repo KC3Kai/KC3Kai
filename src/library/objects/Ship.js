@@ -165,7 +165,11 @@ KC3改 Ship Object
 	KC3Ship.prototype.isDummy = function(){ return ! this.exists(); };
 	KC3Ship.prototype.master = function(){ return KC3Master.ship( this.masterId ); };
 	KC3Ship.prototype.name = function(){ return KC3Meta.shipNameById( this.masterId ); };
-	KC3Ship.prototype.stype = function(){ return KC3Meta.stype( this.master().api_stype ); };
+	KC3Ship.prototype.stype = function(){
+		var stype = this.master().api_stype;
+		var useAlt = ConfigManager.info_stype_cve && stype === 7 && this.isEscortLightCarrier();
+		return KC3Meta.shipTypeNameSp(this.masterId, stype, useAlt);
+	};
 	KC3Ship.prototype.equipment = function(slot){
 		switch(typeof slot) {
 			case 'number':
@@ -1593,6 +1597,7 @@ KC3改 Ship Object
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
 		const basicPower = this.shellingFirePower();
+		const basicPowerNight = this.nightBattlePower() - this.tp[0];
 		const resultList = [];
 		// Fill damage lists for each enemy type
 		possibleTypes.forEach(installationType => {
@@ -1617,8 +1622,7 @@ KC3改 Ship Object
 			};
 			obj.dayPower = Math.floor(power);
 			
-			// Power constant +5 included, if assumes night contact is triggered.
-			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPrecapModifiers(basicPowerNight, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.nightPower = Math.floor(power);
@@ -1632,7 +1636,7 @@ KC3改 Ship Object
 			
 			// Get Chuuha night power
 			fixedNightPreConds.push("chuuha");
-			({power} = this.applyPrecapModifiers(basicPower, ...fixedNightPreConds));
+			({power} = this.applyPrecapModifiers(basicPowerNight, ...fixedNightPreConds));
 			({power} = this.applyPowerCap(power, "Night", "Shelling"));
 			({power} = this.applyPostcapModifiers(power, ...fixedNightPostConds));
 			obj.damagedPowers.push(Math.floor(power));
@@ -1653,9 +1657,10 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 9 types of Daihatsu Landing Craft with known bonus:
+		// 9 types of Daihatsu Landing Craft with known bonus, 1 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
+		//  * 449: Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 193: Toku Daihatsu Landing Craft
@@ -2205,16 +2210,15 @@ KC3改 Ship Object
 				};
 				// actual modifier affected by (internal) proficiency and bonus under verification,
 				// https://docs.google.com/spreadsheets/d/1DCSQpzGeStmkkDpHAfEfUHdsUlULmg2IGrNLpwFfW34/html
-				// might be an average value from participants internal proficiency experience,
-				// all max 120 exp should be 0.106022, but here we use low exp 100 like regular below, so modifier is still 0.1
+				// might be an average value from participants internal proficiency experience
 				const getAverageProficiencyCriticalModifier = (type2Ids) => {
 					const expBonus = [0, 0, 0, 0, -3, -2, 2, 10, 10.25];
 					let modSum = 0, modCnt = 0;
 					this.equipment().forEach((g, i) => {
 						if(this.slots[i] > 0 && g.exists() && type2Ids.includes(g.master().api_type[2])) {
 							const aceLevel = g.ace || 0;
-							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-							const mod = aceLevel < 4 ? 0 : Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 200;
+							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
+							const mod = aceLevel < 4 ? 0 : Math.floor(Math.sqrt(internalExpHigh) + (expBonus[aceLevel] || 0)) / 200;
 							modSum += mod;
 							modCnt += 1;
 						}
@@ -2232,8 +2236,8 @@ KC3改 Ship Object
 					this.equipment().forEach((g, i) => {
 						if(g.isAirstrikeAircraft()) {
 							const aceLevel = g.ace || 0;
-							const internalExpLow = KC3Meta.airPowerInternalExpBounds(aceLevel)[0];
-							let mod = Math.floor(Math.sqrt(internalExpLow) + (expBonus[aceLevel] || 0)) / 100;
+							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
+							let mod = Math.floor(Math.sqrt(internalExpHigh) + (expBonus[aceLevel] || 0)) / 100;
 							if(i > 0) mod /= 2;
 							proficiencyCriticalModifier += mod;
 						}
@@ -3026,6 +3030,8 @@ KC3改 Ship Object
 		const isLand = targetShipType.isLand;
 		// M4A1 DD
 		if(this.hasEquipment(355) && isLand) return 6;
+		// Toku Daihatsu + T1 Gun Tank
+		if(this.hasEquipment(449) && isLand) return 10;
 		// Soukoutei (Armored Boat Class)
 		if(this.hasEquipment(408) && (isLand || targetShipType.isPtImp)) return 7;
 		// Armed Daihatsu

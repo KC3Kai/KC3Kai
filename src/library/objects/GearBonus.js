@@ -870,6 +870,76 @@
 					},
 				],
 			},
+			// Type 0 Fighter Model 64 (Two-seat w/ KMX)
+			"447": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Taiyou Class
+					"76": [
+						{
+							multiple: { "houg": 1, "tais": 1, "houk": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tais": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tais": 1 },
+						},
+					],
+				},
+				byShip: [
+					// Yawatamaru/Unyou
+					{
+						origins: [522],
+						multiple: { "houg": 1, "tais": 1, "houk": 1 },
+					},
+					// Houshou, Taigei/Ryuuhou
+					{
+						origins: [89, 184],
+						multiple: { "houg": 1, "tais": 2, "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 10,
+						multiple: { "tais": 1 },
+					},
+				],
+			},
 			// Suisei
 			"24": {
 				count: 0,
@@ -7208,11 +7278,11 @@
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut, Conte di Cavour (base remodel)
-						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
+						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511, 877,
-								75, 89, 92, 521, 534, 544,
+								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
 						excludes: [541, 573, 888, 878, 879],

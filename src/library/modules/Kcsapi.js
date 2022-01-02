@@ -2635,9 +2635,21 @@ Previously known as "Reactor"
 					//if(itemId === 11) PlayerManager.consumables.furniture400 -= 10;
 					//if(itemId === 12) PlayerManager.consumables.furniture700 -= 10;
 				break;
-				case 51: // exchange 1 xmas select gift box with 1 Reppuu (guessed)
-				case 52: // exchange 1 xmas select gift box with 1 WG42 (guessed)
-				case 53: // exchange 1 xmas select gift box with 4 screws [0, 0, 0, 4]
+				//case 51: // 2017: exchange 1 xmas select gift box with 1 Reppuu
+				//case 52: // 2017: exchange 1 xmas select gift box with 1 WG42
+				//case 53: // 2017: exchange 1 xmas select gift box with 4 screws [0, 0, 0, 4]
+				//case 51: // 2018: exchange 1 xmas select gift box with 1 T0 Seaplane Reconn 11B
+				//case 52: // 2018: exchange 1 xmas select gift box with 1 T97 Torpedo Bomber 931G
+				//case 53: // 2018: exchange 1 xmas select gift box with 5 screws [0, 0, 0, 5]
+				//case 51: // 2019: exchange 1 xmas select gift box with 1 WG42
+				//case 52: // 2019: exchange 1 xmas select gift box with 1 T0 Seaplane Reconn 11B
+				//case 53: // 2019: exchange 1 xmas select gift box with 6 screws [0, 0, 0, 6]
+				case 51:   // 2020: exchange 1 xmas select gift box with 1 T2 Seaplane Fighter Kai +3
+				case 52:   // 2020: exchange 1 xmas select gift box with 1 Type124 ASDIC +3
+				case 53:   // 2020: exchange 1 xmas select gift box with 7 screws [0, 0, 0, 7]
+				case 2101: // 2021: exchange 1 xmas select gift box with 2 Tenzan Model 12A
+				case 2102: // 2021: exchange 1 xmas select gift box with 1 GFCS Mk.37 +2
+				case 2103: // 2021: exchange 1 xmas select gift box with 8 screws [0, 0, 0, 8]
 					//if(itemId === 80) PlayerManager.consumables.xmasGiftBox -= 1;
 				break;
 				case 61: // exchange 5 rice with 1 origini

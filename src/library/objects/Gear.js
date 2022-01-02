@@ -896,6 +896,7 @@ KC3改 Equipment Object
 		// Re.2001 CB Kai (AA 4 DV 6) is not fighter bomber: https://twitter.com/myteaGuard/status/1330856406363193345
 		// FM-2 (AA 6 DV 2) is not fighter bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
+		// [447] Type 0 Fighter Model 64 (Two-seat w/ KMX) is? (since Abyssal version named)
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
@@ -1025,6 +1026,8 @@ KC3改 Equipment Object
 		$(".name", title).text(nameText);
 		// Some stats only shown at Equipment Library, omitted here.
 		const planeStats = ["or", "kk"];
+		// Some stats not defined in API data, these flags maintained by us manually.
+		const nonMasterFlags = ["rk", "rm", "hk"];
 		$.each([
 			["hp", "taik"],
 			["fp", "houg"],
@@ -1039,6 +1042,7 @@ KC3改 Equipment Object
 			["rn", "leng"],
 			["or", "distance"],
 			["rk", "baku"],
+			["rm", "houm"],
 			["hk", "distance"],
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
@@ -1049,13 +1053,15 @@ KC3改 Equipment Object
 			) && (
 				sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 			) && (
+				sdata[0] !== "rm" || KC3GearManager.highAltitudeInterceptorIds.includes(gearData.api_id)
+			) && (
 				sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
 			)) {
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
 				if(sdata[0] === "rn") {
 					$(".value", statBox).text(KC3Meta.gearRange(gearData["api_" + sdata[1]]));
-				} else if(["rk", "hk"].includes(sdata[0])) {
+				} else if(nonMasterFlags.includes(sdata[0])) {
 					$(".value", statBox).text("");
 				} else {
 					$(".value", statBox).text(gearData["api_" + sdata[1]]);

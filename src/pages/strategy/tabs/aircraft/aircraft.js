@@ -121,8 +121,9 @@
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
-							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) && 1,
-							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) && 1,
+							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) & 1,
+							rm: KC3GearManager.highAltitudeInterceptorIds.includes(ThisItem.masterId) & 1,
+							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) & 1,
 						},
 						instances: []
 					};
@@ -243,6 +244,7 @@
 				this.slotitem_stat(ItemElem, ThisSlotitem, "rn");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "or");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "rk");
+				this.slotitem_stat(ItemElem, ThisSlotitem, "rm");
 				this.slotitem_stat(ItemElem, ThisSlotitem, "hk");
 				
 				ThisSlotitem.instances.forEach(ThisPlane => {
@@ -330,6 +332,8 @@
 		slotitem_stat :function(ItemElem, SlotItem, statName){
 			if(statName === "rk") {
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
+			} else if(statName === "rm") {
+				$(".stats .item_rm", ItemElem).toggle(!!SlotItem.stats.rm);
 			} else if(statName === "hk") {
 				$(".stats .item_hk", ItemElem).toggle(!!SlotItem.stats.hk);
 				if(!!SlotItem.stats.hk) {

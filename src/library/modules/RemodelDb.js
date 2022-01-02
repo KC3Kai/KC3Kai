@@ -86,6 +86,10 @@
                 case 320: // Isokaze
                 case 381: // Shinyou Kai
                     return 40;
+                case 884: // Unyou
+                    return 32;
+                case 382: // Unyou Kai
+                    return 64;
                 case 313: // Tanikaze
                 case 228: // Yukikaze Kai
                     return 50;

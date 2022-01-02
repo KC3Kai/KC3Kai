@@ -764,7 +764,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 					}
 				}
 			});
-			return allMapData[latest.key];
+			return allMapData[latest.key] || {};
 		},
 		
 		load :function(){
