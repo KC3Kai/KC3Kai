@@ -3683,6 +3683,7 @@ KC3改 Ship Object
 		*/
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+		const stype = this.master().api_stype;
 		// Flagship bonus
 		const isFlagship = shipPos === 0;
 		if (isFlagship) { baseValue += 15; }
@@ -3691,8 +3692,9 @@ KC3改 Ship Object
 		if (isChuuhaOrWorse) { baseValue += 18; }
 		// Ship Personnel bonus
 		if (this.hasEquipmentType(2, 39)) { baseValue += 5; }
-		// Torpedo Squadron Skilled Lookouts +9 in total?
-		if (this.hasEquipment(412)) { baseValue += 4; }
+		// Torpedo Squadron Skilled Lookouts +9 in total if equipped by DD/CL/CLT
+		// https://twitter.com/Divinity__123/status/1479343022974324739
+		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { baseValue += 4; }
 		// Searchlight bonus, large SL unknown for now
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
 		if (fleetSearchlight) { baseValue += 7; }
@@ -3824,12 +3826,12 @@ KC3改 Ship Object
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
 			8: 140,
-			9: 124, // or still 122?
+			9: 125, // or still 122?
 			10: 122,
 			// Doubled hits versions
 			11: 115,
 			12: 140,
-			13: 124,
+			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
 			// 300~302 unknown
