@@ -4546,27 +4546,22 @@
 			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
-			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
-			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
 			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
+			// about GS conds and rate, see natsuiro.js comments
 			var estSuccessRate = -1;
-			// can GS if:
-			// - expedition requirements are satisfied
-			// - either drum expedition, or regular expedition with all ships sparkled
-			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (condIsFlagshipLevel) {
-					estSuccessRate = 16 + 15 * sparkledCount
-						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
+				if (condIsFlagshipLevel || condIsDrumExpedition || !condIsUnsparkledShip) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
+					}
+					if (condIsFlagshipLevel) {
+						estSuccessRate += Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10) - 5;
 					}
 				} else {
 					estSuccessRate = 0;

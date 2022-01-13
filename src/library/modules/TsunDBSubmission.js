@@ -1131,11 +1131,13 @@
 					const time = attack.cutin >= 0 ? "day" : "yasen";
 					const submarineCutinIds = [300, 301, 302];
 					const cutin = attack.cutin || attack.ncutin || 0;
-					let cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+					let cutinType = (time === "day")
+						? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 						: ship.estimateNightAttackType(enemy, true);
 					if (submarineCutinIds.includes(cutin)) {
 						const fs = fleet.ship(0);
-						cutinType = time === "day" ? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+						cutinType = (time === "day")
+							? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 							: fs.estimateNightAttackType(enemy, true);
 					}
 					if (cutinType[1] === 0) { break; }

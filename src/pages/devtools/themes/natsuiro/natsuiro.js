@@ -4444,22 +4444,23 @@
 			// - either drum expedition, or regular expedition with all ships sparkled
 			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (condIsFlagshipLevel) {
-					// https://twitter.com/jo_swaf/status/1145297004995596288
-					// https://tonahazana.com/blog-entry-577.html
-					estSuccessRate = 16 + 15 * sparkledCount
-						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
-					// based on the decompiled vita formula,
-					// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+				// based on the decompiled vita formula, see also:
+				// Exec_MissionResult#setResultKind, getCheckRate, getFlagShipLevelCheckValue
+				// https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+				// https://twitter.com/jo_swaf/status/1145297004995596288
+				// https://tonahazana.com/blog-entry-577.html
+				if (condIsFlagshipLevel || condIsDrumExpedition || !condIsUnsparkledShip) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
-				} else {
+					if (condIsFlagshipLevel) {
+						estSuccessRate += Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10) - 5;
+					}
+				} else { // all ships sparkled needed
 					estSuccessRate = 0;
 				}
-			} else {
+			} else { // unsupplied ship found
 				estSuccessRate = 0;
 			}
 

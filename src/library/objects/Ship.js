@@ -3427,18 +3427,21 @@ KC3改 Ship Object
 				// new patterns for Suisei Model 12 (Type 31 Photoelectric Fuze Bombs) since 2019-04-30,
 				// it more likely acts as yet unimplemented Night Dive Bomber type
 				const photoDBomberCnt = this.countNonZeroSlotEquipment(320);
-				// might extract this out for estimating unexpected damage actual pattern modifier
-				const ncvciModifier = (() => {
-					const otherCnt = photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
-					if(nightFighterCnt >= 2 && nightTBomberCnt >= 1) return 1.25;
-					if(nightFighterCnt + nightTBomberCnt + otherCnt === 2) return 1.2;
-					if(nightFighterCnt + nightTBomberCnt + otherCnt >= 3) return 1.18;
-					return 1; // should not reach here
-				})();
-				// first place thank to its highest mod 1.25
+				const nightPlaneCnt = nightFighterCnt + nightTBomberCnt + photoDBomberCnt + iwaiDBomberCnt + swordfishTBomberCnt;
+				// first place thank to its highest priority and power mod 1.25
 				if(nightFighterCnt >= 2 && nightTBomberCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNTB", 1.25));
-				// 3 planes mod 1.18
+				// 2 planes mod 1.2, proc rate might be higher and photo one might roll once more
+				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2));
+				if((nightFighterCnt >= 1 || nightTBomberCnt >= 1) && photoDBomberCnt >= 1)
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
+				// 3 planes mod 1.18, get rid of the mod 1.25 pattern
+				if(nightFighterCnt >= 1 && nightPlaneCnt >= 3
+					&& !(nightFighterCnt === 2 && nightTBomberCnt === 1 && nightPlaneCnt === 3))
+					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNPx3", 1.18));
+				// old codes for all known patterns of 3 planes
+				/*
 				if(nightFighterCnt >= 3)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNFNF", ncvciModifier));
 				if(nightFighterCnt >= 1 && nightTBomberCnt >= 2)
@@ -3467,13 +3470,7 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBFBI", ncvciModifier));
 				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1 && swordfishTBomberCnt >= 1)
 					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDBSF", ncvciModifier));
-				// 2 planes mod 1.2, put here not to mask previous patterns, tho proc rate might be higher
-				if(nightFighterCnt >= 1 && nightTBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNTB", 1.2));
-				if(nightFighterCnt >= 1 && photoDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNFNDB", 1.2));
-				if(nightTBomberCnt >= 1 && photoDBomberCnt >= 1)
-					results.push(KC3Ship.specialAttackTypeNight(6, "CutinNTBNDB", 1.2));
+				*/
 			} else {
 				// special Nelson Touch since 2018-09-15
 				if(this.canDoNelsonTouch()) {
@@ -3803,25 +3800,11 @@ KC3改 Ship Object
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
 			5: 140,
-			6: ({ // CVNCI factors not fully tested yet
+			6: ({ // CVNCI factors https://twitter.com/Divinity__123/status/1481091340876369921
 				"CutinNFNFNTB": 105,  // 3 planes for mod 1.25
-				"CutinNFNTB" : undefined,   // 115?, 2 planes for mod 1.2
-				"CutinNFNDB" : undefined,
-				"CutinNTBNDB": undefined,
-				"CutinNFNFNF"  : undefined, // 125?, 3 planes for mod 1.18
-				"CutinNFNTBNTB": undefined,
-				"CutinNFNFFBI" : undefined,
-				"CutinNFNFSF"  : undefined,
-				"CutinNFFBIFBI": undefined,
-				"CutinNFSFSF"  : undefined,
-				"CutinNFFBISF" : undefined,
-				"CutinNFNTBFBI": undefined,
-				"CutinNFNTBSF" : undefined,
-				"CutinNFNFNDB" : undefined,
-				"CutinNFNDBNDB": undefined,
-				"CutinNFNTBNDB": undefined,
-				"CutinNFNDBFBI": undefined,
-				"CutinNFNDBSF" : undefined,
+				"CutinNFNTB" : 120,   // 2 planes for mod 1.2
+				"CutinNFNDB" : 120,   // 110 or 115?
+				"CutinNPx3"  : 130,   // 125?, 3 planes for mod 1.18
 			   })[cutinSubType],
 			// These DD cutins can be rolled before regular cutin, more chance to be processed
 			7: 115,
