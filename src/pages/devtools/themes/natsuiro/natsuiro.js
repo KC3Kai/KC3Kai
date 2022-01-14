@@ -4536,10 +4536,17 @@
 					} else if (dataResult === true) {
 						// when this condition is met
 						markPassed( jq );
-						// when actual value near requirement
-						if (typeof(postActions) === "boolean" &&
-							postActions && dataActual <= dataReq + 1) {
-							jq.css("color", "lightpink");
+						// stats color hints for combat exped
+						if (typeof(postActions) === "boolean" && postActions) {
+							// when actual stats value near requirement
+							if (dataActual <= dataReq + 1) {
+								jq.css("color", "lightpink");
+							}
+							// when actual stats value greater than req x2.17
+							// https://twitter.com/CC_jabberwock/status/1381532727170637827
+							if (dataActual > dataReq * 2.17) {
+								jq.css("color", "goldenrod");
+							}
 						}
 					}
 					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();
