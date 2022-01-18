@@ -490,7 +490,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.isEscortLightCarrier = function(){
 		if(this.isDummy()) return false;
 		const stype = this.master().api_stype;
-		// Known implementations: Taiyou series, Gambier Bay series, Zuihou K2B
+		// Known implementations: Taiyou-class series, Gambier Bay series, Zuihou K2B
 		const minAsw = (this.master().api_tais || [])[0];
 		return stype === 7 && minAsw > 0;
 	};
@@ -2544,6 +2544,7 @@ KC3改 Ship Object
 		//   https://twitter.com/noobcyan/status/1299886834919510017
 		if(isLightCarrier || isKagaK2Go) {
 			const isTaiyouKaiAfter = RemodelDb.remodelGroup(521).indexOf(this.masterId) > 1
+				|| RemodelDb.remodelGroup(522).indexOf(this.masterId) > 1
 				|| RemodelDb.remodelGroup(534).indexOf(this.masterId) > 0;
 			const hasAswAircraft = this.equipment(true).some(gear => gear.isAswAircraft(false));
 			if( ((isTaiyouKaiAfter || isKagaK2Go) && hasAswAircraft)                  // ship visible asw irrelevant
@@ -4674,7 +4675,7 @@ KC3改 Ship Object
 		const attackTypeNight = shipObj.estimateNightAttackType();
 		const canNightAttack = shipObj.canDoNightAttack();
 		// See functions in previous 2 lines, ships whose night attack is AirAttack,
-		// but power formula seems be shelling: Taiyou Kai Ni, Shinyou Kai Ni
+		// but power formula seems be shelling: Taiyou Kai Ni, Unyou Kai Ni, Shinyou Kai Ni
 		const hasYasenPower = (shipMst.api_houg || [])[0] + (shipMst.api_raig || [])[0] > 0;
 		const hasNightFlag = attackTypeNight[0] === "AirAttack" && attackTypeNight[2] === true;
 		const warfareTypeNight = {
