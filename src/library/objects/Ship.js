@@ -1660,7 +1660,6 @@ KC3改 Ship Object
 		// 9 types of Daihatsu Landing Craft with known bonus, 1 unknown:
 		//  * 167: Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 166: Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
-		//  * 449: Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 68 : Daihatsu Landing Craft
 		//  * 230: Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 193: Toku Daihatsu Landing Craft
@@ -1668,7 +1667,8 @@ KC3改 Ship Object
 		//  * 408: Soukoutei (Armored Boat Class)
 		//  * 409: Armed Daihatsu
 		//  * 436: Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409, 436];
+		//  * 449: Toku Daihatsu Landing Craft + Type 1 Gun Tank
+		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409, 436, 449];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1678,13 +1678,16 @@ KC3改 Ship Object
 		let improvementBonus = 1;
 		let landingGroupStars = 0, tankGroupStars = 0;
 		let landingGroupCount = 0, tankGroupCount = 0;
-		let hasType89LandingForce = false;
+		let hasType89LandingForce = false, hasHoni1 = false;
 		landingCraftCounts.forEach((count, type) => {
 			if(count > 0) {
 				if(type > 0) {
+					// Honi1 is counted as T89 for Supply Depot Princess postcap?
+					if(installationType === 4 && type === 1) count += landingCraftCounts[9];
 					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
 					landingGroupCount += count;
 					if(type === 1) hasType89LandingForce = true;
+					if(type === 9) hasHoni1 = true;
 				} else {
 					// T2 Tank base bonus fixed to 1.0
 					tankGroupCount += count;
@@ -1698,8 +1701,11 @@ KC3改 Ship Object
 						}
 					}
 				});
-				// no bonus except base one on yasen for 408, 409
-				if(type < 6 || type > 7 || !isNight || installationType === 4) {
+				if((installationType !== 4 && type >= 6 && type <= 7 && isNight)
+					|| (installationType === 4 && type === 9 && hasType89LandingForce)) {
+					// no precap bonus except the base one on yasen for 408, 409;
+					// no postcap bonus for Honi1 against SDP if already merged into T89?
+				} else {
 					oneGearBonus *= getModifier(type, "count1");
 					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
 				}
@@ -1707,8 +1713,8 @@ KC3改 Ship Object
 		});
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
 			landingGroupStars / landingGroupCount / 50 + 1,
-			// When T89 Tank equipped, Supply Depot Princess's postcap improvement bonus ^2
-			installationType === 4 && hasType89LandingForce ? 2 : 1
+			// When T89 Tank/Honi1 equipped, Supply Depot Princess's postcap improvement bonus ^2
+			installationType === 4 && (hasType89LandingForce || hasHoni1) ? 2 : 1
 		);
 		if(tankGroupCount > 0) improvementBonus *= tankGroupStars / tankGroupCount / 30 + 1;
 		// Multiply modifiers
@@ -1757,6 +1763,10 @@ KC3改 Ship Object
 		const diveBomberCount = this.countEquipmentType(2, [7, 57]);
 		const shikonCount = this.countEquipment(230);
 		const m4a1ddCount = this.countEquipment(355);
+		const honi1Count = this.countEquipment(449);
+		
+		// Uncertain postcap modifier from Toku Daihatsu Landing Craft + Type 1 Gun Tank
+		const honi1Modifier = honi1Count ? 1.05 : 1;
 		
 		// Following synergy bonuses from Armored Boat and Armed Daihatsu:
 		//   https://twitter.com/yukicacoon/status/1368513654111408137
@@ -1852,22 +1862,25 @@ KC3改 Ship Object
 			}
 		} else { // Post-cap types
 			switch(installationType) {
+				case 1: // Soft-skinned, general type of land installation except SDP case 4
+					return [0,  honi1Modifier, 0, 0, 1];
+				
 				case 2: // Pillbox, Artillery Imp
 					// Dive Bomber, Seaplane Bomber, LBAA, Jet Dive Bomber on airstrike phase
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.55 : 1;
-					return [0, airstrikeBomberBonus, 0, 0, 1];
+					return [0, airstrikeBomberBonus * honi1Modifier, 0, 0, 1];
 				
 				case 3: // Isolated Island Princess
 					airstrikeBomberBonus = warfareType === "Aerial" &&
 						this.hasEquipmentType(2, [7, 11, 47, 57]) ? 1.7 : 1;
-					return [0, airstrikeBomberBonus, 0, 0, 1];
+					return [0, airstrikeBomberBonus * honi1Modifier, 0, 0, 1];
 				
 				case 4: // Supply Depot Princess
 					wg42Bonus = [1, 1.25, 1.25 * 1.3][wg42Count] || 1.625;
 					type4RocketBonus = [1, 1.2, 1.2 * 1.4][type4RocketCount + type4RocketCdCount] || 1.68;
 					mortarBonus = [1, 1.15, 1.15 * 1.2][mortarCount + mortarCdCount] || 1.38;
-					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus, 0, 0, 1];
+					return [0, wg42Bonus * type4RocketBonus * mortarBonus * landingBonus * honi1Modifier, 0, 0, 1];
 			}
 		}
 		return [0, 1, 0, 0, 1];
