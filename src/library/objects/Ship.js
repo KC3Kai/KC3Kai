@@ -1674,6 +1674,7 @@ KC3改 Ship Object
 		const getModifier = (type, modName = "base") => (
 			(landingModifiers[modName] || [])[type] || 1
 		);
+		const forSdpPostcap = installationType === 4;
 		let landingBaseBonus = 1, oneGearBonus = 1, moreGearBonus = 1;
 		let improvementBonus = 1;
 		let landingGroupStars = 0, tankGroupStars = 0;
@@ -1682,14 +1683,16 @@ KC3改 Ship Object
 		landingCraftCounts.forEach((count, type) => {
 			if(count > 0) {
 				if(type > 0) {
-					// Honi1 is counted as T89 for Supply Depot Princess postcap?
-					if(installationType === 4 && type === 1) count += landingCraftCounts[9];
 					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
 					landingGroupCount += count;
 					if(type === 1) hasType89LandingForce = true;
 					if(type === 9) hasHoni1 = true;
+					// Honi1 is counted as T89 for Supply Depot Princess postcap?
+					// must be added after landingGroupCount summed to avoid duplicated sum of type9
+					if(forSdpPostcap && type === 1) count += landingCraftCounts[9];
 				} else {
 					// T2 Tank base bonus fixed to 1.0
+					landingBaseBonus = Math.max(landingBaseBonus, 1);
 					tankGroupCount += count;
 				}
 				this.equipment().forEach((g, i) => {
@@ -1701,10 +1704,11 @@ KC3改 Ship Object
 						}
 					}
 				});
-				if((installationType !== 4 && type >= 6 && type <= 7 && isNight)
-					|| (installationType === 4 && type === 9 && hasType89LandingForce)) {
+				if((!forSdpPostcap && type >= 6 && type <= 7 && isNight)
+					|| (forSdpPostcap && type === 9 && hasType89LandingForce)) {
 					// no precap bonus except the base one on yasen for 408, 409;
-					// no postcap bonus for Honi1 against SDP if already merged into T89?
+					// no postcap bonus for Honi1 against SDP if already merged into T89 type1?
+					oneGearBonus *= 1;
 				} else {
 					oneGearBonus *= getModifier(type, "count1");
 					if(count > 1) { moreGearBonus *= getModifier(type, "count2"); }
@@ -1714,7 +1718,7 @@ KC3改 Ship Object
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
 			landingGroupStars / landingGroupCount / 50 + 1,
 			// When T89 Tank/Honi1 equipped, Supply Depot Princess's postcap improvement bonus ^2
-			installationType === 4 && (hasType89LandingForce || hasHoni1) ? 2 : 1
+			forSdpPostcap && (hasType89LandingForce || hasHoni1) ? 2 : 1
 		);
 		if(tankGroupCount > 0) improvementBonus *= tankGroupStars / tankGroupCount / 30 + 1;
 		// Multiply modifiers
