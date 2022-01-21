@@ -832,7 +832,7 @@
 			// if it turns out a no drop happened due to max slots or equipment
 			if(this.shipDrop.ship === -1
 				&& (KC3ShipManager.count() >= KC3ShipManager.max
-				 || KC3GearManager.count() >= KC3GearManager.max - 3)
+				 || KC3GearManager.countNonUseitem() >= KC3GearManager.max - 3)
 			) { return; }
 			this.processDropLoc(this.shipDrop);
 			this.sendData(this.shipDrop, 'drops');

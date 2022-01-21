@@ -122,7 +122,7 @@
 		},
 		processStartNext: function( requestObj ) {
 			this.cleanup();
-			if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.count()) <= 3)
+			if(KC3ShipManager.count() >= KC3ShipManager.max || (KC3GearManager.max - KC3GearManager.countNonUseitem()) <= 3)
 				return;
 			var response = requestObj.response.api_data;
 

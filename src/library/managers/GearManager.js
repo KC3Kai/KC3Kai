@@ -140,6 +140,14 @@ Saves and loads list to and from localStorage
 			));
 		},
 		
+		// Count number of equipment without useitem-like ones, added since 2022-01-21 @ `main.js#SlotitemModelHolder.prototype.num`
+		countNonUseitem :function(){
+			return this.count(gear => (
+				// Repair Personnel, Repair Goddess, Combat Ration, Underway Replenishment, Canned Saury, Special Onigiri
+				![42, 43, 145, 146, 150, 241].includes(gear.masterId)
+			));
+		},
+		
 		// To collect unequipped slotitem ID list,
 		// but correctly should search in `unsetSlotitemByType2` from `api_get_member/unsetslot`.
 		collectEquippedIds :function(lbasIncluded = true){

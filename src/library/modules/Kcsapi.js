@@ -256,6 +256,14 @@ Previously known as "Reactor"
 				}
 			});
 			
+			// Since 2022-01-21, game client no longer count useitem-like things (food, repair, etc) towards total amount of equipment,
+			// game server-side's count is reported by this API for now
+			const countedAmount = KC3GearManager.countNonUseitem(),
+				apiAmount = response.api_data.api_slotitem[0];
+			if(countedAmount !== apiAmount) {
+				console.warn("Mismatched slotitem amount detected, expected:", apiAmount, ", found:", countedAmount);
+			}
+			
 			KC3Network.trigger("HQ");
 			KC3Network.trigger("Consumables");
 			KC3Network.trigger("ShipSlots");
@@ -2702,21 +2710,25 @@ Previously known as "Reactor"
 				case 74: // exchange 1 dinner ticket with 3 mamiya
 					//if(itemId === 89) PlayerManager.consumables.dinnerTicket -= 1;
 				break;
+				// see also `main.js#ConfirmView.prototype.initialize`
 				case 81: // exchange 2 beans with materials [0, 0, 0, 1]
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 2;
 				break;
 				case 82: // exchange 4 beans with a setsubun furniture in 2019
 					// 10 beans with a Action Report in 2020 (once)
 					// 7 beans with a Medal in 2021
+					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022 (once?)
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
 					// 7 beans + 18 devmats with a Type 2 Land-based Reconnaissance Aircraft in 2020
 					// 20 beans + 40 devmats with a Ginga in 2021 (once)
+					// 20 beans with a Blueprint in 2022
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 8; PlayerManager.consumables.devmats -= 10; }
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
-					// exchange 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
+					// 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
+					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022 (once?)
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]
