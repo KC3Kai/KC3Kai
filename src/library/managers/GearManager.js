@@ -59,40 +59,40 @@ Saves and loads list to and from localStorage
 		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types
-		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus, abBonus, armedBonus, panzer2Bonus]
+		// Array format is [t2Bonus, t89Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus, abBonus, armedBonus, panzer2Bonus, tokuHoni1Bonus]
 		// see also: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AllBonusTable
 		// All base modifiers for T2 Tank are fixed to 1.0 since only 1 item of this category implemented
 		// All players have only 1 piece of M4A1 DD/Panzer2 for now, so no info for its count2 modifier
 		landingCraftModifiers: {
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {
-				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4, 1.4, 1.4],
-				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1, 1.5],
-				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0],
+				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4, 1.4, 1.4, 1.4],
+				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1, 1.5, 1.4],
+				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Artillery Imp
 			1: {
-				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.5, 1.0, 1.8, 1.15, 2.0, 1.3, 1.3, 1.5],
-				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.2, 1.2, 1.0],
+				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
+				count1: [2.4,  1.5, 1.0, 1.8, 1.15, 2.0, 1.3, 1.3, 1.5, 1.5],
+				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.2, 1.2, 1.0, 1.0],
 			},
 			// Isolated Island Princess
 			2: {
-				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.2, 1.0, 1.8, 1.15, 1.8, 1.3, 1.3, 1.2],
-				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0],
+				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
+				count1: [2.4,  1.2, 1.0, 1.8, 1.15, 1.8, 1.3, 1.3, 1.2, 2.0],
+				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Supply Depot Princess for post-cap bonus only
 			3: {
-				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
-				count1: [1.7, 1.3, 1.0, 1.0, 1.2, 1.2, 1.5, 1.5, 1.3],
-				count2: [1.5, 1.6, 1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.0],
+				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
+				count1: [1.7, 1.3, 1.0, 1.0, 1.2, 1.2, 1.5, 1.5, 1.3, 1.3],
+				count2: [1.5, 1.6, 1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.0, 1.6],
 			},
 			// Summer Harbor Princess
 			4: {
-				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
-				count1: [2.8, 1.6, 1.0, 1.8, 1.2, 2.0, 1.0, 1.0, 1.6],
-				count2: [1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
+				count1: [2.8, 1.6, 1.0, 1.8, 1.2, 2.0, 1.0, 1.0, 1.6, 1.0],
+				count2: [1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
 			},
 		},
 
@@ -137,6 +137,14 @@ Saves and loads list to and from localStorage
 				gear.masterId == slotitem_id
 					&& (!isUnlock || !gear.lock)
 					&& (!isNoStar || !gear.stars)
+			));
+		},
+		
+		// Count number of equipment without useitem-like ones, added since 2022-01-21 @ `main.js#SlotitemModelHolder.prototype.num`
+		countNonUseitem :function(){
+			return this.count(gear => (
+				// Repair Personnel, Repair Goddess, Combat Ration, Underway Replenishment, Canned Saury, Special Onigiri
+				![42, 43, 145, 146, 150, 241].includes(gear.masterId)
 			));
 		},
 		

@@ -954,7 +954,7 @@ AntiAir: anti-air related calculations
 
 	// UIT-25 / I-504
 	declareAACI(
-		23, 1, 1.05,
+		23, 1, 1.05, // referred from abyssal resist: [1, 1, ?]
 		[uit25Icon, aaGunNotCdIcon],
 		predAnyOf(isUit25, isI504),
 		withEquipmentMsts(
@@ -1068,7 +1068,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		37, 4, 1.45,
+		37, 4, 1.45, // referred from abyssal resist: [2or3, 3or2, ?]
 		[fletcherIcon, haMountIcon, haMountIcon],
 		predAllOf(isFletcherClass),
 		withEquipmentMsts(
@@ -1079,7 +1079,7 @@ AntiAir: anti-air related calculations
 
 	// Atlanta-class
 	declareAACI(
-		38, 10, 1.85,
+		38, 10, 1.85, // referred from abyssal resist 0.6: [5or6, 6or5, ?]
 		[atlantaIcon, haMountKaiRadar, haMountKaiRadar],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(
@@ -1098,7 +1098,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 	declareAACI(
-		40, 10, 1.7,
+		40, 10, 1.7, // referred from pvp resist 0.5: [6or7, 5or4, ?]
 		[atlantaIcon, haMountCdIcon, haMountCdIcon, radarIcon],
 		predAllOf(isAtlantaClass),
 		withEquipmentMsts(

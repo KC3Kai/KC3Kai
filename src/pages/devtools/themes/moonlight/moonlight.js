@@ -1650,14 +1650,15 @@
 
 		GearSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			const gearCount = KC3GearManager.count(),
+			const gearCount = KC3GearManager.countNonUseitem(),
+				allGearCount = KC3GearManager.count(),
 				lockedGearCount = KC3GearManager.count(g => !!g.lock);
 
 			$(".count_gear")
 				.text( gearCount )
 				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
 				.toggleClass("fulled", (KC3GearManager.max - gearCount) <= 3)
-				.attr("title", "\u2764 " + lockedGearCount)
+				.attr("title", "\u03a3 {0}\n\u2764 {1}".format(allGearCount, lockedGearCount))
 				.lazyInitTooltip();
 
 			$(".max_gear").text( "/"+ KC3GearManager.max );
@@ -4546,27 +4547,22 @@
 			var sparkledCount = fleetObj.ship().filter( s => s.morale >= 50 ).length;
 			var fleetShipCount = fleetObj.countShips();
 			var fleetDrumCount = fleetObj.countDrums();
-			// reference: https://wikiwiki.jp/kancolle/%E9%81%A0%E5%BE%81#success
-			// https://kancolle.fandom.com/wiki/Great_Success
 			var gsDrumCount = ExpedRawInfo.kc3_gs_drum_count;
 			var condIsDrumExpedition = !!gsDrumCount;
 			var condIsUnsparkledShip = fleetShipCount > sparkledCount;
 			var condIsOverdrum = fleetDrumCount >= gsDrumCount;
 			var condIsFlagshipLevel = !!ExpedRawInfo.kc3_gs_flagship_level;
 
+			// about GS conds and rate, see natsuiro.js comments
 			var estSuccessRate = -1;
-			// can GS if:
-			// - expedition requirements are satisfied
-			// - either drum expedition, or regular expedition with all ships sparkled
-			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (condIsFlagshipLevel) {
-					estSuccessRate = 16 + 15 * sparkledCount
-						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
+				if (condIsFlagshipLevel || condIsDrumExpedition || !condIsUnsparkledShip) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
+					}
+					if (condIsFlagshipLevel) {
+						estSuccessRate += Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10) - 5;
 					}
 				} else {
 					estSuccessRate = 0;
@@ -4647,10 +4643,16 @@
 					} else if (dataResult === true) {
 						// when this condition is met
 						markPassed( jq );
-						// when actual value near requirement
-						if (typeof(postActions) === "boolean" &&
-							postActions && dataActual <= dataReq + 1) {
-							jq.css("color", "lightpink");
+						// stats color hints for combat exped
+						if (typeof(postActions) === "boolean" && postActions) {
+							// when actual stats value near requirement
+							if (dataActual <= dataReq + 1) {
+								jq.css("color", "lightpink");
+							}
+							// when actual stats value greater than req x2.17
+							if (dataActual > dataReq * 2.17) {
+								jq.css("color", "goldenrod");
+							}
 						}
 					}
 					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();

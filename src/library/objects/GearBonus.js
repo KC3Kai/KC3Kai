@@ -873,11 +873,34 @@
 			// Type 0 Fighter Model 64 (Two-seat w/ KMX)
 			"447": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Taiyou Class
-					"76": {
-						multiple: { "houg": 1, "tais": 1, "houk": 2 },
-					},
+					"76": [
+						{
+							multiple: { "houg": 1, "tais": 1, "houk": 2 },
+						},
+						{
+							minStars: 2,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 4,
+							multiple: { "tyku": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "tais": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "tais": 1 },
+						},
+					],
 				},
 				byShip: [
 					// Yawatamaru/Unyou
@@ -889,6 +912,31 @@
 					{
 						origins: [89, 184],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 2,
+						multiple: { "houg": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 4,
+						multiple: { "tyku": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 6,
+						multiple: { "tais": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 8,
+						multiple: { "houk": 1 },
+					},
+					{
+						origins: [89, 184],
+						minStars: 10,
+						multiple: { "tais": 1 },
 					},
 				],
 			},
@@ -3412,7 +3460,9 @@
 						multiple: { "houg": 1 },
 					},
 					// Ooyodo Class
-					"52": "9",
+					"52": {
+						multiple: { "houg": 2 },
+					},
 				},
 			},
 			// 15.5cm Triple Gun Mount Kai
@@ -3421,7 +3471,7 @@
 				byClass: {
 					// Mogami Class
 					"9": {
-						multiple: { "houg": 1, "tyku": 1 },
+						multiple: { "houg": 2, "tyku": 1 },
 					},
 					// Ooyodo Class
 					"52": "9",
@@ -4149,11 +4199,21 @@
 							countCap: 2,
 						},
 						{
-							// +1 fp if stars +max
 							minStars: 10,
 							remodel: 2,
-							multiple: { "houg": 1 },
-							countCap: 2,
+							single: { "houg": 1, "raig": 1 },
+						},
+						{
+							minStars: 10,
+							remodel: 2,
+							minCount: 2,
+							single: { "houg": 2, "raig": 1 },
+						},
+						{
+							minStars: 10,
+							remodel: 2,
+							minCount: 3,
+							single: { "raig": 3 },
 						},
 					],
 					// Akatsuki Class K2: Akatsuki K2, Hibiki K2 (Bep)
@@ -4163,6 +4223,32 @@
 					// Fubuki Class K2: Fubuki K2, Murakumo K2
 					"12": "1",
 				},
+				byShip: [
+					{
+						// Amagiri K2
+						ids: [903],
+						minCount: 2,
+						single: { "raig": 2 },
+					},
+					{
+						// Amagiri K2
+						ids: [903],
+						minCount: 3,
+						single: { "raig": 2 },
+					},
+					{
+						// Amagiri K2D
+						ids: [908],
+						minCount: 2,
+						single: { "raig": 1 },
+					},
+					{
+						// Amagiri K2D
+						ids: [908],
+						minCount: 3,
+						single: { "raig": 1 },
+					},
+				],
 			},
 			// 61cm Quadruple (Oxygen) Torpedo Mount Late Model
 			"286": {
@@ -5197,6 +5283,11 @@
 						ids: [469],
 						multiple: { "houk": 2 },
 					},
+					{
+						// Amagiri K2/K2D
+						ids: [903, 908],
+						multiple: { "houg": 2 },
+					},
 				],
 			},
 			// 12.7cm Twin Gun Mount Model C Kai Ni
@@ -5585,7 +5676,12 @@
 					{
 						// Shikinami K2
 						ids: [627],
-						multiple: { "houg": 2, "raig": 1},
+						multiple: { "houg": 2, "raig": 1 },
+					},
+					{
+						// Amagiri K2/K2D
+						ids: [903, 908],
+						multiple: { "houg": 3 },
 					},
 				],
 			},
@@ -5967,6 +6063,57 @@
 						// Yahagi Kai Ni B
 						ids: [668],
 						multiple: { "tyku": 3, "houk": 2 },
+					},
+				],
+			},
+			// 2cm Flakvierling 38
+			"84": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// All Italian ship-classes despite of equippable:
+					"58": [
+						{
+							minStars: 4,
+							multiple: { "tyku": 1, "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1 },
+						},
+					],
+					"61": "58",
+					"64": "58",
+					"68": "58",
+					"80": "58",
+					"92": "58",
+					"113": "58",
+					// All German ship-classes despite of equippable:
+					"47": "58",
+					"48": "58",
+					"55": "58",
+					"57": "58",
+					"63": "58",
+				},
+				byShip: [
+					{
+						// All ships can equip this gun stars+4
+						minStars: 4,
+						multiple: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "airRadar" ],
+							distinct: { "tyku": 1 },
+						},
+					},
+					{
+						// All ships can equip this gun stars+7
+						minStars: 7,
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+					{
+						// All ships can equip this gun stars+10
+						minStars: 10,
+						multiple: { "tyku": 1, "houk": 1 },
 					},
 				],
 			},
@@ -7230,11 +7377,11 @@
 					{
 						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut, Conte di Cavour (base remodel)
-						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Shinyou, Gambier Bay
+						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
 						origins: [184, 634, 635, 162, 154, 465, 621, 699,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511, 877,
-								75, 89, 92, 521, 534, 544,
+								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491
 							],
 						excludes: [541, 573, 888, 878, 879],

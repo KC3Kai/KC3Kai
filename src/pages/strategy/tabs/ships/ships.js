@@ -763,8 +763,9 @@
 				});
 				console.assert(
 					thisOption.view.length === 1,
-					"expecting exactly one result of getView on "
-						+ filterName  + "," + optionName );
+					"expecting exactly one result of findView on "
+						+ filterName  + "," + optionName,
+					"but " + thisOption.view.length + " found");
 				newOptions.push( thisOption );
 			});
 

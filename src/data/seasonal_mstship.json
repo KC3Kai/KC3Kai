@@ -4875,5 +4875,85 @@
 		"api_stype": 5,
 		"api_soku": 10,
 		"api_slot_num": 3
+	},
+	"5609": {
+		"api_id": 5609,
+		"api_name": "正月第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5610": {
+		"api_id": 5610,
+		"api_name": "正月迅鯨",
+		"api_yomi": "じんげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5611": {
+		"api_id": 5611,
+		"api_name": "正月宗谷(特務艦)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5612": {
+		"api_id": 5612,
+		"api_name": "正月宗谷(灯台補給船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5613": {
+		"api_id": 5613,
+		"api_name": "正月宗谷(南極観測船)",
+		"api_yomi": "そうや",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5614": {
+		"api_id": 5614,
+		"api_name": "正月伊203",
+		"api_yomi": "い203",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5615": {
+		"api_id": 5615,
+		"api_name": "正月伊47",
+		"api_yomi": "い47",
+		"api_stype": 13,
+		"api_soku": 10,
+		"api_slot_num": 1
+	},
+	"5616": {
+		"api_id": 5616,
+		"api_name": "正月長門",
+		"api_yomi": "ながと",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
+	},
+	"5617": {
+		"api_id": 5617,
+		"api_name": "正月翔鶴",
+		"api_yomi": "しょうかく",
+		"api_stype": 11,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5618": {
+		"api_id": 5618,
+		"api_name": "正月Conte di Cavour",
+		"api_yomi": "カブール",
+		"api_stype": 9,
+		"api_soku": 5,
+		"api_slot_num": 4
 	}
 }
