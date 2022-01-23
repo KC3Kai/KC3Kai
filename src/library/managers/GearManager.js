@@ -67,19 +67,19 @@ Saves and loads list to and from localStorage
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {
 				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4, 1.4, 1.4, 1.4],
-				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1, 1.5, 1.0],
+				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1, 1.5, 1.4],
 				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Artillery Imp
 			1: {
 				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.5, 1.0, 1.8, 1.15, 2.0, 1.3, 1.3, 1.5, 1.0],
+				count1: [2.4,  1.5, 1.0, 1.8, 1.15, 2.0, 1.3, 1.3, 1.5, 1.5],
 				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.2, 1.2, 1.0, 1.0],
 			},
 			// Isolated Island Princess
 			2: {
 				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.2, 1.0, 1.8, 1.15, 1.8, 1.3, 1.3, 1.2, 1.0],
+				count1: [2.4,  1.2, 1.0, 1.8, 1.15, 1.8, 1.3, 1.3, 1.2, 2.0],
 				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Supply Depot Princess for post-cap bonus only
@@ -138,6 +138,14 @@ Saves and loads list to and from localStorage
 					&& (!isUnlock || !gear.lock)
 					&& (!isNoStar || !gear.stars)
 			));
+		},
+		
+		// Count number of equipment without useitem-like ones, added since 2022-01-21 @ `main.js#SlotitemModelHolder.prototype.num`
+		countNonUseitem :function(){
+			return this.count(gear => (
+				// Repair Personnel, Repair Goddess, Combat Ration, Underway Replenishment, Canned Saury, Special Onigiri
+				![42, 43, 145, 146, 150, 241].includes(gear.masterId)
+			)) + this.pendingGearNum;
 		},
 		
 		// To collect unequipped slotitem ID list,

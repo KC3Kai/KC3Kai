@@ -1573,14 +1573,15 @@
 
 		GearSlots: function(data){
 			$(".activity_basic .consumables").hideChildrenTooltips();
-			const gearCount = KC3GearManager.count(),
+			const gearCount = KC3GearManager.countNonUseitem(),
+				allGearCount = KC3GearManager.count(),
 				lockedGearCount = KC3GearManager.count(g => !!g.lock);
 
 			$(".count_gear")
 				.text( gearCount )
 				.toggleClass("danger", (KC3GearManager.max - gearCount) < 20)
 				.toggleClass("fulled", (KC3GearManager.max - gearCount) <= 3)
-				.attr("title", "\u2764 " + lockedGearCount)
+				.attr("title", "\u03a3 {0}\n\u2764 {1}".format(allGearCount, lockedGearCount))
 				.lazyInitTooltip();
 
 			$(".max_gear").text( "/"+ KC3GearManager.max );
@@ -4444,22 +4445,23 @@
 			// - either drum expedition, or regular expedition with all ships sparkled
 			// - or new added flagship level expeditions such as: A2, 41
 			if (condCheckWithoutResupply) {
-				if (condIsFlagshipLevel) {
-					// https://twitter.com/jo_swaf/status/1145297004995596288
-					// https://tonahazana.com/blog-entry-577.html
-					estSuccessRate = 16 + 15 * sparkledCount
-						+ Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10);
-				} else if (!condIsUnsparkledShip || condIsDrumExpedition) {
-					// based on the decompiled vita formula,
-					// see https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+				// based on the decompiled vita formula, see also:
+				// Exec_MissionResult#setResultKind, getCheckRate, getFlagShipLevelCheckValue
+				// https://github.com/KC3Kai/KC3Kai/issues/1951#issuecomment-292883907
+				// https://twitter.com/jo_swaf/status/1145297004995596288
+				// https://tonahazana.com/blog-entry-577.html
+				if (condIsFlagshipLevel || condIsDrumExpedition || !condIsUnsparkledShip) {
 					estSuccessRate = 21 + 15 * sparkledCount;
 					if (condIsDrumExpedition) {
 						estSuccessRate += condIsOverdrum ? 20 : -15;
 					}
-				} else {
+					if (condIsFlagshipLevel) {
+						estSuccessRate += Math.floor(Math.sqrt(shipFlagshipLevel) + shipFlagshipLevel / 10) - 5;
+					}
+				} else { // all ships sparkled needed
 					estSuccessRate = 0;
 				}
-			} else {
+			} else { // unsupplied ship found
 				estSuccessRate = 0;
 			}
 
@@ -4535,10 +4537,17 @@
 					} else if (dataResult === true) {
 						// when this condition is met
 						markPassed( jq );
-						// when actual value near requirement
-						if (typeof(postActions) === "boolean" &&
-							postActions && dataActual <= dataReq + 1) {
-							jq.css("color", "lightpink");
+						// stats color hints for combat exped
+						if (typeof(postActions) === "boolean" && postActions) {
+							// when actual stats value near requirement
+							if (dataActual <= dataReq + 1) {
+								jq.css("color", "lightpink");
+							}
+							// when actual stats value greater than req x2.17
+							// https://twitter.com/CC_jabberwock/status/1381532727170637827
+							if (dataActual > dataReq * 2.17) {
+								jq.css("color", "goldenrod");
+							}
 						}
 					}
 					jq.text(dataReq).attr("title", dataActual).lazyInitTooltip();

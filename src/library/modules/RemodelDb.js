@@ -102,6 +102,8 @@
                 case 301: // Akigumo
                 case 345: // Takanami
                 case 362: // Oyashio
+                case 390: // Amagiri Kai
+                case 903: // Amagiri K2
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
@@ -110,6 +112,7 @@
                     return 10;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
+                case 908: // Amagiri K2D
                     return 5;
                 case 359: // Okinami
                 case 562: // Johnston
@@ -216,6 +219,9 @@
                 case 520: // Janus
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
+                case 390: // Amagiri Kai
+                case 903: // Amagiri K2
+                case 908: // Amagiri K2D
                     return 10;
                 case 692: // Fletcher Kai
                 case 628: // Fletcher Kai Mod.2
