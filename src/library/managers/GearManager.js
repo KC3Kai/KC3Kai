@@ -145,7 +145,7 @@ Saves and loads list to and from localStorage
 			return this.count(gear => (
 				// Repair Personnel, Repair Goddess, Combat Ration, Underway Replenishment, Canned Saury, Special Onigiri
 				![42, 43, 145, 146, 150, 241].includes(gear.masterId)
-			));
+			)) + this.pendingGearNum;
 		},
 		
 		// To collect unequipped slotitem ID list,
