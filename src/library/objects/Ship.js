@@ -4001,6 +4001,32 @@ KC3改 Ship Object
 		};
 	};
 
+	KC3Ship.prototype.antiSubWarfareAccuracy = function(formationModifier = 1, isPvP = false) {
+		if(this.isDummy()) { return {}; }
+		const byLevel = 2 * Math.sqrt(this.level);
+		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
+		// only counted from small sonar's asw, acc not used
+		const byEquip = 2 * this.equipmentTotalStats("tais", true, true, false, [14]);
+		const byImprove = this.equipment(true)
+			.map(g => g.accStatImprovementBonus("asw"))
+			.sumValues();
+		const battleConds = this.collectBattleConditions();
+		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
+		const pvpModifier = isPvP ? 1.5 : 1;
+		const byFleetType = 80;
+		const basic = byFleetType + byLevel + byLuck + byEquip + byImprove;
+		const accuracy = Math.floor(basic * formationModifier * moraleModifier * pvpModifier);
+		return {
+			accuracy,
+			basicAccuracy: basic,
+			equipmentStats: byEquip,
+			equipImprovement: byImprove,
+			moraleModifier,
+			formationModifier,
+			pvpModifier
+		};
+	};
+
 	/**
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#hitterm1
 	 * @see http://wikiwiki.jp/kancolle/?%CC%BF%C3%E6%A4%C8%B2%F3%C8%F2%A4%CB%A4%C4%A4%A4%A4%C6#avoidterm1
@@ -4008,7 +4034,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateShellingFormationModifier = function(
 			playerFormationId = ConfigManager.aaFormation,
 			enemyFormationId = 0,
-			type = "accuracy") {
+			type = "accuracy",
+			isAntisubWarfare = false) {
 		let modifier = 1;
 		switch(type) {
 			case "accuracy":
@@ -4029,7 +4056,9 @@ KC3改 Ship Object
 					case 6:{// Vanguard, depends on fleet position
 						const [shipPos, shipCnt] = this.fleetPosition(),
 							isGuardian = shipCnt >= 4 && shipPos >= Math.floor(shipCnt / 2);
-						modifier = isGuardian ? 1.2 : 0.8;
+						modifier = isGuardian ?
+							(isAntisubWarfare ? 1.1 : 1.2) :
+							(isAntisubWarfare ? 1.0 : 0.8);
 						break;
 					}
 				}
@@ -4815,29 +4844,39 @@ KC3改 Ship Object
 				)
 			);
 		}
-		// Only day shelling here, to implement other types of accuracy?
-		const shellingAccuracy = shipObj.shellingAccuracy(
-			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId),
+		// Only day shelling part here
+		const accuracyInfo = shipObj.shellingAccuracy(
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "accuracy", false),
 			true,
 			onFleetNum <= 2 ? battleConds.playerCombinedFleetType : 0,
 			onFleetNum === 1,
 			battleConds.isEnemyCombined,
 			isAirAttackDay
 		);
-		$(".shellingAccuracy", tooltipBox).text(
+		// Append other types of accuracy
+		if(canAsw) {
+			accuracyInfo.asw = shipObj.antiSubWarfareAccuracy(
+				shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "accuracy", true),
+				KC3SortieManager.isPvP()
+			);
+		}
+		$(".shellingAccuracy", tooltipBox).text([
 			KC3Meta.term("ShipAccShelling").format(
-				floorToDecimal(shellingAccuracy.accuracy, 1),
-				signedNumber(shellingAccuracy.equipmentStats),
-				signedNumber(floorToDecimal(shellingAccuracy.equipImprovement, 1)),
-				signedNumber(floorToDecimal(shellingAccuracy.equipGunFit, 1)),
-				optionalModifier(shellingAccuracy.moraleModifier, true),
-				optionalModifier(shellingAccuracy.artillerySpottingModifier),
-				optionalModifier(shellingAccuracy.apShellModifier),
-				(isAirAttackDay ? signedNumber(shellingAccuracy.aircraftProficiencyBonus) : "")
+				floorToDecimal(accuracyInfo.accuracy, 1),
+				signedNumber(accuracyInfo.equipmentStats),
+				signedNumber(floorToDecimal(accuracyInfo.equipImprovement, 1)),
+				signedNumber(floorToDecimal(accuracyInfo.equipGunFit, 1)),
+				optionalModifier(accuracyInfo.moraleModifier, true),
+				optionalModifier(accuracyInfo.artillerySpottingModifier),
+				optionalModifier(accuracyInfo.apShellModifier),
+				(isAirAttackDay ? signedNumber(accuracyInfo.aircraftProficiencyBonus) : "")
+			),
+			!canAsw ? "" : KC3Meta.term("ShipAccAntisub").format(
+				floorToDecimal(accuracyInfo.asw.accuracy, 1)
 			)
-		);
+		].filter(v => !!v).join(" / "));
 		const shellingEvasion = shipObj.shellingEvasion(
-			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion")
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion", false)
 		);
 		$(".shellingEvasion", tooltipBox).text(
 			KC3Meta.term("ShipEvaShelling").format(
