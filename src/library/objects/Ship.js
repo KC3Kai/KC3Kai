@@ -3789,7 +3789,7 @@ KC3改 Ship Object
 			   })[cutinSubType],
 			// 100~103 might use different formula, see #nelsonTouchRate
 			200: 120,
-			201: undefined,
+			201: 130,
 			// 300~302 unknown
 		}[atType];
 		if (!typeFactor) { return false; }
@@ -3929,8 +3929,10 @@ KC3改 Ship Object
 					return ({
 						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
 						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
-						// modifier for 7 (CVCI) still unknown
+						// modifier for 7 (CVCI) unknown, roughly ranged in 1.2~1.3
+						"7": 1.2,
 						// modifiers for [100, 302] (special cutins) still unknown
+						"200": 1.2, "201": 1.2,
 					})[type[1]] || 1;
 				}
 				return 1;
@@ -4078,15 +4080,10 @@ KC3改 Ship Object
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
 						break;
-					case 6:{// Vanguard, depends on fleet position and ship type
-						const [shipPos, shipCnt] = this.fleetPosition(),
-							isGuardian = shipCnt >= 4 && shipPos >= (Math.floor(shipCnt / 2) + 1),
-							isThisDestroyer = this.master().api_stype === 2;
-						modifier = isThisDestroyer ?
-							(isGuardian ? 1.4 : 1.2) :
-							(isGuardian ? 1.2 : 1.05);
+					case 6: // Vanguard, depends on fleet position and ship type
+						// but it seems be postcap bonus of hit rate instead of a multiplier, see #shellingEvasion
+						modifier = 1.0;
 						break;
-					}
 				}
 				break;
 			default:
@@ -4244,10 +4241,14 @@ KC3改 Ship Object
 		const byImprove = this.equipment(true)
 			.map(g => g.evaStatImprovementBonus("fire"))
 			.sumValues();
-		// under verification
-		const stypeBonus = 0;
+		const stype = this.master().api_stype,
+			isThisDestroyer = stype === 2;
+		// Heavy Cruiser class bonus
+		const stypeBonus = [5, 6].includes(stype) ? 5 : 0;
+		// SLO+Radar on destroyers bonus
+		const skilledLookoutBonus = (isThisDestroyer && this.hasEquipmentType(2, 39) && this.hasEquipmentType(2, [12, 13])) ? 10 : 0;
 		const searchlightModifier = this.hasEquipmentType(1, 18) ? 0.2 : 1;
-		const postCapForYasen = Math.floor(postCap + stypeBonus) * searchlightModifier;
+		const postCapForYasen = Math.floor(postCap + stypeBonus + skilledLookoutBonus) * searchlightModifier;
 		const fuelPercent = Math.floor(this.fuel / this.master().api_fuel_max * 100);
 		const fuelPenalty = fuelPercent < 75 ? 75 - fuelPercent : 0;
 		// final hit % = ucap(floor(lcap(attackerAccuracy - defenderEvasion) * defenderMoraleModifier)) + aircraftProficiencyBonus
@@ -4255,8 +4256,20 @@ KC3改 Ship Object
 		// ship morale modifier not applied here since 'evasion' may be looked reduced when sparkle
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7], battleConds.isOnBattle);
-		const evasion = Math.floor(postCap + byImprove - fuelPenalty);
-		const evasionForYasen = Math.floor(postCapForYasen + byImprove - fuelPenalty);
+		const playerFormationId = battleConds.formationId || ConfigManager.aaFormation;
+		// Vanguard formation final hit rate bonus https://wikiwiki.jp/kancolle/%E5%91%BD%E4%B8%AD%E3%81%A8%E5%9B%9E%E9%81%BF%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#vigilance
+		const vanguardBonus = (() => {
+			if(playerFormationId === 6) {
+				const [shipPos, shipCnt] = this.fleetPosition();
+				const bonusByPos = isThisDestroyer ?
+					[7, 7, 20, 20, 35, 40, 40] :
+					[7, 7, 7,  7,  15, 20, 20];
+				return bonusByPos[shipPos] || 0;
+			}
+			return 0;
+		})();
+		const evasion = Math.floor(postCap + byImprove + vanguardBonus - fuelPenalty);
+		const evasionForYasen = Math.floor(postCapForYasen + byImprove + vanguardBonus - fuelPenalty);
 		return {
 			evasion,
 			evasionForYasen,
@@ -4265,6 +4278,7 @@ KC3改 Ship Object
 			postCapForYasen,
 			equipmentStats: byEquip,
 			equipImprovement: byImprove,
+			vanguardBonus,
 			fuelPenalty,
 			moraleModifier,
 			formationModifier
