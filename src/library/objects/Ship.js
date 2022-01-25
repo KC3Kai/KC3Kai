@@ -3789,7 +3789,7 @@ KC3改 Ship Object
 			   })[cutinSubType],
 			// 100~103 might use different formula, see #nelsonTouchRate
 			200: 120,
-			201: undefined,
+			201: 130,
 			// 300~302 unknown
 		}[atType];
 		if (!typeFactor) { return false; }
@@ -3877,6 +3877,7 @@ KC3改 Ship Object
 	 * @param {number} playerCombinedFleetType - 0=single, 1=CTF, 2=STF, 3=TCF.
 	 * @param {boolean} isPlayerMainFleet - if attacker ship is in CF main fleet or escort.
 	 * @param {boolean} isEnemyCombined - if defender side is combined fleet.
+	 * @param {boolean} isAirAttack - if bonus applied from aircraft proficiency.
 	 * @return {Object} accuracy factors of this ship.
 	 * @see http://kancolle.wikia.com/wiki/Combat/Accuracy_and_Evasion
 	 * @see https://en.kancollewiki.net/Accuracy,_Evasion_and_Criticals
@@ -3884,8 +3885,10 @@ KC3改 Ship Object
 	 * @see https://twitter.com/Nishisonic/status/890202416112480256
 	 */
 	KC3Ship.prototype.shellingAccuracy = function(formationModifier = 1, applySpAttackModifiers = true,
-		playerCombinedFleetType = 0, isPlayerMainFleet = true, isEnemyCombined = false) {
+		playerCombinedFleetType = 0, isPlayerMainFleet = true, isEnemyCombined = false,
+		isAirAttack = false) {
 		if(this.isDummy()) { return {}; }
+		
 		const byLevel = 2 * Math.sqrt(this.level);
 		// formula from PSVita is sqrt(1.5 * lk) anyway,
 		// but verifications have proved this one gets more accurate
@@ -3898,6 +3901,7 @@ KC3改 Ship Object
 		const byGunfit = this.shellingGunFitAccuracy();
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
+		
 		// Base accuracy value by fleet types of player & enemy
 		// https://docs.google.com/spreadsheets/d/1sABE9Cc-QXTWaiqIdpYt19dFTWKUi0SDAtaWSWyyAXg/htmlview
 		const byFleetType = (({
@@ -3911,8 +3915,12 @@ KC3改 Ship Object
 		})[playerCombinedFleetType > 0 ? [playerCombinedFleetType, (isPlayerMainFleet ? "M" : "E")].join("") : 0] || [])
 			[isEnemyCombined & 1] || 90;
 		const combinedFleetPenalty = 90 - byFleetType;
-		const basic = byFleetType + byLevel + byLuck + byEquip + byImprove;
+		// penalty for stype: DE, https://twitter.com/Xe_UCH/status/1452576231115743232
+		const byStype = [1].includes(this.master().api_stype) ? -13 : 0;
+		
+		const basic = byFleetType + byStype + byLevel + byLuck + byEquip + byImprove;
 		const beforeSpModifier = basic * formationModifier * moraleModifier + byGunfit;
+		
 		let artillerySpottingModifier = 1;
 		// there is trigger chance rate for Artillery Spotting itself, see #artillerySpottingRate
 		if(applySpAttackModifiers) {
@@ -3921,14 +3929,49 @@ KC3改 Ship Object
 					return ({
 						// IDs from `api_hougeki.api_at_type`, see #specialAttackTypeDay
 						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
-						// modifier for 7 (CVCI) still unknown
+						// modifier for 7 (CVCI) unknown, roughly ranged in 1.2~1.3
+						"7": 1.2,
 						// modifiers for [100, 302] (special cutins) still unknown
+						"200": 1.2, "201": 1.2,
 					})[type[1]] || 1;
 				}
 				return 1;
 			})(this.estimateDayAttackType(undefined, true, battleConds.airBattleId));
 		}
-		// TODO accuracy bonus from aircraft proficiency
+		
+		// Accuracy postcap (96) bonus from aircraft proficiency (also used by critical rate), from Vita `BattleLogicBase,cs#setCliticalAlv`
+		// see also: https://wikiwiki.jp/kancolle/%E5%91%BD%E4%B8%AD%E3%81%A8%E5%9B%9E%E9%81%BF%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#airSkill
+		const aircraftProficiencyBonus = (() => {
+			if(isAirAttack) {
+				const getAverageProficiencyAccuracyBonus = (allowedSlotType) => {
+					let profBonus = 0, expSum = 0, expCnt = 0;
+					let criticalBonus = 0;
+					this.equipment().forEach((g, i) => {
+						if(this.slots[i] > 0 && g.exists()
+							&& allowedSlotType.includes(g.master().api_type[2])) {
+							const aceLevel = g.ace || 0;
+							const internalExpHigh = KC3Meta.airPowerInternalExpBounds(aceLevel)[1];
+							expSum += internalExpHigh;
+							expCnt += 1;
+							criticalBonus += (internalExpHigh >= 70 ? 8 : 10) * (i > 0 ? 0.6 : 0.8);
+						}
+					});
+					const avgExp = expCnt > 0 ? Math.floor(expSum / expCnt) : 0;
+					if(avgExp >= 10) profBonus += Math.floor(Math.sqrt(avgExp * 0.1));
+					if(avgExp >= 25) profBonus += 1;
+					if(avgExp >= 40) profBonus += 1;
+					if(avgExp >= 55) profBonus += 1;
+					if(avgExp >= 70) profBonus += 1;
+					if(avgExp >= 80) profBonus += 2;
+					if(avgExp >= 100) profBonus += 3;
+					// critical bonus only used by critical rolling?
+					return [profBonus, Math.floor(criticalBonus)];
+				};
+				return getAverageProficiencyAccuracyBonus([7, 8, 11, 41])[0];
+			}
+			return 0;
+		})();
+		
 		const apShellModifier = (() => {
 			// AP Shell combined with Large cal. main gun only mainly for battleships
 			const hasApShellAndMainGun = this.hasEquipmentType(2, 19) && this.hasEquipmentType(2, 3);
@@ -3942,6 +3985,7 @@ KC3改 Ship Object
 			}
 			return 1;
 		})();
+		
 		const accuracy = Math.floor(beforeSpModifier * artillerySpottingModifier * apShellModifier);
 		return {
 			accuracy,
@@ -3954,7 +3998,34 @@ KC3改 Ship Object
 			moraleModifier,
 			formationModifier,
 			artillerySpottingModifier,
+			aircraftProficiencyBonus,
 			apShellModifier
+		};
+	};
+
+	KC3Ship.prototype.antiSubWarfareAccuracy = function(formationModifier = 1, isPvP = false) {
+		if(this.isDummy()) { return {}; }
+		const byLevel = 2 * Math.sqrt(this.level);
+		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
+		// only counted from small sonar's asw, acc not used
+		const byEquip = 2 * this.equipmentTotalStats("tais", true, true, false, [14]);
+		const byImprove = this.equipment(true)
+			.map(g => g.accStatImprovementBonus("asw"))
+			.sumValues();
+		const battleConds = this.collectBattleConditions();
+		const moraleModifier = this.moraleEffectLevel([1, 0.5, 0.8, 1, 1.2], battleConds.isOnBattle);
+		const pvpModifier = isPvP ? 1.5 : 1;
+		const byFleetType = 80;
+		const basic = byFleetType + byLevel + byLuck + byEquip + byImprove;
+		const accuracy = Math.floor(basic * formationModifier * moraleModifier * pvpModifier);
+		return {
+			accuracy,
+			basicAccuracy: basic,
+			equipmentStats: byEquip,
+			equipImprovement: byImprove,
+			moraleModifier,
+			formationModifier,
+			pvpModifier
 		};
 	};
 
@@ -3965,7 +4036,8 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateShellingFormationModifier = function(
 			playerFormationId = ConfigManager.aaFormation,
 			enemyFormationId = 0,
-			type = "accuracy") {
+			type = "accuracy",
+			isAntisubWarfare = false) {
 		let modifier = 1;
 		switch(type) {
 			case "accuracy":
@@ -3986,7 +4058,9 @@ KC3改 Ship Object
 					case 6:{// Vanguard, depends on fleet position
 						const [shipPos, shipCnt] = this.fleetPosition(),
 							isGuardian = shipCnt >= 4 && shipPos >= Math.floor(shipCnt / 2);
-						modifier = isGuardian ? 1.2 : 0.8;
+						modifier = isGuardian ?
+							(isAntisubWarfare ? 1.1 : 1.2) :
+							(isAntisubWarfare ? 1.0 : 0.8);
 						break;
 					}
 				}
@@ -4006,15 +4080,10 @@ KC3改 Ship Object
 					case 5: // Line Abreast, enhanced by Echelon / Line Abreast unknown
 						modifier = 1.3;
 						break;
-					case 6:{// Vanguard, depends on fleet position and ship type
-						const [shipPos, shipCnt] = this.fleetPosition(),
-							isGuardian = shipCnt >= 4 && shipPos >= (Math.floor(shipCnt / 2) + 1),
-							isThisDestroyer = this.master().api_stype === 2;
-						modifier = isThisDestroyer ?
-							(isGuardian ? 1.4 : 1.2) :
-							(isGuardian ? 1.2 : 1.05);
+					case 6: // Vanguard, depends on fleet position and ship type
+						// but it seems be postcap bonus of hit rate instead of a multiplier, see #shellingEvasion
+						modifier = 1.0;
 						break;
-					}
 				}
 				break;
 			default:
@@ -4172,10 +4241,14 @@ KC3改 Ship Object
 		const byImprove = this.equipment(true)
 			.map(g => g.evaStatImprovementBonus("fire"))
 			.sumValues();
-		// under verification
-		const stypeBonus = 0;
+		const stype = this.master().api_stype,
+			isThisDestroyer = stype === 2;
+		// Heavy Cruiser class bonus
+		const stypeBonus = [5, 6].includes(stype) ? 5 : 0;
+		// SLO+Radar on destroyers bonus
+		const skilledLookoutBonus = (isThisDestroyer && this.hasEquipmentType(2, 39) && this.hasEquipmentType(2, [12, 13])) ? 10 : 0;
 		const searchlightModifier = this.hasEquipmentType(1, 18) ? 0.2 : 1;
-		const postCapForYasen = Math.floor(postCap + stypeBonus) * searchlightModifier;
+		const postCapForYasen = Math.floor(postCap + stypeBonus + skilledLookoutBonus) * searchlightModifier;
 		const fuelPercent = Math.floor(this.fuel / this.master().api_fuel_max * 100);
 		const fuelPenalty = fuelPercent < 75 ? 75 - fuelPercent : 0;
 		// final hit % = ucap(floor(lcap(attackerAccuracy - defenderEvasion) * defenderMoraleModifier)) + aircraftProficiencyBonus
@@ -4183,8 +4256,20 @@ KC3改 Ship Object
 		// ship morale modifier not applied here since 'evasion' may be looked reduced when sparkle
 		const battleConds = this.collectBattleConditions();
 		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7], battleConds.isOnBattle);
-		const evasion = Math.floor(postCap + byImprove - fuelPenalty);
-		const evasionForYasen = Math.floor(postCapForYasen + byImprove - fuelPenalty);
+		const playerFormationId = battleConds.formationId || ConfigManager.aaFormation;
+		// Vanguard formation final hit rate bonus https://wikiwiki.jp/kancolle/%E5%91%BD%E4%B8%AD%E3%81%A8%E5%9B%9E%E9%81%BF%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#vigilance
+		const vanguardBonus = (() => {
+			if(playerFormationId === 6) {
+				const [shipPos, shipCnt] = this.fleetPosition();
+				const bonusByPos = isThisDestroyer ?
+					[7, 7, 20, 20, 35, 40, 40] :
+					[7, 7, 7,  7,  15, 20, 20];
+				return bonusByPos[shipPos] || 0;
+			}
+			return 0;
+		})();
+		const evasion = Math.floor(postCap + byImprove + vanguardBonus - fuelPenalty);
+		const evasionForYasen = Math.floor(postCapForYasen + byImprove + vanguardBonus - fuelPenalty);
 		return {
 			evasion,
 			evasionForYasen,
@@ -4193,6 +4278,7 @@ KC3改 Ship Object
 			postCapForYasen,
 			equipmentStats: byEquip,
 			equipImprovement: byImprove,
+			vanguardBonus,
 			fuelPenalty,
 			moraleModifier,
 			formationModifier
@@ -4585,6 +4671,7 @@ KC3改 Ship Object
 			"LandingAttack" : "AntiLand",
 			"Rocket"        : "AntiLand"
 			}[attackTypeDay[0]] || "Shelling";
+		const isAirAttackDay = attackTypeDay[0] === "AirAttack";
 		const canAsw = shipObj.canDoASW();
 		if(canAsw){
 			const aswAttackType = shipObj.estimateDayAttackType(1530, false);
@@ -4771,27 +4858,39 @@ KC3改 Ship Object
 				)
 			);
 		}
-		// TODO implement other types of accuracy
-		const shellingAccuracy = shipObj.shellingAccuracy(
-			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId),
+		// Only day shelling part here
+		const accuracyInfo = shipObj.shellingAccuracy(
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "accuracy", false),
 			true,
 			onFleetNum <= 2 ? battleConds.playerCombinedFleetType : 0,
 			onFleetNum === 1,
-			battleConds.isEnemyCombined
+			battleConds.isEnemyCombined,
+			isAirAttackDay
 		);
-		$(".shellingAccuracy", tooltipBox).text(
+		// Append other types of accuracy
+		if(canAsw) {
+			accuracyInfo.asw = shipObj.antiSubWarfareAccuracy(
+				shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "accuracy", true),
+				KC3SortieManager.isPvP()
+			);
+		}
+		$(".shellingAccuracy", tooltipBox).text([
 			KC3Meta.term("ShipAccShelling").format(
-				floorToDecimal(shellingAccuracy.accuracy, 1),
-				signedNumber(shellingAccuracy.equipmentStats),
-				signedNumber(floorToDecimal(shellingAccuracy.equipImprovement, 1)),
-				signedNumber(floorToDecimal(shellingAccuracy.equipGunFit, 1)),
-				optionalModifier(shellingAccuracy.moraleModifier, true),
-				optionalModifier(shellingAccuracy.artillerySpottingModifier),
-				optionalModifier(shellingAccuracy.apShellModifier)
+				floorToDecimal(accuracyInfo.accuracy, 1),
+				signedNumber(accuracyInfo.equipmentStats),
+				signedNumber(floorToDecimal(accuracyInfo.equipImprovement, 1)),
+				signedNumber(floorToDecimal(accuracyInfo.equipGunFit, 1)),
+				optionalModifier(accuracyInfo.moraleModifier, true),
+				optionalModifier(accuracyInfo.artillerySpottingModifier),
+				optionalModifier(accuracyInfo.apShellModifier),
+				(isAirAttackDay ? signedNumber(accuracyInfo.aircraftProficiencyBonus) : "")
+			),
+			!canAsw ? "" : KC3Meta.term("ShipAccAntisub").format(
+				floorToDecimal(accuracyInfo.asw.accuracy, 1)
 			)
-		);
+		].filter(v => !!v).join(" / "));
 		const shellingEvasion = shipObj.shellingEvasion(
-			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion")
+			shipObj.estimateShellingFormationModifier(battleConds.formationId, battleConds.enemyFormationId, "evasion", false)
 		);
 		$(".shellingEvasion", tooltipBox).text(
 			KC3Meta.term("ShipEvaShelling").format(
