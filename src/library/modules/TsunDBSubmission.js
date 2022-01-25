@@ -832,7 +832,7 @@
 			// if it turns out a no drop happened due to max slots or equipment
 			if(this.shipDrop.ship === -1
 				&& (KC3ShipManager.count() >= KC3ShipManager.max
-				 || KC3GearManager.count() >= KC3GearManager.max - 3)
+				 || KC3GearManager.countNonUseitem() >= KC3GearManager.max - 3)
 			) { return; }
 			this.processDropLoc(this.shipDrop);
 			this.sendData(this.shipDrop, 'drops');
@@ -1131,11 +1131,13 @@
 					const time = attack.cutin >= 0 ? "day" : "yasen";
 					const submarineCutinIds = [300, 301, 302];
 					const cutin = attack.cutin || attack.ncutin || 0;
-					let cutinType = time === "day" ? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+					let cutinType = (time === "day")
+						? ship.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 						: ship.estimateNightAttackType(enemy, true);
 					if (submarineCutinIds.includes(cutin)) {
 						const fs = fleet.ship(0);
-						cutinType = time === "day" ? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
+						cutinType = (time === "day")
+							? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 							: fs.estimateNightAttackType(enemy, true);
 					}
 					if (cutinType[1] === 0) { break; }

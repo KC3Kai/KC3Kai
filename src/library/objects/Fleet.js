@@ -406,6 +406,7 @@ Contains summary information about a fleet and its ships
 					case 449: // Toku DLC + Type 1 Gun Tank
 						tokuHoni1Count += 1;
 						// improvement unknown
+						addImprove(gearObj.stars);
 					break;
 				}
 			});
@@ -424,7 +425,7 @@ Contains summary information about a fleet and its ships
 			[0.054, 0.056, 0.058, 0.059][normalCount] || 0.06 :
 			[0.050, 0.050, 0.052, 0.054][normalCount] || 0.054;
 		const tokuBonus = Math.min(tokuCap, 0.02 * tokuCount);
-		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount + panzerCount;
+		const landingCraftCount = normalCount + t89Count + t2Count + tokuCount + abCount + armedCount + panzerCount + tokuHoni1Count;
 		// "Bstar" in the formula
 		const improveBonus = landingCraftCount > 0
 			? 0.01 * improveCount * cappedBasicBonus / landingCraftCount
