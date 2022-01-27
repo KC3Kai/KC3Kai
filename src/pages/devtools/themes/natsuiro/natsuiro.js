@@ -4274,13 +4274,15 @@
 			if (!$("#atab_expeditionPlanner").hasClass("active")) { return false; }
 
 			var expedMaster = KC3Master.mission(selectedExpedition);
+			var expedCombatType = expedMaster.api_damage_type || 0;
 			$( ".module.activity .activity_expeditionPlanner .expres_greatbtn img" )
 				.attr("src", "../../../../assets/img/ui/btn-"+(plannerIsGreatSuccess?"":"x")+"gs.png");
 			$(".module.activity .activity_expeditionPlanner .dropdown_title").text(
 				KC3Meta.term("ExpedNumLabel") + KC3Master.missionDispNo(selectedExpedition)
 				 // Monthly or unknown period
 				+ (expedMaster.api_reset_type == 1 ? " (M)" : expedMaster.api_reset_type > 0 ? "(?)" : "")
-				+ (expedMaster.api_damage_type > 0 ? " (C)" : "") // Combat
+				// Combat Type I or II or unknown
+				+ (expedCombatType > 0 ? " (C{0})".format(expedCombatType) : "")
 				+ (!expedMaster.api_return_flag ? " (S)" : "")    // Support
 			);
 
@@ -4543,9 +4545,9 @@
 							if (dataActual <= dataReq + 1) {
 								jq.css("color", "lightpink");
 							}
-							// when actual stats value greater than req x2.17
+							// when actual stats value greater than req x2.17 for combat type2
 							// https://twitter.com/CC_jabberwock/status/1381532727170637827
-							if (dataActual > dataReq * 2.17) {
+							if (expedCombatType > 1 && dataActual > dataReq * 2.17) {
 								jq.css("color", "goldenrod");
 							}
 						}
