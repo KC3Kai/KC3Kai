@@ -1743,18 +1743,28 @@ KC3改 Ship Object
 	 * @see estimateInstallationEnemyType
 	 * @see calcLandingCraftBonus
 	 * @return {Object} of {
-	 *  	additive general bonus, multiplicative general bonus,
-	 *  	precap stype additive, precap stype multiplicative,
-	 *  	precap sptank additive, precap sptank multiplicative
+	 * 		modifiers: {
+	 * 			general bonus (precap/postcap),
+	 * 			precap stype (dd/cl),
+	 * 			precap special (dd/gun) tanks,
+	 * 			precap daihatsu synergy,
+	 * 		},
+	 * 		additives: {
+	 * 			general bonus (precap/postcap),
+	 * 			precap stype (ss/ssv),
+	 * 			precap special (dd/shikon/gun) tanks,
+	 * 			precap gun tank,
+	* 		}
 	 * }
 	 */
 	KC3Ship.prototype.antiLandWarfarePowerMods = function(targetShipMasterId = 0, precap = true, warfareType = "Shelling", isNight = false){
-		if(this.isDummy()) { return {}; }
+		if(this.isDummy()) { return { modifiers: {}, additives: {} }; }
 		const installationType = this.estimateInstallationEnemyType(targetShipMasterId, precap);
-		if(!installationType) { return {}; }
+		if(!installationType) { return { modifiers: {}, additives: {} }; }
 		let generalAdditive = 0, generalModifier = 1,
 			stypeAdditive = 0, stypeModifier = 1,
-			tankAdditive = 0, tankModifier = 1;
+			spTankAdditive = 0, spTankModifier = 1,
+			gunTankAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
@@ -1765,7 +1775,7 @@ KC3改 Ship Object
 		let diveBomberBonus = 1;
 		let airstrikeBomberBonus = 1;
 		const landingBonus = this.calcLandingCraftBonus(installationType, isNight);
-		const submarineBonus = this.isSubmarine() ? 30 : 0;
+		
 		const wg42Count = this.countEquipment(126);
 		const mortarCount = this.countEquipment(346);
 		const mortarCdCount = this.countEquipment(347);
@@ -1778,39 +1788,9 @@ KC3改 Ship Object
 		const m4a1ddCount = this.countEquipment(355);
 		const honi1Count = this.countEquipment(449);
 		
-		// Following synergy bonuses from Armored Boat and Armed Daihatsu:
-		//   https://twitter.com/yukicacoon/status/1368513654111408137
-		//   https://twitter.com/yukicacoon/status/1383313261089542152
-		const abCount = this.countEquipment(408);
-		const armedCount = this.countEquipment(409);
-		// Normal, T89, Toku, Honi1
-		const dlcGroup1Count = this.countEquipment([68, 166, 193, 449]);
-		// T2 tank, T11 shikon
-		const dlcGroup2Count = this.countEquipment([167, 230]);
-		// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
-		const singleSynergyFlag = abCount === 1 || armedCount === 1;
-		const doubleSynergyFlag = abCount === 1 && armedCount === 1;
-		const dlcGroupLevel1Flag = dlcGroup1Count + dlcGroup2Count >= 1;
-		const dlcGroupLevel2Flag = dlcGroup1Count + dlcGroup2Count >= 2;
-		const singleSynergyModifier = singleSynergyFlag && dlcGroupLevel1Flag ? 1.2 : 1;
-		const doubleSynergyModifier = doubleSynergyFlag && dlcGroupLevel2Flag ? 1.3 :
-			doubleSynergyFlag && dlcGroup2Count >= 1 ? 1.2 :
-			doubleSynergyFlag && dlcGroup1Count >= 1 ? 1.1 : 1;
-		const singleSynergyAdditive = singleSynergyFlag && dlcGroupLevel1Flag ? 10 : 0;
-		const doubleSynergyAdditive = doubleSynergyFlag && dlcGroupLevel2Flag ? 5 :
-			doubleSynergyFlag && dlcGroup2Count >= 1 ? 3 :
-			doubleSynergyFlag && dlcGroup1Count >= 1 ? 2 : 0;
-		
-		// although here using word 'tank', but they are in landing craft cateory, different with T2 tank
-		const specialTankModifier = singleSynergyModifier * doubleSynergyModifier
-			* (m4a1ddCount ? 1.4 : 1)
-			* (honi1Count ? 1.3 : 1);
-		const specialTankAdditive = singleSynergyAdditive + doubleSynergyAdditive
-			+ (25 * m4a1ddCount)
-			+ (42 * honi1Count)
-			+ (shikonCount + honi1Count ? 25 : 0);
-		
 		if(precap) {
+			const submarineBonus = this.isSubmarine() ? 30 : 0;
+			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
 			const wg42Additive = !wg42Count ? 0 : [0, 75, 110, 140, 160][wg42Count] || 160;
 			const type4RocketAdditive = !type4RocketCount ? 0 : [0, 55, 115, 160, 190][type4RocketCount] || 190;
@@ -1819,9 +1799,39 @@ KC3改 Ship Object
 			const mortarCdAdditive = !mortarCdCount ? 0 : [0, 60, 110, 150, 180][mortarCdCount] || 180;
 			const rocketsAdditive = wg42Additive + type4RocketAdditive + type4RocketCdAdditive + mortarAdditive + mortarCdAdditive;
 			
+			// Following synergy bonuses from Armored Boat and Armed Daihatsu:
+			//   https://twitter.com/yukicacoon/status/1368513654111408137
+			//   https://twitter.com/yukicacoon/status/1383313261089542152
+			const abCount = this.countEquipment(408);
+			const armedCount = this.countEquipment(409);
+			// Normal, T89, Toku, Honi1
+			const dlcGroup1Count = this.countEquipment([68, 166, 193, 449]);
+			// T2 tank, T11 shikon
+			const dlcGroup2Count = this.countEquipment([167, 230]);
+			// strange fact: if 2 Armed Daihatsu equipped, multiplicative and additive is 0, suspected to be a bug using `==1`
+			const singleSynergyFlag = abCount === 1 || armedCount === 1;
+			const doubleSynergyFlag = abCount === 1 && armedCount === 1;
+			const dlcGroupLevel1Flag = dlcGroup1Count + dlcGroup2Count >= 1;
+			const dlcGroupLevel2Flag = dlcGroup1Count + dlcGroup2Count >= 2;
+			const singleSynergyModifier = singleSynergyFlag && dlcGroupLevel1Flag ? 1.2 : 1;
+			const doubleSynergyModifier = doubleSynergyFlag && dlcGroupLevel2Flag ? 1.3 :
+				doubleSynergyFlag && dlcGroup2Count >= 1 ? 1.2 :
+				doubleSynergyFlag && dlcGroup1Count >= 1 ? 1.1 : 1;
+			const singleSynergyAdditive = singleSynergyFlag && dlcGroupLevel1Flag ? 10 : 0;
+			const doubleSynergyAdditive = doubleSynergyFlag && dlcGroupLevel2Flag ? 5 :
+				doubleSynergyFlag && dlcGroup2Count >= 1 ? 3 :
+				doubleSynergyFlag && dlcGroup1Count >= 1 ? 2 : 0;
+			const abdSynergyModifier = singleSynergyModifier * doubleSynergyModifier;
+			const abdSynergyAdditive = singleSynergyAdditive + doubleSynergyAdditive;
+			
+			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1
+			// although here using word 'tank', but they are in landing craft cateory unlike T2 tank
+			spTankModifier = (m4a1ddCount ? 1.4 : 1) * (honi1Count ? 1.3 : 1);
+			spTankAdditive = (m4a1ddCount ? 25 : 0) + (shikonCount + honi1Count ? 25 : 0);
+			gunTankAdditive = !honi1Count ? 0 : [0, 42][honi1Count] || 42;
+			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
-					// 2.5x multiplicative for at least one T3
 					t3Bonus = hasT3Shell ? 2.5 : 1;
 					seaplaneBonus = hasSeaplane ? 1.2 : 1;
 					wg42Bonus = [1, 1.3, 1.3 * 1.4][wg42Count] || 1.82;
@@ -1830,12 +1840,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
+					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * seaplaneBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
-					tankAdditive += specialTankAdditive;
-					tankModifier *= specialTankModifier;
+					synergyModifier *= abdSynergyModifier;
 					break;
 				
 				case 2: // Pillbox, Artillery Imp
@@ -1845,20 +1855,19 @@ KC3改 Ship Object
 					diveBomberBonus = [1, 1.5, 1.5 * 2.0][diveBomberCount] || 3;
 					// DD/CL bonus
 					const lightShipBonus = [2, 3].includes(this.master().api_stype) ? 1.4 : 1;
-					// Multiplicative WG42 bonus
 					wg42Bonus = [1, 1.6, 1.6 * 1.7][wg42Count] || 2.72;
 					type4RocketBonus = [1, 1.5, 1.5 * 1.8][type4RocketCount + type4RocketCdCount] || 2.7;
 					mortarBonus = [1, 1.3, 1.3 * 1.5][mortarCount + mortarCdCount] || 1.95;
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
+					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= apShellBonus * seaplaneBonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
 					stypeModifier *= lightShipBonus;
-					tankAdditive += specialTankAdditive;
-					tankModifier *= specialTankModifier;
+					synergyModifier *= abdSynergyModifier;
 					break;
 				
 				case 3: // Isolated Island Princess
@@ -1870,12 +1879,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
+					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
-					tankAdditive += specialTankAdditive;
-					tankModifier *= specialTankModifier;
+					synergyModifier *= abdSynergyModifier;
 					break;
 				
 				case 5: // Summer Harbor Princess
@@ -1889,12 +1898,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
+					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * apShellBonus * seaplaneBonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
-					tankAdditive += specialTankAdditive;
-					tankModifier *= specialTankModifier;
+					synergyModifier *= abdSynergyModifier;
 					break;
 			}
 		} else { // Post-cap types
@@ -1925,12 +1934,18 @@ KC3改 Ship Object
 			}
 		}
 		return {
-			generalAdditive,
-			generalModifier,
-			stypeAdditive,
-			stypeModifier,
-			tankAdditive,
-			tankModifier,
+			modifiers: {
+				generalModifier,
+				stypeModifier,
+				spTankModifier,
+				synergyModifier,
+			},
+			additives: {
+				generalAdditive,
+				stypeAdditive,
+				spTankAdditive,
+				gunTankAdditive,
+			}
 		};
 	};
 
@@ -2131,21 +2146,20 @@ KC3改 Ship Object
 		// Summary in total
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		// Breakdown details
-		const antiLandMods = {
-			generalAdditive: 0, generalModifier: 1,
-			stypeAdditive: 0, stypeModifier: 1,
-			tankAdditive: 0, tankModifier: 1
-		};
+		const antiLandMods = { modifiers: {}, additives: {} };
+		const mulBonus = (name) => (antiLandMods.modifiers[name] || 1);
+		const addBonus = (name) => (antiLandMods.additives[name] || 0);
 		if(targetShipType.isLand) {
 			Object.assign(antiLandMods, this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle));
-			antiLandAdditive = antiLandMods.generalAdditive + antiLandMods.stypeAdditive + antiLandMods.tankAdditive;
-			antiLandModifier = antiLandMods.generalModifier * antiLandMods.stypeModifier * antiLandMods.tankModifier;
+			antiLandModifier = Object.keys(antiLandMods.modifiers).map(k => mulBonus(k)).reduce((v, p) => p * v, 1);
+			antiLandAdditive = Object.keys(antiLandMods.additives).map(k => addBonus(k)).sumValues();
 		}
 		
 		// Apply modifiers, flooring unknown, anti-land modifiers get in first
-		let result = (((basicPower + antiLandMods.stypeAdditive)
-			* antiLandMods.stypeModifier * antiLandMods.generalModifier + antiLandMods.tankAdditive)
-			* antiLandMods.tankModifier + antiLandMods.generalAdditive)
+		let result = ((((basicPower + addBonus("stypeAdditive")) * mulBonus("stypeModifier")
+			* mulBonus("generalModifier") + addBonus("spTankAdditive"))
+			* mulBonus("spTankModifier") + addBonus("gunTankAdditve"))
+			* mulBonus("synergyModifier") + addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers
@@ -2323,8 +2337,8 @@ KC3改 Ship Object
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		if(targetShipType.isLand) {
 			const postcapAntiLandMods = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
-			antiLandAdditive = postcapAntiLandMods.generalAdditive || 0;
-			antiLandModifier = postcapAntiLandMods.generalModifier || 1;
+			antiLandAdditive = postcapAntiLandMods.additives.generalAdditive || 0;
+			antiLandModifier = postcapAntiLandMods.modifiers.generalModifier || 1;
 		} else if(targetShipType.isPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
