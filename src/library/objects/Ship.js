@@ -1784,11 +1784,11 @@ KC3改 Ship Object
 		const hasT3Shell = this.hasEquipmentType(2, 18);
 		const hasSeaplane = this.hasEquipmentType(2, [11, 45]);
 		const diveBomberCount = this.countEquipmentType(2, [7, 57]);
-		const shikonCount = this.countEquipment(230);
-		const m4a1ddCount = this.countEquipment(355);
-		const honi1Count = this.countEquipment(449);
 		
 		if(precap) {
+			const shikonCount = this.countEquipment(230);
+			const m4a1ddCount = this.countEquipment(355);
+			const honi1Count = this.countEquipment(449);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
