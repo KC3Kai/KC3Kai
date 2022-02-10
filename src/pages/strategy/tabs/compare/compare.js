@@ -6,7 +6,6 @@
 	KC3StrategyTabs.compare.definition = {
 		tabSelf: KC3StrategyTabs.compare,
 		
-		server_ip: "",
 		ships: [],
 		suggestWait: false,
 		isSearching: false,
@@ -34,8 +33,6 @@
 		Prepares all data needed
 		---------------------------------*/
 		init :function(){
-			var MyServer = (new KC3Server()).setNum( PlayerManager.hq.server );
-			this.server_ip = MyServer.ip;
 		},
 		
 		/* EXECUTE
@@ -55,7 +52,7 @@
 				if (KC3Master.isNotRegularShip(ShipData.api_id)) return false;
 				box = $(".tab_compare .factory .compare_suggest_item").clone();
 				$(".compare_suggest_icon img", box).attr("src", KC3Meta.shipIcon(ShipData.api_id));
-				$(".compare_suggest_name", box).html(KC3Meta.shipName(ShipData.api_name));
+				$(".compare_suggest_name", box).html(KC3Meta.shipNameById(ShipData.api_id));
 				box.data("id", ShipData.api_id);
 				box.appendTo(".tab_compare .compare_suggest");
 			});
@@ -102,7 +99,7 @@
 		/* ADD A SHIP TO COMPARE LIST
 		---------------------------------*/
 		search :function(searchVal){
-			var self = this;
+			const self = this;
 			
 			if (searchVal === "") {
 				$(".tab_compare .compare_suggest_item").hide();
@@ -137,7 +134,7 @@
 				shipBox = $(".tab_compare .factory .compare_ship").clone();
 				shipBox.attr("id", "mst-"+mstId);
 				$(".compare_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(mstId));
-				$(".compare_ship_name", shipBox).text( KC3Meta.shipName(MasterShip.api_name) );
+				$(".compare_ship_name", shipBox).text( KC3Meta.shipNameById(MasterShip.api_id) );
 				$(".compare_remove", shipBox).data("id", mstId);
 				$(".config_stat img", shipBox).each((_, img) => {
 					$(img).attr("src", KC3Meta.statIcon(self.statList[$(img).parent().data("stat")][0]));
@@ -152,13 +149,13 @@
 				this.switchToStatGraph(seletedStat);
 			}
 		},
-		/* VIEW: SINGLE GRAPHED STAT
+		/* VIEW: FULL STAT
 		---------------------------------*/
 		switchToFullView :function(statIndex){
 			$(".tab_compare .compare_select_back").addClass("active");
 			$(".tab_compare .compare_select_stat").removeClass("active");
 			
-			var self = this;
+			const self = this;
 			var shipBox, MasterShip, myStat, myValue, bottom, range, alpha;
 			var highestStats = self.calculateHighestStats();
 			
@@ -172,11 +169,11 @@
 						bottom = Math.floor(highestStats[stat[0]] * 0.8);
 						myValue = myStat - bottom;
 						if (myValue < 0) myValue = 0;
-						alpha = myValue / (highestStats[stat[0]] - bottom);
+						alpha = (myValue / (highestStats[stat[0]] - bottom)) || 0;
 					} else {
 						myValue = myStat - highestStats[stat[0]][0];
 						range = highestStats[stat[0]][1] - highestStats[stat[0]][0];
-						alpha = 1 - (myValue / range);
+						alpha = 1 - ((myValue / range) || 0);
 					}
 					
 					if (alpha) {
@@ -204,9 +201,9 @@
 			$(".tab_compare .compare_select_stat").removeClass("active");
 			$(".tab_compare .compare_select_stat[data-stat="+statIndex+"]").addClass("active");
 			
-			var self = this;
-			var stat = self.statList[statIndex];
-			var barMaxWidth = 450;
+			const self = this;
+			const stat = self.statList[statIndex];
+			const barMaxWidth = 450;
 			var highestStats = self.calculateHighestStats();
 			var shipBox, MasterShip, percent, myStat;
 			
@@ -216,9 +213,9 @@
 				myStat = self.getStat(MasterShip, stat);
 				
 				if (stat[2] == "asc") {
-					percent = myStat / highestStats[stat[0]];
+					percent = (myStat / highestStats[stat[0]]) || 0;
 				} else {
-					percent = myStat / highestStats[stat[0]][1];
+					percent = (myStat / highestStats[stat[0]][1]) || 0;
 				}
 				
 				$(".compare_ship_bar", shipBox).animate({
@@ -236,7 +233,7 @@
 		/* UTIL: CALCULATE HIGHEST STATS
 		---------------------------------*/
 		calculateHighestStats :function(){
-			var self = this;
+			const self = this;
 			var MasterShip , highestStats = {}, myStat = 0;
 			
 			// Calculate highest stats first
