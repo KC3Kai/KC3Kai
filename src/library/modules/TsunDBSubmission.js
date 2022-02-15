@@ -1239,17 +1239,17 @@
 			// enemyEscortShipsPartial2: HP after closing torpedo
 			// Damecons are ignored here as we are only interested in Abyssal ships
 			const enemyEscortShipsPartial1 =
-				(enemyShips.length == 12) ?
+				(thisNode.battleDay !== undefined && enemyShips.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_opening).fleets.enemyEscort:
 				{};
 			const enemyEscortShipsPartial2 = 
-				(this.data.fleetType == 0 && enemyShips.length == 12) ?
+				(thisNode.battleDay !== undefined && this.data.fleetType == 0 && enemyShips.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF).fleets.enemyEscort:
-				(this.data.fleetType == 1 && enemyShips.length == 12) ?
+				(thisNode.battleDay !== undefined && this.data.fleetType == 1 && enemyShips.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF).fleets.enemyEscort:
-				(this.data.fleetType == 2 && enemyShips.length == 12) ?
+				(thisNode.battleDay !== undefined && this.data.fleetType == 2 && enemyShips.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_CF).fleets.enemyEscort:
-				(this.data.fleetType == 3 && enemyShips.length == 12) ?
+				(thisNode.battleDay !== undefined && this.data.fleetType == 3 && enemyShips.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_TCF_vs_CF).fleets.enemyEscort:
 				{};
 
