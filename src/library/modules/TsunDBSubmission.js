@@ -1350,11 +1350,17 @@
 
 					// New field for the HP values of Abyssal attackers after the opening/closing torpedo phase. The Abyssal attacker must be in CF.
 					// Using defenderHPAfter as the key just so that it is consistent with yasen submissions
+					// Adding field opening for good measure
 					if (time == "torp" && enemyShips.length == 12 && idx >= 6) {
-						if (attack.opening)
+						if (attack.opening) {
 							shipInfo.defenderHPAfter = enemyEscortShipsPartial1[idx-6].hp;
-						else
+							shipInfo.opening = true;
+						}
+							
+						else {
 							shipInfo.defenderHPAfter = enemyEscortShipsPartial2[idx-6].hp;
+							shipInfo.opening = false;
+						}
 					}
 						
 
