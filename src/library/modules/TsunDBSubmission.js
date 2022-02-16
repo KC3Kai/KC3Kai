@@ -1105,7 +1105,7 @@
 			//const phases_CTF_vs_CF2			= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki', 'hougeki3'];
 
 			const phases_STF_vs_all1		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
-			const phases_STF_vs_all2		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2']
+			const phases_STF_vs_all2		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2'];
 
 			// playerShipsPartial1: First shelling for MF
 			// playerShipsPartial2: Second shelling for MF
