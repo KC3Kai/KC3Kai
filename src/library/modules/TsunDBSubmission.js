@@ -1111,21 +1111,21 @@
 			// playerShipsPartial2: Second shelling for MF
 			// playerShipsPartial3: Third shelling for MF (single vs CF only)
 			const playerShipsPartial1 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length <= 6) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length == 12) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyShips.length <= 6) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_single1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyShips.length == 12) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyList.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF1).fleets.playerMain:
 				(thisNode.battleNight == undefined && this.data.fleetType == 2) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all1).fleets.playerMain:
 				{};
 			const playerShipsPartial2 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length <= 6) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single2).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length == 12) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF2).fleets.playerMain:
 				(thisNode.battleNight == undefined && this.data.fleetType == 1) ?
 					result.playerMain || []:
@@ -1133,7 +1133,7 @@
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all2).fleets.playerMain:
 				{};
 			const playerShipsPartial3 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length == 12) ?
+				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
 					result.playerMain || []:
 				{};
 
