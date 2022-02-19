@@ -2717,7 +2717,7 @@ Previously known as "Reactor"
 				case 82: // exchange 4 beans with a setsubun furniture in 2019
 					// 10 beans with a Action Report in 2020 (once)
 					// 7 beans with a Medal in 2021
-					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022 (once?)
+					// 18 beans + 28 devmats with a Type 1 Land-based Attack Aircraft Model 22A in 2022
 					//if(itemId === 90) PlayerManager.consumables.setsubunBeans -= 4;
 				break;
 				case 83: // exchange 8 beans + 10 devmats with a Type 1 Land-based Attack Aircraft in 2019
@@ -2728,7 +2728,7 @@ Previously known as "Reactor"
 				break;
 				case 84: // exchange 20 beans + 40 devmats with a Ginga in 2020 (once)
 					// 29 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2021 (once)
-					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022 (once?)
+					// 27 beans + 55 devmats with a Type 4 Heavy Bomber Hiryuu in 2022
 					//if(itemId === 90) { PlayerManager.consumables.setsubunBeans -= 20; PlayerManager.consumables.devmats -= 40; }
 				break;
 				case 91: // exchange 3 sardine with resources [100, 100, 0, 0]

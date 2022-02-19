@@ -4955,5 +4955,37 @@
 		"api_stype": 9,
 		"api_soku": 5,
 		"api_slot_num": 4
+	},
+	"5619": {
+		"api_id": 5619,
+		"api_name": "節分第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5620": {
+		"api_id": 5620,
+		"api_name": "節分大淀",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 3
+	},
+	"5621": {
+		"api_id": 5621,
+		"api_name": "節分大淀改",
+		"api_yomi": "おおよど",
+		"api_stype": 3,
+		"api_soku": 10,
+		"api_slot_num": 4
+	},
+	"5622": {
+		"api_id": 5622,
+		"api_name": "節分深雪",
+		"api_yomi": "みゆき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

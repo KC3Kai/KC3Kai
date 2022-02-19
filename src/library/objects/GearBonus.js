@@ -6079,7 +6079,7 @@
 						},
 						{
 							minStars: 10,
-							multiple: { "houg": 1 },
+							single: { "houg": 1 },
 						},
 					],
 					"61": "58",
@@ -6102,13 +6102,13 @@
 						multiple: { "tyku": 1, "houk": 1 },
 						synergy: {
 							flags: [ "airRadar" ],
-							distinct: { "tyku": 1 },
+							single: { "tyku": 1 },
 						},
 					},
 					{
 						// All ships can equip this gun stars+7
 						minStars: 7,
-						multiple: { "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 					{
 						// All ships can equip this gun stars+10
