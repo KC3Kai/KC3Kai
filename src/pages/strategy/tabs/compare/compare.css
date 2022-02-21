@@ -6,11 +6,11 @@
 .tab_compare .compare_add {
 	height:24px;
 	line-height:24px;
-	margin:10px 0px 20px 0px;
+	margin:10px 0px 27px 0px;
 	display: none;
 }
 .tab_compare .compare_add_col {
-	height:24px;
+	height:52px;
 	line-height:24px;
 	float:left;
 }
@@ -28,17 +28,17 @@
 	height:24px;
 }
 .tab_compare .compare_suggest {
-	width:450px;
+	width:calc(100% - 224px);
 	overflow:hidden;
 }
 /* Suggest Box */
 .tab_compare .compare_suggest_item {
-	width:110px;
+	width:auto;
 	float:left;
 	margin:0px 2px 0px 0px;
 }
 .tab_compare .compare_suggest_icon {
-	width:24px; height:24px;
+	width:24px; height:26px;
 	float:left;
 	margin:0px 3px 0px 0px;
 }
@@ -49,9 +49,11 @@
 	image-rendering: auto;
 }
 .tab_compare .compare_suggest_name {
-	width:83px;
+	width:122px;
 	float:left;
 	font-size:12px;
+	line-height:26px;
+	white-space:normal;
 }
 
 /* LIST
@@ -63,7 +65,7 @@
 	padding:0px 0px 10px 0px;
 }
 .tab_compare .compare_ship {
-	width:680px;
+	min-width:680px;
 	height:24px;
 	margin:0px 0px 4px 0px;
 }
@@ -84,10 +86,11 @@
 	image-rendering: auto;
 }
 .tab_compare .compare_ship_name {
-	width:120px;
+	width:124px;
 	line-height:24px;
 	font-size:12px;
 	margin:0px 5px 0px 0px;
+	white-space: nowrap;
 	overflow: hidden;
 }
 .tab_compare .compare_ship_stat {

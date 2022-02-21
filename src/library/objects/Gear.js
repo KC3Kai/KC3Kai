@@ -279,12 +279,16 @@ KC3改 Equipment Object
 				break;
 			case "torpedo":
 				// Torpedo or AA Machine Gun
-				if([5, 21, 32].includes(type2))
+				if([5, 21].includes(type2))
 					modifier = 1.2;
+				// Submarine Torpedo
+				// https://twitter.com/CC_jabberwock/status/1492866480102248451
+				if(type2 === 32)
+					return 0.2 * stars;
 				break;
 			case "yasen":
 				// Known standard sqrt(stars), see equiptype for api_type[2]
-				if([1, 2, 3, 5, 19, 22, 24, 29, 32, 34, 36, 37, 38, 39, 42, 46].includes(type2))
+				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 36, 37, 38, 39, 42, 46].includes(type2))
 					modifier = 1;
 				else switch(type2) {
 					case 4: // Secondary guns, same values with day shelling fire
@@ -295,6 +299,10 @@ KC3改 Equipment Object
 							return modifier * stars;
 						}
 						break;
+					case 32: // Submarine Torpedo
+						// Has changed from sqrt(stars) since 2022-01-22?
+						// https://twitter.com/CC_jabberwock/status/1492881101131436034
+						return 0.2 * stars;
 					case 7: // Dive Bomber
 					case 57: // Jet Fighter Bomber
 						// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron) gets power bonus either?
