@@ -1082,61 +1082,60 @@
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const battleConds = KC3Calc.collectBattleConditions();
+			const isYasenNotFound = !thisNode.battleNight;
 
-			// Ship index list
+			// Index list of partner ships for NagaMutsu/Colorado cutins
 			const shipIndexListSpecial = {
 				101: [1],
 				102: [1],
 				103: [1, 2],
 			};
-
 			// Partially analyse day battle to obtain HP of friendly ships after first and second round of main fleet shelling
-			const phases_single_vs_single1	= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
-			const phases_single_vs_single2	= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3'];
+			const phases_single_vs_single1 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
+			const phases_single_vs_single2 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3'];
 			
-			const phases_single_vs_CF1		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
-			const phases_single_vs_CF2		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2'];
-			//const phases_single_vs_CF3		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2', 'hougeki3'];
+			const phases_single_vs_CF1     = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
+			const phases_single_vs_CF2     = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2'];
+			//const phases_single_vs_CF3     = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2', 'hougeki3'];
 			
-			const phases_CTF_vs_single1		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2'];
-			//const phases_CTF_vs_single2		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2', 'hougeki3'];
+			const phases_CTF_vs_single1    = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2'];
+			//const phases_CTF_vs_single2    = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki', 'hougeki2', 'hougeki3'];
 			
-			const phases_CTF_vs_CF1			= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1',];
-			//const phases_CTF_vs_CF2			= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki', 'hougeki3'];
+			const phases_CTF_vs_CF1        = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1',];
+			//const phases_CTF_vs_CF2        = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki', 'hougeki3'];
 
-			const phases_STF_vs_all1		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
-			const phases_STF_vs_all2		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2'];
+			const phases_STF_vs_all1       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
+			const phases_STF_vs_all2       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2'];
 
-			// playerShipsPartial1: First shelling for MF
-			// playerShipsPartial2: Second shelling for MF
-			// playerShipsPartial3: Third shelling for MF (single vs CF only)
+			// playerShipsPartial1: 1st day shelling round for main fleet
+			// playerShipsPartial2: 2nd day shelling round for main fleet
+			// playerShipsPartial3: 3rd day shelling round for main fleet (single vs CF only)
 			const playerShipsPartial1 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length <= 6) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyList.length <= 6) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_single1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyList.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF1).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 2) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all1).fleets.playerMain:
+				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single1).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF1).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 1 && enemyList.length <= 6) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_single1).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 1 && enemyList.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF1).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 2) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all1).fleets.playerMain :
 				{};
 			const playerShipsPartial2 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length <= 6) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single2).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF2).fleets.playerMain:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1) ?
-					result.playerMain || []:
-				(thisNode.battleNight == undefined && this.data.fleetType == 2) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all2).fleets.playerMain:
+				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single2).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF2).fleets.playerMain :
+				(isYasenNotFound && this.data.fleetType == 1) ?
+					result.playerMain || [] :
+				(isYasenNotFound && this.data.fleetType == 2) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all2).fleets.playerMain :
 				{};
 			const playerShipsPartial3 =
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyList.length == 12) ?
-					result.playerMain || []:
+				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
+					result.playerMain || [] :
 				{};
-
 
 			const fillShipInfo = ship => ({
 				id: ship.masterId,
@@ -1211,30 +1210,24 @@
 						this.sortieSpecialAttack = true;
 					}
 					if (specialCutinIds.includes(cutinType[1])) {
+						// Flagship ship Chuuha ignored
 						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
 
-						// Additional HP checks for escort ships for NagaMutsu Touch and Colorado Touch (101, 102, 103). This check is only necessary for day battle
-						// Sorties that consume damecon are removed
+						// Sorties that consume damecon are ignored
 						if (thisNode.dameConConsumed.includes(true)) { continue; }
 
-						let taiha_flag = false;
-						if (thisNode.battleNight == undefined && num == 0 && cutinType[1] in shipIndexListSpecial)
-							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								if (playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25)
-									taiha_flag = true;
-						
-						if (thisNode.battleNight == undefined && num == 1 && cutinType[1] in shipIndexListSpecial)
-							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								if (playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25)
-									taiha_flag = true;
-
-						if (thisNode.battleNight == undefined && num == 2 && cutinType[1] in shipIndexListSpecial)
-							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								if (playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25)
-									taiha_flag = true;
-
-						if (taiha_flag == true) { continue; }
-
+						// Additional HP checks for partner ships for NagaMutsu Touch and Colorado Touch (101, 102, 103)
+						// This check is only necessary for day battle
+						if (isYasenNotFound && cutinType[1] in shipIndexListSpecial) {
+							let isPartnerShipTaiha = false;
+							if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
+								isPartnerShipTaiha |= playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
+							if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
+								isPartnerShipTaiha |= playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
+							if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
+								isPartnerShipTaiha |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
+							if (!!isPartnerShipTaiha) { continue; }
+						}
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					} else if (time === "day"
@@ -1307,30 +1300,31 @@
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = thisNode.flarePos >= 0;
 			const ncontact = thisNode.fcontactId == 102;
+			const isYasenNotFound = !thisNode.battleNight;
 
 			// Obtain the battle status right after the opening/closing torpdo phase if enemy fleet is CF
 			// This information is required for torpedo accuracy tests due to torpedo resolve order in CF combat
-			const phases_opening		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack'];
-			const phases_single_vs_CF	= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki'];
-			const phases_CTF_vs_CF		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki'];
-			const phases_STF_vs_CF		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3', 'raigeki'];
-			const phases_TCF_vs_CF		= ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki'];
+			const phases_opening      = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack'];
+			const phases_single_vs_CF = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'raigeki'];
+			const phases_CTF_vs_CF    = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki'];
+			const phases_STF_vs_CF    = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3', 'raigeki'];
+			const phases_TCF_vs_CF    = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'raigeki'];
+			// Damecons are ignored here as we are only interested in Abyssal ships
 			// enemyEscortShipsPartial1: HP after opening torpedo
 			// enemyEscortShipsPartial2: HP after closing torpedo
-			// Damecons are ignored here as we are only interested in Abyssal ships
 			const enemyEscortShipsPartial1 =
-				(thisNode.battleNight == undefined && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_opening).fleets.enemyEscort:
+				(isYasenNotFound && enemyShips.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_opening).fleets.enemyEscort :
 				{};
 			const enemyEscortShipsPartial2 = 
-				(thisNode.battleNight == undefined && this.data.fleetType == 0 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF).fleets.enemyEscort:
-				(thisNode.battleNight == undefined && this.data.fleetType == 1 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF).fleets.enemyEscort:
-				(thisNode.battleNight == undefined && this.data.fleetType == 2 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_CF).fleets.enemyEscort:
-				(thisNode.battleNight == undefined && this.data.fleetType == 3 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_TCF_vs_CF).fleets.enemyEscort:
+				(isYasenNotFound && this.data.fleetType == 0 && enemyShips.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF).fleets.enemyEscort :
+				(isYasenNotFound && this.data.fleetType == 1 && enemyShips.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF).fleets.enemyEscort :
+				(isYasenNotFound && this.data.fleetType == 2 && enemyShips.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_CF).fleets.enemyEscort :
+				(isYasenNotFound && this.data.fleetType == 3 && enemyShips.length == 12) ?
+					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_TCF_vs_CF).fleets.enemyEscort :
 				{};
 
 			// Player attacks
@@ -1427,24 +1421,21 @@
 					shipInfo.position = [shipPos, fleet.ships.filter(id => id > 0).length, (idx > 5 ? idx - 6 : idx)];
 					shipInfo.isAttacker = false;
 
-
 					// New field for the HP values of Abyssal attackers after the opening/closing torpedo phase. The Abyssal attacker must be in CF.
 					// Using defenderHPAfter as the key just so that it is consistent with yasen submissions
 					// Adding field opening for good measure
 					if (time == "torp" && enemyShips.length == 12 && idx >= 6) {
 						if (attack.opening) {
-							shipInfo.defenderHPAfter = enemyEscortShipsPartial1[idx-6].hp;
+							shipInfo.defenderHPAfter = enemyEscortShipsPartial1[idx - 6].hp;
 							shipInfo.opening = true;
 						}
 							
 						else {
-							shipInfo.defenderHPAfter = enemyEscortShipsPartial2[idx-6].hp;
+							shipInfo.defenderHPAfter = enemyEscortShipsPartial2[idx - 6].hp;
 							shipInfo.opening = false;
 						}
 					}
-						
 
-					
 					if (time == "yasen") {
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
