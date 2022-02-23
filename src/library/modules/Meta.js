@@ -597,6 +597,8 @@ Provides access to data on built-in JSON files
 				"699": 52, // Souya AGS: 特務艦
 				"645": 53, // Souya AGL: 灯台補給船
 				"650": 54, // Souya AGB: 南極観測船
+				"900": 55, // Yamashiomaru: 特設護衛空母
+				"717": 55, // Yamashiomaru K: 特設護衛空母
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
