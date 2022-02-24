@@ -2642,6 +2642,31 @@
 					},
 				],
 			},
+			// Type 3 Command Liaison Aircraft (ASW)
+			"70": {
+				count: 0,
+				byShip: {
+					// Yamashiomaru
+					origins: [900],
+					multiple: { "houg": 1, "tais": 1 },
+				},
+			},
+			// Type 3 Command Liaison Aircraft Kai
+			"451": {
+				count: 0,
+				byShip: [
+					{
+						// Yamashiomaru
+						origins: [900],
+						multiple: { "houg": 1, "tais": 3 },
+					},
+					{
+						// Akitsumaru
+						origins: [161],
+						multiple: { "houg": 1, "tais": 2 },
+					},
+				],
+			},
 			// 35.6cm Twin Gun Mount (Dazzle Camouflage)
 			"104": {
 				count: 0,
@@ -5988,6 +6013,49 @@
 					},
 				],
 			},
+			// Type 13 Air Radar Kai Late Model
+			"450": {
+				count: 0,
+				byClass: {
+					// Matsu Class
+					"101": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
+					},
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "tyku": 1, "houk": 2, "souk": 1 },
+					},
+					// Includes all bonuses from T13 Kai either:
+					{
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
+						ids: [407,   145,        419,             151,       541],
+						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
+					},
+					{
+						// All remodels of: Isokaze, Hamakaze, Asashimo, Kasumi, Yukikaze, Suzutsuki, Yahagi
+						origins: [167, 170, 425, 49, 20, 532, 139],
+						multiple: { "tyku": 2, "houk": 2, "souk": 1 },
+					},
+					{
+						// All remodels of: Hibiki, Ooyodo, Kashima
+						origins: [35, 183, 465],
+						multiple: { "tyku": 1, "houk": 3, "souk": 1 },
+					},
+					{
+						// Yahagi K2+
+						ids: [663, 668],
+						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
+					},
+					{
+						// Yahagi K2B
+						ids: [668],
+						single: { "tyku": 1, "houk": 1 },
+					},
+				],
+			},
 			// 25mm Twin Autocannon Mount
 			"39": {
 				count: 0,
@@ -6671,6 +6739,24 @@
 						single: { "houk": 1, "tais": 1 },
 					},
 				],
+			},
+			// Type 2 12cm Mortar Kai
+			"346": {
+				count: 0,
+				byShip: {
+					// Yamashiomaru
+					origins: [900],
+					single: { "tais": 1, "houk": 1 },
+				},
+			},
+			// Type 2 12cm Mortar Kai (Concentrated Deployment)
+			"347": {
+				count: 0,
+				byShip: {
+					// Yamashiomaru
+					origins: [900],
+					single: { "tais": 2, "houk": 2 },
+				},
 			},
 			// Arctic Camouflage
 			"268": {
@@ -7375,11 +7461,11 @@
 						],
 					},
 					{
-						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS)
+						// Slow Group B: Taigei/Ryuuhou, Jingei, Chougei, Kamoi, Katori, Kashima, Shinshumaru, Souya (AGS), Yamashiomaru?
 						//   All slow BB(V): Fusou, Yamashiro, Ise, Hyuuga, Nagato, Mutsu, Warspite, Nelson, Colorado, Gangut, Conte di Cavour (base remodel)
 						//   Slow CVL: Hiyou, Houshou, Junyou, Taiyou, Unyou?, Shinyou, Gambier Bay
 						//   Slow AV: Akitsushima, Mizuho, Commandant Teste
-						origins: [184, 634, 635, 162, 154, 465, 621, 699,
+						origins: [184, 634, 635, 162, 154, 465, 621, 699, 900,
 								26, 27, 77, 87, 80, 81, 439, 571, 601, 511, 877,
 								75, 89, 92, 521, 522, 534, 544,
 								445, 451, 491

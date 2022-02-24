@@ -20,7 +20,7 @@
 			["ls", "db_los", "asc"],
 			["lk", "luck", "asc"],
 			["ys", "yasen", "asc"],
-			["ac", "db_carry", "asc"],
+			["ac", "carry", "asc"],
 			["sp", "soku", "asc"],
 			["rn", "leng", "asc"],
 			["am", "bull_max", "desc"],
@@ -124,6 +124,9 @@
 		---------------------------------*/
 		refresh :function(){
 			const self = this;
+			const shipClickFunc = function(e) {
+				KC3StrategyTabs.gotoTab("mstship", $(this).attr("alt"));
+			};
 			var shipBox, MasterShip;
 			$(".tab_compare .compare_list").html("");
 			
@@ -133,8 +136,11 @@
 				MasterShip = KC3Master.ship(mstId);
 				shipBox = $(".tab_compare .factory .compare_ship").clone();
 				shipBox.attr("id", "mst-"+mstId);
-				$(".compare_ship_icon img", shipBox).attr("src", KC3Meta.shipIcon(mstId));
-				$(".compare_ship_name", shipBox).text( KC3Meta.shipNameById(MasterShip.api_id) );
+				$(".compare_ship_icon img", shipBox)
+					.attr("src", KC3Meta.shipIcon(mstId))
+					.addClass("hover").attr("alt", mstId)
+					.off("click").on("click", shipClickFunc);
+				$(".compare_ship_name", shipBox).text(KC3Meta.shipNameById(MasterShip.api_id));
 				$(".compare_remove", shipBox).data("id", mstId);
 				$(".config_stat img", shipBox).each((_, img) => {
 					$(img).attr("src", KC3Meta.statIcon(self.statList[$(img).parent().data("stat")][0]));
@@ -274,8 +280,11 @@
 		getStat :function(MasterShip, stat){
 			if(stat[1].startsWith("db_")){
 				var statFromDb = WhoCallsTheFleetDb.getShipStat(MasterShip.api_id);
-				var realName = stat[1].slice(3);
-				return statFromDb[realName] == -1 ? 0 : statFromDb[realName];
+				var realName = stat[1].slice(3) + "_max";
+				return statFromDb[realName] == -1 ? 0 : statFromDb[realName] || 0;
+			} else if(stat[0] == "ac") {
+				var carry = KC3Ship.getCarrySlots(MasterShip.api_id);
+				return carry > 0 ? carry : 0;
 			} else if(stat[0] == "ys") {
 				return MasterShip.api_houg[1] + MasterShip.api_raig[1];
 			} else if(stat[0] == "lk") {

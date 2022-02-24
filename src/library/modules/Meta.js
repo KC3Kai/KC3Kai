@@ -158,7 +158,7 @@ Provides access to data on built-in JSON files
 			587: 298, 588: 266, 589: 310, 590: 309, 591: 284, 592: 332, 593: 314, 594: 594, 595: 595, 596: 340,
 			597: 597, 598: 598, 599: 280, 600: 50,  601: 356, 602: 362, 603: 278, 604: 294, 605: 384, 606: 379,
 			607: 380, 608: 279, 609: 381, 610: 610, 611: 611, 612: 387, 613: 426, 614: 427, 615: 428, 616: 429,
-			617: 581, 618: 582, 619: 583, 620: 620, 621: 620,
+			617: 581, 618: 582, 619: 583, 620: 620, 621: 620, 622: 286,
 		},
 		
 		/* Initialization
@@ -597,6 +597,8 @@ Provides access to data on built-in JSON files
 				"699": 52, // Souya AGS: 特務艦
 				"645": 53, // Souya AGL: 灯台補給船
 				"650": 54, // Souya AGB: 南極観測船
+				"900": 55, // Yamashiomaru: 特設護衛空母
+				"717": 55, // Yamashiomaru K: 特設護衛空母
 			};
 			const altIdx = stypeAltNameMap[mstId];
 			if(altIdx) return this.stype(stype, true, altIdx);
