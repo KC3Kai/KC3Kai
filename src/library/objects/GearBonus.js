@@ -82,6 +82,9 @@
 				type21AirRadarIds: [30, 410],
 				type21AirRadarK2: 0,
 				type21AirRadarK2Ids: [410],
+				type13AirRadarKai: 0,
+				type13AirRadarKaiNonexist: 1,
+				type13AirRadarKaiIds: [106],
 			},
 			// Ryuusei
 			"18": {
@@ -6047,12 +6050,19 @@
 					{
 						// Yahagi K2+
 						ids: [663, 668],
-						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
+						// can't stack when equip both Kai and Late Model
+						synergy: {
+							flags: [ "type13AirRadarKaiNonexist" ],
+							single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
+						}
 					},
 					{
 						// Yahagi K2B
 						ids: [668],
-						single: { "tyku": 1, "houk": 1 },
+						synergy: {
+							flags: [ "type13AirRadarKaiNonexist" ],
+							single: { "tyku": 1, "houk": 1 },
+						}
 					},
 				],
 			},
