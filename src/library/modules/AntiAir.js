@@ -546,6 +546,7 @@ AntiAir: anti-air related calculations
 				// Shelffield not been capable until 2021-2-5 fix
 				// https://twitter.com/KanColle_STAFF/status/1357645300895080449
 				108, // Town Class
+				112, // Illustrious Class
 			].indexOf( mst.api_ctype ) !== -1 ||
 			// Kongou Class Kai Ni, K2C
 			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;
