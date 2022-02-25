@@ -76,6 +76,7 @@
                 case 214: // Tatsuta
                 case 242: // Shiratsuyu
                 case 632: // Ariake
+                case 643: // Ume
                     return 15;
                 case 231: // Akebono
                 case 344: // Asashimo
@@ -109,6 +110,7 @@
                     return 20;
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
+                case 900: // Yamashiomaru
                     return 10;
                 case 555: // Zuihou K2
                 case 560: // Zuihou K2B
@@ -196,8 +198,10 @@
                 case 317: // Urakaze
                 case 320: // Isokaze
                 case 632: // Ariake
+                case 643: // Ume
                     return 10;
                 case 231: // Akebono
+                case 900: // Yamashiomaru
                     return 15;
                 case 313: // Tanikaze
                     return 20;

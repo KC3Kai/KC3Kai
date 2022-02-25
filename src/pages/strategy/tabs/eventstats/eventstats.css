@@ -60,6 +60,7 @@
 .tab_eventstats .memorial .shiplist {
 	display:flex;
 	justify-content:center;
+	flex-wrap:wrap;
 }
 
 .tab_eventstats .memorial .memorial_shipicon {
@@ -70,8 +71,8 @@
 	width:26px;
 	height:26px;
 	float:left;
-	margin:0px 2px;
-	border-radius:13px;
+	margin:2px 3px;
+	border-radius:50%;
 	border:1px solid #000;
 	overflow:hidden;
 	background:#888;
