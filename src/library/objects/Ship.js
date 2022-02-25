@@ -2680,8 +2680,9 @@ KC3改 Ship Object
 		const stype = this.master().api_stype;
 		const isHayasuiKaiWithTorpedoBomber = this.masterId === 352 && this.hasEquipmentType(2, 8);
 		const isKagaK2Go = this.masterId === 646;
-		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go
-		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
+		const isYmashiomaruWithAswAircraft = [900, 717].includes(this.masterId) && this.equipment().find(g => g.isAswAircraft(false));
+		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
+		const isAirAntiSubStype = [6, 7, 10, 16, 17].includes(stype) || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || isYmashiomaruWithAswAircraft;
 		if(isAirAntiSubStype) {
 			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertained conditions (using CVL's currently),
 			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
@@ -2699,7 +2700,8 @@ KC3改 Ship Object
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
 		// DE, DD, CL, CLT, CT, AO(*)
-		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw
+		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
+		//      Yamashiomaru uses depth charge if any ASW stat > 0 gear equppied
 		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
 		// if max ASW stat before marriage (Lv99) not 0, can do ASW,
 		// which also used at `Core.swf/vo.UserShipData.hasTaisenAbility()`
@@ -3352,6 +3354,19 @@ KC3改 Ship Object
 			} else
 			// air attack if torpedo bomber equipped, otherwise fall back to shelling
 			if(this.hasEquipmentType(2, 8))
+				results.push(["AirAttack", 1]);
+			else
+				pushRocketAttackIfNecessary(["SingleAttack", 0]);
+		}
+		// is this ship Yamashiomaru
+		else if([900, 717].includes(this.masterId)) {
+			if(targetShipType.isSubmarine) {
+				// air attack if asw aircraft equipped
+				const aswEquip = this.equipment().find(g => g.isAswAircraft(false));
+				results.push(aswEquip ? ["AirAttack", 1] : ["DepthCharge", 2]);
+			} else
+			// air attack if carrier bomber equipped, otherwise fall back to shelling
+			if(this.hasEquipmentType(2, [7, 8]))
 				results.push(["AirAttack", 1]);
 			else
 				pushRocketAttackIfNecessary(["SingleAttack", 0]);
