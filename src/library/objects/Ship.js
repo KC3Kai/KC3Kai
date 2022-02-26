@@ -885,9 +885,15 @@ KC3改 Ship Object
 									if (equipFlag.endsWith("Nonexist")) {
 										if (!synergyGears[equipFlag]) { break; }
 									} else if (synergyGears[equipFlag] > 0) {
-										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
+										const synergyGearIds = synergyGears[equipFlag + "Ids"] || [];
+										if (synergyGearIds.includes(newGearMstId)) { synergyFlag = true; }
 										synergyFlags.push(equipFlag);
-										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
+										const synergyGearId = masterIdList.find(id => synergyGearIds.includes(id));
+										if (!synergyGearId) {
+											console.warn("No matched gear ID found for synergy flag: " + equipFlag, synergyGearIds, masterIdList);
+										} else {
+											synergyIds.push(synergyGearId);
+										}
 									}
 								}
 							}
@@ -900,7 +906,7 @@ KC3改 Ship Object
 			gear.synergyIds = synergyIds;
 			gear.byType = idx >= Math.floor(masterIdList.length / 2);
 			gear.id = masterIdList[idx];
-			return flag;
+			return !!flag;
 		});
 		if (!bonusGears.length) { return false; }
 
