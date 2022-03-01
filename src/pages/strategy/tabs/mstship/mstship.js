@@ -104,9 +104,8 @@
 				const id = shipData.api_id;
 				shipBox.attr("data-id", id);
 				shipBox.data("bs", shipData.kc3_bship);
-				$("img", shipBox).attr("src", KC3Master.isAbyssalShip(id) ?
-					KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id)
-				);
+				$("img", shipBox).attr("src", KC3Meta.shipIcon(0))
+					.attr("data-src", KC3Master.isAbyssalShip(id) ? KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id));
 				const shipName = KC3Master.isAbyssalShip(id) ?
 					KC3Meta.abyssShipName(id) : KC3Meta.shipName(shipData.api_name);
 				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
@@ -117,6 +116,7 @@
 				}
 			});
 			$(".tab_mstship .shipRecords").createChildrenTooltips();
+			$(".tab_mstship .shipRecords img").unveil(".tab_mstship .shipRecords", 22);
 			
 			// Select ship
 			$(".tab_mstship .shipRecords .shipRecord").on("click", function(){
@@ -296,7 +296,7 @@
 			}
 			
 			// Scroll list top to selected ship
-			setTimeout(function(){self.scrollShipListTop();}, 0);
+			setTimeout(function(){ self.scrollShipListTop(); }, 0);
 		},
 		
 		/* UPDATE: optional
@@ -327,6 +327,7 @@
 				 + shipList.scrollTop()
 				 - shipList.offset().top) : 0;
 			shipList.scrollTop(scrollTop);
+			shipList.trigger("lookup");
 		},
 
 		showShip :function(ship_id, switchDamagedGraph, switchCgView, switchAllGraphs){
