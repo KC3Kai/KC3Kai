@@ -296,7 +296,7 @@
 			}
 			
 			// Scroll list top to selected ship
-			setTimeout(function(){ self.scrollShipListTop(); }, 0);
+			setTimeout(function(){ self.scrollShipListTop(); }, 500);
 		},
 		
 		/* UPDATE: optional
@@ -522,7 +522,7 @@
 					}).catch(err => {
 						$(".tab_mstship .shipInfo .cgswf .cr-image").attr("alt", "ERROR: failed to load image");
 					});
-				}, 0);
+				}, 250);
 			}
 			
 			$(".tab_mstship .shipInfo .salty-zone").text(KC3Meta.term(denyTerm()));
