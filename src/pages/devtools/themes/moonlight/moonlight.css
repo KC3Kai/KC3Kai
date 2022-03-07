@@ -6552,7 +6552,7 @@ ABYSS FLEET
 	text-align:right;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_stype {
-	width:32px;
+	width:37px;
 	height:14px;
 	line-height:14px;
 	padding:0px 0px 0px 2px;
@@ -6561,7 +6561,7 @@ ABYSS FLEET
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_face_tooltip .ship_level {
-	width:45px;
+	width:40px;
 	height:14px;
 	line-height:14px;
 	margin:0px 2px 0px 0px;
