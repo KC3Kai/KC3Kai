@@ -251,10 +251,10 @@
 			cleared: null,
 			fleet: {
 				fleet1: [],
-				fleet2: [],
-				lbas: [],
+				fleet2: null,
+				lbas: null,
 				support: null,
-				fleetType: null
+				fleetType: 0
 			},
 			playerformation: 0,
 			resupplyused: false,
@@ -1119,16 +1119,17 @@
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
 				slots: ship.slots,
-				flee: ship.didFlee
+				flee: ship.didFlee,
+				fuel: ship.fuel,
+				ammo: ship.ammo
 			});
 
 			const formatLandBase = base => ({
 				planes: base.planes.map(slot => slot.mst_id),
-				slots: base.planes.map(slot => slot.api_count),
+				slots: base.planes.map(slot => slot.count),
 				proficiency: base.planes.map(slot => slot.ace),
 				improvements: base.planes.map(slot => slot.stars),
 				morale: base.planes.map(slot => slot.morale),
-				count: base.planes.map(slot => slot.count),
 				strikepoints: base.edges
 			});
 
