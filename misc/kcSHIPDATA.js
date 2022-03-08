@@ -12097,7 +12097,7 @@ var SHIPDATA_ = {
 		EQUIPS: [623, 623, 622, 603],
 	},
 	2077: {
-		name: 'Super Heavy Bombing Airfield Princess 1',
+		name: 'Super Heavy Bomber Airfield Princess 1',
 		nameJP: '超重爆飛行場姫',
 		image: 'S2077.jpg',
 		type: 'Installation',
@@ -12113,11 +12113,11 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 5,
 		SPD: 0,
-		SLOTS: [],
+		SLOTS: [20, 16, 8, 4],
 		EQUIPS: [630, 630, 630, 630],
 	},
 	2078: {
-		name: 'Super Heavy Bombing Airfield Princess 2',
+		name: 'Super Heavy Bomber Airfield Princess 2',
 		nameJP: '超重爆飛行場姫',
 		image: 'S2077.jpg',
 		type: 'Installation',
@@ -12137,7 +12137,7 @@ var SHIPDATA_ = {
 		EQUIPS: [631, 630, 630, 630],
 	},
 	2079: {
-		name: 'Super Heavy Bombing Airfield Princess 3',
+		name: 'Super Heavy Bomber Airfield Princess 3',
 		nameJP: '超重爆飛行場姫',
 		image: 'S2077.jpg',
 		type: 'Installation',
@@ -12157,7 +12157,7 @@ var SHIPDATA_ = {
 		EQUIPS: [631, 631, 630, 630],
 	},
 	2080: {
-		name: 'Entombed Anti-Air Winter Guardian Princess 1',
+		name: 'Entombed Anti-Air Guardian Winter Princess 1',
 		nameJP: '防空埋護冬姫',
 		image: 'S2080.jpg',
 		type: 'BBV',
@@ -12177,7 +12177,7 @@ var SHIPDATA_ = {
 		EQUIPS: [553, 553, 624],
 	},
 	2081: {
-		name: 'Entombed Anti-Air Winter Guardian Princess 2',
+		name: 'Entombed Anti-Air Guardian Winter Princess 2',
 		nameJP: '防空埋護冬姫',
 		image: 'S2080.jpg',
 		type: 'BBV',
@@ -12198,7 +12198,7 @@ var SHIPDATA_ = {
 		EQUIPS: [553, 553, 624, 603],
 	},
 	2082: {
-		name: 'Entombed Anti-Air Winter Guardian Princess - Damaged 1',
+		name: 'Entombed Anti-Air Guardian Winter Princess - Damaged 1',
 		nameJP: '防空埋護冬姫-壊',
 		image: 'S2082.jpg',
 		type: 'BBV',
@@ -12219,7 +12219,7 @@ var SHIPDATA_ = {
 		EQUIPS: [553, 553, 624, 603],
 	},
 	2083: {
-		name: 'Entombed Anti-Air Winter Guardian Princess - Damaged 2',
+		name: 'Entombed Anti-Air Guardian Winter Princess - Damaged 2',
 		nameJP: '防空埋護冬姫-壊',
 		image: 'S2082.jpg',
 		type: 'BBV',

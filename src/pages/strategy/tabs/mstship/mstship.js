@@ -1404,9 +1404,11 @@
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "otorp"){
 								const canOtorp = (
-									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).includes(541)
+									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).some(id => [541, 624].includes(id))
 								) || (
 									[13, 14].includes(abyssMaster.api_stype) && abyssMaster.api_yomi != ""
+								) || (
+									[2085, 2087, 2089].includes(abyssMaster.api_id)
 								);
 								$(".ship_stat_min", statBox).text(canOtorp);
 								$(".ship_stat_max", statBox).hide();
