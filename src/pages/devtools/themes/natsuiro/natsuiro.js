@@ -5142,8 +5142,13 @@
 					});
 
 					console.debug("Map HP:",thisMap.curhp,thisMap.baseHp,rate[0],rate[1]);
-					$(".module.activity .map_hp")
-						.text( thisMap.curhp + " / " + thisMap.maxhp );
+					$(".module.activity .map_hp").text([
+						thisMap.curhp,
+						thisMap.curhp > 9999 ? "" : " ",
+						"/",
+						thisMap.maxhp > 9999 ? "" : " ",
+						thisMap.maxhp
+					].join(""));
 					$(".module.activity .map_gauge")
 						.find('.nowhp').css("width", (rate[0])+"%").end()
 						.find('.curhp').css("width", (rate[1])+"%").end();

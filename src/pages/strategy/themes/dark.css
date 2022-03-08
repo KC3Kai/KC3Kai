@@ -86,7 +86,7 @@ button, input, select, textarea {
 	text-align:right;
 }
 .ui-tooltip-content .ship_tooltip .ship_stype {
-	width:32px;
+	width:37px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 2px;
@@ -96,7 +96,7 @@ button, input, select, textarea {
 	white-space:nowrap;
 }
 .ui-tooltip-content .ship_tooltip .ship_level {
-	width:45px;
+	width:40px;
 	height:17px;
 	line-height:17px;
 	padding:0px 0px 0px 0px;

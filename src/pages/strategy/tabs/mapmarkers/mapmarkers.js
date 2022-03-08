@@ -91,17 +91,44 @@
 				this.isShowMarkers = $(e.target).prop("checked");
 				$(".overlay_markers").toggle(this.isShowMarkers);
 			});
-			$(".markers textarea").on("change", e => {
-				$(".markers").removeClass("error");
-				const json = $(e.target).val();
+			const updateMarkersAreaJson = (addElementCallback) => {
+				const json = $(".markers textarea").val();
 				try {
 					const obj = JSON.parse(json);
 					const mapNodes = obj[`World ${this.world}-${this.map}`];
+					if(typeof addElementCallback === "function") {
+						addElementCallback.call(this, mapNodes);
+					}
 					this.addMarkers(mapNodes);
 				} catch(err) {
 					$(".markers").addClass("error");
 					console.debug("Marker JSON parsing", err);
 				}
+			};
+			$(".markers textarea").on("change", e => {
+				$(".markers").removeClass("error");
+				updateMarkersAreaJson();
+			});
+			$("#add_letter").on("click", e => {
+				updateMarkersAreaJson((mapNodes) => {
+					if(!mapNodes.letters) mapNodes.letters = {};
+					const existed = Object.keys(mapNodes.letters);
+					const existedAmount = existed.length;
+					const lastCharCode = (existed.slice(-1)[0] || "@").charCodeAt(0) || 0;
+					const nextLetter = lastCharCode.inside(64, 89) ?
+						String.fromCharCode(lastCharCode + 1) : "Z{0}".format(existedAmount + 1);
+					mapNodes.letters[nextLetter] = [60, 40 + existedAmount * 24];
+				});
+			});
+			$("#add_icon").on("click", e => {
+				updateMarkersAreaJson((mapNodes) => {
+					if(!mapNodes.markers) mapNodes.markers = [];
+					mapNodes.markers.push({
+						"img": "client/fuel.png",
+						"pos": [160, 40 + mapNodes.markers.length * 30],
+						"size": [27, 27]
+					});
+				});
 			});
 		},
 

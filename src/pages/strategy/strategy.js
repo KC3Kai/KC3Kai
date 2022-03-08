@@ -336,4 +336,52 @@
 		};
 	}(jQuery));
 
+	/**
+	 * jQuery Unveil
+	 * A very lightweight jQuery plugin to lazy load images
+	 * https://luis-almeida.github.com/unveil
+	 *
+	 * Licensed under the MIT license.
+	 * Copyright 2013 Luís Almeida
+	 * https://github.com/luis-almeida
+	 *
+	 * with some modifications for working on a div container instead of window
+	 */
+	(function($) {
+	  $.fn.unveil = function(container, threshold, callback) {
+		var $w = $(window),
+			$con = $(container) || $w,
+			th = threshold || 0,
+			attrib = "data-src",
+			images = this,
+			loaded;
+		this.one("unveil", function() {
+		  var source = this.getAttribute(attrib);
+		  source = source || this.getAttribute("data-src");
+		  if (source) {
+			this.setAttribute("src", source);
+			if (typeof callback === "function") callback.call(this);
+		  }
+		});
+
+		function unveil() {
+		  var inview = images.filter(function() {
+			var $e = $(this);
+			if ($e.is(":hidden")) return;
+			var wt = $con.scrollTop(),
+				wb = wt + $con.height(),
+				et = wt + $e.offset().top - $con.offset().top,
+				eb = et + $e.height();
+			return eb >= wt - th && et <= wb + th;
+		  });
+		  loaded = inview.trigger("unveil");
+		  images = images.not(loaded);
+		}
+
+		$con.on("scroll.unveil resize.unveil lookup.unveil", unveil);
+		unveil();
+		return this;
+	  };
+	})(jQuery);
+
 })();

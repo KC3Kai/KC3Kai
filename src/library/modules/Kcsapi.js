@@ -1263,13 +1263,31 @@ Previously known as "Reactor"
 				console.info("Map gimmick flag detected", response.api_data.api_m1);
 			}
 			if(typeof response.api_data.api_destruction_battle !== "undefined"){
-				KC3SortieManager.engageLandBaseAirRaid(
-					response.api_data.api_destruction_battle
-				);
+				const destBattle = response.api_data.api_destruction_battle;
+				KC3SortieManager.engageLandBaseAirRaid(destBattle);
 				KC3Network.trigger("LandBaseAirRaid");
-				if(response.api_data.api_destruction_battle.api_m2 > 0){ 
-					KC3Network.trigger("DebuffNotify", response.api_data.api_destruction_battle);
+				if(destBattle.api_m2 > 0){
+					KC3Network.trigger("DebuffNotify", destBattle);
 				}
+			}
+		},
+		
+		/* Super Heavy Bombing Air Raid since event Winter 2022
+		-------------------------------------------------------*/
+		"api_req_map/air_raid":function(params, response, headers){
+			const destBattleArr = response.api_data.api_destruction_battle;
+			if(Array.isArray(destBattleArr)){
+				// Unlike node air raid, 1~3 waves can occur for this type according QTE result?
+				// Only final wave will be displayed, no good solution for now to display all the 3 waves?
+				destBattleArr.forEach(destBattle => {
+					KC3SortieManager.engageLandBaseAirRaid(destBattle);
+					KC3Network.trigger("LandBaseAirRaid");
+					if(destBattle.api_m2 > 0){
+						KC3Network.trigger("DebuffNotify", destBattle);
+					}
+				});
+			} else {
+				console.debug("Unexpected api data for /air_raid", response.api_data);
 			}
 		},
 		

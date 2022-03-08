@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				domesticSonar: 0,
@@ -6054,7 +6054,7 @@
 						synergy: {
 							flags: [ "type13AirRadarKaiNonexist" ],
 							single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
-						}
+						},
 					},
 					{
 						// Yahagi K2B
@@ -6062,7 +6062,7 @@
 						synergy: {
 							flags: [ "type13AirRadarKaiNonexist" ],
 							single: { "tyku": 1, "houk": 1 },
-						}
+						},
 					},
 				],
 			},

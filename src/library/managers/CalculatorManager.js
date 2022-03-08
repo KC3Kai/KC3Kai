@@ -592,7 +592,7 @@
      *           computed fighter power (without improvement and proficiency bonus),
      *           sum of known slot capacity,
      *           sum of slot capacity without air power,
-     *           sum of slot capacity with recon planes equipped,
+     *           sum of slot capacity with recon/lbaa planes equipped,
      *           exception map indicates which ship or gear missing required data:
      *             {shipId: null || {gearId: null || aaStat || 'recon'}}
      *         ]
