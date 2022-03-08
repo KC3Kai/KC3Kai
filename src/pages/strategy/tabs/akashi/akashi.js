@@ -103,8 +103,9 @@
 				if(e.altKey) {
 					KC3StrategyTabs.gotoTab(null, $(this).data("value"));
 				} else {
-					KC3StrategyTabs.gotoTab(null,
-						[$(this).data("value"), KC3StrategyTabs.pageParams[2]].filter(v => !!v));
+					const extraParams = KC3StrategyTabs.pageParams.slice(2);
+					KC3StrategyTabs.gotoTab(null, extraParams.every(v => !v) ? $(this).data("value") :
+						[$(this).data("value"), ...extraParams]);
 				}
 			});
 
@@ -117,16 +118,23 @@
 				$(toggleClasses, equipList).toggle(!self.hideNotImprovable);
 			});
 
-			$("#equipped_checkbox").on("change", function(){
-				self.showEquippedLocked = this.checked;
+			if(KC3StrategyTabs.pageParams[3] !== undefined){
+				this.showEquippedLocked = !!parseInt(KC3StrategyTabs.pageParams[3]);
+			}
+			const refreshOnToggleEquippedLocked = () => {
 				$(".loading").show();
-				$(this).prop("disabled", true);
+				$("#equipped_checkbox").prop("disabled", true);
 				$(".equipment.disabled,.equipment.equipped,.equipment.insufficient",
 					$(".equipment_list")).show();
 				// To recheck consumable items if locked
 				setTimeout(function(){
-					KC3StrategyTabs.reloadTab(undefined, false);
+					KC3StrategyTabs.gotoTab(null, [KC3StrategyTabs.pageParams[1], KC3StrategyTabs.pageParams[2],
+						self.showEquippedLocked & 1]);
 				}, 0);
+			};
+			$("#equipped_checkbox").on("change", function(){
+				self.showEquippedLocked = this.checked;
+				refreshOnToggleEquippedLocked();
 			}).prop("checked", this.showEquippedLocked);
 
 			// Link to weekday specified by hash parameter

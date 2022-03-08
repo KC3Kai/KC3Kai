@@ -885,9 +885,15 @@ KC3改 Ship Object
 									if (equipFlag.endsWith("Nonexist")) {
 										if (!synergyGears[equipFlag]) { break; }
 									} else if (synergyGears[equipFlag] > 0) {
-										if (synergyGears[equipFlag + "Ids"].includes(newGearMstId)) { synergyFlag = true; }
+										const synergyGearIds = synergyGears[equipFlag + "Ids"] || [];
+										if (synergyGearIds.includes(newGearMstId)) { synergyFlag = true; }
 										synergyFlags.push(equipFlag);
-										synergyIds.push(masterIdList.find(id => synergyGears[equipFlag + "Ids"].includes(id)));
+										const synergyGearId = masterIdList.find(id => synergyGearIds.includes(id));
+										if (!synergyGearId) {
+											console.warn("No matched gear ID found for synergy flag: " + equipFlag, synergyGearIds, masterIdList);
+										} else {
+											synergyIds.push(synergyGearId);
+										}
 									}
 								}
 							}
@@ -900,7 +906,7 @@ KC3改 Ship Object
 			gear.synergyIds = synergyIds;
 			gear.byType = idx >= Math.floor(masterIdList.length / 2);
 			gear.id = masterIdList[idx];
-			return flag;
+			return !!flag;
 		});
 		if (!bonusGears.length) { return false; }
 
@@ -2799,6 +2805,7 @@ KC3改 Ship Object
 			1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // B
 			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
 			2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // B Vacation Mode
+			2084, 2085, 2086, 2087, 2088, 2079, // C
 			].includes(targetShipMasterId)) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
@@ -3173,6 +3180,7 @@ KC3改 Ship Object
 				1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // Supply Depot Princess B
 				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
 				2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // Supply Depot Princess B Vacation Mode
+				2084, 2085, 2086, 2087, 2088, 2079, // Supply Depot Princess C
 				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
 				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
 			].includes(targetShipMasterId);
@@ -4803,7 +4811,7 @@ KC3改 Ship Object
 			const canClosingTorp = shipObj.canDoClosingTorpedo();
 			if(ConfigManager.powerCapApplyLevel >= 1) {
 				({power} = shipObj.applyPrecapModifiers(power, "Antisub",
-					battleConds.engagementId, battleConds.formationId || 5));
+					battleConds.engagementId, battleConds.formationId || ConfigManager.aaFormation));
 			}
 			if(ConfigManager.powerCapApplyLevel >= 2) {
 				({power, isCapped} = shipObj.applyPowerCap(power, "Day", "Antisub"));

@@ -16,6 +16,7 @@
             // order and colors of tag texture see: main.js#BannerPlate.prototype._getTexture,
             // and please update `lockingTagConfigs` and `lockingTagColors` by themes in `fud_quarterly.json` file.
             // NOTE: texture ID and our color ID is 0-based index, but API property `sally` is 1-based.
+            // SIDENOTE: tag conds checking can be found in EventSortieCondition.prototype._check
             const configs = KC3Meta.eventLockingTagConfigs();
             this.lockLimit = ConfigManager.sr_locktag_max || configs.maxTagAmount || 2;
             this.moLocks = ConfigManager.sr_locktag_mo || configs.moTagIds || [];
