@@ -2209,6 +2209,19 @@ Used by SortieManager
 		}
 	};
 
+	KC3Node.prototype.heavyAirBaseRaid = function( battleData ){
+		this.isHeavyAirBaseRaid = true;
+		this.heavyBattleDestructions = battleData;
+		this.heavyDefenseRequest = battleData.api_scc;
+		const battleArr = battleData.api_destruction_battle;
+		if(Array.isArray(battleArr)){
+			battleArr.forEach(singleBattle => {
+				this.airBaseRaid(singleBattle);
+				// TODO sum info from every waves
+			});
+		}
+	};
+
 	KC3Node.prototype.isBoss = function(){
 		// see advanceNode() (SortieManager.js) for api details,
 		// or alternatively at `Core.swf/common.models.bases.BattleBaseData.isBossMap()`

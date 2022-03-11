@@ -432,9 +432,13 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			this.nodes.length = 0;
 		},
 		
-		engageLandBaseAirRaid :function( battleData ){
+		engageLandBaseAirRaid :function( battleData, isHeavyRaid ){
 			// can not check node type because air raid may occur at any node
-			this.currentNode().airBaseRaid( battleData );
+			if(isHeavyRaid) {
+				this.currentNode().heavyAirBaseRaid( battleData );
+			} else {
+				this.currentNode().airBaseRaid( battleData );
+			}
 		},
 		
 		engageBattle :function( battleData, stime ){
@@ -704,6 +708,9 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 							toSave.eventKind = mapNext.api_event_kind;
 						if(mapNext.api_destruction_battle)       // Land Base Enemy Raid
 							toSave.airRaid = mapNext.api_destruction_battle;
+						// Super Heavy Air Raid, no battle data in /next api, have to wait for the api after QTE event
+						if(mapNext.api_destruction_flag && node.heavyBattleDestructions)
+							toSave.heavyAirRaid = node.heavyBattleDestructions;
 						if(mapNext.api_offshore_supply)          // Resupplier used event
 							toSave.offshoreSupply = mapNext.api_offshore_supply;
 					}

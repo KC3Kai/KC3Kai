@@ -1788,14 +1788,18 @@ KC3改 Ship Object
 	 * 		modifiers: {
 	 * 			general bonus (precap/postcap),
 	 * 			precap stype (dd/cl),
-	 * 			precap special (dd/gun) tanks,
+	 * 			precap special (toku) daihatsu + (shikon/gun) tank,
+	 * 			precap m4a1dd,
+	 * 			precap gun tank,
 	 * 			precap daihatsu synergy,
 	 * 		},
 	 * 		additives: {
 	 * 			general bonus (precap/postcap),
 	 * 			precap stype (ss/ssv),
-	 * 			precap special (dd/shikon/gun) tanks,
+	 * 			precap special (toku) daihatsu + tank,
+	 * 			precap m4a1dd,
 	 * 			precap gun tank,
+	 * 			precap daihatsu synergy,
 	* 		}
 	 * }
 	 */
@@ -1806,7 +1810,9 @@ KC3改 Ship Object
 		let generalAdditive = 0, generalModifier = 1,
 			stypeAdditive = 0, stypeModifier = 1,
 			spTankAdditive = 0, spTankModifier = 1,
-			gunTankAdditive = 0, synergyModifier = 1;
+			m4a1ddAdditive = 0, m4a1ddModifier = 1,
+			gunTankAdditive = 0, gunTankModifier = 1,
+			synergyAdditive = 0, synergyModifier = 1;
 		
 		let wg42Bonus = 1;
 		let type4RocketBonus = 1;
@@ -1868,9 +1874,12 @@ KC3改 Ship Object
 			
 			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1
 			// although here using word 'tank', but they are in landing craft cateory unlike T2 tank
-			spTankModifier = (m4a1ddCount ? 1.4 : 1) * (honi1Count ? 1.3 : 1);
-			spTankAdditive = (m4a1ddCount ? 25 : 0) + (shikonCount + honi1Count ? 25 : 0);
-			gunTankAdditive = !honi1Count ? 0 : [0, 42][honi1Count] || 42;
+			spTankModifier = shikonCount + honi1Count ? 1.8 : 1;
+			spTankAdditive = shikonCount + honi1Count ? 25 : 0;
+			m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
+			m4a1ddAdditive = m4a1ddCount ? 35 : 0;
+			gunTankModifier = honi1Count ? 1.3 : 1;
+			gunTankAdditive = honi1Count ? 42 : 0;
 			
 			switch(installationType) {
 				case 1: // Soft-skinned, general type of land installation
@@ -1882,12 +1891,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
-					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * seaplaneBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
 					synergyModifier *= abdSynergyModifier;
+					synergyAdditive += abdSynergyAdditive;
 					break;
 				
 				case 2: // Pillbox, Artillery Imp
@@ -1903,13 +1912,13 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
-					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= apShellBonus * seaplaneBonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
 					stypeModifier *= lightShipBonus;
 					synergyModifier *= abdSynergyModifier;
+					synergyAdditive += abdSynergyAdditive;
 					break;
 				
 				case 3: // Isolated Island Princess
@@ -1921,12 +1930,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
-					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
 					synergyModifier *= abdSynergyModifier;
+					synergyAdditive += abdSynergyAdditive;
 					break;
 				
 				case 5: // Summer Harbor Princess
@@ -1940,12 +1949,12 @@ KC3改 Ship Object
 					
 					// Set additive modifier, multiply multiplicative modifiers
 					generalAdditive += rocketsAdditive;
-					generalAdditive += abdSynergyAdditive;
 					generalModifier *= landingBonus;
 					generalModifier *= t3Bonus * apShellBonus * seaplaneBonus * diveBomberBonus;
 					generalModifier *= wg42Bonus * type4RocketBonus * mortarBonus;
 					stypeAdditive += submarineBonus;
 					synergyModifier *= abdSynergyModifier;
+					synergyAdditive += abdSynergyAdditive;
 					break;
 			}
 		} else { // Post-cap types
@@ -1980,13 +1989,17 @@ KC3改 Ship Object
 				generalModifier,
 				stypeModifier,
 				spTankModifier,
+				m4a1ddModifier,
+				gunTankModifier,
 				synergyModifier,
 			},
 			additives: {
 				generalAdditive,
 				stypeAdditive,
 				spTankAdditive,
+				m4a1ddAdditive,
 				gunTankAdditive,
+				synergyAdditive,
 			}
 		};
 	};
@@ -2198,10 +2211,14 @@ KC3改 Ship Object
 		}
 		
 		// Apply modifiers, flooring unknown, anti-land modifiers get in first
-		let result = ((((basicPower + addBonus("stypeAdditive")) * mulBonus("stypeModifier")
-			* mulBonus("generalModifier") + addBonus("spTankAdditive"))
-			* mulBonus("spTankModifier") + addBonus("gunTankAdditve"))
+		let result = (((((((basicPower
+			* mulBonus("stypeModifier")   + addBonus("stypeAdditive"))
+			* mulBonus("generalModifier"))
+			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
+			* mulBonus("m4a1ddModifier")  + addBonus("m4a1ddAdditive"))
+			* mulBonus("gunTankModifier") + addBonus("gunTankAdditive"))
 			* mulBonus("synergyModifier") + addBonus("generalAdditive"))
+			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
 		// Light Cruiser fit gun bonus, should not applied before modifiers

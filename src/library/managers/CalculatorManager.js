@@ -592,9 +592,9 @@
      *           computed fighter power (without improvement and proficiency bonus),
      *           sum of known slot capacity,
      *           sum of slot capacity without air power,
-     *           sum of slot capacity with recon/lbaa planes equipped,
+     *           sum of slot capacity with recon/lbaa/etc planes equipped,
      *           exception map indicates which ship or gear missing required data:
-     *             {shipId: null || {gearId: null || aaStat || 'recon'}}
+     *             {shipId: null || {gearId: null || aaStat || 'lbas'}}
      *         ]
      * @see Fleet, Ship, Gear classes to compute fighter power of player fleet.
      */
@@ -655,15 +655,15 @@
                         exceptions[shipId] = exceptions[shipId] || {};
                         exceptions[shipId][gearId] = aaStat;
                     }
-                } else if(gearMst.api_type[1] === 7) {
-                    // sum recon planes not participate in normal air battle but LBAS battle,
+                } else {
+                    // sum other planes not participate in normal air battle but LBAS battle,
                     // seaplane fighters/bombers will not be dropped here
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
                         reconCapacity += capacity;
                     } else {
                         exceptions[shipId] = exceptions[shipId] || {};
-                        exceptions[shipId][gearId] = "recon";
+                        exceptions[shipId][gearId] = "lbas";
                     }
                 }
             }
