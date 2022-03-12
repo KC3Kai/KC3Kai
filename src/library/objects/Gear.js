@@ -580,7 +580,7 @@ KC3改 Equipment Object
 		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
-			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
+			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalBonus = KC3Meta.airPowerAverageBonus(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),
@@ -608,9 +608,9 @@ KC3改 Equipment Object
 
 		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane,
-		// Also take recon planes into account because they participate in LBAS battle.
+		// Also take recon/lb planes into account because they participate in LBAS battle.
 		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
-			|| (forLbas && KC3GearManager.landBaseReconnType2Ids.indexOf(type2) > -1)){
+			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
 			var aceLevel = this.ace > 0 ? this.ace : 0,
 				internalExps = KC3Meta.airPowerInternalExpBounds(aceLevel),
 				typeBonus = KC3Meta.airPowerTypeBonus(type2, aceLevel),

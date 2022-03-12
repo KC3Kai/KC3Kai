@@ -640,7 +640,7 @@
                 }
                 // for LBAS battle, recon planes participate, and their fighter power may be counted
                 if(KC3GearManager.antiAirFighterType2Ids.includes(gearMst.api_type[2])
-                    || (!!forLbas && KC3GearManager.landBaseReconnType2Ids.includes(gearMst.api_type[2]))) {
+                    || (!!forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2]))) {
                     const aaStat = gearMst.api_tyku || 0;
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {

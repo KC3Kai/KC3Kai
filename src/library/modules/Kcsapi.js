@@ -1279,10 +1279,10 @@ Previously known as "Reactor"
 			const destBattleArr = response.api_data.api_destruction_battle;
 			// Unlike old land base air raid, 1~3 waves may occur according difficulty:
 			// 1 wave for casual/easy, 2 waves for medium, 3 waves for hard
-			if(!!destBattleArr){
+			if(destBattleArr){
 				KC3SortieManager.engageLandBaseAirRaid({
 					"api_scc": btnScc,
-					"api_destruction_battle": Array.isArray(destBattleArr) ? destBattleArr : [destBattleArr]
+					"api_destruction_battle": destBattleArr
 				}, true);
 				KC3Network.trigger("LandBaseAirRaid");
 				destBattleArr.forEach(destBattle => {
