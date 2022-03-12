@@ -655,9 +655,9 @@
                         exceptions[shipId] = exceptions[shipId] || {};
                         exceptions[shipId][gearId] = aaStat;
                     }
-                } else {
+                } else if(KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2])) {
                     // sum other planes not participate in normal air battle but LBAS battle,
-                    // seaplane fighters/bombers will not be dropped here
+                    // non plane slot, seaplane fighters/bombers will not be dropped here
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
                         reconCapacity += capacity;
