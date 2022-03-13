@@ -1392,7 +1392,9 @@
 								$(".ship_stat_min", statBox).text(
 									KC3Calc.enemyFighterPower([abyssMaster.api_id])[0] || 0
 								);
-								$(".ship_stat_max", statBox).hide();
+								$(".ship_stat_max span", statBox).text(
+									KC3Calc.enemyFighterPower([abyssMaster.api_id], null, null, true)[0] || 0
+								);
 							} else if(stat[1] === "adjaa"){
 								// Compute adjusted anti-air power based on known slots
 								const adjShip = AntiAir.abyssalShipAdjustedAntiAir(abyssMaster.api_id);

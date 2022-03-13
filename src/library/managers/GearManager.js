@@ -86,7 +86,7 @@ Saves and loads list to and from localStorage
 			// Supply Depot Princess for post-cap bonus only
 			3: {
 				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
-				count1: [1.7, 1.3, 1.0, 1.0, 1.2, 1.2, 1.5, 1.5, 1.3, 1.0],
+				count1: [1.7, 1.3, 1.0, 1.0, 1.0, 1.2, 1.5, 1.5, 1.3, 1.0],
 				count2: [1.5, 1.6, 1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Summer Harbor Princess
