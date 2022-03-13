@@ -1732,7 +1732,7 @@ KC3改 Ship Object
 				if(type > 0) {
 					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
 					landingGroupCount += count;
-					// Honi1 is counted as T89 for all cases, so all bonuses of Honi1 itself set to 1.0
+					// Honi1 counted as T89 for all cases, so countN bonuses of Honi1 itself set to 1.0
 					// must be added after landingGroupCount summed to avoid duplicated sum of type9
 					if(type === 1) count += honi1Count;
 				} else {
@@ -2216,7 +2216,7 @@ KC3改 Ship Object
 			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
 			* mulBonus("m4a1ddModifier")  + addBonus("m4a1ddAdditive"))
 			* mulBonus("gunTankModifier") + addBonus("gunTankAdditive"))
-			* mulBonus("synergyModifier") + addBonus("generalAdditive"))
+			* mulBonus("synergyModifier") + addBonus("synergyAdditive"))
 			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
