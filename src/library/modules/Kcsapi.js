@@ -1263,13 +1263,33 @@ Previously known as "Reactor"
 				console.info("Map gimmick flag detected", response.api_data.api_m1);
 			}
 			if(typeof response.api_data.api_destruction_battle !== "undefined"){
-				KC3SortieManager.engageLandBaseAirRaid(
-					response.api_data.api_destruction_battle
-				);
+				const destBattle = response.api_data.api_destruction_battle;
+				KC3SortieManager.engageLandBaseAirRaid(destBattle);
 				KC3Network.trigger("LandBaseAirRaid");
-				if(response.api_data.api_destruction_battle.api_m2 > 0){ 
-					KC3Network.trigger("DebuffNotify", response.api_data.api_destruction_battle);
+				if(destBattle.api_m2 > 0){
+					KC3Network.trigger("DebuffNotify", destBattle);
 				}
+			}
+		},
+		
+		/* Super Heavy Bombing Air Raid since event Winter 2022
+		-------------------------------------------------------*/
+		"api_req_map/air_raid":function(params, response, headers, decodedParams){
+			const btnScc = parseInt(decodedParams.api_scc);
+			const destBattleArr = response.api_data.api_destruction_battle;
+			// Unlike old land base air raid, 1~3 waves may occur according difficulty:
+			// 1 wave for casual/easy, 2 waves for medium, 3 waves for hard
+			if(destBattleArr){
+				KC3SortieManager.engageLandBaseAirRaid({
+					"api_scc": btnScc,
+					"api_destruction_battle": destBattleArr
+				}, true);
+				KC3Network.trigger("LandBaseAirRaid");
+				destBattleArr.forEach(destBattle => {
+					if(destBattle.api_m2 > 0){
+						KC3Network.trigger("DebuffNotify", destBattle);
+					}
+				});
 			}
 		},
 		

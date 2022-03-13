@@ -767,6 +767,11 @@
 									$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
 								}
 							}
+							if(node.heavyAirRaid) {
+								// Adding heavy air raids to all nodes, including non battle ones
+								
+							}
+
 							if(index === 5) {
 								$(".sortie_edges", sortieBox).removeClass("one_line").addClass("two_lines");
 							}
