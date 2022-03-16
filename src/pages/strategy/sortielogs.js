@@ -743,9 +743,11 @@
 								.text(letter)
 								.toggleClass("long_name", String(letter).length > 2);
 
-							if(node.airRaid) {
+							if(node.airRaid || node.heavyAirRaid) {
 								// Adding air raids to all nodes, including non battle ones
-								var airRaid = parseAirRaidFunc(node.airRaid);
+								const destBattle = node.heavyAirRaid ? node.heavyAirRaid.api_destruction_battle.slice(-1)[0] : node.airRaid;
+								// FIXME Handle all waves from heavy air raids
+								const airRaid = parseAirRaidFunc(destBattle);
 								if(airRaid.airRaidLostKind > 0) {
 									$(".sortie_edge_"+(index+1), sortieBox)
 										.addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
@@ -766,10 +768,6 @@
 									);
 									$(".sortie_edge_"+(index+1), sortieBox).attr("title", oldTitle);
 								}
-							}
-							if(node.heavyAirRaid) {
-								// Adding heavy air raids to all nodes, including non battle ones
-								
 							}
 
 							if(index === 5) {

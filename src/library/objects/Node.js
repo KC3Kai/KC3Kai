@@ -2136,7 +2136,7 @@ Used by SortieManager
 	 * Not real battle on this node in fact. Enemy raid just randomly occurs before entering node.
 	 * See: http://kancolle.wikia.com/wiki/Land-Base_Aerial_Support#Enemy_Raid
 	 */
-	KC3Node.prototype.airBaseRaid = function( battleData ){
+	KC3Node.prototype.airBaseRaid = function( battleData, isSaveEncounter = true ){
 		this.battleDestruction = battleData;
 		//console.debug("Raw Air Base Raid data", battleData);
 		this.isAirBaseEnemyRaid = true;
@@ -2203,7 +2203,9 @@ Used by SortieManager
 			? sumSupportDamageArray(bombingPhase.api_fdam)
 			: 0;
 		// Record encountered enemy air raid formation
-		this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
+		if(isSaveEncounter){
+			this.saveEnemyEncounterInfo(this.battleDestruction, undefined, undefined, true);
+		}
 		if(battleData.api_m1){
 			console.info("Map gimmick flag detected", battleData.api_m1);
 		}
@@ -2214,11 +2216,40 @@ Used by SortieManager
 		this.heavyBattleDestructions = battleData;
 		this.heavyDefenseRequest = battleData.api_scc;
 		const battleArr = battleData.api_destruction_battle;
-		if(Array.isArray(battleArr)){
-			battleArr.forEach(singleBattle => {
-				this.airBaseRaid(singleBattle);
-				// TODO sum info from every waves
+		// client also merges all waves into 1 show, see main.js#AirRaidModel.prototype._convert and ._getLostKind
+		// client only uses info except api_air_base_attack from 1st wave, show api_disp_seiku from last wave (see TaskAirUnitHeavy.prototype.setLast)
+		this.lostKindByWaves = [];
+		this.baseDamageByWaves = [];
+		this.fplaneFromByWaves = [];
+		this.planeFightersByWaves = [];
+		if(Array.isArray(battleArr) && battleArr.length > 0){
+			battleArr.forEach((singleWave, idx) => {
+				// to save enemy counter once only
+				const isLast = idx === battleArr.length - 1;
+				this.airBaseRaid(singleWave, isLast);
+				this.lostKindByWaves.push(this.lostKind);
+				this.baseDamageByWaves.push(this.baseDamage);
+				this.fplaneFromByWaves.push(this.fplaneFrom);
+				this.planeFightersByWaves.push(this.planeFighters);
 			});
+			// Here most info from last wave, and merge necessary data from all waves
+			this.lostKind = ((arr) => (
+				arr.includes(2) || arr.includes(1) && arr.includes(3) ? 2 :
+				arr.includes(1) ? 1 : arr.includes(3) ? 3 : 4
+			))(this.lostKindByWaves);
+			this.baseDamage = this.baseDamageByWaves.sumValues();
+			// Loss of player interception squads are cumulative wave by wave
+			// abyssal counts kept from last wave
+			this.planeFighters.player = [
+				// total plane count is from 1st wave
+				this.planeFightersByWaves[0].player[0],
+				// lost plane count is total from all waves
+				this.planeFightersByWaves.map(o => o.player[1]).sumValues()
+			];
+			// Skips planeBombers process since it seems api_stage2 always null for air raid?
+			// According tests, defender squads count is decided by QTE result,
+			// so api_map_squadron_plane and api_plane_from[0] will be null if api_scc = 0.
+			// here only show fplaneFrom from last wave, so keep it untouched
 		}
 	};
 

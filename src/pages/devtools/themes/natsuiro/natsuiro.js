@@ -2943,8 +2943,14 @@
 				var airDefender = (!thisNode.fplaneFrom || thisNode.fplaneFrom[0] === -1) ?
 					KC3Meta.term("BattleAirDefendNo") :
 					KC3Meta.term("BattleAirDefendYes").format(thisNode.fplaneFrom.join(","));
-				$(".module.activity .battle_detection").text(airDefender);
-				$(".module.activity .battle_detection").attr("title", airDefender);
+				if(thisNode.heavyDefenseRequest !== undefined) {
+					airDefender = "{0} ([1})".format(airDefender, thisNode.heavyDefenseRequest);
+					$(".module.activity .battle_detection").text(airDefender)
+						.attr("title", [airDefender, JSON.stringify(thisNode.fplaneFromByWaves)].join("\n"));
+				} else {
+					$(".module.activity .battle_detection").text(airDefender);
+					$(".module.activity .battle_detection").attr("title", airDefender);
+				}
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
 				if(thisNode.lostKind == 4){
@@ -2953,9 +2959,15 @@
 				} else {
 					$(".module.activity .battle_engagement").addClass("bad");
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
-					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
-						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
-					);
+					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip").format(
+						(thisNode.baseDamageByWaves ?
+							"{0} [{1}]".format(this.baseDamage, thisNode.baseDamageByWaves.join(",")) :
+							thisNode.baseDamage
+						),
+						Math.round(thisNode.baseDamage * 0.9 + 0.1)
+					) + (
+						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.join(",")) : ""
+					));
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
