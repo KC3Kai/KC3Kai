@@ -2215,16 +2215,14 @@ Used by SortieManager
 		this.isHeavyAirBaseRaid = true;
 		this.heavyBattleDestructions = battleData;
 		this.heavyDefenseRequest = battleData.api_scc;
-		const battleArr = battleData.api_destruction_battle;
-		// client also merges all waves into 1 show, see main.js#AirRaidModel.prototype._convert and ._getLostKind
-		// client only uses info except api_air_base_attack from 1st wave, show api_disp_seiku from last wave (see TaskAirUnitHeavy.prototype.setLast)
 		this.lostKindByWaves = [];
 		this.baseDamageByWaves = [];
 		this.fplaneFromByWaves = [];
 		this.planeFightersByWaves = [];
+		const battleArr = battleData.api_destruction_battle;
 		if(Array.isArray(battleArr) && battleArr.length > 0){
 			battleArr.forEach((singleWave, idx) => {
-				// to save enemy counter once only
+				// to save enemy counter only once
 				const isLast = idx === battleArr.length - 1;
 				this.airBaseRaid(singleWave, isLast);
 				this.lostKindByWaves.push(this.lostKind);
@@ -2232,6 +2230,8 @@ Used by SortieManager
 				this.fplaneFromByWaves.push(this.fplaneFrom);
 				this.planeFightersByWaves.push(this.planeFighters);
 			});
+			// client also merges all waves into 1 show, see main.js#AirRaidModel.prototype._convert and ._getLostKind
+			// client only uses info except api_air_base_attack from 1st wave, show api_disp_seiku from last wave (see TaskAirUnitHeavy.prototype.setLast)
 			// Here most info from last wave, and merge necessary data from all waves
 			this.lostKind = ((arr) => (
 				arr.includes(2) || arr.includes(1) && arr.includes(3) ? 2 :
