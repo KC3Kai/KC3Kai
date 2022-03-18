@@ -2582,7 +2582,9 @@
 							const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
 							const hamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff);
 							const haifp = Math.floor(ifp * hamod);
-							const haifpTip = "{0} (x{1})".format(haifp, hamod);
+							const shhamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff, true);
+							const shhaifp = Math.floor(ifp * shhamod);
+							const haifpTip = "{0} (x{1}) / {2} (x{3})".format(haifp, hamod, shhaifp, shhamod);
 							$(".base_ifp .base_stat_value", baseBox).attr("title",
 								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifpTip)
 							).lazyInitTooltip();
@@ -3073,9 +3075,9 @@
 					KC3Meta.term("BattleAirDefendNo") :
 					KC3Meta.term("BattleAirDefendYes").format(thisNode.fplaneFrom.join(","));
 				if(thisNode.heavyDefenseRequest !== undefined) {
-					airDefender = "{0} ([1})".format(airDefender, thisNode.heavyDefenseRequest);
+					airDefender = "{0} ({1})".format(airDefender, thisNode.heavyDefenseRequest);
 					$(".module.activity .battle_detection").text(airDefender)
-						.attr("title", [airDefender, JSON.stringify(thisNode.fplaneFromByWaves)].join("\n"));
+						.attr("title", [airDefender, JSON.stringify(thisNode.fplaneFromByWaves.map(v => v || -1))].join("\n"));
 				} else {
 					$(".module.activity .battle_detection").text(airDefender);
 					$(".module.activity .battle_detection").attr("title", airDefender);
@@ -3090,7 +3092,7 @@
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
 					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip").format(
 						(thisNode.baseDamageByWaves ?
-							"{0} [{1}]".format(this.baseDamage, thisNode.baseDamageByWaves.join(",")) :
+							"{0} [{1}]".format(thisNode.baseDamage, thisNode.baseDamageByWaves.join(",")) :
 							thisNode.baseDamage
 						),
 						Math.round(thisNode.baseDamage * 0.9 + 0.1)

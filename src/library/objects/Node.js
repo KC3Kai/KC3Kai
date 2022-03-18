@@ -1601,6 +1601,10 @@ Used by SortieManager
 	*/
 	KC3Node.prototype.buildAirPowerMessage = function(forLbas = false, isPvP = this.isPvP){
 		var tooltip = this.airbattle[2] || "";
+		// Show all results for multi-waves heavy air raid, only last wave shown in-game
+		if(Array.isArray(this.airbattleIdByWaves)){
+			tooltip += " [{0}]".format(this.airbattleIdByWaves.join(","));
+		}
 		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot, undefined, forLbas);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+
 		const ap = apTuple[0];
@@ -2218,6 +2222,8 @@ Used by SortieManager
 		this.lostKindByWaves = [];
 		this.baseDamageByWaves = [];
 		this.fplaneFromByWaves = [];
+		this.fcontactIdByWaves = [];
+		this.airbattleIdByWaves = [];
 		this.planeFightersByWaves = [];
 		const battleArr = battleData.api_destruction_battle;
 		if(Array.isArray(battleArr) && battleArr.length > 0){
@@ -2229,6 +2235,9 @@ Used by SortieManager
 				this.baseDamageByWaves.push(this.baseDamage);
 				this.fplaneFromByWaves.push(this.fplaneFrom);
 				this.planeFightersByWaves.push(this.planeFighters);
+				this.fcontactIdByWaves.push(this.fcontactId);
+				this.airbattleIdByWaves.push(Object.getSafePath(singleWave,
+					"api_air_base_attack.api_stage1.api_disp_seiku"));
 			});
 			// client also merges all waves into 1 show, see main.js#AirRaidModel.prototype._convert and ._getLostKind
 			// client only uses info except api_air_base_attack from 1st wave, show api_disp_seiku from last wave (see TaskAirUnitHeavy.prototype.setLast)

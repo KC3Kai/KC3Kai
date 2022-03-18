@@ -566,14 +566,18 @@
      * @see https://cdn.discordapp.com/attachments/208624431818342400/620539904694288395/lbas_tables_swdn.png
      * @see https://twitter.com/CC_jabberwock/status/1466445421799112705 - modifiers have changed since Event 52 (Fall 2021) according selected difficulty and map settings
      */
-    const getLandBaseHighAltitudeModifier = (world, diff = 4) => {
-        const modMapByDifficulty = {
+    const getLandBaseHighAltitudeModifier = (world, diff = 4, night = false) => {
+        const modMapByDifficulty = night ? {
+            // under verification for super heavy bombers night air raid
+            // https://twitter.com/yukicacoon/status/1504310867755606016
+            "4": [0.3, 0.55, 0.85, 1.0], // Hard
+        } : {
             "1": [1.0, 1.0, 1.1, 1.2], // Casual
             "2": [1.0, 1.0, 1.1, 1.2], // Easy
             "3": [0.5, 0.8, 1.1, 1.2], // Normal
             "4": [0.5, 0.8, 1.1, 1.2], // Hard
         };
-        const mods = modMapByDifficulty[diff] || [0.5, 0.8, 1.1, 1.2];
+        const mods = modMapByDifficulty[diff] || modMapByDifficulty[4];
         const rocketDefenderCount = PlayerManager.bases
             .filter(base => base.map === world && base.action === 2)
             .reduce((acc, base) => acc + base.getHighAltitudeInterceptorCount(), 0);
