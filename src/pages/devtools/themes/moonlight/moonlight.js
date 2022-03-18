@@ -3075,9 +3075,13 @@
 					KC3Meta.term("BattleAirDefendNo") :
 					KC3Meta.term("BattleAirDefendYes").format(thisNode.fplaneFrom.join(","));
 				if(thisNode.heavyDefenseRequest !== undefined) {
-					airDefender = "{0} ({1})".format(airDefender, thisNode.heavyDefenseRequest);
-					$(".module.activity .battle_detection").text(airDefender)
-						.attr("title", [airDefender, JSON.stringify(thisNode.fplaneFromByWaves.map(v => v || -1))].join("\n"));
+					const colorName = ["black", "coral", "silver", "gold"][thisNode.heavyDefenseRequest] || "inherit";
+					const reqSquadStar = "<span style='color:{0}'>\u2605</span>".format(colorName);
+					$(".module.activity .battle_detection").html([airDefender, reqSquadStar].join(" "))
+						.attr("title", [
+							"{0} ({1})".format(airDefender, thisNode.heavyDefenseRequest),
+							JSON.stringify(thisNode.fplaneFromByWaves.map(v => v || []))
+						].join("\n"));
 				} else {
 					$(".module.activity .battle_detection").text(airDefender);
 					$(".module.activity .battle_detection").attr("title", airDefender);
