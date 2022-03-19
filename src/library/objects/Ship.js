@@ -2881,7 +2881,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nelson, Double Line variants formation selected.
+	 * Flagship is healthy Nelson, Double Line (forward) formation selected.
 	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
 	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
@@ -2922,7 +2922,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
+	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon (forward) formation selected.
 	 * 2nd ship is a battleship, Chuuha ok, Taiha no good.
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
@@ -2996,7 +2996,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Colorado, Echelon formation selected.
+	 * Flagship is healthy Colorado, Echelon (forward) formation selected.
 	 * 2nd and 3rd ships are healthy battleship, not Taiha ~~nor Chuuha~~,
 	 *   Chuuha allowed since 2021-10-15.
 	 *
@@ -3075,7 +3075,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead / Echelon formation selected, night battle only. (Echelon added since 2021-08-20)
+	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
@@ -3127,7 +3127,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
+	 * Flagship is Submarine Tender without Taiha, Echelon (forward) / Line Abreast (antisub) formation selected.
 	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).

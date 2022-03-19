@@ -4290,6 +4290,7 @@ ABYSS FLEET
 	display:none;
 }
 .module.fleet .lship .ship_exp_bar {
+	width:calc(100% * var(--expPercent));
 	height:2px;
 	background:#6798C9;
 }
@@ -4458,7 +4459,7 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_hp_bar_cover {
 	width:118px;
-	height:9px;
+	height:100%;
 	float:left;
 }
 .v .module.fleet .lship .ship_hp_box {
@@ -4476,23 +4477,22 @@ ABYSS FLEET
 	top:23px;
 	left:54px;
 }
-.module.fleet .lship.seven .ship_hp_bar_cover {
-	height:7px;
-}
 .module.fleet .lship .ship_hp_bar {
-	height:9px;
+	width:calc(100% * var(--hpPercent));
+	height:100%;
 }
 .module.fleet .lship .ship_hp_prediction {
-	height:9px;
+	width:calc(100% * var(--afterHpPercent));
+	height:100%;
 }
 .module.fleet .lship.seven .ship_hp_box {
 	height:9px;
 }
+.module.fleet .lship.seven .ship_hp_bar_cover {
+}
 .module.fleet .lship.seven .ship_hp_bar {
-	height:7px;
 }
 .module.fleet .lship.seven .ship_hp_prediction {
-	height:7px;
 }
 .module.fleet .lship .ship_hp_pred_value {
 	position:absolute;
@@ -4583,6 +4583,21 @@ ABYSS FLEET
 	height:12px;
 	line-height:12px;
 	top:2px;
+}
+.module.fleet .ship_morale.morale_sparkle {
+	background:#dddd00;
+}
+.module.fleet .ship_morale.morale_normal {
+	background:#dddddf;
+}
+.module.fleet .ship_morale.morale_mamiya {
+	background:#ffddbb;
+}
+.module.fleet .ship_morale.morale_orange {
+	background:#ffb74a;
+}
+.module.fleet .ship_morale.morale_red {
+	background:#ffa6a6;
 }
 .module.fleet .lship .ship_morale.glowing {
 	box-shadow:0px 0px 10px 1px rgba(255,255,0,0.9), -3px 3px 16px rgba(255,255,0,0.7) inset,  0px 8px 6px rgba(0,0,0,0.3) inset;
@@ -4727,6 +4742,20 @@ ABYSS FLEET
 }
 .module.fleet .lship .ship_gear.empty .ship_gear_slot {
 	color:#999;
+}
+.module.fleet .ship_gear .ship_gear_slot.slot_size_empty {
+	color:#999 !important;
+}
+.module.fleet .ship_gear .ship_gear_slot.slot_size_taiha {
+	color:#f00 !important;
+}
+.module.fleet .ship_gear .ship_gear_slot.slot_size_chuuha {
+	color:#f90 !important;
+}
+.module.fleet .ship_gear .ship_gear_slot.slot_size_shouha {
+	color:#ff0 !important;
+}
+.module.fleet .ship_gear .ship_gear_slot.slot_size_full {
 }
 .module.fleet .lship .ship_supplies {
 	width:32px;
@@ -4991,14 +5020,16 @@ ABYSS FLEET
 }
 .module.fleet .sship .ship_hp_bar_cover {
 	width:88px;
-	height:9px;
+	height:100%;
 	float:left;
 }
 .module.fleet .sship .ship_hp_bar {
-	height:9px;
+	width:calc(100% * var(--hpPercent));
+	height:100%;
 }
 .module.fleet .sship .ship_hp_prediction {
-	height:9px;
+	width:calc(100% * var(--afterHpPercent));
+	height:100%;
 }
 .module.fleet .sship .ship_hp_pred_value {
 	position:absolute;
@@ -5033,7 +5064,6 @@ ABYSS FLEET
 	line-height:10px;
 	float:left;
 	margin:5px;
-	background:#ffff00;
 	font-size:8px;
 	text-align:center;
 	position:absolute;
