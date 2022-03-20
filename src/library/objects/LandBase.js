@@ -180,10 +180,22 @@
 		};
 	};
 	
-	KC3LandBase.prototype.getHighAltitudeInterceptorCount = function() {
+	KC3LandBase.prototype.countByMstId = function(ids) {
+		const idArr = Array.isArray(ids) ? ids : [ids];
 		return this.planes.reduce((acc, p) => acc + (
-			KC3GearManager.highAltitudeInterceptorIds.includes(KC3GearManager.get(p.api_slotid).master().api_id) ? 1 : 0
+			idArr.includes(KC3GearManager.get(p.api_slotid).master().api_id) ? 1 : 0
 		), 0);
+	};
+	
+	KC3LandBase.prototype.countByTypeId = function(typeIndex, typeIds) {
+		const idArr = Array.isArray(typeIds) ? typeIds : [typeIds];
+		return this.planes.reduce((acc, p) => acc + (
+			idArr.includes(KC3GearManager.get(p.api_slotid).master().api_type[typeIndex]) ? 1 : 0
+		), 0);
+	};
+	
+	KC3LandBase.prototype.getHighAltitudeInterceptorCount = function() {
+		return this.countByMstId(KC3GearManager.highAltitudeInterceptorIds);
 	};
 	
 	/**

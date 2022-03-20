@@ -2578,19 +2578,13 @@
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
-						if (!!ifp) {
-							const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
-							const hamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff);
-							const haifp = Math.floor(ifp * hamod);
-							const shhamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff, true);
-							const shhaifp = Math.floor(ifp * shhamod);
-							const haifpTip = "{0} (x{1}) / {2} (x{3})".format(haifp, hamod, shhaifp, shhamod);
+						if (!!ifp && actionTerm === "Defend") {
 							$(".base_ifp .base_stat_value", baseBox).attr("title",
-								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifpTip)
+								KC3Calc.buildLandBaseHighAltitudeFighterPowerText(baseInfo.map, ifp)
 							).lazyInitTooltip();
 						}
 						//$(".airbase_infos", baseBox).on("click", togglePlaneName);
-
+						
 						let planeNames = "";
 						$.each(baseInfo.planes, function(i, planeInfo){
 							const planeBox = $("#factory .airbase_plane").clone();
@@ -2612,7 +2606,7 @@
 								}
 								$(".base_plane_name", planeBox).attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
 								planeNames += itemObj.name() + "\n";
-
+								
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first

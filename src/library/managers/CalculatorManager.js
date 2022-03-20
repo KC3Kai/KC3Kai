@@ -569,8 +569,8 @@
     const getLandBaseHighAltitudeModifier = (world, diff = 4, night = false) => {
         const modMapByDifficulty = night ? {
             // under verification for super heavy bombers night air raid
-            // https://twitter.com/yukicacoon/status/1504310867755606016
-            "4": [0.3, 0.55, 0.85, 1.0], // Hard
+            // https://twitter.com/yukicacoon/status/1505131589818150913
+            "4": [120, 220, 340, 400], // Hard
         } : {
             "1": [1.0, 1.0, 1.1, 1.2], // Casual
             "2": [1.0, 1.0, 1.1, 1.2], // Easy
@@ -578,10 +578,49 @@
             "4": [0.5, 0.8, 1.1, 1.2], // Hard
         };
         const mods = modMapByDifficulty[diff] || modMapByDifficulty[4];
-        const rocketDefenderCount = PlayerManager.bases
-            .filter(base => base.map === world && base.action === 2)
+        const defenderBases = PlayerManager.bases
+            .filter(base => base.map === world && base.action === 2);
+        const rocketDefenderCount = defenderBases
             .reduce((acc, base) => acc + base.getHighAltitudeInterceptorCount(), 0);
-        return mods[rocketDefenderCount.valueBetween(0, 3)];
+        const rocketMod = mods[rocketDefenderCount.valueBetween(0, 3)];
+        if(night) {
+            const countDefenderPlane = (ids) => defenderBases
+                .reduce((acc, base) => acc + base.countByMstId(ids), 0);
+            // Group1: Shiden Kai (343), Raiden?, Type 3 Fighter Hien (244)?, Fw190 D-9?
+            // Reppu Kai/(352), Toryuu Model C, ... belonged to group2? and group2 overrides 1?
+            const group1Count = countDefenderPlane([175, 177, 263, 354]);
+            const group1Mod = 120 + 15 * group1Count;
+            return Math.qckInt("round", 3 * (rocketMod / 120) * (group1Mod / 120), 2) / 10;
+        } else {
+            return rocketMod;
+        }
+    };
+
+    const buildLandBaseHighAltitudeFighterPowerText = (world, baseIntPower) => {
+        const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
+        const hamod1 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff);
+        const hapow1 = Math.floor(baseIntPower * hamod1);
+        const hamod2 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff, true);
+        const hapow2 = Math.floor(baseIntPower * hamod2);
+        const powTip = "{0} (x{1}) / x{2}?".format(hapow1, hamod1, hamod2);
+        const firstLine = KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(powTip);
+        // List up usual modifiers instead, since heavy bomber mods still under verification
+        const containerStyles = {
+            "font-size":"11px",
+            "display":"grid",
+            "grid-template-columns":"50% auto auto",
+            "column-gap":"10px", "grid-column-gap":"10px",
+            "white-space":"nowrap",
+        };
+        let text = "";
+        [0.3, 0.5, 0.8, 1.1, 1.2, 1.3].forEach(mod => {
+            text += "<div>&nbsp;</div><div>x{0}</div><div>={1}</div>"
+                .format(mod, Math.floor(baseIntPower * mod));
+        });
+        return firstLine + "\n" + $("<div></div>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
     };
 
     /**
@@ -819,6 +858,7 @@
         getLandBasesWorstCond,
         isLandBasesSupplied,
         getLandBaseHighAltitudeModifier,
+        buildLandBaseHighAltitudeFighterPowerText,
         
         enemyFighterPower,
         fighterPowerIntervals,
