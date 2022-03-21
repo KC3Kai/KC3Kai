@@ -2752,6 +2752,8 @@ KC3改 Ship Object
 			// *Some Abyssal AV/BBV can do ASW with air attack at night.
 			if(time === "Night") return isCvlLike && !this.isTaiha() && this.as[1] > 0;
 			// For day time, false if CVL or CVL-like chuuha
+			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
+			// https://twitter.com/yukicacoon/status/1505719117260550147
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));

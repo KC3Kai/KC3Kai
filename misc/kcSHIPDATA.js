@@ -12290,7 +12290,7 @@ var SHIPDATA_ = {
 		HP: 2000,
 		FP: 118,
 		TP: 108,
-		AA: 74,
+		AA: 73,
 		AR: 122,
 		EV: 0,
 		ASW: 0,
