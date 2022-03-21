@@ -4457,11 +4457,6 @@ ABYSS FLEET
 	top:30px;
 	left:65px;
 }
-.module.fleet .lship .ship_hp_bar_cover {
-	width:118px;
-	height:100%;
-	float:left;
-}
 .v .module.fleet .lship .ship_hp_box {
 	top:34px;
 	left:116px;
@@ -4477,13 +4472,25 @@ ABYSS FLEET
 	top:23px;
 	left:54px;
 }
+.module.fleet .lship .ship_hp_bar_cover {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	float:left;
+}
 .module.fleet .lship .ship_hp_bar {
 	width:calc(100% * var(--hpPercent));
 	height:100%;
 }
 .module.fleet .lship .ship_hp_prediction {
+	position:absolute;
+	top:0;
+	left:0;
 	width:calc(100% * var(--afterHpPercent));
 	height:100%;
+	float:left;
 }
 .module.fleet .lship.seven .ship_hp_box {
 	height:9px;
@@ -5018,18 +5025,25 @@ ABYSS FLEET
 	background:#555;
 	position:relative;
 }
-.module.fleet .sship .ship_hp_bar_cover {
-	width:88px;
-	height:100%;
-	float:left;
-}
 .module.fleet .sship .ship_hp_bar {
 	width:calc(100% * var(--hpPercent));
 	height:100%;
 }
 .module.fleet .sship .ship_hp_prediction {
+	position:absolute;
+	left:0;
+	top:0;
 	width:calc(100% * var(--afterHpPercent));
 	height:100%;
+	float:left;
+}
+.module.fleet .sship .ship_hp_bar_cover {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	float:left;
 }
 .module.fleet .sship .ship_hp_pred_value {
 	position:absolute;
