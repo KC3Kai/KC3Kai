@@ -296,9 +296,10 @@
 		$(".ship_hp_max", this.element).text( "/"+this.shipData.hp[1] );
 		$(".ship_hp_pred_value", this.element).hide();
 		
-		// HP bar
+		// HP bar, for prediction bar either since it is sliding now
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
 		this.setStyleVar($(".ship_hp_bar", this.element), "--hpPercent", hpPercent);
+		this.setStyleVar($(".ship_hp_prediction", this.element), "--afterHpPercent", hpPercent);
 		
 		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
@@ -354,14 +355,14 @@
 			} else {
 				if (hpPercent <= 0.25) {
 					// mark hp bar and container box as red if taiha
-					$(".ship_hp_bar", this.element).addClass("hp_taiha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_taiha");
 					this.element.addClass("hp_taiha");
 				} else if (hpPercent <= 0.50) {
-					$(".ship_hp_bar", this.element).addClass("hp_chuuha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_chuuha");
 				} else if (hpPercent <= 0.75) {
-					$(".ship_hp_bar", this.element).addClass("hp_shouha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_shouha");
 				} else {
-					$(".ship_hp_bar", this.element).addClass("hp_normal");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_normal");
 				}
 			}
 

@@ -450,7 +450,7 @@
 
 			$(".lbcons").append("Land Base Cost: " + buildLBMessage(this.stats.lbConsumption));
 			$(".totalcons").append("Total Event Cost: " + buildConsMessage(totalCost));
-			$(".damecons").append("Damage Control Consumed: " + this.stats.dameconCount);
+			$(".damecons").append("Damage Control Consumed in Battles: " + this.stats.dameconCount);
 			$(".loading").hide();
 			$(".table5").show();
 			$(".lbcons").show();
