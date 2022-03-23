@@ -567,32 +567,38 @@
      * @see https://twitter.com/CC_jabberwock/status/1466445421799112705 - modifiers have changed since Event 52 (Fall 2021) according selected difficulty and map settings
      */
     const getLandBaseHighAltitudeModifier = (world, diff = 4, night = false) => {
-        const modMapByDifficulty = night ? {
-            // under verification for super heavy bombers night air raid
-            // https://twitter.com/yukicacoon/status/1505131589818150913
-            "4": [120, 220, 340, 400], // Hard
-        } : {
+        const modMapByDifficulty = {
             "1": [1.0, 1.0, 1.1, 1.2], // Casual
             "2": [1.0, 1.0, 1.1, 1.2], // Easy
             "3": [0.5, 0.8, 1.1, 1.2], // Normal
             "4": [0.5, 0.8, 1.1, 1.2], // Hard
         };
-        const mods = modMapByDifficulty[diff] || modMapByDifficulty[4];
+        const rocketMods = modMapByDifficulty[diff] || modMapByDifficulty[4];
         const defenderBases = PlayerManager.bases
             .filter(base => base.map === world && base.action === 2);
         const rocketDefenderCount = defenderBases
             .reduce((acc, base) => acc + base.getHighAltitudeInterceptorCount(), 0);
-        const rocketMod = mods[rocketDefenderCount.valueBetween(0, 3)];
+        const countDefenderPlane = (ids) => defenderBases
+            .reduce((acc, base) => acc + base.countByMstId(ids), 0);
         if(night) {
-            const countDefenderPlane = (ids) => defenderBases
-                .reduce((acc, base) => acc + base.countByMstId(ids), 0);
-            // Group1: Shiden Kai (343), Raiden?, Type 3 Fighter Hien (244)?, Fw190 D-9?
-            // Reppu Kai/(352), Toryuu Model C, ... belonged to group2? and group2 overrides 1?
-            const group1Count = countDefenderPlane([175, 177, 263, 354]);
-            const group1Mod = 120 + 15 * group1Count;
-            return Math.qckInt("round", 3 * (rocketMod / 120) * (group1Mod / 120), 2) / 10;
+            // https://twitter.com/yukicacoon/status/1506442926628376579
+            const rocketBonus = Array.numbers(1, rocketDefenderCount).reduce((a, v) => (
+                a + 100 * (120 / 100 / Math.pow(2, v))
+            ), -5) + (rocketDefenderCount <= 0 ? 35 : 0);
+            const rocketMod = [1, 1, 1, 1.0, 1, 1][rocketDefenderCount] || 1;
+            // Raiden, Hien (244ag), Repppu Kai, Toryuu
+            const group1Count = countDefenderPlane([175, 177, 333, 445]);
+            // Shiden Kai (343ag), Fw190 D-9
+            const group2Count = countDefenderPlane([263, 354]);
+            // Reppu Kai(352/skilled), Toryuu Model C, Ki-96
+            const group3Count = countDefenderPlane([334, 446, 452]);
+            const group1Bonus = 7 * group1Count;
+            const group2Bonus = group2Count <= 0 ? 0 : [0, 11, 14][group2Count] || 14;
+            const group3Bonus = group3Count <= 0 ? 0 : 10 + (7 + (group3Count - 1) * 10) * 1.1;
+            return Math.qckInt("round", (rocketMod * (group1Bonus + group2Bonus + group3Bonus)
+                + rocketBonus) / 100, 3);
         } else {
-            return rocketMod;
+            return rocketMods[rocketDefenderCount.valueBetween(0, 3)];
         }
     };
 
@@ -601,19 +607,18 @@
         const hamod1 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff);
         const hapow1 = Math.floor(baseIntPower * hamod1);
         const hamod2 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff, true);
-        const hapow2 = Math.floor(baseIntPower * hamod2);
-        const powTip = "{0} (x{1}) / x{2}?".format(hapow1, hamod1, hamod2);
+        const powTip = "{0} (x{1})".format(hapow1, hamod1);
         const firstLine = KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(powTip);
-        // List up usual modifiers instead, since heavy bomber mods still under verification
+        // List up usual modifiers too, since super heavy bomber mods still under verification
         const containerStyles = {
             "font-size":"11px",
             "display":"grid",
-            "grid-template-columns":"50% auto auto",
+            "grid-template-columns":"38.2% auto auto",
             "column-gap":"10px", "grid-column-gap":"10px",
             "white-space":"nowrap",
         };
         let text = "";
-        [0.3, 0.5, 0.8, 1.1, 1.2, 1.3].forEach(mod => {
+        [0.3, 0.5, 0.8, 1.1, 1.2, hamod2].forEach(mod => {
             text += "<div>&nbsp;</div><div>x{0}</div><div>={1}</div>"
                 .format(mod, Math.floor(baseIntPower * mod));
         });
