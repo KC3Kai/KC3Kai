@@ -27,6 +27,12 @@
 		this.lockTagColors = KC3Meta.eventLockingTagColors(ConfigManager.sr_theme);
 	};
 
+	KC3NatsuiroShipbox.prototype.setStyleVar = function(elm, name, value){
+		const nativeStyle = $(elm).get(0).style;
+		nativeStyle.removeProperty(name);
+		nativeStyle.setProperty(name, value);
+	};
+
 	/* SET SHIP
 	Short ship box for combined fleets
 	---------------------------------------------------*/
@@ -186,15 +192,14 @@
 	Short ship box for combined fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineShort = function( currentFleet ){
-		this.hpBarLength = 88;
 		this.showHP();
 		this.showPrediction();
 		this.showMorale();
 		
-		// Thin bars below the ship box
+		// REMOVED Thin bars below the ship box
 		$(".ship_exp", this.element).css("width", (25 * this.expPercent)+"px");
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
-		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");		
+		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
 		$(".ship_fuel .ship_supply_bar", this.element).css("width", (25 * Math.min(this.fuelPercent, 1))+"px");
 		$(".ship_ammo .ship_supply_bar", this.element).css("width", (25 * Math.min(this.ammoPercent, 1))+"px");
 		var resupplyCost = this.shipData.calcResupplyCost(-1, -1, true);
@@ -224,7 +229,6 @@
 	Long ship box for single-view fleets
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.defineLong = function( currentFleet ){
-		this.hpBarLength = 118;
 		this.showHP();
 		this.showPrediction();
 		this.showMorale();
@@ -251,7 +255,7 @@
 				return title;
 			})(this.shipData) ).lazyInitTooltip();
 		$(".ship_exp_next", this.element).text( KC3Meta.formatNumber(this.shipData.exp[1]) );
-		$(".ship_exp_bar", this.element).css("width", (183*this.expPercent)+"px");
+		this.setStyleVar($(".ship_exp_bar", this.element), "--expPercent", this.expPercent);
 		
 		$(".ship_fuel .ship_supply_text", this.element).text(Math.ceil(this.fuelPercent*100)+"%");
 		$(".ship_ammo .ship_supply_text", this.element).text(Math.ceil(this.ammoPercent*100)+"%");
@@ -292,9 +296,10 @@
 		$(".ship_hp_max", this.element).text( "/"+this.shipData.hp[1] );
 		$(".ship_hp_pred_value", this.element).hide();
 		
-		// HP bar
+		// HP bar, for prediction bar either since it is sliding now
 		var hpPercent = this.shipData.hp[0] / this.shipData.hp[1];
-		$(".ship_hp_bar", this.element).css("width", (this.hpBarLength*hpPercent)+"px");
+		this.setStyleVar($(".ship_hp_bar", this.element), "--hpPercent", hpPercent);
+		this.setStyleVar($(".ship_hp_prediction", this.element), "--afterHpPercent", hpPercent);
 		
 		// Left HP to be Taiha & Chuuha
 		var taihaHp = Math.floor(0.25 * this.shipData.hp[1]);
@@ -350,14 +355,14 @@
 			} else {
 				if (hpPercent <= 0.25) {
 					// mark hp bar and container box as red if taiha
-					$(".ship_hp_bar", this.element).addClass("hp_taiha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_taiha");
 					this.element.addClass("hp_taiha");
 				} else if (hpPercent <= 0.50) {
-					$(".ship_hp_bar", this.element).addClass("hp_chuuha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_chuuha");
 				} else if (hpPercent <= 0.75) {
-					$(".ship_hp_bar", this.element).addClass("hp_shouha");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_shouha");
 				} else {
-					$(".ship_hp_bar", this.element).addClass("hp_normal");
+					$(".ship_hp_bar,.ship_hp_prediction", this.element).addClass("hp_normal");
 				}
 			}
 
@@ -396,8 +401,8 @@
 			
 			// Prediction bar
 			var afterHpPercent = this.shipData.afterHp[0] / this.shipData.afterHp[1];
-			$(".ship_hp_prediction", this.element).css("width", (this.hpBarLength*afterHpPercent)+"px");
-
+			this.setStyleVar($(".ship_hp_prediction", this.element), "--afterHpPercent", afterHpPercent);
+			
 			// Prediction HP result and diff values
 			var hpDiff = this.shipData.afterHp[0] - this.shipData.hp[0];
 			if(this.shipData.hp[0] <= 0) {
@@ -439,26 +444,27 @@
 	Add special glow if more than 53
 	---------------------------------------------------*/
 	KC3NatsuiroShipbox.prototype.showMorale = function(){
-		$(".ship_morale", this.element).text( this.shipData.morale );
+		const moraleClasses = ["glowing", "morale_sparkle", "morale_normal",
+			"morale_mamiya", "morale_orange", "morale_red", ].join(" ");
+		$(".ship_morale", this.element).text(this.shipData.morale).removeClass(moraleClasses);
 		switch(true){
 			case this.shipData.morale > 52: // sparkle and get buff
-				$(".ship_morale", this.element).css("background", "#DDDD00");
-				$(".ship_morale", this.element).addClass("glowing");
+				$(".ship_morale", this.element).addClass("morale_sparkle glowing");
 				break;
 			case this.shipData.morale > 49: // sparkle in-game
-				$(".ship_morale", this.element).css("background", "#dddd00");
+				$(".ship_morale", this.element).addClass("morale_sparkle");
 				break;
 			case this.shipData.morale > 39: // no effect in-game, regular state
-				$(".ship_morale", this.element).css("background", "#dddddf");
+				$(".ship_morale", this.element).addClass("morale_normal");
 				break;
 			case this.shipData.morale > 29: // mamiya/irako usable, debuff when < 33
-				$(".ship_morale", this.element).css("background", "#FFDDBB");
+				$(".ship_morale", this.element).addClass("morale_mamiya");
 				break;
 			case this.shipData.morale > 19: // orange face, debuff
-				$(".ship_morale", this.element).css("background", "#FFB74A");
+				$(".ship_morale", this.element).addClass("morale_orange");
 				break;
 			default: // red face, heavy debuff
-				$(".ship_morale", this.element).css("background", "#FFA6A6");
+				$(".ship_morale", this.element).addClass("morale_red");
 				break;
 		}
 	};
@@ -531,7 +537,10 @@
 				$(".ship_gear_"+(slot+1), this.element).addClass("empty");
 			}
 			
-			if(this.shipData.slots[ slot ] > 0 ||
+			const slotSizeClasses = ["slot_size_empty", "slot_size_taiha",
+				"slot_size_chuuha", "slot_size_shouha", "slot_size_full"].join(" ");
+			$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).removeClass(slotSizeClasses);
+			if(this.shipData.slots[slot] > 0 ||
 				(thisGear && KC3GearManager.carrierBasedAircraftType3Ids.indexOf(thisGear.master().api_type[3]) > -1)
 			){
 				var slotCurr = this.shipData.slots[slot];
@@ -545,21 +554,19 @@
 				}
 				var slotPercent = slotCurr / (slotMax || 1);
 				if(slotPercent <= 0){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#999");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("slot_size_empty");
 				} else if(slotPercent <= 0.25){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f00");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("slot_size_taiha");
 				} else if(slotPercent <= 0.50){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#f90");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("slot_size_chuuha");
 				} else if(slotPercent <= 0.75){
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "#ff0");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("slot_size_shouha");
 				} else {
-					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
+					$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).addClass("slot_size_full");
 				}
 			}else{
 				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).text("");
-				$(".ship_gear_"+(slot+1)+" .ship_gear_slot", this.element).css("color", "");
 			}
-
 			
 			$(".ship_gear_"+(slot+1), this.element).show();
 		}else{

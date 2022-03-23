@@ -1274,20 +1274,23 @@ Previously known as "Reactor"
 		
 		/* Super Heavy Bombing Air Raid since event Winter 2022
 		-------------------------------------------------------*/
-		"api_req_map/air_raid":function(params, response, headers){
+		"api_req_map/air_raid":function(params, response, headers, decodedParams){
+			const btnScc = parseInt(decodedParams.api_scc);
 			const destBattleArr = response.api_data.api_destruction_battle;
-			if(Array.isArray(destBattleArr)){
-				// Unlike node air raid, 1~3 waves can occur for this type according QTE result?
-				// Only final wave will be displayed, no good solution for now to display all the 3 waves?
+			// Unlike old land base air raid, 1~3 waves may occur according difficulty:
+			// 1 wave for casual/easy, 2 waves for medium, 3 waves for hard
+			// btw, game defines this type of land base air raid with 'AirRaidNight', battle scene with 'AirUnitHeavy'
+			if(destBattleArr){
+				KC3SortieManager.engageLandBaseAirRaid({
+					"api_scc": btnScc,
+					"api_destruction_battle": destBattleArr
+				}, true);
+				KC3Network.trigger("LandBaseAirRaid");
 				destBattleArr.forEach(destBattle => {
-					KC3SortieManager.engageLandBaseAirRaid(destBattle);
-					KC3Network.trigger("LandBaseAirRaid");
 					if(destBattle.api_m2 > 0){
 						KC3Network.trigger("DebuffNotify", destBattle);
 					}
 				});
-			} else {
-				console.debug("Unexpected api data for /air_raid", response.api_data);
 			}
 		},
 		

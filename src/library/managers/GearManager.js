@@ -17,7 +17,8 @@ Saves and loads list to and from localStorage
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
 		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,49],
-		antiAirFighterType2Ids: [6,7,8,11,45,47,48,56,57],
+		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
+		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
@@ -39,7 +40,7 @@ Saves and loads list to and from localStorage
 		landBaseOtherSortieAmmoCostPerSlot: 0.6,
 		landBaseReconnMaxSlot: 4,
 		landBaseOtherMaxSlot: 18,
-		landBaseReconnType2Ids: [9,10,41,49],
+		landBaseReconnType2Ids: [9,10,41,49,59,94],
 		// Newly implemented heavy bomber different max slot
 		landBaseHeavyBomberMaxSlot: 9,
 		landBaseHeavyBomberType2Ids: [53],
@@ -67,25 +68,25 @@ Saves and loads list to and from localStorage
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {
 				base:   [1.0, 1.4, 1.4, 1.4, 1.4,  1.4, 1.4, 1.4, 1.4, 1.4],
-				count1: [1.5, 1.5, 1.0, 1.8, 1.15, 1.1, 1.1, 1.1, 1.5, 1.0],
+				count1: [1.5, 1.5, 1.0, 1.0, 1.15, 1.1, 1.1, 1.1, 1.5, 1.0],
 				count2: [1.2, 1.3, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Artillery Imp
 			1: {
 				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.5, 1.0, 1.8, 1.15, 2.0, 1.3, 1.3, 1.5, 1.0],
+				count1: [2.4,  1.5, 1.0, 1.0, 1.15, 2.0, 1.3, 1.3, 1.5, 1.0],
 				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.2, 1.2, 1.0, 1.0],
 			},
 			// Isolated Island Princess
 			2: {
 				base:   [1.0,  1.8, 1.8, 1.8, 1.8,  1.8, 1.8, 1.8, 1.8, 1.8],
-				count1: [2.4,  1.2, 1.0, 1.8, 1.15, 1.8, 1.3, 1.3, 1.2, 1.0],
+				count1: [2.4,  1.2, 1.0, 1.0, 1.15, 1.8, 1.3, 1.3, 1.2, 1.0],
 				count2: [1.35, 1.4, 1.0, 1.0, 1.0,  1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Supply Depot Princess for post-cap bonus only
 			3: {
 				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
-				count1: [1.7, 1.3, 1.0, 1.0, 1.2, 1.2, 1.5, 1.5, 1.3, 1.0],
+				count1: [1.7, 1.3, 1.0, 1.0, 1.0, 1.2, 1.5, 1.5, 1.3, 1.0],
 				count2: [1.5, 1.6, 1.0, 1.0, 1.0, 1.0, 1.1, 1.1, 1.0, 1.0],
 			},
 			// Summer Harbor Princess

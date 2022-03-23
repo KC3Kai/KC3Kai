@@ -804,6 +804,7 @@ Provides access to data on built-in JSON files
 				carrierBasedAircraftType3Ids: d.carrierBasedAircraftType3Ids,
 				landBasedAircraftType3Ids: d.landBasedAircraftType3Ids,
 				antiAirFighterType2Ids: d.antiAirFighterType2Ids,
+				antiAirLandBaseFighterType2Ids: d.antiAirLandBaseFighterType2Ids,
 				airStrikeBomberType2Ids: d.airStrikeBomberType2Ids,
 				antiLandDiveBomberIds: d.antiLandDiveBomberIds,
 				evadeAntiAirFireIds: d.evadeAntiAirFireIds,

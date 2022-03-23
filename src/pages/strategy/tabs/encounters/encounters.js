@@ -131,9 +131,10 @@
 		},
 		
 		isLbasSortieMap: function(world, map) {
-			return world === 6 && [4, 5].includes(map) ||
-				(world >= 41 && (this.maps[['m', world, map].join('')] || {}).airBase) ||
-				KC3Meta.isEventWorld(world);
+			return (this.maps[['m', world, map].join('')] || {}).airBase > 0
+				|| world === 6 && [4, 5].includes(map)
+				|| world === 7 && map === 4
+				|| KC3Meta.isEventWorld(world);
 		},
 		
 		showMapEncounters: function(world, map, cleared, diff) {
