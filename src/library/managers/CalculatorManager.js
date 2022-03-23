@@ -566,18 +566,66 @@
      * @see https://cdn.discordapp.com/attachments/208624431818342400/620539904694288395/lbas_tables_swdn.png
      * @see https://twitter.com/CC_jabberwock/status/1466445421799112705 - modifiers have changed since Event 52 (Fall 2021) according selected difficulty and map settings
      */
-    const getLandBaseHighAltitudeModifier = (world, diff = 4) => {
+    const getLandBaseHighAltitudeModifier = (world, diff = 4, night = false) => {
         const modMapByDifficulty = {
             "1": [1.0, 1.0, 1.1, 1.2], // Casual
             "2": [1.0, 1.0, 1.1, 1.2], // Easy
             "3": [0.5, 0.8, 1.1, 1.2], // Normal
             "4": [0.5, 0.8, 1.1, 1.2], // Hard
         };
-        const mods = modMapByDifficulty[diff] || [0.5, 0.8, 1.1, 1.2];
-        const rocketDefenderCount = PlayerManager.bases
-            .filter(base => base.map === world && base.action === 2)
+        const rocketMods = modMapByDifficulty[diff] || modMapByDifficulty[4];
+        const defenderBases = PlayerManager.bases
+            .filter(base => base.map === world && base.action === 2);
+        const rocketDefenderCount = defenderBases
             .reduce((acc, base) => acc + base.getHighAltitudeInterceptorCount(), 0);
-        return mods[rocketDefenderCount.valueBetween(0, 3)];
+        const countDefenderPlane = (ids) => defenderBases
+            .reduce((acc, base) => acc + base.countByMstId(ids), 0);
+        if(night) {
+            // https://twitter.com/yukicacoon/status/1506442926628376579
+            const rocketBonus = Array.numbers(1, rocketDefenderCount).reduce((a, v) => (
+                a + 100 * (120 / 100 / Math.pow(2, v))
+            ), -5) + (rocketDefenderCount <= 0 ? 35 : 0);
+            const rocketMod = [1, 1, 1, 1.0, 1, 1][rocketDefenderCount] || 1;
+            // Raiden, Hien (244ag), Repppu Kai, Toryuu
+            const group1Count = countDefenderPlane([175, 177, 333, 445]);
+            // Shiden Kai (343ag), Fw190 D-9
+            const group2Count = countDefenderPlane([263, 354]);
+            // Reppu Kai(352/skilled), Toryuu Model C, Ki-96
+            const group3Count = countDefenderPlane([334, 446, 452]);
+            const group1Bonus = 7 * group1Count;
+            const group2Bonus = group2Count <= 0 ? 0 : [0, 11, 14][group2Count] || 14;
+            const group3Bonus = group3Count <= 0 ? 0 : 10 + (7 + (group3Count - 1) * 10) * 1.1;
+            return Math.qckInt("round", (rocketMod * (group1Bonus + group2Bonus + group3Bonus)
+                + rocketBonus) / 100, 3);
+        } else {
+            return rocketMods[rocketDefenderCount.valueBetween(0, 3)];
+        }
+    };
+
+    const buildLandBaseHighAltitudeFighterPowerText = (world, baseIntPower) => {
+        const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
+        const hamod1 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff);
+        const hapow1 = Math.floor(baseIntPower * hamod1);
+        const hamod2 = KC3Calc.getLandBaseHighAltitudeModifier(world, diff, true);
+        const powTip = "{0} (x{1})".format(hapow1, hamod1);
+        const firstLine = KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(powTip);
+        // List up usual modifiers too, since super heavy bomber mods still under verification
+        const containerStyles = {
+            "font-size":"11px",
+            "display":"grid",
+            "grid-template-columns":"38.2% auto auto",
+            "column-gap":"10px", "grid-column-gap":"10px",
+            "white-space":"nowrap",
+        };
+        let text = "";
+        [0.3, 0.5, 0.8, 1.1, 1.2, hamod2].forEach(mod => {
+            text += "<div>&nbsp;</div><div>x{0}</div><div>={1}</div>"
+                .format(mod, Math.floor(baseIntPower * mod));
+        });
+        return firstLine + "\n" + $("<div></div>")
+            .css(containerStyles)
+            .html(text)
+            .prop("outerHTML");
     };
 
     /**
@@ -592,9 +640,9 @@
      *           computed fighter power (without improvement and proficiency bonus),
      *           sum of known slot capacity,
      *           sum of slot capacity without air power,
-     *           sum of slot capacity with recon/lbaa planes equipped,
+     *           sum of slot capacity with recon/lbaa/etc planes equipped,
      *           exception map indicates which ship or gear missing required data:
-     *             {shipId: null || {gearId: null || aaStat || 'recon'}}
+     *             {shipId: null || {gearId: null || aaStat || 'lbas'}}
      *         ]
      * @see Fleet, Ship, Gear classes to compute fighter power of player fleet.
      */
@@ -640,7 +688,7 @@
                 }
                 // for LBAS battle, recon planes participate, and their fighter power may be counted
                 if(KC3GearManager.antiAirFighterType2Ids.includes(gearMst.api_type[2])
-                    || (!!forLbas && KC3GearManager.landBaseReconnType2Ids.includes(gearMst.api_type[2]))) {
+                    || (!!forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2]))) {
                     const aaStat = gearMst.api_tyku || 0;
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
@@ -655,15 +703,15 @@
                         exceptions[shipId] = exceptions[shipId] || {};
                         exceptions[shipId][gearId] = aaStat;
                     }
-                } else if(gearMst.api_type[1] === 7) {
-                    // sum recon planes not participate in normal air battle but LBAS battle,
-                    // seaplane fighters/bombers will not be dropped here
+                } else if(KC3GearManager.antiAirLandBaseFighterType2Ids.includes(gearMst.api_type[2])) {
+                    // sum other planes not participate in normal air battle but LBAS battle,
+                    // non plane slot, seaplane fighters/bombers will not be dropped here
                     const capacity = ((enemySlotSizes || [])[shipIdx] || shipMst.api_maxeq || [])[slotIdx];
                     if(capacity !== undefined) {
                         reconCapacity += capacity;
                     } else {
                         exceptions[shipId] = exceptions[shipId] || {};
-                        exceptions[shipId][gearId] = "recon";
+                        exceptions[shipId][gearId] = "lbas";
                     }
                 }
             }
@@ -815,6 +863,7 @@
         getLandBasesWorstCond,
         isLandBasesSupplied,
         getLandBaseHighAltitudeModifier,
+        buildLandBaseHighAltitudeFighterPowerText,
         
         enemyFighterPower,
         fighterPowerIntervals,

@@ -2578,17 +2578,13 @@
 						$(".base_ifp .base_stat_value", baseBox).text(
 							!!ifp ? "\u2248" + ifp : KC3Meta.term("None")
 						);
-						if (!!ifp) {
-							const diff = KC3SortieManager.map_difficulty || KC3SortieManager.getLatestEventMapData().difficulty;
-							const hamod = KC3Calc.getLandBaseHighAltitudeModifier(baseInfo.map, diff);
-							const haifp = Math.floor(ifp * hamod);
-							const haifpTip = "{0} (x{1})".format(haifp, hamod);
+						if (!!ifp && actionTerm === "Defend") {
 							$(".base_ifp .base_stat_value", baseBox).attr("title",
-								KC3Meta.term("LandBaseTipHighAltitudeAirDefensePower").format(haifpTip)
+								KC3Calc.buildLandBaseHighAltitudeFighterPowerText(baseInfo.map, ifp)
 							).lazyInitTooltip();
 						}
 						//$(".airbase_infos", baseBox).on("click", togglePlaneName);
-
+						
 						let planeNames = "";
 						$.each(baseInfo.planes, function(i, planeInfo){
 							const planeBox = $("#factory .airbase_plane").clone();
@@ -2610,7 +2606,7 @@
 								}
 								$(".base_plane_name", planeBox).attr("title", itemObj.htmlTooltip(planeInfo.api_count, baseInfo)).lazyInitTooltip();
 								planeNames += itemObj.name() + "\n";
-
+								
 								const paddedId = (itemObj.masterId<10?"00":itemObj.masterId<100?"0":"") + itemObj.masterId;
 								let eqImgSrc = "/assets/img/planes/" + paddedId + ".png";
 								// show local plane image first
@@ -3072,8 +3068,18 @@
 				var airDefender = (!thisNode.fplaneFrom || thisNode.fplaneFrom[0] === -1) ?
 					KC3Meta.term("BattleAirDefendNo") :
 					KC3Meta.term("BattleAirDefendYes").format(thisNode.fplaneFrom.join(","));
-				$(".module.activity .battle_detection").text(airDefender);
-				$(".module.activity .battle_detection").attr("title", airDefender);
+				if(thisNode.heavyDefenseRequest !== undefined) {
+					const colorName = ["black", "coral", "silver", "gold"][thisNode.heavyDefenseRequest] || "inherit";
+					const reqSquadStar = "<span style='color:{0}'>\u2605</span>".format(colorName);
+					$(".module.activity .battle_detection").html([airDefender, reqSquadStar].join(" "))
+						.attr("title", [
+							"{0} ({1})".format(airDefender, thisNode.heavyDefenseRequest),
+							JSON.stringify(thisNode.fplaneFromByWaves.map(v => v || []))
+						].join("\n"));
+				} else {
+					$(".module.activity .battle_detection").text(airDefender);
+					$(".module.activity .battle_detection").attr("title", airDefender);
+				}
 				$(".module.activity .battle_engagement").prev().text(KC3Meta.term("BattleAirBaseLoss"));
 				$(".module.activity .battle_engagement").text(KC3Meta.airraiddamage(thisNode.lostKind));
 				if(thisNode.lostKind == 4){
@@ -3082,9 +3088,15 @@
 				} else {
 					$(".module.activity .battle_engagement").addClass("bad");
 					// http://wikiwiki.jp/kancolle/?%B4%F0%C3%CF%B9%D2%B6%F5%C2%E2#airraid
-					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip")
-						.format( thisNode.baseDamage, Math.round(thisNode.baseDamage * 0.9 + 0.1) )
-					);
+					$(".module.activity .battle_engagement").attr("title", KC3Meta.term("BattleAirBaseLossTip").format(
+						(thisNode.baseDamageByWaves ?
+							"{0} [{1}]".format(thisNode.baseDamage, thisNode.baseDamageByWaves.join(",")) :
+							thisNode.baseDamage
+						),
+						Math.round(thisNode.baseDamage * 0.9 + 0.1)
+					) + (
+						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.join(",")) : ""
+					));
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
