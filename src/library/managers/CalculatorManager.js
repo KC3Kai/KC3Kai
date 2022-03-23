@@ -581,22 +581,22 @@
         const countDefenderPlane = (ids) => defenderBases
             .reduce((acc, base) => acc + base.countByMstId(ids), 0);
         if(night) {
-            // https://twitter.com/yukicacoon/status/1506442926628376579
+            // https://twitter.com/yukicacoon/status/1506638266958684160
             const rocketBonus = Array.numbers(1, rocketDefenderCount).reduce((a, v) => (
                 a + 100 * (120 / 100 / Math.pow(2, v))
-            ), -5) + (rocketDefenderCount <= 0 ? 35 : 0);
-            const rocketMod = [1, 1, 1, 1.0, 1, 1][rocketDefenderCount] || 1;
+            ), -5) + (rocketDefenderCount > 0 ? 0 : 35);
+            const rocketMod = [0.5, 0.95, 1, 1.0, 1, 1][rocketDefenderCount] || 1;
             // Raiden, Hien (244ag), Repppu Kai, Toryuu
             const group1Count = countDefenderPlane([175, 177, 333, 445]);
             // Shiden Kai (343ag), Fw190 D-9
             const group2Count = countDefenderPlane([263, 354]);
             // Reppu Kai(352/skilled), Toryuu Model C, Ki-96
             const group3Count = countDefenderPlane([334, 446, 452]);
-            const group1Bonus = 7 * group1Count;
-            const group2Bonus = group2Count <= 0 ? 0 : [0, 11, 14][group2Count] || 14;
-            const group3Bonus = group3Count <= 0 ? 0 : 10 + (7 + (group3Count - 1) * 10) * 1.1;
-            return Math.qckInt("round", (rocketMod * (group1Bonus + group2Bonus + group3Bonus)
-                + rocketBonus) / 100, 3);
+            const group1Bonus = group1Count > 0 ? (7 * group1Count) : 0;
+            const group2Bonus = group2Count > 0 ? ([0, 11, 14][group2Count] || 14) : 0;
+            const group3Bonus = group3Count > 0 ? (10 + (7 + (group3Count - 1) * 10) * 1.1) : 0;
+            return Math.qckInt("round", (rocketBonus + rocketMod *
+                (group1Bonus + group2Bonus + group3Bonus)) / 100, 3);
         } else {
             return rocketMods[rocketDefenderCount.valueBetween(0, 3)];
         }
