@@ -595,18 +595,33 @@
 				if(!id) return;
 				KC3ImageBuilder.exportSortie(id);
 			};
-			const parseAirRaidFunc = function(airRaid) {
+			const parseAirRaidFunc = function(airRaid, heavyAirRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
 				if(airRaid.api_air_base_attack) {
 					//console.debug("LB Air Raid", airRaid);
 					// Whoever wanna do whatever? such as dump enemy info
 					if(typeof window.dumpLandbaseAirRaid === "function")
-						window.dumpLandbaseAirRaid.call(self, airRaid);
+						window.dumpLandbaseAirRaid.call(self, airRaid, heavyAirRaid);
 				}
-				const damageArray = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3.api_fdam") || [];
+				let damageArray = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3.api_fdam") || [];
+				// FIXME Handle all waves from heavy air raids
+				// here simple sum all damages again
+				if(heavyAirRaid) {
+					damageArray = [];
+					heavyAirRaid.api_destruction_battle.map(wave =>
+						Object.getSafePath(wave, "api_air_base_attack.api_stage3.api_fdam") || [])
+						.forEach(arr => { damageArray.push(...arr); });
+				}
 				const baseTotalDamage = damageArray.reduce((sum, n) => sum + Math.max(0, Math.floor(n)), 0);
 				const planePhase = Object.getSafePath(airRaid, "api_air_base_attack.api_stage1") || {};
 				const airState = planePhase.api_disp_seiku === undefined ? 99 : planePhase.api_disp_seiku;
+				let airStateText = KC3Meta.airbattle(airState)[2] || KC3Meta.airbattle(airState)[0];
+				// list up all air states from every waves
+				if(heavyAirRaid) {
+					airStateText = "[{0}]".format(heavyAirRaid.api_destruction_battle.map(wave =>
+						Object.getSafePath(wave, "api_air_base_attack.api_stage1.api_disp_seiku") || 99)
+						.map(seiku => KC3Meta.airbattle(airState)[2] || "?").join(","));
+				}
 				const enemyPlaneLost = planePhase.api_e_count > 0 ?
 					Math.qckInt("round", planePhase.api_e_lostcount / planePhase.api_e_count * 100, 1) : 0;
 				const bomberPhase = Object.getSafePath(airRaid, "api_air_base_attack.api_stage3") || {};
@@ -643,18 +658,28 @@
 					// add a question mark if there is inferring exception
 					airpowIntervals[0] = "{0}?".format(airpowIntervals[0]);
 				}
+				let lostKindId = airRaid.api_lost_kind || 0;
+				if(heavyAirRaid) {
+					lostKindId = ((arr) => (
+						arr.includes(2) || arr.includes(1) && arr.includes(3) ? 2 :
+						arr.includes(1) ? 1 :
+						arr.includes(3) ? 3 :
+						arr.includes(4) ? 4 : 0
+					))(heavyAirRaid.api_destruction_battle.map(wave => wave.api_lost_kind));
+				}
 				return {
-					airRaidLostKind: airRaid.api_lost_kind || 0,
+					airRaidLostKind: lostKindId,
 					baseTotalDamage: baseTotalDamage,
 					resourceLossAmount: Math.round(baseTotalDamage * 0.9 + 0.1),
 					eships: eships,
 					eFighterPowers: airpowIntervals,
-					airState: KC3Meta.airbattle(airState)[2] || KC3Meta.airbattle(airState)[0],
+					airState: airStateText,
 					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1),
 					isDiveBombingFound: (bomberPhase.api_fbak_flag || []).includes(1),
 					shotdownPercent: enemyPlaneLost,
 					topAntiBomberSquadSlots: topAbSquadSlots,
-					topAntiBomberSquadNames: topAbSquadsName
+					topAntiBomberSquadNames: topAbSquadsName,
+					heavyDefenseRequest: heavyAirRaid ? heavyAirRaid.api_scc : undefined,
 				};
 			};
 			const showSortieLedger = function(sortieId, sortieBox, sortieWorld) {
@@ -747,14 +772,18 @@
 								// Adding air raids to all nodes, including non battle ones
 								const destBattle = node.heavyAirRaid ? node.heavyAirRaid.api_destruction_battle.slice(-1)[0] : node.airRaid;
 								//if(node.heavyAirRaid) { console.debug(node.heavyAirRaid); }
-								// FIXME Handle all waves from heavy air raids
-								const airRaid = parseAirRaidFunc(destBattle);
+								const airRaid = parseAirRaidFunc(destBattle, node.heavyAirRaid);
 								if(airRaid.airRaidLostKind > 0) {
 									$(".sortie_edge_"+(index+1), sortieBox)
 										.addClass(airRaid.airRaidLostKind === 4 ? "nodamage" : "damaged");
 									// Show Enemy Air Raid damage
 									let oldTitle = $(".sortie_edge_"+(index+1), sortieBox).attr("title") || "";
 									oldTitle += oldTitle ? "\n" : "";
+									// Prepended info for super heavy air raid
+									if(airRaid.heavyDefenseRequest !== undefined) {
+										oldTitle += KC3Meta.term("BattleHistoryHeavyAirRaidTip")
+											.format(airRaid.heavyDefenseRequest, JSON.stringify(airRaid.eships)) + "\n";
+									}
 									oldTitle += KC3Meta.term("BattleHistoryAirRaidTip").format(
 										airRaid.baseTotalDamage,
 										KC3Meta.airraiddamage(airRaid.airRaidLostKind),
