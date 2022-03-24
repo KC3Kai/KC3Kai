@@ -1603,7 +1603,7 @@ Used by SortieManager
 		var tooltip = this.airbattle[2] || "";
 		// Show all results for multi-waves heavy air raid, only last wave shown in-game
 		if(Array.isArray(this.airbattleIdByWaves)){
-			tooltip += " [{0}]".format(this.airbattleIdByWaves.join(","));
+			tooltip += " [{0}]".format(this.airbattleIdByWaves.map(seiku => KC3Meta.airbattle(seiku)[0] || "?").join(","));
 		}
 		const apTuple = KC3Calc.enemyFighterPower(this.eships, this.eSlot, undefined, forLbas);
 		// Air Power: AI<1/3, 1/3<=AD<2/3, 2/3<=AP<3/2, 3/2<=AS<3, 3<=AS+

@@ -2965,7 +2965,7 @@
 						),
 						Math.round(thisNode.baseDamage * 0.9 + 0.1)
 					) + (
-						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.join(",")) : ""
+						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.map(id => KC3Meta.airraiddamage(id) || "?").join(",")) : ""
 					));
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);

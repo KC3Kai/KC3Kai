@@ -746,6 +746,7 @@
 							if(node.airRaid || node.heavyAirRaid) {
 								// Adding air raids to all nodes, including non battle ones
 								const destBattle = node.heavyAirRaid ? node.heavyAirRaid.api_destruction_battle.slice(-1)[0] : node.airRaid;
+								//if(node.heavyAirRaid) { console.debug(node.heavyAirRaid); }
 								// FIXME Handle all waves from heavy air raids
 								const airRaid = parseAirRaidFunc(destBattle);
 								if(airRaid.airRaidLostKind > 0) {
