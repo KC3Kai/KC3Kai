@@ -3127,8 +3127,9 @@
 			};
 			// `info_compass` including 'Battle Data', so no activity if it's off
 			if(ConfigManager.info_compass){
-				// Have to wait seconds for game animate and see compass results
-				setTimeout(updateBattleActivityFunc, 6500);
+				// Have to wait seconds for game animate and see compass results,
+				// except in case of super heavy air raid
+				setTimeout(updateBattleActivityFunc, thisNode.isHeavyAirBaseRaid ? 100 : 6500);
 			}
 		},
 
