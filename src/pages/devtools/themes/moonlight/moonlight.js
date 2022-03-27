@@ -3100,7 +3100,9 @@
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
-				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").text(
+					thisNode.airbattleIdByWaves ? thisNode.airbattleIdByWaves.map(id => KC3Meta.airbattle(id)[0] || "?").join(",") : thisNode.airbattle[0]
+				);
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle")
 					.attr("title", thisNode.buildAirPowerMessage(true))
