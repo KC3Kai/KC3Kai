@@ -1330,18 +1330,18 @@ KC3改 Ship Object
 	/* FIGHTER POWER
 	Get fighter power of this ship
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.fighterPower = function(){
+	KC3Ship.prototype.fighterPower = function(forLbas = false){
 		if(this.isDummy()){ return 0; }
-		return this.equipment().map((g, i) => g.fighterPower(this.slots[i])).sumValues();
+		return this.equipment().map((g, i) => g.fighterPower(this.slots[i], forLbas)).sumValues();
 	};
 
 	/* FIGHTER POWER with WHOLE NUMBER BONUS
 	Get fighter power of this ship as an array
 	with consideration to whole number proficiency bonus
 	--------------------------------------------------------------*/
-	KC3Ship.prototype.fighterVeteran = function(){
+	KC3Ship.prototype.fighterVeteran = function(forLbas = false){
 		if(this.isDummy()){ return 0; }
-		return this.equipment().map((g, i) => g.fighterVeteran(this.slots[i])).sumValues();
+		return this.equipment().map((g, i) => g.fighterVeteran(this.slots[i], forLbas)).sumValues();
 	};
 
 	/* FIGHTER POWER with LOWER AND UPPER BOUNDS
