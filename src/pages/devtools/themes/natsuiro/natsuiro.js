@@ -2136,7 +2136,9 @@
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle(isCombinedAirView);
 			$(".summary-airfp .summary_text").text(FleetSummary.air)
-				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
+				.attr("titlealt", KC3Calc.buildFleetsFighterPowerText(
+					MainFleet, undefined, selectedFleet === 5, FleetSummary.air
+				) + KC3Calc.buildFleetsAirstrikePowerText(
 					MainFleet, undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
 					MainFleet, undefined, selectedFleet === 5,
