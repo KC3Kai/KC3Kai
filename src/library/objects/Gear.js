@@ -328,6 +328,9 @@ KC3改 Equipment Object
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
 				if(type2 === 25)
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
+				// Unknown for Anti-Sub PBY
+				// https://twitter.com/myteaGuard/status/1502572381625544704
+				//if(type2 === 26) modifier <= 0.6?;
 				break;
 			case "airstrike":
 			case "lbas":
