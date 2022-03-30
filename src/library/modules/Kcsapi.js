@@ -1279,6 +1279,7 @@ Previously known as "Reactor"
 			const destBattleArr = response.api_data.api_destruction_battle;
 			// Unlike old land base air raid, 1~3 waves may occur according difficulty:
 			// 1 wave for casual/easy, 2 waves for medium, 3 waves for hard
+			// btw, game defines this type of land base air raid with 'AirRaidNight', battle scene with 'AirUnitHeavy'
 			if(destBattleArr){
 				KC3SortieManager.engageLandBaseAirRaid({
 					"api_scc": btnScc,

@@ -1732,7 +1732,7 @@ KC3改 Ship Object
 				if(type > 0) {
 					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
 					landingGroupCount += count;
-					// Honi1 is counted as T89 for all cases, so all bonuses of Honi1 itself set to 1.0
+					// Honi1 counted as T89 for all cases, so countN bonuses of Honi1 itself set to 1.0
 					// must be added after landingGroupCount summed to avoid duplicated sum of type9
 					if(type === 1) count += honi1Count;
 				} else {
@@ -2216,7 +2216,7 @@ KC3改 Ship Object
 			* mulBonus("spTankModifier")  + addBonus("spTankAdditive"))
 			* mulBonus("m4a1ddModifier")  + addBonus("m4a1ddAdditive"))
 			* mulBonus("gunTankModifier") + addBonus("gunTankAdditive"))
-			* mulBonus("synergyModifier") + addBonus("generalAdditive"))
+			* mulBonus("synergyModifier") + addBonus("synergyAdditive"))
 			+ addBonus("generalAdditive"))
 			* engagementModifier * formationModifier * damageModifier * nightCutinModifier;
 		
@@ -2752,6 +2752,8 @@ KC3改 Ship Object
 			// *Some Abyssal AV/BBV can do ASW with air attack at night.
 			if(time === "Night") return isCvlLike && !this.isTaiha() && this.as[1] > 0;
 			// For day time, false if CVL or CVL-like chuuha
+			// Yamashiomaru can air attack even taiha, but power calc seems fall back to depth charge?
+			// https://twitter.com/yukicacoon/status/1505719117260550147
 			if(isCvlLike && this.isStriped()) return false;
 			// and if ASW plane equipped and its slot > 0
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
@@ -2881,7 +2883,7 @@ KC3改 Ship Object
 
 	/**
 	 * Conditions under verification, known for now:
-	 * Flagship is healthy Nelson, Double Line variants formation selected.
+	 * Flagship is healthy Nelson, Double Line (forward) formation selected.
 	 * Minimum 6 surface ships fleet needed, main fleet only for Combined Fleet.
 	 * 3rd, 5th ship not carrier or submarine.
 	 * No AS/AS+ air battle needed like regular Artillery Spotting.
@@ -2922,7 +2924,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon formation selected.
+	 * Flagship is healthy Nagato/Mutsu Kai Ni, Echelon (forward) formation selected.
 	 * 2nd ship is a battleship, Chuuha ok, Taiha no good.
 	 *
 	 * Additional ammo consumption for Nagato/Mutsu & 2nd battleship:
@@ -2996,7 +2998,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Colorado, Echelon formation selected.
+	 * Flagship is healthy Colorado, Echelon (forward) formation selected.
 	 * 2nd and 3rd ships are healthy battleship, not Taiha ~~nor Chuuha~~,
 	 *   Chuuha allowed since 2021-10-15.
 	 *
@@ -3075,7 +3077,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead / Echelon formation selected, night battle only. (Echelon added since 2021-08-20)
+	 * Flagship is healthy Kongou-class Kai Ni C, Line Ahead (battle) / Echelon (forward) formation selected, night battle only. (Echelon added since 2021-08-20)
 	 * 2nd ship is healthy one of the following:
 	 *   * Kongou K2C flagship: Hiei K2C / Haruna K2 / Warspite
 	 *   * Hiei K2C flagship: Kongou K2C / Kirishima K2
@@ -3127,7 +3129,7 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is Submarine Tender without Taiha, Echelon / Line Abreast formation selected.
+	 * Flagship is Submarine Tender without Taiha, Echelon (forward) / Line Abreast (antisub) formation selected.
 	 * Level >= 30 (https://twitter.com/kobabu2424/status/1429028664016920579)
 	 * 2nd, 3rd ship is healthy SS(V) for type 300.
 	 * 3nd, 4th ship is healthy SS(V) for type 301. 2nd ship is Chuuha/Taiha SS(V).
