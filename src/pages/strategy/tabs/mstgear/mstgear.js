@@ -44,6 +44,11 @@
 				gearBox.attr("data-id", id);
 				$(".gearIcon img", gearBox).attr("src", KC3Meta.itemIcon(iconType)).error(iconFailsafeHandler);
 				$(".gearName", gearBox).text(`[${id}] ${gearName}`).attr("title", gearName);
+				if(!!ConfigManager.sr_dexmark && !KC3Master.isAbyssalGear(id)) {
+					const isOwned = PictureBook.isEverOwnedGear(id);
+					gearBox.toggleClass("unlocked", isOwned);
+					gearBox.toggleClass("norecord", !isOwned);
+				}
 			});
 			$(".tab_mstgear .gearRecords").createChildrenTooltips();
 			
