@@ -1105,7 +1105,7 @@
 				resupplyused: !!http.params.api_supply_flag,
 				playerformation: Number(http.params.api_formation),
 				rawapi: apiData,
-				amountOfNodes: this.data.nodeInfo.amountOfNodes, // to be used for phase tracking
+				amountofnodes: this.data.nodeInfo.amountOfNodes, // to be used for phase tracking
 				apiname: http.call // api_req_sortie/battle
 			};
 
@@ -1114,7 +1114,7 @@
 				id: ship.masterId,
 				lvl: ship.level,
 				morale: ship.cond || ship.morale,
-				stats: ship.estimateNakedStats(),
+				stats: Object.fromEntries(["fp", "tp", "aa", "ar", "ev", "as", "ls", "lk"].map((stat) => [stat, ship[stat][0]])),
 				equips: ship.equipment(true).map(g => g.masterId || -1), 
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
@@ -1142,7 +1142,7 @@
 				fleettype: this.data.fleetType
 			};
 			if (KC3SortieManager.isCombinedSortie()) {
-				fleet.fleet2 = PlayerManager.fleets[1].map(ship => formatShip(ship));
+				fleet.fleet2 = PlayerManager.fleets[1].ship().map(ship => formatShip(ship));
 			}
 			const isBoss = thisNode.isBoss();
 			const supportFleetNum = KC3SortieManager.getSupportingFleet(isBoss);
@@ -1150,6 +1150,7 @@
 				fleet.support = PlayerManager.fleets[supportFleetNum - 1].ship().map(ship => formatShip(ship));
 			}
 			this.eventBattle.fleet = fleet;
+			this.sendData(this.eventBattle, 'eventbattle');
 		},
 
 		processSpAttack: function() {
