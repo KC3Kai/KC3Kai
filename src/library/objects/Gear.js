@@ -800,8 +800,12 @@ KC3改 Equipment Object
 				lbaaAbyssalModifier = 1.1;
 			// Type 4 Heavy Bomber Hiryuu + I-go Model 1A Guided Missile targeting many types since 2021-11-30
 			// DD, CL, CLT, CA, CVL, BB: https://twitter.com/oxke_admiral/status/1465639932970430469
-			if(this.masterId === 444 && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
+			if([444].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.15;
+			// Ki-102 B Kai + No.1 Model 1B Guided Missile since 2022-03-31
+			// https://twitter.com/Yama625Ayanami/status/1509497879303319552
+			if([454].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.17;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
