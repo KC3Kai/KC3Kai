@@ -61,6 +61,22 @@
         }
     };
 
+    const buildFleetsFighterPowerText = (
+            viewFleet = PlayerManager.fleets[0],
+            escortFleet = PlayerManager.fleets[1],
+            isCombined = false,
+            gottenPowerText = "") => {
+        const afpText = gottenPowerText || KC3Calc.getFleetsFighterPowerText(viewFleet, escortFleet, isCombined);
+        const formulaType = KC3Meta.term(["", "SettingsAFPNoBonus", "SettingsAFPVeteran", "SettingsAFPRange"][ConfigManager.air_formula]) || "";
+        const isCombinedPrefix = (isCombined && ConfigManager.air_combined) ? KC3Meta.term("CombinedFleet") : "";
+        const text = KC3Meta.term("PanelFighterPoowerTip")
+            .format(afpText, isCombinedPrefix + formulaType);
+        return $("<p></p>")
+            .css("font-size", "11px")
+            .html(text)
+            .prop("outerHTML");
+    };
+
     /**
      * Build contact chance rates tooltip text from 1 or more fleet(s).
      * @param {Object} viewFleet - Fleet object currently being viewed, default 1st fleet.
@@ -849,6 +865,7 @@
     // Export public API
     window.KC3Calc = Object.assign(publicApi, {
         getFleetsFighterPowerText,
+        buildFleetsFighterPowerText,
         buildFleetsContactChanceText,
         buildFleetsAirstrikePowerText,
         buildFleetsTotalStatsText,

@@ -1704,13 +1704,25 @@ body {
 }
 /* SHIPS LIBRARY
 --------------------------------*/
+.tab_mstship .shipRecord.norecord .shipName {
+	color:#aaa;
+}
+.tab_mstship .shipRecord.unlocked .shipName {
+}
+.tab_mstship .shipRecord.ringed .shipName {
+	color:#dda5a5;
+}
 .tab_mstship .shipInfo .equipSlots .equippableType {
 	background:#ddd;
 }
 .tab_mstship .shipInfo .equipExSlot .equippableType {
 	background:#ccc;
 }
-
+/* GEARS LIBRARY
+--------------------------------*/
+.tab_mstgear .gearRecord.norecord .gearName {
+	color:#aaa;
+}
 /* QUOTES
 --------------------------------*/
 .tab_quotes .ship_list {

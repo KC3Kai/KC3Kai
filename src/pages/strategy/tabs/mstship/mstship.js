@@ -111,6 +111,12 @@
 				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
 					.attr("title", shipName);
 				
+				if(!!ConfigManager.sr_dexmark && KC3Master.isRegularShip(id)) {
+					const isOwned = PictureBook.isEverOwnedShip(id);
+					shipBox.toggleClass("unlocked", isOwned);
+					shipBox.toggleClass("norecord", !isOwned);
+					shipBox.toggleClass("ringed", PictureBook.isMarriedShip(id));
+				}
 				if(ConfigManager.salt_list.indexOf(shipData.kc3_bship) >= 0) {
 					shipBox.addClass('salted');
 				}

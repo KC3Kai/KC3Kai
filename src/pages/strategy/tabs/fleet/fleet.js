@@ -429,7 +429,8 @@
 			$(".detail_los .detail_value", fleetBox).text( Math.qckInt("floor", kcFleet.eLoS(), 1) )
 				.attr("title", KC3Calc.buildFleetsElosText(kcFleet, 5));
 			$(".detail_air .detail_value", fleetBox).text( kcFleet.fighterPowerText() )
-				.attr("title", KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
+				.attr("title", KC3Calc.buildFleetsFighterPowerText(kcFleet)
+					+ KC3Calc.buildFleetsAirstrikePowerText(kcFleet)
 					+ KC3Calc.buildFleetsContactChanceText(kcFleet));
 			$(".detail_antiair .detail_value", fleetBox).text( kcFleet.adjustedAntiAir(ConfigManager.aaFormation) )
 				.attr("title", KC3Meta.formationText(ConfigManager.aaFormation)
