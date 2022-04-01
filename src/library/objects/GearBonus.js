@@ -4219,7 +4219,7 @@
 				count: 0,
 				starsDist: [],
 				byClass: {
-					// Ayanami Class K2: Ayanami K2, Ushio K2, Akebono K2
+					// Ayanami Class K2: Ayanami K2, Ushio K2, Akebono K2, Amagiri K2+
 					"1": [
 						{
 							remodel: 2,
@@ -4248,7 +4248,7 @@
 					"5": "1",
 					// Hatsuharu Class K2: Hatsuharu K2, Hatsushimo K2
 					"10": "1",
-					// Fubuki Class K2: Fubuki K2, Murakumo K2
+					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2
 					"12": "1",
 				},
 				byShip: [
@@ -5271,6 +5271,80 @@
 					// Fubuki Class
 					"12": "1",
 				},
+			},
+			// Prototype Long-barrelled 12.7cm Twin Gun Mount Model A Kai 4
+			"455": {
+				count: 0,
+				byClass: {
+					// Ayanami Class
+					"1": {
+						multiple: { "houg": 2, "tyku": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 4 },
+							},
+							{
+								flags: [ "tripleTorpedo" ],
+								byCount: {
+									gear: "tripleTorpedo",
+									"1": { "houg": 1, "raig": 3 },
+									"2": { "houg": 2, "raig": 5 },
+									"3": { "houg": 2, "raig": 5 },
+								},
+							},
+							{
+								flags: [ "tripleTorpedoLateModel" ],
+								single: { "raig": 1 },
+							},
+						],
+					},
+					// Akatsuki Class
+					"5": "1",
+					// Fubuki Class
+					"12": {
+						multiple: { "houg": 3, "tyku": 1 },
+						synergy: [
+							{
+								flags: [ "surfaceRadar" ],
+								single: { "houg": 3, "raig": 1, "houk": 2 },
+							},
+							{
+								flags: [ "airRadar" ],
+								single: { "tyku": 4 },
+							},
+							{
+								flags: [ "tripleTorpedo" ],
+								byCount: {
+									gear: "tripleTorpedo",
+									"1": { "houg": 1, "raig": 3 },
+									"2": { "houg": 2, "raig": 5 },
+									"3": { "houg": 2, "raig": 5 },
+								},
+							},
+							{
+								flags: [ "tripleTorpedoLateModel" ],
+								single: { "raig": 1 },
+							},
+						],
+					},
+				},
+				byShip: [
+					{
+						// All remodels of Uranami
+						origins: [486],
+						multiple: { "houg": 1 },
+					},
+					{
+						// Uranami K2
+						ids: [647],
+						multiple: { "houg": 1, "raig": 1, "tais": 1, "houk": 1 },
+					},
+				],
 			},
 			// 12.7cm Twin Gun Mount Model B Kai Ni
 			"63": {
