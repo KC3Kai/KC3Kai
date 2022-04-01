@@ -1103,7 +1103,7 @@
 				debuffed: !!thisNode.debuffed,
 				cleared: !!this.data.cleared,
 				resupplyused: !!http.params.api_supply_flag,
-				playerformation: Number(http.params.api_formation),
+				playerformation: thisNode.fformation,
 				rawapi: apiData,
 				amountofnodes: this.data.nodeInfo.amountOfNodes, // to be used for phase tracking
 				apiname: http.call // api_req_sortie/battle
