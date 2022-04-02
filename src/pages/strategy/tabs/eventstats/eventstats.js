@@ -21,7 +21,8 @@
 			bossCount: {},
 			clearCount: {},
 			ldCount: {},
-			kuso: {}
+			kuso: {},
+			overallDamageDealt: 0
 		},
 
 		/* INIT: mandatory
@@ -119,7 +120,8 @@
 				clearCount: {},
 				ldCount: {},
 				kuso: {},
-				dameconCount: 0
+				dameconCount: 0,
+				overallDamageDealt: 0
 			};
 
 			const buildConsumptionArray = arr => arr.reduce((acc, o) =>
@@ -275,6 +277,7 @@
 						}
 						result = KC3BattlePrediction.analyzeBattle(battle.yasen, [], battleType);
 						player = result.fleets.playerMain.concat(result.fleets.playerEscort);
+						enemy = result.fleets.enemyMain.concat(result.fleets.enemyEscort);
 						player.forEach((ship, index) => {
 							this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 						});
@@ -301,6 +304,10 @@
 							}
 						}
 					}
+
+					// Calculate overall damage dealt, including airstrike and LBAS
+					const eMaxHps = !battleData.api_ship_ke_combined ? battleData.api_e_maxhps : battleData.api_e_maxhps.slice(0, 6).concat(battleData.api_e_maxhps_combined);
+					enemy.forEach((eship, index) => this.stats.overallDamageDealt += (eMaxHps[index] - eship.hp));
 				}));
 
 				// Get sortie consumption
@@ -450,6 +457,7 @@
 
 			$(".lbcons").append("Land Base Cost: " + buildLBMessage(this.stats.lbConsumption));
 			$(".totalcons").append("Total Event Cost: " + buildConsMessage(totalCost));
+			$(".overalldam").append("Overall Damage Dealt: " + this.stats.overallDamageDealt);
 			$(".damecons").append("Damage Control Consumed in Battles: " + this.stats.dameconCount);
 			$(".loading").hide();
 			$(".table5").show();
