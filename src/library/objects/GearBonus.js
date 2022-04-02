@@ -5272,7 +5272,7 @@
 					"12": "1",
 				},
 			},
-			// Prototype Long-barrelled 12.7cm Twin Gun Mount Model A Kai 4
+			// Prototype Long-barrel 12.7cm Twin Gun Mount Model A Kai 4
 			"455": {
 				count: 0,
 				byClass: {
