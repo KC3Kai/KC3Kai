@@ -16,7 +16,7 @@ Saves and loads list to and from localStorage
 		// These IDs can be updated at `fud_weekly.json`
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,49],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,48,49],
 		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421],
