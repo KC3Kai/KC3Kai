@@ -2083,6 +2083,14 @@ button, input, select, textarea {
 .tab_mstship .shipRecord:hover {
 	background:#039;
 }
+.tab_mstship .shipRecord.norecord .shipName {
+	color:#abd;
+}
+.tab_mstship .shipRecord.unlocked .shipName {
+}
+.tab_mstship .shipRecord.ringed .shipName {
+	color:#eec5c3;
+}
 .tab_mstship .shipInfo .more .remodel_name a {
 	color:#ffcc00;
 }
@@ -2145,6 +2153,9 @@ button, input, select, textarea {
 }
 .tab_mstgear .gearRecord:hover {
 	background:#039;
+}
+.tab_mstgear .gearRecord.norecord .gearName {
+	color:#abd;
 }
 .tab_mstgear .gearInfo {
 	background:#222;

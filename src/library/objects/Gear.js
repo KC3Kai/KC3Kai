@@ -328,6 +328,9 @@ KC3改 Equipment Object
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
 				if(type2 === 25)
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
+				// Unknown for Anti-Sub PBY
+				// https://twitter.com/myteaGuard/status/1502572381625544704
+				//if(type2 === 26) modifier <= 0.6?;
 				break;
 			case "airstrike":
 			case "lbas":
@@ -554,14 +557,17 @@ KC3改 Equipment Object
 	};
 
 	/* FIGHTER POWER
-	Get fighter power of this equipment on a slot
+	Get fighter power of this equipment on a slot,
+	for scenes without proficiency and improvement bonus
 	--------------------------------------------------------------*/
-	KC3Gear.prototype.fighterPower = function(capacity = 0){
+	KC3Gear.prototype.fighterPower = function(capacity = 0, forLbas = false){
 		// Empty item means no fighter power
 		if(this.isDummy()){ return 0; }
 
+		var type2 = this.master().api_type[2];
 		// Check if this object is a fighter plane
-		if(KC3GearManager.antiAirFighterType2Ids.indexOf( this.master().api_type[2] ) > -1){
+		if(KC3GearManager.antiAirFighterType2Ids.indexOf(type2) > -1
+			|| (forLbas && KC3GearManager.antiAirLandBaseFighterType2Ids.indexOf(type2) > -1)){
 			return Math.floor( Math.sqrt(capacity) * this.master().api_tyku );
 		}
 
@@ -794,8 +800,13 @@ KC3改 Equipment Object
 				lbaaAbyssalModifier = 1.1;
 			// Type 4 Heavy Bomber Hiryuu + I-go Model 1A Guided Missile targeting many types since 2021-11-30
 			// DD, CL, CLT, CA, CVL, BB: https://twitter.com/oxke_admiral/status/1465639932970430469
-			if(this.masterId === 444 && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
+			if([444].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.15;
+			// Ki-102 B Kai + No.1 Model 1B Guided Missile since 2022-03-31
+			// https://twitter.com/Yama625Ayanami/status/1509497879303319552
+			// https://twitter.com/yukicacoon/status/1510174783819812866
+			if([454].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.16;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
@@ -843,16 +854,17 @@ KC3改 Equipment Object
 	// Some special cases used just in case are defined at Ship object.
 	// Handling data only from master defined at AntiAir module.
 
-	KC3Gear.prototype.isAntiAirAircraft = function(){
-		return this.exists() &&
-			KC3GearManager.antiAirFighterType2Ids.indexOf(this.master().api_type[2]) > -1 &&
-			this.master().api_tyku > 0;
+	KC3Gear.prototype.isAntiAirAircraft = function(forLbas){
+		return this.exists()
+			&& (forLbas ? KC3GearManager.antiAirLandBaseFighterType2Ids : KC3GearManager.antiAirFighterType2Ids)
+				.indexOf(this.master().api_type[2]) > -1
+			&& this.master().api_tyku > 0;
 	};
 
 	KC3Gear.prototype.isAirstrikeAircraft = function(){
-		return this.exists() &&
-			KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1 &&
-			(this.master().api_raig > 0 || this.master().api_baku > 0);
+		return this.exists()
+			&& KC3GearManager.airStrikeBomberType2Ids.indexOf(this.master().api_type[2]) > -1
+			&& (this.master().api_raig > 0 || this.master().api_baku > 0);
 	};
 
 	KC3Gear.prototype.isAswAircraft = function(forCvl = false, forSupport = false){
@@ -1077,7 +1089,7 @@ KC3改 Equipment Object
 				title.append(statBox.html());
 			}
 		});
-		if(slotSize !== undefined && shipOrLb && gearObj.isAntiAirAircraft()) {
+		if(slotSize !== undefined && shipOrLb && gearObj.isAntiAirAircraft(shipOrLb instanceof KC3LandBase)) {
 			KC3Gear.appendFighterPowerTooltip(title, gearObj, slotSize, shipOrLb);
 		}
 		if(slotSize !== undefined && shipOrLb && gearObj.isAirstrikeAircraft()) {
@@ -1090,23 +1102,24 @@ KC3改 Equipment Object
 		airBox.css("font-size", "11px");
 		$(".icon", airBox).attr("src", KC3Meta.statIcon("if"));
 		$(".icon", airBox).width(13).height(13).css("margin-top", "-3px");
+		const isLbas = shipOrLb instanceof KC3LandBase;
 		let pattern, value;
 		switch(ConfigManager.air_formula) {
 			case 2:
 				pattern = "\u2248{0}";
-				value = gearObj.fighterVeteran(slotSize);
+				value = gearObj.fighterVeteran(slotSize, isLbas);
 				break;
 			case 3:
 				pattern = "{0}~{1}";
-				value = gearObj.fighterBounds(slotSize);
+				value = gearObj.fighterBounds(slotSize, isLbas);
 				break;
 			default:
 				pattern = "{0}";
-				value = gearObj.fighterPower(slotSize);
+				value = gearObj.fighterPower(slotSize, isLbas);
 		}
 		$(".value", airBox).text(pattern.format(value));
 		// interception power only applied to aircraft deployed to land base
-		if(shipOrLb instanceof KC3LandBase) {
+		if(isLbas) {
 			const interceptSpan = $('<div><img class="icon stats_icon_img"/> <span class="value"></span></div>');
 			$(".icon", interceptSpan).attr("src", KC3Meta.statIcon("ib"));
 			$(".icon", interceptSpan).width(13).height(13).css("margin-top", "-3px");

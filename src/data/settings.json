@@ -1557,6 +1557,14 @@
 				}
 			},
 			{
+				"id" : "sr_dexmark",
+				"name" : "SettingsLibrarySyncMarks",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsCheckNewShipFromDexTip"
+				}
+			},
+			{
 				"id" : "idbSaveSortie",
 				"name" : "SettingsSaveSortieToDb",
 				"type" : "check",

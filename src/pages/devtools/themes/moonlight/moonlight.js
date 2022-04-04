@@ -2262,7 +2262,9 @@
 			const isCombinedAirView = selectedFleet === 5 && ConfigManager.air_combined;
 			$(".summary-airfp .summary_sub").toggle( isCombinedAirView );
 			$(".summary-airfp .summary_text").text( FleetSummary.air )
-				.attr("titlealt", KC3Calc.buildFleetsAirstrikePowerText(
+				.attr("titlealt", KC3Calc.buildFleetsFighterPowerText(
+					MainFleet, undefined, selectedFleet === 5, FleetSummary.air
+				) + KC3Calc.buildFleetsAirstrikePowerText(
 					MainFleet, undefined, selectedFleet === 5
 				) + KC3Calc.buildFleetsContactChanceText(
 					MainFleet, undefined, selectedFleet === 5,
@@ -3095,12 +3097,14 @@
 						),
 						Math.round(thisNode.baseDamage * 0.9 + 0.1)
 					) + (
-						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.join(",")) : ""
+						thisNode.lostKindByWaves ? "\n[{0}]".format(thisNode.lostKindByWaves.map(id => KC3Meta.airraiddamage(id) || "?").join(",")) : ""
 					));
 				}
 				var contactSpan = buildContactPlaneSpan(thisNode.fcontactId, thisNode.fcontact, thisNode.econtactId, thisNode.econtact);
 				$(".module.activity .battle_contact").html(contactSpan.html()).lazyInitTooltip();
-				$(".module.activity .battle_airbattle").text( thisNode.airbattle[0] );
+				$(".module.activity .battle_airbattle").text(
+					thisNode.airbattleIdByWaves ? thisNode.airbattleIdByWaves.map(id => KC3Meta.airbattle(id)[0] || "?").join(",") : thisNode.airbattle[0]
+				);
 				$(".module.activity .battle_airbattle").addClass( thisNode.airbattle[1] );
 				$(".module.activity .battle_airbattle")
 					.attr("title", thisNode.buildAirPowerMessage(true))
@@ -3127,8 +3131,9 @@
 			};
 			// `info_compass` including 'Battle Data', so no activity if it's off
 			if(ConfigManager.info_compass){
-				// Have to wait seconds for game animate and see compass results
-				setTimeout(updateBattleActivityFunc, 6500);
+				// Have to wait seconds for game animate and see compass results,
+				// except in case of super heavy air raid
+				setTimeout(updateBattleActivityFunc, thisNode.isHeavyAirBaseRaid ? 100 : 6500);
 			}
 		},
 

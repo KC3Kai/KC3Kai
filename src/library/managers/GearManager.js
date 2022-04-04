@@ -16,13 +16,13 @@ Saves and loads list to and from localStorage
 		// These IDs can be updated at `fud_weekly.json`
 		carrierBasedAircraftType3Ids: [6,7,8,9,10,21,22,33,39,40,43,45,46],
 		// Dupe `api_cost`, `api_distance` fixed for non aircraft gears since 2017-03-17
-		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,49],
+		landBasedAircraftType3Ids: [6,7,8,9,10,33,37,38,39,40,43,44,45,46,47,48,49],
 		antiAirFighterType2Ids: [6,7,8,11,45,56,57,58],
 		antiAirLandBaseFighterType2Ids: [9,10,41,47,48,49,59,94],
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
-		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,224,237,319,320,322,323,343,374,388,404,405,406,433,444],
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454],
 		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,53,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],

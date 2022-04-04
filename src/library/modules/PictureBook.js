@@ -8,10 +8,14 @@
 
     window.PictureBook = {
 
-        load: function() {
+        load: function(useCache = true) {
             if (localStorage.pictureBook === undefined)
-                localStorage.pictureBook = JSON.stringify( {} );
-            return JSON.parse( localStorage.pictureBook );
+                localStorage.pictureBook = JSON.stringify({});
+            if (useCache && this.lastHash === localStorage.pictureBook.hashCode())
+                return this.lastLoad;
+            this.lastLoad = JSON.parse(localStorage.pictureBook);
+            this.lastHash = localStorage.pictureBook.hashCode();
+            return this.lastLoad;
         },
 
         /**
@@ -20,14 +24,32 @@
         isEverOwnedShip: function(shipMasterId) {
             const pictureBook = this.load();
             const baseShips = pictureBook.baseShips || [];
-            return baseShips.indexOf( RemodelDb.originOf(shipMasterId) ) > -1;
+            return baseShips.indexOf(RemodelDb.originOf(shipMasterId)) > -1;
+        },
+
+        /**
+         * @return true if specific ship has been given a ring based on picture book info.
+         */
+        isMarriedShip: function(shipMasterId) {
+            const pictureBook = this.load();
+            const shipsByPage = pictureBook.ship || {};
+            return !!Object.keys(shipsByPage).find(pg => shipsByPage[pg].rings.indexOf(RemodelDb.originOf(shipMasterId)) > -1);
+        },
+
+        /**
+         * @return true if specific gear has ever been owned by player based on picture book info.
+         */
+        isEverOwnedGear: function(gearMasterId) {
+            const pictureBook = this.load();
+            const gearsByPage = pictureBook.gear || {};
+            return !!Object.keys(gearsByPage).find(pg => gearsByPage[pg].ids.indexOf(gearMasterId) > -1);
         },
 
         /**
          * Update ship base form ID info in time, since player will not usually go to in-game picture book.
          */
         updateBaseShip: function(...shipMasterIds) {
-            const pictureBook = this.load();
+            const pictureBook = this.load(false);
             const baseShips = pictureBook.baseShips = pictureBook.baseShips || [];
             shipMasterIds.forEach(id => {
                 const baseId = RemodelDb.originOf(id);
@@ -35,11 +57,11 @@
                     baseShips.push(baseId);
                 }
             });
-            localStorage.pictureBook = JSON.stringify( pictureBook );
+            localStorage.pictureBook = JSON.stringify(pictureBook);
         },
 
         record: function(params, response) {
-            const pictureBook = this.load();
+            const pictureBook = this.load(false);
             // note: params are all url encoded strings, these api_* are numeric tho
             // current known types: 1: ship and 2: equipment
             const type = ["unk", "ship", "gear"][params.api_type] || "unk";
@@ -97,7 +119,7 @@
             // clean pages not used any more, past implementation messes up pages from ship and gear.
             [1, 2, 3, 4, 5].forEach(p => { delete pictureBook[p]; });
 
-            localStorage.pictureBook = JSON.stringify( pictureBook );
+            localStorage.pictureBook = JSON.stringify(pictureBook);
             console.log("Picture Book updated for", type, page, currentType[page]);
         }
 
