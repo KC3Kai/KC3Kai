@@ -804,8 +804,9 @@ KC3改 Equipment Object
 				lbaaAbyssalModifier = 1.15;
 			// Ki-102 B Kai + No.1 Model 1B Guided Missile since 2022-03-31
 			// https://twitter.com/Yama625Ayanami/status/1509497879303319552
+			// https://twitter.com/yukicacoon/status/1510174783819812866
 			if([454].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
-				lbaaAbyssalModifier = 1.17;
+				lbaaAbyssalModifier = 1.16;
 			// Do 217 K-2 + Fritz-X targeting surface types:
 			if(this.masterId === 406 && !isLand) {
 				// CA, CAV, CV, CVB
