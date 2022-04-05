@@ -160,7 +160,7 @@
 				const interceptStat = planeMaster.api_houk || 0,
 					antiBombingStat = planeMaster.api_houm || 0;
 				minShotdown = 6.5 * airStateMod +
-					3.5 * (antiBombingStat + airStateMod * Math.min(interceptStat, 1));
+					3.5 * (antiBombingStat + airStateMod * (KC3GearManager.interceptorsType3Ids.includes(planeMaster.api_type[3]) ? 1 : 0));
 				// Exclusive to the upper bound
 				maxShotdown = minShotdown + 3.5 * (airStateMod + antiBombingStat - 1);
 			} else {
