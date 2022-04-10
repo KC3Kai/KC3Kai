@@ -84,10 +84,10 @@
 			
 			// Compile ships on Index
 			for(const ctr in KC3GearManager.list){
-				const ThisItem = KC3GearManager.list[ctr];
+				// Clone gear object since property modifications followed
+				const ThisItem = Object.assign(new KC3Gear(), KC3GearManager.list[ctr]);
 				const MasterItem = ThisItem.master();
 				if(!MasterItem) continue;
-				//if(KC3GearManager.carrierBasedAircraftType3Ids.indexOf(MasterItem.api_type[3]) == -1) continue;
 				
 				// Add holder to the item object temporarily via function return
 				if(this._holders["s"+ThisItem.itemId] !== undefined){
@@ -106,6 +106,7 @@
 				if(thisType["s"+MasterItem.api_id] === undefined){
 					thisType["s"+MasterItem.api_id] = {
 						id: ThisItem.masterId,
+						category_id: MasterItem.api_type[2],
 						type_id: MasterItem.api_type[3],
 						english: ThisItem.name(),
 						japanese: MasterItem.api_name,
@@ -130,6 +131,15 @@
 				}
 				const thisMasterItem = thisType["s"+MasterItem.api_id];
 				thisMasterItem.instances.push(ThisItem);
+				// Compute fighter power when not equpped by a slot
+				ThisItem.airpow = Math.qckInt("floor", thisMasterItem.stats.aa + (
+					// Add improvement bonus to AA stat
+					ConfigManager.air_formula == 1 ? 0 : ThisItem.aaStatImprovementBonus()
+				) + (
+					// Add Interception power to AA stat
+					1.5 * (KC3GearManager.interceptorsType2Ids.includes(thisMasterItem.category_id) ?
+						thisMasterItem.stats.ev : 0)
+				), 1);
 			}
 			
 			const sortSlotItem = (a, b) => (
@@ -303,7 +313,7 @@
 							ThisCapacity = holder.slotSize( this._slotNums["s"+rosterId]);
 						}
 						if(ThisCapacity > 0){
-							// Compute for ace fighter air power
+							// Compute fighter power for ace & improvement according setting
 							let MyFighterPowerText = "";
 							if(ConfigManager.air_formula == 1){
 								MyFighterPowerText = ThisPlane.fighterPower(ThisCapacity);
@@ -319,7 +329,7 @@
 						$(".holder_name", PlaneBox).hide();
 						$(".holder_level", PlaneBox).hide();
 						$(".instance_aaval", PlaneBox).addClass("reserveSquad");
-						$(".instance_aaval", PlaneBox).text(ThisSlotitem.stats.aa);
+						$(".instance_aaval", PlaneBox).text(ThisPlane.airpow);
 					}
 				});
 				
