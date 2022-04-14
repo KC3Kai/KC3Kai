@@ -1492,12 +1492,12 @@ KC3改 Ship Object
 		this.equipment().forEach((gear, i) => {
 			if(this.slots[i] > 0 && gear.isAswAircraft(false, true)) {
 				const asw = gear.master().api_tais || 0;
-				const power = 3 + asw * 0.6 * Math.sqrt(this.slots[i]);
+				const power = 3 + Math.floor(Math.floor(asw * 0.6) * Math.sqrt(this.slots[i]));
 				const capped = this.applyPowerCap(power, "Day", "Support").power;
 				aswPower += this.applyPostcapModifiers(capped, "SupportAntisub", undefined, 0, isCritical).power;
 			}
 		});
-		// 3 random post-cap modifiers
+		// 3 random post-cap modifiers, rates: [40%, 10%, 50%]
 		[1.2, 1.5, 2.0].map(mod => Math.floor(aswPower * mod)).forEach((v, i) => {
 			randomPower[i] += v;
 		});
