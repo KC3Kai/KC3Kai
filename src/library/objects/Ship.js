@@ -2372,6 +2372,9 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += getAverageProficiencyCriticalModifier(allowedSlotType);
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(allowedSlotType) ? 0.15 : 0;
 			} else {
+				// No proficiency critical modifier for both power and accuracy on OASW, but no way to check OASW airattack case here, not handled yet
+				// https://twitter.com/myteaGuard/status/1502574092226281474
+				// https://twitter.com/Camellia_bb/status/1514976505910415365 
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
 				if( !(warfareType === "Antisub" && [11, 18, 22].includes(this.master().api_stype)) ) {
