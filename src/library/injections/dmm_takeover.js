@@ -605,10 +605,11 @@
 		--------------------------------------*/
 		exitConfirmation: function(){
 			if (!config.api_askExit) return false;
-			window.onbeforeunload = function(){
+			window.onbeforeunload = function(event){
 				// Not support custom message any more, see:
 				// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
-				return meta.term("UnwantedExitDMM");
+				event.returnValue = KC3Meta.term("UnwantedExitDMM");
+				return event.returnValue;
 			};
 		},
 

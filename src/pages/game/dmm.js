@@ -259,14 +259,15 @@ $(document).on("ready", function(){
 	}
 	
 	// Exit confirmation
-	window.onbeforeunload = function(){
+	window.onbeforeunload = function(event){
 		// added waiting condition should be ignored
 		if(ConfigManager.api_askExit==1 && !trustedExit && !waiting){
 			trustedExit = true;
 			setTimeout(function(){ trustedExit = false; }, 100);
 			// Not support custom message any more, see:
 			// https://bugs.chromium.org/p/chromium/issues/detail?id=587940
-			return KC3Meta.term("UnwantedExitDMM");
+			event.returnValue = KC3Meta.term("UnwantedExitDMM");
+			return event.returnValue;
 		}
 	};
 	
