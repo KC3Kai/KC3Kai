@@ -1699,49 +1699,40 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 10 types of Daihatsu Landing Craft with known bonus:
+		// 8 types of (10 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
-		//  * 1: [166] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force)
+		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
 		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
 		//  * 4: [193] Toku Daihatsu Landing Craft
 		//  * 5: [355] M4A1 DD
-		//  * 6: [408] Soukoutei (Armored Boat Class)
-		//  * 7: [409] Armed Daihatsu
-		//  * 8: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		//  * 9: [449] Toku Daihatsu Landing Craft + Type 1 Gun Tank
-		const landingCraftIds = [167, 166, 68, 230, 193, 355, 408, 409, 436, 449];
+		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
+		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
 			(landingModifiers[modName] || [])[type] || 1
 		);
 		const forSdpPostcap = installationType === 4;
-		const hasType89LandingForce = landingCraftCounts[1] > 0;
-		const hasPanzer2 = landingCraftCounts[8] > 0;
-		const honi1Count = landingCraftCounts[9] || 0;
-		const hasHoni1 = honi1Count > 0;
-		// When T89Tank/Honi1/Panzer2 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
-		const sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
+		let sdpPostcapImpPow = 1;
 		let landingBaseBonus = 1, oneGearBonus = 1, moreGearBonus = 1;
 		let improvementBonus = 1;
 		let landingGroupStars = 0, tankGroupStars = 0;
 		let landingGroupCount = 0, tankGroupCount = 0;
 		landingCraftCounts.forEach((count, type) => {
-			if(count > 0 || (honi1Count > 0 && type === 1)) {
+			if(count > 0) {
 				if(type > 0) {
 					landingBaseBonus = Math.max(landingBaseBonus, getModifier(type));
 					landingGroupCount += count;
-					// Honi1 counted as T89 for all cases, so countN bonuses of Honi1 itself set to 1.0
-					// must be added after landingGroupCount summed to avoid duplicated sum of type9
-					if(type === 1) count += honi1Count;
 				} else {
 					// T2 Tank base bonus fixed to 1.0
 					landingBaseBonus = Math.max(landingBaseBonus, 1);
 					tankGroupCount += count;
 				}
 				this.equipment().forEach((g, i) => {
-					if(g.exists() && g.masterId === landingCraftIds[type]) {
+					const ids = landingCraftIds[type], mstId = g.masterId;
+					if(g.exists() && (Array.isArray(ids) ? ids.includes(mstId) : ids === mstId)) {
 						if(type > 0) {
 							landingGroupStars += g.stars;
 						} else {
@@ -1749,8 +1740,8 @@ KC3改 Ship Object
 						}
 					}
 				});
-				if((!forSdpPostcap && type >= 6 && type <= 7 && isNight)) {
-					// no precap bonus except the base one on yasen for type 6 and 7
+				if((!forSdpPostcap && type === 6 && isNight)) {
+					// no precap bonus except the base one on yasen for type 6
 					oneGearBonus *= 1;
 				} else {
 					oneGearBonus *= getModifier(type, "count1");
@@ -1758,6 +1749,13 @@ KC3改 Ship Object
 				}
 			}
 		});
+		if(forSdpPostcap) {
+			const hasType89LandingForce = this.hasEquipment(166);
+			const hasHoni1 = this.hasEquipment(449);
+			const hasPanzer2 = landingCraftCounts[7] > 0;
+			// When T89Tank/Honi1/Panzer2 equipped, Supply Depot Princess's postcap improvement bonus ^(1+n)
+			sdpPostcapImpPow = 1 + ((hasType89LandingForce || hasHoni1) & 1) + ((hasType89LandingForce && hasPanzer2) & 1);
+		}
 		if(landingGroupCount > 0) improvementBonus *= Math.pow(
 			landingGroupStars / landingGroupCount / 50 + 1,
 			forSdpPostcap ? sdpPostcapImpPow : 1
@@ -3215,7 +3213,7 @@ KC3改 Ship Object
 		if(isTargetLandable) {
 			// M4A1 DD
 			if(this.hasEquipment(355)) return 6;
-			// Armoured Boat (AB Class)
+			// Armored Boat (AB Class)
 			if(this.hasEquipment(408)) return 7;
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
