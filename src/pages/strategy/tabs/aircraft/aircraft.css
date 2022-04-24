@@ -9,7 +9,7 @@
 	width:30px;
 	height:30px;
 	float:left;
-	margin:0px 3px 5px 3px;
+	margin:0px 5px 5px 0px;
 }
 .tab_aircraft .item_types .item_type img {
 	width:30px;
@@ -155,7 +155,7 @@
 	vertical-align:top;
 }
 .tab_aircraft .slotitem .instance_aaval {
-	width:22px;
+	width:27px;
 	margin:0px 2px 0px 0px;
 	font-size:12px;
 }
@@ -163,11 +163,11 @@
 	color:#aaa;
 }
 .tab_aircraft .slotitem .instance_name {
-	width:120px;
+	width:115px;
 	margin:0px 5px 0px 0px;
 }
 .tab_aircraft .slotitem .instance_name input {
-	width:120px;
+	width:115px;
 	height:20px;
 	line-height:20px;
 	background:transparent;
