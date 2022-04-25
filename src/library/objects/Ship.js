@@ -808,13 +808,13 @@ KC3改 Ship Object
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
 		const originId = RemodelDb.originOf(shipId);
-		const ctype = String(this.master().api_ctype);
+		const ctype = this.master().api_ctype;
 		const stype = this.master().api_stype;
 		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(Number(ctype)) ||
+			(byShip.classes || []).includes(ctype) ||
 			(!byShip.ids && !byShip.origins && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags

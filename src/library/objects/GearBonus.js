@@ -3654,7 +3654,8 @@
 					"95": {
 						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 					},
-					// Following British and Americans: Queen Elizabeth Class
+					// Following British: (Game codes have not used country name to match)
+					// Queen Elizabeth Class
 					"67": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
@@ -3668,6 +3669,7 @@
 					"112": "67",
 				},
 				byNation: {
+					// Number refers to byClass[67] above
 					"UnitedStates": 67,
 				},
 			},
@@ -3828,7 +3830,7 @@
 					},
 				},
 				byClass: {
-					// Following British: (Game codes have not use country name to match)
+					// Following British: (Game codes have not used country name to match)
 					// Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
@@ -3856,7 +3858,7 @@
 					},
 				},
 				byClass: {
-					// Following British: (Game codes have not use country name to match)
+					// Following British: (Game codes have not used country name to match)
 					// Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
