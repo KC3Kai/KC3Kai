@@ -20,18 +20,28 @@
 				const timezoneOffsetMs = new Date().getTimezoneOffset() * msPerMin;
 				const locale = this.getLocale(lang);
 				// The 4th day (1970-1-4 Sun) is chosen as the first Sunday sample
-				Array.numbers(3, 9).forEach((day, idx) => {
-					const dateObj = new Date(day * msPerDay + timezoneOffsetMs);
-					const weekdayShort = dateObj.toLocaleString(locale, {weekday: "short"}),
-						weekdayLong = dateObj.toLocaleString(locale, {weekday: "long"});
-					dateFormat.l10n.dayNames[idx] = weekdayShort || dateFormat.i18n.dayNames[idx];
-					dateFormat.l10n.dayNames[idx + 7] = weekdayLong || dateFormat.i18n.dayNames[idx + 7];
+				Array.numbers(3, 9).forEach((day, dow) => {
+					let dateObj = new Date((day - 1) * msPerDay + timezoneOffsetMs);
+					// Check +/- days either in case of diff by unknown factor
+					if(dateObj.getUTCDay() !== dow) dateObj = new Date((day + 1) * msPerDay + timezoneOffsetMs);
+					if(dateObj.getUTCDay() !== dow) dateObj = new Date(day * msPerDay + timezoneOffsetMs);
+					if(dateObj.getUTCDay() !== dow) {
+						// Fail-safe to en names if no expected dow found
+						dateFormat.l10n.dayNames[dow] = dateFormat.i18n.dayNames[dow];
+						dateFormat.l10n.dayNames[dow + 7] = dateFormat.i18n.dayNames[dow + 7];
+						console.warn("No expected day of week found on " + dow, dateObj);
+					} else {
+						const weekdayShort = dateObj.toLocaleString(locale, {weekday: "short", timeZone: "UTC"}),
+							weekdayLong = dateObj.toLocaleString(locale, {weekday: "long", timeZone: "UTC"});
+						dateFormat.l10n.dayNames[dow] = weekdayShort || dateFormat.i18n.dayNames[dow];
+						dateFormat.l10n.dayNames[dow + 7] = weekdayLong || dateFormat.i18n.dayNames[dow + 7];
+					}
 				});
 				Array.numbers(1, 12).forEach((month, idx) => {
 					const dateObj = new Date(3 * msPerDay);
 					dateObj.setMonth(month - 1);
-					const monthShort = dateObj.toLocaleString(locale, {month: "short"}),
-						monthLong = dateObj.toLocaleString(locale, {month: "long"});
+					const monthShort = dateObj.toLocaleString(locale, {month: "short", timeZone: "UTC"}),
+						monthLong = dateObj.toLocaleString(locale, {month: "long", timeZone: "UTC"});
 					dateFormat.l10n.monthNames[idx] = monthShort || dateFormat.i18n.monthNames[idx];
 					dateFormat.l10n.monthNames[idx + 12] = monthLong || dateFormat.i18n.monthNames[idx + 12];
 				});
