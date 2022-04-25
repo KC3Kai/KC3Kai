@@ -86,6 +86,25 @@
 				type13AirRadarKaiNonexist: 1,
 				type13AirRadarKaiIds: [106],
 			},
+			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
+			"countryCtypeMap": {
+				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114],
+				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
+				"Italia": [58, 61, 64, 68, 80, 92, 113],
+				"Netherlands": [98],
+				"Australia": [96],
+				"Sweden": [89],
+				"Germany": [47, 48, 55, 57, 63],
+				"France": [70, 79],
+				"Russia": [73, 81],
+				"Japan": [
+					1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+					21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+					41, 42, 43, 44, 45, 46, 49, 50, 51, 52, 53, 54, 56, 59, 60, 62, 66,
+					71, 72, 74, 75, 76, 77, 85, 86, 90, 94, 97, 100, 101, 103, 104, 109,
+					111, 115
+				],
+			},
 			// Ryuusei
 			"18": {
 				count: 0,
@@ -1193,48 +1212,33 @@
 			// FM-2
 			"277": {
 				count: 0,
-				byClass: {
-					// Following carriers: Lexington Class
-					"69": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
-					// Ark Royal Class
-					"78": "69",
-					// Illustrious Class
-					"112": "69",
+				},
+				byClass: {
 					// Casablanca Class
 					"83": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
 				},
 			},
 			// SBD
 			"195": {
 				count: 0,
-				byClass: {
-					// Following American carriers: Lexington Class
-					"69": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1 },
 					},
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 			},
 			// SBD-5
 			"419": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following American carriers: Lexington Class
-					"69": [
+				byNation: {
+					"UnitedStates": [
 						{
 							multiple: { "houg": 2 },
 						},
@@ -1247,49 +1251,34 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 			},
 			// SB2C-3
 			"420": {
 				count: 0,
 				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+					],
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": "UnitedStates",
+				},
 				byClass: {
-					// Following American carriers: Lexington Class
-					"69": [
-						{
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 3,
-							multiple: { "houg": 1 },
-						},
-					],
-					// Casablanca Class
-					"83": "69",
-					// Yorktown Class
-					"105": "69",
-					// Illustrious Class
-					"112": "69",
 					// Essex Class
-					"84": [
-						{
-							multiple: { "houg": 2 },
-						},
-						{
-							minStars: 3,
-							multiple: { "houg": 1 },
-						},
-					],
+					"84": {
+						multiple: { "houg": 1 },
+					},
 					// Ark Royal Class
 					"78": {
-						minStars: 3,
-						multiple: { "houg": 1 },
+						// To cancel general British fp bonus
+						multiple: { "houg": -1 },
 					},
 				},
 				byShip: {
@@ -1302,9 +1291,8 @@
 			"421": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following American carriers: Lexington Class
-					"69": [
+				byNation: {
+					"UnitedStates": [
 						{
 							multiple: { "houg": 2 },
 						},
@@ -1313,32 +1301,18 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					// Casablanca Class
-					"83": "69",
-					// Yorktown Class
-					"105": "69",
-					// Illustrious Class
-					"112": "69",
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": "UnitedStates",
+				},
+				byClass: {
 					// Essex Class
-					"84": [
-						{
-							multiple: { "houg": 3 },
-						},
-						{
-							minStars: 5,
-							multiple: { "houg": 1 },
-						},
-					],
+					"84": {
+						multiple: { "houg": 1 },
+					},
 					// Ark Royal Class
-					"78": [
-						{
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 5,
-							multiple: { "houg": 1 },
-						},
-					],
+					"78": {
+						multiple: { "houg": -1 },
+					},
 				},
 				byShip: {
 					// All CVL -2 fp, -1 ev, -2 ar
@@ -1591,32 +1565,21 @@
 			// FR-1 Fireball
 			"422": {
 				count: 0,
-				byClass: {
-					// Following carriers: Lexington Class
-					"69": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
-					// Yorktown Class
-					"105": "69",
-					// Ark Royal Class
-					"78": "69",
-					// Illustrious Class
-					"112": "69",
+				},
+				byClass: {
 					// Essex Class
 					"84": {
-						multiple: { "houg": 2, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
-					// Casablanca Class
-					"83": [
-						{
-							multiple: { "houg": 1, "houk": 1 },
-						},
-						{
-							// Gambier Bay Mk.II
-							remodel: 2,
-							multiple: { "houg": 2, "tyku": 2, "houk": 2 },
-						},
-					],
+				},
+				byShip: {
+					// Gambier Bay Mk.II
+					ids: [707],
+					multiple: { "houg": 2, "tyku": 2, "houk": 2 },
 				},
 			},
 			// Corsair Mk.II
@@ -1631,16 +1594,11 @@
 					"78": {
 						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
 					},
-					// Lexington Class
-					"69": {
+				},
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 					},
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 			},
 			// Corsair Mk.II (Ace)
@@ -1655,16 +1613,11 @@
 					"78": {
 						multiple: { "houg": 1, "tyku": 2, "houk": 3 },
 					},
-					// Lexington Class
-					"69": {
+				},
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 					},
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 			},
 			// Prototype Jinpuu
@@ -1787,16 +1740,21 @@
 					},
 					// Illustrious Class
 					"112": "78",
-					// Lexington Class
-					"69": {
+					// Queen Elizabeth Class
+					"67": {
+						multiple: { "houg": 2, "tyku": 2, "houk": 2, "saku": 2 },
+					},
+					// J Class
+					"82": "67",
+					// Nelson Class
+					"88": "67",
+					// Town Class
+					"108": "67",
+				},
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1, "saku": 1 },
 					},
-					// Casablanca Class
-					"83": "69",
-					// Essex Class
-					"84": "69",
-					// Yorktown Class
-					"105": "69",
 				},
 			},
 			// Barracuda Mk.II
@@ -2330,6 +2288,18 @@
 			"171": {
 				count: 0,
 				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							minStars: 5,
+							single: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							single: { "houg": 1 },
+						},
+					],
+				},
 				byClass: {
 					// Iowa Class
 					"65": [
@@ -2341,16 +2311,8 @@
 							single: { "saku": 1 },
 						},
 						{
-							minStars: 5,
-							single: { "houk": 1 },
-						},
-						{
 							minStars: 8,
 							single: { "saku": 1 },
-						},
-						{
-							minStars: 10,
-							single: { "houg": 1 },
 						},
 					],
 					// Colorado Class
@@ -2359,33 +2321,14 @@
 					"102": "65",
 					// North Carolina Class
 					"107": "65",
-					// Northampton Class
-					"95": [
-						{
-							minStars: 5,
-							single: { "houk": 1 },
-						},
-						{
-							minStars: 10,
-							single: { "houg": 1 },
-						},
-					],
-					// Atlanta Class
-					"99": "95",
-					// St. Louis Class
-					"106": "95",
-					// Brooklyn Class
-					"110": "95",
 				},
 			},
 			// SOC Seagull
 			"414": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following Americans:
-					// Iowa Class
-					"65": [
+				byNation: {
+					"UnitedStates": [
 						{
 							single: { "saku": 1 },
 						},
@@ -2394,24 +2337,16 @@
 							single: { "houk": 1 },
 						},
 					],
-					// Colorado Class
-					"93": "65",
-					// South Dakota Class
-					"102": "65",
-					// North Carolina Class
-					"107": "65",
+				},
+				byClass: {
 					// Northampton Class
 					"95": [
 						{
-							single: { "houg": 1, "saku": 2 },
+							single: { "houg": 1, "saku": 1 },
 						},
 						{
 							minStars: 3,
 							single: { "saku": 1 },
-						},
-						{
-							minStars: 5,
-							single: { "houk": 1 },
 						},
 						{
 							minStars: 8,
@@ -2434,10 +2369,8 @@
 			"415": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following Americans:
-					// Iowa Class
-					"65": [
+				byNation: {
+					"UnitedStates": [
 						{
 							single: { "saku": 1, "tais": 1 },
 						},
@@ -2446,16 +2379,12 @@
 							single: { "houk": 1 },
 						},
 					],
-					// Colorado Class
-					"93": "65",
-					// South Dakota Class
-					"102": "65",
-					// North Carolina Class
-					"107": "65",
+				},
+				byClass: {
 					// Northampton Class
 					"95": [
 						{
-							single: { "houg": 1, "saku": 1, "tais": 1 },
+							single: { "houg": 1 },
 						},
 						{
 							minStars: 3,
@@ -3046,26 +2975,10 @@
 			"381": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following American can equip Large Main Gun:
-					// Iowa
-					"65": [
+				byNation: {
+					"UnitedStates": [
 						{
 							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houg": 1 },
-						},
-					],
-					// Colorado
-					"93": "65",
-					// North Carolina Class
-					"107": "65",
-					// South Dakota
-					"102": [
-						{
-							multiple: { "houg": 2 },
 						},
 						{
 							minStars: 6,
@@ -3073,55 +2986,41 @@
 						},
 					],
 				},
+				byClass: {
+					// South Dakota Class
+					"102": {
+						multiple: { "houg": 1 },
+					},
+				},
 			},
 			// 16inch Triple Gun Mount Mk.6 mod.2
 			"385": {
 				count: 0,
 				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
 				byClass: {
-					// Following American can equip Large Main Gun:
-					// Iowa
-					"65": [
-						{
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
-					// Colorado
-					"93": [
-						{
-							multiple: { "houg": 2 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
-					// South Dakota
-					"102": [
-						{
-							multiple: { "houg": 2, "souk": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
+					// Colorado Class
+					"93": {
+						multiple: { "houg": 1 },
+					},
+					// South Dakota Class
+					"102": {
+						multiple: { "houg": 1, "souk": 1 },
+					},
 					// North Carolina Class
 					"107": "102",
 				},
@@ -3135,62 +3034,34 @@
 			"390": {
 				count: 0,
 				starsDist: [],
+				byNation: {
+					"UnitedStates": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 3,
+							multiple: { "houg": 1 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "souk": 1 },
+						},
+					],
+				},
 				byClass: {
-					// Following American can equip Large Main Gun:
-					// Iowa
-					"65": [
-						{
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 3,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houk": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
-					// Colorado
-					"93": [
-						{
-							multiple: { "houg": 2 },
-						},
-						{
-							minStars: 3,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houk": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
-					// South Dakota
-					"102": [
-						{
-							multiple: { "houg": 2, "souk": 1 },
-						},
-						{
-							minStars: 3,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "houk": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "souk": 1 },
-						},
-					],
+					// Colorado Class
+					"93": {
+						multiple: { "houg": 1 },
+					},
+					// South Dakota Class
+					"102": {
+						multiple: { "houg": 1, "souk": 1 },
+					},
 					// North Carolina Class
 					"107": "102",
 				},
@@ -3204,10 +3075,8 @@
 			"386": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following American can equip Medium Main Gun:
-					// Colorado
-					"93": [
+				byNation: {
+					"UnitedStates": [
 						{
 							multiple: { "houg": 1 },
 						},
@@ -3220,24 +3089,14 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					// Northampton
-					"95": "93",
-					// Atlanta
-					"99": "93",
-					// St. Louis
-					"106": "93",
-					// Brooklyn Class
-					"110": "93",
 				},
 			},
 			// 16inch Triple Rapid Fire Gun Mount Mk.16 mod.2
 			"387": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// Following American can equip Medium Main Gun:
-					// Colorado
-					"93": [
+				byNation: {
+					"UnitedStates": [
 						{
 							multiple: { "houg": 1 },
 						},
@@ -3250,14 +3109,6 @@
 							multiple: { "houg": 1 },
 						},
 					],
-					// Northampton
-					"95": "93",
-					// Atlanta
-					"99": "93",
-					// St. Louis
-					"106": "93",
-					// Brooklyn Class
-					"110": "93",
 				},
 			},
 			// 6inch Mk.XXIII Triple Gun Mount
@@ -3801,7 +3652,7 @@
 				byClass: {
 					// Northampton Class
 					"95": {
-						multiple: { "houg": 2, "tyku": 3, "houk": 3 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 2 },
 					},
 					// Following British and Americans: Queen Elizabeth Class
 					"67": {
@@ -3811,32 +3662,13 @@
 					"78": "67",
 					// Nelson Class
 					"88": "67",
-					// Iowa Class
-					"65": "67",
-					// Lexington Class
-					"69": "67",
-					// Casablanca Class
-					"83": "67",
-					// Essex Class
-					"84": "67",
-					// Colorado Class
-					"93": "67",
-					// Atlanta Class
-					"99": "67",
-					// South Dakota Class
-					"102": "67",
-					// Yorktown Class
-					"105": "67",
-					// St. Louis Class
-					"106": "67",
-					// North Carolina Class
-					"107": "67",
 					// Town Class
 					"108": "67",
-					// Brooklyn Class
-					"110": "67",
 					// Illustrious Class
 					"112": "67",
+				},
+				byNation: {
+					"UnitedStates": 67,
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -3899,21 +3731,16 @@
 			// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 			"362": {
 				count: 0,
+				byNation: {
+					"UnitedStates": {
+						multiple: { "tyku": 1, "houk": 1 },
+					},
+				},
 				byClass: {
 					// Atlanta Class
 					"99": {
-						multiple: { "houg": 1, "tyku": 3, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 2, "houk": 1 },
 					},
-					// Colorado Class
-					"93": {
-						multiple: { "tyku": 1, "houk": 1 },
-					},
-					// Northampton Class
-					"95": "93",
-					// St. Louis Class
-					"106": "93",
-					// Brooklyn Class
-					"110": "93",
 					// Agano Class
 					"41": {
 						multiple: { "tyku": -1, "houk": -2 },
@@ -3995,34 +3822,14 @@
 			// SK Radar
 			"278": {
 				count: 0,
-				byClass: {
-					// Following American: Northampton Class
-					"95": {
+				byNation: {
+					"UnitedStates": {
 						single: { "tyku": 1, "houk": 3, "saku": 1 },
 					},
-					// Iowa Class
-					"65": "95",
-					// Lexington Class
-					"69": "95",
-					// Casablanca Class
-					"83": "95",
-					// Essex Class
-					"84": "95",
-					// Colorado Class
-					"93": "95",
-					// Atlanta Class
-					"99": "95",
-					// South Dakota Class
-					"102": "95",
-					// Yorktown Class
-					"105": "95",
-					// St. Louis Class
-					"106": "95",
-					// North Carolina Class
-					"107": "95",
-					// Brooklyn Class
-					"110": "95",
-					// Following British: Queen Elizabeth Class
+				},
+				byClass: {
+					// Following British: (Game codes have not use country name to match)
+					// Queen Elizabeth Class
 					"67": {
 						single: { "tyku": 1, "houk": 2 },
 					},
@@ -4043,34 +3850,14 @@
 			// SK + SG Radar
 			"279": {
 				count: 0,
-				byClass: {
-					// Following American: Northampton Class
-					"95": {
+				byNation: {
+					"UnitedStates": {
 						single: { "houg": 2, "tyku": 2, "houk": 3, "saku": 2 },
 					},
-					// Iowa Class
-					"65": "95",
-					// Lexington Class
-					"69": "95",
-					// Casablanca Class
-					"83": "95",
-					// Essex Class
-					"84": "95",
-					// Colorado Class
-					"93": "95",
-					// Atlanta Class
-					"99": "95",
-					// South Dakota Class
-					"102": "95",
-					// Yorktown Class
-					"105": "95",
-					// St. Louis Class
-					"106": "95",
-					// Brooklyn Class
-					"110": "95",
-					// North Carolina Class
-					"107": "95",
-					// Following British: Queen Elizabeth Class
+				},
+				byClass: {
+					// Following British: (Game codes have not use country name to match)
+					// Queen Elizabeth Class
 					"67": {
 						single: { "houg": 1, "tyku": 1, "houk": 2, "saku": 1 },
 					},
@@ -4185,23 +3972,13 @@
 			// 533mm Quintuple Torpedo Mount (Late Model)
 			"376": {
 				count: 0,
-				byClass: {
-					// Following Americans: John C. Butler Class
-					"87": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 2, "raig": 4 },
 					},
-					// Fletcher Class
-					"91": "87",
-					// Northampton Class
-					"95": "87",
-					// Atlanta Class
-					"99": "87",
-					// St. Louis Class
-					"106": "87",
-					// Brooklyn Class
-					"110": "87",
-					// Gato Class
-					"114": "87",
+				},
+				byClass: {
+					// Game codes have not used country name to match yet, so does here
 					// Jervis Class
 					"82": {
 						multiple: { "houg": 1, "raig": 2 },
@@ -5807,19 +5584,10 @@
 			// 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37
 			"308": {
 				count: 0,
-				byClass: {
-					// John C. Butler Class, totally +2 fp from DD stype
-					"87": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
-					// Fletcher Class
-					"91": "87",
-					// Atlanta Class
-					"99": "87",
-					// St. Louis Class
-					"106": "87",
-					// Brooklyn Class
-					"110": "87",
 				},
 				byShip: [
 					{
@@ -5978,73 +5746,25 @@
 			// GFCS Mk.37
 			"307": {
 				count: 0,
-				byClass: {
-					// Following Americans: Iowa Class
-					"65": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
 					},
-					// Lexington Class
-					"69": "65",
-					// Casablanca Class
-					"83": "65",
-					// Essex Class
-					"84": "65",
-					// John C. Butler Class
-					"87": "65",
-					// Fletcher Class
-					"91": "65",
-					// Colorado Class
-					"93": "65",
-					// Northampton Class
-					"95": "65",
-					// Atlanta Class
-					"99": "65",
-					// South Dakota Class
-					"102": "65",
-					// Yorktown Class
-					"105": "65",
-					// St. Louis Class
-					"106": "65",
-					// North Carolina Class
-					"107": "65",
-					// Brooklyn Class
-					"110": "65",
 				},
 			},
 			// SG Radar (Initial Model)
 			"315": {
 				count: 0,
-				byClass: {
-					// Following Americans: Iowa Class
-					"65": {
+				byNation: {
+					"UnitedStates": {
 						multiple: { "houg": 2, "houk": 3, "saku": 4 },
 					},
-					// Lexington Class
-					"69": "65",
-					// Casablanca Class
-					"83": "65",
-					// Essex Class
-					"84": "65",
-					// Colorado Class
-					"93": "65",
-					// Northampton Class
-					"95": "65",
-					// Atlanta Class
-					"99": "65",
-					// South Dakota Class
-					"102": "65",
-					// Yorktown Class
-					"105": "65",
-					// St. Louis Class
-					"106": "65",
-					// North Carolina Class
-					"107": "65",
-					// Brooklyn Class
-					"110": "65",
+				},
+				byClass: {
 					// John C. Butler Class, range from medium to long
 					"87": [
 						{
-							multiple: { "houg": 3, "houk": 3, "saku": 4 },
+							multiple: { "houg": 1 },
 						},
 						{
 							single: { "leng": 1 },
@@ -6222,9 +5942,8 @@
 			"84": {
 				count: 0,
 				starsDist: [],
-				byClass: {
-					// All Italian ship-classes despite of equippable:
-					"58": [
+				byNation: {
+					"Italia": [
 						{
 							minStars: 4,
 							multiple: { "tyku": 1, "houk": 1 },
@@ -6234,18 +5953,7 @@
 							single: { "houg": 1 },
 						},
 					],
-					"61": "58",
-					"64": "58",
-					"68": "58",
-					"80": "58",
-					"92": "58",
-					"113": "58",
-					// All German ship-classes despite of equippable:
-					"47": "58",
-					"48": "58",
-					"55": "58",
-					"57": "58",
-					"63": "58",
+					"Germany": "Italia",
 				},
 				byShip: [
 					{
@@ -6707,19 +6415,12 @@
 			// RUR-4A Weapon Alpha Kai
 			"377": {
 				count: 0,
-				byClass: {
-					// Following Americans: John C. Butler Class
-					"87": {
+				byNation: {
+					"UnitedStates": {
 						single: { "houk": 1, "tais": 2 },
 					},
-					// Fletcher Class
-					"91": "87",
-					// Atlanta Class
-					"99": "87",
-					// St. Louis Class
-					"106": "87",
-					// Brooklyn Class
-					"110": "87",
+				},
+				byClass: {
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 1 },
@@ -6745,19 +6446,12 @@
 			// Lightweight ASW Torpedo (Initial Test Model)
 			"378": {
 				count: 0,
-				byClass: {
-					// Following Americans: John C. Butler Class
-					"87": {
+				byNation: {
+					"UnitedStates": {
 						single: { "houk": 1, "tais": 3 },
 					},
-					// Fletcher Class
-					"91": "87",
-					// Atlanta Class
-					"99": "87",
-					// St. Louis Class
-					"106": "87",
-					// Brooklyn Class
-					"110": "87",
+				},
+				byClass: {
 					// Jervis Class
 					"82": {
 						single: { "houk": 1, "tais": 2 },
@@ -6785,31 +6479,17 @@
 			// Hedgehog (Initial Model)
 			"439": {
 				count: 0,
-				// Country by ctype implemented in main.js, see #SlotItemEffectParamModel.prototype.getCountryNameList
-				// Following classes should be applied to all of `アメリカ` and `イギリス`
 				byClass: {
-					// Jervis Class
-					"82": {
-						single: { "tais": 2 },
-					},
-					// John C. Butler Class
-					"87": "82",
-					// Fletcher Class
-					"91": "82",
-					// Atlanta Class
-					"99": "82",
-					// St. Louis Class
-					"106": "82",
-					// Town Class
-					"108": "82",
-					// Brooklyn Class
-					"110": "82",
-					// Gato Class
-					"114": "82",
 					// Matsu Class
 					"101": {
 						single: { "tais": 1 },
 					},
+				},
+				byNation: {
+					"UnitedStates": {
+						single: { "tais": 2 },
+					},
+					"UnitedKingdom": "UnitedStates",
 				},
 				byShip: [
 					{

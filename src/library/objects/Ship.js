@@ -794,6 +794,7 @@ KC3改 Ship Object
 
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
+		const countryCtypeMap = bonusDefs.countryCtypeMap;
 		const allGears = this.equipment(true);
 		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
@@ -838,6 +839,20 @@ KC3改 Ship Object
 						}
 					}
 				}
+				else if (type === "byNation") {
+					for (const key in gear[type]) {
+						if (countryCtypeMap[key] && countryCtypeMap[key].includes(ctype)) {
+							if (Array.isArray(gear[type][key])) {
+								for (let i = 0; i < gear[type][key].length; i++) {
+									gear.path = gear.path || [];
+									gear.path.push(gear[type][key][i]);
+								}
+							} else {
+								gear.path = gear[type][key];
+							}
+						}
+					}
+				}
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
@@ -851,7 +866,8 @@ KC3改 Ship Object
 					}
 				}
 				if (gear.path) {
-					if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
+					if (type === "byNation" && typeof gear.path === "number") { gear.path = gear.byClass[gear.path]; }
+					else if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
 
 					const count = gear.count;
