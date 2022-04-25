@@ -955,8 +955,16 @@
 				const bonusDefs = KC3Gear.explicitStatsBonusGears();
 				const bonusList = [];
 				const synergyList = bonusDefs.synergyGears;
+				const countryCtypeMap = bonusDefs.countryCtypeMap;
 				
 				const ensureArray = array => Array.isArray(array) ? array : [array];
+				const mergeCtypesInNations = (defMap) => Object.keys(defMap).reduce((arr, key) => (
+					arr.push(...(countryCtypeMap[key] || [])), arr
+				), []);
+				const findNationByShipClass = (shipClassId) => (
+					Object.keys(countryCtypeMap).find(key =>
+						countryCtypeMap[key].includes(shipClassId)) || "Japan"
+				);
 				const checkBonusExtraRequirements = (bonusDef, shipId, originId, ctype, stype) => {
 					if (bonusDef.excludes && bonusDef.excludes.includes(shipId)) { return false; }
 					if (bonusDef.excludeOrigins && bonusDef.excludeOrigins.includes(originId)) { return false; }
@@ -1036,6 +1044,8 @@
 							KC3Master.slotitem(mstId).api_type[2] : 0;
 					if (def.byClass && Object.keys(def.byClass).includes(String(shipData.api_ctype))) {
 						bonus = Object.assign(bonus, def);
+					} else if (def.byNation && mergeCtypesInNations(def.byNation).includes(shipData.api_ctype)) {
+						bonus = Object.assign(bonus, def);
 					} else if (def.byShip && checkByShipBonusRequirements(def.byShip, shipData.api_id, shipOriginId, shipData.api_stype, shipData.api_ctype, gearType2)) {
 						bonus = Object.assign(bonus, def);
 					}
@@ -1049,11 +1059,20 @@
 					$.each(bonusList, function (idx, gear) {
 						let found = false, totalStats = {}, bonusStats = {}, synergyGear = [], starBonus = {}, classBonus = [], countBonus = [];
 						
-						// Class bonuses
+						// Class (and nation) bonuses
 						if (gear.byClass && Object.keys(gear.byClass).includes(String(shipData.api_ctype))) {
 							classBonus = gear.byClass[shipData.api_ctype];
 							if (typeof classBonus !== "object") { classBonus = gear.byClass[classBonus]; }
 							classBonus = ensureArray(classBonus);
+						}
+						if (gear.byNation) {
+							let nationBonus = gear.byNation[findNationByShipClass(shipData.api_ctype)];
+							if (typeof nationBonus === "string") { nationBonus = gear.byNation[nationBonus]; }
+							if (typeof nationBonus === "number") { nationBonus = gear.byClass[nationBonus]; }
+							if (!nationBonus) { nationBonus = []; } else { nationBonus = ensureArray(nationBonus); }
+							classBonus.push(...nationBonus);
+						}
+						if (classBonus.length > 0) {
 							classBonus.forEach(bonus => {
 								if (checkBonusExtraRequirements(bonus, shipData.api_id, shipOriginId, shipData.api_ctype, shipData.api_stype)) {
 									found = true;

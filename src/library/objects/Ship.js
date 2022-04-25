@@ -794,6 +794,7 @@ KC3改 Ship Object
 
 		const bonusDefs = KC3Gear.explicitStatsBonusGears();
 		const synergyGears = bonusDefs.synergyGears;
+		const countryCtypeMap = bonusDefs.countryCtypeMap;
 		const allGears = this.equipment(true);
 		allGears.forEach(g => g.exists() && KC3Gear.accumulateShipBonusGear(bonusDefs, g));
 		const masterIdList = allGears.map(g => g.masterId)
@@ -807,13 +808,13 @@ KC3改 Ship Object
 		// Check if each gear works on the equipped ship
 		const shipId = this.masterId;
 		const originId = RemodelDb.originOf(shipId);
-		const ctype = String(this.master().api_ctype);
+		const ctype = this.master().api_ctype;
 		const stype = this.master().api_stype;
 		const checkByShip = (byShip, shipId, originId, stype, ctype) =>
 			(byShip.ids || []).includes(shipId) ||
 			(byShip.origins || []).includes(originId) ||
 			(byShip.stypes || []).includes(stype) ||
-			(byShip.classes || []).includes(Number(ctype)) ||
+			(byShip.classes || []).includes(ctype) ||
 			(!byShip.ids && !byShip.origins && !byShip.stypes && !byShip.classes);
 
 		// Check if ship is eligible for equip bonus and add synergy/id flags
@@ -838,6 +839,20 @@ KC3改 Ship Object
 						}
 					}
 				}
+				else if (type === "byNation") {
+					for (const key in gear[type]) {
+						if (countryCtypeMap[key] && countryCtypeMap[key].includes(ctype)) {
+							if (Array.isArray(gear[type][key])) {
+								for (let i = 0; i < gear[type][key].length; i++) {
+									gear.path = gear.path || [];
+									gear.path.push(gear[type][key][i]);
+								}
+							} else {
+								gear.path = gear[type][key];
+							}
+						}
+					}
+				}
 				else if (type === "byShip") {
 					if (Array.isArray(gear[type])) {
 						for (let i = 0; i < gear[type].length; i++) {
@@ -851,7 +866,8 @@ KC3改 Ship Object
 					}
 				}
 				if (gear.path) {
-					if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
+					if (type === "byNation" && typeof gear.path === "number") { gear.path = gear.byClass[gear.path]; }
+					else if (typeof gear.path !== "object") { gear.path = gear[type][gear.path]; }
 					if (!Array.isArray(gear.path)) { gear.path = [gear.path]; }
 
 					const count = gear.count;
