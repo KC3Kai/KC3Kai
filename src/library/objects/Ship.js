@@ -2312,8 +2312,9 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false, isAirAttack = false,
-			targetShipStype = 0, isDefenderArmorCounted = false, targetShipMasterId = 0){
+			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false,
+			isAirAttack = false, targetShipStype = 0, isDefenderArmorCounted = false,
+			targetShipMasterId = 0, isOaswPhase = false){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
@@ -2386,12 +2387,12 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += getAverageProficiencyCriticalModifier(allowedSlotType);
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(allowedSlotType) ? 0.15 : 0;
 			} else {
-				// No proficiency critical modifier for both power and accuracy on OASW, but no way to check OASW airattack case here, not handled yet
+				// No proficiency critical modifier for both power and accuracy on OASW
 				// https://twitter.com/myteaGuard/status/1502574092226281474
 				// https://twitter.com/Camellia_bb/status/1514976505910415365 
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
-				if( !(warfareType === "Antisub" && [11, 18, 22].includes(this.master().api_stype)) ) {
+				if( !(warfareType === "Antisub" && (isOaswPhase || [11, 18, 22].includes(this.master().api_stype))) ) {
 					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
 					this.equipment().forEach((g, i) => {
@@ -4855,7 +4856,11 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, "Antisub", undefined, undefined,
-						true, aswAttackType[0] === "AirAttack").power;
+						true, aswAttackType[0] === "AirAttack",
+						// To show critical power without proficiency modifier if OASW:
+						//13, false, 0, canOasw
+						13, false, 0, false
+					).power;
 				}
 				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
