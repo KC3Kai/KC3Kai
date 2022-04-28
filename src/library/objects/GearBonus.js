@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				domesticSonar: 0,
@@ -5739,6 +5739,37 @@
 					"UnitedStates": {
 						multiple: { "houg": 2, "houk": 3, "saku": 4 },
 					},
+				},
+				byClass: {
+					// John C. Butler Class, range from medium to long
+					"87": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							single: { "leng": 1 },
+						},
+					],
+					// Fletcher Class
+					"91": "87",
+				},
+				byShip: {
+					// Tan Yang/Yukikaze K2
+					ids: [651, 656],
+					single: { "houg": 2, "houk": 2, "saku": 3, "leng": 1 },
+				},
+			},
+			// SG Radar (Late Model)
+			"456": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						multiple: { "houg": 3, "houk": 4, "saku": 4 },
+					},
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "houk": 2, "saku": 2 },
+					},
+					"Australia": "UnitedKingdom",
 				},
 				byClass: {
 					// John C. Butler Class, range from medium to long
