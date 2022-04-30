@@ -475,8 +475,8 @@ Does not include Ships and Gears which are managed by other Managers
 			if(typeof localStorage.fleets != "undefined"){
 				var oldFleets = JSON.parse(localStorage.fleets);
 				if(Array.isArray(oldFleets)){
-					this.fleets = this.fleets.map(fleet => (
-						(new KC3Fleet()).defineFormatted(fleet)
+					this.fleets = oldFleets.map(fleet => (
+						fleet ? (new KC3Fleet()).defineFormatted(fleet) : new KC3Fleet()
 					));
 				}
 			}
@@ -567,8 +567,8 @@ Does not include Ships and Gears which are managed by other Managers
 			if(typeof localStorage.bases != "undefined"){
 				var oldBases = JSON.parse(localStorage.bases);
 				if(Array.isArray(oldBases)){
-					this.bases = oldBases.map(baseData => (
-						(new KC3LandBase()).defineFormatted(baseData)
+					this.bases = oldBases.map(base => (
+						base ? (new KC3LandBase()).defineFormatted(base) : new KC3LandBase()
 					));
 				}
 			}
