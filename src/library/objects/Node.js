@@ -2590,9 +2590,11 @@ Used by SortieManager
 						const precapPower = power;
 						({power} = ship.applyPowerCap(power, time, warfareType));
 
+						// To fix proficiency critical modifier from OASW air attacks, get OASW phase `openingTaisen` value from BP instead of always `hougeki`?
+						const isOasw = false;
 						// Simplify aerial attack check to just carrier check, unlikely that need to check for edge cases like Hayasui/old CV night attacks
 						({power, newDepthChargeBonus, remainingAmmoModifier} = ship.applyPostcapModifiers(power, warfareType,
-							daySpecialAttackType, 0, isCritical, ship.isCarrier(), enemyShip.api_stype, false, target));
+							daySpecialAttackType, 0, isCritical, ship.isCarrier(), enemyShip.api_stype, false, target, isOasw));
 						const postcapPower = power;
 						if (newDepthChargeBonus)
 							armor = Math.max(1, armor - newDepthChargeBonus);

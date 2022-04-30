@@ -253,7 +253,7 @@
       ship.lk[0] = shipObj.luck || (masterData.api_luck[0] + (mod[4] || 0));
 
       // no value in master data, fall back to calculated naked + equip total
-      ship.ls[0] = shipObj.ls || ((nonMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalLoS());
+      ship.ls[0] = shipObj.ls || ((nonMasterStats.ls || ship.estimateNakedLoS()) + ship.equipmentTotalStats("saku"));
       ship.ev[0] = shipObj.ev || ((nonMasterStats.ev || ship.estimateNakedEvasion()) + ship.equipmentTotalStats('houk'));
       ship.as[0] = shipObj.as || ((nonMasterStats.as || ship.estimateNakedAsw()) + ship.equipmentTotalStats('tais') + (mod[6] || 0));
 

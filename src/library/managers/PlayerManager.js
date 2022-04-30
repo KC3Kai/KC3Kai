@@ -25,6 +25,7 @@ Does not include Ships and Gears which are managed by other Managers
 		statistics: {},
 		maxResource: 350000,
 		maxConsumable: 3000,
+		maxUseitem: 9999,
 		maxCoin: 350000,
 
 		init :function(){
@@ -472,10 +473,12 @@ Does not include Ships and Gears which are managed by other Managers
 
 		loadFleets :function(){
 			if(typeof localStorage.fleets != "undefined"){
-				var oldFleets =JSON.parse( localStorage.fleets );
-				this.fleets = this.fleets.map(function(x,i){
-					return (new KC3Fleet()).defineFormatted(oldFleets[i]);
-				});
+				var oldFleets = JSON.parse(localStorage.fleets);
+				if(Array.isArray(oldFleets)){
+					this.fleets = oldFleets.map(fleet => (
+						fleet ? (new KC3Fleet()).defineFormatted(fleet) : new KC3Fleet()
+					));
+				}
 			}
 			return this;
 		},
@@ -562,13 +565,18 @@ Does not include Ships and Gears which are managed by other Managers
 
 		loadBases :function(){
 			if(typeof localStorage.bases != "undefined"){
-				var oldBases = JSON.parse( localStorage.bases );
-				this.bases = oldBases.map(function(baseData){
-					return (new KC3LandBase()).defineFormatted(baseData);
-				});
+				var oldBases = JSON.parse(localStorage.bases);
+				if(Array.isArray(oldBases)){
+					this.bases = oldBases.map(base => (
+						base ? (new KC3LandBase()).defineFormatted(base) : new KC3LandBase()
+					));
+				}
 			}
 			if(typeof localStorage.baseConvertingSlots != "undefined"){
 				this.baseConvertingSlots = localStorage.getObject("baseConvertingSlots");
+				if(!Array.isArray(this.baseConvertingSlots)){
+					this.baseConvertingSlots = [];
+				}
 			}
 			return this;
 		},

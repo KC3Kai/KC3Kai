@@ -88,6 +88,12 @@ KC3改 Ship Object
 				configurable: false,
 				writable: true
 			},
+			statsCache: {
+				value: null,
+				enumerable: false,
+				configurable: false,
+				writable: true
+			},
 			// useful when making virtual ship objects.
 			// requirements:
 			// * "GearManager.get( itemId )" should get the intended equipment
@@ -676,7 +682,7 @@ KC3改 Ship Object
 	 * Naked stats of this ship.
 	 * @return stats without the equipment but with modernization.
 	 */
-	KC3Ship.prototype.nakedStats = function(statAttr){
+	KC3Ship.prototype.nakedStats = function(statAttr, withIndBonus){
 		if(this.isDummy()) { return false; }
 		const stats = {
 			aa: this.aa[0],
@@ -705,13 +711,35 @@ KC3改 Ship Object
 			"saku": "ls",
 			"raig": "tp",
 			"houm": "ht", // will be negative (0 - accuracy from gears)
+			"leng": "rn",
 			"soku": "sp",
 		};
+		const statsEquip = {}, statsBonus = {};
 		for(const apiName in statApiNames) {
-			const equipStats = this.equipmentTotalStats(apiName);
+			// get both values of total and bonus in 1-call (without `statsBonusOnShip` again),
+			// to save execution time on explicit bonus complex summing
+			const equipStats = this.equipmentTotalStats(apiName, true, true, withIndBonus ? "both" : false);
+			const statsTotal = withIndBonus ? equipStats[0] : equipStats;
+			if(withIndBonus) {
+				statsEquip[statApiNames[apiName]] = statsTotal;
+				statsBonus[statApiNames[apiName]] = equipStats[1];
+			}
 			// known issue: since stats value cannot be negative (lower cap at 0, except unknown accuracy),
 			// will get incorrect stats in cases like actual naked 0 with negative stats from equip.
-			stats[statApiNames[apiName]] -= equipStats;
+			// master values do not need to be adjusted by equip
+			if(!["leng", "soku"].includes(apiName)) stats[statApiNames[apiName]] -= statsTotal;
+		}
+		if(withIndBonus) {
+			// cache stats for faster later uses
+			this.statsCache = {
+				items: this.items.slice(0),
+				shipNaked: stats,
+				gearTotal: statsEquip,
+				gearBonus: statsBonus,
+				gearAsw: statsEquip.as,
+				gearLos: statsEquip.ls,
+			};
+			return [stats, statsBonus];
 		}
 		return !statAttr ? stats : stats[statAttr];
 	};
@@ -777,6 +805,7 @@ KC3改 Ship Object
 		// Add explicit stats bonuses (not masked, displayed on ship) from equipment on specific ship
 		if(bonusDefs) {
 			const onShipBonus = KC3Gear.equipmentTotalStatsOnShipBonus(bonusDefs, this, apiName);
+			if(isOnShipBonusOnly === "both") return [total + onShipBonus, onShipBonus];
 			total = isOnShipBonusOnly ? onShipBonus : total + onShipBonus;
 		}
 		return total;
@@ -964,18 +993,39 @@ KC3改 Ship Object
 	// faster naked asw stat method since frequently used
 	KC3Ship.prototype.nakedAsw = function(){
 		var asw = this.as[0];
-		var equipAsw = this.equipmentTotalStats("tais");
-		return asw - equipAsw;
+		var equipAsw;
+		// use cached value as long as equip unchanged
+		if(this.statsCache && this.statsCache.gearAsw !== undefined
+			&& this.items.equals(this.statsCache.items)) {
+			equipAsw = this.statsCache.gearAsw;
+		} else {
+			equipAsw = this.equipmentTotalStats("tais");
+		}
+		var naked = asw - equipAsw;
+		this.statsCache = Object.assign(this.statsCache || {}, {
+			items: this.items.slice(0),
+			gearAsw: equipAsw,
+		});
+		return naked;
 	};
 
+	// faster naked los stat method since frequently used
 	KC3Ship.prototype.nakedLoS = function(){
 		var los = this.ls[0];
-		var equipLos = this.equipmentTotalLoS();
-		return los - equipLos;
-	};
-
-	KC3Ship.prototype.equipmentTotalLoS = function (){
-		return this.equipmentTotalStats("saku");
+		var equipLos;
+		// use cached value as long as equip unchanged
+		if(this.statsCache && this.statsCache.gearLos !== undefined
+			&& this.items.equals(this.statsCache.items)) {
+			equipLos = this.statsCache.gearLos;
+		} else {
+			equipLos = this.equipmentTotalStats("saku");
+		}
+		var naked = los - equipLos;
+		this.statsCache = Object.assign(this.statsCache || {}, {
+			items: this.items.slice(0),
+			gearLos: equipLos,
+		});
+		return naked;
 	};
 
 	KC3Ship.prototype.effectiveEquipmentTotalAsw = function(canAirAttack = false){
@@ -2312,8 +2362,9 @@ KC3改 Ship Object
 	 * @see https://github.com/Nishisonic/UnexpectedDamage/blob/master/UnexpectedDamage.js
 	 */
 	KC3Ship.prototype.applyPostcapModifiers = function(cappedPower, warfareType = "Shelling",
-			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false, isAirAttack = false,
-			targetShipStype = 0, isDefenderArmorCounted = false, targetShipMasterId = 0){
+			daySpecialAttackType = ["SingleAttack", 0], contactPlaneId = 0, isCritical = false,
+			isAirAttack = false, targetShipStype = 0, isDefenderArmorCounted = false,
+			targetShipMasterId = 0, isOaswPhase = false){
 		// Artillery spotting modifier, should not x2 although some types attack 2 times
 		const dayCutinModifier = daySpecialAttackType[0] === "Cutin" && daySpecialAttackType[3] > 0 ?
 			daySpecialAttackType[3] : 1;
@@ -2386,12 +2437,12 @@ KC3改 Ship Object
 				proficiencyCriticalModifier += getAverageProficiencyCriticalModifier(allowedSlotType);
 				proficiencyCriticalModifier += hasNonZeroSlotCaptainPlane(allowedSlotType) ? 0.15 : 0;
 			} else {
-				// No proficiency critical modifier for both power and accuracy on OASW, but no way to check OASW airattack case here, not handled yet
+				// No proficiency critical modifier for both power and accuracy on OASW
 				// https://twitter.com/myteaGuard/status/1502574092226281474
 				// https://twitter.com/Camellia_bb/status/1514976505910415365 
 				// CV(B), AO antisub gets no proficiency critical modifier
 				// https://twitter.com/myteaGuard/status/1358823102419927049
-				if( !(warfareType === "Antisub" && [11, 18, 22].includes(this.master().api_stype)) ) {
+				if( !(warfareType === "Antisub" && (isOaswPhase || [11, 18, 22].includes(this.master().api_stype))) ) {
 					// http://wikiwiki.jp/kancolle/?%B4%CF%BA%DC%B5%A1%BD%CF%CE%FD%C5%D9#v3f6d8dd
 					const expBonus = [0, 1, 2, 3, 4, 5, 7, 10];
 					this.equipment().forEach((g, i) => {
@@ -3814,8 +3865,7 @@ KC3改 Ship Object
 		const fleetLoS = fleet.artillerySpottingLineOfSight();
 		const adjFleetLoS = Math.floor(Math.sqrt(fleetLoS) + fleetLoS / 10);
 		const adjLuck = Math.floor(Math.sqrt(this.lk[0]) + 10);
-		// might exclude equipment on ship LoS bonus for now,
-		// to include LoS bonus, use `this.equipmentTotalLoS()` instead
+		// exclude equipment on ship LoS visible bonus for now
 		const equipLoS = this.equipmentTotalStats("saku", true, false);
 		const battleConds = this.collectBattleConditions();
 		// assume to best condition AS+ by default (for non-battle)
@@ -4717,9 +4767,8 @@ KC3改 Ship Object
 	};
 	KC3Ship.buildShipTooltip = function(shipObj, tooltipBox) {
 		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
-		const nakedStats = shipObj.nakedStats(),
+		const [nakedStats, bonusStats] = shipObj.nakedStats(undefined, true),
 			  maxedStats = shipObj.maxedStats(),
-			  bonusStats = shipObj.statsBonusOnShip(),
 			  maxDiffStats = {},
 			  equipDiffStats = {},
 			  modLeftStats = shipObj.modernizeLeftStats();
@@ -4855,7 +4904,11 @@ KC3改 Ship Object
 				if(ConfigManager.powerCritical) {
 					criticalPower = shipObj.applyPostcapModifiers(
 						power, "Antisub", undefined, undefined,
-						true, aswAttackType[0] === "AirAttack").power;
+						true, aswAttackType[0] === "AirAttack",
+						// To show critical power without proficiency modifier if OASW:
+						//13, false, 0, canOasw
+						13, false, 0, false
+					).power;
 				}
 				({power} = shipObj.applyPostcapModifiers(power, "Antisub"));
 			}
