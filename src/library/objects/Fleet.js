@@ -1204,9 +1204,10 @@ Contains summary information about a fleet and its ships
 		let total = 0;
 		availableShips.forEach(ship => {
 			// According tests, visible LoS bonus from equipment should be added to ship part,
-			// except these pieces for now: SG Radar (Initial Model)
+			// ~except these pieces for now: SG Radar (Initial Model)~
+			//   fixed since 2022-04-28 with Late Model implementation: https://twitter.com/KanColle_STAFF/status/1519633389015670784
 			// https://wikiwiki.jp/kancolle/%E3%83%AB%E3%83%BC%E3%83%88%E5%88%86%E5%B2%90#equipment_bonus
-			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true, null, null, null, [315]) || 0;
+			const losOnShipBonus = ship.equipmentTotalStats("saku", true, true, true) || 0;
 			// sum ship's naked LoS
 			total += Math.sqrt(ship.nakedLoS() + losOnShipBonus);
 			// sum equipment's eLoS

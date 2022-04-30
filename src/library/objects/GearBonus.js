@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				domesticSonar: 0,
@@ -898,31 +898,9 @@
 				starsDist: [],
 				byClass: {
 					// Taiyou Class
-					"76": [
-						{
-							multiple: { "houg": 1, "tais": 1, "houk": 2 },
-						},
-						{
-							minStars: 2,
-							multiple: { "houg": 1 },
-						},
-						{
-							minStars: 4,
-							multiple: { "tyku": 1 },
-						},
-						{
-							minStars: 6,
-							multiple: { "tais": 1 },
-						},
-						{
-							minStars: 8,
-							multiple: { "houk": 1 },
-						},
-						{
-							minStars: 10,
-							multiple: { "tais": 1 },
-						},
-					],
+					"76": {
+						multiple: { "houg": 1, "tais": 1, "houk": 2 },
+					},
 				},
 				byShip: [
 					// Yawatamaru/Unyou
@@ -935,28 +913,24 @@
 						origins: [89, 184],
 						multiple: { "houg": 1, "tais": 2, "houk": 1 },
 					},
+					// All ships can equip this get stars bonuses
 					{
-						origins: [89, 184],
 						minStars: 2,
 						multiple: { "houg": 1 },
 					},
 					{
-						origins: [89, 184],
 						minStars: 4,
 						multiple: { "tyku": 1 },
 					},
 					{
-						origins: [89, 184],
 						minStars: 6,
 						multiple: { "tais": 1 },
 					},
 					{
-						origins: [89, 184],
 						minStars: 8,
 						multiple: { "houk": 1 },
 					},
 					{
-						origins: [89, 184],
 						minStars: 10,
 						multiple: { "tais": 1 },
 					},
@@ -1216,6 +1190,8 @@
 					"UnitedStates": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Casablanca Class
@@ -1569,11 +1545,13 @@
 					"UnitedStates": {
 						multiple: { "houg": 1, "houk": 1 },
 					},
+					// Game codes still using ctype matching, here uses country name in advance
+					"UnitedKingdom": "UnitedStates",
 				},
 				byClass: {
 					// Essex Class
 					"84": {
-						multiple: { "houg": 1, "tyku": 1, "houk": 1 },
+						multiple: { "houg": 1, "tyku": 1 },
 					},
 				},
 				byShip: {
@@ -4014,7 +3992,7 @@
 							minStars: 10,
 							remodel: 2,
 							minCount: 2,
-							single: { "houg": 2, "raig": 1 },
+							single: { "houg": 1 },
 						},
 						{
 							minStars: 10,
@@ -5781,6 +5759,37 @@
 					single: { "houg": 2, "houk": 2, "saku": 3, "leng": 1 },
 				},
 			},
+			// SG Radar (Late Model)
+			"456": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						multiple: { "houg": 3, "houk": 4, "saku": 4 },
+					},
+					"UnitedKingdom": {
+						multiple: { "houg": 2, "houk": 2, "saku": 2 },
+					},
+					"Australia": "UnitedKingdom",
+				},
+				byClass: {
+					// John C. Butler Class, range from medium to long
+					"87": [
+						{
+							multiple: { "houg": 1 },
+						},
+						{
+							single: { "leng": 1 },
+						},
+					],
+					// Fletcher Class
+					"91": "87",
+				},
+				byShip: {
+					// Tan Yang/Yukikaze K2
+					ids: [651, 656],
+					single: { "houg": 2, "houk": 2, "saku": 3, "leng": 1 },
+				},
+			},
 			// Type 13 Air Radar Kai
 			"106": {
 				count: 0,
@@ -6209,6 +6218,7 @@
 			// Type 3 Active Sonar Kai
 			"438": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Ayanami Class
 					"1": {
@@ -6264,7 +6274,7 @@
 					},
 					{
 						// All remodels of: Shigure, Yamakaze, Kamikaze, Harukaze, Mikura, Ishigaki
-						origins: [43, 457, 473, 611, 585],
+						origins: [43, 457, 471, 473, 611, 585],
 						single: { "houk": 1, "tais": 1 },
 					},
 					{
@@ -6876,9 +6886,9 @@
 					},
 					// Yuubari Class
 					"34": "21",
-					// Kuma Class extra +1 fp, +2 tp, +3 ev
+					// Kuma Class extra +1 fp, +2 tp, +2 ev
 					"4": {
-						single: { "houg": 5, "raig": 4, "houk": 5 },
+						single: { "houg": 5, "raig": 4, "houk": 4 },
 					},
 					// Sendai Class
 					"16": "4",
@@ -6896,8 +6906,9 @@
 						single: { "tyku": 1, "houk": 1 },
 					},
 					{
-						// Jintsuu, Sendai, Naganami, Hatsushimo, Teruzuki
-						origins: [55, 54, 135, 41, 422],
+						// Jintsuu, Sendai, Naganami, ~Hatsushimo~, Teruzuki
+						// Another known bug: Hatsushimo appears in game codes, but this case never happens because she has already met previous case
+						origins: [55, 54, 135, 422],
 						single: { "houg": 1, "raig": 1 },
 					},
 					{
