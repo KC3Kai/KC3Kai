@@ -283,8 +283,7 @@ KC3改 Equipment Object
 					case 7: // Dive Bomber
 					case 57: // Jet Fighter Bomber
 						// only applied if not a fighter bomber, btw fighter bomber get AA bonus instead
-						// 0.5 used by Nishisonic/UnexpectedDamage, old one is 0.2 * stars
-						modifier = this.isFighterBomber() ? 0 : 0.5;
+						if(!this.isFighterBomber()) return 0.2 * stars;
 						break;
 					case 8: // Torpedo Bomber
 					case 58: // Jet Torpedo Bomber
@@ -343,7 +342,7 @@ KC3改 Equipment Object
 				// Dive Bomber, 0.2 per star
 				if([7, 57].includes(type2) && !this.isFighterBomber())
 					return 0.2 * stars;
-				// Torpedo Bomber, 0.2 per star (used by Nishisonic/UnexpectedDamage)
+				// Torpedo Bomber, 0.2 per star
 				if([8, 58].includes(type2))
 					return 0.2 * stars;
 				// Autogyro or Helicopter
@@ -933,12 +932,12 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isFighterBomber = function(){
-		// 'Fighter Bomber' in dive bomber category is based on AA stat and DV stat?
+		// 'Fighter Bomber' in dive bomber category is likely based on name, not AA stat and DV stat?
 		//   depends on tests of Suisei M12 (634 Air Group w/Type 3 Cluster Bombs) or other new AA 3 dive bomer.
-		// Re.2001 CB Kai (AA 4 DV 6) is not fighter bomber: https://twitter.com/myteaGuard/status/1330856406363193345
-		// FM-2 (AA 6 DV 2) is not fighter bomber: https://twitter.com/myteaGuard/status/1366391634837991425
+		// Re.2001 CB Kai (AA 4 DV 6) is not fighter-bomber: https://twitter.com/myteaGuard/status/1330856406363193345
+		// FM-2 (AA 6 DV 2) is not fighter-bomber: https://twitter.com/myteaGuard/status/1366391634837991425
 		//   perhaps F4U-1D (AA 7 DV 7) neither? (not improvable yet)
-		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is?
+		// Type 0 Fighter Model 64 (Two-seat w/ KMX) is fighter-bomber: https://twitter.com/Yama625Ayanami/status/1485655534472941572
 		const type2Ids = [7, 57];
 		return this.exists() &&
 			type2Ids.indexOf(this.master().api_type[2]) > -1 &&
