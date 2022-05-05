@@ -2,6 +2,8 @@
  * Exactly, this module is a data builder of online website Image Builder,
  * which generates the fleets composition image on a canvas, instead of building an image by itself.
  *
+ * Currently, exported json data can be either used by kc-web (v2 of aircalc) by:
+ *   https://github.com/noro6/kc-web
  * Currently, supports to export data to the web Image Builder hosted by:
  *   https://github.com/HitomaruKonpaku/KanColleImgBuilder
  * which depends on GKCOI (Generate KanColle Organization Image) originally created by:
@@ -39,15 +41,15 @@
     createKC3FleetObject,
   };
 
-  function openWebsite(deckBuilderData) {
+  function openWebsite(deckBuilderData, baseUrl) {
     const json = JSON.stringify(deckBuilderData);
-    const url = exportBaseUrl + encodeURI(json);
+    const url = (baseUrl || exportBaseUrl) + encodeURI(json);
     //console.log("JSON to be exported", json);
     //console.debug("Site to be exported", url);
     window.open(url);
   }
 
-  function exportCurrentFleets(lbWorldId) {
+  function exportCurrentFleets(lbWorldId, baseUrl) {
     // Not reload storage here to keep WYSIWYG in Strategy Room Fleet Manager,
     // and not necessary to refresh for devtools panel page.
     //PlayerManager.loadFleets();
@@ -58,18 +60,18 @@
     buildFleets(deckBuilder, fleets);
     const availWorlds = lbas.map(lb => lb.map).sort();
     buildLbasFromPlayerManager(deckBuilder, lbas,
-      lbWorldId > 0 ? lbWorldId : availWorlds[0]);
-    openWebsite(deckBuilder);
+      lbWorldId >= 0 ? lbWorldId : availWorlds[0]);
+    openWebsite(deckBuilder, baseUrl);
   }
 
-  function exportSortie(sortieId) {
+  function exportSortie(sortieId, baseUrl) {
     KC3Database.get_sortie(sortieId, sortie => {
       const fleets = createFleetsFromSortie(sortie);
       const lbas = sortie.lbas;
       const deckBuilder = createDeckBuilderHeader(true);
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas);
-      openWebsite(deckBuilder);
+      openWebsite(deckBuilder, baseUrl);
     });
   }
 

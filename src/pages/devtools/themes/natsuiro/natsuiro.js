@@ -713,13 +713,22 @@
 
 		// Export button
 		$(".module.controls .btn_export").on("click", function(e){
-			if(e.altKey && window.KC3ImageBuilder) {
-				KC3ImageBuilder.exportCurrentFleets();
-			} else {
-				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify(PlayerManager.prepareDeckbuilder())
-				)));
+			if(window.KC3ImageBuilder) {
+				if(e.altKey) {
+					KC3ImageBuilder.exportCurrentFleets();
+					return;
+				}
+				if(e.ctrlKey || e.metaKey) {
+					// pass 0 instead of undefined to export land bases of all worlds
+					KC3ImageBuilder.exportCurrentFleets(undefined,
+						// v2 of kcTools: https://github.com/noro6/kc-web
+						"https://noro6.github.io/kc-web?predeck=");
+					return;
+				}
 			}
+			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+				JSON.stringify(PlayerManager.prepareDeckbuilder())
+			)));
 		});
 
 		const prepareBattleLogsData = function(){
