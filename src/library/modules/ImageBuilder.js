@@ -15,6 +15,7 @@
   'use strict';
 
   const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
+  const kcwebBaseUrl = 'https://noro6.github.io/kc-web/?predeck=';
   const defaultLang = 'en';
   const supportedLangs = {
     'jp': 'jp',
@@ -43,10 +44,21 @@
 
   function openWebsite(deckBuilderData, baseUrl) {
     const json = JSON.stringify(deckBuilderData);
+    const isGhSinglePage = baseUrl === "kcweb";
+    if (baseUrl === "kcweb") baseUrl = kcwebBaseUrl;
     const url = (baseUrl || exportBaseUrl) + encodeURI(json);
     //console.log("JSON to be exported", json);
     //console.debug("Site to be exported", url);
-    window.open(url);
+    // Special handling for gh-pages type of single page site, such as simulators
+    if (isGhSinglePage) {
+      const ref = window.open(url, "outersite");
+      if (ref && !ref.closed) {
+        ref.location.replace(url);
+        if (ref.focus) ref.focus();
+      }
+    } else {
+      window.open(url);
+    }
   }
 
   function exportCurrentFleets(lbWorldId, baseUrl) {
@@ -58,29 +70,40 @@
     const lbas = PlayerManager.bases;
     const deckBuilder = createDeckBuilderHeader(true);
     buildFleets(deckBuilder, fleets);
-    const availWorlds = lbas.map(lb => lb.map).sort();
-    buildLbasFromPlayerManager(deckBuilder, lbas,
-      lbWorldId >= 0 ? lbWorldId : availWorlds[0]);
+    if (lbWorldId >= 0 || !lbas.length) {
+      buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId);
+    } else {
+      const availWorlds = lbas.map(lb => lb.map).sort();
+      const latestWorld = availWorlds.pop();
+      const guessedWorld = KC3Meta.isEventWorld(latestWorld) ? latestWorld : availWorlds[0];
+      buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld);
+    }
     openWebsite(deckBuilder, baseUrl);
   }
 
-  function exportSortie(sortieId, baseUrl) {
+  function exportSortie(sortieId, baseUrl, usedOnly) {
     KC3Database.get_sortie(sortieId, sortie => {
-      const fleets = createFleetsFromSortie(sortie);
+      const fleets = createFleetsFromSortie(sortie, usedOnly);
       const lbas = sortie.lbas;
       const deckBuilder = createDeckBuilderHeader(true);
       buildFleets(deckBuilder, fleets);
-      buildLbasFromSortie(deckBuilder, lbas);
+      buildLbasFromSortie(deckBuilder, lbas, usedOnly);
       openWebsite(deckBuilder, baseUrl);
     });
   }
 
-  function createFleetsFromSortie(sortie) {
-    const fleets = [];
-    fleets.push(convertSortiedFleet(sortie.fleet1, 1));
-    fleets.push(convertSortiedFleet(sortie.fleet2, 2));
-    fleets.push(convertSortiedFleet(sortie.fleet3, 3));
-    fleets.push(convertSortiedFleet(sortie.fleet4, 4));
+  function createFleetsFromSortie(sortie, isSortiedOnly) {
+    const sortiedFleetNums = [
+      sortie.fleetnum,
+      (sortie.fleetnum == 1 && sortie.combined) ? 2 : 0,
+      sortie.support1,
+      sortie.support2
+    ].filter(n => !!n);
+    const fleetNums = [1, 2, 3, 4]
+      .filter(n => !isSortiedOnly || sortiedFleetNums.includes(n));
+    const fleets = fleetNums.map(n => (
+      convertSortiedFleet(sortie["fleet" + n], n)
+    ));
     return fleets.map(v => createKC3FleetObject(v));
   }
 
@@ -112,11 +135,11 @@
     });
   }
 
-  function buildLbasFromSortie(deckBuilder, lbas) {
+  function buildLbasFromSortie(deckBuilder, lbas, isUsedOnly) {
     if (!checkLbasBuilderInput(deckBuilder, lbas)) {
       return;
     }
-    lbas.forEach((lb, i) => {
+    lbas.filter(lb => !isUsedOnly || [1, 2].includes(lb.action)).forEach((lb, i) => {
       const lbasObj = {
         mode: lb.action,
         items: {},

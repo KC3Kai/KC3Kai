@@ -719,10 +719,9 @@
 					return;
 				}
 				if(e.ctrlKey || e.metaKey) {
-					// pass 0 instead of undefined to export land bases of all worlds
-					KC3ImageBuilder.exportCurrentFleets(undefined,
-						// v2 of kcTools: https://github.com/noro6/kc-web
-						"https://noro6.github.io/kc-web?predeck=");
+					// pass 0 instead of undefined to export land bases of all worlds,
+					// here use auto pickup to avoid 'URI too long' error
+					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
 					return;
 				}
 			}
@@ -760,7 +759,7 @@
 		const openBattleLogsWindow = function(data, isPopup){
 			try {
 				const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
-				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars,popup"));
 				if(ref && !ref.closed){
 					// Update hash with latest battle data even if window already opened
 					// this might not work for all browser versions as a vulnerability to bypass CORS

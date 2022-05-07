@@ -349,11 +349,11 @@ KC3改 Equipment Object
 				// weaker than "O Type Observation Autogyro Kai Ni" (asw 11) changed to 0.2?
 				if(type2 === 25)
 					return (this.master().api_tais > 10 ? 0.3 : 0.2) * stars;
-				// Uncertained for Anti-Sub PBY, likely in (0.175, 0.25)
-				// https://twitter.com/myteaGuard/status/1502572381625544704
-				// https://twitter.com/CC_jabberwock/status/1521088263989063680
+				// Anti-Sub PBY, Kai & ASW: 0.3 vs 0.2?
+				// https://twitter.com/CC_jabberwock/status/1522610871788212226
+				// https://twitter.com/yukicacoon/status/1522783905350565889
 				if(type2 === 26)
-					return 0.2 * stars;
+					return (this.master().api_tais > 8 ? 0.3 : 0.2) * stars;
 				break;
 			case "airstrike":
 			case "lbas":
@@ -509,6 +509,8 @@ KC3改 Equipment Object
 				modifier = 1.2; break;
 			case 11: // Seaplane bomber
 				modifier = 1.15; break;
+			case 26: // Anti-Sub PBY
+				modifier = 1; break;
 		}
 		return modifier * Math.sqrt(stars);
 	};

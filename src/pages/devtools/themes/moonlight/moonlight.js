@@ -798,8 +798,7 @@
 					return;
 				}
 				if(e.ctrlKey || e.metaKey) {
-					KC3ImageBuilder.exportCurrentFleets(undefined,
-						"https://noro6.github.io/kc-web?predeck=");
+					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
 					return;
 				}
 			}

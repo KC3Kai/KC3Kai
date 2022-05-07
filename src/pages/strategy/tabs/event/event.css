@@ -637,14 +637,9 @@
 	margin-top:-2px;
 }
 
-.tab_event .sortie_list .button_tomanager {
-	width:auto;
-	float:none;
-	padding:0px 5px 0px 5px;
-	margin:5px 5px 5px 5px;
-}
-
-.tab_event .sortie_list .export_img_builder {
+.tab_event .sortie_list .button_tomanager,
+.tab_event .sortie_list .export_img_builder,
+.tab_event .sortie_list .export_kcweb {
 	width:auto;
 	float:none;
 	padding:0px 5px 0px 5px;
@@ -937,20 +932,23 @@
 	color:#f00;
 }
 /* Difficulty marker */
+.tab_event .sortie_list .sortie_box.sortie_ranks:after {
+	content: attr(data-diff);
+	position:absolute;
+	right:7px;
+	bottom:-7px;
+	opacity:0;
+	font-weight:bolder;
+	font-size:175%;
+	pointer-events:none;
+	transition: all 0.25s;
+}
 /* new Winter 2018 casual difficulty uses the ID 1 */
 .tab_event .sortie_list .sortie_box.sortie_rank_1C {
 	border: rgb(64,255,64) solid 1px;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1C:after {
-	content: attr(data-diff);
-	position:absolute;
-	right:0; bottom:0;
-	opacity:0;
 	color:rgb(0,128,0);
-	font-weight:bolder;
-	font-size:200%;
-	pointer-events:none;
-	transition: all 0.25s;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1C.expanded:after {
 	opacity:0.25;
@@ -958,87 +956,27 @@
 /* difficulty ID should shift +1, but unchanged here */
 .tab_event .sortie_list .sortie_box.sortie_rank_1 {
 	border: rgb(64,64,255) solid 1px;
-	/*background-image: url('../../../../assets/img/client/difficulty/bg-1.png');*/
-	/*background-repeat: no-repeat;*/
-	/*background-position: 100% 100%;*/
-	/*position: absolute;*/
-	/*top: 0;*/
-	/*left: 0;*/
-	/*width: 100%;*/
-	/*height: 100%;*/
-	/*content: " ";*/
-	/*pointer-events: none;*/
-	/*opacity: 0.2;*/
-	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1:after {
-	content: attr(data-diff);
-	position:absolute;
-	right:0; bottom:0;
-	opacity:0;
 	color:rgb(0,0,128);
-	font-weight:bolder;
-	font-size:200%;
-	pointer-events:none;
-	transition: all 0.25s;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_1.expanded:after {
 	opacity:0.25;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2 {
 	border: rgb(255,255,64) solid 1px;
-	/*background-image: url('../../../../assets/img/client/difficulty/bg-2.png');*/
-	/*background-repeat: no-repeat;*/
-	/*background-position: 100% 100%;*/
-	/*position: absolute;*/
-	/*top: 0;*/
-	/*left: 0;*/
-	/*width: 100%;*/
-	/*height: 100%;*/
-	/*content: " ";*/
-	/*pointer-events: none;*/
-	/*opacity: 0.2;*/
-	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2:after {
-	content: attr(data-diff);
-	position:absolute;
-	right:0; bottom:0;
-	opacity:0;
 	color:rgb(128,128,0);
-	font-weight:bolder;
-	font-size:200%;
-	pointer-events:none;
-	transition: all 0.25s;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_2.expanded:after {
 	opacity:0.25;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3 {
 	border: rgb(255,64,64) solid 1px;
-	/*background-image: url('../../../../assets/img/client/difficulty/bg-3.png');*/
-	/*background-repeat: no-repeat;*/
-	/*background-position: 100% 100%;*/
-	/*position: absolute;*/
-	/*top: 0;*/
-	/*left: 0;*/
-	/*width: 100%;*/
-	/*height: 100%;*/
-	/*content: " ";*/
-	/*pointer-events: none;*/
-	/*opacity: 0.2;*/
-	/*border-radius: 10px;*/
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3:after {
-	content: attr(data-diff);
-	position:absolute;
-	right:0; bottom:0;
-	opacity:0;
 	color:rgb(128,0,0);
-	font-weight:bolder;
-	font-size:200%;
-	pointer-events:none;
-	transition: all 0.25s;
 }
 .tab_event .sortie_list .sortie_box.sortie_rank_3.expanded:after {
 	opacity:0.25;

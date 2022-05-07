@@ -595,6 +595,12 @@
 				if(!id) return;
 				KC3ImageBuilder.exportSortie(id);
 			};
+			const exportAirSimulator = function () {
+				const id = $(this).data("id");
+				if(!id) return;
+				// pass sortied fleets & lb only to avoid 'URI too long' error
+				KC3ImageBuilder.exportSortie(id, "kcweb", true);
+			};
 			const parseAirRaidFunc = function(airRaid, heavyAirRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
 				if(airRaid.api_air_base_attack) {
@@ -735,7 +741,7 @@
 					}
 					if((sortie.diff || 0) > 0) {
 						const rankMarker = ((d, w) => w >= 41 ? (d === 1 ? "1C" : d - 1) : d)(sortie.diff, sortie.world);
-						$(sortieBox)
+						$(sortieBox).addClass("sortie_ranks")
 							.addClass("sortie_rank_" + rankMarker)
 							.attr("data-diff", KC3Meta.term("EventHistoryRank" + rankMarker));
 					}
@@ -747,11 +753,15 @@
 					$(".sortie_date", sortieBox).attr("title", new Date(sortieTime).format("yyyy-mm-dd HH:MM:ss") );
 					$(".sortie_map", sortieBox).text( (KC3Meta.isEventWorld(sortie.world) ? "E" : sortie.world) + "-" + sortie.mapnum );
 					showSortieLedger(sortie.id, sortieBox, sortie.world);
-					$(".button_tomanager", sortieBox).data("id", sortie.id)
+					$(".button_tomanager", sortieBox)
+						.data("id", sortie.id)
 						.on("click", viewFleetAtManagerFunc);
 					$(".export_img_builder", sortieBox)
 						.data("id", sortie.id)
 						.on("click", exportImageBuilder);
+					$(".export_kcweb", sortieBox)
+						.data("id", sortie.id)
+						.on("click", exportAirSimulator);
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {

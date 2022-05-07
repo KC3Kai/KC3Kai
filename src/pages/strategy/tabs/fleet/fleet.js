@@ -163,6 +163,15 @@
 				}
 			});
 
+			$("button#control_export_kcweb").on("click", function() {
+				if (self.viewType === "current") {
+					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
+				} else {
+					var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);
+					KC3ImageBuilder.openWebsite(converted, "kcweb");
+				}
+			});
+
 			const updateHorizontal = () => {
 				if(this.horizontal) {
 					$(".fleet_ships").addClass("horizontal");
