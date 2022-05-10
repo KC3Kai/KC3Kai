@@ -720,7 +720,7 @@
 				}
 				if(e.ctrlKey || e.metaKey) {
 					// pass 0 instead of undefined to export land bases of all worlds,
-					// here use auto pickup to avoid 'URI too long' error
+					// auto pick up world here since kcweb accepts land bases up to 3 for now
 					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
 					return;
 				}

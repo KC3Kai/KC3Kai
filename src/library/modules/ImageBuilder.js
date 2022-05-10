@@ -15,7 +15,7 @@
   'use strict';
 
   const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
-  const kcwebBaseUrl = 'https://noro6.github.io/kc-web/?predeck=';
+  const kcwebBaseUrl = 'https://noro6.github.io/kc-web#import:';
   const defaultLang = 'en';
   const supportedLangs = {
     'jp': 'jp',
@@ -42,16 +42,20 @@
     createKC3FleetObject,
   };
 
-  function openWebsite(deckBuilderData, baseUrl) {
-    const json = JSON.stringify(deckBuilderData);
-    const isGhSinglePage = baseUrl === "kcweb";
-    if (baseUrl === "kcweb") baseUrl = kcwebBaseUrl;
-    const url = (baseUrl || exportBaseUrl) + encodeURI(json);
-    //console.log("JSON to be exported", json);
+  function openWebsite(deckBuilderData, baseUrl, target) {
+    let url;
+    if (baseUrl === "kcweb") {
+      url = kcwebBaseUrl + JSON.stringify({
+        "predeck": deckBuilderData
+      });
+    } else {
+      const json = JSON.stringify(deckBuilderData);
+      //console.log("JSON to be exported", json);
+      url = (baseUrl || exportBaseUrl) + encodeURI(json);
+    }
     //console.debug("Site to be exported", url);
-    // Special handling for gh-pages type of single page site, such as simulators
-    if (isGhSinglePage) {
-      const ref = window.open(url, "outersite");
+    if (!!target && target !== "_blank") {
+      const ref = window.open(url, target);
       if (ref && !ref.closed) {
         ref.location.replace(url);
         if (ref.focus) ref.focus();
@@ -61,7 +65,7 @@
     }
   }
 
-  function exportCurrentFleets(lbWorldId, baseUrl) {
+  function exportCurrentFleets(lbWorldId, baseUrl, target, deployedOnly) {
     // Not reload storage here to keep WYSIWYG in Strategy Room Fleet Manager,
     // and not necessary to refresh for devtools panel page.
     //PlayerManager.loadFleets();
@@ -71,24 +75,24 @@
     const deckBuilder = createDeckBuilderHeader(true);
     buildFleets(deckBuilder, fleets);
     if (lbWorldId >= 0 || !lbas.length) {
-      buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId);
+      buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId, deployedOnly);
     } else {
       const availWorlds = lbas.map(lb => lb.map).sort();
       const latestWorld = availWorlds.pop();
       const guessedWorld = KC3Meta.isEventWorld(latestWorld) ? latestWorld : availWorlds[0];
       buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld);
     }
-    openWebsite(deckBuilder, baseUrl);
+    openWebsite(deckBuilder, baseUrl, target);
   }
 
-  function exportSortie(sortieId, baseUrl, usedOnly) {
+  function exportSortie(sortieId, baseUrl, target, usedOnly) {
     KC3Database.get_sortie(sortieId, sortie => {
       const fleets = createFleetsFromSortie(sortie, usedOnly);
       const lbas = sortie.lbas;
       const deckBuilder = createDeckBuilderHeader(true);
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas, usedOnly);
-      openWebsite(deckBuilder, baseUrl);
+      openWebsite(deckBuilder, baseUrl, target);
     });
   }
 
@@ -126,11 +130,14 @@
     });
   }
 
-  function buildLbasFromPlayerManager(deckBuilder, lbas, mapId) {
+  function buildLbasFromPlayerManager(deckBuilder, lbas, mapId, deployedOnly) {
     if (!checkLbasBuilderInput(deckBuilder, lbas)) {
       return;
     }
-    lbas.filter(lb => !mapId || lb.map === mapId).forEach((lb, i) => {
+    lbas.filter(lb => !mapId || lb.map === mapId)
+      // get rid of empty land bases with nothing deployed
+      .filter(lb => !deployedOnly || !(lb.action == 0 && lb.planes.every(p => !p.api_slotid)))
+      .forEach((lb, i) => {
       deckBuilder['a' + (i + 1)] = lb.deckbuilder();
     });
   }

@@ -598,8 +598,7 @@
 			const exportAirSimulator = function () {
 				const id = $(this).data("id");
 				if(!id) return;
-				// pass sortied fleets & lb only to avoid 'URI too long' error
-				KC3ImageBuilder.exportSortie(id, "kcweb", true);
+				KC3ImageBuilder.exportSortie(id, "kcweb", "aircalc", true);
 			};
 			const parseAirRaidFunc = function(airRaid, heavyAirRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
