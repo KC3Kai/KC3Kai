@@ -4005,7 +4005,7 @@
 					"5": "1",
 					// Hatsuharu Class K2: Hatsuharu K2, Hatsushimo K2
 					"10": "1",
-					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2
+					// Fubuki Class K2: Fubuki K2, Murakumo K2, Uranami K2, Isonami K2
 					"12": "1",
 				},
 				byShip: [
@@ -5101,6 +5101,11 @@
 						ids: [647],
 						multiple: { "houg": 1, "raig": 1, "tais": 1, "houk": 1 },
 					},
+					{
+						// Isonami K2
+						ids: [666],
+						multiple: { "houg": 1, "tais": 1 },
+					},
 				],
 			},
 			// 12.7cm Twin Gun Mount Model B Kai Ni
@@ -5443,6 +5448,11 @@
 					"5": "1",
 					// Fubuki Class
 					"12": "1",
+				},
+				byShip: {
+					// Isonami K2
+					ids: [666],
+					multiple: { "houg": 1, "tyku": 1, "tais": 1 },
 				},
 			},
 			// 12.7cm Twin Gun Mount Model B Kai 4 + AAFD
