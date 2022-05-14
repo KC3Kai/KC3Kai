@@ -3032,8 +3032,8 @@ Previously known as "Reactor"
 					[948,3,[6,4], true, true], // By10: 4th requirement: [W6-4] A-rank+ the boss node twice
 					[973,0,[3,1], true, true], // By11: 1st requirement: [W3-1] A-rank+ the boss node
 					[973,1,[3,3], true, true], // By11: 2nd requirement: [W3-3] A-rank+ the boss node
-					[973,2,[7,3], true, true, [18,23,24,25]], // By11: 3rd requirement: [W7-3-P] A-rank+ the boss node
-					[973,3,[4,3], true, true], // By11: 4th requirement: [W4-3] A-rank+ the boss node
+					[973,2,[4,3], true, true], // By11: 3rd requirement: [W4-3] A-rank+ the boss node
+					[973,3,[7,3], true, true, [18,23,24,25]], // By11: 4th requirement: [W7-3-P] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
