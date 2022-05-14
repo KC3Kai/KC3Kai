@@ -3030,6 +3030,10 @@ Previously known as "Reactor"
 					[945,0,[1,5], true, true], // By7: 1st requirement: [W1-2] A-rank+ the boss node
 					[945,1,[2,1], true, true], // By7: 2nd requirement: [W1-3] A-rank+ the boss node
 					[948,3,[6,4], true, true], // By10: 4th requirement: [W6-4] A-rank+ the boss node twice
+					[973,0,[3,1], true, true], // By11: 1st requirement: [W3-1] A-rank+ the boss node
+					[973,1,[3,3], true, true], // By11: 2nd requirement: [W3-3] A-rank+ the boss node
+					[973,2,[7,3], true, true, [18,23,24,25]], // By11: 3rd requirement: [W7-3-P] A-rank+ the boss node
+					[973,3,[4,3], true, true], // By11: 4th requirement: [W4-3] A-rank+ the boss node
 				],
 				[ /* S RANK */
 					[214,3,false,false], // Bw1: 4th requirement: 6 S ranks (index:3)
@@ -3088,6 +3092,10 @@ Previously known as "Reactor"
 					[948,0,[5,2], true, true], // By10: 1st requirement: [W5-2] S-rank the boss node twice
 					[948,1,[5,5], true, true], // By10: 2nd requirement: [W5-5] S-rank the boss node twice
 					[948,2,[6,5], true, true], // By10: 3rd requirement: [W6-5] S-rank the boss node twice
+					[975,0,[1,5], true, true], // By12: 1st requirement: [W1-5] S-rank the boss node
+					[975,1,[2,3], true, true], // By12: 2nd requirement: [W2-3] S-rank the boss node
+					[975,2,[3,2], true, true], // By12: 3rd requirement: [W3-2] S-rank the boss node
+					[975,3,[5,3], true, true], // By12: 4th requirement: [W5-3] S-rank the boss node
 				],
 				[ /* SS RANK */ ]
 			].slice(0, rankPt+1)

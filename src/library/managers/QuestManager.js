@@ -252,7 +252,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyMay',
 				key: 'timeToResetYearlyMayQuests',
 				resetMonth: MAY,
-				questIds: [437],
+				questIds: [356, 437, 973, 975],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyMay.type);
 				},
@@ -572,8 +572,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -788,6 +788,15 @@ Uses KC3Quest objects to play around with
 							&& fleet.hasShip([568, 670], 0)
 							&& fleet.hasShip([670, 568], 1);
 					},
+				"356": // C65 PvP with Isonami K2, Uranami K2, Ayanami K2, Shikinami K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(666)
+							&& fleet.hasShip(647)
+							&& fleet.hasShip(195)
+							&& fleet.hasShip(627);
+					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
 						const firstFleet = PlayerManager.fleets[0];
@@ -948,6 +957,24 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleetSent == 1 && fleet.hasShipType([7, 11, 18], 0);
+					},
+				"973": // By11 Sortie 3 American/British ships without any carrier
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.countShipType([7, 11, 18]) === 0
+							// replace ctype with by nation function in future?
+							&& fleet.countShipClass([
+								65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, // US
+								67, 78, 82, 88, 108, 112,                                         // UK
+							]) >= 3;
+					},
+				"975": // By12 Sortie Isonami K2, Uranami K2, Ayanami K2, Shikinami K2
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return fleet.hasShip(666)
+							&& fleet.hasShip(647)
+							&& fleet.hasShip(195)
+							&& fleet.hasShip(627);
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){
