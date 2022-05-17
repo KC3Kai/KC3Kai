@@ -165,7 +165,7 @@
 
 			$("button#control_export_kcweb").on("click", function() {
 				if (self.viewType === "current") {
-					// export land bases from all worlds as long as non-empty
+					// export land bases from all worlds as long as non-empty & in action
 					KC3ImageBuilder.exportCurrentFleets(0, "kcweb", "aircalc", true);
 				} else {
 					var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);

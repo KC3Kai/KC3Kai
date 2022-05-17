@@ -80,7 +80,7 @@
       const availWorlds = lbas.map(lb => lb.map).sort();
       const latestWorld = availWorlds.pop();
       const guessedWorld = KC3Meta.isEventWorld(latestWorld) ? latestWorld : availWorlds[0];
-      buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld);
+      buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld, deployedOnly);
     }
     openWebsite(deckBuilder, baseUrl, target);
   }
@@ -137,6 +137,8 @@
     lbas.filter(lb => !mapId || lb.map === mapId)
       // get rid of empty land bases with nothing deployed
       .filter(lb => !deployedOnly || !(lb.action == 0 && lb.planes.every(p => !p.api_slotid)))
+      // filter off retreated/rest land bases, also because kcweb doesn't support these states
+      .filter(lb => !deployedOnly || [0, 1, 2].includes(lb.action))
       .forEach((lb, i) => {
       deckBuilder['a' + (i + 1)] = lb.deckbuilder();
     });
