@@ -568,14 +568,9 @@
 	margin-top:-2px;
 }
 
-.tab_maps .sortie_list .button_tomanager {
-	width:auto;
-	float:none;
-	padding:0px 5px 0px 5px;
-	margin:5px 5px 5px 5px;
-}
-
-.tab_maps .sortie_list .export_img_builder {
+.tab_maps .sortie_list .button_tomanager,
+.tab_maps .sortie_list .export_img_builder,
+.tab_maps .sortie_list .export_kcweb {
 	width:auto;
 	float:none;
 	padding:0px 5px 0px 5px;

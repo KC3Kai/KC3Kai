@@ -713,13 +713,21 @@
 
 		// Export button
 		$(".module.controls .btn_export").on("click", function(e){
-			if(e.altKey && window.KC3ImageBuilder) {
-				KC3ImageBuilder.exportCurrentFleets();
-			} else {
-				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify(PlayerManager.prepareDeckbuilder())
-				)));
+			if(window.KC3ImageBuilder) {
+				if(e.altKey) {
+					KC3ImageBuilder.exportCurrentFleets();
+					return;
+				}
+				if(e.ctrlKey || e.metaKey) {
+					// pass 0 instead of undefined to export land bases of all worlds,
+					// auto pick up world here since kcweb accepts land bases up to 3 for now
+					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
+					return;
+				}
 			}
+			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+				JSON.stringify(PlayerManager.prepareDeckbuilder())
+			)));
 		});
 
 		const prepareBattleLogsData = function(){
@@ -751,7 +759,7 @@
 		const openBattleLogsWindow = function(data, isPopup){
 			try {
 				const url = "https://kc3kai.github.io/kancolle-replay/battleText.html#" + JSON.stringify(data);
-				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars"));
+				const ref = window.open(url, "battle", (!isPopup ? undefined : "width=640,height=480,resizeable,scrollbars,popup"));
 				if(ref && !ref.closed){
 					// Update hash with latest battle data even if window already opened
 					// this might not work for all browser versions as a vulnerability to bypass CORS

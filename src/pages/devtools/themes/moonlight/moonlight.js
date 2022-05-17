@@ -792,13 +792,19 @@
 
 		// Export button
 		$(".module.controls .btn_export").on("click", function(e){
-			if(e.altKey && window.KC3ImageBuilder) {
-				KC3ImageBuilder.exportCurrentFleets();
-			} else {
-				window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
-					JSON.stringify(PlayerManager.prepareDeckbuilder())
-				)));
+			if(window.KC3ImageBuilder) {
+				if(e.altKey) {
+					KC3ImageBuilder.exportCurrentFleets();
+					return;
+				}
+				if(e.ctrlKey || e.metaKey) {
+					KC3ImageBuilder.exportCurrentFleets(undefined, "kcweb");
+					return;
+				}
 			}
+			window.open("http://www.kancolle-calc.net/deckbuilder.html?predeck=".concat(encodeURI(
+				JSON.stringify(PlayerManager.prepareDeckbuilder())
+			)));
 		});
 
 		function changeLayout(type) {

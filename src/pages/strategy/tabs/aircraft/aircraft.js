@@ -30,6 +30,7 @@
 					case 10: // Seaplane Bomber/Recon
 						s1 = 'dv'; s2 = 'ls'; break;
 					case 37: // LB Attacker
+					case 48: // LB Assault
 						s1 = 'dv'; s2 = 'tp'; break;
 					case 38: // Interceptor (ht = Anti-bomber)
 						s1 = 'ht'; s2 = 'aa'; break;
