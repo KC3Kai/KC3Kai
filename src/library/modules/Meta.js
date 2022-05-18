@@ -20,6 +20,7 @@ Provides access to data on built-in JSON files
 		_useitems:[],
 		_equiptype:[],
 		_quests:{},
+		_questsMeta:{},
 		_ranks:[],
 		_stype:[],
 		_ctype:[],
@@ -181,6 +182,7 @@ Provides access to data on built-in JSON files
 			// fud: Frequently updated data. rarely & randomly updated on maintenance weekly in fact
 			this._dataColle  = JSON.parse( $.ajax(repo+'fud_weekly.json', { async: false }).responseText );
 			this._eventColle = JSON.parse( $.ajax(repo+'fud_quarterly.json', { async: false }).responseText );
+			this._questsMeta = JSON.parse( $.ajax(repo+'quests_meta.json', { async: false }).responseText );
 			
 			// Load Translations
 			this._ship      = KC3Translation.getJSON(repo, 'ships', true);
@@ -211,6 +213,7 @@ Provides access to data on built-in JSON files
 		
 		reloadQuests :function(){
 			this._quests = KC3Translation.getJSON(this.repo, "quests", true);
+			this._questsMeta = JSON.parse($.ajax(this.repo + 'quests_meta.json', { async: false }).responseText);
 			return this;
 		},
 		
@@ -566,7 +569,10 @@ Provides access to data on built-in JSON files
 		},
 		
 		quest :function(id){
-			return this._quests[id] || false;
+			var tl = this._quests[id] || false;
+			if(!tl) return false;
+			var meta = this._questsMeta[id] || false;
+			return Object.assign({}, tl, meta);
 		},
 		
 		rank :function(id){
