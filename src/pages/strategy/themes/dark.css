@@ -2010,6 +2010,19 @@ button, input, select, textarea {
 .tab_maps .sortie_list .node_exp:before {
 	color: #aaa;
 }
+.tab_event .sortie_list .sortie_box.sortie_rank_1C:after {
+	color:rgb(0,255,0);
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_1:after {
+	color:rgb(0,0,255);
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_2:after {
+	color:rgb(255,255,0);
+}
+.tab_event .sortie_list .sortie_box.sortie_rank_3:after {
+	color:rgb(255,0,0);
+}
+
 /* ENCOUNTERS
 --------------------------------*/
 .tab_encounters .map_switcher {

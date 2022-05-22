@@ -109,6 +109,8 @@
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
+                case 206: // Isonami
+                    return 28;
                 case 588: // Yamakaze K2
                 case 667: // Yamakaze K2D
                 case 900: // Yamashiomaru
@@ -282,11 +284,13 @@
         // see: main.js#ShipUpgradeModel.prototype.newhokohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
-                case 148: // Musashi K2
+                case 148: // to Musashi K2
                     return 3;
-                case 149: // Kongou K2C
-                case 150: // Hiei K2C
+                case 149: // to Kongou K2C
+                case 150: // to Hiei K2C
                     return 2;
+                case 206: // to Isonami K2
+                    return 1;
                 default: return 0;
             }
         },

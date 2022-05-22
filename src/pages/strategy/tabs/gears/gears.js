@@ -103,6 +103,8 @@
 			"t46": "tp",
 			// ASW land base bomber
 			"t47": "as",
+			// land base assault
+			"t48": "overall",
 			// land base heavy bomber
 			"t49": "dv",
 			// all types

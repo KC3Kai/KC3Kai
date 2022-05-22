@@ -5027,5 +5027,141 @@
 		"api_stype": 13,
 		"api_soku": 10,
 		"api_slot_num": 1
+	},
+	"5628": {
+		"api_id": 5628,
+		"api_name": "春の私服卯月",
+		"api_yomi": "うづき",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5629": {
+		"api_id": 5629,
+		"api_name": "お出掛け長鯨",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5630": {
+		"api_id": 5630,
+		"api_name": "お出掛け長鯨改",
+		"api_yomi": "ちょうげい",
+		"api_stype": 20,
+		"api_soku": 5,
+		"api_slot_num": 3
+	},
+	"5631": {
+		"api_id": 5631,
+		"api_name": "記念日第四号海防艦",
+		"api_yomi": "だいよんごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 1
+	},
+	"5632": {
+		"api_id": 5632,
+		"api_name": "記念日第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
+		"api_slot_num": 2
+	},
+	"5633": {
+		"api_id": 5633,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5634": {
+		"api_id": 5634,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5635": {
+		"api_id": 5635,
+		"api_name": "記念日岸波",
+		"api_yomi": "きしなみ",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5636": {
+		"api_id": 5636,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5637": {
+		"api_id": 5637,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5638": {
+		"api_id": 5638,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5639": {
+		"api_id": 5639,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5640": {
+		"api_id": 5640,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5641": {
+		"api_id": 5641,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5642": {
+		"api_id": 5642,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5643": {
+		"api_id": 5643,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
+	},
+	"5644": {
+		"api_id": 5644,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
+		"api_slot_num": 2
 	}
 }

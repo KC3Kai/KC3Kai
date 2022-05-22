@@ -2,6 +2,8 @@
  * Exactly, this module is a data builder of online website Image Builder,
  * which generates the fleets composition image on a canvas, instead of building an image by itself.
  *
+ * Currently, exported json data can be either used by kc-web (v2 of aircalc) by:
+ *   https://github.com/noro6/kc-web
  * Currently, supports to export data to the web Image Builder hosted by:
  *   https://github.com/HitomaruKonpaku/KanColleImgBuilder
  * which depends on GKCOI (Generate KanColle Organization Image) originally created by:
@@ -13,6 +15,7 @@
   'use strict';
 
   const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
+  const kcwebBaseUrl = 'https://noro6.github.io/kc-web#import:';
   const defaultLang = 'en';
   const supportedLangs = {
     'jp': 'jp',
@@ -39,15 +42,30 @@
     createKC3FleetObject,
   };
 
-  function openWebsite(deckBuilderData) {
-    const json = JSON.stringify(deckBuilderData);
-    const url = exportBaseUrl + encodeURI(json);
-    //console.log("JSON to be exported", json);
+  function openWebsite(deckBuilderData, baseUrl, target) {
+    let url;
+    if (baseUrl === "kcweb") {
+      url = kcwebBaseUrl + JSON.stringify({
+        "predeck": deckBuilderData
+      });
+    } else {
+      const json = JSON.stringify(deckBuilderData);
+      //console.log("JSON to be exported", json);
+      url = (baseUrl || exportBaseUrl) + encodeURI(json);
+    }
     //console.debug("Site to be exported", url);
-    window.open(url);
+    if (!!target && target !== "_blank") {
+      const ref = window.open(url, target);
+      if (ref && !ref.closed) {
+        ref.location.replace(url);
+        if (ref.focus) ref.focus();
+      }
+    } else {
+      window.open(url);
+    }
   }
 
-  function exportCurrentFleets(lbWorldId) {
+  function exportCurrentFleets(lbWorldId, baseUrl, target, deployedOnly) {
     // Not reload storage here to keep WYSIWYG in Strategy Room Fleet Manager,
     // and not necessary to refresh for devtools panel page.
     //PlayerManager.loadFleets();
@@ -56,29 +74,40 @@
     const lbas = PlayerManager.bases;
     const deckBuilder = createDeckBuilderHeader(true);
     buildFleets(deckBuilder, fleets);
-    const availWorlds = lbas.map(lb => lb.map).sort();
-    buildLbasFromPlayerManager(deckBuilder, lbas,
-      lbWorldId > 0 ? lbWorldId : availWorlds[0]);
-    openWebsite(deckBuilder);
+    if (lbWorldId >= 0 || !lbas.length) {
+      buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId, deployedOnly);
+    } else {
+      const availWorlds = lbas.map(lb => lb.map).sort();
+      const latestWorld = availWorlds.pop();
+      const guessedWorld = KC3Meta.isEventWorld(latestWorld) ? latestWorld : availWorlds[0];
+      buildLbasFromPlayerManager(deckBuilder, lbas, guessedWorld, deployedOnly);
+    }
+    openWebsite(deckBuilder, baseUrl, target);
   }
 
-  function exportSortie(sortieId) {
+  function exportSortie(sortieId, baseUrl, target, usedOnly) {
     KC3Database.get_sortie(sortieId, sortie => {
-      const fleets = createFleetsFromSortie(sortie);
+      const fleets = createFleetsFromSortie(sortie, usedOnly);
       const lbas = sortie.lbas;
       const deckBuilder = createDeckBuilderHeader(true);
       buildFleets(deckBuilder, fleets);
-      buildLbasFromSortie(deckBuilder, lbas);
-      openWebsite(deckBuilder);
+      buildLbasFromSortie(deckBuilder, lbas, usedOnly);
+      openWebsite(deckBuilder, baseUrl, target);
     });
   }
 
-  function createFleetsFromSortie(sortie) {
-    const fleets = [];
-    fleets.push(convertSortiedFleet(sortie.fleet1, 1));
-    fleets.push(convertSortiedFleet(sortie.fleet2, 2));
-    fleets.push(convertSortiedFleet(sortie.fleet3, 3));
-    fleets.push(convertSortiedFleet(sortie.fleet4, 4));
+  function createFleetsFromSortie(sortie, isSortiedOnly) {
+    const sortiedFleetNums = [
+      sortie.fleetnum,
+      (sortie.fleetnum == 1 && sortie.combined) ? 2 : 0,
+      sortie.support1,
+      sortie.support2
+    ].filter(n => !!n);
+    const fleetNums = [1, 2, 3, 4]
+      .filter(n => !isSortiedOnly || sortiedFleetNums.includes(n));
+    const fleets = fleetNums.map(n => (
+      convertSortiedFleet(sortie["fleet" + n], n)
+    ));
     return fleets.map(v => createKC3FleetObject(v));
   }
 
@@ -101,20 +130,25 @@
     });
   }
 
-  function buildLbasFromPlayerManager(deckBuilder, lbas, mapId) {
+  function buildLbasFromPlayerManager(deckBuilder, lbas, mapId, deployedOnly) {
     if (!checkLbasBuilderInput(deckBuilder, lbas)) {
       return;
     }
-    lbas.filter(lb => !mapId || lb.map === mapId).forEach((lb, i) => {
+    lbas.filter(lb => !mapId || lb.map === mapId)
+      // get rid of empty land bases with nothing deployed
+      .filter(lb => !deployedOnly || !(lb.action == 0 && lb.planes.every(p => !p.api_slotid)))
+      // filter off retreated/rest land bases, also because kcweb doesn't support these states
+      .filter(lb => !deployedOnly || [0, 1, 2].includes(lb.action))
+      .forEach((lb, i) => {
       deckBuilder['a' + (i + 1)] = lb.deckbuilder();
     });
   }
 
-  function buildLbasFromSortie(deckBuilder, lbas) {
+  function buildLbasFromSortie(deckBuilder, lbas, isUsedOnly) {
     if (!checkLbasBuilderInput(deckBuilder, lbas)) {
       return;
     }
-    lbas.forEach((lb, i) => {
+    lbas.filter(lb => !isUsedOnly || [1, 2].includes(lb.action)).forEach((lb, i) => {
       const lbasObj = {
         mode: lb.action,
         items: {},

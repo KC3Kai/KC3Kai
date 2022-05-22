@@ -208,6 +208,8 @@ known IDs see QuestManager
 						KC3QuestManager.get(354).increment(); // C60: Yearly Exercises 6
 					if(KC3QuestManager.isPrerequisiteFulfilled(355))
 						KC3QuestManager.get(355).increment(); // C62: Yearly Exercises 7
+					if(KC3QuestManager.isPrerequisiteFulfilled(356))
+						KC3QuestManager.get(356).increment(); // C65: Yearly Exercises 8
 				}
 				break;
 			case 4: // Dxx type, expedition success
@@ -588,7 +590,7 @@ known IDs see QuestManager
 		//   anyway they might treat holding conditions + scrapping amount as couner max.
 		if([318, 628, 643, 653, 1103, 1104, 1105].indexOf(this.id) > -1) {
 			if (currentCount < maxCount && this.progress > 0
-				&& [653, 1103, 1104, 1105].indexOf(this.id) === 0) {
+				&& [653, 1103, 1104, 1105].indexOf(this.id) === -1) {
 				trackingData[0] = maxCount;
 			}
 			return;
