@@ -590,7 +590,7 @@ known IDs see QuestManager
 		//   anyway they might treat holding conditions + scrapping amount as couner max.
 		if([318, 628, 643, 653, 1103, 1104, 1105].indexOf(this.id) > -1) {
 			if (currentCount < maxCount && this.progress > 0
-				&& [653, 1103, 1104, 1105].indexOf(this.id) === 0) {
+				&& [653, 1103, 1104, 1105].indexOf(this.id) === -1) {
 				trackingData[0] = maxCount;
 			}
 			return;
