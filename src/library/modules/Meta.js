@@ -656,7 +656,7 @@ Provides access to data on built-in JSON files
 				"BB": [8, 9, 10],
 				"CV": [7, 11, 18],
 				"SS": [13, 14],
-				"TorpedoSquard": [2, 3, 4],
+				"TorpedoSquad": [2, 3, 4],
 				"AntiSub": [1, 2, 3, 4, 6, 7, 10, 16, 17, 21, 22],
 				"Auxiliary": [16, 17, 19, 20, 21, 22]
 			};
