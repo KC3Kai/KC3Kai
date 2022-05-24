@@ -4119,12 +4119,12 @@ KC3改 Ship Object
 		// https://docs.google.com/spreadsheets/d/1sABE9Cc-QXTWaiqIdpYt19dFTWKUi0SDAtaWSWyyAXg/htmlview
 		const byFleetType = (({
 			"0" : [90, 80], // single
-			"1M": [78, 77], // CTF floor(90*0.875), floor(90*0.86)
+			"1M": [78, 78], // CTF floor(90*0.875)
 			"1E": [45, 67], // CTF 90*0.5, 90*0.75
-			"2M": [45, 77], // STF
+			"2M": [45, 78], // STF
 			"2E": [67, 67], // STF 90*0.75
 			"3M": [54, 54], // TCF 90*0.6
-			"3E": [45, 67], // TCF 67?
+			"3E": [45, 67], // TCF
 		})[playerCombinedFleetType > 0 ? [playerCombinedFleetType, (isPlayerMainFleet ? "M" : "E")].join("") : 0] || [])
 			[isEnemyCombined & 1] || 90;
 		const combinedFleetPenalty = 90 - byFleetType;

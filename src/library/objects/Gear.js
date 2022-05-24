@@ -408,20 +408,20 @@ KC3改 Equipment Object
 		switch(type.toLowerCase()) {
 			case "exped":
 			case "fire":
-				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/DLC/T2Tank
-				// wikia says Sonar gives shelling acc bonus?
-				if([1, 2, 3, 4, 19, 24, 29, 36, 42, 46].includes(type2))
+				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/Lookouts/DLC/T2Tank
+				if([1, 2, 3, 4, 19, 24, 29, 36, 39, 42, 46].includes(type2))
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
 					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
 				// Depth Charge Projector
-				if([15].includes(type2))
-					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown
+				// no bonus on shelling fire? neither for Sonar: https://twitter.com/Divinity__123/status/1528385260567797760
+				//if([15].includes(type2))
+				//	modifier = this.isDepthCharge() ? 0 : 0.333; // mod unknown
 				break;
 			case "torpedo":
 				// AA Gun
-				if([21].includes(type2)) modifier = 1; // unknown
+				if([21].includes(type2)) modifier = 1; // mod unknown
 				// Torpedo
 				if([5, 32].includes(type2)) modifier = 2;
 				break;
