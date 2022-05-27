@@ -820,6 +820,7 @@ KC3改 Equipment Object
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
+			// planes with missile see: `main.js#TaskAircraftFlightBase.HAS_MISSILE_PLANES`
 			// Do 217 E-5 + Hs293 Initial Model targeting DD
 			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
@@ -840,6 +841,7 @@ KC3改 Equipment Object
 				if([8, 9, 10].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.38;
 			}
 			// relations unknown, for now there are 3 types of missiles defined in `main.js#TaskAirWarMissileOne.prototype._getMissileType`
+			// planes with bouncing bomb see: `main.js#TaskAircraftFlightBase.BOUNCE_TORPEDO_PLANES`
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264

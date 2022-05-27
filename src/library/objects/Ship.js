@@ -4320,11 +4320,11 @@ KC3改 Ship Object
 						break;
 					// Guns for USN ships, sonars for RN ships:
 					// https://twitter.com/Divinity__123/status/1529359629574189057
-					case 83: // Tashkent class
+					case 81: // Tashkent class
 						// 130mm B-13 Twin Gun Mount
 						result += 5 * Math.sqrt(this.countEquipment(282));
 						break;
-					case 89: // John C.Butler class
+					case 87: // John C.Butler class
 						// 5inch Single Gun Mount Mk.30 Kai+
 						result += 4 * Math.sqrt(this.countEquipment([308, 313]));
 						break;
@@ -4333,10 +4333,11 @@ KC3改 Ship Object
 						result += 4 * Math.sqrt(this.countEquipment([284, 308, 313]));
 						result += this.countEquipment(284) >= 2 ? 4 : 0;
 						break;
-					case 84: // J class
+					case 82: // J class
 						// Type1NN ASDIC variants
+						result += 3 * Math.sqrt(this.countEquipment([260, 261, 262]));
 						// QF 4.7inch Gun Mk.XII Kai
-						result += 3 * Math.sqrt(this.countEquipment([260, 261, 262, 280]));
+						result += 3 * Math.sqrt(this.countEquipment(280));
 						break;
 				}
 				// for Verniy, the same with Tashkent
