@@ -759,6 +759,7 @@
 						airBattle.bakFlag = koukuApi.api_stage3.api_fbak_flag || [];
 						airBattle.raiFlag = koukuApi.api_stage3.api_frai_flag || [];
 						airBattle.fclFlag = koukuApi.api_stage3.api_fcl_flag || [];
+						airBattle.spList = koukuApi.api_stage3.api_f_sp_list || [];
 						airBattle.damage = koukuApi.api_stage3.api_fdam || [];
 					}
 				}
