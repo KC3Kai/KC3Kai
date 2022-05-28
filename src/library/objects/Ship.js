@@ -3773,7 +3773,7 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
-				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443]);
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				const secondaryCnt = this.countEquipmentType(2, 4);

@@ -842,6 +842,10 @@ KC3改 Equipment Object
 			}
 			// relations unknown, for now there are 3 types of missiles defined in `main.js#TaskAirWarMissileOne.prototype._getMissileType`
 			// planes with bouncing bomb see: `main.js#TaskAircraftFlightBase.BOUNCE_TORPEDO_PLANES`
+			// B-25 against DD since 202-05-27
+			// https://twitter.com/syoukuretin/status/1530322357285711873
+			if(this.masterId === 459 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.8;
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264
