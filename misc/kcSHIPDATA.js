@@ -12427,7 +12427,7 @@ var SHIPDATA_ = {
 		EQUIPS: [574, 574, 547, 583],
 	},
 	2093: {
-		name: 'Airfield Princess Patrol Aircraft Deployment 2',
+		name: 'Airfield Princess Patrol Aircraft Deployment 3',
 		nameJP: '飛行場姫(哨戒機配備)',
 		image: 'S2091.jpg',
 		type: 'Installation',

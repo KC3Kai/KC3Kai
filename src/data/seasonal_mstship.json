@@ -5070,18 +5070,18 @@
 	},
 	"5633": {
 		"api_id": 5633,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "記念日山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5634": {
 		"api_id": 5634,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "記念日屋代",
+		"api_yomi": "やしろ",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5635": {
@@ -5094,35 +5094,35 @@
 	},
 	"5636": {
 		"api_id": 5636,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝いFletcher",
+		"api_yomi": "フレッチャー",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5637": {
 		"api_id": 5637,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝いFletcher改",
+		"api_yomi": "フレッチャー",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5638": {
 		"api_id": 5638,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝いFletcher改 Mod.2",
+		"api_yomi": "フレッチャー",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5639": {
 		"api_id": 5639,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "お祝いFletcher Mk.II",
+		"api_yomi": "フレッチャー",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5640": {
 		"api_id": 5640,
