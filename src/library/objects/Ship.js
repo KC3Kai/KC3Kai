@@ -4349,6 +4349,8 @@ KC3改 Ship Object
 			case 4:
 			case 21: // for Light Cruisers
 				// overhaul implemented in-game since 2017-06-23, not fully verified
+				// https://twitter.com/Divinity__123/status/1530469810450190336
+				
 				// 14cm, 15.2cm single/twin/triple
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];

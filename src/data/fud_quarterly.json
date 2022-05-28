@@ -258,8 +258,8 @@
 			"3": { "type": "hp", "boss": [39] }
 		},
 		"543": {
-			"1": { "type": "tp", "boss": [32], "landing": [31] },
-			"2": { "type": "hp", "boss": [22] },
+			"1": { "type": "hp", "boss": [22] },
+			"2": { "type": "tp", "boss": [32], "landing": [31] },
 			"3": { "type": "hp", "boss": [37] }
 		}
 	},
