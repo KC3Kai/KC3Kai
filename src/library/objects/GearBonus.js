@@ -4216,6 +4216,46 @@
 					},
 				},
 			},
+			// Late Model Bow Torpedo Mount (4 tubes)
+			"457": {
+				count: 0,
+				byClass: {
+					// I-400 Class
+					"44": {
+						single: { "raig": 1, "houk": 4 },
+					},
+					// I-13, I-14
+					"71": {
+						single: { "raig": 2, "houk": 2 },
+					},
+					// I-47 Class
+					"103": "71",
+					// I-201, I-203
+					"109": {
+						single: { "raig": 3, "houk": 3 },
+					},
+				},
+			},
+			// Late Model Radar & Passive Radiolocator + Snorkel Equipment
+			"458": {
+				count: 0,
+				byClass: {
+					// I-400 Class
+					"44": {
+						single: { "raig": 3, "houk": 3 },
+					},
+					// I-13, I-14
+					"71": {
+						single: { "raig": 3, "houk": 4 },
+					},
+					// I-47 Class
+					"103": "71",
+					// I-201, I-203
+					"109": {
+						single: { "raig": 3, "houk": 6 },
+					},
+				},
+			},
 			// Late Model Submarine Radar & Passive Radiolocator
 			"384": {
 				count: 0,
@@ -6641,7 +6681,7 @@
 							single: { "houg": 1 },
 						},
 					],
-					// I-203 Class, 1 boiler without Turbine: Slow -> Fast 
+					// I-201?/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
 						single: { "soku": 5, },
 					},
@@ -7336,8 +7376,8 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-203, Scamp
-						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 882, 299],
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201?, I-203, Scamp
+						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],

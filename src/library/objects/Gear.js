@@ -408,20 +408,20 @@ KC3改 Equipment Object
 		switch(type.toLowerCase()) {
 			case "exped":
 			case "fire":
-				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/DLC/T2Tank
-				// wikia says Sonar gives shelling acc bonus?
-				if([1, 2, 3, 4, 19, 24, 29, 36, 42, 46].includes(type2))
+				// Main gun/Secondary gun/AP shell/AAFD/Searchlight/Lookouts/DLC/T2Tank
+				if([1, 2, 3, 4, 19, 24, 29, 36, 39, 42, 46].includes(type2))
 					modifier = 1;
 				// Radar
 				if([12, 13].includes(type2))
 					modifier = this.isHighAccuracyRadar() ? 1.7 : 1;
 				// Depth Charge Projector
-				if([15].includes(type2))
-					modifier = this.isDepthCharge() ? 0 : 0.333; // unknown
+				// no bonus on shelling fire? neither for Sonar: https://twitter.com/Divinity__123/status/1528385260567797760
+				//if([15].includes(type2))
+				//	modifier = this.isDepthCharge() ? 0 : 0.333; // mod unknown
 				break;
 			case "torpedo":
 				// AA Gun
-				if([21].includes(type2)) modifier = 1; // unknown
+				if([21].includes(type2)) modifier = 1; // mod unknown
 				// Torpedo
 				if([5, 32].includes(type2)) modifier = 2;
 				break;
@@ -820,6 +820,7 @@ KC3改 Equipment Object
 			if(this.masterId === 224 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 2.2;
 			// More modifiers again abyssal surface ships on Do 217 variants since 2021-01-29
+			// planes with missile see: `main.js#TaskAircraftFlightBase.HAS_MISSILE_PLANES`
 			// Do 217 E-5 + Hs293 Initial Model targeting DD
 			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
@@ -840,6 +841,11 @@ KC3改 Equipment Object
 				if([8, 9, 10].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.38;
 			}
 			// relations unknown, for now there are 3 types of missiles defined in `main.js#TaskAirWarMissileOne.prototype._getMissileType`
+			// planes with bouncing bomb see: `main.js#TaskAircraftFlightBase.BOUNCE_TORPEDO_PLANES`
+			// B-25 against DD since 202-05-27
+			// https://twitter.com/syoukuretin/status/1530322357285711873
+			if(this.masterId === 459 && !isLand && [2].includes(targetMst.api_stype))
+				lbaaAbyssalModifier = 1.8;
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264

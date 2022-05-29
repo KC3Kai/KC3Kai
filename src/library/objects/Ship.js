@@ -3773,7 +3773,7 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
-				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443]);
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				const secondaryCnt = this.countEquipmentType(2, 4);
@@ -3900,15 +3900,6 @@ KC3改 Ship Object
 			baseValue += 15 + 50 + Math.sqrt(this.lk[0] - 50);
 		}
 		let levelModifier = this.lk[0] < 50 ? 0.75 : 0.8;
-		// Special mods to match 122 type factor for late model submarine torpedo cut-in
-		// https://twitter.com/Divinity__123/status/1377666014834479104
-		/*
-		if (spType === 3 && this.hasEquipment([213, 214, 383])) {
-			levelModifier *= 2;
-			// Late model submarine radar bonus
-			if (this.hasEquipment([384])) { baseValue += 5; }
-		}
-		*/
 		baseValue += levelModifier * Math.sqrt(this.level);
 		const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 		const stype = this.master().api_stype;
@@ -4026,7 +4017,7 @@ KC3改 Ship Object
 		const typeFactor = {
 			2: 115,
 			3: ({ // submarine late torp cutin
-				"CutinLateTorpRadar": 105, // or 122 with special mods for base rate?
+				"CutinLateTorpRadar": 105,
 				"CutinLateTorpTorp": 110,
 			   })[cutinSubType] || 122, // default CutinTorpTorpTorp
 			4: 130,
@@ -4119,12 +4110,12 @@ KC3改 Ship Object
 		// https://docs.google.com/spreadsheets/d/1sABE9Cc-QXTWaiqIdpYt19dFTWKUi0SDAtaWSWyyAXg/htmlview
 		const byFleetType = (({
 			"0" : [90, 80], // single
-			"1M": [78, 77], // CTF floor(90*0.875), floor(90*0.86)
+			"1M": [78, 78], // CTF floor(90*0.875)
 			"1E": [45, 67], // CTF 90*0.5, 90*0.75
-			"2M": [45, 77], // STF
+			"2M": [45, 78], // STF
 			"2E": [67, 67], // STF 90*0.75
 			"3M": [54, 54], // TCF 90*0.6
-			"3E": [45, 67], // TCF 67?
+			"3E": [45, 67], // TCF
 		})[playerCombinedFleetType > 0 ? [playerCombinedFleetType, (isPlayerMainFleet ? "M" : "E")].join("") : 0] || [])
 			[isEnemyCombined & 1] || 90;
 		const combinedFleetPenalty = 90 - byFleetType;
@@ -4319,16 +4310,47 @@ KC3改 Ship Object
 		switch(stype) {
 			case 2: // for Destroyers
 				// fit bonus under verification since 2017-06-23
-				// 12.7cm Single High-angle Gun Mount (Late Model)
-				const singleHighAngleMountCnt = this.countEquipment(229);
-				// for Mutsuki class including Satsuki K2
-				result += (ctype === 28 ? 5 : 0) * Math.sqrt(singleHighAngleMountCnt);
-				// for Kamikaze class still unknown
+				// for Kamikaze class devs mentioned still unknown
+				// by ship class
+				switch(ctype) {
+					case 28: // Mutsuki class
+						// 12.7cm Single High-angle Gun Mount (Late Model)
+						// 12cm Single Gun Mount Kai Ni
+						result += 5 * Math.sqrt(this.countEquipment([229, 293]));
+						break;
+					// Guns for USN ships, sonars for RN ships:
+					// https://twitter.com/Divinity__123/status/1529359629574189057
+					case 81: // Tashkent class
+						// 130mm B-13 Twin Gun Mount
+						result += 5 * Math.sqrt(this.countEquipment(282));
+						break;
+					case 87: // John C.Butler class
+						// 5inch Single Gun Mount Mk.30 Kai+
+						result += 4 * Math.sqrt(this.countEquipment([308, 313]));
+						break;
+					case 91: // Fletcher class
+						// 5inch Single Gun Mount Mk.30 variants
+						result += 4 * Math.sqrt(this.countEquipment([284, 308, 313]));
+						result += this.countEquipment(284) >= 2 ? 4 : 0;
+						break;
+					case 82: // J class
+						// Type1NN ASDIC variants
+						result += 3 * Math.sqrt(this.countEquipment([260, 261, 262]));
+						// QF 4.7inch Gun Mk.XII Kai
+						result += 3 * Math.sqrt(this.countEquipment(280));
+						break;
+				}
+				// for Verniy, the same with Tashkent
+				if(this.masterId === 147) {
+					result += 5 * Math.sqrt(this.countEquipment(282));
+				}
 				break;
 			case 3:
 			case 4:
 			case 21: // for Light Cruisers
 				// overhaul implemented in-game since 2017-06-23, not fully verified
+				// https://twitter.com/Divinity__123/status/1530469810450190336
+				
 				// 14cm, 15.2cm single/twin/triple
 				const singleMountIds = [4, 11];
 				const twinMountIds = [65, 119, 139];

@@ -2049,7 +2049,9 @@ Used by SortieManager
 								.attr("src", KC3Meta.itemIcon(7));
 							$(`.ally_${className} .f_${i+1}`, table).append(diveBomber);
 						}
-						if(stage3Api.api_frai_flag[i]){
+						// sp_list: 1 = bouncing torpedo (skip bombs) since 2022-05-27, treat it as torpedo for now
+						// see `main.js#AirWarStage3Model.SP_ATTACK_TYPE.BOUNCE_BOM`
+						if(stage3Api.api_frai_flag[i] || (stage3Api.api_f_sp_list || [])[i] == 1){
 							const torpedoBomber = $("<img/>").width(8).height(8)
 								.css({"float": "left", "margin-left": stage3Api.api_fbak_flag[i] ? "-8px" : "-5px", "margin-top": "7px"})
 								.attr("src", KC3Meta.itemIcon(8));
