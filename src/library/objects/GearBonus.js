@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				domesticSonar: 0,
@@ -6681,7 +6681,7 @@
 							single: { "houg": 1 },
 						},
 					],
-					// I-201?/I-203 Class, 1 boiler without Turbine: Slow -> Fast
+					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
 						single: { "soku": 5, },
 					},
@@ -7376,7 +7376,7 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201?, I-203, Scamp
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp
 						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
 						synergy: [
 							{

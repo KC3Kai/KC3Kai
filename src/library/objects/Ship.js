@@ -3773,6 +3773,9 @@ KC3改 Ship Object
 					if(this.level >= 80) addDestroyerSpAttacksToId(4);
 					addDestroyerSpAttacksToId(0);
 				}
+				// [457] bow 4 tubes had been not counted: https://twitter.com/yukicacoon/status/1530850901388587013
+				// [458] even sub radar not counted: https://twitter.com/shiro_sh39/status/1530861026941448193
+				// fixed since 2022-05-30: https://twitter.com/KanColle_STAFF/status/1531162152010395649
 				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);

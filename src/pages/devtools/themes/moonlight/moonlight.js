@@ -2847,7 +2847,7 @@
 						.addClass("hover")
 						.off("click").on("click", function(e){
 							(new RMsg("service", "strategyRoomPage", {
-								tabPath: "encounters-{0}-{1}-{2}".format(world, map, diff)
+								tabPath: "encounters-{0}-{1}-0-{2}".format(world, map, diff)
 							})).execute();
 						});
 					const nodeEncBox = $(".module.activity .node_type_prev_encounters .encounters");
