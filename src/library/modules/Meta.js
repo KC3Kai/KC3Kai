@@ -111,6 +111,7 @@ Provides access to data on built-in JSON files
 			142: 93,
 			151: 94,
 			281: 38,
+			460: 93
 		},
 		// ships with special remodeling animation, ordered by implementated time,
 		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
