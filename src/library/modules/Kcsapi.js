@@ -434,6 +434,7 @@ Previously known as "Reactor"
 			this.serverOffset = this.moraleRefresh.calibrate( headers.Date );
 			
 			KC3ShipManager.set(response.api_data.api_ship_data);
+			PlayerManager.setFleets(response.api_data.api_deck_data);
 			KC3Network.delay(0, "Fleet");
 			KC3Network.trigger("Fleet");
 		},

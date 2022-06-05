@@ -89,15 +89,20 @@ Does not include Ships and Gears which are managed by other Managers
 		},
 
 		setFleets :function( data ){
-			var self = this;
-			[0,1,2,3].forEach(function(i){
-				self.fleets[i].update( data[i] || {} );
+			// Managed fleet objects fixed to 4 for now,
+			// but data length may be < 4, and not start from 1st fleet,
+			// so api_id checked and used
+			[0, 1, 2, 3].forEach(i => {
+				const f = data[i] || {};
+				const id = f.api_id || 0;
+				if(id >= 1 && id <= 4) this.fleets[id - 1].update(f);
 			});
 			this.saveFleets();
 			return this;
 		},
 
 		setBases :function( data, expandedInfo ){
+			// Data length may be < 4 or > 4, ensure minimal 4 base objects
 			Array.numbers(0, data.length < 4 ? 3 : data.length - 1).forEach(i => {
 				this.bases[i] = new KC3LandBase(data[i]);
 				if(!!expandedInfo){
