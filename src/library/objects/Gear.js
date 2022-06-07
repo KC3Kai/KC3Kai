@@ -842,10 +842,18 @@ KC3改 Equipment Object
 			}
 			// relations unknown, for now there are 3 types of missiles defined in `main.js#TaskAirWarMissileOne.prototype._getMissileType`
 			// planes with bouncing bomb see: `main.js#TaskAircraftFlightBase.BOUNCE_TORPEDO_PLANES`
-			// B-25 against DD since 202-05-27
-			// https://twitter.com/syoukuretin/status/1530322357285711873
-			if(this.masterId === 459 && !isLand && [2].includes(targetMst.api_stype))
-				lbaaAbyssalModifier = 1.8;
+			// B-25 against surface types since 202-05-27
+			// https://twitter.com/Camellia_bb/status/1532006059174690816
+			if(this.masterId === 459 && !isLand) {
+				// DD
+				if([2].includes(targetMst.api_stype)) lbaaAbyssalModifier = 2.45;
+				// CL
+				if([3, 4].includes(targetMst.api_stype)) lbaaAbyssalModifier = 2.25;
+				// CA
+				if([5, 6].includes(targetMst.api_stype)) lbaaAbyssalModifier = 2;
+				// CVL, BB
+				if([7, 8, 9, 10].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.5;
+			}
 		}
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264
