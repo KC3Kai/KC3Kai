@@ -140,9 +140,11 @@ Provides access to data on built-in JSON files
 			396, // Gambier Bay Kai -> Mk.II
 			588, // Yamakaze K2 -> K2D
 			667, // Yamakaze K2D -> K2
+			136, // Yamato Kai -> K2
+			911, // Yamato K2 -> K2J
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 635, 639, 640],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 635, 639, 640, 911, 916, 546],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
@@ -150,6 +152,11 @@ Provides access to data on built-in JSON files
 		coloradoCutinShips: [601, 1496],
 		kongouCutinShips: [591, 592],
 		subFleetCutinShips: [184, 634, 635, 639, 640],
+		yamatoCutinShips: [911, 916],
+		musashiCutinShips: [546],
+		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
+		yamatoCutinPartner1: [546, 360, 178, 392, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517, 521: 518, 522: 516, 523: 516, 524: 517, 525: 518,
@@ -505,6 +512,9 @@ Provides access to data on built-in JSON files
 		},
 		
 		useItemName :function(id){
+			// Yamato remodel consumes [87] New Model Boiler mapped to 902,
+			// directly return slotitem name here to avoid 800+ empty string elements in json
+			if(id === 902) return this.gearNameById(87);
 			return this._useitems[id] || (KC3Master.useitem(id) || {}).api_name || "";
 		},
 		

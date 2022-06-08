@@ -1242,7 +1242,9 @@
 					104: [1],
 					300: [0, 1, 2],
 					301: [0, 2, 3],
-					302: [0, 1, 3]
+					302: [0, 1, 3],
+					400: [1, 2],
+					401: [1]
 				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
@@ -1282,7 +1284,7 @@
 					}
 					if (cutinType[1] === 0) { break; }
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302];
+					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||
@@ -1313,6 +1315,7 @@
 								isPartnerShipTaiha |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
 							if (!!isPartnerShipTaiha) { continue; }
 						}
+						// FIXME Check for partner ships not Chuuha for Yamato (400, 401)
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 					} else if (time === "day"

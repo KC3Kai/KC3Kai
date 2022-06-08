@@ -770,7 +770,7 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Musashi K2
+	// Musashi K2 + Yamato K2
 	declareAACI(
 		26, 6, 1.4,
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
@@ -1117,6 +1117,8 @@ AntiAir: anti-air related calculations
 				hasAtLeast( is5inchTwinDualMountCdOrWithGfcs, 2 ))
 		)
 	);
+
+	// Yamato K2+/Musashi K2: 42~45
 
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers

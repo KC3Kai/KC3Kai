@@ -2783,6 +2783,7 @@ KC3改 Ship Object
 		//   https://twitter.com/cat_lost/status/1146075888636710912
 		// Shinshumaru can OASW with at least 1 slot of Autogyro/Seaplane Bomber + Sonar and asw >= 100.
 		//   https://kc3kai.github.io/kancolle-replay/battleplayer.html?fromImg=https://cdn.discordapp.com/attachments/684474161199841296/876011287493111808/cravinghobo_25786.png
+		// Yamato Kai Ni Juu (BBV) can OASW with at least 1 asw aircraft + Sonar and asw >= 100
 		if(isAirAntiSubStype) {
 			// Hyuuga Kai Ni can OASW with 2 Autogyro or 1 Helicopter, without Sonar,
 			//   but not OASW with Sonar + ASW aircraft even asw >= 100 like others.
@@ -3321,6 +3322,8 @@ KC3改 Ship Object
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
+			400: ["Cutin", 400, "CutinYamatoSpecial1", 2.6],
+			401: ["Cutin", 401, "CutinYamatoSpecial2", 2.6],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3596,10 +3599,12 @@ KC3改 Ship Object
 			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
 			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
 			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
-			104: ["Cutin", 104, "CutinKongouSpecial", 1.9],
+			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
+			400: ["Cutin", 400, "CutinYamatoSpecial1", 2.6],
+			401: ["Cutin", 401, "CutinYamatoSpecial2", 2.6],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3725,7 +3730,8 @@ KC3改 Ship Object
 				if(this.canDoKongouCutin()) {
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
 					const engagementMod = [1, 1, 1, 1.25, 0.75][this.collectBattleConditions().engagementId] || 1.0;
-					results.push(KC3Ship.specialAttackTypeNight(104, null, 1.9 * engagementMod));
+					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/Grunilg/status/1534554701710168066
+					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.2 * engagementMod));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {

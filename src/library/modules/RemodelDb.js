@@ -168,6 +168,7 @@
                 case 877: // Conte di Cavour
                     return 30;
                 case 878: // Conte di Cavour Kai
+                case 916: // Yamato Kai Ni Juu
                     return 50;
                 default:
                     return this.isIgnoreDevMat(blueprint_count, ship_id_from)
@@ -276,6 +277,8 @@
                     return 10;
                 case 878: // Conte di Cavour Kai
                     return 20;
+                case 916: // Yamato Kai Ni Juu
+                    return 50;
                 default:
                     return 0;
             }
@@ -284,6 +287,7 @@
         // see: main.js#ShipUpgradeModel.prototype.newhokohesosizai
         calcGunMat: function(ship_id_from) {
             switch(ship_id_from) {
+                case 136: // to Yamato K2
                 case 148: // to Musashi K2
                     return 3;
                 case 149: // to Kongou K2C
@@ -310,6 +314,7 @@
                  , gunmat: Int
                  , airmat: Int
                  , armmat: Int
+                 , boiler: Int
                  , devmat: Int
                  , torch: Int
                  , remodel_level: Int
@@ -345,6 +350,7 @@
                       gunmat: 0,
                       airmat: 0,
                       armmat: 0,
+                      boiler: 0,
                       devmat: 0,
                       torch: 0
                     };
@@ -383,6 +389,7 @@
                 remodel.report = x.api_report_count;
                 remodel.airmat = x.api_aviation_mat_count;
                 remodel.armmat = x.api_arms_mat_count;
+                remodel.boiler = x.api_boiler_count;
                 // recalc devmat according blueprint
                 remodel.devmat = self.calcDevMat(remodel.steel, remodel.ship_id_from, remodel.blueprint);
                 // add loop converted remodel if original ship is also remodel target
