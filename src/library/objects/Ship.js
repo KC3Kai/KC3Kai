@@ -3238,6 +3238,27 @@ KC3改 Ship Object
 	};
 
 	/**
+	 * Most conditions are the same with Nelson Touch, except:
+	 * Flagship is healthy Yamato Kai Ni+ or Musashi Kai Ni, Echelon (battle) formation selected.
+	 * 2nd ship can be Yamato K2+ only if flagship is Musashi;
+	 * if flagship is Yamato K2+, and 2nd ship is one of Musashi K2, Bismark drei, Iowa Kai, Richelieu Kai,
+	 *   2-ship cutin will be performed;
+	 * if flagship is Yamato K2+, and 2nd, 3rd is specific combination, 3-ship cutin triggered,
+	 *   known 2nd/3rd ship pairs are: Nagato K2+Mutsu K2, Ise K2+Hyuuga K2, Fusou K2+Yamashiro K2,
+	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K
+	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
+	 *
+	 * @return API ID (400~401) if this ship can do special cut-in attack, otherwise false.
+	 */
+	KC3Ship.prototype.canDoYamatoClassCutin = function() {
+		return false;
+	};
+
+	KC3Ship.prototype.estimateYamatoClassCutinModifier = function(forShipPos = 0) {
+		return 2;
+	};
+
+	/**
 	 * @return the landing attack kind ID, return 0 if can not attack.
 	 *  Since Phase 2, defined by `_getDaihatsuEffectType` at `PhaseHougekiOpening, PhaseHougeki, PhaseHougekiBase`,
 	 *  all the ID 1 are replaced by 3, ID 2 except the one at `PhaseHougekiOpening` replaced by 3.
@@ -3322,8 +3343,8 @@ KC3改 Ship Object
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial1", 2.6],
-			401: ["Cutin", 401, "CutinYamatoSpecial2", 2.6],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.6],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.6],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3396,6 +3417,10 @@ KC3改 Ship Object
 				// Damage calculation is quite different:
 				// based on torpedo attack, not affected by formation/engagement, affected by level of SS attacker
 				results.push(KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin()));
+			}
+			// Yamato-class Cutin since 2022-06-08
+			if(this.canDoYamatoClassCutin()) {
+				results.push(KC3Ship.specialAttackTypeDay(this.canDoYamatoClassCutin(), null, this.estimateYamatoClassCutinModifier()));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -3603,8 +3628,8 @@ KC3改 Ship Object
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial1", 2.6],
-			401: ["Cutin", 401, "CutinYamatoSpecial2", 2.6],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.6],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.6],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3729,13 +3754,17 @@ KC3改 Ship Object
 				// special Kongou-class K2C Cutin since 2020-04-23
 				if(this.canDoKongouCutin()) {
 					// Basic precap modifier is 1.9: https://twitter.com/CC_jabberwock/status/1253677320629399552
-					const engagementMod = [1, 1, 1, 1.25, 0.75][this.collectBattleConditions().engagementId] || 1.0;
-					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/Grunilg/status/1534554701710168066
+					// Modifier buffed to 2.2 since 2022-06-08: https://twitter.com/hedgehog_hasira/status/1534589935868465154
+					const engagementMod = [1, 1, 1, 1.25, 0.8][this.collectBattleConditions().engagementId] || 1.0;
 					results.push(KC3Ship.specialAttackTypeNight(104, null, 2.2 * engagementMod));
 				}
 				// special Sub Fleet Cutin since 2021-05-08
 				if(this.canDoSubFleetCutin()) {
 					results.push(KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin()));
+				}
+				// special Yamato-class Cutin since 2022-06-08
+				if(this.canDoYamatoClassCutin()) {
+					results.push(KC3Ship.specialAttackTypeNight(this.canDoYamatoClassCutin(), null, this.estimateYamatoClassCutinModifier()));
 				}
 				// special torpedo related cut-in for destroyers since 2017-10-25,
 				// these types can be rolled for every setup requirements met, beofore regular cutins below

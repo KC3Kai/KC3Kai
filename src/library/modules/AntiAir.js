@@ -219,6 +219,13 @@ AntiAir: anti-air related calculations
 	// any of previous two guns
 	var is5inchTwinDualMountCdOrWithGfcs = predAnyOf(is5inchTwinDualMountCD, is5inchTwinDualMountCDwithGfcs);
 
+	// 10cm Twin High-angle Gun Mount Battery Concentrated Deployment
+	var is10cmTwinHighAngleGunMountBatteryCD = masterIdEq(464);
+	// 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni or + Skilled Fire Direction Center
+	function is15mDuplexRangefinderT21AirRadarOrFDC(mst) {
+		return [142, 460].indexOf(mst.api_id) !== -1;
+	}
+
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
 	// so let's use the following naming convention:
@@ -552,6 +559,14 @@ AntiAir: anti-air related calculations
 			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;
 	}
 
+	function isYamatoClassKai2( mst ) {
+		return [
+			911, // Yamato K2
+			916, // Yamato K2J
+			546, // Musashi K2
+		].indexOf( mst.api_id ) !== -1;
+	}
+
 	function masterIdEq( n ) {
 		return function(mst) {
 			return mst.api_id === n;
@@ -569,6 +584,7 @@ AntiAir: anti-air related calculations
 		akizukiIcon = 421,
 		battleShipIcon = 131, // Yamato, weigh anchor!
 		battleShipKaiIcon = 148, // Musashi Kai represents
+		yamatoK2Icon = 911,
 		musashiK2Icon = 546,
 		iseIcon = 77,
 		mayaK2Icon = 428,
@@ -603,7 +619,8 @@ AntiAir: anti-air related calculations
 		aaGunK2RockeLaunIcon = "15+31", // 12cm 30tube Rocket Launcher Kai 2
 		haMountKaiAmg = "16+15",    // 10cm Twin High-angle Mount Kai + Additional Machine Gun
 		haMountKaiRadar = "16+11",  // 5inch Single Gun Mount Mk.30 Kai + GFCS Mk.37 / GFCS Mk.37 + next one
-		haMountCdIcon = "16+16";  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+		haMountCdIcon = "16+16",  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
+		rangefinderRadarIcon = "11+30";  // 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni variants
 
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
@@ -774,7 +791,7 @@ AntiAir: anti-air related calculations
 	declareAACI(
 		26, 6, 1.4,
 		[musashiK2Icon, haMountKaiAmg, radarIcon],
-		predAllOf(isMusashiK2),
+		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( is10cmTwinHighAngleMountKaiAMG ),
@@ -1118,7 +1135,49 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// Yamato K2+/Musashi K2: 42~45
+	// Yamato K2/K2J + Musashi K2
+	declareAACI(
+		42, 10, 1.65,
+		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
+		predAllOf(isYamatoClassKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
+				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
+				hasSome( isAAGun ))
+		)
+	);
+	declareAACI(
+		43, 8, 1.6,
+		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
+		predAllOf(isYamatoClassKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
+				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ))
+		)
+	);
+	declareAACI(
+		44, 6, 1.6,
+		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
+		predAllOf(isYamatoClassKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
+				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
+				hasSome( isAAGun ))
+		)
+	);
+	declareAACI(
+		45, 5, 1.55,
+		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
+		predAllOf(isYamatoClassKai2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
+				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ))
+		)
+	);
 
 	// return a list of possible AACI APIs based on ship and her equipments
 	// - returns a list of **strings**, not numbers
