@@ -1138,7 +1138,7 @@ AntiAir: anti-air related calculations
 	// Yamato K2/K2J + Musashi K2
 	declareAACI(
 		42, 10, 1.65,
-		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
+		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon, aaGunIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
@@ -1149,7 +1149,7 @@ AntiAir: anti-air related calculations
 	);
 	declareAACI(
 		43, 8, 1.6,
-		[yamatoK2Icon, haMountCdIcon, rangefinderRadarIcon],
+		[yamatoK2Icon, haMountCdIcon, haMountCdIcon, rangefinderRadarIcon],
 		predAllOf(isYamatoClassKai2),
 		withEquipmentMsts(
 			predAllOf(
