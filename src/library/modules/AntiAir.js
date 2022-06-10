@@ -1170,7 +1170,7 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
-				hasSome( isAAGun ))
+				hasSome( isHigherAAGun ))
 		)
 	);
 	declareAACI(
