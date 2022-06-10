@@ -325,7 +325,7 @@
 			if (includeRepair && KC3Meta.specialReairVoiceShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(6);
 
-			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou Cutin) key
+			// add special cut-in (Nelson Touch, Nagato/Mutsu/Colorado/Kongou/Yamato Cutin) key
 			if (KC3Meta.specialCutinIds.indexOf(masterId) > -1)
 				sortedVoiceNums.push(900);
 			// add special cut-in voice keys for Nagato class combination
@@ -337,6 +337,9 @@
 				sortedVoiceNums.push(901, 902);
 			// when Submarine Tender cutin, 901 for her damaged state
 			if (KC3Meta.subFleetCutinShips.indexOf(masterId) > -1)
+				sortedVoiceNums.push(901);
+			// when Yamato cutin, 901 for not combined with Musashi, but Musashi has no 901 line
+			if (KC3Meta.yamatoCutinShips.indexOf(masterId) > -1)
 				sortedVoiceNums.push(901);
 
 			if (includeHourlies && KC3Meta.shipHasHourlyVoices(masterId))

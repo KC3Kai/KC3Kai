@@ -689,6 +689,7 @@
 								"gunmat": KC3Meta.useitemIcon(75),
 								"airmat": KC3Meta.useitemIcon(77),
 								"armmat": KC3Meta.useitemIcon(94),
+								"boiler": KC3Meta.useitemIcon(902),
 								"devmat": "/assets/img/client/devmat.png",
 								"torch": "/assets/img/client/ibuild.png",
 							};

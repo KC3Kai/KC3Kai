@@ -378,7 +378,7 @@
             });
 
             // Daihatsu/Amphibious Tank
-            ["---", "Daihatsu", "Tank", "Both", "Either", "Neither", "FCF"].forEach((val, i) => {
+            ["---", "Daihatsu", "DLC-only", "Tank", "Tank-only", "Both", "Either", "Neither", "FCF"].forEach((val, i) => {
                 const elm = $(".factory .ship_filter_radio", this.tab).clone()
                     .appendTo(".tab_locking .filters .ship_filter_daihatsu");
                 $("input[type='radio']", elm).val(i).attr("name", "filter_daihatsu")
@@ -446,11 +446,13 @@
                 (filterDef, ship) => {
                     return (this.filterValues.daihatsu === 0)
                         || (this.filterValues.daihatsu === 1 && ship.canEquipDaihatsu)
-                        || (this.filterValues.daihatsu === 2 && ship.canEquipTank)
-                        || (this.filterValues.daihatsu === 3 && ship.canEquipDaihatsu && ship.canEquipTank)
-                        || (this.filterValues.daihatsu === 4 && (ship.canEquipDaihatsu || ship.canEquipTank))
-                        || (this.filterValues.daihatsu === 5 && !ship.canEquipDaihatsu && !ship.canEquipTank)
-                        || (this.filterValues.daihatsu === 6 && ship.canEquipFCF);
+                        || (this.filterValues.daihatsu === 2 && ship.canEquipDaihatsu && !ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 3 && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 4 && !ship.canEquipDaihatsu && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 5 && ship.canEquipDaihatsu && ship.canEquipTank)
+                        || (this.filterValues.daihatsu === 6 && (ship.canEquipDaihatsu || ship.canEquipTank))
+                        || (this.filterValues.daihatsu === 7 && !(ship.canEquipDaihatsu || ship.canEquipTank))
+                        || (this.filterValues.daihatsu === 8 && ship.canEquipFCF);
                 }
             );
             this.defineSimpleFilter("tagLocked", [], 0,

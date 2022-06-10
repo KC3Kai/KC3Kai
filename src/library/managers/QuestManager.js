@@ -265,7 +265,7 @@ Uses KC3Quest objects to play around with
 				type: 'yearlyJun',
 				key: 'timeToResetYearlyJunQuests',
 				resetMonth: JUNE,
-				questIds: [353, 944, 945, 946, 947, 948, 1103, 1104],
+				questIds: [353, 357, 944, 945, 946, 947, 948, 1103, 1104],
 				resetQuests: function () {
 					KC3QuestManager.resetYearlies(KC3QuestManager.repeatableTypes.yearlyJun.type);
 				},
@@ -572,8 +572,8 @@ Uses KC3Quest objects to play around with
 			// Progress counter reset to 0 only if progress not completed in a day:
 			// Quarterly PvP C29, C38, C42, C44
 			this.resetCounterLoop([330, 337, 339, 342], false);
-			// Yearly PvP C49, C50, C53, C58, C60, C62, C65
-			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356], false);
+			// Yearly PvP C49, C50, C53, C58, C60, C62, C65, C66
+			this.resetCounterLoop([345, 346, 348, 353, 354, 355, 356, 357], false);
 			
 			// Progress counter not changed at all on daily reset:
 			// Monthly PvP C16
@@ -778,7 +778,7 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return KC3SortieManager.isPvP()
-							&& fleet.hasShip(707, 0)
+							&& fleet.hasShip([707], 0)
 							&& fleet.countShipClass([87, 91]) >= 2;
 					},
 				"355": // C62 PvP with Kuroshio K2/Oyashio K2 as flagship, another ship as 2nd ship
@@ -792,10 +792,19 @@ Uses KC3Quest objects to play around with
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return KC3SortieManager.isPvP()
-							&& fleet.hasShip(666)
-							&& fleet.hasShip(647)
-							&& fleet.hasShip(195)
-							&& fleet.hasShip(627);
+							&& fleet.hasShip([666])  // Isonami K2
+							&& fleet.hasShip([647])  // Uranami K2
+							&& fleet.hasShip([195])  // Ayanami K2
+							&& fleet.hasShip([627]); // Shikinami K2
+					},
+				"357": // C66 PvP with Yamato, Musashi, 1 CL, 2 DD
+					({fleetSent = KC3SortieManager.fleetSent}) => {
+						const fleet = PlayerManager.fleets[fleetSent - 1];
+						return KC3SortieManager.isPvP()
+							&& fleet.hasShip(131)  // Yamato any remodel
+							&& fleet.hasShip(143)  // Musashi any remodel
+							&& fleet.countShipType(3) >= 1
+							&& fleet.countShipType(2) >= 2;
 					},
 				"626": // F22 Have 1 Skilled Crew Member. Houshou as secretary, equip her with a >> Type 0 Fighter Model 21
 					() => {
@@ -971,10 +980,10 @@ Uses KC3Quest objects to play around with
 				"975": // By12 Sortie Isonami K2, Uranami K2, Ayanami K2, Shikinami K2
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
-						return fleet.hasShip(666)
-							&& fleet.hasShip(647)
-							&& fleet.hasShip(195)
-							&& fleet.hasShip(627);
+						return fleet.hasShip([666])  // Isonami K2
+							&& fleet.hasShip([647])  // Uranami K2
+							&& fleet.hasShip([195])  // Ayanami K2
+							&& fleet.hasShip([627]); // Shikinami K2
 					},
 			};
 			if(questObj.id && questCondsLibrary[questId]){

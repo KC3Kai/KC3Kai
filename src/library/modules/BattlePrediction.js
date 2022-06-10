@@ -793,18 +793,9 @@
 
   Hougeki.parseJson = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseAttacker, parseDefender, parseAttackerFriend, parseDefenderFriend,
-      parseInfo, isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
-      isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3,
-      parseSpecialCutin } = KC3BattlePrediction.battle.phases.hougeki;
+      parseInfo, isSpecialCutin, parseSpecialCutin } = KC3BattlePrediction.battle.phases.hougeki;
 
-    const isSpecialCutin = isNelsonTouch(attackJson) ||
-      isNagatoCutin(attackJson) || isMutsuCutin(attackJson) ||
-      isColoradoCutin(attackJson) ||
-      isKongouCutin(attackJson) ||
-      isSubmarineCutin1(attackJson) ||
-      isSubmarineCutin2(attackJson) ||
-      isSubmarineCutin3(attackJson);
-    return isSpecialCutin ? parseSpecialCutin(isAllySideFriend, attackJson) : {
+    return isSpecialCutin(attackJson) ? parseSpecialCutin(isAllySideFriend, attackJson) : {
       damage: parseDamage(attackJson),
       attacker: isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson),
       defender: isAllySideFriend ? parseDefenderFriend(attackJson) : parseDefender(attackJson),
@@ -812,18 +803,20 @@
     };
   };
 
-  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou / SubFleet) may attack different targets,
+  // 1 Special CutIn (Nelson Touch / Nagato / Mutsu / Colorado / Kongou / SubFleet / Yamato) may attack different targets,
   // cannot ignore elements besides 1st one in api_df_list[] any more.
   Hougeki.parseSpecialCutin = (isAllySideFriend, attackJson) => {
     const { parseDamage, parseDefender, parseInfo, isRealAttack,
       parseAttacker, parseAttackerFriend, parseAttackerSpecial,
       isNelsonTouch, isNagatoCutin, isMutsuCutin, isColoradoCutin, isKongouCutin,
-      isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3 } = KC3BattlePrediction.battle.phases.hougeki;
+      isSubmarineCutin1, isSubmarineCutin2, isSubmarineCutin3,
+      isYamatoCutin3P, isYamatoCutin2P } = KC3BattlePrediction.battle.phases.hougeki;
 
     const { api_df_list: defenders, api_damage: damages } = attackJson;
     return defenders.map((defender, index) => ({
       damage: parseDamage({ api_damage: [damages[index]] }),
-      attacker: isNelsonTouch(attackJson) ?
+      attacker: (
+        isNelsonTouch(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 2, 4], isAllySideFriend, index})) :
         isNagatoCutin(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1], isAllySideFriend, index})) :
@@ -839,9 +832,14 @@
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [2, 3] : [2, 2, 3, 3]), isAllySideFriend, index})) :
         isSubmarineCutin3(attackJson) ?
           parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: (damages.length <= 2 ? [1, 3] : [1, 1, 3, 3]), isAllySideFriend, index})) :
-        // Unreachable exception
-        (isAllySideFriend ? parseAttackerFriend(attackJson) : parseAttacker(attackJson)),
-      // Assume abyssal enemy and PvP cannot trigger it yet
+        isYamatoCutin3P(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2], isAllySideFriend, index})) :
+        isYamatoCutin2P(attackJson) ?
+          parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 0, 1], isAllySideFriend, index})) :
+        // Exception: unknown cutin type, may cause wrong attacker assigments
+        parseAttackerSpecial(Object.assign({}, attackJson, {attackerPos: [0, 1, 2, 3, 4, 5, 6], isAllySideFriend, index}))
+      ),
+      // Assumed abyssal enemy and PvP cannot trigger yet
       defender: parseDefender({ api_df_list: [defender] }),
       info: parseInfo(attackJson, index),
     })).filter(isRealAttack);
@@ -849,14 +847,19 @@
 
   Hougeki.isRealAttack = ({ defender }) => defender.position !== -1;
 
-  Hougeki.isNelsonTouch   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
-  Hougeki.isNagatoCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 101;
-  Hougeki.isMutsuCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 102;
-  Hougeki.isColoradoCutin = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 103;
-  Hougeki.isKongouCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 104;
+  Hougeki.isSpecialCutin    = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) >= 100
+    // Multi-angle attacks just single attacker cutin, should fall into regular parsing
+    && ![200, 201].includes(api_at_type || api_sp_list);
+  Hougeki.isNelsonTouch     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 100;
+  Hougeki.isNagatoCutin     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 101;
+  Hougeki.isMutsuCutin      = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 102;
+  Hougeki.isColoradoCutin   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 103;
+  Hougeki.isKongouCutin     = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 104;
   Hougeki.isSubmarineCutin1 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 300;
   Hougeki.isSubmarineCutin2 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 301;
   Hougeki.isSubmarineCutin3 = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 302;
+  Hougeki.isYamatoCutin3P   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 400;
+  Hougeki.isYamatoCutin2P   = ({ api_at_type, api_sp_list }) => (api_at_type || api_sp_list) === 401;
 
   // According MVP result, Nelson Touch attackers might be set to corresponding
   //   ship position (1st Nelson, 3th, 5th), not fixed to main fleet flagship Nelson (api_at_list: 0);
@@ -865,6 +868,7 @@
   // For Kongou Class, 2 night attacks assigned to 1st flagship once, 2nd ship once;
   // For Submarine Fleet, 2~4 torpedo attacks assigned to 2 of 2nd~4th SS members, 1st flagship not attack;
   //   Known issue: no proper way to predict 3 hits torpedo attacks have merged 2 hits from which submarine for now;
+  // For Yamato/Musashi, 3 attacks assigned to first 2or3 ships, flagship twice if only 1 partner ship;
   Hougeki.parseAttackerSpecial = ({ isAllySideFriend, index, attackerPos, api_at_eflag, api_sp_list }) => {
     const { getBattleType } = KC3BattlePrediction.battle;
     // Fix known game API issue: for combined fleet night battle, api_at_list (of api_sp_list: 104) still point to 0, instead of escort fleet flagship 6.

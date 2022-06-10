@@ -32,9 +32,9 @@
 		return {
 			"synergyGears": {
 				surfaceRadar: 0,
-				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456],
+				surfaceRadarIds: [28, 29, 31, 32, 88, 89, 124, 141, 142, 240, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				airRadar: 0,
-				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456],
+				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
 				domesticSonar: 0,
@@ -65,6 +65,9 @@
 				twin203MediumGunMountNo2: 0,
 				twin203MediumGunMountNo2Nonexist: 1,
 				twin203MediumGunMountNo2Ids: [90],
+				twin51cmLargeGunMount: 0,
+				twin51cmLargeGunMountIds: [281],
+				twin51cmLargeGunMountNonexist: 1,
 				rotorcraft: 0,
 				rotorcraftIds: [69, 324, 325, 326, 327],
 				helicopter: 0,
@@ -85,6 +88,10 @@
 				type13AirRadarKai: 0,
 				type13AirRadarKaiNonexist: 1,
 				type13AirRadarKaiIds: [106],
+				rangefinderAirRadar: 0,
+				rangefinderAirRadarIds: [142, 460],
+				rangefinderKaiAirRadar: 0,
+				rangefinderKaiAirRadarIds: [460],
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
@@ -2784,6 +2791,83 @@
 					},
 				],
 			},
+			// Prototype 51cm Twin Gun Mount
+			"128": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						synergy: {
+							flags: [ "twin51cmLargeGunMountNonexist", "rangefinderAirRadar" ],
+							single: { "houg": 1, "houm": 2 },
+						},
+					},
+				},
+				byShip: {
+					// Yamato K2+, Musashi K2
+					ids: [911, 916, 546],
+					multiple: { "houg": 1, "houm": 1 },
+					synergy: {
+						flags: [ "twin51cmLargeGunMountNonexist", "rangefinderKaiAirRadar" ],
+						single: { "houk": 1, "houm": 1 },
+					},
+				},
+			},
+			// 51cm Twin Gun Mount
+			"281": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "houg": 1, "houm": 2 },
+						},
+					},
+				},
+				byShip: {
+					// Yamato K2+, Musashi K2
+					ids: [911, 916, 546],
+					multiple: { "houg": 1, "houm": 1 },
+					synergy: {
+						flags: [ "rangefinderKaiAirRadar" ],
+						single: { "houk": 1, "houm": 1 },
+					},
+				},
+			},
+			// Prototype 51cm Triple Gun Mount
+			"465": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "houg": 2, "houm": 2 },
+						},
+					},
+				},
+				byShip: [
+					{
+						// Yamato K2, Musashi K2
+						ids: [911, 546],
+						multiple: { "houg": 1, "houk": 2, "houm": 1 },
+						synergy: {
+							flags: [ "rangefinderKaiAirRadar" ],
+							single: { "tyku": 1, "houk": 1, "houm": 2 },
+						},
+					},
+					{
+						// Yamato K2J
+						ids: [916],
+						multiple: { "houg": 2, "houk": 8, "houm": 2 },
+						synergy: {
+							flags: [ "rangefinderKaiAirRadar" ],
+							single: { "houk": 2, "houm": 1 },
+						},
+					},
+				],
+			},
 			// 16inch Mk.I Triple Gun Mount
 			"298": {
 				count: 0,
@@ -3349,6 +3433,57 @@
 					],
 				},
 			},
+			// 15.5cm Triple Secondary Gun Mount
+			"12": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						multiple: { "houg": 1, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "houk": 1, "houm": 1 },
+						},
+					},
+				},
+			},
+			// 15.5cm Triple Secondary Gun Mount Kai
+			"234": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						multiple: { "houg": 1, "tyku": 1, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "tyku": 1, "houk": 1, "houm": 1 },
+						},
+					},
+				},
+			},
+			// 15.5cm Triple Secondary Gun Mount Kai Ni
+			"463": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						multiple: { "houg": 1, "tyku": 2, "houk": 1, "houm": 1 },
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "tyku": 1, "houk": 1, "houm": 1 },
+						},
+					},
+				},
+				byShip: {
+					// Yamato K2+, Musashi K2
+					ids: [911, 916, 546],
+					multiple: { "houg": 1, "houk": 1, "houm": 2 },
+					synergy: {
+						flags: [ "rangefinderKaiAirRadar" ],
+						single: { "tyku": 1, "houk": 1, "houm": 2 },
+					},
+				},
+			},
 			// 15.2cm Twin Gun Mount Kai
 			"139": {
 				count: 0,
@@ -3649,6 +3784,37 @@
 				byNation: {
 					// Number refers to byClass[67] above
 					"UnitedStates": 67,
+				},
+			},
+			// 10cm Twin High-angle Gun Mount Battery Concentrated Deployment
+			"464": {
+				count: 0,
+				byClass: {
+					// Yamato Class
+					"37": {
+						multiple: { "tyku": 3, "houk": 2 },
+						synergy: {
+							flags: [ "rangefinderAirRadar" ],
+							single: { "tyku": 2, "houk": 1, "houm": 1 },
+						},
+					},
+					// Kongou Class
+					"6": {
+						multiple: { "tyku": 2, "houk": 2 },
+					},
+					// Gangut Class
+					"73": "6",
+					// Conte di Cavour Class
+					"113": "6",
+				},
+				byShip: {
+					// Yamato K2+, Musashi K2
+					ids: [911, 916, 546],
+					multiple: { "tyku": 2, "houk": 2 },
+					synergy: {
+						flags: [ "rangefinderKaiAirRadar" ],
+						single: { "houg": 2, "tyku": 2, "houk": 2, "houm": 3 },
+					},
 				},
 			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
@@ -5845,8 +6011,8 @@
 				count: 0,
 				byShip: [
 					{
-						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2
-						ids: [407,   145,        419,             151,       541],
+						// Ushio K2, Shigure K2, Hatsushimo K2,   Haruna K2, Nagato K2, Yamato K2+
+						ids: [407,   145,        419,             151,       541,       911, 916],
 						multiple: { "houg": 1, "tyku": 2, "houk": 3, "souk": 1 },
 					},
 					{
@@ -6681,7 +6847,7 @@
 							single: { "houg": 1 },
 						},
 					],
-					// I-201?/I-203 Class, 1 boiler without Turbine: Slow -> Fast
+					// I-201/I-203 Class, 1 boiler without Turbine: Slow -> Fast
 					"109": {
 						single: { "soku": 5, },
 					},
@@ -7120,9 +7286,9 @@
 						],
 					},
 					{
-						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa
-						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140],
-						excludes: [662],
+						// Fast Group B1: Amatsukaze, Iowa, Souryuu, Hiryuu, Unryuu, Amagi, Kongou, Haruna, Kirishima, Hiei, Agano, Noshiro, Yahagi, Sakawa, Yamato Kai Ni
+						origins: [181, 440, 90, 91, 404, 331, 78, 79, 85, 86, 137, 138, 139, 140, 131],
+						excludes: [662, 131, 136, 916],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -7257,9 +7423,9 @@
 						],
 					},
 					{
-						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni
+						// Slow Group A: Yamato, Musashi, Nagato Kai Ni, Mutsu Kai Ni, Yamato K2J
 						origins: [131, 143, 80, 81],
-						excludes: [80, 275, 81, 276],
+						excludes: [80, 275, 81, 276, 911],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -7376,7 +7542,7 @@
 					},
 					{
 						// Slow Group C: Akashi, Hayasui, Akitsumaru
-						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201?, I-203, Scamp
+						//   All SS(V): I-168, I-58, I-8, I-19, I-26, I-13, I-400, I-401, I-14, I-47, U-511, UIT-25, Maruyu, I-201, I-203, Scamp
 						origins: [182, 460, 161,  126, 127, 128, 191, 483, 493, 155, 494, 495, 636, 431, 539, 163, 881, 882, 299],
 						synergy: [
 							{
