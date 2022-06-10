@@ -1169,11 +1169,13 @@
 			const battleConds = KC3Calc.collectBattleConditions();
 			const isYasenNotFound = !thisNode.battleNight;
 
-			// Index list of partner ships for NagaMutsu/Colorado cutins
+			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
 			const shipIndexListSpecial = {
 				101: [1],
 				102: [1],
 				103: [1, 2],
+				400: [1, 2],
+				401: [1],
 			};
 			// Partially analyse day battle to obtain HP of friendly ships after first and second round of main fleet shelling
 			const phases_single_vs_single1 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
@@ -1242,7 +1244,9 @@
 					104: [1],
 					300: [0, 1, 2],
 					301: [0, 2, 3],
-					302: [0, 1, 3]
+					302: [0, 1, 3],
+					400: [1, 2],
+					401: [1]
 				}[cutin] || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
@@ -1282,7 +1286,7 @@
 					}
 					if (cutinType[1] === 0) { break; }
 					const cutinEquips = attack.equip || [-1];
-					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302];
+					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
 							specialCutinIds.includes(cutinType[1]) ||
@@ -1301,17 +1305,18 @@
 						// Sorties that consume damecon are ignored
 						if (thisNode.dameConConsumed.includes(true)) { continue; }
 
-						// Additional HP checks for partner ships for NagaMutsu Touch and Colorado Touch (101, 102, 103)
+						// Additional HP checks for partner ships for NagaMutsu, Colorado, Yamato (101, 102, 103, 400, 401)
 						// This check is only necessary for day battle
 						if (isYasenNotFound && cutinType[1] in shipIndexListSpecial) {
-							let isPartnerShipTaiha = false;
+							const hpThreshold = [400, 401].includes(cutinType[1]) ? 0.5 : 0.25;
+							let isPartnerShipIncapble = false;
 							if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipTaiha |= playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
+								isPartnerShipIncapble |= playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
 							if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipTaiha |= playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
+								isPartnerShipIncapble |= playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
 							if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipTaiha |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= 0.25;
-							if (!!isPartnerShipTaiha) { continue; }
+								isPartnerShipIncapble |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
+							if (!!isPartnerShipIncapble) { continue; }
 						}
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);

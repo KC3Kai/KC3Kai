@@ -46,6 +46,7 @@
 		reload() {
 			PlayerManager.loadConsumables();
 			KC3ShipManager.load();
+			KC3GearManager.load();
 		}
 
 		/* EXECUTE
@@ -133,7 +134,8 @@
 			Object.keys(allRemodelInfo).forEach(key => {
 				const remodelInfo = allRemodelInfo[key];
 				if(remodelInfo.blueprint || remodelInfo.catapult || remodelInfo.report
-					|| remodelInfo.gunmat || remodelInfo.airmat || remodelInfo.armmat) {
+					|| remodelInfo.gunmat || remodelInfo.airmat || remodelInfo.armmat
+					|| remodelInfo.boiler) {
 					const shipMaster = KC3Master.ship(remodelInfo.ship_id_from);
 					const shipData = {
 						id: remodelInfo.ship_id_from,
@@ -226,6 +228,14 @@
 						});
 						mappedObj.materialsUsed += isUsed;
 					}
+					if(remodelInfo.boiler) {
+						mappedObj.materials.push({
+							icon: 902,
+							info: remodelInfo,
+							used: isUsed
+						});
+						mappedObj.materialsUsed += isUsed;
+					}
 				}
 			}
 			return mappedObj;
@@ -292,6 +302,7 @@
 									m.icon === 75 ? m.info.gunmat :
 									m.icon === 77 ? m.info.airmat :
 									m.icon === 94 ? m.info.armmat :
+									m.icon === 902 ? m.info.boiler :
 									1).fill(m.icon)
 				))).map(iconArr => {
 					const icon = iconArr[0];
@@ -346,6 +357,9 @@
 						break;
 					case 78:
 						appendOwnedItem(iconImg, PlayerManager.consumables.actionReport);
+						break;
+					case 902: // a slotitem mapped to 902 as a special useitem
+						appendOwnedItem(iconImg, KC3GearManager.count(g => g.masterId === 87));
 						break;
 				}
 			}
@@ -466,6 +480,16 @@
 					.appendTo(line);
 				$("<span></span>").css("margin-right", 10)
 					.text(remodelInfo.armmat)
+					.appendTo(line);
+			}
+			if(remodelInfo.boiler) {
+				$("<img />")
+					.attr("src", KC3Meta.useitemIcon(902))
+					.width(15).height(15).css("margin-right", 2)
+					.css("vertical-align", "top")
+					.appendTo(line);
+				$("<span></span>").css("margin-right", 10)
+					.text(remodelInfo.boiler)
 					.appendTo(line);
 			}
 			if(remodelInfo.devmat) {
