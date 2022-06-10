@@ -3249,13 +3249,97 @@ KC3改 Ship Object
 	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
 	 *
 	 * @return API ID (400~401) if this ship can do special cut-in attack, otherwise false.
+	 * @see https://docs.google.com/spreadsheets/d/1WgZcBjw8Q58or9Mtjq-nzC-bJeu_2OvZfICfTs2iAfA/htmlview
 	 */
 	KC3Ship.prototype.canDoYamatoClassCutin = function() {
+		if(this.isDummy() || this.isAbsent()) { return false; }
+		// is this ship healthy Musashi K2
+		if(KC3Meta.musashiCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isEchelon = [4, 14].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd ship is healthy Yamato K2+ only?
+					validCombinedShips = [fleetObj.ship(1)]
+						.every(ship => !ship.isAbsent() && !ship.isStriped()
+							&& KC3Meta.yamatoCutinShips.includes(ship.masterId)),
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				if(isEchelon && validCombinedShips && hasSixSurfaceShips) return 401;
+			}
+		// is this ship healthy Yamato K2+
+		} else if(KC3Meta.yamatoCutinShips.includes(this.masterId) && !this.isStriped()) {
+			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
+			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
+				&& (!PlayerManager.combinedFleet || fleetNum !== 2)) {
+				const isEchelon = [4, 14].includes(
+					this.collectBattleConditions().formationId || ConfigManager.aaFormation
+				);
+				const fleetObj = PlayerManager.fleets[fleetNum - 1],
+					// 2nd (3rd) ship healthy specific BB?
+					validMinCombinedShips = [fleetObj.ship(1)]
+						.every(ship => !ship.isAbsent() && !ship.isStriped()
+							&& [8, 9, 10].includes(ship.master().api_stype)),
+					// no surface ship(s) sunk or retreated in mid-sortie?
+					hasSixSurfaceShips = fleetObj.shipsUnescaped().filter(s => !s.isSubmarine()).length >= 6;
+				if(isEchelon && validMinCombinedShips && hasSixSurfaceShips) {
+					// 3-ship cases:
+					const valid3rdShip = [fleetObj.ship(2)].every(s => !s.isAbsent() && !s.isStriped() && KC3Meta.yamatoCutinPartner2.includes(s.masterId));
+					if(valid3rdShip) {
+						// Determine valid combination of 3 ships to return 400
+						const allowedCombinations = [
+							{ p1: [546], p2: [541, 573] }, // Musashi + Nagato-class, not swappable
+							{ p1: [541], p2: [573] },      // Nagato + Mutsu
+							{ p1: [553], p2: [554] },      // Ise + Hyuuga
+							{ p1: [411], p2: [412] },      // Fusou + Yamashiro
+							{ p1: [576], p2: [364] },      // Nelson + Warspite
+							{ p1: [591], p2: [592] },      // Kongou + Hiei
+							{ p1: [697], p2: [659] },      // South Dakota + Washington
+							{ p1: [446], p2: [447] },      // Italia + Roma
+							// where is Colorado?
+						];
+						const validPartners = allowedCombinations.find(pair => {
+							const p1Id = fleetObj.ship(1).masterId,
+								p2Id = fleetObj.ship(2).masterId;
+							if(pair.p1.includes(p1Id) && pair.p2.includes(p2Id)) return true;
+							if(!pair.p1.includes(546) && pair.p1.includes(p2Id) && pair.p2.includes(p1Id)) return true;
+							return false;
+						});
+						if(validPartners) return 400;
+					}
+					// 2-ship cases:
+					if(KC3Meta.yamatoCutinPartner1.includes(fleetObj.ship(1).masterId)) return 401;
+				}
+			}
+		}
 		return false;
 	};
 
-	KC3Ship.prototype.estimateYamatoClassCutinModifier = function(forShipPos = 0) {
-		return 2;
+	/**
+	 * Yamato-class special cut-in attack modifiers are variant,
+	 * depending on equipment and 2nd and 3rd ship in the fleet.
+	 * @see https://twitter.com/CC_jabberwock/status/1535008448580005888
+	 */
+	KC3Ship.prototype.estimateYamatoClassCutinModifier = function(apiId = 400, forShipPos = 0) {
+		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
+		if(!locatedFleet) return 1;
+		const flagshipMstId = locatedFleet.ship(0).masterId;
+		if(!KC3Meta.yamatoCutinShips.includes(flagshipMstId)
+			&& !KC3Meta.musashiCutinShips.includes(flagshipMstId)) return 1;
+		forShipPos = (forShipPos || 0) % 3;
+		const baseModifier = (apiId === 400 ? [1.5, 1.5, 1.65] : [1.4, 1.55, 1])[forShipPos];
+		const secondShipMstId = locatedFleet.ship(1).masterId,
+			partnerShipModifier = KC3Meta.yamatoCutinShips.includes(secondShipMstId) || KC3Meta.musashiCutinShips.includes(secondShipMstId) ? [1.1, 1.2, 1][forShipPos] : 1;
+		const targetShip = locatedFleet.ship(forShipPos);
+		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
+		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		// no this mod for 3rd ship: https://twitter.com/CC_jabberwock/status/1534982170065833985
+		const rangefinderRadarModifier = forShipPos < 2 && targetShip.equipment(true).some(gear => [142, 460].includes(gear.masterId)) ? 1.1 : 1;
+		return baseModifier * partnerShipModifier
+			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
 	};
 
 	/**
@@ -3343,8 +3427,8 @@ KC3改 Ship Object
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.6],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.6],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.81],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3419,8 +3503,9 @@ KC3改 Ship Object
 				results.push(KC3Ship.specialAttackTypeDay(this.canDoSubFleetCutin()));
 			}
 			// Yamato-class Cutin since 2022-06-08
-			if(this.canDoYamatoClassCutin()) {
-				results.push(KC3Ship.specialAttackTypeDay(this.canDoYamatoClassCutin(), null, this.estimateYamatoClassCutinModifier()));
+			const yamatoCutinId = this.canDoYamatoClassCutin();
+			if(yamatoCutinId) {
+				results.push(KC3Ship.specialAttackTypeDay(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(yamatoCutinId)));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -3628,8 +3713,8 @@ KC3改 Ship Object
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.6],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.6],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.81],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3763,8 +3848,9 @@ KC3改 Ship Object
 					results.push(KC3Ship.specialAttackTypeNight(this.canDoSubFleetCutin()));
 				}
 				// special Yamato-class Cutin since 2022-06-08
-				if(this.canDoYamatoClassCutin()) {
-					results.push(KC3Ship.specialAttackTypeNight(this.canDoYamatoClassCutin(), null, this.estimateYamatoClassCutinModifier()));
+				const yamatoCutinId = this.canDoYamatoClassCutin();
+				if(yamatoCutinId) {
+					results.push(KC3Ship.specialAttackTypeNight(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(yamatoCutinId)));
 				}
 				// special torpedo related cut-in for destroyers since 2017-10-25,
 				// these types can be rolled for every setup requirements met, beofore regular cutins below

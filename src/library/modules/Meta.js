@@ -155,7 +155,7 @@ Provides access to data on built-in JSON files
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
-		yamatoCutinPartner1: [546, 360, 178, 392, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496],
+		yamatoCutinPartner1: [546, 360, 178, 392],
 		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
@@ -894,14 +894,16 @@ Provides access to data on built-in JSON files
 				// move Nelson Touch/Nagato-class/Colorado Cutin index 100 to 20
 				// move AirSea/Zuiun Multi-Angle Cutin index 200 to 30
 				// move Submarine Fleet Cutin index 300 to 40
-				this._battle.cutinDay[index >= 300 ? index - 260 : index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
+				// move Yamato-class Cutin index 400 to 50
+				this._battle.cutinDay[index >= 400 ? index - 350 : index >= 300 ? index - 260 : index >= 200 ? index - 170 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		cutinTypeNight :function(index){
 			return (typeof index === "undefined") ? this._battle.cutinNight :
 				// move Nelson Touch/Nagato-class/Colorado/Kongou Cutin index 100 to 20
 				// move Submarine Fleet Cutin index 300 to 30
-				this._battle.cutinNight[index >= 300 ? index - 270 : index >= 100 ? index - 80 : index] || "";
+				// move Yamato-class Cutin index 400 to 40
+				this._battle.cutinNight[index >= 400 ? index - 360 : index >= 300 ? index - 270 : index >= 100 ? index - 80 : index] || "";
 		},
 		
 		aacitype :function(index){
