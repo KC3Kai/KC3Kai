@@ -4990,7 +4990,7 @@ KC3改 Ship Object
 			$(".dayAswPower", tooltipBox).html("-");
 		}
 		const isAswPowerShown = canAsw && (canOasw && !shipObj.isOaswShip()
-			|| shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32]), false);
+			|| shipObj.onlyHasEquipmentType(1, [10, 15, 16, 32], false));
 		// Show ASW power if Opening ASW conditions met, or only ASW equipment equipped (ignoring exslot)
 		if(isAswPowerShown){
 			$(".dayAttack", tooltipBox).parent().parent().hide();

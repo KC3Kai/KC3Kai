@@ -225,6 +225,11 @@ AntiAir: anti-air related calculations
 	function is15mDuplexRangefinderT21AirRadarOrFDC(mst) {
 		return [142, 460].indexOf(mst.api_id) !== -1;
 	}
+	// AA machine gun required by Yamato-class kind 42: AA >= 6?
+	// https://twitter.com/syoukuretin/status/1534580755103621120
+	function isHigherAAGun(mst) {
+		return isAAGun(mst) && mst.api_tyku >= 6;
+	}
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -1144,7 +1149,7 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
-				hasSome( isAAGun ))
+				hasSome( isHigherAAGun ))
 		)
 	);
 	declareAACI(
