@@ -3073,7 +3073,7 @@ KC3改 Ship Object
 	 *
 	 * The same additional ammo consumption like Nagato/Mutsu cutin for top 3 battleships.
 	 *
-	 * 4 types of smoke animation effects will be used according corresponding position of partener ships,
+	 * 4 types of smoke animation effects will be used according corresponding position of partner ships,
 	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
 	 *
 	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
@@ -3164,6 +3164,7 @@ KC3改 Ship Object
 	 *   * https://twitter.com/myteaGuard/status/1254048759559778305
 	 * Ammo consumption reduced to 20% since 2021-08-04:
 	 *   * https://twitter.com/yukicacoon/status/1422899332219502596
+	 * Power modifier increased since 2022-06-08
 	 *
 	 * @return true if this ship (Kongou-class K2C) can do special cut-in attack.
 	 * @see https://kancolle.fandom.com/wiki/Kongou/Special_Cut-In
@@ -3180,7 +3181,7 @@ KC3改 Ship Object
 					this.collectBattleConditions().formationId || ConfigManager.aaFormation
 				);
 				const fleetObj = PlayerManager.fleets[fleetNum - 1],
-					// 2nd ship is valid partener and not even Chuuha
+					// 2nd ship is valid partner and not even Chuuha
 					validCombinedShips = ({
 						// Kongou K2C: Hiei K2C, Haruna K2, Warspite
 						"591": [592, 151, 439, 364],
@@ -3247,6 +3248,8 @@ KC3改 Ship Object
 	 *   known 2nd/3rd ship pairs are: Nagato K2+Mutsu K2, Ise K2+Hyuuga K2, Fusou K2+Yamashiro K2,
 	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K
 	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
+	 *
+	 * The same additional ammo consumptions: 16% for 400, 12% for 401
 	 *
 	 * @return API ID (400~401) if this ship can do special cut-in attack, otherwise false.
 	 * @see https://docs.google.com/spreadsheets/d/1WgZcBjw8Q58or9Mtjq-nzC-bJeu_2OvZfICfTs2iAfA/htmlview
@@ -3329,17 +3332,29 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.yamatoCutinShips.includes(flagshipMstId)
 			&& !KC3Meta.musashiCutinShips.includes(flagshipMstId)) return 1;
+
 		forShipPos = (forShipPos || 0) % 3;
 		const baseModifier = (apiId === 400 ? [1.5, 1.5, 1.65] : [1.4, 1.55, 1])[forShipPos];
 		const secondShipMstId = locatedFleet.ship(1).masterId,
-			partnerShipModifier = KC3Meta.yamatoCutinShips.includes(secondShipMstId) || KC3Meta.musashiCutinShips.includes(secondShipMstId) ? [1.1, 1.2, 1][forShipPos] : 1;
+			shipModifiersBy2ndPos = (
+				// for Yamato/Musashi
+				[911, 916, 546].includes(secondShipMstId) ? [1.1, 1.2, 1]
+				// for Nagato/Mutsu
+				: [541, 573].includes(secondShipMstId) ? [1.1, 1.1, 1]
+				// for Ise/Hyuuga
+				: [553, 554].includes(secondShipMstId) ? [1.05, 1.05, 1]
+				: [1, 1, 1]
+			),
+			partnerShipModifier = shipModifiersBy2ndPos[forShipPos];
 		const targetShip = locatedFleet.ship(forShipPos);
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
-		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		// LoS >= 6 radar needed instead of surface
+		const highLosRadarModifier = targetShip.equipment(true).some(gear => [12, 13, 93].includes(gear.master().api_type[2]) && gear.master().api_saku > 5) ? 1.15 : 1;
 		// no this mod for 3rd ship: https://twitter.com/CC_jabberwock/status/1534982170065833985
 		const rangefinderRadarModifier = forShipPos < 2 && targetShip.equipment(true).some(gear => [142, 460].includes(gear.masterId)) ? 1.1 : 1;
+
 		return baseModifier * partnerShipModifier
-			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
+			* apShellModifier * highLosRadarModifier * rangefinderRadarModifier;
 	};
 
 	/**
@@ -3428,7 +3443,7 @@ KC3改 Ship Object
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.81],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.62],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3714,7 +3729,7 @@ KC3改 Ship Object
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
 			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.81],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.62],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
