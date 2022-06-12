@@ -119,11 +119,24 @@ AntiAir: anti-air related calculations
 	// Check by icon (15)
 	var isMachineGun = iconEq(15);
 
-	// Anti-air gun includes machine guns and rocket launchers,
-	// but not sure why AA stat < 3 gun not counted (only 7.7mm MG for now)
+	// Anti-air gun includes machine guns and rocket launchers, equaled to machine gun
 	var isAAGun = predAllOf(isMachineGun, function(mst) {
-		return mst.api_tyku >= 3;
+		return mst.api_tyku > 1;
 	});
+
+	// To match AA gun with minimal tyku of specified value:
+	// kind 12 needs AA stat >= 3 (defined by KC Vita, only 7.7mm MG incaple for now)
+	// kind 33 needs AA stat >= 4
+	// kind 42/44 needs AA stat >= 6
+	function isAAGunWithAtLeast(aa) {
+		return predAllOf(isMachineGun, function(mst) {
+			return mst.api_tyku >= aa;
+		});
+	}
+	// special high AA machine gun
+	var isAAGunCDMG = isAAGunWithAtLeast(9);
+	// some kinds need AA between 3 and 8
+	var isAAGunNotCD = predAllOf(isAAGunWithAtLeast(3), predNot(isAAGunCDMG));
 
 	// High AA HA/machine guns/AAFD for modifier conditions.
 	// api_tyku threshold from KC Vita Exec_AirBattle.cs#getA1Plus
@@ -152,33 +165,12 @@ AntiAir: anti-air related calculations
 	function isBuiltinHighAngleMount(mst) {
 		// use the condition also used in game for future unknown equipment
 		return isHighAngleMount(mst) && mst.api_tyku >= 8;
-		/*
-		return [
-			122, // aki-gun
-			130, // maya-gun
-			135, // 90mm single HA
-			172, // 5inch
-		].indexOf( mst.api_id ) !== -1;
-		*/
 	}
 
 	function is10cmTwinHighAngleMountKaiAMG(mst) {
 		// 10cm Twin High-angle Gun Mount Kai + Additional Machine
 		return mst.api_id === 275;
 	}
-
-	function isCDMG(mst) {
-		return isAAGun(mst) && mst.api_tyku >= 9;
-		/*
-		return [
-			131, // 25mm triple (CD)
-			173, // Bofors
-			191, // QF 2-pounder
-		].indexOf( mst.api_id ) !== -1;
-		*/
-	}
-
-	var isAAGunNotCD = predAllOf(isAAGun, predNot(isCDMG));
 
 	function is12cm30tubeRocketLauncherKai2(mst) {
 		// 12cm 30-tube Rocket Launcher Kai Ni
@@ -224,11 +216,6 @@ AntiAir: anti-air related calculations
 	// 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni or + Skilled Fire Direction Center
 	function is15mDuplexRangefinderT21AirRadarOrFDC(mst) {
 		return [142, 460].indexOf(mst.api_id) !== -1;
-	}
-	// AA machine gun required by Yamato-class: AA >= 6?
-	// https://twitter.com/syoukuretin/status/1534580755103621120
-	function isHigherAAGun(mst) {
-		return isAAGun(mst) && mst.api_tyku >= 6;
 	}
 
 	// for equipments the coefficient is different for
@@ -745,10 +732,10 @@ AntiAir: anti-air related calculations
 		predAllOf(isNotSubmarine, slotNumAtLeast(2)),
 		withEquipmentMsts(
 			predAllOf(
-				hasSome( isCDMG ),
+				hasSome( isAAGunCDMG ),
 				/* CDMGs are AAGuns, so we need at least 2 AA guns
 				   including the CDMG one we have just counted */
-				hasAtLeast(isAAGun, 2),
+				hasAtLeast( isAAGunWithAtLeast(3), 2 ),
 				hasSome( isAARadar ))
 		)
 	);
@@ -857,7 +844,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
-				hasSome( isCDMG ),
+				hasSome( isAAGunCDMG ),
 				hasSome( isAARadar ))
 		)
 	);
@@ -868,13 +855,14 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
-				hasSome( isCDMG ))
+				hasSome( isAAGunCDMG ))
 		)
 	);
 	// api_kind 13 deprecated by devs
 	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
 	// vita value: [1, 4, 1.35]
 
+	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2
 	declareAACI(
 		14, 4, 1.45,
@@ -927,7 +915,7 @@ AntiAir: anti-air related calculations
 		[satsukiK2Icon, cdmgIcon],
 		predAllOf(isSatsukiK2),
 		withEquipmentMsts(
-			hasSome( isCDMG )
+			hasSome( isAAGunCDMG )
 		)
 	);
 
@@ -941,7 +929,7 @@ AntiAir: anti-air related calculations
 				/* any HA with builtin AAFD will not work */
 				predNot( hasSome( isBuiltinHighAngleMount )),
 				hasSome( isHighAngleMount ),
-				hasSome( isCDMG ))
+				hasSome( isAAGunCDMG ))
 		)
 	);
 	declareAACI(
@@ -949,7 +937,7 @@ AntiAir: anti-air related calculations
 		[kinuK2Icon, cdmgIcon],
 		predAllOf(isKinuK2),
 		withEquipmentMsts(
-			hasSome( isCDMG )
+			hasSome( isAAGunCDMG )
 		)
 	);
 
@@ -971,7 +959,7 @@ AntiAir: anti-air related calculations
 		[fumizukiK2Icon, cdmgIcon],
 		predAllOf(isFumizukiK2),
 		withEquipmentMsts(
-			hasSome( isCDMG )
+			hasSome( isAAGunCDMG )
 		)
 	);
 
@@ -1055,7 +1043,7 @@ AntiAir: anti-air related calculations
 		withEquipmentMsts(
 			predAllOf(
 				hasSome( isHighAngleMount ),
-				hasSome( isAAGun ))
+				hasSome( isAAGunWithAtLeast(4) ))
 		)
 	);
 
@@ -1149,7 +1137,7 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasAtLeast( is10cmTwinHighAngleGunMountBatteryCD, 2 ),
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
-				hasSome( isHigherAAGun ))
+				hasSome( isAAGunWithAtLeast(6) ))
 		)
 	);
 	declareAACI(
@@ -1170,7 +1158,7 @@ AntiAir: anti-air related calculations
 			predAllOf(
 				hasSome( is10cmTwinHighAngleGunMountBatteryCD ),
 				hasSome( is15mDuplexRangefinderT21AirRadarOrFDC ),
-				hasSome( isHigherAAGun ))
+				hasSome( isAAGunWithAtLeast(6) ))
 		)
 	);
 	declareAACI(
@@ -1229,6 +1217,7 @@ AntiAir: anti-air related calculations
 	//    * https://docs.google.com/document/d/1XBrQgQsA_pM3fXsDDC7e1N5Xpr2p59kmvQbnY2UH0Ko
 	//    * https://gist.github.com/Nishisonic/62cead1f57a323c737019d6b630fa4a5
 	//    * http://nishisonic.xsrv.jp/archives/809
+	//    * https://twitter.com/syoukuretin/status/1535102184530276352
 	//   here still use the simple way via ordering by 'effect' since new AACI kinds not covered by investigations.
 	// note: priority is different from trigger chance rate, since random number roll just done once,
 	//       lower priority AACI is still possible to be triggered if chance value is greater.
