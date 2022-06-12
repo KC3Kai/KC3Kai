@@ -3348,13 +3348,12 @@ KC3改 Ship Object
 			partnerShipModifier = shipModifiersBy2ndPos[forShipPos];
 		const targetShip = locatedFleet.ship(forShipPos);
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
-		// LoS >= 6 radar needed instead of surface
-		const highLosRadarModifier = targetShip.equipment(true).some(gear => [12, 13, 93].includes(gear.master().api_type[2]) && gear.master().api_saku > 5) ? 1.15 : 1;
+		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 		// no this mod for 3rd ship: https://twitter.com/CC_jabberwock/status/1534982170065833985
 		const rangefinderRadarModifier = forShipPos < 2 && targetShip.equipment(true).some(gear => [142, 460].includes(gear.masterId)) ? 1.1 : 1;
 
 		return baseModifier * partnerShipModifier
-			* apShellModifier * highLosRadarModifier * rangefinderRadarModifier;
+			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
 	};
 
 	/**
