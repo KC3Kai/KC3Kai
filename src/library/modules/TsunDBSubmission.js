@@ -1324,11 +1324,11 @@
 						
 						// Sending helper HP info too to check if chuuha affects touch trigger rate
 						if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-							misc["ship" + (idxk + 1)] = [playerShipsPartial1[idxk].hp, fleet.ship(idxk).hp[1]];
+							misc["ship" + (idxk + 1)]['hp'] = [playerShipsPartial1[idxk].hp, fleet.ship(idxk).hp[1]];
 						if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-							misc["ship" + (idxk + 1)] = [playerShipsPartial2[idxk].hp, fleet.ship(idxk).hp[1]];
+							misc["ship" + (idxk + 1)]['hp'] = [playerShipsPartial2[idxk].hp, fleet.ship(idxk).hp[1]];
 						if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-							misc["ship" + (idxk + 1)] = [playerShipsPartial3[idxk].hp, fleet.ship(idxk).hp[1]];
+							misc["ship" + (idxk + 1)]['hp'] = [playerShipsPartial3[idxk].hp, fleet.ship(idxk).hp[1]];
 					} else if (time === "day"
 						&& !(thisNode.planeFighters.player[0] === 0
 							&& thisNode.planeFighters.abyssal[0] === 0)) {
