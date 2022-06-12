@@ -1311,12 +1311,19 @@
 						if (isYasenNotFound && cutinType[1] in shipIndexListSpecial) {
 							const hpThreshold = [400, 401].includes(cutinType[1]) ? 0.5 : 0.25;
 							let isPartnerShipIncapble = false;
-							if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
-							if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
-							if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
+							
+							// Checks HP thresholds for each helper ship (index from shipIndexListSpecial)
+							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++) {
+								const helper_idx = shipIndexListSpecial[cutinType[1]][idxk];
+								
+								if (num === 0)
+									isPartnerShipIncapble |= playerShipsPartial1[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
+								if (num === 1)
+									isPartnerShipIncapble |= playerShipsPartial2[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
+								if (num === 2)
+									isPartnerShipIncapble |= playerShipsPartial3[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
+							}
+							
 							if (!!isPartnerShipIncapble) { continue; }
 						}
 
@@ -1327,12 +1334,16 @@
 						
 						// Sending helper HP info to check if chuuha affects touch trigger rate
 						if (cutinType[1] in shipIndexListSpecial) {
-							if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								misc["ship" + (idxk + 1)].hp = [playerShipsPartial1[idxk].hp, fleet.ship(idxk).hp[1]];
-							if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								misc["ship" + (idxk + 1)].hp = [playerShipsPartial2[idxk].hp, fleet.ship(idxk).hp[1]];
-							if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								misc["ship" + (idxk + 1)].hp = [playerShipsPartial3[idxk].hp, fleet.ship(idxk).hp[1]];
+							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++) {
+								const helper_idx = shipIndexListSpecial[cutinType[1]][idxk];
+								
+								if (num === 0)
+									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial1[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
+								if (num === 1)
+									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial2[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
+								if (num === 2)
+									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial3[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
+							}
 						}
 					} else if (time === "day"
 						&& !(thisNode.planeFighters.player[0] === 0
