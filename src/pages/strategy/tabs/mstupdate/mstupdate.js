@@ -177,6 +177,8 @@
 					.attr("data-swf", shipSrc)
 					.click(linkClickFunc);
 				
+				const iconDiv = $("<div class='icon'><img></div>").toggle(false).prependTo(shipBox);
+				$("img", iconDiv).attr("src", KC3Meta.shipIcon(shipData.api_id));
 				shipBox.appendTo(".tab_mstupdate .mstgraph");
 			});
 			$("<div/>").addClass("clear").appendTo(".tab_mstupdate .mstgraph");
@@ -267,6 +269,13 @@
 			$(".allships_btn").on("click", (e) => {
 				appendShipsByPage(true);
 				$(".moreships_btn, .allships_btn").hide();
+			});
+			$(".toggleicon_btn").on("click", (e) => {
+				$(".tab_mstupdate .mstgraph .icon").toggle();
+				const updatedIds = this.newCgs.map(o => o.api_id);
+				console.debug("IDs of updated CGs:", JSON.stringify(updatedIds));
+				console.debug("IDs of current seasonal:", JSON.stringify(KC3Meta._seasonal));
+				console.debug("Diff:", JSON.stringify(KC3Meta._seasonal.filter(id => !updatedIds.includes(id))));
 			});
 			if(!ConfigManager.devOnlyPages) {
 				$(".dev_only").hide();

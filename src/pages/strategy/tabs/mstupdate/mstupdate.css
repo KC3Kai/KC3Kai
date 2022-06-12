@@ -13,8 +13,7 @@
 .tab_mstupdate .new_ships_note em {
 	font-size:12px;
 }
-.tab_mstupdate .moreships_btn,
-.tab_mstupdate .allships_btn {
+.tab_mstupdate .dev_only .btn {
 	margin:5px;
 }
 
@@ -22,7 +21,7 @@
 --------------------------------*/
 .tab_mstupdate .mstship {
 	width:220px;
-	height:320px;
+	height:auto;
 	float:left;
 	margin:0px 5px 10px 0px;
 	background:#eee;
@@ -61,6 +60,17 @@
 .tab_mstupdate .mstship.smaller .ship_name {
 	height:30px;
 	line-height:25px;
+}
+.tab_mstupdate .mstship .icon {
+	width:100%;
+	background:#006c91;
+	text-align:center;
+}
+.tab_mstupdate .mstship .icon img {
+	height:120px;
+	vertical-align:top;
+	object-fit:cover;
+	image-rendering:auto;
 }
 
 /* GEAR
