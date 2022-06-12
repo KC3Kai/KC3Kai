@@ -1322,7 +1322,10 @@
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
 						
-						// Sending helper HP info too to check if chuuha affects touch trigger rate
+						// Sending the attack round to check if the trigger rates from the first and second round are different
+						misc['attackRound'] = num;
+						
+						// Sending helper HP info to check if chuuha affects touch trigger rate
 						if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
 							misc["ship" + (idxk + 1)]['hp'] = [playerShipsPartial1[idxk].hp, fleet.ship(idxk).hp[1]];
 						if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
