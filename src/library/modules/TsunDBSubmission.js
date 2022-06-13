@@ -1309,7 +1309,6 @@
 						if (thisNode.dameConConsumed.includes(true)) { continue; }
 
 						// Additional HP checks for partner ships for NagaMutsu, Colorado, Yamato (101, 102, 103, 400, 401)
-						// This check is only necessary for day battle
 						const partnerHps = [];
 						if (estCutinId in shipIndexListSpecial) {
 							// Checks HP thresholds for each partner ship (index from shipIndexListSpecial)
@@ -1323,17 +1322,18 @@
 									isPartnerShipIncapble |= (php / mhp <= hpThreshold);
 									partnerHps[partnerPos] = [php, mhp];
 								} else {
-									// should not reach here except insufficient partial prediction
+									// should not reach here since insufficient partial prediction
 									partnerHps[partnerPos] = [];
 								}
 							}
+							// This check is only necessary for day battle
 							if (isYasenNotFound && !!isPartnerShipIncapble) { continue; }
 						}
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
-						// Sending the attack round to check if the trigger rates from the first and second round are different
+						// The attack round to check if the trigger rates from the first and second round are different
 						misc.attackRound = num;
-						// Sending helper HP info to check if chuuha affects touch trigger rate
+						// Partner ships HP to check if Chuuha affects trigger rate
 						if (estCutinId in shipIndexListSpecial) {
 							for (let psidx in shipIndexListSpecial[estCutinId]) {
 								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
