@@ -872,14 +872,16 @@
 			self.defineShipFilter(
 				"daihatsu",
 				savedFilterValues.daihatsu || 0,
-				["all", "dlc", "tank", "both", "either", "neither"],
+				["all", "dlc", "dlconly", "tank", "tankonly", "both", "either", "neither"],
 				function(curVal, ship) {
 					return (curVal === 0)
-						|| (curVal === 1 &&  ship.canEquipDaihatsu && !ship.canEquipTank)
-						|| (curVal === 2 && !ship.canEquipDaihatsu &&  ship.canEquipTank)
-						|| (curVal === 3 &&  ship.canEquipDaihatsu &&  ship.canEquipTank)
-						|| (curVal === 4 &&  (ship.canEquipDaihatsu || ship.canEquipTank))
-						|| (curVal === 5 && !(ship.canEquipDaihatsu || ship.canEquipTank));
+						|| (curVal === 1 &&  ship.canEquipDaihatsu)
+						|| (curVal === 2 &&  ship.canEquipDaihatsu && !ship.canEquipTank)
+						|| (curVal === 3 &&                            ship.canEquipTank)
+						|| (curVal === 4 && !ship.canEquipDaihatsu &&  ship.canEquipTank)
+						|| (curVal === 5 &&  ship.canEquipDaihatsu &&  ship.canEquipTank)
+						|| (curVal === 6 &&  (ship.canEquipDaihatsu || ship.canEquipTank))
+						|| (curVal === 7 && !(ship.canEquipDaihatsu || ship.canEquipTank));
 				});
 
 			self.defineShipFilter(
