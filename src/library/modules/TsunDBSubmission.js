@@ -1170,14 +1170,6 @@
 			const battleConds = KC3Calc.collectBattleConditions();
 			const isYasenNotFound = !thisNode.battleNight;
 
-			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
-			const shipIndexListSpecial = {
-				101: [1],
-				102: [1],
-				103: [1, 2],
-				400: [1, 2],
-				401: [1],
-			};
 			// Partially analyse day battle to obtain HP of friendly ships after first and second round of main fleet shelling
 			const phases_single_vs_single1 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
 			const phases_single_vs_single2 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3'];
@@ -1195,10 +1187,11 @@
 			const phases_STF_vs_all1       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
 			const phases_STF_vs_all2       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2'];
 
-			// playerShipsPartial1: 1st day shelling round for main fleet
-			// playerShipsPartial2: 2nd day shelling round for main fleet
-			// playerShipsPartial3: 3rd day shelling round for main fleet (single vs CF only)
-			const playerShipsPartial1 =
+			// playerShipsPartial.1: 1st day shelling round for main fleet
+			// playerShipsPartial.2: 2nd day shelling round for main fleet
+			// playerShipsPartial.3: 3rd day shelling round for main fleet (single vs CF only)
+			const playerShipsPartial = [];
+			playerShipsPartial[0] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single1).fleets.playerMain :
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
@@ -1210,7 +1203,7 @@
 				(isYasenNotFound && this.data.fleetType == 2) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all1).fleets.playerMain :
 				{};
-			const playerShipsPartial2 =
+			playerShipsPartial[1] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single2).fleets.playerMain :
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
@@ -1220,7 +1213,7 @@
 				(isYasenNotFound && this.data.fleetType == 2) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all2).fleets.playerMain :
 				{};
-			const playerShipsPartial3 =
+			playerShipsPartial[2] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
 					result.playerMain || [] :
 				{};
@@ -1235,6 +1228,14 @@
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
 				slots: ship.slots,
 			});
+			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
+			const shipIndexListSpecial = {
+				101: [1],
+				102: [1],
+				103: [1, 2],
+				400: [1, 2],
+				401: [1],
+			};
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
 				const shipIndexList = {
@@ -1285,12 +1286,13 @@
 							? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 							: fs.estimateNightAttackType(enemy, true);
 					}
-					if (cutinType[1] === 0) { break; }
+					const estCutinId = cutinType[1];
+					if (estCutinId === 0) { break; }
 					const cutinEquips = attack.equip || [-1];
 					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
-							specialCutinIds.includes(cutinType[1]) ||
+							specialCutinIds.includes(estCutinId) ||
 							specialCutinIds.includes(cutin)
 						)
 					) { continue; }
@@ -1299,7 +1301,7 @@
 					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
 					}
-					if (specialCutinIds.includes(cutinType[1])) {
+					if (specialCutinIds.includes(estCutinId)) {
 						// Flagship ship Chuuha ignored
 						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
 
@@ -1308,41 +1310,34 @@
 
 						// Additional HP checks for partner ships for NagaMutsu, Colorado, Yamato (101, 102, 103, 400, 401)
 						// This check is only necessary for day battle
-						if (isYasenNotFound && cutinType[1] in shipIndexListSpecial) {
-							const hpThreshold = [400, 401].includes(cutinType[1]) ? 0.5 : 0.25;
+						const partnerHps = [];
+						if (estCutinId in shipIndexListSpecial) {
+							// Checks HP thresholds for each partner ship (index from shipIndexListSpecial)
+							const hpThreshold = [400, 401].includes(estCutinId) ? 0.5 : 0.25;
 							let isPartnerShipIncapble = false;
-							
-							// Checks HP thresholds for each helper ship (index from shipIndexListSpecial)
-							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++) {
-								const helper_idx = shipIndexListSpecial[cutinType[1]][idxk];
-								
-								if (num === 0)
-									isPartnerShipIncapble |= playerShipsPartial1[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
-								if (num === 1)
-									isPartnerShipIncapble |= playerShipsPartial2[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
-								if (num === 2)
-									isPartnerShipIncapble |= playerShipsPartial3[helper_idx].hp / fleet.ship(helper_idx).hp[1] <= hpThreshold;
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
+								if (num < 3) {
+									const php = playerShipsPartial[num][partnerPos].hp;
+									const mhp = fleet.ship(partnerPos).hp[1];
+									isPartnerShipIncapble |= (php / mhp <= hpThreshold);
+									partnerHps[partnerPos] = [php, mhp];
+								} else {
+									// should not reach here except insufficient partial prediction
+									partnerHps[partnerPos] = [];
+								}
 							}
-							
-							if (!!isPartnerShipIncapble) { continue; }
+							if (isYasenNotFound && !!isPartnerShipIncapble) { continue; }
 						}
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
-						
 						// Sending the attack round to check if the trigger rates from the first and second round are different
 						misc.attackRound = num;
-						
 						// Sending helper HP info to check if chuuha affects touch trigger rate
-						if (cutinType[1] in shipIndexListSpecial) {
-							for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++) {
-								const helper_idx = shipIndexListSpecial[cutinType[1]][idxk];
-								
-								if (num === 0)
-									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial1[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
-								if (num === 1)
-									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial2[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
-								if (num === 2)
-									misc["ship" + (helper_idx + 1)].hp = [playerShipsPartial3[helper_idx].hp, fleet.ship(helper_idx).hp[1]];
+						if (estCutinId in shipIndexListSpecial) {
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
+								misc["ship" + (partnerPos + 1)].hp = partnerHps[partnerPos];
 							}
 						}
 					} else if (time === "day"
