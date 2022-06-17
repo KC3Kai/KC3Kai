@@ -92,6 +92,10 @@
 				rangefinderAirRadarIds: [142, 460],
 				rangefinderKaiAirRadar: 0,
 				rangefinderKaiAirRadarIds: [460],
+				usNavySurfaceRadar: 0,
+				usNavySurfaceRadarIds: [279, 307, 315, 456],
+				usNavyAirRadar: 0,
+				usNavyAirRadarIds: [278, 279],
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
@@ -163,6 +167,27 @@
 						// extra +1 fp, +1 ev for Akagi Kai Ni E, Kaga K2E
 						ids: [599, 610],
 						multiple: { "houg": 1, "houk": 1 },
+					},
+				],
+			},
+			// Ryuusei Kai (Skilled)
+			"466": {
+				count: 0,
+				byShip: [
+					{
+						// Akagi Kai, Kaga Kai, Taihou Kai, Shoukaku Kai, Zuikaku Kai, Hiryuu Kai, Souryuu Kai
+						ids: [277, 278, 156, 288, 112, 280, 279],
+						multiple: { "houg": 1, "houm": 1 },
+					},
+					{
+						// Shoukaku K2/K2A, Zuikaku K2/K2A
+						ids: [461, 466, 462, 467],
+						multiple: { "houg": 1, "houk": 2, "houm": 1 },
+					},
+					{
+						// Akagi K2/K2E, Kaga K2/K2Go/K2E, Hiryuu K2, Souryuu K2
+						ids: [594, 698, 646, 599, 610, 196, 197],
+						multiple: { "houg": 1, "houk": 1, "houm": 2 },
 					},
 				],
 			},
@@ -3817,6 +3842,34 @@
 					},
 				},
 			},
+			// 5inch Twin Gun Mount (Secondary Armament) Concentrated Deployment
+			"467": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						// Bugged currently
+						//multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						synergy: [
+							{
+								flags: [ "usNavySurfaceRadar" ],
+								single: { "houg": 1, "tyku": 1, "houk": 1, "houm": 2 },
+							},
+							{
+								flags: [ "usNavyAirRadar" ],
+								single: { "tyku": 2, "houk": 2 },
+							},
+						],
+					},
+				},
+				byClass: {
+					"65": {
+						multiple: { "tyku": 2, "houk": 1 },
+					},
+					"93": "65",
+					"102": "65",
+					"107": "65",
+				},
+			},
 			// 6inch Twin Rapid Fire Gun Mount Mk.XXI
 			"359": {
 				count: 0,
@@ -5980,10 +6033,10 @@
 				count: 0,
 				byNation: {
 					"UnitedStates": {
-						multiple: { "houg": 3, "houk": 4, "saku": 4 },
+						multiple: { "houg": 3, "houk": 4, "saku": 4, "houm": 3 },
 					},
 					"UnitedKingdom": {
-						multiple: { "houg": 2, "houk": 2, "saku": 2 },
+						multiple: { "houg": 2, "houk": 2, "saku": 2, "houm": 2 },
 					},
 					"Australia": "UnitedKingdom",
 				},
@@ -6003,7 +6056,7 @@
 				byShip: {
 					// Tan Yang/Yukikaze K2
 					ids: [651, 656],
-					single: { "houg": 2, "houk": 2, "saku": 3, "leng": 1 },
+					single: { "houg": 2, "houk": 2, "saku": 3, "houm": 2, "leng": 1 },
 				},
 			},
 			// Type 13 Air Radar Kai

@@ -3122,12 +3122,16 @@ KC3改 Ship Object
 				"80": 1.1, "275": 1.1, "541": 1.1, // Nagato
 				"81": 1.1, "276": 1.1, "573": 1.1, // Mutsu
 				"571": 1.1, "576": 1.1,            // Nelson
+				// Colorado?
+				// Maryland?
 			},
 			// x1.15 for Big-7 3rd ship
 			{
 				"80": 1.15, "275": 1.15, "541": 1.15,
 				"81": 1.15, "276": 1.15, "573": 1.15,
 				"571": 1.15, "576": 1.15,
+				// Colorado?
+				// Maryland?
 			},
 		];
 
@@ -3302,7 +3306,7 @@ KC3改 Ship Object
 							{ p1: [591], p2: [592] },      // Kongou + Hiei
 							{ p1: [697], p2: [659] },      // South Dakota + Washington
 							{ p1: [446], p2: [447] },      // Italia + Roma
-							// where is Colorado?
+							{ p1: [1496], p2: [918] },     // Colorado + Maryland
 						];
 						const validPartners = allowedCombinations.find(pair => {
 							const p1Id = fleetObj.ship(1).masterId,
