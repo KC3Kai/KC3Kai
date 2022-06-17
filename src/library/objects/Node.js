@@ -2560,6 +2560,17 @@ Used by SortieManager
 
 				let eHp = attack.ehp || this.maxHPs.enemy[targetIndex];
 				const unexpectedFlag = isLand || KC3Meta.isEventWorld(KC3SortieManager.map_world) || KC3Node.debugPrediction();
+				const updateSpecialCutinModifierIfNecessary = (spAtkTypeArr, dmgIdx, dmgArr) => {
+					if (Array.isArray(spAtkTypeArr)) {
+						const spcutinId = spAtkTypeArr[1];
+						const spcutinInfo = KC3Ship.specialAttackExtendInfo(spcutinId);
+						if (spcutinInfo && spcutinInfo.modFunc) {
+							let shipPos = spcutinInfo.posIndex[dmgIdx];
+							if (dmgArr.length > spcutinInfo.posIndex.length && spcutinId >= 300 && spcutinId < 400) shipPos = spcutinInfo.posIndex2[dmgIdx];
+							if (shipPos !== undefined) spAtkTypeArr[3] = ship[spcutinInfo.modFunc](shipPos);
+						}
+					}
+				};
 
 				// Simulating each attack
 				for (let i = 0; i < damage.length; i++) {
@@ -2590,6 +2601,11 @@ Used by SortieManager
 							power = ship.nightAirAttackPower(isNightContacted);
 						}
 						const shellingPower = power;
+
+						// To fix unexpected damage from non-flagship for Touch-like special cutins, modifier in nightSpecialAttackType and daySpecialAttackType arrary should be recalculated by damage index (respected to ship position)
+						updateSpecialCutinModifierIfNecessary(nightSpecialAttackType, i, damage);
+						updateSpecialCutinModifierIfNecessary(daySpecialAttackType, i, damage);
+
 						({power} = ship.applyPrecapModifiers(power, warfareType, engagement, formation,
 							nightSpecialAttackType, this.isNightStart, this.playerCombined, target, damageStatus));
 						const precapPower = power;

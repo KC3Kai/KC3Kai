@@ -3034,14 +3034,14 @@ KC3改 Ship Object
 	 * @return the modifier, 1 by default for unknown conditions.
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 */
-	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(modifierFor2ndShip = false) {
+	KC3Ship.prototype.estimateNagatoClassCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
-			(modifierFor2ndShip ? {
+			(forShipPos > 0 ? {
 				"573": 1.4,               // Mutsu Kai Ni
 				"276": 1.35, "81": 1.35,  // Mutsu
 				"576": 1.25, "571": 1.25, // Nelson
@@ -3051,14 +3051,14 @@ KC3改 Ship Object
 				"576": 1.1, "571": 1.1,   // Nelson
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
-			(modifierFor2ndShip ? {
+			(forShipPos > 0 ? {
 				"541": 1.4,              // Nagato Kai Ni
 				"275": 1.35, "80": 1.35, // Nagato
 			} : {
 				"541": 1.2,              // Nagato Kai Ni
 				"275": 1.15, "80": 1.15, // Nagato
 			}) : {};
-		const baseModifier = modifierFor2ndShip ? 1.2 : 1.4;
+		const baseModifier = forShipPos > 0 ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
 		const apShellModifier = this.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = this.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
@@ -3737,6 +3737,26 @@ KC3改 Ship Object
 			if(altModifier) matched[3] = altModifier;
 		}
 		return matched;
+	};
+
+	/**
+	 * @return special cutin attack extended info, such as damage dealer index, modifier callback.
+	 * @see KC3BattlePrediction.battle.phases.hougeki.parseSpecialCutin - similar settings coded.
+	 */
+	KC3Ship.specialAttackExtendInfo = function(attackType){
+		const knownAttackTypes = {
+			100: { posIndex: [0, 2, 4], partIndex: [2, 4], },
+			101: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
+			102: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateNagatoClassCutinModifier", },
+			103: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateColoradoCutinModifier", },
+			104: { posIndex: [0, 1], partIndex: [1], },
+			300: { posIndex: [1, 2], posIndex2: [1, 1, 2, 2], partIndex: [0, 1, 2], },
+			301: { posIndex: [2, 3], posIndex2: [2, 2, 3, 3], partIndex: [0, 2, 3], },
+			302: { posIndex: [1, 3], posIndex2: [1, 1, 3, 3], partIndex: [0, 1, 3], },
+			400: { posIndex: [0, 1, 2], partIndex: [1, 2], modFunc: "estimateYamatoClassCutinModifier", },
+			401: { posIndex: [0, 0, 1], partIndex: [1], modFunc: "estimateYamatoClassCutinModifier", },
+		};
+		return attackType ? knownAttackTypes[attackType] || {} : knownAttackTypes;
 	};
 
 	/**

@@ -1170,6 +1170,14 @@
 			const battleConds = KC3Calc.collectBattleConditions();
 			const isYasenNotFound = !thisNode.battleNight;
 
+			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
+			const shipIndexListSpecial = {
+				101: [1],
+				102: [1],
+				103: [1, 2],
+				400: [1, 2],
+				401: [1],
+			};
 			// Partially analyse day battle to obtain HP of friendly ships after first and second round of main fleet shelling
 			const phases_single_vs_single1 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
 			const phases_single_vs_single2 = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2', 'hougeki3'];
@@ -1228,28 +1236,9 @@
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
 				slots: ship.slots,
 			});
-			// Index list of partner ships for NagaMutsu/Colorado/Yamato cutins
-			const shipIndexListSpecial = {
-				101: [1],
-				102: [1],
-				103: [1, 2],
-				400: [1, 2],
-				401: [1],
-			};
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
-				const shipIndexList = {
-					100: [2, 4],
-					101: [1],
-					102: [1],
-					103: [1, 2],
-					104: [1],
-					300: [0, 1, 2],
-					301: [0, 2, 3],
-					302: [0, 1, 3],
-					400: [1, 2],
-					401: [1]
-				}[cutin] || [];
+				const shipIndexList = KC3Ship.specialAttackExtendInfo(cutin).partIndex || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
 					misc["ship" + (idx + 1)] = fillShipInfo(ship);
