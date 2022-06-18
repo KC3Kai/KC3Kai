@@ -83,6 +83,9 @@
 		return (crc ^ -1) >>> 0;
 	};
 
+	const matchGimmickApiName = (apiName) => !!apiName.match(/^api_m\d+/);
+	const isMapGimmickTriggered = (apiData) => !!Object.keys(apiData).find(matchGimmickApiName);
+
 	window.TsunDBSubmission = {
 		celldata : {
 			map: null,
@@ -582,11 +585,7 @@
 				this.processEnemy(http, apiData.api_destruction_battle);
 				this.fillGimmickInfo(apiData.api_destruction_battle, true);
 			}
-			if(apiData.api_m1) {
-				this.processGimmick(http);
-			}
-			// Currently not present in /next
-			if(apiData.api_m2) {
+			if(isMapGimmickTriggered(apiData)) {
 				this.processGimmick(http);
 			}
 			if(apiData.api_happening) {
@@ -1061,14 +1060,14 @@
 			}
 		},
 		
-		processGimmick: function(http, trigger = 'port'){
-			const apiData = http ? http.response.api_data : {};
+		processGimmick: function(http, trigger = 'port', battleApiData = {}){
+			const apiData = http ? http.response.api_data : battleApiData;
 			if (http) {
 				if (!(
-					// triggered by next node flag
-					apiData.api_m1 ||
-					// "new" debuff flag, currently not present in next
-					apiData.api_m2 || 
+					// api_m1: triggered by next node flag
+					// api_m2: "new" debuff flag, currently not present in next
+					// api_m10: triggered on airbase moved?
+					isMapGimmickTriggered(apiData) ||
 					// triggered by home port SE flag
 					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
 				)) { return; }
@@ -1080,11 +1079,22 @@
 			this.gimmick.nodes = this.data.edgeID;
 			this.gimmick.kc3version = this.kc3version;
 			this.gimmick.difficulty = this.data.difficulty;
-			if (apiData.api_m1) {
-				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
+			if (trigger === 'port') {
+				if (apiData.api_m1) {
+					this.gimmick.trigger = 'nodeNext';
+				} else if (apiData.api_m2) {
+					this.gimmick.trigger = 'nodeDebuff';
+				} else if (apiData.api_m10) {
+					this.gimmick.trigger = 'airbaseMove';
+				}
 			}
-			if (apiData.api_m2) {
-				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
+			if (isMapGimmickTriggered(apiData)) {
+				this.gimmick.mapflags = {};
+				Object.keys(apiData).forEach(key => {
+					if (matchGimmickApiName(key)) {
+						this.gimmick.mapflags[key] = apiData[key];
+					}
+				});
 			}
 			this.sendData(this.gimmick, 'gimmick');
 		},
@@ -1942,13 +1952,13 @@
 				};
 				this.gimmick.lbasdef.push(obj);
 			}
-			if (apiData.api_m1) {
-				obj.api_m1 = apiData.api_m1;
-				this.processGimmick(false, isAirRaid ? 'nodeAB' : 'nodeBattle');
-			}
-			if (apiData.api_m2) {
-				obj.api_m2 = apiData.api_m2;
-				this.processGimmick(false, isAirRaid ? 'nodeAB2' : 'nodeBattle2');
+			if (isMapGimmickTriggered(apiData)) {
+				Object.keys(apiData).forEach(key => {
+					if (matchGimmickApiName(key)) {
+						obj[key] = apiData[key];
+					}
+				});
+				this.processGimmick(false, (isAirRaid ? 'nodeAB' : 'nodeBattle'), apiData);
 			}
 		},
 		
