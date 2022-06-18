@@ -83,8 +83,8 @@
 		return (crc ^ -1) >>> 0;
 	};
 
-	const matchGimmickApiName = (apiName) => !!apiName.match(/^api_m\d+/);
-	const isMapGimmickTriggered = (apiData) => !!Object.keys(apiData).find(matchGimmickApiName);
+	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
+	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
 
 	window.TsunDBSubmission = {
 		celldata : {
@@ -302,6 +302,7 @@
 			battles: [],
 			lbasdef: [],
 			difficulty: null,
+			mapflags: {},
 			kc3version: null
 		},
 		spAttack: {
@@ -1062,12 +1063,13 @@
 		
 		processGimmick: function(http, trigger = 'port', battleApiData = {}){
 			const apiData = http ? http.response.api_data : battleApiData;
+			const isMapflagsFound = isMapGimmickTriggered(apiData);
 			if (http) {
 				if (!(
 					// api_m1: triggered by next node flag
 					// api_m2: "new" debuff flag, currently not present in next
 					// api_m10: triggered on airbase moved?
-					isMapGimmickTriggered(apiData) ||
+					isMapflagsFound ||
 					// triggered by home port SE flag
 					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
 				)) { return; }
@@ -1075,21 +1077,12 @@
 			this.gimmick.map = this.data.map;
 			this.gimmick.amountofnodes = this.data.nodeInfo.amountOfNodes;
 			this.gimmick.gaugenum = this.data.gaugeNum;
-			this.gimmick.trigger = trigger;
+			this.gimmick.trigger = (trigger === 'port' && isMapflagsFound) ? 'nodeNext' : trigger;
 			this.gimmick.nodes = this.data.edgeID;
 			this.gimmick.kc3version = this.kc3version;
 			this.gimmick.difficulty = this.data.difficulty;
-			if (trigger === 'port') {
-				if (apiData.api_m1) {
-					this.gimmick.trigger = 'nodeNext';
-				} else if (apiData.api_m2) {
-					this.gimmick.trigger = 'nodeDebuff';
-				} else if (apiData.api_m10) {
-					this.gimmick.trigger = 'airbaseMove';
-				}
-			}
-			if (isMapGimmickTriggered(apiData)) {
-				this.gimmick.mapflags = {};
+			this.gimmick.mapflags = {};
+			if (isMapflagsFound) {
 				Object.keys(apiData).forEach(key => {
 					if (matchGimmickApiName(key)) {
 						this.gimmick.mapflags[key] = apiData[key];
