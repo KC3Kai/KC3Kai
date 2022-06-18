@@ -3847,8 +3847,7 @@
 				count: 0,
 				byNation: {
 					"UnitedStates": {
-						// Bugged currently
-						//multiple: { "houg": 1, "tyku": 1, "houk": 2 },
+						multiple: { "houg": 1, "tyku": 1, "houk": 2 },
 						synergy: [
 							{
 								flags: [ "usNavySurfaceRadar" ],
@@ -3862,11 +3861,15 @@
 					},
 				},
 				byClass: {
+					// Iowa Class
 					"65": {
 						multiple: { "tyku": 2, "houk": 1 },
 					},
+					// Colorado Class
 					"93": "65",
+					// South Dakota Class
 					"102": "65",
+					// North Carolina Class
 					"107": "65",
 				},
 			},
