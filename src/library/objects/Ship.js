@@ -3040,23 +3040,24 @@ KC3改 Ship Object
 		const flagshipMstId = locatedFleet.ship(0).masterId;
 		if(!KC3Meta.nagatoClassCutinShips.includes(flagshipMstId)) return 1;
 		const ship2ndMstId = locatedFleet.ship(1).masterId;
+		// Nelson base form not counted: https://twitter.com/CC_jabberwock/status/1538234446024847360
 		const partnerModifierMap = KC3Meta.nagatoCutinShips.includes(flagshipMstId) ?
 			(forShipPos > 0 ? {
 				"573": 1.4,               // Mutsu Kai Ni
-				"276": 1.35, "81": 1.35,  // Mutsu
-				"576": 1.25, "571": 1.25, // Nelson
+				"276": 1.35,              // Mutsu Kai
+				"571": 1.25,              // Nelson Kai
 			} : {
 				"573": 1.2,               // Mutsu Kai Ni
-				"276": 1.15, "81": 1.15,  // Mutsu
-				"576": 1.1, "571": 1.1,   // Nelson
+				"276": 1.15,              // Mutsu Kai
+				"571": 1.1,               // Nelson Kai
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
 			(forShipPos > 0 ? {
-				"541": 1.4,              // Nagato Kai Ni
-				"275": 1.35, "80": 1.35, // Nagato
+				"541": 1.4,               // Nagato Kai Ni
+				"275": 1.35,              // Nagato Kai
 			} : {
-				"541": 1.2,              // Nagato Kai Ni
-				"275": 1.15, "80": 1.15, // Nagato
+				"541": 1.2,               // Nagato Kai Ni
+				"275": 1.15,              // Nagato Kai
 			}) : {};
 		const baseModifier = forShipPos > 0 ? 1.2 : 1.4;
 		const partnerModifier = partnerModifierMap[ship2ndMstId] || 1;
@@ -3107,6 +3108,8 @@ KC3改 Ship Object
 	 * Colorado special cut-in attack modifiers are variant,
 	 * depending on equipment and 2nd and 3rd ship in the fleet.
 	 * @see https://twitter.com/syoukuretin/status/1132763536222969856
+	 * @see https://twitter.com/CC_jabberwock/status/1538198001520283649 - buffed since 2022-06-17
+	 * @see https://twitter.com/CC_jabberwock/status/1538235861178802176 - base remodel no Big7 modifier
 	 */
 	KC3Ship.prototype.estimateColoradoCutinModifier = function(forShipPos = 0) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
@@ -3115,37 +3118,38 @@ KC3改 Ship Object
 		if(!KC3Meta.coloradoCutinShips.includes(flagshipMstId)) return 1;
 
 		const combinedModifierMaps = [
-			// No more mods for flagship?
+			// No extra mod for flagship
 			{},
-			// x1.1 for Big-7 2nd ship
+			// x1.15 for Big-7 2nd ship
 			{
-				"80": 1.1, "275": 1.1, "541": 1.1, // Nagato
-				"81": 1.1, "276": 1.1, "573": 1.1, // Mutsu
-				"571": 1.1, "576": 1.1,            // Nelson
-				// Colorado?
-				// Maryland?
+				"275": 1.15, "541": 1.15,             // Nagato Kai+
+				"276": 1.15, "573": 1.15,             // Mutsu Kai+
+				"576": 1.15,                          // Nelson Kai
+				"601": 1.15, "1496": 1.15,            // Colorado
+				"913": 1.15, "918": 1.15,             // Maryland
 			},
-			// x1.15 for Big-7 3rd ship
+			// x1.17 for Big-7 3rd ship
 			{
-				"80": 1.15, "275": 1.15, "541": 1.15,
-				"81": 1.15, "276": 1.15, "573": 1.15,
-				"571": 1.15, "576": 1.15,
-				// Colorado?
-				// Maryland?
+				"275": 1.17, "541": 1.17,
+				"276": 1.17, "573": 1.17,
+				"576": 1.17,
+				"601": 1.17, "1496": 1.17,
+				"913": 1.17, "918": 1.17,
 			},
 		];
 
 		forShipPos = (forShipPos || 0) % 3;
-		const baseModifier = [1.3, 1.15, 1.15][forShipPos];
+		const baseModifier = [1.5, 1.3, 1.3][forShipPos];
 		const targetShip = locatedFleet.ship(forShipPos),
 			targetShipMstId = targetShip.masterId,
 			targetShipModifier = combinedModifierMaps[forShipPos][targetShipMstId] || 1;
 		// Bug 'mods of 2nd ship's apshell/radar and on-5th-slot-empty-exslot spread to 3rd ship' not applied here, fixed since 2021-10-15
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
+		const sgRadarLateModelModifier = targetShip.equipment(true).some(gear => [456].includes(gear.masterId)) ? 1.15 : 1;
 
 		return baseModifier * targetShipModifier
-			* apShellModifier * surfaceRadarModifier;
+			* apShellModifier * surfaceRadarModifier * sgRadarLateModelModifier;
 	};
 
 	/**
@@ -3330,7 +3334,7 @@ KC3改 Ship Object
 	 * depending on equipment and 2nd and 3rd ship in the fleet.
 	 * @see https://twitter.com/CC_jabberwock/status/1535008448580005888
 	 */
-	KC3Ship.prototype.estimateYamatoClassCutinModifier = function(apiId = 400, forShipPos = 0) {
+	KC3Ship.prototype.estimateYamatoClassCutinModifier = function(forShipPos = 0, apiId = 400) {
 		const locatedFleet = PlayerManager.fleets[this.onFleet() - 1];
 		if(!locatedFleet) return 1;
 		const flagshipMstId = locatedFleet.ship(0).masterId;
@@ -3437,16 +3441,16 @@ KC3改 Ship Object
 			6: ["Cutin", 6, "CutinMainMain", 1.5],
 			7: ["Cutin", 7, "CutinCVCI", 1.25],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
-			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
-			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
+			101: ["Cutin", 101, "CutinNagatoSpecial", 2.61],
+			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			200: ["Cutin", 200, "CutinZuiunMultiAngle", 1.35],
 			201: ["Cutin", 201, "CutinAirSeaMultiAngle", 1.3],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.62],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.82],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.63],
 		};
 		if(atType === undefined) return knownDayAttackTypes;
 		const matched = knownDayAttackTypes[atType] || ["SingleAttack", 0];
@@ -3523,7 +3527,7 @@ KC3改 Ship Object
 			// Yamato-class Cutin since 2022-06-08
 			const yamatoCutinId = this.canDoYamatoClassCutin();
 			if(yamatoCutinId) {
-				results.push(KC3Ship.specialAttackTypeDay(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(yamatoCutinId)));
+				results.push(KC3Ship.specialAttackTypeDay(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(0, yamatoCutinId)));
 			}
 		}
 		const isAirSuperiorityBetter = airBattleId === 1 || airBattleId === 2;
@@ -3724,15 +3728,15 @@ KC3改 Ship Object
 			13: ["Cutin", 13, "CutinTorpLookoutTorpDouble", 1.5],
 			14: ["Cutin", 14, "CutinTorpLookoutDrumDouble", 1.3],
 			100: ["Cutin", 100, "CutinNelsonTouch", 2.0],
-			101: ["Cutin", 101, "CutinNagatoSpecial", 2.27],
-			102: ["Cutin", 102, "CutinMutsuSpecial", 2.27],
-			103: ["Cutin", 103, "CutinColoradoSpecial", 2.26],
+			101: ["Cutin", 101, "CutinNagatoSpecial", 2.61],
+			102: ["Cutin", 102, "CutinMutsuSpecial", 2.61],
+			103: ["Cutin", 103, "CutinColoradoSpecial", 2.68],
 			104: ["Cutin", 104, "CutinKongouSpecial", 2.2],
 			300: ["Cutin", 300, "CutinSubFleetSpecial1", 1.2],
 			301: ["Cutin", 301, "CutinSubFleetSpecial2", 1.2],
 			302: ["Cutin", 302, "CutinSubFleetSpecial3", 1.2],
-			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.81],
-			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.62],
+			400: ["Cutin", 400, "CutinYamatoSpecial3ship", 2.82],
+			401: ["Cutin", 401, "CutinYamatoSpecial2ship", 2.63],
 		};
 		if(spType === undefined) return knownNightAttackTypes;
 		const matched = knownNightAttackTypes[spType] || ["SingleAttack", 0];
@@ -3888,7 +3892,7 @@ KC3改 Ship Object
 				// special Yamato-class Cutin since 2022-06-08
 				const yamatoCutinId = this.canDoYamatoClassCutin();
 				if(yamatoCutinId) {
-					results.push(KC3Ship.specialAttackTypeNight(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(yamatoCutinId)));
+					results.push(KC3Ship.specialAttackTypeNight(yamatoCutinId, null, this.estimateYamatoClassCutinModifier(0, yamatoCutinId)));
 				}
 				// special torpedo related cut-in for destroyers since 2017-10-25,
 				// these types can be rolled for every setup requirements met, beofore regular cutins below
@@ -4156,7 +4160,7 @@ KC3改 Ship Object
 			// 100~103 might use different formula, see #nelsonTouchRate
 			200: 120,
 			201: 130,
-			// 300~302 unknown
+			// 300~302, 400~401 unknown
 		}[atType];
 		if (!typeFactor) { return false; }
 		const {baseValue, isFlagship} = this.daySpAttackBaseRate();
@@ -4201,7 +4205,7 @@ KC3改 Ship Object
 			13: 125,
 			14: 122,
 			// 100~104 might be different, even with day one
-			// 300~302 unknown
+			// 300~302, 400~401 unknown
 		}[spType];
 		if (!typeFactor) { return false; }
 		const {baseValue} = this.nightSpAttackBaseRate(spType);
@@ -4297,7 +4301,7 @@ KC3改 Ship Object
 						"2": 1.1, "3": 1.3, "4": 1.5, "5": 1.3, "6": 1.2,
 						// modifier for 7 (CVCI) unknown, roughly ranged in 1.2~1.3
 						"7": 1.2,
-						// modifiers for [100, 302] (special cutins) still unknown
+						// modifiers for [100, 401] (special cutins) still unknown
 						"200": 1.2, "201": 1.2,
 					})[type[1]] || 1;
 				}
