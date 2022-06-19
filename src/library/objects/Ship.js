@@ -3045,11 +3045,11 @@ KC3改 Ship Object
 			(forShipPos > 0 ? {
 				"573": 1.4,               // Mutsu Kai Ni
 				"276": 1.35,              // Mutsu Kai
-				"571": 1.25,              // Nelson Kai
+				"576": 1.25,              // Nelson Kai
 			} : {
 				"573": 1.2,               // Mutsu Kai Ni
 				"276": 1.15,              // Mutsu Kai
-				"571": 1.1,               // Nelson Kai
+				"576": 1.1,               // Nelson Kai
 			}) :
 			KC3Meta.mutsuCutinShips.includes(flagshipMstId) ?
 			(forShipPos > 0 ? {
