@@ -83,6 +83,9 @@
 		return (crc ^ -1) >>> 0;
 	};
 
+	const matchGimmickApiName = (apiName = "") => !!apiName.match(/^api_m\d+/);
+	const isMapGimmickTriggered = (apiData = {}) => !!Object.keys(apiData).find(matchGimmickApiName);
+
 	window.TsunDBSubmission = {
 		celldata : {
 			map: null,
@@ -299,6 +302,7 @@
 			battles: [],
 			lbasdef: [],
 			difficulty: null,
+			mapflags: {},
 			kc3version: null
 		},
 		spAttack: {
@@ -582,11 +586,7 @@
 				this.processEnemy(http, apiData.api_destruction_battle);
 				this.fillGimmickInfo(apiData.api_destruction_battle, true);
 			}
-			if(apiData.api_m1) {
-				this.processGimmick(http);
-			}
-			// Currently not present in /next
-			if(apiData.api_m2) {
+			if(isMapGimmickTriggered(apiData)) {
 				this.processGimmick(http);
 			}
 			if(apiData.api_happening) {
@@ -1061,14 +1061,15 @@
 			}
 		},
 		
-		processGimmick: function(http, trigger = 'port'){
-			const apiData = http ? http.response.api_data : {};
+		processGimmick: function(http, trigger = 'port', battleApiData = {}){
+			const apiData = http ? http.response.api_data : battleApiData;
+			const isMapflagsFound = isMapGimmickTriggered(apiData);
 			if (http) {
 				if (!(
-					// triggered by next node flag
-					apiData.api_m1 ||
-					// "new" debuff flag, currently not present in next
-					apiData.api_m2 || 
+					// api_m1: triggered by next node flag
+					// api_m2: "new" debuff flag, currently not present in next
+					// api_m10: triggered on airbase moved?
+					isMapflagsFound ||
 					// triggered by home port SE flag
 					(apiData.api_event_object && apiData.api_event_object.api_m_flag2)
 				)) { return; }
@@ -1076,15 +1077,17 @@
 			this.gimmick.map = this.data.map;
 			this.gimmick.amountofnodes = this.data.nodeInfo.amountOfNodes;
 			this.gimmick.gaugenum = this.data.gaugeNum;
-			this.gimmick.trigger = trigger;
+			this.gimmick.trigger = (trigger === 'port' && isMapflagsFound) ? 'nodeNext' : trigger;
 			this.gimmick.nodes = this.data.edgeID;
 			this.gimmick.kc3version = this.kc3version;
 			this.gimmick.difficulty = this.data.difficulty;
-			if (apiData.api_m1) {
-				this.gimmick.trigger = 'nodeNext' + apiData.api_m1;
-			}
-			if (apiData.api_m2) {
-				this.gimmick.trigger = 'nodeDebuff' + apiData.api_m2;
+			this.gimmick.mapflags = {};
+			if (isMapflagsFound) {
+				Object.keys(apiData).forEach(key => {
+					if (matchGimmickApiName(key)) {
+						this.gimmick.mapflags[key] = apiData[key];
+					}
+				});
 			}
 			this.sendData(this.gimmick, 'gimmick');
 		},
@@ -1162,6 +1165,7 @@
 				map: this.data.map,
 				node: thisNode.id
 			};
+			
 			const enemyList = thisNode.eships, isCombined = KC3SortieManager.isCombinedSortie();
 			const result = thisNode.predictedFleetsNight || thisNode.predictedFleetsDay || {};
 			const playerShips = (result.playerMain || []).concat(result.playerEscort || []);
@@ -1194,10 +1198,11 @@
 			const phases_STF_vs_all1       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1'];
 			const phases_STF_vs_all2       = ['airBaseInjection', 'injectionKouku', 'airBaseAttack', 'friendlyKouku', 'kouku', 'kouku2', 'support', 'openingTaisen', 'openingAtack', 'hougeki1', 'hougeki2'];
 
-			// playerShipsPartial1: 1st day shelling round for main fleet
-			// playerShipsPartial2: 2nd day shelling round for main fleet
-			// playerShipsPartial3: 3rd day shelling round for main fleet (single vs CF only)
-			const playerShipsPartial1 =
+			// playerShipsPartial.1: 1st day shelling round for main fleet
+			// playerShipsPartial.2: 2nd day shelling round for main fleet
+			// playerShipsPartial.3: 3rd day shelling round for main fleet (single vs CF only)
+			const playerShipsPartial = [];
+			playerShipsPartial[0] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single1).fleets.playerMain :
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
@@ -1209,7 +1214,7 @@
 				(isYasenNotFound && this.data.fleetType == 2) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all1).fleets.playerMain :
 				{};
-			const playerShipsPartial2 =
+			playerShipsPartial[1] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length <= 6) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_single2).fleets.playerMain :
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
@@ -1219,7 +1224,7 @@
 				(isYasenNotFound && this.data.fleetType == 2) ?
 					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_all2).fleets.playerMain :
 				{};
-			const playerShipsPartial3 =
+			playerShipsPartial[2] =
 				(isYasenNotFound && this.data.fleetType == 0 && enemyList.length == 12) ?
 					result.playerMain || [] :
 				{};
@@ -1236,18 +1241,7 @@
 			});
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
-				const shipIndexList = {
-					100: [2, 4],
-					101: [1],
-					102: [1],
-					103: [1, 2],
-					104: [1],
-					300: [0, 1, 2],
-					301: [0, 2, 3],
-					302: [0, 1, 3],
-					400: [1, 2],
-					401: [1]
-				}[cutin] || [];
+				const shipIndexList = KC3Ship.specialAttackExtendInfo(cutin).partIndex || [];
 				shipIndexList.forEach(idx => {
 					const ship = fleet.ship(idx);
 					misc["ship" + (idx + 1)] = fillShipInfo(ship);
@@ -1284,12 +1278,13 @@
 							? fs.estimateDayAttackType(enemy, true, battleConds.airBattleId)
 							: fs.estimateNightAttackType(enemy, true);
 					}
-					if (cutinType[1] === 0) { break; }
+					const estCutinId = cutinType[1];
+					if (estCutinId === 0) { break; }
 					const cutinEquips = attack.equip || [-1];
 					const specialCutinIds = [100, 101, 102, 103, 104, 300, 301, 302, 400, 401];
 					let misc = {};
 					if (this.sortieSpecialAttack && (
-							specialCutinIds.includes(cutinType[1]) ||
+							specialCutinIds.includes(estCutinId) ||
 							specialCutinIds.includes(cutin)
 						)
 					) { continue; }
@@ -1298,7 +1293,7 @@
 					if (specialCutinIds.includes(cutin)) {
 						this.sortieSpecialAttack = true;
 					}
-					if (specialCutinIds.includes(cutinType[1])) {
+					if (specialCutinIds.includes(estCutinId)) {
 						// Flagship ship Chuuha ignored
 						if (attack.hp / ship.hp[1] <= 0.5) { continue; }
 
@@ -1306,20 +1301,37 @@
 						if (thisNode.dameConConsumed.includes(true)) { continue; }
 
 						// Additional HP checks for partner ships for NagaMutsu, Colorado, Yamato (101, 102, 103, 400, 401)
-						// This check is only necessary for day battle
-						if (isYasenNotFound && cutinType[1] in shipIndexListSpecial) {
-							const hpThreshold = [400, 401].includes(cutinType[1]) ? 0.5 : 0.25;
+						const partnerHps = [];
+						if (estCutinId in shipIndexListSpecial) {
+							// Checks HP thresholds for each partner ship (index from shipIndexListSpecial)
+							const hpThreshold = [400, 401].includes(estCutinId) ? 0.5 : 0.25;
 							let isPartnerShipIncapble = false;
-							if (num === 0) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial1[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
-							if (num === 1) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial2[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
-							if (num === 2) for (let idxk = 0; idxk < shipIndexListSpecial[cutinType[1]].length; idxk++)
-								isPartnerShipIncapble |= playerShipsPartial3[idxk].hp / fleet.ship(idxk).hp[1] <= hpThreshold;
-							if (!!isPartnerShipIncapble) { continue; }
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
+								if (num < 3) {
+									const php = playerShipsPartial[num][partnerPos].hp;
+									const mhp = fleet.ship(partnerPos).hp[1];
+									isPartnerShipIncapble |= (php / mhp <= hpThreshold);
+									partnerHps[partnerPos] = [php, mhp];
+								} else {
+									// should not reach here since insufficient partial prediction
+									partnerHps[partnerPos] = [];
+								}
+							}
+							// This check is only necessary for day battle
+							if (isYasenNotFound && !!isPartnerShipIncapble) { continue; }
 						}
 
 						misc = buildSortieSpecialInfo(fleet, cutinType[1]);
+						// The attack round to check if the trigger rates from the first and second round are different
+						misc.attackRound = num;
+						// Partner ships HP to check if Chuuha affects trigger rate
+						if (estCutinId in shipIndexListSpecial) {
+							for (let psidx in shipIndexListSpecial[estCutinId]) {
+								const partnerPos = shipIndexListSpecial[estCutinId][psidx];
+								misc["ship" + (partnerPos + 1)].hp = partnerHps[partnerPos];
+							}
+						}
 					} else if (time === "day"
 						&& !(thisNode.planeFighters.player[0] === 0
 							&& thisNode.planeFighters.abyssal[0] === 0)) {
@@ -1933,13 +1945,13 @@
 				};
 				this.gimmick.lbasdef.push(obj);
 			}
-			if (apiData.api_m1) {
-				obj.api_m1 = apiData.api_m1;
-				this.processGimmick(false, isAirRaid ? 'nodeAB' : 'nodeBattle');
-			}
-			if (apiData.api_m2) {
-				obj.api_m2 = apiData.api_m2;
-				this.processGimmick(false, isAirRaid ? 'nodeAB2' : 'nodeBattle2');
+			if (isMapGimmickTriggered(apiData)) {
+				Object.keys(apiData).forEach(key => {
+					if (matchGimmickApiName(key)) {
+						obj[key] = apiData[key];
+					}
+				});
+				this.processGimmick(false, (isAirRaid ? 'nodeAB' : 'nodeBattle'), apiData);
 			}
 		},
 		
