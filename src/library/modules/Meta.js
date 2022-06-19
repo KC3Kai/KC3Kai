@@ -113,6 +113,7 @@ Provides access to data on built-in JSON files
 			281: 38,
 			460: 93,
 			465: 38,
+			//467: 95,
 		},
 		// ships with special remodeling animation, ordered by implementated time,
 		// from `main.js/RemodelUtil.isSpKaizo`. btw `full_2x` is used for this case
@@ -145,19 +146,19 @@ Provides access to data on built-in JSON files
 			911, // Yamato K2 -> K2J
 		],
 		// all ships for special cut-in attacks
-		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 184, 634, 635, 639, 640, 911, 916, 546],
+		specialCutinIds: [541, 571, 573, 576, 591, 592, 601, 1496, 913, 918, 184, 634, 635, 639, 640, 911, 916, 546],
 		nelsonTouchShips: [571, 576],
 		nagatoClassCutinShips: [541, 573],
 		nagatoCutinShips: [541],
 		mutsuCutinShips: [573],
-		coloradoCutinShips: [601, 1496],
+		coloradoCutinShips: [601, 1496, 913, 918],
 		kongouCutinShips: [591, 592],
 		subFleetCutinShips: [184, 634, 635, 639, 640],
 		yamatoCutinShips: [911, 916],
 		musashiCutinShips: [546],
 		// from `main.js/CutinYamatoAttack.prototype._getCutinSettings`
 		yamatoCutinPartner1: [546, 360, 178, 392],
-		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496],
+		yamatoCutinPartner2: [546, 541, 573, 553, 554, 411, 412, 576, 364, 591, 592, 697, 659, 446, 447, 1496, 918],
 		// from `main.js/ITEMUP_REPLACE`
 		abyssalItemupReplace: {
 			516: 516, 517: 517, 518: 518, 519: 516, 520: 517, 521: 518, 522: 516, 523: 516, 524: 517, 525: 518,
