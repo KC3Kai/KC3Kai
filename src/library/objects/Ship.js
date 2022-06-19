@@ -3030,7 +3030,7 @@ KC3改 Ship Object
 	/**
 	 * Nagato/Mutsu Kai Ni special cut-in attack modifiers are variant depending on the fleet 2nd ship.
 	 * And there are different modifiers for 2nd ship's 3rd attack.
-	 * @param modifierFor2ndShip - to indicate the returned modifier is used for flagship or 2nd ship.
+	 * @param forShipPos - to indicate the returned modifier is used for flagship or 2nd ship.
 	 * @return the modifier, 1 by default for unknown conditions.
 	 * @see https://wikiwiki.jp/kancolle/%E9%95%B7%E9%96%80%E6%94%B9%E4%BA%8C
 	 */
@@ -3146,7 +3146,7 @@ KC3改 Ship Object
 		// Bug 'mods of 2nd ship's apshell/radar and on-5th-slot-empty-exslot spread to 3rd ship' not applied here, fixed since 2021-10-15
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
-		const sgRadarLateModelModifier = targetShip.equipment(true).some(gear => [456].includes(gear.masterId)) ? 1.15 : 1;
+		const sgRadarLateModelModifier = targetShip.hasEquipment([456]) ? 1.15 : 1;
 
 		return baseModifier * targetShipModifier
 			* apShellModifier * surfaceRadarModifier * sgRadarLateModelModifier;
@@ -3358,7 +3358,7 @@ KC3改 Ship Object
 		const apShellModifier = targetShip.hasEquipmentType(2, 19) ? 1.35 : 1;
 		const surfaceRadarModifier = targetShip.equipment(true).some(gear => gear.isSurfaceRadar()) ? 1.15 : 1;
 		// no this mod for 3rd ship: https://twitter.com/CC_jabberwock/status/1534982170065833985
-		const rangefinderRadarModifier = forShipPos < 2 && targetShip.equipment(true).some(gear => [142, 460].includes(gear.masterId)) ? 1.1 : 1;
+		const rangefinderRadarModifier = forShipPos < 2 && targetShip.hasEquipment([142, 460]) ? 1.1 : 1;
 
 		return baseModifier * partnerShipModifier
 			* apShellModifier * surfaceRadarModifier * rangefinderRadarModifier;
