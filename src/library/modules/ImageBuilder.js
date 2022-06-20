@@ -21,15 +21,14 @@
     'jp': 'jp',
     'kr': 'kr',
     'scn': 'scn',
-    // gkcoi does not support tcn, map them to jp
-    'tcn': 'jp',
-    'tcn-yue': 'jp',
+    'tcn': 'tcn',
+    'tcn-yue': 'tcn',
   };
   const defaultTheme = 'dark';
   const supportedThemes = {
     'dark': 'dark',
-    // gkcoi does not show LBAS for other theme, so map all to dark
-    'legacy': 'dark',
+    // gkcoi added light since 1.3.x
+    'legacy': 'light',
   };
 
   window.KC3ImageBuilder = {
