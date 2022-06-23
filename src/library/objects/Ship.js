@@ -3345,11 +3345,13 @@ KC3改 Ship Object
 		const baseModifier = (apiId === 400 ? [1.5, 1.5, 1.65] : [1.4, 1.55, 1])[forShipPos];
 		const secondShipMstId = locatedFleet.ship(1).masterId,
 			shipModifiersBy2ndPos = (
-				// for Yamato/Musashi
-				[911, 916, 546].includes(secondShipMstId) ? [1.1, 1.2, 1]
-				// for Nagato/Mutsu
+				// for Yamato K2J
+				916 === secondShipMstId ? [1.1, 1.25, 1]
+				// for Yamato K2/Musashi K2
+				: [911, 546].includes(secondShipMstId) ? [1.1, 1.2, 1]
+				// for Nagato-class
 				: [541, 573].includes(secondShipMstId) ? [1.1, 1.1, 1]
-				// for Ise/Hyuuga
+				// for Ise-class
 				: [553, 554].includes(secondShipMstId) ? [1.05, 1.05, 1]
 				: [1, 1, 1]
 			),
