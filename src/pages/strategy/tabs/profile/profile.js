@@ -531,7 +531,7 @@
 			$(".tab_profile .export_csv_shiplist").on("click", function(event){
 				// CSV Headers
 				let exportData = [
-					"ID", "Name", "SType", "Class", "Level", "HP", "FP", "TP", "NB", "AA", "AR", "Luck", "Speed", "Exslot Opened", "Daihatsu Capable", "Tank Capable", "FCF Capable",
+					"ID", "Name", "SType", "Class", "Level", "HP", "FP", "TP", "NB", "AA", "AR", "Luck", "Speed", "Exslot Opened", "Daihatsu Capable", "Tank Capable", "FCF Capable", "Heart Locked",  "EventTag ID"
 				].join(",")+CSV_LINE_BREAKS;
 				// Reload latest ship list first
 				KC3ShipManager.load();
@@ -557,9 +557,44 @@
 						shipObj.canEquipDaihatsu(),
 						shipObj.canEquipTank(),
 						shipObj.canEquipFCF(),
+						!!shipObj.lock,
+						shipObj.sally
 					].join(",")+CSV_LINE_BREAKS;
 				});
 				const filename = self.makeFilename("ShipList", "csv");
+				self.saveFile(filename, exportData, "text/csv");
+			});
+			
+			// Export CSV: Equipment in Possesion List
+			$(".tab_profile .export_csv_equiplist").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "Japanese Name", "Category", "Master ID", "Types", "Stars", "Plane Level", "Locked"
+				].join(",")+CSV_LINE_BREAKS;
+				// Reload latest gear list first
+				KC3GearManager.load();
+				// Sort gears by a reasonable order
+				const sortedList = Object.keys(KC3GearManager.list).map(key => KC3GearManager.list[key]).sort((a, b) => (
+					(a.master() && a.master().api_type[2]) - (b.master() && b.master().api_type[2]) ||
+					a.masterId - b.masterId ||
+					a.itemId - b.itemId
+				));
+				$.each(sortedList, (i, gearObj) => {
+					if(gearObj.isDummy()) return;
+					const gearMst = gearObj.master();
+					exportData += [
+						gearObj.itemId,
+						csvQuoteIfNecessary(gearObj.name()),
+						csvQuoteIfNecessary(gearMst.api_name),
+						csvQuoteIfNecessary(KC3Meta.gearTypeName(2, KC3Master.equip_type_sp(gearMst.api_id, gearMst.api_type[2]))),
+						gearObj.masterId,
+						gearMst.api_type.join('/'),
+						gearObj.stars,
+						gearObj.ace >= 0 ? gearObj.ace : "-",
+						!!gearObj.lock
+					].join(",")+CSV_LINE_BREAKS;
+				});
+				const filename = self.makeFilename("EquipmentList", "csv");
 				self.saveFile(filename, exportData, "text/csv");
 			});
 			
