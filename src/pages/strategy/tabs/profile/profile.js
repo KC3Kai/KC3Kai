@@ -317,37 +317,6 @@
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});*/
-
-			// Export CSV: Abyssal Enemies
-			$(".tab_profile .export_csv_shiplist").on("click", function(event){
-				// CSV Headers
-				let exportData = [
-					"ID", "Name", "SType", "Level", "HP", "FP", "TP", "NB", "AA", "AR", "Luck", "Speed", "Exslot Opened", "Daihatsu Capable", "Tank Capable",
-				].join(",")+CSV_LINE_BREAKS;
-				for (let xid in KC3ShipManager.list) {
-					const shipObj = KC3ShipManager.list[xid];
-					const stats = shipObj.nakedStats();
-					exportData += [
-						shipObj.rosterId,
-						csvQuoteIfNecessary(KC3Meta.shipName(shipObj.masterId)),
-						csvQuoteIfNecessary(shipObj.stype()),
-						shipObj.level,
-						shipObj.hp[1],
-						stats.fp,
-						stats.tp,
-						stats.fp + stats.tp,
-						stats.aa,
-						stats.ar,
-						stats.lk,
-						KC3Meta.shipSpeed(shipObj.speed),
-						shipObj.ex_item !== 0,
-						shipObj.canEquipDaihatsu(),
-						shipObj.canEquipTank()
-					].join(",")+CSV_LINE_BREAKS;
-				}
-				const filename = self.makeFilename("ShipList", "csv");
-				self.saveFile(filename, exportData, "text/csv");
-			});
 			
 			const exportExpedCsv = (forNewExped) => {
 				// CSV Headers
@@ -556,6 +525,42 @@
 						const filename = self.makeFilename("LSC", "csv");
 						self.saveFile(filename, exportData, "text/csv");
 					});
+			});
+			
+			// Export CSV: Shipgirl in Possesion List
+			$(".tab_profile .export_csv_shiplist").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "SType", "Class", "Level", "HP", "FP", "TP", "NB", "AA", "AR", "Luck", "Speed", "Exslot Opened", "Daihatsu Capable", "Tank Capable", "FCF Capable",
+				].join(",")+CSV_LINE_BREAKS;
+				// Reload latest ship list first
+				KC3ShipManager.load();
+				$.each(KC3ShipManager.list, (i, shipObj) => {
+					if(shipObj.isDummy()) return;
+					const shipMst = shipObj.master();
+					const stats = shipObj.nakedStats();
+					exportData += [
+						shipObj.rosterId,
+						csvQuoteIfNecessary(shipObj.name()),
+						csvQuoteIfNecessary(shipObj.stype()),
+						csvQuoteIfNecessary(KC3Meta.ctypeName(shipMst.api_ctype)),
+						shipObj.level,
+						shipObj.hp[1],
+						stats.fp,
+						stats.tp,
+						stats.fp + stats.tp,
+						stats.aa,
+						stats.ar,
+						shipObj.lk[0],
+						csvQuoteIfNecessary(shipObj.speedName()),
+						shipObj.ex_item !== 0,
+						shipObj.canEquipDaihatsu(),
+						shipObj.canEquipTank(),
+						shipObj.canEquipFCF(),
+					].join(",")+CSV_LINE_BREAKS;
+				});
+				const filename = self.makeFilename("ShipList", "csv");
+				self.saveFile(filename, exportData, "text/csv");
 			});
 			
 			// Export CSV: Shipgirl Master Data (Abyssal including internal DB)
