@@ -317,6 +317,37 @@
 						self.saveFile(filename, exportData, "text/csv");
 					});
 			});*/
+
+			// Export CSV: Abyssal Enemies
+			$(".tab_profile .export_csv_shiplist").on("click", function(event){
+				// CSV Headers
+				let exportData = [
+					"ID", "Name", "SType", "Level", "HP", "FP", "TP", "NB", "AA", "AR", "Luck", "Speed", "Exslot Opened", "Daihatsu Capable", "Tank Capable",
+				].join(",")+CSV_LINE_BREAKS;
+				for (let xid in KC3ShipManager.list) {
+					const shipObj = KC3ShipManager.list[xid];
+					const stats = shipObj.nakedStats();
+					exportData += [
+						shipObj.rosterId,
+						csvQuoteIfNecessary(KC3Meta.shipName(shipObj.masterId)),
+						csvQuoteIfNecessary(shipObj.stype()),
+						shipObj.level,
+						shipObj.hp[1],
+						stats.fp,
+						stats.tp,
+						stats.fp + stats.tp,
+						stats.aa,
+						stats.ar,
+						stats.lk,
+						KC3Meta.shipSpeed(shipObj.speed),
+						shipObj.ex_item !== 0,
+						shipObj.canEquipDaihatsu(),
+						shipObj.canEquipTank()
+					].join(",")+CSV_LINE_BREAKS;
+				}
+				const filename = self.makeFilename("ShipList", "csv");
+				self.saveFile(filename, exportData, "text/csv");
+			});
 			
 			const exportExpedCsv = (forNewExped) => {
 				// CSV Headers
