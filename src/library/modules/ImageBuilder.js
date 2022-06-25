@@ -27,8 +27,9 @@
   const defaultTheme = 'dark';
   const supportedThemes = {
     'dark': 'dark',
-    // gkcoi added light since 1.3.x
-    'legacy': 'light',
+    // gkcoi added light since 1.3.x, but buggy
+    //'legacy': 'light',
+    'legacy': 'dark',
   };
 
   window.KC3ImageBuilder = {
