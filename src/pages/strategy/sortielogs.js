@@ -684,7 +684,7 @@
 					eships: eships,
 					eFighterPowers: airpowIntervals,
 					airState: airStateText,
-					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1) || (bomberPhase.api_f_sp_list || []).includes(1),
+					isTorpedoBombingFound: (bomberPhase.api_frai_flag || []).includes(1),
 					isDiveBombingFound: (bomberPhase.api_fbak_flag || []).includes(1),
 					shotdownPercent: enemyPlaneLost,
 					topAntiBomberSquadSlots: topAbSquadSlots,
