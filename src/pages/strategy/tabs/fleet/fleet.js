@@ -173,6 +173,16 @@
 				}
 			});
 
+			$("button#control_export_jervis").on("click", function() {
+				if (self.viewType === "current") {
+					// export land bases from all worlds as long as non-empty & in action
+					KC3ImageBuilder.exportCurrentFleets(0, "jervis", "fleethub", true);
+				} else {
+					var converted = self.fleetsObjToDeckBuilder(self.currentFleetsObj, true);
+					KC3ImageBuilder.openWebsite(converted, "jervis");
+				}
+			});
+
 			const updateHorizontal = () => {
 				if(this.horizontal) {
 					$(".fleet_ships").addClass("horizontal");

@@ -2,6 +2,8 @@
  * Exactly, this module is a data builder of online website Image Builder,
  * which generates the fleets composition image on a canvas, instead of building an image by itself.
  *
+ * Currently, exported json data can be either used by fleethub (Rust remake of jervisOR) by:
+ *   https://github.com/madonoharu/fleethub
  * Currently, exported json data can be either used by kc-web (v2 of aircalc) by:
  *   https://github.com/noro6/kc-web
  * Currently, supports to export data to the web Image Builder hosted by:
@@ -15,7 +17,9 @@
   'use strict';
 
   const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
-  const kcwebBaseUrl = 'https://noro6.github.io/kc-web#import:';
+  const kcwebJaBaseUrl = 'https://noro6.github.io/kc-web#import:';
+  const kcwebEnBaseUrl = 'https://arill.github.io/kc-web#import:';
+  const jervisBaseUrl = 'https://jervis.vercel.app/{0}?predeck=';
   const defaultLang = 'en';
   const supportedLangs = {
     'jp': 'jp',
@@ -45,9 +49,21 @@
   function openWebsite(deckBuilderData, baseUrl, target) {
     let url;
     if (baseUrl === "kcweb") {
+      // Redirect non-CJK user to Arill's en fork
+      const kcwebBaseUrl = (({
+        "jp" : kcwebJaBaseUrl, "kr" : kcwebJaBaseUrl,
+        "scn": kcwebJaBaseUrl, "tcn": kcwebJaBaseUrl, "tcn-yue": kcwebJaBaseUrl,
+      })[ConfigManager.language] || kcwebEnBaseUrl);
       url = kcwebBaseUrl + JSON.stringify({
         "predeck": deckBuilderData
       });
+    } else if (baseUrl === "jervis") {
+      // fleethub url needs language included
+      url = jervisBaseUrl.format(({
+        "jp": "ja", "kr": "ko",
+        "scn": "zh-CN", "tcn": "zh-TW",
+      })[ConfigManager.language] || "en")
+        + encodeURI(JSON.stringify(deckBuilderData));
     } else {
       const json = JSON.stringify(deckBuilderData);
       //console.log("JSON to be exported", json);

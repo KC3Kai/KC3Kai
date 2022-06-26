@@ -600,6 +600,11 @@
 				if(!id) return;
 				KC3ImageBuilder.exportSortie(id, "kcweb", "aircalc", true);
 			};
+			const exportJervisOr = function () {
+				const id = $(this).data("id");
+				if(!id) return;
+				KC3ImageBuilder.exportSortie(id, "jervis", "fleethub", true);
+			};
 			const parseAirRaidFunc = function(airRaid, heavyAirRaid) {
 				if(!airRaid) return {airRaidLostKind: 0};
 				if(airRaid.api_air_base_attack) {
@@ -761,6 +766,9 @@
 					$(".export_kcweb", sortieBox)
 						.data("id", sortie.id)
 						.on("click", exportAirSimulator);
+					$(".export_jervis", sortieBox)
+						.data("id", sortie.id)
+						.on("click", exportJervisOr);
 					var edges = [];
 					if(sortie.nodes && ConfigManager.sr_show_non_battle) {
 						$.each(sortie.nodes, function(index, node) {
