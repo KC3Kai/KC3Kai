@@ -41,6 +41,9 @@
 	color: red;
 	display: none;
 }
+.tab_fleet .fleet_control .export_label {
+	margin: 0 0 0 5px;
+}
 
 .tab_fleet button:disabled {
 }

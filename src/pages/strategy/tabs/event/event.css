@@ -637,13 +637,18 @@
 	margin-top:-2px;
 }
 
-.tab_event .sortie_list .button_tomanager,
-.tab_event .sortie_list .export_img_builder,
-.tab_event .sortie_list .export_kcweb {
+.tab_event .sortie_list .button_tomanager {
 	width:auto;
 	float:none;
 	padding:0px 5px 0px 5px;
 	margin:5px 5px 5px 5px;
+}
+.tab_event .sortie_list .export_btn {
+	width:45%;
+	float:left;
+	white-space:nowrap;
+	padding:0px 5px 0px 5px;
+	margin:5px 0px 5px 5px;
 }
 
 /* Sortie Nodes */

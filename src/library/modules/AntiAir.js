@@ -125,7 +125,7 @@ AntiAir: anti-air related calculations
 	});
 
 	// To match AA gun with minimal tyku of specified value:
-	// kind 12 needs AA stat >= 3 (defined by KC Vita, only 7.7mm MG incaple for now)
+	// kind 12 needs AA stat >= 3 (defined by KC Vita, only 7.7mm MG incapable for now)
 	// kind 33 needs AA stat >= 4
 	// kind 42/44 needs AA stat >= 6
 	function isAAGunWithAtLeast(aa) {
