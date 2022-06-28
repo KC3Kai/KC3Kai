@@ -544,7 +544,7 @@
 								<span>Lv${item.holder.level}</span>
 								<span>x${item.count}</span>`
 						});
-						$("img", holderDiv).addClass("hover")
+						$("img", holderDiv).addClass("shipiconimg hover")
 							.attr("title", `[${masterId}] ${item.holder.name()} #${item.holder.rosterId}\n${getItemList(item.held).join("\n")}`)
 							.attr("alt", masterId)
 							.on("click", shipClickFunc);

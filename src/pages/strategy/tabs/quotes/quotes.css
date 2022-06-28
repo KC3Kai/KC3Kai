@@ -180,9 +180,7 @@
 .tab_quotes .ship_list .ship_entity .ship_icon img {
 	width: 20px;
 	height: 20px;
-	object-fit: cover;
 	border-radius: 50%;
-	image-rendering: auto;
 }
 
 .tab_quotes .ship_list .ship_entity .ship_name {

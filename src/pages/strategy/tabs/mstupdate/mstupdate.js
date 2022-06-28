@@ -177,7 +177,7 @@
 					.attr("data-swf", shipSrc)
 					.click(linkClickFunc);
 				
-				const iconDiv = $("<div class='icon'><img></div>").toggle(false).prependTo(shipBox);
+				const iconDiv = $("<div class='icon shipiconbox'><img /></div>").toggle(false).prependTo(shipBox);
 				$("img", iconDiv).attr("src", KC3Meta.shipIcon(shipData.api_id));
 				shipBox.appendTo(".tab_mstupdate .mstgraph");
 			});

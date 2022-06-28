@@ -369,7 +369,7 @@
 					const vals = this.stats[key];
 					const topFive = getTopFive(vals);
 					for (let i = 0; i < Math.min(5, topFive.length); i++) {
-						str += "<td><img src=" + KC3Meta.getIcon(topFive[i].key) + "></img><span>" + topFive[i].value + "</span></td>";
+						str += "<td><img class='shipiconimg' src='" + KC3Meta.shipIcon(topFive[i].key) + "'></img><span>" + topFive[i].value + "</span></td>";
 					}
 					str += "</tr>";
 					$(".table5").append(str);
