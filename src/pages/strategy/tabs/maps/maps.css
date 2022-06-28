@@ -276,8 +276,6 @@
 	width:30px;
 	height:30px;
 	vertical-align:top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .sortie_combined_ship {
 	position:absolute;
@@ -475,9 +473,7 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
-	object-fit: cover;
 	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .rfleet_name {
 	width:55px;
@@ -568,13 +564,18 @@
 	margin-top:-2px;
 }
 
-.tab_maps .sortie_list .button_tomanager,
-.tab_maps .sortie_list .export_img_builder,
-.tab_maps .sortie_list .export_kcweb {
+.tab_maps .sortie_list .button_tomanager {
 	width:auto;
 	float:none;
 	padding:0px 5px 0px 5px;
 	margin:5px 5px 5px 5px;
+}
+.tab_maps .sortie_list .export_btn {
+	width:45%;
+	float:left;
+	white-space:nowrap;
+	padding:0px 5px 0px 5px;
+	margin:5px 0px 5px 5px;
 }
 
 /* Sortie Nodes */
@@ -641,11 +642,9 @@
 	width:20px;
 	height:20px;
 	vertical-align:top;
-	object-fit: cover;
 }
 .tab_maps .sortie_list .node_result_box.node_drop img {
 	border-radius: 50%;
-	image-rendering: auto;
 }
 .tab_maps .sortie_list .node_result_box .exped {
 	width:10px;

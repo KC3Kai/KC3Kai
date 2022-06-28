@@ -76,8 +76,6 @@
 	width:20px;
 	height:20px;
 	vertical-align:text-bottom;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_mstship .shipRecord .shipName {
 	width:150px;
@@ -585,8 +583,6 @@
 	height:20px;
 	margin-top:-2px;
 	border-radius: 50%;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_mstship .shipInfo .aaci .equipIcons {
 	width:100px;

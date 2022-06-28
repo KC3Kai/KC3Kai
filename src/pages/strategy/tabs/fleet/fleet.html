@@ -63,12 +63,14 @@
 <div class="page_section" id="fleet_description"></div>
 <div class="fleet_control">
 	<button type="button" id="control_save">Save ...</button>
-	<button type="button" id="control_export_dbuilder">Export to DeckBuilder</button>
-	<button type="button" id="control_export_imgkcbuilder">Export to ImgBuilder</button>
+	<label class="export_label">Export to:</label>
+	<button type="button" id="control_export_dbuilder">DeckBuilder</button>
+	<button type="button" id="control_export_imgkcbuilder">ImgBuilder</button>
 	<!--
-		 <button type="button" id="control_export_wctf">Export to WhoCallsTheFleet</button>
+		 <button type="button" id="control_export_wctf">WhoCallsTheFleet</button>
 	-->
-	<button type="button" id="control_export_kcweb">Export to AirSimulator</button>
+	<button type="button" id="control_export_kcweb">AirSimulator</button>
+	<button type="button" id="control_export_jervis">JervisOR</button>
 	<button type="button" id="control_switch_view">Switch view</button>
 </div>
 
@@ -130,7 +132,7 @@
 		<div class="ship_box">
 			<div class="ship_hover">
 				<div class="ship_type">XXX</div>
-				<div class="ship_pic hover"><img/></div>
+				<div class="ship_pic shipiconbox hover"><img/></div>
 				<div class="ship_tiny_stats">
 					<div class="ship_lv">
 						<div class="ship_lv_lbl">Lv.</div>

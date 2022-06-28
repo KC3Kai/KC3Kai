@@ -133,9 +133,8 @@
                     .format(1 + idx);
                 planeListHtml += $("<img />")
                     .attr("src", KC3Meta.shipIcon(p.shipMasterId))
+                    .addClass("shipiconimg")
                     .css(iconStyles)
-                    .css("image-rendering", "auto")
-                    .css("object-fit", "cover")
                     .prop("outerHTML");
                 planeListHtml += $("<img />").attr("src", KC3Meta.itemIcon(p.icon))
                     .css(iconStyles).prop("outerHTML");
@@ -391,7 +390,6 @@
         const shipIconStyles = {
             "width":"13px", "height":"13px",
             "margin-top":"-3px", "margin-right":"2px",
-            "image-rendering":"auto", "object-fit":"cover"
         };
         let text = "";
         for(let idx = 0; idx < maxShipCount; idx++) {
@@ -401,6 +399,7 @@
             text += "<div>#{0}&nbsp;".format(1 + idx);
             text += $("<img />")
                 .attr("src", KC3Meta.shipIcon(ship.masterId))
+                .addClass("shipiconimg")
                 .css(shipIconStyles)
                 .prop("outerHTML");
             const styles = ship.isAbsent() || ship.isDummy() ? "color:#aaa" :

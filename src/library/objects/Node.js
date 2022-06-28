@@ -1833,7 +1833,7 @@ Used by SortieManager
 				const leftHp = chp - friendlyFleetDamages[idx];
 				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
-					.css("margin-top", "-3px").css("object-fit", "cover")
+					.css("margin-top", "-3px").addClass("shipiconimg")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
 				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_id)).css("padding-right", 2);
@@ -1958,7 +1958,7 @@ Used by SortieManager
 		);
 		const stage3Template = $('<table class="stage3"><tr><td colspan="18">Stage3</td></tr>' +
 			'<tr class="ally_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
-			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td><td class="s_7"></td><td class="f_7"></td><td class="dmg_7"></td></tr>' +
 			'<tr class="ally_escort"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
 			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
 			'<tr class="enemy_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
@@ -2013,7 +2013,7 @@ Used by SortieManager
 						if(sid > 0){
 							const shipIcon = $("<img/>").width(14).height(14)
 								.css("margin-top", "-3px").css("margin-right", "3px")
-								.css("object-fit", "cover")
+								.addClass("shipiconimg")
 								// can be regular ship icon for PvP battle
 								.attr("src", KC3Meta.abyssIcon(sid));
 							$(`.enemy_${className} .s_${i+1}`, table).append(shipIcon);
@@ -2046,15 +2046,20 @@ Used by SortieManager
 							.text("#" + (i + (className === "escort" ? 7 : 1)))
 							.css("color", "silver")
 							.css("margin-right", "3px");
+						// sp_list: [1] = bouncing torpedo (skip bombs) since 2022-05-27, treat it as dive bombing because bak_flag: 1 at the same time
+						// see `main.js#AirWarStage3Model.SP_ATTACK_TYPE.BOUNCE_BOM`
 						if(stage3Api.api_fbak_flag[i]){
 							const diveBomber = $("<img/>").width(8).height(8)
 								.css({"float": "left", "margin-left": "-5px", "margin-top": "0px"})
 								.attr("src", KC3Meta.itemIcon(7));
+							const isBounce = ((stage3Api.api_f_sp_list || [])[i] || []).includes(1);
+							if(isBounce) {
+								diveBomber.css("filter", "drop-shadow(0px 0px 2px #911)")
+									.css("-webkit-filter", "drop-shadow(0px 0px 2px #911)");
+							}
 							$(`.ally_${className} .f_${i+1}`, table).append(diveBomber);
 						}
-						// sp_list: 1 = bouncing torpedo (skip bombs) since 2022-05-27, treat it as torpedo for now
-						// see `main.js#AirWarStage3Model.SP_ATTACK_TYPE.BOUNCE_BOM`
-						if(stage3Api.api_frai_flag[i] || (stage3Api.api_f_sp_list || [])[i] == 1){
+						if(stage3Api.api_frai_flag[i]){
 							const torpedoBomber = $("<img/>").width(8).height(8)
 								.css({"float": "left", "margin-left": stage3Api.api_fbak_flag[i] ? "-8px" : "-5px", "margin-top": "7px"})
 								.attr("src", KC3Meta.itemIcon(8));
