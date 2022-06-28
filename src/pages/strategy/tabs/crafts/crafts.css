@@ -33,8 +33,6 @@
 	width:20px;
 	height:20px;
 	margin:2px;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .tab_crafts .build_item .build_flag {
 	width:100px;

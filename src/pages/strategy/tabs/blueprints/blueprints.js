@@ -267,7 +267,7 @@
 					.attr("src", KC3Meta.shipIcon(firstMaterial.info.ship_id_to))
 					.attr("alt", firstMaterial.info.ship_id_to)
 					.click(this.shipClickFunc)
-					.addClass("hover")
+					.addClass("shipiconimg hover")
 					.appendTo(shipDiv);
 				$("<span></span>")
 					.text(KC3Meta.shipName(firstMaterial.info.ship_id_to))
@@ -375,8 +375,7 @@
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_from))
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
-				.css("object-fit", "cover")
-				.css("image-rendering", "auto")
+				.addClass("shipiconimg")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(remodelInfo.ship_id_from)
@@ -389,8 +388,7 @@
 				.attr("src", KC3Meta.shipIcon(remodelInfo.ship_id_to))
 				.width(18).height(18).css("margin-right", 2)
 				.css("vertical-align", "bottom")
-				.css("object-fit", "cover")
-				.css("image-rendering", "auto")
+				.addClass("shipiconimg")
 				.appendTo(line);
 			$("<span></span>").text(
 				KC3Meta.shipName(remodelInfo.ship_id_to)

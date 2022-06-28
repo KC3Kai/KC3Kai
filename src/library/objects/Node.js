@@ -1833,7 +1833,7 @@ Used by SortieManager
 				const leftHp = chp - friendlyFleetDamages[idx];
 				const isTaiha = (leftHp / mhp) < 0.25;
 				const shipIcon = $("<img/>").width(14).height(14)
-					.css("margin-top", "-3px").css("object-fit", "cover")
+					.css("margin-top", "-3px").addClass("shipiconimg")
 					.attr("src", KC3Meta.shipIcon(sid, undefined, true, isTaiha));
 				$(".face", tRow).append(shipIcon).css("padding-right", 3);
 				$(".name", tRow).append(KC3Meta.shipName(shipMaster.api_id)).css("padding-right", 2);
@@ -1958,7 +1958,7 @@ Used by SortieManager
 		);
 		const stage3Template = $('<table class="stage3"><tr><td colspan="18">Stage3</td></tr>' +
 			'<tr class="ally_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
-			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
+			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td><td class="s_7"></td><td class="f_7"></td><td class="dmg_7"></td></tr>' +
 			'<tr class="ally_escort"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
 			'<td class="s_4"></td><td class="f_4"></td><td class="dmg_4"></td><td class="s_5"></td><td class="f_5"></td><td class="dmg_5"></td><td class="s_6"></td><td class="f_6"></td><td class="dmg_6"></td></tr>' +
 			'<tr class="enemy_main"><td class="s_1"></td><td class="f_1"></td><td class="dmg_1"></td><td class="s_2"></td><td class="f_2"></td><td class="dmg_2"></td><td class="s_3"></td><td class="f_3"></td><td class="dmg_3"></td>' +
@@ -2013,7 +2013,7 @@ Used by SortieManager
 						if(sid > 0){
 							const shipIcon = $("<img/>").width(14).height(14)
 								.css("margin-top", "-3px").css("margin-right", "3px")
-								.css("object-fit", "cover")
+								.addClass("shipiconimg")
 								// can be regular ship icon for PvP battle
 								.attr("src", KC3Meta.abyssIcon(sid));
 							$(`.enemy_${className} .s_${i+1}`, table).append(shipIcon);

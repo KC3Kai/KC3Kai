@@ -69,8 +69,6 @@
 .tab_mstupdate .mstship .icon img {
 	height:120px;
 	vertical-align:top;
-	object-fit:cover;
-	image-rendering:auto;
 }
 
 /* GEAR

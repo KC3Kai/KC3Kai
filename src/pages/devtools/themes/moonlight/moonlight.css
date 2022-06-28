@@ -725,7 +725,6 @@ html,body {
 	width:100px;
 	height:20px;
 	margin:-2px 0px 0px 0px;
-	object-fit: cover;
 	background:rgba(0,0,0,0) !important;
 }
 .module.expeditions2 .timer-img img {
@@ -777,7 +776,6 @@ html,body {
 	width:100px;
 	height:20px;
 	margin:-2px 0px 0px 0px;
-	object-fit: cover;
 }
 .module.expeditions2 .timer_box .timer-time {
 	height:13px;
@@ -1015,7 +1013,7 @@ ABYSS FLEET
 	height:16px;
 	vertical-align:top;
 	display:none;
-	object-fit: cover;
+	object-fit:cover;
 }
 .module.activity .abyss_single .sink_icons .shown img {
 	display:inline;
@@ -1053,7 +1051,6 @@ ABYSS FLEET
 	position:relative;
 	top:-1px;
 	left:-1px;
-	object-fit: cover;
 }
 .module.activity .abyss_ships .boss {
 	border-color:#5ef;
@@ -1184,7 +1181,6 @@ ABYSS FLEET
 	height:15px;
 	position:relative;
 	vertical-align:top;
-	object-fit: cover;
 }
 
 /* Battle Flags */
@@ -1320,7 +1316,6 @@ ABYSS FLEET
 	vertical-align:top;
 }
 .module.activity .battle_drop img {
-	object-fit:cover;
 }
 .module.activity .battle_drop img.rounded {
 	border-radius:50%;
@@ -1908,8 +1903,6 @@ ABYSS FLEET
 	width:27px;
 	height:18px;
 	vertical-align:top;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .module.activity .activity_expedition .expres_ship_exp {
 	width:54px;
@@ -2433,7 +2426,6 @@ ABYSS FLEET
 	height:18px;
 	margin-top:-2px;
 	margin-left:-2px;
-	object-fit: cover;
 }
 .module.activity .activity_gunfit .aaci .equipIcons {
 	width:60px;
@@ -2631,7 +2623,6 @@ ABYSS FLEET
 	width: 40px;
 	height: 35px;
 	position: relative;
-	object-fit: cover;
 }
 .module.activity .activity_pvp .pvp_enemy_name {
 	width: 53px;
@@ -2831,7 +2822,6 @@ ABYSS FLEET
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_icon img {
 	width: 28px;
 	height: 28px;
-	object-fit: cover;
 	border-radius:25px;
 }
 .module.activity .activity_pvp .pvpFleetShip .pvp_fleet_ship_name {
@@ -2951,7 +2941,6 @@ ABYSS FLEET
 .module.activity .activity_remodel .remodel_header .assistant_ship img {
 	width: 40px;
 	height: 30px;
-	object-fit: cover;
 }
 .module.activity .activity_remodel .remodel_scrollable {
 	width: 186px;
@@ -3663,7 +3652,7 @@ ABYSS FLEET
 				brightness(0.8);
 	image-rendering: auto;
 	border-radius:15px;
-	object-fit: cover;
+	object-fit:cover;
 }
 .module.summary .summary-saury .summary_text,
 .module.summary .summary-sardines .summary_text {
@@ -3851,8 +3840,8 @@ ABYSS FLEET
 .module.sumstats .improvement_icon img {
 	height:25px;
 	width:25px;
-	object-fit: cover;
-	image-rendering: auto;
+	object-fit:cover;
+	image-rendering:auto;
 }
 .module.sumstats .imp_rejected_icon img {
 	opacity:0.65;
@@ -4094,8 +4083,6 @@ ABYSS FLEET
 	width:60px;
 	height:40px;
 	position:relative;
-	object-fit: cover;
-	image-rendering: auto;
 }
 .v .module.fleet .lship .ship_img img {
 	height:46px;
@@ -4923,10 +4910,8 @@ ABYSS FLEET
 .module.fleet .sship .ship_img img {
 	width:45px;
 	height:40px;
-	object-fit: cover;
 	position:relative;
 	margin:0px 0px 0px 0px;
-	image-rendering: auto;
 }
 .v .module.fleet .sship .ship_img img {
 	width:45px;

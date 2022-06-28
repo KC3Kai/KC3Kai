@@ -251,7 +251,7 @@
 				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
 					if(!Array.isArray(shipIdArr)) return;
 					shipIdArr.sort(orderByRemodel).forEach(shipId => {
-						const shipBox = $("<div><img/></div>").appendTo(appendTo);
+						const shipBox = $("<div class='shipiconbox'><img/></div>").appendTo(appendTo);
 						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
 						const shipMst = KC3Master.ship(shipId);
 						$("img", shipBox).attr("src", KC3Meta.shipIcon(shipId, undefined, false))

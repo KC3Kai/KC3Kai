@@ -20,11 +20,22 @@
 }
 /*
 To resolve over blurred downsized image issue.
-`scroll-behavior` default from Chrome 61, but
+`scroll-behavior` default enabled since Chrome 61, but
 can be enabled via `chrome://flags/#enable-experimental-web-platform-features`.
 */
 @supports (scroll-behavior: smooth) {
 	img[src$=".gif"], img[src$=".png"] {
 		image-rendering: -webkit-optimize-contrast;
 	}
+}
+/*
+Common styles for ship icon images, to fit large square -> smaller circle.
+Known pixelated image issue (downsized <50%?) found,
+if `object-fit: cover` used since Chrome 103, no solution for now.
+*/
+.shipiconbox img,
+.shipiconimg {
+	object-fit: cover;
+	object-position: center;
+	image-rendering: auto;
 }
