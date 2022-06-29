@@ -34,7 +34,7 @@ Known pixelated image issue (downsized <50%?) found,
 if `object-fit: cover` used since Chrome 103, no solution for now.
 */
 .shipiconbox img,
-.shipiconimg {
+img.shipiconimg {
 	object-fit: cover;
 	object-position: center;
 	image-rendering: auto;
