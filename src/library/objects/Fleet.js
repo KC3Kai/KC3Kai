@@ -678,6 +678,7 @@ Contains summary information about a fleet and its ships
 						icon: gearMaster.api_type[3],
 						stars: gear.stars || 0,
 						slotSize: ship.slotSize(gearIdx),
+						accurcy: gearMaster.api_houm || 0,
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
@@ -688,6 +689,10 @@ Contains summary information about a fleet and its ships
 				}
 			});
 		});
+		if(contactPlaneList.length > 0) {
+			// Selection priority order by: accuracy desc, ship position asc
+			contactPlaneList.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
+		}
 		return contactPlaneList;
 	};
 
