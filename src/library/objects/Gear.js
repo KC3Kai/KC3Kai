@@ -1002,7 +1002,7 @@ KC3改 Equipment Object
 			};
 		}
 	};
-	KC3Gear.prototype.isNightContactAircraft = function(returnEffects = false){
+	KC3Gear.prototype.isNightContactAircraft = function(returnEffects){
 		return KC3Gear.isNightContactAircraft(this.masterId, returnEffects);
 	};
 

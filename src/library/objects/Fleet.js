@@ -671,7 +671,7 @@ Contains summary information about a fleet and its ships
 		this.ship().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
 				const gearMaster = gear.master();
-				if(gear.itemId && gearMaster && gearMaster.api_type[3] === 50) {
+				if(gear.itemId && gearMaster && gear.isNightContactAircraft()) {
 					contactPlaneList.push({
 						itemId: itemId,
 						masterId: gear.masterId,

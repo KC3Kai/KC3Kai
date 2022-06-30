@@ -1622,7 +1622,7 @@ KC3改 Ship Object
 			shellingPower += combinedFleetFactor;
 			shellingPower += this.equipmentTotalImprovementBonus("fire");
 		}
-		// 5 is attack power constant also used everywhere
+		// 5 is attack power constant also used everywhere for day time
 		shellingPower += 5;
 		return shellingPower;
 	};
@@ -1635,6 +1635,77 @@ KC3改 Ship Object
 		if(this.isDummy()) { return 0; }
 		return 5 + this.tp[0] + combinedFleetFactor +
 			this.equipmentTotalImprovementBonus("torpedo");
+	};
+
+	/**
+	 * Get pre-cap night battle power of this ship.
+	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b717e35a
+	 */
+	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0){
+		if(this.isDummy()) { return 0; }
+		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
+		// ~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~
+		// new night recon (acc: 2) implemented since 2022-06-30
+		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
+		return nightContact.powerBonus + this.fp[0] + this.tp[0]
+			+ this.equipmentTotalImprovementBonus("yasen");
+	};
+
+	/**
+	 * Get pre-cap carrier night aerial attack power of this ship.
+	 * This formula is the same with the one above besides slot bonus part and filtered equipment stats.
+	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
+	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#nightAS
+	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCVN
+	 */
+	KC3Ship.prototype.nightAirAttackPower = function(nightContactPlaneId = 0, isTargetLand = false){
+		if(this.isDummy()) { return 0; }
+		const equipTotals = {
+			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
+		};
+		// Generally, power from only night capable aircraft will be taken into account.
+		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
+		const isThisArkRoyal = [515, 393].includes(this.masterId);
+		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
+		const nightPlaneMstIds = [];
+		this.equipment().forEach((gear, idx) => {
+			if(gear.exists()) {
+				const master = gear.master();
+				const type2 = master.api_type[2];
+				const type3 = master.api_type[3];
+				const slot = this.slots[idx];
+				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(type3);
+				// Swordfish variants as special torpedo bombers
+				const isSwordfish = [242, 243, 244].includes(gear.masterId);
+				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
+				// Suisei Model 12 (Type 31 Photoelectric Fuze Bombs)
+				const isSpecialNightPlane = [154, 320].includes(gear.masterId);
+				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
+					isNightAircraftType || isSwordfish || isSpecialNightPlane;
+				if(isNightPlane && slot > 0) {
+					nightPlaneMstIds.push(master.api_id);
+					equipTotals.fp += master.api_houg || 0;
+					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
+					if([7, 57].includes(type2)) equipTotals.dv += master.api_baku || 0;
+					if(!isLegacyArkRoyal) {
+						// Bonus from night aircraft slot which also takes bombing and asw stats into account
+						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
+						const ftbaPower = master.api_houg + master.api_raig + master.api_baku + master.api_tais;
+						equipTotals.slotBonus += Math.sqrt(slot) * ftbaPower * (isNightAircraftType ? 0.45 : 0.3);
+					}
+					equipTotals.improveBonus += gear.attackPowerImprovementBonus("yasen");
+				}
+			}
+		});
+		let shellingPower = this.estimateNakedStats("fp");
+		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
+		// No effect for visible FP bonus
+		// TP bonus added since 2021-08-04, not affect slotBonus part, weird multi-planes calc unimplemented
+		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
+		shellingPower += equipTotals.slotBonus;
+		shellingPower += equipTotals.improveBonus;
+		shellingPower += KC3Gear.isNightContactAircraft(nightContactPlaneId, true).powerBonus;
+		return shellingPower;
 	};
 
 	KC3Ship.prototype.isAswAirAttack = function(){
@@ -1707,7 +1778,7 @@ KC3改 Ship Object
 		// 1573: Harbor Princess, 1665: Artillery Imp, 1668: Isolated Island Princess
 		// 1656: Supply Depot Princess - Damaged, 1699: Summer Harbor Princess
 		const dummyEnemyList = [1573, 1665, 1668, 1656, 1699];
-		const basicPower = this.shellingFirePower();
+		const basicPower = this.shellingFirePower(0, true);
 		const basicPowerNight = this.nightBattlePower() - this.tp[0];
 		const resultList = [];
 		// Fill damage lists for each enemy type
@@ -2109,77 +2180,6 @@ KC3改 Ship Object
 			}
 		});
 		return totalPower;
-	};
-
-	/**
-	 * Get pre-cap night battle power of this ship.
-	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b717e35a
-	 */
-	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0){
-		if(this.isDummy()) { return 0; }
-		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
-		// ~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~
-		// new night recon (acc: 2) implemented since 2022-06-30
-		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
-		return nightContact.powerBonus + this.fp[0] + this.tp[0]
-			+ this.equipmentTotalImprovementBonus("yasen");
-	};
-
-	/**
-	 * Get pre-cap carrier night aerial attack power of this ship.
-	 * This formula is the same with the one above besides slot bonus part and filtered equipment stats.
-	 * @see http://kancolle.wikia.com/wiki/Damage_Calculation
-	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#nightAS
-	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCVN
-	 */
-	KC3Ship.prototype.nightAirAttackPower = function(nightContactPlaneId = 0, isTargetLand = false){
-		if(this.isDummy()) { return 0; }
-		const equipTotals = {
-			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
-		};
-		// Generally, power from only night capable aircraft will be taken into account.
-		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
-		const isThisArkRoyal = [515, 393].includes(this.masterId);
-		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
-		const nightPlaneMstIds = [];
-		this.equipment().forEach((gear, idx) => {
-			if(gear.exists()) {
-				const master = gear.master();
-				const type2 = master.api_type[2];
-				const type3 = master.api_type[3];
-				const slot = this.slots[idx];
-				const isNightAircraftType = KC3GearManager.nightAircraftType3Ids.includes(type3);
-				// Swordfish variants as special torpedo bombers
-				const isSwordfish = [242, 243, 244].includes(gear.masterId);
-				// Zero Fighter Model 62 (Fighter-bomber Iwai Squadron)
-				// Suisei Model 12 (Type 31 Photoelectric Fuze Bombs)
-				const isSpecialNightPlane = [154, 320].includes(gear.masterId);
-				const isNightPlane = isLegacyArkRoyal ? isSwordfish :
-					isNightAircraftType || isSwordfish || isSpecialNightPlane;
-				if(isNightPlane && slot > 0) {
-					nightPlaneMstIds.push(master.api_id);
-					equipTotals.fp += master.api_houg || 0;
-					if(!isTargetLand) equipTotals.tp += master.api_raig || 0;
-					if([7, 57].includes(type2)) equipTotals.dv += master.api_baku || 0;
-					if(!isLegacyArkRoyal) {
-						// Bonus from night aircraft slot which also takes bombing and asw stats into account
-						equipTotals.slotBonus += slot * (isNightAircraftType ? 3 : 0);
-						const ftbaPower = master.api_houg + master.api_raig + master.api_baku + master.api_tais;
-						equipTotals.slotBonus += Math.sqrt(slot) * ftbaPower * (isNightAircraftType ? 0.45 : 0.3);
-					}
-					equipTotals.improveBonus += gear.attackPowerImprovementBonus("yasen");
-				}
-			}
-		});
-		let shellingPower = this.estimateNakedStats("fp");
-		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
-		// No effect for visible FP bonus
-		// TP bonus added since 2021-08-04, not affect slotBonus part, weird multi-planes calc unimplemented
-		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
-		shellingPower += equipTotals.slotBonus;
-		shellingPower += equipTotals.improveBonus;
-		shellingPower += KC3Gear.isNightContactAircraft(nightContactPlaneId, true).powerBonus;
-		return shellingPower;
 	};
 
 	/**
