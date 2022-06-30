@@ -96,6 +96,8 @@
 				usNavySurfaceRadarIds: [279, 307, 315, 456],
 				usNavyAirRadar: 0,
 				usNavyAirRadarIds: [278, 279],
+				frenchYellowSecGunMount: 0,
+				frenchYellowSecGunMountIds: [247],
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
@@ -3347,6 +3349,105 @@
 					"73": {
 						multiple: { "houg": 1 },
 					},
+				},
+			},
+			// 38cm Quadruple Gun Mount
+			"245": {
+				count: 0,
+				byClass: {
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houm": 1 },
+						synergy: {
+							flags: [ "frenchYellowSecGunMount" ],
+							byCount: {
+								gear: "frenchYellowSecGunMount",
+								distinct: true,
+								"1": { "houg": 2, "houk": 2, "houm": 2 },
+								"2": { "houg": 4, "houk": 4, "houm": 4 },
+								"3": { "houg": 6, "houk": 6, "houm": 6 },
+							},
+						},
+					},
+				},
+			},
+			// 38cm Quadruple Gun Mount Kai
+			"246": {
+				count: 0,
+				byClass: {
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houm": 1 },
+						synergy: {
+							flags: [ "frenchYellowSecGunMount" ],
+							byCount: {
+								gear: "frenchYellowSecGunMount",
+								distinct: true,
+								"1": { "houg": 2, "houk": 2, "houm": 2 },
+								"2": { "houg": 4, "houk": 4, "houm": 4 },
+								"3": { "houg": 6, "houk": 6, "houm": 6 },
+							},
+						},
+					},
+				},
+			},
+			// 38cm Quadruple Gun Mount Kai Deux
+			"468": {
+				count: 0,
+				starsDist: [],
+				byClass: {
+					// Richelieu Class
+					"79": [
+						{
+							multiple: { "houg": 3, "houm": 1 },
+							synergy: {
+								flags: [ "frenchYellowSecGunMount" ],
+								byCount: {
+									gear: "frenchYellowSecGunMount",
+									distinct: true,
+									"1": { "houg": 2, "houk": 2, "houm": 2 },
+									"2": { "houg": 4, "houk": 4, "houm": 4 },
+									"3": { "houg": 6, "houk": 6, "houm": 6 },
+								},
+							},
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houm": 1 },
+						},
+					],
+				},
+			},
+			// 15.2cm Triple Gun Mount
+			"247": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houm": 2 },
+						},
+						{
+							minStars: 4,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houk": 1, "houm": 1 },
+						},
+					],
 				},
 			},
 			// 14cm Twin Gun Mount

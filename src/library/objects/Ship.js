@@ -969,10 +969,13 @@ KC3改 Ship Object
 			obj.synergyIcons = obj.synergyFlags.map(flag => {
 				if (flag.includes("Radar")) { return 11; }
 				else if (flag.includes("Torpedo")) { return 5; }
+				else if (flag.includes("YellowSecGunMount")) { return 4; }
 				else if (flag.includes("LargeGunMount")) { return 3; }
 				else if (flag.includes("MediumGunMount")) { return 2; }
 				else if (flag.includes("SmallGunMount")) { return 1; }
 				else if (flag.includes("MachineGun")) { return 15; }
+				else if (flag.includes("HighAngleGunMount")) { return 16; }
+				else if (flag.includes("GreenSecGunMount")) { return 16; }
 				else if (flag.includes("skilledLookouts")) { return 32; }
 				else if (flag.includes("searchlight")) { return 24; }
 				else if (flag.includes("rotorcraft") || flag.includes("helicopter")) { return 21; }
@@ -2112,11 +2115,13 @@ KC3改 Ship Object
 	 * Get pre-cap night battle power of this ship.
 	 * @see http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#b717e35a
 	 */
-	KC3Ship.prototype.nightBattlePower = function(isNightContacted = false){
+	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0){
 		if(this.isDummy()) { return 0; }
 		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
-		// but currently only Type 98 Night Recon implemented (acc: 1), so always +5
-		return (isNightContacted ? 5 : 0) + this.fp[0] + this.tp[0]
+		// ~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~
+		// new night recon (acc: 2) implemented since 2022-06-30
+		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
+		return nightContact.powerBonus + this.fp[0] + this.tp[0]
 			+ this.equipmentTotalImprovementBonus("yasen");
 	};
 
@@ -2127,7 +2132,7 @@ KC3改 Ship Object
 	 * @see https://wikiwiki.jp/kancolle/%E6%88%A6%E9%97%98%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#nightAS
 	 * @see https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGCalcCVN
 	 */
-	KC3Ship.prototype.nightAirAttackPower = function(isNightContacted = false, isTargetLand = false){
+	KC3Ship.prototype.nightAirAttackPower = function(nightContactPlaneId = 0, isTargetLand = false){
 		if(this.isDummy()) { return 0; }
 		const equipTotals = {
 			fp: 0, tp: 0, dv: 0, slotBonus: 0, improveBonus: 0
@@ -2173,7 +2178,7 @@ KC3改 Ship Object
 		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
-		shellingPower += isNightContacted ? 5 : 0;
+		shellingPower += KC3Gear.isNightContactAircraft(nightContactPlaneId, true).powerBonus;
 		return shellingPower;
 	};
 
@@ -5195,7 +5200,7 @@ KC3改 Ship Object
 			"Rocket"        : "AntiLand"
 			}[attackTypeNight[0]] || "Shelling";
 		if(attackTypeNight[0] === "AirAttack" && canNightAttack && (hasNightFlag || !hasYasenPower)){
-			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId == 102);
+			let power = shipObj.nightAirAttackPower(battleConds.contactPlaneId);
 			let criticalPower = false;
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);
@@ -5227,7 +5232,7 @@ KC3改 Ship Object
 				)
 			);
 		} else {
-			let power = shipObj.nightBattlePower(battleConds.contactPlaneId == 102);
+			let power = shipObj.nightBattlePower(battleConds.contactPlaneId);
 			let criticalPower = false;
 			let isCapped = false;
 			const spAttackType = shipObj.estimateNightAttackType(undefined, true);

@@ -1028,7 +1028,7 @@
 				kc3version: this.kc3version,
 				starshell: !!thisNode.flarePos,
 				searchlight: !!fleet.estimateUsableSearchlight(),
-				ncontact: thisNode.fcontactId === 102,
+				ncontact: KC3Gear.isNightContactAircraft(thisNode.fcontactId),
 			};
 			const battleData = thisNode.battleDay || thisNode.battleNight;
 			template.formation = battleData.api_formation[0];
@@ -1401,7 +1401,7 @@
 			const enemyShips = (result.enemyMain || []).concat(result.enemyEscort || []);
 			const fleetSent = this.data.sortiedFleet;
 			const starshellActivated = thisNode.flarePos >= 0;
-			const ncontact = thisNode.fcontactId == 102;
+			const ncontact = KC3Gear.isNightContactAircraft(thisNode.fcontactId);
 			const isYasenNotFound = !thisNode.battleNight;
 
 			// Obtain the battle status right after the opening/closing torpdo phase if enemy fleet is CF
@@ -1465,6 +1465,7 @@
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
 						shipInfo.ncontact = ncontact;
+						shipInfo.contactID = thisNode.fcontactId;
 						shipInfo.cutin = attack.ncutin;
 						shipInfo.defenderHP = attack.ehp;
 						shipInfo.attackerHP = attack.hp;
@@ -1542,6 +1543,7 @@
 						shipInfo.starshellActivated = starshellActivated;
 						shipInfo.searchlightPresent = !!fleet.estimateUsableSearchlight();
 						shipInfo.ncontact = ncontact;
+						shipInfo.contactID = thisNode.fcontactId;
 						shipInfo.cutin = attack.ncutin;
 						shipInfo.defenderHP = attack.ehp;
 						shipInfo.attackerHP = attack.hp;

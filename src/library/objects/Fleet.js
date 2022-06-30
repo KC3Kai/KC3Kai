@@ -670,8 +670,8 @@ Contains summary information about a fleet and its ships
 		// Tests confirmed: escaped ships still can be rolled on CF escort fleet, sunk ships unknown, but PvP sunk can
 		this.ship().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
-				if(gear.itemId && gear.masterId === 102) {
-					const gearMaster = gear.master();
+				const gearMaster = gear.master();
+				if(gear.itemId && gearMaster && gearMaster.api_type[3] === 50) {
 					contactPlaneList.push({
 						itemId: itemId,
 						masterId: gear.masterId,
