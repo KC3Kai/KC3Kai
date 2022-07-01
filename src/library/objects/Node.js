@@ -2597,20 +2597,19 @@ Used by SortieManager
 					if ((unexpectedFlag || damage[i] > scratchDamage) && acc[i] > 0) {
 
 						const damageInstance = {};
-						// Use == for auto-casting since `api_touch_plane` api value might be a string
-						const isNightContacted = this.fcontactId == 102;
+						const isNightContacted = KC3Gear.isNightContactAircraft(this.fcontactId);
 						const isCritical = acc[i] === 2;
 						let unexpectedDamage = false,
 							newDepthChargeBonus = 0,
 							remainingAmmoModifier = 1,
 							armor = ((this.eParam[targetIndex] || [])[3] || 0) + eShipEquipArmor;
 
-						let power = time === 'Day' ? ship.shellingFirePower(combinedFleetFactor, isLand)
-							: !isLand ? ship.nightBattlePower(isNightContacted) :
-							ship.shellingFirePower(isNightContacted ? 0 : -5, isLand);
+						let power = time === 'Day'
+							? ship.shellingFirePower(combinedFleetFactor, isLand)
+							: ship.nightBattlePower(this.fcontactId) - (isLand ? ship.tp[0] : 0);
 						if (warfareType === 'Antisub') { power = ship.antiSubWarfarePower(); }
 						if (time === 'Night' && ship.canCarrierNightAirAttack()) {
-							power = ship.nightAirAttackPower(isNightContacted);
+							power = ship.nightAirAttackPower(this.fcontactId, isLand);
 						}
 						const shellingPower = power;
 

@@ -107,6 +107,8 @@
 			"t48": "overall",
 			// land base heavy bomber
 			"t49": "dv",
+			// night recon
+			"t50": "overall",
 			// all types
 			"tall": "type",
 		},
