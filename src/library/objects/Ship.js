@@ -1644,7 +1644,7 @@ KC3改 Ship Object
 	KC3Ship.prototype.nightBattlePower = function(nightContactPlaneId = 0){
 		if(this.isDummy()) { return 0; }
 		// Night contact power bonus based on recon accuracy value: 1: 5, 2: 7, >=3: 9
-		// ~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~
+		// ~~but currently only Type 98 Night Recon implemented (acc: 1), so always +5~~
 		// new night recon (acc: 2) implemented since 2022-06-30
 		const nightContact = KC3Gear.isNightContactAircraft(nightContactPlaneId, true);
 		return nightContact.powerBonus + this.fp[0] + this.tp[0]
