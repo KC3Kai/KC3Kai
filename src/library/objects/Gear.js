@@ -989,7 +989,7 @@ KC3改 Equipment Object
 			// see PSVia `Server_Controllers.BattleLogic.Exec_Midnight.cs#setTouchPlaneValanceValue`
 			const nightContactLevel = isNightRecon ? [1, 1, 2, 3][planeMst.api_houm || 0] || 3 : 0;
 			const powerBonus = isNightRecon ? [0, 5, 7, 9][nightContactLevel] || 0 : 0;
-			// night battle base hit 69
+			// night battle base hit constant is 69
 			const accuracyBaseModifier = isNightRecon ? [1, 1.1, 1.15, 1.2][nightContactLevel] || 1 : 1;
 			// critical trigger threshold based on final hit rate
 			const criticalHitModifier = isNightRecon ? [1.5, 1.57, 1.64, 1.7][nightContactLevel] || 1.5 : 1.5;
