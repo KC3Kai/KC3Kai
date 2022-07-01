@@ -670,24 +670,29 @@ Contains summary information about a fleet and its ships
 		// Tests confirmed: escaped ships still can be rolled on CF escort fleet, sunk ships unknown, but PvP sunk can
 		this.ship().forEach((ship, shipIdx) => {
 			ship.equipment((itemId, gearIdx, gear) => {
-				if(gear.itemId && gear.masterId === 102) {
+				if(gear.isNightContactAircraft()) {
 					const gearMaster = gear.master();
 					contactPlaneList.push({
 						itemId: itemId,
 						masterId: gear.masterId,
 						icon: gearMaster.api_type[3],
 						stars: gear.stars || 0,
-						slotSize: ship.slotSize(gearIdx),
+						accurcy: gearMaster.api_houm || 0,
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						shipLevel: ship.level,
-						// Unknown if slot size affects, no LoS proficiency/improvement/visible bonus found,
+						slotSize: ship.slotSize(gearIdx),
+						// No effect from LoS proficiency/improvement/visible bonus found,
 						// and this PSVita KCKai formula slightly different with wiki's.
 						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku) * Math.sqrt(ship.level)) / 25 : 0
 					});
 				}
 			});
 		});
+		if(contactPlaneList.length > 0) {
+			// Selection priority order by: accuracy desc, ship position asc
+			contactPlaneList.sort((a, b) => b.accurcy - a.accurcy || a.shipOrder - b.shipOrder);
+		}
 		return contactPlaneList;
 	};
 

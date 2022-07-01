@@ -169,7 +169,15 @@ KC3改 Equipment Object
 						if(synergy.byCount) {
 							const gearName = synergy.byCount.gear;
 							const countAmount = gearName === "this" ? gearCount : synergyGears[gearName] || 0;
-							total += (synergy.byCount[countAmount] || {})[apiName] || 0;
+							if(synergy.byCount.distinct) {
+								const flagsKey = synergy.flags.join("_") + "Applied";
+								synergyGears[flagsKey] = (synergyGears[flagsKey] || 0) + 1;
+								if(synergyGears[flagsKey] < 2) {
+									total += (synergy.byCount[countAmount] || {})[apiName] || 0;
+								}
+							} else {
+								total += (synergy.byCount[countAmount] || {})[apiName] || 0;
+							}
 						}
 					}
 				};
@@ -971,6 +979,31 @@ KC3改 Equipment Object
 		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59, 94] : [9, 10, 41, 49, 59, 94];
 		return this.exists() &&
 			type2.indexOf(this.master().api_type[2]) > -1;
+	};
+
+	KC3Gear.isNightContactAircraft = function(mstId = 0, returnEffectsObj = false){
+		const planeMst = KC3Master.slotitem(mstId);
+		const isNightRecon = planeMst && planeMst.api_type[3] === 50;
+		if(!returnEffectsObj) return isNightRecon;
+		else {
+			// see PSVia `Server_Controllers.BattleLogic.Exec_Midnight.cs#setTouchPlaneValanceValue`
+			const nightContactLevel = isNightRecon ? [1, 1, 2, 3][planeMst.api_houm || 0] || 3 : 0;
+			const powerBonus = isNightRecon ? [0, 5, 7, 9][nightContactLevel] || 0 : 0;
+			// night battle base hit constant is 69
+			const accuracyBaseModifier = isNightRecon ? [1, 1.1, 1.15, 1.2][nightContactLevel] || 1 : 1;
+			// critical trigger threshold based on final hit rate
+			const criticalHitModifier = isNightRecon ? [1.5, 1.57, 1.64, 1.7][nightContactLevel] || 1.5 : 1.5;
+			return {
+				isNightRecon,
+				level: nightContactLevel,
+				powerBonus,
+				accuracyBaseModifier,
+				criticalHitModifier,
+			};
+		}
+	};
+	KC3Gear.prototype.isNightContactAircraft = function(returnEffects){
+		return KC3Gear.isNightContactAircraft(this.masterId, returnEffects);
 	};
 
 	KC3Gear.prototype.isAirRadar = function(){
