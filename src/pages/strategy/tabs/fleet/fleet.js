@@ -375,7 +375,7 @@
 				self.currentFleetsObj = fleetsObj;
 				self.sortiedMap = [sortieData.world, sortieData.mapnum].join("");
 				self.sortiedFleet = sortieData.fleetnum;
-				self.sortiedCombined = sortieData.combined;
+				self.sortiedCombined = sortieData.fleetnum == 1 ? sortieData.combined : 0;
 				self.suggestedName = "Sortie #{0} {1}{2}-{3}".format(
 					sortieId, KC3Meta.isEventWorld(sortieData.world) ? "E" : "W", sortieData.world, sortieData.mapnum
 				);

@@ -134,7 +134,7 @@
     if (forImgBuilder) {
       obj.lang = supportedLangs[ConfigManager.language] || defaultLang;
       obj.theme = supportedThemes[ConfigManager.sr_theme] || defaultTheme;
-      // attributes to help select fleets, not supported by gkcoi
+      // attributes to help selecting fleets, not supported by gkcoi
       if (cfType) obj.combined = cfType;
       if (sortiedFleet) obj.sortied = sortiedFleet;
     } else {
