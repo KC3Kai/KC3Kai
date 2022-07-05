@@ -2193,6 +2193,8 @@ KC3改 Ship Object
 			engagementId = 1, formationId = ConfigManager.aaFormation, nightSpecialAttackType = [],
 			isNightStart = false, isCombined = false, targetShipMasterId = 0,
 			damageStatus = this.damageStatus()){
+		// Non-empty attack type tuple means this supposed to be night battle
+		const isNightBattle = nightSpecialAttackType.length > 0;
 		// Engagement modifier
 		let engagementModifier = (warfareType === "Aerial" ? [] : [0, 1, 0.8, 1.2, 0.6])[engagementId] || 1;
 		// Formation modifier, about formation IDs:
@@ -2227,7 +2229,7 @@ KC3改 Ship Object
 			if(shipCnt >= 4) {
 				// Guardian ships counted from 3rd or 4th ship
 				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
-				if(warfareType === "Shelling") {
+				if(warfareType === "Shelling" || (isNightBattle && warfareType === "Torpedo")) {
 					formationModifier = isGuardian ? 1.0 : 0.5;
 				} else if(warfareType === "Antisub") {
 					formationModifier = isGuardian ? 0.6 : 1.0;
@@ -2238,8 +2240,6 @@ KC3改 Ship Object
 				formationModifier = this.collectBattleConditions().isEnemyCombined ? 1.0 : 0.5;
 			}
 		}
-		// Non-empty attack type tuple means this supposed to be night battle
-		const isNightBattle = nightSpecialAttackType.length > 0;
 		const canNightAntisub = warfareType === "Antisub" && (isNightStart || isCombined);
 		// No engagement and formation modifier except night starts / combined ASW attack
 		// Vanguard still applies for night battle
