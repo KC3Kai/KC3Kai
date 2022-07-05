@@ -326,7 +326,6 @@
 				files.push("database.json");
 				let finished = false;
 				const progress = {};
-				const utf8Decoder = new window.TextDecoder("utf-8");
 
 				// Write progress messages and callback
 				if(ekex) {
@@ -390,6 +389,7 @@
 									return dhandle.getFileHandle(`${tableName}.kc3data`).then(fhandle =>
 										fhandle.getFile().then((file) => {
 											
+											const utf8Decoder = new window.TextDecoder("utf-8");
 											let reader = file.stream().getReader();
 											let re = /\r\n|\n|\r/gm;
 											let remainder = "";
@@ -452,7 +452,7 @@
 															currentBatch.push(table.add(record).then(() => progress[tableName][0] += 1 ));
 														}
 														catch (error) {
-															console.error(error);
+															console.error(`Table ${tableName} read fail`);
 															// Add error handling here
 															return false;
 														}
