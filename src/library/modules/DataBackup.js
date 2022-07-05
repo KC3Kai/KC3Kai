@@ -1,6 +1,8 @@
 (function(){
 	"use strict";
 
+	const DBExportBatchSize = 5000;
+
 	window.KC3DataBackup = {
 			saveData : function(elementkey,callback){//Save All Data to file, elementkey can be null
 				var fullDBData={};
@@ -173,6 +175,255 @@
 								});//file acces foreach
 				});//reader.onload
 				reader.readAsArrayBuffer(file_);
-			}//loadData
+			},//loadData
+
+			saveDataToFolder : function(elementkey,callback) {
+				var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
+				const progress = {};
+				let finished = false;
+
+				// FIll progress bar for ekex
+				Promise.all(KC3Database.con.tables.map(table =>
+					table.count().then(count =>
+						progress[table.name] = [0, count]))
+					).then(() => {
+						if(ekex){
+							for (let index in progress) {
+								const prog = progress[index];
+								$(elementkey).append(
+									`<div class = \"${index}\">${index}}] queued : 『0/${prog[1]}}』</div>`);
+							}
+							
+							var alertwhenfinished = function() {
+
+								for (let index in progress) {
+									const prog = progress[index];
+									if(ekex)$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
+								}
+
+								setTimeout(function() {
+									if(finished)  callback();
+									else alertwhenfinished();
+								},1000);
+							};
+							alertwhenfinished();
+						}
+					});
+				
+
+				// Start readonly transaction
+				KC3Database.con.transaction("r", KC3Database.con.tables, () => {
+					// Let user pick folder to dump DB data
+					window.showDirectoryPicker().then(dhandle => {
+						dhandle.requestPermission({ readwrite: true });
+
+						// Localstorage data handler
+						const storagePromise = dhandle.getFileHandle(`storage.json`, { create: true }).then(fhandle =>
+							fhandle.createWritable().then(stream => {
+								const fullStorageData = {}
+								for(var i=0;i<localStorage.length;i++)
+								{
+									var name = localStorage.key(i);
+									fullStorageData[name] = localStorage.getItem(name);
+								}
+								return stream.write(JSON.stringify(fullStorageData)).then(() => {
+									if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">LS complete</div>");
+									stream.close()
+								})
+							})
+						)
+
+						// Map each DB table to start iteration/export
+						Promise.all(KC3Database.con.tables.map((table) => {
+
+							// Create/Append (todo) file stream for each table
+							return dhandle.getFileHandle(`${table.name}.kc3data`, { create: true }).then(fhandle => 
+								fhandle.createWritable()
+								.then(stream => {
+
+									// Iterate over DB in batches to save memory
+									// TODO: Determine a good number for the batch size count
+									const f = offset => {
+										// TODO: Ensure table max count is completed before commencing DB crawl
+										if (offset >= progress[table.name][1]) {
+											return true;
+										}
+
+										return table.offset(offset).limit(DBExportBatchSize).toArray(arr =>
+											// Write each entry into stream
+											Promise.all(arr.map(entry => stream.write(JSON.stringify(entry) + "\n")
+												.then(() => progress[table.name][0] += 1))))
+											.then(() => f(offset + DBExportBatchSize))
+									}
+									// Resolve all DB search and write operations, then close stream
+									return Promise.resolve(f(0))
+										.then(() => stream.close())
+								})
+							)
+						})).then(() => {
+							// Resolve localstorage dump promise
+							storagePromise.then(() =>
+								// Signal to timeout that all export complete
+								finished = true
+							)
+						});
+					});
+				});
+			},//saveDataToFolder
+
+			loadDataFromFolder: function(elementkey,callback) {
+				var ekex = ((typeof elementkey)==="string");
+				const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
+				files.push("storage.json");
+				let finished = false;
+				const progress = {};
+				const utf8Decoder = new TextDecoder("utf-8");
+
+				// Write progress messages and callback
+				if(ekex) {
+					$(elementkey).append("<div class =\"datatransaction\">-DB Transaction Started-</div>");
+					KC3Database.con.tables.forEach(table => {
+						progress[table.name] = [0, 0];
+						$(elementkey).append(`<div class = \"${table.name}\">${table.name} : Loading data </div>`);
+					});
+
+					var alertwhenfinished = function() {
+
+						for (let index in progress) {
+							const prog = progress[index];
+							if(ekex)$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
+						}
+						
+						setTimeout(function() {
+							if(finished) callback();
+							else alertwhenfinished();
+						},1000);
+					};
+					alertwhenfinished();
+				}
+
+				window.showDirectoryPicker().then(dhandle => {
+					dhandle.requestPermission({ read: true });
+					// Check if all files are present in dir
+					Promise.all(files.map(filename => dhandle.getFileHandle(filename))).then(
+						() => {
+							dhandle.getFileHandle("storage.json").then(fh =>
+								fh.getFile().then(file =>
+									file.text().then(text => {
+										window.KC3DataBackup.processStorage(text)
+										if(ekex)$(elementkey).append("<div>LS Transfer Complete<div/>");
+									}
+									)
+								)
+							);
+							// Clean and re-init DB
+							KC3Database.con.close();
+							KC3Database.clear(function(){
+								console.log("Cleaned up old database...");
+							});
+							console.log("Processing tables...");
+							KC3Database.init();
+							KC3Database.con.open();
+
+
+							return Promise.all(KC3Database.con.tables.map(table => 
+								KC3Database.con.transaction("rw!",table,function(){
+									return dhandle.getFileHandle(`${table.name}.kc3data`).then(fhandle =>
+										fhandle.getFile().then((file) => {
+											
+											let reader = file.stream().getReader();
+											let re = /\r\n|\n|\r/gm;
+											let remainder = "";
+											let startIndex = 0;
+											
+											/** File streaming process
+											 * 
+											 * 	1) Read a chunk of bytes from the file
+											 * 	2) Decode and add the bytes into a buffer
+											 * 	3) Check if a new line delimiter exists in the buffer
+											 * 	4) If the delimiter exists, slice the buffer
+											 *  5) If the buffer slice is not empty, add the slice into the DB
+											 * 	6) If the slice is empty, we have reached the end-of-file and can exit
+											 * 	7) If no delimiter exists, exit if there is no remaining bytes in the file to be read
+											 *  8) Goto 1
+											 */
+
+											const f = ((chunk, done) => {
+
+												// Promise array for adding entries for current chunk
+												const currentBatch = [];
+
+												// Add new data from file into buffer
+												remainder = remainder.substr(startIndex);
+												chunk = chunk ? utf8Decoder.decode(chunk, {stream: true}) : "";
+												remainder += chunk;
+												// Search buffer for the newline delimiter
+												let result = re.exec(remainder);
+
+												
+												// If there is no current match, we reset the starting index
+												if (!result) {
+													startIndex = re.lastIndex = 0;
+
+													// If there is no current match and we are done with file reading, exit
+													if (done) {
+														return true;
+													}
+												}
+												
+												// Process the line if there is a matched newline
+												// Usually there is multiple lines pulled in one go, so process all of them at once
+												while (!!result) {
+													
+													// Substring line from current buffer
+													const line = remainder.substr(startIndex, result.index);
+													
+													// Advance buffer position
+													startIndex = re.lastIndex;
+													remainder = remainder.substr(startIndex);
+													startIndex = re.lastIndex = 0;
+
+													// Parse the buffer into an object and add it into the DB
+													if (line != "") {
+														progress[table.name][1] += 1;
+														try {
+															let record = JSON.parse(line);
+															if(["enemy", "encounters"].indexOf(table.name) == -1){
+																delete record.id;
+															}
+															currentBatch.push(table.add(record).then(() => progress[table.name][0] += 1 ));
+														}
+														catch {
+															console.debug(line);
+															// Add error handling here
+															return false;
+														}
+
+													// If the line is empty, we have reached the end of file
+													} else if (line == "") { // EOF
+														return true;
+													}
+
+													result = re.exec(remainder);
+												}
+
+												// If there are still lines in the buffer or data in the file, continue
+												// Resolve current batch of entries before reading next batch of file data
+												return Promise.all(currentBatch).then(() => reader.read().then(({value, done}) => f(value, done)));
+												
+											});
+											return reader.read().then(({value, done}) => f(value, done));
+										})
+									)
+								})
+							))
+						},
+						() => alert("Missing files, aborting import")
+					).then(() => finished = true)
+
+					
+				});								
+			}//loadDataFromFolder
+			
 	};
 })();

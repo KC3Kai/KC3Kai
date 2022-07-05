@@ -72,6 +72,33 @@
 			$(".tab_databackup .import_file").on("change", function(event){
 				filename = event.target.files[0];
 			});
+
+			$(".tab_databackup .export_data2").on("click", function(){ //export data
+				sav = true;
+				if(confirm("Are you sure you want to export your data?")){
+					$(".tab_databackup .dataselect").hide();
+					$(".tab_databackup .processDisplay").show();
+					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText",function(){
+							alert("finished!");
+							$(".tab_databackup .dataselect").show();
+							$(".tab_databackup .processDisplay").hide();
+					});
+				}
+			});
+
+			$(".tab_databackup .import_data2").on("click", function(){ //overwrite_data
+				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
+				if(confirm("This will overwrite all of your KC3 data! Are you sure?")){
+					$(".tab_databackup .dataselect").hide();
+					$(".tab_databackup .processDisplay").show();
+					window.KC3DataBackup.loadDataFromFolder(".tab_databackup .processDisplay .processText",function(){
+						alert("Finished! Will reload this page.");
+						$(".tab_databackup .dataselect").show();
+						$(".tab_databackup .processDisplay").hide();
+						window.location.reload();
+					});
+				}
+			});
 		}
 	};
 
