@@ -177,13 +177,21 @@
 				reader.readAsArrayBuffer(file_);
 			},//loadData
 
-			saveDataToFolder : function(elementkey,callback) {
+			saveDataToFolder : function(elementkey, callback, incremental=false) {
+
+				if (navigator.chromeVersion < 86) {
+					alert("This feature is only supported on Chrome v86 and later");
+					return;
+				}
+
 				var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
 				const progress = {};
 				let finished = false;
+				const initialPromises = [];
+				let writableOptions = {};
 
-				// FIll progress bar for ekex
-				Promise.all(KC3Database.con.tables.map(table =>
+				// Fill progress bar for ekex
+				initialPromises.push(Promise.all(KC3Database.con.tables.map(table =>
 					table.count().then(count =>
 						progress[table.name] = [0, count]))
 					).then(() => {
@@ -191,16 +199,16 @@
 							for (let index in progress) {
 								const prog = progress[index];
 								$(elementkey).append(
-									`<div class = \"${index}\">${index}}] queued : 『0/${prog[1]}}』</div>`);
+									`<div class = \"${index}\">${index}}] queued : 『0/${prog[1]}』</div>`);
 							}
-							
+
 							var alertwhenfinished = function() {
 
 								for (let index in progress) {
 									const prog = progress[index];
 									if(ekex)$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
 								}
-
+			
 								setTimeout(function() {
 									if(finished)  callback();
 									else alertwhenfinished();
@@ -208,19 +216,33 @@
 							};
 							alertwhenfinished();
 						}
-					});
-				
+					}));
 
 				// Start readonly transaction
-				KC3Database.con.transaction("r", KC3Database.con.tables, () => {
+				KC3Database.con.transaction("r", KC3Database.con.tables, () => 
 					// Let user pick folder to dump DB data
 					window.showDirectoryPicker().then(dhandle => {
 						dhandle.requestPermission({ readwrite: true });
 
+						// Open json file keeping entry offset
+						if (incremental) {
+							writableOptions = { keepExistingData: true };
+							initialPromises.push(dhandle.getFileHandle('database.json')
+							.then(fhandle => fhandle.getFile()
+							.then(file => file.text()
+							.then(text => {
+								const tableOffset = JSON.parse(text);
+								for (let index in tableOffset) {
+									// Update existing backup entry count
+									progress[index][0] = tableOffset[index];
+								}
+							}))));
+						}
+
 						// Localstorage data handler
 						const storagePromise = dhandle.getFileHandle(`storage.json`, { create: true }).then(fhandle =>
 							fhandle.createWritable().then(stream => {
-								const fullStorageData = {}
+								const fullStorageData = {};
 								for(var i=0;i<localStorage.length;i++)
 								{
 									var name = localStorage.key(i);
@@ -228,24 +250,31 @@
 								}
 								return stream.write(JSON.stringify(fullStorageData)).then(() => {
 									if(ekex)$(elementkey).append("<div class =\"localstorageprocess\">LS complete</div>");
-									stream.close()
-								})
+									return stream.close();
+								});
 							})
-						)
+						);
 
 						// Map each DB table to start iteration/export
-						Promise.all(KC3Database.con.tables.map((table) => {
+						return Promise.all(initialPromises).then(() => Promise.all(KC3Database.con.tables.map((table) => {
 
-							// Create/Append (todo) file stream for each table
+							// Create/Append file stream for each table
 							return dhandle.getFileHandle(`${table.name}.kc3data`, { create: true }).then(fhandle => 
-								fhandle.createWritable()
+								fhandle.createWritable(writableOptions)
 								.then(stream => {
+
+									// Move writestream to EOF if needed
+									let setup = 1;
+									if (incremental) {
+										setup = fhandle.getFile().then(file => stream.seek(file.size));
+									}
+									const initialOffset = progress[table.name][0];
+									const lastEntry = progress[table.name][1];
 
 									// Iterate over DB in batches to save memory
 									// TODO: Determine a good number for the batch size count
 									const f = offset => {
-										// TODO: Ensure table max count is completed before commencing DB crawl
-										if (offset >= progress[table.name][1]) {
+										if (offset >= lastEntry) {
 											return true;
 										}
 
@@ -253,25 +282,44 @@
 											// Write each entry into stream
 											Promise.all(arr.map(entry => stream.write(JSON.stringify(entry) + "\n")
 												.then(() => progress[table.name][0] += 1))))
-											.then(() => f(offset + DBExportBatchSize))
-									}
+											.then(() => f(offset + DBExportBatchSize));
+									};
 									// Resolve all DB search and write operations, then close stream
-									return Promise.resolve(f(0))
-										.then(() => stream.close())
+									return Promise.resolve(setup)
+										.then(() => Promise.resolve(f(initialOffset))
+										.then(() => stream.close()));
 								})
-							)
-						})).then(() => {
+							);
+						}))).then(() => {
 							// Resolve localstorage dump promise
-							storagePromise.then(() =>
-								// Signal to timeout that all export complete
-								finished = true
-							)
+							storagePromise
+							.then(() =>
+								// Write exported entry count per table
+								dhandle.getFileHandle('database.json', { create: true })
+								.then(fhandle => fhandle.createWritable()
+								.then(stream => {
+									const offset = {};
+									for (let index in progress) {
+										offset[index] = progress[index][0];
+									}
+									return stream.write(JSON.stringify(offset))
+									.then(() => stream.close().then(() => finished = true));
+								}))
+							);
+						}, () => {
+							alert("Export failed");
 						});
-					});
-				});
+					})
+				);
 			},//saveDataToFolder
 
-			loadDataFromFolder: function(elementkey,callback) {
+			loadDataFromFolder: function(elementkey, callback) {
+
+				if (navigator.chromeVersion < 86) {
+					alert("This feature is only supported on Chrome v86 and later");
+					return;
+				}
+
 				var ekex = ((typeof elementkey)==="string");
 				const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
 				files.push("storage.json");
@@ -310,7 +358,7 @@
 							dhandle.getFileHandle("storage.json").then(fh =>
 								fh.getFile().then(file =>
 									file.text().then(text => {
-										window.KC3DataBackup.processStorage(text)
+										window.KC3DataBackup.processStorage(text);
 										if(ekex)$(elementkey).append("<div>LS Transfer Complete<div/>");
 									}
 									)
@@ -348,7 +396,7 @@
 											 *  8) Goto 1
 											 */
 
-											const f = ((chunk, done) => {
+											const f = (chunk, done) => {
 
 												// Promise array for adding entries for current chunk
 												const currentBatch = [];
@@ -393,8 +441,8 @@
 															}
 															currentBatch.push(table.add(record).then(() => progress[table.name][0] += 1 ));
 														}
-														catch {
-															console.debug(line);
+														catch (error) {
+															console.error(error);
 															// Add error handling here
 															return false;
 														}
@@ -411,7 +459,7 @@
 												// Resolve current batch of entries before reading next batch of file data
 												return Promise.all(currentBatch).then(() => reader.read().then(({value, done}) => f(value, done)));
 												
-											});
+											};
 											return reader.read().then(({value, done}) => f(value, done));
 										})
 									)
