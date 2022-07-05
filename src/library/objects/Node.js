@@ -1490,7 +1490,7 @@ Used by SortieManager
 		if(showEnemyDamage && battleData && battleData.api_e_nowhps){
 			// Battle data without `api_e_nowhps` is old, not supported by current prediction module
 			const { fleets } = KC3BattlePrediction.analyzeBattlePartially(
-				battleData, [], // Not concern at damecons and damages of player ships here
+				battleData, {}, // Not concern at damecons and damages of player ships here
 				// Might pre-define this type of phases preset inside module?
 				["nSupport", "airBaseInjection", "airBaseAttack", "support"]
 			);

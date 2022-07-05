@@ -2229,7 +2229,7 @@ KC3改 Ship Object
 			if(shipCnt >= 4) {
 				// Guardian ships counted from 3rd or 4th ship
 				const isGuardian = shipPos >= Math.floor(shipCnt / 2);
-				if(warfareType === "Shelling" || (isNightBattle && warfareType === "Torpedo")) {
+				if(warfareType === "Shelling" || isNightBattle) {
 					formationModifier = isGuardian ? 1.0 : 0.5;
 				} else if(warfareType === "Antisub") {
 					formationModifier = isGuardian ? 0.6 : 1.0;
