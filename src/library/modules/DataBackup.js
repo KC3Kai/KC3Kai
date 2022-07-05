@@ -323,6 +323,7 @@
 				var ekex = ((typeof elementkey)==="string");
 				const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
 				files.push("storage.json");
+				files.push("database.json");
 				let finished = false;
 				const progress = {};
 				const utf8Decoder = new window.TextDecoder("utf-8");
@@ -360,8 +361,7 @@
 									file.text().then(text => {
 										window.KC3DataBackup.processStorage(text);
 										if(ekex)$(elementkey).append("<div>LS Transfer Complete<div/>");
-									}
-									)
+									})
 								)
 							);
 							// Clean and re-init DB
@@ -373,6 +373,16 @@
 							KC3Database.init();
 							KC3Database.con.open();
 
+							dhandle.getFileHandle("database.json").then(fh =>
+								fh.getFile().then(file =>
+									file.text().then(text => {
+										const totalEntries = JSON.parse(text);
+										for (let index in totalEntries) {
+											progress[index][1] = totalEntries[index];
+										}
+									})
+								)
+							);
 
 							return Promise.all(KC3Database.con.tables.map(table => 
 								KC3Database.con.transaction("rw!",table,function(){
@@ -434,7 +444,6 @@
 
 													// Parse the buffer into an object and add it into the DB
 													if (line != "") {
-														progress[tableName][1] += 1;
 														try {
 															let record = JSON.parse(line);
 															if(["enemy", "encounters"].indexOf(tableName) == -1){
@@ -469,9 +478,7 @@
 						},
 						() => alert("Missing files, aborting import")
 					).then(() => finished = true);
-
-					
-				});								
+				});
 			}//loadDataFromFolder
 			
 	};
