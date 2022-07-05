@@ -2864,7 +2864,7 @@ KC3改 Ship Object
 		// regular surface vessel by default
 		const isSurface = !isLand && !isSubmarine;
 		// known PT Imp Packs (also belong to surface)
-		const isPtImp = [1637, 1638, 1639, 1640].includes(targetShipMasterId);
+		const isPtImp = KC3Meta.specialPtImpPackNames.includes(targetShip.api_name);
 		return {
 			isSubmarine,
 			isLand,
@@ -2889,30 +2889,18 @@ KC3改 Ship Object
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) { return 0; }
 		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
-		// Supply Depot Princess
-		if([1653, 1654, 1655, 1656, 1657, 1658,
-			// No bonus for Summer SDP: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
-			// 1753, 1754, // Summer Supply Depot Princess
-			1809, 1810, 1811, 1812, 1813, 1814, // Vacation Mode
-			1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // B
-			1933, 1934, 1935, 1936, 1937, 1938, // B Summer Landing Mode
-			2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // B Vacation Mode
-			2084, 2085, 2086, 2087, 2088, 2079, // C
-			].includes(targetShipMasterId)) {
+		// Supply Depot Princess, but no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
 		}
-		const abyssalIdTypeMap = {
-			// Summer Harbor Princess
-			"1699": 5, "1700": 5, "1701": 5, "1702": 5, "1703": 5, "1704": 5,
-			// Summer Harbor Princess B
-			"2023": 5, "2024": 5, "2025": 6, "2026": 5, "2027": 5, "2028": 5,
-			// Isolated Island Princess
-			"1668": 3, "1669": 3, "1670": 3, "1671": 3, "1672": 3,
-			// Artillery Imp
-			"1665": 2, "1666": 2, "1667": 2,
+		const abyssalNameTypeMap = {
+			"港湾夏姫": 5, // Summer Harbor Princess
+			"離島棲姫": 3, // Isolated Island Princess
+			"砲台小鬼": 2, // Artillery Imp
 		};
-		return abyssalIdTypeMap[targetShipMasterId] || 1;
+		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
+		return foundPrefix ? abyssalNameTypeMap[foundPrefix] : 1;
 	};
 
 	/**
@@ -3391,20 +3379,8 @@ KC3改 Ship Object
 		if(this.hasEquipment(409) && (isLand || targetShipType.isPtImp)) return 8;
 		// Toku Daihatsu + 11th Tank
 		if(this.hasEquipment(230)) return isLand ? 5 : 0;
-		// Abyssal hard land installation could be landing attacked, see `SPECIAL_ENTRY`
-		const isTargetLandable =
-			[1668, 1669, 1670, 1671, 1672, // Isolated Island Princess
-				1665, 1666, 1667, // Artillery Imp
-				1653, 1654, 1655, 1656, 1657, 1658, // Supply Depot Princess
-				// but why Summer Supply Depot Princess not counted?
-				1809, 1810, 1811, 1812, 1813, 1814, // Supply Depot Princess Vacation Mode
-				1921, 1922, 1923, 1924, 1925, 1926, 1994, 1995, // Supply Depot Princess B
-				1933, 1934, 1935, 1936, 1937, 1938, // Supply Depot Princess B Summer Landing Mode
-				2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, // Supply Depot Princess B Vacation Mode
-				2084, 2085, 2086, 2087, 2088, 2079, // Supply Depot Princess C
-				1815, 1816, 1817, 1818, 1819, 1820, // Anchorage Water Demon Vacation Mode
-				1556, 1631, 1632, 1633, 1650, 1651, 1652, 1889, 1890, 1891, 1892, 1893, 1894 // Airfield Princess
-			].includes(targetShipMasterId);
+		// Abyssal land attack target, like Supply Depot Princess, and etc.
+		const isTargetLandable = KC3Meta.specialLandInstallationNames.includes(targetShip.api_name);
 		// T2 Tank
 		if(this.hasEquipment(167)) {
 			const isThisSubmarine = this.isSubmarine();

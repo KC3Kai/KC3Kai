@@ -103,9 +103,16 @@ Provides access to data on built-in JSON files
 			"4171793": 1799, // Abyssal Crane Princess
 			"4171796": 1802, // Abyssal Crane Princess - Damaged
 		},
+		// Abyssal land installation full names, from `main.js/SPECIAL_ENTRY`
+		specialLandInstallationNames: [
+			'離島棲姫', '砲台小鬼', '集積地棲姫', '集積地棲姫-壊', '泊地水鬼 バカンスmode', '集積地棲姫 バカンスmode', '集積地棲姫 バカンスmode-壊', '飛行場姫', '集積地棲姫II', '集積地棲姫II-壊', '集積地棲姫II 夏季上陸mode', '集積地棲姫II 夏季上陸mode-壊', '集積地棲姫II バカンスmode', '集積地棲姫II バカンスmode-壊', '集積地棲姫III', '集積地棲姫III-壊'
+		],
+		// from `main.js/SPECIAL_ENTRY2`
+		specialPtImpPackNames: ['PT小鬼群'],
 		// key: slotitem ID, value: special type2 ID. from:
 		//   Phase1: `Core.swf/vo.MasterSlotItemData.getSlotItemEquipTypeSp()`
 		//   Phase2: `main.js/SlotitemMstModel.prototype.equipTypeSp`
+		//        or `main.js/SlotitemModelHolder.prototype.createUnsetListFromMstId`
 		specialEquipTypeMap: {
 			128: 38,
 			142: 93,
