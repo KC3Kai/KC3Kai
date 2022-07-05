@@ -325,7 +325,7 @@
 				files.push("storage.json");
 				let finished = false;
 				const progress = {};
-				const utf8Decoder = new TextDecoder("utf-8");
+				const utf8Decoder = new window.TextDecoder("utf-8");
 
 				// Write progress messages and callback
 				if(ekex) {
@@ -376,7 +376,8 @@
 
 							return Promise.all(KC3Database.con.tables.map(table => 
 								KC3Database.con.transaction("rw!",table,function(){
-									return dhandle.getFileHandle(`${table.name}.kc3data`).then(fhandle =>
+									const tableName = table.name;
+									return dhandle.getFileHandle(`${tableName}.kc3data`).then(fhandle =>
 										fhandle.getFile().then((file) => {
 											
 											let reader = file.stream().getReader();
@@ -433,13 +434,13 @@
 
 													// Parse the buffer into an object and add it into the DB
 													if (line != "") {
-														progress[table.name][1] += 1;
+														progress[tableName][1] += 1;
 														try {
 															let record = JSON.parse(line);
-															if(["enemy", "encounters"].indexOf(table.name) == -1){
+															if(["enemy", "encounters"].indexOf(tableName) == -1){
 																delete record.id;
 															}
-															currentBatch.push(table.add(record).then(() => progress[table.name][0] += 1 ));
+															currentBatch.push(table.add(record).then(() => progress[tableName][0] += 1 ));
 														}
 														catch (error) {
 															console.error(error);
@@ -462,12 +463,12 @@
 											};
 											return reader.read().then(({value, done}) => f(value, done));
 										})
-									)
+									);
 								})
-							))
+							));
 						},
 						() => alert("Missing files, aborting import")
-					).then(() => finished = true)
+					).then(() => finished = true);
 
 					
 				});								
