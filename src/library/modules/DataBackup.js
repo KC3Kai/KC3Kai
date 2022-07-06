@@ -201,7 +201,7 @@
 				}
 			};
 
-			// Fill progress bar for ekex
+			// Fill progress bar and poll finished state to callback
 			initialPromises.push(Promise.all(KC3Database.con.tables.map(table =>
 				table.count().then(count =>
 					progress[table.name] = [0, count]))
@@ -353,7 +353,7 @@
 				}
 			};
 
-			// Write progress messages and callback
+			// Fill progress, poll finished state and callback
 			if(ekex) {
 				$(elementkey).empty();
 				KC3Database.con.tables.forEach(table => {
@@ -362,19 +362,20 @@
 						`<div class = "${table.name}">${table.name} : Loading data </div>`
 					);
 				});
-
-				const alertWhenFinished = () => {
+			}
+			const alertWhenFinished = () => {
+				if(ekex) {
 					for (let index in progress) {
 						const prog = progress[index];
 						$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
 					}
-					setTimeout(function() {
-						if(finished) callback(finished !== "error");
-						else alertWhenFinished();
-					}, 1000);
-				};
-				alertWhenFinished();
-			}
+				}
+				setTimeout(function() {
+					if(finished) callback(finished !== "error");
+					else alertWhenFinished();
+				}, 1000);
+			};
+			alertWhenFinished();
 
 			window.showDirectoryPicker().then(dhandle => {
 				dhandle.requestPermission({ read: true });

@@ -93,7 +93,7 @@
 				}
 			});
 
-			// Export increment data
+			// Export incremental data
 			$(".tab_databackup .export_update_data2").on("click", function(){
 				sav = true;
 				if(confirm("Are you sure you want to export your data?")){
