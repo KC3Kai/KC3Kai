@@ -61,6 +61,36 @@ AntiAir: anti-air related calculations
 		};
 	}
 
+	function masterIdEq( n ) {
+		return function(mst) {
+			return mst.api_id === n;
+		};
+	}
+
+	function masterIdIn( arr ) {
+		return function(mst) {
+			return arr.includes(mst.api_id);
+		};
+	}
+
+	function stypeIdIn( arr ) {
+		return function(mst) {
+			return arr.includes(mst.api_stype);
+		};
+	}
+
+	function ctypeIdEq( n ) {
+		return function(mst) {
+			return mst.api_ctype === n;
+		};
+	}
+
+	function ctypeIdIn( arr ) {
+		return function(mst) {
+			return arr.includes(mst.api_ctype);
+		};
+	}
+
 	// a predicate combinator, "predAnyOf(f,g)(x)" is the same as "f(x) || g(x)"
 	// test all predicates passed as argument in order,
 	// return the first non-falsy value or "false" if all predicates have failed.
@@ -103,9 +133,9 @@ AntiAir: anti-air related calculations
 	// AA Radar
 	// Surface Radar are excluded by checking whether
 	// the equipment gives AA stat (api_tyku)
-	function isAARadar(mst) {
-		return isRadar(mst) && mst.api_tyku >= 2;
-	}
+	var isAARadar = predAllOf(isRadar, function(mst) {
+		return mst.api_tyku >= 2;
+	});
 
 	// AAFD: check by category (36)
 	var isAAFD = categoryEq(36);
@@ -147,51 +177,34 @@ AntiAir: anti-air related calculations
 	var isRedGun = predAnyOf(
 		iconEq(1),
 		iconEq(2),
-		iconEq(3));
-
-	function is46cmTripleMount(mst) {
-		// 46cm Kai not counted
-		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
-		return mst.api_id === 6; //|| mst.api_id === 276;
-	}
-	
+		iconEq(3)
+	);
 	var isYellowGun = iconEq(4);
 	var isFighter = categoryEq(6);
 	var isDiveBomber = categoryEq(7);
 	var isSeaplaneRecon = categoryEq(10);
-
 	var isLargeCaliberMainGun = categoryEq(3);
 
-	function isBuiltinHighAngleMount(mst) {
-		// use the condition also used in game for future unknown equipment
-		return isHighAngleMount(mst) && mst.api_tyku >= 8;
-	}
+	var isBuiltinHighAngleMount = predAllOf(isHighAngleMount, function(mst) {
+		return mst.api_tyku >= 8;
+	});
 
-	function is10cmTwinHighAngleMountKaiAMG(mst) {
-		// 10cm Twin High-angle Gun Mount Kai + Additional Machine
-		return mst.api_id === 275;
-	}
+	// [276] 46cm Kai not counted
+	// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:363#21
+	var is46cmTripleMount = masterIdEq(6);
 
-	function is12cm30tubeRocketLauncherKai2(mst) {
-		// 12cm 30-tube Rocket Launcher Kai Ni
-		return mst.api_id === 274;
-	}
+	// 12cm 30-tube Rocket Launcher Kai Ni
+	var is12cm30tubeRocketLauncherKai2 = masterIdEq(274);
+	// 10cm Twin High-angle Gun Mount Kai + Additional Machine
+	var is10cmTwinHighAngleMountKaiAMG = masterIdEq(275);
 
-	function isBritishRocketLauncher(mst) {
-		// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284 (UP Rocket Launchers embedded)
-		// 20-tube 7inch UP Rocket Launchers
-		return [300, 301].indexOf(mst.api_id) !== -1;
-	}
-
-	function is20tube7inchUPRocketLaunchers(mst) {
-		// 20-tube 7inch UP Rocket Launchers
-		return mst.api_id === 301;
-	}
-
-	function isBritishAAGun(mst) {
-		// QF 2-pounder Octuple Pom-pom Gun Mount
-		return [191].indexOf(mst.api_id) !== -1;
-	}
+	// 20-tube 7inch UP Rocket Launchers
+	var is20tube7inchUPRocketLaunchers = masterIdEq(301);
+	// QF 2-pounder Octuple Pom-pom Gun Mount
+	var isBritishAAGun = masterIdEq(191);
+	// 16inch Mk.I Triple Gun Mount Kai + FCR Type 284 (UP Rocket Launchers embedded)
+	// 20-tube 7inch UP Rocket Launchers
+	var isBritishRocketLauncher = masterIdIn([300, 301]);
 
 	// GFCS Mk.37
 	var isGfcsRadar = masterIdEq(307);
@@ -200,9 +213,7 @@ AntiAir: anti-air related calculations
 	// 5inch Single Gun Mount Mk.30 Kai
 	var is5inchSingleMountKai = masterIdEq(313);
 	// 5inch Single Gun Mount Mk.30 or +Kai
-	function is5inchSingleMountOrKai(mst) {
-		return [284, 313].indexOf(mst.api_id) !== -1;
-	}
+	var is5inchSingleMountOrKai = masterIdIn([284, 313]);
 
 	// 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 	var is5inchTwinDualMountCD = masterIdEq(362);
@@ -214,9 +225,7 @@ AntiAir: anti-air related calculations
 	// 10cm Twin High-angle Gun Mount Battery Concentrated Deployment
 	var is10cmTwinHighAngleGunMountBatteryCD = masterIdEq(464);
 	// 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni or + Skilled Fire Direction Center
-	function is15mDuplexRangefinderT21AirRadarOrFDC(mst) {
-		return [142, 460].indexOf(mst.api_id) !== -1;
-	}
+	var is15mDuplexRangefinderT21AirRadarOrFDC = masterIdIn([142, 460]);
 
 	// for equipments the coefficient is different for
 	// calculating adjusted ship AA stat and fleet AA stat,
@@ -490,87 +499,6 @@ AntiAir: anti-air related calculations
 		};
 	}
 
-	function isNotSubmarine( mst ) {
-		var stype = mst.api_stype;
-		return [13 /* SS */, 14 /* SSV */].indexOf( stype ) === -1;
-	}
-
-	function isBattleship( mst ) {
-		var stype = mst.api_stype;
-		return [8 /* FBB */, 9 /* BB */, 10 /* BBV */].indexOf( stype ) !== -1;
-	}
-
-	function isAkizukiClass( mst ) {
-		return mst.api_ctype === 54;
-		/*
-		return [
-			421, 330, // Akizuki & Kai
-			422, 346, // Teruzuki & Kai
-			423, 357, // Hatsuzuki & Kai
-			532, 537, // Suzutsuki & Kai
-		].indexOf( mst.api_id ) !== -1;
-		*/
-	}
-
-	function isIseClassKai( mst ) {
-		return mst.api_ctype === 2
-			// if non-Kai excluded
-			&& mst.api_id !== 77 && mst.api_id !== 87;
-			// ~~Ise Kai Ni included, but Hyuuga Kai Ni incapable for both kind 25 and 28~~
-			// https://twitter.com/MadonoHaru/status/1121902964120023040
-			// wtf, it was a bug before 2019-04-30 maint
-			// https://twitter.com/KanColle_STAFF/status/1123197646561136642
-			//&& mst.api_id !== 554;
-	}
-
-	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
-	function isBattleShipKai( mst ) {
-		return [
-			82, // Ise Kai
-			553, // Ise K2
-			88, // Hyuuga Kai
-			554, // Hyuuga K2
-			148, // Musashi Kai
-			546, // Musashi K2
-		].indexOf( mst.api_id ) !== -1;
-	}
-
-	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
-	function isBritishShips( mst ) {
-		return [
-				67, // Queen Elizabeth Class
-				78, // Ark Royal Class
-				82, // Jervis Class
-				88, // Nelson Class
-				// Shelffield not been capable until 2021-2-5 fix
-				// https://twitter.com/KanColle_STAFF/status/1357645300895080449
-				108, // Town Class
-				112, // Illustrious Class
-			].indexOf( mst.api_ctype ) !== -1 ||
-			// Kongou Class Kai Ni, K2C
-			[149, 150, 151, 152, 591, 592].indexOf( mst.api_id ) !== -1;
-	}
-
-	function isYamatoClassKai2( mst ) {
-		return [
-			911, // Yamato K2
-			916, // Yamato K2J
-			546, // Musashi K2
-		].indexOf( mst.api_id ) !== -1;
-	}
-
-	function masterIdEq( n ) {
-		return function(mst) {
-			return mst.api_id === n;
-		};
-	}
-
-	function ctypeIdEq( n ) {
-		return function(mst) {
-			return mst.api_ctype === n;
-		};
-	}
-
 	// Icons used to declare AACI type
 	var surfaceShipIcon = 0, // Means no icon, low priority
 		akizukiIcon = 421,
@@ -614,6 +542,10 @@ AntiAir: anti-air related calculations
 		haMountCdIcon = "16+16",  // 5inch Twin Dual-purpose Gun Mount (Concentrated Deployment)
 		rangefinderRadarIcon = "11+30";  // 15m Duplex Rangefinder + Type 21 Air Radar Kai Ni variants
 
+	// Ships (types/classes) used to declare AACI type
+	var isNotSubmarine = predNot(stypeIdIn( [13 /* SS */, 14 /* SSV */] ));
+	var isBattleship = stypeIdIn( [8 /* FBB */, 9 /* BB */, 10 /* BBV */] );
+	var isAkizukiClass = ctypeIdEq( 54 );
 	var isMusashiK2 = masterIdEq( musashiK2Icon );
 	var isMayaK2 = masterIdEq( mayaK2Icon );
 	var isIsuzuK2 = masterIdEq( isuzuK2Icon );
@@ -634,6 +566,44 @@ AntiAir: anti-air related calculations
 	var isAtlantaClass = ctypeIdEq( 99 );
 	var isYuubariK2 = masterIdEq( 622 );
 
+	function isIseClassKai( mst ) {
+		return mst.api_ctype === 2
+			// if non-Kai excluded
+			&& mst.api_id !== 77 && mst.api_id !== 87;
+			// ~~Ise Kai Ni included, but Hyuuga Kai Ni incapable for both kind 25 and 28~~
+			// https://twitter.com/MadonoHaru/status/1121902964120023040
+			// wtf, it was a bug before 2019-04-30 maint
+			// https://twitter.com/KanColle_STAFF/status/1123197646561136642
+			//&& mst.api_id !== 554;
+	}
+	// Battleships capable for 12cm 30tube Rocket Launcher Kai 2
+	var isBattleShipKai = masterIdIn([
+		82, // Ise Kai
+		553, // Ise K2
+		88, // Hyuuga Kai
+		554, // Hyuuga K2
+		148, // Musashi Kai
+		546, // Musashi K2
+	]);
+	// British-relevant ships can trigger AACI with 20-tube 7inch UP Rocket Launchers
+	var isBritishShips = predAnyOf(ctypeIdIn([
+			67, // Queen Elizabeth Class
+			78, // Ark Royal Class
+			82, // Jervis Class
+			88, // Nelson Class
+			// Shelffield not been capable until 2021-2-5 fix
+			// https://twitter.com/KanColle_STAFF/status/1357645300895080449
+			108, // Town Class
+			112, // Illustrious Class
+		]),
+		// Kongou Class Kai Ni, K2C
+		masterIdIn( [149, 150, 151, 152, 591, 592] )
+	);
+	var isYamatoClassKai2 = masterIdIn([
+		911, // Yamato K2
+		916, // Yamato K2J
+		546, // Musashi K2
+	]);
 
 	// turns a "shipObj" into the list of her equipments
 	// for its parameter function "pred"
