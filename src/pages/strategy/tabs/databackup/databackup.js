@@ -76,44 +76,53 @@
 				filename = event.target.files[0];
 			});
 
-			$(".tab_databackup .export_data2").on("click", function(){ //export data
+			// Export fullset data
+			$(".tab_databackup .export_data2").on("click", function(){
 				sav = true;
 				if(confirm("Are you sure you want to export your data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
-					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText",function(){
-						localStorage.lastBackupTime = Date.now();
-						alert("finished!");
+					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText", function(success){
+						if(success){
+							localStorage.lastBackupTime = Date.now();
+							alert("finished!");
+						}
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
 					});
 				}
 			});
 
-			$(".tab_databackup .export_update_data2").on("click", function(){ //export data
+			// Export increment data
+			$(".tab_databackup .export_update_data2").on("click", function(){
 				sav = true;
 				if(confirm("Are you sure you want to export your data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
-					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText",function(){
-						localStorage.lastBackupTime = Date.now();
-						alert("finished!");
+					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText", function(success){
+						if(success){
+							localStorage.lastBackupTime = Date.now();
+							alert("finished!");
+						}
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
 					}, true);
 				}
-			});			
+			});
 
-			$(".tab_databackup .import_data2").on("click", function(){ //overwrite_data
+			// Import data
+			$(".tab_databackup .import_data2").on("click", function(){
 				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
 				if(confirm("This will overwrite all of your KC3 data! Are you sure?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
-					window.KC3DataBackup.loadDataFromFolder(".tab_databackup .processDisplay .processText",function(){
-						alert("Finished! Will reload this page.");
+					window.KC3DataBackup.loadDataFromFolder(".tab_databackup .processDisplay .processText", function(success){
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
-						window.location.reload();
+						if(success){
+							alert("Finished! Will reload this page.");
+							window.location.reload();
+						}
 					});
 				}
 			});

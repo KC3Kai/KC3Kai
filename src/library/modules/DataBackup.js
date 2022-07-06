@@ -177,14 +177,15 @@
 				reader.readAsArrayBuffer(file_);
 			},//loadData
 
-			saveDataToFolder : function(elementkey, callback, incremental=false) {
-
+			saveDataToFolder : function(elementkey, callback, incremental = false) {
 				if (navigator.chromeVersion < 86) {
-					alert("This feature is only supported on Chrome v86 and later");
+					alert("This feature is only supported by Chrome 86 and later");
+					callback(false);
 					return;
 				}
 
-				var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
+				// true if elementkey exists, false if not
+				var ekex = ((typeof elementkey)==="string");
 				const progress = {};
 				let finished = false;
 				const initialPromises = [];
@@ -196,6 +197,7 @@
 						progress[table.name] = [0, count]))
 					).then(() => {
 						if(ekex){
+							$(elementkey).empty();
 							for (let index in progress) {
 								const prog = progress[index];
 								$(elementkey).append(
@@ -203,23 +205,23 @@
 							}
 
 							var alertwhenfinished = function() {
-
 								for (let index in progress) {
 									const prog = progress[index];
 									if(ekex)$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
 								}
-			
+
 								setTimeout(function() {
-									if(finished)  callback();
+									if(finished) callback(finished !== "error");
 									else alertwhenfinished();
-								},1000);
+								}, 1000);
 							};
 							alertwhenfinished();
 						}
-					}));
+					})
+				);
 
 				// Start readonly transaction
-				KC3Database.con.transaction("r", KC3Database.con.tables, () => 
+				KC3Database.con.transaction("r", KC3Database.con.tables, () =>
 					// Let user pick folder to dump DB data
 					window.showDirectoryPicker().then(dhandle => {
 						dhandle.requestPermission({ readwrite: true });
@@ -228,24 +230,26 @@
 						if (incremental) {
 							writableOptions = { keepExistingData: true };
 							initialPromises.push(dhandle.getFileHandle('database.kc3data')
-							.then(fhandle => fhandle.getFile()
-							.then(file => file.text()
-							.then(text => {
-								const tableOffset = JSON.parse(text);
-								for (let index in tableOffset) {
-									// Update existing backup entry count
-									progress[index][0] = tableOffset[index];
-								}
-							}))));
+								.then(fhandle => fhandle.getFile()
+									.then(file => file.text()
+										.then(text => {
+											const tableOffset = JSON.parse(text);
+											// Update existing backup entry count
+											for (let index in tableOffset) {
+												progress[index][0] = tableOffset[index];
+											}
+										})
+									)
+								)
+							);
 						}
 
 						// Localstorage data handler
 						const storagePromise = dhandle.getFileHandle(`storage.kc3data`, { create: true }).then(fhandle =>
 							fhandle.createWritable().then(stream => {
 								const fullStorageData = {};
-								for(var i=0;i<localStorage.length;i++)
-								{
-									var name = localStorage.key(i);
+								for (let i = 0; i < localStorage.length; i++) {
+									const name = localStorage.key(i);
 									fullStorageData[name] = localStorage.getItem(name);
 								}
 								return stream.write(JSON.stringify(fullStorageData)).then(() => {
@@ -256,67 +260,69 @@
 						);
 
 						// Map each DB table to start iteration/export
-						return Promise.all(initialPromises).then(() => Promise.all(KC3Database.con.tables.map((table) => {
+						return Promise.all(initialPromises).then(() =>
+							Promise.all(KC3Database.con.tables.map((table) => {
 
-							// Create/Append file stream for each table
-							return dhandle.getFileHandle(`${table.name}.kc3data`, { create: true }).then(fhandle => 
-								fhandle.createWritable(writableOptions)
-								.then(stream => {
+								// Create/Append file stream for each table
+								return dhandle.getFileHandle(`${table.name}.kc3data`, { create: true })
+									.then(fhandle => fhandle.createWritable(writableOptions).then(stream => {
 
-									// Move writestream to EOF if needed
-									let setup = 1;
-									if (incremental) {
-										setup = fhandle.getFile().then(file => stream.seek(file.size));
-									}
-									const initialOffset = progress[table.name][0];
-									const lastEntry = progress[table.name][1];
-
-									// Iterate over DB in batches to save memory
-									// TODO: Determine a good number for the batch size count
-									const f = offset => {
-										if (offset >= lastEntry) {
-											return true;
+										// Move writestream to EOF if needed
+										let setup = 1;
+										if (incremental) {
+											setup = fhandle.getFile().then(file => stream.seek(file.size));
 										}
+										const initialOffset = progress[table.name][0];
+										const lastEntry = progress[table.name][1];
 
-										return table.offset(offset).limit(DBExportBatchSize).toArray(arr =>
-											// Write each entry into stream
-											Promise.all(arr.map(entry => stream.write(JSON.stringify(entry) + "\n")
-												.then(() => progress[table.name][0] += 1))))
-											.then(() => f(offset + DBExportBatchSize));
-									};
-									// Resolve all DB search and write operations, then close stream
-									return Promise.resolve(setup)
-										.then(() => Promise.resolve(f(initialOffset))
-										.then(() => stream.close()));
-								})
-							);
-						}))).then(() => {
-							// Resolve localstorage dump promise
-							storagePromise
-							.then(() =>
-								// Write exported entry count per table
-								dhandle.getFileHandle('database.kc3data', { create: true })
-								.then(fhandle => fhandle.createWritable()
-								.then(stream => {
-									const offset = {};
-									for (let index in progress) {
-										offset[index] = progress[index][0];
-									}
-									return stream.write(JSON.stringify(offset))
-									.then(() => stream.close().then(() => finished = true));
-								}))
-							);
-						}, () => {
-							alert("Export failed");
-						});
+										// Iterate over DB in batches to save memory
+										// TODO: Determine a good number for the batch size count
+										const f = offset => {
+											if (offset >= lastEntry) {
+												return true;
+											}
+											return table.offset(offset).limit(DBExportBatchSize).toArray(arr =>
+												// Write each entry into stream
+												Promise.all(arr.map(entry => stream.write(JSON.stringify(entry) + "\n")
+													.then(() => progress[table.name][0] += 1))))
+													.then(() => f(offset + DBExportBatchSize));
+										};
+										// Resolve all DB search and write operations, then close stream
+										return Promise.resolve(setup)
+											.then(() => Promise.resolve(f(initialOffset))
+											.then(() => stream.close()));
+									}));
+							}))).then(() => {
+								// Resolve localstorage dump promise
+								storagePromise.then(() =>
+									// Write exported entry count per table
+									dhandle.getFileHandle('database.kc3data', { create: true })
+									.then(fhandle => fhandle.createWritable()
+									.then(stream => {
+										const offset = {};
+										for (let index in progress) {
+											offset[index] = progress[index][0];
+										}
+										return stream.write(JSON.stringify(offset))
+											.then(() => stream.close().then(() => finished = true));
+									}))
+								);
+							}).catch(err => {
+								finished = "error";
+								console.error("Export promises rejected", err);
+								alert("Export failed");
+							});
+					}).catch(err => {
+						// picker window dismissed by user
+						finished = "error";
 					})
 				);
 			},//saveDataToFolder
 
 			loadDataFromFolder: function(elementkey, callback) {
-
 				if (navigator.chromeVersion < 86) {
-					alert("This feature is only supported on Chrome v86 and later");
+					alert("This feature is only supported by Chrome 86 and later");
+					callback(false);
 					return;
 				}
 
@@ -336,16 +342,15 @@
 					});
 
 					var alertwhenfinished = function() {
-
 						for (let index in progress) {
 							const prog = progress[index];
 							if(ekex)$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
 						}
 						
 						setTimeout(function() {
-							if(finished) callback();
+							if(finished) callback(finished !== "errr");
 							else alertwhenfinished();
-						},1000);
+						}, 1000);
 					};
 					alertwhenfinished();
 				}
@@ -388,7 +393,6 @@
 									const tableName = table.name;
 									return dhandle.getFileHandle(`${tableName}.kc3data`).then(fhandle =>
 										fhandle.getFile().then((file) => {
-											
 											const utf8Decoder = new window.TextDecoder("utf-8");
 											let reader = file.stream().getReader();
 											let re = /\r\n|\n|\r/gm;
@@ -419,7 +423,6 @@
 												// Search buffer for the newline delimiter
 												let result = re.exec(remainder);
 
-												
 												// If there is no current match, we reset the starting index
 												if (!result) {
 													startIndex = re.lastIndex = 0;
@@ -433,10 +436,8 @@
 												// Process the line if there is a matched newline
 												// Usually there is multiple lines pulled in one go, so process all of them at once
 												while (!!result) {
-													
 													// Substring line from current buffer
 													const line = remainder.substr(startIndex, result.index);
-													
 													// Advance buffer position
 													startIndex = re.lastIndex;
 													remainder = remainder.substr(startIndex);
@@ -452,7 +453,7 @@
 															currentBatch.push(table.add(record).then(() => progress[tableName][0] += 1 ));
 														}
 														catch (error) {
-															console.error(`Table ${tableName} read fail`);
+															console.error(`Table ${tableName} reading failed`);
 															// Add error handling here
 															return false;
 														}
@@ -476,10 +477,21 @@
 								})
 							));
 						},
-						() => alert("Missing files, aborting import")
-					).then(() => finished = true);
+						(reason) => {
+							alert("Missing files, aborting import");
+							throw reason;
+						}
+					).then(() => {
+						finished = true; 
+					}).catch(err => {
+						finished = "error";
+						console.error("Import promises rejected", err);
+					});
+				}).catch(err => {
+					// picker window dismissed by user
+					finished = "error";
 				});
 			}//loadDataFromFolder
-			
+
 	};
 })();

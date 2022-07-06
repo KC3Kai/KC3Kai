@@ -829,6 +829,12 @@ button, input, select, textarea {
 .tab_overlodger .lodger-data .materials .material.over:before {
 	
 }
+
+/* Data Backup */
+.tab_databackup a.fscolor3 {
+	color:#abe;
+}
+
 /* Ship List */
 .tab_ships .filters .fold_button {
 	background:#cccccc;
