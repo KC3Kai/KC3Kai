@@ -227,7 +227,7 @@
 						// Open json file keeping entry offset
 						if (incremental) {
 							writableOptions = { keepExistingData: true };
-							initialPromises.push(dhandle.getFileHandle('database.json')
+							initialPromises.push(dhandle.getFileHandle('database.kc3data')
 							.then(fhandle => fhandle.getFile()
 							.then(file => file.text()
 							.then(text => {
@@ -240,7 +240,7 @@
 						}
 
 						// Localstorage data handler
-						const storagePromise = dhandle.getFileHandle(`storage.json`, { create: true }).then(fhandle =>
+						const storagePromise = dhandle.getFileHandle(`storage.kc3data`, { create: true }).then(fhandle =>
 							fhandle.createWritable().then(stream => {
 								const fullStorageData = {};
 								for(var i=0;i<localStorage.length;i++)
@@ -295,7 +295,7 @@
 							storagePromise
 							.then(() =>
 								// Write exported entry count per table
-								dhandle.getFileHandle('database.json', { create: true })
+								dhandle.getFileHandle('database.kc3data', { create: true })
 								.then(fhandle => fhandle.createWritable()
 								.then(stream => {
 									const offset = {};
@@ -322,8 +322,8 @@
 
 				var ekex = ((typeof elementkey)==="string");
 				const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
-				files.push("storage.json");
-				files.push("database.json");
+				files.push("storage.kc3data");
+				files.push("database.kc3data");
 				let finished = false;
 				const progress = {};
 
@@ -355,7 +355,7 @@
 					// Check if all files are present in dir
 					Promise.all(files.map(filename => dhandle.getFileHandle(filename))).then(
 						() => {
-							dhandle.getFileHandle("storage.json").then(fh =>
+							dhandle.getFileHandle("storage.kc3data").then(fh =>
 								fh.getFile().then(file =>
 									file.text().then(text => {
 										window.KC3DataBackup.processStorage(text);
@@ -372,7 +372,7 @@
 							KC3Database.init();
 							KC3Database.con.open();
 
-							dhandle.getFileHandle("database.json").then(fh =>
+							dhandle.getFileHandle("database.kc3data").then(fh =>
 								fh.getFile().then(file =>
 									file.text().then(text => {
 										const totalEntries = JSON.parse(text);

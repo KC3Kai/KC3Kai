@@ -47,6 +47,9 @@
 			$(".tab_databackup .warningbtn").on("click", function(){ //warning_btn
 				$(".tab_databackup .warning").toggle();
 			});
+			$(".tab_databackup .warningbtn2").on("click", function(){ //warning_btn
+				$(".tab_databackup .warning2").toggle();
+			});
 
 			$(".tab_databackup .overwrite_data").on("click", function(){ //overwrite_data
 				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))

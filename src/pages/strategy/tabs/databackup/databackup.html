@@ -16,6 +16,7 @@
 
     <div class ="dataselect">
     <ul>
+        <h3>Backup v1</h3>
         <li><a class="export_data fscolor3">Export data to a file(.kc3data/.zip)</a></li>
         <li>Import data from a file(.kc3data/.zip)</li>
         <ul style="list-style-type:decimal">
@@ -36,9 +37,32 @@
                 <!--<a class="merge_data">Merge data</a> --> <a class="overwrite_data fscolor3">Overwrite data</a>
             </li>
         </ul>
-        <li><a class="export_data2 fscolor3">Backup data (v2)</a></li>
-        <li><a class="export_update_data2 fscolor3">Update backup (v2)</a></li>
-        <li><a class="import_data2 fscolor3">Import data (v2)</a></li>
+        <hr />
+        <h3>Backup v2</h3>
+        <p>
+            On starting the v2 backup process, you will be asked to select the backup folder. Then, you will be
+            asked for permission to use the folder.
+        </p>
+
+        <li><a class="export_data2 fscolor3">Backup all data</a></li>
+        <li><a class="export_update_data2 fscolor3">Update current backup</a></li>
+        <li><a class="import_data2 fscolor3">Import data</a></li>
+        <p>
+            Read the <a class = "warningbtn2 fscolor3">WARNINGS</a> first!
+            <div class="warning2" style="display: none;">
+                <ul style="list-style-type:roman">
+                <li><strong>DO NOT</strong> go to other tabs while importing your data.</li>
+                <li><strong>DO NOT</strong> close the window while importing your data.</li>
+                <li><strong>DO NOT</strong> input other files.</li>
+                <li>Especially large files may take over an hour to finish.
+                    BE PATIENT.</li>
+                </ul>
+            </div>
+
+        <p>This is an experimental backup feature that provides more stability at the cost of speed. It also allows for
+            updating the current backup without having to perform a full backup. Currently, it is only supported on Chrome
+            v86 and higher. Please note that the v2 backup files do not with with v1 backup and vice versa.
+        </p>
     </ul>
   </div>
 
