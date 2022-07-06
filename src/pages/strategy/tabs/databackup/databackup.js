@@ -28,7 +28,7 @@
 					$(".tab_databackup .processDisplay").show();
 					window.KC3DataBackup.saveData(".tab_databackup .processDisplay .processText",function(){
 							localStorage.lastBackupTime = Date.now();
-							alert("finished!");
+							alert("Finished!");
 							$(".tab_databackup .dataselect").show();
 							$(".tab_databackup .processDisplay").hide();
 					});
@@ -85,7 +85,7 @@
 					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText", function(success){
 						if(success){
 							localStorage.lastBackupTime = Date.now();
-							alert("finished!");
+							alert("Finished!");
 						}
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
@@ -102,7 +102,7 @@
 					window.KC3DataBackup.saveDataToFolder(".tab_databackup .processDisplay .processText", function(success){
 						if(success){
 							localStorage.lastBackupTime = Date.now();
-							alert("finished!");
+							alert("Finished!");
 						}
 						$(".tab_databackup .dataselect").show();
 						$(".tab_databackup .processDisplay").hide();
