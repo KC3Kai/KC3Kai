@@ -186,7 +186,8 @@
 			}
 
 			// true if elementkey exists, false if not
-			var ekex = (typeof elementkey) === "string";
+			const ekex = $(elementkey).length > 0;
+			if (ekex) $(elementkey).empty();
 			const progress = {};
 			let finished = false;
 			const initialPromises = [];
@@ -201,43 +202,30 @@
 				}
 			};
 
-			// Fill progress bar and poll finished state to callback
+			// Fill progress lines, and poll finished state to callback
+			const updateProgress = () => {
+				if (!ekex) return;
+				for (let name in progress) {
+					const prog = progress[name];
+					$(`${elementkey} .${name}`).text(`${name} : 『${prog[0]}/${prog[1]}』`);
+				}
+			};
+			const alertWhenFinished = () => {
+				setTimeout(() => {
+					updateProgress();
+					if(finished) callback(finished !== "error");
+					else alertWhenFinished();
+				}, 1000);
+			};
+			alertWhenFinished();
 			initialPromises.push(Promise.all(KC3Database.con.tables.map(table =>
-				table.count().then(count =>
-					progress[table.name] = [0, count]))
-				).then(() => {
-					if(ekex){
-						$(elementkey).empty();
-						for (let index in progress) {
-							const prog = progress[index];
-							$(elementkey).append(
-								`<div class="${index}">${index} : 『0/${prog[1]}』</div>`
-							);
-						}
-					}
-					const refreshProgress = () => {
-						if(ekex) {
-							for (let index in progress) {
-								const prog = progress[index];
-								$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
-							}
-						}
-					};
-					const alertWhenFinished = () => {
-						setTimeout(() => {
-							refreshProgress();
-							if(finished) {
-								callback(finished !== "error");
-							}
-							else alertWhenFinished();
-						}, 1000);
-					};
-					alertWhenFinished();
-				}).catch(err => {
-					errorHandler(err);
-					callback(false);
+				table.count().then(count => {
+					progress[table.name] = [0, count];
+					if (ekex) $(elementkey).append(
+						`<div class="${table.name}">${table.name} : 『0/${count}』</div>`
+					);
 				})
-			);
+			)));
 
 			// Start readonly transaction
 			KC3Database.con.transaction("r", KC3Database.con.tables, () =>
@@ -271,7 +259,7 @@
 								fullStorageData[name] = localStorage.getItem(name);
 							}
 							return stream.write(JSON.stringify(fullStorageData)).then(() => {
-								if(ekex) $(elementkey).append("<div class =\"localstorageprocess\">LS complete</div>");
+								if(ekex) $(elementkey).append(`<div class="localstorageprocess">LS complete</div>`);
 								return stream.close();
 							});
 						})
@@ -337,10 +325,8 @@
 				return;
 			}
 
-			var ekex = (typeof elementkey) === "string";
-			const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
-			files.push("storage.kc3data");
-			files.push("database.kc3data");
+			const ekex = $(elementkey).length > 0;
+			if (ekex) $(elementkey).empty();
 			let finished = false;
 			const progress = {};
 			const errorHandler = (err) => {
@@ -353,29 +339,32 @@
 				}
 			};
 
-			// Fill progress, poll finished state and callback
-			if(ekex) {
-				$(elementkey).empty();
-				KC3Database.con.tables.forEach(table => {
-					progress[table.name] = [0, 0];
-					$(elementkey).append(
-						`<div class = "${table.name}">${table.name} : Loading data </div>`
-					);
-				});
-			}
-			const alertWhenFinished = () => {
-				if(ekex) {
-					for (let index in progress) {
-						const prog = progress[index];
-						$(elementkey+" ."+index).text(`${index} : 『${prog[0]}/${prog[1]}』`);
-					}
+			// Files of current known tables in IndexedDB: 17 + 2 extra meta files
+			const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
+			files.push("storage.kc3data");
+			files.push("database.kc3data");
+			// Fill progress lines, and poll finished state to callback
+			const updateProgress = () => {
+				if (!ekex) return;
+				for (let name in progress) {
+					const prog = progress[name];
+					$(`${elementkey} .${name}`).text(`${name} : 『${prog[0]}/${prog[1]}』`);
 				}
+			};
+			const alertWhenFinished = () => {
 				setTimeout(function() {
+					updateProgress();
 					if(finished) callback(finished !== "error");
 					else alertWhenFinished();
 				}, 1000);
 			};
 			alertWhenFinished();
+			KC3Database.con.tables.forEach(table => {
+				progress[table.name] = [0, 0];
+				if(ekex) $(elementkey).append(
+					`<div class="${table.name}">${table.name} : Loading data </div>`
+				);
+			});
 
 			window.showDirectoryPicker().then(dhandle => {
 				dhandle.requestPermission({ read: true });
@@ -386,7 +375,7 @@
 						fh.getFile().then(file =>
 							file.text().then(text => {
 								window.KC3DataBackup.processStorage(text);
-								if(ekex) $(elementkey).append("<div>LS Transfer Complete<div/>");
+								if(ekex) $(elementkey).append(`<div class="localstorageprocess">LS complete</div>`);
 							})
 						)
 					);
@@ -472,7 +461,7 @@
 													currentBatch.push(table.add(record).then(() => progress[tableName][0] += 1 ));
 												}
 												catch (error) {
-													console.error(`Table ${tableName} reading failed`);
+													console.warn(`Table ${tableName} reading failed`, error);
 													// Add error handling here
 													return false;
 												}

@@ -78,7 +78,6 @@
 
 			// Export fullset data
 			$(".tab_databackup .export_data2").on("click", function(){
-				sav = true;
 				if(confirm("Are you sure you want to export your data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
@@ -95,7 +94,6 @@
 
 			// Export incremental data
 			$(".tab_databackup .export_update_data2").on("click", function(){
-				sav = true;
 				if(confirm("Are you sure you want to export your data?")){
 					$(".tab_databackup .dataselect").hide();
 					$(".tab_databackup .processDisplay").show();
