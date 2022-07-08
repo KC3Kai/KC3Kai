@@ -187,7 +187,8 @@
 
 			// true if elementkey exists, false if not
 			const ekex = $(elementkey).length > 0;
-			if (ekex) $(elementkey).empty();
+			if (ekex) $(elementkey).html(`<div>== Export Progress ==</div>`);
+			const startTime = Date.now();
 			const progress = {};
 			let finished = false;
 			const initialPromises = [];
@@ -207,13 +208,17 @@
 				if (!ekex) return;
 				for (let name in progress) {
 					const prog = progress[name];
-					$(`${elementkey} .${name}`).text(`${name} : 『${prog[0]}/${prog[1]}』`);
+					$(`${elementkey} #${name}`).text(`${name} : 『${prog[0]}/${prog[1]}』`);
+					if (prog[0] >= prog[1]) $(`${elementkey} #${name}`).addClass("complete");
 				}
+				$(`${elementkey} #_timer`).text(
+					`Elapsed time : ${String((Date.now() - startTime) / 1000).toHHMMSS()}`
+				);
 			};
 			const alertWhenFinished = () => {
 				setTimeout(() => {
 					updateProgress();
-					if(finished) callback(finished !== "error");
+					if (finished) callback(finished !== "error");
 					else alertWhenFinished();
 				}, 1000);
 			};
@@ -222,10 +227,12 @@
 				table.count().then(count => {
 					progress[table.name] = [0, count];
 					if (ekex) $(elementkey).append(
-						`<div class="${table.name}">${table.name} : 『0/${count}』</div>`
+						`<div id="${table.name}">${table.name} : 『0/${count}』</div>`
 					);
 				})
-			)));
+			)).then(() => {
+				if (ekex) $(elementkey).append(`<div id="_timer">Elapsed time : 00:00:00</div>`);
+			}));
 
 			// Start readonly transaction
 			KC3Database.con.transaction("r", KC3Database.con.tables, () =>
@@ -259,7 +266,7 @@
 								fullStorageData[name] = localStorage.getItem(name);
 							}
 							return stream.write(JSON.stringify(fullStorageData)).then(() => {
-								if(ekex) $(elementkey).append(`<div class="localstorageprocess">LS complete</div>`);
+								if(ekex) $(elementkey).append(`<div class="complete">localStorage complete</div>`);
 								return stream.close();
 							});
 						})
@@ -310,7 +317,10 @@
 										offset[index] = progress[index][0];
 									}
 									return stream.write(JSON.stringify(offset))
-										.then(() => stream.close().then(() => finished = true));
+										.then(() => stream.close().then(() => {
+											finished = true;
+											console.info(`Backup v2 exporting done (${incremental ? "incremental" : "full"})`);
+										}));
 								}))
 							).catch(errorHandler);
 						}).catch(errorHandler);
@@ -326,7 +336,8 @@
 			}
 
 			const ekex = $(elementkey).length > 0;
-			if (ekex) $(elementkey).empty();
+			if (ekex) $(elementkey).html(`<div>== Import Progress ==</div>`);
+			const startTime = Date.now();
 			let finished = false;
 			const progress = {};
 			const errorHandler = (err) => {
@@ -348,25 +359,33 @@
 				if (!ekex) return;
 				for (let name in progress) {
 					const prog = progress[name];
-					progress[name][2].textContent = `${name} : 『${prog[0]}/${prog[1]}』`;
-					if (prog[1] > 0 && prog[0] === prog[1])
-						progress[name][2].classList.add('itemcomplete');
+					if (prog[1] > -1) {
+						progress[name][2].textContent = `${name} : 『${prog[0]}/${prog[1]}』`;
+						if (prog[0] >= prog[1]) progress[name][2].classList.add("complete");
+					}
 				}
+				$(`${elementkey} #_timer`).text(
+					`Elapsed time : ${String((Date.now() - startTime) / 1000).toHHMMSS()}`
+				);
 			};
 			const alertWhenFinished = () => {
 				setTimeout(function() {
 					updateProgress();
-					if(finished) callback(finished !== "error");
+					if (finished) callback(finished !== "error");
 					else alertWhenFinished();
 				}, 1000);
 			};
 			alertWhenFinished();
 			KC3Database.con.tables.forEach(table => {
-				if(ekex) $(elementkey).append(
-					`<div class="${table.name}">${table.name} : Loading data </div>`
-				);
-				progress[table.name] = [0, 0, $(`${elementkey} .${table.name}`)[0]];
+				progress[table.name] = [0, -1];
+				if (ekex) {
+					$(elementkey).append(
+						`<div id="${table.name}">${table.name} : Loading data </div>`
+					);
+					progress[table.name][2] = $(`${elementkey} #${table.name}`).get(0);
+				}
 			});
+			if (ekex) $(elementkey).append(`<div id="_timer">Elapsed time : 00:00:00</div>`);
 
 			window.showDirectoryPicker().then(dhandle => {
 				dhandle.requestPermission({ read: true });
@@ -377,7 +396,7 @@
 						fh.getFile().then(file =>
 							file.text().then(text => {
 								window.KC3DataBackup.processStorage(text);
-								if(ekex) $(elementkey).append(`<div class="localstorageprocess">LS complete</div>`);
+								if(ekex) $(elementkey).append(`<div class="complete">localStorage complete</div>`);
 							})
 						)
 					);
@@ -386,7 +405,7 @@
 					KC3Database.clear(function(){
 						console.log("Cleaned up old database...");
 					});
-					console.log("Processing tables...");
+					console.log("Processing DB tables...");
 					KC3Database.init();
 					KC3Database.con.open();
 
@@ -487,7 +506,7 @@
 						})
 					)).then(() =>  {
 						finished = true;
-						console.info("Import processing done");
+						console.info(`Backup v2 importing done`);
 					}).catch(errorHandler);
 				}).catch(errorHandler);
 			}).catch(errorHandler);

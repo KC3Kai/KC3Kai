@@ -9,12 +9,9 @@
 .tab_databackup .page_padding{
 	margin-top:20px;
 }
-.tab_databackup .datapanel{
-  margin:10px 10px 10px 10px;
-}
 
-.tab_databackup .tmptextbox{
-  height:0px;
+.tab_databackup .datapanel{
+	margin:10px 10px 10px 10px;
 }
 
 .tab_databackup table{
@@ -28,6 +25,7 @@
 	text-decoration:underline;
 	color:#CC0000;
 }
-.tab_databackup .itemcomplete {
-	color: #afffaf;
+
+.tab_databackup .processDisplay .progressColumn {
+	min-width:240px;
 }

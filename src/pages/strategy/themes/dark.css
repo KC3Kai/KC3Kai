@@ -834,6 +834,9 @@ button, input, select, textarea {
 .tab_databackup a.fscolor3 {
 	color:#abe;
 }
+.tab_databackup .processDisplay .complete {
+	color:#afffaf;
+}
 
 /* Ship List */
 .tab_ships .filters .fold_button {
