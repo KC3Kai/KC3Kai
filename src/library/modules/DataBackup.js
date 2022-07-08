@@ -348,7 +348,7 @@
 				if (!ekex) return;
 				for (let name in progress) {
 					const prog = progress[name];
-					$(`${elementkey} .${name}`).text(`${name} : 『${prog[0]}/${prog[1]}』`);
+					progress[name][2].textContent = `${name} : 『${prog[0]}/${prog[1]}』`;
 				}
 			};
 			const alertWhenFinished = () => {
@@ -360,10 +360,10 @@
 			};
 			alertWhenFinished();
 			KC3Database.con.tables.forEach(table => {
-				progress[table.name] = [0, 0];
 				if(ekex) $(elementkey).append(
 					`<div class="${table.name}">${table.name} : Loading data </div>`
 				);
+				progress[table.name] = [0, 0, $(`${elementkey} .${table.name}`)[0]];
 			});
 
 			window.showDirectoryPicker().then(dhandle => {
