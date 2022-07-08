@@ -197,8 +197,11 @@
 				finished = "error";
 				// Do not log and alert on:
 				// picker window aborted by user, or permission refused
-				if(err && !["AbortError", "NotAllowedError"].includes(err.name)) {
-					console.error("Export unexpectedly rejected", err);
+				if (err && !["AbortError", "NotAllowedError"].includes(err.name)) {
+					// No log for 'handle user gesture to show a file picker'
+					if ("SecurityError" !== err.name) {
+						console.error("Export unexpectedly rejected", err);
+					}
 					alert("Backup " + err);
 				}
 			};
@@ -344,8 +347,11 @@
 				finished = "error";
 				// Do not log and alert on:
 				// picker window aborted by user, or permission refused
-				if(err && !["AbortError", "NotAllowedError"].includes(err.name)) {
-					console.error("Import unexpectedly rejected", err);
+				if (err && !["AbortError", "NotAllowedError"].includes(err.name)) {
+					// No log for 'handle user gesture to show a file picker'
+					if ("SecurityError" !== err.name) {
+						console.error("Import unexpectedly rejected", err);
+					}
 					alert("Restore " + err);
 				}
 			};
