@@ -349,6 +349,8 @@
 				for (let name in progress) {
 					const prog = progress[name];
 					progress[name][2].textContent = `${name} : 『${prog[0]}/${prog[1]}』`;
+					if (prog[1] > 0 && prog[0] === prog[1])
+						progress[name][2].classList.add('itemcomplete');
 				}
 			};
 			const alertWhenFinished = () => {
