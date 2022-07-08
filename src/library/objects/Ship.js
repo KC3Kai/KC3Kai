@@ -3061,22 +3061,23 @@ KC3改 Ship Object
 
 	/**
 	 * Most conditions are the same with Nelson Touch, except:
-	 * Flagship is healthy Colorado, Echelon (forward) formation selected.
+	 * Flagship is healthy Colorado-class any remodel, Echelon (forward) formation selected.
 	 * 2nd and 3rd ships are healthy battleship, not Taiha ~~nor Chuuha~~,
 	 *   Chuuha allowed since 2021-10-15.
+	 *   Maryland implemented since 2022-06-18.
 	 *
 	 * The same additional ammo consumption like Nagato/Mutsu cutin for top 3 battleships.
 	 *
 	 * 4 types of smoke animation effects will be used according corresponding position of partner ships,
 	 * see `main.js#CutinColoradoAttack.prototype._getSmoke`.
 	 *
-	 * @return true if this ship (Colorado) can do Colorado special cut-in attack.
+	 * @return true if this ship can do Colorado special cut-in attack.
 	 * @see http://kancolle.wikia.com/wiki/Colorado
 	 * @see https://wikiwiki.jp/kancolle/Colorado
 	 */
 	KC3Ship.prototype.canDoColoradoCutin = function() {
 		if(this.isDummy() || this.isAbsent()) { return false; }
-		// is this ship Colorado and not even Chuuha
+		// is this ship Colorado-class and not even Chuuha
 		if(KC3Meta.coloradoCutinShips.includes(this.masterId) && !this.isStriped()) {
 			const [shipPos, shipCnt, fleetNum] = this.fleetPosition();
 			if(fleetNum > 0 && shipPos === 0 && shipCnt >= 6
