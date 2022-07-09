@@ -13,9 +13,6 @@
 .tab_databackup .dataSelect {
 	margin:10px 10px 10px 10px;
 }
-.tab_databackup .warning {
-	display:none;
-}
 .tab_databackup strong {
 	text-decoration:underline;
 	color:#c00;
@@ -29,18 +26,18 @@
 	text-align:left;
 }
 
-.tab_databackup .processDisplay {
-	display:none;
-}
+.tab_databackup .warning,
+.tab_databackup .processDisplay,
 .tab_databackup .processDisplay .expedFinished {
 	display:none;
 }
-
 .tab_databackup .processDisplay .errorMessage {
 	font-weight:bold;
 	color:red;
 }
-
+.tab_databackup .processDisplay img.finished {
+	height:300px;
+}
 .tab_databackup .processDisplay .progressColumn {
 	min-width:240px;
 }

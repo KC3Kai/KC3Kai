@@ -18,6 +18,7 @@
 
 		execute :function(){
 			var isExportedFirst = false;
+			var isReloadNeeded = false;
 			var filename = "";
 
 			const progressTextSelector = ".tab_databackup .processDisplay .processText";
@@ -28,6 +29,7 @@
 			const toggleFinishedIndicator = (isFinished) => {
 				$(".tab_databackup .processDisplay .expedAkatsuki").toggle(!isFinished);
 				$(".tab_databackup .processDisplay .expedFinished").toggle(!!isFinished);
+				if(!isFinished) isReloadNeeded = false;
 			};
 			const setFinishMessage = (msg) => {
 				$(".tab_databackup .processDisplay .errorMessage").text(msg || "Finished!");
@@ -43,6 +45,7 @@
 
 			$(".tab_databackup .gobackbtn").on("click", function(){
 				toggleProgressDisplay(false);
+				if(isReloadNeeded) window.location.reload();
 			});
 
 			// Export data v1
@@ -56,7 +59,6 @@
 						setFinishMessage();
 						toggleFinishedIndicator(true);
 						alert("Finished!");
-						toggleProgressDisplay(false);
 					});
 				}
 			});
@@ -87,11 +89,10 @@
 					toggleFinishedIndicator(false);
 					toggleProgressDisplay(true);
 					window.KC3DataBackup.loadData(filename, true, progressTextSelector, () => {
-						setFinishMessage();
+						setFinishMessage("Finished! Please reload this page.");
 						toggleFinishedIndicator(true);
-						alert("Finished! Will reload this page.");
-						toggleProgressDisplay(false);
-						window.location.reload();
+						alert("Finished!");
+						isReloadNeeded = true;
 					});
 				}
 			});
@@ -101,8 +102,8 @@
 				if(confirm("Are you sure you want to export your data?")){
 					toggleFinishedIndicator(false);
 					toggleProgressDisplay(true);
-					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoReturn, lastErr) => {
-						if(autoReturn) toggleProgressDisplay(false);
+					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
+						if(autoBack) toggleProgressDisplay(false);
 						setFinishMessage(lastErr);
 						toggleFinishedIndicator(true);
 					});
@@ -114,8 +115,8 @@
 				if(confirm("Are you sure you want to export your data?")){
 					toggleFinishedIndicator(false);
 					toggleProgressDisplay(true);
-					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoReturn, lastErr) => {
-						if(autoReturn) toggleProgressDisplay(false);
+					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
+						if(autoBack) toggleProgressDisplay(false);
 						setFinishMessage(lastErr);
 						toggleFinishedIndicator(true);
 					}, true);
@@ -128,8 +129,9 @@
 				if(confirm("This will overwrite all of your KC3 data! Are you sure?")){
 					toggleFinishedIndicator(false);
 					toggleProgressDisplay(true);
-					window.KC3DataBackup.loadDataFromFolder(progressTextSelector, (autoReturn, lastErr) => {
-						if(autoReturn) toggleProgressDisplay(false);
+					window.KC3DataBackup.loadDataFromFolder(progressTextSelector, (autoBack, lastErr) => {
+						if(autoBack) toggleProgressDisplay(false);
+						if(!autoBack && !lastErr) isReloadNeeded = true;
 						setFinishMessage(lastErr || "Finished! Please reload this page.");
 						toggleFinishedIndicator(true);
 					});
