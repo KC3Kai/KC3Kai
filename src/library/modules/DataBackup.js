@@ -480,22 +480,22 @@
 											startIndex = re.lastIndex = 0;
 
 											// Parse the buffer into an object and add it into the DB
-											if (line != "") {
+											if (line.length > 0) {
 												try {
 													let record = JSON.parse(line);
-													if(["enemy", "encounters"].indexOf(tableName) == -1){
+													if (!requiresFullTableExport(tableName)){
+														// Remove inbound auto-sequenced primary key
 														delete record.id;
 													}
 													currentBatch.push(table.add(record).then(() => progress[tableName][0] += 1 ));
 												}
 												catch (error) {
-													console.warn(`Table ${tableName} reading failed`, error);
+													console.warn(`Table ${tableName} parsing line failed`, line, error);
 													// Add error handling here
 													return false;
 												}
-
 											// If the line is empty, we have reached the end of file
-											} else if (line == "") { // EOF
+											} else {
 												return true;
 											}
 
