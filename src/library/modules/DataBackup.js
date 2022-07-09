@@ -12,7 +12,11 @@
 			var zip = new JSZip();
 			var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
 
-			if(ekex)$(elementkey).append("Exporting Data...(0/3)");
+			if(ekex)
+			{
+				$(elementkey).html("");
+				$(elementkey).append("Exporting Data...(0/3)");
+			}
 			for(var i=0;i<localStorage.length;i++)
 			{
 				var name = localStorage.key(i);
@@ -75,7 +79,7 @@
 		processDB : function(dbstring,overwrite,elementkey,callback){//load data from DB string, elementkey can be null
 			var ekex = ((typeof elementkey)==="string");
 			var dbdata = JSON.parse(dbstring);
-			if(ekex)$(elementkey).text("");
+			if(ekex)$(elementkey).html("");
 			var processTables = function(dbdata_, overwrite){
 				var dothing = function(){
 					var tableCount = -1;
@@ -182,7 +186,7 @@
 		saveDataToFolder : function(elementkey, callback, incremental = false) {
 			if (!window.showDirectoryPicker || navigator.chromeVersion < 86) {
 				alert("This feature is only supported by Chrome 86 and later");
-				callback(false);
+				callback(true);
 				return;
 			}
 
@@ -192,6 +196,7 @@
 			const startTime = Date.now();
 			const progress = {};
 			let finished = false;
+			let lastErrMsg = "";
 			const initialPromises = [];
 			let writableOptions = {};
 			const errorHandler = (err) => {
@@ -203,7 +208,8 @@
 					if ("SecurityError" !== err.name) {
 						console.error("Export unexpectedly rejected", err);
 					}
-					alert("Backup " + err);
+					lastErrMsg = "Backup " + err;
+					alert(lastErrMsg);
 				}
 			};
 
@@ -222,8 +228,10 @@
 			const alertWhenFinished = () => {
 				setTimeout(() => {
 					updateProgress();
-					if (finished) callback(finished !== "error");
-					else alertWhenFinished();
+					if (finished) {
+						if (finished === true) localStorage.lastBackupTime = Date.now();
+						callback(!lastErrMsg && finished === "error", lastErrMsg);
+					} else alertWhenFinished();
 				}, 1000);
 			};
 			alertWhenFinished();
@@ -335,7 +343,7 @@
 		loadDataFromFolder: function(elementkey, callback) {
 			if (!window.showDirectoryPicker || navigator.chromeVersion < 86) {
 				alert("This feature is only supported by Chrome 86 and later");
-				callback(false);
+				callback(true);
 				return;
 			}
 
@@ -343,6 +351,7 @@
 			if (ekex) $(elementkey).html(`<div>== Import Progress ==</div>`);
 			const startTime = Date.now();
 			let finished = false;
+			let lastErrMsg = "";
 			const progress = {};
 			const errorHandler = (err) => {
 				finished = "error";
@@ -353,7 +362,8 @@
 					if ("SecurityError" !== err.name) {
 						console.error("Import unexpectedly rejected", err);
 					}
-					alert("Restore " + err);
+					lastErrMsg = "Restore " + err;
+					alert(lastErrMsg);
 				}
 			};
 
@@ -378,7 +388,7 @@
 			const alertWhenFinished = () => {
 				setTimeout(function() {
 					updateProgress();
-					if (finished) callback(finished !== "error");
+					if (finished) callback(!lastErrMsg && finished === "error", lastErrMsg);
 					else alertWhenFinished();
 				}, 1000);
 			};
