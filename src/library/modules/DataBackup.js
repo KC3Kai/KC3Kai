@@ -2,6 +2,7 @@
 	"use strict";
 
 	const DBExportBatchSize = 5000;
+	const requiresFullTableExport = tableName => ["enemy", "encounters"].includes(tableName);
 
 	window.KC3DataBackup = {
 		saveData : function(elementkey,callback){//Save All Data to file, elementkey can be null
@@ -254,7 +255,7 @@
 									const tableOffset = JSON.parse(text);
 									// Update existing backup entry count
 									for (let index in tableOffset) {
-										progress[index][0] = tableOffset[index];
+										progress[index][0] = requiresFullTableExport(index) ? 0 : tableOffset[index];
 									}
 								})))
 						);
@@ -281,11 +282,11 @@
 
 							// Create/Append file stream for each table
 							return dhandle.getFileHandle(`${table.name}.kc3data`, { create: true })
-								.then(fhandle => fhandle.createWritable(writableOptions).then(stream => {
+								.then(fhandle => fhandle.createWritable(incremental && requiresFullTableExport(table.name) ? {} : writableOptions).then(stream => {
 
 									// Move writestream to EOF if needed
 									let setup = 1;
-									if (incremental) {
+									if (incremental && !requiresFullTableExport(table.name)) {
 										setup = fhandle.getFile().then(file => stream.seek(file.size));
 									}
 									const initialOffset = progress[table.name][0];
