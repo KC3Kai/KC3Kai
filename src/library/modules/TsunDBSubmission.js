@@ -1414,20 +1414,19 @@
 			// Damecons are ignored here as we are only interested in Abyssal ships
 			// enemyEscortShipsPartial1: HP after opening torpedo
 			// enemyEscortShipsPartial2: HP after closing torpedo
-			const enemyEscortShipsPartial1 =
-				(isYasenNotFound && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_opening).fleets.enemyEscort :
-				{};
-			const enemyEscortShipsPartial2 = 
-				(isYasenNotFound && this.data.fleetType == 0 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_single_vs_CF).fleets.enemyEscort :
-				(isYasenNotFound && this.data.fleetType == 1 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_CTF_vs_CF).fleets.enemyEscort :
-				(isYasenNotFound && this.data.fleetType == 2 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_STF_vs_CF).fleets.enemyEscort :
-				(isYasenNotFound && this.data.fleetType == 3 && enemyShips.length == 12) ?
-					KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, [], phases_TCF_vs_CF).fleets.enemyEscort :
-				{};
+			const enemyEscortShipsPartial1 = (isYasenNotFound && enemyShips.length == 12)
+				? KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, {}, phases_opening).fleets.enemyEscort
+				: {};
+			const enemyEscortShipsPartial2 =
+				(isYasenNotFound && this.data.fleetType == 0 && enemyShips.length == 12)
+					? KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, {}, phases_single_vs_CF).fleets.enemyEscort
+				: (isYasenNotFound && this.data.fleetType == 1 && enemyShips.length == 12)
+					? KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, {}, phases_CTF_vs_CF).fleets.enemyEscort
+				: (isYasenNotFound && this.data.fleetType == 2 && enemyShips.length == 12)
+					? KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, {}, phases_STF_vs_CF).fleets.enemyEscort
+				: (isYasenNotFound && this.data.fleetType == 3 && enemyShips.length == 12)
+					? KC3BattlePrediction.analyzeBattlePartially(thisNode.battleDay, {}, phases_TCF_vs_CF).fleets.enemyEscort
+				: {};
 
 			// Player attacks
 			for (let idx = 0; idx < playerShips.length; idx++) {

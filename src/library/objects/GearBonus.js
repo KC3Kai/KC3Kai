@@ -6136,12 +6136,22 @@
 			"456": {
 				count: 0,
 				byNation: {
-					"UnitedStates": {
-						multiple: { "houg": 3, "houk": 4, "saku": 4, "houm": 3 },
-					},
-					"UnitedKingdom": {
-						multiple: { "houg": 2, "houk": 2, "saku": 2, "houm": 2 },
-					},
+					"UnitedStates": [
+						{
+							multiple: { "houg": 3, "houk": 4, "saku": 4 },
+						},
+						{
+							single: { "houm": 3 },
+						},
+					],
+					"UnitedKingdom": [
+						{
+							multiple: { "houg": 2, "houk": 2, "saku": 2 },
+						},
+						{
+							single: { "houm": 2 },
+						},
+					],
 					"Australia": "UnitedKingdom",
 				},
 				byClass: {

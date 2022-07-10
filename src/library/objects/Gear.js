@@ -283,6 +283,10 @@ KC3改 Equipment Object
 						// so here use white-list for sqrt(stars)
 						if([11, 134, 135].includes(this.masterId)) {
 							modifier = 1;
+						// 0.3 per star for Secondary (II) guns?
+						// https://twitter.com/hedgehog_hasira/status/1545868174259720192
+						} else if([467].includes(this.masterId)) {
+							return 0.3 * stars;
 						} else {
 							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
 							return modifier * stars;

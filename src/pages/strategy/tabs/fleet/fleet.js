@@ -11,6 +11,8 @@
 		currentFleetsObj: null,
 		suggestedName: "",
 		sortiedMap: "",
+		sortiedFleet: 0,
+		sortiedCombined: 0,
 
 		/*
 		  "fleets" object format:
@@ -42,7 +44,7 @@
 		 */
 
 		fleetsObjToDeckBuilder: function(fleetsObj, isImgBuilder = false) {
-			var dBuilderData = KC3ImageBuilder.createDeckBuilderHeader(isImgBuilder);
+			var dBuilderData = KC3ImageBuilder.createDeckBuilderHeader(isImgBuilder, this.sortiedFleet, this.sortiedCombined);
 			fleetsObj
 				.map(KC3ImageBuilder.createKC3FleetObject)
 				.map( function(x,i) {
@@ -323,6 +325,8 @@
 			this.currentFleetsObj = this.getCurrentFleetsObj();
 			this.suggestedName = "Fleets (" + new Date().format("yyyy-mm-dd HH:MM:ss") + ")";
 			this.sortiedMap = "";
+			this.sortiedFleet = 0;
+			this.sortiedCombined = PlayerManager.combinedFleet;
 		},
 
 		showSavedFleets: function(name) {
@@ -345,6 +349,8 @@
 			this.currentFleetsObj = fleetsObj;
 			this.suggestedName = name;
 			this.sortiedMap = "";
+			this.sortiedFleet = 0;
+			this.sortiedCombined = 0;
 		},
 
 		showFleetFromSortieId: function(sortieId) {
@@ -368,6 +374,8 @@
 
 				self.currentFleetsObj = fleetsObj;
 				self.sortiedMap = [sortieData.world, sortieData.mapnum].join("");
+				self.sortiedFleet = sortieData.fleetnum;
+				self.sortiedCombined = sortieData.fleetnum == 1 ? sortieData.combined : 0;
 				self.suggestedName = "Sortie #{0} {1}{2}-{3}".format(
 					sortieId, KC3Meta.isEventWorld(sortieData.world) ? "E" : "W", sortieData.world, sortieData.mapnum
 				);
@@ -394,6 +402,8 @@
 				});
 				self.currentFleetsObj = fleetsObj;
 				self.sortiedMap = "";
+				self.sortiedFleet = 0;
+				self.sortiedCombined = 0;
 				self.suggestedName = "Exped #{0} ({1} {2})".format(
 					expedId,
 					KC3Master.missionDispNo(expedData.mission),
