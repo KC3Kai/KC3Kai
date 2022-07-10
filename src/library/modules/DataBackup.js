@@ -12,11 +12,7 @@
 			var zip = new JSZip();
 			var ekex = ((typeof elementkey)==="string");//true if elementkey exists, false if not
 
-			if(ekex)
-			{
-				$(elementkey).html("");
-				$(elementkey).append("Exporting Data...(0/3)");
-			}
+			if(ekex) $(elementkey).html("<div>-Exporting Data Started-</div>");
 			for(var i=0;i<localStorage.length;i++)
 			{
 				var name = localStorage.key(i);
@@ -24,7 +20,7 @@
 			}
 
 			KC3Database.con.transaction("r", KC3Database.con.tables, function(){
-				if(ekex)$(elementkey).append("<div>Loading Data to array...(1/4)<div/>");
+				if(ekex)$(elementkey).append("<div>Loading Data to array...(1/4)</div>");
 				KC3Database.con.tables.forEach( //access all tables
 					function(table){
 						table.toArray(function(tablearray) { //add table data tmptext
@@ -35,14 +31,14 @@
 						});
 				});//foreach
 			}).then(function(){//for transaction
-				if(ekex)$(elementkey).append("<div>Loading Data to zip...(2/4)<div/>");
+				if(ekex)$(elementkey).append("<div>Loading Data to zip...(2/4)</div>");
 				zip.file("db.json",JSON.stringify(fullDBData));
 				zip.file("storage.json",JSON.stringify(fullStorageData));
 
-				if(ekex)$(elementkey).append("<div>Compressing zip....(3/4)<div/>");
+				if(ekex)$(elementkey).append("<div>Compressing zip....(3/4)</div>");
 				var objurl= URL.createObjectURL(zip.generate({type:"blob", compression: "DEFLATE"}));
 
-				if(ekex)$(elementkey).append("<div>Downloading zip....(4/4)<div/>");
+				if(ekex)$(elementkey).append("<div>Downloading zip....(4/4)</div>");
 				console.info("Downloading file to", ConfigManager.ss_directory + "/Backup/");
 
 				const zipFilename = (
