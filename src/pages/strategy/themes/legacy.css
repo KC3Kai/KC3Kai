@@ -682,6 +682,11 @@ body {
 .tab_overlodger .lodger-data .materials .material.over:before {
 	background-color: #bcd;
 }
+/* Data Backup */
+.tab_databackup .processDisplay .complete {
+	color:#081;
+}
+
 /* Ship List */
 .tab_ships .filters .fold_button {
 	background:#333;

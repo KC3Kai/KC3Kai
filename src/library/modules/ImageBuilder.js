@@ -31,9 +31,8 @@
   const defaultTheme = 'dark';
   const supportedThemes = {
     'dark': 'dark',
-    // gkcoi added light since 1.3.x, but buggy
-    //'legacy': 'light',
-    'legacy': 'dark',
+    // gkcoi added light since 1.3.x
+    'legacy': 'light',
   };
 
   window.KC3ImageBuilder = {
@@ -88,7 +87,7 @@
     //PlayerManager.loadBases();
     const fleets = PlayerManager.fleets;
     const lbas = PlayerManager.bases;
-    const deckBuilder = createDeckBuilderHeader(true);
+    const deckBuilder = createDeckBuilderHeader(true, 0, PlayerManager.combinedFleet);
     buildFleets(deckBuilder, fleets);
     if (lbWorldId >= 0 || !lbas.length) {
       buildLbasFromPlayerManager(deckBuilder, lbas, lbWorldId, deployedOnly);
@@ -105,7 +104,8 @@
     KC3Database.get_sortie(sortieId, sortie => {
       const fleets = createFleetsFromSortie(sortie, usedOnly);
       const lbas = sortie.lbas;
-      const deckBuilder = createDeckBuilderHeader(true);
+      const deckBuilder = createDeckBuilderHeader(true, sortie.fleetnum,
+        sortie.fleetnum == 1 && sortie.combined);
       buildFleets(deckBuilder, fleets);
       buildLbasFromSortie(deckBuilder, lbas, usedOnly);
       openWebsite(deckBuilder, baseUrl, target);
@@ -127,13 +127,16 @@
     return fleets.map(v => createKC3FleetObject(v));
   }
 
-  function createDeckBuilderHeader(forImgBuilder = false) {
+  function createDeckBuilderHeader(forImgBuilder = false, sortiedFleet = 0, cfType = 0) {
     const obj = {
       hqlv: PlayerManager.hq.level,
     };
     if (forImgBuilder) {
       obj.lang = supportedLangs[ConfigManager.language] || defaultLang;
       obj.theme = supportedThemes[ConfigManager.sr_theme] || defaultTheme;
+      // attributes to help selecting fleets, not supported by gkcoi
+      if (cfType) obj.combined = cfType;
+      if (sortiedFleet) obj.sortied = sortiedFleet;
     } else {
       obj.version = 4;
     }

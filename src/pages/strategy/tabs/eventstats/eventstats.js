@@ -235,7 +235,7 @@
 						time: time
 					};
 
-					let result = KC3BattlePrediction.analyzeBattle(battleData, [], battleType);
+					const resultDay = KC3BattlePrediction.analyzeBattle(battleData, {}, battleType);
 					const fleetSent = battleData.api_deck_id;
 					let ships = sortie["fleet" + fleetSent];
 					let maxHps = battleData.api_f_maxhps, initialHps = battleData.api_f_nowhps;
@@ -264,8 +264,8 @@
 						eships = eships.concat(battleData.api_ship_ke_combined);
 					}
 
-					let player = result.fleets.playerMain.concat(result.fleets.playerEscort);
-					let enemy = result.fleets.enemyMain.concat(result.fleets.enemyEscort);
+					let player = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
+					let enemy = resultDay.fleets.enemyMain.concat(resultDay.fleets.enemyEscort);
 					player.forEach((ship, index) => {
 						this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 					});
@@ -275,19 +275,21 @@
 						if (battle.yasen.api_e_nowhps.length > 6) { // Old API entries
 							battle.yasen.api_e_nowhps = battle.yasen.api_e_nowhps.slice(0, 6);
 						}
-						result = KC3BattlePrediction.analyzeBattle(battle.yasen, [], battleType);
-						player = result.fleets.playerMain.concat(result.fleets.playerEscort);
-						enemy = result.fleets.enemyMain.concat(result.fleets.enemyEscort);
+						const resultNight = KC3BattlePrediction.analyzeBattle(battle.yasen, {}, battleType);
+						player = resultNight.fleets.playerMain.concat(resultNight.fleets.playerEscort);
+						enemy = resultNight.fleets.enemyMain.concat(resultNight.fleets.enemyEscort);
 						player.forEach((ship, index) => {
 							this.stats.shipDamageDealt[ships[index].mst_id] = (this.stats.shipDamageDealt[ships[index].mst_id] || 0) + ship.damageDealt;
 						});
 						checkFleetAttacks(player, ships, checkForLastHit, mapnum);
 					}
 
-					// Assign taiha magnets
+					// Assign taiha magnets, count used damecon, or assign sunk ships
+					const playerResultDay = resultDay.fleets.playerMain.concat(resultDay.fleets.playerEscort);
 					for (let shipIdx = 0; shipIdx < ships.length; shipIdx++) {
 						if (!ships[shipIdx]) continue;
 						const taihaHp = maxHps[shipIdx] / 4;
+						const resultHpDayOnly = playerResultDay[shipIdx].hp;
 						const resultHp = player[shipIdx].hp;
 
 						// Handle pre-boss taiha
@@ -295,8 +297,8 @@
 								this.stats.taihaMagnets[ships[shipIdx].mst_id] = (this.stats.taihaMagnets[ships[shipIdx].mst_id] || 0) + 1;
 						}
 						// Handle sunk ships
-						if (resultHp <= 0) {
-							if (ships[shipIdx].equip.includes(42) || ships[shipIdx].equip.includes(43)) {
+						if (resultHp <= 0 || resultHpDayOnly <= 0) {
+							if (ships[shipIdx].equip.some(id => [42, 43].includes(id))) {
 								this.stats.dameconCount += 1;
 							} else {
 								if (!this.stats.kuso[sortie.id]) { this.stats.kuso[sortie.id] = []; }
