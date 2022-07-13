@@ -5126,35 +5126,35 @@
 	},
 	"5640": {
 		"api_id": 5640,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "梅雨高波改二",
+		"api_yomi": "たかなみ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5641": {
 		"api_id": 5641,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "梅雨曙改二",
+		"api_yomi": "あけぼの",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5642": {
 		"api_id": 5642,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "梅雨潮",
+		"api_yomi": "うしお",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5643": {
 		"api_id": 5643,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "梅雨潮改二",
+		"api_yomi": "うしお",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5644": {
 		"api_id": 5644,

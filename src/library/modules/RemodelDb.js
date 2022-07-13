@@ -106,6 +106,7 @@
                 case 390: // Amagiri Kai
                 case 903: // Amagiri K2
                 case 368: // Uranami
+                case 720: // Hayashio
                 case 545: // Saratoga Mk.2
                 case 550: // Saratoga Mk.2 Mod.2
                     return 20;
