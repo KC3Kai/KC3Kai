@@ -5681,19 +5681,19 @@
 					},
 					{
 						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [ 566, 567, 568, 656, 670, 915, 651, 145],
+						ids: [566, 567, 568, 656, 670, 915, 651, 145],
 						minStars: 5,
 						multiple: { "houm": 1 },
 					},
 					{
 						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [ 566, 567, 568, 656, 670, 915, 651, 145],
+						ids: [566, 567, 568, 656, 670, 915, 651, 145],
 						minStars: 8,
 						multiple: { "houg": 1 },
 					},
 					{
 						// Kagerou Class K2, Tan Yang, Shigure K2
-						ids: [ 566, 567, 568, 656, 670, 915, 651, 145],
+						ids: [566, 567, 568, 656, 670, 915, 651, 145],
 						minStars: 10,
 						multiple: { "houm": 1 },
 					},
