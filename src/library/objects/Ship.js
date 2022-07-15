@@ -3248,7 +3248,7 @@ KC3改 Ship Object
 	 *   2-ship cutin will be performed;
 	 * if flagship is Yamato K2+, and 2nd, 3rd is specific combination, 3-ship cutin triggered,
 	 *   known 2nd/3rd ship pairs are: Nagato K2+Mutsu K2, Ise K2+Hyuuga K2, Fusou K2+Yamashiro K2,
-	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K
+	 *     Nelson K+Warspite K, Kongou K2C+Hiei K2C, SouthDakota K+Washington K, Italia+Roma K, Colorado K+Maryland K
 	 * 2nd, 3rd ship must be healthy either (not even Chuuha).
 	 *
 	 * The same additional ammo consumptions: 16% for 400, 12% for 401
@@ -4064,9 +4064,9 @@ KC3改 Ship Object
 		// Torpedo Squadron Skilled Lookouts +9 in total if equipped by DD/CL/CLT
 		// https://twitter.com/Divinity__123/status/1479343022974324739
 		if (this.hasEquipment(412) && [2, 3, 4].includes(stype)) { baseValue += 4; }
-		// Searchlight bonus, large SL unknown for now
+		// Searchlight bonus, either small or large
 		const fleetSearchlight = fleetNum > 0 && PlayerManager.fleets[fleetNum - 1].estimateUsableSearchlight();
-		if (fleetSearchlight) { baseValue += 7; }
+		if (!!fleetSearchlight) { baseValue += 7; }
 		// Enemy searchlight -5, not implemented, rarely used by abyssal
 		// Starshell bonus/penalty
 		const battleConds = this.collectBattleConditions();
