@@ -4248,6 +4248,8 @@ KC3改 Ship Object
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
+		// already taken visible accuracy bonus into account
+		// https://twitter.com/noratako5/status/1252194958456483840
 		const byEquip = -this.nakedStats("ht");
 		const byImprove = this.equipment(true)
 			.map(g => g.accStatImprovementBonus("fire"))
@@ -4938,6 +4940,7 @@ KC3改 Ship Object
 		return KC3Ship.buildShipTooltip(this, tooltipBox);
 	};
 	KC3Ship.buildShipTooltip = function(shipObj, tooltipBox) {
+		if(!shipObj || shipObj.isDummy()) return tooltipBox;
 		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
 		const [nakedStats, bonusStats] = shipObj.nakedStats(undefined, true),
 			  maxedStats = shipObj.maxedStats(),
