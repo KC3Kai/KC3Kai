@@ -327,6 +327,9 @@ KC3改 Equipment Object
 					case 4: // Secondary guns, same values with day shelling fire
 						if([11, 134, 135].includes(this.masterId)) {
 							modifier = 1;
+						// https://twitter.com/hedgehog_hasira/status/1546101225069826049
+						} else if([467].includes(this.masterId)) {
+							return 0.3 * stars;
 						} else {
 							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
 							return modifier * stars;
