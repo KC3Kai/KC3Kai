@@ -4155,7 +4155,7 @@
 						.text("x{0}".format(recipeDetail.api_req_slot_num));
 					consumeGearBox.show();
 					const gearToRemodel = KC3GearManager.get(data.rosterId);
-					const isToConsumeSameGear = gearToRemodel.masterId === recipeDetail.api_slot_id
+					const isToConsumeSameGear = masterId === gearToRemodel.masterId
 						&& !gearToRemodel.lock && !gearToRemodel.stars;
 					const totalAmount = KC3GearManager.countByMasterId(masterId, false, true)
 						- (isToConsumeSameGear & 1);
