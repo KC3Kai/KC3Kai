@@ -422,6 +422,43 @@
 				return window.open(ExportSiteHost + "/#/newTab/");
 			});
 
+			$("#exportToKcwebSite").click(function(){
+				const settings = self.getSettings();
+				KC3ShipManager.load();
+				KC3GearManager.load();
+				self.shipsToExport = [];
+				for(const idx in KC3ShipManager.list) {
+					const ship = KC3ShipManager.list[idx];
+					// Skip ships not heart-locked or erroneous
+					if(!settings.exportIncludesUnlocked && !ship.lock) continue;
+					if(!ship.masterId || ship.masterId <= 0) continue;
+					self.shipsToExport.push({
+						api_ship_id: ship.masterId,
+						api_lv: ship.level,
+						api_kyouka: ship.mod,
+						api_exp: ship.exp,
+						api_slot_ex: ship.ex_item,
+						api_sally_area: ship.sally,
+					});
+				}
+				self.gearsToExport = [];
+				for(const idx in KC3GearManager.list) {
+					const gear = KC3GearManager.list[idx];
+					// Skip unlocked or erroneous gears
+					if(!settings.exportIncludesUnlocked && !gear.lock) continue;
+					if(!gear.masterId || gear.masterId <= 0) continue;
+					self.gearsToExport.push({
+						api_slotitem_id: gear.masterId,
+						api_level: gear.stars,
+					});
+				}
+				const objectToExport = {
+					ships: self.shipsToExport,
+					items: self.gearsToExport,
+				};
+				return window.open("https://noro6.github.io/kc-web#import:" + JSON.stringify(objectToExport), "kcweb");
+			});
+
 			// SHIPS
 			$.each(this.shipCache, function(stype, stypeList){
 
