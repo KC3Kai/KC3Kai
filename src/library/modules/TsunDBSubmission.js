@@ -1365,10 +1365,10 @@
 					// Uses raw api array instead to include engagement
 					misc.formation = (thisNode.battleDay !== undefined) ? thisNode.battleDay.api_formation: thisNode.battleNight.api_formation;
 					// Adding attacker HP for hit/miss prediction
-					template2['ship'].hp = attack.hp;
-					template2['ship'].maxhp = ship.hp[1];
+					template2.ship.hp = attack.hp;
+					template2.ship.maxhp = ship.hp[1];
 					// Adding position for calculations in vanguard formation
-					template2['ship'].position = [shipPos, fleet.ships.filter(id => id > 0).length];
+					template2.ship.position = [shipPos, fleet.ships.filter(id => id > 0).length];
 					misc.isCombined = isCombined;
 					misc.enemy = enemy;
 					misc.eposition = target;
