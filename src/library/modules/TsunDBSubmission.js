@@ -1095,8 +1095,24 @@
 		processEventBattle: function(http){
 			// Sends the raw battle api with minimal info to reconstruct battle on server side
 			if(!this.currentMap[0] || !this.currentMap[1]) { return; }
-			if(!KC3Meta.isEventWorld(this.currentMap[0])) { return; }
 			const thisNode = KC3SortieManager.currentNode();
+
+			// Adding 6-4-C/J/K and 6-5/7-4 boss nodes for validation of the LBAS hit rate formula (https://twitter.com/Divinity_123/status/1538517358406418436)
+			const isNode64CJK 	= (this.currentMap[0] == 6 && this.currentMap[1] == 4) && ([3,10,11,18].includes(thisNode.id));
+			const isNode65M  	= (this.currentMap[0] == 6 && this.currentMap[1] == 5) && ([13,18].includes(thisNode.id));
+			const isNode74P  	= (this.currentMap[0] == 7 && this.currentMap[1] == 4) && ([16,22,23].includes(thisNode.id));
+
+			// Adding vanguard formation in normal maps provisionally for validation later
+			const isVanguard = thisNode.fformation == 6;
+
+			const isEventMap 	= KC3Meta.isEventWorld(this.currentMap[0]);
+			
+			// Ignore the battle unless one of these conditions are met:
+			// 1. Event map
+			// 2. 6-4-C/J/K, 6-5/7-4 boss nodes
+			// 3. Friendly vanguard formation (in normal maps)
+			if (!isEventMap && !isNode64CJK && !isNode65M && !isNode74P && !isVanguard) { return; }
+
 			const apiData = http.response.api_data;
 			
 			// Fill constants
