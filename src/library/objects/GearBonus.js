@@ -2487,6 +2487,36 @@
 					single: { "raig": 1, "houk": 1 },
 				},
 			},
+			// Loire 130M
+			"471": {
+				count: 0,
+				starsDist: [],
+				byNation: {
+					"France": [
+						{
+							multiple: { "houg": 2, "houk": 2, "houm": 2 },
+						},
+						{
+							minStars: 6,
+							multiple: { "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 8,
+							multiple: { "houg": 1, "houk": 1, "houm": 1 },
+						},
+						{
+							minStars: 10,
+							multiple: { "houg": 1, "houm": 1 },
+						},
+					],
+				},
+				byClass: {
+					// Richelieu Class
+					"79": {
+						multiple: { "houg": 2, "houm": 1 },
+					},
+				},
+			},
 			// Kyoufuu Kai
 			"217": {
 				count: 0,
@@ -4614,6 +4644,26 @@
 			},
 			// Late Model Bow Torpedo Mount (4 tubes)
 			"457": {
+				count: 0,
+				byClass: {
+					// I-400 Class
+					"44": {
+						single: { "raig": 1, "houk": 4 },
+					},
+					// I-13, I-14
+					"71": {
+						single: { "raig": 2, "houk": 2 },
+					},
+					// I-47 Class
+					"103": "71",
+					// I-201, I-203
+					"109": {
+						single: { "raig": 3, "houk": 3 },
+					},
+				},
+			},
+			// Skilled Sonar Personnel + Late Model Bow Torpedo Mount (4 tubes)
+			"461": {
 				count: 0,
 				byClass: {
 					// I-400 Class
