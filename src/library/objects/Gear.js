@@ -139,6 +139,11 @@ KC3改 Equipment Object
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
 			if(Array.isArray(bonusDef.excludeStypes) && bonusDef.excludeStypes.includes(shipTypeId)) { return; }
+			if(Array.isArray(bonusDef.distinctGears)) {
+				const flagsKey = "countOnceIds" + bonusDef.distinctGears.join("_");
+				synergyGears[flagsKey] = (synergyGears[flagsKey] || 0) + 1;
+				if(synergyGears[flagsKey] > 1) { return; }
+			}
 			if(bonusDef.remodel || bonusDef.remodelCap) {
 				const remodelGroup = RemodelDb.remodelGroup(shipMasterId);
 				if(remodelGroup.indexOf(shipMasterId) < bonusDef.remodel) { return; }

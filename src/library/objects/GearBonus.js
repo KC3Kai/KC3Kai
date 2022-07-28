@@ -37,8 +37,6 @@
 				airRadarIds: [27, 30, 32, 89, 106, 124, 142, 278, 279, 307, 315, 410, 411, 450, 456, 460],
 				aaMachineGun: 0,
 				aaMachineGunIds: [37, 38, 39, 40, 49, 51, 84, 85, 92, 131, 173, 191, 274, 301],
-				domesticSonar: 0,
-				domesticSonarIds: [46, 47, 132, 149, 438],
 				enhancedBoiler: 0,
 				enhancedBoilerIds: [34],
 				newModelBoiler: 0,
@@ -85,9 +83,6 @@
 				type21AirRadarIds: [30, 410],
 				type21AirRadarK2: 0,
 				type21AirRadarK2Ids: [410],
-				type13AirRadarKai: 0,
-				type13AirRadarKaiNonexist: 1,
-				type13AirRadarKaiIds: [106],
 				rangefinderAirRadar: 0,
 				rangefinderAirRadarIds: [142, 460],
 				rangefinderKaiAirRadar: 0,
@@ -1834,11 +1829,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1855,11 +1852,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1893,11 +1892,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1914,11 +1915,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1952,11 +1955,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1973,11 +1978,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -1994,11 +2001,13 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2, "houk": 1 },
 					},
 					{
 						// Yahagi Kai Ni+, Mogami Kai Ni+
 						ids: [663, 668, 501, 506],
+						distinctGears: [26, 62, 79, 80, 81, 207, 208],
 						single: { "houg": 2 },
 					},
 					{
@@ -2032,6 +2041,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [237, 322, 323],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2055,6 +2065,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [237, 322, 323],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2078,6 +2089,7 @@
 					{
 						// Noshiro Kai Ni
 						ids: [662],
+						distinctGears: [237, 322, 323],
 						single: { "houg": 3, "houk": 1 },
 					},
 					{
@@ -2457,6 +2469,7 @@
 				byShip: {
 					// Mogami K2+
 					ids: [501, 506],
+					distinctGears: [165, 216],
 					single: { "tyku": 2, "houk": 2 },
 				},
 			},
@@ -2466,6 +2479,7 @@
 				byShip: {
 					// Mogami K2+
 					ids: [501, 506],
+					distinctGears: [165, 216],
 					single: { "tyku": 2, "houk": 2 },
 				},
 			},
@@ -2475,6 +2489,7 @@
 				byShip: {
 					// Mogami K2+
 					ids: [501, 506],
+					distinctGears: [238, 239],
 					single: { "raig": 1, "houk": 1 },
 				},
 			},
@@ -2484,6 +2499,7 @@
 				byShip: {
 					// Mogami K2+
 					ids: [501, 506],
+					distinctGears: [238, 239],
 					single: { "raig": 1, "houk": 1 },
 				},
 			},
@@ -4608,6 +4624,7 @@
 				byClass: {
 					// Gato Class
 					"114": {
+						distinctGears: [440, 441],
 						single: { "raig": 2 },
 					},
 				},
@@ -4618,6 +4635,7 @@
 				byClass: {
 					// Gato Class
 					"114": {
+						distinctGears: [440, 441],
 						single: { "raig": 2 },
 					},
 				},
@@ -4628,6 +4646,7 @@
 				byClass: {
 					// Gato Class
 					"114": {
+						distinctGears: [442, 443],
 						single: { "raig": 2 },
 					},
 				},
@@ -4638,6 +4657,7 @@
 				byClass: {
 					// Gato Class
 					"114": {
+						distinctGears: [442, 443],
 						single: { "raig": 2 },
 					},
 				},
@@ -4648,16 +4668,19 @@
 				byClass: {
 					// I-400 Class
 					"44": {
+						distinctGears: [457, 461],
 						single: { "raig": 1, "houk": 4 },
 					},
 					// I-13, I-14
 					"71": {
+						distinctGears: [457, 461],
 						single: { "raig": 2, "houk": 2 },
 					},
 					// I-47 Class
 					"103": "71",
 					// I-201, I-203
 					"109": {
+						distinctGears: [457, 461],
 						single: { "raig": 3, "houk": 3 },
 					},
 				},
@@ -4668,16 +4691,19 @@
 				byClass: {
 					// I-400 Class
 					"44": {
+						distinctGears: [457, 461],
 						single: { "raig": 1, "houk": 4 },
 					},
 					// I-13, I-14
 					"71": {
+						distinctGears: [457, 461],
 						single: { "raig": 2, "houk": 2 },
 					},
 					// I-47 Class
 					"103": "71",
 					// I-201, I-203
 					"109": {
+						distinctGears: [457, 461],
 						single: { "raig": 3, "houk": 3 },
 					},
 				},
@@ -6248,12 +6274,14 @@
 				byClass: {
 					// Akizuki Class
 					"54": {
+						distinctGears: [30, 410],
 						single: { "tyku": 3, "houk": 2, "saku": 2 },
 					},
 				},
 				byShip: {
 					// Mogami Kai+
 					ids: [73, 501, 506],
+					distinctGears: [30, 410],
 					single: { "tyku": 3, "houk": 2, "saku": 2 },
 				},
 			},
@@ -6262,15 +6290,29 @@
 				count: 0,
 				byClass: {
 					// Akizuki Class
-					"54": {
-						single: { "houg": 1, "souk": 1, "tyku": 5, "houk": 4, "saku": 2 },
+					"54": [
+						{
+							distinctGears: [30, 410],
+							single: { "tyku": 3, "houk": 2, "saku": 2 },
+						},
+						{
+							single: { "houg": 1, "souk": 1, "tyku": 2, "houk": 2 },
+						},
+					],
+				},
+				byShip: [
+					{
+						// Mogami Kai+
+						ids: [73, 501, 506],
+						distinctGears: [30, 410],
+						single: { "tyku": 3, "houk": 2, "saku": 2 },
 					},
-				},
-				byShip: {
-					// Mogami Kai+
-					ids: [73, 501, 506],
-					single: { "houg": 1, "souk": 1, "tyku": 5, "houk": 4, "saku": 2 },
-				},
+					{
+						// Mogami Kai+
+						ids: [73, 501, 506],
+						single: { "houg": 1, "souk": 1, "tyku": 2, "houk": 2 },
+					},
+				],
 			},
 			// Type 42 Air Radar Kai Ni
 			"411": {
@@ -6420,11 +6462,14 @@
 					{
 						// Yahagi K2+
 						ids: [663, 668],
+						// can't stack when equip both Kai and Late Model
+						distinctGears: [106, 450],
 						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
 					},
 					{
 						// Yahagi K2B
 						ids: [668],
+						distinctGears: [106, 450],
 						single: { "tyku": 1, "houk": 1 },
 					},
 				],
@@ -6464,18 +6509,14 @@
 						// Yahagi K2+
 						ids: [663, 668],
 						// can't stack when equip both Kai and Late Model
-						synergy: {
-							flags: [ "type13AirRadarKaiNonexist" ],
-							single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
-						},
+						distinctGears: [106, 450],
+						single: { "houg": 1, "tyku": 1, "houk": 1, "souk": 1 },
 					},
 					{
 						// Yahagi K2B
 						ids: [668],
-						synergy: {
-							flags: [ "type13AirRadarKaiNonexist" ],
-							single: { "tyku": 1, "houk": 1 },
-						},
+						distinctGears: [106, 450],
+						single: { "tyku": 1, "houk": 1 },
 					},
 				],
 			},
@@ -6790,10 +6831,8 @@
 				byClass: {
 					// Katori Class
 					"56": {
-						synergy: {
-							flags: [ "domesticSonar" ],
-							distinct: { "houk": 3, "tais": 2 },
-						},
+						distinctGears: [46, 47, 132, 149, 438],
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 			},
@@ -6804,10 +6843,8 @@
 				byClass: {
 					// Katori Class
 					"56": {
-						synergy: {
-							flags: [ "domesticSonar" ],
-							distinct: { "houk": 3, "tais": 2 },
-						},
+						distinctGears: [46, 47, 132, 149, 438],
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 				byShip: [
@@ -6858,10 +6895,8 @@
 					"101": "1",
 					// Katori Class
 					"56": {
-						synergy: {
-							flags: [ "domesticSonar" ],
-							distinct: { "houk": 3, "tais": 2 },
-						},
+						distinctGears: [46, 47, 132, 149, 438],
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 				byShip: [
@@ -6922,10 +6957,8 @@
 				byClass: {
 					// Katori Class
 					"56": {
-						synergy: {
-							flags: [ "domesticSonar" ],
-							distinct: { "houk": 3, "tais": 2 },
-						},
+						distinctGears: [46, 47, 132, 149, 438],
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 			},
@@ -6939,10 +6972,8 @@
 					},
 					// Katori Class
 					"56": {
-						synergy: {
-							flags: [ "domesticSonar" ],
-							distinct: { "houk": 3, "tais": 2 },
-						},
+						distinctGears: [46, 47, 132, 149, 438],
+						single: { "houk": 3, "tais": 2 },
 					},
 				},
 				byShip: [
