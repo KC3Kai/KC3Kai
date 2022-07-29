@@ -95,7 +95,7 @@
 	background:#eee;
 	border:1px solid #ccc;
 	border-radius: 0px 8px 8px 0px;
-	padding:5px 5px 40px 5px;
+	padding:5px 5px 5px 5px;
 	position:relative;
 }
 
@@ -106,7 +106,7 @@
 	width:218px;
 	height:300px;
 	float:left;
-	margin:0px 5px 5px 0px;
+	margin:5px 5px 5px 0px;
 	background:#006c91;
 	overflow:hidden;
 	text-align:center;
@@ -141,6 +141,8 @@
 }
 
 /* Ship Name*/
+.tab_mstship .shipInfo .basic {
+}
 .tab_mstship .shipInfo .name {
 	width:85%;
 	height:30px;
@@ -151,9 +153,7 @@
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
-	margin:0px 0px 5px 0px;
 }
-
 .tab_mstship .shipInfo .type {
 	width:auto;
 	max-width:15%;
@@ -165,15 +165,23 @@
 	text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;
-	margin:0px 0px 5px 0px;
+}
+.tab_mstship .shipInfo .name_jp {
+	width:100%;
+	min-height:20px;
+	line-height:20px;
+	text-align:left;
+	text-overflow:ellipsis;
+	overflow:hidden;
+	white-space:nowrap;
 }
 
 /* Ship stats */
 .tab_mstship .shipInfo .stats {
 	width:245px;
-	height:132px;
+	min-height:132px;
 	float:left;
-	margin:0px 0px 3px 0px;
+	margin:5px 0px 2px 0px;
 }
 .tab_mstship .shipInfo .ship_stat {
 	width:119px;
@@ -220,10 +228,10 @@
 /* Equipment */
 .tab_mstship .shipInfo .equipments {
 	width:245px;
-	height:94px;
+	min-height:92px;
 	float:left;
-	margin:0px 0px 5px 0px;
-	padding:2px 0px 0px 0px;
+	margin:2px 0px 2px 0px;
+	padding:0px 0px 0px 0px;
 }
 .tab_mstship .shipInfo .equipment {
 	width:245px;
@@ -291,8 +299,8 @@
 /* Abyssal boss flag & encounter */
 .tab_mstship .shipInfo .encounter {
 	position:relative;
-	left:-20px;
-	top:-93px;
+	left:-50px;
+	top:-114px;
 	float:left;
 	display:none;
 }
@@ -301,9 +309,9 @@
 	height:20px;
 }
 .tab_mstship .shipInfo .boss {
-	position:absolute;
-	left:128px;
-	top:445px;
+	position:relative;
+	left:-80px;
+	top:-114px;
 	float:left;
 	display:none;
 }
@@ -315,7 +323,7 @@
 /* Intro message */
 .tab_mstship .shipInfo .intro {
 	width:245px;
-	height:69px;
+	max-height:69px;
 	float:left;
 	font-size:12px;
 	text-align:left;
@@ -326,8 +334,7 @@
 /* MORE INFORMATION
 --------------------------------*/
 .tab_mstship .shipInfo .more {
-	/*padding:10px 0px 0px 0px;*/
-	margin:10px 0px 10px 0px;
+	margin:5px 0px 10px 0px;
 }
 .tab_mstship .shipInfo .more .moreinfo_box {
 	width:470px;
@@ -488,6 +495,7 @@
 }
 /* Accordion like */
 .tab_mstship .shipInfo .accordion {
+	margin-bottom:25px;
 }
 .tab_mstship .shipInfo .accordion .head {
 	height:24px;
@@ -864,13 +872,16 @@
 	margin-right: 2px;
 }
 
-/* SPECIAL (Salt Check)
+/* SPECIAL (Salt Check / Quotes)
 -------------------------------*/
 .tab_mstship .shipInfo .tokubest {
-	position:absolute;
-	bottom:0;
-	right:0;
-	padding:4px;
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: flex-end;
+	margin: 0px 2px;
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
 }
 
 .tab_mstship .shipInfo .tokubest .salty-zone {
@@ -882,6 +893,7 @@
 	font-size: 12px;
 	text-align: center;
 	padding: 1px;
+	margin: 2px;
 }
 
 .tab_mstship .shipInfo:not(.salted) .tokubest .salty-zone {
@@ -902,6 +914,7 @@
 	font-size: 12px;
 	text-align: center;
 	padding: 1px;
+	margin: 2px;
 	border: 1px solid #242;
 	background: #77f;
 }

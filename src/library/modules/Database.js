@@ -767,8 +767,7 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_enemy : function(enemyId, callback) {
-			var self = this;
-			this.con.battle
+			return this.con.battle
 				.where("enemyId").equals(enemyId)
 				.toArray(function(battleList){
 					if(battleList.length > 0){
@@ -784,21 +783,16 @@ Uses Dexie.js third-party plugin on the assets directory
 		},
 		
 		get_enemyInfo :function(shipId, callback){
-			try {
-				this.con.enemy
-					.where("id").equals(shipId)
-					.toArray(function(matchList){
-						//console.debug("matchList", matchList);
-						if(matchList.length > 0){
-							callback(matchList[0]);
-						}else{
-							callback(false);
-						}
-					});
-				return true;
-			} catch (e) {
-				console.warn(e);
-			}
+			return this.con.enemy
+				.where("id").equals(shipId)
+				.toArray(function(matchList){
+					//console.debug("matchList", matchList);
+					if(matchList.length > 0){
+						callback(matchList[0]);
+					}else{
+						callback(false);
+					}
+				});
 		},
 		
 		get_resource :function(HourNow, callback){

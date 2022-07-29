@@ -365,6 +365,7 @@ AntiAir: anti-air related calculations
 	function abyssalEquipmentAntiAir(gearMst, forFleet) {
 		if (typeof gearMst === "number" && KC3Master.isAbyssalGear(gearMst))
 			gearMst = KC3Master.slotitem(gearMst);
+		if (!gearMst) return 0;
 		return calcEquipmentAADefense(gearMst, 0, forFleet);
 	}
 
