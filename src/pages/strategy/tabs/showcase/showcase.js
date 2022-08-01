@@ -456,7 +456,11 @@
 					ships: self.shipsToExport,
 					items: self.gearsToExport,
 				};
-				return window.open("https://noro6.github.io/kc-web#import:" + JSON.stringify(objectToExport), "kcweb");
+				const kcwebBaseUrl = "https://noro6.github.io/kc-web#import:".format(({
+					"jp": "ja", "kr": "ja",
+					"scn": "ja", "tcn": "ja", "tcn-yue": "ja",
+				})[ConfigManager.language] || "en");
+				return window.open(kcwebBaseUrl + JSON.stringify(objectToExport), "kcweb");
 			});
 
 			// SHIPS

@@ -17,8 +17,7 @@
   'use strict';
 
   const exportBaseUrl = 'https://kancolleimgbuilder.web.app/builder#';
-  const kcwebJaBaseUrl = 'https://noro6.github.io/kc-web#import:';
-  const kcwebEnBaseUrl = 'https://arill.github.io/kc-web#import:';
+  const kcwebBaseUrl = 'https://noro6.github.io/kc-web#import:';
   const jervisBaseUrl = 'https://jervis.vercel.app/{0}?predeck=';
   const defaultLang = 'en';
   const supportedLangs = {
@@ -48,12 +47,11 @@
   function openWebsite(deckBuilderData, baseUrl, target) {
     let url;
     if (baseUrl === "kcweb") {
-      // Redirect non-CJK user to Arill's en fork
-      const kcwebBaseUrl = (({
-        "jp" : kcwebJaBaseUrl, "kr" : kcwebJaBaseUrl,
-        "scn": kcwebJaBaseUrl, "tcn": kcwebJaBaseUrl, "tcn-yue": kcwebJaBaseUrl,
-      })[ConfigManager.language] || kcwebEnBaseUrl);
-      url = kcwebBaseUrl + JSON.stringify({
+      // set en language for non-CJK users
+      url = kcwebBaseUrl.format(({
+        "jp": "ja", "kr": "ja",
+        "scn": "ja", "tcn": "ja", "tcn-yue": "ja",
+      })[ConfigManager.language] || "en") + JSON.stringify({
         "predeck": deckBuilderData
       });
     } else if (baseUrl === "jervis") {
