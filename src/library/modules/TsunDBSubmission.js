@@ -1157,6 +1157,7 @@
 			this.sendData(this.eventBattle, 'eventbattle');
 		},
 
+
 		processSpAttack: function() {
 			this.spAttack = {};
 			const thisNode = KC3SortieManager.currentNode();
@@ -1238,6 +1239,8 @@
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
 				slots: ship.slots,
+				// Adding ammo for hit/miss prediction
+				ammo: ship.ammo,
 			});
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
@@ -1256,7 +1259,7 @@
 				const fleet = PlayerManager.fleets[!isEscort ? fleetSent - 1 : 1];
 				const ship = fleet.ship(shipPos);
 				const shipInfo = fillShipInfo(ship);
-				shipInfo.position = shipPos;
+				//shipInfo.position = shipPos;
 				const template2 = Object.assign({}, template, {ship: shipInfo});
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
@@ -1344,7 +1347,14 @@
 						misc = ship.nightSpAttackBaseRate(cutin);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
-					misc.formation = [thisNode.fformation, thisNode.eformation];
+					// Uses raw api array instead to include engagement
+					misc.formation = (thisNode.battleDay !== undefined) ? thisNode.battleDay.api_formation: thisNode.battleNight.api_formation;
+					// Adding attacker HP and fleet type for hit/miss prediction
+					template2.ship.hp = attack.hp;
+					template2.ship.maxhp = ship.hp[1];
+					template2.ship.fleetType = this.data.fleetType;
+					// Adding position for calculations in vanguard formation
+					template2.ship.position = [shipPos, fleet.ships.filter(id => id > 0).length];
 					misc.isCombined = isCombined;
 					misc.enemy = enemy;
 					misc.eposition = target;
