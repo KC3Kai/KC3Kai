@@ -2832,14 +2832,19 @@ KC3改 Ship Object
 			// and if ASW plane equipped and its slot > 0
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
-		// DE, DD, CL, CLT, CT, AO(*)
+		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
-		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied
-		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
+		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied.
+		// *FBB: if Yamato K2 inherits K2 Juu's asw mod, she can depth charge without any equip.
+		// https://twitter.com/yukicacoon/status/1554821784104419329
+		// it's more likely no stype limited ingame, the asw stat of ship was the only condition?
+		// but CV Kaga K2 with asw mod has been fixed to no asw ability, so:
+		//const isAntiSubStype = [1, 2, 3, 4, 8, 21, 22].includes(stype);
+		const incapableStype = [11].includes(stype);
 		// if max ASW stat before marriage (Lv99) not 0, can do ASW,
 		// which also used at `Core.swf/vo.UserShipData.hasTaisenAbility()`
 		// if as[1] === 0, naked asw stat should be 0, but as[0] may not.
-		return isAntiSubStype && this.as[1] > 0;
+		return !incapableStype && this.as[1] + (this.mod[6] || 0) > 0;
 	};
 
 	/**
