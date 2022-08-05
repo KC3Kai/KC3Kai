@@ -1074,8 +1074,10 @@ KC3改 Equipment Object
 		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
 		//   [378] Lightweight ASW Torpedo (Initial Test Model)
 		//   [439] Hedgehog (Initial Model)
-		// No armor penetration effect found for newly added ones
+		// ~~No armor penetration effect found for newly added ones~~
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
+		// Armor penetration extended since 2022-08-04, even applied to some projectors, summary:
+		//   https://twitter.com/twillwave1024/status/1555399272358899712
 			[226, 227, 378, 439].indexOf(this.masterId) > -1;
 	};
 
@@ -1086,10 +1088,12 @@ KC3改 Equipment Object
 		//   [287] Type3 DCP (Concentrated Deployment)
 		//   [288] Prototype 15cm 9-tube ASW Rocket Launcher
 		//   [377] RUR-4A Weapon Alpha Kai
+		// Added since 2022-08-04:
+		//   [472] Mk.32 ASW Torpedo (Mk.2 Thrower)
 		// Not counted by either:
 		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
-			[44, 45, 287, 288, 377].indexOf(this.masterId) > -1;
+			[44, 45, 287, 288, 377, 472].indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {

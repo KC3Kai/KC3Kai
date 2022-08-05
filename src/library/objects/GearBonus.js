@@ -6954,6 +6954,7 @@
 			// Type 0 Passive Sonar
 			"132": {
 				count: 0,
+				starsDist: [],
 				byClass: {
 					// Katori Class
 					"56": {
@@ -6961,6 +6962,43 @@
 						single: { "houk": 3, "tais": 2 },
 					},
 				},
+				byShip: [
+					{
+						// Yamato K2+, Musashi K2
+						ids: [911, 916, 546],
+						single: { "houk": 1 },
+					},
+					{
+						// Taihou Kai, Shoukaku K2+, Zuikaku K2+
+						ids: [156, 461, 466, 462, 467],
+						single: { "houk": 2 },
+					},
+					// Following no ship limited, any ship can equip applied
+					{
+						minStars: 3,
+						single: { "houk": 1 },
+					},
+					{
+						minStars: 5,
+						single: { "tais": 1 },
+					},
+					{
+						minStars: 7,
+						single: { "houk": 1 },
+					},
+					{
+						minStars: 8,
+						single: { "tais": 1 },
+					},
+					{
+						minStars: 9,
+						single: { "houm": 1 },
+					},
+					{
+						minStars: 10,
+						single: { "tais": 1 },
+					},
+				],
 			},
 			// Type 4 Passive Sonar
 			"149": {
@@ -7063,6 +7101,22 @@
 					},
 				],
 			},
+			// Type 2 Depth Charge
+			"227": {
+				count: 0,
+				starsDist: [],
+				byShip: [
+					// For all ships can equip it
+					{
+						minStars: 8,
+						multiple: { "tais": 1 },
+					},
+					{
+						minStars: 10,
+						multiple: { "tais": 1 },
+					},
+				],
+			},
 			// RUR-4A Weapon Alpha Kai
 			"377": {
 				count: 0,
@@ -7152,6 +7206,30 @@
 						// All DD/CL/CT
 						stypes: [2, 3, 21],
 						single: { "houk": 1, "tais": 1 },
+					},
+				],
+			},
+			// Mk.32 ASW Torpedo (Mk.2 Thrower)
+			"472": {
+				count: 0,
+				byNation: {
+					"UnitedStates": {
+						multiple: { "tais": 3 },
+					},
+					"UnitedKingdom": {
+						multiple: { "tais": 1 },
+					},
+				},
+				byShip: [
+					{
+						// All DE
+						stypes: [1],
+						multiple: { "houk": 1 },
+					},
+					{
+						// Samuel B.Roberts Mk.II
+						ids: [920],
+						single: { "houk": 1, "tais": 1, "houm": 1 },
 					},
 				],
 			},
@@ -7720,7 +7798,7 @@
 							{
 								flags: [ "newModelBoiler" ],
 								byCount: {
-									gear: "enhancedBoiler",
+									gear: "newModelBoiler",
 									"1": { "soku": 5 },
 									"2": { "soku": 10 },
 									"3": { "soku": 10 },
@@ -7793,7 +7871,7 @@
 						stypes: [2],
 						// Except slow DDs(see Slow Group B special below) and DDs in other groups:
 						//   Samuel B.Roberts, Shimakaze, Tashkent, Amatsukaze
-						excludes: [561, 681, 50, 229, 516, 395, 181, 316],
+						excludes: [561, 681, 920, 50, 229, 516, 395, 181, 316],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],
@@ -7827,9 +7905,9 @@
 						],
 					},
 					{
-						// Fast Group C: Yuubari/Yuubari Kai, Kaga, fast AV: Chitose, Chiyoda, Nisshin
-						origins: [115, 84, 102, 103, 581],
-						excludes: [622, 623, 624, 108, 109, 291, 292, 296, 297],
+						// Fast Group C: Yuubari/Yuubari Kai, Kaga, fast AV: Chitose, Chiyoda, Nisshin, Samuel B.Roberts Mk.II
+						origins: [115, 84, 102, 103, 581, 561],
+						excludes: [622, 623, 624, 108, 109, 291, 292, 296, 297, 561, 681],
 						synergy: [
 							{
 								flags: [ "enhancedBoiler" ],

@@ -2518,16 +2518,16 @@ KC3改 Ship Object
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
 		if(warfareType === "Antisub") {
-			const type95ndcCnt = this.countEquipment(226);
-			const type2ndcCnt = this.countEquipment(227);
-			if(type95ndcCnt > 0 || type2ndcCnt > 0) {
-				const deShipBonus = this.master().api_stype === 1 ? 1 : 0;
-				newDepthChargeBonus =
-					type95ndcCnt * (Math.sqrt(KC3Master.slotitem(226).api_tais - 2) + deShipBonus) +
-					type2ndcCnt * (Math.sqrt(KC3Master.slotitem(227).api_tais - 2) + deShipBonus);
-				// Applying this to enemy submarine's armor, result will be capped to at least 1
-				if(isDefenderArmorCounted) result += newDepthChargeBonus;
-			}
+			const deShipBonus = this.master().api_stype === 1 ? 1 : 0;
+			// Hedgehog (Initial Model) and other 3 gears added since 2022-08-04
+			// https://twitter.com/hedgehog_hasira/status/1555167740150681600
+			// https://twitter.com/yukicacoon/status/1555380069706584064
+			newDepthChargeBonus = [226, 227, 377, 378, 439, 472].reduce((sum, id) => (sum
+				+ this.countEquipment(id)
+					* (Math.sqrt(KC3Master.slotitem(id).api_tais - 2) + deShipBonus)
+			), 0);
+			// Applying this to enemy submarine's armor, result will be capped to at least 1
+			if(isDefenderArmorCounted) result += newDepthChargeBonus;
 		}
 		
 		// Remaining ammo percent modifier, applied to final damage, not only attack power
