@@ -88,17 +88,18 @@
 	line-height:26px;
 	margin:0px 0px 5px 0px;
 	font-size:20px;
-	text-overflow:ellipsis;
+	text-overflow:clip;
 	overflow:hidden;
-	white-space:nowrap;
+	white-space:normal;
 }
-.tab_mstgear .gearInfo .name:hover {
+.tab_mstgear .gearInfo .name_jp:hover {
 	text-overflow:clip;
 	white-space:normal;
 }
+.tab_mstgear .gearInfo .name_jp,
 .tab_mstgear .gearInfo .types {
 	width:368px;
-	height:20px;
+	min-height:20px;
 	line-height:20px;
 	margin:0px 0px 2px 0px;
 	text-overflow:ellipsis;

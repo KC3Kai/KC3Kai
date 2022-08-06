@@ -2518,16 +2518,16 @@ KC3改 Ship Object
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
 		if(warfareType === "Antisub") {
-			const type95ndcCnt = this.countEquipment(226);
-			const type2ndcCnt = this.countEquipment(227);
-			if(type95ndcCnt > 0 || type2ndcCnt > 0) {
-				const deShipBonus = this.master().api_stype === 1 ? 1 : 0;
-				newDepthChargeBonus =
-					type95ndcCnt * (Math.sqrt(KC3Master.slotitem(226).api_tais - 2) + deShipBonus) +
-					type2ndcCnt * (Math.sqrt(KC3Master.slotitem(227).api_tais - 2) + deShipBonus);
-				// Applying this to enemy submarine's armor, result will be capped to at least 1
-				if(isDefenderArmorCounted) result += newDepthChargeBonus;
-			}
+			const deShipBonus = this.master().api_stype === 1 ? 1 : 0;
+			// Hedgehog (Initial Model) and other 3 gears added since 2022-08-04
+			// https://twitter.com/hedgehog_hasira/status/1555167740150681600
+			// https://twitter.com/yukicacoon/status/1555380069706584064
+			newDepthChargeBonus = [226, 227, 377, 378, 439, 472].reduce((sum, id) => (sum
+				+ this.countEquipment(id)
+					* (Math.sqrt(KC3Master.slotitem(id).api_tais - 2) + deShipBonus)
+			), 0);
+			// Applying this to enemy submarine's armor, result will be capped to at least 1
+			if(isDefenderArmorCounted) result += newDepthChargeBonus;
 		}
 		
 		// Remaining ammo percent modifier, applied to final damage, not only attack power
@@ -2692,7 +2692,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
-				681, // Samuel B.Roberts Kai
+				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, // all remodels of Fletcher-class
 				624, // Yuubari Kai Ni D
 			].includes(this.masterId);
@@ -2832,14 +2832,19 @@ KC3改 Ship Object
 			// and if ASW plane equipped and its slot > 0
 			return this.equipment().some((g, i) => this.slots[i] > 0 && g.isAswAircraft(isCvlLike));
 		}
-		// DE, DD, CL, CLT, CT, AO(*)
+		// Known stype: DE, DD, CL, CLT, CT, AO(*), FBB(*)
 		// *AO: Hayasui base form and Kamoi Kai-Bo can only depth charge, Kamoi base form cannot asw,
-		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied
-		const isAntiSubStype = [1, 2, 3, 4, 21, 22].includes(stype);
+		//      Yamashiomaru uses depth charge if not air attack or any ASW stat > 0 gear equppied.
+		// *FBB: if Yamato K2 inherits K2 Juu's asw mod, she can depth charge without any equip.
+		// https://twitter.com/yukicacoon/status/1554821784104419329
+		// it's more likely no stype limited ingame, the asw stat of ship was the only condition?
+		// but CV Kaga K2 with asw mod has been fixed to no asw ability, so:
+		//const isAntiSubStype = [1, 2, 3, 4, 8, 21, 22].includes(stype);
+		const incapableStype = [11].includes(stype);
 		// if max ASW stat before marriage (Lv99) not 0, can do ASW,
 		// which also used at `Core.swf/vo.UserShipData.hasTaisenAbility()`
 		// if as[1] === 0, naked asw stat should be 0, but as[0] may not.
-		return isAntiSubStype && this.as[1] > 0;
+		return !incapableStype && this.as[1] + (this.mod[6] || 0) > 0;
 	};
 
 	/**
@@ -3923,7 +3928,7 @@ KC3改 Ship Object
 				// [457] bow 4 tubes had been not counted: https://twitter.com/yukicacoon/status/1530850901388587013
 				// [458] even sub radar not counted: https://twitter.com/shiro_sh39/status/1530861026941448193
 				// fixed since 2022-05-30: https://twitter.com/KanColle_STAFF/status/1531162152010395649
-				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457]);
+				const lateTorpedoCnt = this.countEquipment([213, 214, 383, 441, 443, 457, 461]);
 				const submarineRadarCnt = this.countEquipmentType(2, 51);
 				const mainGunCnt = this.countEquipmentType(2, [1, 2, 3, 38]);
 				const secondaryCnt = this.countEquipmentType(2, 4);
@@ -4248,6 +4253,8 @@ KC3改 Ship Object
 		// but verifications have proved this one gets more accurate
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:450#68
 		const byLuck = 1.5 * Math.sqrt(this.lk[0]);
+		// already taken visible accuracy bonus into account
+		// https://twitter.com/noratako5/status/1252194958456483840
 		const byEquip = -this.nakedStats("ht");
 		const byImprove = this.equipment(true)
 			.map(g => g.accStatImprovementBonus("fire"))
@@ -4938,6 +4945,7 @@ KC3改 Ship Object
 		return KC3Ship.buildShipTooltip(this, tooltipBox);
 	};
 	KC3Ship.buildShipTooltip = function(shipObj, tooltipBox) {
+		if(!shipObj || shipObj.isDummy()) return tooltipBox;
 		//const shipDb = WhoCallsTheFleetDb.getShipStat(shipObj.masterId);
 		const [nakedStats, bonusStats] = shipObj.nakedStats(undefined, true),
 			  maxedStats = shipObj.maxedStats(),

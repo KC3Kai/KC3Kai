@@ -1323,16 +1323,19 @@
 							targetElm.tooltip("destroy");
 						}
 						if(self.showTooltip){
-							// but this is also time-consuming
-							const tooltipBox = KC3ShipManager.get(thisShip.id)
-								.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
-							targetElm.tooltip({
-								position: { my: "left top", at: "left+25 bottom" },
-								items: "div",
-								content: tooltipBox.prop("outerHTML"),
-								// might be disabled for performance
-								open: KC3Ship.onShipTooltipOpen,
-							});
+							const shipObj = KC3ShipManager.get(thisShip.id);
+							if(shipObj.exists()){
+								// but this is also time-consuming
+								const tooltipBox = shipObj
+									.htmlTooltip($(".tab_ships .factory .ship_tooltip").clone());
+								targetElm.tooltip({
+									position: { my: "left top", at: "left+25 bottom" },
+									items: "div",
+									content: tooltipBox.prop("outerHTML"),
+									// might be disabled for performance
+									open: KC3Ship.onShipTooltipOpen,
+								});
+							}
 						}
 						// Rebind click handlers
 						$(".ship_img .ship_icon", this).click(self.shipClickFunc);

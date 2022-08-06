@@ -153,8 +153,9 @@
 				$(".tab_mstgear .gearInfo .scrap").hide();
 			}
 			
-			$(".tab_mstgear .gearInfo .name").text(
-				"[{0}] {1}".format(gearId, KC3Meta.gearName(gearData.api_name))
+			$(".tab_mstgear .gearInfo .name").text(KC3Meta.gearName(gearData.api_name));
+			$(".tab_mstgear .gearInfo .name_jp").text(
+				"[{0}] {1}".format(gearId, gearData.api_name)
 			);
 			// Devs removed this property from master since 2019-06-25
 			// Picture book API will return it for those unlocked items only

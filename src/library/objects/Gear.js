@@ -139,6 +139,11 @@ KC3改 Equipment Object
 			if(Array.isArray(bonusDef.excludeClasses) && bonusDef.excludeClasses.includes(shipClassId)) { return; }
 			if(Array.isArray(bonusDef.stypes) && !bonusDef.stypes.includes(shipTypeId)) { return; }
 			if(Array.isArray(bonusDef.excludeStypes) && bonusDef.excludeStypes.includes(shipTypeId)) { return; }
+			if(Array.isArray(bonusDef.distinctGears)) {
+				const flagsKey = "countOnceIds" + bonusDef.distinctGears.join("_");
+				synergyGears[flagsKey] = (synergyGears[flagsKey] || 0) + 1;
+				if(synergyGears[flagsKey] > 1) { return; }
+			}
 			if(bonusDef.remodel || bonusDef.remodelCap) {
 				const remodelGroup = RemodelDb.remodelGroup(shipMasterId);
 				if(remodelGroup.indexOf(shipMasterId) < bonusDef.remodel) { return; }
@@ -327,6 +332,9 @@ KC3改 Equipment Object
 					case 4: // Secondary guns, same values with day shelling fire
 						if([11, 134, 135].includes(this.masterId)) {
 							modifier = 1;
+						// https://twitter.com/hedgehog_hasira/status/1546101225069826049
+						} else if([467].includes(this.masterId)) {
+							return 0.3 * stars;
 						} else {
 							modifier = this.master().api_type[3] === 16 ? 0.2 : 0.3;
 							return modifier * stars;
@@ -1066,8 +1074,10 @@ KC3改 Equipment Object
 		// Added since 2021-10-29: https://twitter.com/KanColle_STAFF/status/1454037548209037315
 		//   [378] Lightweight ASW Torpedo (Initial Test Model)
 		//   [439] Hedgehog (Initial Model)
-		// No armor penetration effect found for newly added ones
+		// ~~No armor penetration effect found for newly added ones~~
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
+		// Armor penetration extended since 2022-08-04, even applied to some projectors, summary:
+		//   https://twitter.com/twillwave1024/status/1555399272358899712
 			[226, 227, 378, 439].indexOf(this.masterId) > -1;
 	};
 
@@ -1078,10 +1088,12 @@ KC3改 Equipment Object
 		//   [287] Type3 DCP (Concentrated Deployment)
 		//   [288] Prototype 15cm 9-tube ASW Rocket Launcher
 		//   [377] RUR-4A Weapon Alpha Kai
+		// Added since 2022-08-04:
+		//   [472] Mk.32 ASW Torpedo (Mk.2 Thrower)
 		// Not counted by either:
 		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
-			[44, 45, 287, 288, 377].indexOf(this.masterId) > -1;
+			[44, 45, 287, 288, 377, 472].indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {

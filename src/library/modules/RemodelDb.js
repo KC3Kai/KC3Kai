@@ -95,6 +95,7 @@
                 case 228: // Yukikaze Kai
                     return 50;
                 case 651: // Tan Yang
+                case 681: // Samuel B.Roberts Kai
                     return 60;
                 case 208: // Shikinami
                 case 225: // Kagerou
@@ -236,6 +237,7 @@
                 case 628: // Fletcher Kai Mod.2
                     return 30;
                 case 629: // Fletcher Mk.II
+                case 681: // Samuel B.Roberts Kai
                     return 20;
                 case 597: // Atlanta
                     return 20;

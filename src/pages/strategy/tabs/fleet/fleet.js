@@ -570,7 +570,7 @@
 
 			// Only available for current fleet as no ship attribute omitted
 			var viewType = $("input[type=radio][name=view_type]:checked").val();
-			if(viewType === "current"){
+			if(viewType === "current" && kcShip.exists()){
 				// Show a rich text tool-tip like stats in game
 				const tooltipBox = kcShip.htmlTooltip($(".ship_tooltip", shipBox));
 				$(".ship_hover", shipBox).tooltip({
