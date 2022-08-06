@@ -351,7 +351,7 @@ AntiAir: anti-air related calculations
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 1 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true);
+			(forFleet ? 0.5 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);

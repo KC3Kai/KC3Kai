@@ -2692,7 +2692,7 @@ KC3改 Ship Object
 				478, // Tatsuta Kai Ni
 				394, // Jervis Kai
 				893, // Janus Kai
-				681, // Samuel B.Roberts Kai
+				681, 920, // Samuel B.Roberts Kai and Mk.II
 				562, 689, 596, 692, 628, 629, // all remodels of Fletcher-class
 				624, // Yuubari Kai Ni D
 			].includes(this.masterId);
