@@ -1557,6 +1557,7 @@
 									filename: PlayerManager.hq.name + '_' + sortieId,
 									format: 'png',
 									subDir: 'replay',
+									hideDownload: false,
 								}).export(self.endExport.bind(self));
 							});
 						},
@@ -1581,8 +1582,8 @@
 				console.error("Generating replay data failed", error);
 				alert("Failed to generate replay data");
 			} else if (result && result.filename) {
-				// Show a response 'cause download bar is hidden
-				alert("Saved to {0}".format(result.filename));
+				// Show a response if hideDownload shelf bar is true
+				//alert("Saved to {0}".format(result.filename));
 			}
 			this.exportingReplay = false;
 			$("body").css("opacity", "1");

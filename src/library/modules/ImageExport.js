@@ -7,7 +7,7 @@
     loadDb = function () {};
   };
 
-  function KC3ImageExport(canvas, { filename, subDir, method, format, quality }) {
+  function KC3ImageExport(canvas, { filename, subDir, method, format, quality, hideDownload }) {
     ConfigManager.load();
     loadDb();
 
@@ -15,6 +15,7 @@
       filename,
       dir: `${ConfigManager.ss_directory}${subDir ? `/${subDir}` : ''}`,
       format: format || (ConfigManager.ss_type === 'JPG' ? 'jpg' : 'png'),
+      disableDownloadShelf: hideDownload || false,
     });
 
     this.imageData = KC3ImageExport.composeImageData(canvas, this.format,
@@ -54,7 +55,7 @@
     );
 
     return this.imageData.toUrl()
-      .then(download.bind(null, path));
+      .then(download.bind(this, path));
   };
 
   KC3ImageExport.prototype.saveTab = function () {
@@ -159,7 +160,7 @@
   KC3ImageExport.download = function (path, urlSpec) {
     const { disableDownloadBar, writeFile, registerDeterminingFilenameListener } = KC3ImageExport;
     return Promise.resolve()
-      .then(disableDownloadBar)
+      .then(disableDownloadBar.bind(this))
       .then(registerDeterminingFilenameListener)
       .then(writeFile.bind(null, path, urlSpec));
   };
@@ -202,19 +203,26 @@
     }
   };
 
-  let disableTimer = null;
+  // `downloads.shelf` permission needed in manifest.json,
+  // could be disabled since webstore policy become stricter
+  let disableTimer = null, disableDone = false;
   KC3ImageExport.disableDownloadBar = function () {
     if (disableTimer) {
       clearTimeout(disableTimer);
     }
-    chrome.downloads.setShelfEnabled(false);
+    if (this.disableDownloadShelf) {
+      chrome.downloads.setShelfEnabled(false);
+      disableDone = true;
+    }
   };
-  KC3ImageExport.enableDownloadBar = function (result) {
-    disableTimer = setTimeout(() => {
-      chrome.downloads.setShelfEnabled(true);
-      disableTimer = null;
-    }, 300);
-    return result;
+  KC3ImageExport.enableDownloadBar = function () {
+    if (disableDone) {
+      disableTimer = setTimeout(() => {
+        chrome.downloads.setShelfEnabled(true);
+        disableTimer = null;
+        disableDone = false;
+      }, 300);
+    }
   };
 
   /* ----------------------[ IMGUR ]----------------------- */
