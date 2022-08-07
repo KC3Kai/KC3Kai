@@ -392,6 +392,11 @@
 						KC3Meta.shipName(shipData.api_name) // For Seasonal CGs
 			).lazyInitTooltip();
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
+			$(".tab_mstship .shipInfo .name_jp").text([
+				KC3Master.isRegularShip(ship_id) ? KC3Meta.ctype(shipData.api_ctype) : "",
+				shipData.api_name,
+				["'", wanakana.toRomaji(shipData.api_yomi.replace(/^-$/, "")), "'"].join(""),
+			].join(" ")).toggle(KC3Master.isRegularShip(ship_id) && ConfigManager.language !== "jp");
 			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );
 			
 			// CG VIEWER
@@ -1303,7 +1308,7 @@
 				$(".tab_mstship .shipInfo .cgswf")
 					.css("width", "100%").css("height", "400px")
 					.attr("scale", 400 / 1000);
-				$(".tab_mstship .shipInfo .boss").toggle("boss" === KC3Meta.abyssShipBorderClass(shipData));
+				$(".tab_mstship .shipInfo .boss").hide();
 				
 				// ENEMY STATS
 				// show stats if encounter once, or show stats of internal db
@@ -1491,12 +1496,18 @@
 							statBox.appendTo(".tab_mstship .shipInfo .stats");
 						});
 						
+						if("boss" === KC3Meta.abyssShipBorderClass(shipData))
+							$(".tab_mstship .shipInfo .boss").show();
 						$(".tab_mstship .shipInfo .stats").show();
 						$(".tab_mstship .shipInfo .equipments").show();
 					} else {
 						$(".tab_mstship .shipInfo .json").show();
 						$(".tab_mstship .shipInfo .boss").hide();
 					}
+				}).catch(e => {
+					$(".tab_mstship .shipInfo .json").show();
+					$(".tab_mstship .shipInfo .boss").hide();
+					console.debug("Abyssal stats unexpected", e);
 				});
 				
 				$(".tab_mstship .shipInfo .voices").hide();

@@ -317,7 +317,8 @@ AntiAir: anti-air related calculations
 			(forFleet
 			 ? getFleetImprovementModifier
 			 : getShipImprovementModifier)(mst);
-		// according verification, AA bonus of specific equip on specific ship not counted
+		// ~~According verification, AA bonus of specific equip on specific ship not counted~~
+		// Visible AA bonus applied since 2022-08-04 https://twitter.com/KanColle_STAFF/status/1555144543766724608
 		var aaStat = mst.api_tyku;
 		return eTypMod * aaStat + eImproveMod * Math.sqrt( stars );
 	}
@@ -345,9 +346,14 @@ AntiAir: anti-air related calculations
 		return shipObj.equipment(true);
 	}
 
-	function shipEquipmentAntiAir(shipObj, forFleet) {
+	function shipEquipmentAntiAir(shipObj, forFleet, includeOnShipBonus = true) {
+		// Calculations unknown for AA visible bonus yet,
+		// total value added to adjusted aa of both ship and fleet?
+		// https://twitter.com/nishikkuma/status/1555195233658601473
+		var onShipBonus = !includeOnShipBonus ? 0 :
+			(forFleet ? 0.5 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
-		return allItems.reduce( function(curAA, item) {
+		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
 		}, 0);
 	}
@@ -365,6 +371,7 @@ AntiAir: anti-air related calculations
 	function abyssalEquipmentAntiAir(gearMst, forFleet) {
 		if (typeof gearMst === "number" && KC3Master.isAbyssalGear(gearMst))
 			gearMst = KC3Master.slotitem(gearMst);
+		if (!gearMst) return 0;
 		return calcEquipmentAADefense(gearMst, 0, forFleet);
 	}
 

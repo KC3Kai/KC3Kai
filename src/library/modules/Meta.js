@@ -559,7 +559,7 @@ Provides access to data on built-in JSON files
 				(this._eventColle.abyssNonBossIds || []).indexOf(shipMaster.api_id) < 0){
 				return "boss";
 			}
-			return KC3Master.isAbyssalShip(shipMaster.api_id) ? shipMaster.api_yomi.replace("-", "") : "";
+			return KC3Master.isAbyssalShip(shipMaster.api_id) ? shipMaster.api_yomi.replace(/^-$/, "") : "";
 		},
 		
 		shipSpeed :function(apiSoku, returnTerm){

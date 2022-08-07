@@ -1238,6 +1238,8 @@
 				improvements: ship.equipment(true).map(g => g.stars || -1),
 				proficiency: ship.equipment(true).map(g => g.ace || -1),
 				slots: ship.slots,
+				// Adding ammo for hit/miss prediction
+				ammo: ship.ammo,
 			});
 			const buildSortieSpecialInfo = (fleet, cutin) => {
 				const misc = {};
@@ -1255,9 +1257,9 @@
 				const shipPos = !isEscort ? idx : idx - 6;
 				const fleet = PlayerManager.fleets[!isEscort ? fleetSent - 1 : 1];
 				const ship = fleet.ship(shipPos);
+				const shipCount = fleet.countShips();
 				const shipInfo = fillShipInfo(ship);
-				shipInfo.position = shipPos;
-				const template2 = Object.assign({}, template, {ship: shipInfo});
+				const template2 = Object.assign({}, template, { ship: shipInfo });
 				for (let num = 0; num < attacks.length; num++) {
 					const attack = attacks[num];
 					if (attack.phase !== "hougeki") { continue; }
@@ -1344,7 +1346,14 @@
 						misc = ship.nightSpAttackBaseRate(cutin);
 					}
 					if (Object.keys(misc).length === 0) { continue; }
-					misc.formation = [thisNode.fformation, thisNode.eformation];
+					// Attacker HP and fleet type for hit/miss prediction
+					shipInfo.hp = attack.hp;
+					shipInfo.maxhp = ship.hp[1];
+					shipInfo.fleetType = this.data.fleetType;
+					// Position for calculations in vanguard formation
+					shipInfo.position = [shipPos, shipCount];
+					// Uses raw api array instead to include engagement
+					misc.formation = (thisNode.battleNight || thisNode.battleDay).api_formation;
 					misc.isCombined = isCombined;
 					misc.enemy = enemy;
 					misc.eposition = target;
