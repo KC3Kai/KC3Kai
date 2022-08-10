@@ -986,7 +986,7 @@ KC3改 Equipment Object
 	};
 
 	KC3Gear.prototype.isContactAircraft = function(isSelection = false){
-		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat, LB Recon?
+		// Contact trigger-able by Recon Aircraft, Recon Seaplane, Large Flying Boat, LB Recon
 		// Contact select-able by previous 3 types, plus Torpedo Bomber
 		const type2 = isSelection ? [8, 9, 10, 41, 49, 58, 59, 94] : [9, 10, 41, 49, 59, 94];
 		return this.exists() &&
