@@ -537,6 +537,7 @@ KC3改 Equipment Object
 
 	/**
 	 * Get improvement bonus of anti-air fighters.
+	 * @see AntiAir.js - for bonus of AA defense.
 	 * @see http://wikiwiki.jp/kancolle/?%B2%FE%BD%A4%B9%A9%BE%B3#ic9d577c
 	 */
 	KC3Gear.prototype.aaStatImprovementBonus = function(type = "fire") {

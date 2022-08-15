@@ -258,14 +258,16 @@ AntiAir: anti-air related calculations
 	}
 
 	function getFleetEquipmentModifier(mst) {
+		if (is46cmTripleMount(mst))
+			return 0.25;
 		if (isType3Shell(mst))
 			return 0.6;
 		if (isAARadar(mst))
 			return 0.4;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 0.35;
-		if (is46cmTripleMount(mst))
-			return 0.25;
+		// 0.2 by default, even for unverified equipment since KC Vita does so
+		/*
 		if (predAnyOf(isRedGun,
 				  isYellowGun,
 				  isMachineGun,
@@ -273,8 +275,8 @@ AntiAir: anti-air related calculations
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
 			return 0.2;
-		// no default value for unverified equipment, might use 0.2 as default?
-		return 0;
+		*/
+		return 0.2;
 	}
 
 	// Updated data: https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB
@@ -351,7 +353,7 @@ AntiAir: anti-air related calculations
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.75 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -386,7 +388,10 @@ AntiAir: anti-air related calculations
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipBaseAA = allItems.reduce((sum, item) => sum + (item.api_tyku || 0), 0);
 		var totalEquipAADefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, false), 0);
-		return 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
+		var adjAA = 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
+		// the same functionality with specialFloor
+		var noItemEquipped = allItems.every(v => !v);
+		return noItemEquipped ? Math.floor(adjAA) : 2 * Math.floor(adjAA / 2);
 	}
 
 	function abyssalShipFleetAdjustedAntiAir(shipMst, altSlots, formationModifier = 1) {
