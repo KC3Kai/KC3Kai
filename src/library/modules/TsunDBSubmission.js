@@ -2072,6 +2072,7 @@
 			//console.debug(JSON.stringify(payload));
 			$.ajax({
 				url: `https://tsundb.kc3.moe/api/${type}`,
+				async: true,
 				method: 'PUT',
 				headers: {
 					'content-type': 'application/json',

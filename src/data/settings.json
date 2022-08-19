@@ -1129,7 +1129,7 @@
 				"options" : {}
 			},
 			{
-				"id" : "PushAlerts_expedition_only",
+				"id" : "PushAlerts_expedonly",
 				"name" : "SettingsPushAlertsExpeditionOnly",
 				"type" : "check",
 				"options" : {}
