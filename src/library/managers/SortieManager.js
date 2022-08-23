@@ -492,14 +492,15 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 		 */
 		isPlayerNotTakenAirBombingDamage :function(node, position, isOnEscortFleet){
 			const thisNode = node || this.currentNode();
-			if(Array.isArray(thisNode.takenAirBombingDamages)) {
+			if(Array.isArray(thisNode.takenAirBombingDamages) && Array.isArray(thisNode.beenAirBombingTargeted)) {
 				let isUndefined = false;
 				const found = thisNode.takenAirBombingDamages.find(wave => {
 					const fleetIdx = isOnEscortFleet ? 1 : 0;
 					if(!Array.isArray(wave[fleetIdx]) || wave[fleetIdx][position] === undefined) {
 						isUndefined = true;
 						return true;
-					} else if(wave[fleetIdx][position] <= 0) {
+					} else if(thisNode.beenAirBombingTargeted[fleetIdx][position]
+						&& wave[fleetIdx][position] <= 0) {
 						return true;
 					}
 				}) !== undefined;

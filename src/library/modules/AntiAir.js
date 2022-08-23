@@ -352,8 +352,9 @@ AntiAir: anti-air related calculations
 		// Calculations unknown for AA visible bonus yet,
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
+		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.75 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.75 : 1) * 0.75 * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -530,6 +531,7 @@ AntiAir: anti-air related calculations
 		i504Icon = 530,
 		tenryuuK2Icon = 477,
 		tatsutaK2Icon = 478,
+		ooyodoKaiIcon = 321,
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
 		warspiteIcon = 439,
@@ -570,6 +572,7 @@ AntiAir: anti-air related calculations
 	var isI504 = masterIdEq( i504Icon );
 	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
+	var isOoyodoKai = masterIdEq ( ooyodoKaiIcon );
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
@@ -773,7 +776,18 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// api_kind 27 still unknown
+	// Ooyodo Kai for now, too low trigger rate (5%~10%) to investigate, since almost covered by kind 8
+	declareAACI(
+		27, 5, 1.55,
+		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
+		predAllOf(isOoyodoKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiAMG ),
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isAARadar ))
+		)
+	);
 
 	// Ise-class Kai + Musashi Kai
 	declareAACI(
@@ -840,9 +854,21 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunCDMG ))
 		)
 	);
-	// api_kind 13 deprecated by devs
+	// api_kind 13 deprecated by devs, perhaps covered by kind 8 so 0% trigger forever?
 	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
-	// vita value: [1, 4, 1.35]
+	/*
+	declareAACI(
+		13, 4, 1.35, // vita value: [1, 4, 1.35]
+		[mayaIcon, biHaMountIcon, cdmgIcon, radarIcon],
+		predAllOf(isMayaNotK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isBuiltinHighAngleMount ),
+				hasSome( isAAGunCDMG ),
+				hasSome( isAARadar ))
+		)
+	);
+	*/
 
 	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2
