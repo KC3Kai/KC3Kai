@@ -354,7 +354,7 @@ AntiAir: anti-air related calculations
 		// https://twitter.com/nishikkuma/status/1555195233658601473
 		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.75 : 0.8) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.375 : 2*0.4) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -368,6 +368,8 @@ AntiAir: anti-air related calculations
 		// according verification, AA bonus of specific equip on specific ship not counted,
 		// it seems be better not to use aa[0] property,
 		// might use `shipObj.estimateNakedStats("aa")` instead.
+		// According KC vita calculations, player ship AA is x0.5, but our formula does not,
+		// so here all equipment modifiers for ship are x2 either, and specialFloor used later.
 		return shipObj.estimateNakedStats("aa") + shipEquipmentAntiAir(shipObj, false);
 	}
 
@@ -389,10 +391,10 @@ AntiAir: anti-air related calculations
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipBaseAA = allItems.reduce((sum, item) => sum + (item.api_tyku || 0), 0);
 		var totalEquipAADefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, false), 0);
-		var adjAA = 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
-		// the same functionality with specialFloor
-		var noItemEquipped = allItems.every(v => !v);
-		return noItemEquipped ? Math.floor(adjAA) : 2 * Math.floor(adjAA / 2);
+		// abyssal does not need specialFloor, since according KC vita calculations,
+		// no x0.5 applied to abyssal ship's AA, here x2 as fleet adjusted AA does,
+		// in order to be put into the same formula.
+		return 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
 	}
 
 	function abyssalShipFleetAdjustedAntiAir(shipMst, altSlots, formationModifier = 1) {
@@ -402,7 +404,7 @@ AntiAir: anti-air related calculations
 		if (!shipMst || (!Array.isArray(shipMst.kc3_slots) && !Array.isArray(altSlots))) return;
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipFleetDefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
-		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+		return (2/1) * Math.floor(formationModifier * totalEquipFleetDefense);
 	}
 
 	function abyssalFleetAdjustedAntiAir(fleetArr, formationModifier = 1) {
@@ -412,7 +414,7 @@ AntiAir: anti-air related calculations
 			var allItems = (shipMst.kc3_slots || []).map(id => KC3Master.slotitem(id));
 			return allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
 		}, 0);
-		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+		return (2/1) * Math.floor(formationModifier * totalEquipFleetDefense);
 	}
 
 	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
@@ -452,7 +454,8 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
-		// according KC vita calculations, 1.3 is vita ver constant, 2 is browser ver modifier
+		// according KC vita calculations, 1.3 is browser ver player constant,
+		// x2 since extra /2 on later calc, to fit with 'ship adjusted not x0.5, so x2 everywhere calc'
 		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
 	}
 
