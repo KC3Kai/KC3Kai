@@ -386,6 +386,7 @@
 			// console.debug( "Endpoint: " + target + ", data: " + JSON.stringify( payload ) );
 			$.ajax({
 				url: url,
+				async: true,
 				method: "POST",
 				contentType: "application/json",
 				data: JSON.stringify({

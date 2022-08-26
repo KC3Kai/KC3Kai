@@ -118,6 +118,8 @@ See Manifest File [manifest.json] under "background" > "scripts"
 			});
 			// Sending Mobile Push notification if enabled
 			if(ConfigManager.PushAlerts_enabled) {
+				// Expedition IDs are type 0, `{type}_{fleetnum-2}`: 0_0, 0_1, 0_2
+				if(ConfigManager.PushAlerts_expedonly && !request.notifId.startsWith("0_")) return;
 				$.ajax({
 					async: true,
 					crossDomain: true,

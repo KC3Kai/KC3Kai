@@ -589,16 +589,22 @@ Used by SortieManager
 			this.planeBombers.abyssal[1] = attackPhase.api_e_lostcount;
 		}
 		this.takenAirBombingDamages = [];
+		this.beenAirBombingTargeted = [];
 		const bombingPhaseMain = (battleData.api_kouku || {}).api_stage3 || {},
 			bombingPhaseEscort = (battleData.api_kouku || {}).api_stage3_combined || {},
 			bombingDamages = [],
-			damageToInteger = v => Math.floor(v);
+			bombingTargetedFlags = [],
+			damageToInteger = v => Math.floor(v),
+			mergeToBoolean = (arr, v, i) => !!v || !!arr[i];
 		// Although game codes use api_plane_from[1] only as prerequisite
 		if(this.planeBombers.abyssal[0] > 0){
 			bombingDamages.push((bombingPhaseMain.api_fdam || []).map(damageToInteger));
 			bombingDamages.push((bombingPhaseEscort.api_fdam || []).map(damageToInteger));
+			bombingTargetedFlags.push((bombingPhaseMain.api_fbak_flag || []).map(mergeToBoolean.bind(null, bombingPhaseMain.api_frai_flag || [])));
+			bombingTargetedFlags.push((bombingPhaseEscort.api_fbak_flag || []).map(mergeToBoolean.bind(null, bombingPhaseEscort.api_frai_flag || [])));
 		}
 		this.takenAirBombingDamages.push(bombingDamages);
+		this.beenAirBombingTargeted.push(bombingTargetedFlags);
 		
 		// Fighter phase 2
 		if(battleData.api_kouku2){
@@ -616,7 +622,7 @@ Used by SortieManager
 					this.antiAirFire[1] = battleData.api_kouku2.api_stage2.api_air_fire;
 				}
 			}
-			const bombingDamages2 = [];
+			const bombingDamages2 = [], bombingTargetedFlags2 = [];
 			if(battleData.api_kouku2.api_stage2 && battleData.api_kouku2.api_stage2.api_e_count > 0){
 				bombingDamages2.push(
 					((battleData.api_kouku2.api_stage3 || {}).api_fdam || []).map(damageToInteger)
@@ -624,8 +630,15 @@ Used by SortieManager
 				bombingDamages2.push(
 					((battleData.api_kouku2.api_stage3_combined || {}).api_fdam || []).map(damageToInteger)
 				);
+				bombingTargetedFlags.push(
+					((battleData.api_kouku2.api_stage3 || {}).api_fbak_flag || []).map(mergeToBoolean.bind(null, (battleData.api_kouku2.api_stage3 || {}).api_frai_flag || []))
+				);
+				bombingTargetedFlags.push(
+					((battleData.api_kouku2.api_stage3_combined || {}).api_fbak_flag || []).map(mergeToBoolean.bind(null, (battleData.api_kouku2.api_stage3_combined || {}).api_frai_flag || []))
+				);
 			}
 			this.takenAirBombingDamages.push(bombingDamages2);
+			this.beenAirBombingTargeted.push(bombingTargetedFlags2);
 		}
 		
 		// Jet plane phase, happen before fighter attack phase

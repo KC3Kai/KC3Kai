@@ -325,6 +325,7 @@
         new KC3ImageExport(canvas, {
             filename: topLine,
             method: this.buildSettings.output,
+            hideDownload: true,
         }).export(function (error, result) {
             self.complete(result || {});
         });

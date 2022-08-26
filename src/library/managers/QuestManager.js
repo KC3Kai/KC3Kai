@@ -658,13 +658,15 @@ Uses KC3Quest objects to play around with
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShip(62) && fleet.hasShip(63) && fleet.hasShip(65);
 					},
-				"257": // Bm3 Sortie CL as flagship, 0-2 other CL and 1 DD at least, no other ship type
+				"257": // Bm3 Sortie CL as flagship, 0-2 more CL and 1 DD at least, no other ship type
 					({fleetSent = KC3SortieManager.fleetSent}) => {
 						const fleet = PlayerManager.fleets[fleetSent - 1];
 						return fleet.hasShipType(3, 0)
 							&& fleet.countShipType(3) <= 3
 							&& fleet.countShipType(2) >= 1
-							&& fleet.countShipType([2, 3], true) === 0;
+							// Progress not counted in-game if there is ETS FCF retreated ship, so use KCKai vita logic to simulate
+							//&& fleet.countShipType([2, 3], true) === 0;
+							&& fleet.countShipType([2, 3], false, true) === fleet.countShips(false);
 					},
 				"259": // Bm4 Sortie 3 BB (4 classes below only) and 1 CL
 					({fleetSent = KC3SortieManager.fleetSent}) => {

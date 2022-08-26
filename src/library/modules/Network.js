@@ -350,7 +350,7 @@ Listens to network history and triggers callback if game events happen
 					// suppose all exceptions thrown are caught already, should not reach here.
 					console.warn(`Uncaught data submission to ${moduleName}`, error);
 				}
-			});
+			}, 0);
 		},
 
 		/**
