@@ -49,6 +49,7 @@ Retrieves when needed to apply on components
 				TsunDBSubmission_enabled : false,
 				TsunDBSubmissionExtra_enabled : false,
 				PushAlerts_enabled   : 0,
+				PushAlerts_expedonly : false,
 				PushAlerts_key       : '',
 
 				info_quest_activity  : true,

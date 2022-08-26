@@ -594,10 +594,14 @@ Contains summary information about a fleet and its ships
 		this.shipsUnescaped().forEach(ship => {
 			rate += ship.equipment().map(
 				(gear, idx) => gear.isContactAircraft(false) ?
-					(0.04 * gear.master().api_saku * Math.sqrt(ship.slotSize(idx))) : 0
+					(0.04 * (gear.master().api_saku || 0) * Math.sqrt(ship.slotSize(idx))) : 0
 			).sumValues();
 		});
-		return rate * (airControlModifiers[dispSeiku] || 0);
+		// Always has '1 chance' to start contact, irrelevant to LoS and slotsize, because `0 < 0` is false (true to start) for `adjustedLos < randInt(rateBySeiku)` condition in KCKai, see: `Server_Controllers.BattleLogic/Exec_AirBattle.cs#getSyokusetuInfo#L308`
+		// In fact, only Torpedo Bomber equipped about 4% chance to contact, for LBAS either:
+		// https://twitter.com/noratako5/status/845572079952941056
+		// https://twitter.com/wowakayotareso/status/882276107063513088
+		return (rate || 0.04) * (airControlModifiers[dispSeiku] || 0);
 	};
 
 	/**
@@ -631,7 +635,7 @@ Contains summary information about a fleet and its ships
 						shipOrder: shipIdx,
 						shipMasterId: ship.masterId,
 						// LoS improvement taken into account, but any other modifier unknown
-						rate: (gearMaster.api_saku + gear.losStatImprovementBonus())
+						rate: ((gearMaster.api_saku || 0) + gear.losStatImprovementBonus())
 							* (airControlModifiers[dispSeiku] || 0)
 					});
 				}
@@ -684,7 +688,7 @@ Contains summary information about a fleet and its ships
 						slotSize: ship.slotSize(gearIdx),
 						// No effect from LoS proficiency/improvement/visible bonus found,
 						// and this PSVita KCKai formula slightly different with wiki's.
-						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku) * Math.sqrt(ship.level)) / 25 : 0
+						rate: ship.slotSize(gearIdx) > 0 ? Math.floor(Math.sqrt(gearMaster.api_saku || 0) * Math.sqrt(ship.level)) / 25 : 0
 					});
 				}
 			});

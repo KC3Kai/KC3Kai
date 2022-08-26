@@ -200,12 +200,14 @@
 				// Do not log and alert on:
 				// picker window aborted by user, or permission refused
 				if (err && !["AbortError", "NotAllowedError"].includes(err.name)) {
-					// No log for 'handle user gesture to show a file picker'
-					if ("SecurityError" !== err.name) {
+					// for 'must handle user gesture to show a file picker'
+					if ("SecurityError" === err.name) {
+						alert(err + "\nJust try again.");
+					} else {
 						console.error("Export unexpectedly rejected", err);
+						lastErrMsg = "Backup " + err;
+						alert(lastErrMsg);
 					}
-					lastErrMsg = "Backup " + err;
-					alert(lastErrMsg);
 				}
 			};
 
@@ -354,19 +356,17 @@
 				// Do not log and alert on:
 				// picker window aborted by user, or permission refused
 				if (err && !["AbortError", "NotAllowedError"].includes(err.name)) {
-					// No log for 'handle user gesture to show a file picker'
-					if ("SecurityError" !== err.name) {
+					// for 'must handle user gesture to show a file picker'
+					if ("SecurityError" === err.name) {
+						alert(err + "\nJust try again.");
+					} else {
 						console.error("Import unexpectedly rejected", err);
+						lastErrMsg = "Restore " + err;
+						alert(lastErrMsg);
 					}
-					lastErrMsg = "Restore " + err;
-					alert(lastErrMsg);
 				}
 			};
 
-			// Files of current known tables in IndexedDB: 17 + 2 extra meta files
-			const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
-			files.push("storage.kc3data");
-			files.push("database.kc3data");
 			// Fill progress lines, and poll finished state to callback
 			const updateProgress = () => {
 				if (!ekex) return;
@@ -389,6 +389,10 @@
 				}, 1000);
 			};
 			alertWhenFinished();
+			// Files of current known tables in IndexedDB: 17 + 2 extra meta files
+			const files = KC3Database.con.tables.map(table => `${table.name}.kc3data`);
+			files.push("storage.kc3data");
+			files.push("database.kc3data");
 			KC3Database.con.tables.forEach(table => {
 				progress[table.name] = [0, -1];
 				if (ekex) {

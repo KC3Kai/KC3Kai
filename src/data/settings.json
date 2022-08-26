@@ -1129,6 +1129,12 @@
 				"options" : {}
 			},
 			{
+				"id" : "PushAlerts_expedonly",
+				"name" : "SettingsPushAlertsExpeditionOnly",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "PushAlerts_key",
 				"name" : "SettingsPushAlertsKey",
 				"type" : "long_text",

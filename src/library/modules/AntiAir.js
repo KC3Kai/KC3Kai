@@ -258,14 +258,16 @@ AntiAir: anti-air related calculations
 	}
 
 	function getFleetEquipmentModifier(mst) {
+		if (is46cmTripleMount(mst))
+			return 0.25;
 		if (isType3Shell(mst))
 			return 0.6;
 		if (isAARadar(mst))
 			return 0.4;
 		if (isHighAngleMount(mst) || isAAFD(mst))
 			return 0.35;
-		if (is46cmTripleMount(mst))
-			return 0.25;
+		// 0.2 by default, even for unverified equipment since KC Vita does so
+		/*
 		if (predAnyOf(isRedGun,
 				  isYellowGun,
 				  isMachineGun,
@@ -273,8 +275,8 @@ AntiAir: anti-air related calculations
 				  isDiveBomber,
 				  isSeaplaneRecon)(mst))
 			return 0.2;
-		// no default value for unverified equipment, might use 0.2 as default?
-		return 0;
+		*/
+		return 0.2;
 	}
 
 	// Updated data: https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB
@@ -350,8 +352,9 @@ AntiAir: anti-air related calculations
 		// Calculations unknown for AA visible bonus yet,
 		// total value added to adjusted aa of both ship and fleet?
 		// https://twitter.com/nishikkuma/status/1555195233658601473
+		// https://twitter.com/noro_006/status/1562055932431208448
 		var onShipBonus = !includeOnShipBonus ? 0 :
-			(forFleet ? 0.5 : 0.75) * shipObj.equipmentTotalStats("tyku", true, true, true);
+			(forFleet ? 0.375 : 2*0.4) * shipObj.equipmentTotalStats("tyku", true, true, true);
 		var allItems = allShipEquipments(shipObj);
 		return onShipBonus + allItems.reduce( function(curAA, item) {
 			return curAA + item.aaDefense(forFleet);
@@ -365,6 +368,8 @@ AntiAir: anti-air related calculations
 		// according verification, AA bonus of specific equip on specific ship not counted,
 		// it seems be better not to use aa[0] property,
 		// might use `shipObj.estimateNakedStats("aa")` instead.
+		// According KC vita calculations, player ship AA is x0.5, but our formula does not,
+		// so here all equipment modifiers for ship are x2 either, and specialFloor used later.
 		return shipObj.estimateNakedStats("aa") + shipEquipmentAntiAir(shipObj, false);
 	}
 
@@ -386,6 +391,9 @@ AntiAir: anti-air related calculations
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipBaseAA = allItems.reduce((sum, item) => sum + (item.api_tyku || 0), 0);
 		var totalEquipAADefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, false), 0);
+		// abyssal does not need specialFloor, since according KC vita calculations,
+		// no x0.5 applied to abyssal ship's AA, here x2 as fleet adjusted AA does,
+		// in order to be put into the same formula.
 		return 2 * Math.floor(Math.sqrt(shipAA + totalEquipBaseAA)) + totalEquipAADefense;
 	}
 
@@ -396,7 +404,7 @@ AntiAir: anti-air related calculations
 		if (!shipMst || (!Array.isArray(shipMst.kc3_slots) && !Array.isArray(altSlots))) return;
 		var allItems = (altSlots || shipMst.kc3_slots).map(id => KC3Master.slotitem(id));
 		var totalEquipFleetDefense = allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
-		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+		return (2/1) * Math.floor(formationModifier * totalEquipFleetDefense);
 	}
 
 	function abyssalFleetAdjustedAntiAir(fleetArr, formationModifier = 1) {
@@ -406,7 +414,7 @@ AntiAir: anti-air related calculations
 			var allItems = (shipMst.kc3_slots || []).map(id => KC3Master.slotitem(id));
 			return allItems.reduce((sum, item) => sum + abyssalEquipmentAntiAir(item, true), 0);
 		}, 0);
-		return 2 * Math.floor(formationModifier * totalEquipFleetDefense);
+		return (2/1) * Math.floor(formationModifier * totalEquipFleetDefense);
 	}
 
 	function shipProportionalShotdownRate(shipObj, onCombinedFleetNum) {
@@ -446,7 +454,8 @@ AntiAir: anti-air related calculations
 		var allShipEquipmentAA = fleetObj.ship().reduce( function(curAA, ship) {
 			return curAA + shipEquipmentAntiAir(ship, true);
 		}, 0);
-		// according KC vita calculations, 1.3 is vita ver constant, 2 is browser ver modifier
+		// according KC vita calculations, 1.3 is browser ver player constant,
+		// x2 since extra /2 on later calc, to fit with 'ship adjusted not x0.5, so x2 everywhere calc'
 		return (2/1.3) * Math.floor( formationModifier * allShipEquipmentAA );
 	}
 
@@ -525,6 +534,7 @@ AntiAir: anti-air related calculations
 		i504Icon = 530,
 		tenryuuK2Icon = 477,
 		tatsutaK2Icon = 478,
+		ooyodoKaiIcon = 321,
 		isokazeBkIcon = 557,
 		hamakazeBkIcon = 558,
 		warspiteIcon = 439,
@@ -565,6 +575,7 @@ AntiAir: anti-air related calculations
 	var isI504 = masterIdEq( i504Icon );
 	var isTenryuuK2 = masterIdEq( tenryuuK2Icon );
 	var isTatsutaK2 = masterIdEq( tatsutaK2Icon );
+	var isOoyodoKai = masterIdEq ( ooyodoKaiIcon );
 	var isIsokazeBk = masterIdEq( isokazeBkIcon );
 	var isHamakazeBk = masterIdEq( hamakazeBkIcon );
 	var isGotlandKai = masterIdEq( gotlandKaiIcon );
@@ -768,7 +779,18 @@ AntiAir: anti-air related calculations
 		)
 	);
 
-	// api_kind 27 still unknown
+	// Ooyodo Kai for now, too low trigger rate (5%~10%) to investigate, since almost covered by kind 8
+	declareAACI(
+		27, 5, 1.55,
+		[ooyodoKaiIcon, haMountKaiAmg, aaGunK2RockeLaunIcon, radarIcon],
+		predAllOf(isOoyodoKai),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( is10cmTwinHighAngleMountKaiAMG ),
+				hasSome( is12cm30tubeRocketLauncherKai2 ),
+				hasSome( isAARadar ))
+		)
+	);
 
 	// Ise-class Kai + Musashi Kai
 	declareAACI(
@@ -835,9 +857,21 @@ AntiAir: anti-air related calculations
 				hasSome( isAAGunCDMG ))
 		)
 	);
-	// api_kind 13 deprecated by devs
+	// api_kind 13 deprecated by devs, perhaps covered by kind 8 so 0% trigger forever?
 	// might be non-MayaK2 biHaMount+CDMG+AirRadar +4 x1.35
-	// vita value: [1, 4, 1.35]
+	/*
+	declareAACI(
+		13, 4, 1.35, // vita value: [1, 4, 1.35]
+		[mayaIcon, biHaMountIcon, cdmgIcon, radarIcon],
+		predAllOf(isMayaNotK2),
+		withEquipmentMsts(
+			predAllOf(
+				hasSome( isBuiltinHighAngleMount ),
+				hasSome( isAAGunCDMG ),
+				hasSome( isAARadar ))
+		)
+	);
+	*/
 
 	// AA stat 2 machine gun capable for kind 14~17: https://twitter.com/nishikkuma/status/1535641120386224129
 	// Isuzu K2

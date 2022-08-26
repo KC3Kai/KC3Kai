@@ -25,6 +25,7 @@
 			const toggleProgressDisplay = (inProg) => {
 				$(".tab_databackup .processDisplay").toggle(!!inProg);
 				$(".tab_databackup .dataSelect").toggle(!inProg);
+				if(!inProg) $(".tab_databackup .warning").hide();
 			};
 			const toggleFinishedIndicator = (isFinished) => {
 				$(".tab_databackup .processDisplay .expedAkatsuki").toggle(!isFinished);
@@ -99,43 +100,36 @@
 
 			// Export fullset data v2
 			$(".tab_databackup .export_data2").on("click", function(){
-				if(confirm("Are you sure you want to export your data?")){
-					toggleFinishedIndicator(false);
-					toggleProgressDisplay(true);
-					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
-						if(autoBack) toggleProgressDisplay(false);
-						setFinishMessage(lastErr);
-						toggleFinishedIndicator(true);
-					});
-				}
+				toggleFinishedIndicator(false);
+				toggleProgressDisplay(true);
+				window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
+					if(autoBack) toggleProgressDisplay(false);
+					setFinishMessage(lastErr);
+					toggleFinishedIndicator(true);
+				});
 			});
 
 			// Export incremental data v2
 			$(".tab_databackup .export_update_data2").on("click", function(){
-				if(confirm("Are you sure you want to export your data?")){
-					toggleFinishedIndicator(false);
-					toggleProgressDisplay(true);
-					window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
-						if(autoBack) toggleProgressDisplay(false);
-						setFinishMessage(lastErr);
-						toggleFinishedIndicator(true);
-					}, true);
-				}
+				toggleFinishedIndicator(false);
+				toggleProgressDisplay(true);
+				window.KC3DataBackup.saveDataToFolder(progressTextSelector, (autoBack, lastErr) => {
+					if(autoBack) toggleProgressDisplay(false);
+					setFinishMessage(lastErr);
+					toggleFinishedIndicator(true);
+				}, true);
 			});
 
 			// Import data v2
 			$(".tab_databackup .import_data2").on("click", function(){
-				if(confirm("Please close all currently opened Kancolle or KC3 tabs, panels and pages before proceeding."))
-				if(confirm("This will overwrite all of your KC3 data! Are you sure?")){
-					toggleFinishedIndicator(false);
-					toggleProgressDisplay(true);
-					window.KC3DataBackup.loadDataFromFolder(progressTextSelector, (autoBack, lastErr) => {
-						if(autoBack) toggleProgressDisplay(false);
-						if(!autoBack && !lastErr) isReloadNeeded = true;
-						setFinishMessage(lastErr || "Finished! Please reload this page.");
-						toggleFinishedIndicator(true);
-					});
-				}
+				toggleFinishedIndicator(false);
+				toggleProgressDisplay(true);
+				window.KC3DataBackup.loadDataFromFolder(progressTextSelector, (autoBack, lastErr) => {
+					if(autoBack) toggleProgressDisplay(false);
+					if(!autoBack && !lastErr) isReloadNeeded = true;
+					setFinishMessage(lastErr || "Finished! Please reload this page.");
+					toggleFinishedIndicator(true);
+				});
 			});
 
 		}

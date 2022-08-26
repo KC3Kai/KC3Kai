@@ -362,6 +362,7 @@
             new KC3ImageExport(this.canvas, {
                 filename: exportFileName + dateFormat(" yyyy-mm-dd"),
                 method: this.buildSettings.output,
+                hideDownload: true,
             }).export((error, result) => {
                 this.complete(result || {});
                 this.init();
