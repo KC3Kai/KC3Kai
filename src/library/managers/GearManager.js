@@ -92,7 +92,7 @@ Saves and loads list to and from localStorage
 			// Summer Harbor Princess
 			4: {
 				base:   [1.0, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7, 1.7],
-				count1: [2.8, 1.6, 1.0, 1.8, 1.2, 2.0, 1.0, 1.6],
+				count1: [2.8, 1.6, 1.0, 1.0, 1.2, 2.0, 1.0, 1.6],
 				count2: [1.5, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
 			},
 		},

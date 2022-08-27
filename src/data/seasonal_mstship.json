@@ -5238,10 +5238,10 @@
 	},
 	"5654": {
 		"api_id": 5654,
-		"api_name": "お出掛け長鯨",
-		"api_yomi": "ちょうげい",
-		"api_stype": 20,
-		"api_soku": 5,
+		"api_name": "【保留】",
+		"api_yomi": "n/a",
+		"api_stype": 2,
+		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5655": {

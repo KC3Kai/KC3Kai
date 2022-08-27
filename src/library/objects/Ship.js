@@ -1611,8 +1611,8 @@ KC3改 Ship Object
 				// ~~TP visible bonus from Torpedo Bombers no effect.~~ Added since 2021-08-04
 				// but calculation is strange for 2 or more bonus planes: https://twitter.com/myteaGuard/status/1423010128349913092
 				shellingPower += this.equipmentTotalStats("raig", true, true);
-				// ~~DV visible bonus not implemented yet~~ found in non-aircraft: 
-				// [478] Skilled Deck Personnel + Aviation Maintenance Hands, unverified yet
+				// ~~DV visible bonus not implemented yet~~ found from non-aircraft since 2022-08-26:
+				// [478] Skilled Deck Personnel + Aviation Maintenance Hands, effect unverified yet
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
 			}
 			shellingPower += combinedFleetFactor;
