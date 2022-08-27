@@ -842,15 +842,12 @@
 					exslotTypes.forEach(addEquipType.bind(this, ".equipExSlot .equipList"));
 					// specified items on exslot of specified ships
 					const exslotItems = KC3Master.equip_exslot_ship(shipData.api_id);
-					// `RemodelUtil.createSetListEx` hard-coded whether Improved Turbine can be equipped
-					if (equipTypes.includes(17) && !exslotItems.includes(33)) {
-						exslotItems.push(33);
-					}
-					// Similarly Submarine Stern Torpedo added since 2021-11-19
-					if (equipTypes.includes(32)) {
-						if (!exslotItems.includes(442)) exslotItems.push(442);
-						if (!exslotItems.includes(443)) exslotItems.push(443);
-					}
+					// `RemodelUtil.createSetListEx` hard-coded whether special ones can be equipped
+					KC3Master.equip_exslot_ids().forEach(id => {
+						const gearMst = KC3Master.slotitem(id);
+						if (equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
+							exslotItems.push(id);
+					});
 					if (exslotItems.length > 0) {
 						exslotItems.forEach(item => {
 							const gearMst = KC3Master.slotitem(item);

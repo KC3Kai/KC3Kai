@@ -422,6 +422,18 @@ Saves and loads significant data for future use
 		},
 
 		/**
+		 * @return the array contains slotitem master ids can be equipped on exslot by capable ships,
+		 *         which not indicated by API data, but hard-coded in client instead.
+		 * @see `#createSetListEx`/`#createSetListFromMstId`/`#createUnsetListFromMstId` in main.js
+		 */
+		equip_exslot_ids :function() {
+			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
+			// Submarine Stern Torpedo Launchers can be equipped on exslot, added since 2021-11-19
+			// Skilled Deck Personnel can be equipped on exslot, added since 2022-08-26
+			return [33, 442, 443, 477, 478];
+		},
+
+		/**
 		 * Check if specified equipment (or equip type) can be equipped on specified ship.
 		 * @param {number} shipId - the master ID of ship to be checked.
 		 * @param {number} gearId - the master ID of a gear to be checked. if omitted, will be checked by equip type.
@@ -444,11 +456,8 @@ Saves and loads significant data for future use
 				if(equipOn.stypes.includes(stype)) result |= 1;
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
-			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
-			const isTurbine = gearMstId === 33;
-			// Submarine Stern Torpedo Launchers can be equpped on exslot, added since 2021-11-19
-			const isSternSubTorp = [442, 443].includes(gearMstId);
-			if(equipOn.exslot || isTurbine || isSternSubTorp) {
+			const isExslotCapableCheckedByClient = this.equip_exslot_ids().includes(gearMstId);
+			if(equipOn.exslot || isExslotCapableCheckedByClient) {
 				if(result) result |= 2;
 			} else if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) {
 				result |= 2;
