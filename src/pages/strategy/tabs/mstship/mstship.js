@@ -393,10 +393,11 @@
 			).lazyInitTooltip();
 			$(".tab_mstship .shipInfo .type").text( "{0}".format(KC3Meta.stype(shipData.api_stype)) );
 			$(".tab_mstship .shipInfo .name_jp").text([
+				"No.{0}".format(shipData.api_sortno),
 				KC3Master.isRegularShip(ship_id) ? KC3Meta.ctype(shipData.api_ctype) : "",
 				shipData.api_name,
-				["'", wanakana.toRomaji(shipData.api_yomi.replace(/^-$/, "")), "'"].join(""),
-			].join(" ")).toggle(KC3Master.isRegularShip(ship_id) && ConfigManager.language !== "jp");
+				"'{0}'".format(wanakana.toRomaji(shipData.api_yomi.replace(/^-$/, ""))),
+			].join(" ")).toggle(KC3Master.isRegularShip(ship_id));
 			$(".tab_mstship .shipInfo .json").text( '"{0}":{1}'.format(ship_id, JSON.stringify(shipData)) );
 			
 			// CG VIEWER

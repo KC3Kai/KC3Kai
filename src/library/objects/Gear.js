@@ -274,6 +274,7 @@ KC3改 Equipment Object
 					case 29: // Searchlight
 					case 42: // Large Searchlight
 					case 34: // Command Facility
+					case 35: // Aviation Personnel
 					case 36: // AA Fire Director
 					case 37: // Anti-Ground Rocket
 					case 39: // Skilled Lookouts
@@ -326,7 +327,7 @@ KC3改 Equipment Object
 				break;
 			case "yasen":
 				// Known standard sqrt(stars), see equiptype for api_type[2]
-				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 36, 37, 38, 39, 42, 46].includes(type2))
+				if([1, 2, 3, 5, 19, 22, 24, 29, 34, 35, 36, 37, 38, 39, 42, 46].includes(type2))
 					modifier = 1;
 				else switch(type2) {
 					case 4: // Secondary guns, same values with day shelling fire

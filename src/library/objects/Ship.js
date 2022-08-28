@@ -1612,7 +1612,7 @@ KC3改 Ship Object
 				// but calculation is strange for 2 or more bonus planes: https://twitter.com/myteaGuard/status/1423010128349913092
 				shellingPower += this.equipmentTotalStats("raig", true, true);
 				// ~~DV visible bonus not implemented yet~~ found from non-aircraft since 2022-08-26:
-				// [478] Skilled Deck Personnel + Aviation Maintenance Hands, effect unverified yet
+				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
 			}
 			shellingPower += combinedFleetFactor;
@@ -2160,12 +2160,24 @@ KC3改 Ship Object
 				// https://twitter.com/myteaGuard/status/1423010128349913092
 				// https://twitter.com/yukicacoon/status/1423133193096503296
 				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
-				const tpBonus = this.equipmentTotalStats("raig", true, true, true, null, [gear.masterId]);
-				if(tpBonus > 0 && !isJetAssaultPhase) {
+				const visibleBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [gear.masterId]);
+				if(visibleBonus > 0 && !isJetAssaultPhase) {
 					const capaSqrt = Math.sqrt(this.slots[i]);
 					const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
-					power[0] += tpBonus * capaSqrt * typeFactor[0];
-					power[1] += tpBonus * capaSqrt * typeFactor[1];
+					power[0] += visibleBonus * capaSqrt * typeFactor[0];
+					power[1] += visibleBonus * capaSqrt * typeFactor[1];
+				}
+				// TB and DB bonus from non aircraft Deck Personnel since 2022-08-26
+				// https://twitter.com/panmodoki10/status/1563773326073511940
+				// FIXME: unknown how to simulate ingame calc, here just add bonus from deck personnel to all planes if no other visible bonus found
+				if(this.hasEquipment(478)) {
+					const personnelBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [478]);
+					if(personnelBonus > 0 && !visibleBonus && !isJetAssaultPhase) {
+						const capaSqrt = Math.sqrt(this.slots[i]);
+						const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
+						power[0] += personnelBonus * capaSqrt * typeFactor[0];
+						power[1] += personnelBonus * capaSqrt * typeFactor[1];
+					}
 				}
 				const capped = [
 					this.applyPowerCap(power[0], "Day", "Aerial").power,
