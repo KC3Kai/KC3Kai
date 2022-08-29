@@ -1611,7 +1611,8 @@ KC3改 Ship Object
 				// ~~TP visible bonus from Torpedo Bombers no effect.~~ Added since 2021-08-04
 				// but calculation is strange for 2 or more bonus planes: https://twitter.com/myteaGuard/status/1423010128349913092
 				shellingPower += this.equipmentTotalStats("raig", true, true);
-				// DV visible bonus not implemented yet, unknown
+				// ~~DV visible bonus not implemented yet~~ found from non-aircraft since 2022-08-26:
+				// [478] Skilled Deck Personnel + Aviation Maintenance Hands
 				shellingPower += Math.floor(1.3 * this.equipmentTotalStats("baku"), true, true);
 			}
 			shellingPower += combinedFleetFactor;
@@ -2159,12 +2160,24 @@ KC3改 Ship Object
 				// https://twitter.com/myteaGuard/status/1423010128349913092
 				// https://twitter.com/yukicacoon/status/1423133193096503296
 				// FIXME: not implemented those yet, all slots with the same plane will benefit for now
-				const tpBonus = this.equipmentTotalStats("raig", true, true, true, null, [gear.masterId]);
-				if(tpBonus > 0 && !isJetAssaultPhase) {
+				const visibleBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [gear.masterId]);
+				if(visibleBonus > 0 && !isJetAssaultPhase) {
 					const capaSqrt = Math.sqrt(this.slots[i]);
 					const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
-					power[0] += tpBonus * capaSqrt * typeFactor[0];
-					power[1] += tpBonus * capaSqrt * typeFactor[1];
+					power[0] += visibleBonus * capaSqrt * typeFactor[0];
+					power[1] += visibleBonus * capaSqrt * typeFactor[1];
+				}
+				// TB and DB bonus from non aircraft Deck Personnel since 2022-08-26
+				// https://twitter.com/panmodoki10/status/1563773326073511940
+				// FIXME: unknown how to simulate ingame calc, here just add bonus from deck personnel to all planes if no other visible bonus found
+				if(this.hasEquipment(478)) {
+					const personnelBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [478]);
+					if(personnelBonus > 0 && !visibleBonus && !isJetAssaultPhase) {
+						const capaSqrt = Math.sqrt(this.slots[i]);
+						const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
+						power[0] += personnelBonus * capaSqrt * typeFactor[0];
+						power[1] += personnelBonus * capaSqrt * typeFactor[1];
+					}
 				}
 				const capped = [
 					this.applyPowerCap(power[0], "Day", "Aerial").power,
@@ -3374,33 +3387,42 @@ KC3改 Ship Object
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) return 0;
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
-		const isLand = targetShipType.isLand;
-		// M4A1 DD
-		if(this.hasEquipment(355) && isLand) return 6;
-		// Toku Daihatsu + T1 Gun Tank
-		if(this.hasEquipment(449) && isLand) return 10;
-		// Soukoutei (Armored Boat Class)
-		if(this.hasEquipment(408) && (isLand || targetShipType.isPtImp)) return 7;
-		// Armed Daihatsu
-		if(this.hasEquipment(409) && (isLand || targetShipType.isPtImp)) return 8;
-		// Toku Daihatsu + 11th Tank
-		if(this.hasEquipment(230)) return isLand ? 5 : 0;
+		if(targetShipType.isPtImp) {
+			// Soukoutei (Armored Boat Class)
+			if(this.hasEquipment(408)) return 7;
+			// Armed Daihatsu
+			if(this.hasEquipment(409)) return 8;
+		}
+		if(targetShipType.isLand) {
+			// M4A1 DD
+			if(this.hasEquipment(355)) return 6;
+			// Toku Daihatsu + T1 Gun Tank
+			if(this.hasEquipment(449)) return 10;
+			// Toku Daihatsu + 11th Tank
+			if(this.hasEquipment(230)) return 5;
+			// Soukoutei (Armored Boat Class)
+			if(this.hasEquipment(408)) return 7;
+			// Armed Daihatsu
+			if(this.hasEquipment(409)) return 8;
+		}
 		// Abyssal land attack target, like Supply Depot Princess, and etc.
 		const isTargetLandable = KC3Meta.specialLandInstallationNames.includes(targetShip.api_name);
+		// M4A1 DD
+		if(this.hasEquipment(355) && isTargetLandable) return 6;
 		// T2 Tank
 		if(this.hasEquipment(167)) {
 			const isThisSubmarine = this.isSubmarine();
-			if(isThisSubmarine && isLand) return 4;
+			if(isThisSubmarine && targetShipType.isLand) return 4;
 			if(isTargetLandable) return 4;
 			return 0;
 		}
 		if(isTargetLandable) {
-			// M4A1 DD
-			if(this.hasEquipment(355)) return 6;
 			// Armored Boat (AB Class)
 			if(this.hasEquipment(408)) return 7;
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
+			// Panzer II
+			if(this.hasEquipment(436)) return 9;
 			// T89 Tank
 			if(this.hasEquipment(166)) return 3;
 			// Toku Daihatsu

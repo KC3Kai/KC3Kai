@@ -602,13 +602,14 @@
 			$(".tab_profile .export_csv_shipgirl").on("click", function(event){
 				// CSV Headers
 				let exportData = [
-					"ID", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots", "Costs", "BuildMins", "Graph"
+					"ID", "Sortno", "Name", "Yomi", "Romaji", "SType", "Class", "Models", "HP", "FP", "AR", "TP", "AA", "Luck", "Speed", "Slots", "Costs", "BuildMins", "Graph"
 				].join(",") + CSV_LINE_BREAKS;
 				$.each(KC3Master.all_ships(true), (i, s) => {
 					const isAb = KC3Master.isAbyssalShip(s.api_id);
 					if((!event.altKey && KC3Master.isRegularShip(s.api_id)) || (event.altKey && isAb)) {
 						exportData += [
 							s.api_id,
+							s.api_sortno,
 							csvQuoteIfNecessary(isAb ? KC3Meta.abyssShipName(s.api_id) : KC3Meta.shipName(s.api_id)),
 							csvQuoteIfNecessary(s.api_yomi),
 							isAb ? "-" : csvQuoteIfNecessary(wanakana.toRomaji(s.api_yomi).capitalize()),
