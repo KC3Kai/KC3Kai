@@ -12919,7 +12919,7 @@ var SHIPDATA_ = {
 		RNG: 4,
 		SPD: 10,
 		unknownstats: true,
-		SLOTS: [42, 42, 42, 42, 0],
+		SLOTS: [48, 48, 36, 36, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 		fuel: 0,
 		ammo: 0
@@ -12942,7 +12942,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [60, 52, 56, 30, 0],
+		SLOTS: [38, 53, 57, 30, 0],
 		EQUIPS: [581, 582, 583, 574, 608],
 	},
 	2118: {
@@ -12963,7 +12963,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [60, 52, 56, 30, 0],
+		SLOTS: [39, 57, 62, 30, 0],
 		EQUIPS: [581, 582, 583, 574, 608],
 	},
 	2119: {
@@ -12984,7 +12984,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [60, 52, 56, 30, 0],
+		SLOTS: [49, 57, 62, 30, 0],
 		EQUIPS: [581, 582, 583, 574, 608],
 	},
 	2120: {
@@ -13005,7 +13005,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [30, 30, 29, 29, 0],
+		SLOTS: [34, 34, 34, 16, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2121: {
@@ -13026,7 +13026,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [0, 0, 0, 0, 0],
+		SLOTS: [34, 34, 34, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2122: {
@@ -13047,7 +13047,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [37, 37, 37, 37, 0],
+		SLOTS: [40, 41, 41, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2123: {
@@ -13068,11 +13068,11 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [30, 30, 29, 29, 0],
+		SLOTS: [34, 34, 34, 16, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2124: {
-		name: 'Fast Light Carrier Water Demon - Damaged 1',
+		name: 'Fast Light Carrier Water Demon - Damaged 2',
 		nameJP: '高速軽空母水鬼-壊',
 		image: 'S2123.jpg',
 		type: 'CVL',
@@ -13089,7 +13089,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [0, 0, 0, 0, 0],
+		SLOTS: [36, 38, 38, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2125: {
@@ -13110,7 +13110,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [42, 42, 42, 42, 0],
+		SLOTS: [46, 48, 48, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 
