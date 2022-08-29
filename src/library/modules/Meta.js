@@ -569,7 +569,7 @@ Provides access to data on built-in JSON files
 		},
 		
 		shipRange :function(apiLeng, returnTerm){
-			var rangeTermsMap = {"1":"RangeShort", "2":"RangeMedium", "3":"RangeLong", "4":"RangeVeryLong"};
+			var rangeTermsMap = {"1":"RangeShort", "2":"RangeMedium", "3":"RangeLong", "4":"RangeVeryLong", "5":"RangeExtremeLong"};
 			var term = rangeTermsMap[apiLeng] || "Unknown";
 			return !returnTerm ? this.term(term) : term;
 		},

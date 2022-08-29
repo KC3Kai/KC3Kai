@@ -266,7 +266,7 @@
 				addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
 				addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
 				// These special ones can be always equipped on exslot of capable ship types
-				const isExslotCapableCheckedByClient = [33, 442, 443].includes(gearId);
+				const isExslotCapableCheckedByClient = KC3Master.equip_exslot_ids().includes(gearId);
 				const hasExslotCapableShips = Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.length > 0;
 				$('<div><img src="/assets/img/useitems/64.png" /></div>')
 					.toggleClass("incapable", !(equipOn.exslot || isExslotCapableCheckedByClient))
