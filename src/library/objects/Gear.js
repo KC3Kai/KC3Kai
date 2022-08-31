@@ -847,8 +847,8 @@ KC3改 Equipment Object
 			if(this.masterId === 405 && !isLand && [2].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.1;
 			// Type 4 Heavy Bomber Hiryuu + I-go Model 1A Guided Missile targeting many types since 2021-11-30
-			// DD, CL, CLT, CA, CVL, BB: https://twitter.com/oxke_admiral/status/1465639932970430469
-			if([444].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10].includes(targetMst.api_stype))
+			// DD, CL, CLT, CA, CVL, BB, AO: https://twitter.com/oxke_admiral/status/1465639932970430469
+			if([444].includes(this.masterId) && !isLand && [2, 3, 4, 5, 6, 7, 8, 9, 10, 22].includes(targetMst.api_stype))
 				lbaaAbyssalModifier = 1.15;
 			// Ki-102 B Kai + No.1 Model 1B Guided Missile since 2022-03-31
 			// https://twitter.com/Yama625Ayanami/status/1509497879303319552
@@ -874,8 +874,8 @@ KC3改 Equipment Object
 				if([3, 4].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.75;
 				// CA
 				if([5, 6].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.6;
-				// CVL, BB
-				if([7, 8, 9, 10].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.3;
+				// CVL, BB, AO
+				if([7, 8, 9, 10, 22].includes(targetMst.api_stype)) lbaaAbyssalModifier = 1.3;
 			}
 		}
 		// Postcap LBAA recon modifier if LB recon is present
