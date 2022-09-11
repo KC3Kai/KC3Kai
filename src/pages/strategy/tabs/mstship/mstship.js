@@ -846,7 +846,7 @@
 					// `RemodelUtil.createSetListEx` hard-coded whether special ones can be equipped
 					KC3Master.equip_exslot_ids().forEach(id => {
 						const gearMst = KC3Master.slotitem(id);
-						if (equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
+						if (KC3Master.equip_exslot_ids(id, shipData.api_stype) && equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
 							exslotItems.push(id);
 					});
 					if (exslotItems.length > 0) {
