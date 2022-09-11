@@ -2910,13 +2910,14 @@ KC3改 Ship Object
 	 *   Type 5: Summer Harbor Princess
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
+	 * @see KC3Meta.specialLandInstallationNames - SPECIAL_ENTRY defined by game client, 'installation' not equaled to land type (speed 0)
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 */
 	KC3Ship.prototype.estimateInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) { return 0; }
-		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
-		// Supply Depot Princess, but no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+		// Supply Depot Princess, no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+		// SDP III Vacation mode (集積地棲姫III バカンスmode) has bonus, but not land (speed=5)
 		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
 			return precap ? 1 : 4;
@@ -2927,7 +2928,9 @@ KC3改 Ship Object
 			"砲台小鬼": 2, // Artillery Imp
 		};
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
-		return foundPrefix ? abyssalNameTypeMap[foundPrefix] : 1;
+		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
+		// Other installations, but there may be other uncategorized non-land ship? eg: 船渠棲姫
+		return this.estimateTargetShipType(targetShipMasterId).isLand ? 1 : 0;
 	};
 
 	/**
