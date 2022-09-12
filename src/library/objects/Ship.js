@@ -1848,7 +1848,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (10 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
@@ -1856,8 +1856,8 @@ KC3改 Ship Object
 		//  * 4: [193] Toku Daihatsu Landing Craft
 		//  * 5: [355] M4A1 DD
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
-		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], 436];
+		//  * 7: [436,482] Daihatsu Landing Craft (Panzer II / North African Specification), Toku Daihatsu Landing Craft + Panzer III (North African Specification)?
+		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], [436, 482]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2916,11 +2916,12 @@ KC3改 Ship Object
 	KC3Ship.prototype.estimateInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) { return 0; }
+		const isLand = this.estimateTargetShipType(targetShipMasterId).isLand;
 		// Supply Depot Princess, no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
-		// SDP III Vacation mode (集積地棲姫III バカンスmode) has bonus, but not land (speed=5)
+		// SDP III Vacation mode (集積地棲姫III バカンスmode) has postcap bonus, but not land (speed=5)
 		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
 			// Unique case: takes soft-skinned pre-cap but unique post-cap
-			return precap ? 1 : 4;
+			return precap ? (isLand ? 1 : 0) : 4;
 		}
 		const abyssalNameTypeMap = {
 			"港湾夏姫": 5, // Summer Harbor Princess
@@ -2930,7 +2931,7 @@ KC3改 Ship Object
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
 		// Other installations, but there may be other uncategorized non-land ship? eg: 船渠棲姫
-		return this.estimateTargetShipType(targetShipMasterId).isLand ? 1 : 0;
+		return isLand ? 1 : 0;
 	};
 
 	/**

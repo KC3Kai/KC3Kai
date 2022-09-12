@@ -60,7 +60,7 @@ Saves and loads list to and from localStorage
 		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types
-		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus, abBonus/armedBonus, panzer2Bonus]
+		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus, abBonus/armedBonus, panzer2Bonus/panzer3Bonus?]
 		// see also: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AllBonusTable
 		// All base modifiers for T2 Tank are fixed to 1.0 since only 1 item of this category implemented
 		// All players have only 1 piece of M4A1 DD/Panzer2 for now, so no info for its count2 modifier
