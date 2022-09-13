@@ -846,7 +846,7 @@
 					// `RemodelUtil.createSetListEx` hard-coded whether special ones can be equipped
 					KC3Master.equip_exslot_ids().forEach(id => {
 						const gearMst = KC3Master.slotitem(id);
-						if (equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
+						if (KC3Master.equip_exslot_ids(id, shipData.api_stype) && equipTypes.includes(gearMst.api_type[2]) && !exslotItems.includes(id))
 							exslotItems.push(id);
 					});
 					if (exslotItems.length > 0) {
@@ -1437,13 +1437,12 @@
 								$(".ship_stat_min", statBox).text(abyssMaster.kc3_aaci || "-");
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "otorp"){
-								const canOtorp = (
+								let canOtorp = (
 									abyssMaster.api_raig > 0 && (abyssMaster.kc3_slots || []).some(id => [541, 624].includes(id))
 								) || (
 									[13, 14].includes(abyssMaster.api_stype) && abyssMaster.api_yomi != ""
-								) || (
-									[2085, 2087, 2089].includes(abyssMaster.api_id)
 								);
+								if(abyssMaster.kc3_otorp !== undefined) canOtorp = !!abyssMaster.kc3_otorp;
 								$(".ship_stat_min", statBox).text(canOtorp);
 								$(".ship_stat_max", statBox).hide();
 							} else if(stat[1] === "oasw"){

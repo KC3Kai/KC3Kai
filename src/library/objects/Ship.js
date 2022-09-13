@@ -1602,8 +1602,8 @@ KC3改 Ship Object
 				// except following: Ju87C Kai, Prototype Nanzan, F4U-1D, FM-2, Ju87C Kai Ni (variants),
 				//   Suisei Model 12 (634 Air Group w/Type 3 Cluster Bombs)
 				// DV power from items other than previous ones should not be counted
-				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58]);
-				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57],
+				const tbBaku = this.equipmentTotalStats("baku", true, false, false, [8, 58, 35]);
+				const dbBaku = this.equipmentTotalStats("baku", true, false, false, [7, 57, 35],
 					KC3GearManager.antiLandDiveBomberIds);
 				shellingPower += Math.floor(1.3 * (tbBaku + dbBaku));
 			} else {
@@ -1668,7 +1668,8 @@ KC3改 Ship Object
 		// For Ark Royal (Kai) + Swordfish - Night Aircraft (despite of NOAP), only Swordfish counted.
 		const isThisArkRoyal = [515, 393].includes(this.masterId);
 		const isLegacyArkRoyal = isThisArkRoyal && !this.canCarrierNightAirAttack();
-		const nightPlaneMstIds = [];
+		// Skilled Deck Personnel + Aviation Maintenance Hands
+		const nightPlaneMstIds = [478];
 		this.equipment().forEach((gear, idx) => {
 			if(gear.exists()) {
 				const master = gear.master();
@@ -1702,7 +1703,14 @@ KC3改 Ship Object
 		shellingPower += equipTotals.fp + equipTotals.tp + equipTotals.dv;
 		// No effect for visible FP bonus
 		// TP bonus added since 2021-08-04, not affect slotBonus part, weird multi-planes calc unimplemented
-		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58], nightPlaneMstIds);
+		if(!isTargetLand) shellingPower += this.equipmentTotalStats("raig", true, true, true, [8, 58, 35], nightPlaneMstIds);
+		// DV bonus counted since SDPAMH? and special improvement bonus from SDPAMH?
+		// https://twitter.com/yukicacoon/status/1566320330544521216
+		// FIXME: but should be applied post night cutin modifier instead of base power here?
+		// https://twitter.com/yukicacoon/status/1566425711065174016
+		shellingPower += this.equipmentTotalStats("baku", true, true, true, [7, 57, 35], nightPlaneMstIds);
+		if(this.hasEquipment(478)) equipTotals.improveBonus += this.equipment(true)
+			.reduce((b, g) => b + (g.masterId === 478 ? 0.7 * Math.sqrt(g.stars || 0) : 0), 0);
 		shellingPower += equipTotals.slotBonus;
 		shellingPower += equipTotals.improveBonus;
 		shellingPower += KC3Gear.isNightContactAircraft(nightContactPlaneId, true).powerBonus;
@@ -1840,7 +1848,7 @@ KC3改 Ship Object
 	 */
 	KC3Ship.prototype.calcLandingCraftBonus = function(installationType = 0, isNight = false){
 		if(this.isDummy() || ![1, 2, 3, 4, 5].includes(installationType)) { return 0; }
-		// 8 types of (10 gears) Daihatsu Landing Craft with known bonus:
+		// 8 types of (11 gears) Daihatsu Landing Craft with known bonus:
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
@@ -1848,8 +1856,8 @@ KC3改 Ship Object
 		//  * 4: [193] Toku Daihatsu Landing Craft
 		//  * 5: [355] M4A1 DD
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
-		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
-		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], 436];
+		//  * 7: [436,482] Daihatsu Landing Craft (Panzer II / North African Specification), Toku Daihatsu Landing Craft + Panzer III (North African Specification)?
+		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], [436, 482]];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -2167,12 +2175,13 @@ KC3改 Ship Object
 					power[0] += visibleBonus * capaSqrt * typeFactor[0];
 					power[1] += visibleBonus * capaSqrt * typeFactor[1];
 				}
-				// TB and DB bonus from non aircraft Deck Personnel since 2022-08-26
+				// TB and DB bonus from Skilled Deck Personnel + AMH since 2022-08-26
 				// https://twitter.com/panmodoki10/status/1563773326073511940
-				// FIXME: unknown how to simulate ingame calc, here just add bonus from deck personnel to all planes if no other visible bonus found
+				// https://twitter.com/yukicacoon/status/1566320330544521216
+				// FIXME: unknown how to simulate ingame calc
 				if(this.hasEquipment(478)) {
 					const personnelBonus = this.equipmentTotalStats((isRange ? "raig" : "baku"), true, true, true, null, [478]);
-					if(personnelBonus > 0 && !visibleBonus && !isJetAssaultPhase) {
+					if(personnelBonus > 0 && !isJetAssaultPhase) {
 						const capaSqrt = Math.sqrt(this.slots[i]);
 						const typeFactor = isRange ? [0.8, 1.5] : [1, 1];
 						power[0] += personnelBonus * capaSqrt * typeFactor[0];
@@ -2901,16 +2910,18 @@ KC3改 Ship Object
 	 *   Type 5: Summer Harbor Princess
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
+	 * @see KC3Meta.specialLandInstallationNames - SPECIAL_ENTRY defined by game client, 'installation' not equaled to land type (speed 0)
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 */
 	KC3Ship.prototype.estimateInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) { return 0; }
-		if(!this.estimateTargetShipType(targetShipMasterId).isLand) { return 0; }
-		// Supply Depot Princess, but no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+		const isLand = this.estimateTargetShipType(targetShipMasterId).isLand;
+		// Supply Depot Princess, no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
+		// SDP III Vacation mode (集積地棲姫III バカンスmode) postcap bonus only, but not land (speed=5)
 		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
-			// Unique case: takes soft-skinned pre-cap but unique post-cap
-			return precap ? 1 : 4;
+			// Unique case: takes soft-skinned pre-cap (if land),  but unique post-cap
+			return precap ? (isLand ? 1 : 0) : 4;
 		}
 		const abyssalNameTypeMap = {
 			"港湾夏姫": 5, // Summer Harbor Princess
@@ -2918,7 +2929,9 @@ KC3改 Ship Object
 			"砲台小鬼": 2, // Artillery Imp
 		};
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
-		return foundPrefix ? abyssalNameTypeMap[foundPrefix] : 1;
+		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
+		// Other installations, but there may be another uncategorized surface ship? eg: 船渠棲姫
+		return isLand ? 1 : 0;
 	};
 
 	/**
@@ -3421,6 +3434,8 @@ KC3改 Ship Object
 			if(this.hasEquipment(408)) return 7;
 			// Armed Daihatsu
 			if(this.hasEquipment(409)) return 8;
+			// Panzer III
+			if(this.hasEquipment(482)) return 11;
 			// Panzer II
 			if(this.hasEquipment(436)) return 9;
 			// T89 Tank
@@ -4672,6 +4687,7 @@ KC3改 Ship Object
 		const moraleModifier = this.moraleEffectLevel([1, 1.4, 1.2, 1, 0.7], battleConds.isOnBattle);
 		const playerFormationId = battleConds.formationId || ConfigManager.aaFormation;
 		// Vanguard formation final hit rate bonus https://wikiwiki.jp/kancolle/%E5%91%BD%E4%B8%AD%E3%81%A8%E5%9B%9E%E9%81%BF%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6#vigilance
+		// But another tests think it's still modifier, applied before accuracy formation modifier: https://twitter.com/Divinity_123/status/1566375782703931394
 		const vanguardBonus = (() => {
 			if(playerFormationId === 6) {
 				const [shipPos, shipCnt] = this.fleetPosition();

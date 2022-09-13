@@ -351,6 +351,14 @@
 							&& this.mapInfoMeta.airraids.map(ar => ar.no).includes(node.no)) {
 							node.color = 10;
 						}
+						// Show blue dot for branching node by default if any
+						if((!node.color || node.color === -1) && node.branch) {
+							node.color = 1;
+						}
+						// Show green dot for landing node by default if any
+						if((!node.color || node.color === -1) && node.landing) {
+							node.color = 2;
+						}
 						if(node.no && (node.color || node.route || node.line)
 							// To keep red dot for both initial (undefined) and added (-2) boss node
 							&& (node.color || node.no >= this.mapInfoMeta.initSpotCnt)) {

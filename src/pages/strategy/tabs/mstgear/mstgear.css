@@ -193,13 +193,19 @@
 }
 
 .tab_mstgear .gearInfo .equippable .ships > div,
-.tab_mstgear .gearInfo .equippable .exslot > div {
+.tab_mstgear .gearInfo .equippable .exslot > div.reicon,
+.tab_mstgear .gearInfo .equippable .exslot > div.shipiconbox {
 	float:left;
 	width:36px;
 	margin:0px 0px 1px 0px;
 	text-align:center;
 	overflow:hidden;
 	white-space:nowrap;
+}
+.tab_mstgear .gearInfo .equippable .exslot > div.stype {
+	float:left;
+	width:100%;
+	margin-top:3px;
 }
 
 .tab_mstgear .gearInfo .equippable .ships > div.incapable,
