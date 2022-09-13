@@ -2918,9 +2918,9 @@ KC3改 Ship Object
 		if(!this.masterId || !targetShip) { return 0; }
 		const isLand = this.estimateTargetShipType(targetShipMasterId).isLand;
 		// Supply Depot Princess, no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
-		// SDP III Vacation mode (集積地棲姫III バカンスmode) has postcap bonus, but not land (speed=5)
+		// SDP III Vacation mode (集積地棲姫III バカンスmode) postcap bonus only, but not land (speed=5)
 		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
-			// Unique case: takes soft-skinned pre-cap but unique post-cap
+			// Unique case: takes soft-skinned pre-cap (if land),  but unique post-cap
 			return precap ? (isLand ? 1 : 0) : 4;
 		}
 		const abyssalNameTypeMap = {
@@ -2930,7 +2930,7 @@ KC3改 Ship Object
 		};
 		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
-		// Other installations, but there may be other uncategorized non-land ship? eg: 船渠棲姫
+		// Other installations, but there may be another uncategorized surface ship? eg: 船渠棲姫
 		return isLand ? 1 : 0;
 	};
 
