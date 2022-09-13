@@ -400,6 +400,7 @@ Contains summary information about a fleet and its ships
 						addImprove(gearObj.stars);
 					break;
 					case 436: // Panzer II/North African Spec
+					case 482: // Panzer III?
 						panzerCount += 1;
 						addImprove(gearObj.stars);
 					break;

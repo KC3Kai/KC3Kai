@@ -5074,7 +5074,7 @@
 		"api_yomi": "やましおまる",
 		"api_stype": 22,
 		"api_soku": 5,
-		"api_slot_num": 3
+		"api_slot_num": 2
 	},
 	"5634": {
 		"api_id": 5634,
@@ -5158,83 +5158,83 @@
 	},
 	"5644": {
 		"api_id": 5644,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "夏最上改二",
+		"api_yomi": "もがみ",
+		"api_stype": 6,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5645": {
 		"api_id": 5645,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "夏最上改二特",
+		"api_yomi": "もがみ",
+		"api_stype": 6,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5646": {
 		"api_id": 5646,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "水着第三〇号海防艦",
+		"api_yomi": "だいさんじゅうごう",
+		"api_stype": 1,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5647": {
 		"api_id": 5647,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着衣笠",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5648": {
 		"api_id": 5648,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着衣笠改二",
+		"api_yomi": "きぬがさ",
+		"api_stype": 5,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 4
 	},
 	"5649": {
 		"api_id": 5649,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着狭霧",
+		"api_yomi": "さぎり",
 		"api_stype": 2,
 		"api_soku": 10,
 		"api_slot_num": 2
 	},
 	"5650": {
 		"api_id": 5650,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着狭霧改",
+		"api_yomi": "さぎり",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5651": {
 		"api_id": 5651,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "水着山汐丸",
+		"api_yomi": "やましおまる",
+		"api_stype": 22,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5652": {
 		"api_id": 5652,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Helena",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5653": {
 		"api_id": 5653,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
+		"api_name": "水着Helena改",
+		"api_yomi": "ヘレナ",
+		"api_stype": 3,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5654": {
 		"api_id": 5654,
@@ -5246,75 +5246,75 @@
 	},
 	"5655": {
 		"api_id": 5655,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
+		"api_name": "水着春日丸",
+		"api_yomi": "たいよう",
+		"api_stype": 7,
+		"api_soku": 5,
 		"api_slot_num": 2
 	},
 	"5656": {
 		"api_id": 5656,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着大鷹",
+		"api_yomi": "たいよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 3
 	},
 	"5657": {
 		"api_id": 5657,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着大鷹改",
+		"api_yomi": "たいよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"5658": {
 		"api_id": 5658,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着大鷹改二",
+		"api_yomi": "たいよう",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"5659": {
 		"api_id": 5659,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "かき氷Gambier Bay Mk.II",
+		"api_yomi": "ガンビア・ベイ",
+		"api_stype": 7,
+		"api_soku": 5,
+		"api_slot_num": 4
 	},
 	"5660": {
 		"api_id": 5660,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着大和改二",
+		"api_yomi": "やまと",
+		"api_stype": 8,
+		"api_soku": 5,
+		"api_slot_num": 5
 	},
 	"5661": {
 		"api_id": 5661,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
-		"api_stype": 2,
-		"api_soku": 10,
-		"api_slot_num": 2
+		"api_name": "水着大和改二重",
+		"api_yomi": "やまと",
+		"api_stype": 10,
+		"api_soku": 5,
+		"api_slot_num": 5
 	},
 	"5662": {
 		"api_id": 5662,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着山風改二",
+		"api_yomi": "やまかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5663": {
 		"api_id": 5663,
-		"api_name": "【保留】",
-		"api_yomi": "n/a",
+		"api_name": "水着山風改二丁",
+		"api_yomi": "やまかぜ",
 		"api_stype": 2,
 		"api_soku": 10,
-		"api_slot_num": 2
+		"api_slot_num": 3
 	},
 	"5664": {
 		"api_id": 5664,

@@ -250,7 +250,7 @@
 					|| a - b
 				);
 				const addEquipShips = (shipIdArr, appendTo, isIncapable = false) => {
-					if(!Array.isArray(shipIdArr)) return;
+					if(!Array.isArray(shipIdArr) || !shipIdArr.length) return;
 					shipIdArr.sort(orderByRemodel).forEach(shipId => {
 						const shipBox = $("<div class='shipiconbox'><img/></div>").appendTo(appendTo);
 						shipBox.attr("masterId", shipId).toggleClass("incapable", isIncapable);
@@ -263,18 +263,31 @@
 							)).lazyInitTooltip();
 					});
 				};
+				const addEquipStypes = (stypeIdArr, appendTo, capable = true) => {
+					if(!Array.isArray(stypeIdArr) || !stypeIdArr.length) return;
+					const stypesBox = $("<div class='stype'></div>").appendTo(appendTo);
+					stypeIdArr.forEach(stype => {
+						const stypeBox = $("<div></div>").appendTo(stypesBox);
+						stypeBox.attr("stype", stype).toggleClass("capable", capable).text(
+							KC3Meta.stype(stype)
+						);
+					});
+				};
 				addEquipShips(equipOn.includes, ".tab_mstgear .gearInfo .equippable .ships");
 				addEquipShips(equipOn.excludes, ".tab_mstgear .gearInfo .equippable .ships", true);
 				// These special ones can be always equipped on exslot of capable ship types
-				const isExslotCapableCheckedByClient = KC3Master.equip_exslot_ids().includes(gearId);
+				const exslotCapableStypes = KC3Master.equip_exslot_ids(gearId);
+				const isExslotCapableCheckedByClient = exslotCapableStypes === true;
 				const hasExslotCapableShips = Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.length > 0;
-				$('<div><img src="/assets/img/useitems/64.png" /></div>')
+				const hasExslotCapableStypes = Array.isArray(exslotCapableStypes);
+				$('<div class="reicon"><img src="/assets/img/useitems/64.png" /></div>')
 					.toggleClass("incapable", !(equipOn.exslot || isExslotCapableCheckedByClient))
-					.toggle(equipOn.exslot || isExslotCapableCheckedByClient || hasExslotCapableShips)
-					.attr("title", "[Lighted] Capable on ex-slot of ships or types above\n[Greyed] Capable on ex-slot of following ships")
+					.toggle(equipOn.exslot || isExslotCapableCheckedByClient || hasExslotCapableShips || hasExslotCapableStypes)
+					.attr("title", "[Lighted] Capable on ex-slot of ships or types above\n[Greyed] Capable on ex-slot of following ships or types")
 					.lazyInitTooltip()
 					.appendTo(".tab_mstgear .gearInfo .equippable .exslot");
 				addEquipShips(equipOn.exslotIncludes, ".tab_mstgear .gearInfo .equippable .exslot");
+				if(hasExslotCapableStypes) addEquipStypes(exslotCapableStypes, ".tab_mstgear .gearInfo .equippable .exslot");
 			}
 			
 		}

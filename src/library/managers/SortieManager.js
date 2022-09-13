@@ -368,6 +368,7 @@ Stores and manages states and functions during sortie of fleets (including PvP b
 			}
 			// Emergency Anchorage Repair Node (CellTaskAnchorageRepair), event only for now
 			// api_event_id = 10
+			// since event summer 2022 (E55-2 R), the anchor icon (api_color_no = 8) is used instead of regular green dot
 			else if (nodeData.api_event_id === 10) {
 				nodeKind = "Dud";
 			}

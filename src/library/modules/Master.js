@@ -351,7 +351,7 @@ Saves and loads significant data for future use
 		 *     nothing needed to be handled for now, since we haven't added slot index condition.
 		 *     * see `main.js#RemodelUtil.excludeEquipList`
 		 *     * see `main.js#TaskIdleMain._onDropSlotItem`
-		 *   * [392] Richelieu Kai can equip seaplane bomber [194] Laté 298B only,
+		 *   * [392/724] Richelieu-class Kai can equip seaplane bomber [194] Laté 298B only,
 		 *     either hard-coded the exception conndition in following codes.
 		 *     * see `main.js#TaskChoiceSlotItem.prototype._initSetList_` and `#_updateListItem_`
 		 *     * see `main.js#SlotitemModelHolder.prototype.createUnsetList` and `#createUnsetList_unType`
@@ -402,10 +402,12 @@ Saves and loads significant data for future use
 					exslotCapableShips = [];
 				}
 			}
-			// Remove Richelieu Kai from Seaplane Bomber type list except Late 298B
+			// Remove Richelieu-class Kai from Seaplane Bomber type list except Late 298B
 			if(type2Id === 11 && gearId !== 194) {
 				const richelieuKaiPos = capableShips.indexOf(392);
 				if(richelieuKaiPos >= 0) capableShips.splice(richelieuKaiPos, 1);
+				const jeanBartKaiPos = capableShips.indexOf(724);
+				if(jeanBartKaiPos >= 0) capableShips.splice(jeanBartKaiPos, 1);
 			}
 			// Remove AkitsuMaru Kai from Aviation Personnel type list except Arctic Gear & Deck Personnel
 			if(type2Id === 35 && gearId !== 402) {
@@ -422,15 +424,23 @@ Saves and loads significant data for future use
 		},
 
 		/**
-		 * @return the array contains slotitem master ids can be equipped on exslot by capable ships,
+		 * @param gearMstId - slotitem to be checked, all slotitem ids returned if omitted
+		 * @param shipTypeId - stype to be checked, allowed stype ids (if any) returned if omitted
+		 * @return the array contains slotitem master ids or stype ids can be equipped on exslot by capable ships,
 		 *         which not indicated by API data, but hard-coded in client instead.
 		 * @see `#createSetListEx`/`#createSetListFromMstId`/`#createUnsetListFromMstId` in main.js
 		 */
-		equip_exslot_ids :function() {
+		equip_exslot_ids :function(gearMstId, shipTypeId) {
 			// Improved Kanhon Type Turbine can be always equipped on exslot of capable ship types
 			// Submarine Stern Torpedo Launchers can be equipped on exslot, added since 2021-11-19
-			// Skilled Deck Personnel can be equipped on exslot, added since 2022-08-26
-			return [33, 442, 443, 477, 478];
+			// Skilled Deck Personnel can be equipped on exslot for stype 7,11,18, added since 2022-08-26
+			const allGearIds = [33, 442, 443, 477, 478];
+			const stypeGearIds1 = [477, 478], stypes1 = [7, 11, 18];
+			if(!gearMstId) return allGearIds;
+			if(!shipTypeId) return stypeGearIds1.includes(gearMstId) ? stypes1
+				: allGearIds.includes(gearMstId);
+			return stypeGearIds1.includes(gearMstId) ? stypes1.includes(shipTypeId)
+				: allGearIds.includes(gearMstId);
 		},
 
 		/**
@@ -456,7 +466,7 @@ Saves and loads significant data for future use
 				if(equipOn.stypes.includes(stype)) result |= 1;
 				else if(Array.isArray(equipOn.includes) && equipOn.includes.includes(shipMstId)) result |= 1;
 			}
-			const isExslotCapableCheckedByClient = this.equip_exslot_ids().includes(gearMstId);
+			const isExslotCapableCheckedByClient = this.equip_exslot_ids(gearMstId, stype);
 			if(equipOn.exslot || isExslotCapableCheckedByClient) {
 				if(result) result |= 2;
 			} else if(Array.isArray(equipOn.exslotIncludes) && equipOn.exslotIncludes.includes(shipMstId)) {

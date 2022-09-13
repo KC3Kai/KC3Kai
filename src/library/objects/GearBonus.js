@@ -96,7 +96,7 @@
 			},
 			// getCountryName by ctype in main.js#SlotItemEffectParamModel.SHIP_COUNTRY
 			"countryCtypeMap": {
-				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116],
+				"UnitedStates": [65, 69, 83, 84, 87, 91, 93, 95, 99, 102, 105, 106, 107, 110, 114, 116, 118],
 				"UnitedKingdom": [67, 78, 82, 88, 108, 112],
 				"Italia": [58, 61, 64, 68, 80, 92, 113],
 				"Netherlands": [98],
@@ -1583,6 +1583,8 @@
 					"105": "69",
 					// Independence Class
 					"116": "69",
+					// Ranger Class
+					"118": "69",
 					// Kaga Class
 					"3": {
 						multiple: { "houg": 1, "tyku": 1, "tais": 1, "houk": 1 },
