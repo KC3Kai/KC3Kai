@@ -1933,3 +1933,15 @@ body {
 .tab_gunfits .testitem.testingActive {
 	background:#cfc;
 }
+
+/* JUKEBOX
+--------------------------------*/
+.tab_jukebox .musiclist .type {
+	background:#def;
+}
+.tab_jukebox .musiclist .track.odd {
+	background-color:#fff;
+}
+.tab_jukebox .musiclist .track.even {
+	background-color:#eeeeee;
+}

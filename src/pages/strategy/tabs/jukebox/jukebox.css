@@ -43,8 +43,7 @@
 
 .tab_jukebox .musiclist .type {
 	min-width:10%;
-	text-align:right;
-	padding-right:10px;
+	text-align:center;
 }
 
 .tab_jukebox .musiclist .port,
@@ -54,6 +53,8 @@
 
 .tab_jukebox .musiclist .track {
 	display:flex;
+	padding-left:3px;
+	margin-right:3px;
 	margin-bottom:2px;
 }
 
@@ -61,14 +62,17 @@
 	min-width:15%;
 }
 .tab_jukebox .musiclist .track .desc {
-	min-width:80%;
+	min-width:78%;
 	overflow:hidden;
 	white-space:nowrap;
 	text-overflow:ellipsis;
 }
 
 .tab_jukebox .musiclist .track .playbtn {
-	width:15px;
+	min-width:20px;
+	min-height:20px;
+	text-align:center;
+	border-radius:50%;
 	background-color:gray;
 	filter:invert(1);
 }

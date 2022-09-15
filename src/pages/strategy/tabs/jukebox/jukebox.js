@@ -18,6 +18,8 @@
 		Loads latest player or game data if needed.
 		---------------------------------*/
 		reload: function() {
+			this.portbgm = KC3Master._raw.bgm;
+			this.mapbgm = KC3Master._raw.mapbgm;
 		},
 
 		/* EXECUTE: mandatory
@@ -36,26 +38,31 @@
 			audio.oncanplay = () => {
 				audio.play();
 			};
-			const addTrack = (elm, bgmid, bgmdesc) => {
-				const item = $(".factory .track").clone().appendTo(".musiclist ." + elm);
-				$(".id", item).text("#" + String(bgmid).pad(3, "0")).data("bgmid", bgmid).data("bgmtype", elm);
+			let evenodd = false;
+			const addTrack = (bgmtype, bgmid, bgmdesc) => {
+				const item = $(".factory .track").clone().appendTo(".musiclist ." + bgmtype);
+				$(".id", item).text("#" + String(bgmid).pad(3, "0"))
+					.data("bgmid", bgmid).data("bgmtype", bgmtype);
 				$(".desc", item).text("\u266a " + (bgmdesc || "-"));
+				item.toggleClass("even", !!evenodd).toggleClass("odd", !evenodd);
+				evenodd = !evenodd;
 			};
-			$.each(KC3Master._raw.bgm, (idx, bgm) => {
+			$.each(this.portbgm, (idx, bgm) => {
 				addTrack("port", bgm.api_id, bgm.api_name);
 			});
-			$.each(KC3Master._raw.mapbgm, (idx, bgm) => {
+			$.each(this.mapbgm, (idx, bgm) => {
 				const mapName = "World {0}{1}".format(
 					KC3Meta.isEventWorld(bgm.api_maparea_id) ? bgm.api_maparea_id + " " : "",
 					KC3Meta.mapToDesc(bgm.api_maparea_id, bgm.api_no)
 				);
 				addTrack("battle", bgm.api_moving_bgm, mapName + " Overworld");
-				addTrack("battle", bgm.api_map_bgm[0], mapName + " Day Battle");
-				addTrack("battle", bgm.api_map_bgm[1], mapName + " Night Battle");
-				addTrack("battle", bgm.api_boss_bgm[0], mapName + " Day Boss");
-				addTrack("battle", bgm.api_boss_bgm[1], mapName + " Night Boss");
+				if(bgm.api_map_bgm[0]) addTrack("battle", bgm.api_map_bgm[0], mapName + " Day Battle");
+				if(bgm.api_map_bgm[1]) addTrack("battle", bgm.api_map_bgm[1], mapName + " Night Battle");
+				if(bgm.api_boss_bgm[0]) addTrack("battle", bgm.api_boss_bgm[0], mapName + " Day Boss");
+				if(bgm.api_boss_bgm[1]) addTrack("battle", bgm.api_boss_bgm[1], mapName + " Night Boss");
 			});
 			$(".musiclist .playbtn").addClass("hover").click((e) => {
+				audio.pause();
 				const item = $(e.target).parent();
 				const bgmId = $(".id", item).data("bgmid");
 				const bgmType = $(".id", item).data("bgmtype");

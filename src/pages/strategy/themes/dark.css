@@ -2601,3 +2601,15 @@ button, input, select, textarea {
 .tab_gunfits .testitem.testingActive {
 	background: #1f9a00;
 }
+
+/* JUKEBOX
+--------------------------------*/
+.tab_jukebox .musiclist .type {
+	background:#2e2e2e;
+}
+.tab_jukebox .musiclist .track.odd {
+	background-color:#222222;
+}
+.tab_jukebox .musiclist .track.even {
+	background-color:#333333;
+}
