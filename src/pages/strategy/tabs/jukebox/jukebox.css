@@ -1,0 +1,74 @@
+.tab_jukebox {
+	width:680px;
+}
+
+.tab_jukebox .factory {
+	display:none;
+}
+
+.tab_jukebox .player {
+	display:flex;
+	margin:10px;
+	align-items:center;
+}
+
+.tab_jukebox .player.fixed {
+	min-width:52.5%;
+	min-height:32px;
+	background:rgba(241,243,244,1);
+	border:1px #aaa solid;
+	border-radius:10px;
+	position:fixed;
+	bottom:0;
+	z-index:99;
+}
+
+.tab_jukebox .player > audio {
+	margin-left:10px;
+}
+.tab_jukebox .player .playing {
+	display:flex;
+	width:50%;
+	margin-left:20px;
+	min-height:32px;
+	justify-content:left;
+	align-items:center;
+	color:#333;
+}
+
+.tab_jukebox .musiclist {
+	display:flex;
+	margin:10px;
+}
+
+.tab_jukebox .musiclist .type {
+	min-width:10%;
+	text-align:right;
+	padding-right:10px;
+}
+
+.tab_jukebox .musiclist .port,
+.tab_jukebox .musiclist .battle {
+	min-width:40%;
+}
+
+.tab_jukebox .musiclist .track {
+	display:flex;
+	margin-bottom:2px;
+}
+
+.tab_jukebox .musiclist .track .id {
+	min-width:15%;
+}
+.tab_jukebox .musiclist .track .desc {
+	min-width:80%;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+.tab_jukebox .musiclist .track .playbtn {
+	width:15px;
+	background-color:gray;
+	filter:invert(1);
+}

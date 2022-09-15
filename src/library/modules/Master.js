@@ -262,7 +262,8 @@ Saves and loads significant data for future use
 			const uniqueKey = type === "full" && rscPath === "ship" ? ((key) => (
 					key ? "_" + key : ""
 				))(this.graph(id).api_filename) : "";
-			return `/${rscPath}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}${suffix}${uniqueKey}.png`;
+			const fileExt = ({ "bgm": ".mp3" })[rscPath] || ".png";
+			return `/${rscPath}/${typeWithSuffix}/${paddedId}${debuffedAbyssalSuffix}${suffix}${uniqueKey}${fileExt}`;
 		},
 		png_file :function(id, type = "card", shipOrSlot = "ship", isDamaged = false, debuffedAbyssalSuffix = ""){
 			return this.rsc_file(id, type, shipOrSlot, isDamaged, debuffedAbyssalSuffix);
