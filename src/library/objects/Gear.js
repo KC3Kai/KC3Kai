@@ -881,12 +881,19 @@ KC3改 Equipment Object
 		// Postcap LBAA recon modifier if LB recon is present
 		// https://twitter.com/syoukuretin/status/1068477784232587264
 		// https://twitter.com/Nishisonic/status/1080146808318263296
+		// https://twitter.com/yukicacoon/status/1570246361790185473
 		let lbaaReconModifier = 1;
 		if(isLbaa && landBaseObj) {
-			// Check LB recon and set the value according FP modifier
-			const lbfpReconModifier = landBaseObj.toShipObject().fighterPowerReconModifier(true);
-			lbaaReconModifier = lbfpReconModifier === 1.15 ? 1.125 :
-				lbfpReconModifier === 1.18 ? 1.15 : 1;
+			// Get LBAA power modifier by LB recon accuray stat
+			landBaseObj.toShipObject().equipment((rid, idx, gear) => {
+				if(!rid || gear.isDummy()) { return; }
+				if(gear.master().api_type[2] === 49) {
+					const acc = gear.master().api_houm;
+					lbaaReconModifier = Math.max(lbaaReconModifier,
+						acc >= 3 ? 1.15 : 1.12
+					);
+				}
+			});
 		}
 		const onNormal = Math.floor(cappedPower
 			* lbAttackerModifier * concatModifier * lbaaAbyssalModifier * enemyCombinedModifier * lbaaReconModifier);

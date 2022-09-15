@@ -1428,7 +1428,7 @@ KC3改 Ship Object
 	};
 
 	/**
-	 * @return value under verification of LB Recon modifier to LBAS sortie fighter power.
+	 * @return value of LB Recon modifier to LBAS sortie fighter power.
 	 */
 	KC3Ship.prototype.fighterPowerReconModifier = function(forLbas = false){
 		var reconModifier = 1;
