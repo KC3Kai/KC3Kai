@@ -26,17 +26,15 @@
 		Places data onto the interface from scratch.
 		---------------------------------*/
 		execute: function() {
-			const audioElm = $("audio"), audio = audioElm.get(0);
-			audio.crossOrigin = "anonymous";
-			audio.loop = true;
+			const audioElm = $(".player audio"), audio = audioElm.get(0);
 			audio.onplay = () => {
 				$(".player").addClass("playing");
 			};
 			audio.onended = () => {
 				$(".player").removeClass("playing");
 			};
-			audio.oncanplay = () => {
-				audio.play();
+			audio.oncanplay = (e) => {
+				e.target.play();
 			};
 			let evenodd = false;
 			const addTrack = (bgmtype, bgmid, bgmdesc) => {
@@ -45,21 +43,31 @@
 					.data("bgmid", bgmid).data("bgmtype", bgmtype);
 				$(".desc", item).text("\u266a " + (bgmdesc || "-"));
 				item.toggleClass("even", !!evenodd).toggleClass("odd", !evenodd);
-				evenodd = !evenodd;
+				return item;
 			};
 			$.each(this.portbgm, (idx, bgm) => {
 				addTrack("port", bgm.api_id, bgm.api_name);
+				evenodd = !evenodd;
 			});
+			evenodd = false;
+			let prevMap = 1;
 			$.each(this.mapbgm, (idx, bgm) => {
+				const world = bgm.api_maparea_id, map = bgm.api_no;
 				const mapName = "World {0}{1}".format(
-					KC3Meta.isEventWorld(bgm.api_maparea_id) ? bgm.api_maparea_id + " " : "",
-					KC3Meta.mapToDesc(bgm.api_maparea_id, bgm.api_no)
+					KC3Meta.isEventWorld(world) ? world + " " : "",
+					KC3Meta.mapToDesc(world, map)
 				);
-				addTrack("battle", bgm.api_moving_bgm, mapName + " Overworld");
-				if(bgm.api_map_bgm[0]) addTrack("battle", bgm.api_map_bgm[0], mapName + " Day Battle");
-				if(bgm.api_map_bgm[1]) addTrack("battle", bgm.api_map_bgm[1], mapName + " Night Battle");
-				if(bgm.api_boss_bgm[0]) addTrack("battle", bgm.api_boss_bgm[0], mapName + " Day Boss");
-				if(bgm.api_boss_bgm[1]) addTrack("battle", bgm.api_boss_bgm[1], mapName + " Night Boss");
+				const trackClass = [
+					KC3Meta.isEventWorld(world) ? "event" : "world{0}".format(world),
+					"map{0}".format(map)
+				].join(" ");
+				if(map !== prevMap) evenodd = !evenodd;
+				addTrack("battle", bgm.api_moving_bgm, mapName + " Overworld").addClass(trackClass);
+				if(bgm.api_map_bgm[0]) addTrack("battle", bgm.api_map_bgm[0], mapName + " Day Battle").addClass(trackClass);
+				if(bgm.api_map_bgm[1]) addTrack("battle", bgm.api_map_bgm[1], mapName + " Night Battle").addClass(trackClass);
+				if(bgm.api_boss_bgm[0]) addTrack("battle", bgm.api_boss_bgm[0], mapName + " Day Boss").addClass(trackClass);
+				if(bgm.api_boss_bgm[1]) addTrack("battle", bgm.api_boss_bgm[1], mapName + " Night Boss").addClass(trackClass);
+				prevMap = map;
 			});
 			$(".musiclist .playbtn").addClass("hover").click((e) => {
 				audio.pause();

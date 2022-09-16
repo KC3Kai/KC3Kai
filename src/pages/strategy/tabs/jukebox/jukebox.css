@@ -14,6 +14,7 @@
 
 .tab_jukebox .player.fixed {
 	min-width:52.5%;
+	max-width:65%;
 	min-height:32px;
 	background:rgba(241,243,244,1);
 	border:1px #aaa solid;
@@ -23,7 +24,7 @@
 	z-index:99;
 }
 
-.tab_jukebox .player > audio {
+.tab_jukebox .player audio {
 	margin-left:10px;
 }
 .tab_jukebox .player .playing {
