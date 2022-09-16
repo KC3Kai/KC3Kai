@@ -92,6 +92,9 @@
 	font-size:12px;
 	white-space:nowrap;
 }
+.tab_gears .slotitem .info .item_stat.noval {
+	width:19px;
+}
 .tab_gears .slotitem .info .item_stat img {
 	max-width:19px;
 	height:16px;

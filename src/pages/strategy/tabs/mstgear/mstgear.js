@@ -182,12 +182,21 @@
 				["hk", "distance", "ShipGearEvadeAAFire"], // fake `distance` for almost planes
 				["rk", "baku", "ShipGearAntiLand"],        // fake `baku` for all dive bombers
 				["rm", "houm", "ShipGearHighAltitude"],    // fake `houm` for LB interceptors
+				["dc", "tais", "ShipGearDepthCharge"],     // fake `tais` for Depth Charges
+				["dp", "tais", "ShipGearDCProjector"],     // fake `tais` for Depth Charge Projectors
+				["ap", "tais", "ShipGearSubArmorPen"],     // fake `tais` for ASW Armor Penetration
 			], (index, sdata) => {
 				if((gearData["api_"+sdata[1]]||0) !== 0 && (
 					!planeOnlyStats.includes(sdata[0]) || (
 						planeOnlyStats.includes(sdata[0]) &&
 						KC3GearManager.landBasedAircraftType3Ids.includes(gearData.api_type[3])
 					)
+				) && (
+					sdata[0] !== "dc" || KC3GearManager.aswDepthChargeIds.includes(gearData.api_id)
+				) && (
+					sdata[0] !== "dp" || KC3GearManager.aswDepthChargeProjectorIds.includes(gearData.api_id)
+				) && (
+					sdata[0] !== "ap" || KC3GearManager.aswArmorPenetrationIds.includes(gearData.api_id)
 				) && (
 					sdata[0] !== "rk" || KC3GearManager.antiLandDiveBomberIds.includes(gearData.api_id)
 				) && (
@@ -220,9 +229,8 @@
 							"x{0}/x{1}".format(KC3Meta.antiAirResistMods(gearData.api_id))
 						);
 						$(statBox).css("width", "100px");
-					} else if(sdata[0] === "rk") { // For dive bomber who can anti-land
-						$(".stat_value", statBox).text("");
-					} else if(sdata[0] === "rm") { // For LB interceptors who can intercept High Altitude air-raid
+					// For dive bomber who can anti-land, or LB interceptors who can intercept High Altitude air-raid, or asw gears
+					} else if(["rk","rm", "dc", "dp", "ap"].includes(sdata[0])) {
 						$(".stat_value", statBox).text("");
 					} else {
 						$(".stat_value", statBox).text(gearData["api_"+sdata[1]]);

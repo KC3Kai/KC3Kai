@@ -2544,7 +2544,7 @@ KC3改 Ship Object
 			// Hedgehog (Initial Model) and other 3 gears added since 2022-08-04
 			// https://twitter.com/hedgehog_hasira/status/1555167740150681600
 			// https://twitter.com/yukicacoon/status/1555380069706584064
-			newDepthChargeBonus = [226, 227, 377, 378, 439, 472].reduce((sum, id) => (sum
+			newDepthChargeBonus = KC3GearManager.aswArmorPenetrationIds.reduce((sum, id) => (sum
 				+ this.countEquipment(id)
 					* (Math.sqrt(KC3Master.slotitem(id).api_tais - 2) + deShipBonus)
 			), 0);

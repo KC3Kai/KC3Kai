@@ -1087,7 +1087,7 @@ KC3改 Equipment Object
 		//   https://twitter.com/myteaGuard/status/1454139122168127493
 		// Armor penetration extended since 2022-08-04, even applied to some projectors, summary:
 		//   https://twitter.com/twillwave1024/status/1555399272358899712
-			[226, 227, 378, 439].indexOf(this.masterId) > -1;
+			KC3GearManager.aswDepthChargeIds.indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.isDepthChargeProjector = function(){
@@ -1102,7 +1102,7 @@ KC3改 Equipment Object
 		// Not counted by either:
 		//   [346][347] Type2 12cm Mortar Kai & CD
 		return this.exists() && this.master().api_type[2] === 15 &&
-			[44, 45, 287, 288, 377, 472].indexOf(this.masterId) > -1;
+			KC3GearManager.aswDepthChargeProjectorIds.indexOf(this.masterId) > -1;
 	};
 
 	KC3Gear.prototype.aaDefense = function(forFleet) {
@@ -1145,7 +1145,7 @@ KC3改 Equipment Object
 		// Some stats only shown at Equipment Library, omitted here.
 		const planeStats = ["or", "kk"];
 		// Some stats not defined in API data, these flags maintained by us manually.
-		const nonMasterFlags = ["rk", "rm", "hk"];
+		const nonMasterFlags = ["rk", "rm", "hk", "dc", "dp", "ap"];
 		$.each([
 			["hp", "taik"],
 			["fp", "houg"],
@@ -1162,6 +1162,9 @@ KC3改 Equipment Object
 			["rk", "baku"],
 			["rm", "houm"],
 			["hk", "distance"],
+			["dc", "tais"],
+			["dp", "tais"],
+			["ap", "tais"],
 		], function(index, sdata) {
 			const statBox = $('<div><img class="icon stats_icon_img"/> <span class="value"></span>&nbsp;</div>');
 			statBox.css("font-size", "11px");
@@ -1174,6 +1177,12 @@ KC3改 Equipment Object
 				sdata[0] !== "rm" || KC3GearManager.highAltitudeInterceptorIds.includes(gearData.api_id)
 			) && (
 				sdata[0] !== "hk" || KC3GearManager.evadeAntiAirFireIds.includes(gearData.api_id)
+			) && (
+				sdata[0] !== "dc" || KC3GearManager.aswDepthChargeIds.includes(gearData.api_id)
+			) && (
+				sdata[0] !== "dp" || KC3GearManager.aswDepthChargeProjectorIds.includes(gearData.api_id)
+			) && (
+				sdata[0] !== "ap" || KC3GearManager.aswArmorPenetrationIds.includes(gearData.api_id)
 			)) {
 				$(".icon", statBox).attr("src", KC3Meta.statIcon(sdata[0]));
 				$(".icon", statBox).css("max-width", 15).height(13).css("margin-top", "-3px");
