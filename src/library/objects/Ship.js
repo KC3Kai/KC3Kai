@@ -2531,6 +2531,8 @@ KC3改 Ship Object
 		
 		// About rounding and position of anti-land modifier:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
+		// Suspected different rounding and modifiers ordering:
+		// https://twitter.com/hedgehog_hasira/status/1569717081016520704
 		let result = Math.floor(Math.floor(
 					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
 				) * criticalModifier * proficiencyCriticalModifier
