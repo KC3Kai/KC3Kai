@@ -216,6 +216,7 @@ Retrieves when needed to apply on components
 				sr_custom_css          : "",
 				sr_locktag_max         : 0,
 				sr_dexmark             : true,
+				sr_dexorder            : false,
 
 				idbSaveSortie          : true,
 				idbSaveExcludeMaps     : [],

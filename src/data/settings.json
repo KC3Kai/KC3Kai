@@ -1571,6 +1571,12 @@
 				}
 			},
 			{
+				"id" : "sr_dexorder",
+				"name" : "SettingsShipLibraryOrder",
+				"type" : "check",
+				"options" : {}
+			},
+			{
 				"id" : "idbSaveSortie",
 				"name" : "SettingsSaveSortieToDb",
 				"type" : "check",
