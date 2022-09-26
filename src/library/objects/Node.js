@@ -1246,9 +1246,12 @@ Used by SortieManager
 					console.log("Event items get", resultEventItems);
 					(resultEventItems || []).forEach(function(eventItem){
 						switch(eventItem.api_type){
-							case 1: // Item
-								if(eventItem.api_id.inside(1,4)) {
-									KC3SortieManager.materialGain[eventItem.api_id+3] += eventItem.api_value;
+							case 1: // Materials/Resources
+								if(eventItem.api_id.inside(1, 4)) {
+									KC3SortieManager.materialGain[eventItem.api_id + 3] += eventItem.api_value;
+								}
+								if(eventItem.api_id.inside(31, 34)) {
+									KC3SortieManager.materialGain[eventItem.api_id - 31] += eventItem.api_value;
 								}
 							break;
 							case 2: // Ship
@@ -1256,12 +1259,17 @@ Used by SortieManager
 							break;
 							case 3: // Equip
 							break;
+							case 5: // Furniture
+							break;
 							default:
 								console.info("Unknown item type", eventItem);/*RemoveLogging:skip*/
 							break;
 						}
 					});
 				}).call(this, resultData.api_get_eventitem);
+			}
+			if(typeof resultData.api_select_reward_dict !== "undefined"){
+				console.log("Event items selectable", resultData.api_select_reward_dict);
 			}
 			
 			ConfigManager.load();
