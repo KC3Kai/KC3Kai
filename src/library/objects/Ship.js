@@ -2287,14 +2287,14 @@ KC3改 Ship Object
 			nightSpecialAttackType[3] > 0 ? nightSpecialAttackType[3] : 1;
 		
 		// Anti-installation modifiers
-		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		const isTargetInstallation = !!this.estimateInstallationEnemyType(targetShipMasterId, true);
 		// Summary in total
 		let antiLandAdditive = 0, antiLandModifier = 1;
 		// Breakdown details
 		const antiLandMods = { modifiers: {}, additives: {} };
 		const mulBonus = (name) => (antiLandMods.modifiers[name] || 1);
 		const addBonus = (name) => (antiLandMods.additives[name] || 0);
-		if(targetShipType.isLand) {
+		if(isTargetInstallation) {
 			Object.assign(antiLandMods, this.antiLandWarfarePowerMods(targetShipMasterId, true, warfareType, isNightBattle));
 			antiLandModifier = Object.keys(antiLandMods.modifiers).map(k => mulBonus(k)).reduce((v, p) => p * v, 1);
 			antiLandAdditive = Object.keys(antiLandMods.additives).map(k => addBonus(k)).sumValues();
@@ -2408,7 +2408,8 @@ KC3改 Ship Object
 		// CA, CAV, BB, FBB, BBV, CV, CVB and Land installation
 		targetShipStype = targetShipStype || (targetShipMasterId > 0 ? KC3Master.ship(targetShipMasterId).api_stype || 0 : 0);
 		const isTargetShipTypeMatched = [5, 6, 8, 9, 10, 11, 18].includes(targetShipStype);
-		if(isTargetShipTypeMatched && !isNightBattle) {
+		const isApshellApplied = isTargetShipTypeMatched && !isNightBattle;
+		if(isApshellApplied) {
 			const mainGunCnt = this.countEquipmentType(2, [1, 2, 3]);
 			const apShellCnt = this.countEquipmentType(2, 19);
 			const secondaryCnt = this.countEquipmentType(2, 4);
@@ -2431,7 +2432,7 @@ KC3改 Ship Object
 				// http://wikiwiki.jp/kancolle/?%C0%EF%C6%AE%A4%CB%A4%C4%A4%A4%A4%C6#FAcutin
 				// same modifier with regualr air attack for CVNCI
 				const allowedSlotType = (cutinType => {
-					// uncertained: jets counted? not counted since #estimateDayAttackType neither
+					// uncertain: jets counted? not counted since #estimateDayAttackType neither
 					switch(cutinType) {
 						case "CutinFDBTB": return [6, 7, 8];
 						case "CutinDBDBTB":
@@ -2486,20 +2487,22 @@ KC3改 Ship Object
 		}
 		
 		const targetShipType = this.estimateTargetShipType(targetShipMasterId);
+		const isTargetPtImp = targetShipType.isPtImp;
+		const isTargetInstallation = !!this.estimateInstallationEnemyType(targetShipMasterId, false);
 		// Anti-installation modifier
 		let antiLandAdditive = 0, antiLandModifier = 1;
-		if(targetShipType.isLand) {
+		if(isTargetInstallation) {
 			const postcapAntiLandMods = this.antiLandWarfarePowerMods(targetShipMasterId, false, warfareType, isNightBattle);
 			antiLandAdditive = postcapAntiLandMods.additives.generalAdditive || 0;
 			antiLandModifier = postcapAntiLandMods.modifiers.generalModifier || 1;
-		} else if(targetShipType.isPtImp) {
+		} else if(isTargetPtImp) {
 		// Against PT Imp fixed modifier constants, put into antiLand part in formula
 			antiLandModifier = 0.35;
 			antiLandAdditive = 15;
 		}
 		// Against PT Imp modifier from equipment
 		let antiPtImpModifier = 1;
-		if(targetShipType.isPtImp) {
+		if(isTargetPtImp) {
 			const smallGunCount = this.countEquipmentType(2, 1);
 			const smallGunBonus = smallGunCount > 0 ? 1.5 * (smallGunCount > 1 ? 1.4 : 1) : 1;
 			antiPtImpModifier *= smallGunBonus;
@@ -2529,15 +2532,25 @@ KC3改 Ship Object
 		// Fixed modifier for antisub type exped support
 		const antisubSupportModifier = warfareType === "SupportAntisub" ? 1.75 : 1;
 		
-		// About rounding and position of anti-land modifier:
+		// About rounding and position of anti-land modifiers:
 		// http://ja.kancolle.wikia.com/wiki/%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89:925#33
-		// Suspected different rounding and modifiers ordering:
+		// Different rounding and modifiers ordering on different targets:
 		// https://twitter.com/hedgehog_hasira/status/1569717081016520704
-		let result = Math.floor(Math.floor(
-					Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * apshellModifier
-				) * criticalModifier * proficiencyCriticalModifier
-			) * dayCutinModifier * airstrikeConcatModifier
-			* antiPtImpModifier * aerialSupportModifier * antisubSupportModifier;
+		let result = cappedPower;
+		if(isTargetInstallation || isTargetPtImp) {
+			result = Math.floor(cappedPower * antiLandModifier + antiLandAdditive) * dayCutinModifier;
+			if(isApshellApplied) result = Math.floor(result * apshellModifier);
+			// Specific ships for maps/event postcap bonuses applied here
+			result *= antiPtImpModifier;
+			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+		} else {
+			if(isApshellApplied) result = Math.floor(result * apshellModifier);
+			// Specific ships for maps/event postcap bonuses applied here
+			if(isCritical) result = Math.floor(result * criticalModifier * proficiencyCriticalModifier);
+			result *= dayCutinModifier;
+		}
+		// Uncertain rounding and ordering for other modifiers
+		result *= airstrikeConcatModifier * aerialSupportModifier * antisubSupportModifier;
 		
 		// New Depth Charge armor penetration, not attack power bonus
 		let newDepthChargeBonus = 0;
@@ -2839,7 +2852,7 @@ KC3改 Ship Object
 		// CAV, CVL, BBV, AV, LHA, CVL-like Hayasui Kai, Kaga Kai Ni Go, Yamashiomaru
 		const isAirAntiSubStype = this.isAirAntiSubStype() || isHayasuiKaiWithTorpedoBomber || isKagaK2Go || this.isYamashiomaruWithAswAircraft();
 		if(isAirAntiSubStype) {
-			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertained conditions (using CVL's currently),
+			// CV Kaga Kai Ni Go implemented since 2020-08-27, can do ASW under uncertain conditions (using CVL's currently),
 			// but any CV form (converted back from K2Go) may ASW either if her asw modded > 0, fixed on the next day
 			// see https://twitter.com/Synobicort_SC/status/1298998245893394432
 			const isCvlLike = stype === 7 || isHayasuiKaiWithTorpedoBomber || isKagaK2Go;
@@ -2913,26 +2926,36 @@ KC3改 Ship Object
 	 * @param precap - specify true if going to calculate pre-cap modifiers
 	 * @return the numeric type identifier
 	 * @see KC3Meta.specialLandInstallationNames - SPECIAL_ENTRY defined by game client, 'installation' not equaled to land type (speed 0)
+	 * @see https://en.kancollewiki.net/Combat/Anti-Installation
 	 * @see http://kancolle.wikia.com/wiki/Installation_Type
 	 */
 	KC3Ship.prototype.estimateInstallationEnemyType = function(targetShipMasterId = 0, precap = true){
 		const targetShip = KC3Master.ship(targetShipMasterId);
 		if(!this.masterId || !targetShip) { return 0; }
 		const isLand = this.estimateTargetShipType(targetShipMasterId).isLand;
+		const shipJapName = targetShip.api_name || "";
 		// Supply Depot Princess, no bonus for Summer SDP (集積地夏姫): https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AGBonusSupply
 		// SDP III Vacation mode (集積地棲姫III バカンスmode) postcap bonus only, but not land (speed=5)
-		if((targetShip.api_name || "").startsWith("集積地棲姫")) {
+		if(shipJapName.startsWith("集積地棲姫")) {
 			// Unique case: takes soft-skinned pre-cap (if land),  but unique post-cap
 			return precap ? (isLand ? 1 : 0) : 4;
 		}
 		const abyssalNameTypeMap = {
+			// Uncategorized event-only land installation:
+			//"北端上陸姫": 5, // Northernmost Landing Princess
 			"港湾夏姫": 5, // Summer Harbor Princess
 			"離島棲姫": 3, // Isolated Island Princess
 			"砲台小鬼": 2, // Artillery Imp
 		};
-		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => (targetShip.api_name || "").startsWith(s));
+		const foundPrefix = Object.keys(abyssalNameTypeMap).find(s => shipJapName.startsWith(s));
 		if(foundPrefix) return abyssalNameTypeMap[foundPrefix];
-		// Other installations, but there may be another uncategorized surface ship? eg: 船渠棲姫
+		if(!precap) {
+			// Uncategorized postcap-only event surface installations:
+			// Anchorage Water Demon Vacation Mode, Dock Princess
+			//if(shipJapName.startsWith("泊地水鬼 バカンスmode")) return 6?;
+			//if(shipJapName.startsWith("船渠棲姫")) return 7?;
+		}
+		// Other soft-skin installations
 		return isLand ? 1 : 0;
 	};
 
