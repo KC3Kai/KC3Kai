@@ -150,7 +150,7 @@ Executes processing and relies on KC3Network for the triggers
 			if(this.call.indexOf("api_start2") > -1){
 				KC3Network.trigger( "CatBomb", {
 					title: KC3Meta.term("CatBombHardAPIErrorTitle"),
-					message: KC3Meta.term("CatBombHardAPIErrorMsg")
+					message: KC3Meta.term("CatBombHardAPIErrorMsg").format(this.gameStatus)
 				});
 				return false;
 			}
@@ -174,7 +174,7 @@ Executes processing and relies on KC3Network for the triggers
 				} else {
 					KC3Network.trigger("CatBomb", {
 						title: KC3Meta.term("CatBombErrorOnHomePortTitle"),
-						message: KC3Meta.term("CatBombErrorOnHomePortMsg")
+						message: KC3Meta.term("CatBombErrorOnHomePortMsg").format(this.gameStatus)
 					});
 				}
 				return false;
@@ -183,7 +183,7 @@ Executes processing and relies on KC3Network for the triggers
 			// Some other API Call failed
 			KC3Network.trigger("CatBomb", {
 				title: KC3Meta.term("CatBombAPIDataErrorTitle"),
-				message: KC3Meta.term("CatBombAPIDataErrorMsg")
+				message: KC3Meta.term("CatBombAPIDataErrorMsg").format(this.gameStatus)
 			});
 			
 			return false;
