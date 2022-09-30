@@ -595,6 +595,10 @@ body {
 .ship_list .ship_item .ship_equip span {
 	color:#777;
 }
+.ship_list .ship_item .ship_equip span.sub {
+	color:#111;
+	text-shadow:1px 1px 0 rgba(255,255,255,0.7);
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#ccc;
 }

@@ -3713,8 +3713,9 @@ KC3改 Ship Object
 		const isThisCarrier = this.isCarrier();
 		// even carrier can do shelling or air attack if her yasen power > 0 (no matter chuuha)
 		// currently known ships: Graf / Graf Kai, Saratoga, Taiyou Class Kai Ni, Kaga Kai Ni Go
-		// but Gambier Bay Mk.II is an exception, she don't move if NOAP flag not met although fp is 3.
-		if(isThisCarrier && initYasen > 0 && this.masterId !== 707) return true;
+		// exceptions: Gambier Bay Mk.II don't move if NOAP flag not met although fp is 3
+		//             Langley and Kai fp > 0, but seems don't attack either
+		if(isThisCarrier && initYasen > 0 && ![707, 925, 930].includes(this.masterId)) return true;
 		// carriers without yasen power can do air attack under some conditions:
 		if(isThisCarrier) {
 			// only CVB can air attack on chuuha (taiha already excluded)

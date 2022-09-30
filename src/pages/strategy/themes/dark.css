@@ -643,6 +643,10 @@ button, input, select, textarea {
 .ship_list .ship_item .ship_equip span {
 	color:#999999;
 }
+.ship_list .ship_item .ship_equip span.sub {
+	color:#fff;
+	background:rgba(0,0,0,0.5);
+}
 .ship_list .ship_item .ship_equip .ship_equip_ex .empty {
 	background:#555555;
 }
