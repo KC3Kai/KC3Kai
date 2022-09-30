@@ -84,7 +84,7 @@
     },
 
     setType(value) {
-      this.type = value ?? 'battle';
+      this.type = value || 'battle';
     },
 
     getVolume() {
@@ -92,7 +92,7 @@
     },
 
     setVolume(value) {
-      this.volume = value ?? 0.1;
+      this.volume = Number(value) || 0.1;
     },
 
     getAudio() {
