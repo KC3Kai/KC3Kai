@@ -44,6 +44,15 @@
 		$("head").append(themeCSS);
 		$("body").addClass(themeName);
 
+		if(ConfigManager.sr_auto_width){
+			var widerCSS = document.createElement("link");
+			widerCSS.id = "widerCSS";
+			widerCSS.rel = "stylesheet";
+			widerCSS.type = "text/css";
+			widerCSS.href = "./themes/wider.css";
+			$("head").append(widerCSS);
+		}
+
 		if(ConfigManager.sr_custom_css !== ""){
 			var customCSS = document.createElement("style");
 			customCSS.id = "customCSS";

@@ -1540,6 +1540,14 @@
 				}
 			},
 			{
+				"id" : "sr_auto_width",
+				"name" : "SettingsAutofitWidth",
+				"type" : "check",
+				"options" : {
+					"tooltip" : "SettingsWiderStylesTip"
+				}
+			},
+			{
 				"id" : "sr_locktag_max",
 				"name" : "SettingsMaxEventTags",
 				"type" : "dropdown",
