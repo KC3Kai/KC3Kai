@@ -11,7 +11,7 @@
     volume: 0.1,
 
     // Battle BGM
-    maxBattleId: 215,
+    maxBattleId: 216,
     missingBattleIds: [24],
 
     /* INIT: mandatory
@@ -28,7 +28,9 @@
     reload: function () {
       this.portbgm = KC3Master._raw.bgm;
       this.mapbgm = KC3Master._raw.mapbgm;
-      this.loadConfig()
+      this.maxBattleId = Math.max(this.maxBattleId, ...Object.values(this.mapbgm).map(v => v.api_boss_bgm).flat());
+      this.loadConfig();
+      console.debug('maxBattleId', this.maxBattleId);
     },
 
     /* EXECUTE: mandatory
