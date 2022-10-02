@@ -65,8 +65,8 @@
 			"t27": "overall",
 			// fleet command facility
 			"t28": "overall",
-			// skilled aircraft maintenance
-			"t29": "fp",
+			// skilled aircraft personnel
+			"t29": "overall",
 			// AAFD
 			"t30": "aa",
 			// WG42
