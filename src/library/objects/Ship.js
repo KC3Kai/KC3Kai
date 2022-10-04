@@ -1852,12 +1852,12 @@ KC3改 Ship Object
 		//  * 0: [167] Special Type 2 Amphibious Tank, exactly this one is in different type named 'Tank'
 		//  * 1: [166,449] Daihatsu Landing Craft (Type 89 Medium Tank & Landing Force), Toku Daihatsu Landing Craft + Type 1 Gun Tank
 		//  * 2: [ 68] Daihatsu Landing Craft
-		//  * 3: [230] Toku Daihatsu Landing Craft + 11th Tank Regiment
+		//  * 3: [230,482] Toku Daihatsu Landing Craft + 11th Tank Regiment, Toku Daihatsu Landing Craft + Panzer III (North African Specification)
 		//  * 4: [193] Toku Daihatsu Landing Craft
 		//  * 5: [355] M4A1 DD
 		//  * 6: [408,409] Soukoutei (Armored Boat Class), Armed Daihatsu
-		//  * 7: [436,482] Daihatsu Landing Craft (Panzer II / North African Specification), Toku Daihatsu Landing Craft + Panzer III (North African Specification)?
-		const landingCraftIds = [167, [166, 449], 68, 230, 193, 355, [408, 409], [436, 482]];
+		//  * 7: [436] Daihatsu Landing Craft (Panzer II / North African Specification)
+		const landingCraftIds = [167, [166, 449], 68, [230, 482], 193, 355, [408, 409], 436];
 		const landingCraftCounts = landingCraftIds.map(id => this.countEquipment(id));
 		const landingModifiers = KC3GearManager.landingCraftModifiers[installationType - 1] || {};
 		const getModifier = (type, modName = "base") => (
@@ -1983,6 +1983,7 @@ KC3改 Ship Object
 			const shikonCount = this.countEquipment(230);
 			const m4a1ddCount = this.countEquipment(355);
 			const honi1Count = this.countEquipment(449);
+			const panzer3Count = this.countEquipment(482);
 			const submarineBonus = this.isSubmarine() ? 30 : 0;
 			
 			// [0, 70, 110, 140, 160] additive for each WG42 from PSVita KCKai, unknown for > 4
@@ -2018,10 +2019,11 @@ KC3改 Ship Object
 			const abdSynergyModifier = singleSynergyModifier * doubleSynergyModifier;
 			const abdSynergyAdditive = singleSynergyAdditive + doubleSynergyAdditive;
 			
-			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1
+			// Cumulative extra bonus set from tank embedded daihtsu: Shikon, DDTank, Honi1, Panzer3
 			// although here using word 'tank', but they are in landing craft cateory unlike T2 tank
-			spTankModifier = shikonCount + honi1Count ? 1.8 : 1;
-			spTankAdditive = shikonCount + honi1Count ? 25 : 0;
+			// Different for uncategorized surface installation types, eg: Anchorage Water Demon Vacation Mode x1.1 for shikon only, Dock Princess x1.4 +0 for 3 sptanks
+			spTankModifier = shikonCount + honi1Count + panzer3Count ? 1.8 : 1;
+			spTankAdditive = shikonCount + honi1Count + panzer3Count ? 25 : 0;
 			m4a1ddModifier = m4a1ddCount ? 1.4 : 1;
 			m4a1ddAdditive = m4a1ddCount ? 35 : 0;
 			gunTankModifier = honi1Count ? 1.3 : 1;
