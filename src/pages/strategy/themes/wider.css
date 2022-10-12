@@ -26,6 +26,7 @@
 .tab_pvp .page_list, .tab_pvp .toggles { width: 100%; }
 .tab_showcase .controls { width: 100%; }
 .tab_shipdrop .filters .ship_types { width: calc(100% - 20px); height: auto; min-height: 20px; }
+.tab_jukebox .music-player { width: calc(70% + 90px); }
 }
 
 @media screen and (min-width:1440px) {

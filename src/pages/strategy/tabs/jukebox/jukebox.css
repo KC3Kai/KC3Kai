@@ -14,7 +14,7 @@
   grid-column-gap: 8px;
   position: fixed;
   bottom: 8px;
-  min-width: calc(40% - 80px);
+  min-width: 680px;
   /* chrome audio control height 54px */
   min-height: 60px;
   padding: 3px 8px;
