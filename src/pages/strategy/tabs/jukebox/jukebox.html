@@ -5,41 +5,56 @@
 
 <!-- HELP TOPICS -->
 <div class="page_help">
-	<div class="help_q">What is this page for?</div>
-	<div class="help_a">This page serves as a free game BGM player.
-	Music information taken from in-game API data, so only those tracks currently used by game are listed here,
-	in track ID order for port section, map ID order for battle section.<br/>
-	For more music information, see this <a href="https://en.kancollewiki.net/Music" target="_blank">EN wiki page</a>
-	or this <a href="https://wikiwiki.jp/kancolle/BGM" target="_blank">JP wiki page</a>.</div>
+  <div class="help_q">What is this page for?</div>
+  <div class="help_a">This page serves as a free game BGM player.
+    Music information taken from in-game API data, so only those tracks currently used by game are listed here,
+    in track ID order for port section, map ID order for battle section.<br />
+    For more music information, see this <a
+      href="https://en.kancollewiki.net/Music"
+      target="_blank"
+    >EN wiki page</a>
+    or this <a
+      href="https://wikiwiki.jp/kancolle/BGM"
+      target="_blank"
+    >JP wiki page</a>.</div>
 
-	<div class="help_q">Is it safe that connect to game sever for playing BGM outside of game play?</div>
-	<div class="help_a">Yes, as long as your browser cache works properly.
-	Anyway, it's recommanded to use a 3rd party cache utility, like KCCP, to reduce network traffic as possible.</div>
+  <div class="help_q">Is it safe that connect to game sever for playing BGM outside of game play?</div>
+  <div class="help_a">Yes, as long as your browser cache works properly.
+    Anyway, it's recommanded to use a 3rd party cache utility, like KCCP, to reduce network traffic as possible.</div>
 
-	<div class="help_q">Why are some tracks duplicated?</div>
-	<div class="help_a">Because they are used by game duplicatedly.
-	For port section, tracks with ID starting from 200 are used by in-game jukebox furniture, so all of them have title.
-	For battle section, tracks are assigned to various sortie scenes and updated seasonally and duplicatedly.</div>
+  <div class="help_q">Why are some tracks duplicated?</div>
+  <div class="help_a">Because they are used by game duplicatedly.
+    For port section, tracks with ID starting from 200 are used by in-game jukebox furniture, so all of them have title.
+    For battle section, tracks are assigned to various sortie scenes and updated seasonally and duplicatedly.</div>
 </div>
 
 <!-- CONTENT -->
 <div class="page_padding">
-	<div class="player fixed">
-		<audio controls loop crossorigin="anonymous" controlslist="nodownload"></audio>
-		<div class="playing jp_fonts">Choose a track...</div>
-	</div>
-	<div class="musiclist">
-		<div class="type">Port</div>
-		<div class="port">
-		</div>
-		<div class="type">Maps</div>
-		<div class="battle">
-		</div>
-	</div>
+  <div class="music-player">
+    <audio
+      controls
+      loop
+      crossorigin="anonymous"
+    ></audio>
+
+    <div class="id"></div>
+    <div class="desc"></div>
+  </div>
+
+  <div class="music-container">
+    <div class="music-types">
+      <div class="type hover port">Port</div>
+      <div class="type hover battle">Battle</div>
+    </div>
+
+    <div class="music-list list">
+    </div>
+  </div>
 </div>
 
 <div class="factory">
-	<div class="track">
-		<div class="id"></div><div class="desc jp_fonts"></div><div class="playbtn">&#9654;</div>
-	</div>
+  <div class="track hover">
+    <div class="id"></div>
+    <div class="desc jp_fonts"></div>
+  </div>
 </div>

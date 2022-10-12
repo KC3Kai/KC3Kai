@@ -1,79 +1,98 @@
 .tab_jukebox {
-	width:680px;
+  width: 680px;
 }
 
-.tab_jukebox .factory {
-	display:none;
+.tab_jukebox * {
+  transition: 0.25s;
 }
 
-.tab_jukebox .player {
-	display:flex;
-	margin:10px;
-	align-items:center;
+.tab_jukebox .music-player {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: fixed;
+  bottom: 8px;
+  left: 30%;
+  width: 40%;
+  padding: 4px;
+  opacity: 0.7;
+  border-radius: 8px;
+  background: #ddd;
+  color: black;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
-.tab_jukebox .player.fixed {
-	min-width:52.5%;
-	max-width:65%;
-	min-height:32px;
-	background:rgba(241,243,244,1);
-	border:1px #aaa solid;
-	border-radius:10px;
-	position:fixed;
-	bottom:0;
-	z-index:99;
+.tab_jukebox .music-player:hover {
+  opacity: 1;
 }
 
-.tab_jukebox .player audio {
-	margin-left:10px;
-}
-.tab_jukebox .player .playing {
-	display:flex;
-	width:50%;
-	margin-left:20px;
-	min-height:32px;
-	justify-content:left;
-	align-items:center;
-	color:#333;
+.tab_jukebox .music-player .id {
+  width: 50px;
 }
 
-.tab_jukebox .musiclist {
-	display:flex;
-	margin:10px;
+.tab_jukebox .music-container .music-types {
+  display: flex;
+  gap: 8px;
 }
 
-.tab_jukebox .musiclist .type {
-	min-width:10%;
-	text-align:center;
+.tab_jukebox .music-container .music-types .type {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-weight: bold;
+  height: 32px;
+  border-radius: 8px;
 }
 
-.tab_jukebox .musiclist .port,
-.tab_jukebox .musiclist .battle {
-	min-width:40%;
+.tab_jukebox .music-container .music-types .type:hover,
+.tab_jukebox .music-container .music-types .type.active {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
 }
 
-.tab_jukebox .musiclist .track {
-	display:flex;
-	padding-left:3px;
-	margin-right:3px;
-	margin-bottom:2px;
+.tab_jukebox .music-container .music-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px;
+  margin-top: 8px;
 }
 
-.tab_jukebox .musiclist .track .id {
-	min-width:15%;
-}
-.tab_jukebox .musiclist .track .desc {
-	min-width:78%;
-	overflow:hidden;
-	white-space:nowrap;
-	text-overflow:ellipsis;
+.tab_jukebox .music-container .music-list .track {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
 }
 
-.tab_jukebox .musiclist .track .playbtn {
-	min-width:20px;
-	min-height:20px;
-	text-align:center;
-	border-radius:50%;
-	background-color:gray;
-	filter:invert(1);
+.tab_jukebox .music-container .music-list .track:hover,
+.tab_jukebox .music-container .music-list .track.active {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+
+.tab_jukebox .music-container .music-list .track .desc {
+  display: none;
+}
+
+.tab_jukebox .music-container .music-list.list {
+  justify-content: space-evenly;
+}
+
+.tab_jukebox .music-container .music-list.list .track {
+  width: 200px;
+  height: unset;
+  min-height: 40px;
+}
+
+.tab_jukebox .music-container .music-list.list .track .desc {
+  display: block;
 }
