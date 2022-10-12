@@ -842,6 +842,10 @@ Provides access to data on built-in JSON files
 				interceptorsType2Ids: d.interceptorsType2Ids,
 				jetAircraftType2Ids: d.jetAircraftType2Ids,
 				landBaseReconnType2Ids: d.landBaseReconnType2Ids,
+				// these are not aircraft though
+				aswDepthChargeIds: d.aswDepthChargeIds,
+				aswDepthChargeProjectorIds: d.aswDepthChargeProjectorIds,
+				aswArmorPenetrationIds: d.aswArmorPenetrationIds,
 			};
 			// clean keys with invalid value to avoid being overwritten
 			Object.keys(vo).filter(k => !Array.isArray(vo[k])).forEach(k => {

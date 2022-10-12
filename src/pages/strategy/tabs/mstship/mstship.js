@@ -61,6 +61,23 @@
 		---------------------------------*/
 		reload :function(){
 			ConfigManager.load();
+			if(!ConfigManager.sr_dexorder) {
+				this.sortedMasterShips = this.mergedMasterShips;
+			} else {
+				this.sortedMasterShips = Object.keys(this.mergedMasterShips).map(k => this.mergedMasterShips[k]).sort((a, b) => {
+					const mstIda = a.api_id, mstIdb = b.api_id;
+					let sortNoa = a.api_sortno, sortNob = b.api_sortno;
+					if(KC3Master.isRegularShip(mstIda) && KC3Master.isRegularShip(mstIdb)) {
+						// Order remodels not in their own pages to follow base remodel,
+						// Souya's remodels in her own pages, although kc3_ values are incorrect.
+						const modela = a.kc3_model, modelb = b.kc3_model;
+						if(sortNoa > 1300) sortNoa = this.mergedMasterShips[a.kc3_bship].api_sortno;
+						if(sortNob > 1300) sortNob = this.mergedMasterShips[b.kc3_bship].api_sortno;
+						return sortNoa - sortNob || modela - modelb || mstIda - mstIdb;
+					}
+					return mstIda - mstIdb;
+				});
+			}
 		},
 		
 		/* EXECUTE
@@ -97,21 +114,23 @@
 			};
 
 			// List all ships
-			$.each(this.mergedMasterShips, function(index, shipData){
+			$.each(this.sortedMasterShips, function(index, shipData){
 				if(!shipData) { return true; }
 				const shipBox = $(".tab_mstship .factory .shipRecord").clone()
 					.appendTo(".tab_mstship .shipRecords");
 				const id = shipData.api_id;
+				const isRegularShip = KC3Master.isRegularShip(id);
 				shipBox.attr("data-id", id);
 				shipBox.data("bs", shipData.kc3_bship);
 				$("img", shipBox).attr("src", KC3Meta.shipIcon(0))
 					.attr("data-src", KC3Master.isAbyssalShip(id) ? KC3Meta.abyssIcon(id) : KC3Meta.shipIcon(id));
 				const shipName = KC3Master.isAbyssalShip(id) ?
 					KC3Meta.abyssShipName(id) : KC3Meta.shipName(shipData.api_name);
-				$(".shipName", shipBox).text(`[${id}] ${shipName}`)
+				const dispId = ConfigManager.sr_dexorder && isRegularShip ? shipData.api_sortno : id;
+				$(".shipName", shipBox).text(`[${dispId}] ${shipName}`)
 					.attr("title", shipName);
 				
-				if(!!ConfigManager.sr_dexmark && KC3Master.isRegularShip(id)) {
+				if(!!ConfigManager.sr_dexmark && isRegularShip) {
 					const isOwned = PictureBook.isEverOwnedShip(id);
 					shipBox.toggleClass("unlocked", isOwned);
 					shipBox.toggleClass("norecord", !isOwned);
@@ -337,7 +356,7 @@
 		},
 
 		showShip :function(ship_id, switchDamagedGraph, switchCgView, switchAllGraphs){
-			ship_id = Number(ship_id || "405");
+			ship_id = Number(ship_id || (ConfigManager.sr_dexorder ? "80" : "405"));
 			const self = this,
 				shipData = this.mergedMasterShips[ship_id],
 				saltState = function(){

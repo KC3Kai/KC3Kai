@@ -22,10 +22,13 @@ Saves and loads list to and from localStorage
 		antiLandDiveBomberIds: [64,148,233,277,305,306,319,320,391,392,420,421,474],
 		// WiP modifiers applied to enemy fleet's AA fire formula:
 		// https://wikiwiki.jp/kancolle/%E5%AF%BE%E7%A9%BA%E7%A0%B2%E7%81%AB#avoid_AAfire
-		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454,466,474,479],
+		evadeAntiAirFireIds: [79,80,81,93,94,99,100,143,144,154,170,199,200,224,237,319,320,322,323,343,374,388,404,405,406,433,444,453,454,466,474,475,476,479,481],
 		highAltitudeInterceptorIds: [350,351,352],
 		airStrikeBomberType2Ids: [7,8,11,41,47,53,57,58],
 		aswAircraftType2Ids: [7,8,11,25,26,41,47,57,58],
+		aswDepthChargeIds: [226,227,378,439],
+		aswDepthChargeProjectorIds: [44,45,287,288,377,472],
+		aswArmorPenetrationIds: [226,227,377,378,439,472],
 		interceptorsType3Ids: [38,44],
 		interceptorsType2Ids: [48],
 		nightAircraftType3Ids: [45,46],
@@ -60,10 +63,10 @@ Saves and loads list to and from localStorage
 		},
 
 		// Daihatsu landing craft anti-installation power modifiers per types
-		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus, normalBonus, shikonBonus, tokuBonus, m4a1ddBonus, abBonus/armedBonus, panzer2Bonus/panzer3Bonus?]
+		// Array format is [t2Bonus, t89Bonus/tokuHoni1Bonus, normalBonus, shikonBonus/panzer3Bonus, tokuBonus, m4a1ddBonus, abBonus/armedBonus, panzer2Bonus]
 		// see also: https://wikiwiki.jp/kancolle/%E5%AF%BE%E5%9C%B0%E6%94%BB%E6%92%83#AllBonusTable
 		// All base modifiers for T2 Tank are fixed to 1.0 since only 1 item of this category implemented
-		// All players have only 1 piece of M4A1 DD/Panzer2 for now, so no info for its count2 modifier
+		// All players have only 1 piece of M4A1 DD/Panzer2/3 for now, so no info for its count2 modifier
 		landingCraftModifiers: {
 			// Soft-skinned (including Supply Depot Princess pre-cap bonus)
 			0: {

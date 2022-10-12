@@ -111,7 +111,7 @@
 /* PAGINATION
 --------------------------------*/
 .tab_expedpast .exped_pages {
-	width:700px;
+	width:100%;
 	margin:0px 0px 10px 0px;
 	padding:5px 10px 0px;
 	border-bottom:1px solid #369;

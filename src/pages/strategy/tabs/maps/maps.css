@@ -856,6 +856,9 @@
 .tab_maps .sortie_list .node_airtext .node_loss {
 	color:#f00;
 }
+.tab_maps .sortie_list .node_airtext .aaci_loss {
+	text-shadow:0 0 4px #fe0;
+}
 .tab_maps .sortie_list .node_exp {
 	display: inline-block;
 	text-align: right;

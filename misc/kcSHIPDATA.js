@@ -12692,7 +12692,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [34, 34, 32, 26],
+		SLOTS: [36, 30, 36, 24],
 		EQUIPS: [581, 574, 582, 583],
 	},
 	2106: {
@@ -12713,7 +12713,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [46, 46, 44, 32],
+		SLOTS: [48, 36, 48, 36],
 		EQUIPS: [581, 574, 582, 583],
 	},
 	2107: {
@@ -12734,7 +12734,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [56, 56, 44, 32],
+		SLOTS: [56, 48, 48, 36],
 		EQUIPS: [581, 574, 582, 583],
 	},
 	2108: {
@@ -12755,7 +12755,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [64, 64, 56, 32],
+		SLOTS: [72, 52, 56, 36],
 		EQUIPS: [581, 575, 582, 583],
 	},
 	2109: {
@@ -12942,7 +12942,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [52, 42, 42, 42, 0],
+		SLOTS: [49, 43, 43, 43, 0],
 		EQUIPS: [581, 582, 583, 574, 608],
 	},
 	2118: {
@@ -12963,7 +12963,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [54, 46, 44, 44, 0],
+		SLOTS: [51, 46, 46, 46, 0],
 		EQUIPS: [581, 582, 583, 574, 608],
 	},
 	2119: {
@@ -13005,7 +13005,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [24, 35, 35, 24, 0],
+		SLOTS: [32, 30, 30, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2121: {
@@ -13026,7 +13026,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [27, 37, 37, 27, 0],
+		SLOTS: [36, 32, 32, 28, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2122: {
@@ -13047,7 +13047,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [32, 42, 42, 32, 0],
+		SLOTS: [40, 38, 38, 32, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2123: {
@@ -13068,7 +13068,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [24, 35, 35, 24, 0],
+		SLOTS: [32, 30, 30, 26, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2124: {
@@ -13089,7 +13089,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [34, 35, 35, 34, 0],
+		SLOTS: [40, 38, 38, 32, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2125: {
@@ -13110,7 +13110,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [42, 42, 42, 42, 0],
+		SLOTS: [48, 42, 42, 36, 0],
 		EQUIPS: [574, 582, 583, 581, 608],
 	},
 	2126: {
@@ -13131,7 +13131,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [50, 40, 30, 30, 0],
+		SLOTS: [40, 40, 40, 30, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2127: {
@@ -13152,7 +13152,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [70, 50, 30, 30, 0],
+		SLOTS: [50, 60, 40, 30, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2128: {
@@ -13173,7 +13173,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [82, 62, 32, 32, 0],
+		SLOTS: [64, 74, 40, 30, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2129: {
@@ -13194,7 +13194,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [70, 50, 30, 30, 0],
+		SLOTS: [50, 60, 40, 30, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2130: {
@@ -13215,7 +13215,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [80, 64, 32, 32, 0],
+		SLOTS: [64, 74, 40, 30, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2131: {
@@ -13236,7 +13236,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 4,
 		SPD: 10,
-		SLOTS: [94, 82, 36, 36, 0],
+		SLOTS: [72, 84, 52, 40, 0],
 		EQUIPS: [581, 574, 582, 583, 608],
 	},
 	2132: {
@@ -13440,7 +13440,7 @@ var SHIPDATA_ = {
 		unknownstats: true,
 		RNG: 3,
 		SPD: 5,
-		SLOTS: [0, 0, 0, 132],
+		SLOTS: [0, 0, 0, 128],
 		EQUIPS: [565, 565, 580, 562],
 	},
 	2142: {
@@ -13492,10 +13492,10 @@ var SHIPDATA_ = {
 		type: 'BBV',
 		canOpTorp: true,
 		HP: 7200,
-		FP: 198,
-		TP: 188,
-		AA: 121,
-		AR: 221,
+		FP: 168,
+		TP: 144,
+		AA: 101,
+		AR: 191,
 		EV: 0,
 		ASW: 0,
 		LOS: 0,
@@ -13513,10 +13513,10 @@ var SHIPDATA_ = {
 		type: 'BB',
 		canOpTorp: true,
 		HP: 7200,
-		FP: 168,
-		TP: 144,
-		AA: 101,
-		AR: 191,
+		FP: 198,
+		TP: 188,
+		AA: 121,
+		AR: 221,
 		EV: 0,
 		ASW: 0,
 		LOS: 0,

@@ -394,6 +394,17 @@
 					sprite.position.set(airbase.x, airbase.y);
 					stage.addChild(sprite);
 				}
+				// Show possibly multiple 'AB' icons for event maps
+				if(Array.isArray(this.mapInfoMeta.airbases)) {
+					this.mapInfoMeta.airbases.forEach(elm => {
+						const airbase = elm.point;
+						const frame = this.pixi.Texture.fromFrame(getTextureByColorNo(-99));
+						const sprite = new this.pixi.Sprite(frame);
+						sprite.anchor.set(0.5, 0.5);
+						sprite.position.set(airbase.x, airbase.y);
+						stage.addChild(sprite);
+					});
+				}
 				if(this.isShowEnemies && this.mapInfoMeta.enemies) {
 					for(const enemy of this.mapInfoMeta.enemies) {
 						const frame = this.pixi.Texture.fromFrame(`${texturePrefix}${enemy.img}`);
@@ -451,6 +462,10 @@
 								if(addingInfo.labels) {
 									info.labels = info.labels || [];
 									info.labels.push(...addingInfo.labels);
+								}
+								if(addingInfo.airbases) {
+									info.airbases = info.airbases || [];
+									info.airbases.push(...addingInfo.airbases);
 								}
 								const foundSpotCnt = (addingInfo.spots || []).length;
 								addedSpotCnt += foundSpotCnt;

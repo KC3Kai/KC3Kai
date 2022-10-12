@@ -11,7 +11,7 @@
 		_comparator: {},
 		_currentTypeId: 1, // keep track of current type_id
 		_currentItemId: 0, // keep track of item id to be focused
-		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","rk","rm","hk"],
+		_allProperties: ["fp","tp","aa","ar","as","ev","ls","dv","ht","rn","or","dc","dp","ap","rk","rm","hk"],
 		_defaultCompareMethod: {
 			// main guns
 			"t1": "fp",
@@ -65,8 +65,8 @@
 			"t27": "overall",
 			// fleet command facility
 			"t28": "overall",
-			// skilled aircraft maintenance
-			"t29": "fp",
+			// skilled aircraft personnel
+			"t29": "overall",
 			// AAFD
 			"t30": "aa",
 			// WG42
@@ -233,6 +233,9 @@
 							ht: MasterItem.api_houm,
 							rn: MasterItem.api_leng,
 							or: MasterItem.api_distance,
+							dc: ThisItem.isDepthCharge() & 1,
+							dp: ThisItem.isDepthChargeProjector() & 1,
+							ap: KC3GearManager.aswArmorPenetrationIds.includes(ThisItem.masterId) & 1,
 							rk: KC3GearManager.antiLandDiveBomberIds.includes(ThisItem.masterId) & 1,
 							rm: KC3GearManager.highAltitudeInterceptorIds.includes(ThisItem.masterId) & 1,
 							hk: KC3GearManager.evadeAntiAirFireIds.includes(ThisItem.masterId) ?
@@ -485,6 +488,9 @@
 				// there are too many sorters
 				$(".tab_gears .itemSorters .sortControl.rk" +
 					", .tab_gears .itemSorters .sortControl.hk" +
+					", .tab_gears .itemSorters .sortControl.dc" +
+					", .tab_gears .itemSorters .sortControl.dp" +
+					", .tab_gears .itemSorters .sortControl.ap" +
 					", .tab_gears .itemSorters .sortControl.rm").addClass("hide");
 			} else {
 				$(q).addClass("hide");
@@ -636,6 +642,12 @@
 				$(".stats .item_rk", ItemElem).toggle(!!SlotItem.stats.rk);
 			} else if(statName === "rm") {
 				$(".stats .item_rm", ItemElem).toggle(!!SlotItem.stats.rm);
+			} else if(statName === "dc") {
+				$(".stats .item_dc", ItemElem).toggle(!!SlotItem.stats.dc);
+			} else if(statName === "dp") {
+				$(".stats .item_dp", ItemElem).toggle(!!SlotItem.stats.dp);
+			} else if(statName === "ap") {
+				$(".stats .item_ap", ItemElem).toggle(!!SlotItem.stats.ap);
 			} else if(statName === "hk") {
 				if(SlotItem.stats.hk > 0) {
 					$(".stats .item_hk", ItemElem).width(70).show();

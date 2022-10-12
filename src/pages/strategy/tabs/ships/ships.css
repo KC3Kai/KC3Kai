@@ -548,15 +548,21 @@
 .tab_ships .ship_item .ship_equip span {
 	position:absolute;
 	display:flex;
-	right:0px;
-	bottom:0px;
+	left:0px;
+	top:0px;
 	font-size:10px;
 	width:100%;
 	height:100%;
-	border-radius:18px;
+	border-radius:50%;
 	text-align:center;
 	align-items:center;
 	justify-content:center;
+}
+.tab_ships .ship_item .ship_equip span.sub {
+	pointer-events:none;
+	font-size:9px;
+	width:70%;
+	height:50%;
 }
 .tab_ships .ship_item .ship_equip .ship_equip_ex img {
 	display:none;

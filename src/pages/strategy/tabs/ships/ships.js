@@ -618,6 +618,7 @@
 				range: ThisShip.range,
 				irange: MasterShip.api_leng,
 				slots: ThisShip.slots,
+				maxSlots: MasterShip.api_maxeq,
 				exSlot: ThisShip.ex_item,
 				slotNum: ThisShip.slotnum,
 				carry: ThisShip.carrySlots(),
@@ -1271,10 +1272,10 @@
 						cElm.addClass('modernization-able');
 
 					cShip.equip.forEach(function(gid, idx){
-						self.equipImg(cElm, idx + 1, cShip.slotNum, cShip.slots[idx], gid, cShip.id);
+						self.equipImg(cElm, idx + 1, cShip.slotNum, cShip.slots[idx], cShip.maxSlots[idx], gid, cShip.id);
 					});
 					if(cShip.exSlot !== 0){
-						self.equipImg(cElm, "ex", cShip.slotNum, -2, cShip.exSlot);
+						self.equipImg(cElm, "ex", cShip.slotNum, -2, 0, cShip.exSlot);
 					}
 					$(".ship_equip", cElm).toggleClass("slot5",
 						cShip.slotNum + ((cShip.exSlot !== 0) & 1) > 5);
@@ -1423,29 +1424,28 @@
 
 		/* Show single equipment icon
 		--------------------------------------------*/
-		equipImg :function(cElm, slotIndex, slotCount, slotSize, gearId, shipId){
+		equipImg :function(cElm, slotIndex, slotCount, slotSize, maxSize, gearId, shipId){
 			const element = $(".ship_equip_" + slotIndex, cElm);
+			const sizeSpan = $("span", element);
+			if(maxSize > 0 && slotSize !== undefined) sizeSpan.text(slotSize);
 			if(gearId > 0){
 				const gear = KC3GearManager.get(gearId);
 				if(gear.isDummy()){ element.hide(); return; }
+				const type3 = gear.master().api_type[3];
 				const ship = shipId > 0 ? KC3ShipManager.get(shipId) : undefined;
 				$("img", element)
-					.attr("src", KC3Meta.itemIcon(gear.master().api_type[3]))
+					.attr("src", KC3Meta.itemIcon(type3))
 					.attr("titlealt", gear.htmlTooltip(slotSize, ship))
 					.attr("alt", gear.master().api_id)
 					.show();
-				$("span", element).css("visibility", "hidden");
+				sizeSpan.addClass("sub").toggle(maxSize > 0);
 				element.show();
 			} else if(slotIndex === "ex" || slotIndex <= Math.max(4, slotCount)){
 				$("img", element).hide();
-				const sizeSpan = $("span", element);
-				if(slotSize > 0)
-					sizeSpan.text(slotSize);
-				else if(slotSize === -2)
-					// for ex slot opened, but not equipped
-					sizeSpan.addClass("empty");
-				else
-					sizeSpan.css("visibility", "hidden");
+				// for ex slot opened, but not equipped
+				sizeSpan.toggleClass("empty", slotSize === -2)
+					.toggle(slotSize === -2 || maxSize > 0);
+				element.show();
 			} else {
 				element.hide();
 			}

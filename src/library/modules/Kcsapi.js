@@ -417,6 +417,38 @@ Previously known as "Reactor"
 			PlayerManager.friendlySettings = $.extend(PlayerManager.friendlySettings || {}, newSettings);
 		},
 		
+		/* Selected event rewards since Summer 2022
+		-------------------------------------------------------*/
+		"api_req_member/get_event_selected_reward":function(params, response, headers){
+			if(response.api_data && Array.isArray(response.api_data.api_get_item_list)){
+				console.info("Selected event reward:", response.api_data.api_get_item_list);/*RemoveLogging:skip*/
+				// Only do this on sortied, since this API might be called on login following /get_incentive
+				if(KC3SortieManager.isOnSortie()){
+					response.api_data.api_get_item_list.forEach(eventItem => {
+						switch(eventItem.api_type){
+							case 1: // Materials/Resources
+								if(eventItem.api_id.inside(1, 4)) {
+									KC3SortieManager.materialGain[eventItem.api_id + 3] += eventItem.api_value;
+								}
+								if(eventItem.api_id.inside(31, 34)) {
+									KC3SortieManager.materialGain[eventItem.api_id - 31] += eventItem.api_value;
+								}
+							break;
+							case 2: // Ship
+							break;
+							case 3: // Equip
+							break;
+							case 5: // Furniture
+							break;
+							default:
+								console.log("Unknown item type", eventItem);
+							break;
+						}
+					});
+				}
+			}
+		},
+		
 		
 		/*-------------------------------------------------------*/
 		/*----------------------[ LIBRARY ]----------------------*/
